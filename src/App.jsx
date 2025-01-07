@@ -1,14 +1,10 @@
-import Navbar from "./components/Navbar"
-import Spacebar from "./components/Spacebar"
-import LayoutCard from "./components/LayoutCard"
-import QnaPopup from "./components/QnaPopup"
+import React from 'react'
+import Layout from './layout/pages/Layout'
+
 function App() {
   return (
     <div>
-      <Navbar/>
-      <Spacebar/>
-      <LayoutCard/>
-      <QnaPopup  question="is the flooring project for residental purpose ?"/>
+      <Layout />
     </div>
   )
 }
