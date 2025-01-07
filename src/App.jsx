@@ -1,10 +1,12 @@
 import React from 'react'
-import Layout from './layout/pages/Layout'
+import Layout from './layout/pages/Layout';
+import Boq from './boq/pages/Boq';
 
 function App() {
   return (
     <div>
-      <Layout />
+      {/* <Layout /> */}
+      <Boq />
     </div>
   )
 }
