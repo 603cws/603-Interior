@@ -47,15 +47,9 @@ function Navbar({ totalArea, setTotalArea, MIN_AREA, MAX_AREA, resetAll }) {
 
     return (
         <div>
-            {/* div for in and enlish */}
-            {/* <div className=" flex justify-end py-1 items-center text-white bg-[#828C96]"> */}
-            <div className=" flex justify-end pr-10 text-sm py-1 items-center text-white bg-gradient-to-r from-[#828C96] to-[#003366]">
-                <CiGlobe size={15} color="white" />
-                <span className="text-sm">In | English</span>
-            </div>
             {/* navbar */}
             {/* <div className="flex justify-evenly bg-[#003366] py-2 items-center rounded-full mx-2 mt-2"> */}
-            <div className="flex justify-evenly bg-gradient-to-r from-[#1A3A36] to-[#54DED3]  py-2 items-center mt-2">
+            <div className="flex justify-evenly bg-gradient-to-r from-[#1A3A36] to-[#54DED3] py-2 items-center ">
                 {/* logo */}
                 <div className=" ">
                     <img src='/logo/logo.png' alt="603 logo" className="h-auto w-20" />
@@ -80,7 +74,7 @@ function Navbar({ totalArea, setTotalArea, MIN_AREA, MAX_AREA, resetAll }) {
                 </div>
                 {/* button for generate boq */}
                 <div>
-                    <button className="bg-[#003366] mt-2 rounded-xl text-sm py-2 px-5 text-white">
+                    <button className="bg-[#1A3A36] mt-2 rounded-xl text-sm py-2 px-5 text-white">
                         Generate BOQ
                     </button>
                 </div>
