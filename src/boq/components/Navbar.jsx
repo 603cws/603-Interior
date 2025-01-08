@@ -1,17 +1,31 @@
 import { CiCalculator1 } from "react-icons/ci";
 import { MdOutlineCancel } from "react-icons/md";
 import { CiGlobe } from "react-icons/ci";
+import { useNavigate } from "react-router-dom";
+import { useApp } from "../../Context/Context";
 
 function Navbar() {
-    const progress = 70;
+    // const progress = 0;
+
+    const {progress}=useApp()
+
+    const naviagte = useNavigate()
+
+    const handleGoTOlayout = () =>{
+        naviagte('/')
+    }
+
+    const handlelogo = () =>{
+        naviagte('/')
+    }
 
     return (
         <div>
             <div className="flex justify-around bg-gradient-to-r from-[#1A3A36] to-[#48A095] items-center">
                 {/* logo */}
-                <div className="">
+                <button className="" onClick={handlelogo}>
                     <img src='/logo/logo.png' alt="603 logo" className="h-12 w-20 " />
-                </div>
+                </button>
                 {/* button for generate boq */}
                 <div className="pl-60">
                     <button className="bg-[#FFF] rounded-xl text-sm py-2 px-5 text-black font-bold border-solid border-2 border-black">
@@ -21,7 +35,7 @@ function Navbar() {
             </div>
             <div className="bg-[#1A3A36] py-1 flex">
                 <div className="pl-10 py-2.5">
-                    <button className="bg-[#FFF] text-sm py-2 px-5 text-black rounded-full font-bold border-solid border-2 border-black">
+                    <button className="bg-[#FFF] text-sm py-2 px-5 text-black rounded-full font-bold border-solid border-2 border-black" onClick={handleGoTOlayout}>
                         Go to Layout
                     </button>
                 </div>
@@ -44,7 +58,8 @@ function Navbar() {
                         {progress}% Completed
                     </div>
                 </div>
-                <div className="pl-42 ">
+                <div className="flex items-center">
+                <div className=" pl-42 ">
                     <button className="bg-[#FFF] text-sm py-2 px-5 text-black rounded-full font-bold border-solid border-2 border-black">
                         Save BOQ
                     </button>
@@ -58,6 +73,7 @@ function Navbar() {
                     <button className="bg-[#1A3A36] text-sm py-2 px-5 text-white rounded-full font-bold border-solid border-2 border-[#34BFAD]">
                         Download
                     </button>
+                </div>
                 </div>
             </div>
         </div >

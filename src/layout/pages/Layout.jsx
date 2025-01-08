@@ -6,6 +6,7 @@ import TreeMap from "../pages/TreeMap";
 import OpenWorkspaces from "../pages/OpenWorkspaces";
 import Cabins from "../pages/Cabins";
 import MeetingRooms from "../pages/MeetingRooms";
+import { useApp } from "../../Context/Context";
 // import QnaPopup from "./components/QnaPopup"
 
 const initialAreaValues = {
@@ -292,7 +293,7 @@ const calculateExecutiveWashroom = (totalArea, areaValues) => {
 function Layout() {
 
 
-    const [totalArea, setTotalArea] = useState(0);
+    // const [totalArea, setTotalArea] = useState(0);
     const [builtArea, setBuiltArea] = useState(0);
     const [areaValues, setAreaValues] = useState(initialAreaValues);
     const [areaQuantities, setAreaQuantities] = useState(initialQuantities);
@@ -313,10 +314,12 @@ function Layout() {
     const [loungeSize, setLoungeSize] = useState(areaValues.lounge)
     const [smallCabinSeatCount, setSmallCabinSeatCount] = useState(0);
 
+    const {totalArea,setTotalArea}=useApp()
 
-    useEffect(() => {
-        document.title = '603 Layout';
-    }, []);
+
+    // useEffect(() => {
+    //     document.title = '603 Layout';
+    // }, []);
 
     useEffect(() => {
         const linear = calculateLinear(totalArea);
@@ -480,9 +483,16 @@ function Layout() {
     };
     return (
         <div className="container">
-            <Navbar
+            {/* <Navbar
                 totalArea={totalArea}
                 setTotalArea={setTotalArea}
+                MAX_AREA={MAX_AREA}
+                MIN_AREA={MIN_AREA}
+                resetAll={resetAll}
+            /> */}
+            <Navbar
+                // totalArea={totalArea}
+                // setTotalArea={setTotalArea}
                 MAX_AREA={MAX_AREA}
                 MIN_AREA={MIN_AREA}
                 resetAll={resetAll}

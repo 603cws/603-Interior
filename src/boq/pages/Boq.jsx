@@ -14,9 +14,9 @@ function Boq() {
     const [workspaces, setWorkspaces] = useState([]);
     const [roomData, setRoomData] = useState({ quantityData: [], areasData: [] });
 
-    useEffect(() => {
-        document.title = '603 BOQ';
-    }, []);
+    // useEffect(() => {
+    //     document.title = '603 BOQ';
+    // }, []);
 
     useEffect(() => {
         const loadData = async () => {
