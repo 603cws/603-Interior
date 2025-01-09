@@ -2,8 +2,8 @@ import { MdCancel } from "react-icons/md";
 
 function RegisterUser() {
     return (
-        <div className="bg-gradient-to-br from-[#CCCCCC] via-[#7C8A88] to-[#1A3A36] h-screen  p-20">
-        <div className="w-1/2 mx-auto  grid grid-cols-2 border-2 border-yellow-500 rounded-3xl bg-gradient-to-br from-[#CCCCCC] via-[#7C8A88] to-[#1A3A36]">
+        <div   style={{ backgroundImage: "url('/images/RegisteruserBackground.jpeg')" }} className=" h-screen flex justify-center items-center" >
+        <div className="w-[75%] h-[75%] pt-10 mx-auto grid grid-cols-2 border-2 border-[#1A3A36] rounded-3xl bg-gradient-to-br from-[#CCCCCC] via-[#7C8A88] to-[#1A3A36]">
         {/* <div className="  grid grid-cols-2 border-2 border-yellow-500 rounded-3xl "> */}
             {/* form */}
             <div className="my-10 ">
@@ -52,7 +52,7 @@ function RegisterUser() {
                 </div>
             </div>
             {/* image */}
-            <div>
+            <div className="overflow-hidden">
                 <img src="images/Register.png" alt="sitting area image" />
             </div>
         </div>
