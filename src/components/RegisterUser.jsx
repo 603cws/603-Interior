@@ -24,7 +24,7 @@ function RegisterUser() {
                             <label  className="block text-sm font-medium mb-2 ">
                                    Company Name
                             </label>
-                            <input type='text'placeholder="Enter company name" className="w-full text-sm h-7 border-1 rounded-md pl-2" />
+                            <input type='text'placeholder="Enter company name" className="w-full text-sm h-7 border-1 rounded-md pl-2 capitalize" />
                         </div>
                         {/* Mobile Number*/}
                         <div className="mb-3">

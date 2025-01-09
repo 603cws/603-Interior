@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import { CiCirclePlus, CiCircleMinus } from "react-icons/ci";
 // import Tooltip from '../components/ToolTip'; // Ensure the correct import
 import AreaCounter from "../components/AreaCounter"; // Adjust the import path as needed
+import ErrorModal from "../../components/ErrorModal";
 
 const LayoutCard = ({
     image,
@@ -17,6 +18,7 @@ const LayoutCard = ({
     showAreaCounter, // Boolean to conditionally render AreaCounter
     areaCounterProps, // Props specific to AreaCounter
 }) => {
+    const [warning,setwarning] =useState(false)
     return (
         <div className="flex flex-col w-[280px] items-center border border-solid bg-[#fff] p-18 my-3">
             {/* Image */}
@@ -62,6 +64,8 @@ const LayoutCard = ({
                 {/* Area Counter */}
                 {showAreaCounter && <AreaCounter {...areaCounterProps} />}
             </div>
+
+            {warning && <ErrorModal/>}
         </div>
     );
 };

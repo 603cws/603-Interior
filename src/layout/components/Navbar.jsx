@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { CiCalculator1 } from "react-icons/ci";
 import { MdOutlineCancel } from "react-icons/md";
-import { CiGlobe } from "react-icons/ci";
 import { useApp } from "../../Context/Context";
 import { useNavigate } from "react-router-dom";
+
+// import ErrorModal from "../../components/ErrorModal";
 
 // function Navbar({ totalArea, setTotalArea, MIN_AREA, MAX_AREA, resetAll }) {
 function Navbar({ MIN_AREA, MAX_AREA, resetAll }) {
@@ -11,6 +12,8 @@ function Navbar({ MIN_AREA, MAX_AREA, resetAll }) {
     const [error, setError] = useState(false);
 
     const {setTotalArea ,totalArea} =useApp()
+
+    // const [warning,setWarning]=useState(false)
 
     const navigate = useNavigate()
 
@@ -20,6 +23,13 @@ function Navbar({ MIN_AREA, MAX_AREA, resetAll }) {
             navigate('/boq')
         }
     }
+    // const handlegenrateboq = ()=>{
+
+    //     // if(totalArea){
+    //     //     navigate('/boq')
+    //     // }
+    //     setWarning(true)
+    // }
 
     const handleInputChange = (e) => {
         if (e.target.value.length <= 5) {
@@ -74,13 +84,13 @@ function Navbar({ MIN_AREA, MAX_AREA, resetAll }) {
                     <CiCalculator1 size={30} color="#FEBF00" className="absolute left-0" />
                     <MdOutlineCancel size={30} className="absolute right-2 cursor-pointer text-[#FFD43B] border-none" onClick={handleReset} />
                     <input
-                        type="number"
-                        className={`w-full rounded-md border-none bg-transparent py-2 ms-5  focus:outline-none focus:ring-0 text-white [&::-webkit-inner-spin-button]:appearance-none ${error ? 'error' : ''}`}
+                        type='text'
+                        className={`w-full rounded-md border-none bg-transparent py-2 ms-5  focus:outline-none focus:ring-0 text-white ${error ? 'error' : ''}`}
                         value={inputValue}
                         onChange={handleInputChange}
                         onKeyDown={handleKeyDown}
                         onKeyUp={handleSubmit}
-                        placeholder="Enter total area (sq ft)"
+                        // placeholder="Enter total area (sq ft)"
                         title="Set the area value here"
                         // className={`set-area-input ${error ? 'error' : ''}`}
                         aria-label="Total Area Input"
@@ -92,7 +102,10 @@ function Navbar({ MIN_AREA, MAX_AREA, resetAll }) {
                         Generate BOQ
                     </button>
                 </div>
+
+
             </div>
+            {/* {warning && <ErrorModal onclose={()=>setWarning(false)} />} */}
         </div>
     )
 }
