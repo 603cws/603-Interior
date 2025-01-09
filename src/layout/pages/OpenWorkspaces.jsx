@@ -48,7 +48,7 @@ function OpenWorkspaces({ areaQuantities, variant, updateAreas, onVariantChange 
 
     return (
         <div className='section px-3'>
-            <h3 className='section-heading bg-gray-400 font-bold'>Open Workspaces</h3>
+            <h3 className='section-heading bg-white shadow-sm text-md pl-2 py-1.5 sticky top-0 font-semibold'>Open Workspaces</h3>
             <div className="open-workspaces grid grid-cols-2">
                 {workspaceData.map((workspace) => (
                     <LayoutCard

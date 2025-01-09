@@ -104,7 +104,7 @@ const TreeMap = ({ totalArea, areaQuantities, areaValues }) => {
             text: 'Area Distribution of Workspaces',
             align: 'center',
             style: {
-                fontSize: '20px',
+                fontSize: '15px',
                 fontWeight: 'bold',
                 color: '#263238'
             }
@@ -146,9 +146,10 @@ const TreeMap = ({ totalArea, areaQuantities, areaValues }) => {
                     className={`legend-item ${hoveredArea === item.x ? 'blink' : ''}`}
                     style={{
                         display: 'flex',
-                        justifyContent: 'space-evenly',
+                        // justifyContent: 'space-evenly',
                         alignItems: 'center',
-                        marginBottom: '4px'
+                        marginBottom: '4px',
+                        marginRight: '5px'
                     }}
                     onMouseEnter={() => setHoveredArea(item.x)}
                     onMouseLeave={() => setHoveredArea(null)}
@@ -159,7 +160,7 @@ const TreeMap = ({ totalArea, areaQuantities, areaValues }) => {
                             backgroundColor: item.fillColor,
                             width: '10px',
                             height: '10px',
-                            marginRight: '10px',
+                            // marginRight: '10px',
                             borderRadius: '50%'
                         }}
                     ></span>
@@ -189,9 +190,7 @@ const TreeMap = ({ totalArea, areaQuantities, areaValues }) => {
         };
     }, []);
 
-    console.log("total area in chart", totalArea)
-    console.log("areaQuantities in chart", areaValues)
-    console.log("quantity in chart", areaQuantities)
+
     return (
         <div id="chart" style={{ position: 'relative' }}>
             <ReactApexChart options={options} series={[{ data: series }]} type="treemap" className='distribution-chart' />
@@ -210,12 +209,11 @@ const TreeMap = ({ totalArea, areaQuantities, areaValues }) => {
                 {/* <FontAwesomeIcon icon={isLegendVisible ? faChevronLeft : faChevronRight} /> */}
             </button>
             <div
-                className="legend-container"
+                className="legend-container w-full flex flex-wrap"
                 style={{
                     transform: isLegendVisible ? 'translateX(0)' : 'translateX(-100%)', // Start hidden and slide in
                     transition: 'transform 1s ease-in-out',
                     position: 'absolute',
-                    bottom: -50,
                     left: '0',
                     background: '#fff',
                     padding: '10px',

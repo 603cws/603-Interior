@@ -1,5 +1,7 @@
+import React from "react";
 import { CiCirclePlus, CiCircleMinus } from "react-icons/ci";
 // import Tooltip from '../components/ToolTip'; // Ensure the correct import
+import AreaCounter from "../components/AreaCounter"; // Adjust the import path as needed
 
 const LayoutCard = ({
     image,
@@ -12,12 +14,14 @@ const LayoutCard = ({
     onSizeChange,
     tooltipText,
     title,
+    showAreaCounter, // Boolean to conditionally render AreaCounter
+    areaCounterProps, // Props specific to AreaCounter
 }) => {
     return (
-        <div className="flex flex-col w-[280px] items-center border border-solid bg-[#fff] p-18">
+        <div className="flex flex-col w-[280px] items-center border border-solid bg-[#fff] p-18 my-3">
             {/* Image */}
             <div className="bg-red-400">
-                <img src={image} alt={title} className="object-cover" />
+                <img src={image} alt={title} className={`object-fit w-full h-56`} />
             </div>
             {/* Content */}
             <div className="flex flex-col mt-2">
@@ -37,7 +41,8 @@ const LayoutCard = ({
                         {sizes.map((size) => (
                             <button
                                 key={size}
-                                className={`border-2 rounded-full p-1 ${selectedSize === size ? 'bg-gray-300' : ''}`}
+                                className={`border-2 rounded-full p-1 ${selectedSize === size ? "bg-gray-300" : ""
+                                    }`}
                                 onClick={() => onSizeChange(size)}
                             >
                                 {size}
@@ -46,7 +51,7 @@ const LayoutCard = ({
                     </div>
                 )}
                 {/* Description */}
-                <p className="text-center text-sm">{description}</p>
+                <p className="text-center text-sm invisible">{description}</p>
                 <p className="text-center font-bold text-sm">{title}</p>
                 {/* Tooltip */}
                 {tooltipText && (
@@ -54,6 +59,8 @@ const LayoutCard = ({
                         {/* <Tooltip text={tooltipText} /> */}
                     </div>
                 )}
+                {/* Area Counter */}
+                {showAreaCounter && <AreaCounter {...areaCounterProps} />}
             </div>
         </div>
     );

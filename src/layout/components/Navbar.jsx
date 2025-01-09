@@ -74,13 +74,13 @@ function Navbar({ MIN_AREA, MAX_AREA, resetAll }) {
                     <CiCalculator1 size={30} color="#FEBF00" className="absolute left-0" />
                     <MdOutlineCancel size={30} className="absolute right-2 cursor-pointer text-[#FFD43B] border-none" onClick={handleReset} />
                     <input
-                        type='text'
-                        className={`w-full rounded-md border-none bg-transparent py-2 ms-5  focus:outline-none focus:ring-0 text-white ${error ? 'error' : ''}`}
+                        type="number"
+                        className={`w-full rounded-md border-none bg-transparent py-2 ms-5  focus:outline-none focus:ring-0 text-white [&::-webkit-inner-spin-button]:appearance-none ${error ? 'error' : ''}`}
                         value={inputValue}
                         onChange={handleInputChange}
                         onKeyDown={handleKeyDown}
                         onKeyUp={handleSubmit}
-                        // placeholder="Enter total area (sq ft)"
+                        placeholder="Enter total area (sq ft)"
                         title="Set the area value here"
                         // className={`set-area-input ${error ? 'error' : ''}`}
                         aria-label="Total Area Input"

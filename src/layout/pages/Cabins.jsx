@@ -1,5 +1,5 @@
 import React from "react";
-import LayoutCard from "../components/LayoutCard";// Reusable LayoutCard component
+import LayoutCard from "../components/LayoutCard"; // Ensure the correct path to LayoutCard
 
 const cabinData = [
     {
@@ -47,83 +47,73 @@ const cabinData = [
     },
 ];
 
-
 const Cabins = ({
     areaQuantities,
     updateAreas,
+    mdCabinSize,
+    setMdCabinSize,
+    smallCabinConfig,
     totalArea,
     builtArea,
     initialAreaValues,
-    mdCabinSize,
-    setMdCabinSize,
     managerCabinSize,
     setManagerCabinSize,
-    smallCabinConfig,
 }) => {
-    const handleIncrement = (type) => {
-        const newValue = (areaQuantities[type] || 0) + 1;
-        updateAreas(type, newValue);
-    };
-
-    const handleDecrement = (type) => {
-        const newValue = (areaQuantities[type] || 0) - 1;
-        if (newValue >= 0) {
-            updateAreas(type, newValue);
-        }
-    };
-
-    const handleSliderChange = (key, value) => {
-        if (key === "mdCabinSize") setMdCabinSize(value);
-        if (key === "managerCabinSize") setManagerCabinSize(value);
-        if (key === "smallCabinConfig.seatCount") smallCabinConfig.setSeatCount(value);
-        if (key === "smallCabinConfig.roomSize") smallCabinConfig.setRoomSize(value);
-    };
-
     return (
         <div className="section px-3">
-            <h3 className="section-heading bg-gray-400">Cabins</h3>
+            <h3 className="section-heading bg-white shadow-sm text-md pl-2 py-1.5 sticky top-0 font-semibold">Cabins</h3>
             <div className="cabins grid grid-cols-2">
-                {cabinData.map((cabin) => (
+                {cabinData.map((room) => (
                     <LayoutCard
-                        key={cabin.type}
-                        image={cabin.image}
-                        description={cabin.description}
-                        counterValue={areaQuantities[cabin.type] || 0}
-                        onIncrement={() => handleIncrement(cabin.type)}
-                        onDecrement={() => handleDecrement(cabin.type)}
-                        title={`${cabin.type.charAt(0).toUpperCase() + cabin.type.slice(1)} Cabin`}
-                        tooltipText={
-                            cabin.type === "small"
-                                ? `Size: ${smallCabinConfig.roomSize} sq ft \nCabin: ${4 + smallCabinConfig.seatCount} seats`
+                        key={room.type}
+                        image={room.image}
+                        description={room.description}
+                        counterValue={areaQuantities[room.type] || 0}
+                        onIncrement={() =>
+                            updateAreas(room.type, (areaQuantities[room.type] || 0) + 1)
+                        }
+                        onDecrement={() => {
+                            const newValue = (areaQuantities[room.type] || 0) - 1;
+                            if (newValue >= 0) {
+                                updateAreas(room.type, newValue);
+                            }
+                        }}
+                        onChange={(value) => updateAreas(room.type, value)}
+                        title={`${room.type.charAt(0).toUpperCase() + room.type.slice(1)} Cabin`}
+                        showAreaCounter
+                        areaCounterProps={
+                            room.slider
+                                ? {
+                                    name: room.slider.name,
+                                    value: room.type === "md"
+                                        ? mdCabinSize
+                                        : room.type === "manager"
+                                            ? managerCabinSize
+                                            : smallCabinConfig.seatCount,
+                                    onChange: room.type === "md"
+                                        ? setMdCabinSize
+                                        : room.type === "manager"
+                                            ? setManagerCabinSize
+                                            : smallCabinConfig.setSeatCount,
+                                    min2: room.slider.min,
+                                    max2: room.slider.max,
+                                    step2: room.slider.step,
+                                    totalArea,
+                                    builtArea,
+                                    type: room.type,
+                                    initialAreaValues,
+                                    ...(room.type === "small"
+                                        ? {
+                                            cabinSize: smallCabinConfig.roomSize,
+                                            setCabinSize: smallCabinConfig.setRoomSize,
+                                        }
+                                        : {
+                                            cabinSize: room.type === "md" ? mdCabinSize : managerCabinSize,
+                                            setCabinSize: room.type === "md" ? setMdCabinSize : setManagerCabinSize,
+                                        }),
+                                }
                                 : null
                         }
-                    // additionalContent={
-                    //     cabin.slider && (
-                    //         <InteractiveInputSlider
-                    //             name={cabin.slider.name}
-                    //             value={eval(cabin.slider.valueKey)}
-                    //             min2={cabin.slider.min}
-                    //             max2={cabin.slider.max}
-                    //             step2={cabin.slider.step}
-                    //             onChange={(value) => handleSliderChange(cabin.slider.valueKey, value)}
-                    //             cabinSize={
-                    //                 cabin.slider.additionalData?.roomSizeKey
-                    //                     ? eval(cabin.slider.additionalData.roomSizeKey)
-                    //                     : eval(cabin.slider.valueKey)
-                    //             }
-                    //             setCabinSize={(value) =>
-                    //                 handleSliderChange(
-                    //                     cabin.slider.additionalData?.setRoomSizeKey || cabin.slider.setValueKey,
-                    //                     value
-                    //                 )
-                    //             }
-                    //             totalArea={totalArea}
-                    //             builtArea={builtArea}
-                    //             type={cabin.type}
-                    //             initialAreaValues={initialAreaValues}
-                    //         />
-                    //     )
-                    // }
                     />
                 ))}
             </div>

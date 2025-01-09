@@ -295,6 +295,7 @@ function Layout() {
 
     // const [totalArea, setTotalArea] = useState(0);
     const [builtArea, setBuiltArea] = useState(0);
+    const [availableArea, setAvailableArea] = useState(0);
     const [areaValues, setAreaValues] = useState(initialAreaValues);
     const [areaQuantities, setAreaQuantities] = useState(initialQuantities);
     const [variant, setVariant] = useState("large");
@@ -313,6 +314,9 @@ function Layout() {
     const [receptionSize, setReceptionSize] = useState(areaValues.reception);
     const [loungeSize, setLoungeSize] = useState(areaValues.lounge)
     const [smallCabinSeatCount, setSmallCabinSeatCount] = useState(0);
+    const [hrRoomSeatCount, setHrRoomSeatCount] = useState(0);
+    const [salesSeatCount, setSalesSeatCount] = useState(0);
+    const [financeRoomSeatCount, setFinanceRoomSeatCount] = useState(0);
 
     const {totalArea,setTotalArea}=useApp()
 
@@ -370,6 +374,24 @@ function Layout() {
         // setShowModal(true);
         setErrorMessage(message);
     };
+
+    // Calculate builtArea and set it to state
+    useEffect(() => {
+        const calculatedBuiltArea = Object.keys(areaQuantities).reduce(
+            (acc, key) => acc + areaQuantities[key] * areaValues[key],
+            0
+        );
+        setBuiltArea(calculatedBuiltArea);
+        // console.log("Built area cal:", calculatedBuiltArea, "Areas:", areas, "Area values:", areaValues);
+    }, [areaQuantities, areaValues]);
+
+    // Calculate availableArea based on totalArea and builtArea
+    useEffect(() => {
+        setAvailableArea(totalArea - builtArea);
+        // console.log("Available area:", availableArea);
+        // console.log("Built area:", builtArea);
+    }, [totalArea, builtArea]);
+
     const updateAreas = (type, value) => {
         // console.log("Here");
         if (!totalArea) {
@@ -474,6 +496,32 @@ function Layout() {
     };
 
     const handleSmallCabinSeatCountChange = handleSeatCountChange(setSmallCabinSeatCount);
+    const handleHrRoomSeatCountChange = handleSeatCountChange(setHrRoomSeatCount);
+    const handleSalesRoomSeatCountChange = handleSeatCountChange(setSalesSeatCount);
+    const handleFinanceRoomSeatCountChange = handleSeatCountChange(setFinanceRoomSeatCount);
+
+
+
+    const hrRoomConfig = {
+        seatCount: hrRoomSeatCount,
+        setSeatCount: handleHrRoomSeatCountChange,
+        roomSize: hrRoomSize,
+        setRoomSize: handleHrRoomAreaChange,
+    };
+
+    const salesRoomConfig = {
+        seatCount: salesSeatCount,
+        setSeatCount: handleSalesRoomSeatCountChange,
+        roomSize: salesRoomSize,
+        setRoomSize: handleSalesRoomAreaChange,
+    };
+
+    const financeRoomConfig = {
+        seatCount: financeRoomSeatCount,
+        setSeatCount: handleFinanceRoomSeatCountChange,
+        roomSize: financeRoomSize,
+        setRoomSize: handleFinanceRoomAreaChange,
+    };
 
     const smallCabinConfig = {
         seatCount: smallCabinSeatCount,
@@ -481,8 +529,14 @@ function Layout() {
         roomSize: smallCabinSize,
         setRoomSize: handleSmallCabinAreaChange,
     };
+
+    const areaInfo = {
+        totalArea,
+        builtArea,
+    };
+
     return (
-        <div className="container">
+        <div className="container max-h-lvh overflow-hidden">
             {/* <Navbar
                 totalArea={totalArea}
                 setTotalArea={setTotalArea}
@@ -498,16 +552,20 @@ function Layout() {
                 resetAll={resetAll}
             />
 
-            <div className="content w-full flex justify-between gap-3 px-3 mt-5">
+            <div className="content w-full flex justify-between gap-3 px-3 mt-5 relative">
                 <div className="area-distribution-chart w-1/2 px-3 border-2">
-                    <Spacebar />
+                    <Spacebar
+                        builtArea={builtArea}
+                        availableArea={availableArea}
+                        totalArea={totalArea}
+                    />
                     <TreeMap
                         totalArea={totalArea}
                         areaValues={areaValues}
                         areaQuantities={areaQuantities}
                     />
                 </div>
-                <div className="sections w-1/2">
+                <div className="sections w-1/2 overflow-auto max-h-lvh pb-32">
                     <OpenWorkspaces
                         areaQuantities={areaQuantities}
                         variant={variant}
@@ -526,7 +584,21 @@ function Layout() {
                         managerCabinSize={managerCabinSize}
                         setManagerCabinSize={handleManagerCabinSizeChange}
                     />
-                    <MeetingRooms />
+                    <MeetingRooms
+                        areaQuantities={areaQuantities}
+                        updateAreas={updateAreas}
+                        hrRoomConfig={hrRoomConfig} salesRoomConfig={salesRoomConfig}
+                        financeRoomConfig={financeRoomConfig} areaInfo={areaInfo} initialAreaValues={initialAreaValues}
+                        videoRecordingRoomSize={videoRecordingRoomSize} setVideoRecordingRoomSize={handleVideoRecordingRoomAreaChange}
+                        conferenceRoomSize={conferenceRoomSize} setConferenceRoomSize={handleConferenceRoomAreaChange}
+                        boardRoomSize={boardRoomSize} setBoardRoomSize={handleBoardRoomAreaChange}
+                        hrRoomSeatCount={hrRoomSeatCount}
+                        setHrRoomSeatCount={setHrRoomSeatCount}
+                        salesSeatCount={salesSeatCount}
+                        setSalesSeatCount={setSalesSeatCount}
+                        financeRoomSeatCount={financeRoomSeatCount}
+                        setFinanceRoomSeatCount={setFinanceRoomSeatCount}
+                    />
                 </div>
             </div>
             {/* <LayoutCard /> */}
