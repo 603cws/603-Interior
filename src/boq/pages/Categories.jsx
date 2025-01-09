@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-const Categories = ({ categories }) => {    //handleSelectedSubCategory
-    const [selectedCategory, setSelectedCategory] = useState(null);
-    const [selectedSubCategory, setSelectedSubCategory] = useState(null);
+const Categories = ({ categories, selectedCategory, setSelectedCategory, selectedSubCategory, setSelectedSubCategory, minimizedView }) => {
 
     // Set the default category to "Furniture" on component mount
     useEffect(() => {
@@ -28,16 +26,6 @@ const Categories = ({ categories }) => {    //handleSelectedSubCategory
         // .toLowerCase();                         // Convert to lowercase
     };
 
-    // Handle category selection
-    const handleCategorySelection = (categoryData) => {
-        setSelectedCategory(categoryData);
-    };
-
-    const handleSelectedSubCategory = (subCategory) => {
-        setSelectedSubCategory(subCategory);
-        console.log(subCategory);
-    }
-
     return (
         <div className="flex flex-col">
             {/* Categories List */}
@@ -49,10 +37,10 @@ const Categories = ({ categories }) => {    //handleSelectedSubCategory
                     const imageSrc = `/images/icons/${cleanedCategoryName}.png`; // Dynamically set the image source based on cleaned category name
 
                     return (
-                        <div key={id} onClick={() => handleCategorySelection({ id, category, subcategories })}
+                        <div key={id} onClick={() => setSelectedCategory({ id, category, subcategories })}
                             className={`transition-transform duration-500 ease-in-out ${isSelected ? 'scale-110' : 'scale-100'
                                 }`}>
-                            {!selectedSubCategory && <div className={`pt-[30px] pr-[50px] pb-[30px] pl-[50px] flex flex-row gap-[21px] items-center justify-start relative overflow-auto`}>
+                            {!minimizedView && <div className={`pt-[30px] pr-[50px] pb-[30px] pl-[50px] flex flex-row gap-[21px] items-center justify-start relative overflow-auto`}>
                                 <div className={`${selectedCategory?.id === id ? 'bg-[#A9D3CE]' : 'bg-[#ffffff]'} 
                                     rounded-3xl border-solid border-[#000000] border-2 pt-3.5 pr-4 pb-3.5 pl-4 flex flex-col gap-0 items-center justify-start shrink-0 w-[120px] h-[100px] relative`}>
                                     <div className="flex flex-row gap-2.5 items-center justify-center shrink-0 w-[50px] relative">
@@ -75,7 +63,7 @@ const Categories = ({ categories }) => {    //handleSelectedSubCategory
                             }
 
                             {/* Show below afterwards when minimized */}
-                            {selectedSubCategory && <div className={`pl-20 flex flex-row gap-[21px] items-center justify-start relative overflow-hidden group`}>
+                            {minimizedView && <div className={`pl-20 flex flex-row gap-[21px] items-center justify-start relative overflow-hidden group`}>
                                 <div className={`rounded-full border-2 ${selectedCategory?.id === id ? 'border-[#34BFAD]' : 'border-[#000000]'} w-[70px] h-[70px] flex items-center justify-center`} >
                                     {/* Dynamically load category image */}
                                     <img
@@ -85,7 +73,7 @@ const Categories = ({ categories }) => {    //handleSelectedSubCategory
                                     />
                                 </div>
                                 {/* Category Name (Appears on hover) */}
-                                <div className="absolute bottom-0 w-100 h-100 text-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-[#252525] font-['Poppins-Regular',_sans-serif] text-base leading-5 font-normal">
+                                <div className="absolute -bottom-1 w-100 h-100 text-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-[#252525] font-['Poppins-Regular',_sans-serif] text-base leading-5 font-normal">
                                     {category}
                                 </div>
                             </div>
@@ -99,11 +87,11 @@ const Categories = ({ categories }) => {    //handleSelectedSubCategory
             {selectedCategory && (
                 <div className="mt-5">
 
-                    {selectedSubCategory && (
-                        <div class="bg-[#ffffff] border-solid border-[#d5d5d5] border pt-[13px] pb-[13px] pl-[10px] flex flex-row gap-[10px] items-center justify-start overflow-auto cursor-pointer">
+                    {minimizedView && (
+                        <div className="bg-[#ffffff] border-solid border-[#d5d5d5] border pt-[13px] pb-[13px] pl-[10px] flex flex-row gap-[10px] items-center justify-start overflow-auto cursor-pointer">
                             {selectedCategory.subcategories.map((subCategory, index) => (
-                                <div key={index} class="bg-[#ffffff] rounded-lg pr-4 pl-4 flex flex-row gap-[9px] items-start justify-center shrink-0 w-56">
-                                    <div class="text-[#252525] text-center font-['Poppins-Regular',_sans-serif] text-2xl leading-[30px] font-normal w-[198px] flex items-center justify-center ">
+                                <div key={index} onClick={() => setSelectedSubCategory(subCategory)} className="bg-[#ffffff] rounded-lg pr-4 pl-4 flex flex-row gap-[9px] items-start justify-center shrink-0 w-56">
+                                    <div className="text-[#252525] text-center font-['Poppins-Regular',_sans-serif] text-2xl leading-[30px] font-normal w-[198px] flex items-center justify-center ">
                                         {subCategory}
                                     </div>
                                 </div>
@@ -111,7 +99,7 @@ const Categories = ({ categories }) => {    //handleSelectedSubCategory
                         </div>
                     )}
 
-                    {!selectedSubCategory &&
+                    {!minimizedView &&
                         <div>
                             <h3 className="text-xl font-semibold text-gray-800">Subcategories of {selectedCategory.category}</h3>
                             <div className="grid grid-cols-4 gap-5 mt-3">
@@ -123,7 +111,7 @@ const Categories = ({ categories }) => {    //handleSelectedSubCategory
                                     return (
                                         <div key={index}
                                             // className="p-4 border rounded-lg cursor-pointer hover:bg-gray-100"
-                                            onClick={() => handleSelectedSubCategory(subCategory)}  // Trigger the subcategory selection callback
+                                            onClick={() => setSelectedSubCategory(subCategory)}  // Trigger the subcategory selection callback
                                         >
 
                                             <div className='className="p-4 border rounded-lg cursor-pointer hover:bg-gray-100"'>
