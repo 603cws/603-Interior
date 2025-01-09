@@ -4,6 +4,7 @@ import Boq from './boq/pages/Boq';
 import PageNotFound from './components/PageNotFound';
 
 import { Route, Routes } from 'react-router-dom';
+import RegisterUser from './components/RegisterUser';
 
 
 function App() {
@@ -13,6 +14,7 @@ function App() {
       {/* <Boq /> */}
      <Routes>
        <Route path='/' element={<Layout/>} />
+       <Route path='/RegisterUser' element={<RegisterUser/>} />
        <Route path='/boq' element={<Boq/>} />
        <Route path='*' element={<PageNotFound/>} />
      </Routes>
