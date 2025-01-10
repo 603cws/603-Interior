@@ -8,12 +8,12 @@ import { Toaster } from 'react-hot-toast';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-  <BrowserRouter>
-     <AppProvider>
-      <Toaster/>
-      <App />
-    </AppProvider>
+    <BrowserRouter>
+      <AppProvider>
+        <Toaster />
+        <App />
+      </AppProvider>
       {/* <App /> */}
-  </BrowserRouter>
+    </BrowserRouter>
   </StrictMode>,
 )

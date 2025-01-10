@@ -4,7 +4,7 @@ import LayoutCard from "../components/LayoutCard"; // Ensure the correct path to
 const cabinData = [
     {
         type: "md",
-        image: "/images/md.png",
+        image: "/images/workspace-image/md.png",
         description: "This is the MD's cabin, designed for maximum comfort and productivity.",
         slider: {
             name: "MD Cabin Size",
@@ -17,7 +17,7 @@ const cabinData = [
     },
     {
         type: "manager",
-        image: "/images/manager.png",
+        image: "/images/workspace-image/manager.png",
         description: "This is the Manager's cabin, equipped with all necessary amenities.",
         slider: {
             name: "Manager Cabin Size",
@@ -30,7 +30,7 @@ const cabinData = [
     },
     {
         type: "small",
-        image: "/images/small.png",
+        image: "/images/workspace-image/small.png",
         description: "This is a small cabin, suitable for individual work.",
         tooltipText: "Size :80 sqft",
         slider: {

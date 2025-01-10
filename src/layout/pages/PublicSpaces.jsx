@@ -4,7 +4,7 @@ import LayoutCard from "../components/LayoutCard"; // Ensure the correct path to
 const publicSpacesData = [
     {
         type: "reception",
-        image: "/images/reception.png",
+        image: "/images/workspace-image/reception.png",
         description: "This is the reception area, the first point of contact for visitors.",
         slider: {
             name: "Reception Size",
@@ -17,7 +17,7 @@ const publicSpacesData = [
     },
     {
         type: "lounge",
-        image: "/images/lounge.png",
+        image: "/images/workspace-image/lounge.png",
         description: "This is the lounge, a comfortable area for informal meetings.",
         slider: {
             name: "Lounge Size",
@@ -30,13 +30,13 @@ const publicSpacesData = [
     },
     {
         type: "phoneBooth",
-        image: "/images/phoneBooth.png",
+        image: "/images/workspace-image/phoneBooth.png",
         description: "This is the phone booth, providing a quiet space for calls.",
         tooltipText: "size: 25 sqft",
     },
     {
         type: "breakoutRoom",
-        image: "/images/breakout.png",
+        image: "/images/workspace-image/breakout.png",
         description: "This is the breakout room, a flexible space for small group discussions.",
         slider: {
             name: "Breakout Room Size",

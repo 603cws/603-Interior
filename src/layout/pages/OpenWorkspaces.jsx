@@ -4,7 +4,7 @@ import LayoutCard from '../components/LayoutCard';
 const workspaceData = [
     {
         type: "linear",
-        image: "/images/linear.png",
+        image: "/images/workspace-image/linear.png",
         description: "This is a linear workspace, designed for open collaboration.",
         sizes: ["M", "L", "XL"], // Corresponds to sizeMapping keys
         tooltipText: "Size: 20 sq ft", // Default tooltip text for Linear Workstation
@@ -12,7 +12,7 @@ const workspaceData = [
     },
     {
         type: "lType",
-        image: "/images/lType.png",
+        image: "/images/workspace-image/lType.png",
         description: "This is an L-type workspace, providing a semi-private environment.",
         sizes: null, // No size options
         tooltipText: "Size: 34 sq ft",

@@ -14,14 +14,14 @@ function App() {
     <div>
       {/* <Layout /> */}
       {/* <Boq /> */}
-     <Routes>
-       <Route path='/' element={<Layout/>} />
-       <Route path='/RegisterUser' element={<RegisterUser/>} />
-       <Route path='/boq' element={<Boq/>} />
-       <Route path='/Error' element={<ErrorModal/>}/>
-       <Route path='/ProductCard' element={<ProductCard/>}/>
-       <Route path='*' element={<PageNotFound/>} />
-     </Routes>
+      <Routes>
+        <Route path='/' element={<Layout />} />
+        <Route path='/RegisterUser' element={<RegisterUser />} />
+        <Route path='/boq' element={<Boq />} />
+        <Route path='/Error' element={<ErrorModal />} />
+        <Route path='/ProductCard' element={<ProductCard />} />
+        <Route path='*' element={<PageNotFound />} />
+      </Routes>
     </div>
   )
 }

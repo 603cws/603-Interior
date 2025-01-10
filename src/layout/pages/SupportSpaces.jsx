@@ -4,31 +4,31 @@ import LayoutCard from "../components/LayoutCard"; // Ensure the correct path to
 const supportSpacesData = [
     {
         type: "ups",
-        image: "/images/ups.png",
+        image: "/images/workspace-image/ups.png",
         description: "This is the UPS room, ensuring uninterrupted power supply.",
         tooltipText: "size: 90 sqft",
     },
     {
         type: "bms",
-        image: "/images/bms.png",
+        image: "/images/workspace-image/bms.png",
         description: "This is the BMS room, managing building systems.",
         tooltipText: "size: 90 sqft",
     },
     {
         type: "server",
-        image: "/images/server.png",
+        image: "/images/workspace-image/server.png",
         description: "This is the server room, housing critical IT infrastructure.",
         tooltipText: "size: 40 sqft",
     },
     {
         type: "executiveWashroom",
-        image: "/images/executiveWashroom.png",
+        image: "/images/workspace-image/executiveWashroom.png",
         description: "This is the Executive Washroom, providing premium facilities.",
         tooltipText: "size: 60 sqft",
     },
     {
         type: "other",
-        image: "/images/other.png",
+        image: "/images/workspace-image/other.png",
         description: "This is an additional space for miscellaneous purposes.",
     },
 ];
