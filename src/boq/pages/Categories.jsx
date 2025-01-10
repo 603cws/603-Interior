@@ -29,13 +29,7 @@ const Categories = ({ categories, selectedCategory, setSelectedCategory, selecte
         const cleanedSubCategoryName = getCleanedName(subCategory);
 
         // Handle specific categories if needed
-        if (category === 'Lighting') {
-            return `/images/subheader/${category}-${cleanedSubCategoryName}.png`;
-        } else if (category === 'HVAC') {
-            return `/images/subheader/${category}-${cleanedSubCategoryName}.png`;
-        } else if (category === 'Smart Solutions') {
-            return `/images/subheader/${category}-${cleanedSubCategoryName}.png`;
-        } else if (category === 'Flooring') {
+        if (['Lighting', 'HVAC', 'Smart Solutions', 'Flooring'].includes(category)) {
             return `/images/subheader/${category}-${cleanedSubCategoryName}.png`;
         }
 
