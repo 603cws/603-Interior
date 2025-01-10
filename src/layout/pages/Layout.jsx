@@ -7,6 +7,9 @@ import OpenWorkspaces from "../pages/OpenWorkspaces";
 import Cabins from "../pages/Cabins";
 import MeetingRooms from "../pages/MeetingRooms";
 import { useApp } from "../../Context/Context";
+import SupportSpaces from "./SupportSpaces";
+import PublicSpaces from "./PublicSpaces";
+import ErrorModal from "../../components/ErrorModal";
 // import QnaPopup from "./components/QnaPopup"
 
 const initialAreaValues = {
@@ -317,8 +320,10 @@ function Layout() {
     const [hrRoomSeatCount, setHrRoomSeatCount] = useState(0);
     const [salesSeatCount, setSalesSeatCount] = useState(0);
     const [financeRoomSeatCount, setFinanceRoomSeatCount] = useState(0);
+    const [isOtherSelected, setIsOtherSelected] = useState(false);
+    const [warning, setWarning] = useState(false);
 
-    const {totalArea,setTotalArea}=useApp()
+    const { totalArea, setTotalArea } = useApp()
 
 
     // useEffect(() => {
@@ -373,6 +378,7 @@ function Layout() {
         setError(true);
         // setShowModal(true);
         setErrorMessage(message);
+        setWarning(true);
     };
 
     // Calculate builtArea and set it to state
@@ -393,7 +399,7 @@ function Layout() {
     }, [totalArea, builtArea]);
 
     const updateAreas = (type, value) => {
-        // console.log("Here");
+        // Ensure the total area is entered before making changes
         if (!totalArea) {
             setErrorMessageHandler(
                 "The input box for total area cannot be left empty.\n" +
@@ -402,44 +408,50 @@ function Layout() {
             return;
         }
 
-        const newAreaQuantities = {
-            ...areaQuantities,
-            [type]: value
-        };
+        // Clone current area values and area quantities
+        const newAreaQuantities = { ...areaQuantities };
+        const newAreaValues = { ...areaValues };
 
+        if (type === "other") {
+            // Update areaValues for 'other'
+            newAreaValues[type] = value;
+
+            // Ensure areaQuantities for 'other' is 1 if areaValues of 'other' is greater than 1
+            if (value > 1) {
+                newAreaQuantities[type] = 1;
+            } else {
+                newAreaQuantities[type] = 0; // Optional: Set to 0 if value is 0 or less
+            }
+        } else {
+            // Update areaQuantities for other types
+            newAreaQuantities[type] = value;
+        }
+
+        // Calculate the built area
         const calculatedBuiltArea = Object.keys(newAreaQuantities).reduce(
-            (acc, key) => acc + newAreaQuantities[key] * areaValues[key],
+            (acc, key) => acc + newAreaQuantities[key] * newAreaValues[key],
             0
         );
 
         const freeSpace = totalArea * 0.05; // 5% of totalArea
         const usableArea = totalArea - freeSpace; // Area available for building
 
+        // Check if the built area exceeds the usable area
         if (calculatedBuiltArea <= usableArea) {
-            setBuiltArea(calculatedBuiltArea); // Only update builtArea and areas if valid
-            setAreaQuantities(newAreaQuantities);
+            setBuiltArea(calculatedBuiltArea); // Update built area
+            setAreaQuantities(newAreaQuantities); // Update area quantities
+            setAreaValues(newAreaValues); // Update area values
             setError(false);
-            // setShowModal(false);
         } else {
-            console.log("Built area exceeds the available space, showing modal");
-            // setError(true);
-            // setShowModal(true);
-            if (calculatedBuiltArea <= usableArea) {
-                setBuiltArea(calculatedBuiltArea); // Only update builtArea and areas if valid
-                setAreaQuantities(newAreaQuantities);
-                setError(false);
-                // setShowModal(false);
-            } else {
-                console.log("Built area exceeds the available space, showing modal");
-                // setError(true);
-                // setShowModal(true);
-                setErrorMessageHandler(
-                    "The built area exceeds the available usable space.\n" +
-                    "To resolve this, either increase the total area or adjust the number of rooms to ensure the built area fits within the usable space."
-                );
-            }
+            console.log("Built area exceeds the available space, showing error message");
+            setErrorMessageHandler(
+                "The built area exceeds the available usable space.\n" +
+                "To resolve this, either increase the total area or adjust the number of rooms to ensure the built area fits within the usable space."
+            );
         }
     };
+
+
 
     const resetAll = () => {
         setTotalArea(0);
@@ -455,13 +467,13 @@ function Layout() {
         setVariant(newVariant);
         const newAreaValues = { ...areaValues };
         switch (newVariant) {
-            case "medium":
+            case "M":
                 newAreaValues.linear = 20;
                 break;
-            case "xl":
+            case "XL":
                 newAreaValues.linear = 29;
                 break;
-            case "large":
+            case "L":
             default:
                 newAreaValues.linear = 24;
                 break;
@@ -535,6 +547,7 @@ function Layout() {
         builtArea,
     };
 
+    console.log("area sqft: ", areaValues, "area qty", areaQuantities)
     return (
         <div className="container max-h-lvh overflow-hidden">
             {/* <Navbar
@@ -599,10 +612,23 @@ function Layout() {
                         financeRoomSeatCount={financeRoomSeatCount}
                         setFinanceRoomSeatCount={setFinanceRoomSeatCount}
                     />
+                    <PublicSpaces areaQuantities={areaQuantities} updateAreas={updateAreas}
+                        breakoutRoomSize={breakoutRoomSize} setBreakoutRoomSize={handleBreakoutRoomAreaChange}
+                        totalArea={totalArea} builtArea={builtArea} initialAreaValues={initialAreaValues}
+                        receptionSize={receptionSize} setReceptionSize={handleReceptionSizeChange}
+                        loungeSize={loungeSize} setLoungeSize={handleLoungeSizeChange}
+                    />
+                    <SupportSpaces areaQuantities={areaQuantities} updateAreas={updateAreas}
+                        setIsOtherSelected={setIsOtherSelected} areaValues={areaValues}
+                    />
                 </div>
+                {warning &&
+                    <ErrorModal onclose={() => setWarning(false)} />
+                }
             </div>
             {/* <LayoutCard /> */}
             {/* <QnaPopup question="is the flooring project for residental purpose ?" /> */}
+
         </div>
     )
 }

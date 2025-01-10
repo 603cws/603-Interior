@@ -6,11 +6,14 @@ const meetingRoomData = [
         type: "discussionRoom",
         image: "/images/discussionRoom.png",
         description: "This is the discussion room, ideal for small group discussions.",
+        tooltipText: "size: 380 sqft"
     },
     {
         type: "interviewRoom",
         image: "/images/interviewRoom.png",
         description: "This is the interview room, designed for conducting interviews.",
+        tooltipText: "size: 100 sqft"
+
     },
     {
         type: "conferenceRoom",
@@ -42,16 +45,20 @@ const meetingRoomData = [
         type: "meetingRoom",
         image: "/images/meetingRoom.png",
         description: "This is the meeting room, perfect for team meetings.",
+        tooltipText: "size: 100 sqft",
+
     },
     {
         type: "meetingRoomLarge",
         image: "/images/meetingRoomLarge.png",
         description: "This is the large meeting room, accommodating larger groups.",
+        tooltipText: "size: 120 sqft",
     },
     {
         type: "hrRoom",
         image: "/images/hrRoom.png",
         description: "This is the HR room, designated for HR activities.",
+        tooltipText: "size: 80 sqft",
         slider: {
             name: "Add. Seat Count",
             valueKey: "hrRoomSeatCount",
@@ -67,6 +74,7 @@ const meetingRoomData = [
         type: "financeRoom",
         image: "/images/financeRoom.png",
         description: "This is the finance room, used for financial discussions.",
+        tooltipText: "size: 100 sqft",
         slider: {
             name: "Add. Seat Count",
             valueKey: "financeRoomSeatCount",
@@ -82,6 +90,7 @@ const meetingRoomData = [
         type: "sales",
         image: "/images/sales.png",
         description: "This is the sales area, designed for sales team activities.",
+        tooltipText: "size: 80 sqft",
         slider: {
             name: "Add. Seat Count",
             valueKey: "salesSeatCount",
@@ -207,9 +216,10 @@ const MeetingRooms = ({
                                 }
                             }}
                             onChange={(value) => handleChange(room.type, value)}
-                            title={`${room.type.charAt(0).toUpperCase() + room.type.slice(1)} Room`}
+                            title={`${room.type.charAt(0).toUpperCase() + room.type.slice(1)}`}
                             showAreaCounter={!!room.slider} // Show counter only if room has a slider
                             areaCounterProps={sliderProps}
+                            tooltipText={room.tooltipText}
                         />
                     );
                 })}

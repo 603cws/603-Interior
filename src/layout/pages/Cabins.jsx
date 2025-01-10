@@ -32,6 +32,7 @@ const cabinData = [
         type: "small",
         image: "/images/small.png",
         description: "This is a small cabin, suitable for individual work.",
+        tooltipText: "Size :80 sqft",
         slider: {
             name: "Add. Seat Count",
             min: 0,
@@ -81,6 +82,7 @@ const Cabins = ({
                         onChange={(value) => updateAreas(room.type, value)}
                         title={`${room.type.charAt(0).toUpperCase() + room.type.slice(1)} Cabin`}
                         showAreaCounter
+                        tooltipText={room.tooltipText}
                         areaCounterProps={
                             room.slider
                                 ? {

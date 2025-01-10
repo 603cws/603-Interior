@@ -1,13 +1,13 @@
-import React, { useState } from 'react'
-import LayoutCard from '../components/LayoutCard'
+import React, { useState } from 'react';
+import LayoutCard from '../components/LayoutCard';
 
 const workspaceData = [
     {
         type: "linear",
         image: "/images/linear.png",
         description: "This is a linear workspace, designed for open collaboration.",
-        sizes: ["M", "L", "XL"],
-        tooltipText: "Size: 20 sq ft",
+        sizes: ["M", "L", "XL"], // Corresponds to sizeMapping keys
+        tooltipText: "Size: 20 sq ft", // Default tooltip text for Linear Workstation
         title: "Linear Workstation",
     },
     {
@@ -20,15 +20,28 @@ const workspaceData = [
     },
 ];
 
+const sizeMapping = {
+    M: "3 X 2",
+    L: "3.5 X 2",
+    XL: "4 X 2",
+    lType: "5 X 4",
+};
+
+const sizeArea = {
+    M: "20 sq ft",
+    L: "24 sq ft",
+    XL: "29 sq ft",
+    lType: "34 sq ft",
+};
 
 function OpenWorkspaces({ areaQuantities, variant, updateAreas, onVariantChange }) {
     const [selectedSize, setSelectedSize] = useState(variant);
 
-
-    const handleSizeChange = (e) => {
-        const newSize = e.target.value;
-        setSelectedSize(newSize);
-        onVariantChange(newSize);
+    const handleSizeChange = (newSize, type) => {
+        if (type === "linear") {
+            setSelectedSize(newSize);
+            onVariantChange(newSize); // Notify parent if needed
+        }
     };
 
     const handleIncrement = (type) => {
@@ -40,11 +53,8 @@ function OpenWorkspaces({ areaQuantities, variant, updateAreas, onVariantChange 
         const newValue = (areaQuantities[type] || 0) - 1;
         if (newValue >= 0) {
             updateAreas(type, newValue);
-        } else {
-            //alert("Negative values are not allowed.");
         }
     };
-
 
     return (
         <div className='section px-3'>
@@ -59,15 +69,19 @@ function OpenWorkspaces({ areaQuantities, variant, updateAreas, onVariantChange 
                         onIncrement={() => handleIncrement(workspace.type)}
                         onDecrement={() => handleDecrement(workspace.type)}
                         sizes={workspace.sizes}
-                        selectedSize={selectedSize}
-                        onSizeChange={handleSizeChange}
-                        tooltipText={workspace.tooltipText}
-                        title={workspace.title}
+                        selectedSize={workspace.type === "linear" ? selectedSize : null} // Only for Linear Workstation
+                        onSizeChange={(size) => handleSizeChange(size, workspace.type)}
+                        tooltipText={
+                            workspace.type === "linear"
+                                ? sizeArea[selectedSize] || workspace.tooltipText
+                                : workspace.tooltipText
+                        }
+                        title={`${workspace.title} ${workspace.type === "linear" ? sizeMapping[selectedSize] || '' : ''}`}
                     />
                 ))}
             </div>
         </div>
-    )
+    );
 }
 
-export default OpenWorkspaces
+export default OpenWorkspaces;
