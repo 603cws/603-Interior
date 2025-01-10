@@ -27,7 +27,7 @@ const Categories = ({ categories, selectedCategory, setSelectedCategory, selecte
     };
 
     return (
-        <div className="flex flex-col">
+        <div className="flex  flex-col">
             {/* Categories List */}
             <div className="flex flex-row overflow-auto gap-5 cursor-pointer p-8">
                 {categories.map(({ id, category, subcategories }) => {
@@ -35,7 +35,6 @@ const Categories = ({ categories, selectedCategory, setSelectedCategory, selecte
                     const cleanedCategoryName = getCleanedCategoryName(category);
                     const isSelected = selectedCategory?.id === id;
                     const imageSrc = `/images/icons/${cleanedCategoryName}.png`; // Dynamically set the image source based on cleaned category name
-
                     return (
                         <div key={id} onClick={() => setSelectedCategory({ id, category, subcategories })}
                             className={`transition-transform duration-500 ease-in-out ${isSelected ? 'scale-110' : 'scale-100'
