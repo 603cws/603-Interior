@@ -15,15 +15,32 @@ const Categories = ({ categories, selectedCategory, setSelectedCategory, selecte
         return categoryName.replace(/[^a-zA-Z0-9]/g, ''); // Removes all non-alphanumeric characters
     };
 
-    const getCleanedSubCategoryName = (name) => {
-        if (!name) return ''; // If name is undefined or null, return empty string
+    const getImageSrcSubCat = (category, subCategory) => {
+        if (!subCategory) return ''; // If subCategory is undefined or null, return empty string
 
-        // Remove spaces and special characters, and convert to camelCase
-        return name
-            .replace(/[^a-zA-Z0-9\s]/g, '')         // Remove special characters
-            .replace(/\s(.)/g, (match, group1) => group1.toUpperCase()) // Convert spaces to camel case
-            .replace(/\s+/g, '')                    // Remove all spaces
-        // .toLowerCase();                         // Convert to lowercase
+        // Define a function to clean the name
+        const getCleanedName = (name) => {
+            return name
+                .replace(/[^a-zA-Z0-9\s]/g, '')         // Remove special characters
+                .replace(/\s(.)/g, (match, group1) => group1.toUpperCase()) // Convert spaces to camel case
+                .replace(/\s+/g, '');                  // Remove all spaces
+        };
+
+        const cleanedSubCategoryName = getCleanedName(subCategory);
+
+        // Handle specific categories if needed
+        if (category === 'Lighting') {
+            return `/images/subheader/${category}-${cleanedSubCategoryName}.png`;
+        } else if (category === 'HVAC') {
+            return `/images/subheader/${category}-${cleanedSubCategoryName}.png`;
+        } else if (category === 'Smart Solutions') {
+            return `/images/subheader/${category}-${cleanedSubCategoryName}.png`;
+        } else if (category === 'Flooring') {
+            return `/images/subheader/${category}-${cleanedSubCategoryName}.png`;
+        }
+
+        // Default case
+        return `/images/subheader/${cleanedSubCategoryName}.png`;
     };
 
     return (
@@ -104,8 +121,8 @@ const Categories = ({ categories, selectedCategory, setSelectedCategory, selecte
                             <div className="grid grid-cols-4 gap-5 mt-3">
                                 {selectedCategory.subcategories.map((subCategory, index) => {
                                     // Clean the subcategory name by removing special characters and converting to camel case
-                                    const cleanedSubCategoryName = getCleanedSubCategoryName(subCategory);
-                                    const imageSrcSubCat = `/images/subheader/${cleanedSubCategoryName}.png`; // Use the cleaned name for image source
+                                    // const cleanedSubCategoryName = getCleanedSubCategoryName(subCategory);
+                                    const imageSrcSubCat = getImageSrcSubCat(selectedCategory.category, subCategory);; // Use the cleaned name for image source
 
                                     return (
                                         <div key={index}
