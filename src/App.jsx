@@ -6,6 +6,7 @@ import PageNotFound from './components/PageNotFound';
 import { Route, Routes } from 'react-router-dom';
 import RegisterUser from './components/RegisterUser';
 import ErrorModal from './components/ErrorModal';
+import ProductCard from './components/ProductCard';
 
 
 function App() {
@@ -18,8 +19,8 @@ function App() {
        <Route path='/RegisterUser' element={<RegisterUser/>} />
        <Route path='/boq' element={<Boq/>} />
        <Route path='/Error' element={<ErrorModal/>}/>
+       <Route path='/ProductCard' element={<ProductCard/>}/>
        <Route path='*' element={<PageNotFound/>} />
-
      </Routes>
     </div>
   )

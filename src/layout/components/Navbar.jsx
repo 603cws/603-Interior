@@ -3,6 +3,7 @@ import { CiCalculator1 } from "react-icons/ci";
 import { MdOutlineCancel } from "react-icons/md";
 import { useApp } from "../../Context/Context";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 // import ErrorModal from "../../components/ErrorModal";
 
@@ -22,6 +23,12 @@ function Navbar({ MIN_AREA, MAX_AREA, resetAll }) {
         if(totalArea){
             navigate('/boq')
         }
+
+        if(totalArea === 0) {
+            toast.error("Enter the Area")
+        }
+
+
     }
     // const handlegenrateboq = ()=>{
 
