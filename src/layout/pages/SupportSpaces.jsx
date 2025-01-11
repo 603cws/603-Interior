@@ -36,12 +36,14 @@ const supportSpacesData = [
 const SupportSpaces = ({
     areaQuantities,
     updateAreas,
-    isOtherSelected,
+    // isOtherSelected,
     setIsOtherSelected,
-    areaValues,
+    // areaValues,
+    // warning,
+    otherArea,
+    setOtherArea
 }) => {
 
-    const [otherArea, setOtherArea] = useState(areaValues.other || 0);
     const handleIncrement = (type) => {
         const newValue = (areaQuantities[type] || 0) + 1;
         updateAreas(type, newValue);
@@ -63,8 +65,8 @@ const SupportSpaces = ({
 
     const handleOtherAreaChange = (event) => {
         const value = Math.max(0, Number(event.target.value)); // Prevent negative values
-        setOtherArea(value);
         setIsOtherSelected(true);
+        setOtherArea(value);
         updateAreas("other", value); // Update the area in the parent component
     };
 

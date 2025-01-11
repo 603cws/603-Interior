@@ -322,6 +322,7 @@ function Layout() {
     const [financeRoomSeatCount, setFinanceRoomSeatCount] = useState(0);
     const [isOtherSelected, setIsOtherSelected] = useState(false);
     const [warning, setWarning] = useState(false);
+    const [otherArea, setOtherArea] = useState();
 
     const { totalArea, setTotalArea } = useApp()
 
@@ -448,6 +449,9 @@ function Layout() {
                 "The built area exceeds the available usable space.\n" +
                 "To resolve this, either increase the total area or adjust the number of rooms to ensure the built area fits within the usable space."
             );
+            if (type === 'other') {
+                setOtherArea(otherArea);
+            }
         }
     };
 
@@ -620,7 +624,8 @@ function Layout() {
                         loungeSize={loungeSize} setLoungeSize={handleLoungeSizeChange}
                     />
                     <SupportSpaces areaQuantities={areaQuantities} updateAreas={updateAreas}
-                        setIsOtherSelected={setIsOtherSelected} areaValues={areaValues}
+                        setIsOtherSelected={setIsOtherSelected} areaValues={areaValues} warning={warning}
+                        otherArea={otherArea} setOtherArea={setOtherArea}
                     />
                 </div>
                 {warning &&
