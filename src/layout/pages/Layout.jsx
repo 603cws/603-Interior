@@ -301,7 +301,7 @@ function Layout() {
     const [availableArea, setAvailableArea] = useState(0);
     const [areaValues, setAreaValues] = useState(initialAreaValues);
     const [areaQuantities, setAreaQuantities] = useState(initialQuantities);
-    const [variant, setVariant] = useState("large");
+    const [variant, setVariant] = useState("L");
     const [error, setError] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
     const [mdCabinSize, setMdCabinSize] = useState(areaValues.md);
@@ -547,7 +547,6 @@ function Layout() {
         builtArea,
     };
 
-    console.log("area sqft: ", areaValues, "area qty", areaQuantities)
     return (
         <div className="container max-h-lvh overflow-hidden">
             {/* <Navbar
@@ -563,6 +562,7 @@ function Layout() {
                 MAX_AREA={MAX_AREA}
                 MIN_AREA={MIN_AREA}
                 resetAll={resetAll}
+                areaQuantities={areaQuantities} areaValues={areaValues}
             />
 
             <div className="content w-full flex justify-between gap-3 px-3 mt-5 relative">
@@ -578,7 +578,7 @@ function Layout() {
                         areaQuantities={areaQuantities}
                     />
                 </div>
-                <div className="sections w-1/2 overflow-auto max-h-lvh pb-32">
+                <div className="sections w-1/2 overflow-auto max-h-lvh pb-24">
                     <OpenWorkspaces
                         areaQuantities={areaQuantities}
                         variant={variant}
@@ -596,6 +596,7 @@ function Layout() {
                         initialAreaValues={initialAreaValues}
                         managerCabinSize={managerCabinSize}
                         setManagerCabinSize={handleManagerCabinSizeChange}
+                        smallCabinSeatCount={smallCabinSeatCount}
                     />
                     <MeetingRooms
                         areaQuantities={areaQuantities}
@@ -623,7 +624,7 @@ function Layout() {
                     />
                 </div>
                 {warning &&
-                    <ErrorModal onclose={() => setWarning(false)} />
+                    <ErrorModal onclose={() => setWarning(false)} message={errorMessage} />
                 }
             </div>
             {/* <LayoutCard /> */}

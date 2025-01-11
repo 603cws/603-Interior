@@ -76,7 +76,14 @@ function OpenWorkspaces({ areaQuantities, variant, updateAreas, onVariantChange 
                                 ? sizeArea[selectedSize] || workspace.tooltipText
                                 : workspace.tooltipText
                         }
-                        title={`${workspace.title} ${workspace.type === "linear" ? sizeMapping[selectedSize] || '' : ''}`}
+                        title={`${workspace.title
+                            } ${workspace.type === "linear"
+                                ? sizeMapping[selectedSize] || ''
+                                : workspace.type === "lType"
+                                    ? sizeMapping.lType
+                                    : ''
+                            }`}
+
                     />
                 ))}
             </div>

@@ -60,7 +60,7 @@ const meetingRoomData = [
         description: "This is the HR room, designated for HR activities.",
         tooltipText: "size: 80 sqft",
         slider: {
-            name: "Add. Seat Count",
+            name: "Add Extra Seats",
             valueKey: "hrRoomSeatCount",
             setValueKey: "setHrRoomSeatCount",
             min: 0,
@@ -76,7 +76,7 @@ const meetingRoomData = [
         description: "This is the finance room, used for financial discussions.",
         tooltipText: "size: 100 sqft",
         slider: {
-            name: "Add. Seat Count",
+            name: "Add Extra Seats",
             valueKey: "financeRoomSeatCount",
             setValueKey: "setFinanceRoomSeatCount",
             min: 0,
@@ -92,7 +92,7 @@ const meetingRoomData = [
         description: "This is the sales area, designed for sales team activities.",
         tooltipText: "size: 80 sqft",
         slider: {
-            name: "Add. Seat Count",
+            name: "Add Extra Seats",
             valueKey: "salesSeatCount",
             setValueKey: "setSalesSeatCount",
             min: 0,
@@ -219,7 +219,21 @@ const MeetingRooms = ({
                             title={`${room.type.charAt(0).toUpperCase() + room.type.slice(1)}`}
                             showAreaCounter={!!room.slider} // Show counter only if room has a slider
                             areaCounterProps={sliderProps}
-                            tooltipText={room.tooltipText}
+                            tooltipText={
+                                room.type === "conferenceRoom"
+                                    ? `Size: ${conferenceRoomSize || 250} sqft`
+                                    : room.type === "boardRoom"
+                                        ? `Size: ${boardRoomSize || 325} sqft`
+                                        : room.type === "hrRoom"
+                                            ? `Size: ${hrRoomConfig.roomSize || "80"} sqft \n Seats: ${4 + hrRoomSeatCount}`
+                                            : room.type === "financeRoom"
+                                                ? `Size: ${financeRoomConfig.roomSize || "100"} sqft \n Seats: ${4 + financeRoomSeatCount}`
+                                                : room.type === "sales"
+                                                    ? `Size: ${salesRoomConfig.roomSize || "80"} sqft \n Seats: ${4 + salesSeatCount}`
+                                                    : room.type === "videoRecordingRoom"
+                                                        ? `Size: ${videoRecordingRoomSize || 80} sqft`
+                                                        : room.tooltipText
+                            }
                         />
                     );
                 })}

@@ -12,7 +12,7 @@ const AreaCounter = ({ name, value, onChange, min2, max2, step2, cabinSize, setC
             onChange(value + step);
             if (type === 'financeRoom') {
                 setCabinSize(cabinSize + 50)
-            } else if (type === 'md' || type === 'manager' || type === "reception" || type === "lounge") {
+            } else if (type === 'md' || type === 'manager' || type === "reception" || type === "lounge" || type === "videoRecordingRoom") {
                 setCabinSize(cabinSize + 5)
             } else if (type === "conferenceRoom" || type === "boardRoom") {
                 setCabinSize(cabinSize + 25)
@@ -27,7 +27,7 @@ const AreaCounter = ({ name, value, onChange, min2, max2, step2, cabinSize, setC
             onChange(value - step);
             if (type === 'financeRoom' || type === 'boardRoom' || type === 'conferenceRoom') {
                 setCabinSize(cabinSize - 50)
-            } else if (type === 'md' || type === 'manager' || type === "reception" || type === "lounge") {
+            } else if (type === 'md' || type === 'manager' || type === "reception" || type === "lounge" || type === "videoRecordingRoom") {
                 setCabinSize(cabinSize - 5)
             } else {
                 setCabinSize(cabinSize - 40)

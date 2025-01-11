@@ -143,7 +143,7 @@ const TreeMap = ({ totalArea, areaQuantities, areaValues }) => {
             .map(item => (
                 <div
                     key={item.x}
-                    className={`legend-item ${hoveredArea === item.x ? 'blink' : ''}`}
+                    className={`legend-item ${hoveredArea === item.x ? 'animate-blink' : ''}`}
                     style={{
                         display: 'flex',
                         // justifyContent: 'space-evenly',
@@ -155,7 +155,7 @@ const TreeMap = ({ totalArea, areaQuantities, areaValues }) => {
                     onMouseLeave={() => setHoveredArea(null)}
                 >
                     <span
-                        className={`legend-color ${hoveredArea === item.x ? 'blink' : ''}`}
+                        className={`legend-color ${hoveredArea === item.x ? 'animate-blink' : ''}`}
                         style={{
                             backgroundColor: item.fillColor,
                             width: '10px',

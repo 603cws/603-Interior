@@ -18,6 +18,16 @@ export default {
       height: {
         810: "810px",
       },
+      keyframes: {
+        blink: {
+          '0%': { transform: 'scale(1)' },
+          '50%': { transform: 'scale(1.2)' },
+          '100%': { transform: 'scale(1)' },
+        },
+      },
+      animation: {
+        blink: 'blink 1s infinite',
+      },
     },
   },
   plugins: [],

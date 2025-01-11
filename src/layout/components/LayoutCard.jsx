@@ -21,17 +21,21 @@ const LayoutCard = ({
 }) => {
 
     return (
-        <div className="flex flex-col w-[280px] items-center border border-solid bg-[#fff] p-18 my-3">
+        <div className="flex flex-col w-[280px] items-center border border-solid bg-[#fff] pb-2 my-3 relative">
             {/* Image */}
-            <div className="bg-red-400">
-                <img src={image} alt={title} className={`object-fit w-full h-56`} />
+            <div className="relative bg-red-400 group w-full h-56 overflow-hidden">
+                <img src={image} alt={title} className="RoomImage object-fit w-full h-full cursor-pointer" />
+                {/* Description on hover */}
+                <p className="absolute inset-0 bg-black bg-opacity-50 text-white text-center flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    {description}
+                </p>
             </div>
             {/* Content */}
-            <div className="flex flex-col mt-2">
+            <div className="flex flex-col gap-3">
                 {/* Counter */}
                 {!showInputField && (
-                    <div className="flex justify-around mt-2 gap-2">
-                        <button onClick={onDecrement} >
+                    <div className="flex justify-around mt-2 gap-3">
+                        <button onClick={onDecrement}>
                             <PiMinusCircleFill size={30} />
                         </button>
                         <div className="w-24 border-2 rounded-xl text-center flex items-center justify-center">{counterValue}</div>
@@ -46,8 +50,7 @@ const LayoutCard = ({
                         {sizes.map((size) => (
                             <button
                                 key={size}
-                                className={`border-2 rounded-full p-1 ${selectedSize === size ? "bg-gray-300" : ""
-                                    }`}
+                                className={`border-2 rounded-full p-1 ${selectedSize === size ? "bg-gray-300" : ""}`}
                                 onClick={() => onSizeChange(size)}
                             >
                                 {size}
@@ -55,15 +58,12 @@ const LayoutCard = ({
                         ))}
                     </div>
                 )}
-                {/* Description */}
-                <p className="text-center text-sm invisible">{description}</p>
                 <p className="text-center font-bold text-sm">{title}</p>
                 {/* Tooltip */}
                 {tooltipText && (
                     <div className="tooltip-container">
-                        {/* Tooltip rendering (if required) */}
                         <Tooltip text={tooltipText}>
-                            <div className="w-4 absolute right-4 bottom-4">
+                            <div className="w-4 absolute right-2 bottom-0">
                                 <PiInfoLight size={25} />
                             </div>
                         </Tooltip>
@@ -89,6 +89,7 @@ const LayoutCard = ({
                 )}
             </div>
         </div>
+
     );
 };
 

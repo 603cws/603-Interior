@@ -70,7 +70,7 @@ const SupportSpaces = ({
 
     return (
         <div className="section px-3">
-            <h3 className="section-heading bg-white shadow-sm text-md pl-2 py-1.5 sticky top-0 font-semibold">
+            <h3 className="section-heading bg-white shadow-sm text-md pl-2 py-1.5 sticky top-0 font-semibold z-10">
                 Support Spaces
             </h3>
             <div className="support-spaces grid grid-cols-2">

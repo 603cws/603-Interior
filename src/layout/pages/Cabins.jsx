@@ -34,7 +34,7 @@ const cabinData = [
         description: "This is a small cabin, suitable for individual work.",
         tooltipText: "Size :80 sqft",
         slider: {
-            name: "Add. Seat Count",
+            name: "Add Extra Seats",
             min: 0,
             max: 24,
             step: 2,
@@ -59,6 +59,7 @@ const Cabins = ({
     initialAreaValues,
     managerCabinSize,
     setManagerCabinSize,
+    smallCabinSeatCount
 }) => {
     return (
         <div className="section px-3">
@@ -82,7 +83,15 @@ const Cabins = ({
                         onChange={(value) => updateAreas(room.type, value)}
                         title={`${room.type.charAt(0).toUpperCase() + room.type.slice(1)} Cabin`}
                         showAreaCounter
-                        tooltipText={room.tooltipText}
+                        tooltipText={
+                            room.type === "md"
+                                ? `Size: ${mdCabinSize} sqft`
+                                : room.type === "manager"
+                                    ? `Size: ${managerCabinSize} sqft`
+                                    : room.type === "small"
+                                        ? `Size: ${smallCabinConfig.roomSize || "80"}sqft \n Seats:${4 + smallCabinSeatCount}`
+                                        : "Size: Not available"
+                        }
                         areaCounterProps={
                             room.slider
                                 ? {
