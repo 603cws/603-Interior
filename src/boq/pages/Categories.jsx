@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';  //{ useState, useEffect }
 
 const Categories = ({ categories, selectedCategory, setSelectedCategory, selectedSubCategory, setSelectedSubCategory, minimizedView }) => {
 
