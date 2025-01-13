@@ -28,6 +28,20 @@ export default {
       animation: {
         blink: 'blink 1s infinite',
       },
+      screens: {
+        '3xl': '1920px', // Add a custom breakpoint for larger screens
+      },
+      // container: {
+      //   center: true,
+      //   padding: {
+      //     DEFAULT: '1rem',
+      //     sm: '2rem',
+      //     lg: '4rem',
+      //     xl: '5rem',
+      //     '2xl': '6rem',
+      //     '3xl': '8rem', // Optional custom padding for 3xl
+      //   },
+      // },
     },
   },
   plugins: [require("tailwind-scrollbar-hide")],

@@ -63,7 +63,7 @@ const Cabins = ({
 }) => {
     return (
         <div className="section px-3">
-            <h3 className="section-heading bg-white shadow-sm text-md pl-2 py-1.5 sticky top-0 font-semibold">Cabins</h3>
+            <h3 className="section-heading bg-white shadow-sm text-md pl-2 py-1.5 sticky top-0 font-semibold z-10">Cabins</h3>
             <div className="cabins grid grid-cols-2">
                 {cabinData.map((room) => (
                     <LayoutCard

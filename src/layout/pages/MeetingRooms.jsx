@@ -145,7 +145,7 @@ const MeetingRooms = ({
 
     return (
         <div className="section px-3">
-            <h3 className="section-heading bg-white shadow-sm text-md pl-2 py-1.5 sticky top-0 font-semibold">Meeting Rooms</h3>
+            <h3 className="section-heading bg-white shadow-sm text-md pl-2 py-1.5 sticky top-0 font-semibold z-10">Meeting Rooms</h3>
             <div className="meeting-rooms grid grid-cols-2">
                 {meetingRoomData.map((room) => {
                     const sliderProps = room.slider

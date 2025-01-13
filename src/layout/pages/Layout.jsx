@@ -582,7 +582,7 @@ function Layout() {
                         areaQuantities={areaQuantities}
                     />
                 </div>
-                <div className="sections w-1/2 overflow-auto max-h-lvh pb-24">
+                <div className="sections w-1/2 overflow-auto max-h-lvh pb-24 scrollbar-hide">
                     <OpenWorkspaces
                         areaQuantities={areaQuantities}
                         variant={variant}
