@@ -55,7 +55,7 @@ function Boq() {
     return (
         <div>
             <Navbar />
-
+            <div className="container px-5">
             <Categories categories={categories} selectedCategory={selectedCategory} setSelectedCategory={handleCategorySelection}
                 selectedSubCategory={selectedSubCategory} setSelectedSubCategory={handleSelectedSubCategory} minimizedView={minimizedView} />
 
@@ -63,6 +63,7 @@ function Boq() {
             {minimizedView &&
                 <MainPage selectedCategory={selectedCategory} />
             }
+            </div>
         </div>
     )
 }

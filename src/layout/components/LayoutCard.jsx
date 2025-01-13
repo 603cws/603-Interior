@@ -50,7 +50,7 @@ const LayoutCard = ({
                         {sizes.map((size) => (
                             <button
                                 key={size}
-                                className={`border-2 rounded-full p-1 ${selectedSize === size ? "bg-gray-300" : ""}`}
+                                className={`border-2 rounded-full p-1 h-9 w-9 ${selectedSize === size ? "bg-gray-300" : ""}`}
                                 onClick={() => onSizeChange(size)}
                             >
                                 {size}
