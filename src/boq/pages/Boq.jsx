@@ -1,8 +1,11 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState, useMemo } from "react"
 import Navbar from '../../boq/components/Navbar';
 import Categories from './Categories';
 import { fetchCategories, fetchProductsData, fetchWorkspaces, fetchRoomData, } from '../utils/dataFetchers';
 import MainPage from "./MainPage";
+import ProductCard from "../../components/ProductCard";
+import RecommendComp from "../../components/RecommendComp";
+import processData from '../utils/dataProcessor';
 
 function Boq() {
     const [selectedCategory, setSelectedCategory] = useState(null);     //Gets value after data fetching
@@ -10,10 +13,17 @@ function Boq() {
     const [selectedSubCategory1, setSelectedSubCategory1] = useState('');
     const [selectedProducts, setSelectedProducts] = useState([]);
 
+    const [subCat1, setSubCat1] = useState(null);
+
     const [categories, setCategories] = useState([]);
     const [productsData, setProductData] = useState([]);
+    const [searchQuery, setSearchQuery] = useState('');
+    const [priceRange, setPriceRange] = useState([1000, 15000000]);
+
     const [workspaces, setWorkspaces] = useState([]);
     const [roomData, setRoomData] = useState({ quantityData: [], areasData: [] });
+    const [areasData, setAreasData] = useState([]);
+    const [quantityData, setQuantityData] = useState([]);
 
     const [minimizedView, setMinimizedView] = useState(false);
 
@@ -41,6 +51,79 @@ function Boq() {
         loadData();
     }, []);
 
+    useEffect(() => {
+        if (roomData.quantityData && roomData.quantityData.length > 0) {
+            const processedQuantityData = processData(roomData.quantityData, "quantity");
+            if (processedQuantityData) {
+                setQuantityData([processedQuantityData]);
+            }
+        }
+
+        if (roomData.areasData && roomData.areasData.length > 0) {
+            const processedAreasData = processData(roomData.areasData, "areas");
+            if (processedAreasData) {
+                setAreasData([processedAreasData]);
+            }
+        }
+    }, [roomData]);
+
+    useEffect(() => {
+        // Automatically select the first subcategory when the category changes
+        if (subCat1 && selectedCategory?.category) {
+            const subCategories = subCat1[selectedCategory.category];
+            if (subCategories && subCategories.length > 0) {
+                setSelectedSubCategory1(subCategories[0]); // Set the first subcategory as the default
+            } else {
+                setSelectedSubCategory1(null);
+            }
+        }
+    }, [subCat1, selectedCategory]);
+
+    // Filter products based on search query, price range, and category
+    const filteredProducts = useMemo(() => {
+        // if (!selectedCategory) return false;
+        return productsData.filter((product) => {
+            if (!product.product_variants || product.product_variants.length === 0) {
+                return false;
+            }
+
+            const matchesVariant = product.product_variants.some((variant) => {
+                const matchesSearch =
+                    variant.title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                    variant.details?.toLowerCase().includes(searchQuery.toLowerCase());
+
+                const matchesPrice =
+                    variant.price >= priceRange[0] && variant.price <= priceRange[1];
+
+                return matchesSearch && matchesPrice;
+            });
+
+            const matchesCategory =
+                selectedCategory?.category === '' || product.category === selectedCategory?.category;
+            return matchesVariant && matchesCategory;
+        });
+    }, [productsData, searchQuery, priceRange, selectedCategory]);
+
+    // Group products by category and subcategory
+    const groupedProducts = useMemo(() => {
+        const grouped = {};
+
+        filteredProducts.forEach(product => {
+            const subcategories = product.subcategory.split(',').map(sub => sub.trim());
+
+            subcategories.forEach(subcategory => {
+                if (!grouped[product.category]) {
+                    grouped[product.category] = {};
+                }
+                if (!grouped[product.category][subcategory]) {
+                    grouped[product.category][subcategory] = [];
+                }
+                grouped[product.category][subcategory].push(product);
+            });
+        });
+        return grouped;
+    }, [filteredProducts]);
+
     const handleCategorySelection = (categoryData) => {
         setSelectedCategory(categoryData);
         console.log("Selected Category: ", categoryData.category);
@@ -52,17 +135,25 @@ function Boq() {
         console.log("Selected SubCat: ", subCategory);
     }
 
+    const handleSelectedSubCategory1 = (subCategory1) => {
+        setSelectedSubCategory1(subCategory1);
+        console.log("Selected SubCat1: ", subCategory1);
+    }
+
     return (
         <div>
             <Navbar />
             <div className="container px-5">
-            <Categories categories={categories} selectedCategory={selectedCategory} setSelectedCategory={handleCategorySelection}
-                selectedSubCategory={selectedSubCategory} setSelectedSubCategory={handleSelectedSubCategory} minimizedView={minimizedView} />
+                <Categories categories={categories} selectedCategory={selectedCategory} setSelectedCategory={handleCategorySelection}
+                    selectedSubCategory={selectedSubCategory} setSelectedSubCategory={handleSelectedSubCategory} minimizedView={minimizedView} />
 
 
-            {minimizedView &&
-                <MainPage selectedCategory={selectedCategory} />
-            }
+                {minimizedView &&
+                    <div>
+                        <MainPage selectedCategory={selectedCategory} selectedSubCategory1={selectedSubCategory1} setSelectedSubCategory1={handleSelectedSubCategory1} />
+                        <ProductCard products={groupedProducts} selectedCategory={selectedCategory} selectedSubCategory={selectedSubCategory} selectedSubCategory1={selectedSubCategory1} />
+                    </div>
+                }
             </div>
         </div>
     )
