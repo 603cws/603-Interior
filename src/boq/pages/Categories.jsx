@@ -60,7 +60,9 @@ const Categories = ({ categories, selectedCategory, setSelectedCategory, selecte
                             key={id}
                             onClick={() => {
                                 setSelectedCategory({ id, category, subcategories });
-                                setSelectedSubCategory(subcategories[0] || null); // Automatically select the first subcategory if available
+                                if (minimizedView) {
+                                    setSelectedSubCategory(subcategories[0] || null); // Automatically select the first subcategory if available
+                                }
                             }}
                             className={`transition-transform duration-500 ease-in-out cursor-pointer ${isSelected ? "scale-110" : "scale-100"
                                 }`}
@@ -71,8 +73,8 @@ const Categories = ({ categories, selectedCategory, setSelectedCategory, selecte
                                 >
                                     <div
                                         className={`${selectedCategory?.id === id
-                                                ? "bg-[#A9D3CE]"
-                                                : "bg-[#ffffff]"
+                                            ? "bg-[#A9D3CE]"
+                                            : "bg-[#ffffff]"
                                             } 
                                     rounded-3xl border-solid border-[#000000] border-2 flex flex-col gap-0 items-center justify-around shrink-0 w-[90px] h-[80px] relative`}
                                     >
@@ -99,8 +101,8 @@ const Categories = ({ categories, selectedCategory, setSelectedCategory, selecte
                                 >
                                     <div
                                         className={`rounded-full border-2 ${selectedCategory?.id === id
-                                                ? "border-[#34BFAD] scale-75"
-                                                : "border-[#000000]"
+                                            ? "border-[#34BFAD] scale-75"
+                                            : "border-[#000000]"
                                             } w-[70px] h-[70px] flex items-center justify-center group-hover:scale-75 transition-transform duration-[1000ms] ease-in-out`}
                                     >
                                         <img
@@ -111,8 +113,8 @@ const Categories = ({ categories, selectedCategory, setSelectedCategory, selecte
                                     </div>
                                     <p
                                         className={`absolute w-full text-center ${selectedCategory?.id === id
-                                                ? "-bottom-1 opacity-100"
-                                                : "-bottom-1 opacity-0 group-hover:opacity-100"
+                                            ? "-bottom-1 opacity-100"
+                                            : "-bottom-1 opacity-0 group-hover:opacity-100"
                                             } transition-all duration-[1000ms] ease-in-out text-[#252525] font-['Poppins-Regular',_sans-serif] leading-5 font-normal text-sm text-nowrap`}
                                     >
                                         {category}
@@ -142,8 +144,8 @@ const Categories = ({ categories, selectedCategory, setSelectedCategory, selecte
                                         {/* Animated underline (span) */}
                                         <span
                                             className={`absolute left-0 bottom-0 block w-0 h-1 bg-[#34BFAD] transition-all duration-300 ease-in-out ${selectedSubCategory === subCategory
-                                                    ? "w-full"
-                                                    : "group-hover:w-full"
+                                                ? "w-full"
+                                                : "group-hover:w-full"
                                                 }`}
                                         ></span>
                                     </p>
