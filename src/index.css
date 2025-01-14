@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 .book-tour-btn {
-    position: fixed;
-    right: -40px;
-    top: 50%;
+  position: fixed;
+  right: -40px;
+  top: 50%;
 }

@@ -49,7 +49,7 @@ function SelectArea() {
           {/* first div */}
           <div className=" p-4">
             {/* each tick component */}
-            <div className="mb-2">
+            <div className="mb-2 flex gap-2">
               <input
                 type="checkbox"
                 id="LinearWorkstation"
@@ -58,7 +58,7 @@ function SelectArea() {
               />
               <label for="LinearWorkstation"> LinearWorkstation</label>
             </div>
-            <div className="mb-2">
+            <div className="mb-2 flex gap-2">
               <input
                 type="checkbox"
                 id="LinearWorkstation"
@@ -67,7 +67,7 @@ function SelectArea() {
               />
               <label for="LinearWorkstation"> LinearWorkstation</label>
             </div>
-            <div className="mb-2">
+            <div className="mb-2 flex gap-2">
               <input
                 type="checkbox"
                 id="LinearWorkstation"
@@ -80,7 +80,7 @@ function SelectArea() {
           {/* second */}
           <div className=" p-4">
             {/* each tick component */}
-            <div className="mb-2">
+            <div className="mb-2 flex gap-2">
               <input
                 type="checkbox"
                 id="LinearWorkstation"
@@ -89,7 +89,7 @@ function SelectArea() {
               />
               <label for="LinearWorkstation"> LinearWorkstation</label>
             </div>
-            <div className="mb-2">
+            <div className="mb-2 flex gap-2">
               <input
                 type="checkbox"
                 id="LinearWorkstation"
@@ -98,7 +98,7 @@ function SelectArea() {
               />
               <label for="LinearWorkstation"> LinearWorkstation</label>
             </div>
-            <div className="mb-2">
+            <div className="mb-2 flex gap-2">
               <input
                 type="checkbox"
                 id="LinearWorkstation"

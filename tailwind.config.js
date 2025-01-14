@@ -7,6 +7,7 @@ export default {
         sans: ["Poppins", "sans-serif"],
         Raleway: ["Raleway"],
         Convergence: ["Convergence"],
+        zcool: ['"ZCOOL KuaiLe"', "cursive"],
       },
       colors: {
         customYellow: "#fff9c9",
@@ -20,27 +21,32 @@ export default {
       },
       keyframes: {
         blink: {
-          '0%': { transform: 'scale(1)' },
-          '50%': { transform: 'scale(1.2)' },
-          '100%': { transform: 'scale(1)' },
+          "0%": { transform: "scale(1)" },
+          "50%": { transform: "scale(1.2)" },
+          "100%": { transform: "scale(1)" },
         },
         fadeIn: {
-          '0%': { opacity: 0, transform: 'translateY(20px)' },
-          '100%': { opacity: 1, transform: 'translateY(0)' },
+          "0%": { opacity: 0, transform: "translateY(20px)" },
+          "100%": { opacity: 1, transform: "translateY(0)" },
+        },
+        fadeIn: {
+          "0%": { opacity: 0, transform: "translateY(20px)" },
+          "100%": { opacity: 1, transform: "translateY(0)" },
         },
       },
       animation: {
-        blink: 'blink 1s infinite',
-        'fade-in': 'fadeIn 0.7s ease-in-out',
+        blink: "blink 1s infinite",
+        blink: "blink 1s infinite",
+        "fade-in": "fadeIn 0.7s ease-in-out",
       },
       screens: {
-        sm: '100%',   // Full width for small screens
-        md: '640px',  // Medium screens
-        lg: '768px',  // Large screens
-        xl: '1024px', // Extra-large screens
-        '2xl': '1280px', // 2XL screens
-        '3xl': '1440px', // Custom 3XL screens
-        '4xl': '1920px', // Custom 4XL screens
+        sm: "100%", // Full width for small screens
+        md: "640px", // Medium screens
+        lg: "768px", // Large screens
+        xl: "1024px", // Extra-large screens
+        "2xl": "1280px", // 2XL screens
+        "3xl": "1440px", // Custom 3XL screens
+        "4xl": "1920px", // Custom 4XL screens
       },
       // container: {
       //   center: true,

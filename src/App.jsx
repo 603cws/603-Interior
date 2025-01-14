@@ -1,5 +1,6 @@
 import React from "react";
-import Layout from "./layout/pages/Layout";
+import { lazy, Suspense } from "react";
+// import Layout from "./layout/pages/Layout";
 import Boq from "./boq/pages/Boq";
 import PageNotFound from "./components/PageNotFound";
 
@@ -11,24 +12,35 @@ import ProductOverview from "./components/ProductOverview";
 import Addon from "./components/Addon";
 import RecommendComp from "./components/RecommendComp";
 import SelectArea from "./components/SelectArea";
+import Landing from "./pages/Landing";
+
+import SpinnerFullPage from "./components/SpinnerFullPage";
+
+// const Homepage = lazy(() => import("./pages/Homepage"));
+
+const Layout = lazy(() => import("./layout/pages/Layout"));
 
 function App() {
   return (
     <div>
       {/* <Layout /> */}
       {/* <Boq /> */}
-      <Routes>
-        <Route path="/" element={<Layout />} />
-        <Route path="/RegisterUser" element={<RegisterUser />} />
-        <Route path="/boq" element={<Boq />} />
-        <Route path="/Error" element={<ErrorModal />} />
-        <Route path="/ProductCard" element={<ProductCard />} />
-        <Route path="/ProductOverview" element={<ProductOverview />} />
-        <Route path="/Addon" element={<Addon />} />
-        <Route path="/Recommend" element={<RecommendComp />} />
-        <Route path="/selectArea" element={<SelectArea />} />
-        <Route path="*" element={<PageNotFound />} />
-      </Routes>
+      <Suspense fallback={<SpinnerFullPage />}>
+        <Routes>
+          <Route path="/" element={<Layout />} />
+          <Route path="/RegisterUser" element={<RegisterUser />} />
+          <Route path="/boq" element={<Boq />} />
+          <Route path="/Error" element={<ErrorModal />} />
+          <Route path="/ProductCard" element={<ProductCard />} />
+          <Route path="/ProductOverview" element={<ProductOverview />} />
+          <Route path="/Addon" element={<Addon />} />
+          <Route path="/Recommend" element={<RecommendComp />} />
+          <Route path="/selectArea" element={<SelectArea />} />
+          <Route path="/spinner" element={<SpinnerFullPage />} />
+          <Route path="/Home" element={<Landing />} />
+          <Route path="*" element={<PageNotFound />} />
+        </Routes>
+      </Suspense>
     </div>
   );
 }
