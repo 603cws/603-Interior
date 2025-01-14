@@ -167,7 +167,7 @@ function Boq() {
                 </div>
             }
             {showProductView &&
-                <ProductOverview selectedProductView={selectedProductView} selectedCategory={selectedCategory} selectedSubCategory={selectedSubCategory} quantityData={quantityData} areasData={areasData} />
+                <ProductOverview selectedProductView={selectedProductView} selectedCategory={selectedCategory} selectedSubCategory={selectedSubCategory} quantityData={quantityData} areasData={areasData} setShowProductView={setShowProductView} />
             }
         </div>
     )

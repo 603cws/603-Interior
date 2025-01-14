@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
+import { TbArrowBackUp } from "react-icons/tb";
 import { calculateTotalPriceHelper, normalizeKey } from '../boq/utils/CalculateTotalPriceHelper';
 
-function ProductOverview({ selectedProductView, selectedCategory, selectedSubCategory, quantityData, areasData }) {
+function ProductOverview({ selectedProductView, selectedCategory, selectedSubCategory, quantityData, areasData, setShowProductView }) {
   const [mainImageHovered, setMainImageHovered] = useState(false); // For main image hover effect
   const [hoveredImage, setHoveredImage] = useState(null); // For additional image hover effect
   const baseImageUrl = 'https://bwxzfwsoxwtzhjbzbdzs.supabase.co/storage/v1/object/public/addon/';
@@ -50,6 +51,11 @@ function ProductOverview({ selectedProductView, selectedCategory, selectedSubCat
       <div className="grid grid-cols-2 p-5">
         {/* grid component 1 */}
         <div className=" ">
+          <TbArrowBackUp size={30}
+            className="cursor-pointer"
+            onClick={() => {
+              setShowProductView(false); // Open product view
+            }} />
           {/* main div for image */}
           <div className="flex items-center justify-center"
             onMouseEnter={() => setMainImageHovered(true)}
@@ -79,7 +85,7 @@ function ProductOverview({ selectedProductView, selectedCategory, selectedSubCat
                   height={100}
                   onMouseEnter={() => setHoveredImage(img)} // Updates hoveredImage on hover
                   onMouseLeave={() => setHoveredImage(null)} // Reverts to main image on leave
-                  className="w-10 h-10 object-cover cursor-pointer rounded-lg border-2 border-transparent"
+                // className="w-10 h-10 object-cover cursor-pointer rounded-lg border-2 border-transparent"
                 />
               ))}
             </div>
@@ -94,6 +100,7 @@ function ProductOverview({ selectedProductView, selectedCategory, selectedSubCat
               {selectedProductView.details}
             </span>
             <p className="text-3xl font-semibold mb-2">₹ {selectedProductView.price} <span className="text-sm">/ Per Unit</span></p>
+            <br></br>
             {/* <span className="text-2xl font-semibold line-through mb-3">
             Mrp 13202
           </span> */}
@@ -153,6 +160,15 @@ function ProductOverview({ selectedProductView, selectedCategory, selectedSubCat
           </div>
         </div>
       </div >
+
+      <div className="fixed z-10 right-0 rotate-90 book-tour-btn ">
+        <button
+          //   onClick={() => setRequestTour(true)}
+          className="text-base text-md  bg-[#1A3A36] text-white  lg:px-4 py-2  rounded-3xl "
+        >
+          Recommendation
+        </button>
+      </div>
       {/* <div className=" w-60 h-64 bg-white flex-col justify-center items-center inline-flex overflow-hidden">
         <div className=" w-60 h-64 relative flex-col justify-start items-start flex overflow-hidden">
           <img className="relative  w-60 h-64" src="images/chair/1.png" />
