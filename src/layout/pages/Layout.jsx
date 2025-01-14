@@ -552,7 +552,7 @@ function Layout() {
     };
 
     return (
-        <div className="container max-h-lvh overflow-hidden">
+        <div className="max-h-lvh overflow-hidden">
             {/* <Navbar
                 totalArea={totalArea}
                 setTotalArea={setTotalArea}
