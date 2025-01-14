@@ -6,6 +6,7 @@ import MainPage from "./MainPage";
 import ProductCard from "../../components/ProductCard";
 import RecommendComp from "../../components/RecommendComp";
 import processData from '../utils/dataProcessor';
+import ProductOverview from '../../components/ProductOverview';
 
 function Boq() {
     const [selectedCategory, setSelectedCategory] = useState(null);     //Gets value after data fetching
@@ -14,6 +15,7 @@ function Boq() {
     const [selectedProducts, setSelectedProducts] = useState([]);
 
     const [subCat1, setSubCat1] = useState(null);
+    const [selectedProductView, setSelectedProductView] = useState([]);
 
     const [categories, setCategories] = useState([]);
     const [productsData, setProductData] = useState([]);
@@ -26,6 +28,7 @@ function Boq() {
     const [quantityData, setQuantityData] = useState([]);
 
     const [minimizedView, setMinimizedView] = useState(false);
+    const [showProductView, setShowProductView] = useState(false);
 
     // useEffect(() => {
     //     document.title = '603 BOQ';
@@ -140,21 +143,32 @@ function Boq() {
         console.log("Selected SubCat1: ", subCategory1);
     }
 
+    const handleSelectedProductView = (variant) => {
+        setSelectedProductView(variant);
+    }
+
+    console.log("ProductOverview: ", selectedProductView)
+
     return (
         <div>
             <Navbar />
-            <div className="container px-5">
-                <Categories categories={categories} selectedCategory={selectedCategory} setSelectedCategory={handleCategorySelection}
-                    selectedSubCategory={selectedSubCategory} setSelectedSubCategory={handleSelectedSubCategory} minimizedView={minimizedView} />
+            {!showProductView &&
+                <div className="container px-5">
+                    <Categories categories={categories} selectedCategory={selectedCategory} setSelectedCategory={handleCategorySelection}
+                        selectedSubCategory={selectedSubCategory} setSelectedSubCategory={handleSelectedSubCategory} minimizedView={minimizedView} />
 
-
-                {minimizedView &&
-                    <div>
-                        <MainPage selectedCategory={selectedCategory} selectedSubCategory1={selectedSubCategory1} setSelectedSubCategory1={handleSelectedSubCategory1} />
-                        <ProductCard products={groupedProducts} selectedCategory={selectedCategory} selectedSubCategory={selectedSubCategory} selectedSubCategory1={selectedSubCategory1} />
-                    </div>
-                }
-            </div>
+                    {minimizedView &&
+                        <div>
+                            <MainPage selectedCategory={selectedCategory} selectedSubCategory1={selectedSubCategory1} setSelectedSubCategory1={handleSelectedSubCategory1} />
+                            <ProductCard products={groupedProducts} selectedCategory={selectedCategory} selectedSubCategory={selectedSubCategory} selectedSubCategory1={selectedSubCategory1}
+                                selectedProductView={selectedProductView} setShowProductView={setShowProductView} setSelectedProductView={handleSelectedProductView} />
+                        </div>
+                    }
+                </div>
+            }
+            {showProductView &&
+                <ProductOverview selectedProductView={selectedProductView} selectedCategory={selectedCategory} selectedSubCategory={selectedSubCategory} quantityData={quantityData} areasData={areasData} />
+            }
         </div>
     )
 }

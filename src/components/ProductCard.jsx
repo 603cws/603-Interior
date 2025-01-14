@@ -1,4 +1,4 @@
-function ProductCard({ products, selectedCategory, selectedSubCategory, selectedSubCategory1, seatingtype = 'abc', chainame = 'xyz' }) {
+function ProductCard({ products, selectedCategory, selectedSubCategory, selectedSubCategory1, selectedProductView, setSelectedProductView, setShowProductView }) {
   const productsInCategory = products[selectedCategory?.category];
 
   if (!productsInCategory) {
@@ -16,10 +16,10 @@ function ProductCard({ products, selectedCategory, selectedSubCategory, selected
     .filter((product) => product.subcategory1 === selectedSubCategory1)
     .flatMap((product) => product.product_variants || []); // Flatten the product_variants array
 
-  console.log(productsInSubCategory);
+  console.log("filteredProducts: ", filteredProducts);
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 cursor-pointer">
       {filteredProducts.length > 0 ? (
         filteredProducts.map((variant) => (
           <div
@@ -30,9 +30,18 @@ function ProductCard({ products, selectedCategory, selectedSubCategory, selected
               src={variant.image}
               alt={variant.title}
               className="w-full h-64 object-cover rounded-t-lg"
+              onClick={() => {
+                setSelectedProductView(variant); // Pass product details
+                setShowProductView(true); // Open product view
+              }}
             />
             <div className="p-4">
-              <h2 className="text-lg font-medium text-gray-800">{variant.title}</h2>
+              <h2 className="text-lg font-medium text-gray-800"
+                onClick={() => {
+                  setSelectedProductView(variant); // Pass product details
+                  setShowProductView(true); // Open product view
+                }}
+              >{variant.title}</h2>
             </div>
           </div>
         ))

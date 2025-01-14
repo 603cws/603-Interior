@@ -1,39 +1,99 @@
-function ProductOverview() {
+import React, { useState } from 'react';
+import { calculateTotalPriceHelper, normalizeKey } from '../boq/utils/CalculateTotalPriceHelper';
+
+function ProductOverview({ selectedProductView, selectedCategory, selectedSubCategory, quantityData, areasData }) {
+  const [mainImageHovered, setMainImageHovered] = useState(false); // For main image hover effect
+  const [hoveredImage, setHoveredImage] = useState(null); // For additional image hover effect
+  const baseImageUrl = 'https://bwxzfwsoxwtzhjbzbdzs.supabase.co/storage/v1/object/public/addon/';
+
+  const additionalImagesArray = selectedProductView.additional_images
+    ? JSON.parse(selectedProductView.additional_images).map(
+      (imageName) => `${baseImageUrl}${imageName}`
+    )
+    : [];
+
+  const findClosestKey = (targetKey, dataObject) => {
+    if (!targetKey || !dataObject) return null;
+
+    const normalizedTargetKey = normalizeKey(targetKey);
+    const keys = Object.keys(dataObject);
+
+    return keys.find((key) => normalizedTargetKey.includes(normalizeKey(key))) || null;
+  };
+
+  const calculationDetails = () => {
+    const normalizedSubCat =
+      findClosestKey(selectedSubCategory, quantityData[0]) ||
+      findClosestKey(selectedSubCategory, areasData[0]);
+
+    const quantity = quantityData[0]?.[normalizedSubCat] || 0;
+    const area = areasData[0]?.[normalizedSubCat] || 0;
+    if (selectedCategory?.category === "Furniture" || selectedCategory?.category === "HVAC" || selectedCategory?.category === "Partitions / Ceilings") {
+      return { quantity, price: selectedProductView.price };  //addonPrice
+    } else {
+      return { area, price: selectedProductView.price };  //addonPrice
+    }
+  };
+
+  const details = calculationDetails();
+
+  const calculateTotalPrice = () => {
+    const total = calculateTotalPriceHelper(quantityData[0], areasData[0], selectedCategory?.category, selectedSubCategory);
+    return total * selectedProductView.price;
+  };
+
+  console.log(additionalImagesArray);
+
   return (
     // grid
     <>
-      <div className="grid grid-cols-2  ">
+      <div className="grid grid-cols-2 p-5">
         {/* grid component 1 */}
         <div className=" ">
           {/* main div for image */}
-          <div className="flex items-center justify-center">
+          <div className="flex items-center justify-center"
+            onMouseEnter={() => setMainImageHovered(true)}
+            onMouseLeave={() => setMainImageHovered(false)}
+            style={{
+              // transform: mainImageHovered ? 'scale(1.3)' : 'scale(1)',
+              zIndex: mainImageHovered ? 10 : 1,
+            }}
+          >
             <img
-              src="images/chair/image.png"
+              src={hoveredImage || selectedProductView.image}
               // width={600}
               // height={600}
               className="object-cover"
-              alt=""
+              alt={selectedProductView.title}
             />
           </div>
           {/* flex box for other images  */}
-          <div className="flex justify-start gap-1 mx-6">
-            <img src="images/chair/1.png" width={100} height={100} alt="" />
-            <img src="images/chair/2.png" width={100} height={100} alt="" />
-            <img src="images/chair/3.png" width={100} height={100} alt="" />
-            <img src="images/chair/4.png" width={100} height={100} alt="" />
-            <img src="images/chair/5.png" width={100} height={100} alt="" />
-          </div>
+          {additionalImagesArray.length > 0 && (
+            <div className="flex justify-start gap-1 mx-6">
+              {additionalImagesArray.map((img, idx) => (
+                <img
+                  key={idx}
+                  src={img}
+                  alt={`Angle ${idx + 1}`}
+                  width={100}
+                  height={100}
+                  onMouseEnter={() => setHoveredImage(img)} // Updates hoveredImage on hover
+                  onMouseLeave={() => setHoveredImage(null)} // Reverts to main image on leave
+                  className="w-10 h-10 object-cover cursor-pointer rounded-lg border-2 border-transparent"
+                />
+              ))}
+            </div>
+          )}
         </div>
         {/* grid component 2 */}
         <div className=" flex flex-col">
           {/* product info */}
           <div className="flex flex-col justify-center">
-            <h2 className="text-[36px] font-bold mb-3">Product Name</h2>
+            <h2 className="text-[36px] font-bold mb-3">{selectedProductView.title}</h2>
             <span className="text-2xl font-medium text-[#334A78] mb-3">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Modi
-              error sit dolores dolorem accusamus qui.
+              {selectedProductView.details}
             </span>
-            <p className="text-3xl font-semibold mb-2">7000</p>
+            <p className="text-3xl font-semibold mb-2">₹ {selectedProductView.price} <span className="text-sm">/ Per Unit</span></p>
             {/* <span className="text-2xl font-semibold line-through mb-3">
             Mrp 13202
           </span> */}
@@ -43,11 +103,11 @@ function ProductOverview() {
             <p className="text-2xl font-medium text-[#334A78]  mb-3">
               Final Price
             </p>
-            <p className="text-3xl font-bold mb-3">Price</p>
+            <p className="text-3xl font-bold mb-3">₹ {calculateTotalPrice()}</p>
             <p className="text-2xl font-medium text-[#334A78]  mb-3">
               Total Quantity{" "}
               <span className="border-2 py-2 border-[#334A78] text-[#1a1b1c] rounded-xl px-5 ">
-                5
+                {details.quantity}
               </span>{" "}
             </p>
             <button className=" border-2 border-[#212B36] p-5 text-2xl w-1/2  mb-3 mt-2">
@@ -92,7 +152,7 @@ function ProductOverview() {
             </div>
           </div>
         </div>
-      </div>
+      </div >
       {/* <div className=" w-60 h-64 bg-white flex-col justify-center items-center inline-flex overflow-hidden">
         <div className=" w-60 h-64 relative flex-col justify-start items-start flex overflow-hidden">
           <img className="relative  w-60 h-64" src="images/chair/1.png" />
