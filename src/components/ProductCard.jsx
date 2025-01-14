@@ -1,4 +1,12 @@
-function ProductCard({ products, selectedCategory, selectedSubCategory, selectedSubCategory1, selectedProductView, setSelectedProductView, setShowProductView }) {
+function ProductCard({
+  products,
+  selectedCategory,
+  selectedSubCategory,
+  selectedSubCategory1,
+  selectedProductView,
+  setSelectedProductView,
+  setShowProductView,
+}) {
   const productsInCategory = products[selectedCategory?.category];
 
   if (!productsInCategory) {
@@ -8,7 +16,12 @@ function ProductCard({ products, selectedCategory, selectedSubCategory, selected
   const productsInSubCategory = productsInCategory[selectedSubCategory];
 
   if (!productsInSubCategory) {
-    return <p>Subcategory "{selectedSubCategory}" not found in category "{selectedCategory?.category}".</p>;
+    return (
+      <p>
+        Subcategory "{selectedSubCategory}" not found in category "
+        {selectedCategory?.category}".
+      </p>
+    );
   }
 
   // Filter products based on `selectedSubCategory1`
@@ -19,35 +32,39 @@ function ProductCard({ products, selectedCategory, selectedSubCategory, selected
   console.log("filteredProducts: ", filteredProducts);
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 cursor-pointer">
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
       {filteredProducts.length > 0 ? (
         filteredProducts.map((variant) => (
           <div
             key={variant.id}
-            className="flex flex-col max-w-xs bg-white rounded-lg shadow-md"
+            className="w-11/12 h-full flex flex-col justify-center items-center bg-white rounded-lg shadow-md cursor-pointer my-2 px-3"
           >
             <img
               src={variant.image}
               alt={variant.title}
-              className="w-full h-64 object-cover rounded-t-lg"
+              className="object-fit rounded-t-lg"
               onClick={() => {
                 setSelectedProductView(variant); // Pass product details
                 setShowProductView(true); // Open product view
               }}
             />
             <div className="p-4">
-              <h2 className="text-lg font-medium text-gray-800"
+              <p
+                className="text-sm font-medium text-gray-800"
                 onClick={() => {
                   setSelectedProductView(variant); // Pass product details
                   setShowProductView(true); // Open product view
                 }}
-              >{variant.title}</h2>
+              >
+                {variant.title}
+              </p>
             </div>
           </div>
         ))
       ) : (
         <p className="col-span-full text-center text-gray-500">
-          No products found for "{selectedSubCategory1}" in "{selectedSubCategory}".
+          No products found for "{selectedSubCategory1}" in "
+          {selectedSubCategory}".
         </p>
       )}
     </div>
