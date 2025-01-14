@@ -1,16 +1,38 @@
 import React, { useState } from "react";
 import { TbArrowBackUp } from "react-icons/tb";
-import { MdOutlineKeyboardArrowRight, MdOutlineKeyboardArrowLeft, } from "react-icons/md";
-import { calculateTotalPriceHelper, normalizeKey, } from "../boq/utils/CalculateTotalPriceHelper";
+import {
+  MdOutlineKeyboardArrowRight,
+  MdOutlineKeyboardArrowLeft,
+} from "react-icons/md";
+import {
+  calculateTotalPriceHelper,
+  normalizeKey,
+} from "../boq/utils/CalculateTotalPriceHelper";
+import Addon from "./Addon";
 
-function ProductOverview({ selectedProductView, selectedCategory, selectedSubCategory, selectedSubCategory1, quantityData,
-  areasData, setShowProductView, showRecommend, setShowRecommend
+function ProductOverview({
+  selectedProductView,
+  selectedCategory,
+  selectedSubCategory,
+  selectedSubCategory1,
+  quantityData,
+  areasData,
+  setShowProductView,
+  showRecommend,
+  setShowRecommend,
+  filteredProducts,
+  handleAddOnChange,
 }) {
   const [mainImageHovered, setMainImageHovered] = useState(false); // For main image hover effect
   const [hoveredImage, setHoveredImage] = useState(null); // For additional image hover effect
-  const baseImageUrl = "https://bwxzfwsoxwtzhjbzbdzs.supabase.co/storage/v1/object/public/addon/";
+  const baseImageUrl =
+    "https://bwxzfwsoxwtzhjbzbdzs.supabase.co/storage/v1/object/public/addon/";
 
-  const additionalImagesArray = selectedProductView.additional_images ? JSON.parse(selectedProductView.additional_images).map((imageName) => `${baseImageUrl}${imageName}`) : [];
+  const additionalImagesArray = selectedProductView.additional_images
+    ? JSON.parse(selectedProductView.additional_images).map(
+        (imageName) => `${baseImageUrl}${imageName}`
+      )
+    : [];
 
   const findClosestKey = (targetKey, dataObject) => {
     if (!targetKey || !dataObject) return null;
@@ -18,7 +40,10 @@ function ProductOverview({ selectedProductView, selectedCategory, selectedSubCat
     const normalizedTargetKey = normalizeKey(targetKey);
     const keys = Object.keys(dataObject);
 
-    return (keys.find((key) => normalizedTargetKey.includes(normalizeKey(key))) || null);
+    return (
+      keys.find((key) => normalizedTargetKey.includes(normalizeKey(key))) ||
+      null
+    );
   };
 
   const calculationDetails = () => {
@@ -51,8 +76,12 @@ function ProductOverview({ selectedProductView, selectedCategory, selectedSubCat
     return total * selectedProductView.price;
   };
 
-  console.log(additionalImagesArray);
-
+  const allAddons = filteredProducts.flatMap((product) =>
+    product.subcategory1 === selectedSubCategory1 &&
+    Array.isArray(product.addons)
+      ? product.addons
+      : []
+  );
   return (
     // grid
     <>
@@ -66,22 +95,22 @@ function ProductOverview({ selectedProductView, selectedCategory, selectedSubCat
               setShowProductView(false); // Open product view
             }}
           />
-          <div className="flex mx-10 items-center text-[#334A78]">
-            <span>{selectedCategory?.category}</span>
+          <div className="flex mx-10 items-center text-[#334A78] text-sm">
+            <span className="cursor-pointer">{selectedCategory?.category}</span>
             <MdOutlineKeyboardArrowRight
-              size={20}
+              size={15}
               style={{ color: "#334A78" }}
             />
-            <span>{selectedSubCategory}</span>
+            <span className="cursor-pointer">{selectedSubCategory}</span>
             <MdOutlineKeyboardArrowRight
-              size={20}
+              size={15}
               style={{ color: "#334A78" }}
             />
-            <span>{selectedSubCategory1}</span>
+            <span className="cursor-pointer">{selectedSubCategory1}</span>
           </div>
           {/* main div for image */}
           <div
-            className="w-3/5 h-3/4 mx-auto mb-2"
+            className="w-3/5 h-3/4 mx-auto mb-2 flex items-center"
             onMouseEnter={() => setMainImageHovered(true)}
             onMouseLeave={() => setMainImageHovered(false)}
             style={{
@@ -92,13 +121,13 @@ function ProductOverview({ selectedProductView, selectedCategory, selectedSubCat
               src={hoveredImage || selectedProductView.image}
               // width={600}
               // height={600}
-              className="object-fit"
+              className="object-fit h-5/6"
               alt={selectedProductView.title}
             />
           </div>
           {/* flex box for other images  */}
           {additionalImagesArray.length > 0 && (
-            <div className="flex justify-start gap-2 mx-6">
+            <div className="flex justify-start gap-2 mx-6 ml-16">
               {additionalImagesArray.map((img, idx) => (
                 <img
                   key={idx}
@@ -108,7 +137,7 @@ function ProductOverview({ selectedProductView, selectedCategory, selectedSubCat
                   height={50}
                   onMouseEnter={() => setHoveredImage(img)} // Updates hoveredImage on hover
                   onMouseLeave={() => setHoveredImage(null)} // Reverts to main image on leave
-                // className="w-10 h-10 object-cover cursor-pointer rounded-lg border-2 border-transparent"
+                  // className="w-10 h-10 object-cover cursor-pointer rounded-lg border-2 border-transparent"
                 />
               ))}
             </div>
@@ -184,16 +213,16 @@ function ProductOverview({ selectedProductView, selectedCategory, selectedSubCat
           Recommendation
         </button>
       </div>
-      {/* <div className=" w-60 h-64 bg-white flex-col justify-center items-center inline-flex overflow-hidden">
-        <div className=" w-60 h-64 relative flex-col justify-start items-start flex overflow-hidden">
-          <img className="relative  w-60 h-64" src="images/chair/1.png" />
-          <div className="absolute bottom-10 right-10 w-36 px-16 py-4 bg-white rounded-sm border border-gray-800 justify-center items-center gap-2.5 inline-flex">
-            <div className=" text-center text-gray-800 text-xs font-normal font-['Poppins'] uppercase leading-none tracking-wider">
-              aDD TO Cart
-            </div>
-          </div>
-        </div>
-      </div> */}
+      <div className="addons px-5 my-3">
+        <h4 className="text-md font-semibold mb-2">ADDONS</h4>
+        <Addon
+          allAddons={allAddons}
+          selectedCategory={selectedCategory}
+          selectedSubCategory={selectedSubCategory}
+          productID={selectedProductView.id}
+          onAddonAdd={handleAddOnChange}
+        />
+      </div>
     </>
   );
 }

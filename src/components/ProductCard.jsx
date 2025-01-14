@@ -29,8 +29,6 @@ function ProductCard({
     .filter((product) => product.subcategory1 === selectedSubCategory1)
     .flatMap((product) => product.product_variants || []); // Flatten the product_variants array
 
-  console.log("filteredProducts: ", filteredProducts);
-
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
       {filteredProducts.length > 0 ? (
@@ -42,7 +40,7 @@ function ProductCard({
             <img
               src={variant.image}
               alt={variant.title}
-              className="object-fit rounded-t-lg"
+              className="object-contain rounded-t-lg"
               onClick={() => {
                 setSelectedProductView(variant); // Pass product details
                 setShowProductView(true); // Open product view
