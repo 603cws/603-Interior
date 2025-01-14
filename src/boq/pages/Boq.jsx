@@ -29,6 +29,7 @@ function Boq() {
 
     const [minimizedView, setMinimizedView] = useState(false);
     const [showProductView, setShowProductView] = useState(false);
+    const [showRecommend, setShowRecommend] = useState(false);
 
     // useEffect(() => {
     //     document.title = '603 BOQ';
@@ -167,7 +168,12 @@ function Boq() {
                 </div>
             }
             {showProductView &&
-                <ProductOverview selectedProductView={selectedProductView} selectedCategory={selectedCategory} selectedSubCategory={selectedSubCategory} quantityData={quantityData} areasData={areasData} setShowProductView={setShowProductView} />
+                <div>
+                    <ProductOverview selectedProductView={selectedProductView} selectedCategory={selectedCategory} selectedSubCategory={selectedSubCategory} selectedSubCategory1={selectedSubCategory1} quantityData={quantityData} areasData={areasData} setShowProductView={setShowProductView} showRecommend={showRecommend} setShowRecommend={setShowRecommend} />
+                    {showRecommend &&
+                        <RecommendComp showRecommend={showRecommend} setShowRecommend={setShowRecommend} />
+                    }
+                </div>
             }
         </div>
     )

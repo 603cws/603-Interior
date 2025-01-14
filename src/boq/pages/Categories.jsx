@@ -64,20 +64,12 @@ const Categories = ({ categories, selectedCategory, setSelectedCategory, selecte
                                     setSelectedSubCategory(subcategories[0] || null); // Automatically select the first subcategory if available
                                 }
                             }}
-                            className={`transition-transform duration-500 ease-in-out cursor-pointer ${isSelected ? "scale-110" : "scale-100"
-                                }`}
+                            className={`transition-transform duration-500 ease-in-out cursor-pointer ${isSelected ? "scale-110" : "scale-100"}`}
                         >
                             {!minimizedView && (
-                                <div
-                                    className={`flex flex-row gap-[21px] items-center justify-start relative overflow-auto`}
-                                >
-                                    <div
-                                        className={`${selectedCategory?.id === id
-                                            ? "bg-[#A9D3CE]"
-                                            : "bg-[#ffffff]"
-                                            } 
-                                    rounded-3xl border-solid border-[#000000] border-2 flex flex-col gap-0 items-center justify-around shrink-0 w-[90px] h-[80px] relative`}
-                                    >
+                                <div className={`flex flex-row gap-[21px] items-center justify-start relative overflow-auto`}>
+                                    <div className={`${selectedCategory?.id === id ? "bg-[#A9D3CE]" : "bg-[#ffffff]"} 
+                                        rounded-3xl border-solid border-[#000000] border-2 flex flex-col gap-0 items-center justify-around shrink-0 w-[90px] h-[80px] relative`}                                     >
                                         <div className="flex flex-row gap-2 items-center justify-center shrink-0 w-[50px] relative">
                                             <img
                                                 className="flex flex-col gap-2.5 items-start justify-start shrink-0 w-[30px] h-[30px] relative overflow-hidden"
@@ -96,26 +88,15 @@ const Categories = ({ categories, selectedCategory, setSelectedCategory, selecte
                                 </div>
                             )}
                             {minimizedView && (
-                                <div
-                                    className={`flex flex-row items-center justify-start relative group py-2`}
-                                >
-                                    <div
-                                        className={`rounded-full border-2 ${selectedCategory?.id === id
-                                            ? "border-[#34BFAD] scale-75"
-                                            : "border-[#000000]"
-                                            } w-[70px] h-[70px] flex items-center justify-center group-hover:scale-75 transition-transform duration-[1000ms] ease-in-out`}
+                                <div className={`flex flex-row items-center justify-start relative group py-2`} >
+                                    <div className={`rounded-full border-2 ${selectedCategory?.id === id ? "border-[#34BFAD] scale-75" : "border-[#000000]"} 
+                                        w-[70px] h-[70px] flex items-center justify-center group-hover:scale-75 transition-transform duration-[1000ms] ease-in-out`}
                                     >
-                                        <img
-                                            className="rounded-full w-[50px] h-[50px] object-contain"
-                                            src={imageSrc}
-                                            alt={`${category} icon`}
-                                        />
+                                        <img className="rounded-full w-[50px] h-[50px] object-contain"
+                                            src={imageSrc} alt={`${category} icon`} />
                                     </div>
-                                    <p
-                                        className={`absolute w-full text-center ${selectedCategory?.id === id
-                                            ? "-bottom-1 opacity-100"
-                                            : "-bottom-1 opacity-0 group-hover:opacity-100"
-                                            } transition-all duration-[1000ms] ease-in-out text-[#252525] font-['Poppins-Regular',_sans-serif] leading-5 font-normal text-sm text-nowrap`}
+                                    <p className={`absolute w-full text-center ${selectedCategory?.id === id ? "-bottom-1 opacity-100" : "-bottom-1 opacity-0 group-hover:opacity-100"
+                                        } transition-all duration-[1000ms] ease-in-out text-[#252525] font-['Poppins-Regular',_sans-serif] leading-5 font-normal text-sm text-nowrap`}
                                     >
                                         {category}
                                     </p>
@@ -137,9 +118,7 @@ const Categories = ({ categories, selectedCategory, setSelectedCategory, selecte
                                     onClick={() => setSelectedSubCategory(subCategory)}
                                     className="rounded-lg flex flex-row gap-[9px] items-start justify-center shrink-0 mx-3 group"
                                 >
-                                    <p
-                                        className={`relative text-[#252525] text-center font-['Poppins-Regular',_sans-serif] text-sm font-normal flex items-center justify-center py-3 cursor-pointer`}
-                                    >
+                                    <p className={`relative text-[#252525] text-center font-['Poppins-Regular',_sans-serif] text-sm font-normal flex items-center justify-center py-3 cursor-pointer`} >
                                         {subCategory}
                                         {/* Animated underline (span) */}
                                         <span
@@ -160,10 +139,7 @@ const Categories = ({ categories, selectedCategory, setSelectedCategory, selecte
                             </h3>
                             <div className="flex flex-grow flex-wrap gap-10 mt-5 justify-center ">
                                 {selectedCategory.subcategories.map((subCategory, index) => {
-                                    const imageSrcSubCat = getImageSrcSubCat(
-                                        selectedCategory.category,
-                                        subCategory
-                                    );
+                                    const imageSrcSubCat = getImageSrcSubCat(selectedCategory.category, subCategory);
 
                                     return (
                                         <div
@@ -171,24 +147,19 @@ const Categories = ({ categories, selectedCategory, setSelectedCategory, selecte
                                             // className="p-4 border rounded-lg cursor-pointer hover:bg-gray-100"
                                             onClick={() => setSelectedSubCategory(subCategory)}
                                         >
-                                            {/* <div className='className="p-4 border rounded-lg cursor-pointer hover:bg-gray-100"'> */}
                                             <div className="flex flex-col items-center justify-evenly flex-wrap relative ">
                                                 <div className="flex flex-col gap-[19px] items-center justify-center w-full relative cursor-pointer hover:scale-105 transition-transform duration-500 ease-in-out">
                                                     <div className="relative w-[160px] h-[170px] flex items-center justify-center bg-gradient-to-r from-[#003442] to-[#34BFAD] rounded-[26px] ">
-                                                        {/* <div className=" w-[210px] h-[220px] flex items-center justify-center"> */}
-                                                        <img
-                                                            className="rounded-3xl w-[150px] h-[150px] object-cover"
+                                                        <img className="rounded-3xl w-[150px] h-[150px] object-cover"
                                                             src={imageSrcSubCat}
                                                             alt={`${subCategory} subcategory`}
                                                         />
-                                                        {/* </div> */}
                                                     </div>
                                                     <p className="text-[#444444] text-center font-['Montserrat-Medium',_sans-serif] text-sm font-medium relative">
                                                         {subCategory}
                                                     </p>
                                                 </div>
                                             </div>
-                                            {/* </div> */}
                                         </div>
                                     );
                                 })}

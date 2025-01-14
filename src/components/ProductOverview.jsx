@@ -1,28 +1,16 @@
 import React, { useState } from "react";
 import { TbArrowBackUp } from "react-icons/tb";
-import {
-  calculateTotalPriceHelper,
-  normalizeKey,
-} from "../boq/utils/CalculateTotalPriceHelper";
+import { MdOutlineKeyboardArrowRight, MdOutlineKeyboardArrowLeft, } from "react-icons/md";
+import { calculateTotalPriceHelper, normalizeKey, } from "../boq/utils/CalculateTotalPriceHelper";
 
-function ProductOverview({
-  selectedProductView,
-  selectedCategory,
-  selectedSubCategory,
-  quantityData,
-  areasData,
-  setShowProductView,
+function ProductOverview({ selectedProductView, selectedCategory, selectedSubCategory, selectedSubCategory1, quantityData,
+  areasData, setShowProductView, showRecommend, setShowRecommend
 }) {
   const [mainImageHovered, setMainImageHovered] = useState(false); // For main image hover effect
   const [hoveredImage, setHoveredImage] = useState(null); // For additional image hover effect
-  const baseImageUrl =
-    "https://bwxzfwsoxwtzhjbzbdzs.supabase.co/storage/v1/object/public/addon/";
+  const baseImageUrl = "https://bwxzfwsoxwtzhjbzbdzs.supabase.co/storage/v1/object/public/addon/";
 
-  const additionalImagesArray = selectedProductView.additional_images
-    ? JSON.parse(selectedProductView.additional_images).map(
-        (imageName) => `${baseImageUrl}${imageName}`
-      )
-    : [];
+  const additionalImagesArray = selectedProductView.additional_images ? JSON.parse(selectedProductView.additional_images).map((imageName) => `${baseImageUrl}${imageName}`) : [];
 
   const findClosestKey = (targetKey, dataObject) => {
     if (!targetKey || !dataObject) return null;
@@ -30,10 +18,7 @@ function ProductOverview({
     const normalizedTargetKey = normalizeKey(targetKey);
     const keys = Object.keys(dataObject);
 
-    return (
-      keys.find((key) => normalizedTargetKey.includes(normalizeKey(key))) ||
-      null
-    );
+    return (keys.find((key) => normalizedTargetKey.includes(normalizeKey(key))) || null);
   };
 
   const calculationDetails = () => {
@@ -81,13 +66,25 @@ function ProductOverview({
               setShowProductView(false); // Open product view
             }}
           />
+          <div className="flex mx-10 items-center text-[#334A78]">
+            <span>{selectedCategory?.category}</span>
+            <MdOutlineKeyboardArrowRight
+              size={20}
+              style={{ color: "#334A78" }}
+            />
+            <span>{selectedSubCategory}</span>
+            <MdOutlineKeyboardArrowRight
+              size={20}
+              style={{ color: "#334A78" }}
+            />
+            <span>{selectedSubCategory1}</span>
+          </div>
           {/* main div for image */}
           <div
             className="w-3/5 h-3/4 mx-auto mb-2"
             onMouseEnter={() => setMainImageHovered(true)}
             onMouseLeave={() => setMainImageHovered(false)}
             style={{
-              // transform: mainImageHovered ? 'scale(1.3)' : 'scale(1)',
               zIndex: mainImageHovered ? 10 : 1,
             }}
           >
@@ -111,7 +108,7 @@ function ProductOverview({
                   height={50}
                   onMouseEnter={() => setHoveredImage(img)} // Updates hoveredImage on hover
                   onMouseLeave={() => setHoveredImage(null)} // Reverts to main image on leave
-                  // className="w-10 h-10 object-cover cursor-pointer rounded-lg border-2 border-transparent"
+                // className="w-10 h-10 object-cover cursor-pointer rounded-lg border-2 border-transparent"
                 />
               ))}
             </div>
@@ -130,9 +127,6 @@ function ProductOverview({
               <span className="text-sm">/ Per Unit</span>
             </p>
             <br></br>
-            {/* <span className="text-2xl font-semibold line-through mb-3">
-            Mrp 13202
-          </span> */}
           </div>
           {/* final price section */}
           <div className="mt-1">
@@ -169,11 +163,6 @@ function ProductOverview({
               </p>
               <span className="text-xs text-[#334A78] ">dimension value</span>
             </div>
-            {/* instruction  */}
-            {/* <div>
-            <p> instruction</p>
-            <span>instruction text</span>
-          </div> */}
             <div className="border-b-2 pt-2 pb-1">
               <p className="text-sm uppercase font-bold text-[#334A78]">
                 instruction
@@ -189,6 +178,7 @@ function ProductOverview({
       <div className="fixed z-10 right-0 rotate-90 book-tour-btn">
         <button
           //   onClick={() => setRequestTour(true)}
+          onClick={() => setShowRecommend(true)}
           className="text-base text-md  bg-[#1A3A36] text-white  lg:px-4 py-2  rounded-3xl "
         >
           Recommendation
