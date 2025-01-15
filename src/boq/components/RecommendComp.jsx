@@ -1,5 +1,5 @@
 import { MdOutlineCancel } from "react-icons/md";
-import Addon from "./Addon";
+import Addon from "../../components/Addon";
 
 function RecommendComp({ showRecommend, setShowRecommend }) {
   console.log(showRecommend);

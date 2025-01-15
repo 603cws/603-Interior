@@ -8,23 +8,24 @@ import {
   fetchRoomData,
 } from "../utils/dataFetchers";
 import MainPage from "./MainPage";
-import ProductCard from "../../components/ProductCard";
-import RecommendComp from "../../components/RecommendComp";
+import ProductCard from "../components/ProductCard";
+import RecommendComp from "../components/RecommendComp";
 import processData from "../utils/dataProcessor";
-import ProductOverview from "../../components/ProductOverview";
+import ProductOverview from "../components/ProductOverview";
 
 function Boq() {
   const [selectedCategory, setSelectedCategory] = useState(null); //Gets value after data fetching
   const [selectedSubCategory, setSelectedSubCategory] = useState(null); //Gets value after data fetching
-  const [selectedSubCategory1, setSelectedSubCategory1] = useState("");
+  const [selectedSubCategory1, setSelectedSubCategory1] = useState('');
   const [selectedProducts, setSelectedProducts] = useState([]);
 
   const [subCat1, setSubCat1] = useState(null);
   const [selectedProductView, setSelectedProductView] = useState([]);
 
   const [categories, setCategories] = useState([]);
+  const [subCategories, setSubCategories] = useState([]); // Extracted subcategories
   const [productsData, setProductData] = useState([]);
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState('');
   const [priceRange, setPriceRange] = useState([1000, 15000000]);
 
   const [workspaces, setWorkspaces] = useState([]);
@@ -41,14 +42,23 @@ function Boq() {
   // }, []);
 
   useEffect(() => {
+    if (selectedCategory) {
+      // Find the category object matching the selected category ID
+      const category = categories.find((cat) => cat.id === selectedCategory.id);
+
+      // Update the subcategories state
+      if (category) {
+        setSubCategories(category.subcategories || []);
+      }
+    } else {
+      setSubCategories([]); // Reset subcategories if no category is selected
+    }
+  }, [selectedCategory, categories]);
+
+  useEffect(() => {
     const loadData = async () => {
-      const [categoriesData, productsData, workspacesData, roomDataResult] =
-        await Promise.all([
-          fetchCategories(),
-          fetchProductsData(),
-          fetchWorkspaces(),
-          fetchRoomData(),
-        ]);
+      const [categoriesData, productsData, workspacesData, roomDataResult] = await Promise.all([
+        fetchCategories(), fetchProductsData(), fetchWorkspaces(), fetchRoomData(),]);
 
       setCategories(categoriesData);
 
@@ -67,10 +77,7 @@ function Boq() {
 
   useEffect(() => {
     if (roomData.quantityData && roomData.quantityData.length > 0) {
-      const processedQuantityData = processData(
-        roomData.quantityData,
-        "quantity"
-      );
+      const processedQuantityData = processData(roomData.quantityData, "quantity");
       if (processedQuantityData) {
         setQuantityData([processedQuantityData]);
       }
@@ -116,8 +123,7 @@ function Boq() {
       });
 
       const matchesCategory =
-        selectedCategory?.category === "" ||
-        product.category === selectedCategory?.category;
+        selectedCategory?.category === '' || product.category === selectedCategory?.category;
       return matchesVariant && matchesCategory;
     });
   }, [productsData, searchQuery, priceRange, selectedCategory]);
@@ -126,12 +132,10 @@ function Boq() {
   const groupedProducts = useMemo(() => {
     const grouped = {};
 
-    filteredProducts.forEach((product) => {
-      const subcategories = product.subcategory
-        .split(",")
-        .map((sub) => sub.trim());
+    filteredProducts.forEach(product => {
+      const subcategories = product.subcategory.split(',').map(sub => sub.trim());
 
-      subcategories.forEach((subcategory) => {
+      subcategories.forEach(subcategory => {
         if (!grouped[product.category]) {
           grouped[product.category] = {};
         }
@@ -242,6 +246,7 @@ function Boq() {
             setShowProductView={setShowProductView}
             showRecommend={showRecommend}
             setShowRecommend={setShowRecommend}
+            subCategories={subCategories}
             filteredProducts={filteredProducts}
             handleAddOnChange={handleAddOnChange}
           />

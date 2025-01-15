@@ -5,13 +5,13 @@ import Boq from "./boq/pages/Boq";
 import PageNotFound from "./components/PageNotFound";
 
 import { Route, Routes } from "react-router-dom";
-import RegisterUser from "./components/RegisterUser";
+import RegisterUser from "./layout/components/RegisterUser";
 import ErrorModal from "./components/ErrorModal";
-import ProductCard from "./components/ProductCard";
-import ProductOverview from "./components/ProductOverview";
-import Addon from "./components/Addon";
-import RecommendComp from "./components/RecommendComp";
-import SelectArea from "./components/SelectArea";
+import ProductCard from "./boq/components/ProductCard";
+import ProductOverview from "./boq/components/ProductOverview";
+import Addon from "./boq/components/Addon";
+import RecommendComp from "./boq/components/RecommendComp";
+import SelectArea from "./boq/components/SelectArea";
 import Landing from "./pages/Landing";
 
 import SpinnerFullPage from "./components/SpinnerFullPage";

@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { useNavigate, useLocation } from "react-router-dom"; //useHref
 import countryList from "react-select-country-list";
-import { supabase } from "../services/supabase"; // Import Supabase client
-import checkIfEmailExists from "../layout/utils/checkIfEmailExists";
-import ErrorMiniModal from "./ErrorMiniModal";
+import { supabase } from "../../services/supabase"; // Import Supabase client
+import checkIfEmailExists from "../utils/checkIfEmailExists";
+import ErrorMiniModal from "../../components/ErrorMiniModal";
 import Select from "react-select";
 
 function RegisterUser() {
