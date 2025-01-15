@@ -1,23 +1,16 @@
 import { useEffect, useState, useMemo } from "react";
 import Navbar from "../../boq/components/Navbar";
 import Categories from "./Categories";
-import {
-  fetchCategories,
-  fetchProductsData,
-  fetchWorkspaces,
-  fetchRoomData,
-} from "../utils/dataFetchers";
+import { fetchCategories, fetchProductsData, fetchWorkspaces, fetchRoomData } from "../utils/dataFetchers";
 import MainPage from "./MainPage";
 import ProductCard from "../components/ProductCard";
 import RecommendComp from "../components/RecommendComp";
 import processData from "../utils/dataProcessor";
 import ProductOverview from "../components/ProductOverview";
+import { useApp } from "../../Context/Context";
 
 function Boq() {
-  const [selectedCategory, setSelectedCategory] = useState(null); //Gets value after data fetching
-  const [selectedSubCategory, setSelectedSubCategory] = useState(null); //Gets value after data fetching
-  const [selectedSubCategory1, setSelectedSubCategory1] = useState("");
-  const [selectedProducts, setSelectedProducts] = useState([]);
+  // const [selectedProducts, setSelectedProducts] = useState([]);
 
   const [subCat1, setSubCat1] = useState(null);
   const [selectedProductView, setSelectedProductView] = useState([]);
@@ -37,11 +30,18 @@ function Boq() {
   const [showProductView, setShowProductView] = useState(false);
   const [showRecommend, setShowRecommend] = useState(false);
   const [selectedAddons, setSelectedAddons] = useState([]);
-  const [selectedData, setSelectedData] = useState([]);
+
+  const { selectedCategory, setSelectedCategory, selectedSubCategory, setSelectedSubCategory,
+    selectedSubCategory1, setSelectedSubCategory1, selectedData, setSelectedData } = useApp();
 
   // useEffect(() => {
   //     document.title = '603 BOQ';
   // }, []);
+
+  useEffect(() => {
+    var temp = JSON.parse(localStorage.getItem("selectedData"));
+    setSelectedData(temp);
+  }, []);
 
   useEffect(() => {
     if (selectedCategory) {
@@ -268,9 +268,7 @@ function Boq() {
         <div className="container px-5">
           <Categories
             categories={categories}
-            selectedCategory={selectedCategory}
             setSelectedCategory={handleCategorySelection}
-            selectedSubCategory={selectedSubCategory}
             setSelectedSubCategory={handleSelectedSubCategory}
             minimizedView={minimizedView}
           />
@@ -284,9 +282,6 @@ function Boq() {
               />
               <ProductCard
                 products={groupedProducts}
-                selectedCategory={selectedCategory}
-                selectedSubCategory={selectedSubCategory}
-                selectedSubCategory1={selectedSubCategory1}
                 selectedProductView={selectedProductView}
                 setShowProductView={setShowProductView}
                 setSelectedProductView={handleSelectedProductView}
@@ -299,9 +294,6 @@ function Boq() {
         <div>
           <ProductOverview
             selectedProductView={selectedProductView}
-            selectedCategory={selectedCategory}
-            selectedSubCategory={selectedSubCategory}
-            selectedSubCategory1={selectedSubCategory1}
             quantityData={quantityData}
             areasData={areasData}
             setShowProductView={setShowProductView}

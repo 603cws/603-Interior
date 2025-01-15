@@ -1,17 +1,23 @@
-import { useState } from "react";
+import { useEffect } from "react";  //useState
 import { MdOutlineCancel } from "react-icons/md";
+import { useApp } from "../../Context/Context";
 
-function SelectArea({
-  setShowSelectArea,
-  image,
-  subCategories,
-  selectedAreas,
-  setSelectedAreas,
-  selectedProductView,
-  selectedCategory,
-  selectedSubCategory1,
-  handelSelectedData,
-}) {
+function SelectArea({ setShowSelectArea, image, subCategories, selectedAreas, setSelectedAreas, selectedProductView, handelSelectedData }) {
+
+  const { selectedData, selectedCategory, selectedSubCategory1, } = useApp()
+
+  // Initialize selected areas based on selectedData
+  useEffect(() => {
+    const initialSelectedAreas = subCategories.filter((subCat) =>
+      selectedData.some(
+        (item) =>
+          item.groupKey ===
+          `${selectedCategory.category}-${subCat}-${selectedSubCategory1}`
+      )
+    );
+    setSelectedAreas(initialSelectedAreas);
+  }, [subCategories, selectedData, selectedCategory, selectedSubCategory1, setSelectedAreas]);
+
   const handleCheckboxChange = (value, checked) => {
     setSelectedAreas((prev) =>
       checked ? [...prev, value] : prev.filter((item) => item !== value)

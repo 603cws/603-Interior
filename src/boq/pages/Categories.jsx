@@ -1,13 +1,10 @@
 import React from "react"; //{ useState, useEffect }
+import { useApp } from "../../Context/Context";
 
-const Categories = ({
-  categories,
-  selectedCategory,
-  setSelectedCategory,
-  selectedSubCategory,
-  setSelectedSubCategory,
-  minimizedView,
-}) => {
+const Categories = ({ categories, setSelectedCategory, setSelectedSubCategory, minimizedView }) => {
+
+  const { selectedCategory, selectedSubCategory } = useApp();
+
   const getCleanedCategoryName = (categoryName) => {
     return categoryName.replace(/[^a-zA-Z0-9]/g, ""); // Removes all non-alphanumeric characters
   };
@@ -70,20 +67,18 @@ const Categories = ({
                   setSelectedSubCategory(subcategories[0] || null); // Automatically select the first subcategory if available
                 }
               }}
-              className={`transition-transform duration-500 ease-in-out cursor-pointer ${
-                isSelected ? "scale-110" : "scale-100"
-              }`}
+              className={`transition-transform duration-500 ease-in-out cursor-pointer ${isSelected ? "scale-110" : "scale-100"
+                }`}
             >
               {!minimizedView && (
                 <div
                   className={`flex flex-row gap-[21px] items-center justify-start relative overflow-auto`}
                 >
                   <div
-                    className={`${
-                      selectedCategory?.id === id
-                        ? "bg-[#A9D3CE]"
-                        : "bg-[#ffffff]"
-                    } 
+                    className={`${selectedCategory?.id === id
+                      ? "bg-[#A9D3CE]"
+                      : "bg-[#ffffff]"
+                      } 
                                         rounded-3xl border-solid border-[#000000] border-2 flex flex-col gap-0 items-center justify-around shrink-0 w-[90px] h-[80px] relative`}
                   >
                     <div className="flex flex-row gap-2 items-center justify-center shrink-0 w-[50px] relative">
@@ -108,11 +103,10 @@ const Categories = ({
                   className={`flex flex-row items-center justify-start relative group py-2`}
                 >
                   <div
-                    className={`rounded-full border-2 ${
-                      selectedCategory?.id === id
-                        ? "border-[#34BFAD] scale-75"
-                        : "border-[#000000]"
-                    } 
+                    className={`rounded-full border-2 ${selectedCategory?.id === id
+                      ? "border-[#34BFAD] scale-75"
+                      : "border-[#000000]"
+                      } 
                                         w-[70px] h-[70px] flex items-center justify-center group-hover:scale-75 transition-transform duration-[1000ms] ease-in-out`}
                   >
                     <img
@@ -122,11 +116,10 @@ const Categories = ({
                     />
                   </div>
                   <p
-                    className={`absolute w-full text-center ${
-                      selectedCategory?.id === id
-                        ? "-bottom-1 opacity-100"
-                        : "-bottom-1 opacity-0 group-hover:opacity-100"
-                    } transition-all duration-[1000ms] ease-in-out text-[#252525] font-['Poppins-Regular',_sans-serif] leading-5 font-normal text-sm text-nowrap`}
+                    className={`absolute w-full text-center ${selectedCategory?.id === id
+                      ? "-bottom-1 opacity-100"
+                      : "-bottom-1 opacity-0 group-hover:opacity-100"
+                      } transition-all duration-[1000ms] ease-in-out text-[#252525] font-['Poppins-Regular',_sans-serif] leading-5 font-normal text-sm text-nowrap`}
                   >
                     {category}
                   </p>
@@ -154,11 +147,10 @@ const Categories = ({
                     {subCategory}
                     {/* Animated underline (span) */}
                     <span
-                      className={`absolute left-0 bottom-0 block w-0 h-1 bg-[#34BFAD] transition-all duration-300 ease-in-out ${
-                        selectedSubCategory === subCategory
-                          ? "w-full"
-                          : "group-hover:w-full"
-                      }`}
+                      className={`absolute left-0 bottom-0 block w-0 h-1 bg-[#34BFAD] transition-all duration-300 ease-in-out ${selectedSubCategory === subCategory
+                        ? "w-full"
+                        : "group-hover:w-full"
+                        }`}
                     ></span>
                   </p>
                 </div>

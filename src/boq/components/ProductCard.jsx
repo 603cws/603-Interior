@@ -1,4 +1,9 @@
-function ProductCard({ products, selectedCategory, selectedSubCategory, selectedSubCategory1, selectedProductView, setSelectedProductView, setShowProductView, }) {
+import { useApp } from "../../Context/Context";
+
+function ProductCard({ products, selectedProductView, setSelectedProductView, setShowProductView, }) {
+
+  const { selectedCategory, selectedSubCategory, selectedSubCategory1 } = useApp();
+
   const productsInCategory = products[selectedCategory?.category];
 
   if (!productsInCategory) {

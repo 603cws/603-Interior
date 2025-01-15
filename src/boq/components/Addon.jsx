@@ -1,10 +1,10 @@
 import React from "react";
-
-const baseImageUrl =
-  "https://bwxzfwsoxwtzhjbzbdzs.supabase.co/storage/v1/object/public/addon/";
+// import { useApp } from "../../Context/Context";
 
 function Addon({ allAddons, onAddonAdd }) {
-  // Filter products based on selectedSubCategory1 (like 'Table', 'Chair')
+  // const { selectedCategory, selectedSubCategory } = useApp();
+
+  const baseImageUrl = "https://bwxzfwsoxwtzhjbzbdzs.supabase.co/storage/v1/object/public/addon/";
 
   if (allAddons?.length === 0) {
     return <p>No addons available for this category.</p>;
