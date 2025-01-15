@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { TbArrowBackUp } from "react-icons/tb";
-import { MdOutlineKeyboardArrowRight, MdOutlineKeyboardArrowLeft, } from "react-icons/md";
+import { MdOutlineKeyboardArrowRight } from "react-icons/md"; //MdOutlineKeyboardArrowLeft
 import { calculateTotalPriceHelper, normalizeKey, } from "../utils/CalculateTotalPriceHelper";
 import SelectArea from './SelectArea';
 import Addon from "./Addon";
@@ -10,6 +10,7 @@ function ProductOverview({ selectedProductView, selectedCategory, selectedSubCat
   const [mainImageHovered, setMainImageHovered] = useState(false); // For main image hover effect
   const [hoveredImage, setHoveredImage] = useState(null); // For additional image hover effect
   const [showSelectArea, setShowSelectArea] = useState(false);
+  const [selectedAreas, setSelectedAreas] = useState([]);
 
   const baseImageUrl = "https://bwxzfwsoxwtzhjbzbdzs.supabase.co/storage/v1/object/public/addon/";
 
@@ -192,9 +193,9 @@ function ProductOverview({ selectedProductView, selectedCategory, selectedSubCat
         </button>
       </div>
 
-      {showSelectArea && <SelectArea setShowSelectArea={setShowSelectArea} image={selectedProductView.image} subCategories={subCategories} />}
+      {showSelectArea && <SelectArea setShowSelectArea={setShowSelectArea} image={selectedProductView.image} subCategories={subCategories} selectedAreas={selectedAreas} setSelectedAreas={setSelectedAreas} />}
 
-      <div className="addons px-5 my-3">
+      <div className={`addons px-5 my-3 ${showSelectArea ? "opacity-50 pointer-events-none" : "opacity-100"}`}>
         <h4 className="text-md font-semibold mb-2">ADDONS</h4>
         <Addon
           allAddons={allAddons}
