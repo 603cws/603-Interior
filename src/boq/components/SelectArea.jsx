@@ -1,8 +1,17 @@
 import { useState } from "react";
 import { MdOutlineCancel } from "react-icons/md";
 
-function SelectArea({ setShowSelectArea, image, subCategories, selectedAreas, setSelectedAreas }) {
-
+function SelectArea({
+  setShowSelectArea,
+  image,
+  subCategories,
+  selectedAreas,
+  setSelectedAreas,
+  selectedProductView,
+  selectedCategory,
+  selectedSubCategory1,
+  handelSelectedData,
+}) {
   const handleCheckboxChange = (value, checked) => {
     setSelectedAreas((prev) =>
       checked ? [...prev, value] : prev.filter((item) => item !== value)
@@ -10,7 +19,14 @@ function SelectArea({ setShowSelectArea, image, subCategories, selectedAreas, se
   };
 
   const handleDoneClick = () => {
-    console.log("Selected Areas:", selectedAreas); // Save or process the selected values here
+    selectedAreas.forEach((subCat) => {
+      handelSelectedData(
+        selectedProductView,
+        selectedCategory,
+        subCat,
+        selectedSubCategory1 // Pass the selectedSubCategory1 as well
+      );
+    });
     setShowSelectArea(false); // Close the modal
   };
 
@@ -20,7 +36,9 @@ function SelectArea({ setShowSelectArea, image, subCategories, selectedAreas, se
         <div className="p-4 border-2 border-[#FFD500] rounded-xl relative">
           {/* Title */}
           <div className="flex justify-center items-center mb-4">
-            <p className="text-center font-semibold text-xl">Select Your Area</p>
+            <p className="text-center font-semibold text-xl">
+              Select Your Area
+            </p>
           </div>
 
           {/* Content */}

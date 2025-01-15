@@ -16,7 +16,7 @@ import ProductOverview from "../components/ProductOverview";
 function Boq() {
   const [selectedCategory, setSelectedCategory] = useState(null); //Gets value after data fetching
   const [selectedSubCategory, setSelectedSubCategory] = useState(null); //Gets value after data fetching
-  const [selectedSubCategory1, setSelectedSubCategory1] = useState('');
+  const [selectedSubCategory1, setSelectedSubCategory1] = useState("");
   const [selectedProducts, setSelectedProducts] = useState([]);
 
   const [subCat1, setSubCat1] = useState(null);
@@ -25,7 +25,7 @@ function Boq() {
   const [categories, setCategories] = useState([]);
   const [subCategories, setSubCategories] = useState([]); // Extracted subcategories
   const [productsData, setProductData] = useState([]);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
   const [priceRange, setPriceRange] = useState([1000, 15000000]);
 
   const [workspaces, setWorkspaces] = useState([]);
@@ -37,6 +37,8 @@ function Boq() {
   const [showProductView, setShowProductView] = useState(false);
   const [showRecommend, setShowRecommend] = useState(false);
   const [selectedAddons, setSelectedAddons] = useState([]);
+  const [selectedData, setSelectedData] = useState([]);
+
   // useEffect(() => {
   //     document.title = '603 BOQ';
   // }, []);
@@ -57,8 +59,13 @@ function Boq() {
 
   useEffect(() => {
     const loadData = async () => {
-      const [categoriesData, productsData, workspacesData, roomDataResult] = await Promise.all([
-        fetchCategories(), fetchProductsData(), fetchWorkspaces(), fetchRoomData(),]);
+      const [categoriesData, productsData, workspacesData, roomDataResult] =
+        await Promise.all([
+          fetchCategories(),
+          fetchProductsData(),
+          fetchWorkspaces(),
+          fetchRoomData(),
+        ]);
 
       setCategories(categoriesData);
 
@@ -77,7 +84,10 @@ function Boq() {
 
   useEffect(() => {
     if (roomData.quantityData && roomData.quantityData.length > 0) {
-      const processedQuantityData = processData(roomData.quantityData, "quantity");
+      const processedQuantityData = processData(
+        roomData.quantityData,
+        "quantity"
+      );
       if (processedQuantityData) {
         setQuantityData([processedQuantityData]);
       }
@@ -123,7 +133,8 @@ function Boq() {
       });
 
       const matchesCategory =
-        selectedCategory?.category === '' || product.category === selectedCategory?.category;
+        selectedCategory?.category === "" ||
+        product.category === selectedCategory?.category;
       return matchesVariant && matchesCategory;
     });
   }, [productsData, searchQuery, priceRange, selectedCategory]);
@@ -132,10 +143,12 @@ function Boq() {
   const groupedProducts = useMemo(() => {
     const grouped = {};
 
-    filteredProducts.forEach(product => {
-      const subcategories = product.subcategory.split(',').map(sub => sub.trim());
+    filteredProducts.forEach((product) => {
+      const subcategories = product.subcategory
+        .split(",")
+        .map((sub) => sub.trim());
 
-      subcategories.forEach(subcategory => {
+      subcategories.forEach((subcategory) => {
         if (!grouped[product.category]) {
           grouped[product.category] = {};
         }
@@ -199,7 +212,55 @@ function Boq() {
     });
   };
 
-  console.log("selected addons", selectedAddons);
+  const handelSelectedData = (product, category, subCat, subcategory1) => {
+    if (!product) return;
+
+    // Unique group key to ensure only one selection per group
+    const groupKey = `${category.category}-${subCat}-${subcategory1}`;
+
+    const productData = {
+      groupKey, // For group-level management
+      id: product.id,
+      category: category.category,
+      subcategory: subCat,
+      subcategory1, // added subcategory1 as an argument
+      product_variant: {
+        variant_title: product.title,
+        variant_image: product.image,
+        variant_details: product.details,
+        variant_price: product.price,
+        variant_id: product.id,
+        additional_images: JSON.parse(product.additional_images || "[]"), // Parse the string to an array
+      },
+      addons: selectedAddons || [], // Assuming addons might be optional
+    };
+
+    // Update selectedData to replace any existing product in the group
+    setSelectedData((prevData) => {
+      // Check if there's already a product with the same groupKey
+      const existingProductIndex = prevData.findIndex(
+        (item) => item.groupKey === groupKey
+      );
+
+      if (existingProductIndex !== -1) {
+        // Replace the existing product in the group
+        const updatedData = [...prevData];
+        updatedData[existingProductIndex] = productData; // Replace the product with new data
+        localStorage.setItem("selectedData", JSON.stringify(updatedData)); // Persist updated state
+        return updatedData;
+      }
+
+      // If no existing product with the same groupKey, add the new product
+      const updatedData = [...prevData, productData];
+      localStorage.setItem("selectedData", JSON.stringify(updatedData)); // Persist updated state
+      return updatedData;
+    });
+
+    console.log("Processed group key:", groupKey);
+  };
+
+  // console.log("selected addons", selectedAddons);
+  console.log("selected products", selectedData);
   return (
     <div>
       <Navbar />
@@ -249,6 +310,7 @@ function Boq() {
             subCategories={subCategories}
             filteredProducts={filteredProducts}
             handleAddOnChange={handleAddOnChange}
+            handelSelectedData={handelSelectedData}
           />
           {showRecommend && (
             <RecommendComp
