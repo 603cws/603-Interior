@@ -1,7 +1,7 @@
 import React from "react"; //{ useState, useEffect }
 import { useApp } from "../../Context/Context";
 
-const Categories = ({ categories, setSelectedCategory, setSelectedSubCategory, minimizedView }) => {
+const Categories = ({ categories, setSelectedCategory, setSelectedSubCategory, minimizedView,handleCategoryClick,userResponses }) => {
 
   const { selectedCategory, selectedSubCategory } = useApp();
 
@@ -61,14 +61,16 @@ const Categories = ({ categories, setSelectedCategory, setSelectedSubCategory, m
           return (
             <div
               key={id}
-              onClick={() => {
-                setSelectedCategory({ id, category, subcategories });
-                if (minimizedView) {
-                  setSelectedSubCategory(subcategories[0] || null); // Automatically select the first subcategory if available
-                }
-              }}
-              className={`transition-transform duration-500 ease-in-out cursor-pointer ${isSelected ? "scale-110" : "scale-100"
-                }`}
+              // onClick={() => {
+              //   setSelectedCategory({ id, category, subcategories });
+              //   if (minimizedView) {
+              //     setSelectedSubCategory(subcategories[0] || null); // Automatically select the first subcategory if available
+              //   }
+              // }}
+              onClick={() => handleCategoryClick(id, category, subcategories)}
+              className={`transition-transform duration-500 ease-in-out cursor-pointer ${
+                isSelected ? "scale-110" : "scale-100"
+              }`}
             >
               {!minimizedView && (
                 <div
@@ -133,21 +135,31 @@ const Categories = ({ categories, setSelectedCategory, setSelectedSubCategory, m
         <div className="mt-5">
           {minimizedView && (
             <div className="border-solid border-[#d5d5d5] border flex flex-row items-center justify-start overflow-auto scrollbar-hide pb-4">
-              {selectedCategory.subcategories.map((subCategory, index) => (
-                <div
-                  key={index}
-                  onClick={() => setSelectedSubCategory(subCategory)}
-                  className="rounded-lg flex flex-row gap-[9px] items-start justify-center shrink-0 mx-3 group "
-                >
-                  <p
-                    className={`relative text-[#252525] text-center font-['Poppins-Regular',_sans-serif] text-sm font-normal flex items-center justify-center py-3 cursor-pointer `}  //bg-[#A9D3CE]
+              {selectedCategory.subcategories
+                .filter(
+                  (subCategory) =>
+                    selectedCategory.category === "HVAC" // Apply logic only for HVAC
+                      ? userResponses.hvacType === "Centralized"
+                        ? subCategory === "Centralized" // Show only "Centralized"
+                        : subCategory !== "Centralized" // Exclude "Centralized"
+                      : true // Show all subcategories for non-HVAC categories
+                )
+                .map((subCategory, index) => (
+                  <div
+                    key={index}
+                    onClick={() => setSelectedSubCategory(subCategory)}
+                    className="rounded-lg flex flex-row gap-[9px] items-start justify-center shrink-0 mx-3 group"
                   >
-                    {subCategory}
-                    {/* Animated underline (span) */}
-                    <span
-                      className={`absolute left-0 bottom-0 block w-0 h-1 bg-[#34BFAD] transition-all duration-300 ease-in-out ${selectedSubCategory === subCategory
-                        ? "w-full"
-                        : "group-hover:w-full"
+                    <p
+                      className={`relative text-[#252525] text-center font-['Poppins-Regular',_sans-serif] text-sm font-normal flex items-center justify-center py-3 cursor-pointer`}
+                    >
+                      {subCategory}
+                      {/* Animated underline (span) */}
+                      <span
+                        className={`absolute left-0 bottom-0 block w-0 h-1 bg-[#34BFAD] transition-all duration-300 ease-in-out ${
+                          selectedSubCategory === subCategory
+                            ? "w-full"
+                            : "group-hover:w-full"
                         }`}
                     ></span>
                   </p>
@@ -160,12 +172,21 @@ const Categories = ({ categories, setSelectedCategory, setSelectedSubCategory, m
               <h3 className="text-lg font-semibold text-gray-800 ms-5">
                 Subcategories of {selectedCategory.category}
               </h3>
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-5 mt-5 justify-center ">
-                {selectedCategory.subcategories.map((subCategory, index) => {
-                  const imageSrcSubCat = getImageSrcSubCat(
-                    selectedCategory.category,
-                    subCategory
-                  );
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-5 mt-5 justify-center">
+                {selectedCategory.subcategories
+                  .filter(
+                    (subCategory) =>
+                      selectedCategory.category === "HVAC" // Apply logic only for HVAC
+                        ? userResponses.hvacType === "Centralized"
+                          ? subCategory === "Centralized" // Show only "Centralized"
+                          : subCategory !== "Centralized" // Exclude "Centralized"
+                        : true // Show all subcategories for non-HVAC categories
+                  )
+                  .map((subCategory, index) => {
+                    const imageSrcSubCat = getImageSrcSubCat(
+                      selectedCategory.category,
+                      subCategory
+                    );
 
                   return (
                     <div

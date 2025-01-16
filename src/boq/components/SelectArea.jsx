@@ -1,22 +1,41 @@
-import { useEffect } from "react";  //useState
+import { useEffect } from "react"; //useState
 import { MdOutlineCancel } from "react-icons/md";
 import { useApp } from "../../Context/Context";
 
-function SelectArea({ setShowSelectArea, image, subCategories, selectedAreas, setSelectedAreas, selectedProductView, handelSelectedData }) {
-
-  const { selectedData, selectedCategory, selectedSubCategory1 } = useApp()
+function SelectArea({
+  setShowSelectArea,
+  image,
+  subCategories,
+  selectedAreas,
+  setSelectedAreas,
+  selectedProductView,
+  handelSelectedData,
+}) {
+  const { selectedData, selectedCategory, selectedSubCategory1 } = useApp();
 
   // Initialize selected areas based on selectedData
   useEffect(() => {
-    const initialSelectedAreas = subCategories.filter((subCat) =>
-      selectedData.some(
-        (item) =>
-          item.groupKey ===
-          `${selectedCategory.category}-${subCat}-${selectedSubCategory1}`
-      )
-    );
-    setSelectedAreas(initialSelectedAreas);
-  }, [subCategories, selectedData, selectedCategory, selectedSubCategory1, setSelectedAreas]);
+    // Only proceed if selectedData is a non-empty array
+    if (Array.isArray(selectedData) && selectedData.length > 0) {
+      const initialSelectedAreas = subCategories.filter((subCat) =>
+        selectedData.some(
+          (item) =>
+            item.groupKey ===
+            `${selectedCategory.category}-${subCat}-${selectedSubCategory1}`
+        )
+      );
+      setSelectedAreas(initialSelectedAreas);
+    } else {
+      // If selectedData is empty, clear the selected areas
+      setSelectedAreas([]);
+    }
+  }, [
+    subCategories,
+    selectedData,
+    selectedCategory,
+    selectedSubCategory1,
+    setSelectedAreas,
+  ]);
 
   const handleCheckboxChange = (value, checked) => {
     setSelectedAreas((prev) =>
@@ -58,33 +77,49 @@ function SelectArea({ setShowSelectArea, image, subCategories, selectedAreas, se
                     id={`subCategory-${id}`}
                     value={name}
                     checked={selectedAreas.includes(name)} // Persist checked state
-                    onChange={(e) => handleCheckboxChange(e.target.value, e.target.checked)}
-                    disabled={selectedData.some(
-                      (item) =>
-                        item.groupKey ===
-                        `${selectedCategory.category}-${name}-${selectedSubCategory1}` &&
-                        item.product_variant.variant_title !== selectedProductView.title
-                    )}
+                    onChange={(e) =>
+                      handleCheckboxChange(e.target.value, e.target.checked)
+                    }
+                    disabled={
+                      Array.isArray(selectedData) &&
+                      selectedData.length > 0 &&
+                      selectedData.some(
+                        (item) =>
+                          item.groupKey ===
+                            `${selectedCategory.category}-${name}-${selectedSubCategory1}` &&
+                          item.product_variant.variant_title !==
+                            selectedProductView.title
+                      )
+                    }
                   />
-                  <label htmlFor={`subCategory-${id}`}
-                    className={`${selectedData.some(
-                      (item) =>
-                        item.groupKey ===
-                        `${selectedCategory.category}-${name}-${selectedSubCategory1}` &&
-                        item.product_variant.variant_title !== selectedProductView.title
-                    )
-                      ? "text-gray-400 cursor-not-allowed"
-                      : ""
-                      }`}
+                  <label
+                    htmlFor={`subCategory-${id}`}
+                    className={`${
+                      Array.isArray(selectedData) &&
+                      selectedData.length > 0 &&
+                      selectedData.some(
+                        (item) =>
+                          item.groupKey ===
+                            `${selectedCategory.category}-${name}-${selectedSubCategory1}` &&
+                          item.product_variant.variant_title !==
+                            selectedProductView.title
+                      )
+                        ? "text-gray-400 cursor-not-allowed"
+                        : ""
+                    }`}
                   >
                     {name}
                   </label>
-                  {selectedData.some(
-                    (item) =>
-                      item.groupKey ===
-                      `${selectedCategory.category}-${name}-${selectedSubCategory1}` &&
-                      item.product_variant.variant_title !== selectedProductView.title
-                  ) && (
+
+                  {Array.isArray(selectedData) &&
+                    selectedData.length > 0 &&
+                    selectedData.some(
+                      (item) =>
+                        item.groupKey ===
+                          `${selectedCategory.category}-${name}-${selectedSubCategory1}` &&
+                        item.product_variant.variant_title !==
+                          selectedProductView.title
+                    ) && (
                       <div className="tooltip bg-gray-700 text-white text-xs rounded px-2 py-1 absolute -top-8 left-0">
                         Already selected for another product
                       </div>
@@ -95,18 +130,28 @@ function SelectArea({ setShowSelectArea, image, subCategories, selectedAreas, se
 
             {/* Image Section */}
             <div className="flex justify-center items-center">
-              <img src={image} alt="select area"
+              <img
+                src={image}
+                alt="select area"
                 className="rounded-md object-cover max-w-[200px] lg:max-w-[300px] max-h-[300px] border border-gray-300 shadow-md"
               />
             </div>
           </div>
 
           {/* Close Button */}
-          <MdOutlineCancel size={30} color="gray" className="absolute right-4 top-4 cursor-pointer" onClick={() => setShowSelectArea(false)} />
+          <MdOutlineCancel
+            size={30}
+            color="gray"
+            className="absolute right-4 top-4 cursor-pointer"
+            onClick={() => setShowSelectArea(false)}
+          />
 
           {/* Done Button */}
           <div className="flex justify-center items-center mt-4">
-            <button className="bg-[#1A3A36] rounded-xl text-sm py-2 px-5 text-white" onClick={handleDoneClick} >
+            <button
+              className="bg-[#1A3A36] rounded-xl text-sm py-2 px-5 text-white"
+              onClick={handleDoneClick}
+            >
               Done
             </button>
           </div>

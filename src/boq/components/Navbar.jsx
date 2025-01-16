@@ -4,7 +4,7 @@ import { CiGlobe } from "react-icons/ci";
 import { useNavigate } from "react-router-dom";
 import { useApp } from "../../Context/Context";
 
-function Navbar() {
+function Navbar({ clearSelectedData }) {
   // const progress = 0;
 
   const { progress } = useApp();
@@ -63,7 +63,10 @@ function Navbar() {
         </div>
         <div className="flex items-center gap-2">
           {/* <div className=""> */}
-          <button className="bg-[#FFF] text-xs py-2 px-5 text-black rounded-full border-solid border-[1px]border-black">
+          <button
+            className="bg-[#FFF] text-xs py-2 px-5 text-black rounded-full border-solid border-[1px]border-black"
+            onClick={clearSelectedData}
+          >
             Save BOQ
           </button>
           {/* </div> */}

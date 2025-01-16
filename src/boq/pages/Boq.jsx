@@ -1,12 +1,18 @@
 import { useEffect, useState, useMemo } from "react";
 import Navbar from "../../boq/components/Navbar";
 import Categories from "./Categories";
-import { fetchCategories, fetchProductsData, fetchWorkspaces, fetchRoomData } from "../utils/dataFetchers";
+import {
+  fetchCategories,
+  fetchProductsData,
+  fetchWorkspaces,
+  fetchRoomData,
+} from "../utils/dataFetchers";
 import MainPage from "./MainPage";
 import ProductCard from "../components/ProductCard";
 import RecommendComp from "../components/RecommendComp";
 import processData from "../utils/dataProcessor";
 import ProductOverview from "../components/ProductOverview";
+import QnaPopup from "../components/QnaPopup";
 import { useApp } from "../../Context/Context";
 
 function Boq() {
@@ -30,9 +36,19 @@ function Boq() {
   const [showProductView, setShowProductView] = useState(false);
   const [showRecommend, setShowRecommend] = useState(false);
   const [selectedAddons, setSelectedAddons] = useState([]);
-
-  const { selectedCategory, setSelectedCategory, selectedSubCategory, setSelectedSubCategory,
-    selectedSubCategory1, setSelectedSubCategory1, selectedData, setSelectedData } = useApp();
+  const [questionPopup, setQuestionPopup] = useState(false);
+  const [userResponses, setUserResponses] = useState({});
+  const categoriesWithModal = ["Flooring", "HVAC", "Partitions / Ceilings"]; // Array of categories that should show the modal when clicked
+  const {
+    selectedCategory,
+    setSelectedCategory,
+    selectedSubCategory,
+    setSelectedSubCategory,
+    selectedSubCategory1,
+    setSelectedSubCategory1,
+    selectedData,
+    setSelectedData,
+  } = useApp();
 
   // useEffect(() => {
   //     document.title = '603 BOQ';
@@ -112,6 +128,10 @@ function Boq() {
       }
     }
   }, [subCat1, selectedCategory]);
+
+  useEffect(() => {
+    setQuestionPopup(true);
+  }, []);
 
   // Filter products based on search query, price range, and category
   const filteredProducts = useMemo(() => {
@@ -216,7 +236,7 @@ function Boq() {
     if (!product) return;
 
     // Unique group key to ensure only one selection per group
-    const groupKey = `${category.category}-${subCat}-${subcategory1}`;
+    const groupKey = `${category.category}-${subCat}-${subcategory1}-${product.id}`;
 
     const productData = {
       groupKey, // For group-level management
@@ -237,21 +257,23 @@ function Boq() {
 
     // Update selectedData to replace any existing product in the group
     setSelectedData((prevData) => {
-      // Check if there's already a product with the same groupKey
-      const existingProductIndex = prevData.findIndex(
+      // Ensure prevData is always an array
+      const validPrevData = Array.isArray(prevData) ? prevData : [];
+
+      const existingProductIndex = validPrevData.findIndex(
         (item) => item.groupKey === groupKey
       );
 
       if (existingProductIndex !== -1) {
         // Replace the existing product in the group
-        const updatedData = [...prevData];
+        const updatedData = [...validPrevData];
         updatedData[existingProductIndex] = productData; // Replace the product with new data
         localStorage.setItem("selectedData", JSON.stringify(updatedData)); // Persist updated state
         return updatedData;
       }
 
       // If no existing product with the same groupKey, add the new product
-      const updatedData = [...prevData, productData];
+      const updatedData = [...validPrevData, productData];
       localStorage.setItem("selectedData", JSON.stringify(updatedData)); // Persist updated state
       return updatedData;
     });
@@ -259,11 +281,67 @@ function Boq() {
     console.log("Processed group key:", groupKey);
   };
 
+  const clearSelectedData = () => {
+    // Clear from local storage
+    localStorage.removeItem("selectedData");
+
+    // Optionally, clear the state if applicable
+    setSelectedData([]);
+
+    console.log("Selected data cleared from local storage and state.");
+  };
+
+  const handleCategoryClick = (id, category, subcategories) => {
+    setSelectedCategory({ id, category, subcategories });
+    if (minimizedView) {
+      setSelectedSubCategory(subcategories[0] || null); // Automatically select the first subcategory if available
+    }
+    // Check if the category requires the modal
+    if (categoriesWithModal.includes(category)) {
+      setQuestionPopup(true);
+      // setSelectedCategory(category);
+    }
+  };
+
+  const handleQuestionSubmit = (answers) => {
+    console.log("Answers from QuestionModal:", answers); // Log submitted answers
+    setUserResponses((prevResponses) => ({
+      ...prevResponses,
+      height: answers.roomHeight,
+      flooring: answers.flooringStatus,
+      // flooringArea: answers.flooringArea,
+      // flooringType: answers.flooringType,
+      // cabinFlooring: answers.cabinFlooring,
+      hvacType: answers.hvacType,
+      // hvacCentralized: answers.hvacCentralized,
+      // partitionArea: answers.partitionArea,
+      // partitionType: answers.partitionType,
+      //  [expandedSubcategory]: answers, // Store answers for the subcategory
+      // [expandedSubcategory]: answers,
+    }));
+
+    // Hide the modal and reset questions state
+    setQuestionPopup(false);
+    //  setCabinsQuestions(false);
+
+    //  setExpandedSubcategory(expandedSubcategory);
+
+    // Update the total cost or other BOQ data if needed
+    //  updateBOQTotal();
+  };
   // console.log("selected addons", selectedAddons);
   console.log("selected products", selectedData);
+  console.log("user responses", userResponses);
   return (
     <div>
-      <Navbar />
+      <Navbar clearSelectedData={clearSelectedData} />
+      {questionPopup && (
+        <QnaPopup
+          onClose={() => setQuestionPopup(false)}
+          category={selectedCategory}
+          onSubmit={handleQuestionSubmit}
+        />
+      )}
       {!showProductView && (
         <div className="container px-5">
           <Categories
@@ -271,6 +349,8 @@ function Boq() {
             setSelectedCategory={handleCategorySelection}
             setSelectedSubCategory={handleSelectedSubCategory}
             minimizedView={minimizedView}
+            handleCategoryClick={handleCategoryClick}
+            userResponses={userResponses}
           />
 
           {minimizedView && (
@@ -279,12 +359,14 @@ function Boq() {
                 selectedCategory={selectedCategory}
                 selectedSubCategory1={selectedSubCategory1}
                 setSelectedSubCategory1={handleSelectedSubCategory1}
+                userResponses={userResponses}
               />
               <ProductCard
                 products={groupedProducts}
                 selectedProductView={selectedProductView}
                 setShowProductView={setShowProductView}
                 setSelectedProductView={handleSelectedProductView}
+                userResponses={userResponses}
               />
             </div>
           )}
