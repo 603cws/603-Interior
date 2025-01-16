@@ -9,7 +9,7 @@ export const AppProvider = ({ children }) => {
 
     const [selectedCategory, setSelectedCategory] = useState(null); //Gets value after data fetching
     const [selectedSubCategory, setSelectedSubCategory] = useState(null); //Gets value after data fetching
-    const [selectedSubCategory1, setSelectedSubCategory1] = useState("");
+    const [selectedSubCategory1, setSelectedSubCategory1] = useState(null);
     const [selectedData, setSelectedData] = useState([]);
 
     return (

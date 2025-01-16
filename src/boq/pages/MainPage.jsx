@@ -13,12 +13,14 @@ const MainPage = ({ selectedCategory, selectedSubCategory1, setSelectedSubCatego
         if (subCat1 && selectedCategory?.category) {
             const subCategories = subCat1[selectedCategory.category];
             if (subCategories && subCategories.length > 0) {
-                setSelectedSubCategory1(subCategories[0]); // Set the first subcategory as the default
+                if (!selectedSubCategory1 || !subCategories.includes(selectedSubCategory1)) {
+                    setSelectedSubCategory1(subCategories[0]); // Set the first subcategory as default
+                }
             } else {
                 setSelectedSubCategory1(null);
             }
         }
-    }, [subCat1, selectedCategory]);
+    }, [subCat1, selectedCategory, selectedSubCategory1]);
 
     async function fetchCategories() {
         try {

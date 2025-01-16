@@ -14,7 +14,7 @@ function ProductOverview({ selectedProductView, quantityData, areasData, setShow
   const [showSelectArea, setShowSelectArea] = useState(false);
   const [selectedAreas, setSelectedAreas] = useState([]);
 
-  const { selectedCategory, selectedSubCategory, selectedSubCategory1, selectedData } = useApp();
+  const { selectedCategory, selectedSubCategory, selectedSubCategory1, selectedData, setSelectedData } = useApp();
 
   const baseImageUrl = "https://bwxzfwsoxwtzhjbzbdzs.supabase.co/storage/v1/object/public/addon/";
 
@@ -23,6 +23,16 @@ function ProductOverview({ selectedProductView, quantityData, areasData, setShow
       (imageName) => `${baseImageUrl}${imageName}`
     )
     : [];
+
+  const isProductInCart = () => {
+    return selectedData.some(
+      (item) =>
+        item.id === selectedProductView.id && item.category === selectedCategory?.category &&
+        item.subcategory === selectedSubCategory && item.subcategory1 === selectedSubCategory1
+    );
+  };
+
+  console.log("Selected Data: ", selectedData);
 
   const findClosestKey = (targetKey, dataObject) => {
     if (!targetKey || !dataObject) return null;
@@ -145,7 +155,7 @@ function ProductOverview({ selectedProductView, quantityData, areasData, setShow
               {selectedProductView.details}
             </span>
             <p className="text-md font-semibold">
-              ₹ {selectedProductView.price}{" "}
+              ₹ {selectedProductView.price.toLocaleString("en-IN")}{" "}
               <span className="text-sm">/ Per Unit</span>
             </p>
             <br></br>
@@ -153,12 +163,12 @@ function ProductOverview({ selectedProductView, quantityData, areasData, setShow
           {/* final price section */}
           <div className="mt-1">
             <p className="text-lg font-medium text-[#334A78] ">Final Price</p>
-            <p className="text-lg font-bold mb-3">₹ {calculateTotalPrice()}</p>
+            <p className="text-lg font-bold mb-3">₹ {calculateTotalPrice().toLocaleString("en-IN")}</p>
             {details.quantity &&
               <p className="text-md font-medium text-[#334A78] mb-3">
                 Total Quantity:{" "}
                 <span className="border-[1px] py-1 border-[#334A78] text-[#1a1b1c] rounded-xl px-2 text-sm">
-                  {details.quantity}
+                  {details.quantity.toLocaleString("en-IN")}
                 </span>{" "}
               </p>
             }
@@ -166,7 +176,7 @@ function ProductOverview({ selectedProductView, quantityData, areasData, setShow
               <p className="text-md font-medium text-[#334A78] mb-3">
                 Total Area:{" "}
                 <span className="border-[1px] py-1 border-[#334A78] text-[#1a1b1c] rounded-xl px-2 text-sm">
-                  {details.area}
+                  {details.area.toLocaleString("en-IN")}
                 </span>{" "}
               </p>
             }
@@ -183,7 +193,7 @@ function ProductOverview({ selectedProductView, quantityData, areasData, setShow
                 // )
               }
             >
-              Add to cart
+              {isProductInCart() ? "Remove from BOQ " : "Add to BOQ"}
             </button>
           </div>
           {/* product description */}

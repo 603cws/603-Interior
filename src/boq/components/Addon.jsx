@@ -40,7 +40,7 @@ function Addon({ allAddons, onAddonAdd }) {
           />
           <div className="mt-2 ml-2">
             <h4 className="text-xs font-semibold">{variant.title}</h4>
-            <p className="text-xs">Price: ₹{variant.price}</p>
+            <p className="text-xs">Price: ₹{variant.price.toLocaleString("en-IN")}</p>
           </div>
           <button
             className="absolute bottom-16 text-black font-bold text-xs left-5 uppercase border px-3 py-2 hover:bg-white hover:text-black hover:border-black"
