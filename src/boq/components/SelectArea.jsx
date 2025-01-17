@@ -2,9 +2,25 @@ import { useEffect } from "react"; //useState
 import { MdOutlineCancel } from "react-icons/md";
 import { useApp } from "../../Context/Context";
 
-function SelectArea({ setShowSelectArea, image, categories, subCategories, subCat1, selectedAreas, setSelectedAreas, selectedProductView, handelSelectedData }) {
-
-  const { selectedData, selectedCategory, selectedSubCategory, selectedSubCategory1, setProgress, handleProgressBar } = useApp() //handleProgressBar
+function SelectArea({
+  setShowSelectArea,
+  image,
+  categories,
+  subCategories,
+  subCat1,
+  selectedAreas,
+  setSelectedAreas,
+  selectedProductView,
+  handelSelectedData,
+}) {
+  const {
+    selectedData,
+    selectedCategory,
+    selectedSubCategory,
+    selectedSubCategory1,
+    setProgress,
+    handleProgressBar,
+  } = useApp(); //handleProgressBar
 
   // Initialize selected areas based on selectedData
   useEffect(() => {
@@ -37,19 +53,22 @@ function SelectArea({ setShowSelectArea, image, categories, subCategories, subCa
   };
 
   const handleDoneClick = () => {
-    selectedAreas.forEach((subCat) => {
+    const allSubcategories = subCategories; // All available subcategories
+
+    // Process all subcategories to handle addition and removal
+    allSubcategories.forEach((subCat) => {
+      const isChecked = selectedAreas.includes(subCat);
+
+      // Add or remove the product for the current subcategory
       handelSelectedData(
         selectedProductView,
         selectedCategory,
         subCat,
-        selectedSubCategory1 // Pass the selectedSubCategory1 as well
+        selectedSubCategory1,
+        isChecked // Pass whether the subcategory is selected or not
       );
-      if (selectedCategory.category === "Flooring") {
-        handleProgressBar(categories, subCat1, selectedCategory.category, subCat);
-      } else {
-        handleProgressBar(categories, subCat1, selectedCategory.category, subCat, selectedSubCategory1);
-      }
     });
+
     setShowSelectArea(false); // Close the modal
   };
 
@@ -84,26 +103,27 @@ function SelectArea({ setShowSelectArea, image, categories, subCategories, subCa
                       selectedData.some(
                         (item) =>
                           item.groupKey ===
-                          `${selectedCategory.category}-${name}-${selectedSubCategory1}-${selectedProductView.id}` &&
+                            `${selectedCategory.category}-${name}-${selectedSubCategory1}-${selectedProductView.id}` &&
                           item.product_variant.variant_title !==
-                          selectedProductView.title
+                            selectedProductView.title
                       )
                     }
                   />
                   <label
                     htmlFor={`subCategory-${id}`}
-                    className={`${Array.isArray(selectedData) &&
+                    className={`${
+                      Array.isArray(selectedData) &&
                       selectedData.length > 0 &&
                       selectedData.some(
                         (item) =>
                           item.groupKey ===
-                          `${selectedCategory.category}-${name}-${selectedSubCategory1}-${selectedProductView.id}` &&
+                            `${selectedCategory.category}-${name}-${selectedSubCategory1}-${selectedProductView.id}` &&
                           item.product_variant.variant_title !==
-                          selectedProductView.title
+                            selectedProductView.title
                       )
-                      ? "text-gray-400 cursor-not-allowed"
-                      : ""
-                      }`}
+                        ? "text-gray-400 cursor-not-allowed"
+                        : ""
+                    }`}
                   >
                     {name}
                   </label>
@@ -113,9 +133,9 @@ function SelectArea({ setShowSelectArea, image, categories, subCategories, subCa
                     selectedData.some(
                       (item) =>
                         item.groupKey ===
-                        `${selectedCategory.category}-${name}-${selectedSubCategory1}-${selectedProductView.id}` &&
+                          `${selectedCategory.category}-${name}-${selectedSubCategory1}-${selectedProductView.id}` &&
                         item.product_variant.variant_title !==
-                        selectedProductView.title
+                          selectedProductView.title
                     ) && (
                       <div className="tooltip bg-gray-700 text-white text-xs rounded px-2 py-1 absolute -top-8 left-0">
                         Already selected for another product

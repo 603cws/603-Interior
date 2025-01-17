@@ -1,7 +1,12 @@
 import { useEffect, useState, useMemo } from "react";
 import Navbar from "../../boq/components/Navbar";
 import Categories from "./Categories";
-import { fetchCategories, fetchProductsData, fetchWorkspaces, fetchRoomData } from "../utils/dataFetchers";
+import {
+  fetchCategories,
+  fetchProductsData,
+  fetchWorkspaces,
+  fetchRoomData,
+} from "../utils/dataFetchers";
 import MainPage from "./MainPage";
 import ProductCard from "../components/ProductCard";
 import RecommendComp from "../components/RecommendComp";
@@ -227,10 +232,16 @@ function Boq() {
     });
   };
 
-  const handelSelectedData = (product, category, subCat, subcategory1) => {
+  const handelSelectedData = (
+    product,
+    category,
+    subCat,
+    subcategory1,
+    isChecked
+  ) => {
     if (!product) return;
 
-    // Unique group key to ensure only one selection per group
+    // Unique group key for each product and subcategory
     const groupKey = `${category.category}-${subCat}-${subcategory1}-${product.id}`;
 
     const productData = {
@@ -250,30 +261,42 @@ function Boq() {
       addons: selectedAddons || [], // Assuming addons might be optional
     };
 
-    // Update selectedData to replace any existing product in the group
+    // Update selectedData
     setSelectedData((prevData) => {
-      // Ensure prevData is always an array
       const validPrevData = Array.isArray(prevData) ? prevData : [];
 
+      if (!isChecked) {
+        // Remove the product when unchecked
+        const updatedData = validPrevData.filter(
+          (item) => !(item.groupKey === groupKey)
+        );
+        localStorage.setItem("selectedData", JSON.stringify(updatedData)); // Persist updated state
+        return updatedData;
+      }
+
+      // Add or update the product when checked
       const existingProductIndex = validPrevData.findIndex(
         (item) => item.groupKey === groupKey
       );
 
       if (existingProductIndex !== -1) {
-        // Replace the existing product in the group
+        // Replace the existing product
         const updatedData = [...validPrevData];
-        updatedData[existingProductIndex] = productData; // Replace the product with new data
-        localStorage.setItem("selectedData", JSON.stringify(updatedData)); // Persist updated state
+        updatedData[existingProductIndex] = productData; // Replace with new data
+        localStorage.setItem("selectedData", JSON.stringify(updatedData));
         return updatedData;
       }
 
-      // If no existing product with the same groupKey, add the new product
+      // Add a new product if it doesn't already exist
       const updatedData = [...validPrevData, productData];
-      localStorage.setItem("selectedData", JSON.stringify(updatedData)); // Persist updated state
+      localStorage.setItem("selectedData", JSON.stringify(updatedData));
       return updatedData;
     });
 
-    console.log("Processed group key:", groupKey);
+    console.log(
+      isChecked ? "Added to selected data" : "Removed from selected data",
+      groupKey
+    );
   };
 
   const clearSelectedData = () => {
