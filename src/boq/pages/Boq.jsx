@@ -293,10 +293,10 @@ function Boq() {
       return updatedData;
     });
 
-    console.log(
-      isChecked ? "Added to selected data" : "Removed from selected data",
-      groupKey
-    );
+    // console.log(
+    //   isChecked ? "Added to selected data" : "Removed from selected data",
+    //   groupKey
+    // );
   };
 
   const clearSelectedData = () => {
@@ -349,7 +349,6 @@ function Boq() {
   };
   // console.log("selected addons", selectedAddons);
   console.log("selected products", selectedData);
-  console.log("user responses", userResponses);
   return (
     <div>
       <Navbar clearSelectedData={clearSelectedData} />

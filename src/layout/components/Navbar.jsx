@@ -97,7 +97,7 @@ function Navbar({ MIN_AREA, MAX_AREA, resetAll, areaQuantities, areaValues }) {
       {/* <div className="flex justify-evenly bg-[#003366] py-2 items-center rounded-full mx-2 mt-2"> */}
       <div className="flex justify-between bg-gradient-to-r from-[#1A3A36] to-[#54DED3] py-2 items-center px-5">
         {/* logo */}
-        <button className="self-start">
+        <button className="self-start" onClick={() => navigate("/")}>
           <img src="/logo/logo.png" alt="603 logo" className="h-auto w-20" />
         </button>
         {/* sq feet div */}

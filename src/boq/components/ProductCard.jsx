@@ -26,7 +26,6 @@ function ProductCard({
       </p>
     );
   }
-  console.log("answer for hvac", userResponses.hvacType);
   // Filter products based on `selectedSubCategory1`
   const filteredProducts = productsInSubCategory
     .filter((product) => {

@@ -1,5 +1,6 @@
 import { jsPDF } from "jspdf";
 import "jspdf-autotable";
+import { supabase } from "../../services/supabase";
 
 const PDFGenerator = {
   generatePDF: async (selectedData) => {
@@ -55,12 +56,15 @@ Addon Title: ${addon.addon_title || "N/A"}
 Addon Price: ${addon.addon_price || "N/A"}/-
           `;
           addonDetails.push(addonText);
+
+          // Insert data into Supabase for each addon dynamically
+          await insertDataIntoSupabase(selectedData); // Passing entire item to extract IDs from selectedData
         }
       }
 
       const addonTextCombined = addonDetails.join("\n");
 
-      // Prepare row
+      // Prepare row for the table
       rows.push([
         { content: productDetails, styles: { halign: "left", fontSize: 10 } },
         productImage !== "No image available"
@@ -121,6 +125,66 @@ Addon Price: ${addon.addon_price || "N/A"}/-
     // Save the PDF
     doc.save("products_table.pdf");
   },
+};
+
+// Function to insert data into the Supabase `boqdata` table, now extracting IDs from the passed item directly
+const insertDataIntoSupabase = async (selectedData) => {
+  try {
+    // Arrays to hold the IDs
+    const productIds = [];
+    const productVariantIds = [];
+    const addonIds = [];
+    const addonVariantIds = [];
+
+    // Loop through selected data and collect the IDs
+    selectedData.forEach((item) => {
+      // Collect product IDs
+      if (item.id) productIds.push(item.id);
+
+      // Collect product variant IDs
+      if (item.product_variant?.variant_id)
+        productVariantIds.push(item.product_variant.variant_id);
+
+      // Collect addon IDs and addon variant IDs
+      if (item.addons) {
+        Object.keys(item.addons).forEach((addonKey) => {
+          const addon = item.addons[addonKey];
+          if (addon.addonId) addonIds.push(addon.addonId);
+          if (addon.variantID) addonVariantIds.push(addon.variantID);
+        });
+      }
+    });
+
+    // Join arrays into comma-separated strings
+    const productIdStr = productIds.join(",");
+    const productVariantIdStr = productVariantIds.join(",");
+    const addonIdStr = addonIds.join(",");
+    const addonVariantIdStr = addonVariantIds.join(",");
+
+    // Create the formatted data object
+    const formattedData = {
+      product_id: productIdStr,
+      product_variant_id: productVariantIdStr,
+      addon_id: addonIdStr,
+      addon_variant_id: addonVariantIdStr,
+    };
+
+    // Debugging logs to check the final data
+    console.log("Formatted data to insert:", formattedData);
+
+    // Insert the formatted data into Supabase as a single row
+    const { data, error } = await supabase
+      .from("boqdata")
+      .insert([formattedData]);
+
+    if (error) {
+      console.error("Error inserting data into Supabase:", error);
+    } else {
+      console.log("Data inserted successfully:", data);
+    }
+  } catch (error) {
+    console.error("Error during insertion:", error);
+  }
 };
 
 const loadImage = (url) => {
