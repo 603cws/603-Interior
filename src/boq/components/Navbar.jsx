@@ -3,11 +3,12 @@ import { MdOutlineCancel } from "react-icons/md";
 import { CiGlobe } from "react-icons/ci";
 import { useNavigate } from "react-router-dom";
 import { useApp } from "../../Context/Context";
+import PDFGenerator from "./PDFGenerator";
 
 function Navbar({ clearSelectedData }) {
   // const progress = 0;
 
-  const { progress } = useApp();
+  const { progress, selectedData } = useApp();
 
   const naviagte = useNavigate();
 
@@ -76,7 +77,10 @@ function Navbar({ clearSelectedData }) {
           </button>
           {/* </div> */}
           <div className="flex items-center">
-            <button className="bg-[#1A3A36] text-xs py-2 px-5 text-white rounded-full border-solid border-[1px] border-[#34BFAD]">
+            <button
+              onClick={() => PDFGenerator.generatePDF(selectedData)}
+              className="bg-[#1A3A36] text-xs py-2 px-5 text-white rounded-full border-solid border-[1px] border-[#34BFAD]"
+            >
               Download
             </button>
           </div>
