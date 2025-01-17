@@ -15,6 +15,8 @@ import SelectArea from "./boq/components/SelectArea";
 import Landing from "./pages/Landing";
 
 import SpinnerFullPage from "./components/SpinnerFullPage";
+import Contactus from "./pages/Contactus";
+import AboutUs from "./pages/AboutUs";
 
 // const Homepage = lazy(() => import("./pages/Homepage"));
 
@@ -27,7 +29,8 @@ function App() {
       {/* <Boq /> */}
       <Suspense fallback={<SpinnerFullPage />}>
         <Routes>
-          <Route path="/" element={<Layout />} />
+          <Route path="/" element={<Landing />} />
+          <Route path="/Layout" element={<Layout />} />
           <Route path="/RegisterUser" element={<RegisterUser />} />
           <Route path="/boq" element={<Boq />} />
           <Route path="/Error" element={<ErrorModal />} />
@@ -37,7 +40,8 @@ function App() {
           <Route path="/Recommend" element={<RecommendComp />} />
           <Route path="/selectArea" element={<SelectArea />} />
           <Route path="/spinner" element={<SpinnerFullPage />} />
-          <Route path="/Home" element={<Landing />} />
+          <Route path="/Contactus" element={<Contactus />} />
+          <Route path="/Aboutus" element={<AboutUs />} />
           <Route path="*" element={<PageNotFound />} />
         </Routes>
       </Suspense>
