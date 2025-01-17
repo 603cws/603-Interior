@@ -1,41 +1,22 @@
 import React, { useState } from "react";
 import { TbArrowBackUp } from "react-icons/tb";
 import { MdOutlineKeyboardArrowRight } from "react-icons/md"; //MdOutlineKeyboardArrowLeft
-import {
-  calculateTotalPriceHelper,
-  normalizeKey,
-} from "../utils/CalculateTotalPriceHelper";
+import { calculateTotalPriceHelper, normalizeKey, } from "../utils/CalculateTotalPriceHelper";
 import SelectArea from "./SelectArea";
 import Addon from "./Addon";
 import { useApp } from "../../Context/Context";
 
-function ProductOverview({
-  selectedProductView,
-  quantityData,
-  areasData,
-  setShowProductView,
-  showRecommend,
-  setShowRecommend,
-  filteredProducts,
-  handleAddOnChange,
-  subCategories,
-  handelSelectedData,
-}) {
+function ProductOverview({ selectedProductView, quantityData, areasData, setShowProductView, showRecommend,
+  setShowRecommend, filteredProducts, handleAddOnChange, categories, subCategories, subCat1, handelSelectedData, }) {
+
   const [mainImageHovered, setMainImageHovered] = useState(false); // For main image hover effect
   const [hoveredImage, setHoveredImage] = useState(null); // For additional image hover effect
   const [showSelectArea, setShowSelectArea] = useState(false);
   const [selectedAreas, setSelectedAreas] = useState([]);
 
-  const {
-    selectedCategory,
-    selectedSubCategory,
-    selectedSubCategory1,
-    selectedData,
-    setSelectedData,
-  } = useApp();
+  const { selectedCategory, selectedSubCategory, selectedSubCategory1, selectedData, setSelectedData } = useApp();
 
-  const baseImageUrl =
-    "https://bwxzfwsoxwtzhjbzbdzs.supabase.co/storage/v1/object/public/addon/";
+  const baseImageUrl = "https://bwxzfwsoxwtzhjbzbdzs.supabase.co/storage/v1/object/public/addon/";
 
   const additionalImagesArray = selectedProductView.additional_images
     ? JSON.parse(selectedProductView.additional_images).map(
@@ -59,7 +40,7 @@ function ProductOverview({
     );
   };
 
-  console.log("Selected Data: ", selectedData);
+  // console.log("Selected Data: ", selectedData);
 
   const findClosestKey = (targetKey, dataObject) => {
     if (!targetKey || !dataObject) return null;
@@ -113,9 +94,8 @@ function ProductOverview({
     // grid
     <>
       <div
-        className={`grid grid-cols-2 p-5 gap-1 ${
-          showSelectArea ? "opacity-50 pointer-events-none" : "opacity-100"
-        }`}
+        className={`grid grid-cols-2 p-5 gap-1 ${showSelectArea ? "opacity-50 pointer-events-none" : "opacity-100"
+          }`}
       >
         {/* grid component 1 */}
         <div className="flex flex-col">
@@ -260,9 +240,8 @@ function ProductOverview({
       </div>
 
       <div
-        className={`fixed z-10 right-0 rotate-90 book-tour-btn ${
-          showSelectArea ? "opacity-50 pointer-events-none" : "opacity-100"
-        }`}
+        className={`fixed z-10 right-0 rotate-90 book-tour-btn ${showSelectArea ? "opacity-50 pointer-events-none" : "opacity-100"
+          }`}
       >
         <button
           //   onClick={() => setRequestTour(true)}
@@ -277,7 +256,9 @@ function ProductOverview({
         <SelectArea
           setShowSelectArea={setShowSelectArea}
           image={selectedProductView.image}
+          categories={categories}
           subCategories={subCategories}
+          subCat1={subCat1}
           selectedAreas={selectedAreas}
           setSelectedAreas={setSelectedAreas}
           selectedProductView={selectedProductView}
@@ -287,9 +268,8 @@ function ProductOverview({
       )}
 
       <div
-        className={`addons px-5 my-3 ${
-          showSelectArea ? "opacity-50 pointer-events-none" : "opacity-100"
-        }`}
+        className={`addons px-5 my-3 ${showSelectArea ? "opacity-50 pointer-events-none" : "opacity-100"
+          }`}
       >
         <h4 className="text-md font-semibold mb-2">ADDONS</h4>
         <Addon

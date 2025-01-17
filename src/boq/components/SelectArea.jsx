@@ -2,16 +2,9 @@ import { useEffect } from "react"; //useState
 import { MdOutlineCancel } from "react-icons/md";
 import { useApp } from "../../Context/Context";
 
-function SelectArea({
-  setShowSelectArea,
-  image,
-  subCategories,
-  selectedAreas,
-  setSelectedAreas,
-  selectedProductView,
-  handelSelectedData,
-}) {
-  const { selectedData, selectedCategory, selectedSubCategory1 } = useApp();
+function SelectArea({ setShowSelectArea, image, categories, subCategories, subCat1, selectedAreas, setSelectedAreas, selectedProductView, handelSelectedData }) {
+
+  const { selectedData, selectedCategory, selectedSubCategory, selectedSubCategory1, setProgress, handleProgressBar } = useApp() //handleProgressBar
 
   // Initialize selected areas based on selectedData
   useEffect(() => {
@@ -21,7 +14,7 @@ function SelectArea({
         selectedData.some(
           (item) =>
             item.groupKey ===
-            `${selectedCategory.category}-${subCat}-${selectedSubCategory1}`
+            `${selectedCategory.category}-${subCat}-${selectedSubCategory1}-${selectedProductView.id}`
         )
       );
       setSelectedAreas(initialSelectedAreas);
@@ -51,6 +44,11 @@ function SelectArea({
         subCat,
         selectedSubCategory1 // Pass the selectedSubCategory1 as well
       );
+      if (selectedCategory.category === "Flooring") {
+        handleProgressBar(categories, subCat1, selectedCategory.category, subCat);
+      } else {
+        handleProgressBar(categories, subCat1, selectedCategory.category, subCat, selectedSubCategory1);
+      }
     });
     setShowSelectArea(false); // Close the modal
   };
@@ -86,27 +84,26 @@ function SelectArea({
                       selectedData.some(
                         (item) =>
                           item.groupKey ===
-                            `${selectedCategory.category}-${name}-${selectedSubCategory1}` &&
+                          `${selectedCategory.category}-${name}-${selectedSubCategory1}-${selectedProductView.id}` &&
                           item.product_variant.variant_title !==
-                            selectedProductView.title
+                          selectedProductView.title
                       )
                     }
                   />
                   <label
                     htmlFor={`subCategory-${id}`}
-                    className={`${
-                      Array.isArray(selectedData) &&
+                    className={`${Array.isArray(selectedData) &&
                       selectedData.length > 0 &&
                       selectedData.some(
                         (item) =>
                           item.groupKey ===
-                            `${selectedCategory.category}-${name}-${selectedSubCategory1}` &&
+                          `${selectedCategory.category}-${name}-${selectedSubCategory1}-${selectedProductView.id}` &&
                           item.product_variant.variant_title !==
-                            selectedProductView.title
+                          selectedProductView.title
                       )
-                        ? "text-gray-400 cursor-not-allowed"
-                        : ""
-                    }`}
+                      ? "text-gray-400 cursor-not-allowed"
+                      : ""
+                      }`}
                   >
                     {name}
                   </label>
@@ -116,9 +113,9 @@ function SelectArea({
                     selectedData.some(
                       (item) =>
                         item.groupKey ===
-                          `${selectedCategory.category}-${name}-${selectedSubCategory1}` &&
+                        `${selectedCategory.category}-${name}-${selectedSubCategory1}-${selectedProductView.id}` &&
                         item.product_variant.variant_title !==
-                          selectedProductView.title
+                        selectedProductView.title
                     ) && (
                       <div className="tooltip bg-gray-700 text-white text-xs rounded px-2 py-1 absolute -top-8 left-0">
                         Already selected for another product

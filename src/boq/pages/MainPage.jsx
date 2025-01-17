@@ -1,13 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { supabase } from "../../services/supabase";
 
-const MainPage = ({
-  selectedCategory,
-  selectedSubCategory1,
-  setSelectedSubCategory1,
-  userResponses,
-}) => {
-  const [subCat1, setSubCat1] = useState(null);
+const MainPage = ({ selectedCategory, selectedSubCategory1, setSelectedSubCategory1, subCat1, setSubCat1, userResponses, }) => {
+    // const [subCat1, setSubCat1] = useState(null);
 
   useEffect(() => {
     fetchCategories();

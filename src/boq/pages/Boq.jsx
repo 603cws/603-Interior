@@ -1,12 +1,7 @@
 import { useEffect, useState, useMemo } from "react";
 import Navbar from "../../boq/components/Navbar";
 import Categories from "./Categories";
-import {
-  fetchCategories,
-  fetchProductsData,
-  fetchWorkspaces,
-  fetchRoomData,
-} from "../utils/dataFetchers";
+import { fetchCategories, fetchProductsData, fetchWorkspaces, fetchRoomData } from "../utils/dataFetchers";
 import MainPage from "./MainPage";
 import ProductCard from "../components/ProductCard";
 import RecommendComp from "../components/RecommendComp";
@@ -360,6 +355,8 @@ function Boq() {
                 selectedSubCategory1={selectedSubCategory1}
                 setSelectedSubCategory1={handleSelectedSubCategory1}
                 userResponses={userResponses}
+                subCat1={subCat1}
+                setSubCat1={setSubCat1}
               />
               <ProductCard
                 products={groupedProducts}
@@ -381,7 +378,9 @@ function Boq() {
             setShowProductView={setShowProductView}
             showRecommend={showRecommend}
             setShowRecommend={setShowRecommend}
+            categories={categories}
             subCategories={subCategories}
+            subCat1={subCat1}
             filteredProducts={filteredProducts}
             handleAddOnChange={handleAddOnChange}
             handelSelectedData={handelSelectedData}
