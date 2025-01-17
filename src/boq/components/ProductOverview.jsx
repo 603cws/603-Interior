@@ -20,8 +20,8 @@ function ProductOverview({ selectedProductView, quantityData, areasData, setShow
 
   const additionalImagesArray = selectedProductView.additional_images
     ? JSON.parse(selectedProductView.additional_images).map(
-        (imageName) => `${baseImageUrl}${imageName}`
-      )
+      (imageName) => `${baseImageUrl}${imageName}`
+    )
     : [];
 
   const isProductInCart = () => {
@@ -61,12 +61,10 @@ function ProductOverview({ selectedProductView, quantityData, areasData, setShow
 
     const quantity = quantityData[0]?.[normalizedSubCat] || 0;
     const area = areasData[0]?.[normalizedSubCat] || 0;
-    if (
-      selectedCategory?.category === "Furniture" ||
-      selectedCategory?.category === "HVAC" ||
-      selectedCategory?.category === "Partitions / Ceilings"
-    ) {
+    if (selectedCategory?.category === "Furniture" || selectedCategory?.category === "HVAC") {
       return { quantity, price: selectedProductView.price }; //addonPrice
+    } else if (selectedCategory?.category === "Partitions / Ceilings") {    //currently this category is missing
+      return { quantity, area, price: selectedProductView.price }; //addonPrice
     } else {
       return { area, price: selectedProductView.price }; //addonPrice
     }
@@ -86,7 +84,7 @@ function ProductOverview({ selectedProductView, quantityData, areasData, setShow
 
   const allAddons = filteredProducts.flatMap((product) =>
     product.subcategory1 === selectedSubCategory1 &&
-    Array.isArray(product.addons)
+      Array.isArray(product.addons)
       ? product.addons
       : []
   );
@@ -148,7 +146,7 @@ function ProductOverview({ selectedProductView, quantityData, areasData, setShow
                   height={50}
                   onMouseEnter={() => setHoveredImage(img)} // Updates hoveredImage on hover
                   onMouseLeave={() => setHoveredImage(null)} // Reverts to main image on leave
-                  // className="w-10 h-10 object-cover cursor-pointer rounded-lg border-2 border-transparent"
+                // className="w-10 h-10 object-cover cursor-pointer rounded-lg border-2 border-transparent"
                 />
               ))}
             </div>

@@ -29,8 +29,10 @@ function SelectArea({
       const initialSelectedAreas = subCategories.filter((subCat) =>
         selectedData.some(
           (item) =>
-            item.groupKey ===
-            `${selectedCategory.category}-${subCat}-${selectedSubCategory1}-${selectedProductView.id}`
+            // item.groupKey ===
+            // `${selectedCategory.category}-${subCat}-${selectedSubCategory1}-${selectedProductView.id}`
+            `${item.category}-${item.subcategory}-${item.subcategory1}` ===
+            `${selectedCategory.category}-${subCat}-${selectedSubCategory1}`
         )
       );
       setSelectedAreas(initialSelectedAreas);
@@ -57,6 +59,18 @@ function SelectArea({
 
     // Process all subcategories to handle addition and removal
     allSubcategories.forEach((subCat) => {
+      const isDisabled = Array.isArray(selectedData) &&
+        selectedData.length > 0 &&
+        selectedData.some(
+          (item) =>
+            `${item.category}-${item.subcategory}-${item.subcategory1}` ===
+            `${selectedCategory.category}-${subCat}-${selectedSubCategory1}` &&
+            item.product_variant.variant_title !== selectedProductView.title
+        );
+
+      // Skip processing if the subcategory is disabled
+      if (isDisabled) return;
+
       const isChecked = selectedAreas.includes(subCat);
 
       // Add or remove the product for the current subcategory
@@ -93,7 +107,7 @@ function SelectArea({
                     type="checkbox"
                     id={`subCategory-${id}`}
                     value={name}
-                    checked={selectedAreas.includes(name)} // Persist checked state
+                    checked={selectedAreas.includes(name)}
                     onChange={(e) =>
                       handleCheckboxChange(e.target.value, e.target.checked)
                     }
@@ -102,28 +116,31 @@ function SelectArea({
                       selectedData.length > 0 &&
                       selectedData.some(
                         (item) =>
-                          item.groupKey ===
-                            `${selectedCategory.category}-${name}-${selectedSubCategory1}-${selectedProductView.id}` &&
+                          // item.groupKey ===
+                          // `${selectedCategory.category}-${name}-${selectedSubCategory1}-${selectedProductView.id}` &&
+                          `${item.category}-${item.subcategory}-${item.subcategory1}` ===
+                          `${selectedCategory.category}-${name}-${selectedSubCategory1}` &&
                           item.product_variant.variant_title !==
-                            selectedProductView.title
+                          selectedProductView.title
                       )
                     }
                   />
                   <label
                     htmlFor={`subCategory-${id}`}
-                    className={`${
-                      Array.isArray(selectedData) &&
+                    className={`${Array.isArray(selectedData) &&
                       selectedData.length > 0 &&
                       selectedData.some(
                         (item) =>
-                          item.groupKey ===
-                            `${selectedCategory.category}-${name}-${selectedSubCategory1}-${selectedProductView.id}` &&
+                          // item.groupKey ===
+                          // `${selectedCategory.category}-${name}-${selectedSubCategory1}-${selectedProductView.id}` &&
+                          `${item.category}-${item.subcategory}-${item.subcategory1}` ===
+                          `${selectedCategory.category}-${name}-${selectedSubCategory1}` &&
                           item.product_variant.variant_title !==
-                            selectedProductView.title
+                          selectedProductView.title
                       )
-                        ? "text-gray-400 cursor-not-allowed"
-                        : ""
-                    }`}
+                      ? "text-gray-400 cursor-not-allowed"
+                      : ""
+                      }`}
                   >
                     {name}
                   </label>
@@ -132,10 +149,12 @@ function SelectArea({
                     selectedData.length > 0 &&
                     selectedData.some(
                       (item) =>
-                        item.groupKey ===
-                          `${selectedCategory.category}-${name}-${selectedSubCategory1}-${selectedProductView.id}` &&
+                        // item.groupKey ===
+                        // `${selectedCategory.category}-${name}-${selectedSubCategory1}-${selectedProductView.id}` &&
+                        `${item.category}-${item.subcategory}-${item.subcategory1}` ===
+                        `${selectedCategory.category}-${name}-${selectedSubCategory1}` &&
                         item.product_variant.variant_title !==
-                          selectedProductView.title
+                        selectedProductView.title
                     ) && (
                       <div className="tooltip bg-gray-700 text-white text-xs rounded px-2 py-1 absolute -top-8 left-0">
                         Already selected for another product
