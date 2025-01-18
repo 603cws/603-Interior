@@ -1,27 +1,49 @@
 import React, { useState } from "react";
 import { TbArrowBackUp } from "react-icons/tb";
 import { MdOutlineKeyboardArrowRight } from "react-icons/md"; //MdOutlineKeyboardArrowLeft
-import { calculateTotalPriceHelper, normalizeKey, } from "../utils/CalculateTotalPriceHelper";
+import {
+  calculateTotalPriceHelper,
+  normalizeKey,
+} from "../utils/CalculateTotalPriceHelper";
 import SelectArea from "./SelectArea";
 import Addon from "./Addon";
 import { useApp } from "../../Context/Context";
 
-function ProductOverview({ selectedProductView, quantityData, areasData, setShowProductView, showRecommend,
-  setShowRecommend, filteredProducts, handleAddOnChange, categories, subCategories, subCat1, handelSelectedData, }) {
-
+function ProductOverview({
+  selectedProductView,
+  quantityData,
+  areasData,
+  setShowProductView,
+  showRecommend,
+  setShowRecommend,
+  filteredProducts,
+  handleAddOnChange,
+  categories,
+  subCategories,
+  subCat1,
+  handelSelectedData,
+  calculateTotalPrice,
+}) {
   const [mainImageHovered, setMainImageHovered] = useState(false); // For main image hover effect
   const [hoveredImage, setHoveredImage] = useState(null); // For additional image hover effect
   const [showSelectArea, setShowSelectArea] = useState(false);
   const [selectedAreas, setSelectedAreas] = useState([]);
 
-  const { selectedCategory, selectedSubCategory, selectedSubCategory1, selectedData, setSelectedData } = useApp();
+  const {
+    selectedCategory,
+    selectedSubCategory,
+    selectedSubCategory1,
+    selectedData,
+    setSelectedData,
+  } = useApp();
 
-  const baseImageUrl = "https://bwxzfwsoxwtzhjbzbdzs.supabase.co/storage/v1/object/public/addon/";
+  const baseImageUrl =
+    "https://bwxzfwsoxwtzhjbzbdzs.supabase.co/storage/v1/object/public/addon/";
 
   const additionalImagesArray = selectedProductView.additional_images
     ? JSON.parse(selectedProductView.additional_images).map(
-      (imageName) => `${baseImageUrl}${imageName}`
-    )
+        (imageName) => `${baseImageUrl}${imageName}`
+      )
     : [];
 
   const isProductInCart = () => {
@@ -61,9 +83,13 @@ function ProductOverview({ selectedProductView, quantityData, areasData, setShow
 
     const quantity = quantityData[0]?.[normalizedSubCat] || 0;
     const area = areasData[0]?.[normalizedSubCat] || 0;
-    if (selectedCategory?.category === "Furniture" || selectedCategory?.category === "HVAC") {
+    if (
+      selectedCategory?.category === "Furniture" ||
+      selectedCategory?.category === "HVAC"
+    ) {
       return { quantity, price: selectedProductView.price }; //addonPrice
-    } else if (selectedCategory?.category === "Partitions / Ceilings") {    //currently this category is missing
+    } else if (selectedCategory?.category === "Partitions / Ceilings") {
+      //currently this category is missing
       return { quantity, area, price: selectedProductView.price }; //addonPrice
     } else {
       return { area, price: selectedProductView.price }; //addonPrice
@@ -72,19 +98,9 @@ function ProductOverview({ selectedProductView, quantityData, areasData, setShow
 
   const details = calculationDetails();
 
-  const calculateTotalPrice = () => {
-    const total = calculateTotalPriceHelper(
-      quantityData[0],
-      areasData[0],
-      selectedCategory?.category,
-      selectedSubCategory
-    );
-    return total * selectedProductView.price;
-  };
-
   const allAddons = filteredProducts.flatMap((product) =>
     product.subcategory1 === selectedSubCategory1 &&
-      Array.isArray(product.addons)
+    Array.isArray(product.addons)
       ? product.addons
       : []
   );
@@ -92,8 +108,9 @@ function ProductOverview({ selectedProductView, quantityData, areasData, setShow
     // grid
     <>
       <div
-        className={`grid grid-cols-2 p-5 gap-1 ${showSelectArea ? "opacity-50 pointer-events-none" : "opacity-100"
-          }`}
+        className={`grid grid-cols-2 p-5 gap-1 ${
+          showSelectArea ? "opacity-50 pointer-events-none" : "opacity-100"
+        }`}
       >
         {/* grid component 1 */}
         <div className="flex flex-col">
@@ -146,7 +163,7 @@ function ProductOverview({ selectedProductView, quantityData, areasData, setShow
                   height={50}
                   onMouseEnter={() => setHoveredImage(img)} // Updates hoveredImage on hover
                   onMouseLeave={() => setHoveredImage(null)} // Reverts to main image on leave
-                // className="w-10 h-10 object-cover cursor-pointer rounded-lg border-2 border-transparent"
+                  // className="w-10 h-10 object-cover cursor-pointer rounded-lg border-2 border-transparent"
                 />
               ))}
             </div>
@@ -238,8 +255,9 @@ function ProductOverview({ selectedProductView, quantityData, areasData, setShow
       </div>
 
       <div
-        className={`fixed z-10 right-0 rotate-90 book-tour-btn ${showSelectArea ? "opacity-50 pointer-events-none" : "opacity-100"
-          }`}
+        className={`fixed z-10 right-0 rotate-90 book-tour-btn ${
+          showSelectArea ? "opacity-50 pointer-events-none" : "opacity-100"
+        }`}
       >
         <button
           //   onClick={() => setRequestTour(true)}
@@ -266,8 +284,9 @@ function ProductOverview({ selectedProductView, quantityData, areasData, setShow
       )}
 
       <div
-        className={`addons px-5 my-3 ${showSelectArea ? "opacity-50 pointer-events-none" : "opacity-100"
-          }`}
+        className={`addons px-5 my-3 ${
+          showSelectArea ? "opacity-50 pointer-events-none" : "opacity-100"
+        }`}
       >
         <h4 className="text-md font-semibold mb-2">ADDONS</h4>
         <Addon

@@ -14,6 +14,7 @@ import processData from "../utils/dataProcessor";
 import ProductOverview from "../components/ProductOverview";
 import QnaPopup from "../components/QnaPopup";
 import { useApp } from "../../Context/Context";
+import { calculateTotalPriceHelper } from "../utils/CalculateTotalPriceHelper";
 
 function Boq() {
   // const [selectedProducts, setSelectedProducts] = useState([]);
@@ -201,6 +202,16 @@ function Boq() {
     setSelectedProductView(variant);
   };
 
+  const calculateTotalPrice = () => {
+    const total = calculateTotalPriceHelper(
+      quantityData[0],
+      areasData[0],
+      selectedCategory?.category,
+      selectedSubCategory
+    );
+    return total * selectedProductView.price;
+  };
+
   const handleAddOnChange = (variant) => {
     console.log("addon added");
 
@@ -259,6 +270,7 @@ function Boq() {
         additional_images: JSON.parse(product.additional_images || "[]"), // Parse the string to an array
       },
       addons: selectedAddons || [], // Assuming addons might be optional
+      finalPrice: calculateTotalPrice(),
     };
 
     // Update selectedData
@@ -406,6 +418,7 @@ function Boq() {
             filteredProducts={filteredProducts}
             handleAddOnChange={handleAddOnChange}
             handelSelectedData={handelSelectedData}
+            calculateTotalPrice={calculateTotalPrice}
           />
           {showRecommend && (
             <RecommendComp
