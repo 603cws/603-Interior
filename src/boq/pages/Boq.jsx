@@ -6,6 +6,7 @@ import {
   fetchProductsData,
   fetchWorkspaces,
   fetchRoomData,
+  fetchCategoriesandSubCat1,
 } from "../utils/dataFetchers";
 import MainPage from "./MainPage";
 import ProductCard from "../components/ProductCard";
@@ -19,11 +20,12 @@ import { calculateTotalPriceHelper } from "../utils/CalculateTotalPriceHelper";
 function Boq() {
   // const [selectedProducts, setSelectedProducts] = useState([]);
 
-  const [subCat1, setSubCat1] = useState(null);
   const [selectedProductView, setSelectedProductView] = useState([]);
 
-  const [categories, setCategories] = useState([]);
-  const [subCategories, setSubCategories] = useState([]); // Extracted subcategories
+  // const [categories, setCategories] = useState([]);
+  // const [subCategories, setSubCategories] = useState([]); // Extracted subcategories
+  // const [subCat1, setSubCat1] = useState(null);
+
   const [productsData, setProductData] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [priceRange, setPriceRange] = useState([1000, 15000000]);
@@ -40,6 +42,7 @@ function Boq() {
   const [questionPopup, setQuestionPopup] = useState(false);
   const [userResponses, setUserResponses] = useState({});
   const categoriesWithModal = ["Flooring", "HVAC", "Partitions / Ceilings"]; // Array of categories that should show the modal when clicked
+
   const {
     selectedCategory,
     setSelectedCategory,
@@ -49,6 +52,12 @@ function Boq() {
     setSelectedSubCategory1,
     selectedData,
     setSelectedData,
+    categories,
+    setCategories,
+    subCategories,
+    setSubCategories,
+    subCat1,
+    setSubCat1,
   } = useApp();
 
   // useEffect(() => {
@@ -76,13 +85,19 @@ function Boq() {
 
   useEffect(() => {
     const loadData = async () => {
-      const [categoriesData, productsData, workspacesData, roomDataResult] =
-        await Promise.all([
-          fetchCategories(),
-          fetchProductsData(),
-          fetchWorkspaces(),
-          fetchRoomData(),
-        ]);
+      const [
+        categoriesData,
+        productsData,
+        workspacesData,
+        roomDataResult,
+        subCategory1Data,
+      ] = await Promise.all([
+        fetchCategories(),
+        fetchProductsData(),
+        fetchWorkspaces(),
+        fetchRoomData(),
+        fetchCategoriesandSubCat1(),
+      ]);
 
       setCategories(categoriesData);
 
@@ -94,6 +109,7 @@ function Boq() {
       setProductData(productsData);
       setWorkspaces(workspacesData);
       setRoomData(roomDataResult);
+      setSubCat1(subCategory1Data);
     };
 
     loadData();

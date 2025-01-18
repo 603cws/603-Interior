@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState, useRef } from "react";
 
 const AppContext = createContext();
 
@@ -6,102 +6,92 @@ export const AppProvider = ({ children }) => {
   const [totalArea, setTotalArea] = useState(0);
   const [progress, setProgress] = useState(0);
 
-  useEffect(() => {
-    console.log("Progress: ", progress);
-  }, [progress]);
-
   const [selectedCategory, setSelectedCategory] = useState(null); //Gets value after data fetching
   const [selectedSubCategory, setSelectedSubCategory] = useState(null); //Gets value after data fetching
   const [selectedSubCategory1, setSelectedSubCategory1] = useState(null);
   const [selectedData, setSelectedData] = useState([]);
 
-  function handleProgressBar(
-    categories,
-    subCat1,
-    categoryName,
-    subCategoryName,
-    subCat1Name = null
-  ) {
-    setProgress((prevProgress) => {
-      let progress1 = prevProgress; // Use the previous state for accurate updates
+  const [categories, setCategories] = useState([]);
+  const [subCategories, setSubCategories] = useState([]); // Extracted subcategories
+  const [subCat1, setSubCat1] = useState([]);
 
-      // Find the category by name
-      const category = categories.find((cat) => cat.category === categoryName);
+  const prevSelectedData = useRef(selectedData); // Ref to store previous selectedData
+  const prevCategories = useRef(categories); // Ref to store previous categories
+  const prevSubCat1 = useRef(subCat1); // Ref to store previous subCat1
 
-      if (!category) {
-        console.error(`Category "${categoryName}" not found.`);
-        return prevProgress; // Return unchanged progress if there's an error
+  useEffect(() => {
+    console.log("Progress: ", progress);
+  }, []);
+
+  useEffect(() => {
+    console.log("Selected Data: ", selectedData);
+  }, [selectedData]);
+
+  useEffect(() => {
+    // Run only if there are actual changes in the data
+    if (
+      selectedData !== prevSelectedData.current ||
+      categories !== prevCategories.current ||
+      subCat1 !== prevSubCat1.current
+    ) {
+      handleProgressBar(selectedData, categories, subCat1);
+      // Update refs to avoid redundant calls
+      prevSelectedData.current = selectedData;
+      prevCategories.current = categories;
+      prevSubCat1.current = subCat1;
+    }
+  }, [selectedData, categories, subCat1]);
+
+  function handleProgressBar(selectedData, categories, subCat1) {
+    if (categories.length === 0) return;
+    let totalProgress = 0;
+    selectedData.forEach((item) => {
+      const { category, subcategory, subcategory1 } = item;
+
+      const categoryObj = categories.find((cat) => cat.category === category);
+      if (!categoryObj) {
+        console.error(`Category "${category}" not found.`);
+        return;
       }
 
-      // Calculate the percentage per category
       const totalCategories = categories.length;
       const categoryPercentage = 100 / totalCategories;
 
-      // Find the subcategories
-      const subcategories = category.subcategories;
-
-      if (!Array.isArray(subcategories)) {
-        console.error(`No subcategories found for category "${categoryName}".`);
-        return prevProgress; // Return unchanged progress if there's an error
-      }
-
-      const subCategoryIndex = subcategories.indexOf(subCategoryName);
-
+      const subCategoryIndex = categoryObj.subcategories.indexOf(subcategory);
       if (subCategoryIndex === -1) {
-        console.error(
-          `Subcategory "${subCategoryName}" not found in category "${categoryName}".`
-        );
-        return prevProgress; // Return unchanged progress if there's an error
+        console.error(`Subcategory "${subcategory}" not found.`);
+        return;
       }
 
-      // Calculate the percentage per subcategory
-      const subCategoryPercentage = categoryPercentage / subcategories.length;
+      const subCategoryPercentage =
+        categoryPercentage / categoryObj.subcategories.length;
 
-      // Check if the category has subCategory1 in subCat1
-      if (subCat1Name && subCat1[categoryName]) {
-        // Fetch subCategory1 based on the category name
-        const subCategory1 = subCat1[categoryName];
-
-        if (subCategory1 && Array.isArray(subCategory1)) {
-          const subCategory1Index = subCategory1.indexOf(subCat1Name);
-
-          if (subCategory1Index === -1) {
-            console.error(
-              `SubCategory1 "${subCat1Name}" not found in category "${categoryName}".`
-            );
-            return prevProgress; // Return unchanged progress if there's an error
-          }
-
-          // Divide subCategory percentage further among subCategory1
+      // Handle subCategory1 logic
+      if (
+        (subcategory1 &&
+          subCat1[category] &&
+          Array.isArray(subCat1[category]) &&
+          category === "Furniture") ||
+        category === "Smart Solutions"
+      ) {
+        //&& (category === 'Furniture' || category === 'Smart Solutions')
+        // if (category === "Flooring") return;
+        const subCategory1Index = subCat1[category].indexOf(subcategory1);
+        if (subCategory1Index !== -1) {
           const subCategory1Percentage =
-            subCategoryPercentage / subCategory1.length;
-
-          // Increment progress
-          progress1 += subCategory1Percentage;
-          console.log(
-            `Progress updated (Category > Subcategory > Subcategory1): ${progress1.toFixed(
-              2
-            )}%`
-          );
+            subCategoryPercentage / subCat1[category].length;
+          totalProgress += subCategory1Percentage;
         } else {
-          console.error(
-            `SubCategory1 is not properly defined for category "${categoryName}".`
-          );
-          return prevProgress; // Return unchanged progress if there's an error
+          console.error(`SubCategory1 "${subcategory1}" not found.`);
         }
       } else {
-        // If no subCategory1 exists, only use the subcategory level percentage
-        progress1 += subCategoryPercentage;
-        console.log(
-          `Progress updated (Category > Subcategory): ${progress1.toFixed(2)}%`
-        );
+        totalProgress += subCategoryPercentage;
       }
-
-      // Ensure progress doesn't exceed 100%
-      if (progress1 > 100) progress1 = 100;
-
-      return progress1; // Return the updated progress
     });
+
+    // Ensure progress does not exceed 100%
+    totalProgress = Math.min(totalProgress, 100);
+    setProgress(Math.round(totalProgress * 100) / 100); // Round to 2 decimal places
   }
 
   return (
@@ -119,6 +109,12 @@ export const AppProvider = ({ children }) => {
         setSelectedSubCategory,
         selectedSubCategory1,
         setSelectedSubCategory1,
+        categories,
+        setCategories,
+        subCategories,
+        setSubCategories,
+        subCat1,
+        setSubCat1,
         handleProgressBar,
       }}
     >

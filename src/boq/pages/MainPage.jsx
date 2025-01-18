@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { supabase } from "../../services/supabase";
 
-const MainPage = ({ selectedCategory, selectedSubCategory1, setSelectedSubCategory1, subCat1, setSubCat1, userResponses, }) => {
-    // const [subCat1, setSubCat1] = useState(null);
-
-  useEffect(() => {
-    fetchCategories();
-  }, []);
-
+const MainPage = ({
+  selectedCategory,
+  selectedSubCategory1,
+  setSelectedSubCategory1,
+  subCat1,
+  setSubCat1,
+  userResponses,
+}) => {
   useEffect(() => {
     // Automatically select the first subcategory when the category changes
     if (subCat1 && selectedCategory?.category) {
@@ -46,27 +47,6 @@ const MainPage = ({ selectedCategory, selectedSubCategory1, setSelectedSubCatego
       }
     }
   }, [subCat1, selectedCategory, userResponses.hvacType, selectedSubCategory1]);
-  async function fetchCategories() {
-    try {
-      const { data, error } = await supabase
-        .from("categories")
-        .select("name,subCat1");
-
-      if (error) {
-        console.error("Error fetching categories:", error);
-        return;
-      }
-
-      // Transform data into key-value pairs
-      const transformedData = data.reduce((acc, item) => {
-        acc[item.name] = item.subCat1 ? JSON.parse(item.subCat1) : [];
-        return acc;
-      }, {});
-      setSubCat1(transformedData);
-    } catch (err) {
-      console.error("Unexpected error:", err);
-    }
-  }
 
   const selectedSubCategories =
     subCat1 && subCat1[selectedCategory.category]
