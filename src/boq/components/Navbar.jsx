@@ -19,12 +19,16 @@ function Navbar({ clearSelectedData }) {
   const handlelogo = () => {
     naviagte("/");
   };
+  
   const calculateGrandTotal = () => {
-    // Assuming selectedData is an array of objects, each with a 'finalPrice' property
-    const grandTotal = selectedData.reduce((total, product) => {
-      return total + (product.finalPrice || 0); // Add the final price, defaulting to 0 if not present
-    }, 0);
-
+    // Ensure selectedData is an array before calling reduce
+    const grandTotal = (Array.isArray(selectedData) ? selectedData : []).reduce(
+      (total, product) => {
+        return total + (product.finalPrice || 0); // Add the final price, defaulting to 0 if not present
+      },
+      0
+    );
+  
     return grandTotal;
   };
 

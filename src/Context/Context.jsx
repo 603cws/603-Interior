@@ -43,7 +43,19 @@ export const AppProvider = ({ children }) => {
   }, [selectedData, categories, subCat1]);
 
   function handleProgressBar(selectedData, categories, subCat1) {
-    if (categories.length === 0) return;
+    // Validate selectedData and categories to prevent errors
+    if (!Array.isArray(selectedData) || selectedData.length === 0) {
+      console.error("Invalid or empty selectedData.");
+      setProgress(0); // Reset progress to 0 if no data
+      return;
+    }
+
+    if (!Array.isArray(categories) || categories.length === 0) {
+      console.error("Invalid or empty categories.");
+      setProgress(0); // Reset progress to 0 if no categories
+      return;
+    }
+    
     let totalProgress = 0;
     selectedData.forEach((item) => {
       const { category, subcategory, subcategory1 } = item;
