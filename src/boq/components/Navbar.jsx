@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { useApp } from "../../Context/Context";
 import PDFGenerator from "./PDFGenerator";
 
-function Navbar({ clearSelectedData }) {
+function Navbar({ clearSelectedData, calculateGrandTotal }) {
   // const progress = 0;
 
   const { progress, selectedData } = useApp();
@@ -18,18 +18,6 @@ function Navbar({ clearSelectedData }) {
 
   const handlelogo = () => {
     naviagte("/");
-  };
-  
-  const calculateGrandTotal = () => {
-    // Ensure selectedData is an array before calling reduce
-    const grandTotal = (Array.isArray(selectedData) ? selectedData : []).reduce(
-      (total, product) => {
-        return total + (product.finalPrice || 0); // Add the final price, defaulting to 0 if not present
-      },
-      0
-    );
-  
-    return grandTotal;
   };
 
   return (
@@ -76,12 +64,12 @@ function Navbar({ clearSelectedData }) {
         </div>
         <div className="flex items-center gap-2">
           {/* <div className=""> */}
-          <button
+          {/* <button
             className="bg-[#FFF] text-xs py-2 px-5 text-black rounded-full border-solid border-[1px]border-black"
             onClick={clearSelectedData}
           >
             Save BOQ
-          </button>
+          </button> */}
           {/* </div> */}
           {/* <div className="justify-items-end"> */}
           <button className="bg-[#FFF] text-xs py-2 px-5 text-black rounded-full border-solid border-[1px] border-black">

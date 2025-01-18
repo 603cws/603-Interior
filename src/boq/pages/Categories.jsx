@@ -1,8 +1,14 @@
 import React from "react"; //{ useState, useEffect }
 import { useApp } from "../../Context/Context";
 
-const Categories = ({ categories, setSelectedCategory, setSelectedSubCategory, minimizedView,handleCategoryClick,userResponses }) => {
-
+const Categories = ({
+  categories,
+  setSelectedCategory,
+  setSelectedSubCategory,
+  minimizedView,
+  handleCategoryClick,
+  userResponses,
+}) => {
   const { selectedCategory, selectedSubCategory } = useApp();
 
   const getCleanedCategoryName = (categoryName) => {
@@ -51,7 +57,7 @@ const Categories = ({ categories, setSelectedCategory, setSelectedSubCategory, m
   };
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col pb-5">
       {/* Categories List */}
       <div className="flex justify-evenly overflow-x-auto gap-3 px-5 py-3 scrollbar-hide">
         {categories.map(({ id, category, subcategories }) => {
@@ -77,10 +83,11 @@ const Categories = ({ categories, setSelectedCategory, setSelectedSubCategory, m
                   className={`flex flex-row gap-[21px] items-center justify-start relative overflow-auto`}
                 >
                   <div
-                    className={`${selectedCategory?.id === id
-                      ? "bg-[#A9D3CE]"
-                      : "bg-[#ffffff]"
-                      } rounded-3xl border-solid border-[#000000] border-2 flex flex-col gap-0 items-center justify-around shrink-0 w-[90px] h-[80px] relative`}
+                    className={`${
+                      selectedCategory?.id === id
+                        ? "bg-[#A9D3CE]"
+                        : "bg-[#ffffff]"
+                    } rounded-3xl border-solid border-[#000000] border-2 flex flex-col gap-0 items-center justify-around shrink-0 w-[90px] h-[80px] relative`}
                   >
                     <div className="flex flex-row gap-2 items-center justify-center shrink-0 w-[50px] relative">
                       <img
@@ -104,10 +111,11 @@ const Categories = ({ categories, setSelectedCategory, setSelectedSubCategory, m
                   className={`flex flex-row items-center justify-start relative group py-2`}
                 >
                   <div
-                    className={`rounded-full border-2 ${selectedCategory?.id === id
-                      ? "border-[#34BFAD] scale-75"
-                      : "border-[#000000]"
-                      } w-[70px] h-[70px] flex items-center justify-center group-hover:scale-75 transition-transform duration-[1000ms] ease-in-out`}
+                    className={`rounded-full border-2 ${
+                      selectedCategory?.id === id
+                        ? "border-[#34BFAD] scale-75"
+                        : "border-[#000000]"
+                    } w-[70px] h-[70px] flex items-center justify-center group-hover:scale-75 transition-transform duration-[1000ms] ease-in-out`}
                   >
                     <img
                       className="rounded-full w-[50px] h-[50px] object-contain"
@@ -116,10 +124,11 @@ const Categories = ({ categories, setSelectedCategory, setSelectedSubCategory, m
                     />
                   </div>
                   <p
-                    className={`absolute w-full text-center ${selectedCategory?.id === id
-                      ? "-bottom-1 opacity-100"
-                      : "-bottom-1 opacity-0 group-hover:opacity-100"
-                      } transition-all duration-[1000ms] ease-in-out text-[#252525] font-['Poppins-Regular',_sans-serif] leading-5 font-normal text-sm text-nowrap`}
+                    className={`absolute w-full text-center ${
+                      selectedCategory?.id === id
+                        ? "-bottom-1 opacity-100"
+                        : "-bottom-1 opacity-0 group-hover:opacity-100"
+                    } transition-all duration-[1000ms] ease-in-out text-[#252525] font-['Poppins-Regular',_sans-serif] leading-5 font-normal text-sm text-nowrap`}
                   >
                     {category}
                   </p>
@@ -161,10 +170,10 @@ const Categories = ({ categories, setSelectedCategory, setSelectedSubCategory, m
                             ? "w-full"
                             : "group-hover:w-full"
                         }`}
-                    ></span>
-                  </p>
-                </div>
-              ))}
+                      ></span>
+                    </p>
+                  </div>
+                ))}
             </div>
           )}
           {!minimizedView && (
@@ -188,29 +197,29 @@ const Categories = ({ categories, setSelectedCategory, setSelectedSubCategory, m
                       subCategory
                     );
 
-                  return (
-                    <div
-                      key={index}
-                      // className="p-4 border rounded-lg cursor-pointer hover:bg-gray-100"
-                      onClick={() => setSelectedSubCategory(subCategory)}
-                    >
-                      <div className="flex flex-col items-center justify-evenly flex-wrap relative ">
-                        <div className="flex flex-col gap-[19px] items-center justify-center w-full relative cursor-pointer hover:scale-105 transition-transform duration-500 ease-in-out">
-                          <div className="relative w-[160px] h-[170px] flex items-center justify-center bg-gradient-to-r from-[#003442] to-[#34BFAD] rounded-[26px] ">
-                            <img
-                              className="rounded-3xl w-[150px] h-[150px] object-cover"
-                              src={imageSrcSubCat}
-                              alt={`${subCategory} subcategory`}
-                            />
+                    return (
+                      <div
+                        key={index}
+                        // className="p-4 border rounded-lg cursor-pointer hover:bg-gray-100"
+                        onClick={() => setSelectedSubCategory(subCategory)}
+                      >
+                        <div className="flex flex-col items-center justify-evenly flex-wrap relative ">
+                          <div className="flex flex-col gap-[19px] items-center justify-center w-full relative cursor-pointer hover:scale-105 transition-transform duration-500 ease-in-out">
+                            <div className="relative w-[160px] h-[170px] flex items-center justify-center bg-gradient-to-r from-[#003442] to-[#34BFAD] rounded-[26px] ">
+                              <img
+                                className="rounded-3xl w-[150px] h-[150px] object-cover"
+                                src={imageSrcSubCat}
+                                alt={`${subCategory} subcategory`}
+                              />
+                            </div>
+                            <p className="text-[#444444] text-center font-['Montserrat-Medium',_sans-serif] text-sm font-medium relative">
+                              {subCategory}
+                            </p>
                           </div>
-                          <p className="text-[#444444] text-center font-['Montserrat-Medium',_sans-serif] text-sm font-medium relative">
-                            {subCategory}
-                          </p>
                         </div>
                       </div>
-                    </div>
-                  );
-                })}
+                    );
+                  })}
               </div>
             </div>
           )}

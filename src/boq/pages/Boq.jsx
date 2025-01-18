@@ -58,6 +58,7 @@ function Boq() {
     setSubCategories,
     subCat1,
     setSubCat1,
+    totalArea,
   } = useApp();
 
   // useEffect(() => {
@@ -375,11 +376,33 @@ function Boq() {
     // Update the total cost or other BOQ data if needed
     //  updateBOQTotal();
   };
+  console.log("user responces", userResponses);
+  console.log("total area", totalArea);
+  const calculateGrandTotal = () => {
+    // Ensure selectedData is an array before calling reduce
+    let grandTotal = (Array.isArray(selectedData) ? selectedData : []).reduce(
+      (total, product) => {
+        return total + (product.finalPrice || 0); // Add the final price, defaulting to 0 if not present
+      },
+      0
+    );
+
+    // Add 150 * totalArea if flooring is bareShell
+    if (userResponses.flooring === "bareShell") {
+      grandTotal += 150 * totalArea;
+    }
+
+    return grandTotal;
+  };
+
   // console.log("selected addons", selectedAddons);
   console.log("selected products", selectedData);
   return (
     <div>
-      <Navbar clearSelectedData={clearSelectedData} />
+      <Navbar
+        clearSelectedData={clearSelectedData}
+        calculateGrandTotal={calculateGrandTotal}
+      />
       {questionPopup && (
         <QnaPopup
           onClose={() => setQuestionPopup(false)}

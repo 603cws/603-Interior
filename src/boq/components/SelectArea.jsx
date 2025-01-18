@@ -59,12 +59,13 @@ function SelectArea({
 
     // Process all subcategories to handle addition and removal
     allSubcategories.forEach((subCat) => {
-      const isDisabled = Array.isArray(selectedData) &&
+      const isDisabled =
+        Array.isArray(selectedData) &&
         selectedData.length > 0 &&
         selectedData.some(
           (item) =>
             `${item.category}-${item.subcategory}-${item.subcategory1}` ===
-            `${selectedCategory.category}-${subCat}-${selectedSubCategory1}` &&
+              `${selectedCategory.category}-${subCat}-${selectedSubCategory1}` &&
             item.product_variant.variant_title !== selectedProductView.title
         );
 
@@ -92,7 +93,7 @@ function SelectArea({
         <div className="p-4 border-2 border-[#FFD500] rounded-xl relative">
           {/* Title */}
           <div className="flex justify-center items-center mb-4">
-            <p className="text-center font-semibold text-xl">
+            <p className="text-center font-semibold text-lg">
               Select Your Area
             </p>
           </div>
@@ -100,9 +101,12 @@ function SelectArea({
           {/* Content */}
           <div className="flex flex-col lg:flex-row justify-between gap-8">
             {/* Subcategories Checkbox List */}
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 p-4">
+            <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-4 p-4 cursor-pointer">
               {subCategories.map((name, id) => (
-                <div key={id} className="flex items-center gap-2">
+                <div
+                  key={id}
+                  className="flex items-center gap-2 cursor-pointer"
+                >
                   <input
                     type="checkbox"
                     id={`subCategory-${id}`}
@@ -119,28 +123,29 @@ function SelectArea({
                           // item.groupKey ===
                           // `${selectedCategory.category}-${name}-${selectedSubCategory1}-${selectedProductView.id}` &&
                           `${item.category}-${item.subcategory}-${item.subcategory1}` ===
-                          `${selectedCategory.category}-${name}-${selectedSubCategory1}` &&
+                            `${selectedCategory.category}-${name}-${selectedSubCategory1}` &&
                           item.product_variant.variant_title !==
-                          selectedProductView.title
+                            selectedProductView.title
                       )
                     }
                   />
                   <label
                     htmlFor={`subCategory-${id}`}
-                    className={`${Array.isArray(selectedData) &&
+                    className={`${
+                      Array.isArray(selectedData) &&
                       selectedData.length > 0 &&
                       selectedData.some(
                         (item) =>
                           // item.groupKey ===
                           // `${selectedCategory.category}-${name}-${selectedSubCategory1}-${selectedProductView.id}` &&
                           `${item.category}-${item.subcategory}-${item.subcategory1}` ===
-                          `${selectedCategory.category}-${name}-${selectedSubCategory1}` &&
+                            `${selectedCategory.category}-${name}-${selectedSubCategory1}` &&
                           item.product_variant.variant_title !==
-                          selectedProductView.title
+                            selectedProductView.title
                       )
-                      ? "text-gray-400 cursor-not-allowed"
-                      : ""
-                      }`}
+                        ? "text-gray-400 cursor-not-allowed"
+                        : ""
+                    }text-sm`}
                   >
                     {name}
                   </label>
@@ -152,9 +157,9 @@ function SelectArea({
                         // item.groupKey ===
                         // `${selectedCategory.category}-${name}-${selectedSubCategory1}-${selectedProductView.id}` &&
                         `${item.category}-${item.subcategory}-${item.subcategory1}` ===
-                        `${selectedCategory.category}-${name}-${selectedSubCategory1}` &&
+                          `${selectedCategory.category}-${name}-${selectedSubCategory1}` &&
                         item.product_variant.variant_title !==
-                        selectedProductView.title
+                          selectedProductView.title
                     ) && (
                       <div className="tooltip bg-gray-700 text-white text-xs rounded px-2 py-1 absolute -top-8 left-0">
                         Already selected for another product
