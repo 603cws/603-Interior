@@ -38,7 +38,7 @@ function Navbar({ clearSelectedData }) {
         {/* button for generate boq */}
         <div className="pl-60 ">
           <button className="bg-[#FFF] rounded-xl text-xs py-2 px-5 text-black  border-solid border-1 border-black">
-            Grand Total: ₹{calculateGrandTotal()}
+            Grand Total: ₹ {calculateGrandTotal().toLocaleString("en-IN")}
           </button>
         </div>
       </div>
