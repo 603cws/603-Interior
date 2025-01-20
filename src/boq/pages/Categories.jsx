@@ -67,27 +67,21 @@ const Categories = ({
           return (
             <div
               key={id}
-              // onClick={() => {
-              //   setSelectedCategory({ id, category, subcategories });
-              //   if (minimizedView) {
-              //     setSelectedSubCategory(subcategories[0] || null); // Automatically select the first subcategory if available
-              //   }
-              // }}
               onClick={() => handleCategoryClick(id, category, subcategories)}
               className={`transition-transform duration-500 ease-in-out cursor-pointer ${
-                isSelected ? "scale-110" : "scale-100"
+                isSelected ? "scale-100" : "scale-95"
               }`}
             >
               {!minimizedView && (
                 <div
-                  className={`flex flex-row gap-[21px] top-1 items-center justify-start relative overflow-auto`}
+                  className={`flex flex-row gap-[21px] top-1 items-center justify-start relative overflow-auto group`} // Added 'group' class here for hover effect
                 >
                   <div
                     className={`${
                       selectedCategory?.id === id
                         ? "bg-[#A9D3CE]"
                         : "bg-[#ffffff]"
-                    } rounded-3xl border-solid border-[#000000] border-2 flex flex-col gap-0 items-center justify-around shrink-0 w-[90px] h-[80px] relative`}
+                    } rounded-3xl border-solid border-[#000000] border-2 flex flex-col gap-0 items-center justify-around shrink-0 w-[90px] h-[80px] relative group-hover:scale-90 transition-transform duration-[300ms] ease-in-out`} // Added hover effect here
                   >
                     <div className="flex flex-row gap-2 items-center justify-center shrink-0 w-[50px] relative">
                       <img
@@ -97,7 +91,7 @@ const Categories = ({
                       />
                     </div>
                     <div className="flex flex-col gap-2.5 items-start justify-start shrink-0 relative overflow-hidden">
-                      <div className="flex flex-row gap-2.5 items-center justify-center shrink-0  relative overflow-hidden">
+                      <div className="flex flex-row gap-2.5 items-center justify-center shrink-0 relative overflow-hidden">
                         <div className="text-[#252525] text-center font-['Poppins-Regular',_sans-serif] text-sm leading-5 font-normal relative flex items-center justify-center">
                           {category}
                         </div>
