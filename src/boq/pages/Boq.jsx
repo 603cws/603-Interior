@@ -411,7 +411,7 @@ function Boq() {
         />
       )}
       {!showProductView && (
-        <div className="container px-5">
+        <div className=" px-5">
           <Categories
             categories={categories}
             setSelectedCategory={handleCategorySelection}

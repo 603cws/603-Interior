@@ -18,16 +18,17 @@ function Navbar({ clearSelectedData, calculateGrandTotal }) {
   };
 
   return (
-    <div>
+    <div className="navbar sticky top-0 z-20">
       <div className="flex justify-between bg-gradient-to-r from-[#1A3A36] to-[#48A095] items-center px-4">
         {/* logo */}
         <button className="" onClick={handlelogo}>
-          <img src="/logo/logo.png" alt="603 logo" className="h-12 w-20 " />
+          <img src="/logo/logo.png" alt="603 logo" className="h-10 w-18 " />
         </button>
         {/* button for generate boq */}
         <div className="pl-60 ">
           <button className="bg-[#FFF] rounded-xl text-xs py-2 px-5 text-black  border-solid border-1 border-black">
-            Grand Total: ₹ {calculateGrandTotal().toLocaleString("en-IN")}
+            <span className="font-bold">Total</span>: ₹{" "}
+            {calculateGrandTotal().toLocaleString("en-IN")}
           </button>
         </div>
       </div>
@@ -69,7 +70,10 @@ function Navbar({ clearSelectedData, calculateGrandTotal }) {
           </button> */}
           {/* </div> */}
           {/* <div className="justify-items-end"> */}
-          <button className="bg-[#FFF] text-xs py-2 px-5 text-black rounded-full border-solid border-[1px] border-black">
+          <button
+            className="bg-[#FFF] text-xs py-2 px-5 text-black rounded-full border-solid border-[1px] border-black"
+            onClick={clearSelectedData}
+          >
             View BOQ
           </button>
           {/* </div> */}

@@ -60,7 +60,7 @@ const MainPage = ({
       : [];
 
   return (
-    <div className="flex flex-row gap-2 items-center justify-start relative overflow-hidden mt-3 p-8">
+    <div className="flex flex-row gap-2 items-center justify-start relative overflow-hidden px-8">
       {selectedSubCategories && selectedSubCategories.length > 0 ? (
         selectedSubCategories.map((subCategory1, index) => (
           <div

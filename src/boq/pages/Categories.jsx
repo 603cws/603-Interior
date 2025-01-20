@@ -57,9 +57,9 @@ const Categories = ({
   };
 
   return (
-    <div className="flex flex-col pb-5">
+    <div className="flex flex-col pb-3">
       {/* Categories List */}
-      <div className="flex justify-evenly overflow-x-auto gap-3 px-5 py-3 scrollbar-hide">
+      <div className="flex justify-evenly overflow-x-auto gap-3 px-5 pb-2 scrollbar-hide">
         {categories.map(({ id, category, subcategories }) => {
           const cleanedCategoryName = getCleanedCategoryName(category);
           const isSelected = selectedCategory?.id === id;
@@ -115,10 +115,10 @@ const Categories = ({
                       selectedCategory?.id === id
                         ? "border-[#34BFAD] scale-75"
                         : "border-[#000000]"
-                    } w-[70px] h-[70px] flex items-center justify-center group-hover:scale-75 transition-transform duration-[1000ms] ease-in-out`}
+                    } w-[50px] h-[50px] flex items-center justify-center group-hover:scale-75 transition-transform duration-[1000ms] ease-in-out`}
                   >
                     <img
-                      className="rounded-full w-[50px] h-[50px] object-contain"
+                      className="rounded-full w-[30px] h-[30px] object-contain"
                       src={imageSrc}
                       alt={`${category} icon`}
                     />
@@ -128,7 +128,7 @@ const Categories = ({
                       selectedCategory?.id === id
                         ? "-bottom-1 opacity-100"
                         : "-bottom-1 opacity-0 group-hover:opacity-100"
-                    } transition-all duration-[1000ms] ease-in-out text-[#252525] font-['Poppins-Regular',_sans-serif] leading-5 font-normal text-sm text-nowrap`}
+                    } transition-all duration-[1000ms] ease-in-out text-[#252525] font-['Poppins-Regular',_sans-serif] leading-5 font-normal text-xs text-nowrap`}
                   >
                     {category}
                   </p>
@@ -141,7 +141,7 @@ const Categories = ({
 
       {/* Subcategories */}
       {selectedCategory && (
-        <div className="mt-5">
+        <div className="mt-2">
           {minimizedView && (
             <div className="border-solid border-[#d5d5d5] border flex flex-row items-center justify-start overflow-auto scrollbar-hide pb-4">
               {selectedCategory.subcategories
@@ -204,7 +204,7 @@ const Categories = ({
                         onClick={() => setSelectedSubCategory(subCategory)}
                       >
                         <div className="flex flex-col items-center justify-evenly flex-wrap relative ">
-                          <div className="flex flex-col gap-[19px] items-center justify-center w-full relative cursor-pointer hover:scale-105 transition-transform duration-500 ease-in-out">
+                          <div className="flex flex-col gap-[21px] items-center justify-center w-full relative cursor-pointer hover:scale-105 transition-transform duration-500 ease-in-out">
                             <div className="relative w-[160px] h-[170px] flex items-center justify-center bg-gradient-to-r from-[#003442] to-[#34BFAD] rounded-[26px] ">
                               <img
                                 className="rounded-3xl w-[150px] h-[150px] object-cover"
