@@ -80,7 +80,7 @@ const Categories = ({
             >
               {!minimizedView && (
                 <div
-                  className={`flex flex-row gap-[21px] items-center justify-start relative overflow-auto`}
+                  className={`flex flex-row gap-[21px] top-1 items-center justify-start relative overflow-auto`}
                 >
                   <div
                     className={`${

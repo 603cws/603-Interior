@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import "animate.css";
 
 const QnaPopup = ({ onClose, onSubmit, category }) => {
   const categoryName = category?.category || ""; // Safely access the category name
@@ -68,6 +69,7 @@ const QnaPopup = ({ onClose, onSubmit, category }) => {
   const [answers, setAnswers] = useState({});
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [showDisclaimer, setShowDisclaimer] = useState(false);
+  const [animationClass, setAnimationClass] = useState("animate__fadeInUp");
 
   useEffect(() => {
     const savedAnswers = localStorage.getItem("answers");
@@ -119,8 +121,11 @@ const QnaPopup = ({ onClose, onSubmit, category }) => {
         ...answers,
         roomHeight: answers.roomHeight || "10",
       };
-      onSubmit(finalAnswers);
-      onClose();
+      setAnimationClass("animate__fadeOutUp");
+      setTimeout(() => {
+        onSubmit(finalAnswers);
+        onClose();
+      }, 1000); // Adjust this delay based on animation duration
     }
   };
 
@@ -140,11 +145,16 @@ const QnaPopup = ({ onClose, onSubmit, category }) => {
     }
   };
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-      <div className="bg-white border-8 border-[#1A3A36] rounded-xl shadow-lg relative w-1/2">
+    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 ">
+      <div
+        className={`bg-white border-8 border-[#1A3A36] rounded-xl shadow-lg relative w-1/2 animate__animated ${animationClass}`}
+      >
         <div className="p-4 border-2 border-[#FFD500]">
           <button
-            onClick={onClose}
+            onClick={() => {
+              setAnimationClass("animate__fadeOutUp");
+              setTimeout(onClose, 1000);
+            }}
             className="absolute top-4 right-4 text-2xl font-bold text-gray-500 hover:text-gray-800"
           >
             &times;

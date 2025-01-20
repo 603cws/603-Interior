@@ -3,6 +3,15 @@ export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
+      boxShadow: {
+        custom: "13px 13px 20px #ebebeb, -13px -13px 28px #ffffff",
+      },
+      backgroundImage: {
+        "custom-gradient": "linear-gradient(145deg, #ffffff, #ffffff)",
+      },
+      borderRadius: {
+        "lg-19": "19px",
+      },
       fontFamily: {
         sans: ["Poppins", "sans-serif"],
         Raleway: ["Raleway"],

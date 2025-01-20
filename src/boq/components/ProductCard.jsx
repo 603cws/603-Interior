@@ -50,7 +50,8 @@ function ProductCard({
         filteredProducts.map((variant) => (
           <div
             key={variant.id}
-            className="w-11/12 h-full flex flex-col justify-center items-center bg-white rounded-lg shadow-md cursor-pointer my-2 px-3"
+            className="w-11/12 h-full flex flex-col justify-center items-center bg-white rounded-lg shadow-md cursor-pointer my-2 px-3 
+  hover:rounded-lg-21 hover:bg-custom-gradient hover:shadow-custom transition-all duration-300"
           >
             <img
               className="object-contain rounded-t-lg"
