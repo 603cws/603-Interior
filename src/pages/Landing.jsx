@@ -394,31 +394,33 @@ function Landing() {
       {/* section6 */}
       <section className="bg-gradient-to-t from-[#f4f4f4] via-[#f4f4f4] to-[#D0D0D0] ">
         <div className="container mx-auto flex justify-around items-center py-10 ">
-          {/* <div className="w-[350px] h-[520.78px] px-[30px] py-[37px] bg-[#1f5c54] rounded-tr-[200px] rounded-bl-[200px] rounded-br-[200px] flex-col justify-start items-center gap-[18px] inline-flex "> */}
-          <div className="w-[350px] h-[450px] px-[30px] py-[37px] bg-[#1f5c54] rounded-tr-[200px] rounded-bl-[200px] rounded-br-[200px] flex-col justify-start items-center gap-[18px] inline-flex relative z-10">
-            <div className="h-[255px] relative">
-              {/* <div className="w-[300px] h-[255px] left-[-5px] top-0 absolute text-center text-white text-[15px] font-normal font-['Lora'] leading-normal" */}
-              <div className="w-[250px] h-[255px] right-[-100px] top-0 absolute text-center text-white text-sm font-normal font-['Lora'] leading-normal">
-                Creativity flows freely at 603 The Coworking Space. As a content
-                creator, I find the ambiance truly inspiring. Being surrounded
-                by fellow creatives has led to unexpected collaborations and
-                projects. It's like working in a hub of innovation, and I
-                couldn't be happier with my choice.
-              </div>
-            </div>
-            <img
-              className="w-[100px] h-[100px] relative rounded-[100px] border border-[#1a3a36]"
-              src="/images/testimonalicon.png"
-              alt="testimonal person "
-            />
-            <div className="self-stretch h-[18.89px] text-center text-white text-lg font-bold font-['DM Sans'] uppercase leading-[29.60px] tracking-[3.52px]">
-              Sakshi
-            </div>
-            <div className="self-stretch h-[18.89px] text-center text-[#33bead] text-lg font-bold font-['DM Sans'] uppercase leading-[29.60px] tracking-[3.52px]">
-              Manager
-            </div>
-            <div className="absolute right-[-20px] top-0">
+          <div>
+            {/* <div className="w-[350px] h-[520.78px] px-[30px] py-[37px] bg-[#1f5c54] rounded-tr-[200px] rounded-bl-[200px] rounded-br-[200px] flex-col justify-start items-center gap-[18px] inline-flex "> */}
+            <div className="relative top-20 left-[290px]">
               <img src="/images/testimonalicon1.png" alt="testimonalicon" />
+            </div>
+            <div className="w-[350px] h-[450px] px-[30px] top-[-40px] py-[37px] bg-[#1f5c54] rounded-tr-[200px] rounded-bl-[200px] rounded-br-[200px] flex-col justify-start items-center gap-[18px] inline-flex relative z-10">
+              <div className="h-[255px] relative">
+                {/* <div className="w-[300px] h-[255px] left-[-5px] top-0 absolute text-center text-white text-[15px] font-normal font-['Lora'] leading-normal" */}
+                <div className="w-[250px] h-[255px] right-[-100px] top-0 absolute text-center text-white text-sm font-normal font-['Lora'] leading-normal">
+                  Creativity flows freely at 603 The Coworking Space. As a
+                  content creator, I find the ambiance truly inspiring. Being
+                  surrounded by fellow creatives has led to unexpected
+                  collaborations and projects. It's like working in a hub of
+                  innovation, and I couldn't be happier with my choice.
+                </div>
+              </div>
+              <img
+                className="w-[100px] h-[100px] relative rounded-[100px] border border-[#1a3a36]"
+                src="/images/testimonalicon.png"
+                alt="testimonal person "
+              />
+              <div className="self-stretch h-[18.89px] text-center text-white text-lg font-bold font-['DM Sans'] uppercase leading-[29.60px] tracking-[3.52px]">
+                Sakshi
+              </div>
+              <div className="self-stretch h-[18.89px] text-center text-[#33bead] text-lg font-bold font-['DM Sans'] uppercase leading-[29.60px] tracking-[3.52px]">
+                Manager
+              </div>
             </div>
           </div>
           {/* second div */}
@@ -449,30 +451,32 @@ function Landing() {
 
           {/* div 3 */}
           {/* <div className="w-[350px] h-[520.78px] px-[30px] py-[37px] bg-[#1f5c54] rounded-tl-[200px] rounded-bl-[200px] rounded-br-[200px] flex-col justify-start items-center gap-[18px] inline-flex"> */}
-          <div className="w-[350px] h-[450px] px-[30px] py-[37px] bg-[#1f5c54] rounded-tl-[200px] rounded-bl-[200px] rounded-br-[200px] flex-col justify-start items-center gap-[18px] inline-flex relative">
-            <div className="h-[255px] relative">
-              {/* <div className="w-[300px] h-[255px] left-[-5px] top-0 absolute text-center text-white text-[15px] font-normal font-['Lora'] leading-normal"> */}
-              <div className="w-[250px] h-[255px] right-[-115px] top-3 absolute text-center text-white text-sm font-normal font-['Lora'] leading-normal">
-                Creativity flows freely at 603 The Coworking Space. As a content
-                creator, I find the ambiance truly inspiring. Being surrounded
-                by fellow creatives has led to unexpected collaborations and
-                projects. It's like working in a hub of innovation, and I
-                couldn't be happier with my choice.
-              </div>
-            </div>
-            <img
-              className="w-[100px] h-[100px] relative rounded-[100px] border border-[#1a3a36]"
-              src="/images/testimonalicon.png"
-              alt="testimonal person "
-            />
-            <div className="self-stretch h-[18.89px] text-center text-white text-lg font-bold font-['DM Sans'] uppercase leading-[29.60px] tracking-[3.52px]">
-              Sakshi
-            </div>
-            <div className="self-stretch h-[18.89px] text-center text-[#33bead] text-lg font-bold font-['DM Sans'] uppercase leading-[29.60px] tracking-[3.52px]">
-              Manager
-            </div>
-            <div className="absolute right-[-20px] bottom-0">
+          <div>
+            <div className="relative left-[330px] top-[400px]">
               <img src="/images/testimonalicon2.png" alt="testimonalicon" />
+            </div>
+            <div className="w-[350px] h-[450px] px-[30px] top-[-30px] py-[37px] bg-[#1f5c54] rounded-tl-[200px] rounded-bl-[200px] rounded-br-[200px] flex-col justify-start items-center gap-[18px] inline-flex relative">
+              <div className="h-[255px] relative">
+                {/* <div className="w-[300px] h-[255px] left-[-5px] top-0 absolute text-center text-white text-[15px] font-normal font-['Lora'] leading-normal"> */}
+                <div className="w-[250px] h-[255px] right-[-115px] top-3 absolute text-center text-white text-sm font-normal font-['Lora'] leading-normal">
+                  Creativity flows freely at 603 The Coworking Space. As a
+                  content creator, I find the ambiance truly inspiring. Being
+                  surrounded by fellow creatives has led to unexpected
+                  collaborations and projects. It's like working in a hub of
+                  innovation, and I couldn't be happier with my choice.
+                </div>
+              </div>
+              <img
+                className="w-[100px] h-[100px] relative rounded-[100px] border border-[#1a3a36]"
+                src="/images/testimonalicon.png"
+                alt="testimonal person "
+              />
+              <div className="self-stretch h-[18.89px] text-center text-white text-lg font-bold font-['DM Sans'] uppercase leading-[29.60px] tracking-[3.52px]">
+                Sakshi
+              </div>
+              <div className="self-stretch h-[18.89px] text-center text-[#33bead] text-lg font-bold font-['DM Sans'] uppercase leading-[29.60px] tracking-[3.52px]">
+                Manager
+              </div>
             </div>
           </div>
         </div>

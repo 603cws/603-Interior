@@ -5,22 +5,13 @@ import { useApp } from "../../Context/Context";
 function SelectArea({
   setShowSelectArea,
   image,
-  categories,
   subCategories,
-  subCat1,
   selectedAreas,
   setSelectedAreas,
   selectedProductView,
   handelSelectedData,
 }) {
-  const {
-    selectedData,
-    selectedCategory,
-    selectedSubCategory,
-    selectedSubCategory1,
-    setProgress,
-    handleProgressBar,
-  } = useApp(); //handleProgressBar
+  const { selectedData, selectedCategory, selectedSubCategory1 } = useApp();
 
   // Initialize selected areas based on selectedData
   useEffect(() => {

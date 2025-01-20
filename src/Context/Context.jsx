@@ -55,7 +55,7 @@ export const AppProvider = ({ children }) => {
       setProgress(0); // Reset progress to 0 if no categories
       return;
     }
-    
+
     let totalProgress = 0;
     selectedData.forEach((item) => {
       const { category, subcategory, subcategory1 } = item;
@@ -83,8 +83,8 @@ export const AppProvider = ({ children }) => {
         (subcategory1 &&
           subCat1[category] &&
           Array.isArray(subCat1[category]) &&
-          category === "Furniture") ||
-        category === "Smart Solutions"
+          category === "Furniture" ||
+          category === "Smart Solutions" || category === "Civil / Plumbing" || category === "Lux")
       ) {
         //&& (category === 'Furniture' || category === 'Smart Solutions')
         // if (category === "Flooring") return;

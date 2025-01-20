@@ -1,6 +1,3 @@
-import { CiCalculator1 } from "react-icons/ci";
-import { MdOutlineCancel } from "react-icons/md";
-import { CiGlobe } from "react-icons/ci";
 import { useNavigate } from "react-router-dom";
 import { useApp } from "../../Context/Context";
 import PDFGenerator from "./PDFGenerator";

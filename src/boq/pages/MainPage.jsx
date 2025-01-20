@@ -1,12 +1,10 @@
-import React, { useState, useEffect } from "react";
-import { supabase } from "../../services/supabase";
+import React, { useEffect } from "react";
 
 const MainPage = ({
   selectedCategory,
   selectedSubCategory1,
   setSelectedSubCategory1,
   subCat1,
-  setSubCat1,
   userResponses,
 }) => {
   useEffect(() => {

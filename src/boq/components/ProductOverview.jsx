@@ -1,10 +1,7 @@
 import React, { useState } from "react";
 import { TbArrowBackUp } from "react-icons/tb";
 import { MdOutlineKeyboardArrowRight } from "react-icons/md"; //MdOutlineKeyboardArrowLeft
-import {
-  calculateTotalPriceHelper,
-  normalizeKey,
-} from "../utils/CalculateTotalPriceHelper";
+import { normalizeKey } from "../utils/CalculateTotalPriceHelper";
 import SelectArea from "./SelectArea";
 import Addon from "./Addon";
 import { useApp } from "../../Context/Context";
@@ -14,7 +11,6 @@ function ProductOverview({
   quantityData,
   areasData,
   setShowProductView,
-  showRecommend,
   setShowRecommend,
   filteredProducts,
   handleAddOnChange,
@@ -34,7 +30,6 @@ function ProductOverview({
     selectedSubCategory,
     selectedSubCategory1,
     selectedData,
-    setSelectedData,
   } = useApp();
 
   const baseImageUrl =
