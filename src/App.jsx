@@ -13,6 +13,8 @@ import Addon from "./boq/components/Addon";
 import RecommendComp from "./boq/components/RecommendComp";
 import SelectArea from "./boq/components/SelectArea";
 import Landing from "./pages/Landing";
+import NumberAnimation from "./components/NumberAnimation";
+import JobCard from "./components/JobCard";
 
 import SpinnerFullPage from "./components/SpinnerFullPage";
 import Contactus from "./pages/Contactus";
@@ -43,6 +45,8 @@ function App() {
           <Route path="/Contactus" element={<Contactus />} />
           <Route path="/Aboutus" element={<AboutUs />} />
           <Route path="*" element={<PageNotFound />} />
+          <Route path="/NumberAnimation" element={<NumberAnimation />} />
+          <Route path="/JobCard" element={<JobCard />} />
         </Routes>
       </Suspense>
     </div>
