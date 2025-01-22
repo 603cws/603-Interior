@@ -67,27 +67,51 @@ const Categories = ({
     // console.log("categoryObject:", categoryObject); // Log categoryObject
     if (!categoryObject) return false;
 
-    const requiredSubCategory1Items = categoryObject.subcategory1 || [];
-    // console.log("requiredSubCategory1Items:", requiredSubCategory1Items); // Log requiredSubCategory1Items
+    // Categories where we need to check subcategories
+    const specialCategories = [
+      "furniture",
+      "civil/plumbing",
+      "lux",
+      "smart solutions",
+    ];
 
-    const selectedSubCategory1Items = selectedData
-      .filter(
-        (item) =>
-          item.category.toLowerCase().trim() ===
-            category.toLowerCase().trim() &&
-          item.subcategory.toLowerCase().trim() ===
-            subCategory.toLowerCase().trim()
-      )
-      .map((item) => item.subcategory1);
-    // console.log("selectedSubCategory1Items:", selectedSubCategory1Items); // Log selectedSubCategory1Items
+    if (specialCategories.includes(category.toLowerCase().trim())) {
+      const requiredSubCategory1Items = categoryObject.subcategory1 || [];
+      // console.log("requiredSubCategory1Items:", requiredSubCategory1Items); // Log requiredSubCategory1Items
 
-    const isCompleted =
-      requiredSubCategory1Items.length > 0 &&
-      requiredSubCategory1Items.every((subCat1) =>
-        selectedSubCategory1Items.includes(subCat1)
-      );
-    // console.log("isCompleted:", isCompleted); // Log isCompleted
-    return isCompleted;
+      const selectedSubCategory1Items = selectedData
+        .filter(
+          (item) =>
+            item.category.toLowerCase().trim() ===
+              category.toLowerCase().trim() &&
+            item.subcategory.toLowerCase().trim() ===
+              subCategory.toLowerCase().trim()
+        )
+        .map((item) => item.subcategory1);
+      // console.log("selectedSubCategory1Items:", selectedSubCategory1Items); // Log selectedSubCategory1Items
+
+      const isCompleted =
+        requiredSubCategory1Items.length > 0 &&
+        requiredSubCategory1Items.every((subCat1) =>
+          selectedSubCategory1Items.includes(subCat1)
+        );
+      // console.log("isCompleted:", isCompleted); // Log isCompleted
+      return isCompleted;
+    } else {
+      // For other categories, check if only one subcategory1 is added
+      const selectedSubCategory1Items = selectedData
+        .filter(
+          (item) =>
+            item.category.toLowerCase().trim() ===
+              category.toLowerCase().trim() &&
+            item.subcategory.toLowerCase().trim() ===
+              subCategory.toLowerCase().trim()
+        )
+        .map((item) => item.subcategory1);
+
+      // If only one subcategory1 is selected, mark as completed
+      return selectedSubCategory1Items.length === 1;
+    }
   };
 
   const checkIfCategoryCompleted = (category) => {
@@ -177,8 +201,8 @@ const Categories = ({
                   <p
                     className={`absolute w-full text-center ${
                       selectedCategory?.id === id
-                        ? "-bottom-1 opacity-100"
-                        : "-bottom-1 opacity-0 group-hover:opacity-100"
+                        ? "-bottom-3 opacity-100"
+                        : "-bottom-3 opacity-0 group-hover:opacity-100"
                     } transition-all duration-[1000ms] ease-in-out text-[#252525] font-['Poppins-Regular',_sans-serif] leading-5 font-normal text-xs text-nowrap`}
                   >
                     {category}
@@ -194,7 +218,7 @@ const Categories = ({
       {selectedCategory && (
         <div className="mt-2">
           {minimizedView && (
-            <div className="border-solid border-[#d5d5d5] border flex flex-row items-center justify-start overflow-auto scrollbar-hide pb-4">
+            <div className="border-solid border-[#d5d5d5] border flex flex-row items-center justify-start overflow-auto scrollbar-hide py-1">
               {selectedCategory.subcategories
                 .filter(
                   (subCategory) =>
@@ -213,19 +237,21 @@ const Categories = ({
                     <div
                       key={index}
                       onClick={() => setSelectedSubCategory(subCategory)}
-                      className={`rounded-lg flex flex-row gap-[9px] items-start justify-center shrink-0 mx-3 group ${
-                        isCompleted ? "bg-green-200" : ""
+                      className={`rounded-lg flex flex-row items-start justify-center shrink-0 mx-3 group px-3 ${
+                        isCompleted
+                          ? "border-2 border-green-400 bg-green-200"
+                          : ""
                       }`}
                     >
                       <p
                         className={`relative text-[#252525] text-center font-['Poppins-Regular',_sans-serif] text-sm font-normal flex items-center justify-center py-3 cursor-pointer`}
                       >
                         {subCategory}
-                        {isCompleted && (
+                        {/* {isCompleted && (
                           <span className="text-green-600 text-xs ml-2">
                             Completed
                           </span>
-                        )}
+                        )} */}
                         {/* Animated underline (span) */}
                         <span
                           className={`absolute left-0 bottom-0 block w-0 h-1 bg-[#34BFAD] transition-all duration-300 ease-in-out ${
