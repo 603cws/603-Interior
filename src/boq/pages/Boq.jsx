@@ -177,6 +177,7 @@ function Boq() {
       });
 
       console.log("Updated Categories: ", categories);
+      setCategories(categories);
     }
   }, [categories, quantityData, areasData, subCategories]);
 
