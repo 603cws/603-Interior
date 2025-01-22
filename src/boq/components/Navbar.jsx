@@ -51,7 +51,7 @@ function Navbar({ clearSelectedData, calculateGrandTotal }) {
             ></div>
             {/* Progress Circle */}
             <div
-              className="absolute top-1/2 transform -translate-y-1/2 -translate-x-1/2 bg-[#CCCCCC] border-2 border-white rounded-full"
+              className="absolute top-1/2 transform -translate-y-1/2 -translate-x-1/2 bg-[#CCCCCC] border-2 border-white rounded-full glowing-circle"
               style={{ left: `${progress}%`, width: "16px", height: "16px" }}
             ></div>
           </div>

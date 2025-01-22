@@ -7,3 +7,20 @@
   right: -40px;
   top: 50%;
 }
+
+.glowing-circle {
+  box-shadow: 0 0 8px rgba(52, 191, 173, 0.8), 0 0 15px rgba(52, 191, 173, 0.6);
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 8px rgba(52, 191, 173, 0.8),
+      0 0 15px rgba(52, 191, 173, 0.6);
+  }
+  50% {
+    box-shadow: 0 0 15px rgba(52, 191, 173, 0.8),
+      0 0 25px rgba(52, 191, 173, 0.6);
+  }
+}
