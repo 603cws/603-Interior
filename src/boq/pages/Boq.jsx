@@ -105,6 +105,7 @@ function Boq() {
     loadData();
   }, []);
 
+  // Below UseEffect is used to filter the subcategories based on the quantity data and remove the subcategories with 0 quantity
   useEffect(() => {
     if (quantityData.length !== 0 || areasData.length !== 0) {
       categories.forEach((category) => {
