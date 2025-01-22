@@ -10,7 +10,7 @@ const Categories = ({
   userResponses,
   quantityData,
 }) => {
-  const { selectedCategory, selectedSubCategory } = useApp();
+  const { selectedCategory, selectedSubCategory, selectedData } = useApp();
 
   const getCleanedCategoryName = (categoryName) => {
     return categoryName.replace(/[^a-zA-Z0-9]/g, ""); // Removes all non-alphanumeric characters
@@ -55,6 +55,39 @@ const Categories = ({
 
     // Default case
     return `/images/subheader/${cleanedSubCategoryName}.png`;
+  };
+  const checkIfSubCategoryCompleted = (category, subCategory) => {
+    console.log("selectedData:", selectedData); // Log selectedData
+    if (!selectedData || selectedData.length === 0) return false;
+
+    const categoryObject = categories.find(
+      (cat) =>
+        cat.category.toLowerCase().trim() === category.toLowerCase().trim()
+    );
+    // console.log("categoryObject:", categoryObject); // Log categoryObject
+    if (!categoryObject) return false;
+
+    const requiredSubCategory1Items = categoryObject.subcategory1 || [];
+    // console.log("requiredSubCategory1Items:", requiredSubCategory1Items); // Log requiredSubCategory1Items
+
+    const selectedSubCategory1Items = selectedData
+      .filter(
+        (item) =>
+          item.category.toLowerCase().trim() ===
+            category.toLowerCase().trim() &&
+          item.subcategory.toLowerCase().trim() ===
+            subCategory.toLowerCase().trim()
+      )
+      .map((item) => item.subcategory1);
+    // console.log("selectedSubCategory1Items:", selectedSubCategory1Items); // Log selectedSubCategory1Items
+
+    const isCompleted =
+      requiredSubCategory1Items.length > 0 &&
+      requiredSubCategory1Items.every((subCat1) =>
+        selectedSubCategory1Items.includes(subCat1)
+      );
+    console.log("isCompleted:", isCompleted); // Log isCompleted
+    return isCompleted;
   };
 
   return (
@@ -148,27 +181,40 @@ const Categories = ({
                         : subCategory !== "Centralized" // Exclude "Centralized"
                       : true // Show all subcategories for non-HVAC categories
                 )
-                .map((subCategory, index) => (
-                  <div
-                    key={index}
-                    onClick={() => setSelectedSubCategory(subCategory)}
-                    className="rounded-lg flex flex-row gap-[9px] items-start justify-center shrink-0 mx-3 group"
-                  >
-                    <p
-                      className={`relative text-[#252525] text-center font-['Poppins-Regular',_sans-serif] text-sm font-normal flex items-center justify-center py-3 cursor-pointer`}
+                .map((subCategory, index) => {
+                  const isCompleted = checkIfSubCategoryCompleted(
+                    selectedCategory.category,
+                    subCategory
+                  );
+                  return (
+                    <div
+                      key={index}
+                      onClick={() => setSelectedSubCategory(subCategory)}
+                      className={`rounded-lg flex flex-row gap-[9px] items-start justify-center shrink-0 mx-3 group ${
+                        isCompleted ? "bg-green-200" : ""
+                      }`}
                     >
-                      {subCategory}
-                      {/* Animated underline (span) */}
-                      <span
-                        className={`absolute left-0 bottom-0 block w-0 h-1 bg-[#34BFAD] transition-all duration-300 ease-in-out ${
-                          selectedSubCategory === subCategory
-                            ? "w-full"
-                            : "group-hover:w-full"
-                        }`}
-                      ></span>
-                    </p>
-                  </div>
-                ))}
+                      <p
+                        className={`relative text-[#252525] text-center font-['Poppins-Regular',_sans-serif] text-sm font-normal flex items-center justify-center py-3 cursor-pointer`}
+                      >
+                        {subCategory}
+                        {isCompleted && (
+                          <span className="text-green-600 text-xs ml-2">
+                            Completed
+                          </span>
+                        )}
+                        {/* Animated underline (span) */}
+                        <span
+                          className={`absolute left-0 bottom-0 block w-0 h-1 bg-[#34BFAD] transition-all duration-300 ease-in-out ${
+                            selectedSubCategory === subCategory
+                              ? "w-full"
+                              : "group-hover:w-full"
+                          }`}
+                        ></span>
+                      </p>
+                    </div>
+                  );
+                })}
             </div>
           )}
           {!minimizedView && (

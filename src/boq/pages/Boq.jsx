@@ -431,8 +431,6 @@ function Boq() {
     // Update the total cost or other BOQ data if needed
     //  updateBOQTotal();
   };
-  console.log("user responces", userResponses);
-  console.log("total area", totalArea);
   const calculateGrandTotal = () => {
     // Ensure selectedData is an array before calling reduce
     let grandTotal = (Array.isArray(selectedData) ? selectedData : []).reduce(
@@ -449,8 +447,6 @@ function Boq() {
 
     return grandTotal;
   };
-
-  // console.log("selected addons", selectedAddons);
   console.log("selected products", selectedData);
   return (
     <div>

@@ -4,7 +4,7 @@ export const fetchCategories = async () => {
   try {
     const { data, error } = await supabase
       .from("categories")
-      .select("id, name, subcategories");
+      .select("id, name, subcategories,subCat1");
 
     if (error) throw error;
 
@@ -13,6 +13,7 @@ export const fetchCategories = async () => {
         id: item.id,
         category: item.name,
         subcategories: JSON.parse(item.subcategories || "[]"),
+        subcategory1: JSON.parse(item.subCat1 || "[]"),
       }))
       .sort((a, b) => a.id - b.id);
 
