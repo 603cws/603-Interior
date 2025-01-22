@@ -92,7 +92,7 @@ function Landing() {
         </div>
       </section>
       {/* section 2 */}
-      <section className="bg-[#1F5C54] h-screen">
+      <section className="bg-[#1F5C54]">
         <div className="container mx-auto  flex flex-col text-white ">
           {/* div for the text */}
           <div className="flex flex-col justify-center items-center mt-7 font-sans mb-5">
@@ -111,8 +111,8 @@ function Landing() {
             {/* div for images  */}
             <div className="flex justify-center gap-14 relative px-20 pb-10">
               {/* image 1 */}
-              <div className="group text-center relative bg-transparent hover:bg-white hover:rounded-xl hover:transition duration-700 ease-in-out w-1/4">
-                <div className="p-0 group-hover:p-4 transition-all duration-700 ease-in-out cursor-pointer">
+              <div className="group text-center relative bg-transparent hover:bg-white hover:rounded-xl hover:transition duration-700 ease-in-out w-1/4 h-96">
+                <div className="p-0 group-hover:p-4 transition-all duration-700 ease-in-out cursor-pointer absolute">
                   <img
                     src="/images/section2-img1.png"
                     alt="pantary"
@@ -127,8 +127,8 @@ function Landing() {
                 </div>
               </div>
               {/* image 1 */}
-              <div className="group text-center relative bg-transparent hover:bg-white hover:rounded-xl hover:transition duration-700 ease-in-out w-1/4">
-                <div className="p-0 group-hover:p-4 transition-all duration-700 ease-in-out cursor-pointer">
+              <div className="group text-center relative bg-transparent hover:bg-white hover:rounded-xl hover:transition duration-700 ease-in-out w-1/4 h-96">
+                <div className="p-0 group-hover:p-4 transition-all duration-700 ease-in-out cursor-pointer absolute">
                   <img
                     src="/images/section2-img2.png"
                     alt="pantary"
@@ -143,8 +143,8 @@ function Landing() {
                 </div>
               </div>
 
-              <div className="group text-center relative bg-transparent hover:bg-white hover:rounded-xl hover:transition duration-700 ease-in-out w-1/4">
-                <div className="p-0 group-hover:p-4 transition-all duration-700 ease-in-out cursor-pointer">
+              <div className="group text-center relative bg-transparent hover:bg-white hover:rounded-xl hover:transition duration-700 ease-in-out w-1/4 h-96">
+                <div className="p-0 group-hover:p-4 transition-all duration-700 ease-in-out cursor-pointer absolute">
                   <img
                     src="/images/section2-img3.png"
                     alt="pantary"
