@@ -76,7 +76,12 @@ function Footer() {
                 >
                   Contact Us
                 </li>
-                <li className="cursor-pointer">Carrer</li>
+                <li
+                  className="cursor-pointer"
+                  onClick={() => navigation("/Career")}
+                >
+                  Carrer
+                </li>
                 <li className="cursor-pointer">Blogs</li>
               </ul>
             </div>

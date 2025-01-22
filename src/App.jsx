@@ -24,6 +24,9 @@ import AboutUs from "./pages/AboutUs";
 
 const Layout = lazy(() => import("./layout/pages/Layout"));
 
+const BlogPage = lazy(() => import("./pages/Blog"));
+const Carrer = lazy(() => import("./pages/Carrer"));
+
 function App() {
   return (
     <div>
@@ -44,6 +47,8 @@ function App() {
           <Route path="/spinner" element={<SpinnerFullPage />} />
           <Route path="/Contactus" element={<Contactus />} />
           <Route path="/Aboutus" element={<AboutUs />} />
+          <Route path="/Blog" element={<BlogPage />} />
+          <Route path="/Career" element={<Carrer />} />
           <Route path="*" element={<PageNotFound />} />
           <Route path="/NumberAnimation" element={<NumberAnimation />} />
           <Route path="/JobCard" element={<JobCard />} />

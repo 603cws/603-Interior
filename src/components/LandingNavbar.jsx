@@ -21,7 +21,7 @@ function LandingNavbar() {
             <li>Spaces</li>
             <li onClick={() => navigate("/Aboutus")}>About Us</li>
             <li>Our Services</li>
-            <li>Our Blog</li>
+            <li onClick={() => navigate("/Blog")}>Our Blog</li>
             <li onClick={() => navigate("/Contactus")}>Contact Us</li>
           </ul>
         </div>

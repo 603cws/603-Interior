@@ -55,7 +55,7 @@ function Landing() {
     dots: true,
     infinite: true,
     speed: 500,
-    slidesToShow: 3,
+    slidesToShow: 4,
     slidesToScroll: 1,
     autoplay: true,
     autoplaySpeed: 2000,
@@ -163,9 +163,9 @@ function Landing() {
         </div>
       </section>
       {/* section 3 */}
-      <section className="bg-[#F4F4F4]">
+      <section className="bg-[#F4F4F4] pb-24">
         {/* <div className="container mx-auto flex my-10 gap-32"> */}
-        <div className="container mx-auto flex py-10 gap-32">
+        <div className="container mx-auto flex py-10 justify-around">
           {/* div for textual part */}
           <div>
             <div className="flex flex-col justify-center items-center gap-2 mb-3">
@@ -218,81 +218,96 @@ function Landing() {
             </div>
           </div>
           {/* div for image */}
-          <div className="flex-1 flex justify-center items-center">
+          <div className=" flex justify-end items-center">
             <img src="/images/section3Welcome.png" alt="welcome interior" />
           </div>
         </div>
       </section>
 
       {/* section buy our product */}
-      <section>
+      <section className="bg-[url('/images/produt.png')] bg-cover bg-center py-4 h-1/2 pb-20">
         {/* div for container */}
-        <div className="container mx-auto relative my-10">
+        <div className="container mx-auto relative py-10 ">
           {/* div for text */}
-          <div className="flex flex-col gap-5 justify-center items-center absolute w-1/2 top-[80px] left-[-150px]">
-            <div className="flex flex-col justify-center items-center">
-              <p className="font-sans"> our products</p>
+          <div className="flex flex-col gap-5 justify-center items-center absolute w-1/2 top-[40px] left-[-200px] ">
+            <div className="flex flex-col justify-center items-center pb-3">
+              <p className="font-sans mb-1 text-[#1F5C54] font-bold uppercase text-sm">
+                {" "}
+                our products
+              </p>
               <img src="/images/serviceIcon.png" alt="service icon" />
-              <h3 className="font-Poppins text-3xl font-semibold">
+              <h3 className="font-Poppins text-3xl font-semibold my-4 text-[#1F5C54]">
                 Buy Our Product
               </h3>
             </div>
-            <div>
-              <button className=" bg-[#34BFAD] px-5 py-2">View More</button>
+            <div className="pt-16 pb-5">
+              <button className=" bg-[#34BFAD] px-5 py-2w-[83px] h-[35px] text-center text-black text-xs font-normal font-['Poppins'] leading-normal">
+                View More
+              </button>
             </div>
           </div>
           {/* div for caurosel */}
           <div className="slider-container w-3/4 ml-auto">
             <Slider {...settingsProduct}>
-              <div className=" bg-white flex-col justify-center items-center gap-5 inline-flex overflow-hidden">
-                <img
-                  className="object-center"
-                  src="images/sectionproduct1.png "
-                  alt="sectionproduct"
-                />
-                <div className="text-center w-1/2 text-[#111111] text-sm font-bold font-Poppins capitalize">
-                  <span>Table Lamp</span>
-                </div>{" "}
+              <div className="overflow-hidden">
+                <div className="bg-white lg:w-[220px] lg:h-[320px] ">
+                  <img
+                    className=""
+                    src="images/sectionproduct1.png "
+                    alt="sectionproduct"
+                  />
+                  <div className="text-center text-[#111111] text-sm font-bold font-Poppins capitalize py-2">
+                    <span>Table Lamp</span>
+                  </div>{" "}
+                </div>
               </div>
-              <div className=" bg-white flex-col justify-center items-center gap-5 inline-flex overflow-hidden">
-                <img
-                  className="object-center"
-                  src="images/sectionproduct2.png "
-                  alt="sectionproduct"
-                />
-                <div className="text-center w-1/2  text-[#111111] text-sm font-bold font-Poppins capitalize">
-                  <span>Table Lamp</span>
-                </div>{" "}
+              <div className="overflow-hidden">
+                <div className="bg-white w-1/2 lg:w-[220px] lg:h-[320px] ">
+                  <img
+                    className=""
+                    src="images/sectionproduct2.png "
+                    alt="sectionproduct"
+                  />
+                  <div className="text-center text-[#111111] text-sm font-bold font-Poppins capitalize py-2">
+                    <span>Chair</span>
+                  </div>{" "}
+                </div>
               </div>
-              <div className=" bg-white flex-col justify-center items-center gap-5 inline-flex overflow-hidden">
-                <img
-                  className="object-center"
-                  src="images/sectionproduct3.png "
-                  alt="sectionproduct"
-                />
-                <div className="text-center w-1/2  text-[#111111] text-sm font-bold font-Poppins capitalize">
-                  <span>Table Lamp</span>
-                </div>{" "}
+              <div className="overflow-hidden">
+                <div className="bg-white w-1/2 lg:w-[220px] lg:h-[320px] ">
+                  <img
+                    className=""
+                    src="images/sectionproduct3.png "
+                    alt="sectionproduct"
+                  />
+                  <div className="text-center text-[#111111] text-sm font-bold font-Poppins capitalize py-2">
+                    <span>Lights</span>
+                  </div>{" "}
+                </div>
               </div>
-              <div className=" bg-white flex-col justify-center items-center gap-5 inline-flex overflow-hidden">
-                <img
-                  className="object-center"
-                  src="images/sectionproduct4.png "
-                  alt="sectionproduct"
-                />
-                <div className="text-center w-1/2  text-[#111111] text-sm font-bold font-Poppins capitalize">
-                  <span>Table Lamp</span>
-                </div>{" "}
+              <div className="overflow-hidden">
+                <div className="bg-white w-1/2 lg:w-[220px] lg:h-[320px] ">
+                  <img
+                    className=""
+                    src="images/sectionproduct4.png "
+                    alt="sectionproduct"
+                  />
+                  <div className="text-center text-[#111111] text-sm font-bold font-Poppins capitalize py-2">
+                    <span>Chair</span>
+                  </div>{" "}
+                </div>
               </div>
-              <div className=" bg-white flex-col justify-center items-center gap-5 inline-flex overflow-hidden">
-                <img
-                  className="object-center"
-                  src="images/sectionproduct5.png "
-                  alt="sectionproduct"
-                />
-                <div className="text-center w-1/2  text-[#111111] text-sm font-bold font-Poppins capitalize">
-                  <span>Table Lamp</span>
-                </div>{" "}
+              <div className="overflow-hidden">
+                <div className="bg-white w-1/2 lg:w-[220px] lg:h-[320px] ">
+                  <img
+                    className=""
+                    src="images/sectionproduct5.png "
+                    alt="sectionproduct"
+                  />
+                  <div className="text-center text-[#111111] text-sm font-bold font-Poppins capitalize py-2">
+                    <span>Table Lamp</span>
+                  </div>{" "}
+                </div>
               </div>
               {/* <div className="bg-green-800 ">
                 <img
