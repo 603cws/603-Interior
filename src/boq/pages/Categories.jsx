@@ -86,7 +86,27 @@ const Categories = ({
       requiredSubCategory1Items.every((subCat1) =>
         selectedSubCategory1Items.includes(subCat1)
       );
-    console.log("isCompleted:", isCompleted); // Log isCompleted
+    // console.log("isCompleted:", isCompleted); // Log isCompleted
+    return isCompleted;
+  };
+
+  const checkIfCategoryCompleted = (category) => {
+    // Check if selectedData is available
+    if (!selectedData || selectedData.length === 0) return false;
+
+    const categoryObject = categories.find(
+      (cat) =>
+        cat.category.toLowerCase().trim() === category.toLowerCase().trim()
+    );
+    if (!categoryObject) return false;
+
+    const requiredSubCategories = categoryObject.subcategories || [];
+
+    // Loop through all subcategories to check if all are marked as completed
+    const isCompleted = requiredSubCategories.every((subCategory) =>
+      checkIfSubCategoryCompleted(category, subCategory)
+    );
+
     return isCompleted;
   };
 
@@ -96,6 +116,7 @@ const Categories = ({
       <div className="flex justify-evenly overflow-x-auto gap-3 px-5 pb-2 scrollbar-hide">
         {categories.map(({ id, category, subcategories }) => {
           const cleanedCategoryName = getCleanedCategoryName(category);
+          const isCategoryCompleted = checkIfCategoryCompleted(category); // Check if the category is completed
           const isSelected = selectedCategory?.id === id;
           const imageSrc = `/images/icons/${cleanedCategoryName}.png`;
           return (
@@ -140,7 +161,9 @@ const Categories = ({
                 >
                   <div
                     className={`rounded-full border-2 ${
-                      selectedCategory?.id === id
+                      isCategoryCompleted
+                        ? "border-green-600 bg-[#34BFAD]"
+                        : selectedCategory?.id === id
                         ? "border-[#34BFAD] scale-75"
                         : "border-[#000000]"
                     } w-[50px] h-[50px] flex items-center justify-center group-hover:scale-75 transition-transform duration-[1000ms] ease-in-out`}
