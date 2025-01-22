@@ -18,14 +18,7 @@ import { useApp } from "../../Context/Context";
 import { calculateTotalPriceHelper } from "../utils/CalculateTotalPriceHelper";
 
 function Boq() {
-  // const [selectedProducts, setSelectedProducts] = useState([]);
-
   const [selectedProductView, setSelectedProductView] = useState([]);
-
-  // const [categories, setCategories] = useState([]);
-  // const [subCategories, setSubCategories] = useState([]); // Extracted subcategories
-  // const [subCat1, setSubCat1] = useState(null);
-
   const [productsData, setProductData] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [priceRange, setPriceRange] = useState([1000, 15000000]);
@@ -60,10 +53,6 @@ function Boq() {
     setSubCat1,
     totalArea,
   } = useApp();
-
-  // useEffect(() => {
-  //     document.title = '603 BOQ';
-  // }, []);
 
   useEffect(() => {
     var temp = JSON.parse(localStorage.getItem("selectedData"));
@@ -100,7 +89,7 @@ function Boq() {
         fetchCategoriesandSubCat1(),
       ]);
 
-      setCategories(categoriesData);
+      setCategories(categoriesData); //remove 0 value qunatity from subCat
 
       if (categoriesData.length > 0) {
         setSelectedCategory(categoriesData[0]);
@@ -115,6 +104,72 @@ function Boq() {
 
     loadData();
   }, []);
+
+  useEffect(() => {
+    if (quantityData.length !== 0 || areasData.length !== 0) {
+      categories.forEach((category) => {
+        category.subcategories = category.subcategories.filter(
+          (subcategory) => {
+            // Normalize the strings for comparison
+            const normalize = (str) =>
+              str.toLowerCase().replace(/[^a-z0-9]/g, "");
+            const subcategoryKey = normalize(subcategory);
+
+            // Skip filtering if the category is not "Furniture"
+            const isFurniture = normalize(category.category) === "furniture";
+            if (!isFurniture) {
+              return true; // Keep the subcategory if it's not "Furniture"
+            }
+
+            // Get the room data from quantityData
+            const roomCount = quantityData[0];
+
+            // Check for the "Meeting Room" and "Meeting Room Large" case specifically
+            const meetingRoomLargeQuantity = roomCount["meetingroomlarge"] || 0;
+            const meetingRoomQuantity = roomCount["meetingroom"] || 0;
+
+            // Exclude "Meeting Room Large" if its own quantity is 0
+            if (subcategoryKey === "meetingroomlarge") {
+              if (meetingRoomLargeQuantity === 0) {
+                return false; // Exclude "Meeting Room Large" if it has quantity 0
+              }
+              return true; // Keep "Meeting Room Large" if it has a non-zero quantity
+            }
+
+            // Exclude "Meeting Room" if it has quantity 0, but only if "Meeting Room Large" is not visible
+            if (
+              subcategoryKey === "meetingroom" &&
+              meetingRoomLargeQuantity === 0
+            ) {
+              if (meetingRoomQuantity === 0) {
+                return false; // Exclude "Meeting Room" if it has quantity 0
+              }
+              return true; // Keep "Meeting Room" if it has a non-zero quantity
+            }
+
+            // General logic: check the quantity of the subcategory or matching base room key
+            const baseRoomKey = Object.keys(roomCount).find((roomKey) => {
+              const normalizedRoomKey = normalize(roomKey);
+              return (
+                subcategoryKey === normalizedRoomKey || // Exact match
+                subcategoryKey.includes(normalizedRoomKey) // Partial match
+              );
+            });
+
+            // If no base room key is found, exclude this subcategory
+            if (!baseRoomKey || roomCount[baseRoomKey] === 0) {
+              return false;
+            }
+
+            // Include subcategory if the base room key has a non-zero quantity
+            return true;
+          }
+        );
+      });
+
+      console.log("Updated Categories: ", categories);
+    }
+  }, [categories, quantityData, areasData, subCategories]);
 
   useEffect(() => {
     if (roomData.quantityData && roomData.quantityData.length > 0) {
@@ -419,6 +474,7 @@ function Boq() {
             minimizedView={minimizedView}
             handleCategoryClick={handleCategoryClick}
             userResponses={userResponses}
+            quantityData={quantityData}
           />
 
           {minimizedView && (

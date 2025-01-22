@@ -93,7 +93,7 @@ function SelectArea({
           <div className="flex flex-col lg:flex-row justify-between gap-8">
             {/* Subcategories Checkbox List */}
             <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-4 p-4 cursor-pointer">
-              {subCategories.map((name, id) => (
+              {selectedCategory.subcategories.map((name, id) => (
                 <div
                   key={id}
                   className="flex items-center gap-2 cursor-pointer"
@@ -136,7 +136,7 @@ function SelectArea({
                       )
                         ? "text-gray-400 cursor-not-allowed"
                         : ""
-                    }text-sm`}
+                    } text-sm`}
                   >
                     {name}
                   </label>

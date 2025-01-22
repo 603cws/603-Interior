@@ -8,6 +8,7 @@ const Categories = ({
   minimizedView,
   handleCategoryClick,
   userResponses,
+  quantityData,
 }) => {
   const { selectedCategory, selectedSubCategory } = useApp();
 
