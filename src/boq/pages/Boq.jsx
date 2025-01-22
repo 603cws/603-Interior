@@ -52,12 +52,20 @@ function Boq() {
     subCat1,
     setSubCat1,
     totalArea,
+    setTotalArea,
+    userId,
+    setUserId,
   } = useApp();
 
   useEffect(() => {
     var temp = JSON.parse(localStorage.getItem("selectedData"));
     setSelectedData(temp);
   }, []);
+
+  useEffect(() => {
+    setTotalArea(roomData.areasData[0]?.totalArea);
+    setUserId(roomData.areasData[0]?.userId);
+  }, [roomData]);
 
   useEffect(() => {
     if (selectedCategory) {

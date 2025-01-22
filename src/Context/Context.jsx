@@ -5,6 +5,7 @@ const AppContext = createContext();
 export const AppProvider = ({ children }) => {
   const [totalArea, setTotalArea] = useState(0);
   const [progress, setProgress] = useState(0);
+  const [userId, setUserId] = useState(null);
 
   const [selectedCategory, setSelectedCategory] = useState(null); //Gets value after data fetching
   const [selectedSubCategory, setSelectedSubCategory] = useState(null); //Gets value after data fetching
@@ -83,8 +84,10 @@ export const AppProvider = ({ children }) => {
         (subcategory1 &&
           subCat1[category] &&
           Array.isArray(subCat1[category]) &&
-          category === "Furniture" ||
-          category === "Smart Solutions" || category === "Civil / Plumbing" || category === "Lux")
+          category === "Furniture") ||
+        category === "Smart Solutions" ||
+        category === "Civil / Plumbing" ||
+        category === "Lux"
       ) {
         //&& (category === 'Furniture' || category === 'Smart Solutions')
         // if (category === "Flooring") return;
@@ -128,6 +131,8 @@ export const AppProvider = ({ children }) => {
         subCat1,
         setSubCat1,
         handleProgressBar,
+        userId,
+        setUserId,
       }}
     >
       {children}
