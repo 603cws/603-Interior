@@ -92,7 +92,7 @@ function Landing() {
         </div>
       </section>
       {/* section 2 */}
-      <section className="bg-[#1F5C54] ">
+      <section className="bg-[#1F5C54] h-screen">
         <div className="container mx-auto  flex flex-col text-white ">
           {/* div for the text */}
           <div className="flex flex-col justify-center items-center mt-7 font-sans mb-5">
@@ -107,50 +107,56 @@ function Landing() {
             </p>
           </div>
           {/* div for the carousel */}
-          <div className="flex-1 my-5 ">
+          <div className="flex-1 my-7">
             {/* div for images  */}
-            <div className="flex justify-center items-center gap-10 mb-20">
+            <div className="flex justify-center gap-14 relative px-20 pb-10">
               {/* image 1 */}
-              <div className="hover:bg-white group text-center hover:border hover:rounded-xl hover:transition duration-700 ease-in-out">
-                <img
-                  src="/images/section2-img1.png"
-                  alt="pantary"
-                  className="group-hover:m-5"
-                />
-                <p className="hidden group-hover:block font-lora font-bold text-[#333333] mb-1">
-                  Meeting Room
-                </p>
-                <p className=" hidden group-hover:block text-[#34BFAD] font-sans font-bold mb-2">
-                  Create Space
-                </p>
+              <div className="group text-center relative bg-transparent hover:bg-white hover:rounded-xl hover:transition duration-700 ease-in-out w-1/4">
+                <div className="p-0 group-hover:p-4 transition-all duration-700 ease-in-out cursor-pointer">
+                  <img
+                    src="/images/section2-img1.png"
+                    alt="pantary"
+                    className="mx-auto group-hover:scale-95 transition-transform duration-700 ease-in-out"
+                  />
+                  <p className="hidden group-hover:block font-lora font-bold text-[#333333] mb-1">
+                    Meeting Room
+                  </p>
+                  <p className="hidden group-hover:block text-[#34BFAD] font-sans font-bold mb-2">
+                    Create Space
+                  </p>
+                </div>
               </div>
               {/* image 1 */}
-              <div className="bg-white group text-center hover:border hover:rounded-xl hover:transition duration-700 ease-in-out">
-                <img
-                  src="/images/section2-img2.png"
-                  alt="pantary"
-                  className="group-hover:m-5"
-                />
-                <p className="hidden group-hover:block font-lora font-bold text-[#333333] mb-1">
-                  Meeting Room
-                </p>
-                <p className=" hidden group-hover:block text-[#34BFAD] font-sans font-bold mb-2">
-                  Create Space
-                </p>
+              <div className="group text-center relative bg-transparent hover:bg-white hover:rounded-xl hover:transition duration-700 ease-in-out w-1/4">
+                <div className="p-0 group-hover:p-4 transition-all duration-700 ease-in-out cursor-pointer">
+                  <img
+                    src="/images/section2-img2.png"
+                    alt="pantary"
+                    className="mx-auto group-hover:scale-95 transition-transform duration-700 ease-in-out"
+                  />
+                  <p className="hidden group-hover:block font-lora font-bold text-[#333333] mb-1">
+                    Meeting Room
+                  </p>
+                  <p className="hidden group-hover:block text-[#34BFAD] font-sans font-bold mb-2">
+                    Create Space
+                  </p>
+                </div>
               </div>
-              {/* image 1 */}
-              <div className="bg-white group text-center hover:border hover:rounded-xl hover:transition duration-700 ease-in-out">
-                <img
-                  src="/images/section2-img3.png"
-                  alt="pantary"
-                  className="group-hover:m-5"
-                />
-                <p className="hidden group-hover:block font-lora font-bold text-[#333333] mb-1">
-                  Meeting Room
-                </p>
-                <p className=" hidden group-hover:block text-[#34BFAD] font-sans font-bold mb-2">
-                  Create Space
-                </p>
+
+              <div className="group text-center relative bg-transparent hover:bg-white hover:rounded-xl hover:transition duration-700 ease-in-out w-1/4">
+                <div className="p-0 group-hover:p-4 transition-all duration-700 ease-in-out cursor-pointer">
+                  <img
+                    src="/images/section2-img3.png"
+                    alt="pantary"
+                    className="mx-auto group-hover:scale-95 transition-transform duration-700 ease-in-out"
+                  />
+                  <p className="hidden group-hover:block font-lora font-bold text-[#333333] mb-1">
+                    Meeting Room
+                  </p>
+                  <p className="hidden group-hover:block text-[#34BFAD] font-sans font-bold mb-2">
+                    Create Space
+                  </p>
+                </div>
               </div>
             </div>
           </div>
