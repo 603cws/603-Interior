@@ -25,6 +25,7 @@
     "react-select-country-list": "^2.2.3",
     "react-slick": "^0.30.3",
     "slick-carousel": "^1.8.1",
+    "swiper": "^11.2.1",
     "tailwind-scrollbar-hide": "^2.0.0",
     "typewriter-effect": "^2.21.0"
   },

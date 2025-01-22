@@ -5,12 +5,20 @@ import { IoCallOutline } from "react-icons/io5";
 import { FaAngleDown, FaAngleUp } from "react-icons/fa";
 
 import Slider from "react-slick";
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+import "swiper/css/effect-coverflow";
+import "swiper/css/pagination";
+import "swiper/css/navigation";
+import { EffectCoverflow, Pagination, Navigation } from "swiper/modules";
+import "../styles/Landing.css";
 
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
 import { useNavigate } from "react-router-dom";
 import Footer from "../components/Footer";
+import { BiLeftArrowCircle, BiRightArrowCircle } from "react-icons/bi";
 
 function Landing() {
   const [expandedIndex, setExpandedIndex] = useState();
@@ -345,7 +353,7 @@ function Landing() {
       {/* section our Work */}
       <section>
         {/* container */}
-        <div className="container mx-auto flex flex-col gap-10">
+        <div className="container max-w-full overflow-x-hidden">
           {/* textual part */}
           <div className="flex flex-col justify-center items-center">
             <p className="text-[#1F5C54]">our work</p>
@@ -354,26 +362,52 @@ function Landing() {
           </div>
 
           {/* slider for images */}
-
-          <div className="flex-1">
-            <Slider {...settingsWork}>
-              <div>
-                <img src="/images/sectionwork1.png" alt="work section" />
+          <Swiper
+            effect={"coverflow"}
+            grabCursor={true}
+            centeredSlides={true}
+            loop={true}
+            slidesPerView={"auto"}
+            coverflowEffect={{
+              rotate: 0,
+              stretch: 0,
+              depth: 100,
+              modifier: 2.5,
+            }}
+            pagination={{ el: ".swiper-pagination", clickable: true }}
+            navigation={{
+              nextEl: ".swiper-button-next",
+              prevEl: ".swiper-button-prev",
+              clickable: true,
+            }}
+            modules={[EffectCoverflow, Pagination, Navigation]}
+            className="swiper_container max-w-screen overflow-x-hidden"
+          >
+            <SwiperSlide>
+              <img src="/images/sectionwork1.png" alt="work section" />
+            </SwiperSlide>{" "}
+            <SwiperSlide>
+              <img src="/images/sectionwork2.png" alt="work section" />
+            </SwiperSlide>{" "}
+            <SwiperSlide>
+              <img src="/images/sectionwork3.png" alt="work section" />
+            </SwiperSlide>{" "}
+            <SwiperSlide>
+              <img src="/images/sectionwork4.png" alt="work section" />
+            </SwiperSlide>{" "}
+            <SwiperSlide>
+              <img src="/images/sectionwork5.png" alt="work section" />
+            </SwiperSlide>
+            <div className="slider-controler">
+              <div className="swiper-button-prev slider-arrow">
+                <BiLeftArrowCircle name="arrow-back-outline"></BiLeftArrowCircle>
               </div>
-              <div>
-                <img src="/images/sectionwork2.png" alt="work section" />
+              <div className="swiper-button-next slider-arrow">
+                <BiRightArrowCircle name="arrow-forward-outline"></BiRightArrowCircle>
               </div>
-              <div>
-                <img src="/images/sectionwork3.png" alt="work section" />
-              </div>
-              <div>
-                <img src="/images/sectionwork4.png" alt="work section" />
-              </div>
-              <div>
-                <img src="/images/sectionwork5.png" alt="work section" />
-              </div>
-            </Slider>
-          </div>
+              <div className="swiper-pagination"></div>
+            </div>
+          </Swiper>
         </div>
       </section>
 
@@ -687,3 +721,25 @@ export default Landing;
 //   </div>
 // </div>
 // </section>
+
+{
+  /* <div className="flex-1">
+            <Slider {...settingsWork}>
+              <div>
+                <img src="/images/sectionwork1.png" alt="work section" />
+              </div>
+              <div>
+                <img src="/images/sectionwork2.png" alt="work section" />
+              </div>
+              <div>
+                <img src="/images/sectionwork3.png" alt="work section" />
+              </div>
+              <div>
+                <img src="/images/sectionwork4.png" alt="work section" />
+              </div>
+              <div>
+                <img src="/images/sectionwork5.png" alt="work section" />
+              </div>
+            </Slider>
+          </div> */
+}
