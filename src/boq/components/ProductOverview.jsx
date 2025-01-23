@@ -97,6 +97,16 @@ function ProductOverview({
       ? product.addons
       : []
   );
+
+  function formatDimensions(dimensions) {
+    if (!dimensions) {
+      return "N/A";
+    }
+    return dimensions
+      .split(",") // Split the dimensions by commas
+      .map((dim) => dim.trim() + " cm") // Add "cm" after each number
+      .join(" X "); // Join the dimensions with "X"
+  }
   return (
     // grid
     <>
@@ -225,7 +235,7 @@ function ProductOverview({
                 Manufacturer
               </p>
               <span className="text-xs text-[#334A78] ">
-                Name of the manufacturer
+                {selectedProductView.manufacturer || "N/A"}
               </span>
             </div>
             {/* dimensions */}
@@ -233,7 +243,9 @@ function ProductOverview({
               <p className="text-sm uppercase font-bold text-[#334A78] ">
                 dimensions(H x l x W)
               </p>
-              <span className="text-xs text-[#334A78] ">dimension value</span>
+              <span className="text-xs text-[#334A78] ">
+                {formatDimensions(selectedProductView.dimensions)}
+              </span>
             </div>
             <div className="border-b-2 pt-2 pb-1">
               <p className="text-sm uppercase font-bold text-[#334A78]">

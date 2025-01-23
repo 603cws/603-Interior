@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import LandingNavbar from "../components/LandingNavbar";
 import { IoCallOutline } from "react-icons/io5";
 
@@ -25,6 +25,27 @@ import {
 
 function Landing() {
   const [expandedIndex, setExpandedIndex] = useState();
+  const heroImages = [
+    "/images/Hero.png",
+    "/images/Hero-image-1.png",
+    "/images/Hero-image-2.png",
+    "/images/Hero-image-3.png",
+    "/images/Hero-image-4.png",
+    "/images/Hero-image-5.png",
+  ];
+
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  // Change background image every 5 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentImageIndex((prevIndex) =>
+        prevIndex === heroImages.length - 1 ? 0 : prevIndex + 1
+      );
+    }, 5000); // 5000ms = 5 seconds
+
+    return () => clearInterval(interval); // Cleanup interval on component unmount
+  }, [heroImages.length]);
 
   const navigate = useNavigate();
   const handleToggle = (index) => {
@@ -85,25 +106,38 @@ function Landing() {
   return (
     <div>
       {/* section 1 */}
-      <section className="flex flex-col h-screen bg-[url('/images/Hero.png')] bg-cover bg-center">
-        <LandingNavbar />
+      <section
+        className={`relative flex flex-col h-screen bg-cover bg-center transition-all duration-1000`}
+        style={{
+          backgroundImage: `url(${heroImages[currentImageIndex]})`,
+        }}
+      >
+        {/* Add a dark overlay */}
+        <div className="absolute inset-0 bg-black/50"></div>
 
-        {/* text div */}
-        <div className="flex-1 flex flex-col justify-center items-center text-white">
-          <h1 className="font-lato text-[64px]">Create your Space</h1>
-          <p className="font-Poppins text-[32px]">
-            We create unique style and design for your office
-          </p>
-          <button
-            className="border border-transparent px-5 bg-[#1F5C54] py-3 mt-3 font-Poppins font-bold transform transition-transform duration-300 ease-in-out hover:scale-110 "
-            onClick={() => navigate("/Layout")}
-          >
-            Make Your space
-          </button>
+        {/* Content */}
+        <div className="relative z-10 ">
+          <LandingNavbar />
+
+          {/* Text div */}
+          <div className="flex justify-center items-center h-svh">
+            <div className="flex-1 flex flex-col justify-center items-center text-white max-h-fit max-w-fit mx-auto p-5 rounded-xl mb-10 backdrop-blur-sm">
+              <h1 className="font-lato text-[64px]">Create your Space</h1>
+              <p className="font-Poppins text-[32px]">
+                We create unique style and design for your office
+              </p>
+              <button
+                className="border border-transparent px-5 bg-[#1F5C54] py-3 mt-3 font-Poppins font-bold transform transition-transform duration-300 ease-in-out hover:scale-110"
+                onClick={() => navigate("/Layout")}
+              >
+                Make Your Space
+              </button>
+            </div>
+          </div>
         </div>
       </section>
       {/* section 2 */}
-      <section className="bg-[#1F5C54]">
+      <section className="bg-[#1F5C54] lg:h-[500px] xl:h-[700px]">
         <div className="container mx-auto  flex flex-col text-white ">
           {/* div for the text */}
           <div className="flex flex-col justify-center items-center mt-7 font-sans mb-5">
@@ -122,8 +156,8 @@ function Landing() {
             {/* div for images  */}
             <div className="flex justify-center gap-14 relative px-20 pb-10">
               {/* image 1 */}
-              <div className="group text-center relative bg-transparent hover:bg-white hover:rounded-xl hover:transition duration-700 ease-in-out w-1/4 h-96">
-                <div className="p-0 group-hover:p-4 transition-all duration-700 ease-in-out cursor-pointer absolute">
+              <div className="group text-center relative  hover:rounded-xl hover:transition duration-700 ease-in-out w-1/4 h-auto">
+                <div className="p-0 group-hover:p-4 transition-all duration-700 ease-in-out cursor-pointer absolute bg-transparent hover:bg-white">
                   <img
                     src="/images/section2-img1.png"
                     alt="pantary"
@@ -138,8 +172,8 @@ function Landing() {
                 </div>
               </div>
               {/* image 1 */}
-              <div className="group text-center relative bg-transparent hover:bg-white hover:rounded-xl hover:transition duration-700 ease-in-out w-1/4 h-96">
-                <div className="p-0 group-hover:p-4 transition-all duration-700 ease-in-out cursor-pointer absolute">
+              <div className="group text-center relative  hover:rounded-xl hover:transition duration-700 ease-in-out w-1/4 h-auto">
+                <div className="p-0 group-hover:p-4 transition-all duration-700 ease-in-out cursor-pointer absolute bg-transparent hover:bg-white">
                   <img
                     src="/images/section2-img2.png"
                     alt="pantary"
@@ -154,8 +188,8 @@ function Landing() {
                 </div>
               </div>
 
-              <div className="group text-center relative bg-transparent hover:bg-white hover:rounded-xl hover:transition duration-700 ease-in-out w-1/4 h-96">
-                <div className="p-0 group-hover:p-4 transition-all duration-700 ease-in-out cursor-pointer absolute">
+              <div className="group text-center relative  hover:rounded-xl hover:transition duration-700 ease-in-out w-1/4 h-auto">
+                <div className="p-0 group-hover:p-4 transition-all duration-700 ease-in-out cursor-pointer absolute bg-transparent hover:bg-white">
                   <img
                     src="/images/section2-img3.png"
                     alt="pantary"

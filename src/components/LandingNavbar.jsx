@@ -16,13 +16,24 @@ function LandingNavbar() {
         </div>
         {/* middle section */}
         <div className="">
-          <ul className="flex gap-4 text-[#1A3A36] font-semibold cursor-pointer">
-            <li onClick={() => navigate("/")}>Home</li>
-            <li>Spaces</li>
-            <li onClick={() => navigate("/Aboutus")}>About Us</li>
-            <li>Our Services</li>
-            <li onClick={() => navigate("/Blog")}>Our Blog</li>
-            <li onClick={() => navigate("/Contactus")}>Contact Us</li>
+          <ul className="flex gap-4 text-[#1A3A36] font-semibold">
+            <li onClick={() => navigate("/")} className="cursor-pointer">
+              Home
+            </li>
+            <li className="cursor-pointer">Spaces</li>
+            <li onClick={() => navigate("/Aboutus")} className="cursor-pointer">
+              About Us
+            </li>
+            <li className="cursor-pointer">Our Services</li>
+            <li onClick={() => navigate("/Blog")} className="cursor-pointer">
+              Our Blog
+            </li>
+            <li
+              onClick={() => navigate("/Contactus")}
+              className="cursor-pointer"
+            >
+              Contact Us
+            </li>
           </ul>
         </div>
 
