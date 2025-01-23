@@ -31,7 +31,38 @@ function ProductOverview({
     selectedSubCategory1,
     selectedData,
   } = useApp();
-
+  const instructions = {
+    Furniture: [
+      "Wipe down all surfaces with a damp cloth and mild detergent.",
+      "Vacuum upholstered furniture to remove dust and debris.",
+      "Polish wooden furniture with appropriate polish.",
+      "Remove all protective coverings and labels.",
+    ],
+    Flooring: [
+      "Sweep or vacuum to remove dust.",
+      "Clean with a floor cleaner appropriate for the flooring type.",
+      "Avoid excessive moisture, especially on hardwood.",
+    ],
+    Lighting: [
+      "Wipe down light fixtures with a damp cloth.",
+      "Remove any dust or debris from light diffusers.",
+      "Ensure all bulbs are clean and functioning.",
+    ],
+    HVAC: [
+      "Clean air vents and grilles to remove dust and debris.",
+      "Replace or clean air filters.",
+      "Wipe down exterior surfaces of HVAC units.",
+    ],
+    "Smart Solutions": [
+      "Wipe down screens and surfaces with a soft, dry cloth. Avoid liquids.",
+      "Remove any protective films or labels.",
+      "Ensure all connections are clean and secure.",
+    ],
+  };
+  const getInstructions = (category) => {
+    return instructions[category] || ["No specific instructions found."]; // Provide default message
+  };
+  const categoryInstructions = getInstructions(selectedCategory?.category);
   const baseImageUrl =
     "https://bwxzfwsoxwtzhjbzbdzs.supabase.co/storage/v1/object/public/addon/";
 
@@ -251,9 +282,19 @@ function ProductOverview({
               <p className="text-sm uppercase font-bold text-[#334A78]">
                 instruction
               </p>
-              <span className="text-xs text-[#334A78] ">
-                Lorem ipsum dolor sit amet.
-              </span>
+              {categoryInstructions.length > 0 ? (
+                <ul className="list-disc pl-5">
+                  {categoryInstructions.map((instruction, index) => (
+                    <li key={index} className="text-xs text-[#334A78]">
+                      {instruction}
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <span className="text-xs text-[#334A78]">
+                  No specific instructions available for this category.
+                </span>
+              )}
             </div>
           </div>
         </div>
