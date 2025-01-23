@@ -78,10 +78,8 @@ function ProductOverview({
 
     const quantity = quantityData[0]?.[normalizedSubCat] || 0;
     const area = areasData[0]?.[normalizedSubCat] || 0;
-    if (
-      selectedCategory?.category === "Furniture" ||
-      selectedCategory?.category === "HVAC"
-    ) {
+    if (selectedCategory?.category === "Furniture") {
+      // || selectedCategory?.category === "HVAC"
       return { quantity, price: selectedProductView.price }; //addonPrice
     } else if (selectedCategory?.category === "Partitions / Ceilings") {
       //currently this category is missing
