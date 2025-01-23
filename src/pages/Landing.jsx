@@ -18,7 +18,10 @@ import "slick-carousel/slick/slick-theme.css";
 
 import { useNavigate } from "react-router-dom";
 import Footer from "../components/Footer";
-import { BiLeftArrowCircle, BiRightArrowCircle } from "react-icons/bi";
+import {
+  BiSolidLeftArrowSquare,
+  BiSolidRightArrowSquare,
+} from "react-icons/bi";
 
 function Landing() {
   const [expandedIndex, setExpandedIndex] = useState();
@@ -353,7 +356,7 @@ function Landing() {
       {/* section our Work */}
       <section>
         {/* container */}
-        <div className="container max-w-full overflow-x-hidden">
+        <div className="container max-w-full overflow-x-hidden py-2">
           {/* textual part */}
           <div className="flex flex-col justify-center items-center">
             <p className="text-[#1F5C54]">our work</p>
@@ -367,14 +370,16 @@ function Landing() {
             grabCursor={true}
             centeredSlides={true}
             loop={true}
-            slidesPerView={"auto"}
+            slidesPerView={"auto"} // Ensures 5 slides are visible
+            spaceBetween={30} // Adds spacing between slides
+            initialSlide={3}
             coverflowEffect={{
-              rotate: 0,
+              rotate: 35,
               stretch: 0,
               depth: 100,
-              modifier: 2.5,
+              modifier: 0.8,
             }}
-            pagination={{ el: ".swiper-pagination", clickable: true }}
+            // pagination={{ el: ".swiper-pagination", clickable: true }}
             navigation={{
               nextEl: ".swiper-button-next",
               prevEl: ".swiper-button-prev",
@@ -385,25 +390,31 @@ function Landing() {
           >
             <SwiperSlide>
               <img src="/images/sectionwork1.png" alt="work section" />
-            </SwiperSlide>{" "}
+            </SwiperSlide>
             <SwiperSlide>
               <img src="/images/sectionwork2.png" alt="work section" />
-            </SwiperSlide>{" "}
+            </SwiperSlide>
             <SwiperSlide>
               <img src="/images/sectionwork3.png" alt="work section" />
-            </SwiperSlide>{" "}
+            </SwiperSlide>
             <SwiperSlide>
               <img src="/images/sectionwork4.png" alt="work section" />
-            </SwiperSlide>{" "}
+            </SwiperSlide>
             <SwiperSlide>
               <img src="/images/sectionwork5.png" alt="work section" />
             </SwiperSlide>
             <div className="slider-controler">
               <div className="swiper-button-prev slider-arrow">
-                <BiLeftArrowCircle name="arrow-back-outline"></BiLeftArrowCircle>
+                <BiSolidLeftArrowSquare
+                  name="arrow-back-outline"
+                  color={"#1A3A36"}
+                />
               </div>
               <div className="swiper-button-next slider-arrow">
-                <BiRightArrowCircle name="arrow-forward-outline"></BiRightArrowCircle>
+                <BiSolidRightArrowSquare
+                  name="arrow-back-outline"
+                  color={"#1A3A36"}
+                />
               </div>
               <div className="swiper-pagination"></div>
             </div>
@@ -721,25 +732,3 @@ export default Landing;
 //   </div>
 // </div>
 // </section>
-
-{
-  /* <div className="flex-1">
-            <Slider {...settingsWork}>
-              <div>
-                <img src="/images/sectionwork1.png" alt="work section" />
-              </div>
-              <div>
-                <img src="/images/sectionwork2.png" alt="work section" />
-              </div>
-              <div>
-                <img src="/images/sectionwork3.png" alt="work section" />
-              </div>
-              <div>
-                <img src="/images/sectionwork4.png" alt="work section" />
-              </div>
-              <div>
-                <img src="/images/sectionwork5.png" alt="work section" />
-              </div>
-            </Slider>
-          </div> */
-}
