@@ -16,7 +16,7 @@ function LandingNavbar() {
         </div>
         {/* middle section */}
         <div className="">
-          <ul className="flex gap-4 text-[#1A3A36] font-semibold">
+          <ul className="flex gap-12 text-[#1A3A36] font-semibold">
             <li onClick={() => navigate("/")} className="cursor-pointer">
               Home
             </li>
