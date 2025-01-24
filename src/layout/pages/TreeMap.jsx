@@ -58,7 +58,7 @@ const TreeMap = ({ totalArea, areaQuantities, areaValues }) => {
         'HR Room': '#E15F41',
         'Finance Room': '#63CDDA',
         'Executive Washroom': '#C44569',
-        'Available Space': '#ADDFFF',
+        'Available Space': '#1F5C54',
         'Other': '#778BEB' // Color for the "Other" category
     };
 
@@ -112,7 +112,10 @@ const TreeMap = ({ totalArea, areaQuantities, areaValues }) => {
         plotOptions: {
             treemap: {
                 distributed: true,
-                enableShades: false
+                enableShades: false,
+                // shadeIntensity: 0, // Disable shade intensity
+            // reverseNegativeShade: false, // Prevent hover shade reversal
+            // useFillColorAsStroke: true // Maintain original fill color as stroke
             }
         },
         tooltip: {
@@ -133,6 +136,14 @@ const TreeMap = ({ totalArea, areaQuantities, areaValues }) => {
                     return `${opts.w.globals.labels[opts.dataPointIndex]} (${percentage}%)`;
                 }
                 return `${opts.w.globals.labels[opts.dataPointIndex]}: ${val}`;
+            }
+        },
+        states: {
+            hover: {
+                filter:{
+                    type:"darken",
+                    value:0.1,
+                }
             }
         }
     };
@@ -164,7 +175,7 @@ const TreeMap = ({ totalArea, areaQuantities, areaValues }) => {
                             borderRadius: '50%'
                         }}
                     ></span>
-                    <span className="legend-label" style={{ fontSize: '13px' }}>
+                    <span className="legend-label pr-2" style={{ fontSize: '13px' }}>
                         {item.x}
                     </span>
                 </div>

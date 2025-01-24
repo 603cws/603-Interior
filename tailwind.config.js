@@ -37,7 +37,7 @@ export default {
       keyframes: {
         blink: {
           "0%": { transform: "scale(1)" },
-          "50%": { transform: "scale(1.2)" },
+          "50%": { transform: "scale(1.1)" },
           "100%": { transform: "scale(1)" },
         },
         fadeIn: {
@@ -54,15 +54,15 @@ export default {
         blink: "blink 1s infinite",
         "fade-in": "fadeIn 0.7s ease-in-out",
       },
-      screens: {
-        sm: "100%", // Full width for small screens
-        md: "640px", // Medium screens
-        lg: "768px", // Large screens
-        xl: "1024px", // Extra-large screens
-        "2xl": "1280px", // 2XL screens
-        "3xl": "1440px", // Custom 3XL screens
-        "4xl": "1920px", // Custom 4XL screens
-      },
+      // screens: {
+      //   sm: "100%", // Full width for small screens
+      //   md: "640px", // Medium screens
+      //   lg: "768px", // Large screens
+      //   xl: "1024px", // Extra-large screens
+      //   "2xl": "1280px", // 2XL screens
+      //   "3xl": "1440px", // Custom 3XL screens
+      //   "4xl": "1920px", // Custom 4XL screens
+      // },
       // container: {
       //   center: true,
       //   padding: {

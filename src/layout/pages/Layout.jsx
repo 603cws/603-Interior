@@ -569,8 +569,8 @@ function Layout() {
                 areaQuantities={areaQuantities} areaValues={areaValues}
             />
 
-            <div className="content w-full flex justify-between gap-3 px-3 mt-5 relative">
-                <div className="area-distribution-chart w-1/2 px-3 border-2">
+            <div className="content w-full flex justify-between gap-3 px-0 mt-5 relative">
+                <div className="area-distribution-chart w-1/2 px-3 border-2 pl-5">
                     <Spacebar
                         builtArea={builtArea}
                         availableArea={availableArea}

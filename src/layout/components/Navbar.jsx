@@ -95,7 +95,7 @@ function Navbar({ MIN_AREA, MAX_AREA, resetAll, areaQuantities, areaValues }) {
     <div>
       {/* navbar */}
       {/* <div className="flex justify-evenly bg-[#003366] py-2 items-center rounded-full mx-2 mt-2"> */}
-      <div className="flex justify-between bg-gradient-to-r from-[#1A3A36] to-[#54DED3] py-2 items-center px-5">
+      <div className="flex justify-between bg-gradient-to-r from-[#1A3A36] to-[#48A095] py-2 items-center px-5">
         {/* logo */}
         <button className="self-start" onClick={() => navigate("/")}>
           <img src="/logo/logo.png" alt="603 logo" className="h-auto w-20" />
@@ -148,7 +148,7 @@ function Navbar({ MIN_AREA, MAX_AREA, resetAll, areaQuantities, areaValues }) {
         </div>
         {error && (
           <div
-            className="error-message text-[#FFD43B] font-medium text-xs mt-1 flex items-center absolute -top-1 bg-transparent left-1/3 bg-gradient-to-r from-[#2d706a] to-[#3e9f97]"
+            className="error-message text-[#FFD43B] font-medium text-xs mt-1 flex items-center absolute -top-1 bg-transparent left-1/3 bg-gradient-to-r from-[#325B56] to-[#3D6F68]"
             aria-live="polite"
           >
             <span className="warning-icon">⚠️</span>
@@ -159,7 +159,7 @@ function Navbar({ MIN_AREA, MAX_AREA, resetAll, areaQuantities, areaValues }) {
         {/* button for generate boq */}
         {/* <div> */}
         <button
-          className="bg-[#1A3A36] mt-2 rounded-3xl text-sm py-2 px-5 text-white mb-2"
+          className="bg-[#1A3A36] mt-2 rounded-3xl text-sm py-2 px-5 text-white mb-2 border border-2 border-[#34BFAD]"
           onClick={handlegenrateboq}
         >
           Generate BOQ

@@ -70,7 +70,7 @@ const PublicSpaces = ({
       <h3 className="section-heading bg-white shadow-sm text-md pl-2 py-1.5 sticky top-0 font-semibold z-10">
         Public Spaces
       </h3>
-      <div className="public-spaces grid grid-cols-2">
+            <div className="public-spaces grid grid-cols-2 2xl:grid-cols-3 gap-5">
         {publicSpacesData.map((space) => {
           const sliderProps = space.slider
             ? {
