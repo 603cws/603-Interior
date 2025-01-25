@@ -55,11 +55,7 @@ function OpenWorkspaces({
       <h3 className="section-heading bg-white shadow-sm text-md pl-2 py-1.5 sticky top-0 font-semibold z-10">
         Open Workspaces
       </h3>
-<<<<<<< HEAD
-      <div className="open-workspaces grid grid-cols-2 2xl:grid-cols-3 gap-5">
-=======
       <div className="open-workspaces grid grid-cols-2 4xl:grid-cols-3 gap-5">
->>>>>>> e2a2e3f548bf870fe6ab0943579454540538e890
         {workspaceData.map((workspace) => (
           <LayoutCard
             key={workspace.type}
