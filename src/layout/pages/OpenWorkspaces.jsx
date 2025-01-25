@@ -4,7 +4,7 @@ import LayoutCard from "../components/LayoutCard";
 const workspaceData = [
   {
     type: "linear",
-        image: "/images/workspace-image/linear2.png",
+    image: "/images/workspace-image/linear2.png",
     description: "This is a linear workspace, designed for open collaboration.",
     sizes: ["M", "L", "XL"], // Corresponds to sizeMapping keys
     tooltipText: "Size: 20 sq ft", // Default tooltip text for Linear Workstation
@@ -15,7 +15,7 @@ const workspaceData = [
     image: "/images/workspace-image/lType.png",
     description:
       "This is an L-type workspace, providing a semi-private environment.",
-        sizes: [], // No size options
+    sizes: [], // No size options
     tooltipText: "Size: 34 sq ft",
     title: "L-Type Workstation",
   },
@@ -55,7 +55,7 @@ function OpenWorkspaces({
       <h3 className="section-heading bg-white shadow-sm text-md pl-2 py-1.5 sticky top-0 font-semibold z-10">
         Open Workspaces
       </h3>
-            <div className="open-workspaces grid grid-cols-2 2xl:grid-cols-3 gap-5">
+      <div className="open-workspaces grid grid-cols-2 4xl:grid-cols-3 gap-5">
         {workspaceData.map((workspace) => (
           <LayoutCard
             key={workspace.type}

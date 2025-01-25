@@ -11,6 +11,7 @@ export const AppProvider = ({ children }) => {
   const [selectedSubCategory, setSelectedSubCategory] = useState(null); //Gets value after data fetching
   const [selectedSubCategory1, setSelectedSubCategory1] = useState(null);
   const [selectedData, setSelectedData] = useState([]);
+  const [selectedAddons, setSelectedAddons] = useState([]);
 
   const [categories, setCategories] = useState([]);
   const [subCategories, setSubCategories] = useState([]); // Extracted subcategories
@@ -19,6 +20,11 @@ export const AppProvider = ({ children }) => {
   const prevSelectedData = useRef(selectedData); // Ref to store previous selectedData
   const prevCategories = useRef(categories); // Ref to store previous categories
   const prevSubCat1 = useRef(subCat1); // Ref to store previous subCat1
+
+  useEffect(() => {
+    var temp = JSON.parse(localStorage.getItem("selectedData"));
+    setSelectedData(temp);
+  }, []);
 
   useEffect(() => {
     console.log("Progress: ", progress);
@@ -133,6 +139,8 @@ export const AppProvider = ({ children }) => {
         handleProgressBar,
         userId,
         setUserId,
+        selectedAddons,
+        setSelectedAddons,
       }}
     >
       {children}

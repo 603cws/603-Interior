@@ -31,7 +31,7 @@ function Boq() {
   const [minimizedView, setMinimizedView] = useState(false);
   const [showProductView, setShowProductView] = useState(false);
   const [showRecommend, setShowRecommend] = useState(false);
-  const [selectedAddons, setSelectedAddons] = useState([]);
+  // const [selectedAddons, setSelectedAddons] = useState([]);
   const [questionPopup, setQuestionPopup] = useState(false);
   const [userResponses, setUserResponses] = useState({});
   const categoriesWithModal = ["Flooring", "HVAC", "Partitions / Ceilings"]; // Array of categories that should show the modal when clicked
@@ -55,6 +55,8 @@ function Boq() {
     setTotalArea,
     userId,
     setUserId,
+    selectedAddons,
+    setSelectedAddons,
   } = useApp();
 
   useEffect(() => {
@@ -441,6 +443,7 @@ function Boq() {
     // Update the total cost or other BOQ data if needed
     //  updateBOQTotal();
   };
+
   const calculateGrandTotal = () => {
     // Ensure selectedData is an array before calling reduce
     let grandTotal = (Array.isArray(selectedData) ? selectedData : []).reduce(
@@ -457,7 +460,9 @@ function Boq() {
 
     return grandTotal;
   };
+
   console.log("selected products", selectedData);
+
   return (
     <div>
       <Navbar
@@ -486,12 +491,8 @@ function Boq() {
           {minimizedView && (
             <div>
               <MainPage
-                selectedCategory={selectedCategory}
-                selectedSubCategory1={selectedSubCategory1}
                 setSelectedSubCategory1={handleSelectedSubCategory1}
                 userResponses={userResponses}
-                subCat1={subCat1}
-                setSubCat1={setSubCat1}
               />
               <ProductCard
                 products={groupedProducts}
