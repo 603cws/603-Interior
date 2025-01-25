@@ -31,10 +31,8 @@ function Boq() {
   const [minimizedView, setMinimizedView] = useState(false);
   const [showProductView, setShowProductView] = useState(false);
   const [showRecommend, setShowRecommend] = useState(false);
-  // const [selectedAddons, setSelectedAddons] = useState([]);
   const [questionPopup, setQuestionPopup] = useState(false);
   const [userResponses, setUserResponses] = useState({});
-  const categoriesWithModal = ["Flooring", "HVAC", "Partitions / Ceilings"]; // Array of categories that should show the modal when clicked
 
   const {
     selectedCategory,
@@ -57,6 +55,7 @@ function Boq() {
     setUserId,
     selectedAddons,
     setSelectedAddons,
+    categoriesWithModal,
   } = useApp();
 
   useEffect(() => {
@@ -102,7 +101,7 @@ function Boq() {
       setCategories(categoriesData); //remove 0 value qunatity from subCat
 
       if (categoriesData.length > 0) {
-        setSelectedCategory(categoriesData[0]);
+        handleCategorySelection(categoriesData[0]);
         setSelectedSubCategory(categoriesData[0].subcategories[0] || null);
       }
 
