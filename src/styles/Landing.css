@@ -13,7 +13,7 @@ html {
   box-sizing: inherit; /* Ensure consistent box-sizing across elements */
 }
 .swiper_container {
-  height: auto; /* Height of the Swiper container */
+  height: 35rem; /* Height of the Swiper container */
   padding: 2rem 0;
   position: relative;
   overflow: hidden; /* Prevent overflow */
@@ -21,7 +21,7 @@ html {
 
 .swiper-slide {
   width: 20rem; /* Adjusted slide width for proportionality */
-  height: 25rem; /* Slightly smaller than the container height */
+  height: 30rem; /* Slightly smaller than the container height */
   position: relative;
   box-sizing: border-box;
 }
