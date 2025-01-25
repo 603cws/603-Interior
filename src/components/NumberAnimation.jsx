@@ -1,5 +1,5 @@
 import React from "react";
-import "./NumberAnimation.css";
+import "../styles/NumberAnimation.css";
 
 const NumberAnimation = () => {
   return (

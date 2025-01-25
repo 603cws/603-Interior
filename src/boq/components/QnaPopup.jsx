@@ -96,11 +96,18 @@ const QnaPopup = ({ onClose, onSubmit, category }) => {
     localStorage.setItem("answers", JSON.stringify(updatedAnswers));
 
     // If flooringStatus is selected, check for the demolishTile question
-    if (name === "flooringStatus" && value === "basicTiling") {
-      setQuestions((prevQuestions) => [
-        ...prevQuestions,
-        ...demolishTileQuestion, // Add demolish tile question if Basic Tiling is selected
-      ]);
+    if (questions.length < 2) {
+      if (name === "flooringStatus" && value === "basicTiling") {
+        setQuestions((prevQuestions) => [
+          ...prevQuestions,
+          ...demolishTileQuestion, // Add demolish tile question if Basic Tiling is selected
+        ]);
+      }
+    }
+
+    //set the question array to default question 1st if value is bareshell
+    if (name === "flooringStatus" && value === "bareShell") {
+      setQuestions(flooringQuestions);
     }
   };
 
@@ -144,6 +151,9 @@ const QnaPopup = ({ onClose, onSubmit, category }) => {
       setCurrentQuestionIndex((prevIndex) => prevIndex - 1);
     }
   };
+
+  console.log("questions", questions);
+
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 ">
       <div
@@ -202,14 +212,16 @@ const QnaPopup = ({ onClose, onSubmit, category }) => {
                   </div>
                 </div>
                 <div className="flex justify-around">
-                  <button
-                    type="button"
-                    onClick={handlePreviousClick}
-                    className="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700"
-                    disabled={currentQuestionIndex === 0}
-                  >
-                    Previous
-                  </button>
+                  {currentQuestionIndex > 0 && (
+                    <button
+                      type="button"
+                      onClick={handlePreviousClick}
+                      className="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700"
+                      disabled={currentQuestionIndex === 0}
+                    >
+                      Previous
+                    </button>
+                  )}
                   <button
                     type="submit"
                     className="bg-[#1A3A36] text-white px-4 py-2 rounded hover:bg-[#145A50]"
