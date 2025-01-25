@@ -214,7 +214,7 @@ function Contactus() {
       </section>
 
       {/* section 4 */}
-      <Footer />
+      <Footer key="contactus" />
 
       {/* contatus form button  */}
       {/* <button className="rotate-90 absolute top-50 right-0 bg-red-600 px-5 py-2">

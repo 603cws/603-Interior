@@ -25,7 +25,7 @@ const LayoutCard = ({
   areaCounterProps, // Props specific to AreaCounter
 }) => {
   return (
-    <div className="flex flex-col w-[280px] items-center border border-solid bg-[#fff] pb-2 my-3 relative">
+    <div className="workspacedescription flex flex-col w-[280px] items-center border border-solid bg-[#fff] pb-2 my-3 relative">
       {/* Image */}
       <div className="relative bg-red-400 group w-full h-56 overflow-hidden">
         <img
@@ -34,18 +34,15 @@ const LayoutCard = ({
           className="RoomImage object-fit w-full h-full cursor-pointer"
         />
         {/* Description on hover */}
-        <p
-  className="absolute inset-0 bg-white bg-opacity-10 text-white text-center flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 backdrop-blur-md shadow-lg group-hover:text-black"
->
-  {description}
-</p>
-
+        <p className="absolute inset-0 bg-white bg-opacity-10 text-white text-center flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 backdrop-blur-md shadow-lg group-hover:text-black">
+          {description}
+        </p>
       </div>
       {/* Content */}
       <div className="flex flex-col gap-3">
         {/* Counter */}
         {!showInputField && (
-          <div className="flex justify-around mt-2 gap-3">
+          <div className=" flex justify-around mt-2 gap-3">
             <button onClick={onDecrement}>
               <PiMinusCircleFill size={30} />
             </button>
@@ -82,7 +79,7 @@ const LayoutCard = ({
         {tooltipText && (
           <div className="tooltip-container">
             <Tooltip text={tooltipText}>
-                            <div className="w-4 absolute right-3 bottom-1">
+              <div className="w-4 absolute right-3 bottom-1">
                 <PiInfoLight size={25} />
               </div>
             </Tooltip>

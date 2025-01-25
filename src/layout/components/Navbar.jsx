@@ -102,7 +102,7 @@ function Navbar({ MIN_AREA, MAX_AREA, resetAll, areaQuantities, areaValues }) {
         </button>
         {/* sq feet div */}
         <div
-          className={`flex justify-between w-7/12 border-2 border-[#FFD43B] items-center px-2 rounded-xl relative ${
+          className={`joynavarea flex justify-between w-7/12 border-2 border-[#FFD43B] items-center px-2 rounded-xl relative ${
             error ? "border-t-1" : "border-1"
           }`}
         >
@@ -159,7 +159,7 @@ function Navbar({ MIN_AREA, MAX_AREA, resetAll, areaQuantities, areaValues }) {
         {/* button for generate boq */}
         {/* <div> */}
         <button
-          className="bg-[#1A3A36] mt-2 rounded-3xl text-sm py-2 px-5 text-white mb-2 border border-2 border-[#34BFAD]"
+          className="generateBoq bg-[#1A3A36] mt-2 rounded-3xl text-sm py-2 px-5 text-white mb-2 border border-2 border-[#34BFAD]"
           onClick={handlegenrateboq}
         >
           Generate BOQ
