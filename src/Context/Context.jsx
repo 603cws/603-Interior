@@ -3,6 +3,8 @@ import { createContext, useContext, useEffect, useState, useRef } from "react";
 const AppContext = createContext();
 
 export const AppProvider = ({ children }) => {
+  const categoriesWithModal = ["Flooring", "HVAC", "Partitions / Ceilings"]; // Array of categories that should show the modal when clicked
+
   const [totalArea, setTotalArea] = useState(0);
   const [progress, setProgress] = useState(0);
   const [userId, setUserId] = useState(null);
@@ -11,6 +13,7 @@ export const AppProvider = ({ children }) => {
   const [selectedSubCategory, setSelectedSubCategory] = useState(null); //Gets value after data fetching
   const [selectedSubCategory1, setSelectedSubCategory1] = useState(null);
   const [selectedData, setSelectedData] = useState([]);
+  const [selectedAddons, setSelectedAddons] = useState([]);
 
   const [categories, setCategories] = useState([]);
   const [subCategories, setSubCategories] = useState([]); // Extracted subcategories
@@ -19,6 +22,11 @@ export const AppProvider = ({ children }) => {
   const prevSelectedData = useRef(selectedData); // Ref to store previous selectedData
   const prevCategories = useRef(categories); // Ref to store previous categories
   const prevSubCat1 = useRef(subCat1); // Ref to store previous subCat1
+
+  useEffect(() => {
+    var temp = JSON.parse(localStorage.getItem("selectedData"));
+    setSelectedData(temp);
+  }, []);
 
   useEffect(() => {
     console.log("Progress: ", progress);
@@ -133,6 +141,9 @@ export const AppProvider = ({ children }) => {
         handleProgressBar,
         userId,
         setUserId,
+        selectedAddons,
+        setSelectedAddons,
+        categoriesWithModal,
       }}
     >
       {children}

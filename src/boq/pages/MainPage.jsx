@@ -1,12 +1,15 @@
 import React, { useEffect } from "react";
+import { useApp } from "../../Context/Context";
 
-const MainPage = ({
-  selectedCategory,
-  selectedSubCategory1,
-  setSelectedSubCategory1,
-  subCat1,
-  userResponses,
-}) => {
+const MainPage = ({ userResponses, setSelectedSubCategory1 }) => {
+  const {
+    selectedCategory,
+    selectedSubCategory1,
+    // setSelectedSubCategory1,
+    subCat1,
+    setSubCat1,
+  } = useApp();
+
   useEffect(() => {
     // Automatically select the first subcategory when the category changes
     if (subCat1 && selectedCategory?.category) {

@@ -54,26 +54,26 @@ export default {
         blink: "blink 1s infinite",
         "fade-in": "fadeIn 0.7s ease-in-out",
       },
-      // screens: {
-      //   sm: "100%", // Full width for small screens
-      //   md: "640px", // Medium screens
-      //   lg: "768px", // Large screens
-      //   xl: "1024px", // Extra-large screens
-      //   "2xl": "1280px", // 2XL screens
-      //   "3xl": "1440px", // Custom 3XL screens
-      //   "4xl": "1920px", // Custom 4XL screens
-      // },
-      // container: {
-      //   center: true,
-      //   padding: {
-      //     DEFAULT: '1rem',
-      //     sm: '2rem',
-      //     lg: '4rem',
-      //     xl: '5rem',
-      //     '2xl': '6rem',
-      //     '3xl': '8rem', // Optional custom padding for 3xl
-      //   },
-      // },
+      screens: {
+        sm: "100%", // Full width for small screens
+        md: "640px", // Medium screens
+        lg: "768px", // Large screens
+        xl: "1024px", // Extra-large screens
+        "2xl": "1280px", // 2XL screens
+        "3xl": "1440px", // Custom 3XL screens
+        "4xl": "1920px", // Custom 4XL screens
+      },
+      container: {
+        center: true,
+        padding: {
+          DEFAULT: "1rem",
+          sm: "2rem",
+          lg: "4rem",
+          xl: "5rem",
+          "2xl": "6rem",
+          "3xl": "8rem", // Optional custom padding for 3xl
+        },
+      },
     },
   },
   plugins: [require("tailwind-scrollbar-hide")],

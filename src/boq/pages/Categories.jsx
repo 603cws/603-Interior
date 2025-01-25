@@ -219,8 +219,8 @@ const Categories = ({
         <div className="mt-2">
           {minimizedView && (
             <div className="border-solid border-[#d5d5d5] border flex flex-row items-center justify-start overflow-auto scrollbar-hide py-1">
-              {selectedCategory.subcategories
-                .filter(
+              {selectedCategory?.subcategories
+                ?.filter(
                   (subCategory) =>
                     selectedCategory.category === "HVAC" // Apply logic only for HVAC
                       ? userResponses.hvacType === "Centralized"

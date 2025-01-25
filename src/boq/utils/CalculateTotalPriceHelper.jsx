@@ -2,7 +2,7 @@ import ParitionCelingCalculation from "./ParitionCelingCalculation";
 
 // Helper to normalize keys
 export const normalizeKey = (key) => {
-  return key.toLowerCase().replace(/[^a-z0-9]/g, "");
+  return key?.toLowerCase().replace(/[^a-z0-9]/g, "");
 };
 
 // Pure utility function
@@ -29,12 +29,12 @@ export const calculateTotalPriceHelper = (
     //currently this category is missing
     // Calculation of price * quantity * area
     matchedKey = Object.keys(roomNumbersMap || {}).find((key) =>
-      normalizedSubCat.includes(key.toLowerCase())
+      normalizedSubCat?.includes(key.toLowerCase())
     );
     quantity = matchedKey ? roomNumbersMap[matchedKey] : 1;
 
     matchedKey = Object.keys(areasData || {}).find((key) =>
-      normalizedSubCat.includes(key.toLowerCase())
+      normalizedSubCat?.includes(key.toLowerCase())
     );
     area = matchedKey ? areasData[matchedKey] : 1;
     if (category === "Partitions / Ceilings") {
@@ -44,7 +44,7 @@ export const calculateTotalPriceHelper = (
   } else {
     // Calculation of price * area
     matchedKey = Object.keys(areasData || {}).find((key) =>
-      normalizedSubCat.includes(key.toLowerCase())
+      normalizedSubCat?.includes(key.toLowerCase())
     );
     area = matchedKey ? areasData[matchedKey] : 1;
 
