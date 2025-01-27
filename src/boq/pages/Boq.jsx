@@ -100,106 +100,126 @@ function Boq() {
 
       setCategories(categoriesData); //remove 0 value qunatity from subCat
 
-      if (categoriesData.length > 0) {
+      setProductData(productsData);
+      setWorkspaces(workspacesData);
+
+      setRoomData(roomDataResult);
+
+      var processedQuantityData, processedAreasData;
+      if (
+        roomDataResult.quantityData &&
+        roomDataResult.quantityData.length > 0
+      ) {
+        processedQuantityData = processData(
+          roomDataResult.quantityData,
+          "quantity"
+        );
+        if (processedQuantityData) {
+          setQuantityData([processedQuantityData]);
+        }
+      }
+
+      if (roomDataResult.areasData && roomDataResult.areasData.length > 0) {
+        processedAreasData = processData(roomDataResult.areasData, "areas");
+        if (processedAreasData) {
+          setAreasData([processedAreasData]);
+        }
+      }
+
+      if (
+        processedQuantityData.length !== 0 ||
+        processedAreasData.length !== 0
+      ) {
+        categoriesData.forEach((category) => {
+          category.subcategories = category.subcategories.filter(
+            (subcategory) => {
+              // Normalize the strings for comparison
+              const normalize = (str) =>
+                str.toLowerCase().replace(/[^a-z0-9]/g, "");
+              const subcategoryKey = normalize(subcategory);
+
+              // Skip filtering if the category is not "Furniture"
+              const isFurniture = normalize(category.category) === "furniture";
+              if (!isFurniture) {
+                return true; // Keep the subcategory if it's not "Furniture"
+              }
+
+              // Get the room data from quantityData
+              const roomCount = processedQuantityData;
+
+              // Check for the "Meeting Room" and "Meeting Room Large" case specifically
+              const meetingRoomLargeQuantity =
+                roomCount["meetingroomlarge"] || 0;
+              const meetingRoomQuantity = roomCount["meetingroom"] || 0;
+
+              // Exclude "Meeting Room Large" if its own quantity is 0
+              if (subcategoryKey === "meetingroomlarge") {
+                if (meetingRoomLargeQuantity === 0) {
+                  return false; // Exclude "Meeting Room Large" if it has quantity 0
+                }
+                return true; // Keep "Meeting Room Large" if it has a non-zero quantity
+              }
+
+              // Exclude "Meeting Room" if it has quantity 0, but only if "Meeting Room Large" is not visible
+              if (
+                subcategoryKey === "meetingroom" &&
+                meetingRoomLargeQuantity === 0
+              ) {
+                if (meetingRoomQuantity === 0) {
+                  return false; // Exclude "Meeting Room" if it has quantity 0
+                }
+                return true; // Keep "Meeting Room" if it has a non-zero quantity
+              }
+
+              // General logic: check the quantity of the subcategory or matching base room key
+              const baseRoomKey = Object.keys(roomCount).find((roomKey) => {
+                const normalizedRoomKey = normalize(roomKey);
+                return (
+                  subcategoryKey === normalizedRoomKey || // Exact match
+                  subcategoryKey.includes(normalizedRoomKey) // Partial match
+                );
+              });
+
+              // If no base room key is found, exclude this subcategory
+              if (!baseRoomKey || roomCount[baseRoomKey] === 0) {
+                return false;
+              }
+
+              // Include subcategory if the base room key has a non-zero quantity
+              return true;
+            }
+          );
+        });
+
+        console.log("Updated Categories: ", categoriesData);
+
+        setCategories(categoriesData);
         handleCategorySelection(categoriesData[0]);
         setSelectedSubCategory(categoriesData[0].subcategories[0] || null);
       }
 
-      setProductData(productsData);
-      setWorkspaces(workspacesData);
-      setRoomData(roomDataResult);
       setSubCat1(subCategory1Data);
     };
 
     loadData();
   }, []);
+  //   if (roomData.quantityData && roomData.quantityData.length > 0) {
+  //     const processedQuantityData = processData(
+  //       roomData.quantityData,
+  //       "quantity"
+  //     );
+  //     if (processedQuantityData) {
+  //       setQuantityData([processedQuantityData]);
+  //     }
+  //   }
 
-  // Below UseEffect is used to filter the subcategories based on the quantity data and remove the subcategories with 0 quantity
-  useEffect(() => {
-    if (quantityData.length !== 0 || areasData.length !== 0) {
-      categories.forEach((category) => {
-        category.subcategories = category.subcategories.filter(
-          (subcategory) => {
-            // Normalize the strings for comparison
-            const normalize = (str) =>
-              str.toLowerCase().replace(/[^a-z0-9]/g, "");
-            const subcategoryKey = normalize(subcategory);
-
-            // Skip filtering if the category is not "Furniture"
-            const isFurniture = normalize(category.category) === "furniture";
-            if (!isFurniture) {
-              return true; // Keep the subcategory if it's not "Furniture"
-            }
-
-            // Get the room data from quantityData
-            const roomCount = quantityData[0];
-
-            // Check for the "Meeting Room" and "Meeting Room Large" case specifically
-            const meetingRoomLargeQuantity = roomCount["meetingroomlarge"] || 0;
-            const meetingRoomQuantity = roomCount["meetingroom"] || 0;
-
-            // Exclude "Meeting Room Large" if its own quantity is 0
-            if (subcategoryKey === "meetingroomlarge") {
-              if (meetingRoomLargeQuantity === 0) {
-                return false; // Exclude "Meeting Room Large" if it has quantity 0
-              }
-              return true; // Keep "Meeting Room Large" if it has a non-zero quantity
-            }
-
-            // Exclude "Meeting Room" if it has quantity 0, but only if "Meeting Room Large" is not visible
-            if (
-              subcategoryKey === "meetingroom" &&
-              meetingRoomLargeQuantity === 0
-            ) {
-              if (meetingRoomQuantity === 0) {
-                return false; // Exclude "Meeting Room" if it has quantity 0
-              }
-              return true; // Keep "Meeting Room" if it has a non-zero quantity
-            }
-
-            // General logic: check the quantity of the subcategory or matching base room key
-            const baseRoomKey = Object.keys(roomCount).find((roomKey) => {
-              const normalizedRoomKey = normalize(roomKey);
-              return (
-                subcategoryKey === normalizedRoomKey || // Exact match
-                subcategoryKey.includes(normalizedRoomKey) // Partial match
-              );
-            });
-
-            // If no base room key is found, exclude this subcategory
-            if (!baseRoomKey || roomCount[baseRoomKey] === 0) {
-              return false;
-            }
-
-            // Include subcategory if the base room key has a non-zero quantity
-            return true;
-          }
-        );
-      });
-
-      console.log("Updated Categories: ", categories);
-      setCategories(categories);
-    }
-  }, [categories, quantityData, areasData, subCategories]);
-
-  useEffect(() => {
-    if (roomData.quantityData && roomData.quantityData.length > 0) {
-      const processedQuantityData = processData(
-        roomData.quantityData,
-        "quantity"
-      );
-      if (processedQuantityData) {
-        setQuantityData([processedQuantityData]);
-      }
-    }
-
-    if (roomData.areasData && roomData.areasData.length > 0) {
-      const processedAreasData = processData(roomData.areasData, "areas");
-      if (processedAreasData) {
-        setAreasData([processedAreasData]);
-      }
-    }
-  }, [roomData]);
+  //   if (roomData.areasData && roomData.areasData.length > 0) {
+  //     const processedAreasData = processData(roomData.areasData, "areas");
+  //     if (processedAreasData) {
+  //       setAreasData([processedAreasData]);
+  //     }
+  //   }
+  // }, [roomData]);
 
   useEffect(() => {
     // Automatically select the first subcategory when the category changes
