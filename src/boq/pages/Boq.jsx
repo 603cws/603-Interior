@@ -16,6 +16,7 @@ import ProductOverview from "../components/ProductOverview";
 import QnaPopup from "../components/QnaPopup";
 import { useApp } from "../../Context/Context";
 import { calculateTotalPriceHelper } from "../utils/CalculateTotalPriceHelper";
+import Joyride, { STATUS } from "react-joyride";
 
 function Boq() {
   const [selectedProductView, setSelectedProductView] = useState([]);
@@ -233,9 +234,72 @@ function Boq() {
     }
   }, [subCat1, selectedCategory]);
 
+  // useEffect(() => {
+  //   setQuestionPopup(true);
+  // }, []);
+
+  const [runTour, setRunTour] = useState(false); // Controls whether the tour runs
+
+  //setps for joyride
+  const tourSteps = [
+    {
+      target: ".cat", // CSS class in the Navbar component
+      content: "these are the category",
+
+      disableBeacon: true,
+      disableOverlayClose: true,
+      placement: "top",
+    },
+    {
+      target: ".subcat", // Add className in OpenWorkspaces component
+      content: "there are all the subcategory of the selected category.",
+      disableBeacon: true,
+      placement: "top",
+    },
+    {
+      target: ".viewB", // Add className in Spacebar component
+      content: "you can view your boq here",
+      disableBeacon: true,
+      // placement: "top",
+    },
+    {
+      target: ".downloadB", // Add className in Spacebar component
+      content: "click here to download boq in pdf format",
+      disableBeacon: true,
+      // placement: "top",
+    },
+  ];
+
+  // Handle the completion or skipping of the tour
+  const handleTourCallback = (data) => {
+    const { status } = data;
+    console.log(data);
+
+    const finishedStatuses = [STATUS.FINISHED, STATUS.SKIPPED];
+    if (finishedStatuses.includes(status)) {
+      setRunTour(false);
+      setQuestionPopup(true);
+      localStorage.setItem("hasSeenBOQTour", "true");
+    }
+  };
+
   useEffect(() => {
-    setQuestionPopup(true);
+    // Check localStorage to decide if the tour should run
+    const hasSeenTour = localStorage.getItem("hasSeenBOQTour");
+    if (!hasSeenTour) {
+      setRunTour(true); // Start the tour automatically on first visit
+    } else {
+      setQuestionPopup(true);
+    }
   }, []);
+
+  // Only run the tour for first-time visitors
+  //   useEffect(() => {
+  //     const hasSeenTour = localStorage.getItem("hasSeenLayoutTour");
+  //     if (hasSeenTour) {
+  //       setRunTour(false); // Don't run the tour if already completed
+  //     }
+  //   }, []);
 
   // Filter products based on search query, price range, and category
   const filteredProducts = useMemo(() => {
@@ -456,6 +520,7 @@ function Boq() {
     // Hide the modal and reset questions state
     setQuestionPopup(false);
     //  setCabinsQuestions(false);
+    // setRunTour(true);
 
     //  setExpandedSubcategory(expandedSubcategory);
 
@@ -484,6 +549,21 @@ function Boq() {
 
   return (
     <div>
+      <Joyride
+        steps={tourSteps}
+        run={runTour}
+        continuous
+        showSkipButton
+        callback={handleTourCallback}
+        scrollToFirstStep
+        styles={{
+          options: {
+            zIndex: 10000,
+            primaryColor: "#6366f1", // Tailwind's Indigo-500
+            overlayColor: "rgba(0, 0, 0, 0.5)",
+          },
+        }}
+      />
       <Navbar
         clearSelectedData={clearSelectedData}
         calculateGrandTotal={calculateGrandTotal}

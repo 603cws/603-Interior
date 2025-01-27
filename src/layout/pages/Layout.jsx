@@ -332,7 +332,7 @@ function Layout() {
   const [otherArea, setOtherArea] = useState();
 
   const { totalArea, setTotalArea } = useApp();
-  const [runTour, setRunTour] = useState(true); // Controls whether the tour runs
+  const [runTour, setRunTour] = useState(false); // Controls whether the tour runs
 
   //setps for joyride
   const tourSteps = [
@@ -340,17 +340,22 @@ function Layout() {
       target: ".joynavarea", // CSS class in the Navbar component
       content:
         "This is the Input bar where you can Enter the Total area of your space.",
+
+      disableBeacon: true,
+      disableOverlayClose: true,
       placement: "bottom",
     },
     {
       target: ".workspacedescription", // Add className in OpenWorkspaces component
       content: "Configure your Work spaces based on your Requirement.",
+      disableBeacon: true,
       //   placement: "bottom",
     },
     {
       target: ".generateBoq", // Add className in Spacebar component
       content:
         "After complemention of your configuration click here to generate BOQ",
+      disableBeacon: true,
       placement: "top",
     },
   ];
@@ -358,12 +363,22 @@ function Layout() {
   // Handle the completion or skipping of the tour
   const handleTourCallback = (data) => {
     const { status } = data;
+    console.log(data);
+
     const finishedStatuses = [STATUS.FINISHED, STATUS.SKIPPED];
     if (finishedStatuses.includes(status)) {
       setRunTour(false);
-      //   localStorage.setItem("hasSeenLayoutTour", "true");
+      localStorage.setItem("hasSeenLayoutTour", "true");
     }
   };
+
+  useEffect(() => {
+    // Check localStorage to decide if the tour should run
+    const hasSeenTour = localStorage.getItem("hasSeenLayoutTour");
+    if (!hasSeenTour) {
+      setRunTour(true); // Start the tour automatically on first visit
+    }
+  }, []);
 
   // Only run the tour for first-time visitors
   //   useEffect(() => {
@@ -636,7 +651,7 @@ function Layout() {
         continuous
         showSkipButton
         callback={handleTourCallback}
-        disableBeacon={true} // Disable the beacon
+        scrollToFirstStep
         styles={{
           options: {
             zIndex: 10000,

@@ -137,7 +137,7 @@ const Categories = ({
   return (
     <div className="flex flex-col pb-3">
       {/* Categories List */}
-      <div className="flex justify-evenly overflow-x-auto gap-3 px-5 pb-2 scrollbar-hide">
+      <div className="cat flex justify-evenly overflow-x-auto gap-3 px-5 pb-2 scrollbar-hide">
         {categories.map(({ id, category, subcategories }) => {
           const cleanedCategoryName = getCleanedCategoryName(category);
           const isCategoryCompleted = checkIfCategoryCompleted(category); // Check if the category is completed
@@ -153,7 +153,7 @@ const Categories = ({
             >
               {!minimizedView && (
                 <div
-                  className={`flex flex-row gap-[21px] top-1 items-center justify-start relative overflow-auto group`} // Added 'group' class here for hover effect
+                  className={` flex flex-row gap-[21px] top-1 items-center justify-start relative overflow-auto group`} // Added 'group' class here for hover effect
                 >
                   <div
                     className={`${
@@ -181,7 +181,7 @@ const Categories = ({
               )}
               {minimizedView && (
                 <div
-                  className={`flex flex-row items-center justify-start relative group py-2`}
+                  className={` flex flex-row items-center justify-start relative group py-2`}
                 >
                   <div
                     className={`rounded-full border-2 ${
@@ -218,7 +218,7 @@ const Categories = ({
       {selectedCategory && (
         <div className="mt-2">
           {minimizedView && (
-            <div className="border-solid border-[#d5d5d5] border flex flex-row items-center justify-start overflow-auto scrollbar-hide py-1">
+            <div className="subcat border-solid border-[#d5d5d5] border flex flex-row items-center justify-start overflow-auto scrollbar-hide py-1">
               {selectedCategory?.subcategories
                 ?.filter(
                   (subCategory) =>
@@ -271,7 +271,7 @@ const Categories = ({
               <h3 className="text-lg font-semibold text-gray-800 ms-5">
                 Subcategories of {selectedCategory.category}
               </h3>
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-5 mt-5 justify-center">
+              <div className="subcat grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-5 mt-5 justify-center">
                 {selectedCategory.subcategories
                   .filter(
                     (subCategory) =>
