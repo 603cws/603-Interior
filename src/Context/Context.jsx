@@ -5,7 +5,7 @@ const AppContext = createContext();
 export const AppProvider = ({ children }) => {
   const categoriesWithModal = ["Flooring", "HVAC", "Partitions / Ceilings"]; // Array of categories that should show the modal when clicked
 
-  const [totalArea, setTotalArea] = useState(0);
+  const [totalArea, setTotalArea] = useState();
   const [progress, setProgress] = useState(0);
   const [userId, setUserId] = useState(null);
 

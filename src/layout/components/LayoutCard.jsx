@@ -31,13 +31,14 @@ const LayoutCard = ({
         <img
           src={image}
           alt={title}
-          className="RoomImage object-fit w-full h-full cursor-pointer"
+          className="RoomImage object-cover w-full h-full cursor-pointer"
         />
-        {/* Description on hover */}
-        <p className="absolute inset-0 bg-white bg-opacity-10 text-white text-center flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 backdrop-blur-md shadow-lg group-hover:text-black">
+        {/* Tooltip-like description */}
+        <p className="absolute bottom-2 left-1/2 transform -translate-x-1/2 bg-white bg-opacity-70 text-black px-4 py-2 text-sm rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-300 shadow-lg pointer-events-none w-full">
           {description}
         </p>
       </div>
+
       {/* Content */}
       <div className="flex flex-col gap-3">
         {/* Counter */}

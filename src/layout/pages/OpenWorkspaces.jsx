@@ -7,7 +7,8 @@ const workspaceData = [
     image: "/images/workspace-image/linear2.png",
     description: "This is a linear workspace, designed for open collaboration.",
     sizes: ["M", "L", "XL"], // Corresponds to sizeMapping keys
-    tooltipText: "Size: 20 sq ft", // Default tooltip text for Linear Workstation
+    tooltipText:
+      "M: 3 X 2 ft (20 sq ft) \n L: 3.5 X 2 ft (24 sq ft) \n XL: 4 X 2 ft (29 sq ft)", // Default tooltip text for Linear Workstation
     title: "Linear Workstation",
   },
   {
@@ -78,11 +79,12 @@ function OpenWorkspaces({
             sizes={workspace.sizes}
             selectedSize={workspace.type === "linear" ? selectedSize : null} // Only for Linear Workstation
             onSizeChange={(size) => handleSizeChange(size, workspace.type)}
-            tooltipText={
-              workspace.type === "linear"
-                ? sizeArea[selectedSize] || workspace.tooltipText
-                : workspace.tooltipText
-            }
+            // tooltipText={
+            //   workspace.type === "linear"
+            //     ? sizeArea[selectedSize] || workspace.tooltipText
+            //     : workspace.tooltipText
+            // }
+            tooltipText={workspace.tooltipText}
             title={`${workspace.title} ${
               workspace.type === "linear"
                 ? sizeMapping[selectedSize] || ""

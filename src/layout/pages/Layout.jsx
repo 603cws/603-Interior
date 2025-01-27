@@ -12,6 +12,7 @@ import PublicSpaces from "./PublicSpaces";
 import ErrorModal from "../../components/ErrorModal";
 // import QnaPopup from "./components/QnaPopup"
 import Joyride, { STATUS } from "react-joyride";
+import EnterAreaModal from "../components/EnterAreaModal";
 
 const initialAreaValues = {
   linear: 24,
@@ -334,6 +335,8 @@ function Layout() {
   const { totalArea, setTotalArea } = useApp();
   const [runTour, setRunTour] = useState(false); // Controls whether the tour runs
 
+  const [areaWarn, setAreaWarn] = useState(false);
+
   //setps for joyride
   const tourSteps = [
     {
@@ -444,6 +447,9 @@ function Layout() {
     setErrorMessage(message);
     setWarning(true);
   };
+  const totalAreaWarning = () => {
+    setAreaWarn(true);
+  };
 
   // Calculate builtArea and set it to state
   useEffect(() => {
@@ -465,10 +471,11 @@ function Layout() {
   const updateAreas = (type, value) => {
     // Ensure the total area is entered before making changes
     if (!totalArea) {
-      setErrorMessageHandler(
-        "The input box for total area cannot be left empty.\n" +
-          "Please fill in the total area in square feet before making any changes."
-      );
+      // setErrorMessageHandler(
+      //   "The input box for total area cannot be left empty.\n" +
+      //     "Please fill in the total area in square feet before making any changes."
+      // );
+      totalAreaWarning();
       return;
     }
 
@@ -696,6 +703,7 @@ function Layout() {
             variant={variant}
             updateAreas={updateAreas}
             onVariantChange={handleVariantChange}
+            totalAreaWarning={totalAreaWarning}
           />
           <Cabins
             areaQuantities={areaQuantities}
@@ -760,6 +768,7 @@ function Layout() {
             message={errorMessage}
           />
         )}
+        {areaWarn && <EnterAreaModal onclose={() => setAreaWarn(false)} />}
       </div>
       {/* <LayoutCard /> */}
       {/* <QnaPopup question="is the flooring project for residental purpose ?" /> */}
