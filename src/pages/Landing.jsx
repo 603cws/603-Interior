@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import LandingNavbar from "../components/LandingNavbar";
-import { IoCallOutline } from "react-icons/io5";
 
 import { FaAngleDown, FaAngleUp } from "react-icons/fa";
 
@@ -111,6 +110,7 @@ function Landing() {
         className={`relative flex flex-col h-screen bg-cover bg-center transition-all duration-1000`}
         style={{
           backgroundImage: `url(${heroImages[currentImageIndex]})`,
+          backgroundAttachment: "fixed",
         }}
       >
         {/* Add a dark overlay */}
@@ -300,7 +300,7 @@ function Landing() {
               </h3>
             </div>
             <div className="pt-16 pb-5">
-              <button className=" bg-[#34BFAD] px-5 py-2 border-[1px] border-r-4 border-b-4 drop-shadow-xl border-black text-center text-black text-xs font-normal font-['Poppins'] leading-normal">
+              <button className=" bg-[#34BFAD] px-5 py-2 border-[1px] border-r-4 border-b-4 drop-shadow-xl border-black text-center text-black text-xs font-normal font-['Poppins'] leading-normal hover:scale-110 transition-transform">
                 View More
               </button>
             </div>
@@ -616,13 +616,10 @@ function Landing() {
             <div className="self-stretch h-[18.89px] text-center text-[#33bead] text-lg font-bold font-['DM Sans'] uppercase leading-[29.60px] tracking-[3.52px]">
               Manager
             </div>
-            {/* <div className="absolute right-[-20px] bottom-0">
+            <div className="absolute right-[-20px] bottom-0">
               <img src="/images/testimonalicon2.png" alt="testimonalicon" />
-            </div> */}
+            </div>
           </div>
-        </div>
-        <div className="absolute right-[-20px] bottom-0">
-          <img src="/images/testimonalicon2.png" alt="testimonalicon" />
         </div>
       </section>
 

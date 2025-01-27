@@ -5,6 +5,7 @@ import { supabase } from "../../services/supabase"; // Import Supabase client
 import checkIfEmailExists from "../utils/checkIfEmailExists";
 import ErrorMiniModal from "../../components/ErrorMiniModal";
 import Select from "react-select";
+import toast from "react-hot-toast";
 
 function RegisterUser() {
   const location = useLocation();
@@ -198,35 +199,37 @@ function RegisterUser() {
       }
 
       // Step 3: Insert data into 'quantity' table with the retrieved user ID
-      const { error: quantityInsertError } = await supabase.from("quantity").insert([
-        {
-          userId: userId,
-          linear: areas.linear,
-          lType: areas.lType,
-          md: areas.md,
-          manager: areas.manager,
-          small: areas.small,
-          ups: areas.ups,
-          bms: areas.bms,
-          server: areas.server,
-          reception: areas.reception,
-          lounge: areas.lounge,
-          sales: areas.sales,
-          phoneBooth: areas.phoneBooth,
-          discussionRoom: areas.discussionRoom,
-          interviewRoom: areas.interviewRoom,
-          conferenceRoom: areas.conferenceRoom,
-          boardRoom: areas.boardRoom,
-          meetingRoom: areas.meetingRoom,
-          meetingRoomLarge: areas.meetingRoomLarge,
-          hrRoom: areas.hrRoom,
-          financeRoom: areas.financeRoom,
-          breakoutRoom: areas.breakoutRoom,
-          executiveWashroom: areas.executiveWashroom,
-          videoRecordingRoom: areas.videoRecordingRoom,
-          other: areas.other,
-        },
-      ]);
+      const { error: quantityInsertError } = await supabase
+        .from("quantity")
+        .insert([
+          {
+            userId: userId,
+            linear: areas.linear,
+            lType: areas.lType,
+            md: areas.md,
+            manager: areas.manager,
+            small: areas.small,
+            ups: areas.ups,
+            bms: areas.bms,
+            server: areas.server,
+            reception: areas.reception,
+            lounge: areas.lounge,
+            sales: areas.sales,
+            phoneBooth: areas.phoneBooth,
+            discussionRoom: areas.discussionRoom,
+            interviewRoom: areas.interviewRoom,
+            conferenceRoom: areas.conferenceRoom,
+            boardRoom: areas.boardRoom,
+            meetingRoom: areas.meetingRoom,
+            meetingRoomLarge: areas.meetingRoomLarge,
+            hrRoom: areas.hrRoom,
+            financeRoom: areas.financeRoom,
+            breakoutRoom: areas.breakoutRoom,
+            executiveWashroom: areas.executiveWashroom,
+            videoRecordingRoom: areas.videoRecordingRoom,
+            other: areas.other,
+          },
+        ]);
 
       if (quantityInsertError) {
         console.error(
@@ -249,11 +252,14 @@ function RegisterUser() {
   const handleSubmit = (e) => {
     e.preventDefault();
     handleRegister(); // Call register function on successful validation
-    alert("Form Submitted!");
+    toast.success("You have registered successfully !");
   };
 
   return (
-    <div style={{ backgroundImage: "url('/images/RegisteruserBackground.jpeg')" }} className="h-screen w-screen" >
+    <div
+      style={{ backgroundImage: "url('/images/RegisteruserBackground.jpeg')" }}
+      className="h-screen w-screen"
+    >
       <div className="w-full flex justify-center gap-5 rounded-3xl bg-transparent relative px-10 mx-auto">
         {/* form */}
         <div className="w-1/2 pt-20 pl-36">
@@ -298,12 +304,13 @@ function RegisterUser() {
                   Mobile Number
                 </label>
                 <div className="flex justify-start items-center rounded-md bg-white">
-                  <Select
+                  {/* <Select
                     options={options}
                     value={value}
                     onChange={handleCountryCodeChange}
                     className="w-1/3 text-xs"
-                  />
+                  /> */}
+                  <p className="w-1/7 text-xs px-2">+91</p>
                   <input
                     type="text"
                     name="mobile"

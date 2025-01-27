@@ -3,13 +3,6 @@ import "animate.css";
 
 const QnaPopup = ({ onClose, onSubmit, category }) => {
   const categoryName = category?.category || ""; // Safely access the category name
-  const typeMapping = {
-    Flooring: "flooring type",
-    HVAC: "AC type",
-    "Partitions / Ceilings": "partition/ceiling type",
-  };
-
-  const currentType = typeMapping[categoryName] || "default type";
 
   // Height question (always the first question)
   const heightQuestion = [
@@ -17,6 +10,7 @@ const QnaPopup = ({ onClose, onSubmit, category }) => {
       name: "roomHeight",
       label: "Enter the height of the room (in feet). Default is 10ft.",
       isNumberInput: true,
+      ImageUrl: "/images/Chat-bot.gif",
     },
   ];
 
@@ -29,6 +23,7 @@ const QnaPopup = ({ onClose, onSubmit, category }) => {
         { value: "bareShell", label: "Bare Shell" },
         { value: "basicTiling", label: "Basic Tiling Done" },
       ],
+      ImageUrl: "/images/Chat-bot.gif",
     },
   ];
 
@@ -40,6 +35,7 @@ const QnaPopup = ({ onClose, onSubmit, category }) => {
         { value: "yes", label: "Yes" },
         { value: "no", label: "No" },
       ],
+      ImageUrl: "/images/Chat-bot.gif",
     },
   ];
 
@@ -51,6 +47,7 @@ const QnaPopup = ({ onClose, onSubmit, category }) => {
         { value: "Centralized", label: "Centralized" },
         { value: "Combination", label: "Combination" },
       ],
+      ImageUrl: "/images/Chat-bot.gif",
     },
   ];
 
@@ -62,6 +59,7 @@ const QnaPopup = ({ onClose, onSubmit, category }) => {
         { value: "allArea", label: "All Areas" },
         { value: "customizeAreas", label: "Customize Areas" },
       ],
+      ImageUrl: "/images/Chat-bot.gif",
     },
   ];
 
@@ -92,6 +90,8 @@ const QnaPopup = ({ onClose, onSubmit, category }) => {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     const updatedAnswers = { ...answers, [name]: value };
+    console.log(updatedAnswers);
+
     setAnswers(updatedAnswers);
     localStorage.setItem("answers", JSON.stringify(updatedAnswers));
 
@@ -132,11 +132,13 @@ const QnaPopup = ({ onClose, onSubmit, category }) => {
       setTimeout(() => {
         onSubmit(finalAnswers);
         onClose();
-      }, 1000); // Adjust this delay based on animation duration
+      }, 300); // Adjust this delay based on animation duration
     }
   };
 
   const currentQuestion = questions[currentQuestionIndex];
+  const sideImage = currentQuestion?.ImageUrl;
+
   const handleDisclaimerClose = () => {
     setShowDisclaimer(false);
     if (currentQuestionIndex < questions.length - 1) {
@@ -152,26 +154,45 @@ const QnaPopup = ({ onClose, onSubmit, category }) => {
     }
   };
 
-  console.log("questions", questions);
+  const handleHeightClose = () => {
+    if (!answers.roomHeight) {
+      answers.roomHeight = 10;
+    }
+    setAnimationClass("animate__fadeOutUp");
+    setTimeout(onClose, 300);
+  };
+
+  // console.log("questions", questions);
+  console.log("answers", answers.roomHeight);
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 ">
+    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
       <div
-        className={`bg-white border-8 border-[#1A3A36] rounded-xl shadow-lg relative w-1/2 animate__animated ${animationClass}`}
+        className={`bg-white border-[20px] border-[#1A3A36] rounded-xl shadow-lg relative w-3/5 h-1/2 animate__animated ${animationClass} flex flex-row-reverse `}
       >
-        <div className="p-4 border-2 border-[#FFD500]">
+        {/* Left Side: Image */}
+        <div
+          className="w-1/2 bg-contain bg-no-repeat bg-center border-2 border-[#ffd500] border-l-0"
+          style={{
+            backgroundImage: `url(${sideImage})`,
+          }}
+        ></div>
+
+        {/* Right Side: Questions */}
+        <div className="w-1/2 p-6 border-2 border-[#ffd500] border-r-0 flex flex-col items-center justify-center">
           <button
-            onClick={() => {
-              setAnimationClass("animate__fadeOutUp");
-              setTimeout(onClose, 1000);
-            }}
+            // onClick={() => {
+            //   setAnimationClass("animate__fadeOutUp");
+            //   setTimeout(onClose, 300);
+            // }}
+            onClick={handleHeightClose}
             className="absolute top-4 right-4 text-2xl font-bold text-gray-500 hover:text-gray-800"
           >
             &times;
           </button>
           {!showDisclaimer ? (
-            <div>
-              <h2 className="text-md font-bold mb-4">Answer These Questions</h2>
+            <div className="flex flex-col gap-5">
+              <h2 className="text-lg font-bold mb-4">Answer These Questions</h2>
               <form onSubmit={handleFormSubmit} className="space-y-4">
                 <div>
                   <label className="block font-medium text-gray-700 text-sm">
@@ -182,12 +203,13 @@ const QnaPopup = ({ onClose, onSubmit, category }) => {
                       <input
                         type="number"
                         name={currentQuestion.name}
-                        value={answers[currentQuestion.name] || 10}
+                        // value={answers[currentQuestion.name] || 10}
+                        // value={answers.roomHeight}
                         onChange={handleInputChange}
                         placeholder="Enter height (default is 10)"
-                        min="1"
-                        // required
-                        className="w-full border-2 rounded-md p-2"
+                        min="5"
+                        max="20"
+                        className="w-full border-2 rounded-md p-2 [&::-webkit-inner-spin-button]:appearance-none  focus:outline-none focus:ring-0"
                       />
                     ) : (
                       currentQuestion.options.map((option) => (
@@ -203,7 +225,6 @@ const QnaPopup = ({ onClose, onSubmit, category }) => {
                             checked={
                               answers[currentQuestion.name] === option.value
                             }
-                            required
                           />
                           <span>{option.label}</span>
                         </label>
@@ -234,23 +255,17 @@ const QnaPopup = ({ onClose, onSubmit, category }) => {
               </form>
             </div>
           ) : (
-            <div>
-              <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-                <div className="bg-white border-8 border-[#1A3A36] rounded-xl shadow-lg relative w-1/2 ">
-                  <div className="p-4 border-2 border-[#FFD500] h-40 flex flex-col justify-between">
-                    <p className="text-sm">
-                      Demolishment charges might depend upon the location.
-                    </p>
-                    <div className="flex justify-center">
-                      <button
-                        className="bg-[#1A3A36] text-white px-4 py-2 rounded hover:bg-[#145A50]"
-                        onClick={handleDisclaimerClose}
-                      >
-                        Okay
-                      </button>
-                    </div>
-                  </div>
-                </div>
+            <div className="flex flex-col gap-10">
+              <p className="text-md text-center">
+                Demolishment charges might depend upon the location.
+              </p>
+              <div className="flex justify-center">
+                <button
+                  className="bg-[#1A3A36] text-white px-4 py-2 rounded hover:bg-[#145A50]"
+                  onClick={handleDisclaimerClose}
+                >
+                  Okay
+                </button>
               </div>
             </div>
           )}

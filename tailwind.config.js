@@ -63,17 +63,17 @@ export default {
         "3xl": "1440px", // Custom 3XL screens
         "4xl": "1920px", // Custom 4XL screens
       },
-      container: {
-        center: true,
-        padding: {
-          DEFAULT: "1rem",
-          sm: "2rem",
-          lg: "4rem",
-          xl: "5rem",
-          "2xl": "6rem",
-          "3xl": "8rem", // Optional custom padding for 3xl
-        },
-      },
+      // container: {
+      //   center: true,
+      //   padding: {
+      //     DEFAULT: "1rem",
+      //     sm: "2rem",
+      //     lg: "4rem",
+      //     xl: "5rem",
+      //     "2xl": "6rem",
+      //     "3xl": "8rem", // Optional custom padding for 3xl
+      //   },
+      // },
     },
   },
   plugins: [require("tailwind-scrollbar-hide")],

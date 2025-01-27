@@ -98,7 +98,7 @@ function Footer() {
                 <input
                   type="email"
                   placeholder="Enter Your Email"
-                  className="w-full text-black"
+                  className="w-full text-black p-2"
                 />
                 <button>
                   <FaArrowRight color="white" className="mx-3" />

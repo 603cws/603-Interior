@@ -1,6 +1,6 @@
 import Spinner from "./Spinner";
 
-import styles from "./spinner.module.css";
+import styles from "../styles/spinner.module.css";
 
 function SpinnerFullPage() {
   return (
