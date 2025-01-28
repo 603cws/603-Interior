@@ -96,7 +96,14 @@ function ProductOverview({
     const normalizedTargetKey = normalizeKey(targetKey);
     const keys = Object.keys(dataObject);
 
+    // Try to find an exact match first
+    const exactMatch = keys.find(
+      (key) => normalizedTargetKey === normalizeKey(key)
+    );
+
+    // If no exact match, find the closest one by partial matching
     return (
+      exactMatch ||
       keys.find((key) => normalizedTargetKey.includes(normalizeKey(key))) ||
       null
     );
@@ -112,7 +119,10 @@ function ProductOverview({
     if (selectedCategory?.category === "Furniture") {
       // || selectedCategory?.category === "HVAC"
       return { quantity, price: selectedProductView.price }; //addonPrice
-    } else if (selectedCategory?.category === "Partitions / Ceilings") {
+    } else if (
+      selectedCategory?.category === "Partitions / Ceilings" ||
+      selectedCategory?.category === "HVAC"
+    ) {
       //currently this category is missing
       return { quantity, area, price: selectedProductView.price }; //addonPrice
     } else {

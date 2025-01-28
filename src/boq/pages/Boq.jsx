@@ -120,8 +120,17 @@ function Boq() {
         }
       }
 
-      if (roomDataResult.areasData && roomDataResult.areasData.length > 0) {
-        processedAreasData = processData(roomDataResult.areasData, "areas");
+      if (
+        roomDataResult.areasData &&
+        roomDataResult.areasData.length > 0 &&
+        roomDataResult.quantityData &&
+        roomDataResult.quantityData.length > 0
+      ) {
+        processedAreasData = processData(
+          roomDataResult.areasData,
+          "areas",
+          roomDataResult.quantityData
+        );
         if (processedAreasData) {
           setAreasData([processedAreasData]);
         }
