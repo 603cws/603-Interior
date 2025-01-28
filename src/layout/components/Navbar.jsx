@@ -55,6 +55,7 @@ function Navbar({ MIN_AREA, MAX_AREA, resetAll, areaQuantities, areaValues }) {
 
   const handleInputChange = (e) => {
     if (e.target.value.length <= 5) {
+      setTotalAreaSource("NoErrorModal"); // Set the source
       setInputValue(e.target.value);
       setError(false); // Reset error state on input change
     }
@@ -100,7 +101,7 @@ function Navbar({ MIN_AREA, MAX_AREA, resetAll, areaQuantities, areaValues }) {
     <div>
       {/* navbar */}
       {/* <div className="flex justify-evenly bg-[#003366] py-2 items-center rounded-full mx-2 mt-2"> */}
-      <div className="flex justify-between bg-gradient-to-r from-[#1A3A36] to-[#48A095] py-2 items-center px-5">
+      <div className="flex justify-between bg-gradient-to-r from-[#1A3A36] to-[#48A095] py-4 items-center px-5">
         {/* logo */}
         <button className="self-start" onClick={() => navigate("/")}>
           <img src="/logo/logo.png" alt="603 logo" className="h-auto w-20" />
@@ -124,7 +125,7 @@ function Navbar({ MIN_AREA, MAX_AREA, resetAll, areaQuantities, areaValues }) {
           />
           <input
             type="number"
-            className={`w-full rounded-md border-none bg-transparent py-1 ms-5 [&::-webkit-inner-spin-button]:appearance-none  focus:outline-none focus:ring-0 text-white ${
+            className={`w-full rounded-md border-none bg-transparent py-2.5 ms-5 [&::-webkit-inner-spin-button]:appearance-none  focus:outline-none focus:ring-0 text-white ${
               error ? "error" : ""
             }`}
             value={inputValue}
@@ -138,7 +139,7 @@ function Navbar({ MIN_AREA, MAX_AREA, resetAll, areaQuantities, areaValues }) {
             data-tip="Enter the total area in square feet"
             autoFocus
           />
-          <div className="absolute top-2 left-7 text-gray-300 text-sm">
+          <div className="absolute top-3 left-7 text-gray-300 text-sm">
             {!inputValue && (
               <Typewriter
                 options={{
@@ -153,7 +154,7 @@ function Navbar({ MIN_AREA, MAX_AREA, resetAll, areaQuantities, areaValues }) {
         </div>
         {error && (
           <div
-            className="error-message text-[#FFD43B] font-medium text-xs mt-1 flex items-center absolute -top-1 bg-transparent left-1/3 bg-gradient-to-r from-[#325B56] to-[#3D6F68]"
+            className="error-message text-[#FFD43B] font-medium text-xs mt-1 flex items-center absolute top-1 bg-transparent left-1/3 bg-gradient-to-r from-[#325B56] to-[#3D6F68]"
             aria-live="polite"
           >
             <span className="warning-icon">⚠️</span>

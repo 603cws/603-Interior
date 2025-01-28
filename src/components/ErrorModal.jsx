@@ -9,7 +9,6 @@ function ErrorModal({ onclose, message }) {
     inputValue,
     setInputValue,
   } = useApp(); // Access totalArea and setter from context
-  // const [inputValue, setInputValue] = useState(totalArea); // Local state for input field
   const [error, setError] = useState(""); // For validation errors
 
   const MIN_AREA = 1000;
@@ -39,22 +38,23 @@ function ErrorModal({ onclose, message }) {
   };
 
   return (
-    <div className="w-full h-svh z-10 absolute bg-[rgba(25,25,25,0.46)] flex justify-center items-center">
-      <div className="grid grid-cols-[2fr_1fr] bg-[#1A3A36] border-2 rounded-3xl w-1/2 mx-auto ">
+    <div className="w-full h-svh z-20 top-0 absolute bg-[rgba(25,25,25,0.46)] flex justify-center items-center">
+      <div className="grid grid-cols-[2fr_1fr] bg-[#1A3A36] border-2 rounded-3xl w-5/6 2xl:w-1/2 mx-auto ">
         <div className="text-white p-5 flex flex-col justify-center gap-4 m-10">
           <p className="text-4xl font-['UbuntuSans-Regular',_sans-serif]">
             <span className="text-6xl">W</span>arning
           </p>
           <p style={{ fontFamily: "'Poppins', sans-serif" }}>
-            {message.split(".").map(
-              (sentence, index) =>
-                sentence.trim() && (
-                  <span key={index}>
-                    {sentence.trim()}.
-                    <br />
-                  </span>
-                )
-            )}
+            <ul style={{ paddingLeft: "20px", listStyleType: "disc" }}>
+              {message.split(".").map(
+                (sentence, index) =>
+                  sentence.trim() && (
+                    <li key={index} style={{ marginBottom: "5px" }}>
+                      {sentence.trim()}.
+                    </li>
+                  )
+              )}
+            </ul>
           </p>
           {/* Input Field */}
           <input
@@ -72,7 +72,7 @@ function ErrorModal({ onclose, message }) {
               onClick={onclose}
               className="py-2 px-4 bg-gray-500 text-white border-2 border-black border-b-8 border-r-8"
             >
-              Go Back
+              Cancel
             </button>
             {/* Submit Button */}
             <button
@@ -85,10 +85,10 @@ function ErrorModal({ onclose, message }) {
         </div>
 
         {/* Image Section */}
-        <div className="flex justify-center m-10 relative">
+        <div className="flex justify-center my-10 mx-5 relative">
           <img src="images/Errorimg.png" alt="Error chair" />
-          <button className="absolute -top-5 -right-5" onClick={onclose}>
-            <MdCancel size={30} />
+          <button className="absolute -top-5 right-0" onClick={onclose}>
+            <MdCancel size={30} color="white" />
           </button>
         </div>
       </div>

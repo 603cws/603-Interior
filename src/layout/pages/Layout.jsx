@@ -525,8 +525,9 @@ function Layout() {
       setErrorMessageHandler(
         // "The built area exceeds the available usable space.\n" +
         //   "To resolve this, either increase the total area or adjust the number of rooms to ensure the built area fits within the usable space."
-        "The built area exceeds the available usable space.\n" +
-          "Increase the total area to add more cabins."
+        "The built area exceeds the available space.\n" +
+          "Adjust the number of workspaces OR.\n" +
+          "Increase the total area to add more workspaces."
       );
       if (type === "other") {
         setOtherArea(otherArea);
@@ -658,7 +659,7 @@ function Layout() {
   };
 
   return (
-    <div className="max-h-lvh overflow-hidden">
+    <div className="max-h-lvh 2xl:overflow-y-hidden">
       <Joyride
         steps={tourSteps}
         run={runTour}
@@ -681,17 +682,19 @@ function Layout() {
                 MIN_AREA={MIN_AREA}
                 resetAll={resetAll}
             /> */}
-      <Navbar
-        // totalArea={totalArea}
-        // setTotalArea={setTotalArea}
-        MAX_AREA={MAX_AREA}
-        MIN_AREA={MIN_AREA}
-        resetAll={resetAll}
-        areaQuantities={areaQuantities}
-        areaValues={areaValues}
-      />
+      <div className="navbar">
+        <Navbar
+          // totalArea={totalArea}
+          // setTotalArea={setTotalArea}
+          MAX_AREA={MAX_AREA}
+          MIN_AREA={MIN_AREA}
+          resetAll={resetAll}
+          areaQuantities={areaQuantities}
+          areaValues={areaValues}
+        />
+      </div>
 
-      <div className="content w-full flex justify-between gap-3 px-0 mt-5 relative">
+      <div className="content w-full flex justify-between gap-3 p-2">
         <div className="area-distribution-chart w-1/2 px-3 border-2 pl-5">
           <Spacebar
             builtArea={builtArea}
@@ -704,7 +707,7 @@ function Layout() {
             areaQuantities={areaQuantities}
           />
         </div>
-        <div className="sections w-1/2 overflow-auto max-h-lvh pb-24 scrollbar-hide">
+        <div className="sections w-1/2 overflow-auto max-h-lvh pb-24 scrollbar-hide mt-2">
           <OpenWorkspaces
             areaQuantities={areaQuantities}
             variant={variant}
@@ -769,14 +772,12 @@ function Layout() {
             setOtherArea={setOtherArea}
           />
         </div>
-        {warning && (
-          <ErrorModal
-            onclose={() => setWarning(false)}
-            message={errorMessage}
-          />
-        )}
-        {areaWarn && <EnterAreaModal onclose={() => setAreaWarn(false)} />}
       </div>
+      {warning && (
+        <ErrorModal onclose={() => setWarning(false)} message={errorMessage} />
+      )}
+      {areaWarn && <EnterAreaModal onclose={() => setAreaWarn(false)} />}
+
       {/* <LayoutCard /> */}
       {/* <QnaPopup question="is the flooring project for residental purpose ?" /> */}
     </div>
