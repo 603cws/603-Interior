@@ -1,5 +1,5 @@
-import LandingNavbar from "../components/LandingNavbar";
-import Footer from "../components/Footer";
+import LandingNavbar from "../common-components/LandingNavbar";
+import Footer from "../common-components/Footer";
 
 import { CiLocationOn } from "react-icons/ci";
 import { useState } from "react";

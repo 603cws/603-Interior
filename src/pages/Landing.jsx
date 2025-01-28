@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import LandingNavbar from "../components/LandingNavbar";
+import LandingNavbar from "../common-components/LandingNavbar";
 
 import { FaAngleDown, FaAngleUp } from "react-icons/fa";
 
@@ -16,7 +16,7 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
 import { useNavigate } from "react-router-dom";
-import Footer from "../components/Footer";
+import Footer from "../common-components/Footer";
 import {
   BiSolidLeftArrowSquare,
   BiSolidRightArrowSquare,

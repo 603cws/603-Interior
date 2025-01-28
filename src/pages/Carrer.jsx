@@ -1,6 +1,6 @@
-import LandingNavbar from "../components/LandingNavbar";
+import LandingNavbar from "../common-components/LandingNavbar";
 
-import Footer from "../components/Footer";
+import Footer from "../common-components/Footer";
 
 import { FaLocationDot } from "react-icons/fa6";
 import { GiPadlock } from "react-icons/gi";

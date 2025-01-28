@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom"; //useHref
 import countryList from "react-select-country-list";
 import { supabase } from "../../services/supabase"; // Import Supabase client
 import checkIfEmailExists from "../utils/checkIfEmailExists";
-import ErrorMiniModal from "../../components/ErrorMiniModal";
+import ErrorMiniModal from "../../common-components/ErrorMiniModal";
 import Select from "react-select";
 import toast from "react-hot-toast";
 

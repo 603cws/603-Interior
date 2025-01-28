@@ -2,21 +2,21 @@ import React from "react";
 import { lazy, Suspense } from "react";
 // import Layout from "./layout/pages/Layout";
 import Boq from "./boq/pages/Boq";
-import PageNotFound from "./components/PageNotFound";
+import PageNotFound from "./common-components/PageNotFound";
 
 import { Route, Routes } from "react-router-dom";
 import RegisterUser from "./layout/components/RegisterUser";
-import ErrorModal from "./components/ErrorModal";
+import ErrorModal from "./common-components/ErrorModal";
 import ProductCard from "./boq/components/ProductCard";
 import ProductOverview from "./boq/components/ProductOverview";
 import Addon from "./boq/components/Addon";
 import RecommendComp from "./boq/components/RecommendComp";
 import SelectArea from "./boq/components/SelectArea";
 import Landing from "./pages/Landing";
-import NumberAnimation from "./components/NumberAnimation";
-import JobCard from "./components/JobCard";
+import NumberAnimation from "./common-components/NumberAnimation";
+import JobCard from "./common-components/JobCard";
 
-import SpinnerFullPage from "./components/SpinnerFullPage";
+import SpinnerFullPage from "./common-components/SpinnerFullPage";
 import Contactus from "./pages/Contactus";
 import AboutUs from "./pages/AboutUs";
 
