@@ -1,34 +1,90 @@
 import { MdCancel } from "react-icons/md";
-
+import { useState } from "react";
+import { useApp } from "../Context/Context";
 function ErrorModal({ onclose, message }) {
-  console.log("error mesage", message);
+  const {
+    totalArea,
+    setTotalArea,
+    setTotalAreaSource,
+    inputValue,
+    setInputValue,
+  } = useApp(); // Access totalArea and setter from context
+  // const [inputValue, setInputValue] = useState(totalArea); // Local state for input field
+  const [error, setError] = useState(""); // For validation errors
+
+  const MIN_AREA = 1000;
+  const MAX_AREA = 25000;
+
+  const handleInputChange = (e) => {
+    const value = e.target.value;
+    setInputValue(value); // Update local input state
+    setError(""); // Clear previous errors
+  };
+
+  const handleSubmit = () => {
+    const area = parseInt(inputValue, 10);
+
+    // Validation for new totalArea
+    if (isNaN(area)) {
+      setError("Please enter a valid number.");
+    } else if (area <= totalArea) {
+      setError("New area must be greater than the existing area."); // Prevent decreasing the area
+    } else if (area < MIN_AREA || area > MAX_AREA) {
+      setError(`Area must be between ${MIN_AREA} and ${MAX_AREA}.`); // Range validation
+    } else {
+      setTotalArea(area); // Update global totalArea
+      setTotalAreaSource("ErrorModal"); // Set the source
+      onclose(); // Close modal
+    }
+  };
 
   return (
     <div className="w-full h-svh z-10 absolute bg-[rgba(25,25,25,0.46)] flex justify-center items-center">
-      {/* modal */}
       <div className="grid grid-cols-[2fr_1fr] bg-[#1A3A36] border-2 rounded-3xl w-1/2 mx-auto ">
-        {/* text */}
-        <div className="text-white p-5 flex flex-col justify-center gap-2 m-10">
-          {/* <p style={{ fontFamily: "'Ubuntu Sans', sans-serif" }} className="text-4xl"><span className="text-6xl"> W</span>arning</p> */}
+        <div className="text-white p-5 flex flex-col justify-center gap-4 m-10">
           <p className="text-4xl font-['UbuntuSans-Regular',_sans-serif]">
             <span className="text-6xl">W</span>arning
           </p>
-          <p style={{ fontFamily: "'Poppins', sans-serif" }}>{message}</p>
-          {/* <p>please fill in the total area in the swft before making any changes.</p> */}
-          {/* use this button to close the error window */}
-          {/* <button className="bg-[#FFD500] border-2 p-2 border-[#000] w-1/4"> Go Back</button> */}
-          <div class="bg-[#000000] pt-0.5 pr-2 pb-2 pl-0.5 flex flex-col gap-2.5 items-start justify-start w-[132px] relative overflow-hidden">
-            <div class="bg-[#ffd500] self-stretch shrink-0 h-[49px] relative overflow-hidden">
-              <button
-                onClick={onclose}
-                class="text-[#000000] text-center font-['Poppins-Regular',_sans-serif] text-base leading-6 font-normal absolute left-6 top-3 w-[83px] h-6 flex items-center justify-center"
-              >
-                Go Back
-              </button>
-            </div>
+          <p style={{ fontFamily: "'Poppins', sans-serif" }}>
+            {message.split(".").map(
+              (sentence, index) =>
+                sentence.trim() && (
+                  <span key={index}>
+                    {sentence.trim()}.
+                    <br />
+                  </span>
+                )
+            )}
+          </p>
+          {/* Input Field */}
+          <input
+            type="number"
+            value={inputValue} // Bind to local inputValue state
+            onChange={handleInputChange} // Update inputValue
+            placeholder="Enter updated total area"
+            className="py-2 px-3 rounded-lg border-2 border-gray-300 focus:ring-yellow-500 bg-transparent text-white [&::-webkit-inner-spin-button]:appearance-none focus:outline-none focus:ring-0"
+          />
+          {error && <p className="text-red-500 text-sm mt-2">{error}</p>}{" "}
+          {/* Error Message */}
+          <div className="flex gap-4 mt-4">
+            {/* Go Back Button */}
+            <button
+              onClick={onclose}
+              className="py-2 px-4 bg-gray-500 text-white border-2 border-black border-b-8 border-r-8"
+            >
+              Go Back
+            </button>
+            {/* Submit Button */}
+            <button
+              onClick={handleSubmit}
+              className="py-2 px-4 bg-[#FFD500] text-black border-2 border-black border-b-8 border-r-8"
+            >
+              Update
+            </button>
           </div>
         </div>
-        {/* img part */}
+
+        {/* Image Section */}
         <div className="flex justify-center m-10 relative">
           <img src="images/Errorimg.png" alt="Error chair" />
           <button className="absolute -top-5 -right-5" onClick={onclose}>

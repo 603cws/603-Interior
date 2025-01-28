@@ -10,10 +10,15 @@ import Typewriter from "typewriter-effect";
 
 // function Navbar({ totalArea, setTotalArea, MIN_AREA, MAX_AREA, resetAll }) {
 function Navbar({ MIN_AREA, MAX_AREA, resetAll, areaQuantities, areaValues }) {
-  const [inputValue, setInputValue] = useState("");
   const [error, setError] = useState(false);
 
-  const { setTotalArea, totalArea } = useApp();
+  const {
+    setTotalArea,
+    totalArea,
+    inputValue,
+    setInputValue,
+    setTotalAreaSource,
+  } = useApp();
 
   // const [warning,setWarning]=useState(false)
   console.log(
@@ -159,7 +164,7 @@ function Navbar({ MIN_AREA, MAX_AREA, resetAll, areaQuantities, areaValues }) {
         {/* button for generate boq */}
         {/* <div> */}
         <button
-          className="generateBoq bg-[#1A3A36] mt-2 rounded-3xl text-sm py-2 px-5 text-white mb-2 border border-2 border-[#34BFAD]"
+          className="generateBoq bg-[#1A3A36] mt-2 rounded-3xl text-sm py-2 px-5 text-white mb-2 border-2 border-[#34BFAD]"
           onClick={handlegenrateboq}
         >
           Generate BOQ

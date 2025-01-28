@@ -332,7 +332,7 @@ function Layout() {
   const [warning, setWarning] = useState(false);
   const [otherArea, setOtherArea] = useState();
 
-  const { totalArea, setTotalArea } = useApp();
+  const { totalArea, setTotalArea, totalAreaSource } = useApp();
   const [runTour, setRunTour] = useState(false); // Controls whether the tour runs
 
   const [areaWarn, setAreaWarn] = useState(false);
@@ -396,50 +396,55 @@ function Layout() {
   // }, []);
 
   useEffect(() => {
-    const linear = calculateLinear(totalArea);
-    const lType = calculateLType(totalArea, areaValues);
-    const md = calculateMd(totalArea, areaValues);
-    const manager = calculateManager(totalArea, areaValues);
-    const small = calculateSmall(totalArea, areaValues);
-    const discussionRoom = calculateDiscussionRoom(totalArea, areaValues);
-    const interviewRoom = calculateInterviewRoom(totalArea, areaValues);
-    const conferenceRoom = calculateConferenceRoom(totalArea, areaValues);
-    const boardRoom = calculateBoardRoom(totalArea, areaValues);
-    const meetingRoom = calculateMeetingRoom(totalArea, areaValues);
-    const meetingRoomLarge = calculateMeetingRoomLarge(totalArea, areaValues);
-    const videoRecordingRoom = calculateVideoRecordingRoom(
-      totalArea,
-      areaValues
-    );
-    const phoneBooth = calculatePhoneBooth(totalArea, areaValues);
-    const server = calculateServer(totalArea, areaValues);
-    const executiveWashroom = calculateExecutiveWashroom(totalArea, areaValues);
-    const receptionArea = calculateReceptionArea(totalArea);
-    const loungeArea = calculateLoungeArea(totalArea);
-    const otherArea = 0;
+    if (totalAreaSource !== "ErrorModal") {
+      const linear = calculateLinear(totalArea);
+      const lType = calculateLType(totalArea, areaValues);
+      const md = calculateMd(totalArea, areaValues);
+      const manager = calculateManager(totalArea, areaValues);
+      const small = calculateSmall(totalArea, areaValues);
+      const discussionRoom = calculateDiscussionRoom(totalArea, areaValues);
+      const interviewRoom = calculateInterviewRoom(totalArea, areaValues);
+      const conferenceRoom = calculateConferenceRoom(totalArea, areaValues);
+      const boardRoom = calculateBoardRoom(totalArea, areaValues);
+      const meetingRoom = calculateMeetingRoom(totalArea, areaValues);
+      const meetingRoomLarge = calculateMeetingRoomLarge(totalArea, areaValues);
+      const videoRecordingRoom = calculateVideoRecordingRoom(
+        totalArea,
+        areaValues
+      );
+      const phoneBooth = calculatePhoneBooth(totalArea, areaValues);
+      const server = calculateServer(totalArea, areaValues);
+      const executiveWashroom = calculateExecutiveWashroom(
+        totalArea,
+        areaValues
+      );
+      const receptionArea = calculateReceptionArea(totalArea);
+      const loungeArea = calculateLoungeArea(totalArea);
+      const otherArea = 0;
 
-    setAreaQuantities((prevAreaQuantities) => ({
-      ...prevAreaQuantities,
-      linear: Math.round(linear / areaValues.linear),
-      lType: lType / areaValues.lType,
-      md: Math.round(md / areaValues.md),
-      manager: manager / areaValues.manager,
-      small: small / areaValues.small,
-      discussionRoom: discussionRoom / areaValues.discussionRoom,
-      interviewRoom: interviewRoom / areaValues.interviewRoom,
-      conferenceRoom: conferenceRoom / areaValues.conferenceRoom,
-      boardRoom: boardRoom / areaValues.boardRoom,
-      meetingRoom: meetingRoom / areaValues.meetingRoom,
-      meetingRoomLarge: meetingRoomLarge / areaValues.meetingRoomLarge,
-      videoRecordingRoom: videoRecordingRoom / areaValues.videoRecordingRoom,
-      phoneBooth: phoneBooth / areaValues.phoneBooth,
-      server: server / areaValues.server,
-      executiveWashroom: executiveWashroom / areaValues.executiveWashroom,
-      reception: Math.round(receptionArea / areaValues.reception),
-      lounge: Math.round(loungeArea / areaValues.lounge),
-      other: otherArea / areaValues.other,
-    }));
-  }, [totalArea]);
+      setAreaQuantities((prevAreaQuantities) => ({
+        ...prevAreaQuantities,
+        linear: Math.round(linear / areaValues.linear),
+        lType: lType / areaValues.lType,
+        md: Math.round(md / areaValues.md),
+        manager: manager / areaValues.manager,
+        small: small / areaValues.small,
+        discussionRoom: discussionRoom / areaValues.discussionRoom,
+        interviewRoom: interviewRoom / areaValues.interviewRoom,
+        conferenceRoom: conferenceRoom / areaValues.conferenceRoom,
+        boardRoom: boardRoom / areaValues.boardRoom,
+        meetingRoom: meetingRoom / areaValues.meetingRoom,
+        meetingRoomLarge: meetingRoomLarge / areaValues.meetingRoomLarge,
+        videoRecordingRoom: videoRecordingRoom / areaValues.videoRecordingRoom,
+        phoneBooth: phoneBooth / areaValues.phoneBooth,
+        server: server / areaValues.server,
+        executiveWashroom: executiveWashroom / areaValues.executiveWashroom,
+        reception: Math.round(receptionArea / areaValues.reception),
+        lounge: Math.round(loungeArea / areaValues.lounge),
+        other: otherArea / areaValues.other,
+      }));
+    }
+  }, [totalArea, totalAreaSource]);
 
   const setErrorMessageHandler = (message) => {
     setError(true);
@@ -518,8 +523,10 @@ function Layout() {
         "Built area exceeds the available space, showing error message"
       );
       setErrorMessageHandler(
+        // "The built area exceeds the available usable space.\n" +
+        //   "To resolve this, either increase the total area or adjust the number of rooms to ensure the built area fits within the usable space."
         "The built area exceeds the available usable space.\n" +
-          "To resolve this, either increase the total area or adjust the number of rooms to ensure the built area fits within the usable space."
+          "Increase the total area to add more cabins."
       );
       if (type === "other") {
         setOtherArea(otherArea);

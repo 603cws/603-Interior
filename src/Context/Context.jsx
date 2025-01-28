@@ -6,6 +6,8 @@ export const AppProvider = ({ children }) => {
   const categoriesWithModal = ["Flooring", "HVAC", "Partitions / Ceilings"]; // Array of categories that should show the modal when clicked
 
   const [totalArea, setTotalArea] = useState();
+  const [inputValue, setInputValue] = useState("");
+  const [totalAreaSource, setTotalAreaSource] = useState(""); // Track the source of updates
   const [progress, setProgress] = useState(0);
   const [userId, setUserId] = useState(null);
 
@@ -122,6 +124,10 @@ export const AppProvider = ({ children }) => {
       value={{
         totalArea,
         setTotalArea,
+        inputValue,
+        setInputValue,
+        totalAreaSource,
+        setTotalAreaSource,
         progress,
         setProgress,
         selectedData,
