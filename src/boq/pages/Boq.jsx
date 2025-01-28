@@ -573,7 +573,21 @@ function Boq() {
           options: {
             zIndex: 10000,
             primaryColor: "#6366f1", // Tailwind's Indigo-500
+            backgroundColor: "#A9D3CE",
+            arrowColor: "#A9D3CE",
             overlayColor: "rgba(0, 0, 0, 0.5)",
+          },
+          buttonNext: {
+            backgroundColor: "#34bfad",
+            borderRadius: 4,
+            color: "#000",
+            padding: 10,
+            font: "semibold",
+          },
+          buttonSkip: {
+            color: "#797979",
+            font: "semibold",
+            fontSize: 16,
           },
         }}
       />

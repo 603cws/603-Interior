@@ -9,7 +9,8 @@ import MeetingRooms from "../pages/MeetingRooms";
 import { useApp } from "../../Context/Context";
 import SupportSpaces from "./SupportSpaces";
 import PublicSpaces from "./PublicSpaces";
-import ErrorModal from "../../components/ErrorModal";
+// import ErrorModal from "../../components/ErrorModal";
+import ErrorModal from "../../common-components/ErrorModal";
 // import QnaPopup from "./components/QnaPopup"
 import Joyride, { STATUS } from "react-joyride";
 import EnterAreaModal from "../components/EnterAreaModal";
@@ -670,8 +671,22 @@ function Layout() {
         styles={{
           options: {
             zIndex: 10000,
+            backgroundColor: "#A9D3CE",
+            arrowColor: "#A9D3CE",
             primaryColor: "#6366f1", // Tailwind's Indigo-500
             overlayColor: "rgba(0, 0, 0, 0.5)",
+          },
+          buttonNext: {
+            backgroundColor: "#34bfad",
+            borderRadius: 4,
+            color: "#000",
+            padding: 10,
+            font: "semibold",
+          },
+          buttonSkip: {
+            color: "#797979",
+            font: "semibold",
+            fontSize: 16,
           },
         }}
       />

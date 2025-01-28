@@ -192,13 +192,15 @@ const QnaPopup = ({ onClose, onSubmit, category }) => {
           </button>
           {!showDisclaimer ? (
             <div className="flex flex-col gap-5">
-              <h2 className="text-lg font-bold mb-4">Answer These Questions</h2>
+              <h2 className="text-lg font-bold mb-4 text-center">
+                Answer These Questions
+              </h2>
               <form onSubmit={handleFormSubmit} className="space-y-4">
                 <div>
                   <label className="block font-medium text-gray-700 text-sm">
                     {currentQuestionIndex + 1}. {currentQuestion.label}
                   </label>
-                  <div className="mt-2 space-y-2">
+                  <div className="my-4 flex justify-around items-center">
                     {currentQuestion.isNumberInput ? (
                       <input
                         type="number"
@@ -215,7 +217,7 @@ const QnaPopup = ({ onClose, onSubmit, category }) => {
                       currentQuestion.options.map((option) => (
                         <label
                           key={option.value}
-                          className="flex items-center space-x-2 text-xs"
+                          className="flex items-center gap-1 text-xs"
                         >
                           <input
                             type="radio"
@@ -232,7 +234,7 @@ const QnaPopup = ({ onClose, onSubmit, category }) => {
                     )}
                   </div>
                 </div>
-                <div className="flex justify-around">
+                <div className="flex justify-around ">
                   {currentQuestionIndex > 0 && (
                     <button
                       type="button"
