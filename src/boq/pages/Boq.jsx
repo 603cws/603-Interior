@@ -385,6 +385,10 @@ function Boq() {
       selectedCategory?.category,
       selectedSubCategory
     );
+    //Currently rate of product is hardcoded inside HVACCalculation.jsx file.
+    if (selectedCategory?.category === "HVAC") {
+      return total;
+    }
     return total * selectedProductView.price;
   };
 

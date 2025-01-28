@@ -1,3 +1,4 @@
+import HVACCalculation from "./HVACCalculation";
 import ParitionCelingCalculation from "./ParitionCelingCalculation";
 
 // Helper to normalize keys
@@ -59,10 +60,15 @@ export const calculateTotalPriceHelper = (
     matchedKey = findKeyWithExactAndPartialMatch(normalizedSubCat, areasData);
     area = matchedKey ? areasData[matchedKey] : 1;
 
+    value = quantity * area;
+
     if (category === "Partitions / Ceilings") {
       ParitionCelingCalculation({ quantity, area }); //return value and do the calculation here
     }
-    value = quantity * area;
+
+    if (category === "HVAC") {
+      value = HVACCalculation({ quantity, area, subcategory }); //return value and do the calculation here
+    }
   } else {
     // Calculation of price * area
     matchedKey = findKeyWithExactAndPartialMatch(normalizedSubCat, areasData);
