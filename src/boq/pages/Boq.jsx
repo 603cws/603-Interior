@@ -145,14 +145,16 @@ function Boq() {
             (subcategory) => {
               // Normalize the strings for comparison
               const normalize = (str) =>
-                str.toLowerCase().replace(/[^a-z0-9]/g, "");
+                str.toLowerCase().replace(/[^a-z0-9]/g, ""); //output of "Civil / Plumbing" => "civilplumbing"
               const subcategoryKey = normalize(subcategory);
 
               // Skip filtering if the category is not "Furniture"
-              // const isFurniture = normalize(category.category) === "furniture";
-              // if (!isFurniture) {
-              //   return true; // Keep the subcategory if it's not "Furniture"
-              // }
+              const ignoreCat =
+                normalize(category.category) === "lux" ||
+                normalize(category.category) === "civilplumbing";
+              if (ignoreCat) {
+                return true; // Keep the subcategory if it's not "Furniture"
+              }
 
               // Get the room data from quantityData
               const roomCount = processedQuantityData;

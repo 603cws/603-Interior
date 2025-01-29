@@ -6,6 +6,7 @@ import checkIfEmailExists from "../utils/checkIfEmailExists";
 import ErrorMiniModal from "../../common-components/ErrorMiniModal";
 import Select from "react-select";
 import toast from "react-hot-toast";
+import { countries } from "countries-list";
 
 function RegisterUser() {
   const location = useLocation();
@@ -14,6 +15,11 @@ function RegisterUser() {
   const totalArea = location.state?.totalArea;
 
   const [isLogin, setIsLogin] = useState(false);
+
+  const countryOptions = Object.entries(countries).map(([code, details]) => ({
+    value: details.phone,
+    label: `+${details.phone} ${details.name} (${code})`,
+  }));
 
   console.log(
     "Inside LoginForm",
@@ -31,13 +37,20 @@ function RegisterUser() {
     mobile: "",
     location: "",
     password: "",
+    confirmPassword: "",
   });
 
   const [errors, setErrors] = useState({});
   const [debouncedEmail, setDebouncedEmail] = useState(formData.email);
   const [debouncedMobile, setDebouncedMobile] = useState(formData.mobile); // Debounced mobile number
 
-  const [value, setValue] = useState("");
+  const defaultCountry = countryOptions.find((c) => c.label.includes("India"));
+  const [countryCode, setCountryCode] = useState(defaultCountry?.value || "");
+
+  useEffect(() => {
+    console.log("Default country:", defaultCountry);
+  }, [defaultCountry]);
+
   const options = useMemo(() => countryList().getData(), []);
 
   const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -50,14 +63,16 @@ function RegisterUser() {
       setErrors({ ...errors, [name]: "" });
     }
 
-    if (name === "email") {
-      setDebouncedEmail(value);
+    if (!isLogin) {
+      if (name === "email") {
+        setDebouncedEmail(value);
 
-      if (value && !emailRegex.test(value)) {
-        showErrorWithTimeout(
-          "email",
-          "Invalid email format. Please enter a valid email."
-        );
+        if (value && !emailRegex.test(value)) {
+          showErrorWithTimeout(
+            "email",
+            "Invalid email format. Please enter a valid email."
+          );
+        }
       }
     }
 
@@ -115,10 +130,8 @@ function RegisterUser() {
   }, [debouncedMobile]);
 
   const handleCountryCodeChange = (value) => {
-    // setSelectedCountryCode(e.target.value);
-    setValue(value);
-    console.log("Country code");
-    console.log(value);
+    setCountryCode(value.value[0]);
+    console.log("Country code", value.value[0]);
   };
 
   const showErrorWithTimeout = (field, message) => {
@@ -137,7 +150,7 @@ function RegisterUser() {
   const navigate = useNavigate();
 
   const handleRegister = async () => {
-    const { email, companyName, mobile, location /*password*/ } = formData;
+    const { email, companyName, mobile, location, password } = formData;
 
     try {
       // Step 1: Insert data into 'users' table and retrieve the user ID
@@ -147,9 +160,9 @@ function RegisterUser() {
           {
             email,
             companyname: companyName,
-            mobile,
+            mobile: countryCode + mobile,
             location,
-            // password,
+            password,
           },
         ])
         .select();
@@ -255,8 +268,15 @@ function RegisterUser() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (isLogin) handleLogin();
-    else handleRegister(); // Call register function on successful validation
+    if (isLogin) {
+      handleLogin();
+    } else {
+      if (formData.password !== formData.confirmPassword) {
+        showErrorWithTimeout("confirmPassword", "Passwords do not match.");
+        return;
+      }
+      handleRegister();
+    }
   };
 
   const toggleForm = () => {
@@ -267,7 +287,7 @@ function RegisterUser() {
       mobile: "",
       location: "",
       password: "",
-      // confirmPassword: "",
+      confirmPassword: "",
     });
     setErrors({});
   };
@@ -294,6 +314,7 @@ function RegisterUser() {
       console.log("Login successful:", data);
       toast.success("Login successful!");
       // Redirect or perform actions after successful login
+      navigate("/boq");
     } catch (error) {
       console.error("Unexpected error during login:", error);
       toast.error("Login failed. Please try again.");
@@ -329,8 +350,9 @@ function RegisterUser() {
                 />
                 {errors.email && <ErrorMiniModal text={errors.email} />}
               </div>
+
               {!isLogin && (
-                <div className="mb-3">
+                <div className="mb-3 relative">
                   <label className="block text-sm font-medium mb-2 ">
                     Company Name{" "}
                     <span className="text-red-500 text-[0.85em] ml-2 whitespace-nowrap absolute left-[280px]">
@@ -348,6 +370,7 @@ function RegisterUser() {
                   />
                 </div>
               )}
+
               {!isLogin && (
                 <div className="mb-3 relative">
                   <label className="block text-sm font-medium mb-2 ">
@@ -360,7 +383,15 @@ function RegisterUser() {
                     onChange={handleCountryCodeChange}
                     className="w-1/3 text-xs"
                   /> */}
-                    <p className="w-1/7 text-xs px-2">+91</p>
+                    <Select
+                      options={countryOptions}
+                      onChange={handleCountryCodeChange}
+                      placeholder="Select a country"
+                      className="w-1/3 text-xs"
+                      defaultValue={defaultCountry} // Set default to India
+                    />
+
+                    {/* <p className="w-1/7 text-xs px-2">+91</p> */}
                     <input
                       type="text"
                       name="mobile"
@@ -371,14 +402,15 @@ function RegisterUser() {
                       maxLength="10"
                       inputMode="numeric"
                       pattern="\d{10}"
-                      className="w-2/3 text-sm py-1.5 border-1 rounded-md pl-2 placeholder:text-xs"
+                      className="w-2/3 text-sm py-1.5 border-1 rounded-md pl-2 placeholder:text-xs" //w-2/3
                     />
                     {errors.mobile && <ErrorMiniModal text={errors.mobile} />}
                   </div>
                 </div>
               )}
+
               {!isLogin && (
-                <div className="">
+                <div className="mb-3 relative">
                   <label className="block text-sm font-medium mb-2 ">
                     Location{" "}
                     <span className="text-red-500 text-[0.85em] ml-2 whitespace-nowrap absolute left-[280px]">
@@ -397,27 +429,42 @@ function RegisterUser() {
                 </div>
               )}
 
-              {isLogin && (
-                <div className="">
+              <div className="mb-3 relative">
+                <label className="block text-sm font-medium mb-2 ">
+                  Password{" "}
+                </label>
+                <input
+                  type="password"
+                  name="password"
+                  placeholder="Enter your password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  required
+                  className="w-full py-1.5 text-sm border-1 rounded-md pl-2 placeholder:text-xs"
+                />
+              </div>
+
+              {!isLogin && (
+                <div className="mb-3 relative">
                   <label className="block text-sm font-medium mb-2 ">
-                    Password{" "}
-                    <span className="text-red-500 text-[0.85em] ml-2 whitespace-nowrap absolute left-[280px]">
-                      {errors.password}
-                    </span>
+                    Confirm Password{" "}
                   </label>
                   <input
                     type="password"
-                    name="password"
-                    placeholder="Enter your password"
-                    value={formData.password}
+                    name="confirmPassword"
+                    placeholder="Confirm your password"
+                    value={formData.confirmPassword}
                     onChange={handleChange}
                     required
                     className="w-full py-1.5 text-sm border-1 rounded-md pl-2 placeholder:text-xs"
                   />
+                  {errors.confirmPassword && (
+                    <ErrorMiniModal text={errors.confirmPassword} />
+                  )}
                 </div>
               )}
 
-              <div className="bg-green-950 mt-8 w-3/4 mx-auto rounded-lg">
+              <div className="bg-green-950 mt-10 w-3/4 mx-auto rounded-lg">
                 <button className="w-full text-white py-1.5" type="submit">
                   {isLogin ? "Login" : "Register"}
                 </button>
