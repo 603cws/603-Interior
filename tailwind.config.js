@@ -13,7 +13,7 @@ export default {
         "lg-19": "19px",
       },
       fontFamily: {
-        sans: ["Poppins", "sans-serif"],
+        Poppins: ["Poppins", "sans-serif"],
         Raleway: ["Raleway"],
         Convergence: ["Convergence"],
         zcool: ['"ZCOOL KuaiLe"', "cursive"],

@@ -35,31 +35,33 @@ function Footer() {
               width={80}
               height={80}
             />
-            <p className="font-semibold">Head office :</p>
+            <p className="font-semibold pt-2">Head office :</p>
             <p className="font-semibold">603 The Interiors</p>
-            <div className="flex flex-col font-light gap-2 mt-1">
+            <div className="flex flex-col font-extralight gap-2 mt-1 text-md">
               <div className="flex gap-4 items-center">
-                <CiLocationOn />
-                <p>
+                <CiLocationOn size={22} />
+                <p className="font-thin">
                   Makhija Arcade, 35th Rd, Khar West, <br /> Mumbai Maharashtra
                   400052
                 </p>
               </div>
-              <div className="flex gap-4 items-center">
-                <IoCallOutline />
+              <div className="flex gap-4 items-center font-extralight">
+                <IoCallOutline size={22} />
                 <p>+91-123-123456</p>
               </div>
-              <div className="flex gap-4 items-center">
-                <IoIosMail />
+              <div className="flex gap-4 items-center font-extralight">
+                <IoIosMail size={22} />
                 <p>603coworkingspace@gmail.com</p>
               </div>
             </div>
           </div>
           {/* second div */}
           <div className="">
-            <h2 className="font-lexend font-medium text-xl my-3">Quicklinks</h2>
+            <h2 className="font-lexend font-semibold text-xl my-3">
+              Quicklinks
+            </h2>
             <div className="flex gap-5">
-              <ul className="">
+              <ul className="font-Poppins flex flex-col gap-1 font-extralight text-md ">
                 <li onClick={() => navigation("/")} className="cursor-pointer">
                   Home
                 </li>
@@ -69,7 +71,7 @@ function Footer() {
                 <li className="cursor-pointer">Help & FAQ</li>
                 <li className="cursor-pointer">Become a reseller</li>
               </ul>
-              <ul>
+              <ul className="font-Poppins flex flex-col gap-1 font-extralight text-md">
                 <li
                   onClick={() => navigation("/Contactus")}
                   className="cursor-pointer"
@@ -80,16 +82,16 @@ function Footer() {
                   className="cursor-pointer"
                   onClick={() => navigation("/Career")}
                 >
-                  Carrer
+                  Career
                 </li>
                 <li className="cursor-pointer">Blogs</li>
               </ul>
             </div>
           </div>
           {/* third div */}
-          <div className="captialize font-lexend">
-            <p className="my-3 text-xl">Subscribe</p>
-            <div className="">
+          <div className="captialize font-Poppins">
+            <p className="my-3 text-xl font-semibold">Subscribe</p>
+            <div className="font-extralight text-md">
               <p>
                 Sign up for Alerts, Special Offers, Education <br /> and
                 Updates.
@@ -98,7 +100,7 @@ function Footer() {
                 <input
                   type="email"
                   placeholder="Enter Your Email"
-                  className="w-full text-black p-2"
+                  className="w-full text-black p-2 focus:outline-none"
                 />
                 <button>
                   <FaArrowRight color="white" className="mx-3" />
@@ -107,18 +109,18 @@ function Footer() {
 
               <div className="mt-2">
                 <p>Follow us on</p>
-                <ul className="flex items-center gap-2 mt-2">
+                <ul className="flex items-center gap-3 mt-2">
                   <li>
-                    <FaLinkedin />
+                    <FaLinkedin size={26} />
                   </li>
                   <li>
-                    <FaFacebookSquare />
+                    <FaFacebookSquare size={26} />
                   </li>
                   <li>
-                    <FaInstagram />
+                    <FaInstagram size={26} />
                   </li>
                   <li>
-                    <RiTwitterXLine />
+                    <RiTwitterXLine size={26} />
                   </li>
                 </ul>
               </div>
@@ -127,8 +129,8 @@ function Footer() {
         </div>
 
         {/* copyright part */}
-        <div className="text-white flex items-center justify-center pb-3">
-          <p className="w-3/4 text-center">
+        <div className="text-white flex justify-around items-center pb-3 pt-5">
+          <p className="w-3/4 text-center text-base font-thin">
             © 2024 . All Rights Reserved | Crafted by 603 The Coworking Space
           </p>
           <div
