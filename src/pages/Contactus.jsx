@@ -1,8 +1,16 @@
 import LandingNavbar from "../common-components/LandingNavbar";
 import Footer from "../common-components/Footer";
 
-import { CiLocationOn } from "react-icons/ci";
 import { useState } from "react";
+import {
+  RiFacebookCircleFill,
+  RiInstagramFill,
+  RiLinkedinBoxFill,
+} from "react-icons/ri";
+import { PiMapPinAreaFill } from "react-icons/pi";
+import { IoIosCall } from "react-icons/io";
+import { MdEmail } from "react-icons/md";
+import { HiClock } from "react-icons/hi";
 
 function Contactus() {
   const [name, setname] = useState("");
@@ -47,9 +55,11 @@ function Contactus() {
         {/* container */}
         <div className="container mx-auto flex justify-evenly font-Poppins py-4 items-center ">
           {/* content card */}
-          <div className="border border-1 border-[#000] text-center  w-[215px] h-[255px] ">
-            <div className="flex justify-center my-4">
-              <img src="/images/Pin.png" alt="pin" className="" />
+          <div className="border border-1 border-[#000] text-center p-2 w-[215px] h-[255px] ">
+            <div className="w-full flex justify-center my-4">
+              <div className="cursor-pointer w-12 h-12 rounded-full bg-[#34BFAD] flex justify-center items-center">
+                <PiMapPinAreaFill size={35} />
+              </div>
             </div>
             <h2 className="font-semibold text-2xl uppercase mb-2">Address</h2>
             <h3 className="text-xl font-medium mb-1">Head Office:</h3>
@@ -60,8 +70,10 @@ function Contactus() {
           </div>
           {/* content card */}
           <div className="border border-1 border-[#000] text-center p-2  w-[215px] h-[255px] ">
-            <div className="flex justify-center my-4">
-              <img src="/images/ContactusCall.png" alt="pin" className="" />
+            <div className="w-full flex justify-center my-4">
+              <div className="cursor-pointer w-12 h-12 rounded-full bg-[#34BFAD] flex justify-center items-center">
+                <IoIosCall size={35} />
+              </div>
             </div>
             <h2 className="font-semibold text-2xl uppercase mb-3">phone</h2>
             <h3 className="text-xl font-medium mb-2">Head Office:</h3>
@@ -72,8 +84,10 @@ function Contactus() {
           </div>
           {/* content card */}
           <div className="border border-1 border-[#000] text-center p-2  w-[215px] h-[255px]  ">
-            <div className="flex justify-center my-4">
-              <img src="/images/Mail.png" alt="pin" className="" />
+            <div className="w-full flex justify-center my-4">
+              <div className="cursor-pointer w-12 h-12 rounded-full bg-[#34BFAD] flex justify-center items-center">
+                <MdEmail size={35} />
+              </div>
             </div>
             <h2 className="font-semibold text-2xl uppercase mb-2">Email</h2>
             <h3 className="text-xl font-medium mb-1">Head Office:</h3>
@@ -81,8 +95,10 @@ function Contactus() {
           </div>
           {/* content card */}
           <div className="border border-1 border-[#000] text-center p-2  w-[215px] h-[255px]  ">
-            <div className="flex justify-center my-4">
-              <img src="/images/Time.png" alt="pin" className="" />
+            <div className="w-full flex justify-center my-4">
+              <div className="cursor-pointer w-12 h-12 rounded-full bg-[#34BFAD] flex justify-center items-center">
+                <HiClock size={35} />
+              </div>
             </div>
             <h2 className="font-semibold text-2xl uppercase mb-2">Time</h2>
             <h3 className="text-xl font-medium mb-1">Mon-sat:</h3>
@@ -92,11 +108,11 @@ function Contactus() {
       </section>
 
       {/* section 3 */}
-      <section className="bg-[#F4F4F4]">
+      <section className="bg-[#F4F4F4] pt-8">
         <div className="flex container mx-auto gap-10 py-3">
           {/* form section */}
           <div className="flex-1">
-            <div className="px-10 bg-[#1F5C54] rounded-3xl">
+            <div className="px-10 bg-[#1A3A36] rounded-3xl pb-5">
               {/* text */}
               <div className="font-Poppins font-semibold py-3">
                 <p className="text-sm text-[#34BFAD]">Get in Touch!</p>
@@ -159,7 +175,7 @@ function Contactus() {
                       {" "}
                     </textarea>
                   </div>
-                  <button className="px-5 py-2 rounded-xl bg-[#1A3A36] border-white border border-1 mb-2 text-white">
+                  <button className="px-10 py-2 font-semibold rounded-lg bg-[#1F5C54] border-black border border-1 mb-2 text-white">
                     Submit
                   </button>
                 </form>
@@ -189,24 +205,41 @@ function Contactus() {
               <div className="flex-1 bg-gradient-to-r from-gray-100 to-yellow-100">
                 <iframe
                   src={source}
-                  className="w-full h-80 rounded-lg shadow-lg"
+                  className="w-full h-96 rounded-lg shadow-lg"
                   loading="lazy"
                   title="makhija archade"
                 ></iframe>
               </div>
 
               {/* social media */}
-              <div className="flex-1 flex justify-start p-16">
-                <div>
-                  <h3 className="mb-4 font-semibold font-Poppins">
-                    Social Media
-                  </h3>
-                  <div className="flex gap-3 items-center">
-                    <img src="/images/Insta.png" alt="social media" />
-                    <img src="/images/Insta.png" alt="social media" />
-                    <img src="/images/Insta.png" alt="social media" />
+              <div className="flex-1 flex flex-col justify-start pt-16 ">
+                {/* <div> */}
+                <h3 className="mb-4 font-semibold font-Poppins">
+                  Social Media
+                </h3>
+                <div className="flex gap-3 items-center">
+                  {/* <RiInstagramFill size={50} color="#1F5C54" /> */}
+                  <div className="cursor-pointer w-12 h-12 rounded-full bg-[#34BFAD] flex justify-center items-center">
+                    <RiInstagramFill size={35} />
                   </div>
+                  <div className="cursor-pointer w-12 h-12 rounded-full bg-[#34BFAD] flex justify-center items-center">
+                    <RiFacebookCircleFill size={35} />
+                  </div>
+                  <div className="cursor-pointer w-12 h-12 rounded-full bg-[#34BFAD] flex justify-center items-center">
+                    <RiLinkedinBoxFill size={35} />
+                  </div>
+                  {/* <img
+                    src="/images/Insta.png"
+                    alt="social media"
+                    className="cursor-pointer"
+                  />
+                  <img
+                    src="/images/Insta.png"
+                    alt="social media"
+                    className="cursor-pointer"
+                  /> */}
                 </div>
+                {/* </div> */}
               </div>
             </div>
           </div>

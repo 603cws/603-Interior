@@ -132,14 +132,14 @@ function Navbar({ MIN_AREA, MAX_AREA, resetAll, areaQuantities, areaValues }) {
             onChange={handleInputChange}
             onKeyDown={handleKeyDown}
             onKeyUp={handleSubmit}
-            placeholder=""
+            placeholder="Enter total area (sq ft)"
             title="Set the area value here"
             // className={`set-area-input ${error ? 'error' : ''}`}
             aria-label="Total Area Input"
             data-tip="Enter the total area in square feet"
             autoFocus
           />
-          <div className="absolute top-3 left-7 text-gray-300 text-sm">
+          {/* <div className="absolute top-3 left-7 text-gray-300 text-sm">
             {!inputValue && (
               <Typewriter
                 options={{
@@ -150,7 +150,7 @@ function Navbar({ MIN_AREA, MAX_AREA, resetAll, areaQuantities, areaValues }) {
                 }}
               />
             )}
-          </div>
+          </div> */}
         </div>
         {error && (
           <div

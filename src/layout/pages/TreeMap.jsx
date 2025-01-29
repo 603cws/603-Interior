@@ -132,7 +132,7 @@ const TreeMap = ({ totalArea, areaQuantities, areaValues }) => {
     dataLabels: {
       enabled: true,
       style: {
-        fontSize: "14px",
+        fontSize: "14rem",
         fontWeight: "bold",
         colors: ["#FFFFFF"],
       },
@@ -183,7 +183,7 @@ const TreeMap = ({ totalArea, areaQuantities, areaValues }) => {
               backgroundColor: item.fillColor,
               width: "10px",
               height: "10px",
-              // marginRight: '10px',
+              marginRight: "5px",
               borderRadius: "50%",
             }}
           ></span>
@@ -242,9 +242,9 @@ const TreeMap = ({ totalArea, areaQuantities, areaValues }) => {
           transition: "transform 1s ease-in-out",
           position: "absolute",
           left: "0",
-          background: "#fff",
+          //   background: "#fff",
           padding: "10px",
-          boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)",
+          //   boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)",
           visibility: isLegendVisible ? "visible" : "hidden", // Fully hide off-screen
         }}
       >

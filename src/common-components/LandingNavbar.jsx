@@ -16,7 +16,7 @@ function LandingNavbar() {
         </div>
         {/* middle section */}
         <div className="">
-          <ul className="flex gap-12 text-[#1A3A36] font-semibold">
+          <ul className="flex gap-12 text-[#1A3A36] font-semibold uppercase">
             <li onClick={() => navigate("/")} className="cursor-pointer">
               Home
             </li>
@@ -39,7 +39,7 @@ function LandingNavbar() {
 
         {/* last button */}
         <div className="mx-4">
-          <button className="px-5 py-1 bg-[#1F5C54] border border-[#15423C] rounded-3xl text-white">
+          <button className="px-8 py-1.5 bg-[#1F5C54] border border-[#15423C] rounded-3xl text-white">
             Log In
           </button>
         </div>

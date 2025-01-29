@@ -1,11 +1,8 @@
 import React from "react";
 import AreaCounter from "./AreaCounter";
-import {
-  PiInfoLight,
-  PiMinusCircleFill,
-  PiPlusCircleFill,
-} from "react-icons/pi";
+import { PiMinusCircleFill, PiPlusCircleFill } from "react-icons/pi";
 import Tooltip from "./ToolTip";
+import { RxInfoCircled } from "react-icons/rx";
 
 const LayoutCard = ({
   image,
@@ -59,9 +56,11 @@ const LayoutCard = ({
             </button>
           </div>
         )}
+        <p className="text-center font-bold text-sm">{title}</p>
+
         {/* Size Options */}
         {sizes && (
-          <div className="flex gap-2 text-sm font-bold mt-4 mb-4 justify-around">
+          <div className="flex gap-2 text-sm font-bold my-2 justify-around">
             {sizes.map((size) => (
               <button
                 key={size}
@@ -75,20 +74,19 @@ const LayoutCard = ({
             ))}
           </div>
         )}
-        <p className="text-center font-bold text-sm">{title}</p>
         {/* Tooltip */}
         {tooltipText && (
           <div className="tooltip-container">
             <Tooltip text={tooltipText}>
-              <div className="w-4 absolute right-3 bottom-1">
-                <PiInfoLight size={25} />
+              <div className="w-4 absolute right-5 bottom-3">
+                <RxInfoCircled size={20} />
               </div>
             </Tooltip>
           </div>
         )}
         {/* Area Counter */}
         {showAreaCounter && !showInputField && (
-          <AreaCounter {...areaCounterProps} />
+          <AreaCounter {...areaCounterProps} counterValue={counterValue} />
         )}
         {/* Input Field for "Other Area" */}
         {showInputField && (
