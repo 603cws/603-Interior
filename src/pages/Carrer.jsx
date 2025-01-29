@@ -10,19 +10,37 @@ import { IoIosArrowForward } from "react-icons/io";
 function Carrer() {
   const row1 = [
     {
-      imgurl: "/images/careerChair.png",
+      imgurl: "/images/career page/careerChair.png",
       header: "Large beautiful office",
       para: " Enjoy a comfortable office  environment with most  modern  and stylish furniture",
     },
     {
-      imgurl: "/images/careerChair.png",
-      header: "Large beautiful office",
-      para: " Enjoy a comfortable office  environment with most  modern  and stylish furniture",
+      imgurl: "/images/career page/career5.png",
+      header: "Easy Location",
+      para: " Commute early to work  t yor convenient and enjoy compensation for transport costs.",
     },
     {
-      imgurl: "/images/careerChair.png",
-      header: "Large beautiful office",
-      para: " Enjoy a comfortable office  environment with most  modern  and stylish furniture",
+      imgurl: "/images/career page/career3.png",
+      header: "Free lunch & Snacks",
+      para: " Enjoy a comfortable office environment with most modern and stylish furniture ",
+    },
+  ];
+
+  const row2 = [
+    {
+      imgurl: "/images/career page/career2.png",
+      header: "Great co-workers",
+      para: " Work with some of the best talent in the industry and build strong network with them.",
+    },
+    {
+      imgurl: "/images/career page/career4.png",
+      header: "Education opportunity",
+      para: " Get resource for developing your skills and knowledge to kick start your career.",
+    },
+    {
+      imgurl: "/images/career page/career2.png",
+      header: "Performance Award",
+      para: " Enjoy a comfortable office environment with most modern and stylish furniture ",
     },
   ];
 
@@ -124,7 +142,7 @@ function Carrer() {
             </div>
             {/* cards row 2 */}
             <div className="flex flex-col gap-10 pt-20">
-              {row1.map((card) => {
+              {row2.map((card) => {
                 {
                   /* card  */
                 }
@@ -164,9 +182,9 @@ function Carrer() {
               </div>
               <p className="font-sans text-lg mb-7">
                 At 603 Interiors, we believe that the right workspace can
-                transform the way <br /> you work. we are looking for dynamic nd
-                creative individuals who are willing <br /> to dedicate
-                themselves to providing innovative products nd services for our{" "}
+                transform the way <br /> you work. we are looking for dynamic
+                and creative individuals who are willing <br /> to dedicate
+                themselves to providing innovative products and services for our{" "}
                 <br /> clients.
               </p>
               <p className="font-sans text-lg mb-5">
@@ -174,7 +192,7 @@ function Carrer() {
                 603 <br /> Interiors you can also network with some of the most
                 talented people in the <br /> industry
               </p>
-              <button className="px-5 py-3 text-[#34BFAD] uppercase border border-[#34BFAD] bg-[#f8f8f8] hover:bg-[#34BFAD] hover:text-white">
+              <button className="px-10 py-3 font-semibold text-[#34BFAD] uppercase border-t border-l border-[#34BFAD] border-r-black border-b-black border-r-2 border-b-2 bg-[#f8f8f8] hover:bg-[#34BFAD] hover:text-white tracking-widest">
                 Read More
               </button>
             </div>

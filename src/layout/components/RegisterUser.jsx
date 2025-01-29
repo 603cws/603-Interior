@@ -13,6 +13,8 @@ function RegisterUser() {
   const areaValues = location.state?.areaValues;
   const totalArea = location.state?.totalArea;
 
+  const [isLogin, setIsLogin] = useState(false);
+
   console.log(
     "Inside LoginForm",
     "Total Area: ",
@@ -28,6 +30,7 @@ function RegisterUser() {
     companyName: "",
     mobile: "",
     location: "",
+    password: "",
   });
 
   const [errors, setErrors] = useState({});
@@ -240,6 +243,7 @@ function RegisterUser() {
       }
 
       console.log("User, areas, and quantity data inserted successfully!");
+      toast.success("You have registered successfully !");
 
       // navigate('/Contact', { replace: true });
       // window.location.href = 'https://603-boq.vercel.app/';     //Goto BOQ page from here
@@ -251,8 +255,49 @@ function RegisterUser() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    handleRegister(); // Call register function on successful validation
-    toast.success("You have registered successfully !");
+    if (isLogin) handleLogin();
+    else handleRegister(); // Call register function on successful validation
+  };
+
+  const toggleForm = () => {
+    setIsLogin(!isLogin);
+    setFormData({
+      email: "",
+      companyName: "",
+      mobile: "",
+      location: "",
+      password: "",
+      // confirmPassword: "",
+    });
+    setErrors({});
+  };
+
+  const handleLogin = async () => {
+    try {
+      // Check if the email and password match
+      const { data, error } = await supabase
+        .from("users")
+        .select("email, password")
+        .eq("email", formData.email)
+        .single();
+
+      if (error || !data) {
+        showErrorWithTimeout("email", "Email not registered or incorrect.");
+        return;
+      }
+
+      if (data.password !== formData.password) {
+        showErrorWithTimeout("password", "Incorrect password.");
+        return;
+      }
+
+      console.log("Login successful:", data);
+      toast.success("Login successful!");
+      // Redirect or perform actions after successful login
+    } catch (error) {
+      console.error("Unexpected error during login:", error);
+      toast.error("Login failed. Please try again.");
+    }
   };
 
   return (
@@ -263,7 +308,9 @@ function RegisterUser() {
       <div className="w-full flex justify-center gap-5 rounded-3xl bg-transparent relative px-10 mx-auto">
         {/* form */}
         <div className="w-1/2 pt-20 pl-36">
-          <p className="text-center font-bold text-lg">Register User</p>
+          <p className="text-center font-bold text-lg">
+            {isLogin ? "User Login" : "Register User"}
+          </p>
           <div className="mt-10">
             <form action="" className="" onSubmit={handleSubmit}>
               <div className="mb-3 relative">
@@ -282,74 +329,108 @@ function RegisterUser() {
                 />
                 {errors.email && <ErrorMiniModal text={errors.email} />}
               </div>
-              <div className="mb-3">
-                <label className="block text-sm font-medium mb-2 ">
-                  Company Name{" "}
-                  <span className="text-red-500 text-[0.85em] ml-2 whitespace-nowrap absolute left-[280px]">
-                    {errors.companyName}
-                  </span>
-                </label>
-                <input
-                  type="text"
-                  name="companyName"
-                  placeholder="Enter company name"
-                  value={formData.companyName}
-                  onChange={handleChange}
-                  required
-                  className="w-full text-sm py-1.5 border-1 rounded-md pl-2 capitalize placeholder:text-xs"
-                />
-              </div>
-              <div className="mb-3 relative">
-                <label className="block text-sm font-medium mb-2 ">
-                  Mobile Number
-                </label>
-                <div className="flex justify-start items-center rounded-md bg-white">
-                  {/* <Select
+              {!isLogin && (
+                <div className="mb-3">
+                  <label className="block text-sm font-medium mb-2 ">
+                    Company Name{" "}
+                    <span className="text-red-500 text-[0.85em] ml-2 whitespace-nowrap absolute left-[280px]">
+                      {errors.companyName}
+                    </span>
+                  </label>
+                  <input
+                    type="text"
+                    name="companyName"
+                    placeholder="Enter company name"
+                    value={formData.companyName}
+                    onChange={handleChange}
+                    required
+                    className="w-full text-sm py-1.5 border-1 rounded-md pl-2 capitalize placeholder:text-xs"
+                  />
+                </div>
+              )}
+              {!isLogin && (
+                <div className="mb-3 relative">
+                  <label className="block text-sm font-medium mb-2 ">
+                    Mobile Number
+                  </label>
+                  <div className="flex justify-start items-center rounded-md bg-white">
+                    {/* <Select
                     options={options}
                     value={value}
                     onChange={handleCountryCodeChange}
                     className="w-1/3 text-xs"
                   /> */}
-                  <p className="w-1/7 text-xs px-2">+91</p>
+                    <p className="w-1/7 text-xs px-2">+91</p>
+                    <input
+                      type="text"
+                      name="mobile"
+                      placeholder="Enter Mobile Number"
+                      value={formData.mobile}
+                      required
+                      onChange={handleChange}
+                      maxLength="10"
+                      inputMode="numeric"
+                      pattern="\d{10}"
+                      className="w-2/3 text-sm py-1.5 border-1 rounded-md pl-2 placeholder:text-xs"
+                    />
+                    {errors.mobile && <ErrorMiniModal text={errors.mobile} />}
+                  </div>
+                </div>
+              )}
+              {!isLogin && (
+                <div className="">
+                  <label className="block text-sm font-medium mb-2 ">
+                    Location{" "}
+                    <span className="text-red-500 text-[0.85em] ml-2 whitespace-nowrap absolute left-[280px]">
+                      {errors.location}
+                    </span>
+                  </label>
                   <input
                     type="text"
-                    name="mobile"
-                    placeholder="Enter Mobile Number"
-                    value={formData.mobile}
-                    required
+                    name="location"
+                    placeholder="Enter your location"
+                    value={formData.location}
                     onChange={handleChange}
-                    maxLength="10"
-                    inputMode="numeric"
-                    pattern="\d{10}"
-                    className="w-2/3 text-sm py-1.5 border-1 rounded-md pl-2 placeholder:text-xs"
+                    required
+                    className="w-full py-1.5 text-sm border-1 rounded-md pl-2 placeholder:text-xs"
                   />
-                  {errors.mobile && <ErrorMiniModal text={errors.mobile} />}
                 </div>
-              </div>
-              <div className="">
-                <label className="block text-sm font-medium mb-2 ">
-                  Location{" "}
-                  <span className="text-red-500 text-[0.85em] ml-2 whitespace-nowrap absolute left-[280px]">
-                    {errors.location}
-                  </span>
-                </label>
-                <input
-                  type="text"
-                  name="location"
-                  placeholder="Enter your location"
-                  value={formData.location}
-                  onChange={handleChange}
-                  required
-                  className="w-full py-1.5 text-sm border-1 rounded-md pl-2 placeholder:text-xs"
-                />
-              </div>
+              )}
+
+              {isLogin && (
+                <div className="">
+                  <label className="block text-sm font-medium mb-2 ">
+                    Password{" "}
+                    <span className="text-red-500 text-[0.85em] ml-2 whitespace-nowrap absolute left-[280px]">
+                      {errors.password}
+                    </span>
+                  </label>
+                  <input
+                    type="password"
+                    name="password"
+                    placeholder="Enter your password"
+                    value={formData.password}
+                    onChange={handleChange}
+                    required
+                    className="w-full py-1.5 text-sm border-1 rounded-md pl-2 placeholder:text-xs"
+                  />
+                </div>
+              )}
 
               <div className="bg-green-950 mt-8 w-3/4 mx-auto rounded-lg">
                 <button className="w-full text-white py-1.5" type="submit">
-                  Register
+                  {isLogin ? "Login" : "Register"}
                 </button>
               </div>
             </form>
+            <p
+              onClick={toggleForm}
+              className="toggle-link cursor-pointer justify-self-center py-2"
+            >
+              {isLogin
+                ? "Don't have an account? Register here"
+                : "Already have an account? Login"}
+            </p>
           </div>
         </div>
         {/* image */}
