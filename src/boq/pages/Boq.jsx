@@ -149,10 +149,10 @@ function Boq() {
               const subcategoryKey = normalize(subcategory);
 
               // Skip filtering if the category is not "Furniture"
-              const isFurniture = normalize(category.category) === "furniture";
-              if (!isFurniture) {
-                return true; // Keep the subcategory if it's not "Furniture"
-              }
+              // const isFurniture = normalize(category.category) === "furniture";
+              // if (!isFurniture) {
+              //   return true; // Keep the subcategory if it's not "Furniture"
+              // }
 
               // Get the room data from quantityData
               const roomCount = processedQuantityData;
