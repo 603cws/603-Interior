@@ -37,7 +37,7 @@ const Categories = ({
     const cleanedCategoryName = getCleanedCategoryName(category);
     const cleanedSubCategoryName = getCleanedSubCategoryName(subCategory);
 
-    // Handle specific categories if needed
+    // Handle specific categories except Furniture
     if (
       [
         "Lighting",
@@ -47,6 +47,7 @@ const Categories = ({
         "Civil Plumbing",
         "Paint",
         "Partitions Ceilings",
+        "Lux",
       ].includes(cleanedCategoryName)
     ) {
       //Sunny => Maybe reverse logic in future(except Furniture)
