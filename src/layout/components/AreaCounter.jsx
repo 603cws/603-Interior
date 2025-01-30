@@ -46,7 +46,7 @@ const AreaCounter = ({
       setError("Add workspace to increase the area");
       setTimeout(() => {
         setError("");
-      }, 1200);
+      }, 1500);
     }
   };
 

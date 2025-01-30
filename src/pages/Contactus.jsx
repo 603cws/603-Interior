@@ -53,7 +53,7 @@ function Contactus() {
       {/* section2 */}
       <section className="bg-[url('/images/AdressCont.png')] bg-cover">
         {/* container */}
-        <div className="container mx-auto flex justify-evenly font-Poppins py-4 items-center ">
+        <div className="container mx-auto flex justify-center gap-12 font-Poppins py-4 items-center ">
           {/* content card */}
           <div className="border border-1 border-[#000] text-center p-2 w-[215px] h-[255px] ">
             <div className="w-full flex justify-center my-4">
@@ -158,7 +158,7 @@ function Contactus() {
                     </label>
                     <input
                       type="Number"
-                      className="w-full rounded-lg p-2 mb-2 focus:outline-none"
+                      className="w-full rounded-lg p-2 mb-2 focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                       placeholder="Enter Mobile No"
                       required
                     />

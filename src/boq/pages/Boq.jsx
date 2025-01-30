@@ -22,7 +22,7 @@ function Boq() {
   const [selectedProductView, setSelectedProductView] = useState([]);
   const [productsData, setProductData] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
-  const [priceRange, setPriceRange] = useState([1000, 15000000]);
+  const [priceRange, setPriceRange] = useState([1, 15000000]);
 
   const [workspaces, setWorkspaces] = useState([]);
   const [roomData, setRoomData] = useState({ quantityData: [], areasData: [] });
