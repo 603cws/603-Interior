@@ -31,13 +31,19 @@ export const calculateTotalPriceHelper = (
   roomNumbersMap,
   areasData,
   category,
-  subcategory
+  subcategory,
+  subcategory1,
+  height
 ) => {
   const normalizedSubCat = normalizeKey(subcategory);
 
   let matchedKey, quantity, area, value;
 
-  if (category === "Furniture") {
+  if (
+    category === "Furniture" ||
+    category === "Smart Solutions" ||
+    category === "Lux"
+  ) {
     //|| category === "HVAC"
     // Calculation of price * quantity
     matchedKey = findKeyWithExactAndPartialMatch(
@@ -63,7 +69,12 @@ export const calculateTotalPriceHelper = (
     value = quantity * area;
 
     if (category === "Partitions / Ceilings") {
-      ParitionCelingCalculation({ quantity, area }); //return value and do the calculation here
+      value = ParitionCelingCalculation({
+        quantity,
+        area,
+        subcategory1,
+        height,
+      }); //return value and do the calculation here
     }
 
     if (category === "HVAC") {

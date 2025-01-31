@@ -57,6 +57,8 @@ function Boq() {
     selectedAddons,
     setSelectedAddons,
     categoriesWithModal,
+    height,
+    setHeight,
   } = useApp();
 
   useEffect(() => {
@@ -68,6 +70,12 @@ function Boq() {
     setTotalArea(roomData.areasData[0]?.totalArea);
     setUserId(roomData.areasData[0]?.userId);
   }, [roomData]);
+
+  useEffect(() => {
+    if (userResponses.height) {
+      setHeight(userResponses.height);
+    }
+  }, [userResponses]);
 
   useEffect(() => {
     if (selectedCategory) {
@@ -385,11 +393,22 @@ function Boq() {
       quantityData[0],
       areasData[0],
       selectedCategory?.category,
-      selectedSubCategory
+      selectedSubCategory,
+      selectedSubCategory1,
+      height
     );
     //Currently rate of product is hardcoded inside HVACCalculation.jsx file.
     if (selectedCategory?.category === "HVAC") {
       return total;
+    }
+    if (selectedCategory?.category === "Lighting") {
+      return total * 200 + selectedProductView.price;
+    }
+    if (selectedCategory?.category === "Civil / Plumbing") {
+      return total * 100 + selectedProductView.price;
+    }
+    if (selectedCategory?.category === "Paint") {
+      return total * selectedProductView.price * 3 * 15;
     }
     return total * selectedProductView.price;
   };

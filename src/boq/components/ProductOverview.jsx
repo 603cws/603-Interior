@@ -116,7 +116,11 @@ function ProductOverview({
 
     const quantity = quantityData[0]?.[normalizedSubCat] || 0;
     const area = areasData[0]?.[normalizedSubCat] || 0;
-    if (selectedCategory?.category === "Furniture") {
+    if (
+      selectedCategory?.category === "Furniture" ||
+      selectedCategory?.category === "Smart Solutions" ||
+      selectedCategory?.category === "Lux"
+    ) {
       // || selectedCategory?.category === "HVAC"
       return { quantity, price: selectedProductView.price }; //addonPrice
     } else if (
@@ -233,7 +237,7 @@ function ProductOverview({
             <p className="text-lg font-bold mb-3">
               ₹ {calculateTotalPrice().toLocaleString("en-IN")}
             </p>
-            {details.quantity && (
+            {details.quantity > 0 && (
               <p className="text-md font-medium text-[#334A78] mb-3">
                 Total Quantity:{" "}
                 <span className="border-[1px] py-1 border-[#334A78] text-[#1a1b1c] rounded-xl px-2 text-sm">
@@ -241,7 +245,7 @@ function ProductOverview({
                 </span>{" "}
               </p>
             )}
-            {details.area && (
+            {details.area > 0 && (
               <p className="text-md font-medium text-[#334A78] mb-3">
                 Total Area:{" "}
                 <span className="border-[1px] py-1 border-[#334A78] text-[#1a1b1c] rounded-xl px-2 text-sm">
