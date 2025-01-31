@@ -122,7 +122,7 @@ function Landing() {
 
           {/* Text div */}
           <div className="flex justify-center items-center h-svh">
-            <div className="flex-1 flex flex-col justify-center items-center text-white max-h-fit max-w-fit mx-auto p-5 rounded-xl mb-10 backdrop-blur-sm">
+            <div className="flex-1 flex flex-col justify-center items-center text-white max-h-fit max-w-fit mx-auto p-5 rounded-xl mt-14 backdrop-blur-sm">
               <h1 className="font-lato text-[64px]">Create your Space</h1>
               <p className="font-Poppins text-[32px]">
                 We create unique style and design for your office

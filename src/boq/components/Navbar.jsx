@@ -1,9 +1,25 @@
 import { useNavigate } from "react-router-dom";
 import { useApp } from "../../Context/Context";
 import PDFGenerator from "./PDFGenerator";
+import { useState, useEffect, useRef } from "react";
+import { RiArrowDropDownLine } from "react-icons/ri";
 
 function Navbar({ clearSelectedData, calculateGrandTotal }) {
   // const progress = 0;
+  const [isOpen, setIsOpen] = useState(false);
+  const dropdownRef = useRef(null);
+  // Close when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   const { progress, selectedData } = useApp();
 
@@ -70,12 +86,34 @@ function Navbar({ clearSelectedData, calculateGrandTotal }) {
           </button> */}
           {/* </div> */}
           {/* <div className="justify-items-end"> */}
-          <button
-            className="viewB bg-[#FFF] text-xs py-2 px-5 text-black rounded-full border-solid border-[1px] border-black"
-            onClick={clearSelectedData}
+          <div
+            className="relative inline-flex items-center border border-black rounded-full"
+            ref={dropdownRef}
           >
-            View BOQ
-          </button>
+            <button className="bg-white text-xs py-2 px-3 text-black rounded-l-full">
+              Save BOQ
+            </button>
+            <button
+              onClick={() => setIsOpen(!isOpen)}
+              className="bg-white px-3 py-2 border-l border-black flex items-center rounded-r-full"
+            >
+              <RiArrowDropDownLine />
+            </button>
+
+            {isOpen && (
+              <ul className="absolute left-0 top-7 mt-2 w-32 bg-white border border-gray-300 rounded-lg shadow-md">
+                <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
+                  BOQ 1
+                </li>
+                <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
+                  BOQ 2
+                </li>
+                <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
+                  BOQ 3
+                </li>
+              </ul>
+            )}
+          </div>
           {/* </div> */}
           <div className="flex items-center downloadB">
             <button
