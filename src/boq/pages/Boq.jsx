@@ -658,6 +658,7 @@ function Boq() {
             selectedProductView={selectedProductView}
             quantityData={quantityData}
             areasData={areasData}
+            showProductView={showProductView}
             setShowProductView={setShowProductView}
             showRecommend={showRecommend}
             setShowRecommend={setShowRecommend}

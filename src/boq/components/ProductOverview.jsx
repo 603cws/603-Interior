@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { TbArrowBackUp } from "react-icons/tb";
 import { MdOutlineKeyboardArrowRight } from "react-icons/md"; //MdOutlineKeyboardArrowLeft
 import { normalizeKey } from "../utils/CalculateTotalPriceHelper";
@@ -30,6 +30,7 @@ function ProductOverview({
     selectedSubCategory,
     selectedSubCategory1,
     selectedData,
+    categoriesWithTwoLevelCheck,
   } = useApp();
   const instructions = {
     Furniture: [
@@ -59,10 +60,30 @@ function ProductOverview({
       "Ensure all connections are clean and secure.",
     ],
   };
+
+  useEffect(() => {
+    // Function to handle "Esc" key press
+    const handleEscKey = (e) => {
+      if (e.key === "Escape") {
+        setShowProductView(false);
+      }
+    };
+
+    // Add event listener when component is mounted
+    document.addEventListener("keydown", handleEscKey);
+
+    // Cleanup event listener on component unmount
+    return () => {
+      document.removeEventListener("keydown", handleEscKey);
+    };
+  }, []);
+
   const getInstructions = (category) => {
     return instructions[category] || ["No specific instructions found."]; // Provide default message
   };
+
   const categoryInstructions = getInstructions(selectedCategory?.category);
+
   const baseImageUrl =
     "https://bwxzfwsoxwtzhjbzbdzs.supabase.co/storage/v1/object/public/addon/";
 
@@ -79,12 +100,15 @@ function ProductOverview({
     }
 
     // Proceed with the .some() method if selectedData is non-empty
-    return selectedData.some(
-      (item) =>
-        item.id === selectedProductView.id &&
-        item.category === selectedCategory?.category &&
-        item.subcategory === selectedSubCategory &&
-        item.subcategory1 === selectedSubCategory1
+    return selectedData.some((item) =>
+      categoriesWithTwoLevelCheck.includes(item.category)
+        ? item.id === selectedProductView.id &&
+          item.category === selectedCategory?.category &&
+          item.subcategory === selectedSubCategory
+        : item.id === selectedProductView.id &&
+          item.category === selectedCategory?.category &&
+          item.subcategory === selectedSubCategory &&
+          item.subcategory1 === selectedSubCategory1
     );
   };
 
@@ -340,6 +364,7 @@ function ProductOverview({
           selectedProductView={selectedProductView}
           selectedData={selectedData}
           handelSelectedData={handelSelectedData}
+          categoriesWithTwoLevelCheck={categoriesWithTwoLevelCheck}
         />
       )}
 

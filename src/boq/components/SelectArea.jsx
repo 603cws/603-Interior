@@ -10,6 +10,7 @@ function SelectArea({
   setSelectedAreas,
   selectedProductView,
   handelSelectedData,
+  categoriesWithTwoLevelCheck,
 }) {
   const { selectedData, selectedCategory, selectedSubCategory1 } = useApp();
 
@@ -17,14 +18,28 @@ function SelectArea({
   useEffect(() => {
     // Only proceed if selectedData is a non-empty array
     if (Array.isArray(selectedData) && selectedData.length > 0) {
-      const initialSelectedAreas = subCategories.filter((subCat) =>
-        selectedData.some(
-          (item) =>
-            // item.groupKey ===
-            // `${selectedCategory.category}-${subCat}-${selectedSubCategory1}-${selectedProductView.id}`
-            `${item.category}-${item.subcategory}-${item.subcategory1}` ===
-            `${selectedCategory.category}-${subCat}-${selectedSubCategory1}`
-        )
+      const initialSelectedAreas = subCategories.filter(
+        (subCat) =>
+          selectedData.some((item) =>
+            // Check for the 'Flooring' category separately
+            categoriesWithTwoLevelCheck.includes(item.category)
+              ? item.id === selectedProductView?.id
+                ? `${item.category}-${item.subcategory}-${item.subcategory1}` ===
+                  `${selectedCategory.category}-${subCat}-${selectedSubCategory1}`
+                : `${item.category}-${item.subcategory}` ===
+                  `${selectedCategory.category}-${subCat}`
+              : `${item.category}-${item.subcategory}-${item.subcategory1}` ===
+                `${selectedCategory.category}-${subCat}-${selectedSubCategory1}`
+          )
+
+        // Array.isArray(selectedData) &&
+        // selectedData.length > 0 &&
+        // isItemSelected(
+        //   selectedData,
+        //   selectedCategory,
+        //   subCat,
+        //   selectedSubCategory1
+        // )
       );
       setSelectedAreas(initialSelectedAreas);
     } else {
@@ -39,6 +54,23 @@ function SelectArea({
     setSelectedAreas,
   ]);
 
+  useEffect(() => {
+    // Function to handle "Esc" key press
+    const handleEscKey = (e) => {
+      if (e.key === "Escape") {
+        setShowSelectArea(false);
+      }
+    };
+
+    // Add event listener when component is mounted
+    document.addEventListener("keydown", handleEscKey);
+
+    // Cleanup event listener on component unmount
+    return () => {
+      document.removeEventListener("keydown", handleEscKey);
+    };
+  }, []);
+
   const handleCheckboxChange = (value, checked) => {
     setSelectedAreas((prev) =>
       checked ? [...prev, value] : prev.filter((item) => item !== value)
@@ -51,13 +83,22 @@ function SelectArea({
     // Process all subcategories to handle addition and removal
     allSubcategories.forEach((subCat) => {
       const isDisabled =
+        // Array.isArray(selectedData) &&
+        // selectedData.length > 0 &&
+        // selectedData.some(
+        //   (item) =>
+        //     `${item.category}-${item.subcategory}-${item.subcategory1}` ===
+        //       `${selectedCategory.category}-${subCat}-${selectedSubCategory1}` &&
+        //     item.product_variant.variant_title !== selectedProductView.title
+        // );
         Array.isArray(selectedData) &&
         selectedData.length > 0 &&
-        selectedData.some(
-          (item) =>
-            `${item.category}-${item.subcategory}-${item.subcategory1}` ===
-              `${selectedCategory.category}-${subCat}-${selectedSubCategory1}` &&
-            item.product_variant.variant_title !== selectedProductView.title
+        isItemSelected(
+          selectedData,
+          selectedCategory,
+          subCat,
+          selectedSubCategory1,
+          selectedProductView
         );
 
       // Skip processing if the subcategory is disabled
@@ -76,6 +117,32 @@ function SelectArea({
     });
 
     setShowSelectArea(false); // Close the modal
+  };
+
+  const isItemSelected = (
+    selectedData,
+    selectedCategory,
+    subCat,
+    selectedSubCategory1,
+    selectedProductView
+  ) => {
+    return (
+      Array.isArray(selectedData) &&
+      selectedData.some((item) => {
+        const baseCondition = categoriesWithTwoLevelCheck.includes(
+          selectedCategory.category
+        )
+          ? `${item.category}-${item.subcategory}` ===
+              `${selectedCategory.category}-${subCat}` &&
+            item.product_variant.variant_title !== selectedProductView?.title
+          : `${item.category}-${item.subcategory}-${item.subcategory1}` ===
+              `${selectedCategory.category}-${subCat}-${selectedSubCategory1}` &&
+            item.product_variant.variant_title !== selectedProductView?.title;
+
+        // Directly return baseCondition
+        return baseCondition;
+      })
+    );
   };
 
   return (
@@ -107,32 +174,59 @@ function SelectArea({
                       handleCheckboxChange(e.target.value, e.target.checked)
                     }
                     disabled={
+                      // Array.isArray(selectedData) &&
+                      // selectedData.length > 0 &&
+                      // selectedData.some((item) =>
+                      //   // item.groupKey ===
+                      //   // `${selectedCategory.category}-${name}-${selectedSubCategory1}-${selectedProductView.id}` &&
+                      //   item.category === "Flooring"
+                      //     ? `${item.category}-${item.subcategory}` ===
+                      //         `${selectedCategory.category}-${name}` &&
+                      //       item.product_variant.variant_title !==
+                      //         selectedProductView.title
+                      //     : `${item.category}-${item.subcategory}-${item.subcategory1}` ===
+                      //         `${selectedCategory.category}-${name}-${selectedSubCategory1}` &&
+                      //       item.product_variant.variant_title !==
+                      //         selectedProductView.title
+                      // )
                       Array.isArray(selectedData) &&
                       selectedData.length > 0 &&
-                      selectedData.some(
-                        (item) =>
-                          // item.groupKey ===
-                          // `${selectedCategory.category}-${name}-${selectedSubCategory1}-${selectedProductView.id}` &&
-                          `${item.category}-${item.subcategory}-${item.subcategory1}` ===
-                            `${selectedCategory.category}-${name}-${selectedSubCategory1}` &&
-                          item.product_variant.variant_title !==
-                            selectedProductView.title
+                      isItemSelected(
+                        selectedData,
+                        selectedCategory,
+                        name,
+                        selectedSubCategory1,
+                        selectedProductView
                       )
                     }
                   />
                   <label
                     htmlFor={`subCategory-${id}`}
                     className={`${
+                      // Array.isArray(selectedData) &&
+                      // selectedData.length > 0 &&
+                      // selectedData.some((item) =>
+                      //   // item.groupKey ===
+                      //   // `${selectedCategory.category}-${name}-${selectedSubCategory1}-${selectedProductView.id}` &&
+
+                      //   item.category === "Furniture"
+                      //     ? `${item.category}-${item.subcategory}-${item.subcategory1}` ===
+                      //         `${selectedCategory.category}-${name}-${selectedSubCategory1}` &&
+                      //       item.product_variant.variant_title !==
+                      //         selectedProductView.title
+                      //     : `${item.category}-${item.subcategory}` ===
+                      //         `${selectedCategory.category}-${name}` &&
+                      //       item.product_variant.variant_title !==
+                      //         selectedProductView.title
+                      // )
                       Array.isArray(selectedData) &&
                       selectedData.length > 0 &&
-                      selectedData.some(
-                        (item) =>
-                          // item.groupKey ===
-                          // `${selectedCategory.category}-${name}-${selectedSubCategory1}-${selectedProductView.id}` &&
-                          `${item.category}-${item.subcategory}-${item.subcategory1}` ===
-                            `${selectedCategory.category}-${name}-${selectedSubCategory1}` &&
-                          item.product_variant.variant_title !==
-                            selectedProductView.title
+                      isItemSelected(
+                        selectedData,
+                        selectedCategory,
+                        name,
+                        selectedSubCategory1,
+                        selectedProductView
                       )
                         ? "text-gray-400 cursor-not-allowed"
                         : ""
@@ -140,22 +234,6 @@ function SelectArea({
                   >
                     {name}
                   </label>
-
-                  {Array.isArray(selectedData) &&
-                    selectedData.length > 0 &&
-                    selectedData.some(
-                      (item) =>
-                        // item.groupKey ===
-                        // `${selectedCategory.category}-${name}-${selectedSubCategory1}-${selectedProductView.id}` &&
-                        `${item.category}-${item.subcategory}-${item.subcategory1}` ===
-                          `${selectedCategory.category}-${name}-${selectedSubCategory1}` &&
-                        item.product_variant.variant_title !==
-                          selectedProductView.title
-                    ) && (
-                      <div className="tooltip bg-gray-700 text-white text-xs rounded px-2 py-1 absolute -top-8 left-0">
-                        Already selected for another product
-                      </div>
-                    )}
                 </div>
               ))}
             </div>

@@ -3,7 +3,13 @@ import { createContext, useContext, useEffect, useState, useRef } from "react";
 const AppContext = createContext();
 
 export const AppProvider = ({ children }) => {
-  const categoriesWithModal = ["Flooring", "HVAC", "Partitions / Ceilings"]; // Array of categories that should show the modal when clicked
+  const categoriesWithModal = ["Flooring", "HVAC"]; // Array of categories that should show the modal/questions when clicked
+
+  const categoriesWithTwoLevelCheck = [
+    "Flooring",
+    "Partitions / Ceilings",
+    "HVAC",
+  ]; //Array of Categories where save data works on dependent subcategories
 
   const [totalArea, setTotalArea] = useState();
   const [inputValue, setInputValue] = useState("");
@@ -153,6 +159,7 @@ export const AppProvider = ({ children }) => {
         categoriesWithModal,
         height,
         setHeight,
+        categoriesWithTwoLevelCheck,
       }}
     >
       {children}
