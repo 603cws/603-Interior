@@ -145,6 +145,8 @@ const processData = (data, type, quantity = {}) => {
     publicspaces: publicspaces,
     supportspaces: supportspaces,
     allareas: allAreas,
+    centralized: allAreas,
+    pantry: latestData.lounge,
   };
 
   return processedData;

@@ -4,7 +4,7 @@ import PDFGenerator from "./PDFGenerator";
 import { useState, useEffect, useRef } from "react";
 import { RiArrowDropDownLine } from "react-icons/ri";
 
-function Navbar({ clearSelectedData, calculateGrandTotal }) {
+function Navbar({ handleSave, calculateGrandTotal }) {
   // const progress = 0;
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
@@ -90,7 +90,10 @@ function Navbar({ clearSelectedData, calculateGrandTotal }) {
             className="relative inline-flex items-center border border-black rounded-full"
             ref={dropdownRef}
           >
-            <button className="bg-white text-xs py-2 px-3 text-black rounded-l-full">
+            <button
+              onClick={handleSave}
+              className="bg-white text-xs py-2 px-3 text-black rounded-l-full"
+            >
               Save BOQ
             </button>
             <button

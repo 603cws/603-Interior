@@ -17,7 +17,7 @@ import QnaPopup from "../components/QnaPopup";
 import { useApp } from "../../Context/Context";
 import { calculateTotalPriceHelper } from "../utils/CalculateTotalPriceHelper";
 import Joyride, { STATUS } from "react-joyride";
-
+import { supabase } from "../../services/supabase";
 function Boq() {
   const [selectedProductView, setSelectedProductView] = useState([]);
   const [productsData, setProductData] = useState([]);
@@ -159,7 +159,8 @@ function Boq() {
               // Skip filtering if the category is not "Furniture"
               const ignoreCat =
                 normalize(category.category) === "lux" ||
-                normalize(category.category) === "civilplumbing";
+                normalize(category.category) === "civilplumbing" ||
+                normalize(category.category) === "hvac";
               if (ignoreCat) {
                 return true; // Keep the subcategory if it's not "Furniture"
               }
@@ -579,6 +580,75 @@ function Boq() {
     return grandTotal;
   };
 
+  const insertDataIntoSupabase = async (selectedData) => {
+    try {
+      // Arrays to hold the IDs
+      const productIds = [];
+      const productVariantIds = [];
+      const addonIds = [];
+      const addonVariantIds = [];
+
+      // Loop through selected data and collect the IDs
+      selectedData.forEach((item) => {
+        // Collect product IDs
+        if (item.id) productIds.push(item.id);
+
+        // Collect product variant IDs
+        if (item.product_variant?.variant_id)
+          productVariantIds.push(item.product_variant.variant_id);
+
+        // Collect addon IDs and addon variant IDs
+        if (item.addons) {
+          Object.keys(item.addons).forEach((addonKey) => {
+            const addon = item.addons[addonKey];
+            if (addon.addonId) addonIds.push(addon.addonId);
+            if (addon.variantID) addonVariantIds.push(addon.variantID);
+          });
+        }
+      });
+
+      // Join arrays into comma-separated strings
+      const productIdStr = productIds.join(",");
+      const productVariantIdStr = productVariantIds.join(",");
+      const addonIdStr = addonIds.join(",");
+      const addonVariantIdStr = addonVariantIds.join(",");
+
+      // Create the formatted data object
+      const formattedData = {
+        product_id: productIdStr,
+        product_variant_id: productVariantIdStr,
+        addon_id: addonIdStr,
+        addon_variant_id: addonVariantIdStr,
+        userId: userId, // Add userId to the formatted data
+      };
+
+      // Debugging logs to check the final data
+      console.log("Formatted data to insert:", formattedData);
+
+      // Insert the formatted data into Supabase as a single row
+      const { data, error } = await supabase
+        .from("boqdata")
+        .insert([formattedData]);
+
+      if (error) {
+        console.error("Error inserting data into Supabase:", error);
+      } else {
+        console.log("Data inserted successfully:", data);
+      }
+    } catch (error) {
+      console.error("Error during insertion:", error);
+    }
+  };
+
+  const handleSave = () => {
+    if (selectedData && selectedData.length > 0) {
+      insertDataIntoSupabase(selectedData);
+      console.log("Data inserted");
+    } else {
+      console.warn("No selected data to save.");
+    }
+  };
+
   console.log("selected products", selectedData);
 
   return (
@@ -615,6 +685,7 @@ function Boq() {
       <Navbar
         clearSelectedData={clearSelectedData}
         calculateGrandTotal={calculateGrandTotal}
+        handleSave={handleSave}
       />
       {questionPopup && (
         <QnaPopup
