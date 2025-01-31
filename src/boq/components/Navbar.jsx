@@ -26,7 +26,7 @@ function Navbar({ clearSelectedData, calculateGrandTotal }) {
   const naviagte = useNavigate();
 
   const handleGoTOlayout = () => {
-    naviagte("/");
+    naviagte("/Layout");
   };
 
   const handlelogo = () => {
