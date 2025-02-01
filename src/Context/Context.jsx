@@ -38,8 +38,20 @@ export const AppProvider = ({ children }) => {
   }, []);
 
   useEffect(() => {
+    // Check if selectedData is valid and not empty
+    if (selectedData && selectedData.length > 0) {
+      // Save the data as a JSON string
+      localStorage.setItem("selectedData", JSON.stringify(selectedData));
+    }
+  }, [selectedData]);
+
+  useEffect(() => {
     console.log("Progress: ", progress);
   }, []);
+
+  useEffect(() => {
+    console.log("userId: ", userId);
+  }, [userId]);
 
   useEffect(() => {
     console.log("Selected Data: ", selectedData);

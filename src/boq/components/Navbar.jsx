@@ -3,10 +3,22 @@ import { useApp } from "../../Context/Context";
 import PDFGenerator from "./PDFGenerator";
 import { useState, useEffect, useRef } from "react";
 import { RiArrowDropDownLine } from "react-icons/ri";
+import { FaDownload, FaTrash } from "react-icons/fa";
+import { MdClear } from "react-icons/md";
 
-function Navbar({ handleSave, calculateGrandTotal }) {
+function Navbar({
+  handleSave,
+  calculateGrandTotal,
+  fetchSavedBOQs,
+  boqList,
+  setBoqList,
+  handleLoadBOQ,
+  handleDeleteBOQ,
+}) {
   // const progress = 0;
   const [isOpen, setIsOpen] = useState(false);
+  // const [boqList, setBoqList] = useState([]);
+
   const dropdownRef = useRef(null);
   // Close when clicking outside
   useEffect(() => {
@@ -86,6 +98,14 @@ function Navbar({ handleSave, calculateGrandTotal }) {
           </button> */}
           {/* </div> */}
           {/* <div className="justify-items-end"> */}
+          <MdClear
+            color="red"
+            size={30}
+            onClick={() => {
+              localStorage.clear(selectedData);
+            }}
+            className="cursor-pointer"
+          />
           <div
             className="relative inline-flex items-center border border-black rounded-full"
             ref={dropdownRef}
@@ -97,23 +117,53 @@ function Navbar({ handleSave, calculateGrandTotal }) {
               Save BOQ
             </button>
             <button
-              onClick={() => setIsOpen(!isOpen)}
+              onClick={() => {
+                fetchSavedBOQs();
+                setIsOpen(!isOpen);
+              }}
               className="bg-white px-3 py-2 border-l border-black flex items-center rounded-r-full"
             >
               <RiArrowDropDownLine />
             </button>
 
             {isOpen && (
-              <ul className="absolute left-0 top-7 mt-2 w-32 bg-white border border-gray-300 rounded-lg shadow-md">
-                <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
-                  BOQ 1
+              <ul className="absolute left-0 top-7 min-w-[200px] mt-2 w-auto bg-white border border-gray-300 rounded-lg shadow-md">
+                {/* Header Row */}
+                <li className="px-4 py-2 grid grid-cols-[2fr_1fr] font-semibold bg-gray-200 text-center rounded-lg shadow-md">
+                  <span className="text-left">Title</span>
+                  <span className="text-center">Actions</span>
                 </li>
-                <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
-                  BOQ 2
-                </li>
-                <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
-                  BOQ 3
-                </li>
+
+                {/* BOQ List */}
+                {boqList.length > 0 ? (
+                  boqList.map((boq) => (
+                    <li
+                      key={boq.id}
+                      className="px-4 py-2 grid grid-cols-[2fr_1fr] items-center hover:bg-gray-100 cursor-pointer"
+                    >
+                      {/* Title with word wrap */}
+                      <span className="text-left break-words whitespace-normal">
+                        {boq.title}
+                      </span>
+
+                      {/* Action Icons */}
+                      <div className="flex justify-center gap-2">
+                        <FaDownload
+                          className="text-blue-500 cursor-pointer"
+                          onClick={() => handleLoadBOQ(boq.id)}
+                        />
+                        <FaTrash
+                          className="text-red-500 cursor-pointer"
+                          onClick={() => handleDeleteBOQ(boq.id)}
+                        />
+                      </div>
+                    </li>
+                  ))
+                ) : (
+                  <li className="px-4 py-2 text-gray-500 text-center">
+                    No BOQs saved
+                  </li>
+                )}
               </ul>
             )}
           </div>

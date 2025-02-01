@@ -18,6 +18,7 @@ import { useApp } from "../../Context/Context";
 import { calculateTotalPriceHelper } from "../utils/CalculateTotalPriceHelper";
 import Joyride, { STATUS } from "react-joyride";
 import { supabase } from "../../services/supabase";
+import toast from "react-hot-toast";
 function Boq() {
   const [selectedProductView, setSelectedProductView] = useState([]);
   const [productsData, setProductData] = useState([]);
@@ -34,6 +35,7 @@ function Boq() {
   const [showRecommend, setShowRecommend] = useState(false);
   const [questionPopup, setQuestionPopup] = useState(false);
   const [userResponses, setUserResponses] = useState({});
+  const [boqList, setBoqList] = useState([]);
 
   const {
     selectedCategory,
@@ -485,6 +487,7 @@ function Boq() {
           (item) => !(item.groupKey === groupKey)
         );
         localStorage.setItem("selectedData", JSON.stringify(updatedData)); // Persist updated state
+        console.log("Updated DataL ", updatedData);
         return updatedData;
       }
 
@@ -580,52 +583,60 @@ function Boq() {
     return grandTotal;
   };
 
-  const insertDataIntoSupabase = async (selectedData) => {
+  const insertDataIntoSupabase = async (selectedData, userId, boqTitle) => {
     try {
-      // Arrays to hold the IDs
-      const productIds = [];
-      const productVariantIds = [];
-      const addonIds = [];
-      const addonVariantIds = [];
+      // Check how many BOQs the user has already saved
+      const { data: existingBOQs, error: fetchError } = await supabase
+        .from("boqdata")
+        .select("id", { count: "exact" })
+        .eq("userId", userId);
 
-      // Loop through selected data and collect the IDs
-      selectedData.forEach((item) => {
-        // Collect product IDs
-        if (item.id) productIds.push(item.id);
+      if (fetchError) {
+        console.error("Error fetching user BOQ count:", fetchError);
+        return;
+      }
 
-        // Collect product variant IDs
-        if (item.product_variant?.variant_id)
-          productVariantIds.push(item.product_variant.variant_id);
+      if (existingBOQs.length >= 3) {
+        console.warn("User has reached the BOQ limit.");
+        toast.error("You can only save up to 3 BOQs.");
+        return;
+      }
 
-        // Collect addon IDs and addon variant IDs
-        if (item.addons) {
-          Object.keys(item.addons).forEach((addonKey) => {
-            const addon = item.addons[addonKey];
-            if (addon.addonId) addonIds.push(addon.addonId);
-            if (addon.variantID) addonVariantIds.push(addon.variantID);
-          });
-        }
-      });
+      // Ask for BOQ title
+      if (!boqTitle) {
+        toast.error("BOQ name cannot be empty.");
+        return;
+      }
 
-      // Join arrays into comma-separated strings
-      const productIdStr = productIds.join(",");
-      const productVariantIdStr = productVariantIds.join(",");
-      const addonIdStr = addonIds.join(",");
-      const addonVariantIdStr = addonVariantIds.join(",");
-
-      // Create the formatted data object
+      // Prepare formatted data
       const formattedData = {
-        product_id: productIdStr,
-        product_variant_id: productVariantIdStr,
-        addon_id: addonIdStr,
-        addon_variant_id: addonVariantIdStr,
-        userId: userId, // Add userId to the formatted data
+        product_id: selectedData.map((item) => item.id).join(","),
+        product_variant_id: selectedData
+          .map((item) => item.product_variant?.variant_id || "")
+          .join(","),
+        addon_id: selectedData
+          .flatMap((item) =>
+            item.addons
+              ? Object.values(item.addons).map((addon) => addon.addonId)
+              : []
+          )
+          .join(","),
+        addon_variant_id: selectedData
+          .flatMap((item) =>
+            item.addons
+              ? Object.values(item.addons).map((addon) => addon.variantID)
+              : []
+          )
+          .join(","),
+        group_key: selectedData
+          .map((item) => item.groupKey || "")
+          .filter(Boolean) // Removes empty strings
+          .join(","), // Store multiple group keys as comma-separated values
+        userId: userId,
+        title: boqTitle, // Save the entered BOQ name
       };
 
-      // Debugging logs to check the final data
-      console.log("Formatted data to insert:", formattedData);
-
-      // Insert the formatted data into Supabase as a single row
+      // Insert into Supabase
       const { data, error } = await supabase
         .from("boqdata")
         .insert([formattedData]);
@@ -634,6 +645,7 @@ function Boq() {
         console.error("Error inserting data into Supabase:", error);
       } else {
         console.log("Data inserted successfully:", data);
+        toast.success("BOQ saved successfully!");
       }
     } catch (error) {
       console.error("Error during insertion:", error);
@@ -642,10 +654,342 @@ function Boq() {
 
   const handleSave = () => {
     if (selectedData && selectedData.length > 0) {
-      insertDataIntoSupabase(selectedData);
-      console.log("Data inserted");
+      const boqTitle = window.prompt("Enter a name for your BOQ:");
+      if (boqTitle) {
+        insertDataIntoSupabase(selectedData, userId, boqTitle.trim());
+      }
     } else {
       console.warn("No selected data to save.");
+      toast.error("No selected data to save.");
+    }
+  };
+
+  const fetchSavedBOQs = async () => {
+    try {
+      const { data, error } = await supabase
+        .from("boqdata")
+        .select("id, created_at, title") // Fetch BOQs for the user
+        .eq("userId", userId)
+        .order("created_at", { ascending: false }); // Sort by latest first
+
+      if (error) {
+        console.error("Error fetching BOQs:", error);
+        return;
+      }
+
+      setBoqList(data); // Update state with fetched BOQs
+    } catch (err) {
+      console.error("Error fetching BOQs:", err);
+    }
+  };
+
+  // Function to load a BOQ (replace with actual logic)
+  const handleLoadBOQ = async (boqId) => {
+    try {
+      // Fetch BOQ data from Supabase
+      const { data, error } = await supabase
+        .from("boqdata")
+        .select("*")
+        .eq("id", boqId)
+        .single();
+
+      if (error) {
+        console.error("Error fetching BOQ:", error);
+        toast.error("Failed to load BOQ");
+        return;
+      }
+
+      if (!data) {
+        toast.error("BOQ not found");
+        return;
+      }
+
+      // Convert stored comma-separated IDs into arrays
+      const productVariantIds = data.product_variant_id
+        ? data.product_variant_id.split(",").map((id) => id.trim())
+        : [];
+
+      const addonIds = data.addon_id
+        ? data.addon_id.split(",").map((id) => id.trim())
+        : [];
+
+      const groupKeys = data.group_key
+        ? data.group_key.split(",").map((key) => key.trim())
+        : [];
+
+      // ✅ Reconstruct products based on `groupKey`
+      const reconstructedData = groupKeys.map((groupKey, index) => {
+        const [category, subcategory, subcategory1, productId] =
+          groupKey.split("-");
+
+        return {
+          id: productId,
+          category,
+          subcategory,
+          subcategory1,
+          product_variant: {
+            variant_id: productVariantIds[index] || productId,
+          },
+          addons: addonIds.length > index ? [{ addonId: addonIds[index] }] : [],
+          groupKey,
+        };
+      });
+
+      console.log("Reconstructed BOQ Data:", reconstructedData);
+
+      // Fetch and transform BOQ-related products
+      const formattedBOQProducts = await fetchFilteredBOQProducts(
+        reconstructedData
+      );
+
+      // ✅ Update state with the final BOQ structure
+      setSelectedData(formattedBOQProducts);
+
+      toast.success(`Loaded BOQ: ${data.title}`);
+    } catch (err) {
+      console.error("Error loading BOQ:", err);
+      toast.error("Error loading BOQ");
+    }
+  };
+
+  const tryParseJSON = (jsonString) => {
+    try {
+      return jsonString ? JSON.parse(jsonString) : [];
+    } catch (e) {
+      console.error("Error parsing JSON:", e);
+      return []; // Return an empty array if parsing fails
+    }
+  };
+
+  const fetchFilteredBOQProducts = async (reconstructedData) => {
+    try {
+      if (!Array.isArray(reconstructedData) || reconstructedData.length === 0) {
+        console.warn(
+          "fetchFilteredBOQProducts received invalid data:",
+          reconstructedData
+        );
+        return [];
+      }
+
+      // Fetch all products from the database
+      const allProducts = await fetchProductsData();
+
+      if (!Array.isArray(allProducts) || allProducts.length === 0) {
+        console.warn("No products found in the database.");
+        return [];
+      }
+
+      // Extract saved product and addon variant IDs
+      const savedProductVariantIds = reconstructedData
+        .map((dataItem) => dataItem.product_variant?.variant_id)
+        .filter(Boolean);
+      const savedAddonVariantIds = reconstructedData
+        .flatMap((dataItem) =>
+          Object.values(dataItem.addons || {}).map((addon) => addon.addonId)
+        )
+        .filter(Boolean);
+
+      // Filter products matching BOQ data
+      const filteredBOQProducts = reconstructedData
+        .map((boqItem) => {
+          const matchingProduct = allProducts.find((product) =>
+            product.product_variants.some(
+              (variant) => variant.id === boqItem.product_variant.variant_id
+            )
+          );
+
+          if (!matchingProduct) return null;
+
+          const matchingVariant = matchingProduct.product_variants.find(
+            (variant) => variant.id === boqItem.product_variant.variant_id
+          );
+
+          return {
+            id: matchingVariant?.id || matchingProduct.id,
+            category: boqItem.category,
+            subcategory: boqItem.subcategory,
+            subcategory1: boqItem.subcategory1,
+            product_variant: {
+              variant_id: matchingVariant?.id || matchingProduct.id,
+              variant_title: matchingVariant?.title || matchingProduct.title,
+              variant_details:
+                matchingVariant?.details || matchingProduct.details,
+              variant_image: matchingVariant?.image || matchingProduct.image,
+              variant_price: matchingVariant?.price || matchingProduct.price,
+              additional_images: JSON.parse(matchingVariant?.additional_images),
+              // ? tryParseJSON(matchingVariant.additional_images)
+              // : [],
+            },
+            addons: boqItem.addons,
+            groupKey: boqItem.groupKey,
+          };
+        })
+        .filter(Boolean);
+
+      console.log("Formatted BOQ Products:", filteredBOQProducts);
+      return filteredBOQProducts;
+    } catch (error) {
+      console.error("Error fetching and filtering BOQ products:", error);
+      return [];
+    }
+  };
+
+  // const groupedBOQProducts = useMemo(() => {
+  //   const grouped = {};
+  //   filteredBOQProducts.forEach((product) => {
+  //     const subcategories = product.subcategory
+  //       .split(",")
+  //       .map((sub) => sub.trim());
+
+  //     subcategories.forEach((subcategory) => {
+  //       if (!grouped[product.category]) {
+  //         grouped[product.category] = {};
+  //       }
+  //       if (!grouped[product.category][subcategory]) {
+  //         grouped[product.category][subcategory] = [];
+  //       }
+  //       grouped[product.category][subcategory].push(product);
+  //     });
+  //   });
+  //   return grouped;
+  // }, [filteredBOQProducts]);
+
+  // const fetchBOQData = async (reconstructedData) => {
+  //   try {
+  //     // Loop through each entry in reconstructedData
+  //     const updatedData = await Promise.all(
+  //       reconstructedData.map(async (dataItem) => {
+  //         const { product_variant, addons } = dataItem;
+
+  //         // Fetch full product variant data from product_variants table using product_variant.variant_id
+  //         const { data: productVariantData, error: productVariantError } =
+  //           await supabase
+  //             .from("product_variants")
+  //             .select("*") // Select all columns to get the full details
+  //             .eq("id", product_variant.variant_id);
+
+  //         if (productVariantError) {
+  //           console.error(
+  //             "Error fetching product variant:",
+  //             productVariantError
+  //           );
+  //           return null;
+  //         }
+
+  //         // Check if product variant data is returned, and update with full variant data
+  //         const fullProductVariant = productVariantData?.[0] || null;
+
+  //         // Fetch addon data from addon_variants table using addon_id and variant_id
+  //         const addonData = await Promise.all(
+  //           Object.keys(addons).map(async (addonKey) => {
+  //             const addon = addons[addonKey];
+
+  //             if (addon.addonId) {
+  //               const { data: addonVariantData, error: addonVariantError } =
+  //                 await supabase
+  //                   .from("addon_variants")
+  //                   .select("*")
+  //                   .eq("id", addon.addonId);
+
+  //               if (addonVariantError) {
+  //                 console.error(
+  //                   `Error fetching addon variant for addonId ${addon.addonId}:`,
+  //                   addonVariantError
+  //                 );
+  //                 return null;
+  //               }
+
+  //               return addonVariantData?.[0] || null;
+  //             }
+  //           })
+  //         );
+
+  //         // Return updated data with full product_variant and addon data
+  //         return {
+  //           ...dataItem,
+  //           product_variant: fullProductVariant, // Use the full product variant data
+  //           addons: addonData.filter(Boolean), // Remove null values from errors
+  //         };
+  //       })
+  //     );
+
+  //     // Filter out any null results
+  //     const filteredData = updatedData.filter(Boolean);
+
+  //     console.log("Fetched BOQ Data:", filteredData);
+
+  //     // Call fetchAndFilterBOQData to filter the product dataset based on saved BOQ
+  //     const finalFilteredProducts = await fetchAndFilterBOQData(filteredData);
+
+  //     return finalFilteredProducts;
+  //   } catch (error) {
+  //     console.error("Error fetching BOQ data:", error);
+  //   }
+  // };
+
+  // const fetchAndFilterBOQData = async (filteredData) => {
+  //   try {
+  //     // Fetch all products from the database
+  //     const allProducts = await fetchProductsData();
+
+  //     // Extract saved product and addon variant IDs from filteredData
+  //     const savedProductVariantIds = filteredData.map(
+  //       (dataItem) => dataItem.product_variant?.id
+  //     );
+
+  //     const savedAddonVariantIds = filteredData.flatMap((dataItem) =>
+  //       dataItem.addons.map((addon) => addon.id)
+  //     );
+
+  //     // Filter products to include only those that match the saved BOQ data
+  //     const filteredProducts = allProducts.filter((product) =>
+  //       product.product_variants.some((variant) =>
+  //         savedProductVariantIds.includes(variant.id)
+  //       )
+  //     );
+
+  //     // Ensure that each filtered product contains only the relevant variants and addons
+  //     const finalFilteredProducts = filteredProducts.map((product) => ({
+  //       ...product,
+  //       product_variants: product.product_variants.filter((variant) =>
+  //         savedProductVariantIds.includes(variant.id)
+  //       ),
+  //       addons: product.addons
+  //         ? product.addons.filter((addon) =>
+  //             savedAddonVariantIds.includes(addon.id)
+  //           )
+  //         : [],
+  //     }));
+
+  //     console.log("Final Filtered BOQ Products:", finalFilteredProducts);
+  //     return finalFilteredProducts;
+  //   } catch (error) {
+  //     console.error("Error fetching and filtering BOQ data:", error);
+  //   }
+  // };
+
+  // Function to delete a BOQ
+
+  const handleDeleteBOQ = async (boqId) => {
+    const isConfirmed = window.confirm(
+      "Are you sure you want to delete this BOQ?"
+    );
+
+    if (!isConfirmed) return; // If user cancels, stop execution
+
+    try {
+      const { error } = await supabase.from("boqdata").delete().eq("id", boqId);
+
+      if (error) {
+        console.error("Error deleting BOQ:", error);
+        toast.error("Failed to delete BOQ");
+        return;
+      }
+
+      toast.success("BOQ deleted successfully!");
+      fetchSavedBOQs(); // Refresh the list after deletion
+    } catch (err) {
+      console.error("Error deleting BOQ:", err);
     }
   };
 
@@ -686,6 +1030,11 @@ function Boq() {
         clearSelectedData={clearSelectedData}
         calculateGrandTotal={calculateGrandTotal}
         handleSave={handleSave}
+        fetchSavedBOQs={fetchSavedBOQs}
+        boqList={boqList}
+        setBoqList={setBoqList}
+        handleLoadBOQ={handleLoadBOQ}
+        handleDeleteBOQ={handleDeleteBOQ}
       />
       {questionPopup && (
         <QnaPopup
