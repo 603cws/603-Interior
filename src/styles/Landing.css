@@ -124,3 +124,16 @@ html {
 .swiper-pagination .swiper-pagination-bullet-active {
   background: gray;
 }
+
+/*Login page css*/
+
+#checkbox:checked + label span::before {
+  content: "\2713"; /* Check mark */
+  color: green;
+  font-size: 16px;
+  font-weight: bolder;
+  position: absolute;
+  top: 50%;
+  left: 5%;
+  transform: translate(-50%, -50%);
+}

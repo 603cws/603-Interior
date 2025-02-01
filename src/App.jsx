@@ -19,6 +19,7 @@ import JobCard from "./common-components/JobCard";
 import SpinnerFullPage from "./common-components/SpinnerFullPage";
 import Contactus from "./pages/Contactus";
 import AboutUs from "./pages/AboutUs";
+import Login from "./common-components/Login";
 
 // const Homepage = lazy(() => import("./pages/Homepage"));
 
@@ -52,6 +53,7 @@ function App() {
           <Route path="*" element={<PageNotFound />} />
           <Route path="/NumberAnimation" element={<NumberAnimation />} />
           <Route path="/JobCard" element={<JobCard />} />
+          <Route path="/Login" element={<Login />} />
         </Routes>
       </Suspense>
     </div>

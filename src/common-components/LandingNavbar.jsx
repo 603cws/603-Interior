@@ -8,7 +8,7 @@ function LandingNavbar() {
   return (
     <div className="px-5 pt-3 absolute top-0 w-full z-10">
       {/* Navbar Container */}
-      <div className="bg-white bg-opacity-[0.72] flex justify-between items-center border rounded-3xl px-5 py-3">
+      <div className="bg-white bg-opacity-[0.72] flex justify-between items-center border rounded-full px-5 py-1.5">
         {/* Logo */}
         <div className="cursor-pointer" onClick={() => navigate("/")}>
           <img src="/logo/logo.png" alt="Logo" className="h-12 w-20" />
@@ -39,7 +39,10 @@ function LandingNavbar() {
 
         {/* Login Button (Desktop) */}
         <div className="hidden xl:block">
-          <button className="px-6 py-1.5 bg-[#1F5C54] border border-[#15423C] rounded-3xl text-white">
+          <button
+            onClick={() => navigate("/Login")}
+            className="px-6 py-1.5 bg-[#1F5C54] border border-[#15423C] rounded-3xl text-white"
+          >
             Log In
           </button>
         </div>
@@ -78,7 +81,10 @@ function LandingNavbar() {
               Contact Us
             </li>
             <li>
-              <button className="px-6 py-1.5 bg-[#1F5C54] border border-[#15423C] rounded-3xl text-white w-full">
+              <button
+                onClick={() => navigate("/Login")}
+                className="px-6 py-1.5 bg-[#1F5C54] border border-[#15423C] rounded-3xl text-white w-full"
+              >
                 Log In
               </button>
             </li>

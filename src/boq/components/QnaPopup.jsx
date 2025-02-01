@@ -69,10 +69,10 @@ const QnaPopup = ({ onClose, onSubmit, category }) => {
   const [showDisclaimer, setShowDisclaimer] = useState(false);
   const [animationClass, setAnimationClass] = useState("animate__fadeInUp");
 
-  useEffect(() => {
-    const savedAnswers = localStorage.getItem("answers");
-    if (savedAnswers) setAnswers(JSON.parse(savedAnswers));
-  }, []);
+  // useEffect(() => {
+  //   const savedAnswers = localStorage.getItem("answers");
+  //   if (savedAnswers) setAnswers(JSON.parse(savedAnswers));
+  // }, []);
 
   useEffect(() => {
     // Dynamically set questions based on category name
@@ -93,7 +93,7 @@ const QnaPopup = ({ onClose, onSubmit, category }) => {
     console.log(updatedAnswers);
 
     setAnswers(updatedAnswers);
-    localStorage.setItem("answers", JSON.stringify(updatedAnswers));
+    // localStorage.setItem("answers", JSON.stringify(updatedAnswers));
 
     // If flooringStatus is selected, check for the demolishTile question
     if (questions.length < 2) {
