@@ -34,7 +34,6 @@ function Boq() {
   const [showProductView, setShowProductView] = useState(false);
   const [showRecommend, setShowRecommend] = useState(false);
   const [questionPopup, setQuestionPopup] = useState(false);
-  const [userResponses, setUserResponses] = useState({});
   const [boqList, setBoqList] = useState([]);
 
   const {
@@ -61,6 +60,8 @@ function Boq() {
     categoriesWithModal,
     height,
     setHeight,
+    userResponses,
+    setUserResponses,
   } = useApp();
 
   useEffect(() => {
@@ -544,6 +545,7 @@ function Boq() {
       ...prevResponses,
       height: answers.roomHeight,
       flooring: answers.flooringStatus,
+      demolishTile: answers.demolishTile,
       // flooringArea: answers.flooringArea,
       // flooringType: answers.flooringType,
       // cabinFlooring: answers.cabinFlooring,
@@ -993,7 +995,8 @@ function Boq() {
     }
   };
 
-  console.log("selected products", selectedData);
+  // console.log("selected products", selectedData);
+  console.log("user responces", userResponses);
 
   return (
     <div>

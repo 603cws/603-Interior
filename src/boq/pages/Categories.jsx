@@ -58,7 +58,7 @@ const Categories = ({
     return `/images/subheader/${cleanedSubCategoryName}.png`;
   };
   const checkIfSubCategoryCompleted = (category, subCategory) => {
-    console.log("selectedData:", selectedData); // Log selectedData
+    // console.log("selectedData:", selectedData); // Log selectedData
     if (!selectedData || selectedData.length === 0) return false;
 
     const categoryObject = categories.find(
@@ -134,7 +134,7 @@ const Categories = ({
 
     return isCompleted;
   };
-  console.log("categories", categories);
+  // console.log("categories", categories);
   return (
     <div className="flex flex-col pb-3">
       {/* Categories List */}

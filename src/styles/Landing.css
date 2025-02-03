@@ -124,6 +124,9 @@ html {
 .swiper-pagination .swiper-pagination-bullet-active {
   background: gray;
 }
+/* .service-card:hover ~ .service-card p {
+  font-size: 10px;
+} */
 
 /*Login page css*/
 

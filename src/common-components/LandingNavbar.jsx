@@ -24,7 +24,12 @@ function LandingNavbar() {
             <li onClick={() => navigate("/Aboutus")} className="cursor-pointer">
               About Us
             </li>
-            <li className="cursor-pointer">Our Services</li>
+            <li
+              onClick={() => navigate("/OurServices")}
+              className="cursor-pointer"
+            >
+              Our Services
+            </li>
             <li onClick={() => navigate("/Blog")} className="cursor-pointer">
               Our Blog
             </li>
@@ -70,7 +75,12 @@ function LandingNavbar() {
             <li onClick={() => navigate("/Aboutus")} className="cursor-pointer">
               About Us
             </li>
-            <li className="cursor-pointer">Our Services</li>
+            <li
+              onClick={() => navigate("/OurServices")}
+              className="cursor-pointer"
+            >
+              Our Services
+            </li>
             <li onClick={() => navigate("/Blog")} className="cursor-pointer">
               Our Blog
             </li>

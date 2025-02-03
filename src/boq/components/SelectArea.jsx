@@ -12,7 +12,13 @@ function SelectArea({
   handelSelectedData,
   categoriesWithTwoLevelCheck,
 }) {
-  const { selectedData, selectedCategory, selectedSubCategory1 } = useApp();
+  const {
+    selectedData,
+    selectedCategory,
+    selectedSubCategory1,
+    userResponses,
+    setUserResponses,
+  } = useApp();
 
   // Initialize selected areas based on selectedData
   useEffect(() => {
@@ -160,82 +166,91 @@ function SelectArea({
           <div className="flex flex-col lg:flex-row justify-between gap-8">
             {/* Subcategories Checkbox List */}
             <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-4 p-4 cursor-pointer">
-              {selectedCategory.subcategories.map((name, id) => (
-                <div
-                  key={id}
-                  className="flex items-center gap-2 cursor-pointer"
-                >
-                  <input
-                    type="checkbox"
-                    id={`subCategory-${id}`}
-                    value={name}
-                    checked={selectedAreas.includes(name)}
-                    onChange={(e) =>
-                      handleCheckboxChange(e.target.value, e.target.checked)
-                    }
-                    disabled={
-                      // Array.isArray(selectedData) &&
-                      // selectedData.length > 0 &&
-                      // selectedData.some((item) =>
-                      //   // item.groupKey ===
-                      //   // `${selectedCategory.category}-${name}-${selectedSubCategory1}-${selectedProductView.id}` &&
-                      //   item.category === "Flooring"
-                      //     ? `${item.category}-${item.subcategory}` ===
-                      //         `${selectedCategory.category}-${name}` &&
-                      //       item.product_variant.variant_title !==
-                      //         selectedProductView.title
-                      //     : `${item.category}-${item.subcategory}-${item.subcategory1}` ===
-                      //         `${selectedCategory.category}-${name}-${selectedSubCategory1}` &&
-                      //       item.product_variant.variant_title !==
-                      //         selectedProductView.title
-                      // )
-                      Array.isArray(selectedData) &&
-                      selectedData.length > 0 &&
-                      isItemSelected(
-                        selectedData,
-                        selectedCategory,
-                        name,
-                        selectedSubCategory1,
-                        selectedProductView
-                      )
-                    }
-                  />
-                  <label
-                    htmlFor={`subCategory-${id}`}
-                    className={`${
-                      // Array.isArray(selectedData) &&
-                      // selectedData.length > 0 &&
-                      // selectedData.some((item) =>
-                      //   // item.groupKey ===
-                      //   // `${selectedCategory.category}-${name}-${selectedSubCategory1}-${selectedProductView.id}` &&
-
-                      //   item.category === "Furniture"
-                      //     ? `${item.category}-${item.subcategory}-${item.subcategory1}` ===
-                      //         `${selectedCategory.category}-${name}-${selectedSubCategory1}` &&
-                      //       item.product_variant.variant_title !==
-                      //         selectedProductView.title
-                      //     : `${item.category}-${item.subcategory}` ===
-                      //         `${selectedCategory.category}-${name}` &&
-                      //       item.product_variant.variant_title !==
-                      //         selectedProductView.title
-                      // )
-                      Array.isArray(selectedData) &&
-                      selectedData.length > 0 &&
-                      isItemSelected(
-                        selectedData,
-                        selectedCategory,
-                        name,
-                        selectedSubCategory1,
-                        selectedProductView
-                      )
-                        ? "text-gray-400 cursor-not-allowed"
-                        : ""
-                    } text-sm`}
+              {selectedCategory.subcategories
+                ?.filter(
+                  (subCategory) =>
+                    selectedCategory.category === "HVAC"
+                      ? userResponses?.hvacType === "Centralized"
+                        ? subCategory === "Centralized" // Show only "Centralized"
+                        : subCategory !== "Centralized" // Show all except "Centralized"
+                      : true // Show all for non-HVAC categories
+                )
+                .map((name, id) => (
+                  <div
+                    key={id}
+                    className="flex items-center gap-2 cursor-pointer"
                   >
-                    {name}
-                  </label>
-                </div>
-              ))}
+                    <input
+                      type="checkbox"
+                      id={`subCategory-${id}`}
+                      value={name}
+                      checked={selectedAreas.includes(name)}
+                      onChange={(e) =>
+                        handleCheckboxChange(e.target.value, e.target.checked)
+                      }
+                      disabled={
+                        // Array.isArray(selectedData) &&
+                        // selectedData.length > 0 &&
+                        // selectedData.some((item) =>
+                        //   // item.groupKey ===
+                        //   // `${selectedCategory.category}-${name}-${selectedSubCategory1}-${selectedProductView.id}` &&
+                        //   item.category === "Flooring"
+                        //     ? `${item.category}-${item.subcategory}` ===
+                        //         `${selectedCategory.category}-${name}` &&
+                        //       item.product_variant.variant_title !==
+                        //         selectedProductView.title
+                        //     : `${item.category}-${item.subcategory}-${item.subcategory1}` ===
+                        //         `${selectedCategory.category}-${name}-${selectedSubCategory1}` &&
+                        //       item.product_variant.variant_title !==
+                        //         selectedProductView.title
+                        // )
+                        Array.isArray(selectedData) &&
+                        selectedData.length > 0 &&
+                        isItemSelected(
+                          selectedData,
+                          selectedCategory,
+                          name,
+                          selectedSubCategory1,
+                          selectedProductView
+                        )
+                      }
+                    />
+                    <label
+                      htmlFor={`subCategory-${id}`}
+                      className={`${
+                        // Array.isArray(selectedData) &&
+                        // selectedData.length > 0 &&
+                        // selectedData.some((item) =>
+                        //   // item.groupKey ===
+                        //   // `${selectedCategory.category}-${name}-${selectedSubCategory1}-${selectedProductView.id}` &&
+
+                        //   item.category === "Furniture"
+                        //     ? `${item.category}-${item.subcategory}-${item.subcategory1}` ===
+                        //         `${selectedCategory.category}-${name}-${selectedSubCategory1}` &&
+                        //       item.product_variant.variant_title !==
+                        //         selectedProductView.title
+                        //     : `${item.category}-${item.subcategory}` ===
+                        //         `${selectedCategory.category}-${name}` &&
+                        //       item.product_variant.variant_title !==
+                        //         selectedProductView.title
+                        // )
+                        Array.isArray(selectedData) &&
+                        selectedData.length > 0 &&
+                        isItemSelected(
+                          selectedData,
+                          selectedCategory,
+                          name,
+                          selectedSubCategory1,
+                          selectedProductView
+                        )
+                          ? "text-gray-400 cursor-not-allowed"
+                          : ""
+                      } text-sm`}
+                    >
+                      {name}
+                    </label>
+                  </div>
+                ))}
             </div>
 
             {/* Image Section */}

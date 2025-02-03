@@ -69,10 +69,10 @@ const QnaPopup = ({ onClose, onSubmit, category }) => {
   const [showDisclaimer, setShowDisclaimer] = useState(false);
   const [animationClass, setAnimationClass] = useState("animate__fadeInUp");
 
-  // useEffect(() => {
-  //   const savedAnswers = localStorage.getItem("answers");
-  //   if (savedAnswers) setAnswers(JSON.parse(savedAnswers));
-  // }, []);
+  useEffect(() => {
+    const savedAnswers = localStorage.getItem("answers");
+    if (savedAnswers) setAnswers(JSON.parse(savedAnswers));
+  }, []);
 
   useEffect(() => {
     // Dynamically set questions based on category name
@@ -93,7 +93,7 @@ const QnaPopup = ({ onClose, onSubmit, category }) => {
     console.log(updatedAnswers);
 
     setAnswers(updatedAnswers);
-    // localStorage.setItem("answers", JSON.stringify(updatedAnswers));
+    localStorage.setItem("answers", JSON.stringify(updatedAnswers));
 
     // If flooringStatus is selected, check for the demolishTile question
     if (questions.length < 2) {
@@ -163,7 +163,7 @@ const QnaPopup = ({ onClose, onSubmit, category }) => {
   };
 
   // console.log("questions", questions);
-  console.log("answers", answers.roomHeight);
+  // console.log("answers", answers.roomHeight);
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
@@ -181,15 +181,17 @@ const QnaPopup = ({ onClose, onSubmit, category }) => {
         {/* Right Side: Questions */}
         <div className="w-1/2 p-6 border-2 border-[#ffd500] border-r-0 flex flex-col items-center justify-center">
           <button
-            // onClick={() => {
-            //   setAnimationClass("animate__fadeOutUp");
-            //   setTimeout(onClose, 300);
-            // }}
             onClick={handleHeightClose}
-            className="absolute top-4 right-4 text-2xl font-bold text-gray-500 hover:text-gray-800"
+            disabled={Object.keys(answers).length === 0} // Disable if no answers
+            className={`absolute top-4 right-4 text-2xl font-bold ${
+              Object.keys(answers).length === 0
+                ? "text-gray-300 cursor-not-allowed"
+                : "text-gray-500 hover:text-gray-800"
+            }`}
           >
             &times;
           </button>
+
           {!showDisclaimer ? (
             <div className="flex flex-col gap-5">
               <h2 className="text-lg font-bold mb-4 text-center">
@@ -247,7 +249,12 @@ const QnaPopup = ({ onClose, onSubmit, category }) => {
                   )}
                   <button
                     type="submit"
-                    className="bg-[#1A3A36] text-white px-4 py-2 rounded hover:bg-[#145A50]"
+                    disabled={Object.keys(answers).length === 0} // Disable if no answers
+                    className={`px-4 py-2 rounded ${
+                      Object.keys(answers).length === 0
+                        ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                        : "bg-[#1A3A36] text-white hover:bg-[#145A50]"
+                    }`}
                   >
                     {currentQuestionIndex < questions.length - 1
                       ? "Next"

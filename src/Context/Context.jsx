@@ -27,6 +27,7 @@ export const AppProvider = ({ children }) => {
   const [categories, setCategories] = useState([]);
   const [subCategories, setSubCategories] = useState([]); // Extracted subcategories
   const [subCat1, setSubCat1] = useState([]);
+  const [userResponses, setUserResponses] = useState({});
 
   const prevSelectedData = useRef(selectedData); // Ref to store previous selectedData
   const prevCategories = useRef(categories); // Ref to store previous categories
@@ -172,6 +173,8 @@ export const AppProvider = ({ children }) => {
         height,
         setHeight,
         categoriesWithTwoLevelCheck,
+        userResponses,
+        setUserResponses,
       }}
     >
       {children}
