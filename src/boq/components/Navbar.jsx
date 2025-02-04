@@ -101,8 +101,10 @@ function Navbar({
           <MdClear
             color="red"
             size={30}
+            title="Clear selected data"
             onClick={() => {
-              localStorage.clear(selectedData);
+              localStorage.removeItem("selectedData");
+              window.location.reload();
             }}
             className="cursor-pointer"
           />

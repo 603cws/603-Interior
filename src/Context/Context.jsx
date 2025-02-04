@@ -117,7 +117,8 @@ export const AppProvider = ({ children }) => {
           category === "Furniture") ||
         category === "Smart Solutions" ||
         category === "Civil / Plumbing" ||
-        category === "Lux"
+        category === "Lux" ||
+        category === "Paint"
       ) {
         //&& (category === 'Furniture' || category === 'Smart Solutions')
         // if (category === "Flooring") return;

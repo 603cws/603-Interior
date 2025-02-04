@@ -585,7 +585,12 @@ function Boq() {
     return grandTotal;
   };
 
-  const insertDataIntoSupabase = async (selectedData, userId, boqTitle) => {
+  const insertDataIntoSupabase = async (
+    selectedData,
+    userId,
+    boqTitle,
+    totalArea
+  ) => {
     try {
       // Check how many BOQs the user has already saved
       const { data: existingBOQs, error: fetchError } = await supabase
@@ -604,10 +609,13 @@ function Boq() {
         return;
       }
 
-      // Ask for BOQ title
+      // Ask for BOQ title only if the user has room for more BOQs
       if (!boqTitle) {
-        toast.error("BOQ name cannot be empty.");
-        return;
+        boqTitle = window.prompt("Enter a name for your BOQ:");
+        if (!boqTitle) {
+          toast.error("BOQ name cannot be empty.");
+          return;
+        }
       }
 
       // Prepare formatted data
@@ -636,6 +644,11 @@ function Boq() {
           .join(","), // Store multiple group keys as comma-separated values
         userId: userId,
         title: boqTitle, // Save the entered BOQ name
+        total_area: totalArea,
+        final_price: selectedData
+          .map((item) => item.finalPrice || "")
+          .filter(Boolean) // Removes empty strings
+          .join(","), // Store multiple group keys as comma-separated values
       };
 
       // Insert into Supabase
@@ -656,10 +669,12 @@ function Boq() {
 
   const handleSave = () => {
     if (selectedData && selectedData.length > 0) {
-      const boqTitle = window.prompt("Enter a name for your BOQ:");
-      if (boqTitle) {
-        insertDataIntoSupabase(selectedData, userId, boqTitle.trim());
-      }
+      insertDataIntoSupabase(
+        selectedData,
+        userId,
+        "", // Initially empty; will be set later
+        totalArea
+      );
     } else {
       console.warn("No selected data to save.");
       toast.error("No selected data to save.");
@@ -719,6 +734,12 @@ function Boq() {
         ? data.group_key.split(",").map((key) => key.trim())
         : [];
 
+      const finalPrices = data.final_price
+        ? data.final_price
+            .split(",")
+            .map((price) => parseFloat(price.trim()) || 0)
+        : [];
+
       // ✅ Reconstruct products based on `groupKey`
       const reconstructedData = groupKeys.map((groupKey, index) => {
         const [category, subcategory, subcategory1, productId] =
@@ -734,6 +755,7 @@ function Boq() {
           },
           addons: addonIds.length > index ? [{ addonId: addonIds[index] }] : [],
           groupKey,
+          finalPrice: finalPrices[index] || 0, // Assign the corresponding final price
         };
       });
 
@@ -746,20 +768,13 @@ function Boq() {
 
       // ✅ Update state with the final BOQ structure
       setSelectedData(formattedBOQProducts);
+      setUserId(data.userId);
+      setTotalArea(data.total_area);
 
       toast.success(`Loaded BOQ: ${data.title}`);
     } catch (err) {
       console.error("Error loading BOQ:", err);
       toast.error("Error loading BOQ");
-    }
-  };
-
-  const tryParseJSON = (jsonString) => {
-    try {
-      return jsonString ? JSON.parse(jsonString) : [];
-    } catch (e) {
-      console.error("Error parsing JSON:", e);
-      return []; // Return an empty array if parsing fails
     }
   };
 
@@ -824,6 +839,7 @@ function Boq() {
             },
             addons: boqItem.addons,
             groupKey: boqItem.groupKey,
+            finalPrice: boqItem.finalPrice || matchingVariant?.price || 0, // Ensure finalPrice is carried over
           };
         })
         .filter(Boolean);
@@ -995,8 +1011,7 @@ function Boq() {
     }
   };
 
-  // console.log("selected products", selectedData);
-  console.log("user responces", userResponses);
+  console.log("selected products", selectedData);
 
   return (
     <div>

@@ -134,7 +134,7 @@ const Categories = ({
 
     return isCompleted;
   };
-  // console.log("categories", categories);
+  console.log("categories", categories);
   return (
     <div className="flex flex-col pb-3">
       {/* Categories List */}

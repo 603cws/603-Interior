@@ -1,15 +1,11 @@
-import { useEffect, useState } from "react";
-
 const HVACCalculation = ({
   quantity,
   area,
   subcategory = "Centralized",
   subCat1 = "split",
   location = "India", // Default: "India"
-  showAlert = true, // Optional: Control whether to show alert or not
+  showAlert = false, // Optional: Control whether to show alert or not
 }) => {
-  const [calculatedValue, setCalculatedValue] = useState(0);
-
   // Rates for different AC types and units
   const rates = {
     split: { hp: 55000, ton: 40000 },
@@ -30,8 +26,6 @@ const HVACCalculation = ({
     const value =
       acType === "hp" ? tonToHp(baseTonValue) * rate : baseTonValue * rate;
 
-    setCalculatedValue(value);
-
     if (showAlert) {
       alert(
         `Calculation Details:\n` +
@@ -48,11 +42,7 @@ const HVACCalculation = ({
     return value;
   };
 
-  useEffect(() => {
-    if (area && quantity) calculateArea();
-  }, [area, quantity, location]); // Recalculate when area, quantity, or location changes
-
-  return calculatedValue; // Returns the calculated value
+  return calculateArea(); // Return the calculated value directly
 };
 
 export default HVACCalculation;
