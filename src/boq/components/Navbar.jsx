@@ -3,8 +3,9 @@ import { useApp } from "../../Context/Context";
 import PDFGenerator from "./PDFGenerator";
 import { useState, useEffect, useRef } from "react";
 import { RiArrowDropDownLine } from "react-icons/ri";
-import { FaDownload, FaTrash } from "react-icons/fa";
+import { FaTrash } from "react-icons/fa";
 import { MdClear } from "react-icons/md";
+import { FiUploadCloud } from "react-icons/fi";
 
 function Navbar({
   handleSave,
@@ -150,8 +151,8 @@ function Navbar({
 
                       {/* Action Icons */}
                       <div className="flex justify-center gap-2">
-                        <FaDownload
-                          className="text-blue-500 cursor-pointer"
+                        <FiUploadCloud
+                          className="cursor-pointer"
                           onClick={() => handleLoadBOQ(boq.id)}
                         />
                         <FaTrash

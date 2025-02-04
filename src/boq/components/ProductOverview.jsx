@@ -176,6 +176,7 @@ function ProductOverview({
       .map((dim) => dim.trim() + " cm") // Add "cm" after each number
       .join(" X "); // Join the dimensions with "X"
   }
+
   return (
     // grid
     <>

@@ -54,7 +54,7 @@ function ProductCard({
   };
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 pb-8 pt-3">
       {loading ? (
         Array.from({ length: 4 }).map((_, index) => (
           <div

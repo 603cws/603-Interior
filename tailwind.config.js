@@ -8,6 +8,8 @@ export default {
       },
       backgroundImage: {
         "custom-gradient": "linear-gradient(145deg, #ffffff, #ffffff)",
+        "login-custom-gradient":
+          "radial-gradient(circle at top left, #D3DAD8 10%, #85A59E 40%, #2C5C4E 90%)",
       },
       borderRadius: {
         "lg-19": "19px",
@@ -27,6 +29,9 @@ export default {
       colors: {
         customYellow: "#fff9c9",
         customGray: "#817a78",
+        customTop: "#D3DAD8", // Light grayish-green
+        customMiddle: "#85A59E", // Muted green
+        customBottom: "#2C5C4E", // Dark green
       },
       width: {
         1524: "1524px",
@@ -74,15 +79,6 @@ export default {
       //     "3xl": "8rem", // Optional custom padding for 3xl
       //   },
       // },
-      colors: {
-        customTop: "#D3DAD8", // Light grayish-green
-        customMiddle: "#85A59E", // Muted green
-        customBottom: "#2C5C4E", // Dark green
-      },
-      backgroundImage: {
-        "custom-gradient":
-          "radial-gradient(circle at top left, #D3DAD8 10%, #85A59E 40%, #2C5C4E 90%)",
-      },
     },
   },
   plugins: [require("tailwind-scrollbar-hide")],

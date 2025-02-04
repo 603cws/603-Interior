@@ -54,7 +54,7 @@ function Login() {
   };
 
   return (
-    <div className="main flex justify-center gap-5 h-screen w-full bg-custom-gradient">
+    <div className="main flex justify-center gap-5 h-screen w-full bg-login-custom-gradient">
       <div className="img w-1/2 p-5 flex justify-end items-center">
         <img
           src="images/Register.png"
