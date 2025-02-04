@@ -171,6 +171,8 @@ function Contactus() {
                       rows="4"
                       className="w-full rounded-lg p-2 mb-2 focus:outline-none"
                       placeholder="your message..."
+                      value={message}
+                      onChange={(e) => setMessage(e.target.value)}
                     >
                       {" "}
                     </textarea>
