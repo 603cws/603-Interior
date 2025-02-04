@@ -55,7 +55,7 @@ export default {
         "fade-in": "fadeIn 0.7s ease-in-out",
       },
       screens: {
-        sm: "100%", // Full width for small screens
+        sm: "450px", // Full width for small screens
         md: "640px", // Medium screens
         lg: "768px", // Large screens
         xl: "1024px", // Extra-large screens
