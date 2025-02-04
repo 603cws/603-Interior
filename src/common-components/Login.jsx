@@ -7,21 +7,50 @@ function Login() {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [isSignUp, setIsSignUp] = useState(false);
   const [isForgotPassword, setIsForgotPassword] = useState(false);
+  const [formData, setFormData] = useState({
+    email: "",
+    company: "",
+    location: "",
+    mobile: "",
+    password: "",
+    confirmPassword: "",
+  });
 
   const togglePasswordVisibility = () => {
     setIsPasswordVisible(!isPasswordVisible);
   };
+
   const toggleForm = () => {
     setIsSignUp(!isSignUp);
     setIsForgotPassword(false);
+    resetForm();
   };
+
   const showForgotPassword = () => {
     setIsForgotPassword(true);
     setIsSignUp(false);
+    resetForm();
   };
+
   const backToSignIn = () => {
     setIsForgotPassword(false);
     setIsSignUp(false);
+    resetForm();
+  };
+
+  const resetForm = () => {
+    setFormData({
+      email: "",
+      company: "",
+      location: "",
+      mobile: "",
+      password: "",
+      confirmPassword: "",
+    });
+  };
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   return (
@@ -36,7 +65,7 @@ function Login() {
       <div
         className={`content w-1/2 max-h-full h-full flex flex-col items-start ${
           isSignUp ? "pt-10" : "pt-40"
-        }  gap-10`}
+        } gap-10`}
       >
         <div className="w-3/4">
           <h1 className="capitalize text-3xl font-bold text-white text-center">
@@ -46,7 +75,7 @@ function Login() {
               ? "Create Account"
               : "Welcome back!"}
           </h1>
-          <p className="capitalize text-white font-semibold text-center">
+          <p className="capitalize text-white font-semibold text-center my-2">
             {isForgotPassword
               ? "No worries, we'll send you reset instructions"
               : isSignUp
@@ -56,7 +85,6 @@ function Login() {
         </div>
 
         <div className="w-full flex flex-col gap-2 pr-2">
-          {/* Email Input */}
           <div className="flex flex-col gap-3 xl:w-3/4">
             <label
               htmlFor="email"
@@ -67,18 +95,21 @@ function Login() {
             <input
               type="email"
               name="email"
-              placeholder="example@gmail.com"
+              value={formData.email}
+              onChange={handleChange}
+              placeholder={
+                isForgotPassword ? "Enter your email" : "example@gmail.com"
+              }
               className="w-full py-2 rounded-lg pl-2 focus:outline-none"
             />
           </div>
 
-          {/* Forgot Password View */}
           {isForgotPassword ? (
             <div>
               <button className="capitalize w-full xl:w-3/4 bg-[#1A3A36] text-white font-semibold py-2 rounded-lg mt-3">
                 Reset Password
               </button>
-              <p className="text-white capitalize flex items-center justify-center gap-1 w-full xl:w-3/4">
+              <p className="text-white capitalize flex items-center justify-center gap-1 w-full xl:w-3/4 my-6">
                 <span
                   onClick={backToSignIn}
                   className="cursor-pointer text-black self-center"
@@ -90,11 +121,9 @@ function Login() {
             </div>
           ) : (
             <>
-              {/* Sign Up Additional Fields */}
               {isSignUp && (
                 <>
                   <div className="flex justify-center gap-2 xl:w-3/4">
-                    {/* Company Name */}
                     <div className="flex flex-col gap-3 w-1/2">
                       <label
                         htmlFor="company"
@@ -105,12 +134,13 @@ function Login() {
                       <input
                         type="text"
                         name="company"
+                        value={formData.company}
+                        onChange={handleChange}
                         placeholder="Your Company Name"
                         className="w-full py-2 rounded-lg pl-2 focus:outline-none"
                       />
                     </div>
 
-                    {/* Location */}
                     <div className="flex flex-col gap-3 w-1/2">
                       <label
                         htmlFor="location"
@@ -121,12 +151,14 @@ function Login() {
                       <input
                         type="text"
                         name="location"
+                        value={formData.location}
+                        onChange={handleChange}
                         placeholder="Your Location"
                         className="w-full py-2 rounded-lg pl-2 focus:outline-none"
                       />
                     </div>
                   </div>
-                  {/* Mobile Number */}
+
                   <div className="xl:w-3/4 flex flex-col gap-3">
                     <label
                       htmlFor="mobile"
@@ -137,6 +169,8 @@ function Login() {
                     <input
                       type="text"
                       name="mobile"
+                      value={formData.mobile}
+                      onChange={handleChange}
                       placeholder="Your Mobile Number"
                       className="w-full py-2 rounded-lg pl-2 focus:outline-none"
                     />
@@ -144,7 +178,6 @@ function Login() {
                 </>
               )}
 
-              {/* Password Input */}
               <div className="xl:w-3/4 flex flex-col gap-3 relative">
                 <label
                   htmlFor="password"
@@ -155,12 +188,16 @@ function Login() {
                 <input
                   type={isPasswordVisible ? "text" : "password"}
                   name="password"
+                  value={formData.password}
+                  onChange={handleChange}
                   placeholder="Enter Password"
                   className="py-2 rounded-lg pl-2 focus:outline-none"
                 />
                 <div
                   onClick={togglePasswordVisibility}
-                  className="absolute top-[40%] right-3 cursor-pointer"
+                  className={`absolute ${
+                    isSignUp ? "top-[60%]" : "top-[40%]"
+                  } right-3 cursor-pointer`}
                 >
                   {isPasswordVisible ? (
                     <IoEyeOutline color="gray" size={20} />
@@ -180,24 +217,25 @@ function Login() {
                 )}
               </div>
 
-              {/* Confirm Password (Sign Up Only) */}
               {isSignUp && (
                 <div className="xl:w-3/4 flex flex-col gap-3 relative">
                   <label
-                    htmlFor="password"
+                    htmlFor="confirmPassword"
                     className="capitalize text-md font-semibold text-white"
                   >
-                    confirm Password <span>*</span>
+                    Confirm Password <span>*</span>
                   </label>
                   <input
                     type={isPasswordVisible ? "text" : "password"}
-                    name="password"
-                    placeholder="Enter Password"
+                    name="confirmPassword"
+                    value={formData.confirmPassword}
+                    onChange={handleChange}
+                    placeholder="Confirm Password"
                     className="py-2 rounded-lg pl-2 focus:outline-none"
                   />
                   <div
                     onClick={togglePasswordVisibility}
-                    className="absolute top-[40%] right-3 cursor-pointer"
+                    className="absolute top-[60%] right-3 cursor-pointer"
                   >
                     {isPasswordVisible ? (
                       <IoEyeOutline color="gray" size={20} />
@@ -218,12 +256,14 @@ function Login() {
                 </div>
               )}
 
-              {/* Sign In/Sign Up Button */}
-              <button className="capitalize xl:w-3/4 bg-[#1A3A36] text-white font-semibold py-2 rounded-lg">
+              <button
+                className={`capitalize xl:w-3/4 bg-[#1A3A36] text-white font-semibold py-2 rounded-lg ${
+                  isSignUp ? "my-1" : "my-2"
+                }`}
+              >
                 {isSignUp ? "Sign Up" : "Sign In"}
               </button>
 
-              {/* Switch Between Forms */}
               <p className="text-white">
                 {isSignUp ? (
                   <>
