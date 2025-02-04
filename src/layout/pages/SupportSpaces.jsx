@@ -4,32 +4,37 @@ import LayoutCard from "../components/LayoutCard"; // Ensure the correct path to
 const supportSpacesData = [
   {
     type: "ups",
-    image: "/images/workspace-image/ups.png",
+    // image: "/images/workspace-image/ups.png",
+    image: "/images/workstation-wp/ups-wp.webp",
     description: "This is the UPS room, ensuring uninterrupted power supply.",
     tooltipText: "size: 90 sqft",
   },
   {
     type: "bms",
-    image: "/images/workspace-image/bms.png",
+    // image: "/images/workspace-image/bms.png",
+    image: "/images/workstation-wp/BMS-WP.webp",
     description: "This is the BMS room, managing building systems.",
     tooltipText: "size: 90 sqft",
   },
   {
     type: "server",
-    image: "/images/workspace-image/server.png",
+    // image: "/images/workspace-image/server.png",
+    image: "/images/workstation-wp/serverRoom-wp.webp",
     description: "This is the server room, housing critical IT infrastructure.",
     tooltipText: "size: 40 sqft",
   },
   {
     type: "executiveWashroom",
-    image: "/images/workspace-image/executiveWashroom.png",
+    // image: "/images/workspace-image/executiveWashroom.png",
+    image: "/images/workstation-wp/executivewash-wp.webp",
     description:
       "This is the Executive Washroom, providing premium facilities.",
     tooltipText: "size: 60 sqft",
   },
   {
     type: "other",
-    image: "/images/workspace-image/other.png",
+    // image: "/images/workspace-image/other.png",
+    image: "/images/workstation-wp/other-wp.webp",
     description: "This is an additional space for miscellaneous purposes.",
   },
 ];

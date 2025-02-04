@@ -4,7 +4,8 @@ import LayoutCard from "../components/LayoutCard"; // Ensure the correct path to
 const cabinData = [
   {
     type: "md",
-    image: "/images/workspace-image/md.png",
+    // image: "/images/workspace-image/md.png",
+    image: "/images/workstation-wp/md-wp.webp",
     description:
       "This is the MD's cabin, designed for maximum comfort and productivity.",
     slider: {
@@ -18,7 +19,8 @@ const cabinData = [
   },
   {
     type: "manager",
-    image: "/images/workspace-image/manager.png",
+    // image: "/images/workspace-image/manager.png",
+    image: "/images/workstation-wp/manager-wp.webp",
     description:
       "This is the Manager's cabin, equipped with all necessary amenities.",
     slider: {
@@ -32,7 +34,8 @@ const cabinData = [
   },
   {
     type: "small",
-    image: "/images/workspace-image/small.png",
+    // image: "/images/workspace-image/small.png",
+    image: "/images/workstation-wp/small-wp.webp",
     description: "This is a small cabin, suitable for individual work.",
     tooltipText: "Size :80 sqft",
     slider: {

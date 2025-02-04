@@ -338,6 +338,8 @@ function Layout() {
 
   const [areaWarn, setAreaWarn] = useState(false);
 
+  console.log("tracking total area", totalArea);
+
   //setps for joyride
   const tourSteps = [
     {
