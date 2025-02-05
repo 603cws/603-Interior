@@ -22,6 +22,8 @@ import AboutUs from "./pages/AboutUs";
 import Login from "./common-components/Login";
 import OurServices from "./pages/OurServices";
 
+import BlogDetail from "./pages/BlogDetail";
+
 // const Homepage = lazy(() => import("./pages/Homepage"));
 
 const Layout = lazy(() => import("./layout/pages/Layout"));
@@ -50,6 +52,7 @@ function App() {
           <Route path="/Contactus" element={<Contactus />} />
           <Route path="/Aboutus" element={<AboutUs />} />
           <Route path="/Blog" element={<BlogPage />} />
+          <Route path="/Blog/:title" element={<BlogDetail />} />
           <Route path="/Career" element={<Carrer />} />
           <Route path="*" element={<PageNotFound />} />
           <Route path="/NumberAnimation" element={<NumberAnimation />} />
