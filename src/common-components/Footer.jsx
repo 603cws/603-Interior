@@ -26,7 +26,7 @@ function Footer() {
       {/* container div */}
       <div className="container mx-auto">
         {/* container will contain two part one for all the logo and all ,second for copy right and top scroll */}
-        <div className="text-white flex  items-center gap-10 justify-around pt-5 mb-3">
+        <div className="text-white lg:flex lg:gap-10  items-center gap-10 justify-around pt-5 mb-3">
           {/* 3div */}
           <div className="text-white font-lexend ">
             <img

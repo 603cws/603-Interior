@@ -2,8 +2,16 @@ import React from "react";
 import { BsFillArrowUpRightCircleFill } from "react-icons/bs";
 import { SiAntdesign } from "react-icons/si";
 import "../styles/Landing.css";
+import { useState } from "react";
+import LandingNavbar from "../common-components/LandingNavbar";
+import Footer from "../common-components/Footer";
 
 function OurServices() {
+  const [isHovered, setIsHovered] = useState(false);
+  const [isHovered2, setIsHovered2] = useState(false);
+  const [isHovered3, setIsHovered3] = useState(false);
+  const [isHovered4, setIsHovered4] = useState(false);
+  const [expandedIndex, setExpandedIndex] = useState(0);
   const services = [
     {
       title: "WORKSPACE DESIGN & PLANNING",
@@ -29,9 +37,35 @@ function OurServices() {
     },
   ];
 
+  const background = "/images/servicepage.png";
+  const service = `/images/ourservicebg.png`;
+
   return (
     <>
-      <section className="max-w-screen-xl mx-auto px-5 py-10">
+      {/* Navbar Section */}
+      <header className="bg-white shadow-lg z-50 relative">
+        <LandingNavbar />
+      </header>
+
+      {/* Hero Section */}
+      <section
+        className="relative h-screen flex items-center text-center justify-center bg-cover bg-center bg-no-repeat bg-gray-100"
+        style={{
+          backgroundImage: `url(${background})`,
+          backgroundAttachment: "fixed",
+        }}
+      >
+        <div className="absolute inset-0 bg-black opacity-50"></div>
+        <div className="relative z-10 uppercase">
+          <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold font-lato  text-white drop-shadow-lg">
+            Our service
+          </h1>
+          <p className="text-lg text-gray-200 mt-4">THIS IS what we do</p>
+        </div>
+      </section>
+
+      {/* our mission section */}
+      <section className="max-w-screen mx-auto px-5 py-10">
         {/* Section Header */}
         <div className="text-center mb-10">
           <img
@@ -49,44 +83,229 @@ function OurServices() {
         </div>
 
         {/* Services Grid */}
-        <div className=" flex justify-center gap-5 px-10 h-[467px]">
+        <div className="flex justify-center w-full gap-5 px-10 h-[467px]">
           {services.map((service, index) => (
             <div
               key={index}
-              className=" service-card group relative w-[220px] h-full flex flex-col items-center justify-center text-center p-5  transition-all duration-500 ease-in-out overflow-hidden 
-              bg-[#1F5C54] hover:w-[467px] cursor-pointer"
+              className={`relative flex flex-col text-center transition-all duration-500 ease-in-out overflow-hidden bg-[#1F5C54] cursor-pointer
+              ${
+                expandedIndex === index
+                  ? "w-[467px] h-full justify-end"
+                  : "w-[220px] h-full justify-center"
+              }`}
+              onMouseEnter={() => setExpandedIndex(index)}
+              onMouseLeave={() => setExpandedIndex(0)} // Reset to first card when leaving
             >
-              {/* Background Image on Hover */}
+              {/* Background Image - Always visible for expanded card */}
               <div
-                className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-all duration-500"
+                className={`absolute inset-0 transition-all duration-500 ${
+                  expandedIndex === index
+                    ? "opacity-100 scale-100"
+                    : "opacity-0 scale-110"
+                }`}
                 style={{
                   backgroundImage: `url(${service.bgImage})`,
-                  // backgroundSize: "cover",
-                  // backgroundPosition: "center",
+                  backgroundSize: "cover",
+                  backgroundPosition: "center",
                 }}
               />
 
+              {/* Overlay when expanded */}
+
               {/* Content */}
-              <div className="flex flex-col justify-evenly h-full group-hover:h-auto absolute z-10 group-hover:bg-black group-hover:bg-opacity-40 group-hover:bottom-0 px-3 py-2 text-start">
-                <SiAntdesign
-                  size={40}
-                  className="text-white transition-opacity duration-300 group-hover:opacity-0"
-                />
-                <h5 className="uppercase font-semibold text-white group-hover:text-[#34BFAD] transition-colors duration-300">
-                  {service.title}
-                </h5>
-                <p className="uppercase text-white text-sm  group-hover:text-gray-200 transition-colors duration-300">
-                  {service.description}
-                </p>
-                <BsFillArrowUpRightCircleFill
-                  size={20}
-                  className="text-[#34BFAD] bg-black rounded-full group-hover:self-end"
-                />
+              <div className="relative z-10  px-3 py-2 text-start">
+                <div
+                  className={`absolute inset-0 bottom-0  transition-all duration-500 ${
+                    expandedIndex === index ? "bg-black/40" : "bg-black/0"
+                  }`}
+                ></div>
+                <div
+                  className={`relative z-10 w-full bottom-0 left-0 flex flex-col ${
+                    expandedIndex === index ? "gap-2" : "gap-10"
+                  }`}
+                >
+                  {/* Icon - Hide when expanded */}
+                  <SiAntdesign
+                    size={40}
+                    className={`text-white transition-opacity duration-300 ${
+                      expandedIndex === index ? "opacity-0" : "opacity-100"
+                    }`}
+                  />
+                  {/* Title - Change color when expanded */}
+                  <h5
+                    className={`uppercase font-extrabold text-[18px] transition-colors duration-300 ${
+                      expandedIndex === index ? "text-[#34BFAD]" : "text-white"
+                    }`}
+                  >
+                    {service.title}
+                  </h5>
+                  {/* Description - Show when expanded */}
+                  <p
+                    className={`uppercase text-white text-[16px] transition-opacity duration-300 font-extrabold`}
+                  >
+                    {service.description}
+                  </p>
+                  {/* Arrow Icon - Stick to the bottom */}
+                  <BsFillArrowUpRightCircleFill
+                    size={20}
+                    className="text-[#34BFAD] bg-black rounded-full self-end"
+                  />
+                </div>
               </div>
             </div>
           ))}
         </div>
       </section>
+
+      {/* section design modern */}
+      <section
+        className="flex h-screen"
+        style={{ backgroundImage: `url(${service})` }}
+      >
+        <div className="container mx-auto flex-1 flex flex-col">
+          {/* <div className="flex mb-4 justify-between gap-4 "> */}
+          <div className="flex-1 flex flex-col gap-4 items-center justify-center h-full">
+            <div className="flex justify-center gap-4">
+              {/* we have loop 4 div for icon and text */}
+              <div
+                className="hover:bg-[#1F5C54] text-center flex flex-col justify-center font-Poppins hover:text-[#fff] lg:w-[300px] lg:h-[300px] shadow-2xl bg-[#fff]"
+                onMouseEnter={() => setIsHovered(true)}
+                onMouseLeave={() => setIsHovered(false)}
+              >
+                <div className="flex justify-center lg:mt-4">
+                  <img
+                    src={
+                      isHovered
+                        ? "/images/modernservice1.png"
+                        : "/images/modernservice2.png"
+                    }
+                    // src="/images/modern-ofc.png"
+                    alt="modern service 1"
+                    className=""
+                  />
+                </div>
+                <h4 className="uppercase font-bold text-xl my-4 lg:my-6">
+                  interior design
+                </h4>
+                <p className="capitalize font-medium text-base">
+                  Fusce at tellus nec erat pretium maximus eu et eros
+                </p>
+              </div>
+              {/* we have loop 4 div for icon and text */}
+              <div
+                className="hover:bg-[#1F5C54] text-center flex flex-col justify-center font-Poppins hover:text-[#fff] lg:w-[300px] lg:h-[300px] shadow-2xl bg-[#fff]"
+                onMouseEnter={() => setIsHovered2(true)}
+                onMouseLeave={() => setIsHovered2(false)}
+              >
+                <div className="flex justify-center lg:mt-4">
+                  <img
+                    src={
+                      isHovered2
+                        ? "/images/modernservice4.png"
+                        : "/images/modernservice3.png"
+                    }
+                    // src="/images/modern-ofc.png"
+                    alt="modern service 1"
+                    className=""
+                  />
+                </div>
+                <h4 className="uppercase font-bold text-xl my-4 lg:my-6">
+                  office redesign
+                </h4>
+                <p className="capitalize font-medium text-base">
+                  Fusce at tellus nec erat pretium maximus eu et eros
+                </p>
+              </div>
+            </div>
+            <div className="flex justify-center gap-4">
+              {/* we have loop 4 div for icon and text */}
+              <div
+                className="hover:bg-[#1F5C54] text-center flex flex-col justify-center font-Poppins hover:text-[#fff] lg:w-[300px] lg:h-[300px] shadow-2xl bg-[#fff]"
+                onMouseEnter={() => setIsHovered3(true)}
+                onMouseLeave={() => setIsHovered3(false)}
+              >
+                <div className="flex justify-center lg:mt-4">
+                  <img
+                    src={
+                      isHovered3
+                        ? "/images/modernservice5.png"
+                        : "/images/modernservice6.png"
+                    }
+                    // src="/images/modern-ofc.png"
+                    alt="modern service 1"
+                    className=""
+                  />
+                </div>
+                <h4 className="uppercase font-bold text-xl my-4 lg:my-6">
+                  Interior decoration
+                </h4>
+                <p className="capitalize font-medium text-base">
+                  Fusce at tellus nec erat pretium maximus eu et eros
+                </p>
+              </div>
+              {/* we have loop 4 div for icon and text */}
+              <div
+                className="hover:bg-[#1F5C54] text-center flex flex-col justify-center font-Poppins hover:text-[#fff] lg:w-[300px] lg:h-[300px] shadow-2xl bg-[#fff]"
+                onMouseEnter={() => setIsHovered4(true)}
+                onMouseLeave={() => setIsHovered4(false)}
+              >
+                <div className="flex justify-center lg:mt-4">
+                  <img
+                    src={
+                      isHovered4
+                        ? "/images/modernservice7.png"
+                        : "/images/modernservice8.png"
+                    }
+                    // src="/images/modern-ofc.png"
+                    alt="modern service 1"
+                    className=""
+                  />
+                </div>
+                <h4 className="uppercase font-bold text-xl my-4 lg:my-6">
+                  furniture production
+                </h4>
+                <p className="capitalize font-medium text-base">
+                  Fusce at tellus nec erat pretium maximus eu et eros
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="flex-1 flex justify-start items-center">
+          {/* div for text and button */}
+          <div className=" flex items-center">
+            <div className="font-Poppins">
+              {/* serviceicon */}
+              <div className="flex ">
+                <img src="/images/serviceIcon.png" alt="service icon" />
+              </div>
+              <h3 className="font-extrabold uppercase lg:my-7">services</h3>
+              <p className="font-semibold lg:text-3xl uppercase ">
+                We design modern <br /> and elegant
+              </p>
+              <p className="my-3 lg:my-7">
+                Lorem ipsum odor amet, consectetuer adipiscing elit. Parturient{" "}
+                <br />
+                dictum class velit tristique efficitur; pulvinar laoreet ipsum{" "}
+                <br />
+                scelerisque. Sapien facilisi blandit sodales eget auctor
+                dignissim <br /> habitant. Augue egestas parturient potenti
+                auctor cursus ut <br /> fusce. Imperdiet hendrerit praesent
+                dictum senectus integer <br /> ridiculus curae leo. Nec finibus
+                tempus ultricies sapien; dis proin <br /> efficitur.
+              </p>
+
+              {/* button */}
+              <div className="flex justify-center">
+                <button className="bg-[#1F5C54] text-[#fff] border-1 border-[#000] font-bold capitalize w-full rounded-lg py-2">
+                  Start Creating your office now
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* How do we work section */}
       <section className="container mx-auto w-full flex px-11 font-Poppins my-20">
         <div className="w-2/5">
@@ -169,6 +388,8 @@ function OurServices() {
           </div>
         </div>
       </section>
+      {/* footer */}
+      <Footer />
     </>
   );
 }
