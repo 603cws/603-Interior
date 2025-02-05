@@ -60,14 +60,17 @@ export default {
         "fade-in": "fadeIn 0.7s ease-in-out",
       },
       screens: {
-        sm: "450px", // Full width for small screens
-        md: "640px", // Medium screens
-        lg: "768px", // Large screens
-        xl: "1024px", // Extra-large screens
-        "2xl": "1280px", // 2XL screens
-        "3xl": "1440px", // Custom 3XL screens
-        "4xl": "1920px", // Custom 4XL screens
+        "3xl": "1800px",
       },
+      // screens: {
+      //   sm: "450px", // Full width for small screens
+      //   md: "640px", // Medium screens
+      //   lg: "768px", // Large screens
+      //   xl: "1024px", // Extra-large screens
+      //   "2xl": "1280px", // 2XL screens
+      //   "3xl": "1440px", // Custom 3XL screens
+      //   "4xl": "1920px", // Custom 4XL screens
+      // },
       // container: {
       //   center: true,
       //   padding: {

@@ -125,7 +125,7 @@ function Navbar({ MIN_AREA, MAX_AREA, resetAll, areaQuantities, areaValues }) {
           />
           <input
             type="number"
-            className={`w-full rounded-md border-none bg-transparent py-2.5 ms-5 [&::-webkit-inner-spin-button]:appearance-none  focus:outline-none focus:ring-0 text-white ${
+            className={`w-full rounded-md border-none bg-transparent py-2.5 ms-8 [&::-webkit-inner-spin-button]:appearance-none  focus:outline-none focus:ring-0 text-white ${
               error ? "error" : ""
             }`}
             value={inputValue}

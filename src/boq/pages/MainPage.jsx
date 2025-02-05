@@ -63,7 +63,8 @@ const MainPage = ({ userResponses, setSelectedSubCategory1 }) => {
       : [];
 
   return (
-    <div className="flex flex-row gap-2 items-center justify-start relative overflow-hidden px-8">
+    // subcategory1 (table,chair)
+    <div className="flex flex-row gap-2 items-center justify-start relative overflow-hidden px-8 font-Poppins">
       {selectedSubCategories && selectedSubCategories.length > 0 ? (
         selectedSubCategories.map((subCategory1, index) => (
           <div
@@ -76,7 +77,7 @@ const MainPage = ({ userResponses, setSelectedSubCategory1 }) => {
             onClick={() => setSelectedSubCategory1(subCategory1)} // Allow changing selection on click
           >
             <div className="flex flex-row items-center justify-center self-stretch relative overflow-hidden">
-              <button className="text-[#252525] text-center font-['Poppins-Regular',_sans-serif] text-md leading-[30px] font-normal relative flex items-center justify-center px-7">
+              <button className="text-[#252525] text-center text-md leading-[30px] font-normal relative flex items-center justify-center px-7">
                 {subCategory1}
               </button>
             </div>

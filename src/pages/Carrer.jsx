@@ -217,45 +217,47 @@ function Carrer() {
           </div>
 
           {/* div for carrer card */}
-          <div className="py-4 grid grid-cols-2 gap-5 xl:grid-cols-3 xl:gap-5">
+          <div className="py-4 grid grid-cols-2 gap-5 3xl:grid-cols-3 3xl:gap-5">
             {career603.map((carrercard, index) => {
-              <div
-                key={index}
-                className="hover:bg-[#A9D3CE] bg-[#fff] lg:w-[400px] lg:h-[220px] p-10 rounded-3xl"
-              >
-                <div className="pb-4">
-                  <h2 className="font-Poppins font-semibold text-3xl">
-                    {carrercard.jobTitle}
-                  </h2>
-                </div>
-                {/* icons  */}
-                <div className="flex flex-col gap-5 text-black">
-                  {/* flex for two */}
-                  <div className="flex gap-24">
-                    <div className="flex items-center space-x-2">
-                      <HiClock color="#1F5C54" />
-                      <p className="text-sm ">{carrercard.time}</p>
+              return (
+                <div
+                  key={index}
+                  className="hover:bg-[#A9D3CE] bg-[#fff] lg:w-[400px] lg:h-[220px] p-10 rounded-3xl"
+                >
+                  <div className="pb-4">
+                    <h2 className="font-Poppins font-semibold text-3xl">
+                      {carrercard.jobTitle}
+                    </h2>
+                  </div>
+                  {/* icons  */}
+                  <div className="flex flex-col gap-5 text-black">
+                    {/* flex for two */}
+                    <div className="flex gap-24">
+                      <div className="flex items-center space-x-2">
+                        <HiClock color="#1F5C54" />
+                        <p className="text-sm ">{carrercard.time}</p>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <GiPadlock color="#1F5C54" />
+                        <p className="text-sm ">{carrercard.experince} </p>
+                      </div>
                     </div>
+                    {/* one icon */}
                     <div className="flex items-center space-x-2">
-                      <GiPadlock color="#1F5C54" />
-                      <p className="text-sm ">{carrercard.experince} </p>
+                      <FaLocationDot color="#1F5C54" />
+                      <p className="text-sm ">{carrercard.location} </p>
                     </div>
                   </div>
-                  {/* one icon */}
-                  <div className="flex items-center space-x-2">
-                    <FaLocationDot color="#1F5C54" />
-                    <p className="text-sm ">{carrercard.location} </p>
-                  </div>
-                </div>
 
-                {/* button */}
-                <div className="flex items-center pt-8">
-                  <button className="font-Poppins font-semibold text-black capitalize">
-                    View Details
-                  </button>
-                  <IoIosArrowForward color="#1F5C54" />
+                  {/* button */}
+                  <div className="flex items-center pt-8">
+                    <button className="font-Poppins font-semibold text-black capitalize">
+                      View Details
+                    </button>
+                    <IoIosArrowForward color="#1F5C54" />
+                  </div>
                 </div>
-              </div>;
+              );
             })}
           </div>
         </section>

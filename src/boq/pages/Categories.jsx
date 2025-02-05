@@ -74,6 +74,7 @@ const Categories = ({
       "civil/plumbing",
       "lux",
       "smart solutions",
+      "paint",
     ];
 
     if (specialCategories.includes(category.toLowerCase().trim())) {
@@ -182,32 +183,32 @@ const Categories = ({
               )}
               {minimizedView && (
                 <div
-                  className={` flex flex-row items-center justify-start relative group py-2`}
+                  // className={` flex flex-row items-center justify-start relative group py-2`}
+                  className={`font-Poppins flex flex-col justify-center items-center text-xs gap-2 mt-3 relative group`}
                 >
                   <div
-                    className={`rounded-full border-2 ${
+                    className={`border-2 ${
                       isCategoryCompleted
-                        ? "border-green-600 bg-[#34BFAD]"
+                        ? "border-[#f4f4f4] border-[1px] bg-[#34BFAD] shadow-[0_0_10px_#93FCEE] animate-pulse"
                         : selectedCategory?.id === id
                         ? "border-[#34BFAD] scale-75"
                         : "border-[#000000]"
-                    } w-[50px] h-[50px] flex items-center justify-center group-hover:scale-75 transition-transform duration-[1000ms] ease-in-out`}
+                    } w-16 h-16 rounded-full flex justify-center items-center group-hover:scale-75 transition-transform duration-[1000ms] ease-in-out`}
                   >
                     <img
-                      className="rounded-full w-[30px] h-[30px] object-contain"
+                      // className="rounded-full w-[30px] h-[30px] object-contain"
+                      className="w-10 h-10"
                       src={imageSrc}
                       alt={`${category} icon`}
                     />
                   </div>
-                  <p
-                    className={`absolute w-full text-center ${
-                      selectedCategory?.id === id
-                        ? "-bottom-3 opacity-100"
-                        : "-bottom-3 opacity-0 group-hover:opacity-100"
-                    } transition-all duration-[1000ms] ease-in-out text-[#252525] font-['Poppins-Regular',_sans-serif] leading-5 font-normal text-xs text-nowrap`}
+                  <div
+                    className={` group-hover:visible ${
+                      selectedCategory.id === id ? "visible" : "invisible"
+                    } transition-all duration-[500ms] ease-in-out`}
                   >
-                    {category}
-                  </p>
+                    <p>{category}</p>
+                  </div>
                 </div>
               )}
             </div>
@@ -217,7 +218,7 @@ const Categories = ({
 
       {/* Subcategories */}
       {selectedCategory && (
-        <div className="mt-2">
+        <div className="mt-2 font-Poppins">
           {minimizedView && (
             <div className="subcat border-solid border-[#d5d5d5] border flex flex-row items-center justify-start overflow-auto scrollbar-hide py-1">
               {selectedCategory?.subcategories
@@ -238,14 +239,16 @@ const Categories = ({
                     <div
                       key={index}
                       onClick={() => setSelectedSubCategory(subCategory)}
-                      className={`rounded-lg flex flex-row items-start justify-center shrink-0 mx-3 group px-3 ${
+                      className={`rounded-lg flex flex-row items-start justify-center shrink-0 mx-3 group px-5 ${
                         isCompleted
-                          ? "border-2 border-green-400 bg-green-200"
+                          ? "border-2 border-[#f4f4f4] bg-[#34BFAD]"
                           : ""
                       }`}
                     >
                       <p
-                        className={`relative text-[#252525] text-center font-['Poppins-Regular',_sans-serif] text-sm font-normal flex items-center justify-center py-3 cursor-pointer`}
+                        className={`relative text-[#252525] text-center text-sm  flex items-center justify-center py-3 cursor-pointer ${
+                          isCompleted ? "font-semibold" : "font-normal"
+                        }`}
                       >
                         {subCategory}
                         {/* {isCompleted && (

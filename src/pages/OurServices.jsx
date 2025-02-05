@@ -5,6 +5,7 @@ import "../styles/Landing.css";
 import { useState } from "react";
 import LandingNavbar from "../common-components/LandingNavbar";
 import Footer from "../common-components/Footer";
+import { useNavigate } from "react-router-dom";
 
 function OurServices() {
   const [isHovered, setIsHovered] = useState(false);
@@ -12,6 +13,8 @@ function OurServices() {
   const [isHovered3, setIsHovered3] = useState(false);
   const [isHovered4, setIsHovered4] = useState(false);
   const [expandedIndex, setExpandedIndex] = useState(0);
+
+  const navigate = useNavigate();
   const services = [
     {
       title: "WORKSPACE DESIGN & PLANNING",
@@ -65,7 +68,7 @@ function OurServices() {
       </section>
 
       {/* our mission section */}
-      <section className="max-w-screen mx-auto px-5 py-10">
+      <section className="container mx-auto px-5 py-10">
         {/* Section Header */}
         <div className="text-center mb-10">
           <img
@@ -159,10 +162,10 @@ function OurServices() {
 
       {/* section design modern */}
       <section
-        className="flex h-screen"
+        className="flex h-screen bg-cover container mx-auto"
         style={{ backgroundImage: `url(${service})` }}
       >
-        <div className="container mx-auto flex-1 flex flex-col">
+        <div className=" mx-auto flex-1 flex flex-col">
           {/* <div className="flex mb-4 justify-between gap-4 "> */}
           <div className="flex-1 flex flex-col gap-4 items-center justify-center h-full">
             <div className="flex justify-center gap-4">
@@ -297,7 +300,10 @@ function OurServices() {
 
               {/* button */}
               <div className="flex justify-center">
-                <button className="bg-[#1F5C54] text-[#fff] border-1 border-[#000] font-bold capitalize w-full rounded-lg py-2">
+                <button
+                  onClick={() => navigate("/Layout")}
+                  className="bg-[#1F5C54] text-[#fff] border-1 border-[#000] font-bold capitalize w-full rounded-lg py-2"
+                >
                   Start Creating your office now
                 </button>
               </div>
@@ -307,7 +313,7 @@ function OurServices() {
       </section>
 
       {/* How do we work section */}
-      <section className="container mx-auto w-full flex px-11 font-Poppins my-20">
+      <section className="container mx-auto flex justify-center px-11 font-Poppins my-20">
         <div className="w-2/5">
           <img src="/images/serviceIcon.png" alt="service icon" />
           <h4 className="uppercase font-extrabold text-2xl my-7">

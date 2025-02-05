@@ -22,6 +22,7 @@ function Blog() {
     autoplay: true,
     autoplaySpeed: 2000,
     infinite: true,
+    arrows: false,
     // pauseOnHover: true,
     responsive: [
       {
@@ -199,6 +200,7 @@ function Blog() {
           </h2>
 
           {/* div for blog*/}
+          {/* <div className="xl:flex justify-around"> */}
           <div className="xl:flex justify-around">
             {/* div for card */}
             {/* card */}
@@ -237,7 +239,7 @@ function Blog() {
             </div>
 
             {/* div for two cards */}
-            <div>
+            <div className=" flex justify-around mt-10 xl:flex-col xl:mt-0">
               {/* card */}
               <div className="max-w-sm rounded overflow-hidden shadow-lg mb-4">
                 {/* image */}
@@ -478,9 +480,9 @@ function Blog() {
       </section>
 
       {/* footer */}
-      {/* <footer className="mt-10">
+      <footer className="mt-10">
         <Footer />
-      </footer> */}
+      </footer>
     </>
   );
 }

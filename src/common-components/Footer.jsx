@@ -84,7 +84,12 @@ function Footer() {
                 >
                   Career
                 </li>
-                <li className="cursor-pointer">Blogs</li>
+                <li
+                  onClick={() => navigation("/Blog")}
+                  className="cursor-pointer"
+                >
+                  Blogs
+                </li>
               </ul>
             </div>
           </div>
@@ -131,7 +136,7 @@ function Footer() {
         {/* copyright part */}
         <div className="text-white flex justify-around items-center pb-3 pt-5">
           <p className="w-3/4 text-center text-base font-thin">
-            © 2024 . All Rights Reserved | Crafted by 603 The Coworking Space
+            © 2024 . All Rights Reserved | Crafted by 603 Interiors
           </p>
           <div
             className=" rounded-full bg-[#34BFAD] cursor-pointer"

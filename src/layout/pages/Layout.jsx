@@ -662,7 +662,8 @@ function Layout() {
   };
 
   return (
-    <div className="max-h-lvh 2xl:overflow-y-hidden">
+    // <div className="max-h-lvh 2xl:overflow-y-hidden">
+    <div className="max-h-lvh xl:overflow-y-hidden">
       <Joyride
         steps={tourSteps}
         run={runTour}
@@ -712,7 +713,7 @@ function Layout() {
       </div>
 
       <div className="content w-full flex justify-between gap-3 p-2">
-        <div className="area-distribution-chart w-1/2 px-3 border-2 pl-5">
+        <div className="area-distribution-chart h-full w-1/2 px-3 border-2 pl-5">
           <Spacebar
             builtArea={builtArea}
             availableArea={availableArea}

@@ -3,6 +3,7 @@ import LandingNavbar from "../common-components/LandingNavbar";
 import { useParams } from "react-router-dom";
 
 import BlogData from "./BlogData";
+import Footer from "../common-components/Footer";
 
 function BlogDetail() {
   const { title } = useParams();
@@ -87,6 +88,11 @@ function BlogDetail() {
           </div>
         </div>
       </section>
+
+      {/* footer */}
+      <footer className="mt-10">
+        <Footer />
+      </footer>
     </div>
   );
 }

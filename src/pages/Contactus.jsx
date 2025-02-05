@@ -11,6 +11,7 @@ import { PiMapPinAreaFill } from "react-icons/pi";
 import { IoIosCall } from "react-icons/io";
 import { MdEmail } from "react-icons/md";
 import { HiClock } from "react-icons/hi";
+import { useNavigate } from "react-router-dom";
 
 function Contactus() {
   const [name, setname] = useState("");
@@ -18,6 +19,8 @@ function Contactus() {
   const [mobileNo, setMobileNo] = useState(0);
   const [companyName, setCompanyName] = useState("");
   const [message, setMessage] = useState("");
+
+  const navigate = useNavigate();
 
   const [source] = useState(
     "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d19404.103720641866!2d72.8237966008724!3d19.057896067431624!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be7c91140262913%3A0xc53b6407e4d39f76!2sMakhija%20Arcade%2C%2035th%20Rd%2C%20Khar%2C%20Khar%20West%2C%20Mumbai%2C%20Maharashtra%20400052!5e0!3m2!1sen!2sin!4v1737115916330!5m2!1sen!2sin"
@@ -295,7 +298,10 @@ function Contactus() {
 
           {/* button */}
           <div className="mb-6 mt-4 flex justify-center">
-            <button className="bg-[#1F5C54] text-[#fff] border-1 border-[#000] font-bold capitalize w-1/4 rounded-lg py-2">
+            <button
+              onClick={() => navigate("/Layout")}
+              className="bg-[#1F5C54] text-[#fff] border-1 border-[#000] font-bold capitalize w-1/4 rounded-lg py-2"
+            >
               Start Creating your office now
             </button>
           </div>
