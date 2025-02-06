@@ -90,19 +90,19 @@ function AboutUs() {
               interior design
             </h4>
           </div>
-          <div className="group w-1/3 flex flex-col justify-center items-center gap-5 py-12 cursor-pointer hover:bg-[#15423C]">
+          <div className="group w-1/3 flex flex-col justify-center items-center gap-5 py-12 cursor-pointer hover:bg-[#15423C] shadow-xl">
             <img src="/images/about-us-s2-2.png" alt="" />
             <h4 className="uppercase font-Poppins font-extrabold text-2xl group-hover:text-white">
               production
             </h4>
           </div>
-          <div className="group w-1/3 flex flex-col justify-center items-center gap-5 py-12 cursor-pointer hover:bg-[#15423C]">
+          <div className="group w-1/3 flex flex-col justify-center items-center gap-5 py-12 cursor-pointer hover:bg-[#15423C] shadow-xl">
             <img src="/images/about-us-s2-3.png" alt="" />
             <h4 className="uppercase font-Poppins font-extrabold text-2xl group-hover:text-white">
               execution
             </h4>
           </div>
-          <div className="group w-1/3 flex flex-col justify-center items-center gap-5 py-12 cursor-pointer hover:bg-[#15423C]">
+          <div className="group w-1/3 flex flex-col justify-center items-center gap-5 py-12 cursor-pointer hover:bg-[#15423C] shadow-xl">
             <img src="/images/about-us-s2-4.png" alt="" />
             <h4 className="uppercase font-Poppins font-extrabold text-2xl group-hover:text-white">
               after service

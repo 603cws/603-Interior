@@ -62,6 +62,12 @@ export default {
       screens: {
         "3xl": "1800px",
       },
+      container: {
+        center: true,
+        padding: {
+          DEFAULT: "3rem",
+        },
+      },
       // screens: {
       //   sm: "450px", // Full width for small screens
       //   md: "640px", // Medium screens

@@ -228,7 +228,9 @@ function Boq() {
       setSubCat1(subCategory1Data);
     };
 
-    loadData();
+    if (userId) {
+      loadData();
+    }
   }, [userId]);
   //   if (roomData.quantityData && roomData.quantityData.length > 0) {
   //     const processedQuantityData = processData(

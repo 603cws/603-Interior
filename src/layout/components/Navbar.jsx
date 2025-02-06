@@ -5,6 +5,7 @@ import { useApp } from "../../Context/Context";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import Typewriter from "typewriter-effect";
+import { supabase } from "../../services/supabase";
 
 // import ErrorModal from "../../components/ErrorModal";
 
@@ -18,6 +19,7 @@ function Navbar({ MIN_AREA, MAX_AREA, resetAll, areaQuantities, areaValues }) {
     inputValue,
     setInputValue,
     setTotalAreaSource,
+    userId,
   } = useApp();
 
   // const [warning,setWarning]=useState(false)
@@ -29,20 +31,90 @@ function Navbar({ MIN_AREA, MAX_AREA, resetAll, areaQuantities, areaValues }) {
     "area values",
     areaValues
   );
+  console.log("user id", userId);
+
   const navigate = useNavigate();
 
-  const handlegenrateboq = () => {
+  const mapAreaValues = (userId, areaValues, totalArea = null) => {
+    return {
+      userId: userId || null,
+      linear: areaValues.linear,
+      lType: areaValues.lType,
+      md: areaValues.md,
+      manager: areaValues.manager,
+      small: areaValues.small,
+      ups: areaValues.ups,
+      bms: areaValues.bms,
+      server: areaValues.server,
+      reception: areaValues.reception,
+      lounge: areaValues.lounge,
+      sales: areaValues.sales,
+      phoneBooth: areaValues.phoneBooth,
+      discussionRoom: areaValues.discussionRoom,
+      interviewRoom: areaValues.interviewRoom,
+      conferenceRoom: areaValues.conferenceRoom,
+      boardRoom: areaValues.boardRoom,
+      meetingRoom: areaValues.meetingRoom,
+      meetingRoomLarge: areaValues.meetingRoomLarge,
+      hrRoom: areaValues.hrRoom,
+      financeRoom: areaValues.financeRoom,
+      breakoutRoom: areaValues.breakoutRoom,
+      executiveWashroom: areaValues.executiveWashroom,
+      videoRecordingRoom: areaValues.videoRecordingRoom,
+      other: areaValues.other,
+      ...(totalArea !== null && { totalArea }),
+    };
+  };
+
+  const handlegenrateboq = async () => {
     if (!totalArea) {
       toast.error("Enter the Area");
     }
     if (totalArea) {
-      navigate("/RegisterUser", {
-        state: {
-          totalArea: totalArea,
-          areaValues: areaValues,
-          areaQuantities: areaQuantities,
-        },
-      });
+      const areaData = mapAreaValues(userId, areaValues, totalArea);
+      const quantityData = mapAreaValues(userId, areaQuantities);
+
+      // Insert into tables
+      const { data: aData, error: areasInsertError } = await supabase
+        .from("areas")
+        .insert([areaData])
+        .select("areaId")
+        .single();
+
+      if (areasInsertError) {
+        console.error("Error inserting into areas:", areasInsertError.message);
+      }
+
+      console.log("Area Data:", aData);
+
+      const { data: qData, error: quantityInsertError } = await supabase
+        .from("quantity")
+        .insert([quantityData])
+        .select("quantityId")
+        .single();
+
+      if (quantityInsertError) {
+        console.error(
+          "Error inserting into quantity:",
+          quantityInsertError.message
+        );
+      }
+
+      console.log("Quantity Data:", qData);
+
+      if (!userId) {
+        navigate("/Login", {
+          state: {
+            totalArea: totalArea,
+            areaValues: areaValues,
+            areaQuantities: areaQuantities,
+            quantityId: qData.quantityId,
+            areaId: aData.areaId,
+          },
+        });
+      } else {
+        navigate("/boq");
+      }
     }
   };
   // const handlegenrateboq = ()=>{
