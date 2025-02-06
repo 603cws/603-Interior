@@ -257,7 +257,7 @@ function SelectArea({
             <div className="flex justify-center items-center">
               <img
                 src={image}
-                alt="select area"
+                alt={selectedProductView.title}
                 className="rounded-md object-cover max-w-[200px] lg:max-w-[300px] max-h-[300px] border border-gray-300 shadow-md"
               />
             </div>

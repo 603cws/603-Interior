@@ -4,7 +4,7 @@ import Categories from "./Categories";
 import {
   fetchCategories,
   fetchProductsData,
-  fetchWorkspaces,
+  // fetchWorkspaces,
   fetchRoomData,
   fetchCategoriesandSubCat1,
 } from "../utils/dataFetchers";
@@ -19,13 +19,16 @@ import { calculateTotalPriceHelper } from "../utils/CalculateTotalPriceHelper";
 import Joyride, { STATUS } from "react-joyride";
 import { supabase } from "../../services/supabase";
 import toast from "react-hot-toast";
+
 function Boq() {
   const [selectedProductView, setSelectedProductView] = useState([]);
   const [productsData, setProductData] = useState([]);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [priceRange, setPriceRange] = useState([1, 15000000]);
+  // const [searchQuery, setSearchQuery] = useState("");
+  // const [priceRange, setPriceRange] = useState([1, 15000000]);
+  const searchQuery = "";
+  const priceRange = [1, 15000000];
 
-  const [workspaces, setWorkspaces] = useState([]);
+  // const [workspaces, setWorkspaces] = useState([]);
   const [roomData, setRoomData] = useState({ quantityData: [], areasData: [] });
   const [areasData, setAreasData] = useState([]);
   const [quantityData, setQuantityData] = useState([]);
@@ -64,15 +67,15 @@ function Boq() {
     setUserResponses,
   } = useApp();
 
-  useEffect(() => {
-    var temp = JSON.parse(localStorage.getItem("selectedData"));
-    setSelectedData(temp);
-  }, []);
+  // useEffect(() => {
+  //   // var temp = JSON.parse(localStorage.getItem("selectedData"));
+  //   // setSelectedData(temp);
+  // }, []);
 
-  useEffect(() => {
-    setTotalArea(roomData.areasData[0]?.totalArea);
-    setUserId(roomData.areasData[0]?.userId);
-  }, [roomData]);
+  // useEffect(() => {
+  //   setTotalArea(roomData.areasData[0]?.totalArea);
+  //   // setUserId(roomData.areasData[0]?.userId);
+  // }, [roomData]);
 
   useEffect(() => {
     if (userResponses.height) {
@@ -99,21 +102,21 @@ function Boq() {
       const [
         categoriesData,
         productsData,
-        workspacesData,
+        // workspacesData,
         roomDataResult,
         subCategory1Data,
       ] = await Promise.all([
         fetchCategories(),
         fetchProductsData(),
-        fetchWorkspaces(),
-        fetchRoomData(),
+        // fetchWorkspaces(),
+        fetchRoomData(userId),
         fetchCategoriesandSubCat1(),
       ]);
 
       setCategories(categoriesData); //remove 0 value qunatity from subCat
 
       setProductData(productsData);
-      setWorkspaces(workspacesData);
+      // setWorkspaces(workspacesData);
 
       setRoomData(roomDataResult);
 
@@ -226,7 +229,7 @@ function Boq() {
     };
 
     loadData();
-  }, []);
+  }, [userId]);
   //   if (roomData.quantityData && roomData.quantityData.length > 0) {
   //     const processedQuantityData = processData(
   //       roomData.quantityData,

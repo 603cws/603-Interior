@@ -79,34 +79,36 @@ export const fetchProductsData = async () => {
   }
 };
 
-export const fetchWorkspaces = async () => {
-  try {
-    const { data, error } = await supabase.from("workspaces").select();
+// export const fetchWorkspaces = async () => {
+//   try {
+//     const { data, error } = await supabase.from("workspaces").select();
 
-    if (error) throw error;
+//     if (error) throw error;
 
-    return data;
-  } catch (error) {
-    console.error("Error fetching workspaces:", error);
-    return [];
-  }
-};
+//     return data;
+//   } catch (error) {
+//     console.error("Error fetching workspaces:", error);
+//     return [];
+//   }
+// };
 
-export const fetchRoomData = async () => {
+export const fetchRoomData = async (userId) => {
   try {
     const { data: quantityData, error: quantityError } = await supabase
       .from("quantity")
       .select()
-      .order("created_at", { ascending: false })
-      .limit(1);
+      .eq("userId", userId); // Filter by userId
+    // .order("created_at", { ascending: false })
+    // .limit(1);
 
     if (quantityError) throw quantityError;
 
     const { data: areasData, error: areasError } = await supabase
       .from("areas")
       .select()
-      .order("created_at", { ascending: false })
-      .limit(1);
+      .eq("userId", userId); // Filter by userId
+    // .order("created_at", { ascending: false })
+    // .limit(1);
 
     if (areasError) throw areasError;
 
