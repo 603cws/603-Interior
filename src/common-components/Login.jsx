@@ -348,7 +348,7 @@ function Login() {
               </label>
               <input
                 type={isPasswordVisible ? "text" : "password"}
-                name="password"
+                name="confirmPassword"
                 value={formData.confirmPassword}
                 onChange={handleChange}
                 placeholder="Enter New Password"
