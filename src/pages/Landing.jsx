@@ -452,6 +452,9 @@ function Landing() {
             <SwiperSlide>
               <img src="/images/sectionwork5.png" alt="work section" />
             </SwiperSlide>
+            <SwiperSlide>
+              <img src="/images/sectionwork3.png" alt="work section" />
+            </SwiperSlide>
             <div className="slider-controler">
               <div className="swiper-button-prev slider-arrow">
                 <BiSolidLeftArrowSquare
