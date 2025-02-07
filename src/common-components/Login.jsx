@@ -5,13 +5,19 @@ import { FcGoogle } from "react-icons/fc";
 import { IoEyeOffOutline, IoEyeOutline } from "react-icons/io5";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useApp } from "../Context/Context";
+import { use } from "react";
+import toast from "react-hot-toast";
 
 function Login() {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] =
+    useState(false);
   const [isSignUp, setIsSignUp] = useState(false);
   const [isForgotPassword, setIsForgotPassword] = useState(false);
   const [isLogin, setIsLogin] = useState(false);
   const [resetPass, setResetPass] = useState(false);
+
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const { setUserId, setTotalArea } = useApp();
 
@@ -45,6 +51,10 @@ function Login() {
 
   const togglePasswordVisibility = () => {
     setIsPasswordVisible(!isPasswordVisible);
+  };
+
+  const toggleConfirmPasswordVisibility = () => {
+    setIsConfirmPasswordVisible(!isConfirmPasswordVisible);
   };
 
   const toggleForm = () => {
@@ -252,43 +262,87 @@ function Login() {
   };
 
   const handleForgotPassword = async () => {
-    if (!formData.email) {
-      alert("Please enter an email address.");
-      return;
-    }
-
-    // Check if email exists in Supabase Auth
-    const { data, error: emailCheckError } = await supabase.rpc(
-      "check_user_exists",
-      {
-        user_email: formData.email,
+    try {
+      setIsSubmitting(true);
+      if (!formData.email) {
+        // alert("Please enter an email address.");
+        toast.error("Please enter an email address.");
+        return;
       }
-    );
 
-    if (emailCheckError || !data) {
-      alert("Email does not exist. Please enter a registered email.");
-      return;
-    }
+      // Check if email exists in Supabase Auth
+      const { data, error: emailCheckError } = await supabase.rpc(
+        "check_user_exists",
+        {
+          user_email: formData.email,
+        }
+      );
 
-    // Proceed with sending reset email
-    const { error } = await supabase.auth.resetPasswordForEmail(
-      formData.email,
-      {
-        redirectTo: "https://603-interior.vercel.app/Login?type=recovery",
+      if (emailCheckError || !data) {
+        // alert("Email does not exist. Please enter a registered email.");
+        toast.error("Email does not exist. Please enter a registered email.");
+        return;
       }
-    );
 
-    if (error) {
-      console.error("Error sending reset email:", error.message);
-      alert("Error sending reset email. Please try again.");
-    } else {
-      alert("Password reset email sent! Check your inbox.");
+      // Proceed with sending reset email
+      const { error } = await supabase.auth.resetPasswordForEmail(
+        formData.email,
+        {
+          redirectTo: "https://603-interior.vercel.app/Login?type=recovery",
+        }
+      );
+
+      if (error) {
+        console.error("Error sending reset email:", error.message);
+        // alert("Error sending reset email. Please try again.");
+        toast.error("Error sending reset email. Please try again.");
+      } else {
+        // alert("Password reset email sent! Check your inbox.");
+        toast.success("Password reset email sent! Check your inbox.");
+      }
+    } finally {
+      setIsSubmitting(false);
     }
   };
+  // const handleForgotPassword = async () => {
+  //   if (!formData.email) {
+  //     alert("Please enter an email address.");
+  //     return;
+  //   }
+
+  //   // Check if email exists in Supabase Auth
+  //   const { data, error: emailCheckError } = await supabase.rpc(
+  //     "check_user_exists",
+  //     {
+  //       user_email: formData.email,
+  //     }
+  //   );
+
+  //   if (emailCheckError || !data) {
+  //     alert("Email does not exist. Please enter a registered email.");
+  //     return;
+  //   }
+
+  //   // Proceed with sending reset email
+  //   const { error } = await supabase.auth.resetPasswordForEmail(
+  //     formData.email,
+  //     {
+  //       redirectTo: "https://603-interior.vercel.app/Login?type=recovery",
+  //     }
+  //   );
+
+  //   if (error) {
+  //     console.error("Error sending reset email:", error.message);
+  //     alert("Error sending reset email. Please try again.");
+  //   } else {
+  //     alert("Password reset email sent! Check your inbox.");
+  //   }
+  // };
 
   const handleResetPassword = async () => {
     if (formData.password !== formData.confirmPassword) {
-      alert("Passwords do not match!");
+      // alert("Passwords do not match!");
+      toast.error("Passwords do not match!");
       return;
     }
 
@@ -298,7 +352,8 @@ function Login() {
 
     if (error) {
       console.error("Error resetting password:", error.message);
-      alert("Error resetting password. Please try again.");
+      // alert("Error resetting password. Please try again.");
+      toast.error("Error resetting password. Please try again.");
     } else {
       alert("Password reset successfully! Please log in.");
       navigate("/login");
@@ -347,7 +402,7 @@ function Login() {
                 confirm Password <span>*</span>
               </label>
               <input
-                type={isPasswordVisible ? "text" : "password"}
+                type={isConfirmPasswordVisible ? "text" : "password"}
                 name="confirmPassword"
                 value={formData.confirmPassword}
                 onChange={handleChange}
@@ -355,10 +410,10 @@ function Login() {
                 className="py-2 rounded-lg pl-2 focus:outline-none"
               />
               <div
-                onClick={togglePasswordVisibility}
+                onClick={toggleConfirmPasswordVisibility}
                 className={`absolute top-[60%] right-10 cursor-pointer`}
               >
-                {isPasswordVisible ? (
+                {isConfirmPasswordVisible ? (
                   <IoEyeOutline color="gray" size={20} />
                 ) : (
                   <IoEyeOffOutline color="gray" size={20} />
@@ -400,7 +455,7 @@ function Login() {
                   ? "No worries, we'll send you reset instructions"
                   : isSignUp
                   ? ""
-                  : "Please enter your details"}
+                  : "Please enter your Credentials"}
               </p>
             </div>
 
@@ -429,8 +484,34 @@ function Login() {
                   <button
                     onClick={handleForgotPassword}
                     className="capitalize w-full xl:w-3/4 bg-[#1A3A36] text-white font-semibold py-2 rounded-lg mt-3"
+                    disabled={isSubmitting}
                   >
-                    Reset Password
+                    {isSubmitting ? (
+                      <div className="spinner flex justify-center items-center">
+                        <svg
+                          className="animate-spin h-5 w-5 text-white"
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                        >
+                          <circle
+                            className="opacity-25"
+                            cx="12"
+                            cy="12"
+                            r="10"
+                            stroke="currentColor"
+                            strokeWidth="4"
+                          ></circle>
+                          <path
+                            className="opacity-75"
+                            fill="currentColor"
+                            d="M4 12a8 8 0 018-8v8h8a8 8 0 01-8 8V12H4z"
+                          ></path>
+                        </svg>
+                      </div>
+                    ) : (
+                      "Reset password"
+                    )}
                   </button>
                   <p className="text-white capitalize flex items-center justify-center gap-1 w-full xl:w-3/4 my-6">
                     <span
@@ -561,7 +642,7 @@ function Login() {
                         Confirm Password <span>*</span>
                       </label>
                       <input
-                        type={isPasswordVisible ? "text" : "password"}
+                        type={isConfirmPasswordVisible ? "text" : "password"}
                         name="confirmPassword"
                         value={formData.confirmPassword}
                         onChange={handleChange}
@@ -569,10 +650,10 @@ function Login() {
                         className="py-2 rounded-lg pl-2 focus:outline-none"
                       />
                       <div
-                        onClick={togglePasswordVisibility}
+                        onClick={toggleConfirmPasswordVisibility}
                         className="absolute top-[60%] right-3 cursor-pointer"
                       >
-                        {isPasswordVisible ? (
+                        {isConfirmPasswordVisible ? (
                           <IoEyeOutline color="gray" size={20} />
                         ) : (
                           <IoEyeOffOutline color="gray" size={20} />
