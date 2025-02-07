@@ -6,6 +6,7 @@ import { RiArrowDropDownLine } from "react-icons/ri";
 import { FaTrash } from "react-icons/fa";
 import { MdClear } from "react-icons/md";
 import { FiUploadCloud } from "react-icons/fi";
+import useAuthRefresh from "../../Context/useAuthRefresh";
 
 function Navbar({
   handleSave,
@@ -21,6 +22,8 @@ function Navbar({
   // const [boqList, setBoqList] = useState([]);
 
   const dropdownRef = useRef(null);
+  const { signOutUser } = useAuthRefresh(); // Get signOutUser from hook
+
   // Close when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -55,7 +58,10 @@ function Navbar({
         </button>
         {/* button for generate boq */}
         <div className="pl-60 flex gap-5">
-          <button className="bg-[#FFF] rounded-xl text-xs py-2 px-5 text-black  border-solid border-1 border-black">
+          <button
+            onClick={signOutUser}
+            className="bg-[#FFF] rounded-xl text-xs py-2 px-5 text-black  border-solid border-1 border-black"
+          >
             <span className="font-bold">Total</span>: ₹{" "}
             {calculateGrandTotal().toLocaleString("en-IN")}
           </button>

@@ -198,6 +198,9 @@ function Login() {
       if (data) {
         const usertoken = data.session.access_token;
         localStorage.setItem("usertoken", usertoken);
+
+        const session = data.session;
+        localStorage.setItem("session", JSON.stringify(session)); // Convert to string
       }
 
       try {
