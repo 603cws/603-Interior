@@ -23,6 +23,9 @@ import Login from "./common-components/Login";
 import OurServices from "./pages/OurServices";
 
 import BlogDetail from "./pages/BlogDetail";
+import ProfileCard from "./boq/components/ProfileCard";
+import Dashboard from "./pages/Dashboard";
+import ScrollToTop from "./common-components/ScrollToTop";
 
 // const Homepage = lazy(() => import("./pages/Homepage"));
 
@@ -34,6 +37,7 @@ const Carrer = lazy(() => import("./pages/Carrer"));
 function App() {
   return (
     <div>
+      <ScrollToTop />
       {/* <Layout /> */}
       {/* <Boq /> */}
       <Suspense fallback={<SpinnerFullPage />}>
@@ -59,6 +63,8 @@ function App() {
           <Route path="/JobCard" element={<JobCard />} />
           <Route path="/Login" element={<Login />} />
           <Route path="/OurServices" element={<OurServices />} />
+          <Route path="/profile" element={<ProfileCard />} />
+          <Route path="/dashboard" element={<Dashboard />} />
         </Routes>
       </Suspense>
     </div>

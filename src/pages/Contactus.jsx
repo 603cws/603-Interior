@@ -1,5 +1,7 @@
 import LandingNavbar from "../common-components/LandingNavbar";
 import Footer from "../common-components/Footer";
+import axios from "axios";
+import toast from "react-hot-toast";
 
 import { useState } from "react";
 import {
@@ -12,13 +14,33 @@ import { IoIosCall } from "react-icons/io";
 import { MdEmail } from "react-icons/md";
 import { HiClock } from "react-icons/hi";
 import { useNavigate } from "react-router-dom";
+import emailjs from "@emailjs/browser";
 
 function Contactus() {
-  const [name, setname] = useState("");
-  const [email, setEmail] = useState("");
-  const [mobileNo, setMobileNo] = useState(0);
-  const [companyName, setCompanyName] = useState("");
-  const [message, setMessage] = useState("");
+  // const [name, setname] = useState("");
+  // const [email, setEmail] = useState("");
+  // const [mobileNo, setMobileNo] = useState(0);
+  // const [companyName, setCompanyName] = useState("");
+  // const [message, setMessage] = useState("");
+
+  const [isSubmitting, setisSubmitting] = useState(false);
+
+  // template id
+  const templateID = "template_0355bfq";
+  const serviceid = "service_ae0sgim";
+  const your_public_key = "dR0YyJ3Be6H6xVsT7";
+
+  const [form, setFormData] = useState({
+    message: "",
+    name: "",
+    email: "",
+    mobileNo: 0,
+    companyName: "",
+  });
+
+  const handleChange = (e) => {
+    setFormData({ ...form, [e.target.name]: e.target.value });
+  };
 
   const navigate = useNavigate();
 
@@ -27,6 +49,45 @@ function Contactus() {
   );
 
   const background = "/images/contactpage.png";
+
+  const handleformsubmit = async (e) => {
+    e.preventDefault();
+
+    console.log("hii from log");
+
+    const data = {
+      service_id: serviceid,
+      template_id: templateID,
+      user_id: your_public_key,
+      template_params: {
+        name: form.name,
+        mobile: form.mobileNo,
+        company: form.companyName,
+        email: form.email,
+        message: form.message,
+      },
+    };
+
+    try {
+      setisSubmitting(true);
+      const response = await axios.post(
+        "https://api.emailjs.com/api/v1.0/email/send",
+        data,
+        {
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+      console.log("Email sent successfully:", response.data);
+      // alert("Your mail is sent!");
+      toast.success("we will shortly reach you");
+      // setFormData({ username: "", user_email: "", message: "" }); // Reset form
+    } catch (error) {
+      console.error("Error sending email:", error);
+      alert("Oops... " + JSON.stringify(error.response?.data || error.message));
+    } finally {
+      setisSubmitting(false);
+    }
+  };
 
   return (
     <>
@@ -132,8 +193,12 @@ function Contactus() {
                     <label className="font-semibold ">Name*</label>
                     <input
                       type="text"
+                      name="name"
                       className="font-medium w-full rounded-lg p-2 mb-2 border-2 border-[#D1D5DB] bg-[#F8F8F8] focus:outline-none placeholder:text-[#CCC] capitalize"
                       placeholder="John Doe"
+                      value={form.name}
+                      // onChange={setname((e) => e.target.value)}
+                      onChange={handleChange}
                       required
                     />
                   </div>
@@ -141,8 +206,13 @@ function Contactus() {
                     <label className="mt-2">Email*</label>
                     <input
                       type="email"
+                      name="email"
                       className="font-medium w-full rounded-lg p-2 mb-2 border-2 border-[#D1D5DB] bg-[#F8F8F8] focus:outline-none placeholder:text-[#CCC] "
                       placeholder="example@gmail.com"
+                      // value={email}
+                      // onChange={setEmail((e) => e.target.value)}
+                      value={form.email}
+                      onChange={handleChange}
                       required
                     />
                   </div>
@@ -150,17 +220,27 @@ function Contactus() {
                     <label className="mt-2">Company Name*</label>
                     <input
                       type="text"
+                      name="companyName"
                       className="w-full rounded-lg p-2 mb-2 border-2 border-[#D1D5DB] bg-[#F8F8F8] focus:outline-none placeholder:text-[#CCC] font-medium"
                       required
                       //   placeholder="John Doe"
+                      // value={companyName}
+                      // onChange={setCompanyName((e) => e.target.value)}
+                      value={form.companyName}
+                      onChange={handleChange}
                     />
                   </div>
                   <div className="mb-2 flex flex-col gap-2">
                     <label className="font-semibold mt-2">Mobile No*</label>
                     <input
                       type="Number"
+                      name="mobileNo"
                       className="w-full rounded-lg p-2 mb-2 focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none border-2 border-[#D1D5DB] bg-[#F8F8F8] placeholder:text-[#CCC] font-medium"
                       placeholder="Enter Mobile No"
+                      // value={mobileNo}
+                      // onChange={setMobileNo((e) => e.target.value)}
+                      value={form.mobileNo}
+                      onChange={handleChange}
                       required
                     />
                   </div>
@@ -168,16 +248,48 @@ function Contactus() {
                     <label className=" mt-2">Message*</label>
                     <textarea
                       rows="4"
+                      name="message"
                       className="w-full rounded-lg p-2 mb-2 border-2 border-[#D1D5DB] bg-[#F8F8F8] focus:outline-none placeholder:text-[#CCC] font-medium"
                       placeholder="your message..."
-                      value={message}
-                      onChange={(e) => setMessage(e.target.value)}
+                      // value={message}
+                      // onChange={(e) => setMessage(e.target.value)}
+                      value={form.message}
+                      onChange={handleChange}
                     >
                       {" "}
                     </textarea>
                   </div>
-                  <button className="px-10 py-2 font-bold rounded-lg bg-[#1F5C54] border-black border border-1 mb-2 text-white">
-                    Submit
+                  <button
+                    className="px-10 py-2 font-bold rounded-lg bg-[#1F5C54] border-black border border-1 mb-2 text-white"
+                    onClick={handleformsubmit}
+                    disabled={isSubmitting}
+                  >
+                    {isSubmitting ? (
+                      <div className="spinner">
+                        <svg
+                          className="animate-spin h-5 w-5 text-white"
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                        >
+                          <circle
+                            className="opacity-25"
+                            cx="12"
+                            cy="12"
+                            r="10"
+                            stroke="currentColor"
+                            strokeWidth="4"
+                          ></circle>
+                          <path
+                            className="opacity-75"
+                            fill="currentColor"
+                            d="M4 12a8 8 0 018-8v8h8a8 8 0 01-8 8V12H4z"
+                          ></path>
+                        </svg>
+                      </div>
+                    ) : (
+                      "Submit"
+                    )}
                   </button>
                 </form>
               </div>

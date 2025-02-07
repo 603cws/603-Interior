@@ -54,11 +54,20 @@ function Navbar({
           <img src="/logo/logo.png" alt="603 logo" className="h-10 w-18 " />
         </button>
         {/* button for generate boq */}
-        <div className="pl-60 ">
+        <div className="pl-60 flex gap-5">
           <button className="bg-[#FFF] rounded-xl text-xs py-2 px-5 text-black  border-solid border-1 border-black">
             <span className="font-bold">Total</span>: ₹{" "}
             {calculateGrandTotal().toLocaleString("en-IN")}
           </button>
+
+          {/* prfile icon */}
+          <div className="">
+            <img
+              src="/images/usericon.png"
+              alt="usericon"
+              className="w-12 h-12"
+            />
+          </div>
         </div>
       </div>
       <div className="bg-[#1A3A36] py-1 flex px-5">
