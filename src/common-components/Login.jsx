@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { supabase } from "../services/supabase";
 import { FaAngleLeft, FaFacebook } from "react-icons/fa6";
 import { FcGoogle } from "react-icons/fc";
@@ -32,6 +32,15 @@ function Login() {
   const totalArea = location.state?.totalArea;
   const quantityID = location.state?.quantityId;
   const areaID = location.state?.areaId;
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const recoveryType = params.get("type");
+
+    if (recoveryType === "recovery") {
+      setResetPass(true);
+    }
+  }, [location.search]); // Run whenever the URL changes
 
   const togglePasswordVisibility = () => {
     setIsPasswordVisible(!isPasswordVisible);
@@ -234,202 +243,288 @@ function Login() {
     }
   };
 
+  const handleForgotPassword = async () => {
+    if (!formData.email) {
+      alert("Please enter an email address.");
+      return;
+    }
+
+    // Check if email exists in Supabase Auth
+    const { data, error: emailCheckError } = await supabase.rpc(
+      "check_user_exists",
+      {
+        user_email: formData.email,
+      }
+    );
+
+    if (emailCheckError || !data) {
+      alert("Email does not exist. Please enter a registered email.");
+      return;
+    }
+
+    // Proceed with sending reset email
+    const { error } = await supabase.auth.resetPasswordForEmail(
+      formData.email,
+      {
+        redirectTo: "https://603-interior.vercel.app/Login?type=recovery",
+      }
+    );
+
+    if (error) {
+      console.error("Error sending reset email:", error.message);
+      alert("Error sending reset email. Please try again.");
+    } else {
+      alert("Password reset email sent! Check your inbox.");
+    }
+  };
+
+  const handleResetPassword = async () => {
+    if (formData.password !== formData.confirmPassword) {
+      alert("Passwords do not match!");
+      return;
+    }
+
+    const { error } = await supabase.auth.updateUser({
+      password: formData.password,
+    });
+
+    if (error) {
+      console.error("Error resetting password:", error.message);
+      alert("Error resetting password. Please try again.");
+    } else {
+      alert("Password reset successfully! Please log in.");
+      navigate("/login");
+    }
+  };
+
   return (
     <>
-      <div className="main flex justify-center gap-5 h-screen w-full bg-login-custom-gradient">
-        <div className="img w-1/2 p-5 flex justify-end items-center">
-          <img
-            src="images/Register.png"
-            alt=""
-            className="max-h-full h-full xl:h-auto w-full xl:w-3/4"
-          />
-        </div>
-        <div
-          className={`content w-1/2 max-h-full h-full flex flex-col items-start ${
-            isSignUp ? "pt-10" : "pt-40"
-          } gap-10`}
-        >
-          <div className="w-3/4">
-            <h1 className="capitalize text-3xl font-bold text-white text-center">
-              {isForgotPassword
-                ? "Forgot password"
-                : isSignUp
-                ? "Create Account"
-                : "Welcome back!"}
+      {resetPass ? (
+        <div className="flex flex-col justify-center items-center gap-5 h-screen w-full bg-login-custom-gradient">
+          <div className="w-full sm:w-1/2 px-5 flex flex-col justify-center items-center gap-5">
+            <h1 className="capitalize text-3xl font-bold text-white text-center ">
+              Reset Password
             </h1>
-            <p className="capitalize text-white font-semibold text-center my-2">
-              {isForgotPassword
-                ? "No worries, we'll send you reset instructions"
-                : isSignUp
-                ? ""
-                : "Please enter your details"}
-            </p>
-          </div>
-
-          <div className="w-full flex flex-col gap-2 pr-2">
-            <div className="flex flex-col gap-3 xl:w-3/4">
+            <div className="w-full  px-5 flex flex-col gap-3 relative">
               <label
-                htmlFor="email"
+                htmlFor="password"
                 className="capitalize text-md font-semibold text-white"
               >
-                Email Id <span>*</span>
+                Password <span>*</span>
               </label>
               <input
-                type="email"
-                name="email"
-                value={formData.email}
+                type={isPasswordVisible ? "text" : "password"}
+                name="password"
+                value={formData.password}
                 onChange={handleChange}
-                placeholder={
-                  isForgotPassword ? "Enter your email" : "example@gmail.com"
-                }
-                className="w-full py-2 rounded-lg pl-2 focus:outline-none"
+                placeholder="Enter Password"
+                className="py-2 rounded-lg pl-2 focus:outline-none"
               />
+              <div
+                onClick={togglePasswordVisibility}
+                className={`absolute top-[60%] right-10 cursor-pointer`}
+              >
+                {isPasswordVisible ? (
+                  <IoEyeOutline color="gray" size={20} />
+                ) : (
+                  <IoEyeOffOutline color="gray" size={20} />
+                )}
+              </div>
+            </div>
+            <div className="w-full  px-5 flex flex-col gap-3 relative">
+              <label
+                htmlFor="password"
+                className="capitalize text-md font-semibold text-white"
+              >
+                Password <span>*</span>
+              </label>
+              <input
+                type={isPasswordVisible ? "text" : "password"}
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+                placeholder="Enter Password"
+                className="py-2 rounded-lg pl-2 focus:outline-none"
+              />
+              <div
+                onClick={togglePasswordVisibility}
+                className={`absolute top-[60%] right-10 cursor-pointer`}
+              >
+                {isPasswordVisible ? (
+                  <IoEyeOutline color="gray" size={20} />
+                ) : (
+                  <IoEyeOffOutline color="gray" size={20} />
+                )}
+              </div>
+            </div>
+            <button
+              onClick={handleResetPassword}
+              className="capitalize w-full xl:w-3/4 bg-[#1A3A36] text-white font-semibold py-2 rounded-lg mt-3"
+            >
+              Reset Password
+            </button>
+          </div>
+        </div>
+      ) : (
+        <div className="main flex justify-center gap-5 h-screen w-full bg-login-custom-gradient">
+          <div className="img w-1/2 p-5 flex justify-end items-center">
+            <img
+              src="images/Register.png"
+              alt=""
+              className="max-h-full h-full xl:h-auto w-full xl:w-3/4"
+            />
+          </div>
+          <div
+            className={`content w-1/2 max-h-full h-full flex flex-col items-start ${
+              isSignUp ? "pt-10" : "pt-40"
+            } gap-10`}
+          >
+            <div className="w-3/4">
+              <h1 className="capitalize text-3xl font-bold text-white text-center">
+                {isForgotPassword
+                  ? "Forgot password"
+                  : isSignUp
+                  ? "Create Account"
+                  : "Welcome back!"}
+              </h1>
+              <p className="capitalize text-white font-semibold text-center my-2">
+                {isForgotPassword
+                  ? "No worries, we'll send you reset instructions"
+                  : isSignUp
+                  ? ""
+                  : "Please enter your details"}
+              </p>
             </div>
 
-            {isForgotPassword ? (
-              <div>
-                <button className="capitalize w-full xl:w-3/4 bg-[#1A3A36] text-white font-semibold py-2 rounded-lg mt-3">
-                  Reset Password
-                </button>
-                <p className="text-white capitalize flex items-center justify-center gap-1 w-full xl:w-3/4 my-6">
-                  <span
-                    onClick={backToSignIn}
-                    className="cursor-pointer text-black self-center"
-                  >
-                    <FaAngleLeft size={16} />
-                  </span>
-                  Back to log in
-                </p>
+            <div className="w-full flex flex-col gap-2 pr-2">
+              <div className="flex flex-col gap-3 xl:w-3/4">
+                <label
+                  htmlFor="email"
+                  className="capitalize text-md font-semibold text-white"
+                >
+                  Email Id <span>*</span>
+                </label>
+                <input
+                  type="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  placeholder={
+                    isForgotPassword ? "Enter your email" : "example@gmail.com"
+                  }
+                  className="w-full py-2 rounded-lg pl-2 focus:outline-none"
+                />
               </div>
-            ) : (
-              <>
-                {isSignUp && (
-                  <>
-                    <div className="flex justify-center gap-2 xl:w-3/4">
-                      <div className="flex flex-col gap-3 w-1/2">
-                        <label
-                          htmlFor="company"
-                          className="capitalize text-md font-semibold text-white"
-                        >
-                          Company Name <span>*</span>
-                        </label>
-                        <input
-                          type="text"
-                          name="company"
-                          value={formData.company}
-                          onChange={handleChange}
-                          placeholder="Your Company Name"
-                          className="w-full py-2 rounded-lg pl-2 focus:outline-none"
-                        />
+
+              {isForgotPassword ? (
+                <div>
+                  <button
+                    onClick={handleForgotPassword}
+                    className="capitalize w-full xl:w-3/4 bg-[#1A3A36] text-white font-semibold py-2 rounded-lg mt-3"
+                  >
+                    Reset Password
+                  </button>
+                  <p className="text-white capitalize flex items-center justify-center gap-1 w-full xl:w-3/4 my-6">
+                    <span
+                      onClick={backToSignIn}
+                      className="cursor-pointer text-black self-center"
+                    >
+                      <FaAngleLeft size={16} />
+                    </span>
+                    Back to log in
+                  </p>
+                </div>
+              ) : (
+                <>
+                  {isSignUp && (
+                    <>
+                      <div className="flex justify-center gap-2 xl:w-3/4">
+                        <div className="flex flex-col gap-3 w-1/2">
+                          <label
+                            htmlFor="company"
+                            className="capitalize text-md font-semibold text-white"
+                          >
+                            Company Name <span>*</span>
+                          </label>
+                          <input
+                            type="text"
+                            name="company"
+                            value={formData.company}
+                            onChange={handleChange}
+                            placeholder="Your Company Name"
+                            className="w-full py-2 rounded-lg pl-2 focus:outline-none"
+                          />
+                        </div>
+
+                        <div className="flex flex-col gap-3 w-1/2">
+                          <label
+                            htmlFor="location"
+                            className="capitalize text-md font-semibold text-white"
+                          >
+                            Location <span>*</span>
+                          </label>
+                          <input
+                            type="text"
+                            name="location"
+                            value={formData.location}
+                            onChange={handleChange}
+                            onInput={(e) => {
+                              e.target.value = e.target.value.replace(
+                                /[^A-Za-z\s]/g,
+                                ""
+                              ); // Remove everything except letters & spaces
+                            }}
+                            placeholder="Your Location"
+                            className="w-full py-2 rounded-lg pl-2 focus:outline-none"
+                          />
+                        </div>
                       </div>
 
-                      <div className="flex flex-col gap-3 w-1/2">
+                      <div className="xl:w-3/4 flex flex-col gap-3">
                         <label
-                          htmlFor="location"
+                          htmlFor="mobile"
                           className="capitalize text-md font-semibold text-white"
                         >
-                          Location <span>*</span>
+                          Mobile Number <span>*</span>
                         </label>
                         <input
                           type="text"
-                          name="location"
-                          value={formData.location}
+                          name="mobile"
+                          value={formData.mobile}
                           onChange={handleChange}
                           onInput={(e) => {
-                            e.target.value = e.target.value.replace(
-                              /[^A-Za-z\s]/g,
-                              ""
-                            ); // Remove everything except letters & spaces
+                            e.target.value = e.target.value.replace(/\D/g, ""); // Remove non-numeric characters
                           }}
-                          placeholder="Your Location"
+                          maxLength="10"
+                          inputMode="numeric"
+                          pattern="\d{10}"
+                          placeholder="Your Mobile Number"
                           className="w-full py-2 rounded-lg pl-2 focus:outline-none"
                         />
                       </div>
-                    </div>
-
-                    <div className="xl:w-3/4 flex flex-col gap-3">
-                      <label
-                        htmlFor="mobile"
-                        className="capitalize text-md font-semibold text-white"
-                      >
-                        Mobile Number <span>*</span>
-                      </label>
-                      <input
-                        type="text"
-                        name="mobile"
-                        value={formData.mobile}
-                        onChange={handleChange}
-                        onInput={(e) => {
-                          e.target.value = e.target.value.replace(/\D/g, ""); // Remove non-numeric characters
-                        }}
-                        maxLength="10"
-                        inputMode="numeric"
-                        pattern="\d{10}"
-                        placeholder="Your Mobile Number"
-                        className="w-full py-2 rounded-lg pl-2 focus:outline-none"
-                      />
-                    </div>
-                  </>
-                )}
-
-                <div className="xl:w-3/4 flex flex-col gap-3 relative">
-                  <label
-                    htmlFor="password"
-                    className="capitalize text-md font-semibold text-white"
-                  >
-                    Password <span>*</span>
-                  </label>
-                  <input
-                    type={isPasswordVisible ? "text" : "password"}
-                    name="password"
-                    value={formData.password}
-                    onChange={handleChange}
-                    placeholder="Enter Password"
-                    className="py-2 rounded-lg pl-2 focus:outline-none"
-                  />
-                  <div
-                    onClick={togglePasswordVisibility}
-                    className={`absolute ${
-                      isSignUp ? "top-[60%]" : "top-[40%]"
-                    } right-3 cursor-pointer`}
-                  >
-                    {isPasswordVisible ? (
-                      <IoEyeOutline color="gray" size={20} />
-                    ) : (
-                      <IoEyeOffOutline color="gray" size={20} />
-                    )}
-                  </div>
-                  {!isSignUp && (
-                    <div className="w-full flex justify-end">
-                      <p
-                        onClick={showForgotPassword}
-                        className="capitalize text-white underline cursor-pointer"
-                      >
-                        Forgot Password?
-                      </p>
-                    </div>
+                    </>
                   )}
-                </div>
 
-                {isSignUp && (
                   <div className="xl:w-3/4 flex flex-col gap-3 relative">
                     <label
-                      htmlFor="confirmPassword"
+                      htmlFor="password"
                       className="capitalize text-md font-semibold text-white"
                     >
-                      Confirm Password <span>*</span>
+                      Password <span>*</span>
                     </label>
                     <input
                       type={isPasswordVisible ? "text" : "password"}
-                      name="confirmPassword"
-                      value={formData.confirmPassword}
+                      name="password"
+                      value={formData.password}
                       onChange={handleChange}
-                      placeholder="Confirm Password"
+                      placeholder="Enter Password"
                       className="py-2 rounded-lg pl-2 focus:outline-none"
                     />
                     <div
                       onClick={togglePasswordVisibility}
-                      className="absolute top-[60%] right-3 cursor-pointer"
+                      className={`absolute ${
+                        isSignUp ? "top-[60%]" : "top-[40%]"
+                      } right-3 cursor-pointer`}
                     >
                       {isPasswordVisible ? (
                         <IoEyeOutline color="gray" size={20} />
@@ -448,91 +543,97 @@ function Login() {
                       </div>
                     )}
                   </div>
-                )}
 
-                <button
-                  onClick={handleSubmit}
-                  className={`capitalize xl:w-3/4 bg-[#1A3A36] text-white font-semibold py-2 rounded-lg ${
-                    isSignUp ? "my-1" : "my-2"
-                  }`}
-                >
-                  {isSignUp ? "Sign Up" : "Sign In"}
-                </button>
-
-                <p className="text-white">
-                  {isSignUp ? (
-                    <>
-                      Already have an account?{" "}
-                      <span
-                        onClick={toggleForm}
-                        className="cursor-pointer text-black"
+                  {isSignUp && (
+                    <div className="xl:w-3/4 flex flex-col gap-3 relative">
+                      <label
+                        htmlFor="confirmPassword"
+                        className="capitalize text-md font-semibold text-white"
                       >
-                        Sign In
-                      </span>
-                    </>
-                  ) : (
-                    <>
-                      Don't have an account?{" "}
-                      <span
-                        onClick={toggleForm}
-                        className="cursor-pointer text-black"
+                        Confirm Password <span>*</span>
+                      </label>
+                      <input
+                        type={isPasswordVisible ? "text" : "password"}
+                        name="confirmPassword"
+                        value={formData.confirmPassword}
+                        onChange={handleChange}
+                        placeholder="Confirm Password"
+                        className="py-2 rounded-lg pl-2 focus:outline-none"
+                      />
+                      <div
+                        onClick={togglePasswordVisibility}
+                        className="absolute top-[60%] right-3 cursor-pointer"
                       >
-                        Sign Up
-                      </span>
-                    </>
+                        {isPasswordVisible ? (
+                          <IoEyeOutline color="gray" size={20} />
+                        ) : (
+                          <IoEyeOffOutline color="gray" size={20} />
+                        )}
+                      </div>
+                      {!isSignUp && (
+                        <div className="w-full flex justify-end">
+                          <p
+                            onClick={showForgotPassword}
+                            className="capitalize text-white underline cursor-pointer"
+                          >
+                            Forgot Password?
+                          </p>
+                        </div>
+                      )}
+                    </div>
                   )}
-                </p>
 
-                {/* Social Login */}
-                <div className="flex justify-center gap-3 items-center xl:w-3/4">
-                  <hr className="w-2/5" />
-                  <span className="text-white">or</span>
-                  <hr className="w-2/5" />
-                </div>
-                <div className="xl:w-3/4 flex justify-center gap-5">
-                  <FcGoogle size={30} className="cursor-pointer" />
-                  <FaFacebook
-                    fill="blue"
-                    size={30}
-                    className="bg-white rounded-full cursor-pointer bg-contain"
-                  />
-                </div>
-              </>
-            )}
+                  <button
+                    onClick={handleSubmit}
+                    className={`capitalize xl:w-3/4 bg-[#1A3A36] text-white font-semibold py-2 rounded-lg ${
+                      isSignUp ? "my-1" : "my-2"
+                    }`}
+                  >
+                    {isSignUp ? "Sign Up" : "Sign In"}
+                  </button>
+
+                  <p className="text-white">
+                    {isSignUp ? (
+                      <>
+                        Already have an account?{" "}
+                        <span
+                          onClick={toggleForm}
+                          className="cursor-pointer text-black"
+                        >
+                          Sign In
+                        </span>
+                      </>
+                    ) : (
+                      <>
+                        Don't have an account?{" "}
+                        <span
+                          onClick={toggleForm}
+                          className="cursor-pointer text-black"
+                        >
+                          Sign Up
+                        </span>
+                      </>
+                    )}
+                  </p>
+
+                  {/* Social Login */}
+                  <div className="flex justify-center gap-3 items-center xl:w-3/4">
+                    <hr className="w-2/5" />
+                    <span className="text-white">or</span>
+                    <hr className="w-2/5" />
+                  </div>
+                  <div className="xl:w-3/4 flex justify-center gap-5">
+                    <FcGoogle size={30} className="cursor-pointer" />
+                    <FaFacebook
+                      fill="blue"
+                      size={30}
+                      className="bg-white rounded-full cursor-pointer bg-contain"
+                    />
+                  </div>
+                </>
+              )}
+            </div>
           </div>
-        </div>
-      </div>
-      {resetPass && (
-        <div className="flex justify-center gap-5 h-screen w-full bg-login-custom-gradient">
-          <h1>Reset Password</h1>
-          <label
-            htmlFor="password"
-            className="capitalize text-md font-semibold text-white"
-          >
-            Password <span>*</span>
-          </label>
-          <input
-            type={isPasswordVisible ? "text" : "password"}
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
-            placeholder="Enter Password"
-            className="py-2 rounded-lg pl-2 focus:outline-none"
-          />
-          <label
-            htmlFor="confirmPassword"
-            className="capitalize text-md font-semibold text-white"
-          >
-            Confirm Password <span>*</span>
-          </label>
-          <input
-            type={isPasswordVisible ? "text" : "password"}
-            name="confirmPassword"
-            value={formData.confirmPassword}
-            onChange={handleChange}
-            placeholder="Confirm Password"
-            className="py-2 rounded-lg pl-2 focus:outline-none"
-          />
         </div>
       )}
     </>
