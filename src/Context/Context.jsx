@@ -1,4 +1,5 @@
 import { createContext, useContext, useEffect, useState, useRef } from "react";
+import { supabase } from "../services/supabase";
 
 const AppContext = createContext();
 
@@ -52,6 +53,24 @@ export const AppProvider = ({ children }) => {
 
   useEffect(() => {
     console.log("userId: ", userId);
+
+    async function fetchdata() {
+      const usertoken = localStorage.getItem("usertoken");
+      if (usertoken) {
+        const { data, error } = await supabase.auth.getUser(usertoken);
+        if (error) {
+          console.error("Error fetching user:", error);
+          return null;
+        }
+
+        if (data) {
+          setUserId(data.user.id);
+        }
+      }
+    }
+
+    fetchdata();
+    // setUserId(userId);
   }, [userId]);
 
   useEffect(() => {

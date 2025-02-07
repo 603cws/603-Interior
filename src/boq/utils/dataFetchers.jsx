@@ -97,18 +97,18 @@ export const fetchRoomData = async (userId) => {
     const { data: quantityData, error: quantityError } = await supabase
       .from("quantity")
       .select()
-      .eq("userId", userId); // Filter by userId
-    // .order("created_at", { ascending: false })
-    // .limit(1);
+      .eq("userId", userId) // Filter by userId
+      .order("created_at", { ascending: false })
+      .limit(1);
 
     if (quantityError) throw quantityError;
 
     const { data: areasData, error: areasError } = await supabase
       .from("areas")
       .select()
-      .eq("userId", userId); // Filter by userId
-    // .order("created_at", { ascending: false })
-    // .limit(1);
+      .eq("userId", userId) // Filter by userId
+      .order("created_at", { ascending: false })
+      .limit(1);
 
     if (areasError) throw areasError;
 

@@ -13,7 +13,7 @@ function Login() {
   const [isLogin, setIsLogin] = useState(false);
   const [resetPass, setResetPass] = useState(false);
 
-  const { userId, setUserId, setTotalArea } = useApp();
+  const { setUserId, setTotalArea } = useApp();
 
   const navigate = useNavigate();
 
@@ -178,9 +178,16 @@ function Login() {
       return;
     }
 
-    if (data.user.id) {
+    if (data.user?.id) {
       const userId = data.user.id;
+      await updateUserId(userId); // Ensure this function completes before proceeding
+
       setUserId(userId);
+
+      if (data) {
+        const usertoken = data.session.access_token;
+        localStorage.setItem("usertoken", usertoken);
+      }
 
       try {
         // Fetch areaId and quantityId for the logged-in user

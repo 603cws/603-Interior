@@ -87,6 +87,18 @@ function RegisterUser() {
   };
 
   useEffect(() => {
+    if (formData.password && formData.confirmPassword) {
+      const timeoutId = setTimeout(() => {
+        if (formData.password !== formData.confirmPassword) {
+          showErrorWithTimeout("confirmPassword", "Passwords do not match.");
+        } else {
+          showErrorWithTimeout("confirmPassword", ""); // Clear error when passwords match
+        }
+      }, 500);
+    }
+  }, [formData.password, formData.confirmPassword]); // Runs whenever password or confirmPassword changes
+
+  useEffect(() => {
     const timeoutId = setTimeout(async () => {
       if (debouncedEmail) {
         const emailExists = await checkIfEmailExists(debouncedEmail);
@@ -260,7 +272,9 @@ function RegisterUser() {
 
       // navigate('/Contact', { replace: true });
       // window.location.href = 'https://603-boq.vercel.app/';     //Goto BOQ page from here
-      navigate("/boq");
+      navigate("/boq", {
+        state: { userID: userId, clearData: true },
+      });
     } catch (error) {
       console.error("Unexpected error during registration:", error);
     }
@@ -271,10 +285,10 @@ function RegisterUser() {
     if (isLogin) {
       handleLogin();
     } else {
-      if (formData.password !== formData.confirmPassword) {
-        showErrorWithTimeout("confirmPassword", "Passwords do not match.");
-        return;
-      }
+      // if (formData.password !== formData.confirmPassword) {
+      //   showErrorWithTimeout("confirmPassword", "Passwords do not match.");
+      //   return;
+      // }
       handleRegister();
     }
   };
@@ -297,7 +311,7 @@ function RegisterUser() {
       // Check if the email and password match
       const { data, error } = await supabase
         .from("users")
-        .select("email, password")
+        .select("email, password, userId")
         .eq("email", formData.email)
         .single();
 
@@ -399,6 +413,9 @@ function RegisterUser() {
                       value={formData.mobile}
                       required
                       onChange={handleChange}
+                      onInput={(e) => {
+                        e.target.value = e.target.value.replace(/\D/g, ""); // Remove non-numeric characters
+                      }}
                       maxLength="10"
                       inputMode="numeric"
                       pattern="\d{10}"
@@ -423,6 +440,12 @@ function RegisterUser() {
                     placeholder="Enter your location"
                     value={formData.location}
                     onChange={handleChange}
+                    onInput={(e) => {
+                      e.target.value = e.target.value.replace(
+                        /[^A-Za-z\s]/g,
+                        ""
+                      ); // Remove everything except letters & spaces
+                    }}
                     required
                     className="w-full py-1.5 text-sm border-1 rounded-md pl-2 placeholder:text-xs"
                   />
