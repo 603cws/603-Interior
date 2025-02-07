@@ -34,13 +34,14 @@ function Login() {
   const areaID = location.state?.areaId;
 
   useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    const recoveryType = params.get("type");
+    // Parse the hash parameters from the URL
+    const hashParams = new URLSearchParams(window.location.hash.substring(1));
+    const recoveryType = hashParams.get("type");
 
     if (recoveryType === "recovery") {
       setResetPass(true);
     }
-  }, [location.search]); // Run whenever the URL changes
+  }, []); // Run only once when component mounts
 
   const togglePasswordVisibility = () => {
     setIsPasswordVisible(!isPasswordVisible);
@@ -317,14 +318,14 @@ function Login() {
                 htmlFor="password"
                 className="capitalize text-md font-semibold text-white"
               >
-                Password <span>*</span>
+                New Password <span>*</span>
               </label>
               <input
                 type={isPasswordVisible ? "text" : "password"}
                 name="password"
                 value={formData.password}
                 onChange={handleChange}
-                placeholder="Enter Password"
+                placeholder="Enter New Password"
                 className="py-2 rounded-lg pl-2 focus:outline-none"
               />
               <div
@@ -340,17 +341,17 @@ function Login() {
             </div>
             <div className="w-full  px-5 flex flex-col gap-3 relative">
               <label
-                htmlFor="password"
+                htmlFor="confirmPassword"
                 className="capitalize text-md font-semibold text-white"
               >
-                Password <span>*</span>
+                confirm Password <span>*</span>
               </label>
               <input
                 type={isPasswordVisible ? "text" : "password"}
                 name="password"
-                value={formData.password}
+                value={formData.confirmPassword}
                 onChange={handleChange}
-                placeholder="Enter Password"
+                placeholder="Enter New Password"
                 className="py-2 rounded-lg pl-2 focus:outline-none"
               />
               <div
