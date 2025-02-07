@@ -14,6 +14,7 @@ import ErrorModal from "../../common-components/ErrorModal";
 // import QnaPopup from "./components/QnaPopup"
 import Joyride, { STATUS } from "react-joyride";
 import EnterAreaModal from "../components/EnterAreaModal";
+import ProfileCard from "../../boq/components/ProfileCard";
 
 const initialAreaValues = {
   linear: 24,
@@ -333,7 +334,7 @@ function Layout() {
   const [warning, setWarning] = useState(false);
   const [otherArea, setOtherArea] = useState();
 
-  const { totalArea, setTotalArea, totalAreaSource } = useApp();
+  const { totalArea, setTotalArea, totalAreaSource, showProfile } = useApp();
   const [runTour, setRunTour] = useState(false); // Controls whether the tour runs
 
   const [areaWarn, setAreaWarn] = useState(false);
@@ -795,6 +796,7 @@ function Layout() {
         <ErrorModal onclose={() => setWarning(false)} message={errorMessage} />
       )}
       {areaWarn && <EnterAreaModal onclose={() => setAreaWarn(false)} />}
+      {showProfile && <ProfileCard />}
 
       {/* <LayoutCard /> */}
       {/* <QnaPopup question="is the flooring project for residental purpose ?" /> */}

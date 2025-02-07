@@ -19,6 +19,7 @@ import { calculateTotalPriceHelper } from "../utils/CalculateTotalPriceHelper";
 import Joyride, { STATUS } from "react-joyride";
 import { supabase } from "../../services/supabase";
 import toast from "react-hot-toast";
+import ProfileCard from "../components/ProfileCard";
 
 function Boq() {
   const [selectedProductView, setSelectedProductView] = useState([]);
@@ -65,6 +66,8 @@ function Boq() {
     setHeight,
     userResponses,
     setUserResponses,
+    showProfile,
+    setShowProfile,
   } = useApp();
 
   // useEffect(() => {
@@ -1121,6 +1124,7 @@ function Boq() {
           )}
         </div>
       )}
+      {showProfile && <ProfileCard />}
     </div>
   );
 }

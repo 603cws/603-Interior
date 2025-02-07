@@ -1,8 +1,12 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "../services/supabase";
+import { useApp } from "./Context";
+import toast from "react-hot-toast";
 
 const useAuthRefresh = () => {
+  const { setIsAuthenticated } = useApp();
+
   const [isUserActive, setIsUserActive] = useState(true);
   const navigate = useNavigate();
   let inactivityTimeout, refreshInterval;
@@ -78,10 +82,17 @@ const useAuthRefresh = () => {
       `User inactive for 1 hour or token refresh failed. Signing out... Time: ${currentTime}`
     );
 
-    await supabase.auth.signOut();
-    localStorage.removeItem("session"); // Clear session
-    localStorage.removeItem("usertoken"); //Clear user token
-    navigate("/login"); // Redirect to login page
+    const { error } = await supabase.auth.signOut();
+    if (error) {
+      console.error("Error signing out:", error.message);
+    } else {
+      localStorage.removeItem("session"); // Clear session
+      localStorage.removeItem("usertoken"); //Clear user token
+      toast.success("User signed out successfully");
+      setIsAuthenticated(false);
+      console.log("User signed out successfully");
+      navigate("/login"); // Redirect to login page
+    }
   };
 
   return { isUserActive, signOutUser };

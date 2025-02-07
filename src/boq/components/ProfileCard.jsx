@@ -1,11 +1,42 @@
 import { RiDashboardFill } from "react-icons/ri";
+import { supabase } from "../../services/supabase";
+import { useApp } from "../../Context/Context";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
+import useAuthRefresh from "../../Context/useAuthRefresh";
 
 function ProfileCard() {
+  const { setIsAuthenticated } = useApp();
   const background = "images/profilebg.png";
+
+  const navigate = useNavigate();
+  const { signOutUser } = useAuthRefresh(); // Get signOutUser from hook
+
+  // const handleLogout = async () => {
+
+  //   const { error } = await supabase.auth.signOut();
+  //   if (error) {
+  //     console.error("Error signing out:", error.message);
+  //   } else {
+  //     console.log("User signed out successfully");
+  //     toast.success("User signed out successfully");
+  //     setIsAuthenticated(false);
+  //     localStorage.removeItem("usertoken");
+  //     navigate("/login");
+  //   }
+  // };
+
+  // const handleLogout = async () => {
+  //   setIsAuthenticated(false);
+  //   localStorage.removeItem("usertoken");
+  //   toast.success("User signed out successfully");
+  //   navigate("/login");
+  // };
+
   return (
     <div>
       {/* div for card */}
-      <div className="rounded-bl-[60px] rounded-tl-[60px]  shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)]  overflow-hidden max-w-sm h-[100vh] font-Poppins bg-[#fff]">
+      <div className="rounded-bl-[60px] rounded-tl-[60px]  shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)]  overflow-hidden max-w-sm w-full h-[calc(100vh-50px)] font-Poppins bg-[#fff] z-20 absolute right-0 top-[50px] transition-transform duration-1000 ease-in-out ">
         {/* <div className="rounded-bl-[60px] rounded-tl-[60px]   overflow-hidden max-w-sm h-[100vh] font-Poppins"> */}
         {/* div for profile icon part */}
         <div className=" h-1/3 flex flex-col">
@@ -54,7 +85,7 @@ function ProfileCard() {
           </div>
           <div className="flex items-center mx-4 gap-3">
             <RiDashboardFill />
-            <p>sign out</p>
+            <button onClick={signOutUser}>sign out</button>
           </div>
         </div>
       </div>

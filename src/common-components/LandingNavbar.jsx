@@ -1,9 +1,16 @@
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { FiMenu, FiX } from "react-icons/fi";
+import { useApp } from "../Context/Context";
 function LandingNavbar() {
   const navigate = useNavigate();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  const { setShowProfile, showProfile, isAuthenticated } = useApp();
+
+  const toggleProfile = () => {
+    setShowProfile(!showProfile);
+  };
 
   return (
     <div className="px-5 pt-3 absolute top-0 w-full z-10">
@@ -44,12 +51,23 @@ function LandingNavbar() {
 
         {/* Login Button (Desktop) */}
         <div className="hidden xl:block">
-          <button
-            onClick={() => navigate("/Login")}
-            className="px-6 py-1.5 bg-[#1F5C54] border border-[#15423C] rounded-3xl text-white"
-          >
-            Log In
-          </button>
+          {isAuthenticated ? (
+            <div className="">
+              <img
+                onClick={toggleProfile}
+                src="/images/usericon.png"
+                alt="usericon"
+                className="w-12 h-12 cursor-pointer"
+              />
+            </div>
+          ) : (
+            <button
+              onClick={() => navigate("/Login")}
+              className="px-6 py-1.5 bg-[#1F5C54] border border-[#15423C] rounded-3xl text-white"
+            >
+              Log In
+            </button>
+          )}
         </div>
 
         {/* Mobile Menu Button */}

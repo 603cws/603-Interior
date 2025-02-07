@@ -27,6 +27,7 @@ import ProfileCard from "./boq/components/ProfileCard";
 import Dashboard from "./pages/Dashboard";
 import ScrollToTop from "./common-components/ScrollToTop";
 import useAuthRefresh from "./Context/useAuthRefresh"; // Import the hook
+import BecomeSeller from "./pages/BecomeSeller";
 
 // const Homepage = lazy(() => import("./pages/Homepage"));
 
@@ -68,6 +69,7 @@ function App() {
           <Route path="/OurServices" element={<OurServices />} />
           <Route path="/profile" element={<ProfileCard />} />
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/becomeseller" element={<BecomeSeller />} />
         </Routes>
       </Suspense>
     </div>

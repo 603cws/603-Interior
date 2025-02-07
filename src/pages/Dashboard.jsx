@@ -6,10 +6,10 @@ const percentage = 66;
 function Dashboard() {
   return (
     <div className="">
-      <div className="flex gap-3 max-h-max">
+      <div className="flex gap-3 max-h-screen overflow-y-hidden">
         {/* sidebar */}
         {/* <div className="h-screen max-w-sm bg-red-600"> */}
-        <div className="h-screen max-w-sm bg-red-600 sticky left-0 top-0 bottom-0">
+        <div className="h-screen max-w-sm  sticky left-0 top-0 bottom-0">
           {/* logo */}
           <div className="cursor-pointer flex justify-center items-center">
             <img src="/logo/logo.png" alt="Logo" className="h-20 w-32" />
@@ -48,9 +48,9 @@ function Dashboard() {
             </div>
           </div>
         </div>
-        <div className="flex-1 flex flex-col bg-yellow-700 gap-3 relative h-full">
+        <div className="flex-1 flex flex-col gap-3 relative h-full px-2">
           {/* header for dashboard */}
-          <div className="flex justify-between items-center border-2 rounded-3xl mt-2 sticky top-5 z-10 bg-white">
+          <div className="flex justify-between items-center border-2 rounded-3xl mt-2 sticky top-3 z-10 bg-white h-[50px]">
             <div className="mx-3">
               <h3 className="font-bold text-lg capitalize ">client</h3>
             </div>
@@ -60,9 +60,9 @@ function Dashboard() {
           </div>
 
           {/* div for content */}
-          <div className="flex-1 bg-green-500 border-2 border-[#000] rounded-3xl sticky top-10">
+          <div className="flex-1  border-2 border-[#000] rounded-3xl ">
             {/* for dashboard */}
-            <div className="sticky top-0 bottom-0 left-0 right-0 overflow-y-scroll">
+            <div className="overflow-y-auto scrollbar-hide h-[calc(100vh-100px)] py-2 px-3">
               {/* dashboard area layout */}
               <div className="p-4">
                 <h2 className="capitalize font-bold mb-2">

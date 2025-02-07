@@ -37,7 +37,7 @@ function Navbar({
     };
   }, []);
 
-  const { progress, selectedData } = useApp();
+  const { progress, selectedData, setShowProfile, showProfile } = useApp();
 
   const naviagte = useNavigate();
 
@@ -49,9 +49,12 @@ function Navbar({
     naviagte("/");
   };
 
+  const toggleProfile = () => {
+    setShowProfile(!showProfile);
+  };
   return (
     <div className="navbar sticky top-0 z-20">
-      <div className="flex justify-between bg-gradient-to-r from-[#1A3A36] to-[#48A095] items-center px-4">
+      <div className="flex justify-between bg-gradient-to-r from-[#1A3A36] to-[#48A095] items-center px-4 h-[50px]">
         {/* logo */}
         <button className="" onClick={handlelogo}>
           <img src="/logo/logo.png" alt="603 logo" className="h-10 w-18 " />
@@ -69,9 +72,10 @@ function Navbar({
           {/* prfile icon */}
           <div className="">
             <img
+              onClick={toggleProfile}
               src="/images/usericon.png"
               alt="usericon"
-              className="w-12 h-12"
+              className="w-12 h-12 cursor-pointer"
             />
           </div>
         </div>

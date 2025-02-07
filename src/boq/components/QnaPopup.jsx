@@ -212,7 +212,7 @@ const QnaPopup = ({ onClose, onSubmit, category }) => {
                         onChange={handleInputChange}
                         placeholder="Enter height (default is 10)"
                         min="5"
-                        max="20"
+                        max="16"
                         className="w-full border-2 rounded-md p-2 [&::-webkit-inner-spin-button]:appearance-none  focus:outline-none focus:ring-0"
                       />
                     ) : (

@@ -29,10 +29,14 @@ export const AppProvider = ({ children }) => {
   const [subCategories, setSubCategories] = useState([]); // Extracted subcategories
   const [subCat1, setSubCat1] = useState([]);
   const [userResponses, setUserResponses] = useState({});
+  const [showProfile, setShowProfile] = useState(false);
 
   const prevSelectedData = useRef(selectedData); // Ref to store previous selectedData
   const prevCategories = useRef(categories); // Ref to store previous categories
   const prevSubCat1 = useRef(subCat1); // Ref to store previous subCat1
+
+  // auth
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
     var temp = JSON.parse(localStorage.getItem("selectedData"));
@@ -56,6 +60,9 @@ export const AppProvider = ({ children }) => {
 
     async function fetchdata() {
       const usertoken = localStorage.getItem("usertoken");
+      if (!usertoken) {
+        setIsAuthenticated(false); // Set auth to false if no token
+      }
       if (usertoken) {
         const { data, error } = await supabase.auth.getUser(usertoken);
         if (error) {
@@ -65,6 +72,7 @@ export const AppProvider = ({ children }) => {
 
         if (data) {
           setUserId(data.user.id);
+          setIsAuthenticated(true);
         }
       }
     }
@@ -195,6 +203,10 @@ export const AppProvider = ({ children }) => {
         categoriesWithTwoLevelCheck,
         userResponses,
         setUserResponses,
+        showProfile,
+        setShowProfile,
+        isAuthenticated,
+        setIsAuthenticated,
       }}
     >
       {children}

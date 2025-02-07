@@ -20,6 +20,8 @@ function Navbar({ MIN_AREA, MAX_AREA, resetAll, areaQuantities, areaValues }) {
     setInputValue,
     setTotalAreaSource,
     userId,
+    showProfile,
+    setShowProfile,
   } = useApp();
 
   // const [warning,setWarning]=useState(false)
@@ -169,11 +171,15 @@ function Navbar({ MIN_AREA, MAX_AREA, resetAll, areaQuantities, areaValues }) {
     resetAll(); // Call the resetAll function passed from the parent component
   };
 
+  const toggleProfile = () => {
+    setShowProfile(!showProfile);
+  };
+
   return (
     <div>
       {/* navbar */}
       {/* <div className="flex justify-evenly bg-[#003366] py-2 items-center rounded-full mx-2 mt-2"> */}
-      <div className="flex justify-between bg-gradient-to-r from-[#1A3A36] to-[#48A095] py-4 items-center px-5">
+      <div className="flex justify-around bg-gradient-to-r from-[#1A3A36] to-[#48A095] py-4 items-center px-5">
         {/* logo */}
         <button className="self-start" onClick={() => navigate("/")}>
           <img src="/logo/logo.png" alt="603 logo" className="h-auto w-20" />
@@ -242,6 +248,12 @@ function Navbar({ MIN_AREA, MAX_AREA, resetAll, areaQuantities, areaValues }) {
         >
           Generate BOQ
         </button>
+        <img
+          onClick={toggleProfile}
+          src="/images/usericon.png"
+          alt="usericon"
+          className="w-12 h-12 cursor-pointer"
+        />
         {/* </div> */}
       </div>
       {/* {warning && <ErrorModal onclose={()=>setWarning(false)} />} */}
