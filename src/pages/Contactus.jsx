@@ -55,37 +55,59 @@ function Contactus() {
 
     console.log("hii from log");
 
-    const data = {
-      service_id: serviceid,
-      template_id: templateID,
-      user_id: your_public_key,
-      template_params: {
-        name: form.name,
-        mobile: form.mobileNo,
-        company: form.companyName,
-        email: form.email,
-        message: form.message,
-      },
-    };
+    if (
+      !form.email ||
+      !form.companyName ||
+      !form.name ||
+      !form.mobileNo ||
+      !form.message
+    ) {
+      toast.error("form not filled");
+      return;
+    } else {
+      const data = {
+        service_id: serviceid,
+        template_id: templateID,
+        user_id: your_public_key,
+        template_params: {
+          name: form.name,
+          mobile: form.mobileNo,
+          company: form.companyName,
+          email: form.email,
+          message: form.message,
+        },
+      };
 
-    try {
-      setisSubmitting(true);
-      const response = await axios.post(
-        "https://api.emailjs.com/api/v1.0/email/send",
-        data,
-        {
-          headers: { "Content-Type": "application/json" },
-        }
-      );
-      console.log("Email sent successfully:", response.data);
-      // alert("Your mail is sent!");
-      toast.success("we will shortly reach you");
-      // setFormData({ username: "", user_email: "", message: "" }); // Reset form
-    } catch (error) {
-      console.error("Error sending email:", error);
-      alert("Oops... " + JSON.stringify(error.response?.data || error.message));
-    } finally {
-      setisSubmitting(false);
+      try {
+        setisSubmitting(true);
+        const response = await axios.post(
+          "https://api.emailjs.com/api/v1.0/email/send",
+          data,
+          {
+            headers: { "Content-Type": "application/json" },
+          }
+        );
+        console.log("Email sent successfully:", response.data);
+        // alert("Your mail is sent!");
+        toast.success("we will shortly reach you");
+        // setFormData({ username: "", user_email: "", message: "" }); // Reset form
+
+        //reset form
+        setFormData({
+          message: "",
+          name: "",
+          email: "",
+          mobileNo: 0,
+          companyName: "",
+        });
+      } catch (error) {
+        console.error("Error sending email:", error);
+        alert(
+          "Oops... " + JSON.stringify(error.response?.data || error.message)
+        );
+      } finally {
+        setisSubmitting(false);
+      }
     }
   };
 
@@ -119,7 +141,7 @@ function Contactus() {
         {/* <div className="container mx-auto flex justify-center gap-12 font-Poppins py-4 items-center "> */}
         <div className="container mx-auto flex justify-around gap-12 font-Poppins py-4 items-center ">
           {/* content card */}
-          <div className=" text-center p-2 w-[215px] h-[255px] ">
+          <div className=" text-center p-2 w-[215px] h-[255px] flex flex-col justify-center items-center">
             <div className="w-full flex justify-center my-4">
               <div className="cursor-pointer w-12 h-12 rounded-full bg-[#34BFAD] flex justify-center items-center">
                 <PiMapPinAreaFill size={35} />
@@ -135,7 +157,7 @@ function Contactus() {
             </p>
           </div>
           {/* content card */}
-          <div className="text-center p-2  w-[215px] h-[255px] ">
+          <div className="text-center p-2  w-[215px] h-[255px] flex flex-col justify-center items-center">
             <div className="w-full flex justify-center my-4">
               <div className="cursor-pointer w-12 h-12 rounded-full bg-[#34BFAD] flex justify-center items-center">
                 <IoIosCall size={35} />
@@ -143,13 +165,12 @@ function Contactus() {
             </div>
             <h2 className="font-semibold text-2xl uppercase mb-3">phone</h2>
             <h3 className="text-xl font-medium mb-2">Head Office:</h3>
-            <p className="text-[#111111] font-medium">
-              +91-22-12345678 / <br />
-              +91-22-12345678
+            <p className="text-[#111111] font-medium text-center">
+              +91-9136036603
             </p>
           </div>
           {/* content card */}
-          <div className=" text-center p-2  w-[215px] h-[255px]  ">
+          <div className=" text-center p-2  w-[215px] h-[255px] flex flex-col justify-center items-center ">
             <div className="w-full flex justify-center my-4">
               <div className="cursor-pointer w-12 h-12 rounded-full bg-[#34BFAD] flex justify-center items-center">
                 <MdEmail size={35} />
@@ -157,18 +178,20 @@ function Contactus() {
             </div>
             <h2 className="font-semibold text-2xl uppercase mb-2">Email</h2>
             <h3 className="text-xl font-medium mb-1">Head Office:</h3>
-            <p className="text-[#111111] font-medium">603@Coworking.com</p>
+            <p className="text-[#111111] font-medium">
+              603coworkingspace@gmail.com
+            </p>
           </div>
           {/* content card */}
-          <div className=" text-center p-2  w-[215px] h-[255px]  ">
+          <div className=" text-center p-2  w-[215px] h-[255px] flex flex-col justify-center items-center ">
             <div className="w-full flex justify-center my-4">
               <div className="cursor-pointer w-12 h-12 rounded-full bg-[#34BFAD] flex justify-center items-center">
                 <HiClock size={35} />
               </div>
             </div>
             <h2 className="font-semibold text-2xl uppercase mb-2">Time</h2>
-            <h3 className="text-xl font-medium mb-1">Mon-sat:</h3>
-            <p className="text-[#111111] font-medium">9am-9pm</p>
+            <h3 className="text-xl font-medium mb-1">Monday-saturday</h3>
+            <p className="text-[#111111] font-medium ">9am-9pm</p>
           </div>
         </div>
       </section>

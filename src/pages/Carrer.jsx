@@ -8,6 +8,7 @@ import { HiClock } from "react-icons/hi2";
 import { IoIosArrowForward } from "react-icons/io";
 
 function Carrer() {
+  const background = "/images/career-page-bg.png";
   const row1 = [
     {
       imgurl: "/images/career page/careerChair.png",
@@ -102,12 +103,23 @@ function Carrer() {
   ];
   return (
     <div className="">
-      {/* section1 */}
-      <section className="flex flex-col bg-[url('/images/CareerPage.png')] bg-contain bg-right bg-no-repeat h-[80vh]">
+      {/* Navbar Section */}
+      <header className="bg-white shadow-lg z-50 relative">
         <LandingNavbar />
-        <div className="container mx-auto flex-1 flex  items-center font-lato font-extrabold text-6xl uppercase">
-          <h1 className="pb-32">
-            Join our team <br /> now!
+      </header>
+
+      {/* Hero Section */}
+      <section
+        className="relative h-screen flex items-center text-center justify-center bg-cover bg-center bg-no-repeat bg-gray-100"
+        style={{
+          backgroundImage: `url(${background})`,
+          backgroundAttachment: "fixed",
+        }}
+      >
+        <div className="absolute inset-0 bg-black opacity-50"></div>
+        <div className="relative z-10 uppercase">
+          <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold font-lato  text-white drop-shadow-lg tracking-wider">
+            Join our team now!
           </h1>
         </div>
       </section>
@@ -217,7 +229,7 @@ function Carrer() {
           </div>
 
           {/* div for carrer card */}
-          <div className="py-4 grid grid-cols-2 gap-5 3xl:grid-cols-3 3xl:gap-5">
+          <div className="py-4 grid grid-cols-2 gap-5 xl:grid-cols-3 xl:gap-5">
             {career603.map((carrercard, index) => {
               return (
                 <div

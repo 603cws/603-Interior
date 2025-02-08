@@ -96,11 +96,31 @@ function Landing() {
   };
 
   const accordionItems = [
-    { title: "How can i contact support ?", content: "Content for section 1." },
-    { title: "How can i contact support ?", content: "Content for section 1." },
-    { title: "How can i contact support ?", content: "Content for section 1." },
-    { title: "How can i contact support ?", content: "Content for section 1." },
-    { title: "How can i contact support ?", content: "Content for section 1." },
+    {
+      title: "1.What is 603 Interiors?",
+      content:
+        "603 Interiors is a tech-driven platform that helps corporates design and set up their office spaces with instant layouts, smart BOQs, and vendor partnerships, ensuring a hassle-free experience",
+    },
+    {
+      title: "2.Who can use 603 Interiors?",
+      content:
+        "Our platform is designed for corporates, startups, office administrators, HR teams, and real estate decision-makers looking for efficient office space planning and execution.",
+    },
+    {
+      title: "3.How does 603 Interiors simplify office setup?",
+      content:
+        "We eliminate the need for lengthy consultations by offering instant office layouts, predefined and custom BOQs, and direct vendor collaboration, saving you time and costs.",
+    },
+    {
+      title: "4.Is 603 Interiors only for large businesses?",
+      content:
+        "No, we cater to businesses of all sizes, from small startups to large corporations, providing scalable solutions for workspace design.",
+    },
+    {
+      title: "5.Can I get a customized office layout?",
+      content:
+        "Yes! You can input your office requirements, and our system generates a tailored layout to match your needs.",
+    },
   ];
 
   return (
@@ -137,7 +157,7 @@ function Landing() {
         </div>
       </section>
       {/* section 2 */}
-      <section className="bg-[#1F5C54] lg:h-[500px] xl:h-[700px]">
+      <section className="bg-[#1F5C54] md:h-[600px] lg:h-[700px] xl:h-[750px]">
         <div className="container mx-auto  flex flex-col text-white ">
           {/* div for the text */}
           <div className="flex flex-col justify-center items-center mt-7 font-sans mb-5">
@@ -161,7 +181,8 @@ function Landing() {
             {/* Container for Images */}
             <div className="flex justify-center gap-14 relative px-20 pb-10">
               {/* Image Card 1 */}
-              <div className="group relative text-center w-1/4 h-auto overflow-hidden rounded-xl transition-all duration-700 ease-in-out">
+              <div className="group relative text-center w-1/3 h-auto overflow-hidden rounded-xl transition-all duration-700 ease-in-out">
+                {/* <div className="group relative text-center max-w-sm h-auto overflow-hidden rounded-xl transition-all duration-700 ease-in-out"> */}
                 <div className="flex flex-col items-center justify-center p-4 bg-transparent transition-all duration-700 ease-in-out group-hover:bg-white group-hover:scale-105 group-hover:py-8">
                   <img
                     src="/images/section2-img1.png"
@@ -169,16 +190,17 @@ function Landing() {
                     className="mx-auto transition-transform duration-700 ease-in-out group-hover:scale-95 group-hover:origin-center"
                   />
                   <p className="hidden group-hover:block font-lora font-bold text-[#333333] mt-2">
-                    Meeting Room
+                    Smart Office Layouts
                   </p>
-                  {/* <p className="hidden group-hover:block text-[#34BFAD] font-sans font-bold mt-1 uppercase tracking-widest text-xs ">
-                    view Space
-                  </p> */}
+                  <p className="hidden group-hover:block text-[#34BFAD] font-sans font-bold mt-1 uppercase tracking-widest text-xs ">
+                    Space-optimized layouts tailored to your team’s needs.
+                  </p>
                 </div>
               </div>
 
               {/* Image Card 2 */}
-              <div className="group relative text-center w-1/4 h-auto overflow-hidden rounded-xl transition-all duration-700 ease-in-out">
+              <div className="group relative text-center w-1/3 h-auto overflow-hidden rounded-xl transition-all duration-700 ease-in-out">
+                {/* <div className="group relative text-center max-w-sm h-auto overflow-hidden rounded-xl transition-all duration-700 ease-in-out"> */}
                 <div className="flex flex-col items-center justify-center p-4 bg-transparent transition-all duration-700 ease-in-out group-hover:bg-white group-hover:scale-105 group-hover:py-8">
                   <img
                     src="/images/section2-img2.png"
@@ -186,16 +208,17 @@ function Landing() {
                     className="mx-auto transition-transform duration-700 ease-in-out group-hover:scale-95 group-hover:origin-center"
                   />
                   <p className="hidden group-hover:block font-lora font-bold text-[#333333] mt-2">
-                    Meeting Room
+                    Custom BOQ
                   </p>
-                  {/* <p className="hidden group-hover:block text-[#34BFAD] font-sans font-bold mt-1 uppercase tracking-widest text-xs ">
-                    view Space
-                  </p> */}
+                  <p className="hidden group-hover:block text-[#34BFAD] font-sans font-bold mt-1 uppercase tracking-widest text-xs ">
+                    fully customizable BOQs with trusted vendor recommendations
+                  </p>
                 </div>
               </div>
 
               {/* Image Card 3 */}
-              <div className="group relative text-center w-1/4 h-auto overflow-hidden rounded-xl transition-all duration-700 ease-in-out">
+              <div className="group relative text-center w-1/3 h-auto overflow-hidden rounded-xl transition-all duration-700 ease-in-out">
+                {/* <div className="group relative text-center max-w-sm h-auto overflow-hidden rounded-xl transition-all duration-700 ease-in-out"> */}
                 <div className="flex flex-col items-center justify-center p-4 bg-transparent transition-all duration-700 ease-in-out group-hover:bg-white group-hover:scale-105 group-hover:py-8">
                   <img
                     src="/images/section2-img3.png"
@@ -203,11 +226,12 @@ function Landing() {
                     className="mx-auto transition-transform duration-700 ease-in-out group-hover:scale-95 group-hover:origin-center"
                   />
                   <p className="hidden group-hover:block font-lora font-bold text-[#333333] mt-2">
-                    Meeting Room
+                    End-to-End Execution
                   </p>
-                  {/* <p className="hidden group-hover:block text-[#34BFAD] font-sans font-bold mt-1 uppercase tracking-widest text-xs ">
-                    view Space
-                  </p> */}
+                  <p className="hidden group-hover:block text-[#34BFAD] font-sans font-bold mt-1 uppercase tracking-widest text-xs ">
+                    From planning to procurement and setup, we ensure quality
+                    and efficiency at every step
+                  </p>
                 </div>
               </div>
             </div>
@@ -233,7 +257,7 @@ function Landing() {
               Welcome to 603 <br /> Interiors
             </h2>
 
-            <p className="text-[#212121] font-sans mb-10">
+            <p className="text-[#212121] font-sans mb-10 text-center">
               At 603 Interiors, we believe that the right workspace can
               transform the way <br /> you work. Our expertise in designing
               functional, aesthetically pleasing, and <br /> customized office
@@ -490,45 +514,41 @@ function Landing() {
             <Slider {...settings}>
               <div>
                 <img
-                  src="/images/facebook.png"
+                  src="/images/iide-logo.svg"
+                  alt="iide"
+                  className="w-56 h-16"
+                />
+              </div>
+              <div>
+                <img
+                  src="/images/credilio-svg-logo.svg"
+                  alt="credilio"
+                  className="w-56 h-16"
+                />
+              </div>
+              <div>
+                <img
+                  src="/images/tripjack-logo.png"
+                  alt="tripjack"
+                  className="w-56 h-16"
+                />
+              </div>
+              <div>
+                <img
+                  src="/images/bajaj-electricals-logo.jpg"
+                  alt="bajaj"
+                  className="w-40 h-[70px]"
+                />
+              </div>
+              {/* <div>
+                <img
+                  src="/images/Mindshare-logo.jpg"
                   alt="facebook"
                   className="w-56 h-16"
                 />
-              </div>
+              </div> */}
               <div>
-                <img
-                  src="/images/bajaj.png"
-                  alt="bajaj"
-                  className="w-56 h-16"
-                />
-              </div>
-              <div>
-                <img
-                  src="/images/facebook.png"
-                  alt="facebook"
-                  className="w-56 h-16"
-                />
-              </div>
-              <div>
-                <img
-                  src="/images/bajaj.png"
-                  alt="bajaj"
-                  className="w-56 h-16"
-                />
-              </div>
-              <div>
-                <img
-                  src="/images/facebook.png"
-                  alt="facebook"
-                  className="w-56 h-16"
-                />
-              </div>
-              <div>
-                <img
-                  src="/images/bajaj.png"
-                  alt="bajaj"
-                  className="w-56 h-16"
-                />
+                <img src="/logo/logo.png" alt="603" className="w-40 h-16" />
               </div>
             </Slider>
           </div>

@@ -47,7 +47,7 @@ function Footer() {
               </div>
               <div className="flex gap-4 items-center font-extralight">
                 <IoCallOutline size={22} />
-                <p>+91-123-123456</p>
+                <p>+91-9136036603</p>
               </div>
               <div className="flex gap-4 items-center font-extralight">
                 <IoIosMail size={22} />
@@ -69,7 +69,12 @@ function Footer() {
                 <li className="cursor-pointer">Brand</li>
                 <li className="cursor-pointer">Products</li>
                 <li className="cursor-pointer">Help & FAQ</li>
-                <li className="cursor-pointer">Become a reseller</li>
+                <li
+                  className="cursor-pointer"
+                  onClick={() => navigation("/becomeseller")}
+                >
+                  Become a reseller
+                </li>
               </ul>
               <ul className="font-Poppins flex flex-col gap-1 font-extralight text-md">
                 <li

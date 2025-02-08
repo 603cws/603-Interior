@@ -112,7 +112,7 @@ function AboutUs() {
       </section>
 
       {/* our team */}
-      <section className="our-team container mx-auto my-10">
+      {/* <section className="our-team container mx-auto my-10">
         <div className="text-center">
           <img
             src="/images/serviceIcon.png"
@@ -144,7 +144,7 @@ function AboutUs() {
             <h2 className="text-[#B1B1B1]">designer</h2>
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* contact us */}
       <section className="contact-us bg-[url('/images/about-us-s3-bg.png')] bg-no-repeat bg-cover py-10 relative">

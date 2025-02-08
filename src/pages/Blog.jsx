@@ -314,26 +314,20 @@ function Blog() {
       </section>
 
       {/* Daily highlights */}
-      <section className="container mx-auto">
+      {/* <section className="container mx-auto">
         <h3 className="capitalize xl:text-5xl font-lato text-center my-8">
           daily highlights
         </h3>
-
-        {/* div for the slider */}
-
-        {/* div for caurosel */}
-        {/* <div className="slider-container  ml-auto"> */}
         <div className="slider-container  mx-auto">
           <Slider {...settingsProduct}>
-            {/* card */}
             <div className="max-w-sm rounded overflow-hidden shadow-lg">
-              {/* image */}
+   
               <div>
                 <img src="/images/contact1.png" alt="blog" className="w-full" />
               </div>
-              {/* text */}
+
               <div className="font-Poppins mx-5">
-                {/* user div */}
+  
                 <div className="flex justify-start items-center w-3/4 gap-5 my-4">
                   <div>
                     <img src="/images/usericon.png" alt="user icon" />
@@ -355,15 +349,15 @@ function Blog() {
                 </div>
               </div>
             </div>
-            {/* card */}
+ 
             <div className="max-w-sm rounded overflow-hidden shadow-lg">
-              {/* image */}
+          
               <div>
                 <img src="/images/contact1.png" alt="blog" className="w-full" />
               </div>
-              {/* text */}
+        
               <div className="font-Poppins mx-5">
-                {/* user div */}
+              
                 <div className="flex justify-start items-center w-3/4 gap-5 my-4">
                   <div>
                     <img src="/images/usericon.png" alt="user icon" />
@@ -385,15 +379,15 @@ function Blog() {
                 </div>
               </div>
             </div>
-            {/* card */}
+       
             <div className="max-w-sm rounded overflow-hidden shadow-lg">
-              {/* image */}
+             
               <div>
                 <img src="/images/contact1.png" alt="blog" className="w-full" />
               </div>
-              {/* text */}
+           
               <div className="font-Poppins mx-5">
-                {/* user div */}
+            
                 <div className="flex justify-start items-center w-3/4 gap-5 my-4">
                   <div>
                     <img src="/images/usericon.png" alt="user icon" />
@@ -415,15 +409,15 @@ function Blog() {
                 </div>
               </div>
             </div>
-            {/* card */}
+      
             <div className="max-w-sm rounded overflow-hidden shadow-lg">
-              {/* image */}
+         
               <div>
                 <img src="/images/contact1.png" alt="blog" className="w-full" />
               </div>
-              {/* text */}
+   
               <div className="font-Poppins mx-5">
-                {/* user div */}
+              
                 <div className="flex justify-start items-center w-3/4 gap-5 my-4">
                   <div>
                     <img src="/images/usericon.png" alt="user icon" />
@@ -445,15 +439,15 @@ function Blog() {
                 </div>
               </div>
             </div>
-            {/* card */}
+        
             <div className="max-w-sm rounded overflow-hidden shadow-lg">
-              {/* image */}
+          
               <div>
                 <img src="/images/contact1.png" alt="blog" className="w-full" />
               </div>
-              {/* text */}
+        
               <div className="font-Poppins mx-5">
-                {/* user div */}
+            
                 <div className="flex justify-start items-center w-3/4 gap-5 my-4">
                   <div>
                     <img src="/images/usericon.png" alt="user icon" />
@@ -477,7 +471,7 @@ function Blog() {
             </div>
           </Slider>
         </div>
-      </section>
+      </section> */}
 
       {/* footer */}
       <footer className="mt-10">

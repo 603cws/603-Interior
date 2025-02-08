@@ -3,28 +3,27 @@ import { supabase } from "../../services/supabase";
 import { useApp } from "../../Context/Context";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
-import useAuthRefresh from "../../Context/useAuthRefresh";
+// import useAuthRefresh from "../../Context/useAuthRefresh";
 
 function ProfileCard() {
   const { setIsAuthenticated } = useApp();
   const background = "images/profilebg.png";
 
   const navigate = useNavigate();
-  const { signOutUser } = useAuthRefresh(); // Get signOutUser from hook
+  //   const { signOutUser } = useAuthRefresh(); // Get signOutUser from hook
 
-  // const handleLogout = async () => {
-
-  //   const { error } = await supabase.auth.signOut();
-  //   if (error) {
-  //     console.error("Error signing out:", error.message);
-  //   } else {
-  //     console.log("User signed out successfully");
-  //     toast.success("User signed out successfully");
-  //     setIsAuthenticated(false);
-  //     localStorage.removeItem("usertoken");
-  //     navigate("/login");
-  //   }
-  // };
+  const handleLogout = async () => {
+    const { error } = await supabase.auth.signOut();
+    if (error) {
+      console.error("Error signing out:", error.message);
+    } else {
+      console.log("User signed out successfully");
+      toast.success("User signed out successfully");
+      setIsAuthenticated(false);
+      localStorage.removeItem("usertoken");
+      navigate("/login");
+    }
+  };
 
   // const handleLogout = async () => {
   //   setIsAuthenticated(false);
@@ -85,7 +84,7 @@ function ProfileCard() {
           </div>
           <div className="flex items-center mx-4 gap-3">
             <RiDashboardFill />
-            <button onClick={signOutUser}>sign out</button>
+            <button onClick={handleLogout}>sign out</button>
           </div>
         </div>
       </div>

@@ -190,8 +190,12 @@ function OurServices() {
                 <h4 className="uppercase font-bold text-xl my-4 lg:my-6">
                   interior design
                 </h4>
-                <p className="capitalize font-medium text-base">
+                {/* <p className="capitalize font-medium text-base">
                   Fusce at tellus nec erat pretium maximus eu et eros
+                </p> */}
+                <p className="capitalize font-medium text-base">
+                  Smart, functional, and aesthetic office spaces tailored to
+                  your needs.
                 </p>
               </div>
               {/* we have loop 4 div for icon and text */}
@@ -216,7 +220,7 @@ function OurServices() {
                   office redesign
                 </h4>
                 <p className="capitalize font-medium text-base">
-                  Fusce at tellus nec erat pretium maximus eu et eros
+                  Transforming workspaces for better efficiency and style.
                 </p>
               </div>
             </div>
@@ -243,7 +247,7 @@ function OurServices() {
                   Interior decoration
                 </h4>
                 <p className="capitalize font-medium text-base">
-                  Fusce at tellus nec erat pretium maximus eu et eros
+                  Elevating office ambiance with curated décor and finishes.
                 </p>
               </div>
               {/* we have loop 4 div for icon and text */}
@@ -268,7 +272,8 @@ function OurServices() {
                   furniture production
                 </h4>
                 <p className="capitalize font-medium text-base">
-                  Fusce at tellus nec erat pretium maximus eu et eros
+                  High-quality, ergonomic office furniture designed for comfort
+                  and productivity.
                 </p>
               </div>
             </div>
@@ -286,7 +291,7 @@ function OurServices() {
               <p className="font-semibold lg:text-3xl uppercase ">
                 We design modern <br /> and elegant
               </p>
-              <p className="my-3 lg:my-7">
+              {/* <p className="my-3 lg:my-7">
                 Lorem ipsum odor amet, consectetuer adipiscing elit. Parturient{" "}
                 <br />
                 dictum class velit tristique efficitur; pulvinar laoreet ipsum{" "}
@@ -296,6 +301,18 @@ function OurServices() {
                 auctor cursus ut <br /> fusce. Imperdiet hendrerit praesent
                 dictum senectus integer <br /> ridiculus curae leo. Nec finibus
                 tempus ultricies sapien; dis proin <br /> efficitur.
+              </p> */}
+
+              <p className="my-3 lg:my-7">
+                At 603 Interiors, we simplify corporate office setup with smart,
+                tech-driven solutions. From instant office layouts to
+                customizable BOQs and trusted vendor partnerships, we provide a
+                seamless experience for businesses. Our platform helps optimize
+                space, reduce costs, and streamline procurement, ensuring that
+                your office is designed efficiently without unnecessary delays.
+                Whether you choose from our predefined BOQ packages (Basic,
+                Luxury, Ultra Luxury) or customize your own, we make office
+                interiors hassle-free and cost-effective.
               </p>
 
               {/* button */}
@@ -323,10 +340,18 @@ function OurServices() {
             we design for your <br />
             satisfaction
           </h1>
-          <p className="text-base my-7">
+          {/* <p className="text-base my-7">
             Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nobis ab
             temporibus fugiat quos cum! Necessitatibus fugiat vero minus
             perferendis ipsum!
+          </p> */}
+          <p className="text-base my-7">
+            At 603 Interiors, your workspace isn’t just another project—it’s a
+            reflection of your vision and needs. with a perfect blend of perfect
+            blend of efficiency, aesthetics, and comfort. Our goal is to
+            simplify office interiors by providing smart layouts, functional
+            designs, and seamless execution, ensuring your office is both
+            visually appealing and highly productive.
           </p>
           <div className=" w-full">
             <div className="w-full flex gap-5 items-center mb-2">
@@ -335,9 +360,13 @@ function OurServices() {
               </h1>
               <div className="font-Poppins flex flex-col gap-5">
                 <h2 className="uppercase font-bold text-[32px]">layout</h2>
-                <p className="uppercase font-bold text-base">
+                {/* <p className="uppercase font-bold text-base">
                   Mauris dapibus consectetur enim a dictum. <br />
                   Ut in rhoncus sem
+                </p> */}
+                <p className="uppercase font-bold text-base">
+                  Strategically planned spaces that optimize functionality and
+                  flow.
                 </p>
               </div>
             </div>
@@ -348,8 +377,8 @@ function OurServices() {
               <div className="font-Poppins flex flex-col gap-5">
                 <h2 className="uppercase font-bold text-[32px]">design</h2>
                 <p className="uppercase font-bold text-base">
-                  Mauris dapibus consectetur enim a dictum.
-                  <br /> Ut in rhoncus sem
+                  Thoughtfully curated interiors that align with your brand
+                  identity and culture
                 </p>
               </div>
             </div>
@@ -360,8 +389,8 @@ function OurServices() {
               <div className="font-Poppins flex flex-col gap-5">
                 <h2 className="uppercase font-bold text-[32px]">development</h2>
                 <p className="uppercase font-bold text-base">
-                  Mauris dapibus consectetur enim a dictum.
-                  <br /> Ut in rhoncus sem
+                  High-quality execution with premium materials, trusted
+                  vendors, and expert craftsmanship.
                 </p>
               </div>
             </div>

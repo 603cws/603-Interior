@@ -26,7 +26,7 @@ import BlogDetail from "./pages/BlogDetail";
 import ProfileCard from "./boq/components/ProfileCard";
 import Dashboard from "./pages/Dashboard";
 import ScrollToTop from "./common-components/ScrollToTop";
-import useAuthRefresh from "./Context/useAuthRefresh"; // Import the hook
+// import useAuthRefresh from "./Context/useAuthRefresh"; // Import the hook
 import BecomeSeller from "./pages/BecomeSeller";
 
 // const Homepage = lazy(() => import("./pages/Homepage"));
@@ -37,7 +37,7 @@ const BlogPage = lazy(() => import("./pages/Blog"));
 const Carrer = lazy(() => import("./pages/Carrer"));
 
 function App() {
-  useAuthRefresh(); // Automatically handles user inactivity
+  // useAuthRefresh(); // Automatically handles user inactivity
 
   return (
     <div>

@@ -27,7 +27,7 @@ function LandingNavbar() {
             <li onClick={() => navigate("/")} className="cursor-pointer">
               Home
             </li>
-            {/* <li className="cursor-pointer">Spaces</li> */}
+
             <li onClick={() => navigate("/Aboutus")} className="cursor-pointer">
               About Us
             </li>
@@ -39,6 +39,12 @@ function LandingNavbar() {
             </li>
             <li onClick={() => navigate("/Blog")} className="cursor-pointer">
               Our Blog
+            </li>
+            <li
+              className="cursor-pointer"
+              onClick={() => navigate("/becomeseller")}
+            >
+              Collabrate
             </li>
             <li
               onClick={() => navigate("/Contactus")}

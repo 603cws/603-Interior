@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { TbArrowBackUp } from "react-icons/tb";
 import { MdOutlineKeyboardArrowRight } from "react-icons/md"; //MdOutlineKeyboardArrowLeft
 import { normalizeKey } from "../utils/CalculateTotalPriceHelper";

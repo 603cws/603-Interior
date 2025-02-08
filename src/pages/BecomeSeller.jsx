@@ -1,8 +1,104 @@
 import React, { useEffect, useRef } from "react";
 import { LiaLongArrowAltRightSolid } from "react-icons/lia";
+import Footer from "../common-components/Footer";
+import LandingNavbar from "../common-components/LandingNavbar";
+
+import Slider from "react-slick";
+
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import axios from "axios";
+import toast from "react-hot-toast";
+
+import { useState } from "react";
+
+import { useNavigate } from "react-router-dom";
+import emailjs from "@emailjs/browser";
 
 const BecomeSeller = () => {
   const sectionRef = useRef(null);
+
+  const [isSubmitting, setisSubmitting] = useState(false);
+
+  // template id
+  const templateID = "template_0355bfq";
+  const serviceid = "service_ae0sgim";
+  const your_public_key = "dR0YyJ3Be6H6xVsT7";
+
+  const [form, setFormData] = useState({
+    message: "",
+    name: "",
+    email: "",
+    mobileNo: 0,
+    companyName: "",
+  });
+
+  const handleChange = (e) => {
+    setFormData({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const navigate = useNavigate();
+
+  const handleformsubmit = async (e) => {
+    e.preventDefault();
+
+    console.log("hii from log");
+
+    if (
+      !form.email ||
+      !form.companyName ||
+      !form.name ||
+      !form.mobileNo ||
+      !form.message
+    ) {
+      toast.error("form not filled");
+      return;
+    } else {
+      const data = {
+        service_id: serviceid,
+        template_id: templateID,
+        user_id: your_public_key,
+        template_params: {
+          name: form.name,
+          mobile: form.mobileNo,
+          company: form.companyName,
+          email: form.email,
+          message: form.message,
+        },
+      };
+
+      try {
+        setisSubmitting(true);
+        const response = await axios.post(
+          "https://api.emailjs.com/api/v1.0/email/send",
+          data,
+          {
+            headers: { "Content-Type": "application/json" },
+          }
+        );
+        console.log("Email sent successfully:", response.data);
+        // alert("Your mail is sent!");
+        toast.success("we will shortly reach you");
+        // setFormData({ username: "", user_email: "", message: "" }); // Reset form
+
+        //reset form
+        setFormData({
+          message: "",
+          name: "",
+          email: "",
+          mobileNo: 0,
+          companyName: "",
+        });
+      } catch (error) {
+        console.error("Error sending email:", error);
+        alert(
+          "Oops... " + JSON.stringify(error.response?.data || error.message)
+        );
+      } finally {
+        setisSubmitting(false);
+      }
+    }
+  };
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -20,17 +116,71 @@ const BecomeSeller = () => {
     return () => observer.disconnect();
   }, []);
 
+  const settings = {
+    dots: false,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 3,
+    slidesToScroll: 1,
+    autoplay: true,
+    autoplaySpeed: 2000,
+    pauseOnHover: true,
+    arrows: false,
+  };
+
+  const scrollToSection = () => {
+    const section = document.getElementById("contact");
+    if (section) {
+      section.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
   return (
     <>
+      <section className="h-[85vh] flex flex-col">
+        <div>
+          <LandingNavbar />
+        </div>
+        <div className="flex-1 flex justify-around items-center ">
+          <div>
+            <h2 className="text-[#1F5C54]  uppercase font-extrabold mb-10 lg:mb-20">
+              Become a 603 interior Seller
+            </h2>
+
+            <h3 className="text-5xl uppercase text-[#1F5C54]">
+              connect. <span className="text-[#54DED3]">collab.</span> <br />{" "}
+              innovate.
+            </h3>
+
+            {/* <a
+              href="#contact"
+              className="px-5 py-3 bg-[#1F5C54] border-1 border-[#15423C] rounded-3xl uppercase text-white"
+            >
+              get started
+            </a> */}
+            <button
+              onClick={scrollToSection}
+              className="px-5 py-3 bg-[#1F5C54] border-1 border-[#15423C] rounded-3xl uppercase text-white"
+            >
+              get started
+            </button>
+          </div>
+
+          <div>
+            <img src="/images/becomeseller.png" alt="seller herosection" />
+          </div>
+        </div>
+      </section>
       {/* how it works */}
       <section className="my-10">
-        <div className="font-Poppins container mx-auto">
+        <div className="font-Poppins container mx-auto ">
           {/* text */}
-          <div className="text-center my-7">
+          <div className="text-center my-7 flex flex-col justify-center items-center gap-2">
+            <img src="/images/serviceIcon.png" alt="service icon" />
             <h2 className="uppercase font-bold text-3xl">how it works</h2>
           </div>
           {/* infor */}
-          <div className="flex justify-center gap-4 ">
+          <div className="flex justify-center gap-4 bg-[#F4F4F4] py-5">
             {/* info card */}
             <div className="max-w-sm">
               <div className="flex  items-center gap-3">
@@ -125,6 +275,204 @@ const BecomeSeller = () => {
           </div>
         </div>
       </section>
+
+      {/* our client section */}
+      {/* section 5 */}
+      <section className="bg-[#F4F4F4]">
+        {/* container */}
+        <div className="container mx-auto flex flex-col py-10">
+          {/* text */}
+          <div className="flex flex-col justify-center items-center mb-3">
+            <p className="text-[#] font-thin font-sans uppercase tracking-wider">
+              Our Clients
+            </p>
+            <img src="/images/serviceIcon.png" alt="service icon" />
+          </div>
+          {/* logo slider */}
+          <div>
+            <Slider {...settings}>
+              <div>
+                <img
+                  src="/images/iide-logo.svg"
+                  alt="iide"
+                  className="w-56 h-16"
+                />
+              </div>
+              <div>
+                <img
+                  src="/images/credilio-svg-logo.svg"
+                  alt="credilio"
+                  className="w-56 h-16"
+                />
+              </div>
+              <div>
+                <img
+                  src="/images/tripjack-logo.png"
+                  alt="tripjack"
+                  className="w-56 h-16"
+                />
+              </div>
+              <div>
+                <img
+                  src="/images/bajaj-electricals-logo.jpg"
+                  alt="bajaj"
+                  className="w-40 h-[70px]"
+                />
+              </div>
+              {/* <div>
+                <img
+                  src="/images/Mindshare-logo.jpg"
+                  alt="facebook"
+                  className="w-56 h-16"
+                />
+              </div> */}
+              <div>
+                <img src="/logo/logo.png" alt="603" className="w-40 h-16" />
+              </div>
+            </Slider>
+          </div>
+        </div>
+      </section>
+
+      {/* contact section */}
+      <section id="contact" className="">
+        <div className="flex container mx-auto my-10 ">
+          {/* img */}
+          <div className="flex-1 max-w-2xl">
+            <img
+              src="/images/becomesellercontact.png"
+              className="w-full"
+              alt="becomeseller contact"
+            />
+          </div>
+          {/* form */}
+          {/* form section */}
+          <div className="flex-1">
+            <div className="px-10  rounded-3xl pb-5">
+              {/* text */}
+              <div className="font-Poppins font-semibold py-3">
+                <p className="text-sm text-[#34BFAD]">Get in Touch!</p>
+                <img src="/images/serviceIcon.png" alt="service icon" />
+                <h4 className="text-2xl my-2">Love to hear from you</h4>
+                <h5 className="text-2xl mb-2">Get in Touch!</h5>
+              </div>
+              {/* form part */}
+              <div className="font-Poppins pl-2">
+                <form action="" className="font-semibold ">
+                  <div className="mb-2 flex flex-col gap-2">
+                    <label className="font-semibold ">Name*</label>
+                    <input
+                      type="text"
+                      name="name"
+                      className="font-medium w-full rounded-lg p-2 mb-2 border-2 border-[#D1D5DB] bg-[#F8F8F8] focus:outline-none placeholder:text-[#CCC] capitalize"
+                      placeholder="John Doe"
+                      value={form.name}
+                      // onChange={setname((e) => e.target.value)}
+                      onChange={handleChange}
+                      required
+                    />
+                  </div>
+                  <div className="mb-2 flex flex-col gap-2">
+                    <label className="mt-2">Email*</label>
+                    <input
+                      type="email"
+                      name="email"
+                      className="font-medium w-full rounded-lg p-2 mb-2 border-2 border-[#D1D5DB] bg-[#F8F8F8] focus:outline-none placeholder:text-[#CCC] "
+                      placeholder="example@gmail.com"
+                      // value={email}
+                      // onChange={setEmail((e) => e.target.value)}
+                      value={form.email}
+                      onChange={handleChange}
+                      required
+                    />
+                  </div>
+                  <div className="mb-2 flex flex-col gap-2">
+                    <label className="mt-2">Company Name*</label>
+                    <input
+                      type="text"
+                      name="companyName"
+                      className="w-full rounded-lg p-2 mb-2 border-2 border-[#D1D5DB] bg-[#F8F8F8] focus:outline-none placeholder:text-[#CCC] font-medium"
+                      required
+                      //   placeholder="John Doe"
+                      // value={companyName}
+                      // onChange={setCompanyName((e) => e.target.value)}
+                      value={form.companyName}
+                      onChange={handleChange}
+                    />
+                  </div>
+                  <div className="mb-2 flex flex-col gap-2">
+                    <label className="font-semibold mt-2">Mobile No*</label>
+                    <input
+                      type="Number"
+                      name="mobileNo"
+                      className="w-full rounded-lg p-2 mb-2 focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none border-2 border-[#D1D5DB] bg-[#F8F8F8] placeholder:text-[#CCC] font-medium"
+                      placeholder="Enter Mobile No"
+                      // value={mobileNo}
+                      // onChange={setMobileNo((e) => e.target.value)}
+                      value={form.mobileNo}
+                      onChange={handleChange}
+                      required
+                    />
+                  </div>
+                  <div className="mb-2 flex flex-col gap-2">
+                    <label className=" mt-2">Message*</label>
+                    <textarea
+                      rows="4"
+                      name="message"
+                      className="w-full rounded-lg p-2 mb-2 border-2 border-[#D1D5DB] bg-[#F8F8F8] focus:outline-none placeholder:text-[#CCC] font-medium"
+                      placeholder="your message..."
+                      // value={message}
+                      // onChange={(e) => setMessage(e.target.value)}
+                      value={form.message}
+                      onChange={handleChange}
+                    >
+                      {" "}
+                    </textarea>
+                  </div>
+                  <button
+                    className="px-10 py-2 font-bold rounded-lg bg-[#1F5C54] border-black border border-1 mb-2 text-white"
+                    type="submit"
+                    onClick={handleformsubmit}
+                    disabled={isSubmitting}
+                  >
+                    {isSubmitting ? (
+                      <div className="spinner">
+                        <svg
+                          className="animate-spin h-5 w-5 text-white"
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                        >
+                          <circle
+                            className="opacity-25"
+                            cx="12"
+                            cy="12"
+                            r="10"
+                            stroke="currentColor"
+                            strokeWidth="4"
+                          ></circle>
+                          <path
+                            className="opacity-75"
+                            fill="currentColor"
+                            d="M4 12a8 8 0 018-8v8h8a8 8 0 01-8 8V12H4z"
+                          ></path>
+                        </svg>
+                      </div>
+                    ) : (
+                      "Submit"
+                    )}
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* footer */}
+      <footer>
+        <Footer />
+      </footer>
     </>
   );
 };
