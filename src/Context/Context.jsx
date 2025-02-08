@@ -4,6 +4,7 @@ import { supabase } from "../services/supabase";
 const AppContext = createContext();
 
 export const AppProvider = ({ children }) => {
+  const session = supabase.storageKey;
   const categoriesWithModal = ["Flooring", "HVAC"]; // Array of categories that should show the modal/questions when clicked
 
   const categoriesWithTwoLevelCheck = [
@@ -59,7 +60,10 @@ export const AppProvider = ({ children }) => {
     console.log("userId: ", userId);
 
     async function fetchdata() {
-      const usertoken = localStorage.getItem("usertoken");
+      const sessionData = JSON.parse(localStorage.getItem(session));
+      // const usertoken = localStorage.getItem("usertoken");
+      const usertoken = sessionData?.access_token;
+
       if (!usertoken) {
         setIsAuthenticated(false); // Set auth to false if no token
       }

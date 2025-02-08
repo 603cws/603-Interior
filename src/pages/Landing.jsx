@@ -92,7 +92,7 @@ function Landing() {
     autoplay: true,
     autoplaySpeed: 2000,
     pauseOnHover: true,
-    arrows: true,
+    arrows: false, //true
   };
 
   const accordionItems = [
@@ -171,9 +171,9 @@ function Landing() {
                   <p className="hidden group-hover:block font-lora font-bold text-[#333333] mt-2">
                     Meeting Room
                   </p>
-                  <p className="hidden group-hover:block text-[#34BFAD] font-sans font-bold mt-1 uppercase tracking-widest text-xs ">
+                  {/* <p className="hidden group-hover:block text-[#34BFAD] font-sans font-bold mt-1 uppercase tracking-widest text-xs ">
                     view Space
-                  </p>
+                  </p> */}
                 </div>
               </div>
 
@@ -188,9 +188,9 @@ function Landing() {
                   <p className="hidden group-hover:block font-lora font-bold text-[#333333] mt-2">
                     Meeting Room
                   </p>
-                  <p className="hidden group-hover:block text-[#34BFAD] font-sans font-bold mt-1 uppercase tracking-widest text-xs ">
+                  {/* <p className="hidden group-hover:block text-[#34BFAD] font-sans font-bold mt-1 uppercase tracking-widest text-xs ">
                     view Space
-                  </p>
+                  </p> */}
                 </div>
               </div>
 
@@ -205,9 +205,9 @@ function Landing() {
                   <p className="hidden group-hover:block font-lora font-bold text-[#333333] mt-2">
                     Meeting Room
                   </p>
-                  <p className="hidden group-hover:block text-[#34BFAD] font-sans font-bold mt-1 uppercase tracking-widest text-xs ">
+                  {/* <p className="hidden group-hover:block text-[#34BFAD] font-sans font-bold mt-1 uppercase tracking-widest text-xs ">
                     view Space
-                  </p>
+                  </p> */}
                 </div>
               </div>
             </div>

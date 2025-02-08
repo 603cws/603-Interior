@@ -10,6 +10,7 @@ const useAuthRefresh = () => {
   const [isUserActive, setIsUserActive] = useState(true);
   const navigate = useNavigate();
   let inactivityTimeout, refreshInterval;
+  const session = supabase.storageKey;
 
   useEffect(() => {
     const handleUserActivity = () => {
@@ -46,7 +47,7 @@ const useAuthRefresh = () => {
     console.log(sessionData);
     if (!sessionData || !sessionData.expires_at || !sessionData.refresh_token) {
       console.log("Session data missing. Signing out...");
-      signOutUser();
+      // signOutUser();
       return;
     }
 
@@ -70,7 +71,7 @@ const useAuthRefresh = () => {
           signOutUser();
         } else {
           console.log("Token refreshed successfully.");
-          localStorage.setItem("session", JSON.stringify(data.session)); // Update session
+          localStorage.setItem(session, JSON.stringify(data.session)); // Update session
         }
       }
     }
@@ -78,16 +79,12 @@ const useAuthRefresh = () => {
 
   const signOutUser = async () => {
     const currentTime = new Date().toLocaleString(); // Get current time in readable format
-    console.log(
-      `User inactive for 1 hour or token refresh failed. Signing out... Time: ${currentTime}`
-    );
+    console.log(`User Signing out... Time: ${currentTime}`);
 
     const { error } = await supabase.auth.signOut();
     if (error) {
       console.error("Error signing out:", error.message);
     } else {
-      localStorage.removeItem("session"); // Clear session
-      localStorage.removeItem("usertoken"); //Clear user token
       toast.success("User signed out successfully");
       setIsAuthenticated(false);
       console.log("User signed out successfully");

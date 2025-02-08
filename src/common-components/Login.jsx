@@ -195,14 +195,6 @@ function Login() {
 
       setUserId(userId);
 
-      if (data) {
-        const usertoken = data.session.access_token;
-        localStorage.setItem("usertoken", usertoken);
-
-        const session = data.session;
-        localStorage.setItem("session", JSON.stringify(session)); // Convert to string
-      }
-
       try {
         // Fetch areaId and quantityId for the logged-in user
         const { data: areaData, error: areaError } = await supabase
