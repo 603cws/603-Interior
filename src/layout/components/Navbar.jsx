@@ -25,45 +25,105 @@ function Navbar({ MIN_AREA, MAX_AREA, resetAll, areaQuantities, areaValues }) {
   } = useApp();
 
   // const [warning,setWarning]=useState(false)
-  console.log(
-    "total area",
-    totalArea,
-    "quantity",
-    areaQuantities,
-    "area values",
-    areaValues
-  );
+  // console.log(
+  //   "total area",
+  //   totalArea,
+  //   "quantity",
+  //   areaQuantities,
+  //   "area values",
+  //   areaValues
+  // );
   console.log("user id", userId);
 
   const navigate = useNavigate();
 
-  const mapAreaValues = (userId, areaValues, totalArea = null) => {
+  // const mapAreaValues = (userId, areaValues, totalArea = null) => {
+  //   return {
+  //     userId: userId || null,
+  //     linear: areaValues.linear,
+  //     lType: areaValues.lType,
+  //     md: areaValues.md,
+  //     manager: areaValues.manager,
+  //     small: areaValues.small,
+  //     ups: areaValues.ups,
+  //     bms: areaValues.bms,
+  //     server: areaValues.server,
+  //     reception: areaValues.reception,
+  //     lounge: areaValues.lounge,
+  //     sales: areaValues.sales,
+  //     phoneBooth: areaValues.phoneBooth,
+  //     discussionRoom: areaValues.discussionRoom,
+  //     interviewRoom: areaValues.interviewRoom,
+  //     conferenceRoom: areaValues.conferenceRoom,
+  //     boardRoom: areaValues.boardRoom,
+  //     meetingRoom: areaValues.meetingRoom,
+  //     meetingRoomLarge: areaValues.meetingRoomLarge,
+  //     hrRoom: areaValues.hrRoom,
+  //     financeRoom: areaValues.financeRoom,
+  //     breakoutRoom: areaValues.breakoutRoom,
+  //     executiveWashroom: areaValues.executiveWashroom,
+  //     videoRecordingRoom: areaValues.videoRecordingRoom,
+  //     other: areaValues.other,
+  //     ...(totalArea !== null && { totalArea }),
+  //   };
+  // };
+
+  const mapAreaValues = (
+    userId,
+    areaValues,
+    areaQuantities,
+    totalArea = null
+  ) => {
     return {
       userId: userId || null,
-      linear: areaValues.linear,
-      lType: areaValues.lType,
-      md: areaValues.md,
-      manager: areaValues.manager,
-      small: areaValues.small,
-      ups: areaValues.ups,
-      bms: areaValues.bms,
-      server: areaValues.server,
-      reception: areaValues.reception,
-      lounge: areaValues.lounge,
-      sales: areaValues.sales,
-      phoneBooth: areaValues.phoneBooth,
-      discussionRoom: areaValues.discussionRoom,
-      interviewRoom: areaValues.interviewRoom,
-      conferenceRoom: areaValues.conferenceRoom,
-      boardRoom: areaValues.boardRoom,
-      meetingRoom: areaValues.meetingRoom,
-      meetingRoomLarge: areaValues.meetingRoomLarge,
-      hrRoom: areaValues.hrRoom,
-      financeRoom: areaValues.financeRoom,
-      breakoutRoom: areaValues.breakoutRoom,
-      executiveWashroom: areaValues.executiveWashroom,
-      videoRecordingRoom: areaValues.videoRecordingRoom,
-      other: areaValues.other,
+      linearArea: areaValues.linear,
+      linearQty: areaQuantities.linear || 0,
+      lTypeArea: areaValues.lType,
+      lTypeQty: areaQuantities.lType || 0,
+      mdArea: areaValues.md,
+      mdQty: areaQuantities.md || 0,
+      managerArea: areaValues.manager,
+      managerQty: areaQuantities.manager || 0,
+      smallArea: areaValues.small,
+      smallQty: areaQuantities.small || 0,
+      upsArea: areaValues.ups,
+      upsQty: areaQuantities.ups || 0,
+      bmsArea: areaValues.bms,
+      bmsQty: areaQuantities.bms || 0,
+      serverArea: areaValues.server,
+      serverQty: areaQuantities.server || 0,
+      receptionArea: areaValues.reception,
+      receptionQty: areaQuantities.reception || 0,
+      loungeArea: areaValues.lounge,
+      loungeQty: areaQuantities.lounge || 0,
+      salesArea: areaValues.sales,
+      salesQty: areaQuantities.sales || 0,
+      phoneBoothArea: areaValues.phoneBooth,
+      phoneBoothQty: areaQuantities.phoneBooth || 0,
+      discussionRoomArea: areaValues.discussionRoom,
+      discussionRoomQty: areaQuantities.discussionRoom || 0,
+      interviewRoomArea: areaValues.interviewRoom,
+      interviewRoomQty: areaQuantities.interviewRoom || 0,
+      conferenceRoomArea: areaValues.conferenceRoom,
+      conferenceRoomQty: areaQuantities.conferenceRoom || 0,
+      boardRoomArea: areaValues.boardRoom,
+      boardRoomQty: areaQuantities.boardRoom || 0,
+      meetingRoomArea: areaValues.meetingRoom,
+      meetingRoomQty: areaQuantities.meetingRoom || 0,
+      meetingRoomLargeArea: areaValues.meetingRoomLarge,
+      meetingRoomLargeQty: areaQuantities.meetingRoomLarge || 0,
+      hrRoomArea: areaValues.hrRoom,
+      hrRoomQty: areaQuantities.hrRoom || 0,
+      financeRoomArea: areaValues.financeRoom,
+      financeRoomQty: areaQuantities.financeRoom || 0,
+      breakoutRoomArea: areaValues.breakoutRoom,
+      breakoutRoomQty: areaQuantities.breakoutRoom || 0,
+      executiveWashroomArea: areaValues.executiveWashroom,
+      executiveWashroomQty: areaQuantities.executiveWashroom || 0,
+      videoRecordingRoomArea: areaValues.videoRecordingRoom,
+      videoRecordingRoomQty: areaQuantities.videoRecordingRoom || 0,
+      otherArea: areaValues.other,
+      otherQty: areaQuantities.other || 0,
       ...(totalArea !== null && { totalArea }),
     };
   };
@@ -73,36 +133,26 @@ function Navbar({ MIN_AREA, MAX_AREA, resetAll, areaQuantities, areaValues }) {
       toast.error("Enter the Area");
     }
     if (totalArea) {
-      const areaData = mapAreaValues(userId, areaValues, totalArea);
-      const quantityData = mapAreaValues(userId, areaQuantities);
+      const layoutDta = mapAreaValues(
+        userId,
+        areaValues,
+        areaQuantities,
+        totalArea
+      );
+      console.log("layoutDta", layoutDta);
 
       // Insert into tables
-      const { data: aData, error: areasInsertError } = await supabase
-        .from("areas")
-        .insert([areaData])
-        .select("areaId")
+      const { data: data, error: error } = await supabase
+        .from("layout")
+        .insert([layoutDta])
+        .select("id")
         .single();
 
-      if (areasInsertError) {
-        console.error("Error inserting into areas:", areasInsertError.message);
+      if (error) {
+        console.error("Error inserting into layout:", error.message);
       }
 
-      console.log("Area Data:", aData);
-
-      const { data: qData, error: quantityInsertError } = await supabase
-        .from("quantity")
-        .insert([quantityData])
-        .select("quantityId")
-        .single();
-
-      if (quantityInsertError) {
-        console.error(
-          "Error inserting into quantity:",
-          quantityInsertError.message
-        );
-      }
-
-      console.log("Quantity Data:", qData);
+      console.log("layout Data:", data);
 
       if (!userId) {
         navigate("/Login", {
@@ -110,8 +160,7 @@ function Navbar({ MIN_AREA, MAX_AREA, resetAll, areaQuantities, areaValues }) {
             totalArea: totalArea,
             areaValues: areaValues,
             areaQuantities: areaQuantities,
-            quantityId: qData.quantityId,
-            areaId: aData.areaId,
+            layoutId: data.id,
           },
         });
       } else {
@@ -119,6 +168,58 @@ function Navbar({ MIN_AREA, MAX_AREA, resetAll, areaQuantities, areaValues }) {
       }
     }
   };
+
+  // const handlegenrateboq = async () => {
+  //   if (!totalArea) {
+  //     toast.error("Enter the Area");
+  //   }
+  //   if (totalArea) {
+  //     const areaData = mapAreaValues(userId, areaValues, totalArea);
+  //     const quantityData = mapAreaValues(userId, areaQuantities);
+
+  //     // Insert into tables
+  //     const { data: aData, error: areasInsertError } = await supabase
+  //       .from("areas")
+  //       .insert([areaData])
+  //       .select("areaId")
+  //       .single();
+
+  //     if (areasInsertError) {
+  //       console.error("Error inserting into areas:", areasInsertError.message);
+  //     }
+
+  //     console.log("Area Data:", aData);
+
+  //     const { data: qData, error: quantityInsertError } = await supabase
+  //       .from("quantity")
+  //       .insert([quantityData])
+  //       .select("quantityId")
+  //       .single();
+
+  //     if (quantityInsertError) {
+  //       console.error(
+  //         "Error inserting into quantity:",
+  //         quantityInsertError.message
+  //       );
+  //     }
+
+  //     console.log("Quantity Data:", qData);
+
+  //     if (!userId) {
+  //       navigate("/Login", {
+  //         state: {
+  //           totalArea: totalArea,
+  //           areaValues: areaValues,
+  //           areaQuantities: areaQuantities,
+  //           quantityId: qData.quantityId,
+  //           areaId: aData.areaId,
+  //         },
+  //       });
+  //     } else {
+  //       navigate("/boq");
+  //     }
+  //   }
+  // };
   // const handlegenrateboq = ()=>{
 
   //     // if(totalArea){

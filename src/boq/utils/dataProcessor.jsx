@@ -1,11 +1,18 @@
 function calculateSpace(type, quantity, latestData, keys) {
   quantity = quantity[0] || {};
+
   if (type === "areas") {
     return keys.reduce((total, key) => {
-      return total + (quantity[key] && latestData[key] ? latestData[key] : 0);
+      return (
+        total +
+        (quantity[`${key}Qty`] && latestData[`${key}Area`]
+          ? latestData[`${key}Area`]
+          : 0)
+      );
     }, 0);
   }
-  return keys.reduce((total, key) => total + (latestData[key] || 0), 0);
+
+  return keys.reduce((total, key) => total + (latestData[`${key}Qty`] || 0), 0);
 }
 
 // Same calculateSpace function with console logs for debugging
@@ -113,30 +120,63 @@ const processData = (data, type, quantity = {}) => {
     openworkspaces + cabins + meetingrooms + publicspaces + supportspaces;
 
   const processedData = {
-    linear: latestData.linear,
-    ltype: latestData.lType,
-    md: latestData.md,
-    manager: latestData.manager,
-    small: latestData.small,
-    ups: latestData.ups,
-    bms: latestData.bms,
-    server: latestData.server,
-    reception: latestData.reception,
-    lounge: latestData.lounge,
-    sales: latestData.sales,
-    phonebooth: latestData.phoneBooth,
-    discussionroom: latestData.discussionRoom,
-    interviewroom: latestData.interviewRoom,
-    conferenceroom: latestData.conferenceRoom,
-    boardroom: latestData.boardRoom,
-    meetingroom: latestData.meetingRoom,
-    meetingroomlarge: latestData.meetingRoomLarge,
-    hrroom: latestData.hrRoom,
-    financeroom: latestData.financeRoom,
-    videorecordingroom: latestData.videoRecordingRoom,
-    breakoutroom: latestData.breakoutRoom,
-    executivewashroom: latestData.executiveWashroom,
-    other: latestData.other,
+    linear: type === "quantity" ? latestData.linearQty : latestData.linearArea,
+    ltype: type === "quantity" ? latestData.lTypeQty : latestData.lTypeArea,
+    md: type === "quantity" ? latestData.mdQty : latestData.mdArea,
+    manager:
+      type === "quantity" ? latestData.managerQty : latestData.managerArea,
+    small: type === "quantity" ? latestData.smallQty : latestData.smallArea,
+    ups: type === "quantity" ? latestData.upsQty : latestData.upsArea,
+    bms: type === "quantity" ? latestData.bmsQty : latestData.bmsArea,
+    server: type === "quantity" ? latestData.serverQty : latestData.serverArea,
+    reception:
+      type === "quantity" ? latestData.receptionQty : latestData.receptionArea,
+    lounge: type === "quantity" ? latestData.loungeQty : latestData.loungeArea,
+    sales: type === "quantity" ? latestData.salesQty : latestData.salesArea,
+    phonebooth:
+      type === "quantity"
+        ? latestData.phoneBoothQty
+        : latestData.phoneBoothArea,
+    discussionroom:
+      type === "quantity"
+        ? latestData.discussionRoomQty
+        : latestData.discussionRoomArea,
+    interviewroom:
+      type === "quantity"
+        ? latestData.interviewRoomQty
+        : latestData.interviewRoomArea,
+    conferenceroom:
+      type === "quantity"
+        ? latestData.conferenceRoomQty
+        : latestData.conferenceRoomArea,
+    boardroom:
+      type === "quantity" ? latestData.boardRoomQty : latestData.boardRoomArea,
+    meetingroom:
+      type === "quantity"
+        ? latestData.meetingRoomQty
+        : latestData.meetingRoomArea,
+    meetingroomlarge:
+      type === "quantity"
+        ? latestData.meetingRoomLargeQty
+        : latestData.meetingRoomLargeArea,
+    hrroom: type === "quantity" ? latestData.hrRoomQty : latestData.hrRoomArea,
+    financeroom:
+      type === "quantity"
+        ? latestData.financeRoomQty
+        : latestData.financeRoomArea,
+    videorecordingroom:
+      type === "quantity"
+        ? latestData.videoRecordingRoomQty
+        : latestData.videoRecordingRoomArea,
+    breakoutroom:
+      type === "quantity"
+        ? latestData.breakoutRoomQty
+        : latestData.breakoutRoomArea,
+    executivewashroom:
+      type === "quantity"
+        ? latestData.executiveWashroomQty
+        : latestData.executiveWashroomArea,
+    other: type === "quantity" ? latestData.otherQty : latestData.otherArea,
     totalArea: type === "areas" ? latestData.totalArea : undefined,
 
     openworkspaces: openworkspaces,
@@ -146,7 +186,7 @@ const processData = (data, type, quantity = {}) => {
     supportspaces: supportspaces,
     allareas: allAreas,
     centralized: allAreas,
-    pantry: latestData.lounge,
+    pantry: type === "quantity" ? latestData.loungeQty : latestData.loungeArea,
   };
 
   return processedData;

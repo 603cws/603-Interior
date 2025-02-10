@@ -36,8 +36,9 @@ function Login() {
   const areas = location.state?.areaQuantities;
   const areaValues = location.state?.areaValues;
   const totalArea = location.state?.totalArea;
-  const quantityID = location.state?.quantityId;
-  const areaID = location.state?.areaId;
+  // const quantityID = location.state?.quantityId;
+  // const areaID = location.state?.areaId;
+  const layoutId = location.state?.layoutId;
 
   useEffect(() => {
     // Parse the hash parameters from the URL
@@ -122,28 +123,26 @@ function Login() {
   const updateUserId = async (userId) => {
     try {
       // Update userId in the 'areas' table
-      const { error: areasUpdateError } = await supabase
-        .from("areas")
+      const { error: error } = await supabase
+        .from("layout")
         .update({ userId })
-        .eq("areaId", areaID);
+        .eq("id", layoutId);
 
-      if (areasUpdateError) {
-        throw new Error(
-          `Error updating areas table: ${areasUpdateError.message}`
-        );
+      if (error) {
+        throw new Error(`Error updating layout table: ${error.message}`);
       }
 
       // Update userId in the 'quantity' table
-      const { error: quantityUpdateError } = await supabase
-        .from("quantity")
-        .update({ userId })
-        .eq("quantityId", quantityID);
+      // const { error: quantityUpdateError } = await supabase
+      //   .from("quantity")
+      //   .update({ userId })
+      //   .eq("quantityId", quantityID);
 
-      if (quantityUpdateError) {
-        throw new Error(
-          `Error updating areas table: ${quantityUpdateError.message}`
-        );
-      }
+      // if (quantityUpdateError) {
+      //   throw new Error(
+      //     `Error updating areas table: ${quantityUpdateError.message}`
+      //   );
+      // }
     } catch (e) {
       console.error(e);
     }
@@ -197,38 +196,38 @@ function Login() {
 
       try {
         // Fetch areaId and quantityId for the logged-in user
-        const { data: areaData, error: areaError } = await supabase
-          .from("areas")
-          .select("areaId")
+        const { data: layoutData, error: error } = await supabase
+          .from("layout")
+          .select("id")
           .eq("userId", userId)
           .order("created_at", { ascending: false }) // Order by latest entry
           .limit(1)
           .single();
 
-        const { data: quantityData, error: quantityError } = await supabase
-          .from("quantity")
-          .select("quantityId")
-          .eq("userId", userId)
-          .order("created_at", { ascending: false }) // Order by latest entry
-          .limit(1)
-          .single();
+        // const { data: quantityData, error: quantityError } = await supabase
+        //   .from("quantity")
+        //   .select("quantityId")
+        //   .eq("userId", userId)
+        //   .order("created_at", { ascending: false }) // Order by latest entry
+        //   .limit(1)
+        //   .single();
 
-        if (areaError) console.error("Error fetching areaId:", areaError);
-        if (quantityError)
-          console.error("Error fetching quantityId:", quantityError);
+        if (error) console.error("Error fetching layout:", error);
+        // if (quantityError)
+        //   console.error("Error fetching quantityId:", quantityError);
 
-        const areaId = areaData?.areaId;
-        const quantityId = quantityData?.quantityId;
+        const layoutId = layoutData?.id;
+        // const quantityId = quantityData?.quantityId;
 
         console.log(
-          "Fetched areaId:",
-          areaId,
-          "Fetched quantityId:",
-          quantityId
+          "Fetched layoutId:",
+          layoutId
+          // "Fetched quantityId:",
+          // quantityId
         );
 
         // Navigate based on whether areaId and quantityId exist
-        if (areaId && quantityId) {
+        if (layoutId) {
           navigate("/boq");
         } else {
           navigate("/Layout");

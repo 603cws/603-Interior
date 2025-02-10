@@ -94,31 +94,31 @@ export const fetchProductsData = async () => {
 
 export const fetchRoomData = async (userId) => {
   try {
-    const { data: quantityData, error: quantityError } = await supabase
-      .from("quantity")
+    const { data: layoutData, error: error } = await supabase
+      .from("layout")
       .select()
       .eq("userId", userId) // Filter by userId
       .order("created_at", { ascending: false })
       .limit(1);
 
-    if (quantityError) throw quantityError;
+    if (error) throw error;
 
-    const { data: areasData, error: areasError } = await supabase
-      .from("areas")
-      .select()
-      .eq("userId", userId) // Filter by userId
-      .order("created_at", { ascending: false })
-      .limit(1);
+    // const { data: areasData, error: areasError } = await supabase
+    //   .from("areas")
+    //   .select()
+    //   .eq("userId", userId) // Filter by userId
+    //   .order("created_at", { ascending: false })
+    //   .limit(1);
 
-    if (areasError) throw areasError;
+    // if (areasError) throw areasError;
 
     return {
-      quantityData: quantityData || [],
-      areasData: areasData || [],
+      layoutData: layoutData || [],
+      // areasData: areasData || [],
     };
   } catch (error) {
     console.error("Error fetching room data:", error);
-    return { quantityData: [], areasData: [] };
+    return { layoutData: [] };
   }
 };
 

@@ -124,34 +124,40 @@ function Boq() {
       setRoomData(roomDataResult);
 
       var processedQuantityData, processedAreasData;
-      if (
-        roomDataResult.quantityData &&
-        roomDataResult.quantityData.length > 0
-      ) {
+      if (roomDataResult.layoutData && roomDataResult.layoutData.length > 0) {
         processedQuantityData = processData(
-          roomDataResult.quantityData,
+          roomDataResult.layoutData,
           "quantity"
         );
         if (processedQuantityData) {
           setQuantityData([processedQuantityData]);
         }
-      }
 
-      if (
-        roomDataResult.areasData &&
-        roomDataResult.areasData.length > 0 &&
-        roomDataResult.quantityData &&
-        roomDataResult.quantityData.length > 0
-      ) {
         processedAreasData = processData(
-          roomDataResult.areasData,
+          roomDataResult.layoutData,
           "areas",
-          roomDataResult.quantityData
+          roomDataResult.layoutData
         );
         if (processedAreasData) {
           setAreasData([processedAreasData]);
         }
       }
+
+      // if (
+      //   roomDataResult.areasData &&
+      //   roomDataResult.areasData.length > 0 &&
+      //   roomDataResult.quantityData &&
+      //   roomDataResult.quantityData.length > 0
+      // ) {
+      //   processedAreasData = processData(
+      //     roomDataResult.areasData,
+      //     "areas",
+      //     roomDataResult.quantityData
+      //   );
+      //   if (processedAreasData) {
+      //     setAreasData([processedAreasData]);
+      //   }
+      // }
 
       if (
         processedQuantityData.length !== 0 ||

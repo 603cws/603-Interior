@@ -265,7 +265,7 @@ function Landing() {
               Welcome to 603 <br /> Interiors
             </h2>
 
-            <p className="text-[#212121] font-sans mb-10 text-center">
+            <p className="text-[#212121] font-sans mb-10 text-justify">
               At 603 Interiors, we believe that the right workspace can
               transform the way <br /> you work. Our expertise in designing
               functional, aesthetically pleasing, and <br /> customized office
@@ -289,7 +289,7 @@ function Landing() {
                 Read More
               </button>
               {/* image  */}
-              <div className="flex justify-center items-center gap-2">
+              <div className=" w-1/2 flex justify-center items-center gap-2">
                 <div
                   className="bg-[#34BFAD] w-[50px] h-[50px] rounded-full flex justify-center items-center cursor-pointer"
                   onClick={() => navigate("/ContactUs")}
@@ -308,8 +308,8 @@ function Landing() {
             </div>
           </div>
           {/* div for image */}
-          <div className=" flex justify-end items-center h-full">
-            <img src="/images/section3Welcome.png" alt="welcome interior" />
+          <div className=" flex justify-end items-center h-full w-1/2">
+            <img src="/images/welcome to interior.png" alt="welcome interior" />
           </div>
         </div>
       </section>
@@ -472,34 +472,34 @@ function Landing() {
             className="swiper_container max-w-screen overflow-x-hidden"
           >
             <SwiperSlide>
-              <img src="/images/sectionwork1.png" alt="work section" />
+              <img src="/images/our-work/our-work-1.png" alt="work section" />
             </SwiperSlide>
             <SwiperSlide>
-              <img src="/images/sectionwork2.png" alt="work section" />
+              <img src="/images/our-work/our-work-2.png" alt="work section" />
             </SwiperSlide>
             <SwiperSlide>
-              <img src="/images/sectionwork3.png" alt="work section" />
+              <img src="/images/our-work/our-work-3.png" alt="work section" />
             </SwiperSlide>
             <SwiperSlide>
-              <img src="/images/sectionwork4.png" alt="work section" />
+              <img src="/images/our-work/our-work-4.png" alt="work section" />
             </SwiperSlide>
             <SwiperSlide>
-              <img src="/images/sectionwork5.png" alt="work section" />
+              <img src="/images/our-work/our-work-5.png" alt="work section" />
             </SwiperSlide>
             <SwiperSlide>
-              <img src="/images/sectionwork1.png" alt="work section" />
+              <img src="/images/our-work/our-work-6.jpg" alt="work section" />
             </SwiperSlide>
             <SwiperSlide>
-              <img src="/images/sectionwork2.png" alt="work section" />
+              <img src="/images/our-work/our-work-7.png" alt="work section" />
             </SwiperSlide>
             <SwiperSlide>
-              <img src="/images/sectionwork3.png" alt="work section" />
+              <img src="/images/our-work/our-work-8.png" alt="work section" />
             </SwiperSlide>
             <SwiperSlide>
-              <img src="/images/sectionwork4.png" alt="work section" />
+              <img src="/images/our-work/our-work-9.png" alt="work section" />
             </SwiperSlide>
             <SwiperSlide>
-              <img src="/images/sectionwork5.png" alt="work section" />
+              <img src="/images/our-work/our-work-1.png" alt="work section" />
             </SwiperSlide>
             <div className="slider-controler">
               <div className="swiper-button-prev slider-arrow !static ml-[12%]">
