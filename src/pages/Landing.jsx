@@ -26,12 +26,12 @@ import { IoIosCall } from "react-icons/io";
 function Landing() {
   const [expandedIndex, setExpandedIndex] = useState();
   const heroImages = [
-    "/images/Hero.png",
-    "/images/Hero-image-1.png",
-    "/images/Hero-image-2.png",
-    "/images/Hero-image-3.png",
-    "/images/Hero-image-4.png",
-    "/images/Hero-image-5.png",
+    "/images/home/Hero.png",
+    "/images/home/Hero-image-1.png",
+    "/images/home/Hero-image-2.png",
+    "/images/home/Hero-image-3.png",
+    "/images/home/Hero-image-4.png",
+    "/images/home/Hero-image-5.png",
   ];
 
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -193,7 +193,7 @@ function Landing() {
                 {/* <div className="group relative text-center max-w-sm h-auto overflow-hidden rounded-xl transition-all duration-700 ease-in-out"> */}
                 <div className="flex flex-col items-center justify-center p-4 bg-transparent transition-all duration-700 ease-in-out group-hover:bg-white group-hover:scale-105 group-hover:py-8">
                   <img
-                    src="/images/section2-img1.png"
+                    src="/images/home/section2-img1.png"
                     alt="pantary"
                     className="mx-auto transition-transform duration-700 ease-in-out group-hover:scale-95 group-hover:origin-center"
                   />
@@ -211,7 +211,7 @@ function Landing() {
                 {/* <div className="group relative text-center max-w-sm h-auto overflow-hidden rounded-xl transition-all duration-700 ease-in-out"> */}
                 <div className="flex flex-col items-center justify-center p-4 bg-transparent transition-all duration-700 ease-in-out group-hover:bg-white group-hover:scale-105 group-hover:py-8">
                   <img
-                    src="/images/section2-img2.png"
+                    src="/images/home/section2-img2.png"
                     alt="pantary"
                     className="mx-auto transition-transform duration-700 ease-in-out group-hover:scale-95 group-hover:origin-center"
                   />
@@ -229,7 +229,7 @@ function Landing() {
                 {/* <div className="group relative text-center max-w-sm h-auto overflow-hidden rounded-xl transition-all duration-700 ease-in-out"> */}
                 <div className="flex flex-col items-center justify-center p-4 bg-transparent transition-all duration-700 ease-in-out group-hover:bg-white group-hover:scale-105 group-hover:py-8">
                   <img
-                    src="/images/section2-img3.png"
+                    src="/images/home/section2-img3.png"
                     alt="pantary"
                     className="mx-auto transition-transform duration-700 ease-in-out group-hover:scale-95 group-hover:origin-center"
                   />
@@ -309,13 +309,16 @@ function Landing() {
           </div>
           {/* div for image */}
           <div className=" flex justify-end items-center h-full w-1/2">
-            <img src="/images/welcome to interior.png" alt="welcome interior" />
+            <img
+              src="/images/home/welcome to interior.png"
+              alt="welcome interior"
+            />
           </div>
         </div>
       </section>
 
       {/* section buy our product */}
-      <section className="bg-[url('/images/produt.png')] bg-cover bg-center py-4 h-1/2 pb-20">
+      <section className="bg-[url('/images/home/produt.png')] bg-cover bg-center py-4 h-1/2 pb-20">
         {/* div for container */}
         <div className="container mx-auto relative py-10 ">
           {/* div for text */}
@@ -343,7 +346,7 @@ function Landing() {
                 <div className="bg-white lg:w-[220px] lg:h-[320px] ">
                   <img
                     className=""
-                    src="images/sectionproduct1.png "
+                    src="images/home/sectionproduct1.png "
                     alt="sectionproduct"
                   />
                   <div className="text-center text-[#111111] text-sm font-bold font-Poppins capitalize py-2">
@@ -355,7 +358,7 @@ function Landing() {
                 <div className="bg-white w-1/2 lg:w-[220px] lg:h-[320px] ">
                   <img
                     className=""
-                    src="images/sectionproduct2.png "
+                    src="images/home/sectionproduct2.png "
                     alt="sectionproduct"
                   />
                   <div className="text-center text-[#111111] text-sm font-bold font-Poppins capitalize py-2">
@@ -367,7 +370,7 @@ function Landing() {
                 <div className="bg-white w-1/2 lg:w-[220px] lg:h-[320px] ">
                   <img
                     className=""
-                    src="images/sectionproduct3.png "
+                    src="images/home/sectionproduct3.png "
                     alt="sectionproduct"
                   />
                   <div className="text-center text-[#111111] text-sm font-bold font-Poppins capitalize py-2">
@@ -379,7 +382,7 @@ function Landing() {
                 <div className="bg-white w-1/2 lg:w-[220px] lg:h-[320px] ">
                   <img
                     className=""
-                    src="images/sectionproduct4.png "
+                    src="images/home/sectionproduct4.png "
                     alt="sectionproduct"
                   />
                   <div className="text-center text-[#111111] text-sm font-bold font-Poppins capitalize py-2">
@@ -391,7 +394,7 @@ function Landing() {
                 <div className="bg-white w-1/2 lg:w-[220px] lg:h-[320px] ">
                   <img
                     className=""
-                    src="images/sectionproduct5.png "
+                    src="images/home/sectionproduct5.png "
                     alt="sectionproduct"
                   />
                   <div className="text-center text-[#111111] text-sm font-bold font-Poppins capitalize py-2">
@@ -584,7 +587,10 @@ function Landing() {
           <div>
             {/* <div className="w-[350px] h-[520.78px] px-[30px] py-[37px] bg-[#1f5c54] rounded-tr-[200px] rounded-bl-[200px] rounded-br-[200px] flex-col justify-start items-center gap-[18px] inline-flex "> */}
             <div className="relative top-20 left-[290px]">
-              <img src="/images/testimonalicon1.png" alt="testimonalicon" />
+              <img
+                src="/images/home/testimonalicon1.png"
+                alt="testimonalicon"
+              />
             </div>
             <div className="w-[350px] h-[500px] px-[30px] top-[-40px] py-[37px] bg-[#1f5c54] rounded-tr-[200px] rounded-bl-[200px] rounded-br-[200px] flex-col justify-start items-center gap-[18px] inline-flex relative z-10">
               <div className="h-[255px] flex items-center justify-center px-2">
@@ -599,7 +605,7 @@ function Landing() {
               </div>
               <img
                 className="w-[100px] h-[100px] relative rounded-[100px] border border-[#1a3a36]"
-                src="/images/testimonalicon.png"
+                src="/images/home/testimonalicon.png"
                 alt="testimonal person "
               />
               <div className="self-stretch h-[18.89px] text-center text-white text-lg font-bold font-['DM Sans'] uppercase leading-[29.60px] tracking-[3.52px]">
@@ -625,7 +631,7 @@ function Landing() {
             </div>
             <img
               className="w-[100px] h-[100px] relative rounded-[100px] border border-[#1a3a36]"
-              src="/images/testimonal2.png"
+              src="/images/home/testimonal2.png"
               alt="testimonal person "
             />
             <div className="self-stretch h-[18.89px] text-center text-[#1a3a36] text-lg font-bold font-['DM Sans'] uppercase leading-[29.60px] tracking-[3.52px]">
@@ -651,7 +657,7 @@ function Landing() {
             </div>
             <img
               className="w-[100px] h-[100px] relative rounded-[100px] border border-[#1a3a36]"
-              src="/images/testimonalicon.png"
+              src="/images/home/testimonalicon.png"
               alt="testimonal person "
             />
             <div className="self-stretch h-[18.89px] text-center text-white text-lg font-bold font-['DM Sans'] uppercase leading-[29.60px] tracking-[3.52px]">
@@ -661,7 +667,10 @@ function Landing() {
               Manager
             </div>
             <div className="absolute right-[-20px] bottom-0">
-              <img src="/images/testimonalicon2.png" alt="testimonalicon" />
+              <img
+                src="/images/home/testimonalicon2.png"
+                alt="testimonalicon"
+              />
             </div>
           </div>
         </div>
@@ -674,7 +683,7 @@ function Landing() {
         <div className="container mx-auto flex">
           {/* a div for image */}
           <div>
-            <img src="/images/sectionFAQ.png" alt="FAQ Section" />
+            <img src="/images/home/sectionFAQ.png" alt="FAQ Section" />
           </div>
           {/* div for Faq */}
           <div className="flex-1 ">

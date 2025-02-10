@@ -40,8 +40,8 @@ function OurServices() {
     },
   ];
 
-  const background = "/images/servicepage.png";
-  const service = `/images/ourservicebg.png`;
+  const background = "/images/services/servicepage.png";
+  const service = `/images/services/ourservicebg.png`;
 
   return (
     <>
@@ -59,11 +59,13 @@ function OurServices() {
         }}
       >
         <div className="absolute inset-0 bg-black opacity-50"></div>
-        <div className="relative z-10 uppercase">
-          <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold font-lato  text-white drop-shadow-lg">
+        <div className="relative z-10 uppercase font-lato font-extrabold">
+          <h1 className="text-5xl lg:text-7xl text-white drop-shadow-lg">
             Our service
           </h1>
-          <p className="text-lg text-gray-200 mt-4">THIS IS what we do</p>
+          <p className="lg:text-3xl text-xl text-gray-200 mt-4">
+            THIS IS what we do
+          </p>
         </div>
       </section>
 
@@ -76,10 +78,10 @@ function OurServices() {
             alt="service icon"
             className="mx-auto"
           />
-          <h3 className="uppercase text-[#1F5C54] font-bold">
+          <h3 className="uppercase text-[#1F5C54] font-extrabold text-xl font-Poppins">
             Change Your Office Space
           </h3>
-          <h1 className="font-extrabold text-3xl">
+          <h1 className="font-extrabold text-3xl tracking-wide">
             Our mission is to make your <br />
             <span className="text-[#1F5C54]">Office</span> better
           </h1>
@@ -179,8 +181,8 @@ function OurServices() {
                   <img
                     src={
                       isHovered
-                        ? "/images/modernservice1.png"
-                        : "/images/modernservice2.png"
+                        ? "/images/services/modernservice1.png"
+                        : "/images/services/modernservice2.png"
                     }
                     // src="/images/modern-ofc.png"
                     alt="modern service 1"
@@ -208,8 +210,8 @@ function OurServices() {
                   <img
                     src={
                       isHovered2
-                        ? "/images/modernservice4.png"
-                        : "/images/modernservice3.png"
+                        ? "/images/services/modernservice4.png"
+                        : "/images/services/modernservice3.png"
                     }
                     // src="/images/modern-ofc.png"
                     alt="modern service 1"
@@ -235,8 +237,8 @@ function OurServices() {
                   <img
                     src={
                       isHovered3
-                        ? "/images/modernservice5.png"
-                        : "/images/modernservice6.png"
+                        ? "/images/services/modernservice5.png"
+                        : "/images/services/modernservice6.png"
                     }
                     // src="/images/modern-ofc.png"
                     alt="modern service 1"
@@ -260,8 +262,8 @@ function OurServices() {
                   <img
                     src={
                       isHovered4
-                        ? "/images/modernservice7.png"
-                        : "/images/modernservice8.png"
+                        ? "/images/services/modernservice7.png"
+                        : "/images/services/modernservice8.png"
                     }
                     // src="/images/modern-ofc.png"
                     alt="modern service 1"
@@ -287,8 +289,10 @@ function OurServices() {
               <div className="flex ">
                 <img src="/images/serviceIcon.png" alt="service icon" />
               </div>
-              <h3 className="font-extrabold uppercase lg:my-7">services</h3>
-              <p className="font-semibold lg:text-3xl uppercase ">
+              <h3 className="font-extrabold uppercase lg:my-7 text-xl font-Poppins">
+                services
+              </h3>
+              <p className="font-semibold lg:text-5xl uppercase font-Poppins">
                 We design modern <br /> and elegant
               </p>
               {/* <p className="my-3 lg:my-7">
@@ -303,7 +307,7 @@ function OurServices() {
                 tempus ultricies sapien; dis proin <br /> efficitur.
               </p> */}
 
-              <p className="my-3 lg:my-7">
+              <p className="my-3 lg:my-7 uppercase">
                 At 603 Interiors, we simplify corporate office setup with smart,
                 tech-driven solutions. From instant office layouts to
                 customizable BOQs and trusted vendor partnerships, we provide a
@@ -345,7 +349,7 @@ function OurServices() {
             temporibus fugiat quos cum! Necessitatibus fugiat vero minus
             perferendis ipsum!
           </p> */}
-          <p className="text-base my-7">
+          <p className="text-base my-7 uppercase">
             At 603 Interiors, your workspace isn’t just another project—it’s a
             reflection of your vision and needs. with a perfect blend of perfect
             blend of efficiency, aesthetics, and comfort. Our goal is to

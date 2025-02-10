@@ -8,21 +8,21 @@ function AboutUs() {
     <>
       {/* Hero image */}
       <section
-        className="bg-[url('/images/about-us-bg.png')] w-full h-screen bg-no-repeat bg-cover"
+        className="bg-[url('/images/about-us/about-us-bg.png')] w-full h-screen bg-no-repeat bg-cover"
         style={{ backgroundAttachment: "fixed" }}
       >
         <div className="absolute inset-0 bg-black/50"></div>
         <div className="z-10 relative">
           <LandingNavbar />
-          <div className="flex flex-col justify-center items-center h-screen text-white font-lato gap-3">
-            <h1 className="text-7xl font-extrabold ">About Us</h1>
-            <p className="text-2xl font-extrabold">THIS IS WHO WE ARE</p>
+          <div className="flex flex-col justify-center items-center h-screen text-white font-lato gap-3 uppercase font-extrabold">
+            <h1 className="text-5xl lg:text-7xl">About Us</h1>
+            <p className="lg:text-3xl text-xl">THIS IS WHO WE ARE</p>
           </div>
         </div>
       </section>
 
       {/* What we do */}
-      <section className="what-we-do container mx-auto py-10 bg-[url('/images/about-us-s2-bg.png')] bg-no-repeat bg-top bg-[length:100%_50%]">
+      <section className="what-we-do container mx-auto py-10 bg-[url('/images/about-us/about-us-s2-bg.png')] bg-no-repeat bg-top bg-[length:100%_50%]">
         <div className="text-center">
           <img
             src="/images/serviceIcon.png"
@@ -38,7 +38,7 @@ function AboutUs() {
           </p>
         </div>
         <div className="flex justify-between gap-10 font-Poppins font-bold text-white my-10 pt-5">
-          <div className="relative w-1/3 h-[438px] cursor-pointer rounded-[100px] group overflow-hidden bg-[url('/images/about-us-what-we-do-1.png')] bg-cover bg-center flex justify-center items-center">
+          <div className="relative w-1/3 h-[438px] cursor-pointer rounded-[100px] group overflow-hidden bg-[url('/images/about-us/about-us-what-we-do-1.png')] bg-cover bg-center flex justify-center items-center">
             {/* Black Overlay with Bottom to Top Transition */}
             <div className="absolute inset-0 before:absolute before:bottom-0 before:left-0 before:w-full before:h-0 before:bg-black/50 before:transition-all before:duration-700 before:ease-in-out group-hover:before:h-full rounded-[100px]"></div>
             {/* Text */}
@@ -47,7 +47,7 @@ function AboutUs() {
             </h3>
           </div>
 
-          <div className="relative w-1/3 h-[438px] cursor-pointer rounded-[100px] group overflow-hidden bg-[url('/images/about-us-what-we-do-2.png')] bg-cover bg-center flex justify-center items-center">
+          <div className="relative w-1/3 h-[438px] cursor-pointer rounded-[100px] group overflow-hidden bg-[url('/images/about-us/about-us-what-we-do-2.png')] bg-cover bg-center flex justify-center items-center">
             {/* Black Overlay with Bottom to Top Transition */}
             <div className="absolute inset-0 before:absolute before:bottom-0 before:left-0 before:w-full before:h-0 before:bg-black/50 before:transition-all before:duration-700 before:ease-in-out group-hover:before:h-full rounded-[100px]"></div>
             {/* Text */}
@@ -56,7 +56,7 @@ function AboutUs() {
             </h3>
           </div>
 
-          <div className="relative w-1/3 h-[438px] cursor-pointer rounded-[100px] group overflow-hidden bg-[url('/images/about-us-what-we-do-3.png')] bg-cover bg-center flex justify-center items-center">
+          <div className="relative w-1/3 h-[438px] cursor-pointer rounded-[100px] group overflow-hidden bg-[url('/images/about-us/about-us-what-we-do-3.png')] bg-cover bg-center flex justify-center items-center">
             {/* Black Overlay with Bottom to Top Transition */}
             <div className="absolute inset-0 before:absolute before:bottom-0 before:left-0 before:w-full before:h-0 before:bg-black/50 before:transition-all before:duration-700 before:ease-in-out group-hover:before:h-full rounded-[100px]"></div>
             {/* Text */}
@@ -78,32 +78,32 @@ function AboutUs() {
           <h3 className="font-extrabold uppercase text-2xl font-Poppins my-5 text-[#1A3A36]">
             why choose us?
           </h3>
-          <p className="font-Poppins font-medium text-[40px] uppercase">
+          <p className="font-Poppins font-medium text-[40px]">
             Our strategy is very personalized <br />
             to meet your needs.
           </p>
         </div>
         <div className="w-full flex justify-between gap-8 py-12">
           <div className="group w-1/3 flex flex-col justify-center items-center gap-5 py-12 cursor-pointer hover:bg-[#15423C] shadow-xl">
-            <img src="/images/about-us-s2-1.png" alt="" />
+            <img src="/images/about-us/about-us-s2-1.png" alt="" />
             <h4 className="uppercase font-Poppins font-extrabold text-2xl group-hover:text-white">
               interior design
             </h4>
           </div>
           <div className="group w-1/3 flex flex-col justify-center items-center gap-5 py-12 cursor-pointer hover:bg-[#15423C] shadow-xl">
-            <img src="/images/about-us-s2-2.png" alt="" />
+            <img src="/images/about-us/about-us-s2-2.png" alt="" />
             <h4 className="uppercase font-Poppins font-extrabold text-2xl group-hover:text-white">
               production
             </h4>
           </div>
           <div className="group w-1/3 flex flex-col justify-center items-center gap-5 py-12 cursor-pointer hover:bg-[#15423C] shadow-xl">
-            <img src="/images/about-us-s2-3.png" alt="" />
+            <img src="/images/about-us/about-us-s2-3.png" alt="" />
             <h4 className="uppercase font-Poppins font-extrabold text-2xl group-hover:text-white">
               execution
             </h4>
           </div>
           <div className="group w-1/3 flex flex-col justify-center items-center gap-5 py-12 cursor-pointer hover:bg-[#15423C] shadow-xl">
-            <img src="/images/about-us-s2-4.png" alt="" />
+            <img src="/images/about-us/about-us-s2-4.png" alt="" />
             <h4 className="uppercase font-Poppins font-extrabold text-2xl group-hover:text-white">
               after service
             </h4>
@@ -147,7 +147,7 @@ function AboutUs() {
       </section> */}
 
       {/* contact us */}
-      <section className="contact-us bg-[url('/images/about-us-s3-bg.png')] bg-no-repeat bg-cover py-10 relative">
+      <section className="contact-us bg-[url('/images/about-us/about-us-s3-bg.png')] bg-no-repeat bg-cover py-10 relative">
         <div className="absolute inset-0 bg-black/40"></div>
         <div className="relative z-10 text-white font-Poppins flex flex-col justify-between items-center gap-20 text-center my-7">
           <h2 className="font-extrabold uppercase text-4xl">

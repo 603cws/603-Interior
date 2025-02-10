@@ -118,7 +118,7 @@ function Carrer() {
       >
         <div className="absolute inset-0 bg-black opacity-50"></div>
         <div className="relative z-10 uppercase">
-          <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold font-lato  text-white drop-shadow-lg tracking-wider">
+          <h1 className="text-5xl lg:text-7xl font-extrabold font-lato  text-white drop-shadow-lg tracking-wider">
             Join our team now!
           </h1>
         </div>

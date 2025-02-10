@@ -34,7 +34,7 @@ function Contactus() {
     message: "",
     name: "",
     email: "",
-    mobileNo: 0,
+    mobileNo: "",
     companyName: "",
   });
 
@@ -48,7 +48,7 @@ function Contactus() {
     "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d19404.103720641866!2d72.8237966008724!3d19.057896067431624!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be7c91140262913%3A0xc53b6407e4d39f76!2sMakhija%20Arcade%2C%2035th%20Rd%2C%20Khar%2C%20Khar%20West%2C%20Mumbai%2C%20Maharashtra%20400052!5e0!3m2!1sen!2sin!4v1737115916330!5m2!1sen!2sin"
   );
 
-  const background = "/images/contactpage.png";
+  const background = "/images/contact-us/contactpage.png";
 
   const handleformsubmit = async (e) => {
     e.preventDefault();
@@ -127,11 +127,13 @@ function Contactus() {
         }}
       >
         <div className="absolute inset-0 bg-black opacity-50"></div>
-        <div className="relative z-10 uppercase">
-          <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold font-lato  text-white drop-shadow-lg">
+        <div className="relative z-10 uppercase font-lato font-extrabold">
+          <h1 className="text-5xl lg:text-7xl text-white drop-shadow-lg">
             contact Us
           </h1>
-          <p className="text-lg text-gray-200 mt-4">connect with us</p>
+          <p className="lg:text-3xl text-xl text-gray-200 mt-4">
+            connect with us
+          </p>
         </div>
       </section>
 
@@ -139,9 +141,9 @@ function Contactus() {
       <section className="">
         {/* container */}
         {/* <div className="container mx-auto flex justify-center gap-12 font-Poppins py-4 items-center "> */}
-        <div className="container mx-auto flex justify-around gap-12 font-Poppins py-4 items-center ">
+        <div className="container mx-auto flex justify-around gap-12 font-Poppins py-8 items-center ">
           {/* content card */}
-          <div className=" text-center p-2 w-[215px] h-[255px] flex flex-col justify-center items-center">
+          <div className=" text-center p-2 w-[215px] h-[255px] flex flex-col justify-start items-center">
             <div className="w-full flex justify-center my-4">
               <div className="cursor-pointer w-12 h-12 rounded-full bg-[#34BFAD] flex justify-center items-center">
                 <PiMapPinAreaFill size={35} />
@@ -157,7 +159,7 @@ function Contactus() {
             </p>
           </div>
           {/* content card */}
-          <div className="text-center p-2  w-[215px] h-[255px] flex flex-col justify-center items-center">
+          <div className="text-center p-2 w-[215px] h-[255px] flex flex-col justify-start items-center">
             <div className="w-full flex justify-center my-4">
               <div className="cursor-pointer w-12 h-12 rounded-full bg-[#34BFAD] flex justify-center items-center">
                 <IoIosCall size={35} />
@@ -170,7 +172,7 @@ function Contactus() {
             </p>
           </div>
           {/* content card */}
-          <div className=" text-center p-2  w-[215px] h-[255px] flex flex-col justify-center items-center ">
+          <div className=" text-center p-2  w-[215px] h-[255px] flex flex-col justify-start items-center ">
             <div className="w-full flex justify-center my-4">
               <div className="cursor-pointer w-12 h-12 rounded-full bg-[#34BFAD] flex justify-center items-center">
                 <MdEmail size={35} />
@@ -183,14 +185,14 @@ function Contactus() {
             </p>
           </div>
           {/* content card */}
-          <div className=" text-center p-2  w-[215px] h-[255px] flex flex-col justify-center items-center ">
+          <div className=" text-center p-2  w-[215px] h-[255px] flex flex-col justify-start items-center ">
             <div className="w-full flex justify-center my-4">
               <div className="cursor-pointer w-12 h-12 rounded-full bg-[#34BFAD] flex justify-center items-center">
                 <HiClock size={35} />
               </div>
             </div>
             <h2 className="font-semibold text-2xl uppercase mb-2">Time</h2>
-            <h3 className="text-xl font-medium mb-1">Monday-saturday</h3>
+            <h3 className="text-xl font-medium mb-1">Monday-Saturday</h3>
             <p className="text-[#111111] font-medium ">9am-9pm</p>
           </div>
         </div>
@@ -226,7 +228,7 @@ function Contactus() {
                     />
                   </div>
                   <div className="mb-2 flex flex-col gap-2">
-                    <label className="mt-2">Email*</label>
+                    <label className="mt-2">Email id*</label>
                     <input
                       type="email"
                       name="email"
@@ -254,7 +256,7 @@ function Contactus() {
                     />
                   </div>
                   <div className="mb-2 flex flex-col gap-2">
-                    <label className="font-semibold mt-2">Mobile No*</label>
+                    <label className="font-semibold mt-2">Mobile Number*</label>
                     <input
                       type="Number"
                       name="mobileNo"
@@ -400,7 +402,7 @@ function Contactus() {
             {/* div for each img */}
             <div>
               <img
-                src="/images/modern-ofc.png"
+                src="/images/our-work/our-work-6.jpg"
                 alt="contact seaction"
                 className="lg:w-[300px] lg:h-[400px]"
               />
@@ -408,7 +410,7 @@ function Contactus() {
             {/* div for each img */}
             <div>
               <img
-                src="/images/modern-ofc.png"
+                src="/images/our-work/our-work-7.png"
                 alt="contact seaction"
                 className="lg:w-[300px] lg:h-[400px]"
               />
@@ -416,7 +418,7 @@ function Contactus() {
             {/* div for each img */}
             <div>
               <img
-                src="/images/modern-ofc.png"
+                src="/images/our-work/our-work-9.png"
                 alt="contact seaction"
                 className="lg:w-[300px] lg:h-[400px]"
               />
@@ -424,7 +426,7 @@ function Contactus() {
             {/* div for each img */}
             <div>
               <img
-                src="/images/modern-ofc.png"
+                src="/images/contact-us/dream office.png"
                 alt="contact seaction"
                 className="lg:w-[300px] lg:h-[400px]"
               />
