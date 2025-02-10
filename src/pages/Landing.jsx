@@ -62,13 +62,21 @@ function Landing() {
   const settings = {
     dots: false,
     infinite: true,
-    speed: 500,
-    slidesToShow: 3,
+    speed: 1000,
+    slidesToShow: 4,
     slidesToScroll: 1,
     autoplay: true,
     autoplaySpeed: 2000,
     pauseOnHover: true,
     arrows: false,
+    responsive: [
+      {
+        breakpoint: 1800, // Tailwind's custom 3xl breakpoint
+        settings: {
+          slidesToShow: 5, // Show 5 slides only on 3xl screens
+        },
+      },
+    ],
   };
   const settingsWork = {
     dots: true,
@@ -425,12 +433,14 @@ function Landing() {
       {/* section for buy  */}
 
       {/* section our Work */}
-      <section>
+      <section className="py-6">
         {/* container */}
         <div className="container max-w-full overflow-x-hidden py-2">
           {/* textual part */}
           <div className="flex flex-col justify-center items-center">
-            <p className="text-[#1F5C54] uppercase">our work</p>
+            <p className="font-sans mb-1 text-[#1F5C54] font-bold text-sm uppercase text tracking-wider">
+              our work
+            </p>
             <img src="/images/serviceIcon.png" alt="service icon" />
             <h3 className="text-5xl font-lato font-semibold uppercase">
               Our WORK
@@ -477,16 +487,28 @@ function Landing() {
               <img src="/images/sectionwork5.png" alt="work section" />
             </SwiperSlide>
             <SwiperSlide>
+              <img src="/images/sectionwork1.png" alt="work section" />
+            </SwiperSlide>
+            <SwiperSlide>
+              <img src="/images/sectionwork2.png" alt="work section" />
+            </SwiperSlide>
+            <SwiperSlide>
               <img src="/images/sectionwork3.png" alt="work section" />
             </SwiperSlide>
+            <SwiperSlide>
+              <img src="/images/sectionwork4.png" alt="work section" />
+            </SwiperSlide>
+            <SwiperSlide>
+              <img src="/images/sectionwork5.png" alt="work section" />
+            </SwiperSlide>
             <div className="slider-controler">
-              <div className="swiper-button-prev slider-arrow">
+              <div className="swiper-button-prev slider-arrow !static ml-[12%]">
                 <BiSolidLeftArrowSquare
                   name="arrow-back-outline"
                   color={"#1A3A36"}
                 />
               </div>
-              <div className="swiper-button-next slider-arrow">
+              <div className="swiper-button-next slider-arrow !static ml-6">
                 <BiSolidRightArrowSquare
                   name="arrow-back-outline"
                   color={"#1A3A36"}
@@ -499,19 +521,19 @@ function Landing() {
       </section>
 
       {/* section 5 */}
-      <section className="bg-[#F4F4F4]">
+      <section className="mt-6 relative bg-white shadow-[0px_5px_15px_rgba(0,0,0,0.1),0px_-5px_15px_rgba(0,0,0,0.1)]">
         {/* container */}
         <div className="container mx-auto flex flex-col py-10">
           {/* text */}
           <div className="flex flex-col justify-center items-center mb-3">
-            <p className="text-[#] font-thin font-sans uppercase tracking-wider">
+            <p className="font-sans mb-1 text-[#1F5C54] font-bold uppercase text-sm tracking-wider">
               Our Clients
             </p>
             <img src="/images/serviceIcon.png" alt="service icon" />
           </div>
           {/* logo slider */}
-          <div>
-            <Slider {...settings}>
+          <div className="flex justify-center items-center mx-4 w-full max-w-screen">
+            <Slider {...settings} className="w-full">
               <div>
                 <img
                   src="/images/iide-logo.svg"
