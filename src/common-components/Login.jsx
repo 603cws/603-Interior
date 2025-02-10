@@ -423,231 +423,199 @@ function Login() {
           </div>
         </div>
       ) : (
-        <div className="main flex justify-center gap-5 h-screen w-full bg-login-custom-gradient">
-          <div className="img w-1/2 p-5 flex justify-end items-center">
-            <img
-              src="images/Register.png"
-              alt=""
-              className="max-h-full h-full xl:h-auto w-full xl:w-3/4"
-            />
-          </div>
-          <div
-            className={`content w-1/2 max-h-full h-full flex flex-col items-start ${
-              isSignUp ? "pt-10" : "pt-40"
-            } gap-10`}
-          >
-            <div className="w-3/4">
-              <h1 className="capitalize text-3xl font-bold text-white text-center">
-                {isForgotPassword
-                  ? "Forgot password"
-                  : isSignUp
-                  ? "Create Account"
-                  : "Welcome back!"}
-              </h1>
-              <p className="capitalize text-white font-semibold text-center my-2">
-                {isForgotPassword
-                  ? "No worries, we'll send you reset instructions"
-                  : isSignUp
-                  ? ""
-                  : "Please enter your Credentials"}
-              </p>
+        <form onSubmit={handleSubmit}>
+          <div className="main flex justify-center gap-5 h-screen w-full bg-login-custom-gradient">
+            <div className="img w-1/2 p-5 flex justify-end items-center">
+              <img
+                src="images/Register.png"
+                alt=""
+                className="max-h-full h-full xl:h-auto w-full xl:w-3/4"
+              />
             </div>
-
-            <div className="w-full flex flex-col gap-2 pr-2">
-              <div className="flex flex-col gap-3 xl:w-3/4">
-                <label
-                  htmlFor="email"
-                  className="capitalize text-md font-semibold text-white"
-                >
-                  Email Id <span>*</span>
-                </label>
-                <input
-                  type="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  placeholder={
-                    isForgotPassword ? "Enter your email" : "example@gmail.com"
-                  }
-                  className="w-full py-2 rounded-lg pl-2 focus:outline-none"
-                />
+            <div
+              className={`content w-1/2 max-h-full h-full flex flex-col items-start ${
+                isSignUp ? "pt-10" : "pt-40"
+              } gap-10`}
+            >
+              <div className="w-3/4">
+                <h1 className="capitalize text-3xl font-bold text-white text-center">
+                  {isForgotPassword
+                    ? "Forgot password"
+                    : isSignUp
+                    ? "Create Account"
+                    : "Welcome back!"}
+                </h1>
+                <p className="capitalize text-white font-semibold text-center my-2">
+                  {isForgotPassword
+                    ? "No worries, we'll send you reset instructions"
+                    : isSignUp
+                    ? ""
+                    : "Please enter your Credentials"}
+                </p>
               </div>
 
-              {isForgotPassword ? (
-                <div>
-                  <button
-                    onClick={handleForgotPassword}
-                    className="capitalize w-full xl:w-3/4 bg-[#1A3A36] text-white font-semibold py-2 rounded-lg mt-3"
-                    disabled={isSubmitting}
+              <div className="w-full flex flex-col gap-2 pr-2">
+                <div className="flex flex-col gap-3 xl:w-3/4">
+                  <label
+                    htmlFor="email"
+                    className="capitalize text-md font-semibold text-white"
                   >
-                    {isSubmitting ? (
-                      <div className="spinner flex justify-center items-center">
-                        <svg
-                          className="animate-spin h-5 w-5 text-white"
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                        >
-                          <circle
-                            className="opacity-25"
-                            cx="12"
-                            cy="12"
-                            r="10"
-                            stroke="currentColor"
-                            strokeWidth="4"
-                          ></circle>
-                          <path
-                            className="opacity-75"
-                            fill="currentColor"
-                            d="M4 12a8 8 0 018-8v8h8a8 8 0 01-8 8V12H4z"
-                          ></path>
-                        </svg>
-                      </div>
-                    ) : (
-                      "Reset password"
-                    )}
-                  </button>
-                  <p className="text-white capitalize flex items-center justify-center gap-1 w-full xl:w-3/4 my-6">
-                    <span
-                      onClick={backToSignIn}
-                      className="cursor-pointer text-black self-center"
-                    >
-                      <FaAngleLeft size={16} />
-                    </span>
-                    Back to log in
-                  </p>
+                    Email Id <span>*</span>
+                  </label>
+                  <input
+                    type="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    placeholder={
+                      isForgotPassword
+                        ? "Enter your email"
+                        : "example@gmail.com"
+                    }
+                    className="w-full py-2 rounded-lg pl-2 focus:outline-none"
+                  />
                 </div>
-              ) : (
-                <>
-                  {isSignUp && (
-                    <>
-                      <div className="flex justify-center gap-2 xl:w-3/4">
-                        <div className="flex flex-col gap-3 w-1/2">
-                          <label
-                            htmlFor="company"
-                            className="capitalize text-md font-semibold text-white"
+
+                {isForgotPassword ? (
+                  <div>
+                    <button
+                      onClick={handleForgotPassword}
+                      className="capitalize w-full xl:w-3/4 bg-[#1A3A36] text-white font-semibold py-2 rounded-lg mt-3"
+                      disabled={isSubmitting}
+                    >
+                      {isSubmitting ? (
+                        <div className="spinner flex justify-center items-center">
+                          <svg
+                            className="animate-spin h-5 w-5 text-white"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
                           >
-                            Company Name <span>*</span>
-                          </label>
-                          <input
-                            type="text"
-                            name="company"
-                            value={formData.company}
-                            onChange={handleChange}
-                            placeholder="Your Company Name"
-                            className="w-full py-2 rounded-lg pl-2 focus:outline-none"
-                          />
+                            <circle
+                              className="opacity-25"
+                              cx="12"
+                              cy="12"
+                              r="10"
+                              stroke="currentColor"
+                              strokeWidth="4"
+                            ></circle>
+                            <path
+                              className="opacity-75"
+                              fill="currentColor"
+                              d="M4 12a8 8 0 018-8v8h8a8 8 0 01-8 8V12H4z"
+                            ></path>
+                          </svg>
+                        </div>
+                      ) : (
+                        "Reset password"
+                      )}
+                    </button>
+                    <p className="text-white capitalize flex items-center justify-center gap-1 w-full xl:w-3/4 my-6">
+                      <span
+                        onClick={backToSignIn}
+                        className="cursor-pointer text-black self-center"
+                      >
+                        <FaAngleLeft size={16} />
+                      </span>
+                      Back to log in
+                    </p>
+                  </div>
+                ) : (
+                  <>
+                    {isSignUp && (
+                      <>
+                        <div className="flex justify-center gap-2 xl:w-3/4">
+                          <div className="flex flex-col gap-3 w-1/2">
+                            <label
+                              htmlFor="company"
+                              className="capitalize text-md font-semibold text-white"
+                            >
+                              Company Name <span>*</span>
+                            </label>
+                            <input
+                              type="text"
+                              name="company"
+                              value={formData.company}
+                              onChange={handleChange}
+                              placeholder="Your Company Name"
+                              className="w-full py-2 rounded-lg pl-2 focus:outline-none"
+                            />
+                          </div>
+
+                          <div className="flex flex-col gap-3 w-1/2">
+                            <label
+                              htmlFor="location"
+                              className="capitalize text-md font-semibold text-white"
+                            >
+                              Location <span>*</span>
+                            </label>
+                            <input
+                              type="text"
+                              name="location"
+                              value={formData.location}
+                              onChange={handleChange}
+                              onInput={(e) => {
+                                e.target.value = e.target.value.replace(
+                                  /[^A-Za-z\s]/g,
+                                  ""
+                                ); // Remove everything except letters & spaces
+                              }}
+                              placeholder="Your Location"
+                              className="w-full py-2 rounded-lg pl-2 focus:outline-none"
+                            />
+                          </div>
                         </div>
 
-                        <div className="flex flex-col gap-3 w-1/2">
+                        <div className="xl:w-3/4 flex flex-col gap-3">
                           <label
-                            htmlFor="location"
+                            htmlFor="mobile"
                             className="capitalize text-md font-semibold text-white"
                           >
-                            Location <span>*</span>
+                            Mobile Number <span>*</span>
                           </label>
                           <input
                             type="text"
-                            name="location"
-                            value={formData.location}
+                            name="mobile"
+                            value={formData.mobile}
                             onChange={handleChange}
                             onInput={(e) => {
                               e.target.value = e.target.value.replace(
-                                /[^A-Za-z\s]/g,
+                                /\D/g,
                                 ""
-                              ); // Remove everything except letters & spaces
+                              ); // Remove non-numeric characters
                             }}
-                            placeholder="Your Location"
+                            maxLength="10"
+                            inputMode="numeric"
+                            pattern="\d{10}"
+                            placeholder="Your Mobile Number"
                             className="w-full py-2 rounded-lg pl-2 focus:outline-none"
                           />
                         </div>
-                      </div>
-
-                      <div className="xl:w-3/4 flex flex-col gap-3">
-                        <label
-                          htmlFor="mobile"
-                          className="capitalize text-md font-semibold text-white"
-                        >
-                          Mobile Number <span>*</span>
-                        </label>
-                        <input
-                          type="text"
-                          name="mobile"
-                          value={formData.mobile}
-                          onChange={handleChange}
-                          onInput={(e) => {
-                            e.target.value = e.target.value.replace(/\D/g, ""); // Remove non-numeric characters
-                          }}
-                          maxLength="10"
-                          inputMode="numeric"
-                          pattern="\d{10}"
-                          placeholder="Your Mobile Number"
-                          className="w-full py-2 rounded-lg pl-2 focus:outline-none"
-                        />
-                      </div>
-                    </>
-                  )}
-
-                  <div className="xl:w-3/4 flex flex-col gap-3 relative">
-                    <label
-                      htmlFor="password"
-                      className="capitalize text-md font-semibold text-white"
-                    >
-                      Password <span>*</span>
-                    </label>
-                    <input
-                      type={isPasswordVisible ? "text" : "password"}
-                      name="password"
-                      value={formData.password}
-                      onChange={handleChange}
-                      placeholder="Enter Password"
-                      className="py-2 rounded-lg pl-2 focus:outline-none"
-                    />
-                    <div
-                      onClick={togglePasswordVisibility}
-                      className={`absolute ${
-                        isSignUp ? "top-[60%]" : "top-[40%]"
-                      } right-3 cursor-pointer`}
-                    >
-                      {isPasswordVisible ? (
-                        <IoEyeOutline color="gray" size={20} />
-                      ) : (
-                        <IoEyeOffOutline color="gray" size={20} />
-                      )}
-                    </div>
-                    {!isSignUp && (
-                      <div className="w-full flex justify-end">
-                        <p
-                          onClick={showForgotPassword}
-                          className="capitalize text-white underline cursor-pointer"
-                        >
-                          Forgot Password?
-                        </p>
-                      </div>
+                      </>
                     )}
-                  </div>
 
-                  {isSignUp && (
                     <div className="xl:w-3/4 flex flex-col gap-3 relative">
                       <label
-                        htmlFor="confirmPassword"
+                        htmlFor="password"
                         className="capitalize text-md font-semibold text-white"
                       >
-                        Confirm Password <span>*</span>
+                        Password <span>*</span>
                       </label>
                       <input
-                        type={isConfirmPasswordVisible ? "text" : "password"}
-                        name="confirmPassword"
-                        value={formData.confirmPassword}
+                        type={isPasswordVisible ? "text" : "password"}
+                        name="password"
+                        value={formData.password}
                         onChange={handleChange}
-                        placeholder="Confirm Password"
+                        placeholder="Enter Password"
                         className="py-2 rounded-lg pl-2 focus:outline-none"
                       />
                       <div
-                        onClick={toggleConfirmPasswordVisibility}
-                        className="absolute top-[60%] right-3 cursor-pointer"
+                        onClick={togglePasswordVisibility}
+                        className={`absolute ${
+                          isSignUp ? "top-[60%]" : "top-[40%]"
+                        } right-3 cursor-pointer`}
                       >
-                        {isConfirmPasswordVisible ? (
+                        {isPasswordVisible ? (
                           <IoEyeOutline color="gray" size={20} />
                         ) : (
                           <IoEyeOffOutline color="gray" size={20} />
@@ -664,60 +632,100 @@ function Login() {
                         </div>
                       )}
                     </div>
-                  )}
 
-                  <button
-                    onClick={handleSubmit}
-                    className={`capitalize xl:w-3/4 bg-[#1A3A36] text-white font-semibold py-2 rounded-lg ${
-                      isSignUp ? "my-1" : "my-2"
-                    }`}
-                  >
-                    {isSignUp ? "Sign Up" : "Sign In"}
-                  </button>
-
-                  <p className="text-white">
-                    {isSignUp ? (
-                      <>
-                        Already have an account?{" "}
-                        <span
-                          onClick={toggleForm}
-                          className="cursor-pointer text-black"
+                    {isSignUp && (
+                      <div className="xl:w-3/4 flex flex-col gap-3 relative">
+                        <label
+                          htmlFor="confirmPassword"
+                          className="capitalize text-md font-semibold text-white"
                         >
-                          Sign In
-                        </span>
-                      </>
-                    ) : (
-                      <>
-                        Don't have an account?{" "}
-                        <span
-                          onClick={toggleForm}
-                          className="cursor-pointer text-black"
+                          Confirm Password <span>*</span>
+                        </label>
+                        <input
+                          type={isConfirmPasswordVisible ? "text" : "password"}
+                          name="confirmPassword"
+                          value={formData.confirmPassword}
+                          onChange={handleChange}
+                          placeholder="Confirm Password"
+                          className="py-2 rounded-lg pl-2 focus:outline-none"
+                        />
+                        <div
+                          onClick={toggleConfirmPasswordVisibility}
+                          className="absolute top-[60%] right-3 cursor-pointer"
                         >
-                          Sign Up
-                        </span>
-                      </>
+                          {isConfirmPasswordVisible ? (
+                            <IoEyeOutline color="gray" size={20} />
+                          ) : (
+                            <IoEyeOffOutline color="gray" size={20} />
+                          )}
+                        </div>
+                        {!isSignUp && (
+                          <div className="w-full flex justify-end">
+                            <p
+                              onClick={showForgotPassword}
+                              className="capitalize text-white underline cursor-pointer"
+                            >
+                              Forgot Password?
+                            </p>
+                          </div>
+                        )}
+                      </div>
                     )}
-                  </p>
 
-                  {/* Social Login */}
-                  <div className="flex justify-center gap-3 items-center xl:w-3/4">
-                    <hr className="w-2/5" />
-                    <span className="text-white">or</span>
-                    <hr className="w-2/5" />
-                  </div>
-                  <div className="xl:w-3/4 flex justify-center gap-5">
-                    <FcGoogle size={30} className="cursor-pointer" />
-                    <FaFacebook
-                      fill="blue"
-                      size={30}
-                      className="bg-white rounded-full cursor-pointer bg-contain"
-                    />
-                  </div>
-                </>
-              )}
+                    <button
+                      // onClick={handleSubmit}
+                      type="submit"
+                      className={`capitalize xl:w-3/4 bg-[#1A3A36] text-white font-semibold py-2 rounded-lg ${
+                        isSignUp ? "my-1" : "my-2"
+                      }`}
+                    >
+                      {isSignUp ? "Sign Up" : "Sign In"}
+                    </button>
+
+                    <p className="text-white">
+                      {isSignUp ? (
+                        <>
+                          Already have an account?{" "}
+                          <span
+                            onClick={toggleForm}
+                            className="cursor-pointer text-black"
+                          >
+                            Sign In
+                          </span>
+                        </>
+                      ) : (
+                        <>
+                          Don't have an account?{" "}
+                          <span
+                            onClick={toggleForm}
+                            className="cursor-pointer text-black"
+                          >
+                            Sign Up
+                          </span>
+                        </>
+                      )}
+                    </p>
+
+                    {/* Social Login */}
+                    <div className="flex justify-center gap-3 items-center xl:w-3/4">
+                      <hr className="w-2/5" />
+                      <span className="text-white">or</span>
+                      <hr className="w-2/5" />
+                    </div>
+                    <div className="xl:w-3/4 flex justify-center gap-5">
+                      <FcGoogle size={30} className="cursor-pointer" />
+                      <FaFacebook
+                        fill="blue"
+                        size={30}
+                        className="bg-white rounded-full cursor-pointer bg-contain"
+                      />
+                    </div>
+                  </>
+                )}
+              </div>
             </div>
           </div>
-        </div>
+        </form>
       )}
     </>
   );

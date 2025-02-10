@@ -3,11 +3,14 @@ import { supabase } from "../../services/supabase";
 import { useApp } from "../../Context/Context";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 // import useAuthRefresh from "../../Context/useAuthRefresh";
 
 function ProfileCard() {
   const { setIsAuthenticated } = useApp();
   const background = "images/profilebg.png";
+  const [userEmail, setUserEmail] = useState("");
+  const [companyName, setCompanyName] = useState("");
 
   const navigate = useNavigate();
   //   const { signOutUser } = useAuthRefresh(); // Get signOutUser from hook
@@ -21,7 +24,7 @@ function ProfileCard() {
       toast.success("User signed out successfully");
       setIsAuthenticated(false);
       localStorage.removeItem("usertoken");
-      navigate("/login");
+      navigate("/");
     }
   };
 
@@ -31,6 +34,35 @@ function ProfileCard() {
   //   toast.success("User signed out successfully");
   //   navigate("/login");
   // };
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      // Retrieve the currently authenticated user
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
+      if (user) {
+        // Set the user's email
+        setUserEmail(user.email);
+
+        // Query the profiles table for the company name using the user's id
+        const { data, error } = await supabase
+          .from("profiles")
+          .select("company_name")
+          .eq("id", user.id)
+          .single();
+
+        if (error) {
+          console.error("Error fetching profile:", error.message);
+        } else if (data) {
+          setCompanyName(data.company_name);
+        }
+      }
+    };
+
+    fetchUserData();
+  }, []);
 
   return (
     <div>
@@ -52,8 +84,11 @@ function ProfileCard() {
             />
           </div>
           <div className="flex-1 flex flex-col items-center justify-center ">
-            <p className="font-semibold text-lg">uername</p>
-            <p className="font-sm">example@gmail.com</p>
+            <p className="font-semibold text-lg">
+              {" "}
+              {companyName || "Company Name"}
+            </p>
+            <p className="font-sm">{userEmail || "example@gmail.com"}</p>{" "}
           </div>
         </div>
 
