@@ -147,7 +147,7 @@ const BecomeSeller = () => {
     <>
       <section className="h-[85vh] flex flex-col">
         <div>
-          <LandingNavbar />
+          <LandingNavbar bgColor={true} />
         </div>
         <div className="container mx-auto flex-1 flex justify-around items-center ">
           <div className="w-1/2">

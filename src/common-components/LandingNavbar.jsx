@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { FiMenu, FiX } from "react-icons/fi";
 import { useApp } from "../Context/Context";
-function LandingNavbar() {
+function LandingNavbar({ bgColor = false }) {
   const navigate = useNavigate();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -11,11 +11,13 @@ function LandingNavbar() {
   const toggleProfile = () => {
     setShowProfile(!showProfile);
   };
-
+  const bgcolor = bgColor ? "bg-[#ccc]" : "bg-white";
   return (
     <div className="px-5 pt-3 absolute top-0 w-full z-10">
       {/* Navbar Container */}
-      <div className="bg-white bg-opacity-[0.72] flex justify-between items-center border rounded-full px-5 py-1.5">
+      <div
+        className={`${bgcolor} bg-opacity-[0.72] flex justify-between items-center border rounded-full px-5 py-1.5`}
+      >
         {/* Logo */}
         <div className="cursor-pointer" onClick={() => navigate("/")}>
           <img src="/logo/logo.png" alt="Logo" className="h-12 w-20" />
