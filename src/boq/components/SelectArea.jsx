@@ -151,6 +151,38 @@ function SelectArea({
     );
   };
 
+  const handleSelectAll = (checked) => {
+    if (checked) {
+      const selectableSubCategories = selectedCategory.subcategories.filter(
+        (subCategory) =>
+          !isItemSelected(
+            selectedData,
+            selectedCategory,
+            subCategory,
+            selectedSubCategory1,
+            selectedProductView
+          )
+      );
+      setSelectedAreas(selectableSubCategories);
+    } else {
+      setSelectedAreas([]);
+    }
+  };
+
+  // Check if all selectable subcategories are already selected
+  const allSelected =
+    selectedCategory.subcategories?.every(
+      (subCategory) =>
+        selectedAreas.includes(subCategory) ||
+        isItemSelected(
+          selectedData,
+          selectedCategory,
+          subCategory,
+          selectedSubCategory1,
+          selectedProductView
+        )
+    ) ?? false;
+
   return (
     <div className="fixed inset-0 bg-black bg-opacity-30 flex justify-center items-center z-10">
       <div className="bg-white border-8 border-[#1A3A36] rounded-xl max-w-[90%] max-h-screen overflow-auto w-[1000px]">
@@ -188,6 +220,11 @@ function SelectArea({
                       onChange={(e) =>
                         handleCheckboxChange(e.target.value, e.target.checked)
                       }
+                      className="appearance-none w-5 h-5 border-2 border-gray-400 cursor-pointer transition duration-300 
+                      checked:bg-black checked:border-black 
+                      relative checked:before:content-['✔'] checked:before:absolute checked:before:text-white 
+                      checked:before:top-[50%] checked:before:left-[50%] checked:before:translate-x-[-50%] checked:before:translate-y-[-50%] 
+                      checked:before:text-[14px] checked:before:font-bold"
                       disabled={
                         // Array.isArray(selectedData) &&
                         // selectedData.length > 0 &&
@@ -251,6 +288,22 @@ function SelectArea({
                     </label>
                   </div>
                 ))}
+              <div className="flex items-center gap-2 cursor-pointer col-span-full mr-10">
+                <input
+                  type="checkbox"
+                  id="selectAll"
+                  checked={allSelected}
+                  onChange={(e) => handleSelectAll(e.target.checked)}
+                  className="appearance-none w-5 h-5 border-2 border-gray-400 cursor-pointer transition duration-300 
+                  checked:bg-black checked:border-black 
+                  relative checked:before:content-['✔'] checked:before:absolute checked:before:text-white 
+                  checked:before:top-[50%] checked:before:left-[50%] checked:before:translate-x-[-50%] checked:before:translate-y-[-50%] 
+                  checked:before:text-[14px] checked:before:font-bold"
+                />
+                <label htmlFor="selectAll" className="text-sm">
+                  Select All
+                </label>
+              </div>
             </div>
 
             {/* Image Section */}

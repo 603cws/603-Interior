@@ -63,7 +63,7 @@ function Navbar({
         <div className="pl-60 flex gap-5">
           <div
             // onClick={signOutUser}
-            className="bg-[#FFF] rounded-xl text-xs py-2 px-5 text-black  border-solid border-1 border-black"
+            className="flex justify-center items-center bg-[#FFF] rounded-xl text-xs py-2 px-5 text-black  border-solid border-1 border-black"
           >
             <span className="font-bold">Total</span>: ₹{" "}
             {calculateGrandTotal().toLocaleString("en-IN")}

@@ -69,7 +69,7 @@ const MainPage = ({ userResponses, setSelectedSubCategory1 }) => {
         selectedSubCategories.map((subCategory1, index) => (
           <div
             key={index}
-            className={`bg-[#a9d3ce] border-solid border-[#000000] border pr-[37px] pl-[37px] flex flex-col gap-2.5 items-start justify-start shrink-0 w-[169px] relative ${
+            className={`bg-[#a9d3ce] border-solid border-[#000000] border flex flex-col gap-2.5 items-start justify-start shrink-0 w-[169px] relative ${
               selectedSubCategory1 === subCategory1
                 ? "bg-[#82b8b0]"
                 : "bg-white" // Highlight the default selected subcategory

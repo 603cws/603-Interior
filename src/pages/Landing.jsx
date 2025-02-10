@@ -155,7 +155,7 @@ function Landing() {
                 We create unique style and design for your office
               </p>
               <button
-                className="border border-transparent px-5 bg-[#1F5C54] py-3 mt-3 font-Poppins font-bold transform transition-transform duration-300 ease-in-out hover:scale-110"
+                className="border border-transparent px-5 bg-[#1F5C54] py-3 mt-16 font-Poppins font-bold transform transition-transform duration-300 ease-in-out hover:scale-110"
                 onClick={() => navigate("/Layout")}
               >
                 Make Your Space
