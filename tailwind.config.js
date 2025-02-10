@@ -60,7 +60,7 @@ export default {
       },
       animation: {
         blink: "blink 1s infinite",
-        blink: "blink 1s infinite",
+        blink: "blink 1s ease-in-out 2",
         "fade-in": "fadeIn 0.7s ease-in-out",
         bikeSlide: "bikeSlide 4s ease-out forwards",
       },

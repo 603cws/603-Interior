@@ -36,30 +36,31 @@ const TreeMap = ({ totalArea, areaQuantities, areaValues }) => {
   const [isLegendVisible, setIsLegendVisible] = useState(false);
 
   const colors = {
-    "Linear Workspace": "#6A89A7",
-    "L-Type Workspace": "#855762",
-    "MD Cabin": "#92E5BB",
-    "Manager Cabin": "#90C680",
-    "Small Cabin": "#E491A5",
-    "UPS Room": "#BCDDFC",
-    "BMS Room": "#87BDF2",
-    "Server Room": "#384959",
-    Reception: "#272757",
-    "Lounge/Pantry": "#8686AC",
-    "Fitness Zone": "#505081",
-    "Sales Team": "#0F0E47",
-    "Phone Booth": "#2D6F40",
-    "Discussion Room": "#574B90",
-    "Interview Room": "#68BA7F",
-    "Conference Room": "#253D2C",
-    "Board Room": "#F7D794",
-    "Meeting Room": "#3DC1D3",
-    "Meeting Room (Large)": "#546DE5",
-    "HR Room": "#E15F41",
-    "Finance Room": "#63CDDA",
-    "Executive Washroom": "#C44569",
+    "Linear Workspace": "#62897E",
+    "L-Type Workspace": "#3F5855",
+    "MD Cabin": "#1D3130",
+    "Manager Cabin": "#293C3E",
+    "Small Cabin": "#4A5E65",
+    "UPS Room": "#737F85",
+    "BMS Room": "#8CDDCE",
+    "Server Room": "#54A08C",
+    Reception: "#368772",
+    "Lounge/Pantry": "#2A3338",
+    "Video Recording Room": "#354044",
+    "Sales Team": "#3C464F",
+    "Phone Booth": "#515554",
+    "Discussion Room": "#868A8E",
+    "Interview Room": "#A4ACAF",
+    "Conference Room": "#488677",
+    "Board Room": "#3A4B45",
+    "Meeting Room": "#1E8D78",
+    "Meeting Room (Large)": "#07281D",
+    "HR Room": "#233736",
+    "Finance Room": "#081011",
+    "Executive Washroom": "#567F7D",
+    "Breakout Room": "#74D0C1",
     "Available Space": "#1F5C54",
-    Other: "#778BEB", // Color for the "Other" category
+    Other: "#5E9B96", // Color for the "Other" category
   };
 
   const validTotalArea = totalArea > 0 ? totalArea : 4000;
@@ -169,7 +170,7 @@ const TreeMap = ({ totalArea, areaQuantities, areaValues }) => {
             display: "flex",
             // justifyContent: 'space-evenly',
             alignItems: "center",
-            marginBottom: "4px",
+            // marginBottom: "4px",
             marginRight: "5px",
           }}
           onMouseEnter={() => setHoveredArea(item.x)}

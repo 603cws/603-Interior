@@ -502,7 +502,7 @@ function Landing() {
               <img src="/images/our-work/our-work-9.png" alt="work section" />
             </SwiperSlide>
             <SwiperSlide>
-              <img src="/images/our-work/our-work-1.png" alt="work section" />
+              <img src="/images/our-work/our-work-5.png" alt="work section" />
             </SwiperSlide>
             <div className="slider-controler">
               <div className="swiper-button-prev slider-arrow !static ml-[12%]">

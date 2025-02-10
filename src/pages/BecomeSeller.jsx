@@ -149,16 +149,16 @@ const BecomeSeller = () => {
         <div>
           <LandingNavbar />
         </div>
-        <div className="flex-1 flex justify-around items-center ">
-          <div>
-            <h2 className="text-[#1F5C54]  uppercase font-extrabold mb-10 lg:mb-20">
+        <div className="container mx-auto flex-1 flex justify-around items-center ">
+          <div className="w-1/2">
+            <h3 className="text-[#1F5C54]  uppercase font-extrabold text-lg mb-3">
               Become a 603 interior Seller
-            </h2>
+            </h3>
 
-            <h3 className="text-5xl uppercase text-[#1F5C54]">
+            <h1 className="text-4xl xl:text-5xl font-extrabold uppercase text-[#1F5C54]">
               connect. <span className="text-[#54DED3]">collab.</span> <br />{" "}
               innovate.
-            </h3>
+            </h1>
 
             {/* <a
               href="#contact"
@@ -168,20 +168,30 @@ const BecomeSeller = () => {
             </a> */}
             <button
               onClick={scrollToSection}
-              className="px-5 py-3 bg-[#1F5C54] border-1 border-[#15423C] rounded-3xl uppercase text-white"
+              className="px-10 py-3 mt-20 bg-[#1F5C54] border-1 font-Poppins font-bold border-[#15423C] rounded-3xl uppercase text-white"
             >
               get started
             </button>
           </div>
 
-          <div>
-            <img src="/images/becomeseller.png" alt="seller herosection" />
+          <div className="w-1/2 relative h-full mt-60 3xl:mt-96">
+            {/* <img src="/images/becomeseller.png" alt="seller herosection" /> */}
+            <img
+              src="/images/collab-bg-2.png"
+              alt=""
+              className="absolute top-0 left-0 w-2/3 xl:w-3/4"
+            />
+            <img
+              src="/images/collab-bg-1.png"
+              alt=""
+              className="absolute top-36 right-0 w-2/3 xl:w-3/4"
+            />
           </div>
         </div>
       </section>
       {/* how it works */}
       <section className="my-10">
-        <div className="font-Poppins container mx-auto ">
+        <div className="font-Poppins uppercase container mx-auto ">
           {/* text */}
           <div className="text-center my-7 flex flex-col justify-center items-center gap-2">
             <img src="/images/serviceIcon.png" alt="service icon" />
@@ -195,11 +205,11 @@ const BecomeSeller = () => {
                 <div className="w-12 h-12 bg-[#1F5C54] rounded-full text-white text-lg flex justify-center items-center">
                   <span>1</span>
                 </div>
-                <div class="w-[158px] h-[0px] border-2 border-[#1f5c54]"></div>
+                <div className="w-[158px] h-[0px] border-2 border-[#1f5c54]"></div>
               </div>
               {/* info of card */}
               <div>
-                <h3 className="font-semibold my-3">create account</h3>
+                <h3 className="font-semibold text-base my-3">create account</h3>
                 <p className="text-sm">All you need is :</p>
               </div>
             </div>
@@ -209,11 +219,11 @@ const BecomeSeller = () => {
                 <div className="w-12 h-12 bg-[#1F5C54] rounded-full text-white text-lg flex justify-center items-center">
                   <span>2</span>
                 </div>
-                <div class="w-[158px] h-[0px] border-2 border-[#1f5c54]"></div>
+                <div className="w-[158px] h-[0px] border-2 border-[#1f5c54]"></div>
               </div>
               {/* info of card */}
               <div>
-                <h3 className="font-semibold my-2">List Products</h3>
+                <h3 className="font-semibold text-base my-2">List Products</h3>
                 <p className="text-sm uppercase">
                   List the products <br /> you want to sell in <br /> your
                   supplier panel
@@ -226,11 +236,11 @@ const BecomeSeller = () => {
                 <div className="w-12 h-12 bg-[#1F5C54] rounded-full text-white text-lg flex justify-center items-center">
                   <span>3</span>
                 </div>
-                <div class="w-[158px] h-[0px] border-2 border-[#1f5c54]"></div>
+                <div className="w-[158px] h-[0px] border-2 border-[#1f5c54]"></div>
               </div>
               {/* info of card */}
               <div>
-                <h3 className="font-semibold my-2">Get Orders</h3>
+                <h3 className="font-semibold text-base my-2">Get Orders</h3>
                 <p className="text-sm">
                   Start getting orders <br /> from crores of Indians <br />{" "}
                   actively shopping on our <br /> platform.
@@ -243,11 +253,13 @@ const BecomeSeller = () => {
                 <div className="w-12 h-12 bg-[#1F5C54] rounded-full text-white text-lg flex justify-center items-center">
                   <span>4</span>
                 </div>
-                {/* <div class="w-[158px] h-[0px] border-2 border-[#1f5c54]"></div> */}
+                {/* <div className="w-[158px] h-[0px] border-2 border-[#1f5c54]"></div> */}
               </div>
               {/* info of card */}
               <div>
-                <h3 className="font-semibold my-2">Receive Payments</h3>
+                <h3 className="font-semibold text-base my-2">
+                  Receive Payments
+                </h3>
                 <p className="text-sm">
                   APayments are deposited directly <br /> to your bank account{" "}
                   <br />
@@ -260,14 +272,18 @@ const BecomeSeller = () => {
       </section>
 
       {/* bring your brand */}
-      <section className="w-full container mx-auto px-10 py-5">
+      <section className="w-full container mx-auto px-10">
         <div className="bring-your-brand w-full bg-[#7AC2AE] overflow-hidden rounded-[30px]">
-          {/* Remove the static animate-bikeSlide class and add it dynamically via the ref */}
-          <div ref={sectionRef} className="flex gap-5">
+          {/* Remove the static animate-bikeSlide className and add it dynamically via the ref */}
+          <div ref={sectionRef} className="flex gap-5 pt-16">
             <div className="w-1/3">
-              <img src="/images/launch-brand.png" alt="Bike or Brand" />
+              <img
+                src="/images/delivery-truck.png"
+                alt="Bike or Brand"
+                className="h-full w-full"
+              />
             </div>
-            <div className="w-2/3 flex flex-col gap-5 py-9 px-5 justify-center items-start font-Poppins">
+            <div className="w-2/3 flex flex-col gap-5 px-5 justify-center items-start font-Poppins">
               <h2 className="text-3xl font-bold">
                 Bring your brand on 603 Interior
               </h2>
@@ -344,9 +360,9 @@ const BecomeSeller = () => {
 
       {/* contact section */}
       <section id="contact" className="">
-        <div className="flex container mx-auto my-10 ">
+        <div className="flex container mx-auto my-10 gap-5">
           {/* img */}
-          <div className="flex-1 max-w-2xl">
+          <div className="flex-1 w-1/2">
             <img
               src="/images/becomesellercontact.png"
               className="w-full"
@@ -355,8 +371,8 @@ const BecomeSeller = () => {
           </div>
           {/* form */}
           {/* form section */}
-          <div className="flex-1">
-            <div className="px-10  rounded-3xl pb-5">
+          <div className="flex-1 w-1/2 border-2 rounded-3xl">
+            <div className="px-10  pb-5">
               {/* text */}
               <div className="font-Poppins font-semibold py-3">
                 <p className="text-sm text-[#34BFAD]">Get in Touch!</p>
@@ -366,8 +382,8 @@ const BecomeSeller = () => {
               </div>
               {/* form part */}
               <div className="font-Poppins pl-2">
-                <form action="" className="font-semibold ">
-                  <div className="mb-2 flex flex-col gap-2">
+                <form action="" className="font-semibold">
+                  <div className="mb-2 flex flex-col">
                     <label className="font-semibold ">Name*</label>
                     <input
                       type="text"

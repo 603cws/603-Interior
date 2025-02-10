@@ -65,9 +65,9 @@ function Footer() {
                 <li onClick={() => navigation("/")} className="cursor-pointer">
                   Home
                 </li>
-                <li className="cursor-pointer">Company</li>
+                {/* <li className="cursor-pointer">Company</li>
                 <li className="cursor-pointer">Brand</li>
-                <li className="cursor-pointer">Products</li>
+                <li className="cursor-pointer">Products</li> */}
                 <li className="cursor-pointer">Help & FAQ</li>
                 <li
                   className="cursor-pointer"

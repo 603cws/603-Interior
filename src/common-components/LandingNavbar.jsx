@@ -22,7 +22,7 @@ function LandingNavbar() {
         </div>
 
         {/* Desktop Menu */}
-        <div className="hidden xl:flex">
+        <div className="hidden lg:flex">
           <ul className="flex gap-8 text-[#1A3A36] font-semibold uppercase">
             <li onClick={() => navigate("/")} className="cursor-pointer">
               Home
@@ -56,7 +56,7 @@ function LandingNavbar() {
         </div>
 
         {/* Login Button (Desktop) */}
-        <div className="hidden xl:block">
+        <div className="hidden lg:block">
           {isAuthenticated ? (
             <div className="">
               <img
@@ -77,7 +77,7 @@ function LandingNavbar() {
         </div>
 
         {/* Mobile Menu Button */}
-        <div className="xl:hidden flex items-center">
+        <div className="lg:hidden flex items-center">
           <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
             {isMobileMenuOpen ? (
               <FiX className="size-7 text-[#1A3A36]" />
@@ -107,6 +107,12 @@ function LandingNavbar() {
             </li>
             <li onClick={() => navigate("/Blog")} className="cursor-pointer">
               Our Blog
+            </li>
+            <li
+              className="cursor-pointer"
+              onClick={() => navigate("/becomeseller")}
+            >
+              Collabrate
             </li>
             <li
               onClick={() => navigate("/Contactus")}
