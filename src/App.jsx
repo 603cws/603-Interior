@@ -28,6 +28,7 @@ import Dashboard from "./pages/Dashboard";
 import ScrollToTop from "./common-components/ScrollToTop";
 // import useAuthRefresh from "./Context/useAuthRefresh"; // Import the hook
 import BecomeSeller from "./pages/BecomeSeller";
+import { useApp } from "./Context/Context";
 
 // const Homepage = lazy(() => import("./pages/Homepage"));
 
@@ -38,6 +39,10 @@ const Carrer = lazy(() => import("./pages/Carrer"));
 
 function App() {
   // useAuthRefresh(); // Automatically handles user inactivity
+
+  const { accountHolder } = useApp();
+
+  const isadmin = accountHolder.role === "admin" ? true : false;
 
   return (
     <div>
@@ -68,7 +73,20 @@ function App() {
           <Route path="/Login" element={<Login />} />
           <Route path="/OurServices" element={<OurServices />} />
           <Route path="/profile" element={<ProfileCard />} />
-          <Route path="/dashboard" element={<Dashboard />} />
+          <Route
+            path="/dashboard"
+            element={
+              accountHolder?.role ? (
+                accountHolder.role === "admin" ? (
+                  <Dashboard />
+                ) : (
+                  <PageNotFound />
+                )
+              ) : (
+                <SpinnerFullPage />
+              )
+            }
+          />
           <Route path="/becomeseller" element={<BecomeSeller />} />
         </Routes>
       </Suspense>

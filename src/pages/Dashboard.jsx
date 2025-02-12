@@ -36,7 +36,7 @@ function Dashboard() {
             </div>
           </div>
           {/* others */}
-          <div className="font-semibold text-lg capitalize leading-normal tracking-wide py-7 text-[#262626]  flex flex-col gap-4">
+          <div className="font-semibold text-lg capitalize leading-normal tracking-wide py-7 text-[#262626]  flex flex-col gap-4 px-7">
             <h3 className="capitalize text-[#A1A1A1] mx-4">main</h3>
             <div className="flex items-center mx-4 gap-3 hover:bg-[#B4EAEA] cursor-pointer">
               <RiDashboardFill />

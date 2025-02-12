@@ -7,11 +7,12 @@ import { useEffect, useState } from "react";
 // import useAuthRefresh from "../../Context/useAuthRefresh";
 
 function ProfileCard() {
-  const { setIsAuthenticated } = useApp();
+  const { setIsAuthenticated, accountHolder } = useApp();
   const background = "images/profilebg.png";
   const [userEmail, setUserEmail] = useState("");
   const [companyName, setCompanyName] = useState("");
 
+  const isadmin = accountHolder.role === "admin" ? true : false;
   const navigate = useNavigate();
   //   const { signOutUser } = useAuthRefresh(); // Get signOutUser from hook
 
@@ -35,34 +36,34 @@ function ProfileCard() {
   //   navigate("/login");
   // };
 
-  useEffect(() => {
-    const fetchUserData = async () => {
-      // Retrieve the currently authenticated user
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
+  // useEffect(() => {
+  //   const fetchUserData = async () => {
+  //     // Retrieve the currently authenticated user
+  //     const {
+  //       data: { user },
+  //     } = await supabase.auth.getUser();
 
-      if (user) {
-        // Set the user's email
-        setUserEmail(user.email);
+  //     if (user) {
+  //       // Set the user's email
+  //       setUserEmail(user.email);
 
-        // Query the profiles table for the company name using the user's id
-        const { data, error } = await supabase
-          .from("profiles")
-          .select("company_name")
-          .eq("id", user.id)
-          .single();
+  //       // Query the profiles table for the company name using the user's id
+  //       const { data, error } = await supabase
+  //         .from("profiles")
+  //         .select("company_name")
+  //         .eq("id", user.id)
+  //         .single();
 
-        if (error) {
-          console.error("Error fetching profile:", error.message);
-        } else if (data) {
-          setCompanyName(data.company_name);
-        }
-      }
-    };
+  //       if (error) {
+  //         console.error("Error fetching profile:", error.message);
+  //       } else if (data) {
+  //         setCompanyName(data.company_name);
+  //       }
+  //     }
+  //   };
 
-    fetchUserData();
-  }, []);
+  //   fetchUserData();
+  // }, []);
 
   return (
     <div>
@@ -86,9 +87,11 @@ function ProfileCard() {
           <div className="flex-1 flex flex-col items-center justify-center ">
             <p className="font-semibold text-lg">
               {" "}
-              {companyName || "Company Name"}
+              {accountHolder.companyName || "Company Name"}
             </p>
-            <p className="font-sm">{userEmail || "example@gmail.com"}</p>{" "}
+            <p className="font-sm">
+              {accountHolder.email || "example@gmail.com"}
+            </p>{" "}
           </div>
         </div>
 
@@ -96,7 +99,9 @@ function ProfileCard() {
         <div className="font-semibold text-lg capitalize leading-normal tracking-wide py-7 text-[#262626] border-y-2 border-[#ccc] flex flex-col gap-4">
           <div className="flex items-center mx-4 gap-3">
             <RiDashboardFill />
-            <p>dashboard</p>
+            <button onClick={() => navigate("/dashboard")} disabled={!isadmin}>
+              dashboard
+            </button>
           </div>
           <div className="flex items-center mx-4 gap-3">
             <RiDashboardFill />

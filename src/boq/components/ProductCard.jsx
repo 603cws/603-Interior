@@ -54,7 +54,7 @@ function ProductCard({
   };
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 3xl:grid-cols-6 gap-6 pb-8 pt-3">
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 3xl:grid-cols-6 gap-6 pb-8 pt-3 px-8">
       {loading ? (
         Array.from({ length: 4 }).map((_, index) => (
           <div
@@ -74,7 +74,7 @@ function ProductCard({
           <div
             key={variant.id}
             className="w-11/12 h-full flex flex-col justify-center items-center bg-white rounded-lg shadow-md cursor-pointer my-2 px-3 
-              hover:rounded-lg-21 hover:bg-custom-gradient hover:shadow-custom transition-all duration-300"
+              hover:rounded-lg-21 hover:bg-custom-gradient hover:shadow-custom transition-all duration-300 border-2"
           >
             {/* Image with Skeleton */}
             <div className="w-full aspect-[4/3] rounded-t-lg relative">

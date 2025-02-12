@@ -31,6 +31,13 @@ export const AppProvider = ({ children }) => {
   const [subCat1, setSubCat1] = useState([]);
   const [userResponses, setUserResponses] = useState({});
   const [showProfile, setShowProfile] = useState(false);
+  const [accountHolder, setAccountHolder] = useState({
+    userId: "",
+    email: "",
+    phone: "",
+    companyName: "",
+    role: "",
+  });
 
   const prevSelectedData = useRef(selectedData); // Ref to store previous selectedData
   const prevCategories = useRef(categories); // Ref to store previous categories
@@ -103,6 +110,48 @@ export const AppProvider = ({ children }) => {
       prevSubCat1.current = subCat1;
     }
   }, [selectedData, categories, subCat1]);
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        // Retrieve the currently authenticated user
+        const {
+          data: { user },
+          error: authError,
+        } = await supabase.auth.getUser();
+
+        if (authError) throw authError;
+        if (!user) return;
+
+        // Extract user ID and email from authentication
+        const userId = user.id;
+        const userEmail = user.email;
+
+        // Query the profiles table for phone and companyName
+        const { data, error: profileError } = await supabase
+          .from("profiles")
+          .select("phone, company_name,role")
+          .eq("id", userId)
+          .single();
+
+        if (profileError) throw profileError;
+
+        // Update state with user details
+        setAccountHolder({
+          userId,
+          email: userEmail,
+          phone: profileError ? "" : data.phone || "",
+          companyName: profileError ? "" : data.company_name || "",
+          role: profileError ? "" : data.role || "",
+        });
+      } catch (error) {
+        console.error("Error fetching user data:", error.message);
+      }
+    };
+
+    fetchUserData();
+  }, []);
+  console.log("current user", accountHolder);
 
   function handleProgressBar(selectedData, categories, subCat1) {
     // Validate selectedData and categories to prevent errors
@@ -211,6 +260,7 @@ export const AppProvider = ({ children }) => {
         setShowProfile,
         isAuthenticated,
         setIsAuthenticated,
+        accountHolder,
       }}
     >
       {children}

@@ -140,3 +140,17 @@ html {
   left: 5%;
   transform: translate(-50%, -50%);
 }
+.bring-your-brand {
+  position: relative;
+  overflow: visible;
+}
+
+.horizontal-scroll {
+  display: flex;
+  will-change: transform;
+}
+
+/* Hide scrollbar for a clean UI */
+.horizontal-scroll::-webkit-scrollbar {
+  display: none;
+}

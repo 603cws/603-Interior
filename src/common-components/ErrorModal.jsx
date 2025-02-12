@@ -42,7 +42,7 @@ function ErrorModal({ onclose, message }) {
       <div className="grid grid-cols-[2fr_1fr] bg-[#1A3A36] border-2 rounded-3xl w-5/6 2xl:w-1/2 mx-auto ">
         <div className="text-white p-5 flex flex-col justify-center gap-4 m-10">
           <p className="text-4xl font-['UbuntuSans-Regular',_sans-serif]">
-            <span className="text-6xl">W</span>arning
+            <span className="text-6xl tracking-tighter">W</span>arning
           </p>
           <p style={{ fontFamily: "'Poppins', sans-serif" }}>
             <ul style={{ paddingLeft: "20px", listStyleType: "disc" }}>

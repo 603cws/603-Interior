@@ -357,7 +357,7 @@ function Login() {
   return (
     <>
       {resetPass ? (
-        <div className="flex flex-col justify-center items-center gap-5 h-screen w-full bg-login-custom-gradient">
+        <div className="flex flex-col justify-center items-center gap-5 max-h-screen w-full bg-login-custom-gradient">
           <div className="w-full sm:w-1/2 px-5 flex flex-col justify-center items-center gap-5">
             <h1 className="capitalize text-3xl font-bold text-white text-center ">
               Reset Password
@@ -425,17 +425,22 @@ function Login() {
       ) : (
         <form onSubmit={handleSubmit}>
           <div className="main flex justify-center gap-5 h-screen w-full bg-login-custom-gradient">
-            <div className="img w-1/2 p-5 flex justify-end items-center">
+            {/* <div className="img w-1/2 p-5 flex justify-end items-center"> */}
+            <div className="img flex-1 p-5 flex justify-end items-center">
               <img
                 src="images/Register.png"
                 alt=""
-                className="max-h-full h-full xl:h-auto w-full xl:w-3/4"
+                // className="max-h-full h-full xl:h-auto w-full xl:w-3/4"
+                className="xl:max-w-lg sm:max-w-sm"
               />
             </div>
             <div
-              className={`content w-1/2 max-h-full h-full flex flex-col items-start ${
+              // className={`content w-1/2 max-h-full h-full flex flex-col items-start ${
+              //   isSignUp ? "pt-10" : "pt-40"
+              // } gap-10`}
+              className={`content flex-1 max-h-full h-full flex flex-col items-start ${
                 isSignUp ? "pt-10" : "pt-40"
-              } gap-10`}
+              }   xl:gap-10`}
             >
               <div className="w-3/4">
                 <h1 className="capitalize text-3xl font-bold text-white text-center">
@@ -455,7 +460,7 @@ function Login() {
               </div>
 
               <div className="w-full flex flex-col gap-2 pr-2">
-                <div className="flex flex-col gap-3 xl:w-3/4">
+                <div className="flex flex-col gap-1 xl:gap-3 xl:w-3/4">
                   <label
                     htmlFor="email"
                     className="capitalize text-md font-semibold text-white"
@@ -525,7 +530,7 @@ function Login() {
                     {isSignUp && (
                       <>
                         <div className="flex justify-center gap-2 xl:w-3/4">
-                          <div className="flex flex-col gap-3 w-1/2">
+                          <div className="flex flex-col gap-1 xl:gap-3 w-1/2">
                             <label
                               htmlFor="company"
                               className="capitalize text-md font-semibold text-white"
@@ -542,7 +547,7 @@ function Login() {
                             />
                           </div>
 
-                          <div className="flex flex-col gap-3 w-1/2">
+                          <div className="flex flex-col gap-1 xl:gap-3 w-1/2">
                             <label
                               htmlFor="location"
                               className="capitalize text-md font-semibold text-white"
@@ -566,7 +571,7 @@ function Login() {
                           </div>
                         </div>
 
-                        <div className="xl:w-3/4 flex flex-col gap-3">
+                        <div className="xl:w-3/4 flex flex-col gap-1 xl:gap-3">
                           <label
                             htmlFor="mobile"
                             className="capitalize text-md font-semibold text-white"
@@ -594,7 +599,7 @@ function Login() {
                       </>
                     )}
 
-                    <div className="xl:w-3/4 flex flex-col gap-3 relative">
+                    <div className="xl:w-3/4 flex flex-col gap-1 xl:gap-3 relative">
                       <label
                         htmlFor="password"
                         className="capitalize text-md font-semibold text-white"
@@ -634,7 +639,7 @@ function Login() {
                     </div>
 
                     {isSignUp && (
-                      <div className="xl:w-3/4 flex flex-col gap-3 relative">
+                      <div className="xl:w-3/4 flex flex-col gap-1 xl:gap-3 relative">
                         <label
                           htmlFor="confirmPassword"
                           className="capitalize text-md font-semibold text-white"
