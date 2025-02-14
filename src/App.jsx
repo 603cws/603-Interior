@@ -32,6 +32,8 @@ import { useApp } from "./Context/Context";
 import Plans from "./common-components/Plans";
 import HelpnFaq from "./pages/HelpnFaq";
 
+import TermsAndCondition from "./pages/TermsAndCondition";
+
 // const Homepage = lazy(() => import("./pages/Homepage"));
 
 const Layout = lazy(() => import("./layout/pages/Layout"));
@@ -90,6 +92,7 @@ function App() {
           <Route path="/becomeseller" element={<BecomeSeller />} />
           <Route path="/plans" element={<Plans />} />
           <Route path="/help" element={<HelpnFaq />} />
+          <Route path="/termsNcondtion" element={<TermsAndCondition />} />
         </Routes>
       </Suspense>
     </div>

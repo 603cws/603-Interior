@@ -68,7 +68,19 @@ function Footer() {
                 {/* <li className="cursor-pointer">Company</li>
                 <li className="cursor-pointer">Brand</li>
                 <li className="cursor-pointer">Products</li> */}
-                <li className="cursor-pointer">Help & FAQ</li>
+                <li
+                  className="cursor-pointer"
+                  onClick={() => navigation("/help")}
+                >
+                  Help & FAQ
+                </li>
+                <li
+                  className="cursor-pointer"
+                  onClick={() => navigation("/termsNcondtion")}
+                >
+                  Terms N Condition
+                </li>
+
                 <li
                   className="cursor-pointer"
                   onClick={() => navigation("/becomeseller")}
