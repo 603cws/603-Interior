@@ -16,6 +16,8 @@ function Navbar({
   setBoqList,
   handleLoadBOQ,
   handleDeleteBOQ,
+  toggleProfile,
+  iconRef,
 }) {
   // const progress = 0;
   const [isOpen, setIsOpen] = useState(false);
@@ -49,9 +51,9 @@ function Navbar({
     naviagte("/");
   };
 
-  const toggleProfile = () => {
-    setShowProfile(!showProfile);
-  };
+  // const toggleProfile = () => {
+  //   setShowProfile(!showProfile);
+  // };
   return (
     <div className="navbar sticky top-0 z-20">
       <div className="flex justify-between bg-gradient-to-r from-[#1A3A36] to-[#48A095] items-center px-4 h-[50px]">
@@ -70,7 +72,7 @@ function Navbar({
           </div>
 
           {/* prfile icon */}
-          <div className="">
+          <div className="" ref={iconRef}>
             <img
               onClick={toggleProfile}
               src="/images/usericon.png"

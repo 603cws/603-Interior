@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useMemo, useRef } from "react";
 import Navbar from "../../boq/components/Navbar";
 import Categories from "./Categories";
 import {
@@ -29,12 +29,19 @@ function Boq() {
   const searchQuery = "";
   const priceRange = [1, 15000000];
 
+  const [isOpen, setIsOpen] = useState(false);
+
+  const profileRef = useRef(null);
+
+  const iconRef = useRef(null);
+
   // const [workspaces, setWorkspaces] = useState([]);
   const [roomData, setRoomData] = useState({ quantityData: [], areasData: [] });
   const [areasData, setAreasData] = useState([]);
   const [quantityData, setQuantityData] = useState([]);
 
   const [minimizedView, setMinimizedView] = useState(false);
+  // const [minimizedView, setMinimizedView] = useState(true);
   const [showProductView, setShowProductView] = useState(false);
   const [showRecommend, setShowRecommend] = useState(false);
   const [questionPopup, setQuestionPopup] = useState(false);
@@ -337,6 +344,38 @@ function Boq() {
   //       setRunTour(false); // Don't run the tour if already completed
   //     }
   //   }, []);
+
+  // Toggle profile card visibility
+  const toggleProfile = () => {
+    setIsOpen(!isOpen);
+  };
+
+  // Close profile card when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      // If clicked inside ProfileCard or on the Profile Icon, do nothing
+      if (profileRef.current && profileRef.current.contains(event.target)) {
+        return;
+      }
+
+      if (iconRef.current && iconRef.current.contains(event.target)) {
+        return;
+      }
+
+      // Otherwise, close the profile card
+      setIsOpen(false);
+    };
+
+    if (isOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isOpen]);
 
   // Filter products based on search query, price range, and category
   const filteredProducts = useMemo(() => {
@@ -1067,6 +1106,8 @@ function Boq() {
         setBoqList={setBoqList}
         handleLoadBOQ={handleLoadBOQ}
         handleDeleteBOQ={handleDeleteBOQ}
+        toggleProfile={toggleProfile}
+        iconRef={iconRef}
       />
       {questionPopup && (
         <QnaPopup
@@ -1130,7 +1171,12 @@ function Boq() {
           )}
         </div>
       )}
-      {showProfile && <ProfileCard />}
+      {/* {showProfile && <ProfileCard />} */}
+      {isOpen && (
+        <div ref={profileRef}>
+          <ProfileCard />
+        </div>
+      )}
     </div>
   );
 }

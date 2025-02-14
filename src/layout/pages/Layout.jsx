@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import Navbar from "../components/Navbar";
 import Spacebar from "../components/Spacebar";
 import TreeMap from "../pages/TreeMap";
@@ -337,9 +337,42 @@ function Layout() {
   const { totalArea, setTotalArea, totalAreaSource, showProfile } = useApp();
   const [runTour, setRunTour] = useState(false); // Controls whether the tour runs
 
+  const [isOpen, setIsOpen] = useState(false);
+
+  // const [isProfileOpen, setIsProfileOpen] = useState(false);
+
   const [areaWarn, setAreaWarn] = useState(false);
+  const profileRef = useRef(null);
+  const iconRef = useRef(null);
 
   console.log("tracking total area", totalArea);
+
+  // Close profile card when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      // If clicked inside ProfileCard or on the Profile Icon, do nothing
+      if (profileRef.current && profileRef.current.contains(event.target)) {
+        return;
+      }
+
+      if (iconRef.current && iconRef.current.contains(event.target)) {
+        return;
+      }
+
+      // Otherwise, close the profile card
+      setIsOpen(false);
+    };
+
+    if (isOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isOpen]);
 
   //setps for joyride
   const tourSteps = [
@@ -662,6 +695,11 @@ function Layout() {
     builtArea,
   };
 
+  // Toggle profile card visibility
+  const toggleProfile = () => {
+    setIsOpen(!isOpen);
+  };
+
   return (
     // <div className="max-h-lvh 2xl:overflow-y-hidden">
     <div className="max-h-lvh xl:overflow-y-hidden">
@@ -710,6 +748,8 @@ function Layout() {
           resetAll={resetAll}
           areaQuantities={areaQuantities}
           areaValues={areaValues}
+          toggleProfile={toggleProfile}
+          iconRef={iconRef}
         />
       </div>
 
@@ -796,7 +836,11 @@ function Layout() {
         <ErrorModal onclose={() => setWarning(false)} message={errorMessage} />
       )}
       {areaWarn && <EnterAreaModal onclose={() => setAreaWarn(false)} />}
-      {showProfile && <ProfileCard />}
+      {isOpen && (
+        <div ref={profileRef}>
+          <ProfileCard />
+        </div>
+      )}
 
       {/* <LayoutCard /> */}
       {/* <QnaPopup question="is the flooring project for residental purpose ?" /> */}

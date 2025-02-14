@@ -265,7 +265,7 @@ function Landing() {
               Welcome to 603 <br /> Interiors
             </h2>
 
-            <p className="text-[#212121] font-sans mb-10 text-justify">
+            <p className="text-[#212121] font-sans mb-10 text-center">
               At 603 Interiors, we believe that the right workspace can
               transform the way <br /> you work. Our expertise in designing
               functional, aesthetically pleasing, and <br /> customized office

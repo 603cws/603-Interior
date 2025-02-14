@@ -3,17 +3,20 @@ import { supabase } from "../../services/supabase";
 import { useApp } from "../../Context/Context";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useRef } from "react";
 // import useAuthRefresh from "../../Context/useAuthRefresh";
 
 function ProfileCard() {
-  const { setIsAuthenticated, accountHolder } = useApp();
-  const background = "images/profilebg.png";
-  const [userEmail, setUserEmail] = useState("");
-  const [companyName, setCompanyName] = useState("");
+  const { setIsAuthenticated, accountHolder, setAccountHolder } = useApp();
+  const profileRef = useRef(null);
 
-  const isadmin = accountHolder.role === "admin" ? true : false;
+  //   const background = "images/profilebg.png";
+  //   const [userEmail, setUserEmail] = useState("");
+  //   const [companyName, setCompanyName] = useState("");
+
+  let isadmin = accountHolder.role === "admin" ? true : false;
   const navigate = useNavigate();
+
   //   const { signOutUser } = useAuthRefresh(); // Get signOutUser from hook
 
   const handleLogout = async () => {
@@ -24,10 +27,32 @@ function ProfileCard() {
       console.log("User signed out successfully");
       toast.success("User signed out successfully");
       setIsAuthenticated(false);
-      localStorage.removeItem("usertoken");
+      isadmin = false;
+      setAccountHolder({
+        companyName: "",
+        email: "",
+        phone: "",
+        role: "",
+        userId: "",
+      });
+      console.log("hello");
       navigate("/");
     }
   };
+  //   const handleLogout = async () => {
+  //     try {
+  //       await supabase.auth.signOut();
+  //       console.log("User signed out successfully");
+  //       toast.success("User signed out successfully");
+
+  //       setIsAuthenticated(false);
+  //       localStorage.removeItem("usertoken");
+  //       console.log("hello");
+  //       navigate("/");
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   };
 
   // const handleLogout = async () => {
   //   setIsAuthenticated(false);
@@ -66,10 +91,9 @@ function ProfileCard() {
   // }, []);
 
   return (
-    <div>
+    <div ref={profileRef}>
       {/* div for card */}
       <div className="rounded-bl-[60px] rounded-tl-[60px]  shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)]  overflow-hidden max-w-sm w-full h-[calc(100vh-50px)] font-Poppins bg-[#fff] z-20 absolute right-0 top-[50px] transition-transform duration-1000 ease-in-out ">
-        {/* <div className="rounded-bl-[60px] rounded-tl-[60px]   overflow-hidden max-w-sm h-[100vh] font-Poppins"> */}
         {/* div for profile icon part */}
         <div className=" h-1/3 flex flex-col">
           <div
@@ -84,14 +108,13 @@ function ProfileCard() {
               className="w-16 h-16"
             />
           </div>
+
           <div className="flex-1 flex flex-col items-center justify-center ">
             <p className="font-semibold text-lg">
               {" "}
-              {accountHolder.companyName || "Company Name"}
+              {accountHolder.companyName}
             </p>
-            <p className="font-sm">
-              {accountHolder.email || "example@gmail.com"}
-            </p>{" "}
+            <p className="font-sm">{accountHolder.email}</p>{" "}
           </div>
         </div>
 

@@ -19,7 +19,7 @@ function Login() {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const { setUserId, setTotalArea } = useApp();
+  const { setUserId, setTotalArea, setIsAuthenticated } = useApp();
 
   const navigate = useNavigate();
 
@@ -183,7 +183,8 @@ function Login() {
     });
 
     if (error) {
-      alert(error.message);
+      // alert(error.message);
+      toast.error(error.message);
       console.error("Error logging in:", error);
       return;
     }
@@ -193,6 +194,7 @@ function Login() {
       await updateUserId(userId); // Ensure this function completes before proceeding
 
       setUserId(userId);
+      setIsAuthenticated(true);
 
       try {
         // Fetch areaId and quantityId for the logged-in user
@@ -238,7 +240,8 @@ function Login() {
       }
     }
 
-    alert("User logged in successfully!");
+    // alert("User logged in successfully!");
+    toast.success("User logged in successfully!");
     console.log("User logged in successfully:", data);
   };
 

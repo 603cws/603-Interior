@@ -6,7 +6,10 @@ function LandingNavbar({ bgColor = false }) {
   const navigate = useNavigate();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  const { setShowProfile, showProfile, isAuthenticated } = useApp();
+  const { setShowProfile, showProfile, isAuthenticated, accountHolder } =
+    useApp();
+
+  const isadmin = accountHolder.role === "admin" ? true : false;
 
   const toggleProfile = () => {
     setShowProfile(!showProfile);
@@ -60,14 +63,18 @@ function LandingNavbar({ bgColor = false }) {
         {/* Login Button (Desktop) */}
         <div className="hidden lg:block">
           {isAuthenticated ? (
-            <div className="">
+            <button
+              className=""
+              onClick={() => navigate("/dashboard")}
+              disabled={!isadmin}
+            >
               <img
                 onClick={toggleProfile}
                 src="/images/usericon.png"
                 alt="usericon"
                 className="w-12 h-12 cursor-pointer"
               />
-            </div>
+            </button>
           ) : (
             <button
               onClick={() => navigate("/Login")}

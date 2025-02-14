@@ -38,6 +38,7 @@ export const AppProvider = ({ children }) => {
     companyName: "",
     role: "",
   });
+  // const [accountHolder, setAccountHolder] = useState(null);
 
   const prevSelectedData = useRef(selectedData); // Ref to store previous selectedData
   const prevCategories = useRef(categories); // Ref to store previous categories
@@ -61,7 +62,7 @@ export const AppProvider = ({ children }) => {
 
   useEffect(() => {
     console.log("Progress: ", progress);
-  }, []);
+  }, [progress]);
 
   useEffect(() => {
     console.log("userId: ", userId);
@@ -114,43 +115,53 @@ export const AppProvider = ({ children }) => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        // Retrieve the currently authenticated user
-        const {
-          data: { user },
-          error: authError,
-        } = await supabase.auth.getUser();
+        if (isAuthenticated) {
+          // Retrieve the currently authenticated user
+          const {
+            data: { user },
+            error: authError,
+          } = await supabase.auth.getUser();
 
-        if (authError) throw authError;
-        if (!user) return;
+          if (authError) throw authError;
+          if (!user) return;
 
-        // Extract user ID and email from authentication
-        const userId = user.id;
-        const userEmail = user.email;
+          // Extract user ID and email from authentication
+          const userId = user.id;
+          const userEmail = user.email;
 
-        // Query the profiles table for phone and companyName
-        const { data, error: profileError } = await supabase
-          .from("profiles")
-          .select("phone, company_name,role")
-          .eq("id", userId)
-          .single();
+          // Query the profiles table for phone and companyName
+          const { data, error: profileError } = await supabase
+            .from("profiles")
+            .select("phone, company_name,role")
+            .eq("id", userId)
+            .single();
 
-        if (profileError) throw profileError;
+          if (profileError) throw profileError;
 
-        // Update state with user details
-        setAccountHolder({
-          userId,
-          email: userEmail,
-          phone: profileError ? "" : data.phone || "",
-          companyName: profileError ? "" : data.company_name || "",
-          role: profileError ? "" : data.role || "",
-        });
+          // Update state with user details
+          // setAccountHolder({
+          //   userId,
+          //   email: userEmail,
+          //   phone: profileError ? "" : data.phone || "",
+          //   companyName: profileError ? "" : data.company_name || "",
+          //   role: profileError ? "" : data.role || "",
+          // });
+          // Update state with user details
+          setAccountHolder({
+            userId,
+            email: userEmail,
+            phone: data.phone || "",
+            companyName: data.company_name || "",
+            role: data.role || "",
+          });
+        }
       } catch (error) {
         console.error("Error fetching user data:", error.message);
       }
     };
 
     fetchUserData();
-  }, []);
+  }, [isAuthenticated]);
   console.log("current user", accountHolder);
 
   function handleProgressBar(selectedData, categories, subCat1) {
@@ -261,6 +272,7 @@ export const AppProvider = ({ children }) => {
         isAuthenticated,
         setIsAuthenticated,
         accountHolder,
+        setAccountHolder,
       }}
     >
       {children}

@@ -6,12 +6,24 @@ import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import Typewriter from "typewriter-effect";
 import { supabase } from "../../services/supabase";
+import { useRef, useEffect } from "react";
 
 // import ErrorModal from "../../components/ErrorModal";
 
 // function Navbar({ totalArea, setTotalArea, MIN_AREA, MAX_AREA, resetAll }) {
-function Navbar({ MIN_AREA, MAX_AREA, resetAll, areaQuantities, areaValues }) {
+function Navbar({
+  MIN_AREA,
+  MAX_AREA,
+  resetAll,
+  areaQuantities,
+  areaValues,
+  toggleProfile,
+  iconRef,
+}) {
   const [error, setError] = useState(false);
+
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { isAuthenticated } = useApp();
 
   const {
     setTotalArea,
@@ -129,45 +141,91 @@ function Navbar({ MIN_AREA, MAX_AREA, resetAll, areaQuantities, areaValues }) {
   };
 
   const handlegenrateboq = async () => {
-    if (!totalArea) {
-      toast.error("Enter the Area");
-    }
-    if (totalArea) {
-      const layoutDta = mapAreaValues(
-        userId,
-        areaValues,
-        areaQuantities,
-        totalArea
-      );
-      console.log("layoutDta", layoutDta);
-
-      // Insert into tables
-      const { data: data, error: error } = await supabase
-        .from("layout")
-        .insert([layoutDta])
-        .select("id")
-        .single();
-
-      if (error) {
-        console.error("Error inserting into layout:", error.message);
+    try {
+      setIsSubmitting(true);
+      if (!totalArea) {
+        toast.error("Enter the Area");
       }
+      if (totalArea) {
+        const layoutDta = mapAreaValues(
+          userId,
+          areaValues,
+          areaQuantities,
+          totalArea
+        );
 
-      console.log("layout Data:", data);
+        console.log("layoutDta", layoutDta);
 
-      if (!userId) {
-        navigate("/Login", {
-          state: {
-            totalArea: totalArea,
-            areaValues: areaValues,
-            areaQuantities: areaQuantities,
-            layoutId: data.id,
-          },
-        });
-      } else {
-        navigate("/boq");
+        // Insert into tables
+        const { data: data, error: error } = await supabase
+          .from("layout")
+          .insert([layoutDta])
+          .select("id")
+          .single();
+
+        if (error) {
+          console.error("Error inserting into layout:", error.message);
+        }
+
+        console.log("layout Data:", data);
+
+        if (!userId) {
+          navigate("/Login", {
+            state: {
+              totalArea: totalArea,
+              areaValues: areaValues,
+              areaQuantities: areaQuantities,
+              layoutId: data.id,
+            },
+          });
+        } else {
+          navigate("/boq");
+        }
       }
+    } finally {
+      setIsSubmitting(false);
     }
   };
+  // const handlegenrateboq = async () => {
+  //   if (!totalArea) {
+  //     toast.error("Enter the Area");
+  //   }
+  //   if (totalArea) {
+  //     const layoutDta = mapAreaValues(
+  //       userId,
+  //       areaValues,
+  //       areaQuantities,
+  //       totalArea
+  //     );
+  //     console.log("layoutDta", layoutDta);
+
+  //     // Insert into tables
+  //     const { data: data, error: error } = await supabase
+  //       .from("layout")
+  //       .insert([layoutDta])
+  //       .select("id")
+  //       .single();
+
+  //     if (error) {
+  //       console.error("Error inserting into layout:", error.message);
+  //     }
+
+  //     console.log("layout Data:", data);
+
+  //     if (!userId) {
+  //       navigate("/Login", {
+  //         state: {
+  //           totalArea: totalArea,
+  //           areaValues: areaValues,
+  //           areaQuantities: areaQuantities,
+  //           layoutId: data.id,
+  //         },
+  //       });
+  //     } else {
+  //       navigate("/boq");
+  //     }
+  //   }
+  // };
 
   // const handlegenrateboq = async () => {
   //   if (!totalArea) {
@@ -272,9 +330,9 @@ function Navbar({ MIN_AREA, MAX_AREA, resetAll, areaQuantities, areaValues }) {
     resetAll(); // Call the resetAll function passed from the parent component
   };
 
-  const toggleProfile = () => {
-    setShowProfile(!showProfile);
-  };
+  // const toggleProfile = () => {
+  //   setShowProfile(!showProfile);
+  // };
 
   return (
     <div>
@@ -343,18 +401,55 @@ function Navbar({ MIN_AREA, MAX_AREA, resetAll, areaQuantities, areaValues }) {
         )}
         {/* button for generate boq */}
         {/* <div> */}
-        <button
+        {/* <button
           className="generateBoq bg-[#1A3A36] mt-2 rounded-3xl text-sm py-2 px-5 text-white mb-2 border-2 border-[#34BFAD]"
           onClick={handlegenrateboq}
         >
           Generate BOQ
+        </button> */}
+        <button
+          className="generateBoq bg-[#1A3A36] mt-2 rounded-3xl text-sm py-2 px-5 text-white mb-2 border-2 border-[#34BFAD]"
+          onClick={handlegenrateboq}
+          disabled={isSubmitting}
+        >
+          {isSubmitting ? (
+            <div className="spinner flex justify-center items-center">
+              <svg
+                className="animate-spin h-5 w-5 text-white"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  className="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  strokeWidth="4"
+                ></circle>
+                <path
+                  className="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8v8h8a8 8 0 01-8 8V12H4z"
+                ></path>
+              </svg>
+            </div>
+          ) : (
+            "Generate BOQ"
+          )}
         </button>
-        <img
-          onClick={toggleProfile}
-          src="/images/usericon.png"
-          alt="usericon"
-          className="w-12 h-12 cursor-pointer"
-        />
+        {isAuthenticated && (
+          <button ref={iconRef}>
+            <img
+              onClick={toggleProfile}
+              src="/images/usericon.png"
+              alt="usericon"
+              className="w-12 h-12 cursor-pointer"
+            />
+          </button>
+        )}
+
         {/* </div> */}
       </div>
       {/* {warning && <ErrorModal onclose={()=>setWarning(false)} />} */}

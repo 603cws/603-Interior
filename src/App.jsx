@@ -29,6 +29,8 @@ import ScrollToTop from "./common-components/ScrollToTop";
 // import useAuthRefresh from "./Context/useAuthRefresh"; // Import the hook
 import BecomeSeller from "./pages/BecomeSeller";
 import { useApp } from "./Context/Context";
+import Plans from "./common-components/Plans";
+import HelpnFaq from "./pages/HelpnFaq";
 
 // const Homepage = lazy(() => import("./pages/Homepage"));
 
@@ -41,8 +43,6 @@ function App() {
   // useAuthRefresh(); // Automatically handles user inactivity
 
   const { accountHolder } = useApp();
-
-  const isadmin = accountHolder.role === "admin" ? true : false;
 
   return (
     <div>
@@ -88,6 +88,8 @@ function App() {
             }
           />
           <Route path="/becomeseller" element={<BecomeSeller />} />
+          <Route path="/plans" element={<Plans />} />
+          <Route path="/help" element={<HelpnFaq />} />
         </Routes>
       </Suspense>
     </div>
