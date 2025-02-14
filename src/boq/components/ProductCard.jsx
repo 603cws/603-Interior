@@ -40,12 +40,10 @@ function ProductCard({
   // If the plan is "Custom", show all variants. Otherwise, only show variants whose segment matches the selected plan.
   const filteredVariants = filteredProducts.filter((variant) => {
     if (selectedPlan === "Custom") return true;
-    // If you use "Executive" in the UI but store "Exclusive" in the DB, map accordingly.
-    let requiredSegment =
-      selectedPlan === "Executive" ? "Exclusive" : selectedPlan;
+
     return (
       variant.segment &&
-      variant.segment.toLowerCase() === requiredSegment.toLowerCase()
+      variant.segment.toLowerCase() === selectedPlan.toLowerCase()
     );
   });
 
