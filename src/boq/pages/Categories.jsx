@@ -71,7 +71,7 @@ const Categories = ({
     // Categories where we need to check subcategories
     const specialCategories = [
       "furniture",
-      "civil/plumbing",
+      "civil / plumbing",
       "lux",
       "smart solutions",
       "paint",
@@ -138,7 +138,7 @@ const Categories = ({
   console.log("categories", categories);
   return (
     <>
-      <div className="flex flex-col pb-3">
+      <div className="categories flex flex-col pb-3">
         {/* Categories List */}
         <div className="cat flex justify-evenly overflow-x-auto gap-3 px-5 pb-2 scrollbar-hide">
           {categories.map(({ id, category, subcategories }) => {

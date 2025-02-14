@@ -1,5 +1,7 @@
 import { motion } from "motion/react";
+import { useApp } from "../Context/Context";
 function Plans() {
+  const { setSelectedPlan } = useApp();
   return (
     <div className="container mx-auto my-5 ">
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 capitalize">
@@ -41,7 +43,7 @@ function Plans() {
             </ul>
 
             <div className=" w-full flex justify-end items-end  px-3 mt-10">
-              <button className="">
+              <button onClick={() => setSelectedPlan("Custom")} className="">
                 <img src="/images/blogicon.svg" alt="" />
               </button>
             </div>
@@ -75,7 +77,7 @@ function Plans() {
             </ul>
 
             <div className=" w-full flex justify-end items-end  px-3 mt-10">
-              <button className="">
+              <button onClick={() => setSelectedPlan("Minimal")} className="">
                 <img src="/images/blogicon.svg" alt="" />
               </button>
             </div>
@@ -85,10 +87,10 @@ function Plans() {
         <div className="max-w-sm relative font-Poppins group overflow-hidden">
           <img src="/images/plan1.png" alt="plan" />
           <h2 className="absolute z-10 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 font-medium text-xl text-[#fff] group-hover:hidden">
-            Executive
+            Exclusive
           </h2>
           <div className="absolute top-full left-0 w-full h-full bg-black bg-opacity-70 text-white p-4 text-center transition-all duration-500 ease-out group-hover:top-0 flex flex-col justify-center items-center">
-            <h3 className=" mb-3 font-bold text-3xl">Executive</h3>
+            <h3 className=" mb-3 font-bold text-3xl">Exclusive</h3>
             <ul className="font-medium  text-sm list-disc list-inside space-y-2 ">
               <li className="flex justify-center items-center gap-3">
                 <img src="/images/Check_ring.png" alt="" />
@@ -109,7 +111,7 @@ function Plans() {
             </ul>
 
             <div className=" w-full flex justify-end items-end  px-3 mt-10">
-              <button className="">
+              <button onClick={() => setSelectedPlan("Exclusive")} className="">
                 <img src="/images/blogicon.svg" alt="" />
               </button>
             </div>
@@ -143,7 +145,7 @@ function Plans() {
             </ul>
 
             <div className=" w-full flex justify-end items-end  px-3 mt-10">
-              <button className="">
+              <button onClick={() => setSelectedPlan("Luxury")} className="">
                 <img src="/images/blogicon.svg" alt="" />
               </button>
             </div>

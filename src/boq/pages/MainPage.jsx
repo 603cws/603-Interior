@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useApp } from "../../Context/Context";
 
-const MainPage = ({ userResponses, setSelectedSubCategory1 }) => {
+const MainPage = ({ userResponses, setSelectedSubCategory1, productsData }) => {
   const {
     selectedCategory,
     selectedSubCategory1,
@@ -62,9 +62,11 @@ const MainPage = ({ userResponses, setSelectedSubCategory1 }) => {
         : subCat1[selectedCategory.category] // No filter logic for other categories
       : [];
 
+  console.log("all products", productsData);
+
   return (
     // subcategory1 (table,chair)
-    <div className="flex flex-row gap-2 items-center justify-start relative overflow-hidden px-8 font-Poppins">
+    <div className="main-page flex flex-row gap-2 items-center justify-start relative overflow-hidden px-8 font-Poppins">
       {selectedSubCategories && selectedSubCategories.length > 0 ? (
         selectedSubCategories.map((subCategory1, index) => (
           <div

@@ -39,6 +39,7 @@ export const AppProvider = ({ children }) => {
     role: "",
   });
   // const [accountHolder, setAccountHolder] = useState(null);
+  const [selectedPlan, setSelectedPlan] = useState(null);
 
   const prevSelectedData = useRef(selectedData); // Ref to store previous selectedData
   const prevCategories = useRef(categories); // Ref to store previous categories
@@ -273,6 +274,8 @@ export const AppProvider = ({ children }) => {
         setIsAuthenticated,
         accountHolder,
         setAccountHolder,
+        selectedPlan,
+        setSelectedPlan,
       }}
     >
       {children}

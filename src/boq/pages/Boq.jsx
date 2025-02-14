@@ -20,7 +20,7 @@ import Joyride, { STATUS } from "react-joyride";
 import { supabase } from "../../services/supabase";
 import toast from "react-hot-toast";
 import ProfileCard from "../components/ProfileCard";
-
+import Plans from "../../common-components/Plans";
 function Boq() {
   const [selectedProductView, setSelectedProductView] = useState([]);
   const [productsData, setProductData] = useState([]);
@@ -46,6 +46,7 @@ function Boq() {
   const [showRecommend, setShowRecommend] = useState(false);
   const [questionPopup, setQuestionPopup] = useState(false);
   const [boqList, setBoqList] = useState([]);
+  // const [selectedPlan, setSelectedPlan] = useState(null);
 
   const {
     selectedCategory,
@@ -75,6 +76,7 @@ function Boq() {
     setUserResponses,
     showProfile,
     setShowProfile,
+    selectedPlan,
   } = useApp();
 
   // useEffect(() => {
@@ -1065,6 +1067,7 @@ function Boq() {
   };
 
   console.log("selected products", selectedData);
+  console.log("selected plan", selectedPlan);
 
   return (
     <div>
@@ -1109,7 +1112,7 @@ function Boq() {
         toggleProfile={toggleProfile}
         iconRef={iconRef}
       />
-      {questionPopup && (
+      {/* {questionPopup && (
         <QnaPopup
           onClose={() => setQuestionPopup(false)}
           category={selectedCategory}
@@ -1133,6 +1136,7 @@ function Boq() {
               <MainPage
                 setSelectedSubCategory1={handleSelectedSubCategory1}
                 userResponses={userResponses}
+                productsData={productsData}
               />
               <ProductCard
                 products={groupedProducts}
@@ -1144,7 +1148,53 @@ function Boq() {
             </div>
           )}
         </div>
-      )}
+      )} */}
+      <div className="px-5">
+        {!selectedPlan ? (
+          <Plans />
+        ) : (
+          <>
+            {questionPopup && (
+              <QnaPopup
+                onClose={() => setQuestionPopup(false)}
+                category={selectedCategory}
+                onSubmit={handleQuestionSubmit}
+              />
+            )}
+
+            {!showProductView && (
+              <>
+                <Categories
+                  categories={categories}
+                  setSelectedCategory={handleCategorySelection}
+                  setSelectedSubCategory={handleSelectedSubCategory}
+                  minimizedView={minimizedView}
+                  handleCategoryClick={handleCategoryClick}
+                  userResponses={userResponses}
+                  quantityData={quantityData}
+                />
+                {minimizedView && (
+                  <div>
+                    <MainPage
+                      setSelectedSubCategory1={handleSelectedSubCategory1}
+                      userResponses={userResponses}
+                      productsData={productsData}
+                    />
+                    <ProductCard
+                      products={groupedProducts}
+                      selectedProductView={selectedProductView}
+                      setShowProductView={setShowProductView}
+                      setSelectedProductView={handleSelectedProductView}
+                      userResponses={userResponses}
+                    />
+                  </div>
+                )}
+              </>
+            )}
+          </>
+        )}
+      </div>
+
       {showProductView && (
         <div>
           <ProductOverview

@@ -181,7 +181,7 @@ function ProductOverview({
     // grid
     <>
       <div
-        className={`grid grid-cols-2 p-5 gap-1 ${
+        className={`product-overview grid grid-cols-2 p-5 gap-1 ${
           showSelectArea ? "opacity-50 pointer-events-none" : "opacity-100"
         }`}
       >
@@ -220,7 +220,7 @@ function ProductOverview({
               src={hoveredImage || selectedProductView.image}
               // width={600}
               // height={600}
-              className="object-fit h-5/6"
+              className="object-fit h-96"
               alt={selectedProductView.title}
             />
           </div>
