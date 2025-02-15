@@ -110,6 +110,29 @@ const QnaPopup = ({ onClose, onSubmit, category }) => {
       setQuestions(flooringQuestions);
     }
   };
+  // const handleInputChange = (e) => {
+  //   const { name, value } = e.target;
+  //   const updatedAnswers = { ...answers, [name]: value };
+  //   console.log(updatedAnswers);
+
+  //   setAnswers(updatedAnswers);
+  //   localStorage.setItem("answers", JSON.stringify(updatedAnswers));
+
+  //   // If flooringStatus is selected, check for the demolishTile question
+  //   if (questions.length < 2) {
+  //     if (name === "flooringStatus" && value === "basicTiling") {
+  //       setQuestions((prevQuestions) => [
+  //         ...prevQuestions,
+  //         ...demolishTileQuestion, // Add demolish tile question if Basic Tiling is selected
+  //       ]);
+  //     }
+  //   }
+
+  //   //set the question array to default question 1st if value is bareshell
+  //   if (name === "flooringStatus" && value === "bareShell") {
+  //     setQuestions(flooringQuestions);
+  //   }
+  // };
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
@@ -126,7 +149,7 @@ const QnaPopup = ({ onClose, onSubmit, category }) => {
     } else {
       const finalAnswers = {
         ...answers,
-        roomHeight: answers.roomHeight || "10",
+        roomHeight: answers.roomHeight || 10,
       };
       setAnimationClass("animate__fadeOutUp");
       setTimeout(() => {

@@ -169,6 +169,11 @@ function Navbar({
 
         console.log("layout Data:", data);
 
+        if (data) {
+          const currentLayoutID = data.id;
+          localStorage.setItem("currentLayoutID", currentLayoutID);
+        }
+
         if (!userId) {
           navigate("/Login", {
             state: {

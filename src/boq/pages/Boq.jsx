@@ -637,6 +637,9 @@ function Boq() {
       grandTotal += 150 * totalArea;
     }
 
+    console.log("from grandtotal", grandTotal);
+    console.log("from grandtotal area", totalArea);
+
     return grandTotal;
   };
 

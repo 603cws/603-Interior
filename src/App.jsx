@@ -46,7 +46,7 @@ const Carrer = lazy(() => import("./pages/Carrer"));
 function App() {
   // useAuthRefresh(); // Automatically handles user inactivity
 
-  const { accountHolder } = useApp();
+  const { accountHolder, isAuthenticated } = useApp();
 
   return (
     <div>
@@ -54,49 +54,70 @@ function App() {
       {/* <Layout /> */}
       {/* <Boq /> */}
       <Suspense fallback={<SpinnerFullPage />}>
-        <Routes>
-          <Route path="/" element={<Landing />} />
-          <Route path="/Layout" element={<Layout />} />
-          <Route path="/RegisterUser" element={<RegisterUser />} />
-          <Route path="/boq" element={<Boq />} />
-          <Route path="/Error" element={<ErrorModal />} />
-          <Route path="/ProductCard" element={<ProductCard />} />
-          <Route path="/ProductOverview" element={<ProductOverview />} />
-          <Route path="/Addon" element={<Addon />} />
-          <Route path="/Recommend" element={<RecommendComp />} />
-          <Route path="/selectArea" element={<SelectArea />} />
-          <Route path="/spinner" element={<SpinnerFullPage />} />
-          <Route path="/Contactus" element={<Contactus />} />
-          <Route path="/Aboutus" element={<AboutUs />} />
-          <Route path="/Blog" element={<BlogPage />} />
-          <Route path="/Blog/:title" element={<BlogDetail />} />
-          <Route path="/Career" element={<Carrer />} />
-          <Route path="*" element={<PageNotFound />} />
-          <Route path="/NumberAnimation" element={<NumberAnimation />} />
-          <Route path="/JobCard" element={<JobCard />} />
-          <Route path="/Login" element={<Login />} />
-          <Route path="/OurServices" element={<OurServices />} />
-          <Route path="/profile" element={<ProfileCard />} />
-          <Route
-            path="/dashboard"
-            element={
-              accountHolder?.role ? (
-                accountHolder.role === "admin" ? (
-                  <Dashboard />
+        {isAuthenticated ? (
+          <Routes>
+            <Route path="/" element={<Landing />} />
+            <Route path="/Layout" element={<Layout />} />
+            <Route path="/RegisterUser" element={<RegisterUser />} />
+            <Route path="/boq" element={<Boq />} />
+            <Route path="/Error" element={<ErrorModal />} />
+            <Route path="/ProductCard" element={<ProductCard />} />
+            <Route path="/ProductOverview" element={<ProductOverview />} />
+            <Route path="/Addon" element={<Addon />} />
+            <Route path="/Recommend" element={<RecommendComp />} />
+            <Route path="/selectArea" element={<SelectArea />} />
+            <Route path="/spinner" element={<SpinnerFullPage />} />
+            <Route path="/Contactus" element={<Contactus />} />
+            <Route path="/Aboutus" element={<AboutUs />} />
+            <Route path="/Blog" element={<BlogPage />} />
+            <Route path="/Blog/:title" element={<BlogDetail />} />
+            <Route path="/Career" element={<Carrer />} />
+            <Route path="*" element={<PageNotFound />} />
+            <Route path="/NumberAnimation" element={<NumberAnimation />} />
+            <Route path="/JobCard" element={<JobCard />} />
+            <Route path="/Login" element={<Login />} />
+            <Route path="/OurServices" element={<OurServices />} />
+            <Route path="/profile" element={<ProfileCard />} />
+            <Route
+              path="/dashboard"
+              element={
+                accountHolder?.role ? (
+                  accountHolder.role === "admin" ? (
+                    <Dashboard />
+                  ) : (
+                    <PageNotFound />
+                  )
                 ) : (
-                  <PageNotFound />
+                  <SpinnerFullPage />
                 )
-              ) : (
-                <SpinnerFullPage />
-              )
-            }
-          />
-          <Route path="/becomeseller" element={<BecomeSeller />} />
-          <Route path="/plans" element={<Plans />} />
-          <Route path="/help" element={<HelpnFaq />} />
-          <Route path="/termsNcondtion" element={<TermsAndCondition />} />
-          <Route path="/boqcompleted" element={<Boqcompleted />} />
-        </Routes>
+              }
+            />
+            <Route path="/becomeseller" element={<BecomeSeller />} />
+            <Route path="/plans" element={<Plans />} />
+            <Route path="/help" element={<HelpnFaq />} />
+            <Route path="/termsNcondtion" element={<TermsAndCondition />} />
+            <Route path="/boqcompleted" element={<Boqcompleted />} />
+          </Routes>
+        ) : (
+          <Routes>
+            <Route path="/" element={<Landing />} />
+            <Route path="/Layout" element={<Layout />} />
+            <Route path="/RegisterUser" element={<RegisterUser />} />
+            <Route path="/Error" element={<ErrorModal />} />
+            <Route path="/Contactus" element={<Contactus />} />
+            <Route path="/Aboutus" element={<AboutUs />} />
+            <Route path="/Blog" element={<BlogPage />} />
+            <Route path="/Blog/:title" element={<BlogDetail />} />
+            <Route path="/Career" element={<Carrer />} />
+            <Route path="*" element={<PageNotFound />} />
+            <Route path="/Login" element={<Login />} />
+            <Route path="/OurServices" element={<OurServices />} />
+            <Route path="/profile" element={<ProfileCard />} />
+            <Route path="/becomeseller" element={<BecomeSeller />} />
+            <Route path="/help" element={<HelpnFaq />} />
+            <Route path="/termsNcondtion" element={<TermsAndCondition />} />
+          </Routes>
+        )}
       </Suspense>
     </div>
   );

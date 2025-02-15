@@ -123,10 +123,15 @@ function Login() {
   const updateUserId = async (userId) => {
     try {
       // Update userId in the 'areas' table
-      const { error: error } = await supabase
+      const { data: data, error: error } = await supabase
         .from("layout")
         .update({ userId })
         .eq("id", layoutId);
+
+      if (data) {
+        const currentLayoutID = data.id;
+        localStorage.setItem("currentLayoutID", currentLayoutID);
+      }
 
       if (error) {
         throw new Error(`Error updating layout table: ${error.message}`);

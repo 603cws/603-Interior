@@ -48,6 +48,31 @@ export const AppProvider = ({ children }) => {
   // auth
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
+  // get the totalarea based on current layout id
+  useEffect(() => {
+    const currentLayoutID = localStorage.getItem("currentLayoutID");
+
+    const fetchdata = async () => {
+      try {
+        if (currentLayoutID) {
+          // get the layout details from the supabase
+          const { data, error } = await supabase
+            .from("layout")
+            .select()
+            .eq("id", currentLayoutID); // Filter by userId
+
+          console.log("layout details from context ", data);
+          setTotalArea(data[0].totalArea);
+          console.log(totalArea);
+
+          if (error) throw error;
+        }
+      } catch (error) {}
+    };
+
+    fetchdata();
+  }, []);
+
   useEffect(() => {
     var temp = JSON.parse(localStorage.getItem("selectedData"));
     setSelectedData(temp);

@@ -51,6 +51,8 @@ function Navbar({
     naviagte("/");
   };
 
+  console.log("total", calculateGrandTotal().toLocaleString("en-IN"));
+
   // const toggleProfile = () => {
   //   setShowProfile(!showProfile);
   // };
