@@ -165,17 +165,15 @@ function HelpnFaq() {
   return (
     <div className="font-Poppins">
       {/* hero section */}
-      <section className="">
-        <div className="p-4">
-          <div className="bg-[#A9D3CE] h-[80vh]  rounded-3xl flex flex-col ">
-            {/* Navbar Section */}
-            <header className="relative">
+      {/* <section className="h-screen p-4">
+        <div className=" bg-[#A9D3CE] h-full  rounded-3xl">
+          <div className="flex flex-col h-full">
+            <div className="relative">
               <LandingNavbar />
-            </header>
+            </div>
 
-            {/* content */}
-            <div className="flex-1 flex justify-around items-center">
-              <div className="self-end flex flex-col text-[#1F5C54] font-extrabold gap-4 mb-10">
+            <div className="flex-1 flex justify-between items-center">
+              <div className="self-end flex flex-col text-[#1F5C54] font-extrabold">
                 <h2 className="tracking-wide text-3xl">
                   Looking for help? Here are our <br /> most frequently asked
                   questions.
@@ -186,13 +184,56 @@ function HelpnFaq() {
                   click ‘I’ve got a question’ or ‘Chat to our team’!
                 </p>
               </div>
-              <div>
+              <div className="relative">
                 <img src="/images/helpimg.png" alt="help" />
+                <span className="capitalize bg-[#54DED3] px-5 py-3 rounded-3xl absolute top-1/4 animate-message1">
+                  what is 603 interiors?
+                </span>{" "}
+                <span className="capitalize bg-[#54DED3] px-5 py-3 rounded-3xl absolute top-1/3 right-0 animate-message2">
+                  what is 603 interiors?
+                </span>{" "}
+                <span className="capitalize bg-[#54DED3] px-5 py-3 rounded-3xl absolute top-3/4 -left-10 animate-message3">
+                  what is 603 interiors?
+                </span>
               </div>
             </div>
           </div>
         </div>
+      </section> */}
+
+      <section className="w-full h-screen p-5">
+        <div className="bg-[#A9D3CE] h-full rounded-3xl">
+          <div className="relative">
+            <LandingNavbar />
+          </div>
+          <div className="flex-1 flex justify-between items-center h-full">
+            <div className="flex-1 flex flex-col gap-8 mx-20 mt-24 font-extrabold text-[#1F5C54] font-lato">
+              <h1 className=" text-4xl">
+                Looking for help? Here are our <br /> most frequently asked
+                questions.
+              </h1>
+              <p className="text-base">
+                Everything you need to know about 603 Interiors. Can’t find the
+                answer to a question <br /> you have? No worries, just click
+                ‘I’ve got a question’ or ‘Chat to our team’!
+              </p>
+            </div>
+            <div className="flex-1 h-full flex justify-end items-end relative">
+              <img src="/images/helpimg.png" alt="" className="max-h-full" />
+              <span className="px-5 py-3 rounded-3xl bg-[#54DED3] text-xs font-lora font-bold absolute top-1/2 left-10 animate-message1">
+                What is 603 Interiors?
+              </span>
+              <span className="px-5 py-3 rounded-3xl bg-[#54DED3] text-xs font-lora font-bold absolute top-1/4 left-1/4 animate-message3">
+                What is 603 Interiors?
+              </span>
+              <span className="px-5 py-3 rounded-3xl bg-[#54DED3] text-xs font-lora font-bold absolute bottom-1/2 right-1 animate-message2">
+                What is 603 Interiors?
+              </span>
+            </div>
+          </div>
+        </div>
       </section>
+
       {/* section for the image */}
       <section className="hidden sm:block">
         <div className="font-medium capitalize grid grid-cols-5 my-12 gap-3 container mx-auto">

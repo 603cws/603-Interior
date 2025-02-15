@@ -57,12 +57,27 @@ export default {
           "0%": { transform: "translateX(100%)" },
           "100%": { transform: "translateX(0)" },
         },
+        message1: {
+          "0%": { transform: "translateX(-100%)", opacity: "0" },
+          "100%": { transform: "translateX(0)", opacity: "100%" },
+        },
+        message2: {
+          "0%": { transform: "translateY(100%)", opacity: "0" },
+          "100%": { transform: "translateY(0)", opacity: "100%" },
+        },
+        message3: {
+          "0%": { transform: "translateY(-100%)", opacity: "0" },
+          "100%": { transform: "translateY(0)", opacity: "100%" },
+        },
       },
       animation: {
         blink: "blink 1s infinite",
         blink: "blink 1s ease-in-out 2",
         "fade-in": "fadeIn 0.7s ease-in-out",
         bikeSlide: "bikeSlide 4s ease-out forwards",
+        message1: "message1 3s ease-in-out ",
+        message3: "message3 3s ease-in-out ",
+        message2: "message2 3s ease-in-out ",
       },
       screens: {
         "3xl": "1800px",
