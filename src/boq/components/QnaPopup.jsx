@@ -10,7 +10,7 @@ const QnaPopup = ({ onClose, onSubmit, category }) => {
       name: "roomHeight",
       label: "Enter the height of the room (in feet). Default is 10ft.",
       isNumberInput: true,
-      ImageUrl: "/images/Chat-bot.gif",
+      ImageUrl: "/images/flooringimg.png",
     },
   ];
 

@@ -34,6 +34,8 @@ import HelpnFaq from "./pages/HelpnFaq";
 
 import TermsAndCondition from "./pages/TermsAndCondition";
 
+import Boqcompleted from "./common-components/Boqcompleted";
+
 // const Homepage = lazy(() => import("./pages/Homepage"));
 
 const Layout = lazy(() => import("./layout/pages/Layout"));
@@ -93,6 +95,7 @@ function App() {
           <Route path="/plans" element={<Plans />} />
           <Route path="/help" element={<HelpnFaq />} />
           <Route path="/termsNcondtion" element={<TermsAndCondition />} />
+          <Route path="/boqcompleted" element={<Boqcompleted />} />
         </Routes>
       </Suspense>
     </div>

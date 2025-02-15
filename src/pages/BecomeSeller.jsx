@@ -275,10 +275,15 @@ const BecomeSeller = () => {
       <section className="w-full container mx-auto px-10">
         <div className="bring-your-brand w-full bg-[#7AC2AE] overflow-hidden rounded-[30px]">
           {/* Remove the static animate-bikeSlide className and add it dynamically via the ref */}
-          <div ref={sectionRef} className="flex gap-5 pt-16">
+          <div ref={sectionRef} className="flex gap-5 pt-16 px-4">
             <div className="w-1/3">
-              <img
+              {/* <img
                 src="/images/delivery-truck.png"
+                alt="Bike or Brand"
+                className="h-full w-full"
+              /> */}
+              <img
+                src="/images/truck.png"
                 alt="Bike or Brand"
                 className="h-full w-full"
               />
