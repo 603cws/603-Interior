@@ -19,6 +19,8 @@ function ProductCard({
   const [loading, setLoading] = useState(true);
   const [loadingImages, setLoadingImages] = useState({}); // Track image loading
 
+  const [filtervalue, setFiltervalue] = useState(selectedPlan);
+
   const productsInSubCategory = productsInCategory[selectedSubCategory];
 
   // Move `filteredProducts` ABOVE useEffect
@@ -38,12 +40,20 @@ function ProductCard({
 
   // Now filter variants based on the selected plan.
   // If the plan is "Custom", show all variants. Otherwise, only show variants whose segment matches the selected plan.
+  // const filteredVariants = filteredProducts.filter((variant) => {
+  //   if (selectedPlan === "Custom") return true;
+
+  //   return (
+  //     variant.segment &&
+  //     variant.segment.toLowerCase() === selectedPlan.toLowerCase()
+  //   );
+  // });
   const filteredVariants = filteredProducts.filter((variant) => {
-    if (selectedPlan === "Custom") return true;
+    if (filtervalue === "Custom") return true;
 
     return (
       variant.segment &&
-      variant.segment.toLowerCase() === selectedPlan.toLowerCase()
+      variant.segment.toLowerCase() === filtervalue.toLowerCase()
     );
   });
 
@@ -69,7 +79,35 @@ function ProductCard({
   };
 
   return (
-    <div className="product-card grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 3xl:grid-cols-6 gap-6 pb-8 pt-3 px-8">
+    <div className="product-card grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 3xl:grid-cols-6 gap-6 pb-8 pt-3 px-8 relative">
+      <div className="absolute right-10 -top-8 border-2">
+        <select
+          name="plans"
+          id="plans"
+          className="px-5 py-1"
+          value={filtervalue}
+          onChange={(e) => setFiltervalue(e.target.value)}
+        >
+          <option value="Custom">Custom</option>
+          <option value="Minimal">Minimal</option>
+          <option value="Exclusive">Exclusive</option>
+          <option value="Luxury">Luxury</option>
+        </select>
+        {/* <select
+          name="plans"
+          id="plans"
+          className="px-5 py-1.5"
+          onChange={(e) => setFiltervalue(e.target.value)}
+        >
+          <option value="" disabled selected>
+            Filter
+          </option>
+          <option value="Custom">Custom</option>
+          <option value="Minimal">Minimal</option>
+          <option value="Exclusive">Exclusive</option>
+          <option value="Luxury">Luxury</option>
+        </select> */}
+      </div>
       {loading ? (
         Array.from({ length: 4 }).map((_, index) => (
           <div
