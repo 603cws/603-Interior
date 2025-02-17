@@ -39,6 +39,7 @@ const QnaPopup = ({ onClose, onSubmit, category }) => {
     },
   ];
 
+  // AC question
   const hvacQuestions = [
     {
       name: "hvacType",
@@ -51,6 +52,7 @@ const QnaPopup = ({ onClose, onSubmit, category }) => {
     },
   ];
 
+  // partition/ceiling
   const partitionQuestions = [
     {
       name: "partitionArea",

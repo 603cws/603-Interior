@@ -48,6 +48,8 @@ export const AppProvider = ({ children }) => {
   // auth
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
+  const [isAuthLoading, setIsAuthLoading] = useState(true);
+
   // get the totalarea based on current layout id
   useEffect(() => {
     const currentLayoutID = localStorage.getItem("currentLayoutID");
@@ -100,6 +102,7 @@ export const AppProvider = ({ children }) => {
 
       if (!usertoken) {
         setIsAuthenticated(false); // Set auth to false if no token
+        setIsAuthLoading(false);
       }
       if (usertoken) {
         const { data, error } = await supabase.auth.getUser(usertoken);
@@ -111,6 +114,7 @@ export const AppProvider = ({ children }) => {
         if (data) {
           setUserId(data.user.id);
           setIsAuthenticated(true);
+          setIsAuthLoading(false);
         }
       }
     }
@@ -297,6 +301,7 @@ export const AppProvider = ({ children }) => {
         setShowProfile,
         isAuthenticated,
         setIsAuthenticated,
+        isAuthLoading,
         accountHolder,
         setAccountHolder,
         selectedPlan,

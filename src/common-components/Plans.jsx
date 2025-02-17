@@ -86,6 +86,9 @@ function Plans() {
 
   return (
     <div className="container mx-auto my-8 font-Poppins">
+      <h2 className="text-center font-semibold text-3xl capitalize text-[#34BFAD] my-4">
+        please select your plan
+      </h2>
       {/* 
         A grid with 4 columns, where the hovered plan is wide, and the others are narrow.
         Adjust the gap, height, etc. as needed.
@@ -138,7 +141,7 @@ function Plans() {
                         {/* Bullet Points */}
                         <ul className="xl:space-y-2 text-sm">
                           {plan.bullets.map((bullet, i) => (
-                            <li key={i} className="flex items-start xl:gap-2">
+                            <li key={i} className="flex items-center xl:gap-2 ">
                               <img
                                 src="/images/Check_ring.png"
                                 alt="check"

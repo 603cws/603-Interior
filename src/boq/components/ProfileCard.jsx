@@ -7,7 +7,8 @@ import { useRef } from "react";
 // import useAuthRefresh from "../../Context/useAuthRefresh";
 
 function ProfileCard() {
-  const { setIsAuthenticated, accountHolder, setAccountHolder } = useApp();
+  const { setIsAuthenticated, accountHolder, setAccountHolder, setTotalArea } =
+    useApp();
   const profileRef = useRef(null);
 
   //   const background = "images/profilebg.png";
@@ -36,6 +37,8 @@ function ProfileCard() {
         userId: "",
       });
       console.log("hello");
+      setTotalArea("");
+      localStorage.removeItem("currentLayoutID");
       navigate("/");
     }
   };

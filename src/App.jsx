@@ -46,7 +46,12 @@ const Carrer = lazy(() => import("./pages/Carrer"));
 function App() {
   // useAuthRefresh(); // Automatically handles user inactivity
 
-  const { accountHolder, isAuthenticated } = useApp();
+  const { accountHolder, isAuthenticated, isAuthLoading } = useApp();
+
+  // While authentication is loading, show a spinner
+  if (isAuthLoading) {
+    return <SpinnerFullPage />;
+  }
 
   return (
     <div>
@@ -60,10 +65,6 @@ function App() {
             <Route path="/Layout" element={<Layout />} />
             <Route path="/RegisterUser" element={<RegisterUser />} />
             <Route path="/boq" element={<Boq />} />
-            <Route path="/Error" element={<ErrorModal />} />
-            <Route path="/ProductCard" element={<ProductCard />} />
-            <Route path="/ProductOverview" element={<ProductOverview />} />
-            <Route path="/Addon" element={<Addon />} />
             <Route path="/Recommend" element={<RecommendComp />} />
             <Route path="/selectArea" element={<SelectArea />} />
             <Route path="/spinner" element={<SpinnerFullPage />} />
@@ -73,8 +74,6 @@ function App() {
             <Route path="/Blog/:title" element={<BlogDetail />} />
             <Route path="/Career" element={<Carrer />} />
             <Route path="*" element={<PageNotFound />} />
-            <Route path="/NumberAnimation" element={<NumberAnimation />} />
-            <Route path="/JobCard" element={<JobCard />} />
             <Route path="/Login" element={<Login />} />
             <Route path="/OurServices" element={<OurServices />} />
             <Route path="/profile" element={<ProfileCard />} />
