@@ -35,6 +35,7 @@ import HelpnFaq from "./pages/HelpnFaq";
 import TermsAndCondition from "./pages/TermsAndCondition";
 
 import Boqcompleted from "./common-components/Boqcompleted";
+import Howtosell from "./pages/Howtosell";
 
 // const Homepage = lazy(() => import("./pages/Homepage"));
 
@@ -96,6 +97,7 @@ function App() {
             <Route path="/help" element={<HelpnFaq />} />
             <Route path="/termsNcondtion" element={<TermsAndCondition />} />
             <Route path="/boqcompleted" element={<Boqcompleted />} />
+            <Route path="/howtosell" element={<Howtosell />} />
           </Routes>
         ) : (
           <Routes>
