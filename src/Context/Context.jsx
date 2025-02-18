@@ -50,6 +50,8 @@ export const AppProvider = ({ children }) => {
 
   const [isAuthLoading, setIsAuthLoading] = useState(true);
 
+  const [defaultProduct, setDefaultProduct] = useState(true);
+
   // get the totalarea based on current layout id
   useEffect(() => {
     const currentLayoutID = localStorage.getItem("currentLayoutID");
@@ -306,6 +308,8 @@ export const AppProvider = ({ children }) => {
         setAccountHolder,
         selectedPlan,
         setSelectedPlan,
+        defaultProduct,
+        setDefaultProduct,
       }}
     >
       {children}

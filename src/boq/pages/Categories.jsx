@@ -81,14 +81,17 @@ const Categories = ({
       const requiredSubCategory1Items = categoryObject.subcategory1 || [];
       // console.log("requiredSubCategory1Items:", requiredSubCategory1Items); // Log requiredSubCategory1Items
 
-      const selectedSubCategory1Items = selectedData
+      const selectedSubCategory1Items = (
+        Array.isArray(selectedData) ? selectedData : []
+      )
         .filter(
           (item) =>
-            item.category.toLowerCase().trim() ===
-              category.toLowerCase().trim() &&
-            item.subcategory.toLowerCase().trim() ===
-              subCategory.toLowerCase().trim()
+            item?.category?.toLowerCase().trim() ===
+              category?.toLowerCase().trim() &&
+            item?.subcategory?.toLowerCase().trim() ===
+              subCategory?.toLowerCase().trim()
         )
+
         .map((item) => item.subcategory1);
       // console.log("selectedSubCategory1Items:", selectedSubCategory1Items); // Log selectedSubCategory1Items
 
@@ -101,14 +104,17 @@ const Categories = ({
       return isCompleted;
     } else {
       // For other categories, check if only one subcategory1 is added
-      const selectedSubCategory1Items = selectedData
+      const selectedSubCategory1Items = (
+        Array.isArray(selectedData) ? selectedData : []
+      )
         .filter(
           (item) =>
-            item.category.toLowerCase().trim() ===
-              category.toLowerCase().trim() &&
-            item.subcategory.toLowerCase().trim() ===
-              subCategory.toLowerCase().trim()
+            item?.category?.toLowerCase().trim() ===
+              category?.toLowerCase().trim() &&
+            item?.subcategory?.toLowerCase().trim() ===
+              subCategory?.toLowerCase().trim()
         )
+
         .map((item) => item.subcategory1);
 
       // If only one subcategory1 is selected, mark as completed

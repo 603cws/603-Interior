@@ -77,6 +77,8 @@ function Boq() {
     showProfile,
     setShowProfile,
     selectedPlan,
+    setDefaultProduct,
+    defaultProduct,
   } = useApp();
 
   // useEffect(() => {
@@ -103,6 +105,7 @@ function Boq() {
       // Update the subcategories state
       if (category) {
         setSubCategories(category.subcategories || []);
+        console.log("filtered subcategories", category.subcategories);
       }
     } else {
       setSubCategories([]); // Reset subcategories if no category is selected
@@ -339,6 +342,23 @@ function Boq() {
     }
   }, []);
 
+  useEffect(() => {
+    if (defaultProduct && selectedPlan && productsData.length > 0) {
+      // autoSelectPlanProducts(productsData, subCategories);
+      autoSelectPlanProducts(productsData, categories);
+      setDefaultProduct(false);
+    }
+  }, [selectedPlan, productsData, defaultProduct]);
+  // useEffect(() => {
+  //   try {
+  //     if (defaultProduct && selectedPlan && productsData.length > 0) {
+  //       autoSelectPlanProducts(productsData, subCategories);
+  //     }
+  //   } finally {
+  //     setDefaultProduct(false);
+  //   }
+  // }, [selectedPlan, productsData, defaultProduct]);
+
   // Only run the tour for first-time visitors
   //   useEffect(() => {
   //     const hasSeenTour = localStorage.getItem("hasSeenLayoutTour");
@@ -571,6 +591,212 @@ function Boq() {
     //   groupKey
     // );
   };
+
+  const autoSelectPlanProducts = (products, categories) => {
+    console.log("All Products:", products);
+    console.log("Selected categories:", categories);
+
+    if (!selectedPlan || !products.length || !categories.length) return;
+
+    const selectedProducts = [];
+    const selectedGroups = new Set(); // To track selected subcategory1 for each category-subcategory combination
+    const productMap = new Map();
+
+    categories.forEach((cat) => {
+      products.forEach((product) => {
+        const { category, subcategory, subcategory1, product_variants } =
+          product;
+
+        if (
+          !category ||
+          !subcategory ||
+          !subcategory1 ||
+          !product_variants?.length
+        )
+          return;
+
+        // Split subcategories if they contain multiple comma-separated values
+        const subcategories = subcategory.split(",").map((sub) => sub.trim());
+
+        subcategories.forEach((subCat) => {
+          // Ensure the subcategory is in the selected subcategories list
+          if (!cat.subcategories.includes(subCat)) return;
+          // const groupKey = `${category}-${subCat}-${subcategory1}`;
+          // const groupKey = `${category}-${subCat}-${subcategory1}-${product.id}`;
+
+          // Find the variant that matches the selected plan AND has `default` set to true
+          const matchingVariant = product_variants.find(
+            (variant) =>
+              variant.segment?.toLowerCase() === selectedPlan?.toLowerCase() &&
+              variant.default === variant.segment // Ensure it is marked as default
+          );
+
+          console.log("matching variant", matchingVariant);
+
+          if (matchingVariant) {
+            // const groupKey = `${category}-${subCat}-${subcategory1}-${product.id}`;
+            const groupKey = `${category}-${subCat}-${subcategory1}-${matchingVariant.id}`;
+
+            productMap.set(groupKey, {
+              product,
+              variant: matchingVariant,
+              subcategory: subCat,
+            });
+          }
+        });
+      });
+
+      // Process selected products (one per `subcategory1` for each subcategory)
+      productMap.forEach(({ product, variant, subcategory }, groupKey) => {
+        if (!selectedGroups.has(groupKey)) {
+          const { category, subcategory1 } = product;
+
+          const productData = {
+            groupKey,
+            id: variant.id,
+            category,
+            subcategory, // Individual subcategory
+            subcategory1,
+            product_variant: {
+              variant_title: variant.title || product.title || "No Title",
+              variant_image: variant.image || null,
+              variant_details: variant.details || "No Details",
+              variant_price: variant.price || 0,
+              variant_id: variant.id,
+              variant_segment: variant.segment,
+              default: variant.default,
+              additional_images: JSON.parse(variant.additional_images || "[]"),
+            },
+            addons: product.addons || [],
+            finalPrice: variant.price || 0,
+          };
+
+          selectedProducts.push(productData);
+          // setSelectedData((prev) => [...prev, productData]);
+          selectedGroups.add(groupKey);
+        }
+      });
+    });
+
+    setSelectedData(selectedProducts);
+
+    console.log("Auto-selected products based on plan:", selectedProducts);
+  };
+
+  // const autoSelectPlanProducts = (products, categories) => {
+
+  //   console.log("All Products:", products);
+  //   console.log("Selected Subcategories:", subCategories);
+
+  //   if (!selectedPlan || !products.length || !subCategories.length) return;
+
+  //   const selectedProducts = [];
+  //   const selectedGroups = new Set(); // To track selected subcategory1 for each category-subcategory combination
+  //   const productMap = new Map();
+
+  //   categories.forEach((category)=>{
+
+  //   })
+
+  //   products.forEach((product) => {
+  //     const { category, subcategory, subcategory1, product_variants } = product;
+
+  //     if (
+  //       !category ||
+  //       !subcategory ||
+  //       !subcategory1 ||
+  //       !product_variants?.length
+  //     )
+  //       return;
+
+  //     // Split subcategories if they contain multiple comma-separated values
+  //     const subcategories = subcategory.split(",").map((sub) => sub.trim());
+
+  //     subcategories.forEach((subCat) => {
+  //       // Ensure the subcategory is in the selected subcategories list
+  //       if (!subCategories.includes(subCat)) return;
+
+  //       // const groupKey = `${category}-${subCat}-${subcategory1}`;
+  //       // const groupKey = `${category}-${subCat}-${subcategory1}-${product.id}`;
+
+  //       // Find the variant that matches the selected plan AND has `default` set to true
+  //       const matchingVariant = product_variants.find(
+  //         (variant) =>
+  //           variant.segment?.toLowerCase() === selectedPlan?.toLowerCase() &&
+  //           variant.default === variant.segment // Ensure it is marked as default
+  //       );
+
+  //       console.log("matching variant", matchingVariant);
+
+  //       if (matchingVariant) {
+  //         // const groupKey = `${category}-${subCat}-${subcategory1}-${product.id}`;
+  //         const groupKey = `${category}-${subCat}-${subcategory1}-${matchingVariant.id}`;
+
+  //         productMap.set(groupKey, {
+  //           product,
+  //           variant: matchingVariant,
+  //           subcategory: subCat,
+  //         });
+  //       }
+  //     });
+  //   });
+
+  //   // Process selected products (one per `subcategory1` for each subcategory)
+  //   productMap.forEach(({ product, variant, subcategory }, groupKey) => {
+  //     if (!selectedGroups.has(groupKey)) {
+  //       const { category, subcategory1 } = product;
+
+  //       const productData = {
+  //         groupKey,
+  //         id: variant.id,
+  //         category,
+  //         subcategory, // Individual subcategory
+  //         subcategory1,
+  //         product_variant: {
+  //           variant_title: variant.title || product.title || "No Title",
+  //           variant_image: variant.image || null,
+  //           variant_details: variant.details || "No Details",
+  //           variant_price: variant.price || 0,
+  //           variant_id: variant.id,
+  //           variant_segment: variant.segment,
+  //           default: variant.default,
+  //           additional_images: JSON.parse(variant.additional_images || "[]"),
+  //         },
+  //         addons: product.addons || [],
+  //         finalPrice: variant.price || 0,
+  //       };
+
+  //       selectedProducts.push(productData);
+  //       // setSelectedData((prev) => [...prev, productData]);
+  //       selectedGroups.add(groupKey);
+  //     }
+  //   });
+
+  //   setSelectedData(selectedProducts);
+
+  //   // // Update `selectedData`
+  //   // setSelectedData((prevData) => {
+  //   //   const validPrevData = Array.isArray(prevData) ? prevData : [];
+
+  //   //   console.log("hello from the selected data ");
+
+  //   //   // Remove old selections of the same `subcategory1`
+  //   //   const updatedData = validPrevData.filter(
+  //   //     (item) =>
+  //   //       !selectedProducts.some(
+  //   //         (newItem) => newItem.groupKey === item.groupKey
+  //   //       )
+  //   //   );
+
+  //   //   // const finalData = [...updatedData, ...selectedProducts];
+  //   //   const finalData = [...selectedProducts];
+
+  //   //   localStorage.setItem("selectedData", JSON.stringify(finalData));
+  //   //   return finalData;
+  //   // });
+
+  //   console.log("Auto-selected products based on plan:", selectedProducts);
+  // };
 
   const clearSelectedData = () => {
     // Clear from local storage
