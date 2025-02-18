@@ -1,9 +1,11 @@
 import { RiDashboardFill } from "react-icons/ri";
 import { MdOutlineModeEdit, MdDeleteOutline } from "react-icons/md";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
+import { useNavigate } from "react-router-dom";
 const percentage = 66;
 
 function Dashboard() {
+  const navigate = useNavigate();
   return (
     <div className="">
       <div className="flex gap-3 max-h-screen overflow-y-hidden">
@@ -20,7 +22,7 @@ function Dashboard() {
             <h3 className="capitalize text-[#A1A1A1] mx-4">main</h3>
             <div className="flex items-center mx-4 gap-3 hover:bg-[#B4EAEA] cursor-pointer">
               <RiDashboardFill />
-              <p>dashboard</p>
+              <button onClick={() => navigate("/")}>Home</button>
             </div>
             <div className="flex items-center mx-4 gap-3 hover:bg-[#B4EAEA] cursor-pointer">
               <RiDashboardFill />

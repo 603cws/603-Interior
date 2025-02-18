@@ -4,7 +4,7 @@ import { MdOutlineCancel } from "react-icons/md";
 import { useApp } from "../../Context/Context";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
-import Typewriter from "typewriter-effect";
+// import Typewriter from "typewriter-effect";
 import { supabase } from "../../services/supabase";
 import { useRef, useEffect } from "react";
 
@@ -28,23 +28,12 @@ function Navbar({
   const {
     setTotalArea,
     totalArea,
-    inputValue,
-    setInputValue,
+    // inputValue,
+    // setInputValue,
     setTotalAreaSource,
     userId,
-    showProfile,
-    setShowProfile,
   } = useApp();
 
-  // const [warning,setWarning]=useState(false)
-  // console.log(
-  //   "total area",
-  //   totalArea,
-  //   "quantity",
-  //   areaQuantities,
-  //   "area values",
-  //   areaValues
-  // );
   console.log("user id", userId);
 
   const navigate = useNavigate();
@@ -191,110 +180,12 @@ function Navbar({
       setIsSubmitting(false);
     }
   };
-  // const handlegenrateboq = async () => {
-  //   if (!totalArea) {
-  //     toast.error("Enter the Area");
-  //   }
-  //   if (totalArea) {
-  //     const layoutDta = mapAreaValues(
-  //       userId,
-  //       areaValues,
-  //       areaQuantities,
-  //       totalArea
-  //     );
-  //     console.log("layoutDta", layoutDta);
-
-  //     // Insert into tables
-  //     const { data: data, error: error } = await supabase
-  //       .from("layout")
-  //       .insert([layoutDta])
-  //       .select("id")
-  //       .single();
-
-  //     if (error) {
-  //       console.error("Error inserting into layout:", error.message);
-  //     }
-
-  //     console.log("layout Data:", data);
-
-  //     if (!userId) {
-  //       navigate("/Login", {
-  //         state: {
-  //           totalArea: totalArea,
-  //           areaValues: areaValues,
-  //           areaQuantities: areaQuantities,
-  //           layoutId: data.id,
-  //         },
-  //       });
-  //     } else {
-  //       navigate("/boq");
-  //     }
-  //   }
-  // };
-
-  // const handlegenrateboq = async () => {
-  //   if (!totalArea) {
-  //     toast.error("Enter the Area");
-  //   }
-  //   if (totalArea) {
-  //     const areaData = mapAreaValues(userId, areaValues, totalArea);
-  //     const quantityData = mapAreaValues(userId, areaQuantities);
-
-  //     // Insert into tables
-  //     const { data: aData, error: areasInsertError } = await supabase
-  //       .from("areas")
-  //       .insert([areaData])
-  //       .select("areaId")
-  //       .single();
-
-  //     if (areasInsertError) {
-  //       console.error("Error inserting into areas:", areasInsertError.message);
-  //     }
-
-  //     console.log("Area Data:", aData);
-
-  //     const { data: qData, error: quantityInsertError } = await supabase
-  //       .from("quantity")
-  //       .insert([quantityData])
-  //       .select("quantityId")
-  //       .single();
-
-  //     if (quantityInsertError) {
-  //       console.error(
-  //         "Error inserting into quantity:",
-  //         quantityInsertError.message
-  //       );
-  //     }
-
-  //     console.log("Quantity Data:", qData);
-
-  //     if (!userId) {
-  //       navigate("/Login", {
-  //         state: {
-  //           totalArea: totalArea,
-  //           areaValues: areaValues,
-  //           areaQuantities: areaQuantities,
-  //           quantityId: qData.quantityId,
-  //           areaId: aData.areaId,
-  //         },
-  //       });
-  //     } else {
-  //       navigate("/boq");
-  //     }
-  //   }
-  // };
-  // const handlegenrateboq = ()=>{
-
-  //     // if(totalArea){
-  //     //     navigate('/boq')
-  //     // }
-  //     setWarning(true)
-  // }
 
   const handleInputChange = (e) => {
     if (e.target.value.length <= 5) {
       setTotalAreaSource("NoErrorModal"); // Set the source
-      setInputValue(e.target.value);
+      // setInputValue(e.target.value);
+      setTotalArea(e.target.value);
       setError(false); // Reset error state on input change
     }
   };
@@ -312,17 +203,18 @@ function Navbar({
   };
 
   const handleSubmit = () => {
-    const area = parseInt(inputValue, 10);
+    // const area = parseInt(totalArea, 10);
+    const area = +totalArea;
     if (!isNaN(area)) {
       if (area >= MIN_AREA && area <= MAX_AREA) {
         setTotalArea(area);
         setError(false);
       } else if (area === 0 || area === undefined) {
         setError(false);
-        resetAll();
+        // resetAll();
       } else {
         setError(true); // Set error state if area is out of range
-        resetAll();
+        // resetAll();
       }
     } else {
       setError(true); // Set error state if input is invalid
@@ -330,14 +222,11 @@ function Navbar({
   };
 
   const handleReset = () => {
-    setInputValue("");
+    // setInputValue("");
+    setTotalArea("");
     setError(false);
     resetAll(); // Call the resetAll function passed from the parent component
   };
-
-  // const toggleProfile = () => {
-  //   setShowProfile(!showProfile);
-  // };
 
   return (
     <div>
@@ -370,7 +259,7 @@ function Navbar({
             className={`w-full rounded-md border-none bg-transparent py-2.5 ms-8 [&::-webkit-inner-spin-button]:appearance-none  focus:outline-none focus:ring-0 text-white ${
               error ? "error" : ""
             }`}
-            value={inputValue}
+            value={totalArea}
             onChange={handleInputChange}
             onKeyDown={handleKeyDown}
             onKeyUp={handleSubmit}
@@ -381,18 +270,6 @@ function Navbar({
             data-tip="Enter the total area in square feet"
             autoFocus
           />
-          {/* <div className="absolute top-3 left-7 text-gray-300 text-sm">
-            {!inputValue && (
-              <Typewriter
-                options={{
-                  strings: ["Enter total area (sq ft)"], // Your placeholder text
-                  autoStart: true,
-                  loop: true,
-                  delay: 100, // Speed of typing
-                }}
-              />
-            )}
-          </div> */}
         </div>
         {error && (
           <div
@@ -405,13 +282,6 @@ function Navbar({
           </div>
         )}
         {/* button for generate boq */}
-        {/* <div> */}
-        {/* <button
-          className="generateBoq bg-[#1A3A36] mt-2 rounded-3xl text-sm py-2 px-5 text-white mb-2 border-2 border-[#34BFAD]"
-          onClick={handlegenrateboq}
-        >
-          Generate BOQ
-        </button> */}
         <button
           className="generateBoq bg-[#1A3A36] mt-2 rounded-3xl text-sm py-2 px-5 text-white mb-2 border-2 border-[#34BFAD]"
           onClick={handlegenrateboq}

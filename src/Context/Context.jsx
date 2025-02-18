@@ -107,7 +107,7 @@ export const AppProvider = ({ children }) => {
       if (usertoken) {
         const { data, error } = await supabase.auth.getUser(usertoken);
         if (error) {
-          console.error("Error fetching user:", error);
+          console.warn("Error fetching user:", error);
           return null;
         }
 
@@ -186,7 +186,7 @@ export const AppProvider = ({ children }) => {
           });
         }
       } catch (error) {
-        console.error("Error fetching user data:", error.message);
+        console.warn("Error fetching user data:", error.message);
       }
     };
 
@@ -197,13 +197,13 @@ export const AppProvider = ({ children }) => {
   function handleProgressBar(selectedData, categories, subCat1) {
     // Validate selectedData and categories to prevent errors
     if (!Array.isArray(selectedData) || selectedData.length === 0) {
-      console.error("Invalid or empty selectedData.");
+      console.warn("Invalid or empty selectedData.");
       setProgress(0); // Reset progress to 0 if no data
       return;
     }
 
     if (!Array.isArray(categories) || categories.length === 0) {
-      console.error("Invalid or empty categories.");
+      console.warn("Invalid or empty categories.");
       setProgress(0); // Reset progress to 0 if no categories
       return;
     }
@@ -214,7 +214,7 @@ export const AppProvider = ({ children }) => {
 
       const categoryObj = categories.find((cat) => cat.category === category);
       if (!categoryObj) {
-        console.error(`Category "${category}" not found.`);
+        console.warn(`Category "${category}" not found.`);
         return;
       }
 
@@ -223,7 +223,7 @@ export const AppProvider = ({ children }) => {
 
       const subCategoryIndex = categoryObj.subcategories.indexOf(subcategory);
       if (subCategoryIndex === -1) {
-        console.error(`Subcategory "${subcategory}" not found.`);
+        console.warn(`Subcategory "${subcategory}" not found.`);
         return;
       }
 
@@ -249,7 +249,7 @@ export const AppProvider = ({ children }) => {
             subCategoryPercentage / subCat1[category].length;
           totalProgress += subCategory1Percentage;
         } else {
-          console.error(`SubCategory1 "${subcategory1}" not found.`);
+          console.warn(`SubCategory1 "${subcategory1}" not found.`);
         }
       } else {
         totalProgress += subCategoryPercentage;
