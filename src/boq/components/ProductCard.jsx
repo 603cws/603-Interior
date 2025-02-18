@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useApp } from "../../Context/Context";
 
 function ProductCard({
@@ -22,6 +22,8 @@ function ProductCard({
   const [filtervalue, setFiltervalue] = useState(selectedPlan);
 
   const productsInSubCategory = productsInCategory[selectedSubCategory];
+
+  console.log("products in subcat", productsInSubCategory);
 
   // Move `filteredProducts` ABOVE useEffect
   const filteredProducts = productsInSubCategory
@@ -57,9 +59,31 @@ function ProductCard({
     );
   });
 
+  console.log("filtered variants0", filteredVariants);
+
   useEffect(() => {
     setLoading(filteredVariants.length === 0);
   }, [filteredVariants]);
+
+  // const timeoutRef = useRef(null);
+
+  // useEffect(() => {
+  //   if (filteredVariants.length === 0) {
+  //     setLoading(true);
+
+  //     timeoutRef.current = setTimeout(() => {
+  //       if (filteredVariants.length === 0) {
+  //         setLoading(false);
+  //         console.log("Array is still empty after 4 seconds");
+  //       }
+  //     }, 2000);
+  //   } else {
+  //     setLoading(false);
+  //     clearTimeout(timeoutRef.current);
+  //   }
+
+  //   return () => clearTimeout(timeoutRef.current);
+  // }, [filteredVariants]);
 
   if (!productsInCategory) {
     return <p>Category "{selectedCategory?.category}" not found.</p>;

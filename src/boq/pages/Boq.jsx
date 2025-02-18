@@ -492,6 +492,27 @@ function Boq() {
     return total * selectedProductView.price;
   };
 
+  const calculateAutoTotalPrice = (variantPrice) => {
+    const baseTotal = calculateTotalPriceHelper(
+      quantityData[0],
+      areasData[0],
+      selectedCategory?.category,
+      selectedSubCategory,
+      selectedSubCategory1,
+      height
+    );
+
+    if (selectedCategory?.category === "HVAC") return baseTotal;
+    if (selectedCategory?.category === "Lighting")
+      return baseTotal * 200 + variantPrice;
+    if (selectedCategory?.category === "Civil / Plumbing")
+      return baseTotal * 100 + variantPrice;
+    if (selectedCategory?.category === "Paint")
+      return baseTotal * variantPrice * 3 * 15;
+
+    return baseTotal * variantPrice;
+  };
+
   const handleAddOnChange = (variant) => {
     console.log("addon added");
 
@@ -668,7 +689,7 @@ function Boq() {
               additional_images: JSON.parse(variant.additional_images || "[]"),
             },
             addons: product.addons || [],
-            finalPrice: variant.price || 0,
+            finalPrice: calculateAutoTotalPrice(variant.price),
           };
 
           selectedProducts.push(productData);

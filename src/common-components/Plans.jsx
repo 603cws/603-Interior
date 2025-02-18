@@ -7,19 +7,6 @@ const plansData = [
   {
     id: 0,
     planNumber: "01",
-    title: "Custom",
-    bullets: [
-      "The brand proposes their budget",
-      "Dedicated brand webinar or",
-      "Co-branded marketing campaigns",
-      "Offline exposure at 603 Co workings",
-    ],
-    image: "/images/plan1.png",
-    planKey: "Custom", // used when "Select" is clicked
-  },
-  {
-    id: 1,
-    planNumber: "02",
     title: "Minimal",
     bullets: [
       "The brand proposes their budget",
@@ -31,8 +18,8 @@ const plansData = [
     planKey: "Minimal",
   },
   {
-    id: 2,
-    planNumber: "03",
+    id: 1,
+    planNumber: "02",
     title: "Exclusive",
     bullets: [
       "The brand proposes their budget",
@@ -44,8 +31,8 @@ const plansData = [
     planKey: "Exclusive",
   },
   {
-    id: 3,
-    planNumber: "04",
+    id: 2,
+    planNumber: "03",
     title: "Luxury",
     bullets: [
       "The brand proposes their budget",
@@ -55,6 +42,19 @@ const plansData = [
     ],
     image: "/images/plan1.png",
     planKey: "Luxury",
+  },
+  {
+    id: 3,
+    planNumber: "04",
+    title: "Custom",
+    bullets: [
+      "The brand proposes their budget",
+      "Dedicated brand webinar or",
+      "Co-branded marketing campaigns",
+      "Offline exposure at 603 Co workings",
+    ],
+    image: "/images/plan1.png",
+    planKey: "Custom", // used when "Select" is clicked
   },
 ];
 
@@ -82,7 +82,7 @@ function Plans() {
   const { setSelectedPlan } = useApp();
 
   // Hovered plan state. 0 = first plan expanded by default.
-  const [hoveredPlan, setHoveredPlan] = useState(0);
+  const [hoveredPlan, setHoveredPlan] = useState(1);
 
   return (
     <div className="container mx-auto my-8 font-Poppins">
@@ -96,7 +96,7 @@ function Plans() {
       <div
         className="grid transition-all duration-500 h-[450px] gap-2"
         style={{ gridTemplateColumns: getGridTemplateColumns(hoveredPlan) }}
-        onMouseLeave={() => setHoveredPlan(0)}
+        onMouseLeave={() => setHoveredPlan(1)}
         // ^ If you want the layout to revert to the first plan after leaving the row.
         // Remove if you prefer the last hovered plan to remain expanded.
       >

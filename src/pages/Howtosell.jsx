@@ -1,4 +1,5 @@
 import LandingNavbar from "../common-components/LandingNavbar";
+import Footer from "../common-components/Footer";
 
 function Howtosell() {
   return (
@@ -130,6 +131,34 @@ function Howtosell() {
           </div>
         </div>
       </section>
+
+      {/* Start selling */}
+      <section>
+        <div className=" bg-[url('/images/how-to-sell-bg-2.png')] bg-cover bg-no-repeat">
+          <div className="flex justify-center items-center">
+            <div className="w-1/2 text-[#1F5C54] ps-20">
+              <h1 className="font-bold text-5xl mb-5">Start selling now!</h1>
+              <p className="leading-8">
+                Join the fastest growing e-commerce platform in India <br /> and
+                sell to crores of users and grow your business.
+              </p>
+              <button className="bg-[#1F5C54] uppercase px-7 py-3 rounded-3xl text-white font-bold text-sm">
+                start selling
+              </button>
+            </div>
+            <div className="w-1/2 flex items-end justify-end">
+              <img
+                src="images/Delivery-lustrator.png"
+                alt=""
+                className="h-80 self-end"
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+      <footer>
+        <Footer />
+      </footer>
     </div>
   );
 }
