@@ -165,41 +165,6 @@ function HelpnFaq() {
   return (
     <div className="font-Poppins">
       {/* hero section */}
-      {/* <section className="h-screen p-4">
-        <div className=" bg-[#A9D3CE] h-full  rounded-3xl">
-          <div className="flex flex-col h-full">
-            <div className="relative">
-              <LandingNavbar />
-            </div>
-
-            <div className="flex-1 flex justify-between items-center">
-              <div className="self-end flex flex-col text-[#1F5C54] font-extrabold">
-                <h2 className="tracking-wide text-3xl">
-                  Looking for help? Here are our <br /> most frequently asked
-                  questions.
-                </h2>
-                <p className="">
-                  Everything you need to know about 603 Interiors. Can’t find
-                  the answer to a question <br /> you have? No worries, just
-                  click ‘I’ve got a question’ or ‘Chat to our team’!
-                </p>
-              </div>
-              <div className="relative">
-                <img src="/images/helpimg.png" alt="help" />
-                <span className="capitalize bg-[#54DED3] px-5 py-3 rounded-3xl absolute top-1/4 animate-message1">
-                  what is 603 interiors?
-                </span>{" "}
-                <span className="capitalize bg-[#54DED3] px-5 py-3 rounded-3xl absolute top-1/3 right-0 animate-message2">
-                  what is 603 interiors?
-                </span>{" "}
-                <span className="capitalize bg-[#54DED3] px-5 py-3 rounded-3xl absolute top-3/4 -left-10 animate-message3">
-                  what is 603 interiors?
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section> */}
 
       <section className="w-full h-screen p-5">
         <div className="bg-[#A9D3CE] h-full rounded-3xl">
