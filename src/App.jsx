@@ -37,6 +37,8 @@ import TermsAndCondition from "./pages/TermsAndCondition";
 import Boqcompleted from "./common-components/Boqcompleted";
 import Howtosell from "./pages/Howtosell";
 
+import VendorDashboard from "./pages/vendor/VendorDashboard";
+
 // const Homepage = lazy(() => import("./pages/Homepage"));
 
 const Layout = lazy(() => import("./layout/pages/Layout"));
@@ -98,6 +100,7 @@ function App() {
             <Route path="/termsNcondtion" element={<TermsAndCondition />} />
             <Route path="/boqcompleted" element={<Boqcompleted />} />
             <Route path="/howtosell" element={<Howtosell />} />
+            <Route path="/vendordashboard" element={<VendorDashboard />} />
           </Routes>
         ) : (
           <Routes>
