@@ -155,6 +155,7 @@ function SelectArea({
     if (checked) {
       const selectableSubCategories = selectedCategory.subcategories.filter(
         (subCategory) =>
+          !(subCategory === "Pantry" && selectedSubCategory1 === "Pods") && // Exclude "Pantry" only if "Pods" is selected
           !isItemSelected(
             selectedData,
             selectedCategory,
@@ -171,17 +172,22 @@ function SelectArea({
 
   // Check if all selectable subcategories are already selected
   const allSelected =
-    selectedCategory.subcategories?.every(
-      (subCategory) =>
-        selectedAreas.includes(subCategory) ||
-        isItemSelected(
-          selectedData,
-          selectedCategory,
-          subCategory,
-          selectedSubCategory1,
-          selectedProductView
-        )
-    ) ?? false;
+    selectedCategory.subcategories
+      ?.filter(
+        (subCategory) =>
+          !(subCategory === "Pantry" && selectedSubCategory1 === "Pods") // Exclude Pantry when Pods is selected
+      )
+      .every(
+        (subCategory) =>
+          selectedAreas.includes(subCategory) ||
+          isItemSelected(
+            selectedData,
+            selectedCategory,
+            subCategory,
+            selectedSubCategory1,
+            selectedProductView
+          )
+      ) ?? false;
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-30 flex justify-center items-center z-10">
@@ -199,14 +205,30 @@ function SelectArea({
             {/* Subcategories Checkbox List */}
             <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-4 p-4 cursor-pointer">
               {selectedCategory.subcategories
-                ?.filter(
-                  (subCategory) =>
-                    selectedCategory.category === "HVAC"
-                      ? userResponses?.hvacType === "Centralized"
-                        ? subCategory === "Centralized" // Show only "Centralized"
-                        : subCategory !== "Centralized" // Show all except "Centralized"
-                      : true // Show all for non-HVAC categories
-                )
+                ?.filter((subCategory) => {
+                  // For HVAC, handle centralized logic
+                  if (selectedCategory.category === "HVAC") {
+                    return userResponses?.hvacType === "Centralized"
+                      ? subCategory === "Centralized" // Show only "Centralized"
+                      : subCategory !== "Centralized"; // Show all except "Centralized"
+                  }
+
+                  // If the main category is "Civil / Plumbing"
+                  if (selectedCategory.category === "Civil / Plumbing") {
+                    // Always keep "Washrooms"
+                    if (subCategory === "Washrooms") return true;
+
+                    // Remove "Pantry" when "Pods" exists
+                    if (
+                      subCategory === "Pantry" &&
+                      selectedSubCategory1 === "Pods"
+                    ) {
+                      return false;
+                    }
+                  }
+
+                  return true; // Default case: show all
+                })
                 .map((name, id) => (
                   <div
                     key={id}

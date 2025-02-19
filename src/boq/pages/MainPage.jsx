@@ -4,6 +4,8 @@ import { useApp } from "../../Context/Context";
 const MainPage = ({ userResponses, setSelectedSubCategory1, productsData }) => {
   const {
     selectedCategory,
+    selectedSubCategory,
+    setSelectedSubCategory,
     selectedSubCategory1,
     // setSelectedSubCategory1,
     subCat1,
@@ -11,47 +13,52 @@ const MainPage = ({ userResponses, setSelectedSubCategory1, productsData }) => {
   } = useApp();
 
   useEffect(() => {
-    // Automatically select the first subcategory when the category changes
     if (subCat1 && selectedCategory?.category) {
-      const subCategories = subCat1[selectedCategory.category];
+      let subCategories = subCat1[selectedCategory.category] || [];
 
-      if (subCategories && subCategories.length > 0) {
-        // Only apply filtering logic for HVAC category
-        if (selectedCategory.category === "HVAC") {
-          const filteredSubCategories =
-            userResponses.hvacType === "Centralized"
-              ? subCategories.filter(
-                  (subCategory) => subCategory === "Centralized AC"
-                )
-              : subCategories.filter(
-                  (subCategory) => subCategory !== "Centralized AC"
-                );
-
-          // Set the first subcategory from the filtered list, fallback to null if empty
-          if (
-            !selectedSubCategory1 ||
-            !filteredSubCategories.includes(selectedSubCategory1)
-          ) {
-            setSelectedSubCategory1(filteredSubCategories[0] || null);
-          }
-        } else {
-          // If not HVAC, just set the first subcategory as default
-          if (
-            !selectedSubCategory1 ||
-            !subCategories.includes(selectedSubCategory1)
-          ) {
-            setSelectedSubCategory1(subCategories[0] || null);
-          }
-        }
-      } else {
-        setSelectedSubCategory1(null); // If no subcategories, set to null
+      // Apply filter for HVAC category
+      if (selectedCategory.category === "HVAC") {
+        subCategories =
+          userResponses.hvacType === "Centralized"
+            ? subCategories.filter(
+                (subCategory) => subCategory === "Centralized AC"
+              )
+            : subCategories.filter(
+                (subCategory) => subCategory !== "Centralized AC"
+              );
       }
+
+      // Apply filter for Civil / Plumbing -> Pantry
+      if (
+        selectedCategory.category === "Civil / Plumbing" &&
+        selectedSubCategory === "Pantry"
+      ) {
+        subCategories = subCategories.filter(
+          (subCategory) => subCategory !== "Pods"
+        );
+      }
+
+      // Automatically select the first available subcategory when switching
+      if (
+        !selectedSubCategory1 ||
+        !subCategories.includes(selectedSubCategory1)
+      ) {
+        setSelectedSubCategory1(subCategories[0] || null);
+      }
+    } else {
+      setSelectedSubCategory1(null); // Reset if no subcategories exist
     }
-  }, [subCat1, selectedCategory, userResponses.hvacType, selectedSubCategory1]);
+  }, [
+    subCat1,
+    selectedCategory,
+    selectedSubCategory,
+    userResponses.hvacType,
+    setSelectedSubCategory1,
+  ]);
 
   const selectedSubCategories =
     subCat1 && subCat1[selectedCategory.category]
-      ? selectedCategory.category === "HVAC" // Apply filter logic only for HVAC
+      ? selectedCategory.category === "HVAC"
         ? userResponses.hvacType === "Centralized"
           ? subCat1[selectedCategory.category].filter(
               (subCategory) => subCategory === "Centralized AC" // Only "Centralized AC"
@@ -59,6 +66,11 @@ const MainPage = ({ userResponses, setSelectedSubCategory1, productsData }) => {
           : subCat1[selectedCategory.category].filter(
               (subCategory) => subCategory !== "Centralized AC" // Exclude "Centralized AC"
             )
+        : selectedCategory.category === "Civil / Plumbing" &&
+          selectedSubCategory === "Pantry"
+        ? subCat1[selectedCategory.category].filter(
+            (subCategory) => subCategory !== "Pods" // Exclude "Pods"
+          )
         : subCat1[selectedCategory.category] // No filter logic for other categories
       : [];
 
