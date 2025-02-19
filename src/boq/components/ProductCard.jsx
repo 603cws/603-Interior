@@ -62,7 +62,10 @@ function ProductCard({
   console.log("filtered variants0", filteredVariants);
 
   useEffect(() => {
-    setLoading(filteredVariants.length === 0);
+    // setLoading(filteredVariants.length === 0);
+    setTimeout(() => {
+      setLoading(false);
+    }, 3000);
   }, [filteredVariants]);
 
   // const timeoutRef = useRef(null);
