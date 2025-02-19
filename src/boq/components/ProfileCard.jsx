@@ -15,7 +15,7 @@ function ProfileCard() {
   //   const [userEmail, setUserEmail] = useState("");
   //   const [companyName, setCompanyName] = useState("");
 
-  let isadmin = accountHolder.role === "admin" ? true : false;
+  let isadmin = accountHolder.role === "user" ? true : false;
   const navigate = useNavigate();
 
   //   const { signOutUser } = useAuthRefresh(); // Get signOutUser from hook
@@ -96,7 +96,7 @@ function ProfileCard() {
   return (
     <div ref={profileRef}>
       {/* div for card */}
-      <div className="rounded-bl-[60px] rounded-tl-[60px]  shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)]  overflow-hidden max-w-sm w-full h-[calc(100vh-50px)] font-Poppins bg-[#fff] z-20 absolute right-0 top-[50px] transition-transform duration-1000 ease-in-out ">
+      <div className="rounded-bl-[60px] rounded-tl-[60px]  shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)]  overflow-hidden max-w-sm w-full h-[calc(100vh-50px)] font-Poppins bg-[#fff] z-20 fixed right-0 top-[50px] transition-transform duration-1000 ease-in-out ">
         {/* div for profile icon part */}
         <div className=" h-1/3 flex flex-col">
           <div
@@ -125,7 +125,7 @@ function ProfileCard() {
         <div className="font-semibold text-lg capitalize leading-normal tracking-wide py-7 text-[#262626] border-y-2 border-[#ccc] flex flex-col gap-4">
           <div className="flex items-center mx-4 gap-3">
             <RiDashboardFill />
-            <button onClick={() => navigate("/dashboard")} disabled={!isadmin}>
+            <button onClick={() => navigate("/dashboard")} disabled={isadmin}>
               dashboard
             </button>
           </div>

@@ -86,6 +86,8 @@ function App() {
                 accountHolder?.role ? (
                   accountHolder.role === "admin" ? (
                     <Dashboard />
+                  ) : accountHolder.role === "vendor" ? (
+                    <VendorDashboard />
                   ) : (
                     <PageNotFound />
                   )
