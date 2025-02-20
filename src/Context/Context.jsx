@@ -23,7 +23,9 @@ export const AppProvider = ({ children }) => {
   const [selectedCategory, setSelectedCategory] = useState(null); //Gets value after data fetching
   const [selectedSubCategory, setSelectedSubCategory] = useState(null); //Gets value after data fetching
   const [selectedSubCategory1, setSelectedSubCategory1] = useState(null);
-  const [selectedData, setSelectedData] = useState([]);
+  const [selectedData, setSelectedData] = useState(
+    JSON.parse(localStorage.getItem("selectedData")) || []
+  );
   const [selectedAddons, setSelectedAddons] = useState([]);
 
   const [categories, setCategories] = useState([]);
@@ -77,10 +79,10 @@ export const AppProvider = ({ children }) => {
     fetchdata();
   }, []);
 
-  useEffect(() => {
-    var temp = JSON.parse(localStorage.getItem("selectedData"));
-    setSelectedData(temp);
-  }, []);
+  // useEffect(() => {
+  //   var temp = JSON.parse(localStorage.getItem("selectedData")) || [];
+  //   setSelectedData(temp);
+  // }, []);
 
   useEffect(() => {
     // Check if selectedData is valid and not empty

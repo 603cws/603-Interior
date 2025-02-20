@@ -544,6 +544,75 @@ function Boq() {
     });
   };
 
+  // const handelSelectedData = (
+  //   product,
+  //   category,
+  //   subCat,
+  //   subcategory1,
+  //   isChecked
+  // ) => {
+  //   if (!product) return;
+
+  //   // Unique group key for each product and subcategory
+  //   const groupKey = `${category.category}-${subCat}-${subcategory1}-${product.id}`;
+
+  //   const productData = {
+  //     groupKey, // For group-level management
+  //     id: product.id,
+  //     category: category.category,
+  //     subcategory: subCat,
+  //     subcategory1, // added subcategory1 as an argument
+  //     product_variant: {
+  //       variant_title: product.title,
+  //       variant_image: product.image,
+  //       variant_details: product.details,
+  //       variant_price: product.price,
+  //       variant_id: product.id,
+  //       additional_images: JSON.parse(product.additional_images || "[]"), // Parse the string to an array
+  //     },
+  //     addons: selectedAddons || [], // Assuming addons might be optional
+  //     finalPrice: calculateTotalPrice(),
+  //   };
+
+  //   // Update selectedData
+  //   setSelectedData((prevData) => {
+  //     const validPrevData = Array.isArray(prevData) ? prevData : [];
+
+  //     if (!isChecked) {
+  //       // Remove the product when unchecked
+  //       const updatedData = validPrevData.filter(
+  //         (item) => !(item.groupKey === groupKey)
+  //       );
+  //       localStorage.setItem("selectedData", JSON.stringify(updatedData)); // Persist updated state
+  //       console.log("Updated DataL ", updatedData);
+  //       return updatedData;
+  //     }
+
+  //     // Add or update the product when checked
+  //     const existingProductIndex = validPrevData.findIndex(
+  //       (item) => item.groupKey === groupKey
+  //     );
+
+  //     if (existingProductIndex !== -1) {
+  //       // Replace the existing product
+  //       const updatedData = [...validPrevData];
+  //       updatedData[existingProductIndex] = productData; // Replace with new data
+  //       localStorage.setItem("selectedData", JSON.stringify(updatedData));
+  //       return updatedData;
+  //     }
+
+  //     // Add a new product if it doesn't already exist
+  //     const updatedData = [...validPrevData, productData];
+  //     localStorage.setItem("selectedData", JSON.stringify(updatedData));
+  //     return updatedData;
+  //   });
+
+  //   console.log(
+  //     isChecked ? "Added to selected data" : "Removed from selected data",
+  //     groupKey
+  //   );
+  // };
+
   const handelSelectedData = (
     product,
     category,
@@ -553,55 +622,54 @@ function Boq() {
   ) => {
     if (!product) return;
 
-    // Unique group key for each product and subcategory
     const groupKey = `${category.category}-${subCat}-${subcategory1}-${product.id}`;
 
-    const productData = {
-      groupKey, // For group-level management
-      id: product.id,
-      category: category.category,
-      subcategory: subCat,
-      subcategory1, // added subcategory1 as an argument
-      product_variant: {
-        variant_title: product.title,
-        variant_image: product.image,
-        variant_details: product.details,
-        variant_price: product.price,
-        variant_id: product.id,
-        additional_images: JSON.parse(product.additional_images || "[]"), // Parse the string to an array
-      },
-      addons: selectedAddons || [], // Assuming addons might be optional
-      finalPrice: calculateTotalPrice(),
-    };
-
-    // Update selectedData
     setSelectedData((prevData) => {
       const validPrevData = Array.isArray(prevData) ? prevData : [];
 
       if (!isChecked) {
-        // Remove the product when unchecked
+        // ❌ Remove the product when unchecked
         const updatedData = validPrevData.filter(
-          (item) => !(item.groupKey === groupKey)
+          (item) => item.groupKey !== groupKey
         );
-        localStorage.setItem("selectedData", JSON.stringify(updatedData)); // Persist updated state
-        console.log("Updated DataL ", updatedData);
-        return updatedData;
-      }
-
-      // Add or update the product when checked
-      const existingProductIndex = validPrevData.findIndex(
-        (item) => item.groupKey === groupKey
-      );
-
-      if (existingProductIndex !== -1) {
-        // Replace the existing product
-        const updatedData = [...validPrevData];
-        updatedData[existingProductIndex] = productData; // Replace with new data
         localStorage.setItem("selectedData", JSON.stringify(updatedData));
         return updatedData;
       }
 
-      // Add a new product if it doesn't already exist
+      // 🔍 Check if the product already exists
+      const existingProduct = validPrevData.find(
+        (item) => item.groupKey === groupKey
+      );
+
+      const productData = {
+        groupKey,
+        id: product.id,
+        category: category.category,
+        subcategory: subCat,
+        subcategory1,
+        product_variant: {
+          variant_title: product.title,
+          variant_image: product.image,
+          variant_details: product.details,
+          variant_price: product.price,
+          variant_id: product.id,
+          additional_images: JSON.parse(product.additional_images || "[]"),
+        },
+        // 🔥 Preserve existing addons if the product exists
+        addons: existingProduct ? existingProduct.addons : selectedAddons || [],
+        finalPrice: calculateTotalPrice(),
+      };
+
+      if (existingProduct) {
+        // 🛠 Replace the existing product while keeping the previous addons
+        const updatedData = validPrevData.map((item) =>
+          item.groupKey === groupKey ? productData : item
+        );
+        localStorage.setItem("selectedData", JSON.stringify(updatedData));
+        return updatedData;
+      }
+
+      // ➕ Add a new product if it doesn't exist
       const updatedData = [...validPrevData, productData];
       localStorage.setItem("selectedData", JSON.stringify(updatedData));
       return updatedData;

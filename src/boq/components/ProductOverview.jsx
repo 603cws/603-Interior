@@ -366,10 +366,12 @@ function ProductOverview({
           selectedData={selectedData}
           handelSelectedData={handelSelectedData}
           categoriesWithTwoLevelCheck={categoriesWithTwoLevelCheck}
+          allAddons={allAddons}
+          onAddonAdd={handleAddOnChange}
         />
       )}
 
-      <div
+      {/* <div
         className={`addons px-5 my-3 ${
           showSelectArea ? "opacity-50 pointer-events-none" : "opacity-100"
         }`}
@@ -380,7 +382,7 @@ function ProductOverview({
           productID={selectedProductView.id}
           onAddonAdd={handleAddOnChange}
         />
-      </div>
+      </div> */}
     </>
   );
 }

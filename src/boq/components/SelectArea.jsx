@@ -1,6 +1,7 @@
-import { useEffect } from "react"; //useState
+import { useEffect, useState } from "react"; //useState
 import { MdOutlineCancel } from "react-icons/md";
 import { useApp } from "../../Context/Context";
+import Addon from "./Addon";
 
 function SelectArea({
   setShowSelectArea,
@@ -11,6 +12,8 @@ function SelectArea({
   selectedProductView,
   handelSelectedData,
   categoriesWithTwoLevelCheck,
+  allAddons,
+  onAddonAdd,
 }) {
   const {
     selectedData,
@@ -18,7 +21,52 @@ function SelectArea({
     selectedSubCategory1,
     userResponses,
     setUserResponses,
+    setSelectedData,
   } = useApp();
+
+  const [showAddon, setShowAddon] = useState(false);
+  const [allSubcategories, setAllSubcategories] = useState([]);
+  const [selectedRoom, setSelectedRoom] = useState(null);
+  const [selectedAddons, setSelectedAddons] = useState([]);
+
+  const baseImageUrl =
+    "https://bwxzfwsoxwtzhjbzbdzs.supabase.co/storage/v1/object/public/addon/";
+
+  const [selectedAddonsMap, setSelectedAddonsMap] = useState({});
+
+  // Fetch existing addons whenever `selectedData` changes
+  useEffect(() => {
+    const addonsMap = {};
+    selectedData.forEach((item) => {
+      addonsMap[item.groupKey] = item.addons || [];
+    });
+    setSelectedAddonsMap(addonsMap);
+  }, [selectedData]);
+
+  const handleAddonClick = () => {
+    setShowAddon(false);
+    setShowSelectArea(false); // Close the modal
+
+    setSelectedData((prevData) => {
+      const updatedData = prevData.map((item) => {
+        const currentGroupKey = `${selectedCategory.category}-${item.subcategory}-${selectedSubCategory1}-${selectedProductView.id}`;
+
+        return {
+          ...item,
+          addons: selectedAddonsMap[currentGroupKey] || [], // ✅ Assign correct addons for each groupKey
+        };
+      });
+
+      localStorage.setItem("selectedData", JSON.stringify(updatedData)); // ✅ Persist state
+      return updatedData;
+    });
+  };
+
+  useEffect(() => {
+    if (allSubcategories.length > 0) {
+      setSelectedRoom(allSubcategories[0]); // Select the first room by default
+    }
+  }, [allSubcategories]);
 
   // Initialize selected areas based on selectedData
   useEffect(() => {
@@ -77,6 +125,10 @@ function SelectArea({
     };
   }, []);
 
+  // useEffect(() => {
+  //   console.log("Updated Selected Data:", selectedData);
+  // }, [selectedData]); // Runs when selectedData changes
+
   const handleCheckboxChange = (value, checked) => {
     setSelectedAreas((prev) =>
       checked ? [...prev, value] : prev.filter((item) => item !== value)
@@ -84,10 +136,16 @@ function SelectArea({
   };
 
   const handleDoneClick = () => {
-    const allSubcategories = subCategories; // All available subcategories
+    // const allSubcategories = subCategories; // All available subcategories
+    const selectedSubcategories = subCategories.filter((subCat) =>
+      selectedAreas.includes(subCat)
+    );
+
+    // Set only selected subcategories
+    setAllSubcategories(selectedSubcategories);
 
     // Process all subcategories to handle addition and removal
-    allSubcategories.forEach((subCat) => {
+    subCategories.forEach((subCat) => {
       const isDisabled =
         // Array.isArray(selectedData) &&
         // selectedData.length > 0 &&
@@ -122,8 +180,59 @@ function SelectArea({
       );
     });
 
-    setShowSelectArea(false); // Close the modal
+    // setShowSelectArea(false); // Close the modal
+    setShowAddon(true);
   };
+
+  // const handleAddonClick = () => {
+  //   setShowAddon(false);
+  //   setShowSelectArea(false); // Close the modal
+
+  //   setSelectedData((prevData) => {
+  //     const updatedData = prevData.map((item) => {
+  //       if (
+  //         item.groupKey ===
+  //         `${selectedCategory.category}-${selectedRoom}-${selectedSubCategory1}-${selectedProductView.id}`
+  //       ) {
+  //         return {
+  //           ...item,
+  //           addons:
+  //             selectedAddons.length > 0 ? [...selectedAddons] : item.addons,
+  //           // ✅ If no new addons are selected, keep the old ones
+  //         };
+  //       }
+  //       return item;
+  //     });
+
+  //     localStorage.setItem("selectedData", JSON.stringify(updatedData)); // ✅ Persist state
+
+  //     return updatedData;
+  //   });
+  // };
+
+  // const handleAddonClick = () => {
+  //   setShowAddon(false);
+  //   setShowSelectArea(false); // Close the modal
+
+  //   setSelectedData((prevData) => {
+  //     const updatedData = prevData.map((item) => {
+  //       if (
+  //         item.groupKey ===
+  //         `${selectedCategory.category}-${selectedRoom}-${selectedSubCategory1}-${selectedProductView.id}`
+  //       ) {
+  //         return {
+  //           ...item,
+  //           addons: [...selectedAddons], // ✅ Always update with selectedAddons (even if empty)
+  //         };
+  //       }
+  //       return item;
+  //     });
+
+  //     localStorage.setItem("selectedData", JSON.stringify(updatedData)); // ✅ Persist state
+
+  //     return updatedData;
+  //   });
+  // };
 
   const isItemSelected = (
     selectedData,
@@ -183,153 +292,187 @@ function SelectArea({
         )
     ) ?? false;
 
+  const handleAddonSelect = (addon, isChecked) => {
+    setSelectedAddons((prev) =>
+      isChecked ? [...prev, addon] : prev.filter((item) => item.id !== addon.id)
+    );
+  };
+
   return (
     <div className="fixed inset-0 bg-black bg-opacity-30 flex justify-center items-center z-20">
-      <div className="bg-white border-[30px] border-[#1A3A36] rounded-xl max-w-[90%] max-h-screen h-[500px] overflow-auto w-[1000px] scrollbar-hide">
-        <div className="p-4 border-2 border-[#FFD500] rounded-xl relative h-auto lg:h-full">
-          {/* Title */}
-          <div className="flex justify-center items-center mb-4">
-            <p className="text-center font-semibold text-lg">
-              Select Your Area
-            </p>
-          </div>
+      <div className="relative bg-[#1A3A36] p-8 rounded-xl max-w-[90%] max-h-screen w-[1000px] scrollbar-hide">
+        {/* Close Button (Common for Both Modals) */}
+        <MdOutlineCancel
+          size={30}
+          color="white"
+          className="absolute top-1 right-1 cursor-pointer z-50"
+          onClick={() => setShowSelectArea(false)}
+        />
 
-          {/* Content */}
-          <div className="flex flex-col lg:flex-row justify-between gap-8">
-            {/* Subcategories Checkbox List */}
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-              {selectedCategory.subcategories
-                ?.filter(
-                  (subCategory) =>
-                    selectedCategory.category === "HVAC"
-                      ? userResponses?.hvacType === "Centralized"
-                        ? subCategory === "Centralized" // Show only "Centralized"
-                        : subCategory !== "Centralized" // Show all except "Centralized"
-                      : true // Show all for non-HVAC categories
-                )
-                .map((name, id) => (
-                  <div key={id} className="flex items-center gap-2">
+        {/* Inner White Content (Common Border) */}
+        <div className="bg-white p-6 rounded-lg border-2 border-[#FFD500] relative h-auto lg:h-full">
+          {/* Area Selection Modal */}
+          {!showAddon && (
+            <div className="overflow-auto">
+              <p className="text-center font-semibold text-lg mb-4">
+                Select Your Area
+              </p>
+
+              <div className="flex flex-col lg:flex-row justify-between gap-8">
+                {/* Subcategories Checkbox List */}
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                  {selectedCategory.subcategories
+                    ?.filter((subCategory) =>
+                      selectedCategory.category === "HVAC"
+                        ? userResponses?.hvacType === "Centralized"
+                          ? subCategory === "Centralized"
+                          : subCategory !== "Centralized"
+                        : true
+                    )
+                    .map((name, id) => (
+                      <div key={id} className="flex items-center gap-2">
+                        <input
+                          type="checkbox"
+                          id={`subCategory-${id}`}
+                          value={name}
+                          checked={selectedAreas.includes(name)}
+                          onChange={(e) =>
+                            handleCheckboxChange(
+                              e.target.value,
+                              e.target.checked
+                            )
+                          }
+                          className="appearance-none w-4 h-4 cursor-pointer transition duration-300 bg-black checked:border-black
+                      relative checked:before:content-['✔'] checked:before:absolute checked:before:text-white 
+                      checked:before:top-1/2 checked:before:left-1/2 checked:before:-translate-x-1/2 checked:before:-translate-y-1/2 
+                      checked:before:text-[14px] checked:before:font-bold"
+                          disabled={
+                            Array.isArray(selectedData) &&
+                            isItemSelected(
+                              selectedData,
+                              selectedCategory,
+                              name,
+                              selectedSubCategory1,
+                              selectedProductView
+                            )
+                          }
+                        />
+                        <label
+                          htmlFor={`subCategory-${id}`}
+                          className={`text-sm cursor-pointer ${
+                            Array.isArray(selectedData) &&
+                            isItemSelected(
+                              selectedData,
+                              selectedCategory,
+                              name,
+                              selectedSubCategory1,
+                              selectedProductView
+                            )
+                              ? "text-gray-400 cursor-not-allowed"
+                              : ""
+                          }`}
+                        >
+                          {name}
+                        </label>
+                      </div>
+                    ))}
+                  <div className="flex items-center gap-2 col-span-full mr-10">
                     <input
                       type="checkbox"
-                      id={`subCategory-${id}`}
-                      value={name}
-                      checked={selectedAreas.includes(name)}
-                      onChange={(e) =>
-                        handleCheckboxChange(e.target.value, e.target.checked)
-                      }
-                      className="appearance-none w-4 h-4  cursor-pointer transition duration-300 
-                      bg-black checked:border-black 
-                      relative checked:before:content-['✔'] checked:before:absolute checked:before:text-white 
-                      checked:before:top-[50%] checked:before:left-[50%] checked:before:translate-x-[-50%] checked:before:translate-y-[-50%] 
-                      checked:before:text-[14px] checked:before:font-bold"
-                      disabled={
-                        // Array.isArray(selectedData) &&
-                        // selectedData.length > 0 &&
-                        // selectedData.some((item) =>
-                        //   // item.groupKey ===
-                        //   // `${selectedCategory.category}-${name}-${selectedSubCategory1}-${selectedProductView.id}` &&
-                        //   item.category === "Flooring"
-                        //     ? `${item.category}-${item.subcategory}` ===
-                        //         `${selectedCategory.category}-${name}` &&
-                        //       item.product_variant.variant_title !==
-                        //         selectedProductView.title
-                        //     : `${item.category}-${item.subcategory}-${item.subcategory1}` ===
-                        //         `${selectedCategory.category}-${name}-${selectedSubCategory1}` &&
-                        //       item.product_variant.variant_title !==
-                        //         selectedProductView.title
-                        // )
-                        Array.isArray(selectedData) &&
-                        selectedData.length > 0 &&
-                        isItemSelected(
-                          selectedData,
-                          selectedCategory,
-                          name,
-                          selectedSubCategory1,
-                          selectedProductView
-                        )
-                      }
+                      id="selectAll"
+                      checked={allSelected}
+                      onChange={(e) => handleSelectAll(e.target.checked)}
+                      className="appearance-none w-4 h-4 cursor-pointer transition duration-300 bg-black checked:border-black
+                  relative checked:before:content-['✔'] checked:before:absolute checked:before:text-white 
+                  checked:before:top-1/2 checked:before:left-1/2 checked:before:-translate-x-1/2 checked:before:-translate-y-1/2 
+                  checked:before:text-[14px] checked:before:font-bold"
                     />
                     <label
-                      htmlFor={`subCategory-${id}`}
-                      className={`${
-                        // Array.isArray(selectedData) &&
-                        // selectedData.length > 0 &&
-                        // selectedData.some((item) =>
-                        //   // item.groupKey ===
-                        //   // `${selectedCategory.category}-${name}-${selectedSubCategory1}-${selectedProductView.id}` &&
-
-                        //   item.category === "Furniture"
-                        //     ? `${item.category}-${item.subcategory}-${item.subcategory1}` ===
-                        //         `${selectedCategory.category}-${name}-${selectedSubCategory1}` &&
-                        //       item.product_variant.variant_title !==
-                        //         selectedProductView.title
-                        //     : `${item.category}-${item.subcategory}` ===
-                        //         `${selectedCategory.category}-${name}` &&
-                        //       item.product_variant.variant_title !==
-                        //         selectedProductView.title
-                        // )
-                        Array.isArray(selectedData) &&
-                        selectedData.length > 0 &&
-                        isItemSelected(
-                          selectedData,
-                          selectedCategory,
-                          name,
-                          selectedSubCategory1,
-                          selectedProductView
-                        )
-                          ? "text-gray-400 cursor-not-allowed"
-                          : ""
-                      } text-sm cursor-pointer`}
+                      htmlFor="selectAll"
+                      className="text-sm cursor-pointer"
                     >
-                      {name}
+                      Select All
                     </label>
                   </div>
-                ))}
-              <div className="flex items-center gap-2 col-span-full mr-10">
-                <input
-                  type="checkbox"
-                  id="selectAll"
-                  checked={allSelected}
-                  onChange={(e) => handleSelectAll(e.target.checked)}
-                  className="appearance-none w-4 h-4 cursor-pointer transition duration-300 
-                  bg-black checked:border-black 
-                  relative checked:before:content-['✔'] checked:before:absolute checked:before:text-white 
-                  checked:before:top-[50%] checked:before:left-[50%] checked:before:translate-x-[-50%] checked:before:translate-y-[-50%] 
-                  checked:before:text-[14px] checked:before:font-bold"
-                />
-                <label htmlFor="selectAll" className="text-sm  cursor-pointer">
-                  Select All
-                </label>
+                </div>
+
+                {/* Image Section */}
+                <div className="flex justify-center items-center">
+                  <img
+                    src={image}
+                    alt={selectedProductView.title}
+                    className="rounded-md object-cover max-w-[200px] lg:max-w-[300px] max-h-[300px] border border-gray-300 shadow-md"
+                  />
+                </div>
+              </div>
+
+              {/* Done Button */}
+              <div className="flex justify-center items-center mt-4">
+                <button
+                  className="bg-[#1A3A36] rounded-lg text-sm py-2 px-10 border-2 border-gray-900 text-white"
+                  onClick={() => handleDoneClick()}
+                >
+                  Next
+                </button>
               </div>
             </div>
+          )}
 
-            {/* Image Section */}
-            <div className="flex justify-center items-center">
-              <img
-                src={image}
-                alt={selectedProductView.title}
-                className="rounded-md object-cover max-w-[200px] lg:max-w-[300px] max-h-[300px] border border-gray-300 shadow-md"
-              />
+          {/* Addon Selection Modal */}
+          {showAddon && (
+            <div className="flex flex-col lg:flex-row justify-between gap-8">
+              {/* Left Side: Selected SubCategories */}
+              <div className="flex flex-col gap-2 w-full lg:w-[70%]">
+                <p className="text-center font-semibold text-lg mb-4">
+                  Select Your Addon
+                </p>
+                <div className="grid grid-cols-3 gap-2">
+                  {allSubcategories.map((room, id) => (
+                    <button
+                      key={id}
+                      onClick={() => setSelectedRoom(room)}
+                      className={`px-4 py-2 border rounded-md transition ${
+                        selectedRoom === room
+                          ? "bg-[#1A3A36] text-white"
+                          : "bg-gray-200"
+                      }`}
+                    >
+                      {room}
+                    </button>
+                  ))}
+                </div>
+                <div className="flex justify-evenly items-center mt-auto pb-4">
+                  <button
+                    className="bg-[#1A3A36] rounded-lg text-sm py-2 px-10 border-2 border-gray-900 text-white"
+                    onClick={() => setShowAddon(false)}
+                  >
+                    Back
+                  </button>
+                  <button
+                    className="bg-[#1A3A36] rounded-lg text-sm py-2 px-10 border-2 border-gray-900 text-white"
+                    onClick={() => handleAddonClick()}
+                  >
+                    Done
+                  </button>
+                </div>
+              </div>
+
+              {/* Right Side: Addons for Selected Room */}
+              <div className="flex flex-col gap-4 border-2 border-gray-300 p-4 w-full lg:w-[30%] lg:min-h-full shadow-lg overflow-y-auto max-h-[500px]">
+                <Addon
+                  allAddons={allAddons}
+                  onAddonSelect={handleAddonSelect}
+                  selectedRoom={selectedRoom}
+                  selectedData={selectedData}
+                  selectedProductView={selectedProductView}
+                  selectedAddons={selectedAddons}
+                  setSelectedAddons={setSelectedAddons}
+                  selectedAddonsMap={selectedAddonsMap}
+                  setSelectedAddonsMap={setSelectedAddonsMap}
+                />
+              </div>
             </div>
-          </div>
-
-          {/* Close Button */}
-          <MdOutlineCancel
-            size={30}
-            color="gray"
-            className="absolute right-4 top-4 cursor-pointer"
-            onClick={() => setShowSelectArea(false)}
-          />
-
-          {/* Done Button */}
-          <div className="flex justify-center items-center mt-4">
-            <button
-              className="bg-[#1A3A36] rounded-lg text-sm py-2 px-10 border-2 border-gray-900 text-white"
-              onClick={handleDoneClick}
-            >
-              Done
-            </button>
-          </div>
+          )}
         </div>
       </div>
     </div>
