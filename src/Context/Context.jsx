@@ -310,6 +310,7 @@ export const AppProvider = ({ children }) => {
         setSelectedPlan,
         defaultProduct,
         setDefaultProduct,
+        setIsAuthLoading,
       }}
     >
       {children}

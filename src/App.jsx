@@ -1,5 +1,5 @@
 import React from "react";
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, useEffect } from "react";
 // import Layout from "./layout/pages/Layout";
 import Boq from "./boq/pages/Boq";
 import PageNotFound from "./common-components/PageNotFound";
@@ -115,13 +115,14 @@ function App() {
             <Route path="/Blog" element={<BlogPage />} />
             <Route path="/Blog/:title" element={<BlogDetail />} />
             <Route path="/Career" element={<Carrer />} />
-            <Route path="*" element={<PageNotFound />} />
+            {/* <Route path="*" element={<PageNotFound />} /> */}
             <Route path="/Login" element={<Login />} />
             <Route path="/OurServices" element={<OurServices />} />
             <Route path="/profile" element={<ProfileCard />} />
             <Route path="/becomeseller" element={<BecomeSeller />} />
             <Route path="/help" element={<HelpnFaq />} />
             <Route path="/termsNcondtion" element={<TermsAndCondition />} />
+            {/* <Route path="/vendordashboard" element={<VendorDashboard />} /> */}
           </Routes>
         )}
       </Suspense>
