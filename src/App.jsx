@@ -38,6 +38,7 @@ import Boqcompleted from "./common-components/Boqcompleted";
 import Howtosell from "./pages/Howtosell";
 
 import VendorDashboard from "./pages/vendor/VendorDashboard";
+import AdminDashboard from "./pages/AdminDashboard";
 
 // const Homepage = lazy(() => import("./pages/Homepage"));
 
@@ -85,7 +86,8 @@ function App() {
               element={
                 accountHolder?.role ? (
                   accountHolder.role === "admin" ? (
-                    <Dashboard />
+                    // <Dashboard />
+                    <AdminDashboard />
                   ) : accountHolder.role === "vendor" ? (
                     <VendorDashboard />
                   ) : (
