@@ -39,6 +39,9 @@ import Howtosell from "./pages/Howtosell";
 
 import VendorDashboard from "./pages/vendor/VendorDashboard";
 import AdminDashboard from "./pages/AdminDashboard";
+import DashboardProductCard from "./common-components/DashboardProductCard";
+import DashboardGetPlan from "./common-components/DashboardGetPlan";
+import PricingCard from "./common-components/PricingCard";
 
 // const Homepage = lazy(() => import("./pages/Homepage"));
 
@@ -105,6 +108,8 @@ function App() {
             <Route path="/boqcompleted" element={<Boqcompleted />} />
             <Route path="/howtosell" element={<Howtosell />} />
             <Route path="/vendordashboard" element={<VendorDashboard />} />
+            <Route path="/dashprod" element={<DashboardProductCard />} />
+            <Route path="/getplan" element={<PricingCard />} />
           </Routes>
         ) : (
           <Routes>

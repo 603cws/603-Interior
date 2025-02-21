@@ -6,6 +6,9 @@ import { useApp } from "../../Context/Context";
 import toast from "react-hot-toast";
 import { useState } from "react";
 import { MdOutlineCancel } from "react-icons/md";
+import { FaArrowLeft } from "react-icons/fa6";
+import VendorSetting from "./VendorSetting";
+import VendorProfile from "./VendorProfile";
 
 import VendorNewProduct from "./VendorNewProduct";
 function VendorDashboard() {
@@ -243,114 +246,34 @@ function VendorDashboard() {
             {isSettingOpen && (
               <div className="overflow-y-hidden scrollbar-hide h-[calc(100vh-100px)] py-2 relative">
                 <div className="flex flex-col justify-between  pt-2 sticky top-0">
-                  <h3 className="capitalize font-semibold px-4 text-xl border-b-2 border-b-[#ccc]">
+                  {/* <h3 className="capitalize font-semibold px-4 text-xl border-b-2 border-b-[#ccc]">
                     setting
-                  </h3>
+                  </h3> */}
                   <div className="border-b-2 border-b-[#ccc] py-2 px-4">
-                    <button className="capitalize font-medium text-base px-10 py-2 rounded-2xl border-[#000] border bg-[#B4EAEA]">
-                      Profile
-                    </button>
+                    {iseditopen ? (
+                      <button className="capitalize font-medium text-base px-10 py-2 rounded-2xl border-[#000] border bg-[#B4EAEA]">
+                        Profile
+                      </button>
+                    ) : (
+                      <div className="capitalize font-medium text-base px-10  ">
+                        <button
+                          className="text-sm text-[#A1A1A1] flex justify-center items-center gap-3"
+                          onClick={() => setIsEditopen(true)}
+                        >
+                          <FaArrowLeft /> back to profile
+                        </button>
+                        <h3>profile edit</h3>
+                      </div>
+                    )}
                   </div>
                 </div>
                 <div className="flex-1 flex flex-col justify-center items-center h-[90%] font-Poppins ">
                   {iseditopen ? (
                     <div className="flex justify-center items-center w-full  h-full">
-                      {/*  */}
-                      <div className="sm:w-[400px] lg:w-[500px] shadow-2xl   rounded-3xl">
-                        <div className="flex justify-end items-center px-10 lg:px-16  lg:pb-3 pt-2 w-full ">
-                          <button className="capitalize font-medium text-base px-5 py-2 rounded-2xl border-[#000] border bg-[#B4EAEA] ">
-                            edit
-                          </button>
-                        </div>
-                        <div className="px-10 lg:mp-16  pb-4 lg:pb-8 pt-2 p-5 w-full ">
-                          <div className="flex justify-center  items-center">
-                            <img
-                              src="/images/Profile.png"
-                              alt="profile"
-                              className="w-28 h-28"
-                            />
-                          </div>
-                          <h2 className="text-center text-[#194F48] font-bold text-xl">
-                            user name
-                          </h2>
-                          <div className="flex items-center justify-start gap-4 w-full my-2">
-                            <h3 className="text-[#CACED8]  capitalize w-1/2 ">
-                              email
-                            </h3>
-                            <p className="text-[#194F48] w-1/2">
-                              yunayong@gmail.com
-                            </p>
-                          </div>
-                          <div className="flex   items-center gap-4 text-nowrap my-2">
-                            <h3 className="text-[#CACED8] text-lg capitalize flex-1">
-                              Phone Number
-                            </h3>
-                            <p className="text-[#194F48] flex-1">1234567890</p>
-                          </div>
-                          <div className="flex justify-center  gap-4 text-nowrap my-2">
-                            <h3 className="text-[#CACED8] text-lg capitalize flex-1">
-                              Company Name
-                            </h3>
-                            <p className="text-[#194F48] flex-1">xyz company</p>
-                          </div>
-                          {/* <div className="grid grid-col2 gap-4 px-4 my-2">
-                          <h3 className="text-[#CACED8] text-lg capitalize">
-                            Company Name
-                          </h3>
-                          <p className="text-[#194F48]">xyz company</p>
-                        </div> */}
-                        </div>
-                      </div>
+                      <VendorProfile setIsEditopen={setIsEditopen} />
                     </div>
                   ) : (
-                    <div className="flex justify-center items-center w-full">
-                      {/*  */}
-                      <div className=" lg:w-[500px] shadow-2xl   rounded-3xl">
-                        <div className="flex justify-end items-center px-10 lg:px-16  lg:pb-3 pt-2 w-full ">
-                          <button className="capitalize font-medium text-base px-5 py-2 rounded-2xl border-[#000] border bg-[#B4EAEA] ">
-                            edit
-                          </button>
-                        </div>
-                        <div className="px-10 lg:mp-16  pb-4 lg:pb-8 pt-2 p-5 w-full ">
-                          <div className="flex justify-center  items-center">
-                            <img
-                              src="/images/Profile.png"
-                              alt="profile"
-                              className="w-28 h-28"
-                            />
-                          </div>
-                          <h2 className="text-center text-[#194F48] font-bold text-xl">
-                            user name
-                          </h2>
-                          <div className="flex items-center justify-start gap-4 w-full my-2">
-                            <h3 className="text-[#CACED8] text-lg capitalize w-1/2 ">
-                              email
-                            </h3>
-                            <p className="text-[#194F48] w-1/2">
-                              yunayong@gmail.com
-                            </p>
-                          </div>
-                          <div className="flex   items-center gap-4 text-nowrap my-2">
-                            <h3 className="text-[#CACED8] text-lg capitalize flex-1">
-                              Phone Number
-                            </h3>
-                            <p className="text-[#194F48] flex-1">1234567890</p>
-                          </div>
-                          <div className="flex justify-center  gap-4 text-nowrap my-2">
-                            <h3 className="text-[#CACED8] text-lg capitalize flex-1">
-                              Company Name
-                            </h3>
-                            <p className="text-[#194F48] flex-1">xyz company</p>
-                          </div>
-                          {/* <div className="grid grid-col2 gap-4 px-4 my-2">
-                          <h3 className="text-[#CACED8] text-lg capitalize">
-                            Company Name
-                          </h3>
-                          <p className="text-[#194F48]">xyz company</p>
-                        </div> */}
-                        </div>
-                      </div>
-                    </div>
+                    <VendorSetting />
                   )}
                 </div>
               </div>
