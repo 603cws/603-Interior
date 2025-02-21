@@ -13,10 +13,12 @@ function ProductCard({
     selectedSubCategory,
     selectedSubCategory1,
     selectedPlan,
+    loading,
+    setLoading,
   } = useApp();
 
   const productsInCategory = products[selectedCategory?.category];
-  const [loading, setLoading] = useState(true);
+  // const [loading, setLoading] = useState(true);
   const [loadingImages, setLoadingImages] = useState({}); // Track image loading
 
   const [filtervalue, setFiltervalue] = useState(selectedPlan);
@@ -63,10 +65,14 @@ function ProductCard({
 
   useEffect(() => {
     // setLoading(filteredVariants.length === 0);
-    setTimeout(() => {
-      setLoading(false);
-    }, 3000);
-  }, [filteredVariants]);
+    if (setLoading) {
+      console.log(setLoading);
+
+      setTimeout(() => {
+        setLoading(false);
+      }, 2000);
+    }
+  }, []);
 
   // const timeoutRef = useRef(null);
 

@@ -19,6 +19,7 @@ export const AppProvider = ({ children }) => {
   const [progress, setProgress] = useState(0);
   const [userId, setUserId] = useState(null);
   const [height, setHeight] = useState(10);
+  const [loading, setLoading] = useState(true);
 
   const [selectedCategory, setSelectedCategory] = useState(null); //Gets value after data fetching
   const [selectedSubCategory, setSelectedSubCategory] = useState(null); //Gets value after data fetching
@@ -313,6 +314,8 @@ export const AppProvider = ({ children }) => {
         defaultProduct,
         setDefaultProduct,
         setIsAuthLoading,
+        setLoading,
+        loading,
       }}
     >
       {children}
