@@ -92,7 +92,7 @@ const TreeMap = ({ totalArea, areaQuantities, areaValues }) => {
   const options = {
     chart: {
       type: "treemap",
-      height: 350,
+      height: "auto",
       toolbar: {
         show: true,
       },
@@ -221,6 +221,7 @@ const TreeMap = ({ totalArea, areaQuantities, areaValues }) => {
         series={[{ data: series }]}
         type="treemap"
         className="distribution-chart"
+        height={400}
       />
       <button
         className="arrow-button"

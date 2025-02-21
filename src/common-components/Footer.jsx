@@ -26,17 +26,17 @@ function Footer() {
       {/* container div */}
       <div className="container mx-auto">
         {/* container will contain two part one for all the logo and all ,second for copy right and top scroll */}
-        <div className="text-white lg:flex lg:gap-10  items-center gap-10 justify-around pt-5 mb-3">
+        <div className="text-white lg:flex lg:gap-10  items-start gap-10 justify-around pt-5 mb-3">
           {/* 3div */}
-          <div className="text-white font-lexend ">
+          <div className="text-white font-lexend text-start">
             <img
               src="/logo/logo.png"
               alt="logo for footer"
               width={80}
               height={80}
             />
-            <p className="font-semibold pt-2">Head office :</p>
-            <p className="font-semibold">603 The Interiors</p>
+            <p className="font-semibold pt-2 text-lg">Head office :</p>
+            <p className="font-semibold text-lg">603 The Interiors</p>
             <div className="flex flex-col font-extralight gap-2 mt-1 text-md">
               <div className="flex gap-4 items-center">
                 <CiLocationOn size={22} />
@@ -57,7 +57,7 @@ function Footer() {
           </div>
           {/* second div */}
           <div className="">
-            <h2 className="font-lexend font-semibold text-xl my-3">
+            <h2 className="font-lexend font-semibold text-lg my-3">
               Quicklinks
             </h2>
             <div className="flex gap-5">
@@ -68,6 +68,26 @@ function Footer() {
                 {/* <li className="cursor-pointer">Company</li>
                 <li className="cursor-pointer">Brand</li>
                 <li className="cursor-pointer">Products</li> */}
+                <li
+                  className="cursor-pointer"
+                  onClick={() => navigation("/Career")}
+                >
+                  Career
+                </li>
+                <li
+                  onClick={() => navigation("/Blog")}
+                  className="cursor-pointer"
+                >
+                  Blogs
+                </li>
+              </ul>
+              <ul className="font-Poppins flex flex-col gap-1 font-extralight text-base">
+                <li
+                  onClick={() => navigation("/Contactus")}
+                  className="cursor-pointer"
+                >
+                  Contact Us
+                </li>
                 <li
                   className="cursor-pointer"
                   onClick={() => navigation("/help")}
@@ -86,26 +106,6 @@ function Footer() {
                   onClick={() => navigation("/becomeseller")}
                 >
                   Become a reseller
-                </li>
-              </ul>
-              <ul className="font-Poppins flex flex-col gap-1 font-extralight text-md">
-                <li
-                  onClick={() => navigation("/Contactus")}
-                  className="cursor-pointer"
-                >
-                  Contact Us
-                </li>
-                <li
-                  className="cursor-pointer"
-                  onClick={() => navigation("/Career")}
-                >
-                  Career
-                </li>
-                <li
-                  onClick={() => navigation("/Blog")}
-                  className="cursor-pointer"
-                >
-                  Blogs
                 </li>
               </ul>
             </div>

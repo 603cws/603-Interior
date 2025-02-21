@@ -197,12 +197,12 @@ function Landing() {
                     alt="pantary"
                     className="mx-auto transition-transform duration-700 ease-in-out group-hover:scale-95 group-hover:origin-center"
                   />
-                  <p className="hidden group-hover:block font-lora font-bold text-[#333333] mt-2">
+                  <p className="hidden group-hover:block font-lora font-bold text-[#333333] mt-2 text-xl">
                     Smart Office Layouts
                   </p>
-                  <p className="hidden group-hover:block text-[#34BFAD] font-sans font-bold mt-1 uppercase tracking-widest text-xs ">
+                  {/* <p className="hidden group-hover:block text-[#34BFAD] font-sans font-bold mt-1 uppercase tracking-widest text-xs ">
                     Space-optimized layouts tailored to your team’s needs.
-                  </p>
+                  </p> */}
                 </div>
               </div>
 
@@ -215,12 +215,12 @@ function Landing() {
                     alt="pantary"
                     className="mx-auto transition-transform duration-700 ease-in-out group-hover:scale-95 group-hover:origin-center"
                   />
-                  <p className="hidden group-hover:block font-lora font-bold text-[#333333] mt-2">
+                  <p className="hidden group-hover:block font-lora font-bold text-[#333333] mt-2 text-xl">
                     Custom BOQ
                   </p>
-                  <p className="hidden group-hover:block text-[#34BFAD] font-sans font-bold mt-1 uppercase tracking-widest text-xs ">
+                  {/* <p className="hidden group-hover:block text-[#34BFAD] font-sans font-bold mt-1 uppercase tracking-widest text-xs ">
                     fully customizable BOQs with trusted vendor recommendations
-                  </p>
+                  </p> */}
                 </div>
               </div>
 
@@ -233,13 +233,13 @@ function Landing() {
                     alt="pantary"
                     className="mx-auto transition-transform duration-700 ease-in-out group-hover:scale-95 group-hover:origin-center"
                   />
-                  <p className="hidden group-hover:block font-lora font-bold text-[#333333] mt-2">
+                  <p className="hidden group-hover:block font-lora font-bold text-[#333333] mt-2 text-xl">
                     End-to-End Execution
                   </p>
-                  <p className="hidden group-hover:block text-[#34BFAD] font-sans font-bold mt-1 uppercase tracking-widest text-xs ">
+                  {/* <p className="hidden group-hover:block text-[#34BFAD] font-sans font-bold mt-1 uppercase tracking-widest text-xs ">
                     From planning to procurement and setup, we ensure quality
                     and efficiency at every step
-                  </p>
+                  </p> */}
                 </div>
               </div>
             </div>
@@ -296,11 +296,11 @@ function Landing() {
                 >
                   <IoIosCall size={35} color="white" />
                 </div>
-                <div className="flex flex-col">
+                <div className="flex flex-col justify-center items-center">
                   <p className="font-sans font-bold text-[#212121] text-sm text-center">
                     Book Through Call
                   </p>
-                  <p className="font-sans text-[#34BFAD] text-lg">
+                  <p className="font-sans text-[#34BFAD] text-lg ml-3">
                     +91 9136036603
                   </p>
                 </div>
@@ -562,7 +562,7 @@ function Landing() {
                 <img
                   src="/images/bajaj-electricals-logo.jpg"
                   alt="bajaj"
-                  className="w-40 h-[70px]"
+                  className="w-28 h-[70px]"
                 />
               </div>
               {/* <div>
@@ -573,7 +573,7 @@ function Landing() {
                 />
               </div> */}
               <div>
-                <img src="/logo/logo.png" alt="603" className="w-40 h-16" />
+                <img src="/logo/logo.png" alt="603" className="w-28 h-16" />
               </div>
             </Slider>
           </div>
@@ -678,15 +678,19 @@ function Landing() {
 
       {/* section FAQ */}
       {/* <section className="bg-gradient-to-t from-[#f4f4f4] via-[#f4f4f4] to-[#D0D0D0]"> */}
-      <section className="">
+      <section className="py-10">
         {/* container */}
         <div className="container mx-auto flex">
           {/* a div for image */}
-          <div>
-            <img src="/images/home/sectionFAQ.png" alt="FAQ Section" />
+          <div className="flex-1">
+            <img
+              src="/images/home/sectionFAQ.png"
+              alt="FAQ Section"
+              className=""
+            />
           </div>
           {/* div for Faq */}
-          <div className="flex-1 ">
+          <div className="flex-1 border-2 border-[#CCCCCC] rounded-3xl p-10">
             <h2 className="font-bold font-Poppins text-3xl text-center my-10">
               Frequently Asked Questions
             </h2>
@@ -698,7 +702,7 @@ function Landing() {
                   className="mb-3 text-[#141515] font-Poppins font-medium"
                 >
                   <div
-                    className="flex w-full text-left p-4 bg-gray-100 hover:bg-gray-200 focus:outline-none justify-between cursor-pointer rounded-xl"
+                    className="flex w-full text-left p-4 border-2 hover:bg-gray-200 focus:outline-none justify-between cursor-pointer rounded-xl"
                     onClick={() => handleToggle(index)}
                   >
                     <button

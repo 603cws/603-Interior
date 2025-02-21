@@ -573,7 +573,7 @@ function Layout() {
   };
 
   const resetAll = () => {
-    setTotalArea(0);
+    setTotalArea();
     // setSmallCabinSeatCount(0);
     // setHrRoomSeatCount(0);
     // setSalesSeatCount(0);
