@@ -5,12 +5,42 @@ import { BiFilterAlt } from "react-icons/bi";
 import { AiOutlineCloudDownload } from "react-icons/ai";
 import { LuPlus } from "react-icons/lu";
 import { IoIosArrowDown } from "react-icons/io";
+import { useEffect, useState } from "react";
+import { supabase } from "../services/supabase";
 
 function AdminDashboard() {
   const navigate = useNavigate();
+
+  const [products, setProducts] = useState([]);
+
+  const baseImageUrl =
+    "https://bwxzfwsoxwtzhjbzbdzs.supabase.co/storage/v1/object/public/addon/";
+
+  // Fetch Products from Supabase
+  useEffect(() => {
+    const fetchProducts = async () => {
+      const { data, error } = await supabase.from("product_variants").select(`
+          id, 
+          title, 
+          price, 
+          details, 
+          image, 
+          product_id, 
+          products (category, subcategory, subcategory1)
+        `);
+
+      if (error) {
+        console.error("Error fetching products:", error);
+      } else {
+        setProducts(data);
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
   //if margin inc/dec then to adjust the screen height => search vh and increase the - part so it will fit the div
   return (
-    //images/home/sectionproduct2.png
     <div className="bg-[url('images/admin/Admin.png')] bg-cover bg-center bg-no-repeat  p-5 max-h-full">
       <div className="flex gap-3 overflow-hidden bg-white rounded-xl">
         {/* Sidebar */}
@@ -142,38 +172,57 @@ function AdminDashboard() {
                         <th className="p-3">Action</th>
                       </tr>
                     </thead>
-                    <tbody className="max-h-[400px] text-center text-sm">
-                      {[...Array(8)].map((_, index) => (
-                        <tr
-                          key={index}
-                          className="hover:bg-gray-50 cursor-pointer w-full"
-                        >
-                          <td className="border border-gray-200 p-3">
-                            Classic Ceramic Tito
-                          </td>
-                          <td className="border border-gray-200 p-3">₹1.129</td>
-                          <td className="border border-gray-200 p-3">
-                            Timeless ceramic tiles that add elegance and style
-                            to any room.
-                          </td>
-                          <td className="border border-gray-200 p-3">
-                            Flooring
-                          </td>
-                          <td className="border border-gray-200 p-3">
-                            Open Workspace, Cabine, Meeting Room, Public Spaces,
-                            All Areas
-                          </td>
-                          <td className="border border-gray-200 p-3">Tito</td>
-                          <td className="border border-gray-200 p-3 flex flex-col items-center">
-                            <button className="bg-white border border-black text-black px-0 py-1.5 hover:bg-[#C4BFE4] w-20 rounded-3xl mb-2">
-                              Edit
-                            </button>
-                            <button className="bg-white border border-black text-black px-0 py-1.5 hover:bg-[#C4BFE4] w-20 rounded-3xl">
-                              Delete
-                            </button>
+                    <tbody className="text-center text-sm">
+                      {products.length > 0 ? (
+                        products.map((product) => (
+                          <tr
+                            key={product.id}
+                            className="hover:bg-gray-50 cursor-pointer"
+                          >
+                            {/* Product Name with Image */}
+                            <td className="border border-gray-200 p-3 align-middle">
+                              <div className="flex items-center gap-2">
+                                <img
+                                  src={`${baseImageUrl}${product.image}`} // Default image if none
+                                  alt={product.title}
+                                  className="w-10 h-10 object-cover rounded"
+                                />
+                                <span>{product.title}</span>
+                              </div>
+                            </td>
+
+                            <td className="border border-gray-200 p-3 align-middle">
+                              ₹{product.price}
+                            </td>
+                            <td className="border border-gray-200 p-3 align-middle">
+                              {product.details}
+                            </td>
+                            <td className="border border-gray-200 p-3 align-middle">
+                              {product.products?.category || "N/A"}
+                            </td>
+                            <td className="border border-gray-200 p-3 align-middle">
+                              {product.products?.subcategory || "N/A"}
+                            </td>
+                            <td className="border border-gray-200 p-3 align-middle">
+                              {product.products?.subcategory1 || "N/A"}
+                            </td>
+                            <td className="border border-gray-200 p-3 align-middle flex flex-col items-center">
+                              <button className="bg-white border border-black text-black py-1.5 hover:bg-[#C4BFE4] w-20 rounded-3xl mb-2">
+                                Edit
+                              </button>
+                              <button className="bg-white border border-black text-black py-1.5 hover:bg-[#C4BFE4] w-20 rounded-3xl">
+                                Delete
+                              </button>
+                            </td>
+                          </tr>
+                        ))
+                      ) : (
+                        <tr>
+                          <td colSpan="7" className="p-5 text-gray-500">
+                            No products found.
                           </td>
                         </tr>
-                      ))}
+                      )}
                     </tbody>
                   </table>
                 </div>

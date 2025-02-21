@@ -10,8 +10,8 @@ const PartitionCeilingCalculation = ({
   const factor = quantity > 3 ? 1.5 : 2;
   const soft = (area / hard).toFixed(2);
 
-  const totalSoft = quantity * soft * factor * height * softPrice;
-  const totalHard = quantity * hard * factor * height * hardPrice;
+  const totalSoft = quantity * soft * factor * height;
+  const totalHard = quantity * hard * factor * height;
 
   console.log(
     "hard: ",
@@ -21,9 +21,9 @@ const PartitionCeilingCalculation = ({
     "Multiply factor: ",
     factor,
     " Hard Calc: Rs.",
-    quantity * hard * factor * height * hardPrice,
+    quantity * hard * factor * height,
     " Soft Calc: Rs.",
-    quantity * soft * factor * height * softPrice,
+    quantity * soft * factor * height,
     " Total Area: ",
     area,
     "Total Quantity:",
