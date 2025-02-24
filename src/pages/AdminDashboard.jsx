@@ -12,6 +12,15 @@ function AdminDashboard() {
   const navigate = useNavigate();
 
   const [products, setProducts] = useState([]);
+  const [addons, setAddons] = useState([]);
+
+  const [toggle, setToggle] = useState(true);
+  const [selectedTab, setSelectedTab] = useState("products");
+
+  const tabs = [
+    { name: "Products", value: "products" },
+    { name: "Add-Ons", value: "addons" },
+  ];
 
   const baseImageUrl =
     "https://bwxzfwsoxwtzhjbzbdzs.supabase.co/storage/v1/object/public/addon/";
@@ -36,8 +45,35 @@ function AdminDashboard() {
       }
     };
 
+    const fetchAddons = async () => {
+      const { data, error } = await supabase.from("addon_variants").select(
+        `
+          id, 
+          title, 
+          price, 
+          image, 
+          addonid, 
+          addons (title)
+        `
+      );
+
+      if (error) {
+        console.error("Error fetching addons:", error);
+      } else {
+        setAddons(data);
+        console.log("Addons: ", data);
+      }
+    };
+
     fetchProducts();
+    fetchAddons();
   }, []);
+
+  const handleTabClick = (event) => {
+    const tab = event.target.value; // Get value from button
+    setSelectedTab(tab);
+    setToggle(tab === "products"); // Set toggle dynamically
+  };
 
   //if margin inc/dec then to adjust the screen height => search vh and increase the - part so it will fit the div
   return (
@@ -142,70 +178,88 @@ function AdminDashboard() {
               <div className="flex justify-between items-center mt-4 px-8">
                 {/* Right Side: Buttons (Vertically Centered) */}
                 <div className="flex items-center gap-3">
-                  <button className="flex items-center gap-2 px-6 py-2 border bg-white rounded-xl hover:bg-[#C4BFE4]">
-                    Products
-                  </button>
-                  <button className="flex items-center gap-2 px-6 py-2 border bg-white rounded-xl hover:bg-[#C4BFE4]">
-                    Add-Ons
-                  </button>
+                  {tabs.map((tab) => (
+                    <button
+                      key={tab.value}
+                      className={`flex items-center gap-2 px-6 py-2 border rounded-xl ${
+                        selectedTab === tab.value
+                          ? "bg-[#C4BFE4] text-white"
+                          : "bg-white "
+                      }`}
+                      value={tab.value}
+                      onClick={handleTabClick} // Dynamically sets the tab
+                    >
+                      {tab.name}
+                    </button>
+                  ))}
                 </div>
               </div>
 
               {/* Table Section */}
-              <section className="mt-2 flex-1 overflow-hidden px-8">
-                <div className="w-full h-full border-t border-b border-[#CCCCCC] overflow-y-auto custom-scrollbar">
-                  <table className="min-w-full border-collapse">
-                    <thead className="bg-[#EBF0FF] sticky top-0 z-10 px-8 text-center text-nowrap">
-                      <tr>
-                        <th className="p-3">Product Name</th>
-                        <th className="p-3 flex items-center gap-2">
-                          Price
-                          <IoIosArrowDown />
-                        </th>
-                        <th className="p-3">Details</th>
-                        <th className="p-3 flex items-center gap-2">
-                          Category
-                          <IoIosArrowDown />
-                        </th>
-                        <th className="p-3">Sub Category</th>
-                        <th className="p-3">Sub-Sub Category</th>
-                        <th className="p-3">Action</th>
-                      </tr>
-                    </thead>
-                    <tbody className="text-center text-sm">
-                      {products.length > 0 ? (
-                        products.map((product) => (
+              {(toggle ? products : addons).length > 0 ? (
+                <section className="mt-2 flex-1 overflow-hidden px-8">
+                  <div className="w-full h-full border-t border-b border-[#CCCCCC] overflow-y-auto custom-scrollbar">
+                    <table className="min-w-full border-collapse">
+                      <thead className="bg-[#EBF0FF] sticky top-0 z-10 px-8 text-center text-nowrap">
+                        <tr>
+                          <th className="p-3">Product Name</th>
+                          <th className="p-3 flex items-center gap-2">
+                            Price <IoIosArrowDown />
+                          </th>
+                          {toggle ? (
+                            <>
+                              <th className="p-3">Details</th>
+                              <th className="p-3 flex items-center gap-2">
+                                Category <IoIosArrowDown />
+                              </th>
+                              <th className="p-3">Sub Category</th>
+                              <th className="p-3">Sub-Sub Category</th>
+                            </>
+                          ) : (
+                            <th className="p-3">Addon Title</th>
+                          )}
+                          <th className="p-3">Action</th>
+                        </tr>
+                      </thead>
+                      <tbody className="text-center text-sm">
+                        {(toggle ? products : addons).map((item) => (
                           <tr
-                            key={product.id}
+                            key={item.id}
                             className="hover:bg-gray-50 cursor-pointer"
                           >
-                            {/* Product Name with Image */}
                             <td className="border border-gray-200 p-3 align-middle">
                               <div className="flex items-center gap-2">
                                 <img
-                                  src={`${baseImageUrl}${product.image}`} // Default image if none
-                                  alt={product.title}
+                                  src={`${baseImageUrl}${item.image}`}
+                                  alt={item.title}
                                   className="w-10 h-10 object-cover rounded"
                                 />
-                                <span>{product.title}</span>
+                                <span>{item.title}</span>
                               </div>
                             </td>
-
                             <td className="border border-gray-200 p-3 align-middle">
-                              ₹{product.price}
+                              ₹{item.price}
                             </td>
-                            <td className="border border-gray-200 p-3 align-middle">
-                              {product.details}
-                            </td>
-                            <td className="border border-gray-200 p-3 align-middle">
-                              {product.products?.category || "N/A"}
-                            </td>
-                            <td className="border border-gray-200 p-3 align-middle">
-                              {product.products?.subcategory || "N/A"}
-                            </td>
-                            <td className="border border-gray-200 p-3 align-middle">
-                              {product.products?.subcategory1 || "N/A"}
-                            </td>
+                            {toggle ? (
+                              <>
+                                <td className="border border-gray-200 p-3 align-middle">
+                                  {item.details}
+                                </td>
+                                <td className="border border-gray-200 p-3 align-middle">
+                                  {item.products?.category || "N/A"}
+                                </td>
+                                <td className="border border-gray-200 p-3 align-middle">
+                                  {item.products?.subcategory || "N/A"}
+                                </td>
+                                <td className="border border-gray-200 p-3 align-middle">
+                                  {item.products?.subcategory1 || "N/A"}
+                                </td>
+                              </>
+                            ) : (
+                              <td className="border border-gray-200 p-3 align-middle">
+                                {item.addons?.title || "N/A"}
+                              </td>
+                            )}
                             <td className="border border-gray-200 p-3 align-middle flex flex-col items-center">
                               <button className="bg-white border border-black text-black py-1.5 hover:bg-[#C4BFE4] w-20 rounded-3xl mb-2">
                                 Edit
@@ -215,18 +269,16 @@ function AdminDashboard() {
                               </button>
                             </td>
                           </tr>
-                        ))
-                      ) : (
-                        <tr>
-                          <td colSpan="7" className="p-5 text-gray-500">
-                            No products found.
-                          </td>
-                        </tr>
-                      )}
-                    </tbody>
-                  </table>
-                </div>
-              </section>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </section>
+              ) : (
+                <p className="p-5 text-gray-500 text-center">
+                  No {toggle ? "products" : "addons"} found.
+                </p>
+              )}
             </div>
           </div>
         </div>
