@@ -467,28 +467,36 @@ function Boq() {
     setSelectedProductView(variant);
   };
 
-  const calculateTotalPrice = () => {
+  const calculateTotalPrice = (category, subCat, subcategory1) => {
+    // Determine the actual values by prioritizing function parameters, falling back to selected state
+    const actualCategory = category || selectedCategory?.category;
+    const actualSubCategory = subCat || selectedSubCategory;
+    const actualSubCategory1 = subcategory1 || selectedSubCategory1;
+
+    // Calculate base total
     const total = calculateTotalPriceHelper(
       quantityData[0],
       areasData[0],
-      selectedCategory?.category,
-      selectedSubCategory,
-      selectedSubCategory1,
+      actualCategory,
+      actualSubCategory,
+      actualSubCategory1,
       height
     );
-    //Currently rate of product is hardcoded inside HVACCalculation.jsx file.
-    if (selectedCategory?.category === "HVAC") {
+
+    // Define price calculation based on category and subcategories
+    if (actualCategory === "HVAC") {
       return total;
     }
-    if (selectedCategory?.category === "Lighting") {
+    if (actualCategory === "Lighting") {
       return total * 200 + selectedProductView.price;
     }
-    if (selectedCategory?.category === "Civil / Plumbing") {
+    if (actualCategory === "Civil / Plumbing") {
       return total * 100 + selectedProductView.price;
     }
-    if (selectedCategory?.category === "Paint") {
+    if (actualCategory === "Paint") {
       return total * selectedProductView.price * 3 * 15;
     }
+
     return total * selectedProductView.price;
   };
 
@@ -657,7 +665,11 @@ function Boq() {
         },
         // 🔥 Preserve existing addons if the product exists
         addons: existingProduct ? existingProduct.addons : selectedAddons || [],
-        finalPrice: calculateTotalPrice(),
+        finalPrice: calculateTotalPrice(
+          category.category,
+          subCat,
+          subcategory1
+        ),
       };
 
       if (existingProduct) {

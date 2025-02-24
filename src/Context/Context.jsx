@@ -203,13 +203,13 @@ export const AppProvider = ({ children }) => {
     // Validate selectedData and categories to prevent errors
     if (!Array.isArray(selectedData) || selectedData.length === 0) {
       console.warn("Invalid or empty selectedData.");
-      setProgress(0); // Reset progress to 0 if no data
+      setProgress(0);
       return;
     }
 
     if (!Array.isArray(categories) || categories.length === 0) {
       console.warn("Invalid or empty categories.");
-      setProgress(0); // Reset progress to 0 if no categories
+      setProgress(0);
       return;
     }
 
@@ -235,7 +235,7 @@ export const AppProvider = ({ children }) => {
       const subCategoryPercentage =
         categoryPercentage / categoryObj.subcategories.length;
 
-      // Handle subCategory1 logic
+      // Handle subCategory1 logic with exclusion for "pods" in "Pantry"
       if (
         (subcategory1 &&
           subCat1[category] &&
@@ -246,15 +246,20 @@ export const AppProvider = ({ children }) => {
         category === "Lux" ||
         category === "Paint"
       ) {
-        //&& (category === 'Furniture' || category === 'Smart Solutions')
-        // if (category === "Flooring") return;
-        const subCategory1Index = subCat1[category].indexOf(subcategory1);
+        let validSubCat1List = subCat1[category];
+
+        // Exclude "pods" when subcategory is "Pantry" under "Civil / Plumbing"
+        if (category === "Civil / Plumbing" && subcategory === "Pantry") {
+          validSubCat1List = validSubCat1List.filter((item) => item !== "Pods");
+        }
+
+        const subCategory1Index = validSubCat1List.indexOf(subcategory1);
         if (subCategory1Index !== -1) {
           const subCategory1Percentage =
-            subCategoryPercentage / subCat1[category].length;
+            subCategoryPercentage / validSubCat1List.length;
           totalProgress += subCategory1Percentage;
         } else {
-          console.warn(`SubCategory1 "${subcategory1}" not found.`);
+          console.warn(`SubCategory1 "${subcategory1}" not found or excluded.`);
         }
       } else {
         totalProgress += subCategoryPercentage;
@@ -263,7 +268,7 @@ export const AppProvider = ({ children }) => {
 
     // Ensure progress does not exceed 100%
     totalProgress = Math.min(totalProgress, 100);
-    setProgress(Math.round(totalProgress * 100) / 100); // Round to 2 decimal places
+    setProgress(Math.round(totalProgress * 100) / 100);
   }
 
   return (
