@@ -185,9 +185,9 @@ function Boq() {
 
               // Skip filtering if the category is not "Furniture"
               const ignoreCat =
-                normalize(category.category) === "lux" ||
-                normalize(category.category) === "civilplumbing" ||
-                normalize(category.category) === "hvac";
+                // normalize(category.category) === "lux" ||
+                normalize(category.category) === "civilplumbing";
+              // normalize(category.category) === "hvac";
               if (ignoreCat) {
                 return true; // Keep the subcategory if it's not "Furniture"
               }
@@ -941,6 +941,11 @@ function Boq() {
 
     // Hide the modal and reset questions state
     setQuestionPopup(false);
+
+    if (answers.hvacType === "Centralized") {
+      setSelectedSubCategory(answers.hvacType || null);
+    }
+
     //  setCabinsQuestions(false);
     // setRunTour(true);
 

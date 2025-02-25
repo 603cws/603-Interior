@@ -19,7 +19,8 @@ const HVACCalculation = ({
   // Calculation logic
   const calculateArea = () => {
     const conversionFactor = location === "India" ? 120 : 100;
-    const baseTonValue = (area * quantity) / conversionFactor;
+    // const baseTonValue = (area * quantity) / conversionFactor;
+    const baseTonValue = area / conversionFactor;
     const acType = subcategory === "Centralized" ? "hp" : "ton";
     const rate = rates[subCat1]?.[acType] || 0;
 
