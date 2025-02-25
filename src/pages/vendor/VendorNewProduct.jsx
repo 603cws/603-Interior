@@ -1,12 +1,52 @@
 import { MdKeyboardArrowLeft } from "react-icons/md";
 import { BsUpload } from "react-icons/bs";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaRegQuestionCircle } from "react-icons/fa";
+
+// import React, { useEffect, useRef } from "react";
+// import { useNavigate } from "react-router-dom"; // Import useNavigate
+// import { useForm, useFieldArray } from "react-hook-form";
+import { supabase } from "../../services/supabase";
+import { toast, Toaster } from "react-hot-toast";
+import { useApp } from "../../Context/Context";
+import AllCatArray from "../../utils/AllCatArray";
+// import { filter } from "motion/react-client";
+
 function VendorNewProduct({ setAddNewProduct }) {
   const [additionalImages, setAdditionalImages] = useState([]);
   const [file, setFile] = useState(null);
   // const [dragging, setDragging] = useState(false);
   const [preview, setPreview] = useState(null);
+
+  // let resources = [];
+  const [resources, setResources] = useState([]);
+  const [subcat, setSubcat] = useState([]);
+
+  const [selectedSubcategories, setSelectedSubcategories] = useState();
+  const [subSubCategory, setSubSubCategory] = useState("");
+
+  const [category, setCategory] = useState("");
+
+  // const [selectedSubcategories, setSelectedSubcategories] = useState();
+
+  // const [variants, setVariants] = useState([
+  //   {
+  //     title: "",
+  //     price: "",
+  //     details: "",
+  //     mainImage: null,
+  //     additionalImages: [],
+  //   },
+  // ]);
+  const [variant, setVariant] = useState({
+    title: "",
+    price: 0,
+    details: "",
+    mainImage: null,
+    additionalImages: [],
+  });
+
+  const { accountHolder } = useApp();
 
   const handleFileChange = (event) => {
     const selectedFile = event.target.files[0];
@@ -30,6 +70,14 @@ function VendorNewProduct({ setAddNewProduct }) {
     setPreview(null);
   };
 
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setVariant((prevVariants) => ({
+      ...prevVariants,
+      [name]: value,
+    }));
+  };
+
   const handleAdditionalImagesChange = (event) => {
     const files = Array.from(event.target.files);
     if (files.length && additionalImages.length + files.length <= 5) {
@@ -37,6 +85,10 @@ function VendorNewProduct({ setAddNewProduct }) {
         ...prev,
         ...files.map((file) => ({ file, preview: URL.createObjectURL(file) })),
       ]);
+      // setVariant((prevVariants) => ({
+      //   ...prevVariants,
+      //   additionalImages: [...prevVariants.additionalImages, newImage], // Add a new image
+      // }));
     } else {
       alert("You can upload up to 5 additional images only.");
     }
@@ -65,6 +117,223 @@ function VendorNewProduct({ setAddNewProduct }) {
   const removeAdditionalImage = (index) => {
     setAdditionalImages((prev) => prev.filter((_, i) => i !== index));
   };
+
+  useEffect(() => {
+    accountHolder.allowedCategory.map((category) => {
+      console.log(category);
+
+      const filtered = AllCatArray.filter((cat) => cat.name === category);
+
+      const subcattodisplay = filtered.flatMap((subcat) => subcat.subCat1);
+      setResources(filtered);
+      setSubcat(subcattodisplay);
+    });
+  }, []);
+
+  const onSubmit = async () => {
+    try {
+      console.log("hello from the submit");
+
+      // Check if the product already exists based on category, subcategory, and subSubCategory
+      const { data: existingProduct, error: existingProductError } =
+        await supabase
+          .from("products")
+          .select("id")
+          .eq("category", category)
+          .eq("subcategory", selectedSubcategories)
+          .eq("subcategory1", subSubCategory) // subSubCategory is from the state
+          .single();
+
+      if (existingProductError && existingProductError.code !== "PGRST116") {
+        console.error(existingProductError);
+        toast.error("Error checking existing product.");
+        return;
+      }
+
+      let productId;
+      if (existingProduct) {
+        // If the product already exists, use the existing product ID
+        productId = existingProduct.id;
+        toast.success(
+          "Product already exists. Proceeding with variants and addons."
+        );
+      } else {
+        // Insert a new product if it doesn't exist
+        const { data: Product, error: insertError } = await supabase
+          .from("products")
+          .insert({
+            category: category,
+            subcategory: selectedSubcategories,
+            subcategory1: subSubCategory || null, // Insert subSubCategory (from state)
+          })
+          .select()
+          .single();
+
+        if (insertError) {
+          console.error(insertError);
+          toast.error("Error inserting new product.");
+          return;
+        }
+
+        productId = Product.id;
+        toast.success("New product inserted successfully.");
+      }
+
+      // Now proceed with adding variants
+      // for (const variant of variants) {
+      //   if (variant.title && variant.price && variant.mainImage) {
+      //     // Upload the main image to Supabase storage
+      //     const { data: mainImageUpload, error: mainImageError } =
+      //       await supabase.storage
+      //         .from("addon")
+      //         .upload(`${variant.title}-main-${productId}`, variant.mainImage);
+
+      //     if (mainImageError) {
+      //       console.error(mainImageError);
+      //       toast.error(
+      //         `Error uploading main image for variant: ${variant.title}`
+      //       );
+      //       break;
+      //     }
+
+      //     // Upload additional images
+      //     const additionalImagePaths = [];
+      //     for (const [index, imageFile] of variant.additionalImages.entries()) {
+      //       const { data: additionalImageUpload, error: additionalImageError } =
+      //         await supabase.storage
+      //           .from("addon")
+      //           .upload(
+      //             `${variant.title}-additional-${index}-${productId}`,
+      //             imageFile
+      //           );
+
+      //       if (additionalImageError) {
+      //         console.error(additionalImageError);
+      //         toast.error(
+      //           `Error uploading additional image ${index + 1} for variant: ${
+      //             variant.title
+      //           }`
+      //         );
+      //         continue;
+      //       }
+      //       additionalImagePaths.push(additionalImageUpload.path);
+      //     }
+
+      //     // Insert the variant into the product_variants table
+      //     const { error: variantError } = await supabase
+      //       .from("product_variants")
+      //       .insert({
+      //         product_id: productId,
+      //         title: variant.title,
+      //         price: variant.price,
+      //         details: variant.details,
+      //         image: mainImageUpload.path, // Store the main image path
+      //         additional_images: additionalImagePaths, // Store paths of additional images
+      //       });
+
+      //     if (variantError) {
+      //       console.error(variantError);
+      //       toast.error(`Error inserting variant: ${variant.title}`);
+      //       break;
+      //     }
+      //     toast.success(`Variant ${variant.title} added successfully.`);
+      //   }
+      // }
+
+      if (variant.title && variant.price && variant.mainImage) {
+        // Upload the main image to Supabase storage
+        const { data: mainImageUpload, error: mainImageError } =
+          await supabase.storage
+            .from("addon")
+            .upload(`${variant.title}-main-${productId}`, variant.mainImage);
+
+        if (mainImageError) {
+          console.error(mainImageError);
+          toast.error(
+            `Error uploading main image for variant: ${variant.title}`
+          );
+        }
+
+        // Upload additional images
+        const additionalImagePaths = [];
+        for (const [index, imageFile] of variant.additionalImages.entries()) {
+          const { data: additionalImageUpload, error: additionalImageError } =
+            await supabase.storage
+              .from("addon")
+              .upload(
+                `${variant.title}-additional-${index}-${productId}`,
+                imageFile
+              );
+
+          if (additionalImageError) {
+            console.error(additionalImageError);
+            toast.error(
+              `Error uploading additional image ${index + 1} for variant: ${
+                variant.title
+              }`
+            );
+          }
+          additionalImagePaths.push(additionalImageUpload.path);
+        }
+
+        // Insert the variant into the product_variants table
+        const { error: variantError } = await supabase
+          .from("product_variants")
+          .insert({
+            product_id: productId,
+            title: variant.title,
+            price: variant.price,
+            details: variant.details,
+            image: mainImageUpload.path, // Store the main image path
+            additional_images: additionalImagePaths, // Store paths of additional images
+          });
+
+        if (variantError) {
+          console.error(variantError);
+          toast.error(`Error inserting variant: ${variant.title}`);
+        }
+        toast.success(`Variant ${variant.title} added successfully.`);
+      }
+
+      // Success message
+      toast.success("Data inserted successfully!");
+    } catch (error) {
+      console.error("Error in onSubmit:", error);
+      toast.error("An unexpected error occurred.");
+    }
+  };
+
+  // console.log(accountHolder);
+  // console.log(accountHolder.allowedCategory);
+
+  // console.log(resources, subcat);
+  console.log(subSubCategory);
+
+  // get the categories based on the category and type
+  useEffect(() => {
+    if (category !== "HVAC" && category !== "civil/plumbing") {
+      console.log(category);
+      const filter = AllCatArray.filter((cat) => cat.name === category).flatMap(
+        (subcat) => subcat.subcategories
+      );
+      setSelectedSubcategories(filter);
+    }
+  }, [category]);
+
+  console.log(selectedSubcategories);
+
+  console.log(variant);
+
+  const handleMainImageChange = (e) => {
+    const file = e.target.files[0]; // Get the selected file
+    if (file) {
+      setVariant((prevVariants) => ({
+        ...prevVariants,
+        mainImage: file, // Update mainImage field
+      }));
+    }
+  };
+
   return (
     <div className="flex flex-col justify-center items-start font-Poppins relative">
       <div className="px-5 py-2 border-b-2 bg-white w-full border-b-gray-400 sticky top-0 z-10">
@@ -79,7 +348,12 @@ function VendorNewProduct({ setAddNewProduct }) {
         </button>
         <h3 className="capitalize font-semibold text-xl ">add new products</h3>
       </div>
-      <div className="lg:flex gap-5 py-3 px-5 w-full">
+      {/* <form action=""> */}
+      <form
+        action=""
+        className="lg:flex gap-5 py-3 px-5 w-full"
+        onSubmit={onSubmit}
+      >
         <div className="w-full lg:w-1/2">
           {/* div for category */}
           <div>
@@ -91,28 +365,45 @@ function VendorNewProduct({ setAddNewProduct }) {
                   name="category"
                   id="category"
                   className="w-full border-2 py-1.5 px-2 rounded-lg"
+                  onChange={(e) => setCategory(e.target.value)}
                 >
-                  <option value="" disabled>
-                    Select Category
-                  </option>
+                  <option value="">Select Category</option>
+                  {/* 
                   <option value="Furniture">Furniture</option>
                   <option value="HVAC">HVAC</option>
-                  <option value="Paint">Paint</option>
+                  <option value="Paint">Paint</option> */}
+                  {accountHolder.allowedCategory.map((cat, index) => {
+                    return (
+                      <option key={index} value={cat}>
+                        {cat}
+                      </option>
+                    );
+                  })}
                 </select>
               </div>
               <div>
                 <h4 className="text-[#7B7B7B]">product subcategory</h4>
                 <select
-                  name="subcategory"
-                  id="subcategory"
+                  name="category"
+                  id="category"
                   className="w-full border-2 py-1.5 px-2 rounded-lg"
+                  value={subSubCategory}
+                  onChange={(e) => setSubSubCategory(e.target.value)}
                 >
                   <option value="" disabled>
-                    Select Sub-Category
+                    Select Category
                   </option>
-                  <option value="Furniture">Table</option>
-                  <option value="HVAC">Chair</option>
-                  <option value="Paint">Storage</option>
+                  {/* 
+                  <option value="Furniture">Furniture</option>
+                  <option value="HVAC">HVAC</option>
+                  <option value="Paint">Paint</option> */}
+                  {subcat.map((cat, index) => {
+                    return (
+                      <option key={index} value={cat}>
+                        {cat}
+                      </option>
+                    );
+                  })}
                 </select>
               </div>
             </div>
@@ -127,7 +418,9 @@ function VendorNewProduct({ setAddNewProduct }) {
                 <h4 className="text-[#7B7B7B]">product name</h4>
                 <input
                   type="text"
-                  name="productName"
+                  name="title"
+                  onChange={handleChange}
+                  value={variant.title}
                   className="w-full py-1.5 px-2 border-2 rounded-lg"
                 />
               </div>
@@ -135,7 +428,9 @@ function VendorNewProduct({ setAddNewProduct }) {
                 <h4 className="text-[#7B7B7B]">product details</h4>
                 <textarea
                   type="textarea"
-                  name="productDetails"
+                  name="details"
+                  onChange={handleChange}
+                  value={variant.details}
                   className="w-full py-1.5 px-2 border-2 rounded-lg"
                 />
               </div>
@@ -143,7 +438,9 @@ function VendorNewProduct({ setAddNewProduct }) {
                 <h4 className="text-[#7B7B7B]">product price</h4>
                 <input
                   type="number"
-                  name="productPrice"
+                  name="price"
+                  onChange={handleChange}
+                  value={variant.price}
                   className="w-full py-1.5 px-2 border-2 rounded-lg [&::-webkit-inner-spin-button]:appearance-none  focus:outline-none focus:ring-0"
                 />
               </div>
@@ -205,7 +502,12 @@ function VendorNewProduct({ setAddNewProduct }) {
                       id="file-upload"
                       className="hidden"
                       accept="image/*"
-                      onChange={handleFileChange}
+                      onChange={handleMainImageChange}
+                      // onChange={(e) => {
+                      //   // const updatedVariants = [...variant];
+                      //   variant.mainImage = e.target.files[0]; // Set the main image
+                      //   setVariant((e) => (variant.mainImage = e.target.files));
+                      // }}
                     />
                     <label
                       htmlFor="file-upload"
@@ -257,10 +559,18 @@ function VendorNewProduct({ setAddNewProduct }) {
                     <input
                       type="file"
                       id="additional-file-upload"
+                      name="additionalImages"
                       className="hidden"
                       accept="image/*"
                       multiple
-                      onChange={handleAdditionalImagesChange}
+                      // onChange={handleAdditionalImagesChange}
+                      // onChange={(e) => {
+                      //   const updatedVariants = [...variant];
+                      //   updatedVariants.additionalImages = Array.from(
+                      //     e.target.files
+                      //   );
+                      //   setVariant(updatedVariants);
+                      // }}
                     />
                     <label
                       htmlFor="additional-file-upload"
@@ -326,12 +636,16 @@ function VendorNewProduct({ setAddNewProduct }) {
             <button className="border-2 px-5 py-2 capitalize rounded-lg">
               Discard
             </button>
-            <button className="border-2 px-5 py-2 bg-[#194F48] text-white capitalize rounded-lg">
+            <button
+              className="border-2 px-5 py-2 bg-[#194F48] text-white capitalize rounded-lg"
+              type="submit"
+            >
               add product
             </button>
           </div>
         </div>
-      </div>
+      </form>
+      {/* </form> */}
     </div>
   );
 }
