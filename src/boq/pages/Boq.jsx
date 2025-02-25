@@ -15,7 +15,10 @@ import processData from "../utils/dataProcessor";
 import ProductOverview from "../components/ProductOverview";
 import QnaPopup from "../components/QnaPopup";
 import { useApp } from "../../Context/Context";
-import { calculateTotalPriceHelper } from "../utils/CalculateTotalPriceHelper";
+import {
+  calculateAddonTotalPriceHelper,
+  calculateTotalPriceHelper,
+} from "../utils/CalculateTotalPriceHelper";
 import Joyride, { STATUS } from "react-joyride";
 import { supabase } from "../../services/supabase";
 import toast from "react-hot-toast";
@@ -465,6 +468,26 @@ function Boq() {
 
   const handleSelectedProductView = (variant) => {
     setSelectedProductView(variant);
+  };
+
+  const calculateAddonTotalPrice = (category, subCat, subcategory1, addon) => {
+    // Determine the actual values by prioritizing function parameters, falling back to selected state
+    const actualCategory = category || selectedCategory?.category;
+    const actualSubCategory = subCat || selectedSubCategory;
+    const actualSubCategory1 = subcategory1 || selectedSubCategory1;
+
+    // Calculate base total
+    const total = calculateAddonTotalPriceHelper(
+      quantityData[0],
+      areasData[0],
+      actualCategory,
+      actualSubCategory,
+      actualSubCategory1,
+      height,
+      addon
+    );
+
+    return total;
   };
 
   const calculateTotalPrice = (category, subCat, subcategory1) => {
@@ -959,7 +982,16 @@ function Boq() {
     // Ensure selectedData is an array before calling reduce
     let grandTotal = (Array.isArray(selectedData) ? selectedData : []).reduce(
       (total, product) => {
-        return total + (product.finalPrice || 0); // Add the final price, defaulting to 0 if not present
+        // Sum the product's final price
+        let productTotal = product.finalPrice || 0;
+
+        // Sum all the addons' final prices
+        let addonsTotal = (product.addons || []).reduce(
+          (addonSum, addon) => addonSum + (addon.finalPrice || 0),
+          0
+        );
+
+        return total + productTotal + addonsTotal;
       },
       0
     );
@@ -1547,6 +1579,7 @@ function Boq() {
             handleAddOnChange={handleAddOnChange}
             handelSelectedData={handelSelectedData}
             calculateTotalPrice={calculateTotalPrice}
+            calculateAddonTotalPrice={calculateAddonTotalPrice}
           />
           {showRecommend && (
             <RecommendComp

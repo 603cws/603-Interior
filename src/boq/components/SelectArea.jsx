@@ -14,6 +14,7 @@ function SelectArea({
   categoriesWithTwoLevelCheck,
   allAddons,
   onAddonAdd,
+  calculateAddonTotalPrice,
 }) {
   const {
     selectedData,
@@ -53,7 +54,15 @@ function SelectArea({
 
         return {
           ...item,
-          addons: selectedAddonsMap[currentGroupKey] || [], // ✅ Assign correct addons for each groupKey
+          addons: (selectedAddonsMap[currentGroupKey] || []).map((addon) => ({
+            ...addon,
+            finalPrice: calculateAddonTotalPrice(
+              selectedCategory.category,
+              item.subcategory,
+              selectedSubCategory1,
+              addon
+            ),
+          })), // ✅ Assign addons with calculated finalPrice
         };
       });
 

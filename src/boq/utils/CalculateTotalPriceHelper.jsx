@@ -26,6 +26,32 @@ function findKeyWithExactAndPartialMatch(subCategory, dataObject) {
   );
 }
 
+export const calculateAddonTotalPriceHelper = (
+  roomNumbersMap,
+  areasData,
+  category,
+  subcategory,
+  subcategory1,
+  height,
+  addon
+) => {
+  const normalizedSubCat = normalizeKey(subcategory);
+
+  let matchedKey, quantity, area, value;
+
+  //|| category === "HVAC"
+  // Calculation of price * quantity
+  matchedKey = findKeyWithExactAndPartialMatch(
+    normalizedSubCat,
+    roomNumbersMap
+  );
+  quantity = matchedKey ? roomNumbersMap[matchedKey] : 1;
+
+  value = quantity * addon.price || 0;
+
+  return value; //return qunatity or area or qunatity * area which will be multiplied by price afterwards
+};
+
 // Pure utility function
 export const calculateTotalPriceHelper = (
   roomNumbersMap,

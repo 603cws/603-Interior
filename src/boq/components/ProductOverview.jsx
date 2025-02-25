@@ -19,6 +19,7 @@ function ProductOverview({
   subCat1,
   handelSelectedData,
   calculateTotalPrice,
+  calculateAddonTotalPrice,
 }) {
   const [mainImageHovered, setMainImageHovered] = useState(false); // For main image hover effect
   const [hoveredImage, setHoveredImage] = useState(null); // For additional image hover effect
@@ -368,6 +369,7 @@ function ProductOverview({
           categoriesWithTwoLevelCheck={categoriesWithTwoLevelCheck}
           allAddons={allAddons}
           onAddonAdd={handleAddOnChange}
+          calculateAddonTotalPrice={calculateAddonTotalPrice}
         />
       )}
 
