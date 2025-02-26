@@ -24,8 +24,9 @@ const HVACCalculation = ({
     const acType = subcategory === "Centralized" ? "hp" : "ton";
     const rate = rates[subCat1]?.[acType] || 0;
 
-    const value =
-      acType === "hp" ? tonToHp(baseTonValue) * rate : baseTonValue * rate;
+    const value = Math.round(
+      acType === "hp" ? tonToHp(baseTonValue) * rate : baseTonValue * rate
+    );
 
     if (showAlert) {
       alert(

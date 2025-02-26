@@ -134,6 +134,25 @@ const Categories = ({
 
     const requiredSubCategories = categoryObject.subcategories || [];
 
+    console.log("category complete", category);
+
+    if (category === "HVAC") {
+      const hasCentralizedProduct = selectedData.some(
+        (product) =>
+          product.category === "HVAC" && product.subcategory === "Centralized"
+      );
+
+      const nonCentralizedSubcategories = requiredSubCategories.filter(
+        (sub) => sub.toLowerCase().trim() !== "centralized"
+      );
+
+      const areOtherSubcategoriesCompleted = nonCentralizedSubcategories.every(
+        (subCategory) => checkIfSubCategoryCompleted(category, subCategory)
+      );
+
+      // Mark as completed if HVAC has a "Centralized" product OR all other subcategories are completed
+      if (hasCentralizedProduct || areOtherSubcategoriesCompleted) return true;
+    }
     // Loop through all subcategories to check if all are marked as completed
     const isCompleted = requiredSubCategories.every((subCategory) =>
       checkIfSubCategoryCompleted(category, subCategory)
