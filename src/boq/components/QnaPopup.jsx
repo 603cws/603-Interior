@@ -48,7 +48,7 @@ const QnaPopup = ({ onClose, onSubmit, category }) => {
         { value: "Centralized", label: "Centralized" },
         { value: "Combination", label: "Combination" },
       ],
-      ImageUrl: "/images/Chat-bot.gif",
+      ImageUrl: "/images/HVAC.gif",
     },
   ];
 

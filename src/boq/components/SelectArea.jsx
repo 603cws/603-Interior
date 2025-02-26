@@ -377,7 +377,7 @@ function SelectArea({
                           className="appearance-none w-4 h-4 cursor-pointer transition duration-300 bg-black checked:border-black
                       relative checked:before:content-['✔'] checked:before:absolute checked:before:text-white 
                       checked:before:top-1/2 checked:before:left-1/2 checked:before:-translate-x-1/2 checked:before:-translate-y-1/2 
-                      checked:before:text-[14px] checked:before:font-bold"
+                      checked:before:text-[14px] checked:before:font-bold disabled:bg-gray-400 disabled:cursor-not-allowed disabled:opacity-60"
                           disabled={
                             Array.isArray(selectedData) &&
                             isItemSelected(

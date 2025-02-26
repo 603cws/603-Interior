@@ -24,6 +24,7 @@ import { supabase } from "../../services/supabase";
 import toast from "react-hot-toast";
 import ProfileCard from "../components/ProfileCard";
 import Plans from "../../common-components/Plans";
+import SelectArea from "../components/SelectArea";
 function Boq() {
   const [selectedProductView, setSelectedProductView] = useState([]);
   const [productsData, setProductData] = useState([]);
@@ -33,10 +34,11 @@ function Boq() {
   const priceRange = [1, 15000000];
 
   const [isOpen, setIsOpen] = useState(false);
-
   const profileRef = useRef(null);
-
   const iconRef = useRef(null);
+
+  const [showSelectArea, setShowSelectArea] = useState(false);
+  const [selectedAreas, setSelectedAreas] = useState([]);
 
   // const [workspaces, setWorkspaces] = useState([]);
   const [roomData, setRoomData] = useState({ quantityData: [], areasData: [] });
@@ -82,6 +84,7 @@ function Boq() {
     selectedPlan,
     setDefaultProduct,
     defaultProduct,
+    categoriesWithTwoLevelCheck,
   } = useApp();
 
   // useEffect(() => {
@@ -1436,6 +1439,13 @@ function Boq() {
   console.log("selected products", selectedData);
   console.log("selected plan", selectedPlan);
 
+  const allAddons = filteredProducts.flatMap((product) =>
+    product.subcategory1 === selectedSubCategory1 &&
+    Array.isArray(product.addons)
+      ? product.addons
+      : []
+  );
+
   return (
     <div>
       <Joyride
@@ -1542,6 +1552,26 @@ function Boq() {
                 />
                 {minimizedView && (
                   <div>
+                    {showSelectArea && (
+                      <SelectArea
+                        setShowSelectArea={setShowSelectArea}
+                        image={selectedProductView.image}
+                        categories={categories}
+                        subCategories={subCategories}
+                        subCat1={subCat1}
+                        selectedAreas={selectedAreas}
+                        setSelectedAreas={setSelectedAreas}
+                        selectedProductView={selectedProductView}
+                        selectedData={selectedData}
+                        handelSelectedData={handelSelectedData}
+                        categoriesWithTwoLevelCheck={
+                          categoriesWithTwoLevelCheck
+                        }
+                        allAddons={allAddons}
+                        onAddonAdd={handleAddOnChange}
+                        calculateAddonTotalPrice={calculateAddonTotalPrice}
+                      />
+                    )}
                     <MainPage
                       setSelectedSubCategory1={handleSelectedSubCategory1}
                       userResponses={userResponses}
@@ -1553,6 +1583,8 @@ function Boq() {
                       setShowProductView={setShowProductView}
                       setSelectedProductView={handleSelectedProductView}
                       userResponses={userResponses}
+                      showSelectArea={showSelectArea}
+                      setShowSelectArea={setShowSelectArea}
                     />
                   </div>
                 )}

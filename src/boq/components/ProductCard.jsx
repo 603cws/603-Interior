@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import { useApp } from "../../Context/Context";
+import { CiCirclePlus } from "react-icons/ci";
 
 function ProductCard({
   products,
@@ -7,6 +8,7 @@ function ProductCard({
   setSelectedProductView,
   setShowProductView,
   userResponses,
+  setShowSelectArea,
 }) {
   const {
     selectedCategory,
@@ -185,7 +187,7 @@ function ProductCard({
                 <div className="absolute inset-0 bg-gray-200 animate-pulse rounded-t-lg"></div>
               )}
               <img
-                className={` rounded-t-lg w-full h-64 object-contain transition-opacity duration-300 ${
+                className={`rounded-t-lg w-full h-64 object-contain transition-opacity duration-300 ${
                   loadingImages[variant.id] !== false
                     ? "opacity-0"
                     : "opacity-100"
@@ -198,6 +200,17 @@ function ProductCard({
                   setShowProductView(true);
                 }}
               />
+              {/* CiCirclePlus Icon - Positioned at Bottom Right */}
+              <div className="absolute bottom-2 right-2 bg-white rounded-full p-1 shadow-md cursor-pointer">
+                <CiCirclePlus
+                  size={30}
+                  color="#A1A1A1"
+                  onClick={() => {
+                    setSelectedProductView(variant);
+                    setShowSelectArea(true);
+                  }}
+                />
+              </div>
             </div>
             {/* Product Name */}
             <div className="p-4">
