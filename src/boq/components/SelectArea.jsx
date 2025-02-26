@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"; //useState
+import { useEffect, useMemo, useState } from "react"; //useState
 import { MdOutlineCancel } from "react-icons/md";
 import { useApp } from "../../Context/Context";
 import Addon from "./Addon";
@@ -30,6 +30,7 @@ function SelectArea({
   const [allSubcategories, setAllSubcategories] = useState([]);
   const [selectedRoom, setSelectedRoom] = useState(null);
   const [selectedAddons, setSelectedAddons] = useState([]);
+  const [disabledAreas, setDisabledAreas] = useState([]);
 
   const baseImageUrl =
     "https://bwxzfwsoxwtzhjbzbdzs.supabase.co/storage/v1/object/public/addon/";
@@ -85,6 +86,46 @@ function SelectArea({
       setSelectedRoom(allSubcategories[0]); // Select the first room by default
     }
   }, [allSubcategories]);
+
+  useEffect(() => {
+    if (Array.isArray(selectedData) && selectedData.length > 0) {
+      const hasCentralized = selectedData.some(
+        (item) => item.subcategory === "Centralized"
+      );
+
+      const hasOtherSubCats = selectedData.some(
+        (item) => item.subcategory !== "Centralized"
+      );
+
+      let disabledList = [];
+
+      if (hasCentralized) {
+        disabledList = subCategories.filter(
+          (subCat) => subCat !== "Centralized"
+        );
+      } else if (hasOtherSubCats) {
+        disabledList = ["Centralized"];
+      }
+
+      // Keep a copy of the original disabled list
+      const initialDisabledList = new Set(disabledList);
+
+      // Get already selected subcategories
+      const alreadySelected = selectedData.map((item) => item.subcategory);
+
+      // Merge only if they were originally disabled
+      disabledList = [
+        ...new Set([
+          ...disabledList,
+          ...alreadySelected.filter((item) => initialDisabledList.has(item)),
+        ]),
+      ];
+
+      setDisabledAreas(disabledList);
+    } else {
+      setDisabledAreas([]);
+    }
+  }, [selectedData, subCategories]);
 
   // Initialize selected areas based on selectedData
   useEffect(() => {
@@ -259,6 +300,9 @@ function SelectArea({
     selectedSubCategory1,
     selectedProductView
   ) => {
+    if (disabledAreas.includes(subCat)) {
+      return false;
+    }
     return (
       Array.isArray(selectedData) &&
       selectedData.some((item) => {
@@ -401,27 +445,29 @@ function SelectArea({
                       checked:before:top-1/2 checked:before:left-1/2 checked:before:-translate-x-1/2 checked:before:-translate-y-1/2 
                       checked:before:text-[14px] checked:before:font-bold disabled:bg-gray-400 disabled:cursor-not-allowed disabled:opacity-60"
                           disabled={
-                            Array.isArray(selectedData) &&
-                            isItemSelected(
-                              selectedData,
-                              selectedCategory,
-                              name,
-                              selectedSubCategory1,
-                              selectedProductView
-                            )
+                            (Array.isArray(selectedData) &&
+                              isItemSelected(
+                                selectedData,
+                                selectedCategory,
+                                name,
+                                selectedSubCategory1,
+                                selectedProductView
+                              )) ||
+                            disabledAreas.includes(name)
                           }
                         />
                         <label
                           htmlFor={`subCategory-${id}`}
                           className={`text-sm cursor-pointer ${
-                            Array.isArray(selectedData) &&
-                            isItemSelected(
-                              selectedData,
-                              selectedCategory,
-                              name,
-                              selectedSubCategory1,
-                              selectedProductView
-                            )
+                            (Array.isArray(selectedData) &&
+                              isItemSelected(
+                                selectedData,
+                                selectedCategory,
+                                name,
+                                selectedSubCategory1,
+                                selectedProductView
+                              )) ||
+                            disabledAreas.includes(name)
                               ? "text-gray-400 cursor-not-allowed"
                               : ""
                           }`}

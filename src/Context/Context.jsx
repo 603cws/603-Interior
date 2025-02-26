@@ -237,8 +237,21 @@ export const AppProvider = ({ children }) => {
         return;
       }
 
+      let validSubcategories = categoryObj.subcategories;
+
+      // ✅ Special Logic for HVAC category
+      if (category === "HVAC") {
+        if (subcategory === "Centralized") {
+          validSubcategories = ["Centralized"]; // Only Centralized should be counted
+        } else {
+          validSubcategories = categoryObj.subcategories.filter(
+            (sub) => sub !== "Centralized"
+          ); // Exclude Centralized for Combination
+        }
+      }
+
       const subCategoryPercentage =
-        categoryPercentage / categoryObj.subcategories.length;
+        categoryPercentage / validSubcategories.length;
 
       // Handle subCategory1 logic with exclusion for "pods" in "Pantry"
       if (
