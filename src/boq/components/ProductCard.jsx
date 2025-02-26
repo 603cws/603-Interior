@@ -68,7 +68,7 @@ function ProductCard({
   useEffect(() => {
     // setLoading(filteredVariants.length === 0);
     if (setLoading) {
-      console.log(setLoading);
+      // console.log(setLoading);
 
       setTimeout(() => {
         setLoading(false);

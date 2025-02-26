@@ -528,6 +528,30 @@ function Boq() {
     return total * selectedProductView.price;
   };
 
+  const calculateCategoryTotals = () => {
+    const categoryTotals = {}; // Object to store total per category
+
+    selectedData.forEach((product) => {
+      const category = product.category;
+      const finalPrice = product.finalPrice;
+
+      // Add finalPrice to the corresponding category total
+      categoryTotals[category] = (categoryTotals[category] || 0) + finalPrice;
+    });
+
+    // Log final totals for each category
+    console.log("Final Totals for Each Category:");
+    Object.entries(categoryTotals).forEach(([category, total]) => {
+      console.log(`Total for ${category}:`, total);
+    });
+
+    return categoryTotals; // If you need the totals elsewhere
+  };
+
+  useEffect(() => {
+    calculateCategoryTotals();
+  }, [selectedData]);
+
   // const calculateAutoTotalPrice = (
   //   variantPrice,
   //   cat,
@@ -556,7 +580,7 @@ function Boq() {
   //   return baseTotal * variantPrice;
   // };
 
-  const categoryTotals = {}; // Store total per category
+  // const categoryTotals = {}; // Store total per category
 
   const calculateAutoTotalPrice = (
     variantPrice,
@@ -584,9 +608,9 @@ function Boq() {
     else total = baseTotal * variantPrice;
 
     // Store the total per category
-    categoryTotals[cat] = (categoryTotals[cat] || 0) + total;
+    // categoryTotals[cat] = (categoryTotals[cat] || 0) + total;
 
-    console.log(`Total for ${cat}: `, categoryTotals[cat]);
+    // console.log(`Total for ${cat}: `, categoryTotals[cat]);
 
     return total;
   };
