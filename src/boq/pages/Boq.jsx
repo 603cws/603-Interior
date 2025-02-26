@@ -1,4 +1,5 @@
 import { useEffect, useState, useMemo, useRef } from "react";
+import { ToastContainer } from "react-toastify";
 import Navbar from "../../boq/components/Navbar";
 import Categories from "./Categories";
 import {
@@ -1617,6 +1618,7 @@ function Boq() {
                 />
                 {minimizedView && (
                   <div>
+                    <ToastContainer />
                     {showSelectArea && (
                       <SelectArea
                         setShowSelectArea={setShowSelectArea}

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"; //useState
 import { MdOutlineCancel } from "react-icons/md";
 import { useApp } from "../../Context/Context";
 import Addon from "./Addon";
+import { toast, Slide } from "react-toastify";
 
 function SelectArea({
   setShowSelectArea,
@@ -44,9 +45,17 @@ function SelectArea({
     setSelectedAddonsMap(addonsMap);
   }, [selectedData]);
 
+  const botRight = () => {
+    toast.dark("Product Added", {
+      position: "bottom-right",
+      transition: Slide, // Change this to Zoom, Bounce, Flip for different effects
+    });
+  };
+
   const handleAddonClick = () => {
     setShowAddon(false);
     setShowSelectArea(false); // Close the modal
+    botRight();
 
     setSelectedData((prevData) => {
       const updatedData = prevData.map((item) => {

@@ -11,6 +11,7 @@ export const AppProvider = ({ children }) => {
     "Flooring",
     "Partitions / Ceilings",
     "HVAC",
+    "Lighting",
   ]; //Array of Categories where save data works on dependent subcategories
 
   const [totalArea, setTotalArea] = useState();

@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
+import { ToastContainer } from "react-toastify";
 import { TbArrowBackUp } from "react-icons/tb";
 import { MdOutlineKeyboardArrowRight } from "react-icons/md"; //MdOutlineKeyboardArrowLeft
 import { normalizeKey } from "../utils/CalculateTotalPriceHelper";
@@ -181,6 +182,7 @@ function ProductOverview({
   return (
     // grid
     <>
+      <ToastContainer />
       <div
         className={`product-overview grid grid-cols-2 p-5 gap-1 ${
           showSelectArea ? "opacity-50 pointer-events-none" : "opacity-100"
