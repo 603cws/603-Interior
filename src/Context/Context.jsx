@@ -169,7 +169,7 @@ export const AppProvider = ({ children }) => {
           // Query the profiles table for phone and companyName
           const { data, error: profileError } = await supabase
             .from("profiles")
-            .select("phone, company_name,role,allowed_category")
+            .select("phone, company_name,role,allowed_category,profile_image")
             .eq("id", userId)
             .single();
 
@@ -191,6 +191,7 @@ export const AppProvider = ({ children }) => {
             companyName: data.company_name || "",
             role: data.role || "",
             allowedCategory: JSON.parse(data.allowed_category) || undefined,
+            profileImage: data.profile_image || null,
           });
         }
       } catch (error) {

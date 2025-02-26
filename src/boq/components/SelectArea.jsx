@@ -272,15 +272,24 @@ function SelectArea({
   const handleSelectAll = (checked) => {
     if (checked) {
       const selectableSubCategories = selectedCategory.subcategories.filter(
-        (subCategory) =>
-          !(subCategory === "Pantry" && selectedSubCategory1 === "Pods") && // Exclude "Pantry" only if "Pods" is selected
-          !isItemSelected(
-            selectedData,
-            selectedCategory,
-            subCategory,
-            selectedSubCategory1,
-            selectedProductView
-          )
+        (subCategory) => {
+          if (selectedCategory.category === "HVAC") {
+            return userResponses?.hvacType === "Centralized"
+              ? subCategory === "Centralized" // Select only "Centralized"
+              : subCategory !== "Centralized"; // Select all except "Centralized"
+          }
+
+          return (
+            !(subCategory === "Pantry" && selectedSubCategory1 === "Pods") && // Exclude Pantry when Pods is selected
+            !isItemSelected(
+              selectedData,
+              selectedCategory,
+              subCategory,
+              selectedSubCategory1,
+              selectedProductView
+            ) // Exclude already-selected items
+          );
+        }
       );
       setSelectedAreas(selectableSubCategories);
     } else {
@@ -291,10 +300,14 @@ function SelectArea({
   // Check if all selectable subcategories are already selected
   const allSelected =
     selectedCategory.subcategories
-      ?.filter(
-        (subCategory) =>
-          !(subCategory === "Pantry" && selectedSubCategory1 === "Pods") // Exclude Pantry when Pods is selected
-      )
+      ?.filter((subCategory) => {
+        if (selectedCategory.category === "HVAC") {
+          return userResponses?.hvacType === "Centralized"
+            ? subCategory === "Centralized" // Only "Centralized" should be checked
+            : subCategory !== "Centralized"; // Exclude "Centralized" for other types
+        }
+        return !(subCategory === "Pantry" && selectedSubCategory1 === "Pods"); // Exclude Pantry when Pods is selected
+      })
       .every(
         (subCategory) =>
           selectedAreas.includes(subCategory) ||

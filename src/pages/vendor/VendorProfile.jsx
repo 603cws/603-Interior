@@ -14,7 +14,11 @@ function VendorProfile({ setIsEditopen }) {
       </div>
       <div className="px-10 lg:mp-16  pb-4 lg:pb-8 pt-2 p-5 w-full ">
         <div className="flex justify-center  items-center">
-          <img src="/images/Profile.png" alt="profile" className="w-28 h-28" />
+          <img
+            src={accountHolder.profileImage}
+            alt="profile"
+            className="w-28 h-28"
+          />
         </div>
         <h2 className="text-center text-[#194F48] font-bold text-xl">
           {accountHolder.companyName}

@@ -18,6 +18,7 @@ import { useApp } from "../../Context/Context";
 import {
   calculateAddonTotalPriceHelper,
   calculateTotalPriceHelper,
+  calculateAutoTotalPriceHelper,
 } from "../utils/CalculateTotalPriceHelper";
 import Joyride, { STATUS } from "react-joyride";
 import { supabase } from "../../services/supabase";
@@ -526,25 +527,67 @@ function Boq() {
     return total * selectedProductView.price;
   };
 
-  const calculateAutoTotalPrice = (variantPrice) => {
-    const baseTotal = calculateTotalPriceHelper(
+  // const calculateAutoTotalPrice = (
+  //   variantPrice,
+  //   cat,
+  //   subcategory,
+  //   subcategory1
+  // ) => {
+  //   console.log(variantPrice, cat, subcategory, subcategory1);
+
+  //   const baseTotal = calculateAutoTotalPriceHelper(
+  //     quantityData[0],
+  //     areasData[0],
+  //     cat,
+  //     subcategory,
+  //     subcategory1,
+  //     height
+  //   );
+  //   console.log("category from total area", cat);
+  //   console.log("subcategory from total area", subcategory);
+  //   console.log("subcategory1 from total area", subcategory1);
+
+  //   if (cat === "HVAC") return baseTotal;
+  //   if (cat === "Lighting") return baseTotal * 200 + variantPrice;
+  //   if (cat === "Civil / Plumbing") return baseTotal * 100 + variantPrice;
+  //   if (cat === "Paint") return baseTotal * variantPrice * 3 * 15;
+
+  //   return baseTotal * variantPrice;
+  // };
+
+  const categoryTotals = {}; // Store total per category
+
+  const calculateAutoTotalPrice = (
+    variantPrice,
+    cat,
+    subcategory,
+    subcategory1
+  ) => {
+    console.log(variantPrice, cat, subcategory, subcategory1);
+
+    const baseTotal = calculateAutoTotalPriceHelper(
       quantityData[0],
       areasData[0],
-      selectedCategory?.category,
-      selectedSubCategory,
-      selectedSubCategory1,
+      cat,
+      subcategory,
+      subcategory1,
       height
     );
 
-    if (selectedCategory?.category === "HVAC") return baseTotal;
-    if (selectedCategory?.category === "Lighting")
-      return baseTotal * 200 + variantPrice;
-    if (selectedCategory?.category === "Civil / Plumbing")
-      return baseTotal * 100 + variantPrice;
-    if (selectedCategory?.category === "Paint")
-      return baseTotal * variantPrice * 3 * 15;
+    let total = 0;
 
-    return baseTotal * variantPrice;
+    if (cat === "HVAC") total = baseTotal;
+    else if (cat === "Lighting") total = baseTotal * 200 + variantPrice;
+    else if (cat === "Civil / Plumbing") total = baseTotal * 100 + variantPrice;
+    else if (cat === "Paint") total = baseTotal * variantPrice * 3 * 15;
+    else total = baseTotal * variantPrice;
+
+    // Store the total per category
+    categoryTotals[cat] = (categoryTotals[cat] || 0) + total;
+
+    console.log(`Total for ${cat}: `, categoryTotals[cat]);
+
+    return total;
   };
 
   const handleAddOnChange = (variant) => {
@@ -730,7 +773,19 @@ function Boq() {
     const productMap = new Map();
 
     categories.forEach((cat) => {
-      products.forEach((product) => {
+      console.log(cat);
+
+      const filterProducts = products.filter(
+        (product) => product.category === cat.category
+      );
+
+      console.log(filterProducts);
+
+      filterProducts.forEach((product) => {
+        console.log(product);
+
+        // if(product.category === "HVAC" && product.subc)
+
         const { category, subcategory, subcategory1, product_variants } =
           product;
 
@@ -746,6 +801,8 @@ function Boq() {
         const subcategories = subcategory.split(",").map((sub) => sub.trim());
 
         subcategories.forEach((subCat) => {
+          if (category === "HVAC" && subCat !== "Centralized") return;
+
           // Ensure the subcategory is in the selected subcategories list
           if (!cat.subcategories.includes(subCat)) return;
           // const groupKey = `${category}-${subCat}-${subcategory1}`;
@@ -794,8 +851,13 @@ function Boq() {
               default: variant.default,
               additional_images: JSON.parse(variant.additional_images || "[]"),
             },
-            addons: product.addons || [],
-            finalPrice: calculateAutoTotalPrice(variant.price),
+            // addons: product.addons || [],
+            finalPrice: calculateAutoTotalPrice(
+              variant.price,
+              product.category,
+              subcategory,
+              product.subcategory1
+            ),
           };
 
           selectedProducts.push(productData);
@@ -968,7 +1030,10 @@ function Boq() {
     // Hide the modal and reset questions state
     setQuestionPopup(false);
 
-    if (answers.hvacType === "Centralized") {
+    if (
+      selectedCategory.category === "HVAC" &&
+      answers.hvacType === "Centralized"
+    ) {
       setSelectedSubCategory(answers.hvacType || null);
     }
 

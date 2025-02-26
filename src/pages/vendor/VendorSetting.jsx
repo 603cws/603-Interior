@@ -1,8 +1,44 @@
 import { useForm } from "react-hook-form";
 import { useApp } from "../../Context/Context";
+import { useState } from "react";
+import { BsCameraFill } from "react-icons/bs";
+import { supabase } from "../../services/supabase";
 function VendorSetting() {
-  const { accountHolder } = useApp();
+  const { accountHolder, setAccountHolder } = useApp();
   const { register, handleSubmit, reset } = useForm();
+  const [profileImage, setProfileImage] = useState(accountHolder.profileImage);
+  const [profileImagesOption, setProfileImagesOption] = useState(false);
+  const profileImages = [
+    "/images/Profile.png",
+    "/images/Profile1.png",
+    "/images/Profile2.png",
+    "/images/usericon.png",
+    // "/images/Profile3.png",
+    // "/images/Profile4.png",
+    // "/images/Profile5.png",
+  ];
+  // const handleSelectImage = (img) => {
+  //   setProfileImage(img);
+  //   setProfileImagesOption(false); // Close modal after selection
+  // };
+  // Function to update profile image in the database
+  const updateProfileImage = async (imgUrl) => {
+    // setLoading(true);
+
+    const { error } = await supabase
+      .from("profiles")
+      .update({ profile_image: imgUrl })
+      .eq("id", accountHolder.userId);
+
+    if (error) {
+      console.error("Error updating profile image:", error);
+    } else {
+      setProfileImage(imgUrl);
+      setAccountHolder((prev) => ({ ...prev, profile_image: imgUrl }));
+    }
+    setProfileImagesOption(false);
+  };
+
   const onSubmit = (data) => {
     console.log(data);
     reset();
@@ -10,11 +46,48 @@ function VendorSetting() {
   return (
     <div className="flex gap-5 w-full h-full px-8 py-4">
       {/*  */}
-      <div className="flex flex-col items-center px-10 pt-4 gap-2">
-        <img src="/images/Profile.png" alt="profile" className="w-28 h-28" />
+      <div className="flex flex-col items-center px-10 pt-4 gap-2 relative">
+        <div className="w-28 h-28 relative">
+          <img
+            src={profileImage}
+            alt="profile"
+            className="w-28 h-28 bg-red-200 rounded-full border-4 border-[#26B893] object-cover"
+          />
+          <div
+            className="absolute bottom-1 right-1.5 cursor-pointer bg-[#26B893] rounded-full p-1.5"
+            onClick={() => {
+              setProfileImagesOption(!profileImagesOption);
+            }}
+          >
+            <BsCameraFill size={15} color="white" />
+          </div>
+        </div>
         <h2 className="text-center text-[#194F48] font-bold text-xl capitalize">
           {accountHolder.companyName}
         </h2>
+        {profileImagesOption && (
+          <div className="absolute top-32 left-0 bg-white shadow-lg p-4 rounded-lg w-52">
+            <p className="text-sm font-semibold mb-2">Select a Profile Image</p>
+            <div className="grid grid-cols-3 gap-2">
+              {profileImages.map((img, index) => (
+                <img
+                  key={index}
+                  src={img}
+                  alt={`Profile ${index}`}
+                  className="w-14 h-14 rounded-full cursor-pointer border-2 border-gray-200 hover:border-blue-500"
+                  // onClick={() => handleSelectImage(img)}
+                  onClick={() => updateProfileImage(img)}
+                />
+              ))}
+            </div>
+            <button
+              className="mt-3 w-full bg-red-400 text-white py-1 rounded"
+              onClick={() => setProfileImagesOption(false)}
+            >
+              Close
+            </button>
+          </div>
+        )}
       </div>
 
       <div className="flex-1 font-Poppins">

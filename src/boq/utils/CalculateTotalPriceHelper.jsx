@@ -117,6 +117,89 @@ export const calculateTotalPriceHelper = (
   return value; //return qunatity or area or qunatity * area which will be multiplied by price afterwards
 };
 
+//
+export const calculateAutoTotalPriceHelper = (
+  roomNumbersMap,
+  areasData,
+  category,
+  subcategory,
+  subcategory1,
+  height
+) => {
+  console.log(
+    "calculateTotalPriceHelper:",
+    roomNumbersMap,
+    areasData,
+    category,
+    subcategory,
+    subcategory1,
+    height
+  );
+
+  const normalizedSubCat = normalizeKey(subcategory);
+
+  let matchedKey, quantity, area, value;
+
+  if (
+    category === "Furniture" ||
+    category === "Smart Solutions" ||
+    category === "Lux"
+  ) {
+    //|| category === "HVAC"
+    // Calculation of price * quantity
+    matchedKey = findKeyWithExactAndPartialMatch(
+      normalizedSubCat,
+      roomNumbersMap
+    );
+    quantity = matchedKey ? roomNumbersMap[matchedKey] : 1;
+
+    value = quantity;
+  } else if (category === "Partitions / Ceilings" || category === "HVAC") {
+    //currently this category is missing
+    // Calculation of price * quantity * area
+
+    matchedKey = findKeyWithExactAndPartialMatch(
+      normalizedSubCat,
+      roomNumbersMap
+    );
+    quantity = matchedKey ? roomNumbersMap[matchedKey] : 1;
+
+    matchedKey = findKeyWithExactAndPartialMatch(normalizedSubCat, areasData);
+    area = matchedKey ? areasData[matchedKey] : 1;
+
+    value = quantity * area;
+
+    if (category === "Partitions / Ceilings") {
+      value = ParitionCelingCalculation({
+        quantity,
+        area,
+        subcategory1,
+        height,
+      }); //return value and do the calculation here
+      console.log(
+        "values from partition calculation",
+        quantity,
+        area,
+        subcategory1,
+        height
+      );
+    }
+
+    if (category === "HVAC") {
+      value = HVACCalculation({ quantity, area, subcategory }); //return value and do the calculation here
+      console.log("values from hvac calculation", quantity, area, subcategory);
+    }
+  } else {
+    // Calculation of price * area
+    matchedKey = findKeyWithExactAndPartialMatch(normalizedSubCat, areasData);
+    area = matchedKey ? areasData[matchedKey] : 1;
+
+    value = area;
+  }
+
+  return value; //return qunatity or area or qunatity * area which will be multiplied by price afterwards
+};
+
 //calc of HVAC = sq ft * area * quantity  ? * price
 
 //furniture => quantity * price ,   partitions => done above calc part, ligthing ~(similar to) AC ,  Flooring => Area * price
