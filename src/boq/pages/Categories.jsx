@@ -68,7 +68,7 @@ const Categories = ({
     // console.log("categoryObject:", categoryObject); // Log categoryObject
     if (!categoryObject) return false;
 
-    // Categories where we need to check subcategories
+    // Categories where we need to check all subcategories
     const specialCategories = [
       "furniture",
       "civil / plumbing",
@@ -78,7 +78,7 @@ const Categories = ({
     ];
 
     if (specialCategories.includes(category.toLowerCase().trim())) {
-      const requiredSubCategory1Items = categoryObject.subcategory1 || [];
+      let requiredSubCategory1Items = categoryObject.subcategory1 || [];
       // console.log("requiredSubCategory1Items:", requiredSubCategory1Items); // Log requiredSubCategory1Items
 
       const selectedSubCategory1Items = (
@@ -94,6 +94,12 @@ const Categories = ({
 
         .map((item) => item.subcategory1);
       // console.log("selectedSubCategory1Items:", selectedSubCategory1Items); // Log selectedSubCategory1Items
+
+      if (category === "Civil / Plumbing" && subCategory === "Pantry") {
+        requiredSubCategory1Items = requiredSubCategory1Items.filter(
+          (item) => item !== "Pods"
+        );
+      }
 
       const isCompleted =
         requiredSubCategory1Items.length > 0 &&

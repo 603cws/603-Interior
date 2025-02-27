@@ -33,7 +33,12 @@ export const AppProvider = ({ children }) => {
   const [categories, setCategories] = useState([]);
   const [subCategories, setSubCategories] = useState([]); // Extracted subcategories
   const [subCat1, setSubCat1] = useState([]);
-  const [userResponses, setUserResponses] = useState({});
+  const [userResponses, setUserResponses] = useState({
+    height: 10,
+    flooring: "basicTiling",
+    demolishTile: "no",
+    hvacType: "Centralized",
+  });
   const [showProfile, setShowProfile] = useState(false);
   const [accountHolder, setAccountHolder] = useState({
     userId: "",

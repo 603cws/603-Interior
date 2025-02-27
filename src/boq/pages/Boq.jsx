@@ -1621,7 +1621,7 @@ function Boq() {
           <Plans />
         ) : (
           <>
-            {questionPopup && (
+            {selectedPlan === "Custom" && questionPopup && (
               <QnaPopup
                 onClose={() => setQuestionPopup(false)}
                 category={selectedCategory}
