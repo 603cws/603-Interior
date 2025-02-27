@@ -93,6 +93,8 @@ function App() {
                     <AdminDashboard />
                   ) : accountHolder.role === "vendor" ? (
                     <VendorDashboard />
+                  ) : accountHolder.role === "user" ? (
+                    <Dashboard />
                   ) : (
                     <PageNotFound />
                   )
@@ -110,6 +112,7 @@ function App() {
             <Route path="/vendordashboard" element={<VendorDashboard />} />
             <Route path="/dashprod" element={<DashboardProductCard />} />
             <Route path="/getplan" element={<PricingCard />} />
+            <Route path="/admin" element={<AdminDashboard />} />
           </Routes>
         ) : (
           <Routes>

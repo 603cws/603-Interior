@@ -38,3 +38,17 @@
   background: linear-gradient(180deg, #c4bfe4, #888);
   border-radius: 10px;
 }
+
+/* @layer utilities {
+  .bg-angular-gradient {
+    background: conic-gradient(
+      from 180deg at 10%,
+      #62f2ee 0%,
+      #5fffb6 54%,
+      #d1ff89 60%,
+      #55ffbf 66%,
+      #78e7ff 72%,
+      #73f1ee 86%
+    );
+  }
+} */

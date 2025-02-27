@@ -3,17 +3,12 @@ import { BsUpload } from "react-icons/bs";
 import { useEffect, useState } from "react";
 import { FaRegQuestionCircle } from "react-icons/fa";
 
-// import React, { useEffect, useRef } from "react";
-// import { useNavigate } from "react-router-dom"; // Import useNavigate
-// import { useForm, useFieldArray } from "react-hook-form";
 import { supabase } from "../../services/supabase";
 import { toast, Toaster } from "react-hot-toast";
 import { useApp } from "../../Context/Context";
 import { AllCatArray, specialArray } from "../../utils/AllCatArray";
-// import { filter } from "motion/react-client";
 
-function VendorNewProduct({ setAddNewProduct, setProductlist }) {
-  const [additionalImages, setAdditionalImages] = useState([]);
+function VendorNewAddon({ setAddNewProduct, setProductlist }) {
   const [file, setFile] = useState(null);
   // const [dragging, setDragging] = useState(false);
   const [preview, setPreview] = useState(null);
@@ -28,9 +23,9 @@ function VendorNewProduct({ setAddNewProduct, setProductlist }) {
   const [category, setCategory] = useState("");
 
   //dimension
-  const [dimensionHeight, setDimensionHeight] = useState();
-  const [dimensionwidth, setDimensionwidth] = useState();
-  const [dimensionLength, setDimensionLength] = useState();
+  //   const [dimensionHeight, setDimensionHeight] = useState();
+  //   const [dimensionwidth, setDimensionwidth] = useState();
+  //   const [dimensionLength, setDimensionLength] = useState();
 
   // const [selectedSubcategories, setSelectedSubcategories] = useState();
   const [variant, setVariant] = useState({
@@ -42,6 +37,16 @@ function VendorNewProduct({ setAddNewProduct, setProductlist }) {
     segment: "",
     dimension: "",
     manufacturer: "",
+  });
+
+  const [addon, setAddon] = useState({
+    title: "",
+    // details: "",
+    price: "",
+    image: null,
+    // category: "",
+    // subcategory: "",
+    // addons: [{ image: null, title: "", price: "" }],
   });
 
   const { accountHolder } = useApp();
@@ -72,60 +77,47 @@ function VendorNewProduct({ setAddNewProduct, setProductlist }) {
     setPreview(null);
   };
 
+  //   const handleChange = (e) => {
+  //     const { name, value } = e.target;
+  //     setVariant((prevVariants) => ({
+  //       ...prevVariants,
+  //       [name]: value,
+  //     }));
+  //   };
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setVariant((prevVariants) => ({
-      ...prevVariants,
+    setAddon((prevAddon) => ({
+      ...prevAddon,
       [name]: value,
     }));
   };
 
-  const handleAdditionalImagesChange = (event) => {
-    const files = Array.from(event.target.files);
-    console.log("hello from the additional images");
-
-    if (files.length && additionalImages.length + files.length <= 5) {
-      setAdditionalImages((prev) => [
-        ...prev,
-        ...files.map((file) => ({ file, preview: URL.createObjectURL(file) })),
-      ]);
-      setVariant((prevVariants) => ({
+  const handleMainImageChange = (e) => {
+    const file = e.target.files[0]; // Get the selected file
+    if (file) {
+      setAddon((prevVariants) => ({
         ...prevVariants,
-        additionalImages: [...prevVariants.additionalImages, ...files], // Add a new image
+        image: file, // Update mainImage field
       }));
-      // const updatedVariants = [...variants];
-      // updatedVariants[index].additionalImages = Array.from(
-      //   e.target.files
-      // );
-      // setVariant(Variant);
-    } else {
-      alert("You can upload up to 5 additional images only.");
+      setFile(file);
+      console.log("hiii");
+      setPreview(URL.createObjectURL(file));
     }
   };
 
-  const handleAdditionalDrop = (event) => {
-    event.preventDefault();
-    const droppedFiles = Array.from(event.dataTransfer.files);
+  //   const handleFileChange = (event) => {
+  //     const selectedFile = event.target.files[0];
 
-    if (
-      droppedFiles.length &&
-      additionalImages.length + droppedFiles.length <= 5
-    ) {
-      setAdditionalImages((prev) => [
-        ...prev,
-        ...droppedFiles.map((file) => ({
-          file,
-          preview: URL.createObjectURL(file),
-        })),
-      ]);
-    } else {
-      alert("You can upload up to 5 additional images only.");
-    }
-  };
+  //     variant.mainImage = selectedFile;
+  //     if (selectedFile) {
+  //       setFile(selectedFile);
+  //       console.log("hiii");
 
-  const removeAdditionalImage = (index) => {
-    setAdditionalImages((prev) => prev.filter((_, i) => i !== index));
-  };
+  //       setPreview(URL.createObjectURL(selectedFile));
+  //     }
+  //   };
+
+  console.log(addon);
 
   useEffect(() => {
     accountHolder.allowedCategory.map((category) => {
@@ -200,68 +192,55 @@ function VendorNewProduct({ setAddNewProduct, setProductlist }) {
         toast.success("New product inserted successfully.");
       }
 
-      // Now proceed with adding variants
+      // Handle the addons
+      const { data: addonCategory, error: addonCategoryError } = await supabase
+        .from("addons")
+        .insert({ title: subSubCategory, productid: productId })
+        .select()
+        .single();
 
-      if (variant.title && variant.price && variant.mainImage) {
-        // Upload the main image to Supabase storage
-        const { data: mainImageUpload, error: mainImageError } =
-          await supabase.storage
-            .from("addon")
-            .upload(`${variant.title}-main-${productId}`, variant.mainImage);
-
-        if (mainImageError) {
-          console.error(mainImageError);
-          toast.error(
-            `Error uploading main image for variant: ${variant.title}`
-          );
-        }
-
-        // Upload additional images
-        const additionalImagePaths = [];
-        for (const [index, imageFile] of variant.additionalImages.entries()) {
-          const { data: additionalImageUpload, error: additionalImageError } =
-            await supabase.storage
-              .from("addon")
-              .upload(
-                `${variant.title}-additional-${index}-${productId}`,
-                imageFile
-              );
-
-          if (additionalImageError) {
-            console.error(additionalImageError);
-            toast.error(
-              `Error uploading additional image ${index + 1} for variant: ${
-                variant.title
-              }`
-            );
-            continue;
-          }
-          additionalImagePaths.push(additionalImageUpload.path);
-        }
-
-        // Insert the variant into the product_variants table
-        const { error: variantError } = await supabase
-          .from("product_variants")
-          .insert({
-            product_id: productId,
-            title: variant.title,
-            price: variant.price,
-            details: variant.details,
-            image: mainImageUpload.path, // Store the main image path
-            additional_images: additionalImagePaths, // Store paths of additional images
-            segment: variant.segment, // Store segment
-            dimensions: variant.dimension, // Store dimension
-            manufacturer: variant.manufacturer, // Store manufacturer
-          });
-
-        if (variantError) {
-          console.error(variantError);
-          toast.error(`Error inserting variant: ${variant.title}`);
-        }
-        toast.success(`Variant ${variant.title} added successfully.`);
+      if (addonCategoryError) {
+        console.error("Error inserting addon category:", addonCategoryError);
+        toast.error("Failed to save addon category.");
+        return;
       }
 
-      // Handle the addons
+      const addonId = addonCategory.id;
+      toast.success("Addon category saved successfully.");
+
+      const { image, title, price } = addon;
+
+      if (image && title && price) {
+        const { data: addonVariantImage, error: addonVariantImageError } =
+          await supabase.storage
+            .from("addon")
+            .upload(`${title}-${addonId}`, image);
+
+        if (addonVariantImageError) {
+          console.error(
+            "Error uploading addon variant image:",
+            addonVariantImageError
+          );
+          toast.error(`Failed to upload image for addon variant: ${title}`);
+        }
+
+        const { error: addonVariantError } = await supabase
+          .from("addon_variants")
+          .insert({
+            addonid: addonId,
+            title,
+            price,
+            image: addonVariantImage.path,
+          });
+
+        if (addonVariantError) {
+          console.error("Error inserting addon variant:", addonVariantError);
+          toast.error(`Failed to save addon variant: ${title}`);
+          return;
+        } else {
+          toast.success(`Addon variant ${title} added successfully.`);
+        }
+      }
 
       // Success message
       toast.success("Data inserted successfully!");
@@ -314,44 +293,14 @@ function VendorNewProduct({ setAddNewProduct, setProductlist }) {
 
   console.log(selectedSubcategories);
 
-  console.log(variant);
-
-  const handleMainImageChange = (e) => {
-    const file = e.target.files[0]; // Get the selected file
-    if (file) {
-      setVariant((prevVariants) => ({
-        ...prevVariants,
-        mainImage: file, // Update mainImage field
-      }));
-    }
-  };
-
-  // handle dimention
-  const handledimension = (e) => {
-    e.preventDefault();
-    const newWidth = e.target.value;
-    setDimensionwidth(newWidth);
-    // setDimensionwidth(e.target.value);
-
-    // setVariant((prev)=> )
-    setVariant((prevVariants) => ({
-      ...prevVariants,
-      dimension: `${dimensionHeight}x${dimensionLength}x${newWidth}`, // Update mainImage field
-    }));
-  };
-
   // clear the form
   const handleFormClear = () => {
-    setVariant({
+    setAddon({
       title: "",
-      price: 0,
-      details: "",
-      mainImage: null,
-      additionalImages: [],
-      segment: "",
-      dimension: "",
-      manufacturer: "",
+      price: "",
+      image: null,
     });
+    removeFile();
   };
 
   return (
@@ -367,7 +316,7 @@ function VendorNewProduct({ setAddNewProduct, setProductlist }) {
           <MdKeyboardArrowLeft />
           Back to product list
         </button>
-        <h3 className="capitalize font-semibold text-xl ">add new products</h3>
+        <h3 className="capitalize font-semibold text-xl ">Add New Add Ons</h3>
       </div>
       {/* <form action=""> */}
       <form
@@ -385,7 +334,7 @@ function VendorNewProduct({ setAddNewProduct, setProductlist }) {
             <h3 className="capitalize mb-3 text-xl font-semibold">category</h3>
             <div className="w-full shadow-lg border-2 p-5 my-3 rounded-xl capitalize">
               <div>
-                <h4 className="text-[#7B7B7B]">product category</h4>
+                <h4 className="text-[#7B7B7B]">Segment</h4>
                 <select
                   name="category"
                   id="category"
@@ -433,16 +382,16 @@ function VendorNewProduct({ setAddNewProduct, setProductlist }) {
             </h3>
             <div className="w-full shadow-lg border-2 p-5 my-3 rounded-xl capitalize">
               <div>
-                <h4 className="text-[#7B7B7B]">product name</h4>
+                <h4 className="text-[#7B7B7B]">Addon name</h4>
                 <input
                   type="text"
                   name="title"
                   onChange={handleChange}
-                  value={variant.title}
+                  value={addon.title}
                   className="w-full py-1.5 px-2 border-2 rounded-lg"
                 />
               </div>
-              <div>
+              {/* <div>
                 <h4 className="text-[#7B7B7B]">product details</h4>
                 <textarea
                   type="textarea"
@@ -451,18 +400,18 @@ function VendorNewProduct({ setAddNewProduct, setProductlist }) {
                   value={variant.details}
                   className="w-full py-1.5 px-2 border-2 rounded-lg"
                 />
-              </div>
+              </div> */}
               <div>
-                <h4 className="text-[#7B7B7B]">product price</h4>
+                <h4 className="text-[#7B7B7B]">Addon price</h4>
                 <input
                   type="number"
                   name="price"
                   onChange={handleChange}
-                  value={variant.price}
+                  value={addon.price}
                   className="w-full py-1.5 px-2 border-2 rounded-lg [&::-webkit-inner-spin-button]:appearance-none  focus:outline-none focus:ring-0"
                 />
               </div>
-              <div>
+              {/* <div>
                 <h4 className="text-[#7B7B7B]">
                   product dimension:(H x L x W)
                 </h4>
@@ -495,7 +444,7 @@ function VendorNewProduct({ setAddNewProduct, setProductlist }) {
                     <span className="absolute top-2 right-2">W</span>
                   </div>
                 </div>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>
@@ -523,7 +472,7 @@ function VendorNewProduct({ setAddNewProduct, setProductlist }) {
                       id="file-upload"
                       className="hidden"
                       accept="image/*"
-                      onChange={handleFileChange}
+                      onChange={handleMainImageChange}
                     />
                     <label
                       htmlFor="file-upload"
@@ -564,64 +513,10 @@ function VendorNewProduct({ setAddNewProduct, setProductlist }) {
                   )}
                 </div>
               </div>
-              <div className="px-4 py-2 bg-white border rounded-xl shadow-lg my-3 w-full">
-                <h4 className="text-[#7B7B7B] capitalize">additional </h4>
-                <div className="flex flex-wrap gap-4">
-                  <div
-                    onDragOver={(e) => e.preventDefault()}
-                    onDrop={handleAdditionalDrop}
-                    className="w-28 h-28 flex flex-col items-center justify-center border border-dashed rounded-lg text-center text-gray-500 cursor-pointer hover:border-gray-400 p-2"
-                  >
-                    <input
-                      type="file"
-                      id="additional-file-upload"
-                      name="additionalImages"
-                      className="hidden"
-                      accept="image/*"
-                      multiple
-                      onChange={handleAdditionalImagesChange}
-                    />
-                    <label
-                      htmlFor="additional-file-upload"
-                      className="flex flex-col items-center"
-                    >
-                      <BsUpload className="w-6 h-6 mb-1 text-gray-500" />
-                      <span className="text-xs">
-                        <span className="text-blue-500 cursor-pointer underline">
-                          Click to upload
-                        </span>{" "}
-                        or drag and drop
-                      </span>
-                    </label>
-                  </div>
-
-                  {additionalImages.map((img, index) => (
-                    <div
-                      key={index}
-                      className="relative w-24 h-24 border rounded-lg overflow-hidden group"
-                    >
-                      <img
-                        src={img.preview}
-                        alt={`Additional Preview ${index}`}
-                        className="w-full h-full object-cover"
-                      />
-                      <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <button
-                          onClick={() => removeAdditionalImage(index)}
-                          className="text-white text-xs bg-red-600 px-2 py-1 rounded"
-                          type="button"
-                        >
-                          Remove
-                        </button>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
             </div>
           </div>
           {/* div for plan selection */}
-          <div>
+          {/* <div>
             <h3 className="capitalize mb-3 text-xl font-semibold">
               plan category
             </h3>
@@ -639,12 +534,13 @@ function VendorNewProduct({ setAddNewProduct, setProductlist }) {
                 <option value="Luxury">Luxury</option>
               </select>
             </div>
-          </div>
+          </div> */}
           {/* div for buttons */}
           <div className="w-full flex items-end justify-between mt-5">
             <button
               className="border-2 px-5 py-2 capitalize rounded-lg"
               type="button"
+              onClick={handleFormClear}
             >
               Discard
             </button>
@@ -663,4 +559,4 @@ function VendorNewProduct({ setAddNewProduct, setProductlist }) {
   );
 }
 
-export default VendorNewProduct;
+export default VendorNewAddon;

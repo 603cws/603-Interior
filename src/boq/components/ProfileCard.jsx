@@ -125,9 +125,7 @@ function ProfileCard() {
         <div className="font-semibold text-lg capitalize leading-normal tracking-wide py-7 text-[#262626] border-y-2 border-[#ccc] flex flex-col gap-4">
           <div className="flex items-center mx-4 gap-3">
             <RiDashboardFill />
-            <button onClick={() => navigate("/dashboard")} disabled={isadmin}>
-              dashboard
-            </button>
+            <button onClick={() => navigate("/dashboard")}>dashboard</button>
           </div>
           <div className="flex items-center mx-4 gap-3">
             <RiDashboardFill />

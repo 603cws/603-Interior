@@ -1,6 +1,8 @@
 import React from "react";
 
-const AllCatArray = [
+// note for civil/plumbing and hvac there will be different logic
+
+export const AllCatArray = [
   {
     name: "Furniture",
     subcategories: [
@@ -97,6 +99,52 @@ const AllCatArray = [
     ],
     subCat1: ["Glass Partition", "Gypsum Partition"],
   },
+  {
+    name: "HVAC",
+    subcategories: [
+      "Cabins",
+      "Open Workspaces",
+      "Meeting Rooms",
+      "Public Spaces",
+      "Support Spaces",
+      "Centralized",
+    ],
+    subCat1: ["Centralized AC", "Combination", "AC", "VRV"],
+  },
+  {
+    name: "Civil / Plumbing",
+    subcategories: ["Washrooms", "Pantry"],
+    subCat1: ["Tile", "Basin", "Pods"],
+  },
 ];
 
-export default AllCatArray;
+export const specialArray = [
+  {
+    name: "HVAC",
+    type: "Centralized AC",
+    subcategories: ["Centralized"],
+  },
+  {
+    name: "HVAC",
+    type: "other",
+    subcategories: [
+      "Cabins",
+      "Open Workspaces",
+      "Meeting Rooms",
+      "Public Spaces",
+      "Support Spaces",
+    ],
+  },
+  {
+    name: "Civil / Plumbing",
+    type: "other",
+    subcategories: ["Washrooms", "Pantry"],
+  },
+  {
+    name: "Civil / Plumbing",
+    type: "Pods",
+    subcategories: ["Washrooms"],
+  },
+];
+
+// export default AllCatArray;

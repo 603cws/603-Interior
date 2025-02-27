@@ -5,7 +5,10 @@ function PricingCard() {
     <>
       {/* <div className="grid grid-cols-1 gap-10 lg-gap-0 justify-items-center sm:grid-cols-2 lg:flex lg:justify-evenly"> */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 justify-items-center container mx-auto">
-        <div className="max-w-sm font-Poppins p-4 shadow-2xl">
+        <div
+          className="max-w-sm font-Poppins p-4 shadow-2xl bg-[url('/images/Flat.png')] bg-cover bg-center "
+          // style={{ backgroundImage: "/images/Flat.png" }}
+        >
           <div className="flex flex-col justify-center items-center my-4">
             <h2 className="capitalize font-medium text-[#000] text-sm text-opacity-50 text-center pl-3 mb-2">
               All Access
@@ -45,7 +48,7 @@ function PricingCard() {
             </button>
           </div>
         </div>
-        <div className="max-w-sm font-Poppins p-4 shadow-2xl">
+        <div className="max-w-sm font-Poppins p-4 shadow-2xl  bg-[url('/images/Glass.png')] bg-cover bg-center bg-opacity-25 rounded-md ">
           <div className="flex flex-col justify-center items-center my-4">
             <h2 className="capitalize font-medium text-[#000] text-sm text-opacity-50 text-center pl-3 mb-2">
               All Access
@@ -85,7 +88,7 @@ function PricingCard() {
             </button>
           </div>
         </div>
-        <div className="max-w-sm font-Poppins p-4 shadow-2xl">
+        <div className="max-w-sm font-Poppins p-4 shadow-2xl bg-[url('/images/Flat.png')] bg-cover bg-center ">
           <div className="flex flex-col justify-center items-center my-4">
             <h2 className="capitalize font-medium text-[#000] text-sm text-opacity-50 text-center pl-3 mb-2">
               All Access
@@ -125,7 +128,7 @@ function PricingCard() {
             </button>
           </div>
         </div>
-        <div className="max-w-sm font-Poppins p-4 shadow-2xl">
+        <div className="max-w-sm font-Poppins p-4 shadow-2xl bg-[url('/images/Flat.png')] bg-cover bg-center ">
           <div className="flex flex-col justify-center items-center my-4">
             <h2 className="capitalize font-medium text-[#000] text-sm text-opacity-50 text-center pl-3 mb-2">
               All Access
@@ -165,6 +168,10 @@ function PricingCard() {
             </button>
           </div>
         </div>
+        {/* 
+        <div className="max-w-sm">
+          <img src="/images/Flat.png" alt="gradient " />
+        </div> */}
       </div>
     </>
   );
