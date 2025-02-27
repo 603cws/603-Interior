@@ -28,40 +28,36 @@ function VendorNewAddon({ setAddNewProduct, setProductlist }) {
   //   const [dimensionLength, setDimensionLength] = useState();
 
   // const [selectedSubcategories, setSelectedSubcategories] = useState();
-  const [variant, setVariant] = useState({
-    title: "",
-    price: 0,
-    details: "",
-    mainImage: null,
-    additionalImages: [],
-    segment: "",
-    dimension: "",
-    manufacturer: "",
-  });
+  // const [variant, setVariant] = useState({
+  //   title: "",
+  //   price: 0,
+  //   details: "",
+  //   mainImage: null,
+  //   additionalImages: [],
+  //   segment: "",
+  //   dimension: "",
+  //   manufacturer: "",
+  // });
 
   const [addon, setAddon] = useState({
     title: "",
-    // details: "",
     price: "",
     image: null,
-    // category: "",
-    // subcategory: "",
-    // addons: [{ image: null, title: "", price: "" }],
   });
 
   const { accountHolder } = useApp();
 
-  const handleFileChange = (event) => {
-    const selectedFile = event.target.files[0];
+  // const handleFileChange = (event) => {
+  //   const selectedFile = event.target.files[0];
 
-    variant.mainImage = selectedFile;
-    if (selectedFile) {
-      setFile(selectedFile);
-      console.log("hiii");
+  //   variant.mainImage = selectedFile;
+  //   if (selectedFile) {
+  //     setFile(selectedFile);
+  //     console.log("hiii");
 
-      setPreview(URL.createObjectURL(selectedFile));
-    }
-  };
+  //     setPreview(URL.createObjectURL(selectedFile));
+  //   }
+  // };
 
   const handleDrop = (event) => {
     event.preventDefault();
@@ -76,14 +72,6 @@ function VendorNewAddon({ setAddNewProduct, setProductlist }) {
     setFile(null);
     setPreview(null);
   };
-
-  //   const handleChange = (e) => {
-  //     const { name, value } = e.target;
-  //     setVariant((prevVariants) => ({
-  //       ...prevVariants,
-  //       [name]: value,
-  //     }));
-  //   };
   const handleChange = (e) => {
     const { name, value } = e.target;
     setAddon((prevAddon) => ({
@@ -104,18 +92,6 @@ function VendorNewAddon({ setAddNewProduct, setProductlist }) {
       setPreview(URL.createObjectURL(file));
     }
   };
-
-  //   const handleFileChange = (event) => {
-  //     const selectedFile = event.target.files[0];
-
-  //     variant.mainImage = selectedFile;
-  //     if (selectedFile) {
-  //       setFile(selectedFile);
-  //       console.log("hiii");
-
-  //       setPreview(URL.createObjectURL(selectedFile));
-  //     }
-  //   };
 
   console.log(addon);
 
@@ -391,16 +367,6 @@ function VendorNewAddon({ setAddNewProduct, setProductlist }) {
                   className="w-full py-1.5 px-2 border-2 rounded-lg"
                 />
               </div>
-              {/* <div>
-                <h4 className="text-[#7B7B7B]">product details</h4>
-                <textarea
-                  type="textarea"
-                  name="details"
-                  onChange={handleChange}
-                  value={variant.details}
-                  className="w-full py-1.5 px-2 border-2 rounded-lg"
-                />
-              </div> */}
               <div>
                 <h4 className="text-[#7B7B7B]">Addon price</h4>
                 <input
@@ -411,40 +377,6 @@ function VendorNewAddon({ setAddNewProduct, setProductlist }) {
                   className="w-full py-1.5 px-2 border-2 rounded-lg [&::-webkit-inner-spin-button]:appearance-none  focus:outline-none focus:ring-0"
                 />
               </div>
-              {/* <div>
-                <h4 className="text-[#7B7B7B]">
-                  product dimension:(H x L x W)
-                </h4>
-                <div className="flex gap-5">
-                  <div className="relative">
-                    <input
-                      type="number"
-                      name="height"
-                      onChange={(e) => setDimensionHeight(e.target.value)}
-                      className="w-20 xl:w-32 py-1.5 px-2 border-2 rounded-lg [&::-webkit-inner-spin-button]:appearance-none  focus:outline-none focus:ring-0"
-                    />
-                    <span className="absolute right-2 top-2">H</span>
-                  </div>
-                  <div className="relative">
-                    <input
-                      type="number"
-                      name="length"
-                      onChange={(e) => setDimensionLength(e.target.value)}
-                      className="w-20 xl:w-32 py-1.5 px-2 border-2 rounded-lg [&::-webkit-inner-spin-button]:appearance-none  focus:outline-none focus:ring-0"
-                    />
-                    <span className="absolute top-2 right-2">L</span>
-                  </div>
-                  <div className="relative">
-                    <input
-                      type="number"
-                      name="width"
-                      onChange={handledimension}
-                      className="w-20 xl:w-32 py-1.5 px-2 border-2 rounded-lg [&::-webkit-inner-spin-button]:appearance-none  focus:outline-none focus:ring-0"
-                    />
-                    <span className="absolute top-2 right-2">W</span>
-                  </div>
-                </div>
-              </div> */}
             </div>
           </div>
         </div>

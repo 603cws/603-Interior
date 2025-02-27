@@ -6,19 +6,25 @@ import { useApp } from "../Context/Context";
 import { supabase } from "../services/supabase";
 import toast from "react-hot-toast";
 import { useState } from "react";
-import VendorProfile from "./vendor/VendorProfile";
-import VendorSetting from "./vendor/VendorSetting";
+// import VendorProfile from "./vendor/VendorProfile";
+// import VendorSetting from "./vendor/VendorSetting";
+import UserProfile from "./user/UserProfile";
+import UserSetting from "./user/UserSetting";
 import { FaArrowLeft } from "react-icons/fa6";
+
+import { FaAngleDown, FaAngleUp } from "react-icons/fa";
 const percentage = 66;
 
 function Dashboard() {
   const navigate = useNavigate();
   // const [productlist, setProductlist] = useState(true);
   const [isSettingOpen, setIsSettingOpen] = useState(false);
-  const [isProductOpen, setIsProductOpen] = useState(true);
+  const [isProductOpen, setIsProductOpen] = useState(false);
   const [iseditopen, setIsEditopen] = useState(true);
-
   const [dashboard, setDashboard] = useState(true);
+  const [currentSection, setCurrentSection] = useState("Dashboard");
+  const [help, setHelp] = useState(false);
+  const [expandedIndex, setExpandedIndex] = useState();
 
   const {
     accountHolder,
@@ -32,15 +38,31 @@ function Dashboard() {
     setIsProductOpen(false);
     setDashboard(false);
     setIsSettingOpen(true);
+    setHelp(false);
+    setCurrentSection("Setting");
   };
   const handleproduct = () => {
     setIsSettingOpen(false);
+    setDashboard(false);
     setIsProductOpen(true);
+    setHelp(false);
+    setCurrentSection("Product");
   };
 
   const handledashboard = () => {
     setIsSettingOpen(false);
+    setIsProductOpen(false);
     setDashboard(true);
+    setHelp(false);
+    setCurrentSection("Dashboard");
+  };
+
+  const handlehelp = () => {
+    setIsSettingOpen(false);
+    setIsProductOpen(false);
+    setDashboard(false);
+    setHelp(true);
+    setCurrentSection("Help");
   };
 
   const handleLogout = async () => {
@@ -68,9 +90,34 @@ function Dashboard() {
       setIsAuthLoading(false);
     }
   };
+
+  const handleToggle = (index) => {
+    setExpandedIndex((prevIndex) => (prevIndex === index ? null : index));
+  };
+
+  const accordionItems = [
+    {
+      title: "1.What is 603 Interiors?",
+      content:
+        "603 Interiors is a tech-driven platform that helps corporates design and set up their office spaces with instant layouts, smart BOQs, and vendor partnerships, ensuring a hassle-free experience",
+    },
+    {
+      title: "2.Who can use 603 Interiors?",
+      content:
+        "Our platform is designed for corporates, startups, office administrators, HR teams, and real estate decision-makers looking for efficient office space planning and execution.",
+    },
+    {
+      title: "3.How does 603 Interiors simplify office setup?",
+      content:
+        "We eliminate the need for lengthy consultations by offering instant office layouts, predefined and custom BOQs, and direct vendor collaboration, saving you time and costs.",
+    },
+  ];
+
   return (
+    // <div className="bg-[url('images/admin/Admin.png')] bg-cover bg-center bg-no-repeat  p-5 max-h-full">
     <div className="">
-      <div className="flex gap-3 max-h-screen overflow-y-hidden">
+      <div className="flex gap-3 max-h-screen overflow-hidden bg-white">
+        {/* <div className="flex gap-3 max-h-screen overflow-y-hidden bg-white"> */}
         {/* sidebar */}
         {/* <div className="h-screen max-w-sm bg-red-600"> */}
         <div className="h-screen max-w-sm  sticky left-0 top-0 bottom-0">
@@ -96,7 +143,10 @@ function Dashboard() {
             </div>
             <div className="flex items-center mx-4 gap-3 hover:bg-[#B4EAEA] cursor-pointer">
               <RiDashboardFill />
-              <button className="capitalize"> product</button>
+              <button className="capitalize" onClick={handleproduct}>
+                {" "}
+                product
+              </button>
             </div>
           </div>
           {/* others */}
@@ -104,7 +154,9 @@ function Dashboard() {
             <h3 className="capitalize text-[#A1A1A1] mx-4">other</h3>
             <div className="flex items-center mx-4 gap-3 hover:bg-[#B4EAEA] cursor-pointer">
               <RiDashboardFill />
-              <button className="capitalize">help</button>
+              <button className="capitalize" onClick={handlehelp}>
+                help
+              </button>
             </div>
             <div className="flex items-center mx-4 gap-3 hover:bg-[#B4EAEA] cursor-pointer">
               <RiDashboardFill />
@@ -124,14 +176,16 @@ function Dashboard() {
           {/* header for dashboard */}
           <div className="flex justify-between items-center border-2 rounded-3xl mt-2 sticky top-3 z-10 bg-white h-[50px]">
             <div className="mx-3">
-              <h3 className="font-bold text-lg capitalize ">client</h3>
+              <h3 className="font-bold text-lg capitalize ">
+                {currentSection}
+              </h3>
             </div>
             <div className="mx-3">
               <img src="/images/usericon.png" alt="usericon" />
             </div>
           </div>
 
-          {/* div for content */}
+          {/* div for dashboard */}
           {dashboard && (
             <div className="flex-1  border-2 border-[#000] rounded-3xl ">
               {/* for dashboard */}
@@ -163,32 +217,34 @@ function Dashboard() {
                     <div className="flex justify-around items-center gap-3  py-3 px-2">
                       <div>
                         <img
-                          src="/images/layouticon.png"
+                          src="/images/totalproduct.png"
                           alt=" dashboard layout "
                           className="w-[60px] h-[60px]"
                         />
                       </div>
                       <div className="capitalize pr-10">
                         <p className="font-bold text-lg">
-                          1500 <span>sqft</span>
+                          {/* 1500 <span>sqft</span> */}
+                          1500
                         </p>
-                        <p className="text-base">total area</p>
+                        <p className="text-base">Total No Product</p>
                       </div>
                     </div>
                     {/* each icon  */}
                     <div className="flex justify-around items-center gap-3  py-3 px-2">
                       <div>
                         <img
-                          src="/images/layouticon.png"
+                          src="/images/grandtotal.png"
                           alt=" dashboard layout "
                           className="w-[60px] h-[60px]"
                         />
                       </div>
                       <div className="capitalize pr-10">
                         <p className="font-bold text-lg">
-                          1500 <span>sqft</span>
+                          {/* 1500 <span>sqft</span> */}
+                          1500000cr
                         </p>
-                        <p className="text-base">total area</p>
+                        <p className="text-base">Total Amount</p>
                       </div>
                     </div>
                   </div>
@@ -281,11 +337,88 @@ function Dashboard() {
                 <div className="flex-1 flex flex-col justify-center items-center h-[90%] font-Poppins ">
                   {iseditopen ? (
                     <div className="flex justify-center items-center w-full  h-full">
-                      <VendorProfile setIsEditopen={setIsEditopen} />
+                      <UserProfile setIsEditopen={setIsEditopen} />
                     </div>
                   ) : (
-                    <VendorSetting />
+                    <UserSetting />
                   )}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* product */}
+          {isProductOpen && (
+            <div className="flex-1  border-2 border-[#000] rounded-3xl ">
+              <h3>product list will be displayed here</h3>
+            </div>
+          )}
+
+          {/* help */}
+          {help && (
+            <div className="flex-1  border-2 border-[#000] rounded-3xl font-Poppins">
+              <div className="flex-col overflow-y-auto scrollbar-hide h-[calc(100vh-100px)] py-2 px-3">
+                <div className="my-4">
+                  <h2 className="text-[#000] text-xl capitalize font-semibold text-center">
+                    How can we help you?
+                  </h2>
+                </div>
+
+                <div className="bg-[#fff] border-2 p-3 border-[#E6E6E6] rounded-xl">
+                  <h3 className="px-8 text-xl capitalize font-medium">
+                    Common Issue
+                  </h3>
+                  <div className="flex flex-col m-auto px-8 py-2 ">
+                    {accordionItems.map((item, index) => (
+                      // <div key={index} className="border-b last:border-b-0">
+                      <div
+                        key={index}
+                        className="mb-3 text-[#141515] font-Poppins font-medium"
+                      >
+                        <div
+                          className="flex w-full text-left p-4 bg-gray-100 hover:bg-gray-200 focus:outline-none justify-between cursor-pointer rounded-xl"
+                          onClick={() => handleToggle(index)}
+                        >
+                          <button
+                          // className="w-full text-left p-4 bg-gray-100 hover:bg-gray-200 focus:outline-none"
+                          // className="w-full text-left p-4 "
+                          // onClick={() => handleToggle(index)}
+                          >
+                            {item.title}
+                          </button>
+                          {expandedIndex === index ? (
+                            <FaAngleUp />
+                          ) : (
+                            <FaAngleDown />
+                          )}
+                        </div>
+                        {expandedIndex === index && (
+                          <div className="p-4 bg-white border-t rounded-xl">
+                            <p>{item.content}</p>
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="flex-1 flex justify-center items-center bg-[#fff] border-2 p-3 border-[#E6E6E6] rounded-xl  my-5">
+                  <div className="my-4">
+                    <h4 className="text-[#1A3A36] text-xl text-center mb-3">
+                      Still Need Help?
+                    </h4>
+                    <p className="text-[#4B5563] text-center mb-2">
+                      Our support team is available 24/7 to assist you{" "}
+                    </p>
+                    <div className="flex justify-center items-center gap-4 my-1">
+                      <button className="px-5 py-3 bg-[#1A3A36] text-[#fff] capitalize rounded-3xl">
+                        Call
+                      </button>
+                      <button className="border-2 border-[#D1D5DB] text-[#1A3A36] px-5 py-2 rounded-2xl">
+                        Email
+                      </button>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>

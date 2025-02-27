@@ -5,7 +5,7 @@ import { FcGoogle } from "react-icons/fc";
 import { IoEyeOffOutline, IoEyeOutline } from "react-icons/io5";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useApp } from "../Context/Context";
-import { use } from "react";
+// import { use } from "react";
 import toast from "react-hot-toast";
 
 function Login() {
@@ -14,7 +14,7 @@ function Login() {
     useState(false);
   const [isSignUp, setIsSignUp] = useState(false);
   const [isForgotPassword, setIsForgotPassword] = useState(false);
-  const [isLogin, setIsLogin] = useState(false);
+  // const [isLogin, setIsLogin] = useState(false);
   const [resetPass, setResetPass] = useState(false);
 
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -33,9 +33,9 @@ function Login() {
   });
 
   const location = useLocation();
-  const areas = location.state?.areaQuantities;
-  const areaValues = location.state?.areaValues;
-  const totalArea = location.state?.totalArea;
+  // const areas = location.state?.areaQuantities;
+  // const areaValues = location.state?.areaValues;
+  // const totalArea = location.state?.totalArea;
   // const quantityID = location.state?.quantityId;
   // const areaID = location.state?.areaId;
   const layoutId = location.state?.layoutId;
@@ -91,19 +91,6 @@ function Login() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  // const showErrorWithTimeout = (field, message) => {
-  //   setErrors((prevErrors) => ({
-  //     ...prevErrors,
-  //     [field]: message,
-  //   }));
-  //   setTimeout(() => {
-  //     setErrors((prevErrors) => ({
-  //       ...prevErrors,
-  //       [field]: "",
-  //     }));
-  //   }, 3000);
-  // };
-
   const updateUserProfile = async (userId, role, location, company, mobile) => {
     const { data, error } = await supabase.from("profiles").upsert({
       id: userId, // Use the user ID from Supabase
@@ -123,7 +110,7 @@ function Login() {
   const updateUserId = async (userId) => {
     try {
       // Update userId in the 'areas' table
-      const { data: data, error: error } = await supabase
+      const { data, error } = await supabase
         .from("layout")
         .update({ userId })
         .eq("id", layoutId);
@@ -136,18 +123,6 @@ function Login() {
       if (error) {
         throw new Error(`Error updating layout table: ${error.message}`);
       }
-
-      // Update userId in the 'quantity' table
-      // const { error: quantityUpdateError } = await supabase
-      //   .from("quantity")
-      //   .update({ userId })
-      //   .eq("quantityId", quantityID);
-
-      // if (quantityUpdateError) {
-      //   throw new Error(
-      //     `Error updating areas table: ${quantityUpdateError.message}`
-      //   );
-      // }
     } catch (e) {
       console.error(e);
     }
@@ -203,7 +178,7 @@ function Login() {
 
       try {
         // Fetch areaId and quantityId for the logged-in user
-        const { data: layoutData, error: error } = await supabase
+        const { data: layoutData, error } = await supabase
           .from("layout")
           .select("id")
           .eq("userId", userId)
@@ -211,27 +186,11 @@ function Login() {
           .limit(1)
           .single();
 
-        // const { data: quantityData, error: quantityError } = await supabase
-        //   .from("quantity")
-        //   .select("quantityId")
-        //   .eq("userId", userId)
-        //   .order("created_at", { ascending: false }) // Order by latest entry
-        //   .limit(1)
-        //   .single();
-
         if (error) console.error("Error fetching layout:", error);
-        // if (quantityError)
-        //   console.error("Error fetching quantityId:", quantityError);
 
         const layoutId = layoutData?.id;
-        // const quantityId = quantityData?.quantityId;
 
-        console.log(
-          "Fetched layoutId:",
-          layoutId
-          // "Fetched quantityId:",
-          // quantityId
-        );
+        console.log("Fetched layoutId:", layoutId);
 
         // Navigate based on whether areaId and quantityId exist
         if (layoutId) {
@@ -244,8 +203,6 @@ function Login() {
         navigate("/Layout"); // Default navigation in case of an error
       }
     }
-
-    // alert("User logged in successfully!");
     toast.success("User logged in successfully!");
     console.log("User logged in successfully:", data);
   };
@@ -255,10 +212,6 @@ function Login() {
     if (isSignUp) {
       handleRegister();
     } else {
-      // if (formData.password !== formData.confirmPassword) {
-      //   // showErrorWithTimeout("confirmPassword", "Passwords do not match.");
-      //   return;
-      // }
       handleLogin();
     }
   };
@@ -267,7 +220,6 @@ function Login() {
     try {
       setIsSubmitting(true);
       if (!formData.email) {
-        // alert("Please enter an email address.");
         toast.error("Please enter an email address.");
         return;
       }
@@ -281,7 +233,6 @@ function Login() {
       );
 
       if (emailCheckError || !data) {
-        // alert("Email does not exist. Please enter a registered email.");
         toast.error("Email does not exist. Please enter a registered email.");
         return;
       }
@@ -296,54 +247,18 @@ function Login() {
 
       if (error) {
         console.error("Error sending reset email:", error.message);
-        // alert("Error sending reset email. Please try again.");
+
         toast.error("Error sending reset email. Please try again.");
       } else {
-        // alert("Password reset email sent! Check your inbox.");
         toast.success("Password reset email sent! Check your inbox.");
       }
     } finally {
       setIsSubmitting(false);
     }
   };
-  // const handleForgotPassword = async () => {
-  //   if (!formData.email) {
-  //     alert("Please enter an email address.");
-  //     return;
-  //   }
-
-  //   // Check if email exists in Supabase Auth
-  //   const { data, error: emailCheckError } = await supabase.rpc(
-  //     "check_user_exists",
-  //     {
-  //       user_email: formData.email,
-  //     }
-  //   );
-
-  //   if (emailCheckError || !data) {
-  //     alert("Email does not exist. Please enter a registered email.");
-  //     return;
-  //   }
-
-  //   // Proceed with sending reset email
-  //   const { error } = await supabase.auth.resetPasswordForEmail(
-  //     formData.email,
-  //     {
-  //       redirectTo: "https://603-interior.vercel.app/Login?type=recovery",
-  //     }
-  //   );
-
-  //   if (error) {
-  //     console.error("Error sending reset email:", error.message);
-  //     alert("Error sending reset email. Please try again.");
-  //   } else {
-  //     alert("Password reset email sent! Check your inbox.");
-  //   }
-  // };
 
   const handleResetPassword = async () => {
     if (formData.password !== formData.confirmPassword) {
-      // alert("Passwords do not match!");
       toast.error("Passwords do not match!");
       return;
     }
@@ -354,7 +269,6 @@ function Login() {
 
     if (error) {
       console.error("Error resetting password:", error.message);
-      // alert("Error resetting password. Please try again.");
       toast.error("Error resetting password. Please try again.");
     } else {
       toast.success("Password reset successfully! Please log in.");
