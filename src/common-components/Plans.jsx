@@ -107,7 +107,7 @@ function Plans() {
             <div
               key={plan.id}
               onMouseEnter={() => setHoveredPlan(plan.id)}
-              className="relative overflow-hidden bg-[#E4F0EC]"
+              className="relative overflow-hidden bg-[#E4F0EC] rounded-xl"
             >
               {/* 
                 If expanded, show the "large" layout: 

@@ -357,15 +357,16 @@ function Login() {
       // alert("Error resetting password. Please try again.");
       toast.error("Error resetting password. Please try again.");
     } else {
-      alert("Password reset successfully! Please log in.");
-      navigate("/login");
+      toast.success("Password reset successfully! Please log in.");
+      setResetPass(false);
+      navigate("/Login");
     }
   };
 
   return (
     <>
       {resetPass ? (
-        <div className="flex flex-col justify-center items-center gap-5 max-h-screen w-full bg-login-custom-gradient">
+        <div className="flex flex-col justify-center items-center gap-5 max-h-screen h-screen w-full bg-login-custom-gradient">
           <div className="w-full sm:w-1/2 px-5 flex flex-col justify-center items-center gap-5">
             <h1 className="capitalize text-3xl font-bold text-white text-center ">
               Reset Password
