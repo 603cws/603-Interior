@@ -66,7 +66,7 @@ function LandingNavbar({ bgColor = false }) {
             <button
               className=""
               onClick={() => navigate("/dashboard")}
-              disabled={!isadmin}
+              // disabled={!isadmin}
             >
               <img
                 onClick={toggleProfile}
