@@ -23,7 +23,7 @@ function Navbar({
   const [error, setError] = useState(false);
 
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const { isAuthenticated } = useApp();
+  const { isAuthenticated, layoutImgRef, layoutImage = "" } = useApp();
 
   const {
     setTotalArea,
@@ -35,6 +35,7 @@ function Navbar({
   } = useApp();
 
   console.log("user id", userId);
+  console.log("layout img", layoutImage);
 
   const navigate = useNavigate();
 
@@ -73,7 +74,8 @@ function Navbar({
     userId,
     areaValues,
     areaQuantities,
-    totalArea = null
+    totalArea = null,
+    imageUrl
   ) => {
     return {
       userId: userId || null,
@@ -126,7 +128,24 @@ function Navbar({
       otherArea: areaValues.other,
       otherQty: areaQuantities.other || 0,
       ...(totalArea !== null && { totalArea }),
+      layoutImg: imageUrl,
     };
+  };
+
+  const uploadImage = async (imageDataUrl) => {
+    const blob = await fetch(imageDataUrl).then((res) => res.blob());
+    const fileName = `area_distribution_${Date.now()}.png`;
+
+    const { data, error } = await supabase.storage
+      .from("addon")
+      .upload(fileName, blob, { contentType: "image/png" });
+
+    if (error) {
+      console.error("Image upload failed:", error);
+      return null;
+    }
+
+    return `https://bwxzfwsoxwtzhjbzbdzs.supabase.co/storage/v1/object/public/addon/${data.path}`;
   };
 
   const handlegenrateboq = async () => {
@@ -135,12 +154,27 @@ function Navbar({
       if (!totalArea) {
         toast.error("Enter the Area");
       }
+
+      // Trigger export and wait for image to be available
+      if (layoutImgRef.current) {
+        await layoutImgRef.current();
+      }
+
+      if (!layoutImage) {
+        alert("Failed to generate image");
+        return;
+      }
+
+      // Upload image to Supabase
+      const imageUrl = await uploadImage(layoutImage || "");
+
       if (totalArea) {
         const layoutDta = mapAreaValues(
           userId,
           areaValues,
           areaQuantities,
-          totalArea
+          totalArea,
+          imageUrl
         );
 
         console.log("layoutDta", layoutDta);

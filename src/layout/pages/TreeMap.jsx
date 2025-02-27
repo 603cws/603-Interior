@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import ReactApexChart from "react-apexcharts";
+import { useApp } from "../../Context/Context";
 // import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 // import { faChevronRight, faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 
@@ -34,6 +35,9 @@ const fullNames = {
 const TreeMap = ({ totalArea, areaQuantities, areaValues }) => {
   const [hoveredArea, setHoveredArea] = useState(null);
   const [isLegendVisible, setIsLegendVisible] = useState(false);
+
+  const { layoutImgRef, setLayoutImage } = useApp();
+  const chartRef = useRef(null);
 
   const colors = {
     "Linear Workspace": "#62897E",
@@ -105,6 +109,9 @@ const TreeMap = ({ totalArea, areaQuantities, areaValues }) => {
         dataPointMouseLeave: () => {
           setHoveredArea(null);
         },
+        mounted: (chart) => {
+          chartRef.current = chart; // Store chart instance
+        },
       },
     },
     title: {
@@ -155,6 +162,18 @@ const TreeMap = ({ totalArea, areaQuantities, areaValues }) => {
         },
       },
     },
+  };
+  useEffect(() => {
+    if (layoutImgRef) {
+      layoutImgRef.current = exportChart;
+    }
+  }, []);
+
+  const exportChart = async () => {
+    if (chartRef.current) {
+      const imageURI = await chartRef.current.dataURI(); // Get image
+      setLayoutImage(imageURI.imgURI); // Send to context
+    }
   };
 
   const generateLegendItems = () => {

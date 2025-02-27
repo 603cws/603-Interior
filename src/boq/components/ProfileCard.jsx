@@ -106,7 +106,7 @@ function ProfileCard() {
             // }}
           >
             <img
-              src="/images/usericon.png"
+              src={accountHolder.profileImage}
               alt="usericon"
               className="w-16 h-16"
             />

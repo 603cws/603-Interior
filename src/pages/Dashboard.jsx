@@ -11,8 +11,13 @@ import { useState } from "react";
 import UserProfile from "./user/UserProfile";
 import UserSetting from "./user/UserSetting";
 import { FaArrowLeft } from "react-icons/fa6";
+import { VscSignOut } from "react-icons/vsc";
+import { IoSettingsSharp } from "react-icons/io5";
+import { LuBlend } from "react-icons/lu";
+import { TiHomeOutline } from "react-icons/ti";
 
 import { FaAngleDown, FaAngleUp } from "react-icons/fa";
+import { BsQuestionCircle } from "react-icons/bs";
 const percentage = 66;
 
 function Dashboard() {
@@ -25,6 +30,7 @@ function Dashboard() {
   const [currentSection, setCurrentSection] = useState("Dashboard");
   const [help, setHelp] = useState(false);
   const [expandedIndex, setExpandedIndex] = useState();
+  const [isExpanded, setIsExpanded] = useState(false);
 
   const {
     accountHolder,
@@ -32,7 +38,9 @@ function Dashboard() {
     setIsAuthLoading,
     setIsAuthenticated,
     setTotalArea,
+    layoutImage,
   } = useApp();
+  console.log("layout image", layoutImage);
 
   const handlesetting = () => {
     setIsProductOpen(false);
@@ -113,6 +121,18 @@ function Dashboard() {
     },
   ];
 
+  const SidebarItem = ({ icon, text, onClick, isExpanded }) => (
+    <div
+      className={`flex items-center mx-4 gap-3 hover:bg-[#B4EAEA] p-2 rounded cursor-pointer ${
+        isExpanded ? "" : "justify-center"
+      }`}
+      onClick={onClick}
+    >
+      <div className="text-2xl">{icon}</div>
+      <span className={`${isExpanded ? "block" : "hidden"}`}>{text}</span>
+    </div>
+  );
+
   return (
     // <div className="bg-[url('images/admin/Admin.png')] bg-cover bg-center bg-no-repeat  p-5 max-h-full">
     <div className="">
@@ -120,56 +140,78 @@ function Dashboard() {
         {/* <div className="flex gap-3 max-h-screen overflow-y-hidden bg-white"> */}
         {/* sidebar */}
         {/* <div className="h-screen max-w-sm bg-red-600"> */}
-        <div className="h-screen max-w-sm  sticky left-0 top-0 bottom-0">
-          {/* logo */}
-          <div className="cursor-pointer flex justify-center items-center">
-            <img src="/logo/logo.png" alt="Logo" className="h-20 w-32" />
+        <div
+          className={`h-screen sticky left-0 top-0 bottom-0 bg-white shadow-lg transition-all duration-300 ${
+            isExpanded ? "max-w-sm w-60 absolute" : "w-16"
+          }`}
+          onMouseEnter={() => setIsExpanded(true)}
+          onMouseLeave={() => setIsExpanded(false)}
+        >
+          {/* Logo */}
+          <div className="cursor-pointer flex justify-center items-center py-4">
+            <img
+              src="/logo/logo.png"
+              alt="Logo"
+              className={`${isExpanded ? "h-20 w-32" : "size-12"}`}
+            />
           </div>
 
-          {/* main */}
-          <div className="font-semibold text-lg capitalize leading-normal tracking-wide py-7 text-[#262626]  flex flex-col gap-4 px-7">
-            <h3 className="capitalize text-[#A1A1A1] mx-4">main</h3>
-            <div className="flex items-center mx-4 gap-3 hover:bg-[#B4EAEA] cursor-pointer">
-              <RiDashboardFill />
-              <button className="capitalize" onClick={() => navigate("/")}>
-                Home
-              </button>
-            </div>
-            <div className="flex items-center mx-4 gap-3 hover:bg-[#B4EAEA] cursor-pointer">
-              <RiDashboardFill />
-              <button className="capitalize" onClick={handledashboard}>
-                dashboard
-              </button>
-            </div>
-            <div className="flex items-center mx-4 gap-3 hover:bg-[#B4EAEA] cursor-pointer">
-              <RiDashboardFill />
-              <button className="capitalize" onClick={handleproduct}>
-                {" "}
-                product
-              </button>
-            </div>
+          {/* Menu Items */}
+          <div className="font-semibold text-lg capitalize leading-normal tracking-wide py-4 text-[#262626] flex flex-col gap-4 px-3">
+            <h3
+              className={`capitalize text-[#A1A1A1] ${
+                isExpanded ? "mx-4" : "hidden"
+              }`}
+            >
+              main
+            </h3>
+            <SidebarItem
+              icon={<TiHomeOutline />}
+              text="Home"
+              onClick={() => navigate("/")}
+              isExpanded={isExpanded}
+            />
+            <SidebarItem
+              icon={<RiDashboardFill />}
+              text="Dashboard"
+              onClick={handledashboard}
+              isExpanded={isExpanded}
+            />
+            <SidebarItem
+              icon={<LuBlend />}
+              text="Product"
+              onClick={handleproduct}
+              isExpanded={isExpanded}
+            />
           </div>
-          {/* others */}
-          <div className="font-semibold text-lg capitalize leading-normal tracking-wide py-7 text-[#262626]  flex flex-col gap-4 px-7">
-            <h3 className="capitalize text-[#A1A1A1] mx-4">other</h3>
-            <div className="flex items-center mx-4 gap-3 hover:bg-[#B4EAEA] cursor-pointer">
-              <RiDashboardFill />
-              <button className="capitalize" onClick={handlehelp}>
-                help
-              </button>
-            </div>
-            <div className="flex items-center mx-4 gap-3 hover:bg-[#B4EAEA] cursor-pointer">
-              <RiDashboardFill />
-              <button className="capitalize" onClick={handlesetting}>
-                setting
-              </button>
-            </div>
-            <div className="flex items-center mx-4 gap-3 hover:bg-[#B4EAEA] cursor-pointer">
-              <RiDashboardFill />
-              <button className="capitalize" onClick={handleLogout}>
-                logout
-              </button>
-            </div>
+
+          {/* Other Items */}
+          <div className="font-semibold text-lg capitalize leading-normal tracking-wide py-4 text-[#262626] flex flex-col gap-4 px-3">
+            <h3
+              className={`capitalize text-[#A1A1A1] ${
+                isExpanded ? "mx-4" : "hidden"
+              }`}
+            >
+              other
+            </h3>
+            <SidebarItem
+              icon={<BsQuestionCircle />}
+              text="Help"
+              onClick={handlehelp}
+              isExpanded={isExpanded}
+            />
+            <SidebarItem
+              icon={<IoSettingsSharp />}
+              text="Setting"
+              onClick={handlesetting}
+              isExpanded={isExpanded}
+            />
+            <SidebarItem
+              icon={<VscSignOut />}
+              text="Logout"
+              onClick={handleLogout}
+              isExpanded={isExpanded}
+            />
           </div>
         </div>
         <div className="flex-1 flex flex-col gap-3 relative h-full px-2">
@@ -187,122 +229,127 @@ function Dashboard() {
 
           {/* div for dashboard */}
           {dashboard && (
-            <div className="flex-1  border-2 border-[#000] rounded-3xl ">
+            <div className="w-full  border-2 border-[#000] rounded-3xl ">
               {/* for dashboard */}
-              <div className="overflow-y-auto scrollbar-hide h-[calc(100vh-100px)] py-2 px-3">
+              <div className="w-full flex overflow-y-auto scrollbar-hide h-[calc(100vh-100px)] py-2 px-3">
                 {/* dashboard area layout */}
-                <div className="p-4">
-                  <h2 className="capitalize font-bold mb-2">
-                    Layout Information
-                  </h2>
-                  {/* div containing information */}
-                  <div className="flex gap-10">
-                    {/* each icon  */}
-                    <div className="flex justify-around items-center gap-3  py-3 px-2">
-                      <div>
-                        <img
-                          src="/images/layouticon.png"
-                          alt=" dashboard layout "
-                          className="w-[60px] h-[60px]"
-                        />
+                <div className="w-2/3">
+                  <div className="p-4">
+                    <h2 className="capitalize font-bold mb-2">
+                      Layout Information
+                    </h2>
+                    {/* div containing information */}
+                    <div className="flex gap-10">
+                      {/* each icon  */}
+                      <div className="flex justify-around items-center gap-3  py-3 px-2">
+                        <div>
+                          <img
+                            src="/images/layouticon.png"
+                            alt=" dashboard layout "
+                            className="w-[60px] h-[60px]"
+                          />
+                        </div>
+                        <div className="capitalize pr-10">
+                          <p className="font-bold text-lg">
+                            1500 <span>sqft</span>
+                          </p>
+                          <p className="text-base">total area</p>
+                        </div>
                       </div>
-                      <div className="capitalize pr-10">
-                        <p className="font-bold text-lg">
-                          1500 <span>sqft</span>
-                        </p>
-                        <p className="text-base">total area</p>
+                      {/* each icon  */}
+                      <div className="flex justify-around items-center gap-3  py-3 px-2">
+                        <div>
+                          <img
+                            src="/images/totalproduct.png"
+                            alt=" dashboard layout "
+                            className="w-[60px] h-[60px]"
+                          />
+                        </div>
+                        <div className="capitalize pr-10">
+                          <p className="font-bold text-lg">
+                            {/* 1500 <span>sqft</span> */}
+                            1500
+                          </p>
+                          <p className="text-base">Total No Product</p>
+                        </div>
+                      </div>
+                      {/* each icon  */}
+                      <div className="flex justify-around items-center gap-3  py-3 px-2">
+                        <div>
+                          <img
+                            src="/images/grandtotal.png"
+                            alt=" dashboard layout "
+                            className="w-[60px] h-[60px]"
+                          />
+                        </div>
+                        <div className="capitalize pr-10">
+                          <p className="font-bold text-lg">
+                            {/* 1500 <span>sqft</span> */}
+                            1500000cr
+                          </p>
+                          <p className="text-base">Total Amount</p>
+                        </div>
                       </div>
                     </div>
-                    {/* each icon  */}
-                    <div className="flex justify-around items-center gap-3  py-3 px-2">
-                      <div>
-                        <img
-                          src="/images/totalproduct.png"
-                          alt=" dashboard layout "
-                          className="w-[60px] h-[60px]"
-                        />
+                  </div>
+                  {/* dashboard boq part */}
+                  <div className="p-3">
+                    <h3 className="capitalize font-bold ">BOQ generated</h3>
+
+                    {/* boq card */}
+                    <div className="rounded-3xl border-2 border-[#ccc] max-w-sm p-2">
+                      <div className="flex justify-end gap-2 p-2">
+                        <MdOutlineModeEdit size={30} />
+                        <MdDeleteOutline size={30} />
                       </div>
-                      <div className="capitalize pr-10">
-                        <p className="font-bold text-lg">
-                          {/* 1500 <span>sqft</span> */}
-                          1500
-                        </p>
-                        <p className="text-base">Total No Product</p>
+                      <div>
+                        <h3 className="font-bold">Lorem, ipsum.</h3>
                       </div>
                     </div>
-                    {/* each icon  */}
-                    <div className="flex justify-around items-center gap-3  py-3 px-2">
-                      <div>
-                        <img
-                          src="/images/grandtotal.png"
-                          alt=" dashboard layout "
-                          className="w-[60px] h-[60px]"
-                        />
-                      </div>
-                      <div className="capitalize pr-10">
-                        <p className="font-bold text-lg">
-                          {/* 1500 <span>sqft</span> */}
-                          1500000cr
-                        </p>
-                        <p className="text-base">Total Amount</p>
-                      </div>
+
+                    <div className="w-32 h-32">
+                      <CircularProgressbar
+                        value={percentage}
+                        text={`${percentage}%`}
+                        // styles={{ width: 50, height: 50 }}
+                        styles={buildStyles({
+                          // Rotation of path and trail, in number of turns (0-1)
+                          rotation: 0.25,
+
+                          // Whether to use rounded or flat corners on the ends - can use 'butt' or 'round'
+                          strokeLinecap: "butt",
+
+                          // Text size
+                          textSize: "16px",
+
+                          // How long animation takes to go from one percentage to another, in seconds
+                          pathTransitionDuration: 0.5,
+
+                          // Can specify path transition in more detail, or remove it entirely
+                          // pathTransition: 'none',
+
+                          // Colors
+                          pathColor: `rgba(62, 152, 199, ${percentage / 100})`,
+                          textColor: "#f88",
+                          trailColor: "#d6d6d6",
+                          backgroundColor: "#3e98c7",
+                        })}
+                      />
                     </div>
+                  </div>
+                  <div>
+                    <p>
+                      Lorem ipsum dolor sit, amet consectetur adipisicing elit.
+                      Magni quos fugiat reiciendis temporibus nulla eius maxime
+                      quidem? Libero eum laborum ut, dolorum corrupti autem
+                      voluptate,
+                    </p>
                   </div>
                 </div>
-
-                {/* dashboard boq part */}
-
-                <div className="p-3">
-                  <h3 className="capitalize font-bold ">BOQ generated</h3>
-
-                  {/* boq card */}
-                  <div className="rounded-3xl border-2 border-[#ccc] max-w-sm p-2">
-                    <div className="flex justify-end gap-2 p-2">
-                      <MdOutlineModeEdit size={30} />
-                      <MdDeleteOutline size={30} />
-                    </div>
-                    <div>
-                      <h3 className="font-bold">Lorem, ipsum.</h3>
-                    </div>
+                <div className="w-1/3  flex justify-center">
+                  <div className="border-2 p-4 rounded-xl h-96">
+                    <img src={layoutImage} alt="" className="h-80 w-80" />
                   </div>
-
-                  <div className="w-32 h-32">
-                    <CircularProgressbar
-                      value={percentage}
-                      text={`${percentage}%`}
-                      // styles={{ width: 50, height: 50 }}
-                      styles={buildStyles({
-                        // Rotation of path and trail, in number of turns (0-1)
-                        rotation: 0.25,
-
-                        // Whether to use rounded or flat corners on the ends - can use 'butt' or 'round'
-                        strokeLinecap: "butt",
-
-                        // Text size
-                        textSize: "16px",
-
-                        // How long animation takes to go from one percentage to another, in seconds
-                        pathTransitionDuration: 0.5,
-
-                        // Can specify path transition in more detail, or remove it entirely
-                        // pathTransition: 'none',
-
-                        // Colors
-                        pathColor: `rgba(62, 152, 199, ${percentage / 100})`,
-                        textColor: "#f88",
-                        trailColor: "#d6d6d6",
-                        backgroundColor: "#3e98c7",
-                      })}
-                    />
-                  </div>
-                </div>
-                <div>
-                  <p>
-                    Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-                    Magni quos fugiat reiciendis temporibus nulla eius maxime
-                    quidem? Libero eum laborum ut, dolorum corrupti autem
-                    voluptate,
-                  </p>
                 </div>
               </div>
             </div>

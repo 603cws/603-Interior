@@ -51,11 +51,12 @@ export const AppProvider = ({ children }) => {
   });
   // const [accountHolder, setAccountHolder] = useState(null);
   const [selectedPlan, setSelectedPlan] = useState(null);
+  const [layoutImage, setLayoutImage] = useState(null);
 
   const prevSelectedData = useRef(selectedData); // Ref to store previous selectedData
   const prevCategories = useRef(categories); // Ref to store previous categories
   const prevSubCat1 = useRef(subCat1); // Ref to store previous subCat1
-
+  const layoutImgRef = useRef(null);
   // auth
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
@@ -344,6 +345,9 @@ export const AppProvider = ({ children }) => {
         setIsAuthLoading,
         setLoading,
         loading,
+        layoutImgRef,
+        layoutImage,
+        setLayoutImage,
       }}
     >
       {children}
