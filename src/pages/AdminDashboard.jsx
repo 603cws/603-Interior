@@ -5,7 +5,7 @@ import { BiFilterAlt } from "react-icons/bi";
 import { AiOutlineCloudDownload } from "react-icons/ai";
 import { LuPlus } from "react-icons/lu";
 import { IoIosArrowDown } from "react-icons/io";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { supabase } from "../services/supabase";
 
 function AdminDashboard() {
@@ -24,6 +24,42 @@ function AdminDashboard() {
 
   const baseImageUrl =
     "https://bwxzfwsoxwtzhjbzbdzs.supabase.co/storage/v1/object/public/addon/";
+
+  const tableRef = useRef(null);
+  const [itemsPerPage, setItemsPerPage] = useState(10); // Default (gets updated dynamically)
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const items = toggle ? products : addons;
+  const totalPages = Math.ceil(items.length / itemsPerPage);
+
+  useEffect(() => {
+    const calculateItemsPerPage = () => {
+      if (tableRef.current) {
+        const tableHeight = tableRef.current.clientHeight; // Get table's available height
+        const rowHeight = 60; // Approximate row height (adjust if needed)
+        const headerHeight = 50; // Height of the table header
+        const maxRows = Math.floor((tableHeight - headerHeight) / rowHeight);
+
+        // setItemsPerPage(maxRows > 0 ? maxRows : 1); // Ensure at least 1 row is shown
+      }
+    };
+
+    calculateItemsPerPage();
+    window.addEventListener("resize", calculateItemsPerPage);
+    return () => window.removeEventListener("resize", calculateItemsPerPage);
+  }, []);
+
+  // Slice the items for pagination
+  const paginatedItems = items.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
+  const goToPage = (page) => {
+    if (page > 0 && page <= totalPages) {
+      setCurrentPage(page);
+    }
+  };
 
   // Fetch Products from Supabase
   useEffect(() => {
@@ -141,7 +177,17 @@ function AdminDashboard() {
 
           {/* Content */}
           <div className="flex-1 rounded-xl bg-[#EBF0FF] mb-5 cursor-default overflow-hidden">
-            <div className="h-[calc(100vh-130px)] flex flex-col">
+            <div
+              className={`3xl:${
+                totalPages > 1
+                  ? "h-[calc(100vh-220px)]"
+                  : "h-[calc(100vh-150px)]"
+              } ${
+                totalPages > 1
+                  ? "h-[calc(100vh-220px)]"
+                  : "h-[calc(100vh-130px)]"
+              } flex flex-col`}
+            >
               {/* Header Section */}
               <div className="flex justify-between items-center mt-4 px-8">
                 {/* Left Side: Back Navigation & Title (Stacked Vertically) */}
@@ -196,9 +242,13 @@ function AdminDashboard() {
               </div>
 
               {/* Table Section */}
-              {(toggle ? products : addons).length > 0 ? (
-                <section className="mt-2 flex-1 overflow-hidden px-8">
-                  <div className="w-full h-full border-t border-b border-[#CCCCCC] overflow-y-auto custom-scrollbar">
+              <section className="mt-2 flex flex-col px-8">
+                {/* Scrollable Table Container */}
+                <div
+                  className="w-full  3xl:h-[620px] h-[400px] border-t border-b border-[#CCCCCC] overflow-y-auto custom-scrollbar"
+                  ref={tableRef}
+                >
+                  {items.length > 0 ? (
                     <table className="min-w-full border-collapse">
                       <thead className="bg-[#EBF0FF] sticky top-0 z-10 px-8 text-center text-nowrap">
                         <tr>
@@ -222,7 +272,7 @@ function AdminDashboard() {
                         </tr>
                       </thead>
                       <tbody className="text-center text-sm">
-                        {(toggle ? products : addons).map((item) => (
+                        {paginatedItems.map((item) => (
                           <tr
                             key={item.id}
                             className="hover:bg-gray-50 cursor-pointer"
@@ -272,14 +322,58 @@ function AdminDashboard() {
                         ))}
                       </tbody>
                     </table>
-                  </div>
-                </section>
-              ) : (
-                <p className="p-5 text-gray-500 text-center">
-                  No {toggle ? "products" : "addons"} found.
-                </p>
-              )}
+                  ) : (
+                    <p className="p-5 text-gray-500 text-center">
+                      No {toggle ? "products" : "addons"} found.
+                    </p>
+                  )}
+                </div>
+              </section>
             </div>
+            {/* Pagination Controls (Always Visible) */}
+            {totalPages > 1 && (
+              <div className="flex justify-center items-center gap-2 mt-10 z-30 sticky bottom-0 bg-[#EBF0FF] mb-4 text-[#3d194f]">
+                <button
+                  onClick={() => goToPage(currentPage - 1)}
+                  disabled={currentPage === 1}
+                  className="px-3 py-1 border rounded disabled:opacity-50 text-[#3d194f]"
+                >
+                  Previous
+                </button>
+
+                {/* Page Numbers */}
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map(
+                  (page) =>
+                    page === 1 ||
+                    page === totalPages ||
+                    (page >= currentPage - 1 && page <= currentPage + 1) ? (
+                      <button
+                        key={page}
+                        onClick={() => goToPage(page)}
+                        className={`w-8 h-8 flex items-center justify-center  ${
+                          currentPage === page
+                            ? "bg-[#aca9d3] text-white rounded-full "
+                            : "rounded-md text-[#3d194f]"
+                        }`}
+                      >
+                        {page}
+                      </button>
+                    ) : page === currentPage + 2 || page === currentPage - 2 ? (
+                      <span key={page} className="px-2">
+                        ...
+                      </span>
+                    ) : null
+                )}
+
+                <button
+                  onClick={() => goToPage(currentPage + 1)}
+                  disabled={currentPage === totalPages}
+                  className="px-3 py-1 border rounded disabled:opacity-50 text-[#3d194f]"
+                >
+                  Next
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </div>

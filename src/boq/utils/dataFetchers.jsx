@@ -34,7 +34,23 @@ export const fetchProductsData = async () => {
 
     if (error) throw error;
 
-    const allImages = data
+    // Filter products where at least one variant is approved
+    const approvedProducts = data
+      .map((product) => {
+        const approvedVariants = product.product_variants.filter(
+          (variant) => variant.status === "approved"
+        );
+
+        if (approvedVariants.length === 0) return null; // Exclude products without approved variants
+
+        return {
+          ...product,
+          product_variants: approvedVariants,
+        };
+      })
+      .filter(Boolean); // Remove null values
+
+    const allImages = approvedProducts
       .flatMap((product) => [
         ...product.product_variants.map((variant) => variant.image),
         ...product.addons.flatMap((addon) => [
@@ -56,7 +72,7 @@ export const fetchProductsData = async () => {
       signedUrls.map((item) => [item.path, item.signedUrl])
     );
 
-    const processedData = data.map((product) => ({
+    const processedData = approvedProducts.map((product) => ({
       ...product,
       product_variants: product.product_variants.map((variant) => ({
         ...variant,
