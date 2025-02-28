@@ -124,56 +124,59 @@ function VendorDashboard() {
   };
 
   // Fetch Products from Supabase
-  useEffect(() => {
-    const fetchProducts = async () => {
-      setIsloading(true);
+  const fetchProducts = async () => {
+    setIsloading(true);
 
-      try {
-        const { data } = await supabase
-          .from("product_variants")
-          .select(
-            `
-            id, 
-            title, 
-            price, 
-            details, 
-            image, 
-            product_id, 
-            products (category, subcategory, subcategory1)
+    try {
+      const { data } = await supabase
+        .from("product_variants")
+        .select(
           `
-          )
-          .eq("vendor_id", accountHolder.userId);
+          id, 
+          title, 
+          price, 
+          details, 
+          image, 
+          product_id, 
+          products (category, subcategory, subcategory1)
+        `
+        )
+        .eq("vendor_id", accountHolder.userId);
 
-        setProducts(data);
+      setProducts(data);
 
-        console.log(data);
-      } catch (error) {
-        console.log("Error fetching products:", error);
-      } finally {
-        setIsloading(false);
-      }
-    };
+      console.log(data);
+    } catch (error) {
+      console.log("Error fetching products:", error);
+    } finally {
+      setIsloading(false);
+    }
+  };
 
-    fetchProducts();
-  }, []);
+  const fetchAddons = async () => {
+    const { data, error } = await supabase
+      .from("addon_variants")
+      .select("*")
+      .eq("vendorId", accountHolder.userId);
+    console.log(data);
+
+    if (error) {
+      console.log("Error fetching addons:", error);
+    } else {
+      setAddons(data);
+      console.log("Addons: ", data);
+    }
+  };
 
   useEffect(() => {
-    const fetchAddons = async () => {
-      const { data, error } = await supabase
-        .from("addon_variants")
-        .select("*")
-        .eq("vendorId", accountHolder.userId);
-      console.log(data);
-
-      if (error) {
-        console.log("Error fetching addons:", error);
-      } else {
-        setAddons(data);
-        console.log("Addons: ", data);
-      }
-    };
+    fetchProducts();
     fetchAddons();
   }, []);
+
+  // useEffect(() => {
+
+  //   fetchAddons();
+  // }, []);
 
   const handlenewproduct = () => {
     setProductlist(false);
@@ -217,6 +220,26 @@ function VendorDashboard() {
 
     setProductPreview(true);
     setSelectedProductview(product);
+  };
+
+  const handleDelete = async (product) => {
+    if (!product.id) return;
+
+    try {
+      const { error } = await supabase
+        .from("product_variants") // Ensure this matches your table name
+        .delete()
+        .eq("id", product.id);
+
+      if (error) throw error; // Throw error to be caught in catch block
+
+      toast.success("Product deleted successfully!");
+      setProductPreview(false); // Close the modal after deletion
+    } catch (error) {
+      toast.error("Failed to delete product.");
+      console.error("Delete error:", error);
+    }
+    fetchProducts(1); // Fetch products after deletion
   };
 
   const SidebarItem = ({ icon, text, onClick, isExpanded, isActive }) => (
@@ -542,7 +565,12 @@ function VendorDashboard() {
                                           >
                                             <VscEye /> view
                                           </button>
-                                          <button className="flex gap-2 items-center w-full text-left px-3 py-2 hover:bg-gray-200">
+                                          <button
+                                            onClick={() => {
+                                              handleDelete(item);
+                                            }}
+                                            className="flex gap-2 items-center w-full text-left px-3 py-2 hover:bg-gray-200"
+                                          >
                                             <MdOutlineDelete /> Delete
                                           </button>
                                         </div>
@@ -667,6 +695,8 @@ function VendorDashboard() {
               setProductPreview(false);
             }}
             product={selectedProductview}
+            // fetchProducts={fetchProducts}
+            handleDelete={handleDelete}
           />
         )}
       </div>

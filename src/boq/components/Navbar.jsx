@@ -39,7 +39,8 @@ function Navbar({
     };
   }, []);
 
-  const { progress, selectedData, setShowProfile, showProfile } = useApp();
+  const { progress, selectedData, setShowProfile, showProfile, accountHolder } =
+    useApp();
 
   const naviagte = useNavigate();
 
@@ -83,7 +84,7 @@ function Navbar({
           <div className="" ref={iconRef}>
             <img
               onClick={toggleProfile}
-              src="/images/usericon.png"
+              src={accountHolder.profileImage}
               alt="usericon"
               className="w-12 h-12 cursor-pointer"
             />

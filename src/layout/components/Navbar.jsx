@@ -23,7 +23,12 @@ function Navbar({
   const [error, setError] = useState(false);
 
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const { isAuthenticated, layoutImgRef, layoutImage = "" } = useApp();
+  const {
+    isAuthenticated,
+    layoutImgRef,
+    layoutImage = "",
+    accountHolder,
+  } = useApp();
 
   const {
     setTotalArea,
@@ -352,7 +357,7 @@ function Navbar({
           <button ref={iconRef}>
             <img
               onClick={toggleProfile}
-              src="/images/usericon.png"
+              src={accountHolder.profileImage}
               alt="usericon"
               className="w-12 h-12 cursor-pointer"
             />

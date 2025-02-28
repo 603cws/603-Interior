@@ -42,6 +42,7 @@ function VendorNewProduct({ setAddNewProduct, setProductlist }) {
     segment: "",
     dimension: "",
     manufacturer: "",
+    vendor_id: "",
   });
 
   const { accountHolder } = useApp();
@@ -70,6 +71,7 @@ function VendorNewProduct({ setAddNewProduct, setProductlist }) {
   const removeFile = () => {
     setFile(null);
     setPreview(null);
+    setVariant((prev) => ({ ...prev, mainImage: null }));
   };
 
   const handleChange = (e) => {
@@ -252,6 +254,7 @@ function VendorNewProduct({ setAddNewProduct, setProductlist }) {
             segment: variant.segment, // Store segment
             dimensions: variant.dimension, // Store dimension
             manufacturer: variant.manufacturer, // Store manufacturer
+            vendor_id: accountHolder.userId, // Store vendor ID
           });
 
         if (variantError) {

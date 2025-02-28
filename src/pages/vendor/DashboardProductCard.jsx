@@ -1,6 +1,8 @@
 import { MdDeleteOutline } from "react-icons/md";
+import { supabase } from "../../services/supabase";
+import toast from "react-hot-toast";
 
-function DashboardProductCard({ onClose, product }) {
+function DashboardProductCard({ onClose, product, handleDelete }) {
   console.log("product preview", product);
   const baseImageUrl =
     "https://bwxzfwsoxwtzhjbzbdzs.supabase.co/storage/v1/object/public/addon/";
@@ -28,7 +30,12 @@ function DashboardProductCard({ onClose, product }) {
         </div>
         <div className="flex text-[#000] justify-between  w-full p-4">
           <div>
-            <button className="px-3 py-2 capitalize border-[#FF6666] border-2 rounded-2xl flex justify-center items-center gap-2">
+            <button
+              onClick={() => {
+                handleDelete(product);
+              }}
+              className="px-3 py-2 capitalize border-[#FF6666] border-2 rounded-2xl flex justify-center items-center gap-2"
+            >
               <MdDeleteOutline /> delete
             </button>
           </div>

@@ -14,14 +14,8 @@ function VendorSetting() {
     "/images/Profile1.png",
     "/images/Profile2.png",
     "/images/usericon.png",
-    // "/images/Profile3.png",
-    // "/images/Profile4.png",
-    // "/images/Profile5.png",
   ];
-  // const handleSelectImage = (img) => {
-  //   setProfileImage(img);
-  //   setProfileImagesOption(false); // Close modal after selection
-  // };
+
   // Function to update profile image in the database
   const updateProfileImage = async () => {
     // setLoading(true);
@@ -74,8 +68,9 @@ function VendorSetting() {
                   key={index}
                   src={img}
                   alt={`Profile ${index}`}
-                  className="w-14 h-14 rounded-full cursor-pointer border-2 border-gray-200 hover:border-blue-500"
-                  // onClick={() => handleSelectImage(img)}
+                  className={`w-14 h-14 rounded-full cursor-pointer ${
+                    selectedImage === img ? " border-2 border-blue-500" : ""
+                  }`}
                   onClick={() => setSelectedImage(img)}
                 />
               ))}
