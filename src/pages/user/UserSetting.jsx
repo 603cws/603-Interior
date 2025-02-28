@@ -1,19 +1,65 @@
 import { useForm } from "react-hook-form";
 import { useApp } from "../../Context/Context";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { BsCameraFill } from "react-icons/bs";
 import { supabase } from "../../services/supabase";
+
 function UserSetting() {
   const { accountHolder, setAccountHolder } = useApp();
-  const { register, handleSubmit, reset } = useForm();
+  const { register, handleSubmit, reset, setValue } = useForm();
   const [profileImage, setProfileImage] = useState(accountHolder.profileImage);
   const [profileImagesOption, setProfileImagesOption] = useState(false);
+
   const profileImages = [
     "/images/Profile.png",
     "/images/Profile1.png",
     "/images/Profile2.png",
     "/images/usericon.png",
   ]; // Function to update profile image in the database
+
+  useEffect(() => {
+    fetchProfileData();
+  }, [accountHolder?.userId, setValue]);
+
+  const fetchProfileData = async () => {
+    if (!accountHolder?.userId) return;
+
+    try {
+      // Fetch user email from Supabase auth
+      const { data: authData, error: authError } =
+        await supabase.auth.getUser();
+
+      if (authError) {
+        console.error("Error fetching auth data:", authError);
+      }
+
+      // Fetch profile data from "profiles" table
+      const { data: profileData, error: profileError } = await supabase
+        .from("profiles")
+        .select("*")
+        .eq("id", accountHolder.userId)
+        .single();
+
+      if (profileError) {
+        console.error("Error fetching profile:", profileError);
+      }
+
+      // Set form values with fetched data
+      if (profileData) {
+        setValue("companyName", profileData.company_name || "");
+        setValue("mobileNo", profileData.phone || "");
+        setValue("location", profileData.location || "");
+        // setValue("city", profileData.city || ""); // Uncomment if city field is needed
+      }
+
+      if (authData) {
+        setValue("email", authData.user.email || "");
+      }
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+    }
+  };
+
   const updateProfileImage = async (imgUrl) => {
     // setLoading(true);
 
@@ -31,10 +77,40 @@ function UserSetting() {
     setProfileImagesOption(false);
   };
 
-  const onSubmit = (data) => {
-    console.log(data);
-    reset();
+  const onSubmit = async (formData) => {
+    try {
+      const { error } = await supabase
+        .from("profiles")
+        .update({
+          company_name: formData.companyName,
+          phone: formData.mobileNo,
+          location: formData.location,
+          // city: formData.city,
+        })
+        .eq("id", accountHolder.userId); // Update only the current user’s profile
+
+      if (error) {
+        console.error("Error updating profile:", error);
+        alert("Failed to update profile");
+        return;
+      }
+
+      alert("Profile updated successfully!");
+
+      // ✅ Update accountHolder state after successful update
+      setAccountHolder((prev) => ({
+        ...prev,
+        companyName: formData.companyName,
+        phone: formData.mobileNo,
+      }));
+
+      // ✅ Fetch updated profile data after successful update
+      fetchProfileData();
+    } catch (err) {
+      console.error("Unexpected error:", err);
+    }
   };
+
   return (
     <div className="flex gap-5 w-full h-full px-8 py-4">
       {/*  */}
@@ -92,7 +168,7 @@ function UserSetting() {
         </p>
 
         <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="flex w-full gap-4">
+          {/* <div className="flex w-full gap-4">
             <div className="flex-1">
               <h2 className="mb-2 text-[#194F48] font-bold capitalize">
                 First Name
@@ -114,14 +190,14 @@ function UserSetting() {
                 className="w-full rounded-lg p-1.5  focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none border-2 border-[#CACED8] bg-[#fff] placeholder:text-[#194F48]  "
               />
             </div>
-          </div>
+          </div> */}
           <div className="my-2">
             <h2 className="mb-2 text-[#194F48] font-bold capitalize">
               Company name
             </h2>
             <input
               type="text"
-              placeholder="company name"
+              placeholder="Enter Company Name"
               {...register("companyName", { required: true })}
               className="w-full rounded-lg p-1.5  focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none border-2 border-[#CACED8] bg-[#fff] placeholder:text-[#194F48]  "
             />
@@ -137,9 +213,10 @@ function UserSetting() {
               </h2>
               <input
                 type="email"
-                placeholder="email"
+                placeholder="Enter Email"
                 {...register("email", { required: true })}
-                className="w-full rounded-lg p-1.5 focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none border-2 border-[#CACED8] bg-[#fff] placeholder:text-[#194F48]  "
+                disabled
+                className="w-full rounded-lg p-1.5 focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none border-2 border-[#CACED8] bg-gray-100 placeholder:text-[#194F48]  "
               />
             </div>
             <div className="flex-1">
@@ -148,6 +225,7 @@ function UserSetting() {
               </h2>
               <input
                 type="number"
+                placeholder="Enter Phone Number"
                 {...register("mobileNo", { required: true })}
                 className="w-full rounded-lg p-1.5  focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none border-2 border-[#CACED8] bg-[#fff] placeholder:text-[#194F48]  "
               />
@@ -156,23 +234,23 @@ function UserSetting() {
           <div className="flex w-full gap-4 mb-2">
             <div className="flex-1">
               <h2 className="mb-2 text-[#194F48] font-bold capitalize">
-                country
+                Location
               </h2>
               <input
                 type="text"
-                placeholder="country name"
-                {...register("country")}
+                placeholder="Enter Location"
+                {...register("location")}
                 className="w-full rounded-lg p-1.5 focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none border-2 border-[#CACED8] bg-[#fff] placeholder:text-[#194F48]  "
               />
             </div>
-            <div className="flex-1">
+            {/* <div className="flex-1">
               <h2 className="mb-2 text-[#194F48] font-bold capitalize">city</h2>
               <input
                 type="text"
                 {...register("city", { required: true })}
                 className="w-full rounded-lg p-1.5  focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none border-2 border-[#CACED8] bg-[#fff] placeholder:text-[#194F48]  "
               />
-            </div>
+            </div> */}
           </div>
 
           <button
