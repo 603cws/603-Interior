@@ -7,6 +7,7 @@ function VendorSetting() {
   const { accountHolder, setAccountHolder } = useApp();
   const { register, handleSubmit, reset } = useForm();
   const [profileImage, setProfileImage] = useState(accountHolder.profileImage);
+  const [selectedImage, setSelectedImage] = useState(null);
   const [profileImagesOption, setProfileImagesOption] = useState(false);
   const profileImages = [
     "/images/Profile.png",
@@ -22,19 +23,18 @@ function VendorSetting() {
   //   setProfileImagesOption(false); // Close modal after selection
   // };
   // Function to update profile image in the database
-  const updateProfileImage = async (imgUrl) => {
+  const updateProfileImage = async () => {
     // setLoading(true);
-
     const { error } = await supabase
       .from("profiles")
-      .update({ profile_image: imgUrl })
+      .update({ profile_image: selectedImage })
       .eq("id", accountHolder.userId);
 
     if (error) {
       console.error("Error updating profile image:", error);
     } else {
-      setProfileImage(imgUrl);
-      setAccountHolder((prev) => ({ ...prev, profile_image: imgUrl }));
+      setProfileImage(selectedImage);
+      setAccountHolder((prev) => ({ ...prev, profileImage: selectedImage }));
     }
     setProfileImagesOption(false);
   };
@@ -76,16 +76,24 @@ function VendorSetting() {
                   alt={`Profile ${index}`}
                   className="w-14 h-14 rounded-full cursor-pointer border-2 border-gray-200 hover:border-blue-500"
                   // onClick={() => handleSelectImage(img)}
-                  onClick={() => updateProfileImage(img)}
+                  onClick={() => setSelectedImage(img)}
                 />
               ))}
             </div>
-            <button
-              className="mt-3 w-full bg-red-400 text-white py-1 rounded"
-              onClick={() => setProfileImagesOption(false)}
-            >
-              Close
-            </button>
+            <div className="w-full flex gap-2">
+              <button
+                className="mt-3 w-full bg-red-400 text-white py-1 rounded"
+                onClick={() => setProfileImagesOption(false)}
+              >
+                Close
+              </button>
+              <button
+                className="mt-3 w-full bg-green-400 text-white py-1 rounded"
+                onClick={updateProfileImage}
+              >
+                Done
+              </button>
+            </div>
           </div>
         )}
       </div>

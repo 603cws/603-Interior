@@ -207,6 +207,7 @@ function VendorNewAddon({ setAddNewProduct, setProductlist }) {
             title,
             price,
             image: addonVariantImage.path,
+            vendorId: accountHolder.userId,
           });
 
         if (addonVariantError) {

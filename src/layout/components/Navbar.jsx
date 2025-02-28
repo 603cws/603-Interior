@@ -160,10 +160,10 @@ function Navbar({
         await layoutImgRef.current();
       }
 
-      if (!layoutImage) {
-        alert("Failed to generate image");
-        return;
-      }
+      // if (!layoutImage) {
+      //   alert("Failed to generate image");
+      //   return;
+      // }
 
       // Upload image to Supabase
       const imageUrl = await uploadImage(layoutImage || "");
