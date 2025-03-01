@@ -81,6 +81,8 @@ export const AppProvider = ({ children }) => {
           setTotalArea(data[0].totalArea);
           console.log(totalArea);
 
+          setLayoutImage(data[0].layoutImg);
+
           if (error) throw error;
         }
       } catch (error) {}

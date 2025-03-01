@@ -38,7 +38,8 @@ import Boqcompleted from "./common-components/Boqcompleted";
 import Howtosell from "./pages/Howtosell";
 
 import VendorDashboard from "./pages/vendor/VendorDashboard";
-import AdminDashboard from "./pages/AdminDashboard";
+// import AdminDashboard from "./pages/AdminDashboard";
+import AdminDashboard from "./pages/Admin/AdminDashboard";
 // import DashboardProductCard from "./common-components/DashboardProductCard";
 import DashboardGetPlan from "./common-components/DashboardGetPlan";
 import PricingCard from "./common-components/PricingCard";

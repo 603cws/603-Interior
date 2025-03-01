@@ -197,24 +197,6 @@ function VendorDashboard() {
     setOpenMenuId((prev) => (prev === id ? null : id));
   };
 
-  // useEffect(() => {
-  //   const handleClickOutside = (event) => {
-  //     // Check if the clicked element is inside any open menu
-  //     if (
-  //       openMenuId !== null &&
-  //       menuRefs.current[openMenuId] &&
-  //       !menuRefs.current[openMenuId].contains(event.target)
-  //     ) {
-  //       setOpenMenuId(null);
-  //     }
-  //   };
-
-  //   document.addEventListener("mousedown", handleClickOutside);
-  //   return () => {
-  //     document.removeEventListener("mousedown", handleClickOutside);
-  //   };
-  // }, [openMenuId]);
-
   const handleProductPreview = (product) => {
     console.log("in function handleProductPreview", product);
 

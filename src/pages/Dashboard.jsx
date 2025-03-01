@@ -241,12 +241,12 @@ function Dashboard() {
                     {/* div containing information */}
                     <div className="flex gap-10">
                       {/* each icon  */}
-                      <div className="flex justify-around items-center gap-3  py-3 px-2">
+                      <div className="xl:flex justify-around items-center gap-3  py-3 px-2">
                         <div>
                           <img
                             src="/images/layouticon.png"
                             alt=" dashboard layout "
-                            className="w-[60px] h-[60px]"
+                            className="w-[45px] h-[45px] xl:w-[60px] xl:h-[60px]"
                           />
                         </div>
                         <div className="capitalize pr-10">
@@ -257,12 +257,12 @@ function Dashboard() {
                         </div>
                       </div>
                       {/* each icon  */}
-                      <div className="flex justify-around items-center gap-3  py-3 px-2">
+                      <div className="xl:flex justify-around items-center gap-3  py-3 px-2">
                         <div>
                           <img
                             src="/images/totalproduct.png"
                             alt=" dashboard layout "
-                            className="w-[60px] h-[60px]"
+                            className="w-[45px] h-[45px] xl:w-[60px] xl:h-[60px]"
                           />
                         </div>
                         <div className="capitalize pr-10">
@@ -274,12 +274,12 @@ function Dashboard() {
                         </div>
                       </div>
                       {/* each icon  */}
-                      <div className="flex justify-around items-center gap-3  py-3 px-2">
+                      <div className="xl:flex justify-around items-center gap-3  py-3 px-2">
                         <div>
                           <img
                             src="/images/grandtotal.png"
                             alt=" dashboard layout "
-                            className="w-[60px] h-[60px]"
+                            className="w-[45px] h-[45px] xl:w-[60px] xl:h-[60px]"
                           />
                         </div>
                         <div className="capitalize pr-10">
@@ -459,7 +459,7 @@ function Dashboard() {
                     </p>
                     <div className="flex justify-center items-center gap-4 my-1">
                       <button className="px-5 py-3 bg-[#1A3A36] text-[#fff] capitalize rounded-3xl">
-                        Call
+                        +91-9136036603
                       </button>
                       <button className="border-2 border-[#D1D5DB] text-[#1A3A36] px-5 py-2 rounded-2xl">
                         Email

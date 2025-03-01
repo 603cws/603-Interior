@@ -1,5 +1,3 @@
-import React from "react";
-
 // note for civil/plumbing and hvac there will be different logic
 
 export const AllCatArray = [

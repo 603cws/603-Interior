@@ -355,6 +355,8 @@ function VendorNewProduct({ setAddNewProduct, setProductlist }) {
       dimension: "",
       manufacturer: "",
     });
+    removeFile();
+    setAdditionalImages([]);
   };
 
   return (
@@ -648,6 +650,7 @@ function VendorNewProduct({ setAddNewProduct, setProductlist }) {
             <button
               className="border-2 px-5 py-2 capitalize rounded-lg"
               type="button"
+              onClick={handleFormClear}
             >
               Discard
             </button>
