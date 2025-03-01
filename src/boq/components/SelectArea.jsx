@@ -30,7 +30,7 @@ function SelectArea({
   const [allSubcategories, setAllSubcategories] = useState([]);
   const [selectedRoom, setSelectedRoom] = useState(null);
   const [selectedAddons, setSelectedAddons] = useState([]);
-  const [disabledAreas, setDisabledAreas] = useState([]);
+  // const [disabledAreas, setDisabledAreas] = useState([]);
 
   const baseImageUrl =
     "https://bwxzfwsoxwtzhjbzbdzs.supabase.co/storage/v1/object/public/addon/";
@@ -87,47 +87,48 @@ function SelectArea({
     }
   }, [allSubcategories]);
 
-  useEffect(() => {
-    if (Array.isArray(selectedData) && selectedData.length > 0) {
-      const hasCentralized = selectedData.some(
-        (item) => item.subcategory === "Centralized"
-      );
+  // useEffect(() => {
+  //   if (Array.isArray(selectedData) && selectedData.length > 0) {
+  //     const hasCentralized = selectedData.some(
+  //       (item) => item.subcategory === "Centralized"
+  //     );
 
-      const hasOtherSubCats = selectedData.some(
-        (item) => item.subcategory !== "Centralized"
-      );
+  //     const hasOtherSubCats = selectedData.some(
+  //       (item) => item.subcategory !== "Centralized"
+  //     );
 
-      let disabledList = [];
+  //     let disabledList = [];
 
-      if (hasCentralized) {
-        disabledList = subCategories.filter(
-          (subCat) => subCat !== "Centralized"
-        );
-      } else if (hasOtherSubCats) {
-        disabledList = ["Centralized"];
-      }
+  //     if (hasCentralized) {
+  //       disabledList = subCategories.filter(
+  //         (subCat) => subCat !== "Centralized"
+  //       );
+  //     } else if (hasOtherSubCats) {
+  //       disabledList = ["Centralized"];
+  //     }
 
-      // Keep a copy of the original disabled list
-      const initialDisabledList = new Set(disabledList);
+  //     // Keep a copy of the original disabled list
+  //     const initialDisabledList = new Set(disabledList);
 
-      // Get already selected subcategories
-      const alreadySelected = selectedData.map((item) => item.subcategory);
+  //     // Get already selected subcategories
+  //     const alreadySelected = selectedData.map((item) => item.subcategory);
 
-      // Merge only if they were originally disabled
-      disabledList = [
-        ...new Set([
-          ...disabledList,
-          ...alreadySelected.filter((item) => initialDisabledList.has(item)),
-        ]),
-      ];
+  //     // Merge only if they were originally disabled
+  //     disabledList = [
+  //       ...new Set([
+  //         ...disabledList,
+  //         ...alreadySelected.filter((item) => initialDisabledList.has(item)),
+  //       ]),
+  //     ];
 
-      setDisabledAreas(disabledList);
-    } else {
-      setDisabledAreas([]);
-    }
-  }, [selectedData, subCategories]);
+  //     setDisabledAreas(disabledList);
+  //   } else {
+  //     setDisabledAreas([]);
+  //   }
+  // }, [selectedData, subCategories]);
 
   // Initialize selected areas based on selectedData
+
   useEffect(() => {
     // Only proceed if selectedData is a non-empty array
     if (Array.isArray(selectedData) && selectedData.length > 0) {
@@ -300,9 +301,9 @@ function SelectArea({
     selectedSubCategory1,
     selectedProductView
   ) => {
-    if (disabledAreas.includes(subCat)) {
-      return false;
-    }
+    // if (disabledAreas.includes(subCat)) {
+    //   return false;
+    // }
     return (
       Array.isArray(selectedData) &&
       selectedData.some((item) => {
@@ -445,31 +446,33 @@ function SelectArea({
                       checked:before:top-1/2 checked:before:left-1/2 checked:before:-translate-x-1/2 checked:before:-translate-y-1/2 
                       checked:before:text-[14px] checked:before:font-bold disabled:bg-gray-400 disabled:cursor-not-allowed disabled:opacity-60"
                           disabled={
-                            (Array.isArray(selectedData) &&
-                              isItemSelected(
-                                selectedData,
-                                selectedCategory,
-                                name,
-                                selectedSubCategory1,
-                                selectedProductView
-                              )) ||
-                            disabledAreas.includes(name)
+                            Array.isArray(selectedData) &&
+                            isItemSelected(
+                              selectedData,
+                              selectedCategory,
+                              name,
+                              selectedSubCategory1,
+                              selectedProductView
+                            )
+                            //  ||
+                            // disabledAreas.includes(name)
                           }
                         />
                         <label
                           htmlFor={`subCategory-${id}`}
                           className={`text-sm cursor-pointer ${
-                            (Array.isArray(selectedData) &&
-                              isItemSelected(
-                                selectedData,
-                                selectedCategory,
-                                name,
-                                selectedSubCategory1,
-                                selectedProductView
-                              )) ||
-                            disabledAreas.includes(name)
-                              ? "text-gray-400 cursor-not-allowed"
-                              : ""
+                            Array.isArray(selectedData) &&
+                            isItemSelected(
+                              selectedData,
+                              selectedCategory,
+                              name,
+                              selectedSubCategory1,
+                              selectedProductView
+                            )
+                            //   ||
+                            // disabledAreas.includes(name)
+                            //   ? "text-gray-400 cursor-not-allowed"
+                            //   : ""
                           }`}
                         >
                           {name}
