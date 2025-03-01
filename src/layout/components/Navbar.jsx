@@ -359,7 +359,7 @@ function Navbar({
               onClick={toggleProfile}
               src={accountHolder.profileImage}
               alt="usericon"
-              className="w-12 h-12 cursor-pointer"
+              className="w-12 h-12 cursor-pointer rounded-full"
             />
           </button>
         )}

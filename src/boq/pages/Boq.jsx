@@ -1715,7 +1715,7 @@ function Boq() {
       {/* {showProfile && <ProfileCard />} */}
       {isOpen && (
         <div ref={profileRef}>
-          <ProfileCard />
+          <ProfileCard layout={false} />
         </div>
       )}
     </div>

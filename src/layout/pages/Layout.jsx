@@ -838,7 +838,7 @@ function Layout() {
       {areaWarn && <EnterAreaModal onclose={() => setAreaWarn(false)} />}
       {isOpen && (
         <div ref={profileRef}>
-          <ProfileCard />
+          <ProfileCard layout={true} />
         </div>
       )}
 

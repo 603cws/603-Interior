@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { useRef } from "react";
 // import useAuthRefresh from "../../Context/useAuthRefresh";
 
-function ProfileCard() {
+function ProfileCard({ layout = false }) {
   const { setIsAuthenticated, accountHolder, setAccountHolder, setTotalArea } =
     useApp();
   const profileRef = useRef(null);
@@ -42,6 +42,7 @@ function ProfileCard() {
       navigate("/");
     }
   };
+
   //   const handleLogout = async () => {
   //     try {
   //       await supabase.auth.signOut();
@@ -96,7 +97,14 @@ function ProfileCard() {
   return (
     <div ref={profileRef}>
       {/* div for card */}
-      <div className="rounded-bl-[60px] rounded-tl-[60px]  shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)]  overflow-hidden max-w-sm w-full h-[calc(100vh-50px)] font-Poppins bg-[#fff] z-20 fixed right-0 top-[50px] transition-transform duration-1000 ease-in-out ">
+      <div
+        className={`rounded-bl-[60px] rounded-tl-[60px]  shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)]  overflow-hidden max-w-sm w-full ${
+          layout
+            ? "h-[calc(100vh-85px)] top-[85px]"
+            : "h-[calc(100vh-50px)] top-[50px]"
+        } font-Poppins bg-[#fff] z-20 fixed right-0 transition-transform duration-1000 ease-in-out `}
+      >
+        {/* <div className="rounded-bl-[60px] rounded-tl-[60px]  shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)]  overflow-hidden max-w-sm w-full h-[calc(100vh-50px)] font-Poppins bg-[#fff] z-20 fixed right-0 top-[50px] transition-transform duration-1000 ease-in-out "> */}
         {/* div for profile icon part */}
         <div className=" h-1/3 flex flex-col">
           <div

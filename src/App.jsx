@@ -43,6 +43,7 @@ import AdminDashboard from "./pages/AdminDashboard";
 import DashboardGetPlan from "./common-components/DashboardGetPlan";
 import PricingCard from "./common-components/PricingCard";
 import VendorRegister from "./pages/vendor/VendorRegister";
+import DoorScrollEffect from "./pages/DoorScrollEffect";
 
 // const Homepage = lazy(() => import("./pages/Homepage"));
 
@@ -85,6 +86,7 @@ function App() {
             <Route path="/Login" element={<Login />} />
             <Route path="/OurServices" element={<OurServices />} />
             <Route path="/profile" element={<ProfileCard />} />
+            <Route path="/scroll" element={<DoorScrollEffect />} />
             <Route
               path="/dashboard"
               element={
