@@ -6,6 +6,7 @@ import { CiMenuKebab } from "react-icons/ci";
 import Spinner from "../../common-components/Spinner";
 import { supabase } from "../../services/supabase";
 import toast from "react-hot-toast";
+import DashboardProductCard from "../vendor/DashboardProductCard";
 
 function VendorProductlist({ setVendorproductlist, selectedVendor }) {
   const [toggle, setToggle] = useState(true);
@@ -28,7 +29,8 @@ function VendorProductlist({ setVendorproductlist, selectedVendor }) {
   const [isAddProduct, setIsAddProduct] = useState(false);
   const [isProductHovered, setIsProductHovered] = useState(false);
   const [isAddonHovered, setIsAddonHovered] = useState(false);
-  const menuRef = useRef(null);
+  const menuRef = useRef({});
+  const buttonRef = useRef({});
 
   //baseurlforimg
   const baseImageUrl =
@@ -40,6 +42,27 @@ function VendorProductlist({ setVendorproductlist, selectedVendor }) {
   const handleMenuToggle = (id) => {
     setOpenMenuId((prev) => (prev === id ? null : id));
   };
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      // If clicking inside the menu OR the menu button, do nothing
+      if (
+        openMenuId !== null &&
+        (menuRef.current[openMenuId]?.contains(event.target) ||
+          buttonRef.current[openMenuId]?.contains(event.target))
+      ) {
+        return;
+      }
+
+      // Otherwise, close the menu
+      setOpenMenuId(null);
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [openMenuId]);
 
   const handleProductPreview = (product) => {
     console.log("in function handleProductPreview", product);
@@ -268,6 +291,7 @@ function VendorProductlist({ setVendorproductlist, selectedVendor }) {
                         )}
                         <td className="border border-gray-200 p-3 align-middle flex justify-center items-center relative">
                           <button
+                            ref={(el) => (buttonRef.current[item.id] = el)}
                             className="bg-white flex justify-center items-center py-1.5 w-20 mb-2"
                             onClick={() => handleMenuToggle(item.id)}
                           >
@@ -276,7 +300,7 @@ function VendorProductlist({ setVendorproductlist, selectedVendor }) {
 
                           {openMenuId === item.id && (
                             <div
-                              ref={menuRef}
+                              ref={(el) => (menuRef.current[item.id] = el)}
                               className="absolute top-1/2 left-0 transform mt-2 bg-white border border-gray-300 shadow-md rounded-md w-24 z-10"
                             >
                               <button
@@ -411,6 +435,17 @@ function VendorProductlist({ setVendorproductlist, selectedVendor }) {
           </div>
         )}
       </div>
+      {/* product preview */}
+      {productPreview && (
+        <DashboardProductCard
+          onClose={() => {
+            setProductPreview(false);
+          }}
+          product={selectedProductview}
+          // fetchProducts={fetchProducts}
+          handleDelete={handleDelete}
+        />
+      )}
     </div>
   );
 }

@@ -194,6 +194,7 @@ function Login() {
 
         // Navigate based on whether areaId and quantityId exist
         if (layoutId) {
+          localStorage.setItem("currentLayoutID", layoutId);
           navigate("/boq");
         } else {
           navigate("/Layout");

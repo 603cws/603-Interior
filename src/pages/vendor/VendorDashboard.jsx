@@ -44,8 +44,8 @@ function VendorDashboard() {
 
   console.log("selected product", selectedProductview);
 
-  const menuRef = useRef(null);
-  const buttonRef = useRef(null);
+  const menuRef = useRef({});
+  const buttonRef = useRef({});
 
   // loading
   const [isloading, setIsloading] = useState(false);
@@ -196,6 +196,27 @@ function VendorDashboard() {
   const handleMenuToggle = (id) => {
     setOpenMenuId((prev) => (prev === id ? null : id));
   };
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      // If clicking inside the menu OR the menu button, do nothing
+      if (
+        openMenuId !== null &&
+        (menuRef.current[openMenuId]?.contains(event.target) ||
+          buttonRef.current[openMenuId]?.contains(event.target))
+      ) {
+        return;
+      }
+
+      // Otherwise, close the menu
+      setOpenMenuId(null);
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [openMenuId]);
 
   const handleProductPreview = (product) => {
     console.log("in function handleProductPreview", product);
@@ -523,6 +544,9 @@ function VendorDashboard() {
 
                                       <button
                                         className="bg-white flex justify-center items-center py-1.5 w-20 mb-2"
+                                        ref={(el) =>
+                                          (buttonRef.current[item.id] = el)
+                                        }
                                         onClick={() =>
                                           handleMenuToggle(item.id)
                                         }
@@ -533,7 +557,9 @@ function VendorDashboard() {
                                       {openMenuId === item.id && (
                                         // <div className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 bg-white border border-gray-300 shadow-md rounded-md w-24 z-10">
                                         <div
-                                          ref={menuRef}
+                                          ref={(el) =>
+                                            (menuRef.current[item.id] = el)
+                                          }
                                           className="absolute top-1/2 left-0 transform mt-2 bg-white border border-gray-300 shadow-md rounded-md w-24 z-10"
                                         >
                                           <button

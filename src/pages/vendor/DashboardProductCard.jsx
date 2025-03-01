@@ -8,7 +8,7 @@ function DashboardProductCard({ onClose, product, handleDelete }) {
     "https://bwxzfwsoxwtzhjbzbdzs.supabase.co/storage/v1/object/public/addon/";
 
   return (
-    <div className="flex justify-center items-center h-screen absolute z-20 top-0 w-screen">
+    <div className="flex justify-center items-center h-screen absolute z-30 top-0 w-screen">
       <div className="absolute inset-0 bg-black opacity-50"></div>
       <div className="font-Poppins max-w-xl p-10 rounded-3xl border-2 relative bg-white">
         <div className="flex gap-4">

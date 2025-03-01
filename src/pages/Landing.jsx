@@ -189,13 +189,13 @@ function Landing() {
             {/* Container for Images */}
             <div className="flex justify-center gap-14 relative px-20 pb-10">
               {/* Image Card 1 */}
-              <div className="group relative text-center w-1/3 h-auto overflow-hidden rounded-xl transition-all duration-700 ease-in-out">
+              <div className="group relative text-center w-1/3 h-auto overflow-hidden rounded-3xl transition-all duration-700 ease-in-out">
                 {/* <div className="group relative text-center max-w-sm h-auto overflow-hidden rounded-xl transition-all duration-700 ease-in-out"> */}
                 <div className="flex flex-col items-center justify-center p-4 bg-transparent transition-all duration-700 ease-in-out group-hover:bg-white group-hover:scale-105 group-hover:py-8">
                   <img
                     src="/images/home/section2-img1.png"
                     alt="pantary"
-                    className="mx-auto transition-transform duration-700 ease-in-out group-hover:scale-95 group-hover:origin-center"
+                    className="mx-auto transition-transform duration-700 ease-in-out group-hover:scale-95 group-hover:origin-center rounded-3xl"
                   />
                   <p className="hidden group-hover:block font-lora font-bold text-[#333333] mt-2 text-xl">
                     Smart Office Layouts
@@ -207,13 +207,13 @@ function Landing() {
               </div>
 
               {/* Image Card 2 */}
-              <div className="group relative text-center w-1/3 h-auto overflow-hidden rounded-xl transition-all duration-700 ease-in-out">
+              <div className="group relative text-center w-1/3 h-auto overflow-hidden rounded-3xl transition-all duration-700 ease-in-out">
                 {/* <div className="group relative text-center max-w-sm h-auto overflow-hidden rounded-xl transition-all duration-700 ease-in-out"> */}
                 <div className="flex flex-col items-center justify-center p-4 bg-transparent transition-all duration-700 ease-in-out group-hover:bg-white group-hover:scale-105 group-hover:py-8">
                   <img
                     src="/images/home/section2-img2.png"
                     alt="pantary"
-                    className="mx-auto transition-transform duration-700 ease-in-out group-hover:scale-95 group-hover:origin-center"
+                    className="mx-auto transition-transform duration-700 ease-in-out group-hover:scale-95 group-hover:origin-center rounded-3xl"
                   />
                   <p className="hidden group-hover:block font-lora font-bold text-[#333333] mt-2 text-xl">
                     Custom BOQ
@@ -225,13 +225,13 @@ function Landing() {
               </div>
 
               {/* Image Card 3 */}
-              <div className="group relative text-center w-1/3 h-auto overflow-hidden rounded-xl transition-all duration-700 ease-in-out">
+              <div className="group relative text-center w-1/3 h-auto overflow-hidden rounded-3xl transition-all duration-700 ease-in-out">
                 {/* <div className="group relative text-center max-w-sm h-auto overflow-hidden rounded-xl transition-all duration-700 ease-in-out"> */}
                 <div className="flex flex-col items-center justify-center p-4 bg-transparent transition-all duration-700 ease-in-out group-hover:bg-white group-hover:scale-105 group-hover:py-8">
                   <img
                     src="/images/home/section2-img3.png"
                     alt="pantary"
-                    className="mx-auto transition-transform duration-700 ease-in-out group-hover:scale-95 group-hover:origin-center"
+                    className="mx-auto transition-transform duration-700 ease-in-out group-hover:scale-95 group-hover:origin-center rounded-3xl"
                   />
                   <p className="hidden group-hover:block font-lora font-bold text-[#333333] mt-2 text-xl">
                     End-to-End Execution

@@ -25,6 +25,7 @@ import SidebarItem from "../../common-components/SidebarItem";
 import Clients from "./Clients";
 import VendorProductlist from "./VendorProductlist";
 // import { useLogout } from "../../utils/HelperFunction";
+import DashboardProductCard from "../vendor/DashboardProductCard";
 
 function AdminDashboard() {
   const navigate = useNavigate();
@@ -58,8 +59,8 @@ function AdminDashboard() {
 
   console.log("selected product", selectedProductview);
 
-  const menuRef = useRef(null);
-  const buttonRef = useRef(null);
+  const menuRef = useRef({});
+  const buttonRef = useRef({});
 
   // loading
   const [isloading, setIsloading] = useState(false);
@@ -187,6 +188,27 @@ function AdminDashboard() {
   const handleMenuToggle = (id) => {
     setOpenMenuId((prev) => (prev === id ? null : id));
   };
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      // If clicking inside the menu OR the menu button, do nothing
+      if (
+        openMenuId !== null &&
+        (menuRef.current[openMenuId]?.contains(event.target) ||
+          buttonRef.current[openMenuId]?.contains(event.target))
+      ) {
+        return;
+      }
+
+      // Otherwise, close the menu
+      setOpenMenuId(null);
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [openMenuId]);
 
   const handleProductPreview = (product) => {
     console.log("in function handleProductPreview", product);
@@ -652,6 +674,9 @@ function AdminDashboard() {
                                     )}
                                     <td className="border border-gray-200 p-3 align-middle flex justify-center items-center relative">
                                       <button
+                                        ref={(el) =>
+                                          (buttonRef.current[item.id] = el)
+                                        }
                                         className="bg-white flex justify-center items-center py-1.5 w-20 mb-2"
                                         onClick={() =>
                                           handleMenuToggle(item.id)
@@ -662,7 +687,9 @@ function AdminDashboard() {
 
                                       {openMenuId === item.id && (
                                         <div
-                                          ref={menuRef}
+                                          ref={(el) =>
+                                            (menuRef.current[item.id] = el)
+                                          }
                                           className="absolute top-1/2 left-0 transform mt-2 bg-white border border-gray-300 shadow-md rounded-md w-24 z-10"
                                         >
                                           <button
@@ -1028,6 +1055,17 @@ function AdminDashboard() {
           )}
         </div>
       </div>
+      {/* product preview */}
+      {productPreview && (
+        <DashboardProductCard
+          onClose={() => {
+            setProductPreview(false);
+          }}
+          product={selectedProductview}
+          // fetchProducts={fetchProducts}
+          handleDelete={handleDelete}
+        />
+      )}
     </div>
   );
 }
