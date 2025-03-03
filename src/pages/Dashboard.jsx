@@ -322,20 +322,22 @@ function Dashboard() {
                   <div className="p-3">
                     <h3 className="capitalize font-bold ">BOQ generated</h3>
 
-                    {/* boq card */}
+                    {/* boq card
                     {boqdata.map((boq) => {
                       return (
-                        <div className="rounded-3xl border-2 border-[#ccc] max-w-sm p-2">
-                          <div className="flex justify-end gap-2 p-2">
-                            <MdOutlineModeEdit size={30} />
-                            <MdDeleteOutline size={30} />
-                          </div>
-                          <div>
-                            <h3 className="font-bold">{}</h3>
-                          </div>
-                        </div>
+                   
                       );
-                    })}
+                    })} */}
+
+                    <div className="rounded-3xl border-2 border-[#ccc] max-w-sm p-2">
+                      <div className="flex justify-end gap-2 p-2">
+                        <MdOutlineModeEdit size={30} />
+                        <MdDeleteOutline size={30} />
+                      </div>
+                      <div>
+                        <h3 className="font-bold">Lorem, ipsum.</h3>
+                      </div>
+                    </div>
 
                     {/* <div className="w-32 h-32">
                       <CircularProgressbar
