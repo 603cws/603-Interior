@@ -23,15 +23,19 @@ function Clients({ isExpanded, filterByMultipleFields, filteredusers, query }) {
         {/* client card for display */}
 
         <div
-          className={`grid grid-cols-2 ${
-            isExpanded ? "lg:grid-cols-4 gap-3" : "lg:grid-cols-4 gap-8"
+          className={`grid grid-cols-2   ${
+            isExpanded
+              ? "lg:grid-cols-3 xl:grid-cols-4 gap-8"
+              : "lg:grid-cols-3 xl:grid-cols-4 gap-8"
           } p-2 `}
         >
           {filteredusers.map((user, index) => {
             return (
               <div
                 key={index}
-                className=" flex flex-col w-[300px] h-[150px] font-Poppins rounded-2xl bg-[#fff]"
+                className={`flex flex-col ${
+                  isExpanded ? "lg:w-[200px] xl:w-[250px]" : "w-[300px]"
+                } h-[150px] font-Poppins rounded-2xl bg-[#fff]`}
               >
                 <div className="flex items-center my-4">
                   <div className="mx-3">

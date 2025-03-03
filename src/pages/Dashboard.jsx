@@ -1,11 +1,11 @@
 import { RiDashboardFill } from "react-icons/ri";
 import { MdOutlineModeEdit, MdDeleteOutline } from "react-icons/md";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useApp } from "../Context/Context";
 import { supabase } from "../services/supabase";
 import toast from "react-hot-toast";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 // import VendorProfile from "./vendor/VendorProfile";
 // import VendorSetting from "./vendor/VendorSetting";
 import UserProfile from "./user/UserProfile";
@@ -18,6 +18,7 @@ import { TiHomeOutline } from "react-icons/ti";
 
 import { FaAngleDown, FaAngleUp } from "react-icons/fa";
 import { BsQuestionCircle } from "react-icons/bs";
+import Spinner from "../common-components/Spinner";
 const percentage = 66;
 
 function Dashboard() {
@@ -31,6 +32,7 @@ function Dashboard() {
   const [help, setHelp] = useState(false);
   const [expandedIndex, setExpandedIndex] = useState();
   const [isExpanded, setIsExpanded] = useState(false);
+  const [boqdata, setboqdata] = useState();
 
   const {
     accountHolder,
@@ -40,7 +42,25 @@ function Dashboard() {
     setTotalArea,
     layoutImage,
   } = useApp();
+  const location = useLocation();
   console.log("layout image", layoutImage);
+
+  useEffect(() => {
+    if (location.state?.openSettings) {
+      setIsProductOpen(false);
+      setDashboard(false);
+      setIsSettingOpen(true);
+      setHelp(false);
+      setCurrentSection("Setting");
+    }
+    if (location.state?.openHelp) {
+      setIsSettingOpen(false);
+      setIsProductOpen(false);
+      setDashboard(false);
+      setHelp(true);
+      setCurrentSection("Help");
+    }
+  }, [location.state]);
 
   const handlesetting = () => {
     setIsProductOpen(false);
@@ -102,6 +122,30 @@ function Dashboard() {
   const handleToggle = (index) => {
     setExpandedIndex((prevIndex) => (prevIndex === index ? null : index));
   };
+
+  const fetchboq = async () => {
+    try {
+      const { data } = await supabase
+        .from("boqdata")
+        .select("*")
+        .eq("userId", accountHolder.userId);
+
+      console.log(data);
+      setboqdata(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchboq();
+  }, []);
+
+  // useEffect(() => {
+  //   if (!layoutImage) {
+  //     return <Spinner />;
+  //   }
+  // }, [layoutImage]);
 
   const accordionItems = [
     {
@@ -296,7 +340,13 @@ function Dashboard() {
                   <div className="p-3">
                     <h3 className="capitalize font-bold ">BOQ generated</h3>
 
-                    {/* boq card */}
+                    {/* boq card
+                    {boqdata.map((boq) => {
+                      return (
+                   
+                      );
+                    })} */}
+
                     <div className="rounded-3xl border-2 border-[#ccc] max-w-sm p-2">
                       <div className="flex justify-end gap-2 p-2">
                         <MdOutlineModeEdit size={30} />
@@ -307,7 +357,7 @@ function Dashboard() {
                       </div>
                     </div>
 
-                    <div className="w-32 h-32">
+                    {/* <div className="w-32 h-32">
                       <CircularProgressbar
                         value={percentage}
                         text={`${percentage}%`}
@@ -335,20 +385,28 @@ function Dashboard() {
                           backgroundColor: "#3e98c7",
                         })}
                       />
-                    </div>
+                    </div> */}
                   </div>
-                  <div>
+                  {/* <div>
                     <p>
                       Lorem ipsum dolor sit, amet consectetur adipisicing elit.
                       Magni quos fugiat reiciendis temporibus nulla eius maxime
                       quidem? Libero eum laborum ut, dolorum corrupti autem
                       voluptate,
                     </p>
-                  </div>
+                  </div> */}
                 </div>
                 <div className="w-1/3  flex justify-center">
                   <div className="border-2 p-4 rounded-xl h-96">
-                    <img src={layoutImage} alt="" className="h-80 w-80" />
+                    {layoutImage ? (
+                      <img
+                        src={layoutImage}
+                        alt="layout image"
+                        className="h-80 w-80"
+                      />
+                    ) : (
+                      <Spinner />
+                    )}
                   </div>
                 </div>
               </div>
