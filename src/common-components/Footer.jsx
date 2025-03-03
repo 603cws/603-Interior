@@ -1,14 +1,11 @@
-import { IoCallOutline } from "react-icons/io5";
-import { CiLocationOn } from "react-icons/ci";
 import { IoIosMail } from "react-icons/io";
-import {
-  FaArrowRight,
-  FaFacebookSquare,
-  FaInstagram,
-  FaLinkedin,
-  FaAngleUp,
-} from "react-icons/fa";
+import { FaInstagram, FaAngleUp } from "react-icons/fa";
 import { RiTwitterXLine } from "react-icons/ri";
+import { LuYoutube } from "react-icons/lu";
+import { FiFacebook, FiLinkedin } from "react-icons/fi";
+import { BsShop } from "react-icons/bs";
+import { FaLocationDot } from "react-icons/fa6";
+import { PiPhoneCallFill } from "react-icons/pi";
 
 import { useNavigate } from "react-router-dom";
 
@@ -20,147 +17,122 @@ function Footer() {
     });
   };
 
-  const navigation = useNavigate();
+  const navigate = useNavigate();
   return (
-    <footer className="bg-[#1F5C54]  ">
-      {/* container div */}
-      <div className="container mx-auto">
-        {/* container will contain two part one for all the logo and all ,second for copy right and top scroll */}
-        <div className="text-white lg:flex lg:gap-10  items-start gap-10 justify-around pt-5 mb-3">
-          {/* 3div */}
-          <div className="text-white font-lexend text-start">
-            <img
-              src="/logo/logo.png"
-              alt="logo for footer"
-              width={80}
-              height={80}
-            />
-            <p className="font-semibold pt-2 text-lg">Head office :</p>
-            <p className="font-semibold text-lg">603 The Interiors</p>
-            <div className="flex flex-col font-extralight gap-2 mt-1 text-md">
-              <div className="flex gap-4 items-center">
-                <CiLocationOn size={22} />
-                <p className="font-thin">
-                  Makhija Arcade, 35th Rd, Khar West, <br /> Mumbai Maharashtra
-                  400052
-                </p>
-              </div>
-              <div className="flex gap-4 items-center font-extralight">
-                <IoCallOutline size={22} />
-                <p>+91-9136036603</p>
-              </div>
-              <div className="flex gap-4 items-center font-extralight">
-                <IoIosMail size={22} />
-                <p>603coworkingspace@gmail.com</p>
-              </div>
-            </div>
+    <footer className=" bg-[#1F5C54] text-white font-Poppins px-10 xl:px-40 pt-12 pb-5">
+      <div className="container mx-auto flex flex-col lg:flex-row justify-between gap-10 mb-20">
+        <div className="lg:border-r-2 border-[#34BFAD] capitalize pr-10 xl:pr-28 hidden lg:flex flex-col gap-5 text-sm">
+          <div>
+            <h3 className="font-semibold">registered office address</h3>
+            <h3 className="font-semibold">workved interiors</h3>
           </div>
-          {/* second div */}
-          <div className="">
-            <h2 className="font-lexend font-semibold text-lg my-3">
-              Quicklinks
-            </h2>
-            <div className="flex gap-5">
-              <ul className="font-Poppins flex flex-col gap-1 font-extralight text-md ">
-                <li onClick={() => navigation("/")} className="cursor-pointer">
-                  Home
-                </li>
-                {/* <li className="cursor-pointer">Company</li>
-                <li className="cursor-pointer">Brand</li>
-                <li className="cursor-pointer">Products</li> */}
-                <li
-                  className="cursor-pointer"
-                  onClick={() => navigation("/Career")}
-                >
-                  Career
-                </li>
-                <li
-                  onClick={() => navigation("/Blog")}
-                  className="cursor-pointer"
-                >
-                  Blogs
-                </li>
-              </ul>
-              <ul className="font-Poppins flex flex-col gap-1 font-extralight text-base">
-                <li
-                  onClick={() => navigation("/Contactus")}
-                  className="cursor-pointer"
-                >
-                  Contact Us
-                </li>
-                <li
-                  className="cursor-pointer"
-                  onClick={() => navigation("/help")}
-                >
-                  Help & FAQ
-                </li>
-                <li
-                  className="cursor-pointer"
-                  onClick={() => navigation("/termsNcondtion")}
-                >
-                  Terms N Condition
-                </li>
-
-                <li
-                  className="cursor-pointer"
-                  onClick={() => navigation("/becomeseller")}
-                >
-                  Become a reseller
-                </li>
-              </ul>
-            </div>
-          </div>
-          {/* third div */}
-          <div className="captialize font-Poppins">
-            <p className="my-3 text-xl font-semibold">Subscribe</p>
-            <div className="font-extralight text-md">
-              <p>
-                Sign up for Alerts, Special Offers, Education <br /> and
-                Updates.
+          <div className="flex flex-col gap-2.5">
+            <div className="flex items-center gap-10">
+              <FaLocationDot size={20} />
+              <p className="font-thin">
+                Makhija Arcade, 35th Rd, Khar West, <br />
+                Mumbai Maharashtra 400052
               </p>
-              <div className="flex items-center bg-[#34BFAD] mt-2">
-                <input
-                  type="email"
-                  placeholder="Enter Your Email"
-                  className="w-full text-black p-2 focus:outline-none"
-                />
-                <button>
-                  <FaArrowRight color="white" className="mx-3" />
-                </button>
-              </div>
-
-              <div className="mt-2">
-                <p>Follow us on</p>
-                <ul className="flex items-center gap-3 mt-2">
-                  <li>
-                    <FaLinkedin size={26} />
-                  </li>
-                  <li>
-                    <FaFacebookSquare size={26} />
-                  </li>
-                  <li>
-                    <FaInstagram size={26} />
-                  </li>
-                  <li>
-                    <RiTwitterXLine size={26} />
-                  </li>
-                </ul>
-              </div>
+            </div>
+            <div className="flex items-center gap-10">
+              <PiPhoneCallFill size={20} />
+              <p>+91-9136036603</p>
+            </div>
+            <div className="flex items-center gap-10">
+              <IoIosMail size={20} />
+              <p>603coworkingspace@gmail.com</p>
             </div>
           </div>
         </div>
-
-        {/* copyright part */}
-        <div className="text-white flex justify-around items-center pb-3 pt-5">
-          <p className="w-3/4 text-center text-base font-thin">
-            © 2024 . All Rights Reserved | Crafted by 603 Interiors
-          </p>
-          <div
-            className=" rounded-full bg-[#34BFAD] cursor-pointer"
-            onClick={scrollToTop}
-          >
-            <FaAngleUp className="w-30 h-30 m-3" />
+        <div className="flex flex-col md:flex-row gap-12 xl:gap-36 pl-5 xl:pl-0">
+          <div className="flex gap-24 capitalize text-sm">
+            <ul className="flex flex-col gap-3 font-thin">
+              <li className="font-bold">company</li>
+              <li className="cursor-pointer" onClick={() => navigate("/")}>
+                home
+              </li>
+              <li
+                className="cursor-pointer"
+                onClick={() => navigate("/Aboutus")}
+              >
+                about us
+              </li>
+              <li
+                className="cursor-pointer"
+                onClick={() => navigate("/OurServices")}
+              >
+                services
+              </li>
+              <li
+                className="cursor-pointer"
+                onClick={() => navigate("/Career")}
+              >
+                career
+              </li>
+            </ul>
+            <ul className="font-thin flex flex-col gap-3">
+              <li className="font-bold">resources</li>
+              <li
+                className="cursor-pointer"
+                onClick={() => navigate("/Contactus")}
+              >
+                contact us
+              </li>
+              <li
+                onClick={() => navigate("/help")}
+                className="hidden xl:block cursor-pointer"
+              >
+                help & FAQ's
+              </li>
+              <li
+                onClick={() => navigate("/help")}
+                className="xl:hidden cursor-pointer"
+              >
+                FAQ's
+              </li>
+              <li
+                onClick={() => navigate("/termsNcondtion")}
+                className="hidden xl:block cursor-pointer"
+              >
+                terms & conditions
+              </li>
+              <li
+                onClick={() => navigate("/termsNcondtion")}
+                className="xl:hidden cursor-pointer"
+              >
+                terms
+              </li>
+              <li className="cursor-pointer" onClick={() => navigate("/Blog")}>
+                blog
+              </li>
+            </ul>
           </div>
+          <div className="capitalize">
+            <h3 className="font-semibold text-xl">follow us on</h3>
+            <div className="flex gap-4 mt-2">
+              <FaInstagram size={24} className="cursor-pointer" />
+              <FiFacebook size={24} className="cursor-pointer" />
+              <RiTwitterXLine size={24} className="cursor-pointer" />
+              {/* <LuYoutube size={24} className="cursor-pointer" /> */}
+              <FiLinkedin size={24} className="cursor-pointer" />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="flex justify-between items-center text-sm">
+        <div
+          onClick={() => navigate("/becomeseller")}
+          className="flex justify-center items-center gap-3 cursor-pointer"
+        >
+          <BsShop size={16} />
+          <h4 className="font-semibold">Become a reseller</h4>
+        </div>
+        <p>&copy; 2019-2025 . Workved Interiors | All Rights Reserved</p>
+        <div
+          className=" rounded-full bg-[#34BFAD] cursor-pointer"
+          onClick={scrollToTop}
+        >
+          <FaAngleUp className="w-30 h-30 m-3" />
         </div>
       </div>
     </footer>
