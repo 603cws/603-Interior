@@ -4,6 +4,12 @@ import { useApp } from "../../Context/Context";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { useRef } from "react";
+import { LuLayoutList } from "react-icons/lu";
+import { RxVideo } from "react-icons/rx";
+import { BsQuestionCircle } from "react-icons/bs";
+import { IoSettingsSharp } from "react-icons/io5";
+import { VscSignOut } from "react-icons/vsc";
+
 // import useAuthRefresh from "../../Context/useAuthRefresh";
 
 function ProfileCard({ layout = false }) {
@@ -133,30 +139,42 @@ function ProfileCard({ layout = false }) {
         <div className="font-semibold text-lg capitalize leading-normal tracking-wide py-7 text-[#262626] border-y-2 border-[#ccc] flex flex-col gap-4">
           <div className="flex items-center mx-4 gap-3">
             <RiDashboardFill />
-            <button onClick={() => navigate("/dashboard")}>dashboard</button>
+            <button onClick={() => navigate("/dashboard")}>Dashboard</button>
           </div>
           <div className="flex items-center mx-4 gap-3">
-            <RiDashboardFill />
-            <p>layout</p>
+            <LuLayoutList />
+            <button onClick={() => navigate("/Layout")}>Layout</button>
           </div>
           <div className="flex items-center mx-4 gap-3">
-            <RiDashboardFill />
+            <RxVideo />
             <p>How it works</p>
           </div>
         </div>
         {/* third box for the features */}
         <div className="font-semibold text-lg capitalize leading-normal tracking-wide py-7 text-[#262626] border-b-2 border-[#ccc] flex flex-col gap-4">
           <div className="flex items-center mx-4 gap-3">
-            <RiDashboardFill />
-            <p>help</p>
+            <BsQuestionCircle />
+            <button
+              onClick={() =>
+                navigate("/dashboard", { state: { openHelp: true } })
+              }
+            >
+              Help
+            </button>
           </div>
           <div className="flex items-center mx-4 gap-3">
-            <RiDashboardFill />
-            <p>settings</p>
+            <IoSettingsSharp />
+            <button
+              onClick={() =>
+                navigate("/dashboard", { state: { openSettings: true } })
+              }
+            >
+              Settings
+            </button>
           </div>
           <div className="flex items-center mx-4 gap-3">
-            <RiDashboardFill />
-            <button onClick={handleLogout}>sign out</button>
+            <VscSignOut />
+            <button onClick={handleLogout}>Sign out</button>
           </div>
         </div>
       </div>

@@ -1,7 +1,7 @@
 import { RiDashboardFill } from "react-icons/ri";
 import { MdOutlineModeEdit, MdDeleteOutline } from "react-icons/md";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useApp } from "../Context/Context";
 import { supabase } from "../services/supabase";
 import toast from "react-hot-toast";
@@ -42,7 +42,25 @@ function Dashboard() {
     setTotalArea,
     layoutImage,
   } = useApp();
+  const location = useLocation();
   console.log("layout image", layoutImage);
+
+  useEffect(() => {
+    if (location.state?.openSettings) {
+      setIsProductOpen(false);
+      setDashboard(false);
+      setIsSettingOpen(true);
+      setHelp(false);
+      setCurrentSection("Setting");
+    }
+    if (location.state?.openHelp) {
+      setIsSettingOpen(false);
+      setIsProductOpen(false);
+      setDashboard(false);
+      setHelp(true);
+      setCurrentSection("Help");
+    }
+  }, [location.state]);
 
   const handlesetting = () => {
     setIsProductOpen(false);
