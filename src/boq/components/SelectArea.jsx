@@ -30,6 +30,7 @@ function SelectArea({
   const [allSubcategories, setAllSubcategories] = useState([]);
   const [selectedRoom, setSelectedRoom] = useState(null);
   const [selectedAddons, setSelectedAddons] = useState([]);
+  const [submitBtn, setSubmitBtn] = useState(false);
   // const [disabledAreas, setDisabledAreas] = useState([]);
 
   const baseImageUrl =
@@ -46,6 +47,10 @@ function SelectArea({
     setSelectedAddonsMap(addonsMap);
   }, [selectedData]);
 
+  useEffect(() => {
+    if (!allAddons || allAddons.length === 0) setSubmitBtn(true);
+  }, [allAddons]);
+
   const botRight = () => {
     toast.dark("Product Added", {
       position: "bottom-right",
@@ -56,7 +61,8 @@ function SelectArea({
   const handleAddonClick = () => {
     setShowAddon(false);
     setShowSelectArea(false); // Close the modal
-    botRight();
+
+    if (allSubcategories.length > 0) botRight();
 
     setSelectedData((prevData) => {
       const updatedData = prevData.map((item) => {
@@ -240,8 +246,24 @@ function SelectArea({
       );
     });
 
-    // setShowSelectArea(false); // Close the modal
-    setShowAddon(true);
+    // if (!allAddons || allAddons.length === 0) {
+    //   setShowSelectArea(false);
+    //   if (selectedSubcategories.length > 0) botRight();
+    // } else {
+    //   if (selectedSubcategories.length > 0) setShowAddon(true);
+    //   else setShowSelectArea(false);
+    // }
+
+    if (selectedSubcategories.length > 0) {
+      if (!allAddons || allAddons.length === 0) {
+        setShowSelectArea(false);
+        botRight();
+      } else {
+        setShowAddon(true);
+      }
+    } else {
+      setShowSelectArea(false);
+    }
   };
 
   // const handleAddonClick = () => {
@@ -515,7 +537,7 @@ function SelectArea({
                   className="bg-[#1A3A36] rounded-lg text-sm py-2 px-10 border-2 border-gray-900 text-white"
                   onClick={() => handleDoneClick()}
                 >
-                  Next
+                  {submitBtn ? "Submit" : "Next"}
                 </button>
               </div>
             </div>
@@ -572,6 +594,8 @@ function SelectArea({
                   setSelectedAddons={setSelectedAddons}
                   selectedAddonsMap={selectedAddonsMap}
                   setSelectedAddonsMap={setSelectedAddonsMap}
+                  setShowSelectArea={setShowSelectArea}
+                  botRight={botRight}
                 />
               </div>
             </div>
