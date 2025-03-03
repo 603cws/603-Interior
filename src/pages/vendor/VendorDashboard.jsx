@@ -397,7 +397,7 @@ function VendorDashboard() {
                         add product
                       </button>
                     </div> */}
-                    <div className=" sticky top-0">
+                    <div className=" sticky top-0 z-20 bg-white">
                       <div className="flex justify-between items-center px-4 py-2 border-b-2 border-b-gray-400 ">
                         <h3 className="capitalize font-semibold text-xl ">
                           product list

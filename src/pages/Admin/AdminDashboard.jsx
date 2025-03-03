@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import { RiDashboardFill } from "react-icons/ri";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useApp } from "../../Context/Context";
 import { supabase } from "../../services/supabase";
 import toast from "react-hot-toast";
@@ -104,7 +104,26 @@ function AdminDashboard() {
     setTotalArea,
     layoutImage,
   } = useApp();
+
+  const location = useLocation();
   console.log("layout image", layoutImage);
+
+  useEffect(() => {
+    if (location.state?.openSettings) {
+      setIsProductOpen(false);
+      setDashboard(false);
+      setIsSettingOpen(true);
+      // setHelp(false);
+      setCurrentSection("Setting");
+    }
+    // if (location.state?.openHelp) {
+    //   setIsSettingOpen(false);
+    //   setIsProductOpen(false);
+    //   setDashboard(false);
+    //   setHelp(true);
+    //   setCurrentSection("Help");
+    // }
+  }, [location.state]);
 
   const handleTabClick = (event) => {
     setProductlist(true);
@@ -150,21 +169,46 @@ function AdminDashboard() {
   };
 
   // Fetch Products from Supabase
+  // const fetchProducts = async () => {
+  //   setIsloading(true);
+  //   try {
+  //     const { data } = await supabase.from("product_variants").select(
+  //       `
+  //         id,
+  //         title,
+  //         price,
+  //         details,
+  //         image,
+  //         product_id,
+  //         products (category, subcategory, subcategory1)
+  //       `
+  //     );
+  //     setProducts(data);
+
+  //     console.log(data);
+  //   } catch (error) {
+  //     console.log("Error fetching products:", error);
+  //   } finally {
+  //     setIsloading(false);
+  //   }
+  // };
   const fetchProducts = async () => {
     setIsloading(true);
     try {
-      const { data } = await supabase.from("product_variants").select(
-        `
-          id, 
-          title, 
-          price, 
-          details, 
-          image, 
-          product_id, 
-          products (category, subcategory, subcategory1)
-        `
-      );
-      setProducts(data);
+      const { data } = await supabase
+        .from("product_variants")
+        .select("*")
+        .order("created_at", { ascending: false });
+
+      const sortedData = data.sort((a, b) => {
+        // Prioritize "pending" status
+        if (a.status === "pending" && b.status !== "pending") return -1;
+        if (b.status === "pending" && a.status !== "pending") return 1;
+
+        // If both are "pending" or both are not "pending", sort by date
+        return new Date(b.created_at) - new Date(a.created_at);
+      });
+      setProducts(sortedData);
 
       console.log(data);
     } catch (error) {
@@ -416,6 +460,32 @@ function AdminDashboard() {
     setVendorproductlist(true);
   };
 
+  const handleAccept = async (id) => {
+    const { error } = await supabase
+      .from("product_variants") // Table name
+      .update({ status: "approved" }) // New status
+      .eq("id", id); // Matching row
+
+    if (error) {
+      console.error("Error updating status:", error.message);
+    } else {
+      toast.success("Product accepted");
+    }
+  };
+
+  const handleReject = async (id) => {
+    const { error } = await supabase
+      .from("product_variants") // Table name
+      .update({ status: "rejected" }) // New status
+      .eq("id", id); // Matching row
+
+    if (error) {
+      console.error("Error updating status:", error.message);
+    } else {
+      toast.success("Product rejected");
+    }
+  };
+
   return (
     <div className="">
       <div className="flex gap-3 max-h-full overflow-hidden bg-white">
@@ -432,7 +502,7 @@ function AdminDashboard() {
             <img
               src="/logo/logo.png"
               alt="Logo"
-              onClick={()=>navigate("/")}
+              onClick={() => navigate("/")}
               className={`${isExpanded ? "h-20 w-32" : "size-12"}`}
             />
           </div>
@@ -592,7 +662,7 @@ function AdminDashboard() {
                 ) : (
                   // Default product list and add product UI
                   <>
-                    <div className=" sticky top-0">
+                    <div className=" sticky top-0 z-20 bg-white">
                       <div className="flex justify-between items-center px-4 py-2 border-b-2 border-b-gray-400 ">
                         <h3 className="capitalize font-semibold text-xl ">
                           product list
@@ -654,11 +724,14 @@ function AdminDashboard() {
                                       {/* <th className="p-3 font-medium">
                                         Details
                                       </th> */}
-                                      <th className="p-3 font-medium">
+                                      {/* <th className="p-3 font-medium">
                                         Category
                                       </th>
                                       <th className="p-3 font-medium">
                                         specification
+                                      </th> */}
+                                      <th className="p-3 font-medium">
+                                        status
                                       </th>
                                     </>
                                   ) : (
@@ -691,7 +764,7 @@ function AdminDashboard() {
                                         )}
                                       </div>
                                     </td>
-                                    <td className="border border-gray-200 p-3 align-middle">
+                                    <td className="border border-gray-200 p-3 align-middle text-center">
                                       ₹{item.price}
                                     </td>
                                     {toggle ? (
@@ -699,11 +772,46 @@ function AdminDashboard() {
                                         {/* <td className="border border-gray-200 p-3 align-middle">
                                           {item.details}
                                         </td> */}
-                                        <td className="border border-gray-200 p-3 align-middle">
+                                        {/* <td className="border border-gray-200 p-3 align-middle">
                                           {item.products?.category || "N/A"}
                                         </td>
                                         <td className="border border-gray-200 p-3 align-middle">
                                           {item.products?.subcategory1 || "N/A"}
+                                        </td> */}
+                                        <td className="border border-gray-200 p-3 align-middle text-center group relative">
+                                          {item.status === "pending" ? (
+                                            <div className="flex items-center justify-center">
+                                              <span className="text-[#13B2E4]">
+                                                Pending
+                                              </span>
+                                              <div className="absolute top-0 left-0 w-full h-full bg-white/90 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                                                <button
+                                                  className="bg-green-500 text-white px-2 py-1 rounded-md mr-2 hover:bg-green-600"
+                                                  onClick={() =>
+                                                    handleAccept(item.id)
+                                                  }
+                                                >
+                                                  Accept
+                                                </button>
+                                                <button
+                                                  className="bg-red-500 text-white px-2 py-1 rounded-md hover:bg-red-600"
+                                                  onClick={() =>
+                                                    handleReject(item.id)
+                                                  }
+                                                >
+                                                  Reject
+                                                </button>
+                                              </div>
+                                            </div>
+                                          ) : item.status === "approved" ? (
+                                            <span className="text-green-400">
+                                              approved
+                                            </span>
+                                          ) : (
+                                            <span className="text-red-400">
+                                              {item.status || "N/A"}
+                                            </span>
+                                          )}
                                         </td>
                                       </>
                                     ) : (
