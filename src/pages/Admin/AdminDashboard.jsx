@@ -26,6 +26,9 @@ import Clients from "./Clients";
 import VendorProductlist from "./VendorProductlist";
 // import { useLogout } from "../../utils/HelperFunction";
 import DashboardProductCard from "../vendor/DashboardProductCard";
+import DashboardCards from "./DashboardCards";
+import DashboardInbox from "./DashboardInbox";
+import CreateUser from "./CreateUser";
 
 function AdminDashboard() {
   const navigate = useNavigate();
@@ -80,6 +83,9 @@ function AdminDashboard() {
   const [selectedTab, setSelectedTab] = useState("products");
 
   const [showMenu, setShowMenu] = useState(false);
+
+  // create profile
+  const [createProfile, setCreateProfikle] = useState(false);
 
   const tabs = [
     { name: "Products", value: "products" },
@@ -253,6 +259,7 @@ function AdminDashboard() {
     setIsSettingOpen(true);
     setIsclientopen(false);
     setIsvendoropen(false);
+    setCreateProfikle(false);
     setCurrentSection("Setting");
   };
   const handleproduct = () => {
@@ -261,6 +268,7 @@ function AdminDashboard() {
     setIsclientopen(false);
     setIsProductOpen(true);
     setIsvendoropen(false);
+    setCreateProfikle(false);
     setCurrentSection("Product");
   };
 
@@ -270,6 +278,7 @@ function AdminDashboard() {
     setIsclientopen(false);
     setDashboard(true);
     setIsvendoropen(false);
+    setCreateProfikle(false);
     setCurrentSection("AdminDashboard");
   };
 
@@ -279,6 +288,7 @@ function AdminDashboard() {
     setDashboard(false);
     setIsvendoropen(false);
     setIsclientopen(true);
+    setCreateProfikle(false);
     setCurrentSection("Client");
   };
 
@@ -288,7 +298,17 @@ function AdminDashboard() {
     setDashboard(false);
     setIsclientopen(false);
     setIsvendoropen(true);
+    setCreateProfikle(false);
     setCurrentSection("Vendor");
+  };
+  const handlecreate = () => {
+    setIsSettingOpen(false);
+    setIsProductOpen(false);
+    setDashboard(false);
+    setIsclientopen(false);
+    setIsvendoropen(false);
+    setCreateProfikle(true);
+    setCurrentSection("create profile");
   };
 
   const handleLogout = async () => {
@@ -412,6 +432,7 @@ function AdminDashboard() {
             <img
               src="/logo/logo.png"
               alt="Logo"
+              onClick={()=>navigate("/")}
               className={`${isExpanded ? "h-20 w-32" : "size-12"}`}
             />
           </div>
@@ -447,6 +468,12 @@ function AdminDashboard() {
               icon={<PiHandshakeFill />}
               text="Vendor"
               onClick={handleVendor}
+              isExpanded={isExpanded}
+            />
+            <SidebarItem
+              icon={<PiHandshakeFill />}
+              text="create"
+              onClick={handlecreate}
               isExpanded={isExpanded}
             />
           </div>
@@ -489,10 +516,22 @@ function AdminDashboard() {
 
           {/* div for dashboard */}
           {dashboard && (
-            <div className="w-full  border-2 border-[#000] rounded-3xl ">
+            <div className="w-full  border-2 border-[#000] rounded-3xl bg-[#EBF0FF] ">
               {/* for dashboard */}
               <div className="w-full flex overflow-y-auto scrollbar-hide h-[calc(100vh-100px)] py-2 px-3">
-                <p>this part is under working</p>
+                {/* <p>this part is under working</p> */}
+                <div className="xl:flex justify-evenly gap-4 w-full">
+                  <div className="p-4">
+                    <DashboardCards
+                      totalclients={allusers}
+                      totalVendors={allvendors}
+                    />
+                  </div>
+                  <div className="flex-1 p-4">
+                    {" "}
+                    <DashboardInbox />
+                  </div>
+                </div>
               </div>
             </div>
           )}
@@ -612,9 +651,9 @@ function AdminDashboard() {
                                   <th className="p-3  font-medium">Price</th>
                                   {toggle ? (
                                     <>
-                                      <th className="p-3 font-medium">
+                                      {/* <th className="p-3 font-medium">
                                         Details
-                                      </th>
+                                      </th> */}
                                       <th className="p-3 font-medium">
                                         Category
                                       </th>
@@ -657,9 +696,9 @@ function AdminDashboard() {
                                     </td>
                                     {toggle ? (
                                       <>
-                                        <td className="border border-gray-200 p-3 align-middle">
+                                        {/* <td className="border border-gray-200 p-3 align-middle">
                                           {item.details}
-                                        </td>
+                                        </td> */}
                                         <td className="border border-gray-200 p-3 align-middle">
                                           {item.products?.category || "N/A"}
                                         </td>
@@ -724,136 +763,6 @@ function AdminDashboard() {
                           </p>
                         </>
                       ))}
-                    {/* {productlist &&
-                      (isloading ? (
-                        <Spinner />
-                      ) : (toggle ? products : addons).length > 0 ? (
-                        // <section className="mt-2 flex-1 overflow-hidden px-8">
-                        <section className=" h-[90%] font-Poppins overflow-hidden">
-                          <div className="w-full h-full border-t border-b border-[#CCCCCC] overflow-y-auto custom-scrollbar">
-                            <table className="min-w-full border-collapse">
-                              <thead className="bg-[#FFFFFF] sticky top-0 z-10 px-8 text-center text-[#000] text-base">
-                                <tr>
-                                  {toggle ? (
-                                    <th className="p-3 font-medium">
-                                      Product Name
-                                    </th>
-                                  ) : (
-                                    <th className="p-3 font-medium">
-                                      Addon ID
-                                    </th>
-                                  )}
-                                  <th className="p-3  font-medium">Price</th>
-                                  {toggle ? (
-                                    <>
-                                      <th className="p-3 font-medium">
-                                        Details
-                                      </th>
-                                      <th className="p-3 font-medium">
-                                        Category
-                                      </th>
-                                      <th className="p-3 font-medium">
-                                        specification
-                                      </th>
-                                    </>
-                                  ) : (
-                                    <th className="p-3 font-medium">
-                                      Addon Title
-                                    </th>
-                                  )}
-                                  <th className="p-3 font-medium">Action</th>
-                                </tr>
-                              </thead>
-                              <tbody className=" text-sm">
-                                {(toggle ? products : addons).map((item) => (
-                                  <tr
-                                    key={item.id}
-                                    className="hover:bg-gray-50 cursor-pointer"
-                                  >
-                                    <td className="border border-gray-200 p-3 align-middle">
-                                      <div className="flex items-center gap-2">
-                                        <img
-                                          src={`${baseImageUrl}${item.image}`}
-                                          alt={item.title}
-                                          className="w-10 h-10 object-cover rounded"
-                                        />
-                                        {toggle ? (
-                                          <span>{item.title}</span>
-                                        ) : (
-                                          <span className="text-wrap">
-                                            {item.id}
-                                          </span>
-                                        )}
-                                      </div>
-                                    </td>
-                                    <td className="border border-gray-200 p-3 align-middle">
-                                      ₹{item.price}
-                                    </td>
-                                    {toggle ? (
-                                      <>
-                                        <td className="border border-gray-200 p-3 align-middle">
-                                          {item.details}
-                                        </td>
-                                        <td className="border border-gray-200 p-3 align-middle">
-                                          {item.products?.category || "N/A"}
-                                        </td>
-                                        <td className="border border-gray-200 p-3 align-middle">
-                                          {item.products?.subcategory1 || "N/A"}
-                                        </td>
-                                      </>
-                                    ) : (
-                                      <td className="border border-gray-200 p-3 align-middle">
-                                        {item.addons?.title || item.title}
-                                      </td>
-                                    )}
-                                    <td className="border border-gray-200 p-3 align-middle flex justify-center items-center relative">
-
-                                      <button
-                                        className="bg-white flex justify-center items-center py-1.5 w-20 mb-2"
-                                        onClick={() =>
-                                          handleMenuToggle(item.id)
-                                        }
-                                      >
-                                        <CiMenuKebab size={25} />
-                                      </button>
-
-                                      {openMenuId === item.id && (
-                                        <div
-                                          ref={menuRef}
-                                          className="absolute top-1/2 left-0 transform mt-2 bg-white border border-gray-300 shadow-md rounded-md w-24 z-10"
-                                        >
-                                          <button
-                                            onClick={() => {
-                                              handleProductPreview(item);
-                                            }}
-                                            className=" flex gap-2 items-center w-full text-left px-3 py-2 hover:bg-gray-200"
-                                          >
-                                            <VscEye /> view
-                                          </button>
-                                          <button
-                                            onClick={() => {
-                                              handleDelete(item);
-                                            }}
-                                            className="flex gap-2 items-center w-full text-left px-3 py-2 hover:bg-gray-200"
-                                          >
-                                            <MdOutlineDelete /> Delete
-                                          </button>
-                                        </div>
-                                      )}
-                                    </td>
-                                  </tr>
-                                ))}
-                              </tbody>
-                            </table>
-                          </div>
-                        </section>
-                      ) : (
-                        <>
-                          <p className="p-5 text-gray-500 text-center">
-                            No {toggle ? "products" : "addons"} found.
-                          </p>
-                        </>
-                      ))} */}
 
                     {/* Pagination Controls (Always Visible) */}
                     {totalPages > 1 && (
@@ -1001,15 +910,19 @@ function AdminDashboard() {
                 {/* client card for display */}
 
                 <div
-                  className={`grid grid-cols-2 ${
-                    isExpanded ? "lg:grid-cols-4 gap-3" : "lg:grid-cols-4 gap-8"
+                  className={`grid grid-cols-2  ${
+                    isExpanded
+                      ? "lg:grid-cols-3 xl:grid-cols-4 gap-8"
+                      : "lg:grid-cols-3 xl:grid-cols-4 gap-8"
                   } p-2`}
                 >
                   {filteredvendors.map((user, index) => {
                     return (
                       <div
                         key={index}
-                        className=" flex flex-col w-[300px] h-[150px] font-Poppins rounded-2xl bg-[#fff]"
+                        className={`flex flex-col ${
+                          isExpanded ? "lg:w-[200px] xl:w-[250px]" : "w-[300px]"
+                        } h-[150px] font-Poppins rounded-2xl bg-[#fff]`}
                       >
                         <div className="flex items-center my-4">
                           <div className="mx-3">
@@ -1052,6 +965,15 @@ function AdminDashboard() {
               setVendorproductlist={setVendorproductlist}
               selectedVendor={selectedVendor}
             />
+          )}
+
+          {/* create profile */}
+          {createProfile && (
+            <div className="flex-1 bg-[#EBF0FF] border-2 border-[#000] rounded-3xl ">
+              <div className="overflow-y-auto scrollbar-hide h-[calc(100vh-100px)] rounded-3xl relative ">
+                <CreateUser />
+              </div>
+            </div>
           )}
         </div>
       </div>

@@ -130,7 +130,7 @@ function App() {
             <Route path="/Blog" element={<BlogPage />} />
             <Route path="/Blog/:title" element={<BlogDetail />} />
             <Route path="/Career" element={<Carrer />} />
-            {/* <Route path="*" element={<PageNotFound />} /> */}
+            <Route path="*" element={<PageNotFound />} />
             <Route path="/Login" element={<Login />} />
             <Route path="/OurServices" element={<OurServices />} />
             <Route path="/profile" element={<ProfileCard />} />
