@@ -252,6 +252,7 @@ function SelectArea({
     // } else {
     //   if (selectedSubcategories.length > 0) setShowAddon(true);
     //   else setShowSelectArea(false);
+
     // }
 
     if (selectedSubcategories.length > 0) {
