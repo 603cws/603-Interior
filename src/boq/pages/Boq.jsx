@@ -27,7 +27,12 @@ import toast from "react-hot-toast";
 import ProfileCard from "../components/ProfileCard";
 import Plans from "../../common-components/Plans";
 import SelectArea from "../components/SelectArea";
+import BoqPrompt from "../components/BoqPrompt"; // Import the BOQ modal
+
 function Boq() {
+  const [showBoqPrompt, setShowBoqPrompt] = useState(false);
+  const [boqTitle, setBoqTitle] = useState("");
+
   const [selectedProductView, setSelectedProductView] = useState([]);
   const [productsData, setProductData] = useState([]);
   // const [searchQuery, setSearchQuery] = useState("");
@@ -1182,19 +1187,53 @@ function Boq() {
     }
   };
 
-  const handleSave = () => {
-    if (selectedData && selectedData.length > 0) {
-      insertDataIntoSupabase(
-        selectedData,
-        userId,
-        "", // Initially empty; will be set later
-        totalArea
-      );
-    } else {
-      console.warn("No selected data to save.");
+  const handleSave = async () => {
+    if (!selectedData || selectedData.length === 0) {
       toast.error("No selected data to save.");
+      return;
     }
+
+    // Check user's existing BOQs
+    const { data: existingBOQs, error: fetchError } = await supabase
+      .from("boqdata")
+      .select("id", { count: "exact" })
+      .eq("userId", userId);
+
+    if (fetchError) {
+      console.error("Error fetching user BOQ count:", fetchError);
+      return;
+    }
+
+    if (existingBOQs.length >= 3) {
+      toast.error("You can only save up to 3 BOQs.");
+      return;
+    }
+
+    // Show BOQ name prompt
+    setShowBoqPrompt(true);
   };
+
+  const handleBoqNameConfirm = (name) => {
+    setBoqTitle(name);
+    setShowBoqPrompt(false);
+
+    // Now insert the data
+    insertDataIntoSupabase(selectedData, userId, name, totalArea);
+  };
+
+  // const handleSave = () => {
+  //   if (selectedData && selectedData.length > 0) {
+  //     insertDataIntoSupabase(
+  //       selectedData,
+  //       userId,
+  //       "", // Initially empty; will be set later
+  //       totalArea
+  //     );
+  //   } else {
+  //     console.warn("No selected data to save.");
+  //     toast.error("No selected data to save.");
+  //   }
+  // };
 
   const fetchSavedBOQs = async () => {
     try {
@@ -1538,6 +1577,13 @@ function Boq() {
 
   return (
     <div>
+      {showBoqPrompt && (
+        <BoqPrompt
+          onConfirm={handleBoqNameConfirm}
+          onCancel={() => setShowBoqPrompt(false)}
+        />
+      )}
+
       <Joyride
         steps={tourSteps}
         run={runTour}
