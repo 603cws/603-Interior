@@ -1,9 +1,20 @@
+import { useState } from "react";
+import { useApp } from "../../Context/Context";
 import { MdDeleteOutline } from "react-icons/md";
 import { supabase } from "../../services/supabase";
 import toast from "react-hot-toast";
 
-function DashboardProductCard({ onClose, product, handleDelete }) {
-  console.log("product preview", product);
+function DashboardProductCard({
+  onClose,
+  product,
+  handleDelete,
+  updateStatus,
+}) {
+  const [statusDropdown, setStatusDropdown] = useState(false);
+  const [selectedStatus, setSelectedStatus] = useState(product.status);
+  const { accountHolder } = useApp();
+
+  console.log("product status", product);
   const baseImageUrl =
     "https://bwxzfwsoxwtzhjbzbdzs.supabase.co/storage/v1/object/public/addon/";
 
@@ -19,9 +30,15 @@ function DashboardProductCard({ onClose, product, handleDelete }) {
             <h2 className="font-semibold text-3xl text-[#111] uppercase">
               {product.title}
             </h2>
-            <h4 className="uppercase text-[#334A78] font-medium text-sm">
+            <p className="uppercase text-[#334A78] font-medium text-xs">
               {product.details}
-            </h4>
+            </p>
+            <h5 className="uppercase text-[#334A78] font-medium text-xs opacity-80">
+              Category:{product.products?.category}
+            </h5>
+            <h5 className="uppercase text-[#334A78] font-medium text-xs opacity-80">
+              Specification:{product.product_type}
+            </h5>
             <p className="text-[#334A78] text-sm font-medium">Final Price</p>
             <p className="font-semibold text-[#000] text-xl">
               ₹{product.price} 
@@ -29,7 +46,7 @@ function DashboardProductCard({ onClose, product, handleDelete }) {
           </div>
         </div>
         <div className="flex text-[#000] justify-between  w-full p-4">
-          <div>
+          {accountHolder.role !== "user" && (
             <button
               onClick={() => {
                 handleDelete(product);
@@ -38,7 +55,40 @@ function DashboardProductCard({ onClose, product, handleDelete }) {
             >
               <MdDeleteOutline /> delete
             </button>
-          </div>
+          )}
+          {accountHolder.role === "admin" && (
+            <div className="relative inline-block">
+              {/* Update Status Button */}
+              <button
+                onClick={() => setStatusDropdown(!statusDropdown)}
+                className="px-3 py-2 capitalize border-[#BBBBBB] border-2 bg-[#fff] rounded-2xl"
+              >
+                Update Status
+              </button>
+
+              {/* Dropdown Options */}
+              {statusDropdown && (
+                <div className="absolute mt-2 w-36 bg-white border border-gray-300 rounded-lg shadow-md">
+                  {["pending", "approved", "rejected"].map((status) => (
+                    <button
+                      key={status}
+                      onClick={() => {
+                        updateStatus(product.id, status); // Call the function from props
+                        setSelectedStatus(status); // Update UI
+                        setStatusDropdown(false); // Close dropdown
+                      }}
+                      className={`block w-full px-4 py-2 text-left hover:bg-gray-100 ${
+                        selectedStatus === status ? "bg-gray-200 font-bold" : ""
+                      }`}
+                    >
+                      {status}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+
           <div>
             <button
               onClick={onClose}

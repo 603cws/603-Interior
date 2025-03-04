@@ -1,7 +1,7 @@
 import React from "react";
 import Spinner from "../../common-components/Spinner";
 
-function DashboardCards({ totalclients, totalVendors }) {
+function DashboardCards({ totalclients, totalVendors, vendors, clients }) {
   if (!totalclients || !totalVendors) {
     return <Spinner />;
   }
@@ -9,7 +9,10 @@ function DashboardCards({ totalclients, totalVendors }) {
   return (
     <div>
       <div className="flex gap-4 font-Poppins">
-        <div className="bg-gradient-to-r from-[#6BE4FC] to-[#4AF3DF] text-white p-7 rounded-3xl flex flex-col justify-between lg:h-48 lg:w-40 xl:h-56 xl:w-48 relative hover:scale-110 transition-transform duration-300 ease-in-out">
+        <div
+          onClick={clients}
+          className="bg-gradient-to-r from-[#6BE4FC] to-[#4AF3DF] text-white p-7 rounded-3xl flex flex-col justify-between lg:h-48 lg:w-40 xl:h-56 xl:w-48 relative hover:scale-110 transition-transform duration-300 ease-in-out"
+        >
           <h2 className="self-center text-xl font-bold">Client</h2>
           <h1 className="self-end justify-end font-semibold text-3xl xl:text-5xl">
             {totalclients.length}
@@ -21,7 +24,10 @@ function DashboardCards({ totalclients, totalVendors }) {
           />
         </div>
 
-        <div className="bg-gradient-to-r from-[#6BAAFC] to-[#4A80F3] text-white p-7 rounded-3xl flex flex-col justify-between lg:h-48 lg:w-40 xl:h-56 xl:w-48 relative hover:scale-110 transition-transform duration-300 ease-in-out">
+        <div
+          onClick={vendors}
+          className="bg-gradient-to-r from-[#6BAAFC] to-[#4A80F3] text-white p-7 rounded-3xl flex flex-col justify-between lg:h-48 lg:w-40 xl:h-56 xl:w-48 relative hover:scale-110 transition-transform duration-300 ease-in-out"
+        >
           <h2 className="self-center text-xl font-bold">Vendor</h2>
           <h1 className="self-end justify-end font-semibold text-3xl xl:text-5xl">
             {totalVendors.length}

@@ -8,7 +8,7 @@ import UserProfile from "../user/UserProfile";
 import UserSetting from "../user/UserSetting";
 import { FaArrowLeft } from "react-icons/fa6";
 import { VscSignOut } from "react-icons/vsc";
-import { IoSettingsSharp } from "react-icons/io5";
+import { IoCheckmark, IoSettingsSharp } from "react-icons/io5";
 import { LuBlend } from "react-icons/lu";
 import { FaRegUserCircle } from "react-icons/fa";
 import { FaBuilding } from "react-icons/fa";
@@ -29,6 +29,7 @@ import DashboardProductCard from "../vendor/DashboardProductCard";
 import DashboardCards from "./DashboardCards";
 import DashboardInbox from "./DashboardInbox";
 import CreateUser from "./CreateUser";
+import { HiXMark } from "react-icons/hi2";
 
 function AdminDashboard() {
   const navigate = useNavigate();
@@ -197,7 +198,7 @@ function AdminDashboard() {
     try {
       const { data } = await supabase
         .from("product_variants")
-        .select("*")
+        .select("*,products(*)")
         .order("created_at", { ascending: false });
 
       const sortedData = data.sort((a, b) => {
@@ -233,6 +234,10 @@ function AdminDashboard() {
   useEffect(() => {
     fetchProducts();
     fetchAddons();
+    // handleUpdateStatus();
+    handleDelete();
+    handleAccept();
+    handleReject();
   }, []);
 
   const handleMenuToggle = (id) => {
@@ -284,7 +289,53 @@ function AdminDashboard() {
       toast.error("Failed to delete product.");
       console.error("Delete error:", error);
     }
-    fetchProducts(1); // Fetch products after deletion
+    fetchProducts(); // Fetch products after deletion
+  };
+
+  const handleAccept = async (id) => {
+    const { error } = await supabase
+      .from("product_variants") // Table name
+      .update({ status: "approved" }) // New status
+      .eq("id", id); // Matching row
+
+    if (error) {
+      console.error("Error updating status:", error.message);
+    } else {
+      toast.success("Product accepted");
+    }
+    fetchProducts();
+  };
+
+  const handleReject = async (id) => {
+    const { error } = await supabase
+      .from("product_variants") // Table name
+      .update({ status: "rejected" }) // New status
+      .eq("id", id); // Matching row
+
+    if (error) {
+      console.error("Error updating status:", error.message);
+    } else {
+      toast.success("Product rejected");
+    }
+    fetchProducts();
+  };
+
+  const handleUpdateStatus = async (productID, newStatus) => {
+    console.log("new status", newStatus);
+
+    // update status of product
+    try {
+      const { data } = await supabase
+        .from("product_variants")
+        .update({ status: newStatus })
+        .eq("id", productID);
+
+      toast.success("Status updated successfully:", data);
+    } catch {
+      toast.error("unable to update status..");
+    }
+    setProductPreview(false);
+    fetchProducts();
   };
 
   const handlenewproduct = () => {
@@ -460,35 +511,9 @@ function AdminDashboard() {
     setVendorproductlist(true);
   };
 
-  const handleAccept = async (id) => {
-    const { error } = await supabase
-      .from("product_variants") // Table name
-      .update({ status: "approved" }) // New status
-      .eq("id", id); // Matching row
-
-    if (error) {
-      console.error("Error updating status:", error.message);
-    } else {
-      toast.success("Product accepted");
-    }
-  };
-
-  const handleReject = async (id) => {
-    const { error } = await supabase
-      .from("product_variants") // Table name
-      .update({ status: "rejected" }) // New status
-      .eq("id", id); // Matching row
-
-    if (error) {
-      console.error("Error updating status:", error.message);
-    } else {
-      toast.success("Product rejected");
-    }
-  };
-
   return (
     <div className="bg-[url('images/admin/Admin.png')] bg-cover bg-center bg-no-repeat p-3 xl:p-5">
-      <div className="flex gap-3 max-h-fit overflow-hidden bg-white">
+      <div className="flex gap-3 max-h-fit overflow-hidden bg-white rounded-3xl">
         {/* sidebar */}
         <div
           className={`max-h-screen sticky left-0 top-0 bottom-0 bg-white shadow-lg transition-all duration-300 ${
@@ -595,11 +620,16 @@ function AdminDashboard() {
                     <DashboardCards
                       totalclients={allusers}
                       totalVendors={allvendors}
+                      vendors={handleVendor}
+                      clients={handleclient}
                     />
                   </div>
                   <div className="flex-1 p-4">
                     {" "}
-                    <DashboardInbox />
+                    <DashboardInbox
+                      viewDetails={handleproduct}
+                      products={products}
+                    />
                   </div>
                 </div>
               </div>
@@ -786,20 +816,20 @@ function AdminDashboard() {
                                               </span>
                                               <div className="absolute top-0 left-0 w-full h-full bg-white/90 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                                                 <button
-                                                  className="bg-green-500 text-white px-2 py-1 rounded-md mr-2 hover:bg-green-600"
+                                                  className="bg-gray-100 text-green-600 p-3 rounded-full mr-2 hover:text-gray-100 hover:bg-green-600"
                                                   onClick={() =>
                                                     handleAccept(item.id)
                                                   }
                                                 >
-                                                  Accept
+                                                  <IoCheckmark size={20} />
                                                 </button>
                                                 <button
-                                                  className="bg-red-500 text-white px-2 py-1 rounded-md hover:bg-red-600"
+                                                  className="bg-gray-100 text-red-600 p-3 rounded-full mr-2 hover:text-gray-100 hover:bg-red-600"
                                                   onClick={() =>
                                                     handleReject(item.id)
                                                   }
                                                 >
-                                                  Reject
+                                                  <HiXMark size={20} />
                                                 </button>
                                               </div>
                                             </div>
@@ -845,7 +875,7 @@ function AdminDashboard() {
                                             }}
                                             className=" flex gap-2 items-center w-full text-left px-3 py-2 hover:bg-gray-200"
                                           >
-                                            <VscEye /> view
+                                            <VscEye /> Edit
                                           </button>
                                           <button
                                             onClick={() => {
@@ -1094,6 +1124,7 @@ function AdminDashboard() {
           product={selectedProductview}
           // fetchProducts={fetchProducts}
           handleDelete={handleDelete}
+          updateStatus={handleUpdateStatus}
         />
       )}
     </div>
