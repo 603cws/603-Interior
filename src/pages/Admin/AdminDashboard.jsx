@@ -487,11 +487,11 @@ function AdminDashboard() {
   };
 
   return (
-    <div className="">
-      <div className="flex gap-3 max-h-full overflow-hidden bg-white">
+    <div className="bg-[url('images/admin/Admin.png')] bg-cover bg-center bg-no-repeat p-3 xl:p-5">
+      <div className="flex gap-3 max-h-fit overflow-hidden bg-white">
         {/* sidebar */}
         <div
-          className={`h-screen sticky left-0 top-0 bottom-0 bg-white shadow-lg transition-all duration-300 ${
+          className={`max-h-screen sticky left-0 top-0 bottom-0 bg-white shadow-lg transition-all duration-300 ${
             isExpanded ? "max-w-sm w-60 absolute" : "w-16"
           }`}
           onMouseEnter={() => setIsExpanded(true)}
@@ -571,7 +571,7 @@ function AdminDashboard() {
             />
           </div>
         </div>
-        <div className="flex-1 flex flex-col gap-3 relative h-full px-2">
+        <div className="flex-1 flex flex-col relative h-full px-2">
           {/* header for dashboard */}
           <div className="flex justify-between items-center border-2 rounded-3xl mt-2 sticky top-3 z-10 bg-[#EBF0FF] h-[50px]">
             <div className="mx-3">
@@ -586,9 +586,9 @@ function AdminDashboard() {
 
           {/* div for dashboard */}
           {dashboard && (
-            <div className="w-full  border-2 border-[#000] rounded-3xl bg-[#EBF0FF] ">
+            <div className="w-full  border-2 border-[#000] rounded-3xl bg-[#EBF0FF] my-2.5">
               {/* for dashboard */}
-              <div className="w-full flex overflow-y-auto scrollbar-hide h-[calc(100vh-100px)] py-2 px-3">
+              <div className="w-full flex overflow-y-auto scrollbar-hide h-[calc(100vh-120px)] py-2 px-3">
                 {/* <p>this part is under working</p> */}
                 <div className="xl:flex justify-evenly gap-4 w-full">
                   <div className="p-4">
@@ -608,8 +608,8 @@ function AdminDashboard() {
 
           {/* setting */}
           {isSettingOpen && (
-            <div className="flex-1  border-2 border-[#000] rounded-3xl ">
-              <div className="overflow-y-hidden scrollbar-hide h-[calc(100vh-100px)] py-2 relative">
+            <div className="flex-1  border-2 border-[#000] rounded-3xl my-2.5">
+              <div className="overflow-y-hidden scrollbar-hide h-[calc(100vh-120px)] py-2 relative">
                 <div className="flex flex-col justify-between  pt-2 sticky top-0">
                   {/* <h3 className="capitalize font-semibold px-4 text-xl border-b-2 border-b-[#ccc]">
                       setting
@@ -647,8 +647,8 @@ function AdminDashboard() {
 
           {/* product */}
           {isProductOpen && (
-            <div className="flex-1  border-2 border-[#000] rounded-3xl ">
-              <div className="overflow-y-auto scrollbar-hide h-[calc(100vh-100px)] rounded-3xl relative ">
+            <div className="flex-1  border-2 border-[#000] rounded-3xl my-2.5">
+              <div className="overflow-y-auto scrollbar-hide h-[calc(100vh-120px)] rounded-3xl relative ">
                 {addNewProduct ? (
                   <VendorNewProduct
                     setAddNewProduct={setAddNewProduct}
@@ -994,9 +994,9 @@ function AdminDashboard() {
 
           {/*vendor page */}
           {isvendoropen && !vendorproductlist && (
-            <div className="w-full  bg-[#EBF0FF] rounded-3xl ">
+            <div className="w-full  bg-[#EBF0FF] rounded-3xl my-2.5">
               {/* for dashboard */}
-              <div className="w-full flex flex-col overflow-y-auto scrollbar-hide h-[calc(100vh-100px)] pb-2 px-3">
+              <div className="w-full flex flex-col overflow-y-auto scrollbar-hide h-[calc(100vh-120px)] pb-2 px-3">
                 <div className=" sticky top-0 z-20 bg-[#EBF0FF] rounded-lg">
                   <div className="flex justify-between items-center px-4 py-2 border-b-2 border-b-gray-400 ">
                     <h3 className="capitalize font-semibold text-xl ">
@@ -1077,8 +1077,8 @@ function AdminDashboard() {
 
           {/* create profile */}
           {createProfile && (
-            <div className="flex-1 bg-[#EBF0FF] border-2 border-[#000] rounded-3xl ">
-              <div className="overflow-y-auto scrollbar-hide h-[calc(100vh-100px)] rounded-3xl relative ">
+            <div className="flex-1 bg-[#EBF0FF] border-2 border-[#000] rounded-3xl my-2.5">
+              <div className="overflow-y-auto scrollbar-hide h-[calc(100vh-120px)] rounded-3xl relative ">
                 <CreateUser />
               </div>
             </div>

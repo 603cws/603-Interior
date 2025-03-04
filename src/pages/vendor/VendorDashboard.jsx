@@ -258,12 +258,12 @@ function VendorDashboard() {
   );
 
   return (
-    <div className="">
-      <div className="flex gap-3 max-h-screen overflow-y-hidden">
+    <div className="bg-[url('images/admin/Admin.png')] bg-cover bg-center bg-no-repeat p-3 xl:p-5">
+      <div className="flex gap-3 overflow-y-hidden max-h-fit bg-white rounded-3xl">
         {/* sidebar */}
         {/* <div className="h-screen max-w-sm bg-red-600"> */}
         <div
-          className={`h-screen sticky left-0 top-0 bottom-0 bg-white shadow-lg transition-all duration-300 ${
+          className={`max-h-screen sticky left-0 top-0 bottom-0 bg-white shadow-lg transition-all duration-300 ${
             isExpanded ? "max-w-sm w-60" : "w-16"
           }`}
           onMouseEnter={() => setIsExpanded(true)}
@@ -345,7 +345,7 @@ function VendorDashboard() {
             />
           </div>
         </div>
-        <div className="flex-1 flex flex-col gap-3 relative h-full px-2">
+        <div className="flex-1 flex flex-col relative h-full px-2">
           {/* header for dashboard */}
           <div className="flex justify-between items-center border-2 rounded-3xl mt-2 sticky top-3 z-10 bg-white h-[50px]">
             <div className="mx-3">
@@ -363,10 +363,10 @@ function VendorDashboard() {
           </div>
 
           {/* div for content */}
-          <div className="flex-1  border-2 border-gray-400 rounded-3xl">
+          <div className="flex-1  border-2 border-gray-400 rounded-3xl my-2">
             {/* for dashboard */}
             {isProductOpen && (
-              <div className="overflow-y-auto scrollbar-hide h-[calc(100vh-100px)] rounded-3xl relative ">
+              <div className="overflow-y-auto scrollbar-hide h-[calc(100vh-120px)] rounded-3xl relative ">
                 {addNewProduct ? (
                   <VendorNewProduct
                     setAddNewProduct={setAddNewProduct}
@@ -659,7 +659,7 @@ function VendorDashboard() {
 
             {/* setting */}
             {isSettingOpen && (
-              <div className="overflow-y-hidden scrollbar-hide h-[calc(100vh-100px)] py-2 relative">
+              <div className="overflow-y-hidden scrollbar-hide h-[calc(100vh-120px)] py-2 relative">
                 <div className="flex flex-col justify-between  pt-2 sticky top-0">
                   {/* <h3 className="capitalize font-semibold px-4 text-xl border-b-2 border-b-[#ccc]">
                     setting

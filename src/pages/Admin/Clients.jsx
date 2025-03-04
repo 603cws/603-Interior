@@ -2,9 +2,9 @@ import { FaBuilding } from "react-icons/fa";
 
 function Clients({ isExpanded, filterByMultipleFields, filteredusers, query }) {
   return (
-    <div className="w-full  bg-[#EBF0FF] rounded-3xl ">
+    <div className="w-full  bg-[#EBF0FF] rounded-3xl my-2.5">
       {/* for dashboard */}
-      <div className="w-full flex flex-col overflow-y-auto scrollbar-hide h-[calc(100vh-100px)] pb-2 px-3">
+      <div className="w-full flex flex-col overflow-y-auto scrollbar-hide h-[calc(100vh-120px)] pb-2 px-3">
         {/* <div className="w-full flex flex-col overflow-y-auto scrollbar-hide h-[calc(100vh-200px)] pb-2 px-3"> */}
         <div className=" sticky top-0 z-20 bg-[#EBF0FF] rounded-lg">
           <div className="flex justify-between items-center px-4 py-2 border-b-2 border-b-gray-400 ">
