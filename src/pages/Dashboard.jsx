@@ -1,13 +1,13 @@
 import { RiDashboardFill } from "react-icons/ri";
 import { MdOutlineModeEdit, MdDeleteOutline } from "react-icons/md";
-import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
+// import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useApp } from "../Context/Context";
 import { supabase } from "../services/supabase";
 import toast from "react-hot-toast";
-import { useEffect, useState } from "react";
-// import VendorProfile from "./vendor/VendorProfile";
-// import VendorSetting from "./vendor/VendorSetting";
+import { useEffect, useState, useRef } from "react";
+import { VscEye } from "react-icons/vsc";
+import { CiMenuKebab } from "react-icons/ci";
 import UserProfile from "./user/UserProfile";
 import UserSetting from "./user/UserSetting";
 import { FaArrowLeft } from "react-icons/fa6";
@@ -15,14 +15,16 @@ import { VscSignOut } from "react-icons/vsc";
 import { IoSettingsSharp } from "react-icons/io5";
 import { LuBlend } from "react-icons/lu";
 import { TiHomeOutline } from "react-icons/ti";
-
 import { FaAngleDown, FaAngleUp } from "react-icons/fa";
 import { BsQuestionCircle } from "react-icons/bs";
 import Spinner from "../common-components/Spinner";
-const percentage = 66;
+import DashboardProductCard from "./vendor/DashboardProductCard";
+import SidebarItem from "../common-components/SidebarItem";
+// const percentage = 66;
 
 function Dashboard() {
   const navigate = useNavigate();
+  const location = useLocation();
   // const [productlist, setProductlist] = useState(true);
   const [isSettingOpen, setIsSettingOpen] = useState(false);
   const [isProductOpen, setIsProductOpen] = useState(false);
@@ -33,7 +35,6 @@ function Dashboard() {
   const [expandedIndex, setExpandedIndex] = useState();
   const [isExpanded, setIsExpanded] = useState(false);
   const [boqdata, setboqdata] = useState();
-
   const {
     accountHolder,
     setAccountHolder,
@@ -42,25 +43,155 @@ function Dashboard() {
     setTotalArea,
     layoutImage,
   } = useApp();
-  const location = useLocation();
-  console.log("layout image", layoutImage);
 
-  useEffect(() => {
-    if (location.state?.openSettings) {
-      setIsProductOpen(false);
-      setDashboard(false);
-      setIsSettingOpen(true);
-      setHelp(false);
-      setCurrentSection("Setting");
+  //selectedboq
+  const [selectedBoq, setSelectedBoq] = useState();
+
+  const [products, setProducts] = useState([]);
+  const [addons, setAddons] = useState([]);
+
+  const menuRef = useRef({});
+  const buttonRef = useRef({});
+
+  // loading
+  const [isloading, setIsloading] = useState(false);
+  const [productlist, setProductlist] = useState(true);
+
+  const [openMenuId, setOpenMenuId] = useState(null); // Store the ID of the row with an open menu
+  // const [isExpanded, setIsExpanded] = useState(false);
+  const [selectedProductview, setSelectedProductview] = useState({
+    product_name: "",
+    product_price: "",
+    product_image: "",
+    product_description: "",
+  });
+  const [productPreview, setProductPreview] = useState(false);
+
+  const [toggle, setToggle] = useState(true);
+  const [selectedTab, setSelectedTab] = useState("products");
+
+  const tabs = [
+    { name: "Products", value: "products" },
+    { name: "Add-Ons", value: "addons" },
+  ];
+
+  const [itemsPerPage, setItemsPerPage] = useState(10); // Default (gets updated dynamically)
+  const [currentPage, setCurrentPage] = useState(1);
+  const items = toggle ? products : addons;
+  const totalPages = Math.ceil(items.length / itemsPerPage);
+  const tableRef = useRef(null);
+  //boqdata available or not
+  const [isboqavailable, setIsboqavailable] = useState(false);
+
+  //baseurlforimg
+  const baseImageUrl =
+    "https://bwxzfwsoxwtzhjbzbdzs.supabase.co/storage/v1/object/public/addon/";
+
+  // Slice the items for pagination
+  const paginatedItems = items.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
+  const goToPage = (page) => {
+    if (page > 0 && page <= totalPages) {
+      setCurrentPage(page);
     }
-    if (location.state?.openHelp) {
-      setIsSettingOpen(false);
-      setIsProductOpen(false);
-      setDashboard(false);
-      setHelp(true);
-      setCurrentSection("Help");
+  };
+
+  const fetchAddonsByIds = async () => {
+    try {
+      setIsloading(true);
+      if (!selectedBoq) {
+        return;
+      }
+
+      if (selectedBoq) {
+        const productIdsArray = selectedBoq.addon_varaint_id
+          .split(",")
+          .map((id) => id.trim());
+
+        const { data } = await supabase
+          .from("addon_variants")
+          .select("*")
+          .in("id", productIdsArray); // Use Supabase `in()` filter
+
+        console.log(data);
+
+        setAddons(data);
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsloading(false);
     }
-  }, [location.state]);
+  };
+
+  //fetch the product based on the selected boq
+  const fetchProductsByIds = async () => {
+    try {
+      setIsloading(true);
+      if (!selectedBoq) {
+        return;
+      }
+
+      const productIdsArray = selectedBoq.product_variant_id
+        .split(",")
+        .map((id) => id.trim()); // Convert to array of numbers
+
+      const { data } = await supabase
+        .from("product_variants")
+        .select("*,products(*)")
+        .in("id", productIdsArray); // Use Supabase `in()` filter
+
+      console.log(data);
+
+      setProducts(data);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsloading(false);
+    }
+  };
+
+  const handleMenuToggle = (id) => {
+    setOpenMenuId((prev) => (prev === id ? null : id));
+  };
+
+  const handleProductPreview = (product) => {
+    console.log("in function handleProductPreview", product);
+
+    setProductPreview(true);
+    setSelectedProductview(product);
+  };
+
+  const handleDelete = async (product) => {
+    if (!product.id) return;
+
+    try {
+      const { error } = await supabase
+        .from("product_variants") // Ensure this matches your table name
+        .delete()
+        .eq("id", product.id);
+
+      if (error) throw error; // Throw error to be caught in catch block
+
+      toast.success("Product deleted successfully!");
+      setProductPreview(false); // Close the modal after deletion
+    } catch (error) {
+      toast.error("Failed to delete product.");
+      console.error("Delete error:", error);
+    }
+    // fetchProducts(1); // Fetch products after deletion
+  };
+
+  const handleTabClick = (event) => {
+    setProductlist(true);
+    // setIsAddProduct(false);
+    const tab = event.target.value; // Get value from button
+    setSelectedTab(tab);
+    setToggle(tab === "products"); // Set toggle dynamically
+  };
 
   const handlesetting = () => {
     setIsProductOpen(false);
@@ -132,20 +263,77 @@ function Dashboard() {
 
       console.log(data);
       setboqdata(data);
+      setIsboqavailable(true);
     } catch (error) {
       console.log(error);
     }
   };
 
   useEffect(() => {
-    fetchboq();
+    const calculateItemsPerPage = () => {
+      if (tableRef.current) {
+        const tableHeight = tableRef.current.clientHeight; // Get table's available height
+        const rowHeight = 60; // Approximate row height (adjust if needed)
+        const headerHeight = 50; // Height of the table header
+        const maxRows = Math.floor((tableHeight - headerHeight) / rowHeight);
+
+        // setItemsPerPage(maxRows > 0 ? maxRows : 1); // Ensure at least 1 row is shown
+      }
+    };
+
+    calculateItemsPerPage();
+    window.addEventListener("resize", calculateItemsPerPage);
+    return () => window.removeEventListener("resize", calculateItemsPerPage);
   }, []);
 
-  // useEffect(() => {
-  //   if (!layoutImage) {
-  //     return <Spinner />;
-  //   }
-  // }, [layoutImage]);
+  useEffect(() => {
+    fetchProductsByIds();
+    fetchAddonsByIds();
+  }, [selectedBoq]);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      // If clicking inside the menu OR the menu button, do nothing
+      if (
+        openMenuId !== null &&
+        (menuRef.current[openMenuId]?.contains(event.target) ||
+          buttonRef.current[openMenuId]?.contains(event.target))
+      ) {
+        return;
+      }
+
+      // Otherwise, close the menu
+      setOpenMenuId(null);
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [openMenuId, fetchAddonsByIds, fetchProductsByIds]);
+
+  // console.log("layout image", layoutImage);
+
+  useEffect(() => {
+    if (location.state?.openSettings) {
+      setIsProductOpen(false);
+      setDashboard(false);
+      setIsSettingOpen(true);
+      setHelp(false);
+      setCurrentSection("Setting");
+    }
+    if (location.state?.openHelp) {
+      setIsSettingOpen(false);
+      setIsProductOpen(false);
+      setDashboard(false);
+      setHelp(true);
+      setCurrentSection("Help");
+    }
+  }, [location.state]);
+
+  useEffect(() => {
+    fetchboq();
+  }, []);
 
   const accordionItems = [
     {
@@ -165,25 +353,12 @@ function Dashboard() {
     },
   ];
 
-  const SidebarItem = ({ icon, text, onClick, isExpanded }) => (
-    <div
-      className={`flex items-center mx-4 gap-3 hover:bg-[#B4EAEA] p-2 rounded cursor-pointer ${
-        isExpanded ? "" : "justify-center"
-      }`}
-      onClick={onClick}
-    >
-      <div className="text-2xl">{icon}</div>
-      <span className={`${isExpanded ? "block" : "hidden"}`}>{text}</span>
-    </div>
-  );
+  // console.log("selectedboq", selectedBoq);
 
   return (
-    // <div className="bg-[url('images/admin/Admin.png')] bg-cover bg-center bg-no-repeat  p-5 max-h-full">
     <div className="">
       <div className="flex gap-3 max-h-screen overflow-hidden bg-white">
-        {/* <div className="flex gap-3 max-h-screen overflow-y-hidden bg-white"> */}
         {/* sidebar */}
-        {/* <div className="h-screen max-w-sm bg-red-600"> */}
         <div
           className={`h-screen sticky left-0 top-0 bottom-0 bg-white shadow-lg transition-all duration-300 ${
             isExpanded ? "max-w-sm w-60 absolute" : "w-16"
@@ -340,22 +515,24 @@ function Dashboard() {
                   <div className="p-3">
                     <h3 className="capitalize font-bold ">BOQ generated</h3>
 
-                    {/* boq card
-                    {boqdata.map((boq) => {
-                      return (
-                   
-                      );
-                    })} */}
-
-                    <div className="rounded-3xl border-2 border-[#ccc] max-w-sm p-2">
-                      <div className="flex justify-end gap-2 p-2">
-                        <MdOutlineModeEdit size={30} />
-                        <MdDeleteOutline size={30} />
-                      </div>
-                      <div>
-                        <h3 className="font-bold">Lorem, ipsum.</h3>
-                      </div>
-                    </div>
+                    {/* boq card */}
+                    {isboqavailable &&
+                      boqdata.map((boq, index) => {
+                        return (
+                          <div
+                            key={boq.title}
+                            className="rounded-3xl border-2 border-[#ccc] max-w-sm p-2 mb-3"
+                          >
+                            <div className="flex justify-end gap-2 p-2">
+                              <MdOutlineModeEdit size={30} />
+                              <MdDeleteOutline size={30} />
+                            </div>
+                            <div>
+                              <h3 className="font-bold">{boq.title}</h3>
+                            </div>
+                          </div>
+                        );
+                      })}
 
                     {/* <div className="w-32 h-32">
                       <CircularProgressbar
@@ -387,21 +564,13 @@ function Dashboard() {
                       />
                     </div> */}
                   </div>
-                  {/* <div>
-                    <p>
-                      Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-                      Magni quos fugiat reiciendis temporibus nulla eius maxime
-                      quidem? Libero eum laborum ut, dolorum corrupti autem
-                      voluptate,
-                    </p>
-                  </div> */}
                 </div>
                 <div className="w-1/3  flex justify-center">
                   <div className="border-2 p-4 rounded-xl h-96">
                     {layoutImage ? (
                       <img
                         src={layoutImage}
-                        alt="layout image"
+                        alt="layout"
                         className="h-80 w-80"
                       />
                     ) : (
@@ -418,9 +587,6 @@ function Dashboard() {
             <div className="flex-1  border-2 border-[#000] rounded-3xl ">
               <div className="overflow-y-hidden scrollbar-hide h-[calc(100vh-100px)] py-2 relative">
                 <div className="flex flex-col justify-between  pt-2 sticky top-0">
-                  {/* <h3 className="capitalize font-semibold px-4 text-xl border-b-2 border-b-[#ccc]">
-                      setting
-                    </h3> */}
                   <div className="border-b-2 border-b-[#ccc] py-2 px-4">
                     {iseditopen ? (
                       <button className="capitalize font-medium text-base px-10 py-2 rounded-2xl border-[#000] border bg-[#B4EAEA]">
@@ -455,7 +621,224 @@ function Dashboard() {
           {/* product */}
           {isProductOpen && (
             <div className="flex-1  border-2 border-[#000] rounded-3xl ">
-              <h3>product list will be displayed here</h3>
+              <div className="overflow-y-auto scrollbar-hide h-[calc(100vh-100px)] rounded-3xl relative ">
+                {/* // Default product list and add product UI */}
+                <div className=" sticky top-0">
+                  <div className="flex items-center gap-5 px-4 py-2 border-b-2 border-b-gray-400 ">
+                    <h3 className=" font-semibold text-xl ">BOQs</h3>
+                    {isboqavailable &&
+                      boqdata.map((boq, index) => {
+                        return (
+                          <div
+                            key={boq.title}
+                            className="rounded-3xl border-2 border-[#ccc] px-5 py-3"
+                          >
+                            <button
+                              onClick={() => setSelectedBoq(boq)}
+                              className="font-bold"
+                            >
+                              {boq.title}
+                            </button>
+                          </div>
+                        );
+                      })}
+                  </div>
+                  <div className="flex gap-3 px-4 py-2 border-b-2 border-b-gray-400">
+                    {tabs.map((tab) => (
+                      <button
+                        key={tab.value}
+                        className={`flex items-center gap-2 px-6 py-2 border rounded-xl ${
+                          selectedTab === tab.value
+                            ? "bg-[#B4EAEA]"
+                            : "bg-white "
+                        }`}
+                        value={tab.value}
+                        onClick={handleTabClick} // Dynamically sets the tab
+                      >
+                        {tab.name}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+                {/*  */}
+                {productlist &&
+                  (isloading ? (
+                    <Spinner />
+                  ) : items.length > 0 ? (
+                    // <section className="mt-2 flex-1 overflow-hidden px-8">
+                    <section className=" h-[90%] font-Poppins overflow-hidden">
+                      <div className="w-full h-full border-t border-b border-[#CCCCCC] overflow-y-auto custom-scrollbar">
+                        <table
+                          className="min-w-full border-collapse"
+                          ref={tableRef}
+                        >
+                          <thead className="bg-[#FFFFFF] sticky top-0 z-10 px-8 text-center text-[#000] text-base">
+                            <tr>
+                              {toggle ? (
+                                <th className="p-3 font-medium">
+                                  Product Name
+                                </th>
+                              ) : (
+                                <th className="p-3 font-medium">Addon ID</th>
+                              )}
+                              <th className="p-3  font-medium">Price</th>
+                              {toggle ? (
+                                <>
+                                  {/* <th className="p-3 font-medium">
+                                        Details
+                                      </th> */}
+                                  <th className="p-3 font-medium">Category</th>
+                                  <th className="p-3 font-medium">
+                                    specification
+                                  </th>
+                                </>
+                              ) : (
+                                <th className="p-3 font-medium">Addon Title</th>
+                              )}
+                              <th className="p-3 font-medium">Action</th>
+                            </tr>
+                          </thead>
+                          <tbody className=" text-sm">
+                            {paginatedItems.map((item) => (
+                              <tr
+                                key={item.id}
+                                className="hover:bg-gray-50 cursor-pointer"
+                              >
+                                <td className="border border-gray-200 p-3 align-middle">
+                                  <div className="flex items-center gap-2">
+                                    <img
+                                      src={`${baseImageUrl}${item.image}`}
+                                      alt={item.title}
+                                      className="w-10 h-10 object-cover rounded"
+                                    />
+                                    {toggle ? (
+                                      <span>{item.title}</span>
+                                    ) : (
+                                      <span className="text-wrap">
+                                        {item.id}
+                                      </span>
+                                    )}
+                                  </div>
+                                </td>
+                                <td className="border border-gray-200 p-3 align-middle">
+                                  ₹{item.price}
+                                </td>
+                                {toggle ? (
+                                  <>
+                                    <td className="border border-gray-200 p-3 align-middle">
+                                      {item.products?.category || "N/A"}
+                                    </td>
+                                    <td className="border border-gray-200 p-3 align-middle">
+                                      {item.products?.subcategory1 || "N/A"}
+                                    </td>
+                                  </>
+                                ) : (
+                                  <td className="border border-gray-200 p-3 align-middle">
+                                    {item.addons?.title || item.title}
+                                  </td>
+                                )}
+                                <td className="border border-gray-200 p-3 align-middle flex justify-center items-center relative">
+                                  <button
+                                    ref={(el) =>
+                                      (buttonRef.current[item.id] = el)
+                                    }
+                                    className="bg-white flex justify-center items-center py-1.5 w-20 mb-2"
+                                    onClick={() => handleMenuToggle(item.id)}
+                                  >
+                                    <CiMenuKebab size={25} />
+                                  </button>
+
+                                  {openMenuId === item.id && (
+                                    <div
+                                      ref={(el) =>
+                                        (menuRef.current[item.id] = el)
+                                      }
+                                      className="absolute top-1/2 left-0 transform mt-2 bg-white border border-gray-300 shadow-md rounded-md w-24 z-10"
+                                    >
+                                      <button
+                                        onClick={() => {
+                                          handleProductPreview(item);
+                                        }}
+                                        className=" flex gap-2 items-center w-full text-left px-3 py-2 hover:bg-gray-200"
+                                      >
+                                        <VscEye /> view
+                                      </button>
+                                      {/* <button
+                                        onClick={() => {
+                                          handleDelete(item);
+                                        }}
+                                        className="flex gap-2 items-center w-full text-left px-3 py-2 hover:bg-gray-200"
+                                      >
+                                        <MdOutlineDelete /> Delete
+                                      </button> */}
+                                    </div>
+                                  )}
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  ) : (
+                    <>
+                      {selectedBoq ? (
+                        <p className="p-5 text-gray-500 text-center">
+                          No {toggle ? "products" : "addons"} found.
+                        </p>
+                      ) : (
+                        <p className="p-5 text-gray-500 text-center">
+                          please select a boq
+                        </p>
+                      )}
+                    </>
+                  ))}
+                {/* Pagination Controls (Always Visible) */}
+                {totalPages > 1 && (
+                  <div className="flex justify-center items-center gap-2 mt-10 z-30 sticky bottom-0 bg-[#EBF0FF] mb-4 text-[#3d194f]">
+                    <button
+                      onClick={() => goToPage(currentPage - 1)}
+                      disabled={currentPage === 1}
+                      className="px-3 py-1 border rounded disabled:opacity-50 text-[#3d194f]"
+                    >
+                      Previous
+                    </button>
+
+                    {/* Page Numbers */}
+                    {Array.from({ length: totalPages }, (_, i) => i + 1).map(
+                      (page) =>
+                        page === 1 ||
+                        page === totalPages ||
+                        (page >= currentPage - 1 && page <= currentPage + 1) ? (
+                          <button
+                            key={page}
+                            onClick={() => goToPage(page)}
+                            className={`w-8 h-8 flex items-center justify-center  ${
+                              currentPage === page
+                                ? "bg-[#aca9d3] text-white rounded-full "
+                                : "rounded-md text-[#3d194f]"
+                            }`}
+                          >
+                            {page}
+                          </button>
+                        ) : page === currentPage + 2 ||
+                          page === currentPage - 2 ? (
+                          <span key={page} className="px-2">
+                            ...
+                          </span>
+                        ) : null
+                    )}
+
+                    <button
+                      onClick={() => goToPage(currentPage + 1)}
+                      disabled={currentPage === totalPages}
+                      className="px-3 py-1 border rounded disabled:opacity-50 text-[#3d194f]"
+                    >
+                      Next
+                    </button>
+                  </div>
+                )}
+              </div>
             </div>
           )}
 
@@ -484,13 +867,7 @@ function Dashboard() {
                           className="flex w-full text-left p-4 bg-gray-100 hover:bg-gray-200 focus:outline-none justify-between cursor-pointer rounded-xl"
                           onClick={() => handleToggle(index)}
                         >
-                          <button
-                          // className="w-full text-left p-4 bg-gray-100 hover:bg-gray-200 focus:outline-none"
-                          // className="w-full text-left p-4 "
-                          // onClick={() => handleToggle(index)}
-                          >
-                            {item.title}
-                          </button>
+                          <button>{item.title}</button>
                           {expandedIndex === index ? (
                             <FaAngleUp />
                           ) : (
@@ -530,6 +907,17 @@ function Dashboard() {
           )}
         </div>
       </div>
+      {/* product preview */}
+      {productPreview && (
+        <DashboardProductCard
+          onClose={() => {
+            setProductPreview(false);
+          }}
+          product={selectedProductview}
+          // fetchProducts={fetchProducts}
+          handleDelete={handleDelete}
+        />
+      )}
     </div>
   );
 }
