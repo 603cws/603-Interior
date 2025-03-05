@@ -19,7 +19,6 @@ export const AppProvider = ({ children }) => {
   const [totalAreaSource, setTotalAreaSource] = useState(""); // Track the source of updates
   const [progress, setProgress] = useState(0);
   const [userId, setUserId] = useState(null);
-  const [height, setHeight] = useState(10);
   const [loading, setLoading] = useState(true);
 
   const [selectedCategory, setSelectedCategory] = useState(null); //Gets value after data fetching
@@ -328,8 +327,6 @@ export const AppProvider = ({ children }) => {
         selectedAddons,
         setSelectedAddons,
         categoriesWithModal,
-        height,
-        setHeight,
         categoriesWithTwoLevelCheck,
         userResponses,
         setUserResponses,

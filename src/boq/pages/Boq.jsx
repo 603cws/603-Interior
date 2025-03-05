@@ -32,6 +32,7 @@ import BoqPrompt from "../components/BoqPrompt"; // Import the BOQ modal
 function Boq() {
   const [showBoqPrompt, setShowBoqPrompt] = useState(false);
   const [boqTitle, setBoqTitle] = useState("");
+  const [existingBoqs, setExistingBoqs] = useState([]); // Stores fetched BOQs
 
   const [selectedProductView, setSelectedProductView] = useState([]);
   const [productsData, setProductData] = useState([]);
@@ -82,8 +83,6 @@ function Boq() {
     selectedAddons,
     setSelectedAddons,
     categoriesWithModal,
-    height,
-    setHeight,
     userResponses,
     setUserResponses,
     showProfile,
@@ -103,12 +102,6 @@ function Boq() {
   //   setTotalArea(roomData.areasData[0]?.totalArea);
   //   // setUserId(roomData.areasData[0]?.userId);
   // }, [roomData]);
-
-  useEffect(() => {
-    if (userResponses.height) {
-      setHeight(userResponses.height);
-    }
-  }, [userResponses]);
 
   useEffect(() => {
     if (selectedCategory) {
@@ -493,7 +486,7 @@ function Boq() {
       actualCategory,
       actualSubCategory,
       actualSubCategory1,
-      height,
+      userResponses.height,
       addon
     );
 
@@ -513,7 +506,7 @@ function Boq() {
       actualCategory,
       actualSubCategory,
       actualSubCategory1,
-      height
+      userResponses.height
     );
 
     // Define price calculation based on category and subcategories
@@ -601,7 +594,7 @@ function Boq() {
       cat,
       subcategory,
       subcategory1,
-      height
+      userResponses.height
     );
 
     let total = 0;
@@ -1147,14 +1140,14 @@ function Boq() {
         addon_id: selectedData
           .flatMap((item) =>
             item.addons
-              ? Object.values(item.addons).map((addon) => addon.addonId)
+              ? Object.values(item.addons).map((addon) => addon.addonid)
               : []
           )
           .join(","),
         addon_variant_id: selectedData
           .flatMap((item) =>
             item.addons
-              ? Object.values(item.addons).map((addon) => addon.variantID)
+              ? Object.values(item.addons).map((addon) => addon.variantid)
               : []
           )
           .join(","),
@@ -1165,6 +1158,11 @@ function Boq() {
         userId: userId,
         title: boqTitle, // Save the entered BOQ name
         total_area: totalArea,
+        height: userResponses.height,
+        flooring: userResponses.flooring,
+        demolishTile: userResponses.demolishTile,
+        hvacType: userResponses.hvac,
+        planType: selectedPlan,
         final_price: selectedData
           .map((item) => item.finalPrice || "")
           .filter(Boolean) // Removes empty strings
@@ -1193,14 +1191,14 @@ function Boq() {
       return;
     }
 
-    // Check user's existing BOQs
+    // Fetch user's existing BOQs
     const { data: existingBOQs, error: fetchError } = await supabase
       .from("boqdata")
-      .select("id", { count: "exact" })
+      .select("id, title") // Fetch ID and title
       .eq("userId", userId);
 
     if (fetchError) {
-      console.error("Error fetching user BOQ count:", fetchError);
+      console.error("Error fetching user BOQs:", fetchError);
       return;
     }
 
@@ -1209,16 +1207,74 @@ function Boq() {
       return;
     }
 
-    // Show BOQ name prompt
-    setShowBoqPrompt(true);
+    if (existingBOQs.length > 0) {
+      setShowBoqPrompt(true); // Show the prompt for choosing or naming the BOQ
+      setExistingBoqs(existingBOQs); // Store the fetched BOQs for selection
+    } else {
+      setShowBoqPrompt(true); // If no existing BOQs, directly show naming prompt
+    }
   };
 
-  const handleBoqNameConfirm = (name) => {
-    setBoqTitle(name);
+  const handleBoqNameConfirm = (nameOrId, isNew = true) => {
     setShowBoqPrompt(false);
 
-    // Now insert the data
-    insertDataIntoSupabase(selectedData, userId, name, totalArea);
+    if (isNew) {
+      setBoqTitle(nameOrId); // If it's a new BOQ, use the entered name
+      insertDataIntoSupabase(selectedData, userId, nameOrId, totalArea);
+    } else {
+      updateExistingBoq(nameOrId); // If updating an existing BOQ, use its ID
+    }
+  };
+
+  const updateExistingBoq = async (boqId) => {
+    try {
+      const { error } = await supabase
+        .from("boqdata")
+        .update({
+          product_id: selectedData.map((item) => item.id).join(","),
+          product_variant_id: selectedData
+            .map((item) => item.product_variant?.variant_id || "")
+            .join(","),
+          addon_id: selectedData
+            .flatMap((item) =>
+              item.addons
+                ? Object.values(item.addons).map((addon) => addon.addonId)
+                : []
+            )
+            .join(","),
+          addon_variant_id: selectedData
+            .flatMap((item) =>
+              item.addons
+                ? Object.values(item.addons).map((addon) => addon.variantID)
+                : []
+            )
+            .join(","),
+          group_key: selectedData
+            .map((item) => item.groupKey || "")
+            .filter(Boolean)
+            .join(","),
+          final_price: selectedData
+            .map((item) => item.finalPrice || "")
+            .filter(Boolean)
+            .join(","),
+          total_area: totalArea,
+          height: userResponses.height,
+          flooring: userResponses.flooring,
+          demolishTile: userResponses.demolishTile,
+          hvacType: userResponses.hvac,
+          planType: selectedPlan,
+        })
+        .eq("id", boqId);
+
+      if (error) {
+        console.error("Error updating existing BOQ:", error);
+        toast.error("Failed to update BOQ.");
+      } else {
+        toast.success("BOQ updated successfully!");
+      }
+    } catch (error) {
+      console.error("Error during update:", error);
+    }
   };
 
   // const handleSave = () => {
@@ -1579,6 +1635,7 @@ function Boq() {
     <div>
       {showBoqPrompt && (
         <BoqPrompt
+          existingBoqs={existingBoqs}
           onConfirm={handleBoqNameConfirm}
           onCancel={() => setShowBoqPrompt(false)}
         />
