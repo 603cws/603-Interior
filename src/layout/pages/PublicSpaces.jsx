@@ -111,6 +111,7 @@ const PublicSpaces = ({
           return (
             <LayoutCard
               key={space.type}
+              roomType={space.type}
               image={space.image}
               description={space.description}
               counterValue={areaQuantities[space.type] || 0}

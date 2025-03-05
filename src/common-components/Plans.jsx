@@ -9,12 +9,12 @@ const plansData = [
     planNumber: "01",
     title: "Minimal",
     bullets: [
-      "The brand proposes their budget",
-      "The brand proposes their budget",
-      "The brand proposes their budget",
-      "The brand proposes their budget",
+      "Budget-friendly with essential features.",
+      "Standard quality materials.",
+      "No luxury add-ons.",
+      "Quick and simple execution.",
     ],
-    image: "/images/plan1.png",
+    image: "/images/plan-minimal.webp",
     planKey: "Minimal",
   },
   {
@@ -22,12 +22,12 @@ const plansData = [
     planNumber: "02",
     title: "Exclusive",
     bullets: [
-      "The brand proposes their budget",
-      "The brand proposes their budget",
-      "The brand proposes their budget",
-      "The brand proposes their budget",
+      "Premium materials with a refined look.",
+      "Stylish finishes and modern features.",
+      "Balanced cost and luxury.",
+      "Energy-efficient solutions.",
     ],
-    image: "/images/plan1.png",
+    image: "/images/plan-exclusive.jpg",
     planKey: "Exclusive",
   },
   {
@@ -35,12 +35,12 @@ const plansData = [
     planNumber: "03",
     title: "Luxury",
     bullets: [
-      "The brand proposes their budget",
-      "The brand proposes their budget",
-      "The brand proposes their budget",
-      "The brand proposes their budget",
+      "High-end finishes and designer fittings.",
+      "Smart office integration.",
+      "Custom detailing for a lavish feel.",
+      "Ultimate comfort and sophistication.",
     ],
-    image: "/images/plan1.png",
+    image: "/images/plan-luxury.png",
     planKey: "Luxury",
   },
   {
@@ -53,7 +53,7 @@ const plansData = [
       "Co-branded marketing campaigns",
       "Offline exposure at 603 Co workings",
     ],
-    image: "/images/plan1.png",
+    image: "/images/plan-custom.jpg",
     planKey: "Custom", // used when "Select" is clicked
   },
 ];

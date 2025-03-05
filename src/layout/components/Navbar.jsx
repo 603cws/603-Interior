@@ -4,11 +4,7 @@ import { MdOutlineCancel } from "react-icons/md";
 import { useApp } from "../../Context/Context";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
-// import Typewriter from "typewriter-effect";
 import { supabase } from "../../services/supabase";
-import { useRef, useEffect } from "react";
-
-// import ErrorModal from "../../components/ErrorModal";
 
 // function Navbar({ totalArea, setTotalArea, MIN_AREA, MAX_AREA, resetAll }) {
 function Navbar({
@@ -39,41 +35,10 @@ function Navbar({
     userId,
   } = useApp();
 
-  console.log("user id", userId);
-  console.log("layout img", layoutImage);
+  // console.log("user id", userId);
+  // console.log("layout img", layoutImage);
 
   const navigate = useNavigate();
-
-  // const mapAreaValues = (userId, areaValues, totalArea = null) => {
-  //   return {
-  //     userId: userId || null,
-  //     linear: areaValues.linear,
-  //     lType: areaValues.lType,
-  //     md: areaValues.md,
-  //     manager: areaValues.manager,
-  //     small: areaValues.small,
-  //     ups: areaValues.ups,
-  //     bms: areaValues.bms,
-  //     server: areaValues.server,
-  //     reception: areaValues.reception,
-  //     lounge: areaValues.lounge,
-  //     sales: areaValues.sales,
-  //     phoneBooth: areaValues.phoneBooth,
-  //     discussionRoom: areaValues.discussionRoom,
-  //     interviewRoom: areaValues.interviewRoom,
-  //     conferenceRoom: areaValues.conferenceRoom,
-  //     boardRoom: areaValues.boardRoom,
-  //     meetingRoom: areaValues.meetingRoom,
-  //     meetingRoomLarge: areaValues.meetingRoomLarge,
-  //     hrRoom: areaValues.hrRoom,
-  //     financeRoom: areaValues.financeRoom,
-  //     breakoutRoom: areaValues.breakoutRoom,
-  //     executiveWashroom: areaValues.executiveWashroom,
-  //     videoRecordingRoom: areaValues.videoRecordingRoom,
-  //     other: areaValues.other,
-  //     ...(totalArea !== null && { totalArea }),
-  //   };
-  // };
 
   const mapAreaValues = (
     userId,
@@ -165,11 +130,6 @@ function Navbar({
         await layoutImgRef.current();
       }
 
-      // if (!layoutImage) {
-      //   alert("Failed to generate image");
-      //   return;
-      // }
-
       // Upload image to Supabase
       const imageUrl = await uploadImage(layoutImage || "");
 
@@ -185,7 +145,7 @@ function Navbar({
         console.log("layoutDta", layoutDta);
 
         // Insert into tables
-        const { data: data, error: error } = await supabase
+        const { data, error } = await supabase
           .from("layout")
           .insert([layoutDta])
           .select("id")
@@ -262,7 +222,7 @@ function Navbar({
 
   const handleReset = () => {
     // setInputValue("");
-    setTotalArea("");
+    // setTotalArea();
     setError(false);
     resetAll(); // Call the resetAll function passed from the parent component
   };
@@ -270,7 +230,6 @@ function Navbar({
   return (
     <div>
       {/* navbar */}
-      {/* <div className="flex justify-evenly bg-[#003366] py-2 items-center rounded-full mx-2 mt-2"> */}
       <div className="flex justify-around bg-gradient-to-r from-[#1A3A36] to-[#48A095] py-4 items-center px-5">
         {/* logo */}
         <button className="self-start" onClick={() => navigate("/")}>
@@ -304,7 +263,6 @@ function Navbar({
             onKeyUp={handleSubmit}
             placeholder="Enter total area (sq ft)"
             title="Set the area value here"
-            // className={`set-area-input ${error ? 'error' : ''}`}
             aria-label="Total Area Input"
             data-tip="Enter the total area in square feet"
             autoFocus

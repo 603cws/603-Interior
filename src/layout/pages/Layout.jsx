@@ -73,6 +73,26 @@ const initialQuantities = {
 const MAX_AREA = 25000;
 const MIN_AREA = 1000;
 
+// const calculateReceptionArea = (totalArea) => {
+//   if (totalArea >= 1000 && totalArea < 3500) {
+//     return Math.round(totalArea * 0.08);
+//   } else if (totalArea >= 3500 && totalArea < 4500) {
+//     return Math.round(totalArea * 0.06);
+//   } else if (totalArea >= 4500 && totalArea < 5500) {
+//     return Math.round(totalArea * 0.05);
+//   } else if (totalArea >= 5500 && totalArea < 6500) {
+//     return Math.round(totalArea * 0.045);
+//   } else if (totalArea >= 6500 && totalArea < 12000) {
+//     return 300;
+//   } else if (totalArea >= 12000 && totalArea < 18000) {
+//     return 500;
+//   } else if (totalArea >= 18000 && totalArea <= 25000) {
+//     return 700;
+//   } else {
+//     return 0;
+//   }
+// };
+
 const calculateReceptionArea = (totalArea) => {
   if (totalArea >= 1000 && totalArea < 3500) {
     return Math.round(totalArea * 0.08);
@@ -89,7 +109,7 @@ const calculateReceptionArea = (totalArea) => {
   } else if (totalArea >= 18000 && totalArea <= 25000) {
     return 700;
   } else {
-    return 0;
+    return 1;
   }
 };
 
@@ -334,7 +354,7 @@ function Layout() {
   const [warning, setWarning] = useState(false);
   const [otherArea, setOtherArea] = useState();
 
-  const { totalArea, setTotalArea, totalAreaSource, showProfile } = useApp();
+  const { totalArea, setTotalArea, totalAreaSource } = useApp();
   const [runTour, setRunTour] = useState(false); // Controls whether the tour runs
 
   const [isOpen, setIsOpen] = useState(false);
@@ -346,6 +366,7 @@ function Layout() {
   const iconRef = useRef(null);
 
   console.log("tracking total area", totalArea);
+  console.log("areas", areaValues, "quantity", areaQuantities);
 
   // Close profile card when clicking outside
   useEffect(() => {
@@ -373,6 +394,11 @@ function Layout() {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [isOpen]);
+
+  useEffect(() => {
+    setReceptionSize(areaValues.reception);
+    setLoungeSize(areaValues.lounge);
+  });
 
   //setps for joyride
   const tourSteps = [
@@ -476,10 +502,29 @@ function Layout() {
         phoneBooth: phoneBooth / areaValues.phoneBooth,
         server: server / areaValues.server,
         executiveWashroom: executiveWashroom / areaValues.executiveWashroom,
-        reception: Math.round(receptionArea / areaValues.reception),
-        lounge: Math.round(loungeArea / areaValues.lounge),
+        // reception: Math.round(receptionArea / areaValues.reception),
+        // lounge: Math.round(loungeArea / areaValues.lounge),
         other: otherArea / areaValues.other,
       }));
+
+      if (totalArea >= MIN_AREA && totalArea <= MAX_AREA) {
+        setAreaValues((prevAreaValues) => ({
+          ...prevAreaValues,
+          reception: Math.round(receptionArea),
+          lounge: Math.round(loungeArea),
+        }));
+        setAreaQuantities((prevAreaQuantities) => ({
+          ...prevAreaQuantities,
+          reception: 1,
+          lounge: 1,
+        }));
+      } else {
+        setAreaQuantities((prevAreaQuantities) => ({
+          ...prevAreaQuantities,
+          reception: 0,
+          lounge: 0,
+        }));
+      }
     }
   }, [totalArea, totalAreaSource]);
 
@@ -573,14 +618,9 @@ function Layout() {
   };
 
   const resetAll = () => {
-    setTotalArea();
-    // setSmallCabinSeatCount(0);
-    // setHrRoomSeatCount(0);
-    // setSalesSeatCount(0);
-    // setFinanceRoomSeatCount(0);
+    setTotalArea("");
+    // setInputValue("");
     setAreaQuantities(initialQuantities);
-    // setError(false);
-    // setShowModal(false); // Hide modal on reset
   };
   const handleVariantChange = (newVariant) => {
     setVariant(newVariant);
@@ -759,6 +799,7 @@ function Layout() {
             builtArea={builtArea}
             availableArea={availableArea}
             totalArea={totalArea}
+            MIN_AREA={MIN_AREA}
           />
           <TreeMap
             totalArea={totalArea}

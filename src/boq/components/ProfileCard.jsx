@@ -141,10 +141,12 @@ function ProfileCard({ layout = false }) {
             <RiDashboardFill />
             <button onClick={() => navigate("/dashboard")}>Dashboard</button>
           </div>
-          <div className="flex items-center mx-4 gap-3">
-            <LuLayoutList />
-            <button onClick={() => navigate("/Layout")}>Layout</button>
-          </div>
+          {!layout && (
+            <div className="flex items-center mx-4 gap-3">
+              <LuLayoutList />
+              <button onClick={() => navigate("/Layout")}>Layout</button>
+            </div>
+          )}
           <div className="flex items-center mx-4 gap-3">
             <RxVideo />
             <p>How it works</p>

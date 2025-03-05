@@ -10,7 +10,7 @@ function DashboardInbox({ viewDetails, products }) {
   console.log(filteredpending);
 
   return (
-    <div className="bg-white rounded-3xl shadow-sm p-10 font-Poppins lg:h-[240px] overflow-y-auto">
+    <div className="bg-white rounded-3xl shadow-sm p-10 font-Poppins lg:h-[240px] overflow-y-auto scrollbar-hide">
       <div className="flex justify-between items-center">
         <div>
           <h3 className="text-xl font-bold text-[#252733]">Inbox</h3>
@@ -37,7 +37,7 @@ function DashboardInbox({ viewDetails, products }) {
       {filteredpending.map((product) => {
         return (
           <div
-            key={product}
+            key={product.id}
             className="flex gap-3 justify-between items-center my-5 py-2 border-b-2 hover:bg-gray-100"
           >
             <p className="text-[#252733]">

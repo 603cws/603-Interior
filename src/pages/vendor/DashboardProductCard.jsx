@@ -37,7 +37,7 @@ function DashboardProductCard({
               Category:{product.products?.category}
             </h5>
             <h5 className="uppercase text-[#334A78] font-medium text-xs opacity-80">
-              Specification:{product.product_type}
+              Specification:{product.products?.subcategory1}
             </h5>
             <p className="text-[#334A78] text-sm font-medium">Final Price</p>
             <p className="font-semibold text-[#000] text-xl">

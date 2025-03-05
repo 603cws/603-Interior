@@ -5,6 +5,7 @@ import Tooltip from "./ToolTip";
 import { RxInfoCircled } from "react-icons/rx";
 
 const LayoutCard = ({
+  roomType,
   image,
   description,
   counterValue,
@@ -21,6 +22,9 @@ const LayoutCard = ({
   showAreaCounter, // Boolean to conditionally render AreaCounter
   areaCounterProps, // Props specific to AreaCounter
 }) => {
+  console.log("room type", roomType);
+  console.log("area counter props", areaCounterProps);
+
   return (
     <div className="workspacedescription flex flex-col w-[280px] items-center border border-solid bg-[#fff] pb-2 my-3 relative">
       {/* Image */}
@@ -41,9 +45,11 @@ const LayoutCard = ({
         {/* Counter */}
         {!showInputField && (
           <div className=" flex justify-around mt-2 gap-3">
-            <button onClick={onDecrement}>
-              <PiMinusCircleFill size={30} />
-            </button>
+            {roomType !== "reception" && roomType !== "lounge" && (
+              <button onClick={onDecrement}>
+                <PiMinusCircleFill size={30} />
+              </button>
+            )}
             <input
               type="number"
               className="w-16 border rounded text-center [&::-webkit-inner-spin-button]:appearance-none  focus:outline-none focus:ring-0"
@@ -51,9 +57,11 @@ const LayoutCard = ({
               onChange={(e) => onChange(Number(e.target.value))} // Update counterValue on input change
               min={0}
             />
-            <button onClick={onIncrement}>
-              <PiPlusCircleFill size={30} />
-            </button>
+            {roomType !== "reception" && roomType !== "lounge" && (
+              <button onClick={onIncrement}>
+                <PiPlusCircleFill size={30} />
+              </button>
+            )}
           </div>
         )}
         <p className="text-center font-bold text-sm">{title}</p>
