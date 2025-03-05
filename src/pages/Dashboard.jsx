@@ -20,6 +20,7 @@ import { BsQuestionCircle } from "react-icons/bs";
 import Spinner from "../common-components/Spinner";
 import DashboardProductCard from "./vendor/DashboardProductCard";
 import SidebarItem from "../common-components/SidebarItem";
+import Help from "./user/Help";
 // const percentage = 66;
 
 function Dashboard() {
@@ -56,6 +57,7 @@ function Dashboard() {
   // loading
   const [isloading, setIsloading] = useState(false);
   const [productlist, setProductlist] = useState(true);
+  const [imageIsLoaded, setImageIsLoaded] = useState(false);
 
   const [openMenuId, setOpenMenuId] = useState(null); // Store the ID of the row with an open menu
   // const [isExpanded, setIsExpanded] = useState(false);
@@ -106,7 +108,7 @@ function Dashboard() {
         return;
       }
 
-      if (selectedBoq) {
+      if (selectedBoq && selectedBoq.addon_varaint_id) {
         const productIdsArray = selectedBoq.addon_varaint_id
           .split(",")
           .map((id) => id.trim());
@@ -208,6 +210,15 @@ function Dashboard() {
     setCurrentSection("Product");
   };
 
+  const handlecheckboqdetails = (boq) => {
+    setIsSettingOpen(false);
+    setDashboard(false);
+    setIsProductOpen(true);
+    setHelp(false);
+    setSelectedBoq(boq);
+    setCurrentSection("Product");
+  };
+
   const handledashboard = () => {
     setIsSettingOpen(false);
     setIsProductOpen(false);
@@ -248,10 +259,6 @@ function Dashboard() {
     } finally {
       setIsAuthLoading(false);
     }
-  };
-
-  const handleToggle = (index) => {
-    setExpandedIndex((prevIndex) => (prevIndex === index ? null : index));
   };
 
   const fetchboq = async () => {
@@ -310,7 +317,7 @@ function Dashboard() {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [openMenuId, fetchAddonsByIds, fetchProductsByIds]);
+  }, [openMenuId]);
 
   // console.log("layout image", layoutImage);
 
@@ -335,23 +342,11 @@ function Dashboard() {
     fetchboq();
   }, []);
 
-  const accordionItems = [
-    {
-      title: "1.What is 603 Interiors?",
-      content:
-        "603 Interiors is a tech-driven platform that helps corporates design and set up their office spaces with instant layouts, smart BOQs, and vendor partnerships, ensuring a hassle-free experience",
-    },
-    {
-      title: "2.Who can use 603 Interiors?",
-      content:
-        "Our platform is designed for corporates, startups, office administrators, HR teams, and real estate decision-makers looking for efficient office space planning and execution.",
-    },
-    {
-      title: "3.How does 603 Interiors simplify office setup?",
-      content:
-        "We eliminate the need for lengthy consultations by offering instant office layouts, predefined and custom BOQs, and direct vendor collaboration, saving you time and costs.",
-    },
-  ];
+  useEffect(() => {
+    if (layoutImage && !imageIsLoaded) {
+      setImageIsLoaded(true);
+    }
+  }, [layoutImage]);
 
   // console.log("selectedboq", selectedBoq);
 
@@ -524,7 +519,13 @@ function Dashboard() {
                             className="rounded-3xl border-2 border-[#ccc] max-w-sm p-2 mb-3"
                           >
                             <div className="flex justify-end gap-2 p-2">
-                              <MdOutlineModeEdit size={30} />
+                              {/* <MdOutlineModeEdit size={30} /> */}
+                              <button
+                                className="px-5 py-1 bg-green-300  rounded-2xl capitalize"
+                                onClick={() => handlecheckboqdetails(boq)}
+                              >
+                                details
+                              </button>
                               <MdDeleteOutline size={30} />
                             </div>
                             <div>
@@ -567,7 +568,7 @@ function Dashboard() {
                 </div>
                 <div className="w-1/3  flex justify-center">
                   <div className="border-2 p-4 rounded-xl h-96">
-                    {layoutImage ? (
+                    {imageIsLoaded ? (
                       <img
                         src={layoutImage}
                         alt="layout"
@@ -631,7 +632,11 @@ function Dashboard() {
                         return (
                           <div
                             key={boq.title}
-                            className="rounded-3xl border-2 border-[#ccc] px-5 py-3"
+                            className={`rounded-3xl border-2 border-[#ccc] px-5 py-3 ${
+                              selectedBoq.title === boq.title
+                                ? "bg-[#B4EAEA]"
+                                : ""
+                            }`}
                           >
                             <button
                               onClick={() => setSelectedBoq(boq)}
@@ -843,68 +848,7 @@ function Dashboard() {
           )}
 
           {/* help */}
-          {help && (
-            <div className="flex-1  border-2 border-[#000] rounded-3xl my-2.5 font-Poppins">
-              <div className="flex-col overflow-y-auto scrollbar-hide h-[calc(100vh-120px)] py-2 px-3">
-                <div className="my-4">
-                  <h2 className="text-[#000] text-xl capitalize font-semibold text-center">
-                    How can we help you?
-                  </h2>
-                </div>
-
-                <div className="bg-[#fff] border-2 p-3 border-[#E6E6E6] rounded-xl">
-                  <h3 className="px-8 text-xl capitalize font-medium">
-                    Common Issue
-                  </h3>
-                  <div className="flex flex-col m-auto px-8 py-2 ">
-                    {accordionItems.map((item, index) => (
-                      // <div key={index} className="border-b last:border-b-0">
-                      <div
-                        key={index}
-                        className="mb-3 text-[#141515] font-Poppins font-medium"
-                      >
-                        <div
-                          className="flex w-full text-left p-4 bg-gray-100 hover:bg-gray-200 focus:outline-none justify-between cursor-pointer rounded-xl"
-                          onClick={() => handleToggle(index)}
-                        >
-                          <button>{item.title}</button>
-                          {expandedIndex === index ? (
-                            <FaAngleUp />
-                          ) : (
-                            <FaAngleDown />
-                          )}
-                        </div>
-                        {expandedIndex === index && (
-                          <div className="p-4 bg-white border-t rounded-xl">
-                            <p>{item.content}</p>
-                          </div>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="flex-1 flex justify-center items-center bg-[#fff] border-2 p-3 border-[#E6E6E6] rounded-xl  my-5">
-                  <div className="my-4">
-                    <h4 className="text-[#1A3A36] text-xl text-center mb-3">
-                      Still Need Help?
-                    </h4>
-                    <p className="text-[#4B5563] text-center mb-2">
-                      Our support team is available 24/7 to assist you{" "}
-                    </p>
-                    <div className="flex justify-center items-center gap-4 my-1">
-                      <button className="px-5 py-3 bg-[#1A3A36] text-[#fff] capitalize rounded-3xl">
-                        +91-9136036603
-                      </button>
-                      <button className="border-2 border-[#D1D5DB] text-[#1A3A36] px-5 py-2 rounded-2xl">
-                        Email
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
+          {help && <Help />}
         </div>
       </div>
       {/* product preview */}
