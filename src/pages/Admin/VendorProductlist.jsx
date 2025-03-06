@@ -65,8 +65,6 @@ function VendorProductlist({ setVendorproductlist, selectedVendor }) {
   }, [openMenuId]);
 
   const handleProductPreview = (product) => {
-    console.log("in function handleProductPreview", product);
-
     setProductPreview(true);
     setSelectedProductview(product);
   };
@@ -160,8 +158,6 @@ function VendorProductlist({ setVendorproductlist, selectedVendor }) {
         )
         .eq("vendor_id", selectedVendor.id);
       setProducts(data);
-
-      console.log(data);
     } catch (error) {
       console.log("Error fetching products:", error);
     } finally {
@@ -174,13 +170,11 @@ function VendorProductlist({ setVendorproductlist, selectedVendor }) {
       .from("addon_variants")
       .select("*")
       .eq("vendorId", selectedVendor.id);
-    console.log(data);
 
     if (error) {
       console.log("Error fetching addons:", error);
     } else {
       setAddons(data);
-      console.log("Addons: ", data);
     }
   };
 
@@ -188,8 +182,6 @@ function VendorProductlist({ setVendorproductlist, selectedVendor }) {
     fetchProducts();
     fetchAddons();
   }, []);
-
-  console.log("vendor", selectedVendor);
 
   return (
     <div className="flex-1  border-2 border-[#000] rounded-3xl ">

@@ -160,7 +160,6 @@ function CreateUser() {
       return;
     }
     console.log("User signed up successfully:", data);
-    alert("User signed up successfully:", data);
 
     const userId = data.user.id;
 
@@ -172,9 +171,6 @@ function CreateUser() {
       formData.mobile,
       formData.category ? formData.category.map((cat) => cat.label) : []
     );
-
-    console.log("Submitting form data:", formData);
-    // Submit to DB here
   };
   return (
     // <div className="">

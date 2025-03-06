@@ -43,12 +43,7 @@ function AdminDashboard() {
   const [isAddProduct, setIsAddProduct] = useState(false);
   const [openMenuId, setOpenMenuId] = useState(null); // Store the ID of the row with an open menu
   const [isExpanded, setIsExpanded] = useState(false);
-  const [selectedProductview, setSelectedProductview] = useState({
-    product_name: "",
-    product_price: "",
-    product_image: "",
-    product_description: "",
-  });
+  const [selectedProductview, setSelectedProductview] = useState();
   const [productPreview, setProductPreview] = useState(false);
   const [selectedVendor, setSelectedVendor] = useState(null);
 
@@ -90,6 +85,10 @@ function AdminDashboard() {
   // create profile
   const [createProfile, setCreateProfikle] = useState(false);
 
+  //delete warning
+  const [deleteWarning, setDeleteWarning] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState();
+
   const tabs = [
     { name: "Products", value: "products" },
     { name: "Add-Ons", value: "addons" },
@@ -100,16 +99,13 @@ function AdminDashboard() {
     "https://bwxzfwsoxwtzhjbzbdzs.supabase.co/storage/v1/object/public/addon/";
 
   const {
-    accountHolder,
     setAccountHolder,
     setIsAuthLoading,
     setIsAuthenticated,
     setTotalArea,
-    layoutImage,
   } = useApp();
 
   const location = useLocation();
-  console.log("layout image", layoutImage);
 
   useEffect(() => {
     if (location.state?.openSettings) {
@@ -180,8 +176,6 @@ function AdminDashboard() {
         return new Date(b.created_at) - new Date(a.created_at);
       });
       setProducts(sortedData);
-
-      console.log(data);
     } catch (error) {
       console.log("Error fetching products:", error);
     } finally {
@@ -202,13 +196,11 @@ function AdminDashboard() {
         // If both are "pending" or both are not "pending", sort by date
         return new Date(b.created_at) - new Date(a.created_at);
       });
-      console.log(data);
 
       if (error) {
         console.log("Error fetching addons:", error);
       } else {
         setAddons(sortedData);
-        console.log("Addons: ", data);
       }
     } finally {
       setIsAddonRefresh(false);
@@ -253,35 +245,67 @@ function AdminDashboard() {
     setSelectedProductview(product);
   };
 
-  const handleDelete = async (product) => {
+  const handleDeleteClick = (item) => {
+    setDeleteWarning(true);
+    setSelectedProductview(item);
+  };
+
+  const handleDelete = async (selectedProductview) => {
     try {
-      if (product && product.type === "product") {
+      if (selectedProductview && selectedProductview.type === "product") {
         await supabase
           .from("product_variants") // Ensure this matches your table name
           .delete()
-          .eq("id", product.id);
+          .eq("id", selectedProductview.id);
 
         toast.success("Product deleted successfully!");
         setIsProductRefresh(true);
       }
 
-      if (product.type === "addon") {
+      if (selectedProductview.type === "addon") {
         await supabase
           .from("addon_variants") // Ensure this matches your table name
           .delete()
-          .eq("id", product.id);
+          .eq("id", selectedProductview.id);
         toast.success("Product deleted successfully!");
         setIsAddonRefresh(true);
+      }
+
+      let imagePaths = [];
+
+      if (selectedProductview.image) {
+        imagePaths.push(selectedProductview.image);
+      }
+      if (selectedProductview.additional_images) {
+        try {
+          const parsedAdditionalImages = JSON.parse(
+            selectedProductview.additional_images
+          );
+          if (Array.isArray(parsedAdditionalImages)) {
+            imagePaths = imagePaths.concat(parsedAdditionalImages);
+          }
+        } catch (parseError) {
+          console.log("error parsing error", parseError);
+        }
+      }
+
+      if (imagePaths.length > 0) {
+        const { storageError } = await supabase.storage
+          .from("addon")
+          .remove(imagePaths);
+
+        if (storageError) throw storageError;
       }
 
       setProductPreview(false); // Close the modal after deletion
     } catch (error) {
       console.log(error);
     } finally {
-      product.type === "product"
+      selectedProductview.type === "product"
         ? setIsProductRefresh(true)
         : setIsAddonRefresh(true);
     }
+    setDeleteWarning(false);
   };
 
   // const handleAccept = async (product) => {
@@ -433,7 +457,6 @@ function AdminDashboard() {
           role: "",
           userId: "",
         });
-        console.log("hello");
         setTotalArea("");
         localStorage.removeItem("currentLayoutID");
         navigate("/");
@@ -451,7 +474,6 @@ function AdminDashboard() {
       .select("*")
       .eq("role", "vendor");
 
-    console.log("all the vendors", data);
     setAllvendors(data);
     setFilteredvendors(data);
   };
@@ -463,8 +485,6 @@ function AdminDashboard() {
         .from("profiles")
         .select("*")
         .eq("role", "user");
-
-      console.log("all the users", data);
 
       console.log(profileError);
 
@@ -492,13 +512,10 @@ function AdminDashboard() {
     const filtereduser = allusers.filter((item) =>
       item.company_name.toLowerCase().includes(query.toLowerCase())
     );
-    console.log(filtereduser);
     setFilteredUsers(filtereduser);
   };
 
   const filterVendorByMultipleFields = (query) => {
-    console.log(allvendors);
-
     if (!query) {
       setFilteredvendors(allvendors); // Reset to original list when input is empty
       return;
@@ -506,7 +523,6 @@ function AdminDashboard() {
     const filteredvendor = allvendors.filter((item) =>
       item.company_name.toLowerCase().includes(query.toLowerCase())
     );
-    console.log(filteredvendor);
     setFilteredvendors(filteredvendor);
   };
 
@@ -854,8 +870,11 @@ function AdminDashboard() {
                                             <VscEye /> Edit
                                           </button>
                                           <button
+                                            // onClick={() => {
+                                            //   handleDelete(item);
+                                            // }}
                                             onClick={() => {
-                                              handleDelete(item);
+                                              handleDeleteClick(item);
                                             }}
                                             className="flex gap-2 items-center w-full text-left px-3 py-2 hover:bg-gray-200"
                                           >
@@ -1047,7 +1066,44 @@ function AdminDashboard() {
           // fetchProducts={fetchProducts}
           handleDelete={handleDelete}
           updateStatus={handleUpdateStatus}
+          deleteWarning={deleteWarning}
+          setDeleteWarning={setDeleteWarning}
         />
+      )}
+
+      {deleteWarning && (
+        <div className="flex justify-center items-center h-screen absolute z-30 top-0 w-screen">
+          <div className="absolute inset-0 bg-black opacity-50"></div>
+          <div className="bg-white relative py-7 px-20">
+            <div className="flex justify-center items-center">
+              <img
+                src="images/icons/delete-icon.png"
+                alt=""
+                className="h-12 w-12"
+              />
+            </div>
+
+            <h4 className="font-semibold my-5">
+              Do you want to delete {selectedProductview.title}?
+            </h4>
+            <div className="flex justify-between">
+              <button
+                onClick={() => {
+                  setDeleteWarning(false);
+                }}
+                className="px-5 py-2 bg-[#EEEEEE] rounded-md"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => handleDelete(selectedProductview)}
+                className="px-5 py-2 bg-[#B4EAEA] rounded-md"
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );

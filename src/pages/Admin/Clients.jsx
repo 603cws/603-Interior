@@ -25,7 +25,6 @@ function Clients({
   const handleConfirmDelete = async () => {
     if (selectedUser) {
       try {
-        console.log("Deleting user:", selectedUser);
         // Call your delete function here
         await adminsupabase.auth.admin.deleteUser(selectedUser.id);
         setIsModalOpen(false);

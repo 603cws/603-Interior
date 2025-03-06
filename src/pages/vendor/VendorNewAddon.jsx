@@ -47,18 +47,6 @@ function VendorNewAddon({ setAddNewProduct, setProductlist }) {
 
   const { accountHolder } = useApp();
 
-  // const handleFileChange = (event) => {
-  //   const selectedFile = event.target.files[0];
-
-  //   variant.mainImage = selectedFile;
-  //   if (selectedFile) {
-  //     setFile(selectedFile);
-  //     console.log("hiii");
-
-  //     setPreview(URL.createObjectURL(selectedFile));
-  //   }
-  // };
-
   const handleDrop = (event) => {
     event.preventDefault();
     const droppedFile = event.dataTransfer.files[0];
@@ -88,19 +76,13 @@ function VendorNewAddon({ setAddNewProduct, setProductlist }) {
         image: file, // Update mainImage field
       }));
       setFile(file);
-      console.log("hiii");
       setPreview(URL.createObjectURL(file));
     }
   };
 
-  console.log(addon);
-
   useEffect(() => {
     accountHolder.allowedCategory.map((category) => {
-      console.log(category);
-
       const filtered = AllCatArray.filter((cat) => cat.name === category);
-      console.log(filtered);
 
       const subcattodisplay = filtered.flatMap((subcat) => subcat.subCat1);
       console.log(subcattodisplay);
@@ -121,7 +103,6 @@ function VendorNewAddon({ setAddNewProduct, setProductlist }) {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    toast.success("submit got trriggered");
     try {
       // Check if the product already exists based on category, subcategory, and subSubCategory
       const { data: existingProduct, error: existingProductError } =
@@ -134,8 +115,7 @@ function VendorNewAddon({ setAddNewProduct, setProductlist }) {
           .single();
 
       if (existingProductError && existingProductError.code !== "PGRST116") {
-        console.log(existingProductError);
-        toast.error("Error checking existing product.");
+        console.log("Error checking existing product.");
         return;
       }
 
@@ -143,7 +123,7 @@ function VendorNewAddon({ setAddNewProduct, setProductlist }) {
       if (existingProduct) {
         // If the product already exists, use the existing product ID
         productId = existingProduct.id;
-        toast.success(
+        console.log(
           "Product already exists. Proceeding with variants and addons."
         );
       } else {
@@ -177,12 +157,12 @@ function VendorNewAddon({ setAddNewProduct, setProductlist }) {
 
       if (addonCategoryError) {
         console.error("Error inserting addon category:", addonCategoryError);
-        toast.error("Failed to save addon category.");
+        // toast.error("Failed to save addon category.");
         return;
       }
 
       const addonId = addonCategory.id;
-      toast.success("Addon category saved successfully.");
+      // toast.success("Addon category saved successfully.");
 
       const { image, title, price } = addon;
 
@@ -197,7 +177,7 @@ function VendorNewAddon({ setAddNewProduct, setProductlist }) {
             "Error uploading addon variant image:",
             addonVariantImageError
           );
-          toast.error(`Failed to upload image for addon variant: ${title}`);
+          console.log(`Failed to upload image for addon variant: ${title}`);
         }
 
         const { error: addonVariantError } = await supabase
@@ -212,7 +192,7 @@ function VendorNewAddon({ setAddNewProduct, setProductlist }) {
 
         if (addonVariantError) {
           console.error("Error inserting addon variant:", addonVariantError);
-          toast.error(`Failed to save addon variant: ${title}`);
+          // toast.error(`Failed to save addon variant: ${title}`);
           return;
         } else {
           toast.success(`Addon variant ${title} added successfully.`);
@@ -223,14 +203,13 @@ function VendorNewAddon({ setAddNewProduct, setProductlist }) {
       toast.success("Data inserted successfully!");
     } catch (error) {
       console.log("Error in onSubmit:", error);
-      toast.error("An unexpected error occurred.");
+      // toast.error("An unexpected error occurred.");
     }
   };
 
   // get the categories based on the category and type
   useEffect(() => {
     if (category !== "HVAC" && category !== "Civil / Plumbing") {
-      console.log(category);
       const filter = AllCatArray.filter((cat) => cat.name === category).flatMap(
         (subcat) => subcat.subcategories
       );
@@ -252,8 +231,6 @@ function VendorNewAddon({ setAddNewProduct, setProductlist }) {
     }
 
     if (category === "HVAC") {
-      console.log(subSubCategory);
-
       if (subSubCategory === "Centralized AC") {
         const filter = specialArray
           .filter((cat) => cat.name === category && cat.type === subSubCategory)
@@ -267,8 +244,6 @@ function VendorNewAddon({ setAddNewProduct, setProductlist }) {
       }
     }
   }, [category, subSubCategory]);
-
-  console.log(selectedSubcategories);
 
   // clear the form
   const handleFormClear = () => {

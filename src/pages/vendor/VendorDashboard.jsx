@@ -42,8 +42,6 @@ function VendorDashboard() {
   });
   const [productPreview, setProductPreview] = useState(false);
 
-  console.log("selected product", selectedProductview);
-
   const menuRef = useRef({});
   const buttonRef = useRef({});
 
@@ -104,7 +102,6 @@ function VendorDashboard() {
           role: "",
           userId: "",
         });
-        console.log("hello");
         setTotalArea("");
         localStorage.removeItem("currentLayoutID");
         navigate("/");
@@ -144,8 +141,6 @@ function VendorDashboard() {
         .eq("vendor_id", accountHolder.userId);
 
       setProducts(data);
-
-      console.log(data);
     } catch (error) {
       console.log("Error fetching products:", error);
     } finally {
@@ -158,13 +153,11 @@ function VendorDashboard() {
       .from("addon_variants")
       .select("*")
       .eq("vendorId", accountHolder.userId);
-    console.log(data);
 
     if (error) {
       console.log("Error fetching addons:", error);
     } else {
       setAddons(data);
-      console.log("Addons: ", data);
     }
   };
 
@@ -219,8 +212,6 @@ function VendorDashboard() {
   }, [openMenuId]);
 
   const handleProductPreview = (product) => {
-    console.log("in function handleProductPreview", product);
-
     setProductPreview(true);
     setSelectedProductview(product);
   };

@@ -22,9 +22,6 @@ const LayoutCard = ({
   showAreaCounter, // Boolean to conditionally render AreaCounter
   areaCounterProps, // Props specific to AreaCounter
 }) => {
-  console.log("room type", roomType);
-  console.log("area counter props", areaCounterProps);
-
   return (
     <div className="workspacedescription flex flex-col w-[280px] items-center border border-solid bg-[#fff] pb-2 my-3 relative">
       {/* Image */}

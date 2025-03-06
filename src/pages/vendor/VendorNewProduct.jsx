@@ -53,7 +53,6 @@ function VendorNewProduct({ setAddNewProduct, setProductlist }) {
     variant.mainImage = selectedFile;
     if (selectedFile) {
       setFile(selectedFile);
-      console.log("hiii");
 
       setPreview(URL.createObjectURL(selectedFile));
     }
@@ -84,7 +83,6 @@ function VendorNewProduct({ setAddNewProduct, setProductlist }) {
 
   const handleAdditionalImagesChange = (event) => {
     const files = Array.from(event.target.files);
-    console.log("hello from the additional images");
 
     if (files.length && additionalImages.length + files.length <= 5) {
       setAdditionalImages((prev) => [
@@ -131,10 +129,7 @@ function VendorNewProduct({ setAddNewProduct, setProductlist }) {
 
   useEffect(() => {
     accountHolder.allowedCategory.map((category) => {
-      console.log(category);
-
       const filtered = AllCatArray.filter((cat) => cat.name === category);
-      console.log(filtered);
 
       const subcattodisplay = filtered.flatMap((subcat) => subcat.subCat1);
       console.log(subcattodisplay);
@@ -168,7 +163,6 @@ function VendorNewProduct({ setAddNewProduct, setProductlist }) {
           .single();
 
       if (existingProductError && existingProductError.code !== "PGRST116") {
-        console.log(existingProductError);
         toast.error("Error checking existing product.");
         return;
       }
@@ -211,12 +205,12 @@ function VendorNewProduct({ setAddNewProduct, setProductlist }) {
             .from("addon")
             .upload(`${variant.title}-main-${productId}`, variant.mainImage);
 
-        if (mainImageError) {
-          console.error(mainImageError);
-          toast.error(
-            `Error uploading main image for variant: ${variant.title}`
-          );
-        }
+        // if (mainImageError) {
+        //   console.error(mainImageError);
+        //   toast.error(
+        //     `Error uploading main image for variant: ${variant.title}`
+        //   );
+        // }
 
         // Upload additional images
         const additionalImagePaths = [];
@@ -229,16 +223,16 @@ function VendorNewProduct({ setAddNewProduct, setProductlist }) {
                 imageFile
               );
 
-          if (additionalImageError) {
-            console.error(additionalImageError);
-            toast.error(
-              `Error uploading additional image ${index + 1} for variant: ${
-                variant.title
-              }`
-            );
-            continue;
-          }
-          additionalImagePaths.push(additionalImageUpload.path);
+          // if (additionalImageError) {
+          //   console.error(additionalImageError);
+          //   toast.error(
+          //     `Error uploading additional image ${index + 1} for variant: ${
+          //       variant.title
+          //     }`
+          //   );
+          //   continue;
+          // }
+          additionalImagePaths.push(additionalImageUpload);
         }
 
         // Insert the variant into the product_variants table
@@ -249,7 +243,7 @@ function VendorNewProduct({ setAddNewProduct, setProductlist }) {
             title: variant.title,
             price: variant.price,
             details: variant.details,
-            image: mainImageUpload.path, // Store the main image path
+            image: mainImageUpload, // Store the main image path
             additional_images: additionalImagePaths, // Store paths of additional images
             segment: variant.segment, // Store segment
             dimensions: variant.dimension, // Store dimension
@@ -277,7 +271,6 @@ function VendorNewProduct({ setAddNewProduct, setProductlist }) {
   // get the categories based on the category and type
   useEffect(() => {
     if (category !== "HVAC" && category !== "Civil / Plumbing") {
-      console.log(category);
       const filter = AllCatArray.filter((cat) => cat.name === category).flatMap(
         (subcat) => subcat.subcategories
       );
@@ -299,8 +292,6 @@ function VendorNewProduct({ setAddNewProduct, setProductlist }) {
     }
 
     if (category === "HVAC") {
-      console.log(subSubCategory);
-
       if (subSubCategory === "Centralized AC") {
         const filter = specialArray
           .filter((cat) => cat.name === category && cat.type === subSubCategory)
@@ -314,10 +305,6 @@ function VendorNewProduct({ setAddNewProduct, setProductlist }) {
       }
     }
   }, [category, subSubCategory]);
-
-  console.log(selectedSubcategories);
-
-  console.log(variant);
 
   const handleMainImageChange = (e) => {
     const file = e.target.files[0]; // Get the selected file

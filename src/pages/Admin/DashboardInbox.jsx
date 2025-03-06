@@ -1,13 +1,9 @@
 import React from "react";
 
 function DashboardInbox({ viewDetails, products }) {
-  console.log("products", products);
-
   const filteredpending = products.filter(
     (product) => product.status === "pending"
   );
-
-  console.log(filteredpending);
 
   return (
     <div className="bg-white rounded-3xl shadow-sm p-10 font-Poppins lg:h-[240px] overflow-y-auto scrollbar-hide">

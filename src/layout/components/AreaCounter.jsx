@@ -15,8 +15,6 @@ const AreaCounter = ({
   initialAreaValues,
   counterValue,
 }) => {
-  console.log("area value", value);
-
   const min = min2;
   const max = max2;
   const step = step2;
