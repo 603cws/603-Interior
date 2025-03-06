@@ -15,7 +15,7 @@ function UserSetting() {
     "/images/Profile1.png",
     "/images/Profile2.png",
     "/images/usericon.png",
-  ]; // Function to update profile image in the database
+  ];
 
   useEffect(() => {
     fetchProfileData();
@@ -25,12 +25,11 @@ function UserSetting() {
     if (!accountHolder?.userId) return;
 
     try {
-      // Fetch user email from Supabase auth
       const { data: authData, error: authError } =
         await supabase.auth.getUser();
 
       if (authError) {
-        console.error("Error fetching auth data:", authError);
+        console.log("Error fetching auth data:", authError);
       }
 
       // Fetch profile data from "profiles" table
@@ -49,7 +48,6 @@ function UserSetting() {
         setValue("companyName", profileData.company_name || "");
         setValue("mobileNo", profileData.phone || "");
         setValue("location", profileData.location || "");
-        // setValue("city", profileData.city || ""); // Uncomment if city field is needed
       }
 
       if (authData) {
@@ -61,8 +59,6 @@ function UserSetting() {
   };
 
   const updateProfileImage = async (imgUrl) => {
-    // setLoading(true);
-
     const { error } = await supabase
       .from("profiles")
       .update({ profile_image: imgUrl })
@@ -85,7 +81,6 @@ function UserSetting() {
           company_name: formData.companyName,
           phone: formData.mobileNo,
           location: formData.location,
-          // city: formData.city,
         })
         .eq("id", accountHolder.userId); // Update only the current user’s profile
 
@@ -113,7 +108,6 @@ function UserSetting() {
 
   return (
     <div className="flex gap-5 w-full h-full px-8 py-4">
-      {/*  */}
       <div className="flex flex-col items-center px-10 pt-4 gap-2 relative">
         <div className="w-28 h-28 relative">
           <img
@@ -143,7 +137,6 @@ function UserSetting() {
                   src={img}
                   alt={`Profile ${index}`}
                   className="w-14 h-14 rounded-full cursor-pointer border-2 border-gray-200 hover:border-blue-500"
-                  // onClick={() => handleSelectImage(img)}
                   onClick={() => updateProfileImage(img)}
                 />
               ))}
@@ -168,29 +161,6 @@ function UserSetting() {
         </p>
 
         <form onSubmit={handleSubmit(onSubmit)}>
-          {/* <div className="flex w-full gap-4">
-            <div className="flex-1">
-              <h2 className="mb-2 text-[#194F48] font-bold capitalize">
-                First Name
-              </h2>
-              <input
-                type="text"
-                placeholder="name"
-                {...register("firstName", { required: true })}
-                className="w-full rounded-lg p-1.5 focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none border-2 border-[#CACED8] bg-[#fff] placeholder:text-[#194F48]  "
-              />
-            </div>
-            <div className="flex-1">
-              <h2 className="mb-2 text-[#194F48] font-bold capitalize">
-                last Name
-              </h2>
-              <input
-                type="text"
-                {...register("lastName", { required: true })}
-                className="w-full rounded-lg p-1.5  focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none border-2 border-[#CACED8] bg-[#fff] placeholder:text-[#194F48]  "
-              />
-            </div>
-          </div> */}
           <div className="my-2">
             <h2 className="mb-2 text-[#194F48] font-bold capitalize">
               Company name
@@ -243,14 +213,6 @@ function UserSetting() {
                 className="w-full rounded-lg p-1.5 focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none border-2 border-[#CACED8] bg-[#fff] placeholder:text-[#194F48]  "
               />
             </div>
-            {/* <div className="flex-1">
-              <h2 className="mb-2 text-[#194F48] font-bold capitalize">city</h2>
-              <input
-                type="text"
-                {...register("city", { required: true })}
-                className="w-full rounded-lg p-1.5  focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none border-2 border-[#CACED8] bg-[#fff] placeholder:text-[#194F48]  "
-              />
-            </div> */}
           </div>
 
           <button

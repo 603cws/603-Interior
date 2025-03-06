@@ -3,7 +3,13 @@ import { FaBuilding } from "react-icons/fa";
 import { MdDeleteOutline } from "react-icons/md";
 import { adminsupabase } from "../../services/supabase";
 
-function Clients({ isExpanded, filterByMultipleFields, filteredusers, query }) {
+function Clients({
+  isExpanded,
+  filterByMultipleFields,
+  filteredusers,
+  query,
+  setIsrefresh,
+}) {
   //state
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
@@ -26,6 +32,8 @@ function Clients({ isExpanded, filterByMultipleFields, filteredusers, query }) {
         setSelectedUser(null);
       } catch (error) {
         console.log(error);
+      } finally {
+        setIsrefresh(true);
       }
     }
   };

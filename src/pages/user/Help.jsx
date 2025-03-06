@@ -36,7 +36,6 @@ function Help() {
           <h3 className="px-8 text-xl capitalize font-medium">Common Issue</h3>
           <div className="flex flex-col m-auto px-8 py-2 ">
             {accordionItems.map((item, index) => (
-              // <div key={index} className="border-b last:border-b-0">
               <div
                 key={index}
                 className="mb-3 text-[#141515] font-Poppins font-medium"

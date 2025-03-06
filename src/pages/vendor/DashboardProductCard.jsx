@@ -73,7 +73,7 @@ function DashboardProductCard({
                     <button
                       key={status}
                       onClick={() => {
-                        updateStatus(product.id, status); // Call the function from props
+                        updateStatus(product, status); // Call the function from props
                         setSelectedStatus(status); // Update UI
                         setStatusDropdown(false); // Close dropdown
                       }}

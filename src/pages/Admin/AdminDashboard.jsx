@@ -17,7 +17,6 @@ import VendorNewProduct from "../vendor/VendorNewProduct";
 import VendorNewAddon from "../vendor/VendorNewAddon";
 import { VscEye } from "react-icons/vsc";
 import { MdOutlineDelete } from "react-icons/md";
-import { MdOutlineCancel } from "react-icons/md";
 import { CiMenuKebab } from "react-icons/ci";
 import { IoIosAdd } from "react-icons/io";
 import Spinner from "../../common-components/Spinner";
@@ -42,8 +41,6 @@ function AdminDashboard() {
   const [isvendoropen, setIsvendoropen] = useState(false);
   const [query, setQuery] = useState();
   const [isAddProduct, setIsAddProduct] = useState(false);
-  const [isProductHovered, setIsProductHovered] = useState(false);
-  const [isAddonHovered, setIsAddonHovered] = useState(false);
   const [openMenuId, setOpenMenuId] = useState(null); // Store the ID of the row with an open menu
   const [isExpanded, setIsExpanded] = useState(false);
   const [selectedProductview, setSelectedProductview] = useState({
@@ -55,13 +52,20 @@ function AdminDashboard() {
   const [productPreview, setProductPreview] = useState(false);
   const [selectedVendor, setSelectedVendor] = useState(null);
 
+  //user refresh
+  const [isrefresh, setIsrefresh] = useState(false);
+  //product refresh
+  const [isproductRefresh, setIsProductRefresh] = useState(false);
+
+  //addon refresh
+
+  const [isaddonRefresh, setIsAddonRefresh] = useState(false);
+
   // vendorproductlist
   const [vendorproductlist, setVendorproductlist] = useState(false);
 
   const [products, setProducts] = useState([]);
   const [addons, setAddons] = useState([]);
-
-  console.log("selected product", selectedProductview);
 
   const menuRef = useRef({});
   const buttonRef = useRef({});
@@ -82,8 +86,6 @@ function AdminDashboard() {
 
   const [toggle, setToggle] = useState(true);
   const [selectedTab, setSelectedTab] = useState("products");
-
-  const [showMenu, setShowMenu] = useState(false);
 
   // create profile
   const [createProfile, setCreateProfikle] = useState(false);
@@ -117,13 +119,6 @@ function AdminDashboard() {
       // setHelp(false);
       setCurrentSection("Setting");
     }
-    // if (location.state?.openHelp) {
-    //   setIsSettingOpen(false);
-    //   setIsProductOpen(false);
-    //   setDashboard(false);
-    //   setHelp(true);
-    //   setCurrentSection("Help");
-    // }
   }, [location.state]);
 
   const handleTabClick = (event) => {
@@ -168,31 +163,6 @@ function AdminDashboard() {
       setCurrentPage(page);
     }
   };
-
-  // Fetch Products from Supabase
-  // const fetchProducts = async () => {
-  //   setIsloading(true);
-  //   try {
-  //     const { data } = await supabase.from("product_variants").select(
-  //       `
-  //         id,
-  //         title,
-  //         price,
-  //         details,
-  //         image,
-  //         product_id,
-  //         products (category, subcategory, subcategory1)
-  //       `
-  //     );
-  //     setProducts(data);
-
-  //     console.log(data);
-  //   } catch (error) {
-  //     console.log("Error fetching products:", error);
-  //   } finally {
-  //     setIsloading(false);
-  //   }
-  // };
   const fetchProducts = async () => {
     setIsloading(true);
     try {
@@ -216,29 +186,42 @@ function AdminDashboard() {
       console.log("Error fetching products:", error);
     } finally {
       setIsloading(false);
+      setIsProductRefresh(false);
     }
   };
 
   const fetchAddons = async () => {
-    const { data, error } = await supabase.from("addon_variants").select("*");
-    console.log(data);
+    try {
+      const { data, error } = await supabase.from("addon_variants").select("*");
 
-    if (error) {
-      console.log("Error fetching addons:", error);
-    } else {
-      setAddons(data);
-      console.log("Addons: ", data);
+      const sortedData = data.sort((a, b) => {
+        // Prioritize "pending" status
+        if (a.status === "pending" && b.status !== "pending") return -1;
+        if (b.status === "pending" && a.status !== "pending") return 1;
+
+        // If both are "pending" or both are not "pending", sort by date
+        return new Date(b.created_at) - new Date(a.created_at);
+      });
+      console.log(data);
+
+      if (error) {
+        console.log("Error fetching addons:", error);
+      } else {
+        setAddons(sortedData);
+        console.log("Addons: ", data);
+      }
+    } finally {
+      setIsAddonRefresh(false);
     }
   };
 
   useEffect(() => {
     fetchProducts();
+  }, [isproductRefresh]);
+
+  useEffect(() => {
     fetchAddons();
-    // handleUpdateStatus();
-    handleDelete();
-    handleAccept();
-    handleReject();
-  }, []);
+  }, [isaddonRefresh]);
 
   const handleMenuToggle = (id) => {
     setOpenMenuId((prev) => (prev === id ? null : id));
@@ -266,86 +249,115 @@ function AdminDashboard() {
   }, [openMenuId]);
 
   const handleProductPreview = (product) => {
-    console.log("in function handleProductPreview", product);
-
     setProductPreview(true);
     setSelectedProductview(product);
   };
 
   const handleDelete = async (product) => {
-    if (!product.id) return;
-
     try {
-      const { error } = await supabase
-        .from("product_variants") // Ensure this matches your table name
-        .delete()
-        .eq("id", product.id);
+      if (product && product.type === "product") {
+        await supabase
+          .from("product_variants") // Ensure this matches your table name
+          .delete()
+          .eq("id", product.id);
 
-      if (error) throw error; // Throw error to be caught in catch block
+        toast.success("Product deleted successfully!");
+        setIsProductRefresh(true);
+      }
 
-      toast.success("Product deleted successfully!");
+      if (product.type === "addon") {
+        await supabase
+          .from("addon_variants") // Ensure this matches your table name
+          .delete()
+          .eq("id", product.id);
+        toast.success("Product deleted successfully!");
+        setIsAddonRefresh(true);
+      }
+
       setProductPreview(false); // Close the modal after deletion
     } catch (error) {
-      toast.error("Failed to delete product.");
-      console.error("Delete error:", error);
+      console.log(error);
+    } finally {
+      product.type === "product"
+        ? setIsProductRefresh(true)
+        : setIsAddonRefresh(true);
     }
-    fetchProducts(); // Fetch products after deletion
   };
 
-  const handleAccept = async (id) => {
-    const { error } = await supabase
-      .from("product_variants") // Table name
-      .update({ status: "approved" }) // New status
-      .eq("id", id); // Matching row
+  // const handleAccept = async (product) => {
+  //   try {
+  //     if (product && product.type === "product") {
+  //       await supabase
+  //         .from("product_variants") // Table name
+  //         .update({ status: "approved" }) // New status
+  //         .eq("id", product.id); // Matching row
+  //       toast.success("Product accepted");
+  //     }
 
-    if (error) {
-      console.error("Error updating status:", error.message);
-    } else {
-      toast.success("Product accepted");
-    }
-    fetchProducts();
-  };
+  //     if (product.type === "addon") {
+  //       await supabase
+  //         .from("addon_variants") // Ensure this matches your table name
+  //         .update({ status: "approved" }) // New status
+  //         .eq("id", product.id); // Matching row
+  //       toast.success("Addon accepted");
+  //     }
+  //   } finally {
+  //     product.type === "product"
+  //       ? setIsProductRefresh(true)
+  //       : setIsAddonRefresh(true);
+  //   }
+  // };
 
-  const handleReject = async (id) => {
-    const { error } = await supabase
-      .from("product_variants") // Table name
-      .update({ status: "rejected" }) // New status
-      .eq("id", id); // Matching row
+  // const handleReject = async (product) => {
+  //   try {
+  //     if (product && product.type === "product") {
+  //       await supabase
+  //         .from("product_variants") // Table name
+  //         .update({ status: "rejected" }) // New status
+  //         .eq("id", product.id); // Matching row
+  //       toast.success("Product accepted");
+  //     }
 
-    if (error) {
-      console.error("Error updating status:", error.message);
-    } else {
-      toast.success("Product rejected");
-    }
-    fetchProducts();
-  };
+  //     if (product.type === "addon") {
+  //       await supabase
+  //         .from("addon_variants") // Ensure this matches your table name
+  //         .update({ status: "rejected" }) // New status
+  //         .eq("id", product.id); // Matching row
+  //       toast.success("Addon accepted");
+  //     }
+  //   } finally {
+  //     product.type === "product"
+  //       ? setIsProductRefresh(true)
+  //       : setIsAddonRefresh(true);
+  //   }
+  // };
 
-  const handleUpdateStatus = async (productID, newStatus) => {
-    console.log("new status", newStatus);
-
-    // update status of product
+  const handleUpdateStatus = async (product, newStatus) => {
     try {
-      const { data } = await supabase
-        .from("product_variants")
-        .update({ status: newStatus })
-        .eq("id", productID);
+      if (product && product.type === "product") {
+        await supabase
+          .from("product_variants") // Table name
+          .update({ status: newStatus }) // New status
+          .eq("id", product.id); // Matching row
+        toast.success(`product ${newStatus}`);
+      }
 
-      toast.success("Status updated successfully:", data);
-    } catch {
-      toast.error("unable to update status..");
+      if (product.type === "addon") {
+        await supabase
+          .from("addon_variants") // Ensure this matches your table name
+          .update({ status: newStatus }) // New status
+          .eq("id", product.id); // Matching row
+        toast.success(`Addon ${newStatus}`);
+      }
+    } finally {
+      product.type === "product"
+        ? setIsProductRefresh(true)
+        : setIsAddonRefresh(true);
+
+      if (productPreview) {
+        setProductPreview(false);
+      }
     }
-    setProductPreview(false);
-    fetchProducts();
-  };
-
-  const handlenewproduct = () => {
-    setProductlist(false);
-    setIsAddProduct(true);
-  };
-
-  const handleAddproductclose = () => {
-    setProductlist(true);
-    setIsAddProduct(false);
   };
 
   const handlesetting = () => {
@@ -444,42 +456,33 @@ function AdminDashboard() {
     setFilteredvendors(data);
   };
 
-  // const getusers = async () => {
-  //   // Query the profiles table for phone and companyName
-  //   const { data, error: profileError } = await supabase.from("profiles")
-  //     .select(`
-  //       *,
-  //       auth_users:auth.users(*)
-  //     `);
-
-  //   console.log("all the users", data);
-
-  //   console.log(profileError);
-
-  //   setAllusers(data);
-  //   setFilteredUsers(data);
-  // };
-
   const getusers = async () => {
-    // Query the profiles table for phone and companyName
-    const { data, error: profileError } = await supabase
-      .from("profiles")
-      .select("*")
-      .eq("role", "user");
+    try {
+      // Query the profiles table for phone and companyName
+      const { data, error: profileError } = await supabase
+        .from("profiles")
+        .select("*")
+        .eq("role", "user");
 
-    console.log("all the users", data);
+      console.log("all the users", data);
 
-    console.log(profileError);
+      console.log(profileError);
 
-    setAllusers(data);
-    setFilteredUsers(data);
+      setAllusers(data);
+      setFilteredUsers(data);
+    } finally {
+      setIsrefresh(false);
+    }
   };
 
   // get all the users and vendors from the database
   useEffect(() => {
     getvendors();
-    getusers();
   }, []);
+
+  useEffect(() => {
+    getusers();
+  }, [isrefresh]);
 
   const filterByMultipleFields = (query) => {
     if (!query) {
@@ -507,9 +510,9 @@ function AdminDashboard() {
     setFilteredvendors(filteredvendor);
   };
 
-  const handlevendorcard = () => {
-    setVendorproductlist(true);
-  };
+  // const handlevendorcard = () => {
+  //   setVendorproductlist(true);
+  // };
 
   return (
     <div className="bg-[url('images/admin/Admin.png')] bg-cover bg-center bg-no-repeat p-3 xl:p-5">
@@ -698,13 +701,13 @@ function AdminDashboard() {
                           product list
                         </h3>
 
-                        <button
+                        {/* <button
                           onClick={handlenewproduct}
                           className="capitalize shadow-sm py-2 px-4 text-sm flex justify-center items-center border-2"
                         >
                           <IoIosAdd size={20} />
                           add product
-                        </button>
+                        </button> */}
                       </div>
                       <div className="flex gap-3 px-4 py-2 border-b-2 border-b-gray-400">
                         {tabs.map((tab) => (
@@ -745,30 +748,13 @@ function AdminDashboard() {
                                     </th>
                                   ) : (
                                     <th className="p-3 font-medium">
-                                      Addon ID
+                                      Addon Name
                                     </th>
                                   )}
                                   <th className="p-3  font-medium">Price</th>
-                                  {toggle ? (
-                                    <>
-                                      {/* <th className="p-3 font-medium">
-                                        Details
-                                      </th> */}
-                                      {/* <th className="p-3 font-medium">
-                                        Category
-                                      </th>
-                                      <th className="p-3 font-medium">
-                                        specification
-                                      </th> */}
-                                      <th className="p-3 font-medium">
-                                        status
-                                      </th>
-                                    </>
-                                  ) : (
-                                    <th className="p-3 font-medium">
-                                      Addon Title
-                                    </th>
-                                  )}
+                                  <>
+                                    <th className="p-3 font-medium">status</th>
+                                  </>
                                   <th className="p-3 font-medium">Action</th>
                                 </tr>
                               </thead>
@@ -785,70 +771,60 @@ function AdminDashboard() {
                                           alt={item.title}
                                           className="w-10 h-10 object-cover rounded"
                                         />
-                                        {toggle ? (
-                                          <span>{item.title}</span>
-                                        ) : (
-                                          <span className="text-wrap">
-                                            {item.id}
-                                          </span>
-                                        )}
+
+                                        <span>{item.title}</span>
                                       </div>
                                     </td>
                                     <td className="border border-gray-200 p-3 align-middle text-center">
                                       ₹{item.price}
                                     </td>
-                                    {toggle ? (
-                                      <>
-                                        {/* <td className="border border-gray-200 p-3 align-middle">
-                                          {item.details}
-                                        </td> */}
-                                        {/* <td className="border border-gray-200 p-3 align-middle">
-                                          {item.products?.category || "N/A"}
-                                        </td>
-                                        <td className="border border-gray-200 p-3 align-middle">
-                                          {item.products?.subcategory1 || "N/A"}
-                                        </td> */}
-                                        <td className="border border-gray-200 p-3 align-middle text-center group relative">
-                                          {item.status === "pending" ? (
-                                            <div className="flex items-center justify-center">
-                                              <span className="text-[#13B2E4]">
-                                                Pending
-                                              </span>
-                                              <div className="absolute top-0 left-0 w-full h-full bg-white/90 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                                                <button
-                                                  className="bg-gray-100 text-green-600 p-3 rounded-full mr-2 hover:text-gray-100 hover:bg-green-600"
-                                                  onClick={() =>
-                                                    handleAccept(item.id)
-                                                  }
-                                                >
-                                                  <IoCheckmark size={20} />
-                                                </button>
-                                                <button
-                                                  className="bg-gray-100 text-red-600 p-3 rounded-full mr-2 hover:text-gray-100 hover:bg-red-600"
-                                                  onClick={() =>
-                                                    handleReject(item.id)
-                                                  }
-                                                >
-                                                  <HiXMark size={20} />
-                                                </button>
-                                              </div>
-                                            </div>
-                                          ) : item.status === "approved" ? (
-                                            <span className="text-green-400">
-                                              approved
-                                            </span>
-                                          ) : (
-                                            <span className="text-red-400">
-                                              {item.status || "N/A"}
-                                            </span>
-                                          )}
-                                        </td>
-                                      </>
-                                    ) : (
-                                      <td className="border border-gray-200 p-3 align-middle">
-                                        {item.addons?.title || item.title}
-                                      </td>
-                                    )}
+
+                                    <td className="border border-gray-200 p-3 align-middle text-center group relative">
+                                      {item.status === "pending" ? (
+                                        <div className="flex items-center justify-center">
+                                          <span className="text-[#13B2E4]">
+                                            Pending
+                                          </span>
+                                          <div className="absolute top-0 left-0 w-full h-full bg-white/90 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                                            <button
+                                              className="bg-gray-100 text-green-600 p-3 rounded-full mr-2 hover:text-gray-100 hover:bg-green-600"
+                                              onClick={() =>
+                                                handleUpdateStatus(
+                                                  item,
+                                                  "approved"
+                                                )
+                                              }
+                                              // onClick={() => handleAccept(item)}
+                                            >
+                                              <IoCheckmark size={20} />
+                                            </button>
+                                            <button
+                                              className="bg-gray-100 text-red-600 p-3 rounded-full mr-2 hover:text-gray-100 hover:bg-red-600"
+                                              // onClick={() =>
+                                              //   handleReject(item.id)
+                                              // }
+                                              onClick={() =>
+                                                handleUpdateStatus(
+                                                  item,
+                                                  "rejected"
+                                                )
+                                              }
+                                            >
+                                              <HiXMark size={20} />
+                                            </button>
+                                          </div>
+                                        </div>
+                                      ) : item.status === "approved" ? (
+                                        <span className="text-green-400">
+                                          approved
+                                        </span>
+                                      ) : (
+                                        <span className="text-red-400">
+                                          {item.status || "N/A"}
+                                        </span>
+                                      )}
+                                    </td>
+
                                     <td className="border border-gray-200 p-3 align-middle flex justify-center items-center relative">
                                       <button
                                         ref={(el) =>
@@ -950,61 +926,6 @@ function AdminDashboard() {
                         </button>
                       </div>
                     )}
-
-                    {isAddProduct && (
-                      <div className="flex flex-col justify-center items-center h-[90%] font-Poppins overflow-y-hidden">
-                        <div className="border-2 border-gray-200 px-28 py-14 flex justify-center items-center gap-10 rounded-2xl shadow-lg capitalize relative">
-                          <div
-                            onClick={() => {
-                              setAddNewProduct(true);
-                              setIsAddProduct(false);
-                            }}
-                            onMouseEnter={() => setIsProductHovered(true)}
-                            onMouseLeave={() => setIsProductHovered(false)}
-                            className="flex flex-col justify-center items-center gap-5 p-10 shadow-[0_4px_10px_rgba(180,234,234,50)] font-bold rounded-xl cursor-pointer hover:bg-[#194F48] hover:text-white hover:scale-110 transition-transform duration-200 ease-in-out"
-                          >
-                            <img
-                              src={
-                                isProductHovered
-                                  ? "images/product-icon-2.png"
-                                  : "images/product-icon-1.png"
-                              }
-                              alt=""
-                            />
-                            <h2 className="text-lg">product</h2>
-                          </div>
-
-                          <div
-                            onClick={() => {
-                              setAddNewAddon(true);
-                              setIsAddProduct(false);
-                            }}
-                            onMouseEnter={() => setIsAddonHovered(true)}
-                            onMouseLeave={() => setIsAddonHovered(false)}
-                            className="flex flex-col justify-center items-center gap-5 p-10 shadow-[0_4px_10px_rgba(180,234,234,100)] font-bold rounded-xl cursor-pointer hover:bg-[#194F48] hover:text-white hover:scale-110 transition-transform duration-200 ease-in-out"
-                          >
-                            <img
-                              src={
-                                isAddonHovered
-                                  ? "images/addOn-icon-2.png"
-                                  : "images/addOn-icon-1.png"
-                              }
-                              alt=""
-                            />
-                            <h2 className="text-lg">add ons</h2>
-                          </div>
-
-                          <div className="absolute top-2 right-2">
-                            <MdOutlineCancel
-                              // onClick={() => setIsAddProduct(false)}
-                              onClick={handleAddproductclose}
-                              size={25}
-                              className="cursor-pointer"
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    )}
                   </>
                 )}
               </div>
@@ -1018,6 +939,7 @@ function AdminDashboard() {
                 filterByMultipleFields={filterByMultipleFields}
                 query={query}
                 filteredusers={filteredusers}
+                setIsrefresh={setIsrefresh}
               />
             </>
           )}
