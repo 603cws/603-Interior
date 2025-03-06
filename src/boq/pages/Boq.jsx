@@ -1171,7 +1171,7 @@ function Boq() {
         height: userResponses.height,
         flooring: userResponses.flooring,
         demolishTile: userResponses.demolishTile,
-        hvacType: userResponses.hvac,
+        hvacType: userResponses.hvacType,
         planType: selectedPlan,
         final_price: selectedData
           .map((item) => item.finalPrice || "")
@@ -1281,7 +1281,7 @@ function Boq() {
           height: userResponses.height,
           flooring: userResponses.flooring,
           demolishTile: userResponses.demolishTile,
-          hvacType: userResponses.hvac,
+          hvacType: userResponses.hvacType,
           planType: selectedPlan,
         })
         .eq("id", boqId);
