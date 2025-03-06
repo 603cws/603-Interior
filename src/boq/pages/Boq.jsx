@@ -1147,10 +1147,20 @@ function Boq() {
         addon_variant_id: selectedData
           .flatMap((item) =>
             item.addons
-              ? Object.values(item.addons).map((addon) => addon.variantid)
+              ? Object.values(item.addons).map((addon) => addon.id)
               : []
           )
           .join(","),
+        addon_final_price: selectedData
+          .flatMap((item) =>
+            item.addons
+              ? Object.values(item.addons).map(
+                  (addon) => addon.finalPrice || ""
+                )
+              : []
+          )
+          .filter(Boolean) // Removes empty strings
+          .join(","), // Store multiple addon final prices as comma-separated values
         group_key: selectedData
           .map((item) => item.groupKey || "")
           .filter(Boolean) // Removes empty strings
@@ -1166,7 +1176,7 @@ function Boq() {
         final_price: selectedData
           .map((item) => item.finalPrice || "")
           .filter(Boolean) // Removes empty strings
-          .join(","), // Store multiple group keys as comma-separated values
+          .join(","), // Store multiple product final prices as comma-separated values
       };
 
       // Insert into Supabase
@@ -1238,16 +1248,26 @@ function Boq() {
           addon_id: selectedData
             .flatMap((item) =>
               item.addons
-                ? Object.values(item.addons).map((addon) => addon.addonId)
+                ? Object.values(item.addons).map((addon) => addon.addonid)
                 : []
             )
             .join(","),
           addon_variant_id: selectedData
             .flatMap((item) =>
               item.addons
-                ? Object.values(item.addons).map((addon) => addon.variantID)
+                ? Object.values(item.addons).map((addon) => addon.id)
                 : []
             )
+            .join(","),
+          addon_final_price: selectedData
+            .flatMap((item) =>
+              item.addons
+                ? Object.values(item.addons).map(
+                    (addon) => addon.finalPrice || ""
+                  )
+                : []
+            )
+            .filter(Boolean)
             .join(","),
           group_key: selectedData
             .map((item) => item.groupKey || "")
@@ -1331,29 +1351,42 @@ function Boq() {
         return;
       }
 
-      // Convert stored comma-separated IDs into arrays
-      const productVariantIds = data.product_variant_id
-        ? data.product_variant_id.split(",").map((id) => id.trim())
-        : [];
+      // Convert stored comma-separated values into arrays
+      const productVariantIds =
+        data.product_variant_id?.split(",").map((id) => id.trim()) || [];
+      const addonIds = data.addon_id?.split(",").map((id) => id.trim()) || [];
+      const addonVariantIds =
+        data.addon_variant_id?.split(",").map((id) => id.trim()) || [];
+      const groupKeys =
+        data.group_key?.split(",").map((key) => key.trim()) || [];
+      const finalPrices =
+        data.final_price
+          ?.split(",")
+          .map((price) => parseFloat(price.trim()) || 0) || [];
+      const addonFinalPrices =
+        data.addon_final_price
+          ?.split(",")
+          .map((price) => parseFloat(price.trim()) || 0) || [];
 
-      const addonIds = data.addon_id
-        ? data.addon_id.split(",").map((id) => id.trim())
-        : [];
-
-      const groupKeys = data.group_key
-        ? data.group_key.split(",").map((key) => key.trim())
-        : [];
-
-      const finalPrices = data.final_price
-        ? data.final_price
-            .split(",")
-            .map((price) => parseFloat(price.trim()) || 0)
-        : [];
-
-      // ✅ Reconstruct products based on `groupKey`
+      // ✅ Reconstruct products and addons based on groupKey
       const reconstructedData = groupKeys.map((groupKey, index) => {
-        const [category, subcategory, subcategory1, productId] =
-          groupKey.split("-");
+        let category = "";
+        let subcategory = "";
+        let subcategory1 = "";
+        let productId = "";
+
+        const parts = groupKey.split("-");
+
+        if (groupKey.includes("L-Type Workstation")) {
+          // ✅ Special handling for "L-Type Workstation"
+          category = parts[0];
+          subcategory = "L-Type Workstation"; // Keep it intact
+          subcategory1 = parts.length > 3 ? parts[3] : "";
+          productId = parts[parts.length - 1];
+        } else {
+          // Default split behavior
+          [category, subcategory, subcategory1, productId] = parts;
+        }
 
         return {
           id: productId,
@@ -1363,15 +1396,24 @@ function Boq() {
           product_variant: {
             variant_id: productVariantIds[index] || productId,
           },
-          addons: addonIds.length > index ? [{ addonId: addonIds[index] }] : [],
+          addons:
+            addonIds.length > index
+              ? [
+                  {
+                    addonid: addonIds[index],
+                    id: addonVariantIds[index],
+                    finalPrice: addonFinalPrices[index] || 0, // ✅ Assign finalPrice for addons
+                  },
+                ]
+              : [],
           groupKey,
-          finalPrice: finalPrices[index] || 0, // Assign the corresponding final price
+          finalPrice: finalPrices[index] || 0, // Assign final price for product
         };
       });
 
       console.log("Reconstructed BOQ Data:", reconstructedData);
 
-      // Fetch and transform BOQ-related products
+      // Fetch and transform BOQ-related products and addons
       const formattedBOQProducts = await fetchFilteredBOQProducts(
         reconstructedData
       );
@@ -1398,7 +1440,7 @@ function Boq() {
         return [];
       }
 
-      // Fetch all products from the database
+      // Fetch all products including addons
       const allProducts = await fetchProductsData();
 
       if (!Array.isArray(allProducts) || allProducts.length === 0) {
@@ -1406,30 +1448,57 @@ function Boq() {
         return [];
       }
 
-      // Extract saved product and addon variant IDs
-      const savedProductVariantIds = reconstructedData
-        .map((dataItem) => dataItem.product_variant?.variant_id)
-        .filter(Boolean);
-      const savedAddonVariantIds = reconstructedData
-        .flatMap((dataItem) =>
-          Object.values(dataItem.addons || {}).map((addon) => addon.addonId)
-        )
-        .filter(Boolean);
-
-      // Filter products matching BOQ data
+      // Filter products that match BOQ data
       const filteredBOQProducts = reconstructedData
         .map((boqItem) => {
+          // Find matching product from allProducts
           const matchingProduct = allProducts.find((product) =>
-            product.product_variants.some(
-              (variant) => variant.id === boqItem.product_variant.variant_id
+            product.product_variants?.some(
+              (variant) => variant.id === boqItem.product_variant?.variant_id
             )
           );
 
           if (!matchingProduct) return null;
 
-          const matchingVariant = matchingProduct.product_variants.find(
-            (variant) => variant.id === boqItem.product_variant.variant_id
+          // Find matching variant inside the product
+          const matchingVariant = matchingProduct.product_variants?.find(
+            (variant) => variant.id === boqItem.product_variant?.variant_id
           );
+
+          // ✅ Fetch addons that match the BOQ item's addons
+          const matchingAddons = boqItem.addons
+            ?.map(({ addonid, id, finalPrice }) => {
+              // Ensure finalPrice is used
+              // Find the corresponding product that contains the addon
+              const addonProduct = allProducts.find((product) =>
+                product.addons?.some((addon) => addon.id === addonid)
+              );
+
+              if (!addonProduct) return null;
+
+              // Get the addon from the matching product
+              const addon = addonProduct.addons?.find((a) => a.id === addonid);
+              if (!addon) return null;
+
+              // Find the correct addon variant
+              const addonVariant = addon.addon_variants?.find(
+                (variant) => variant.id === id
+              );
+              if (!addonVariant) return null;
+
+              return {
+                addonid: addon.id,
+                // typetitle: addon.title,
+                price: addonVariant.price,
+                id: addonVariant.id,
+                title: addonVariant.title,
+                status: addonVariant.status,
+                vendorId: addonVariant.vendorId,
+                image: addonVariant.image,
+                finalPrice: finalPrice || addonVariant.price || 0, // ✅ Use saved finalPrice
+              };
+            })
+            .filter(Boolean); // Remove null values
 
           return {
             id: matchingVariant?.id || matchingProduct.id,
@@ -1443,16 +1512,16 @@ function Boq() {
                 matchingVariant?.details || matchingProduct.details,
               variant_image: matchingVariant?.image || matchingProduct.image,
               variant_price: matchingVariant?.price || matchingProduct.price,
-              additional_images: JSON.parse(matchingVariant?.additional_images),
-              // ? tryParseJSON(matchingVariant.additional_images)
-              // : [],
+              additional_images: JSON.parse(
+                matchingVariant?.additional_images || "[]"
+              ),
             },
-            addons: boqItem.addons,
+            addons: matchingAddons, // ✅ Addons now include fetched finalPrice
             groupKey: boqItem.groupKey,
             finalPrice: boqItem.finalPrice || matchingVariant?.price || 0, // Ensure finalPrice is carried over
           };
         })
-        .filter(Boolean);
+        .filter(Boolean); // Remove null entries
 
       console.log("Formatted BOQ Products:", filteredBOQProducts);
       return filteredBOQProducts;
