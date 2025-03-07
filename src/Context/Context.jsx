@@ -47,6 +47,8 @@ export const AppProvider = ({ children }) => {
     role: "",
     allowedCategory: [] || undefined,
     profileImage: null,
+    location: "",
+    boqName: "",
   });
   // const [accountHolder, setAccountHolder] = useState(null);
   const [selectedPlan, setSelectedPlan] = useState(null);
@@ -177,7 +179,9 @@ export const AppProvider = ({ children }) => {
           // Query the profiles table for phone and companyName
           const { data, error: profileError } = await supabase
             .from("profiles")
-            .select("phone, company_name,role,allowed_category,profile_image")
+            .select(
+              "phone, company_name,role,allowed_category,profile_image,location"
+            )
             .eq("id", userId)
             .single();
 
@@ -200,6 +204,7 @@ export const AppProvider = ({ children }) => {
             role: data.role || "",
             allowedCategory: JSON.parse(data.allowed_category) || undefined,
             profileImage: data.profile_image || null,
+            location: data.location || "",
           });
         }
       } catch (error) {

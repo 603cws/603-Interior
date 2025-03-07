@@ -204,7 +204,12 @@ function Navbar({
           <div className="flex items-center downloadB">
             <button
               onClick={() =>
-                PDFGenerator.generatePDF(selectedData, calculateGrandTotal)
+                PDFGenerator.generatePDF(
+                  selectedData,
+                  calculateGrandTotal,
+                  accountHolder.companyName,
+                  accountHolder.location
+                )
               }
               className="bg-[#1A3A36] text-xs py-2 px-5 text-white rounded-full border-solid border-[1px] border-[#34BFAD] hover:bg-[#34BFAD]"
             >
