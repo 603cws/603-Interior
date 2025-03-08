@@ -80,13 +80,13 @@ export const AppProvider = ({ children }) => {
 
           console.log("layout details from context ", data);
           setTotalArea(data[0].totalArea);
-          console.log(totalArea);
-
           setLayoutImage(data[0].layoutImg);
 
           if (error) throw error;
         }
-      } catch (error) {}
+      } catch (error) {
+        console.log(error);
+      }
     };
 
     fetchdata();
@@ -110,10 +110,10 @@ export const AppProvider = ({ children }) => {
   }, [progress]);
 
   useEffect(() => {
-    console.log("userId: ", userId);
-
     async function fetchdata() {
       const sessionData = JSON.parse(localStorage.getItem(session));
+      console.log("session data", sessionData);
+
       // const usertoken = localStorage.getItem("usertoken");
       const usertoken = sessionData?.access_token;
 
@@ -125,6 +125,8 @@ export const AppProvider = ({ children }) => {
         const { data, error } = await supabase.auth.getUser(usertoken);
         if (error) {
           console.warn("Error fetching user:", error);
+          setIsAuthenticated(false); // Set auth to false if no token
+          setIsAuthLoading(false);
           return null;
         }
 

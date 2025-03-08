@@ -1,9 +1,5 @@
 import { RiDashboardFill } from "react-icons/ri";
-import { MdKeyboardArrowLeft } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
-import { BiFilterAlt } from "react-icons/bi";
-import { AiOutlineCloudDownload } from "react-icons/ai";
-import { LuPlus } from "react-icons/lu";
 import { useEffect, useState } from "react";
 import { supabase } from "../../services/supabase";
 import Select from "react-select";
@@ -318,17 +314,6 @@ function VendorRegister() {
                   {/* Mobile Number - Fixed Position */}
                   <div className="flex flex-col">
                     <label className="font-medium">Mobile Number*</label>
-                    {/* <div className="flex gap-2"> */}
-                    {/* <select
-                        name="countryCode"
-                        className="border p-2 rounded-md max-w-xs"
-                        value={formData.countryCode}
-                        onChange={handleChange}
-                      >
-                        <option value="+91">+91</option>
-                        <option value="+1">+1</option>
-                        <option value="+44">+44</option>
-                      </select> */}
                     <input
                       type="tel"
                       name="mobile"

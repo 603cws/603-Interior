@@ -1,8 +1,6 @@
 import { useState } from "react";
 import { useApp } from "../../Context/Context";
 import { MdDeleteOutline } from "react-icons/md";
-import { supabase } from "../../services/supabase";
-import toast from "react-hot-toast";
 
 function DashboardProductCard({
   onClose,
@@ -20,7 +18,7 @@ function DashboardProductCard({
     "https://bwxzfwsoxwtzhjbzbdzs.supabase.co/storage/v1/object/public/addon/";
 
   return (
-    <div className="flex justify-center items-center h-screen absolute z-30 top-0 w-screen">
+    <div className="flex justify-center items-center h-screen fixed inset-0 z-30 top-0 w-screen">
       <div className="absolute inset-0 bg-black opacity-50"></div>
       <div className="font-Poppins max-w-xl p-10 rounded-3xl border-2 relative bg-white">
         {!deleteWarning ? (
@@ -37,14 +35,19 @@ function DashboardProductCard({
                   {product.details}
                 </p>
                 <h5 className="uppercase text-[#334A78] font-medium text-xs opacity-80">
-                  Category:{product.products?.category}
+                  Category:
+                  <span className="font-bold text-[#000]">
+                    {product.products?.category}
+                  </span>
                 </h5>
                 <h5 className="uppercase text-[#334A78] font-medium text-xs opacity-80">
-                  Specification:{product.products?.subcategory1}
+                  Specification:
+                  <span className="font-bold text-[#000]">
+                    {product.products?.subcategory1}
+                  </span>
                 </h5>
-                <p className="text-[#334A78] text-sm font-medium">
-                  Final Price
-                </p>
+                <p className="text-[#334A78] text-sm font-medium">Price</p>
+
                 <p className="font-semibold text-[#000] text-xl">
                   ₹{product.price} 
                 </p>
