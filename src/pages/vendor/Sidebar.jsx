@@ -6,7 +6,7 @@ import { TiHomeOutline } from "react-icons/ti";
 import { VscSignOut } from "react-icons/vsc";
 import { IoSettingsSharp } from "react-icons/io5";
 import { LuBlend } from "react-icons/lu";
-// import { BsQuestionCircle } from "react-icons/bs";
+import { BsQuestionCircle } from "react-icons/bs";
 
 function Sidebar({
   handleLogout,
@@ -15,6 +15,7 @@ function Sidebar({
   isProductOpen,
   isSettingOpen,
   handledashboard,
+  handleHelp,
 }) {
   const [isExpanded, setIsExpanded] = useState(false);
   const navigate = useNavigate();
@@ -51,6 +52,12 @@ function Sidebar({
           isExpanded={isExpanded}
         />
         <SidebarItem
+          icon={<RiDashboardFill />}
+          text="Dashboard"
+          onClick={handledashboard}
+          isExpanded={isExpanded}
+        />
+        <SidebarItem
           icon={<LuBlend />}
           text="Product"
           onClick={() => {
@@ -58,12 +65,6 @@ function Sidebar({
           }}
           isExpanded={isExpanded}
           isActive={isProductOpen}
-        />
-        <SidebarItem
-          icon={<RiDashboardFill />}
-          text="Dashboard"
-          onClick={handledashboard}
-          isExpanded={isExpanded}
         />
       </div>
 
@@ -76,11 +77,12 @@ function Sidebar({
         >
           others
         </h3>
-        {/* <SidebarItem
+        <SidebarItem
           icon={<BsQuestionCircle />}
           text="Help"
           isExpanded={isExpanded}
-        /> */}
+          onClick={handleHelp}
+        />
         <SidebarItem
           icon={<IoSettingsSharp />}
           text="Setting"

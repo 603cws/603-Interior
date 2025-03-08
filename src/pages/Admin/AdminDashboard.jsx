@@ -60,7 +60,9 @@ function AdminDashboard() {
   const [vendorproductlist, setVendorproductlist] = useState(false);
 
   const [products, setProducts] = useState([]);
+  const [filteredProducts, setFilteredProducts] = useState([]);
   const [addons, setAddons] = useState([]);
+  const [filteredAddons, setFilteredAddons] = useState([]);
 
   const menuRef = useRef({});
   const buttonRef = useRef({});
@@ -128,7 +130,8 @@ function AdminDashboard() {
   const [itemsPerPage, setItemsPerPage] = useState(10); // Default (gets updated dynamically)
   const [currentPage, setCurrentPage] = useState(1);
 
-  const items = toggle ? products : addons;
+  const items = toggle ? filteredProducts : filteredAddons;
+  // const items = toggle ? products : addons;
   const totalPages = Math.ceil(items.length / itemsPerPage);
 
   useEffect(() => {
@@ -176,6 +179,7 @@ function AdminDashboard() {
         return new Date(b.created_at) - new Date(a.created_at);
       });
       setProducts(sortedData);
+      setFilteredProducts(sortedData);
     } catch (error) {
       console.log("Error fetching products:", error);
     } finally {
@@ -201,6 +205,7 @@ function AdminDashboard() {
         console.log("Error fetching addons:", error);
       } else {
         setAddons(sortedData);
+        setFilteredAddons(sortedData);
       }
     } finally {
       setIsAddonRefresh(false);
@@ -307,54 +312,6 @@ function AdminDashboard() {
     }
     setDeleteWarning(false);
   };
-
-  // const handleAccept = async (product) => {
-  //   try {
-  //     if (product && product.type === "product") {
-  //       await supabase
-  //         .from("product_variants") // Table name
-  //         .update({ status: "approved" }) // New status
-  //         .eq("id", product.id); // Matching row
-  //       toast.success("Product accepted");
-  //     }
-
-  //     if (product.type === "addon") {
-  //       await supabase
-  //         .from("addon_variants") // Ensure this matches your table name
-  //         .update({ status: "approved" }) // New status
-  //         .eq("id", product.id); // Matching row
-  //       toast.success("Addon accepted");
-  //     }
-  //   } finally {
-  //     product.type === "product"
-  //       ? setIsProductRefresh(true)
-  //       : setIsAddonRefresh(true);
-  //   }
-  // };
-
-  // const handleReject = async (product) => {
-  //   try {
-  //     if (product && product.type === "product") {
-  //       await supabase
-  //         .from("product_variants") // Table name
-  //         .update({ status: "rejected" }) // New status
-  //         .eq("id", product.id); // Matching row
-  //       toast.success("Product accepted");
-  //     }
-
-  //     if (product.type === "addon") {
-  //       await supabase
-  //         .from("addon_variants") // Ensure this matches your table name
-  //         .update({ status: "rejected" }) // New status
-  //         .eq("id", product.id); // Matching row
-  //       toast.success("Addon accepted");
-  //     }
-  //   } finally {
-  //     product.type === "product"
-  //       ? setIsProductRefresh(true)
-  //       : setIsAddonRefresh(true);
-  //   }
-  // };
 
   const handleUpdateStatus = async (product, newStatus) => {
     try {
@@ -515,6 +472,34 @@ function AdminDashboard() {
     setFilteredUsers(filtereduser);
   };
 
+  const filterItems = (query) => {
+    console.log(query);
+
+    if (toggle) {
+      if (!query) {
+        setFilteredProducts(products); // Reset to original list when input is empty
+        return;
+      }
+      const filtered = products.filter((item) =>
+        item.title.toLowerCase().includes(query.toLowerCase())
+      );
+      console.log(filtered);
+
+      setFilteredProducts(filtered);
+    } else {
+      if (!query) {
+        setFilteredAddons(addons); // Reset to original list when input is empty
+        return;
+      }
+      const filtered = addons.filter((item) =>
+        item.title.toLowerCase().includes(query.toLowerCase())
+      );
+      console.log(filtered);
+
+      setFilteredAddons(filtered);
+    }
+  };
+
   const filterVendorByMultipleFields = (query) => {
     if (!query) {
       setFilteredvendors(allvendors); // Reset to original list when input is empty
@@ -641,6 +626,8 @@ function AdminDashboard() {
                       totalVendors={allvendors}
                       vendors={handleVendor}
                       clients={handleclient}
+                      products={products}
+                      addons={addons}
                     />
                   </div>
                   <div className="flex-1 p-4">
@@ -716,6 +703,15 @@ function AdminDashboard() {
                         <h3 className="capitalize font-semibold text-xl ">
                           product list
                         </h3>
+
+                        <div className="w-1/2">
+                          <input
+                            type="text"
+                            className="w-full rounded-lg px-2 py-1 outline-none border-2 border-gray-400"
+                            placeholder="......search by product name"
+                            onChange={(e) => filterItems(e.target.value)}
+                          />
+                        </div>
 
                         {/* <button
                           onClick={handlenewproduct}

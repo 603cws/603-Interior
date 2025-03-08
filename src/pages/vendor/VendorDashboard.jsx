@@ -9,12 +9,14 @@ import VendorProfile from "./VendorProfile";
 import Sidebar from "./Sidebar";
 import VendorItem from "./VendorItem";
 import VendorDashboardCards from "./VendorDashboardCards";
+import Help from "../user/Help";
 
 function VendorDashboard() {
   const [isSettingOpen, setIsSettingOpen] = useState(false);
   const [isProductOpen, setIsProductOpen] = useState(false);
   const [isdashboardopen, setIsdashboardopen] = useState(true);
   const [iseditopen, setIsEditopen] = useState(true);
+  const [help, setHelp] = useState(false);
 
   const navigate = useNavigate();
   const {
@@ -29,17 +31,27 @@ function VendorDashboard() {
     setIsProductOpen(false);
     setIsdashboardopen(false);
     setIsSettingOpen(true);
+    setHelp(false);
   };
   const handleproduct = () => {
     setIsSettingOpen(false);
     setIsdashboardopen(false);
     setIsProductOpen(true);
+    setHelp(false);
   };
 
   const handledashboard = () => {
     setIsSettingOpen(false);
     setIsProductOpen(false);
     setIsdashboardopen(true);
+    setHelp(false);
+  };
+
+  const handleHelp = () => {
+    setIsSettingOpen(false);
+    setIsProductOpen(false);
+    setIsdashboardopen(false);
+    setHelp(true);
   };
 
   const handleLogout = async () => {
@@ -78,6 +90,7 @@ function VendorDashboard() {
           isProductOpen={isProductOpen}
           isSettingOpen={isSettingOpen}
           handledashboard={handledashboard}
+          handleHelp={handleHelp}
         />
         <div className="flex-1 flex flex-col relative h-full px-2">
           {/* header for dashboard */}
@@ -143,6 +156,9 @@ function VendorDashboard() {
                 </div>
               </div>
             )}
+
+            {/* help */}
+            {help && <Help />}
           </div>
         </div>
       </div>

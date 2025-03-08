@@ -1,12 +1,11 @@
-import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { supabase } from "../../services/supabase";
 import Select from "react-select";
 import { IoEyeOffOutline, IoEyeOutline } from "react-icons/io5";
+import toast from "react-hot-toast";
 
 function CreateUser() {
-  const navigate = useNavigate();
-  const [role, setRole] = useState("");
+  // const [role, setRole] = useState("");
   const [categories, setCategories] = useState([]);
   const [formData, setFormData] = useState({
     company: "",
@@ -19,7 +18,7 @@ function CreateUser() {
     password: "",
     confirmPassword: "",
   });
-  const [selectedCategories, setSelectedCategories] = useState([]); // Stores selected categories
+  // const [selectedCategories, setSelectedCategories] = useState([]); // Stores selected categories
 
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] =
@@ -133,18 +132,18 @@ function CreateUser() {
       !formData.password ||
       !formData.confirmPassword
     ) {
-      alert("All fields are required!");
+      toast.error("All fields are required!");
       return;
     }
 
     if (formData.role === "vendor" && formData.category.length === 0) {
-      alert("Category is required for Vendors!");
+      toast.error("Category is required for Vendors!");
       return;
     }
 
     // Password validation
     if (formData.password !== formData.confirmPassword) {
-      alert("Passwords do not match!");
+      toast.error("Passwords do not match!");
       return;
     }
 
@@ -155,11 +154,12 @@ function CreateUser() {
     });
 
     if (error) {
-      alert(error);
+      toast.error(error);
       console.error("Error signing up:", error);
       return;
     }
     console.log("User signed up successfully:", data);
+    toast.success(`${formData.role} created successfully`);
 
     const userId = data.user.id;
 
@@ -175,11 +175,8 @@ function CreateUser() {
   return (
     // <div className="">
     <div className="flex-1 rounded-xl bg-[#EBF0FF] mb-5 cursor-default overflow-hidden ">
-      {/* <div className=" flex-col flex justify-center items-center"> */}
       <div className="h-[calc(100vh-130px)] flex-col flex justify-center items-center">
         <div className=" w-11/12 bg-white p-6 border border-black rounded-xl shadow-md flex flex-col items-center text-center">
-          {/* <div className="w-full bg-white p-6 rounded-xl shadow-md flex-1 flex-col items-center  text-center"> */}
-          {/* <div className="w-full bg-white p-6 border border-black rounded-xl shadow-md flex-1 flex-col items-center  text-center"> */}
           {/* Header Section */}
           <div className="w-full text-left font-Poppins">
             <h4 className="text-xl font-semibold mb-2 text-[#231F5C]">
@@ -193,7 +190,6 @@ function CreateUser() {
           {/* Form Fields */}
           <form
             onSubmit={handleSubmit}
-            // className="w-full text-left text-base ml-20"
             className="w-full grid grid-cols-2 gap-4 text-left text-base ml-20"
           >
             <div className="flex flex-col justify-center gap-2">
@@ -301,22 +297,6 @@ function CreateUser() {
                 </div>
               </div>
 
-              {/* Location - Fixed Position */}
-              <div className="flex flex-col">
-                <label className="font-medium">Location*</label>
-                <input
-                  type="text"
-                  name="location"
-                  placeholder="Enter location"
-                  value={formData.location}
-                  onChange={handleChange}
-                  className={`border p-2 rounded-md ${
-                    formData.role === "vendor" ? "max-w-md" : "max-w-md"
-                  }`}
-                  required
-                />
-              </div>
-
               {/* Confirm Password - Always on Right Side */}
               <div className="flex flex-col relative max-w-md">
                 <label className="font-medium">Confirm Password*</label>
@@ -340,9 +320,26 @@ function CreateUser() {
                   )}
                 </div>
               </div>
+
+              {/* Location - Fixed Position */}
+              <div className="flex flex-col">
+                <label className="font-medium">Location*</label>
+                <input
+                  type="text"
+                  name="location"
+                  placeholder="Enter location"
+                  value={formData.location}
+                  onChange={handleChange}
+                  className={`border p-2 rounded-md ${
+                    formData.role === "vendor" ? "max-w-md" : "max-w-md"
+                  }`}
+                  required
+                />
+              </div>
             </div>
 
             {/* Submit Button */}
+
             <div className="col-span-2 flex justify-center mt-5">
               <button
                 type="submit"
