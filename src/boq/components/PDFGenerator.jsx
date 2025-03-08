@@ -77,60 +77,91 @@ const PDFGenerator = {
     });
 
     // 2. Create Summary Section
-    let yOffset = 50;
     doc.setFontSize(14);
     doc.setFont("helvetica", "bold");
-    doc.text("Summary", doc.internal.pageSize.width / 2, yOffset, {
+
+    // Dynamically calculate the full table width
+    const tablePageWidth = doc.internal.pageSize.width - 20; // Full table width minus margin
+    const xOffsetCenter = 10; // Keep margin from the left (10)
+
+    // Draw Blue Background for "Summary" (Full Width)
+    doc.setFillColor(17, 69, 112); // Set background color
+    doc.rect(xOffsetCenter, 50, tablePageWidth, 10, "F");
+
+    // Add "Summary" Text Centered
+    doc.setTextColor(255, 255, 255); // White text
+    doc.text("Summary", doc.internal.pageSize.width / 2, 57, {
       align: "center",
     });
 
-    yOffset += 8;
+    // Reset Text Color to Black
+    doc.setTextColor(0, 0, 0);
+
+    // ✅ Leave Space After Summary Before Table Starts
+    let yOffset = 60;
+    yOffset += 5; // Add 10 units space after summary
+
+    // Calculate Grand Total
+    const grandTotalAmount = Object.values(categoryTotals).reduce(
+      (acc, val) => acc + val,
+      0
+    );
 
     // Prepare summary table rows
     const categoryEntries = Object.entries(categoryTotals);
     const summaryRows = categoryEntries.map(([category, total]) => [
-      { content: category, styles: { halign: "left", fontSize: 10 } }, // Left-aligned category name
+      { content: category, styles: { halign: "center", fontSize: 10 } },
       {
         content: `Rs. ${formatNumber(total)}/-`,
-        styles: { halign: "right", fontSize: 10 },
-      }, // Right-aligned price
+        styles: { halign: "center", fontSize: 10 },
+      },
     ]);
 
-    // Add Summary Table
+    // Add Grand Total Row (Bold + Center)
+    summaryRows.push([
+      {
+        content: "Grand Total",
+        styles: { halign: "center", fontSize: 10, fontStyle: "bold" },
+      },
+      {
+        content: `Rs. ${formatNumber(grandTotalAmount)}/-`,
+        styles: {
+          halign: "center",
+          fontSize: 10,
+          fontStyle: "bold",
+          textColor: [0, 0, 0], // Black text for grand total
+        },
+      },
+    ]);
+
+    // Add Summary Table Center-Aligned
     doc.autoTable({
       head: [["Category", "Price"]],
       body: summaryRows,
       columnStyles: {
-        0: { cellWidth: 90, halign: "left" }, // Category column
-        1: { cellWidth: 40, halign: "right" }, // Price column
+        0: { cellWidth: tablePageWidth / 2, halign: "center" }, // ✅ Center-align the category
+        1: { cellWidth: tablePageWidth / 2, halign: "center" }, // ✅ Center-align the price
       },
-      startY: yOffset,
-      styles: { fontSize: 10, cellPadding: 5 },
+      startY: yOffset, // ✅ The table will now start after some space
+      styles: {
+        fontSize: 10,
+        cellPadding: 5,
+        halign: "center", // ✅ This makes the content center aligned
+      },
       headStyles: {
-        fillColor: [22, 160, 133], // Light green header
+        fillColor: [22, 160, 133], // Header color
         textColor: [255, 255, 255], // White text
         fontStyle: "bold",
+        halign: "center", // ✅ Center-align the table header
+      },
+      tableWidth: "auto",
+      margin: {
+        left: xOffsetCenter, // Keep the table centered horizontally
+        right: xOffsetCenter,
       },
     });
 
     yOffset = doc.autoTable.previous.finalY + 10;
-
-    // 3. Add Grand Total (Bold)
-    const grandTotal = Object.values(categoryTotals).reduce(
-      (acc, val) => acc + val,
-      0
-    );
-    const grandTotalTextt = `Grand Total: Rs. ${formatNumber(grandTotal)}/-`;
-
-    doc.setFontSize(12);
-    doc.setFont("helvetica", "bold");
-
-    // Positioning: Keep it aligned with "Price" column
-    const textWidth2 = doc.getTextWidth(grandTotalTextt);
-    const pageWidth2 = doc.internal.pageSize.width;
-    const xPos2 = pageWidth2 - textWidth2 - 15;
-
-    doc.text(grandTotalTextt, xPos2, yOffset);
 
     // 3. Process images asynchronously before table rendering
     for (const [category, products] of Object.entries(categorizedProducts)) {
@@ -163,7 +194,7 @@ const PDFGenerator = {
           const productDetails = `
 Title: ${item.product_variant.variant_title || "N/A"}
 Subcategory: ${item.subcategory || "N/A"}
-Price: Rs. ${item.product_variant.variant_price || "N/A"}/-
+Price: Rs. ${formatNumber(item.finalPrice) || "N/A"}/-
 Description: ${item.product_variant.variant_details || "N/A"}
                 `;
 
