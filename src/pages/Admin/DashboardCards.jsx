@@ -1,10 +1,25 @@
 import React from "react";
 import Spinner from "../../common-components/Spinner";
 
-function DashboardCards({ totalclients, totalVendors, vendors, clients }) {
+function DashboardCards({
+  totalclients,
+  totalVendors,
+  vendors,
+  clients,
+  products,
+  addons,
+}) {
   if (!totalclients || !totalVendors) {
     return <Spinner />;
   }
+
+  const pendingproduct = products.filter(
+    (product) => product.status === "pending"
+  );
+
+  const pendingAddons = addons.filter((addon) => addon.status === "pending");
+
+  console.log(pendingproduct, pendingAddons);
 
   return (
     <div>
@@ -40,9 +55,9 @@ function DashboardCards({ totalclients, totalVendors, vendors, clients }) {
         </div>
 
         <div className="bg-gradient-to-br from-[#EF5E7A] to-[#D35385] text-white p-7 rounded-3xl flex flex-col justify-between lg:h-48 lg:w-40 xl:h-56 xl:w-48 relative hover:scale-110 transition-transform duration-300 ease-in-out cursor-pointer">
-          <h2 className="self-center text-xl font-bold">Pending Orders</h2>
+          <h2 className="self-center text-xl font-bold">Pending Products</h2>
           <h1 className="self-end justify-end font-semibold text-3xl xl:text-5xl">
-            0
+            {pendingproduct.length}
           </h1>
           <img
             src="/images/dashboard-orders.png"
@@ -52,9 +67,9 @@ function DashboardCards({ totalclients, totalVendors, vendors, clients }) {
         </div>
 
         <div className="bg-gradient-to-br from-[#D623FE] to-[#A530F2] text-white p-7 rounded-3xl flex flex-col justify-between lg:h-48 lg:w-40 xl:h-56 xl:w-48 relative hover:scale-110 transition-transform duration-300 ease-in-out cursor-pointer">
-          <h2 className="self-center text-xl font-bold">New Orders</h2>
+          <h2 className="self-center text-xl font-bold">Pending Addons</h2>
           <h1 className="self-end justify-end font-semibold text-3xl xl:text-5xl">
-            0
+            {pendingAddons.length}
           </h1>
           <img
             src="/images/dashboard-new-orders.png"

@@ -2,23 +2,15 @@ import { MdKeyboardArrowLeft } from "react-icons/md";
 import { BsUpload } from "react-icons/bs";
 import { useEffect, useState } from "react";
 import { FaRegQuestionCircle } from "react-icons/fa";
-
-// import React, { useEffect, useRef } from "react";
-// import { useNavigate } from "react-router-dom"; // Import useNavigate
-// import { useForm, useFieldArray } from "react-hook-form";
 import { supabase } from "../../services/supabase";
-import { toast, Toaster } from "react-hot-toast";
+import { toast } from "react-hot-toast";
 import { useApp } from "../../Context/Context";
 import { AllCatArray, specialArray } from "../../utils/AllCatArray";
-// import { filter } from "motion/react-client";
 
 function VendorNewProduct({ setAddNewProduct, setProductlist }) {
   const [additionalImages, setAdditionalImages] = useState([]);
   const [file, setFile] = useState(null);
-  // const [dragging, setDragging] = useState(false);
   const [preview, setPreview] = useState(null);
-
-  // let resources = [];
   const [resources, setResources] = useState([]);
   const [subcat, setSubcat] = useState([]);
 
@@ -93,11 +85,6 @@ function VendorNewProduct({ setAddNewProduct, setProductlist }) {
         ...prevVariants,
         additionalImages: [...prevVariants.additionalImages, ...files], // Add a new image
       }));
-      // const updatedVariants = [...variants];
-      // updatedVariants[index].additionalImages = Array.from(
-      //   e.target.files
-      // );
-      // setVariant(Variant);
     } else {
       alert("You can upload up to 5 additional images only.");
     }
@@ -133,8 +120,6 @@ function VendorNewProduct({ setAddNewProduct, setProductlist }) {
 
       const subcattodisplay = filtered.flatMap((subcat) => subcat.subCat1);
       console.log(subcattodisplay);
-      // setResources(filtered);
-      // setSubcat(subcattodisplay);
     });
   }, []);
 

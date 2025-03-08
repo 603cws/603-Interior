@@ -1,5 +1,5 @@
 import React from "react";
-import { lazy, Suspense, useEffect } from "react";
+import { lazy, Suspense, useEffect, useState } from "react";
 // import Layout from "./layout/pages/Layout";
 import Boq from "./boq/pages/Boq";
 import PageNotFound from "./common-components/PageNotFound";
@@ -7,15 +7,9 @@ import PageNotFound from "./common-components/PageNotFound";
 import { Route, Routes } from "react-router-dom";
 import RegisterUser from "./layout/components/RegisterUser";
 import ErrorModal from "./common-components/ErrorModal";
-import ProductCard from "./boq/components/ProductCard";
-import ProductOverview from "./boq/components/ProductOverview";
-import Addon from "./boq/components/Addon";
 import RecommendComp from "./boq/components/RecommendComp";
 import SelectArea from "./boq/components/SelectArea";
 import Landing from "./pages/Landing";
-import NumberAnimation from "./common-components/NumberAnimation";
-import JobCard from "./common-components/JobCard";
-
 import SpinnerFullPage from "./common-components/SpinnerFullPage";
 import Contactus from "./pages/Contactus";
 import AboutUs from "./pages/AboutUs";
@@ -26,7 +20,6 @@ import BlogDetail from "./pages/BlogDetail";
 import ProfileCard from "./boq/components/ProfileCard";
 import Dashboard from "./pages/Dashboard";
 import ScrollToTop from "./common-components/ScrollToTop";
-// import useAuthRefresh from "./Context/useAuthRefresh"; // Import the hook
 import BecomeSeller from "./pages/BecomeSeller";
 import { useApp } from "./Context/Context";
 import Plans from "./common-components/Plans";
@@ -40,8 +33,6 @@ import Howtosell from "./pages/Howtosell";
 import VendorDashboard from "./pages/vendor/VendorDashboard";
 // import AdminDashboard from "./pages/AdminDashboard";
 import AdminDashboard from "./pages/Admin/AdminDashboard";
-// import DashboardProductCard from "./common-components/DashboardProductCard";
-import DashboardGetPlan from "./common-components/DashboardGetPlan";
 import PricingCard from "./common-components/PricingCard";
 import VendorRegister from "./pages/vendor/VendorRegister";
 import DoorScrollEffect from "./pages/DoorScrollEffect";
@@ -58,10 +49,37 @@ function App() {
 
   const { accountHolder, isAuthenticated, isAuthLoading } = useApp();
 
+  // const [hasCheckedAuth, setHasCheckedAuth] = useState(false);
+
+  // useEffect(() => {
+  //   if (!isAuthLoading) {
+  //     setHasCheckedAuth(true);
+  //   }
+  // }, [isAuthLoading]);
+
+  // // If authentication is still loading but hasn't been checked yet, show the spinner
+  // if (isAuthLoading && !hasCheckedAuth) {
+  //   return <SpinnerFullPage />;
+  // }
+
   // While authentication is loading, show a spinner
   if (isAuthLoading) {
+    console.log(isAuthLoading);
     return <SpinnerFullPage />;
   }
+
+  console.log(isAuthLoading, isAuthenticated);
+
+  // useEffect(() => {
+  //   const timeout = setTimeout(() => {
+  //     if (isAuthLoading) {
+  //       console.warn("isAuthLoading took too long, forcing it to false.");
+  //       // You can set it to false manually if needed
+  //     }
+  //   }, 2000); // 5 seconds timeout
+
+  //   return () => clearTimeout(timeout);
+  // }, [isAuthLoading]);
 
   return (
     <div>
