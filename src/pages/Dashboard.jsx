@@ -351,7 +351,7 @@ function Dashboard() {
   // console.log("selectedboq", selectedBoq);
 
   return (
-    <div className="bg-[url('images/admin/Admin.png')] bg-cover bg-center bg-no-repeat p-3 xl:p-5">
+    <div className="bg-[url('images/bg/vendor.png')] bg-cover bg-center bg-no-repeat p-3 xl:p-5">
       <div className="flex gap-3 max-h-fit overflow-hidden bg-white rounded-3xl">
         {/* sidebar */}
         <div
@@ -430,7 +430,7 @@ function Dashboard() {
         </div>
         <div className="flex-1 flex flex-col relative h-full px-2">
           {/* header for dashboard */}
-          <div className="flex justify-between items-center border-2 rounded-3xl mt-2 sticky top-3 z-10 bg-white h-[50px]">
+          <div className="flex justify-between items-center border-2 border-[#194F48] rounded-3xl mt-2 sticky top-3 z-10 bg-white h-[50px]">
             <div className="mx-3">
               <h3 className="font-bold text-lg capitalize ">
                 {currentSection}
@@ -443,7 +443,7 @@ function Dashboard() {
 
           {/* div for dashboard */}
           {dashboard && (
-            <div className="w-full  border-2 border-[#000] rounded-3xl my-2.5">
+            <div className="w-full  border-2 border-[#194F48] rounded-3xl my-2.5">
               {/* for dashboard */}
               <div className="w-full flex overflow-y-auto scrollbar-hide h-[calc(100vh-120px)] py-2 px-3">
                 {/* dashboard area layout */}

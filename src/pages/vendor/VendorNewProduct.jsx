@@ -217,7 +217,7 @@ function VendorNewProduct({ setAddNewProduct, setProductlist }) {
           //   );
           //   continue;
           // }
-          additionalImagePaths.push(additionalImageUpload);
+          additionalImagePaths.push(additionalImageUpload.path);
         }
 
         // Insert the variant into the product_variants table
@@ -228,7 +228,7 @@ function VendorNewProduct({ setAddNewProduct, setProductlist }) {
             title: variant.title,
             price: variant.price,
             details: variant.details,
-            image: mainImageUpload, // Store the main image path
+            image: mainImageUpload.path, // Store the main image path
             additional_images: additionalImagePaths, // Store paths of additional images
             segment: variant.segment, // Store segment
             dimensions: variant.dimension, // Store dimension

@@ -5,6 +5,7 @@ import { useApp } from "../../Context/Context";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { supabase } from "../../services/supabase";
+import UnusedAreaWarning from "./UnusedAreaWarning";
 
 // function Navbar({ totalArea, setTotalArea, MIN_AREA, MAX_AREA, resetAll }) {
 function Navbar({
@@ -20,6 +21,8 @@ function Navbar({
   const [error, setError] = useState(false);
 
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [unusedArea, setUnusedArea] = useState(0);
+  const [showWarning, setShowWarning] = useState(false);
   const {
     isAuthenticated,
     layoutImgRef,
@@ -121,11 +124,27 @@ function Navbar({
     return `https://bwxzfwsoxwtzhjbzbdzs.supabase.co/storage/v1/object/public/addon/${data.path}`;
   };
 
+  const generateBOQclick = () => {
+    const usedPercentage = (builtArea / totalArea) * 100;
+    console.log("used percentage", usedPercentage);
+
+    if (usedPercentage < 90) {
+      console.log(" Warning condition met, showing modal");
+      setUnusedArea(totalArea - builtArea);
+      setShowWarning(true);
+      return;
+    } else {
+      console.log("Skipping warning, proceeding to save BOQ");
+      handlegenrateboq();
+    }
+  };
+
   const handlegenrateboq = async () => {
     try {
       setIsSubmitting(true);
       if (!totalArea) {
         toast.error("Enter the Area");
+        return;
       }
 
       // Trigger export and wait for image to be available
@@ -285,7 +304,7 @@ function Navbar({
         {/* button for generate boq */}
         <button
           className="generateBoq bg-[#1A3A36] mt-2 rounded-3xl text-sm py-2 px-5 text-white mb-2 border-2 border-[#34BFAD]"
-          onClick={handlegenrateboq}
+          onClick={generateBOQclick}
           disabled={isSubmitting}
         >
           {isSubmitting ? (
@@ -329,6 +348,16 @@ function Navbar({
         {/* </div> */}
       </div>
       {/* {warning && <ErrorModal onclose={()=>setWarning(false)} />} */}
+      {showWarning && (
+        <UnusedAreaWarning
+          unusedArea={unusedArea}
+          onConfirm={handlegenrateboq}
+          onCancel={() => {
+            console.log("Cancel clicked");
+            setShowWarning(false);
+          }}
+        />
+      )}
     </div>
   );
 }

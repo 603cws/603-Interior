@@ -39,8 +39,8 @@ function ErrorModal({ onclose, message }) {
 
   return (
     <div className="w-full h-svh z-20 top-0 absolute bg-[rgba(25,25,25,0.46)] flex justify-center items-center">
-      <div className="grid grid-cols-[2fr_1fr] bg-[#1A3A36] border-2 rounded-3xl w-5/6 2xl:w-1/2 mx-auto ">
-        <div className="text-white p-5 flex flex-col justify-center gap-4 m-10">
+      <div className="grid grid-cols-[1.5fr_1fr] bg-[#1A3A36] border-2 rounded-3xl max-w-4xl mx-auto ">
+        <div className="text-white p-5 flex flex-col justify-center gap-4 my-10">
           <p className="text-4xl font-['UbuntuSans-Regular',_sans-serif]">
             <span className="text-6xl tracking-tighter">W</span>arning
           </p>
@@ -85,11 +85,11 @@ function ErrorModal({ onclose, message }) {
         </div>
 
         {/* Image Section */}
-        <div className="flex justify-center my-10 mx-5 relative">
-          <img src="images/Errorimg.png" alt="Error chair" />
-          <button className="absolute -top-5 right-0" onClick={onclose}>
-            <MdCancel size={30} color="white" />
-          </button>
+        <div className="flex justify-center my-10 mx-1 relative">
+          <img src="images/Errorimg.gif" alt="Error chair" />
+          {/* <button className="absolute -top-5 right-0" onClick={onclose}> */}
+          {/* <MdCancel size={30} color="white" /> */}
+          {/* </button> */}
         </div>
       </div>
     </div>

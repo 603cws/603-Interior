@@ -29,6 +29,13 @@ function VendorItem() {
   });
   const [productPreview, setProductPreview] = useState(false);
 
+  //delete warning
+  const [deleteWarning, setDeleteWarning] = useState(false);
+  //product refresh
+  const [isproductRefresh, setIsProductRefresh] = useState(false);
+  //addon refresh
+  const [isaddonRefresh, setIsAddonRefresh] = useState(false);
+
   console.log("selected product", selectedProductview);
 
   const menuRef = useRef({});
@@ -102,8 +109,11 @@ function VendorItem() {
 
   useEffect(() => {
     fetchProducts();
+  }, [isproductRefresh]);
+
+  useEffect(() => {
     fetchAddons();
-  }, []);
+  }, [isaddonRefresh]);
 
   const handlenewproduct = () => {
     setProductlist(false);
@@ -147,24 +157,67 @@ function VendorItem() {
     setSelectedProductview(product);
   };
 
-  const handleDelete = async (product) => {
-    if (!product.id) return;
+  const handleDeleteClick = (item) => {
+    setDeleteWarning(true);
+    setSelectedProductview(item);
+  };
 
+  const handleDelete = async (selectedProductview) => {
     try {
-      const { error } = await supabase
-        .from("product_variants") // Ensure this matches your table name
-        .delete()
-        .eq("id", product.id);
+      if (selectedProductview && selectedProductview.type === "product") {
+        await supabase
+          .from("product_variants") // Ensure this matches your table name
+          .delete()
+          .eq("id", selectedProductview.id);
 
-      if (error) throw error; // Throw error to be caught in catch block
+        toast.success("Product deleted successfully!");
+        setIsProductRefresh(true);
+      }
 
-      toast.success("Product deleted successfully!");
+      if (selectedProductview.type === "addon") {
+        await supabase
+          .from("addon_variants") // Ensure this matches your table name
+          .delete()
+          .eq("id", selectedProductview.id);
+        toast.success("Product deleted successfully!");
+        setIsAddonRefresh(true);
+      }
+
+      let imagePaths = [];
+
+      if (selectedProductview.image) {
+        imagePaths.push(selectedProductview.image);
+      }
+      if (selectedProductview.additional_images) {
+        try {
+          const parsedAdditionalImages = JSON.parse(
+            selectedProductview.additional_images
+          );
+          if (Array.isArray(parsedAdditionalImages)) {
+            imagePaths = imagePaths.concat(parsedAdditionalImages);
+          }
+        } catch (parseError) {
+          console.log("error parsing error", parseError);
+        }
+      }
+
+      if (imagePaths.length > 0) {
+        const { storageError } = await supabase.storage
+          .from("addon")
+          .remove(imagePaths);
+
+        if (storageError) throw storageError;
+      }
+
       setProductPreview(false); // Close the modal after deletion
     } catch (error) {
-      toast.error("Failed to delete product.");
-      console.error("Delete error:", error);
+      console.log(error);
+    } finally {
+      selectedProductview.type === "product"
+        ? setIsProductRefresh(true)
+        : setIsAddonRefresh(true);
     }
-    fetchProducts(1); // Fetch products after deletion
+    setDeleteWarning(false);
   };
 
   return (
@@ -310,11 +363,11 @@ function VendorItem() {
                                     }}
                                     className=" flex gap-2 items-center w-full text-left px-3 py-2 hover:bg-gray-200"
                                   >
-                                    <VscEye /> view
+                                    <VscEye /> Edit
                                   </button>
                                   <button
                                     onClick={() => {
-                                      handleDelete(item);
+                                      handleDeleteClick(item);
                                     }}
                                     className="flex gap-2 items-center w-full text-left px-3 py-2 hover:bg-gray-200"
                                   >
@@ -401,7 +454,45 @@ function VendorItem() {
             }}
             product={selectedProductview}
             handleDelete={handleDelete}
+            // updateStatus={handleUpdateStatus}
+            deleteWarning={deleteWarning}
+            setDeleteWarning={setDeleteWarning}
           />
+        </div>
+      )}
+
+      {deleteWarning && (
+        <div className="flex justify-center items-center h-screen fixed inset-0 z-30 top-0 w-screen">
+          <div className="absolute inset-0 bg-black opacity-50"></div>
+          <div className="bg-white relative py-7 px-20">
+            <div className="flex justify-center items-center">
+              <img
+                src="images/icons/delete-icon.png"
+                alt=""
+                className="h-12 w-12"
+              />
+            </div>
+
+            <h4 className="font-semibold my-5">
+              Do you want to delete {selectedProductview.title}?
+            </h4>
+            <div className="flex justify-between">
+              <button
+                onClick={() => {
+                  setDeleteWarning(false);
+                }}
+                className="px-5 py-2 bg-[#EEEEEE] rounded-md"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => handleDelete(selectedProductview)}
+                className="px-5 py-2 bg-[#B4EAEA] rounded-md"
+              >
+                Delete
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </>

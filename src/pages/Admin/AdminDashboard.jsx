@@ -53,7 +53,6 @@ function AdminDashboard() {
   const [isproductRefresh, setIsProductRefresh] = useState(false);
 
   //addon refresh
-
   const [isaddonRefresh, setIsAddonRefresh] = useState(false);
 
   // vendorproductlist
@@ -89,7 +88,6 @@ function AdminDashboard() {
 
   //delete warning
   const [deleteWarning, setDeleteWarning] = useState(false);
-  const [selectedProduct, setSelectedProduct] = useState();
 
   const tabs = [
     { name: "Products", value: "products" },
@@ -516,7 +514,7 @@ function AdminDashboard() {
   // };
 
   return (
-    <div className="bg-[url('images/admin/Admin.png')] bg-cover bg-center bg-no-repeat p-3 xl:p-5">
+    <div className="bg-[url('images/bg/Admin.png')] bg-cover bg-center bg-no-repeat p-3 xl:p-5">
       <div className="flex gap-3 max-h-fit overflow-hidden bg-white rounded-3xl">
         {/* sidebar */}
         <div
@@ -532,12 +530,12 @@ function AdminDashboard() {
               src="/logo/logo.png"
               alt="Logo"
               onClick={() => navigate("/")}
-              className={`${isExpanded ? "h-20 w-32" : "size-12"}`}
+              className={`${isExpanded ? "h-20 w-32" : "h-10 w-14"}`}
             />
           </div>
 
           {/* Menu Items */}
-          <div className="font-semibold text-lg capitalize leading-normal tracking-wide py-4 text-[#262626] flex flex-col gap-4 px-3">
+          <div className="font-semibold text-lg capitalize leading-normal tracking-wide py-3 xl:py-4 text-[#262626] flex flex-col gap-2 xl:gap-4 px-3">
             <h3
               className={`capitalize text-[#A1A1A1] ${
                 isExpanded ? "mx-4" : "hidden"
@@ -578,7 +576,7 @@ function AdminDashboard() {
           </div>
 
           {/* Other Items */}
-          <div className="font-semibold text-lg capitalize leading-normal tracking-wide py-4 text-[#262626] flex flex-col gap-4 px-3">
+          <div className="font-semibold text-lg capitalize leading-normal tracking-wide py-3 xl:py-4 text-[#262626] flex flex-col gap-2 xl:gap-4 px-3">
             <h3
               className={`capitalize text-[#A1A1A1] ${
                 isExpanded ? "mx-4" : "hidden"

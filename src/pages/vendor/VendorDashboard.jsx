@@ -80,7 +80,7 @@ function VendorDashboard() {
   };
 
   return (
-    <div className="bg-[url('images/admin/Admin.png')] bg-cover bg-center bg-no-repeat p-3 xl:p-5">
+    <div className="bg-[url('images/bg/vendor.png')] bg-cover bg-center bg-no-repeat p-3 xl:p-5">
       <div className="flex gap-3 overflow-y-hidden max-h-fit bg-white rounded-3xl">
         {/* sidebar */}
         <Sidebar
