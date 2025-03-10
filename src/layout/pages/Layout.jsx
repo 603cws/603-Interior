@@ -72,6 +72,7 @@ const initialQuantities = {
 
 const MAX_AREA = 25000;
 const MIN_AREA = 1000;
+const bufferSpace = 0.05; //5% Buffer Space kept
 
 // const calculateReceptionArea = (totalArea) => {
 //   if (totalArea >= 1000 && totalArea < 3500) {
@@ -591,7 +592,7 @@ function Layout() {
       0
     );
 
-    const freeSpace = totalArea * 0.05; // 5% of totalArea
+    const freeSpace = totalArea * bufferSpace;
     const usableArea = totalArea - freeSpace; // Area available for building
 
     // Check if the built area exceeds the usable area
@@ -790,6 +791,7 @@ function Layout() {
           areaValues={areaValues}
           toggleProfile={toggleProfile}
           iconRef={iconRef}
+          builtArea={builtArea}
         />
       </div>
 

@@ -15,6 +15,7 @@ function Navbar({
   areaValues,
   toggleProfile,
   iconRef,
+  builtArea,
 }) {
   const [error, setError] = useState(false);
 
@@ -45,7 +46,8 @@ function Navbar({
     areaValues,
     areaQuantities,
     totalArea = null,
-    imageUrl
+    imageUrl,
+    builtArea
   ) => {
     return {
       userId: userId || null,
@@ -99,6 +101,7 @@ function Navbar({
       otherQty: areaQuantities.other || 0,
       ...(totalArea !== null && { totalArea }),
       layoutImg: imageUrl,
+      usedSpace: builtArea,
     };
   };
 
@@ -134,20 +137,21 @@ function Navbar({
       const imageUrl = await uploadImage(layoutImage || "");
 
       if (totalArea) {
-        const layoutDta = mapAreaValues(
+        const layoutData = mapAreaValues(
           userId,
           areaValues,
           areaQuantities,
           totalArea,
-          imageUrl
+          imageUrl,
+          builtArea
         );
 
-        console.log("layoutDta", layoutDta);
+        console.log("layoutData", layoutData);
 
         // Insert into tables
         const { data, error } = await supabase
           .from("layout")
-          .insert([layoutDta])
+          .insert([layoutData])
           .select("id")
           .single();
 
