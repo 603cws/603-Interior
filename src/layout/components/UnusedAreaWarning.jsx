@@ -2,12 +2,12 @@ import React from "react";
 
 function UnusedAreaWarning({ onConfirm, onCancel, unusedArea }) {
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-30">
-      <div className="bg-white p-6 rounded-lg shadow-lg text-center">
+    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-70 z-30">
+      <div className="bg-[#1A3A36] text-white py-10 px-20 rounded-lg shadow-sm text-center shadow-white">
         <h2 className="text-lg font-semibold">Unused Space Warning</h2>
         <p className="mt-2">
-          You have {unusedArea.toFixed(2)} sq ft of unused area. Are you sure
-          you want to proceed?
+          There is {unusedArea} sq ft of unused space.
+          <br /> Are you sure you want to proceed?
         </p>
         <div className="mt-4 flex justify-center space-x-4">
           <button

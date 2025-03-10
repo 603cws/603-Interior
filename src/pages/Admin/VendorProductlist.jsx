@@ -7,6 +7,7 @@ import Spinner from "../../common-components/Spinner";
 import { supabase } from "../../services/supabase";
 import toast from "react-hot-toast";
 import DashboardProductCard from "../vendor/DashboardProductCard";
+import { useApp } from "../../Context/Context";
 
 function VendorProductlist({ setVendorproductlist, selectedVendor }) {
   const [toggle, setToggle] = useState(true);
@@ -29,15 +30,17 @@ function VendorProductlist({ setVendorproductlist, selectedVendor }) {
   const [isAddProduct, setIsAddProduct] = useState(false);
   const [isProductHovered, setIsProductHovered] = useState(false);
   const [isAddonHovered, setIsAddonHovered] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const [products, setProducts] = useState([]);
+  const [addons, setAddons] = useState([]);
   const menuRef = useRef({});
   const buttonRef = useRef({});
+
+  const vendorcategory = JSON.parse(selectedVendor.allowed_category);
 
   //baseurlforimg
   const baseImageUrl =
     "https://bwxzfwsoxwtzhjbzbdzs.supabase.co/storage/v1/object/public/addon/";
-
-  const [products, setProducts] = useState([]);
-  const [addons, setAddons] = useState([]);
 
   const handleMenuToggle = (id) => {
     setOpenMenuId((prev) => (prev === id ? null : id));
@@ -82,7 +85,14 @@ function VendorProductlist({ setVendorproductlist, selectedVendor }) {
     setToggle(tab === "products"); // Set toggle dynamically
   };
 
-  const items = toggle ? products : addons;
+  const filteredProducts =
+    selectedCategory === ""
+      ? products
+      : products.filter(
+          (product) => product.products?.category === selectedCategory
+        );
+
+  const items = toggle ? filteredProducts : addons;
   const totalPages = Math.ceil(items.length / itemsPerPage);
 
   useEffect(() => {
@@ -184,8 +194,8 @@ function VendorProductlist({ setVendorproductlist, selectedVendor }) {
   }, []);
 
   return (
-    <div className="flex-1  border-2 border-[#000] rounded-3xl ">
-      <div className="overflow-y-auto scrollbar-hide h-[calc(100vh-100px)] rounded-3xl relative ">
+    <div className="flex-1  border-2 border-[#000] rounded-3xl my-2.5">
+      <div className="overflow-y-auto scrollbar-hide h-[calc(100vh-120px)] rounded-3xl relative ">
         <div className=" sticky top-0">
           <div className="flex justify-between items-center px-4 py-2 border-b-2 border-b-gray-400 ">
             <button
@@ -195,6 +205,23 @@ function VendorProductlist({ setVendorproductlist, selectedVendor }) {
             >
               go back
             </button>
+            {toggle && (
+              <div>
+                <select
+                  name="category"
+                  value={selectedCategory}
+                  onChange={(e) => setSelectedCategory(e.target.value)}
+                  id="category"
+                >
+                  <option value="">All categories</option>
+                  {vendorcategory.map((category) => (
+                    <option key={category} value={category}>
+                      {category}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            )}
           </div>
           <div className="flex gap-3 px-4 py-2 border-b-2 border-b-gray-400">
             {tabs.map((tab) => (
