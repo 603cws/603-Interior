@@ -187,6 +187,7 @@ const processData = (data, type, quantity = {}) => {
     allareas: allAreas,
     centralized: allAreas,
     pantry: type === "quantity" ? latestData.loungeQty : latestData.loungeArea,
+    usedSpace: latestData.usedSpace,
   };
 
   return processedData;

@@ -18,6 +18,7 @@ function Navbar({
   handleDeleteBOQ,
   toggleProfile,
   iconRef,
+  areasData,
 }) {
   // const progress = 0;
   const [isOpen, setIsOpen] = useState(false);
@@ -39,8 +40,14 @@ function Navbar({
     };
   }, []);
 
-  const { progress, selectedData, setShowProfile, showProfile, accountHolder } =
-    useApp();
+  const {
+    progress,
+    selectedData,
+    setShowProfile,
+    showProfile,
+    accountHolder,
+    categories,
+  } = useApp();
 
   const naviagte = useNavigate();
 
@@ -208,7 +215,9 @@ function Navbar({
                   selectedData,
                   calculateGrandTotal,
                   accountHolder.companyName,
-                  accountHolder.location
+                  accountHolder.location,
+                  areasData,
+                  categories
                 )
               }
               className="bg-[#1A3A36] text-xs py-2 px-5 text-white rounded-full border-solid border-[1px] border-[#34BFAD] hover:bg-[#34BFAD]"

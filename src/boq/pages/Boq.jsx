@@ -1750,6 +1750,7 @@ function Boq() {
         handleDeleteBOQ={handleDeleteBOQ}
         toggleProfile={toggleProfile}
         iconRef={iconRef}
+        areasData={areasData}
       />
       {/* {questionPopup && (
         <QnaPopup

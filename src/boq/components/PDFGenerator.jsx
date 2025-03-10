@@ -3,7 +3,15 @@ import "jspdf-autotable";
 // import { supabase } from "../../services/supabase";
 
 const PDFGenerator = {
-  generatePDF: async (selectedData, calculateGrandTotal) => {
+  generatePDF: async (
+    selectedData,
+    calculateGrandTotal,
+    companyName,
+    location,
+    areasData,
+    categories
+  ) => {
+    const areas = areasData[0];
     const doc = new jsPDF();
     const baseImageUrl =
       "https://bwxzfwsoxwtzhjbzbdzs.supabase.co/storage/v1/object/public/addon/";
@@ -23,91 +31,107 @@ const PDFGenerator = {
     doc.setFont("helvetica", "normal");
 
     // Hardcoded values (replace with props)
-    const clientName = "John Doe";
     const projectName = "ABC Corp Office";
-    const location = "Mumbai, India";
-    const date = new Date().toLocaleDateString("en-GB"); // en-GB ensures DD/MM/YYYY format
+    const date = new Date().toLocaleDateString("en-GB"); // DD/MM/YYYY format
 
     const details = [
-      `Client: ${clientName}`,
+      `Client: ${companyName}`,
       `Project: ${projectName}`,
       `Location: ${location}`,
+      `Total Area: ${areas.totalArea} sq.ft`,
       `Date: ${date}`,
+      `Used Space: ${areas.usedSpace} sq.ft`,
+      ``,
+      `Unused Space: ${areas.totalArea - areas.usedSpace} sq.ft`,
     ];
 
-    // Arrange details in two columns (better space utilization)
-    let headerYOffset = 25; // Renamed to prevent conflicts
+    // ✅ Arrange details in two columns
+    let headerYOffset = 25; // Starting Y position
     let xOffset = 40;
+
+    // ✅ Dynamically render details
     details.forEach((detail, index) => {
       doc.text(detail, xOffset, headerYOffset);
+
+      // Shift Y-axis after 2 items
       if (index % 2 === 1) {
-        headerYOffset += 5; // Move to next row after every 2 items
-        xOffset = 40; // Reset to starting position
+        headerYOffset += 5;
+        xOffset = 40;
       } else {
-        xOffset = 130; // Move to the right column
+        xOffset = 130;
       }
     });
 
-    // Add a horizontal line below the header
+    // ✅ Draw Line (with clear spacing after it)
+    headerYOffset += 5;
     doc.setLineWidth(0.5);
+    doc.setDrawColor(0);
     doc.line(
       10,
-      headerYOffset + 5,
+      headerYOffset,
       doc.internal.pageSize.width - 10,
-      headerYOffset + 5
+      headerYOffset
     );
 
-    // Format numbers with commas
+    // ✅ ✅ ✅ Now declare yOffset globally (this was missing earlier)
+    let yOffset = headerYOffset + 10; // ✅ Add clear space after the line
+
+    // ✅ Format numbers with commas
     const formatNumber = (num) => num.toLocaleString("en-IN");
 
-    // 1. Calculate Category Totals
+    // ✅ Calculate Category Totals (Show ₹0 Categories Too)
     const categoryTotals = {};
     const categorizedProducts = {};
 
-    selectedData.forEach((item) => {
-      const category = item.category || "Uncategorized";
-      const finalPrice = item.finalPrice || 0;
+    // ✅ Loop through categoriesData and ensure ALL categories are shown
+    categories.forEach((cat) => {
+      const category = cat.category;
+      const productsInCategory = selectedData.filter(
+        (item) => item.category === category
+      );
 
-      categoryTotals[category] = (categoryTotals[category] || 0) + finalPrice;
+      // ✅ Calculate the total price of products in this category
+      const totalPrice = productsInCategory.reduce(
+        (acc, item) => acc + (item.finalPrice || 0),
+        0
+      );
 
-      if (!categorizedProducts[category]) {
-        categorizedProducts[category] = [];
-      }
-      categorizedProducts[category].push(item);
+      // ✅ Always add the category, even if price is ₹0
+      categoryTotals[category] = totalPrice;
+      categorizedProducts[category] = productsInCategory;
     });
 
-    // 2. Create Summary Section
+    // ✅ Create Summary Section (with box)
     doc.setFontSize(14);
     doc.setFont("helvetica", "bold");
 
-    // Dynamically calculate the full table width
-    const tablePageWidth = doc.internal.pageSize.width - 20; // Full table width minus margin
-    const xOffsetCenter = 10; // Keep margin from the left (10)
+    // ✅ Calculate the full table width
+    const tablePageWidth = doc.internal.pageSize.width - 20;
+    const xOffsetCenter = 10;
 
-    // Draw Blue Background for "Summary" (Full Width)
-    doc.setFillColor(17, 69, 112); // Set background color
-    doc.rect(xOffsetCenter, 50, tablePageWidth, 10, "F");
+    // ✅ Draw Blue Background for "Summary"
+    doc.setFillColor(17, 69, 112);
+    doc.rect(xOffsetCenter, yOffset, tablePageWidth, 10, "F");
 
-    // Add "Summary" Text Centered
-    doc.setTextColor(255, 255, 255); // White text
-    doc.text("Summary", doc.internal.pageSize.width / 2, 57, {
+    // ✅ Add "Summary" Text Centered
+    doc.setTextColor(255, 255, 255);
+    doc.text("Summary", doc.internal.pageSize.width / 2, yOffset + 7, {
       align: "center",
     });
 
-    // Reset Text Color to Black
+    // ✅ Reset Text Color to Black
     doc.setTextColor(0, 0, 0);
 
-    // ✅ Leave Space After Summary Before Table Starts
-    let yOffset = 60;
-    yOffset += 5; // Add 10 units space after summary
+    // ✅ ✅ ✅ Move yOffset further down after the Summary Header
+    yOffset += 18;
 
-    // Calculate Grand Total
+    // ✅ Calculate Grand Total
     const grandTotalAmount = Object.values(categoryTotals).reduce(
       (acc, val) => acc + val,
       0
     );
 
-    // Prepare summary table rows
+    // ✅ Prepare summary table rows
     const categoryEntries = Object.entries(categoryTotals);
     const summaryRows = categoryEntries.map(([category, total]) => [
       { content: category, styles: { halign: "center", fontSize: 10 } },
@@ -117,54 +141,56 @@ const PDFGenerator = {
       },
     ]);
 
-    // Add Grand Total Row (Bold + Center)
+    // ✅ Add Grand Total Row (Bold + Center)
     summaryRows.push([
       {
         content: "Grand Total",
-        styles: { halign: "center", fontSize: 10, fontStyle: "bold" },
+        styles: { halign: "center", fontSize: 12, fontStyle: "bold" },
       },
       {
         content: `Rs. ${formatNumber(grandTotalAmount)}/-`,
         styles: {
           halign: "center",
-          fontSize: 10,
+          fontSize: 12,
           fontStyle: "bold",
-          textColor: [0, 0, 0], // Black text for grand total
+          textColor: [0, 0, 0],
         },
       },
     ]);
 
-    // Add Summary Table Center-Aligned
+    // ✅ Add Summary Table Center-Aligned
     doc.autoTable({
       head: [["Category", "Price"]],
       body: summaryRows,
       columnStyles: {
-        0: { cellWidth: tablePageWidth / 2, halign: "center" }, // ✅ Center-align the category
-        1: { cellWidth: tablePageWidth / 2, halign: "center" }, // ✅ Center-align the price
+        0: { cellWidth: tablePageWidth / 2, halign: "center" },
+        1: { cellWidth: tablePageWidth / 2, halign: "center" },
       },
-      startY: yOffset, // ✅ The table will now start after some space
+      startY: yOffset,
       styles: {
         fontSize: 10,
         cellPadding: 5,
-        halign: "center", // ✅ This makes the content center aligned
+        halign: "center",
       },
       headStyles: {
-        fillColor: [22, 160, 133], // Header color
-        textColor: [255, 255, 255], // White text
+        fillColor: [22, 160, 133],
+        textColor: [255, 255, 255],
         fontStyle: "bold",
-        halign: "center", // ✅ Center-align the table header
+        halign: "center",
       },
       tableWidth: "auto",
       margin: {
-        left: xOffsetCenter, // Keep the table centered horizontally
+        left: xOffsetCenter,
         right: xOffsetCenter,
       },
     });
 
-    yOffset = doc.autoTable.previous.finalY + 10;
+    // ✅ ✅ ✅ FINAL SPACE AFTER TABLE
+    yOffset = doc.autoTable.previous.finalY + 15;
 
     // 3. Process images asynchronously before table rendering
     for (const [category, products] of Object.entries(categorizedProducts)) {
+      if (products.length === 0) continue;
       doc.setFontSize(12);
       doc.setFont("helvetica", "bold");
 
@@ -194,6 +220,7 @@ const PDFGenerator = {
           const productDetails = `
 Title: ${item.product_variant.variant_title || "N/A"}
 Subcategory: ${item.subcategory || "N/A"}
+Subcategory1: ${item.subcategory1 || "N/A"}
 Price: Rs. ${formatNumber(item.finalPrice) || "N/A"}/-
 Description: ${item.product_variant.variant_details || "N/A"}
                 `;
@@ -322,16 +349,38 @@ Addon Price: Rs. ${addon.addon_price || "N/A"}/-
       yOffset = 20; // Reset yOffset for new page
     }
 
-    // 4. Add Grand Total at the bottom
-    const grandTotalText = `Grand Total: Rs. ${calculateGrandTotal()}/-`;
-    const pageWidth = doc.internal.pageSize.width;
-    const marginRight = 15;
-    const textWidth = doc.getTextWidth(grandTotalText);
-    const xPos = pageWidth - textWidth - marginRight;
+    // // 4. Add Grand Total at the bottom
+    // const grandTotalText = `Grand Total: Rs. ${calculateGrandTotal()}/-`;
+    // const pageWidth = doc.internal.pageSize.width;
+    // const marginRight = 15;
+    // const textWidth = doc.getTextWidth(grandTotalText);
+    // const xPos = pageWidth - textWidth - marginRight;
+
+    // doc.setFontSize(12);
+    // doc.setFont("helvetica", "bold");
+    // doc.text(grandTotalText, xPos, yOffset);
 
     doc.setFontSize(12);
-    doc.setFont("helvetica", "bold");
-    doc.text(grandTotalText, xPos, yOffset);
+    doc.setTextColor(100);
+    doc.text(
+      "Thank you for choosing 603 The Coworking Space.",
+      10,
+      doc.internal.pageSize.height - 10
+    );
+
+    const pageCount = doc.internal.getNumberOfPages();
+    for (let i = 1; i <= pageCount; i++) {
+      doc.setPage(i);
+      doc.setFontSize(10);
+      doc.setTextColor(100);
+
+      const pageText = `Page ${i} of ${pageCount}`;
+      doc.text(
+        pageText,
+        doc.internal.pageSize.width - 30,
+        doc.internal.pageSize.height - 10
+      );
+    }
 
     // Save the PDF
     doc.save("products_summary.pdf");
