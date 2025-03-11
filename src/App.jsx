@@ -36,6 +36,7 @@ import AdminDashboard from "./pages/Admin/AdminDashboard";
 import PricingCard from "./common-components/PricingCard";
 import VendorRegister from "./pages/vendor/VendorRegister";
 import DoorScrollEffect from "./pages/DoorScrollEffect";
+import BookAppointment from "./boq/components/BookAppointment";
 
 // const Homepage = lazy(() => import("./pages/Homepage"));
 
@@ -136,6 +137,7 @@ function App() {
             {/* <Route path="/dashprod" element={<DashboardProductCard />} /> */}
             <Route path="/getplan" element={<PricingCard />} />
             <Route path="/admin" element={<AdminDashboard />} />
+            <Route path="/bookappointment" element={<BookAppointment />} />
           </Routes>
         ) : (
           <Routes>
@@ -156,6 +158,7 @@ function App() {
             <Route path="/help" element={<HelpnFaq />} />
             <Route path="/termsNcondtion" element={<TermsAndCondition />} />
             {/* <Route path="/vendordashboard" element={<VendorDashboard />} /> */}
+            <Route path="/bookappointment" element={<BookAppointment />} />
           </Routes>
         )}
       </Suspense>

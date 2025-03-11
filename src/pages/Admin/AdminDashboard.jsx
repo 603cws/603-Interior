@@ -424,8 +424,8 @@ function AdminDashboard() {
 
   const getvendors = async () => {
     // Query the profiles table for phone and companyName
-    const { data, error: profileError } = await supabase
-      .from("profiles")
+    const { data } = await supabase
+      .from("users_profiles")
       .select("*")
       .eq("role", "vendor");
 
@@ -436,15 +436,17 @@ function AdminDashboard() {
   const getusers = async () => {
     try {
       // Query the profiles table for phone and companyName
-      const { data, error: profileError } = await supabase
-        .from("profiles")
+      const { data } = await supabase
+        .from("users_profiles")
         .select("*")
         .eq("role", "user");
 
-      console.log(profileError);
+      console.log(data);
 
       setAllusers(data);
       setFilteredUsers(data);
+    } catch (error) {
+      console.log(error);
     } finally {
       setIsrefresh(false);
     }
@@ -1005,9 +1007,10 @@ function AdminDashboard() {
                             <h2 className="text-[#000] text-base font-medium">
                               {user.company_name}
                             </h2>
-                            <p className="text-[#ccc] text-sm">
+                            <p className="text-[#ccc] text-sm">{user.email}</p>
+                            {/* <p className="text-[#ccc] text-sm">
                               {user.company_name}
-                            </p>
+                            </p> */}
                           </div>
                         </div>
                         <div className="flex-1 flex items-end pl-6 gap-3 my-5">

@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState, useRef } from "react";
 import { supabase } from "../services/supabase";
+import { useNavigate } from "react-router-dom";
 
 const AppContext = createContext();
 
@@ -13,6 +14,8 @@ export const AppProvider = ({ children }) => {
     "HVAC",
     "Lighting",
   ]; //Array of Categories where save data works on dependent subcategories
+
+  // const naviagte = useNavigate();
 
   const [totalArea, setTotalArea] = useState();
   const [inputValue, setInputValue] = useState("");
@@ -120,6 +123,7 @@ export const AppProvider = ({ children }) => {
       if (!usertoken) {
         setIsAuthenticated(false); // Set auth to false if no token
         setIsAuthLoading(false);
+        // naviagte("/");
       }
       if (usertoken) {
         const { data, error } = await supabase.auth.getUser(usertoken);

@@ -8,6 +8,7 @@ function VendorDashboardCards() {
   const [products, setProducts] = useState([]);
   const [addons, setAddons] = useState([]);
   const [pendingproducts, setPendingproducts] = useState([]);
+  const [pendingAddons, setPendingAddons] = useState([]);
 
   const { accountHolder } = useApp();
   // Fetch Products from Supabase
@@ -34,17 +35,21 @@ function VendorDashboardCards() {
   };
 
   const fetchAddons = async () => {
-    const { data, error } = await supabase
-      .from("addon_variants")
-      .select("*")
-      .eq("vendorId", accountHolder.userId);
-    console.log(data);
+    try {
+      const { data } = await supabase
+        .from("addon_variants")
+        .select("*")
+        .eq("vendorId", accountHolder.userId);
+      console.log(data);
 
-    if (error) {
-      console.log("Error fetching addons:", error);
-    } else {
+      const getpendingAddons = data.filter((el) => el.status === "pending");
+
       setAddons(data);
+      setPendingAddons(getpendingAddons);
       console.log("Addons: ", data);
+    } catch (error) {
+      console.log("Error fetching addons:", error);
+    } finally {
     }
   };
 
@@ -93,6 +98,19 @@ function VendorDashboardCards() {
           </h2>
           <h1 className="self-end justify-end font-medium text-3xl xl:text-5xl">
             {pendingproducts.length}
+          </h1>
+          <img
+            src="/images/dashboard-orders.png"
+            alt="pending orders"
+            className="absolute left-2 bottom-10 h-24 w-24 opacity-50"
+          />
+        </div>
+        <div className="bg-gradient-to-br from-[#D8F7FF] to-[#D8F7FF]  p-7 rounded-3xl flex flex-col justify-between lg:h-48 lg:w-40 xl:h-56 xl:w-48 relative hover:scale-110 transition-transform duration-300 ease-in-out cursor-pointer">
+          <h2 className="self-center text-xl tracking-wide font-medium">
+            Pending Addons
+          </h2>
+          <h1 className="self-end justify-end font-medium text-3xl xl:text-5xl">
+            {pendingAddons.length}
           </h1>
           <img
             src="/images/dashboard-orders.png"

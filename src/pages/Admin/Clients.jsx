@@ -71,11 +71,11 @@ function Clients({
               <div
                 key={index}
                 className={`flex flex-col relative ${
-                  isExpanded ? "lg:w-[200px] xl:w-[250px]" : "w-[300px]"
+                  isExpanded ? "lg:w-[200px] xl:w-[250px]" : "w-[320px]"
                 } h-[150px] font-Poppins rounded-2xl bg-[#fff]`}
               >
                 <div className="flex items-center my-4 ">
-                  <div className="mx-3">
+                  <div className={`${isExpanded ? "hidden" : "block"} mx-3`}>
                     <img
                       src={`${user.profile_image}`}
                       alt="usericon"
@@ -86,7 +86,9 @@ function Clients({
                     <h2 className="text-[#000] text-base font-medium">
                       {user.company_name}
                     </h2>
-                    <p className="text-[#ccc] text-sm">{user.company_name}</p>
+                    <p className="text-[#ccc] text-sm font-semibold">
+                      {user.email}
+                    </p>
                   </div>
                   <div className="ml-auto px-3">
                     {" "}
