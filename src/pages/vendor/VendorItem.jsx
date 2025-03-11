@@ -11,6 +11,7 @@ import { MdOutlineDelete } from "react-icons/md";
 import { MdOutlineCancel } from "react-icons/md";
 import { IoIosAdd } from "react-icons/io";
 import DashboardProductCard from "./DashboardProductCard";
+import RejectedProduct from "./RejectedProduct";
 
 function VendorItem() {
   const [toggle, setToggle] = useState(true);
@@ -48,6 +49,7 @@ function VendorItem() {
 
   const [products, setProducts] = useState([]);
   const [addons, setAddons] = useState([]);
+  const [rejectedProductView, setRejectedProductView] = useState(false);
 
   const tabs = [
     { name: "Products", value: "products" },
@@ -332,6 +334,12 @@ function VendorItem() {
                               </>
                             )}
                             <td
+                              onClick={() => {
+                                if (item.status === "rejected") {
+                                  setRejectedProductView(true);
+                                  setSelectedProductview(item);
+                                }
+                              }}
                               className={`border border-gray-200 p-3 align-middle ${
                                 item.status === "pending" && "text-[#13B2E4]"
                               } ${
@@ -494,6 +502,13 @@ function VendorItem() {
             </div>
           </div>
         </div>
+      )}
+
+      {rejectedProductView && (
+        <RejectedProduct
+          onClose={() => setRejectedProductView(false)}
+          product={selectedProductview}
+        />
       )}
     </>
   );

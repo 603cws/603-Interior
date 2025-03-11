@@ -88,6 +88,8 @@ function AdminDashboard() {
 
   //delete warning
   const [deleteWarning, setDeleteWarning] = useState(false);
+  const [rejectReason, setRejectReason] = useState("");
+  const [rejectReasonPopup, setRejectReasonPopup] = useState(false);
 
   const tabs = [
     { name: "Products", value: "products" },
@@ -311,14 +313,32 @@ function AdminDashboard() {
     setDeleteWarning(false);
   };
 
-  const handleUpdateStatus = async (product, newStatus) => {
+  const handleRejectClick = (product) => {
+    setSelectedProductview(product);
+    setRejectReasonPopup(true);
+  };
+
+  const handleConfirmReject = () => {
+    if (!rejectReason) {
+      toast.error("Please enter a reason for rejecting the product");
+      return;
+    }
+    handleUpdateStatus(selectedProductview, "rejected", rejectReason);
+  };
+
+  const handleUpdateStatus = async (product, newStatus, reason = "") => {
     try {
       if (product && product.type === "product") {
         await supabase
           .from("product_variants") // Table name
-          .update({ status: newStatus }) // New status
+          .update({
+            status: newStatus,
+            ...(newStatus === "rejected" && { reject_reason: reason }),
+          })
           .eq("id", product.id); // Matching row
         toast.success(`product ${newStatus}`);
+        setRejectReasonPopup(false);
+        setRejectReason("");
       }
 
       if (product.type === "addon") {
@@ -815,11 +835,14 @@ function AdminDashboard() {
                                               // onClick={() =>
                                               //   handleReject(item.id)
                                               // }
+                                              // onClick={() =>
+                                              //   handleUpdateStatus(
+                                              //     item,
+                                              //     "rejected"
+                                              //   )
+                                              // }
                                               onClick={() =>
-                                                handleUpdateStatus(
-                                                  item,
-                                                  "rejected"
-                                                )
+                                                handleRejectClick(item)
                                               }
                                             >
                                               <HiXMark size={20} />
@@ -1065,6 +1088,10 @@ function AdminDashboard() {
           updateStatus={handleUpdateStatus}
           deleteWarning={deleteWarning}
           setDeleteWarning={setDeleteWarning}
+          rejectReasonPopup={rejectReasonPopup}
+          rejectReason={rejectReason}
+          handleConfirmReject={handleConfirmReject}
+          handleRejectClick={handleRejectClick}
         />
       )}
 
@@ -1097,6 +1124,34 @@ function AdminDashboard() {
                 className="px-5 py-2 bg-[#B4EAEA] rounded-md"
               >
                 Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+      {rejectReasonPopup && (
+        <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-30 font-Poppins">
+          <div className="bg-white py-6 px-10 rounded-2xl shadow-lg ">
+            <h2 className="text-lg font-semibold mb-3">Rejection Reason</h2>
+            <textarea
+              className="w-full p-2 border rounded-md"
+              rows="3"
+              placeholder="Provide a reason..."
+              value={rejectReason}
+              onChange={(e) => setRejectReason(e.target.value)}
+            />
+            <div className="mt-7 flex  gap-20 justify-between">
+              <button
+                className="border-[1px] border-[#BBBBBB] px-4 py-2 rounded-md mr-2"
+                onClick={() => setRejectReasonPopup(false)}
+              >
+                Cancel
+              </button>
+              <button
+                className="border-[1px] border-red-600 px-4 py-2 rounded-md"
+                onClick={handleConfirmReject}
+              >
+                Confirm Reject
               </button>
             </div>
           </div>

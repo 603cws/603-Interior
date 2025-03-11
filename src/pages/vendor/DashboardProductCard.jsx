@@ -9,6 +9,12 @@ function DashboardProductCard({
   updateStatus,
   deleteWarning,
   setDeleteWarning,
+  rejectReasonPopup,
+  setRejectReasonPopup,
+  rejectReason,
+  setRejectReason,
+  handleConfirmReject,
+  handleRejectClick,
 }) {
   const [statusDropdown, setStatusDropdown] = useState(false);
   const [selectedStatus, setSelectedStatus] = useState(product.status);
@@ -84,9 +90,13 @@ function DashboardProductCard({
                         <button
                           key={status}
                           onClick={() => {
-                            updateStatus(product, status); // Call the function from props
-                            setSelectedStatus(status); // Update UI
-                            setStatusDropdown(false); // Close dropdown
+                            if (status === "rejected") {
+                              handleRejectClick(product);
+                            } else {
+                              updateStatus(product, status); // Call the function from props
+                              setSelectedStatus(status); // Update UI
+                              setStatusDropdown(false); // Close dropdown
+                            }
                           }}
                           className={`block w-full px-4 py-2 text-left hover:bg-gray-100 ${
                             selectedStatus === status
@@ -136,6 +146,34 @@ function DashboardProductCard({
           </div>
         )}
       </div>
+      {rejectReasonPopup && (
+        <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-30 font-Poppins">
+          <div className="bg-white py-6 px-10 rounded-2xl shadow-lg ">
+            <h2 className="text-lg font-semibold mb-3">Rejection Reason</h2>
+            <textarea
+              className="w-full p-2 border rounded-md"
+              rows="3"
+              placeholder="Provide a reason..."
+              value={rejectReason}
+              onChange={(e) => setRejectReason(e.target.value)}
+            />
+            <div className="mt-7 flex  gap-20 justify-between">
+              <button
+                className="border-[1px] border-[#BBBBBB] px-4 py-2 rounded-md mr-2"
+                onClick={() => setRejectReasonPopup(false)}
+              >
+                Cancel
+              </button>
+              <button
+                className="border-[1px] border-red-600 px-4 py-2 rounded-md"
+                onClick={handleConfirmReject}
+              >
+                Confirm Reject
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
