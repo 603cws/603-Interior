@@ -2,17 +2,8 @@ import { useEffect, useState, useMemo, useRef } from "react";
 import { ToastContainer } from "react-toastify";
 import Navbar from "../../boq/components/Navbar";
 import Categories from "./Categories";
-import {
-  fetchCategories,
-  fetchProductsData,
-  // fetchWorkspaces,
-  fetchRoomData,
-  fetchCategoriesandSubCat1,
-} from "../utils/dataFetchers";
-import MainPage from "./MainPage";
-import ProductCard from "../components/ProductCard";
+import { fetchProductsData } from "../utils/dataFetchers";
 import RecommendComp from "../components/RecommendComp";
-import processData from "../utils/dataProcessor";
 import ProductOverview from "../components/ProductOverview";
 import QnaPopup from "../components/QnaPopup";
 import { useApp } from "../../Context/Context";
@@ -26,8 +17,10 @@ import { supabase } from "../../services/supabase";
 import toast from "react-hot-toast";
 import ProfileCard from "../components/ProfileCard";
 import Plans from "../../common-components/Plans";
-import SelectArea from "../components/SelectArea";
 import BoqPrompt from "../components/BoqPrompt"; // Import the BOQ modal
+import SelectArea from "../components/SelectArea";
+import MainPage from "./MainPage";
+import ProductCard from "../components/ProductCard";
 
 function Boq() {
   const [showBoqPrompt, setShowBoqPrompt] = useState(false);
@@ -35,9 +28,6 @@ function Boq() {
   const [existingBoqs, setExistingBoqs] = useState([]); // Stores fetched BOQs
 
   const [selectedProductView, setSelectedProductView] = useState([]);
-  const [productsData, setProductData] = useState([]);
-  // const [searchQuery, setSearchQuery] = useState("");
-  // const [priceRange, setPriceRange] = useState([1, 15000000]);
   const searchQuery = "";
   const priceRange = [1, 15000000];
 
@@ -48,13 +38,7 @@ function Boq() {
   const [showSelectArea, setShowSelectArea] = useState(false);
   const [selectedAreas, setSelectedAreas] = useState([]);
 
-  // const [workspaces, setWorkspaces] = useState([]);
-  const [roomData, setRoomData] = useState({ quantityData: [], areasData: [] });
-  const [areasData, setAreasData] = useState([]);
-  const [quantityData, setQuantityData] = useState([]);
-
   const [minimizedView, setMinimizedView] = useState(false);
-  // const [minimizedView, setMinimizedView] = useState(true);
   const [showProductView, setShowProductView] = useState(false);
   const [showRecommend, setShowRecommend] = useState(false);
   const [questionPopup, setQuestionPopup] = useState(false);
@@ -91,207 +75,11 @@ function Boq() {
     setDefaultProduct,
     defaultProduct,
     categoriesWithTwoLevelCheck,
+    productData,
+    areasData,
+    quantityData,
+    handleCategorySelection,
   } = useApp();
-
-  // useEffect(() => {
-  //   // var temp = JSON.parse(localStorage.getItem("selectedData"));
-  //   // setSelectedData(temp);
-  // }, []);
-
-  // useEffect(() => {
-  //   setTotalArea(roomData.areasData[0]?.totalArea);
-  //   // setUserId(roomData.areasData[0]?.userId);
-  // }, [roomData]);
-
-  useEffect(() => {
-    if (selectedCategory) {
-      // Find the category object matching the selected category ID
-      const category = categories.find((cat) => cat.id === selectedCategory.id);
-
-      // Update the subcategories state
-      if (category) {
-        setSubCategories(category.subcategories || []);
-        console.log("filtered subcategories", category.subcategories);
-      }
-    } else {
-      setSubCategories([]); // Reset subcategories if no category is selected
-    }
-  }, [selectedCategory, categories]);
-
-  useEffect(() => {
-    const loadData = async () => {
-      const [
-        categoriesData,
-        productsData,
-        // workspacesData,
-        roomDataResult,
-        subCategory1Data,
-      ] = await Promise.all([
-        fetchCategories(),
-        fetchProductsData(),
-        // fetchWorkspaces(),
-        fetchRoomData(userId),
-        fetchCategoriesandSubCat1(),
-      ]);
-
-      setCategories(categoriesData); //remove 0 value qunatity from subCat
-
-      setProductData(productsData);
-      // setWorkspaces(workspacesData);
-
-      setRoomData(roomDataResult);
-
-      var processedQuantityData, processedAreasData;
-      if (roomDataResult.layoutData && roomDataResult.layoutData.length > 0) {
-        processedQuantityData = processData(
-          roomDataResult.layoutData,
-          "quantity"
-        );
-        if (processedQuantityData) {
-          setQuantityData([processedQuantityData]);
-        }
-
-        processedAreasData = processData(
-          roomDataResult.layoutData,
-          "areas",
-          roomDataResult.layoutData
-        );
-        if (processedAreasData) {
-          setAreasData([processedAreasData]);
-        }
-      }
-
-      // if (
-      //   roomDataResult.areasData &&
-      //   roomDataResult.areasData.length > 0 &&
-      //   roomDataResult.quantityData &&
-      //   roomDataResult.quantityData.length > 0
-      // ) {
-      //   processedAreasData = processData(
-      //     roomDataResult.areasData,
-      //     "areas",
-      //     roomDataResult.quantityData
-      //   );
-      //   if (processedAreasData) {
-      //     setAreasData([processedAreasData]);
-      //   }
-      // }
-
-      if (
-        processedQuantityData.length !== 0 ||
-        processedAreasData.length !== 0
-      ) {
-        categoriesData.forEach((category) => {
-          category.subcategories = category.subcategories.filter(
-            (subcategory) => {
-              // Normalize the strings for comparison
-              const normalize = (str) =>
-                str.toLowerCase().replace(/[^a-z0-9]/g, ""); //output of "Civil / Plumbing" => "civilplumbing"
-              const subcategoryKey = normalize(subcategory);
-
-              // Skip filtering if the category is not "Furniture"
-              const ignoreCat =
-                // normalize(category.category) === "lux" ||
-                normalize(category.category) === "civilplumbing";
-              // normalize(category.category) === "hvac";
-              if (ignoreCat) {
-                return true; // Keep the subcategory if it's not "Furniture"
-              }
-
-              // Get the room data from quantityData
-              const roomCount = processedQuantityData;
-
-              // Check for the "Meeting Room" and "Meeting Room Large" case specifically
-              const meetingRoomLargeQuantity =
-                roomCount["meetingroomlarge"] || 0;
-              const meetingRoomQuantity = roomCount["meetingroom"] || 0;
-
-              // Exclude "Meeting Room Large" if its own quantity is 0
-              if (subcategoryKey === "meetingroomlarge") {
-                if (meetingRoomLargeQuantity === 0) {
-                  return false; // Exclude "Meeting Room Large" if it has quantity 0
-                }
-                return true; // Keep "Meeting Room Large" if it has a non-zero quantity
-              }
-
-              // Exclude "Meeting Room" if it has quantity 0, but only if "Meeting Room Large" is not visible
-              if (
-                subcategoryKey === "meetingroom" &&
-                meetingRoomLargeQuantity === 0
-              ) {
-                if (meetingRoomQuantity === 0) {
-                  return false; // Exclude "Meeting Room" if it has quantity 0
-                }
-                return true; // Keep "Meeting Room" if it has a non-zero quantity
-              }
-
-              // General logic: check the quantity of the subcategory or matching base room key
-              const baseRoomKey = Object.keys(roomCount).find((roomKey) => {
-                const normalizedRoomKey = normalize(roomKey);
-                return (
-                  subcategoryKey === normalizedRoomKey || // Exact match
-                  subcategoryKey.includes(normalizedRoomKey) // Partial match
-                );
-              });
-
-              // If no base room key is found, exclude this subcategory
-              if (!baseRoomKey || roomCount[baseRoomKey] === 0) {
-                return false;
-              }
-
-              // Include subcategory if the base room key has a non-zero quantity
-              return true;
-            }
-          );
-        });
-
-        console.log("Updated Categories: ", categoriesData);
-
-        setCategories(categoriesData);
-        handleCategorySelection(categoriesData[0]);
-        setSelectedSubCategory(categoriesData[0].subcategories[0] || null);
-      }
-
-      setSubCat1(subCategory1Data);
-    };
-
-    if (userId) {
-      loadData();
-    }
-  }, [userId]);
-  //   if (roomData.quantityData && roomData.quantityData.length > 0) {
-  //     const processedQuantityData = processData(
-  //       roomData.quantityData,
-  //       "quantity"
-  //     );
-  //     if (processedQuantityData) {
-  //       setQuantityData([processedQuantityData]);
-  //     }
-  //   }
-
-  //   if (roomData.areasData && roomData.areasData.length > 0) {
-  //     const processedAreasData = processData(roomData.areasData, "areas");
-  //     if (processedAreasData) {
-  //       setAreasData([processedAreasData]);
-  //     }
-  //   }
-  // }, [roomData]);
-
-  useEffect(() => {
-    // Automatically select the first subcategory when the category changes
-    if (subCat1 && selectedCategory?.category) {
-      const subCategories = subCat1[selectedCategory.category];
-      if (subCategories && subCategories.length > 0) {
-        setSelectedSubCategory1(subCategories[0]); // Set the first subcategory as the default
-      } else {
-        setSelectedSubCategory1(null);
-      }
-    }
-  }, [subCat1, selectedCategory]);
-
-  // useEffect(() => {
-  //   setQuestionPopup(true);
-  // }, []);
 
   const [runTour, setRunTour] = useState(false); // Controls whether the tour runs
 
@@ -349,29 +137,12 @@ function Boq() {
   }, []);
 
   useEffect(() => {
-    if (defaultProduct && selectedPlan && productsData.length > 0) {
-      // autoSelectPlanProducts(productsData, subCategories);
-      autoSelectPlanProducts(productsData, categories);
+    if (defaultProduct && selectedPlan && productData.length > 0) {
+      // autoSelectPlanProducts(productData, subCategories);
+      autoSelectPlanProducts(productData, categories);
       setDefaultProduct(false);
     }
-  }, [selectedPlan, productsData, defaultProduct]);
-  // useEffect(() => {
-  //   try {
-  //     if (defaultProduct && selectedPlan && productsData.length > 0) {
-  //       autoSelectPlanProducts(productsData, subCategories);
-  //     }
-  //   } finally {
-  //     setDefaultProduct(false);
-  //   }
-  // }, [selectedPlan, productsData, defaultProduct]);
-
-  // Only run the tour for first-time visitors
-  //   useEffect(() => {
-  //     const hasSeenTour = localStorage.getItem("hasSeenLayoutTour");
-  //     if (hasSeenTour) {
-  //       setRunTour(false); // Don't run the tour if already completed
-  //     }
-  //   }, []);
+  }, [selectedPlan, productData, defaultProduct]);
 
   // Toggle profile card visibility
   const toggleProfile = () => {
@@ -408,7 +179,9 @@ function Boq() {
   // Filter products based on search query, price range, and category
   const filteredProducts = useMemo(() => {
     // if (!selectedCategory) return false;
-    return productsData.filter((product) => {
+    if (!Array.isArray(productData)) return []; // Ensure it's an array
+
+    return productData.filter((product) => {
       if (!product.product_variants || product.product_variants.length === 0) {
         return false;
       }
@@ -429,7 +202,7 @@ function Boq() {
         product.category === selectedCategory?.category;
       return matchesVariant && matchesCategory;
     });
-  }, [productsData, searchQuery, priceRange, selectedCategory]);
+  }, [productData, searchQuery, priceRange, selectedCategory]);
 
   // Group products by category and subcategory
   const groupedProducts = useMemo(() => {
@@ -452,11 +225,6 @@ function Boq() {
     });
     return grouped;
   }, [filteredProducts]);
-
-  const handleCategorySelection = (categoryData) => {
-    setSelectedCategory(categoryData);
-    console.log("Selected Category: ", categoryData.category);
-  };
 
   const handleSelectedSubCategory = (subCategory) => {
     setSelectedSubCategory(subCategory);
@@ -526,59 +294,29 @@ function Boq() {
     return total * selectedProductView.price;
   };
 
-  const calculateCategoryTotals = () => {
-    const categoryTotals = {}; // Object to store total per category
+  // const calculateCategoryTotals = () => {
+  //   const categoryTotals = {}; // Object to store total per category
 
-    selectedData.forEach((product) => {
-      const category = product.category;
-      const finalPrice = product.finalPrice;
+  //   selectedData.forEach((product) => {
+  //     const category = product.category;
+  //     const finalPrice = product.finalPrice;
 
-      // Add finalPrice to the corresponding category total
-      categoryTotals[category] = (categoryTotals[category] || 0) + finalPrice;
-    });
+  //     // Add finalPrice to the corresponding category total
+  //     categoryTotals[category] = (categoryTotals[category] || 0) + finalPrice;
+  //   });
 
-    // Log final totals for each category
-    console.log("Final Totals for Each Category:");
-    Object.entries(categoryTotals).forEach(([category, total]) => {
-      console.log(`Total for ${category}:`, total);
-    });
+  //   // Log final totals for each category
+  //   console.log("Final Totals for Each Category:");
+  //   Object.entries(categoryTotals).forEach(([category, total]) => {
+  //     console.log(`Total for ${category}:`, total);
+  //   });
 
-    return categoryTotals; // If you need the totals elsewhere
-  };
-
-  useEffect(() => {
-    calculateCategoryTotals();
-  }, [selectedData]);
-
-  // const calculateAutoTotalPrice = (
-  //   variantPrice,
-  //   cat,
-  //   subcategory,
-  //   subcategory1
-  // ) => {
-  //   console.log(variantPrice, cat, subcategory, subcategory1);
-
-  //   const baseTotal = calculateAutoTotalPriceHelper(
-  //     quantityData[0],
-  //     areasData[0],
-  //     cat,
-  //     subcategory,
-  //     subcategory1,
-  //     height
-  //   );
-  //   console.log("category from total area", cat);
-  //   console.log("subcategory from total area", subcategory);
-  //   console.log("subcategory1 from total area", subcategory1);
-
-  //   if (cat === "HVAC") return baseTotal;
-  //   if (cat === "Lighting") return baseTotal * 200 + variantPrice;
-  //   if (cat === "Civil / Plumbing") return baseTotal * 100 + variantPrice;
-  //   if (cat === "Paint") return baseTotal * variantPrice * 3 * 15;
-
-  //   return baseTotal * variantPrice;
+  //   return categoryTotals; // If you need the totals elsewhere
   // };
 
-  // const categoryTotals = {}; // Store total per category
+  // useEffect(() => {
+  //   calculateCategoryTotals();
+  // }, [selectedData]);
 
   const calculateAutoTotalPrice = (
     variantPrice,
@@ -643,75 +381,6 @@ function Boq() {
       }
     });
   };
-
-  // const handelSelectedData = (
-  //   product,
-  //   category,
-  //   subCat,
-  //   subcategory1,
-  //   isChecked
-  // ) => {
-  //   if (!product) return;
-
-  //   // Unique group key for each product and subcategory
-  //   const groupKey = `${category.category}-${subCat}-${subcategory1}-${product.id}`;
-
-  //   const productData = {
-  //     groupKey, // For group-level management
-  //     id: product.id,
-  //     category: category.category,
-  //     subcategory: subCat,
-  //     subcategory1, // added subcategory1 as an argument
-  //     product_variant: {
-  //       variant_title: product.title,
-  //       variant_image: product.image,
-  //       variant_details: product.details,
-  //       variant_price: product.price,
-  //       variant_id: product.id,
-  //       additional_images: JSON.parse(product.additional_images || "[]"), // Parse the string to an array
-  //     },
-  //     addons: selectedAddons || [], // Assuming addons might be optional
-  //     finalPrice: calculateTotalPrice(),
-  //   };
-
-  //   // Update selectedData
-  //   setSelectedData((prevData) => {
-  //     const validPrevData = Array.isArray(prevData) ? prevData : [];
-
-  //     if (!isChecked) {
-  //       // Remove the product when unchecked
-  //       const updatedData = validPrevData.filter(
-  //         (item) => !(item.groupKey === groupKey)
-  //       );
-  //       localStorage.setItem("selectedData", JSON.stringify(updatedData)); // Persist updated state
-  //       console.log("Updated DataL ", updatedData);
-  //       return updatedData;
-  //     }
-
-  //     // Add or update the product when checked
-  //     const existingProductIndex = validPrevData.findIndex(
-  //       (item) => item.groupKey === groupKey
-  //     );
-
-  //     if (existingProductIndex !== -1) {
-  //       // Replace the existing product
-  //       const updatedData = [...validPrevData];
-  //       updatedData[existingProductIndex] = productData; // Replace with new data
-  //       localStorage.setItem("selectedData", JSON.stringify(updatedData));
-  //       return updatedData;
-  //     }
-
-  //     // Add a new product if it doesn't already exist
-  //     const updatedData = [...validPrevData, productData];
-  //     localStorage.setItem("selectedData", JSON.stringify(updatedData));
-  //     return updatedData;
-  //   });
-
-  //   console.log(
-  //     isChecked ? "Added to selected data" : "Removed from selected data",
-  //     groupKey
-  //   );
-  // };
 
   const handelSelectedData = (
     product,
@@ -895,121 +564,6 @@ function Boq() {
     console.log("Auto-selected products based on plan:", selectedProducts);
   };
 
-  // const autoSelectPlanProducts = (products, categories) => {
-
-  //   console.log("All Products:", products);
-  //   console.log("Selected Subcategories:", subCategories);
-
-  //   if (!selectedPlan || !products.length || !subCategories.length) return;
-
-  //   const selectedProducts = [];
-  //   const selectedGroups = new Set(); // To track selected subcategory1 for each category-subcategory combination
-  //   const productMap = new Map();
-
-  //   categories.forEach((category)=>{
-
-  //   })
-
-  //   products.forEach((product) => {
-  //     const { category, subcategory, subcategory1, product_variants } = product;
-
-  //     if (
-  //       !category ||
-  //       !subcategory ||
-  //       !subcategory1 ||
-  //       !product_variants?.length
-  //     )
-  //       return;
-
-  //     // Split subcategories if they contain multiple comma-separated values
-  //     const subcategories = subcategory.split(",").map((sub) => sub.trim());
-
-  //     subcategories.forEach((subCat) => {
-  //       // Ensure the subcategory is in the selected subcategories list
-  //       if (!subCategories.includes(subCat)) return;
-
-  //       // const groupKey = `${category}-${subCat}-${subcategory1}`;
-  //       // const groupKey = `${category}-${subCat}-${subcategory1}-${product.id}`;
-
-  //       // Find the variant that matches the selected plan AND has `default` set to true
-  //       const matchingVariant = product_variants.find(
-  //         (variant) =>
-  //           variant.segment?.toLowerCase() === selectedPlan?.toLowerCase() &&
-  //           variant.default === variant.segment // Ensure it is marked as default
-  //       );
-
-  //       console.log("matching variant", matchingVariant);
-
-  //       if (matchingVariant) {
-  //         // const groupKey = `${category}-${subCat}-${subcategory1}-${product.id}`;
-  //         const groupKey = `${category}-${subCat}-${subcategory1}-${matchingVariant.id}`;
-
-  //         productMap.set(groupKey, {
-  //           product,
-  //           variant: matchingVariant,
-  //           subcategory: subCat,
-  //         });
-  //       }
-  //     });
-  //   });
-
-  //   // Process selected products (one per `subcategory1` for each subcategory)
-  //   productMap.forEach(({ product, variant, subcategory }, groupKey) => {
-  //     if (!selectedGroups.has(groupKey)) {
-  //       const { category, subcategory1 } = product;
-
-  //       const productData = {
-  //         groupKey,
-  //         id: variant.id,
-  //         category,
-  //         subcategory, // Individual subcategory
-  //         subcategory1,
-  //         product_variant: {
-  //           variant_title: variant.title || product.title || "No Title",
-  //           variant_image: variant.image || null,
-  //           variant_details: variant.details || "No Details",
-  //           variant_price: variant.price || 0,
-  //           variant_id: variant.id,
-  //           variant_segment: variant.segment,
-  //           default: variant.default,
-  //           additional_images: JSON.parse(variant.additional_images || "[]"),
-  //         },
-  //         addons: product.addons || [],
-  //         finalPrice: variant.price || 0,
-  //       };
-
-  //       selectedProducts.push(productData);
-  //       // setSelectedData((prev) => [...prev, productData]);
-  //       selectedGroups.add(groupKey);
-  //     }
-  //   });
-
-  //   setSelectedData(selectedProducts);
-
-  //   // // Update `selectedData`
-  //   // setSelectedData((prevData) => {
-  //   //   const validPrevData = Array.isArray(prevData) ? prevData : [];
-
-  //   //   console.log("hello from the selected data ");
-
-  //   //   // Remove old selections of the same `subcategory1`
-  //   //   const updatedData = validPrevData.filter(
-  //   //     (item) =>
-  //   //       !selectedProducts.some(
-  //   //         (newItem) => newItem.groupKey === item.groupKey
-  //   //       )
-  //   //   );
-
-  //   //   // const finalData = [...updatedData, ...selectedProducts];
-  //   //   const finalData = [...selectedProducts];
-
-  //   //   localStorage.setItem("selectedData", JSON.stringify(finalData));
-  //   //   return finalData;
-  //   // });
-
-  //   console.log("Auto-selected products based on plan:", selectedProducts);
-  // };
-
   const clearSelectedData = () => {
     // Clear from local storage
     localStorage.removeItem("selectedData");
@@ -1092,8 +646,8 @@ function Boq() {
       grandTotal += 150 * totalArea;
     }
 
-    console.log("from grandtotal", grandTotal);
-    console.log("from grandtotal area", totalArea);
+    // console.log("from grandtotal", grandTotal);
+    // console.log("from grandtotal area", totalArea);
 
     return grandTotal;
   };
@@ -1296,20 +850,6 @@ function Boq() {
       console.error("Error during update:", error);
     }
   };
-
-  // const handleSave = () => {
-  //   if (selectedData && selectedData.length > 0) {
-  //     insertDataIntoSupabase(
-  //       selectedData,
-  //       userId,
-  //       "", // Initially empty; will be set later
-  //       totalArea
-  //     );
-  //   } else {
-  //     console.warn("No selected data to save.");
-  //     toast.error("No selected data to save.");
-  //   }
-  // };
 
   const fetchSavedBOQs = async () => {
     try {
@@ -1531,142 +1071,6 @@ function Boq() {
     }
   };
 
-  // const groupedBOQProducts = useMemo(() => {
-  //   const grouped = {};
-  //   filteredBOQProducts.forEach((product) => {
-  //     const subcategories = product.subcategory
-  //       .split(",")
-  //       .map((sub) => sub.trim());
-
-  //     subcategories.forEach((subcategory) => {
-  //       if (!grouped[product.category]) {
-  //         grouped[product.category] = {};
-  //       }
-  //       if (!grouped[product.category][subcategory]) {
-  //         grouped[product.category][subcategory] = [];
-  //       }
-  //       grouped[product.category][subcategory].push(product);
-  //     });
-  //   });
-  //   return grouped;
-  // }, [filteredBOQProducts]);
-
-  // const fetchBOQData = async (reconstructedData) => {
-  //   try {
-  //     // Loop through each entry in reconstructedData
-  //     const updatedData = await Promise.all(
-  //       reconstructedData.map(async (dataItem) => {
-  //         const { product_variant, addons } = dataItem;
-
-  //         // Fetch full product variant data from product_variants table using product_variant.variant_id
-  //         const { data: productVariantData, error: productVariantError } =
-  //           await supabase
-  //             .from("product_variants")
-  //             .select("*") // Select all columns to get the full details
-  //             .eq("id", product_variant.variant_id);
-
-  //         if (productVariantError) {
-  //           console.error(
-  //             "Error fetching product variant:",
-  //             productVariantError
-  //           );
-  //           return null;
-  //         }
-
-  //         // Check if product variant data is returned, and update with full variant data
-  //         const fullProductVariant = productVariantData?.[0] || null;
-
-  //         // Fetch addon data from addon_variants table using addon_id and variant_id
-  //         const addonData = await Promise.all(
-  //           Object.keys(addons).map(async (addonKey) => {
-  //             const addon = addons[addonKey];
-
-  //             if (addon.addonId) {
-  //               const { data: addonVariantData, error: addonVariantError } =
-  //                 await supabase
-  //                   .from("addon_variants")
-  //                   .select("*")
-  //                   .eq("id", addon.addonId);
-
-  //               if (addonVariantError) {
-  //                 console.error(
-  //                   `Error fetching addon variant for addonId ${addon.addonId}:`,
-  //                   addonVariantError
-  //                 );
-  //                 return null;
-  //               }
-
-  //               return addonVariantData?.[0] || null;
-  //             }
-  //           })
-  //         );
-
-  //         // Return updated data with full product_variant and addon data
-  //         return {
-  //           ...dataItem,
-  //           product_variant: fullProductVariant, // Use the full product variant data
-  //           addons: addonData.filter(Boolean), // Remove null values from errors
-  //         };
-  //       })
-  //     );
-
-  //     // Filter out any null results
-  //     const filteredData = updatedData.filter(Boolean);
-
-  //     console.log("Fetched BOQ Data:", filteredData);
-
-  //     // Call fetchAndFilterBOQData to filter the product dataset based on saved BOQ
-  //     const finalFilteredProducts = await fetchAndFilterBOQData(filteredData);
-
-  //     return finalFilteredProducts;
-  //   } catch (error) {
-  //     console.error("Error fetching BOQ data:", error);
-  //   }
-  // };
-
-  // const fetchAndFilterBOQData = async (filteredData) => {
-  //   try {
-  //     // Fetch all products from the database
-  //     const allProducts = await fetchProductsData();
-
-  //     // Extract saved product and addon variant IDs from filteredData
-  //     const savedProductVariantIds = filteredData.map(
-  //       (dataItem) => dataItem.product_variant?.id
-  //     );
-
-  //     const savedAddonVariantIds = filteredData.flatMap((dataItem) =>
-  //       dataItem.addons.map((addon) => addon.id)
-  //     );
-
-  //     // Filter products to include only those that match the saved BOQ data
-  //     const filteredProducts = allProducts.filter((product) =>
-  //       product.product_variants.some((variant) =>
-  //         savedProductVariantIds.includes(variant.id)
-  //       )
-  //     );
-
-  //     // Ensure that each filtered product contains only the relevant variants and addons
-  //     const finalFilteredProducts = filteredProducts.map((product) => ({
-  //       ...product,
-  //       product_variants: product.product_variants.filter((variant) =>
-  //         savedProductVariantIds.includes(variant.id)
-  //       ),
-  //       addons: product.addons
-  //         ? product.addons.filter((addon) =>
-  //             savedAddonVariantIds.includes(addon.id)
-  //           )
-  //         : [],
-  //     }));
-
-  //     console.log("Final Filtered BOQ Products:", finalFilteredProducts);
-  //     return finalFilteredProducts;
-  //   } catch (error) {
-  //     console.error("Error fetching and filtering BOQ data:", error);
-  //   }
-  // };
-
-  // Function to delete a BOQ
-
   const handleDeleteBOQ = async (boqId) => {
     const isConfirmed = window.confirm(
       "Are you sure you want to delete this BOQ?"
@@ -1691,7 +1095,7 @@ function Boq() {
   };
 
   console.log("selected products", selectedData);
-  console.log("selected plan", selectedPlan);
+  // console.log("selected plan", selectedPlan);
 
   const allAddons = filteredProducts.flatMap((product) =>
     product.subcategory1 === selectedSubCategory1 &&
@@ -1752,43 +1156,6 @@ function Boq() {
         iconRef={iconRef}
         areasData={areasData}
       />
-      {/* {questionPopup && (
-        <QnaPopup
-          onClose={() => setQuestionPopup(false)}
-          category={selectedCategory}
-          onSubmit={handleQuestionSubmit}
-        />
-      )}
-      {!showProductView && (
-        <div className=" px-5">
-          <Categories
-            categories={categories}
-            setSelectedCategory={handleCategorySelection}
-            setSelectedSubCategory={handleSelectedSubCategory}
-            minimizedView={minimizedView}
-            handleCategoryClick={handleCategoryClick}
-            userResponses={userResponses}
-            quantityData={quantityData}
-          />
-
-          {minimizedView && (
-            <div>
-              <MainPage
-                setSelectedSubCategory1={handleSelectedSubCategory1}
-                userResponses={userResponses}
-                productsData={productsData}
-              />
-              <ProductCard
-                products={groupedProducts}
-                selectedProductView={selectedProductView}
-                setShowProductView={setShowProductView}
-                setSelectedProductView={handleSelectedProductView}
-                userResponses={userResponses}
-              />
-            </div>
-          )}
-        </div>
-      )} */}
       <div className="px-5">
         {!selectedPlan ? (
           <Plans />
@@ -1839,7 +1206,7 @@ function Boq() {
                     <MainPage
                       setSelectedSubCategory1={handleSelectedSubCategory1}
                       userResponses={userResponses}
-                      productsData={productsData}
+                      productsData={productData}
                     />
                     <ProductCard
                       products={groupedProducts}
@@ -1864,13 +1231,8 @@ function Boq() {
             selectedProductView={selectedProductView}
             quantityData={quantityData}
             areasData={areasData}
-            showProductView={showProductView}
             setShowProductView={setShowProductView}
-            showRecommend={showRecommend}
             setShowRecommend={setShowRecommend}
-            categories={categories}
-            subCategories={subCategories}
-            subCat1={subCat1}
             filteredProducts={filteredProducts}
             handleAddOnChange={handleAddOnChange}
             handelSelectedData={handelSelectedData}

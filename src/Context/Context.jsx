@@ -1,6 +1,13 @@
 import { createContext, useContext, useEffect, useState, useRef } from "react";
 import { supabase } from "../services/supabase";
 import { useNavigate } from "react-router-dom";
+import {
+  fetchCategories,
+  fetchRoomData,
+  fetchCategoriesandSubCat1,
+  fetchProductsData,
+} from "../boq/utils/dataFetchers";
+import processData from "../boq/utils/dataProcessor";
 
 const AppContext = createContext();
 
@@ -67,6 +74,125 @@ export const AppProvider = ({ children }) => {
   const [isAuthLoading, setIsAuthLoading] = useState(true);
 
   const [defaultProduct, setDefaultProduct] = useState(true);
+
+  const [productData, setProductData] = useState([]);
+  const [areasData, setAreasData] = useState([]);
+  const [quantityData, setQuantityData] = useState([]);
+
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        const [categoriesData, productsData, roomDataResult, subCategory1Data] =
+          await Promise.all([
+            fetchCategories(),
+            fetchProductsData(),
+            fetchRoomData(userId),
+            fetchCategoriesandSubCat1(),
+          ]);
+
+        setCategories(categoriesData); // Remove 0 quantity subcategories
+
+        setProductData(productsData);
+
+        var processedQuantityData = {};
+        var processedAreasData = {};
+
+        if (roomDataResult.layoutData && roomDataResult.layoutData.length > 0) {
+          processedQuantityData = processData(
+            roomDataResult.layoutData,
+            "quantity"
+          );
+          if (processedQuantityData) {
+            setQuantityData([processedQuantityData]);
+          }
+
+          processedAreasData = processData(
+            roomDataResult.layoutData,
+            "areas",
+            roomDataResult.layoutData
+          );
+          if (processedAreasData) {
+            setAreasData([processedAreasData]);
+          }
+        }
+
+        // ✅ Fix: Check if they are undefined before accessing length
+        if (
+          (processedQuantityData &&
+            Object.keys(processedQuantityData).length > 0) ||
+          (processedAreasData && Object.keys(processedAreasData).length > 0)
+        ) {
+          categoriesData.forEach((category) => {
+            category.subcategories = category.subcategories.filter(
+              (subcategory) => {
+                // Normalize the strings for comparison
+                const normalize = (str) =>
+                  str.toLowerCase().replace(/[^a-z0-9]/g, ""); //output of "Civil / Plumbing" => "civilplumbing"
+                const subcategoryKey = normalize(subcategory);
+
+                // Skip filtering if the category is not "Furniture"
+                const ignoreCat =
+                  normalize(category.category) === "civilplumbing";
+                if (ignoreCat) {
+                  return true;
+                }
+
+                // Get the room data from quantityData
+                const roomCount = processedQuantityData || {};
+
+                // Handle Meeting Room Large and Meeting Room
+                const meetingRoomLargeQuantity =
+                  roomCount["meetingroomlarge"] || 0;
+                const meetingRoomQuantity = roomCount["meetingroom"] || 0;
+
+                if (subcategoryKey === "meetingroomlarge") {
+                  if (meetingRoomLargeQuantity === 0) return false;
+                  return true;
+                }
+
+                if (
+                  subcategoryKey === "meetingroom" &&
+                  meetingRoomLargeQuantity === 0
+                ) {
+                  if (meetingRoomQuantity === 0) return false;
+                  return true;
+                }
+
+                // General logic: check the quantity of the subcategory or matching base room key
+                const baseRoomKey = Object.keys(roomCount).find((roomKey) => {
+                  const normalizedRoomKey = normalize(roomKey);
+                  return (
+                    subcategoryKey === normalizedRoomKey ||
+                    subcategoryKey.includes(normalizedRoomKey)
+                  );
+                });
+
+                if (!baseRoomKey || roomCount[baseRoomKey] === 0) {
+                  return false;
+                }
+
+                return true;
+              }
+            );
+          });
+
+          console.log("Updated Categories: ", categoriesData);
+
+          setCategories(categoriesData);
+          handleCategorySelection(categoriesData[0]);
+          setSelectedSubCategory(categoriesData[0].subcategories[0] || null);
+        }
+
+        setSubCat1(subCategory1Data);
+      } catch (error) {
+        console.error("Error loading data:", error);
+      }
+    };
+
+    if (userId) {
+      loadData();
+    }
+  }, [userId]);
 
   // get the totalarea based on current layout id
   useEffect(() => {
@@ -151,6 +277,45 @@ export const AppProvider = ({ children }) => {
   }, [selectedData]);
 
   useEffect(() => {
+    if (selectedCategory) {
+      // Find the category object matching the selected category ID
+      const category = categories.find((cat) => cat.id === selectedCategory.id);
+
+      // Update the subcategories state
+      if (category) {
+        setSubCategories(category.subcategories || []);
+        console.log("filtered subcategories", category.subcategories);
+      }
+    } else {
+      setSubCategories([]); // Reset subcategories if no category is selected
+    }
+  }, [selectedCategory, categories]);
+
+  useEffect(() => {
+    // Automatically select the first subcategory when the category changes
+    if (subCat1 && selectedCategory?.category) {
+      const subCategories = subCat1[selectedCategory.category];
+      if (subCategories && subCategories.length > 0) {
+        setSelectedSubCategory1(subCategories[0]); // Set the first subcategory as the default
+      } else {
+        setSelectedSubCategory1(null);
+      }
+    }
+  }, [subCat1, selectedCategory]);
+
+  useEffect(() => {
+    // Prevent handleProgressBar if subCat1 is undefined
+    if (
+      !subCat1 || // 🚀 Prevent call if subCat1 is undefined
+      !Array.isArray(categories) ||
+      categories.length === 0 ||
+      !Array.isArray(selectedData) ||
+      selectedData.length === 0
+    ) {
+      console.warn("Skipping handleProgressBar due to missing data.");
+      return;
+    }
+
     // Run only if there are actual changes in the data
     if (
       selectedData !== prevSelectedData.current ||
@@ -222,6 +387,11 @@ export const AppProvider = ({ children }) => {
   }, [isAuthenticated]);
   console.log("current user", accountHolder);
 
+  const handleCategorySelection = (categoryData) => {
+    setSelectedCategory(categoryData);
+    console.log("Selected Category: ", categoryData.category);
+  };
+
   function handleProgressBar(selectedData, categories, subCat1) {
     // Validate selectedData and categories to prevent errors
     if (!Array.isArray(selectedData) || selectedData.length === 0) {
@@ -274,6 +444,7 @@ export const AppProvider = ({ children }) => {
       // Handle subCategory1 logic with exclusion for "pods" in "Pantry"
       if (
         (subcategory1 &&
+          subCat1 &&
           subCat1[category] &&
           Array.isArray(subCat1[category]) &&
           category === "Furniture") ||
@@ -358,6 +529,13 @@ export const AppProvider = ({ children }) => {
         layoutImgRef,
         layoutImage,
         setLayoutImage,
+        productData,
+        setProductData,
+        areasData,
+        setAreasData,
+        quantityData,
+        setQuantityData,
+        handleCategorySelection,
       }}
     >
       {children}

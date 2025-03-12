@@ -140,7 +140,7 @@ const Categories = ({
 
     const requiredSubCategories = categoryObject.subcategories || [];
 
-    console.log("category complete", category);
+    // console.log("category complete", category);
 
     if (category === "HVAC") {
       const hasCentralizedProduct = selectedData.some(

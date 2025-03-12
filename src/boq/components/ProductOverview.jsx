@@ -15,9 +15,6 @@ function ProductOverview({
   setShowRecommend,
   filteredProducts,
   handleAddOnChange,
-  categories,
-  subCategories,
-  subCat1,
   handelSelectedData,
   calculateTotalPrice,
   calculateAddonTotalPrice,
@@ -33,6 +30,9 @@ function ProductOverview({
     selectedSubCategory1,
     selectedData,
     categoriesWithTwoLevelCheck,
+    categories,
+    subCategories,
+    subCat1,
   } = useApp();
   const instructions = {
     Furniture: [
