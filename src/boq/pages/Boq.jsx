@@ -20,6 +20,7 @@ import BoqPrompt from "../components/BoqPrompt"; // Import the BOQ modal
 import SelectArea from "../components/SelectArea";
 import MainPage from "./MainPage";
 import ProductCard from "../components/ProductCard";
+import { calculateTotalPrice } from "../utils/productUtils";
 
 function Boq() {
   const [showBoqPrompt, setShowBoqPrompt] = useState(false);
@@ -240,63 +241,6 @@ function Boq() {
     setSelectedProductView(variant);
   };
 
-  const calculateTotalPrice = (category, subCat, subcategory1) => {
-    // Determine the actual values by prioritizing function parameters, falling back to selected state
-    const actualCategory = category || selectedCategory?.category;
-    const actualSubCategory = subCat || selectedSubCategory;
-    const actualSubCategory1 = subcategory1 || selectedSubCategory1;
-
-    // Calculate base total
-    const total = calculateTotalPriceHelper(
-      quantityData[0],
-      areasData[0],
-      actualCategory,
-      actualSubCategory,
-      actualSubCategory1,
-      userResponses.height
-    );
-
-    // Define price calculation based on category and subcategories
-    if (actualCategory === "HVAC") {
-      return total;
-    }
-    if (actualCategory === "Lighting") {
-      return total * 200 + selectedProductView.price;
-    }
-    if (actualCategory === "Civil / Plumbing") {
-      return total * 100 + selectedProductView.price;
-    }
-    if (actualCategory === "Paint") {
-      return total * selectedProductView.price * 3 * 15;
-    }
-
-    return total * selectedProductView.price;
-  };
-
-  // const calculateCategoryTotals = () => {
-  //   const categoryTotals = {}; // Object to store total per category
-
-  //   selectedData.forEach((product) => {
-  //     const category = product.category;
-  //     const finalPrice = product.finalPrice;
-
-  //     // Add finalPrice to the corresponding category total
-  //     categoryTotals[category] = (categoryTotals[category] || 0) + finalPrice;
-  //   });
-
-  //   // Log final totals for each category
-  //   console.log("Final Totals for Each Category:");
-  //   Object.entries(categoryTotals).forEach(([category, total]) => {
-  //     console.log(`Total for ${category}:`, total);
-  //   });
-
-  //   return categoryTotals; // If you need the totals elsewhere
-  // };
-
-  // useEffect(() => {
-  //   calculateCategoryTotals();
-  // }, [selectedData]);
-
   const calculateAutoTotalPrice = (
     variantPrice,
     cat,
@@ -408,7 +352,14 @@ function Boq() {
         finalPrice: calculateTotalPrice(
           category.category,
           subCat,
-          subcategory1
+          subcategory1,
+          null, // selectedCategory is not used in this specific calculation, using direct category parameter instead.
+          null, // selectedSubCategory is not used in this specific calculation, using direct subCat parameter instead.
+          null, // selectedSubCategory1 is not used in this specific calculation, using direct subcategory1 parameter instead.
+          quantityData,
+          areasData,
+          userResponses,
+          selectedProductView
         ),
       };
 
@@ -1214,7 +1165,6 @@ function Boq() {
             filteredProducts={filteredProducts}
             handleAddOnChange={handleAddOnChange}
             handelSelectedData={handelSelectedData}
-            calculateTotalPrice={calculateTotalPrice}
           />
           {showRecommend && (
             <RecommendComp

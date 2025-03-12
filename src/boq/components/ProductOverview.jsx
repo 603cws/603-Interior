@@ -6,6 +6,7 @@ import { normalizeKey } from "../utils/CalculateTotalPriceHelper";
 import SelectArea from "./SelectArea";
 import Addon from "./Addon";
 import { useApp } from "../../Context/Context";
+import { calculateTotalPrice } from "../utils/productUtils";
 
 function ProductOverview({
   selectedProductView,
@@ -14,7 +15,6 @@ function ProductOverview({
   filteredProducts,
   handleAddOnChange,
   handelSelectedData, //
-  calculateTotalPrice,
 }) {
   const [mainImageHovered, setMainImageHovered] = useState(false); // For main image hover effect
   const [hoveredImage, setHoveredImage] = useState(null); // For additional image hover effect
@@ -32,6 +32,7 @@ function ProductOverview({
     subCat1,
     quantityData,
     areasData,
+    userResponses,
   } = useApp();
 
   const instructions = {
@@ -179,6 +180,19 @@ function ProductOverview({
       .join(" X "); // Join the dimensions with "X"
   }
 
+  const totalPrice = calculateTotalPrice(
+    null, // category parameter is not used.
+    null, // subCat parameter is not used.
+    null, // subcategory1 parameter is not used.
+    selectedCategory,
+    selectedSubCategory,
+    selectedSubCategory1,
+    quantityData,
+    areasData,
+    userResponses,
+    selectedProductView
+  );
+
   return (
     // grid
     <>
@@ -263,7 +277,7 @@ function ProductOverview({
           <div className="mt-1">
             <p className="text-lg font-medium text-[#334A78] ">Final Price</p>
             <p className="text-lg font-bold mb-3">
-              ₹ {calculateTotalPrice().toLocaleString("en-IN")}
+              ₹ {totalPrice.toLocaleString("en-IN")}
             </p>
             {details.quantity > 0 && (
               <p className="text-md font-medium text-[#334A78] mb-3">
