@@ -12,7 +12,6 @@ function ProductOverview({
   setShowProductView,
   setShowRecommend,
   filteredProducts,
-  handleAddOnChange,
 }) {
   const [mainImageHovered, setMainImageHovered] = useState(false); // For main image hover effect
   const [hoveredImage, setHoveredImage] = useState(null); // For additional image hover effect
@@ -383,7 +382,6 @@ function ProductOverview({
           selectedData={selectedData}
           categoriesWithTwoLevelCheck={categoriesWithTwoLevelCheck}
           allAddons={allAddons}
-          onAddonAdd={handleAddOnChange}
         />
       )}
 
@@ -396,7 +394,7 @@ function ProductOverview({
         <Addon
           allAddons={allAddons}
           productID={selectedProductView.id}
-          onAddonAdd={handleAddOnChange}
+          onAddonAdd={handleAddOnChange}  //moved to utils
         />
       </div> */}
     </>

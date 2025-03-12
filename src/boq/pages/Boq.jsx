@@ -275,37 +275,6 @@ function Boq() {
     return total;
   };
 
-  const handleAddOnChange = (variant) => {
-    console.log("addon added");
-
-    // Ensure the variant object has title, price, and image
-    if (!variant || !variant.title || variant.price == null || !variant.image)
-      return;
-
-    setSelectedAddons((prevSelectedAddOns) => {
-      // Check if the add-on is already selected
-      const isAlreadySelected = prevSelectedAddOns[variant.title];
-
-      if (isAlreadySelected) {
-        // If already selected, remove the add-on
-        const { [variant.title]: _, ...rest } = prevSelectedAddOns;
-        return rest;
-      } else {
-        // If not selected, add the add-on
-        return {
-          ...prevSelectedAddOns,
-          [variant.title]: {
-            addon_title: variant.title || "No Title",
-            addon_price: variant.price || "No Price",
-            addon_image: variant.image || "No Image",
-            addonId: variant.addonid || "No Id",
-            variantID: variant.id || "No Id",
-          },
-        };
-      }
-    });
-  };
-
   const autoSelectPlanProducts = (products, categories) => {
     console.log("All Products:", products);
     console.log("Selected categories:", categories);
@@ -1050,7 +1019,6 @@ function Boq() {
                           categoriesWithTwoLevelCheck
                         }
                         allAddons={allAddons}
-                        onAddonAdd={handleAddOnChange}
                       />
                     )}
                     <MainPage
@@ -1084,7 +1052,6 @@ function Boq() {
             setShowProductView={setShowProductView}
             setShowRecommend={setShowRecommend}
             filteredProducts={filteredProducts}
-            handleAddOnChange={handleAddOnChange}
           />
           {showRecommend && (
             <RecommendComp
