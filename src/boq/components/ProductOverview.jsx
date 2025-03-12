@@ -4,11 +4,13 @@ import { TbArrowBackUp } from "react-icons/tb";
 import { MdOutlineKeyboardArrowRight } from "react-icons/md"; //MdOutlineKeyboardArrowLeft
 import { normalizeKey } from "../utils/CalculateTotalPriceHelper";
 import SelectArea from "./SelectArea";
-import Addon from "./Addon";
 import { useApp } from "../../Context/Context";
 import { calculateTotalPrice } from "../utils/productUtils";
+import { useNavigate } from "react-router-dom";
+import RecommendComp from "./RecommendComp";
 
-function ProductOverview({ setShowProductView, setShowRecommend }) {
+function ProductOverview() {
+  const navigate = useNavigate();
   const [mainImageHovered, setMainImageHovered] = useState(false); // For main image hover effect
   const [hoveredImage, setHoveredImage] = useState(null); // For additional image hover effect
   const [showSelectArea, setShowSelectArea] = useState(false);
@@ -29,6 +31,9 @@ function ProductOverview({ setShowProductView, setShowRecommend }) {
     selectedProductView,
     setSelectedProductView,
     allAddons,
+    setShowProductView,
+    setShowRecommend,
+    showRecommend,
   } = useApp();
 
   const instructions = {
@@ -205,6 +210,7 @@ function ProductOverview({ setShowProductView, setShowRecommend }) {
             className="cursor-pointer"
             onClick={() => {
               setShowProductView(false); // Open product view
+              navigate("/boq"); //new ProductOverview
             }}
           />
           <div className="flex mx-10 items-center text-[#334A78] text-sm">
@@ -379,6 +385,13 @@ function ProductOverview({ setShowProductView, setShowRecommend }) {
           selectedData={selectedData}
           categoriesWithTwoLevelCheck={categoriesWithTwoLevelCheck}
           allAddons={allAddons}
+        />
+      )}
+
+      {showRecommend && ( //new ProductOverview
+        <RecommendComp
+          showRecommend={showRecommend}
+          setShowRecommend={setShowRecommend}
         />
       )}
 

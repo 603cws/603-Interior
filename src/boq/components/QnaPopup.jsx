@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
 import "animate.css";
+import { useApp } from "../../Context/Context";
 
-const QnaPopup = ({ onClose, onSubmit, category }) => {
-  const categoryName = category?.category || ""; // Safely access the category name
+const QnaPopup = ({ onClose, onSubmit }) => {
+  const { selectedCategory } = useApp();
+  const categoryName = selectedCategory?.category || ""; // Safely access the category name
 
   // Height question (always the first question)
   const heightQuestion = [

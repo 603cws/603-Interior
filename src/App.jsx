@@ -37,6 +37,7 @@ import PricingCard from "./common-components/PricingCard";
 import VendorRegister from "./pages/vendor/VendorRegister";
 import DoorScrollEffect from "./pages/DoorScrollEffect";
 import BookAppointment from "./boq/components/BookAppointment";
+import ProductOverview from "./boq/components/ProductOverview";
 
 // const Homepage = lazy(() => import("./pages/Homepage"));
 
@@ -94,6 +95,7 @@ function App() {
             <Route path="/Layout" element={<Layout />} />
             <Route path="/RegisterUser" element={<RegisterUser />} />
             <Route path="/boq" element={<Boq />} />
+            <Route path="/product/:id" element={<ProductOverview />} />
             <Route path="/Recommend" element={<RecommendComp />} />
             <Route path="/selectArea" element={<SelectArea />} />
             <Route path="/spinner" element={<SpinnerFullPage />} />

@@ -17,8 +17,11 @@ import BoqPrompt from "../components/BoqPrompt"; // Import the BOQ modal
 import SelectArea from "../components/SelectArea";
 import MainPage from "./MainPage";
 import ProductCard from "../components/ProductCard";
+import { useNavigate } from "react-router-dom";
 
 function Boq() {
+  const navigate = useNavigate();
+
   const [showBoqPrompt, setShowBoqPrompt] = useState(false);
   const [boqTitle, setBoqTitle] = useState("");
   const [existingBoqs, setExistingBoqs] = useState([]); // Stores fetched BOQs
@@ -30,9 +33,6 @@ function Boq() {
   const [showSelectArea, setShowSelectArea] = useState(false);
   const [selectedAreas, setSelectedAreas] = useState([]);
 
-  const [minimizedView, setMinimizedView] = useState(false);
-  const [showProductView, setShowProductView] = useState(false);
-  const [showRecommend, setShowRecommend] = useState(false);
   const [questionPopup, setQuestionPopup] = useState(false);
   const [boqList, setBoqList] = useState([]);
   // const [selectedPlan, setSelectedPlan] = useState(null);
@@ -76,6 +76,12 @@ function Boq() {
     filteredProducts,
     groupedProducts,
     allAddons,
+    minimizedView,
+    setMinimizedView,
+    showProductView,
+    setShowProductView,
+    showRecommend,
+    setShowRecommend,
   } = useApp();
 
   const [runTour, setRunTour] = useState(false); // Controls whether the tour runs
@@ -186,6 +192,7 @@ function Boq() {
 
   const handleSelectedProductView = (variant) => {
     setSelectedProductView(variant);
+    navigate(`/product/${variant.id}`); //new ProductOverview
   };
 
   const calculateAutoTotalPrice = (
@@ -924,7 +931,6 @@ function Boq() {
             {selectedPlan === "Custom" && questionPopup && (
               <QnaPopup
                 onClose={() => setQuestionPopup(false)}
-                category={selectedCategory}
                 onSubmit={handleQuestionSubmit}
               />
             )}
@@ -932,13 +938,9 @@ function Boq() {
             {!showProductView && (
               <>
                 <Categories
-                  categories={categories}
                   setSelectedCategory={handleCategorySelection}
                   setSelectedSubCategory={handleSelectedSubCategory}
-                  minimizedView={minimizedView}
                   handleCategoryClick={handleCategoryClick}
-                  userResponses={userResponses}
-                  quantityData={quantityData}
                 />
                 {minimizedView && (
                   <div>
@@ -947,9 +949,6 @@ function Boq() {
                       <SelectArea
                         setShowSelectArea={setShowSelectArea}
                         image={selectedProductView.image}
-                        categories={categories}
-                        subCategories={subCategories}
-                        subCat1={subCat1}
                         selectedAreas={selectedAreas}
                         setSelectedAreas={setSelectedAreas}
                         selectedProductView={selectedProductView}
@@ -982,7 +981,7 @@ function Boq() {
         )}
       </div>
 
-      {showProductView && (
+      {/* {showProductView && ( //Old ProductOverview
         <div>
           <ProductOverview
             selectedProductView={selectedProductView}
@@ -999,7 +998,7 @@ function Boq() {
             />
           )}
         </div>
-      )}
+      )} */}
       {/* {showProfile && <ProfileCard />} */}
       {isOpen && (
         <div ref={profileRef}>

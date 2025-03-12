@@ -2,15 +2,19 @@ import React from "react"; //{ useState, useEffect }
 import { useApp } from "../../Context/Context";
 
 const Categories = ({
-  categories,
   setSelectedCategory,
   setSelectedSubCategory,
-  minimizedView,
   handleCategoryClick,
-  userResponses,
-  quantityData,
 }) => {
-  const { selectedCategory, selectedSubCategory, selectedData } = useApp();
+  const {
+    selectedCategory,
+    selectedSubCategory,
+    selectedData,
+    minimizedView,
+    categories,
+    userResponses,
+    quantityData,
+  } = useApp();
 
   const getCleanedCategoryName = (categoryName) => {
     return categoryName.replace(/[^a-zA-Z0-9]/g, ""); // Removes all non-alphanumeric characters

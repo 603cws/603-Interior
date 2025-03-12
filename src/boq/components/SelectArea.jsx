@@ -8,7 +8,6 @@ import { calculateAddonTotalPrice } from "../utils/productUtils";
 function SelectArea({
   setShowSelectArea,
   image,
-  subCategories,
   selectedAreas,
   setSelectedAreas,
   selectedProductView,
@@ -27,6 +26,7 @@ function SelectArea({
     areasData,
     quantityData,
     handelSelectedData,
+    subCategories,
   } = useApp();
 
   const [showAddon, setShowAddon] = useState(false);

@@ -85,9 +85,7 @@ export const AppProvider = ({ children }) => {
   const layoutImgRef = useRef(null);
   // auth
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-
   const [isAuthLoading, setIsAuthLoading] = useState(true);
-
   const [defaultProduct, setDefaultProduct] = useState(true);
 
   const [productData, setProductData] = useState([]);
@@ -97,6 +95,10 @@ export const AppProvider = ({ children }) => {
   const [filteredProducts, setFilteredProducts] = useState(null);
   const [groupedProducts, setGroupedProducts] = useState(null);
   const [allAddons, setAllAddons] = useState([]); // Add allAddons
+
+  const [minimizedView, setMinimizedView] = useState(false);
+  const [showProductView, setShowProductView] = useState(false);
+  const [showRecommend, setShowRecommend] = useState(false);
 
   useEffect(() => {
     const loadData = async () => {
@@ -685,6 +687,12 @@ export const AppProvider = ({ children }) => {
         setGroupedProducts,
         allAddons,
         setAllAddons,
+        minimizedView,
+        setMinimizedView,
+        showProductView,
+        setShowProductView,
+        showRecommend,
+        setShowRecommend,
       }}
     >
       {children}
