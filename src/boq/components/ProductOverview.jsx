@@ -9,15 +9,12 @@ import { useApp } from "../../Context/Context";
 
 function ProductOverview({
   selectedProductView,
-  quantityData,
-  areasData,
   setShowProductView,
   setShowRecommend,
   filteredProducts,
   handleAddOnChange,
-  handelSelectedData,
+  handelSelectedData, //
   calculateTotalPrice,
-  calculateAddonTotalPrice,
 }) {
   const [mainImageHovered, setMainImageHovered] = useState(false); // For main image hover effect
   const [hoveredImage, setHoveredImage] = useState(null); // For additional image hover effect
@@ -33,7 +30,10 @@ function ProductOverview({
     categories,
     subCategories,
     subCat1,
+    quantityData,
+    areasData,
   } = useApp();
+
   const instructions = {
     Furniture: [
       "Wipe down all surfaces with a damp cloth and mild detergent.",
@@ -371,7 +371,6 @@ function ProductOverview({
           categoriesWithTwoLevelCheck={categoriesWithTwoLevelCheck}
           allAddons={allAddons}
           onAddonAdd={handleAddOnChange}
-          calculateAddonTotalPrice={calculateAddonTotalPrice}
         />
       )}
 

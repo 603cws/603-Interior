@@ -8,7 +8,6 @@ import ProductOverview from "../components/ProductOverview";
 import QnaPopup from "../components/QnaPopup";
 import { useApp } from "../../Context/Context";
 import {
-  calculateAddonTotalPriceHelper,
   calculateTotalPriceHelper,
   calculateAutoTotalPriceHelper,
 } from "../utils/CalculateTotalPriceHelper";
@@ -239,26 +238,6 @@ function Boq() {
 
   const handleSelectedProductView = (variant) => {
     setSelectedProductView(variant);
-  };
-
-  const calculateAddonTotalPrice = (category, subCat, subcategory1, addon) => {
-    // Determine the actual values by prioritizing function parameters, falling back to selected state
-    const actualCategory = category || selectedCategory?.category;
-    const actualSubCategory = subCat || selectedSubCategory;
-    const actualSubCategory1 = subcategory1 || selectedSubCategory1;
-
-    // Calculate base total
-    const total = calculateAddonTotalPriceHelper(
-      quantityData[0],
-      areasData[0],
-      actualCategory,
-      actualSubCategory,
-      actualSubCategory1,
-      userResponses.height,
-      addon
-    );
-
-    return total;
   };
 
   const calculateTotalPrice = (category, subCat, subcategory1) => {
@@ -1200,7 +1179,6 @@ function Boq() {
                         }
                         allAddons={allAddons}
                         onAddonAdd={handleAddOnChange}
-                        calculateAddonTotalPrice={calculateAddonTotalPrice}
                       />
                     )}
                     <MainPage
@@ -1237,7 +1215,6 @@ function Boq() {
             handleAddOnChange={handleAddOnChange}
             handelSelectedData={handelSelectedData}
             calculateTotalPrice={calculateTotalPrice}
-            calculateAddonTotalPrice={calculateAddonTotalPrice}
           />
           {showRecommend && (
             <RecommendComp

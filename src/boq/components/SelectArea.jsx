@@ -3,6 +3,7 @@ import { MdOutlineCancel } from "react-icons/md";
 import { useApp } from "../../Context/Context";
 import Addon from "./Addon";
 import { toast, Slide } from "react-toastify";
+import { calculateAddonTotalPrice } from "../utils/productUtils";
 
 function SelectArea({
   setShowSelectArea,
@@ -15,15 +16,17 @@ function SelectArea({
   categoriesWithTwoLevelCheck,
   allAddons,
   onAddonAdd,
-  calculateAddonTotalPrice,
 }) {
   const {
     selectedData,
     selectedCategory,
+    selectedSubCategory,
     selectedSubCategory1,
     userResponses,
     setUserResponses,
     setSelectedData,
+    areasData,
+    quantityData,
   } = useApp();
 
   const [showAddon, setShowAddon] = useState(false);
@@ -76,7 +79,13 @@ function SelectArea({
               selectedCategory.category,
               item.subcategory,
               selectedSubCategory1,
-              addon
+              addon,
+              selectedCategory,
+              selectedSubCategory,
+              selectedSubCategory1,
+              userResponses,
+              areasData,
+              quantityData
             ),
           })), // ✅ Assign addons with calculated finalPrice
         };
