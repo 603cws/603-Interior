@@ -116,7 +116,7 @@ function VendorDashboard() {
             {isdashboardopen && (
               <div className="overflow-y-hidden scrollbar-hide h-[calc(100vh-120px)] py-2 relative">
                 <div className="p-4">
-                  <VendorDashboardCards />
+                  <VendorDashboardCards handleproduct={handleproduct} />
                 </div>
               </div>
             )}

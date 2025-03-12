@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "react-calendar/dist/Calendar.css";
 import { SlCalender } from "react-icons/sl";
 import { PiWarningCircleFill } from "react-icons/pi";
@@ -12,6 +12,7 @@ function BookAppointment() {
   const [value, onChange] = useState(new Date());
   const [selectedTIme, setSelectedTime] = useState();
   const [isSubmitting, setisSubmitting] = useState(false);
+  const [isappointmentbooked, setIsappointmentbooked] = useState(false);
 
   const { accountHolder } = useApp();
 
@@ -103,6 +104,7 @@ function BookAppointment() {
 
         // alert("Your mail is sent!");
         toast.success("we will shortly reach you");
+        setIsappointmentbooked(true);
       } else {
         toast.error("please select the time");
       }
@@ -113,66 +115,12 @@ function BookAppointment() {
     }
   };
 
-  //   const handleformsubmit = async (e) => {
-  //     e.preventDefault();
-
-  //     console.log("hii from log");
-
-  //     if (
-  //       !form.email ||
-  //       !form.companyName ||
-  //       !form.name ||
-  //       !form.mobileNo ||
-  //       !form.message
-  //     ) {
-  //       toast.error("form not filled");
-  //       return;
-  //     } else {
-  //       const data = {
-  //         service_id: serviceid,
-  //         template_id: templateID,
-  //         user_id: your_public_key,
-  //         template_params: {
-  //           name: form.name,
-  //           mobile: form.mobileNo,
-  //           company: form.companyName,
-  //           email: form.email,
-  //           message: form.message,
-  //         },
-  //       };
-
-  //       try {
-  //         setisSubmitting(true);
-  //         const response = await axios.post(
-  //           "https://api.emailjs.com/api/v1.0/email/send",
-  //           data,
-  //           {
-  //             headers: { "Content-Type": "application/json" },
-  //           }
-  //         );
-  //         console.log("Email sent successfully:", response.data);
-  //         // alert("Your mail is sent!");
-  //         toast.success("we will shortly reach you");
-  //         // setFormData({ username: "", user_email: "", message: "" }); // Reset form
-
-  //         //reset form
-  //         setFormData({
-  //           message: "",
-  //           name: "",
-  //           email: "",
-  //           mobileNo: 0,
-  //           companyName: "",
-  //         });
-  //       } catch (error) {
-  //         console.error("Error sending email:", error);
-  //         alert(
-  //           "Oops... " + JSON.stringify(error.response?.data || error.message)
-  //         );
-  //       } finally {
-  //         setisSubmitting(false);
-  //       }
-  //     }
-  //   };
+  useEffect(() => {
+    if (isappointmentbooked) {
+      const timer = setTimeout(() => setIsappointmentbooked(false), 3000); // Close modal after duration
+      return () => clearTimeout(timer);
+    }
+  }, [isappointmentbooked]);
 
   return (
     <div className="fixed inset-0 font-Poppins flex justify-center items-center ">
@@ -181,101 +129,113 @@ function BookAppointment() {
           appointment
         </h2>
         <div className=" flex justify-center items-center ">
-          <div className="max-w-3xl p-4 my-5">
-            <h3 className="text-[#0BA1A1] text-2xl font-bold text-center my-3">
-              Book an Appointment
-            </h3>
-            {/* div for calender and times  */}
-            <div className="flex justify-around items-stretch gap-4 xl:gap-6">
-              {/* calender */}
-              <div>
-                <h3 className="text-sm text-[#111] font-medium ">
-                  Schedule date*
-                </h3>
-                <div className="flex gap-2 items-center rounded-xl bg-[#FAFAFA] border-[#757575] border px-2 mb-3">
-                  <div>
-                    {" "}
-                    <SlCalender />{" "}
+          {!isappointmentbooked ? (
+            <div className="max-w-3xl p-4 my-5">
+              <h3 className="text-[#0BA1A1] text-2xl font-bold text-center my-3">
+                Book an Appointment
+              </h3>
+              {/* div for calender and times  */}
+              <div className="flex justify-around items-stretch gap-4 xl:gap-6">
+                {/* calender */}
+                <div>
+                  <h3 className="text-sm text-[#111] font-medium ">
+                    Schedule date*
+                  </h3>
+                  <div className="flex gap-2 items-center rounded-xl bg-[#FAFAFA] border-[#757575] border px-2 mb-3">
+                    <div>
+                      {" "}
+                      <SlCalender />{" "}
+                    </div>
+                    <h2 className="text-[#C4C4C4]">Select the date</h2>
                   </div>
-                  <h2 className="text-[#C4C4C4]">Select the date</h2>
+                  <div className="">
+                    <Calendar
+                      onChange={onChange}
+                      value={value}
+                      minDate={new Date()}
+                      tileDisabled={({ date }) =>
+                        date < new Date().setHours(0, 0, 0, 0)
+                      } // Disable past dates
+                    />
+                  </div>
                 </div>
-                <div className="">
-                  <Calendar
-                    onChange={onChange}
-                    value={value}
-                    minDate={new Date()}
-                    tileDisabled={({ date }) =>
-                      date < new Date().setHours(0, 0, 0, 0)
-                    } // Disable past dates
-                  />
+                {/* times */}
+                <div>
+                  <h4 className="text-[#111] font-medium text-base mb-3">
+                    select time*
+                  </h4>
+                  <div className="grid grid-cols-3 gap-x-5 gap-y-3">
+                    {times.map((time, index) => (
+                      <button
+                        key={time}
+                        onClick={(e) => handletime(time)}
+                        className={` border border-[#757575] px-4 py-3 rounded-xl text-xs xl:text-sm ${
+                          selectedTIme === time
+                            ? "text-[#ebffff] bg-[#194f48]"
+                            : "text-[#194F48] bg-[#EBFFFF]"
+                        }`}
+                      >
+                        {time}
+                      </button>
+                    ))}
+                  </div>
+                  <div className="flex items-center bg-[#FEF4EB] gap-2 mt-10">
+                    <div>
+                      <PiWarningCircleFill color="#D59E61" size={20} />
+                    </div>
+                    <h2 className="text-sm text-[#000]">
+                      All times are in central Time(India)
+                    </h2>
+                  </div>
                 </div>
               </div>
-              {/* times */}
-              <div>
-                <h4 className="text-[#111] font-medium text-base mb-3">
-                  select time*
-                </h4>
-                <div className="grid grid-cols-3 gap-x-5 gap-y-3">
-                  {times.map((time, index) => (
-                    <button
-                      key={time}
-                      onClick={(e) => handletime(time)}
-                      className={` border border-[#757575] px-4 py-3 rounded-xl text-xs xl:text-sm ${
-                        selectedTIme === time
-                          ? "text-[#ebffff] bg-[#194f48]"
-                          : "text-[#194F48] bg-[#EBFFFF]"
-                      }`}
-                    >
-                      {time}
-                    </button>
-                  ))}
-                </div>
-                <div className="flex items-center bg-[#FEF4EB] gap-2 mt-10">
-                  <div>
-                    <PiWarningCircleFill color="#D59E61" size={20} />
-                  </div>
-                  <h2 className="text-sm text-[#000]">
-                    All times are in central Time(India)
-                  </h2>
-                </div>
+              {/* button for submit */}
+              <div className="flex justify-center items-center my-4">
+                <button
+                  onClick={handlesubmi}
+                  className="px-5 py-3 bg-[#0BA1A1] text-[#fafafa] rounded-lg"
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? (
+                    <div className="spinner">
+                      <svg
+                        className="animate-spin h-5 w-5 text-white"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                      >
+                        <circle
+                          className="opacity-25"
+                          cx="12"
+                          cy="12"
+                          r="10"
+                          stroke="currentColor"
+                          strokeWidth="4"
+                        ></circle>
+                        <path
+                          className="opacity-75"
+                          fill="currentColor"
+                          d="M4 12a8 8 0 018-8v8h8a8 8 0 01-8 8V12H4z"
+                        ></path>
+                      </svg>
+                    </div>
+                  ) : (
+                    "Submit"
+                  )}
+                </button>
               </div>
             </div>
-            {/* button for submit */}
-            <div className="flex justify-center items-center my-4">
-              <button
-                onClick={handlesubmi}
-                className="px-5 py-3 bg-[#0BA1A1] text-[#fafafa] rounded-lg"
-                disabled={isSubmitting}
-              >
-                {isSubmitting ? (
-                  <div className="spinner">
-                    <svg
-                      className="animate-spin h-5 w-5 text-white"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                    >
-                      <circle
-                        className="opacity-25"
-                        cx="12"
-                        cy="12"
-                        r="10"
-                        stroke="currentColor"
-                        strokeWidth="4"
-                      ></circle>
-                      <path
-                        className="opacity-75"
-                        fill="currentColor"
-                        d="M4 12a8 8 0 018-8v8h8a8 8 0 01-8 8V12H4z"
-                      ></path>
-                    </svg>
-                  </div>
-                ) : (
-                  "Submit"
-                )}
-              </button>
+          ) : (
+            <div className="max-w-3xl p-4 my-5 flex justify-center items-center ">
+              <div className="w-[280px] h-[250px] m-20 ">
+                <img
+                  src="/images/Appointment.gif"
+                  alt="bookedappointment gif"
+                  className="h-full w-full"
+                />
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </div>
     </div>

@@ -8,6 +8,7 @@ function DashboardCards({
   clients,
   products,
   addons,
+  handleproduct,
 }) {
   if (!totalclients || !totalVendors) {
     return <Spinner />;
@@ -54,7 +55,10 @@ function DashboardCards({
           />
         </div>
 
-        <div className="bg-gradient-to-br from-[#EF5E7A] to-[#D35385] text-white p-7 rounded-3xl flex flex-col justify-between lg:h-48 lg:w-40 xl:h-56 xl:w-48 relative hover:scale-110 transition-transform duration-300 ease-in-out cursor-pointer">
+        <div
+          onClick={handleproduct}
+          className="bg-gradient-to-br from-[#EF5E7A] to-[#D35385] text-white p-7 rounded-3xl flex flex-col justify-between lg:h-48 lg:w-40 xl:h-56 xl:w-48 relative hover:scale-110 transition-transform duration-300 ease-in-out cursor-pointer"
+        >
           <h2 className="self-center text-xl font-bold">Pending Products</h2>
           <h1 className="self-end justify-end font-semibold text-3xl xl:text-5xl">
             {pendingproduct.length}
@@ -66,7 +70,10 @@ function DashboardCards({
           />
         </div>
 
-        <div className="bg-gradient-to-br from-[#D623FE] to-[#A530F2] text-white p-7 rounded-3xl flex flex-col justify-between lg:h-48 lg:w-40 xl:h-56 xl:w-48 relative hover:scale-110 transition-transform duration-300 ease-in-out cursor-pointer">
+        <div
+          onClick={handleproduct}
+          className="bg-gradient-to-br from-[#D623FE] to-[#A530F2] text-white p-7 rounded-3xl flex flex-col justify-between lg:h-48 lg:w-40 xl:h-56 xl:w-48 relative hover:scale-110 transition-transform duration-300 ease-in-out cursor-pointer"
+        >
           <h2 className="self-center text-xl font-bold">Pending Addons</h2>
           <h1 className="self-end justify-end font-semibold text-3xl xl:text-5xl">
             {pendingAddons.length}

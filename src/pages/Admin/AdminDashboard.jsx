@@ -2,7 +2,7 @@ import { useEffect, useState, useRef } from "react";
 import { RiDashboardFill } from "react-icons/ri";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useApp } from "../../Context/Context";
-import { supabase } from "../../services/supabase";
+import { supabase, adminsupabase } from "../../services/supabase";
 import toast from "react-hot-toast";
 import UserProfile from "../user/UserProfile";
 import UserSetting from "../user/UserSetting";
@@ -18,17 +18,16 @@ import VendorNewAddon from "../vendor/VendorNewAddon";
 import { VscEye } from "react-icons/vsc";
 import { MdOutlineDelete } from "react-icons/md";
 import { CiMenuKebab } from "react-icons/ci";
-import { IoIosAdd } from "react-icons/io";
 import Spinner from "../../common-components/Spinner";
 import SidebarItem from "../../common-components/SidebarItem";
 import Clients from "./Clients";
 import VendorProductlist from "./VendorProductlist";
-// import { useLogout } from "../../utils/HelperFunction";
 import DashboardProductCard from "../vendor/DashboardProductCard";
 import DashboardCards from "./DashboardCards";
 import DashboardInbox from "./DashboardInbox";
 import CreateUser from "./CreateUser";
 import { HiXMark } from "react-icons/hi2";
+import { MdDeleteOutline } from "react-icons/md";
 
 function AdminDashboard() {
   const navigate = useNavigate();
@@ -49,6 +48,9 @@ function AdminDashboard() {
 
   //user refresh
   const [isrefresh, setIsrefresh] = useState(false);
+
+  //venbdor refresh
+  const [isvendorRefresh, setIsvendorRefresh] = useState(false);
   //product refresh
   const [isproductRefresh, setIsProductRefresh] = useState(false);
 
@@ -96,6 +98,8 @@ function AdminDashboard() {
     { name: "Add-Ons", value: "addons" },
   ];
 
+  const [selectedCategory, setSelectedCategory] = useState("");
+
   //baseurlforimg
   const baseImageUrl =
     "https://bwxzfwsoxwtzhjbzbdzs.supabase.co/storage/v1/object/public/addon/";
@@ -133,6 +137,46 @@ function AdminDashboard() {
   const items = toggle ? filteredProducts : filteredAddons;
   // const items = toggle ? products : addons;
   const totalPages = Math.ceil(items.length / itemsPerPage);
+
+  //state
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedUser, setSelectedUser] = useState(null);
+  const [selectedindex, setSelectedindex] = useState();
+
+  //handle functions
+  const handleDeletevendirClick = (user, index) => {
+    setSelectedUser(user);
+    setIsModalOpen(true);
+    setSelectedindex(index);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (selectedUser) {
+      try {
+        // Call your delete function here
+        await adminsupabase.auth.admin.deleteUser(selectedUser.id);
+        setIsModalOpen(false);
+        setSelectedUser(null);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setIsvendorRefresh(true);
+      }
+    }
+  };
+
+  //all the category
+  const category = [
+    "furniture",
+    "HVAC",
+    "paint",
+    "partitions / ceilings",
+    "lux",
+    "civil / plumbing",
+    "flooring",
+    "lighting",
+    "smart solutions",
+  ];
 
   useEffect(() => {
     const calculateItemsPerPage = () => {
@@ -180,6 +224,7 @@ function AdminDashboard() {
       });
       setProducts(sortedData);
       setFilteredProducts(sortedData);
+      console.log(sortedData);
     } catch (error) {
       console.log("Error fetching products:", error);
     } finally {
@@ -206,6 +251,7 @@ function AdminDashboard() {
       } else {
         setAddons(sortedData);
         setFilteredAddons(sortedData);
+        console.log("addons", sortedData);
       }
     } finally {
       setIsAddonRefresh(false);
@@ -444,13 +490,19 @@ function AdminDashboard() {
 
   const getvendors = async () => {
     // Query the profiles table for phone and companyName
-    const { data } = await supabase
-      .from("users_profiles")
-      .select("*")
-      .eq("role", "vendor");
+    try {
+      const { data } = await supabase
+        .from("users_profiles")
+        .select("*")
+        .eq("role", "vendor");
 
-    setAllvendors(data);
-    setFilteredvendors(data);
+      setAllvendors(data);
+      setFilteredvendors(data);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsvendorRefresh(false);
+    }
   };
 
   const getusers = async () => {
@@ -475,7 +527,7 @@ function AdminDashboard() {
   // get all the users and vendors from the database
   useEffect(() => {
     getvendors();
-  }, []);
+  }, [isvendorRefresh]);
 
   useEffect(() => {
     getusers();
@@ -496,10 +548,16 @@ function AdminDashboard() {
     console.log(query);
 
     if (toggle) {
-      if (!query) {
+      if (!query && !selectedCategory) {
         setFilteredProducts(products); // Reset to original list when input is empty
         return;
       }
+
+      if (!query && selectedCategory) {
+        filterbyCategory(selectedCategory);
+        return;
+      }
+
       const filtered = products.filter((item) =>
         item.title.toLowerCase().includes(query.toLowerCase())
       );
@@ -531,9 +589,35 @@ function AdminDashboard() {
     setFilteredvendors(filteredvendor);
   };
 
-  // const handlevendorcard = () => {
-  //   setVendorproductlist(true);
-  // };
+  const filterbyCategory = (category) => {
+    console.log(category);
+    setSelectedCategory(category);
+
+    if (toggle) {
+      if (!category) {
+        setFilteredProducts(products); // Reset to original list when input is empty
+        return;
+      }
+      const filtered = products.filter(
+        (item) =>
+          item.products.category.toLowerCase() === category.toLowerCase()
+      );
+      console.log(filtered);
+
+      setFilteredProducts(filtered);
+    } else {
+      if (!category) {
+        setFilteredAddons(addons); // Reset to original list when input is empty
+        return;
+      }
+      const filtered = addons.filter((item) =>
+        item.title.toLowerCase().includes(category.toLowerCase())
+      );
+      console.log(filtered);
+
+      setFilteredAddons(filtered);
+    }
+  };
 
   return (
     <div className="bg-[url('images/bg/Admin.png')] bg-cover bg-center bg-no-repeat p-3 xl:p-5">
@@ -647,6 +731,7 @@ function AdminDashboard() {
                       vendors={handleVendor}
                       clients={handleclient}
                       products={products}
+                      handleproduct={handleproduct}
                       addons={addons}
                     />
                   </div>
@@ -732,6 +817,24 @@ function AdminDashboard() {
                             onChange={(e) => filterItems(e.target.value)}
                           />
                         </div>
+
+                        {toggle && (
+                          <div>
+                            <select
+                              name="category"
+                              value={selectedCategory}
+                              onChange={(e) => filterbyCategory(e.target.value)}
+                              id="category"
+                            >
+                              <option value="">All categories</option>
+                              {category.map((category) => (
+                                <option key={category} value={category}>
+                                  {category}
+                                </option>
+                              ))}
+                            </select>
+                          </div>
+                        )}
 
                         {/* <button
                           onClick={handlenewproduct}
@@ -1020,7 +1123,7 @@ function AdminDashboard() {
                         key={index}
                         className={`flex flex-col ${
                           isExpanded ? "lg:w-[200px] xl:w-[250px]" : "w-[300px]"
-                        } h-[150px] font-Poppins rounded-2xl bg-[#fff]`}
+                        } h-[150px] font-Poppins rounded-2xl bg-[#fff] relative`}
                       >
                         <div className="flex items-center my-4">
                           <div className="mx-3">
@@ -1034,6 +1137,17 @@ function AdminDashboard() {
                             {/* <p className="text-[#ccc] text-sm">
                               {user.company_name}
                             </p> */}
+                          </div>
+                          <div className="ml-auto px-3">
+                            {" "}
+                            <button
+                              onClick={() =>
+                                handleDeletevendirClick(user, index)
+                              }
+                            >
+                              {" "}
+                              <MdDeleteOutline size={25} />{" "}
+                            </button>
                           </div>
                         </div>
                         <div className="flex-1 flex items-end pl-6 gap-3 my-5">
@@ -1051,6 +1165,33 @@ function AdminDashboard() {
                             {user.company_name}
                           </button>
                         </div>
+                        {isModalOpen && selectedindex === index && (
+                          <div className=" inset-0 flex items-center justify-center bg-opacity-80 absolute w-full h-full">
+                            <div className="bg-white rounded-lg px-5 py-2">
+                              <h3 className="text-lg font-semibold">
+                                Are you sure?
+                              </h3>
+                              <p>
+                                Do you really want to delete{" "}
+                                {selectedUser?.company_name}?
+                              </p>
+                              <div className="flex justify-center mt-4 gap-3">
+                                <button
+                                  onClick={() => setIsModalOpen(false)}
+                                  className="px-4 py-2 bg-gray-300 rounded"
+                                >
+                                  No
+                                </button>
+                                <button
+                                  onClick={handleConfirmDelete}
+                                  className="px-4 py-2 bg-red-500 text-white rounded"
+                                >
+                                  Yes
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        )}
                       </div>
                     );
                   })}

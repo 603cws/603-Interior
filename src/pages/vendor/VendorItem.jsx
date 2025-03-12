@@ -50,6 +50,8 @@ function VendorItem() {
   const [products, setProducts] = useState([]);
   const [addons, setAddons] = useState([]);
   const [rejectedProductView, setRejectedProductView] = useState(false);
+    const [filteredProducts, setFilteredProducts] = useState([]);
+  const [filteredAddons, setFilteredAddons] = useState([]);
 
   const tabs = [
     { name: "Products", value: "products" },
@@ -57,6 +59,9 @@ function VendorItem() {
   ];
 
   const { accountHolder } = useApp();
+
+  // const items = toggle ? filteredProducts : filteredAddons;
+  const items = toggle ? filteredProducts : filteredAddons;
 
   const baseImageUrl =
     "https://bwxzfwsoxwtzhjbzbdzs.supabase.co/storage/v1/object/public/addon/";
@@ -84,7 +89,17 @@ function VendorItem() {
         )
         .eq("vendor_id", accountHolder.userId);
 
-      setProducts(data);
+      const sortedData = data.sort((a, b) => {
+        // Prioritize "pending" status
+        if (a.status === "pending" && b.status !== "pending") return -1;
+        if (b.status === "pending" && a.status !== "pending") return 1;
+
+        // If both are "pending" or both are not "pending", sort by date
+        return new Date(b.created_at) - new Date(a.created_at);
+      });
+      setProducts(sortedData);
+      setFilteredProducts(sortedData);
+      // setProducts(data);
 
       console.log(data);
     } catch (error) {
@@ -104,8 +119,44 @@ function VendorItem() {
     if (error) {
       console.log("Error fetching addons:", error);
     } else {
-      setAddons(data);
+      const sortedData = data.sort((a, b) => {
+        // Prioritize "pending" status
+        if (a.status === "pending" && b.status !== "pending") return -1;
+        if (b.status === "pending" && a.status !== "pending") return 1;
+
+        // If both are "pending" or both are not "pending", sort by date
+        return new Date(b.created_at) - new Date(a.created_at);
+      });
+      setAddons(sortedData);
+      setFilteredAddons(sortedData);
+      // setAddons(data);
       console.log("Addons: ", data);
+    }
+  };
+
+  const filterItems = (query) => {
+    console.log(query);
+
+    if (toggle) {
+      if (!query) {
+        setFilteredProducts(products); // Reset to original list when input is empty
+        return;
+      }
+      const filtered = products.filter((item) =>
+        item.title.toLowerCase().includes(query.toLowerCase())
+      );
+      console.log(filtered);
+      setFilteredProducts(filtered);
+    } else {
+      if (!query) {
+        setFilteredAddons(addons); // Reset to original list when input is empty
+        return;
+      }
+      const filtered = addons.filter((item) =>
+        item.title.toLowerCase().includes(query.toLowerCase())
+      );
+      setFilteredAddons(filtered);
+      console.log(filtered);
     }
   };
 
@@ -244,6 +295,15 @@ function VendorItem() {
                   product list
                 </h3>
 
+                <div className="w-1/2">
+                  <input
+                    type="text"
+                    className="w-full rounded-lg px-2 py-1 outline-none border-2 border-gray-400"
+                    placeholder="......search by product name"
+                    onChange={(e) => filterItems(e.target.value)}
+                  />
+                </div>
+
                 <button
                   onClick={handlenewproduct}
                   className="capitalize shadow-sm py-2 px-4 text-sm flex justify-center items-center border-2"
@@ -273,7 +333,8 @@ function VendorItem() {
             {productlist &&
               (isloading ? (
                 <Spinner />
-              ) : (toggle ? products : addons).length > 0 ? (
+              ) : // ) : (toggle ? products : addons).length > 0 ? (
+              items.length > 0 ? (
                 <section className=" h-[90%] font-Poppins overflow-hidden">
                   <div className="w-full h-full border-t border-b border-[#CCCCCC] overflow-y-auto custom-scrollbar">
                     <table className="min-w-full border-collapse">
@@ -302,7 +363,8 @@ function VendorItem() {
                         </tr>
                       </thead>
                       <tbody className=" text-sm">
-                        {(toggle ? products : addons).map((item) => (
+                        {/* {(toggle ? products : addons).map((item) => ( */}
+                        {items.map((item) => (
                           <tr
                             key={item.id}
                             className="hover:bg-gray-50 cursor-pointer"
