@@ -8,6 +8,8 @@ import { useApp } from "../../Context/Context";
 import { calculateTotalPrice } from "../utils/productUtils";
 import { useNavigate } from "react-router-dom";
 import RecommendComp from "./RecommendComp";
+import Navbar from "./Navbar";
+import ProfileCard from "./ProfileCard";
 
 function ProductOverview() {
   const navigate = useNavigate();
@@ -15,6 +17,10 @@ function ProductOverview() {
   const [hoveredImage, setHoveredImage] = useState(null); // For additional image hover effect
   const [showSelectArea, setShowSelectArea] = useState(false);
   const [selectedAreas, setSelectedAreas] = useState([]);
+
+  const [isOpen, setIsOpen] = useState(false);
+  const profileRef = useRef(null);
+  const iconRef = useRef(null); //used to close Profile Card when clicked outside of Profile Card area
 
   const {
     selectedCategory,
@@ -65,6 +71,11 @@ function ProductOverview() {
     ],
   };
 
+  // Toggle profile card visibility
+  const toggleProfile = () => {
+    setIsOpen(!isOpen);
+  };
+
   useEffect(() => {
     // Function to handle "Esc" key press
     const handleEscKey = (e) => {
@@ -81,6 +92,33 @@ function ProductOverview() {
       document.removeEventListener("keydown", handleEscKey);
     };
   }, []);
+
+  // Close profile card when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      // If clicked inside ProfileCard or on the Profile Icon, do nothing
+      if (profileRef.current && profileRef.current.contains(event.target)) {
+        return;
+      }
+
+      if (iconRef.current && iconRef.current.contains(event.target)) {
+        return;
+      }
+
+      // Otherwise, close the profile card
+      setIsOpen(false);
+    };
+
+    if (isOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isOpen]);
 
   const getInstructions = (category) => {
     return instructions[category] || ["No specific instructions found."]; // Provide default message
@@ -197,6 +235,7 @@ function ProductOverview() {
   return (
     // grid
     <>
+      <Navbar toggleProfile={toggleProfile} iconRef={iconRef} />
       <ToastContainer />
       <div
         className={`product-overview grid grid-cols-2 p-5 gap-1 ${
@@ -393,6 +432,12 @@ function ProductOverview() {
           showRecommend={showRecommend}
           setShowRecommend={setShowRecommend}
         />
+      )}
+
+      {isOpen && (
+        <div ref={profileRef}>
+          <ProfileCard layout={false} />
+        </div>
       )}
 
       {/* <div
