@@ -8,11 +8,7 @@ import Addon from "./Addon";
 import { useApp } from "../../Context/Context";
 import { calculateTotalPrice } from "../utils/productUtils";
 
-function ProductOverview({
-  setShowProductView,
-  setShowRecommend,
-  filteredProducts,
-}) {
+function ProductOverview({ setShowProductView, setShowRecommend }) {
   const [mainImageHovered, setMainImageHovered] = useState(false); // For main image hover effect
   const [hoveredImage, setHoveredImage] = useState(null); // For additional image hover effect
   const [showSelectArea, setShowSelectArea] = useState(false);
@@ -32,6 +28,7 @@ function ProductOverview({
     userResponses,
     selectedProductView,
     setSelectedProductView,
+    allAddons,
   } = useApp();
 
   const instructions = {
@@ -162,12 +159,12 @@ function ProductOverview({
 
   const details = calculationDetails();
 
-  const allAddons = filteredProducts.flatMap((product) =>
-    product.subcategory1 === selectedSubCategory1 &&
-    Array.isArray(product.addons)
-      ? product.addons
-      : []
-  );
+  // const allAddons = filteredProducts.flatMap((product) =>
+  //   product.subcategory1 === selectedSubCategory1 &&
+  //   Array.isArray(product.addons)
+  //     ? product.addons
+  //     : []
+  // );
 
   function formatDimensions(dimensions) {
     if (!dimensions) {

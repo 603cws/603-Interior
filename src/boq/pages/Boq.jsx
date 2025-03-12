@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo, useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 import { ToastContainer } from "react-toastify";
 import Navbar from "../../boq/components/Navbar";
 import Categories from "./Categories";
@@ -7,10 +7,7 @@ import RecommendComp from "../components/RecommendComp";
 import ProductOverview from "../components/ProductOverview";
 import QnaPopup from "../components/QnaPopup";
 import { useApp } from "../../Context/Context";
-import {
-  calculateTotalPriceHelper,
-  calculateAutoTotalPriceHelper,
-} from "../utils/CalculateTotalPriceHelper";
+import { calculateAutoTotalPriceHelper } from "../utils/CalculateTotalPriceHelper";
 import Joyride, { STATUS } from "react-joyride";
 import { supabase } from "../../services/supabase";
 import toast from "react-hot-toast";
@@ -20,15 +17,11 @@ import BoqPrompt from "../components/BoqPrompt"; // Import the BOQ modal
 import SelectArea from "../components/SelectArea";
 import MainPage from "./MainPage";
 import ProductCard from "../components/ProductCard";
-import { calculateTotalPrice } from "../utils/productUtils";
 
 function Boq() {
   const [showBoqPrompt, setShowBoqPrompt] = useState(false);
   const [boqTitle, setBoqTitle] = useState("");
   const [existingBoqs, setExistingBoqs] = useState([]); // Stores fetched BOQs
-
-  const searchQuery = "";
-  const priceRange = [1, 15000000];
 
   const [isOpen, setIsOpen] = useState(false);
   const profileRef = useRef(null);
@@ -80,6 +73,9 @@ function Boq() {
     handleCategorySelection,
     selectedProductView,
     setSelectedProductView,
+    filteredProducts,
+    groupedProducts,
+    allAddons,
   } = useApp();
 
   const [runTour, setRunTour] = useState(false); // Controls whether the tour runs
@@ -176,56 +172,6 @@ function Boq() {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [isOpen]);
-
-  // Filter products based on search query, price range, and category
-  const filteredProducts = useMemo(() => {
-    // if (!selectedCategory) return false;
-    if (!Array.isArray(productData)) return []; // Ensure it's an array
-
-    return productData.filter((product) => {
-      if (!product.product_variants || product.product_variants.length === 0) {
-        return false;
-      }
-
-      const matchesVariant = product.product_variants.some((variant) => {
-        const matchesSearch =
-          variant.title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          variant.details?.toLowerCase().includes(searchQuery.toLowerCase());
-
-        const matchesPrice =
-          variant.price >= priceRange[0] && variant.price <= priceRange[1];
-
-        return matchesSearch && matchesPrice;
-      });
-
-      const matchesCategory =
-        selectedCategory?.category === "" ||
-        product.category === selectedCategory?.category;
-      return matchesVariant && matchesCategory;
-    });
-  }, [productData, searchQuery, priceRange, selectedCategory]);
-
-  // Group products by category and subcategory
-  const groupedProducts = useMemo(() => {
-    const grouped = {};
-
-    filteredProducts.forEach((product) => {
-      const subcategories = product.subcategory
-        .split(",")
-        .map((sub) => sub.trim());
-
-      subcategories.forEach((subcategory) => {
-        if (!grouped[product.category]) {
-          grouped[product.category] = {};
-        }
-        if (!grouped[product.category][subcategory]) {
-          grouped[product.category][subcategory] = [];
-        }
-        grouped[product.category][subcategory].push(product);
-      });
-    });
-    return grouped;
-  }, [filteredProducts]);
 
   const handleSelectedSubCategory = (subCategory) => {
     setSelectedSubCategory(subCategory);
@@ -917,13 +863,6 @@ function Boq() {
 
   console.log("selected products", selectedData);
   // console.log("selected plan", selectedPlan);
-
-  const allAddons = filteredProducts.flatMap((product) =>
-    product.subcategory1 === selectedSubCategory1 &&
-    Array.isArray(product.addons)
-      ? product.addons
-      : []
-  );
 
   return (
     <div>

@@ -1,4 +1,11 @@
-import { createContext, useContext, useEffect, useState, useRef } from "react";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  useRef,
+  useMemo,
+} from "react";
 import { supabase } from "../services/supabase";
 import { useNavigate } from "react-router-dom";
 import {
@@ -8,7 +15,11 @@ import {
   fetchProductsData,
 } from "../boq/utils/dataFetchers";
 import processData from "../boq/utils/dataProcessor";
-import { calculateTotalPrice } from "../boq/utils/productUtils";
+import {
+  calculateTotalPrice,
+  filterProduct,
+  groupProduct,
+} from "../boq/utils/productUtils";
 
 const AppContext = createContext();
 
@@ -24,6 +35,8 @@ export const AppProvider = ({ children }) => {
   ]; //Array of Categories where save data works on dependent subcategories
 
   // const naviagte = useNavigate();
+  const searchQuery = "";
+  const priceRange = [1, 15000000];
 
   const [totalArea, setTotalArea] = useState();
   const [inputValue, setInputValue] = useState("");
@@ -80,6 +93,10 @@ export const AppProvider = ({ children }) => {
   const [productData, setProductData] = useState([]);
   const [areasData, setAreasData] = useState([]);
   const [quantityData, setQuantityData] = useState([]);
+
+  const [filteredProducts, setFilteredProducts] = useState(null);
+  const [groupedProducts, setGroupedProducts] = useState(null);
+  const [allAddons, setAllAddons] = useState([]); // Add allAddons
 
   useEffect(() => {
     const loadData = async () => {
@@ -314,7 +331,7 @@ export const AppProvider = ({ children }) => {
       !Array.isArray(selectedData) ||
       selectedData.length === 0
     ) {
-      console.warn("Skipping handleProgressBar due to missing data.");
+      console.log("Skipping handleProgressBar due to missing data.");
       return;
     }
 
@@ -388,6 +405,48 @@ export const AppProvider = ({ children }) => {
     fetchUserData();
   }, [isAuthenticated]);
   console.log("current user", accountHolder);
+
+  useEffect(() => {
+    if (!productData || selectedCategory === null) return; // Prevent execution if data isn't available
+
+    if (!filteredProducts) {
+      const filtered = filterProduct(
+        productData,
+        searchQuery,
+        priceRange,
+        selectedCategory
+      );
+      setFilteredProducts(filtered);
+    }
+  }, [
+    productData,
+    searchQuery,
+    priceRange,
+    selectedCategory,
+    filteredProducts,
+  ]);
+
+  useEffect(() => {
+    if (filteredProducts && !groupedProducts) {
+      const grouped = groupProduct(filteredProducts);
+      setGroupedProducts(grouped);
+    }
+  }, [filteredProducts, groupedProducts]);
+
+  useEffect(() => {
+    if (filteredProducts) {
+      // Add this check
+      const newAddons = filteredProducts.flatMap((product) =>
+        product.subcategory1 === selectedSubCategory1 &&
+        Array.isArray(product.addons)
+          ? product.addons
+          : []
+      );
+      setAllAddons(newAddons);
+    } else {
+      setAllAddons([]); // Set to empty array if filteredProducts is null
+    }
+  }, [filteredProducts, selectedSubCategory1]);
 
   const handleCategorySelection = (categoryData) => {
     setSelectedCategory(categoryData);
@@ -620,6 +679,12 @@ export const AppProvider = ({ children }) => {
         handelSelectedData,
         selectedProductView,
         setSelectedProductView,
+        filteredProducts,
+        setFilteredProducts,
+        groupedProducts,
+        setGroupedProducts,
+        allAddons,
+        setAllAddons,
       }}
     >
       {children}

@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import {
   calculateTotalPriceHelper,
   calculateAddonTotalPriceHelper,
@@ -107,4 +108,55 @@ export const handleAddOnChange = (variant, setSelectedAddons) => {
       };
     }
   });
+};
+
+export const filterProduct = (
+  productData,
+  searchQuery,
+  priceRange,
+  selectedCategory
+) => {
+  if (!Array.isArray(productData)) return [];
+
+  return productData.filter((product) => {
+    if (!product.product_variants || product.product_variants.length === 0) {
+      return false;
+    }
+
+    const matchesVariant = product.product_variants.some((variant) => {
+      const matchesSearch =
+        variant.title?.toLowerCase().includes(searchQuery?.toLowerCase()) ||
+        variant.details?.toLowerCase().includes(searchQuery?.toLowerCase());
+      const matchesPrice =
+        variant.price >= priceRange?.[0] && variant.price <= priceRange?.[1];
+      return matchesSearch && matchesPrice;
+    });
+
+    const matchesCategory =
+      selectedCategory?.category === "" ||
+      product.category === selectedCategory?.category;
+    return matchesVariant && matchesCategory;
+  });
+};
+
+export const groupProduct = (filteredProducts) => {
+  const grouped = {};
+
+  filteredProducts.forEach((product) => {
+    const subcategories = product.subcategory
+      .split(",")
+      .map((sub) => sub.trim());
+
+    subcategories.forEach((subcategory) => {
+      if (!grouped[product.category]) {
+        grouped[product.category] = {};
+      }
+      if (!grouped[product.category][subcategory]) {
+        grouped[product.category][subcategory] = [];
+      }
+      grouped[product.category][subcategory].push(product);
+    });
+  });
+
+  return grouped;
 };
