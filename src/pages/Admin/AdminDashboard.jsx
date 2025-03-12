@@ -224,7 +224,6 @@ function AdminDashboard() {
       });
       setProducts(sortedData);
       setFilteredProducts(sortedData);
-      console.log(sortedData);
     } catch (error) {
       console.log("Error fetching products:", error);
     } finally {
@@ -251,7 +250,6 @@ function AdminDashboard() {
       } else {
         setAddons(sortedData);
         setFilteredAddons(sortedData);
-        console.log("addons", sortedData);
       }
     } finally {
       setIsAddonRefresh(false);
@@ -379,7 +377,8 @@ function AdminDashboard() {
           .from("product_variants") // Table name
           .update({
             status: newStatus,
-            ...(newStatus === "rejected" && { reject_reason: reason }),
+            // ...(newStatus === "rejected" && { reject_reason: reason }),
+            reject_reason: reason,
           })
           .eq("id", product.id); // Matching row
         toast.success(`product ${newStatus}`);
@@ -923,12 +922,13 @@ function AdminDashboard() {
                                           <div className="absolute top-0 left-0 w-full h-full bg-white/90 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                                             <button
                                               className="bg-gray-100 text-green-600 p-3 rounded-full mr-2 hover:text-gray-100 hover:bg-green-600"
-                                              onClick={() =>
+                                              onClick={() => {
                                                 handleUpdateStatus(
                                                   item,
                                                   "approved"
-                                                )
-                                              }
+                                                );
+                                                setRejectReason("");
+                                              }}
                                               // onClick={() => handleAccept(item)}
                                             >
                                               <IoCheckmark size={20} />
@@ -1224,15 +1224,13 @@ function AdminDashboard() {
             setProductPreview(false);
           }}
           product={selectedProductview}
-          // fetchProducts={fetchProducts}
           handleDelete={handleDelete}
           updateStatus={handleUpdateStatus}
           deleteWarning={deleteWarning}
           setDeleteWarning={setDeleteWarning}
-          rejectReasonPopup={rejectReasonPopup}
           rejectReason={rejectReason}
+          setRejectReason={setRejectReason}
           handleConfirmReject={handleConfirmReject}
-          handleRejectClick={handleRejectClick}
         />
       )}
 

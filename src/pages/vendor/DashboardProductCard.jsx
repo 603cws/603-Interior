@@ -1,6 +1,9 @@
 import { useState } from "react";
 import { useApp } from "../../Context/Context";
 import { MdDeleteOutline } from "react-icons/md";
+import { AiTwotoneCheckCircle } from "react-icons/ai";
+import { PiClockCountdown } from "react-icons/pi";
+import { IoCloseCircleOutline } from "react-icons/io5";
 
 function DashboardProductCard({
   onClose,
@@ -9,56 +12,143 @@ function DashboardProductCard({
   updateStatus,
   deleteWarning,
   setDeleteWarning,
-  rejectReasonPopup,
-  setRejectReasonPopup,
   rejectReason,
   setRejectReason,
   handleConfirmReject,
-  handleRejectClick,
 }) {
-  const [statusDropdown, setStatusDropdown] = useState(false);
-  const [selectedStatus, setSelectedStatus] = useState(product.status);
+  const [showTextarea, setShowTextarea] = useState(false);
   const { accountHolder } = useApp();
 
   const baseImageUrl =
     "https://bwxzfwsoxwtzhjbzbdzs.supabase.co/storage/v1/object/public/addon/";
 
+  const currentStatus = product.status;
+  console.log("current status", currentStatus);
+
   return (
     <div className="flex justify-center items-center h-screen fixed inset-0 z-30 top-0 w-screen">
       <div className="absolute inset-0 bg-black opacity-50"></div>
-      <div className="font-Poppins max-w-xl p-10 rounded-3xl border-2 relative bg-white">
+      <div className="font-Poppins max-w-3xl p-10 rounded-3xl border-2 relative bg-white">
         {!deleteWarning ? (
           <div>
             <div className="flex gap-4">
               <div className="flex-1">
                 <img src={`${baseImageUrl}${product.image}`} alt="product" />
               </div>
-              <div className="flex-1 flex flex-col justify-center gap-2">
+              <div className="flex-1 flex flex-col gap-2">
                 <h2 className="font-semibold text-3xl text-[#111] uppercase">
                   {product.title}
                 </h2>
-                <p className="uppercase text-[#334A78] font-medium text-xs">
+                <p className="capitalize font-thin text-[#334A78] text-xs">
                   {product.details}
                 </p>
-                <h5 className="uppercase text-[#334A78] font-medium text-xs opacity-80">
-                  Category:
-                  <span className="font-bold text-[#000]">
-                    {product.products?.category}
-                  </span>
-                </h5>
-                <h5 className="uppercase text-[#334A78] font-medium text-xs opacity-80">
-                  Specification:
-                  <span className="font-bold text-[#000]">
-                    {product.products?.subcategory1}
-                  </span>
-                </h5>
                 <p className="text-[#334A78] text-sm font-medium">Price</p>
 
                 <p className="font-semibold text-[#000] text-xl">
                   ₹{product.price} 
                 </p>
               </div>
+              <div className="flex-1 flex flex-col gap-4">
+                <h5 className="uppercase text-[#334A78] font-medium text-xs opacity-80">
+                  Category:
+                  <span className="font-bold text-[#000]">
+                    {product.products?.category}
+                  </span>
+                </h5>
+                <hr />
+                <h5 className="uppercase text-[#334A78] font-medium text-xs opacity-80">
+                  Specification:
+                  <span className="font-bold text-[#000]">
+                    {product.products?.subcategory1}
+                  </span>
+                </h5>
+                <hr />
+                <h5 className="uppercase text-[#334A78] font-medium text-xs opacity-80">
+                  dimensions:
+                  <span className="font-bold text-[#000]">
+                    {product.dimensions}
+                  </span>
+                </h5>
+                <hr />
+                <h5 className="uppercase text-[#334A78] font-medium text-xs opacity-80">
+                  segment:
+                  <span className="font-bold text-[#000]">
+                    {product.segment}
+                  </span>
+                </h5>
+                <hr />
+              </div>
             </div>
+
+            {accountHolder.role === "admin" && (
+              <div className="flex w-full items-start mt-2.5">
+                {!showTextarea ? (
+                  <div className="flex justify-center gap-2 flex-1 transition-all duration-500">
+                    <button
+                      onClick={() => {
+                        updateStatus(product, "approved");
+                        setRejectReason("");
+                      }}
+                      className={`px-5 py-2 bg-[#F8FBFF]  border-[#A3FEE7] transition-all duration-500 flex flex-col justify-center items-center rounded-lg ${
+                        currentStatus === "approved" ? "border-4" : "border-2"
+                      }`}
+                    >
+                      <AiTwotoneCheckCircle size={25} />
+                      {currentStatus === "approved" ? "Approved" : "Approve"}
+                    </button>
+                    <button
+                      onClick={() => {
+                        updateStatus(product, "pending");
+                        setRejectReason("");
+                      }}
+                      className={`px-7 py-3 bg-[#FFFEF8] border-[#FFB966] transition-all duration-500 flex flex-col justify-center items-center rounded-lg ${
+                        currentStatus === "pending" ? "border-4" : "border-2"
+                      }`}
+                    >
+                      <PiClockCountdown size={25} />
+                      Pending
+                    </button>
+                    <button
+                      className={`px-7 py-3 bg-[#FFF8F8] border-[#FF6666] transition-all duration-500 flex flex-col justify-center items-center rounded-lg ${
+                        currentStatus === "rejected" ? "border-4" : "border-2"
+                      }`}
+                      onClick={() => setShowTextarea(true)}
+                    >
+                      <IoCloseCircleOutline size={25} />
+                      {currentStatus === "rejected" ? "Rejected" : "Reject"}
+                    </button>
+                  </div>
+                ) : (
+                  <div className="flex w-full gap-2 transition-all duration-500">
+                    <button
+                      onClick={() => setShowTextarea(false)}
+                      className="px-7 py-3 border-2 border-red-400 transition-all duration-500 flex flex-col justify-center items-center"
+                    >
+                      <IoCloseCircleOutline size={25} />
+                      {/* Reject */}
+                    </button>
+                    <textarea
+                      className={`flex-1 p-2 border rounded-md transition-all duration-500 ${
+                        showTextarea ? "opacity-100 w-full" : "opacity-0 w-0"
+                      }`}
+                      rows="2"
+                      placeholder="Provide a reason..."
+                      value={rejectReason}
+                      onChange={(e) => setRejectReason(e.target.value)}
+                    />
+                    <button
+                      onClick={handleConfirmReject}
+                      className={`px-5 py-3 border-2 bg-blue-500 text-white rounded-md transition-all duration-500 ${
+                        showTextarea ? "opacity-100 w-auto" : "opacity-0 w-0"
+                      }`}
+                    >
+                      Confirm
+                    </button>
+                  </div>
+                )}
+              </div>
+            )}
+
             <div className="flex text-[#000] justify-between  w-full p-4">
               {accountHolder.role !== "user" && (
                 <button
@@ -72,44 +162,6 @@ function DashboardProductCard({
                 >
                   <MdDeleteOutline /> delete
                 </button>
-              )}
-              {accountHolder.role === "admin" && (
-                <div className="relative inline-block">
-                  {/* Update Status Button */}
-                  <button
-                    onClick={() => setStatusDropdown(!statusDropdown)}
-                    className="px-3 py-2 capitalize border-[#BBBBBB] border-2 bg-[#fff] rounded-2xl"
-                  >
-                    Update Status
-                  </button>
-
-                  {/* Dropdown Options */}
-                  {statusDropdown && (
-                    <div className="absolute mt-2 w-36 bg-white border border-gray-300 rounded-lg shadow-md">
-                      {["pending", "approved", "rejected"].map((status) => (
-                        <button
-                          key={status}
-                          onClick={() => {
-                            if (status === "rejected") {
-                              handleRejectClick(product);
-                            } else {
-                              updateStatus(product, status); // Call the function from props
-                              setSelectedStatus(status); // Update UI
-                              setStatusDropdown(false); // Close dropdown
-                            }
-                          }}
-                          className={`block w-full px-4 py-2 text-left hover:bg-gray-100 ${
-                            selectedStatus === status
-                              ? "bg-gray-200 font-bold"
-                              : ""
-                          }`}
-                        >
-                          {status}
-                        </button>
-                      ))}
-                    </div>
-                  )}
-                </div>
               )}
 
               <div>
@@ -146,34 +198,6 @@ function DashboardProductCard({
           </div>
         )}
       </div>
-      {rejectReasonPopup && (
-        <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-30 font-Poppins">
-          <div className="bg-white py-6 px-10 rounded-2xl shadow-lg ">
-            <h2 className="text-lg font-semibold mb-3">Rejection Reason</h2>
-            <textarea
-              className="w-full p-2 border rounded-md"
-              rows="3"
-              placeholder="Provide a reason..."
-              value={rejectReason}
-              onChange={(e) => setRejectReason(e.target.value)}
-            />
-            <div className="mt-7 flex  gap-20 justify-between">
-              <button
-                className="border-[1px] border-[#BBBBBB] px-4 py-2 rounded-md mr-2"
-                onClick={() => setRejectReasonPopup(false)}
-              >
-                Cancel
-              </button>
-              <button
-                className="border-[1px] border-red-600 px-4 py-2 rounded-md"
-                onClick={handleConfirmReject}
-              >
-                Confirm Reject
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
