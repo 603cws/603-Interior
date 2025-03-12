@@ -27,7 +27,6 @@ function Boq() {
   const [boqTitle, setBoqTitle] = useState("");
   const [existingBoqs, setExistingBoqs] = useState([]); // Stores fetched BOQs
 
-  const [selectedProductView, setSelectedProductView] = useState([]);
   const searchQuery = "";
   const priceRange = [1, 15000000];
 
@@ -79,6 +78,8 @@ function Boq() {
     areasData,
     quantityData,
     handleCategorySelection,
+    selectedProductView,
+    setSelectedProductView,
   } = useApp();
 
   const [runTour, setRunTour] = useState(false); // Controls whether the tour runs
@@ -303,85 +304,6 @@ function Boq() {
         };
       }
     });
-  };
-
-  const handelSelectedData = (
-    product,
-    category,
-    subCat,
-    subcategory1,
-    isChecked
-  ) => {
-    if (!product) return;
-
-    const groupKey = `${category.category}-${subCat}-${subcategory1}-${product.id}`;
-
-    setSelectedData((prevData) => {
-      const validPrevData = Array.isArray(prevData) ? prevData : [];
-
-      if (!isChecked) {
-        // ❌ Remove the product when unchecked
-        const updatedData = validPrevData.filter(
-          (item) => item.groupKey !== groupKey
-        );
-        localStorage.setItem("selectedData", JSON.stringify(updatedData));
-        return updatedData;
-      }
-
-      // 🔍 Check if the product already exists
-      const existingProduct = validPrevData.find(
-        (item) => item.groupKey === groupKey
-      );
-
-      const productData = {
-        groupKey,
-        id: product.id,
-        category: category.category,
-        subcategory: subCat,
-        subcategory1,
-        product_variant: {
-          variant_title: product.title,
-          variant_image: product.image,
-          variant_details: product.details,
-          variant_price: product.price,
-          variant_id: product.id,
-          additional_images: JSON.parse(product.additional_images || "[]"),
-        },
-        // 🔥 Preserve existing addons if the product exists
-        addons: existingProduct ? existingProduct.addons : selectedAddons || [],
-        finalPrice: calculateTotalPrice(
-          category.category,
-          subCat,
-          subcategory1,
-          null, // selectedCategory is not used in this specific calculation, using direct category parameter instead.
-          null, // selectedSubCategory is not used in this specific calculation, using direct subCat parameter instead.
-          null, // selectedSubCategory1 is not used in this specific calculation, using direct subcategory1 parameter instead.
-          quantityData,
-          areasData,
-          userResponses,
-          selectedProductView
-        ),
-      };
-
-      if (existingProduct) {
-        // 🛠 Replace the existing product while keeping the previous addons
-        const updatedData = validPrevData.map((item) =>
-          item.groupKey === groupKey ? productData : item
-        );
-        localStorage.setItem("selectedData", JSON.stringify(updatedData));
-        return updatedData;
-      }
-
-      // ➕ Add a new product if it doesn't exist
-      const updatedData = [...validPrevData, productData];
-      localStorage.setItem("selectedData", JSON.stringify(updatedData));
-      return updatedData;
-    });
-
-    // console.log(
-    //   isChecked ? "Added to selected data" : "Removed from selected data",
-    //   groupKey
-    // );
   };
 
   const autoSelectPlanProducts = (products, categories) => {
@@ -1124,7 +1046,6 @@ function Boq() {
                         setSelectedAreas={setSelectedAreas}
                         selectedProductView={selectedProductView}
                         selectedData={selectedData}
-                        handelSelectedData={handelSelectedData}
                         categoriesWithTwoLevelCheck={
                           categoriesWithTwoLevelCheck
                         }
@@ -1164,7 +1085,6 @@ function Boq() {
             setShowRecommend={setShowRecommend}
             filteredProducts={filteredProducts}
             handleAddOnChange={handleAddOnChange}
-            handelSelectedData={handelSelectedData}
           />
           {showRecommend && (
             <RecommendComp

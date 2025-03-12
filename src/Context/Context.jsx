@@ -8,6 +8,7 @@ import {
   fetchProductsData,
 } from "../boq/utils/dataFetchers";
 import processData from "../boq/utils/dataProcessor";
+import { calculateTotalPrice } from "../boq/utils/productUtils";
 
 const AppContext = createContext();
 
@@ -38,6 +39,7 @@ export const AppProvider = ({ children }) => {
     JSON.parse(localStorage.getItem("selectedData")) || []
   );
   const [selectedAddons, setSelectedAddons] = useState([]);
+  const [selectedProductView, setSelectedProductView] = useState([]);
 
   const [categories, setCategories] = useState([]);
   const [subCategories, setSubCategories] = useState([]); // Extracted subcategories
@@ -478,6 +480,85 @@ export const AppProvider = ({ children }) => {
     setProgress(Math.round(totalProgress * 100) / 100);
   }
 
+  const handelSelectedData = (
+    product,
+    category,
+    subCat,
+    subcategory1,
+    isChecked
+  ) => {
+    if (!product) return;
+
+    const groupKey = `${category.category}-${subCat}-${subcategory1}-${product.id}`;
+
+    setSelectedData((prevData) => {
+      const validPrevData = Array.isArray(prevData) ? prevData : [];
+
+      if (!isChecked) {
+        // ❌ Remove the product when unchecked
+        const updatedData = validPrevData.filter(
+          (item) => item.groupKey !== groupKey
+        );
+        localStorage.setItem("selectedData", JSON.stringify(updatedData));
+        return updatedData;
+      }
+
+      // 🔍 Check if the product already exists
+      const existingProduct = validPrevData.find(
+        (item) => item.groupKey === groupKey
+      );
+
+      const productData = {
+        groupKey,
+        id: product.id,
+        category: category.category,
+        subcategory: subCat,
+        subcategory1,
+        product_variant: {
+          variant_title: product.title,
+          variant_image: product.image,
+          variant_details: product.details,
+          variant_price: product.price,
+          variant_id: product.id,
+          additional_images: JSON.parse(product.additional_images || "[]"),
+        },
+        // 🔥 Preserve existing addons if the product exists
+        addons: existingProduct ? existingProduct.addons : selectedAddons || [],
+        finalPrice: calculateTotalPrice(
+          category.category,
+          subCat,
+          subcategory1,
+          null, // selectedCategory is not used in this specific calculation, using direct category parameter instead.
+          null, // selectedSubCategory is not used in this specific calculation, using direct subCat parameter instead.
+          null, // selectedSubCategory1 is not used in this specific calculation, using direct subcategory1 parameter instead.
+          quantityData,
+          areasData,
+          userResponses,
+          selectedProductView
+        ),
+      };
+
+      if (existingProduct) {
+        // 🛠 Replace the existing product while keeping the previous addons
+        const updatedData = validPrevData.map((item) =>
+          item.groupKey === groupKey ? productData : item
+        );
+        localStorage.setItem("selectedData", JSON.stringify(updatedData));
+        return updatedData;
+      }
+
+      // ➕ Add a new product if it doesn't exist
+      const updatedData = [...validPrevData, productData];
+      localStorage.setItem("selectedData", JSON.stringify(updatedData));
+      return updatedData;
+    });
+
+    // console.log(
+    //   isChecked ? "Added to selected data" : "Removed from selected data",
+    //   groupKey
+    // );
+  };
+
   return (
     <AppContext.Provider
       value={{
@@ -536,6 +617,9 @@ export const AppProvider = ({ children }) => {
         quantityData,
         setQuantityData,
         handleCategorySelection,
+        handelSelectedData,
+        selectedProductView,
+        setSelectedProductView,
       }}
     >
       {children}

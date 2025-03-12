@@ -12,7 +12,6 @@ function SelectArea({
   selectedAreas,
   setSelectedAreas,
   selectedProductView,
-  handelSelectedData,
   categoriesWithTwoLevelCheck,
   allAddons,
   onAddonAdd,
@@ -27,6 +26,7 @@ function SelectArea({
     setSelectedData,
     areasData,
     quantityData,
+    handelSelectedData,
   } = useApp();
 
   const [showAddon, setShowAddon] = useState(false);

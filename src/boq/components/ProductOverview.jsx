@@ -9,12 +9,10 @@ import { useApp } from "../../Context/Context";
 import { calculateTotalPrice } from "../utils/productUtils";
 
 function ProductOverview({
-  selectedProductView,
   setShowProductView,
   setShowRecommend,
   filteredProducts,
   handleAddOnChange,
-  handelSelectedData, //
 }) {
   const [mainImageHovered, setMainImageHovered] = useState(false); // For main image hover effect
   const [hoveredImage, setHoveredImage] = useState(null); // For additional image hover effect
@@ -33,6 +31,8 @@ function ProductOverview({
     quantityData,
     areasData,
     userResponses,
+    selectedProductView,
+    setSelectedProductView,
   } = useApp();
 
   const instructions = {
@@ -381,7 +381,6 @@ function ProductOverview({
           setSelectedAreas={setSelectedAreas}
           selectedProductView={selectedProductView}
           selectedData={selectedData}
-          handelSelectedData={handelSelectedData}
           categoriesWithTwoLevelCheck={categoriesWithTwoLevelCheck}
           allAddons={allAddons}
           onAddonAdd={handleAddOnChange}
