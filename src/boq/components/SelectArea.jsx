@@ -65,11 +65,9 @@ function SelectArea({
     setShowAddon(false);
     setShowSelectArea(false); // Close the modal
 
-    if (allSubcategories.length > 0) botRight();
-
     setSelectedData((prevData) => {
       const updatedData = prevData.map((item) => {
-        const currentGroupKey = `${selectedCategory.category}-${item.subcategory}-${selectedSubCategory1}-${selectedProductView.id}`;
+        const currentGroupKey = `${selectedCategory.category}-${item.subcategory}-${selectedSubCategory1}-${item.id}`;
 
         return {
           ...item,
@@ -87,13 +85,20 @@ function SelectArea({
               areasData,
               quantityData
             ),
-          })), // ✅ Assign addons with calculated finalPrice
+          })),
         };
       });
 
-      localStorage.setItem("selectedData", JSON.stringify(updatedData)); // ✅ Persist state
+      localStorage.setItem("selectedData", JSON.stringify(updatedData)); // ✅ Persist correct state
       return updatedData;
     });
+
+    // ✅ Update selectedAddonsMap correctly
+    const currentProductKey = `${selectedCategory.category}-${selectedProductView.subcategory}-${selectedSubCategory1}-${selectedProductView.id}`;
+    setSelectedAddonsMap((prev) => ({
+      ...prev,
+      [currentProductKey]: selectedAddons, // Keep only selected addons for the specific product
+    }));
   };
 
   useEffect(() => {
@@ -212,9 +217,23 @@ function SelectArea({
 
   const handleDoneClick = () => {
     // const allSubcategories = subCategories; // All available subcategories
-    const selectedSubcategories = subCategories.filter((subCat) =>
+    let selectedSubcategories = subCategories.filter((subCat) =>
       selectedAreas.includes(subCat)
     );
+
+    selectedSubcategories = selectedSubcategories.filter((subCat) => {
+      return !(
+        Array.isArray(selectedData) &&
+        selectedData.length > 0 &&
+        isItemSelected(
+          selectedData,
+          selectedCategory,
+          subCat,
+          selectedSubCategory1,
+          selectedProductView
+        )
+      );
+    });
 
     // Set only selected subcategories
     setAllSubcategories(selectedSubcategories);
@@ -407,6 +426,20 @@ function SelectArea({
       ) ?? false;
 
   const handleAddonSelect = (addon, isChecked) => {
+    const currentGroupKey = `${selectedCategory.category}-${selectedSubCategory}-${selectedSubCategory1}-${selectedProductView.id}`;
+
+    setSelectedAddonsMap((prev) => {
+      const existingAddons = prev[currentGroupKey] || [];
+
+      // Only update addons for the current product
+      const updatedAddons = isChecked
+        ? [...existingAddons, addon] // Add new addon
+        : existingAddons.filter((item) => item.id !== addon.id); // Remove if unchecked
+
+      return { ...prev, [currentGroupKey]: updatedAddons };
+    });
+
+    // Keep `selectedAddons` specific to the selected product
     setSelectedAddons((prev) =>
       isChecked ? [...prev, addon] : prev.filter((item) => item.id !== addon.id)
     );

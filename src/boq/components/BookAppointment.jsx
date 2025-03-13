@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import "react-calendar/dist/Calendar.css";
 import { SlCalender } from "react-icons/sl";
 import { PiWarningCircleFill } from "react-icons/pi";
-import "./calender.css";
+import "../../styles/calender.css";
 import axios from "axios";
 import toast from "react-hot-toast";
 
@@ -154,8 +154,9 @@ function BookAppointment() {
                       value={value}
                       minDate={new Date()}
                       tileDisabled={({ date }) =>
-                        date < new Date().setHours(0, 0, 0, 0)
-                      } // Disable past dates
+                        date < new Date().setHours(0, 0, 0, 0) ||
+                        date.getDay() === 0
+                      } // Disable past dates and Sundays
                     />
                   </div>
                 </div>
