@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 import { useApp } from "../../Context/Context";
 import { CiCirclePlus } from "react-icons/ci";
+import { useNavigate } from "react-router-dom";
 
 function ProductCard({
   products,
@@ -10,6 +11,8 @@ function ProductCard({
   userResponses,
   setShowSelectArea,
 }) {
+  const navigate = useNavigate();
+
   const {
     selectedCategory,
     selectedSubCategory,
@@ -19,13 +22,13 @@ function ProductCard({
     setLoading,
   } = useApp();
 
-  const productsInCategory = products[selectedCategory?.category];
+  const productsInCategory = products[selectedCategory?.category] || [];
   // const [loading, setLoading] = useState(true);
   const [loadingImages, setLoadingImages] = useState({}); // Track image loading
 
   const [filtervalue, setFiltervalue] = useState(selectedPlan);
 
-  const productsInSubCategory = productsInCategory[selectedSubCategory];
+  const productsInSubCategory = productsInCategory[selectedSubCategory] || [];
 
   console.log("products in subcat", productsInSubCategory);
 
@@ -198,6 +201,7 @@ function ProductCard({
                 onClick={() => {
                   setSelectedProductView(variant);
                   setShowProductView(true);
+                  navigate(`${variant.id}`); //new ProductOverview
                 }}
               />
               {/* CiCirclePlus Icon - Positioned at Bottom Right */}
@@ -219,6 +223,7 @@ function ProductCard({
                 onClick={() => {
                   setSelectedProductView(variant);
                   setShowProductView(true);
+                  navigate(`${variant.id}`); //new ProductOverview
                 }}
               >
                 {variant.title.toLowerCase()}

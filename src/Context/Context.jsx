@@ -92,10 +92,6 @@ export const AppProvider = ({ children }) => {
   const [areasData, setAreasData] = useState([]);
   const [quantityData, setQuantityData] = useState([]);
 
-  const [filteredProducts, setFilteredProducts] = useState(null);
-  const [groupedProducts, setGroupedProducts] = useState(null);
-  const [allAddons, setAllAddons] = useState([]); // Add allAddons
-
   const [minimizedView, setMinimizedView] = useState(false);
   const [showProductView, setShowProductView] = useState(false);
   const [showRecommend, setShowRecommend] = useState(false);
@@ -408,48 +404,6 @@ export const AppProvider = ({ children }) => {
   }, [isAuthenticated]);
   console.log("current user", accountHolder);
 
-  useEffect(() => {
-    if (!productData || selectedCategory === null) return; // Prevent execution if data isn't available
-
-    if (!filteredProducts) {
-      const filtered = filterProduct(
-        productData,
-        searchQuery,
-        priceRange,
-        selectedCategory
-      );
-      setFilteredProducts(filtered);
-    }
-  }, [
-    productData,
-    searchQuery,
-    priceRange,
-    selectedCategory,
-    filteredProducts,
-  ]);
-
-  useEffect(() => {
-    if (filteredProducts && !groupedProducts) {
-      const grouped = groupProduct(filteredProducts);
-      setGroupedProducts(grouped);
-    }
-  }, [filteredProducts, groupedProducts]);
-
-  useEffect(() => {
-    if (filteredProducts) {
-      // Add this check
-      const newAddons = filteredProducts.flatMap((product) =>
-        product.subcategory1 === selectedSubCategory1 &&
-        Array.isArray(product.addons)
-          ? product.addons
-          : []
-      );
-      setAllAddons(newAddons);
-    } else {
-      setAllAddons([]); // Set to empty array if filteredProducts is null
-    }
-  }, [filteredProducts, selectedSubCategory1]);
-
   const handleCategorySelection = (categoryData) => {
     setSelectedCategory(categoryData);
     console.log("Selected Category: ", categoryData.category);
@@ -681,18 +635,14 @@ export const AppProvider = ({ children }) => {
         handelSelectedData,
         selectedProductView,
         setSelectedProductView,
-        filteredProducts,
-        setFilteredProducts,
-        groupedProducts,
-        setGroupedProducts,
-        allAddons,
-        setAllAddons,
         minimizedView,
         setMinimizedView,
         showProductView,
         setShowProductView,
         showRecommend,
         setShowRecommend,
+        searchQuery,
+        priceRange,
       }}
     >
       {children}

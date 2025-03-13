@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useMemo } from "react";
 import { ToastContainer } from "react-toastify";
 import Navbar from "../../boq/components/Navbar";
 import Categories from "./Categories";
@@ -14,11 +14,8 @@ import BoqPrompt from "../components/BoqPrompt"; // Import the BOQ modal
 import SelectArea from "../components/SelectArea";
 import MainPage from "./MainPage";
 import ProductCard from "../components/ProductCard";
-import { useNavigate } from "react-router-dom";
 
 function Boq() {
-  const navigate = useNavigate();
-
   const [isOpen, setIsOpen] = useState(false);
   const profileRef = useRef(null);
   const iconRef = useRef(null); //used to close Profile Card when clicked outside of Profile Card area
@@ -65,15 +62,14 @@ function Boq() {
     handleCategorySelection,
     selectedProductView,
     setSelectedProductView,
-    filteredProducts,
-    groupedProducts,
-    allAddons,
     minimizedView,
     setMinimizedView,
     showProductView,
     setShowProductView,
     showRecommend,
     setShowRecommend,
+    searchQuery,
+    priceRange,
   } = useApp();
 
   const [runTour, setRunTour] = useState(false); // Controls whether the tour runs
@@ -184,7 +180,6 @@ function Boq() {
 
   const handleSelectedProductView = (variant) => {
     setSelectedProductView(variant);
-    navigate(`/product/${variant.id}`); //new ProductOverview
   };
 
   const calculateAutoTotalPrice = (
@@ -378,6 +373,63 @@ function Boq() {
     // Update the total cost or other BOQ data if needed
     //  updateBOQTotal();
   };
+
+  // Filter products based on search query, price range, and category
+  const filteredProducts = useMemo(() => {
+    // if (!selectedCategory) return false;
+    // if (productData.length > 0 || priceRange.length > 0) return []; // Ensure it's an array
+
+    return productData.filter((product) => {
+      if (!product.product_variants || product.product_variants.length === 0) {
+        return false;
+      }
+
+      const matchesVariant = product.product_variants.some((variant) => {
+        const matchesSearch =
+          variant.title?.toLowerCase().includes(searchQuery?.toLowerCase()) ||
+          variant.details?.toLowerCase().includes(searchQuery?.toLowerCase());
+
+        const matchesPrice =
+          variant.price >= priceRange[0] && variant.price <= priceRange[1];
+
+        return matchesSearch && matchesPrice;
+      });
+
+      const matchesCategory =
+        selectedCategory?.category === "" ||
+        product.category === selectedCategory?.category;
+      return matchesVariant && matchesCategory;
+    });
+  }, [productData, searchQuery, priceRange, selectedCategory]);
+
+  // Group products by category and subcategory
+  const groupedProducts = useMemo(() => {
+    const grouped = {};
+
+    filteredProducts.forEach((product) => {
+      const subcategories = product.subcategory
+        .split(",")
+        .map((sub) => sub.trim());
+
+      subcategories.forEach((subcategory) => {
+        if (!grouped[product.category]) {
+          grouped[product.category] = {};
+        }
+        if (!grouped[product.category][subcategory]) {
+          grouped[product.category][subcategory] = [];
+        }
+        grouped[product.category][subcategory].push(product);
+      });
+    });
+    return grouped;
+  }, [filteredProducts]);
+
+  const allAddons = filteredProducts.flatMap((product) =>
+    product.subcategory1 === selectedSubCategory1 &&
+    Array.isArray(product.addons)
+      ? product.addons
+      : []
+  );
 
   // const handleBoqNameConfirm = (nameOrId, isNew = true) => {
   //   setShowBoqPrompt(false);

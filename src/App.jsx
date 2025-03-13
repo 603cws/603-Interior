@@ -95,7 +95,7 @@ function App() {
             <Route path="/Layout" element={<Layout />} />
             <Route path="/RegisterUser" element={<RegisterUser />} />
             <Route path="/boq" element={<Boq />} />
-            <Route path="/product/:id" element={<ProductOverview />} />
+            <Route path="/boq/:id" element={<ProductOverview />} />
             <Route path="/Recommend" element={<RecommendComp />} />
             <Route path="/selectArea" element={<SelectArea />} />
             <Route path="/spinner" element={<SpinnerFullPage />} />

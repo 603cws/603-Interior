@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useMemo } from "react";
 import { ToastContainer } from "react-toastify";
 import { TbArrowBackUp } from "react-icons/tb";
 import { MdOutlineKeyboardArrowRight } from "react-icons/md"; //MdOutlineKeyboardArrowLeft
@@ -6,13 +6,19 @@ import { normalizeKey } from "../utils/CalculateTotalPriceHelper";
 import SelectArea from "./SelectArea";
 import { useApp } from "../../Context/Context";
 import { calculateTotalPrice } from "../utils/productUtils";
-import { useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import RecommendComp from "./RecommendComp";
 import Navbar from "./Navbar";
 import ProfileCard from "./ProfileCard";
+import { supabase } from "../../services/supabase";
 
 function ProductOverview() {
   const navigate = useNavigate();
+  const baseImageUrl =
+    "https://bwxzfwsoxwtzhjbzbdzs.supabase.co/storage/v1/object/public/addon/";
+  const { id } = useParams(); // Extract product ID from URL
+  console.log("id from useParams:", id);
+
   const [mainImageHovered, setMainImageHovered] = useState(false); // For main image hover effect
   const [hoveredImage, setHoveredImage] = useState(null); // For additional image hover effect
   const [showSelectArea, setShowSelectArea] = useState(false);
@@ -21,6 +27,7 @@ function ProductOverview() {
   const [isOpen, setIsOpen] = useState(false);
   const profileRef = useRef(null);
   const iconRef = useRef(null); //used to close Profile Card when clicked outside of Profile Card area
+  const [products, setProducts] = useState([]);
 
   const {
     selectedCategory,
@@ -36,10 +43,12 @@ function ProductOverview() {
     userResponses,
     selectedProductView,
     setSelectedProductView,
-    allAddons,
     setShowProductView,
     setShowRecommend,
     showRecommend,
+    productData,
+    searchQuery,
+    priceRange,
   } = useApp();
 
   const instructions = {
@@ -77,10 +86,38 @@ function ProductOverview() {
   };
 
   useEffect(() => {
+    const fetchProduct = async () => {
+      if (selectedProductView.length > 0) {
+        setProducts([selectedProductView]); // Use selectedProductView if available
+      } else if (id) {
+        const { data, error } = await supabase
+          .from("product_variants")
+          .select("*")
+          .eq("id", id)
+          .single();
+
+        if (error) {
+          console.error("Error fetching product:", error);
+        } else {
+          if (data.image) {
+            data.image = `${baseImageUrl}${data.image}`; // Append base URL to image
+          }
+          setProducts([data]); // Store fetched data in products
+        }
+      }
+    };
+
+    fetchProduct();
+  }, [id, selectedProductView]); // Re-fetch when id or selectedProductView changes
+
+  const product = products[0]; // Access the first product
+
+  useEffect(() => {
     // Function to handle "Esc" key press
     const handleEscKey = (e) => {
       if (e.key === "Escape") {
         setShowProductView(false);
+        navigate("/boq"); //new ProductOverview
       }
     };
 
@@ -126,11 +163,8 @@ function ProductOverview() {
 
   const categoryInstructions = getInstructions(selectedCategory?.category);
 
-  const baseImageUrl =
-    "https://bwxzfwsoxwtzhjbzbdzs.supabase.co/storage/v1/object/public/addon/";
-
-  const additionalImagesArray = selectedProductView.additional_images
-    ? JSON.parse(selectedProductView.additional_images).map(
+  const additionalImagesArray = product?.additional_images
+    ? JSON.parse(product?.additional_images).map(
         (imageName) => `${baseImageUrl}${imageName}`
       )
     : [];
@@ -144,10 +178,10 @@ function ProductOverview() {
     // Proceed with the .some() method if selectedData is non-empty
     return selectedData.some((item) =>
       categoriesWithTwoLevelCheck.includes(item.category)
-        ? item.id === selectedProductView.id &&
+        ? item.id === product?.id &&
           item.category === selectedCategory?.category &&
           item.subcategory === selectedSubCategory
-        : item.id === selectedProductView.id &&
+        : item.id === product?.id &&
           item.category === selectedCategory?.category &&
           item.subcategory === selectedSubCategory &&
           item.subcategory1 === selectedSubCategory1
@@ -188,15 +222,15 @@ function ProductOverview() {
       selectedCategory?.category === "Lux"
     ) {
       // || selectedCategory?.category === "HVAC"
-      return { quantity, price: selectedProductView.price }; //addonPrice
+      return { quantity, price: product?.price || 0 }; //addonPrice
     } else if (
       selectedCategory?.category === "Partitions / Ceilings" ||
       selectedCategory?.category === "HVAC"
     ) {
       //currently this category is missing
-      return { quantity, area, price: selectedProductView.price }; //addonPrice
+      return { quantity, area, price: product?.price || 0 }; //addonPrice
     } else {
-      return { area, price: selectedProductView.price }; //addonPrice
+      return { area, price: product?.price || 0 }; //addonPrice
     }
   };
 
@@ -219,17 +253,95 @@ function ProductOverview() {
       .join(" X "); // Join the dimensions with "X"
   }
 
-  const totalPrice = calculateTotalPrice(
-    null, // category parameter is not used.
-    null, // subCat parameter is not used.
-    null, // subcategory1 parameter is not used.
+  const totalPrice = useMemo(() => {
+    if (
+      !selectedCategory ||
+      !selectedSubCategory ||
+      !selectedSubCategory1 ||
+      !quantityData ||
+      !areasData ||
+      !userResponses ||
+      !product
+    ) {
+      return 0; // Or return null if needed
+    }
+
+    return calculateTotalPrice(
+      null, // category parameter is not used.
+      null, // subCat parameter is not used.
+      null, // subcategory1 parameter is not used.
+      selectedCategory,
+      selectedSubCategory,
+      selectedSubCategory1,
+      quantityData,
+      areasData,
+      userResponses,
+      product
+    );
+  }, [
     selectedCategory,
     selectedSubCategory,
     selectedSubCategory1,
     quantityData,
     areasData,
     userResponses,
-    selectedProductView
+    product,
+  ]);
+
+  const filteredProducts = useMemo(() => {
+    // if (!selectedCategory) return false;
+    // if (productData.length > 0 || priceRange.length > 0) return []; // Ensure it's an array
+
+    return productData.filter((product) => {
+      if (!product.product_variants || product.product_variants.length === 0) {
+        return false;
+      }
+
+      const matchesVariant = product.product_variants.some((variant) => {
+        const matchesSearch =
+          variant.title?.toLowerCase().includes(searchQuery?.toLowerCase()) ||
+          variant.details?.toLowerCase().includes(searchQuery?.toLowerCase());
+
+        const matchesPrice =
+          variant.price >= priceRange[0] && variant.price <= priceRange[1];
+
+        return matchesSearch && matchesPrice;
+      });
+
+      const matchesCategory =
+        selectedCategory?.category === "" ||
+        product.category === selectedCategory?.category;
+      return matchesVariant && matchesCategory;
+    });
+  }, [productData, searchQuery, priceRange, selectedCategory]);
+
+  // Group products by category and subcategory
+  const groupedProducts = useMemo(() => {
+    const grouped = {};
+
+    filteredProducts.forEach((product) => {
+      const subcategories = product.subcategory
+        .split(",")
+        .map((sub) => sub.trim());
+
+      subcategories.forEach((subcategory) => {
+        if (!grouped[product.category]) {
+          grouped[product.category] = {};
+        }
+        if (!grouped[product.category][subcategory]) {
+          grouped[product.category][subcategory] = [];
+        }
+        grouped[product.category][subcategory].push(product);
+      });
+    });
+    return grouped;
+  }, [filteredProducts]);
+
+  const allAddons = filteredProducts.flatMap((product) =>
+    product.subcategory1 === selectedSubCategory1 &&
+    Array.isArray(product.addons)
+      ? product.addons
+      : []
   );
 
   return (
@@ -275,11 +387,11 @@ function ProductOverview() {
             }}
           >
             <img
-              src={hoveredImage || selectedProductView.image}
+              src={hoveredImage || product?.image}
               // width={600}
               // height={600}
               className="object-fit h-96"
-              alt={selectedProductView.title}
+              alt={product?.title}
             />
           </div>
           {/* flex box for other images  */}
@@ -304,12 +416,12 @@ function ProductOverview() {
         <div className=" flex flex-col">
           {/* product info */}
           <div className="flex flex-col justify-center">
-            <h2 className="text-xl font-bold">{selectedProductView.title}</h2>
+            <h2 className="text-xl font-bold">{product?.title}</h2>
             <span className="text-xs font-medium text-[#334A78] ">
-              {selectedProductView.details}
+              {product?.details}
             </span>
             <p className="text-md font-semibold">
-              ₹ {selectedProductView.price.toLocaleString("en-IN")}{" "}
+              ₹ {product?.price?.toLocaleString("en-IN")}{" "}
               <span className="text-sm">/ Per Unit</span>
             </p>
             <br></br>
@@ -341,7 +453,7 @@ function ProductOverview() {
               onClick={
                 () => setShowSelectArea(true)
                 // /**/ handelSelectedData(
-                //   selectedProductView,
+                //   products,
                 //   // variant,
                 //   selectedCategory,
                 //   selectedSubCategory,
@@ -363,7 +475,7 @@ function ProductOverview() {
                 Manufacturer
               </p>
               <span className="text-xs text-[#334A78] ">
-                {selectedProductView.manufacturer || "N/A"}
+                {product?.manufacturer || "N/A"}
               </span>
             </div>
             {/* dimensions */}
@@ -372,7 +484,7 @@ function ProductOverview() {
                 dimensions(H x l x W)
               </p>
               <span className="text-xs text-[#334A78] ">
-                {formatDimensions(selectedProductView.dimensions)}
+                {formatDimensions(product?.dimensions)}
               </span>
             </div>
             <div className="border-b-2 pt-2 pb-1">
@@ -414,13 +526,13 @@ function ProductOverview() {
       {showSelectArea && (
         <SelectArea
           setShowSelectArea={setShowSelectArea}
-          image={selectedProductView.image}
+          image={product?.image}
           categories={categories}
           subCategories={subCategories}
           subCat1={subCat1}
           selectedAreas={selectedAreas}
           setSelectedAreas={setSelectedAreas}
-          selectedProductView={selectedProductView}
+          selectedProductView={product}
           selectedData={selectedData}
           categoriesWithTwoLevelCheck={categoriesWithTwoLevelCheck}
           allAddons={allAddons}
