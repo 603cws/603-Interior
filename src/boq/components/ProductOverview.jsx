@@ -49,6 +49,8 @@ function ProductOverview() {
     productData,
     searchQuery,
     priceRange,
+    setMinimizedView,
+    setSelectedPlan,
   } = useApp();
 
   const instructions = {
@@ -117,6 +119,8 @@ function ProductOverview() {
     const handleEscKey = (e) => {
       if (e.key === "Escape") {
         setShowProductView(false);
+        setSelectedPlan("Custom");
+        setMinimizedView(true);
         navigate("/boq"); //new ProductOverview
       }
     };
@@ -361,6 +365,8 @@ function ProductOverview() {
             className="cursor-pointer"
             onClick={() => {
               setShowProductView(false); // Open product view
+              setSelectedPlan("Custom");
+              setMinimizedView(true);
               navigate("/boq"); //new ProductOverview
             }}
           />
