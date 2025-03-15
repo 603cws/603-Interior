@@ -38,6 +38,7 @@ import VendorRegister from "./pages/vendor/VendorRegister";
 import DoorScrollEffect from "./pages/DoorScrollEffect";
 import BookAppointment from "./boq/components/BookAppointment";
 import ProductOverview from "./boq/components/ProductOverview";
+import AppointmentConfirmation from "./boq/components/AppointmentConfirmation";
 
 // const Homepage = lazy(() => import("./pages/Homepage"));
 
@@ -140,6 +141,10 @@ function App() {
             <Route path="/getplan" element={<PricingCard />} />
             <Route path="/admin" element={<AdminDashboard />} />
             <Route path="/bookappointment" element={<BookAppointment />} />
+            <Route
+              path="/appointmentConfirm"
+              element={<AppointmentConfirmation />}
+            />
           </Routes>
         ) : (
           <Routes>
@@ -161,6 +166,10 @@ function App() {
             <Route path="/termsNcondtion" element={<TermsAndCondition />} />
             {/* <Route path="/vendordashboard" element={<VendorDashboard />} /> */}
             <Route path="/bookappointment" element={<BookAppointment />} />
+            <Route
+              path="/appointmentConfirm"
+              element={<AppointmentConfirmation />}
+            />
           </Routes>
         )}
       </Suspense>

@@ -143,7 +143,7 @@ function Contactus() {
         {/* <div className="container mx-auto flex justify-center gap-12 font-Poppins py-4 items-center "> */}
         <div className="container mx-auto flex justify-around gap-12 font-Poppins py-8 items-center ">
           {/* content card */}
-          <div className=" text-center p-2 w-[215px] h-[255px] flex flex-col justify-start items-center">
+          <div className=" text-center p-2 w-[215px] h-[255px] flex flex-col justify-start items-center border-2 ">
             <div className="w-full flex justify-center my-4">
               <div className="cursor-pointer w-12 h-12 rounded-full bg-[#34BFAD] flex justify-center items-center">
                 <PiMapPinAreaFill size={35} />
@@ -153,13 +153,13 @@ function Contactus() {
               Address
             </h2>
             <h3 className="text-xl font-medium mb-1">Head Office:</h3>
-            <p className="text-[#111111] ">
+            <p className="text-[#111111] text-sm ">
               Makhija Arcade, 35th Rd,
               <br /> Khar West, Mumbai <br /> Maharashtra 400052
             </p>
           </div>
           {/* content card */}
-          <div className="text-center p-2 w-[215px] h-[255px] flex flex-col justify-start items-center">
+          <div className="text-center p-2 w-[215px] h-[255px] flex flex-col justify-start items-center border-2">
             <div className="w-full flex justify-center my-4">
               <div className="cursor-pointer w-12 h-12 rounded-full bg-[#34BFAD] flex justify-center items-center">
                 <IoIosCall size={35} />
@@ -172,20 +172,20 @@ function Contactus() {
             </p>
           </div>
           {/* content card */}
-          <div className=" text-center p-2  w-[215px] h-[255px] flex flex-col justify-start items-center ">
+          <div className=" text-center p-2  w-[215px] h-[255px] flex flex-col justify-start items-center border-2">
             <div className="w-full flex justify-center my-4">
               <div className="cursor-pointer w-12 h-12 rounded-full bg-[#34BFAD] flex justify-center items-center">
                 <MdEmail size={35} />
               </div>
             </div>
             <h2 className="font-semibold text-2xl uppercase mb-2">Email</h2>
-            <h3 className="text-xl font-medium mb-1">Head Office:</h3>
-            <p className="text-[#111111] font-medium">
+            <h3 className="text-xl font-medium mb-3">Head Office:</h3>
+            <p className="text-[#111111] font-medium text-xs">
               603coworkingspace@gmail.com
             </p>
           </div>
           {/* content card */}
-          <div className=" text-center p-2  w-[215px] h-[255px] flex flex-col justify-start items-center ">
+          <div className=" text-center p-2  w-[215px] h-[255px] flex flex-col justify-start items-center border-2">
             <div className="w-full flex justify-center my-4">
               <div className="cursor-pointer w-12 h-12 rounded-full bg-[#34BFAD] flex justify-center items-center">
                 <HiClock size={35} />
@@ -398,13 +398,13 @@ function Contactus() {
           </div>
 
           {/* image grid */}
-          <div className="flex justify-around mb-5">
+          <div className="flex justify-around gap-3 mb-5">
             {/* div for each img */}
             <div>
               <img
                 src="/images/our-work/our-work-6.jpg"
                 alt="contact seaction"
-                className="lg:w-[300px] lg:h-[400px]"
+                className="h-[290px] w-[280px] xl:w-[350px] xl:h-[400px]"
               />
             </div>
             {/* div for each img */}
@@ -412,7 +412,7 @@ function Contactus() {
               <img
                 src="/images/our-work/our-work-7.png"
                 alt="contact seaction"
-                className="lg:w-[300px] lg:h-[400px]"
+                className="h-[290px] w-[280px] xl:w-[350px] xl:h-[400px]"
               />
             </div>
             {/* div for each img */}
@@ -420,7 +420,7 @@ function Contactus() {
               <img
                 src="/images/our-work/our-work-9.png"
                 alt="contact seaction"
-                className="lg:w-[300px] lg:h-[400px]"
+                className="h-[290px] w-[280px] xl:w-[350px] xl:h-[400px]"
               />
             </div>
             {/* div for each img */}
@@ -428,7 +428,7 @@ function Contactus() {
               <img
                 src="/images/contact-us/dream office.png"
                 alt="contact seaction"
-                className="lg:w-[300px] lg:h-[400px]"
+                className="h-[290px] w-[280px] xl:w-[350px] xl:h-[400px]"
               />
             </div>
           </div>
@@ -437,7 +437,7 @@ function Contactus() {
           <div className="mb-6 mt-4 flex justify-center">
             <button
               onClick={() => navigate("/Layout")}
-              className="bg-[#1F5C54] text-[#fff] border-1 border-[#000] font-bold capitalize w-1/4 rounded-lg py-2"
+              className="bg-[#1F5C54] text-[#fff] border-1 border-[#000] font-bold capitalize rounded-lg py-3 px-10"
             >
               Start Creating your office now
             </button>
@@ -457,21 +457,3 @@ function Contactus() {
 }
 
 export default Contactus;
-
-// <div className="h-[120vh]">
-//         <section className="flex flex-col h-[75vh] bg-[url('/images/contactuspage.png')] bg-contain bg-no-repeat  ">
-{
-  /* <section className="flex flex-col h-[75vh]  bg-[url('/images/resize2.png')] bg-contain bg-center bg-no-repeat"> */
-}
-//       <div>
-//         <LandingNavbar />
-//       </div>
-
-//       <div className="flex-1  flex justify-end items-center">
-//         <div className="mx-10 font-lato font-extrabold uppercase">
-//           <h1 className=" text-6xl">contact Us</h1>
-//           <p className="text-xl text-end">connect with us</p>
-//         </div>
-//       </div>
-//     </section>
-//   </div>

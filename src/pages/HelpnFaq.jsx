@@ -173,7 +173,7 @@ function HelpnFaq() {
           </div>
           <div className="flex-1 flex justify-between items-center h-full">
             <div className="flex-1 flex flex-col gap-8 mx-20 mt-24 font-extrabold text-[#1F5C54] font-lato">
-              <h1 className=" text-4xl">
+              <h1 className=" text-5xl 3xl:text-6xl 3xl:leading-[4.5rem]">
                 Looking for help? Here are our <br /> most frequently asked
                 questions.
               </h1>
@@ -184,7 +184,11 @@ function HelpnFaq() {
               </p>
             </div>
             <div className="flex-1 h-full flex justify-end items-end relative">
-              <img src="/images/helpimg.png" alt="" className="max-h-full" />
+              <img
+                src="/images/helpimg.png"
+                alt=""
+                className="max-h-full h-full"
+              />
               <span className="px-5 py-3 rounded-3xl bg-[#54DED3] text-xs font-lora font-bold absolute top-1/2 left-10 animate-message1">
                 What is 603 Interiors?
               </span>
@@ -446,11 +450,11 @@ function HelpnFaq() {
               </h2>
               <p className="text-lg text-center">Try these next steps</p>
             </div>
-            <div className="flex justify-center items-center gap-3 font-semibold text-lg text-[#000] bg-[#f9f9f9]">
+            <div className="flex justify-center items-center gap-3 font-semibold text-lg text-[#000] shadow-[0px_0px_5px_rgba(0,0,0,0.05)] px-5 rounded-lg ml-10">
               <div>
                 <img src="/images/helplogo.png" alt="help logo" />
               </div>
-              <div className="flex flex-col">
+              <div className="flex flex-col py-3">
                 <h3>Contact us</h3>
                 <p>Tell us more and we’ll help you get there</p>
                 <p>+91-9136036603</p>

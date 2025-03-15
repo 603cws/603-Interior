@@ -322,18 +322,18 @@ function Landing() {
         {/* div for container */}
         <div className="container mx-auto relative py-10 ">
           {/* div for text */}
-          <div className="flex flex-col gap-12 justify-center items-center absolute w-1/2 top-[40px] left-[-200px] ">
-            <div className="flex flex-col justify-center items-center pb-3">
+          <div className="flex flex-col gap-12 justify-center items-center h-3/4 absolute w-1/2 top-[40px] left-[-200px]">
+            <div className="flex flex-col justify-center items-center">
               <p className="font-sans mb-1 text-[#1F5C54] font-bold uppercase text-sm">
                 {" "}
                 our products
               </p>
               <img src="/images/serviceIcon.png" alt="service icon" />
-              <h3 className="font-Poppins text-3xl font-semibold my-4 text-[#1F5C54]">
+              <h3 className="font-Poppins text-3xl font-semibold text-[#1F5C54] ">
                 Buy Our Product
               </h3>
             </div>
-            <div className="pt-16 pb-5">
+            <div className="">
               <button className=" bg-[#34BFAD] px-5 py-2 border-[1px] border-r-4 border-b-4 drop-shadow-xl border-black text-center text-black text-xs font-normal font-['Poppins'] leading-normal hover:scale-110 transition-transform">
                 View More
               </button>

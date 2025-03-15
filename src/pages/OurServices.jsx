@@ -28,8 +28,8 @@ function OurServices() {
       bgImage: "/images/workspace-design.png",
     },
     {
-      title: "turnkey projects",
-      description: "complete project management from design to delivery.",
+      title: "turnkey\nproject",
+      description: "complete project management \nfrom design to delivery.",
       bgImage: "/images/workspace-design.png",
     },
     {
@@ -96,7 +96,7 @@ function OurServices() {
               ${
                 expandedIndex === index
                   ? "w-[467px] h-full justify-end"
-                  : "w-[220px] h-full justify-center"
+                  : "w-[220px] h-full justify-evenly"
               }`}
               onMouseEnter={() => setExpandedIndex(index)}
               onMouseLeave={() => setExpandedIndex(0)} // Reset to first card when leaving
@@ -118,14 +118,18 @@ function OurServices() {
               {/* Overlay when expanded */}
 
               {/* Content */}
-              <div className="relative z-10  px-3 py-2 text-start">
+              <div
+                className={`relative z-10  px-3 py-2 text-start  ${
+                  expandedIndex === index ? "" : "h-full"
+                }`}
+              >
                 <div
                   className={`absolute inset-0 bottom-0  transition-all duration-500 ${
                     expandedIndex === index ? "bg-black/40" : "bg-black/0"
                   }`}
                 ></div>
                 <div
-                  className={`relative z-10 w-full bottom-0 left-0 flex flex-col ${
+                  className={`relative z-10 w-full bottom-0 left-0 h-full flex flex-col justify-evenly items-center${
                     expandedIndex === index ? "gap-2" : "gap-10"
                   }`}
                 >
@@ -138,7 +142,7 @@ function OurServices() {
                   />
                   {/* Title - Change color when expanded */}
                   <h5
-                    className={`uppercase font-extrabold text-[18px] transition-colors duration-300 ${
+                    className={`uppercase font-extrabold text-[18px] transition-colors duration-300 whitespace-pre-line ${
                       expandedIndex === index ? "text-[#34BFAD]" : "text-white"
                     }`}
                   >
@@ -146,7 +150,7 @@ function OurServices() {
                   </h5>
                   {/* Description - Show when expanded */}
                   <p
-                    className={`uppercase text-white text-[16px] transition-opacity duration-300 font-extrabold`}
+                    className={`uppercase text-white text-[16px] transition-opacity duration-300 font-extrabold whitespace-pre-line`}
                   >
                     {service.description}
                   </p>
@@ -173,7 +177,7 @@ function OurServices() {
             <div className="flex justify-center gap-4">
               {/* we have loop 4 div for icon and text */}
               <div
-                className="hover:bg-[#1F5C54] text-center flex flex-col justify-center font-Poppins hover:text-[#fff] lg:w-[300px] lg:h-[300px] shadow-2xl bg-[#fff]"
+                className="hover:bg-[#1F5C54] text-center flex flex-col justify-center font-Poppins hover:text-[#fff] lg:w-[300px] lg:h-[300px] shadow-[0px_0px_20px_rgba(0,0,0,0.1)] bg-[#fff]"
                 onMouseEnter={() => setIsHovered(true)}
                 onMouseLeave={() => setIsHovered(false)}
               >
@@ -195,14 +199,15 @@ function OurServices() {
                 {/* <p className="capitalize font-medium text-base">
                   Fusce at tellus nec erat pretium maximus eu et eros
                 </p> */}
-                <p className="capitalize font-medium text-base">
-                  Smart, functional, and aesthetic office spaces tailored to
-                  your needs.
+                <p className="capitalize text-base font-light">
+                  Smart, functional, and <br />
+                  aesthetic office spaces
+                  <br /> tailored to your needs.
                 </p>
               </div>
               {/* we have loop 4 div for icon and text */}
               <div
-                className="hover:bg-[#1F5C54] text-center flex flex-col justify-center font-Poppins hover:text-[#fff] lg:w-[300px] lg:h-[300px] shadow-2xl bg-[#fff]"
+                className="hover:bg-[#1F5C54] text-center flex flex-col justify-center font-Poppins hover:text-[#fff] lg:w-[300px] lg:h-[300px] shadow-[0px_0px_20px_rgba(0,0,0,0.1)] bg-[#fff]"
                 onMouseEnter={() => setIsHovered2(true)}
                 onMouseLeave={() => setIsHovered2(false)}
               >
@@ -221,15 +226,16 @@ function OurServices() {
                 <h4 className="uppercase font-bold text-xl my-4 lg:my-6">
                   office redesign
                 </h4>
-                <p className="capitalize font-medium text-base">
-                  Transforming workspaces for better efficiency and style.
+                <p className="capitalize font-light text-base">
+                  Transforming workspaces <br /> for better efficiency
+                  <br /> and style.
                 </p>
               </div>
             </div>
             <div className="flex justify-center gap-4">
               {/* we have loop 4 div for icon and text */}
               <div
-                className="hover:bg-[#1F5C54] text-center flex flex-col justify-center font-Poppins hover:text-[#fff] lg:w-[300px] lg:h-[300px] shadow-2xl bg-[#fff]"
+                className="hover:bg-[#1F5C54] text-center flex flex-col justify-center font-Poppins hover:text-[#fff] lg:w-[300px] lg:h-[300px] shadow-[0px_0px_20px_rgba(0,0,0,0.1)] bg-[#fff]"
                 onMouseEnter={() => setIsHovered3(true)}
                 onMouseLeave={() => setIsHovered3(false)}
               >
@@ -248,13 +254,14 @@ function OurServices() {
                 <h4 className="uppercase font-bold text-xl my-4 lg:my-6">
                   Interior decoration
                 </h4>
-                <p className="capitalize font-medium text-base">
-                  Elevating office ambiance with curated décor and finishes.
+                <p className="capitalize font-light text-base">
+                  Elevating office ambiance <br /> with curated décor <br />
+                  and finishes.
                 </p>
               </div>
               {/* we have loop 4 div for icon and text */}
               <div
-                className="hover:bg-[#1F5C54] text-center flex flex-col justify-center font-Poppins hover:text-[#fff] lg:w-[300px] lg:h-[300px] shadow-2xl bg-[#fff]"
+                className="hover:bg-[#1F5C54] text-center flex flex-col justify-center font-Poppins hover:text-[#fff] lg:w-[300px] lg:h-[300px] shadow-[0px_0px_20px_rgba(0,0,0,0.1)] bg-[#fff]"
                 onMouseEnter={() => setIsHovered4(true)}
                 onMouseLeave={() => setIsHovered4(false)}
               >
@@ -273,8 +280,9 @@ function OurServices() {
                 <h4 className="uppercase font-bold text-xl my-4 lg:my-6">
                   furniture production
                 </h4>
-                <p className="capitalize font-medium text-base">
+                <p className="capitalize font-light text-base">
                   High-quality, ergonomic office furniture designed for comfort
+                  <br />
                   and productivity.
                 </p>
               </div>
@@ -323,7 +331,7 @@ function OurServices() {
               <div className="flex justify-center">
                 <button
                   onClick={() => navigate("/Layout")}
-                  className="bg-[#1F5C54] text-[#fff] border-1 border-[#000] font-bold capitalize w-full rounded-lg py-2"
+                  className="bg-[#1F5C54] text-[#fff] border-1 border-[#000] font-bold capitalize w-full rounded-lg py-3"
                 >
                   Start Creating your office now
                 </button>

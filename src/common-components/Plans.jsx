@@ -84,6 +84,11 @@ function Plans() {
   // Hovered plan state. 0 = first plan expanded by default.
   const [hoveredPlan, setHoveredPlan] = useState(1);
 
+  const handlePlanSelect = (planKey) => {
+    localStorage.setItem("selectedPlan", planKey);
+    setSelectedPlan(planKey);
+  };
+
   return (
     <div className="container mx-auto my-8 font-Poppins">
       <h2 className="text-center font-semibold text-3xl capitalize text-[#34BFAD] my-4">
@@ -156,7 +161,8 @@ function Plans() {
                       {/* "Select" Button */}
                       <div className="text-left mt-4">
                         <button
-                          onClick={() => setSelectedPlan(plan.planKey)}
+                          // onClick={() => setSelectedPlan(plan.planKey)}
+                          onClick={() => handlePlanSelect(plan.planKey)}
                           className="bg-[#34BFAD] text-black px-4 py-2 rounded-3xl font-semibold hover:bg-gray-200 transition"
                         >
                           Select

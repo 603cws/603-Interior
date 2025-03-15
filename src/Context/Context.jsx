@@ -76,7 +76,10 @@ export const AppProvider = ({ children }) => {
     boqName: "",
   });
   // const [accountHolder, setAccountHolder] = useState(null);
-  const [selectedPlan, setSelectedPlan] = useState(null);
+  // const [selectedPlan, setSelectedPlan] = useState(null);
+  const [selectedPlan, setSelectedPlan] = useState(
+    localStorage.getItem("selectedPlan")
+  );
   const [layoutImage, setLayoutImage] = useState(null);
 
   const prevSelectedData = useRef(selectedData); // Ref to store previous selectedData
