@@ -4,11 +4,12 @@ import { useApp } from "../../Context/Context";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { useRef } from "react";
-import { LuLayoutList } from "react-icons/lu";
 import { RxVideo } from "react-icons/rx";
 import { BsQuestionCircle } from "react-icons/bs";
 import { IoSettingsSharp } from "react-icons/io5";
 import { VscSignOut } from "react-icons/vsc";
+import { PiListStarFill } from "react-icons/pi";
+import { BiUnite } from "react-icons/bi";
 
 // import useAuthRefresh from "../../Context/useAuthRefresh";
 
@@ -148,13 +149,13 @@ function ProfileCard({ layout = false, setIsOpen }) {
           </div>
           {!layout && (
             <div className="flex items-center mx-4 gap-3">
-              <LuLayoutList />
+              <BiUnite />
               <button onClick={() => navigate("/Layout")}>Layout</button>
             </div>
           )}
           {!layout && (
             <div className="flex items-center mx-4 gap-3">
-              <LuLayoutList />
+              <PiListStarFill />
               <button
                 onClick={() => {
                   setSelectedPlan(null);

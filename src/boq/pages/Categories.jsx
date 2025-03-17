@@ -294,7 +294,7 @@ const Categories = ({
                         )} */}
                           {/* Animated underline (span) */}
                           <span
-                            className={`absolute left-0 bottom-0 block w-0 h-1 bg-[#34BFAD] transition-all duration-300 ease-in-out ${
+                            className={`absolute left-0 bottom-0 block w-0 h-1 bg-[#194f48] transition-all duration-300 ease-in-out ${
                               selectedSubCategory === subCategory
                                 ? "w-full"
                                 : "group-hover:w-full"
