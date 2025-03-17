@@ -12,9 +12,14 @@ import { VscSignOut } from "react-icons/vsc";
 
 // import useAuthRefresh from "../../Context/useAuthRefresh";
 
-function ProfileCard({ layout = false }) {
-  const { setIsAuthenticated, accountHolder, setAccountHolder, setTotalArea } =
-    useApp();
+function ProfileCard({ layout = false, setIsOpen }) {
+  const {
+    setIsAuthenticated,
+    accountHolder,
+    setAccountHolder,
+    setTotalArea,
+    setSelectedPlan,
+  } = useApp();
   const profileRef = useRef(null);
 
   //   const background = "images/profilebg.png";
@@ -145,6 +150,19 @@ function ProfileCard({ layout = false }) {
             <div className="flex items-center mx-4 gap-3">
               <LuLayoutList />
               <button onClick={() => navigate("/Layout")}>Layout</button>
+            </div>
+          )}
+          {!layout && (
+            <div className="flex items-center mx-4 gap-3">
+              <LuLayoutList />
+              <button
+                onClick={() => {
+                  setSelectedPlan(null);
+                  setIsOpen(false);
+                }}
+              >
+                Select Your Plan
+              </button>
             </div>
           )}
           <div className="flex items-center mx-4 gap-3">

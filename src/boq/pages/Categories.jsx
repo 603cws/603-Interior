@@ -256,7 +256,7 @@ const Categories = ({
         {selectedCategory && (
           <div className="mt-2 font-Poppins">
             {minimizedView && (
-              <div className="subcat border-solid border-[#d5d5d5] border flex flex-row items-center justify-start overflow-auto scrollbar-hide py-1">
+              <div className="subcat border-solid border-[#d5d5d5] border flex flex-row items-center justify-start overflow-auto scrollbar-hide py-1 rounded-lg">
                 {selectedCategory?.subcategories
                   ?.filter(
                     (subCategory) =>
@@ -275,7 +275,7 @@ const Categories = ({
                       <div
                         key={index}
                         onClick={() => setSelectedSubCategory(subCategory)}
-                        className={`rounded-lg flex flex-row items-start justify-center shrink-0 mx-3 group px-5 ${
+                        className={`rounded-xl flex flex-row items-start justify-center shrink-0 mx-3 group px-5 ${
                           isCompleted
                             ? "border-2 border-[#f4f4f4] bg-[#34BFAD]"
                             : ""

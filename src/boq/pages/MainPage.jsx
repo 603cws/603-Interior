@@ -78,12 +78,12 @@ const MainPage = ({ userResponses, setSelectedSubCategory1, productsData }) => {
 
   return (
     // subcategory1 (table,chair)
-    <div className="main-page flex flex-row gap-2 items-center justify-start relative overflow-hidden px-8 font-Poppins">
+    <div className="main-page flex flex-row gap-4 items-center justify-start relative overflow-hidden px-8 font-Poppins">
       {selectedSubCategories && selectedSubCategories.length > 0 ? (
         selectedSubCategories.map((subCategory1, index) => (
           <div
             key={index}
-            className={`bg-[#a9d3ce] border-solid border-[#000000] border flex flex-col gap-2.5 items-start justify-start shrink-0 w-[169px] relative ${
+            className={`bg-[#a9d3ce] border-solid border-[#000000] border flex flex-col gap-2.5 items-start shrink-0 w-auto h-10 justify-center relative rounded-xl ${
               selectedSubCategory1 === subCategory1
                 ? "bg-[#82b8b0]"
                 : "bg-white" // Highlight the default selected subcategory

@@ -550,10 +550,10 @@ function Navbar({ toggleProfile, iconRef }) {
           <img src="/logo/logo.png" alt="603 logo" className="h-10 w-18 " />
         </button>
         {/* button for generate boq */}
-        <div className="pl-60 flex gap-5">
+        <div className="pr-2 flex gap-3">
           <div
             // onClick={signOutUser}
-            className="flex justify-center items-center bg-[#FFF] rounded-xl text-xs py-2 px-5 text-black  border-solid border-1 border-black"
+            className="flex justify-center items-center bg-[#FFF] rounded-xl text-xs px-5 h-fit py-3 self-center text-black border-solid border-1 border-black"
           >
             <span className="font-bold">Total</span>: ₹{" "}
             {calculateGrandTotal().toLocaleString("en-IN")}

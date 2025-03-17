@@ -118,11 +118,11 @@ function ProductCard({
 
   return (
     <div className="product-card grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 3xl:grid-cols-6 gap-6 pb-8 pt-3 px-8 relative">
-      <div className="absolute right-10 -top-8 border-2">
+      <div className="absolute right-10 -top-8 border-2 rounded-lg">
         <select
           name="plans"
           id="plans"
-          className="px-5 py-1"
+          className="px-5 py-1 rounded-lg"
           value={filtervalue}
           onChange={(e) => setFiltervalue(e.target.value)}
         >

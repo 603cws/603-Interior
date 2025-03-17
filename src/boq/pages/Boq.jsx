@@ -564,7 +564,7 @@ function Boq() {
       {/* {showProfile && <ProfileCard />} */}
       {isOpen && (
         <div ref={profileRef}>
-          <ProfileCard layout={false} />
+          <ProfileCard layout={false} setIsOpen={setIsOpen} />
         </div>
       )}
     </div>
