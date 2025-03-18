@@ -90,7 +90,7 @@ const LayoutCard = ({
           </div>
         )}
         {/* Area Counter */}
-        {showAreaCounter && !showInputField && (
+        {counterValue >= 1 && showAreaCounter && !showInputField && (
           <AreaCounter {...areaCounterProps} counterValue={counterValue} />
         )}
         {/* Input Field for "Other Area" */}

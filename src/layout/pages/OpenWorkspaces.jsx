@@ -5,7 +5,7 @@ const workspaceData = [
   {
     type: "linear",
     // image: "/images/workspace-image/linear2.png",
-    image: "/images/workstation-wp/linear2-wp.webp",
+    image: "/images/workstation-wp/linear-wp.webp",
     description: "This is a linear workspace, designed for open collaboration.",
     sizes: ["M", "L", "XL"], // Corresponds to sizeMapping keys
     tooltipText:

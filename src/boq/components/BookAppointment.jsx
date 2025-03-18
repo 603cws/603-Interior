@@ -9,7 +9,9 @@ import { supabase } from "../../services/supabase";
 
 import Calendar from "react-calendar";
 import { useApp } from "../../Context/Context";
-function BookAppointment() {
+import AppointmentConfirmation from "./AppointmentConfirmation";
+import { IoMdClose } from "react-icons/io";
+function BookAppointment({ onClose }) {
   const [value, onChange] = useState(new Date());
   const [selectedTIme, setSelectedTime] = useState();
   const [isSubmitting, setisSubmitting] = useState(false);
@@ -156,17 +158,20 @@ function BookAppointment() {
     } catch (error) {}
   };
 
-  useEffect(() => {
-    if (isappointmentbooked) {
-      const timer = setTimeout(() => setIsappointmentbooked(false), 3000); // Close modal after duration
-      return () => clearTimeout(timer);
-    }
-  }, [isappointmentbooked]);
+  // useEffect(() => {
+  //   if (isappointmentbooked) {
+  //     const timer = setTimeout(() => setIsappointmentbooked(false), 3000); // Close modal after duration
+  //     return () => clearTimeout(timer);
+  //   }
+  // }, [isappointmentbooked]);
 
   return (
-    <div className="fixed inset-0 font-Poppins flex justify-center items-center ">
-      <div className="max-w-4xl rounded-2xl border bg-[#fff] ">
-        <h2 className="font-semibold text-lg text-[#000] capitalize border border-b-[#CCCCCC]">
+    <div className="fixed inset-0 font-Poppins flex justify-center items-center z-20 bg-black bg-opacity-80">
+      <div className="max-w-4xl rounded-2xl border bg-[#fff] p-5 relative">
+        <div className="absolute right-5 top-5">
+          <IoMdClose onClick={onClose} size={20} className="cursor-pointer" />
+        </div>
+        <h2 className="font-semibold text-lg text-[#000] capitalize border-b-2 border-[#CCCCCC]">
           appointment
         </h2>
         <div className=" flex justify-center items-center ">
@@ -268,15 +273,19 @@ function BookAppointment() {
               </div>
             </div>
           ) : (
-            <div className="max-w-3xl p-4 my-5 flex justify-center items-center ">
-              <div className="w-[280px] h-[250px] m-20 ">
-                <img
-                  src="/images/Appointment.gif"
-                  alt="bookedappointment gif"
-                  className="h-full w-full"
-                />
-              </div>
-            </div>
+            // <div className="max-w-3xl p-4 my-5 flex justify-center items-center ">
+            //   <div className="w-[280px] h-[250px] m-20 ">
+            //     <img
+            //       src="/images/Appointment.gif"
+            //       alt="bookedappointment gif"
+            //       className="h-full w-full"
+            //     />
+            //   </div>
+            // </div>
+            <AppointmentConfirmation
+              onClose={() => setIsappointmentbooked(false)}
+              time={`${value.toDateString()}-${selectedTIme}`}
+            />
           )}
         </div>
       </div>

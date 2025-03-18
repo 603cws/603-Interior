@@ -67,6 +67,33 @@ const TreeMap = ({ totalArea, areaQuantities, areaValues }) => {
     Other: "#5E9B96", // Color for the "Other" category
   };
 
+  const workspaceImages = {
+    "Linear Workspace": "/images/workstation-wp/linear-wp.webp",
+    "L-Type Workspace": "/images/workstation-wp/ltype-wp.webp",
+    "MD Cabin": "/images/workstation-wp/md-wp.webp",
+    "Manager Cabin": "/images/workstation-wp/manager-wp.webp",
+    "Small Cabin": "/images/workstation-wp/small-wp.webp",
+    "UPS Room": "/images/workstation-wp/ups-wp.webp",
+    "BMS Room": "/images/workstation-wp/BMS-WP.webp",
+    "Server Room": "/images/workstation-wp/serverRoom-wp.webp",
+    Reception: "/images/workstation-wp/reception-wp.webp",
+    "Lounge/Pantry": "/images/workstation-wp/lounge-wp.webp",
+    "Video Recording Room": "/images/workstation-wp/videocon-wp.webp",
+    "Sales Team": "/images/workstation-wp/sales-wp.webp",
+    "Phone Booth": "/images/workstation-wp/phoneBooth-wp.webp",
+    "Discussion Room": "/images/workstation-wp/discuss-wp.webp",
+    "Interview Room": "/images/workstation-wp/interview-wp.webp",
+    "Conference Room": "/images/workstation-wp/conf-wp.webp",
+    "Board Room": "/images/workstation-wp/boardroom-wp.webp",
+    "Meeting Room": "/images/workstation-wp/meetingroom-wp.webp",
+    "Meeting Room (Large)": "/images/workstation-wp/meetroomlarge-wp.webp",
+    "HR Room": "/images/workstation-wp/hr-wp.webp",
+    "Finance Room": "/images/workstation-wp/finance-wp.webp",
+    "Executive Washroom": "/images/workstation-wp/executivewash-wp.webp",
+    "Breakout Room": "/images/workstation-wp/breakout-wp.webp",
+    Other: "/images/workstation-wp/other-wp.webp",
+  };
+
   const validTotalArea = totalArea > 0 ? totalArea : 4000;
   const builtArea = Object.keys(areaQuantities).reduce(
     (acc, key) => acc + areaQuantities[key] * areaValues[key],
@@ -160,6 +187,38 @@ const TreeMap = ({ totalArea, areaQuantities, areaValues }) => {
           type: "darken",
           value: 0.1,
         },
+      },
+    },
+    tooltip: {
+      custom: ({ series, seriesIndex, dataPointIndex, w }) => {
+        const dataPoint = w.config.series[0].data[dataPointIndex];
+        const workspaceName = dataPoint.x.split(":")[0]; // Extract name
+        const occupiedArea = dataPoint.y;
+        const percentage = dataPoint.x.split(":")[1]; // Extract percentage
+        const imageUrl = workspaceImages[workspaceName] || null;
+
+        return `
+          <div style="
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+            min-width: 250px;
+            position: relative;
+          ">
+            ${
+              imageUrl
+                ? `<img src="${imageUrl}" alt="${workspaceName}" style="width: 100%; height: 180px; object-fit: cover; border-radius: 5px;" />`
+                : ""
+            }
+            <div style="margin-top: 5px;">
+              <strong>${workspaceName}</strong>
+              <div>Occupied Area: ${occupiedArea} sq ft</div>
+              <div>Usage: ${percentage}</div>
+            </div>
+          </div>
+        `;
       },
     },
   };

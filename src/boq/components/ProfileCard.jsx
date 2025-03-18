@@ -3,13 +3,15 @@ import { supabase } from "../../services/supabase";
 import { useApp } from "../../Context/Context";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
-import { useRef } from "react";
+import { useRef, useState } from "react";
+import { LuCalendarClock, LuLayoutList } from "react-icons/lu";
 import { RxVideo } from "react-icons/rx";
 import { BsQuestionCircle } from "react-icons/bs";
 import { IoSettingsSharp } from "react-icons/io5";
 import { VscSignOut } from "react-icons/vsc";
 import { PiListStarFill } from "react-icons/pi";
 import { BiUnite } from "react-icons/bi";
+import BookAppointment from "./BookAppointment";
 
 // import useAuthRefresh from "../../Context/useAuthRefresh";
 
@@ -20,12 +22,14 @@ function ProfileCard({ layout = false, setIsOpen }) {
     setAccountHolder,
     setTotalArea,
     setSelectedPlan,
+    progress,
   } = useApp();
   const profileRef = useRef(null);
 
   //   const background = "images/profilebg.png";
   //   const [userEmail, setUserEmail] = useState("");
   //   const [companyName, setCompanyName] = useState("");
+  const [showBookAppointment, setShowBookAppointment] = useState(false);
 
   let isadmin = accountHolder.role === "user" ? true : false;
   const navigate = useNavigate();
@@ -106,6 +110,21 @@ function ProfileCard({ layout = false, setIsOpen }) {
   //   fetchUserData();
   // }, []);
 
+  const handleAppointment = () => {
+    if (progress >= 90) {
+      setShowBookAppointment(true);
+    } else {
+      toast("Complete the BOQ before booking appointment!", {
+        style: {
+          border: "1px solid #1A3A36",
+          padding: "16px",
+          color: "#1A3A36",
+        },
+        icon: "🔐",
+      });
+    }
+  };
+
   return (
     <div ref={profileRef}>
       {/* div for card */}
@@ -170,6 +189,19 @@ function ProfileCard({ layout = false, setIsOpen }) {
             <RxVideo />
             <p>How it works</p>
           </div>
+          <div
+            className={`flex items-center mx-4 gap-3 ${
+              progress < 90 ? "text-gray-400 cursor-not-allowed" : ""
+            }`}
+          >
+            <LuCalendarClock />
+            <button
+              onClick={handleAppointment}
+              className={`${progress < 90 ? "cursor-not-allowed" : ""}`}
+            >
+              Book Appointment
+            </button>
+          </div>
         </div>
         {/* third box for the features */}
         <div className="font-semibold text-lg capitalize leading-normal tracking-wide py-7 text-[#262626] border-b-2 border-[#ccc] flex flex-col gap-4">
@@ -199,6 +231,9 @@ function ProfileCard({ layout = false, setIsOpen }) {
           </div>
         </div>
       </div>
+      {showBookAppointment && (
+        <BookAppointment onClose={() => setShowBookAppointment(false)} />
+      )}
     </div>
   );
 }
