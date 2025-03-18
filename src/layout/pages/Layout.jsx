@@ -95,24 +95,45 @@ const bufferSpace = 0.05; //5% Buffer Space kept
 // };
 
 const calculateReceptionArea = (totalArea) => {
-  if (totalArea >= 1000 && totalArea < 3500) {
-    return Math.round(totalArea * 0.08);
-  } else if (totalArea >= 3500 && totalArea < 4500) {
-    return Math.round(totalArea * 0.06);
-  } else if (totalArea >= 4500 && totalArea < 5500) {
-    return Math.round(totalArea * 0.05);
-  } else if (totalArea >= 5500 && totalArea < 6500) {
-    return Math.round(totalArea * 0.045);
-  } else if (totalArea >= 6500 && totalArea < 12000) {
-    return 300;
-  } else if (totalArea >= 12000 && totalArea < 18000) {
-    return 500;
-  } else if (totalArea >= 18000 && totalArea <= 25000) {
-    return 700;
+  if (totalArea > 999 && totalArea <= 25000) {
+    if (totalArea >= 1000 && totalArea < 3500) {
+      return Math.round(totalArea * 0.08);
+    } else if (totalArea >= 3500 && totalArea < 4500) {
+      return Math.round(totalArea * 0.06);
+    } else if (totalArea >= 4500 && totalArea < 5500) {
+      return Math.round(totalArea * 0.05);
+    } else if (totalArea >= 5500 && totalArea < 6500) {
+      return Math.round(totalArea * 0.045);
+    } else if (totalArea >= 6500 && totalArea < 12000) {
+      return 300;
+    } else if (totalArea >= 12000 && totalArea < 18000) {
+      return 500;
+    } else if (totalArea >= 18000 && totalArea <= 25000) {
+      return 700;
+    }
   } else {
     return 1;
   }
 };
+// const calculateReceptionArea = (totalArea) => {
+//   if (totalArea >= 1000 && totalArea < 3500) {
+//     return Math.round(totalArea * 0.08);
+//   } else if (totalArea >= 3500 && totalArea < 4500) {
+//     return Math.round(totalArea * 0.06);
+//   } else if (totalArea >= 4500 && totalArea < 5500) {
+//     return Math.round(totalArea * 0.05);
+//   } else if (totalArea >= 5500 && totalArea < 6500) {
+//     return Math.round(totalArea * 0.045);
+//   } else if (totalArea >= 6500 && totalArea < 12000) {
+//     return 300;
+//   } else if (totalArea >= 12000 && totalArea < 18000) {
+//     return 500;
+//   } else if (totalArea >= 18000 && totalArea <= 25000) {
+//     return 700;
+//   } else {
+//     return 1;
+//   }
+// };
 
 const calculateLoungeArea = (totalArea) => {
   if (totalArea >= 1000 && totalArea < 2500) {

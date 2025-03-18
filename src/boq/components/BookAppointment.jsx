@@ -5,6 +5,7 @@ import { PiWarningCircleFill } from "react-icons/pi";
 import "../../styles/calender.css";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { supabase } from "../../services/supabase";
 
 import Calendar from "react-calendar";
 import { useApp } from "../../Context/Context";
@@ -48,6 +49,13 @@ function BookAppointment() {
     setSelectedTime(time);
   };
 
+  const getNextTime = (selectedTime) => {
+    const index = times.indexOf(selectedTime);
+    return index !== -1 && index < times.length - 1
+      ? times[index + 1]
+      : "09:00 pm";
+  };
+
   const handlesubmi = async () => {
     const date = value.getDate();
     const month = value.getMonth() + 1;
@@ -55,6 +63,12 @@ function BookAppointment() {
     const formattedDate = `${date}/${month}/${year}`;
     console.log(formattedDate, selectedTIme);
     setisSubmitting(true);
+    console.log(value.toLocaleDateString("en-US", { weekday: "short" }));
+
+    const weekday = value.toLocaleDateString("en-US", { weekday: "short" });
+
+    const endtime = getNextTime(selectedTIme);
+
     try {
       if (selectedTIme) {
         const data = {
@@ -104,7 +118,10 @@ function BookAppointment() {
 
         // alert("Your mail is sent!");
         toast.success("we will shortly reach you");
+
         setIsappointmentbooked(true);
+
+        saveBookingDatainDB(formattedDate, weekday, endtime);
       } else {
         toast.error("please select the time");
       }
@@ -113,6 +130,30 @@ function BookAppointment() {
     } finally {
       setisSubmitting(false);
     }
+  };
+
+  const saveBookingDatainDB = async (date, weekday, endtime) => {
+    //
+    try {
+      const { data, error } = await supabase.from("appointments").insert([
+        {
+          user_id: accountHolder.userId, // Assuming accountHolder contains user ID
+          date,
+          time_slot: JSON.stringify({
+            [weekday]: { [selectedTIme]: `${selectedTIme}-${endtime}` },
+          }),
+          company_name: accountHolder.companyName,
+        },
+      ]);
+
+      if (error) {
+        console.error("Error inserting data:", error.message);
+        toast.error("Failed to book appointment");
+        return;
+      }
+
+      toast.success("Appointment booked successfully");
+    } catch (error) {}
   };
 
   useEffect(() => {
@@ -244,509 +285,3 @@ function BookAppointment() {
 }
 
 export default BookAppointment;
-// import { useEffect, useState } from "react";
-// import axios from "axios";
-// function BookAppointment() {
-//   const getTheme = (darkMode) => ({
-//     background: {
-//       default: darkMode ? "#121212" : "#F5F5F5",
-//     },
-//     text: {
-//       primary: darkMode ? "#E0E0E0" : "#212121",
-//     },
-//   });
-
-//   const [quantity, setQuantity] = useState(1);
-
-//   const times2 = [
-//     "9:00 am",
-//     "9:30 am",
-//     "10:00 am",
-//     "10:30 am",
-//     "11:00 am",
-//     "11:30 am",
-//     "12:00 pm",
-//     "12:30 pm",
-//     "1:00 pm",
-//     "1:30 pm",
-//     "2:00 pm",
-//     "2:30 pm",
-//     "3:00 pm",
-//     "3:30 pm",
-//     "4:00 pm",
-//     "4:30 pm",
-//     "5:00 pm",
-//     "5:30 pm",
-//     "6:00 pm",
-//     "6:30 pm",
-//     "7:00 pm",
-//     "7:30 pm",
-//     "8:00 pm",
-//     "8:30 pm",
-//     "9:00 pm",
-//     "10:00 pm",
-//   ];
-
-//   const getTimeInMinutes = (timeStr) => {
-//     const [time, period] = timeStr.split(" ");
-//     const [hourStr, minuteStr] = time.split(":");
-//     const hour = parseInt(hourStr, 10);
-//     const minute = parseInt(minuteStr, 10);
-
-//     return ((hour % 12) + (period === "pm" ? 12 : 0)) * 60 + minute;
-//   };
-
-//   const getFilteredTimes = (selectedDay, currentTime) => {
-//     if (selectedDay === null) {
-//       return times;
-//     }
-
-//     const today = new Date();
-//     const selectedDate = new Date(
-//       currentTime.getFullYear(),
-//       currentTime.getMonth(),
-//       selectedDay
-//     );
-//     if (selectedDate.toDateString() === today.toDateString()) {
-//       const currentTimeInMinutes =
-//         currentTime.getHours() * 60 + currentTime.getMinutes();
-//       return times.filter((time) => {
-//         const timeInMinutes = getTimeInMinutes(time);
-//         return timeInMinutes > currentTimeInMinutes;
-//       });
-//     } else {
-//       return times;
-//     }
-//   };
-
-//   const handledecQuan = () => {
-//     if (quantity <= 1) return;
-//     setQuantity(() => quantity - 1);
-//   };
-
-//   //handle inc
-//   const handleincQuan = () => {
-//     if (quantity >= 20) return;
-//     setQuantity(() => quantity + 1);
-//   };
-
-//   const [selectedDate, setSelectedDate] = useState("");
-//   const [showcalenderconfroom, setshowcalenderconfroom] = useState(false);
-//   const [showcalenderdaypass, setshowcalenderdaypass] = useState(false);
-//   const [showcalendermeetroom, setshowcalendermeetroom] = useState(false);
-//   useEffect(() => {
-//     console.log("selectedDate", selectedDate);
-//   });
-//   const [selectedLocation, setselectedLocation] = useState("");
-//   const [spacetype, setspacetype] = useState("");
-//   const [selectedStartTime, setSelectedStartTime] = useState("");
-//   const [selectedEndTime, setSelectedEndTime] = useState("");
-//   const [unavailabledaypasses, setunavailabledaypasses] = useState([]);
-//   const [currentMonth, setCurrentMonth] = useState(new Date().getMonth());
-//   const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
-//   const [selectedDay, setSelectedDay] = useState(null);
-//   const [currentTime, setCurrentTime] = useState(new Date());
-//   const [timedifference, settimedifference] = useState(0);
-//   const [enableconftime, setenableconftime] = useState(false);
-//   const [enabledaypasstime, setenabledaypasstime] = useState(false);
-//   const [enablemeettime, setenablemeettime] = useState(false);
-//   const [timings, setTimings] = useState([]);
-//   const [availableStartTimes, setAvailableStartTimes] = useState([]);
-//   const [availableEndTimes, setAvailableEndTimes] = useState([]);
-//   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-
-//   const [isSubmitting, setIsSubmitting] = useState(false);
-
-//   // const [coupon, setCoupon] = useState("");
-
-//   //daypass price manipulation based on quantity
-
-//   useEffect(() => {
-//     const handleResize = () => {
-//       setWindowWidth(window.innerWidth);
-//     };
-
-//     window.addEventListener("resize", handleResize);
-//     return () => {
-//       window.removeEventListener("resize", handleResize);
-//     };
-//   }, []);
-
-//   const calendarStyle = {
-//     justifyContent: "center",
-//     display: "grid",
-//     gridTemplateColumns: "repeat(7, 1fr)",
-//     gap: windowWidth > 390 ? "10px" : "6px",
-//     margin: "20px 0",
-//   };
-
-//   const dayStyle = {
-//     width: "22px",
-//     height: "22px",
-//     fontSize: "14px",
-//     display: "flex",
-//     justifyContent: "center",
-//     alignItems: "center",
-//     borderRadius: "5px",
-//     boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
-//     cursor: "pointer",
-//   };
-
-//   //   const dayStyle = {
-//   //     width:
-//   //       windowWidth > 1280
-//   //         ? "60px"
-//   //         : windowWidth > 545
-//   //         ? "45px"
-//   //         : windowWidth > 377
-//   //         ? "40px"
-//   //         : "35px",
-//   //     height: windowWidth > 440 ? "40px" : "35px",
-//   //     fontSize: windowWidth > 582 ? undefined : "14px",
-//   //     display: "flex",
-//   //     justifyContent: "center",
-//   //     alignItems: "center",
-//   //     borderRadius: "5px",
-//   //     fontFamily: "Poppins, sans-serif",
-//   //     boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
-//   //     cursor: "pointer",
-//   //   };
-
-//   const availableStyle1 = {
-//     backgroundColor: "white", // green-400
-//     color: "black",
-//   };
-
-//   const selectedStyle = {
-//     backgroundColor: "#34D399", // green-400
-//     color: "white",
-//   };
-
-//   const partiallyBookedStyle = {
-//     backgroundColor: "#fff778", // yellow-400
-//   };
-
-//   const pastDayStyle = {
-//     backgroundColor: "#d3d3d3", // gray
-//     color: "#a9a9a9", // dark gray
-//     cursor: "not-allowed",
-//   };
-
-//   useEffect(() => {
-//     const updateCurrentTime = () => setCurrentTime(new Date());
-//     const interval = setInterval(updateCurrentTime, 60000); // Update every minute
-
-//     return () => clearInterval(interval);
-//   }, []);
-
-//   useEffect(() => {
-//     if (selectedStartTime && selectedEndTime) {
-//       const startMinutes = getTimeInMinutes(selectedStartTime);
-//       const endMinutes = getTimeInMinutes(selectedEndTime);
-//       const difference = (endMinutes - startMinutes) / 60;
-//       settimedifference(difference);
-//     } else {
-//       settimedifference(0);
-//     }
-//   }, [selectedStartTime, selectedEndTime]);
-
-//   const changeday = (day) => {
-//     setSelectedStartTime("");
-//     setSelectedEndTime("");
-
-//     let availableStartTimesUnfiltered = getFilteredTimes(day, currentTime);
-//     console.log("Initial available times:", availableStartTimesUnfiltered);
-
-//     if (timings.length > 0) {
-//       timings.forEach(([start, end]) => {
-//         const startTimeInMinutes = getTimeInMinutes(start.toString());
-//         const endTimeInMinutes = getTimeInMinutes(end.toString());
-
-//         availableStartTimesUnfiltered = availableStartTimesUnfiltered.filter(
-//           (time) => {
-//             const timeInMinutes = getTimeInMinutes(time);
-//             // Keep the end time but filter out times within the interval
-//             if (timeInMinutes === endTimeInMinutes) {
-//               return true;
-//             }
-//             return (
-//               timeInMinutes < startTimeInMinutes ||
-//               timeInMinutes > endTimeInMinutes
-//             );
-//           }
-//         );
-//       });
-//     }
-
-//     setAvailableStartTimes(availableStartTimesUnfiltered);
-//     console.log("Filtered start times:", availableStartTimesUnfiltered);
-//   };
-
-//   const selectendtimefunction = (starttime) => {
-//     const startIndex = availableStartTimes.indexOf(starttime);
-//     if (startIndex === -1) return;
-
-//     const endTimes = [];
-
-//     for (let i = startIndex + 1; i < availableStartTimes.length; i++) {
-//       const currentEndTime = availableStartTimes[i];
-//       const previousTime = availableStartTimes[i - 1];
-
-//       const currentEndTimeInMinutes = getTimeInMinutes(currentEndTime);
-//       const previousTimeInMinutes = getTimeInMinutes(previousTime);
-
-//       const differenceInMinutes =
-//         currentEndTimeInMinutes - previousTimeInMinutes;
-//       if (differenceInMinutes == 30) {
-//         endTimes.push(currentEndTime);
-//       } else {
-//         const y = times2.indexOf(previousTime);
-//         console.log(y, "rjojro");
-//         endTimes.push(times2[y + 1]);
-//         break;
-//       }
-//     }
-
-//     setAvailableEndTimes(endTimes);
-//     console.log("Filtered end times:", endTimes);
-//   };
-
-//   useEffect(() => {
-//     if (selectedStartTime !== "") {
-//       selectendtimefunction(selectedStartTime);
-//     }
-//   }, [selectedStartTime]);
-
-//   useEffect(() => {
-//     if (selectedDay !== null) {
-//       changeday(selectedDay);
-//     }
-//   }, [selectedDay, timings, currentTime]);
-
-//   useEffect(() => {
-//     setSelectedDate("");
-//   }, [selectedLocation]);
-
-//   useEffect(() => {
-//     const handleResize = () => {
-//       setWindowWidth(window.innerWidth);
-//     };
-
-//     window.addEventListener("resize", handleResize);
-//     return () => {
-//       window.removeEventListener("resize", handleResize);
-//     };
-//   }, []);
-
-//   const calendarHeaderStyle = {
-//     // display: "flex",
-//     justifyContent: "space-between",
-//     width: "100%",
-//     padding: windowWidth > 560 ? "0 2rem" : "0 0.5rem",
-//   };
-
-//   const inputContainerStyle = {
-//     display: "flex",
-//     flexDirection: "column",
-//     width: "100%",
-//     alignItems: "center",
-//   };
-
-//   const inputStyle = {
-//     padding: "10px",
-//     fontSize: "16px",
-//     width: "100%",
-//     borderRadius: "8px",
-//     border: "1px solid #d1d5db", // gray-300
-//     boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
-//     marginTop: "5px",
-//   };
-
-//   const labelStyle = {
-//     fontSize: "15px",
-//     width: "100%",
-//     color: "#4B5563",
-//     fontFamily: "Poppins, sans-serif",
-//     textAlign: "left",
-//     marginTop: "10px",
-//   };
-
-//   const buttonStyle = {
-//     backgroundColor: "#e1e1e1",
-//     padding: "2px 8px",
-//     borderRadius: "80%",
-//     boxShadow: "0 10px 20px rgba(194, 194, 194, 0.1)",
-//     fontSize: "20px",
-//     cursor: "pointer",
-//   };
-
-//   const headerStyle = {
-//     marginBottom: "15px",
-//     fontSize: windowWidth > 390 ? "15px" : "14px",
-//     paddingTop: "10px",
-//     fontWeight: "bold",
-//     color: "#4B5563",
-//     fontFamily: "Poppins, sans-serif",
-//   };
-
-//   const timestyle = {
-//     fontSize: windowWidth > 350 ? undefined : "13px",
-//     display: "flex",
-//     alignItems: "center",
-//     color: "black",
-//     fontWeight: "bold",
-//   };
-
-//   useEffect(() => {
-//     if (selectedDay !== null) {
-//       const date = `${selectedDay}/${currentMonth + 1}/${currentYear}`;
-//       setSelectedDate(date);
-//     }
-//   }, [selectedDay, currentMonth, currentYear]);
-
-//   useEffect(() => {
-//     const date = `${selectedDay}/${currentMonth + 1}/${currentYear}`;
-//     setSelectedDate(date);
-//   }, [currentMonth, currentYear, selectedLocation]);
-
-//   useEffect(() => {
-//     const updateCurrentTime = () => setCurrentTime(new Date());
-//     const interval = setInterval(updateCurrentTime, 60000); // Update every minute
-
-//     return () => clearInterval(interval);
-//   }, []);
-
-//   const isWeekend = (day, month, year) => {
-//     const date = new Date(year, month, day);
-//     const dayOfWeek = date.getDay();
-//     return dayOfWeek === 0 || dayOfWeek === 6;
-//   };
-
-//   const daysInMonth = (month, year) => new Date(year, month + 1, 0).getDate();
-
-//   const changeMonth = (increment) => {
-//     let newMonth = currentMonth + increment;
-//     let newYear = currentYear;
-
-//     if (newMonth < 0) {
-//       newMonth = 11;
-//       newYear -= 1;
-//     } else if (newMonth > 11) {
-//       newMonth = 0;
-//       newYear += 1;
-//     }
-//     setCurrentMonth(newMonth);
-//     setCurrentYear(newYear);
-//     setSelectedDay(null);
-//     setSelectedStartTime("");
-//     setSelectedEndTime("");
-//   };
-
-//   const handleStartTimeChange = (event) => {
-//     setSelectedStartTime(event.target.value);
-//     setSelectedEndTime("");
-//   };
-
-//   const handleEndTimeChange = (event) => {
-//     setSelectedEndTime(event.target.value);
-//   };
-
-//   const isPastDay = (day) => {
-//     const today = new Date();
-//     const date = new Date(currentYear, currentMonth, day);
-//     today.setHours(0, 0, 0, 0);
-//     return date < today;
-//   };
-//   const times = [
-//     "09:00 am",
-//     "10:00 am",
-//     "11:00 am",
-//     "12:00 pm",
-//     "01:00 pm",
-//     "02:00 pm",
-//     "03:00 pm",
-//     "04:00 pm",
-//     "05:00 pm",
-//     "06:00 pm",
-//     "07:00 pm",
-//     "08:00 pm",
-//   ];
-//   return (
-//     <div className="font-Poppins">
-//       <div className="max-w-4xl rounded-xl bg-[#fff]">
-//         <h2 className="font-semibold text-lg text-[#000] capitalize border border-b-[#CCCCCC]">
-//           appointment
-//         </h2>
-
-//         <div>
-//           <h3>Book an Appointment</h3>
-//           {/* div for calender and times  */}
-//           <div className="flex justify-around items-center">
-//             {/* calender */}
-//             <div>
-//               <div className="flex justify-around">
-//                 <button style={buttonStyle} onClick={() => changeMonth(-1)}>
-//                   {"<"}
-//                 </button>
-//                 <h2 style={timestyle}>{`${new Date(
-//                   currentYear,
-//                   currentMonth
-//                 ).toLocaleString("default", {
-//                   month: "long",
-//                 })} ${currentYear}`}</h2>
-//                 <button style={buttonStyle} onClick={() => changeMonth(1)}>
-//                   {">"}
-//                 </button>
-//               </div>
-//               <div className="grid justify-center grid-cols-7 gap-2 my-5">
-//                 {Array.from(
-//                   { length: daysInMonth(currentMonth, currentYear) },
-//                   (_, index) => index + 1
-//                 ).map((day) => (
-//                   <div
-//                     key={day}
-//                     className="w-[22px] h-[22px] text-[14px] flex justify-center items-center rounded-[5px] shadow-md cursor-pointer"
-//                     style={{
-//                       ...(isPastDay(day)
-//                         ? pastDayStyle
-//                         : isWeekend(day, currentMonth, currentYear)
-//                         ? partiallyBookedStyle
-//                         : availableStyle1),
-//                       ...(selectedDay === day && selectedStyle),
-//                     }}
-//                     onClick={() => {
-//                       if (!isPastDay(day)) {
-//                         setSelectedDay(day);
-//                         setSelectedStartTime("");
-//                         setSelectedEndTime("");
-//                         setenableconftime(true);
-//                       }
-//                     }}
-//                   >
-//                     {day}
-//                   </div>
-//                 ))}
-//               </div>
-//             </div>
-
-//             {/* times */}
-//             <div>
-//               <h4 className="text-[#111] font-medium text-base">
-//                 select time*
-//               </h4>
-//               <div className="grid grid-cols-3">
-//                 {times.map((time) => (
-//                   <button className="bg-[#EBFFFF] border-[#757575] px-4 py-3 rounded-xl">
-//                     {time}
-//                   </button>
-//                 ))}
-//               </div>
-//             </div>
-//           </div>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// }
-
-// export default BookAppointment;

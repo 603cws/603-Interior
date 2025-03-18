@@ -38,7 +38,9 @@ import VendorRegister from "./pages/vendor/VendorRegister";
 import DoorScrollEffect from "./pages/DoorScrollEffect";
 import BookAppointment from "./boq/components/BookAppointment";
 import ProductOverview from "./boq/components/ProductOverview";
-import AppointmentConfirmation from "./boq/components/AppointmentConfirmation";
+import Sessiontimeout from "./pages/Sessiontimeout";
+import Brokenlink from "./pages/Brokenlink";
+import TokenExpired from "./pages/TokenExpired";
 
 // const Homepage = lazy(() => import("./pages/Homepage"));
 
@@ -48,22 +50,7 @@ const BlogPage = lazy(() => import("./pages/Blog"));
 const Carrer = lazy(() => import("./pages/Carrer"));
 
 function App() {
-  // useAuthRefresh(); // Automatically handles user inactivity
-
   const { accountHolder, isAuthenticated, isAuthLoading } = useApp();
-
-  // const [hasCheckedAuth, setHasCheckedAuth] = useState(false);
-
-  // useEffect(() => {
-  //   if (!isAuthLoading) {
-  //     setHasCheckedAuth(true);
-  //   }
-  // }, [isAuthLoading]);
-
-  // // If authentication is still loading but hasn't been checked yet, show the spinner
-  // if (isAuthLoading && !hasCheckedAuth) {
-  //   return <SpinnerFullPage />;
-  // }
 
   // While authentication is loading, show a spinner
   if (isAuthLoading) {
@@ -72,17 +59,6 @@ function App() {
   }
 
   console.log(isAuthLoading, isAuthenticated);
-
-  // useEffect(() => {
-  //   const timeout = setTimeout(() => {
-  //     if (isAuthLoading) {
-  //       console.warn("isAuthLoading took too long, forcing it to false.");
-  //       // You can set it to false manually if needed
-  //     }
-  //   }, 2000); // 5 seconds timeout
-
-  //   return () => clearTimeout(timeout);
-  // }, [isAuthLoading]);
 
   return (
     <div>
@@ -141,10 +117,9 @@ function App() {
             <Route path="/getplan" element={<PricingCard />} />
             <Route path="/admin" element={<AdminDashboard />} />
             <Route path="/bookappointment" element={<BookAppointment />} />
-            <Route
-              path="/appointmentConfirm"
-              element={<AppointmentConfirmation />}
-            />
+            <Route path="/sessiontimeout" element={<Sessiontimeout />} />
+            <Route path="/brokenlink" element={<Brokenlink />} />
+            <Route path="/tokenExpired" element={<TokenExpired />} />
           </Routes>
         ) : (
           <Routes>
@@ -166,10 +141,6 @@ function App() {
             <Route path="/termsNcondtion" element={<TermsAndCondition />} />
             {/* <Route path="/vendordashboard" element={<VendorDashboard />} /> */}
             <Route path="/bookappointment" element={<BookAppointment />} />
-            <Route
-              path="/appointmentConfirm"
-              element={<AppointmentConfirmation />}
-            />
           </Routes>
         )}
       </Suspense>

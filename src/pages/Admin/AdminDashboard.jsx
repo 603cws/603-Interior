@@ -28,6 +28,7 @@ import DashboardInbox from "./DashboardInbox";
 import CreateUser from "./CreateUser";
 import { HiXMark } from "react-icons/hi2";
 import { MdDeleteOutline } from "react-icons/md";
+import Schedule from "./Schedule";
 
 function AdminDashboard() {
   const navigate = useNavigate();
@@ -92,6 +93,9 @@ function AdminDashboard() {
   const [deleteWarning, setDeleteWarning] = useState(false);
   const [rejectReason, setRejectReason] = useState("");
   const [rejectReasonPopup, setRejectReasonPopup] = useState(false);
+
+  //state schedule
+  const [isScheduleOpen, setisScheduleOpen] = useState(false);
 
   const tabs = [
     { name: "Products", value: "products" },
@@ -411,6 +415,7 @@ function AdminDashboard() {
     setIsclientopen(false);
     setIsvendoropen(false);
     setCreateProfikle(false);
+    setisScheduleOpen(false);
     setCurrentSection("Setting");
   };
   const handleproduct = () => {
@@ -420,6 +425,7 @@ function AdminDashboard() {
     setIsProductOpen(true);
     setIsvendoropen(false);
     setCreateProfikle(false);
+    setisScheduleOpen(false);
     setCurrentSection("Product");
   };
 
@@ -430,6 +436,7 @@ function AdminDashboard() {
     setDashboard(true);
     setIsvendoropen(false);
     setCreateProfikle(false);
+    setisScheduleOpen(false);
     setCurrentSection("AdminDashboard");
   };
 
@@ -440,6 +447,7 @@ function AdminDashboard() {
     setIsvendoropen(false);
     setIsclientopen(true);
     setCreateProfikle(false);
+    setisScheduleOpen(false);
     setCurrentSection("Client");
   };
 
@@ -450,6 +458,7 @@ function AdminDashboard() {
     setIsclientopen(false);
     setIsvendoropen(true);
     setCreateProfikle(false);
+    setisScheduleOpen(false);
     setCurrentSection("Vendor");
   };
   const handlecreate = () => {
@@ -459,7 +468,20 @@ function AdminDashboard() {
     setIsclientopen(false);
     setIsvendoropen(false);
     setCreateProfikle(true);
+    setisScheduleOpen(false);
     setCurrentSection("create profile");
+  };
+
+  //handle schedule
+  const handleschedule = () => {
+    setIsSettingOpen(false);
+    setIsProductOpen(false);
+    setDashboard(false);
+    setIsclientopen(false);
+    setIsvendoropen(false);
+    setCreateProfikle(false);
+    setisScheduleOpen(true);
+    setCurrentSection("schedule");
   };
 
   const handleLogout = async () => {
@@ -676,6 +698,12 @@ function AdminDashboard() {
               icon={<PiHandshakeFill />}
               text="create"
               onClick={handlecreate}
+              isExpanded={isExpanded}
+            />
+            <SidebarItem
+              icon={<PiHandshakeFill />}
+              text="schedule"
+              onClick={handleschedule}
               isExpanded={isExpanded}
             />
           </div>
@@ -1215,6 +1243,9 @@ function AdminDashboard() {
               </div>
             </div>
           )}
+
+          {/* schedule  */}
+          {isScheduleOpen && <Schedule />}
         </div>
       </div>
       {/* product preview */}

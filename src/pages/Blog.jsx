@@ -1,6 +1,5 @@
 import LandingNavbar from "../common-components/LandingNavbar";
 import Footer from "../common-components/Footer";
-import Slider from "react-slick";
 
 import { useNavigate } from "react-router-dom";
 
