@@ -215,6 +215,7 @@ function Login() {
     } else {
       handleLogin();
     }
+    localStorage.removeItem("boqCompleted");
   };
 
   const handleForgotPassword = async () => {

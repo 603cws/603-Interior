@@ -11,6 +11,7 @@ import toast from "react-hot-toast";
 import { fetchProductsData } from "../utils/dataFetchers";
 import { createPortal } from "react-dom";
 import BoqPrompt from "./BoqPrompt";
+import Boqcompleted from "../../common-components/Boqcompleted";
 
 // import useAuthRefresh from "../../Context/useAuthRefresh";
 
@@ -21,6 +22,9 @@ function Navbar({ toggleProfile, iconRef }) {
   const [existingBoqs, setExistingBoqs] = useState([]); // Stores fetched BOQs
   const [showBoqPrompt, setShowBoqPrompt] = useState(false);
   const [boqTitle, setBoqTitle] = useState("");
+  const [completed100, setCompleted100] = useState(() => {
+    return localStorage.getItem("boqCompleted") === "done" ? false : false;
+  });
 
   const dropdownRef = useRef(null);
   // const { signOutUser } = useAuthRefresh(); // Get signOutUser from hook
@@ -54,6 +58,15 @@ function Navbar({ toggleProfile, iconRef }) {
     selectedPlan,
     areasData,
   } = useApp();
+
+  useEffect(() => {
+    const boqCompleted = localStorage.getItem("boqCompleted");
+
+    if (progress === 100 && boqCompleted !== "done" && !completed100) {
+      setCompleted100(true);
+      localStorage.setItem("boqCompleted", "done"); // ✅ Store "done" properly
+    }
+  }, [progress, completed100]); // ✅ Added `completed100` to prevent unnecessary re-triggers
 
   const naviagte = useNavigate();
 
@@ -289,6 +302,7 @@ function Navbar({ toggleProfile, iconRef }) {
       setTotalArea(data.total_area);
 
       toast.success(`Loaded BOQ: ${data.title}`);
+      localStorage.removeItem("boqCompleted");
     } catch (err) {
       console.error("Error loading BOQ:", err);
       toast.error("Error loading BOQ");
@@ -705,7 +719,6 @@ function Navbar({ toggleProfile, iconRef }) {
           </div>
         </div>
       </div>
-
       {showBoqPrompt &&
         createPortal(
           <BoqPrompt
@@ -713,6 +726,11 @@ function Navbar({ toggleProfile, iconRef }) {
             onConfirm={handleBoqNameConfirm}
             onCancel={() => setShowBoqPrompt(false)}
           />,
+          document.body // Mounts it at the root level
+        )}
+      {completed100 &&
+        createPortal(
+          <Boqcompleted setCompleted100={setCompleted100} />,
           document.body // Mounts it at the root level
         )}
     </div>
