@@ -57,6 +57,8 @@ function Navbar({ toggleProfile, iconRef }) {
     userResponses,
     selectedPlan,
     areasData,
+    boqTotal,
+    setBoqTotal,
   } = useApp();
 
   useEffect(() => {
@@ -375,7 +377,6 @@ function Navbar({ toggleProfile, iconRef }) {
       },
       0
     );
-
     // Add 150 * totalArea if flooring is bareShell
     if (userResponses.flooring === "bareShell") {
       grandTotal += 150 * totalArea;
@@ -383,9 +384,14 @@ function Navbar({ toggleProfile, iconRef }) {
 
     // console.log("from grandtotal", grandTotal);
     // console.log("from grandtotal area", totalArea);
-
-    return grandTotal;
+    console.log("grand total", grandTotal);
+    setBoqTotal(grandTotal);
+    console.log("boq total", boqTotal);
   };
+
+  useEffect(() => {
+    calculateGrandTotal();
+  }, [selectedData]);
 
   const insertDataIntoSupabase = async (
     selectedData,
@@ -570,7 +576,7 @@ function Navbar({ toggleProfile, iconRef }) {
             className="flex justify-center items-center bg-[#FFF] rounded-xl text-xs px-5 h-fit py-3 self-center text-black border-solid border-1 border-black"
           >
             <span className="font-bold">Total</span>: ₹{" "}
-            {calculateGrandTotal().toLocaleString("en-IN")}
+            {boqTotal.toLocaleString("en-IN")}
           </div>
           {/* <div
             // onClick={signOutUser}

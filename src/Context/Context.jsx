@@ -98,6 +98,7 @@ export const AppProvider = ({ children }) => {
   const [minimizedView, setMinimizedView] = useState(false);
   const [showProductView, setShowProductView] = useState(false);
   const [showRecommend, setShowRecommend] = useState(false);
+  const [boqTotal, setBoqTotal] = useState(0);
 
   useEffect(() => {
     const loadData = async () => {
@@ -646,6 +647,8 @@ export const AppProvider = ({ children }) => {
         setShowRecommend,
         searchQuery,
         priceRange,
+        boqTotal,
+        setBoqTotal,
       }}
     >
       {children}
