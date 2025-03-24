@@ -21,16 +21,6 @@ function RegisterUser() {
     label: `+${details.phone} ${details.name} (${code})`,
   }));
 
-  console.log(
-    "Inside LoginForm",
-    "Total Area: ",
-    totalArea,
-    "Area Values: ",
-    areaValues,
-    "Areas Quantity: ",
-    areas
-  );
-
   const [formData, setFormData] = useState({
     email: "",
     companyName: "",
@@ -46,10 +36,6 @@ function RegisterUser() {
 
   const defaultCountry = countryOptions.find((c) => c.label.includes("India"));
   const [countryCode, setCountryCode] = useState(defaultCountry?.value || "");
-
-  useEffect(() => {
-    console.log("Default country:", defaultCountry);
-  }, [defaultCountry]);
 
   const options = useMemo(() => countryList().getData(), []);
 
@@ -143,7 +129,6 @@ function RegisterUser() {
 
   const handleCountryCodeChange = (value) => {
     setCountryCode(value.value[0]);
-    console.log("Country code", value.value[0]);
   };
 
   const showErrorWithTimeout = (field, message) => {

@@ -307,7 +307,7 @@ const BecomeSeller = () => {
 
       {/* our client section */}
       {/* section 5 */}
-      <section className="mt-6 relative bg-white shadow-[0px_5px_15px_rgba(0,0,0,0.1),0px_-5px_15px_rgba(0,0,0,0.1)]">
+      <section className="mt-6 relative bg-white shadow-[0px_0px_20px_rgba(0,0,0,0.1)]">
         {/* container */}
         <div className="container mx-auto flex flex-col py-10">
           {/* text */}
@@ -320,43 +320,40 @@ const BecomeSeller = () => {
           {/* logo slider */}
           <div className="flex justify-center items-center mx-4 w-full max-w-screen">
             <Slider {...settings} className="w-full">
-              <div>
+              <div className="slider-image w-56 h-16 flex justify-center items-center">
                 <img
                   src="/images/iide-logo.svg"
                   alt="iide"
-                  className="w-56 h-16"
+                  className="w-full max-h-full"
                 />
               </div>
-              <div>
+              <div className=" slider-image">
                 <img
                   src="/images/credilio-svg-logo.svg"
                   alt="credilio"
-                  className="w-56 h-16"
+                  className="w-full max-h-full"
                 />
               </div>
-              <div>
+              <div className="slider-image w-56 h-16 flex justify-center items-center">
                 <img
                   src="/images/tripjack-logo.png"
                   alt="tripjack"
-                  className="w-56 h-16"
+                  className="w-full max-h-full"
                 />
               </div>
-              <div>
+              <div className="slider-image w-32 h-[70px] flex justify-center items-center px-5">
                 <img
                   src="/images/bajaj-electricals-logo.jpg"
                   alt="bajaj"
-                  className="w-40 h-[70px]"
+                  className="w-full max-h-full"
                 />
               </div>
-              {/* <div>
+              <div className="slider-image w-28 h-16 flex justify-center items-center px-5">
                 <img
-                  src="/images/Mindshare-logo.jpg"
-                  alt="facebook"
-                  className="w-56 h-16"
+                  src="/logo/logo.png"
+                  alt="603"
+                  className="w-full max-h-full"
                 />
-              </div> */}
-              <div>
-                <img src="/logo/logo.png" alt="603" className="w-40 h-16" />
               </div>
             </Slider>
           </div>

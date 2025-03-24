@@ -41,9 +41,6 @@ function Navbar({
     setSelectedPlan,
   } = useApp();
 
-  // console.log("user id", userId);
-  // console.log("layout img", layoutImage);
-
   const navigate = useNavigate();
 
   const mapAreaValues = (
@@ -112,23 +109,6 @@ function Navbar({
     };
   };
 
-  // const uploadImage = async (imageDataUrl) => {
-  //   const blob = await fetch(imageDataUrl).then((res) => res.blob());
-  //   const fileName = `area_distribution_${Date.now()}.png`;
-  //   console.log("url", imageDataUrl);
-  //   console.log("file name", fileName);
-
-  //   const { data, error } = await supabase.storage
-  //     .from("addon")
-  //     .upload(fileName, blob, { contentType: "image/png" });
-
-  //   if (error) {
-  //     console.error("Image upload failed:", error);
-  //     return null;
-  //   }
-
-  //   return `https://bwxzfwsoxwtzhjbzbdzs.supabase.co/storage/v1/object/public/addon/${data.path}`;
-  // };
   const uploadImage = async (imageDataUrl) => {
     try {
       // ✅ Convert Base64 to Blob Properly
@@ -146,7 +126,6 @@ function Navbar({
 
       // ✅ Ensure Correct Filename
       const fileName = `area_distribution_${Date.now()}.png`;
-      console.log("Uploading file:", fileName);
 
       // ✅ Upload Image to Supabase Storage
       const { data, error } = await supabase.storage
@@ -158,7 +137,6 @@ function Navbar({
         return null;
       }
 
-      console.log("Image uploaded successfully:", data.path);
       return fileName; // ✅ Store filename in DB
     } catch (error) {
       console.error("Upload failed:", error);
@@ -173,15 +151,12 @@ function Navbar({
     localStorage.removeItem("hasSeenQuestionPopup");
     setSelectedPlan(null);
     const usedPercentage = (builtArea / totalArea) * 100;
-    console.log("used percentage", usedPercentage);
 
     if (usedPercentage < 90) {
-      console.log(" Warning condition met, showing modal");
       setUnusedArea(totalArea - builtArea);
       setShowWarning(true);
       return;
     } else {
-      console.log("Skipping warning, proceeding to save BOQ");
       handlegenrateboq();
 }
     }
@@ -213,8 +188,6 @@ function Navbar({
           imageFilename,
           builtArea
         );
-
-        console.log("layoutData", layoutData);
 
         // Insert into tables
         const { data, error } = await supabase
@@ -306,8 +279,12 @@ function Navbar({
       {/* navbar */}
       <div className="flex justify-around bg-gradient-to-r from-[#1A3A36] to-[#48A095] py-4 items-center px-5">
         {/* logo */}
-        <button className="self-start" onClick={() => navigate("/")}>
-          <img src="/logo/logo.png" alt="603 logo" className="h-auto w-20" />
+        <button className=" " onClick={() => navigate("/")}>
+          <img
+            src="/logo/logo.png"
+            alt="603 logo"
+            className="h-auto w-20 flex justify-center items-center"
+          />
         </button>
         {/* sq feet div */}
         <div
@@ -404,7 +381,6 @@ function Navbar({
           unusedArea={unusedArea}
           onConfirm={handlegenrateboq}
           onCancel={() => {
-            console.log("Cancel clicked");
             setShowWarning(false);
           }}
         />

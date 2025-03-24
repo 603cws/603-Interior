@@ -232,7 +232,6 @@ const TreeMap = ({ totalArea, areaQuantities, areaValues }) => {
     if (chartRef.current) {
       const imageURI = await chartRef.current.dataURI(); // Get image
       setLayoutImage(imageURI.imgURI); // Send to context
-      console.log("image url", imageURI);
     }
   };
 

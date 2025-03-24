@@ -433,10 +433,6 @@ function Layout() {
 
   // const bufferSpace = totalArea < 5000 ? 0.05 : totalArea <= 10000 ? 0.03 : 0; //buffer space
   const bufferSpace = 0; //buffer space
-  console.log("buffer space", bufferSpace);
-
-  console.log("tracking total area", totalArea);
-  console.log("areas", areaValues, "quantity", areaQuantities);
 
   // Close profile card when clicking outside
   useEffect(() => {
@@ -499,7 +495,6 @@ function Layout() {
   // Handle the completion or skipping of the tour
   const handleTourCallback = (data) => {
     const { status } = data;
-    console.log(data);
 
     const finishedStatuses = [STATUS.FINISHED, STATUS.SKIPPED];
     if (finishedStatuses.includes(status)) {
@@ -619,14 +614,11 @@ function Layout() {
       0
     );
     setBuiltArea(calculatedBuiltArea);
-    // console.log("Built area cal:", calculatedBuiltArea, "Areas:", areas, "Area values:", areaValues);
   }, [areaQuantities, areaValues]);
 
   // Calculate availableArea based on totalArea and builtArea
   useEffect(() => {
     setAvailableArea(totalArea - builtArea);
-    // console.log("Available area:", availableArea);
-    // console.log("Built area:", builtArea);
   }, [totalArea, builtArea]);
 
   const updateAreas = (type, value) => {

@@ -154,3 +154,24 @@ html {
 .horizontal-scroll::-webkit-scrollbar {
   display: none;
 }
+
+.slick-slide,
+slick-active,
+slick-current {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+}
+.slick-slide > div {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  width: 100% !important;
+}
+.slider-image {
+  /* width: 100%; */
+  width: 135px !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+}

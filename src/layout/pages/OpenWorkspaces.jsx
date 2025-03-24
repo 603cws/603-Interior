@@ -64,8 +64,6 @@ function OpenWorkspaces({
   //   }
   // };
 
-  console.log("built area", builtArea);
-
   const handleSizeChange = (newSize, type, noOfLinearStation) => {
     const newSizeArea = sizeAreaMapping[newSize];
     const prevSizeArea = sizeAreaMapping[selectedSize];
@@ -73,8 +71,6 @@ function OpenWorkspaces({
       builtArea -
       prevSizeArea * noOfLinearStation +
       newSizeArea * noOfLinearStation;
-
-    console.log("new sizearea", newSizeArea, prevSizeArea, newBuiltArea);
 
     if (type === "linear") {
       if (newBuiltArea > totalArea) {
