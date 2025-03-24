@@ -120,10 +120,13 @@ function Boq() {
   useEffect(() => {
     // Check localStorage to decide if the tour should run
     const hasSeenTour = localStorage.getItem("hasSeenBOQTour");
+    const hasSeenPopup = localStorage.getItem("hasSeenQuestionPopup");
+
     if (!hasSeenTour) {
       setRunTour(true); // Start the tour automatically on first visit
-    } else {
+    } else if (!hasSeenPopup) {
       setQuestionPopup(true);
+      localStorage.setItem("hasSeenQuestionPopup", "true");
     }
   }, []);
 
@@ -131,7 +134,7 @@ function Boq() {
     if (defaultProduct && selectedPlan && productData.length > 0) {
       // autoSelectPlanProducts(productData, subCategories);
       autoSelectPlanProducts(productData, categories);
-      setDefaultProduct(false);
+      // setDefaultProduct(false);
     }
   }, [selectedPlan, productData, defaultProduct]);
 

@@ -54,6 +54,12 @@ const publicSpacesData = [
       step: 5,
     },
   },
+  {
+    type: "washroom",
+    image: "/images/workstation-wp/executivewash-wp.webp",
+    description: "Common washroom",
+    tooltipText: "size: 100 sqft",
+  },
 ];
 
 const PublicSpaces = ({

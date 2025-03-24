@@ -566,7 +566,7 @@ function Dashboard() {
                     </div> */}
                   </div>
                 </div>
-                <div className="w-1/3  flex justify-center">
+                {/* <div className="w-1/3  flex justify-center">
                   <div className="border-2 p-4 rounded-xl h-96">
                     {imageIsLoaded ? (
                       <img
@@ -578,7 +578,7 @@ function Dashboard() {
                       <Spinner />
                     )}
                   </div>
-                </div>
+                </div> */}
               </div>
             </div>
           )}

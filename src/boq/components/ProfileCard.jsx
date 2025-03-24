@@ -23,6 +23,8 @@ function ProfileCard({ layout = false, setIsOpen }) {
     setTotalArea,
     setSelectedPlan,
     progress,
+    setProgress,
+    setBoqTotal,
   } = useApp();
   const profileRef = useRef(null);
 
@@ -179,6 +181,9 @@ function ProfileCard({ layout = false, setIsOpen }) {
                 onClick={() => {
                   setSelectedPlan(null);
                   setIsOpen(false);
+                  setProgress(0);
+                  localStorage.removeItem("selectedData");
+                  setBoqTotal(0);
                 }}
               >
                 Select Your Plan

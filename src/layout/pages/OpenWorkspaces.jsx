@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import LayoutCard from "../components/LayoutCard";
+import { useApp } from "../../Context/Context";
+import ErrorModal from "../../common-components/ErrorModal";
 
 const workspaceData = [
   {
@@ -37,19 +39,50 @@ const sizeArea = {
   XL: "29 sq ft",
   lType: "34 sq ft",
 };
+const sizeAreaMapping = {
+  M: 20,
+  L: 24,
+  XL: 29,
+};
 
 function OpenWorkspaces({
   areaQuantities,
   variant,
   updateAreas,
   onVariantChange,
+  builtArea,
 }) {
   const [selectedSize, setSelectedSize] = useState(variant);
+  const [showError, setShowError] = useState(false);
 
-  const handleSizeChange = (newSize, type) => {
+  const { totalArea } = useApp();
+
+  // const handleSizeChange = (newSize, type) => {
+  //   if (type === "linear") {
+  //     setSelectedSize(newSize);
+  //     onVariantChange(newSize); // Notify parent if needed
+  //   }
+  // };
+
+  console.log("built area", builtArea);
+
+  const handleSizeChange = (newSize, type, noOfLinearStation) => {
+    const newSizeArea = sizeAreaMapping[newSize];
+    const prevSizeArea = sizeAreaMapping[selectedSize];
+    const newBuiltArea =
+      builtArea -
+      prevSizeArea * noOfLinearStation +
+      newSizeArea * noOfLinearStation;
+
+    console.log("new sizearea", newSizeArea, prevSizeArea, newBuiltArea);
+
     if (type === "linear") {
+      if (newBuiltArea > totalArea) {
+        setShowError(true);
+        return;
+      }
       setSelectedSize(newSize);
-      onVariantChange(newSize); // Notify parent if needed
+      onVariantChange(newSize);
     }
   };
 
@@ -81,7 +114,13 @@ function OpenWorkspaces({
             onChange={(newValue) => updateAreas(workspace.type, newValue)}
             sizes={workspace.sizes}
             selectedSize={workspace.type === "linear" ? selectedSize : null} // Only for Linear Workstation
-            onSizeChange={(size) => handleSizeChange(size, workspace.type)}
+            onSizeChange={(size) =>
+              handleSizeChange(
+                size,
+                workspace.type,
+                areaQuantities[workspace.type]
+              )
+            }
             // tooltipText={
             //   workspace.type === "linear"
             //     ? sizeArea[selectedSize] || workspace.tooltipText
@@ -98,6 +137,12 @@ function OpenWorkspaces({
           />
         ))}
       </div>
+      {showError && (
+        <ErrorModal
+          message="Selected size exceeds total area!"
+          onclose={() => setShowError(false)}
+        />
+      )}
     </div>
   );
 }

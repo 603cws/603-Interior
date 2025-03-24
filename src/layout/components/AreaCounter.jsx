@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Cabins from "../pages/Cabins";
 
 const AreaCounter = ({
   name,
@@ -14,6 +15,8 @@ const AreaCounter = ({
   type,
   initialAreaValues,
   counterValue,
+  seatCount,
+  setSeatCount,
 }) => {
   const min = min2;
   const max = max2;
@@ -33,11 +36,14 @@ const AreaCounter = ({
           type === "manager" ||
           type === "reception" ||
           type === "lounge" ||
-          type === "videoRecordingRoom"
+          type === "videoRecordingRoom" ||
+          type === "ups" ||
+          type === "bms"
         ) {
           setCabinSize(cabinSize + 5);
         } else if (type === "conferenceRoom" || type === "boardRoom") {
-          setCabinSize(cabinSize + 25);
+          setCabinSize(cabinSize + 35);
+          setSeatCount(seatCount + 2);
         } else {
           setCabinSize(cabinSize + 40);
         }
@@ -54,17 +60,22 @@ const AreaCounter = ({
     if (value > min && totalArea > 0 && cabinSize > initialAreaValues[type]) {
       onChange(value - step);
       if (
-        type === "financeRoom" ||
-        type === "boardRoom" ||
-        type === "conferenceRoom"
+        type === "financeRoom"
+        // type === "boardRoom" ||
+        // type === "conferenceRoom"
       ) {
         setCabinSize(cabinSize - 50);
+      } else if (type === "conferenceRoom" || type === "boardRoom") {
+        setCabinSize(cabinSize - 35);
+        setSeatCount(seatCount - 2);
       } else if (
         type === "md" ||
         type === "manager" ||
         type === "reception" ||
         type === "lounge" ||
-        type === "videoRecordingRoom"
+        type === "videoRecordingRoom" ||
+        type === "ups" ||
+        type === "bms"
       ) {
         setCabinSize(cabinSize - 5);
       } else {

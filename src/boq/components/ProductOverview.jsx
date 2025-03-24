@@ -119,7 +119,7 @@ function ProductOverview() {
     const handleEscKey = (e) => {
       if (e.key === "Escape") {
         setShowProductView(false);
-        setSelectedPlan("Custom");
+        // setSelectedPlan("Custom");
         setMinimizedView(true);
         navigate("/boq"); //new ProductOverview
       }
@@ -365,7 +365,7 @@ function ProductOverview() {
             className="cursor-pointer"
             onClick={() => {
               setShowProductView(false); // Open product view
-              setSelectedPlan("Custom");
+              // setSelectedPlan("Custom");
               setMinimizedView(true);
               navigate("/boq"); //new ProductOverview
             }}

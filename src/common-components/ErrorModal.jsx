@@ -38,13 +38,13 @@ function ErrorModal({ onclose, message }) {
   };
 
   return (
-    <div className="w-full h-svh z-20 top-0 absolute bg-[rgba(25,25,25,0.46)] flex justify-center items-center">
+    <div className="fixed inset-0 z-20 top-0 bg-[rgba(25,25,25,0.46)] flex justify-center items-center">
       <div className="grid grid-cols-[1.5fr_1fr] bg-[#1A3A36] border-2 rounded-3xl max-w-4xl mx-auto ">
         <div className="text-white p-5 flex flex-col justify-center gap-4 my-10">
           <p className="text-4xl font-['UbuntuSans-Regular',_sans-serif]">
             <span className="text-6xl tracking-tighter">W</span>arning
           </p>
-          <p style={{ fontFamily: "'Poppins', sans-serif" }}>
+          <div style={{ fontFamily: "'Poppins', sans-serif" }}>
             <ul style={{ paddingLeft: "20px", listStyleType: "disc" }}>
               {message.split(".").map(
                 (sentence, index) =>
@@ -55,7 +55,7 @@ function ErrorModal({ onclose, message }) {
                   )
               )}
             </ul>
-          </p>
+          </div>
           {/* Input Field */}
           <input
             type="number"

@@ -22,8 +22,8 @@ const initialAreaValues = {
   md: 120,
   manager: 80,
   small: 80,
-  ups: 90,
-  bms: 90,
+  ups: 60,
+  bms: 60,
   server: 40,
   reception: 80,
   lounge: 80,
@@ -32,15 +32,16 @@ const initialAreaValues = {
   discussionRoom: 380,
   interviewRoom: 100,
   conferenceRoom: 250,
-  boardRoom: 325,
-  meetingRoom: 100,
-  meetingRoomLarge: 120,
+  boardRoom: 380,
+  meetingRoom: 120,
+  meetingRoomLarge: 150,
   hrRoom: 80,
   financeRoom: 100,
   breakoutRoom: 80,
   executiveWashroom: 60,
   videoRecordingRoom: 80,
   other: 1,
+  washroom: 100,
 };
 
 const initialQuantities = {
@@ -68,11 +69,11 @@ const initialQuantities = {
   executiveWashroom: 0,
   videoRecordingRoom: 0,
   other: 0,
+  washroom: 0,
 };
 
 const MAX_AREA = 25000;
 const MIN_AREA = 1000;
-const bufferSpace = 0.05; //5% Buffer Space kept
 
 // const calculateReceptionArea = (totalArea) => {
 //   if (totalArea >= 1000 && totalArea < 3500) {
@@ -96,20 +97,32 @@ const bufferSpace = 0.05; //5% Buffer Space kept
 
 const calculateReceptionArea = (totalArea) => {
   if (totalArea > 999 && totalArea <= 25000) {
-    if (totalArea >= 1000 && totalArea < 3500) {
-      return Math.round(totalArea * 0.08);
-    } else if (totalArea >= 3500 && totalArea < 4500) {
-      return Math.round(totalArea * 0.06);
-    } else if (totalArea >= 4500 && totalArea < 5500) {
+    if (totalArea >= 1000 && totalArea <= 2000) {
+      return Math.round(totalArea * 0.055);
+    } else if (totalArea >= 2000 && totalArea <= 10000) {
       return Math.round(totalArea * 0.05);
-    } else if (totalArea >= 5500 && totalArea < 6500) {
+    } else if (totalArea >= 10000 && totalArea <= 12000) {
+      return Math.round(totalArea * 0.0475);
+    } else if (totalArea >= 12000 && totalArea <= 14000) {
       return Math.round(totalArea * 0.045);
-    } else if (totalArea >= 6500 && totalArea < 12000) {
-      return 300;
-    } else if (totalArea >= 12000 && totalArea < 18000) {
-      return 500;
-    } else if (totalArea >= 18000 && totalArea <= 25000) {
-      return 700;
+    } else if (totalArea >= 14000 && totalArea <= 16000) {
+      return Math.round(totalArea * 0.0425);
+    } else if (totalArea >= 16000 && totalArea <= 18000) {
+      return Math.round(totalArea * 0.04);
+    } else if (totalArea >= 18000 && totalArea <= 19000) {
+      return Math.round(totalArea * 0.0375);
+    } else if (totalArea >= 19000 && totalArea <= 20000) {
+      return Math.round(totalArea * 0.035);
+    } else if (totalArea >= 20000 && totalArea <= 21000) {
+      return Math.round(totalArea * 0.0325);
+    } else if (totalArea >= 21000 && totalArea <= 22000) {
+      return Math.round(totalArea * 0.03);
+    } else if (totalArea >= 22000 && totalArea <= 23000) {
+      return Math.round(totalArea * 0.0275);
+    } else if (totalArea >= 23000 && totalArea <= 24000) {
+      return Math.round(totalArea * 0.025);
+    } else if (totalArea >= 24000 && totalArea <= 25000) {
+      return Math.round(totalArea * 0.02);
     }
   } else {
     return 1;
@@ -331,9 +344,36 @@ const calculateServer = (totalArea, areaValues) => {
   }
 };
 
-const calculateExecutiveWashroom = (totalArea, areaValues) => {
-  if (totalArea >= 9000 && totalArea <= 25000) {
-    return areaValues.executiveWashroom * 2;
+// const calculateExecutiveWashroom = (totalArea, areaValues) => {
+//   if (totalArea >= 9000 && totalArea <= 25000) {
+//     return areaValues.executiveWashroom * 2;
+//   } else {
+//     return 0;
+//   }
+// };
+const calculateWashroomArea = (totalArea) => {
+  if (totalArea >= 1000 && totalArea <= 2000) {
+    return Math.round(totalArea * 0.12);
+  } else if (totalArea >= 2000 && totalArea <= 3000) {
+    return Math.round(totalArea * 0.1);
+  } else if (totalArea >= 3000 && totalArea <= 4000) {
+    return Math.round(totalArea * 0.08);
+  } else if (totalArea >= 4000 && totalArea <= 10000) {
+    return Math.round(totalArea * 0.05);
+  } else if (totalArea >= 10000 && totalArea <= 12000) {
+    return Math.round(totalArea * 0.0475);
+  } else if (totalArea >= 12000 && totalArea <= 14000) {
+    return Math.round(totalArea * 0.046);
+  } else if (totalArea >= 14000 && totalArea <= 16000) {
+    return Math.round(totalArea * 0.045);
+  } else if (totalArea >= 16000 && totalArea <= 20000) {
+    return Math.round(totalArea * 0.044);
+  } else if (totalArea >= 20000 && totalArea <= 22000) {
+    return Math.round(totalArea * 0.043);
+  } else if (totalArea >= 22000 && totalArea <= 24000) {
+    return Math.round(totalArea * 0.042);
+  } else if (totalArea >= 24000 && totalArea <= 25000) {
+    return Math.round(totalArea * 0.04);
   } else {
     return 0;
   }
@@ -368,10 +408,14 @@ function Layout() {
   const [managerCabinSize, setManagerCabinSize] = useState(areaValues.manager);
   const [receptionSize, setReceptionSize] = useState(areaValues.reception);
   const [loungeSize, setLoungeSize] = useState(areaValues.lounge);
+  const [upsRoomSize, setUpsRoomSize] = useState(areaValues.ups);
+  const [bmsRoomSize, setBmsRoomSize] = useState(areaValues.bms);
   const [smallCabinSeatCount, setSmallCabinSeatCount] = useState(0);
   const [hrRoomSeatCount, setHrRoomSeatCount] = useState(0);
   const [salesSeatCount, setSalesSeatCount] = useState(0);
   const [financeRoomSeatCount, setFinanceRoomSeatCount] = useState(0);
+  const [boardRoomSeatCount, setBoardRoomSeatCount] = useState(0);
+  const [conferenceRoomSeatCount, setConferenceRoomSeatCount] = useState(0);
   const [isOtherSelected, setIsOtherSelected] = useState(false);
   const [warning, setWarning] = useState(false);
   const [otherArea, setOtherArea] = useState();
@@ -386,6 +430,10 @@ function Layout() {
   const [areaWarn, setAreaWarn] = useState(false);
   const profileRef = useRef(null);
   const iconRef = useRef(null);
+
+  // const bufferSpace = totalArea < 5000 ? 0.05 : totalArea <= 10000 ? 0.03 : 0; //buffer space
+  const bufferSpace = 0; //buffer space
+  console.log("buffer space", bufferSpace);
 
   console.log("tracking total area", totalArea);
   console.log("areas", areaValues, "quantity", areaQuantities);
@@ -499,13 +547,14 @@ function Layout() {
       );
       const phoneBooth = calculatePhoneBooth(totalArea, areaValues);
       const server = calculateServer(totalArea, areaValues);
-      const executiveWashroom = calculateExecutiveWashroom(
-        totalArea,
-        areaValues
-      );
+      // const executiveWashroom = calculateExecutiveWashroom(
+      //   totalArea,
+      //   areaValues
+      // );
       const receptionArea = calculateReceptionArea(totalArea);
       const loungeArea = calculateLoungeArea(totalArea);
       const otherArea = 0;
+      const washroomArea = calculateWashroomArea(totalArea);
 
       setAreaQuantities((prevAreaQuantities) => ({
         ...prevAreaQuantities,
@@ -523,7 +572,7 @@ function Layout() {
         videoRecordingRoom: videoRecordingRoom / areaValues.videoRecordingRoom,
         phoneBooth: phoneBooth / areaValues.phoneBooth,
         server: server / areaValues.server,
-        executiveWashroom: executiveWashroom / areaValues.executiveWashroom,
+        // executiveWashroom: executiveWashroom / areaValues.executiveWashroom,
         // reception: Math.round(receptionArea / areaValues.reception),
         // lounge: Math.round(loungeArea / areaValues.lounge),
         other: otherArea / areaValues.other,
@@ -534,17 +583,20 @@ function Layout() {
           ...prevAreaValues,
           reception: Math.round(receptionArea),
           lounge: Math.round(loungeArea),
+          washroom: Math.round(washroomArea),
         }));
         setAreaQuantities((prevAreaQuantities) => ({
           ...prevAreaQuantities,
           reception: 1,
           lounge: 1,
+          washroom: 1,
         }));
       } else {
         setAreaQuantities((prevAreaQuantities) => ({
           ...prevAreaQuantities,
           reception: 0,
           lounge: 0,
+          washroom: 0,
         }));
       }
     }
@@ -709,6 +761,8 @@ function Layout() {
     setReceptionSize
   );
   const handleLoungeSizeChange = handleRoomAreaChange("lounge", setLoungeSize);
+  const handleUpsSizeChange = handleRoomAreaChange("ups", setUpsRoomSize);
+  const handleBmsSizeChange = handleRoomAreaChange("bms", setBmsRoomSize);
 
   const handleSeatCountChange = (setter) => (newCount) => {
     setter(newCount);
@@ -722,6 +776,13 @@ function Layout() {
     handleSeatCountChange(setSalesSeatCount);
   const handleFinanceRoomSeatCountChange = handleSeatCountChange(
     setFinanceRoomSeatCount
+  );
+  const handleBoardRoomSeatCountChange = handleSeatCountChange(
+    setBoardRoomSeatCount
+  );
+
+  const handleConferenceRoomSeatCountChange = handleSeatCountChange(
+    setConferenceRoomSeatCount
   );
 
   const hrRoomConfig = {
@@ -750,6 +811,18 @@ function Layout() {
     setSeatCount: handleSmallCabinSeatCountChange,
     roomSize: smallCabinSize,
     setRoomSize: handleSmallCabinAreaChange,
+  };
+  const boardRoomConfig = {
+    seatCount: boardRoomSeatCount,
+    setSeatCount: handleBoardRoomSeatCountChange,
+    roomSize: boardRoomSize,
+    setRoomSize: handleBoardRoomAreaChange,
+  };
+  const conferenceRoomConfig = {
+    seatCount: conferenceRoomSeatCount,
+    setSeatCount: handleConferenceRoomSeatCountChange,
+    roomSize: conferenceRoomSize,
+    setRoomSize: handleConferenceRoomAreaChange,
   };
 
   const areaInfo = {
@@ -837,6 +910,7 @@ function Layout() {
             updateAreas={updateAreas}
             onVariantChange={handleVariantChange}
             totalAreaWarning={totalAreaWarning}
+            builtArea={builtArea}
           />
           <Cabins
             areaQuantities={areaQuantities}
@@ -871,6 +945,8 @@ function Layout() {
             setSalesSeatCount={setSalesSeatCount}
             financeRoomSeatCount={financeRoomSeatCount}
             setFinanceRoomSeatCount={setFinanceRoomSeatCount}
+            boardRoomConfig={boardRoomConfig}
+            conferenceRoomConfig={conferenceRoomConfig}
           />
           <PublicSpaces
             areaQuantities={areaQuantities}
@@ -893,6 +969,12 @@ function Layout() {
             warning={warning}
             otherArea={otherArea}
             setOtherArea={setOtherArea}
+            upsRoomSize={upsRoomSize}
+            setUpsRoomSize={handleUpsSizeChange}
+            bmsRoomSize={bmsRoomSize}
+            setBmsRoomSize={handleBmsSizeChange}
+            builtArea={builtArea}
+            initialAreaValues={initialAreaValues}
           />
         </div>
       </div>

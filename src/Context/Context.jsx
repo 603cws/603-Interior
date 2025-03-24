@@ -230,7 +230,10 @@ export const AppProvider = ({ children }) => {
 
           console.log("layout details from context ", data);
           setTotalArea(data[0].totalArea);
-          setLayoutImage(data[0].layoutImg);
+          // setLayoutImage(data[0].layoutImg);
+          setLayoutImage(
+            `https://bwxzfwsoxwtzhjbzbdzs.supabase.co/storage/v1/object/public/addon/${data[0].layoutImg}`
+          );
 
           if (error) throw error;
         }

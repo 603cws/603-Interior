@@ -85,8 +85,8 @@ function Plans() {
   const [hoveredPlan, setHoveredPlan] = useState(1);
 
   const handlePlanSelect = (planKey) => {
-    localStorage.setItem("selectedPlan", planKey);
     setSelectedPlan(planKey);
+    localStorage.setItem("selectedPlan", planKey);
   };
 
   return (
