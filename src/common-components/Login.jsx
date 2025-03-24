@@ -19,7 +19,7 @@ function Login() {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const { setUserId, setTotalArea, setIsAuthenticated } = useApp();
+  const { setUserId, setIsAuthenticated } = useApp();
 
   const navigate = useNavigate();
 

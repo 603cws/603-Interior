@@ -6,11 +6,8 @@ import QnaPopup from "../components/QnaPopup";
 import { useApp } from "../../Context/Context";
 import { calculateAutoTotalPriceHelper } from "../utils/CalculateTotalPriceHelper";
 import Joyride, { STATUS } from "react-joyride";
-import { supabase } from "../../services/supabase";
-import toast from "react-hot-toast";
 import ProfileCard from "../components/ProfileCard";
 import Plans from "../../common-components/Plans";
-import BoqPrompt from "../components/BoqPrompt"; // Import the BOQ modal
 import SelectArea from "../components/SelectArea";
 import MainPage from "./MainPage";
 import ProductCard from "../components/ProductCard";
@@ -29,31 +26,16 @@ function Boq() {
   const {
     selectedCategory,
     setSelectedCategory,
-    selectedSubCategory,
     setSelectedSubCategory,
     selectedSubCategory1,
     setSelectedSubCategory1,
     selectedData,
     setSelectedData,
     categories,
-    setCategories,
-    subCategories,
-    setSubCategories,
-    subCat1,
-    setSubCat1,
-    totalArea,
-    setTotalArea,
-    userId,
-    setUserId,
-    selectedAddons,
-    setSelectedAddons,
     categoriesWithModal,
     userResponses,
     setUserResponses,
-    showProfile,
-    setShowProfile,
     selectedPlan,
-    setDefaultProduct,
     defaultProduct,
     categoriesWithTwoLevelCheck,
     productData,
@@ -66,8 +48,6 @@ function Boq() {
     setMinimizedView,
     showProductView,
     setShowProductView,
-    showRecommend,
-    setShowRecommend,
     searchQuery,
     priceRange,
   } = useApp();

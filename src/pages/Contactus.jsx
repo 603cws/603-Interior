@@ -14,7 +14,7 @@ import { IoIosCall } from "react-icons/io";
 import { MdEmail } from "react-icons/md";
 import { HiClock } from "react-icons/hi";
 import { useNavigate } from "react-router-dom";
-import emailjs from "@emailjs/browser";
+// import emailjs from "@emailjs/browser";
 
 function Contactus() {
   // const [name, setname] = useState("");

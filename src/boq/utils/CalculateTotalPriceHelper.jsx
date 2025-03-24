@@ -37,7 +37,7 @@ export const calculateAddonTotalPriceHelper = (
 ) => {
   const normalizedSubCat = normalizeKey(subcategory);
 
-  let matchedKey, quantity, area, value;
+  let matchedKey, quantity, value; //area
 
   //|| category === "HVAC"
   // Calculation of price * quantity

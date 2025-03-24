@@ -1,4 +1,3 @@
-import { MdCancel } from "react-icons/md";
 import { useState } from "react";
 import { useApp } from "../Context/Context";
 function ErrorModal({ onclose, message }) {

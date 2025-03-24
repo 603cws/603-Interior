@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { FaRegQuestionCircle } from "react-icons/fa";
 
 import { supabase } from "../../services/supabase";
-import { toast, Toaster } from "react-hot-toast";
+import { toast } from "react-hot-toast"; //Toaster
 import { useApp } from "../../Context/Context";
 import { AllCatArray, specialArray } from "../../utils/AllCatArray";
 

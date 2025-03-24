@@ -1,5 +1,5 @@
 import React from "react";
-import { lazy, Suspense, useEffect, useState } from "react";
+import { lazy, Suspense } from "react";
 // import Layout from "./layout/pages/Layout";
 import Boq from "./boq/pages/Boq";
 import PageNotFound from "./common-components/PageNotFound";

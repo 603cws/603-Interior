@@ -1,13 +1,5 @@
-import {
-  createContext,
-  useContext,
-  useEffect,
-  useState,
-  useRef,
-  useMemo,
-} from "react";
+import { createContext, useContext, useEffect, useState, useRef } from "react";
 import { supabase } from "../services/supabase";
-import { useNavigate } from "react-router-dom";
 import {
   fetchCategories,
   fetchRoomData,
@@ -15,11 +7,7 @@ import {
   fetchProductsData,
 } from "../boq/utils/dataFetchers";
 import processData from "../boq/utils/dataProcessor";
-import {
-  calculateTotalPrice,
-  filterProduct,
-  groupProduct,
-} from "../boq/utils/productUtils";
+import { calculateTotalPrice } from "../boq/utils/productUtils";
 
 const AppContext = createContext();
 

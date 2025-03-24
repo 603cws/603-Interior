@@ -92,6 +92,7 @@ const TreeMap = ({ totalArea, areaQuantities, areaValues }) => {
     "Executive Washroom": "/images/workstation-wp/executivewash-wp.webp",
     "Breakout Room": "/images/workstation-wp/breakout-wp.webp",
     Other: "/images/workstation-wp/other-wp.webp",
+    washroom: "/images/workstation-wp/executivewash-wp.webp",
   };
 
   const validTotalArea = totalArea > 0 ? totalArea : 4000;
@@ -159,11 +160,11 @@ const TreeMap = ({ totalArea, areaQuantities, areaValues }) => {
         // useFillColorAsStroke: true // Maintain original fill color as stroke
       },
     },
-    tooltip: {
-      y: {
-        formatter: (value) => `${value} sq ft`,
-      },
-    },
+    // tooltip: {
+    //   y: {
+    //     formatter: (value) => `${value} sq ft`,
+    //   },
+    // },
     dataLabels: {
       enabled: true,
       style: {

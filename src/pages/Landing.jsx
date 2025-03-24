@@ -52,12 +52,12 @@ function Landing() {
     setExpandedIndex((prevIndex) => (prevIndex === index ? null : index));
   };
 
-  const scrollToTop = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth", // Enables smooth scrolling
-    });
-  };
+  // const scrollToTop = () => {
+  //   window.scrollTo({
+  //     top: 0,
+  //     behavior: "smooth", // Enables smooth scrolling
+  //   });
+  // };
 
   const settings = {
     dots: false,
@@ -78,17 +78,17 @@ function Landing() {
       },
     ],
   };
-  const settingsWork = {
-    dots: true,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 3,
-    slidesToScroll: 1,
-    autoplay: true,
-    autoplaySpeed: 2000,
-    // pauseOnHover: true,
-    arrows: false,
-  };
+  // const settingsWork = {
+  //   dots: true,
+  //   infinite: true,
+  //   speed: 500,
+  //   slidesToShow: 3,
+  //   slidesToScroll: 1,
+  //   autoplay: true,
+  //   autoplaySpeed: 2000,
+  //   // pauseOnHover: true,
+  //   arrows: false,
+  // };
   const settingsProduct = {
     // vertical: true,
     // verticalSwiping: true,

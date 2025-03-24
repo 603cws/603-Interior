@@ -21,7 +21,6 @@ function Navbar({ toggleProfile, iconRef }) {
   const [boqList, setBoqList] = useState([]);
   const [existingBoqs, setExistingBoqs] = useState([]); // Stores fetched BOQs
   const [showBoqPrompt, setShowBoqPrompt] = useState(false);
-  const [boqTitle, setBoqTitle] = useState("");
   const [completed100, setCompleted100] = useState(() => {
     return localStorage.getItem("boqCompleted") === "done" ? false : false;
   });
@@ -46,8 +45,6 @@ function Navbar({ toggleProfile, iconRef }) {
     progress,
     selectedData,
     setSelectedData,
-    setShowProfile,
-    showProfile,
     accountHolder,
     categories,
     setUserId,
@@ -468,7 +465,6 @@ function Navbar({ toggleProfile, iconRef }) {
         demolishTile: userResponses.demolishTile,
         hvacType: userResponses.hvacType,
         planType: selectedPlan,
-        totalprice: boqTotal,
         final_price: selectedData
           .map((item) => item.finalPrice || "")
           .filter(Boolean) // Removes empty strings
@@ -556,7 +552,6 @@ function Navbar({ toggleProfile, iconRef }) {
     setShowBoqPrompt(false);
 
     if (isNew) {
-      setBoqTitle(nameOrId); // If it's a new BOQ, use the entered name
       insertDataIntoSupabase(selectedData, userId, nameOrId, totalArea);
     } else {
       updateExistingBoq(nameOrId); // If updating an existing BOQ, use its ID

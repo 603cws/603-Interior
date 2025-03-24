@@ -42,7 +42,6 @@ function ProductOverview() {
     areasData,
     userResponses,
     selectedProductView,
-    setSelectedProductView,
     setShowProductView,
     setShowRecommend,
     showRecommend,
@@ -50,7 +49,6 @@ function ProductOverview() {
     searchQuery,
     priceRange,
     setMinimizedView,
-    setSelectedPlan,
   } = useApp();
 
   const instructions = {

@@ -110,7 +110,7 @@ export const fetchProductsData = async () => {
 
 export const fetchRoomData = async (userId) => {
   try {
-    const { data: layoutData, error: error } = await supabase
+    const { data: layoutData, error } = await supabase
       .from("layout")
       .select()
       .eq("userId", userId) // Filter by userId

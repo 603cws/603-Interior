@@ -12,8 +12,8 @@ import toast from "react-hot-toast";
 
 import { useState } from "react";
 
-import { useNavigate } from "react-router-dom";
-import emailjs from "@emailjs/browser";
+// import { useNavigate } from "react-router-dom";
+// import emailjs from "@emailjs/browser";
 
 const BecomeSeller = () => {
   const sectionRef = useRef(null);
@@ -37,7 +37,7 @@ const BecomeSeller = () => {
     setFormData({ ...form, [e.target.name]: e.target.value });
   };
 
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   const handleformsubmit = async (e) => {
     e.preventDefault();

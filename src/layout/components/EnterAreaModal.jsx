@@ -1,10 +1,8 @@
-import { MdCancel } from "react-icons/md";
 import { useState } from "react";
 import { useApp } from "../../Context/Context";
 
 function EnterAreaModal({ onclose }) {
-  const { inputValue, setInputValue, setTotalArea, setTotalAreaSource } =
-    useApp();
+  const { inputValue, setInputValue, setTotalArea } = useApp();
   const [error, setError] = useState(""); // State to store the error message
 
   const MIN_AREA = 1000;

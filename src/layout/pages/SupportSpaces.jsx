@@ -61,8 +61,6 @@ const SupportSpaces = ({
   initialAreaValues,
   areaQuantities,
   updateAreas,
-  // isOtherSelected,
-  setIsOtherSelected,
   // areaValues,
   // warning,
   otherArea,
@@ -75,7 +73,6 @@ const SupportSpaces = ({
   const { totalArea } = useApp();
   const handleOtherAreaChange = (event) => {
     const value = Math.max(0, Number(event.target.value)); // Prevent negative values
-    setIsOtherSelected(true);
     setOtherArea(value);
     updateAreas("other", value); // Update the area in the parent component
   };

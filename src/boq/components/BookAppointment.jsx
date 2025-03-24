@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import "react-calendar/dist/Calendar.css";
 import { SlCalender } from "react-icons/sl";
 import { PiWarningCircleFill } from "react-icons/pi";
@@ -137,7 +137,8 @@ function BookAppointment({ onClose }) {
   const saveBookingDatainDB = async (date, weekday, endtime) => {
     //
     try {
-      const { data, error } = await supabase.from("appointments").insert([
+      const { error } = await supabase.from("appointments").insert([
+        //data
         {
           user_id: accountHolder.userId, // Assuming accountHolder contains user ID
           date,

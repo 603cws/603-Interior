@@ -7,7 +7,6 @@ import Spinner from "../../common-components/Spinner";
 import { supabase } from "../../services/supabase";
 import toast from "react-hot-toast";
 import DashboardProductCard from "../vendor/DashboardProductCard";
-import { useApp } from "../../Context/Context";
 
 function VendorProductlist({ setVendorproductlist, selectedVendor }) {
   const [toggle, setToggle] = useState(true);

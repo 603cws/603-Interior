@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { useNavigate, useLocation } from "react-router-dom"; //useHref
-import countryList from "react-select-country-list";
 import { supabase } from "../../services/supabase"; // Import Supabase client
 import checkIfEmailExists from "../utils/checkIfEmailExists";
 import ErrorMiniModal from "../../common-components/ErrorMiniModal";
@@ -37,10 +36,10 @@ function RegisterUser() {
   const defaultCountry = countryOptions.find((c) => c.label.includes("India"));
   const [countryCode, setCountryCode] = useState(defaultCountry?.value || "");
 
-  const options = useMemo(() => countryList().getData(), []);
+  // const options = useMemo(() => countryList().getData(), []);
 
   const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-  const mobileRegex = /^(?!([0-9])\1{9})\d{10}$/;
+  const mobileRegex = useMemo(() => /^(?!([0-9])\1{9})\d{10}$/, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -74,13 +73,13 @@ function RegisterUser() {
 
   useEffect(() => {
     if (formData.password && formData.confirmPassword) {
-      const timeoutId = setTimeout(() => {
-        if (formData.password !== formData.confirmPassword) {
-          showErrorWithTimeout("confirmPassword", "Passwords do not match.");
-        } else {
-          showErrorWithTimeout("confirmPassword", ""); // Clear error when passwords match
-        }
-      }, 500);
+      // const timeoutId = setTimeout(() => {
+      //   if (formData.password !== formData.confirmPassword) {
+      //     showErrorWithTimeout("confirmPassword", "Passwords do not match.");
+      //   } else {
+      //     showErrorWithTimeout("confirmPassword", ""); // Clear error when passwords match
+      //   }
+      // }, 500);
     }
   }, [formData.password, formData.confirmPassword]); // Runs whenever password or confirmPassword changes
 
@@ -125,7 +124,7 @@ function RegisterUser() {
     }, 500);
 
     return () => clearTimeout(timeoutId);
-  }, [debouncedMobile]);
+  }, [debouncedMobile, mobileRegex]);
 
   const handleCountryCodeChange = (value) => {
     setCountryCode(value.value[0]);

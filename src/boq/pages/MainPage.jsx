@@ -5,11 +5,8 @@ const MainPage = ({ userResponses, setSelectedSubCategory1, productsData }) => {
   const {
     selectedCategory,
     selectedSubCategory,
-    setSelectedSubCategory,
     selectedSubCategory1,
-    // setSelectedSubCategory1,
     subCat1,
-    setSubCat1,
   } = useApp();
 
   useEffect(() => {

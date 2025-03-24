@@ -33,12 +33,13 @@ const sizeMapping = {
   lType: "5 X 4",
 };
 
-const sizeArea = {
-  M: "20 sq ft",
-  L: "24 sq ft",
-  XL: "29 sq ft",
-  lType: "34 sq ft",
-};
+// const sizeArea = {
+//   M: "20 sq ft",
+//   L: "24 sq ft",
+//   XL: "29 sq ft",
+//   lType: "34 sq ft",
+// };
+
 const sizeAreaMapping = {
   M: 20,
   L: 24,

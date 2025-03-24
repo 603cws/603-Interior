@@ -386,7 +386,6 @@ function Layout() {
   const [areaValues, setAreaValues] = useState(initialAreaValues);
   const [areaQuantities, setAreaQuantities] = useState(initialQuantities);
   const [variant, setVariant] = useState("L");
-  const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [mdCabinSize, setMdCabinSize] = useState(areaValues.md);
   const [breakoutRoomSize, setBreakoutRoomSize] = useState(
@@ -416,7 +415,6 @@ function Layout() {
   const [financeRoomSeatCount, setFinanceRoomSeatCount] = useState(0);
   const [boardRoomSeatCount, setBoardRoomSeatCount] = useState(0);
   const [conferenceRoomSeatCount, setConferenceRoomSeatCount] = useState(0);
-  const [isOtherSelected, setIsOtherSelected] = useState(false);
   const [warning, setWarning] = useState(false);
   const [otherArea, setOtherArea] = useState();
 
@@ -464,7 +462,7 @@ function Layout() {
   useEffect(() => {
     setReceptionSize(areaValues.reception);
     setLoungeSize(areaValues.lounge);
-  });
+  }, []);
 
   //setps for joyride
   const tourSteps = [
@@ -598,11 +596,11 @@ function Layout() {
   }, [totalArea, totalAreaSource]);
 
   const setErrorMessageHandler = (message) => {
-    setError(true);
     // setShowModal(true);
     setErrorMessage(message);
     setWarning(true);
   };
+
   const totalAreaWarning = () => {
     setAreaWarn(true);
   };
@@ -665,7 +663,6 @@ function Layout() {
       setBuiltArea(calculatedBuiltArea); // Update built area
       setAreaQuantities(newAreaQuantities); // Update area quantities
       setAreaValues(newAreaValues); // Update area values
-      setError(false);
     } else {
       console.log(
         "Built area exceeds the available space, showing error message"
@@ -956,7 +953,6 @@ function Layout() {
           <SupportSpaces
             areaQuantities={areaQuantities}
             updateAreas={updateAreas}
-            setIsOtherSelected={setIsOtherSelected}
             areaValues={areaValues}
             warning={warning}
             otherArea={otherArea}

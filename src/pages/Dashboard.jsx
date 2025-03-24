@@ -1,5 +1,5 @@
 import { RiDashboardFill } from "react-icons/ri";
-import { MdOutlineModeEdit, MdDeleteOutline } from "react-icons/md";
+import { MdDeleteOutline } from "react-icons/md";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useApp } from "../Context/Context";
 import { supabase } from "../services/supabase";
@@ -14,7 +14,6 @@ import { VscSignOut } from "react-icons/vsc";
 import { IoSettingsSharp } from "react-icons/io5";
 import { LuBlend } from "react-icons/lu";
 import { TiHomeOutline } from "react-icons/ti";
-import { FaAngleDown, FaAngleUp } from "react-icons/fa";
 import { BsQuestionCircle } from "react-icons/bs";
 import Spinner from "../common-components/Spinner";
 import DashboardProductCard from "./vendor/DashboardProductCard";
@@ -32,7 +31,6 @@ function Dashboard() {
   const [dashboard, setDashboard] = useState(true);
   const [currentSection, setCurrentSection] = useState("Dashboard");
   const [help, setHelp] = useState(false);
-  const [expandedIndex, setExpandedIndex] = useState();
   const [isExpanded, setIsExpanded] = useState(false);
   const [boqdata, setboqdata] = useState();
   const {
@@ -805,22 +803,22 @@ function Dashboard() {
                                       <CiMenuKebab size={25} />
                                     </button>
 
-                                  {openMenuId === item.id && (
-                                    <div
-                                      ref={(el) =>
-                                        (menuRef.current[item.id] = el)
-                                      }
-                                      className="absolute top-1/2 left-0 transform mt-2 bg-white border border-gray-300 shadow-md rounded-md w-24 z-10"
-                                    >
-                                      <button
-                                        onClick={() => {
-                                          handleProductPreview(item);
-                                        }}
-                                        className=" flex gap-2 items-center w-full text-left px-3 py-2 hover:bg-gray-200"
+                                    {openMenuId === item.id && (
+                                      <div
+                                        ref={(el) =>
+                                          (menuRef.current[item.id] = el)
+                                        }
+                                        className="absolute top-1/2 left-0 transform mt-2 bg-white border border-gray-300 shadow-md rounded-md w-24 z-10"
                                       >
-                                        <VscEye /> view
-                                      </button>
-                                      {/* <button
+                                        <button
+                                          onClick={() => {
+                                            handleProductPreview(item);
+                                          }}
+                                          className=" flex gap-2 items-center w-full text-left px-3 py-2 hover:bg-gray-200"
+                                        >
+                                          <VscEye /> view
+                                        </button>
+                                        {/* <button
                                         onClick={() => {
                                           handleDelete(item);
                                         }}
@@ -828,11 +826,11 @@ function Dashboard() {
                                       >
                                         <MdOutlineDelete /> Delete
                                       </button> */}
-                                    </div>
-                                  )}
-                                </td>
-                              </tr>
-                            ))}
+                                      </div>
+                                    )}
+                                  </td>
+                                </tr>
+                              ))}
                           </tbody>
                         </table>
                       </div>

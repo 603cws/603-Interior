@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import Cabins from "../pages/Cabins";
 
 const AreaCounter = ({
   name,
@@ -108,7 +107,8 @@ const AreaCounter = ({
           step={step}
           value={value}
           onChange={handleInputChange}
-          className="border-2 text-center mx-2 rounded-md [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+          readOnly
+          className="border-2 text-center mx-2 rounded-md [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none pointer-events-none select-none"
         />
         <button
           onClick={handleIncrement}

@@ -6,7 +6,7 @@ import { supabase } from "../../services/supabase";
 
 function UserSetting() {
   const { accountHolder, setAccountHolder } = useApp();
-  const { register, handleSubmit, reset, setValue } = useForm();
+  const { register, handleSubmit, setValue } = useForm(); //reset
   const [profileImage, setProfileImage] = useState(accountHolder.profileImage);
   const [profileImagesOption, setProfileImagesOption] = useState(false);
 

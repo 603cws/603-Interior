@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react"; //useState
+import { useEffect, useState } from "react"; //useState
 import { MdOutlineCancel } from "react-icons/md";
 import { useApp } from "../../Context/Context";
 import Addon from "./Addon";
@@ -21,7 +21,6 @@ function SelectArea({
     selectedSubCategory,
     selectedSubCategory1,
     userResponses,
-    setUserResponses,
     setSelectedData,
     areasData,
     quantityData,
@@ -36,8 +35,8 @@ function SelectArea({
   const [submitBtn, setSubmitBtn] = useState(false);
   // const [disabledAreas, setDisabledAreas] = useState([]);
 
-  const baseImageUrl =
-    "https://bwxzfwsoxwtzhjbzbdzs.supabase.co/storage/v1/object/public/addon/";
+  // const baseImageUrl =
+  //   "https://bwxzfwsoxwtzhjbzbdzs.supabase.co/storage/v1/object/public/addon/";
 
   const [selectedAddonsMap, setSelectedAddonsMap] = useState({});
 

@@ -33,11 +33,8 @@ function Navbar({
   const {
     setTotalArea,
     totalArea,
-    // inputValue,
-    // setInputValue,
     setTotalAreaSource,
     userId,
-    selectedPlan,
     setSelectedPlan,
   } = useApp();
 
@@ -128,7 +125,7 @@ function Navbar({
       const fileName = `area_distribution_${Date.now()}.png`;
 
       // ✅ Upload Image to Supabase Storage
-      const { data, error } = await supabase.storage
+      const { error } = await supabase.storage
         .from("addon")
         .upload(fileName, blob, { contentType: "image/png" });
 
@@ -145,20 +142,19 @@ function Navbar({
   };
 
   const generateBOQclick = () => {
-     if (totalArea >= MIN_AREA && totalArea <= MAX_AREA) {
+    if (totalArea >= MIN_AREA && totalArea <= MAX_AREA) {
+      localStorage.removeItem("selectedPlan");
+      localStorage.removeItem("hasSeenQuestionPopup");
+      setSelectedPlan(null);
+      const usedPercentage = (builtArea / totalArea) * 100;
 
-    localStorage.removeItem("selectedPlan");
-    localStorage.removeItem("hasSeenQuestionPopup");
-    setSelectedPlan(null);
-    const usedPercentage = (builtArea / totalArea) * 100;
-
-    if (usedPercentage < 90) {
-      setUnusedArea(totalArea - builtArea);
-      setShowWarning(true);
-      return;
-    } else {
-      handlegenrateboq();
-}
+      if (usedPercentage < 90) {
+        setUnusedArea(totalArea - builtArea);
+        setShowWarning(true);
+        return;
+      } else {
+        handlegenrateboq();
+      }
     }
   };
 

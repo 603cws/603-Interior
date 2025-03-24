@@ -9,7 +9,7 @@ function LandingNavbar({ bgColor = false }) {
   const { setShowProfile, showProfile, isAuthenticated, accountHolder } =
     useApp();
 
-  const isadmin = accountHolder.role === "admin" ? true : false;
+  // const isadmin = accountHolder.role === "admin" ? true : false;
 
   const toggleProfile = () => {
     setShowProfile(!showProfile);

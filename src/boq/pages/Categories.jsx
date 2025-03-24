@@ -13,7 +13,6 @@ const Categories = ({
     minimizedView,
     categories,
     userResponses,
-    quantityData,
   } = useApp();
 
   const getCleanedCategoryName = (categoryName) => {

@@ -1,5 +1,4 @@
 import React from "react";
-import { BsArrowsAngleExpand } from "react-icons/bs";
 import { MdClose } from "react-icons/md";
 import { PiWarningCircleFill } from "react-icons/pi";
 
