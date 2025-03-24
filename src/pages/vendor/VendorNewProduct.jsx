@@ -249,6 +249,8 @@ function VendorNewProduct({ setAddNewProduct, setProductlist }) {
     } catch (error) {
       console.log("Error in onSubmit:", error);
       toast.error("An unexpected error occurred.");
+    } finally {
+      handleFormClear();
     }
   };
 

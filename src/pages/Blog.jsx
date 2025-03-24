@@ -54,46 +54,85 @@ function Blog() {
     {
       blogimage: "/images/contact1.png",
       profileicon: "/images/usericon.png",
-      name: "name",
-      title: "developing usefull product that would meet user’s needs",
-      des: "Lorem Ipsum is simply dummy text of the printing andtypesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an",
+      name: "sakshi",
+      title:
+        "The Future of Office Design: Trends That Will Shape Workspaces in 2025",
+      des: "The way we design office spaces is evolving rapidly. With hybrid work models, a focus on employee well-being, and advancements in technology, companies are rethinking how they utilize their office spaces. ",
     },
     {
       blogimage: "/images/contact1.png",
       profileicon: "/images/usericon.png",
-      name: "name",
-      title: "developing usefull product that would meet user’s needs",
-      des: "Lorem Ipsum is simply dummy text of the printing andtypesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an",
+      name: "Sakshi ",
+      title: "How to Design a Productive Office Space: A Step-by-Step Guide",
+      des: "A well-designed office isn’t just about aesthetics—it directly impacts employee productivity, engagement, and overall job satisfaction",
     },
     {
       blogimage: "/images/contact1.png",
       profileicon: "/images/usericon.png",
-      name: "name",
-      title: "developing usefull product that would meet user’s needs",
-      des: "Lorem Ipsum is simply dummy text of the printing andtypesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an",
+      name: "Sakshi ",
+      title: "How AI & Automation Are Changing Interior Design for Offices",
+      des: "Gone are the days of manual floor plans and traditional office setups. AI and automation are revolutionizing how companies design their workspaces, making office planning faster, smarter, and more cost-effective. ",
     },
     {
       blogimage: "/images/contact1.png",
       profileicon: "/images/usericon.png",
-      name: "name",
-      title: "developing usefull product that would meet user’s needs",
-      des: "Lorem Ipsum is simply dummy text of the printing andtypesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an",
+      name: "Sakshi ",
+      title: "How Office Design Impacts Employee Productivity & Well-Being",
+      des: "Your office space is more than just a place to work—it influences mood, motivation, and overall productivity. A well-designed workspace can enhance focus, reduce stress, and foster collaboration, while a poorly planned office can lead to distractions, fatigue, and disengagement.",
     },
     {
       blogimage: "/images/contact1.png",
       profileicon: "/images/usericon.png",
-      name: "name",
-      title: "developing usefull product that would meet user’s needs",
-      des: "Lorem Ipsum is simply dummy text of the printing andtypesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an",
-    },
-    {
-      blogimage: "/images/contact1.png",
-      profileicon: "/images/usericon.png",
-      name: "name",
-      title: "developing usefull product that would meet user’s needs",
-      des: "Lorem Ipsum is simply dummy text of the printing andtypesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an",
+      name: "Sakshi ",
+      title: "10 Office Design Mistakes That Are Killing Your Productivity",
+      des: "Your officeYour office layout might be working against you. From poor lighting to cluttered spaces, minor design flaws can impact focus and efficiency. layout might be working against you. From poor lighting to cluttered spaces, minor design flaws can impact focus and efficiency.",
     },
   ];
+  // const blogs = [
+  //   {
+  //     blogimage: "/images/contact1.png",
+  //     profileicon: "/images/usericon.png",
+  //     name: "name",
+  //     title:
+  //       "The Future of Office Design: Trends That Will Shape Workspaces in 2025",
+  //     des: "Lorem Ipsum is simply dummy text of the printing andtypesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an",
+  //   },
+  //   {
+  //     blogimage: "/images/contact1.png",
+  //     profileicon: "/images/usericon.png",
+  //     name: "name",
+  //     title: "developing usefull product that would meet user’s needs",
+  //     des: "Lorem Ipsum is simply dummy text of the printing andtypesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an",
+  //   },
+  //   {
+  //     blogimage: "/images/contact1.png",
+  //     profileicon: "/images/usericon.png",
+  //     name: "name",
+  //     title: "developing usefull product that would meet user’s needs",
+  //     des: "Lorem Ipsum is simply dummy text of the printing andtypesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an",
+  //   },
+  //   {
+  //     blogimage: "/images/contact1.png",
+  //     profileicon: "/images/usericon.png",
+  //     name: "name",
+  //     title: "developing usefull product that would meet user’s needs",
+  //     des: "Lorem Ipsum is simply dummy text of the printing andtypesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an",
+  //   },
+  //   {
+  //     blogimage: "/images/contact1.png",
+  //     profileicon: "/images/usericon.png",
+  //     name: "name",
+  //     title: "developing usefull product that would meet user’s needs",
+  //     des: "Lorem Ipsum is simply dummy text of the printing andtypesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an",
+  //   },
+  //   {
+  //     blogimage: "/images/contact1.png",
+  //     profileicon: "/images/usericon.png",
+  //     name: "name",
+  //     title: "developing usefull product that would meet user’s needs",
+  //     des: "Lorem Ipsum is simply dummy text of the printing andtypesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an",
+  //   },
+  // ];
 
   return (
     <>
@@ -156,7 +195,7 @@ function Blog() {
                           <img src={blog.profileicon} alt="user icon" />
                         </div>
 
-                        <h3 className="text-[#B1B1B1]">Name</h3>
+                        <h3 className="text-[#B1B1B1]">{blog.name}</h3>
                       </div>
                       {/* <h6 className="font-semibold text-xl capitalize mb-1">
                         developing usefull product that would meet user’s needs
@@ -190,20 +229,14 @@ function Blog() {
       </section>
 
       {/* new latest section */}
-      <section>
+      {/* <section>
         <div className="container mx-auto my-10">
-          {/* header */}
           <h2 className="capitalize text-2xl font-lato lg:text-5xl text-center my-3 lg:my-5 xl:my-10 ">
             latest news
           </h2>
 
-          {/* div for blog*/}
-          {/* <div className="xl:flex justify-around"> */}
           <div className="xl:flex justify-around">
-            {/* div for card */}
-            {/* card */}
             <div className="xl:max-w-2xl 2xl:max-w-4xl rounded overflow-hidden shadow-lg">
-              {/* image */}
               <div className="">
                 <img
                   src="/images/contact1.png"
@@ -211,9 +244,8 @@ function Blog() {
                   className="w-full h-[380px]"
                 />
               </div>
-              {/* text */}
+
               <div className="font-Poppins mx-5">
-                {/* user div */}
                 <div className="flex justify-start items-center w-3/4 gap-5 my-4 xl:my-6">
                   <div>
                     <img src="/images/usericon.png" alt="user icon" />
@@ -229,18 +261,10 @@ function Blog() {
                   typesetting industry. Lorem Ipsum has been the industry's
                   standard dummy text ever since the 1500s, when an{" "}
                 </p>
-
-                {/* <div className="flex justify-end items-center my-5">
-                  <img src="/images/blogicon.svg" alt="" />
-                </div> */}
               </div>
             </div>
-
-            {/* div for two cards */}
             <div className=" flex justify-around mt-10 xl:flex-col xl:mt-0">
-              {/* card */}
               <div className="max-w-sm rounded overflow-hidden shadow-lg mb-4">
-                {/* image */}
                 <div>
                   <img
                     src="/images/contact1.png"
@@ -248,9 +272,8 @@ function Blog() {
                     className="w-full h-[150px]"
                   />
                 </div>
-                {/* text */}
+
                 <div className="font-Poppins mx-5">
-                  {/* user div */}
                   <div className="flex justify-start items-center w-3/4 gap-5 my-4">
                     <div>
                       <img src="/images/usericon.png" alt="user icon" />
@@ -266,15 +289,10 @@ function Blog() {
                     typesetting industry. Lorem Ipsum has been the industry's
                     standard dummy text ever since the 1500s, when an{" "}
                   </p>
-
-                  {/* <div className="flex justify-end items-center my-5">
-                    <img src="/images/blogicon.svg" alt="" />
-                  </div> */}
                 </div>
               </div>
-              {/* card */}
+
               <div className="max-w-sm rounded overflow-hidden shadow-lg">
-                {/* image */}
                 <div>
                   <img
                     src="/images/contact1.png"
@@ -282,9 +300,8 @@ function Blog() {
                     className="w-full h-[150px]"
                   />
                 </div>
-                {/* text */}
+
                 <div className="font-Poppins mx-5">
-                  {/* user div */}
                   <div className="flex justify-start items-center w-3/4 gap-5 my-4">
                     <div>
                       <img src="/images/usericon.png" alt="user icon" />
@@ -300,16 +317,12 @@ function Blog() {
                     typesetting industry. Lorem Ipsum has been the industry's
                     standard dummy text ever since the 1500s, when an{" "}
                   </p>
-                  {/* 
-                  <div className="flex justify-end items-center my-5">
-                    <img src="/images/blogicon.svg" alt="" />
-                  </div> */}
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* Daily highlights */}
       {/* <section className="container mx-auto">

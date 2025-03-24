@@ -210,9 +210,9 @@ function Carrer() {
                 603 <br /> Interiors you can also network with some of the most
                 talented people in the <br /> industry
               </p>
-              <button className="px-10 py-3 font-semibold text-[#34BFAD] uppercase border-t border-l border-[#34BFAD] border-r-black border-b-black border-r-2 border-b-2 bg-[#f8f8f8] hover:bg-[#34BFAD] hover:text-white tracking-widest">
+              {/* <button className="px-10 py-3 font-semibold text-[#34BFAD] uppercase border-t border-l border-[#34BFAD] border-r-black border-b-black border-r-2 border-b-2 bg-[#f8f8f8] hover:bg-[#34BFAD] hover:text-white tracking-widest">
                 Read More
-              </button>
+              </button> */}
             </div>
           </div>
         </section>

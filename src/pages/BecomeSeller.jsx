@@ -198,7 +198,7 @@ const BecomeSeller = () => {
             <h2 className="uppercase font-bold text-3xl">how it works</h2>
           </div>
           {/* infor */}
-          <div className="flex justify-center gap-4 bg-[#F4F4F4] py-5">
+          <div className="flex justify-center gap-4 bg-[#F4F4F4] rounded-2xl py-5">
             {/* info card */}
             <div className="max-w-sm">
               <div className="flex  items-center gap-3">

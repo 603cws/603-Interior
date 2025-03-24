@@ -13,27 +13,27 @@ function HelpnFaq() {
 
   const generalquestions = [
     {
-      title: "1.What is 603 Interiors?",
+      title: "What is 603 Interiors?",
       content:
         "603 Interiors is a tech-driven platform that helps corporates design and set up their office spaces with instant layouts, smart BOQs, and vendor partnerships, ensuring a hassle-free experience",
     },
     {
-      title: "2.Who can use 603 Interiors?",
+      title: "Who can use 603 Interiors?",
       content:
         "Our platform is designed for corporates, startups, office administrators, HR teams, and real estate decision-makers looking for efficient office space planning and execution.",
     },
     {
-      title: "3.How does 603 Interiors simplify office setup?",
+      title: "How does 603 Interiors simplify office setup?",
       content:
         "We eliminate the need for lengthy consultations by offering instant office layouts, predefined and custom BOQs, and direct vendor collaboration, saving you time and costs.",
     },
     {
-      title: "4.Is 603 Interiors only for large businesses?",
+      title: "Is 603 Interiors only for large businesses?",
       content:
         "No, we cater to businesses of all sizes, from small startups to large corporations, providing scalable solutions for workspace design.",
     },
     {
-      title: "5.Can I get a customized office layout?",
+      title: "Can I get a customized office layout?",
       content:
         "Yes! You can input your office requirements, and our system generates a tailored layout to match your needs.",
     },
@@ -41,111 +41,111 @@ function HelpnFaq() {
 
   const layoutofficeQuestion = [
     {
-      title: "1.What is a BOQ (Bill of Quantities)?",
+      title: "What is a BOQ (Bill of Quantities)?",
       content:
         "A BOQ is a detailed breakdown of materials, furniture, and services needed to set up your office, along with estimated costs.",
     },
     {
-      title: "2.Do you offer predefined BOQs?",
+      title: "Do you offer predefined BOQs?",
       content:
         "Yes, we provide Basic, Luxury, and Ultra Luxury predefined BOQs that streamline decision-making.",
     },
     {
-      title: "3.Can I customize my BOQ?",
+      title: "Can I customize my BOQ?",
       content:
         "Absolutely! You can add, remove, or modify products based on your requirements.",
     },
     {
-      title: "4.How accurate are the estimated costs in the BOQ?",
+      title: "How accurate are the estimated costs in the BOQ?",
       content:
         "The BOQ provides realistic cost estimates based on vendor pricing and industry standards, ensuring transparency.",
     },
     {
-      title: "5.Do you provide recommendations for vendors and products?",
+      title: "Do you provide recommendations for vendors and products?",
       content:
         "Yes! Based on your needs, we recommend vendors and products, ensuring quality and efficiency.",
     },
   ];
   const vendorQuestion = [
     {
-      title: "1.Which brands do you collaborate with?",
+      title: "Which brands do you collaborate with?",
       content:
         "We work with trusted brands like Mitsubishi, Daikin, Featherlite, and more, offering premium office solutions.",
     },
     {
       title:
-        "2.Can we choose which category our brand appears in for predefined BOQs?",
+        "Can we choose which category our brand appears in for predefined BOQs?",
       content:
         "Yes! Brands can select categories for their products in our predefined BOQs for maximum visibility.",
     },
     {
-      title: "3.How can vendors partner with 603 Interiors?",
+      title: "How can vendors partner with 603 Interiors?",
       content:
         "Vendors can collaborate with us by listing their products on our platform, gaining exposure to corporate clients.",
     },
     {
-      title: "4.What are the benefits of listing our brand with 603 Interiors?",
+      title: "What are the benefits of listing our brand with 603 Interiors?",
       content:
         "Partner brands get direct visibility, increased sales opportunities, and premium positioning in our curated BOQs.",
     },
     {
-      title: "5.Can vendors set their own pricing on the platform?",
+      title: "Can vendors set their own pricing on the platform?",
       content:
         "Yes, vendors can list their pricing while ensuring competitive market rates.",
     },
   ];
   const executionQuestion = [
     {
-      title: "1.Do you provide end-to-end execution for office interiors?",
+      title: "Do you provide end-to-end execution for office interiors?",
       content:
         "Yes, we handle everything from design planning to procurement and execution, ensuring a seamless process.",
     },
     {
-      title: "2.Can we work with our own architects and vendors?",
+      title: "Can we work with our own architects and vendors?",
       content:
         "Yes, our platform is flexible, allowing you to integrate your own team while benefiting from our tools and recommendations.",
     },
     {
-      title: "3.How do you ensure quality in execution?",
+      title: "How do you ensure quality in execution?",
       content:
         "We collaborate with trusted brands and professionals, ensuring high standards in materials and workmanship.",
     },
     {
       title:
-        "4.Can I get assistance in negotiating with landlords based on my office layout?",
+        "Can I get assistance in negotiating with landlords based on my office layout?",
       content:
         "Yes! Our layout tools help you optimize space and negotiate better lease terms before signing contracts.",
     },
     {
       title:
-        "5.What if my office requirements change after generating the layout?",
+        "What if my office requirements change after generating the layout?",
       content:
         "No worries! You can modify your layout and BOQ as needed before finalizing your plan.",
     },
   ];
   const paymentQuestion = [
     {
-      title: "1.Is using 603 Interiors free?",
+      title: "Is using 603 Interiors free?",
       content:
         "Generating an office layout and exploring BOQs is free, but charges apply for vendor collaborations and execution services.",
     },
     {
-      title: "2.How do I make payments for selected products and services?",
+      title: "How do I make payments for selected products and services?",
       content:
         "Payments can be made directly through the platform or as per vendor agreements.",
     },
     {
-      title: "3.Do you offer financing or payment plans?",
+      title: "Do you offer financing or payment plans?",
       content:
         "We are working on flexible payment solutions with our vendor partners—stay tuned!",
     },
     {
-      title: "4.Are there any hidden charges?",
+      title: "Are there any hidden charges?",
       content:
         "No, we believe in 100% transparency—all costs are clearly outlined in your BOQ.",
     },
     {
-      title: "5.How do I get started with 603 Interiors?",
+      title: "How do I get started with 603 Interiors?",
       content:
         "Simply sign up, enter your office details, explore layouts, and generate your BOQ—all in a few clicks!",
     },
@@ -254,7 +254,7 @@ function HelpnFaq() {
             onClick={() => scrollToSection("sectionPayment")}
           >
             <div>
-              <img src="/images/hlepnfaq1.png" alt="helpfaq" />
+              <img src="/images/paymentHelp.png" alt="helpfaq" />
             </div>
             <h3 className="text-lg text-center">Pricing & Payments</h3>
           </div>

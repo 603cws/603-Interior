@@ -357,12 +357,20 @@ function Contactus() {
                 </h3>
                 <div className="flex gap-3 mt-4 items-center">
                   {/* <RiInstagramFill size={50} color="#1F5C54" /> */}
-                  <div className="cursor-pointer w-12 h-12 rounded-full bg-[#34BFAD] flex justify-center items-center">
+                  <a
+                    href=" https://www.instagram.com/603.interiors/"
+                    target="_blank"
+                    className="cursor-pointer w-12 h-12 rounded-full bg-[#34BFAD] flex justify-center items-center"
+                  >
                     <RiInstagramFill size={35} />
-                  </div>
-                  <div className="cursor-pointer w-12 h-12 rounded-full bg-[#34BFAD] flex justify-center items-center">
+                  </a>
+                  <a
+                    href=" https://www.facebook.com/profile.php?id=61561253712041"
+                    target="_blank"
+                    className="cursor-pointer w-12 h-12 rounded-full bg-[#34BFAD] flex justify-center items-center"
+                  >
                     <RiFacebookCircleFill size={35} />
-                  </div>
+                  </a>
                   <div className="cursor-pointer w-12 h-12 rounded-full bg-[#34BFAD] flex justify-center items-center">
                     <RiLinkedinBoxFill size={35} />
                   </div>

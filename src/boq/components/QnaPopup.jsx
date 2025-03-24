@@ -25,7 +25,7 @@ const QnaPopup = ({ onClose, onSubmit }) => {
         { value: "bareShell", label: "Bare Shell" },
         { value: "basicTiling", label: "Basic Tiling Done" },
       ],
-      ImageUrl: "/images/Chat-bot.gif",
+      ImageUrl: "/images/Flooringquestion.gif",
     },
   ];
 

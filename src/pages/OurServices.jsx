@@ -92,7 +92,7 @@ function OurServices() {
           {services.map((service, index) => (
             <div
               key={index}
-              className={`relative flex flex-col text-center transition-all duration-500 ease-in-out overflow-hidden bg-[#1F5C54] cursor-pointer
+              className={`relative flex flex-col text-center transition-all duration-500 ease-in-out overflow-hidden bg-[#1F5C54] 
               ${
                 expandedIndex === index
                   ? "w-[467px] h-full justify-end"
@@ -155,10 +155,10 @@ function OurServices() {
                     {service.description}
                   </p>
                   {/* Arrow Icon - Stick to the bottom */}
-                  <BsFillArrowUpRightCircleFill
+                  {/* <BsFillArrowUpRightCircleFill
                     size={20}
                     className="text-[#34BFAD] bg-black rounded-full self-end"
-                  />
+                  /> */}
                 </div>
               </div>
             </div>

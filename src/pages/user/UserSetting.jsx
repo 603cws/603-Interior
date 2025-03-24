@@ -3,6 +3,7 @@ import { useApp } from "../../Context/Context";
 import { useEffect, useState } from "react";
 import { BsCameraFill } from "react-icons/bs";
 import { supabase } from "../../services/supabase";
+import toast from "react-hot-toast";
 
 function UserSetting() {
   const { accountHolder, setAccountHolder } = useApp();
@@ -86,11 +87,11 @@ function UserSetting() {
 
       if (error) {
         console.error("Error updating profile:", error);
-        alert("Failed to update profile");
+        toast.error("Failed to update profile");
         return;
       }
 
-      alert("Profile updated successfully!");
+      toast.success("Profile updated successfully!");
 
       // ✅ Update accountHolder state after successful update
       setAccountHolder((prev) => ({

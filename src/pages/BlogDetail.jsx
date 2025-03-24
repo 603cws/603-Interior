@@ -63,7 +63,12 @@ function BlogDetail() {
                   </h2> */}
                   <h2 className="leading-snug"> {blog.title}</h2>
                 </div>
-                <p className="xl:text-xl mb-5">
+                <div
+                  className="xl:text-xl mb-5 text-gray-700"
+                  dangerouslySetInnerHTML={{ __html: blog.content }}
+                ></div>
+
+                {/* <p className="xl:text-xl mb-5">
                   Lorem Ipsum is simply dummy text of the printing and
                   typesetting industry. Lorem Ipsum has been the industry's
                   standard dummy text ever since the 1500s, when an
@@ -82,7 +87,7 @@ function BlogDetail() {
                   Lorem Ipsum is simply dummy text of the printing and
                   typesetting industry. Lorem Ipsum has been the industry's
                   standard dummy text ever since the 1500s, when an
-                </p>
+                </p> */}
               </div>
             </div>
           </div>

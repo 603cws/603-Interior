@@ -109,8 +109,18 @@ function Footer() {
           <div className="capitalize">
             <h3 className="font-semibold text-xl">follow us on</h3>
             <div className="flex gap-4 mt-2">
-              <FaInstagram size={24} className="cursor-pointer" />
-              <FiFacebook size={24} className="cursor-pointer" />
+              <a
+                href=" https://www.instagram.com/603.interiors/"
+                target="_blank"
+              >
+                <FaInstagram size={24} className="cursor-pointer" />
+              </a>
+              <a
+                href=" https://www.facebook.com/profile.php?id=61561253712041"
+                target="_blank"
+              >
+                <FiFacebook size={24} className="cursor-pointer" />
+              </a>
               <RiTwitterXLine size={24} className="cursor-pointer" />
               <FiLinkedin size={24} className="cursor-pointer" />
             </div>

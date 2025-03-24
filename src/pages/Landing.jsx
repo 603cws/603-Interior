@@ -110,27 +110,27 @@ function Landing() {
 
   const accordionItems = [
     {
-      title: "1.What is 603 Interiors?",
+      title: "What is 603 Interiors?",
       content:
         "603 Interiors is a tech-driven platform that helps corporates design and set up their office spaces with instant layouts, smart BOQs, and vendor partnerships, ensuring a hassle-free experience",
     },
     {
-      title: "2.Who can use 603 Interiors?",
+      title: "Who can use 603 Interiors?",
       content:
         "Our platform is designed for corporates, startups, office administrators, HR teams, and real estate decision-makers looking for efficient office space planning and execution.",
     },
     {
-      title: "3.How does 603 Interiors simplify office setup?",
+      title: "How does 603 Interiors simplify office setup?",
       content:
         "We eliminate the need for lengthy consultations by offering instant office layouts, predefined and custom BOQs, and direct vendor collaboration, saving you time and costs.",
     },
     {
-      title: "4.Is 603 Interiors only for large businesses?",
+      title: "Is 603 Interiors only for large businesses?",
       content:
         "No, we cater to businesses of all sizes, from small startups to large corporations, providing scalable solutions for workspace design.",
     },
     {
-      title: "5.Can I get a customized office layout?",
+      title: "Can I get a customized office layout?",
       content:
         "Yes! You can input your office requirements, and our system generates a tailored layout to match your needs.",
     },
@@ -441,7 +441,7 @@ function Landing() {
       {/* section for buy  */}
 
       {/* section our Work */}
-      <section className="py-6">
+      <section className="py-6 bg-[#F4F4F4] ">
         {/* container */}
         <div className="container max-w-full overflow-x-hidden py-2">
           {/* textual part */}
@@ -484,35 +484,35 @@ function Landing() {
             className="swiper_container max-w-screen overflow-x-hidden"
           >
             <SwiperSlide>
-              <img src="/images/our-work/our-work-1.png" alt="work section" />
+              <img src="/images/ourwork1.jpg" alt="work section" />
             </SwiperSlide>
             <SwiperSlide>
-              <img src="/images/our-work/our-work-2.png" alt="work section" />
+              <img src="/images/ourwork2.jpg" alt="work section" />
             </SwiperSlide>
             <SwiperSlide>
-              <img src="/images/our-work/our-work-3.png" alt="work section" />
+              <img src="/images/ourwork3.jpeg" alt="work section" />
             </SwiperSlide>
             <SwiperSlide>
-              <img src="/images/our-work/our-work-4.png" alt="work section" />
+              <img src="/images/ourwork4.JPG" alt="work section" />
             </SwiperSlide>
             <SwiperSlide>
+              <img src="/images/ourwork5.jpg" alt="work section" />
+            </SwiperSlide>
+            <SwiperSlide>
+              <img src="/images/ourwork6.jpg" alt="work section" />
+            </SwiperSlide>
+            <SwiperSlide>
+              <img src="/images/ourwork7.jpg" alt="work section" />
+            </SwiperSlide>
+            <SwiperSlide>
+              <img src="/images/ourwork8.jpg" alt="work section" />
+            </SwiperSlide>
+            <SwiperSlide>
+              <img src="/images/ourwork9.JPG" alt="work section" />
+            </SwiperSlide>
+            {/* <SwiperSlide>
               <img src="/images/our-work/our-work-5.png" alt="work section" />
-            </SwiperSlide>
-            <SwiperSlide>
-              <img src="/images/our-work/our-work-6.jpg" alt="work section" />
-            </SwiperSlide>
-            <SwiperSlide>
-              <img src="/images/our-work/our-work-7.png" alt="work section" />
-            </SwiperSlide>
-            <SwiperSlide>
-              <img src="/images/our-work/our-work-8.png" alt="work section" />
-            </SwiperSlide>
-            <SwiperSlide>
-              <img src="/images/our-work/our-work-9.png" alt="work section" />
-            </SwiperSlide>
-            <SwiperSlide>
-              <img src="/images/our-work/our-work-5.png" alt="work section" />
-            </SwiperSlide>
+            </SwiperSlide> */}
             <div className="slider-controler">
               <div className="swiper-button-prev slider-arrow !static ml-[12%]">
                 <BiSolidLeftArrowSquare
@@ -533,7 +533,7 @@ function Landing() {
       </section>
 
       {/* section 5 */}
-      <section className="mt-6 relative bg-white shadow-[0px_0px_20px_rgba(0,0,0,0.1)]">
+      <section className="pt-6 relative bg-[#F4F4F4] shadow-[0px_0px_20px_rgba(0,0,0,0.1)]">
         {/* container */}
         <div className="container mx-auto flex flex-col py-10">
           {/* text */}
@@ -588,7 +588,7 @@ function Landing() {
 
       {/* section6 */}
       {/* <section className="bg-gradient-to-t from-[#f4f4f4] via-[#f4f4f4] to-[#D0D0D0] "> */}
-      <section className=" ">
+      <section className=" bg-[#F4F4F4] ">
         <div className="container mx-auto flex justify-around items-center py-10 ">
           <div>
             {/* <div className="w-[350px] h-[520.78px] px-[30px] py-[37px] bg-[#1f5c54] rounded-tr-[200px] rounded-bl-[200px] rounded-br-[200px] flex-col justify-start items-center gap-[18px] inline-flex "> */}
@@ -602,23 +602,24 @@ function Landing() {
               <div className="h-[255px] flex items-center justify-center px-2">
                 {/* <div className="w-[300px] h-[255px] left-[-5px] top-0 absolute text-center text-white text-[15px] font-normal font-['Lora'] leading-normal" */}
                 <p className="mt-10 text-justify text-white text-sm font-['Lora'] leading-normal">
-                  Creativity flows freely at 603 The Coworking Space. As a
-                  content creator, I find the ambiance truly inspiring. Being
-                  surrounded by fellow creatives has led to unexpected
-                  collaborations and projects. It's like working in a hub of
-                  innovation, and I couldn't be happier with my choice.
+                  Workved Interiors transformed our office into a space that
+                  perfectly blends functionality with modern aesthetics. Their
+                  team understood our requirements and executed the project
+                  seamlessly, ensuring a workspace that enhances productivity
+                  and employee well-being. The attention to detail and quality
+                  craftsmanship truly set them apart!
                 </p>
               </div>
               <img
                 className="w-[100px] h-[100px] relative rounded-[100px] border border-[#1a3a36]"
-                src="/images/home/testimonalicon.png"
+                src="/images/testimonalreview1.png"
                 alt="testimonal person "
               />
-              <div className="self-stretch h-[18.89px] text-center text-white text-lg font-bold font-['DM Sans'] uppercase leading-[29.60px] tracking-[3.52px]">
-                Sakshi
+              <div className="self-stretch h-[18.89px] text-center text-white text-sm font-bold font-['DM Sans'] uppercase leading-[29.60px] tracking-[3.52px]">
+                Hussain
               </div>
-              <div className="self-stretch h-[18.89px] text-center text-[#33bead] text-lg font-bold font-['DM Sans'] uppercase leading-[29.60px] tracking-[3.52px]">
-                Manager
+              <div className="self-stretch h-[18.89px] text-center text-[#33bead] text-sm font-bold font-['DM Sans'] uppercase leading-[29.60px] tracking-[3.52px]">
+                Director, Tripjack
               </div>
             </div>
           </div>
@@ -628,23 +629,24 @@ function Landing() {
             <div className="h-[255px] flex items-center justify-center">
               {/* <div className="w-[300px] h-[255px] left-[-5px] top-0 absolute text-center text-[#141515] text-[15px] font-normal font-['Lora'] leading-normal"> */}
               <div className="text-justify mt-10 text-[#141515] text-sm font-normal font-['Lora'] leading-normal">
-                Creativity flows freely at 603 The Coworking Space. As a content
-                creator, I find the ambiance truly inspiring. Being surrounded
-                by fellow creatives has led to unexpected collaborations and
-                projects. It's like working in a hub of innovation, and I
-                couldn't be happier with my choice.
+                Workved Interiors has played a key role in shaping our coworking
+                spaces into inspiring and productive environments. Their ability
+                to design offices that are both stylish and highly functional
+                has been a game-changer for our members. Their expertise,
+                professionalism, and commitment to delivering excellence make
+                them a trusted partner in workspace design.
               </div>
             </div>
             <img
               className="w-[100px] h-[100px] relative rounded-[100px] border border-[#1a3a36]"
-              src="/images/home/testimonal2.png"
+              src="/images/testimonalreview2.png"
               alt="testimonal person "
             />
-            <div className="self-stretch h-[18.89px] text-center text-[#1a3a36] text-lg font-bold font-['DM Sans'] uppercase leading-[29.60px] tracking-[3.52px]">
-              Sakshi
+            <div className="self-stretch h-[18.89px] text-center text-[#1a3a36] text-sm font-bold font-['DM Sans'] uppercase leading-[29.60px] tracking-[3.52px]">
+              Kunal Kataria
             </div>
-            <div className="self-stretch h-[18.89px] text-center text-[#33bead] text-lg font-bold font-['DM Sans'] uppercase leading-[29.60px] tracking-[3.52px]">
-              Manager
+            <div className="self-stretch h-[18.89px] text-center text-[#33bead] text-sm font-bold font-['DM Sans'] uppercase leading-[29.60px] tracking-[3.52px]">
+              Founder, 603 CWS
             </div>
           </div>
 
@@ -654,23 +656,24 @@ function Landing() {
             <div className="h-[255px] flex items-center justify-center">
               {/* <div className="w-[300px] h-[255px] left-[-5px] top-0 absolute text-center text-white text-[15px] font-normal font-['Lora'] leading-normal"> */}
               <div className="text-justify mt-10 text-white text-sm font-normal font-['Lora'] leading-normal">
-                Creativity flows freely at 603 The Coworking Space. As a content
-                creator, I find the ambiance truly inspiring. Being surrounded
-                by fellow creatives has led to unexpected collaborations and
-                projects. It's like working in a hub of innovation, and I
-                couldn't be happier with my choice.
+                The team at Workved Interiors understood our brand vision and
+                delivered an office space that enhances collaboration,
+                creativity, and efficiency. They were meticulous in their
+                planning and execution, ensuring that every element from layout
+                to furnishings was aligned with our needs. Working with them was
+                a smooth and rewarding experience!
               </div>
             </div>
             <img
               className="w-[100px] h-[100px] relative rounded-[100px] border border-[#1a3a36]"
-              src="/images/home/testimonalicon.png"
+              src="/images/testimonalreview3.png"
               alt="testimonal person "
             />
-            <div className="self-stretch h-[18.89px] text-center text-white text-lg font-bold font-['DM Sans'] uppercase leading-[29.60px] tracking-[3.52px]">
-              Sakshi
+            <div className="self-stretch h-[18.89px] text-center text-white text-sm font-bold font-['DM Sans'] uppercase leading-[29.60px] tracking-[3.52px]">
+              Aditya
             </div>
-            <div className="self-stretch h-[18.89px] text-center text-[#33bead] text-lg font-bold font-['DM Sans'] uppercase leading-[29.60px] tracking-[3.52px]">
-              Manager
+            <div className="self-stretch h-[18.89px] text-center text-[#33bead] text-sm font-bold font-['DM Sans'] uppercase leading-[29.60px] tracking-[3.52px]">
+              CEO, Credilio
             </div>
             <div className="absolute right-[-20px] bottom-0">
               <img
@@ -684,7 +687,7 @@ function Landing() {
 
       {/* section FAQ */}
       {/* <section className="bg-gradient-to-t from-[#f4f4f4] via-[#f4f4f4] to-[#D0D0D0]"> */}
-      <section className="py-10">
+      <section className="py-10 bg-[#F4F4F4] ">
         {/* container */}
         <div className="container mx-auto flex">
           {/* a div for image */}

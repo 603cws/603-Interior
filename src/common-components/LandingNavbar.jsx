@@ -23,8 +23,11 @@ function LandingNavbar({ bgColor = false }) {
       >
         {/* Logo */}
         <div className="cursor-pointer" onClick={() => navigate("/")}>
-          <img src="/logo/logo.png" alt="Logo" className="h-12 w-20" />
+          <img src="/logo/603interior.png" alt="Logo" className="h-12 w-20" />
         </div>
+        {/* <div className="cursor-pointer" onClick={() => navigate("/")}>
+          <img src="/logo/logo.png" alt="Logo" className="h-12 w-20" />
+        </div> */}
 
         {/* Desktop Menu */}
         <div className="hidden lg:flex">
@@ -40,10 +43,10 @@ function LandingNavbar({ bgColor = false }) {
               onClick={() => navigate("/OurServices")}
               className="cursor-pointer"
             >
-              Our Services
+              Services
             </li>
             <li onClick={() => navigate("/Blog")} className="cursor-pointer">
-              Our Blog
+              Blog
             </li>
             <li
               className="cursor-pointer"

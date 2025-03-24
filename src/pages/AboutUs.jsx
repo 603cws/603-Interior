@@ -80,25 +80,25 @@ function AboutUs() {
           </p>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 lg:gap-4 xl:gap-10  my-10">
-          <div className="group  flex flex-col justify-center items-center gap-5 py-12 cursor-pointer hover:bg-[#15423C] shadow-[0px_0px_20px_rgba(0,0,0,0.1)]">
+          <div className="group  flex flex-col justify-center items-center gap-5 py-12  hover:bg-[#15423C] shadow-[0px_0px_20px_rgba(0,0,0,0.1)]">
             <img src="/images/about-us/about-us-s2-1.png" alt="" />
             <h4 className="uppercase font-Poppins font-extrabold text-2xl group-hover:text-white">
               interior design
             </h4>
           </div>
-          <div className="group  flex flex-col justify-center items-center gap-5 py-12 cursor-pointer hover:bg-[#15423C] shadow-[0px_0px_20px_rgba(0,0,0,0.1)]">
+          <div className="group  flex flex-col justify-center items-center gap-5 py-12  hover:bg-[#15423C] shadow-[0px_0px_20px_rgba(0,0,0,0.1)]">
             <img src="/images/about-us/about-us-s2-2.png" alt="" />
             <h4 className="uppercase font-Poppins font-extrabold text-2xl group-hover:text-white">
               production
             </h4>
           </div>
-          <div className="group  flex flex-col justify-center items-center gap-5 py-12 cursor-pointer hover:bg-[#15423C] shadow-[0px_0px_20px_rgba(0,0,0,0.1)]">
+          <div className="group  flex flex-col justify-center items-center gap-5 py-12  hover:bg-[#15423C] shadow-[0px_0px_20px_rgba(0,0,0,0.1)]">
             <img src="/images/about-us/about-us-s2-3.png" alt="" />
             <h4 className="uppercase font-Poppins font-extrabold text-2xl group-hover:text-white">
               execution
             </h4>
           </div>
-          <div className="group  flex flex-col justify-center items-center gap-5 py-12 cursor-pointer hover:bg-[#15423C] shadow-[0px_0px_20px_rgba(0,0,0,0.1)]">
+          <div className="group  flex flex-col justify-center items-center gap-5 py-12  hover:bg-[#15423C] shadow-[0px_0px_20px_rgba(0,0,0,0.1)]">
             <img src="/images/about-us/about-us-s2-4.png" alt="" />
             <h4 className="uppercase font-Poppins font-extrabold text-2xl group-hover:text-white">
               after service
@@ -158,18 +158,33 @@ function AboutUs() {
           {/* text */}
           <div className="bg-[#34BFAD] h-full w-1/2 absolute right-0  flex justify-center items-center">
             <div className="font-medium sm:text-xs lg:text-base  xl:text-xl tracking-wide text-[#FFF] text-center uppercase  xl:p-2 lg:p-7">
-              <p className="mb-5 lg:mb-8 xl:mb-20">
+              <p className="mb-5 lg:mb-8 xl:mb-20 xl:text-lg text-center px-[4.5rem]">
+                At 603 Interiors, we design functional, inspiring, and efficient{" "}
+                office spaces tailored to your business needs. Whether you're
+                setting up a new office or revamping an existing one, our
+                AI-driven platform simplifies the process—allowing you to create
+                layouts, customize BOQs, and choose from a curated selection of
+                furniture, HVAC, lighting, and automation solutions.
+              </p>
+              {/* <p className="mb-5 lg:mb-8 xl:mb-20">
                 Lorem Ipsum is simply dummy text of the <br /> printing and
                 typesetting industry. <br /> Lorem Ipsum has been the industry's{" "}
                 <br /> standard dummy text ever since the <br /> 1500s, when an
                 unknown printer took a <br /> galley of type and scrambled it{" "}
                 <br /> to make a type specimen book. 
+              </p> */}
+              <p className=" xl:text-lg text-center px-[4.5rem]">
+                Backed by our expertise in designing 603 The Coworking Space, we
+                bring innovation, precision, and seamless execution to every
+                project. With strategic brand collaborations and a
+                technology-driven approach, 603 Interiors is your one-stop
+                solution for modern office design.
               </p>
-              <p>
+              {/* <p>
                 Lorem Ipsum is simply dummy text of the <br /> printing and
                 typesetting industry. <br /> Lorem Ipsum has been the industry's{" "}
                 <br /> standard dummy text{" "}
-              </p>
+              </p> */}
             </div>
           </div>
         </div>
