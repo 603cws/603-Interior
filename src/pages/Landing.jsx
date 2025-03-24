@@ -9,7 +9,12 @@ import "swiper/css";
 import "swiper/css/effect-coverflow";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
-import { EffectCoverflow, Pagination, Navigation } from "swiper/modules";
+import {
+  EffectCoverflow,
+  Pagination,
+  Navigation,
+  Autoplay,
+} from "swiper/modules";
 import "../styles/Landing.css";
 
 import "slick-carousel/slick/slick.css";
@@ -465,13 +470,17 @@ function Landing() {
               depth: 100,
               modifier: 0.8,
             }}
+            autoplay={{
+              delay: 1500, // 1.5 seconds per slide
+              disableOnInteraction: false, // Keeps autoplay even after user interaction
+            }}
             // pagination={{ el: ".swiper-pagination", clickable: true }}
             navigation={{
               nextEl: ".swiper-button-next",
               prevEl: ".swiper-button-prev",
               clickable: true,
             }}
-            modules={[EffectCoverflow, Pagination, Navigation]}
+            modules={[EffectCoverflow, Pagination, Navigation, Autoplay]}
             className="swiper_container max-w-screen overflow-x-hidden"
           >
             <SwiperSlide>

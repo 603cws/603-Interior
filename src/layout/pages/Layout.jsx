@@ -41,7 +41,8 @@ const initialAreaValues = {
   executiveWashroom: 60,
   videoRecordingRoom: 80,
   other: 1,
-  washroom: 100,
+  maleWashroom: 100,
+  femaleWashroom: 100,
 };
 
 const initialQuantities = {
@@ -69,7 +70,8 @@ const initialQuantities = {
   executiveWashroom: 0,
   videoRecordingRoom: 0,
   other: 0,
-  washroom: 0,
+  maleWashroom: 0,
+  femaleWashroom: 0,
 };
 
 const MAX_AREA = 25000;
@@ -371,29 +373,57 @@ const calculateServer = (totalArea, areaValues) => {
 //     return 0;
 //   }
 // };
-const calculateWashroomArea = (totalArea) => {
+const calculateMaleWashroomArea = (totalArea) => {
   if (totalArea >= 1000 && totalArea < 2000) {
-    return Math.round(totalArea * 0.12);
+    return Math.round(totalArea * 0.06);
   } else if (totalArea >= 2000 && totalArea < 3000) {
-    return Math.round(totalArea * 0.1);
-  } else if (totalArea >= 3000 && totalArea < 4000) {
-    return Math.round(totalArea * 0.08);
-  } else if (totalArea >= 4000 && totalArea < 10000) {
     return Math.round(totalArea * 0.05);
-  } else if (totalArea >= 10000 && totalArea < 12000) {
-    return Math.round(totalArea * 0.0475);
-  } else if (totalArea >= 12000 && totalArea < 14000) {
-    return Math.round(totalArea * 0.046);
-  } else if (totalArea >= 14000 && totalArea < 16000) {
-    return Math.round(totalArea * 0.045);
-  } else if (totalArea >= 16000 && totalArea < 20000) {
-    return Math.round(totalArea * 0.044);
-  } else if (totalArea >= 20000 && totalArea < 22000) {
-    return Math.round(totalArea * 0.043);
-  } else if (totalArea >= 22000 && totalArea < 24000) {
-    return Math.round(totalArea * 0.042);
-  } else if (totalArea >= 24000 && totalArea <= 25000) {
+  } else if (totalArea >= 3000 && totalArea < 4000) {
     return Math.round(totalArea * 0.04);
+  } else if (totalArea >= 4000 && totalArea < 10000) {
+    return Math.round(totalArea * 0.025);
+  } else if (totalArea >= 10000 && totalArea < 12000) {
+    return Math.round(totalArea * 0.02375);
+  } else if (totalArea >= 12000 && totalArea < 14000) {
+    return Math.round(totalArea * 0.023);
+  } else if (totalArea >= 14000 && totalArea < 16000) {
+    return Math.round(totalArea * 0.0225);
+  } else if (totalArea >= 16000 && totalArea < 20000) {
+    return Math.round(totalArea * 0.022);
+  } else if (totalArea >= 20000 && totalArea < 22000) {
+    return Math.round(totalArea * 0.0215);
+  } else if (totalArea >= 22000 && totalArea < 24000) {
+    return Math.round(totalArea * 0.021);
+  } else if (totalArea >= 24000 && totalArea <= 25000) {
+    return Math.round(totalArea * 0.02);
+  } else {
+    return 0;
+  }
+};
+
+const calculateFemaleWashroomArea = (totalArea) => {
+  if (totalArea >= 1000 && totalArea < 2000) {
+    return Math.round(totalArea * 0.06);
+  } else if (totalArea >= 2000 && totalArea < 3000) {
+    return Math.round(totalArea * 0.05);
+  } else if (totalArea >= 3000 && totalArea < 4000) {
+    return Math.round(totalArea * 0.04);
+  } else if (totalArea >= 4000 && totalArea < 10000) {
+    return Math.round(totalArea * 0.025);
+  } else if (totalArea >= 10000 && totalArea < 12000) {
+    return Math.round(totalArea * 0.02375);
+  } else if (totalArea >= 12000 && totalArea < 14000) {
+    return Math.round(totalArea * 0.023);
+  } else if (totalArea >= 14000 && totalArea < 16000) {
+    return Math.round(totalArea * 0.0225);
+  } else if (totalArea >= 16000 && totalArea < 20000) {
+    return Math.round(totalArea * 0.022);
+  } else if (totalArea >= 20000 && totalArea < 22000) {
+    return Math.round(totalArea * 0.0215);
+  } else if (totalArea >= 22000 && totalArea < 24000) {
+    return Math.round(totalArea * 0.021);
+  } else if (totalArea >= 24000 && totalArea <= 25000) {
+    return Math.round(totalArea * 0.02);
   } else {
     return 0;
   }
@@ -567,7 +597,8 @@ function Layout() {
       const receptionArea = calculateReceptionArea(totalArea);
       const loungeArea = calculateLoungeArea(totalArea);
       const otherArea = 0;
-      const washroomArea = calculateWashroomArea(totalArea);
+      const maleWashroom = calculateMaleWashroomArea(totalArea);
+      const femaleWashroom = calculateFemaleWashroomArea(totalArea);
 
       setAreaQuantities((prevAreaQuantities) => ({
         ...prevAreaQuantities,
@@ -596,20 +627,23 @@ function Layout() {
           ...prevAreaValues,
           reception: Math.round(receptionArea),
           lounge: Math.round(loungeArea),
-          washroom: Math.round(washroomArea),
+          maleWashroom: Math.round(maleWashroom),
+          femaleWashroom: Math.round(femaleWashroom),
         }));
         setAreaQuantities((prevAreaQuantities) => ({
           ...prevAreaQuantities,
           reception: 1,
           lounge: 1,
-          washroom: 1,
+          maleWashroom: 1,
+          femaleWashroom: 1,
         }));
       } else {
         setAreaQuantities((prevAreaQuantities) => ({
           ...prevAreaQuantities,
           reception: 0,
           lounge: 0,
-          washroom: 0,
+          maleWashroom: 0,
+          femaleWashroom: 0,
         }));
       }
     }

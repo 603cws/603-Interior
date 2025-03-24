@@ -30,6 +30,8 @@ const fullNames = {
   breakoutRoom: "Breakout Room",
   videoRecordingRoom: "Video Recording Room",
   other: "Other", // Add new category here
+  maleWashroom: "Male Washroom",
+  femaleWashroom: "Female Washroom",
 };
 
 const TreeMap = ({ totalArea, areaQuantities, areaValues }) => {
@@ -65,6 +67,8 @@ const TreeMap = ({ totalArea, areaQuantities, areaValues }) => {
     "Breakout Room": "#74D0C1",
     "Available Space": "#1F5C54",
     Other: "#5E9B96", // Color for the "Other" category
+    "Male Washroom": "#95D5B2",
+    "Female Washroom": "#85CEA8",
   };
 
   const workspaceImages = {

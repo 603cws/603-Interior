@@ -76,7 +76,14 @@ const processData = (data, type, quantity = {}) => {
     "videoRecordingRoom",
   ];
 
-  const publicSpaceKeys = ["reception", "lounge", "phoneBooth", "breakoutRoom"];
+  const publicSpaceKeys = [
+    "reception",
+    "lounge",
+    "phoneBooth",
+    "breakoutRoom",
+    "maleWashroom",
+    "femaleWashroom",
+  ];
 
   const supportSpaceKeys = [
     "ups",
@@ -172,6 +179,14 @@ const processData = (data, type, quantity = {}) => {
       type === "quantity"
         ? latestData.breakoutRoomQty
         : latestData.breakoutRoomArea,
+    malewashroom:
+      type === "quantity"
+        ? latestData.maleWashroomQty
+        : latestData.maleWashroomArea,
+    femalewashroom:
+      type === "quantity"
+        ? latestData.femaleWashroomQty
+        : latestData.femaleWashroomArea,
     executivewashroom:
       type === "quantity"
         ? latestData.executiveWashroomQty
