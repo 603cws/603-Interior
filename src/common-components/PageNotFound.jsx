@@ -1,3 +1,14 @@
+// import { useNavigate } from "react-router-dom";
+// function PageNotFound() {
+//   const navigate = useNavigate();
+//   return (
+//     <div className="flex justify-center items-center  h-screen">
+//       <div className="max-w-3xl">
+//         <img src="images/404Error.gif" alt="pagenotfound" />
+//       </div>
+//     </div>
+//   );
+// }
 import { useNavigate } from "react-router-dom";
 function PageNotFound() {
   const navigate = useNavigate();

@@ -19,6 +19,14 @@ function BoqPrompt({ existingBoqs, onConfirm, onCancel }) {
     }
   };
 
+  const handleEnter = (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      console.log("Processing input:", e.target.value);
+      handleConfirm();
+    }
+  };
+
   return (
     <Transition appear show={true} as={Fragment}>
       <Dialog as="div" className="relative z-10" onClose={onCancel}>
@@ -58,6 +66,7 @@ function BoqPrompt({ existingBoqs, onConfirm, onCancel }) {
                 type="text"
                 placeholder="Enter BOQ Name"
                 value={boqTitle}
+                onKeyDown={handleEnter}
                 onChange={(e) => setBoqTitle(e.target.value)}
                 className="w-full mt-2 p-3 border border-gray-300 rounded text-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                 disabled={!!selectedBoq}

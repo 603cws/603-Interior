@@ -27,10 +27,6 @@ function ProfileCard({ layout = false, setIsOpen }) {
     setBoqTotal,
   } = useApp();
   const profileRef = useRef(null);
-
-  //   const background = "images/profilebg.png";
-  //   const [userEmail, setUserEmail] = useState("");
-  //   const [companyName, setCompanyName] = useState("");
   const [showBookAppointment, setShowBookAppointment] = useState(false);
 
   let isadmin = accountHolder.role === "user" ? true : false;
@@ -61,62 +57,11 @@ function ProfileCard({ layout = false, setIsOpen }) {
     }
   };
 
-  //   const handleLogout = async () => {
-  //     try {
-  //       await supabase.auth.signOut();
-  //       console.log("User signed out successfully");
-  //       toast.success("User signed out successfully");
-
-  //       setIsAuthenticated(false);
-  //       localStorage.removeItem("usertoken");
-  //       console.log("hello");
-  //       navigate("/");
-  //     } catch (error) {
-  //       console.log(error);
-  //     }
-  //   };
-
-  // const handleLogout = async () => {
-  //   setIsAuthenticated(false);
-  //   localStorage.removeItem("usertoken");
-  //   toast.success("User signed out successfully");
-  //   navigate("/login");
-  // };
-
-  // useEffect(() => {
-  //   const fetchUserData = async () => {
-  //     // Retrieve the currently authenticated user
-  //     const {
-  //       data: { user },
-  //     } = await supabase.auth.getUser();
-
-  //     if (user) {
-  //       // Set the user's email
-  //       setUserEmail(user.email);
-
-  //       // Query the profiles table for the company name using the user's id
-  //       const { data, error } = await supabase
-  //         .from("profiles")
-  //         .select("company_name")
-  //         .eq("id", user.id)
-  //         .single();
-
-  //       if (error) {
-  //         console.error("Error fetching profile:", error.message);
-  //       } else if (data) {
-  //         setCompanyName(data.company_name);
-  //       }
-  //     }
-  //   };
-
-  //   fetchUserData();
-  // }, []);
-
   const handleAppointment = () => {
     if (progress >= 90) {
       setShowBookAppointment(true);
     } else {
-      toast("Complete the BOQ before booking appointment!", {
+      toast("Atleast Complete 90% of the BOQ before booking appointment!", {
         style: {
           border: "1px solid #1A3A36",
           padding: "16px",
@@ -194,19 +139,22 @@ function ProfileCard({ layout = false, setIsOpen }) {
             <RxVideo />
             <p>How it works</p>
           </div>
-          <div
-            className={`flex items-center mx-4 gap-3 ${
-              progress < 90 ? "text-gray-400 cursor-not-allowed" : ""
-            }`}
-          >
-            <LuCalendarClock />
-            <button
-              onClick={handleAppointment}
-              className={`${progress < 90 ? "cursor-not-allowed" : ""}`}
+
+          {accountHolder.role === "user" && (
+            <div
+              className={`flex items-center mx-4 gap-3 ${
+                progress < 90 ? "text-gray-400 cursor-not-allowed" : ""
+              }`}
             >
-              Book Appointment
-            </button>
-          </div>
+              <LuCalendarClock />
+              <button
+                onClick={handleAppointment}
+                // className={`${progress < 90 ? "cursor-not-allowed" : ""}`}
+              >
+                Book Appointment
+              </button>
+            </div>
+          )}
         </div>
         {/* third box for the features */}
         <div className="font-semibold text-lg capitalize leading-normal tracking-wide py-7 text-[#262626] border-b-2 border-[#ccc] flex flex-col gap-4">

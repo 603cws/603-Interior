@@ -193,10 +193,10 @@ function HelpnFaq() {
                 What is 603 Interiors?
               </span>
               <span className="px-5 py-3 rounded-3xl bg-[#54DED3] text-xs font-lora font-bold absolute top-1/4 left-1/4 animate-message3">
-                What is 603 Interiors?
+                What is a BOQ?
               </span>
               <span className="px-5 py-3 rounded-3xl bg-[#54DED3] text-xs font-lora font-bold absolute bottom-1/2 right-1 animate-message2">
-                What is 603 Interiors?
+                Can I customize my BOQ?
               </span>
             </div>
           </div>
@@ -212,7 +212,7 @@ function HelpnFaq() {
             onClick={() => scrollToSection("sectionFAQ")}
           >
             <div>
-              <img src="/images/hlepnfaq1.png" alt="helpfaq" />
+              <img src="/images/generalfaq.png" alt="helpfaq" />
             </div>
             <h3 className="text-lg text-center">General Information</h3>
           </div>
@@ -232,7 +232,7 @@ function HelpnFaq() {
             onClick={() => scrollToSection("sectionvendor")}
           >
             <div>
-              <img src="/images/hlepnfaq1.png" alt="helpfaq" />
+              <img src="/images/V&B.png" alt="helpfaq" />
             </div>
             <h3 className="text-lg text-center">
               Vendor & Brand Collaborations
@@ -244,7 +244,7 @@ function HelpnFaq() {
             onClick={() => scrollToSection("sectionExecution")}
           >
             <div>
-              <img src="/images/hlepnfaq1.png" alt="helpfaq" />
+              <img src="/images/e&I.png" alt="helpfaq" />
             </div>
             <h3 className="text-lg text-center">Execution & Implementation</h3>
           </div>

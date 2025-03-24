@@ -1,6 +1,5 @@
 import { RiDashboardFill } from "react-icons/ri";
 import { MdOutlineModeEdit, MdDeleteOutline } from "react-icons/md";
-// import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useApp } from "../Context/Context";
 import { supabase } from "../services/supabase";
@@ -84,6 +83,7 @@ function Dashboard() {
   const tableRef = useRef(null);
   //boqdata available or not
   const [isboqavailable, setIsboqavailable] = useState(false);
+  const [isfetchBoqDataRefresh, setisfetchBoqDataRefresh] = useState(false);
 
   //baseurlforimg
   const baseImageUrl =
@@ -131,30 +131,70 @@ function Dashboard() {
 
   //fetch the product based on the selected boq
   const fetchProductsByIds = async () => {
+    console.log("hello from the product ");
+
     try {
-      setIsloading(true);
-      if (!selectedBoq) {
-        return;
+      if (selectedBoq) {
+        setIsloading(true);
+
+        console.log(selectedBoq);
+
+        const productIdsArray = selectedBoq.product_variant_id
+          .split(",")
+          .map((id) => id.trim()); // Convert to array of numbers
+
+        const { data, error } = await supabase
+          .from("product_variants")
+          .select("*,products(*)")
+          .in("id", productIdsArray); // Use Supabase `in()` filter
+
+        if (data) {
+          setProducts(data);
+        }
+
+        if (error) {
+          throw new Error(error);
+        }
+
+        console.log(data);
+      } else {
+        setProducts([]);
       }
-
-      const productIdsArray = selectedBoq.product_variant_id
-        .split(",")
-        .map((id) => id.trim()); // Convert to array of numbers
-
-      const { data } = await supabase
-        .from("product_variants")
-        .select("*,products(*)")
-        .in("id", productIdsArray); // Use Supabase `in()` filter
-
-      console.log(data);
-
-      setProducts(data);
     } catch (error) {
       console.log(error);
     } finally {
       setIsloading(false);
     }
   };
+  // const fetchProductsByIds = async () => {
+  //   console.log("hello from the product ");
+
+  //   try {
+  //     setIsloading(true);
+  //     if (!selectedBoq) {
+  //       return;
+  //     }
+
+  //     console.log(selectedBoq);
+
+  //     const productIdsArray = selectedBoq.product_variant_id
+  //       .split(",")
+  //       .map((id) => id.trim()); // Convert to array of numbers
+
+  //     const { data } = await supabase
+  //       .from("product_variants")
+  //       .select("*,products(*)")
+  //       .in("id", productIdsArray); // Use Supabase `in()` filter
+
+  //     console.log(data);
+
+  //     setProducts(data);
+  //   } catch (error) {
+  //     console.log(error);
+  //   } finally {
+  //     setIsloading(false);
+  //   }
+  // };
 
   const handleMenuToggle = (id) => {
     setOpenMenuId((prev) => (prev === id ? null : id));
@@ -268,11 +308,35 @@ function Dashboard() {
         .select("*")
         .eq("userId", accountHolder.userId);
 
-      console.log(data);
+      console.log("fetch boq data", data);
+
       setboqdata(data);
-      setIsboqavailable(true);
+      // selectedBoq(data.boq);
+      if (data.length > 0) {
+        setSelectedBoq(data[0]);
+        setIsboqavailable(true);
+      }
     } catch (error) {
       console.log(error);
+    }
+  };
+
+  const handledeleteBoq = async (boq) => {
+    setisfetchBoqDataRefresh(true);
+    try {
+      const { error } = await supabase
+        .from("boqdata") // Replace with your table name
+        .delete()
+        .eq("id", boq.id); // Filtering by id
+
+      if (error) {
+        throw new Error(error);
+      }
+    } catch (error) {
+      console.log("something went wrong", error);
+    } finally {
+      setSelectedBoq(() => null);
+      setisfetchBoqDataRefresh(false);
     }
   };
 
@@ -296,7 +360,7 @@ function Dashboard() {
   useEffect(() => {
     fetchProductsByIds();
     fetchAddonsByIds();
-  }, [selectedBoq]);
+  }, [selectedBoq, isfetchBoqDataRefresh]);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -340,7 +404,7 @@ function Dashboard() {
 
   useEffect(() => {
     fetchboq();
-  }, []);
+  }, [isfetchBoqDataRefresh]);
 
   useEffect(() => {
     if (layoutImage && !imageIsLoaded) {
@@ -437,7 +501,11 @@ function Dashboard() {
               </h3>
             </div>
             <div className="mx-3">
-              <img src="/images/usericon.png" alt="usericon" />
+              <img
+                src={accountHolder.profileImage}
+                alt="usericon"
+                className="w-10 h-10"
+              />
             </div>
           </div>
 
@@ -465,7 +533,9 @@ function Dashboard() {
                         </div>
                         <div className="capitalize pr-10">
                           <p className="font-bold text-lg">
-                            1500 <span>sqft</span>
+                            {/* {selectedBoq.total_area} */}
+                            {selectedBoq && selectedBoq.total_area}
+                            <span>sqft</span>
                           </p>
                           <p className="text-base">total area</p>
                         </div>
@@ -482,7 +552,8 @@ function Dashboard() {
                         <div className="capitalize pr-10">
                           <p className="font-bold text-lg">
                             {/* 1500 <span>sqft</span> */}
-                            1500
+                            {/* {products.length} */}
+                            {selectedBoq && products && products.length}{" "}
                           </p>
                           <p className="text-base">Total No Product</p>
                         </div>
@@ -499,7 +570,8 @@ function Dashboard() {
                         <div className="capitalize pr-10">
                           <p className="font-bold text-lg">
                             {/* 1500 <span>sqft</span> */}
-                            1500000cr
+                            {selectedBoq && selectedBoq.totalprice}{" "}
+                            <span>INR</span>
                           </p>
                           <p className="text-base">Total Amount</p>
                         </div>
@@ -526,7 +598,10 @@ function Dashboard() {
                               >
                                 details
                               </button>
-                              <MdDeleteOutline size={30} />
+                              <button onClick={() => handledeleteBoq(boq)}>
+                                {" "}
+                                <MdDeleteOutline size={30} />
+                              </button>
                             </div>
                             <div>
                               <h3 className="font-bold">{boq.title}</h3>
@@ -535,35 +610,11 @@ function Dashboard() {
                         );
                       })}
 
-                    {/* <div className="w-32 h-32">
-                      <CircularProgressbar
-                        value={percentage}
-                        text={`${percentage}%`}
-                        // styles={{ width: 50, height: 50 }}
-                        styles={buildStyles({
-                          // Rotation of path and trail, in number of turns (0-1)
-                          rotation: 0.25,
-
-                          // Whether to use rounded or flat corners on the ends - can use 'butt' or 'round'
-                          strokeLinecap: "butt",
-
-                          // Text size
-                          textSize: "16px",
-
-                          // How long animation takes to go from one percentage to another, in seconds
-                          pathTransitionDuration: 0.5,
-
-                          // Can specify path transition in more detail, or remove it entirely
-                          // pathTransition: 'none',
-
-                          // Colors
-                          pathColor: `rgba(62, 152, 199, ${percentage / 100})`,
-                          textColor: "#f88",
-                          trailColor: "#d6d6d6",
-                          backgroundColor: "#3e98c7",
-                        })}
-                      />
-                    </div> */}
+                    {!isboqavailable && (
+                      <div>
+                        <h3>You havent saved a BOQ yet</h3>
+                      </div>
+                    )}
                   </div>
                 </div>
                 {/* <div className="w-1/3  flex justify-center">
@@ -669,7 +720,7 @@ function Dashboard() {
                 {productlist &&
                   (isloading ? (
                     <Spinner />
-                  ) : items.length > 0 ? (
+                  ) : selectedBoq && items.length > 0 ? (
                     // <section className="mt-2 flex-1 overflow-hidden px-8">
                     <section className=" h-[90%] font-Poppins overflow-hidden">
                       <div className="w-full h-full border-t border-b border-[#CCCCCC] overflow-y-auto custom-scrollbar">
@@ -704,54 +755,55 @@ function Dashboard() {
                             </tr>
                           </thead>
                           <tbody className=" text-sm">
-                            {paginatedItems.map((item) => (
-                              <tr
-                                key={item.id}
-                                className="hover:bg-gray-50 cursor-pointer"
-                              >
-                                <td className="border border-gray-200 p-3 align-middle">
-                                  <div className="flex items-center gap-2">
-                                    <img
-                                      src={`${baseImageUrl}${item.image}`}
-                                      alt={item.title}
-                                      className="w-10 h-10 object-cover rounded"
-                                    />
-                                    {toggle ? (
-                                      <span>{item.title}</span>
-                                    ) : (
-                                      <span className="text-wrap">
-                                        {item.id}
-                                      </span>
-                                    )}
-                                  </div>
-                                </td>
-                                <td className="border border-gray-200 p-3 align-middle">
-                                  ₹{item.price}
-                                </td>
-                                {toggle ? (
-                                  <>
-                                    <td className="border border-gray-200 p-3 align-middle">
-                                      {item.products?.category || "N/A"}
-                                    </td>
-                                    <td className="border border-gray-200 p-3 align-middle">
-                                      {item.products?.subcategory1 || "N/A"}
-                                    </td>
-                                  </>
-                                ) : (
+                            {selectedBoq &&
+                              paginatedItems.map((item) => (
+                                <tr
+                                  key={item.id}
+                                  className="hover:bg-gray-50 cursor-pointer"
+                                >
                                   <td className="border border-gray-200 p-3 align-middle">
-                                    {item.addons?.title || item.title}
+                                    <div className="flex items-center gap-2">
+                                      <img
+                                        src={`${baseImageUrl}${item.image}`}
+                                        alt={item.title}
+                                        className="w-10 h-10 object-cover rounded"
+                                      />
+                                      {toggle ? (
+                                        <span>{item.title}</span>
+                                      ) : (
+                                        <span className="text-wrap">
+                                          {item.id}
+                                        </span>
+                                      )}
+                                    </div>
                                   </td>
-                                )}
-                                <td className="border border-gray-200 p-3 align-middle flex justify-center items-center relative">
-                                  <button
-                                    ref={(el) =>
-                                      (buttonRef.current[item.id] = el)
-                                    }
-                                    className="bg-white flex justify-center items-center py-1.5 w-20 mb-2"
-                                    onClick={() => handleMenuToggle(item.id)}
-                                  >
-                                    <CiMenuKebab size={25} />
-                                  </button>
+                                  <td className="border border-gray-200 p-3 align-middle">
+                                    ₹{item.price}
+                                  </td>
+                                  {toggle ? (
+                                    <>
+                                      <td className="border border-gray-200 p-3 align-middle">
+                                        {item.products?.category || "N/A"}
+                                      </td>
+                                      <td className="border border-gray-200 p-3 align-middle">
+                                        {item.products?.subcategory1 || "N/A"}
+                                      </td>
+                                    </>
+                                  ) : (
+                                    <td className="border border-gray-200 p-3 align-middle">
+                                      {item.addons?.title || item.title}
+                                    </td>
+                                  )}
+                                  <td className="border border-gray-200 p-3 align-middle flex justify-center items-center relative">
+                                    <button
+                                      ref={(el) =>
+                                        (buttonRef.current[item.id] = el)
+                                      }
+                                      className="bg-white flex justify-center items-center py-1.5 w-20 mb-2"
+                                      onClick={() => handleMenuToggle(item.id)}
+                                    >
+                                      <CiMenuKebab size={25} />
+                                    </button>
 
                                   {openMenuId === item.id && (
                                     <div
@@ -799,7 +851,7 @@ function Dashboard() {
                     </>
                   ))}
                 {/* Pagination Controls (Always Visible) */}
-                {totalPages > 1 && (
+                {selectedBoq && totalPages > 1 && (
                   <div className="flex justify-center items-center gap-2 mt-10 z-30 sticky bottom-0 bg-[#EBF0FF] mb-4 text-[#3d194f]">
                     <button
                       onClick={() => goToPage(currentPage - 1)}

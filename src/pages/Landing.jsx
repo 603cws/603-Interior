@@ -342,7 +342,7 @@ function Landing() {
           {/* div for caurosel */}
           <div className="slider-container w-3/4 ml-auto">
             <Slider {...settingsProduct}>
-              <div className="overflow-hidden">
+              <div className="overflow-hidden ">
                 <div className="bg-white lg:w-[220px] lg:h-[320px] ">
                   <img
                     className=""

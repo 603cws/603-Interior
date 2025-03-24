@@ -1,7 +1,6 @@
 import { IoIosMail } from "react-icons/io";
 import { FaInstagram, FaAngleUp } from "react-icons/fa";
 import { RiTwitterXLine } from "react-icons/ri";
-import { LuYoutube } from "react-icons/lu";
 import { FiFacebook, FiLinkedin } from "react-icons/fi";
 import { BsShop } from "react-icons/bs";
 import { FaLocationDot } from "react-icons/fa6";
@@ -113,7 +112,6 @@ function Footer() {
               <FaInstagram size={24} className="cursor-pointer" />
               <FiFacebook size={24} className="cursor-pointer" />
               <RiTwitterXLine size={24} className="cursor-pointer" />
-              {/* <LuYoutube size={24} className="cursor-pointer" /> */}
               <FiLinkedin size={24} className="cursor-pointer" />
             </div>
           </div>
@@ -121,7 +119,7 @@ function Footer() {
       </div>
       <div className="flex justify-between items-center text-sm">
         <div
-          onClick={() => navigate("/becomeseller")}
+          onClick={() => navigate("/howtosell")}
           className="flex justify-center items-center gap-3 cursor-pointer"
         >
           <BsShop size={16} />

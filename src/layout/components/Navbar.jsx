@@ -167,6 +167,8 @@ function Navbar({
   };
 
   const generateBOQclick = () => {
+     if (totalArea >= MIN_AREA && totalArea <= MAX_AREA) {
+
     localStorage.removeItem("selectedPlan");
     localStorage.removeItem("hasSeenQuestionPopup");
     setSelectedPlan(null);
@@ -181,6 +183,7 @@ function Navbar({
     } else {
       console.log("Skipping warning, proceeding to save BOQ");
       handlegenrateboq();
+}
     }
   };
 
@@ -264,7 +267,9 @@ function Navbar({
       e.key === "E" ||
       e.key === "+" ||
       e.key === "-" ||
-      e.key === "."
+      e.key === "." ||
+      e.key === "ArrowUp" ||
+      e.key === "ArrowDown"
     ) {
       e.preventDefault(); // Prevent the default behavior
     }

@@ -2,7 +2,7 @@ function Spacebar({ totalArea, builtArea, availableArea, MIN_AREA }) {
   const usedPer = (builtArea / totalArea) * 100;
   const roundedUsedPer = Math.round(usedPer);
   const unUsedPer = 100 - roundedUsedPer;
-  if (!totalArea || totalArea < MIN_AREA) {
+  if (!totalArea || totalArea < MIN_AREA || totalArea > 25000) {
     // Reset state when totalArea is 0 or undefined
     return (
       <div className="flex w-full border-2 bg-[#385682] my-3 h-7 items-center justify-center text-white">

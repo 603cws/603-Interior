@@ -468,6 +468,7 @@ function Navbar({ toggleProfile, iconRef }) {
         demolishTile: userResponses.demolishTile,
         hvacType: userResponses.hvacType,
         planType: selectedPlan,
+        totalprice: boqTotal,
         final_price: selectedData
           .map((item) => item.finalPrice || "")
           .filter(Boolean) // Removes empty strings
