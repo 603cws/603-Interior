@@ -39,14 +39,14 @@ function AboutUs() {
         </div>
         {/* <div className="flex justify-between gap-10 font-Poppins font-bold text-white my-10 pt-5"> */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-10 font-Poppins font-bold text-white my-10 pt-5">
-          <div className="relative h-[438px] cursor-pointer rounded-[100px] group overflow-hidden bg-[url('/images/about-us/about-us-what-we-do-1.png')] bg-cover bg-center flex justify-center items-center">
+          <div className="relative h-[438px] cursor-pointer rounded-[100px] group overflow-hidden bg-[url('/images/about-us/about-us-what-we-do-1.jpg')] bg-cover bg-center flex justify-center items-center">
             <div className="absolute inset-0 before:absolute before:bottom-0 before:left-0 before:w-full before:h-0 before:bg-black/50 before:transition-all before:duration-700 before:ease-in-out group-hover:before:h-full rounded-[100px]"></div>
             <h3 className="absolute text-3xl uppercase z-10 text-white hidden group-hover:block transition-opacity duration-300 ease-in-out">
               design
             </h3>
           </div>
 
-          <div className="relative h-[438px] cursor-pointer rounded-[100px] group overflow-hidden bg-[url('/images/about-us/about-us-what-we-do-2.png')] bg-cover bg-center flex justify-center items-center">
+          <div className="relative h-[438px] cursor-pointer rounded-[100px] group overflow-hidden bg-[url('/images/about-us/about-us-what-we-do-2.jpg')] bg-cover bg-center flex justify-center items-center">
             <div className="absolute inset-0 before:absolute before:bottom-0 before:left-0 before:w-full before:h-0 before:bg-black/50 before:transition-all before:duration-700 before:ease-in-out group-hover:before:h-full rounded-[100px]"></div>
 
             <h3 className="absolute text-3xl uppercase z-10 text-white hidden group-hover:block transition-opacity duration-300 ease-in-out">
@@ -54,7 +54,7 @@ function AboutUs() {
             </h3>
           </div>
 
-          <div className="relative  h-[438px] cursor-pointer rounded-[100px] group overflow-hidden bg-[url('/images/about-us/about-us-what-we-do-3.png')] bg-cover bg-center flex justify-center items-center">
+          <div className="relative  h-[438px] cursor-pointer rounded-[100px] group overflow-hidden bg-[url('/images/about-us/about-us-what-we-do-3.jpg')] bg-cover bg-center flex justify-center items-center">
             <div className="absolute inset-0 before:absolute before:bottom-0 before:left-0 before:w-full before:h-0 before:bg-black/50 before:transition-all before:duration-700 before:ease-in-out group-hover:before:h-full rounded-[100px]"></div>
             <h3 className="absolute text-3xl uppercase z-10 text-white hidden group-hover:block transition-opacity duration-300 ease-in-out">
               production

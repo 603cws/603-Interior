@@ -149,17 +149,27 @@ const calculateReceptionArea = (totalArea) => {
 // };
 
 const calculateLoungeArea = (totalArea) => {
-  if (totalArea >= 1000 && totalArea < 2500) {
+  if (totalArea >= 1000 && totalArea < 2000) {
     return Math.round(totalArea * 0.11);
-  } else if (totalArea >= 2500 && totalArea < 4500) {
+  } else if (totalArea >= 2000 && totalArea < 3000) {
+    return Math.round(totalArea * 0.08);
+  } else if (totalArea >= 3000 && totalArea < 4000) {
+    return Math.round(totalArea * 0.065);
+  } else if (totalArea >= 4000 && totalArea < 5000) {
     return Math.round(totalArea * 0.06);
-  } else if (totalArea >= 4500 && totalArea < 6500) {
+  } else if (totalArea >= 5000 && totalArea < 6000) {
     return Math.round(totalArea * 0.05);
-  } else if (totalArea >= 6500 && totalArea < 8500) {
+  } else if (totalArea >= 6000 && totalArea < 7000) {
+    return Math.round(totalArea * 0.047);
+  } else if (totalArea >= 7000 && totalArea < 8000) {
+    return Math.round(totalArea * 0.046);
+  } else if (totalArea >= 8000 && totalArea < 12000) {
     return Math.round(totalArea * 0.045);
-  } else if (totalArea >= 8500 && totalArea <= 10000) {
-    return Math.round(totalArea * 0.04);
-  } else if (totalArea > 10000 && totalArea <= 25000) {
+  } else if (totalArea >= 12000 && totalArea < 13000) {
+    return Math.round(totalArea * 0.043);
+  } else if (totalArea >= 13000 && totalArea < 14000) {
+    return Math.round(totalArea * 0.0407);
+  } else if (totalArea >= 14000 && totalArea <= 25000) {
     return Math.round(totalArea * 0.04);
   } else {
     return 0;
@@ -167,7 +177,13 @@ const calculateLoungeArea = (totalArea) => {
 };
 
 const calculateLinear = (totalArea) => {
-  if (totalArea >= 1000 && totalArea <= 25000) {
+  if (totalArea >= 1000 && totalArea < 2000) {
+    return Math.round(totalArea * 0.3);
+  } else if (totalArea >= 2000 && totalArea < 6000) {
+    return Math.round(totalArea * 0.36);
+  } else if (totalArea >= 6000 && totalArea < 10000) {
+    return Math.round(totalArea * 0.38);
+  } else if (totalArea >= 10000 && totalArea <= 25000) {
     return Math.round(totalArea * 0.4);
   } else {
     return 0;
@@ -175,11 +191,11 @@ const calculateLinear = (totalArea) => {
 };
 
 const calculateLType = (totalArea, areaValues) => {
-  if (totalArea >= 9000 && totalArea < 12000) {
+  if (totalArea >= 8000 && totalArea < 9000) {
     return areaValues.lType * 5;
-  } else if (totalArea >= 12000 && totalArea < 15000) {
+  } else if (totalArea >= 9000 && totalArea < 14000) {
     return areaValues.lType * 10;
-  } else if (totalArea >= 15000 && totalArea < 18000) {
+  } else if (totalArea >= 14000 && totalArea < 18000) {
     return areaValues.lType * 15;
   } else if (totalArea >= 18000 && totalArea < 21000) {
     return areaValues.lType * 20;
@@ -211,7 +227,7 @@ const calculateMd = (totalArea, areaValues) => {
 };
 
 const calculateManager = (totalArea, areaValues) => {
-  if (totalArea >= 1500 && totalArea < 3000) {
+  if (totalArea >= 2000 && totalArea < 3000) {
     return areaValues.manager * 1;
   } else if (totalArea >= 3000 && totalArea < 6000) {
     return areaValues.manager * 2;
@@ -233,7 +249,7 @@ const calculateManager = (totalArea, areaValues) => {
 };
 
 const calculateSmall = (totalArea, areaValues) => {
-  if (totalArea >= 1000 && totalArea < 3000) {
+  if (totalArea >= 2000 && totalArea < 3000) {
     return areaValues.small * 1;
   } else if (totalArea >= 3000 && totalArea < 6000) {
     return areaValues.small * 2;
@@ -246,13 +262,13 @@ const calculateSmall = (totalArea, areaValues) => {
   }
 };
 
-const calculateDiscussionRoom = (totalArea, areaValues) => {
-  if (totalArea >= 12000 && totalArea <= 25000) {
-    return areaValues.discussionRoom * 1;
-  } else {
-    return 0;
-  }
-};
+// const calculateDiscussionRoom = (totalArea, areaValues) => {
+//   if (totalArea >= 12000 && totalArea <= 25000) {
+//     return areaValues.discussionRoom * 1;
+//   } else {
+//     return 0;
+//   }
+// };
 
 const calculateInterviewRoom = (totalArea, areaValues) => {
   if (totalArea >= 6000 && totalArea < 12000) {
@@ -265,7 +281,9 @@ const calculateInterviewRoom = (totalArea, areaValues) => {
 };
 
 const calculateConferenceRoom = (totalArea, areaValues) => {
-  if (totalArea >= 9000 && totalArea < 15000) {
+  if (totalArea >= 3000 && totalArea < 8000) {
+    return areaValues.conferenceRoom * 1;
+  } else if (totalArea >= 8000 && totalArea < 15000) {
     return areaValues.conferenceRoom * 2;
   } else if (totalArea >= 15000 && totalArea < 18000) {
     return areaValues.conferenceRoom * 3;
@@ -303,7 +321,9 @@ const calculateMeetingRoom = (totalArea, areaValues) => {
 };
 
 const calculateMeetingRoomLarge = (totalArea, areaValues) => {
-  if (totalArea >= 15000 && totalArea <= 25000) {
+  if (totalArea >= 14000 && totalArea < 15000) {
+    return areaValues.meetingRoomLarge * 1;
+  } else if (totalArea >= 15000 && totalArea <= 25000) {
     return areaValues.meetingRoomLarge * 2;
   } else {
     return 0;
@@ -331,7 +351,7 @@ const calculatePhoneBooth = (totalArea, areaValues) => {
 };
 
 const calculateServer = (totalArea, areaValues) => {
-  if (totalArea >= 1000 && totalArea < 6000) {
+  if (totalArea >= 2000 && totalArea < 6000) {
     return areaValues.server * 1;
   } else if (totalArea >= 6000 && totalArea < 12000) {
     return areaValues.server * 2;
@@ -352,25 +372,25 @@ const calculateServer = (totalArea, areaValues) => {
 //   }
 // };
 const calculateWashroomArea = (totalArea) => {
-  if (totalArea >= 1000 && totalArea <= 2000) {
+  if (totalArea >= 1000 && totalArea < 2000) {
     return Math.round(totalArea * 0.12);
-  } else if (totalArea >= 2000 && totalArea <= 3000) {
+  } else if (totalArea >= 2000 && totalArea < 3000) {
     return Math.round(totalArea * 0.1);
-  } else if (totalArea >= 3000 && totalArea <= 4000) {
+  } else if (totalArea >= 3000 && totalArea < 4000) {
     return Math.round(totalArea * 0.08);
-  } else if (totalArea >= 4000 && totalArea <= 10000) {
+  } else if (totalArea >= 4000 && totalArea < 10000) {
     return Math.round(totalArea * 0.05);
-  } else if (totalArea >= 10000 && totalArea <= 12000) {
+  } else if (totalArea >= 10000 && totalArea < 12000) {
     return Math.round(totalArea * 0.0475);
-  } else if (totalArea >= 12000 && totalArea <= 14000) {
+  } else if (totalArea >= 12000 && totalArea < 14000) {
     return Math.round(totalArea * 0.046);
-  } else if (totalArea >= 14000 && totalArea <= 16000) {
+  } else if (totalArea >= 14000 && totalArea < 16000) {
     return Math.round(totalArea * 0.045);
-  } else if (totalArea >= 16000 && totalArea <= 20000) {
+  } else if (totalArea >= 16000 && totalArea < 20000) {
     return Math.round(totalArea * 0.044);
-  } else if (totalArea >= 20000 && totalArea <= 22000) {
+  } else if (totalArea >= 20000 && totalArea < 22000) {
     return Math.round(totalArea * 0.043);
-  } else if (totalArea >= 22000 && totalArea <= 24000) {
+  } else if (totalArea >= 22000 && totalArea < 24000) {
     return Math.round(totalArea * 0.042);
   } else if (totalArea >= 24000 && totalArea <= 25000) {
     return Math.round(totalArea * 0.04);
@@ -430,7 +450,7 @@ function Layout() {
   const iconRef = useRef(null);
 
   // const bufferSpace = totalArea < 5000 ? 0.05 : totalArea <= 10000 ? 0.03 : 0; //buffer space
-  const bufferSpace = 0; //buffer space
+  const bufferSpace = 0.02; //buffer space
 
   // Close profile card when clicking outside
   useEffect(() => {
@@ -528,7 +548,7 @@ function Layout() {
       const md = calculateMd(totalArea, areaValues);
       const manager = calculateManager(totalArea, areaValues);
       const small = calculateSmall(totalArea, areaValues);
-      const discussionRoom = calculateDiscussionRoom(totalArea, areaValues);
+      // const discussionRoom = calculateDiscussionRoom(totalArea, areaValues);
       const interviewRoom = calculateInterviewRoom(totalArea, areaValues);
       const conferenceRoom = calculateConferenceRoom(totalArea, areaValues);
       const boardRoom = calculateBoardRoom(totalArea, areaValues);
@@ -556,7 +576,7 @@ function Layout() {
         md: Math.round(md / areaValues.md),
         manager: manager / areaValues.manager,
         small: small / areaValues.small,
-        discussionRoom: discussionRoom / areaValues.discussionRoom,
+        // discussionRoom: discussionRoom / areaValues.discussionRoom,
         interviewRoom: interviewRoom / areaValues.interviewRoom,
         conferenceRoom: conferenceRoom / areaValues.conferenceRoom,
         boardRoom: boardRoom / areaValues.boardRoom,
@@ -593,7 +613,7 @@ function Layout() {
         }));
       }
     }
-  }, [totalArea, totalAreaSource]);
+  }, [totalArea, totalAreaSource]); //do not add any more dependency
 
   const setErrorMessageHandler = (message) => {
     // setShowModal(true);
