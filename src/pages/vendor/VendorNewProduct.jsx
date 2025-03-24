@@ -200,13 +200,12 @@ function VendorNewProduct({ setAddNewProduct, setProductlist }) {
         // Upload additional images
         const additionalImagePaths = [];
         for (const [index, imageFile] of variant.additionalImages.entries()) {
-          const { data: additionalImageUpload, error: additionalImageError } =
-            await supabase.storage
-              .from("addon")
-              .upload(
-                `${variant.title}-additional-${index}-${productId}`,
-                imageFile
-              );
+          const { data: additionalImageUpload } = await supabase.storage
+            .from("addon")
+            .upload(
+              `${variant.title}-additional-${index}-${productId}`,
+              imageFile
+            );
 
           // if (additionalImageError) {
           //   console.error(additionalImageError);
@@ -291,15 +290,15 @@ function VendorNewProduct({ setAddNewProduct, setProductlist }) {
     }
   }, [category, subSubCategory]);
 
-  const handleMainImageChange = (e) => {
-    const file = e.target.files[0]; // Get the selected file
-    if (file) {
-      setVariant((prevVariants) => ({
-        ...prevVariants,
-        mainImage: file, // Update mainImage field
-      }));
-    }
-  };
+  // const handleMainImageChange = (e) => {
+  //   const file = e.target.files[0]; // Get the selected file
+  //   if (file) {
+  //     setVariant((prevVariants) => ({
+  //       ...prevVariants,
+  //       mainImage: file, // Update mainImage field
+  //     }));
+  //   }
+  // };
 
   // handle dimention
   const handledimension = (e) => {
