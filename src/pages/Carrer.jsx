@@ -271,7 +271,7 @@ function Carrer() {
                     View Details <IoIosArrowForward color="#1F5C54" />
                   </button> */}
                   <Link
-                    to={`/Career/JobPage/${encodeURIComponent(key)}`}
+                    to={`${encodeURIComponent(key)}`}
                     onClick={() =>
                       localStorage.setItem("selectedJob", JSON.stringify(job))
                     }

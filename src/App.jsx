@@ -5,7 +5,7 @@ import Boq from "./boq/pages/Boq";
 import PageNotFound from "./common-components/PageNotFound";
 
 import { Route, Routes } from "react-router-dom";
-import RegisterUser from "./layout/components/RegisterUser";
+// import RegisterUser from "./layout/components/RegisterUser";
 import ErrorModal from "./common-components/ErrorModal";
 import RecommendComp from "./boq/components/RecommendComp";
 import SelectArea from "./boq/components/SelectArea";
@@ -71,7 +71,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Landing />} />
             <Route path="/Layout" element={<Layout />} />
-            <Route path="/RegisterUser" element={<RegisterUser />} />
+            {/* <Route path="/RegisterUser" element={<RegisterUser />} /> */}
             <Route path="/boq" element={<Boq />} />
             <Route path="/boq/:id" element={<ProductOverview />} />
             <Route path="/Recommend" element={<RecommendComp />} />
@@ -85,7 +85,7 @@ function App() {
             <Route path="*" element={<PageNotFound />} />
             <Route path="/Login" element={<Login />} />
             <Route path="/OurServices" element={<OurServices />} />
-            <Route path="/Career/JobPage/:jobTitle" element={<JobPage />} />
+            <Route path="/Career/:jobTitle" element={<JobPage />} />
             <Route path="/profile" element={<ProfileCard />} />
             <Route path="/scroll" element={<DoorScrollEffect />} />
             <Route
@@ -127,7 +127,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Landing />} />
             <Route path="/Layout" element={<Layout />} />
-            <Route path="/RegisterUser" element={<RegisterUser />} />
+            {/* <Route path="/RegisterUser" element={<RegisterUser />} /> */}
             <Route path="/Error" element={<ErrorModal />} />
             <Route path="/Contactus" element={<Contactus />} />
             <Route path="/Aboutus" element={<AboutUs />} />
@@ -137,7 +137,7 @@ function App() {
             <Route path="*" element={<PageNotFound />} />
             <Route path="/Login" element={<Login />} />
             <Route path="/OurServices" element={<OurServices />} />
-            <Route path="/Career/JobPage/:jobTitle" element={<JobPage />} />
+            <Route path="/Career/:jobTitle" element={<JobPage />} />
             <Route path="/profile" element={<ProfileCard />} />
             <Route path="/becomeseller" element={<BecomeSeller />} />
             <Route path="/help" element={<HelpnFaq />} />
