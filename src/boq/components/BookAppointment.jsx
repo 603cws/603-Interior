@@ -78,7 +78,7 @@ function BookAppointment({ onClose }) {
           template_id: clienttemplateID,
           user_id: your_public_key,
           template_params: {
-            our_companyname: "603 Interior",
+            our_companyname: "Workved Interiors",
             username: accountHolder.companyName,
             date: formattedDate,
             time: selectedTIme,
@@ -90,7 +90,7 @@ function BookAppointment({ onClose }) {
           template_id: adminTemplateID,
           user_id: your_public_key,
           template_params: {
-            our_companyname: "603 Interior",
+            our_companyname: "Workved Interiors",
             companyname: accountHolder.companyName,
             date: formattedDate,
             time: selectedTIme,

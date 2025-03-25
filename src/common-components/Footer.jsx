@@ -20,24 +20,24 @@ function Footer() {
   return (
     <footer className=" bg-[#1F5C54] text-white font-Poppins px-10 xl:px-40 pt-12 pb-5">
       <div className="container mx-auto flex flex-col lg:flex-row justify-between gap-10 mb-20">
-        <div className="lg:border-r-2 border-[#34BFAD] capitalize pr-10 xl:pr-28 hidden lg:flex flex-col gap-5 text-sm">
-          <div>
+        <div className="lg:border-r-2 border-[#34BFAD]  pr-10 xl:pr-28 hidden lg:flex flex-col gap-5 text-sm">
+          <div className="capitalize">
             <h3 className="font-semibold">registered office address</h3>
             <h3 className="font-semibold">workved interiors</h3>
           </div>
           <div className="flex flex-col gap-2.5">
-            <div className="flex items-center gap-10">
+            <div className="flex items-center gap-10 capitalize">
               <FaLocationDot size={20} />
               <p className="font-thin">
                 Makhija Arcade, 35th Rd, Khar West, <br />
                 Mumbai Maharashtra 400052
               </p>
             </div>
-            <div className="flex items-center gap-10">
+            <div className="flex items-center gap-10 capitalize">
               <PiPhoneCallFill size={20} />
               <p>+91-9136036603</p>
             </div>
-            <div className="flex items-center gap-10">
+            <div className="flex items-center gap-10 ">
               <IoIosMail size={20} />
               <p>603coworkingspace@gmail.com</p>
             </div>

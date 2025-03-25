@@ -199,7 +199,7 @@ function Carrer() {
                 </h3>
               </div>
               <p className="font-sans text-lg mb-7">
-                At 603 Interiors, we believe that the right workspace can
+                At Workved Interiors, we believe that the right workspace can
                 transform the way <br /> you work. we are looking for dynamic
                 and creative individuals who are willing <br /> to dedicate
                 themselves to providing innovative products and services for our{" "}

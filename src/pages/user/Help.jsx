@@ -8,17 +8,17 @@ function Help() {
   };
   const accordionItems = [
     {
-      title: "What is 603 Interiors?",
+      title: "What is Workved Interiors?",
       content:
-        "603 Interiors is a tech-driven platform that helps corporates design and set up their office spaces with instant layouts, smart BOQs, and vendor partnerships, ensuring a hassle-free experience",
+        "Workved Interiors is a tech-driven platform that helps corporates design and set up their office spaces with instant layouts, smart BOQs, and vendor partnerships, ensuring a hassle-free experience",
     },
     {
-      title: "Who can use 603 Interiors?",
+      title: "Who can use Workved Interiors?",
       content:
         "Our platform is designed for corporates, startups, office administrators, HR teams, and real estate decision-makers looking for efficient office space planning and execution.",
     },
     {
-      title: "How does 603 Interiors simplify office setup?",
+      title: "How does Workved Interiors simplify office setup?",
       content:
         "We eliminate the need for lengthy consultations by offering instant office layouts, predefined and custom BOQs, and direct vendor collaboration, saving you time and costs.",
     },

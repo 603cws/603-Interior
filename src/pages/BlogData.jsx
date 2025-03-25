@@ -122,7 +122,7 @@ const BlogData = [
         <span className="font-bold">Conclusion</span>
       </h1>
       <p className="text-gray-700 mb-4">
-        Workspaces are no longer just about desks and chairs. They’re evolving into experience-driven environments that foster productivity, creativity, and well-being. Is your office ready for the future? At 603 Interiors, we help businesses transform their workspaces with modern, efficient, and inspiring designs. Contact us to explore innovative office design solutions!
+        Workspaces are no longer just about desks and chairs. They’re evolving into experience-driven environments that foster productivity, creativity, and well-being. Is your office ready for the future? At Workved Interiors, we help businesses transform their workspaces with modern, efficient, and inspiring designs. Contact us to explore innovative office design solutions!
       </p>
     </div>
 `,
@@ -188,7 +188,7 @@ const BlogData = [
         <span className="font-bold">Conclusion</span>
       </h1>
       <p className="text-gray-700 mb-4">
-        A thoughtfully designed office improves efficiency, collaboration, and overall well-being. At 603 Interiors, we help businesses create workspaces that inspire success. Get in touch to design an office that works for you!
+        A thoughtfully designed office improves efficiency, collaboration, and overall well-being. At Workved Interiors, we help businesses create workspaces that inspire success. Get in touch to design an office that works for you!
       </p>
     </div>
 `,
@@ -212,7 +212,7 @@ const BlogData = [
         <span className="font-bold">1. AI-Powered Office Layouts</span>
       </h1>
       <p className="text-gray-700 mb-4">
-        AI-driven platforms (like the one offered by 603 Interiors) allow businesses to input their office size and requirements, and instantly generate optimized layouts. These designs maximize space utilization while ensuring a comfortable work environment.
+        AI-driven platforms (like the one offered by Workved Interiors) allow businesses to input their office size and requirements, and instantly generate optimized layouts. These designs maximize space utilization while ensuring a comfortable work environment.
       </p>
 
       <h1 className="font-semibold text-xl mb-2">
@@ -240,7 +240,7 @@ const BlogData = [
         <span className="font-bold">Conclusion</span>
       </h1>
       <p className="text-gray-700 mb-4">
-        AI is transforming office interiors, making them smarter and more adaptable. If you’re looking to upgrade your office with AI-driven design solutions, 603 Interiors is here to help. Get in touch with us to experience the future of office interiors today!
+        AI is transforming office interiors, making them smarter and more adaptable. If you’re looking to upgrade your office with AI-driven design solutions, Workved Interiors is here to help. Get in touch with us to experience the future of office interiors today!
       </p>
     </div>
 `,
@@ -292,7 +292,7 @@ const BlogData = [
         <span className="font-bold">Conclusion</span>
       </h1>
       <p className="text-gray-700 mb-4">
-        A well-planned office improves efficiency, well-being, and job satisfaction. If your workspace isn’t enhancing productivity, it’s time for a redesign. 603 Interiors specializes in creating functional, stylish, and employee-friendly office spaces—contact us to transform your office!
+        A well-planned office improves efficiency, well-being, and job satisfaction. If your workspace isn’t enhancing productivity, it’s time for a redesign. Workved Interiors specializes in creating functional, stylish, and employee-friendly office spaces—contact us to transform your office!
       </p>
     </div>
 `,
@@ -366,7 +366,7 @@ const BlogData = [
         <span className="font-bold">Conclusion</span>
       </h1>
       <p className="text-gray-700 mb-4">
-        A few tweaks can turn a chaotic office into a well-organized, productive space. At 603 Interiors, we help businesses revamp their workspaces for efficiency and comfort. Contact us for a consultation!
+        A few tweaks can turn a chaotic office into a well-organized, productive space. At Workved Interiors, we help businesses revamp their workspaces for efficiency and comfort. Contact us for a consultation!
       </p>
     </div>
 `,
@@ -420,7 +420,7 @@ const BlogData = [
         <span className="font-bold">Conclusion</span>
       </h1>
       <p className="text-gray-700 mb-4">
-        AI is revolutionizing office planning, making workplaces smarter, more efficient, and cost-effective. Want to integrate AI into your office design? Let 603 Interiors help you create a future-ready workspace!
+        AI is revolutionizing office planning, making workplaces smarter, more efficient, and cost-effective. Want to integrate AI into your office design? Let Workved Interiors help you create a future-ready workspace!
       </p>
     </div>
 `,

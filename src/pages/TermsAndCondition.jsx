@@ -22,9 +22,9 @@ function TermsAndCondition() {
     {
       title: "Content & Intellectual Property",
       description: [
-        "All content, including text, images, designs, and software on our website, is the property of 603 Interiors and is protected by copyright laws.",
+        "All content, including text, images, designs, and software on our website, is the property of Workved Interiors and is protected by copyright laws.",
         "You may not copy, distribute, or use any content from our website without prior written permission.",
-        "Vendor products, images, and descriptions belong to their respective owners, and 603 Interiors is not responsible for any inaccuracies or changes in product details.",
+        "Vendor products, images, and descriptions belong to their respective owners, and Workved Interiors is not responsible for any inaccuracies or changes in product details.",
       ],
     },
     {
@@ -39,7 +39,7 @@ function TermsAndCondition() {
       title: "Payments & Transactions",
       description: [
         "If you choose to purchase a product or service through our platform, all transactions will be managed by the respective vendor.",
-        "603 Interiors is not responsible for refunds, returns, or disputes related to payments made to vendors.",
+        "Workved Interiors is not responsible for refunds, returns, or disputes related to payments made to vendors.",
         "We recommend reviewing the vendor’s terms before making any purchases.",
       ],
     },
@@ -61,7 +61,7 @@ function TermsAndCondition() {
     {
       title: "Service Changes & Updates",
       description: [
-        "603 Interiors reserves the right to modify or discontinue any part of its services, website features, or vendor collaborations without prior notice.",
+        "Workved Interiors reserves the right to modify or discontinue any part of its services, website features, or vendor collaborations without prior notice.",
       ],
     },
     {
@@ -111,9 +111,9 @@ function TermsAndCondition() {
                 <h2 className="leading-snug">Terms & Conditions</h2>
               </div>
               <p className="xl:text-xl mb-5">
-                Welcome to 603 Interiors! By accessing and using our website,
-                you agree to the following terms and conditions. These ensure a
-                smooth experience for all users and help us maintain
+                Welcome to Workved Interiors! By accessing and using our
+                website, you agree to the following terms and conditions. These
+                ensure a smooth experience for all users and help us maintain
                 transparency in our services. Please read them carefully.
               </p>
               {/* <div>

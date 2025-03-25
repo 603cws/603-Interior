@@ -152,7 +152,7 @@ const BecomeSeller = () => {
         <div className="container mx-auto flex-1 flex justify-around items-center ">
           <div className="w-1/2">
             <h3 className="text-[#1F5C54]  uppercase font-extrabold text-lg mb-3">
-              Become a 603 interior Seller
+              Become a workved interiors Seller
             </h3>
 
             <h1 className="text-4xl xl:text-5xl font-extrabold uppercase text-[#1F5C54]">
@@ -290,11 +290,11 @@ const BecomeSeller = () => {
             </div>
             <div className="w-2/3 flex flex-col gap-5 px-5 justify-center items-start font-Poppins">
               <h2 className="text-3xl font-bold">
-                Bring your brand on 603 Interior
+                Bring your brand on workved interiors
               </h2>
               <p>
-                Use 603 interior tools to help customers discover your unique
-                products and protect your intellectual property.
+                Use workved interiors tools to help customers discover your
+                unique products and protect your intellectual property.
               </p>
               <button className="flex justify-center items-center gap-4 font-semibold text-xl">
                 Launch your brand

@@ -150,7 +150,7 @@ function OurServices() {
                   </h5>
                   {/* Description - Show when expanded */}
                   <p
-                    className={`uppercase text-white text-[16px] transition-opacity duration-300 font-extrabold whitespace-pre-line`}
+                    className={`capitalize text-white text-[16px] transition-opacity duration-300 font-extrabold whitespace-pre-line`}
                   >
                     {service.description}
                   </p>
@@ -315,9 +315,9 @@ function OurServices() {
                 tempus ultricies sapien; dis proin <br /> efficitur.
               </p> */}
 
-              <p className="my-3 lg:my-7 uppercase">
-                At 603 Interiors, we simplify corporate office setup with smart,
-                tech-driven solutions. From instant office layouts to
+              <p className="my-3 lg:my-7 capitalize">
+                At workved interiors, we simplify corporate office setup with
+                smart, tech-driven solutions. From instant office layouts to
                 customizable BOQs and trusted vendor partnerships, we provide a
                 seamless experience for businesses. Our platform helps optimize
                 space, reduce costs, and streamline procurement, ensuring that
@@ -357,10 +357,10 @@ function OurServices() {
             temporibus fugiat quos cum! Necessitatibus fugiat vero minus
             perferendis ipsum!
           </p> */}
-          <p className="text-base my-7 uppercase">
-            At 603 Interiors, your workspace isn’t just another project—it’s a
-            reflection of your vision and needs. with a perfect blend of perfect
-            blend of efficiency, aesthetics, and comfort. Our goal is to
+          <p className="text-base my-7 ">
+            At workved interiors, your workspace isn’t just another project—it’s
+            a reflection of your vision and needs. with a perfect blend of
+            perfect blend of efficiency, aesthetics, and comfort. Our goal is to
             simplify office interiors by providing smart layouts, functional
             designs, and seamless execution, ensuring your office is both
             visually appealing and highly productive.

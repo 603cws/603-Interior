@@ -110,22 +110,22 @@ function Landing() {
 
   const accordionItems = [
     {
-      title: "What is 603 Interiors?",
+      title: "What is  workved interiors?",
       content:
-        "603 Interiors is a tech-driven platform that helps corporates design and set up their office spaces with instant layouts, smart BOQs, and vendor partnerships, ensuring a hassle-free experience",
+        " workved interiors is a tech-driven platform that helps corporates design and set up their office spaces with instant layouts, smart BOQs, and vendor partnerships, ensuring a hassle-free experience",
     },
     {
-      title: "Who can use 603 Interiors?",
+      title: "Who can use  workved interiors?",
       content:
         "Our platform is designed for corporates, startups, office administrators, HR teams, and real estate decision-makers looking for efficient office space planning and execution.",
     },
     {
-      title: "How does 603 Interiors simplify office setup?",
+      title: "How does  workved interiors simplify office setup?",
       content:
         "We eliminate the need for lengthy consultations by offering instant office layouts, predefined and custom BOQs, and direct vendor collaboration, saving you time and costs.",
     },
     {
-      title: "Is 603 Interiors only for large businesses?",
+      title: "Is  workved interiors only for large businesses?",
       content:
         "No, we cater to businesses of all sizes, from small startups to large corporations, providing scalable solutions for workspace design.",
     },
@@ -267,11 +267,11 @@ function Landing() {
               <img src="/images/serviceIcon.png" alt="service icon" />
             </div>
             <h2 className="text-center text-[#212121] font-bold text-5xl font-lato mb-3">
-              Welcome to 603 <br /> Interiors
+              Welcome to workved <br /> Interiors
             </h2>
 
             <p className="text-[#212121] font-sans mb-10 text-center">
-              At 603 Interiors, we believe that the right workspace can
+              At workved interiors, we believe that the right workspace can
               transform the way <br /> you work. Our expertise in designing
               functional, aesthetically pleasing, and <br /> customized office
               spaces sets us apart. With a dedicated in-house design <br /> team
@@ -280,10 +280,10 @@ function Landing() {
               Coworking Space, we bring the same innovation and precision to
               your <br /> corporate office. Whether you're looking to redesign
               your existing office or <br /> create a new space from scratch,
-              603 Interiors offers end-to-end solutions <br /> tailored to your
-              business needs. Experience the perfect blend of creativity,
-              <br /> efficiency, and functionality with 603 Interiors – where
-              every space is <br /> designed with purpose.
+              workved interiors offers end-to-end solutions <br /> tailored to
+              your business needs. Experience the perfect blend of creativity,
+              <br /> efficiency, and functionality with workved interiors –
+              where every space is <br /> designed with purpose.
             </p>
             {/* buton and call div */}
             <div className="flex justify-between items-center">
@@ -323,10 +323,8 @@ function Landing() {
       </section>
 
       {/* section buy our product */}
-      <section className="bg-[url('/images/home/produt.png')] bg-cover bg-center py-4 h-1/2 pb-20">
-        {/* div for container */}
+      {/* <section className="bg-[url('/images/home/produt.png')] bg-cover bg-center py-4 h-1/2 pb-20">
         <div className="container mx-auto relative py-10 ">
-          {/* div for text */}
           <div className="flex flex-col gap-12 justify-center items-center h-3/4 absolute w-1/2 top-[40px] left-[-200px]">
             <div className="flex flex-col justify-center items-center">
               <p className="font-sans mb-1 text-[#1F5C54] font-bold uppercase text-sm">
@@ -344,7 +342,7 @@ function Landing() {
               </button>
             </div>
           </div>
-          {/* div for caurosel */}
+
           <div className="slider-container w-3/4 ml-auto">
             <Slider {...settingsProduct}>
               <div className="overflow-hidden ">
@@ -407,36 +405,10 @@ function Landing() {
                   </div>{" "}
                 </div>
               </div>
-              {/* <div className="bg-green-800 ">
-                <img
-                  src="/images/sectionproduct1.png"
-                  alt="section product"
-                  className="bg-yellow-600 object-contain"
-                />
-                <p className="">lamps</p>
-              </div>
-              <div>
-                <img src="/images/sectionproduct2.png" alt="section product" />
-              </div>
-              <div>
-                <img src="/images/sectionproduct3.png" alt="section product" />
-              </div>
-              <div>
-                <img src="/images/sectionproduct4.png" alt="section product" />
-              </div>
-              <div>
-                <img src="/images/sectionproduct5.png" alt="section product" />
-              </div> */}
-              {/* <div>
-                <img src="/images/sectionproduct1.png" alt="section product" />
-              </div>
-              <div>
-                <img src="/images/sectionproduct1.png" alt="section product" />
-              </div> */}
             </Slider>
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* section for buy  */}
 
