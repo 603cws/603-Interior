@@ -41,6 +41,7 @@ import ProductOverview from "./boq/components/ProductOverview";
 import Sessiontimeout from "./pages/Sessiontimeout";
 import Brokenlink from "./pages/Brokenlink";
 import TokenExpired from "./pages/TokenExpired";
+import JobPage from "./pages/JobPage";
 
 // const Homepage = lazy(() => import("./pages/Homepage"));
 
@@ -84,6 +85,7 @@ function App() {
             <Route path="*" element={<PageNotFound />} />
             <Route path="/Login" element={<Login />} />
             <Route path="/OurServices" element={<OurServices />} />
+            <Route path="/Career/JobPage/:jobTitle" element={<JobPage />} />
             <Route path="/profile" element={<ProfileCard />} />
             <Route path="/scroll" element={<DoorScrollEffect />} />
             <Route
@@ -135,6 +137,7 @@ function App() {
             <Route path="*" element={<PageNotFound />} />
             <Route path="/Login" element={<Login />} />
             <Route path="/OurServices" element={<OurServices />} />
+            <Route path="/Career/JobPage/:jobTitle" element={<JobPage />} />
             <Route path="/profile" element={<ProfileCard />} />
             <Route path="/becomeseller" element={<BecomeSeller />} />
             <Route path="/help" element={<HelpnFaq />} />

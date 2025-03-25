@@ -1,11 +1,11 @@
 import LandingNavbar from "../common-components/LandingNavbar";
-
 import Footer from "../common-components/Footer";
-
+import { Link } from "react-router-dom";
 import { FaLocationDot } from "react-icons/fa6";
-import { GiPadlock } from "react-icons/gi";
 import { HiClock } from "react-icons/hi2";
 import { IoIosArrowForward } from "react-icons/io";
+import jobListings from "../utils/jobData";
+import { IoCalendarSharp } from "react-icons/io5";
 
 function Carrer() {
   const background = "/images/career-page-bg.png";
@@ -218,59 +218,70 @@ function Carrer() {
         </section>
       </div>
 
-      {/* section 3 */}
+      {/* Section 3 */}
       <div className="bg-[#A9D3CE] bg-opacity-20">
-        <section className="container mx-auto">
-          <div className="py-3 pb-5">
+        <section className="container mx-auto px-4">
+          {/* Section Heading */}
+          <div className="py-3 pb-5 text-center">
             <h2 className="font-Poppins font-semibold text-3xl">
-              {" "}
-              Our Open Position
+              Our Open Positions
             </h2>
           </div>
 
-          {/* div for carrer card */}
-          <div className="py-4 grid grid-cols-2 gap-5 xl:grid-cols-3 xl:gap-5">
-            {career603.map((carrercard, index) => {
-              return (
-                <div
-                  key={index}
-                  className="hover:bg-[#A9D3CE] bg-[#fff] lg:w-[400px] lg:h-[220px] p-10 rounded-3xl"
-                >
-                  <div className="pb-4">
-                    <h2 className="font-Poppins font-semibold text-3xl">
-                      {carrercard.jobTitle}
-                    </h2>
-                  </div>
-                  {/* icons  */}
-                  <div className="flex flex-col gap-5 text-black">
-                    {/* flex for two */}
-                    <div className="flex gap-24">
-                      <div className="flex items-center space-x-2">
-                        <HiClock color="#1F5C54" />
-                        <p className="text-sm ">{carrercard.time}</p>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <GiPadlock color="#1F5C54" />
-                        <p className="text-sm ">{carrercard.experince} </p>
-                      </div>
-                    </div>
-                    {/* one icon */}
+          {/* Career Cards Grid */}
+          <div className="py-4 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+            {Object.entries(jobListings).map(([key, job], index) => (
+              <div
+                key={index}
+                className="hover:bg-[#A9D3CE] bg-white p-8 rounded-3xl flex flex-col justify-between h-full"
+              >
+                {/* Job Title */}
+                <div className="pb-4">
+                  <h2 className="font-Poppins font-semibold text-2xl break-words">
+                    {key}
+                  </h2>
+                </div>
+
+                {/* Job Details */}
+                <div className="text-black flex-grow">
+                  <div className="flex flex-wrap gap-4">
+                    {/* Job Type */}
                     <div className="flex items-center space-x-2">
-                      <FaLocationDot color="#1F5C54" />
-                      <p className="text-sm ">{carrercard.location} </p>
+                      <HiClock color="#1F5C54" />
+                      <p className="text-sm">{job.type}</p>
+                    </div>
+
+                    {/* Experience */}
+                    <div className="flex items-center space-x-2">
+                      <IoCalendarSharp color="#1F5C54" />
+                      <p className="text-sm">{job.experience}</p>
                     </div>
                   </div>
 
-                  {/* button */}
-                  <div className="flex items-center pt-8">
-                    <button className="font-Poppins font-semibold text-black capitalize">
-                      View Details
-                    </button>
-                    <IoIosArrowForward color="#1F5C54" />
+                  {/* Location */}
+                  <div className="flex items-center space-x-2 mt-3">
+                    <FaLocationDot color="#1F5C54" />
+                    <p className="text-sm">{job.location}</p>
                   </div>
                 </div>
-              );
-            })}
+
+                {/* Button */}
+                <div className="pt-6">
+                  {/* <button className="font-Poppins font-semibold text-black capitalize flex items-center gap-2">
+                    View Details <IoIosArrowForward color="#1F5C54" />
+                  </button> */}
+                  <Link
+                    to={`/Career/JobPage/${encodeURIComponent(key)}`}
+                    onClick={() =>
+                      localStorage.setItem("selectedJob", JSON.stringify(job))
+                    }
+                    className="font-Poppins font-semibold text-black capitalize flex items-center gap-2"
+                  >
+                    View Details <IoIosArrowForward color="#1F5C54" />
+                  </Link>
+                </div>
+              </div>
+            ))}
           </div>
         </section>
       </div>
