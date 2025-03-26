@@ -420,12 +420,14 @@ function ProductOverview() {
                 />
               ))}
               {/* View in 3D Button */}
-              <button
-                className="ml-4 px-4 py-2 rounded-md bg-blue-600 text-white hover:bg-blue-700 transition"
-                onClick={() => setShowThreeViewer(true)}
-              >
-                View in 3D
-              </button>
+              {import.meta.env.MODE === "development" && (
+                <button
+                  className="ml-4 px-4 py-2 rounded-md bg-blue-600 text-white hover:bg-blue-700 transition"
+                  onClick={() => setShowThreeViewer(true)}
+                >
+                  View in 3D
+                </button>
+              )}
             </div>
           )}
         </div>
