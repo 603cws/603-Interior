@@ -42,6 +42,7 @@ import Sessiontimeout from "./pages/Sessiontimeout";
 import Brokenlink from "./pages/Brokenlink";
 import TokenExpired from "./pages/TokenExpired";
 import JobPage from "./pages/JobPage";
+import ThreeDViewer from "./common-components/ThreeDViewer";
 
 // const Homepage = lazy(() => import("./pages/Homepage"));
 
@@ -82,6 +83,7 @@ function App() {
             <Route path="/Blog" element={<BlogPage />} />
             <Route path="/Blog/:title" element={<BlogDetail />} />
             <Route path="/Career" element={<Carrer />} />
+            <Route path="/ThreeDViewer" element={<ThreeDViewer />} />
             <Route path="*" element={<PageNotFound />} />
             <Route path="/Login" element={<Login />} />
             <Route path="/OurServices" element={<OurServices />} />
@@ -134,6 +136,7 @@ function App() {
             <Route path="/Blog" element={<BlogPage />} />
             <Route path="/Blog/:title" element={<BlogDetail />} />
             <Route path="/Career" element={<Carrer />} />
+            <Route path="/ThreeDViewer" element={<ThreeDViewer />} />
             <Route path="*" element={<PageNotFound />} />
             <Route path="/Login" element={<Login />} />
             <Route path="/OurServices" element={<OurServices />} />

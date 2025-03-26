@@ -11,6 +11,7 @@ import RecommendComp from "./RecommendComp";
 import Navbar from "./Navbar";
 import ProfileCard from "./ProfileCard";
 import { supabase } from "../../services/supabase";
+import ThreeDViewer from "../../common-components/ThreeDViewer";
 
 function ProductOverview() {
   const navigate = useNavigate();
@@ -23,6 +24,7 @@ function ProductOverview() {
   const [hoveredImage, setHoveredImage] = useState(null); // For additional image hover effect
   const [showSelectArea, setShowSelectArea] = useState(false);
   const [selectedAreas, setSelectedAreas] = useState([]);
+  const [showThreeViewer, setShowThreeViewer] = useState(false);
 
   const [isOpen, setIsOpen] = useState(false);
   const profileRef = useRef(null);
@@ -351,6 +353,11 @@ function ProductOverview() {
     <>
       <Navbar toggleProfile={toggleProfile} iconRef={iconRef} />
       <ToastContainer />
+      {/* ThreeJS Viewer with reduced size */}
+      {import.meta.env.MODE === "development" && showThreeViewer && (
+        <ThreeDViewer onClose={() => setShowThreeViewer(false)} />
+      )}
+
       <div
         className={`product-overview grid grid-cols-2 p-5 gap-1 ${
           showSelectArea ? "opacity-50 pointer-events-none" : "opacity-100"
@@ -368,6 +375,7 @@ function ProductOverview() {
               navigate("/boq"); //new ProductOverview
             }}
           />
+
           <div className="flex mx-10 items-center text-[#334A78] text-sm">
             <span>{selectedCategory?.category}</span>
             <MdOutlineKeyboardArrowRight
@@ -381,26 +389,24 @@ function ProductOverview() {
             />
             <span>{selectedSubCategory1}</span>
           </div>
-          {/* main div for image */}
+
+          {/* Main image container */}
           <div
             className="w-3/5 h-3/4 mx-auto mb-2 flex items-center"
             onMouseEnter={() => setMainImageHovered(true)}
             onMouseLeave={() => setMainImageHovered(false)}
-            style={{
-              zIndex: mainImageHovered ? 10 : 1,
-            }}
+            style={{ zIndex: mainImageHovered ? 10 : 1 }}
           >
             <img
               src={hoveredImage || product?.image}
-              // width={600}
-              // height={600}
               className="object-fit h-96"
               alt={product?.title}
             />
           </div>
-          {/* flex box for other images  */}
+
+          {/* Additional images + View in 3D Button */}
           {additionalImagesArray.length > 0 && (
-            <div className="flex justify-start gap-2 mx-6 ml-16">
+            <div className="flex items-center gap-3 mx-6 ml-16">
               {additionalImagesArray.map((img, idx) => (
                 <img
                   key={idx}
@@ -408,14 +414,22 @@ function ProductOverview() {
                   alt={`Angle ${idx + 1}`}
                   width={50}
                   height={50}
-                  onMouseEnter={() => setHoveredImage(img)} // Updates hoveredImage on hover
-                  onMouseLeave={() => setHoveredImage(null)} // Reverts to main image on leave
-                  // className="w-10 h-10 object-cover cursor-pointer rounded-lg border-2 border-transparent"
+                  onMouseEnter={() => setHoveredImage(img)}
+                  onMouseLeave={() => setHoveredImage(null)}
+                  className="cursor-pointer rounded-lg border-2 border-transparent"
                 />
               ))}
+              {/* View in 3D Button */}
+              <button
+                className="ml-4 px-4 py-2 rounded-md bg-blue-600 text-white hover:bg-blue-700 transition"
+                onClick={() => setShowThreeViewer(true)}
+              >
+                View in 3D
+              </button>
             </div>
           )}
         </div>
+
         {/* grid component 2 */}
         <div className=" flex flex-col">
           {/* product info */}
