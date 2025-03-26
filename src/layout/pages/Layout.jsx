@@ -41,8 +41,8 @@ const initialAreaValues = {
   executiveWashroom: 60,
   videoRecordingRoom: 80,
   other: 1,
-  maleWashroom: 100,
-  femaleWashroom: 100,
+  maleWashroom: 60,
+  femaleWashroom: 60,
 };
 
 const initialQuantities = {
@@ -459,6 +459,12 @@ function Layout() {
   const [loungeSize, setLoungeSize] = useState(areaValues.lounge);
   const [upsRoomSize, setUpsRoomSize] = useState(areaValues.ups);
   const [bmsRoomSize, setBmsRoomSize] = useState(areaValues.bms);
+  const [maleWashroomSize, setMaleWashroomSize] = useState(
+    areaValues.maleWashroom
+  );
+  const [femaleWashroomSize, setFemaleWashroomSize] = useState(
+    areaValues.femaleWashroom
+  );
   const [smallCabinSeatCount, setSmallCabinSeatCount] = useState(0);
   const [hrRoomSeatCount, setHrRoomSeatCount] = useState(0);
   const [salesSeatCount, setSalesSeatCount] = useState(0);
@@ -481,6 +487,7 @@ function Layout() {
 
   // const bufferSpace = totalArea < 5000 ? 0.05 : totalArea <= 10000 ? 0.03 : 0; //buffer space
   const bufferSpace = 0.02; //buffer space
+  console.log("male washroom", maleWashroomSize);
 
   // Close profile card when clicking outside
   useEffect(() => {
@@ -512,7 +519,9 @@ function Layout() {
   useEffect(() => {
     setReceptionSize(areaValues.reception);
     setLoungeSize(areaValues.lounge);
-  }, []);
+    setMaleWashroomSize(areaValues.maleWashroom);
+    setFemaleWashroomSize(areaValues.femaleWashroom);
+  });
 
   //setps for joyride
   const tourSteps = [
@@ -806,6 +815,14 @@ function Layout() {
   const handleLoungeSizeChange = handleRoomAreaChange("lounge", setLoungeSize);
   const handleUpsSizeChange = handleRoomAreaChange("ups", setUpsRoomSize);
   const handleBmsSizeChange = handleRoomAreaChange("bms", setBmsRoomSize);
+  const handleMaleWashroomSizeChange = handleRoomAreaChange(
+    "maleWashroom",
+    setMaleWashroomSize
+  );
+  const handleFemaleWashroomSizeChange = handleRoomAreaChange(
+    "femaleWashroom",
+    setFemaleWashroomSize
+  );
 
   const handleSeatCountChange = (setter) => (newCount) => {
     setter(newCount);
@@ -1003,6 +1020,10 @@ function Layout() {
             setReceptionSize={handleReceptionSizeChange}
             loungeSize={loungeSize}
             setLoungeSize={handleLoungeSizeChange}
+            maleWashroomSize={maleWashroomSize}
+            setMaleWashroomSize={handleMaleWashroomSizeChange}
+            femaleWashroomSize={femaleWashroomSize}
+            setFemaleWashroomSize={handleFemaleWashroomSizeChange}
           />
           <SupportSpaces
             areaQuantities={areaQuantities}

@@ -52,7 +52,7 @@ function LandingNavbar({ bgColor = false }) {
               className="cursor-pointer"
               onClick={() => navigate("/becomeseller")}
             >
-              Collabrate
+              Collaborate
             </li>
             <li
               onClick={() => navigate("/Contactus")}
@@ -124,7 +124,7 @@ function LandingNavbar({ bgColor = false }) {
               className="cursor-pointer"
               onClick={() => navigate("/becomeseller")}
             >
-              Collabrate
+              Collaborate
             </li>
             <li
               onClick={() => navigate("/Contactus")}

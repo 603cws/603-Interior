@@ -12,7 +12,7 @@ const publicSpacesData = [
       name: "Reception Size",
       valueKey: "receptionSize",
       setValueKey: "setReceptionSize",
-      min: 80,
+      min: 50,
       max: 700,
       step: 5,
     },
@@ -59,12 +59,28 @@ const publicSpacesData = [
     image: "/images/workstation-wp/executivewash-wp.webp",
     description: "Common Male washroom",
     tooltipText: "size: 100 sqft",
+    slider: {
+      name: "Male Washroom Size",
+      valueKey: "maleWashroomSize",
+      setValueKey: "setMaleWashroomSize",
+      min: 60,
+      max: 600,
+      step: 5,
+    },
   },
   {
     type: "femaleWashroom",
     image: "/images/workstation-wp/executivewash-wp.webp",
     description: "Common Female  washroom",
     tooltipText: "size: 100 sqft",
+    slider: {
+      name: "Female Washroom Size",
+      valueKey: "femaleWashroomSize",
+      setValueKey: "setFemaleWashroomSize",
+      min: 60,
+      max: 600,
+      step: 5,
+    },
   },
 ];
 
@@ -80,6 +96,10 @@ const PublicSpaces = ({
   setLoungeSize,
   breakoutRoomSize,
   setBreakoutRoomSize,
+  maleWashroomSize,
+  setMaleWashroomSize,
+  femaleWashroomSize,
+  setFemaleWashroomSize,
 }) => {
   return (
     <div className="section px-3">
@@ -92,8 +112,12 @@ const PublicSpaces = ({
           const sliderProps = space.slider
             ? {
                 name: space.slider.name,
-                value: eval(space.slider.valueKey) || 0,
-                onChange: eval(space.slider.setValueKey),
+                value: space.slider.valueKey
+                  ? eval(space.slider.valueKey) // Dynamically evaluate the value (e.g., videoRecordingRoomSize)
+                  : 0, // Default to 0 if no dynamic value is found
+                onChange: space.slider.setValueKey
+                  ? eval(space.slider.setValueKey) // Dynamically evaluate the setter function (e.g., setVideoRecordingRoomSize)
+                  : () => {}, // Default empty function if no setter is provided
                 min2: space.slider.min,
                 max2: space.slider.max,
                 step2: space.slider.step,
@@ -116,9 +140,20 @@ const PublicSpaces = ({
                       cabinSize: breakoutRoomSize,
                       setCabinSize: setBreakoutRoomSize,
                     }
+                  : space.type === "maleWashroom"
+                  ? {
+                      cabinSize: maleWashroomSize,
+                      setCabinSize: setMaleWashroomSize,
+                    }
+                  : space.type === "femaleWashroom"
+                  ? {
+                      cabinSize: femaleWashroomSize,
+                      setCabinSize: setFemaleWashroomSize,
+                    }
                   : {}),
               }
             : null;
+          console.log(sliderProps);
 
           return (
             <LayoutCard

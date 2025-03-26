@@ -1,8 +1,11 @@
 import LandingNavbar from "../common-components/LandingNavbar";
 import Footer from "../common-components/Footer";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import ContactUsPopup from "../common-components/ContactUsPopup";
 
 function AboutUs() {
+  const [showContactPopup, setShowContactPopup] = useState(false);
   const navigate = useNavigate();
   return (
     <>
@@ -235,7 +238,8 @@ function AboutUs() {
             contact us now
           </h2>
           <button
-            onClick={() => navigate("/Contactus")}
+            // onClick={() => navigate("/Contactus")}
+            onClick={() => setShowContactPopup(true)}
             className="capitalize bg-[#34BFAD] border-[1px] border-black rounded-lg px-10 py-3"
           >
             contact us
@@ -245,6 +249,9 @@ function AboutUs() {
 
       {/* footer */}
       <Footer />
+      {showContactPopup && (
+        <ContactUsPopup onClose={() => setShowContactPopup(false)} />
+      )}
     </>
   );
 }
