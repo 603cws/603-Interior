@@ -132,6 +132,7 @@ function ProductOverview() {
     return () => {
       document.removeEventListener("keydown", handleEscKey);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Close profile card when clicking outside
@@ -376,7 +377,7 @@ function ProductOverview() {
             }}
           />
 
-          <div className="flex mx-10 items-center text-[#334A78] text-sm">
+          <div className="flex mx-10 items-center text-[#334A78] text-sm mt-4">
             <span>{selectedCategory?.category}</span>
             <MdOutlineKeyboardArrowRight
               size={15}
@@ -392,7 +393,7 @@ function ProductOverview() {
 
           {/* Main image container */}
           <div
-            className="w-3/5 h-3/4 mx-auto mb-2 flex items-center"
+            className="w-3/5 h-3/4 mx-auto mb-2 flex items-center justify-center"
             onMouseEnter={() => setMainImageHovered(true)}
             onMouseLeave={() => setMainImageHovered(false)}
             style={{ zIndex: mainImageHovered ? 10 : 1 }}
@@ -406,7 +407,7 @@ function ProductOverview() {
 
           {/* Additional images + View in 3D Button */}
           {additionalImagesArray.length > 0 && (
-            <div className="flex items-center gap-3 mx-6 ml-16">
+            <div className="flex flex-wrap items-center gap-3 mx-6 ml-16 mt-3">
               {additionalImagesArray.map((img, idx) => (
                 <img
                   key={idx}
