@@ -6,7 +6,7 @@ const BlogData = [
     image: "/officeimg/SunMill/Sunmill.jpeg",
     tags: ["Entrepreneurship", "Business"],
     content: `
-        <h1 class="font-semibold text-xl mb-2"><span class="font-bold">1. Introduction</span></h1>
+        <h1 class="font-semibold text-xl mb-2"><span class="font-bold ">1. Introduction</span></h1>
         <p class="text-gray-700 mb-4">Coworking spaces have become increasingly popular in recent years, offering entrepreneurs, startups, and freelancers a flexible and cost-effective alternative to traditional office spaces. However, in order to truly make the most of a coworking environment, effective networking is key. Building connections with fellow coworkers, sharing ideas, and collaborating on projects can lead to new opportunities and business growth. In this blog, we will discuss some of the most effective networking strategies for success in a coworking environment, helping you make the most out of your shared office space experience.</p>
         
         <h1 class="font-semibold text-xl mb-2"><span class="font-bold">2. The importance of networking in a coworking environment</span></h1>
@@ -36,7 +36,7 @@ const BlogData = [
   {
     blogimage: "/images/contact1.png",
     profileicon: "/images/usericon.png",
-    name: "name",
+    name: "sakshi",
     title: "developing usefull product that would meet user’s needs",
     des: "Lorem Ipsum is simply dummy text of the printing andtypesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an",
     content: `
@@ -70,14 +70,14 @@ const BlogData = [
   {
     blogimage: "/images/contact1.png",
     profileicon: "/images/usericon.png",
-    name: "name",
+    name: "Sakshi",
     title:
       "The Future of Office Design: Trends That Will Shape Workspaces in 2025",
     des: "Lorem Ipsum is simply dummy text of the printing andtypesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an",
     content: `
-  <div className="xl:text-xl mb-5 text-gray-700">
-      <h1 className="font-semibold text-xl mb-2">
-        <span className="font-bold">Introduction</span>
+  <div className="  xl:text-xl mb-5 text-gray-700">
+      <h1 className="font-bold text-xl mb-2">
+        Introduction
       </h1>
       <p className="text-gray-700 mb-4">
         The way we design office spaces is evolving rapidly. With hybrid work models, a focus on employee well-being, and advancements in technology, companies are rethinking how they utilize their office spaces. Let’s explore the top office design trends that will shape workspaces in 2025.
@@ -86,7 +86,7 @@ const BlogData = [
       <h1 className="font-semibold text-xl mb-2">
         <span className="font-bold">1. Hybrid Workspaces: The New Norm</span>
       </h1>
-      <p className="text-gray-700 mb-4">
+      <p className="text-gray-700 mb-4 ">
         The traditional 9-to-5 office setup is becoming obsolete. Companies are investing in flexible workspaces that cater to both in-office and remote employees. Hot desking, breakout zones, and collaborative meeting rooms are now essential to encourage productivity.
       </p>
 
@@ -130,7 +130,7 @@ const BlogData = [
   {
     blogimage: "/images/contact1.png",
     profileicon: "/images/usericon.png",
-    name: "name",
+    name: "sakshi",
     title: "How to Design a Productive Office Space: A Step-by-Step Guide",
     des: "Lorem Ipsum is simply dummy text of the printing andtypesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an",
     content: `
@@ -196,7 +196,7 @@ const BlogData = [
   {
     blogimage: "/images/contact1.png",
     profileicon: "/images/usericon.png",
-    name: "name",
+    name: "sakshi",
     title: "How AI & Automation Are Changing Interior Design for Offices",
     des: "Lorem Ipsum is simply dummy text of the printing andtypesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an",
     content: `
@@ -248,7 +248,7 @@ const BlogData = [
   {
     blogimage: "/images/contact1.png",
     profileicon: "/images/usericon.png",
-    name: "name",
+    name: "sakshi",
     title: "How Office Design Impacts Employee Productivity & Well-Being",
     des: "Lorem Ipsum is simply dummy text of the printing andtypesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an",
     content: `
@@ -300,7 +300,7 @@ const BlogData = [
   {
     blogimage: "/images/contact1.png",
     profileicon: "/images/usericon.png",
-    name: "name",
+    name: "sakshi",
     title: "10 Office Design Mistakes That Are Killing Your Productivity",
     des: "Lorem Ipsum is simply dummy text of the printing andtypesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an",
     content: `
@@ -374,7 +374,7 @@ const BlogData = [
   {
     blogimage: "/images/contact1.png",
     profileicon: "/images/usericon.png",
-    name: "name",
+    name: "sakshi",
     title: "How AI is Revolutionizing Office Space Planning",
     des: "Lorem Ipsum is simply dummy text of the printing andtypesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an",
     content: `

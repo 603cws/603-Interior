@@ -266,7 +266,7 @@ function Landing() {
               </p>
               <img src="/images/serviceIcon.png" alt="service icon" />
             </div>
-            <h2 className="text-center text-[#212121] font-bold text-5xl font-lato mb-3">
+            <h2 className="text-center text-[#212121] font-bold text-5xl font-lato mb-3 capitalize">
               Welcome to workved <br /> Interiors
             </h2>
 

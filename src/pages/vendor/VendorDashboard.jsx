@@ -10,6 +10,7 @@ import Sidebar from "./Sidebar";
 import VendorItem from "./VendorItem";
 import VendorDashboardCards from "./VendorDashboardCards";
 import Help from "../user/Help";
+import UserSetting from "../user/UserSetting";
 
 function VendorDashboard() {
   const [isSettingOpen, setIsSettingOpen] = useState(false);
@@ -151,7 +152,8 @@ function VendorDashboard() {
                       <VendorProfile setIsEditopen={setIsEditopen} />
                     </div>
                   ) : (
-                    <VendorSetting />
+                    // <VendorSetting />
+                    <UserSetting />
                   )}
                 </div>
               </div>

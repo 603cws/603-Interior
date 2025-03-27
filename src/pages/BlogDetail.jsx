@@ -43,7 +43,7 @@ function BlogDetail() {
       {/* blog section */}
 
       <section className="my-10">
-        <div className="container mx-auto flex justify-center">
+        <div className="lg:container lg:mx-auto flex justify-center">
           <div className="max-w-4xl flex flex-col gap-20">
             {/* div for image */}
             <div className="flex justify-center">
@@ -54,40 +54,37 @@ function BlogDetail() {
               />
             </div>
 
-            <div className="font-Poppins ">
+            {/* <div className="font-Poppins ">
               <div className="mx-10">
-                {/* blog title */}
                 <div className="font-semibold xl:text-5xl capitalize text-center mb-10">
-                  {/* <h2>
-                    developing usefull product that would meet user’s needs
-                  </h2> */}
                   <h2 className="leading-snug"> {blog.title}</h2>
                 </div>
                 <div
                   className="xl:text-xl mb-5 text-gray-700"
                   dangerouslySetInnerHTML={{ __html: blog.content }}
                 ></div>
+              </div>
+            </div> */}
+            <div className="font-Poppins">
+              <div className="mx-10">
+                {/* Blog Title */}
+                <div className="font-semibold xl:text-3xl capitalize text-center mb-10">
+                  <h2 className="leading-snug">{blog.title}</h2>
+                </div>
 
-                {/* <p className="xl:text-xl mb-5">
-                  Lorem Ipsum is simply dummy text of the printing and
-                  typesetting industry. Lorem Ipsum has been the industry's
-                  standard dummy text ever since the 1500s, when an
-                </p>
-                <p className="xl:text-xl mb-5">
-                  Lorem Ipsum is simply dummy text of the printing and
-                  typesetting industry. Lorem Ipsum has been the industry's
-                  standard dummy text ever since the 1500s, when an
-                </p>
-                <p className="xl:text-xl mb-5">
-                  Lorem Ipsum is simply dummy text of the printing and
-                  typesetting industry. Lorem Ipsum has been the industry's
-                  standard dummy text ever since the 1500s, when an
-                </p>
-                <p className="xl:text-xl mb-5">
-                  Lorem Ipsum is simply dummy text of the printing and
-                  typesetting industry. Lorem Ipsum has been the industry's
-                  standard dummy text ever since the 1500s, when an
-                </p> */}
+                {/* Blog Content Wrapper */}
+                <div className="font-Poppins text-sm xl:text-lg mb-5 text-[#374151] space-y-4 [&_h1]:font-bold [&_h1]:text-xl [&_p]:text-[#374151] [&_p]:mb-4 [&_h1]:mb-2">
+                  <div dangerouslySetInnerHTML={{ __html: blog.content }}></div>
+                  <div className="capitalize border-b-2 border-b-[#EFEFEF] py-5">
+                    <h3 className="text-[#0E403C]">
+                      Edited by :{" "}
+                      <span className="text-[#34BFAD]"> {blog.name}</span>{" "}
+                    </h3>
+                  </div>
+                  {/* <div>
+                    <h3>Was this page helpful?</h3>
+                  </div> */}
+                </div>
               </div>
             </div>
           </div>

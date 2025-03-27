@@ -128,10 +128,10 @@ function Contactus() {
       >
         <div className="absolute inset-0 bg-black opacity-50"></div>
         <div className="relative z-10 uppercase font-lato font-extrabold">
-          <h1 className="text-5xl lg:text-7xl text-white drop-shadow-lg">
+          <h1 className="text-4xl md:text-5xl lg:text-7xl text-white drop-shadow-lg">
             contact Us
           </h1>
-          <p className="lg:text-3xl text-xl text-gray-200 mt-4">
+          <p className="text-lg lg:text-3xl md:text-xl text-gray-200 mt-4">
             connect with us
           </p>
         </div>
@@ -139,9 +139,7 @@ function Contactus() {
 
       {/* section2 */}
       <section className="">
-        {/* container */}
-        {/* <div className="container mx-auto flex justify-center gap-12 font-Poppins py-4 items-center "> */}
-        <div className="container mx-auto flex justify-around gap-12 font-Poppins py-8 items-center ">
+        <div className="lg:container lg:mx-auto justify-items-center grid grid-cols-1 md:grid-cols-2 gap-10 lg:flex lg:justify-around lg:gap-12 font-Poppins py-8 lg:items-center ">
           {/* content card */}
           <div className=" text-center p-2 w-[215px] h-[255px] flex flex-col justify-start items-center border-2 ">
             <div className="w-full flex justify-center my-4">
@@ -200,7 +198,7 @@ function Contactus() {
 
       {/* section 3 */}
       <section className="bg-[#fff] pt-8">
-        <div className="flex container mx-auto gap-10 py-3">
+        <div className="grid grid-cols-1 mx-4 lg:flex lg:container lg:mx-auto gap-10 py-3">
           {/* form section */}
           <div className="flex-1">
             <div className="px-10  rounded-3xl pb-5">
@@ -208,8 +206,12 @@ function Contactus() {
               <div className="font-Poppins font-semibold py-3">
                 <p className="text-sm text-[#34BFAD]">Get in Touch!</p>
                 <img src="/images/serviceIcon.png" alt="service icon" />
-                <h4 className="text-2xl">Love to hear from you</h4>
-                <h5 className="text-2xl">Get in Touch!</h5>
+                <h4 className="text-xl md:text-2xl text-nowrap">
+                  Love to hear from you
+                </h4>
+                <h5 className="text-xl md:text-2xl text-nowrap">
+                  Get in Touch!
+                </h5>
               </div>
               {/* form part */}
               <div className="font-Poppins pl-2">
@@ -374,16 +376,6 @@ function Contactus() {
                   <div className="cursor-pointer w-12 h-12 rounded-full bg-[#34BFAD] flex justify-center items-center">
                     <RiLinkedinBoxFill size={35} />
                   </div>
-                  {/* <img
-                    src="/images/Insta.png"
-                    alt="social media"
-                    className="cursor-pointer"
-                  />
-                  <img
-                    src="/images/Insta.png"
-                    alt="social media"
-                    className="cursor-pointer"
-                  /> */}
                 </div>
                 {/* </div> */}
               </div>
@@ -396,7 +388,7 @@ function Contactus() {
       <section>
         <div className="container mx-auto font-Poppins">
           {/* div for text */}
-          <div className=" lg:my-4">
+          <div className=" my-2 lg:my-4">
             <div className="flex justify-center items-center">
               <img src="/images/serviceIcon.png" alt="service icon" />
             </div>
@@ -406,7 +398,7 @@ function Contactus() {
           </div>
 
           {/* image grid */}
-          <div className="flex justify-around gap-3 mb-5">
+          <div className="grid grid-cols-1 justify-items-center md:grid-cols-2 lg:flex  lg:justify-around gap-3 mb-5">
             {/* div for each img */}
             <div>
               <img
@@ -445,7 +437,7 @@ function Contactus() {
           <div className="mb-6 mt-4 flex justify-center">
             <button
               onClick={() => navigate("/Layout")}
-              className="bg-[#1F5C54] text-[#fff] border-1 border-[#000] font-bold capitalize rounded-lg py-3 px-10"
+              className="bg-[#1F5C54] text-[#fff] border-1 border-[#000] text-nowrap font-bold capitalize rounded-lg py-3 px-10"
             >
               Start Creating your office now
             </button>
@@ -455,11 +447,6 @@ function Contactus() {
 
       {/* section 4 */}
       <Footer key="contactus" />
-
-      {/* contatus form button  */}
-      {/* <button className="rotate-90 absolute top-50 right-0 bg-red-600 px-5 py-2">
-        Contact Form
-        </button> */}
     </>
   );
 }
