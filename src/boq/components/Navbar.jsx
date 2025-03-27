@@ -630,16 +630,18 @@ function Navbar({ toggleProfile, iconRef }) {
           </button> */}
           {/* </div> */}
           {/* <div className="justify-items-end"> */}
-          <MdClear
-            color="red"
-            size={30}
-            title="Clear selected data"
-            onClick={() => {
-              localStorage.removeItem("selectedData");
-              window.location.reload();
-            }}
-            className="cursor-pointer"
-          />
+          {import.meta.env.MODE === "development" && (
+            <MdClear
+              color="red"
+              size={30}
+              title="Clear selected data"
+              onClick={() => {
+                localStorage.removeItem("selectedData");
+                window.location.reload();
+              }}
+              className="cursor-pointer"
+            />
+          )}
           <div
             className="relative inline-flex items-center border border-black rounded-full"
             ref={dropdownRef}
