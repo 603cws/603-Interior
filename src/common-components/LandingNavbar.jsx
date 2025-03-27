@@ -102,7 +102,11 @@ function LandingNavbar({ bgColor = false }) {
 
       {/* Mobile Menu */}
       {isMobileMenuOpen && (
-        <div className="xl:hidden bg-white border mt-2 rounded-3xl p-5 transition-transform ease-in-out duration-500 ">
+        <div
+          className={`xl:hidden bg-white border mt-2 rounded-3xl p-5 transition-transform ease-in-out duration-500 transform animate-fade-in ${
+            isMobileMenuOpen ? "translate-y-0" : "-translate-y-full"
+          }`}
+        >
           <ul className="flex flex-col gap-4 text-[#1A3A36] font-semibold uppercase bg-white z-10">
             <li onClick={() => navigate("/")} className="cursor-pointer">
               Home

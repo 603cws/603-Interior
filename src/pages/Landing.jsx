@@ -30,6 +30,7 @@ import { IoIosCall } from "react-icons/io";
 
 function Landing() {
   const [expandedIndex, setExpandedIndex] = useState();
+  const [isMobile, setIsMobile] = useState(false);
   const heroImages = [
     "/images/home/Hero.png",
     "/images/home/Hero-image-1.png",
@@ -51,6 +52,16 @@ function Landing() {
 
     return () => clearInterval(interval); // Cleanup interval on component unmount
   }, [heroImages.length]);
+
+  // Detect screen size
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768); // Mobile & Tablet: < 768px
+    };
+    handleResize(); // Check on mount
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   const navigate = useNavigate();
   const handleToggle = (index) => {
@@ -79,6 +90,10 @@ function Landing() {
         breakpoint: 1800, // Tailwind's custom 3xl breakpoint
         settings: {
           slidesToShow: 5, // Show 5 slides only on 3xl screens
+        },
+        breakpoint: 768,
+        settings: {
+          slidesToShow: 2, // Show 3 slides only on md screens
         },
       },
     ],
@@ -154,9 +169,11 @@ function Landing() {
 
           {/* Text div */}
           <div className="flex justify-center items-center h-svh">
-            <div className="flex-1 flex flex-col justify-center items-center text-white max-h-fit max-w-fit mx-auto p-5 rounded-xl mt-14 ">
-              <h1 className="font-lato text-[64px]">Create your Space</h1>
-              <p className="font-Poppins text-[32px]">
+            <div className="flex-1 flex flex-col gap-10 lg:gap-0 justify-center items-center text-white max-h-fit max-w-fit mx-auto p-5 rounded-xl mt-14 ">
+              <h1 className="font-lato text-[55px] lg:text-[64px] text-center leading-tight">
+                Create your Space
+              </h1>
+              <p className="font-Poppins text-xl lg:text-3xl text-center">
                 We create unique style and design for your office
               </p>
               <button
@@ -170,18 +187,18 @@ function Landing() {
         </div>
       </section>
       {/* section 2 */}
-      <section className="bg-[#1F5C54] md:h-[600px] lg:h-[700px] xl:h-[750px]">
+      <section className="bg-[#1F5C54] md:h-[500px] lg:h-[600px] xl:h-[700px]">
         <div className="container mx-auto  flex flex-col text-white ">
           {/* div for the text */}
           <div className="flex flex-col justify-center items-center mt-7 font-sans mb-5">
             <p
-              className="text-[#34BFAD] uppercase text-sm font-[10]"
+              className="text-[#34BFAD] uppercase text-xs lg:text-sm font-[10]"
               style={{ wordSpacing: "0.3em", letterSpacing: "0.2rem" }}
             >
               Luxurious Office Interiors
             </p>
             <img src="/images/serviceIcon.png" alt="service icon" />
-            <p className="font-lato text-5xl font-semibold mb-2">
+            <p className="font-lato text-3xl lg:text-5xl font-semibold mb-2">
               We Offer Top Notch
             </p>
             <p className="text-center text-[12px] font-Poppins">
@@ -192,59 +209,46 @@ function Landing() {
           {/* div for the carousel */}
           <div className="flex-1 my-7">
             {/* Container for Images */}
-            <div className="flex justify-center gap-14 relative px-20 pb-10">
+            <div className="flex flex-col sm:flex-row justify-center gap-6 sm:gap-14 relative px-5 lg:px-20 pb-10">
               {/* Image Card 1 */}
-              <div className="group relative text-center w-1/3 h-auto overflow-hidden rounded-3xl transition-all duration-700 ease-in-out">
-                {/* <div className="group relative text-center max-w-sm h-auto overflow-hidden rounded-xl transition-all duration-700 ease-in-out"> */}
+              <div className="group relative text-center w-full md:w-1/3 h-auto overflow-hidden rounded-3xl transition-all duration-700 ease-in-out">
                 <div className="flex flex-col items-center justify-center p-4 bg-transparent transition-all duration-700 ease-in-out group-hover:bg-white group-hover:scale-105 group-hover:py-8">
                   <img
                     src="/images/home/section2-img1.png"
                     alt="pantary"
-                    className="mx-auto transition-transform duration-700 ease-in-out group-hover:scale-95 group-hover:origin-center rounded-3xl"
+                    className="mx-auto w-full sm:w-auto transition-transform duration-700 ease-in-out group-hover:scale-95 rounded-3xl"
                   />
-                  <p className="hidden group-hover:block font-lora font-bold text-[#333333] mt-2 text-xl">
+                  <p className="hidden group-hover:block font-lora font-bold text-[#333333] mt-2 text-base md:text-lg lg:text-xl">
                     Smart Office Layouts
                   </p>
-                  {/* <p className="hidden group-hover:block text-[#34BFAD] font-sans font-bold mt-1 uppercase tracking-widest text-xs ">
-                    Space-optimized layouts tailored to your team’s needs.
-                  </p> */}
                 </div>
               </div>
 
               {/* Image Card 2 */}
-              <div className="group relative text-center w-1/3 h-auto overflow-hidden rounded-3xl transition-all duration-700 ease-in-out">
-                {/* <div className="group relative text-center max-w-sm h-auto overflow-hidden rounded-xl transition-all duration-700 ease-in-out"> */}
+              <div className="group relative text-center w-full md:w-1/3 h-auto overflow-hidden rounded-3xl transition-all duration-700 ease-in-out">
                 <div className="flex flex-col items-center justify-center p-4 bg-transparent transition-all duration-700 ease-in-out group-hover:bg-white group-hover:scale-105 group-hover:py-8">
                   <img
                     src="/images/home/section2-img2.png"
                     alt="pantary"
-                    className="mx-auto transition-transform duration-700 ease-in-out group-hover:scale-95 group-hover:origin-center rounded-3xl"
+                    className="mx-auto w-full sm:w-auto transition-transform duration-700 ease-in-out group-hover:scale-95 rounded-3xl"
                   />
-                  <p className="hidden group-hover:block font-lora font-bold text-[#333333] mt-2 text-xl">
+                  <p className="hidden group-hover:block font-lora font-bold text-[#333333] mt-2 text-base md:text-lg lg:text-xl">
                     Custom BOQ
                   </p>
-                  {/* <p className="hidden group-hover:block text-[#34BFAD] font-sans font-bold mt-1 uppercase tracking-widest text-xs ">
-                    fully customizable BOQs with trusted vendor recommendations
-                  </p> */}
                 </div>
               </div>
 
               {/* Image Card 3 */}
-              <div className="group relative text-center w-1/3 h-auto overflow-hidden rounded-3xl transition-all duration-700 ease-in-out">
-                {/* <div className="group relative text-center max-w-sm h-auto overflow-hidden rounded-xl transition-all duration-700 ease-in-out"> */}
+              <div className="group relative text-center w-full md:w-1/3 h-auto overflow-hidden rounded-3xl transition-all duration-700 ease-in-out">
                 <div className="flex flex-col items-center justify-center p-4 bg-transparent transition-all duration-700 ease-in-out group-hover:bg-white group-hover:scale-105 group-hover:py-8">
                   <img
                     src="/images/home/section2-img3.png"
                     alt="pantary"
-                    className="mx-auto transition-transform duration-700 ease-in-out group-hover:scale-95 group-hover:origin-center rounded-3xl"
+                    className="mx-auto w-full sm:w-auto transition-transform duration-700 ease-in-out group-hover:scale-95 rounded-3xl"
                   />
-                  <p className="hidden group-hover:block font-lora font-bold text-[#333333] mt-2 text-xl">
+                  <p className="hidden group-hover:block font-lora font-bold text-[#333333] mt-2 text-base md:text-lg lg:text-xl">
                     End-to-End Execution
                   </p>
-                  {/* <p className="hidden group-hover:block text-[#34BFAD] font-sans font-bold mt-1 uppercase tracking-widest text-xs ">
-                    From planning to procurement and setup, we ensure quality
-                    and efficiency at every step
-                  </p> */}
                 </div>
               </div>
             </div>
@@ -252,68 +256,68 @@ function Landing() {
         </div>
       </section>
       {/* section 3 */}
-      <section className="bg-[#F4F4F4] pb-24">
-        {/* <div className="container mx-auto flex my-10 gap-32"> */}
-        <div className="container mx-auto flex py-10 justify-around">
-          {/* div for textual part */}
-          <div>
-            <div className="flex flex-col justify-center items-center gap-1">
-              <p
-                className="text-[#1F5C54] font-sans font-bold uppercase text-sm "
-                style={{ wordSpacing: "0.3em", letterSpacing: "0.2rem" }}
-              >
-                our story
-              </p>
-              <img src="/images/serviceIcon.png" alt="service icon" />
-            </div>
-            <h2 className="text-center text-[#212121] font-bold text-5xl font-lato mb-3 capitalize">
-              Welcome to workved <br /> Interiors
-            </h2>
-
-            <p className="text-[#212121] font-sans mb-10 text-center">
-              At workved interiors, we believe that the right workspace can
-              transform the way <br /> you work. Our expertise in designing
-              functional, aesthetically pleasing, and <br /> customized office
-              spaces sets us apart. With a dedicated in-house design <br /> team
-              that has successfully crafted inspiring environments for 603 The{" "}
-              <br />
-              Coworking Space, we bring the same innovation and precision to
-              your <br /> corporate office. Whether you're looking to redesign
-              your existing office or <br /> create a new space from scratch,
-              workved interiors offers end-to-end solutions <br /> tailored to
-              your business needs. Experience the perfect blend of creativity,
-              <br /> efficiency, and functionality with workved interiors –
-              where every space is <br /> designed with purpose.
-            </p>
-            {/* buton and call div */}
-            <div className="flex justify-between items-center">
-              <button
-                onClick={() => navigate("/AboutUs")}
-                className="px-10 py-3.5 border border-[#34BFAD] font-sans text-[#34BFAD] hover:bg-[#34BFAD] hover:text-[#212121] uppercase font-thin text-sm tracking-wider"
-              >
-                Read More
-              </button>
-              {/* image  */}
-              <div className=" w-1/2 flex justify-center items-center gap-2">
-                <div
-                  className="bg-[#34BFAD] w-[50px] h-[50px] rounded-full flex justify-center items-center cursor-pointer"
-                  onClick={() => navigate("/ContactUs")}
+      <section className="bg-[#F4F4F4] pb-10 lg:pb-20">
+        <div className="container mx-auto flex py-10 justify-around gap-5">
+          <div className="flex-1">
+            <div>
+              <div className="flex flex-col justify-center items-center gap-1">
+                <p
+                  className="text-[#1F5C54] font-sans font-bold uppercase text-sm "
+                  style={{ wordSpacing: "0.3em", letterSpacing: "0.2rem" }}
                 >
-                  <IoIosCall size={35} color="white" />
-                </div>
-                <div className="flex flex-col justify-center items-center">
-                  <p className="font-sans font-bold text-[#212121] text-sm text-center">
-                    Book Through Call
-                  </p>
-                  <p className="font-sans text-[#34BFAD] text-lg ml-3">
-                    +91 9136036603
-                  </p>
+                  our story
+                </p>
+                <img src="/images/serviceIcon.png" alt="service icon" />
+              </div>
+              <div className="flex flex-col gap-5 xl:gap-14">
+                <h2 className="text-center text-[#212121] font-bold text-3xl xl:text-5xl font-lato ">
+                  Welcome to Workved {!isMobile && <br />} Interiors
+                </h2>
+
+                <p className="text-[#212121] text-sm xl:text-base font-sans text-justify 2xl:leading-7 xl:mb-5">
+                  At workved interiors, we believe that the right workspace can
+                  transform the way you work. Our expertise in designing
+                  functional, aesthetically pleasing, and customized office
+                  spaces sets us apart. With a dedicated in-house design team
+                  that has successfully crafted inspiring environments for 603
+                  The Coworking Space, we bring the same innovation and
+                  precision to your corporate office. Whether you're looking to
+                  redesign your existing office or create a new space from
+                  scratch, workved interiors offers end-to-end solutions
+                  tailored to your business needs. Experience the perfect blend
+                  of creativity, efficiency, and functionality with workved
+                  interiors – where every space is designed with purpose.
+                </p>
+                {/* buton and call div */}
+                <div className="flex flex-col lg:flex-row justify-center lg:justify-between items-center gap-5">
+                  <button
+                    onClick={() => navigate("/AboutUs")}
+                    className="px-10 py-3.5 border border-[#34BFAD] font-sans text-[#34BFAD] hover:bg-[#34BFAD] hover:text-[#212121] uppercase font-thin text-xs lg:text-sm tracking-wider"
+                  >
+                    Read More
+                  </button>
+                  {/* image  */}
+                  <div className="w-full lg:w-1/2 flex justify-center items-center gap-2">
+                    <div
+                      className="bg-[#34BFAD] lg:w-[50px] w-10 h-10 lg:h-[50px] rounded-full flex justify-center items-center cursor-pointer"
+                      onClick={() => navigate("/ContactUs")}
+                    >
+                      <IoIosCall className="text-white w-6 h-6 sm:w-9 sm:h-9" />
+                    </div>
+                    <div className="flex flex-col justify-center items-center">
+                      <p className="font-sans font-bold text-[#212121] text-sm text-center">
+                        Book Through Call
+                      </p>
+                      <p className="font-sans text-[#34BFAD] text-sm lg:text-lg ml-3">
+                        +91 9136036603
+                      </p>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-          {/* div for image */}
-          <div className=" flex justify-end items-center h-full w-1/2">
+          <div className="flex-1 hidden lg:flex justify-end items-center h-full">
             <img
               src="/images/home/welcome to interior.png"
               alt="welcome interior"
@@ -418,7 +422,10 @@ function Landing() {
         <div className="container max-w-full overflow-x-hidden py-2">
           {/* textual part */}
           <div className="flex flex-col justify-center items-center">
-            <p className="font-sans mb-1 text-[#1F5C54] font-bold text-sm uppercase text tracking-wider">
+            <p
+              className="font-sans mb-1 text-[#1F5C54] font-bold text-sm uppercase text tracking-wider"
+              style={{ wordSpacing: "0.3em", letterSpacing: "0.2rem" }}
+            >
               our work
             </p>
             <img src="/images/serviceIcon.png" alt="service icon" />
@@ -498,7 +505,7 @@ function Landing() {
                   color={"#1A3A36"}
                 />
               </div>
-              <div className="swiper-pagination"></div>
+              <div className="hidden lg:block swiper-pagination"></div>
             </div>
           </Swiper>
         </div>
@@ -510,7 +517,10 @@ function Landing() {
         <div className="container mx-auto flex flex-col py-10">
           {/* text */}
           <div className="flex flex-col justify-center items-center mb-3">
-            <p className="font-sans mb-1 text-[#1F5C54] font-bold uppercase text-sm tracking-wider">
+            <p
+              className="font-sans mb-1 text-[#1F5C54] font-bold uppercase text-sm tracking-wider"
+              style={{ wordSpacing: "0.1em", letterSpacing: "0.1rem" }}
+            >
               Our Clients
             </p>
             <img src="/images/serviceIcon.png" alt="service icon" />
@@ -518,35 +528,35 @@ function Landing() {
           {/* logo slider */}
           <div className="flex justify-center items-center mx-4 w-full max-w-screen">
             <Slider {...settings} className="w-full">
-              <div className="slider-image w-56 h-16 flex justify-center items-center">
+              <div className="slider-image w-32 lg:w-56 h-10 lg:h-16 flex justify-center items-center">
                 <img
                   src="/images/iide-logo.svg"
                   alt="iide"
                   className="w-full max-h-full"
                 />
               </div>
-              <div className=" slider-image">
+              <div className="slider-image w-24 h-10">
                 <img
                   src="/images/credilio-svg-logo.svg"
                   alt="credilio"
                   className="w-full max-h-full"
                 />
               </div>
-              <div className="slider-image w-56 h-16 flex justify-center items-center">
+              <div className="slider-image w-32 lg:w-56 h-10 lg:h-16  flex justify-center items-center">
                 <img
                   src="/images/tripjack-logo.png"
                   alt="tripjack"
                   className="w-full max-h-full"
                 />
               </div>
-              <div className="slider-image w-32 h-[70px] flex justify-center items-center px-5">
+              <div className="slider-image w-24 lg:w-32 h-12 lg:h-[70px] flex justify-center items-center px-5">
                 <img
                   src="/images/bajaj-electricals-logo.jpg"
                   alt="bajaj"
                   className="w-full max-h-full"
                 />
               </div>
-              <div className="slider-image w-28 h-16 flex justify-center items-center px-5">
+              <div className="slider-image w-24 lg:w-28 h-12 lg:h-16 flex justify-center items-center px-5">
                 <img
                   src="/logo/logo.png"
                   alt="603"
@@ -560,7 +570,7 @@ function Landing() {
 
       {/* section6 */}
       {/* <section className="bg-gradient-to-t from-[#f4f4f4] via-[#f4f4f4] to-[#D0D0D0] "> */}
-      <section className=" bg-[#F4F4F4] ">
+      <section className=" bg-[#F4F4F4] hidden lg:block">
         <div className="container mx-auto flex justify-around items-center py-10 ">
           <div>
             {/* <div className="w-[350px] h-[520.78px] px-[30px] py-[37px] bg-[#1f5c54] rounded-tr-[200px] rounded-bl-[200px] rounded-br-[200px] flex-col justify-start items-center gap-[18px] inline-flex "> */}
@@ -661,9 +671,9 @@ function Landing() {
       {/* <section className="bg-gradient-to-t from-[#f4f4f4] via-[#f4f4f4] to-[#D0D0D0]"> */}
       <section className="py-10 bg-[#F4F4F4] ">
         {/* container */}
-        <div className="container mx-auto flex">
+        <div className="lg:container mx-auto flex px-1">
           {/* a div for image */}
-          <div className="flex-1">
+          <div className="flex-1 hidden lg:block">
             <img
               src="/images/home/sectionFAQ.png"
               alt="FAQ Section"
@@ -671,11 +681,11 @@ function Landing() {
             />
           </div>
           {/* div for Faq */}
-          <div className="flex-1 border-2 border-[#CCCCCC] rounded-3xl p-10">
-            <h2 className="font-bold font-Poppins text-3xl text-center my-10">
+          <div className="flex-1 lg:border-2 border-[#CCCCCC] rounded-3xl lg:p-10">
+            <h2 className="font-bold font-Poppins text-xl lg:text-3xl text-center my-10">
               Frequently Asked Questions
             </h2>
-            <div className="flex flex-col m-auto ">
+            <div className="flex flex-col m-auto">
               {accordionItems.map((item, index) => (
                 // <div key={index} className="border-b last:border-b-0">
                 <div
@@ -683,7 +693,7 @@ function Landing() {
                   className="mb-3 text-[#141515] font-Poppins font-medium"
                 >
                   <div
-                    className="flex w-full text-left p-4 border-2 hover:bg-gray-200 focus:outline-none justify-between cursor-pointer rounded-xl"
+                    className="flex w-full text-left p-4 border-2 hover:bg-gray-200 focus:outline-none justify-between cursor-pointer rounded-xl text-xs "
                     onClick={() => handleToggle(index)}
                   >
                     <button
@@ -696,7 +706,7 @@ function Landing() {
                     {expandedIndex === index ? <FaAngleUp /> : <FaAngleDown />}
                   </div>
                   {expandedIndex === index && (
-                    <div className="p-4 bg-white border-t rounded-xl">
+                    <div className="p-4 bg-white border-t rounded-xl text-xs">
                       <p>{item.content}</p>
                     </div>
                   )}

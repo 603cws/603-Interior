@@ -349,9 +349,9 @@ function Login() {
         </div>
       ) : (
         <form onSubmit={handleSubmit}>
-          <div className="main flex justify-center gap-5 h-screen w-full bg-login-custom-gradient">
+          <div className="main flex justify-center gap-5 h-screen w-full bg-login-custom-gradient px-3 lg:px-0">
             {/* <div className="img w-1/2 p-5 flex justify-end items-center"> */}
-            <div className="img flex-1 p-5 flex justify-end items-center">
+            <div className="img flex-1 p-5 md:flex justify-end items-center hidden">
               <img
                 src="images/Register.png"
                 alt=""
