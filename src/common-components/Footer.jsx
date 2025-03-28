@@ -77,13 +77,13 @@ function Footer() {
 
             {/* Email */}
             <div className="flex items-center gap-10">
-              <a href="mailto:603coworkingspace@gmail.com">
+              <a href="mailto:sales@603thecoworkingspace.com">
                 <IoIosMail
                   size={20}
                   className="cursor-pointer hover:text-red-500"
                 />
               </a>
-              <p className="hidden lg:block">603coworkingspace@gmail.com</p>
+              <p className="hidden lg:block">sales@603thecoworkingspace.coms</p>
             </div>
           </div>
           <div className="lg:block capitalize">
@@ -196,7 +196,7 @@ function Footer() {
           className="flex justify-center items-center gap-3 cursor-pointer"
         >
           <BsShop size={16} />
-          <h4 className="font-semibold">Become a reseller</h4>
+          <h4 className="font-semibold">How to sell</h4>
         </div>
         <p className="text-nowrap text-xs">
           &copy; 2019-2025 . Workved Interiors | All Rights Reserved

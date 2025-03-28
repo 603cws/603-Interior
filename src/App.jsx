@@ -147,6 +147,7 @@ function App() {
             <Route path="/termsNcondtion" element={<TermsAndCondition />} />
             {/* <Route path="/vendordashboard" element={<VendorDashboard />} /> */}
             <Route path="/bookappointment" element={<BookAppointment />} />
+            <Route path="/howtosell" element={<Howtosell />} />
           </Routes>
         )}
       </Suspense>

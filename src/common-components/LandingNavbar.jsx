@@ -9,8 +9,6 @@ function LandingNavbar({ bgColor = false }) {
   const { setShowProfile, showProfile, isAuthenticated, accountHolder } =
     useApp();
 
-  // const isadmin = accountHolder.role === "admin" ? true : false;
-
   const toggleProfile = () => {
     setShowProfile(!showProfile);
   };
@@ -119,10 +117,10 @@ function LandingNavbar({ bgColor = false }) {
               onClick={() => navigate("/OurServices")}
               className="cursor-pointer"
             >
-              Our Services
+              Services
             </li>
             <li onClick={() => navigate("/Blog")} className="cursor-pointer">
-              Our Blog
+              Blog
             </li>
             <li
               className="cursor-pointer"
@@ -137,19 +135,23 @@ function LandingNavbar({ bgColor = false }) {
               Contact Us
             </li>
             <li>
-              <button
-                onClick={() => navigate("/Login")}
-                className="px-6 py-1.5 bg-[#1F5C54] border border-[#15423C] rounded-3xl text-white w-full"
-              >
-                Log In
-              </button>
+              {isAuthenticated ? (
+                <button
+                  className="px-6 py-1.5 bg-[#1F5C54] border border-[#15423C] rounded-3xl text-white w-full"
+                  onClick={() => navigate("/dashboard")}
+                >
+                  Dashboard
+                </button>
+              ) : (
+                <button
+                  onClick={() => navigate("/Login")}
+                  className="px-6 py-1.5 bg-[#1F5C54] border border-[#15423C] rounded-3xl text-white w-full"
+                >
+                  Log In
+                </button>
+              )}
             </li>
           </ul>
-
-          {/* Login Button (Mobile) */}
-          {/* <div className="mt-4 text-center">
-           
-          </div> */}
         </div>
       )}
     </div>

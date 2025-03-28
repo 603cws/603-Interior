@@ -132,10 +132,13 @@ const BecomeSeller = () => {
         settings: {
           slidesToShow: 5, // Show 5 slides only on 3xl screens
         },
+        breakpoint: 768,
+        settings: {
+          slidesToShow: 2, // Show 3 slides only on md screens
+        },
       },
     ],
   };
-
   const scrollToSection = () => {
     const section = document.getElementById("contact");
     if (section) {
@@ -145,11 +148,11 @@ const BecomeSeller = () => {
 
   return (
     <>
-      <section className="h-[85vh] flex flex-col">
+      <section className="hidden  h-[85vh] md:flex flex-col">
         <div>
           <LandingNavbar bgColor={true} />
         </div>
-        <div className="container mx-auto flex-1 flex justify-around items-center ">
+        <div className="md:container md:mx-auto flex-1 flex justify-around items-center ">
           <div className="w-1/2">
             <h3 className="text-[#1F5C54]  uppercase font-extrabold text-lg mb-3">
               Become a workved interiors Seller
@@ -159,13 +162,6 @@ const BecomeSeller = () => {
               connect. <span className="text-[#54DED3]">collab.</span> <br />{" "}
               innovate.
             </h1>
-
-            {/* <a
-              href="#contact"
-              className="px-5 py-3 bg-[#1F5C54] border-1 border-[#15423C] rounded-3xl uppercase text-white"
-            >
-              get started
-            </a> */}
             <button
               onClick={scrollToSection}
               className="px-10 py-3 mt-20 bg-[#1F5C54] border-1 font-Poppins font-bold border-[#15423C] rounded-3xl uppercase text-white"
@@ -189,42 +185,84 @@ const BecomeSeller = () => {
           </div>
         </div>
       </section>
+      <section className="md:hidden  flex flex-col">
+        <div>
+          <LandingNavbar bgColor={true} />
+        </div>
+        <div className="mx-4 flex-1 flex flex-col items-center  mt-20 pt-12 ">
+          <div className="">
+            <h3 className="text-[#1F5C54]  uppercase font-extrabold text-sm lg:text-lg mb-3">
+              Become a Part of <br /> workved interiors
+            </h3>
+
+            <h1 className="text-4xl xl:text-5xl font-extrabold uppercase text-[#1F5C54]">
+              connect.
+              <span className="text-[#54DED3]">collab.</span> <br /> innovate.
+            </h1>
+            <button
+              onClick={scrollToSection}
+              className="px-6 py-3 my-4 bg-[#1F5C54] border-1 font-Poppins text-sm lg:text-lg font-bold border-[#15423C] rounded-3xl uppercase text-white"
+            >
+              get started
+            </button>
+          </div>
+
+          {/* <div className="h-[50%] w-screen relative">
+            <img
+              src="/images/collab-bg-2.png"
+              alt=""
+              className="absolute top-0 left-0 w-1/3 "
+            />
+            <img
+              src="/images/collab-bg-1.png"
+              alt=""
+              className="absolute top-36 right-0 w-1/3 "
+            />
+          </div> */}
+        </div>
+      </section>
       {/* how it works */}
-      <section className="my-10">
-        <div className="font-Poppins uppercase container mx-auto ">
+      <section className="my-6">
+        <div className="font-Poppins uppercase mx-4 lg:container lg:mx-auto ">
           {/* text */}
           <div className="text-center my-7 flex flex-col justify-center items-center gap-2">
             <img src="/images/serviceIcon.png" alt="service icon" />
-            <h2 className="uppercase font-bold text-3xl">how it works</h2>
+            <h2 className="uppercase font-bold text-lg sm:text-xl lg:text-3xl">
+              how it works
+            </h2>
           </div>
           {/* infor */}
-          <div className="flex justify-center gap-4 bg-[#F4F4F4] rounded-2xl py-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 justify-items-center  lg:flex  lg:justify-center gap-4 bg-[#F4F4F4] rounded-2xl py-5">
             {/* info card */}
             <div className="max-w-sm">
-              <div className="flex  items-center gap-3">
+              <div className="flex justify-center lg:justify-normal items-center gap-3">
                 <div className="w-12 h-12 bg-[#1F5C54] rounded-full text-white text-lg flex justify-center items-center">
                   <span>1</span>
                 </div>
-                <div className="w-[158px] h-[0px] border-2 border-[#1f5c54]"></div>
+                <div className="hidden lg:block w-[158px] h-[0px] border-2 border-[#1f5c54]"></div>
               </div>
               {/* info of card */}
-              <div>
-                <h3 className="font-semibold text-base my-3">create account</h3>
-                <p className="text-sm">All you need is :</p>
+              <div className="flex flex-col justify-center items-center md:block">
+                <h3 className="font-semibold text-sm lg:text-base my-3">
+                  create account
+                </h3>
+                <p className="text-xs lg:text-sm">All you need is : to login</p>
               </div>
             </div>
             {/* info card */}
             <div className="max-w-sm">
-              <div className="flex  items-center gap-3">
+              <div className="flex justify-center lg:justify-normal  items-center gap-3">
                 <div className="w-12 h-12 bg-[#1F5C54] rounded-full text-white text-lg flex justify-center items-center">
                   <span>2</span>
                 </div>
-                <div className="w-[158px] h-[0px] border-2 border-[#1f5c54]"></div>
+                <div className="hidden lg:block w-[158px] h-[0px] border-2 border-[#1f5c54]"></div>
               </div>
               {/* info of card */}
-              <div>
-                <h3 className="font-semibold text-base my-2">List Products</h3>
-                <p className="text-sm uppercase">
+              <div className="flex flex-col justify-center items-center md:block">
+                <h3 className="font-semibold text-sm lg:text my-2">
+                  List Products
+                </h3>
+                <p className="text-xs lg:text-sm uppercase">
                   List the products <br /> you want to sell in <br /> your
                   supplier panel
                 </p>
@@ -232,16 +270,18 @@ const BecomeSeller = () => {
             </div>
             {/* info card */}
             <div className="max-w-sm">
-              <div className="flex  items-center gap-3">
+              <div className="flex justify-center lg:justify-normal items-center gap-3">
                 <div className="w-12 h-12 bg-[#1F5C54] rounded-full text-white text-lg flex justify-center items-center">
                   <span>3</span>
                 </div>
-                <div className="w-[158px] h-[0px] border-2 border-[#1f5c54]"></div>
+                <div className="hidden lg:block w-[158px] h-[0px] border-2 border-[#1f5c54]"></div>
               </div>
               {/* info of card */}
-              <div>
-                <h3 className="font-semibold text-base my-2">Get Orders</h3>
-                <p className="text-sm">
+              <div className="flex flex-col justify-center items-center md:block">
+                <h3 className="font-semibold text-sm lg:text my-2">
+                  Get Orders
+                </h3>
+                <p className="text-xs lg:text-sm">
                   Start getting orders <br /> from crores of Indians <br />{" "}
                   actively shopping on our <br /> platform.
                 </p>
@@ -249,18 +289,18 @@ const BecomeSeller = () => {
             </div>
             {/* info card */}
             <div className="max-w-sm">
-              <div className="flex  items-center gap-3">
+              <div className="flex justify-center lg:justify-normal items-center gap-3">
                 <div className="w-12 h-12 bg-[#1F5C54] rounded-full text-white text-lg flex justify-center items-center">
                   <span>4</span>
                 </div>
                 {/* <div className="w-[158px] h-[0px] border-2 border-[#1f5c54]"></div> */}
               </div>
               {/* info of card */}
-              <div>
-                <h3 className="font-semibold text-base my-2">
+              <div className="flex flex-col justify-center items-center md:block">
+                <h3 className="font-semibold text-sm lg:text my-2">
                   Receive Payments
                 </h3>
-                <p className="text-sm">
+                <p className="text-xs lg:text-sm">
                   APayments are deposited directly <br /> to your bank account{" "}
                   <br />
                   following a 7-day payment <br /> cycle from order delivery.
@@ -272,16 +312,11 @@ const BecomeSeller = () => {
       </section>
 
       {/* bring your brand */}
-      <section className="w-full container mx-auto px-10">
+      <section className="hidden lg:block w-full container mx-auto px-10">
         <div className="bring-your-brand w-full bg-[#7AC2AE] overflow-hidden rounded-[30px]">
           {/* Remove the static animate-bikeSlide className and add it dynamically via the ref */}
           <div ref={sectionRef} className="flex gap-5 pt-16 px-4">
             <div className="w-1/3">
-              {/* <img
-                src="/images/delivery-truck.png"
-                alt="Bike or Brand"
-                className="h-full w-full"
-              /> */}
               <img
                 src="/images/truck.png"
                 alt="Bike or Brand"
@@ -307,17 +342,17 @@ const BecomeSeller = () => {
 
       {/* our client section */}
       {/* section 5 */}
-      <section className="mt-6 relative bg-white shadow-[0px_0px_20px_rgba(0,0,0,0.1)]">
-        {/* container */}
+      {/* <section className="mt-6 relative bg-white shadow-[0px_0px_20px_rgba(0,0,0,0.1)]">
+      
         <div className="container mx-auto flex flex-col py-10">
-          {/* text */}
+      
           <div className="flex flex-col justify-center items-center mb-3">
             <p className="font-sans mb-1 text-[#1F5C54] font-bold uppercase text-sm tracking-wider">
               Our Clients
             </p>
             <img src="/images/serviceIcon.png" alt="service icon" />
           </div>
-          {/* logo slider */}
+
           <div className="flex justify-center items-center mx-4 w-full max-w-screen">
             <Slider {...settings} className="w-full">
               <div className="slider-image w-56 h-16 flex justify-center items-center">
@@ -358,13 +393,68 @@ const BecomeSeller = () => {
             </Slider>
           </div>
         </div>
+      </section> */}
+      <section className="pt-6 relative bg-[#F4F4F4] shadow-[0px_0px_20px_rgba(0,0,0,0.1)]">
+        {/* container */}
+        <div className="lg:container lg:mx-auto mx-4 flex flex-col py-10">
+          {/* text */}
+          <div className="flex flex-col justify-center items-center mb-3">
+            <p
+              className="font-sans mb-1 text-[#1F5C54] font-bold uppercase text-sm tracking-wider"
+              style={{ wordSpacing: "0.1em", letterSpacing: "0.1rem" }}
+            >
+              Our Clients
+            </p>
+            <img src="/images/serviceIcon.png" alt="service icon" />
+          </div>
+          {/* logo slider */}
+          <div className="flex justify-center items-center mx-4 w-full max-w-screen">
+            <Slider {...settings} className="w-full">
+              <div className="slider-image w-32 lg:w-56 h-10 lg:h-16 flex justify-center items-center">
+                <img
+                  src="/images/iide-logo.svg"
+                  alt="iide"
+                  className="w-full max-h-full"
+                />
+              </div>
+              <div className="slider-image w-24 h-10">
+                <img
+                  src="/images/credilio-svg-logo.svg"
+                  alt="credilio"
+                  className="w-full max-h-full"
+                />
+              </div>
+              <div className="slider-image w-32 lg:w-56 h-10 lg:h-16  flex justify-center items-center">
+                <img
+                  src="/images/tripjack-logo.png"
+                  alt="tripjack"
+                  className="w-full max-h-full"
+                />
+              </div>
+              <div className="slider-image w-24 lg:w-32 h-12 lg:h-[70px] flex justify-center items-center px-5">
+                <img
+                  src="/images/bajaj-electricals-logo.jpg"
+                  alt="bajaj"
+                  className="w-full max-h-full"
+                />
+              </div>
+              <div className="slider-image w-24 lg:w-28 h-12 lg:h-16 flex justify-center items-center px-5">
+                <img
+                  src="/logo/logo.png"
+                  alt="603"
+                  className="w-full max-h-full"
+                />
+              </div>
+            </Slider>
+          </div>
+        </div>
       </section>
 
       {/* contact section */}
       <section id="contact" className="">
-        <div className="flex container mx-auto my-10 gap-5">
+        <div className="flex mx-4 lg:container lg:mx-auto my-10 gap-5">
           {/* img */}
-          <div className="flex-1 w-1/2">
+          <div className="hidden lg:block lg:flex-1 w-1/2">
             <img
               src="/images/becomesellercontact.png"
               className="w-full"
@@ -379,8 +469,10 @@ const BecomeSeller = () => {
               <div className="font-Poppins font-semibold py-3">
                 <p className="text-sm text-[#34BFAD]">Get in Touch!</p>
                 <img src="/images/serviceIcon.png" alt="service icon" />
-                <h4 className="text-2xl my-2">Love to hear from you</h4>
-                <h5 className="text-2xl mb-2">Get in Touch!</h5>
+                <h4 className="text-xl lg:text-2xl my-2">
+                  Love to hear from you
+                </h4>
+                <h5 className="text-xl lg:text-2xl mb-2">Get in Touch!</h5>
               </div>
               {/* form part */}
               <div className="font-Poppins pl-2">
@@ -393,7 +485,6 @@ const BecomeSeller = () => {
                       className="font-medium w-full rounded-lg p-2 mb-2 border-2 border-[#D1D5DB] bg-[#F8F8F8] focus:outline-none placeholder:text-[#CCC] capitalize"
                       placeholder="John Doe"
                       value={form.name}
-                      // onChange={setname((e) => e.target.value)}
                       onChange={handleChange}
                       required
                     />
@@ -405,8 +496,6 @@ const BecomeSeller = () => {
                       name="email"
                       className="font-medium w-full rounded-lg p-2 mb-2 border-2 border-[#D1D5DB] bg-[#F8F8F8] focus:outline-none placeholder:text-[#CCC] "
                       placeholder="example@gmail.com"
-                      // value={email}
-                      // onChange={setEmail((e) => e.target.value)}
                       value={form.email}
                       onChange={handleChange}
                       required
@@ -419,9 +508,6 @@ const BecomeSeller = () => {
                       name="companyName"
                       className="w-full rounded-lg p-2 mb-2 border-2 border-[#D1D5DB] bg-[#F8F8F8] focus:outline-none placeholder:text-[#CCC] font-medium"
                       required
-                      //   placeholder="John Doe"
-                      // value={companyName}
-                      // onChange={setCompanyName((e) => e.target.value)}
                       value={form.companyName}
                       onChange={handleChange}
                     />
@@ -433,8 +519,6 @@ const BecomeSeller = () => {
                       name="mobileNo"
                       className="w-full rounded-lg p-2 mb-2 focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none border-2 border-[#D1D5DB] bg-[#F8F8F8] placeholder:text-[#CCC] font-medium"
                       placeholder="Enter Mobile No"
-                      // value={mobileNo}
-                      // onChange={setMobileNo((e) => e.target.value)}
                       value={form.mobileNo}
                       onChange={handleChange}
                       required
@@ -447,8 +531,6 @@ const BecomeSeller = () => {
                       name="message"
                       className="w-full rounded-lg p-2 mb-2 border-2 border-[#D1D5DB] bg-[#F8F8F8] focus:outline-none placeholder:text-[#CCC] font-medium"
                       placeholder="your message..."
-                      // value={message}
-                      // onChange={(e) => setMessage(e.target.value)}
                       value={form.message}
                       onChange={handleChange}
                     >

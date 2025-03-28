@@ -270,7 +270,7 @@ function Carrer() {
           </div>
 
           {/* Career Cards Grid */}
-          <div className="py-4 grid grid-cols-2 md:grid-cols-2 xl:grid-cols-3 gap-6">
+          <div className="py-4 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
             {Object.entries(jobListings).map(([key, job], index) => (
               <div
                 key={index}

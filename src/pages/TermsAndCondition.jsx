@@ -100,17 +100,14 @@ function TermsAndCondition() {
 
       {/* context */}
       <section>
-        <div className="container mx-auto my-10">
+        <div className="lg:container lg:mx-auto mx-2 my-10">
           <div className="font-Poppins flex justify-center">
-            <div className="mx-10 max-w-4xl ">
+            <div className="mx-6 lg:mx-10 max-w-4xl ">
               {/* title */}
               <div className="font-semibold xl:text-5xl capitalize text-center mb-10">
-                {/* <h2>
-                    developing usefull product that would meet user’s needs
-                  </h2> */}
                 <h2 className="leading-snug">Terms & Conditions</h2>
               </div>
-              <p className="xl:text-xl mb-5">
+              <p className="text-sm lg:text-lg xl:text-xl mb-5">
                 Welcome to Workved Interiors! By accessing and using our
                 website, you agree to the following terms and conditions. These
                 ensure a smooth experience for all users and help us maintain
@@ -140,7 +137,7 @@ function TermsAndCondition() {
                       {term.description.map((point, i) => (
                         <li
                           key={i}
-                          className="relative before:content-['●'] before:absolute before:left-0 before:text-black before:text-lg pl-6"
+                          className="relative before:content-['●'] before:absolute before:left-0 before:text-black before:text-lg lg:text-lg text-sm pl-6"
                         >
                           {point}
                         </li>
