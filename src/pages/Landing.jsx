@@ -200,11 +200,12 @@ function Landing() {
               Luxurious Office Interiors
             </p>
             <img src="/images/serviceIcon.png" alt="service icon" />
-            <p className="font-lato text-3xl lg:text-5xl font-semibold mb-2">
+            <p className="font-lato text-2xl lg:text-5xl font-semibold mb-2">
               We Offer Top Notch
             </p>
             <p className="text-center text-[12px] font-Poppins">
-              We offer top-notch products designed to meet all your <br></br>
+              We offer top-notch products designed to meet all your{" "}
+              {!isMobile && <br />}
               office space needs..
             </p>
           </div>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { BsFillArrowUpRightCircleFill } from "react-icons/bs";
 import { SiAntdesign } from "react-icons/si";
 import "../styles/Landing.css";
@@ -13,35 +13,50 @@ function OurServices() {
   const [isHovered3, setIsHovered3] = useState(false);
   const [isHovered4, setIsHovered4] = useState(false);
   const [expandedIndex, setExpandedIndex] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
 
   const navigate = useNavigate();
   const services = [
     {
-      title: "WORKSPACE DESIGN & PLANNING",
+      title: "WORKSPACE DESIGN \n& PLANNING",
       description:
         "Customized office layouts to optimize productivity and collaboration.",
       bgImage: "/images/workspace-design.png",
+      icon: "/images/services/our-mission-icon-1.png",
     },
     {
-      title: "interior decoration",
+      title: "interior\n decoration",
       description: "Tailored decore solutions that reflect your brand identity",
       bgImage: "/images/workspace-design.png",
+      icon: "/images/services/our-mission-icon-1.png",
     },
     {
       title: "turnkey\nproject",
-      description: "complete project management \nfrom design to delivery.",
+      description: "complete project management from design to delivery.",
       bgImage: "/images/workspace-design.png",
+      icon: "/images/services/our-mission-icon-2.png",
     },
     {
-      title: "renovation & remodeling",
+      title: "renovation & \nremodeling",
       description:
         "transform your existing office into a dynamic, modern workspace.",
       bgImage: "/images/workspace-design.png",
+      icon: "/images/services/our-mission-icon-3.png",
     },
   ];
 
   const background = "/images/services/servicepage.png";
   const service = `/images/services/ourservicebg.png`;
+
+  // Detect screen size
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768); // Mobile & Tablet: < 768px
+    };
+    handleResize(); // Check on mount
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   return (
     <>
@@ -70,7 +85,7 @@ function OurServices() {
       </section>
 
       {/* our mission section */}
-      <section className="container mx-auto px-5 py-10">
+      <section className="lg:container mx-4 lg:mx-auto lg:px-5 py-10">
         {/* Section Header */}
         <div className="text-center mb-10">
           <img
@@ -78,33 +93,37 @@ function OurServices() {
             alt="service icon"
             className="mx-auto"
           />
-          <h3 className="uppercase text-[#1F5C54] font-extrabold text-xl font-Poppins">
+          <h3 className="uppercase text-[#1F5C54] font-extrabold text-base xl:text-xl font-Poppins">
             Change Your Office Space
           </h3>
           <h1 className="font-extrabold text-3xl tracking-wide">
-            Our mission is to make your <br />
+            Our mission is to make your {!isMobile && <br />}
             <span className="text-[#1F5C54]">Office</span> better
           </h1>
         </div>
 
         {/* Services Grid */}
-        <div className="flex justify-center w-full gap-5 px-10 h-[467px]">
+        <div className="flex flex-col md:flex-row justify-center w-full gap-5 lg:px-5 md:px-10">
           {services.map((service, index) => (
             <div
               key={index}
               className={`relative flex flex-col text-center transition-all duration-500 ease-in-out overflow-hidden bg-[#1F5C54] 
-              ${
-                expandedIndex === index
-                  ? "w-[467px] h-full justify-end"
-                  : "w-[220px] h-full justify-evenly"
-              }`}
-              onMouseEnter={() => setExpandedIndex(index)}
-              onMouseLeave={() => setExpandedIndex(0)} // Reset to first card when leaving
+        ${
+          expandedIndex === index || window.innerWidth < 768
+            ? "w-full h-auto md:w-[467px] md:h-[467px] justify-end"
+            : "w-full md:w-[220px] md:h-[467px] justify-evenly"
+        }`}
+              onMouseEnter={() =>
+                window.innerWidth >= 768 && setExpandedIndex(index)
+              }
+              onMouseLeave={() =>
+                window.innerWidth >= 768 && setExpandedIndex(0)
+              } // Reset to first card when leaving
             >
               {/* Background Image - Always visible for expanded card */}
               <div
                 className={`absolute inset-0 transition-all duration-500 ${
-                  expandedIndex === index
+                  expandedIndex === index || window.innerWidth < 768
                     ? "opacity-100 scale-100"
                     : "opacity-0 scale-110"
                 }`}
@@ -119,31 +138,50 @@ function OurServices() {
 
               {/* Content */}
               <div
-                className={`relative z-10  px-3 py-2 text-start  ${
-                  expandedIndex === index ? "" : "h-full"
+                className={`relative z-10 px-3 py-2 text-start ${
+                  expandedIndex === index || window.innerWidth < 768
+                    ? ""
+                    : "h-full"
                 }`}
               >
                 <div
-                  className={`absolute inset-0 bottom-0  transition-all duration-500 ${
-                    expandedIndex === index ? "bg-black/40" : "bg-black/0"
+                  className={`absolute inset-0 bottom-0 transition-all duration-500 ${
+                    expandedIndex === index || window.innerWidth < 768
+                      ? "bg-black/40"
+                      : "bg-black/0"
                   }`}
                 ></div>
                 <div
-                  className={`relative z-10 w-full bottom-0 left-0 h-full flex flex-col justify-evenly items-center${
-                    expandedIndex === index ? "gap-2" : "gap-10"
+                  className={`relative z-10 w-full bottom-0 left-0 h-full flex flex-col justify-evenly items-center ${
+                    expandedIndex === index || window.innerWidth < 768
+                      ? "gap-2"
+                      : "gap-10"
                   }`}
                 >
                   {/* Icon - Hide when expanded */}
-                  <SiAntdesign
+                  {/* <SiAntdesign
                     size={40}
                     className={`text-white transition-opacity duration-300 ${
-                      expandedIndex === index ? "opacity-0" : "opacity-100"
+                      expandedIndex === index || window.innerWidth < 768
+                        ? "opacity-0"
+                        : "opacity-100"
+                    }`}
+                  /> */}
+                  <img
+                    src={service.icon}
+                    alt={`${service.title} Icon`}
+                    className={`text-white transition-opacity duration-300 ${
+                      expandedIndex === index || window.innerWidth < 768
+                        ? "opacity-0"
+                        : "opacity-100"
                     }`}
                   />
                   {/* Title - Change color when expanded */}
                   <h5
                     className={`uppercase font-extrabold text-[18px] transition-colors duration-300 whitespace-pre-line ${
-                      expandedIndex === index ? "text-[#34BFAD]" : "text-white"
+                      expandedIndex === index || window.innerWidth < 768
+                        ? "text-[#34BFAD]"
+                        : "text-white"
                     }`}
                   >
                     {service.title}
@@ -154,11 +192,6 @@ function OurServices() {
                   >
                     {service.description}
                   </p>
-                  {/* Arrow Icon - Stick to the bottom */}
-                  {/* <BsFillArrowUpRightCircleFill
-                    size={20}
-                    className="text-[#34BFAD] bg-black rounded-full self-end"
-                  /> */}
                 </div>
               </div>
             </div>
@@ -168,16 +201,27 @@ function OurServices() {
 
       {/* section design modern */}
       <section
-        className="flex h-screen bg-cover container mx-auto"
+        className="flex lg:h-screen bg-cover lg:container mx-4 lg:mx-auto"
         style={{ backgroundImage: `url(${service})` }}
       >
         <div className=" mx-auto flex-1 flex flex-col">
           {/* <div className="flex mb-4 justify-between gap-4 "> */}
-          <div className="flex-1 flex flex-col gap-4 items-center justify-center h-full">
-            <div className="flex justify-center gap-4">
+          <div className="lg:hidden flex flex-col justify-center items-center my-5">
+            <div className="flex ">
+              <img src="/images/serviceIcon.png" alt="service icon" />
+            </div>
+            <h3 className="font-extrabold uppercase lg:my-7 text-lg font-Poppins">
+              services
+            </h3>
+            <p className="font-semibold text-[35px] uppercase font-Poppins text-center">
+              We design modern and elegant
+            </p>
+          </div>
+          <div className="flex-1 flex flex-col gap-4 justify-center lg:h-full">
+            <div className="flex flex-col md:flex-row justify-center gap-4">
               {/* we have loop 4 div for icon and text */}
               <div
-                className="hover:bg-[#1F5C54] text-center flex flex-col justify-center font-Poppins hover:text-[#fff] lg:w-[300px] lg:h-[300px] shadow-[0px_0px_20px_rgba(0,0,0,0.1)] bg-[#fff]"
+                className="hover:bg-[#1F5C54] text-center flex flex-col justify-center font-Poppins hover:text-[#fff] lg:w-[300px] lg:h-[300px] shadow-[0px_0px_20px_rgba(0,0,0,0.1)] bg-[#fff] flex-1"
                 onMouseEnter={() => setIsHovered(true)}
                 onMouseLeave={() => setIsHovered(false)}
               >
@@ -207,7 +251,7 @@ function OurServices() {
               </div>
               {/* we have loop 4 div for icon and text */}
               <div
-                className="hover:bg-[#1F5C54] text-center flex flex-col justify-center font-Poppins hover:text-[#fff] lg:w-[300px] lg:h-[300px] shadow-[0px_0px_20px_rgba(0,0,0,0.1)] bg-[#fff]"
+                className="hover:bg-[#1F5C54] text-center flex flex-col justify-center font-Poppins hover:text-[#fff] lg:w-[300px] lg:h-[300px] shadow-[0px_0px_20px_rgba(0,0,0,0.1)] bg-[#fff] flex-1"
                 onMouseEnter={() => setIsHovered2(true)}
                 onMouseLeave={() => setIsHovered2(false)}
               >
@@ -232,10 +276,10 @@ function OurServices() {
                 </p>
               </div>
             </div>
-            <div className="flex justify-center gap-4">
+            <div className="flex flex-col md:flex-row justify-center gap-4">
               {/* we have loop 4 div for icon and text */}
               <div
-                className="hover:bg-[#1F5C54] text-center flex flex-col justify-center font-Poppins hover:text-[#fff] lg:w-[300px] lg:h-[300px] shadow-[0px_0px_20px_rgba(0,0,0,0.1)] bg-[#fff]"
+                className="hover:bg-[#1F5C54] text-center flex flex-col justify-center font-Poppins hover:text-[#fff] lg:w-[300px] lg:h-[300px] shadow-[0px_0px_20px_rgba(0,0,0,0.1)] bg-[#fff] flex-1"
                 onMouseEnter={() => setIsHovered3(true)}
                 onMouseLeave={() => setIsHovered3(false)}
               >
@@ -261,7 +305,7 @@ function OurServices() {
               </div>
               {/* we have loop 4 div for icon and text */}
               <div
-                className="hover:bg-[#1F5C54] text-center flex flex-col justify-center font-Poppins hover:text-[#fff] lg:w-[300px] lg:h-[300px] shadow-[0px_0px_20px_rgba(0,0,0,0.1)] bg-[#fff]"
+                className="hover:bg-[#1F5C54] text-center flex flex-col justify-center font-Poppins hover:text-[#fff] lg:w-[300px] lg:h-[300px] shadow-[0px_0px_20px_rgba(0,0,0,0.1)] bg-[#fff] flex-1"
                 onMouseEnter={() => setIsHovered4(true)}
                 onMouseLeave={() => setIsHovered4(false)}
               >
@@ -288,8 +332,16 @@ function OurServices() {
               </div>
             </div>
           </div>
+          <div className="flex justify-center lg:hidden mt-10">
+            <button
+              onClick={() => navigate("/Layout")}
+              className="bg-[#1F5C54] text-[#fff] border-1 border-[#000] font-bold capitalize w-full sm:w-1/2 rounded-lg py-3"
+            >
+              Start Creating your office now
+            </button>
+          </div>
         </div>
-        <div className="flex-1 flex justify-start items-center">
+        <div className="flex-1 lg:flex justify-start items-center hidden">
           {/* div for text and button */}
           <div className=" flex items-center">
             <div className="font-Poppins">
@@ -342,14 +394,14 @@ function OurServices() {
       </section>
 
       {/* How do we work section */}
-      <section className="container mx-auto flex justify-center px-11 font-Poppins my-20">
-        <div className="w-2/5">
+      <section className="lg:container mx-4 lg:mx-auto flex justify-center lg:px-11 font-Poppins my-20">
+        <div className="lg:w-2/5 w-full text-center flex flex-col lg:justify-center items-center sm:px-3 lg:px-0">
           <img src="/images/serviceIcon.png" alt="service icon" />
-          <h4 className="uppercase font-extrabold text-2xl my-7">
+          <h4 className="uppercase font-extrabold text-lg lg:text-2xl my-3 lg:my-7">
             how do we work ?
           </h4>
-          <h1 className="uppercase font-semibold text-5xl">
-            we design for your <br />
+          <h1 className="uppercase font-semibold text-[35px] lg:text-5xl">
+            we design for your {!isMobile && <br />}
             satisfaction
           </h1>
           {/* <p className="text-base my-7">
@@ -357,7 +409,7 @@ function OurServices() {
             temporibus fugiat quos cum! Necessitatibus fugiat vero minus
             perferendis ipsum!
           </p> */}
-          <p className="text-base my-7 ">
+          <p className="text-sm lg:text-base my-3 lg:my-7 text-justify">
             At workved interiors, your workspace isn’t just another project—it’s
             a reflection of your vision and needs. with a perfect blend of
             perfect blend of efficiency, aesthetics, and comfort. Our goal is to
@@ -366,41 +418,47 @@ function OurServices() {
             visually appealing and highly productive.
           </p>
           <div className=" w-full">
-            <div className="w-full flex gap-5 items-center mb-2">
-              <h1 className="font-bold text-[100px] text-[#34BFAD] w-1/5">
+            <div className="w-full flex gap-7 lg:gap-5 items-center mb-2">
+              <h1 className="font-bold text-[80px] lg:text-[100px] text-[#34BFAD] w-1/5">
                 01
               </h1>
-              <div className="font-Poppins flex flex-col gap-5">
-                <h2 className="uppercase font-bold text-[32px]">layout</h2>
+              <div className="font-Poppins flex flex-col gap-2 lg:gap-5 text-start">
+                <h2 className="uppercase font-bold text-2xl lg:text-[32px]">
+                  layout
+                </h2>
                 {/* <p className="uppercase font-bold text-base">
                   Mauris dapibus consectetur enim a dictum. <br />
                   Ut in rhoncus sem
                 </p> */}
-                <p className="uppercase font-bold text-base">
+                <p className="uppercase font-bold text-sm lg:text-base">
                   Strategically planned spaces that optimize functionality and
                   flow.
                 </p>
               </div>
             </div>
-            <div className="w-full flex gap-5 items-center mb-2">
-              <h1 className="font-bold text-[100px] text-[#34BFAD] w-1/5">
+            <div className="w-full flex gap-7 lg:gap-5 items-center mb-2">
+              <h1 className="font-bold text-[80px] lg:text-[100px] text-[#34BFAD] w-1/5">
                 02
               </h1>
-              <div className="font-Poppins flex flex-col gap-5">
-                <h2 className="uppercase font-bold text-[32px]">design</h2>
-                <p className="uppercase font-bold text-base">
+              <div className="font-Poppins flex flex-col gap-2 lg:gap-5 text-start">
+                <h2 className="uppercase font-bold text-2xl lg:text-[32px]">
+                  design
+                </h2>
+                <p className="uppercase font-bold text-sm lg:text-base">
                   Thoughtfully curated interiors that align with your brand
                   identity and culture
                 </p>
               </div>
             </div>
-            <div className="w-full flex gap-5 items-center">
-              <h1 className="font-bold text-[100px] text-[#34BFAD] w-1/5">
+            <div className="w-full flex gap-7 lg:gap-5 items-center justify-between">
+              <h1 className="font-bold text-[80px] lg:text-[100px] text-[#34BFAD] w-1/5">
                 03
               </h1>
-              <div className="font-Poppins flex flex-col gap-5">
-                <h2 className="uppercase font-bold text-[32px]">development</h2>
-                <p className="uppercase font-bold text-base">
+              <div className="font-Poppins flex flex-col gap-2 lg:gap-5 text-start">
+                <h2 className="uppercase font-bold text-2xl lg:text-[32px]">
+                  development
+                </h2>
+                <p className="uppercase font-bold text-sm lg:text-base">
                   High-quality execution with premium materials, trusted
                   vendors, and expert craftsmanship.
                 </p>
@@ -408,20 +466,20 @@ function OurServices() {
             </div>
           </div>
         </div>
-        <div className="w-3/5 flex justify-end gap-5">
-          <div className="flex flex-col gap-5">
+        <div className="w-3/5 sm:flex justify-end gap-5 hidden">
+          <div className="sm:flex flex-col gap-5 hidden">
             <img
               src="/images/we-do-1.png"
               alt=""
-              className="w-[380px] h-[400px]"
+              className="w-[320px] lg:w-[380px] h-[350px] lg:h-[400px]"
             />
             <img
               src="/images/we-do-2.png"
               alt=""
-              className="w-[380px] h-[400px]"
+              className="w-[320px] lg:w-[380px] h-[350px] lg:h-[400px]"
             />
           </div>
-          <div className="flex flex-col gap-5 mt-14">
+          <div className="lg:flex flex-col gap-5 mt-14 hidden">
             <img
               src="/images/we-do-3.png"
               alt=""

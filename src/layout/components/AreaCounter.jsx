@@ -38,8 +38,9 @@ const AreaCounter = ({
           type === "videoRecordingRoom" ||
           type === "ups" ||
           type === "bms" ||
-          type === "maleWashroom" ||
-          type === "femaleWashroom"
+          // type === "maleWashroom" ||
+          // type === "femaleWashroom"
+          type === "washrooms"
         ) {
           setCabinSize(cabinSize + 5);
         } else if (type === "conferenceRoom" || type === "boardRoom") {
@@ -77,8 +78,9 @@ const AreaCounter = ({
         type === "videoRecordingRoom" ||
         type === "ups" ||
         type === "bms" ||
-        type === "maleWashroom" ||
-        type === "femaleWashroom"
+        // type === "maleWashroom" ||
+        // type === "femaleWashroom"
+        type === "washrooms"
       ) {
         setCabinSize(cabinSize - 5);
       } else {

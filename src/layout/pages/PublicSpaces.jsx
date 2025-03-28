@@ -54,31 +54,45 @@ const publicSpacesData = [
       step: 5,
     },
   },
+  // {
+  //   type: "maleWashroom",
+  //   image: "/images/workstation-wp/executivewash-wp.webp",
+  //   description: "Common Male washroom",
+  //   tooltipText: "size: 100 sqft",
+  //   slider: {
+  //     name: "Male Washroom Size",
+  //     valueKey: "maleWashroomSize",
+  //     setValueKey: "setMaleWashroomSize",
+  //     min: 60,
+  //     max: 600,
+  //     step: 5,
+  //   },
+  // },
+  // {
+  //   type: "femaleWashroom",
+  //   image: "/images/workstation-wp/executivewash-wp.webp",
+  //   description: "Common Female  washroom",
+  //   tooltipText: "size: 100 sqft",
+  //   slider: {
+  //     name: "Female Washroom Size",
+  //     valueKey: "femaleWashroomSize",
+  //     setValueKey: "setFemaleWashroomSize",
+  //     min: 60,
+  //     max: 600,
+  //     step: 5,
+  //   },
+  // },
   {
-    type: "maleWashroom",
+    type: "washrooms",
     image: "/images/workstation-wp/executivewash-wp.webp",
-    description: "Common Male washroom",
+    description: "Common washroom",
     tooltipText: "size: 100 sqft",
     slider: {
-      name: "Male Washroom Size",
-      valueKey: "maleWashroomSize",
-      setValueKey: "setMaleWashroomSize",
-      min: 60,
-      max: 600,
-      step: 5,
-    },
-  },
-  {
-    type: "femaleWashroom",
-    image: "/images/workstation-wp/executivewash-wp.webp",
-    description: "Common Female  washroom",
-    tooltipText: "size: 100 sqft",
-    slider: {
-      name: "Female Washroom Size",
-      valueKey: "femaleWashroomSize",
-      setValueKey: "setFemaleWashroomSize",
-      min: 60,
-      max: 600,
+      name: "Washroom Size",
+      valueKey: "washroomsSize",
+      setValueKey: "setWashroomsSize",
+      min: 100,
+      max: 1200,
       step: 5,
     },
   },
@@ -96,10 +110,12 @@ const PublicSpaces = ({
   setLoungeSize,
   breakoutRoomSize,
   setBreakoutRoomSize,
-  maleWashroomSize,
-  setMaleWashroomSize,
-  femaleWashroomSize,
-  setFemaleWashroomSize,
+  // maleWashroomSize,
+  // setMaleWashroomSize,
+  // femaleWashroomSize,
+  // setFemaleWashroomSize,
+  washroomsSize,
+  setWashroomsSize,
 }) => {
   return (
     <div className="section px-3">
@@ -140,15 +156,20 @@ const PublicSpaces = ({
                       cabinSize: breakoutRoomSize,
                       setCabinSize: setBreakoutRoomSize,
                     }
-                  : space.type === "maleWashroom"
+                  : // : space.type === "maleWashroom"
+                  // ? {
+                  //     cabinSize: maleWashroomSize,
+                  //     setCabinSize: setMaleWashroomSize,
+                  //   }
+                  // : space.type === "femaleWashroom"
+                  // ? {
+                  //     cabinSize: femaleWashroomSize,
+                  //     setCabinSize: setFemaleWashroomSize,
+                  //   }
+                  space.type === "washrooms"
                   ? {
-                      cabinSize: maleWashroomSize,
-                      setCabinSize: setMaleWashroomSize,
-                    }
-                  : space.type === "femaleWashroom"
-                  ? {
-                      cabinSize: femaleWashroomSize,
-                      setCabinSize: setFemaleWashroomSize,
+                      cabinSize: washroomsSize,
+                      setCabinSize: setWashroomsSize,
                     }
                   : {}),
               }
@@ -177,7 +198,12 @@ const PublicSpaces = ({
               }`}
               showAreaCounter={!!space.slider} // Show counter only if space has a slider
               areaCounterProps={sliderProps}
-              tooltipText={space.tooltipText}
+              // tooltipText={space.tooltipText}
+              tooltipText={
+                space.type === "washrooms"
+                  ? `Size: ${washroomsSize || 100} sqft `
+                  : space.tooltipText
+              }
             />
           );
         })}

@@ -32,13 +32,13 @@ const JobPage = () => {
 
   return (
     <>
-      <header className="bg-white shadow-lg z-50 relative">
+      <header className="bg-white shadow-lg z-50 relative hidden lg:block">
         <LandingNavbar />
       </header>
 
       {/* Hero Section */}
       <section
-        className="relative h-[50vh] flex items-center text-center justify-center bg-cover bg-center bg-no-repeat bg-gray-100"
+        className="relative h-[50vh] lg:flex items-center text-center justify-center bg-cover bg-center bg-no-repeat bg-gray-100 hidden"
         style={{
           backgroundImage: `url(/images/blognewpage.png)`,
           backgroundAttachment: "fixed",
@@ -53,7 +53,7 @@ const JobPage = () => {
       </section>
 
       {/* Job Details */}
-      <div className="min-h-screen bg-white flex justify-center p-6">
+      <div className="min-h-screen bg-white flex justify-center lg:p-6">
         <div className="max-w-4xl w-full bg-white p-6">
           {/* Back to Jobs - Full Width */}
           <button
@@ -67,7 +67,7 @@ const JobPage = () => {
 
           {/* Job Info: Left & Right Alignment */}
           <div className="flex justify-between items-center mt-2">
-            <div className="flex space-x-6 text-[#1F5C54]">
+            <div className="flex gap-2 lg:space-x-6 text-[#1F5C54] flex-wrap lg:flex-nowrap">
               <p className="flex items-center">
                 <FaLocationDot className="mr-2" />
                 {job.location}
@@ -83,7 +83,7 @@ const JobPage = () => {
             </div>
 
             {/* Apply Now Button - Right Aligned */}
-            <button className="bg-[#1F5C54] text-white py-2 px-4 rounded-lg hover:bg-[#34BFAD] transition">
+            <button className="bg-[#1F5C54] text-white py-2 px-4 rounded-lg hover:bg-[#34BFAD] transition text-nowrap">
               Apply Now
             </button>
           </div>

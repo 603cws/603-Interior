@@ -96,7 +96,7 @@ const TreeMap = ({ totalArea, areaQuantities, areaValues }) => {
     "Executive Washroom": "/images/workstation-wp/executivewash-wp.webp",
     "Breakout Room": "/images/workstation-wp/breakout-wp.webp",
     Other: "/images/workstation-wp/other-wp.webp",
-    washroom: "/images/workstation-wp/executivewash-wp.webp",
+    washrooms: "/images/workstation-wp/executivewash-wp.webp",
   };
 
   const validTotalArea = totalArea > 0 ? totalArea : 4000;
