@@ -30,8 +30,9 @@ const fullNames = {
   breakoutRoom: "Breakout Room",
   videoRecordingRoom: "Video Recording Room",
   other: "Other", // Add new category here
-  maleWashroom: "Male Washroom",
-  femaleWashroom: "Female Washroom",
+  // maleWashroom: "Male Washroom",
+  // femaleWashroom: "Female Washroom",
+  washrooms: "Washrooms",
 };
 
 const TreeMap = ({ totalArea, areaQuantities, areaValues }) => {

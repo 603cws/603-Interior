@@ -81,8 +81,9 @@ const processData = (data, type, quantity = {}) => {
     "lounge",
     "phoneBooth",
     "breakoutRoom",
-    "maleWashroom",
-    "femaleWashroom",
+    // "maleWashroom",
+    // "femaleWashroom",
+    "washrooms",
   ];
 
   const supportSpaceKeys = [
@@ -179,14 +180,16 @@ const processData = (data, type, quantity = {}) => {
       type === "quantity"
         ? latestData.breakoutRoomQty
         : latestData.breakoutRoomArea,
-    malewashroom:
-      type === "quantity"
-        ? latestData.maleWashroomQty
-        : latestData.maleWashroomArea,
-    femalewashroom:
-      type === "quantity"
-        ? latestData.femaleWashroomQty
-        : latestData.femaleWashroomArea,
+    // malewashroom:
+    //   type === "quantity"
+    //     ? latestData.maleWashroomQty
+    //     : latestData.maleWashroomArea,
+    // femalewashroom:
+    //   type === "quantity"
+    //     ? latestData.femaleWashroomQty
+    //     : latestData.femaleWashroomArea,
+    washrooms:
+      type === "quantity" ? latestData.washroomsQty : latestData.washroomsArea,
     executivewashroom:
       type === "quantity"
         ? latestData.executiveWashroomQty
