@@ -1,30 +1,16 @@
 import LandingNavbar from "../common-components/LandingNavbar";
 import Footer from "../common-components/Footer";
-import { useNavigate } from "react-router-dom";
-import { Swiper, SwiperSlide } from "swiper/react";
 import { useState } from "react";
 import "swiper/css";
 import "swiper/css/effect-coverflow";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
-import {
-  EffectCoverflow,
-  Pagination,
-  Navigation,
-  Autoplay,
-} from "swiper/modules";
 import "../styles/Landing.css";
 import ContactUsPopup from "../common-components/ContactUsPopup";
 
 function AboutUs() {
   const [showContactPopup, setShowContactPopup] = useState(false);
-  const navigate = useNavigate();
-  const services = [
-    { img: "/images/about-us/about-us-s2-1.png", title: "interior design" },
-    { img: "/images/about-us/about-us-s2-2.png", title: "production" },
-    { img: "/images/about-us/about-us-s2-3.png", title: "execution" },
-    { img: "/images/about-us/about-us-s2-4.png", title: "after service" },
-  ];
+
   return (
     <>
       {/* Hero image */}
@@ -199,7 +185,7 @@ function AboutUs() {
                 </h3>
               </div>
               <p className="mb-5 lg:mb-8 xl:mb-20  xl:text-lg text-center px-8 lg:px-[6rem]">
-                At workved interiors, we design functional, inspiring, and
+                At Workved Interiors, we design functional, inspiring, and
                 efficient office spaces tailored to your business needs. Whether
                 you're setting up a new office or revamping an existing one, our
                 AI-driven platform simplifies the process allowing you to create
@@ -210,7 +196,7 @@ function AboutUs() {
                 Backed by our expertise in designing 603 The Coworking Space, we
                 bring innovation, precision, and seamless execution to every
                 project. With strategic brand collaborations and a
-                technology-driven approach, workved interiors is your one-stop
+                technology-driven approach, Workved Interiors is your one-stop
                 solution for modern office design.
               </p>
             </div>

@@ -388,6 +388,8 @@ function Navbar({ toggleProfile, iconRef }) {
 
   useEffect(() => {
     calculateGrandTotal();
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedData]);
 
   const insertDataIntoSupabase = async (

@@ -282,6 +282,7 @@ export const AppProvider = ({ children }) => {
 
     fetchdata();
     // setUserId(userId);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userId]);
 
   useEffect(() => {

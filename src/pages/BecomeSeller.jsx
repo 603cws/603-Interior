@@ -132,6 +132,8 @@ const BecomeSeller = () => {
         settings: {
           slidesToShow: 5, // Show 5 slides only on 3xl screens
         },
+      },
+      {
         breakpoint: 768,
         settings: {
           slidesToShow: 2, // Show 3 slides only on md screens

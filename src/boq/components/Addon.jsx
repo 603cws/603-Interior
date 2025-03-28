@@ -25,6 +25,8 @@ function Addon({
     const existingAddons = selectedAddonsMap[currentGroupKey] || [];
 
     setSelectedAddons(existingAddons); // ✅ Always update when selectedData changes
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     selectedData,
     selectedCategory,

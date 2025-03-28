@@ -4,7 +4,6 @@ import { supabase } from "../../services/supabase";
 import { useApp } from "../../Context/Context";
 import toast from "react-hot-toast";
 import { FaArrowLeft } from "react-icons/fa6";
-import VendorSetting from "./VendorSetting";
 import VendorProfile from "./VendorProfile";
 import Sidebar from "./Sidebar";
 import VendorItem from "./VendorItem";

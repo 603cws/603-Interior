@@ -358,6 +358,8 @@ function Dashboard() {
   useEffect(() => {
     fetchProductsByIds();
     fetchAddonsByIds();
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedBoq, isfetchBoqDataRefresh]);
 
   useEffect(() => {
@@ -402,13 +404,15 @@ function Dashboard() {
 
   useEffect(() => {
     fetchboq();
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isfetchBoqDataRefresh]);
 
   useEffect(() => {
     if (layoutImage && !imageIsLoaded) {
       setImageIsLoaded(true);
     }
-  }, [layoutImage]);
+  }, [layoutImage, imageIsLoaded]);
 
   // console.log("selectedboq", selectedBoq);
 

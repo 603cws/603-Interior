@@ -231,6 +231,8 @@ const TreeMap = ({ totalArea, areaQuantities, areaValues }) => {
     if (layoutImgRef) {
       layoutImgRef.current = exportChart;
     }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const exportChart = async () => {

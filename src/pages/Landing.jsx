@@ -111,19 +111,20 @@ function Landing() {
   //   // pauseOnHover: true,
   //   arrows: false,
   // };
-  const settingsProduct = {
-    // vertical: true,
-    // verticalSwiping: true,
-    dots: true,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 4,
-    slidesToScroll: 1,
-    autoplay: true,
-    autoplaySpeed: 2000,
-    pauseOnHover: true,
-    arrows: false, //true
-  };
+
+  // const settingsProduct = {
+  //   // vertical: true,
+  //   // verticalSwiping: true,
+  //   dots: true,
+  //   infinite: true,
+  //   speed: 500,
+  //   slidesToShow: 4,
+  //   slidesToScroll: 1,
+  //   autoplay: true,
+  //   autoplaySpeed: 2000,
+  //   pauseOnHover: true,
+  //   arrows: false, //true
+  // };
 
   const accordionItems = [
     {

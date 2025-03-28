@@ -179,6 +179,8 @@ function SelectArea({
       // If selectedData is empty, clear the selected areas
       setSelectedAreas([]);
     }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     subCategories,
     selectedData,
@@ -202,6 +204,7 @@ function SelectArea({
     return () => {
       document.removeEventListener("keydown", handleEscKey);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // useEffect(() => {

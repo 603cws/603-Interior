@@ -692,6 +692,8 @@ function Layout() {
         }));
       }
     }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [totalArea, totalAreaSource]); //do not add any more dependency
 
   const setErrorMessageHandler = (message) => {

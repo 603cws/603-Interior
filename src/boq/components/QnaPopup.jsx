@@ -89,6 +89,8 @@ const QnaPopup = ({ onClose, onSubmit }) => {
     } else {
       setQuestions(heightQuestion); // Default to height question if no category matches
     }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [categoryName]);
 
   const handleInputChange = (e) => {

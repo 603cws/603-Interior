@@ -77,6 +77,8 @@ function ProductCard({
         setLoading(false);
       }, 2000);
     }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // const timeoutRef = useRef(null);

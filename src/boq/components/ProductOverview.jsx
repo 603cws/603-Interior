@@ -321,26 +321,26 @@ function ProductOverview() {
   }, [productData, searchQuery, priceRange, selectedCategory]);
 
   // Group products by category and subcategory
-  const groupedProducts = useMemo(() => {
-    const grouped = {};
+  // const groupedProducts = useMemo(() => {
+  //   const grouped = {};
 
-    filteredProducts.forEach((product) => {
-      const subcategories = product.subcategory
-        .split(",")
-        .map((sub) => sub.trim());
+  //   filteredProducts.forEach((product) => {
+  //     const subcategories = product.subcategory
+  //       .split(",")
+  //       .map((sub) => sub.trim());
 
-      subcategories.forEach((subcategory) => {
-        if (!grouped[product.category]) {
-          grouped[product.category] = {};
-        }
-        if (!grouped[product.category][subcategory]) {
-          grouped[product.category][subcategory] = [];
-        }
-        grouped[product.category][subcategory].push(product);
-      });
-    });
-    return grouped;
-  }, [filteredProducts]);
+  //     subcategories.forEach((subcategory) => {
+  //       if (!grouped[product.category]) {
+  //         grouped[product.category] = {};
+  //       }
+  //       if (!grouped[product.category][subcategory]) {
+  //         grouped[product.category][subcategory] = [];
+  //       }
+  //       grouped[product.category][subcategory].push(product);
+  //     });
+  //   });
+  //   return grouped;
+  // }, [filteredProducts]);
 
   const allAddons = filteredProducts.flatMap((product) =>
     product.subcategory1 === selectedSubCategory1 &&

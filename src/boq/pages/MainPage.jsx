@@ -48,6 +48,7 @@ const MainPage = ({ userResponses, setSelectedSubCategory1, productsData }) => {
   }, [
     subCat1,
     selectedCategory,
+    selectedSubCategory1,
     selectedSubCategory,
     userResponses.hvacType,
     setSelectedSubCategory1,

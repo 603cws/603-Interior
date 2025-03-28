@@ -116,6 +116,7 @@ function Boq() {
       autoSelectPlanProducts(productData, categories);
       // setDefaultProduct(false);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedPlan, productData, defaultProduct]);
 
   // Toggle profile card visibility
