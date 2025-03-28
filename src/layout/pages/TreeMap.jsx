@@ -68,8 +68,9 @@ const TreeMap = ({ totalArea, areaQuantities, areaValues }) => {
     "Breakout Room": "#74D0C1",
     "Available Space": "#1F5C54",
     Other: "#5E9B96", // Color for the "Other" category
-    "Male Washroom": "#95D5B2",
-    "Female Washroom": "#85CEA8",
+    // "Male Washroom": "#95D5B2",
+    // "Female Washroom": "#85CEA8",
+    Washrooms: "#85CEA8",
   };
 
   const workspaceImages = {
@@ -97,7 +98,7 @@ const TreeMap = ({ totalArea, areaQuantities, areaValues }) => {
     "Executive Washroom": "/images/workstation-wp/executivewash-wp.webp",
     "Breakout Room": "/images/workstation-wp/breakout-wp.webp",
     Other: "/images/workstation-wp/other-wp.webp",
-    washrooms: "/images/workstation-wp/executivewash-wp.webp",
+    Washrooms: "/images/workstation-wp/executivewash-wp.webp",
   };
 
   const validTotalArea = totalArea > 0 ? totalArea : 4000;
