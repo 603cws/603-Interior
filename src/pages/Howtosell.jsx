@@ -62,7 +62,7 @@ function Howtosell() {
                   As a new seller, you may have multiple types of selling <br />
                   packages/plans to choose from, depending on the business your{" "}
                   <br />
-                  in. Follow a few easy steps to register for <br /> 603
+                  in. Follow a few easy steps to register for <br /> Workved
                   Interior seller account and build trust between you and your{" "}
                   <br />
                   potential buyers.{" "}

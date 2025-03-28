@@ -212,11 +212,11 @@ function Carrer() {
               </div>
               <div className="flex justify-center items-center mb-7">
                 <h3 className="font-lato font-bold text-3xl lg:text-5xl ">
-                  Your Life At <span className="text-[#34BFAD]">603</span>
+                  Your Life At <span className="text-[#34BFAD]">Workved</span>
                 </h3>
               </div>
               <p className="text-sm lg:text-lg mb-7">
-                At 603 Interiors, we believe that the right workspace can
+                At Workved Interiors, we believe that the right workspace can
                 transform the way <br /> you work. we are looking for dynamic
                 and creative individuals who are willing <br /> to dedicate
                 themselves to providing innovative products and services for our{" "}
@@ -224,8 +224,8 @@ function Carrer() {
               </p>
               <p className=" text-sm lg:text-lg mb-5">
                 Besides getting the opportunity to unlock your true potential at
-                603 <br /> Interiors you can also network with some of the most
-                talented people in the <br /> industry
+                Workved <br /> Interiors you can also network with some of the
+                most talented people in the <br /> industry
               </p>
               {/* <button className="px-10 py-3 font-semibold text-[#34BFAD] uppercase border-t border-l border-[#34BFAD] border-r-black border-b-black border-r-2 border-b-2 bg-[#f8f8f8] hover:bg-[#34BFAD] hover:text-white tracking-widest">
                 Read More

@@ -443,7 +443,7 @@ const BecomeSeller = () => {
               <div className="slider-image w-24 lg:w-28 h-12 lg:h-16 flex justify-center items-center px-5">
                 <img
                   src="/logo/logo.png"
-                  alt="603"
+                  alt="Workved Interiors"
                   className="w-full max-h-full"
                 />
               </div>

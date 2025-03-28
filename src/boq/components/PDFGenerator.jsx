@@ -24,7 +24,7 @@ const PDFGenerator = {
     // Add company name
     doc.setFontSize(14);
     doc.setFont("helvetica", "bold");
-    doc.text("603 The Coworking Space", 40, 18); // Align with the logo
+    doc.text("Workved Interiors", 40, 18); // Align with the logo
 
     // Add client details neatly aligned
     doc.setFontSize(10);
@@ -363,7 +363,7 @@ Addon Price: Rs. ${addon.addon_price || "N/A"}/-
     doc.setFontSize(12);
     doc.setTextColor(100);
     doc.text(
-      "Thank you for choosing 603 The Coworking Space.",
+      "Thank you for choosing Workved Interiors.",
       10,
       doc.internal.pageSize.height - 10
     );
