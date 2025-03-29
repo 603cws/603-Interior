@@ -160,7 +160,7 @@ const MeetingRooms = ({
         Meeting Rooms
       </h3>
       {/* <div className="meeting-rooms grid grid-cols-2 4xl:grid-cols-3 gap-5"> */}
-      <div className="meeting-rooms grid grid-cols-2 3xl:grid-cols-3 gap-5">
+      <div className="meeting-rooms grid grid-cols-2 3xl:grid-cols-3 gap-5 justify-items-center lg:justify-items-stretch">
         {meetingRoomData.map((room) => {
           const sliderProps = room.slider
             ? {

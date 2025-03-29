@@ -98,11 +98,13 @@ const AreaCounter = ({
 
   return (
     <div className="text-center">
-      <label htmlFor="md-cabin-size">{name}: </label>
+      <label htmlFor="md-cabin-size" className="text-xs md:text-base">
+        {name}:{" "}
+      </label>
       <div className="area-change">
         <button
           onClick={handleDecrement}
-          className="slider-button bg-gray-400 px-2 rounded-md"
+          className="slider-button bg-gray-400 px-2 rounded-md text-xs md:text-base"
         >
           -
         </button>
@@ -114,11 +116,11 @@ const AreaCounter = ({
           value={value}
           onChange={handleInputChange}
           readOnly
-          className="border-2 text-center mx-2 rounded-md [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none pointer-events-none select-none"
+          className="border-2 text-center mx-2 rounded-md [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none pointer-events-none select-none text-xs md:text-base"
         />
         <button
           onClick={handleIncrement}
-          className="slider-button px-2 bg-gray-400 rounded-md"
+          className="slider-button px-2 bg-gray-400 rounded-md text-xs md:text-base"
         >
           +
         </button>

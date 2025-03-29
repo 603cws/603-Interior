@@ -12,10 +12,12 @@ function UserSetting() {
   const [profileImagesOption, setProfileImagesOption] = useState(false);
 
   const profileImages = [
-    "/images/Profile.png",
-    "/images/Profile1.png",
-    "/images/Profile2.png",
-    "/images/usericon.png",
+    // "/images/Profile.png",
+    // "/images/Profile1.png",
+    // "/images/Profile2.png",
+    // "/images/usericon.png",
+    "/images/businessman.png",
+    "/images/woman.png",
   ];
 
   useEffect(() => {

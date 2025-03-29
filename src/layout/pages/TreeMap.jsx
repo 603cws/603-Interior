@@ -1,6 +1,15 @@
 import React, { useState, useEffect, useRef } from "react";
 import ReactApexChart from "react-apexcharts";
 import { useApp } from "../../Context/Context";
+import {
+  MdKeyboardDoubleArrowRight,
+  MdKeyboardDoubleArrowLeft,
+} from "react-icons/md";
+import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
+import { supabase } from "../../services/supabase";
+import UnusedAreaWarning from "../components/UnusedAreaWarning";
+
 // import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 // import { faChevronRight, faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 
@@ -38,9 +47,13 @@ const fullNames = {
 const TreeMap = ({ totalArea, areaQuantities, areaValues }) => {
   const [hoveredArea, setHoveredArea] = useState(null);
   const [isLegendVisible, setIsLegendVisible] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const { layoutImgRef, setLayoutImage } = useApp();
   const chartRef = useRef(null);
+
+  const MIN_AREA = 1000;
+  const MAX_AREA = 25000;
 
   const colors = {
     "Linear Workspace": "#62897E",
@@ -196,6 +209,39 @@ const TreeMap = ({ totalArea, areaQuantities, areaValues }) => {
         },
       },
     },
+    // tooltip: {
+    //   custom: ({ series, seriesIndex, dataPointIndex, w }) => {
+    //     const dataPoint = w.config.series[0].data[dataPointIndex];
+    //     const workspaceName = dataPoint.x.split(":")[0]; // Extract name
+    //     const occupiedArea = dataPoint.y;
+    //     const percentage = dataPoint.x.split(":")[1]; // Extract percentage
+    //     const imageUrl = workspaceImages[workspaceName] || null;
+
+    //     return `
+    //       <div style="
+    //         background: rgba(0, 0, 0, 0.8);
+    //         color: white;
+    //         padding: 10px;
+    //         border-radius: 8px;
+    //         text-align: center;
+    //         max-width: 250px;
+    //         position: relative;
+    //       ">
+    //         ${
+    //           imageUrl
+    //             ? `<img src="${imageUrl}" alt="${workspaceName}" style="width: 100%; height: 180px; object-fit: cover; border-radius: 5px;" />`
+    //             : ""
+    //         }
+    //         <div style="margin-top: 5px;">
+    //           <strong>${workspaceName}</strong>
+    //           <div>Occupied Area: ${occupiedArea} sq ft</div>
+    //           <div>Usage: ${percentage}</div>
+    //         </div>
+    //       </div>
+    //     `;
+    //   },
+    // },
+
     tooltip: {
       custom: ({ series, seriesIndex, dataPointIndex, w }) => {
         const dataPoint = w.config.series[0].data[dataPointIndex];
@@ -204,6 +250,10 @@ const TreeMap = ({ totalArea, areaQuantities, areaValues }) => {
         const percentage = dataPoint.x.split(":")[1]; // Extract percentage
         const imageUrl = workspaceImages[workspaceName] || null;
 
+        // Check screen width for mobile responsiveness
+        const isMobile = window.innerWidth < 640; // Adjust for small screens
+        const imageHeight = isMobile ? 120 : 180; // Smaller image on mobile
+
         return `
           <div style="
             background: rgba(0, 0, 0, 0.8);
@@ -211,12 +261,13 @@ const TreeMap = ({ totalArea, areaQuantities, areaValues }) => {
             padding: 10px;
             border-radius: 8px;
             text-align: center;
-            min-width: 250px;
+            max-width: 250px;
             position: relative;
           ">
             ${
               imageUrl
-                ? `<img src="${imageUrl}" alt="${workspaceName}" style="width: 100%; height: 180px; object-fit: cover; border-radius: 5px;" />`
+                ? `<img src="${imageUrl}" alt="${workspaceName}" 
+                    style="width: 100%; height: ${imageHeight}px; object-fit: cover; border-radius: 5px;" />`
                 : ""
             }
             <div style="margin-top: 5px;">
@@ -287,7 +338,7 @@ const TreeMap = ({ totalArea, areaQuantities, areaValues }) => {
 
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth > 426) {
+      if (window.innerWidth >= 1024) {
         setIsLegendVisible(true);
       } else {
         setIsLegendVisible(false);
@@ -300,6 +351,200 @@ const TreeMap = ({ totalArea, areaQuantities, areaValues }) => {
       window.addEventListener("resize", handleResize);
     };
   }, []);
+
+  const [unusedArea, setUnusedArea] = useState(0);
+  const [showWarning, setShowWarning] = useState(false);
+
+  const { userId, setSelectedPlan, layoutImage = "" } = useApp();
+
+  const navigate = useNavigate();
+
+  const mapAreaValues = (
+    userId,
+    areaValues,
+    areaQuantities,
+    totalArea = null,
+    imageFilename,
+    builtArea
+  ) => {
+    return {
+      userId: userId || null,
+      linearArea: areaValues.linear,
+      linearQty: areaQuantities.linear || 0,
+      lTypeArea: areaValues.lType,
+      lTypeQty: areaQuantities.lType || 0,
+      mdArea: areaValues.md,
+      mdQty: areaQuantities.md || 0,
+      managerArea: areaValues.manager,
+      managerQty: areaQuantities.manager || 0,
+      smallArea: areaValues.small,
+      smallQty: areaQuantities.small || 0,
+      upsArea: areaValues.ups,
+      upsQty: areaQuantities.ups || 0,
+      bmsArea: areaValues.bms,
+      bmsQty: areaQuantities.bms || 0,
+      serverArea: areaValues.server,
+      serverQty: areaQuantities.server || 0,
+      receptionArea: areaValues.reception,
+      receptionQty: areaQuantities.reception || 0,
+      loungeArea: areaValues.lounge,
+      loungeQty: areaQuantities.lounge || 0,
+      salesArea: areaValues.sales,
+      salesQty: areaQuantities.sales || 0,
+      phoneBoothArea: areaValues.phoneBooth,
+      phoneBoothQty: areaQuantities.phoneBooth || 0,
+      discussionRoomArea: areaValues.discussionRoom,
+      discussionRoomQty: areaQuantities.discussionRoom || 0,
+      interviewRoomArea: areaValues.interviewRoom,
+      interviewRoomQty: areaQuantities.interviewRoom || 0,
+      conferenceRoomArea: areaValues.conferenceRoom,
+      conferenceRoomQty: areaQuantities.conferenceRoom || 0,
+      boardRoomArea: areaValues.boardRoom,
+      boardRoomQty: areaQuantities.boardRoom || 0,
+      meetingRoomArea: areaValues.meetingRoom,
+      meetingRoomQty: areaQuantities.meetingRoom || 0,
+      meetingRoomLargeArea: areaValues.meetingRoomLarge,
+      meetingRoomLargeQty: areaQuantities.meetingRoomLarge || 0,
+      hrRoomArea: areaValues.hrRoom,
+      hrRoomQty: areaQuantities.hrRoom || 0,
+      financeRoomArea: areaValues.financeRoom,
+      financeRoomQty: areaQuantities.financeRoom || 0,
+      breakoutRoomArea: areaValues.breakoutRoom,
+      breakoutRoomQty: areaQuantities.breakoutRoom || 0,
+      executiveWashroomArea: areaValues.executiveWashroom,
+      executiveWashroomQty: areaQuantities.executiveWashroom || 0,
+      videoRecordingRoomArea: areaValues.videoRecordingRoom,
+      videoRecordingRoomQty: areaQuantities.videoRecordingRoom || 0,
+      otherArea: areaValues.other,
+      otherQty: areaQuantities.other || 0,
+      // maleWashroomArea: areaValues.maleWashroom,
+      // maleWashroomQty: areaQuantities.maleWashroom || 0,
+      // femaleWashroomArea: areaValues.femaleWashroom,
+      // femaleWashroomQty: areaQuantities.femaleWashroom || 0,
+      washroomsArea: areaValues.washrooms,
+      washroomsQty: areaQuantities.washrooms || 0,
+      ...(totalArea !== null && { totalArea }),
+      layoutImg: imageFilename,
+      usedSpace: builtArea,
+    };
+  };
+
+  const uploadImage = async (imageDataUrl) => {
+    try {
+      // ✅ Convert Base64 to Blob Properly
+      const blob = await fetch(imageDataUrl)
+        .then((res) => res.blob())
+        .catch((error) => {
+          console.error("Error converting Base64 to Blob:", error);
+          return null;
+        });
+
+      if (!blob) {
+        console.error("Blob conversion failed");
+        return null;
+      }
+
+      // ✅ Ensure Correct Filename
+      const fileName = `area_distribution_${Date.now()}.png`;
+
+      // ✅ Upload Image to Supabase Storage
+      const { error } = await supabase.storage
+        .from("addon")
+        .upload(fileName, blob, { contentType: "image/png" });
+
+      if (error) {
+        console.error("Image upload failed:", error);
+        return null;
+      }
+
+      return fileName; // ✅ Store filename in DB
+    } catch (error) {
+      console.error("Upload failed:", error);
+      return null;
+    }
+  };
+
+  const generateBOQclick = () => {
+    console.log(totalArea);
+
+    if (totalArea >= MIN_AREA && totalArea <= MAX_AREA) {
+      localStorage.removeItem("selectedPlan");
+      localStorage.removeItem("hasSeenQuestionPopup");
+      setSelectedPlan(null);
+      const usedPercentage = (builtArea / totalArea) * 100;
+
+      if (usedPercentage < 90) {
+        setUnusedArea(totalArea - builtArea);
+        setShowWarning(true);
+        return;
+      } else {
+        handlegenrateboq();
+      }
+    }
+  };
+
+  const handlegenrateboq = async () => {
+    try {
+      setIsSubmitting(true);
+      if (!totalArea) {
+        toast.error("Enter the Area");
+        return;
+      }
+
+      // Trigger export and wait for image to be available
+      if (layoutImgRef.current) {
+        await layoutImgRef.current();
+      }
+
+      // Upload image to Supabase
+      // const imageUrl = await uploadImage(layoutImage || "");
+      const imageFilename = await uploadImage(layoutImage);
+
+      if (totalArea) {
+        const layoutData = mapAreaValues(
+          userId,
+          areaValues,
+          areaQuantities,
+          totalArea,
+          imageFilename,
+          builtArea
+        );
+
+        // Insert into tables
+        const { data, error } = await supabase
+          .from("layout")
+          .insert([layoutData])
+          .select("id")
+          .single();
+
+        if (error) {
+          console.error("Error inserting into layout:", error.message);
+        }
+
+        console.log("layout Data:", data);
+
+        if (data) {
+          const currentLayoutID = data.id;
+          localStorage.setItem("currentLayoutID", currentLayoutID);
+        }
+
+        if (!userId) {
+          navigate("/Login", {
+            state: {
+              totalArea: totalArea,
+              areaValues: areaValues,
+              areaQuantities: areaQuantities,
+              layoutId: data.id,
+            },
+          });
+        } else {
+          navigate("/boq");
+        }
+      }
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <div id="chart" style={{ position: "relative" }}>
@@ -315,30 +560,81 @@ const TreeMap = ({ totalArea, areaQuantities, areaValues }) => {
         onClick={() => toggleLegend(!isLegendVisible)}
         style={{
           position: "absolute",
-          left: "-10px",
+          left: "-25px",
           top: "200px",
           opacity: "50%",
           zIndex: 1,
-          display: window.innerWidth <= 425 ? "block" : "none",
+          display: window.innerWidth < 1024 ? "block" : "none",
         }}
       >
         {/* <FontAwesomeIcon icon={isLegendVisible ? faChevronLeft : faChevronRight} /> */}
+        {isLegendVisible ? (
+          <MdKeyboardDoubleArrowLeft size={30} />
+        ) : (
+          <MdKeyboardDoubleArrowRight size={30} />
+        )}
       </button>
       <div
-        className="legend-container w-full flex flex-wrap"
+        className="legend-container w-full grid grid-cols-2 gap-3 sm:gap-0 overflow-x-auto sm:flex flex-wrap"
         style={{
           transform: isLegendVisible ? "translateX(0)" : "translateX(-100%)", // Start hidden and slide in
           transition: "transform 1s ease-in-out",
           position: "absolute",
+          top: "10%",
           left: "0",
-          //   background: "#fff",
+          background: "#fff",
           padding: "10px",
-          //   boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)",
+          // boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)",
           visibility: isLegendVisible ? "visible" : "hidden", // Fully hide off-screen
         }}
       >
         {generateLegendItems()}
       </div>
+      {/* button for generate boq */}
+      <div className="flex justify-center items-center md:hidden">
+        <button
+          className="generateBoq bg-[#1A3A36] mt-2 rounded-3xl text-sm py-3 px-10 text-white mb-2 border-2 border-[#34BFAD]"
+          onClick={generateBOQclick}
+          disabled={isSubmitting}
+        >
+          {isSubmitting ? (
+            <div className="spinner flex justify-center items-center">
+              <svg
+                className="animate-spin h-5 w-5 text-white"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  className="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  strokeWidth="4"
+                ></circle>
+                <path
+                  className="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8v8h8a8 8 0 01-8 8V12H4z"
+                ></path>
+              </svg>
+            </div>
+          ) : (
+            "Generate BOQ"
+          )}
+        </button>
+      </div>
+
+      {showWarning && (
+        <UnusedAreaWarning
+          unusedArea={unusedArea}
+          onConfirm={handlegenrateboq}
+          onCancel={() => {
+            setShowWarning(false);
+          }}
+        />
+      )}
     </div>
   );
 };

@@ -23,9 +23,9 @@ const LayoutCard = ({
   areaCounterProps, // Props specific to AreaCounter
 }) => {
   return (
-    <div className="workspacedescription flex flex-col w-[280px] items-center border border-solid bg-[#fff] pb-2 my-3 relative">
+    <div className="workspacedescription flex flex-col w-40 md:w-[280px] items-center border border-solid bg-[#fff] pb-2 my-3 relative">
       {/* Image */}
-      <div className="relative bg-red-400 group w-full h-56 overflow-hidden">
+      <div className="relative bg-red-400 group w-full h-32 md:h-56 overflow-hidden">
         <img
           src={image}
           alt={title}
@@ -38,38 +38,38 @@ const LayoutCard = ({
       </div>
 
       {/* Content */}
-      <div className="flex flex-col gap-3">
+      <div className="flex flex-col gap-1 md:gap-3">
         {/* Counter */}
         {!showInputField && (
           <div className=" flex justify-around mt-2 gap-3">
             {roomType !== "reception" && roomType !== "lounge" && (
               <button onClick={onDecrement}>
-                <PiMinusCircleFill size={30} />
+                <PiMinusCircleFill className="h-6 w-6 md:h-8 md:w-8" />
               </button>
             )}
             <input
               type="number"
-              className="w-16 border rounded text-center [&::-webkit-inner-spin-button]:appearance-none  focus:outline-none focus:ring-0"
+              className="w-10 md:w-16 border rounded text-center [&::-webkit-inner-spin-button]:appearance-none  focus:outline-none focus:ring-0 text-xs md:text-base"
               value={counterValue}
               onChange={(e) => onChange(Number(e.target.value))} // Update counterValue on input change
               min={0}
             />
             {roomType !== "reception" && roomType !== "lounge" && (
               <button onClick={onIncrement}>
-                <PiPlusCircleFill size={30} />
+                <PiPlusCircleFill className="h-6 w-6 md:h-8 md:w-8" />
               </button>
             )}
           </div>
         )}
-        <p className="text-center font-bold text-sm">{title}</p>
+        <p className="text-center font-bold text-xs md:text-sm">{title}</p>
 
         {/* Size Options */}
         {sizes && (
-          <div className="flex gap-2 text-sm font-bold my-2 justify-around">
+          <div className="flex gap-1 md:gap-2 text-xs md:text-sm font-bold md:my-2 justify-center md:justify-around">
             {sizes.map((size) => (
               <button
                 key={size}
-                className={`border-2 rounded-full p-1 h-9 w-9 ${
+                className={`border-2 rounded-full p-1 h-6 w-6 md:h-9 md:w-9 text-[10px] md:text-xs ${
                   selectedSize === size ? "bg-gray-300" : ""
                 }`}
                 onClick={() => onSizeChange(size)}
@@ -81,9 +81,9 @@ const LayoutCard = ({
         )}
         {/* Tooltip */}
         {tooltipText && (
-          <div className="tooltip-container">
+          <div className="tooltip-container mt-2">
             <Tooltip text={tooltipText}>
-              <div className="w-4 absolute right-5 bottom-3">
+              <div className="w-4 absolute right-1 md:right-5 bottom-1 md:bottom-3">
                 <RxInfoCircled size={20} />
               </div>
             </Tooltip>

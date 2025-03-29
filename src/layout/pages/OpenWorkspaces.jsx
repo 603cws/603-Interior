@@ -89,7 +89,7 @@ function OpenWorkspaces({
         Open Workspaces
       </h3>
       {/* <div className="open-workspaces grid grid-cols-2 4xl:grid-cols-3 gap-5"> */}
-      <div className="open-workspaces grid grid-cols-2 3xl:grid-cols-3 gap-5">
+      <div className="open-workspaces grid grid-cols-2 3xl:grid-cols-3 gap-5 justify-items-center lg:justify-items-stretch">
         {workspaceData.map((workspace) => (
           <LayoutCard
             key={workspace.type}

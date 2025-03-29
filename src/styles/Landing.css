@@ -175,3 +175,16 @@ slick-current {
   justify-content: center !important;
   align-items: center !important;
 }
+@media (min-width: 1024px) {
+  .legend-container {
+    position: absolute;
+    top: 100% !important;
+    display: flex;
+    flex-wrap: wrap;
+  }
+}
+@media (max-width: 1024px) {
+  .legend-container {
+    height: 70%;
+  }
+}

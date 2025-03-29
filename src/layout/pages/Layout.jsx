@@ -991,8 +991,8 @@ function Layout() {
         />
       </div>
 
-      <div className="content w-full flex justify-between gap-3 p-2">
-        <div className="area-distribution-chart h-full w-1/2 px-3 border-2 pl-5">
+      <div className="content w-full lg:flex justify-between gap-3 p-2">
+        <div className="area-distribution-chart h-full w-full lg:w-1/2 px-3 border-2 pl-5">
           <Spacebar
             builtArea={builtArea}
             availableArea={availableArea}
@@ -1005,7 +1005,7 @@ function Layout() {
             areaQuantities={areaQuantities}
           />
         </div>
-        <div className="sections w-1/2 overflow-auto max-h-lvh pb-24 scrollbar-hide mt-2 ">
+        <div className="sections w-full lg:w-1/2 lg:overflow-auto lg:max-h-lvh pb-24 scrollbar-hide mt-2 ">
           <OpenWorkspaces
             areaQuantities={areaQuantities}
             variant={variant}

@@ -72,7 +72,7 @@ const Cabins = ({
         Cabins
       </h3>
       {/* <div className="cabins grid grid-cols-2 4xl:grid-cols-3 gap-5"> */}
-      <div className="cabins grid grid-cols-2 3xl:grid-cols-3 gap-5">
+      <div className="cabins grid grid-cols-2 3xl:grid-cols-3 gap-5 justify-items-center lg:justify-items-stretch">
         {cabinData.map((room) => (
           <LayoutCard
             key={room.type}

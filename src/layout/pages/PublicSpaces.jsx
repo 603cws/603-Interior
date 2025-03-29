@@ -123,7 +123,7 @@ const PublicSpaces = ({
         Public Spaces
       </h3>
       {/* <div className="public-spaces grid grid-cols-2 4xl:grid-cols-3 gap-5"> */}
-      <div className="public-spaces grid grid-cols-2 3xl:grid-cols-3 gap-5">
+      <div className="public-spaces grid grid-cols-2 3xl:grid-cols-3 gap-5 justify-items-center lg:justify-items-stretch">
         {publicSpacesData.map((space) => {
           const sliderProps = space.slider
             ? {
