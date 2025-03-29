@@ -20,31 +20,15 @@ function Footer() {
   return (
     <footer className=" bg-[#1F5C54] text-white font-Poppins px-10 xl:px-40 pt-12 pb-5">
       <div className="md:container md:mx-auto  flex flex-col md:flex-row justify-between md:justify-center lg:justify-between   gap-10 mb-20">
-        {/* <div className="container mx-auto flex flex-col lg:flex-row justify-between gap-10 mb-20"> */}
         <div className="border-r-2 border-[#34BFAD]  pr-10 xl:pr-28  lg:flex flex-col gap-5 text-sm">
           <div className="capitalize">
             <h3 className="font-semibold mb-3 lg:mb-0">
               registered office address
             </h3>
-            <h3 className="font-semibold mb-2 lg:mb-0">workved interiors</h3>
+            <h3 className="font-semibold mb-2 lg:mb-0 capitalize">
+              Workved Interiors
+            </h3>
           </div>
-          {/* <div className="flex mb-5 lg:mb-0  lg:flex-col gap-2.5">
-            <div className="flex items-center gap-10 capitalize">
-              <FaLocationDot size={20} />
-              <p className="hidden lg:block font-thin">
-                Makhija Arcade, 35th Rd, Khar West, <br />
-                Mumbai Maharashtra 400052
-              </p>
-            </div>
-            <div className="flex items-center gap-10 capitalize">
-              <PiPhoneCallFill size={20} />
-              <p className="hidden lg:block ">+91-9136036603</p>
-            </div>
-            <div className="flex items-center gap-10 ">
-              <IoIosMail size={20} />
-              <p className="hidden lg:block ">603coworkingspace@gmail.com</p>
-            </div>
-          </div> */}
           <div className="flex mb-5 lg:mb-0 lg:flex-col gap-2.5">
             {/* Address */}
             <div className="flex items-center gap-10 capitalize">
@@ -83,10 +67,13 @@ function Footer() {
                   className="cursor-pointer hover:text-red-500"
                 />
               </a>
-              <p className="hidden lg:block">sales@603thecoworkingspace.coms</p>
+              <p className="hidden lg:block">sales@603thecoworkingspace.com</p>
             </div>
           </div>
-          <div className="lg:block capitalize">
+          <div
+            className="lg:hidden
+           capitalize"
+          >
             <h3 className="font-semibold lg:text-xl">follow us on</h3>
             <div className="flex gap-4 mt-2">
               <a
@@ -169,7 +156,7 @@ function Footer() {
               </li>
             </ul>
           </div>
-          <div className="capitalize hidden lg:block">
+          <div className="capitalize hidden lg:block ">
             <h3 className="font-semibold text-xl">follow us on</h3>
             <div className="flex gap-4 mt-2">
               <a

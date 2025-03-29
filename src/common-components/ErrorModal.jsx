@@ -38,12 +38,16 @@ function ErrorModal({ onclose, message }) {
 
   return (
     <div className="fixed inset-0 z-20 top-0 bg-[rgba(25,25,25,0.46)] flex justify-center items-center">
-      <div className="grid grid-cols-[1.5fr_1fr] bg-[#1A3A36] border-2 rounded-3xl max-w-4xl mx-auto ">
+      <div className="grid grid-cols-1 md:grid-cols-[1.5fr_1fr] bg-[#1A3A36] border-2 rounded-3xl max-w-4xl mx-auto ">
         <div className="text-white p-5 flex flex-col justify-center gap-4 my-10">
-          <p className="text-4xl font-['UbuntuSans-Regular',_sans-serif]">
-            <span className="text-6xl tracking-tighter">W</span>arning
+          <p className="text-2xl md:text-4xl font-['UbuntuSans-Regular',_sans-serif]">
+            <span className="text-4xl md:text-6xl tracking-tighter">W</span>
+            arning
           </p>
-          <div style={{ fontFamily: "'Poppins', sans-serif" }}>
+          <div
+            className="text-xs md:text-base"
+            style={{ fontFamily: "'Poppins', sans-serif" }}
+          >
             <ul style={{ paddingLeft: "20px", listStyleType: "disc" }}>
               {message.split(".").map(
                 (sentence, index) =>
@@ -69,14 +73,14 @@ function ErrorModal({ onclose, message }) {
             {/* Go Back Button */}
             <button
               onClick={onclose}
-              className="py-2 px-4 bg-gray-500 text-white border-2 border-black border-b-8 border-r-8"
+              className="py-1 px-2 md:py-2 md:px-4 bg-gray-500 text-white border-2 border-black border-b-8 border-r-8"
             >
               Cancel
             </button>
             {/* Submit Button */}
             <button
               onClick={handleSubmit}
-              className="py-2 px-4 bg-[#FFD500] text-black border-2 border-black border-b-8 border-r-8"
+              className="py-1 px-2 md:py-2 md:px-4 bg-[#FFD500] text-black border-2 border-black border-b-8 border-r-8"
             >
               Update
             </button>
@@ -84,11 +88,8 @@ function ErrorModal({ onclose, message }) {
         </div>
 
         {/* Image Section */}
-        <div className="flex justify-center my-10 mx-1 relative">
+        <div className="hidden md:flex justify-center md:my-10 mx-1 relative">
           <img src="images/Errorimg.gif" alt="Error chair" />
-          {/* <button className="absolute -top-5 right-0" onClick={onclose}> */}
-          {/* <MdCancel size={30} color="white" /> */}
-          {/* </button> */}
         </div>
       </div>
     </div>

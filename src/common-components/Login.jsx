@@ -349,9 +349,10 @@ function Login() {
         </div>
       ) : (
         <form onSubmit={handleSubmit}>
-          <div className="main flex justify-center gap-5 h-screen w-full bg-login-custom-gradient px-3 lg:px-0">
+          <div className="relative main flex justify-center gap-5 h-screen w-full md:bg-[url(images/Register.png)] bg-login-custom-gradient lg:bg-login-custom-gradient md:bg-opacity-20 px-3 lg:px-0">
+            <div className="hidden  md:block fixed inset-0 bg-black bg-opacity-50 lg:hidden" />
             {/* <div className="img w-1/2 p-5 flex justify-end items-center"> */}
-            <div className="img flex-1 p-5 md:flex justify-end items-center hidden">
+            <div className="img flex-1 p-5 lg:flex justify-end items-center hidden">
               <img
                 src="images/Register.png"
                 alt=""
@@ -360,22 +361,21 @@ function Login() {
               />
             </div>
             <div
-              // className={`content w-1/2 max-h-full h-full flex flex-col items-start ${
-              //   isSignUp ? "pt-10" : "pt-40"
-              // } gap-10`}
-              className={`content flex-1 max-h-full h-full flex flex-col items-start ${
-                isSignUp ? "pt-10" : "pt-40"
+              className={`content z-10 flex-1 max-h-full h-full flex flex-col items-start ${
+                isSignUp
+                  ? "justify-center lg:justify-normal md:pt-10 md:mx-6 lg:mx-0 mx-2"
+                  : "pt-40"
               }   xl:gap-10`}
             >
-              <div className="w-3/4">
-                <h1 className="capitalize text-3xl font-bold text-white text-center">
+              <div className="w-full lg:w-3/4">
+                <h1 className="capitalize text-2xl md:text-3xl font-bold  md:text-white text-center">
                   {isForgotPassword
                     ? "Forgot password"
                     : isSignUp
                     ? "Create Account"
                     : "Welcome back!"}
                 </h1>
-                <p className="capitalize text-white font-semibold text-center my-2">
+                <p className="capitalize md:text-white font-semibold text-center my-2">
                   {isForgotPassword
                     ? "No worries, we'll send you reset instructions"
                     : isSignUp
@@ -388,7 +388,7 @@ function Login() {
                 <div className="flex flex-col gap-1 xl:gap-3 xl:w-3/4">
                   <label
                     htmlFor="email"
-                    className="capitalize text-md font-semibold text-white"
+                    className="capitalize text-sm md:text-md font-semibold md:text-white"
                   >
                     Email Id <span>*</span>
                   </label>
@@ -402,7 +402,7 @@ function Login() {
                         ? "Enter your email"
                         : "example@gmail.com"
                     }
-                    className="w-full py-2 rounded-lg pl-2 focus:outline-none"
+                    className="w-full py-1 pl-1 md:py-2 rounded-lg md:pl-2 focus:outline-none"
                   />
                 </div>
 
@@ -440,15 +440,15 @@ function Login() {
                         "Reset password"
                       )}
                     </button>
-                    <p className="text-white capitalize flex items-center justify-center gap-1 w-full xl:w-3/4 my-6">
-                      <span
-                        onClick={backToSignIn}
-                        className="cursor-pointer text-black self-center"
-                      >
+                    <button
+                      onClick={backToSignIn}
+                      className=" md:text-white capitalize flex items-center justify-center gap-1 w-full xl:w-3/4 my-6"
+                    >
+                      <span className="cursor-pointer text-black self-center">
                         <FaAngleLeft size={16} />
                       </span>
                       Back to log in
-                    </p>
+                    </button>
                   </div>
                 ) : (
                   <>
@@ -458,7 +458,7 @@ function Login() {
                           <div className="flex flex-col gap-1 xl:gap-3 w-1/2">
                             <label
                               htmlFor="company"
-                              className="capitalize text-md font-semibold text-white"
+                              className="capitalize text-sm md:text-md font-semibold md:text-white"
                             >
                               Company Name <span>*</span>
                             </label>
@@ -468,14 +468,14 @@ function Login() {
                               value={formData.company}
                               onChange={handleChange}
                               placeholder="Your Company Name"
-                              className="w-full py-2 rounded-lg pl-2 focus:outline-none"
+                              className="w-full py-1 pl-1 md:py-2 rounded-lg md:pl-2 focus:outline-none"
                             />
                           </div>
 
                           <div className="flex flex-col gap-1 xl:gap-3 w-1/2">
                             <label
                               htmlFor="location"
-                              className="capitalize text-md font-semibold text-white"
+                              className="capitalize text-sm md:text-md font-semibold md:text-white"
                             >
                               Location <span>*</span>
                             </label>
@@ -491,7 +491,7 @@ function Login() {
                                 ); // Remove everything except letters & spaces
                               }}
                               placeholder="Your Location"
-                              className="w-full py-2 rounded-lg pl-2 focus:outline-none"
+                              className="w-full py-1 pl-1 md:py-2 rounded-lg md:pl-2 focus:outline-none"
                             />
                           </div>
                         </div>
@@ -499,7 +499,7 @@ function Login() {
                         <div className="xl:w-3/4 flex flex-col gap-1 xl:gap-3">
                           <label
                             htmlFor="mobile"
-                            className="capitalize text-md font-semibold text-white"
+                            className="capitalize text-sm md:text-md font-semibold md:text-white"
                           >
                             Mobile Number <span>*</span>
                           </label>
@@ -518,7 +518,7 @@ function Login() {
                             inputMode="numeric"
                             pattern="\d{10}"
                             placeholder="Your Mobile Number"
-                            className="w-full py-2 rounded-lg pl-2 focus:outline-none"
+                            className="w-full py-1 pl-1 md:py-2 rounded-lg md:pl-2 focus:outline-none"
                           />
                         </div>
                       </>
@@ -527,7 +527,7 @@ function Login() {
                     <div className="xl:w-3/4 flex flex-col gap-1 xl:gap-3 relative">
                       <label
                         htmlFor="password"
-                        className="capitalize text-md font-semibold text-white"
+                        className="capitalize text-sm md:text-md font-semibold md:text-white"
                       >
                         Password <span>*</span>
                       </label>
@@ -537,7 +537,7 @@ function Login() {
                         value={formData.password}
                         onChange={handleChange}
                         placeholder="Enter Password"
-                        className="py-2 rounded-lg pl-2 focus:outline-none"
+                        className="w-full py-1 pl-1 md:py-2 rounded-lg md:pl-2 focus:outline-none"
                       />
                       <div
                         onClick={togglePasswordVisibility}
@@ -555,7 +555,7 @@ function Login() {
                         <div className="w-full flex justify-end">
                           <p
                             onClick={showForgotPassword}
-                            className="capitalize text-white underline cursor-pointer"
+                            className="capitalize text-sm md:text-base text-black md:text-white underline cursor-pointer"
                           >
                             Forgot Password?
                           </p>
@@ -567,7 +567,7 @@ function Login() {
                       <div className="xl:w-3/4 flex flex-col gap-1 xl:gap-3 relative">
                         <label
                           htmlFor="confirmPassword"
-                          className="capitalize text-md font-semibold text-white"
+                          className="capitalize text-sm md:text-md font-semibold md:text-white"
                         >
                           Confirm Password <span>*</span>
                         </label>
@@ -577,7 +577,7 @@ function Login() {
                           value={formData.confirmPassword}
                           onChange={handleChange}
                           placeholder="Confirm Password"
-                          className="py-2 rounded-lg pl-2 focus:outline-none"
+                          className="md:py-2 py-1 pl-1 rounded-lg md:pl-2 focus:outline-none"
                         />
                         <div
                           onClick={toggleConfirmPasswordVisibility}
@@ -593,7 +593,7 @@ function Login() {
                           <div className="w-full flex justify-end">
                             <p
                               onClick={showForgotPassword}
-                              className="capitalize text-white underline cursor-pointer"
+                              className="capitalize text-black  md:text-white underline cursor-pointer"
                             >
                               Forgot Password?
                             </p>
@@ -612,7 +612,7 @@ function Login() {
                       {isSignUp ? "Sign Up" : "Sign In"}
                     </button>
 
-                    <p className="text-white">
+                    <p className="md:text-white text-sm md:text-base text-center md:text-left">
                       {isSignUp ? (
                         <>
                           Already have an account?{" "}
@@ -637,7 +637,7 @@ function Login() {
                     </p>
 
                     {/* Social Login */}
-                    <div className="flex justify-center gap-3 items-center xl:w-3/4">
+                    {/* <div className="flex justify-center gap-3 items-center xl:w-3/4">
                       <hr className="w-2/5" />
                       <span className="text-white">or</span>
                       <hr className="w-2/5" />
@@ -649,7 +649,7 @@ function Login() {
                         size={30}
                         className="bg-white rounded-full cursor-pointer bg-contain"
                       />
-                    </div>
+                    </div> */}
                   </>
                 )}
               </div>

@@ -1,16 +1,30 @@
 import LandingNavbar from "../common-components/LandingNavbar";
 import Footer from "../common-components/Footer";
+import { useNavigate } from "react-router-dom";
+import { Swiper, SwiperSlide } from "swiper/react";
 import { useState } from "react";
 import "swiper/css";
 import "swiper/css/effect-coverflow";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
+import {
+  EffectCoverflow,
+  Pagination,
+  Navigation,
+  Autoplay,
+} from "swiper/modules";
 import "../styles/Landing.css";
 import ContactUsPopup from "../common-components/ContactUsPopup";
 
 function AboutUs() {
   const [showContactPopup, setShowContactPopup] = useState(false);
-
+  const navigate = useNavigate();
+  const services = [
+    { img: "/images/about-us/about-us-s2-1.png", title: "interior design" },
+    { img: "/images/about-us/about-us-s2-2.png", title: "production" },
+    { img: "/images/about-us/about-us-s2-3.png", title: "execution" },
+    { img: "/images/about-us/about-us-s2-4.png", title: "after service" },
+  ];
   return (
     <>
       {/* Hero image */}

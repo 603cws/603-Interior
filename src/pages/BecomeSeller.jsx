@@ -11,12 +11,18 @@ import axios from "axios";
 import toast from "react-hot-toast";
 
 import { useState } from "react";
+import ContactUsPopup from "../common-components/ContactUsPopup";
 
 // import { useNavigate } from "react-router-dom";
 // import emailjs from "@emailjs/browser";
 
 const BecomeSeller = () => {
   const sectionRef = useRef(null);
+  const [iscontactpopup, setIscontactpopup] = useState(false);
+
+  const handleclose = () => {
+    setIscontactpopup(() => false);
+  };
 
   const [isSubmitting, setisSubmitting] = useState(false);
 
@@ -157,7 +163,7 @@ const BecomeSeller = () => {
         <div className="md:container md:mx-auto flex-1 flex justify-around items-center ">
           <div className="w-1/2">
             <h3 className="text-[#1F5C54]  uppercase font-extrabold text-lg mb-3">
-              Become a workved interiors Seller
+              Become a Workved Interiors Seller
             </h3>
 
             <h1 className="text-4xl xl:text-5xl font-extrabold uppercase text-[#1F5C54]">
@@ -194,7 +200,7 @@ const BecomeSeller = () => {
         <div className="mx-4 flex-1 flex flex-col items-center  mt-20 pt-12 ">
           <div className="">
             <h3 className="text-[#1F5C54]  uppercase font-extrabold text-sm lg:text-lg mb-3">
-              Become a Part of <br /> workved interiors
+              Become a Part of <br /> Workved Interiors
             </h3>
 
             <h1 className="text-4xl xl:text-5xl font-extrabold uppercase text-[#1F5C54]">
@@ -303,7 +309,7 @@ const BecomeSeller = () => {
                   Receive Payments
                 </h3>
                 <p className="text-xs lg:text-sm">
-                  APayments are deposited directly <br /> to your bank account{" "}
+                  A Payments are deposited directly <br /> to your bank account{" "}
                   <br />
                   following a 7-day payment <br /> cycle from order delivery.
                 </p>
@@ -327,13 +333,16 @@ const BecomeSeller = () => {
             </div>
             <div className="w-2/3 flex flex-col gap-5 px-5 justify-center items-start font-Poppins">
               <h2 className="text-3xl font-bold">
-                Bring your brand on workved interiors
+                Bring your brand on Workved Interiors
               </h2>
               <p>
-                Use workved interiors tools to help customers discover your
+                Use Workved Interiors tools to help customers discover your
                 unique products and protect your intellectual property.
               </p>
-              <button className="flex justify-center items-center gap-4 font-semibold text-xl">
+              <button
+                onClick={() => setIscontactpopup(true)}
+                className="flex justify-center items-center gap-4 font-semibold text-xl"
+              >
                 Launch your brand
                 <LiaLongArrowAltRightSolid color="#1A3A36" />
               </button>
@@ -578,6 +587,8 @@ const BecomeSeller = () => {
           </div>
         </div>
       </section>
+
+      {iscontactpopup && <ContactUsPopup onClose={handleclose} />}
 
       {/* footer */}
       <footer>

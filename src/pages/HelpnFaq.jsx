@@ -25,22 +25,22 @@ function HelpnFaq() {
 
   const generalquestions = [
     {
-      title: "What is  workved interiors?",
+      title: "What is  Workved Interiors?",
       content:
-        " workved interiors is a tech-driven platform that helps corporates design and set up their office spaces with instant layouts, smart BOQs, and vendor partnerships, ensuring a hassle-free experience",
+        " Workved Interiors is a tech-driven platform that helps corporates design and set up their office spaces with instant layouts, smart BOQs, and vendor partnerships, ensuring a hassle-free experience",
     },
     {
-      title: "Who can use  workved interiors?",
+      title: "Who can use  Workved Interiors?",
       content:
         "Our platform is designed for corporates, startups, office administrators, HR teams, and real estate decision-makers looking for efficient office space planning and execution.",
     },
     {
-      title: "How does  workved interiors simplify office setup?",
+      title: "How does  Workved Interiors simplify office setup?",
       content:
         "We eliminate the need for lengthy consultations by offering instant office layouts, predefined and custom BOQs, and direct vendor collaboration, saving you time and costs.",
     },
     {
-      title: "Is  workved interiors only for large businesses?",
+      title: "Is  Workved Interiors only for large businesses?",
       content:
         "No, we cater to businesses of all sizes, from small startups to large corporations, providing scalable solutions for workspace design.",
     },
@@ -91,13 +91,13 @@ function HelpnFaq() {
         "Yes! Brands can select categories for their products in our predefined BOQs for maximum visibility.",
     },
     {
-      title: "How can vendors partner with  workved interiors?",
+      title: "How can vendors partner with  Workved Interiors?",
       content:
         "Vendors can collaborate with us by listing their products on our platform, gaining exposure to corporate clients.",
     },
     {
       title:
-        "What are the benefits of listing our brand with  workved interiors?",
+        "What are the benefits of listing our brand with  Workved Interiors?",
       content:
         "Partner brands get direct visibility, increased sales opportunities, and premium positioning in our curated BOQs.",
     },
@@ -138,7 +138,7 @@ function HelpnFaq() {
   ];
   const paymentQuestion = [
     {
-      title: "Is using  workved interiors free?",
+      title: "Is using  Workved Interiors free?",
       content:
         "Generating an office layout and exploring BOQs is free, but charges apply for vendor collaborations and execution services.",
     },
@@ -158,7 +158,7 @@ function HelpnFaq() {
         "No, we believe in 100% transparency—all costs are clearly outlined in your BOQ.",
     },
     {
-      title: "How do I get started with  workved interiors?",
+      title: "How do I get started with  Workved Interiors?",
       content:
         "Simply sign up, enter your office details, explore layouts, and generate your BOQ—all in a few clicks!",
     },
@@ -191,7 +191,7 @@ function HelpnFaq() {
                 frequently asked questions.
               </h1>
               <p className="text-xs lg:text-base">
-                Everything you need to know about workved interiors. Can’t find
+                Everything you need to know about Workved Interiors. Can’t find
                 the answer to a question {!isMobile && <br />}you have? No
                 worries, just click ‘I’ve got a question’ or ‘Chat to our team’!
               </p>
@@ -203,7 +203,7 @@ function HelpnFaq() {
                 className="max-h-full h-full"
               />
               <span className="px-5 py-3 rounded-3xl bg-[#54DED3] text-xs font-lora font-bold absolute top-1/2 left-10 animate-message1">
-                What is workved interiors?
+                What is Workved Interiors?
               </span>
               <span className="px-5 py-3 rounded-3xl bg-[#54DED3] text-xs font-lora font-bold absolute top-1/4 left-1/4 animate-message3">
                 What is a BOQ?

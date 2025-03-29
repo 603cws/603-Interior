@@ -128,22 +128,22 @@ function Landing() {
 
   const accordionItems = [
     {
-      title: "What is  workved interiors?",
+      title: "What is  Workved Interiors?",
       content:
-        " workved interiors is a tech-driven platform that helps corporates design and set up their office spaces with instant layouts, smart BOQs, and vendor partnerships, ensuring a hassle-free experience",
+        " Workved Interiors is a tech-driven platform that helps corporates design and set up their office spaces with instant layouts, smart BOQs, and vendor partnerships, ensuring a hassle-free experience",
     },
     {
-      title: "Who can use  workved interiors?",
+      title: "Who can use  Workved Interiors?",
       content:
         "Our platform is designed for corporates, startups, office administrators, HR teams, and real estate decision-makers looking for efficient office space planning and execution.",
     },
     {
-      title: "How does  workved interiors simplify office setup?",
+      title: "How does  Workved Interiors simplify office setup?",
       content:
         "We eliminate the need for lengthy consultations by offering instant office layouts, predefined and custom BOQs, and direct vendor collaboration, saving you time and costs.",
     },
     {
-      title: "Is  workved interiors only for large businesses?",
+      title: "Is  Workved Interiors only for large businesses?",
       content:
         "No, we cater to businesses of all sizes, from small startups to large corporations, providing scalable solutions for workspace design.",
     },
@@ -279,7 +279,7 @@ function Landing() {
                 </h2>
 
                 <p className="text-[#212121] text-sm xl:text-base font-sans text-justify 2xl:leading-7 xl:mb-5">
-                  At workved interiors, we believe that the right workspace can
+                  At Workved Interiors, we believe that the right workspace can
                   transform the way you work. Our expertise in designing
                   functional, aesthetically pleasing, and customized office
                   spaces sets us apart. With a dedicated in-house design team
@@ -287,10 +287,10 @@ function Landing() {
                   The Coworking Space, we bring the same innovation and
                   precision to your corporate office. Whether you're looking to
                   redesign your existing office or create a new space from
-                  scratch, workved interiors offers end-to-end solutions
+                  scratch, Workved Interiors offers end-to-end solutions
                   tailored to your business needs. Experience the perfect blend
-                  of creativity, efficiency, and functionality with workved
-                  interiors – where every space is designed with purpose.
+                  of creativity, efficiency, and functionality with Workved
+                  Interiors – where every space is designed with purpose.
                 </p>
                 {/* buton and call div */}
                 <div className="flex flex-col lg:flex-row justify-center lg:justify-between items-center gap-5">

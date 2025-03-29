@@ -83,8 +83,8 @@ function ContactUsPopup({ onClose }) {
     }
   };
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-20 z-30 flex justify-center items-center">
-      <div className="bg-white max-w-lg w-full mx-auto rounded-2xl relative">
+    <div className="fixed inset-0 bg-black bg-opacity-20 z-30 flex justify-center items-center ">
+      <div className="bg-white  max-w-sm lg:max-w-lg w-full mx-auto rounded-2xl relative">
         <div className="flex justify-end items-center mb-4 absolute top-3 right-5">
           <MdClose
             className="text-xl cursor-pointer text-gray-600"

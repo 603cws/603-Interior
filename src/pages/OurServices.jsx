@@ -1,6 +1,4 @@
 import React, { useEffect } from "react";
-import { BsFillArrowUpRightCircleFill } from "react-icons/bs";
-import { SiAntdesign } from "react-icons/si";
 import "../styles/Landing.css";
 import { useState } from "react";
 import LandingNavbar from "../common-components/LandingNavbar";
@@ -158,15 +156,6 @@ function OurServices() {
                       : "gap-10"
                   }`}
                 >
-                  {/* Icon - Hide when expanded */}
-                  {/* <SiAntdesign
-                    size={40}
-                    className={`text-white transition-opacity duration-300 ${
-                      expandedIndex === index || window.innerWidth < 768
-                        ? "opacity-0"
-                        : "opacity-100"
-                    }`}
-                  /> */}
                   <img
                     src={service.icon}
                     alt={`${service.title} Icon`}
@@ -243,7 +232,7 @@ function OurServices() {
                 {/* <p className="capitalize font-medium text-base">
                   Fusce at tellus nec erat pretium maximus eu et eros
                 </p> */}
-                <p className="capitalize text-base font-light">
+                <p className=" text-base font-light">
                   Smart, functional, and <br />
                   aesthetic office spaces
                   <br /> tailored to your needs.
@@ -270,7 +259,7 @@ function OurServices() {
                 <h4 className="uppercase font-bold text-xl my-4 lg:my-6">
                   office redesign
                 </h4>
-                <p className="capitalize font-light text-base">
+                <p className=" font-light text-base">
                   Transforming workspaces <br /> for better efficiency
                   <br /> and style.
                 </p>
@@ -298,7 +287,7 @@ function OurServices() {
                 <h4 className="uppercase font-bold text-xl my-4 lg:my-6">
                   Interior decoration
                 </h4>
-                <p className="capitalize font-light text-base">
+                <p className=" font-light text-base">
                   Elevating office ambiance <br /> with curated décor <br />
                   and finishes.
                 </p>
@@ -343,7 +332,7 @@ function OurServices() {
         </div>
         <div className="flex-1 lg:flex justify-start items-center hidden">
           {/* div for text and button */}
-          <div className=" flex items-center">
+          <div className=" flex items-center lg:pl-10">
             <div className="font-Poppins">
               {/* serviceicon */}
               <div className="flex ">
@@ -355,27 +344,15 @@ function OurServices() {
               <p className="font-semibold lg:text-5xl uppercase font-Poppins">
                 We design modern <br /> and elegant
               </p>
-              {/* <p className="my-3 lg:my-7">
-                Lorem ipsum odor amet, consectetuer adipiscing elit. Parturient{" "}
-                <br />
-                dictum class velit tristique efficitur; pulvinar laoreet ipsum{" "}
-                <br />
-                scelerisque. Sapien facilisi blandit sodales eget auctor
-                dignissim <br /> habitant. Augue egestas parturient potenti
-                auctor cursus ut <br /> fusce. Imperdiet hendrerit praesent
-                dictum senectus integer <br /> ridiculus curae leo. Nec finibus
-                tempus ultricies sapien; dis proin <br /> efficitur.
-              </p> */}
-
-              <p className="my-3 lg:my-7 capitalize">
-                At workved interiors, we simplify corporate office setup with
+              <p className="my-3 lg:my-7 ">
+                At Workved Interiors, we simplify corporate office setup with
                 smart, tech-driven solutions. From instant office layouts to
                 customizable BOQs and trusted vendor partnerships, we provide a
                 seamless experience for businesses. Our platform helps optimize
                 space, reduce costs, and streamline procurement, ensuring that
                 your office is designed efficiently without unnecessary delays.
-                Whether you choose from our predefined BOQ packages (Basic,
-                Luxury, Ultra Luxury) or customize your own, we make office
+                Whether you choose from our predefined BOQ packages (Minimal,
+                Exclusive,Luxury) or customize your own, we make office
                 interiors hassle-free and cost-effective.
               </p>
 
@@ -404,13 +381,8 @@ function OurServices() {
             we design for your {!isMobile && <br />}
             satisfaction
           </h1>
-          {/* <p className="text-base my-7">
-            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nobis ab
-            temporibus fugiat quos cum! Necessitatibus fugiat vero minus
-            perferendis ipsum!
-          </p> */}
           <p className="text-sm lg:text-base my-3 lg:my-7 text-justify">
-            At workved interiors, your workspace isn’t just another project—it’s
+            At Workved Interiors, your workspace isn’t just another project—it’s
             a reflection of your vision and needs. with a perfect blend of
             perfect blend of efficiency, aesthetics, and comfort. Our goal is to
             simplify office interiors by providing smart layouts, functional
@@ -426,11 +398,7 @@ function OurServices() {
                 <h2 className="uppercase font-bold text-2xl lg:text-[32px]">
                   layout
                 </h2>
-                {/* <p className="uppercase font-bold text-base">
-                  Mauris dapibus consectetur enim a dictum. <br />
-                  Ut in rhoncus sem
-                </p> */}
-                <p className="uppercase font-bold text-sm lg:text-base">
+                <p className=" font-bold text-sm lg:text-base">
                   Strategically planned spaces that optimize functionality and
                   flow.
                 </p>
@@ -444,7 +412,7 @@ function OurServices() {
                 <h2 className="uppercase font-bold text-2xl lg:text-[32px]">
                   design
                 </h2>
-                <p className="uppercase font-bold text-sm lg:text-base">
+                <p className=" font-bold text-sm lg:text-base">
                   Thoughtfully curated interiors that align with your brand
                   identity and culture
                 </p>
@@ -458,7 +426,7 @@ function OurServices() {
                 <h2 className="uppercase font-bold text-2xl lg:text-[32px]">
                   development
                 </h2>
-                <p className="uppercase font-bold text-sm lg:text-base">
+                <p className=" font-bold text-sm lg:text-base">
                   High-quality execution with premium materials, trusted
                   vendors, and expert craftsmanship.
                 </p>
