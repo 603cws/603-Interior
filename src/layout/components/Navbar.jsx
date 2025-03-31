@@ -23,6 +23,7 @@ function Navbar({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [unusedArea, setUnusedArea] = useState(0);
   const [showWarning, setShowWarning] = useState(false);
+
   const {
     isAuthenticated,
     layoutImgRef,
@@ -36,6 +37,7 @@ function Navbar({
     setTotalAreaSource,
     userId,
     setSelectedPlan,
+    isMobile,
   } = useApp();
 
   const navigate = useNavigate();
@@ -276,109 +278,45 @@ function Navbar({
 
   return (
     <div>
-      {/*desktop navbar */}
-      <div className="hidden md:flex justify-around bg-gradient-to-r from-[#1A3A36] to-[#48A095] py-4 items-center px-5">
-        {/* logo */}
-        <button className=" " onClick={() => navigate("/")}>
-          <img src="/logo/logo.png" alt="603 logo" className="h-auto w-20" />
-        </button>
-        {/* sq feet div */}
-        <div
-          className={`joynavarea flex justify-between w-7/12 border-2 border-[#FFD43B] items-center px-2 rounded-xl relative ${
-            error ? "border-t-1" : "border-1"
-          }`}
-        >
-          {/* cal icon */}
-          <CiCalculator1
-            size={30}
-            color="#FEBF00"
-            className="absolute left-0"
-          />
-          <MdOutlineCancel
-            size={30}
-            className="absolute right-2 cursor-pointer text-[#FFD43B] border-none hover:text-red-300"
-            onClick={handleReset}
-          />
-          <input
-            type="number"
-            className={`w-full rounded-md border-none bg-transparent py-2.5 ms-8 [&::-webkit-inner-spin-button]:appearance-none  focus:outline-none focus:ring-0 text-white ${
-              error ? "error" : ""
-            }`}
-            value={totalArea}
-            onChange={handleInputChange}
-            onKeyDown={handleKeyDown}
-            onKeyUp={handleSubmit}
-            placeholder="Enter total area (sq ft)"
-            title="Set the area value here"
-            aria-label="Total Area Input"
-            data-tip="Enter the total area in square feet"
-            autoFocus
-          />
-        </div>
-        {error && (
-          <div
-            className="error-message text-[#FFD43B] font-medium text-xs mt-1 flex items-center absolute top-1 bg-transparent left-1/3 bg-gradient-to-r from-[#325B56] to-[#3D6F68]"
-            aria-live="polite"
-          >
-            <span className="warning-icon">⚠️</span>
-            Invalid area value. Must be between {MIN_AREA} and {MAX_AREA} square
-            feet.
-          </div>
-        )}
-        {/* button for generate boq */}
-        <button
-          className="generateBoq bg-[#1A3A36] mt-2 rounded-3xl text-sm py-2 px-5 text-white mb-2 border-2 border-[#34BFAD]"
-          onClick={generateBOQclick}
-          disabled={isSubmitting}
-        >
-          {isSubmitting ? (
-            <div className="spinner flex justify-center items-center">
-              <svg
-                className="animate-spin h-5 w-5 text-white"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-              >
-                <circle
-                  className="opacity-25"
-                  cx="12"
-                  cy="12"
-                  r="10"
-                  stroke="currentColor"
-                  strokeWidth="4"
-                ></circle>
-                <path
-                  className="opacity-75"
-                  fill="currentColor"
-                  d="M4 12a8 8 0 018-8v8h8a8 8 0 01-8 8V12H4z"
-                ></path>
-              </svg>
-            </div>
-          ) : (
-            "Generate BOQ"
-          )}
-        </button>
-        {isAuthenticated && (
-          <button ref={iconRef}>
-            <img
-              onClick={toggleProfile}
-              src={accountHolder.profileImage}
-              alt="usericon"
-              className="w-12 h-12 cursor-pointer rounded-full"
-            />
-          </button>
-        )}
-
-        {/* </div> */}
-      </div>
-
-      {/* mobile navbar */}
-      <>
-        <div className="flex md:hidden justify-between bg-gradient-to-r from-[#1A3A36] to-[#48A095] py-2 items-center px-5">
+      {!isMobile ? (
+        <div className="hidden md:flex justify-around bg-gradient-to-r from-[#1A3A36] to-[#48A095] py-4 items-center px-5">
           {/* logo */}
           <button className=" " onClick={() => navigate("/")}>
-            <img src="/logo/logo.png" alt="603 logo" className="h-auto w-14" />
+            <img src="/logo/logo.png" alt="603 logo" className="h-auto w-20" />
           </button>
+          {/* sq feet div */}
+          <div
+            className={`joynavarea flex justify-between w-7/12 border-2 border-[#FFD43B] items-center px-2 rounded-xl relative ${
+              error ? "border-t-1" : "border-1"
+            }`}
+          >
+            {/* cal icon */}
+            <CiCalculator1
+              size={30}
+              color="#FEBF00"
+              className="absolute left-0"
+            />
+            <MdOutlineCancel
+              size={30}
+              className="absolute right-2 cursor-pointer text-[#FFD43B] border-none hover:text-red-300"
+              onClick={handleReset}
+            />
+            <input
+              type="number"
+              className={`w-full rounded-md border-none bg-transparent py-2.5 ms-8 [&::-webkit-inner-spin-button]:appearance-none  focus:outline-none focus:ring-0 text-white ${
+                error ? "error" : ""
+              }`}
+              value={totalArea}
+              onChange={handleInputChange}
+              onKeyDown={handleKeyDown}
+              onKeyUp={handleSubmit}
+              placeholder="Enter total area (sq ft)"
+              title="Set the area value here"
+              aria-label="Total Area Input"
+              data-tip="Enter the total area in square feet"
+              autoFocus
+            />
+          </div>
           {error && (
             <div
               className="error-message text-[#FFD43B] font-medium text-xs mt-1 flex items-center absolute top-1 bg-transparent left-1/3 bg-gradient-to-r from-[#325B56] to-[#3D6F68]"
@@ -389,7 +327,7 @@ function Navbar({
               square feet.
             </div>
           )}
-          {/* button for generate boq
+          {/* button for generate boq */}
           <button
             className="generateBoq bg-[#1A3A36] mt-2 rounded-3xl text-sm py-2 px-5 text-white mb-2 border-2 border-[#34BFAD]"
             onClick={generateBOQclick}
@@ -421,7 +359,7 @@ function Navbar({
             ) : (
               "Generate BOQ"
             )}
-          </button> */}
+          </button>
           {isAuthenticated && (
             <button ref={iconRef}>
               <img
@@ -435,40 +373,79 @@ function Navbar({
 
           {/* </div> */}
         </div>
-        {/* sq feet div */}
-        <div
-          className={`joynavarea md:hidden flex justify-between mx-auto bg-gradient-to-r from-[#1A3A36] to-[#48A095]  border-2 border-[#FFD43B] items-center px-2 rounded-xl relative my-2 w-[90%] ${
-            error ? "border-t-1" : "border-1"
-          }`}
-        >
-          {/* cal icon */}
-          <CiCalculator1
-            size={30}
-            color="#FEBF00"
-            className="absolute left-0"
-          />
-          <MdOutlineCancel
-            size={30}
-            className="absolute right-2 cursor-pointer text-[#FFD43B] border-none hover:text-red-300"
-            onClick={handleReset}
-          />
-          <input
-            type="number"
-            className={`w-full rounded-md border-none bg-transparent py-2.5 ms-8 [&::-webkit-inner-spin-button]:appearance-none  focus:outline-none focus:ring-0 text-white ${
-              error ? "error" : ""
+      ) : (
+        <div>
+          <div className="flex  justify-between bg-gradient-to-r from-[#1A3A36] to-[#48A095] py-2 items-center px-5">
+            {/* logo */}
+            <button className=" " onClick={() => navigate("/")}>
+              <img
+                src="/logo/logo.png"
+                alt="603 logo"
+                className="h-auto w-14"
+              />
+            </button>
+
+            {isAuthenticated && (
+              <button ref={iconRef}>
+                <img
+                  onClick={toggleProfile}
+                  src={accountHolder.profileImage}
+                  alt="usericon"
+                  className="w-12 h-12 cursor-pointer rounded-full"
+                />
+              </button>
+            )}
+
+            {/* </div> */}
+          </div>
+          {/* sq feet div */}
+          <div
+            className={`joynavarea flex justify-between mx-auto bg-gradient-to-r from-[#1A3A36] to-[#48A095]  border-2 border-[#FFD43B] items-center px-2 rounded-xl relative my-2 w-[90%]  ${
+              error ? "border-t-1" : "border-1"
             }`}
-            value={totalArea}
-            onChange={handleInputChange}
-            onKeyDown={handleKeyDown}
-            onKeyUp={handleSubmit}
-            placeholder="Enter total area (sq ft)"
-            title="Set the area value here"
-            aria-label="Total Area Input"
-            data-tip="Enter the total area in square feet"
-            autoFocus
-          />
+          >
+            {/* cal icon */}
+            <CiCalculator1
+              size={30}
+              color="#FEBF00"
+              className="absolute left-0"
+            />
+            <MdOutlineCancel
+              size={30}
+              className="absolute right-2 cursor-pointer text-[#FFD43B] border-none hover:text-red-300"
+              onClick={handleReset}
+            />
+            <input
+              type="number"
+              className={`w-full rounded-md border-none bg-transparent py-2.5 ms-8 [&::-webkit-inner-spin-button]:appearance-none  focus:outline-none focus:ring-0 text-white ${
+                error ? "error" : ""
+              }`}
+              value={totalArea}
+              onChange={handleInputChange}
+              onKeyDown={handleKeyDown}
+              onKeyUp={handleSubmit}
+              placeholder="Enter total area (sq ft)"
+              title="Set the area value here"
+              aria-label="Total Area Input"
+              data-tip="Enter the total area in square feet"
+              autoFocus
+            />
+            {error && (
+              <div
+                className="error-message text-[#FFD43B] font-medium text-[11px] mt-1 flex items-center absolute -top-3 bg-transparent left-14 bg-gradient-to-r from-[#325B56] to-[#3D6F68] text-wrap"
+                aria-live="polite"
+              >
+                <span className="warning-icon">⚠️</span>
+                Invalid area value. Range {MIN_AREA} to {MAX_AREA} sq ft.
+              </div>
+            )}
+          </div>
         </div>
-      </>
+      )}
+      {/*desktop navbar */}
+
+      {/* mobile navbar */}
+
       {/* {warning && <ErrorModal onclose={()=>setWarning(false)} />} */}
       {showWarning && (
         <UnusedAreaWarning

@@ -2,19 +2,22 @@ import LandingNavbar from "../common-components/LandingNavbar";
 import Footer from "../common-components/Footer";
 import { useState, useEffect } from "react";
 import ContactUsPopup from "../common-components/ContactUsPopup";
+import { useApp } from "../Context/Context";
 
 function Howtosell() {
-  const [isMobile, setIsMobile] = useState(false);
+  // const [isMobile, setIsMobile] = useState(false);
   const [iscontactpopup, setIscontactpopup] = useState(false);
+
+  const { isMobile } = useApp();
   // Detect screen size
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth <= 768); // Mobile & Tablet: < 768px
-    };
-    handleResize(); // Check on mount
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
+  // useEffect(() => {
+  //   const handleResize = () => {
+  //     setIsMobile(window.innerWidth <= 768); // Mobile & Tablet: < 768px
+  //   };
+  //   handleResize(); // Check on mount
+  //   window.addEventListener("resize", handleResize);
+  //   return () => window.removeEventListener("resize", handleResize);
+  // }, []);
 
   const handleclose = () => {
     setIscontactpopup(() => false);

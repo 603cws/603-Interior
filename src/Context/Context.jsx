@@ -87,6 +87,7 @@ export const AppProvider = ({ children }) => {
   const [showProductView, setShowProductView] = useState(false);
   const [showRecommend, setShowRecommend] = useState(false);
   const [boqTotal, setBoqTotal] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
     const loadData = async () => {
@@ -400,6 +401,16 @@ export const AppProvider = ({ children }) => {
   }, [isAuthenticated]);
   console.log("current user", accountHolder);
 
+  // Detect screen size
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768); // Mobile & Tablet: < 768px
+    };
+    handleResize(); // Check on mount
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   const handleCategorySelection = (categoryData) => {
     setSelectedCategory(categoryData);
     console.log("Selected Category: ", categoryData.category);
@@ -641,6 +652,8 @@ export const AppProvider = ({ children }) => {
         priceRange,
         boqTotal,
         setBoqTotal,
+        isMobile,
+        setIsMobile,
       }}
     >
       {children}

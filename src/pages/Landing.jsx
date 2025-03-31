@@ -27,10 +27,11 @@ import {
   BiSolidRightArrowSquare,
 } from "react-icons/bi";
 import { IoIosCall } from "react-icons/io";
+import { useApp } from "../Context/Context";
 
 function Landing() {
   const [expandedIndex, setExpandedIndex] = useState();
-  const [isMobile, setIsMobile] = useState(false);
+  // const [isMobile, setIsMobile] = useState(false);
   const heroImages = [
     "/images/home/Hero.png",
     "/images/home/Hero-image-1.png",
@@ -41,6 +42,8 @@ function Landing() {
   ];
 
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  const { isMobile } = useApp();
 
   // Change background image every 5 seconds
   useEffect(() => {
@@ -54,14 +57,14 @@ function Landing() {
   }, [heroImages.length]);
 
   // Detect screen size
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth <= 768); // Mobile & Tablet: < 768px
-    };
-    handleResize(); // Check on mount
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
+  // useEffect(() => {
+  //   const handleResize = () => {
+  //     setIsMobile(window.innerWidth <= 768); // Mobile & Tablet: < 768px
+  //   };
+  //   handleResize(); // Check on mount
+  //   window.addEventListener("resize", handleResize);
+  //   return () => window.removeEventListener("resize", handleResize);
+  // }, []);
 
   const navigate = useNavigate();
   const handleToggle = (index) => {

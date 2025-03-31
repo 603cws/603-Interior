@@ -4,6 +4,7 @@ import { useState } from "react";
 import LandingNavbar from "../common-components/LandingNavbar";
 import Footer from "../common-components/Footer";
 import { useNavigate } from "react-router-dom";
+import { useApp } from "../Context/Context";
 
 function OurServices() {
   const [isHovered, setIsHovered] = useState(false);
@@ -11,7 +12,9 @@ function OurServices() {
   const [isHovered3, setIsHovered3] = useState(false);
   const [isHovered4, setIsHovered4] = useState(false);
   const [expandedIndex, setExpandedIndex] = useState(0);
-  const [isMobile, setIsMobile] = useState(false);
+  // const [isMobile, setIsMobile] = useState(false);
+
+  const { isMobile } = useApp();
 
   const navigate = useNavigate();
   const services = [
@@ -47,14 +50,14 @@ function OurServices() {
   const service = `/images/services/ourservicebg.png`;
 
   // Detect screen size
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth <= 768); // Mobile & Tablet: < 768px
-    };
-    handleResize(); // Check on mount
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
+  // useEffect(() => {
+  //   const handleResize = () => {
+  //     setIsMobile(window.innerWidth <= 768); // Mobile & Tablet: < 768px
+  //   };
+  //   handleResize(); // Check on mount
+  //   window.addEventListener("resize", handleResize);
+  //   return () => window.removeEventListener("resize", handleResize);
+  // }, []);
 
   return (
     <>

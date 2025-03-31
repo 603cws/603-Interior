@@ -4,6 +4,8 @@ import { FiMenu, FiX } from "react-icons/fi";
 import { useApp } from "../Context/Context";
 function LandingNavbar({ bgColor = false }) {
   const navigate = useNavigate();
+  const pathname = window.location.pathname;
+  console.log(pathname);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const { setShowProfile, showProfile, isAuthenticated, accountHolder } =
@@ -12,6 +14,7 @@ function LandingNavbar({ bgColor = false }) {
   const toggleProfile = () => {
     setShowProfile(!showProfile);
   };
+
   const bgcolor = bgColor ? "bg-[#ccc]" : "bg-white";
   return (
     <div className="px-5 pt-3 absolute top-0 w-full z-10">
@@ -28,38 +31,58 @@ function LandingNavbar({ bgColor = false }) {
         </div> */}
 
         {/* Desktop Menu */}
-        <div className="hidden lg:flex">
-          <ul className="flex gap-8 text-[#1A3A36] font-semibold uppercase">
-            <li onClick={() => navigate("/")} className="cursor-pointer">
+        <nav className="hidden lg:flex justify-center items-center py-4">
+          <ul className="flex gap-8 text-[#1A3A36] font-semibold uppercase stroke-nav [&_li]:cursor-pointer ">
+            <li
+              onClick={() => navigate("/")}
+              className={`cursor-pointer relative after:content-[''] after:absolute after:left-0 after:bottom-[-2px] after:h-[2px] after:bg-[#1A3A36] after:transition-all after:duration-300 ${
+                pathname === "/" ? "after:w-full" : "after:w-0"
+              } hover:after:w-full`}
+            >
               Home
             </li>
-
-            <li onClick={() => navigate("/Aboutus")} className="cursor-pointer">
+            <li
+              onClick={() => navigate("/Aboutus")}
+              className={`cursor-pointer relative after:content-[''] after:absolute after:left-0 after:bottom-[-2px] after:h-[2px] after:bg-[#1A3A36] after:transition-all after:duration-300 ${
+                pathname === "/Aboutus" ? "after:w-full" : "after:w-0"
+              } hover:after:w-full`}
+            >
               About Us
             </li>
             <li
               onClick={() => navigate("/OurServices")}
-              className="cursor-pointer"
+              className={`cursor-pointer relative after:content-[''] after:absolute after:left-0 after:bottom-[-2px] after:h-[2px] after:bg-[#1A3A36] after:transition-all after:duration-300 ${
+                pathname === "/OurServices" ? "after:w-full" : "after:w-0"
+              } hover:after:w-full`}
             >
               Services
             </li>
-            <li onClick={() => navigate("/Blog")} className="cursor-pointer">
+            <li
+              onClick={() => navigate("/Blog")}
+              className={`cursor-pointer relative after:content-[''] after:absolute after:left-0 after:bottom-[-2px] after:h-[2px] after:bg-[#1A3A36] after:transition-all after:duration-300 ${
+                pathname === "/Blog" ? "after:w-full" : "after:w-0"
+              } hover:after:w-full`}
+            >
               Blog
             </li>
             <li
-              className="cursor-pointer"
               onClick={() => navigate("/becomeseller")}
+              className={`cursor-pointer relative after:content-[''] after:absolute after:left-0 after:bottom-[-2px] after:h-[2px] after:bg-[#1A3A36] after:transition-all after:duration-300 ${
+                pathname === "/becomeseller" ? "after:w-full" : "after:w-0"
+              } hover:after:w-full`}
             >
               Collaborate
             </li>
             <li
               onClick={() => navigate("/Contactus")}
-              className="cursor-pointer"
+              className={`cursor-pointer relative after:content-[''] after:absolute after:left-0 after:bottom-[-2px] after:h-[2px] after:bg-[#1A3A36] after:transition-all after:duration-300 ${
+                pathname === "/Contactus" ? "after:w-full" : "after:w-0"
+              } hover:after:w-full`}
             >
               Contact Us
             </li>
           </ul>
-        </div>
+        </nav>
 
         {/* Login Button (Desktop) */}
         <div className="hidden lg:block">

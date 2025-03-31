@@ -175,7 +175,7 @@ slick-current {
   justify-content: center !important;
   align-items: center !important;
 }
-@media (min-width: 1024px) {
+@media (min-width: 1351px) {
   .legend-container {
     position: absolute;
     top: 100% !important;
@@ -183,8 +183,13 @@ slick-current {
     flex-wrap: wrap;
   }
 }
-@media (max-width: 1024px) {
+@media (max-width: 1024) {
   .legend-container {
     height: 70%;
+  }
+}
+@media (max-width: 1351px) {
+  .legend-container {
+    height: 80%;
   }
 }

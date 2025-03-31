@@ -4,6 +4,7 @@ import Footer from "../common-components/Footer";
 import LandingNavbar from "../common-components/LandingNavbar";
 
 import { FaAngleDown, FaAngleUp } from "react-icons/fa";
+import { useApp } from "../Context/Context";
 function HelpnFaq() {
   const [expandedIndex, setExpandedIndex] = useState();
   const [layoutexpandedIndex, setlayoutExpandedIndex] = useState();
@@ -11,17 +12,19 @@ function HelpnFaq() {
   const [executionexpandedIndex, setexecutionExpandedIndex] = useState();
   const [paymentexpandedIndex, setpaymentExpandedIndex] = useState();
 
-  const [isMobile, setIsMobile] = useState(false);
+  // const [isMobile, setIsMobile] = useState(false);
+
+  const { isMobile } = useApp();
 
   // Detect screen size
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth <= 768); // Mobile & Tablet: < 768px
-    };
-    handleResize(); // Check on mount
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
+  // useEffect(() => {
+  //   const handleResize = () => {
+  //     setIsMobile(window.innerWidth <= 768); // Mobile & Tablet: < 768px
+  //   };
+  //   handleResize(); // Check on mount
+  //   window.addEventListener("resize", handleResize);
+  //   return () => window.removeEventListener("resize", handleResize);
+  // }, []);
 
   const generalquestions = [
     {

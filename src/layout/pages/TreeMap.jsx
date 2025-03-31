@@ -48,8 +48,20 @@ const TreeMap = ({ totalArea, areaQuantities, areaValues }) => {
   const [hoveredArea, setHoveredArea] = useState(null);
   const [isLegendVisible, setIsLegendVisible] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [unusedArea, setUnusedArea] = useState(0);
+  const [showWarning, setShowWarning] = useState(false);
+  const [chartHeight, setChartHeight] = useState("400px");
 
-  const { layoutImgRef, setLayoutImage } = useApp();
+  const navigate = useNavigate();
+
+  const {
+    layoutImgRef,
+    setLayoutImage,
+    userId,
+    setSelectedPlan,
+    layoutImage = "",
+  } = useApp();
+
   const chartRef = useRef(null);
 
   const MIN_AREA = 1000;
@@ -143,7 +155,7 @@ const TreeMap = ({ totalArea, areaQuantities, areaValues }) => {
   const options = {
     chart: {
       type: "treemap",
-      height: "auto",
+      height: chartHeight,
       toolbar: {
         show: true,
       },
@@ -338,26 +350,25 @@ const TreeMap = ({ totalArea, areaQuantities, areaValues }) => {
 
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth >= 1024) {
+      if (window.innerWidth > 1350) {
         setIsLegendVisible(true);
       } else {
         setIsLegendVisible(false);
       }
     };
-    window.addEventListener("resize", handleResize);
+    const handleChartHeight = () => {
+      if (window.innerWidth >= 1024 && window.innerWidth <= 1350) {
+        setChartHeight("350px");
+      }
+    };
+    window.addEventListener("resize", handleResize, handleChartHeight);
     handleResize();
+    handleChartHeight();
 
     return () => {
-      window.addEventListener("resize", handleResize);
+      window.addEventListener("resize", handleResize, handleChartHeight);
     };
   }, []);
-
-  const [unusedArea, setUnusedArea] = useState(0);
-  const [showWarning, setShowWarning] = useState(false);
-
-  const { userId, setSelectedPlan, layoutImage = "" } = useApp();
-
-  const navigate = useNavigate();
 
   const mapAreaValues = (
     userId,
@@ -553,7 +564,7 @@ const TreeMap = ({ totalArea, areaQuantities, areaValues }) => {
         series={[{ data: series }]}
         type="treemap"
         className="distribution-chart"
-        height={400}
+        height={chartHeight}
       />
       <button
         className="arrow-button"
@@ -564,7 +575,7 @@ const TreeMap = ({ totalArea, areaQuantities, areaValues }) => {
           top: "200px",
           opacity: "50%",
           zIndex: 1,
-          display: window.innerWidth < 1024 ? "block" : "none",
+          display: window.innerWidth <= 1350 ? "block" : "none",
         }}
       >
         {/* <FontAwesomeIcon icon={isLegendVisible ? faChevronLeft : faChevronRight} /> */}
@@ -575,7 +586,7 @@ const TreeMap = ({ totalArea, areaQuantities, areaValues }) => {
         )}
       </button>
       <div
-        className="legend-container w-full grid grid-cols-2 gap-3 sm:gap-0 overflow-x-auto sm:flex flex-wrap"
+        className="legend-container w-full grid grid-cols-2 gap-3 xl:gap-0 overflow-x-auto xl:flex flex-wrap"
         style={{
           transform: isLegendVisible ? "translateX(0)" : "translateX(-100%)", // Start hidden and slide in
           transition: "transform 1s ease-in-out",
@@ -591,7 +602,7 @@ const TreeMap = ({ totalArea, areaQuantities, areaValues }) => {
         {generateLegendItems()}
       </div>
       {/* button for generate boq */}
-      <div className="flex justify-center items-center md:hidden">
+      <div className="flex justify-center items-center lg:hidden">
         <button
           className="generateBoq bg-[#1A3A36] mt-2 rounded-3xl text-sm py-3 px-10 text-white mb-2 border-2 border-[#34BFAD]"
           onClick={generateBOQclick}

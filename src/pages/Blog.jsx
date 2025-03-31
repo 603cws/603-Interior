@@ -167,61 +167,58 @@ function Blog() {
 
           {/* div for grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-10 xl:gap-y-24 justify-items-center ">
-            {/* card */}
             {blogs.map((blog, index) => {
               return (
-                <>
-                  <div
-                    className="max-w-sm rounded overflow-hidden shadow-lg cursor-pointer"
-                    key={index}
-                    onClick={() => {
-                      navigate(`${blog.title.replace(/\s/g, "_")}`);
-                    }}
-                  >
-                    {/* image */}
-                    <div>
-                      <img
-                        // src="/images/contact1.png"
-                        src={blog.blogimage}
-                        alt={`Blog ${index + 1}`}
-                        className="w-full"
-                      />
-                    </div>
-                    {/* text */}
-                    <div className="font-Poppins mx-5">
-                      {/* user div */}
-                      <div className="flex justify-start items-center w-3/4 gap-5 my-4">
-                        <div>
-                          <img src={blog.profileicon} alt="user icon" />
-                        </div>
-
-                        <h3 className="text-[#B1B1B1]">{blog.name}</h3>
+                <div
+                  className="max-w-sm rounded overflow-hidden shadow-lg cursor-pointer"
+                  key={index}
+                  onClick={() => {
+                    navigate(`${blog.title.replace(/\s/g, "_")}`);
+                  }}
+                >
+                  {/* image */}
+                  <div>
+                    <img
+                      // src="/images/contact1.png"
+                      src={blog.blogimage}
+                      alt={`Blog ${index + 1}`}
+                      className="w-full"
+                    />
+                  </div>
+                  {/* text */}
+                  <div className="font-Poppins mx-5">
+                    {/* user div */}
+                    <div className="flex justify-start items-center w-3/4 gap-5 my-4">
+                      <div>
+                        <img src={blog.profileicon} alt="user icon" />
                       </div>
-                      {/* <h6 className="font-semibold text-xl capitalize mb-1">
+
+                      <h3 className="text-[#B1B1B1]">{blog.name}</h3>
+                    </div>
+                    {/* <h6 className="font-semibold text-xl capitalize mb-1">
                         developing usefull product that would meet user’s needs
                       </h6> */}
-                      <h6
-                        className="font-semibold text-xl capitalize mb-1"
-                        onClick={() => navigate(`${blog.title}`)}
-                      >
-                        {blog.title}
-                      </h6>
-                      {/* <p className="text-[#000] tracking-wide text-sm">
+                    <h6
+                      className="font-semibold text-xl capitalize mb-1"
+                      onClick={() => navigate(`${blog.title}`)}
+                    >
+                      {blog.title}
+                    </h6>
+                    {/* <p className="text-[#000] tracking-wide text-sm">
                         Lorem Ipsum is simply dummy text of the printing and
                         typesetting industry. Lorem Ipsum has been the
                         industry's standard dummy text ever since the 1500s,
                         when an{" "}
                       </p> */}
-                      <p className="text-[#000] tracking-wide text-sm">
-                        {blog.des}
-                      </p>
+                    <p className="text-[#000] tracking-wide text-sm">
+                      {blog.des}
+                    </p>
 
-                      <div className="flex justify-end items-center my-5">
-                        <img src="/images/blogicon.svg" alt="" />
-                      </div>
+                    <div className="flex justify-end items-center my-5">
+                      <img src="/images/blogicon.svg" alt="" />
                     </div>
                   </div>
-                </>
+                </div>
               );
             })}
           </div>
