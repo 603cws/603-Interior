@@ -55,7 +55,13 @@ function EnterAreaModal({ onclose }) {
           {error && ( // Display the error message if there's any
             <p className="text-red-500 text-sm mt-2">{error}</p>
           )}
-          <div className="mt-4">
+          <div className="mt-4 flex gap-10">
+            <button
+              onClick={onclose}
+              className="py-1 px-2 md:py-2 md:px-4 bg-gray-500 text-white border-2 border-black border-b-8 border-r-8"
+            >
+              Cancel
+            </button>
             <button
               onClick={handleSubmit}
               className="py-2 px-4 bg-[#FFD500] text-black border-2 border-black border-r-8 border-b-8"

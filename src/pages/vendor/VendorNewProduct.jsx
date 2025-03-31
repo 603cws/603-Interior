@@ -120,6 +120,7 @@ function VendorNewProduct({ setAddNewProduct, setProductlist }) {
 
       const subcattodisplay = filtered.flatMap((subcat) => subcat.subCat1);
       console.log(subcattodisplay);
+      return subcattodisplay;
     });
   }, []);
 

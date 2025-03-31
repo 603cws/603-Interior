@@ -85,7 +85,8 @@ const publicSpacesData = [
   {
     type: "washrooms",
     image: "/images/workstation-wp/executivewash-wp.webp",
-    description: "Common washroom",
+    description:
+      "Common Washroom Area – This includes designated spaces for both male and female washrooms.",
     tooltipText: "size: 100 sqft",
     slider: {
       name: "Washroom Size",

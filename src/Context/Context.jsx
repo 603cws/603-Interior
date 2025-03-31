@@ -436,7 +436,7 @@ export const AppProvider = ({ children }) => {
 
       const categoryObj = categories.find((cat) => cat.category === category);
       if (!categoryObj) {
-        console.warn(`Category "${category}" not found.`);
+        console.log(`Category "${category}" not found.`);
         return;
       }
 

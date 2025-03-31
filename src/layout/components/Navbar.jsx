@@ -454,6 +454,7 @@ function Navbar({
           onCancel={() => {
             setShowWarning(false);
           }}
+          isSubmitting={isSubmitting}
         />
       )}
     </div>

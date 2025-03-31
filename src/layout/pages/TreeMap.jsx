@@ -644,6 +644,7 @@ const TreeMap = ({ totalArea, areaQuantities, areaValues }) => {
           onCancel={() => {
             setShowWarning(false);
           }}
+          isSubmitting={isSubmitting}
         />
       )}
     </div>

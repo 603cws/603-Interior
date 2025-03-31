@@ -16,6 +16,7 @@ import Joyride, { STATUS } from "react-joyride";
 import EnterAreaModal from "../components/EnterAreaModal";
 import ProfileCard from "../../boq/components/ProfileCard";
 import { AnimatePresence } from "framer-motion";
+import toast from "react-hot-toast";
 
 const initialAreaValues = {
   linear: 24,
@@ -760,10 +761,17 @@ function Layout() {
     const usableArea = totalArea - freeSpace; // Area available for building
 
     // Check if the built area exceeds the usable area
-    if (calculatedBuiltArea <= usableArea) {
+    if (
+      totalArea >= MIN_AREA &&
+      totalArea <= MAX_AREA &&
+      calculatedBuiltArea <= usableArea
+    ) {
       setBuiltArea(calculatedBuiltArea); // Update built area
       setAreaQuantities(newAreaQuantities); // Update area quantities
       setAreaValues(newAreaValues); // Update area values
+    } else if (totalArea < MIN_AREA) {
+      console.log("area is less than min area");
+      toast.error("Enter valid area", { duration: 2000 });
     } else {
       console.log(
         "Built area exceeds the available space, showing error message"
