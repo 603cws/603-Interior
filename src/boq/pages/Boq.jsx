@@ -11,9 +11,26 @@ import Plans from "../../common-components/Plans";
 import SelectArea from "../components/SelectArea";
 import MainPage from "./MainPage";
 import ProductCard from "../components/ProductCard";
-import { AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
+
+// Define animation variants
+const selectAreaAnimation = {
+  initial: { x: "100vw", opacity: 0 }, // Start from the right
+  animate: {
+    x: "0",
+    opacity: 1,
+    transition: { duration: 0.5, ease: "easeOut" },
+  }, // Move to center
+  exit: {
+    x: "-100vw",
+    opacity: 0,
+    transition: { duration: 0.5, ease: "easeIn" },
+  }, // Exit to the left
+};
 
 function Boq() {
+  // State to control background visibility
+  const [showBackground, setShowBackground] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const profileRef = useRef(null);
   const iconRef = useRef(null); //used to close Profile Card when clicked outside of Profile Card area
@@ -486,20 +503,40 @@ function Boq() {
                 {minimizedView && (
                   <div>
                     <ToastContainer />
-                    {showSelectArea && (
-                      <SelectArea
-                        setShowSelectArea={setShowSelectArea}
-                        image={selectedProductView.image}
-                        selectedAreas={selectedAreas}
-                        setSelectedAreas={setSelectedAreas}
-                        selectedProductView={selectedProductView}
-                        selectedData={selectedData}
-                        categoriesWithTwoLevelCheck={
-                          categoriesWithTwoLevelCheck
-                        }
-                        allAddons={allAddons}
-                      />
-                    )}
+                    <AnimatePresence>
+                      {showSelectArea && (
+                        <motion.div
+                          variants={selectAreaAnimation}
+                          initial="initial"
+                          animate="animate"
+                          exit="exit"
+                          className={`fixed inset-0 flex justify-center items-center z-[1000] transition-opacity duration-300 ${
+                            showBackground
+                              ? "bg-black bg-opacity-30"
+                              : "bg-transparent"
+                          }`}
+                          onAnimationComplete={(definition) => {
+                            if (definition === "animate") {
+                              setShowBackground(true); // Only show background after entering animation
+                            }
+                          }}
+                        >
+                          <SelectArea
+                            setShowSelectArea={setShowSelectArea}
+                            image={selectedProductView.image}
+                            selectedAreas={selectedAreas}
+                            setSelectedAreas={setSelectedAreas}
+                            selectedProductView={selectedProductView}
+                            selectedData={selectedData}
+                            categoriesWithTwoLevelCheck={
+                              categoriesWithTwoLevelCheck
+                            }
+                            allAddons={allAddons}
+                            setShowBackground={setShowBackground}
+                          />
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
                     <MainPage
                       setSelectedSubCategory1={handleSelectedSubCategory1}
                       userResponses={userResponses}

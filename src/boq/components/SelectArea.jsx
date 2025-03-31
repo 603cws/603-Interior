@@ -14,6 +14,7 @@ function SelectArea({
   categoriesWithTwoLevelCheck,
   allAddons,
   onAddonAdd,
+  setShowBackground,
 }) {
   const {
     selectedData,
@@ -63,6 +64,7 @@ function SelectArea({
   const handleAddonClick = () => {
     setShowAddon(false);
     setShowSelectArea(false); // Close the modal
+    setShowBackground(false); // Hide background before exit animation
 
     setSelectedData((prevData) => {
       const updatedData = prevData.map((item) => {
@@ -87,6 +89,7 @@ function SelectArea({
           })),
         };
       });
+      botRight();
 
       localStorage.setItem("selectedData", JSON.stringify(updatedData)); // ✅ Persist correct state
       return updatedData;
@@ -194,6 +197,7 @@ function SelectArea({
     const handleEscKey = (e) => {
       if (e.key === "Escape") {
         setShowSelectArea(false);
+        setShowBackground(false); // Hide background before exit animation
       }
     };
 
@@ -288,12 +292,14 @@ function SelectArea({
     if (selectedSubcategories.length > 0) {
       if (!allAddons || allAddons.length === 0) {
         setShowSelectArea(false);
+        setShowBackground(false); // Hide background before exit animation
         botRight();
       } else {
         setShowAddon(true);
       }
     } else {
       setShowSelectArea(false);
+      setShowBackground(false); // Hide background before exit animation
     }
   };
 
@@ -448,14 +454,17 @@ function SelectArea({
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-30 flex justify-center items-center z-20">
+    <div className="fixed inset-0 flex justify-center items-center z-20">
       <div className="relative bg-[#1A3A36] p-8 rounded-xl max-w-[90%] max-h-screen w-[1000px] scrollbar-hide">
         {/* Close Button (Common for Both Modals) */}
         <MdOutlineCancel
           size={30}
           color="white"
           className="absolute top-1 right-1 cursor-pointer z-50"
-          onClick={() => setShowSelectArea(false)}
+          onClick={() => {
+            setShowBackground(false); // Hide background before exit animation
+            setShowSelectArea(false);
+          }}
         />
 
         {/* Inner White Content (Common Border) */}

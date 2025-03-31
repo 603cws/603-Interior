@@ -12,9 +12,25 @@ import Navbar from "./Navbar";
 import ProfileCard from "./ProfileCard";
 import { supabase } from "../../services/supabase";
 import ThreeDViewer from "../../common-components/ThreeDViewer";
-import { AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
+
+// Define animation variants
+const selectAreaAnimation = {
+  initial: { x: "100vw", opacity: 0 }, // Start from the right
+  animate: {
+    x: "0",
+    opacity: 1,
+    transition: { duration: 0.5, ease: "easeOut" },
+  }, // Move to center
+  exit: {
+    x: "-100vw",
+    opacity: 0,
+    transition: { duration: 0.5, ease: "easeIn" },
+  }, // Exit to the left
+};
 
 function ProductOverview() {
+  const [showBackground, setShowBackground] = useState(false);
   const navigate = useNavigate();
   const baseImageUrl =
     "https://bwxzfwsoxwtzhjbzbdzs.supabase.co/storage/v1/object/public/addon/";
@@ -38,9 +54,6 @@ function ProductOverview() {
     selectedSubCategory1,
     selectedData,
     categoriesWithTwoLevelCheck,
-    categories,
-    subCategories,
-    subCat1,
     quantityData,
     areasData,
     userResponses,
@@ -135,27 +148,6 @@ function ProductOverview() {
   }, [id, selectedProductView]); // Re-fetch when id or selectedProductView changes
 
   const product = products[0]; // Access the first product
-
-  useEffect(() => {
-    // Function to handle "Esc" key press
-    const handleEscKey = (e) => {
-      if (e.key === "Escape") {
-        setShowProductView(false);
-        // setSelectedPlan("Custom");
-        setMinimizedView(true);
-        navigate("/boq"); //new ProductOverview
-      }
-    };
-
-    // Add event listener when component is mounted
-    document.addEventListener("keydown", handleEscKey);
-
-    // Cleanup event listener on component unmount
-    return () => {
-      document.removeEventListener("keydown", handleEscKey);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   const getInstructions = (category) => {
     return instructions[category] || ["No specific instructions found."]; // Provide default message
@@ -539,21 +531,36 @@ function ProductOverview() {
         </button>
       </div>
 
-      {showSelectArea && (
-        <SelectArea
-          setShowSelectArea={setShowSelectArea}
-          image={product?.image}
-          categories={categories}
-          subCategories={subCategories}
-          subCat1={subCat1}
-          selectedAreas={selectedAreas}
-          setSelectedAreas={setSelectedAreas}
-          selectedProductView={product}
-          selectedData={selectedData}
-          categoriesWithTwoLevelCheck={categoriesWithTwoLevelCheck}
-          allAddons={allAddons}
-        />
-      )}
+      <AnimatePresence>
+        {showSelectArea && (
+          <motion.div
+            variants={selectAreaAnimation}
+            initial="initial"
+            animate="animate"
+            exit="exit"
+            className={`fixed inset-0 flex justify-center items-center z-[1000] transition-opacity duration-300 ${
+              showBackground ? "bg-black bg-opacity-30" : "bg-transparent"
+            }`}
+            onAnimationComplete={(definition) => {
+              if (definition === "animate") {
+                setShowBackground(true); // Only show background after entering animation
+              }
+            }}
+          >
+            <SelectArea
+              setShowSelectArea={setShowSelectArea}
+              image={product?.image}
+              selectedAreas={selectedAreas}
+              setSelectedAreas={setSelectedAreas}
+              selectedProductView={product}
+              selectedData={selectedData}
+              categoriesWithTwoLevelCheck={categoriesWithTwoLevelCheck}
+              allAddons={allAddons}
+              setShowBackground={setShowBackground}
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {showRecommend && ( //new ProductOverview
         <RecommendComp
