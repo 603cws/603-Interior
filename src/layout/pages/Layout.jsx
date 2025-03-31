@@ -15,6 +15,7 @@ import ErrorModal from "../../common-components/ErrorModal";
 import Joyride, { STATUS } from "react-joyride";
 import EnterAreaModal from "../components/EnterAreaModal";
 import ProfileCard from "../../boq/components/ProfileCard";
+import { AnimatePresence } from "framer-motion";
 
 const initialAreaValues = {
   linear: 24,
@@ -520,26 +521,25 @@ function Layout() {
   const bufferSpace = 0.02; //buffer space
   // console.log("male washroom", maleWashroomSize);
 
+  // Toggle profile card visibility
+  const toggleProfile = () => {
+    setIsOpen((prev) => !prev);
+  };
+
   // Close profile card when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
-      // If clicked inside ProfileCard or on the Profile Icon, do nothing
-      if (profileRef.current && profileRef.current.contains(event.target)) {
-        return;
+      if (
+        profileRef.current?.contains(event.target) ||
+        iconRef.current?.contains(event.target)
+      ) {
+        return; // If clicked inside, do nothing
       }
-
-      if (iconRef.current && iconRef.current.contains(event.target)) {
-        return;
-      }
-
-      // Otherwise, close the profile card
-      setIsOpen(false);
+      setIsOpen(false); // Otherwise, close it
     };
 
     if (isOpen) {
       document.addEventListener("mousedown", handleClickOutside);
-    } else {
-      document.removeEventListener("mousedown", handleClickOutside);
     }
 
     return () => {
@@ -932,11 +932,6 @@ function Layout() {
     builtArea,
   };
 
-  // Toggle profile card visibility
-  const toggleProfile = () => {
-    setIsOpen(!isOpen);
-  };
-
   return (
     // <div className="max-h-lvh 2xl:overflow-y-hidden">
     <div className="max-h-lvh xl:overflow-y-hidden">
@@ -1089,11 +1084,13 @@ function Layout() {
         <ErrorModal onclose={() => setWarning(false)} message={errorMessage} />
       )}
       {areaWarn && <EnterAreaModal onclose={() => setAreaWarn(false)} />}
-      {isOpen && (
-        <div ref={profileRef}>
-          <ProfileCard layout={true} />
-        </div>
-      )}
+      <AnimatePresence>
+        {isOpen && (
+          <div ref={profileRef}>
+            <ProfileCard layout={true} isOpen={isOpen} setIsOpen={setIsOpen} />
+          </div>
+        )}
+      </AnimatePresence>
 
       {/* <LayoutCard /> */}
       {/* <QnaPopup question="is the flooring project for residental purpose ?" /> */}

@@ -11,6 +11,7 @@ import Plans from "../../common-components/Plans";
 import SelectArea from "../components/SelectArea";
 import MainPage from "./MainPage";
 import ProductCard from "../components/ProductCard";
+import { AnimatePresence } from "framer-motion";
 
 function Boq() {
   const [isOpen, setIsOpen] = useState(false);
@@ -121,29 +122,23 @@ function Boq() {
 
   // Toggle profile card visibility
   const toggleProfile = () => {
-    setIsOpen(!isOpen);
+    setIsOpen((prev) => !prev);
   };
 
   // Close profile card when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
-      // If clicked inside ProfileCard or on the Profile Icon, do nothing
-      if (profileRef.current && profileRef.current.contains(event.target)) {
-        return;
+      if (
+        profileRef.current?.contains(event.target) ||
+        iconRef.current?.contains(event.target)
+      ) {
+        return; // If clicked inside, do nothing
       }
-
-      if (iconRef.current && iconRef.current.contains(event.target)) {
-        return;
-      }
-
-      // Otherwise, close the profile card
-      setIsOpen(false);
+      setIsOpen(false); // Otherwise, close it
     };
 
     if (isOpen) {
       document.addEventListener("mousedown", handleClickOutside);
-    } else {
-      document.removeEventListener("mousedown", handleClickOutside);
     }
 
     return () => {
@@ -546,11 +541,13 @@ function Boq() {
         </div>
       )} */}
       {/* {showProfile && <ProfileCard />} */}
-      {isOpen && (
-        <div ref={profileRef}>
-          <ProfileCard layout={false} setIsOpen={setIsOpen} />
-        </div>
-      )}
+      <AnimatePresence>
+        {isOpen && (
+          <div ref={profileRef}>
+            <ProfileCard layout={false} isOpen={isOpen} setIsOpen={setIsOpen} />
+          </div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

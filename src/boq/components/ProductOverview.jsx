@@ -12,6 +12,7 @@ import Navbar from "./Navbar";
 import ProfileCard from "./ProfileCard";
 import { supabase } from "../../services/supabase";
 import ThreeDViewer from "../../common-components/ThreeDViewer";
+import { AnimatePresence } from "framer-motion";
 
 function ProductOverview() {
   const navigate = useNavigate();
@@ -84,8 +85,29 @@ function ProductOverview() {
 
   // Toggle profile card visibility
   const toggleProfile = () => {
-    setIsOpen(!isOpen);
+    setIsOpen((prev) => !prev);
   };
+
+  // Close profile card when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        profileRef.current?.contains(event.target) ||
+        iconRef.current?.contains(event.target)
+      ) {
+        return; // If clicked inside, do nothing
+      }
+      setIsOpen(false); // Otherwise, close it
+    };
+
+    if (isOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isOpen]);
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -134,33 +156,6 @@ function ProductOverview() {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  // Close profile card when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      // If clicked inside ProfileCard or on the Profile Icon, do nothing
-      if (profileRef.current && profileRef.current.contains(event.target)) {
-        return;
-      }
-
-      if (iconRef.current && iconRef.current.contains(event.target)) {
-        return;
-      }
-
-      // Otherwise, close the profile card
-      setIsOpen(false);
-    };
-
-    if (isOpen) {
-      document.addEventListener("mousedown", handleClickOutside);
-    } else {
-      document.removeEventListener("mousedown", handleClickOutside);
-    }
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [isOpen]);
 
   const getInstructions = (category) => {
     return instructions[category] || ["No specific instructions found."]; // Provide default message
@@ -567,11 +562,13 @@ function ProductOverview() {
         />
       )}
 
-      {isOpen && (
-        <div ref={profileRef}>
-          <ProfileCard layout={false} />
-        </div>
-      )}
+      <AnimatePresence>
+        {isOpen && (
+          <div ref={profileRef}>
+            <ProfileCard layout={false} isOpen={isOpen} setIsOpen={setIsOpen} />
+          </div>
+        )}
+      </AnimatePresence>
 
       {/* <div
         className={`addons px-5 my-3 ${

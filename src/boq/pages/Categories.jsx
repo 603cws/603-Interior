@@ -1,5 +1,6 @@
 import React from "react"; //{ useState, useEffect }
 import { useApp } from "../../Context/Context";
+import { motion, AnimatePresence } from "framer-motion";
 
 const Categories = ({
   setSelectedCategory,
@@ -255,7 +256,14 @@ const Categories = ({
         {selectedCategory && (
           <div className="mt-2 font-Poppins">
             {minimizedView && (
-              <div className="subcat border-solid border-[#d5d5d5] border flex flex-row items-center justify-start overflow-auto scrollbar-hide py-1 rounded-lg">
+              <motion.div
+                key={selectedCategory.category} // Ensures animation applies on category change
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.4, ease: "easeInOut" }}
+                className="subcat border-solid border-[#d5d5d5] border flex flex-row items-center justify-start overflow-auto scrollbar-hide py-1 rounded-lg"
+              >
                 {selectedCategory?.subcategories
                   ?.filter(
                     (subCategory) =>
@@ -271,9 +279,11 @@ const Categories = ({
                       subCategory
                     );
                     return (
-                      <div
+                      <motion.div
                         key={index}
                         onClick={() => setSelectedSubCategory(subCategory)}
+                        whileHover={{ scale: 1.05 }}
+                        transition={{ duration: 0.3 }}
                         className={`rounded-xl flex flex-row items-start justify-center shrink-0 mx-3 group px-5 ${
                           isCompleted
                             ? "border-2 border-[#f4f4f4] bg-[#34BFAD]"
@@ -281,17 +291,11 @@ const Categories = ({
                         }`}
                       >
                         <p
-                          className={`relative text-[#252525] text-center text-sm  flex items-center justify-center py-3 cursor-pointer ${
+                          className={`relative text-[#252525] text-center text-sm flex items-center justify-center py-3 cursor-pointer ${
                             isCompleted ? "font-semibold" : "font-normal"
                           }`}
                         >
                           {subCategory}
-                          {/* {isCompleted && (
-                          <span className="text-green-600 text-xs ml-2">
-                            Completed
-                          </span>
-                        )} */}
-                          {/* Animated underline (span) */}
                           <span
                             className={`absolute left-0 bottom-0 block w-0 h-1 bg-[#194f48] transition-all duration-300 ease-in-out ${
                               selectedSubCategory === subCategory
@@ -300,18 +304,26 @@ const Categories = ({
                             }`}
                           ></span>
                         </p>
-                      </div>
+                      </motion.div>
                     );
                   })}
-              </div>
+              </motion.div>
             )}
+
             {!minimizedView && (
-              <div className="animate-fade-in">
-                <h3 className="text-lg font-semibold text-gray-800 ms-5">
-                  Subcategories of {selectedCategory.category}
-                </h3>
-                <div className="subcat grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-5 mt-5 justify-center">
-                  {selectedCategory.subcategories
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={selectedCategory.category}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.4, ease: "easeInOut" }}
+                >
+                  <h3 className="text-lg font-semibold text-gray-800 ms-5">
+                    Subcategories of {selectedCategory.category}
+                  </h3>
+                  <div className="subcat grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-5 mt-5 justify-center">
+                    {selectedCategory.subcategories
                     .filter(
                       (subCategory) =>
                         selectedCategory.category === "HVAC" // Apply logic only for HVAC
@@ -326,31 +338,33 @@ const Categories = ({
                         subCategory
                       );
 
-                      return (
-                        <div
-                          key={index}
-                          // className="p-4 border rounded-lg cursor-pointer hover:bg-gray-100"
-                          onClick={() => setSelectedSubCategory(subCategory)}
-                        >
-                          <div className="flex flex-col items-center justify-evenly flex-wrap relative ">
-                            <div className="flex flex-col gap-[21px] items-center justify-center w-full relative cursor-pointer hover:scale-105 transition-transform duration-500 ease-in-out">
-                              <div className="relative w-[160px] h-[170px] flex items-center justify-center bg-gradient-to-r from-[#003442] to-[#34BFAD] rounded-[26px] ">
-                                <img
-                                  className="rounded-3xl w-[150px] h-[150px] object-cover"
-                                  src={imageSrcSubCat}
-                                  alt={`${subCategory} subcategory`}
-                                />
+                        return (
+                          <motion.div
+                            key={index}
+                            onClick={() => setSelectedSubCategory(subCategory)}
+                            whileHover={{ scale: 1.05 }}
+                            transition={{ duration: 0.3 }}
+                          >
+                            <div className="flex flex-col items-center justify-evenly flex-wrap relative">
+                              <div className="flex flex-col gap-[21px] items-center justify-center w-full relative cursor-pointer hover:scale-105 transition-transform duration-500 ease-in-out">
+                                <div className="relative w-[160px] h-[170px] flex items-center justify-center bg-gradient-to-r from-[#003442] to-[#34BFAD] rounded-[26px]">
+                                  <img
+                                    className="rounded-3xl w-[150px] h-[150px] object-cover"
+                                    src={imageSrcSubCat}
+                                    alt={`${subCategory} subcategory`}
+                                  />
+                                </div>
+                                <p className="text-[#444444] text-center font-['Montserrat-Medium',_sans-serif] text-sm font-medium relative">
+                                  {subCategory}
+                                </p>
                               </div>
-                              <p className="text-[#444444] text-center font-['Montserrat-Medium',_sans-serif] text-sm font-medium relative">
-                                {subCategory}
-                              </p>
                             </div>
-                          </div>
-                        </div>
-                      );
-                    })}
-                </div>
-              </div>
+                          </motion.div>
+                        );
+                      })}
+                  </div>
+                </motion.div>
+              </AnimatePresence>
             )}
           </div>
         )}

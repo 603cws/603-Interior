@@ -12,10 +12,20 @@ import { VscSignOut } from "react-icons/vsc";
 import { PiListStarFill } from "react-icons/pi";
 import { BiUnite } from "react-icons/bi";
 import BookAppointment from "./BookAppointment";
-
+import { motion } from "framer-motion";
 // import useAuthRefresh from "../../Context/useAuthRefresh";
 
-function ProfileCard({ layout = false, setIsOpen }) {
+const profileVariants = {
+  hidden: { x: "100%", opacity: 0 }, // Start off-screen (right side)
+  visible: { x: 0, opacity: 1, transition: { duration: 0.5, ease: "easeOut" } }, // Slide in
+  exit: {
+    x: "100%",
+    opacity: 0,
+    transition: { duration: 0.4, ease: "easeInOut" },
+  }, // Slide out
+};
+
+function ProfileCard({ layout = false, isOpen, setIsOpen }) {
   const {
     setIsAuthenticated,
     accountHolder,
@@ -73,67 +83,62 @@ function ProfileCard({ layout = false, setIsOpen }) {
   };
 
   return (
-    <div ref={profileRef}>
-      {/* div for card */}
-      <div
-        className={`rounded-bl-[60px] rounded-tl-[60px]  shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)]  overflow-hidden max-w-sm w-full ${
-          layout
-            ? "h-[calc(100vh-85px)] top-[85px]"
-            : "h-[calc(100vh-50px)] top-[50px]"
-        } font-Poppins bg-[#fff] z-20 fixed right-0 transition-transform duration-1000 ease-in-out `}
-      >
-        {/* <div className="rounded-bl-[60px] rounded-tl-[60px]  shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)]  overflow-hidden max-w-sm w-full h-[calc(100vh-50px)] font-Poppins bg-[#fff] z-20 fixed right-0 top-[50px] transition-transform duration-1000 ease-in-out "> */}
-        {/* div for profile icon part */}
-        <div className=" h-1/3 flex flex-col">
-          <div
-            className=" h-1/2 flex justify-center items-end"
-            // style={{
-            //   backgroundImage: `url(${background})`,
-            // }}
-          >
+    <motion.div
+      ref={profileRef}
+      initial="hidden"
+      animate="visible"
+      exit="exit"
+      variants={profileVariants}
+      className={`fixed right-0 ${
+        layout
+          ? "h-[calc(100vh-85px)] top-[85px]"
+          : "h-[calc(100vh-50px)] top-[50px]"
+      } font-Poppins bg-white z-20 rounded-bl-[60px] rounded-tl-[60px] shadow-lg max-w-sm w-full`}
+    >
+      {/* Profile Card Content */}
+      <div className="rounded-bl-[60px] rounded-tl-[60px] shadow-lg overflow-hidden w-full h-full bg-white">
+        {/* Profile Header */}
+        <div className="h-1/3 flex flex-col">
+          <div className="h-1/2 flex justify-center items-end">
             <img
               src={accountHolder.profileImage}
               alt="usericon"
               className="w-16 h-16"
             />
           </div>
-
-          <div className="flex-1 flex flex-col items-center justify-center ">
-            <p className="font-semibold text-lg">
-              {" "}
-              {accountHolder.companyName}
-            </p>
-            <p className="font-sm">{accountHolder.email}</p>{" "}
+          <div className="flex-1 flex flex-col items-center justify-center">
+            <p className="font-semibold text-lg">{accountHolder.companyName}</p>
+            <p className="font-sm">{accountHolder.email}</p>
           </div>
         </div>
 
-        {/* seconf box for the features */}
+        {/* Features Section */}
         <div className="font-semibold text-lg capitalize leading-normal tracking-wide py-7 text-[#262626] border-y-2 border-[#ccc] flex flex-col gap-4">
           <div className="flex items-center mx-4 gap-3">
             <RiDashboardFill />
             <button onClick={() => navigate("/dashboard")}>Dashboard</button>
           </div>
           {!layout && (
-            <div className="flex items-center mx-4 gap-3">
-              <BiUnite />
-              <button onClick={() => navigate("/Layout")}>Layout</button>
-            </div>
-          )}
-          {!layout && (
-            <div className="flex items-center mx-4 gap-3">
-              <PiListStarFill />
-              <button
-                onClick={() => {
-                  setSelectedPlan(null);
-                  setIsOpen(false);
-                  setProgress(0);
-                  localStorage.removeItem("selectedData");
-                  setBoqTotal(0);
-                }}
-              >
-                Select Your Plan
-              </button>
-            </div>
+            <>
+              <div className="flex items-center mx-4 gap-3">
+                <BiUnite />
+                <button onClick={() => navigate("/Layout")}>Layout</button>
+              </div>
+              <div className="flex items-center mx-4 gap-3">
+                <PiListStarFill />
+                <button
+                  onClick={() => {
+                    setSelectedPlan(null);
+                    setIsOpen(false);
+                    setProgress(0);
+                    localStorage.removeItem("selectedData");
+                    setBoqTotal(0);
+                  }}
+                >
+                  Select Your Plan
+                </button>
+              </div>
+            </>
           )}
           <div className="flex items-center mx-4 gap-3">
             <RxVideo />
@@ -147,16 +152,12 @@ function ProfileCard({ layout = false, setIsOpen }) {
               }`}
             >
               <LuCalendarClock />
-              <button
-                onClick={handleAppointment}
-                // className={`${progress < 90 ? "cursor-not-allowed" : ""}`}
-              >
-                Book Appointment
-              </button>
+              <button onClick={handleAppointment}>Book Appointment</button>
             </div>
           )}
         </div>
-        {/* third box for the features */}
+
+        {/* Help & Settings Section */}
         <div className="font-semibold text-lg capitalize leading-normal tracking-wide py-7 text-[#262626] border-b-2 border-[#ccc] flex flex-col gap-4">
           <div className="flex items-center mx-4 gap-3">
             <BsQuestionCircle />
@@ -184,10 +185,12 @@ function ProfileCard({ layout = false, setIsOpen }) {
           </div>
         </div>
       </div>
+
+      {/* Book Appointment Modal */}
       {showBookAppointment && (
         <BookAppointment onClose={() => setShowBookAppointment(false)} />
       )}
-    </div>
+    </motion.div>
   );
 }
 
