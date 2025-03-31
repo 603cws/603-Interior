@@ -97,18 +97,14 @@ const MainPage = ({ userResponses, setSelectedSubCategory1, productsData }) => {
               initial="hidden"
               animate="visible"
               exit="exit"
-              whileHover={{ scale: 1.05 }} // Slight scale-up on hover
               className={`border-solid border-[#000000] border flex flex-col gap-2.5 items-start shrink-0 w-auto h-10 justify-center relative rounded-xl cursor-pointer transition-all duration-300 ${
                 selectedSubCategory1 === subCategory1
-                  ? "bg-[#82b8b0] shadow-md scale-105" // Selected item styling
-                  : "bg-[#a9d3ce] hover:bg-[#b9e3de]"
+                  ? "bg-[#82b8b0]" // Selected item styling
+                  : "bg-white hover:bg-[#b9e3de]"
               }`}
               onClick={() => setSelectedSubCategory1(subCategory1)}
             >
-              <motion.button
-                whileHover={{ scale: 1.1 }}
-                className="text-[#252525] text-center text-md leading-[30px] font-normal relative flex items-center justify-center px-7"
-              >
+              <motion.button className="text-[#252525] text-center text-md leading-[30px] font-normal relative flex items-center justify-center px-7">
                 {subCategory1}
               </motion.button>
             </motion.div>
