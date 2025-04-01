@@ -3,13 +3,13 @@ import { ToastContainer } from "react-toastify";
 import { TbArrowBackUp } from "react-icons/tb";
 import { MdOutlineKeyboardArrowRight } from "react-icons/md"; //MdOutlineKeyboardArrowLeft
 import { normalizeKey } from "../utils/CalculateTotalPriceHelper";
-import SelectArea from "./SelectArea";
+import SelectArea from "../components/SelectArea";
 import { useApp } from "../../Context/Context";
 import { calculateTotalPrice } from "../utils/productUtils";
 import { useParams, useNavigate } from "react-router-dom";
-import RecommendComp from "./RecommendComp";
-import Navbar from "./Navbar";
-import ProfileCard from "./ProfileCard";
+import RecommendComp from "../components/RecommendComp";
+import Navbar from "../components/Navbar";
+import ProfileCard from "../components/ProfileCard";
 import { supabase } from "../../services/supabase";
 import ThreeDViewer from "../../common-components/ThreeDViewer";
 import { motion, AnimatePresence } from "framer-motion";

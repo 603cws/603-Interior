@@ -69,7 +69,8 @@ export const calculateTotalPrice = (
     return total * 200 + selectedProductView.price;
   }
   if (actualCategory === "Civil / Plumbing") {
-    return total * 100 + selectedProductView.price;
+    return total * selectedProductView.price;
+    // return total * 100 + selectedProductView.price;
   }
   if (actualCategory === "Paint") {
     return total * selectedProductView.price * 3 * 15;

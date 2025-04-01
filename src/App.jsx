@@ -37,7 +37,7 @@ import PricingCard from "./common-components/PricingCard";
 import VendorRegister from "./pages/vendor/VendorRegister";
 import DoorScrollEffect from "./pages/DoorScrollEffect";
 import BookAppointment from "./boq/components/BookAppointment";
-import ProductOverview from "./boq/components/ProductOverview";
+import ProductOverview from "./boq/pages/ProductOverview";
 import Sessiontimeout from "./pages/Sessiontimeout";
 import Brokenlink from "./pages/Brokenlink";
 import TokenExpired from "./pages/TokenExpired";

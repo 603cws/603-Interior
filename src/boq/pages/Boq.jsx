@@ -199,7 +199,8 @@ function Boq() {
 
     if (cat === "HVAC") total = baseTotal;
     else if (cat === "Lighting") total = baseTotal * 200 + variantPrice;
-    else if (cat === "Civil / Plumbing") total = baseTotal * 100 + variantPrice;
+    // else if (cat === "Civil / Plumbing") total = baseTotal * 100 + variantPrice;
+    else if (cat === "Civil / Plumbing") total = baseTotal * variantPrice;
     else if (cat === "Paint") total = baseTotal * variantPrice * 3 * 15;
     else total = baseTotal * variantPrice;
 
