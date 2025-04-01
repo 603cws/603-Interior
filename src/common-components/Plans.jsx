@@ -90,8 +90,8 @@ function Plans() {
   };
 
   return (
-    <div className="container mx-auto my-8 font-Poppins">
-      <h2 className="text-center font-semibold text-3xl capitalize text-[#34BFAD] my-4">
+    <div className="md:container md:mx-auto my-8 font-Poppins">
+      <h2 className="text-center font-semibold text-xl lg:text-3xl capitalize text-[#34BFAD] my-4">
         please select your plan
       </h2>
       {/* 
@@ -99,7 +99,7 @@ function Plans() {
         Adjust the gap, height, etc. as needed.
       */}
       <div
-        className="grid transition-all duration-500 h-[450px] gap-2"
+        className="hidden  md:grid  transition-all duration-500 h-[450px] gap-2"
         style={{ gridTemplateColumns: getGridTemplateColumns(hoveredPlan) }}
         onMouseLeave={() => setHoveredPlan(1)}
         // ^ If you want the layout to revert to the first plan after leaving the row.
@@ -196,6 +196,66 @@ function Plans() {
                   </div>
                 </div>
               )}
+            </div>
+          );
+        })}
+      </div>
+      <div
+        className="md:hidden grid "
+        onMouseLeave={() => setHoveredPlan(1)}
+        // ^ If you want the layout to revert to the first plan after leaving the row.
+        // Remove if you prefer the last hovered plan to remain expanded.
+      >
+        {plansData.map((plan) => {
+          const isExpanded = plan.id === hoveredPlan;
+
+          return (
+            <div
+              key={plan.id}
+              onMouseEnter={() => setHoveredPlan(plan.id)}
+              className="relative overflow-hidden bg-[#E4F0EC] mb-3 rounded-2xl"
+            >
+              <div className="w-full h-full flex flex-col bg-[#183d3d]">
+                <div
+                  className="h-full flex items-center justify-between mx-2 my-2
+                  font-Poppins text-white border-b-2"
+                >
+                  <div className="text-xl font-bold">{plan.planNumber}</div>
+                  <div className="text-xl font-bold  text-end">
+                    {plan.title}
+                  </div>
+                </div>
+                <div className="flex-1 flex flex-col-reverse  ">
+                  <div className="flex-1 py-3 px-6  text-white flex flex-col justify-between">
+                    <div>
+                      <h2 className="text-2xl font-bold mb-4">{plan.title}</h2>
+                      <ul className="space-y-2 text-xs">
+                        {plan.bullets.map((bullet, i) => (
+                          <li key={i} className="flex items-center gap-2 ">
+                            <img
+                              src="/images/Check_ring.png"
+                              alt="check"
+                              className="mt-1"
+                            />
+                            <span>{bullet}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+
+                    {/* "Select" Button */}
+                    <div className="text-left mt-4">
+                      <button
+                        // onClick={() => setSelectedPlan(plan.planKey)}
+                        onClick={() => handlePlanSelect(plan.planKey)}
+                        className="bg-[#34BFAD] text-black px-4 py-2 rounded-3xl font-semibold hover:bg-gray-200 transition"
+                      >
+                        Select
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           );
         })}

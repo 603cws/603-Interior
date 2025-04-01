@@ -1,13 +1,15 @@
-import React, { useState } from "react";
+import React from "react";
+import { useApp } from "../../Context/Context";
 
 function UnusedAreaWarning({ onConfirm, onCancel, unusedArea, isSubmitting }) {
+  const { isMobile } = useApp();
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-70 z-30">
       <div className="bg-white bg-opacity-20 backdrop-blur-lg text-white py-10 px-20 rounded-[40px] shadow-lg text-center border border-white/20">
         <h2 className="text-lg font-semibold">Alert: Unused Space Found</h2>
         <p className="mt-5">
           There is {unusedArea} sq ft of unused space.
-          <br /> Are you sure you want to proceed?
+          {!isMobile && <br />} Are you sure you want to proceed?
         </p>
         <div className="mt-7 flex justify-between space-x-4">
           <button
