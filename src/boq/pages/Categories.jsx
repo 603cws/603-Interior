@@ -55,11 +55,11 @@ const Categories = ({
       ].includes(cleanedCategoryName)
     ) {
       //Sunny => Maybe reverse logic in future(except Furniture)
-      return `/images/subheader/${cleanedCategoryName}/${cleanedSubCategoryName}.png`;
+      return `/images/boq/${cleanedCategoryName}/${cleanedSubCategoryName}.png`;
     }
 
     // Default case
-    return `/images/subheader/${cleanedSubCategoryName}.png`;
+    return `/images/boq/${cleanedSubCategoryName}.png`;
   };
   const checkIfSubCategoryCompleted = (category, subCategory) => {
     // console.log("selectedData:", selectedData); // Log selectedData
@@ -324,19 +324,19 @@ const Categories = ({
                   </h3>
                   <div className="subcat grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-5 mt-5 justify-center">
                     {selectedCategory.subcategories
-                    .filter(
-                      (subCategory) =>
-                        selectedCategory.category === "HVAC" // Apply logic only for HVAC
-                          ? userResponses.hvacType === "Centralized"
-                            ? subCategory === "Centralized" // Show only "Centralized"
-                            : subCategory !== "Centralized" // Exclude "Centralized"
-                          : true // Show all subcategories for non-HVAC categories
-                    )
-                    .map((subCategory, index) => {
-                      const imageSrcSubCat = getImageSrcSubCat(
-                        selectedCategory.category,
-                        subCategory
-                      );
+                      .filter(
+                        (subCategory) =>
+                          selectedCategory.category === "HVAC" // Apply logic only for HVAC
+                            ? userResponses.hvacType === "Centralized"
+                              ? subCategory === "Centralized" // Show only "Centralized"
+                              : subCategory !== "Centralized" // Exclude "Centralized"
+                            : true // Show all subcategories for non-HVAC categories
+                      )
+                      .map((subCategory, index) => {
+                        const imageSrcSubCat = getImageSrcSubCat(
+                          selectedCategory.category,
+                          subCategory
+                        );
 
                         return (
                           <motion.div
