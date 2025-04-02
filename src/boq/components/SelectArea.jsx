@@ -15,19 +15,23 @@ function SelectArea({
   allAddons,
   onAddonAdd,
   setShowBackground,
+  selectedCategory,
+  selectedSubCategory,
+  selectedSubCategory1,
 }) {
   const {
     selectedData,
-    selectedCategory,
-    selectedSubCategory,
-    selectedSubCategory1,
     userResponses,
     setSelectedData,
     areasData,
     quantityData,
     handelSelectedData,
-    subCategories,
+    // subCategories,
   } = useApp();
+
+  //Don't call the selectedCategory, selectedSubCategory, selectedSubCategory1, subCategories from Context => Sunny
+
+  const subCategories = selectedCategory.subcategories;
 
   const [showAddon, setShowAddon] = useState(false);
   const [allSubcategories, setAllSubcategories] = useState([]);

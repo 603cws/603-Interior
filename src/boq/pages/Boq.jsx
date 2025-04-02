@@ -44,6 +44,7 @@ function Boq() {
   const {
     selectedCategory,
     setSelectedCategory,
+    selectedSubCategory,
     setSelectedSubCategory,
     selectedSubCategory1,
     setSelectedSubCategory1,
@@ -534,6 +535,9 @@ function Boq() {
                             }
                             allAddons={allAddons}
                             setShowBackground={setShowBackground}
+                            selectedCategory={selectedCategory}
+                            selectedSubCategory={selectedSubCategory}
+                            selectedSubCategory1={selectedSubCategory1}
                           />
                         </motion.div>
                       )}

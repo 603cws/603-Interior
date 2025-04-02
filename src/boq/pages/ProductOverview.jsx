@@ -43,6 +43,10 @@ function ProductOverview() {
   const [selectedAreas, setSelectedAreas] = useState([]);
   const [showThreeViewer, setShowThreeViewer] = useState(false);
 
+  const [cat, setCat] = useState("");
+  const [subCat, setSubCat] = useState("");
+  const [subCat1, setSubCat1] = useState("");
+
   const [isOpen, setIsOpen] = useState(false);
   const profileRef = useRef(null);
   const iconRef = useRef(null); //used to close Profile Card when clicked outside of Profile Card area
@@ -52,6 +56,9 @@ function ProductOverview() {
     selectedCategory,
     selectedSubCategory,
     selectedSubCategory1,
+    setSelectedCategory,
+    setSelectedSubCategory,
+    setSelectedSubCategory1,
     selectedData,
     categoriesWithTwoLevelCheck,
     quantityData,
@@ -124,12 +131,26 @@ function ProductOverview() {
 
   useEffect(() => {
     const fetchProduct = async () => {
-      if (selectedProductView.length > 0) {
+      if (Object.keys(selectedProductView).length > 0) {
         setProducts([selectedProductView]); // Use selectedProductView if available
+        setCat(selectedCategory);
+        setSubCat(selectedSubCategory);
+        setSubCat1(selectedSubCategory1);
+
+        // Combine values into one object
+        const productData = {
+          category: selectedCategory,
+          subCategory: selectedSubCategory,
+          subCategory1: selectedSubCategory1,
+        };
+
+        // Store in localStorage as a single variable
+        localStorage.setItem("productData", JSON.stringify(productData));
+        //add cat,subCat,subCat1 inside products and call an product cat, subCat always. => Sunny
       } else if (id) {
         const { data, error } = await supabase
           .from("product_variants")
-          .select("*")
+          .select("*, products(*)") // Fetch all columns from product_variants and related products
           .eq("id", id)
           .single();
 
@@ -140,6 +161,17 @@ function ProductOverview() {
             data.image = `${baseImageUrl}${data.image}`; // Append base URL to image
           }
           setProducts([data]); // Store fetched data in products
+          // setCat(data.products);
+
+          const storedProductData = JSON.parse(
+            localStorage.getItem("productData")
+          );
+
+          if (storedProductData) {
+            setCat(storedProductData.category); // Selected category
+            setSubCat(storedProductData.subCategory); // Selected subcategory
+            setSubCat1(storedProductData.subCategory1); // Selected subcategory1
+          }
         }
       }
     };
@@ -153,7 +185,7 @@ function ProductOverview() {
     return instructions[category] || ["No specific instructions found."]; // Provide default message
   };
 
-  const categoryInstructions = getInstructions(selectedCategory?.category);
+  const categoryInstructions = getInstructions(cat?.category);
 
   const additionalImagesArray = product?.additional_images
     ? JSON.parse(product?.additional_images).map(
@@ -171,12 +203,12 @@ function ProductOverview() {
     return selectedData.some((item) =>
       categoriesWithTwoLevelCheck.includes(item.category)
         ? item.id === product?.id &&
-          item.category === selectedCategory?.category &&
-          item.subcategory === selectedSubCategory
+          item.category === cat?.category &&
+          item.subcategory === subCat
         : item.id === product?.id &&
-          item.category === selectedCategory?.category &&
-          item.subcategory === selectedSubCategory &&
-          item.subcategory1 === selectedSubCategory1
+          item.category === cat?.category &&
+          item.subcategory === subCat &&
+          item.subcategory1 === subCat1
     );
   };
 
@@ -203,21 +235,21 @@ function ProductOverview() {
 
   const calculationDetails = () => {
     const normalizedSubCat =
-      findClosestKey(selectedSubCategory, quantityData[0]) ||
-      findClosestKey(selectedSubCategory, areasData[0]);
+      findClosestKey(subCat, quantityData[0]) ||
+      findClosestKey(subCat, areasData[0]);
 
     const quantity = quantityData[0]?.[normalizedSubCat] || 0;
     const area = areasData[0]?.[normalizedSubCat] || 0;
     if (
-      selectedCategory?.category === "Furniture" ||
-      selectedCategory?.category === "Smart Solutions" ||
-      selectedCategory?.category === "Lux"
+      cat?.category === "Furniture" ||
+      cat?.category === "Smart Solutions" ||
+      cat?.category === "Lux"
     ) {
       // || selectedCategory?.category === "HVAC"
       return { quantity, price: product?.price || 0 }; //addonPrice
     } else if (
-      selectedCategory?.category === "Partitions / Ceilings" ||
-      selectedCategory?.category === "HVAC"
+      cat?.category === "Partitions / Ceilings" ||
+      cat?.category === "HVAC"
     ) {
       //currently this category is missing
       return { quantity, area, price: product?.price || 0 }; //addonPrice
@@ -247,9 +279,9 @@ function ProductOverview() {
 
   const totalPrice = useMemo(() => {
     if (
-      !selectedCategory ||
-      !selectedSubCategory ||
-      !selectedSubCategory1 ||
+      !cat ||
+      !subCat ||
+      !subCat1 ||
       !quantityData ||
       !areasData ||
       !userResponses ||
@@ -262,23 +294,15 @@ function ProductOverview() {
       null, // category parameter is not used.
       null, // subCat parameter is not used.
       null, // subcategory1 parameter is not used.
-      selectedCategory,
-      selectedSubCategory,
-      selectedSubCategory1,
+      cat,
+      subCat,
+      subCat1,
       quantityData,
       areasData,
       userResponses,
       product
     );
-  }, [
-    selectedCategory,
-    selectedSubCategory,
-    selectedSubCategory1,
-    quantityData,
-    areasData,
-    userResponses,
-    product,
-  ]);
+  }, [cat, subCat, subCat1, quantityData, areasData, userResponses, product]);
 
   const filteredProducts = useMemo(() => {
     // if (!selectedCategory) return false;
@@ -301,11 +325,10 @@ function ProductOverview() {
       });
 
       const matchesCategory =
-        selectedCategory?.category === "" ||
-        product.category === selectedCategory?.category;
+        cat?.category === "" || product.category === cat?.category;
       return matchesVariant && matchesCategory;
     });
-  }, [productData, searchQuery, priceRange, selectedCategory]);
+  }, [productData, searchQuery, priceRange, cat]);
 
   // Group products by category and subcategory
   // const groupedProducts = useMemo(() => {
@@ -330,8 +353,7 @@ function ProductOverview() {
   // }, [filteredProducts]);
 
   const allAddons = filteredProducts.flatMap((product) =>
-    product.subcategory1 === selectedSubCategory1 &&
-    Array.isArray(product.addons)
+    product.subcategory1 === subCat1 && Array.isArray(product.addons)
       ? product.addons
       : []
   );
@@ -357,25 +379,28 @@ function ProductOverview() {
             size={30}
             className="cursor-pointer"
             onClick={() => {
-              setShowProductView(false); // Open product view
-              // setSelectedPlan("Custom");
+              setShowProductView(false);
               setMinimizedView(true);
-              navigate("/boq"); //new ProductOverview
+              navigate("/boq");
+              //Don't change the below setSelectedCategory, setSelectedSubCategory, setSelectedSubCategory1 => Sunny
+              setSelectedCategory(cat);
+              setSelectedSubCategory(subCat);
+              setSelectedSubCategory1(subCat1);
             }}
           />
 
           <div className="flex mx-10 items-center text-[#334A78] text-sm mt-4">
-            <span>{selectedCategory?.category}</span>
+            <span>{cat?.category}</span>
             <MdOutlineKeyboardArrowRight
               size={15}
               style={{ color: "#334A78" }}
             />
-            <span>{selectedSubCategory}</span>
+            <span>{subCat}</span>
             <MdOutlineKeyboardArrowRight
               size={15}
               style={{ color: "#334A78" }}
             />
-            <span>{selectedSubCategory1}</span>
+            <span>{subCat1}</span>
           </div>
 
           {/* Main image container */}
@@ -557,6 +582,9 @@ function ProductOverview() {
               categoriesWithTwoLevelCheck={categoriesWithTwoLevelCheck}
               allAddons={allAddons}
               setShowBackground={setShowBackground}
+              selectedCategory={cat}
+              selectedSubCategory={subCat}
+              selectedSubCategory1={subCat1}
             />
           </motion.div>
         )}
