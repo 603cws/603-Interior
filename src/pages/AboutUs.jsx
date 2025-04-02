@@ -2,7 +2,7 @@ import LandingNavbar from "../common-components/LandingNavbar";
 import Footer from "../common-components/Footer";
 import { useNavigate } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "swiper/css";
 import "swiper/css/effect-coverflow";
 import "swiper/css/pagination";
@@ -25,6 +25,14 @@ function AboutUs() {
     { img: "/images/about-us/about-us-s2-3.png", title: "execution" },
     { img: "/images/about-us/about-us-s2-4.png", title: "after service" },
   ];
+
+  useEffect(() => {
+    if (showContactPopup) {
+      document.body.style.overflow = "hidden"; // Disable scroll
+    } else {
+      document.body.style.overflow = "auto"; // Enable scroll
+    }
+  }, [showContactPopup]);
   return (
     <>
       {/* Hero image */}

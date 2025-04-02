@@ -591,14 +591,14 @@ function Navbar({ toggleProfile, iconRef }) {
             {boqTotal.toLocaleString("en-IN")}
           </div>
           {/* <div
-            // onClick={signOutUser}
-            className="flex justify-center items-center bg-[#FFF] rounded-xl text-xs py-2 px-5 text-black  border-solid border-1 border-black"
-          >
-            <span className="font-bold">Total</span>: ₹ {calculateGrandTotal()}
-          </div> */}
+          // onClick={signOutUser}
+          className="flex justify-center items-center bg-[#FFF] rounded-xl text-xs py-2 px-5 text-black  border-solid border-1 border-black"
+        >
+          <span className="font-bold">Total</span>: ₹ {calculateGrandTotal()}
+        </div> */}
 
           {/* prfile icon */}
-          <div className="" ref={iconRef}>
+          <div className="z-30" ref={iconRef}>
             <img
               onClick={toggleProfile}
               src={accountHolder.profileImage}
@@ -611,13 +611,13 @@ function Navbar({ toggleProfile, iconRef }) {
       {isMobile ? (
         <div className="bg-[#1A3A36] py-1 flex  justify-around items-center px-5 relative">
           {/* <div className=" flex items-center">
-            <button
-              className="bg-[#FFF] text-xs py-2 px-5 text-black rounded-full border-solid border-[1px] border-black"
-              onClick={handleGoTOlayout}
-            >
-              Layout
-            </button>
-          </div> */}
+          <button
+            className="bg-[#FFF] text-xs py-2 px-5 text-black rounded-full border-solid border-[1px] border-black"
+            onClick={handleGoTOlayout}
+          >
+            Layout
+          </button>
+        </div> */}
           <div className="w-7/12 mx-auto  py-2.5">
             <div className="relative h-3 bg-[#385682] rounded-full">
               <div
@@ -649,8 +649,8 @@ function Navbar({ toggleProfile, iconRef }) {
               {/* <div className="absolute z-20 translate-y-[60%] translate-x-[60%] transform transition-transform ease-in-out duration-700 "> */}
               <ul className="text-[#34BFAD] bg-[#00453C] m-3 p-2">
                 {/* <li className="hover:px-2 hover:bg-white hover:text-[#1A3A36] mb-2 px-2">
-                  view boq{" "}
-                </li> */}
+                view boq{" "}
+              </li> */}
                 <li className="hover:px-2 hover:bg-white hover:text-[#1A3A36] mb-2 px-2">
                   <button
                     className="bg-[#FFF] text-xs py-2 px-5 text-black rounded-full border-solid border-[1px] border-black"
@@ -740,92 +740,92 @@ function Navbar({ toggleProfile, iconRef }) {
           )}
 
           {/* <div className="flex items-center gap-2">
-            {import.meta.env.MODE === "development" && (
-              <MdClear
-                color="red"
-                size={30}
-                title="Clear selected data"
-                onClick={() => {
-                  localStorage.removeItem("selectedData");
-                  window.location.reload();
-                }}
-                className="cursor-pointer"
-              />
-            )}
-            <div
-              className="relative inline-flex items-center border border-black rounded-full"
-              ref={dropdownRef}
+          {import.meta.env.MODE === "development" && (
+            <MdClear
+              color="red"
+              size={30}
+              title="Clear selected data"
+              onClick={() => {
+                localStorage.removeItem("selectedData");
+                window.location.reload();
+              }}
+              className="cursor-pointer"
+            />
+          )}
+          <div
+            className="relative inline-flex items-center border border-black rounded-full"
+            ref={dropdownRef}
+          >
+            <button
+              onClick={handleSave}
+              className="bg-white text-xs py-2 px-3 text-black rounded-l-full"
             >
-              <button
-                onClick={handleSave}
-                className="bg-white text-xs py-2 px-3 text-black rounded-l-full"
-              >
-                Save BOQ
-              </button>
-              <button
-                onClick={() => {
-                  fetchSavedBOQs();
-                  setIsOpen(!isOpen);
-                }}
-                className="bg-white px-3 py-2 border-l border-black flex items-center rounded-r-full"
-              >
-                <RiArrowDropDownLine />
-              </button>
+              Save BOQ
+            </button>
+            <button
+              onClick={() => {
+                fetchSavedBOQs();
+                setIsOpen(!isOpen);
+              }}
+              className="bg-white px-3 py-2 border-l border-black flex items-center rounded-r-full"
+            >
+              <RiArrowDropDownLine />
+            </button>
 
-              {isOpen && (
-                <ul className="absolute left-0 top-7 min-w-[200px] mt-2 w-auto bg-white border border-gray-300 rounded-lg shadow-md">
-                  <li className="px-4 py-2 grid grid-cols-[2fr_1fr] font-semibold bg-gray-200 text-center rounded-lg shadow-md">
-                    <span className="text-left">Title</span>
-                    <span className="text-center">Actions</span>
-                  </li>
-                  {boqList.length > 0 ? (
-                    boqList.map((boq) => (
-                      <li
-                        key={boq.id}
-                        className="px-4 py-2 grid grid-cols-[2fr_1fr] items-center hover:bg-gray-100 cursor-pointer"
-                      >
-                        <span className="text-left break-words whitespace-normal">
-                          {boq.title}
-                        </span>
+            {isOpen && (
+              <ul className="absolute left-0 top-7 min-w-[200px] mt-2 w-auto bg-white border border-gray-300 rounded-lg shadow-md">
+                <li className="px-4 py-2 grid grid-cols-[2fr_1fr] font-semibold bg-gray-200 text-center rounded-lg shadow-md">
+                  <span className="text-left">Title</span>
+                  <span className="text-center">Actions</span>
+                </li>
+                {boqList.length > 0 ? (
+                  boqList.map((boq) => (
+                    <li
+                      key={boq.id}
+                      className="px-4 py-2 grid grid-cols-[2fr_1fr] items-center hover:bg-gray-100 cursor-pointer"
+                    >
+                      <span className="text-left break-words whitespace-normal">
+                        {boq.title}
+                      </span>
 
-                        <div className="flex justify-center gap-2">
-                          <FiUploadCloud
-                            className="cursor-pointer"
-                            onClick={() => handleLoadBOQ(boq.id)}
-                          />
-                          <FaTrash
-                            className="text-red-500 cursor-pointer"
-                            onClick={() => handleDeleteBOQ(boq.id)}
-                          />
-                        </div>
-                      </li>
-                    ))
-                  ) : (
-                    <li className="px-4 py-2 text-gray-500 text-center">
-                      No BOQs saved
+                      <div className="flex justify-center gap-2">
+                        <FiUploadCloud
+                          className="cursor-pointer"
+                          onClick={() => handleLoadBOQ(boq.id)}
+                        />
+                        <FaTrash
+                          className="text-red-500 cursor-pointer"
+                          onClick={() => handleDeleteBOQ(boq.id)}
+                        />
+                      </div>
                     </li>
-                  )}
-                </ul>
-              )}
-            </div>
-            <div className="flex items-center downloadB">
-              <button
-                onClick={() =>
-                  PDFGenerator.generatePDF(
-                    selectedData,
-                    calculateGrandTotal,
-                    accountHolder.companyName,
-                    accountHolder.location,
-                    areasData,
-                    categories
-                  )
-                }
-                className="bg-[#1A3A36] text-xs py-2 px-5 text-white rounded-full border-solid border-[1px] border-[#34BFAD] hover:bg-[#34BFAD]"
-              >
-                Download
-              </button>
-            </div>
-          </div> */}
+                  ))
+                ) : (
+                  <li className="px-4 py-2 text-gray-500 text-center">
+                    No BOQs saved
+                  </li>
+                )}
+              </ul>
+            )}
+          </div>
+          <div className="flex items-center downloadB">
+            <button
+              onClick={() =>
+                PDFGenerator.generatePDF(
+                  selectedData,
+                  calculateGrandTotal,
+                  accountHolder.companyName,
+                  accountHolder.location,
+                  areasData,
+                  categories
+                )
+              }
+              className="bg-[#1A3A36] text-xs py-2 px-5 text-white rounded-full border-solid border-[1px] border-[#34BFAD] hover:bg-[#34BFAD]"
+            >
+              Download
+            </button>
+          </div>
+        </div> */}
         </div>
       ) : (
         <div className="bg-[#1A3A36] py-1 flex px-5">
@@ -859,11 +859,11 @@ function Navbar({ toggleProfile, iconRef }) {
           <div className="flex items-center gap-2">
             {/* <div className=""> */}
             {/* <button
-            className="bg-[#FFF] text-xs py-2 px-5 text-black rounded-full border-solid border-[1px]border-black"
-            onClick={clearSelectedData}
-          >
-            Save BOQ
-          </button> */}
+          className="bg-[#FFF] text-xs py-2 px-5 text-black rounded-full border-solid border-[1px]border-black"
+          onClick={clearSelectedData}
+        >
+          Save BOQ
+        </button> */}
             {/* </div> */}
             {/* <div className="justify-items-end"> */}
             {import.meta.env.MODE === "development" && (

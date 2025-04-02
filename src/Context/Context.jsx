@@ -88,6 +88,10 @@ export const AppProvider = ({ children }) => {
   const [showRecommend, setShowRecommend] = useState(false);
   const [boqTotal, setBoqTotal] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
+  const [currentLayoutData, setCurrentLayoutData] = useState({});
+  const [currentLayoutID, setCurrentLayoutID] = useState(
+    localStorage.getItem("currentLayoutID")
+  );
 
   useEffect(() => {
     const loadData = async () => {
@@ -206,8 +210,7 @@ export const AppProvider = ({ children }) => {
 
   // get the totalarea based on current layout id
   useEffect(() => {
-    const currentLayoutID = localStorage.getItem("currentLayoutID");
-
+    // const currentLayoutID = localStorage.getItem("currentLayoutID");
     const fetchdata = async () => {
       try {
         if (currentLayoutID) {
@@ -219,6 +222,10 @@ export const AppProvider = ({ children }) => {
 
           console.log("layout details from context ", data);
           setTotalArea(data[0].totalArea);
+          setCurrentLayoutData(data[0]);
+
+          console.log("current layout data", currentLayoutData);
+
           // setLayoutImage(data[0].layoutImg);
           setLayoutImage(
             `https://bwxzfwsoxwtzhjbzbdzs.supabase.co/storage/v1/object/public/addon/${data[0].layoutImg}`
@@ -232,7 +239,7 @@ export const AppProvider = ({ children }) => {
     };
 
     fetchdata();
-  }, []);
+  }, [currentLayoutID]);
 
   // useEffect(() => {
   //   var temp = JSON.parse(localStorage.getItem("selectedData")) || [];
@@ -654,6 +661,10 @@ export const AppProvider = ({ children }) => {
         setBoqTotal,
         isMobile,
         setIsMobile,
+        currentLayoutData,
+        setCurrentLayoutData,
+        currentLayoutID,
+        setCurrentLayoutID,
       }}
     >
       {children}

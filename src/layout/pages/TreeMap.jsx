@@ -126,6 +126,14 @@ const TreeMap = ({ totalArea, areaQuantities, areaValues }) => {
     Washrooms: "/images/workstation-wp/executivewash-wp.webp",
   };
 
+  useEffect(() => {
+    if (showWarning) {
+      document.body.style.overflow = "hidden"; // Disable scroll
+    } else {
+      document.body.style.overflow = "auto"; // Enable scroll
+    }
+  }, [showWarning, setShowWarning]);
+
   const validTotalArea = totalArea > 0 ? totalArea : 4000;
   const builtArea = Object.keys(areaQuantities).reduce(
     (acc, key) => acc + areaQuantities[key] * areaValues[key],
@@ -476,8 +484,11 @@ const TreeMap = ({ totalArea, areaQuantities, areaValues }) => {
   };
 
   const generateBOQclick = () => {
-    console.log(totalArea);
-
+    console.log("hii", totalArea);
+    if (!totalArea) {
+      toast.error("Enter the Area");
+      return;
+    }
     if (totalArea >= MIN_AREA && totalArea <= MAX_AREA) {
       localStorage.removeItem("selectedPlan");
       localStorage.removeItem("hasSeenQuestionPopup");

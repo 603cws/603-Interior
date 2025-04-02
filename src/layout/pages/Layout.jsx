@@ -528,25 +528,25 @@ function Layout() {
   };
 
   // Close profile card when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (
-        profileRef.current?.contains(event.target) ||
-        iconRef.current?.contains(event.target)
-      ) {
-        return; // If clicked inside, do nothing
-      }
-      setIsOpen(false); // Otherwise, close it
-    };
+  // useEffect(() => {
+  //   const handleClickOutside = (event) => {
+  //     if (
+  //       profileRef.current?.contains(event.target) ||
+  //       iconRef.current?.contains(event.target)
+  //     ) {
+  //       return; // If clicked inside, do nothing
+  //     }
+  //     setIsOpen(false); // Otherwise, close it
+  //   };
 
-    if (isOpen) {
-      document.addEventListener("mousedown", handleClickOutside);
-    }
+  //   if (isOpen) {
+  //     document.addEventListener("mousedown", handleClickOutside);
+  //   }
 
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [isOpen]);
+  //   return () => {
+  //     document.removeEventListener("mousedown", handleClickOutside);
+  //   };
+  // }, [isOpen]);
 
   useEffect(() => {
     setReceptionSize(areaValues.reception);
@@ -600,6 +600,14 @@ function Layout() {
       setRunTour(true); // Start the tour automatically on first visit
     }
   }, []);
+
+  useEffect(() => {
+    if (warning || areaWarn) {
+      document.body.style.overflow = "hidden"; // Disable scroll
+    } else {
+      document.body.style.overflow = "auto"; // Enable scroll
+    }
+  }, [warning, areaWarn]);
 
   // Only run the tour for first-time visitors
   //   useEffect(() => {
@@ -1095,7 +1103,12 @@ function Layout() {
       <AnimatePresence>
         {isOpen && (
           <div ref={profileRef}>
-            <ProfileCard layout={true} isOpen={isOpen} setIsOpen={setIsOpen} />
+            <ProfileCard
+              layout={true}
+              isOpen={isOpen}
+              setIsOpen={setIsOpen}
+              iconRef={iconRef}
+            />
           </div>
         )}
       </AnimatePresence>

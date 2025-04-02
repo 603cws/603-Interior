@@ -95,18 +95,16 @@ const LayoutCard = ({
         )}
         {/* Input Field for "Other Area" */}
         {showInputField && (
-          <div className="other-area-input mt-4">
-            <label>
-              {inputFieldProps.label || "Enter Value"}:
-              <input
-                type="number"
-                value={inputFieldProps.value || ""}
-                onChange={inputFieldProps.onChange}
-                min={inputFieldProps.min || 0}
-                placeholder={inputFieldProps.placeholder || "Enter value"}
-                className="w-full border rounded p-2 mt-2 [&::-webkit-inner-spin-button]:appearance-none"
-              />
-            </label>
+          <div className="other-area-input mt-4 text-xs">
+            <label>{inputFieldProps.label || "Enter Value"}:</label>
+            <input
+              type="number"
+              value={inputFieldProps.value || ""}
+              onChange={inputFieldProps.onChange}
+              min={inputFieldProps.min || 0}
+              placeholder={inputFieldProps.placeholder || "Enter value"}
+              className="w-full border rounded p-2 mt-2 [&::-webkit-inner-spin-button]:appearance-none"
+            />
           </div>
         )}
       </div>

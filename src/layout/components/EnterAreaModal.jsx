@@ -31,8 +31,9 @@ function EnterAreaModal({ onclose }) {
   };
 
   return (
-    <div className="w-full h-svh z-20 absolute top-0 bg-[rgba(25,25,25,0.46)] flex justify-center items-center">
-      <div className="grid grid-cols-1 md:grid-cols-[2fr_1fr] bg-[#A9D3CE] border-2 rounded-3xl w-3/4 2xl:w-1/2 mx-auto px-4 py-10">
+    // <div className="w-full h-svh z-20 absolute top-0 bg-[rgba(25,25,25,0.46)] flex justify-center items-center">
+    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-70 z-30">
+      <div className="grid grid-cols-1 md:grid-cols-[2fr_1fr] bg-[#A9D3CE] border-2 rounded-3xl w-5/6 2xl:w-1/2 mx-auto px-4 py-10">
         <div className="flex flex-col justify-center gap-2 pr-4">
           <p className="text-4xl font-['UbuntuSans-Regular',_sans-serif]">
             <span className="text-6xl">O</span>ops!
@@ -49,8 +50,8 @@ function EnterAreaModal({ onclose }) {
             onChange={handleInputChange} // Update local inputValue
             onKeyPress={handleKeyPress} // Handle Enter key
             placeholder="Enter Your Area"
-            className="py-2 bg-transparent border-[1px] border-black px-2 rounded-lg [&::-webkit-inner-spin-button]:appearance-none focus:outline-none focus:ring-0 w-3/4"
-            autoFocus
+            className="py-2 bg-transparent border-[1px] border-black px-2 rounded-lg [&::-webkit-inner-spin-button]:appearance-none focus:outline-none focus:ring-0 w-full lg:w-3/4"
+            // autoFocus
           />
           {error && ( // Display the error message if there's any
             <p className="text-red-500 text-sm mt-2">{error}</p>

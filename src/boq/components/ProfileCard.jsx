@@ -3,7 +3,7 @@ import { supabase } from "../../services/supabase";
 import { useApp } from "../../Context/Context";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { LuCalendarClock } from "react-icons/lu";
 import { RxVideo } from "react-icons/rx";
 import { BsQuestionCircle } from "react-icons/bs";
@@ -13,6 +13,7 @@ import { PiListStarFill } from "react-icons/pi";
 import { BiUnite } from "react-icons/bi";
 import BookAppointment from "./BookAppointment";
 import { motion } from "framer-motion";
+import { MdClose } from "react-icons/md";
 // import useAuthRefresh from "../../Context/useAuthRefresh";
 
 const profileVariants = {
@@ -25,7 +26,7 @@ const profileVariants = {
   }, // Slide out
 };
 
-function ProfileCard({ layout = false, isOpen, setIsOpen }) {
+function ProfileCard({ layout = false, isOpen, setIsOpen, iconRef }) {
   const {
     setIsAuthenticated,
     accountHolder,
@@ -43,6 +44,42 @@ function ProfileCard({ layout = false, isOpen, setIsOpen }) {
   const navigate = useNavigate();
 
   //   const { signOutUser } = useAuthRefresh(); // Get signOutUser from hook
+
+  // Close profile card when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      console.log("clicked outside");
+
+      if (
+        profileRef.current?.contains(event.target) ||
+        iconRef.current?.contains(event.target)
+      ) {
+        return; // If clicked inside, do nothing
+      } else {
+        console.log("else outside click");
+
+        setIsOpen(() => false);
+      }
+      // setIsOpen(false); // Otherwise, close it
+    };
+
+    if (isOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isOpen]);
+
+  // useEffect(() => {
+  //   console.log("profile card", isOpen);
+  //   if (isOpen) {
+  //     document.body.style.overflow = "hidden"; // Disable scroll
+  //   } else {
+  //     document.body.style.overflow = "auto"; // Enable scroll
+  //   }
+  // }, [isOpen]);
 
   const handleLogout = async () => {
     const { error } = await supabase.auth.signOut();
@@ -83,114 +120,125 @@ function ProfileCard({ layout = false, isOpen, setIsOpen }) {
   };
 
   return (
-    <motion.div
-      ref={profileRef}
-      initial="hidden"
-      animate="visible"
-      exit="exit"
-      variants={profileVariants}
-      className={`fixed right-0 ${
-        layout
-          ? "h-[calc(100vh-85px)] top-[85px]"
-          : "h-[calc(100vh-50px)] top-[50px]"
-      } font-Poppins bg-white z-20 rounded-bl-[60px] rounded-tl-[60px] shadow-lg max-w-sm w-full`}
-    >
-      {/* Profile Card Content */}
-      <div className="rounded-bl-[60px] rounded-tl-[60px] shadow-lg overflow-hidden w-full h-full bg-white">
-        {/* Profile Header */}
-        <div className="h-1/3 flex flex-col">
-          <div className="h-1/2 flex justify-center items-end">
-            <img
-              src={accountHolder.profileImage}
-              alt="usericon"
-              className="w-16 h-16"
-            />
-          </div>
-          <div className="flex-1 flex flex-col items-center justify-center">
-            <p className="font-semibold text-lg">{accountHolder.companyName}</p>
-            <p className="font-sm">{accountHolder.email}</p>
-          </div>
+    <div className="fixed inset-0 bg-black bg-opacity-30 z-20">
+      <motion.div
+        ref={profileRef}
+        initial="hidden"
+        animate="visible"
+        exit="exit"
+        variants={profileVariants}
+        className={`fixed right-0 ${
+          layout
+            ? "h-dvh lg:h-[calc(100vh-85px)] top-0 lg:top-[85px]"
+            : "h-[calc(100vh-50px)] top-[50px]"
+        } font-Poppins bg-white z-20 md:rounded-bl-[60px] md:rounded-tl-[60px] md:shadow-lg  md:max-w-sm w-3/4`}
+      >
+        <div className="md:hidden flex justify-end items-center mb-4 absolute top-3 left-5">
+          <MdClose
+            className="text-xl cursor-pointer text-gray-600"
+            // onClick={onClose}
+            onClick={() => setIsOpen(false)}
+          />
         </div>
-
-        {/* Features Section */}
-        <div className="font-semibold text-lg capitalize leading-normal tracking-wide py-7 text-[#262626] border-y-2 border-[#ccc] flex flex-col gap-4">
-          <div className="flex items-center mx-4 gap-3">
-            <RiDashboardFill />
-            <button onClick={() => navigate("/dashboard")}>Dashboard</button>
-          </div>
-          {!layout && (
-            <>
-              <div className="flex items-center mx-4 gap-3">
-                <BiUnite />
-                <button onClick={() => navigate("/Layout")}>Layout</button>
-              </div>
-              <div className="flex items-center mx-4 gap-3">
-                <PiListStarFill />
-                <button
-                  onClick={() => {
-                    setSelectedPlan(null);
-                    setIsOpen(false);
-                    setProgress(0);
-                    localStorage.removeItem("selectedData");
-                    setBoqTotal(0);
-                  }}
-                >
-                  Select Your Plan
-                </button>
-              </div>
-            </>
-          )}
-          <div className="flex items-center mx-4 gap-3">
-            <RxVideo />
-            <p>How it works</p>
-          </div>
-
-          {accountHolder.role === "user" && (
-            <div
-              className={`flex items-center mx-4 gap-3 ${
-                progress < 90 ? "text-gray-400 cursor-not-allowed" : ""
-              }`}
-            >
-              <LuCalendarClock />
-              <button onClick={handleAppointment}>Book Appointment</button>
+        {/* Profile Card Content */}
+        <div className="md:rounded-bl-[60px] md:rounded-tl-[60px] shadow-lg overflow-hidden w-full h-full bg-white">
+          {/* Profile Header */}
+          <div className="h-1/3 flex flex-col">
+            <div className="h-1/2 flex justify-center items-end">
+              <img
+                src={accountHolder.profileImage}
+                alt="usericon"
+                className="w-16 h-16"
+              />
             </div>
-          )}
+            <div className="flex-1 flex flex-col items-center justify-center">
+              <p className="font-semibold text-lg">
+                {accountHolder.companyName}
+              </p>
+              <p className="font-sm">{accountHolder.email}</p>
+            </div>
+          </div>
+
+          {/* Features Section */}
+          <div className="font-semibold text-lg capitalize leading-normal tracking-wide py-7 text-[#262626] border-y-2 border-[#ccc] flex flex-col gap-4">
+            <div className="flex items-center mx-4 gap-3">
+              <RiDashboardFill />
+              <button onClick={() => navigate("/dashboard")}>Dashboard</button>
+            </div>
+            {!layout && (
+              <>
+                <div className="flex items-center mx-4 gap-3">
+                  <BiUnite />
+                  <button onClick={() => navigate("/Layout")}>Layout</button>
+                </div>
+                <div className="flex items-center mx-4 gap-3">
+                  <PiListStarFill />
+                  <button
+                    onClick={() => {
+                      setSelectedPlan(null);
+                      setIsOpen(false);
+                      setProgress(0);
+                      localStorage.removeItem("selectedData");
+                      setBoqTotal(0);
+                    }}
+                  >
+                    Select Your Plan
+                  </button>
+                </div>
+              </>
+            )}
+            <div className="flex items-center mx-4 gap-3">
+              <RxVideo />
+              <p>How it works</p>
+            </div>
+
+            {accountHolder.role === "user" && (
+              <div
+                className={`flex items-center mx-4 gap-3 ${
+                  progress < 90 ? "text-gray-400 cursor-not-allowed" : ""
+                }`}
+              >
+                <LuCalendarClock />
+                <button onClick={handleAppointment}>Book Appointment</button>
+              </div>
+            )}
+          </div>
+
+          {/* Help & Settings Section */}
+          <div className="font-semibold text-lg capitalize leading-normal tracking-wide py-7 text-[#262626] border-b-2 border-[#ccc] flex flex-col gap-4">
+            <div className="flex items-center mx-4 gap-3">
+              <BsQuestionCircle />
+              <button
+                onClick={() =>
+                  navigate("/dashboard", { state: { openHelp: true } })
+                }
+              >
+                Help
+              </button>
+            </div>
+            <div className="flex items-center mx-4 gap-3">
+              <IoSettingsSharp />
+              <button
+                onClick={() =>
+                  navigate("/dashboard", { state: { openSettings: true } })
+                }
+              >
+                Settings
+              </button>
+            </div>
+            <div className="flex items-center mx-4 gap-3">
+              <VscSignOut />
+              <button onClick={handleLogout}>Sign out</button>
+            </div>
+          </div>
         </div>
 
-        {/* Help & Settings Section */}
-        <div className="font-semibold text-lg capitalize leading-normal tracking-wide py-7 text-[#262626] border-b-2 border-[#ccc] flex flex-col gap-4">
-          <div className="flex items-center mx-4 gap-3">
-            <BsQuestionCircle />
-            <button
-              onClick={() =>
-                navigate("/dashboard", { state: { openHelp: true } })
-              }
-            >
-              Help
-            </button>
-          </div>
-          <div className="flex items-center mx-4 gap-3">
-            <IoSettingsSharp />
-            <button
-              onClick={() =>
-                navigate("/dashboard", { state: { openSettings: true } })
-              }
-            >
-              Settings
-            </button>
-          </div>
-          <div className="flex items-center mx-4 gap-3">
-            <VscSignOut />
-            <button onClick={handleLogout}>Sign out</button>
-          </div>
-        </div>
-      </div>
-
-      {/* Book Appointment Modal */}
-      {showBookAppointment && (
-        <BookAppointment onClose={() => setShowBookAppointment(false)} />
-      )}
-    </motion.div>
+        {/* Book Appointment Modal */}
+        {showBookAppointment && (
+          <BookAppointment onClose={() => setShowBookAppointment(false)} />
+        )}
+      </motion.div>
+    </div>
   );
 }
 

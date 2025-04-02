@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { CiCalculator1 } from "react-icons/ci";
 import { MdOutlineCancel } from "react-icons/md";
 import { useApp } from "../../Context/Context";
@@ -38,9 +38,18 @@ function Navbar({
     userId,
     setSelectedPlan,
     isMobile,
+    setCurrentLayoutID,
   } = useApp();
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (showWarning) {
+      document.body.style.overflow = "hidden"; // Disable scroll
+    } else {
+      document.body.style.overflow = "auto"; // Enable scroll
+    }
+  }, [showWarning, setShowWarning]);
 
   const mapAreaValues = (
     userId,
@@ -148,6 +157,11 @@ function Navbar({
   };
 
   const generateBOQclick = () => {
+    if (!totalArea) {
+      toast.error("Enter the Area");
+      return;
+    }
+
     if (totalArea >= MIN_AREA && totalArea <= MAX_AREA) {
       localStorage.removeItem("selectedPlan");
       localStorage.removeItem("hasSeenQuestionPopup");
@@ -206,6 +220,7 @@ function Navbar({
 
         if (data) {
           const currentLayoutID = data.id;
+          setCurrentLayoutID(currentLayoutID);
           localStorage.setItem("currentLayoutID", currentLayoutID);
         }
 
@@ -361,7 +376,7 @@ function Navbar({
             )}
           </button>
           {isAuthenticated && (
-            <button ref={iconRef}>
+            <button ref={iconRef} className="z-30">
               <img
                 onClick={toggleProfile}
                 src={accountHolder.profileImage}

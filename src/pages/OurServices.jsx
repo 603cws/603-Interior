@@ -394,7 +394,7 @@ function OurServices() {
           </p>
           <div className=" w-full">
             <div className="w-full flex gap-7 lg:gap-5 items-center mb-2">
-              <h1 className="font-bold text-[80px] lg:text-[100px] text-[#34BFAD] w-1/5">
+              <h1 className="font-bold text-[70px] lg:text-[100px] text-[#34BFAD] w-1/5">
                 01
               </h1>
               <div className="font-Poppins flex flex-col gap-2 lg:gap-5 text-start">
@@ -408,7 +408,7 @@ function OurServices() {
               </div>
             </div>
             <div className="w-full flex gap-7 lg:gap-5 items-center mb-2">
-              <h1 className="font-bold text-[80px] lg:text-[100px] text-[#34BFAD] w-1/5">
+              <h1 className="font-bold text-[70px] lg:text-[100px] text-[#34BFAD] w-1/5">
                 02
               </h1>
               <div className="font-Poppins flex flex-col gap-2 lg:gap-5 text-start">
@@ -422,7 +422,7 @@ function OurServices() {
               </div>
             </div>
             <div className="w-full flex gap-7 lg:gap-5 items-center justify-between">
-              <h1 className="font-bold text-[80px] lg:text-[100px] text-[#34BFAD] w-1/5">
+              <h1 className="font-bold text-[70px] lg:text-[100px] text-[#34BFAD] w-1/5">
                 03
               </h1>
               <div className="font-Poppins flex flex-col gap-2 lg:gap-5 text-start">

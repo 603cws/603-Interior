@@ -19,7 +19,7 @@ function Login() {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const { setUserId, setIsAuthenticated } = useApp();
+  const { setUserId, setIsAuthenticated, setCurrentLayoutID } = useApp();
 
   const navigate = useNavigate();
 
@@ -194,6 +194,7 @@ function Login() {
 
         // Navigate based on whether areaId and quantityId exist
         if (layoutId) {
+          setCurrentLayoutID(layoutId);
           localStorage.setItem("currentLayoutID", layoutId);
           navigate("/boq");
         } else {
