@@ -207,8 +207,6 @@ function Plans() {
         // Remove if you prefer the last hovered plan to remain expanded.
       >
         {plansData.map((plan) => {
-          const isExpanded = plan.id === hoveredPlan;
-
           return (
             <div
               key={plan.id}
@@ -251,7 +249,7 @@ function Plans() {
                     </div>
 
                     {/* "Select" Button */}
-                    <div className="text-left mt-4">
+                    <div className="text-left mt-4 relative">
                       <button
                         // onClick={() => setSelectedPlan(plan.planKey)}
                         onClick={() => handlePlanSelect(plan.planKey)}

@@ -195,20 +195,20 @@ const QnaPopup = ({ onClose, onSubmit }) => {
   // console.log("answers", answers.roomHeight);
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+    <div className=" fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
       <div
-        className={`bg-white border-[20px] border-[#1A3A36] rounded-xl shadow-lg relative w-3/5 h-1/2 animate__animated ${animationClass} flex flex-row-reverse `}
+        className={`bg-white mx-4 w-full border-[5px] md:border-[10px] lg:border-[20px] border-[#1A3A36] rounded-xl shadow-lg relative   md:w-3/5 md:h-1/2 animate__animated ${animationClass} flex flex-row-reverse `}
       >
         {/* Left Side: Image */}
         <div
-          className="w-1/2 bg-contain bg-no-repeat bg-center border-2 border-[#ffd500] border-l-0"
+          className="hidden md:block md:w-1/2 bg-contain bg-no-repeat bg-center border-2 border-[#ffd500] border-l-0"
           style={{
             backgroundImage: `url(${sideImage})`,
           }}
         ></div>
 
         {/* Right Side: Questions */}
-        <div className="w-1/2 p-6 border-2 border-[#ffd500] border-r-0 flex flex-col items-center justify-center">
+        <div className="w-full md:w-1/2 p-3 md:p-6 border-2 border-[#ffd500] border-r-0 flex flex-col md:items-center md:justify-center">
           <button
             onClick={handleHeightClose}
             disabled={Object.keys(answers).length === 0} // Disable if no answers
@@ -223,7 +223,7 @@ const QnaPopup = ({ onClose, onSubmit }) => {
 
           {!showDisclaimer ? (
             <div className="flex flex-col gap-5">
-              <h2 className="text-lg font-bold mb-4 text-center">
+              <h2 className="text-sm lg:text-lg font-bold mb-4 text-center">
                 Answer These Questions
               </h2>
               <form onSubmit={handleFormSubmit} className="space-y-4">
@@ -231,7 +231,7 @@ const QnaPopup = ({ onClose, onSubmit }) => {
                   <label className="block font-medium text-gray-700 text-sm">
                     {currentQuestionIndex + 1}. {currentQuestion.label}
                   </label>
-                  <div className="my-4 flex justify-around items-center">
+                  <div className="my-4 flex justify-around gap-3 md:gap-0 items-center">
                     {currentQuestion.isNumberInput ? (
                       <input
                         type="number"
@@ -270,7 +270,7 @@ const QnaPopup = ({ onClose, onSubmit }) => {
                     <button
                       type="button"
                       onClick={handlePreviousClick}
-                      className="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700"
+                      className="px-4 py-2 bg-gray-600 text-xs md:text-base text-white rounded hover:bg-gray-700"
                       disabled={currentQuestionIndex === 0}
                     >
                       Previous
@@ -279,7 +279,7 @@ const QnaPopup = ({ onClose, onSubmit }) => {
                   <button
                     type="submit"
                     disabled={Object.keys(answers).length === 0} // Disable if no answers
-                    className={`px-4 py-2 rounded ${
+                    className={`px-4 py-2 rounded text-xs md:text-base ${
                       Object.keys(answers).length === 0
                         ? "bg-gray-300 text-gray-500 cursor-not-allowed"
                         : "bg-[#1A3A36] text-white hover:bg-[#145A50]"
@@ -293,13 +293,13 @@ const QnaPopup = ({ onClose, onSubmit }) => {
               </form>
             </div>
           ) : (
-            <div className="flex flex-col gap-10">
-              <p className="text-md text-center">
+            <div className="flex flex-col gap-6 md:gap-10">
+              <p className="text-sm md:text-base text-center">
                 Demolishment charges might depend upon the location.
               </p>
               <div className="flex justify-center">
                 <button
-                  className="bg-[#1A3A36] text-white px-4 py-2 rounded hover:bg-[#145A50]"
+                  className="bg-[#1A3A36]  text-xs md:text-base  text-white px-4 py-2 rounded hover:bg-[#145A50]"
                   onClick={handleDisclaimerClose}
                 >
                   Okay

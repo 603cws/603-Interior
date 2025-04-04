@@ -28,6 +28,7 @@ import {
 } from "react-icons/bi";
 import { IoIosCall } from "react-icons/io";
 import { useApp } from "../Context/Context";
+import MobileTestimonal from "../common-components/MobileTestimonal";
 
 function Landing() {
   const [expandedIndex, setExpandedIndex] = useState();
@@ -436,9 +437,9 @@ function Landing() {
               our work
             </p>
             <img src="/images/serviceIcon.png" alt="service icon" />
-            <h3 className="text-5xl font-lato font-semibold uppercase">
+            {/* <h3 className="text-5xl font-lato font-semibold uppercase">
               Our WORK
-            </h3>
+            </h3> */}
           </div>
 
           {/* slider for images */}
@@ -672,6 +673,134 @@ function Landing() {
             </div>
           </div>
         </div>
+      </section>
+
+      {/* testimonal for mobile */}
+      <section className=" bg-[#F4F4F4]  md:hidden">
+        {/* <div>
+          <div className="max-w-sm mx-10  rounded-3xl bg-[#1f5c54]  flex-col justify-start items-center gap-[18px] inline-flex relative z-10">
+            <div className=" flex items-center justify-center px-2">
+              <p className="mt-10 text-justify text-white text-sm ">
+                Workved Interiors transformed our office into a space that
+                perfectly blends functionality with modern aesthetics. Their
+                team understood our requirements and executed the project
+                seamlessly, ensuring a workspace that enhances productivity and
+                employee well-being. The attention to detail and quality
+                craftsmanship truly set them apart!
+              </p>
+            </div>
+            <img
+              className="w-[100px] h-[100px] relative rounded-[100px] border border-[#1a3a36]"
+              src="/images/testimonalreview1.png"
+              alt="testimonal person "
+            />
+            <div className="  text-center text-white text-sm font-bold  uppercase leading-[29.60px] tracking-[3.52px]">
+              Hussain
+            </div>
+            <div className="mb-3 text-center text-[#33bead] text-sm font-bold  uppercase leading-[29.60px] tracking-[3.52px]">
+              Director, Tripjack
+            </div>
+          </div>
+        </div> */}
+        <h2 className="text-center font-bold text-3xl my-3 uppercase text-[#1F5C54]">
+          Hear from our Clients{" "}
+        </h2>
+
+        {/* slider for images */}
+        <Swiper
+          effect={"coverflow"}
+          grabCursor={true}
+          centeredSlides={true}
+          loop={true}
+          slidesPerView={"auto"} // Ensures 5 slides are visible
+          spaceBetween={30} // Adds spacing between slides
+          initialSlide={3}
+          coverflowEffect={{
+            rotate: 35,
+            stretch: 0,
+            depth: 100,
+            modifier: 0.8,
+          }}
+          autoplay={{
+            delay: 1500, // 1.5 seconds per slide
+            disableOnInteraction: false, // Keeps autoplay even after user interaction
+          }}
+          // pagination={{ el: ".swiper-pagination", clickable: true }}
+          navigation={{
+            nextEl: ".swiper-button-next",
+            prevEl: ".swiper-button-prev",
+            clickable: true,
+          }}
+          modules={[EffectCoverflow, Pagination, Navigation, Autoplay]}
+          className="h-[70vh] max-w-screen overflow-x-hidden"
+        >
+          <SwiperSlide>
+            <MobileTestimonal
+              message={` Workved Interiors transformed our office into a space that
+                  perfectly blends functionality with modern aesthetics. Their
+                  team understood our requirements and executed the project
+                  seamlessly, ensuring a workspace that enhances productivity
+                  and employee well-being. The attention to detail and quality
+                  craftsmanship truly set them apart!`}
+              name={` Hussain`}
+              userprofile={`testimonalreview1`}
+              companyname={`Director, Tripjack`}
+            />
+          </SwiperSlide>
+          <SwiperSlide>
+            <MobileTestimonal
+              message={`Workved Interiors has played a key role in shaping our coworking
+                spaces into inspiring and productive environments. Their ability
+                to design offices that are both stylish and highly functional
+                has been a game-changer for our members. Their expertise,
+                professionalism, and commitment to delivering excellence make
+                them a trusted partner in workspace design.`}
+              name={`Kunal Kataria`}
+              userprofile={`testimonalreview2`}
+              companyname={`Founder, 603 CWS`}
+            />
+          </SwiperSlide>
+          <SwiperSlide>
+            <MobileTestimonal
+              message={`The team at Workved Interiors understood our brand vision and
+                delivered an office space that enhances collaboration,
+                creativity, and efficiency. They were meticulous in their
+                planning and execution, ensuring that every element from layout
+                to furnishings was aligned with our needs. Working with them was
+                a smooth and rewarding experience!`}
+              name={`Aditya`}
+              userprofile={`testimonalreview3`}
+              companyname={`CEO, Credilio`}
+            />
+          </SwiperSlide>
+          {/* <SwiperSlide>
+            <div className="max-w-sm  rounded-3xl bg-[#1f5c54]  flex-col justify-start items-center gap-[18px] inline-flex relative z-10">
+              <div className=" flex items-center justify-center px-2">
+                <p className="mt-10 text-justify text-white text-sm ">
+                  Workved Interiors transformed our office into a space that
+                  perfectly blends functionality with modern aesthetics. Their
+                  team understood our requirements and executed the project
+                  seamlessly, ensuring a workspace that enhances productivity
+                  and employee well-being. The attention to detail and quality
+                  craftsmanship truly set them apart!
+                </p>
+              </div>
+              <div>
+                <img
+                  className="w-[100px] h-[100px] relative rounded-[100px] border border-[#1a3a36]"
+                  src="/images/testimonalreview1.png"
+                  alt="testimonal person "
+                />
+              </div>
+              <div className="  text-center text-white text-sm font-bold  uppercase leading-[29.60px] tracking-[3.52px]">
+                Hussain
+              </div>
+              <div className="mb-3 text-center text-[#33bead] text-sm font-bold  uppercase leading-[29.60px] tracking-[3.52px]">
+                Director, Tripjack
+              </div>
+            </div>
+          </SwiperSlide> */}
+        </Swiper>
       </section>
 
       {/* section FAQ */}

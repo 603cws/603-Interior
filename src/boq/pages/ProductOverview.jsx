@@ -369,12 +369,12 @@ function ProductOverview() {
       )}
 
       <div
-        className={`product-overview grid grid-cols-2 p-5 gap-1 ${
+        className={`product-overview grid grid-cols-1 md:grid-cols-2 p-2 md:p-5 gap-1 ${
           showSelectArea ? "opacity-50 pointer-events-none" : "opacity-100"
         }`}
       >
         {/* grid component 1 */}
-        <div className="flex flex-col">
+        <div className="flex flex-col md:gap-0">
           <TbArrowBackUp
             size={30}
             className="cursor-pointer"
@@ -389,7 +389,7 @@ function ProductOverview() {
             }}
           />
 
-          <div className="flex mx-10 items-center text-[#334A78] text-sm mt-4">
+          <div className="flex mx-10 items-center text-[#334A78] text-sm mt-4 mb-4 md:mb-0">
             <span>{cat?.category}</span>
             <MdOutlineKeyboardArrowRight
               size={15}
@@ -446,27 +446,29 @@ function ProductOverview() {
         </div>
 
         {/* grid component 2 */}
-        <div className=" flex flex-col">
+        <div className=" flex flex-col mt-2 md:mt-0">
           {/* product info */}
           <div className="flex flex-col justify-center">
-            <h2 className="text-xl font-bold">{product?.title}</h2>
-            <span className="text-xs font-medium text-[#334A78] ">
+            <h2 className="text-sm lg:text-xl font-bold">{product?.title}</h2>
+            <p className="text-xs font-medium text-[#334A78] ">
               {product?.details}
-            </span>
-            <p className="text-md font-semibold">
+            </p>
+            <p className="text-sm md:text-base font-semibold">
               ₹ {product?.price?.toLocaleString("en-IN")}{" "}
               <span className="text-sm">/ Per Unit</span>
             </p>
-            <br></br>
+            {/* <br ></br> */}
           </div>
           {/* final price section */}
           <div className="mt-1">
-            <p className="text-lg font-medium text-[#334A78] ">Final Price</p>
-            <p className="text-lg font-bold mb-3">
+            <p className="text-sm lg:text-lg font-medium text-[#334A78] ">
+              Final Price
+            </p>
+            <p className="text-sm lg:text-lg font-bold mb-3">
               ₹ {totalPrice.toLocaleString("en-IN")}
             </p>
             {details.quantity > 0 && (
-              <p className="text-md font-medium text-[#334A78] mb-3">
+              <p className="text-md font-medium text-[#334A78] mb-1 lg:mb-3">
                 Total Quantity:{" "}
                 <span className="border-[1px] py-1 border-[#334A78] text-[#1a1b1c] rounded-xl px-2 text-sm">
                   {details.quantity.toLocaleString("en-IN")}
@@ -474,15 +476,15 @@ function ProductOverview() {
               </p>
             )}
             {details.area > 0 && (
-              <p className="text-md font-medium text-[#334A78] mb-3">
+              <p className="text-xs lg:text-base font-medium text-[#334A78] mb-1 lg:mb-3">
                 Total Area:{" "}
-                <span className="border-[1px] py-1 border-[#334A78] text-[#1a1b1c] rounded-xl px-2 text-sm">
+                <span className="border-[1px] py-1 border-[#334A78] text-[#1a1b1c] rounded-xl px-2 text-xs lg:text-sm">
                   {details.area.toLocaleString("en-IN")}
                 </span>{" "}
               </p>
             )}
             <button
-              className=" border-[1.5px] border-[#212B36] px-2 py-1.5 text-lg w-2/5  mb-3 mt-5"
+              className=" border-2 lg:border-[1.5px] border-[#212B36] px-2 py-1.5 text-sm lg:text-lg w-full md:w-2/5 mb-1 md:mb-3 mt-2 md:mt-5"
               onClick={
                 () => setShowSelectArea(true)
                 // /**/ handelSelectedData(
@@ -498,13 +500,13 @@ function ProductOverview() {
             </button>
           </div>
           {/* product description */}
-          <div className="mt-5">
-            <h3 className="text-lg uppercase font-bold text-[#334A78] border-b-2">
+          <div className="mt-2 md:mt-5">
+            <h3 className="text-sm md:text-lg uppercase font-bold text-[#334A78] border-b-2">
               Product Details
             </h3>
             {/* manufacture */}
             <div className="border-b-2 pt-2 pb-1">
-              <p className="text-sm uppercase font-bold text-[#334A78]">
+              <p className="text-xs md:text-sm uppercase font-bold text-[#334A78]">
                 Manufacturer
               </p>
               <span className="text-xs text-[#334A78] ">
@@ -513,7 +515,7 @@ function ProductOverview() {
             </div>
             {/* dimensions */}
             <div className="border-b-2 pt-2 pb-1">
-              <p className="text-sm uppercase font-bold text-[#334A78] ">
+              <p className="text-xs md:text-sm uppercase font-bold text-[#334A78] ">
                 dimensions(H x l x W)
               </p>
               <span className="text-xs text-[#334A78] ">
@@ -521,7 +523,7 @@ function ProductOverview() {
               </span>
             </div>
             <div className="border-b-2 pt-2 pb-1">
-              <p className="text-sm uppercase font-bold text-[#334A78]">
+              <p className="text-xs md:text-sm uppercase font-bold text-[#334A78]">
                 instruction
               </p>
               {categoryInstructions.length > 0 ? (

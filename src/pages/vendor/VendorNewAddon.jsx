@@ -12,6 +12,7 @@ function VendorNewAddon({ setAddNewProduct, setProductlist }) {
   const [file, setFile] = useState(null);
   // const [dragging, setDragging] = useState(false);
   const [preview, setPreview] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // let resources = [];
   const [resources, setResources] = useState([]);
@@ -103,6 +104,7 @@ function VendorNewAddon({ setAddNewProduct, setProductlist }) {
 
   const onSubmit = async (e) => {
     e.preventDefault();
+    setIsSubmitting(true);
     try {
       // Check if the product already exists based on category, subcategory, and subSubCategory
       const { data: existingProduct, error: existingProductError } =
@@ -204,6 +206,9 @@ function VendorNewAddon({ setAddNewProduct, setProductlist }) {
     } catch (error) {
       console.log("Error in onSubmit:", error);
       // toast.error("An unexpected error occurred.");
+    } finally {
+      handleFormClear();
+      setIsSubmitting(false);
     }
   };
 
@@ -213,7 +218,8 @@ function VendorNewAddon({ setAddNewProduct, setProductlist }) {
       const filter = AllCatArray.filter((cat) => cat.name === category).flatMap(
         (subcat) => subcat.subcategories
       );
-      setSelectedSubcategories(filter);
+      // setSelectedSubcategories(filter);
+      setSelectedSubcategories(filter.join(","));
     }
 
     if (category === "Civil / Plumbing") {
@@ -221,12 +227,12 @@ function VendorNewAddon({ setAddNewProduct, setProductlist }) {
         const filter = specialArray
           .filter((cat) => cat.name === category && cat.type === subSubCategory)
           .flatMap((subcat) => subcat.subcategories);
-        setSelectedSubcategories(filter);
+        setSelectedSubcategories(filter.join(","));
       } else {
         const filter = specialArray
           .filter((cat) => cat.name === category && cat.type === "other")
           .flatMap((subcat) => subcat.subcategories);
-        setSelectedSubcategories(filter);
+        setSelectedSubcategories(filter.join(","));
       }
     }
 
@@ -235,12 +241,12 @@ function VendorNewAddon({ setAddNewProduct, setProductlist }) {
         const filter = specialArray
           .filter((cat) => cat.name === category && cat.type === subSubCategory)
           .flatMap((subcat) => subcat.subcategories);
-        setSelectedSubcategories(filter);
+        setSelectedSubcategories(filter.join(","));
       } else {
         const filter = specialArray
           .filter((cat) => cat.name === category && cat.type === "other")
           .flatMap((subcat) => subcat.subcategories);
-        setSelectedSubcategories(filter);
+        setSelectedSubcategories(filter.join(","));
       }
     }
   }, [category, subSubCategory]);
@@ -252,7 +258,13 @@ function VendorNewAddon({ setAddNewProduct, setProductlist }) {
       price: "",
       image: null,
     });
+
     removeFile();
+  };
+
+  const handlecategorychange = (e) => {
+    setCategory(e.target.value);
+    setSubSubCategory("");
   };
 
   return (
@@ -291,7 +303,8 @@ function VendorNewAddon({ setAddNewProduct, setProductlist }) {
                   name="category"
                   id="category"
                   className="w-full border-2 py-1.5 px-2 rounded-lg"
-                  onChange={(e) => setCategory(e.target.value)}
+                  onChange={(e) => handlecategorychange(e)}
+                  // onChange={(e) => setCategory(e.target.value)}
                 >
                   <option value="">Select Category</option>
 
@@ -456,8 +469,34 @@ function VendorNewAddon({ setAddNewProduct, setProductlist }) {
               className="border-2 px-5 py-2 bg-[#194F48] text-white capitalize rounded-lg"
               type="submit"
               // onClick={onsubmit}
+              disabled={isSubmitting}
             >
-              add product
+              {isSubmitting ? (
+                <div className="spinner flex justify-center items-center">
+                  <svg
+                    className="animate-spin h-5 w-5 text-white"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                    ></circle>
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8v8h8a8 8 0 01-8 8V12H4z"
+                    ></path>
+                  </svg>
+                </div>
+              ) : (
+                "add product"
+              )}
             </button>
           </div>
         </div>

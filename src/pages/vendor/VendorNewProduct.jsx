@@ -18,6 +18,7 @@ function VendorNewProduct({ setAddNewProduct, setProductlist }) {
   const [subSubCategory, setSubSubCategory] = useState("");
 
   const [category, setCategory] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   //dimension
   const [dimensionHeight, setDimensionHeight] = useState();
@@ -137,6 +138,8 @@ function VendorNewProduct({ setAddNewProduct, setProductlist }) {
   const onSubmit = async (e) => {
     e.preventDefault();
     toast.success("submit got trriggered");
+    console.log("selected subcategories", selectedSubcategories);
+    setIsSubmitting(true);
     try {
       // Check if the product already exists based on category, subcategory, and subSubCategory
       const { data: existingProduct, error: existingProductError } =
@@ -252,6 +255,7 @@ function VendorNewProduct({ setAddNewProduct, setProductlist }) {
       toast.error("An unexpected error occurred.");
     } finally {
       handleFormClear();
+      setIsSubmitting(false);
     }
   };
 
@@ -261,7 +265,9 @@ function VendorNewProduct({ setAddNewProduct, setProductlist }) {
       const filter = AllCatArray.filter((cat) => cat.name === category).flatMap(
         (subcat) => subcat.subcategories
       );
-      setSelectedSubcategories(filter);
+      setSelectedSubcategories(filter.join(","));
+      console.log(filter);
+      console.log(filter.join(","));
     }
 
     if (category === "Civil / Plumbing") {
@@ -269,12 +275,16 @@ function VendorNewProduct({ setAddNewProduct, setProductlist }) {
         const filter = specialArray
           .filter((cat) => cat.name === category && cat.type === subSubCategory)
           .flatMap((subcat) => subcat.subcategories);
-        setSelectedSubcategories(filter);
+        setSelectedSubcategories(filter.join(","));
+        console.log(filter);
+        console.log(filter.join(","));
       } else {
         const filter = specialArray
           .filter((cat) => cat.name === category && cat.type === "other")
           .flatMap((subcat) => subcat.subcategories);
-        setSelectedSubcategories(filter);
+        setSelectedSubcategories(filter.join(","));
+        console.log(filter);
+        console.log(filter.join(","));
       }
     }
 
@@ -283,12 +293,16 @@ function VendorNewProduct({ setAddNewProduct, setProductlist }) {
         const filter = specialArray
           .filter((cat) => cat.name === category && cat.type === subSubCategory)
           .flatMap((subcat) => subcat.subcategories);
-        setSelectedSubcategories(filter);
+        setSelectedSubcategories(filter.join(","));
+        console.log(filter);
+        console.log(filter.join(","));
       } else {
         const filter = specialArray
           .filter((cat) => cat.name === category && cat.type === "other")
           .flatMap((subcat) => subcat.subcategories);
-        setSelectedSubcategories(filter);
+        setSelectedSubcategories(filter.join(","));
+        console.log(filter);
+        console.log(filter.join(","));
       }
     }
   }, [category, subSubCategory]);
@@ -333,6 +347,11 @@ function VendorNewProduct({ setAddNewProduct, setProductlist }) {
     setAdditionalImages([]);
   };
 
+  const handlecategorychange = (e) => {
+    setCategory(e.target.value);
+    setSubSubCategory("");
+  };
+
   return (
     <div className="flex flex-col justify-center items-start font-Poppins relative">
       <div className="px-5 py-2 border-b-2 bg-white w-full border-b-gray-400 sticky top-0 z-10">
@@ -369,7 +388,8 @@ function VendorNewProduct({ setAddNewProduct, setProductlist }) {
                   name="category"
                   id="category"
                   className="w-full border-2 py-1.5 px-2 rounded-lg"
-                  onChange={(e) => setCategory(e.target.value)}
+                  // onChange={(e) => setCategory(e.target.value)}
+                  onChange={(e) => handlecategorychange(e)}
                 >
                   <option value="">Select Category</option>
 
@@ -632,8 +652,34 @@ function VendorNewProduct({ setAddNewProduct, setProductlist }) {
               className="border-2 px-5 py-2 bg-[#194F48] text-white capitalize rounded-lg"
               type="submit"
               // onClick={onsubmit}
+              disabled={isSubmitting}
             >
-              add product
+              {isSubmitting ? (
+                <div className="spinner flex justify-center items-center">
+                  <svg
+                    className="animate-spin h-5 w-5 text-white"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                    ></circle>
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8v8h8a8 8 0 01-8 8V12H4z"
+                    ></path>
+                  </svg>
+                </div>
+              ) : (
+                "add product"
+              )}
             </button>
           </div>
         </div>

@@ -566,6 +566,7 @@ const TreeMap = ({ totalArea, areaQuantities, areaValues }) => {
       }
     } finally {
       setIsSubmitting(false);
+      setShowWarning(false);
     }
   };
 

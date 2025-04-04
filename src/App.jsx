@@ -44,6 +44,8 @@ import TokenExpired from "./pages/TokenExpired";
 import JobPage from "./pages/JobPage";
 import ThreeDViewer from "./common-components/ThreeDViewer";
 
+import PartnerWorkvedInterior from "./pages/PartnerWorkvedInterior";
+
 // const Homepage = lazy(() => import("./pages/Homepage"));
 
 const Layout = lazy(() => import("./layout/pages/Layout"));
@@ -124,6 +126,7 @@ function App() {
             <Route path="/sessiontimeout" element={<Sessiontimeout />} />
             <Route path="/brokenlink" element={<Brokenlink />} />
             <Route path="/tokenExpired" element={<TokenExpired />} />
+            <Route path="/partnerwithus" element={<PartnerWorkvedInterior />} />
           </Routes>
         ) : (
           <Routes>
@@ -148,6 +151,7 @@ function App() {
             {/* <Route path="/vendordashboard" element={<VendorDashboard />} /> */}
             <Route path="/bookappointment" element={<BookAppointment />} />
             <Route path="/howtosell" element={<Howtosell />} />
+            <Route path="/partnerwithus" element={<PartnerWorkvedInterior />} />
           </Routes>
         )}
       </Suspense>

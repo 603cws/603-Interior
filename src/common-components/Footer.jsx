@@ -80,7 +80,7 @@ function Footer() {
                 href=" https://www.instagram.com/603.interiors/"
                 target="_blank"
               >
-                <FaInstagram size={24} className="cursor-pointer" />
+                <FaInstagram size={24} className="cursor-pointer " />
               </a>
               <a
                 href=" https://www.facebook.com/profile.php?id=61561253712041"
@@ -185,7 +185,7 @@ function Footer() {
           <BsShop size={16} />
           <h4 className="font-semibold">How to sell</h4>
         </div>
-        <p className="text-nowrap text-xs">
+        <p className=" text-xs">
           &copy; 2019-2025 . Workved Interiors | All Rights Reserved
         </p>
         <div

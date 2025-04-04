@@ -5,7 +5,6 @@ import { useApp } from "../Context/Context";
 function LandingNavbar({ bgColor = false }) {
   const navigate = useNavigate();
   const pathname = window.location.pathname;
-  console.log(pathname);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const { setShowProfile, showProfile, isAuthenticated, accountHolder } =

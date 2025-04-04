@@ -26,7 +26,7 @@ export const AllCatArray = [
       "UPS",
       "BMS",
       "Server Room",
-      "Executive Washroom",
+      // "Executive Washroom",
       "Other Area",
     ],
     subCat1: ["Table", "Chair", "Storage"],
