@@ -216,22 +216,29 @@ function Plans() {
               className="relative overflow-hidden bg-[#E4F0EC] mb-3 rounded-2xl"
             >
               <div className="w-full h-full flex flex-col bg-[#183d3d]">
+                {/* background rings */}
+                <div className="h-44 w-44 rounded-full border-[14px] border-[#1D4C46] absolute -top-5 -right-10 opacity-90"></div>
+                <div className="h-44 w-44 rounded-full border-8 border-[#1D4C46] absolute top-20 -right-20 opacity-50"></div>
+                <div className="h-44 w-44 rounded-full border-8 border-[#1D4C46] absolute -bottom-10 -left-10 opacity-50"></div>
                 <div
                   className="h-full flex items-center justify-between mx-2 my-2
-                  font-Poppins text-white border-b-2"
+                  font-Poppins text-white border-b-2 relative"
                 >
                   <div className="text-xl font-bold">{plan.planNumber}</div>
                   <div className="text-xl font-bold  text-end">
                     {plan.title}
                   </div>
                 </div>
-                <div className="flex-1 flex flex-col-reverse  ">
+                <div className="flex-1 flex flex-col-reverse">
                   <div className="flex-1 py-3 px-6  text-white flex flex-col justify-between">
                     <div>
                       <h2 className="text-2xl font-bold mb-4">{plan.title}</h2>
                       <ul className="space-y-2 text-xs">
                         {plan.bullets.map((bullet, i) => (
-                          <li key={i} className="flex items-center gap-2 ">
+                          <li
+                            key={i}
+                            className="flex items-center gap-2 relative"
+                          >
                             <img
                               src="/images/Check_ring.png"
                               alt="check"

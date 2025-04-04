@@ -49,7 +49,7 @@ function Navbar({
     } else {
       document.body.style.overflow = "auto"; // Enable scroll
     }
-  }, [showWarning, setShowWarning]);
+  }, [showWarning]);
 
   const mapAreaValues = (
     userId,
@@ -239,6 +239,7 @@ function Navbar({
       }
     } finally {
       setIsSubmitting(false);
+      setShowWarning(false);
     }
   };
 

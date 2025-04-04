@@ -14,6 +14,7 @@ import BoqPrompt from "./BoqPrompt";
 import Boqcompleted from "../../common-components/Boqcompleted";
 import { CiMenuFries } from "react-icons/ci";
 import { MdOutlineCancel } from "react-icons/md";
+import { BiCheckCircle, BiDownload } from "react-icons/bi";
 // import useAuthRefresh from "../../Context/useAuthRefresh";
 
 function Navbar({ toggleProfile, iconRef }) {
@@ -30,6 +31,9 @@ function Navbar({ toggleProfile, iconRef }) {
 
   //dropdown mobile
   const [mobileDropDown, setMobileDropDown] = useState(false);
+
+  const [isDownloading, setIsDownloading] = useState(false);
+  const [isCompleted, setIsCompleted] = useState(false);
 
   // const { signOutUser } = useAuthRefresh(); // Get signOutUser from hook
 
@@ -574,6 +578,30 @@ function Navbar({ toggleProfile, iconRef }) {
     }
   };
 
+  const handleDownload = async () => {
+    setIsDownloading(true); // Show loading animation
+    setIsCompleted(false);
+
+    try {
+      await PDFGenerator.generatePDF(
+        selectedData,
+        calculateGrandTotal,
+        accountHolder.companyName,
+        accountHolder.location,
+        areasData,
+        categories
+      );
+      setIsDownloading(false);
+      setIsCompleted(true);
+
+      // Reset button after 2 seconds
+      setTimeout(() => setIsCompleted(false), 2000);
+    } catch (error) {
+      console.error("Error generating PDF:", error);
+      setIsDownloading(false);
+    }
+  };
+
   return (
     <div className="navbar sticky top-0 z-20">
       <div className="flex justify-between bg-gradient-to-r from-[#1A3A36] to-[#48A095] items-center px-4 h-[50px]">
@@ -645,45 +673,38 @@ function Navbar({ toggleProfile, iconRef }) {
           )}
 
           {mobileDropDown && (
-            <div className="absolute z-20 translate-y-[60%] translate-x-[60%] transform transition-all duration-700 ease-in-out opacity-100 scale-100">
+            <div className="absolute z-20 translate-y-[60%] right-0 transform transition-all duration-700 ease-in-out opacity-100 scale-100">
               {/* <div className="absolute z-20 translate-y-[60%] translate-x-[60%] transform transition-transform ease-in-out duration-700 "> */}
-              <ul className="text-[#34BFAD] bg-[#00453C] m-3 p-2">
+              <ul className="text-[#34BFAD] bg-[#00453C] bg-opacity-90 m-3 p-2 text-start">
                 {/* <li className="hover:px-2 hover:bg-white hover:text-[#1A3A36] mb-2 px-2">
                 view boq{" "}
               </li> */}
-                <li className="hover:px-2 hover:bg-white hover:text-[#1A3A36] mb-2 px-2">
-                  <button
-                    className="bg-[#FFF] text-xs py-2 px-5 text-black rounded-full border-solid border-[1px] border-black"
-                    onClick={handleGoTOlayout}
-                  >
-                    Layout
-                  </button>
+                <li
+                  onClick={handleGoTOlayout}
+                  className="hover:px-2 hover:bg-white hover:text-[#1A3A36] mb-2 py-1 px-2 rounded-lg cursor-pointer"
+                >
+                  Layout
                 </li>
-                <li className="hover:px-2 hover:bg-white hover:text-[#1A3A36] mb-2 px-2">
-                  <button
-                    onClick={() =>
-                      PDFGenerator.generatePDF(
-                        selectedData,
-                        calculateGrandTotal,
-                        accountHolder.companyName,
-                        accountHolder.location,
-                        areasData,
-                        categories
-                      )
-                    }
-                    className="bg-[#1A3A36] text-xs py-2 px-5 text-white rounded-full border-solid border-[1px] border-[#34BFAD] hover:bg-[#34BFAD]"
-                  >
-                    Download
-                  </button>
+                <li
+                  onClick={() =>
+                    PDFGenerator.generatePDF(
+                      selectedData,
+                      calculateGrandTotal,
+                      accountHolder.companyName,
+                      accountHolder.location,
+                      areasData,
+                      categories
+                    )
+                  }
+                  className="hover:px-2 hover:bg-white hover:text-[#1A3A36] mb-2 py-1 px-2 rounded-lg cursor-pointer"
+                >
+                  Download
                 </li>
-                <li>
-                  <div
-                    className="relative inline-flex items-center border border-black rounded-full"
-                    ref={dropdownRef}
-                  >
+                <li className=" hover:bg-white hover:text-[#1A3A36] mb-2 py-1 px-2 rounded-lg">
+                  <div className=" flex items-center" ref={dropdownRef}>
                     <button
                       onClick={handleSave}
-                      className="bg-white text-xs py-2 px-3 text-black rounded-l-full"
+                      // className="bg-white text-xs py-2 px-3 text-black rounded-l-full"
                     >
                       Save BOQ
                     </button>
@@ -692,13 +713,13 @@ function Navbar({ toggleProfile, iconRef }) {
                         fetchSavedBOQs();
                         setIsOpen(!isOpen);
                       }}
-                      className="bg-white px-3 py-2 border-l border-black flex items-center rounded-r-full"
+                      // className="bg-white px-3 py-2 border-l border-black flex items-center rounded-r-full"
                     >
                       <RiArrowDropDownLine />
                     </button>
 
                     {isOpen && (
-                      <ul className="absolute left-0 top-7 min-w-[100px] mt-2 w-auto text-xs bg-white border border-gray-300 rounded-lg shadow-md">
+                      <ul className="absolute left-0 -bottom-1/3 min-w-[100px] mt-2 w-auto text-xs bg-white border border-gray-300 rounded-lg shadow-md">
                         <li className="px-4 py-2 grid grid-cols-[2fr_1fr] font-semibold bg-gray-200 text-center rounded-lg shadow-md">
                           <span className="text-left">Title</span>
                           <span className="text-center">Actions</span>
@@ -941,7 +962,7 @@ function Navbar({ toggleProfile, iconRef }) {
             </div>
             {/* </div> */}
             <div className="flex items-center downloadB">
-              <button
+              {/* <button
                 onClick={() =>
                   PDFGenerator.generatePDF(
                     selectedData,
@@ -955,6 +976,37 @@ function Navbar({ toggleProfile, iconRef }) {
                 className="bg-[#1A3A36] text-xs py-2 px-5 text-white rounded-full border-solid border-[1px] border-[#34BFAD] hover:bg-[#34BFAD]"
               >
                 Download
+              </button> */}
+              <button
+                onClick={handleDownload}
+                className={`relative flex items-center justify-center gap-2 bg-[#1A3A36] text-xs py-2 px-6 text-white rounded-full border border-[#34BFAD] transition-all duration-300 ease-in-out 
+                ${
+                  isDownloading
+                    ? "bg-[#267D6E] border-[#34BFAD] scale-95 cursor-not-allowed"
+                    : isCompleted
+                    ? "bg-green-500 border-green-500 scale-105 animate-bounce"
+                    : "hover:bg-[#34BFAD]"
+                }
+              `}
+                disabled={isDownloading}
+              >
+                {isDownloading ? (
+                  <>
+                    <span className="absolute w-4 h-4 bg-white opacity-30 rounded-full animate-ping"></span>
+                    <span className="relative w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+                    <span className="relative">Downloading...</span>
+                  </>
+                ) : isCompleted ? (
+                  <>
+                    <BiCheckCircle size={16} className="text-white" />
+                    <span>Success!</span>
+                  </>
+                ) : (
+                  <>
+                    <BiDownload size={16} className="text-white" />
+                    <span>Download</span>
+                  </>
+                )}
               </button>
             </div>
           </div>

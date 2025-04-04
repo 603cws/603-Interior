@@ -19,7 +19,8 @@ function Login() {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const { setUserId, setIsAuthenticated, setCurrentLayoutID } = useApp();
+  const { setUserId, setIsAuthenticated, setCurrentLayoutID, setProgress } =
+    useApp();
 
   const navigate = useNavigate();
 
@@ -205,6 +206,7 @@ function Login() {
         navigate("/Layout"); // Default navigation in case of an error
       }
     }
+    setProgress(0);
     toast.success("User logged in successfully!");
     console.log("User logged in successfully:", data);
   };

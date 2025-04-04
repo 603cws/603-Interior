@@ -129,8 +129,8 @@ function ProfileCard({ layout = false, isOpen, setIsOpen, iconRef }) {
         variants={profileVariants}
         className={`fixed right-0 ${
           layout
-            ? "h-dvh lg:h-[calc(100vh-85px)] top-0 lg:top-[85px]"
-            : "h-[calc(100vh-50px)] top-[50px]"
+            ? "h-dvh md:h-[calc(100vh-85px)] top-0 md:top-[85px]"
+            : "h-dvh md:h-[calc(100vh-50px)] top-0 md:top-[50px]"
         } font-Poppins bg-white z-20 md:rounded-bl-[60px] md:rounded-tl-[60px] md:shadow-lg  md:max-w-sm w-3/4`}
       >
         <div className="md:hidden flex justify-end items-center mb-4 absolute top-3 left-5">
