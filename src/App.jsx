@@ -45,6 +45,7 @@ import JobPage from "./pages/JobPage";
 import ThreeDViewer from "./common-components/ThreeDViewer";
 
 import PartnerWorkvedInterior from "./pages/PartnerWorkvedInterior";
+import Privacy from "./pages/Privacy";
 
 // const Homepage = lazy(() => import("./pages/Homepage"));
 
@@ -85,6 +86,7 @@ function App() {
             <Route path="/Blog" element={<BlogPage />} />
             <Route path="/Blog/:title" element={<BlogDetail />} />
             <Route path="/Career" element={<Carrer />} />
+            <Route path="/privacy-policy" element={<Privacy />} />
             <Route path="/ThreeDViewer" element={<ThreeDViewer />} />
             <Route path="*" element={<PageNotFound />} />
             <Route path="/Login" element={<Login />} />
@@ -139,6 +141,7 @@ function App() {
             <Route path="/Blog" element={<BlogPage />} />
             <Route path="/Blog/:title" element={<BlogDetail />} />
             <Route path="/Career" element={<Carrer />} />
+            <Route path="/privacy-policy" element={<Privacy />} />
             <Route path="/ThreeDViewer" element={<ThreeDViewer />} />
             <Route path="*" element={<PageNotFound />} />
             <Route path="/Login" element={<Login />} />
