@@ -206,7 +206,7 @@ export const AppProvider = ({ children }) => {
     if (userId) {
       loadData();
     }
-  }, [userId]);
+  }, [userId, currentLayoutID]);
 
   // get the totalarea based on current layout id
   useEffect(() => {

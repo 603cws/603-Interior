@@ -600,7 +600,12 @@ function ProductOverview() {
       <AnimatePresence>
         {isOpen && (
           <div ref={profileRef}>
-            <ProfileCard layout={false} isOpen={isOpen} setIsOpen={setIsOpen} />
+            <ProfileCard
+              layout={false}
+              isOpen={isOpen}
+              setIsOpen={setIsOpen}
+              iconRef={iconRef}
+            />
           </div>
         )}
       </AnimatePresence>
