@@ -23,7 +23,11 @@ function LandingNavbar({ bgColor = false }) {
       >
         {/* Logo */}
         <div className="cursor-pointer" onClick={() => navigate("/")}>
-          <img src="/logo/603interior.png" alt="Logo" className="h-12 w-20" />
+          <img
+            src="/logo/workved-interior.png"
+            alt="Logo"
+            className="h-12 w-20"
+          />
         </div>
         {/* <div className="cursor-pointer" onClick={() => navigate("/")}>
           <img src="/logo/logo.png" alt="Logo" className="h-12 w-20" />

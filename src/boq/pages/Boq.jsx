@@ -483,7 +483,7 @@ function Boq() {
         }}
       />
       <Navbar toggleProfile={toggleProfile} iconRef={iconRef} />
-      <div className="px-5">
+      <div className="px-2 lg:px-5">
         {!selectedPlan ? (
           <Plans />
         ) : (

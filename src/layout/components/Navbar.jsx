@@ -298,7 +298,11 @@ function Navbar({
         <div className="hidden md:flex justify-around bg-gradient-to-r from-[#1A3A36] to-[#48A095] py-4 items-center px-5">
           {/* logo */}
           <button className=" " onClick={() => navigate("/")}>
-            <img src="/logo/logo.png" alt="603 logo" className="h-auto w-20" />
+            <img
+              src="/logo/workved-logo-white.png"
+              alt="603 logo"
+              className="h-auto w-20"
+            />
           </button>
           {/* sq feet div */}
           <div

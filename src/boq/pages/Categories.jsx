@@ -175,7 +175,7 @@ const Categories = ({
     <>
       <div className="categories flex flex-col pb-3">
         {/* Categories List */}
-        <div className="cat flex justify-evenly overflow-x-auto gap-3 px-5 pb-2 scrollbar-hide">
+        <div className="cat flex justify-evenly overflow-x-auto gap-1 md:gap-3 px-0 lg:px-5 pb-2 scrollbar-hide">
           {categories.map(({ id, category, subcategories }) => {
             const cleanedCategoryName = getCleanedCategoryName(category);
             const isCategoryCompleted = checkIfCategoryCompleted(category); // Check if the category is completed
@@ -198,18 +198,18 @@ const Categories = ({
                         selectedCategory?.id === id
                           ? "bg-[#A9D3CE]"
                           : "bg-[#ffffff]"
-                      } rounded-3xl border-solid border-[#000000] border-2 flex flex-col gap-0 items-center justify-around shrink-0 w-[90px] h-[80px] relative group-hover:scale-90 transition-transform duration-[300ms] ease-in-out`} // Added hover effect here
+                      } rounded-xl md:rounded-2xl lg:rounded-3xl border-solid border-[#000000] border-2 flex flex-col gap-0 items-center justify-around shrink-0 w-[72px] md:w-80px  lg:w-[90px] h-[65px] md:h-[70px] lg:h-[80px] relative group-hover:scale-90 transition-transform duration-[300ms] ease-in-out`} // Added hover effect here
                     >
                       <div className="flex flex-row gap-2 items-center justify-center shrink-0 w-[50px] relative">
                         <img
-                          className="flex flex-col gap-2.5 items-start justify-start shrink-0 w-[30px] h-[30px] relative overflow-hidden"
+                          className="flex flex-col gap-2.5 items-start justify-start shrink-0 w-5 lg:w-[30px] h-5 lg:h-[30px] relative overflow-hidden"
                           src={imageSrc}
                           alt={`${category} icon`}
                         />
                       </div>
                       <div className="flex flex-col gap-2.5 items-start justify-start shrink-0 relative overflow-hidden">
                         <div className="flex flex-row gap-2.5 items-center justify-center shrink-0 relative overflow-hidden">
-                          <div className="text-[#252525] text-center font-['Poppins-Regular',_sans-serif] text-sm leading-5 font-normal relative flex items-center justify-center">
+                          <div className="text-[#252525] text-center font-['Poppins-Regular',_sans-serif] text-xs md:text-[13px] lg:text-sm leading-5 font-normal relative flex items-center justify-center">
                             {category}
                           </div>
                         </div>
@@ -319,10 +319,10 @@ const Categories = ({
                   exit={{ opacity: 0, y: -10 }}
                   transition={{ duration: 0.4, ease: "easeInOut" }}
                 >
-                  <h3 className="text-lg font-semibold text-gray-800 ms-5">
+                  <h3 className="text-base lg:text-lg font-semibold text-gray-800 lg:ms-5">
                     Subcategories of {selectedCategory.category}
                   </h3>
-                  <div className="subcat grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-5 mt-5 justify-center">
+                  <div className="subcat grid grid-cols-3 md:grid-cols-5 lg:grid-cols-4 xl:grid-cols-6 gap-5 mt-5 justify-center">
                     {selectedCategory.subcategories
                       .filter(
                         (subCategory) =>
@@ -346,15 +346,15 @@ const Categories = ({
                             transition={{ duration: 0.3 }}
                           >
                             <div className="flex flex-col items-center justify-evenly flex-wrap relative">
-                              <div className="flex flex-col gap-[21px] items-center justify-center w-full relative cursor-pointer hover:scale-105 transition-transform duration-500 ease-in-out">
-                                <div className="relative w-[160px] h-[170px] flex items-center justify-center bg-gradient-to-r from-[#003442] to-[#34BFAD] rounded-[26px]">
+                              <div className="flex flex-col gap-1 lg:gap-[21px] items-center justify-center w-full relative cursor-pointer hover:scale-105 transition-transform duration-500 ease-in-out">
+                                <div className="relative w-[90px] md:w-[130px] lg:w-[160px] h-24 md:h-[130px] lg:h-[170px] flex items-center justify-center bg-gradient-to-r from-[#003442] to-[#34BFAD] rounded-3xl lg:rounded-[26px]">
                                   <img
-                                    className="rounded-3xl w-[150px] h-[150px] object-cover"
+                                    className="rounded-2xl md:rounded-3xl w-[75px] md:w-[110px] lg:w-[150px] h-[80px] md:h-[115px] lg:h-[150px] object-cover"
                                     src={imageSrcSubCat}
                                     alt={`${subCategory} subcategory`}
                                   />
                                 </div>
-                                <p className="text-[#444444] text-center font-['Montserrat-Medium',_sans-serif] text-sm font-medium relative">
+                                <p className="text-[#444444] text-center font-['Montserrat-Medium',_sans-serif] text-xs md:text-[13px] lg:text-sm font-medium relative">
                                   {subCategory}
                                 </p>
                               </div>

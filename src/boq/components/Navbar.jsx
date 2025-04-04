@@ -607,17 +607,24 @@ function Navbar({ toggleProfile, iconRef }) {
       <div className="flex justify-between bg-gradient-to-r from-[#1A3A36] to-[#48A095] items-center px-4 h-[50px]">
         {/* logo */}
         <button className="" onClick={handlelogo}>
-          <img src="/logo/logo.png" alt="603 logo" className="h-10 w-18 " />
+          <img
+            src="/logo/workved-logo-white.png"
+            alt="603 logo"
+            className="h-6 md:h-8 lg:h-10 w-11 md:w-16 lg:w-18 "
+          />
         </button>
         {/* button for generate boq */}
-        <div className="pr-2 flex gap-3">
-          <div
-            // onClick={signOutUser}
-            className="flex justify-center items-center bg-[#FFF] rounded-xl text-xs px-5 h-fit py-3 self-center text-black border-solid border-1 border-black"
-          >
-            <span className="font-bold">Total</span>: ₹{" "}
-            {boqTotal.toLocaleString("en-IN")}
-          </div>
+        <div className="pr-2 flex gap-3 items-center">
+          {boqTotal > 0 && (
+            <div
+              // onClick={signOutUser}
+              className="flex justify-center items-center bg-[#FFF] rounded-xl text-xs px-5 h-fit py-3 self-center text-black border-solid border-1 border-black"
+            >
+              <span className="font-bold">Total</span>: ₹{" "}
+              {boqTotal.toLocaleString("en-IN")}
+            </div>
+          )}
+
           {/* <div
           // onClick={signOutUser}
           className="flex justify-center items-center bg-[#FFF] rounded-xl text-xs py-2 px-5 text-black  border-solid border-1 border-black"
@@ -631,7 +638,7 @@ function Navbar({ toggleProfile, iconRef }) {
               onClick={toggleProfile}
               src={accountHolder.profileImage}
               alt="usericon"
-              className="w-12 h-12 cursor-pointer rounded-full"
+              className="w-8 md:w-12 h-8 md:h-12 cursor-pointer rounded-full"
             />
           </div>
         </div>
@@ -664,11 +671,11 @@ function Navbar({ toggleProfile, iconRef }) {
           </div>
           {mobileDropDown ? (
             <button onClick={handleMobileDropDown}>
-              <MdOutlineCancel color="white" size={30} />
+              <MdOutlineCancel color="white" size={25} />
             </button>
           ) : (
             <button onClick={handleMobileDropDown}>
-              <CiMenuFries color="white" size={30} />
+              <CiMenuFries color="white" size={26} />
             </button>
           )}
 
