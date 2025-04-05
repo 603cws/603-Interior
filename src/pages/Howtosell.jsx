@@ -1,6 +1,6 @@
 import LandingNavbar from "../common-components/LandingNavbar";
 import Footer from "../common-components/Footer";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import ContactUsPopup from "../common-components/ContactUsPopup";
 import { useApp } from "../Context/Context";
 

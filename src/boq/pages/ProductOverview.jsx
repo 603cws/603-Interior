@@ -177,7 +177,13 @@ function ProductOverview() {
     };
 
     fetchProduct();
-  }, [id, selectedProductView]); // Re-fetch when id or selectedProductView changes
+  }, [
+    id,
+    selectedProductView,
+    selectedCategory,
+    selectedSubCategory,
+    selectedSubCategory1,
+  ]); // Re-fetch when id or selectedProductView changes
 
   const product = products[0]; // Access the first product
 

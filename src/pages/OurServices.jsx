@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import "../styles/Landing.css";
 import { useState } from "react";
 import LandingNavbar from "../common-components/LandingNavbar";
