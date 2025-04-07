@@ -297,79 +297,144 @@ const BlogData = [
     </div>
 `,
   },
+  //   {
+  //     blogimage: "/images/contact1.png",
+  //     profileicon: "/images/usericon.png",
+  //     name: "sakshi",
+  //     title: "10 Office Design Mistakes That Are Killing Your Productivity",
+  //     des: "Lorem Ipsum is simply dummy text of the printing andtypesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an",
+  //     content: `
+  //    <div className="xl:text-xl mb-5 text-gray-700">
+  //       <h1 className="font-semibold text-xl mb-2">
+  //         <span className="font-bold">Introduction</span>
+  //       </h1>
+  //       <p className="text-gray-700 mb-4">
+  //         Your office layout might be working against you. From poor lighting to cluttered spaces, minor design flaws can impact focus and efficiency. Here are 10 common office design mistakes that may be hurting productivity—and how to fix them.
+  //       </p>
+
+  //       {[
+  //         {
+  //           title: "1. Poor Lighting & Dark Workspaces",
+  //           text: "Insufficient lighting strains the eyes and reduces alertness. Solution: Maximize natural light and invest in warm, adjustable LED lighting."
+  //         },
+  //         {
+  //           title: "2. Uncomfortable & Outdated Furniture",
+  //           text: "Old chairs and poorly designed desks lead to posture problems and discomfort. Solution: Upgrade to ergonomic chairs and height-adjustable desks."
+  //         },
+  //         {
+  //           title: "3. Noisy Open Workspaces Without Quiet Zones",
+  //           text: "Excessive noise can lead to distractions and reduced concentration. Solution: Introduce soundproofing elements, phone booths, and designated quiet areas."
+  //         },
+  //         {
+  //           title: "4. Lack of Greenery & Natural Elements",
+  //           text: "A dull, lifeless office can feel uninspiring. Solution: Bring in indoor plants, wooden textures, and nature-inspired designs to enhance creativity."
+  //         },
+  //         {
+  //           title: "5. Cluttered & Messy Workstations",
+  //           text: "A cluttered workspace leads to mental chaos. Solution: Encourage minimalism, provide ample storage, and use cable management systems."
+  //         },
+  //         {
+  //           title: "6. Inefficient Office Layout & Traffic Flow",
+  //           text: "Poorly arranged furniture can lead to bottlenecks and movement disruptions. Solution: Design layouts that enhance accessibility and workflow."
+  //         },
+  //         {
+  //           title: "7. Overuse of Cubicles & Closed-Off Spaces",
+  //           text: "A rigid cubicle layout can feel isolating. Solution: Adopt a balance of open and private spaces to encourage interaction and focus."
+  //         },
+  //         {
+  //           title: "8. Ignoring Brand Identity in Office Design",
+  //           text: "A generic office lacks inspiration. Solution: Integrate your brand colors, mission, and unique design elements into the space."
+  //         },
+  //         {
+  //           title: "9. No Designated Breakout or Relaxation Areas",
+  //           text: "All work and no play leads to burnout. Solution: Create casual lounges, game rooms, or wellness areas for employees to recharge."
+  //         },
+  //         {
+  //           title: "10. Outdated Tech & Lack of Smart Solutions",
+  //           text: "Offices that still rely on manual lighting, outdated conferencing tools, and slow Wi-Fi create inefficiencies. Solution: Upgrade to smart automation and AI-driven office systems."
+  //         }
+  //       ].map((item, index) => (
+  //         <div key={index} className="mb-5">
+  //           <h1 className="font-semibold text-xl mb-2">
+  //             <span className="font-bold">{item.title}</span>
+  //           </h1>
+  //           <p className="text-gray-700">{item.text}</p>
+  //         </div>
+  //       ))}
+
+  //       <h1 className="font-semibold text-xl mb-2">
+  //         <span className="font-bold">Conclusion</span>
+  //       </h1>
+  //       <p className="text-gray-700 mb-4">
+  //         A few tweaks can turn a chaotic office into a well-organized, productive space. At Workved Interiors, we help businesses revamp their workspaces for efficiency and comfort. Contact us for a consultation!
+  //       </p>
+  //     </div>
+  // `,
+  //   },
   {
     blogimage: "/images/contact1.png",
     profileicon: "/images/usericon.png",
     name: "sakshi",
     title: "10 Office Design Mistakes That Are Killing Your Productivity",
-    des: "Lorem Ipsum is simply dummy text of the printing andtypesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an",
+    des: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an",
     content: `
-   <div className="xl:text-xl mb-5 text-gray-700">
-      <h1 className="font-semibold text-xl mb-2">
-        <span className="font-bold">Introduction</span>
+    <div class="xl:text-xl mb-5 text-gray-700">
+      <h1 class="font-semibold text-xl mb-2">
+        <span class="font-bold">Introduction</span>
       </h1>
-      <p className="text-gray-700 mb-4">
+      <p class="text-gray-700 mb-4">
         Your office layout might be working against you. From poor lighting to cluttered spaces, minor design flaws can impact focus and efficiency. Here are 10 common office design mistakes that may be hurting productivity—and how to fix them.
       </p>
 
-      {[
-        {
-          title: "1. Poor Lighting & Dark Workspaces",
-          text: "Insufficient lighting strains the eyes and reduces alertness. Solution: Maximize natural light and invest in warm, adjustable LED lighting."
-        },
-        {
-          title: "2. Uncomfortable & Outdated Furniture",
-          text: "Old chairs and poorly designed desks lead to posture problems and discomfort. Solution: Upgrade to ergonomic chairs and height-adjustable desks."
-        },
-        {
-          title: "3. Noisy Open Workspaces Without Quiet Zones",
-          text: "Excessive noise can lead to distractions and reduced concentration. Solution: Introduce soundproofing elements, phone booths, and designated quiet areas."
-        },
-        {
-          title: "4. Lack of Greenery & Natural Elements",
-          text: "A dull, lifeless office can feel uninspiring. Solution: Bring in indoor plants, wooden textures, and nature-inspired designs to enhance creativity."
-        },
-        {
-          title: "5. Cluttered & Messy Workstations",
-          text: "A cluttered workspace leads to mental chaos. Solution: Encourage minimalism, provide ample storage, and use cable management systems."
-        },
-        {
-          title: "6. Inefficient Office Layout & Traffic Flow",
-          text: "Poorly arranged furniture can lead to bottlenecks and movement disruptions. Solution: Design layouts that enhance accessibility and workflow."
-        },
-        {
-          title: "7. Overuse of Cubicles & Closed-Off Spaces",
-          text: "A rigid cubicle layout can feel isolating. Solution: Adopt a balance of open and private spaces to encourage interaction and focus."
-        },
-        {
-          title: "8. Ignoring Brand Identity in Office Design",
-          text: "A generic office lacks inspiration. Solution: Integrate your brand colors, mission, and unique design elements into the space."
-        },
-        {
-          title: "9. No Designated Breakout or Relaxation Areas",
-          text: "All work and no play leads to burnout. Solution: Create casual lounges, game rooms, or wellness areas for employees to recharge."
-        },
-        {
-          title: "10. Outdated Tech & Lack of Smart Solutions",
-          text: "Offices that still rely on manual lighting, outdated conferencing tools, and slow Wi-Fi create inefficiencies. Solution: Upgrade to smart automation and AI-driven office systems."
-        }
-      ].map((item, index) => (
-        <div key={index} className="mb-5">
-          <h1 className="font-semibold text-xl mb-2">
-            <span className="font-bold">{item.title}</span>
-          </h1>
-          <p className="text-gray-700">{item.text}</p>
-        </div>
-      ))}
+      <div class="mb-5">
+        <h1 class="font-semibold text-xl mb-2"><span class="font-bold">1. Poor Lighting & Dark Workspaces</span></h1>
+        <p class="text-gray-700">Insufficient lighting strains the eyes and reduces alertness. Solution: Maximize natural light and invest in warm, adjustable LED lighting.</p>
+      </div>
+      <div class="mb-5">
+        <h1 class="font-semibold text-xl mb-2"><span class="font-bold">2. Uncomfortable & Outdated Furniture</span></h1>
+        <p class="text-gray-700">Old chairs and poorly designed desks lead to posture problems and discomfort. Solution: Upgrade to ergonomic chairs and height-adjustable desks.</p>
+      </div>
+      <div class="mb-5">
+        <h1 class="font-semibold text-xl mb-2"><span class="font-bold">3. Noisy Open Workspaces Without Quiet Zones</span></h1>
+        <p class="text-gray-700">Excessive noise can lead to distractions and reduced concentration. Solution: Introduce soundproofing elements, phone booths, and designated quiet areas.</p>
+      </div>
+      <div class="mb-5">
+        <h1 class="font-semibold text-xl mb-2"><span class="font-bold">4. Lack of Greenery & Natural Elements</span></h1>
+        <p class="text-gray-700">A dull, lifeless office can feel uninspiring. Solution: Bring in indoor plants, wooden textures, and nature-inspired designs to enhance creativity.</p>
+      </div>
+      <div class="mb-5">
+        <h1 class="font-semibold text-xl mb-2"><span class="font-bold">5. Cluttered & Messy Workstations</span></h1>
+        <p class="text-gray-700">A cluttered workspace leads to mental chaos. Solution: Encourage minimalism, provide ample storage, and use cable management systems.</p>
+      </div>
+      <div class="mb-5">
+        <h1 class="font-semibold text-xl mb-2"><span class="font-bold">6. Inefficient Office Layout & Traffic Flow</span></h1>
+        <p class="text-gray-700">Poorly arranged furniture can lead to bottlenecks and movement disruptions. Solution: Design layouts that enhance accessibility and workflow.</p>
+      </div>
+      <div class="mb-5">
+        <h1 class="font-semibold text-xl mb-2"><span class="font-bold">7. Overuse of Cubicles & Closed-Off Spaces</span></h1>
+        <p class="text-gray-700">A rigid cubicle layout can feel isolating. Solution: Adopt a balance of open and private spaces to encourage interaction and focus.</p>
+      </div>
+      <div class="mb-5">
+        <h1 class="font-semibold text-xl mb-2"><span class="font-bold">8. Ignoring Brand Identity in Office Design</span></h1>
+        <p class="text-gray-700">A generic office lacks inspiration. Solution: Integrate your brand colors, mission, and unique design elements into the space.</p>
+      </div>
+      <div class="mb-5">
+        <h1 class="font-semibold text-xl mb-2"><span class="font-bold">9. No Designated Breakout or Relaxation Areas</span></h1>
+        <p class="text-gray-700">All work and no play leads to burnout. Solution: Create casual lounges, game rooms, or wellness areas for employees to recharge.</p>
+      </div>
+      <div class="mb-5">
+        <h1 class="font-semibold text-xl mb-2"><span class="font-bold">10. Outdated Tech & Lack of Smart Solutions</span></h1>
+        <p class="text-gray-700">Offices that still rely on manual lighting, outdated conferencing tools, and slow Wi-Fi create inefficiencies. Solution: Upgrade to smart automation and AI-driven office systems.</p>
+      </div>
 
-      <h1 className="font-semibold text-xl mb-2">
-        <span className="font-bold">Conclusion</span>
+      <h1 class="font-semibold text-xl mb-2">
+        <span class="font-bold">Conclusion</span>
       </h1>
-      <p className="text-gray-700 mb-4">
+      <p class="text-gray-700 mb-4">
         A few tweaks can turn a chaotic office into a well-organized, productive space. At Workved Interiors, we help businesses revamp their workspaces for efficiency and comfort. Contact us for a consultation!
       </p>
     </div>
-`,
+  `,
   },
   {
     blogimage: "/images/contact1.png",

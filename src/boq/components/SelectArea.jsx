@@ -459,11 +459,11 @@ function SelectArea({
 
   return (
     <div className="fixed inset-0 flex justify-center items-center z-20">
-      <div className="relative bg-[#1A3A36] p-8 rounded-xl max-w-[90%] max-h-screen w-[1000px] scrollbar-hide">
+      <div className="relative bg-[#1A3A36] p-2 lg:p-8 rounded-xl max-w-[90%] max-h-screen w-[1000px] scrollbar-hide">
         {/* Close Button (Common for Both Modals) */}
         <MdOutlineCancel
           size={30}
-          color="white"
+          color="black"
           className="absolute top-1 right-1 cursor-pointer z-50"
           onClick={() => {
             setShowBackground(false); // Hide background before exit animation
@@ -476,7 +476,7 @@ function SelectArea({
           {/* Area Selection Modal */}
           {!showAddon && (
             <div className="overflow-auto">
-              <p className="text-center font-semibold text-lg mb-4">
+              <p className="text-center font-semibold text-sm lg:text-lg mb-4">
                 Select Your Area
               </p>
 
@@ -521,7 +521,7 @@ function SelectArea({
                               e.target.checked
                             )
                           }
-                          className="appearance-none w-4 h-4 cursor-pointer transition duration-300 bg-black checked:border-black
+                          className="appearance-none w-3 h-3 lg:w-4 lg:h-4 cursor-pointer transition duration-300 bg-black checked:border-black
                       relative checked:before:content-['✔'] checked:before:absolute checked:before:text-white 
                       checked:before:top-1/2 checked:before:left-1/2 checked:before:-translate-x-1/2 checked:before:-translate-y-1/2 
                       checked:before:text-[14px] checked:before:font-bold disabled:bg-gray-400 disabled:cursor-not-allowed disabled:opacity-60"
@@ -540,7 +540,7 @@ function SelectArea({
                         />
                         <label
                           htmlFor={`subCategory-${id}`}
-                          className={`text-sm cursor-pointer ${
+                          className={`text-xs lg:text-sm cursor-pointer  ${
                             Array.isArray(selectedData) &&
                             isItemSelected(
                               selectedData,
@@ -565,14 +565,14 @@ function SelectArea({
                       id="selectAll"
                       checked={allSelected}
                       onChange={(e) => handleSelectAll(e.target.checked)}
-                      className="appearance-none w-4 h-4 cursor-pointer transition duration-300 bg-black checked:border-black
+                      className="appearance-none w-3 h-3 lg:w-4 lg:h-4 cursor-pointer transition duration-300 bg-black checked:border-black
                   relative checked:before:content-['✔'] checked:before:absolute checked:before:text-white 
                   checked:before:top-1/2 checked:before:left-1/2 checked:before:-translate-x-1/2 checked:before:-translate-y-1/2 
                   checked:before:text-[14px] checked:before:font-bold"
                     />
                     <label
                       htmlFor="selectAll"
-                      className="text-sm cursor-pointer"
+                      className="text-xs lg:text-sm cursor-pointer"
                     >
                       Select All
                     </label>
@@ -592,7 +592,7 @@ function SelectArea({
               {/* Done Button */}
               <div className="flex justify-center items-center mt-4">
                 <button
-                  className="bg-[#1A3A36] rounded-lg text-sm py-2 px-10 border-2 border-gray-900 text-white"
+                  className="bg-[#1A3A36] rounded-lg text-xs lg:text-sm py-2 px-10 border-2 border-gray-900 text-white"
                   onClick={() => handleDoneClick()}
                 >
                   {submitBtn ? "Submit" : "Next"}
@@ -606,7 +606,7 @@ function SelectArea({
             <div className="flex flex-col lg:flex-row justify-between gap-8">
               {/* Left Side: Selected SubCategories */}
               <div className="flex flex-col gap-2 w-full lg:w-[70%]">
-                <p className="text-center font-semibold text-lg mb-4">
+                <p className="text-center font-semibold text-sm lg:text-lg mb-4">
                   Select Your Addon
                 </p>
                 <div className="grid grid-cols-3 gap-2">
@@ -614,7 +614,7 @@ function SelectArea({
                     <button
                       key={id}
                       onClick={() => setSelectedRoom(room)}
-                      className={`px-4 py-2 border rounded-md transition ${
+                      className={`px-4 py-2 border text-xs lg:text-base rounded-md transition ${
                         selectedRoom === room
                           ? "bg-[#1A3A36] text-white"
                           : "bg-gray-200"
@@ -626,13 +626,13 @@ function SelectArea({
                 </div>
                 <div className="flex justify-evenly items-center mt-auto pb-4">
                   <button
-                    className="bg-[#1A3A36] rounded-lg text-sm py-2 px-10 border-2 border-gray-900 text-white"
+                    className="bg-[#1A3A36] rounded-lg text-xs md:text-sm py-2 px-10 border-2 border-gray-900 text-white"
                     onClick={() => setShowAddon(false)}
                   >
                     Back
                   </button>
                   <button
-                    className="bg-[#1A3A36] rounded-lg text-sm py-2 px-10 border-2 border-gray-900 text-white"
+                    className="bg-[#1A3A36] rounded-lg text-xs md:text-sm py-2 px-10 border-2 border-gray-900 text-white"
                     onClick={() => handleAddonClick()}
                   >
                     Done

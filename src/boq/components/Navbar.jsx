@@ -610,7 +610,7 @@ function Navbar({ toggleProfile, iconRef }) {
           <img
             src="/logo/workved-logo-white.png"
             alt="603 logo"
-            className="h-6 md:h-8 lg:h-10 w-11 md:w-16 lg:w-18 "
+            className="h-auto md:h-8 lg:h-10 w-16 lg:w-18 "
           />
         </button>
         {/* button for generate boq */}

@@ -141,7 +141,7 @@ function ProfileCard({ layout = false, isOpen, setIsOpen, iconRef }) {
           />
         </div>
         {/* Profile Card Content */}
-        <div className="md:rounded-bl-[60px] md:rounded-tl-[60px] shadow-lg overflow-hidden w-full h-full bg-white">
+        <div className="md:rounded-bl-[60px] md:rounded-tl-[60px]  shadow-lg overflow-hidden w-full h-full bg-white">
           {/* Profile Header */}
           <div className="h-1/3 flex flex-col">
             <div className="h-1/2 flex justify-center items-end">
@@ -160,7 +160,7 @@ function ProfileCard({ layout = false, isOpen, setIsOpen, iconRef }) {
           </div>
 
           {/* Features Section */}
-          <div className="font-semibold text-lg capitalize leading-normal tracking-wide py-7 text-[#262626] border-y-2 border-[#ccc] flex flex-col gap-4">
+          <div className="font-semibold xl:text-lg capitalize leading-normal tracking-wide py-7 text-[#262626] border-y-2 border-[#ccc] flex flex-col gap-4">
             <div className="flex items-center mx-4 gap-3">
               <RiDashboardFill />
               <button onClick={() => navigate("/dashboard")}>Dashboard</button>
@@ -205,7 +205,7 @@ function ProfileCard({ layout = false, isOpen, setIsOpen, iconRef }) {
           </div>
 
           {/* Help & Settings Section */}
-          <div className="font-semibold text-lg capitalize leading-normal tracking-wide py-7 text-[#262626] border-b-2 border-[#ccc] flex flex-col gap-4">
+          <div className="font-semibold xl:text-lg capitalize leading-normal tracking-wide py-7 text-[#262626] border-b-2 border-[#ccc] flex flex-col gap-4">
             <div className="flex items-center mx-4 gap-3">
               <BsQuestionCircle />
               <button

@@ -375,7 +375,7 @@ function ProductOverview() {
       )}
 
       <div
-        className={`product-overview grid grid-cols-1 md:grid-cols-2 p-2 md:p-5 gap-1 ${
+        className={`product-overview grid grid-cols-1 md:grid-cols-2 p-2 lg:p-5 gap-1 ${
           showSelectArea ? "opacity-50 pointer-events-none" : "opacity-100"
         }`}
       >
@@ -418,7 +418,7 @@ function ProductOverview() {
           >
             <img
               src={hoveredImage || product?.image}
-              className="object-fit h-96"
+              className="object-fit h-80 lg:h-96"
               alt={product?.title}
             />
           </div>
@@ -550,19 +550,21 @@ function ProductOverview() {
         </div>
       </div>
 
-      <div
-        className={`fixed z-10 right-0 rotate-90 book-tour-btn ${
-          showSelectArea ? "opacity-50 pointer-events-none" : "opacity-100"
-        }`}
-      >
-        <button
-          //   onClick={() => setRequestTour(true)}
-          onClick={() => setShowRecommend(true)}
-          className="text-base text-md  bg-[#1A3A36] text-white  lg:px-4 py-2  rounded-3xl "
+      {import.meta.env.MODE === "development" && (
+        <div
+          className={`fixed z-10 right-0 rotate-90 book-tour-btn ${
+            showSelectArea ? "opacity-50 pointer-events-none" : "opacity-100"
+          }`}
         >
-          Recommendation
-        </button>
-      </div>
+          <button
+            //   onClick={() => setRequestTour(true)}
+            onClick={() => setShowRecommend(true)}
+            className="text-base text-md  bg-[#1A3A36] text-white px-4 lg:px-4 py-2  rounded-3xl "
+          >
+            Recommendation
+          </button>
+        </div>
+      )}
 
       <AnimatePresence>
         {showSelectArea && (

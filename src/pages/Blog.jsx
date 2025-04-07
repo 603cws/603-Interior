@@ -53,7 +53,7 @@ function Blog() {
   const blogs = [
     {
       blogimage: "/images/contact1.png",
-      profileicon: "/images/usericon.png",
+      profileicon: "/images/userprofilenew.png",
       name: "sakshi",
       title:
         "The Future of Office Design: Trends That Will Shape Workspaces in 2025",
@@ -61,28 +61,28 @@ function Blog() {
     },
     {
       blogimage: "/images/contact1.png",
-      profileicon: "/images/usericon.png",
+      profileicon: "/images/userprofilenew.png",
       name: "Sakshi ",
       title: "How to Design a Productive Office Space: A Step-by-Step Guide",
       des: "A well-designed office isn’t just about aesthetics—it directly impacts employee productivity, engagement, and overall job satisfaction",
     },
     {
       blogimage: "/images/contact1.png",
-      profileicon: "/images/usericon.png",
+      profileicon: "/images/userprofilenew.png",
       name: "Sakshi ",
       title: "How AI & Automation Are Changing Interior Design for Offices",
       des: "Gone are the days of manual floor plans and traditional office setups. AI and automation are revolutionizing how companies design their workspaces, making office planning faster, smarter, and more cost-effective. ",
     },
     {
       blogimage: "/images/contact1.png",
-      profileicon: "/images/usericon.png",
+      profileicon: "/images/userprofilenew.png",
       name: "Sakshi ",
       title: "How Office Design Impacts Employee Productivity & Well-Being",
       des: "Your office space is more than just a place to work—it influences mood, motivation, and overall productivity. A well-designed workspace can enhance focus, reduce stress, and foster collaboration, while a poorly planned office can lead to distractions, fatigue, and disengagement.",
     },
     {
       blogimage: "/images/contact1.png",
-      profileicon: "/images/usericon.png",
+      profileicon: "/images/userprofilenew.png",
       name: "Sakshi ",
       title: "10 Office Design Mistakes That Are Killing Your Productivity",
       des: "Your officeYour office layout might be working against you. From poor lighting to cluttered spaces, minor design flaws can impact focus and efficiency. layout might be working against you. From poor lighting to cluttered spaces, minor design flaws can impact focus and efficiency.",
@@ -189,7 +189,7 @@ function Blog() {
                   <div className="font-Poppins mx-5">
                     {/* user div */}
                     <div className="flex justify-start items-center w-3/4 gap-5 my-4">
-                      <div>
+                      <div className="w-10 h-10">
                         <img src={blog.profileicon} alt="user icon" />
                       </div>
 
@@ -200,7 +200,7 @@ function Blog() {
                       </h6> */}
                     <h6
                       className="font-semibold text-xl capitalize mb-1"
-                      onClick={() => navigate(`${blog.title}`)}
+                      // onClick={() => navigate(`${blog.title}`)}
                     >
                       {blog.title}
                     </h6>

@@ -151,6 +151,12 @@ function Footer() {
               >
                 terms
               </li>
+              <li
+                onClick={() => navigate("/privacy-policy")}
+                className=" cursor-pointer"
+              >
+                Privacy Policy
+              </li>
               <li className="cursor-pointer" onClick={() => navigate("/Blog")}>
                 blog
               </li>

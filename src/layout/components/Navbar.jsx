@@ -399,7 +399,7 @@ function Navbar({
             {/* logo */}
             <button className=" " onClick={() => navigate("/")}>
               <img
-                src="/logo/logo.png"
+                src="/logo/workved-logo-white.png"
                 alt="603 logo"
                 className="h-auto w-14"
               />

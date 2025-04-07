@@ -73,57 +73,51 @@ function BookAppointment({ onClose }) {
 
     try {
       if (selectedTIme) {
-        const data = {
-          service_id: serviceid,
-          template_id: clienttemplateID,
-          user_id: your_public_key,
-          template_params: {
-            our_companyname: "Workved Interiors",
-            username: accountHolder.companyName,
-            date: formattedDate,
-            time: selectedTIme,
-            to_email: accountHolder.email,
-          },
-        };
-        const Admindata = {
-          service_id: serviceid,
-          template_id: adminTemplateID,
-          user_id: your_public_key,
-          template_params: {
-            our_companyname: "Workved Interiors",
-            companyname: accountHolder.companyName,
-            date: formattedDate,
-            time: selectedTIme,
-            user_email: accountHolder.email,
-            user_phoneno: accountHolder.phone,
-          },
-        };
-
-        const response = await axios.post(
-          "https://api.emailjs.com/api/v1.0/email/send",
-          data,
-          {
-            headers: { "Content-Type": "application/json" },
-          }
-        );
-
-        const adminResponse = await axios.post(
-          "https://api.emailjs.com/api/v1.0/email/send",
-          Admindata,
-          {
-            headers: { "Content-Type": "application/json" },
-          }
-        );
-
-        console.log("Email sent successfully:", response.data);
-        console.log("admin email sent", adminResponse.data);
-
+        // const data = {
+        //   service_id: serviceid,
+        //   template_id: clienttemplateID,
+        //   user_id: your_public_key,
+        //   template_params: {
+        //     our_companyname: "Workved Interiors",
+        //     username: accountHolder.companyName,
+        //     date: formattedDate,
+        //     time: selectedTIme,
+        //     to_email: accountHolder.email,
+        //   },
+        // };
+        // const Admindata = {
+        //   service_id: serviceid,
+        //   template_id: adminTemplateID,
+        //   user_id: your_public_key,
+        //   template_params: {
+        //     our_companyname: "Workved Interiors",
+        //     companyname: accountHolder.companyName,
+        //     date: formattedDate,
+        //     time: selectedTIme,
+        //     user_email: accountHolder.email,
+        //     user_phoneno: accountHolder.phone,
+        //   },
+        // };
+        // const response = await axios.post(
+        //   "https://api.emailjs.com/api/v1.0/email/send",
+        //   data,
+        //   {
+        //     headers: { "Content-Type": "application/json" },
+        //   }
+        // );
+        // const adminResponse = await axios.post(
+        //   "https://api.emailjs.com/api/v1.0/email/send",
+        //   Admindata,
+        //   {
+        //     headers: { "Content-Type": "application/json" },
+        //   }
+        // );
+        // console.log("Email sent successfully:", response.data);
+        // console.log("admin email sent", adminResponse.data);
         // alert("Your mail is sent!");
         toast.success("we will shortly reach you");
-
         setIsappointmentbooked(true);
-
-        saveBookingDatainDB(formattedDate, weekday, endtime);
+        // saveBookingDatainDB(formattedDate, weekday, endtime);
       } else {
         toast.error("please select the time");
       }
@@ -167,22 +161,22 @@ function BookAppointment({ onClose }) {
   // }, [isappointmentbooked]);
 
   return (
-    <div className="fixed inset-0 font-Poppins flex justify-center items-center z-20 bg-black bg-opacity-80">
-      <div className="max-w-4xl rounded-2xl border bg-[#fff] p-5 relative">
+    <div className="md:fixed md:inset-0 font-Poppins flex justify-center items-center z-20 bg-black bg-opacity-80">
+      <div className="max-w-sm md:max-w-4xl rounded-2xl border bg-[#fff] p-5 relative overflow-auto">
         <div className="absolute right-5 top-5">
           <IoMdClose onClick={onClose} size={20} className="cursor-pointer" />
         </div>
-        <h2 className="font-semibold text-lg text-[#000] capitalize border-b-2 border-[#CCCCCC]">
+        <h2 className="font-semibold text-sm md:text-lg text-[#000] capitalize border-b-2 border-[#CCCCCC]">
           appointment
         </h2>
         <div className=" flex justify-center items-center ">
           {!isappointmentbooked ? (
-            <div className="max-w-3xl p-4 my-5">
-              <h3 className="text-[#0BA1A1] text-2xl font-bold text-center my-3">
+            <div className="max-w-sm md:max-w-3xl p-4 md:my-5">
+              <h3 className="text-[#0BA1A1] text-lg md:text-2xl font-bold text-center my-3">
                 Book an Appointment
               </h3>
               {/* div for calender and times  */}
-              <div className="flex justify-around items-stretch gap-4 xl:gap-6">
+              <div className="flex flex-col md:flex-row justify-around items-stretch gap-4 xl:gap-6 mx-3 md:mx-0">
                 {/* calender */}
                 <div>
                   <h3 className="text-sm text-[#111] font-medium ">
@@ -209,7 +203,7 @@ function BookAppointment({ onClose }) {
                 </div>
                 {/* times */}
                 <div>
-                  <h4 className="text-[#111] font-medium text-base mb-3">
+                  <h4 className="text-[#111] font-medium text-sm md:text-base mb-3">
                     select time*
                   </h4>
                   <div className="grid grid-cols-3 gap-x-5 gap-y-3">
@@ -217,7 +211,7 @@ function BookAppointment({ onClose }) {
                       <button
                         key={time}
                         onClick={(e) => handletime(time)}
-                        className={` border border-[#757575] px-4 py-3 rounded-xl text-xs xl:text-sm ${
+                        className={` border border-[#757575] px-2 py-1 md:px-4 md:py-3 rounded-xl text-xs xl:text-sm ${
                           selectedTIme === time
                             ? "text-[#ebffff] bg-[#194f48]"
                             : "text-[#194F48] bg-[#EBFFFF]"
@@ -227,7 +221,7 @@ function BookAppointment({ onClose }) {
                       </button>
                     ))}
                   </div>
-                  <div className="flex items-center bg-[#FEF4EB] gap-2 mt-10">
+                  <div className="flex items-center bg-[#FEF4EB] gap-2 mt-4 md:mt-10">
                     <div>
                       <PiWarningCircleFill color="#D59E61" size={20} />
                     </div>
@@ -238,10 +232,10 @@ function BookAppointment({ onClose }) {
                 </div>
               </div>
               {/* button for submit */}
-              <div className="flex justify-center items-center my-4">
+              <div className="flex justify-center items-center my-2 md:my-4">
                 <button
                   onClick={handlesubmi}
-                  className="px-5 py-3 bg-[#0BA1A1] text-[#fafafa] rounded-lg"
+                  className="px-2 py-1 md:px-5 md:py-3 bg-[#0BA1A1] text-[#fafafa] rounded-lg"
                   disabled={isSubmitting}
                 >
                   {isSubmitting ? (
