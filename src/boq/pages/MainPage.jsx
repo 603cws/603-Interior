@@ -86,7 +86,7 @@ const MainPage = ({ userResponses, setSelectedSubCategory1, productsData }) => {
       animate="visible"
       exit="exit"
       variants={fadeInVariant}
-      className="main-page flex flex-row gap-4 items-center justify-start relative overflow-hidden px-8 font-Poppins"
+      className="main-page flex flex-row gap-4 items-center justify-start relative overflow-auto md:px-8 font-Poppins w-4/5 md:w-full scrollbar-hide"
     >
       <AnimatePresence mode="wait">
         {selectedSubCategories.length > 0 ? (
@@ -97,14 +97,14 @@ const MainPage = ({ userResponses, setSelectedSubCategory1, productsData }) => {
               initial="hidden"
               animate="visible"
               exit="exit"
-              className={`border-solid border-[#000000] border flex flex-col gap-2.5 items-start shrink-0 w-auto h-10 justify-center relative rounded-xl cursor-pointer transition-all duration-300 ${
+              className={`border-solid border-[#000000] border flex flex-col gap-2.5 items-start shrink-0 w-auto h-8 md:h-10 justify-center relative rounded-xl cursor-pointer transition-all duration-300 ${
                 selectedSubCategory1 === subCategory1
                   ? "bg-[#82b8b0]" // Selected item styling
                   : "bg-white hover:bg-[#b9e3de]"
               }`}
               onClick={() => setSelectedSubCategory1(subCategory1)}
             >
-              <motion.button className="text-[#252525] text-center text-md leading-[30px] font-normal relative flex items-center justify-center px-7">
+              <motion.button className="text-[#252525] text-center text-xs md:text-base leading-[30px] font-normal relative flex items-center justify-center px-7">
                 {subCategory1}
               </motion.button>
             </motion.div>

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useApp } from "../../Context/Context";
-import { CiCirclePlus } from "react-icons/ci";
+import { CiCirclePlus, CiFilter } from "react-icons/ci";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -45,6 +45,7 @@ function ProductCard({
   const [loadingImages, setLoadingImages] = useState({}); // Track image loading
 
   const [filtervalue, setFiltervalue] = useState(selectedPlan);
+  const [showMobileFilter, setShowMobileFilter] = useState(false);
 
   const productsInSubCategory = productsInCategory[selectedSubCategory] || [];
 
@@ -137,12 +138,12 @@ function ProductCard({
   };
 
   return (
-    <div className="product-card grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 3xl:grid-cols-6 gap-6 pb-8 pt-3 px-8 relative">
-      <div className="absolute right-10 -top-8 border-2 rounded-lg">
+    <div className="product-card grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 3xl:grid-cols-6 gap-6 pb-8 pt-3 md:px-8 relative">
+      {/* <div className="absolute right-0 md:right-10 -top-8 border-2 rounded-lg">
         <select
           name="plans"
           id="plans"
-          className="px-5 py-1 rounded-lg"
+          className="hidden md:block md:px-5 md:py-1 rounded-lg text-xs md:text-base"
           value={filtervalue}
           onChange={(e) => setFiltervalue(e.target.value)}
         >
@@ -151,6 +152,51 @@ function ProductCard({
           <option value="Exclusive">Exclusive</option>
           <option value="Luxury">Luxury</option>
         </select>
+      </div> */}
+
+      <div className="absolute right-0 md:right-10 -top-8 border-2 rounded-lg">
+        {/* Mobile: Filter Icon */}
+        <button
+          className="md:hidden p-2"
+          onClick={() => setShowMobileFilter(!showMobileFilter)} // 👈 Show mobile dropdown/modal
+        >
+          <CiFilter className="h-5 w-5 text-gray-700" />
+        </button>
+
+        {/* Desktop: Show select */}
+        <select
+          name="plans"
+          id="plans"
+          className="hidden md:block md:px-5 md:py-1 rounded-lg text-xs md:text-base"
+          value={filtervalue}
+          onChange={(e) => setFiltervalue(e.target.value)}
+        >
+          <option value="Custom">Custom</option>
+          <option value="Minimal">Minimal</option>
+          <option value="Exclusive">Exclusive</option>
+          <option value="Luxury">Luxury</option>
+        </select>
+
+        {/* Optional: Mobile dropdown (shown when icon is clicked) */}
+        {showMobileFilter && (
+          // <div className="absolute top-10 right-0 bg-white border rounded-lg shadow-md p-2 md:hidden z-20">
+          <select
+            name="plans"
+            id="mobile-plans"
+            className="text-sm px-3 py-1 absolute top-10 right-0 bg-white border rounded-lg shadow-md p-2 md:hidden z-20"
+            value={filtervalue}
+            onChange={(e) => {
+              setFiltervalue(e.target.value);
+              setShowMobileFilter(false); // close after selecting
+            }}
+          >
+            <option value="Custom">Custom</option>
+            <option value="Minimal">Minimal</option>
+            <option value="Exclusive">Exclusive</option>
+            <option value="Luxury">Luxury</option>
+          </select>
+          // </div>
+        )}
       </div>
 
       {loading ? (
@@ -196,7 +242,7 @@ function ProductCard({
                     clipPath: "polygon(0 0, 100% 0, 85% 100%, 0% 100%)",
                   }}
                 >
-                  <h4>{variant.segment}</h4>
+                  <h4 className="text-xs md:text-base">{variant.segment}</h4>
                 </div>
               )}
 
@@ -206,7 +252,7 @@ function ProductCard({
                   <div className="absolute inset-0 bg-gray-200 animate-pulse rounded-t-lg"></div>
                 )}
                 <img
-                  className={`rounded-t-lg w-full h-64 object-contain transition-opacity duration-300 ${
+                  className={`rounded-t-lg w-full h-36 md:h-64 object-contain transition-opacity duration-300 mt-5 md:mt-0 ${
                     loadingImages[variant.id] !== false
                       ? "opacity-0"
                       : "opacity-100"
@@ -217,11 +263,11 @@ function ProductCard({
                   onClick={() => {
                     setSelectedProductView(variant);
                     setShowProductView(true);
-                  navigate(`${variant.id}`); //new ProductOverview
+                    navigate(`${variant.id}`); //new ProductOverview
                   }}
                 />
                 {/* CiCirclePlus Icon - Positioned at Bottom Right */}
-                <div className="absolute bottom-2 right-2 bg-white rounded-full p-1 shadow-md cursor-pointer">
+                <div className="absolute -bottom-10 md:bottom-2 -right-2 md:right-2 bg-white rounded-full p-1 shadow-md cursor-pointer">
                   <CiCirclePlus
                     size={30}
                     color="#A1A1A1"
@@ -240,7 +286,7 @@ function ProductCard({
                   onClick={() => {
                     setSelectedProductView(variant);
                     setShowProductView(true);
-                  navigate(`${variant.id}`); //new ProductOverview
+                    navigate(`${variant.id}`); //new ProductOverview
                   }}
                 >
                   {variant.title.toLowerCase()}

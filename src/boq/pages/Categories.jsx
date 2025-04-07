@@ -173,9 +173,13 @@ const Categories = ({
   console.log("categories", categories);
   return (
     <>
-      <div className="categories flex flex-col pb-3">
+      <div className="categories flex flex-col pb-1.5 md:pb-3">
         {/* Categories List */}
-        <div className="cat flex justify-evenly overflow-x-auto gap-1 md:gap-3 px-0 lg:px-5 pb-2 scrollbar-hide">
+        <div
+          className={`cat flex justify-evenly overflow-x-auto gap-1 md:gap-3  lg:px-5 scrollbar-hide ${
+            minimizedView ? "px-0" : "pb-2 px-2"
+          }`}
+        >
           {categories.map(({ id, category, subcategories }) => {
             const cleanedCategoryName = getCleanedCategoryName(category);
             const isCategoryCompleted = checkIfCategoryCompleted(category); // Check if the category is completed
@@ -187,7 +191,7 @@ const Categories = ({
                 onClick={() => handleCategoryClick(id, category, subcategories)}
                 className={`transition-transform duration-500 ease-in-out cursor-pointer ${
                   isSelected ? "scale-100" : "scale-95"
-                }`}
+                } ${minimizedView ? "px-2 py-1" : "p-0"}`}
               >
                 {!minimizedView && (
                   <div
@@ -220,20 +224,20 @@ const Categories = ({
                 {minimizedView && (
                   <div
                     // className={` flex flex-row items-center justify-start relative group py-2`}
-                    className={`font-Poppins flex flex-col justify-center items-center text-xs gap-2 mt-3 relative group`}
+                    className={`font-Poppins flex flex-col justify-center items-center text-xs gap-1 md:gap-2 md:mt-3 relative group`}
                   >
                     <div
                       className={`border-2 ${
                         isCategoryCompleted
                           ? "border-[#f4f4f4] border-[1px] bg-[#34BFAD] shadow-[0_0_10px_#93FCEE] animate-pulse"
                           : selectedCategory?.id === id
-                          ? "border-[#34BFAD] scale-75"
+                          ? "border-[#34BFAD] scale-105"
                           : "border-[#000000]"
-                      } w-16 h-16 rounded-full flex justify-center items-center group-hover:scale-75 transition-transform duration-[1000ms] ease-in-out`}
+                      }  w-14 md:w-16 h-14 md:h-16 rounded-full flex justify-center items-center group-hover:scale-105 transition-transform duration-[1000ms] ease-in-out`}
                     >
                       <img
                         // className="rounded-full w-[30px] h-[30px] object-contain"
-                        className="w-10 h-10"
+                        className="w-7 md:w-10 h-7 md:h-10"
                         src={imageSrc}
                         alt={`${category} icon`}
                       />
@@ -254,7 +258,7 @@ const Categories = ({
 
         {/* Subcategories */}
         {selectedCategory && (
-          <div className="mt-2 font-Poppins">
+          <div className="md:mt-2 font-Poppins">
             {minimizedView && (
               <motion.div
                 key={selectedCategory.category} // Ensures animation applies on category change
@@ -284,14 +288,14 @@ const Categories = ({
                         onClick={() => setSelectedSubCategory(subCategory)}
                         whileHover={{ scale: 1.05 }}
                         transition={{ duration: 0.3 }}
-                        className={`rounded-xl flex flex-row items-start justify-center shrink-0 mx-3 group px-5 ${
+                        className={`rounded-xl flex flex-row items-start justify-center shrink-0 mx-3 group md:px-5 ${
                           isCompleted
                             ? "border-2 border-[#f4f4f4] bg-[#34BFAD]"
                             : ""
                         }`}
                       >
                         <p
-                          className={`relative text-[#252525] text-center text-sm flex items-center justify-center py-3 cursor-pointer ${
+                          className={`relative text-[#252525] text-center text-xs md:text-sm flex items-center justify-center py-3 cursor-pointer ${
                             isCompleted ? "font-semibold" : "font-normal"
                           }`}
                         >
