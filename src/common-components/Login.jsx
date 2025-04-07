@@ -282,6 +282,32 @@ function Login() {
     }
   };
 
+  const signInWithGoogle = async () => {
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: {
+        redirectTo: `${window.location.origin}/complete-profile`, // Redirect to profile completion page
+      },
+    });
+
+    if (error) {
+      console.error("Google Login Error:", error.message);
+    }
+  };
+
+  const signInWithFacebook = async () => {
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: "facebook",
+      options: {
+        redirectTo: `${window.location.origin}/complete-profile`,
+      },
+    });
+
+    if (error) {
+      console.error("Facebook Login Error:", error.message);
+    }
+  };
+
   return (
     <>
       {resetPass ? (
@@ -640,19 +666,28 @@ function Login() {
                     </p>
 
                     {/* Social Login */}
-                    {/* <div className="flex justify-center gap-3 items-center xl:w-3/4">
-                      <hr className="w-2/5" />
-                      <span className="text-white">or</span>
-                      <hr className="w-2/5" />
-                    </div>
-                    <div className="xl:w-3/4 flex justify-center gap-5">
-                      <FcGoogle size={30} className="cursor-pointer" />
-                      <FaFacebook
-                        fill="blue"
-                        size={30}
-                        className="bg-white rounded-full cursor-pointer bg-contain"
-                      />
-                    </div> */}
+                    {import.meta.env.MODE === "development" && (
+                      <>
+                        <div className="flex justify-center gap-3 items-center xl:w-3/4">
+                          <hr className="w-2/5" />
+                          <span className="text-white">or</span>
+                          <hr className="w-2/5" />
+                        </div>
+                        <div className="xl:w-3/4 flex justify-center gap-5">
+                          <FcGoogle
+                            size={30}
+                            className="cursor-pointer"
+                            onClick={signInWithGoogle}
+                          />
+                          <FaFacebook
+                            fill="blue"
+                            size={30}
+                            className="bg-white rounded-full cursor-pointer bg-contain"
+                            onClick={signInWithFacebook}
+                          />
+                        </div>
+                      </>
+                    )}
                   </>
                 )}
               </div>

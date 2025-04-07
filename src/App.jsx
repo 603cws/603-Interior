@@ -3,9 +3,7 @@ import { lazy, Suspense } from "react";
 // import Layout from "./layout/pages/Layout";
 import Boq from "./boq/pages/Boq";
 import PageNotFound from "./common-components/PageNotFound";
-
-import { Route, Routes } from "react-router-dom";
-// import RegisterUser from "./layout/components/RegisterUser";
+import { Navigate, Route, Routes } from "react-router-dom";
 import ErrorModal from "./common-components/ErrorModal";
 import RecommendComp from "./boq/components/RecommendComp";
 import SelectArea from "./boq/components/SelectArea";
@@ -15,7 +13,6 @@ import Contactus from "./pages/Contactus";
 import AboutUs from "./pages/AboutUs";
 import Login from "./common-components/Login";
 import OurServices from "./pages/OurServices";
-
 import BlogDetail from "./pages/BlogDetail";
 import ProfileCard from "./boq/components/ProfileCard";
 import Dashboard from "./pages/Dashboard";
@@ -24,12 +21,9 @@ import BecomeSeller from "./pages/BecomeSeller";
 import { useApp } from "./Context/Context";
 import Plans from "./common-components/Plans";
 import HelpnFaq from "./pages/HelpnFaq";
-
 import TermsAndCondition from "./pages/TermsAndCondition";
-
 import Boqcompleted from "./common-components/Boqcompleted";
 import Howtosell from "./pages/Howtosell";
-
 import VendorDashboard from "./pages/vendor/VendorDashboard";
 // import AdminDashboard from "./pages/AdminDashboard";
 import AdminDashboard from "./pages/Admin/AdminDashboard";
@@ -43,14 +37,12 @@ import Brokenlink from "./pages/Brokenlink";
 import TokenExpired from "./pages/TokenExpired";
 import JobPage from "./pages/JobPage";
 import ThreeDViewer from "./common-components/ThreeDViewer";
-
+import CompleteProfile from "./common-components/CompleteProfile";
 import PartnerWorkvedInterior from "./pages/PartnerWorkvedInterior";
 import Privacy from "./pages/Privacy";
 
 // const Homepage = lazy(() => import("./pages/Homepage"));
-
 const Layout = lazy(() => import("./layout/pages/Layout"));
-
 const BlogPage = lazy(() => import("./pages/Blog"));
 const Carrer = lazy(() => import("./pages/Carrer"));
 
@@ -90,6 +82,11 @@ function App() {
             <Route path="/ThreeDViewer" element={<ThreeDViewer />} />
             <Route path="*" element={<PageNotFound />} />
             <Route path="/Login" element={<Login />} />
+            <Route path="/complete-profile" element={<CompleteProfile />} />
+            <Route
+              path="/complete-profile/*"
+              element={<Navigate to="/complete-profile" />}
+            />
             <Route path="/OurServices" element={<OurServices />} />
             <Route path="/Career/:jobTitle" element={<JobPage />} />
             <Route path="/profile" element={<ProfileCard />} />
@@ -145,6 +142,11 @@ function App() {
             <Route path="/ThreeDViewer" element={<ThreeDViewer />} />
             <Route path="*" element={<PageNotFound />} />
             <Route path="/Login" element={<Login />} />
+            <Route path="/complete-profile" element={<CompleteProfile />} />
+            <Route
+              path="/complete-profile/*"
+              element={<Navigate to="/complete-profile" />}
+            />
             <Route path="/OurServices" element={<OurServices />} />
             <Route path="/Career/:jobTitle" element={<JobPage />} />
             <Route path="/profile" element={<ProfileCard />} />
