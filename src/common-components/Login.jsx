@@ -673,23 +673,26 @@ function Login() {
                           /> */}
 
                     {/* Social Login */}
-
-                    <div className="flex justify-center gap-3 items-center xl:w-3/4">
-                      <hr className="w-2/5" />
-                      <span className="text-white">or</span>
-                      <hr className="w-2/5" />
-                    </div>
-                    <div className="xl:w-3/4 flex justify-center gap-5">
-                      <div
-                        className="flex items-center gap-2 bg-white text-black px-4 py-2 rounded-md cursor-pointer shadow-md hover:shadow-lg transition"
-                        onClick={signInWithGoogle}
-                      >
-                        <FcGoogle size={24} />
-                        <span className="font-medium">
-                          Continue with Google
-                        </span>
-                      </div>
-                    </div>
+                    {import.meta.env.MODE === "development" && (
+                      <>
+                        <div className="flex justify-center gap-3 items-center xl:w-3/4">
+                          <hr className="w-2/5" />
+                          <span className="text-white">or</span>
+                          <hr className="w-2/5" />
+                        </div>
+                        <div className="xl:w-3/4 flex justify-center gap-5">
+                          <div
+                            className="flex items-center gap-2 bg-white text-black px-4 py-2 rounded-md cursor-pointer shadow-md hover:shadow-lg transition"
+                            onClick={signInWithGoogle}
+                          >
+                            <FcGoogle size={24} />
+                            <span className="font-medium">
+                              Continue with Google
+                            </span>
+                          </div>
+                        </div>
+                      </>
+                    )}
                   </>
                 )}
               </div>
