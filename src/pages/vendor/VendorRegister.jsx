@@ -172,7 +172,11 @@ function VendorRegister() {
         <div className=" max-w-sm sticky left-0 top-0 bottom-0">
           {/* Logo */}
           <div className="cursor-pointer flex justify-center items-center mt-8">
-            <img src="/logo/logo.png" alt="Logo" className="h-20 w-32" />
+            <img
+              src="/logo/workved-interior.png"
+              alt="Logo"
+              className="h-20 w-32"
+            />
           </div>
 
           {/* Main Menu */}

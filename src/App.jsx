@@ -113,7 +113,7 @@ function App() {
             <Route path="/becomeseller" element={<BecomeSeller />} />
             <Route path="/plans" element={<Plans />} />
             <Route path="/help" element={<HelpnFaq />} />
-            <Route path="/termsNcondtion" element={<TermsAndCondition />} />
+            <Route path="/termsNcondition" element={<TermsAndCondition />} />
             <Route path="/boqcompleted" element={<Boqcompleted />} />
             <Route path="/howtosell" element={<Howtosell />} />
             <Route path="/vendordashboard" element={<VendorDashboard />} />
@@ -152,7 +152,7 @@ function App() {
             <Route path="/profile" element={<ProfileCard />} />
             <Route path="/becomeseller" element={<BecomeSeller />} />
             <Route path="/help" element={<HelpnFaq />} />
-            <Route path="/termsNcondtion" element={<TermsAndCondition />} />
+            <Route path="/termsNcondition" element={<TermsAndCondition />} />
             {/* <Route path="/vendordashboard" element={<VendorDashboard />} /> */}
             <Route path="/bookappointment" element={<BookAppointment />} />
             <Route path="/howtosell" element={<Howtosell />} />

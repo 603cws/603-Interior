@@ -140,13 +140,13 @@ function Footer() {
                 FAQ's
               </li>
               <li
-                onClick={() => navigate("/termsNcondtion")}
+                onClick={() => navigate("/termsNcondition")}
                 className="hidden xl:block cursor-pointer"
               >
                 terms & conditions
               </li>
               <li
-                onClick={() => navigate("/termsNcondtion")}
+                onClick={() => navigate("/termsNcondition")}
                 className="xl:hidden cursor-pointer"
               >
                 terms

@@ -597,7 +597,7 @@ function Dashboard() {
           {/* Logo */}
           <div className="cursor-pointer flex justify-center items-center py-4">
             <img
-              src="/logo/logo.png"
+              src="/logo/workved-interior.png"
               alt="Logo"
               className={`${isExpanded ? "h-20 w-32" : "size-12"}`}
             />

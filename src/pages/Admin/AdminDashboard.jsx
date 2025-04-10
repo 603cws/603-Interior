@@ -654,7 +654,7 @@ function AdminDashboard() {
           {/* Logo */}
           <div className="cursor-pointer flex justify-center items-center py-4">
             <img
-              src="/logo/logo.png"
+              src="/logo/workved-interior.png"
               alt="Logo"
               onClick={() => navigate("/")}
               className={`${isExpanded ? "h-20 w-32" : "h-10 w-14"}`}

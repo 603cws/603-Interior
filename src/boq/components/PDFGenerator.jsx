@@ -16,7 +16,7 @@ const PDFGenerator = {
     const baseImageUrl =
       "https://bwxzfwsoxwtzhjbzbdzs.supabase.co/storage/v1/object/public/addon/";
 
-    const logoUrl = "/logo/logo.png";
+    const logoUrl = "/logo/workved-interior.png";
 
     // Add the logo to the top-left corner
     doc.addImage(logoUrl, "PNG", 10, 10, 20, 20); // Slightly larger for better visibility

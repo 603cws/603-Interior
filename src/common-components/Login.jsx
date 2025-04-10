@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { supabase } from "../services/supabase";
-import { FaAngleLeft, FaFacebook } from "react-icons/fa6";
+import { FaAngleLeft } from "react-icons/fa6";
 import { FcGoogle } from "react-icons/fc";
 import { IoEyeOffOutline, IoEyeOutline } from "react-icons/io5";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -295,18 +295,18 @@ function Login() {
     }
   };
 
-  const signInWithFacebook = async () => {
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: "facebook",
-      options: {
-        redirectTo: `${window.location.origin}/complete-profile`,
-      },
-    });
+  // const signInWithFacebook = async () => {
+  //   const { error } = await supabase.auth.signInWithOAuth({
+  //     provider: "facebook",
+  //     options: {
+  //       redirectTo: `${window.location.origin}/complete-profile`,
+  //     },
+  //   });
 
-    if (error) {
-      console.error("Facebook Login Error:", error.message);
-    }
-  };
+  //   if (error) {
+  //     console.error("Facebook Login Error:", error.message);
+  //   }
+  // };
 
   return (
     <>
@@ -665,29 +665,31 @@ function Login() {
                       )}
                     </p>
 
-                    {/* Social Login */}
-                    {import.meta.env.MODE === "development" && (
-                      <>
-                        <div className="flex justify-center gap-3 items-center xl:w-3/4">
-                          <hr className="w-2/5" />
-                          <span className="text-white">or</span>
-                          <hr className="w-2/5" />
-                        </div>
-                        <div className="xl:w-3/4 flex justify-center gap-5">
-                          <FcGoogle
-                            size={30}
-                            className="cursor-pointer"
-                            onClick={signInWithGoogle}
-                          />
-                          <FaFacebook
+                    {/* <FaFacebook
                             fill="blue"
                             size={30}
                             className="bg-white rounded-full cursor-pointer bg-contain"
                             onClick={signInWithFacebook}
-                          />
-                        </div>
-                      </>
-                    )}
+                          /> */}
+
+                    {/* Social Login */}
+
+                    <div className="flex justify-center gap-3 items-center xl:w-3/4">
+                      <hr className="w-2/5" />
+                      <span className="text-white">or</span>
+                      <hr className="w-2/5" />
+                    </div>
+                    <div className="xl:w-3/4 flex justify-center gap-5">
+                      <div
+                        className="flex items-center gap-2 bg-white text-black px-4 py-2 rounded-md cursor-pointer shadow-md hover:shadow-lg transition"
+                        onClick={signInWithGoogle}
+                      >
+                        <FcGoogle size={24} />
+                        <span className="font-medium">
+                          Continue with Google
+                        </span>
+                      </div>
+                    </div>
                   </>
                 )}
               </div>
