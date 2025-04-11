@@ -290,6 +290,8 @@ function Login() {
       },
     });
 
+    console.log("Window Location:", window.location.origin);
+
     if (error) {
       console.error("Google Login Error:", error.message);
     }
