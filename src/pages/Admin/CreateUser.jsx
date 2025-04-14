@@ -305,6 +305,10 @@ function CreateUser() {
                     value={formData.category}
                     onChange={handleCategoryChange}
                     placeholder="Select Category"
+                    menuPortalTarget={document.body}
+                    styles={{
+                      menuPortal: (base) => ({ ...base, zIndex: 9999 }),
+                    }}
                   />
                 </div>
               )}
