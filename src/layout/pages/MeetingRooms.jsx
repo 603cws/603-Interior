@@ -12,16 +12,16 @@ const meetingRoomData = [
   // },
   {
     type: "interviewRoom",
-    // image: "/images/workspace-image/interviewRoom.png",
-    image: "/images/workstation-wp/interview-wp.webp",
+    image: "/images/workspace-image/interviewRoom.png",
+    // image: "/images/workstation-wp/interview-wp.webp",
     description:
       "This is the interview room, designed for conducting interviews.",
     tooltipText: "size: 100 sqft",
   },
   {
     type: "conferenceRoom",
-    // image: "/images/workspace-image/conferenceRoom.png",
-    image: "/images/workstation-wp/conf-wp.webp",
+    image: "/images/workspace-image/conferenceRoom.png",
+    // image: "/images/workstation-wp/conf-wp.webp",
     description: "This is the conference room, suitable for large meetings.",
     slider: {
       name: "Conference Room Size",
@@ -34,8 +34,8 @@ const meetingRoomData = [
   },
   {
     type: "boardRoom",
-    // image: "/images/workspace-image/boardRoom.png",
-    image: "/images/workstation-wp/boardroom-wp.webp",
+    image: "/images/workspace-image/boardRoom.png",
+    // image: "/images/workstation-wp/boardroom-wp.webp",
     description: "This is the board room, equipped for executive meetings.",
     slider: {
       name: "Board Room Size",
@@ -49,22 +49,22 @@ const meetingRoomData = [
   },
   {
     type: "meetingRoom",
-    // image: "/images/workspace-image/meetingRoom.png",
-    image: "/images/workstation-wp/meetingroom-wp.webp",
+    image: "/images/workspace-image/meetingRoom.png",
+    // image: "/images/workstation-wp/meetingroom-wp.webp",
     description: "This is the meeting room, perfect for team meetings.",
     tooltipText: "size: 120 sqft \n Seats: 6 pax",
   },
   {
     type: "meetingRoomLarge",
-    // image: "/images/workspace-image/meetingRoomLarge.png",
-    image: "/images/workstation-wp/meetroomlarge-wp.webp",
+    image: "/images/workspace-image/meetingRoomLarge.png",
+    // image: "/images/workstation-wp/meetroomlarge-wp.webp",
     description: "This is the large meeting room, accommodating larger groups.",
     tooltipText: "size: 150 sqft \n Seats: 8 pax",
   },
   {
     type: "hrRoom",
-    // image: "/images/workspace-image/hrRoom.png",
-    image: "/images/workstation-wp/hr-wp.webp",
+    image: "/images/workspace-image/hrRoom.png",
+    // image: "/images/workstation-wp/hr-wp.webp",
     description: "This is the HR room, designated for HR activities.",
     tooltipText: "size: 80 sqft",
     slider: {
@@ -80,8 +80,8 @@ const meetingRoomData = [
   },
   {
     type: "financeRoom",
-    // image: "/images/workspace-image/financeRoom.png",
-    image: "/images/workstation-wp/finance-wp.webp",
+    image: "/images/workspace-image/financeRoom.png",
+    // image: "/images/workstation-wp/finance-wp.webp",
     description: "This is the finance room, used for financial discussions.",
     tooltipText: "size: 100 sqft",
     slider: {
@@ -97,8 +97,8 @@ const meetingRoomData = [
   },
   {
     type: "sales",
-    // image: "/images/workspace-image/sales.png",
-    image: "/images/workstation-wp/sales-wp.webp",
+    image: "/images/workspace-image/sales.png",
+    // image: "/images/workstation-wp/sales-wp.webp",
     description: "This is the sales area, designed for sales team activities.",
     tooltipText: "size: 80 sqft",
     slider: {
@@ -114,8 +114,8 @@ const meetingRoomData = [
   },
   {
     type: "videoRecordingRoom",
-    // image: "/images/workspace-image/videoRecordingRoom.png",
-    image: "/images/workstation-wp/videocon-wp.webp",
+    image: "/images/workspace-image/videoRecordingRoom.png",
+    // image: "/images/workstation-wp/videocon-wp.webp",
     description:
       "This is the video recording room, designed for creating professional video content.",
     slider: {

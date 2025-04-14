@@ -25,11 +25,11 @@ const LayoutCard = ({
   return (
     <div className="workspacedescription flex flex-col w-40 md:w-[280px] items-center border border-solid bg-[#fff] pb-2 my-3 relative">
       {/* Image */}
-      <div className="relative bg-red-400 group w-full h-32 md:h-56 overflow-hidden">
+      <div className="relative group w-full h-32 md:h-56 overflow-hidden">
         <img
           src={image}
           alt={title}
-          className="RoomImage object-fill w-full h-full cursor-pointer"
+          className="RoomImage object-contain w-full h-full cursor-pointer"
         />
         {/* Tooltip-like description */}
         <p className="absolute bottom-2 left-1/2 transform -translate-x-1/2 bg-white bg-opacity-70 text-black px-4 py-2 text-sm rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-300 shadow-lg pointer-events-none w-full">

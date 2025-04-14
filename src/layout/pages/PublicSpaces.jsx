@@ -4,8 +4,8 @@ import LayoutCard from "../components/LayoutCard"; // Ensure the correct path to
 const publicSpacesData = [
   {
     type: "reception",
-    // image: "/images/workspace-image/reception.png",
-    image: "/images/workstation-wp/reception-wp.webp",
+    image: "/images/workspace-image/reception.png",
+    // image: "/images/workstation-wp/reception-wp.webp",
     description:
       "This is the reception area, the first point of contact for visitors.",
     slider: {
@@ -19,8 +19,8 @@ const publicSpacesData = [
   },
   {
     type: "lounge",
-    // image: "/images/workspace-image/lounge.png",
-    image: "/images/workstation-wp/lounge-wp.webp",
+    image: "/images/workspace-image/lounge.png",
+    // image: "/images/workstation-wp/lounge-wp.webp",
     description:
       "This is the lounge, a comfortable area for informal meetings.",
     slider: {
@@ -34,15 +34,15 @@ const publicSpacesData = [
   },
   {
     type: "phoneBooth",
-    // image: "/images/workspace-image/phoneBooth.png",
-    image: "/images/workstation-wp/phoneBooth-wp.webp",
+    image: "/images/workspace-image/phoneBooth.png",
+    // image: "/images/workstation-wp/phoneBooth-wp.webp",
     description: "This is the phone booth, providing a quiet space for calls.",
     tooltipText: "size: 25 sqft",
   },
   {
     type: "breakoutRoom",
-    // image: "/images/workspace-image/breakout.png",
-    image: "/images/workstation-wp/breakout-wp.webp",
+    image: "/images/workspace-image/breakout.png",
+    // image: "/images/workstation-wp/breakout-wp.webp",
     description:
       "This is the breakout room, a flexible space for small group discussions.",
     slider: {
@@ -84,7 +84,7 @@ const publicSpacesData = [
   // },
   {
     type: "washrooms",
-    image: "/images/workstation-wp/executivewash-wp.webp",
+    image: "/images/workspace-image/washroom.png",
     description:
       "Common Washroom Area – This includes designated spaces for both male and female washrooms.",
     tooltipText: "size: 100 sqft",
