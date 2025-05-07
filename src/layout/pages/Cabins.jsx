@@ -99,9 +99,9 @@ const Cabins = ({
                 : room.type === "manager"
                 ? `Size: ${managerCabinSize} sqft`
                 : room.type === "small"
-                ? `Size: ${smallCabinConfig.roomSize || "80"}sqft \n Seats:${
+                ? `Size: ${smallCabinConfig.roomSize || "80"}sqft \n Seats: ${
                     4 + smallCabinSeatCount
-                  }`
+                  } pax`
                 : "Size: Not available"
             }
             areaCounterProps={

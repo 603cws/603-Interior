@@ -53,6 +53,7 @@ const publicSpacesData = [
       max: 160,
       step: 5,
     },
+    tooltipText: "size: 80 sqft",
   },
   // {
   //   type: "maleWashroom",
@@ -175,7 +176,6 @@ const PublicSpaces = ({
                   : {}),
               }
             : null;
-          console.log(sliderProps);
 
           return (
             <LayoutCard
@@ -203,6 +203,8 @@ const PublicSpaces = ({
               tooltipText={
                 space.type === "washrooms"
                   ? `Size: ${washroomsSize || 100} sqft `
+                  : space.type === "breakoutRoom"
+                  ? `Size ${breakoutRoomSize || 80} sqft`
                   : space.tooltipText
               }
             />

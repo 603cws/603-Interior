@@ -45,7 +45,7 @@ const meetingRoomData = [
       max: 650,
       step: 5,
     },
-    tooltipText: "size: 18pax",
+    tooltipText: "size: 18 pax",
   },
   {
     type: "meetingRoom",
@@ -243,23 +243,23 @@ const MeetingRooms = ({
                 room.type === "conferenceRoom"
                   ? `Size: ${conferenceRoomSize || 250} sqft \n Seats: ${
                       12 + conferenceRoomConfig.seatCount
-                    }`
+                    } pax`
                   : room.type === "boardRoom"
                   ? `Size: ${boardRoomSize || 325} sqft \n Seats: ${
                       18 + boardRoomConfig.seatCount
-                    }`
+                    } pax`
                   : room.type === "hrRoom"
                   ? `Size: ${hrRoomConfig.roomSize || "80"} sqft \n Seats: ${
                       4 + hrRoomSeatCount
-                    }`
+                    } pax`
                   : room.type === "financeRoom"
                   ? `Size: ${
                       financeRoomConfig.roomSize || "100"
-                    } sqft \n Seats: ${4 + financeRoomSeatCount}`
+                    } sqft \n Seats: ${4 + financeRoomSeatCount} pax`
                   : room.type === "sales"
                   ? `Size: ${salesRoomConfig.roomSize || "80"} sqft \n Seats: ${
                       4 + salesSeatCount
-                    }`
+                    } pax`
                   : room.type === "videoRecordingRoom"
                   ? `Size: ${videoRecordingRoomSize || 80} sqft`
                   : room.tooltipText

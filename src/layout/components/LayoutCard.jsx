@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import AreaCounter from "./AreaCounter";
 import { PiMinusCircleFill, PiPlusCircleFill } from "react-icons/pi";
 import Tooltip from "./ToolTip";
@@ -22,19 +22,25 @@ const LayoutCard = ({
   showAreaCounter, // Boolean to conditionally render AreaCounter
   areaCounterProps, // Props specific to AreaCounter
 }) => {
+  const [showSizes, setShowSizes] = useState(false);
   return (
     <div className="workspacedescription flex flex-col w-40 md:w-[280px] items-center border border-solid bg-[#fff] pb-2 my-3 relative">
       {/* Image */}
-      <div className="relative group w-full h-32 md:h-56 overflow-hidden">
+      <div className="relative group w-full h-32 md:h-48 overflow-hidden">
         <img
           src={image}
           alt={title}
           className="RoomImage object-contain w-full h-full cursor-pointer"
         />
         {/* Tooltip-like description */}
-        <p className="absolute bottom-2 left-1/2 transform -translate-x-1/2 bg-white bg-opacity-70 text-black px-4 py-2 text-sm rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-300 shadow-lg pointer-events-none w-full">
+        <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 translate-y-4 group-hover:translate-y-0 bg-white bg-opacity-70 text-black px-4 py-2 text-sm rounded-md opacity-0 group-hover:opacity-100 transition-all duration-400 shadow-lg pointer-events-none w-full">
           {description}
-        </p>
+          {tooltipText && (
+            <div className="whitespace-pre-line">
+              <Tooltip text={tooltipText}></Tooltip>
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Content */}
@@ -65,34 +71,69 @@ const LayoutCard = ({
 
         {/* Size Options */}
         {sizes && (
-          <div className="flex gap-1 md:gap-2 text-xs md:text-sm font-bold md:my-2 justify-center md:justify-around">
-            {sizes.map((size) => (
-              <button
-                key={size}
-                className={`border-2 rounded-full p-1 h-6 w-6 md:h-9 md:w-9 text-[10px] md:text-xs ${
-                  selectedSize === size ? "bg-gray-300" : ""
-                }`}
-                onClick={() => onSizeChange(size)}
-              >
-                {size}
-              </button>
-            ))}
+          <div className="group relative pb-2 inline-block">
+            <button className="absolute -bottom-2 -left-1/4 border-gray-300 border-[1px] px-2 py-0.5 bg-black text-white animate-bounce text-sm w-fit">
+              Sizes
+            </button>
+            <div className="hidden absolute -bottom-4 group-hover:flex gap-1 text-xs md:text-sm font-bold md:my-3 justify-center  transform -translate-x-full group-hover:translate-x-0 transition-transform duration-500 ease-in-out w-full ">
+              {sizes.map((size) => (
+                <button
+                  key={size}
+                  className={`border-2 h-7 w-7 text-[10px] md:text-xs ${
+                    selectedSize === size ? "bg-gray-300" : ""
+                  }`}
+                  onClick={() => onSizeChange(size)}
+                >
+                  {size}
+                </button>
+              ))}
+            </div>
           </div>
         )}
         {/* Tooltip */}
-        {tooltipText && (
-          <div className="tooltip-container mt-2">
+        {/* {tooltipText && (
+          <div className="tooltip-container">
             <Tooltip text={tooltipText}>
               <div className="w-4 absolute right-1 md:right-5 bottom-1 md:bottom-3">
                 <RxInfoCircled size={20} />
               </div>
             </Tooltip>
           </div>
-        )}
+        )} */}
         {/* Area Counter */}
+
         {counterValue >= 1 && showAreaCounter && !showInputField && (
           <AreaCounter {...areaCounterProps} counterValue={counterValue} />
         )}
+        {/* {showAreaCounter && !showInputField && (
+          <div className="relative pb-8">
+            {" "}
+            <button
+              onClick={() => {
+                setShowSizes(!showSizes);
+                console.log("toggle click");
+              }}
+              className="absolute bottom-0 left-0 transform -translate-x-full border border-gray-300 px-2  bg-black text-white text-xs rounded-full z-10"
+            >
+              {showSizes ? "▼" : "▲"}
+            </button>
+            <div
+              className={`w-full absolute left-0 transition-all duration-500 ease-in-out transform ${
+                showSizes
+                  ? "bottom-10 opacity-100 translate-y-0"
+                  : "bottom-0 opacity-0 translate-y-4 pointer-events-none"
+              }`}
+            >
+              <div className="bg-red-200 px-4 py-2 rounded-t-md shadow-lg">
+                <AreaCounter
+                  {...areaCounterProps}
+                  counterValue={counterValue}
+                />
+              </div>
+            </div>
+          </div>
+        )} */}
+
         {/* Input Field for "Other Area" */}
         {showInputField && (
           <div className="other-area-input mt-4 text-xs">

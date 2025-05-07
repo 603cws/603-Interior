@@ -711,14 +711,15 @@ function Layout() {
           washrooms: 1,
         }));
       } else {
-        setAreaQuantities((prevAreaQuantities) => ({
-          ...prevAreaQuantities,
-          reception: 0,
-          lounge: 0,
-          // maleWashroom: 0,
-          // femaleWashroom: 0,
-          washrooms: 0,
-        }));
+        // setAreaQuantities((prevAreaQuantities) => ({
+        //   ...prevAreaQuantities,
+        //   reception: 0,
+        //   lounge: 0,
+        //   // maleWashroom: 0,
+        //   // femaleWashroom: 0,
+        //   washrooms: 0,
+        // }));
+        setAreaQuantities(initialQuantities);
       }
     }
 
@@ -1019,6 +1020,7 @@ function Layout() {
           toggleProfile={toggleProfile}
           iconRef={iconRef}
           builtArea={builtArea}
+          setAreaQuantities={setAreaQuantities}
         />
       </div>
 

@@ -20,7 +20,7 @@ const workspaceData = [
     // image: "/images/workstation-wp/ltype-wp.webp",
     description:
       "This is an L-type workspace, providing a semi-private environment.",
-    sizes: [], // No size options
+    // sizes: [], // No size options
     tooltipText: "Size: 34 sq ft",
     title: "L-Type Workstation",
   },

@@ -405,7 +405,7 @@ const TreeMap = ({ totalArea, areaQuantities, areaValues }) => {
               borderRadius: "50%",
             }}
           ></span>
-          <span className="legend-label pr-2" style={{ fontSize: "13px" }}>
+          <span className="legend-label pr-2" style={{ fontSize: "12px" }}>
             {item.x}
           </span>
         </div>
@@ -426,6 +426,8 @@ const TreeMap = ({ totalArea, areaQuantities, areaValues }) => {
     const handleChartHeight = () => {
       if (window.innerWidth >= 1024 && window.innerWidth <= 1350) {
         setChartHeight("350px");
+      } else if (window.innerWidth >= 1800) {
+        setChartHeight("550px");
       }
     };
     window.addEventListener("resize", handleResize, handleChartHeight);
@@ -657,7 +659,7 @@ const TreeMap = ({ totalArea, areaQuantities, areaValues }) => {
         )}
       </button>
       <div
-        className="legend-container w-full grid grid-cols-2 gap-3 xl:gap-0 overflow-x-auto xl:flex flex-wrap"
+        className="legend-container w-full grid grid-cols-2 xl:grid-cols-4 gap-3 xl:gap-0 overflow-x-auto "
         style={{
           transform: isLegendVisible ? "translateX(0)" : "translateX(-100%)", // Start hidden and slide in
           transition: "transform 1s ease-in-out",

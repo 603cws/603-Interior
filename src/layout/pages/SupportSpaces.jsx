@@ -130,7 +130,13 @@ const SupportSpaces = ({
                 space.type.charAt(0).toUpperCase() + space.type.slice(1)
               }`}
               showInputField={space.type === "other"}
-              tooltipText={space.tooltipText}
+              tooltipText={
+                space.type === "ups"
+                  ? `Size: ${upsRoomSize || 60} sqft `
+                  : space.type === "bms"
+                  ? `Size ${bmsRoomSize || 60} sqft`
+                  : space.tooltipText
+              }
               inputFieldProps={
                 space.type === "other"
                   ? {
