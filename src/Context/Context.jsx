@@ -221,10 +221,10 @@ export const AppProvider = ({ children }) => {
             .eq("id", currentLayoutID); // Filter by userId
 
           console.log("layout details from context ", data);
-          setTotalArea(data[0].totalArea);
+          // setTotalArea(data[0].totalArea);
           setCurrentLayoutData(data[0]);
 
-          console.log("current layout data", currentLayoutData);
+          console.log("current layout data", data[0]);
 
           // setLayoutImage(data[0].layoutImg);
           setLayoutImage(

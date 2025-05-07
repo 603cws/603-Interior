@@ -240,6 +240,7 @@ function Navbar({
     } finally {
       setIsSubmitting(false);
       setShowWarning(false);
+      setTotalArea();
     }
   };
 

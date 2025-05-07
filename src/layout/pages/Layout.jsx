@@ -17,6 +17,7 @@ import EnterAreaModal from "../components/EnterAreaModal";
 import ProfileCard from "../../boq/components/ProfileCard";
 import { AnimatePresence } from "framer-motion";
 import toast from "react-hot-toast";
+import { extractAreaAndQuantity } from "../../utils/layoutUtils";
 
 const initialAreaValues = {
   linear: 24,
@@ -507,7 +508,26 @@ function Layout() {
   const [warning, setWarning] = useState(false);
   const [otherArea, setOtherArea] = useState();
 
-  const { totalArea, setTotalArea, totalAreaSource } = useApp();
+  const {
+    totalArea,
+    setTotalArea,
+    totalAreaSource,
+    setTotalAreaSource,
+    currentLayoutData,
+  } = useApp();
+
+  useEffect(() => {
+    if (currentLayoutData && Object.keys(currentLayoutData).length > 0) {
+      setTotalAreaSource("layoutLoad");
+      setTotalArea(currentLayoutData.totalArea);
+      const { areaValues, quantities } =
+        extractAreaAndQuantity(currentLayoutData);
+
+      setAreaValues(areaValues);
+      setAreaQuantities(quantities);
+    }
+  }, [currentLayoutData]); // only runs when currentLayoutData changes
+
   const [runTour, setRunTour] = useState(false); // Controls whether the tour runs
 
   const [isOpen, setIsOpen] = useState(false);
@@ -622,7 +642,7 @@ function Layout() {
   // }, []);
 
   useEffect(() => {
-    if (totalAreaSource !== "ErrorModal") {
+    if (totalAreaSource !== "ErrorModal" && totalAreaSource !== "layoutLoad") {
       const linear = calculateLinear(totalArea);
       const lType = calculateLType(totalArea, areaValues);
       const md = calculateMd(totalArea, areaValues);
