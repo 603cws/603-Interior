@@ -642,7 +642,7 @@ function Layout() {
   // }, []);
 
   useEffect(() => {
-    if (totalAreaSource !== "ErrorModal" && totalAreaSource !== "layoutLoad") {
+    if (totalAreaSource !== "ErrorModal" || totalAreaSource !== "layoutLoad") {
       const linear = calculateLinear(totalArea);
       const lType = calculateLType(totalArea, areaValues);
       const md = calculateMd(totalArea, areaValues);
