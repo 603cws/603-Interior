@@ -145,10 +145,62 @@ const TreeMap = ({ totalArea, areaQuantities, areaValues }) => {
   const series = [
     ...Object.keys(areaQuantities).map((key) => {
       const areaOccupied = areaQuantities[key] * areaValues[key];
+      // const areaOccupied = areaQuantities[key] * areaValues[key];
       const percentage = ((areaOccupied / validTotalArea) * 100).toFixed(2);
+      console.log(areaOccupied, percentage, "hellooo from the series");
+
+      let newareaoccupied;
+      console.log(totalArea);
+
+      switch (true) {
+        case totalArea >= 20000:
+          newareaoccupied =
+            areaOccupied > 1 && areaOccupied < 350 ? 600 : areaOccupied;
+          console.log(newareaoccupied, "key", key);
+          break;
+        case totalArea > 3000 && totalArea <= 5000:
+          newareaoccupied =
+            areaOccupied > 1 && areaOccupied < 100 ? 110 : areaOccupied;
+          console.log(newareaoccupied, "key", key);
+          break;
+        case totalArea > 5000 && totalArea <= 7000:
+          newareaoccupied =
+            areaOccupied > 1 && areaOccupied < 100 ? 140 : areaOccupied;
+          console.log(newareaoccupied, "key", key);
+          break;
+        case totalArea > 7000 && totalArea <= 9000:
+          newareaoccupied =
+            areaOccupied > 1 && areaOccupied < 200 ? 200 : areaOccupied;
+          console.log(newareaoccupied, "key", key);
+          break;
+        case totalArea > 9000 && totalArea <= 13000:
+          newareaoccupied =
+            areaOccupied > 1 && areaOccupied < 250 ? 300 : areaOccupied;
+          console.log(newareaoccupied, "key", key);
+          break;
+        case totalArea > 13000 && totalArea <= 17000:
+          newareaoccupied =
+            areaOccupied > 1 && areaOccupied < 250 ? 350 : areaOccupied;
+          console.log(newareaoccupied, "key", key);
+          break;
+        case totalArea > 17000 && totalArea < 20000:
+          newareaoccupied =
+            areaOccupied > 1 && areaOccupied < 300 ? 390 : areaOccupied;
+          console.log(newareaoccupied, "key", key);
+          break;
+
+        default:
+          newareaoccupied = areaOccupied;
+          break;
+      }
+
+      console.log(newareaoccupied, "key", key);
+
       return {
         x: `${fullNames[key] || key}: ${percentage}%`,
-        y: areaOccupied,
+        y: newareaoccupied,
+        // y: areaOccupied,
+        areaOccupied: areaOccupied,
         fillColor: colors[fullNames[key]] || "#000000",
       };
     }),
@@ -265,9 +317,15 @@ const TreeMap = ({ totalArea, areaQuantities, areaValues }) => {
 
     tooltip: {
       custom: ({ series, seriesIndex, dataPointIndex, w }) => {
+        // console.log(series, seriesIndex, dataPointIndex, w);
+
         const dataPoint = w.config.series[0].data[dataPointIndex];
+        console.log(dataPoint);
+        console.log(w.config.series[0]);
+
         const workspaceName = dataPoint.x.split(":")[0]; // Extract name
-        const occupiedArea = dataPoint.y;
+        const occupiedArea = dataPoint.areaOccupied;
+        // const occupiedArea = dataPoint.y;
         const percentage = dataPoint.x.split(":")[1]; // Extract percentage
         const imageUrl = workspaceImages[workspaceName] || null;
 
