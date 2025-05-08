@@ -306,7 +306,7 @@ function Navbar({
           <button className=" " onClick={() => navigate("/")}>
             <img
               src="/logo/workved-logo-white.png"
-              alt="603 logo"
+              alt="Workved Interior logo"
               className="h-auto w-20"
             />
           </button>
@@ -406,7 +406,7 @@ function Navbar({
             <button className=" " onClick={() => navigate("/")}>
               <img
                 src="/logo/workved-logo-white.png"
-                alt="603 logo"
+                alt="Workved Interior logo"
                 className="h-auto w-14"
               />
             </button>

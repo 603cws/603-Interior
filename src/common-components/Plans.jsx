@@ -51,7 +51,7 @@ const plansData = [
       "The brand proposes their budget",
       "Dedicated brand webinar or",
       "Co-branded marketing campaigns",
-      "Offline exposure at 603 Co workings",
+      "Offline exposure at Workved Interiors",
     ],
     image: "/images/plan-custom.jpg",
     planKey: "Custom", // used when "Select" is clicked

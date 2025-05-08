@@ -87,8 +87,8 @@ function Howtosell() {
                   packages/plans to choose from, depending on the business your{" "}
                   {!isMobile && <br />}
                   in. Follow a few easy steps to register for{" "}
-                  {!isMobile && <br />} 603 Interior seller account and build
-                  trust between you and your {!isMobile && <br />}
+                  {!isMobile && <br />} Workved Interior seller account and
+                  build trust between you and your {!isMobile && <br />}
                   potential buyers.{" "}
                 </p>
               </div>
