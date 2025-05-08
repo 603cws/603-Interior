@@ -37,7 +37,7 @@ const publicSpacesData = [
     image: "/images/workspace-image/phoneBooth.png",
     // image: "/images/workstation-wp/phoneBooth-wp.webp",
     description: "This is the phone booth, providing a quiet space for calls.",
-    tooltipText: "size: 25 sqft",
+    tooltipText: "Size: 25 sq ft",
   },
   {
     type: "breakoutRoom",
@@ -55,8 +55,8 @@ const publicSpacesData = [
     },
     tooltipText: "size: 80 sqft",
   },
-  // {
   //   type: "maleWashroom",
+  // {
   //   image: "/images/workstation-wp/executivewash-wp.webp",
   //   description: "Common Male washroom",
   //   tooltipText: "size: 100 sqft",
@@ -202,9 +202,13 @@ const PublicSpaces = ({
               // tooltipText={space.tooltipText}
               tooltipText={
                 space.type === "washrooms"
-                  ? `Size: ${washroomsSize || 100} sqft `
+                  ? `Size: ${washroomsSize || 100} sq ft `
                   : space.type === "breakoutRoom"
-                  ? `Size ${breakoutRoomSize || 80} sqft`
+                  ? `Size: ${breakoutRoomSize || 80} sq ft`
+                  : space.type === "reception"
+                  ? `Size: ${receptionSize || 80} sq ft`
+                  : space.type === "lounge"
+                  ? `Size: ${loungeSize || 80} sq ft`
                   : space.tooltipText
               }
             />

@@ -16,7 +16,7 @@ const supportSpacesData = [
       max: 100,
       step: 5,
     },
-    tooltipText: "size: 60 sqft",
+    tooltipText: "Size: 60 sq ft",
   },
   {
     type: "bms",
@@ -31,14 +31,14 @@ const supportSpacesData = [
       max: 100,
       step: 5,
     },
-    tooltipText: "size: 60 sqft",
+    tooltipText: "Size: 60 sq ft",
   },
   {
     type: "server",
     image: "/images/workspace-image/server.png",
     // image: "/images/workstation-wp/serverRoom-wp.webp",
     description: "This is the server room, housing critical IT infrastructure.",
-    tooltipText: "size: 40 sqft",
+    tooltipText: "Size: 40 sq ft",
   },
   {
     type: "executiveWashroom",
@@ -46,7 +46,7 @@ const supportSpacesData = [
     // image: "/images/workstation-wp/executivewash-wp.webp",
     description:
       "This is the Executive Washroom, providing premium facilities.",
-    tooltipText: "size: 60 sqft",
+    tooltipText: "Size: 60 sq ft",
   },
   {
     type: "other",
@@ -132,9 +132,9 @@ const SupportSpaces = ({
               showInputField={space.type === "other"}
               tooltipText={
                 space.type === "ups"
-                  ? `Size: ${upsRoomSize || 60} sqft `
+                  ? `Size: ${upsRoomSize || 60} sq ft `
                   : space.type === "bms"
-                  ? `Size ${bmsRoomSize || 60} sqft`
+                  ? `Size ${bmsRoomSize || 60} sq ft`
                   : space.tooltipText
               }
               inputFieldProps={

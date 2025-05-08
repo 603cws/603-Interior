@@ -95,11 +95,11 @@ const Cabins = ({
             showAreaCounter
             tooltipText={
               room.type === "md"
-                ? `Size: ${mdCabinSize} sqft`
+                ? `Size: ${mdCabinSize} sq ft`
                 : room.type === "manager"
-                ? `Size: ${managerCabinSize} sqft`
+                ? `Size: ${managerCabinSize} sq ft`
                 : room.type === "small"
-                ? `Size: ${smallCabinConfig.roomSize || "80"}sqft \n Seats: ${
+                ? `Size: ${smallCabinConfig.roomSize || "80"} sq ft \n Seats: ${
                     4 + smallCabinSeatCount
                   } pax`
                 : "Size: Not available"
