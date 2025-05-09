@@ -220,11 +220,8 @@ export const AppProvider = ({ children }) => {
             .select()
             .eq("id", currentLayoutID); // Filter by userId
 
-          console.log("layout details from context ", data);
           // setTotalArea(data[0].totalArea);
           setCurrentLayoutData(data[0]);
-
-          console.log("current layout data", data[0]);
 
           // setLayoutImage(data[0].layoutImg);
           setLayoutImage(
@@ -241,11 +238,6 @@ export const AppProvider = ({ children }) => {
     fetchdata();
   }, [currentLayoutID]);
 
-  // useEffect(() => {
-  //   var temp = JSON.parse(localStorage.getItem("selectedData")) || [];
-  //   setSelectedData(temp);
-  // }, []);
-
   useEffect(() => {
     // Check if selectedData is valid and not empty
     if (selectedData && selectedData.length > 0) {
@@ -255,13 +247,8 @@ export const AppProvider = ({ children }) => {
   }, [selectedData]);
 
   useEffect(() => {
-    console.log("Progress: ", progress);
-  }, [progress]);
-
-  useEffect(() => {
     async function fetchdata() {
       const sessionData = JSON.parse(localStorage.getItem(session));
-      console.log("session data", sessionData);
 
       // const usertoken = localStorage.getItem("usertoken");
       const usertoken = sessionData?.access_token;
@@ -292,10 +279,6 @@ export const AppProvider = ({ children }) => {
     // setUserId(userId);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userId]);
-
-  useEffect(() => {
-    console.log("Selected Data: ", selectedData);
-  }, [selectedData]);
 
   useEffect(() => {
     if (selectedCategory) {
@@ -333,7 +316,7 @@ export const AppProvider = ({ children }) => {
       !Array.isArray(selectedData) ||
       selectedData.length === 0
     ) {
-      console.log("Skipping handleProgressBar due to missing data.");
+      // console.log("Skipping handleProgressBar due to missing data.");
       return;
     }
 
@@ -406,7 +389,6 @@ export const AppProvider = ({ children }) => {
 
     fetchUserData();
   }, [isAuthenticated]);
-  console.log("current user", accountHolder);
 
   // Detect screen size
   useEffect(() => {

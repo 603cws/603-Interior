@@ -8,7 +8,16 @@ import { supabase } from "../../services/supabase";
 import toast from "react-hot-toast";
 import DashboardProductCard from "../vendor/DashboardProductCard";
 
-function VendorProductlist({ setVendorproductlist, selectedVendor }) {
+function VendorProductlist({
+  setVendorproductlist,
+  selectedVendor,
+  updateStatus,
+  deleteWarning,
+  setDeleteWarning,
+  rejectReason,
+  setRejectReason,
+  handleConfirmReject,
+}) {
   const [toggle, setToggle] = useState(true);
   const [isloading, setIsloading] = useState(false);
   const [selectedTab, setSelectedTab] = useState("products");
@@ -20,12 +29,7 @@ function VendorProductlist({ setVendorproductlist, selectedVendor }) {
   const [currentPage, setCurrentPage] = useState(1);
   const [openMenuId, setOpenMenuId] = useState(null); // Store the ID of the row with an open menu
   const [productPreview, setProductPreview] = useState(false);
-  const [selectedProductview, setSelectedProductview] = useState({
-    product_name: "",
-    product_price: "",
-    product_image: "",
-    product_description: "",
-  });
+  const [selectedProductview, setSelectedProductview] = useState();
   const [isAddProduct, setIsAddProduct] = useState(false);
   const [isProductHovered, setIsProductHovered] = useState(false);
   const [isAddonHovered, setIsAddonHovered] = useState(false);
@@ -40,6 +44,8 @@ function VendorProductlist({ setVendorproductlist, selectedVendor }) {
   //baseurlforimg
   const baseImageUrl =
     "https://bwxzfwsoxwtzhjbzbdzs.supabase.co/storage/v1/object/public/addon/";
+
+  console.log("selectedProductview", selectedProductview);
 
   const handleMenuToggle = (id) => {
     setOpenMenuId((prev) => (prev === id ? null : id));
@@ -156,12 +162,7 @@ function VendorProductlist({ setVendorproductlist, selectedVendor }) {
         .from("product_variants")
         .select(
           `
-              id, 
-              title, 
-              price, 
-              details, 
-              image, 
-              product_id, 
+             *, 
               products (category, subcategory, subcategory1)
             `
         )
@@ -462,6 +463,12 @@ function VendorProductlist({ setVendorproductlist, selectedVendor }) {
           product={selectedProductview}
           // fetchProducts={fetchProducts}
           handleDelete={handleDelete}
+          updateStatus={updateStatus}
+          deleteWarning={deleteWarning}
+          setDeleteWarning={setDeleteWarning}
+          rejectReason={rejectReason}
+          setRejectReason={setRejectReason}
+          handleConfirmReject={handleConfirmReject}
         />
       )}
     </div>

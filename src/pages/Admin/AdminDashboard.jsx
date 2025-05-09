@@ -383,6 +383,8 @@ function AdminDashboard() {
   };
 
   const handleUpdateStatus = async (product, newStatus, reason = "") => {
+    console.log("product", product);
+
     try {
       if (product && product.type === "product") {
         await supabase
@@ -1269,6 +1271,12 @@ function AdminDashboard() {
             <VendorProductlist
               setVendorproductlist={setVendorproductlist}
               selectedVendor={selectedVendor}
+              updateStatus={handleUpdateStatus}
+              deleteWarning={deleteWarning}
+              setDeleteWarning={setDeleteWarning}
+              rejectReason={rejectReason}
+              setRejectReason={setRejectReason}
+              handleConfirmReject={handleConfirmReject}
             />
           )}
 

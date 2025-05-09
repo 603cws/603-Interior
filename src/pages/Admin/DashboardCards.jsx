@@ -20,8 +20,6 @@ function DashboardCards({
 
   const pendingAddons = addons.filter((addon) => addon.status === "pending");
 
-  console.log(pendingproduct, pendingAddons);
-
   return (
     <div>
       <div className="flex gap-4 font-Poppins">
