@@ -100,6 +100,8 @@ function ProfileCard({ layout = false, isOpen, setIsOpen, iconRef }) {
       console.log("hello");
       setTotalArea("");
       localStorage.removeItem("currentLayoutID");
+      localStorage.removeItem("session");
+      localStorage.removeItem("usertoken");
       navigate("/");
     }
   };

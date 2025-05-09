@@ -49,11 +49,12 @@ const sizeAreaMapping = {
 function OpenWorkspaces({
   areaQuantities,
   variant,
+  setVariant,
   updateAreas,
   onVariantChange,
   builtArea,
 }) {
-  const [selectedSize, setSelectedSize] = useState(variant);
+  // const [selectedSize, setSelectedSize] = useState(variant);
   const [showError, setShowError] = useState(false);
 
   const { totalArea } = useApp();
@@ -65,9 +66,17 @@ function OpenWorkspaces({
   //   }
   // };
 
+  console.log(
+    "variant in open workspaces",
+    variant,
+    "selected size in open workspaces"
+    // selectedSize
+  );
+
   const handleSizeChange = (newSize, type, noOfLinearStation) => {
+    console.log("newSize", newSize);
     const newSizeArea = sizeAreaMapping[newSize];
-    const prevSizeArea = sizeAreaMapping[selectedSize];
+    const prevSizeArea = sizeAreaMapping[variant];
     const newBuiltArea =
       builtArea -
       prevSizeArea * noOfLinearStation +
@@ -78,11 +87,11 @@ function OpenWorkspaces({
         setShowError(true);
         return;
       }
-      setSelectedSize(newSize);
+      setVariant(newSize);
       onVariantChange(newSize);
     }
   };
-
+  console.log("selectedSize", variant);
   return (
     <div className="section px-3">
       <h3 className="section-heading bg-white shadow-sm text-md pl-2 py-1.5 sticky top-0 font-semibold z-10">
@@ -110,7 +119,7 @@ function OpenWorkspaces({
             }}
             onChange={(newValue) => updateAreas(workspace.type, newValue)}
             sizes={workspace.sizes}
-            selectedSize={workspace.type === "linear" ? selectedSize : null} // Only for Linear Workstation
+            selectedSize={workspace.type === "linear" ? variant : null} // Only for Linear Workstation
             onSizeChange={(size) =>
               handleSizeChange(
                 size,
@@ -126,7 +135,7 @@ function OpenWorkspaces({
             tooltipText={workspace.tooltipText}
             title={`${workspace.title} ${
               workspace.type === "linear"
-                ? sizeMapping[selectedSize] || ""
+                ? sizeMapping[variant] || ""
                 : workspace.type === "lType"
                 ? sizeMapping.lType
                 : ""

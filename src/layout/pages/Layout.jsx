@@ -514,7 +514,11 @@ function Layout() {
     totalAreaSource,
     setTotalAreaSource,
     currentLayoutData,
+    setCurrentLayoutData,
   } = useApp();
+
+  console.log("area", areaValues.linear);
+  console.log("variant", variant);
 
   useEffect(() => {
     if (currentLayoutData && Object.keys(currentLayoutData).length > 0) {
@@ -525,8 +529,29 @@ function Layout() {
 
       setAreaValues(areaValues);
       setAreaQuantities(quantities);
+
+      handleVariantNameChange(areaValues);
     }
   }, [currentLayoutData]); // only runs when currentLayoutData changes
+
+  const handleVariantNameChange = (areaValues) => {
+    let newVariant;
+    switch (areaValues.linear) {
+      case 20:
+        newVariant = "M";
+        break;
+      case 29:
+        newVariant = "XL";
+        break;
+      case 24:
+      default:
+        newVariant = "L";
+        break;
+    }
+    console.log("newVariant", newVariant);
+
+    setVariant(newVariant);
+  };
 
   const [runTour, setRunTour] = useState(false); // Controls whether the tour runs
 
@@ -723,6 +748,8 @@ function Layout() {
       }
     }
 
+    console.log("linear area", areaValues.linear);
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [totalArea, totalAreaSource]); //do not add any more dependency
 
@@ -824,6 +851,7 @@ function Layout() {
     setAreaQuantities(initialQuantities);
   };
   const handleVariantChange = (newVariant) => {
+    console.log("newVariant", newVariant);
     setVariant(newVariant);
     const newAreaValues = { ...areaValues };
     switch (newVariant) {
@@ -1021,6 +1049,7 @@ function Layout() {
           iconRef={iconRef}
           builtArea={builtArea}
           setAreaQuantities={setAreaQuantities}
+          handleVariantChange={handleVariantNameChange}
         />
       </div>
 
@@ -1042,6 +1071,7 @@ function Layout() {
           <OpenWorkspaces
             areaQuantities={areaQuantities}
             variant={variant}
+            setVariant={setVariant}
             updateAreas={updateAreas}
             onVariantChange={handleVariantChange}
             totalAreaWarning={totalAreaWarning}

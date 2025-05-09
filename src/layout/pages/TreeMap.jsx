@@ -260,7 +260,7 @@ const TreeMap = ({ totalArea, areaQuantities, areaValues }) => {
     dataLabels: {
       enabled: true,
       style: {
-        fontSize: "14rem",
+        fontSize: "14px",
         fontWeight: "bold",
         colors: ["#FFFFFF"],
       },
@@ -271,7 +271,7 @@ const TreeMap = ({ totalArea, areaQuantities, areaValues }) => {
             opts.w.globals.labels[opts.dataPointIndex]
           } (${percentage}%)`;
         }
-        return `${opts.w.globals.labels[opts.dataPointIndex]}: ${val}`;
+        return `${val}`;
       },
     },
     states: {
@@ -320,8 +320,8 @@ const TreeMap = ({ totalArea, areaQuantities, areaValues }) => {
         // console.log(series, seriesIndex, dataPointIndex, w);
 
         const dataPoint = w.config.series[0].data[dataPointIndex];
-        console.log(dataPoint);
-        console.log(w.config.series[0]);
+        // console.log(dataPoint);
+        // console.log(w.config.series[0]);
 
         const workspaceName = dataPoint.x.split(":")[0]; // Extract name
         const occupiedArea = dataPoint.areaOccupied;

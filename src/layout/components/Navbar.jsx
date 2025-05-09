@@ -18,6 +18,7 @@ function Navbar({
   iconRef,
   builtArea,
   setAreaQuantities,
+  handleVariantChange,
 }) {
   const [error, setError] = useState(false);
 
@@ -225,7 +226,7 @@ function Navbar({
           localStorage.setItem("currentLayoutID", currentLayoutID);
         }
 
-        if (!userId) {
+        if (!isAuthenticated) {
           navigate("/Login", {
             state: {
               totalArea: totalArea,
@@ -255,6 +256,7 @@ function Navbar({
       console.log("newAreaQuantities", newAreaQuantities);
 
       setAreaQuantities(newAreaQuantities);
+      handleVariantChange(areaValues);
     }
   };
 
