@@ -113,6 +113,7 @@ function AdminDashboard() {
     setIsAuthLoading,
     setIsAuthenticated,
     setTotalArea,
+    accountHolder,
   } = useApp();
 
   const location = useLocation();
@@ -544,7 +545,7 @@ function AdminDashboard() {
         .select("*")
         .eq("role", "user");
 
-      console.log(data);
+      // console.log(data);
 
       setAllusers(data);
       setFilteredUsers(data);
@@ -576,7 +577,7 @@ function AdminDashboard() {
   };
 
   const filterItems = (query) => {
-    console.log(query);
+    // console.log(query);
     setSearchQuery(query);
 
     if (toggle) {
@@ -607,7 +608,7 @@ function AdminDashboard() {
       const filtered = products.filter((item) =>
         item.title.toLowerCase().includes(query.toLowerCase())
       );
-      console.log(filtered);
+      // console.log(filtered);
 
       setFilteredProducts(filtered);
     } else {
@@ -627,7 +628,7 @@ function AdminDashboard() {
       const filtered = addons.filter((item) =>
         item.title.toLowerCase().includes(query.toLowerCase())
       );
-      console.log(filtered);
+      // console.log(filtered);
 
       setFilteredAddons(filtered);
     }
@@ -645,7 +646,7 @@ function AdminDashboard() {
   };
 
   const filterbyCategory = (category) => {
-    console.log(category);
+    // console.log(category);
     setSelectedCategory(category);
 
     if (toggle) {
@@ -657,7 +658,7 @@ function AdminDashboard() {
         (item) =>
           item.products.category.toLowerCase() === category.toLowerCase()
       );
-      console.log(filtered);
+      // console.log(filtered);
 
       setFilteredProducts(filtered);
     } else {
@@ -668,12 +669,14 @@ function AdminDashboard() {
       const filtered = addons.filter((item) =>
         item.title.toLowerCase().includes(category.toLowerCase())
       );
-      console.log(filtered);
+      // console.log(filtered);
 
       setFilteredAddons(filtered);
     }
     setCurrentPage(1);
   };
+
+  // console.log(accountHolder);
 
   return (
     <div className="bg-[url('images/bg/Admin.png')] bg-cover bg-center bg-no-repeat p-3 xl:p-5">
@@ -775,7 +778,11 @@ function AdminDashboard() {
               </h3>
             </div>
             <div className="mx-3">
-              <img src="/images/usericon.png" alt="usericon" />
+              <img
+                src={accountHolder.profileImage}
+                alt="usericon"
+                className="w-10"
+              />
             </div>
           </div>
 
@@ -1194,7 +1201,11 @@ function AdminDashboard() {
                       >
                         <div className="flex items-center my-4">
                           <div className="mx-3">
-                            <img src="/images/usericon.png" alt="usericon" />
+                            <img
+                              src={accountHolder.profileImage}
+                              alt="usericon"
+                              className="w-10"
+                            />
                           </div>
                           <div>
                             <h2 className="text-[#000] text-base font-medium">
@@ -1276,7 +1287,7 @@ function AdminDashboard() {
               setDeleteWarning={setDeleteWarning}
               rejectReason={rejectReason}
               setRejectReason={setRejectReason}
-              handleConfirmReject={handleConfirmReject}
+              handleConfirmReject={handleUpdateStatus}
             />
           )}
 

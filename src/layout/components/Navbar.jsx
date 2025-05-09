@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { CiCalculator1 } from "react-icons/ci";
 import { MdOutlineCancel } from "react-icons/md";
 import { useApp } from "../../Context/Context";
@@ -52,6 +52,25 @@ function Navbar({
       document.body.style.overflow = "auto"; // Enable scroll
     }
   }, [showWarning]);
+
+  const inputRef = useRef(null);
+
+  useEffect(() => {
+    const input = inputRef.current;
+    if (!input) return;
+
+    const preventScroll = (e) => {
+      if (document.activeElement === input) {
+        e.preventDefault();
+      }
+    };
+
+    input.addEventListener("wheel", preventScroll, { passive: false });
+
+    return () => {
+      input.removeEventListener("wheel", preventScroll);
+    };
+  }, []);
 
   const mapAreaValues = (
     userId,
@@ -330,6 +349,7 @@ function Navbar({
               onClick={handleReset}
             />
             <input
+              ref={inputRef}
               type="number"
               className={`w-full rounded-md border-none bg-transparent py-2.5 ms-8 [&::-webkit-inner-spin-button]:appearance-none  focus:outline-none focus:ring-0 text-white ${
                 error ? "error" : ""

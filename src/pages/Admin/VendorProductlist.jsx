@@ -7,6 +7,7 @@ import Spinner from "../../common-components/Spinner";
 import { supabase } from "../../services/supabase";
 import toast from "react-hot-toast";
 import DashboardProductCard from "../vendor/DashboardProductCard";
+import VendorProductCard from "../vendor/VendorProductCard";
 
 function VendorProductlist({
   setVendorproductlist,
@@ -39,6 +40,12 @@ function VendorProductlist({
   const menuRef = useRef({});
   const buttonRef = useRef({});
 
+  //product refresh
+  const [isproductRefresh, setIsProductRefresh] = useState(false);
+
+  //addon refresh
+  const [isaddonRefresh, setIsAddonRefresh] = useState(false);
+
   const vendorcategory = JSON.parse(selectedVendor.allowed_category);
 
   //baseurlforimg
@@ -49,6 +56,43 @@ function VendorProductlist({
 
   const handleMenuToggle = (id) => {
     setOpenMenuId((prev) => (prev === id ? null : id));
+  };
+
+  const handleUpdateStatus = async (product, newStatus, reason = "") => {
+    console.log("product", product);
+
+    try {
+      if (product && product.type === "product") {
+        await supabase
+          .from("product_variants") // Table name
+          .update({
+            status: newStatus,
+            // ...(newStatus === "rejected" && { reject_reason: reason }),
+            reject_reason: reason,
+          })
+          .eq("id", product.id); // Matching row
+        toast.success(`product ${newStatus}`);
+        // setRejectReasonPopup(false);
+        // setProductPreview(false);
+        setRejectReason("");
+      }
+
+      if (product.type === "addon") {
+        await supabase
+          .from("addon_variants") // Ensure this matches your table name
+          .update({ status: newStatus }) // New status
+          .eq("id", product.id); // Matching row
+        toast.success(`Addon ${newStatus}`);
+      }
+    } finally {
+      product.type === "product"
+        ? setIsProductRefresh(true)
+        : setIsAddonRefresh(true);
+
+      if (productPreview) {
+        setProductPreview(false);
+      }
+    }
   };
 
   useEffect(() => {
@@ -188,11 +232,18 @@ function VendorProductlist({
     }
   };
 
+  // useEffect(() => {
+  //   fetchProducts();
+  //   fetchAddons();
+  // }, []);
+
   useEffect(() => {
     fetchProducts();
-    fetchAddons();
-  }, []);
+  }, [isproductRefresh]);
 
+  useEffect(() => {
+    fetchAddons();
+  }, [isaddonRefresh]);
   return (
     <div className="flex-1  border-2 border-[#000] rounded-3xl my-2.5">
       <div className="overflow-y-auto scrollbar-hide h-[calc(100vh-120px)] rounded-3xl relative ">
@@ -265,6 +316,7 @@ function VendorProductlist({
                       ) : (
                         <th className="p-3 font-medium">Addon Title</th>
                       )}
+                      <th className="p-3 font-medium">status</th>
                       <th className="p-3 font-medium">Action</th>
                     </tr>
                   </thead>
@@ -308,6 +360,17 @@ function VendorProductlist({
                             {item.addons?.title || item.title}
                           </td>
                         )}
+                        <td
+                          className={`border border-gray-200 p-3 align-middle ${
+                            item.status === "pending" ? "text-yellow-700" : ""
+                          }  ${
+                            item.status === "approved" ? "text-green-700" : ""
+                          } ${
+                            item.status === "rejected" ? "text-red-700" : ""
+                          }`}
+                        >
+                          {item.status}
+                        </td>
                         <td className="border border-gray-200 p-3 align-middle flex justify-center items-center relative">
                           <button
                             ref={(el) => (buttonRef.current[item.id] = el)}
@@ -330,14 +393,14 @@ function VendorProductlist({
                               >
                                 <VscEye /> view
                               </button>
-                              <button
+                              {/* <button
                                 onClick={() => {
                                   handleDelete(item);
                                 }}
                                 className="flex gap-2 items-center w-full text-left px-3 py-2 hover:bg-gray-200"
                               >
                                 <MdOutlineDelete /> Delete
-                              </button>
+                              </button> */}
                             </div>
                           )}
                         </td>
@@ -456,19 +519,19 @@ function VendorProductlist({
       </div>
       {/* product preview */}
       {productPreview && (
-        <DashboardProductCard
+        <VendorProductCard
           onClose={() => {
             setProductPreview(false);
           }}
           product={selectedProductview}
           // fetchProducts={fetchProducts}
           handleDelete={handleDelete}
-          updateStatus={updateStatus}
+          updateStatus={handleUpdateStatus}
           deleteWarning={deleteWarning}
           setDeleteWarning={setDeleteWarning}
           rejectReason={rejectReason}
           setRejectReason={setRejectReason}
-          handleConfirmReject={handleConfirmReject}
+          handleConfirmReject={handleUpdateStatus}
         />
       )}
     </div>

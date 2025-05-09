@@ -73,51 +73,51 @@ function BookAppointment({ onClose }) {
 
     try {
       if (selectedTIme) {
-        // const data = {
-        //   service_id: serviceid,
-        //   template_id: clienttemplateID,
-        //   user_id: your_public_key,
-        //   template_params: {
-        //     our_companyname: "Workved Interiors",
-        //     username: accountHolder.companyName,
-        //     date: formattedDate,
-        //     time: selectedTIme,
-        //     to_email: accountHolder.email,
-        //   },
-        // };
-        // const Admindata = {
-        //   service_id: serviceid,
-        //   template_id: adminTemplateID,
-        //   user_id: your_public_key,
-        //   template_params: {
-        //     our_companyname: "Workved Interiors",
-        //     companyname: accountHolder.companyName,
-        //     date: formattedDate,
-        //     time: selectedTIme,
-        //     user_email: accountHolder.email,
-        //     user_phoneno: accountHolder.phone,
-        //   },
-        // };
-        // const response = await axios.post(
-        //   "https://api.emailjs.com/api/v1.0/email/send",
-        //   data,
-        //   {
-        //     headers: { "Content-Type": "application/json" },
-        //   }
-        // );
-        // const adminResponse = await axios.post(
-        //   "https://api.emailjs.com/api/v1.0/email/send",
-        //   Admindata,
-        //   {
-        //     headers: { "Content-Type": "application/json" },
-        //   }
-        // );
-        // console.log("Email sent successfully:", response.data);
-        // console.log("admin email sent", adminResponse.data);
-        // alert("Your mail is sent!");
+        const data = {
+          service_id: serviceid,
+          template_id: clienttemplateID,
+          user_id: your_public_key,
+          template_params: {
+            our_companyname: "Workved Interiors",
+            username: accountHolder.companyName,
+            date: formattedDate,
+            time: selectedTIme,
+            to_email: accountHolder.email,
+          },
+        };
+        const Admindata = {
+          service_id: serviceid,
+          template_id: adminTemplateID,
+          user_id: your_public_key,
+          template_params: {
+            our_companyname: "Workved Interiors",
+            companyname: accountHolder.companyName,
+            date: formattedDate,
+            time: selectedTIme,
+            user_email: accountHolder.email,
+            user_phoneno: accountHolder.phone,
+          },
+        };
+        const response = await axios.post(
+          "https://api.emailjs.com/api/v1.0/email/send",
+          data,
+          {
+            headers: { "Content-Type": "application/json" },
+          }
+        );
+        const adminResponse = await axios.post(
+          "https://api.emailjs.com/api/v1.0/email/send",
+          Admindata,
+          {
+            headers: { "Content-Type": "application/json" },
+          }
+        );
+        console.log("Email sent successfully:", response.data);
+        console.log("admin email sent", adminResponse.data);
+        alert("Your mail is sent!");
         toast.success("we will shortly reach you");
         setIsappointmentbooked(true);
-        // saveBookingDatainDB(formattedDate, weekday, endtime);
+        saveBookingDatainDB(formattedDate, weekday, endtime);
       } else {
         toast.error("please select the time");
       }
