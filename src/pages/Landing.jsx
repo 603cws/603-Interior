@@ -44,7 +44,13 @@ function Landing() {
 
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
-  const { isMobile } = useApp();
+  const {
+    isMobile,
+    setTotalArea,
+    setCurrentLayoutID,
+    setCurrentLayoutData,
+    isAuthenticated,
+  } = useApp();
 
   // Change background image every 5 seconds
   useEffect(() => {
@@ -104,6 +110,7 @@ function Landing() {
       },
     ],
   };
+
   // const settingsWork = {
   //   dots: true,
   //   infinite: true,
@@ -185,7 +192,15 @@ function Landing() {
               </p>
               <button
                 className="border border-transparent px-5 bg-[#1F5C54] py-3 mt-16 font-Poppins font-bold transform transition-transform duration-300 ease-in-out hover:scale-110"
-                onClick={() => navigate("/Layout")}
+                onClick={() => {
+                  if (!isAuthenticated) {
+                    localStorage.removeItem("currentLayoutID");
+                    setTotalArea();
+                    setCurrentLayoutID(0);
+                    setCurrentLayoutData({});
+                  }
+                  navigate("/Layout");
+                }}
               >
                 Make Your Space
               </button>
