@@ -102,6 +102,7 @@ function OpenWorkspaces({
         {workspaceData.map((workspace) => (
           <LayoutCard
             key={workspace.type}
+            name={workspace.type}
             image={workspace.image}
             description={workspace.description}
             counterValue={areaQuantities[workspace.type] || 0}

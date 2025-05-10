@@ -3,6 +3,7 @@ import AreaCounter from "./AreaCounter";
 import Tooltip from "./ToolTip";
 
 const LayoutCard = ({
+  name,
   roomType,
   image,
   description,
@@ -101,6 +102,9 @@ const LayoutCard = ({
                 )}
               </div>
             )}
+          {name === "linear" && counterValue <= 0 && (
+            <p className="text-xs md:text-[13px]">Select size</p>
+          )}
         </div>
         <div>
           {!showInputField && (
