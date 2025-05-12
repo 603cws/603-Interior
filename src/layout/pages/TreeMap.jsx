@@ -147,54 +147,43 @@ const TreeMap = ({ totalArea, areaQuantities, areaValues }) => {
       const areaOccupied = areaQuantities[key] * areaValues[key];
       // const areaOccupied = areaQuantities[key] * areaValues[key];
       const percentage = ((areaOccupied / validTotalArea) * 100).toFixed(2);
-      console.log(areaOccupied, percentage, "hellooo from the series");
 
       let newareaoccupied;
-      console.log(totalArea);
 
       switch (true) {
         case totalArea >= 20000:
           newareaoccupied =
             areaOccupied > 1 && areaOccupied < 350 ? 600 : areaOccupied;
-          console.log(newareaoccupied, "key", key);
           break;
         case totalArea > 3000 && totalArea <= 5000:
           newareaoccupied =
             areaOccupied > 1 && areaOccupied < 100 ? 110 : areaOccupied;
-          console.log(newareaoccupied, "key", key);
           break;
         case totalArea > 5000 && totalArea <= 7000:
           newareaoccupied =
             areaOccupied > 1 && areaOccupied < 100 ? 140 : areaOccupied;
-          console.log(newareaoccupied, "key", key);
           break;
         case totalArea > 7000 && totalArea <= 9000:
           newareaoccupied =
             areaOccupied > 1 && areaOccupied < 200 ? 200 : areaOccupied;
-          console.log(newareaoccupied, "key", key);
           break;
         case totalArea > 9000 && totalArea <= 13000:
           newareaoccupied =
             areaOccupied > 1 && areaOccupied < 250 ? 300 : areaOccupied;
-          console.log(newareaoccupied, "key", key);
           break;
         case totalArea > 13000 && totalArea <= 17000:
           newareaoccupied =
             areaOccupied > 1 && areaOccupied < 250 ? 350 : areaOccupied;
-          console.log(newareaoccupied, "key", key);
           break;
         case totalArea > 17000 && totalArea < 20000:
           newareaoccupied =
             areaOccupied > 1 && areaOccupied < 300 ? 390 : areaOccupied;
-          console.log(newareaoccupied, "key", key);
           break;
 
         default:
           newareaoccupied = areaOccupied;
           break;
       }
-
-      console.log(newareaoccupied, "key", key);
 
       return {
         x: `${fullNames[key] || key}: ${percentage}%`,
@@ -271,7 +260,8 @@ const TreeMap = ({ totalArea, areaQuantities, areaValues }) => {
             opts.w.globals.labels[opts.dataPointIndex]
           } (${percentage}%)`;
         }
-        return `${val}`;
+        const newVal = val.split(":")[0];
+        return `${newVal}`;
       },
     },
     states: {
@@ -282,46 +272,9 @@ const TreeMap = ({ totalArea, areaQuantities, areaValues }) => {
         },
       },
     },
-    // tooltip: {
-    //   custom: ({ series, seriesIndex, dataPointIndex, w }) => {
-    //     const dataPoint = w.config.series[0].data[dataPointIndex];
-    //     const workspaceName = dataPoint.x.split(":")[0]; // Extract name
-    //     const occupiedArea = dataPoint.y;
-    //     const percentage = dataPoint.x.split(":")[1]; // Extract percentage
-    //     const imageUrl = workspaceImages[workspaceName] || null;
-
-    //     return `
-    //       <div style="
-    //         background: rgba(0, 0, 0, 0.8);
-    //         color: white;
-    //         padding: 10px;
-    //         border-radius: 8px;
-    //         text-align: center;
-    //         max-width: 250px;
-    //         position: relative;
-    //       ">
-    //         ${
-    //           imageUrl
-    //             ? `<img src="${imageUrl}" alt="${workspaceName}" style="width: 100%; height: 180px; object-fit: cover; border-radius: 5px;" />`
-    //             : ""
-    //         }
-    //         <div style="margin-top: 5px;">
-    //           <strong>${workspaceName}</strong>
-    //           <div>Occupied Area: ${occupiedArea} sq ft</div>
-    //           <div>Usage: ${percentage}</div>
-    //         </div>
-    //       </div>
-    //     `;
-    //   },
-    // },
-
     tooltip: {
       custom: ({ series, seriesIndex, dataPointIndex, w }) => {
-        // console.log(series, seriesIndex, dataPointIndex, w);
-
         const dataPoint = w.config.series[0].data[dataPointIndex];
-        // console.log(dataPoint);
-        // console.log(w.config.series[0]);
 
         const workspaceName = dataPoint.x.split(":")[0]; // Extract name
         const occupiedArea = dataPoint.areaOccupied;
@@ -333,29 +286,37 @@ const TreeMap = ({ totalArea, areaQuantities, areaValues }) => {
         const isMobile = window.innerWidth < 640; // Adjust for small screens
         const imageHeight = isMobile ? 120 : 180; // Smaller image on mobile
 
+        const isAvailable = workspaceName.toLowerCase().includes("available");
+
         return `
-          <div style="
-            background: rgba(0, 0, 0, 0.8);
-            color: white;
-            padding: 10px;
-            border-radius: 8px;
-            text-align: center;
-            max-width: 250px;
-            position: relative;
-          ">
-            ${
-              imageUrl
-                ? `<img src="${imageUrl}" alt="${workspaceName}" 
-                    style="width: 100%; height: ${imageHeight}px; object-fit: cover; border-radius: 5px;" />`
-                : ""
-            }
-            <div style="margin-top: 5px;">
-              <strong>${workspaceName}</strong>
-              <div>Occupied Area: ${occupiedArea} sq ft</div>
-              <div>Usage: ${percentage}</div>
-            </div>
-          </div>
-        `;
+      <div style="
+        background: rgba(0, 0, 0, 0.8);
+        color: white;
+        padding: 10px;
+        border-radius: 8px;
+        text-align: center;
+        max-width: 250px;
+        position: relative;
+      ">
+        ${
+          imageUrl
+            ? `<img src="${imageUrl}" alt="${workspaceName}" 
+                style="width: 100%; height: ${imageHeight}px; object-fit: cover; border-radius: 5px;" />`
+            : ""
+        }
+        <div style="margin-top: 5px;">
+          <strong>${workspaceName}</strong>
+          ${
+            isAvailable
+              ? `<div>Available: ${percentage}</div>`
+              : `
+                <div>Occupied Area: ${occupiedArea} sq ft</div>
+                <div>Usage: ${percentage}</div>
+              `
+          }
+        </div>
+      </div>
+    `;
       },
     },
   };

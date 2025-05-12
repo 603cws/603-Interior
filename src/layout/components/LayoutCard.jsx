@@ -16,13 +16,11 @@ const LayoutCard = ({
   onSizeChange,
   tooltipText,
   title,
-  showInputField, // New prop to conditionally render the input field
+  showInputField, // prop to conditionally render the input field
   inputFieldProps, // Props specific to the input field
   showAreaCounter, // Boolean to conditionally render AreaCounter   //undefined rohit
   areaCounterProps, // Props specific to AreaCounter
 }) => {
-  console.log("areaCounterProps", areaCounterProps);
-
   return (
     <div className="workspacedescription flex flex-col w-40 md:w-[280px] items-center border border-solid bg-[#fff] pb-2 my-3 relative">
       {/* Image */}
@@ -33,8 +31,8 @@ const LayoutCard = ({
           className="RoomImage object-contain w-full h-full cursor-pointer"
         />
         {/* Tooltip-like description */}
-        <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 translate-y-4 group-hover:translate-y-0 bg-white bg-opacity-70 text-black px-4 py-2 text-sm rounded-md opacity-0 group-hover:opacity-100 transition-all duration-400 shadow-lg pointer-events-none w-full">
-          {description}
+        <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 translate-y-4 group-hover:translate-y-0 bg-white bg-opacity-70 text-black px-4 py-2 text-xs sm:text-sm rounded-md opacity-0 group-hover:opacity-100 transition-all duration-400 shadow-lg pointer-events-none w-full">
+          <p className="">{description}</p>
           {tooltipText && (
             <div className="whitespace-pre-line">
               <Tooltip text={tooltipText}></Tooltip>
@@ -42,7 +40,7 @@ const LayoutCard = ({
           )}
         </div>
       </div>
-      <div className="grid grid-cols-2 justify-items-start items-start gap-x-1 w-full px-2">
+      <div className="grid grid-cols-1 md:grid-cols-2 justify-items-start items-start gap-x-1 w-full px-2">
         <div className="font-bold text-xs md:text-[13px]">{title}</div>
         <div>
           {!showInputField && (
@@ -63,6 +61,7 @@ const LayoutCard = ({
                     value={counterValue}
                     onChange={(e) => onChange(Number(e.target.value))} // Update counterValue on input change
                     min={0}
+                    disabled={roomType === "reception" || roomType === "lounge"}
                   />
                   {roomType !== "reception" && roomType !== "lounge" && (
                     <button
@@ -77,7 +76,7 @@ const LayoutCard = ({
             </>
           )}
           {showInputField && (
-            <div className="other-area-input mt-4 text-xs">
+            <div className="other-area-input text-xs">
               <label>{inputFieldProps.label || "Enter Value"}:</label>
               <input
                 type="number"
@@ -85,7 +84,7 @@ const LayoutCard = ({
                 onChange={inputFieldProps.onChange}
                 min={inputFieldProps.min || 0}
                 placeholder={inputFieldProps.placeholder || "Enter value"}
-                className="w-full border rounded p-2 mt-2 [&::-webkit-inner-spin-button]:appearance-none"
+                className="w-full border-2 border-gray-400 rounded p-2 mt-2 [&::-webkit-inner-spin-button]:appearance-none"
               />
             </div>
           )}

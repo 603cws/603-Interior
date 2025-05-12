@@ -11,7 +11,7 @@ const workspaceData = [
     description: "This is a linear workspace, designed for open collaboration.",
     sizes: ["M", "L", "XL"], // Corresponds to sizeMapping keys
     tooltipText:
-      "M: 3 X 2 ft (20 sq ft) \n L: 3.5 X 2 ft (24 sq ft) \n XL: 4 X 2 ft (29 sq ft)", // Default tooltip text for Linear Workstation
+      "M: 3X2 ft (20 sq ft) \n L: 3.5X2 ft (24 sq ft) \n XL: 4X2 ft (29 sq ft)", // Default tooltip text for Linear Workstation
     title: "Linear Workstation",
   },
   {
@@ -66,13 +66,6 @@ function OpenWorkspaces({
   //   }
   // };
 
-  console.log(
-    "variant in open workspaces",
-    variant,
-    "selected size in open workspaces"
-    // selectedSize
-  );
-
   const handleSizeChange = (newSize, type, noOfLinearStation) => {
     console.log("newSize", newSize);
     const newSizeArea = sizeAreaMapping[newSize];
@@ -91,7 +84,6 @@ function OpenWorkspaces({
       onVariantChange(newSize);
     }
   };
-  console.log("selectedSize", variant);
   return (
     <div className="section px-3">
       <h3 className="section-heading bg-white shadow-sm text-md pl-2 py-1.5 sticky top-0 font-semibold z-10">
@@ -128,11 +120,6 @@ function OpenWorkspaces({
                 areaQuantities[workspace.type]
               )
             }
-            // tooltipText={
-            //   workspace.type === "linear"
-            //     ? sizeArea[selectedSize] || workspace.tooltipText
-            //     : workspace.tooltipText
-            // }
             tooltipText={workspace.tooltipText}
             title={`${workspace.title} ${
               workspace.type === "linear"

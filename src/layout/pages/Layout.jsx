@@ -517,9 +517,6 @@ function Layout() {
     setCurrentLayoutData,
   } = useApp();
 
-  console.log("area", areaValues.linear);
-  console.log("variant", variant);
-
   useEffect(() => {
     if (currentLayoutData && Object.keys(currentLayoutData).length > 0) {
       setTotalAreaSource("layoutLoad");
@@ -548,7 +545,6 @@ function Layout() {
         newVariant = "L";
         break;
     }
-    console.log("newVariant", newVariant);
 
     setVariant(newVariant);
   };
@@ -747,8 +743,6 @@ function Layout() {
         setAreaQuantities(initialQuantities);
       }
     }
-
-    console.log("linear area", areaValues.linear);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [totalArea, totalAreaSource]); //do not add any more dependency

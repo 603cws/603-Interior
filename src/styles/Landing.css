@@ -194,6 +194,6 @@ slick-current {
   }
 }
 
-/* .apexcharts-datalabel {
-  font-size: 60%;
-} */
+.apexcharts-datalabel {
+  font-size: 45%;
+}
