@@ -19,7 +19,7 @@ const cabinData = [
   },
   {
     type: "manager",
-    image: "/images/workspace-image/manager.png",
+    image: "/images/workspace-image/manager.webp",
     // image: "/images/workstation-wp/manager-wp.webp",
     description:
       "This is the Manager's cabin, equipped with all necessary amenities.",

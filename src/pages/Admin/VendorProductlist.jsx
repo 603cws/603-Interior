@@ -8,6 +8,7 @@ import { supabase } from "../../services/supabase";
 import toast from "react-hot-toast";
 import DashboardProductCard from "../vendor/DashboardProductCard";
 import VendorProductCard from "../vendor/VendorProductCard";
+import { IoIosArrowBack } from "react-icons/io";
 
 function VendorProductlist({
   setVendorproductlist,
@@ -220,15 +221,19 @@ function VendorProductlist({
   };
 
   const fetchAddons = async () => {
-    const { data, error } = await supabase
-      .from("addon_variants")
-      .select("*")
-      .eq("vendorId", selectedVendor.id);
+    try {
+      const { data, error } = await supabase
+        .from("addon_variants")
+        .select("*")
+        .eq("vendorId", selectedVendor.id);
 
-    if (error) {
-      console.log("Error fetching addons:", error);
-    } else {
-      setAddons(data);
+      if (error) {
+        console.log("Error fetching addons:", error);
+      } else {
+        setAddons(data);
+      }
+    } finally {
+      setIsAddonRefresh(false);
     }
   };
 
@@ -252,10 +257,21 @@ function VendorProductlist({
             <button
               //   onClick={setVendorproductlist(false)}
               onClick={() => setVendorproductlist(false)}
-              className="capitalize font-semibold text-xl "
+              className="capitalize font-semibold flex items-center text-xl "
             >
-              go back
+              <IoIosArrowBack /> go back
             </button>
+
+            <div className="w-1/2">
+              <input
+                type="text"
+                // value={searchQuery}
+                className="w-full rounded-lg px-2 py-1 outline-none border-2 border-gray-400"
+                placeholder="......search by product name"
+                // onChange={(e) => filterItems(e.target.value)}
+              />
+            </div>
+
             {toggle && (
               <div>
                 <select

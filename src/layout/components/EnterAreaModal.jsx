@@ -22,9 +22,13 @@ function EnterAreaModal({ onclose }) {
 
   const handleSubmit = () => {
     const area = parseInt(inputValue, 10);
+    console.log(area);
+
     if (!isNaN(area) && area >= MIN_AREA && area <= MAX_AREA) {
       setTotalArea(area); // Commit inputValue to totalArea
       onclose(); // Close the modal
+    } else if (isNaN(area)) {
+      setError(`please enter the area`);
     } else {
       setError(`Area must be between ${MIN_AREA} and ${MAX_AREA}.`); // Show error message
     }

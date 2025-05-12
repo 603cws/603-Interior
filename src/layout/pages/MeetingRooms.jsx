@@ -12,7 +12,7 @@ const meetingRoomData = [
   // },
   {
     type: "interviewRoom",
-    image: "/images/workspace-image/interviewRoom.png",
+    image: "/images/workspace-image/interviewRoom.webp",
     // image: "/images/workstation-wp/interview-wp.webp",
     description:
       "This is the interview room, designed for conducting interviews.",
@@ -20,7 +20,7 @@ const meetingRoomData = [
   },
   {
     type: "conferenceRoom",
-    image: "/images/workspace-image/conferenceRoom.png",
+    image: "/images/workspace-image/conferenceRoom.webp",
     // image: "/images/workstation-wp/conf-wp.webp",
     description: "This is the conference room, suitable for large meetings.",
     slider: {
@@ -34,7 +34,7 @@ const meetingRoomData = [
   },
   {
     type: "boardRoom",
-    image: "/images/workspace-image/boardRoom.png",
+    image: "/images/workspace-image/boardRoom.webp",
     // image: "/images/workstation-wp/boardroom-wp.webp",
     description: "This is the board room, equipped for executive meetings.",
     slider: {
@@ -63,7 +63,7 @@ const meetingRoomData = [
   },
   {
     type: "hrRoom",
-    image: "/images/workspace-image/hrRoom.png",
+    image: "/images/workspace-image/hrRoom.webp",
     // image: "/images/workstation-wp/hr-wp.webp",
     description: "This is the HR room, designated for HR activities.",
     tooltipText: "size: 80 sqft",
@@ -80,7 +80,7 @@ const meetingRoomData = [
   },
   {
     type: "financeRoom",
-    image: "/images/workspace-image/financeRoom.png",
+    image: "/images/workspace-image/financeRoom.webp",
     // image: "/images/workstation-wp/finance-wp.webp",
     description: "This is the finance room, used for financial discussions.",
     tooltipText: "size: 100 sqft",

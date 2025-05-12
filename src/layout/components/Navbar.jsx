@@ -343,11 +343,13 @@ function Navbar({
               color="#FEBF00"
               className="absolute left-0"
             />
-            <MdOutlineCancel
-              size={30}
-              className="absolute right-2 cursor-pointer text-[#FFD43B] border-none hover:text-red-300"
-              onClick={handleReset}
-            />
+            {totalArea > 0 && (
+              <MdOutlineCancel
+                size={30}
+                className="absolute right-2 cursor-pointer text-[#FFD43B] border-none hover:text-red-300"
+                onClick={handleReset}
+              />
+            )}
             <input
               ref={inputRef}
               type="number"
@@ -359,7 +361,7 @@ function Navbar({
               onKeyDown={handleKeyDown}
               onKeyUp={handleSubmit}
               placeholder="Enter total area (sq ft)"
-              title="Set the area value here"
+              title="Enter area value here"
               aria-label="Total Area Input"
               data-tip="Enter the total area in square feet"
               autoFocus

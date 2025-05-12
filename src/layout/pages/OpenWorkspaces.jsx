@@ -6,7 +6,7 @@ import ErrorModal from "../../common-components/ErrorModal";
 const workspaceData = [
   {
     type: "linear",
-    image: "/images/workspace-image/linear.png",
+    image: "/images/workspace-image/linear.webp",
     // image: "/images/workstation-wp/linear-wp.webp",
     description: "This is a linear workspace, designed for open collaboration.",
     sizes: ["M", "L", "XL"], // Corresponds to sizeMapping keys
@@ -16,7 +16,7 @@ const workspaceData = [
   },
   {
     type: "lType",
-    image: "/images/workspace-image/lType.png",
+    image: "/images/workspace-image/lType.webp",
     // image: "/images/workstation-wp/ltype-wp.webp",
     description:
       "This is an L-type workspace, providing a semi-private environment.",

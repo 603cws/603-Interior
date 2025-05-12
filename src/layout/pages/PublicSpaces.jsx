@@ -19,7 +19,7 @@ const publicSpacesData = [
   },
   {
     type: "lounge",
-    image: "/images/workspace-image/lounge.png",
+    image: "/images/workspace-image/lounge.webp",
     // image: "/images/workstation-wp/lounge-wp.webp",
     description:
       "This is the lounge, a comfortable area for informal meetings.",
@@ -41,7 +41,7 @@ const publicSpacesData = [
   },
   {
     type: "breakoutRoom",
-    image: "/images/workspace-image/breakout.png",
+    image: "/images/workspace-image/breakout.webp",
     // image: "/images/workstation-wp/breakout-wp.webp",
     description:
       "This is the breakout room, a flexible space for small group discussions.",

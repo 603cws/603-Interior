@@ -100,10 +100,10 @@ const TreeMap = ({ totalArea, areaQuantities, areaValues }) => {
   };
 
   const workspaceImages = {
-    "Linear Workspace": "/images/workspace-image/linear.png",
-    "L-Type Workspace": "/images/workspace-image/lType.png",
+    "Linear Workspace": "/images/workspace-image/linear.webp",
+    "L-Type Workspace": "/images/workspace-image/lType.webp",
     "MD Cabin": "/images/workspace-image/md.png",
-    "Manager Cabin": "/images/workspace-image/manager.png",
+    "Manager Cabin": "/images/workspace-image/manager.webp",
     "Small Cabin": "/images/workspace-image/small.png",
     "UPS Room": "/images/workspace-image/ups.png",
     "BMS Room": "/images/workspace-image/bms.png",
@@ -115,14 +115,14 @@ const TreeMap = ({ totalArea, areaQuantities, areaValues }) => {
     "Phone Booth": "/images/workspace-image/phoneBooth.png",
     "Discussion Room": "/images/workspace-image/discussionRoom.png",
     "Interview Room": "/images/workspace-image/interviewRoom.png",
-    "Conference Room": "/images/workspace-image/conferenceRoom.png",
-    "Board Room": "/images/workspace-image/boardRoom.png",
+    "Conference Room": "/images/workspace-image/conferenceRoom.webp",
+    "Board Room": "/images/workspace-image/boardRoom.webp",
     "Meeting Room": "/images/workspace-image/meetingRoom.png",
     "Meeting Room (Large)": "/images/workspace-image/meetingRoomLarge.png",
-    "HR Room": "/images/workspace-image/hrRoom.png",
-    "Finance Room": "/images/workspace-image/financeRoom.png",
+    "HR Room": "/images/workspace-image/hrRoom.webp",
+    "Finance Room": "/images/workspace-image/financeRoom.webp",
     "Executive Washroom": "/images/workspace-image/executiveWashroom.png",
-    "Breakout Room": "/images/workspace-image/breakout.png",
+    "Breakout Room": "/images/workspace-image/breakout.webp",
     Other: "/images/workspace-image/other.png",
     Washrooms: "/images/workspace-image/washroom.png",
   };
