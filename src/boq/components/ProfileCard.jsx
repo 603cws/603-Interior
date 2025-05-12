@@ -26,7 +26,13 @@ const profileVariants = {
   }, // Slide out
 };
 
-function ProfileCard({ layout = false, isOpen, setIsOpen, iconRef }) {
+function ProfileCard({
+  layout = false,
+  isOpen,
+  setIsOpen,
+  iconRef,
+  selectedPlan = null,
+}) {
   const {
     setIsAuthenticated,
     accountHolder,
@@ -173,20 +179,22 @@ function ProfileCard({ layout = false, isOpen, setIsOpen, iconRef }) {
                   <BiUnite />
                   <button onClick={() => navigate("/Layout")}>Layout</button>
                 </div>
-                <div className="flex items-center mx-4 gap-3">
-                  <PiListStarFill />
-                  <button
-                    onClick={() => {
-                      setSelectedPlan(null);
-                      setIsOpen(false);
-                      setProgress(0);
-                      localStorage.removeItem("selectedData");
-                      setBoqTotal(0);
-                    }}
-                  >
-                    Select Your Plan
-                  </button>
-                </div>
+                {selectedPlan && (
+                  <div className="flex items-center mx-4 gap-3">
+                    <PiListStarFill />
+                    <button
+                      onClick={() => {
+                        setSelectedPlan(null);
+                        setIsOpen(false);
+                        setProgress(0);
+                        localStorage.removeItem("selectedData");
+                        setBoqTotal(0);
+                      }}
+                    >
+                      Select Your Plan
+                    </button>
+                  </div>
+                )}
               </>
             )}
             <div className="flex items-center mx-4 gap-3">

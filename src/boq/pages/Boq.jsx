@@ -591,6 +591,7 @@ function Boq() {
               isOpen={isOpen}
               setIsOpen={setIsOpen}
               iconRef={iconRef}
+              selectedPlan={selectedPlan}
             />
           </div>
         )}
