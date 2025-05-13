@@ -28,6 +28,8 @@ import DashboardInbox from "./DashboardInbox";
 import CreateUser from "./CreateUser";
 import { HiXMark } from "react-icons/hi2";
 import { MdDeleteOutline } from "react-icons/md";
+import { FaUserPlus } from "react-icons/fa6";
+import { TbCalendarStats } from "react-icons/tb";
 import Schedule from "./Schedule";
 
 function AdminDashboard() {
@@ -576,6 +578,8 @@ function AdminDashboard() {
     setFilteredUsers(filtereduser);
   };
 
+  const normalize = (str) => str.replace(/\s+/g, " ").trim().toLowerCase();
+
   const filterItems = (query) => {
     // console.log(query);
     setSearchQuery(query);
@@ -605,8 +609,11 @@ function AdminDashboard() {
       }
       setCurrentPage(1);
 
+      // const filtered = products.filter((item) =>
+      //   item.title.toLowerCase().includes(query.toLowerCase())
+      // );
       const filtered = products.filter((item) =>
-        item.title.toLowerCase().includes(query.toLowerCase())
+        normalize(item.title).includes(normalize(query))
       );
       // console.log(filtered);
 
@@ -625,8 +632,11 @@ function AdminDashboard() {
         setIsSearching(true);
       }
       setCurrentPage(1);
-      const filtered = addons.filter((item) =>
-        item.title.toLowerCase().includes(query.toLowerCase())
+      // const filtered = addons.filter((item) =>
+      //   item.title.toLowerCase().includes(query.toLowerCase())
+      // );
+      const filtered = products.filter((item) =>
+        normalize(item.title).includes(normalize(query))
       );
       // console.log(filtered);
 
@@ -733,13 +743,13 @@ function AdminDashboard() {
               isExpanded={isExpanded}
             />
             <SidebarItem
-              icon={<PiHandshakeFill />}
+              icon={<FaUserPlus />}
               text="create"
               onClick={handlecreate}
               isExpanded={isExpanded}
             />
             <SidebarItem
-              icon={<PiHandshakeFill />}
+              icon={<TbCalendarStats />}
               text="schedule"
               onClick={handleschedule}
               isExpanded={isExpanded}
@@ -1196,11 +1206,17 @@ function AdminDashboard() {
                       <div
                         key={index}
                         className={`flex flex-col ${
-                          isExpanded ? "lg:w-[200px] xl:w-[250px]" : "w-[300px]"
-                        } h-[150px] font-Poppins rounded-2xl bg-[#fff] relative`}
+                          isExpanded
+                            ? "lg:w-[200px] xl:w-[270px] h-[170px]"
+                            : "w-[300px] h-[150px]"
+                        }  font-Poppins rounded-2xl bg-[#fff] relative`}
                       >
-                        <div className="flex items-center my-4">
-                          <div className="mx-3">
+                        <div
+                          className={`flex items-center my-4 ${
+                            isExpanded && "px-4 py-2"
+                          }`}
+                        >
+                          <div className={`mx-3 ${isExpanded && "hidden"}`}>
                             <img
                               src={accountHolder.profileImage}
                               alt="usericon"

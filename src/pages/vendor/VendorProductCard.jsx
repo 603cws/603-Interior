@@ -24,6 +24,7 @@ function VendorProductCard({
 
   const currentStatus = product.status;
   console.log("current status", currentStatus);
+  console.log(product);
 
   return (
     <div className="flex justify-center items-center h-screen fixed inset-0 z-30 top-0 w-screen">
@@ -66,7 +67,7 @@ function VendorProductCard({
                 <h5 className="uppercase text-[#334A78] font-medium text-xs opacity-80">
                   dimensions:
                   <span className="font-bold text-[#000]">
-                    {product.dimensions}
+                    {product?.dimensions || "not mentioned"}
                   </span>
                 </h5>
                 <hr />

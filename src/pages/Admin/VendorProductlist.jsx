@@ -6,9 +6,10 @@ import { CiMenuKebab } from "react-icons/ci";
 import Spinner from "../../common-components/Spinner";
 import { supabase } from "../../services/supabase";
 import toast from "react-hot-toast";
-import DashboardProductCard from "../vendor/DashboardProductCard";
+// import DashboardProductCard from "../vendor/DashboardProductCard";
 import VendorProductCard from "../vendor/VendorProductCard";
 import { IoIosArrowBack } from "react-icons/io";
+import { ChevronDownIcon, FunnelIcon } from "@heroicons/react/24/outline";
 
 function VendorProductlist({
   setVendorproductlist,
@@ -41,6 +42,17 @@ function VendorProductlist({
   const menuRef = useRef({});
   const buttonRef = useRef({});
 
+  // const tableRef = useRef(null);
+  const scrollContainerRef = useRef(null);
+  // const [itemsPerPage, setItemsPerPage] = useState(10); // Default (gets updated dynamically)
+  // const [currentPage, setCurrentPage] = useState(1);
+  const [lastPageBeforeSearch, setLastPageBeforeSearch] = useState(1);
+  const [isSearching, setIsSearching] = useState(false);
+  const [searchQuery, setSearchQuery] = useState(""); // to store the latest search input
+
+  const [filteredProducts, setFilteredProducts] = useState([]);
+  const [filteredAddons, setFilteredAddons] = useState([]);
+
   //product refresh
   const [isproductRefresh, setIsProductRefresh] = useState(false);
 
@@ -48,6 +60,24 @@ function VendorProductlist({
   const [isaddonRefresh, setIsAddonRefresh] = useState(false);
 
   const vendorcategory = JSON.parse(selectedVendor.allowed_category);
+
+  const [isOpen, setIsOpen] = useState(false);
+  const [selected, setSelected] = useState("");
+
+  const handleSelect = (e) => {
+    setSelected(e.target.value);
+
+    if (e.target.value !== "") {
+      const filtered = products.filter(
+        (item) => item.status.toLowerCase() === e.target.value.toLowerCase()
+      );
+      setFilteredProducts(filtered);
+    } else {
+      setFilteredProducts(products);
+    }
+
+    setIsOpen(false); // close dropdown after selection (optional)
+  };
 
   //baseurlforimg
   const baseImageUrl =
@@ -135,15 +165,159 @@ function VendorProductlist({
     setToggle(tab === "products"); // Set toggle dynamically
   };
 
-  const filteredProducts =
-    selectedCategory === ""
-      ? products
-      : products.filter(
-          (product) => product.products?.category === selectedCategory
-        );
+  // const filteredProducts =
+  //   selectedCategory === ""
+  //     ? products
+  //     : products.filter(
+  //         (product) => product.products?.category === selectedCategory
+  //       );
 
-  const items = toggle ? filteredProducts : addons;
+  const items = toggle ? filteredProducts : filteredAddons;
+  // const items = toggle ? filteredProducts : addons;
   const totalPages = Math.ceil(items.length / itemsPerPage);
+
+  const normalize = (str) => str.replace(/\s+/g, " ").trim().toLowerCase();
+
+  const resetFilterstatuAfterSearch = () => {
+    if (selected !== "") {
+      const filtered = products.filter(
+        (item) => item.status.toLowerCase() === selected.toLowerCase()
+      );
+      setFilteredProducts(filtered);
+    } else {
+      // const filtered = products.filter((item) =>
+      //   normalize(item.title).includes(normalize(query))
+      // );
+      setFilteredProducts(products);
+    }
+  };
+
+  const filterItems = (query) => {
+    // console.log(query);
+    setSearchQuery(query);
+    console.log(query);
+    console.log("products", products);
+
+    if (toggle) {
+      if (!query && !selectedCategory) {
+        setFilteredProducts(products); // Reset to original list when input is empty
+        resetFilterstatuAfterSearch();
+        if (isSearching) {
+          setCurrentPage(lastPageBeforeSearch); // restore last page
+          setIsSearching(false); // reset
+        }
+        return;
+      }
+
+      if (!query && selectedCategory) {
+        filterbyCategory(selectedCategory);
+        if (isSearching) {
+          setCurrentPage(lastPageBeforeSearch);
+          setIsSearching(false);
+        }
+        return;
+      }
+      // If entering a search query
+      if (!isSearching) {
+        setLastPageBeforeSearch(currentPage); // store page before search
+        setIsSearching(true);
+      }
+      setCurrentPage(1);
+
+      // const filtered = products.filter((item) =>
+      //   item.title.toLowerCase().includes(query.toLowerCase())
+      // );
+      if (selected !== "") {
+        const filtered = filteredProducts.filter(
+          (item) =>
+            item.status.toLowerCase() === selected.toLowerCase() &&
+            normalize(item.title).includes(normalize(query))
+        );
+        setFilteredProducts(filtered);
+      } else {
+        const filtered = products.filter((item) =>
+          normalize(item.title).includes(normalize(query))
+        );
+        setFilteredProducts(filtered);
+      }
+
+      // const filtered = products.filter((item) =>
+      //   normalize(item.title).includes(normalize(query))
+      // );
+      // setFilteredProducts(filtered);
+      // console.log("filtered", filtered);
+    } else {
+      if (!query) {
+        setFilteredAddons(addons); // Reset to original list when input is empty
+        if (isSearching) {
+          setCurrentPage(lastPageBeforeSearch);
+          setIsSearching(false);
+        }
+        return;
+      }
+      if (!isSearching) {
+        setLastPageBeforeSearch(currentPage);
+        setIsSearching(true);
+      }
+      setCurrentPage(1);
+
+      // const filtered = addons.filter((item) =>
+      //   item.title.toLowerCase().includes(query.toLowerCase())
+      // );
+      if (selected !== "") {
+        const filtered = filteredAddons.filter(
+          (item) =>
+            item.status.toLowerCase() === selected.toLowerCase() &&
+            normalize(item.title).includes(normalize(query))
+        );
+        setFilteredAddons(filtered);
+      } else {
+        const filtered = addons.filter((item) =>
+          normalize(item.title).includes(normalize(query))
+        );
+        setFilteredAddons(filtered);
+      }
+
+      // console.log("filtered", filtered);
+      // const filtered = products.filter((item) =>
+      //   normalize(item.title).includes(normalize(query))
+      // );
+      // // console.log(filtered);
+
+      // setFilteredAddons(filtered);
+    }
+  };
+
+  const filterbyCategory = (category) => {
+    // console.log(category);
+    setSelectedCategory(category);
+
+    if (toggle) {
+      if (!category) {
+        setFilteredProducts(products); // Reset to original list when input is empty
+        return;
+      }
+      const filtered = products.filter(
+        (item) =>
+          item.products.category.toLowerCase() === category.toLowerCase()
+      );
+      // console.log(filtered);
+
+      setFilteredProducts(filtered);
+    } else {
+      if (!category) {
+        setFilteredAddons(addons); // Reset to original list when input is empty
+        return;
+      }
+      const filtered = addons.filter((item) =>
+        item.title.toLowerCase().includes(category.toLowerCase())
+      );
+      // console.log(filtered);
+
+      setFilteredAddons(filtered);
+    }
+    setCurrentPage(1);
+  };
 
   useEffect(() => {
     const calculateItemsPerPage = () => {
@@ -171,6 +345,10 @@ function VendorProductlist({
   const goToPage = (page) => {
     if (page > 0 && page <= totalPages) {
       setCurrentPage(page);
+
+      if (scrollContainerRef.current) {
+        scrollContainerRef.current.scrollTo({ top: 0, behavior: "smooth" });
+      }
     }
   };
 
@@ -212,7 +390,18 @@ function VendorProductlist({
             `
         )
         .eq("vendor_id", selectedVendor.id);
-      setProducts(data);
+
+      const sortedData = data.sort((a, b) => {
+        // Prioritize "pending" status
+        if (a.status === "pending" && b.status !== "pending") return -1;
+        if (b.status === "pending" && a.status !== "pending") return 1;
+
+        // If both are "pending" or both are not "pending", sort by date
+        return new Date(b.created_at) - new Date(a.created_at);
+      });
+      setProducts(sortedData);
+      setFilteredProducts(sortedData);
+      // setProducts(data);
     } catch (error) {
       console.log("Error fetching products:", error);
     } finally {
@@ -227,10 +416,25 @@ function VendorProductlist({
         .select("*")
         .eq("vendorId", selectedVendor.id);
 
+      // if (error) {
+      //   console.log("Error fetching addons:", error);
+      // } else {
+      //   setAddons(data);
+      // }
+      const sortedData = data.sort((a, b) => {
+        // Prioritize "pending" status
+        if (a.status === "pending" && b.status !== "pending") return -1;
+        if (b.status === "pending" && a.status !== "pending") return 1;
+
+        // If both are "pending" or both are not "pending", sort by date
+        return new Date(b.created_at) - new Date(a.created_at);
+      });
+
       if (error) {
         console.log("Error fetching addons:", error);
       } else {
-        setAddons(data);
+        setAddons(sortedData);
+        setFilteredAddons(sortedData);
       }
     } finally {
       setIsAddonRefresh(false);
@@ -265,11 +469,48 @@ function VendorProductlist({
             <div className="w-1/2">
               <input
                 type="text"
-                // value={searchQuery}
+                value={searchQuery}
                 className="w-full rounded-lg px-2 py-1 outline-none border-2 border-gray-400"
                 placeholder="......search by product name"
-                // onChange={(e) => filterItems(e.target.value)}
+                onChange={(e) => filterItems(e.target.value)}
               />
+            </div>
+
+            {/* <div>
+              <select>
+                <option value=""></option>
+                <option value="">Pending</option>
+                <option value="">Approved</option>
+                <option value="">Rejected</option>
+              </select>
+            </div> */}
+
+            <div className="relative inline-block text-left">
+              {/* Filter Button */}
+              <button
+                onClick={() => setIsOpen(!isOpen)}
+                className="flex items-center gap-2 bg-gray-100 px-4 py-2 rounded-md hover:bg-gray-200"
+              >
+                <FunnelIcon className="h-5 w-5 text-gray-600" />
+                <span className="text-sm text-gray-700">Filter</span>
+                <ChevronDownIcon className="h-4 w-4 text-gray-500" />
+              </button>
+
+              {/* Dropdown */}
+              {isOpen && (
+                <div className="absolute mt-2 w-40 bg-white border rounded-md shadow-lg z-10">
+                  <select
+                    value={selected}
+                    onChange={handleSelect}
+                    className="w-full border-none focus:ring-0 p-2 text-sm"
+                  >
+                    <option value="">All</option>
+                    <option value="pending">Pending</option>
+                    <option value="approved">Approved</option>
+                    <option value="rejected">Rejected</option>
+                  </select>
+                </div>
+              )}
             </div>
 
             {toggle && (
@@ -277,7 +518,8 @@ function VendorProductlist({
                 <select
                   name="category"
                   value={selectedCategory}
-                  onChange={(e) => setSelectedCategory(e.target.value)}
+                  // onChange={(e) => setSelectedCategory(e.target.value)}
+                  onChange={(e) => filterbyCategory(e.target.value)}
                   id="category"
                 >
                   <option value="">All categories</option>
@@ -313,7 +555,10 @@ function VendorProductlist({
           ) : items.length > 0 ? (
             // <section className="mt-2 flex-1 overflow-hidden px-8">
             <section className=" h-[90%] font-Poppins overflow-hidden">
-              <div className="w-full h-full border-t border-b border-[#CCCCCC] overflow-y-auto custom-scrollbar">
+              <div
+                className="w-full h-full border-t border-b border-[#CCCCCC] overflow-y-auto custom-scrollbar"
+                ref={scrollContainerRef}
+              >
                 <table className="min-w-full border-collapse" ref={tableRef}>
                   <thead className="bg-[#FFFFFF] sticky top-0 z-10 px-8 text-center text-[#000] text-base">
                     <tr>

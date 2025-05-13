@@ -6,7 +6,7 @@ function DashboardInbox({ viewDetails, products }) {
   );
 
   return (
-    <div className="bg-white rounded-3xl shadow-sm p-10 font-Poppins lg:h-[240px] overflow-y-auto scrollbar-hide">
+    <div className="bg-white rounded-3xl shadow-sm p-10 font-Poppins lg:h-[260px] overflow-y-auto scrollbar-hide">
       <div className="flex justify-between items-center">
         <div>
           <h3 className="text-xl font-bold text-[#252733]">Inbox</h3>

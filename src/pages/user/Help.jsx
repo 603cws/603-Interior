@@ -1,7 +1,7 @@
 import { FaAngleDown, FaAngleUp } from "react-icons/fa";
 import { useState } from "react";
 
-function Help() {
+function Help({ isvendor }) {
   const [expandedIndex, setExpandedIndex] = useState();
   const handleToggle = (index) => {
     setExpandedIndex((prevIndex) => (prevIndex === index ? null : index));
@@ -24,7 +24,12 @@ function Help() {
     },
   ];
   return (
-    <div className="flex-1  border-2 border-[#000] rounded-3xl my-2.5 font-Poppins">
+    <div
+      className={`flex-1  ${
+        !isvendor && "border-2 border-[#000]"
+      } rounded-3xl my-2.5 font-Poppins`}
+    >
+      {/* <div className="flex-1  border-2 border-[#000] rounded-3xl my-2.5 font-Poppins"> */}
       <div className="flex-col overflow-y-auto scrollbar-hide h-[calc(100vh-120px)] py-2 px-3">
         <div className="my-4">
           <h2 className="text-[#000] text-xl capitalize font-semibold text-center">

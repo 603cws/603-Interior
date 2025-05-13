@@ -71,10 +71,14 @@ function Clients({
               <div
                 key={index}
                 className={`flex flex-col relative ${
-                  isExpanded ? "lg:w-[200px] xl:w-[250px]" : "w-[320px]"
+                  isExpanded ? "lg:w-[200px] xl:w-[270px]" : "w-[320px]"
                 } h-[150px] font-Poppins rounded-2xl bg-[#fff]`}
               >
-                <div className="flex items-center my-4 ">
+                <div
+                  className={`flex items-center my-4 ${
+                    isExpanded && "px-4 py-2"
+                  }`}
+                >
                   <div className={`${isExpanded ? "hidden" : "block"} mx-3`}>
                     <img
                       src={`${user.profile_image}`}

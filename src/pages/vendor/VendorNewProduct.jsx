@@ -439,6 +439,7 @@ function VendorNewProduct({ setAddNewProduct, setProductlist }) {
                   onChange={handleChange}
                   value={variant.title}
                   className="w-full py-1.5 px-2 border-2 rounded-lg"
+                  required
                 />
               </div>
               <div>
@@ -449,6 +450,7 @@ function VendorNewProduct({ setAddNewProduct, setProductlist }) {
                   onChange={handleChange}
                   value={variant.details}
                   className="w-full py-1.5 px-2 border-2 rounded-lg"
+                  required
                 />
               </div>
               <div>
@@ -459,6 +461,7 @@ function VendorNewProduct({ setAddNewProduct, setProductlist }) {
                   onChange={handleChange}
                   value={variant.price}
                   className="w-full py-1.5 px-2 border-2 rounded-lg [&::-webkit-inner-spin-button]:appearance-none  focus:outline-none focus:ring-0"
+                  required
                 />
               </div>
               <div>
@@ -472,6 +475,7 @@ function VendorNewProduct({ setAddNewProduct, setProductlist }) {
                       name="height"
                       onChange={(e) => setDimensionHeight(e.target.value)}
                       className="w-20 xl:w-32 py-1.5 px-2 border-2 rounded-lg [&::-webkit-inner-spin-button]:appearance-none  focus:outline-none focus:ring-0"
+                      required
                     />
                     <span className="absolute right-2 top-2">H</span>
                   </div>
@@ -481,6 +485,7 @@ function VendorNewProduct({ setAddNewProduct, setProductlist }) {
                       name="length"
                       onChange={(e) => setDimensionLength(e.target.value)}
                       className="w-20 xl:w-32 py-1.5 px-2 border-2 rounded-lg [&::-webkit-inner-spin-button]:appearance-none  focus:outline-none focus:ring-0"
+                      required
                     />
                     <span className="absolute top-2 right-2">L</span>
                   </div>
@@ -490,6 +495,7 @@ function VendorNewProduct({ setAddNewProduct, setProductlist }) {
                       name="width"
                       onChange={handledimension}
                       className="w-20 xl:w-32 py-1.5 px-2 border-2 rounded-lg [&::-webkit-inner-spin-button]:appearance-none  focus:outline-none focus:ring-0"
+                      required
                     />
                     <span className="absolute top-2 right-2">W</span>
                   </div>
@@ -523,6 +529,7 @@ function VendorNewProduct({ setAddNewProduct, setProductlist }) {
                       className="hidden"
                       accept="image/*"
                       onChange={handleFileChange}
+                      // required
                     />
                     <label
                       htmlFor="file-upload"
@@ -579,6 +586,7 @@ function VendorNewProduct({ setAddNewProduct, setProductlist }) {
                       accept="image/*"
                       multiple
                       onChange={handleAdditionalImagesChange}
+                      // required
                     />
                     <label
                       htmlFor="additional-file-upload"

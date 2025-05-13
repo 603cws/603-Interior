@@ -1083,7 +1083,7 @@ function Dashboard() {
           )}
 
           {/* help */}
-          {help && <Help />}
+          {help && <Help isvendor={false} />}
         </div>
       </div>
       {/* product preview */}

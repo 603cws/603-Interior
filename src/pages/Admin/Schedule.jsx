@@ -114,7 +114,8 @@ function Schedule() {
   };
 
   return (
-    <div className="w-full  border-2 border-[#000] rounded-3xl bg-[#EBF0FF] my-2.5">
+    <div className="w-full  border-2 border-[#000] rounded-3xl  my-2.5">
+      {/* <div className="w-full  border-2 border-[#000] rounded-3xl bg-[#EBF0FF] my-2.5"> */}
       <div className="w-full  overflow-y-auto scrollbar-hide h-[calc(100vh-120px)] py-2 ">
         <div>
           <div className="text-xl text-[#000] capitalize font-semibold border-b-2 border-b-[#CCCCCC] ">
@@ -145,9 +146,12 @@ function Schedule() {
                     <h3 className="font-medium">Event Type</h3>
                     <BsThreeDots />
                   </div>
-                  <ul className="">
+                  <ul className=" list-inside">
                     <li className="flex justify-between items-center ">
-                      <p>meeting</p> <BsThreeDots />{" "}
+                      <p className="before:content-['•'] before:mr-2">
+                        meeting
+                      </p>{" "}
+                      <BsThreeDots />{" "}
                     </li>
                     {/* <li className="flex justify-between items-center">
                       <p>meeting</p> <BsThreeDots />{" "}
@@ -168,14 +172,14 @@ function Schedule() {
                   : "select a date"}
               </h4>
               <div className="overflow-x-auto">
-                <table className="w-full border-collapse border border-gray-300 text-[#3D194F]">
+                <table className="w-full border-collapse border border-[#ccc] text-[#3D194F] ">
                   {/* Table Header */}
                   <thead>
-                    <tr className="bg-gray-200">
+                    <tr className="">
                       {columns.map((col, index) => (
                         <th
                           key={index}
-                          className="border border-gray-300 px-4 py-2 text-left"
+                          className="border border-[#ccc] px-4 py-2 text-left"
                         >
                           {col}
                         </th>
@@ -184,11 +188,11 @@ function Schedule() {
                   </thead>
 
                   {/* Table Body */}
-                  <tbody>
+                  <tbody className="3xl:[&_td]:py-4">
                     {timeSlots.map((time, rowIndex) => (
-                      <tr key={rowIndex} className="even:bg-gray-100">
+                      <tr key={rowIndex} className="">
                         {/* Time Slot Column */}
-                        <td className="border border-gray-300 px-4 py-2 font-bold">
+                        <td className="border border-[#ccc] px-4 py-2 font-bold">
                           {time}
                         </td>
 
@@ -197,7 +201,7 @@ function Schedule() {
                           columns.slice(1).map((day, colIndex) => (
                             <td
                               key={colIndex}
-                              className="border border-gray-300 px-4 py-2 relative"
+                              className="border border-[#ccc] px-4 py-2 relative"
                             >
                               {scheduleData[day]?.[time] && (
                                 <div className="bg-purple-100 rounded-lg p-2 shadow-md flex ">

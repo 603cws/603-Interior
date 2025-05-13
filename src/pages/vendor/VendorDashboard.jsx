@@ -159,7 +159,7 @@ function VendorDashboard() {
             )}
 
             {/* help */}
-            {help && <Help />}
+            {help && <Help isvendor={true} />}
           </div>
         </div>
       </div>
