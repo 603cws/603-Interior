@@ -32,6 +32,8 @@ function ProfileCard({
   setIsOpen,
   iconRef,
   selectedPlan = null,
+  setShowBoqPrompt,
+  setIsProfileCard,
 }) {
   const {
     setIsAuthenticated,
@@ -184,11 +186,13 @@ function ProfileCard({
                     <PiListStarFill />
                     <button
                       onClick={() => {
-                        setSelectedPlan(null);
+                        // setSelectedPlan(null);
                         setIsOpen(false);
-                        setProgress(0);
-                        localStorage.removeItem("selectedData");
-                        setBoqTotal(0);
+                        // setProgress(0);
+                        // localStorage.removeItem("selectedData");
+                        // setBoqTotal(0);
+                        setShowBoqPrompt(true);
+                        setIsProfileCard(true);
                       }}
                     >
                       Select Your Plan

@@ -32,7 +32,7 @@ const fullNames = {
   conferenceRoom: "Conference Room",
   boardRoom: "Board Room",
   meetingRoom: "Meeting Room",
-  meetingRoomLarge: "Meeting Room (Large)",
+  meetingRoomLarge: "Meeting Room (L)",
   hrRoom: "HR Room",
   financeRoom: "Finance Room",
   executiveWashroom: "Executive Washroom",

@@ -17,12 +17,21 @@ import { MdOutlineCancel } from "react-icons/md";
 import { BiCheckCircle, BiDownload } from "react-icons/bi";
 // import useAuthRefresh from "../../Context/useAuthRefresh";
 
-function Navbar({ toggleProfile, iconRef }) {
+function Navbar({
+  toggleProfile,
+  iconRef,
+  showBoqPrompt,
+  setShowBoqPrompt,
+  existingBoqs,
+  setExistingBoqs,
+  isProfileCard,
+  setIsProfileCard,
+}) {
   // const progress = 0;
   const [isOpen, setIsOpen] = useState(false);
   const [boqList, setBoqList] = useState([]);
-  const [existingBoqs, setExistingBoqs] = useState([]); // Stores fetched BOQs
-  const [showBoqPrompt, setShowBoqPrompt] = useState(false);
+  // const [existingBoqs, setExistingBoqs] = useState([]); // Stores fetched BOQs
+  // const [showBoqPrompt, setShowBoqPrompt] = useState(false);
   const [completed100, setCompleted100] = useState(() => {
     return localStorage.getItem("boqCompleted") === "done" ? false : false;
   });
@@ -58,7 +67,7 @@ function Navbar({ toggleProfile, iconRef }) {
     categories,
     setUserId,
     setTotalArea,
-    totalArea,
+    // totalArea,
     userId,
     userResponses,
     selectedPlan,
@@ -66,7 +75,11 @@ function Navbar({ toggleProfile, iconRef }) {
     boqTotal,
     setBoqTotal,
     isMobile,
+    currentLayoutData,
+    setSelectedPlan,
   } = useApp();
+
+  const totalArea = currentLayoutData.totalArea;
 
   useEffect(() => {
     const boqCompleted = localStorage.getItem("boqCompleted");
@@ -309,6 +322,7 @@ function Navbar({ toggleProfile, iconRef }) {
       setSelectedData(formattedBOQProducts);
       setUserId(data.userId);
       setTotalArea(data?.total_area);
+      setSelectedPlan(data?.planType);
 
       toast.success(`Loaded BOQ: ${data.title}`);
       localStorage.removeItem("boqCompleted");
@@ -337,35 +351,35 @@ function Navbar({ toggleProfile, iconRef }) {
     }
   };
 
-  const handleSave = async () => {
-    if (!selectedData || selectedData.length === 0) {
-      toast.error("No selected data to save.");
-      return;
-    }
+  // const handleSave = async () => {
+  //   if (!selectedData || selectedData.length === 0) {
+  //     toast.error("No selected data to save.");
+  //     return;
+  //   }
 
-    // Fetch user's existing BOQs
-    const { data: existingBOQs, error: fetchError } = await supabase
-      .from("boqdata")
-      .select("id, title") // Fetch ID and title
-      .eq("userId", userId);
+  //   // Fetch user's existing BOQs
+  //   const { data: existingBOQs, error: fetchError } = await supabase
+  //     .from("boqdata")
+  //     .select("id, title") // Fetch ID and title
+  //     .eq("userId", userId);
 
-    if (fetchError) {
-      console.error("Error fetching user BOQs:", fetchError);
-      return;
-    }
+  //   if (fetchError) {
+  //     console.error("Error fetching user BOQs:", fetchError);
+  //     return;
+  //   }
 
-    if (existingBOQs.length >= 3) {
-      toast.error("You can only save up to 3 BOQs.");
-      return;
-    }
+  //   if (existingBOQs.length >= 3) {
+  //     toast.error("You can only save up to 3 BOQs.");
+  //     return;
+  //   }
 
-    if (existingBOQs.length > 0) {
-      setShowBoqPrompt(true); // Show the prompt for choosing or naming the BOQ
-      setExistingBoqs(existingBOQs); // Store the fetched BOQs for selection
-    } else {
-      setShowBoqPrompt(true); // If no existing BOQs, directly show naming prompt
-    }
-  };
+  //   if (existingBOQs.length > 0) {
+  //     setShowBoqPrompt(true); // Show the prompt for choosing or naming the BOQ
+  //     setExistingBoqs(existingBOQs); // Store the fetched BOQs for selection
+  //   } else {
+  //     setShowBoqPrompt(true); // If no existing BOQs, directly show naming prompt
+  //   }
+  // };
 
   const calculateGrandTotal = () => {
     // Ensure selectedData is an array before calling reduce
@@ -481,6 +495,7 @@ function Navbar({ toggleProfile, iconRef }) {
           .map((item) => item.finalPrice || "")
           .filter(Boolean) // Removes empty strings
           .join(","), // Store multiple product final prices as comma-separated values
+        totalprice: boqTotal,
       };
 
       // Insert into Supabase
@@ -710,7 +725,11 @@ function Navbar({ toggleProfile, iconRef }) {
                 <li className=" hover:bg-white hover:text-[#1A3A36] mb-2 py-1 px-2 rounded-lg">
                   <div className=" flex items-center" ref={dropdownRef}>
                     <button
-                      onClick={handleSave}
+                      // onClick={handleSave}
+                      onClick={() => {
+                        setShowBoqPrompt(true);
+                        setIsProfileCard(false);
+                      }}
                       // className="bg-white text-xs py-2 px-3 text-black rounded-l-full"
                     >
                       Save BOQ
@@ -911,7 +930,11 @@ function Navbar({ toggleProfile, iconRef }) {
               ref={dropdownRef}
             >
               <button
-                onClick={handleSave}
+                // onClick={handleSave}
+                onClick={() => {
+                  setShowBoqPrompt(true);
+                  setIsProfileCard(false);
+                }}
                 className="bg-white text-xs py-2 px-3 text-black rounded-l-full"
               >
                 Save BOQ
@@ -1022,9 +1045,11 @@ function Navbar({ toggleProfile, iconRef }) {
       {showBoqPrompt &&
         createPortal(
           <BoqPrompt
-            existingBoqs={existingBoqs}
+            // existingBoqs={existingBoqs}
             onConfirm={handleBoqNameConfirm}
             onCancel={() => setShowBoqPrompt(false)}
+            isProfileCard={isProfileCard}
+            setIsProfileCard={setIsProfileCard}
           />,
           document.body // Mounts it at the root level
         )}

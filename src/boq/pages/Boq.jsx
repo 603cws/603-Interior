@@ -40,6 +40,9 @@ function Boq() {
 
   const [questionPopup, setQuestionPopup] = useState(false);
   // const [selectedPlan, setSelectedPlan] = useState(null);
+  const [showBoqPrompt, setShowBoqPrompt] = useState(false);
+  const [existingBoqs, setExistingBoqs] = useState([]); // Stores fetched BOQs
+  const [isProfileCard, setIsProfileCard] = useState(false);
 
   const {
     selectedCategory,
@@ -482,7 +485,16 @@ function Boq() {
           },
         }}
       />
-      <Navbar toggleProfile={toggleProfile} iconRef={iconRef} />
+      <Navbar
+        toggleProfile={toggleProfile}
+        iconRef={iconRef}
+        showBoqPrompt={showBoqPrompt}
+        setShowBoqPrompt={setShowBoqPrompt}
+        existingBoqs={existingBoqs}
+        setExistingBoqs={setExistingBoqs}
+        isProfileCard={isProfileCard}
+        setIsProfileCard={setIsProfileCard}
+      />
       <div className="px-2 lg:px-5">
         {!selectedPlan ? (
           <Plans />
@@ -592,6 +604,10 @@ function Boq() {
               setIsOpen={setIsOpen}
               iconRef={iconRef}
               selectedPlan={selectedPlan}
+              // showBoqPrompt={showBoqPrompt}
+              setShowBoqPrompt={setShowBoqPrompt}
+              existingBoqs={existingBoqs}
+              setIsProfileCard={setIsProfileCard}
             />
           </div>
         )}
