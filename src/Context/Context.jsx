@@ -26,7 +26,7 @@ export const AppProvider = ({ children }) => {
   const searchQuery = "";
   const priceRange = [1, 15000000];
 
-  const [totalArea, setTotalArea] = useState();
+  const [totalArea, setTotalArea] = useState("");
   const [inputValue, setInputValue] = useState("");
   const [totalAreaSource, setTotalAreaSource] = useState(""); // Track the source of updates
   const [progress, setProgress] = useState(0);
@@ -220,7 +220,7 @@ export const AppProvider = ({ children }) => {
             .select()
             .eq("id", currentLayoutID); // Filter by userId
 
-          // setTotalArea(data[0].totalArea);
+          setTotalArea(data[0]?.totalArea);
           setCurrentLayoutData(data[0]);
 
           // setLayoutImage(data[0].layoutImg);

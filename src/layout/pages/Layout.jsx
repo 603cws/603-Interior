@@ -2,16 +2,13 @@ import { useEffect, useState, useRef } from "react";
 import Navbar from "../components/Navbar";
 import Spacebar from "../components/Spacebar";
 import TreeMap from "../pages/TreeMap";
-// import LayoutCard from "./layout/components/LayoutCard"
 import OpenWorkspaces from "../pages/OpenWorkspaces";
 import Cabins from "../pages/Cabins";
 import MeetingRooms from "../pages/MeetingRooms";
 import { useApp } from "../../Context/Context";
 import SupportSpaces from "./SupportSpaces";
 import PublicSpaces from "./PublicSpaces";
-// import ErrorModal from "../../components/ErrorModal";
 import ErrorModal from "../../common-components/ErrorModal";
-// import QnaPopup from "./components/QnaPopup"
 import Joyride, { STATUS } from "react-joyride";
 import EnterAreaModal from "../components/EnterAreaModal";
 import ProfileCard from "../../boq/components/ProfileCard";
@@ -82,28 +79,8 @@ const initialQuantities = {
 const MAX_AREA = 25000;
 const MIN_AREA = 1000;
 
-// const calculateReceptionArea = (totalArea) => {
-//   if (totalArea >= 1000 && totalArea < 3500) {
-//     return Math.round(totalArea * 0.08);
-//   } else if (totalArea >= 3500 && totalArea < 4500) {
-//     return Math.round(totalArea * 0.06);
-//   } else if (totalArea >= 4500 && totalArea < 5500) {
-//     return Math.round(totalArea * 0.05);
-//   } else if (totalArea >= 5500 && totalArea < 6500) {
-//     return Math.round(totalArea * 0.045);
-//   } else if (totalArea >= 6500 && totalArea < 12000) {
-//     return 300;
-//   } else if (totalArea >= 12000 && totalArea < 18000) {
-//     return 500;
-//   } else if (totalArea >= 18000 && totalArea <= 25000) {
-//     return 700;
-//   } else {
-//     return 0;
-//   }
-// };
-
 const calculateReceptionArea = (totalArea) => {
-  if (totalArea > 999 && totalArea <= 25000) {
+  if (totalArea >= MIN_AREA && totalArea <= MAX_AREA) {
     if (totalArea >= 1000 && totalArea <= 2000) {
       return Math.round(totalArea * 0.055);
     } else if (totalArea >= 2000 && totalArea <= 10000) {
@@ -135,25 +112,6 @@ const calculateReceptionArea = (totalArea) => {
     return 1;
   }
 };
-// const calculateReceptionArea = (totalArea) => {
-//   if (totalArea >= 1000 && totalArea < 3500) {
-//     return Math.round(totalArea * 0.08);
-//   } else if (totalArea >= 3500 && totalArea < 4500) {
-//     return Math.round(totalArea * 0.06);
-//   } else if (totalArea >= 4500 && totalArea < 5500) {
-//     return Math.round(totalArea * 0.05);
-//   } else if (totalArea >= 5500 && totalArea < 6500) {
-//     return Math.round(totalArea * 0.045);
-//   } else if (totalArea >= 6500 && totalArea < 12000) {
-//     return 300;
-//   } else if (totalArea >= 12000 && totalArea < 18000) {
-//     return 500;
-//   } else if (totalArea >= 18000 && totalArea <= 25000) {
-//     return 700;
-//   } else {
-//     return 1;
-//   }
-// };
 
 const calculateLoungeArea = (totalArea) => {
   if (totalArea >= 1000 && totalArea < 2000) {
@@ -508,28 +466,8 @@ function Layout() {
   const [warning, setWarning] = useState(false);
   const [otherArea, setOtherArea] = useState();
 
-  const {
-    totalArea,
-    setTotalArea,
-    totalAreaSource,
-    setTotalAreaSource,
-    currentLayoutData,
-    setCurrentLayoutData,
-  } = useApp();
-
-  useEffect(() => {
-    if (currentLayoutData && Object.keys(currentLayoutData).length > 0) {
-      setTotalAreaSource("layoutLoad");
-      setTotalArea(currentLayoutData.totalArea);
-      const { areaValues, quantities } =
-        extractAreaAndQuantity(currentLayoutData);
-
-      setAreaValues(areaValues);
-      setAreaQuantities(quantities);
-
-      handleVariantNameChange(areaValues);
-    }
-  }, [currentLayoutData]); // only runs when currentLayoutData changes
+  const { totalArea, setTotalArea, totalAreaSource, currentLayoutData } =
+    useApp();
 
   const handleVariantNameChange = (areaValues) => {
     let newVariant;
@@ -662,8 +600,12 @@ function Layout() {
   //     document.title = '603 Layout';
   // }, []);
 
+  let tempVar = "";
+
   useEffect(() => {
-    if (totalAreaSource !== "ErrorModal" || totalAreaSource !== "layoutLoad") {
+    if (totalAreaSource !== "ErrorModal" || tempVar !== "layoutLoad") {
+      console.log("Main Executed");
+
       const linear = calculateLinear(totalArea);
       const lType = calculateLType(totalArea, areaValues);
       const md = calculateMd(totalArea, areaValues);
@@ -771,6 +713,21 @@ function Layout() {
     setAvailableArea(totalArea - builtArea);
   }, [totalArea, builtArea]);
 
+  useEffect(() => {
+    if (currentLayoutData && Object.keys(currentLayoutData).length > 0) {
+      console.log("Executed");
+
+      tempVar = "layoutLoad";
+      const { areaValues, quantities } =
+        extractAreaAndQuantity(currentLayoutData);
+
+      setAreaValues(areaValues);
+      setAreaQuantities(quantities);
+
+      handleVariantNameChange(areaValues);
+    }
+  }, [currentLayoutData]); // only runs when currentLayoutData changes
+
   const updateAreas = (type, value) => {
     // Ensure the total area is entered before making changes
     if (!totalArea) {
@@ -844,6 +801,7 @@ function Layout() {
     // setInputValue("");
     setAreaQuantities(initialQuantities);
   };
+
   const handleVariantChange = (newVariant) => {
     console.log("newVariant", newVariant);
     setVariant(newVariant);
@@ -1023,17 +981,8 @@ function Layout() {
           },
         }}
       />
-      {/* <Navbar
-                totalArea={totalArea}
-                setTotalArea={setTotalArea}
-                MAX_AREA={MAX_AREA}
-                MIN_AREA={MIN_AREA}
-                resetAll={resetAll}
-            /> */}
       <div className="navbar">
         <Navbar
-          // totalArea={totalArea}
-          // setTotalArea={setTotalArea}
           MAX_AREA={MAX_AREA}
           MIN_AREA={MIN_AREA}
           resetAll={resetAll}

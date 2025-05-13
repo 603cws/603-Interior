@@ -308,7 +308,7 @@ function Navbar({ toggleProfile, iconRef }) {
       // ✅ Update state with the final BOQ structure
       setSelectedData(formattedBOQProducts);
       setUserId(data.userId);
-      setTotalArea(data.total_area);
+      setTotalArea(data?.total_area);
 
       toast.success(`Loaded BOQ: ${data.title}`);
       localStorage.removeItem("boqCompleted");

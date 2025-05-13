@@ -195,7 +195,7 @@ function Landing() {
                 onClick={() => {
                   if (!isAuthenticated) {
                     localStorage.removeItem("currentLayoutID");
-                    setTotalArea();
+                    setTotalArea("");
                     setCurrentLayoutID(0);
                     setCurrentLayoutData({});
                   }
