@@ -56,16 +56,12 @@ function ProfileCard({
   // Close profile card when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
-      console.log("clicked outside");
-
       if (
         profileRef.current?.contains(event.target) ||
         iconRef.current?.contains(event.target)
       ) {
         return; // If clicked inside, do nothing
       } else {
-        console.log("else outside click");
-
         setIsOpen(() => false);
       }
       // setIsOpen(false); // Otherwise, close it
@@ -105,7 +101,6 @@ function ProfileCard({
         role: "",
         userId: "",
       });
-      console.log("hello");
       setTotalArea("");
       localStorage.removeItem("currentLayoutID");
       localStorage.removeItem("session");

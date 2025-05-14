@@ -109,7 +109,6 @@ function Boq() {
   // Handle the completion or skipping of the tour
   const handleTourCallback = (data) => {
     const { status } = data;
-    console.log(data);
 
     const finishedStatuses = [STATUS.FINISHED, STATUS.SKIPPED];
     if (finishedStatuses.includes(status)) {
@@ -170,12 +169,10 @@ function Boq() {
   const handleSelectedSubCategory = (subCategory) => {
     setSelectedSubCategory(subCategory);
     setMinimizedView(true);
-    console.log("Selected SubCat: ", subCategory);
   };
 
   const handleSelectedSubCategory1 = (subCategory1) => {
     setSelectedSubCategory1(subCategory1);
-    console.log("Selected SubCat1: ", subCategory1);
   };
 
   const handleSelectedProductView = (variant) => {
@@ -188,8 +185,6 @@ function Boq() {
     subcategory,
     subcategory1
   ) => {
-    console.log(variantPrice, cat, subcategory, subcategory1);
-
     const baseTotal = calculateAutoTotalPriceHelper(
       quantityData[0],
       areasData[0],
@@ -208,18 +203,10 @@ function Boq() {
     else if (cat === "Paint") total = baseTotal * variantPrice * 3 * 15;
     else total = baseTotal * variantPrice;
 
-    // Store the total per category
-    // categoryTotals[cat] = (categoryTotals[cat] || 0) + total;
-
-    // console.log(`Total for ${cat}: `, categoryTotals[cat]);
-
     return total;
   };
 
   const autoSelectPlanProducts = (products, categories) => {
-    console.log("All Products:", products);
-    console.log("Selected categories:", categories);
-
     if (!selectedPlan || !products.length || !categories.length) return;
 
     const selectedProducts = [];
@@ -227,17 +214,11 @@ function Boq() {
     const productMap = new Map();
 
     categories.forEach((cat) => {
-      console.log(cat);
-
       const filterProducts = products.filter(
         (product) => product.category === cat.category
       );
 
-      console.log(filterProducts);
-
       filterProducts.forEach((product) => {
-        console.log(product);
-
         // if(product.category === "HVAC" && product.subc)
 
         const { category, subcategory, subcategory1, product_variants } =
@@ -268,8 +249,6 @@ function Boq() {
               variant.segment?.toLowerCase() === selectedPlan?.toLowerCase() &&
               variant.default === variant.segment // Ensure it is marked as default
           );
-
-          console.log("matching variant", matchingVariant);
 
           if (matchingVariant) {
             // const groupKey = `${category}-${subCat}-${subcategory1}-${product.id}`;
@@ -322,8 +301,6 @@ function Boq() {
     });
 
     setSelectedData(selectedProducts);
-
-    console.log("Auto-selected products based on plan:", selectedProducts);
   };
 
   const handleCategoryClick = (id, category, subcategories) => {
@@ -339,7 +316,6 @@ function Boq() {
   };
 
   const handleQuestionSubmit = (answers) => {
-    console.log("Answers from QuestionModal:", answers); // Log submitted answers
     setUserResponses((prevResponses) => ({
       ...prevResponses,
       height: answers.roomHeight,
@@ -432,30 +408,8 @@ function Boq() {
       : []
   );
 
-  // const handleBoqNameConfirm = (nameOrId, isNew = true) => {
-  //   setShowBoqPrompt(false);
-
-  //   if (isNew) {
-  //     setBoqTitle(nameOrId); // If it's a new BOQ, use the entered name
-  //     insertDataIntoSupabase(selectedData, userId, nameOrId, totalArea);
-  //   } else {
-  //     *(nameOrId); // If updating an existing BOQ, use its ID
-  //   }
-  // };
-
-  console.log("selected products", selectedData);
-  // console.log("selected plan", selectedPlan);
-
   return (
     <div>
-      {/* {showBoqPrompt && (
-        <BoqPrompt
-          existingBoqs={existingBoqs}
-          onConfirm={handleBoqNameConfirm}
-          onCancel={() => setShowBoqPrompt(false)}
-        />
-      )} */}
-
       <Joyride
         steps={tourSteps}
         run={runTour}

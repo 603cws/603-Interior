@@ -22,16 +22,12 @@ function Navbar({
   iconRef,
   showBoqPrompt,
   setShowBoqPrompt,
-  existingBoqs,
-  setExistingBoqs,
   isProfileCard,
   setIsProfileCard,
 }) {
   // const progress = 0;
   const [isOpen, setIsOpen] = useState(false);
   const [boqList, setBoqList] = useState([]);
-  // const [existingBoqs, setExistingBoqs] = useState([]); // Stores fetched BOQs
-  // const [showBoqPrompt, setShowBoqPrompt] = useState(false);
   const [completed100, setCompleted100] = useState(() => {
     return localStorage.getItem("boqCompleted") === "done" ? false : false;
   });
@@ -67,7 +63,6 @@ function Navbar({
     categories,
     setUserId,
     setTotalArea,
-    // totalArea,
     userId,
     userResponses,
     selectedPlan,
@@ -99,12 +94,6 @@ function Navbar({
   const handlelogo = () => {
     naviagte("/");
   };
-
-  // console.log("total", calculateGrandTotal().toLocaleString("en-IN"));
-
-  // const toggleProfile = () => {
-  //   setShowProfile(!showProfile);
-  // };
 
   const fetchFilteredBOQProducts = async (reconstructedData) => {
     try {
@@ -199,7 +188,6 @@ function Navbar({
         })
         .filter(Boolean); // Remove null entries
 
-      console.log("Formatted BOQ Products:", filteredBOQProducts);
       return filteredBOQProducts;
     } catch (error) {
       console.error("Error fetching and filtering BOQ products:", error);
@@ -311,8 +299,6 @@ function Navbar({
         };
       });
 
-      console.log("Reconstructed BOQ Data:", reconstructedData);
-
       // Fetch and transform BOQ-related products and addons
       const formattedBOQProducts = await fetchFilteredBOQProducts(
         reconstructedData
@@ -351,36 +337,6 @@ function Navbar({
     }
   };
 
-  // const handleSave = async () => {
-  //   if (!selectedData || selectedData.length === 0) {
-  //     toast.error("No selected data to save.");
-  //     return;
-  //   }
-
-  //   // Fetch user's existing BOQs
-  //   const { data: existingBOQs, error: fetchError } = await supabase
-  //     .from("boqdata")
-  //     .select("id, title") // Fetch ID and title
-  //     .eq("userId", userId);
-
-  //   if (fetchError) {
-  //     console.error("Error fetching user BOQs:", fetchError);
-  //     return;
-  //   }
-
-  //   if (existingBOQs.length >= 3) {
-  //     toast.error("You can only save up to 3 BOQs.");
-  //     return;
-  //   }
-
-  //   if (existingBOQs.length > 0) {
-  //     setShowBoqPrompt(true); // Show the prompt for choosing or naming the BOQ
-  //     setExistingBoqs(existingBOQs); // Store the fetched BOQs for selection
-  //   } else {
-  //     setShowBoqPrompt(true); // If no existing BOQs, directly show naming prompt
-  //   }
-  // };
-
   const calculateGrandTotal = () => {
     // Ensure selectedData is an array before calling reduce
     let grandTotal = (Array.isArray(selectedData) ? selectedData : []).reduce(
@@ -403,11 +359,7 @@ function Navbar({
       grandTotal += 150 * totalArea;
     }
 
-    // console.log("from grandtotal", grandTotal);
-    // console.log("from grandtotal area", totalArea);
-    console.log("grand total", grandTotal);
     setBoqTotal(grandTotal);
-    console.log("boq total", boqTotal);
   };
 
   useEffect(() => {
@@ -506,7 +458,6 @@ function Navbar({
       if (error) {
         console.error("Error inserting data into Supabase:", error);
       } else {
-        console.log("Data inserted successfully:", data);
         toast.success("BOQ saved successfully!");
       }
     } catch (error) {
@@ -785,94 +736,6 @@ function Navbar({
               </ul>
             </div>
           )}
-
-          {/* <div className="flex items-center gap-2">
-          {import.meta.env.MODE === "development" && (
-            <MdClear
-              color="red"
-              size={30}
-              title="Clear selected data"
-              onClick={() => {
-                localStorage.removeItem("selectedData");
-                window.location.reload();
-              }}
-              className="cursor-pointer"
-            />
-          )}
-          <div
-            className="relative inline-flex items-center border border-black rounded-full"
-            ref={dropdownRef}
-          >
-            <button
-              onClick={handleSave}
-              className="bg-white text-xs py-2 px-3 text-black rounded-l-full"
-            >
-              Save BOQ
-            </button>
-            <button
-              onClick={() => {
-                fetchSavedBOQs();
-                setIsOpen(!isOpen);
-              }}
-              className="bg-white px-3 py-2 border-l border-black flex items-center rounded-r-full"
-            >
-              <RiArrowDropDownLine />
-            </button>
-
-            {isOpen && (
-              <ul className="absolute left-0 top-7 min-w-[200px] mt-2 w-auto bg-white border border-gray-300 rounded-lg shadow-md">
-                <li className="px-4 py-2 grid grid-cols-[2fr_1fr] font-semibold bg-gray-200 text-center rounded-lg shadow-md">
-                  <span className="text-left">Title</span>
-                  <span className="text-center">Actions</span>
-                </li>
-                {boqList.length > 0 ? (
-                  boqList.map((boq) => (
-                    <li
-                      key={boq.id}
-                      className="px-4 py-2 grid grid-cols-[2fr_1fr] items-center hover:bg-gray-100 cursor-pointer"
-                    >
-                      <span className="text-left break-words whitespace-normal">
-                        {boq.title}
-                      </span>
-
-                      <div className="flex justify-center gap-2">
-                        <FiUploadCloud
-                          className="cursor-pointer"
-                          onClick={() => handleLoadBOQ(boq.id)}
-                        />
-                        <FaTrash
-                          className="text-red-500 cursor-pointer"
-                          onClick={() => handleDeleteBOQ(boq.id)}
-                        />
-                      </div>
-                    </li>
-                  ))
-                ) : (
-                  <li className="px-4 py-2 text-gray-500 text-center">
-                    No BOQs saved
-                  </li>
-                )}
-              </ul>
-            )}
-          </div>
-          <div className="flex items-center downloadB">
-            <button
-              onClick={() =>
-                PDFGenerator.generatePDF(
-                  selectedData,
-                  calculateGrandTotal,
-                  accountHolder.companyName,
-                  accountHolder.location,
-                  areasData,
-                  categories
-                )
-              }
-              className="bg-[#1A3A36] text-xs py-2 px-5 text-white rounded-full border-solid border-[1px] border-[#34BFAD] hover:bg-[#34BFAD]"
-            >
-              Download
-            </button>
-          </div>
-        </div> */}
         </div>
       ) : (
         <div className="bg-[#1A3A36] py-1 flex px-5">

@@ -126,16 +126,6 @@ export const calculateAutoTotalPriceHelper = (
   subcategory1,
   height
 ) => {
-  console.log(
-    "calculateTotalPriceHelper:",
-    roomNumbersMap,
-    areasData,
-    category,
-    subcategory,
-    subcategory1,
-    height
-  );
-
   const normalizedSubCat = normalizeKey(subcategory);
 
   let matchedKey, quantity, area, value;
@@ -176,18 +166,10 @@ export const calculateAutoTotalPriceHelper = (
         subcategory1,
         height,
       }); //return value and do the calculation here
-      console.log(
-        "values from partition calculation",
-        quantity,
-        area,
-        subcategory1,
-        height
-      );
     }
 
     if (category === "HVAC") {
       value = HVACCalculation({ quantity, area, subcategory }); //return value and do the calculation here
-      console.log("values from hvac calculation", quantity, area, subcategory);
     }
   } else {
     // Calculation of price * area

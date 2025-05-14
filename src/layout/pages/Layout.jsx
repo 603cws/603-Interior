@@ -604,8 +604,6 @@ function Layout() {
 
   useEffect(() => {
     if (totalAreaSource !== "ErrorModal" || tempVar !== "layoutLoad") {
-      console.log("Main Executed");
-
       const linear = calculateLinear(totalArea);
       const lType = calculateLType(totalArea, areaValues);
       const md = calculateMd(totalArea, areaValues);
@@ -715,8 +713,6 @@ function Layout() {
 
   useEffect(() => {
     if (currentLayoutData && Object.keys(currentLayoutData).length > 0) {
-      console.log("Executed");
-
       tempVar = "layoutLoad";
       const { areaValues, quantities } =
         extractAreaAndQuantity(currentLayoutData);

@@ -49,8 +49,6 @@ function ProductCard({
 
   const productsInSubCategory = productsInCategory[selectedSubCategory] || [];
 
-  console.log("products in subcat", productsInSubCategory);
-
   // Move `filteredProducts` ABOVE useEffect
   const filteredProducts = productsInSubCategory
     .filter((product) => {
@@ -84,8 +82,6 @@ function ProductCard({
       variant.segment.toLowerCase() === filtervalue.toLowerCase()
     );
   });
-
-  console.log("filtered variants0", filteredVariants);
 
   useEffect(() => {
     // setLoading(filteredVariants.length === 0);

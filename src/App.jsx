@@ -51,11 +51,16 @@ function App() {
 
   // While authentication is loading, show a spinner
   if (isAuthLoading) {
-    console.log(isAuthLoading);
+    // console.log(isAuthLoading);
     return <SpinnerFullPage />;
   }
 
-  console.log(isAuthLoading, isAuthenticated);
+  console.log(
+    "Auth Loading: ",
+    isAuthLoading,
+    "Authenticated: ",
+    isAuthenticated
+  );
 
   return (
     <div>

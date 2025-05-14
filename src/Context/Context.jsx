@@ -190,8 +190,6 @@ export const AppProvider = ({ children }) => {
             );
           });
 
-          console.log("Updated Categories: ", categoriesData);
-
           setCategories(categoriesData);
           handleCategorySelection(categoriesData[0]);
           setSelectedSubCategory(categoriesData[0].subcategories[0] || null);
@@ -288,7 +286,6 @@ export const AppProvider = ({ children }) => {
       // Update the subcategories state
       if (category) {
         setSubCategories(category.subcategories || []);
-        console.log("filtered subcategories", category.subcategories);
       }
     } else {
       setSubCategories([]); // Reset subcategories if no category is selected
@@ -316,7 +313,6 @@ export const AppProvider = ({ children }) => {
       !Array.isArray(selectedData) ||
       selectedData.length === 0
     ) {
-      // console.log("Skipping handleProgressBar due to missing data.");
       return;
     }
 
@@ -402,7 +398,6 @@ export const AppProvider = ({ children }) => {
 
   const handleCategorySelection = (categoryData) => {
     setSelectedCategory(categoryData);
-    console.log("Selected Category: ", categoryData.category);
   };
 
   function handleProgressBar(selectedData, categories, subCat1) {
@@ -563,11 +558,6 @@ export const AppProvider = ({ children }) => {
       localStorage.setItem("selectedData", JSON.stringify(updatedData));
       return updatedData;
     });
-
-    // console.log(
-    //   isChecked ? "Added to selected data" : "Removed from selected data",
-    //   groupKey
-    // );
   };
 
   return (

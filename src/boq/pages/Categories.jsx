@@ -62,14 +62,12 @@ const Categories = ({
     return `/images/boq/${cleanedSubCategoryName}.png`;
   };
   const checkIfSubCategoryCompleted = (category, subCategory) => {
-    // console.log("selectedData:", selectedData); // Log selectedData
     if (!selectedData || selectedData.length === 0) return false;
 
     const categoryObject = categories.find(
       (cat) =>
         cat.category.toLowerCase().trim() === category.toLowerCase().trim()
     );
-    // console.log("categoryObject:", categoryObject); // Log categoryObject
     if (!categoryObject) return false;
 
     // Categories where we need to check all subcategories
@@ -83,7 +81,6 @@ const Categories = ({
 
     if (specialCategories.includes(category.toLowerCase().trim())) {
       let requiredSubCategory1Items = categoryObject.subcategory1 || [];
-      // console.log("requiredSubCategory1Items:", requiredSubCategory1Items); // Log requiredSubCategory1Items
 
       const selectedSubCategory1Items = (
         Array.isArray(selectedData) ? selectedData : []
@@ -97,7 +94,6 @@ const Categories = ({
         )
 
         .map((item) => item.subcategory1);
-      // console.log("selectedSubCategory1Items:", selectedSubCategory1Items); // Log selectedSubCategory1Items
 
       if (category === "Civil / Plumbing" && subCategory === "Pantry") {
         requiredSubCategory1Items = requiredSubCategory1Items.filter(
@@ -110,7 +106,6 @@ const Categories = ({
         requiredSubCategory1Items.every((subCat1) =>
           selectedSubCategory1Items.includes(subCat1)
         );
-      // console.log("isCompleted:", isCompleted); // Log isCompleted
       return isCompleted;
     } else {
       // For other categories, check if only one subcategory1 is added
@@ -144,8 +139,6 @@ const Categories = ({
 
     const requiredSubCategories = categoryObject.subcategories || [];
 
-    // console.log("category complete", category);
-
     if (category === "HVAC") {
       const hasCentralizedProduct = selectedData.some(
         (product) =>
@@ -170,7 +163,6 @@ const Categories = ({
 
     return isCompleted;
   };
-  console.log("categories", categories);
   return (
     <>
       <div className="categories flex flex-col pb-1.5 md:pb-3">

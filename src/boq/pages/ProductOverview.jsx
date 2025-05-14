@@ -35,7 +35,7 @@ function ProductOverview() {
   const baseImageUrl =
     "https://bwxzfwsoxwtzhjbzbdzs.supabase.co/storage/v1/object/public/addon/";
   const { id } = useParams(); // Extract product ID from URL
-  console.log("id from useParams:", id);
+  // console.log("id from useParams:", id);
 
   const [mainImageHovered, setMainImageHovered] = useState(false); // For main image hover effect
   const [hoveredImage, setHoveredImage] = useState(null); // For additional image hover effect
@@ -217,8 +217,6 @@ function ProductOverview() {
           item.subcategory1 === subCat1
     );
   };
-
-  // console.log("Selected Data: ", selectedData);
 
   const findClosestKey = (targetKey, dataObject) => {
     if (!targetKey || !dataObject) return null;

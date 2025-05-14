@@ -272,7 +272,6 @@ function Navbar({
       setTotalArea(e.target.value);
       setError(false); // Reset error state on input change
       const newAreaQuantities = { ...areaQuantities };
-      console.log("newAreaQuantities", newAreaQuantities);
 
       setAreaQuantities(newAreaQuantities);
       handleVariantChange(areaValues);

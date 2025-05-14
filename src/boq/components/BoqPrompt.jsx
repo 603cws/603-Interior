@@ -67,12 +67,9 @@ function BoqPrompt({ onConfirm, onCancel, isProfileCard, setIsProfileCard }) {
   const handleEnter = (e) => {
     if (e.key === "Enter") {
       e.preventDefault();
-      console.log("Processing input:", e.target.value);
       handleConfirm();
     }
   };
-
-  console.log("profile", isProfileCard);
 
   return (
     <Transition appear show={true} as={Fragment}>

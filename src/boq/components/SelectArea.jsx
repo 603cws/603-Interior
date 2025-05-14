@@ -215,10 +215,6 @@ function SelectArea({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // useEffect(() => {
-  //   console.log("Updated Selected Data:", selectedData);
-  // }, [selectedData]); // Runs when selectedData changes
-
   const handleCheckboxChange = (value, checked) => {
     setSelectedAreas((prev) =>
       checked ? [...prev, value] : prev.filter((item) => item !== value)
