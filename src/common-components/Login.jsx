@@ -193,8 +193,21 @@ function Login() {
 
         console.log("Fetched layoutId:", layoutId);
 
+        const { data: userData, userError } = await supabase
+          .from("users_profiles")
+          .select("role")
+          .eq("user_id", userId);
+
+        if (userError) console.error("Error fetching user data:", userError);
+
+        const firstElement = userData[0];
+
         // Navigate based on whether areaId and quantityId exist
-        if (layoutId) {
+        if (layoutId && firstElement?.role !== "user") {
+          setCurrentLayoutID(layoutId);
+          localStorage.setItem("currentLayoutID", layoutId);
+          navigate("/dashboard");
+        } else if (layoutId && firstElement?.role === "user") {
           setCurrentLayoutID(layoutId);
           localStorage.setItem("currentLayoutID", layoutId);
           navigate("/boq");

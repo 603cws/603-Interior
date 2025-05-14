@@ -726,7 +726,7 @@ function Landing() {
           effect={"coverflow"}
           grabCursor={true}
           centeredSlides={true}
-          loop={true}
+          loop={false}
           slidesPerView={"auto"} // Ensures 5 slides are visible
           spaceBetween={30} // Adds spacing between slides
           initialSlide={3}
