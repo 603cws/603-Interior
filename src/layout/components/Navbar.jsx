@@ -41,6 +41,9 @@ function Navbar({
     setSelectedPlan,
     isMobile,
     setCurrentLayoutID,
+    setBoqTotal,
+    setProgress,
+    setSelectedData,
   } = useApp();
 
   const navigate = useNavigate();
@@ -262,6 +265,10 @@ function Navbar({
       setIsSubmitting(false);
       setShowWarning(false);
       setTotalArea("");
+      localStorage.removeItem("selectedData");
+      setSelectedData([]);
+      setProgress(0);
+      setBoqTotal(0);
     }
   };
 
