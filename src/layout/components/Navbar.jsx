@@ -28,8 +28,8 @@ function Navbar({
 
   const {
     isAuthenticated,
-    layoutImgRef,
-    layoutImage = "",
+    // layoutImgRef,
+    // layoutImage = "",
     accountHolder,
   } = useApp();
 
@@ -80,7 +80,7 @@ function Navbar({
     areaValues,
     areaQuantities,
     totalArea = null,
-    imageFilename,
+    // imageFilename,
     builtArea
   ) => {
     return {
@@ -140,45 +140,45 @@ function Navbar({
       washroomsArea: areaValues.washrooms,
       washroomsQty: areaQuantities.washrooms || 0,
       ...(totalArea !== null && { totalArea }),
-      layoutImg: imageFilename,
+      // layoutImg: imageFilename,
       usedSpace: builtArea,
     };
   };
 
-  const uploadImage = async (imageDataUrl) => {
-    try {
-      // ✅ Convert Base64 to Blob Properly
-      const blob = await fetch(imageDataUrl)
-        .then((res) => res.blob())
-        .catch((error) => {
-          console.error("Error converting Base64 to Blob:", error);
-          return null;
-        });
+  // const uploadImage = async (imageDataUrl) => {
+  //   try {
+  //     // ✅ Convert Base64 to Blob Properly
+  //     const blob = await fetch(imageDataUrl)
+  //       .then((res) => res.blob())
+  //       .catch((error) => {
+  //         console.error("Error converting Base64 to Blob:", error);
+  //         return null;
+  //       });
 
-      if (!blob) {
-        console.error("Blob conversion failed");
-        return null;
-      }
+  //     if (!blob) {
+  //       console.error("Blob conversion failed");
+  //       return null;
+  //     }
 
-      // ✅ Ensure Correct Filename
-      const fileName = `area_distribution_${Date.now()}.png`;
+  //     // ✅ Ensure Correct Filename
+  //     const fileName = `area_distribution_${Date.now()}.png`;
 
-      // ✅ Upload Image to Supabase Storage
-      const { error } = await supabase.storage
-        .from("addon")
-        .upload(fileName, blob, { contentType: "image/png" });
+  //     // ✅ Upload Image to Supabase Storage
+  //     const { error } = await supabase.storage
+  //       .from("addon")
+  //       .upload(fileName, blob, { contentType: "image/png" });
 
-      if (error) {
-        console.error("Image upload failed:", error);
-        return null;
-      }
+  //     if (error) {
+  //       console.error("Image upload failed:", error);
+  //       return null;
+  //     }
 
-      return fileName; // ✅ Store filename in DB
-    } catch (error) {
-      console.error("Upload failed:", error);
-      return null;
-    }
-  };
+  //     return fileName; // ✅ Store filename in DB
+  //   } catch (error) {
+  //     console.error("Upload failed:", error);
+  //     return null;
+  //   }
+  // };
 
   const generateBOQclick = () => {
     if (!totalArea) {
@@ -211,13 +211,13 @@ function Navbar({
       }
 
       // Trigger export and wait for image to be available
-      if (layoutImgRef.current) {
-        await layoutImgRef.current();
-      }
+      // if (layoutImgRef.current) {
+      //   await layoutImgRef.current();
+      // }
 
       // Upload image to Supabase
       // const imageUrl = await uploadImage(layoutImage || "");
-      const imageFilename = await uploadImage(layoutImage);
+      // const imageFilename = await uploadImage(layoutImage);
 
       if (totalArea) {
         const layoutData = mapAreaValues(
@@ -225,7 +225,7 @@ function Navbar({
           areaValues,
           areaQuantities,
           totalArea,
-          imageFilename,
+          // imageFilename,
           builtArea
         );
 

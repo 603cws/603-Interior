@@ -220,11 +220,13 @@ const Categories = ({
                   >
                     <div
                       className={`border-2 ${
-                        isCategoryCompleted
-                          ? "border-[#f4f4f4] border-[1px] bg-[#34BFAD] shadow-[0_0_10px_#93FCEE] animate-pulse"
+                        isCategoryCompleted && selectedCategory?.id === id
+                          ? "shadow-[0_0_10px_#93FCEE] bg-[#34BFAD] animate-pulse"
+                          : isCategoryCompleted
+                          ? "border-[#f4f4f4] border-[1px] bg-[#34BFAD]  "
                           : selectedCategory?.id === id
-                          ? "border-[#34BFAD] scale-105"
-                          : "border-[#000000]"
+                          ? "border-[#34BFAD] scale-110"
+                          : "border-[#000000] "
                       }  w-14 md:w-16 h-14 md:h-16 rounded-full flex justify-center items-center group-hover:scale-105 transition-transform duration-[1000ms] ease-in-out`}
                     >
                       <img

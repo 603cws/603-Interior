@@ -38,6 +38,7 @@ function ProductCard({
     selectedPlan,
     loading,
     setLoading,
+    selectedData,
   } = useApp();
 
   const productsInCategory = products[selectedCategory?.category] || [];
@@ -132,6 +133,20 @@ function ProductCard({
   const handleImageLoad = (id) => {
     setLoadingImages((prev) => ({ ...prev, [id]: false }));
   };
+
+  const filterSelectedProduct = selectedData.filter((data) => {
+    return (
+      data.category === selectedCategory.category &&
+      data.subcategory === selectedSubCategory &&
+      data.subcategory1 === selectedSubCategory1
+    );
+  });
+  console.log(selectedCategory, selectedSubCategory, selectedSubCategory1);
+
+  console.log("filterSelectedProduct", filterSelectedProduct);
+
+  console.log("selectedData", selectedData);
+  console.log("filteredVariants", filteredVariants);
 
   return (
     <div className="product-card grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 3xl:grid-cols-6 gap-6 pb-8 pt-3 md:px-8 relative">
@@ -239,6 +254,12 @@ function ProductCard({
                   }}
                 >
                   <h4 className="text-xs md:text-base">{variant.segment}</h4>
+                </div>
+              )}
+
+              {filterSelectedProduct[0]?.id === variant.id && (
+                <div className="absolute top-1 right-0 bg-[#34BFAD] text-xs font-semibold p-0.5 z-20">
+                  Selected
                 </div>
               )}
 

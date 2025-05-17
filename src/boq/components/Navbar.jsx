@@ -63,6 +63,7 @@ function Navbar({
     categories,
     setUserId,
     setTotalArea,
+    totalArea,
     userId,
     userResponses,
     selectedPlan,
@@ -74,7 +75,7 @@ function Navbar({
     setSelectedPlan,
   } = useApp();
 
-  const totalArea = currentLayoutData.totalArea;
+  // const totalArea = currentLayoutData.totalArea;
 
   useEffect(() => {
     const boqCompleted = localStorage.getItem("boqCompleted");

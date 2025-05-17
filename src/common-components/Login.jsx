@@ -153,7 +153,9 @@ function Login() {
       formData.company,
       formData.mobile
     );
-    await updateUserId(userId);
+    if (layoutId) {
+      await updateUserId(userId);
+    }
     await handleLogin();
   };
 
@@ -172,7 +174,9 @@ function Login() {
 
     if (data.user?.id) {
       const userId = data.user.id;
-      await updateUserId(userId); // Ensure this function completes before proceeding
+      if (layoutId) {
+        await updateUserId(userId); // Ensure this function completes before proceeding
+      }
 
       setUserId(userId);
       setIsAuthenticated(true);

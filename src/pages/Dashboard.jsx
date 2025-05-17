@@ -20,6 +20,7 @@ import DashboardProductCard from "./vendor/DashboardProductCard";
 import SidebarItem from "../common-components/SidebarItem";
 import Help from "./user/Help";
 import ReactApexChart from "react-apexcharts";
+import { TbFileInvoice } from "react-icons/tb";
 // const percentage = 66;
 
 const fullNames = {
@@ -102,7 +103,7 @@ function Dashboard() {
     setIsAuthLoading,
     setIsAuthenticated,
     setTotalArea,
-    layoutImage,
+    // layoutImage,
     currentLayoutData,
     totalArea,
     currentLayoutID,
@@ -499,11 +500,11 @@ function Dashboard() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isfetchBoqDataRefresh]);
 
-  useEffect(() => {
-    if (layoutImage && !imageIsLoaded) {
-      setImageIsLoaded(true);
-    }
-  }, [layoutImage, imageIsLoaded]);
+  // useEffect(() => {
+  //   if (layoutImage && !imageIsLoaded) {
+  //     setImageIsLoaded(true);
+  //   }
+  // }, [layoutImage, imageIsLoaded]);
 
   // console.log("selectedboq", selectedBoq);
 
@@ -600,6 +601,7 @@ function Dashboard() {
               src="/logo/workved-interior.png"
               alt="Logo"
               className={`${isExpanded ? "h-20 w-32" : "size-12"}`}
+              onClick={() => navigate("/")}
             />
           </div>
 
@@ -613,9 +615,9 @@ function Dashboard() {
               main
             </h3>
             <SidebarItem
-              icon={<TiHomeOutline />}
-              text="Home"
-              onClick={() => navigate("/")}
+              icon={<TbFileInvoice />}
+              text="BOQ"
+              onClick={() => navigate("/boq")}
               isExpanded={isExpanded}
             />
             <SidebarItem

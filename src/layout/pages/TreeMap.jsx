@@ -55,15 +55,15 @@ const TreeMap = ({ totalArea, areaQuantities, areaValues }) => {
   const navigate = useNavigate();
 
   const {
-    layoutImgRef,
-    setLayoutImage,
+    // layoutImgRef,
+    // setLayoutImage,
     userId,
     setSelectedPlan,
-    layoutImage = "",
+    // layoutImage = "",
     isMobile,
   } = useApp();
 
-  const chartRef = useRef(null);
+  // const chartRef = useRef(null);
 
   const MIN_AREA = 1000;
   const MAX_AREA = 25000;
@@ -218,9 +218,9 @@ const TreeMap = ({ totalArea, areaQuantities, areaValues }) => {
         dataPointMouseLeave: () => {
           setHoveredArea(null);
         },
-        mounted: (chart) => {
-          chartRef.current = chart; // Store chart instance
-        },
+        // mounted: (chart) => {
+        //   chartRef.current = chart; // Store chart instance
+        // },
       },
     },
     title: {
@@ -320,20 +320,20 @@ const TreeMap = ({ totalArea, areaQuantities, areaValues }) => {
       },
     },
   };
-  useEffect(() => {
-    if (layoutImgRef) {
-      layoutImgRef.current = exportChart;
-    }
+  // useEffect(() => {
+  //   if (layoutImgRef) {
+  //     layoutImgRef.current = exportChart;
+  //   }
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, []);
 
-  const exportChart = async () => {
-    if (chartRef.current) {
-      const imageURI = await chartRef.current.dataURI(); // Get image
-      setLayoutImage(imageURI.imgURI); // Send to context
-    }
-  };
+  // const exportChart = async () => {
+  //   if (chartRef.current) {
+  //     const imageURI = await chartRef.current.dataURI(); // Get image
+  //     setLayoutImage(imageURI.imgURI); // Send to context
+  //   }
+  // };
 
   const generateLegendItems = () => {
     return series
@@ -465,45 +465,45 @@ const TreeMap = ({ totalArea, areaQuantities, areaValues }) => {
       washroomsArea: areaValues.washrooms,
       washroomsQty: areaQuantities.washrooms || 0,
       ...(totalArea !== null && { totalArea }),
-      layoutImg: imageFilename,
+      // layoutImg: imageFilename,
       usedSpace: builtArea,
     };
   };
 
-  const uploadImage = async (imageDataUrl) => {
-    try {
-      // ✅ Convert Base64 to Blob Properly
-      const blob = await fetch(imageDataUrl)
-        .then((res) => res.blob())
-        .catch((error) => {
-          console.error("Error converting Base64 to Blob:", error);
-          return null;
-        });
+  // const uploadImage = async (imageDataUrl) => {
+  //   try {
+  //     // ✅ Convert Base64 to Blob Properly
+  //     const blob = await fetch(imageDataUrl)
+  //       .then((res) => res.blob())
+  //       .catch((error) => {
+  //         console.error("Error converting Base64 to Blob:", error);
+  //         return null;
+  //       });
 
-      if (!blob) {
-        console.error("Blob conversion failed");
-        return null;
-      }
+  //     if (!blob) {
+  //       console.error("Blob conversion failed");
+  //       return null;
+  //     }
 
-      // ✅ Ensure Correct Filename
-      const fileName = `area_distribution_${Date.now()}.png`;
+  //     // ✅ Ensure Correct Filename
+  //     const fileName = `area_distribution_${Date.now()}.png`;
 
-      // ✅ Upload Image to Supabase Storage
-      const { error } = await supabase.storage
-        .from("addon")
-        .upload(fileName, blob, { contentType: "image/png" });
+  //     // ✅ Upload Image to Supabase Storage
+  //     const { error } = await supabase.storage
+  //       .from("addon")
+  //       .upload(fileName, blob, { contentType: "image/png" });
 
-      if (error) {
-        console.error("Image upload failed:", error);
-        return null;
-      }
+  //     if (error) {
+  //       console.error("Image upload failed:", error);
+  //       return null;
+  //     }
 
-      return fileName; // ✅ Store filename in DB
-    } catch (error) {
-      console.error("Upload failed:", error);
-      return null;
-    }
-  };
+  //     return fileName; // ✅ Store filename in DB
+  //   } catch (error) {
+  //     console.error("Upload failed:", error);
+  //     return null;
+  //   }
+  // };
 
   const generateBOQclick = () => {
     console.log("hii", totalArea);
@@ -536,13 +536,13 @@ const TreeMap = ({ totalArea, areaQuantities, areaValues }) => {
       }
 
       // Trigger export and wait for image to be available
-      if (layoutImgRef.current) {
-        await layoutImgRef.current();
-      }
+      // if (layoutImgRef.current) {
+      //   await layoutImgRef.current();
+      // }
 
       // Upload image to Supabase
       // const imageUrl = await uploadImage(layoutImage || "");
-      const imageFilename = await uploadImage(layoutImage);
+      // const imageFilename = await uploadImage(layoutImage);
 
       if (totalArea) {
         const layoutData = mapAreaValues(
@@ -550,7 +550,7 @@ const TreeMap = ({ totalArea, areaQuantities, areaValues }) => {
           areaValues,
           areaQuantities,
           totalArea,
-          imageFilename,
+          // imageFilename,
           builtArea
         );
 

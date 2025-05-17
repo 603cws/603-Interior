@@ -68,12 +68,12 @@ export const AppProvider = ({ children }) => {
   const [selectedPlan, setSelectedPlan] = useState(
     localStorage.getItem("selectedPlan")
   );
-  const [layoutImage, setLayoutImage] = useState(null);
+  // const [layoutImage, setLayoutImage] = useState(null);
 
   const prevSelectedData = useRef(selectedData); // Ref to store previous selectedData
   const prevCategories = useRef(categories); // Ref to store previous categories
   const prevSubCat1 = useRef(subCat1); // Ref to store previous subCat1
-  const layoutImgRef = useRef(null);
+  // const layoutImgRef = useRef(null);
   // auth
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isAuthLoading, setIsAuthLoading] = useState(true);
@@ -222,9 +222,9 @@ export const AppProvider = ({ children }) => {
           setCurrentLayoutData(data[0]);
 
           // setLayoutImage(data[0].layoutImg);
-          setLayoutImage(
-            `https://bwxzfwsoxwtzhjbzbdzs.supabase.co/storage/v1/object/public/addon/${data[0].layoutImg}`
-          );
+          // setLayoutImage(
+          //   `https://bwxzfwsoxwtzhjbzbdzs.supabase.co/storage/v1/object/public/addon/${data[0].layoutImg}`
+          // );
 
           if (error) throw error;
         }
@@ -608,9 +608,9 @@ export const AppProvider = ({ children }) => {
         setIsAuthLoading,
         setLoading,
         loading,
-        layoutImgRef,
-        layoutImage,
-        setLayoutImage,
+        // layoutImgRef,
+        // layoutImage,
+        // setLayoutImage,
         productData,
         setProductData,
         areasData,
