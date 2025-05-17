@@ -307,6 +307,9 @@ function Boq() {
     setSelectedCategory({ id, category, subcategories });
     if (minimizedView) {
       setSelectedSubCategory(subcategories[0] || null); // Automatically select the first subcategory if available
+      if (category === "HVAC" && selectedPlan !== "Custom") {
+        setSelectedSubCategory(userResponses.hvacType); // On Plan change subCat not updating proeprly for HVAC
+      }
     }
     // Check if the category requires the modal
     if (categoriesWithModal.includes(category)) {

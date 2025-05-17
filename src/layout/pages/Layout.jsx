@@ -466,8 +466,13 @@ function Layout() {
   const [warning, setWarning] = useState(false);
   const [otherArea, setOtherArea] = useState();
 
-  const { totalArea, setTotalArea, totalAreaSource, currentLayoutData } =
-    useApp();
+  const {
+    totalArea,
+    setTotalArea,
+    totalAreaSource,
+    currentLayoutData,
+    isAuthenticated,
+  } = useApp();
 
   const handleVariantNameChange = (areaValues) => {
     let newVariant;
@@ -713,6 +718,9 @@ function Layout() {
 
   useEffect(() => {
     if (currentLayoutData && Object.keys(currentLayoutData).length > 0) {
+      if (isAuthenticated) {
+        setTotalArea(currentLayoutData?.totalArea);
+      }
       tempVar = "layoutLoad";
       const { areaValues, quantities } =
         extractAreaAndQuantity(currentLayoutData);

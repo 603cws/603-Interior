@@ -206,6 +206,21 @@ export const AppProvider = ({ children }) => {
     }
   }, [userId, currentLayoutID]);
 
+  useEffect(() => {
+    if (selectedPlan !== "Custom") {
+      setUserResponses((prevResponses) => ({
+        ...prevResponses,
+        hvacType: "Centralized",
+        flooring: "basicTiling",
+        demolishTile: "no",
+      }));
+
+      if (selectedCategory?.category === "HVAC") {
+        setSelectedSubCategory("Centralized");
+      }
+    }
+  }, [selectedPlan]); // On Plan change subCat not updating proeprly for HVAC
+
   // get the totalarea based on current layout id
   useEffect(() => {
     // const currentLayoutID = localStorage.getItem("currentLayoutID");
