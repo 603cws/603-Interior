@@ -7,6 +7,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useApp } from "../Context/Context";
 // import { use } from "react";
 import toast from "react-hot-toast";
+import { motion } from "framer-motion";
 
 function Login() {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
@@ -18,6 +19,7 @@ function Login() {
   const [resetPass, setResetPass] = useState(false);
 
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [imageLoaded, setImageLoaded] = useState(false);
 
   const { setUserId, setIsAuthenticated, setCurrentLayoutID, setProgress } =
     useApp();
@@ -400,14 +402,35 @@ function Login() {
           <div className="relative main flex justify-center gap-5 h-screen w-full md:bg-[url(images/Register.png)] bg-login-custom-gradient lg:bg-login-custom-gradient md:bg-opacity-20 px-3 lg:px-0">
             <div className="hidden  md:block fixed inset-0 bg-black bg-opacity-50 lg:hidden" />
             {/* <div className="img w-1/2 p-5 flex justify-end items-center"> */}
-            <div className="img flex-1 p-5 lg:flex justify-end items-center hidden">
+            {/* <div className="img flex-1 p-5 lg:flex justify-end items-center hidden">
               <img
                 src="images/Register.png"
                 alt=""
                 // className="max-h-full h-full xl:h-auto w-full xl:w-3/4"
                 className="xl:max-w-lg sm:max-w-sm"
               />
+            </div> */}
+            <div className="img flex-1 p-5 lg:flex justify-end items-center hidden relative">
+              {/* Skeleton placeholder */}
+              {!imageLoaded && (
+                <div className="xl:max-w-lg sm:max-w-sm w-full h-[450px] bg-gray-300 rounded-2xl animate-pulse" />
+              )}
+
+              {/* Image with fade-in on load */}
+              <motion.img
+                initial={{ opacity: 0 }}
+                animate={{ opacity: imageLoaded ? 1 : 0 }}
+                transition={{ duration: 0.5 }}
+                onLoad={() => setImageLoaded(true)}
+                src="images/Register.png"
+                alt="Register"
+                loading="lazy"
+                className={`xl:max-w-lg sm:max-w-sm w-full h-auto absolute top-0 left-0 ${
+                  imageLoaded ? "relative" : "invisible"
+                }`}
+              />
             </div>
+
             <div
               className={`content z-10 flex-1 max-h-full h-full flex flex-col items-start ${
                 isSignUp

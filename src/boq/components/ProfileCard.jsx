@@ -186,8 +186,15 @@ function ProfileCard({
                         // setProgress(0);
                         // localStorage.removeItem("selectedData");
                         // setBoqTotal(0);
-                        setShowBoqPrompt(true);
-                        setIsProfileCard(true);
+                        if (import.meta.env.MODE !== "development") {
+                          setShowBoqPrompt(true);
+                          setIsProfileCard(true);
+                        } else {
+                          setSelectedPlan(null);
+                          setProgress(0);
+                          localStorage.removeItem("selectedData");
+                          setBoqTotal(0);
+                        }
                       }}
                     >
                       Select Your Plan

@@ -546,6 +546,10 @@ function Navbar({
   };
 
   const handleDownload = async () => {
+    if (selectedData.length === 0) {
+      toast.error("Please add a product to download BOQ.");
+      return;
+    }
     setIsDownloading(true); // Show loading animation
     setIsCompleted(false);
 
@@ -572,12 +576,22 @@ function Navbar({
   return (
     <div className="navbar sticky top-0 z-20">
       <div className="flex justify-between bg-gradient-to-r from-[#1A3A36] to-[#48A095] items-center px-4 h-[50px]">
+        <div className="hidden sm:block absolute lg:flex gap-2 right-1/4 lg:right-20 -translate-x-full">
+          <div className="flex items-center justify-center gap-1">
+            <div className="h-3 w-3 rounded-full border-[1px] bg-[#34BFAD]"></div>
+            <p className="text-xs text-white">Completed</p>
+          </div>
+          <div className="flex items-center justify-center gap-1">
+            <div className="h-3 w-3 rounded-full border-[1px] bg-white"></div>
+            <p className="text-xs text-white">Incomplete</p>
+          </div>
+        </div>
         {/* logo */}
         <button className="" onClick={handlelogo}>
           <img
             src="/logo/workved-logo-white.png"
             alt="Workved Interior logo"
-            className="h-auto md:h-8 lg:h-10 w-16 lg:w-18 "
+            className="h-auto md:h-8 lg:h-10 w-16 lg:w-24 "
           />
         </button>
         {/* button for generate boq */}
@@ -761,11 +775,21 @@ function Navbar({
                 className="absolute top-1/2 transform -translate-y-1/2 -translate-x-1/2 bg-[#CCCCCC] border-2 border-white rounded-full glowing-circle"
                 style={{ left: `${progress}%`, width: "16px", height: "16px" }}
               ></div>
+              <div
+                className={`absolute -top-full -translate-y-3/4 bg-[#f4f4f4] text-black text-[10px] px-3 py-1 rounded-md ${
+                  progress >= 90 ? "animate-bounce" : "animate-none"
+                }`}
+                style={{ left: `${progress - 3}%` }}
+              >
+                {" "}
+                <span className="absolute left-1/2 -translate-x-1/2 -bottom-1 w-0 h-0 border-l-4 border-r-4 border-t-4 border-l-transparent border-r-transparent border-t-white"></span>
+                {`${progress} %`}
+              </div>
             </div>
             {/* Progress Label */}
-            <div className="text-center mt-2 text-[#C7DDFF] text-[10px]">
+            {/* <div className="text-center mt-2 text-[#C7DDFF] text-[10px]">
               {progress}% Completed
-            </div>
+            </div> */}
           </div>
           <div className="flex items-center gap-2">
             {/* <div className=""> */}

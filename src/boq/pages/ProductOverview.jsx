@@ -416,7 +416,7 @@ function ProductOverview() {
           >
             <img
               src={hoveredImage || product?.image}
-              className="object-fit h-80 lg:h-96"
+              className="object-fit h-80 lg:h-96 max-h-full"
               alt={product?.title}
             />
           </div>

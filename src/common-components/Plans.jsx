@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useApp } from "../Context/Context";
+import { motion } from "framer-motion";
 
 // Example bullet points for each plan.
 // You can replace them with your existing content from your original Plans component.
@@ -83,6 +84,7 @@ function Plans() {
 
   // Hovered plan state. 0 = first plan expanded by default.
   const [hoveredPlan, setHoveredPlan] = useState(1);
+  const [imageLoaded, setImageLoaded] = useState(false);
 
   const handlePlanSelect = (planKey) => {
     setSelectedPlan(planKey);
@@ -170,11 +172,31 @@ function Plans() {
                       </div>
                     </div>
                     {/* Right side: plan image */}
-                    <div className="flex-1 px-5 xl:py-7">
+                    {/* <div className="flex-1 px-5 xl:py-7">
                       <img
                         src={plan.image}
                         alt={plan.title}
                         className="w-full h-52 xl:h-full object-cover rounded-3xl"
+                      />
+                    </div> */}
+                    <div className="flex-1 px-5 xl:py-7 relative">
+                      {/* Skeleton placeholder */}
+                      {!imageLoaded && (
+                        <div className="w-full h-52 xl:h-full rounded-3xl bg-gray-300 animate-pulse" />
+                      )}
+
+                      {/* Image with fade-in animation */}
+                      <motion.img
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: imageLoaded ? 1 : 0 }}
+                        transition={{ duration: 0.5 }}
+                        onLoad={() => setImageLoaded(true)}
+                        src={plan.image}
+                        alt={plan.title}
+                        loading="lazy"
+                        className={`w-full h-52 xl:h-full object-cover rounded-3xl absolute top-0 left-0 ${
+                          imageLoaded ? "relative" : "invisible"
+                        }`}
                       />
                     </div>
                   </div>
