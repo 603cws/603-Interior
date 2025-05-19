@@ -382,6 +382,36 @@ function SelectArea({
     );
   };
 
+  // const handleSelectAll = (checked) => {
+  //   if (checked) {
+  //     const selectableSubCategories = selectedCategory.subcategories.filter(
+  //       (subCategory) => {
+  //         if (selectedCategory.category === "HVAC") {
+  //           return userResponses?.hvacType === "Centralized"
+  //             ? subCategory === "Centralized" // Select only "Centralized"
+  //             : subCategory !== "Centralized"; // Select all except "Centralized"
+  //         }
+
+  //         return (
+  //           !(subCategory === "Pantry" && selectedSubCategory1 === "Pods") && // Exclude Pantry when Pods is selected
+  //           !isItemSelected(
+  //             selectedData,
+  //             selectedCategory,
+  //             subCategory,
+  //             selectedSubCategory1,
+  //             selectedProductView
+  //           ) // Exclude already-selected items
+  //         );
+  //       }
+  //     );
+  //     setSelectedAreas(selectableSubCategories);
+  //   } else {
+  //     setSelectedAreas([]);
+  //   }
+  // };
+
+  // Check if all selectable subcategories are already selected
+
   const handleSelectAll = (checked) => {
     if (checked) {
       const selectableSubCategories = selectedCategory.subcategories.filter(
@@ -406,11 +436,43 @@ function SelectArea({
       );
       setSelectedAreas(selectableSubCategories);
     } else {
-      setSelectedAreas([]);
+      // 🟡 Only deselect non-disabled items
+      const nonDisabled = selectedCategory.subcategories.filter(
+        (subCategory) =>
+          !isItemSelected(
+            selectedData,
+            selectedCategory,
+            subCategory,
+            selectedSubCategory1,
+            selectedProductView
+          )
+      );
+      setSelectedAreas((prev) =>
+        prev.filter((subCat) => !nonDisabled.includes(subCat))
+      );
     }
   };
 
-  // Check if all selectable subcategories are already selected
+  const allSubcategoriesDisabled = selectedCategory.subcategories
+    ?.filter((subCategory) => {
+      if (selectedCategory.category === "HVAC") {
+        return userResponses?.hvacType === "Centralized"
+          ? subCategory === "Centralized"
+          : subCategory !== "Centralized";
+      }
+
+      return !(subCategory === "Pantry" && selectedSubCategory1 === "Pods");
+    })
+    .every((subCategory) =>
+      isItemSelected(
+        selectedData,
+        selectedCategory,
+        subCategory,
+        selectedSubCategory1,
+        selectedProductView
+      )
+    );
+
   const allSelected =
     selectedCategory.subcategories
       ?.filter((subCategory) => {
@@ -459,8 +521,8 @@ function SelectArea({
         {/* Close Button (Common for Both Modals) */}
         <MdOutlineCancel
           size={30}
-          color="black"
-          className="absolute top-1 right-1 cursor-pointer z-50"
+          // color="white"
+          className="absolute top-1 right-1 cursor-pointer z-5 text-white hover:text-red-500 transition-colors duration-300"
           onClick={() => {
             setShowBackground(false); // Hide background before exit animation
             setShowSelectArea(false);
@@ -560,11 +622,12 @@ function SelectArea({
                       type="checkbox"
                       id="selectAll"
                       checked={allSelected}
+                      disabled={allSubcategoriesDisabled}
                       onChange={(e) => handleSelectAll(e.target.checked)}
                       className="appearance-none w-3 h-3 lg:w-4 lg:h-4 cursor-pointer transition duration-300 bg-black checked:border-black
                   relative checked:before:content-['✔'] checked:before:absolute checked:before:text-white 
                   checked:before:top-1/2 checked:before:left-1/2 checked:before:-translate-x-1/2 checked:before:-translate-y-1/2 
-                  checked:before:text-[14px] checked:before:font-bold"
+                  checked:before:text-[14px] checked:before:font-bold disabled:bg-gray-400 disabled:cursor-not-allowed disabled:opacity-60"
                     />
                     <label
                       htmlFor="selectAll"

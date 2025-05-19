@@ -72,6 +72,7 @@ function ProductOverview() {
     searchQuery,
     priceRange,
     setMinimizedView,
+    selectedPlan,
   } = useApp();
 
   const instructions = {
@@ -613,6 +614,7 @@ function ProductOverview() {
               isOpen={isOpen}
               setIsOpen={setIsOpen}
               iconRef={iconRef}
+              selectedPlan={selectedPlan}
             />
           </div>
         )}

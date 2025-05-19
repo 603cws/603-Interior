@@ -4,7 +4,6 @@ import PDFGenerator from "./PDFGenerator";
 import { useState, useEffect, useRef } from "react";
 import { RiArrowDropDownLine } from "react-icons/ri";
 import { FaTrash } from "react-icons/fa";
-import { MdClear } from "react-icons/md";
 import { FiUploadCloud } from "react-icons/fi";
 import { supabase } from "../../services/supabase";
 import toast from "react-hot-toast";
@@ -753,7 +752,7 @@ function Navbar({
           )}
         </div>
       ) : (
-        <div className="bg-[#1A3A36] py-1 flex px-5">
+        <div className="bg-[#1A3A36] py-2.5 flex px-5">
           <div className=" flex items-center">
             <button
               className="bg-[#FFF] text-xs py-2 px-5 text-black rounded-full border-solid border-[1px] border-black"
@@ -801,18 +800,6 @@ function Navbar({
         </button> */}
             {/* </div> */}
             {/* <div className="justify-items-end"> */}
-            {import.meta.env.MODE === "development" && (
-              <MdClear
-                color="red"
-                size={30}
-                title="Clear selected data"
-                onClick={() => {
-                  localStorage.removeItem("selectedData");
-                  window.location.reload();
-                }}
-                className="cursor-pointer"
-              />
-            )}
             <div
               className="relative inline-flex items-center border border-black rounded-full"
               ref={dropdownRef}

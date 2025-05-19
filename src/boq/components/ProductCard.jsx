@@ -317,10 +317,10 @@ function ProductCard({
                     }}
                   />
                   {/* CiCirclePlus Icon - Positioned at Bottom Right */}
-                  <div className="absolute -bottom-10 md:bottom-2 -right-2 md:right-2 bg-white rounded-full p-1 shadow-md cursor-pointer">
+                  <div className="absolute -bottom-10 md:bottom-2 -right-2 md:right-2 bg-[#82b8b0] rounded-full p-1 shadow-md cursor-pointer">
                     <CiCirclePlus
                       size={30}
-                      color="#A1A1A1"
+                      color="#FFFFFF"
                       onClick={() => {
                         setSelectedProductView(variant);
                         setShowSelectArea(true);
