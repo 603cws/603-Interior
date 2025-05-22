@@ -1,6 +1,7 @@
 import React from "react";
 import AreaCounter from "./AreaCounter";
 import Tooltip from "./ToolTip";
+import { useApp } from "../../Context/Context";
 
 const LayoutCard = ({
   name,
@@ -21,6 +22,8 @@ const LayoutCard = ({
   showAreaCounter, // Boolean to conditionally render AreaCounter   //undefined rohit
   areaCounterProps, // Props specific to AreaCounter
 }) => {
+  const { totalArea } = useApp();
+
   return (
     <div className="workspacedescription flex flex-col w-40 md:w-[280px] items-center border border-solid bg-[#fff] pb-2 my-3 relative">
       {/* Image */}
@@ -75,7 +78,7 @@ const LayoutCard = ({
               </div>
             </>
           )}
-          {showInputField && (
+          {showInputField && totalArea && (
             <div className="other-area-input text-xs">
               <label>{inputFieldProps.label || "Enter Value"}:</label>
               <input

@@ -118,7 +118,7 @@ const TreeMap = ({ totalArea, areaQuantities, areaValues }) => {
     "Conference Room": "/images/workspace-image/conferenceRoom.webp",
     "Board Room": "/images/workspace-image/boardRoom.webp",
     "Meeting Room": "/images/workspace-image/meetingRoom.png",
-    "Meeting Room (Large)": "/images/workspace-image/meetingRoomLarge.png",
+    "Meeting Room (L)": "/images/workspace-image/meetingRoomLarge.png",
     "HR Room": "/images/workspace-image/hrRoom.webp",
     "Finance Room": "/images/workspace-image/financeRoom.webp",
     "Executive Washroom": "/images/workspace-image/executiveWashroom.png",

@@ -40,7 +40,7 @@ function ErrorModal({ onclose, message }) {
     <div className="fixed inset-0 z-20 top-0 bg-[rgba(25,25,25,0.46)] flex justify-center items-center">
       <div className="grid grid-cols-1 md:grid-cols-[1.5fr_1fr] bg-[#1A3A36] border-2 rounded-3xl max-w-4xl mx-auto ">
         <div className="text-white p-5 flex flex-col justify-center gap-4 my-10">
-          <p className="text-2xl md:text-4xl font-['UbuntuSans-Regular',_sans-serif]">
+          <p className="text-2xl md:text-4xl font-['UbuntuSans-Regular',_sans-serif] text-start">
             <span className="text-4xl md:text-6xl tracking-tighter">W</span>
             arning
           </p>
@@ -52,7 +52,11 @@ function ErrorModal({ onclose, message }) {
               {message.split(".").map(
                 (sentence, index) =>
                   sentence.trim() && (
-                    <li key={index} style={{ marginBottom: "5px" }}>
+                    <li
+                      key={index}
+                      style={{ marginBottom: "5px" }}
+                      className="text-start"
+                    >
                       {sentence.trim()}.
                     </li>
                   )

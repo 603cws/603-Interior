@@ -790,7 +790,7 @@ function Layout() {
       setErrorMessageHandler(
         // "The built area exceeds the available usable space.\n" +
         //   "To resolve this, either increase the total area or adjust the number of rooms to ensure the built area fits within the usable space."
-        "The built area exceeds the available space.\n" +
+        `The built area (${builtArea} sqft) exceeds the available space (${usableArea} sqft).\n` +
           "Adjust the number of workspaces OR.\n" +
           "Increase the total area to add more workspaces."
       );

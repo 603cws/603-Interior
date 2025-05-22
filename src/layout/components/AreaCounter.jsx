@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import ErrorModal from "../../common-components/ErrorModal";
 
 const AreaCounter = ({
   name,
@@ -20,9 +21,15 @@ const AreaCounter = ({
   const min = min2;
   const max = max2;
   const step = step2;
-  const freeSpace = totalArea * 0.05; // 5% of totalArea
+  const freeSpace = totalArea * 0.02; // 2% of totalArea
   const usableArea = totalArea - freeSpace; // Area available for building
   const [error, setError] = useState("");
+  const [warning, setWarning] = useState(false);
+
+  const errorMessage =
+    `The built area (${builtArea} sqft) exceeds the available space (${usableArea} sqft).\n` +
+    "Adjust the number of workspaces OR.\n" +
+    "Increase the total area to add more workspaces.";
 
   const handleIncrement = () => {
     if (counterValue > 0) {
@@ -49,6 +56,8 @@ const AreaCounter = ({
         } else {
           setCabinSize(cabinSize + 40);
         }
+      } else {
+        setWarning(true);
       }
     } else {
       setError("Add workspace to increase the area");
@@ -124,9 +133,10 @@ const AreaCounter = ({
           </p>
         )}
       </div>
-      {/* <div className="progress-bar-container">
-                <div className="progress-bar" style={{ width: `${((value - min) / (max - min)) * 100}%` }}></div>
-            </div> */}
+
+      {warning && (
+        <ErrorModal onclose={() => setWarning(false)} message={errorMessage} />
+      )}
     </div>
   );
 };
