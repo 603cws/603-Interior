@@ -11,6 +11,7 @@ import Landing from "./pages/Landing";
 import SpinnerFullPage from "./common-components/SpinnerFullPage";
 import Contactus from "./pages/Contactus";
 import AboutUs from "./pages/AboutUs";
+import AboutUs2 from "./pages/AboutUs2";
 import Login from "./common-components/Login";
 import OurServices from "./pages/OurServices";
 import BlogDetail from "./pages/BlogDetail";
@@ -80,6 +81,7 @@ function App() {
             <Route path="/spinner" element={<SpinnerFullPage />} />
             <Route path="/Contactus" element={<Contactus />} />
             <Route path="/Aboutus" element={<AboutUs />} />
+            <Route path="/Aboutus2" element={<AboutUs2 />} />
             <Route path="/Blog" element={<BlogPage />} />
             <Route path="/Blog/:title" element={<BlogDetail />} />
             <Route path="/Career" element={<Carrer />} />
@@ -140,6 +142,7 @@ function App() {
             <Route path="/Error" element={<ErrorModal />} />
             <Route path="/Contactus" element={<Contactus />} />
             <Route path="/Aboutus" element={<AboutUs />} />
+            <Route path="/Aboutus2" element={<AboutUs2 />} />
             <Route path="/Blog" element={<BlogPage />} />
             <Route path="/Blog/:title" element={<BlogDetail />} />
             <Route path="/Career" element={<Carrer />} />
