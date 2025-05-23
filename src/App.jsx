@@ -14,6 +14,7 @@ import AboutUs from "./pages/AboutUs";
 import AboutUs2 from "./pages/AboutUs2";
 import Login from "./common-components/Login";
 import OurServices from "./pages/OurServices";
+import OurServices2 from "./pages/OurServices2";
 import BlogDetail from "./pages/BlogDetail";
 import ProfileCard from "./boq/components/ProfileCard";
 import Dashboard from "./pages/Dashboard";
@@ -95,6 +96,7 @@ function App() {
               element={<Navigate to="/complete-profile" />}
             />
             <Route path="/OurServices" element={<OurServices />} />
+            <Route path="/OurServices2" element={<OurServices2 />} />
             <Route path="/Career/:jobTitle" element={<JobPage />} />
             <Route path="/profile" element={<ProfileCard />} />
             <Route path="/scroll" element={<DoorScrollEffect />} />
@@ -156,6 +158,7 @@ function App() {
               element={<Navigate to="/complete-profile" />}
             />
             <Route path="/OurServices" element={<OurServices />} />
+            <Route path="/OurServices2" element={<OurServices2 />} />
             <Route path="/Career/:jobTitle" element={<JobPage />} />
             <Route path="/profile" element={<ProfileCard />} />
             <Route path="/becomeseller" element={<BecomeSeller />} />
