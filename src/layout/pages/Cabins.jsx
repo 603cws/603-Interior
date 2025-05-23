@@ -25,7 +25,7 @@ const cabinData = [
       "This is the Manager's cabin, equipped with all necessary amenities.",
     slider: {
       name: "Manager Cabin Size",
-      min: 50,
+      min: 80,
       max: 180,
       step: 5,
       valueKey: "managerCabinSize",
@@ -131,6 +131,8 @@ const Cabins = ({
                       ? {
                           cabinSize: smallCabinConfig.roomSize,
                           setCabinSize: smallCabinConfig.setRoomSize,
+                          seatCount: smallCabinConfig.seatCount,
+                          setSeatCount: smallCabinConfig.setSeatCount,
                         }
                       : {
                           cabinSize:

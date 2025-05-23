@@ -132,6 +132,7 @@ const LayoutCard = ({
                 <AreaCounter
                   {...areaCounterProps}
                   counterValue={counterValue}
+                  title={title}
                 />
               )}
             </div>

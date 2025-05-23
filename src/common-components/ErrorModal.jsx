@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useApp } from "../Context/Context";
-function ErrorModal({ onclose, message }) {
+import { motion } from "framer-motion";
+function ErrorModal({ onclose, message, sizeReached }) {
   const {
     totalArea,
     setTotalArea,
@@ -9,6 +10,7 @@ function ErrorModal({ onclose, message }) {
     setInputValue,
   } = useApp(); // Access totalArea and setter from context
   const [error, setError] = useState(""); // For validation errors
+  const [imageLoaded, setImageLoaded] = useState(false);
 
   const MIN_AREA = 1000;
   const MAX_AREA = 25000;
@@ -64,13 +66,15 @@ function ErrorModal({ onclose, message }) {
             </ul>
           </div>
           {/* Input Field */}
-          <input
-            type="number"
-            value={inputValue} // Bind to local inputValue state
-            onChange={handleInputChange} // Update inputValue
-            placeholder="Enter updated total area"
-            className="py-2 px-3 rounded-lg border-2 border-gray-300 focus:ring-yellow-500 bg-transparent text-white [&::-webkit-inner-spin-button]:appearance-none focus:outline-none focus:ring-0"
-          />
+          {!sizeReached && (
+            <input
+              type="number"
+              value={inputValue} // Bind to local inputValue state
+              onChange={handleInputChange} // Update inputValue
+              placeholder="Enter updated total area"
+              className="py-2 px-3 rounded-lg border-2 border-gray-300 focus:ring-yellow-500 bg-transparent text-white [&::-webkit-inner-spin-button]:appearance-none focus:outline-none focus:ring-0"
+            />
+          )}
           {error && <p className="text-red-500 text-sm mt-2">{error}</p>}{" "}
           {/* Error Message */}
           <div className="flex gap-4 mt-4">
@@ -82,18 +86,40 @@ function ErrorModal({ onclose, message }) {
               Cancel
             </button>
             {/* Submit Button */}
-            <button
-              onClick={handleSubmit}
-              className="py-1 px-2 md:py-2 md:px-4 bg-[#FFD500] text-black border-2 border-black border-b-8 border-r-8"
-            >
-              Update
-            </button>
+            {!sizeReached && (
+              <button
+                onClick={handleSubmit}
+                className="py-1 px-2 md:py-2 md:px-4 bg-[#FFD500] text-black border-2 border-black border-b-8 border-r-8"
+              >
+                Update
+              </button>
+            )}
           </div>
         </div>
 
         {/* Image Section */}
-        <div className="hidden md:flex justify-center md:my-10 mx-1 relative">
+        {/* <div className="hidden md:flex justify-center md:my-10 mx-1 relative">
           <img src="images/Errorimg.gif" alt="Error chair" />
+        </div> */}
+        <div className="hidden md:flex justify-center md:my-10 relative w-full">
+          {/* Skeleton placeholder while image loads */}
+          {!imageLoaded && (
+            <div className="w-full  bg-gray-300/10 rounded-3xl" />
+          )}
+
+          {/* Lazy-loaded Error image with fade-in animation */}
+          <motion.img
+            initial={{ opacity: 0 }}
+            animate={{ opacity: imageLoaded ? 1 : 0 }}
+            transition={{ duration: 0.5 }}
+            onLoad={() => setImageLoaded(true)}
+            src="images/Errorimg.gif"
+            alt="Error chair"
+            loading="lazy"
+            className={` object-contain rounded-3xl absolute top-0 left-1/2 -translate-x-1/2 ${
+              imageLoaded ? "relative" : "invisible"
+            }`}
+          />
         </div>
       </div>
     </div>

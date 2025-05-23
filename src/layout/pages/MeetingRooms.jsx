@@ -184,16 +184,22 @@ const MeetingRooms = ({
                       // setValueKey: setHrRoomSeatCount,
                       cabinSize: hrRoomConfig.roomSize,
                       setCabinSize: hrRoomConfig.setRoomSize,
+                      seatCount: hrRoomConfig.seatCount,
+                      setSeatCount: hrRoomConfig.setSeatCount,
                     }
                   : room.type === "financeRoom"
                   ? {
                       cabinSize: financeRoomConfig.roomSize,
                       setCabinSize: financeRoomConfig.setRoomSize,
+                      seatCount: financeRoomConfig.seatCount,
+                      setSeatCount: financeRoomConfig.setSeatCount,
                     }
                   : room.type === "sales"
                   ? {
                       cabinSize: salesRoomConfig.roomSize,
                       setCabinSize: salesRoomConfig.setRoomSize,
+                      seatCount: salesRoomConfig.seatCount,
+                      setSeatCount: salesRoomConfig.setSeatCount,
                     }
                   : room.type === "videoRecordingRoom"
                   ? {

@@ -1,9 +1,11 @@
 import { useState } from "react";
 import { useApp } from "../../Context/Context";
+import { motion } from "framer-motion";
 
 function EnterAreaModal({ onclose }) {
   const { inputValue, setInputValue, setTotalArea } = useApp();
   const [error, setError] = useState(""); // State to store the error message
+  const [imageLoaded, setImageLoaded] = useState(false);
 
   const MIN_AREA = 1000;
   const MAX_AREA = 25000;
@@ -76,7 +78,24 @@ function EnterAreaModal({ onclose }) {
           </div>
         </div>
         <div className="flex justify-center h-full w-full relative">
-          <img src="images/No-data.gif" alt="Error chair" />
+          {/* Skeleton placeholder */}
+          {!imageLoaded && (
+            <div className="w-full h-64 bg-gray-300/10 rounded-3xl animate-pulse" />
+          )}
+
+          {/* Lazy-loaded image with fade-in */}
+          <motion.img
+            src="images/No-data.gif"
+            alt="Error chair"
+            loading="lazy"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: imageLoaded ? 1 : 0 }}
+            transition={{ duration: 0.5 }}
+            onLoad={() => setImageLoaded(true)}
+            className={`h-64 object-contain absolute top-0 left-1/2 -translate-x-1/2 ${
+              imageLoaded ? "relative" : "invisible"
+            }`}
+          />
         </div>
       </div>
     </div>
