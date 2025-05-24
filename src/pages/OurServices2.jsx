@@ -126,11 +126,11 @@ function OurServices() {
         <img
           src="./images/services/service-bg.png"
           alt="Blueprint Background"
-          className="absolute right-0 top-0 bottom-0 pl-[30vw] w-full h-full bg-no-repeat bg-contain bg-right z-0"
+          className="absolute right-0 top-0 bottom-0 md:pl-[4vw] lg:pl-[30vw] w-full h-full bg-no-repeat bg-contain bg-right z-0"
           // style={{ objectPosition: "right top" }} // customize position
         />
 
-        <div className="max-w-7xl mx-auto px-4 flex flex-col lg:flex-row items-start gap-16 z-10 relative">
+        <div className="3xl:max-w-[85vw] mx-auto px-2 md:px-12 xl:px-0 3xl:px-4 xl:pr-20 flex flex-col lg:flex-row lg:items-start gap-16 z-10 relative">
           {/* Left Image */}
           <div className="w-full">
             <img
@@ -142,19 +142,19 @@ function OurServices() {
 
           {/* Right Content */}
           <div className="w-full">
-            <div className="mb-6">
-              <div className="flex items-center gap-2 mb-2">
+            <div className="mb-10 lg:mb-6">
+              <div className="flex items-center place-content-end md:place-content-center lg:place-content-start mr-36 lg:mr-0 gap-2 mb-2">
                 <span className="w-9 h-px bg-[#304778] mb-2"></span>
                 <h5 className="text-xs font-semibold uppercase text-[#304778] tracking-widest font-lora">
                   Our Services
                 </h5>
               </div>
-              <h2 className="text-4xl font-bold text-[#232323] font-lora">
+              <h2 className="text-xl md:text-4xl font-bold text-[#232323] place-content-start md:place-self-center ml-[20vw] md:ml-24 lg:ml-0 lg:place-self-start font-lora">
                 Our Featured Services
               </h2>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 px-2 md:px-0">
               {services.map((service, index) => (
                 <div key={index} className="bg-white shadow p-10 text-center">
                   <img
@@ -177,7 +177,7 @@ function OurServices() {
 
       {/* Inoterior Process Section */}
       <section className="py-20">
-        <div className="max-w-7xl mx-auto px-4 text-center">
+        <div className="xl:max-w-7xl 3xl:max-w-[85vw] mx-auto px-4 text-center">
           <div className="flex items-center justify-center gap-1">
             {/* Left Line */}
             <div className="w-9 h-px bg-[#304778] mb-2"></div>
@@ -195,7 +195,8 @@ function OurServices() {
           </h2>
 
           {/* Process Steps */}
-          <div className="mt-16 flex justify-between items-end relative">
+          {/* Desktop Version */}
+          <div className="hidden md:flex mt-16 flex-col md:flex-row justify-between items-center md:items-end relative pr-6 lg:pr-0">
             {processSteps.map((step, index) => (
               <div
                 key={index}
@@ -270,14 +271,41 @@ function OurServices() {
               </div>
             ))}
           </div>
+
+          {/* Mobile Version */}
+          <div className="flex flex-col md:hidden mt-16 gap-8">
+            {processSteps.map((step, index) => (
+              <div
+                key={index}
+                className="flex flex-col items-center text-center px-4"
+              >
+                <div className="border-2 border-gray-200 p-px mb-4">
+                  <div className="border-2 border-gray-200 p-4">
+                    <img
+                      src={step.icon}
+                      alt={step.title}
+                      className="w-12 h-12 mx-auto"
+                    />
+                  </div>
+                </div>
+
+                <h3 className="text-lg font-bold text-[#232323] font-lora mb-1">
+                  {step.title}
+                </h3>
+                <p className="text-sm text-[#777777] font-Poppins max-w-xs">
+                  {step.description}
+                </p>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
       {/* Our Services Section*/}
       <section className="pt-20">
-        <div className="mx-auto flex flex-col md:flex-row">
+        <div className="mx-auto flex flex-col lg:flex-row">
           {/* Left - Stage Content */}
-          <div className="bg-[#F7F7F7] w-full md:w-[46%] px-[4vw] py-14">
+          <div className="bg-[#F7F7F7] w-full lg:w-[46%] px-2 md:px-16 lg:px-[4vw] py-14">
             {/* Heading */}
             <div className="mb-10">
               <div className="flex items-center gap-2">
@@ -319,9 +347,9 @@ function OurServices() {
           </div>
 
           {/* Right - Image & Tabs */}
-          <div className="w-full md:w-[54%] flex flex-col">
+          <div className="w-full lg:w-[54%] flex flex-col py-4 lg:p-0">
             {/* Tabs */}
-            <div className="flex justify-between items-center py-4">
+            <div className="hidden md:flex justify-between items-center py-4">
               {tabs.map((tab, i, arr) => (
                 <div
                   key={i}
@@ -367,8 +395,48 @@ function OurServices() {
               ))}
             </div>
 
+            {/* Mobile Tabs Only */}
+            <div className="block md:hidden space-y-6 px-6">
+              {tabs.map((tab, i) => (
+                <div key={i} className="relative pl-10 pb-6">
+                  {/* Horizontal Divider Line */}
+                  {i <= tabs.length - 1 && (
+                    <div className="absolute top-14 left-14 w-[60vw] border-t border-[#E5E5E5]" />
+                  )}
+
+                  {/* Icon */}
+                  <img
+                    src={tab.icon}
+                    alt={tab.label}
+                    className="w-10 h-10 mb-2"
+                  />
+
+                  {/* Circle Indicator */}
+                  <div className="relative w-4 h-4 mb-1">
+                    <div
+                      className={`w-full h-full rounded-full border-4 ${
+                        tab.active ? "border-[#304778]" : "border-[#232323]"
+                      }`}
+                    />
+                    {tab.active && (
+                      <div className="absolute top-1 left-1 w-2 h-2 bg-[#232323] rounded-full" />
+                    )}
+                  </div>
+
+                  {/* Label */}
+                  <div
+                    className={`text-[15px] font-lora font-bold ${
+                      tab.active ? "text-[#304778]" : "text-[#232323]"
+                    }`}
+                  >
+                    {tab.label}
+                  </div>
+                </div>
+              ))}
+            </div>
+
             {/* Image */}
-            <div className="flex-grow">
+            <div className="flex-grow px-1 lg:p-0">
               <img
                 src="./images/services/section3-img.png"
                 alt="Interior View"
