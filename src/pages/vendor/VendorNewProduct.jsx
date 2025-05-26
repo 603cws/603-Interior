@@ -28,7 +28,7 @@ function VendorNewProduct({ setAddNewProduct, setProductlist }) {
   // const [selectedSubcategories, setSelectedSubcategories] = useState();
   const [variant, setVariant] = useState({
     title: "",
-    price: 0,
+    price: "",
     details: "",
     mainImage: null,
     additionalImages: [],
@@ -235,8 +235,9 @@ function VendorNewProduct({ setAddNewProduct, setProductlist }) {
             additional_images: additionalImagePaths, // Store paths of additional images
             segment: variant.segment, // Store segment
             dimensions: variant.dimension, // Store dimension
-            manufacturer: variant.manufacturer, // Store manufacturer
+            manufacturer: accountHolder?.companyName || variant.manufacturer, // Store manufacturer
             vendor_id: accountHolder.userId, // Store vendor ID
+            product_type: subSubCategory,
           });
 
         if (variantError) {
@@ -333,18 +334,25 @@ function VendorNewProduct({ setAddNewProduct, setProductlist }) {
 
   // clear the form
   const handleFormClear = () => {
-    setVariant({
+    setVariant((prevVariants) => ({
+      ...prevVariants,
       title: "",
-      price: 0,
+      price: "",
       details: "",
       mainImage: null,
       additionalImages: [],
       segment: "",
       dimension: "",
       manufacturer: "",
-    });
+      vendor_id: "",
+    }));
     removeFile();
     setAdditionalImages([]);
+    setCategory("");
+    setSubSubCategory("");
+    setDimensionHeight("");
+    setDimensionLength("");
+    setDimensionwidth("");
   };
 
   const handlecategorychange = (e) => {
@@ -387,6 +395,7 @@ function VendorNewProduct({ setAddNewProduct, setProductlist }) {
                 <select
                   name="category"
                   id="category"
+                  value={category}
                   className="w-full border-2 py-1.5 px-2 rounded-lg"
                   // onChange={(e) => setCategory(e.target.value)}
                   onChange={(e) => handlecategorychange(e)}
@@ -473,6 +482,7 @@ function VendorNewProduct({ setAddNewProduct, setProductlist }) {
                     <input
                       type="number"
                       name="height"
+                      value={dimensionHeight}
                       onChange={(e) => setDimensionHeight(e.target.value)}
                       className="w-20 xl:w-32 py-1.5 px-2 border-2 rounded-lg [&::-webkit-inner-spin-button]:appearance-none  focus:outline-none focus:ring-0"
                       required
@@ -483,6 +493,7 @@ function VendorNewProduct({ setAddNewProduct, setProductlist }) {
                     <input
                       type="number"
                       name="length"
+                      value={dimensionLength}
                       onChange={(e) => setDimensionLength(e.target.value)}
                       className="w-20 xl:w-32 py-1.5 px-2 border-2 rounded-lg [&::-webkit-inner-spin-button]:appearance-none  focus:outline-none focus:ring-0"
                       required
@@ -493,6 +504,7 @@ function VendorNewProduct({ setAddNewProduct, setProductlist }) {
                     <input
                       type="number"
                       name="width"
+                      value={dimensionwidth}
                       onChange={handledimension}
                       className="w-20 xl:w-32 py-1.5 px-2 border-2 rounded-lg [&::-webkit-inner-spin-button]:appearance-none  focus:outline-none focus:ring-0"
                       required
@@ -637,6 +649,7 @@ function VendorNewProduct({ setAddNewProduct, setProductlist }) {
               <select
                 name="segment"
                 id="segment"
+                value={variant.segment}
                 className="w-full border-2 py-1.5 px-2 rounded-lg"
                 onChange={handleChange}
               >

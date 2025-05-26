@@ -258,7 +258,8 @@ function VendorNewAddon({ setAddNewProduct, setProductlist }) {
       price: "",
       image: null,
     });
-
+    setCategory("");
+    setSubSubCategory("");
     removeFile();
   };
 
@@ -302,6 +303,7 @@ function VendorNewAddon({ setAddNewProduct, setProductlist }) {
                 <select
                   name="category"
                   id="category"
+                  value={category}
                   className="w-full border-2 py-1.5 px-2 rounded-lg"
                   onChange={(e) => handlecategorychange(e)}
                   // onChange={(e) => setCategory(e.target.value)}

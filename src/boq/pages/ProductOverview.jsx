@@ -455,7 +455,7 @@ function ProductOverview() {
           {/* product info */}
           <div className="flex flex-col justify-center">
             <h2 className="text-sm lg:text-xl font-bold">{product?.title}</h2>
-            <p className="text-xs font-medium text-[#334A78] ">
+            <p className="text-xs font-medium w-3/4 text-[#334A78] ">
               {product?.details}
             </p>
             <p className="text-sm md:text-base font-semibold">
