@@ -18,9 +18,9 @@ function Footer() {
 
   const navigate = useNavigate();
   return (
-    <footer className=" bg-[#1F5C54] text-white font-Poppins px-10 xl:px-40 pt-12 pb-5">
+    <footer className=" bg-[#232323] text-white font-Poppins px-10 xl:px-40 pt-12 pb-5">
       <div className="md:container md:mx-auto  flex flex-col md:flex-row justify-between md:justify-center lg:justify-between   gap-10 mb-20">
-        <div className="border-r-2 border-[#34BFAD]  pr-10 xl:pr-28  lg:flex flex-col gap-5 text-sm">
+        <div className="border-r-2 border-[#FFD074]  pr-10 xl:pr-28  lg:flex flex-col gap-5 text-sm">
           <div className="capitalize">
             <h3 className="font-semibold mb-3 lg:mb-0">
               registered office address
@@ -195,7 +195,7 @@ function Footer() {
           &copy; 2019-2025 . Workved Interiors | All Rights Reserved
         </p>
         <div
-          className=" rounded-full bg-[#34BFAD] cursor-pointer "
+          className=" rounded-full bg-[#FFD074] cursor-pointer "
           onClick={scrollToTop}
         >
           <FaAngleUp className="w-30 h-30 m-3" />

@@ -105,7 +105,7 @@ function LandingNavbar({ bgColor = false }) {
           ) : (
             <button
               onClick={() => navigate("/Login")}
-              className="px-6 py-1.5 bg-[#1F5C54] border border-[#15423C] rounded-3xl text-white"
+              className="px-8 py-1.5 bg-[#1F3B5C] border border-[#1F3B5C] rounded-3xl text-white uppercase"
             >
               Log In
             </button>
@@ -171,7 +171,7 @@ function LandingNavbar({ bgColor = false }) {
               ) : (
                 <button
                   onClick={() => navigate("/Login")}
-                  className="px-6 py-1.5 bg-[#1F5C54] border border-[#15423C] rounded-3xl text-white w-full"
+                  className="px-6 py-1.5 bg-[#1F3B5C] border border-[#1F3B5C] rounded-3xl text-white w-full uppercase"
                 >
                   Log In
                 </button>

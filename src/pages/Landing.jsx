@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import LandingNavbar from "../common-components/LandingNavbar";
 
 import { FaAngleDown, FaAngleUp } from "react-icons/fa";
@@ -29,10 +29,20 @@ import {
 import { IoIosCall } from "react-icons/io";
 import { useApp } from "../Context/Context";
 import MobileTestimonal from "../common-components/MobileTestimonal";
+import { IoMdCheckmarkCircleOutline } from "react-icons/io";
+import beforeImage from "/images/home/before-img-one.png";
+import afterImage from "/images/home/after-img-one.png";
+import { FaRegUser } from "react-icons/fa";
+import { FiMessageSquare } from "react-icons/fi";
 
 function Landing() {
+  const imageContainerRef = useRef(null);
+  const [sliderPos, setSliderPos] = useState(50);
   const [expandedIndex, setExpandedIndex] = useState();
   // const [isMobile, setIsMobile] = useState(false);
+  const [activeTab, setActiveTab] = useState("designing");
+  const [loading, setLoading] = useState(false);
+
   const heroImages = [
     "/images/home/Hero.png",
     "/images/home/Hero-image-1.png",
@@ -165,712 +175,933 @@ function Landing() {
     },
   ];
 
+  const tabData = [
+    {
+      key: "designing",
+      title: "Designing",
+      img: "/images/home/section_1_design.png",
+      text: "We are committed to the impeccable craftsmanship and luxury is reflected in all we do. We offer span furniture and many accessories.",
+      points: [
+        "Quality and designs checks deeply",
+        "Periodic site review and timelines",
+        "Design development and strategy",
+      ],
+    },
+    {
+      key: "approved",
+      title: "Approved",
+      img: "/images/home/section_1_main.png",
+      text: "Approved tab content description.",
+      points: [
+        "Approved: Quality and inspection passed",
+        "Reviewed and signed off by architect",
+        "Timeline baseline locked in",
+      ],
+    },
+    {
+      key: "guaranteed",
+      title: "Guaranteed",
+      img: "/images/home/section_1_design.png",
+      text: "Guaranteed tab content description.",
+      points: [
+        "Backed by service guarantee",
+        "Compliance ensured with standards",
+        "Final walkthrough and approvals",
+      ],
+    },
+  ];
+
+  const testimonials = [
+    {
+      id: 1,
+      text: "I love everything that was put together for my living room! I just bought this house and only had a few items I wanted to keep. They helped me visualize the room.",
+      name: "Natalie Kameron",
+      role: "CEO / Manager",
+      image: "images/home/testimonial-1.png",
+    },
+    {
+      id: 2,
+      text: "I hired inoterior for my living room, and did such an amazing job, I then hired for my entry. It is going to be beautiful and amazing..!",
+      name: "Joel Elliott",
+      role: "Co-manager associated",
+      image: "images/home/testimonial-2.png",
+    },
+    {
+      id: 3,
+      text: " They helped me design our new living space & did a fantastic job! Such pleasure to work with every step of the way helped us find a design.",
+      name: "Peter Daniels",
+      role: "Ceo /Manger",
+      image: "images/home/testimonial-3.png",
+    },
+  ];
+
+  const latestArticles = [
+    {
+      image: "/images/blogoffice.png",
+      title:
+        "The Future of Office Design: Trends That Will Shape Workspaces in 2025",
+      date: 5,
+      month: "jun",
+      name: "jon deo",
+      comments: 0,
+      shortdescription: "Door Windows, Home Land",
+      description:
+        "A small newly opened interior design business that aims to  cover different issues, from sustainability to social, from equal opportunities to education, from giving space",
+    },
+    {
+      image: "/images/blogoffice.png",
+      title:
+        "The Future of Office Design: Trends That Will Shape Workspaces in 2025",
+      date: 5,
+      month: "jun",
+      name: "jon deo",
+      comments: 0,
+      shortdescription: "Door Windows, Home Land",
+      description:
+        "A small newly opened interior design business that aims to  cover different issues, from sustainability to social, from equal opportunities to education, from giving space",
+    },
+    {
+      image: "/images/blogoffice.png",
+      title:
+        "The Future of Office Design: Trends That Will Shape Workspaces in 2025",
+      date: 5,
+      month: "jun",
+      name: "jon deo",
+      comments: 0,
+      shortdescription: "Door Windows, Home Land",
+      description:
+        "A small newly opened interior design business that aims to  cover different issues, from sustainability to social, from equal opportunities to education, from giving space",
+    },
+  ];
+
+  const handleImageDrag = (e) => {
+    const bounds = imageContainerRef.current.getBoundingClientRect();
+    const x = e.clientX || e.touches?.[0]?.clientX;
+    if (!x) return;
+
+    const offsetX = x - bounds.left;
+    const percent = Math.max(0, Math.min((offsetX / bounds.width) * 100, 100));
+    setSliderPos(percent);
+  };
+  const handleClick = () => {
+    setLoading(true);
+    // Optionally add a timeout if navigation doesn't cause full re-render
+    navigate("/Layout");
+  };
   return (
-    <div>
-      {/* section 1 */}
+    <>
+      {/* header section */}
       <section
-        className={`relative flex flex-col h-screen bg-cover bg-center transition-all duration-1000`}
-        style={{
-          backgroundImage: `url(${heroImages[currentImageIndex]})`,
-          backgroundAttachment: "fixed",
-        }}
+        className="relative flex flex-col h-screen bg-cover bg-center bg-[url('/images/home/Home_Header.png')]"
+        style={{ backgroundAttachment: "fixed" }}
       >
-        {/* Add a dark overlay */}
         <div className="absolute inset-0 bg-black/50"></div>
-        {/* Content */}
         <div className="relative z-10 ">
           <LandingNavbar />
-
-          {/* Text div */}
           <div className="flex justify-center items-center h-svh">
-            <div className="flex-1 flex flex-col gap-10 lg:gap-0 justify-center items-center text-white max-h-fit max-w-fit mx-auto p-5 rounded-xl mt-14 ">
-              <h1 className="font-lato text-[55px] lg:text-[64px] text-center leading-tight">
-                Create your Space
-              </h1>
-              <p className="font-Poppins text-xl lg:text-3xl text-center">
-                We create unique style and design for your office
-              </p>
-              <button
-                className="border border-transparent px-5 bg-[#1F5C54] py-3 mt-16 font-Poppins font-bold transform transition-transform duration-300 ease-in-out hover:scale-110"
-                onClick={() => {
-                  if (!isAuthenticated) {
-                    localStorage.removeItem("currentLayoutID");
-                    setTotalArea("");
-                    setCurrentLayoutID(0);
-                    setCurrentLayoutData({});
-                  }
-                  navigate("/Layout");
-                }}
-              >
-                Make Your Space
-              </button>
+            <div className="flex-1 flex flex-col gap-10 lg:gap-0 justify-center items-center text-white max-h-fit max-w-fit mx-auto lg:p-5 rounded-xl">
+              <div className="lg:flex max-w-6xl px-5 py-5 space-y-10  items-stretch">
+                <div className="lg:w-3/5 flex flex-col  justify-center items-center gap-6">
+                  <h3 className="uppercase lg:self-end font-lato font-bold text-lg">
+                    A Trendy Luxury
+                  </h3>
+                  <p className="font-Poppins text-right hidden lg:block">
+                    Inoterior design consultancy firm that brings sensitivity to
+                    the design top restaurants, hotels, offices & homes around
+                    the world. We stand for quality, safety and credibility.
+                  </p>
+                </div>
+                <div className="w-px mx-10 bg-white"></div>
+                <div className="lg:w-2/5 space-y-10 flex flex-col">
+                  <h2 className="text-4xl lg:text-5xl font-bold font-lato ">
+                    Make Your Space For Better Experience
+                  </h2>
+                  {/* <button
+                    onClick={() => navigate("/Layout")}
+                    className="capitalize bg-[#FFD074] text-base font-semibold text-black px-3 py-1.5 rounded-3xl self-center lg:self-start"
+                  >
+                    discover what we do
+                  </button> */}
+                  <button
+                    onClick={handleClick}
+                    disabled={loading}
+                    className={`capitalize bg-[#FFD074] hover:bg-[#fbc964] text-base font-semibold text-black h-10 w-52  rounded-3xl self-center lg:self-start flex items-center justify-center gap-2 ${
+                      loading ? "opacity-70 cursor-not-allowed" : ""
+                    }`}
+                  >
+                    {loading ? (
+                      <span className="h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+                    ) : (
+                      "discover what we do"
+                    )}
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </section>
+
       {/* section 2 */}
-      <section className="bg-[#1F5C54] md:h-[500px] lg:h-[600px] xl:h-[700px]">
-        <div className="container mx-auto  flex flex-col text-white ">
-          {/* div for the text */}
-          <div className="flex flex-col justify-center items-center mt-7 font-sans mb-5">
-            <p
-              className="text-[#34BFAD] uppercase text-xs lg:text-sm font-[10]"
-              style={{ wordSpacing: "0.3em", letterSpacing: "0.2rem" }}
-            >
-              Luxurious Office Interiors
-            </p>
-            <img src="/images/serviceIcon.png" alt="service icon" />
-            <p className="font-lato text-2xl lg:text-5xl font-semibold mb-2">
-              We Offer Top Notch
-            </p>
-            <p className="text-center text-[12px] font-Poppins">
-              We offer top-notch products designed to meet all your{" "}
-              {!isMobile && <br />}
-              office space needs..
-            </p>
+      <section className="about-us px-3 lg:container pt-10 ">
+        <div className="lg:flex gap-12">
+          <div className="pb-6 lg:pb-0">
+            <img src="/images/home/section_1_main.png" alt="" />
           </div>
-          {/* div for the carousel */}
-          <div className="flex-1 my-7">
-            {/* Container for Images */}
-            <div className="flex flex-col sm:flex-row justify-center gap-6 sm:gap-14 relative px-5 lg:px-20 pb-10">
-              {/* Image Card 1 */}
-              <div className="group relative text-center w-full md:w-1/3 h-auto overflow-hidden rounded-3xl transition-all duration-700 ease-in-out">
-                <div className="flex flex-col items-center justify-center p-4 bg-transparent transition-all duration-700 ease-in-out group-hover:bg-white group-hover:scale-105 group-hover:py-8">
-                  <img
-                    src="/images/home/section2-img1.png"
-                    alt="pantary"
-                    className="mx-auto w-full sm:w-auto transition-transform duration-700 ease-in-out group-hover:scale-95 rounded-3xl"
-                  />
-                  <p className="hidden group-hover:block font-lora font-bold text-[#333333] mt-2 text-base md:text-lg lg:text-xl">
-                    Smart Office Layouts
-                  </p>
-                </div>
+          <div className="space-y-2 flex-1">
+            <div className="flex justify-normal items-center">
+              <span className="w-8 h-px bg-[#374A75]"></span>
+              <h4 className="uppercase text-[#374A75] font-bold text-sm font-lato">
+                about interior{" "}
+              </h4>
+            </div>
+            <div className="space-y-8">
+              <h3 className="text-[#232323] font-lora font-bold text-xl md:text-4xl">
+                We Create The Art Of Stylish <br /> Office Stylishly
+              </h3>
+              <p className="leading-7 font-lato">
+                Inoterior design consultancy firm that brings sensitivity to the
+                design top restaurants, hotels, offices & homes around the
+                world. We stand for quality, safety and credibility, so you
+                could be sure about our work. Initially we started as a company
+                specializing
+              </p>
+            </div>
+            <div>
+              {/* Desktop Tabs */}
+              <div className="hidden md:flex w-full justify-between space-x-2">
+                {tabData.map((tab) => (
+                  <div
+                    key={tab.key}
+                    onClick={() => setActiveTab(tab.key)}
+                    className={`relative inline-block px-6 py-2 font-semibold cursor-pointer ${
+                      activeTab === tab.key
+                        ? "border-b-2 border-[#2D437A] text-[#2D437A]"
+                        : "border-b-2 border-gray-200 text-black"
+                    }`}
+                  >
+                    {tab.title}
+                    {activeTab === tab.key && (
+                      <div className="absolute left-1/2 -bottom-[6px] transform -translate-x-1/2 rotate-45 w-3 h-3 bg-white border-l-2 border-t-2 border-[#2D437A]" />
+                    )}
+                  </div>
+                ))}
               </div>
 
-              {/* Image Card 2 */}
-              <div className="group relative text-center w-full md:w-1/3 h-auto overflow-hidden rounded-3xl transition-all duration-700 ease-in-out">
-                <div className="flex flex-col items-center justify-center p-4 bg-transparent transition-all duration-700 ease-in-out group-hover:bg-white group-hover:scale-105 group-hover:py-8">
-                  <img
-                    src="/images/home/section2-img2.png"
-                    alt="pantary"
-                    className="mx-auto w-full sm:w-auto transition-transform duration-700 ease-in-out group-hover:scale-95 rounded-3xl"
-                  />
-                  <p className="hidden group-hover:block font-lora font-bold text-[#333333] mt-2 text-base md:text-lg lg:text-xl">
-                    Custom BOQ
-                  </p>
-                </div>
+              {/* Desktop Content */}
+              <div className="hidden md:flex space-x-5 mt-4">
+                {tabData
+                  .filter((tab) => tab.key === activeTab)
+                  .map((tab) => (
+                    <>
+                      <img
+                        key="img"
+                        src={tab.img}
+                        alt=""
+                        className="h-64 w-56"
+                      />
+                      <div className="space-y-1" key="text">
+                        <p>{tab.text}</p>
+                        <div className="space-y-1">
+                          {tab.points.map((point, i) => (
+                            <div className="flex items-start space-x-2" key={i}>
+                              <IoMdCheckmarkCircleOutline size={20} />
+                              <p>{point}</p>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </>
+                  ))}
               </div>
 
-              {/* Image Card 3 */}
-              <div className="group relative text-center w-full md:w-1/3 h-auto overflow-hidden rounded-3xl transition-all duration-700 ease-in-out">
-                <div className="flex flex-col items-center justify-center p-4 bg-transparent transition-all duration-700 ease-in-out group-hover:bg-white group-hover:scale-105 group-hover:py-8">
-                  <img
-                    src="/images/home/section2-img3.png"
-                    alt="pantary"
-                    className="mx-auto w-full sm:w-auto transition-transform duration-700 ease-in-out group-hover:scale-95 rounded-3xl"
-                  />
-                  <p className="hidden group-hover:block font-lora font-bold text-[#333333] mt-2 text-base md:text-lg lg:text-xl">
-                    End-to-End Execution
-                  </p>
-                </div>
+              {/* Mobile Swiper */}
+              <div className="md:hidden mt-4">
+                <Swiper
+                  grabCursor={true}
+                  centeredSlides={true}
+                  loop={true}
+                  slidesPerView={"auto"}
+                  spaceBetween={10}
+                  initialSlide={3}
+                  autoplay={{
+                    delay: 1500, // 1.5 seconds per slide
+                    disableOnInteraction: false, // Keeps autoplay even after user interaction
+                  }}
+                  pagination={{ clickable: true }}
+                  modules={[EffectCoverflow, Pagination, Navigation, Autoplay]}
+                >
+                  {tabData.map((tab) => (
+                    <SwiperSlide key={tab.key}>
+                      <div className="space-y-2">
+                        {/* Tab Title */}
+                        <div className="text-center text-[#2D437A] font-semibold text-lg">
+                          {tab.title}
+                        </div>
+
+                        {/* Content */}
+                        <div className="space-y-4 text-sm ">
+                          <img
+                            src={tab.img}
+                            alt=""
+                            className="max-w-xs w-full mx-auto"
+                          />
+                          <p>{tab.text}</p>
+                          <div className="space-y-3">
+                            {tab.points.map((point, i) => (
+                              <div
+                                className="flex items-start space-x-2"
+                                key={i}
+                              >
+                                <IoMdCheckmarkCircleOutline size={20} />
+                                <p>{point}</p>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    </SwiperSlide>
+                  ))}
+                </Swiper>
               </div>
             </div>
           </div>
         </div>
       </section>
       {/* section 3 */}
-      <section className="bg-[#F4F4F4] pb-10 lg:pb-20">
-        <div className="container mx-auto flex py-10 justify-around gap-5">
-          <div className="flex-1">
-            <div>
-              <div className="flex flex-col justify-center items-center gap-1">
-                <p
-                  className="text-[#1F5C54] font-sans font-bold uppercase text-sm "
-                  style={{ wordSpacing: "0.3em", letterSpacing: "0.2rem" }}
-                >
-                  our story
-                </p>
-                <img src="/images/serviceIcon.png" alt="service icon" />
-              </div>
-              <div className="flex flex-col gap-5 xl:gap-14">
-                <h2 className="text-center text-[#212121] font-bold text-3xl xl:text-5xl font-lato ">
-                  Welcome to Workved {!isMobile && <br />} Interiors
-                </h2>
+      <section className="services relative lg:bg-[url('images/home/services_bg.png')] bg-right bg-no-repeat my-10">
+        <div className="px-3 lg:container space-y-3 py-16">
+          <div className="flex justify-normal items-center">
+            <span className="w-8 h-px bg-[#374A75]"></span>
+            <h4 className="uppercase text-[#374A75] font-bold text-sm font-lato">
+              services we do
+            </h4>
+          </div>
+          <h3 className="font-bold text-xl md:text-4xl font-lora">
+            Our Featured Services <br /> Interior Design Transformations
+          </h3>
 
-                <p className="text-[#212121] text-sm xl:text-base font-sans text-justify 2xl:leading-7 xl:mb-5">
-                  At Workved Interiors, we believe that the right workspace can
-                  transform the way you work. Our expertise in designing
-                  functional, aesthetically pleasing, and customized office
-                  spaces sets us apart. With a dedicated in-house design team
-                  that has successfully crafted inspiring environments for 603
-                  The Coworking Space, we bring the same innovation and
-                  precision to your corporate office. Whether you're looking to
-                  redesign your existing office or create a new space from
-                  scratch, Workved Interiors offers end-to-end solutions
-                  tailored to your business needs. Experience the perfect blend
-                  of creativity, efficiency, and functionality with Workved
-                  Interiors – where every space is designed with purpose.
-                </p>
-                {/* buton and call div */}
-                <div className="flex flex-col lg:flex-row justify-center lg:justify-between items-center gap-5">
-                  <button
-                    onClick={() => navigate("/AboutUs")}
-                    className="px-10 py-3.5 border border-[#34BFAD] font-sans text-[#34BFAD] hover:bg-[#34BFAD] hover:text-[#212121] uppercase font-thin text-xs lg:text-sm tracking-wider"
-                  >
-                    Read More
-                  </button>
-                  {/* image  */}
-                  <div className="w-full lg:w-1/2 flex justify-center items-center gap-2">
-                    <div
-                      className="bg-[#34BFAD] lg:w-[50px] w-10 h-10 lg:h-[50px] rounded-full flex justify-center items-center cursor-pointer"
-                      onClick={() => navigate("/ContactUs")}
-                    >
-                      <IoIosCall className="text-white w-6 h-6 sm:w-9 sm:h-9" />
-                    </div>
-                    <div className="flex flex-col justify-center items-center">
-                      <p className="font-sans font-bold text-[#212121] text-sm text-center">
-                        Book Through Call
+          {/* Swiper for mobile & tablet */}
+          <div className="lg:hidden">
+            <Swiper
+              spaceBetween={20}
+              slidesPerView={1}
+              pagination={{ clickable: true }}
+              breakpoints={{
+                640: { slidesPerView: 1 },
+                768: { slidesPerView: 2 },
+              }}
+              autoplay={{
+                delay: 1500, // 1.5 seconds per slide
+                disableOnInteraction: false, // Keeps autoplay even after user interaction
+              }}
+              modules={[Pagination, Autoplay]}
+            >
+              {/* Slide 1 */}
+              <SwiperSlide>
+                <div className="flex justify-center items-center">
+                  <div className="font-lato space-y-7 px-3 py-5 max-w-xs w-full bg-white shadow-lg">
+                    <img src="images/icons/architecture-icon.svg" alt="" />
+                    <h4 className="font-bold text-xl capitalize">
+                      architecture
+                    </h4>
+                    <p>
+                      We develop the full cycle of project documentation & full
+                      details. Our clients satisfaction
+                    </p>
+                    <button className="capitalize border-2 border-black px-4 py-1.5">
+                      read more
+                    </button>
+                  </div>
+                </div>
+              </SwiperSlide>
+
+              {/* Slide 2 */}
+              <SwiperSlide>
+                <div className="flex justify-center items-center">
+                  <div className="font-lato px-3 py-5 max-w-xs w-full bg-[url('/images/home/interior-work-bg.svg')] text-white relative shadow-lg">
+                    <div className="absolute inset-0 bg-black/50"></div>
+                    <div className="relative space-y-7">
+                      <img src="images/icons/interior.svg" alt="" />
+                      <h4 className="font-bold text-xl capitalize">
+                        Interior Work
+                      </h4>
+                      <p>
+                        We will take care of the interior designs, build &
+                        management of all kind of living projects
                       </p>
-                      <p className="font-sans text-[#34BFAD] text-sm lg:text-lg ml-3">
-                        +91 9136036603
-                      </p>
+                      <button className="capitalize border-2 border-white px-4 py-1.5">
+                        read more
+                      </button>
                     </div>
                   </div>
                 </div>
+              </SwiperSlide>
+
+              {/* Slide 3 */}
+              <SwiperSlide>
+                <div className="flex justify-center items-center">
+                  <div className="font-lato space-y-7 px-3 py-5 max-w-xs w-full bg-white shadow-lg">
+                    <img src="images/icons/retail.svg" alt="" />
+                    <h4 className="font-bold text-xl capitalize">
+                      Retail Designs
+                    </h4>
+                    <p>
+                      We can help you with the retail interior design and third
+                      party management to create best
+                    </p>
+                    <button className="capitalize border-2 border-black px-4 py-1.5">
+                      read more
+                    </button>
+                  </div>
+                </div>
+              </SwiperSlide>
+
+              {/* Slide 4 */}
+              <SwiperSlide>
+                <div className="flex justify-center items-center">
+                  {" "}
+                  <div className="font-lato space-y-7 px-3 py-5 max-w-xs w-full bg-white shadow-lg">
+                    <img src="images/icons/2d-3d_layout.svg" alt="" />
+                    <h4 className="font-bold text-xl capitalize">
+                      2D/3D Layouts
+                    </h4>
+                    <p>
+                      We offer professional online 2D and 3D interior designing
+                      which will help you visualize
+                    </p>
+                    <button className="capitalize border-2 border-black px-4 py-1.5">
+                      read more
+                    </button>
+                  </div>
+                </div>
+              </SwiperSlide>
+            </Swiper>
+          </div>
+
+          {/* Original static grid for large screens */}
+          <div className="hidden lg:grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 max-w-fit space-x-5 bg-white shadow-lg">
+            <div className="font-lato space-y-7 px-3 py-5 max-w-xs">
+              <img src="images/icons/architecture-icon.svg" alt="" />
+              <h4 className="font-bold text-xl capitalize">architecture</h4>
+              <p>
+                We develop the full cycle of project documentation & full
+                details. Our clients satisfaction
+              </p>
+              <button className="capitalize border-2 border-black px-4 py-1.5">
+                read more
+              </button>
+            </div>
+            <div className="font-lato px-3 py-5 max-w-xs bg-[url('/images/home/interior-work-bg.svg')] text-white relative">
+              <div className="absolute inset-0 bg-black/50"></div>
+              <div className="relative space-y-7">
+                <img src="images/icons/interior.svg" alt="" />
+                <h4 className="font-bold text-xl capitalize">Interior Work</h4>
+                <p>
+                  We will take care of the interior designs, build & management
+                  of all kind of living projects
+                </p>
+                <button className="capitalize border-2 border-white px-4 py-1.5">
+                  read more
+                </button>
               </div>
             </div>
+            <div className="font-lato space-y-7 px-3 py-5 max-w-xs">
+              <img src="images/icons/retail.svg" alt="" />
+              <h4 className="font-bold text-xl capitalize">Retail Designs</h4>
+              <p>
+                We can help you with the retail interior design and third party
+                management to create best
+              </p>
+              <button className="capitalize border-2 border-black px-4 py-1.5">
+                read more
+              </button>
+            </div>
+            <div className="font-lato space-y-7 px-3 py-5 max-w-xs">
+              <img src="images/icons/2d-3d_layout.svg" alt="" />
+              <h4 className="font-bold text-xl capitalize">2D/3D Layouts</h4>
+              <p>
+                We offer professional online 2D and 3D interior designing which
+                will help you visualize
+              </p>
+              <button className="capitalize border-2 border-black px-4 py-1.5">
+                read more
+              </button>
+            </div>
           </div>
-          <div className="flex-1 hidden lg:flex justify-end items-center h-full">
+        </div>
+      </section>
+
+      {/* section 4 */}
+      <section className="testimonials px-3 lg:container pt-10 pb-5 lg:pb-20 space-y-10">
+        <div className="flex flex-col items-center space-y-4">
+          <div className="flex justify-normal items-center">
+            <span className="w-8 h-px bg-[#374A75]"></span>
+            <h4 className="uppercase text-[#374A75] font-bold text-sm font-lato mx-2">
+              What People Say
+            </h4>
+            <span className="w-8 h-px bg-[#374A75]"></span>
+          </div>
+          <h3 className="font-bold font-lato text-4xl">Words Of Our Clients</h3>
+        </div>
+
+        {/* Mobile & Tablet View */}
+        <div className="block lg:hidden">
+          <Swiper
+            spaceBetween={20}
+            slidesPerView={1}
+            loop={true}
+            autoplay={{
+              delay: 1500, // 1.5 seconds per slide
+              disableOnInteraction: false, // Keeps autoplay even after user interaction
+            }}
+            modules={[Autoplay]}
+          >
+            {testimonials.map((testimonial) => (
+              <SwiperSlide key={testimonial.id}>
+                <div className="border-r-[16px] border-b-[16px] border-[#F7F7F7] max-w-sm space-y-5 mx-auto p-4 bg-white">
+                  <div>
+                    <img src="/images/home/stars.svg" alt="rating stars" />
+                  </div>
+                  <p className="font-lato italic text-[#777777]">
+                    {testimonial.text}
+                  </p>
+                  <div className="flex gap-4 items-center">
+                    <img
+                      src={testimonial.image}
+                      alt={testimonial.name}
+                      className="w-12 h-12 rounded-full"
+                    />
+                    <div>
+                      <h5 className="text-[#232323] font-bold font-lato">
+                        {testimonial.name}
+                      </h5>
+                      <h6 className="text-[#777777]">{testimonial.role}</h6>
+                    </div>
+                  </div>
+                </div>
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        </div>
+
+        {/* Desktop View */}
+        <div className="hidden lg:flex gap-8 justify-between">
+          {testimonials.map((testimonial) => (
+            <div
+              key={testimonial.id}
+              className="border-r-[16px] border-b-[16px] border-[#F7F7F7] max-w-sm space-y-5 p-4"
+            >
+              <div>
+                <img src="/images/home/stars.svg" alt="rating stars" />
+              </div>
+              <p className="font-lato italic text-[#777777]">
+                {testimonial.text}
+              </p>
+              <div className="flex gap-4 items-center">
+                <img
+                  src={testimonial.image}
+                  alt={testimonial.name}
+                  className="w-12 h-12 rounded-full"
+                />
+                <div>
+                  <h5 className="text-[#232323] font-bold font-lato">
+                    {testimonial.name}
+                  </h5>
+                  <h6 className="text-[#777777]">{testimonial.role}</h6>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* section 5 */}
+      <section className="before-after py-10 space-y-5">
+        <div className="lg:container mx-auto hidden md:block">
+          <div className="flex justify-normal items-center">
+            <span className="w-8 h-px bg-[#374A75]"></span>
+            <h4 className="uppercase text-[#374A75] font-bold text-sm font-lato mx-2">
+              after before
+            </h4>
+          </div>
+          <h3 className="font-bold font-lora text-4xl">
+            Let's Have A Look At What <br />
+            Creativity Is!
+          </h3>
+        </div>
+        <div
+          ref={imageContainerRef}
+          className="relative w-full max-w-7xl  h-[500px] overflow-hidden "
+        >
+          {/* Before image */}
+          <img
+            src={beforeImage}
+            className="absolute top-0 left-0 h-full w-full object-cover"
+            alt="Before"
+          />
+
+          {/* After image with dynamic width */}
+          <div
+            className="absolute top-0 left-0 h-full overflow-hidden"
+            style={{ width: `${sliderPos}%` }}
+          >
             <img
-              src="/images/home/welcome to interior.png"
-              alt="welcome interior"
+              src={afterImage}
+              className="h-full w-full object-cover"
+              alt="After"
+            />
+          </div>
+
+          {/* Slider handle */}
+          <div
+            className="absolute top-0 bottom-0"
+            style={{ left: `${sliderPos}%`, transform: "translateX(-50%)" }}
+          >
+            {/* <div className="h-full w-1 bg-white shadow-md" /> */}
+            <div
+              onMouseDown={(e) => {
+                e.preventDefault();
+                window.addEventListener("mousemove", handleImageDrag);
+                window.addEventListener(
+                  "mouseup",
+                  () => {
+                    window.removeEventListener("mousemove", handleImageDrag);
+                  },
+                  { once: true }
+                );
+              }}
+              onTouchStart={(e) => {
+                window.addEventListener("touchmove", handleImageDrag);
+                window.addEventListener(
+                  "touchend",
+                  () => {
+                    window.removeEventListener("touchmove", handleImageDrag);
+                  },
+                  { once: true }
+                );
+              }}
+              className="w-6 h-6 rounded-full  border-2 border-gray-700 animate-pulse mx-auto absolute left-1/2 -translate-x-1/2 top-1/2 cursor-ew-resize"
             />
           </div>
         </div>
       </section>
 
-      {/* section buy our product */}
-      {/* <section className="bg-[url('/images/home/produt.png')] bg-cover bg-center py-4 h-1/2 pb-20">
-        <div className="container mx-auto relative py-10 ">
-          <div className="flex flex-col gap-12 justify-center items-center h-3/4 absolute w-1/2 top-[40px] left-[-200px]">
-            <div className="flex flex-col justify-center items-center">
-              <p className="font-sans mb-1 text-[#1F5C54] font-bold uppercase text-sm">
-                {" "}
-                our products
-              </p>
-              <img src="/images/serviceIcon.png" alt="service icon" />
-              <h3 className="font-Poppins text-3xl font-semibold text-[#1F5C54] ">
-                Buy Our Product
-              </h3>
-            </div>
-            <div className="">
-              <button className=" bg-[#34BFAD] px-5 py-2 border-[1px] border-r-4 border-b-4 drop-shadow-xl border-black text-center text-black text-xs font-normal font-['Poppins'] leading-normal hover:scale-110 transition-transform">
-                View More
-              </button>
-            </div>
+      {/* section 6 */}
+      <section className="py-10">
+        <div className="flex flex-col items-center space-y-4 py-3">
+          <div className="flex justify-normal items-center">
+            <span className="w-8 h-px bg-[#374A75]"></span>
+            <h4 className="uppercase text-[#374A75] font-bold text-sm font-lato mx-2">
+              our best projects
+            </h4>
+            <span className="w-8 h-px bg-[#374A75]"></span>
           </div>
-
-          <div className="slider-container w-3/4 ml-auto">
-            <Slider {...settingsProduct}>
-              <div className="overflow-hidden ">
-                <div className="bg-white lg:w-[220px] lg:h-[320px] ">
-                  <img
-                    className=""
-                    src="images/home/sectionproduct1.png "
-                    alt="sectionproduct"
-                  />
-                  <div className="text-center text-[#111111] text-sm font-bold font-Poppins capitalize py-2">
-                    <span>Table Lamp</span>
-                  </div>{" "}
-                </div>
-              </div>
-              <div className="overflow-hidden">
-                <div className="bg-white w-1/2 lg:w-[220px] lg:h-[320px] ">
-                  <img
-                    className=""
-                    src="images/home/sectionproduct2.png "
-                    alt="sectionproduct"
-                  />
-                  <div className="text-center text-[#111111] text-sm font-bold font-Poppins capitalize py-2">
-                    <span>Chair</span>
-                  </div>{" "}
-                </div>
-              </div>
-              <div className="overflow-hidden">
-                <div className="bg-white w-1/2 lg:w-[220px] lg:h-[320px] ">
-                  <img
-                    className=""
-                    src="images/home/sectionproduct3.png "
-                    alt="sectionproduct"
-                  />
-                  <div className="text-center text-[#111111] text-sm font-bold font-Poppins capitalize py-2">
-                    <span>Lights</span>
-                  </div>{" "}
-                </div>
-              </div>
-              <div className="overflow-hidden">
-                <div className="bg-white w-1/2 lg:w-[220px] lg:h-[320px] ">
-                  <img
-                    className=""
-                    src="images/home/sectionproduct4.png "
-                    alt="sectionproduct"
-                  />
-                  <div className="text-center text-[#111111] text-sm font-bold font-Poppins capitalize py-2">
-                    <span>Chair</span>
-                  </div>{" "}
-                </div>
-              </div>
-              <div className="overflow-hidden">
-                <div className="bg-white w-1/2 lg:w-[220px] lg:h-[320px] ">
-                  <img
-                    className=""
-                    src="images/home/sectionproduct5.png "
-                    alt="sectionproduct"
-                  />
-                  <div className="text-center text-[#111111] text-sm font-bold font-Poppins capitalize py-2">
-                    <span>Table Lamp</span>
-                  </div>{" "}
-                </div>
-              </div>
-            </Slider>
+          <h3 className="font-bold font-lato text-4xl capitalize">
+            our featured projects
+          </h3>
+        </div>
+        {/* Desktop layout */}
+        <div className="w-full justify-end hidden lg:flex">
+          <div className="max-w-7xl flex justify-end gap-5">
+            <img
+              src="/images/home/featured-project-1.png"
+              alt=""
+              className="max-w-xs"
+            />
+            <img
+              src="/images/home/featured-project-2.png"
+              alt=""
+              className="max-w-xs"
+            />
+            <img
+              src="/images/home/featured-project-3.png"
+              alt=""
+              className="max-w-xs"
+            />
+            <img
+              src="/images/home/featured-project-4.png"
+              alt=""
+              className="max-w-xs"
+            />
           </div>
         </div>
-      </section> */}
 
-      {/* section for buy  */}
-
-      {/* section our Work */}
-      <section className="py-6 bg-[#F4F4F4] ">
-        {/* container */}
-        <div className="container max-w-full overflow-x-hidden py-2">
-          {/* textual part */}
-          <div className="flex flex-col justify-center items-center">
-            <p
-              className="font-sans mb-1 text-[#1F5C54] font-bold text-sm uppercase text tracking-wider"
-              style={{ wordSpacing: "0.3em", letterSpacing: "0.2rem" }}
-            >
-              our work
-            </p>
-            <img src="/images/serviceIcon.png" alt="service icon" />
-            {/* <h3 className="text-5xl font-lato font-semibold uppercase">
-              Our WORK
-            </h3> */}
-          </div>
-
-          {/* slider for images */}
+        {/* Swiper for mobile & tablet */}
+        <div className="lg:hidden px-5">
           <Swiper
-            effect={"coverflow"}
-            grabCursor={true}
-            centeredSlides={true}
-            loop={true}
-            slidesPerView={"auto"} // Ensures 5 slides are visible
-            spaceBetween={30} // Adds spacing between slides
-            initialSlide={3}
-            coverflowEffect={{
-              rotate: 35,
-              stretch: 0,
-              depth: 100,
-              modifier: 0.8,
+            spaceBetween={20}
+            breakpoints={{
+              0: {
+                slidesPerView: 1,
+              },
+              768: {
+                slidesPerView: 2,
+              },
             }}
             autoplay={{
               delay: 1500, // 1.5 seconds per slide
               disableOnInteraction: false, // Keeps autoplay even after user interaction
             }}
-            // pagination={{ el: ".swiper-pagination", clickable: true }}
-            navigation={{
-              nextEl: ".swiper-button-next",
-              prevEl: ".swiper-button-prev",
-              clickable: true,
-            }}
-            modules={[EffectCoverflow, Pagination, Navigation, Autoplay]}
-            className="swiper_container max-w-screen overflow-x-hidden"
+            modules={[Autoplay]}
           >
-            <SwiperSlide>
-              <img src="/images/ourwork1.jpg" alt="work section" />
-            </SwiperSlide>
-            <SwiperSlide>
-              <img src="/images/ourwork2.jpg" alt="work section" />
-            </SwiperSlide>
-            <SwiperSlide>
-              <img src="/images/ourwork3.jpeg" alt="work section" />
-            </SwiperSlide>
-            <SwiperSlide>
-              <img src="/images/ourwork4.JPG" alt="work section" />
-            </SwiperSlide>
-            <SwiperSlide>
-              <img src="/images/ourwork5.jpg" alt="work section" />
-            </SwiperSlide>
-            <SwiperSlide>
-              <img src="/images/ourwork6.jpg" alt="work section" />
-            </SwiperSlide>
-            <SwiperSlide>
-              <img src="/images/ourwork7.jpg" alt="work section" />
-            </SwiperSlide>
-            <SwiperSlide>
-              <img src="/images/ourwork8.jpg" alt="work section" />
-            </SwiperSlide>
-            <SwiperSlide>
-              <img src="/images/ourwork9.JPG" alt="work section" />
-            </SwiperSlide>
-            {/* <SwiperSlide>
-              <img src="/images/our-work/our-work-5.png" alt="work section" />
-            </SwiperSlide> */}
-            <div className="slider-controler">
-              <div className="swiper-button-prev slider-arrow !static ml-[12%]">
-                <BiSolidLeftArrowSquare
-                  name="arrow-back-outline"
-                  color={"#1A3A36"}
+            {["1", "2", "3", "4"].map((num) => (
+              <SwiperSlide key={num}>
+                <img
+                  src={`/images/home/featured-project-${num}.png`}
+                  alt={`Featured Project ${num}`}
+                  className="w-full max-w-xs mx-auto"
                 />
-              </div>
-              <div className="swiper-button-next slider-arrow !static ml-6">
-                <BiSolidRightArrowSquare
-                  name="arrow-back-outline"
-                  color={"#1A3A36"}
-                />
-              </div>
-              <div className="hidden lg:block swiper-pagination"></div>
-            </div>
+              </SwiperSlide>
+            ))}
           </Swiper>
         </div>
       </section>
 
-      {/* section 5 */}
-      <section className="pt-6 relative bg-[#F4F4F4] shadow-[0px_0px_20px_rgba(0,0,0,0.1)]">
-        {/* container */}
-        <div className="container mx-auto flex flex-col py-10">
-          {/* text */}
-          <div className="flex flex-col justify-center items-center mb-3">
-            <p
-              className="font-sans mb-1 text-[#1F5C54] font-bold uppercase text-sm tracking-wider"
-              style={{ wordSpacing: "0.1em", letterSpacing: "0.1rem" }}
-            >
-              Our Clients
-            </p>
-            <img src="/images/serviceIcon.png" alt="service icon" />
-          </div>
-          {/* logo slider */}
-          <div className="flex justify-center items-center mx-4 w-full max-w-screen">
-            <Slider {...settings} className="w-full">
-              <div className="slider-image w-32 lg:w-56 h-10 lg:h-16 flex justify-center items-center">
-                <img
-                  src="/images/iide-logo.svg"
-                  alt="iide"
-                  className="w-full max-h-full"
-                />
-              </div>
-              <div className="slider-image w-24 h-10">
-                <img
-                  src="/images/credilio-svg-logo.svg"
-                  alt="credilio"
-                  className="w-full max-h-full"
-                />
-              </div>
-              <div className="slider-image w-32 lg:w-56 h-10 lg:h-16  flex justify-center items-center">
-                <img
-                  src="/images/tripjack-logo.png"
-                  alt="tripjack"
-                  className="w-full max-h-full"
-                />
-              </div>
-              <div className="slider-image w-24 lg:w-32 h-12 lg:h-[70px] flex justify-center items-center px-5">
-                <img
-                  src="/images/bajaj-electricals-logo.jpg"
-                  alt="bajaj"
-                  className="w-full max-h-full"
-                />
-              </div>
-              <div className="slider-image w-24 lg:w-28 h-12 lg:h-16 flex justify-center items-center px-5">
-                <img
-                  src="/logo/logo.png"
-                  alt="Workved Interiors"
-                  className="w-full max-h-full"
-                />
-              </div>
-            </Slider>
-          </div>
-        </div>
-      </section>
-
-      {/* section6 */}
-      {/* <section className="bg-gradient-to-t from-[#f4f4f4] via-[#f4f4f4] to-[#D0D0D0] "> */}
-      <section className=" bg-[#F4F4F4] hidden lg:block">
-        <div className="container mx-auto flex justify-around items-center py-10 ">
-          <div>
-            {/* <div className="w-[350px] h-[520.78px] px-[30px] py-[37px] bg-[#1f5c54] rounded-tr-[200px] rounded-bl-[200px] rounded-br-[200px] flex-col justify-start items-center gap-[18px] inline-flex "> */}
-            <div className="relative top-20 left-[290px]">
+      {/* section 7 */}
+      <section className="bg-[#F7F7F7] py-10 md:py-14">
+        <div className="px-3 lg:container ">
+          <div className="w-full grid grid-cols-2 lg:grid-cols-4 gap-y-5 gap-x-5">
+            <div className="flex lg:justify-center items-center gap-2.5">
               <img
-                src="/images/home/testimonalicon1.png"
-                alt="testimonalicon"
+                src="/images/icons/creative-premium.svg"
+                alt=""
+                className="h-7 md:h-14"
               />
+              <h5 className="font-Poppins text-[#374A75] capitalize text-sm lg:text-xl">
+                <span className="text-[#CDA174]">creative</span> <br /> premium
+              </h5>
             </div>
-            <div className="w-[350px] h-[500px] px-[30px] top-[-40px] py-[37px] bg-[#1f5c54] rounded-tr-[200px] rounded-bl-[200px] rounded-br-[200px] flex-col justify-start items-center gap-[18px] inline-flex relative z-10">
-              <div className="h-[255px] flex items-center justify-center px-2">
-                {/* <div className="w-[300px] h-[255px] left-[-5px] top-0 absolute text-center text-white text-[15px] font-normal font-['Lora'] leading-normal" */}
-                <p className="mt-10 text-justify text-white text-sm font-['Lora'] leading-normal">
-                  Workved Interiors transformed our office into a space that
-                  perfectly blends functionality with modern aesthetics. Their
-                  team understood our requirements and executed the project
-                  seamlessly, ensuring a workspace that enhances productivity
-                  and employee well-being. The attention to detail and quality
-                  craftsmanship truly set them apart!
-                </p>
-              </div>
+            <div className="flex lg:justify-center items-center gap-2.5">
               <img
-                className="w-[100px] h-[100px] relative rounded-[100px] border border-[#1a3a36]"
-                src="/images/testimonalreview1.png"
-                alt="testimonal person "
+                src="/images/icons/office-interior.svg"
+                alt=""
+                className="h-7 md:h-14"
               />
-              <div className="self-stretch h-[18.89px] text-center text-white text-sm font-bold font-['DM Sans'] uppercase leading-[29.60px] tracking-[3.52px]">
-                Hussain
-              </div>
-              <div className="self-stretch h-[18.89px] text-center text-[#33bead] text-sm font-bold font-['DM Sans'] uppercase leading-[29.60px] tracking-[3.52px]">
-                Director, Tripjack
-              </div>
+              <h5 className="font-Poppins text-[#374A75] capitalize text-sm lg:text-xl">
+                <span className="text-[#CDA174]">office</span> <br /> interior
+              </h5>
             </div>
-          </div>
-          {/* second div */}
-          {/* <div className="w-[350px] h-[525px] p-[30px] bg-white rounded-tl-[200px] rounded-tr-[200px] rounded-bl-[200px] border border-[#33bead] flex-col justify-start items-center gap-[18px] inline-flex"> */}
-          <div className="w-[350px] h-[500px] p-[30px] bg-white rounded-tl-[200px] rounded-tr-[200px] rounded-bl-[200px] border border-[#33bead] flex-col justify-start items-center gap-[18px] inline-flex">
-            <div className="h-[255px] flex items-center justify-center">
-              {/* <div className="w-[300px] h-[255px] left-[-5px] top-0 absolute text-center text-[#141515] text-[15px] font-normal font-['Lora'] leading-normal"> */}
-              <div className="text-justify mt-10 text-[#141515] text-sm font-normal font-['Lora'] leading-normal">
-                Workved Interiors has played a key role in shaping our coworking
-                spaces into inspiring and productive environments. Their ability
-                to design offices that are both stylish and highly functional
-                has been a game-changer for our members. Their expertise,
-                professionalism, and commitment to delivering excellence make
-                them a trusted partner in workspace design.
-              </div>
-            </div>
-            <img
-              className="w-[100px] h-[100px] relative rounded-[100px] border border-[#1a3a36]"
-              src="/images/testimonalreview2.png"
-              alt="testimonal person "
-            />
-            <div className="self-stretch h-[18.89px] text-center text-[#1a3a36] text-sm font-bold font-['DM Sans'] uppercase leading-[29.60px] tracking-[3.52px]">
-              Kunal Kataria
-            </div>
-            <div className="self-stretch h-[18.89px] text-center text-[#33bead] text-sm font-bold font-['DM Sans'] uppercase leading-[29.60px] tracking-[3.52px]">
-              Founder, 603 CWS
-            </div>
-          </div>
-
-          {/* div 3 */}
-          {/* <div className="w-[350px] h-[520.78px] px-[30px] py-[37px] bg-[#1f5c54] rounded-tl-[200px] rounded-bl-[200px] rounded-br-[200px] flex-col justify-start items-center gap-[18px] inline-flex"> */}
-          <div className="w-[350px] h-[500px] px-[30px]  py-[37px] bg-[#1f5c54] rounded-tl-[200px] rounded-bl-[200px] rounded-br-[200px] flex-col justify-start items-center gap-[18px] inline-flex relative">
-            <div className="h-[255px] flex items-center justify-center">
-              {/* <div className="w-[300px] h-[255px] left-[-5px] top-0 absolute text-center text-white text-[15px] font-normal font-['Lora'] leading-normal"> */}
-              <div className="text-justify mt-10 text-white text-sm font-normal font-['Lora'] leading-normal">
-                The team at Workved Interiors understood our brand vision and
-                delivered an office space that enhances collaboration,
-                creativity, and efficiency. They were meticulous in their
-                planning and execution, ensuring that every element from layout
-                to furnishings was aligned with our needs. Working with them was
-                a smooth and rewarding experience!
-              </div>
-            </div>
-            <img
-              className="w-[100px] h-[100px] relative rounded-[100px] border border-[#1a3a36]"
-              src="/images/testimonalreview3.png"
-              alt="testimonal person "
-            />
-            <div className="self-stretch h-[18.89px] text-center text-white text-sm font-bold font-['DM Sans'] uppercase leading-[29.60px] tracking-[3.52px]">
-              Aditya
-            </div>
-            <div className="self-stretch h-[18.89px] text-center text-[#33bead] text-sm font-bold font-['DM Sans'] uppercase leading-[29.60px] tracking-[3.52px]">
-              CEO, Credilio
-            </div>
-            <div className="absolute right-[-20px] bottom-0">
+            <div className="flex lg:justify-center items-center gap-2.5">
               <img
-                src="/images/home/testimonalicon2.png"
-                alt="testimonalicon"
+                src="/images/icons/comfort-furniture.svg"
+                alt=""
+                className="h-7 md:h-14"
               />
+              <h5 className="font-Poppins text-[#374A75] capitalize text-sm lg:text-xl">
+                <span className="text-[#CDA174]">comfort</span> <br /> furniture
+              </h5>
+            </div>
+            <div className="flex lg:justify-center items-center gap-2.5">
+              <img
+                src="/images/icons/remodeling-interior.svg"
+                alt=""
+                className="h-7 md:h-14"
+              />
+              <h5 className="font-Poppins text-[#374A75] capitalize text-sm lg:text-xl">
+                <span className="text-[#CDA174]">remodeling</span> <br />{" "}
+                interior
+              </h5>
             </div>
           </div>
         </div>
       </section>
 
-      {/* testimonal for mobile */}
-      <section className=" bg-[#F4F4F4]  md:hidden">
-        {/* <div>
-          <div className="max-w-sm mx-10  rounded-3xl bg-[#1f5c54]  flex-col justify-start items-center gap-[18px] inline-flex relative z-10">
-            <div className=" flex items-center justify-center px-2">
-              <p className="mt-10 text-justify text-white text-sm ">
-                Workved Interiors transformed our office into a space that
-                perfectly blends functionality with modern aesthetics. Their
-                team understood our requirements and executed the project
-                seamlessly, ensuring a workspace that enhances productivity and
-                employee well-being. The attention to detail and quality
-                craftsmanship truly set them apart!
+      {/* section 8 */}
+      <section className="py-10">
+        <div className="max-w-7xl lg:flex gap-10">
+          <div className="flex-1">
+            <img src="images/home/about-interior.png" alt="" />
+          </div>
+          <div className="flex-1 space-y-10 px-3 lg:px-0">
+            <div className="space-y-3 mb-6">
+              <div className="flex justify-normal items-center">
+                <span className="w-8 h-px bg-[#374A75]"></span>
+                <h4 className="uppercase text-[#374A75] font-bold text-sm font-lato mx-2">
+                  About Interior
+                </h4>
+              </div>
+              <h3 className="font-bold font-lora text-4xl">
+                Strategy - Led Interior Design
+              </h3>
+              <p className="font-lato text-base text-[#000000]/65">
+                We work to ensure people’s comfort at their home, and to provide
+                the best and the fastest help at fair prices. We stand for
+                quality, safety and cred
               </p>
             </div>
-            <img
-              className="w-[100px] h-[100px] relative rounded-[100px] border border-[#1a3a36]"
-              src="/images/testimonalreview1.png"
-              alt="testimonal person "
-            />
-            <div className="  text-center text-white text-sm font-bold  uppercase leading-[29.60px] tracking-[3.52px]">
-              Hussain
-            </div>
-            <div className="mb-3 text-center text-[#33bead] text-sm font-bold  uppercase leading-[29.60px] tracking-[3.52px]">
-              Director, Tripjack
-            </div>
-          </div>
-        </div> */}
-        <h2 className="text-center font-bold text-3xl my-3 uppercase text-[#1F5C54]">
-          Hear from our Clients{" "}
-        </h2>
-
-        {/* slider for images */}
-        <Swiper
-          effect={"coverflow"}
-          grabCursor={true}
-          centeredSlides={true}
-          loop={false}
-          slidesPerView={"auto"} // Ensures 5 slides are visible
-          spaceBetween={30} // Adds spacing between slides
-          initialSlide={3}
-          coverflowEffect={{
-            rotate: 35,
-            stretch: 0,
-            depth: 100,
-            modifier: 0.8,
-          }}
-          autoplay={{
-            delay: 1500, // 1.5 seconds per slide
-            disableOnInteraction: false, // Keeps autoplay even after user interaction
-          }}
-          // pagination={{ el: ".swiper-pagination", clickable: true }}
-          navigation={{
-            nextEl: ".swiper-button-next",
-            prevEl: ".swiper-button-prev",
-            clickable: true,
-          }}
-          modules={[EffectCoverflow, Pagination, Navigation, Autoplay]}
-          className="h-[70vh] max-w-screen overflow-x-hidden"
-        >
-          <SwiperSlide>
-            <MobileTestimonal
-              message={` Workved Interiors transformed our office into a space that
-                  perfectly blends functionality with modern aesthetics. Their
-                  team understood our requirements and executed the project
-                  seamlessly, ensuring a workspace that enhances productivity
-                  and employee well-being. The attention to detail and quality
-                  craftsmanship truly set them apart!`}
-              name={` Hussain`}
-              userprofile={`testimonalreview1`}
-              companyname={`Director, Tripjack`}
-            />
-          </SwiperSlide>
-          <SwiperSlide>
-            <MobileTestimonal
-              message={`Workved Interiors has played a key role in shaping our coworking
-                spaces into inspiring and productive environments. Their ability
-                to design offices that are both stylish and highly functional
-                has been a game-changer for our members. Their expertise,
-                professionalism, and commitment to delivering excellence make
-                them a trusted partner in workspace design.`}
-              name={`Kunal Kataria`}
-              userprofile={`testimonalreview2`}
-              companyname={`Founder, 603 CWS`}
-            />
-          </SwiperSlide>
-          <SwiperSlide>
-            <MobileTestimonal
-              message={`The team at Workved Interiors understood our brand vision and
-                delivered an office space that enhances collaboration,
-                creativity, and efficiency. They were meticulous in their
-                planning and execution, ensuring that every element from layout
-                to furnishings was aligned with our needs. Working with them was
-                a smooth and rewarding experience!`}
-              name={`Aditya`}
-              userprofile={`testimonalreview3`}
-              companyname={`CEO, Credilio`}
-            />
-          </SwiperSlide>
-          {/* <SwiperSlide>
-            <div className="max-w-sm  rounded-3xl bg-[#1f5c54]  flex-col justify-start items-center gap-[18px] inline-flex relative z-10">
-              <div className=" flex items-center justify-center px-2">
-                <p className="mt-10 text-justify text-white text-sm ">
-                  Workved Interiors transformed our office into a space that
-                  perfectly blends functionality with modern aesthetics. Their
-                  team understood our requirements and executed the project
-                  seamlessly, ensuring a workspace that enhances productivity
-                  and employee well-being. The attention to detail and quality
-                  craftsmanship truly set them apart!
+            <div className="md:flex gap-2">
+              <div className="flex-1 font-lato space-y-5">
+                <img src="images/icons/modern-living.svg" alt="" />
+                <h4 className="font-bold text-xl  ">Modern living quarter</h4>
+                <p className="text-[#000000]/65">
+                  Iterative approaches to the corporate strategy foster
+                  collaborative
                 </p>
               </div>
-              <div>
-                <img
-                  className="w-[100px] h-[100px] relative rounded-[100px] border border-[#1a3a36]"
-                  src="/images/testimonalreview1.png"
-                  alt="testimonal person "
-                />
-              </div>
-              <div className="  text-center text-white text-sm font-bold  uppercase leading-[29.60px] tracking-[3.52px]">
-                Hussain
-              </div>
-              <div className="mb-3 text-center text-[#33bead] text-sm font-bold  uppercase leading-[29.60px] tracking-[3.52px]">
-                Director, Tripjack
+              <div className="flex-1 font-lato space-y-5">
+                <img src="images/icons/inter-art.svg" alt="" />
+                <h4 className="font-bold text-xl  ">
+                  Interior Inter Art Design
+                </h4>
+                <p className="text-[#000000]/65">
+                  We develop the full cycle of project documentation and full
+                  details.
+                </p>
               </div>
             </div>
-          </SwiperSlide> */}
-        </Swiper>
-      </section>
-
-      {/* section FAQ */}
-      {/* <section className="bg-gradient-to-t from-[#f4f4f4] via-[#f4f4f4] to-[#D0D0D0]"> */}
-      <section className="py-10 bg-[#F4F4F4] ">
-        {/* container */}
-        <div className="lg:container mx-auto flex px-1">
-          {/* a div for image */}
-          <div className="flex-1 hidden lg:block">
-            <img
-              src="/images/home/sectionFAQ.png"
-              alt="FAQ Section"
-              className=""
-            />
-          </div>
-          {/* div for Faq */}
-          <div className="flex-1 lg:border-2 border-[#CCCCCC] rounded-3xl lg:p-10">
-            <h2 className="font-bold font-Poppins text-xl lg:text-3xl text-center my-10">
-              Frequently Asked Questions
-            </h2>
-            <div className="flex flex-col m-auto">
-              {accordionItems.map((item, index) => (
-                // <div key={index} className="border-b last:border-b-0">
-                <div
-                  key={index}
-                  className="mb-3 text-[#141515] font-Poppins font-medium"
-                >
-                  <div
-                    className="flex w-full text-left p-4 border-2 hover:bg-gray-200 focus:outline-none justify-between cursor-pointer rounded-xl text-xs "
-                    onClick={() => handleToggle(index)}
-                  >
-                    <button
-                    // className="w-full text-left p-4 bg-gray-100 hover:bg-gray-200 focus:outline-none"
-                    // className="w-full text-left p-4 "
-                    // onClick={() => handleToggle(index)}
-                    >
-                      {item.title}
-                    </button>
-                    {expandedIndex === index ? <FaAngleUp /> : <FaAngleDown />}
-                  </div>
-                  {expandedIndex === index && (
-                    <div className="p-4 bg-white border-t rounded-xl text-xs">
-                      <p>{item.content}</p>
-                    </div>
-                  )}
-                </div>
-              ))}
+            <div className="md:flex gap-5">
+              <img
+                src="/images/icons/star-full.svg"
+                alt=""
+                className="self-start"
+              />
+              <p className="font-lato text-[#777777]">
+                <span className="font-bold text-[#000000] underline underline-offset-4 decoration-[#EBEFF9]">
+                  99.9% Customer Satisfaction 
+                </span>{" "}
+                based on 750+ reviews and 20,000 Objective Resource
+              </p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Footer */}
-      <Footer />
-    </div>
+      {/* section 9 */}
+      <section className="md:container  md:mx-auto my-10">
+        <div>
+          <div className="flex flex-col items-center space-y-4 py-3  font-bold mb-5">
+            <div className="flex justify-normal items-center">
+              <span className="w-8 h-px bg-[#374A75]"></span>
+              <h4 className="uppercase text-[#374A75] text-xs lg:text-sm font-lato mx-2">
+                Recent Articles
+              </h4>
+              <span className="w-8 h-px bg-[#374A75]"></span>
+            </div>
+            <h3 className=" font-lora text-[#232323] text-xl lg:text-[42px] capitalize">
+              Read Our Latest Articles
+            </h3>
+          </div>
+        </div>
+        <div className="hidden md:flex flex-col md:flex-row  justify-center items-center gap-10  lg:gap-4">
+          {latestArticles.map((article) => (
+            <div className="max-w-sm">
+              <div className="relative">
+                <img src={article.image} alt="blogoffice" />
+                <div className="absolute  left-4 bottom-0 bg-white text-center px-3 py-1 shadow-md rounded-sm">
+                  <div className="text-lg font-bold">{article.date}</div>
+                  <div className="text-sm text-gray-500 -mt-1 uppercase">
+                    {article.month}
+                  </div>
+                </div>
+              </div>
+              <div className="font-lato border border-[#000]/10 p-4 space-y-3">
+                <div className="flex items-center gap-4  text-[#777]">
+                  <div className="flex items-center gap-2">
+                    <FaRegUser size={20} color="#374A75" /> {article.name}
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <FiMessageSquare size={20} color="#374A75" />{" "}
+                    {article.comments} Comments
+                  </div>
+                </div>
+                <p className="font-bold text-[#232323] text-xl">
+                  {article.title}
+                </p>
+                <div className=" left-0  bottom-0  transform translate-x-[5%]  translate-y-[70%] bg-[#fff] inline-block">
+                  <button
+                    onClick={() => {
+                      navigate(`/blog/${article.title.replace(/\s/g, "_")}`);
+                    }}
+                    className="relative  inline-block border-[#232323] px-6 py-2 border-2 font-medium text-sm tracking-wide group"
+                  >
+                    <span className="relative z-10 text-[#232323] font-bold">
+                      Read More
+                    </span>
+                    {/* Top-left line  */}
+                    <span className="absolute top-0 -left-2 w-2 h-px bg-[#232323] "></span>
+                    <span className="absolute -top-2 left-0 h-2 w-px bg-[#232323] "></span>
+
+                    {/* Bottom-right line */}
+                    <span className="absolute bottom-0 -right-2 w-2 h-px bg-[#232323] "></span>
+                    <span className="absolute -bottom-2 right-0 h-2 w-px bg-[#232323] "></span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+        <div className=" md:hidden">
+          <Swiper
+            grabCursor={true}
+            centeredSlides={true}
+            loop={true}
+            slidesPerView={"auto"}
+            spaceBetween={20}
+            initialSlide={1}
+            // autoplay={{
+            //   delay: 1500, // 1.5 seconds per slide
+            //   disableOnInteraction: true, // Keeps autoplay even after user interaction
+            // }}
+            modules={[Autoplay]}
+          >
+            {latestArticles.map((article, index) => (
+              <SwiperSlide key={index}>
+                <div className="max-w-sm">
+                  <div className="relative">
+                    <img src={article.image} alt="blogoffice" />
+                    <div className="absolute  left-4 bottom-0 bg-white text-center px-3 py-1 shadow-md rounded-sm">
+                      <div className="text-lg font-bold">{article.date}</div>
+                      <div className="text-sm text-gray-500 -mt-1 uppercase">
+                        {article.month}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="font-lato border border-[#000]/10 p-4 space-y-3">
+                    <div className="flex items-center gap-4  text-[#777]">
+                      <div className="flex items-center gap-2">
+                        <FaRegUser size={20} color="#374A75" /> {article.name}
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <FiMessageSquare size={20} color="#374A75" />{" "}
+                        {article.comments} Comments
+                      </div>
+                    </div>
+                    <p className="font-bold text-[#232323] text-xl">
+                      {article.title}
+                    </p>
+                    <div className=" left-0  bottom-0  transform translate-x-[5%]  translate-y-[70%] bg-[#fff] inline-block">
+                      <button
+                        onClick={() => {
+                          navigate(
+                            `/blog/${article.title.replace(/\s/g, "_")}`
+                          );
+                        }}
+                        className="relative  inline-block border-[#232323] px-6 py-2 border-2 font-medium text-sm tracking-wide group"
+                      >
+                        <span className="relative z-10 text-[#232323] font-bold">
+                          Read More
+                        </span>
+                        {/* Top-left line  */}
+                        <span className="absolute top-0 -left-2 w-2 h-px bg-[#232323] "></span>
+                        <span className="absolute -top-2 left-0 h-2 w-px bg-[#232323] "></span>
+
+                        {/* Bottom-right line */}
+                        <span className="absolute bottom-0 -right-2 w-2 h-px bg-[#232323] "></span>
+                        <span className="absolute -bottom-2 right-0 h-2 w-px bg-[#232323] "></span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        </div>
+      </section>
+      <footer>
+        <Footer />
+      </footer>
+    </>
   );
 }
 

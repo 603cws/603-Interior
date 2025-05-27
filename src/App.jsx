@@ -57,13 +57,6 @@ function App() {
     return <SpinnerFullPage />;
   }
 
-  console.log(
-    "Auth Loading: ",
-    isAuthLoading,
-    "Authenticated: ",
-    isAuthenticated
-  );
-
   return (
     <div>
       <ScrollToTop />
