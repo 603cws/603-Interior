@@ -34,6 +34,7 @@ import beforeImage from "/images/home/before-img-one.png";
 import afterImage from "/images/home/after-img-one.png";
 import { FaRegUser } from "react-icons/fa";
 import { FiMessageSquare } from "react-icons/fi";
+import ReadMoreBtn from "../common-components/ReadMoreBtn";
 
 function Landing() {
   const imageContainerRef = useRef(null);
@@ -221,7 +222,7 @@ function Landing() {
     },
     {
       id: 2,
-      text: "I hired inoterior for my living room, and did such an amazing job, I then hired for my entry. It is going to be beautiful and amazing..!",
+      text: "I hired Interior for my living room, and did such an amazing job, I then hired for my entry. It is going to be beautiful and amazing..!",
       name: "Joel Elliott",
       role: "Co-manager associated",
       image: "images/home/testimonial-2.png",
@@ -306,9 +307,9 @@ function Landing() {
                     A Trendy Luxury
                   </h3>
                   <p className="font-Poppins text-right hidden lg:block">
-                    Inoterior design consultancy firm that brings sensitivity to
-                    the design top restaurants, hotels, offices & homes around
-                    the world. We stand for quality, safety and credibility.
+                    Interior design consultancy firm that brings sensitivity to
+                    the design top offices around the world. We stand for
+                    quality, safety and credibility.
                   </p>
                 </div>
                 <div className="w-px mx-10 bg-white"></div>
@@ -316,12 +317,7 @@ function Landing() {
                   <h2 className="text-4xl lg:text-5xl font-bold font-lato ">
                     Make Your Space For Better Experience
                   </h2>
-                  {/* <button
-                    onClick={() => navigate("/Layout")}
-                    className="capitalize bg-[#FFD074] text-base font-semibold text-black px-3 py-1.5 rounded-3xl self-center lg:self-start"
-                  >
-                    discover what we do
-                  </button> */}
+
                   <button
                     onClick={handleClick}
                     disabled={loading}
@@ -360,7 +356,7 @@ function Landing() {
                 We Create The Art Of Stylish <br /> Office Stylishly
               </h3>
               <p className="leading-7 font-lato">
-                Inoterior design consultancy firm that brings sensitivity to the
+                Interior design consultancy firm that brings sensitivity to the
                 design top restaurants, hotels, offices & homes around the
                 world. We stand for quality, safety and credibility, so you
                 could be sure about our work. Initially we started as a company
@@ -500,7 +496,7 @@ function Landing() {
               {/* Slide 1 */}
               <SwiperSlide>
                 <div className="flex justify-center items-center">
-                  <div className="font-lato space-y-7 px-3 py-5 max-w-xs w-full bg-white shadow-lg">
+                  <div className="font-lato space-y-6 px-3 py-5 max-w-xs w-full bg-white shadow-lg">
                     <img src="images/icons/architecture-icon.svg" alt="" />
                     <h4 className="font-bold text-xl capitalize">
                       architecture
@@ -509,9 +505,8 @@ function Landing() {
                       We develop the full cycle of project documentation & full
                       details. Our clients satisfaction
                     </p>
-                    <button className="capitalize border-2 border-black px-4 py-1.5">
-                      read more
-                    </button>
+
+                    <ReadMoreBtn />
                   </div>
                 </div>
               </SwiperSlide>
@@ -530,9 +525,8 @@ function Landing() {
                         We will take care of the interior designs, build &
                         management of all kind of living projects
                       </p>
-                      <button className="capitalize border-2 border-white px-4 py-1.5">
-                        read more
-                      </button>
+
+                      <ReadMoreBtn borderColor={"[#ffffff]"} />
                     </div>
                   </div>
                 </div>
@@ -550,9 +544,8 @@ function Landing() {
                       We can help you with the retail interior design and third
                       party management to create best
                     </p>
-                    <button className="capitalize border-2 border-black px-4 py-1.5">
-                      read more
-                    </button>
+
+                    <ReadMoreBtn />
                   </div>
                 </div>
               </SwiperSlide>
@@ -570,9 +563,8 @@ function Landing() {
                       We offer professional online 2D and 3D interior designing
                       which will help you visualize
                     </p>
-                    <button className="capitalize border-2 border-black px-4 py-1.5">
-                      read more
-                    </button>
+
+                    <ReadMoreBtn />
                   </div>
                 </div>
               </SwiperSlide>
@@ -588,9 +580,8 @@ function Landing() {
                 We develop the full cycle of project documentation & full
                 details. Our clients satisfaction
               </p>
-              <button className="capitalize border-2 border-black px-4 py-1.5">
-                read more
-              </button>
+
+              <ReadMoreBtn />
             </div>
             <div className="font-lato px-3 py-5 max-w-xs bg-[url('/images/home/interior-work-bg.svg')] text-white relative">
               <div className="absolute inset-0 bg-black/50"></div>
@@ -601,9 +592,8 @@ function Landing() {
                   We will take care of the interior designs, build & management
                   of all kind of living projects
                 </p>
-                <button className="capitalize border-2 border-white px-4 py-1.5">
-                  read more
-                </button>
+
+                <ReadMoreBtn borderColor="[#ffffff]" />
               </div>
             </div>
             <div className="font-lato space-y-7 px-3 py-5 max-w-xs">
@@ -613,9 +603,8 @@ function Landing() {
                 We can help you with the retail interior design and third party
                 management to create best
               </p>
-              <button className="capitalize border-2 border-black px-4 py-1.5">
-                read more
-              </button>
+
+              <ReadMoreBtn />
             </div>
             <div className="font-lato space-y-7 px-3 py-5 max-w-xs">
               <img src="images/icons/2d-3d_layout.svg" alt="" />
@@ -624,9 +613,8 @@ function Landing() {
                 We offer professional online 2D and 3D interior designing which
                 will help you visualize
               </p>
-              <button className="capitalize border-2 border-black px-4 py-1.5">
-                read more
-              </button>
+
+              <ReadMoreBtn />
             </div>
           </div>
         </div>
@@ -915,7 +903,7 @@ function Landing() {
           <div className="flex-1">
             <img src="images/home/about-interior.png" alt="" />
           </div>
-          <div className="flex-1 space-y-10 px-3 lg:px-0">
+          <div className="flex-1 flex justify-end items-center flex-col space-y-2 px-3 lg:px-0">
             <div className="space-y-3 mb-6">
               <div className="flex justify-normal items-center">
                 <span className="w-8 h-px bg-[#374A75]"></span>
@@ -1011,23 +999,11 @@ function Landing() {
                   {article.title}
                 </p>
                 <div className=" left-0  bottom-0  transform translate-x-[5%]  translate-y-[70%] bg-[#fff] inline-block">
-                  <button
+                  <ReadMoreBtn
                     onClick={() => {
                       navigate(`/blog/${article.title.replace(/\s/g, "_")}`);
                     }}
-                    className="relative  inline-block border-[#232323] px-6 py-2 border-2 font-medium text-sm tracking-wide group"
-                  >
-                    <span className="relative z-10 text-[#232323] font-bold">
-                      Read More
-                    </span>
-                    {/* Top-left line  */}
-                    <span className="absolute top-0 -left-2 w-2 h-px bg-[#232323] "></span>
-                    <span className="absolute -top-2 left-0 h-2 w-px bg-[#232323] "></span>
-
-                    {/* Bottom-right line */}
-                    <span className="absolute bottom-0 -right-2 w-2 h-px bg-[#232323] "></span>
-                    <span className="absolute -bottom-2 right-0 h-2 w-px bg-[#232323] "></span>
-                  </button>
+                  />
                 </div>
               </div>
             </div>
@@ -1049,7 +1025,7 @@ function Landing() {
           >
             {latestArticles.map((article, index) => (
               <SwiperSlide key={index}>
-                <div className="max-w-sm">
+                <div className="max-w-xs">
                   <div className="relative">
                     <img src={article.image} alt="blogoffice" />
                     <div className="absolute  left-4 bottom-0 bg-white text-center px-3 py-1 shadow-md rounded-sm">
@@ -1072,26 +1048,14 @@ function Landing() {
                     <p className="font-bold text-[#232323] text-xl">
                       {article.title}
                     </p>
-                    <div className=" left-0  bottom-0  transform translate-x-[5%]  translate-y-[70%] bg-[#fff] inline-block">
-                      <button
+                    <div className=" left-0  bottom-0  transform md:translate-x-[5%]  md:translate-y-[70%] bg-[#fff] inline-block">
+                      <ReadMoreBtn
                         onClick={() => {
                           navigate(
                             `/blog/${article.title.replace(/\s/g, "_")}`
                           );
                         }}
-                        className="relative  inline-block border-[#232323] px-6 py-2 border-2 font-medium text-sm tracking-wide group"
-                      >
-                        <span className="relative z-10 text-[#232323] font-bold">
-                          Read More
-                        </span>
-                        {/* Top-left line  */}
-                        <span className="absolute top-0 -left-2 w-2 h-px bg-[#232323] "></span>
-                        <span className="absolute -top-2 left-0 h-2 w-px bg-[#232323] "></span>
-
-                        {/* Bottom-right line */}
-                        <span className="absolute bottom-0 -right-2 w-2 h-px bg-[#232323] "></span>
-                        <span className="absolute -bottom-2 right-0 h-2 w-px bg-[#232323] "></span>
-                      </button>
+                      />
                     </div>
                   </div>
                 </div>

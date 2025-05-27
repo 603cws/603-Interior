@@ -12,9 +12,9 @@ html {
 *:after {
   box-sizing: inherit; /* Ensure consistent box-sizing across elements */
 }
-.swiper {
+/* .swiper {
   overflow-y: auto !important;
-}
+} */
 
 .swiper-pagination {
   position: relative;
