@@ -74,7 +74,7 @@ function LandingNavbar({ bgColor = false }) {
                 pathname === "/becomeseller" ? "after:w-full" : "after:w-0"
               } hover:after:w-full`}
             >
-              Collaborate
+              Our Work
             </li>
             <li
               onClick={() => navigate("/Contactus")}
@@ -152,7 +152,7 @@ function LandingNavbar({ bgColor = false }) {
               className="cursor-pointer"
               onClick={() => navigate("/becomeseller")}
             >
-              Collaborate
+              Our Work
             </li>
             <li
               onClick={() => navigate("/Contactus")}

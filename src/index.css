@@ -13,6 +13,17 @@
   animation: pulse 1.5s infinite;
 }
 
+::selection {
+  color: #304778;
+  background-color: #f4f4f4;
+}
+
+/* @media (min-width: 1536px) {
+  .container {
+    max-width: 1440px;
+  }
+} */
+
 @keyframes pulse {
   0%,
   100% {
@@ -53,7 +64,7 @@
   }
 } */
 
-@media (min-width: 1800px) {	//sunny added media queries
+@media (min-width: 1800px) {
   .max-w-7xl {
     max-width: 1440px !important;
     /* padding-left: 0 !important;

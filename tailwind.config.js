@@ -25,6 +25,7 @@ export default {
         lora: ["Lora", "serif"], // Add Lora font with a fallback
         lato: ["Lato", "sans-serif"], // Add Lato font with a fallback
         lexend: ["Lexend Deca", "sans-serif"], // Add Lexend Deca with a fallback
+        inter: ["Inter", "sans-serif"],
       },
       colors: {
         customYellow: "#fff9c9",

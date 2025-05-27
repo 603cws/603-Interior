@@ -8,6 +8,7 @@ import "swiper/css/navigation";
 import "../styles/Landing.css";
 import ContactUsPopup from "../common-components/ContactUsPopup";
 import { ServiceCard } from "../common-components/ServiceCard";
+import HeroSection from "./HeroSection";
 
 const services = [
   {
@@ -118,7 +119,7 @@ function AboutUs() {
   return (
     <div>
       {/* Hero image */}
-      <section
+      {/* <section
         className="bg-[url('/images/about-us/about-us-bg.png')] w-full h-screen bg-no-repeat bg-cover relative sm:static "
         style={{ backgroundAttachment: "fixed" }}
       >
@@ -127,10 +128,14 @@ function AboutUs() {
           <LandingNavbar />
           <div className="flex flex-col justify-center items-center h-screen text-white font-lato gap-3 font-extrabold">
             <h1 className="text-4xl md:text-5xl lg:text-7xl">About Us</h1>
-            {/* <p className="text-lg lg:text-3xl md:text-xl">THIS IS WHO WE ARE</p> */}
           </div>
         </div>
-      </section>
+      </section> */}
+
+      <HeroSection
+        title={"About Us"}
+        background={"/images/about-us/about-us-bg.png"}
+      />
 
       {/* About Us Section */}
       <section className="flex flex-col lg:flex-row bg-white text-black px-10 lg:px-28 max-w-7xl place-self-center py-4">

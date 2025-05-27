@@ -48,7 +48,7 @@ function BlogDetail() {
             {/* div for image */}
             <div className="flex justify-center">
               <img
-                src="/images/contact1.png"
+                src="/images/blogoffice.png"
                 alt="blog"
                 className="w-full object-cover h-72"
               />

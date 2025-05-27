@@ -1197,8 +1197,8 @@ function AdminDashboard() {
                 <div
                   className={`grid grid-cols-2  ${
                     isExpanded
-                      ? "lg:grid-cols-3 xl:grid-cols-4 gap-8"
-                      : "lg:grid-cols-3 xl:grid-cols-4 gap-8"
+                      ? "lg:grid-cols-2 xl:grid-cols-4 gap-8"
+                      : "lg:grid-cols-2 xl:grid-cols-4 gap-8"
                   } p-2`}
                 >
                   {filteredvendors.map((user, index) => {

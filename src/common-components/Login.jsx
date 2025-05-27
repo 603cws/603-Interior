@@ -3,7 +3,7 @@ import { supabase } from "../services/supabase";
 import { FaAngleLeft } from "react-icons/fa6";
 import { FcGoogle } from "react-icons/fc";
 import { IoEyeOffOutline, IoEyeOutline } from "react-icons/io5";
-import { useLocation, useNavigate } from "react-router-dom";
+import { replace, useLocation, useNavigate } from "react-router-dom";
 import { useApp } from "../Context/Context";
 // import { use } from "react";
 import toast from "react-hot-toast";
@@ -212,17 +212,17 @@ function Login() {
         if (layoutId && firstElement?.role !== "user") {
           setCurrentLayoutID(layoutId);
           localStorage.setItem("currentLayoutID", layoutId);
-          navigate("/dashboard");
+          navigate("/dashboard", { replace: true });
         } else if (layoutId && firstElement?.role === "user") {
           setCurrentLayoutID(layoutId);
           localStorage.setItem("currentLayoutID", layoutId);
-          navigate("/boq");
+          navigate("/boq", { replace: true });
         } else {
-          navigate("/Layout");
+          navigate("/Layout", { replace: true });
         }
       } catch (fetchError) {
         console.error("Error checking area and quantity IDs:", fetchError);
-        navigate("/Layout"); // Default navigation in case of an error
+        navigate("/Layout", { replace: true }); // Default navigation in case of an error
       }
     }
     setProgress(0);
@@ -297,7 +297,7 @@ function Login() {
     } else {
       toast.success("Password reset successfully! Please log in.");
       setResetPass(false);
-      navigate("/Login");
+      navigate("/Login", { replace: true });
     }
   };
 

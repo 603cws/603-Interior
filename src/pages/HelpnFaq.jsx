@@ -1,31 +1,23 @@
 import { useState } from "react";
 import Footer from "../common-components/Footer";
-
 import LandingNavbar from "../common-components/LandingNavbar";
-
 import { FaAngleDown, FaAngleUp } from "react-icons/fa";
-import { useApp } from "../Context/Context";
 function HelpnFaq() {
-  const [expandedIndex, setExpandedIndex] = useState();
-  const [layoutexpandedIndex, setlayoutExpandedIndex] = useState();
-  const [vendorexpandedIndex, setvendorExpandedIndex] = useState();
-  const [executionexpandedIndex, setexecutionExpandedIndex] = useState();
-  const [paymentexpandedIndex, setpaymentExpandedIndex] = useState();
+  const [newexpandedIndex, setnewExpandedIndex] = useState({
+    execution: 0,
+    payment: 0,
+    general: 0,
+    layoutoffice: 0,
+    vendor: 0,
+  });
 
-  // const [isMobile, setIsMobile] = useState(false);
-
-  const { isMobile } = useApp();
-
-  // Detect screen size
-  // useEffect(() => {
-  //   const handleResize = () => {
-  //     setIsMobile(window.innerWidth <= 768); // Mobile & Tablet: < 768px
-  //   };
-  //   handleResize(); // Check on mount
-  //   window.addEventListener("resize", handleResize);
-  //   return () => window.removeEventListener("resize", handleResize);
-  // }, []);
-
+  // Toggle handler per category
+  const newhandleToggle = (index, category) => {
+    setnewExpandedIndex((prev) => ({
+      ...prev,
+      [category]: prev[category] === index ? null : index,
+    }));
+  };
   const generalquestions = [
     {
       title: "What is  Workved Interiors?",
@@ -167,322 +159,107 @@ function HelpnFaq() {
     },
   ];
 
-  const handleToggle = (index, setExpandedIndex) => {
-    setExpandedIndex((prevIndex) => (prevIndex === index ? null : index));
+  const categorizedQuestions = {
+    general: generalquestions,
+    layoutoffice: layoutofficeQuestion,
+    vendor: vendorQuestion,
+    execution: executionQuestion,
+    payment: paymentQuestion,
   };
 
-  const scrollToSection = (sectionname) => {
-    const section = document.getElementById(`${sectionname}`);
-    if (section) {
-      section.scrollIntoView({ behavior: "smooth" });
-    }
-  };
+  // const handleToggle = (index, setExpandedIndex) => {
+  //   setExpandedIndex((prevIndex) => (prevIndex === index ? null : index));
+  // };
+  const background = "/images/career-page-bg.png";
 
   return (
     <div className="font-Poppins">
-      {/* hero section */}
+      {/* Navbar Section */}
+      <header className="bg-white shadow-lg z-50 relative">
+        <LandingNavbar />
+      </header>
 
-      <section className="w-full  lg:h-screen p-5">
-        <div className="bg-[#A9D3CE] h-full rounded-3xl">
-          <div className="relative">
-            <LandingNavbar />
-          </div>
-          <div className="flex-1 flex flex-col md:flex-row justify-between items-center h-full">
-            <div className="flex-1 flex flex-col lg:gap-8 mx-4 gap-2 lg:mx-20 mt-24 font-extrabold text-[#1F5C54] font-lato">
-              <h1 className="text-sm lg:text-5xl 3xl:text-6xl 3xl:leading-[4.5rem]">
-                Looking for help? Here are our {!isMobile && <br />} most
-                frequently asked questions.
-              </h1>
-              <p className="text-xs lg:text-base">
-                Everything you need to know about Workved Interiors. Can’t find
-                the answer to a question {!isMobile && <br />}you have? No
-                worries, just click ‘I’ve got a question’ or ‘Chat to our team’!
-              </p>
-            </div>
-            <div className="flex-1 h-full flex justify-end items-end relative">
-              <img
-                src="/images/helpimg.png"
-                alt=""
-                className="max-h-full h-full"
-              />
-              <span className="px-5 py-3 rounded-3xl bg-[#54DED3] text-xs font-lora font-bold absolute top-1/2 left-10 animate-message1">
-                What is Workved Interiors?
-              </span>
-              <span className="px-5 py-3 rounded-3xl bg-[#54DED3] text-xs font-lora font-bold absolute top-1/4 left-1/4 animate-message3">
-                What is a BOQ?
-              </span>
-              <span className="px-5 py-3 rounded-3xl bg-[#54DED3] text-xs font-lora font-bold absolute bottom-1/2 right-1 animate-message2">
-                Can I customize my BOQ?
-              </span>
-            </div>
-          </div>
+      {/* Hero Section */}
+      <section
+        className="relative h-[60vh] flex items-center text-center justify-center bg-cover bg-center bg-no-repeat bg-gray-100"
+        style={{
+          backgroundImage: `url(${background})`,
+          backgroundAttachment: "fixed",
+        }}
+      >
+        <div className="absolute inset-0 bg-black opacity-50"></div>
+        <div className="relative z-10 uppercase">
+          <h1 className="text-3xl md:text-5xl lg:text-7xl font-extrabold font-lato  text-white drop-shadow-lg tracking-wider">
+            FAQ
+          </h1>
         </div>
       </section>
 
-      {/* section for the image */}
-      <section className="hidden lg:block">
-        <div className="font-medium capitalize grid grid-cols-5 my-12 gap-3 container mx-auto">
-          {/* each card */}
-          <div
-            className="max-w-sm flex flex-col justify-center items-center gap-3 border border-[#000] p-3 rounded-lg cursor-pointer"
-            onClick={() => scrollToSection("sectionFAQ")}
-          >
-            <div>
-              <img src="/images/generalfaq.png" alt="helpfaq" />
-            </div>
-            <h3 className="text-lg text-center">General Information</h3>
-          </div>
-          {/* each card */}
-          <div
-            className="max-w-sm flex flex-col justify-center items-center gap-3 border border-[#000] p-3 rounded-lg cursor-pointer"
-            onClick={() => scrollToSection("sectionOfficelayout")}
-          >
-            <div>
-              <img src="/images/hlepnfaq1.png" alt="helpfaq" />
-            </div>
-            <h3 className="text-lg text-center">Office Layout & BOQ</h3>
-          </div>
-          {/* each card */}
-          <div
-            className="max-w-sm flex flex-col justify-center items-center gap-3 border border-[#000] p-3 rounded-lg cursor-pointer"
-            onClick={() => scrollToSection("sectionvendor")}
-          >
-            <div>
-              <img src="/images/V&B.png" alt="helpfaq" />
-            </div>
-            <h3 className="text-lg text-center">
-              Vendor & Brand Collaborations
-            </h3>
-          </div>
-          {/* each card */}
-          <div
-            className="max-w-sm flex flex-col justify-center items-center gap-3 border border-[#000] p-3 rounded-lg cursor-pointer"
-            onClick={() => scrollToSection("sectionExecution")}
-          >
-            <div>
-              <img src="/images/e&I.png" alt="helpfaq" />
-            </div>
-            <h3 className="text-lg text-center">Execution & Implementation</h3>
-          </div>
-          {/* each card */}
-          <div
-            className="max-w-sm flex flex-col justify-center items-center gap-3 border border-[#000] p-3 rounded-lg cursor-pointer"
-            onClick={() => scrollToSection("sectionPayment")}
-          >
-            <div>
-              <img src="/images/paymentHelp.png" alt="helpfaq" />
-            </div>
-            <h3 className="text-lg text-center">Pricing & Payments</h3>
-          </div>
+      <section className="container mx-auto text-center  pt-24 pb-6 ">
+        <div className="flex flex-col gap-3">
+          <h3 className="font-lato font-bold text-sm text-[#304778]">
+            Have any Questions
+          </h3>
+          <h4 className="font-lato font-bold text-[#232323] text-xl lg:text-4xl">
+            Recently Asked Questions
+          </h4>
+          <p className="font-lora text-[#777777] text-[15px]">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quasi{" "}
+            <br />
+            incidunt repellendus aut neque rerum quam ab animi reprehenderit?
+          </p>
         </div>
       </section>
 
-      {/* general faq */}
-      <section className="my-6 lg:my-10" id="sectionFAQ">
-        <div className="lg:container mx-2 lg:mx-auto my-3">
-          <div className=" flex flex-col bg-[#f4f4f4] border rounded-xl">
-            <div>
-              <h3 className="text-[#1F5C54] text-xl lg:text-3xl p-3 mx-4">
-                General FAQs
-              </h3>
-            </div>
-            {generalquestions.map((item, index) => (
-              // <div key={index} className="border-b last:border-b-0">
-              <div
-                key={index}
-                className="mb-3 font-Poppins font-medium text-xs lg:text-base text-[#222] border-b border-[#54DED3] mx-4"
-              >
-                <div
-                  className="flex w-full text-left p-4  bg-gray-100 hover:bg-gray-200 focus:outline-none justify-between cursor-pointer "
-                  onClick={() => handleToggle(index, setExpandedIndex)}
-                >
-                  <button className="text-start">{item.title}</button>
-                  {expandedIndex === index ? <FaAngleUp /> : <FaAngleDown />}
-                </div>
-                {expandedIndex === index && (
-                  <div className="p-4  border-t">
-                    <p>{item.content}</p>
+      {Object.entries(categorizedQuestions).map(
+        ([category, questions], sectionIndex) => (
+          <section className="my-10" key={sectionIndex}>
+            <div
+              className={`lg:container mx-2 lg:mx-auto my-3 flex justify-center items-center gap-8 lg:gap-0 flex-col  ${
+                sectionIndex === 1 || sectionIndex === 3
+                  ? "lg:flex-row-reverse"
+                  : "lg:flex-row"
+              }`}
+            >
+              <div className="flex-1 ">
+                <img
+                  src="/images/help1.png"
+                  alt="help section 1"
+                  className=" lg:max-w-xl"
+                />
+              </div>
+
+              <div className=" flex-1 flex flex-col border rounded-xl">
+                {questions.map((item, index) => (
+                  <div
+                    key={index}
+                    className="mb-3 font-Poppins font-medium text-xs lg:text-base text-[#232323] border-b last:border-b-0 mx-4"
+                  >
+                    <div
+                      className="flex w-full text-left p-4  focus:outline-none justify-between cursor-pointer "
+                      onClick={() => newhandleToggle(index, category)}
+                    >
+                      <button className="text-start font-lora font-bold text-lg">
+                        {item.title}
+                      </button>
+                      {newexpandedIndex[category] === index ? (
+                        <FaAngleUp />
+                      ) : (
+                        <FaAngleDown />
+                      )}
+                    </div>
+                    {newexpandedIndex[category] === index && (
+                      <div className="p-4 text-[#777] border-t font-lora">
+                        <p>{item.content}</p>
+                      </div>
+                    )}
                   </div>
-                )}
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Office Layout & BOQ */}
-      <section className="my-10 " id="sectionOfficelayout">
-        <div className="lg:container  lg:mx-auto mx-2 my-3">
-          <div className=" flex flex-col bg-[#f4f4f4] border rounded-xl">
-            <div>
-              <h3 className="text-[#1F5C54] text-xl lg:text-3xl p-3 mx-4">
-                Office Layout & BOQ{" "}
-              </h3>
-            </div>
-            {layoutofficeQuestion.map((item, index) => (
-              // <div key={index} className="border-b last:border-b-0">
-              <div
-                key={index}
-                className="mb-3 font-Poppins font-medium text-xs lg:text-base text-[#222] border-b border-[#54DED3] mx-4"
-              >
-                <div
-                  className="flex w-full text-left p-4  bg-gray-100 hover:bg-gray-200 focus:outline-none justify-between cursor-pointer "
-                  onClick={() => handleToggle(index, setlayoutExpandedIndex)}
-                >
-                  <button className="text-start">{item.title}</button>
-                  {layoutexpandedIndex === index ? (
-                    <FaAngleUp />
-                  ) : (
-                    <FaAngleDown />
-                  )}
-                </div>
-                {layoutexpandedIndex === index && (
-                  <div className="p-4  border-t">
-                    <p>{item.content}</p>
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Vendor & Brand Collaborations */}
-      <section className="my-10 " id="sectionvendor">
-        <div className="lg:container  lg:mx-auto mx-2 my-3">
-          <div className=" flex flex-col bg-[#f4f4f4] border rounded-xl">
-            <div>
-              <h3 className="text-[#1F5C54] text-xl lg:text-3xl p-3 mx-4">
-                Vendor & Brand Collaborations{" "}
-              </h3>
-            </div>
-            {vendorQuestion.map((item, index) => (
-              // <div key={index} className="border-b last:border-b-0">
-              <div
-                key={index}
-                className="mb-3 font-Poppins font-medium text-xs lg:text-base text-[#222] border-b border-[#54DED3] mx-4"
-              >
-                <div
-                  className="flex w-full text-left p-4  bg-gray-100 hover:bg-gray-200 focus:outline-none justify-between cursor-pointer "
-                  onClick={() => handleToggle(index, setvendorExpandedIndex)}
-                >
-                  <button className="text-start">{item.title}</button>
-                  {vendorexpandedIndex === index ? (
-                    <FaAngleUp />
-                  ) : (
-                    <FaAngleDown />
-                  )}
-                </div>
-                {vendorexpandedIndex === index && (
-                  <div className="p-4  border-t">
-                    <p>{item.content}</p>
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/*Execution & Implementation  */}
-      <section className="my-10 " id="sectionExecution">
-        <div className="lg:container  lg:mx-auto mx-2 my-3">
-          <div className=" flex flex-col bg-[#f4f4f4] border rounded-xl">
-            <div>
-              <h3 className="text-[#1F5C54] text-xl lg:text-3xl p-3 mx-4">
-                Execution & Implementation{" "}
-              </h3>
-            </div>
-            {executionQuestion.map((item, index) => (
-              // <div key={index} className="border-b last:border-b-0">
-              <div
-                key={index}
-                className="mb-3 font-Poppins font-medium text-xs lg:text-base text-[#222] border-b border-[#54DED3] mx-4"
-              >
-                <div
-                  className="flex w-full text-left p-4  bg-gray-100 hover:bg-gray-200 focus:outline-none justify-between cursor-pointer "
-                  onClick={() => handleToggle(index, setexecutionExpandedIndex)}
-                >
-                  <button className="text-start">{item.title}</button>
-                  {executionexpandedIndex === index ? (
-                    <FaAngleUp />
-                  ) : (
-                    <FaAngleDown />
-                  )}
-                </div>
-                {executionexpandedIndex === index && (
-                  <div className="p-4  border-t">
-                    <p>{item.content}</p>
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Pricing & Payments */}
-      <section className="my-10 " id="sectionPayment">
-        <div className="lg:container  lg:mx-auto mx-2 my-3">
-          <div className=" flex flex-col bg-[#f4f4f4] border rounded-xl">
-            <div>
-              <h3 className="text-[#1F5C54] text-xl lg:text-3xl p-3 mx-4">
-                Pricing & Payments{" "}
-              </h3>
-            </div>
-            {paymentQuestion.map((item, index) => (
-              // <div key={index} className="border-b last:border-b-0">
-              <div
-                key={index}
-                className="mb-3 font-Poppins font-medium text-xs lg:text-base  text-[#222] border-b border-[#54DED3] mx-4"
-              >
-                <div
-                  className="flex w-full text-left p-4  bg-gray-100 hover:bg-gray-200 focus:outline-none justify-between cursor-pointer "
-                  onClick={() => handleToggle(index, setpaymentExpandedIndex)}
-                >
-                  <button className="text-start">{item.title}</button>
-                  {paymentexpandedIndex === index ? (
-                    <FaAngleUp />
-                  ) : (
-                    <FaAngleDown />
-                  )}
-                </div>
-                {paymentexpandedIndex === index && (
-                  <div className="p-4  border-t">
-                    <p>{item.content}</p>
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* contact section */}
-      <section className="my-10">
-        <div className="lg:container mx-4 lg:mx-auto my-3 ">
-          <div className="border-[#B5B5B5] border rounded-2xl flex flex-col justify-center items-center lg:p-2 xl:p-8 gap-4 xl:gap-8 ">
-            <div className="font-extrabold  text-[#1F5C54]">
-              <h2 className="text-xl lg:text-2xl capitalize tracking-wide">
-                Need more help?
-              </h2>
-              <p className="text-sm lg:text-lg text-center">
-                Try these next steps
-              </p>
-            </div>
-            <div className="flex lg:flex-row flex-col justify-center items-center gap-3 font-semibold text-sm lg:text-lg text-[#000] lg:shadow-[0px_0px_5px_rgba(0,0,0,0.05)] px-5 rounded-lg ml-10">
-              <div className="">
-                <img src="/images/helplogo.png" alt="help logo" />
-              </div>
-              <div className="flex flex-col py-3">
-                <h3>Contact us</h3>
-                <p>Tell us more and we’ll help you get there</p>
-                <p>+91-9136036603</p>
+                ))}
               </div>
             </div>
-          </div>
-        </div>
-      </section>
+          </section>
+        )
+      )}
 
       <footer>
         <Footer />

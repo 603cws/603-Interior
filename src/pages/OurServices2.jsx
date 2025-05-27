@@ -4,6 +4,7 @@ import Footer from "../common-components/Footer";
 import { IoMdArrowDropright, IoMdArrowRoundDown } from "react-icons/io";
 import { FaDotCircle } from "react-icons/fa";
 import { FaCircleDot } from "react-icons/fa6";
+import HeroSection from "./HeroSection";
 
 const services = [
   {
@@ -99,12 +100,10 @@ function OurServices() {
 
   return (
     <div>
-      {/* Navbar Section */}
-      <header className="bg-white shadow-lg z-50 relative">
+      {/* <header className="bg-white shadow-lg z-50 relative">
         <LandingNavbar />
       </header>
 
-      {/* Hero Section */}
       <section
         className="relative h-screen flex items-center text-center justify-center bg-cover bg-center bg-no-repeat bg-gray-100"
         style={{
@@ -118,7 +117,9 @@ function OurServices() {
             Service
           </h1>
         </div>
-      </section>
+      </section> */}
+
+      <HeroSection title={"Service"} background={background} />
 
       {/* Our Services Section */}
       <section className="py-20 relative">

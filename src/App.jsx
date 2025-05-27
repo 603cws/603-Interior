@@ -42,6 +42,10 @@ import ThreeDViewer from "./common-components/ThreeDViewer";
 import CompleteProfile from "./common-components/CompleteProfile";
 import PartnerWorkvedInterior from "./pages/PartnerWorkvedInterior";
 import Privacy from "./pages/Privacy";
+import OurWork from "./pages/OurWork";
+import InteriorBlog from "./pages/InteriorBlog";
+
+const Home = lazy(() => import("./pages/Home"));
 
 // const Homepage = lazy(() => import("./pages/Homepage"));
 const Layout = lazy(() => import("./layout/pages/Layout"));
@@ -76,7 +80,7 @@ function App() {
             <Route path="/Contactus" element={<Contactus />} />
             <Route path="/Aboutus" element={<AboutUs2 />} />
             {/* <Route path="/Aboutus2" element={<AboutUs2 />} /> */}
-            <Route path="/Blog" element={<BlogPage />} />
+            <Route path="/Blog" element={<InteriorBlog />} />
             <Route path="/Blog/:title" element={<BlogDetail />} />
             <Route path="/Career" element={<Carrer />} />
             <Route path="/privacy-policy" element={<Privacy />} />
@@ -112,7 +116,7 @@ function App() {
                 )
               }
             />
-            <Route path="/becomeseller" element={<BecomeSeller />} />
+            <Route path="/becomeseller" element={<OurWork />} />
             <Route path="/plans" element={<Plans />} />
             <Route path="/help" element={<HelpnFaq />} />
             <Route path="/termsNcondition" element={<TermsAndCondition />} />
@@ -138,7 +142,7 @@ function App() {
             <Route path="/Contactus" element={<Contactus />} />
             <Route path="/Aboutus" element={<AboutUs2 />} />
             {/* <Route path="/Aboutus2" element={<AboutUs2 />} /> */}
-            <Route path="/Blog" element={<BlogPage />} />
+            <Route path="/Blog" element={<InteriorBlog />} />
             <Route path="/Blog/:title" element={<BlogDetail />} />
             <Route path="/Career" element={<Carrer />} />
             <Route path="/privacy-policy" element={<Privacy />} />
@@ -154,13 +158,18 @@ function App() {
             {/* <Route path="/OurServices2" element={<OurServices2 />} /> */}
             <Route path="/Career/:jobTitle" element={<JobPage />} />
             <Route path="/profile" element={<ProfileCard />} />
-            <Route path="/becomeseller" element={<BecomeSeller />} />
+            <Route path="/becomeseller" element={<OurWork />} />
             <Route path="/help" element={<HelpnFaq />} />
             <Route path="/termsNcondition" element={<TermsAndCondition />} />
             {/* <Route path="/vendordashboard" element={<VendorDashboard />} /> */}
             <Route path="/bookappointment" element={<BookAppointment />} />
             <Route path="/howtosell" element={<Howtosell />} />
             <Route path="/partnerwithus" element={<PartnerWorkvedInterior />} />
+            <Route path="/scroll" element={<DoorScrollEffect />} />
+            <Route path="/interiorWork" element={<OurWork />} />
+            {/* <Route path="/interiorblog" element={<InteriorBlog />} />
+            <Route path="/interiorblog/:title" element={<BlogDetail />} /> */}
+            <Route path="/home" element={<Home />} />
           </Routes>
         )}
       </Suspense>

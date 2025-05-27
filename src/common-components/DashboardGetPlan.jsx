@@ -3,7 +3,7 @@ function DashboardGetPlan() {
     <div className="">
       <div className="max-w-sm relative">
         <img
-          src="/images/dashboardmenu.png"
+          src="/images/asidecontact.png"
           alt="doashboard getplan"
           className="w-full"
         />
