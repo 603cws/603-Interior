@@ -133,7 +133,7 @@ function AboutUs() {
       </section>
 
       {/* About Us Section */}
-      <section className="flex flex-col lg:flex-row bg-white text-black px-28 max-w-7xl place-self-center py-4">
+      <section className="flex flex-col lg:flex-row bg-white text-black px-10 lg:px-28 max-w-7xl place-self-center py-4">
         {/* Image Grid */}
         <div className="grid grid-cols-2 lg:grid-cols-2 gap-4 w-full pl-0 mb-8">
           <img
@@ -149,14 +149,14 @@ function AboutUs() {
         </div>
 
         {/* Text Content */}
-        <div className="w-full space-y-6 pl-10 font-Poppins ">
+        <div className="w-full space-y-6 lg:pl-10 font-Poppins ">
           <div className="flex items-center gap-2 mt-8 -mb-4">
             <span className="w-6 h-px bg-[#304778] mb-2"></span>
             <h5 className="text-[#304778] text-sm font-semibold tracking-widest uppercase font-lora">
               About Us
             </h5>
           </div>
-          <h2 className="text-3xl lg:text-4xl font-bold leading-snug text-[#232323] font-lora">
+          <h2 className="text-xl md:text-4xl lg:text-4xl font-bold leading-snug text-[#232323] font-lora">
             Partner In Inspiring And
             <br /> Improving Your Life
           </h2>
@@ -169,7 +169,7 @@ function AboutUs() {
             end-user ergonomics. <br />
             Specialize in mixed-use projects.
           </p>
-          <div className="grid grid-cols-2 gap-y-2 text-sm text-[#777777] font-Poppins">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-y-2 text-sm text-[#777777] font-Poppins">
             <div className="flex items-center gap-2">
               <span>★</span>
               <span>No hidden commission</span>
@@ -205,7 +205,7 @@ function AboutUs() {
       </section>
 
       {/* Services Section */}
-      <section className="relative max-w-full bg-white py-24">
+      <section className="relative max-w-full bg-white py-14 lg:py-24">
         {/* Background Image */}
         <img
           src="./images/about-us/bg-section2.png"
@@ -214,7 +214,7 @@ function AboutUs() {
           style={{ objectPosition: "right top" }} // customize position
         />
 
-        <div className="max-w-7xl px-28 place-self-center">
+        <div className="lg:max-w-7xl lg:px-28 px-4 place-self-center">
           <div className="relative">
             {/* Right Section: Grid of 2x3 Cards */}
             <div className="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -225,7 +225,7 @@ function AboutUs() {
                     Services
                   </h5>
                 </div>
-                <h2 className="text-3xl font-extrabold text-black mb-4 font-lora">
+                <h2 className="text-xl md:text-4xl font-extrabold text-black mb-4 font-lora">
                   Services We’re Providing
                 </h2>
                 <p className="text-black text-sm leading-relaxed font-lato">
@@ -244,7 +244,7 @@ function AboutUs() {
       </section>
 
       {/* Work Stages */}
-      <section className="relative z-10 mt-24 text-center max-w-7xl place-self-center px-28">
+      <section className="relative z-10 mt-24 text-center max-w-7xl place-self-center px-10 lg:px-28">
         <div className="flex items-center justify-center gap-4 mb-2">
           <span className="w-8 h-px bg-[#304778] mb-2"></span>
           <h5 className="text-sm text-[#304778] font-semibold uppercase font-lato">
@@ -253,15 +253,15 @@ function AboutUs() {
           <span className="w-8 h-px bg-[#304778] mb-2"></span>
         </div>
 
-        <h2 className="text-3xl font-bold mb-6 font-lora text-[#232323]">
+        <h2 className="text-xl md:text-4xl font-bold mb-6 font-lora text-[#232323]">
           Best Solutions For Your Dream
         </h2>
-        <p className="text-[#777777] mb-10 max-w-2xl mx-auto font-Poppins">
+        <p className="text-[#777777] mb-10 max-w-lg md:max-w-2xl mx-auto font-Poppins">
           Clients often don’t know what to expect during the interior design
           process, so we’ve put together our guide work stages
         </p>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-10">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-10 md:px-12">
           {work_stages.map((stage) => (
             <div
               key={stage.id}
@@ -290,8 +290,8 @@ function AboutUs() {
 
       {/* Stats Section */}
       <section className="relative bg-[#F7F7F7] mt-20 py-16 z-10">
-        <div className="max-w-7xl mx-auto px-28">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-x-12 gap-y-10 text-center">
+        <div className="max-w-7xl mx-auto lg:px-28 px-10">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:md:grid-cols-4 gap-x-12 gap-y-10 text-center">
             {stats.map((stat) => (
               <div key={stat.label}>
                 <h3 className="text-[#304778] font-lato font-bold text-6xl md:text-7xl">
@@ -307,7 +307,7 @@ function AboutUs() {
       </section>
 
       {/* Skills Section */}
-      <section className="relative max-w-7xl place-self-center px-6 py-20 md:px-28 z-10 grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
+      <section className="relative max-w-7xl place-self-center px-6 lg:py-20 md:px-10 z-10 grid lg:grid-cols-2 md:grid-cols-1 gap-10 items-center">
         {/* Left Section */}
         <div className="text-center md:text-left">
           <h2 className="text-4xl font-bold text-[#232323] font-lora">
@@ -319,7 +319,7 @@ function AboutUs() {
           </p>
 
           {/* Circular Progress Indicators */}
-          <div className="mt-10 flex justify-center md:justify-start gap-10">
+          <div className="mt-10 flex justify-center md:justify-start flex-col md:flex-row gap-10">
             {skills.map((skill, index) => (
               <div key={index} className="flex flex-col items-center">
                 <div className="relative w-24 h-24">

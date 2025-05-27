@@ -130,18 +130,18 @@ function OurServices() {
           // style={{ objectPosition: "right top" }} // customize position
         />
 
-        <div className="3xl:max-w-[85vw] mx-auto px-2 md:px-12 xl:px-0 3xl:px-4 xl:pr-20 flex flex-col lg:flex-row lg:items-start gap-16 z-10 relative">
+        <div className="3xl:max-w-[85vw] mx-auto px-2 md:px-12 xl:px-0 3xl:px-4 xl:pr-20 flex flex-col lg:flex-row lg:items-stretch gap-16 z-10 relative">
           {/* Left Image */}
-          <div className="w-full">
+          <div className="w-full lg:w-1/2">
             <img
               src="../images/services/service.png"
               alt="Featured Office"
-              className="w-full h-full"
+              className="w-full h-full object-cover"
             />
           </div>
 
           {/* Right Content */}
-          <div className="w-full">
+          <div className="w-full lg:w-1/2 flex flex-col justify-between">
             <div className="mb-10 lg:mb-6">
               <div className="flex items-center place-content-end md:place-content-center lg:place-content-start mr-36 lg:mr-0 gap-2 mb-2">
                 <span className="w-9 h-px bg-[#304778] mb-2"></span>
@@ -154,9 +154,12 @@ function OurServices() {
               </h2>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 px-2 md:px-0">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 px-2 md:px-0 flex-grow">
               {services.map((service, index) => (
-                <div key={index} className="bg-white shadow p-10 text-center">
+                <div
+                  key={index}
+                  className="bg-white shadow p-10 text-center flex flex-col justify-center items-center h-full"
+                >
                   <img
                     src={service.icon}
                     alt={service.title}

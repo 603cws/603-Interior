@@ -74,8 +74,8 @@ function App() {
             <Route path="/selectArea" element={<SelectArea />} />
             <Route path="/spinner" element={<SpinnerFullPage />} />
             <Route path="/Contactus" element={<Contactus />} />
-            <Route path="/Aboutus" element={<AboutUs />} />
-            <Route path="/Aboutus2" element={<AboutUs2 />} />
+            <Route path="/Aboutus" element={<AboutUs2 />} />
+            {/* <Route path="/Aboutus2" element={<AboutUs2 />} /> */}
             <Route path="/Blog" element={<BlogPage />} />
             <Route path="/Blog/:title" element={<BlogDetail />} />
             <Route path="/Career" element={<Carrer />} />
@@ -88,8 +88,8 @@ function App() {
               path="/complete-profile/*"
               element={<Navigate to="/complete-profile" />}
             />
-            <Route path="/OurServices" element={<OurServices />} />
-            <Route path="/OurServices2" element={<OurServices2 />} />
+            <Route path="/OurServices" element={<OurServices2 />} />
+            {/* <Route path="/OurServices2" element={<OurServices2 />} /> */}
             <Route path="/Career/:jobTitle" element={<JobPage />} />
             <Route path="/profile" element={<ProfileCard />} />
             <Route path="/scroll" element={<DoorScrollEffect />} />
@@ -136,8 +136,8 @@ function App() {
             {/* <Route path="/RegisterUser" element={<RegisterUser />} /> */}
             <Route path="/Error" element={<ErrorModal />} />
             <Route path="/Contactus" element={<Contactus />} />
-            <Route path="/Aboutus" element={<AboutUs />} />
-            <Route path="/Aboutus2" element={<AboutUs2 />} />
+            <Route path="/Aboutus" element={<AboutUs2 />} />
+            {/* <Route path="/Aboutus2" element={<AboutUs2 />} /> */}
             <Route path="/Blog" element={<BlogPage />} />
             <Route path="/Blog/:title" element={<BlogDetail />} />
             <Route path="/Career" element={<Carrer />} />
@@ -150,8 +150,8 @@ function App() {
               path="/complete-profile/*"
               element={<Navigate to="/complete-profile" />}
             />
-            <Route path="/OurServices" element={<OurServices />} />
-            <Route path="/OurServices2" element={<OurServices2 />} />
+            <Route path="/OurServices" element={<OurServices2 />} />
+            {/* <Route path="/OurServices2" element={<OurServices2 />} /> */}
             <Route path="/Career/:jobTitle" element={<JobPage />} />
             <Route path="/profile" element={<ProfileCard />} />
             <Route path="/becomeseller" element={<BecomeSeller />} />
