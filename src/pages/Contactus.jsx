@@ -92,7 +92,7 @@ function Contactus() {
   return (
     <>
       <div className="">
-        <HeroSection background={background} title={"contact"} />
+        <HeroSection background={background} title={"Contact"} />
       </div>
 
       <section className="hidden sm:block pt-8 lg:h-screen 3xl:h-[50vh] md:container md:mx-auto">

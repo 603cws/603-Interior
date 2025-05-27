@@ -788,8 +788,9 @@ function Landing() {
       </section>
 
       {/* section 6 */}
-      <section className="py-10">
-        <div className="flex flex-col items-center space-y-4 py-3">
+      <section className="py-10 relative">
+        <div className="absolute bg-[#F7F7F7] bottom-0 py-14 w-full z-0" />
+        <div className="flex flex-col items-center space-y-4 py-3 z-10">
           <div className="flex justify-normal items-center">
             <span className="w-8 h-px bg-[#374A75]"></span>
             <h4 className="uppercase text-[#374A75] font-bold text-sm font-lato mx-2">
@@ -802,7 +803,7 @@ function Landing() {
           </h3>
         </div>
         {/* Desktop layout */}
-        <div className="w-full justify-end hidden lg:flex">
+        <div className="relative z-10 w-full justify-end hidden lg:flex">
           <div className="max-w-7xl flex justify-end gap-5">
             <img
               src="/images/home/featured-project-1.png"
@@ -828,7 +829,7 @@ function Landing() {
         </div>
 
         {/* Swiper for mobile & tablet */}
-        <div className="lg:hidden px-5">
+        <div className="z-10 lg:hidden px-5">
           <Swiper
             spaceBetween={20}
             breakpoints={{
@@ -859,7 +860,7 @@ function Landing() {
       </section>
 
       {/* section 7 */}
-      <section className="bg-[#F7F7F7] py-10 md:py-14">
+      <section className="bg-[#F7F7F7] py-10 md:py-5">
         <div className="px-3 lg:container ">
           <div className="w-full grid grid-cols-2 lg:grid-cols-4 gap-y-5 gap-x-5">
             <div className="flex lg:justify-center items-center gap-2.5">
@@ -908,8 +909,9 @@ function Landing() {
       </section>
 
       {/* section 8 */}
-      <section className="py-10">
-        <div className="max-w-7xl lg:flex gap-10">
+      <section className="py-10 relative">
+        <div className="absolute bg-[#F7F7F7] top-0 py-14 w-full z-0"></div>
+        <div className="relative z-10 max-w-7xl lg:flex gap-10">
           <div className="flex-1">
             <img src="images/home/about-interior.png" alt="" />
           </div>

@@ -16,7 +16,7 @@ function HeroSection({ background, title }) {
         }}
       >
         <div className="absolute inset-0 bg-black opacity-50"></div>
-        <div className="relative z-10 uppercase font-lora font-bold">
+        <div className="relative z-10 font-lora font-bold">
           <h1 className="text-4xl md:text-5xl  text-white drop-shadow-lg">
             {title}
           </h1>

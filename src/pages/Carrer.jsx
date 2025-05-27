@@ -25,9 +25,9 @@ function Carrer() {
         }}
       >
         <div className="absolute inset-0 bg-black opacity-50"></div>
-        <div className="relative z-10 uppercase">
+        <div className="relative z-10">
           <h1 className="text-3xl md:text-5xl lg:text-7xl font-extrabold font-lato  text-white drop-shadow-lg tracking-wider">
-            Join us
+            Join Us
           </h1>
         </div>
       </section>
