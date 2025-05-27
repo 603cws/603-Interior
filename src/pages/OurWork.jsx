@@ -27,17 +27,17 @@ const contactDetails = [
   {
     icon: <PiPhoneCall color="#777777" size={30} />,
     title: "Phone Number",
-    description: "+123 456 7890",
+    description: "+91-9136036603",
   },
   {
     icon: <AiOutlineMail color="#777777" size={30} />,
     title: "Email Address",
-    description: "info@abcmail.com",
+    description: "sales@603thecoworkingspace.com",
   },
   {
     icon: <CiLocationOn color="#777777" size={30} />,
     title: "Location",
-    description: "14/A, Miranda City, NYC",
+    description: "Makhija Arcade, 35th Rd, Khar West,Mumbai Maharashtra 400052",
   },
 ];
 
@@ -105,7 +105,7 @@ function OurWork() {
             <div>
               <div className=" space-y-4">
                 <h4 className="font-lora text-xl md:text-3xl font-bold text-[#232323] px-2 lg:px-0">
-                  Creative Solutions By Inoterior Professional Designers
+                  Creative Solutions By Interior Professional Designers
                 </h4>
                 <div className="max-w-4xl">
                   <img
@@ -149,7 +149,7 @@ function OurWork() {
                 </div>
               </div>
               <div className="font-lato px-3 lg:px-0 ">
-                <h2 className="font-bold text-3xl text-[#232323] mt-8 mb-6">
+                <h2 className="font-bold text-3xl text-[#232323] mt-10 mb-8">
                   Words From Our Customers
                 </h2>
                 <div className="flex flex-col md:flex-row gap-10">

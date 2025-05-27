@@ -1,9 +1,9 @@
 function OurWorkTestimonal({ testimonal, name, position, image }) {
   return (
-    <div className="p-6 border border-[#777777] bg-[#000] bg-opacity-0">
-      <div className="space-y-2">
-        <p className="font-Poppins text-xs ">{testimonal}</p>
-        <div className="flex  items-center gap-3">
+    <div className="p-10 border border-[#777777]/20 bg-[#000]/0">
+      <div className="space-y-4">
+        <p className="font-Poppins text-sm leading-6 ">{testimonal}</p>
+        <div className="flex gap-4 items-center">
           <div>
             <img src={`/images/${image}`} alt="testimonal user" />
           </div>

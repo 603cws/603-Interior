@@ -5,15 +5,49 @@ import { FiFacebook, FiLinkedin } from "react-icons/fi";
 import { BsShop } from "react-icons/bs";
 import { FaLocationDot } from "react-icons/fa6";
 import { PiPhoneCallFill } from "react-icons/pi";
+import { supabase } from "../services/supabase";
 
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import toast from "react-hot-toast";
 
 function Footer() {
+  const [email, setEmail] = useState("");
+  const [error, setError] = useState("");
   const scrollToTop = () => {
     window.scrollTo({
       top: 0,
       behavior: "smooth", // Enables smooth scrolling
     });
+  };
+
+  // Email regex validator
+  const isValidEmail = (email) =>
+    /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email);
+
+  //newsletter
+  const handleSubscribe = async (e) => {
+    e.preventDefault();
+
+    // Frontend validation
+    if (!isValidEmail(email)) {
+      toast.error("Please enter a valid email address.");
+      return;
+    }
+
+    const { data, error } = await supabase
+      .from("news_letter")
+      .insert([{ email, subscribed: true }]);
+
+    if (error) {
+      // setMessage("This email is already subscribed or invalid.");
+      console.log(error);
+
+      toast.error("Invalid email");
+    } else {
+      toast.success("subscribed sucessfully");
+      setEmail("");
+    }
   };
 
   const navigate = useNavigate();
@@ -28,16 +62,21 @@ function Footer() {
             Sign up for our monthly newsletter for the latest news & articles
           </p>
         </div>
-        <div className="flex-1 flex justify-center items-center font-lato">
+        <form
+          onSubmit={handleSubscribe}
+          className="flex-1 flex justify-center items-center font-lato"
+        >
           <input
             type="text"
             placeholder="Enter Your Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             className="border-y-[1px] border-l-[1px] border-[#777777] w-full py-3.5 bg-transparent px-2 focus:outline-none focus:ring-0"
           />
           <button className="capitalize bg-[#EBEFF9] text-[#000000] text-nowrap py-3.5 border-y-[1px] border-r-[1px] border-[#777777] font-bold px-1">
             subscribe now
           </button>
-        </div>
+        </form>
       </div>
       <div className="md:container md:mx-auto  flex flex-col md:flex-row justify-between md:justify-center lg:justify-between   gap-10 mb-20">
         <div className="border-r-2 border-[#FFD074]  pr-10 xl:pr-28  lg:flex flex-col gap-5 text-sm">

@@ -9,18 +9,18 @@ import { useNavigate } from "react-router-dom";
 const background = "/images/career-page-bg.png";
 const RecentPosts = [
   {
-    Image: "/testimonaluser.png",
+    Image: "/recentpostimg.png",
     des: "The way we design office spaces is evolving rapidly. With hybrid work models, a focus on employee well-being, and advancements in technology, companies are rethinking how they utilize their office spaces. ",
     date: "June 5, 2021",
     description: "Things to Know When Choosing the Perfect Sofa",
   },
   {
-    Image: "/testimonaluser.png",
+    Image: "/recentpostimg.png",
     date: "June 5, 2021",
     description: "Colour Schemes to Introduce Spring in Your Home",
   },
   {
-    Image: "/testimonaluser.png",
+    Image: "/recentpostimg.png",
     date: "June 5, 2021",
     description: "4 Ways to Create Extra Space in Small Homes",
   },
@@ -122,8 +122,11 @@ function InteriorBlog() {
         <div className="lg:container lg:mx-auto ">
           <div className="flex flex-col xl:grid  xl:grid-cols-[3fr,1fr] ">
             <div className="space-y-12 md:space-y-6">
-              {currentItems.map((blog) => (
-                <div className="max-w-5xl mx-auto h-[550px] relative">
+              {currentItems.map((blog, index) => (
+                <div
+                  className="max-w-5xl mx-auto h-[550px] relative"
+                  key={index}
+                >
                   {/* Image with date */}
                   <div className="relative">
                     <img
@@ -153,9 +156,6 @@ function InteriorBlog() {
                       {blog.description}
                     </p>
 
-                    {/* <button className="inline-flex items-center px-4 py-2 border-b-2 border-black font-semibold text-black hover:border-b-4 transition-all">
-                    Read More
-                  </button> */}
                     <div className="absolute left-0  bottom-0  transform translate-x-[20%]  translate-y-[40%] bg-[#fff]">
                       <button
                         onClick={() => {
@@ -216,9 +216,8 @@ function InteriorBlog() {
             <aside className="space-y-4 px-3 lg:px-0">
               <div className="  font-lora ">
                 <div className="lg:p-4 ">
-                  <h3 className="border-b border-b-[#232323]/10 text-[20px] font-bold">
-                    Categories
-                  </h3>
+                  <h3 className="text-[20px] font-bold">Categories</h3>
+                  <div className="h-[3px] w-full bg-gradient-to-r from-[#304778] to-[#304778]/0" />
                   <ul className=" text-[15px] text-[#232323]  [&_li]:my-3 [&_li]:px-6 [&_li]:py-1 [&_li]:bg-[#fff] ">
                     <li>Decoration</li>
                     <li>Door Windows</li>
@@ -232,7 +231,7 @@ function InteriorBlog() {
                   <h3 className="border-b border-b-[#232323]/10 text-lg font-bold">
                     Recent Post
                   </h3>
-                  <ul className="[&_li]:font-bold text-[15px] text-[#232323]  [&_li]:my-3 [&_li]:px-6 [&_li]:py-3 [&_li]:bg-[#fff] ">
+                  <ul className="[&_li]:my-3 [&_li]:px-6 [&_li]:py-3 [&_li]:bg-[#fff] ">
                     {RecentPosts.map((post) => (
                       <li key={post.title}>
                         {" "}
@@ -240,11 +239,11 @@ function InteriorBlog() {
                           <div>
                             <img src={`/images/${post.Image}`} alt="recent" />
                           </div>
-                          <div className="flex flex-col justify-center font-lato">
-                            <h3 className=" font-bold text-[15px] text-[#232323]">
+                          <div className="flex flex-col justify-center font-lora">
+                            <h3 className=" text-[13px]  text-[#777]">
                               {post.date}
                             </h3>
-                            <p className="font-lora text-[14px] text-[#777]">
+                            <p className=" text-[15px] text-[#232323]">
                               {post.description}
                             </p>
                           </div>
@@ -262,7 +261,7 @@ function InteriorBlog() {
                   </h3>
                   <div className="flex gap-3">
                     {FollowUsOn.map((follow) => (
-                      <div>
+                      <div key={follow.title}>
                         <img src={follow.image} alt={follow.title} />
                       </div>
                     ))}

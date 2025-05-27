@@ -203,11 +203,11 @@ function HelpnFaq() {
           <h4 className="font-lato font-bold text-[#232323] text-xl lg:text-4xl">
             Recently Asked Questions
           </h4>
-          <p className="font-lora text-[#777777] text-[15px]">
+          {/* <p className="font-lora text-[#777777] text-[15px]">
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Quasi{" "}
             <br />
             incidunt repellendus aut neque rerum quam ab animi reprehenderit?
-          </p>
+          </p> */}
         </div>
       </section>
 
@@ -215,21 +215,21 @@ function HelpnFaq() {
         ([category, questions], sectionIndex) => (
           <section className="my-10" key={sectionIndex}>
             <div
-              className={`lg:container mx-2 lg:mx-auto my-3 flex justify-center items-center gap-8 lg:gap-0 flex-col  ${
+              className={`lg:container mx-2 lg:mx-auto my-3 flex justify-center items-center gap-8 lg:gap-10 flex-col  ${
                 sectionIndex === 1 || sectionIndex === 3
                   ? "lg:flex-row-reverse"
                   : "lg:flex-row"
               }`}
             >
-              <div className="flex-1 ">
+              <div className={`flex-1 `}>
                 <img
                   src="/images/help1.png"
                   alt="help section 1"
-                  className=" lg:max-w-xl"
+                  className=" w-full"
                 />
               </div>
 
-              <div className=" flex-1 flex flex-col border rounded-xl">
+              <div className=" flex-1 flex flex-col  border rounded-xl">
                 {questions.map((item, index) => (
                   <div
                     key={index}

@@ -6,41 +6,23 @@ import { HiClock } from "react-icons/hi2";
 import { IoIosArrowForward } from "react-icons/io";
 import jobListings from "../utils/jobData";
 import { IoCalendarSharp } from "react-icons/io5";
+import HeroSection from "./HeroSection";
 
 function Carrer() {
   const background = "/images/career-page-bg.png";
   return (
     <div className="font-Poppins">
-      {/* Navbar Section */}
-      <header className="bg-white shadow-lg z-50 relative">
-        <LandingNavbar />
-      </header>
-
-      {/* Hero Section */}
-      <section
-        className="relative h-[60vh] flex items-center text-center justify-center bg-cover bg-center bg-no-repeat bg-gray-100"
-        style={{
-          backgroundImage: `url(${background})`,
-          backgroundAttachment: "fixed",
-        }}
-      >
-        <div className="absolute inset-0 bg-black opacity-50"></div>
-        <div className="relative z-10">
-          <h1 className="text-3xl md:text-5xl lg:text-7xl font-extrabold font-lato  text-white drop-shadow-lg tracking-wider">
-            Join Us
-          </h1>
-        </div>
-      </section>
+      <HeroSection title={"Join us"} background={background} />
 
       {/* second section */}
       <div className="md:container px-5 md:px-12 md:mx-auto">
-        {/* <div className="md:container px-5 md:px-12  md:mx-auto"> */}
-        <section className=" py-10 flex flex-col gap-10 lg:gap-8 lg:flex-row justify-center items-center">
+        <section className=" py-10 flex flex-col gap-10 lg:gap-8 lg:flex-row justify-between items-center">
           {/* div for image */}
-          <div className="flex-1 flex justify-center items-center">
-            <div className="max-w-lg">
+          <div className=" flex justify-center items-center">
+            <div className="max-w-xl xl:max-w-2xl">
               <img
                 src="/images/carrerLifeAtInterior.png"
+                className="w-full"
                 alt="life at interior"
               />
             </div>
@@ -84,7 +66,7 @@ function Carrer() {
             <img
               src="/images/serviceIcon.png"
               alt="service icon"
-              className=""
+              className="service icon"
             />
             <h2 className="font-lora font-bold text-2xl lg:text-4xl text-[#232323]">
               Our Open Positions
