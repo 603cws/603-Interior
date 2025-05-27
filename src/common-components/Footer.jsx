@@ -19,6 +19,26 @@ function Footer() {
   const navigate = useNavigate();
   return (
     <footer className=" bg-[#232323] text-white font-Poppins px-10 xl:px-40 pt-12 pb-5">
+      <div className="md:container lg:flex justify-stretch w-full mb-10">
+        <div className="font-lato flex-1 space-y-2">
+          <h4 className="text-2xl text-[#fffff] font-bold">
+            Sign Up To Get Latest Update
+          </h4>
+          <p>
+            Sign up for our monthly newsletter for the latest news & articles
+          </p>
+        </div>
+        <div className="flex-1 flex justify-center items-center font-lato">
+          <input
+            type="text"
+            placeholder="Enter Your Email"
+            className="border-y-[1px] border-l-[1px] border-[#777777] w-full py-3.5 bg-transparent px-2 focus:outline-none focus:ring-0"
+          />
+          <button className="capitalize bg-[#EBEFF9] text-[#000000] text-nowrap py-3.5 border-y-[1px] border-r-[1px] border-[#777777] font-bold px-1">
+            subscribe now
+          </button>
+        </div>
+      </div>
       <div className="md:container md:mx-auto  flex flex-col md:flex-row justify-between md:justify-center lg:justify-between   gap-10 mb-20">
         <div className="border-r-2 border-[#FFD074]  pr-10 xl:pr-28  lg:flex flex-col gap-5 text-sm">
           <div className="capitalize">
