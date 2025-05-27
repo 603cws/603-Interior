@@ -215,24 +215,29 @@ function Landing() {
   const testimonials = [
     {
       id: 1,
-      text: "I love everything that was put together for my living room! I just bought this house and only had a few items I wanted to keep. They helped me visualize the room.",
-      name: "Natalie Kameron",
-      role: "CEO / Manager",
-      image: "images/home/testimonial-1.png",
+      text: " Workved Interiors transformed our office into a space that perfectly blends functionality with modern aesthetics. Their team understood our requirements and executed the project seamlessly, ensuring a workspace that enhances productivity and employee well-being. The attention to detail and quality craftsmanship truly set them apart!",
+      name: "Hussain Patel",
+      role: "Director, Tripjack",
+      image: "images/tripjack-logo.png",
     },
     {
       id: 2,
-      text: "I hired Interior for my living room, and did such an amazing job, I then hired for my entry. It is going to be beautiful and amazing..!",
-      name: "Joel Elliott",
-      role: "Co-manager associated",
-      image: "images/home/testimonial-2.png",
+      text: "Workved Interiors has played a key role in shaping our coworking spaces into inspiring and productive environments. Their ability to design offices that are both stylish and highly functional  has been a game-changer for our members. Their expertise, professionalism, and commitment to delivering excellence make them a trusted partner in workspace design.",
+      name: "Kunal Kataria",
+      role: "Founder, 603 CWS",
+      image: "logo/logo.png",
     },
     {
       id: 3,
-      text: " They helped me design our new living space & did a fantastic job! Such pleasure to work with every step of the way helped us find a design.",
-      name: "Peter Daniels",
-      role: "Ceo /Manger",
-      image: "images/home/testimonial-3.png",
+      text: `The team at Workved Interiors understood our brand vision and
+                delivered an office space that enhances collaboration,
+                creativity, and efficiency. They were meticulous in their
+                planning and execution, ensuring that every element from layout
+                to furnishings was aligned with our needs. Working with them was
+                a smooth and rewarding experience!`,
+      name: "Aditya Gupta",
+      role: "CEO, Credilio",
+      image: "images/credilio-svg-logo.svg",
     },
   ];
 

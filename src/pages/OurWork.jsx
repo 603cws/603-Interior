@@ -154,19 +154,16 @@ function OurWork() {
                 </h2>
                 <div className="flex flex-col md:flex-row gap-10">
                   <OurWorkTestimonal
-                    name={"Sofia Dylan"}
-                    position={"Co-manager associated"}
-                    image={"testimonaluser.png"}
-                    testimonal={`“I couldn't believe my eyes when I saw the final layout of
-                          the room! they work with every step of the way helped us
-                          and understood perfectly what I wanted in my room and
-                          brought my vision.”`}
+                    name={"Hussain Patel"}
+                    position={"Director, Tripjack"}
+                    image={"images/tripjack-logo.png"}
+                    testimonal={`“Workved Interiors transformed our office into a space that perfectly blends functionality with modern aesthetics. Their team understood our requirements and executed the project seamlessly, ensuring a workspace that enhances productivity and employee well-being. The attention to detail and quality craftsmanship truly set them apart!”`}
                   />
                   <OurWorkTestimonal
-                    name={"Natalie Kameron"}
-                    position={"Ceo /Manger"}
-                    image={"ourworktestimonaluser2.png"}
-                    testimonal={`“I love everything that put together for my living room! I just bought this house and only had a few items I wanted to keep. I’am able to help me visualize the room””`}
+                    name={"Kunal Kataria"}
+                    position={"Founder, 603 CWS"}
+                    image={"logo/logo.png"}
+                    testimonal={`“Workved Interiors has played a key role in shaping our coworking spaces into inspiring and productive environments. Their ability to design offices that are both stylish and highly functional  has been a game-changer for our members. Their expertise, professionalism, and commitment to delivering excellence make them a trusted partner in workspace design.””`}
                   />
                 </div>
               </div>

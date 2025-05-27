@@ -5,7 +5,7 @@ function OurWorkTestimonal({ testimonal, name, position, image }) {
         <p className="font-Poppins text-sm leading-6 ">{testimonal}</p>
         <div className="flex gap-4 items-center">
           <div>
-            <img src={`/images/${image}`} alt="testimonal user" />
+            <img src={image} alt="testimonal user" className="w-12" />
           </div>
           <div className="flex flex-col justify-center font-lato">
             <h3 className=" font-bold text-[17px] text-[#232323]">{name}</h3>
