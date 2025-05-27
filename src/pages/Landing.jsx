@@ -789,7 +789,7 @@ function Landing() {
 
       {/* section 6 */}
       <section className="py-10 relative">
-        <div className="absolute bg-[#F7F7F7] bottom-0 py-14 w-full z-0" />
+        <div className="absolute bg-[#F7F7F7] bottom-0 py-14 w-full z-0 hidden lg:block" />
         <div className="flex flex-col items-center space-y-4 py-3 z-10">
           <div className="flex justify-normal items-center">
             <span className="w-8 h-px bg-[#374A75]"></span>
@@ -910,7 +910,7 @@ function Landing() {
 
       {/* section 8 */}
       <section className="py-10 relative">
-        <div className="absolute bg-[#F7F7F7] top-0 py-14 w-full z-0"></div>
+        <div className="absolute bg-[#F7F7F7] top-0 py-14 w-full z-0 hidden lg:block"></div>
         <div className="relative z-10 max-w-7xl lg:flex gap-10">
           <div className="flex-1">
             <img src="images/home/about-interior.png" alt="" />
