@@ -531,7 +531,7 @@ function Landing() {
                         management of all kind of living projects
                       </p>
 
-                      <ReadMoreBtn borderColor={"[#ffffff]"} />
+                      <ReadMoreBtn borderColor="#ffffff" />
                     </div>
                   </div>
                 </div>
@@ -598,7 +598,7 @@ function Landing() {
                   of all kind of living projects
                 </p>
 
-                <ReadMoreBtn borderColor="[#ffffff]" />
+                <ReadMoreBtn borderColor="#ffffff" />
               </div>
             </div>
             <div className="font-lato space-y-7 px-3 py-5 max-w-xs">

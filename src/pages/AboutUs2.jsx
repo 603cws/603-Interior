@@ -9,6 +9,7 @@ import "../styles/Landing.css";
 import ContactUsPopup from "../common-components/ContactUsPopup";
 import { ServiceCard } from "../common-components/ServiceCard";
 import HeroSection from "./HeroSection";
+import ReadMoreBtn from "../common-components/ReadMoreBtn";
 
 const services = [
   {
@@ -194,18 +195,7 @@ function AboutUs() {
           </div>
 
           {/* Button */}
-          <button className="relative mt-4 inline-block border-[#232323] px-6 py-2 border-2 font-medium text-sm tracking-wide group">
-            <span className="relative z-10 text-[#232323] font-Poppins">
-              Read More
-            </span>
-            {/* Top-left line     group-hover:w-32      group-hover:h-11   */}
-            <span className="absolute top-0 -left-2 w-2 h-px bg-[#232323] group-hover:w-full transition-all duration-300"></span>
-            <span className="absolute -top-2 left-0 h-2 w-px bg-[#232323] group-hover:h-full transition-all duration-300"></span>
-
-            {/* Bottom-right line   group-hover:w-32      group-hover:h-11 */}
-            <span className="absolute bottom-0 -right-2 w-2 h-px bg-[#232323] group-hover:w-full  transition-all duration-300"></span>
-            <span className="absolute -bottom-2 right-0 h-2 w-px bg-[#232323] group-hover:h-full transition-all duration-300"></span>
-          </button>
+          <ReadMoreBtn borderColor="#232323" />
         </div>
       </section>
 
@@ -266,7 +256,7 @@ function AboutUs() {
           process, so we’ve put together our guide work stages
         </p>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-10 md:px-12">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-10 md:px-12">
           {work_stages.map((stage) => (
             <div
               key={stage.id}
@@ -312,7 +302,7 @@ function AboutUs() {
       </section>
 
       {/* Skills Section */}
-      <section className="relative max-w-7xl place-self-center px-6 lg:py-20 md:px-10 z-10 grid lg:grid-cols-2 md:grid-cols-1 gap-10 items-center">
+      <section className="relative max-w-7xl place-self-center px-6 lg:py-20 md:px-10 lg:px-28 z-10 grid lg:grid-cols-2 md:grid-cols-1 gap-10 items-center">
         {/* Left Section */}
         <div className="text-center md:text-left">
           <h2 className="text-4xl font-bold text-[#232323] font-lora">
