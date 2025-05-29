@@ -10,6 +10,7 @@ import ContactUsPopup from "../common-components/ContactUsPopup";
 import { ServiceCard } from "../common-components/ServiceCard";
 import HeroSection from "./HeroSection";
 import ReadMoreBtn from "../common-components/ReadMoreBtn";
+import { useInView } from "react-intersection-observer";
 
 const services = [
   {
@@ -104,6 +105,7 @@ const skills = [
 function AboutUs() {
   const [showContactPopup, setShowContactPopup] = useState(false);
   const [openIndex, setOpenIndex] = useState(0); // First item open by default
+  const [animatedCounts, setAnimatedCounts] = useState(skills.map(() => 0));
 
   useEffect(() => {
     if (showContactPopup) {
@@ -112,6 +114,26 @@ function AboutUs() {
       document.body.style.overflow = "auto"; // Enable scroll
     }
   }, [showContactPopup]);
+
+  const { ref, inView } = useInView({
+    triggerOnce: false,
+    threshold: 0.3,
+  });
+
+  useEffect(() => {
+    if (inView) {
+      setAnimatedCounts(skills.map(() => 0));
+      const interval = setInterval(() => {
+        setAnimatedCounts((prevCounts) =>
+          prevCounts.map((count, index) =>
+            count < skills[index].percent ? count + 1 : count
+          )
+        );
+      }, 20);
+
+      return () => clearInterval(interval);
+    }
+  }, [inView, skills]);
 
   const handleToggle = (index) => {
     setOpenIndex(index === openIndex ? null : index);
@@ -314,8 +336,11 @@ function AboutUs() {
           </p>
 
           {/* Circular Progress Indicators */}
-          <div className="mt-10 flex justify-center md:justify-start flex-col md:flex-row gap-10">
-            {skills.map((skill, index) => (
+          <div
+            ref={ref}
+            className="mt-10 flex justify-center md:justify-start flex-col md:flex-row gap-10"
+          >
+            {/* {skills.map((skill, index) => (
               <div key={index} className="flex flex-col items-center">
                 <div className="relative w-24 h-24">
                   <svg className="transform rotate-0" viewBox="0 0 36 36">
@@ -341,6 +366,39 @@ function AboutUs() {
                   </svg>
                   <span className="absolute inset-0 flex items-center justify-center text-2xl font-medium text-[#232323] font-lora">
                     {skill.percent}%
+                  </span>
+                </div>
+                <p className="mt-2 text-[#304778] text-xl font-lora">
+                  {skill.label}
+                </p>
+              </div>
+            ))} */}
+            {skills.map((skill, index) => (
+              <div key={index} className="flex flex-col items-center">
+                <div className="relative w-24 h-24">
+                  <svg className="transform rotate-0" viewBox="0 0 36 36">
+                    <path
+                      className="text-[#304778]"
+                      strokeWidth="3"
+                      fill="none"
+                      stroke="currentColor"
+                      d="M18 2.0845
+             a 15.9155 15.9155 0 0 1 0 31.831
+             a 15.9155 15.9155 0 0 1 0 -31.831"
+                    />
+                    <path
+                      className="text-[#CDA174]"
+                      strokeWidth="3"
+                      fill="none"
+                      strokeDasharray={`${animatedCounts[index]}, 100`}
+                      stroke="currentColor"
+                      d="M18 2.0845
+             a 15.9155 15.9155 0 0 1 0 31.831
+             a 15.9155 15.9155 0 0 1 0 -31.831"
+                    />
+                  </svg>
+                  <span className="absolute inset-0 flex items-center justify-center text-2xl font-medium text-[#232323] font-lora">
+                    {animatedCounts[index]}%
                   </span>
                 </div>
                 <p className="mt-2 text-[#304778] text-xl font-lora">

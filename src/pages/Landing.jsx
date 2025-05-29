@@ -148,6 +148,12 @@ function Landing() {
     setSliderPos(percent);
   };
   const handleClick = () => {
+    if (!isAuthenticated) {
+      localStorage.removeItem("currentLayoutID");
+      setTotalArea("");
+      setCurrentLayoutID(0);
+      setCurrentLayoutData({});
+    }
     setLoading(true);
     // Optionally add a timeout if navigation doesn't cause full re-render
     navigate("/Layout");
@@ -298,7 +304,7 @@ function Landing() {
                 {tabData
                   .filter((tab) => tab.key === activeTab)
                   .map((tab) => (
-                    <>
+                    <div key={tab.key}>
                       <img
                         key="img"
                         src={tab.img}
@@ -316,7 +322,7 @@ function Landing() {
                           ))}
                         </div>
                       </div>
-                    </>
+                    </div>
                   ))}
               </div>
 
@@ -850,8 +856,8 @@ function Landing() {
           </div>
         </div>
         <div className="hidden md:flex flex-col md:flex-row  justify-center items-center gap-10  lg:gap-4">
-          {latestArticles.map((article) => (
-            <div className="max-w-sm">
+          {latestArticles.map((article, index) => (
+            <div key={index} className="max-w-sm">
               <div className="relative">
                 <img src={article.image} alt="blogoffice" />
                 <div className="absolute  left-4 bottom-0 bg-white text-center px-3 py-1 shadow-md rounded-sm">

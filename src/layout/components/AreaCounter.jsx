@@ -400,7 +400,7 @@ const AreaCounter = ({
           +
         </button>
         {error && (
-          <p className="text-red-500 absolute -bottom-2 w-full left-0 text-xs z-20">
+          <p className="text-red-500 absolute -bottom-1 md:-bottom-2 w-full left-0 text-[8px] md:text-xs z-20">
             {error}
           </p>
         )}
