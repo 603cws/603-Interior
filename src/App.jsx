@@ -71,7 +71,6 @@ function App() {
           <Routes>
             <Route path="/" element={<Landing />} />
             <Route path="/Layout" element={<Layout />} />
-            {/* <Route path="/RegisterUser" element={<RegisterUser />} /> */}
             <Route path="/boq" element={<Boq />} />
             <Route path="/boq/:id" element={<ProductOverview />} />
             <Route path="/Recommend" element={<RecommendComp />} />
@@ -79,7 +78,7 @@ function App() {
             <Route path="/spinner" element={<SpinnerFullPage />} />
             <Route path="/Contactus" element={<Contactus />} />
             <Route path="/Aboutus" element={<AboutUs2 />} />
-            {/* <Route path="/Aboutus2" element={<AboutUs2 />} /> */}
+
             <Route path="/Blog" element={<InteriorBlog />} />
             <Route path="/Blog/:title" element={<BlogDetail />} />
             <Route path="/Career" element={<Carrer />} />
@@ -93,7 +92,7 @@ function App() {
               element={<Navigate to="/complete-profile" />}
             />
             <Route path="/OurServices" element={<OurServices2 />} />
-            {/* <Route path="/OurServices2" element={<OurServices2 />} /> */}
+
             <Route path="/Career/:jobTitle" element={<JobPage />} />
             <Route path="/profile" element={<ProfileCard />} />
             <Route path="/scroll" element={<DoorScrollEffect />} />
@@ -124,7 +123,7 @@ function App() {
             <Route path="/howtosell" element={<Howtosell />} />
             <Route path="/vendordashboard" element={<VendorDashboard />} />
             <Route path="/vendorregister" element={<VendorRegister />} />
-            {/* <Route path="/dashprod" element={<DashboardProductCard />} /> */}
+
             <Route path="/getplan" element={<PricingCard />} />
             <Route path="/admin" element={<AdminDashboard />} />
             <Route path="/bookappointment" element={<BookAppointment />} />
@@ -137,11 +136,11 @@ function App() {
           <Routes>
             <Route path="/" element={<Landing />} />
             <Route path="/Layout" element={<Layout />} />
-            {/* <Route path="/RegisterUser" element={<RegisterUser />} /> */}
+
             <Route path="/Error" element={<ErrorModal />} />
             <Route path="/Contactus" element={<Contactus />} />
             <Route path="/Aboutus" element={<AboutUs2 />} />
-            {/* <Route path="/Aboutus2" element={<AboutUs2 />} /> */}
+
             <Route path="/Blog" element={<InteriorBlog />} />
             <Route path="/Blog/:title" element={<BlogDetail />} />
             <Route path="/Career" element={<Carrer />} />
@@ -155,20 +154,18 @@ function App() {
               element={<Navigate to="/complete-profile" />}
             />
             <Route path="/OurServices" element={<OurServices2 />} />
-            {/* <Route path="/OurServices2" element={<OurServices2 />} /> */}
+
             <Route path="/Career/:jobTitle" element={<JobPage />} />
             <Route path="/profile" element={<ProfileCard />} />
             <Route path="/becomeseller" element={<OurWork />} />
             <Route path="/help" element={<HelpnFaq />} />
             <Route path="/termsNcondition" element={<TermsAndCondition />} />
-            {/* <Route path="/vendordashboard" element={<VendorDashboard />} /> */}
+
             <Route path="/bookappointment" element={<BookAppointment />} />
             <Route path="/howtosell" element={<Howtosell />} />
             <Route path="/partnerwithus" element={<PartnerWorkvedInterior />} />
             <Route path="/scroll" element={<DoorScrollEffect />} />
             <Route path="/interiorWork" element={<OurWork />} />
-            {/* <Route path="/interiorblog" element={<InteriorBlog />} />
-            <Route path="/interiorblog/:title" element={<BlogDetail />} /> */}
             <Route path="/home" element={<Home />} />
           </Routes>
         )}

@@ -1,9 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import LandingNavbar from "../common-components/LandingNavbar";
 
-import { FaAngleDown, FaAngleUp } from "react-icons/fa";
-
-import Slider from "react-slick";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/effect-coverflow";
@@ -22,13 +19,6 @@ import "slick-carousel/slick/slick-theme.css";
 
 import { useNavigate } from "react-router-dom";
 import Footer from "../common-components/Footer";
-import {
-  BiSolidLeftArrowSquare,
-  BiSolidRightArrowSquare,
-} from "react-icons/bi";
-import { IoIosCall } from "react-icons/io";
-import { useApp } from "../Context/Context";
-import MobileTestimonal from "../common-components/MobileTestimonal";
 import { IoMdCheckmarkCircleOutline } from "react-icons/io";
 import beforeImage from "/images/home/before-img-one.png";
 import afterImage from "/images/home/after-img-one.png";
@@ -39,142 +29,10 @@ import ReadMoreBtn from "../common-components/ReadMoreBtn";
 function Landing() {
   const imageContainerRef = useRef(null);
   const [sliderPos, setSliderPos] = useState(50);
-  const [expandedIndex, setExpandedIndex] = useState();
-  // const [isMobile, setIsMobile] = useState(false);
   const [activeTab, setActiveTab] = useState("designing");
   const [loading, setLoading] = useState(false);
 
-  const heroImages = [
-    "/images/home/Hero.png",
-    "/images/home/Hero-image-1.png",
-    "/images/home/Hero-image-2.png",
-    "/images/home/Hero-image-3.png",
-    "/images/home/Hero-image-4.png",
-    "/images/home/Hero-image-5.png",
-  ];
-
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
-
-  const {
-    isMobile,
-    setTotalArea,
-    setCurrentLayoutID,
-    setCurrentLayoutData,
-    isAuthenticated,
-  } = useApp();
-
-  // Change background image every 5 seconds
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentImageIndex((prevIndex) =>
-        prevIndex === heroImages.length - 1 ? 0 : prevIndex + 1
-      );
-    }, 5000); // 5000ms = 5 seconds
-
-    return () => clearInterval(interval); // Cleanup interval on component unmount
-  }, [heroImages.length]);
-
-  // Detect screen size
-  // useEffect(() => {
-  //   const handleResize = () => {
-  //     setIsMobile(window.innerWidth <= 768); // Mobile & Tablet: < 768px
-  //   };
-  //   handleResize(); // Check on mount
-  //   window.addEventListener("resize", handleResize);
-  //   return () => window.removeEventListener("resize", handleResize);
-  // }, []);
-
   const navigate = useNavigate();
-  const handleToggle = (index) => {
-    setExpandedIndex((prevIndex) => (prevIndex === index ? null : index));
-  };
-
-  // const scrollToTop = () => {
-  //   window.scrollTo({
-  //     top: 0,
-  //     behavior: "smooth", // Enables smooth scrolling
-  //   });
-  // };
-
-  const settings = {
-    dots: false,
-    infinite: true,
-    speed: 1000,
-    slidesToShow: 4,
-    slidesToScroll: 1,
-    autoplay: true,
-    autoplaySpeed: 2000,
-    pauseOnHover: true,
-    arrows: false,
-    responsive: [
-      {
-        breakpoint: 1800, // Tailwind's custom 3xl breakpoint
-        settings: {
-          slidesToShow: 5, // Show 5 slides only on 3xl screens
-        },
-      },
-      {
-        breakpoint: 768,
-        settings: {
-          slidesToShow: 2, // Show 3 slides only on md screens
-        },
-      },
-    ],
-  };
-
-  // const settingsWork = {
-  //   dots: true,
-  //   infinite: true,
-  //   speed: 500,
-  //   slidesToShow: 3,
-  //   slidesToScroll: 1,
-  //   autoplay: true,
-  //   autoplaySpeed: 2000,
-  //   // pauseOnHover: true,
-  //   arrows: false,
-  // };
-
-  // const settingsProduct = {
-  //   // vertical: true,
-  //   // verticalSwiping: true,
-  //   dots: true,
-  //   infinite: true,
-  //   speed: 500,
-  //   slidesToShow: 4,
-  //   slidesToScroll: 1,
-  //   autoplay: true,
-  //   autoplaySpeed: 2000,
-  //   pauseOnHover: true,
-  //   arrows: false, //true
-  // };
-
-  const accordionItems = [
-    {
-      title: "What is  Workved Interiors?",
-      content:
-        " Workved Interiors is a tech-driven platform that helps corporates design and set up their office spaces with instant layouts, smart BOQs, and vendor partnerships, ensuring a hassle-free experience",
-    },
-    {
-      title: "Who can use  Workved Interiors?",
-      content:
-        "Our platform is designed for corporates, startups, office administrators, HR teams, and real estate decision-makers looking for efficient office space planning and execution.",
-    },
-    {
-      title: "How does  Workved Interiors simplify office setup?",
-      content:
-        "We eliminate the need for lengthy consultations by offering instant office layouts, predefined and custom BOQs, and direct vendor collaboration, saving you time and costs.",
-    },
-    {
-      title: "Is  Workved Interiors only for large businesses?",
-      content:
-        "No, we cater to businesses of all sizes, from small startups to large corporations, providing scalable solutions for workspace design.",
-    },
-    {
-      title: "Can I get a customized office layout?",
-      content:
-        "Yes! You can input your office requirements, and our system generates a tailored layout to match your needs.",
-    },
-  ];
 
   const tabData = [
     {
@@ -243,7 +101,7 @@ function Landing() {
 
   const latestArticles = [
     {
-      image: "/images/blogoffice.png",
+      image: "/images/recent-article1.png",
       title:
         "The Future of Office Design: Trends That Will Shape Workspaces in 2025",
       date: 5,
@@ -255,11 +113,11 @@ function Landing() {
         "A small newly opened interior design business that aims to  cover different issues, from sustainability to social, from equal opportunities to education, from giving space",
     },
     {
-      image: "/images/blogoffice.png",
+      image: "/images/recent-article2.png",
       title:
         "The Future of Office Design: Trends That Will Shape Workspaces in 2025",
-      date: 5,
-      month: "jun",
+      date: 15,
+      month: "may",
       name: "jon deo",
       comments: 0,
       shortdescription: "Door Windows, Home Land",
@@ -267,11 +125,11 @@ function Landing() {
         "A small newly opened interior design business that aims to  cover different issues, from sustainability to social, from equal opportunities to education, from giving space",
     },
     {
-      image: "/images/blogoffice.png",
+      image: "/images/recent-article3.png",
       title:
         "The Future of Office Design: Trends That Will Shape Workspaces in 2025",
-      date: 5,
-      month: "jun",
+      date: 23,
+      month: "may",
       name: "jon deo",
       comments: 0,
       shortdescription: "Door Windows, Home Land",
@@ -294,20 +152,37 @@ function Landing() {
     // Optionally add a timeout if navigation doesn't cause full re-render
     navigate("/Layout");
   };
+
+  function TitleHeader({ title, doubleside = false }) {
+    return (
+      <>
+        <div className="flex  items-start gap-2">
+          <span className="w-8 h-px bg-[#374A75] mt-1"></span>
+          <h4 className="uppercase text-[#374A75] font-bold text-sm font-lato">
+            {title}
+          </h4>
+          {doubleside && <span className="w-8 h-px bg-[#374A75] mt-1"></span>}
+        </div>
+      </>
+    );
+  }
+
   return (
     <>
       {/* header section */}
       <section
-        className="relative flex flex-col h-screen bg-cover bg-center bg-[url('/images/home/Home_Header.png')]"
+        className="relative flex flex-col h-screen bg-cover bg-center bg-[url('/images/hero-interior.png')]"
+        // className="relative flex flex-col h-screen bg-cover bg-center bg-[url('/images/home/Home_Header.png')]"
         style={{ backgroundAttachment: "fixed" }}
       >
-        <div className="absolute inset-0 bg-black/50"></div>
+        <div className="absolute inset-0"></div>
+        {/* <div className="absolute inset-0 bg-black/50"></div> */}
         <div className="relative z-10 ">
           <LandingNavbar />
-          <div className="flex justify-center items-center h-svh">
+          <div className="flex justify-center items-center h-svh tranform translate-y-[8%]">
             <div className="flex-1 flex flex-col gap-10 lg:gap-0 justify-center items-center text-white max-h-fit max-w-fit mx-auto lg:p-5 rounded-xl">
-              <div className="lg:flex max-w-6xl px-5 py-5 space-y-10  items-stretch">
-                <div className="lg:w-3/5 flex flex-col  justify-center items-center gap-6">
+              {/* <div className="lg:flex max-w-6xl px-5 py-5 space-y-10  items-stretch">
+                <div className="lg:w-3/5 flex flex-col  justify-center items-center  gap-6">
                   <h3 className="uppercase lg:self-end font-lato font-bold text-lg">
                     A Trendy Luxury
                   </h3>
@@ -337,6 +212,40 @@ function Landing() {
                     )}
                   </button>
                 </div>
+              </div> */}
+              <div className="lg:flex max-w-6xl px-5  items-stretch bg-[#000]/25 backdrop-blur-md border border-white/20 shadow-lg rounded-xl">
+                <div className="lg:w-1/2 flex flex-col justify-center items-center gap-6 py-5">
+                  <h3 className="uppercase lg:self-end font-lora font-bold text-lg">
+                    A Trendy Luxury
+                  </h3>
+                  <p className="font-Poppins text-right hidden lg:block text-white leading-7">
+                    Interior design consultancy firm that brings sensitivity to
+                    the design top offices around the world. We stand for
+                    quality, safety and credibility.
+                  </p>
+                </div>
+
+                <div className="w-[1px] mx-10 bg-white"></div>
+
+                <div className="lg:w-1/2 flex flex-col space-y-10 py-5">
+                  <h2 className="text-4xl lg:text-5xl font-bold font-lora text-white">
+                    Make Your Space For Better Experience
+                  </h2>
+
+                  <button
+                    onClick={handleClick}
+                    disabled={loading}
+                    className={`capitalize bg-[#FFD074] hover:bg-[#fbc964] text-base font-Poppins font-semibold text-black h-10 w-52 rounded-3xl self-center lg:self-start flex items-center justify-center gap-2 ${
+                      loading ? "opacity-70 cursor-not-allowed" : ""
+                    }`}
+                  >
+                    {loading ? (
+                      <span className="h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+                    ) : (
+                      "discover what we do"
+                    )}
+                  </button>
+                </div>
               </div>
             </div>
           </div>
@@ -350,12 +259,7 @@ function Landing() {
             <img src="/images/home/section_1_main.png" alt="" />
           </div>
           <div className="space-y-2 flex-1">
-            <div className="flex justify-normal items-center">
-              <span className="w-8 h-px bg-[#374A75]"></span>
-              <h4 className="uppercase text-[#374A75] font-bold text-sm font-lato">
-                about interior{" "}
-              </h4>
-            </div>
+            <TitleHeader title={"about interior"} />
             <div className="space-y-8">
               <h3 className="text-[#232323] font-lora font-bold text-xl md:text-4xl">
                 We Create The Art Of Stylish <br /> Office Stylishly
@@ -472,12 +376,7 @@ function Landing() {
       {/* section 3 */}
       <section className="services relative lg:bg-[url('images/home/services_bg.png')] bg-right bg-no-repeat my-10">
         <div className="px-3 lg:container space-y-3 py-16">
-          <div className="flex justify-normal items-center">
-            <span className="w-8 h-px bg-[#374A75]"></span>
-            <h4 className="uppercase text-[#374A75] font-bold text-sm font-lato">
-              services we do
-            </h4>
-          </div>
+          <TitleHeader title={"services we do"} />
           <h3 className="font-bold text-xl md:text-4xl font-lora">
             Our Featured Services <br /> Interior Design Transformations
           </h3>
@@ -628,13 +527,7 @@ function Landing() {
       {/* section 4 */}
       <section className="testimonials px-3 lg:container pt-10 pb-5 lg:pb-20 space-y-10">
         <div className="flex flex-col items-center space-y-4">
-          <div className="flex justify-normal items-center">
-            <span className="w-8 h-px bg-[#374A75]"></span>
-            <h4 className="uppercase text-[#374A75] font-bold text-sm font-lato mx-2">
-              What People Say
-            </h4>
-            <span className="w-8 h-px bg-[#374A75]"></span>
-          </div>
+          <TitleHeader title={"What People Say"} doubleside={true} />
           <h3 className="font-bold font-lato text-4xl">Words Of Our Clients</h3>
         </div>
 
@@ -712,12 +605,7 @@ function Landing() {
       {/* section 5 */}
       <section className="before-after py-10 space-y-5">
         <div className="lg:container mx-auto hidden md:block">
-          <div className="flex justify-normal items-center">
-            <span className="w-8 h-px bg-[#374A75]"></span>
-            <h4 className="uppercase text-[#374A75] font-bold text-sm font-lato mx-2">
-              after before
-            </h4>
-          </div>
+          <TitleHeader title={"after before"} />
           <h3 className="font-bold font-lora text-4xl">
             Let's Have A Look At What <br />
             Creativity Is!
@@ -784,13 +672,7 @@ function Landing() {
       <section className="py-10 relative">
         <div className="absolute bg-[#F7F7F7] bottom-0 py-14 w-full z-0 hidden lg:block" />
         <div className="flex flex-col items-center space-y-4 py-3 z-10">
-          <div className="flex justify-normal items-center">
-            <span className="w-8 h-px bg-[#374A75]"></span>
-            <h4 className="uppercase text-[#374A75] font-bold text-sm font-lato mx-2">
-              our best projects
-            </h4>
-            <span className="w-8 h-px bg-[#374A75]"></span>
-          </div>
+          <TitleHeader title={"our best projects"} doubleside={true} />
           <h3 className="font-bold font-lato text-4xl capitalize">
             our featured projects
           </h3>
@@ -910,12 +792,7 @@ function Landing() {
           </div>
           <div className="flex-1 flex justify-end items-center flex-col space-y-2 px-3 lg:px-0">
             <div className="space-y-3 mb-6">
-              <div className="flex justify-normal items-center">
-                <span className="w-8 h-px bg-[#374A75]"></span>
-                <h4 className="uppercase text-[#374A75] font-bold text-sm font-lato mx-2">
-                  About Interior
-                </h4>
-              </div>
+              <TitleHeader title={"About Interior"} />
               <h3 className="font-bold font-lora text-4xl">
                 Strategy - Led Interior Design
               </h3>
@@ -966,13 +843,7 @@ function Landing() {
       <section className="md:container  md:mx-auto my-10">
         <div>
           <div className="flex flex-col items-center space-y-4 py-3  font-bold mb-5">
-            <div className="flex justify-normal items-center">
-              <span className="w-8 h-px bg-[#374A75]"></span>
-              <h4 className="uppercase text-[#374A75] text-xs lg:text-sm font-lato mx-2">
-                Recent Articles
-              </h4>
-              <span className="w-8 h-px bg-[#374A75]"></span>
-            </div>
+            <TitleHeader title={"Recent Articles"} doubleside={true} />
             <h3 className=" font-lora text-[#232323] text-xl lg:text-[42px] capitalize">
               Read Our Latest Articles
             </h3>

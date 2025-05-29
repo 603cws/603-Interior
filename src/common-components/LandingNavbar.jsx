@@ -19,7 +19,7 @@ function LandingNavbar({ bgColor = false }) {
     <div className="px-5 pt-3 absolute top-0 w-full z-10">
       {/* Navbar Container */}
       <div
-        className={`${bgcolor} bg-opacity-[0.72] flex justify-between items-center border rounded-full px-5 py-1.5`}
+        className={`${bgcolor} bg-opacity-[0.72] flex justify-between items-center border rounded-full  px-5 py-1.5 container mx-auto`}
       >
         {/* Logo */}
         <div className="cursor-pointer" onClick={() => navigate("/")}>
@@ -35,7 +35,7 @@ function LandingNavbar({ bgColor = false }) {
 
         {/* Desktop Menu */}
         <nav className="hidden lg:flex justify-center items-center py-4">
-          <ul className="flex gap-8 text-[#1A3A36] font-semibold uppercase stroke-nav [&_li]:cursor-pointer ">
+          <ul className="flex gap-8 text-[#1A293A] font-semibold uppercase stroke-nav [&_li]:cursor-pointer ">
             <li
               onClick={() => navigate("/")}
               className={`cursor-pointer relative after:content-[''] after:absolute after:left-0 after:bottom-[-2px] after:h-[2px] after:bg-[#1A3A36] after:transition-all after:duration-300 ${
