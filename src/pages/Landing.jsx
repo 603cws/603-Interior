@@ -25,6 +25,7 @@ import afterImage from "/images/home/after-img-one.png";
 import { FaRegUser } from "react-icons/fa";
 import { FiMessageSquare } from "react-icons/fi";
 import ReadMoreBtn from "../common-components/ReadMoreBtn";
+import { useApp } from "../Context/Context";
 
 function Landing() {
   const imageContainerRef = useRef(null);
@@ -33,6 +34,13 @@ function Landing() {
   const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
+
+  const {
+    isAuthenticated,
+    setTotalArea,
+    setCurrentLayoutID,
+    setCurrentLayoutData,
+  } = useApp();
 
   const tabData = [
     {
