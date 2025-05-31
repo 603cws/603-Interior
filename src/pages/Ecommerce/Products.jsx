@@ -11,7 +11,10 @@ import "./products.css";
 
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
 
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useApp } from "../../Context/Context";
+
+import { supabase } from "../../services/supabase";
 
 function Productitem({ image, title, width }) {
   return (
@@ -92,12 +95,16 @@ function SectionHeader({ title, isborder = true }) {
   );
 }
 
-function Card({ title, price, ispopular, populartext, image }) {
+function Card({ product }) {
   return (
     <div className="h-full">
       <div className="h-full flex flex-col border-[1px] border-[#AAAAAA] relative">
-        <img src={image} alt={title} className="bg-[#000000]/10" />
-        {ispopular && (
+        <img
+          src={product.image}
+          alt={product.title}
+          className="bg-[#000000]/10"
+        />
+        {/* {product.ispopular && (
           <span
             className={` font-lora text-[11px] capitalize absolute top-2 left-2 p-[5px] ${
               populartext === "popular"
@@ -105,18 +112,41 @@ function Card({ title, price, ispopular, populartext, image }) {
                 : "bg-[#374A75] text-white"
             }`}
           >
-            {populartext}
+            {product.populartext || "eihvihevi"}
           </span>
-        )}
+        )} */}
         <div className="px-5 flex flex-col justify-center items-center gap-3 font-lora py-3 mt-auto">
-          <p className=" text-center text-xs lg:text-sm">{title}</p>
-          <h5 className="lg:text-lg">$ {price} </h5>
+          <p className=" text-center text-xs lg:text-sm">{product.title}</p>
+          <h5 className="lg:text-lg">$ {product.price} </h5>
           <button className="flex justify-center items-center gap-2 font-Poppins text-[13px] py-1.5">
             Add to cart <BsArrowRight size={15} />{" "}
           </button>
         </div>
       </div>
     </div>
+    // <div className="h-full">
+    //   <div className="h-full flex flex-col border-[1px] border-[#AAAAAA] relative">
+    //     <img src={image} alt={title} className="bg-[#000000]/10" />
+    //     {ispopular && (
+    //       <span
+    //         className={` font-lora text-[11px] capitalize absolute top-2 left-2 p-[5px] ${
+    //           populartext === "popular"
+    //             ? "bg-[#E3F3FF] text-[#000]"
+    //             : "bg-[#374A75] text-white"
+    //         }`}
+    //       >
+    //         {populartext}
+    //       </span>
+    //     )}
+    //     <div className="px-5 flex flex-col justify-center items-center gap-3 font-lora py-3 mt-auto">
+    //       <p className=" text-center text-xs lg:text-sm">{title}</p>
+    //       <h5 className="lg:text-lg">$ {price} </h5>
+    //       <button className="flex justify-center items-center gap-2 font-Poppins text-[13px] py-1.5">
+    //         Add to cart <BsArrowRight size={15} />{" "}
+    //       </button>
+    //     </div>
+    //   </div>
+    // </div>
   );
 }
 
@@ -280,6 +310,71 @@ function Products() {
   const prevRef4 = useRef(null);
   const nextRef4 = useRef(null);
   const paginationRef4 = useRef(null);
+
+  const [data, setData] = useState();
+  const [products, setProducts] = useState([]);
+
+  //   const { productData } = useApp();
+  //   console.log(productData);
+
+  //   const fetchdata = async () => {
+  //     const getdata = await fetchProductsData();
+  //     console.log(getdata);
+
+  //     setData(getdata);
+  //     setProducts(getdata);
+  //   };
+
+  useEffect(() => {
+    // fetchdata();
+    fetchProductsData();
+  }, []);
+
+  const fetchProductsData = async () => {
+    try {
+      const { data, error } = await supabase
+        .from("product_variants")
+        .select(`* ,product_id(*)`);
+
+      if (error) throw error;
+
+      // Filter products where it is approved
+      const filtered = data.filter((item) => item.status === "approved");
+
+      // 1. Extract unique image names
+      const uniqueImages = [...new Set(filtered.map((item) => item.image))];
+
+      // 2. Generate signed URLs from Supabase Storage
+      const { data: signedUrls, error: signedUrlError } = await supabase.storage
+        .from("addon") // your bucket name
+        .createSignedUrls(uniqueImages, 3600); // 1 hour expiry
+
+      if (signedUrlError) {
+        console.error("Error generating signed URLs:", signedUrlError);
+        return;
+      }
+
+      // 3. Create a map from image name to signed URL
+      const urlMap = {};
+      signedUrls.forEach(({ path, signedUrl }) => {
+        urlMap[path] = signedUrl;
+      });
+
+      // 4. Replace image names with URLs in the array
+      const updatedProducts = filtered.map((item) => ({
+        ...item,
+        image: urlMap[item.image] || item.image, // fallback if URL not found
+      }));
+
+      console.log(updatedProducts);
+
+      setData(filtered);
+      setProducts(updatedProducts);
+    } catch (error) {
+      console.error("Error fetching filtered data:", error);
+    }
+  };
+
   const categoryies = [
     {
       name: "Furniture",
@@ -332,78 +427,78 @@ function Products() {
     { name: "ikea", image: "/images/brand2.png" },
   ];
 
-  const products = [
-    {
-      title: "Sterling Silver Heart Pendant",
-      price: 49.99,
-      ispopular: true,
-      populartext: "popular",
-      image: "/images/productChair.png",
-    },
-    {
-      title: "14k Rose Gold Stud Earrings",
-      price: 129.0,
-      ispopular: false,
-      populartext: "",
-      image: "/images/productChair.png",
-    },
-    {
-      title: "Platinum Diamond Engagement Ring",
-      price: 999.99,
-      ispopular: true,
-      populartext: "sale",
-      image: "/images/productChair.png",
-    },
-    {
-      title: "Gold-Plated Charm Bracelet",
-      price: 59.5,
-      ispopular: false,
-      populartext: "",
-      image: "/images/productChair.png",
-    },
-    {
-      title: "White Gold Wedding Band",
-      price: 149.0,
-      ispopular: true,
-      populartext: "popular",
-      image: "/images/productChair.png",
-    },
-    {
-      title: "Titanium Men's Ring",
-      price: 89.99,
-      ispopular: false,
-      populartext: "",
-      image: "/images/productChair.png",
-    },
-    {
-      title: "Sapphire and Diamond Necklace",
-      price: 289.0,
-      ispopular: true,
-      populartext: "popular",
-      image: "/images/productChair.png",
-    },
-    {
-      title: "Emerald Birthstone Ring",
-      price: 74.95,
-      ispopular: false,
-      populartext: "",
-      image: "/images/productChair.png",
-    },
-    {
-      title: "Custom Engraved Locket",
-      price: 59.99,
-      ispopular: true,
-      populartext: "popular",
-      image: "/images/productChair.png",
-    },
-    {
-      title: "Minimalist Chain Necklace",
-      price: 39.0,
-      ispopular: false,
-      populartext: "",
-      image: "/images/productChair.png",
-    },
-  ];
+  //   const products = [
+  //     {
+  //       title: "Sterling Silver Heart Pendant",
+  //       price: 49.99,
+  //       ispopular: true,
+  //       populartext: "popular",
+  //       image: "/images/productChair.png",
+  //     },
+  //     {
+  //       title: "14k Rose Gold Stud Earrings",
+  //       price: 129.0,
+  //       ispopular: false,
+  //       populartext: "",
+  //       image: "/images/productChair.png",
+  //     },
+  //     {
+  //       title: "Platinum Diamond Engagement Ring",
+  //       price: 999.99,
+  //       ispopular: true,
+  //       populartext: "sale",
+  //       image: "/images/productChair.png",
+  //     },
+  //     {
+  //       title: "Gold-Plated Charm Bracelet",
+  //       price: 59.5,
+  //       ispopular: false,
+  //       populartext: "",
+  //       image: "/images/productChair.png",
+  //     },
+  //     {
+  //       title: "White Gold Wedding Band",
+  //       price: 149.0,
+  //       ispopular: true,
+  //       populartext: "popular",
+  //       image: "/images/productChair.png",
+  //     },
+  //     {
+  //       title: "Titanium Men's Ring",
+  //       price: 89.99,
+  //       ispopular: false,
+  //       populartext: "",
+  //       image: "/images/productChair.png",
+  //     },
+  //     {
+  //       title: "Sapphire and Diamond Necklace",
+  //       price: 289.0,
+  //       ispopular: true,
+  //       populartext: "popular",
+  //       image: "/images/productChair.png",
+  //     },
+  //     {
+  //       title: "Emerald Birthstone Ring",
+  //       price: 74.95,
+  //       ispopular: false,
+  //       populartext: "",
+  //       image: "/images/productChair.png",
+  //     },
+  //     {
+  //       title: "Custom Engraved Locket",
+  //       price: 59.99,
+  //       ispopular: true,
+  //       populartext: "popular",
+  //       image: "/images/productChair.png",
+  //     },
+  //     {
+  //       title: "Minimalist Chain Necklace",
+  //       price: 39.0,
+  //       ispopular: false,
+  //       populartext: "",
+  //       image: "/images/productChair.png",
+  //     },
+  //   ];
   const Trendingproducts = [
     {
       title: "Sterling Silver Heart Pendant",
@@ -640,13 +735,7 @@ function Products() {
               >
                 {products.map((product, index) => (
                   <SwiperSlide key={index}>
-                    <Card
-                      title={product.title}
-                      price={product.price}
-                      ispopular={product.ispopular}
-                      populartext={product.populartext}
-                      image={product.image}
-                    />
+                    <Card product={product} />
                   </SwiperSlide>
                 ))}
               </Swiper>
