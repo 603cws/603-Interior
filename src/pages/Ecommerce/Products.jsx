@@ -1,0 +1,828 @@
+import { BsArrowRight } from "react-icons/bs";
+
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Grid, Navigation, Pagination } from "swiper/modules";
+import { TiArrowRight } from "react-icons/ti";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
+import "swiper/css/grid"; // this is important for grid layout!
+import "./products.css";
+
+import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
+
+import { useRef } from "react";
+
+function Productitem({ image, title, width }) {
+  return (
+    <div className="py-3 lg:py-6 px-6 lg:px-10 border border-[#374A75] max-w-xs w-full mx-auto lg:w-auto">
+      <div className="flex items-center justify-center font-lora text-base gap-4 ">
+        <div className={`${width}`}>
+          <img src={image} alt="" className={`${width}`} />
+        </div>
+        <p className="text-sm lg:text-base text-[#111]">{title}</p>
+      </div>
+    </div>
+  );
+}
+
+function BannerProduct() {
+  return (
+    <div className="max-w-60 w-full h-96 relative rounded overflow-hidden shadow-lg">
+      <img
+        src="/images/banner-chair.jpg"
+        alt="Meeting Chairs"
+        className="w-full h-full object-cover"
+      />
+
+      <div
+        className="absolute top-0 left-0 w-full bg-[#e0f4ff] text-black flex flex-col justify-evenly px-6"
+        style={{
+          clipPath: "ellipse(95% 100% at 25% 0%)",
+          height: "45%",
+        }}
+      >
+        <p className="text-xs uppercase tracking-[3px] font-lora">
+          New collection
+        </p>
+        <h2 className="text-lg font-lora tracking-wide">
+          MEETING <br /> CHAIRS
+        </h2>
+        <button className="mt-1 text-sm underline underline-offset-4 decoration-[#aaaaaa] flex items-center gap-2 group overflow-hidden relative hover:scale-105 transition-transform duration-700 ease-in-out">
+          <span className="relative z-10">Discover more</span>
+          <BsArrowRight
+            size={15}
+            className="absolute opacity-0 group-hover:opacity-100 translate-x-[550%] group-hover:translate-x-[700%] transition-transform duration-700 ease-in-out"
+          />
+        </button>
+      </div>
+    </div>
+  );
+}
+
+const ProductCard = ({ product }) => (
+  <div className="max-w-xs flex flex-col md:flex-row border border-[#191716]/80 p-3">
+    <div className="flex-1">
+      <img src={product.image} alt="trending product" />
+    </div>
+    <div className="flex-1 flex flex-col justify-center items-center gap-3 font-lora space-y-2">
+      <p className="text-center text-sm leading-[14px] tracking-[0.96px] lg:text-sm">
+        {product.title}
+      </p>
+      <h2 className="text-base leading-4 tracking-[1px] text-[#374A75]">
+        $ {product.price}
+      </h2>
+      <button className="font-Poppins text-[#000] flex gap-2 leading-[13px] tracking-[1px] text-[13px]">
+        Add to cart <BsArrowRight size={15} />
+      </button>
+    </div>
+  </div>
+);
+
+function SectionHeader({ title, isborder = true }) {
+  return (
+    <div className="flex flex-col justify-center items-center mb-10">
+      <h3 className="font-lora text-2xl text-[#111] tracking-wider uppercase mb-2">
+        {title}
+      </h3>
+      {isborder && (
+        <p className="w-[20%] lg:w-[4%] h-[1.5px] bg-[#374A75] "></p>
+      )}
+    </div>
+  );
+}
+
+function Card({ title, price, ispopular, populartext, image }) {
+  return (
+    <div className="h-full">
+      <div className="h-full flex flex-col border-[1px] border-[#AAAAAA] relative">
+        <img src={image} alt={title} className="bg-[#000000]/10" />
+        {ispopular && (
+          <span
+            className={` font-lora text-[11px] capitalize absolute top-2 left-2 p-[5px] ${
+              populartext === "popular"
+                ? "bg-[#E3F3FF] text-[#000]"
+                : "bg-[#374A75] text-white"
+            }`}
+          >
+            {populartext}
+          </span>
+        )}
+        <div className="px-5 flex flex-col justify-center items-center gap-3 font-lora py-3 mt-auto">
+          <p className=" text-center text-xs lg:text-sm">{title}</p>
+          <h5 className="lg:text-lg">$ {price} </h5>
+          <button className="flex justify-center items-center gap-2 font-Poppins text-[13px] py-1.5">
+            Add to cart <BsArrowRight size={15} />{" "}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// <div className="h-[400px]">
+//   <div className="h-full flex flex-col border-[1px] border-[#AAAAAA] relative">
+//     <div className="max-w-xs">
+//       <img src={image} alt={title} className="bg-[#000000]/10" />
+//     </div>
+//     {ispopular && (
+//       <span
+//         className={` font-lora text-[11px] capitalize absolute top-2 left-2 p-[5px] ${
+//           populartext === "popular"
+//             ? "bg-[#E3F3FF] text-[#000]"
+//             : "bg-[#374A75] text-white"
+//         }`}
+//       >
+//         {populartext}
+//       </span>
+//     )}
+//     <div className="px-5 flex flex-col justify-center items-center gap-3 font-lora py-3 mt-auto">
+//       <p className=" text-center text-xs lg:text-sm">{title}</p>
+//       <h5 className="lg:text-lg">$ {price} </h5>
+//       <button className="flex justify-center items-center gap-2 font-Poppins text-[13px] py-1.5">
+//         Add to cart <BsArrowRight size={15} />{" "}
+//       </button>
+//     </div>
+//   </div>
+// </div>
+
+const latestPosts = [
+  {
+    image: "/images/blogoffice.png",
+    date: "05",
+    month: "may",
+    subhead: "info styles",
+    title: "How to Style Mismatched Earrings",
+    description:
+      "Mismatched earrings have become a bold and trendy fashion statement, offering endless opportunities for..",
+  },
+  {
+    image: "/images/blogoffice.png",
+    date: "07",
+    month: "may",
+    subhead: "fashion tips",
+    title: "The Revival of Retro Office Attire",
+    description:
+      "Retro fashion is back, and it's taking over modern workspaces with a splash of bold colors and tailored cuts..",
+  },
+  {
+    image: "/images/blogoffice.png",
+    date: "09",
+    month: "may",
+    subhead: "workwear edit",
+    title: "Balancing Comfort and Style at Work",
+    description:
+      "Modern workwear demands both comfort and professionalism. Here’s how to strike the perfect balance..",
+  },
+  {
+    image: "/images/blogoffice.png",
+    date: "11",
+    month: "may",
+    subhead: "style hacks",
+    title: "5 Ways to Refresh Your Office Look",
+    description:
+      "Looking to spice up your office wardrobe? These simple style hacks can help you stand out while staying professional..",
+  },
+  {
+    image: "/images/blogoffice.png",
+    date: "13",
+    month: "may",
+    subhead: "minimal trends",
+    title: "Minimalist Fashion for Busy Professionals",
+    description:
+      "Clean lines and neutral tones are defining the wardrobes of today’s high-performing professionals..",
+  },
+  {
+    image: "/images/blogoffice.png",
+    date: "15",
+    month: "may",
+    subhead: "quick reads",
+    title: "Blending Colors and Patterns Like a Pro",
+    description:
+      "Don't shy away from bold patterns. Learn how to mix prints with elegance and confidence..",
+  },
+  {
+    image: "/images/blogoffice.png",
+    date: "17",
+    month: "may",
+    subhead: "style daily",
+    title: "Building a Capsule Wardrobe for Work",
+    description:
+      "Simplify your mornings with a capsule wardrobe that saves time without sacrificing style..",
+  },
+  {
+    image: "/images/blogoffice.png",
+    date: "19",
+    month: "may",
+    subhead: "trend alert",
+    title: "Top Accessories to Elevate Your Look",
+    description:
+      "From statement bags to chic scarves, these accessories are redefining office fashion..",
+  },
+  {
+    image: "/images/blogoffice.png",
+    date: "21",
+    month: "may",
+    subhead: "bold moves",
+    title: "Why Power Dressing is Making a Comeback",
+    description:
+      "The modern power suit is sleeker, more versatile, and sends the right message in any meeting..",
+  },
+  {
+    image: "/images/blogoffice.png",
+    date: "23",
+    month: "may",
+    subhead: "style diary",
+    title: "From Desk to Dinner: Outfit Transitions",
+    description:
+      "Learn how to seamlessly transition your office outfit to an evening look with just a few tweaks..",
+  },
+];
+
+function LatestPost({ post }) {
+  return (
+    <div className="max-w-sm">
+      <div className="relative">
+        <img src={post.image} alt="blogoffice" />
+        <div className="absolute  left-4 top-4 bg-white text-center px-3 py-1 shadow-md rounded-sm">
+          <div className="text-lg font-bold">{post.date}</div>
+          <div className="text-sm text-gray-500 -mt-1 uppercase">
+            {post.month}
+          </div>
+        </div>
+      </div>
+      <div className="font-lora border border-[#000]/10 p-4 space-y-3">
+        <p className="text-[#9A9A9A] text-[13px] leading-[13px] tracking-[1px]">
+          {post.subhead}
+        </p>
+        <h2 className="font-semibold text-sm leading-[14px] tracking-[0.5px]">
+          {post.title}
+        </h2>
+        <p className="text-sm tracking-[1px]">{post.description}</p>
+        <button className="font-Poppins text-[#374A75] tracking-[1px] text-sm flex gap-3 items-center">
+          Read More <TiArrowRight size={25} />
+        </button>
+      </div>
+    </div>
+  );
+}
+
+function Products() {
+  const prevRef = useRef(null);
+  const nextRef = useRef(null);
+  const paginationRef = useRef(null);
+  const prevRef2 = useRef(null);
+  const nextRef2 = useRef(null);
+  const paginationRef2 = useRef(null);
+  const prevRef3 = useRef(null);
+  const nextRef3 = useRef(null);
+  const paginationRef3 = useRef(null);
+  const prevRef4 = useRef(null);
+  const nextRef4 = useRef(null);
+  const paginationRef4 = useRef(null);
+  const categoryies = [
+    {
+      name: "Furniture",
+      imagename: "/images/icons/Furniture.png",
+    },
+    {
+      name: "Lighting",
+      imagename: "/images/icons/Lighting.png",
+    },
+    {
+      name: "Paint",
+      imagename: "/images/icons/Paint.png",
+    },
+    {
+      name: `Civil & Plumbing`,
+      imagename: "/images/icons/CivilPlumbing.png",
+    },
+    {
+      name: "Flooring",
+      imagename: "/images/icons/Flooring.png",
+    },
+    {
+      name: "Partition",
+      imagename: "/images/icons/PartitionsCeilings.png",
+    },
+    {
+      name: "HVAC",
+      imagename: "/images/icons/HVAC.png",
+    },
+    {
+      name: "Smart Solution",
+      imagename: "/images/icons/SmartSolutions.png",
+    },
+    {
+      name: "Lux",
+      imagename: "/images/icons/Lux.png",
+    },
+  ];
+
+  const brands = [
+    { name: "ikea", image: "/images/brand2.png" },
+    { name: "ikea", image: "/images/brand2.png" },
+    { name: "ikea", image: "/images/brand2.png" },
+    { name: "ikea", image: "/images/brand2.png" },
+    { name: "ikea", image: "/images/brand2.png" },
+    { name: "ikea", image: "/images/brand2.png" },
+    { name: "ikea", image: "/images/brand2.png" },
+    { name: "ikea", image: "/images/brand2.png" },
+    { name: "ikea", image: "/images/brand2.png" },
+    { name: "ikea", image: "/images/brand2.png" },
+  ];
+
+  const products = [
+    {
+      title: "Sterling Silver Heart Pendant",
+      price: 49.99,
+      ispopular: true,
+      populartext: "popular",
+      image: "/images/productChair.png",
+    },
+    {
+      title: "14k Rose Gold Stud Earrings",
+      price: 129.0,
+      ispopular: false,
+      populartext: "",
+      image: "/images/productChair.png",
+    },
+    {
+      title: "Platinum Diamond Engagement Ring",
+      price: 999.99,
+      ispopular: true,
+      populartext: "sale",
+      image: "/images/productChair.png",
+    },
+    {
+      title: "Gold-Plated Charm Bracelet",
+      price: 59.5,
+      ispopular: false,
+      populartext: "",
+      image: "/images/productChair.png",
+    },
+    {
+      title: "White Gold Wedding Band",
+      price: 149.0,
+      ispopular: true,
+      populartext: "popular",
+      image: "/images/productChair.png",
+    },
+    {
+      title: "Titanium Men's Ring",
+      price: 89.99,
+      ispopular: false,
+      populartext: "",
+      image: "/images/productChair.png",
+    },
+    {
+      title: "Sapphire and Diamond Necklace",
+      price: 289.0,
+      ispopular: true,
+      populartext: "popular",
+      image: "/images/productChair.png",
+    },
+    {
+      title: "Emerald Birthstone Ring",
+      price: 74.95,
+      ispopular: false,
+      populartext: "",
+      image: "/images/productChair.png",
+    },
+    {
+      title: "Custom Engraved Locket",
+      price: 59.99,
+      ispopular: true,
+      populartext: "popular",
+      image: "/images/productChair.png",
+    },
+    {
+      title: "Minimalist Chain Necklace",
+      price: 39.0,
+      ispopular: false,
+      populartext: "",
+      image: "/images/productChair.png",
+    },
+  ];
+  const Trendingproducts = [
+    {
+      title: "Sterling Silver Heart Pendant",
+      price: 49.99,
+      ispopular: true,
+      populartext: "popular",
+      image: "/images/trendingProduct1.png",
+    },
+    {
+      title: "14k Rose Gold Stud Earrings",
+      price: 129.0,
+      ispopular: false,
+      populartext: "",
+      image: "/images/trendingProduct1.png",
+    },
+    {
+      title: "Platinum Diamond Engagement Ring",
+      price: 999.99,
+      ispopular: true,
+      populartext: "sale",
+      image: "/images/trendingProduct1.png",
+    },
+    {
+      title: "Gold-Plated Charm Bracelet",
+      price: 59.5,
+      ispopular: false,
+      populartext: "",
+      image: "/images/trendingProduct1.png",
+    },
+    {
+      title: "White Gold Wedding Band",
+      price: 149.0,
+      ispopular: true,
+      populartext: "popular",
+      image: "/images/trendingProduct1.png",
+    },
+    {
+      title: "Titanium Men's Ring",
+      price: 89.99,
+      ispopular: false,
+      populartext: "",
+      image: "/images/trendingProduct1.png",
+    },
+    {
+      title: "Sapphire and Diamond Necklace",
+      price: 289.0,
+      ispopular: true,
+      populartext: "popular",
+      image: "/images/trendingProduct1.png",
+    },
+    {
+      title: "Emerald Birthstone Ring",
+      price: 74.95,
+      ispopular: false,
+      populartext: "",
+      image: "/images/trendingProduct1.png",
+    },
+    {
+      title: "Custom Engraved Locket",
+      price: 59.99,
+      ispopular: true,
+      populartext: "popular",
+      image: "/images/trendingProduct1.png",
+    },
+    {
+      title: "Minimalist Chain Necklace",
+      price: 39.0,
+      ispopular: false,
+      populartext: "",
+      image: "/images/trendingProduct1.png",
+    },
+  ];
+
+  const EcommerceFeatures = [
+    {
+      title: "EASY PAYMENT",
+      image: "/images/payment.png",
+      width: "w-8",
+    },
+    {
+      title: "FREE SHIPPMENT",
+      image: "/images/shippment.png",
+      width: "w-12",
+    },
+    {
+      title: "EASY INSTALLATION",
+      image: "/images/install.png",
+      width: "w-8",
+    },
+    {
+      title: "GIFT CARTS",
+      image: "/images/gift.png",
+      width: "w-8",
+    },
+  ];
+
+  return (
+    <div>
+      {/* section 2 */}
+      <section>
+        <div className="lg:container lg:mx-auto my-10">
+          <div className="flex flex-col gap-2 md:flex-row justify-between items-stretch ">
+            {EcommerceFeatures.map((feature) => (
+              <Productitem
+                image={feature.image}
+                width={feature.width}
+                title={feature.title}
+                key={feature.title}
+              />
+            ))}
+          </div>
+        </div>
+      </section>
+      {/* section 3 */}
+      <section>
+        <div className="lg:container lg:mx-auto my-10">
+          <SectionHeader title={"Shop by categories"} isborder={false} />
+          <div className="flex overflow-x-auto items-center justify-around my-10 gap-6">
+            {categoryies.map((cat) => (
+              <div
+                className="flex flex-col lg:justify-center  lg:items-center gap-3"
+                key={cat.name}
+              >
+                <div className="bg-[#F8F8F8] border border-[#ccc] p-4 w-16 h-16 xl:w-20 xl:h-20">
+                  <img src={cat.imagename} alt="category" className="" />
+                </div>
+                <h3 className="font-lora text-[#111] text-xs lg:text-sm">
+                  {cat.name}
+                </h3>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* section 4 */}
+      {/* <section>
+        <div className="md:container md:mx-auto my-10">
+          <SectionHeader title={"Featured products"} />
+          <div className="flex gap-4">
+            <div className="space-y-8">
+              <BannerProduct />
+              <BannerProduct />
+            </div>
+            <div className="flex-1 grid grid-cols-2 md:grid-cols-3 lg:gird-cols-4 xl:grid-cols-4 items-stretch gap-4">
+              {products.map((product) => (
+                <Card
+                  title={product.title}
+                  price={product.price}
+                  ispopular={product.ispopular}
+                  populartext={product.populartext}
+                  image={product.image}
+                  key={product.title}
+                />
+              ))}
+            </div>
+          </div>
+        </div>
+      </section> */}
+
+      <section>
+        <SectionHeader title={"Featured products"} />
+        <div className="container px-4 lg:px-12 mx-auto my-10">
+          <div className="hidden md:flex justify-end gap-3">
+            <button
+              ref={prevRef3}
+              className=" text-[#304778] disabled:text-gray-400"
+            >
+              <MdKeyboardArrowLeft size={30} />
+            </button>
+            <button
+              ref={nextRef3}
+              className=" text-[#304778] disabled:text-gray-400"
+            >
+              <MdKeyboardArrowRight size={30} />
+            </button>
+          </div>
+          <div className="flex flex-col md:flex-row gap-6">
+            {/* Left side banners */}
+            <div className="flex flex-col items-center gap-6 md:w-1/4 w-full">
+              <BannerProduct />
+              <BannerProduct />
+            </div>
+
+            {/* Right side Swiper grid */}
+            <div className="md:w-3/4 w-full relative">
+              <div className="md:hidden flex justify-end gap-3">
+                <button ref={prevRef4}>
+                  <MdKeyboardArrowLeft size={30} color="#304778" />
+                </button>
+                <button ref={nextRef4}>
+                  <MdKeyboardArrowRight size={30} color="#304778" />
+                </button>
+              </div>
+              <Swiper
+                onBeforeInit={(swiper) => {
+                  swiper.params.navigation.prevEl =
+                    prevRef3.current || prevRef4.current;
+                  swiper.params.navigation.nextEl =
+                    nextRef3.current || nextRef4.current;
+                  swiper.params.pagination.el = paginationRef3.current;
+                }}
+                onSwiper={(swiper) => {
+                  swiper.navigation.init();
+                  swiper.navigation.update();
+                  swiper.pagination.init();
+                  swiper.pagination.update();
+                }}
+                modules={[Grid, Navigation, Pagination]}
+                slidesPerView={4}
+                grid={{
+                  rows: 2,
+                  fill: "row",
+                }}
+                spaceBetween={30}
+                className="relative pb-10"
+                breakpoints={{
+                  0: {
+                    slidesPerView: 2.02,
+                    grid: { rows: 2 },
+                    spaceBetween: 10,
+                  },
+                  768: {
+                    slidesPerView: 3,
+                    grid: { rows: 2 },
+                    spaceBetween: 24,
+                  },
+                  1024: {
+                    slidesPerView: 4,
+                    grid: { rows: 2 },
+                    spaceBetween: 30,
+                  },
+                }}
+              >
+                {products.map((product, index) => (
+                  <SwiperSlide key={index}>
+                    <Card
+                      title={product.title}
+                      price={product.price}
+                      ispopular={product.ispopular}
+                      populartext={product.populartext}
+                      image={product.image}
+                    />
+                  </SwiperSlide>
+                ))}
+              </Swiper>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* section 5 */}
+      <section>
+        <div className="lg:container lg:mx-auto my-10">
+          <SectionHeader title={"Shop by brands"} />
+          <div className="grid grid-cols-3 lg:grid-cols-5 place-items-center gap-2">
+            {brands.map((brand, index) => (
+              <div className="" key={index}>
+                <img src={brand.image} alt={brand.name} className="w-32" />
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* section 6*/}
+      <section>
+        <SectionHeader title={"Trending products"} />
+        <div className="container px-4 lg:px-12 mx-auto my-10">
+          <div className="relative">
+            <Swiper
+              onBeforeInit={(swiper) => {
+                swiper.params.navigation.prevEl = prevRef.current;
+                swiper.params.navigation.nextEl = nextRef.current;
+                swiper.params.pagination.el = paginationRef.current;
+              }}
+              onSwiper={(swiper) => {
+                swiper.navigation.init();
+                swiper.navigation.update();
+                swiper.pagination.init();
+                swiper.pagination.update();
+              }}
+              //   onBeforeInit={(swiper) => {
+              //     swiper.params.navigation.prevEl = prevRef.current;
+              //     swiper.params.navigation.nextEl = nextRef.current;
+              //     swiper.params.pagination.el = paginationRef.current;
+              //   }}
+              //   onSwiper={(swiper) => {
+              //     swiper.params.navigation.prevEl = ".swiper-button-prev";
+              //     swiper.params.navigation.nextEl = ".swiper-button-next";
+              //     swiper.navigation.init();
+              //     swiper.navigation.update();
+              //   }}
+              modules={[Grid, Navigation, Pagination]}
+              slidesPerView={4}
+              grid={{
+                rows: 2,
+                fill: "row",
+              }}
+              spaceBetween={30}
+              //   navigation={{
+              //     nextEl: ".swiper-button-next",
+              //     prevEl: ".swiper-button-prev",
+              //   }}
+              //   pagination={{ clickable: true, el: ".custom-pagination" }}
+              className="relative pb-10"
+              breakpoints={{
+                0: {
+                  slidesPerView: 2.02,
+                  grid: { rows: 2 },
+                  spaceBetween: 10,
+                },
+                768: {
+                  slidesPerView: 3,
+                  grid: { rows: 2 },
+                  spaceBetween: 24,
+                },
+                1024: {
+                  slidesPerView: 4,
+                  grid: { rows: 2 },
+                  spaceBetween: 30,
+                },
+              }}
+            >
+              {Trendingproducts.map((product, index) => (
+                <SwiperSlide key={index}>
+                  <ProductCard product={product} />
+                </SwiperSlide>
+              ))}
+            </Swiper>
+            {/* Custom arrows */}
+            <div
+              ref={prevRef}
+              className="swiper-button-prev custom-nav absolute top-1/2 -left-10 transform -translate-y-1/2 w-10 h-10 bg-white rounded-full shadow z-50"
+            />
+            <div
+              ref={nextRef}
+              className="swiper-button-next custom-nav absolute top-1/2 -right-10 transform -translate-y-1/2 w-10 h-10 bg-white rounded-full shadow z-50"
+            />
+          </div>
+
+          {/* Custom pagination */}
+          <div
+            ref={paginationRef}
+            className="custom-pagination mt-4 flex justify-center gap-2"
+          />
+        </div>
+      </section>
+
+      <section>
+        <SectionHeader title={"Latest posts"} />
+        <div className="container mx-auto px-4 lg:px-12 my-10">
+          <div className="relative">
+            <Swiper
+              onBeforeInit={(swiper) => {
+                swiper.params.navigation.prevEl = prevRef2.current;
+                swiper.params.navigation.nextEl = nextRef2.current;
+                swiper.params.pagination.el = paginationRef2.current;
+              }}
+              onSwiper={(swiper) => {
+                swiper.navigation.init();
+                swiper.navigation.update();
+                swiper.pagination.init();
+                swiper.pagination.update();
+              }}
+              modules={[Grid, Navigation, Pagination]}
+              slidesPerView={4}
+              grid={{
+                rows: 1,
+                fill: "row",
+              }}
+              spaceBetween={30}
+              //   navigation={{
+              //     nextEl: ".swiper-button-next",
+              //     prevEl: ".swiper-button-prev",
+              //   }}
+              //   pagination={{ clickable: true, el: ".custom-pagination" }}
+              className="relative pb-10"
+              breakpoints={{
+                0: {
+                  slidesPerView: 1,
+                  spaceBetween: 10,
+                },
+                768: {
+                  slidesPerView: 2,
+                  spaceBetween: 10,
+                },
+                1024: {
+                  slidesPerView: 3,
+                  spaceBetween: 30,
+                },
+              }}
+            >
+              {latestPosts.map((post, index) => (
+                <SwiperSlide key={index}>
+                  <LatestPost post={post} key={post.title} />
+                </SwiperSlide>
+              ))}
+            </Swiper>
+            {/* Custom arrows */}
+            <div
+              ref={prevRef2}
+              className="swiper-button-prev custom-nav absolute top-1/2 -left-10 transform -translate-y-1/2 w-10 h-10 bg-white rounded-full shadow z-50"
+            />
+            <div
+              ref={nextRef2}
+              className="swiper-button-next custom-nav absolute top-1/2 -right-10 transform -translate-y-1/2 w-10 h-10 bg-white rounded-full shadow z-50"
+            />
+          </div>
+
+          {/* Custom pagination */}
+          <div
+            ref={paginationRef2}
+            className="custom-pagination mt-4 flex justify-center gap-2"
+          />
+        </div>
+      </section>
+    </div>
+  );
+}
+
+export default Products;

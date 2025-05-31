@@ -44,6 +44,7 @@ import PartnerWorkvedInterior from "./pages/PartnerWorkvedInterior";
 import Privacy from "./pages/Privacy";
 import OurWork from "./pages/OurWork";
 import InteriorBlog from "./pages/InteriorBlog";
+import Products from "./pages/Ecommerce/Products";
 
 const Home = lazy(() => import("./pages/Home"));
 
@@ -167,6 +168,7 @@ function App() {
             <Route path="/scroll" element={<DoorScrollEffect />} />
             <Route path="/interiorWork" element={<OurWork />} />
             <Route path="/home" element={<Home />} />
+            <Route path="/products" element={<Products />} />
           </Routes>
         )}
       </Suspense>
