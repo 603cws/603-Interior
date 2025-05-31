@@ -120,8 +120,10 @@ function Boq() {
 
   useEffect(() => {
     // Check localStorage to decide if the tour should run
-    const hasSeenTour = localStorage.getItem("hasSeenBOQTour");
-    const hasSeenPopup = localStorage.getItem("hasSeenQuestionPopup");
+    if (!selectedPlan) return; // Ensure selectedPlan is set before running the tour
+    const hasSeenTour = localStorage.getItem("hasSeenBOQTour") === "true";
+    const hasSeenPopup =
+      localStorage.getItem("hasSeenQuestionPopup") === "true";
 
     if (!hasSeenTour) {
       setRunTour(true); // Start the tour automatically on first visit
@@ -129,7 +131,7 @@ function Boq() {
       setQuestionPopup(true);
       localStorage.setItem("hasSeenQuestionPopup", "true");
     }
-  }, []);
+  }, [selectedPlan]);
 
   useEffect(() => {
     if (defaultProduct && selectedPlan && productData.length > 0) {
@@ -413,35 +415,37 @@ function Boq() {
 
   return (
     <div>
-      <Joyride
-        steps={tourSteps}
-        run={runTour}
-        continuous
-        showSkipButton
-        callback={handleTourCallback}
-        scrollToFirstStep
-        styles={{
-          options: {
-            zIndex: 10000,
-            primaryColor: "#6366f1", // Tailwind's Indigo-500
-            backgroundColor: "#A9D3CE",
-            arrowColor: "#A9D3CE",
-            overlayColor: "rgba(0, 0, 0, 0.5)",
-          },
-          buttonNext: {
-            backgroundColor: "#34bfad",
-            borderRadius: 4,
-            color: "#000",
-            padding: 10,
-            font: "semibold",
-          },
-          buttonSkip: {
-            color: "#797979",
-            font: "semibold",
-            fontSize: 16,
-          },
-        }}
-      />
+      {selectedPlan && (
+        <Joyride
+          steps={tourSteps}
+          run={runTour}
+          continuous
+          showSkipButton
+          callback={handleTourCallback}
+          scrollToFirstStep
+          styles={{
+            options: {
+              zIndex: 10000,
+              primaryColor: "#6366f1", // Tailwind's Indigo-500
+              backgroundColor: "#A9D3CE",
+              arrowColor: "#A9D3CE",
+              overlayColor: "rgba(0, 0, 0, 0.5)",
+            },
+            buttonNext: {
+              backgroundColor: "#34bfad",
+              borderRadius: 4,
+              color: "#000",
+              padding: 10,
+              font: "semibold",
+            },
+            buttonSkip: {
+              color: "#797979",
+              font: "semibold",
+              fontSize: 16,
+            },
+          }}
+        />
+      )}
       <Navbar
         toggleProfile={toggleProfile}
         iconRef={iconRef}

@@ -1,4 +1,3 @@
-import React from "react";
 import AreaCounter from "./AreaCounter";
 import Tooltip from "./ToolTip";
 import { useApp } from "../../Context/Context";

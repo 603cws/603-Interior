@@ -579,7 +579,7 @@ function Layout() {
 
   useEffect(() => {
     // Check localStorage to decide if the tour should run
-    const hasSeenTour = localStorage.getItem("hasSeenLayoutTour");
+    const hasSeenTour = localStorage.getItem("hasSeenLayoutTour") === "true";
     if (!hasSeenTour) {
       setRunTour(true); // Start the tour automatically on first visit
     }

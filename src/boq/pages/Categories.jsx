@@ -1,4 +1,3 @@
-import React from "react"; //{ useState, useEffect }
 import { useApp } from "../../Context/Context";
 import { motion, AnimatePresence } from "framer-motion";
 
