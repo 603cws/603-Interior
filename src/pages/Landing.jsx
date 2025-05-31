@@ -165,6 +165,10 @@ function Landing() {
     setLoading(true);
     navigate("/Layout");
   };
+  const handleProductClick = () => {
+    setLoading(true);
+    navigate("/products");
+  };
 
   function TitleHeader({ title, doubleside = false }) {
     return (
@@ -228,7 +232,7 @@ function Landing() {
                       )}
                     </button>
                     <button
-                      // onClick={handleClick}
+                      onClick={handleProductClick}
                       disabled={loading}
                       className={`capitalize bg-[#FFD074] hover:bg-[#fbc964] text-base font-Poppins font-semibold text-black h-10 w-52 rounded-3xl self-center lg:self-start flex items-center justify-center gap-2 ${
                         loading ? "opacity-70 cursor-not-allowed" : ""

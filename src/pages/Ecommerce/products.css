@@ -1,0 +1,48 @@
+/* Position arrows outside the Swiper */
+.custom-nav {
+  top: 40%;
+  width: 2rem;
+  height: 2rem;
+  background-color: white;
+  border-radius: 9999px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  color: #333;
+  z-index: 10;
+}
+
+@media (min-width: 1024px) {
+  .swiper-button-prev.custom-nav {
+    left: -2.5rem !important;
+  }
+
+  .swiper-button-next.custom-nav {
+    right: -2.5rem;
+  }
+}
+.swiper-button-prev.custom-nav {
+  left: -1.5rem;
+}
+
+.swiper-button-next.custom-nav {
+  right: -1.5rem;
+}
+
+/* Optional: Adjust arrow icons */
+.custom-nav::after {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+/* Pagination styling */
+.custom-pagination .swiper-pagination-bullet {
+  background-color: #ccc;
+  opacity: 1;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  transition: background-color 0.3s ease;
+}
+
+.custom-pagination .swiper-pagination-bullet-active {
+  background-color: #333;
+}
