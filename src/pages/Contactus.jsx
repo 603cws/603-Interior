@@ -95,9 +95,9 @@ function Contactus() {
         <HeroSection background={background} title={"Contact"} />
       </div>
 
-      <section className="hidden sm:block pt-8 lg:h-screen 3xl:h-[50vh] md:container md:mx-auto">
-        <div className=" py-3 flex flex-col-reverse lg:flex-row lg:justify-center lg:items-center  gap-10 h-full 3xl:h-[600px] relative -top-1/6">
-          <div className="lg:relative lg:flex-1 lg:h-full  3xl:h-[600px]">
+      <section className="hidden sm:block pt-8 lg:h-screen 3xl:h-[75vh] md:container md:mx-auto">
+        <div className=" py-3 flex flex-col-reverse lg:flex-row lg:justify-center lg:items-center  gap-10 h-full 3xl:h-full relative -top-1/6">
+          <div className="lg:relative lg:flex-1 lg:h-full  3xl:h-[720px]">
             <div className="max-w-2xl bg-[#304778] text-white lg:absolute lg:-top-1/4">
               <div className="px-10 py-10 rounded-3xl pb-5 ">
                 {/* text */}

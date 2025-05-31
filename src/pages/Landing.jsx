@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useRef } from "react";
 import LandingNavbar from "../common-components/LandingNavbar";
 
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -163,7 +163,6 @@ function Landing() {
       setCurrentLayoutData({});
     }
     setLoading(true);
-    // Optionally add a timeout if navigation doesn't cause full re-render
     navigate("/Layout");
   };
 
@@ -195,39 +194,7 @@ function Landing() {
           <LandingNavbar />
           <div className="flex justify-center items-center h-svh tranform translate-y-[8%]">
             <div className="flex-1 flex flex-col gap-10 lg:gap-0 justify-center items-center text-white max-h-fit max-w-fit mx-auto lg:p-5 rounded-xl">
-              {/* <div className="lg:flex max-w-6xl px-5 py-5 space-y-10  items-stretch">
-                <div className="lg:w-3/5 flex flex-col  justify-center items-center  gap-6">
-                  <h3 className="uppercase lg:self-end font-lato font-bold text-lg">
-                    A Trendy Luxury
-                  </h3>
-                  <p className="font-Poppins text-right hidden lg:block">
-                    Interior design consultancy firm that brings sensitivity to
-                    the design top offices around the world. We stand for
-                    quality, safety and credibility.
-                  </p>
-                </div>
-                <div className="w-px mx-10 bg-white"></div>
-                <div className="lg:w-2/5 space-y-10 flex flex-col">
-                  <h2 className="text-4xl lg:text-5xl font-bold font-lato ">
-                    Make Your Space For Better Experience
-                  </h2>
-
-                  <button
-                    onClick={handleClick}
-                    disabled={loading}
-                    className={`capitalize bg-[#FFD074] hover:bg-[#fbc964] text-base font-semibold text-black h-10 w-52  rounded-3xl self-center lg:self-start flex items-center justify-center gap-2 ${
-                      loading ? "opacity-70 cursor-not-allowed" : ""
-                    }`}
-                  >
-                    {loading ? (
-                      <span className="h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
-                    ) : (
-                      "discover what we do"
-                    )}
-                  </button>
-                </div>
-              </div> */}
-              <div className="lg:flex max-w-6xl px-5  items-stretch bg-[#000]/25 backdrop-blur-md border border-white/20 shadow-lg rounded-xl">
+              <div className="lg:flex max-w-6xl px-5  items-stretch bg-[#000]/25 backdrop-blur-sm border border-white/20 shadow-lg rounded-xl">
                 <div className="lg:w-1/2 flex flex-col justify-center items-center gap-6 py-5">
                   <h3 className="uppercase lg:self-end font-lora font-bold text-lg">
                     A Trendy Luxury
@@ -246,7 +213,35 @@ function Landing() {
                     Make Your Space For Better Experience
                   </h2>
 
-                  <button
+                  <div className="flex justify-between">
+                    <button
+                      onClick={handleClick}
+                      disabled={loading}
+                      className={`capitalize bg-[#FFD074] hover:bg-[#fbc964] text-base font-Poppins font-semibold text-black h-10 w-52 rounded-3xl self-center lg:self-start flex items-center justify-center gap-2 ${
+                        loading ? "opacity-70 cursor-not-allowed" : ""
+                      }`}
+                    >
+                      {loading ? (
+                        <span className="h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+                      ) : (
+                        "make your space"
+                      )}
+                    </button>
+                    <button
+                      // onClick={handleClick}
+                      disabled={loading}
+                      className={`capitalize bg-[#FFD074] hover:bg-[#fbc964] text-base font-Poppins font-semibold text-black h-10 w-52 rounded-3xl self-center lg:self-start flex items-center justify-center gap-2 ${
+                        loading ? "opacity-70 cursor-not-allowed" : ""
+                      }`}
+                    >
+                      {loading ? (
+                        <span className="h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+                      ) : (
+                        "shop by products"
+                      )}
+                    </button>
+                  </div>
+                  {/* <button
                     onClick={handleClick}
                     disabled={loading}
                     className={`capitalize bg-[#FFD074] hover:bg-[#fbc964] text-base font-Poppins font-semibold text-black h-10 w-52 rounded-3xl self-center lg:self-start flex items-center justify-center gap-2 ${
@@ -258,7 +253,7 @@ function Landing() {
                     ) : (
                       "discover what we do"
                     )}
-                  </button>
+                  </button> */}
                 </div>
               </div>
             </div>
@@ -267,7 +262,7 @@ function Landing() {
       </section>
 
       {/* section 2 */}
-      <section className="about-us px-3 lg:container pt-10 ">
+      <section className="about-us px-3 md:container lg:max-w-7xl mx-auto pt-10 ">
         <div className="lg:flex gap-12">
           <div className="pb-6 lg:pb-0">
             <img src="/images/home/section_1_main.png" alt="" />
@@ -275,10 +270,10 @@ function Landing() {
           <div className="space-y-2 flex-1">
             <TitleHeader title={"about interior"} />
             <div className="space-y-8">
-              <h3 className="text-[#232323] font-lora font-bold text-xl md:text-4xl">
+              <h3 className="text-[#232323] font-lora font-bold text-xl md:text-4xl tracking-wider">
                 We Create The Art Of Stylish <br /> Office Stylishly
               </h3>
-              <p className="leading-7 font-lato">
+              <p className="leading-7 font-lato tracking-wider">
                 Interior design consultancy firm that brings sensitivity to the
                 design top restaurants, hotels, offices & homes around the
                 world. We stand for quality, safety and credibility, so you
@@ -308,20 +303,20 @@ function Landing() {
               </div>
 
               {/* Desktop Content */}
-              <div className="hidden md:flex space-x-5 mt-4">
+              <div className="hidden md:block ">
                 {tabData
                   .filter((tab) => tab.key === activeTab)
                   .map((tab) => (
-                    <div key={tab.key}>
+                    <div key={tab.key} className="flex space-x-5 mt-4">
                       <img
                         key="img"
                         src={tab.img}
                         alt=""
                         className="h-64 w-56"
                       />
-                      <div className="space-y-1" key="text">
+                      <div className="space-y-1 tracking-wider" key="text">
                         <p>{tab.text}</p>
-                        <div className="space-y-1">
+                        <div className="!mt-5">
                           {tab.points.map((point, i) => (
                             <div className="flex items-start space-x-2" key={i}>
                               <IoMdCheckmarkCircleOutline size={20} />
@@ -389,9 +384,9 @@ function Landing() {
       </section>
       {/* section 3 */}
       <section className="services relative lg:bg-[url('images/home/services_bg.png')] bg-right bg-no-repeat my-10">
-        <div className="px-3 lg:container space-y-3 py-16">
+        <div className="px-3 md:container lg:max-w-7xl mx-auto space-y-3 py-16">
           <TitleHeader title={"services we do"} />
-          <h3 className="font-bold text-xl md:text-4xl font-lora">
+          <h3 className="font-bold text-xl md:text-4xl font-lora !leading-[45px] tracking-wider">
             Our Featured Services <br /> Interior Design Transformations
           </h3>
 
@@ -539,10 +534,12 @@ function Landing() {
       </section>
 
       {/* section 4 */}
-      <section className="testimonials px-3 lg:container pt-10 pb-5 lg:pb-20 space-y-10">
+      <section className="testimonials px-3 md:container lg:max-w-7xl mx-auto pt-10 pb-5 lg:pb-20 space-y-10">
         <div className="flex flex-col items-center space-y-4">
           <TitleHeader title={"What People Say"} doubleside={true} />
-          <h3 className="font-bold font-lato text-4xl">Words Of Our Clients</h3>
+          <h3 className="font-bold font-lato text-4xl tracking-wider">
+            Words Of Our Clients
+          </h3>
         </div>
 
         {/* Mobile & Tablet View */}
@@ -618,16 +615,16 @@ function Landing() {
 
       {/* section 5 */}
       <section className="before-after py-10 space-y-5">
-        <div className="lg:container mx-auto hidden md:block">
+        <div className="md:container lg:max-w-7xl mx-auto hidden md:block">
           <TitleHeader title={"after before"} />
-          <h3 className="font-bold font-lora text-4xl">
+          <h3 className="font-bold font-lora text-4xl tracking-wider">
             Let's Have A Look At What <br />
             Creativity Is!
           </h3>
         </div>
         <div
           ref={imageContainerRef}
-          className="relative w-full max-w-7xl  h-[500px] overflow-hidden "
+          className="relative w-full  lg:max-w-7xl 3xl:mx-auto  h-[500px] overflow-hidden "
         >
           {/* Before image */}
           <img
@@ -653,7 +650,6 @@ function Landing() {
             className="absolute top-0 bottom-0"
             style={{ left: `${sliderPos}%`, transform: "translateX(-50%)" }}
           >
-            {/* <div className="h-full w-1 bg-white shadow-md" /> */}
             <div
               onMouseDown={(e) => {
                 e.preventDefault();
@@ -687,13 +683,13 @@ function Landing() {
         <div className="absolute bg-[#F7F7F7] bottom-0 py-14 w-full z-0 hidden lg:block" />
         <div className="flex flex-col items-center space-y-4 py-3 z-10">
           <TitleHeader title={"our best projects"} doubleside={true} />
-          <h3 className="font-bold font-lato text-4xl capitalize">
+          <h3 className="font-bold font-lato text-4xl capitalize tracking-wider">
             our featured projects
           </h3>
         </div>
         {/* Desktop layout */}
         <div className="relative z-10 w-full justify-end hidden lg:flex">
-          <div className="max-w-7xl flex justify-end gap-5">
+          <div className="max-w-7xl 3xl:mx-auto flex justify-end gap-5">
             <img
               src="/images/home/featured-project-1.png"
               alt=""
@@ -750,7 +746,7 @@ function Landing() {
 
       {/* section 7 */}
       <section className="bg-[#F7F7F7] py-10 md:py-5">
-        <div className="px-3 lg:container ">
+        <div className="px-3 md:container lg:max-w-7xl mx-auto ">
           <div className="w-full grid grid-cols-2 lg:grid-cols-4 gap-y-5 gap-x-5">
             <div className="flex lg:justify-center items-center gap-2.5">
               <img
@@ -798,26 +794,26 @@ function Landing() {
       </section>
 
       {/* section 8 */}
-      <section className="py-10 relative">
+      <section className="py-10 relative ">
         <div className="absolute bg-[#F7F7F7] top-0 py-14 w-full z-0 hidden lg:block"></div>
-        <div className="relative z-10 max-w-7xl lg:flex gap-10">
+        <div className="relative z-10 max-w-7xl 3xl:mx-auto lg:flex gap-10">
           <div className="flex-1">
             <img src="images/home/about-interior.png" alt="" />
           </div>
           <div className="flex-1 flex justify-end items-center flex-col space-y-2 px-3 lg:px-0">
             <div className="space-y-3 mb-6">
               <TitleHeader title={"About Interior"} />
-              <h3 className="font-bold font-lora text-4xl">
+              <h3 className="font-bold font-lora text-4xl tracking-wider">
                 Strategy - Led Interior Design
               </h3>
-              <p className="font-lato text-base text-[#000000]/65">
+              <p className="font-lato text-base text-[#000000]/65 tracking-wider">
                 We work to ensure people’s comfort at their home, and to provide
                 the best and the fastest help at fair prices. We stand for
                 quality, safety and cred
               </p>
             </div>
-            <div className="md:flex gap-2">
-              <div className="flex-1 font-lato space-y-5">
+            <div className="md:flex">
+              <div className=" font-lato space-y-5">
                 <img src="images/icons/modern-living.svg" alt="" />
                 <h4 className="font-bold text-xl  ">Modern living quarter</h4>
                 <p className="text-[#000000]/65">
@@ -825,7 +821,8 @@ function Landing() {
                   collaborative
                 </p>
               </div>
-              <div className="flex-1 font-lato space-y-5">
+              <div className="w-px bg-[#000000]/20 mx-10"></div>
+              <div className=" font-lato space-y-5">
                 <img src="images/icons/inter-art.svg" alt="" />
                 <h4 className="font-bold text-xl  ">
                   Interior Inter Art Design
@@ -836,7 +833,7 @@ function Landing() {
                 </p>
               </div>
             </div>
-            <div className="md:flex gap-5">
+            <div className="md:flex gap-5 !mt-5">
               <img
                 src="/images/icons/star-full.svg"
                 alt=""
@@ -854,7 +851,7 @@ function Landing() {
       </section>
 
       {/* section 9 */}
-      <section className="md:container  md:mx-auto my-10">
+      <section className="md:container 3xl:max-w-7xl 3xl:px-0  md:mx-auto my-10">
         <div>
           <div className="flex flex-col items-center space-y-4 py-3  font-bold mb-5">
             <TitleHeader title={"Recent Articles"} doubleside={true} />
@@ -863,7 +860,7 @@ function Landing() {
             </h3>
           </div>
         </div>
-        <div className="hidden md:flex flex-col md:flex-row  justify-center items-center gap-10  lg:gap-4">
+        <div className="hidden md:flex flex-col md:flex-row  justify-between items-center gap-10  lg:gap-4">
           {latestArticles.map((article, index) => (
             <div key={index} className="max-w-sm">
               <div className="relative">
