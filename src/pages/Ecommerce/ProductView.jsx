@@ -1,17 +1,21 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { MdOutlineKeyboardArrowRight } from "react-icons/md"; //MdOutlineKeyboardArrowLeft
 import { AiFillStar } from "react-icons/ai";
 import { useParams } from "react-router-dom";
 import { supabase } from "../../services/supabase";
 import { MdOutlineLocalShipping } from "react-icons/md";
 import { BsArrowRight } from "react-icons/bs";
-
+import { CiHeart } from "react-icons/ci";
+import { FaHeart } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import ReusableSwiper from "./ReusableSwiper";
 
 function ProductView() {
   const [mainImageHovered, setMainImageHovered] = useState(false); // For main image hover effect
   const [hoveredImage, setHoveredImage] = useState(null); // For additional image hover effect
   const [product, setproduct] = useState();
+  const [similarProducts, setSimilarProducts] = useState();
+  const [productsMayLike, setProductsMayLike] = useState();
   const [productqunatity, setProductquantity] = useState(1);
 
   const navigate = useNavigate();
@@ -61,9 +65,136 @@ function ProductView() {
       console.log(error);
     }
   }
+  async function fetchSimilarproduct() {
+    try {
+      //get the current product
+      const { data: product, error: Err } = await supabase
+        .from("product_variants")
+        .select("*,product_id(*)") // or specify fields like "name, price"
+        .eq("id", productid)
+        .single();
+
+      //getting all the products
+      const { data, error } = await supabase
+        .from("product_variants")
+        .select("*,product_id(*)");
+
+      if (error) throw new Error(error);
+
+      // Filter products where it is approved
+
+      const filterdata = data.filter(
+        (item) =>
+          item.status === "approved" &&
+          item.product_id.category !== "Partitions / Ceilings" &&
+          item.product_id.category !== "Civil / Plumbing"
+      );
+
+      //similar product
+      const similarFiltered = filterdata.filter(
+        (item) =>
+          item.id !== product.id && item.product_type === product.product_type
+      );
+
+      //productmaylike filter
+      const productmaylikeFiltered = filterdata.filter(
+        (item) =>
+          item.id !== product.id &&
+          item.product_id.category === product.product_id.category
+      );
+
+      // 1. Extract unique image names
+      const uniqueImages = [...new Set(data.map((item) => item.image))];
+      //   const uniqueImages = [
+      //     ...new Set(similarFiltered.map((item) => item.image)),
+      //   ];
+
+      // 2. Generate signed URLs from Supabase Storage
+      const { data: signedUrls, error: signedUrlError } = await supabase.storage
+        .from("addon") // your bucket name
+        .createSignedUrls(uniqueImages, 3600); // 1 hour expiry
+
+      if (signedUrlError) {
+        console.error("Error generating signed URLs:", signedUrlError);
+        return;
+      }
+
+      // 3. Create a map from image name to signed URL
+      const urlMap = {};
+      signedUrls.forEach(({ path, signedUrl }) => {
+        urlMap[path] = signedUrl;
+      });
+
+      // 4. Replace image names with URLs in the array
+      const updatedProducts = similarFiltered.map((item) => ({
+        ...item,
+        image: urlMap[item.image] || item.image, // fallback if URL not found
+      }));
+      const updatedproductmaylike = productmaylikeFiltered.map((item) => ({
+        ...item,
+        image: urlMap[item.image] || item.image, // fallback if URL not found
+      }));
+
+      setSimilarProducts(updatedProducts);
+      setProductsMayLike(updatedproductmaylike);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  //   async function fetchSimilarproduct() {
+  //     try {
+  //       const { data: product, error: Err } = await supabase
+  //         .from("product_variants")
+  //         .select("*") // or specify fields like "name, price"
+  //         .eq("id", productid)
+  //         .single();
+
+  //       const { data, error } = await supabase
+  //         .from("product_variants")
+  //         .select("*") // or specify fields like "name, price"
+  //         .eq("product_type", product.product_type);
+
+  //       if (error) throw new Error(error);
+
+  //       // Filter products where it is approved
+  //       const filtered = data.filter(
+  //         (item) => item.status === "approved" && item.id !== product.id
+  //       );
+
+  //       // 1. Extract unique image names
+  //       const uniqueImages = [...new Set(filtered.map((item) => item.image))];
+
+  //       // 2. Generate signed URLs from Supabase Storage
+  //       const { data: signedUrls, error: signedUrlError } = await supabase.storage
+  //         .from("addon") // your bucket name
+  //         .createSignedUrls(uniqueImages, 3600); // 1 hour expiry
+
+  //       if (signedUrlError) {
+  //         console.error("Error generating signed URLs:", signedUrlError);
+  //         return;
+  //       }
+
+  //       // 3. Create a map from image name to signed URL
+  //       const urlMap = {};
+  //       signedUrls.forEach(({ path, signedUrl }) => {
+  //         urlMap[path] = signedUrl;
+  //       });
+
+  //       // 4. Replace image names with URLs in the array
+  //       const updatedProducts = filtered.map((item) => ({
+  //         ...item,
+  //         image: urlMap[item.image] || item.image, // fallback if URL not found
+  //       }));
+
+  //       setSimilarProducts(updatedProducts);
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   }
 
   useEffect(() => {
     fetchproductbyid();
+    fetchSimilarproduct();
   }, [productid]);
 
   const baseImageUrl =
@@ -86,6 +217,34 @@ function ProductView() {
     if (productqunatity > 1) {
       setProductquantity((prev) => prev - 1);
     }
+  };
+
+  const prevRef = useRef(null);
+  const nextRef = useRef(null);
+  const paginationRef = useRef(null);
+  const prevRef2 = useRef(null);
+  const nextRef2 = useRef(null);
+  const paginationRef2 = useRef(null);
+
+  const swiperSettings = {
+    slidesPerView: 4,
+    grid: { rows: 1, fill: "row" },
+    spaceBetween: 30,
+    breakpoints: {
+      0: { slidesPerView: 2.02, grid: { rows: 1 }, spaceBetween: 10 },
+      768: { slidesPerView: 3, grid: { rows: 1 }, spaceBetween: 24 },
+      1024: { slidesPerView: 5, grid: { rows: 1 }, spaceBetween: 30 },
+    },
+  };
+  const productmaylikeSwiperSettings = {
+    slidesPerView: 4,
+    grid: { rows: 2, fill: "row" },
+    spaceBetween: 30,
+    breakpoints: {
+      0: { slidesPerView: 2.02, grid: { rows: 2 }, spaceBetween: 10 },
+      768: { slidesPerView: 3, grid: { rows: 2 }, spaceBetween: 24 },
+      1024: { slidesPerView: 5, grid: { rows: 2 }, spaceBetween: 30 },
+    },
   };
 
   return (
@@ -210,6 +369,7 @@ function ProductView() {
                       className="border-2 px-2 w-12 py-2 rounded text-center [&::-webkit-inner-spin-button]:appearance-none  focus:outline-none focus:ring-0 text-xs md:text-[13px] leading-6"
                       min={1}
                       value={productqunatity}
+                      readOnly
                     />
                     <button
                       className="border-2 px-2 w-12 py-2 font-semibold"
@@ -285,10 +445,58 @@ function ProductView() {
         </div>
 
         <div className="my-10 font-Poppins">
-          <h3 className="text-[#171717] text-2xl  font-semibold">
+          <h3 className="text-[#171717] text-3xl  uppercase mb-3 font-semibold">
             Similar Products
           </h3>
-          {product && <Card product={product} />}
+          {similarProducts && (
+            <div className="relative">
+              <ReusableSwiper
+                products={similarProducts}
+                CardComponent={Card}
+                swiperSettings={swiperSettings}
+                prevRef={prevRef}
+                nextRef={nextRef}
+                paginationRef={paginationRef}
+              />
+              {/* Custom arrows */}
+              <div
+                ref={prevRef}
+                className="swiper-button-prev custom-nav absolute top-1/2 -left-10 transform -translate-y-1/2 w-10 h-10 bg-white rounded-full shadow z-50"
+              />
+              <div
+                ref={nextRef}
+                className="swiper-button-next custom-nav absolute top-1/2 -right-10 transform -translate-y-1/2 w-10 h-10 bg-white rounded-full shadow z-50"
+              />
+            </div>
+          )}
+        </div>
+
+        {/* product you may like */}
+        <div className="my-10 font-Poppins">
+          <h3 className="text-[#171717] text-3xl  uppercase mb-3 font-semibold">
+            You May also like
+          </h3>
+          {productsMayLike && (
+            <div className="relative">
+              <ReusableSwiper
+                products={productsMayLike}
+                CardComponent={Card}
+                swiperSettings={productmaylikeSwiperSettings}
+                prevRef={prevRef2}
+                nextRef={nextRef2}
+                paginationRef={paginationRef2}
+              />
+              {/* Custom arrows */}
+              <div
+                ref={prevRef2}
+                className="swiper-button-prev custom-nav absolute top-1/2 -left-10 transform -translate-y-1/2 w-10 h-10 bg-white rounded-full shadow z-50"
+              />
+              <div
+                ref={nextRef2}
+                className="swiper-button-next custom-nav absolute top-1/2 -right-10 transform -translate-y-1/2 w-10 h-10 bg-white rounded-full shadow z-50"
+              />
+            </div>
+          )}
         </div>
       </div>
 
@@ -352,26 +560,30 @@ function ProductDetailreusable({ title1, title2, desc1, desc2 }) {
 
 function Card({ product }) {
   return (
-    <div>
-      <div className="max-w-xs">
-        <img src="/images/productChair.png" alt="chair" />
+    <div className="font-Poppins w-[245px] h-[350px] border border-[#ccc]">
+      <div className="flex justify-center items-center p-2">
+        <img src={product.image} alt="chair" className="h-52 object-contain" />
       </div>
-      <div>
-        <h4>FLAMINGO SLING</h4>
-        <div className="">
-          <div className="flex items-center gap-2">
-            <p className="text-xl font-bold text-[#334A78] ">
-              Rs {product?.price || "Rs 3,0000"}
-            </p>
-            <p className="text-lg text-[#898994] ">
-              MRP <span className="line-through">$5678</span>
-            </p>
-            <p className="text-[#F69E60]">(Rs.2678 OFF)</p>
+      <div className="bg-[#fff] p-2">
+        <div className="flex ">
+          <div className="flex-1 text-sm  leading-[22.4px]  text-[#111] ">
+            <h4 className="font-medium text-sm leading-[22.4px] ">
+              {product?.title}
+            </h4>
+            <div className="flex items-center gap-2">
+              <p className=" ">Rs {product?.price || "Rs 3,0000"}</p>
+              <p className="line-through text-[#111] text-opacity-50">
+                Rs $5678
+              </p>
+              <p className="text-[#C20000]">sale</p>
+            </div>
           </div>
-          <p className="text-xs text-[#3AA495]">inclusive of all taxes</p>
+          <div className=" text-[#ccc] hover:text-red-950 ">
+            <FaHeart size={25} />
+          </div>
         </div>
-        <button className="text-[#212B36] uppercase bg-[#FFFFFF] text-xs border border-[#212B36] w-32  py-2 rounded-sm ">
-          aDD TO CART
+        <button className="text-[#000] uppercase bg-[#FFFFFF] text-xs border border-[#ccc] px-2  py-2 rounded-sm ">
+          ADD TO CART
         </button>
       </div>
     </div>

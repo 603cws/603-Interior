@@ -3,18 +3,20 @@ import { BsCart2 } from "react-icons/bs";
 import { FaRegUser } from "react-icons/fa6";
 import { GoHeart } from "react-icons/go";
 import { IoIosSearch } from "react-icons/io";
+import { useNavigate } from "react-router-dom";
 
 function Header() {
+  const naviagte = useNavigate();
   return (
     <div className="container">
       <div className=" flex bg-[#FFFFFF] rounded-[100px] shadow-[0_4px_12px_rgba(0,0,0,0.1)] my-3 border py-2.5 px-7">
         <div className="w-2/5 flex gap-20">
           <img src="/logo/workved-interior.png" alt="" className="h-10 w-16" />
           <ul className="flex items-center uppercase gap-10 text-xs font-bold text-[#1A293A] [&_li]:cursor-pointer">
-            <li>home</li>
-            <li>shop</li>
-            <li>sell</li>
-            <li>contact us</li>
+            <li onClick={() => naviagte("/products")}>home</li>
+            <li onClick={() => naviagte("/shop")}>shop</li>
+            <li onClick={() => naviagte("/shop")}>sell</li>
+            <li onClick={() => naviagte("/shop")}>contact us</li>
           </ul>
         </div>
         <div className="flex w-3/5 items-center justify-between">
@@ -35,7 +37,7 @@ function Header() {
             <button>
               <GoHeart size={22} />
             </button>
-            <button className="relative">
+            <button className="relative" onClick={() => naviagte("/cart")}>
               <BsCart2 size={23} />
               <span className="absolute -top-1/4 -right-1/3 font-semibold text-[8px] bg-[#C16452] text-[#ffffff] rounded-full p-1 h-4 w-4 flex justify-center items-center">
                 2

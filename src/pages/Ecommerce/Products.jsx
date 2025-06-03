@@ -9,6 +9,8 @@ import "swiper/css/pagination";
 import "swiper/css/grid"; // this is important for grid layout!
 import "./products.css";
 
+import Header from "./Header";
+
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
 
 import { useEffect, useRef, useState } from "react";
@@ -270,151 +272,6 @@ function Products() {
     { name: "ikea", image: "/images/brand2.png" },
   ];
 
-  //   const products = [
-  //     {
-  //       title: "Sterling Silver Heart Pendant",
-  //       price: 49.99,
-  //       ispopular: true,
-  //       populartext: "popular",
-  //       image: "/images/productChair.png",
-  //     },
-  //     {
-  //       title: "14k Rose Gold Stud Earrings",
-  //       price: 129.0,
-  //       ispopular: false,
-  //       populartext: "",
-  //       image: "/images/productChair.png",
-  //     },
-  //     {
-  //       title: "Platinum Diamond Engagement Ring",
-  //       price: 999.99,
-  //       ispopular: true,
-  //       populartext: "sale",
-  //       image: "/images/productChair.png",
-  //     },
-  //     {
-  //       title: "Gold-Plated Charm Bracelet",
-  //       price: 59.5,
-  //       ispopular: false,
-  //       populartext: "",
-  //       image: "/images/productChair.png",
-  //     },
-  //     {
-  //       title: "White Gold Wedding Band",
-  //       price: 149.0,
-  //       ispopular: true,
-  //       populartext: "popular",
-  //       image: "/images/productChair.png",
-  //     },
-  //     {
-  //       title: "Titanium Men's Ring",
-  //       price: 89.99,
-  //       ispopular: false,
-  //       populartext: "",
-  //       image: "/images/productChair.png",
-  //     },
-  //     {
-  //       title: "Sapphire and Diamond Necklace",
-  //       price: 289.0,
-  //       ispopular: true,
-  //       populartext: "popular",
-  //       image: "/images/productChair.png",
-  //     },
-  //     {
-  //       title: "Emerald Birthstone Ring",
-  //       price: 74.95,
-  //       ispopular: false,
-  //       populartext: "",
-  //       image: "/images/productChair.png",
-  //     },
-  //     {
-  //       title: "Custom Engraved Locket",
-  //       price: 59.99,
-  //       ispopular: true,
-  //       populartext: "popular",
-  //       image: "/images/productChair.png",
-  //     },
-  //     {
-  //       title: "Minimalist Chain Necklace",
-  //       price: 39.0,
-  //       ispopular: false,
-  //       populartext: "",
-  //       image: "/images/productChair.png",
-  //     },
-  //   ];
-  const Trendingproducts = [
-    {
-      title: "Sterling Silver Heart Pendant",
-      price: 49.99,
-      ispopular: true,
-      populartext: "popular",
-      image: "/images/trendingProduct1.png",
-    },
-    {
-      title: "14k Rose Gold Stud Earrings",
-      price: 129.0,
-      ispopular: false,
-      populartext: "",
-      image: "/images/trendingProduct1.png",
-    },
-    {
-      title: "Platinum Diamond Engagement Ring",
-      price: 999.99,
-      ispopular: true,
-      populartext: "sale",
-      image: "/images/trendingProduct1.png",
-    },
-    {
-      title: "Gold-Plated Charm Bracelet",
-      price: 59.5,
-      ispopular: false,
-      populartext: "",
-      image: "/images/trendingProduct1.png",
-    },
-    {
-      title: "White Gold Wedding Band",
-      price: 149.0,
-      ispopular: true,
-      populartext: "popular",
-      image: "/images/trendingProduct1.png",
-    },
-    {
-      title: "Titanium Men's Ring",
-      price: 89.99,
-      ispopular: false,
-      populartext: "",
-      image: "/images/trendingProduct1.png",
-    },
-    {
-      title: "Sapphire and Diamond Necklace",
-      price: 289.0,
-      ispopular: true,
-      populartext: "popular",
-      image: "/images/trendingProduct1.png",
-    },
-    {
-      title: "Emerald Birthstone Ring",
-      price: 74.95,
-      ispopular: false,
-      populartext: "",
-      image: "/images/trendingProduct1.png",
-    },
-    {
-      title: "Custom Engraved Locket",
-      price: 59.99,
-      ispopular: true,
-      populartext: "popular",
-      image: "/images/trendingProduct1.png",
-    },
-    {
-      title: "Minimalist Chain Necklace",
-      price: 39.0,
-      ispopular: false,
-      populartext: "",
-      image: "/images/trendingProduct1.png",
-    },
-  ];
-
   const EcommerceFeatures = [
     {
       title: "EASY PAYMENT",
@@ -440,6 +297,9 @@ function Products() {
 
   return (
     <div>
+      <header>
+        <Header />
+      </header>
       {/* section 2 */}
       <section>
         <div className="lg:container lg:mx-auto my-10">
@@ -477,31 +337,6 @@ function Products() {
           </div>
         </div>
       </section>
-
-      {/* section 4 */}
-      {/* <section>
-        <div className="md:container md:mx-auto my-10">
-          <SectionHeader title={"Featured products"} />
-          <div className="flex gap-4">
-            <div className="space-y-8">
-              <BannerProduct />
-              <BannerProduct />
-            </div>
-            <div className="flex-1 grid grid-cols-2 md:grid-cols-3 lg:gird-cols-4 xl:grid-cols-4 items-stretch gap-4">
-              {products.map((product) => (
-                <Card
-                  title={product.title}
-                  price={product.price}
-                  ispopular={product.ispopular}
-                  populartext={product.populartext}
-                  image={product.image}
-                  key={product.title}
-                />
-              ))}
-            </div>
-          </div>
-        </div>
-      </section> */}
 
       <section>
         <SectionHeader title={"Featured products"} />
@@ -626,17 +461,6 @@ function Products() {
                 swiper.pagination.init();
                 swiper.pagination.update();
               }}
-              //   onBeforeInit={(swiper) => {
-              //     swiper.params.navigation.prevEl = prevRef.current;
-              //     swiper.params.navigation.nextEl = nextRef.current;
-              //     swiper.params.pagination.el = paginationRef.current;
-              //   }}
-              //   onSwiper={(swiper) => {
-              //     swiper.params.navigation.prevEl = ".swiper-button-prev";
-              //     swiper.params.navigation.nextEl = ".swiper-button-next";
-              //     swiper.navigation.init();
-              //     swiper.navigation.update();
-              //   }}
               modules={[Grid, Navigation, Pagination]}
               slidesPerView={4}
               grid={{
@@ -644,10 +468,6 @@ function Products() {
                 fill: "row",
               }}
               spaceBetween={30}
-              //   navigation={{
-              //     nextEl: ".swiper-button-next",
-              //     prevEl: ".swiper-button-prev",
-              //   }}
               //   pagination={{ clickable: true, el: ".custom-pagination" }}
               className="relative pb-10"
               breakpoints={{
