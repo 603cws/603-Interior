@@ -232,8 +232,8 @@ function InteriorBlog() {
                     Recent Post
                   </h3>
                   <ul className="[&_li]:my-3 [&_li]:px-6 [&_li]:py-3 [&_li]:bg-[#fff] ">
-                    {RecentPosts.map((post) => (
-                      <li key={post.title}>
+                    {RecentPosts.map((post, index) => (
+                      <li key={index}>
                         {" "}
                         <div className="flex  gap-3">
                           <div>

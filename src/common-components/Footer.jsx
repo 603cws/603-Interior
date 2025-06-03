@@ -72,6 +72,7 @@ function Footer() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             className="border-y-[1px] border-l-[1px] border-[#777777] w-full py-3.5 bg-transparent px-2 focus:outline-none focus:ring-0"
+            name="subscribe-email"
           />
           <button className="capitalize bg-[#EBEFF9] text-[#000000] text-nowrap py-3.5 border-y-[1px] border-r-[1px] border-[#777777] font-bold px-1">
             subscribe now

@@ -45,6 +45,8 @@ import Privacy from "./pages/Privacy";
 import OurWork from "./pages/OurWork";
 import InteriorBlog from "./pages/InteriorBlog";
 import Products from "./pages/Ecommerce/Products";
+import ProductView from "./pages/Ecommerce/ProductView";
+import ShopProducts from "./pages/Ecommerce/ShopProducts";
 
 const Home = lazy(() => import("./pages/Home"));
 
@@ -169,6 +171,9 @@ function App() {
             <Route path="/interiorWork" element={<OurWork />} />
             <Route path="/home" element={<Home />} />
             <Route path="/products" element={<Products />} />
+            <Route path="/productview" element={<ProductView />} />
+            <Route path="/productview/:id" element={<ProductView />} />
+            <Route path="/shop" element={<ShopProducts />} />
           </Routes>
         )}
       </Suspense>
