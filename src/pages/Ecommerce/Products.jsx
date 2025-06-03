@@ -15,140 +15,9 @@ import { useEffect, useRef, useState } from "react";
 import { useApp } from "../../Context/Context";
 
 import { supabase } from "../../services/supabase";
+import SpinnerFullPage from "../../common-components/SpinnerFullPage";
 
-function Productitem({ image, title, width }) {
-  return (
-    <div className="py-3 lg:py-6 px-6 lg:px-10 border border-[#374A75] max-w-xs w-full mx-auto lg:w-auto">
-      <div className="flex items-center justify-center font-lora text-base gap-4 ">
-        <div className={`${width}`}>
-          <img src={image} alt="" className={`${width}`} />
-        </div>
-        <p className="text-sm lg:text-base text-[#111]">{title}</p>
-      </div>
-    </div>
-  );
-}
-
-function BannerProduct() {
-  return (
-    <div className="max-w-60 w-full h-96 relative rounded overflow-hidden shadow-lg">
-      <img
-        src="/images/banner-chair.jpg"
-        alt="Meeting Chairs"
-        className="w-full h-full object-cover"
-      />
-
-      <div
-        className="absolute top-0 left-0 w-full bg-[#e0f4ff] text-black flex flex-col justify-evenly px-6"
-        style={{
-          clipPath: "ellipse(95% 100% at 25% 0%)",
-          height: "45%",
-        }}
-      >
-        <p className="text-xs uppercase tracking-[3px] font-lora">
-          New collection
-        </p>
-        <h2 className="text-lg font-lora tracking-wide">
-          MEETING <br /> CHAIRS
-        </h2>
-        <button className="mt-1 text-sm underline underline-offset-4 decoration-[#aaaaaa] flex items-center gap-2 group overflow-hidden relative hover:scale-105 transition-transform duration-700 ease-in-out">
-          <span className="relative z-10">Discover more</span>
-          <BsArrowRight
-            size={15}
-            className="absolute opacity-0 group-hover:opacity-100 translate-x-[550%] group-hover:translate-x-[700%] transition-transform duration-700 ease-in-out"
-          />
-        </button>
-      </div>
-    </div>
-  );
-}
-
-const ProductCard = ({ product }) => (
-  <div className="max-w-xs flex flex-col md:flex-row border border-[#191716]/80 p-3">
-    <div className="flex-1">
-      <img src={product.image} alt="trending product" />
-    </div>
-    <div className="flex-1 flex flex-col justify-center items-center gap-3 font-lora space-y-2">
-      <p className="text-center text-sm leading-[14px] tracking-[0.96px] lg:text-sm">
-        {product.title}
-      </p>
-      <h2 className="text-base leading-4 tracking-[1px] text-[#374A75]">
-        $ {product.price}
-      </h2>
-      <button className="font-Poppins text-[#000] flex gap-2 leading-[13px] tracking-[1px] text-[13px]">
-        Add to cart <BsArrowRight size={15} />
-      </button>
-    </div>
-  </div>
-);
-
-function SectionHeader({ title, isborder = true }) {
-  return (
-    <div className="flex flex-col justify-center items-center mb-10">
-      <h3 className="font-lora text-2xl text-[#111] tracking-wider uppercase mb-2">
-        {title}
-      </h3>
-      {isborder && (
-        <p className="w-[20%] lg:w-[4%] h-[1.5px] bg-[#374A75] "></p>
-      )}
-    </div>
-  );
-}
-
-function Card({ product }) {
-  return (
-    <div className="h-full">
-      <div className="h-full flex flex-col border-[1px] border-[#AAAAAA] relative">
-        <img
-          src={product.image}
-          alt={product.title}
-          className="bg-[#000000]/10"
-        />
-        {/* {product.ispopular && (
-          <span
-            className={` font-lora text-[11px] capitalize absolute top-2 left-2 p-[5px] ${
-              populartext === "popular"
-                ? "bg-[#E3F3FF] text-[#000]"
-                : "bg-[#374A75] text-white"
-            }`}
-          >
-            {product.populartext || "eihvihevi"}
-          </span>
-        )} */}
-        <div className="px-5 flex flex-col justify-center items-center gap-3 font-lora py-3 mt-auto">
-          <p className=" text-center text-xs lg:text-sm">{product.title}</p>
-          <h5 className="lg:text-lg">$ {product.price} </h5>
-          <button className="flex justify-center items-center gap-2 font-Poppins text-[13px] py-1.5">
-            Add to cart <BsArrowRight size={15} />{" "}
-          </button>
-        </div>
-      </div>
-    </div>
-    // <div className="h-full">
-    //   <div className="h-full flex flex-col border-[1px] border-[#AAAAAA] relative">
-    //     <img src={image} alt={title} className="bg-[#000000]/10" />
-    //     {ispopular && (
-    //       <span
-    //         className={` font-lora text-[11px] capitalize absolute top-2 left-2 p-[5px] ${
-    //           populartext === "popular"
-    //             ? "bg-[#E3F3FF] text-[#000]"
-    //             : "bg-[#374A75] text-white"
-    //         }`}
-    //       >
-    //         {populartext}
-    //       </span>
-    //     )}
-    //     <div className="px-5 flex flex-col justify-center items-center gap-3 font-lora py-3 mt-auto">
-    //       <p className=" text-center text-xs lg:text-sm">{title}</p>
-    //       <h5 className="lg:text-lg">$ {price} </h5>
-    //       <button className="flex justify-center items-center gap-2 font-Poppins text-[13px] py-1.5">
-    //         Add to cart <BsArrowRight size={15} />{" "}
-    //       </button>
-    //     </div>
-    //   </div>
-    // </div>
-  );
-}
+import { useNavigate } from "react-router-dom";
 
 // <div className="h-[400px]">
 //   <div className="h-full flex flex-col border-[1px] border-[#AAAAAA] relative">
@@ -269,34 +138,6 @@ const latestPosts = [
   },
 ];
 
-function LatestPost({ post }) {
-  return (
-    <div className="max-w-sm">
-      <div className="relative">
-        <img src={post.image} alt="blogoffice" />
-        <div className="absolute  left-4 top-4 bg-white text-center px-3 py-1 shadow-md rounded-sm">
-          <div className="text-lg font-bold">{post.date}</div>
-          <div className="text-sm text-gray-500 -mt-1 uppercase">
-            {post.month}
-          </div>
-        </div>
-      </div>
-      <div className="font-lora border border-[#000]/10 p-4 space-y-3">
-        <p className="text-[#9A9A9A] text-[13px] leading-[13px] tracking-[1px]">
-          {post.subhead}
-        </p>
-        <h2 className="font-semibold text-sm leading-[14px] tracking-[0.5px]">
-          {post.title}
-        </h2>
-        <p className="text-sm tracking-[1px]">{post.description}</p>
-        <button className="font-Poppins text-[#374A75] tracking-[1px] text-sm flex gap-3 items-center">
-          Read More <TiArrowRight size={25} />
-        </button>
-      </div>
-    </div>
-  );
-}
-
 function Products() {
   const prevRef = useRef(null);
   const nextRef = useRef(null);
@@ -313,17 +154,7 @@ function Products() {
 
   const [data, setData] = useState();
   const [products, setProducts] = useState([]);
-
-  //   const { productData } = useApp();
-  //   console.log(productData);
-
-  //   const fetchdata = async () => {
-  //     const getdata = await fetchProductsData();
-  //     console.log(getdata);
-
-  //     setData(getdata);
-  //     setProducts(getdata);
-  //   };
+  const [productsloading, setProductsloading] = useState(true);
 
   useEffect(() => {
     // fetchdata();
@@ -332,14 +163,21 @@ function Products() {
 
   const fetchProductsData = async () => {
     try {
+      setProductsloading(true);
       const { data, error } = await supabase
         .from("product_variants")
-        .select(`* ,product_id(*)`);
+        .select(`* ,product_id(*)`)
+        .order("created_at", { ascending: false });
 
       if (error) throw error;
 
       // Filter products where it is approved
-      const filtered = data.filter((item) => item.status === "approved");
+      const filtered = data.filter(
+        (item) =>
+          item.status === "approved" &&
+          item.product_id.category !== "Partitions / Ceilings" &&
+          item.product_id.category !== "Civil / Plumbing"
+      );
 
       // 1. Extract unique image names
       const uniqueImages = [...new Set(filtered.map((item) => item.image))];
@@ -372,6 +210,8 @@ function Products() {
       setProducts(updatedProducts);
     } catch (error) {
       console.error("Error fetching filtered data:", error);
+    } finally {
+      setProductsloading(false);
     }
   };
 
@@ -663,9 +503,10 @@ function Products() {
         <SectionHeader title={"Featured products"} />
         <div className="container px-4 lg:px-12 mx-auto my-10">
           <div className="hidden md:flex justify-end gap-3">
+            {products && <h2 className="text-xl ">Total:{products?.length}</h2>}
             <button
               ref={prevRef3}
-              className=" text-[#304778] disabled:text-gray-400"
+              className="text-[#304778] disabled:text-gray-400"
             >
               <MdKeyboardArrowLeft size={30} />
             </button>
@@ -684,62 +525,68 @@ function Products() {
             </div>
 
             {/* Right side Swiper grid */}
-            <div className="md:w-3/4 w-full relative">
-              <div className="md:hidden flex justify-end gap-3">
-                <button ref={prevRef4}>
-                  <MdKeyboardArrowLeft size={30} color="#304778" />
-                </button>
-                <button ref={nextRef4}>
-                  <MdKeyboardArrowRight size={30} color="#304778" />
-                </button>
+            {!productsloading ? (
+              <div className="md:w-3/4 w-full relative">
+                <div className="md:hidden flex justify-end gap-3">
+                  <button ref={prevRef4}>
+                    <MdKeyboardArrowLeft size={30} color="#304778" />
+                  </button>
+                  <button ref={nextRef4}>
+                    <MdKeyboardArrowRight size={30} color="#304778" />
+                  </button>
+                </div>
+                <Swiper
+                  onBeforeInit={(swiper) => {
+                    swiper.params.navigation.prevEl =
+                      prevRef3.current || prevRef4.current;
+                    swiper.params.navigation.nextEl =
+                      nextRef3.current || nextRef4.current;
+                    swiper.params.pagination.el = paginationRef3.current;
+                  }}
+                  onSwiper={(swiper) => {
+                    swiper.navigation.init();
+                    swiper.navigation.update();
+                    swiper.pagination.init();
+                    swiper.pagination.update();
+                  }}
+                  modules={[Grid, Navigation, Pagination]}
+                  slidesPerView={4}
+                  grid={{
+                    rows: 2,
+                    fill: "row",
+                  }}
+                  spaceBetween={30}
+                  className="relative pb-10"
+                  breakpoints={{
+                    0: {
+                      slidesPerView: 2.02,
+                      grid: { rows: 2 },
+                      spaceBetween: 10,
+                    },
+                    768: {
+                      slidesPerView: 3,
+                      grid: { rows: 2 },
+                      spaceBetween: 24,
+                    },
+                    1024: {
+                      slidesPerView: 4,
+                      grid: { rows: 2 },
+                      spaceBetween: 30,
+                    },
+                  }}
+                >
+                  {products.map((product, index) => (
+                    <SwiperSlide key={index}>
+                      <Card product={product} />
+                    </SwiperSlide>
+                  ))}
+                </Swiper>
               </div>
-              <Swiper
-                onBeforeInit={(swiper) => {
-                  swiper.params.navigation.prevEl =
-                    prevRef3.current || prevRef4.current;
-                  swiper.params.navigation.nextEl =
-                    nextRef3.current || nextRef4.current;
-                  swiper.params.pagination.el = paginationRef3.current;
-                }}
-                onSwiper={(swiper) => {
-                  swiper.navigation.init();
-                  swiper.navigation.update();
-                  swiper.pagination.init();
-                  swiper.pagination.update();
-                }}
-                modules={[Grid, Navigation, Pagination]}
-                slidesPerView={4}
-                grid={{
-                  rows: 2,
-                  fill: "row",
-                }}
-                spaceBetween={30}
-                className="relative pb-10"
-                breakpoints={{
-                  0: {
-                    slidesPerView: 2.02,
-                    grid: { rows: 2 },
-                    spaceBetween: 10,
-                  },
-                  768: {
-                    slidesPerView: 3,
-                    grid: { rows: 2 },
-                    spaceBetween: 24,
-                  },
-                  1024: {
-                    slidesPerView: 4,
-                    grid: { rows: 2 },
-                    spaceBetween: 30,
-                  },
-                }}
-              >
-                {products.map((product, index) => (
-                  <SwiperSlide key={index}>
-                    <Card product={product} />
-                  </SwiperSlide>
-                ))}
-              </Swiper>
-            </div>
+            ) : (
+              <div className="w-full flex justify-center items-center">
+                <SpinnerFullPage />
+              </div>
+            )}
           </div>
         </div>
       </section>
@@ -817,11 +664,16 @@ function Products() {
                 },
               }}
             >
-              {Trendingproducts.map((product, index) => (
+              {products.map((product, index) => (
                 <SwiperSlide key={index}>
                   <ProductCard product={product} />
                 </SwiperSlide>
               ))}
+              {/* {Trendingproducts.map((product, index) => (
+                <SwiperSlide key={index}>
+                  <ProductCard product={product} />
+                </SwiperSlide>
+              ))} */}
             </Swiper>
             {/* Custom arrows */}
             <div
@@ -915,3 +767,181 @@ function Products() {
 }
 
 export default Products;
+
+function Card({ product }) {
+  const naviagte = useNavigate();
+  return (
+    <div className="h-[400px]">
+      <div className="h-full flex flex-col border-[1px] border-[#AAAAAA] relative">
+        {product.image && (
+          <div className=" ">
+            <img
+              src={product.image}
+              alt={product.title}
+              className="bg-[#000000]/10 w-52 h-56 mx-auto mt-4"
+            />
+          </div>
+        )}
+        {/* {product.ispopular && (
+          <span
+            className={` font-lora text-[11px] capitalize absolute top-2 left-2 p-[5px] ${
+              populartext === "popular"
+                ? "bg-[#E3F3FF] text-[#000]"
+                : "bg-[#374A75] text-white"
+            }`}
+          >
+            {product.populartext || "eihvihevi"}
+          </span>
+        )} */}
+        <div className="px-5 flex flex-col justify-center items-center gap-3 font-lora py-3 mt-auto">
+          <p className=" text-center text-xs lg:text-sm">{product.title}</p>
+          <h5 className="lg:text-lg">Rs {product.price} </h5>
+          <button
+            className="flex justify-center items-center gap-2 font-Poppins text-[13px] py-1.5"
+            onClick={() => naviagte(`/productview/${product.id}`)}
+          >
+            Add to cart <BsArrowRight size={15} />{" "}
+          </button>
+        </div>
+      </div>
+    </div>
+    // <div className="h-full">
+    //   <div className="h-full flex flex-col border-[1px] border-[#AAAAAA] relative">
+    //     <img src={image} alt={title} className="bg-[#000000]/10" />
+    //     {ispopular && (
+    //       <span
+    //         className={` font-lora text-[11px] capitalize absolute top-2 left-2 p-[5px] ${
+    //           populartext === "popular"
+    //             ? "bg-[#E3F3FF] text-[#000]"
+    //             : "bg-[#374A75] text-white"
+    //         }`}
+    //       >
+    //         {populartext}
+    //       </span>
+    //     )}
+    //     <div className="px-5 flex flex-col justify-center items-center gap-3 font-lora py-3 mt-auto">
+    //       <p className=" text-center text-xs lg:text-sm">{title}</p>
+    //       <h5 className="lg:text-lg">$ {price} </h5>
+    //       <button className="flex justify-center items-center gap-2 font-Poppins text-[13px] py-1.5">
+    //         Add to cart <BsArrowRight size={15} />{" "}
+    //       </button>
+    //     </div>
+    //   </div>
+    // </div>
+  );
+}
+
+function LatestPost({ post }) {
+  return (
+    <div className="max-w-sm">
+      <div className="relative">
+        <img src={post.image} alt="blogoffice" />
+        <div className="absolute  left-4 top-4 bg-white text-center px-3 py-1 shadow-md rounded-sm">
+          <div className="text-lg font-bold">{post.date}</div>
+          <div className="text-sm text-gray-500 -mt-1 uppercase">
+            {post.month}
+          </div>
+        </div>
+      </div>
+      <div className="font-lora border border-[#000]/10 p-4 space-y-3">
+        <p className="text-[#9A9A9A] text-[13px] leading-[13px] tracking-[1px]">
+          {post.subhead}
+        </p>
+        <h2 className="font-semibold text-sm leading-[14px] tracking-[0.5px]">
+          {post.title}
+        </h2>
+        <p className="text-sm tracking-[1px]">{post.description}</p>
+        <button className="font-Poppins text-[#374A75] tracking-[1px] text-sm flex gap-3 items-center">
+          Read More <TiArrowRight size={25} />
+        </button>
+      </div>
+    </div>
+  );
+}
+
+function Productitem({ image, title, width }) {
+  return (
+    <div className="py-3 lg:py-6 px-6 lg:px-10 border border-[#374A75] max-w-xs w-full mx-auto lg:w-auto">
+      <div className="flex items-center justify-center font-lora text-base gap-4 ">
+        <div className={`${width}`}>
+          <img src={image} alt="" className={`${width}`} />
+        </div>
+        <p className="text-sm lg:text-base text-[#111]">{title}</p>
+      </div>
+    </div>
+  );
+}
+
+function BannerProduct() {
+  const naviagte = useNavigate();
+  return (
+    <div className="max-w-60 w-full h-96 relative rounded overflow-hidden shadow-lg">
+      <img
+        src="/images/banner-chair.jpg"
+        alt="Meeting Chairs"
+        className="w-full h-full object-cover"
+      />
+
+      <div
+        className="absolute top-0 left-0 w-full bg-[#e0f4ff] text-black flex flex-col justify-evenly px-6"
+        style={{
+          clipPath: "ellipse(95% 100% at 25% 0%)",
+          height: "45%",
+        }}
+      >
+        <p className="text-xs uppercase tracking-[3px] font-lora">
+          New collection
+        </p>
+        <h2 className="text-lg font-lora tracking-wide">
+          MEETING <br /> CHAIRS
+        </h2>
+        <button
+          onClick={() => naviagte("/shop")}
+          className="mt-1 text-sm underline underline-offset-4 decoration-[#aaaaaa] flex items-center gap-2 group overflow-hidden relative hover:scale-105 transition-transform duration-700 ease-in-out"
+        >
+          <span className="relative z-10">Discover more</span>
+          <BsArrowRight
+            size={15}
+            className="absolute opacity-0 group-hover:opacity-100 translate-x-[550%] group-hover:translate-x-[700%] transition-transform duration-700 ease-in-out"
+          />
+        </button>
+      </div>
+    </div>
+  );
+}
+
+const ProductCard = ({ product }) => (
+  <div className="max-w-xs flex flex-col md:flex-row border border-[#191716]/80 p-3">
+    <div className="flex-1">
+      <img
+        src={product.image}
+        alt="trending product"
+        className="w-[220px] h-[200px]"
+      />
+    </div>
+    <div className="flex-1 flex flex-col justify-center items-center gap-3 font-lora space-y-2">
+      <p className="text-center text-sm leading-[14px] tracking-[0.96px] lg:text-sm">
+        {product.title}
+      </p>
+      <h2 className="text-base leading-4 tracking-[1px] text-[#374A75]">
+        $ {product.price}
+      </h2>
+      <button className="font-Poppins text-[#000] flex gap-2 leading-[13px] tracking-[1px] text-[13px]">
+        Add to cart <BsArrowRight size={15} />
+      </button>
+    </div>
+  </div>
+);
+
+function SectionHeader({ title, isborder = true }) {
+  return (
+    <div className="flex flex-col justify-center items-center mb-10">
+      <h3 className="font-lora text-2xl text-[#111] tracking-wider uppercase mb-2">
+        {title}
+      </h3>
+      {isborder && (
+        <p className="w-[20%] lg:w-[4%] h-[1.5px] bg-[#374A75] "></p>
+      )}
+    </div>
+  );
+}
