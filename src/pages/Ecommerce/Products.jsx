@@ -155,6 +155,7 @@ function Products() {
   const [data, setData] = useState();
   const [products, setProducts] = useState([]);
   const [productsloading, setProductsloading] = useState(true);
+  // const [selectedCat, setSelectedCat] = useState("Furniture");
 
   useEffect(() => {
     // fetchdata();
@@ -205,7 +206,9 @@ function Products() {
       }));
 
       console.log(updatedProducts);
-
+      // const filteredByCategory = updatedProducts.filter(
+      //   (item) => item.product_id.category === selectedCat
+      // );
       setData(filtered);
       setProducts(updatedProducts);
     } catch (error) {
@@ -228,18 +231,18 @@ function Products() {
       name: "Paint",
       imagename: "/images/icons/Paint.png",
     },
-    {
-      name: `Civil & Plumbing`,
-      imagename: "/images/icons/CivilPlumbing.png",
-    },
+    // {
+    //   name: `Civil & Plumbing`,
+    //   imagename: "/images/icons/CivilPlumbing.png",
+    // },
     {
       name: "Flooring",
       imagename: "/images/icons/Flooring.png",
     },
-    {
-      name: "Partition",
-      imagename: "/images/icons/PartitionsCeilings.png",
-    },
+    // {
+    //   name: "Partition",
+    //   imagename: "/images/icons/PartitionsCeilings.png",
+    // },
     {
       name: "HVAC",
       imagename: "/images/icons/HVAC.png",
@@ -459,8 +462,9 @@ function Products() {
           <div className="flex overflow-x-auto items-center justify-around my-10 gap-6">
             {categoryies.map((cat) => (
               <div
-                className="flex flex-col lg:justify-center  lg:items-center gap-3"
+                className="flex flex-col lg:justify-center  lg:items-center gap-3 cursor-pointer"
                 key={cat.name}
+                // onClick={() => setSelectedCat(cat.name)}
               >
                 <div className="bg-[#F8F8F8] border border-[#ccc] p-4 w-16 h-16 xl:w-20 xl:h-20">
                   <img src={cat.imagename} alt="category" className="" />
@@ -778,7 +782,7 @@ function Card({ product }) {
             <img
               src={product.image}
               alt={product.title}
-              className="bg-[#000000]/10 w-52 h-56 mx-auto mt-4"
+              className="w-52 h-56 mx-auto mt-4 object-contain"
             />
           </div>
         )}
@@ -916,7 +920,7 @@ const ProductCard = ({ product }) => (
       <img
         src={product.image}
         alt="trending product"
-        className="w-[220px] h-[200px]"
+        className="w-[220px] h-[200px] object-contain"
       />
     </div>
     <div className="flex-1 flex flex-col justify-center items-center gap-3 font-lora space-y-2">
@@ -924,7 +928,7 @@ const ProductCard = ({ product }) => (
         {product.title}
       </p>
       <h2 className="text-base leading-4 tracking-[1px] text-[#374A75]">
-        $ {product.price}
+        &#8377; {product.price}
       </h2>
       <button className="font-Poppins text-[#000] flex gap-2 leading-[13px] tracking-[1px] text-[13px]">
         Add to cart <BsArrowRight size={15} />

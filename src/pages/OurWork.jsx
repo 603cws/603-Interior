@@ -51,12 +51,12 @@ function OurWork() {
         <div className="md:container md:mx-auto ">
           <div className="flex  flex-col-reverse xl:grid  xl:grid-cols-[1fr,3fr] gap-x-20">
             <aside className="space-y-4 px-3 lg:px-0">
-              <div className="bg-[#F7F7F7]  font-lato  ">
-                <div className="p-4 ">
+              <div className="bg-[#F7F7F7]  font-lato py-2 ">
+                <div className="lg:p-4 ">
                   <h3 className="border-b border-b-[#232323] text-lg font-bold">
                     More Services
                   </h3>
-                  <ul className="[&_li]:font-bold text-[15px] text-[#232323] [&_li]:mx-6 [&_li]:my-3 [&_li]:px-6 [&_li]:py-3 [&_li]:bg-[#fff] ">
+                  <ul className="[&_li]:font-bold text-[15px] text-[#232323] [&_li]:mx-2 lg:[&_li]:mx-6 [&_li]:my-3 [&_li]:px-6 [&_li]:py-3 [&_li]:bg-[#fff] ">
                     <li>Architecture</li>
                     <li>Interior Work</li>
                     <li>Retail Designs</li>
@@ -66,18 +66,18 @@ function OurWork() {
                   </ul>
                 </div>
               </div>
-              <div className="bg-[#F7F7F7]  font-lato  ">
-                <div className="p-4 ">
+              <div className="bg-[#F7F7F7]  font-lato py-2 ">
+                <div className="lg:p-4 ">
                   <h3 className="border-b border-b-[#232323] text-lg font-bold">
                     Contact
                   </h3>
-                  <ul className="[&_li]:font-bold text-[15px] text-[#232323] [&_li]:mx-6 [&_li]:my-3 [&_li]:px-6 [&_li]:py-3 [&_li]:bg-[#fff] ">
+                  <ul className="[&_li]:font-bold text-[15px] text-[#232323] [&_li]:mx-2 lg:[&_li]:mx-6 [&_li]:my-3 [&_li]:px-6 [&_li]:py-3 [&_li]:bg-[#fff] ">
                     {contactDetails.map((contact) => (
                       <li key={contact.title}>
                         {" "}
                         <div className="flex  items-center gap-3">
                           <div>{contact.icon}</div>
-                          <div className="flex flex-col justify-center font-lato">
+                          <div className="flex flex-col justify-center font-lato ">
                             <h3 className=" font-bold text-[15px] text-[#232323]">
                               {contact.title}
                             </h3>
@@ -92,7 +92,7 @@ function OurWork() {
                 </div>
               </div>
               <div className="bg-[#F7F7F7]  font-lato  ">
-                <div className="p-4 space-y-3 ">
+                <div className="lg:p-4 space-y-3 ">
                   <h3 className="border-b border-b-[#232323] text-lg font-bold">
                     Gallery
                   </h3>
