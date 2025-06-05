@@ -93,6 +93,65 @@ export const AppProvider = ({ children }) => {
     localStorage.getItem("currentLayoutID")
   );
 
+  const [cartItems, setCartItems] = useState([]);
+
+  const [resfreshCartItens, SetRefreshCartItems] = useState(false);
+
+  async function getCartItems() {
+    try {
+      const { data, error } = await supabase
+        .from("userProductCollection")
+        .select("*,productId(*)")
+        .eq("type", "cart");
+
+      if (error) throw new Error(error);
+
+      // 1. Extract unique image names
+      const uniqueImages = [
+        ...new Set(data.map((item) => item.productId.image)),
+      ];
+
+      // 2. Generate signed URLs from Supabase Storage
+      const { data: signedUrls, error: signedUrlError } = await supabase.storage
+        .from("addon") // your bucket name
+        .createSignedUrls(uniqueImages, 3600); // 1 hour expiry
+
+      if (signedUrlError) {
+        console.error("Error generating signed URLs:", signedUrlError);
+        return;
+      }
+
+      // 3. Create a map from image name to signed URL
+      const urlMap = {};
+      signedUrls.forEach(({ path, signedUrl }) => {
+        urlMap[path] = signedUrl;
+      });
+
+      // 4. Replace image names with URLs in the array
+      const updatedProducts = data.map((item) => ({
+        ...item,
+        productId: {
+          ...item.productId,
+          image: urlMap[item.productId.image] || item.productId.image,
+        },
+      }));
+
+      //for safety even if a product is added multiple times it will get filtered into one
+      const uniquecartitems = [
+        ...new Map(
+          updatedProducts.map((item) => [item.productId.id, item])
+        ).values(),
+      ];
+      setCartItems(uniquecartitems);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  useEffect(() => {
+    getCartItems();
+  }, [resfreshCartItens]);
+
   useEffect(() => {
     const loadData = async () => {
       try {
@@ -652,6 +711,9 @@ export const AppProvider = ({ children }) => {
         setCurrentLayoutData,
         currentLayoutID,
         setCurrentLayoutID,
+        cartItems,
+        SetRefreshCartItems,
+        getCartItems,
       }}
     >
       {children}

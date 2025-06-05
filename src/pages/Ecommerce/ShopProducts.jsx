@@ -7,19 +7,28 @@ import { useNavigate } from "react-router-dom";
 import { BsArrowRight } from "react-icons/bs";
 import { FaHeart } from "react-icons/fa";
 import { IoFilter } from "react-icons/io5";
-import { MdKeyboardArrowLeft, MdKeyboardArrowDown } from "react-icons/md";
+import {
+  MdKeyboardArrowLeft,
+  MdKeyboardArrowDown,
+  MdKeyboardArrowUp,
+} from "react-icons/md";
 import { FaArrowRightLong, FaArrowLeftLong } from "react-icons/fa6";
 
 import Header from "./Header";
 
 function ShopProducts() {
-  const [data, setData] = useState();
   const [products, setProducts] = useState([]);
   const [productsloading, setProductsloading] = useState(true);
+  const containerRef = useRef(null);
+
+  const [filterCatName, setFilterCatName] = useState(null);
+  const [filteredProducts, setFilteredProducts] = useState([]);
 
   const [currentPage, setCurrentPage] = useState(1);
 
-  let items = products;
+  const [isShopCatOepn, setIsShopCatOpen] = useState(false);
+
+  let items = filteredProducts;
   let itemsPerPage = 20;
 
   // Calculate total pages
@@ -50,12 +59,36 @@ function ShopProducts() {
   // Handle page change
   const goToPage = (pageNumber) => {
     setCurrentPage(pageNumber);
+    containerRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
   useEffect(() => {
     // fetchdata();
     fetchProductsData();
   }, []);
+
+  function FiltertheproductsbasedOnConditions() {
+    // filter by cat
+    if (filterCatName) {
+      let allproducts = products;
+      console.log("products", filteredProducts);
+
+      const filteredbycat = allproducts.filter(
+        (product) =>
+          product.product_id?.category.toLowerCase() ===
+          filterCatName.toLowerCase()
+      );
+
+      console.log("filteredbasedoncat", filteredbycat);
+
+      setFilteredProducts(filteredbycat);
+    }
+  }
+
+  //   filter the products based on the product cat
+  useEffect(() => {
+    FiltertheproductsbasedOnConditions();
+  }, [filterCatName]);
 
   const fetchProductsData = async () => {
     try {
@@ -101,8 +134,7 @@ function ShopProducts() {
       }));
 
       console.log(updatedProducts);
-
-      setData(filtered);
+      setFilteredProducts(updatedProducts);
       setProducts(updatedProducts);
     } catch (error) {
       console.error("Error fetching filtered data:", error);
@@ -140,7 +172,7 @@ function ShopProducts() {
       imagename: "/images/icons/HVAC.png",
     },
     {
-      name: "Smart Solution",
+      name: "Smart Solutions",
       imagename: "/images/icons/SmartSolutions.png",
     },
     {
@@ -151,7 +183,7 @@ function ShopProducts() {
   return (
     <div>
       <Header />
-      <section>
+      <section ref={containerRef}>
         <div className="lg:container lg:mx-auto my-10">
           <SectionHeader title={"Shop "} isborder={false} />
           <div className="flex overflow-x-auto items-center justify-around my-10 gap-6">
@@ -205,10 +237,36 @@ function ShopProducts() {
                 <h4 className="text-[15px] font-semibold leading-[24px]">
                   Shop by Categories
                 </h4>
-                <div className="">
-                  <MdKeyboardArrowDown size={25} />
-                </div>
+                <button
+                  className=""
+                  onClick={() =>
+                    isShopCatOepn
+                      ? setIsShopCatOpen(false)
+                      : setIsShopCatOpen(true)
+                  }
+                >
+                  {isShopCatOepn ? (
+                    <MdKeyboardArrowUp size={25} />
+                  ) : (
+                    <MdKeyboardArrowDown size={25} />
+                  )}
+                </button>
               </div>
+              {isShopCatOepn && (
+                <div>
+                  <ul className="font-lora space-y-3">
+                    {categoryies.map((cat) => (
+                      <li
+                        onClick={() => setFilterCatName(cat.name)}
+                        className="text-[#111] text-sm cursor-pointer"
+                        key={cat.name}
+                      >
+                        {cat.name}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
               <div className="flex justify-between items-center text-[#334A78]">
                 <h4 className="text-[15px] font-semibold leading-[24px]">
                   price
@@ -320,7 +378,11 @@ function Card({ product }) {
   return (
     <div className="font-Poppins max-w-sm max-h-sm  border border-[#ccc]">
       <div className="flex justify-center items-center p-2">
-        <img src={product.image} alt="chair" className="h-52 object-contain" />
+        <img
+          src={product.image}
+          alt={product.product_id?.category}
+          className="h-52 object-contain"
+        />
       </div>
       <div className="bg-[#fff] p-2">
         <div className="flex ">

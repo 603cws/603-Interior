@@ -4,9 +4,12 @@ import { FaRegUser } from "react-icons/fa6";
 import { GoHeart } from "react-icons/go";
 import { IoIosSearch } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
+import { useApp } from "../../Context/Context";
 
 function Header() {
   const naviagte = useNavigate();
+
+  const { cartItems } = useApp();
   return (
     <div className="container">
       <div className=" flex bg-[#FFFFFF] rounded-[100px] shadow-[0_4px_12px_rgba(0,0,0,0.1)] my-3 border py-2.5 px-7">
@@ -39,9 +42,11 @@ function Header() {
             </button>
             <button className="relative" onClick={() => naviagte("/cart")}>
               <BsCart2 size={23} />
-              <span className="absolute -top-1/4 -right-1/3 font-semibold text-[8px] bg-[#C16452] text-[#ffffff] rounded-full p-1 h-4 w-4 flex justify-center items-center">
-                2
-              </span>
+              {cartItems && (
+                <span className="absolute -top-1/4 -right-1/3 font-semibold text-[8px] bg-[#C16452] text-[#ffffff] rounded-full p-1 h-4 w-4 flex justify-center items-center">
+                  {cartItems?.length}
+                </span>
+              )}
             </button>
           </div>
         </div>

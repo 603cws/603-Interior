@@ -3,12 +3,11 @@ import { MdOutlineKeyboardArrowRight } from "react-icons/md"; //MdOutlineKeyboar
 import { AiFillStar } from "react-icons/ai";
 import { useParams } from "react-router-dom";
 import { supabase } from "../../services/supabase";
-import { MdOutlineLocalShipping } from "react-icons/md";
-import { BsArrowRight } from "react-icons/bs";
-import { CiHeart } from "react-icons/ci";
 import { FaHeart } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import ReusableSwiper from "./ReusableSwiper";
+import { useApp } from "../../Context/Context";
+import BottomTabs from "./BottomTabs";
 
 function ProductView() {
   const [mainImageHovered, setMainImageHovered] = useState(false); // For main image hover effect
@@ -18,22 +17,29 @@ function ProductView() {
   const [productsMayLike, setProductsMayLike] = useState();
   const [productqunatity, setProductquantity] = useState(1);
 
+  const [isCarted, setIsCarted] = useState();
+
   const navigate = useNavigate();
 
   //   get the product based on the product id
   const { id: productid } = useParams();
 
-  console.log(productid);
+  const { cartItems } = useApp();
 
   async function fetchproductbyid() {
     try {
       const { data, error } = await supabase
         .from("product_variants")
-        .select("*") // or specify fields like "name, price"
+        .select("*,product_id(*)") // or specify fields like "name, price"
         .eq("id", productid)
         .single();
 
+      console.log(data);
+
       if (error) throw new Error(error);
+
+      const check = cartItems.some((item) => item.productId?.id === data?.id);
+      setIsCarted(check);
 
       const productwithoutimage = data;
 
@@ -58,8 +64,6 @@ function ProductView() {
         ...productwithoutimage,
         image: signedUrl || productwithoutimage.image, // fallback in case URL not generated
       };
-
-      console.log(productwithimage);
       setproduct(productwithimage);
     } catch (error) {
       console.log(error);
@@ -141,56 +145,6 @@ function ProductView() {
       console.log(error);
     }
   }
-  //   async function fetchSimilarproduct() {
-  //     try {
-  //       const { data: product, error: Err } = await supabase
-  //         .from("product_variants")
-  //         .select("*") // or specify fields like "name, price"
-  //         .eq("id", productid)
-  //         .single();
-
-  //       const { data, error } = await supabase
-  //         .from("product_variants")
-  //         .select("*") // or specify fields like "name, price"
-  //         .eq("product_type", product.product_type);
-
-  //       if (error) throw new Error(error);
-
-  //       // Filter products where it is approved
-  //       const filtered = data.filter(
-  //         (item) => item.status === "approved" && item.id !== product.id
-  //       );
-
-  //       // 1. Extract unique image names
-  //       const uniqueImages = [...new Set(filtered.map((item) => item.image))];
-
-  //       // 2. Generate signed URLs from Supabase Storage
-  //       const { data: signedUrls, error: signedUrlError } = await supabase.storage
-  //         .from("addon") // your bucket name
-  //         .createSignedUrls(uniqueImages, 3600); // 1 hour expiry
-
-  //       if (signedUrlError) {
-  //         console.error("Error generating signed URLs:", signedUrlError);
-  //         return;
-  //       }
-
-  //       // 3. Create a map from image name to signed URL
-  //       const urlMap = {};
-  //       signedUrls.forEach(({ path, signedUrl }) => {
-  //         urlMap[path] = signedUrl;
-  //       });
-
-  //       // 4. Replace image names with URLs in the array
-  //       const updatedProducts = filtered.map((item) => ({
-  //         ...item,
-  //         image: urlMap[item.image] || item.image, // fallback if URL not found
-  //       }));
-
-  //       setSimilarProducts(updatedProducts);
-  //     } catch (error) {
-  //       console.log(error);
-  //     }
-  //   }
 
   useEffect(() => {
     fetchproductbyid();
@@ -205,8 +159,6 @@ function ProductView() {
         (imageName) => `${baseImageUrl}${imageName}`
       )
     : [];
-
-  console.log("additonal images ", additionalImagesArray);
 
   const handleProductQuantityInc = () => {
     if (productqunatity >= 1) {
@@ -245,6 +197,24 @@ function ProductView() {
       768: { slidesPerView: 3, grid: { rows: 2 }, spaceBetween: 24 },
       1024: { slidesPerView: 5, grid: { rows: 2 }, spaceBetween: 30 },
     },
+  };
+
+  const handleAddToCart = async (product) => {
+    if (!isCarted) {
+      try {
+        const { data, error } = await supabase
+          .from("userProductCollection")
+          .insert([
+            { productId: product.id, type: "cart", quantity: productqunatity },
+          ]);
+
+        if (error) throw new Error(error);
+        setIsCarted(true);
+      } catch (error) {
+        console.log(error);
+        setIsCarted(false);
+      }
+    }
   };
 
   return (
@@ -309,7 +279,7 @@ function ProductView() {
                   {product?.title || "product title"}
                 </h2>
                 <p className="text-[#A5A6AD] text-base leading-[38.4px]">
-                  Square bag
+                  {product?.product_type}
                 </p>
 
                 <div className="border border-[#ccc] p-1 w-32">
@@ -383,8 +353,11 @@ function ProductView() {
 
               {/* add to card and buy now */}
               <div className="my-4 flex gap-8 ">
-                <button className="text-[#212B36] uppercase bg-[#FFFFFF] border border-[#212B36] w-52 px-10 py-4 rounded-sm ">
-                  aDD TO CART
+                <button
+                  onClick={() => handleAddToCart(product)}
+                  className="text-[#212B36] uppercase bg-[#FFFFFF] border border-[#212B36] w-52 px-10 py-4 rounded-sm "
+                >
+                  {isCarted ? "Added to cart" : "ADD to cart"}
                 </button>
                 <button className="text-[#212B36] uppercase bg-[#FFFFFF] border border-[#212B36] w-52 px-10 py-4 rounded-sm ">
                   buy now
@@ -501,42 +474,7 @@ function ProductView() {
       </div>
 
       {/* bottom tabs  */}
-      <section className=" w-full bg-[#B8CCCC]/50 px-10 py-2  ">
-        <div className="font-Poppins flex  justify-around items-center">
-          <div className="flex flex-col justify-center">
-            <div className="flex justify-center">
-              <MdOutlineLocalShipping size={25} />
-            </div>
-            <button className="font-semibold text-lg text-[#171717]">
-              Free shipping
-            </button>
-          </div>
-          <div className="flex flex-col justify-center">
-            <div className="flex justify-center">
-              <MdOutlineLocalShipping size={25} />
-            </div>
-            <button className="font-semibold text-lg text-[#171717]">
-              New styles
-            </button>
-          </div>
-          <div className="flex flex-col justify-center">
-            <div className="flex justify-center">
-              <MdOutlineLocalShipping size={25} />
-            </div>
-            <button className="font-semibold text-lg text-[#171717]">
-              Gift cards
-            </button>
-          </div>
-          <div className="flex flex-col justify-center">
-            <div className="flex justify-center">
-              <MdOutlineLocalShipping size={25} />
-            </div>
-            <button className="font-semibold text-lg text-[#171717]">
-              5.0 Trustpilot rating
-            </button>
-          </div>
-        </div>
-      </section>
+      <BottomTabs />
     </>
   );
 }

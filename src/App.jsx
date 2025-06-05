@@ -48,6 +48,7 @@ import Products from "./pages/Ecommerce/Products";
 import ProductView from "./pages/Ecommerce/ProductView";
 import ShopProducts from "./pages/Ecommerce/ShopProducts";
 import Cart from "./pages/Ecommerce/Cart";
+import Addresspage from "./pages/Ecommerce/Addresspage";
 
 const Home = lazy(() => import("./pages/Home"));
 
@@ -176,6 +177,7 @@ function App() {
             <Route path="/productview/:id" element={<ProductView />} />
             <Route path="/shop" element={<ShopProducts />} />
             <Route path="/cart" element={<Cart />} />
+            <Route path="/address" element={<Addresspage />} />
           </Routes>
         )}
       </Suspense>

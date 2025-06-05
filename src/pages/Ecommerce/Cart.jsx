@@ -5,18 +5,41 @@ import { IoCaretDown, IoClose } from "react-icons/io5";
 import { MdOutlineKeyboardArrowRight } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import Header from "./Header";
+import { supabase } from "../../services/supabase";
+import { useEffect } from "react";
+import { useApp } from "../../Context/Context";
+import SpinnerFullPage from "../../common-components/SpinnerFullPage";
+import BottomTabs from "./BottomTabs";
 
 function Cart() {
   const [wishListed, setWishListed] = useState(false);
   const navigate = useNavigate();
+
+  // get the cart items from the cart table
+  const { cartItems, SetRefreshCartItems } = useApp();
+
+  // created a reduce function to calculate the total price
+  const totalPrice = cartItems?.reduce(
+    (acc, curr) => acc + curr.productId?.price * curr.quantity,
+    0
+  );
+
+  // remove a particular item from the cart
+
   return (
     <>
       <Header />
       <div className="container">
-        <div className="flex items-center text-[#334A78] text-sm mt-4 mb-4 ">
-          <button onClick={() => navigate("/products")}>Home</button>
-          <MdOutlineKeyboardArrowRight size={15} style={{ color: "#334A78" }} />
-          <button>SQUARE CROSS-BODY BAG</button>
+        <div className="!my-10 flex items-center justify-center text-[#334A78] text-lg capitalize font-Poppins leading-[16.8px]">
+          <div className="flex items-center gap-2">
+            <p onClick={() => navigate("/products")} className="text-[#334A78]">
+              cart
+            </p>
+            <hr class="border-t-2 border-dashed border-[#334A78] h-1 w-24 " />
+            <p className="text-[#549DC7]">Address</p>
+            <hr class="border-t-2 border-dashed border-[#334A78] h-1 w-24 " />
+            <p>Payment</p>
+          </div>
         </div>
 
         <section>
@@ -31,96 +54,46 @@ function Cart() {
                 </button>
               </div>
 
-              <div className="flex items-center border border-[#CCCCCC] rounded-lg relative">
-                <img
-                  src="/images/home/product-image.png"
-                  alt=""
-                  className="h-40 w-36 object-contain"
-                />
-                <div className="flex-1 font-Poppins space-y-3 font-medium">
-                  <div>
-                    <h5 className="text-sm text-[#111111] uppercase">
-                      FLAMINGO SLING
-                    </h5>
-                    <h5 className="text-sm text-[#111111]/50 capitalize">
-                      Sling Bag
-                    </h5>
-                  </div>
-                  <div className="flex justify-around items-center border border-[#cccccc] w-20 h-6">
-                    <p className="uppercase text-[#000000] text-[10px]">
-                      qty: 1
-                    </p>
-                    <IoCaretDown size={10} />
-                  </div>
-                  <div className="flex gap-3">
-                    <h5 className="text-sm font-medium text-[#111111]">
-                      Rs. 799.00
-                    </h5>
-                    <h5 className="text-sm font-medium text-[#111111]/50">
-                      <del>Rs. 1699.00</del>
-                    </h5>{" "}
-                    <h5 className="text-sm font-medium text-[#C20000]/50">
-                      Rs. 900 OFF
-                    </h5>
-                  </div>
+              {cartItems ? (
+                <div className="space-y-2">
+                  {cartItems.map((item) => (
+                    <CartCard cartitem={item} key={item.productId.title} />
+                  ))}
                 </div>
-                <div className="absolute top-2 right-2">
-                  <button>
-                    <IoClose />
-                  </button>
+              ) : (
+                <div>
+                  <SpinnerFullPage />
                 </div>
-              </div>
+              )}
 
-              <div className="flex items-center border border-[#CCCCCC] rounded-lg relative">
-                <img
-                  src="/images/home/product-image.png"
-                  alt=""
-                  className="h-40 w-36 object-contain"
-                />
-                <div className="flex-1 font-Poppins space-y-3 font-medium">
-                  <div>
-                    <h5 className="text-sm text-[#111111] uppercase">
-                      FLAMINGO SLING
-                    </h5>
-                    <h5 className="text-sm text-[#111111]/50 capitalize">
-                      Sling Bag
-                    </h5>
-                  </div>
-                  <div className="flex justify-around items-center border border-[#cccccc] w-20 h-6">
-                    <p className="uppercase text-[#000000] text-[10px]">
-                      qty: 1
-                    </p>
-                    <IoCaretDown size={10} />
-                  </div>
-                  <div className="flex gap-3">
-                    <h5 className="text-sm font-medium text-[#111111]">
-                      Rs. 799.00
-                    </h5>
-                    <h5 className="text-sm font-medium text-[#111111]/50">
-                      <del>Rs. 1699.00</del>
-                    </h5>{" "}
-                    <h5 className="text-sm font-medium text-[#C20000]/50">
-                      Rs. 900 OFF
-                    </h5>
-                  </div>
+              <div className="border border-[#CCCCCC] rounded-lg font-Poppins flex justify-between items-center py-4 px-3">
+                <div className="flex items-center">
+                  <img
+                    src="/images/wishlist.png"
+                    alt="wishlist icon"
+                    className="w-8"
+                  />
+                  <h5 className="text-sm text-[#171717] font-semibold ">
+                    Add more from Wishlist
+                  </h5>
                 </div>
-                <div className="absolute top-2 right-2">
-                  <button>
-                    <IoClose />
-                  </button>
-                </div>
+                <button className="  text-[#000000]">
+                  <MdOutlineKeyboardArrowRight size={25} />
+                </button>
               </div>
             </div>
 
             <div className="flex-1 border-l-[1px] pl-10">
-              <h4 className="uppercase mb-7">price details (4 Items)</h4>
+              <h4 className="uppercase mb-7">
+                price details ({cartItems?.length} Items)
+              </h4>
               <div className="space-y-6 pb-6">
                 <div className="flex justify-between">
                   <h5 className="font-medium text-base text-[#111111]/80">
                     Total MRP
                   </h5>
                   <h5 className="font-medium text-base text-[#111111]/80 ">
-                    $6,796
+                    Rs {totalPrice || 0}
                   </h5>
                 </div>
 
@@ -219,8 +192,76 @@ function Cart() {
           </div>
         </section>
       </div>
+
+      <BottomTabs />
     </>
   );
 }
 
 export default Cart;
+
+function CartCard({ cartitem }) {
+  const { SetRefreshCartItems, getCartItems } = useApp();
+  async function handleRemoveItem(product) {
+    try {
+      console.log("cartproduct", product);
+
+      const { data, error } = await supabase
+        .from("userProductCollection")
+        .delete()
+        .eq("id", product.id);
+
+      console.log("data", data, "error", error);
+
+      await getCartItems();
+
+      if (error) throw new Error(error);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  return (
+    <>
+      <div className="flex items-center border border-[#CCCCCC] rounded-lg relative">
+        <img
+          src={cartitem.productId.image}
+          alt=""
+          className="h-40 w-36 object-contain"
+        />
+        <div className="flex-1 font-Poppins space-y-3 font-medium">
+          <div>
+            <h5 className="text-sm text-[#111111] uppercase">
+              {cartitem.productId?.title}
+            </h5>
+            <h5 className="text-sm text-[#111111]/50 capitalize">
+              {cartitem.productId?.product_type}
+            </h5>
+          </div>
+          <div className="flex justify-around items-center border border-[#cccccc] w-20 h-6">
+            <p className="uppercase text-[#000000] text-[10px]">
+              qty: {cartitem?.quantity || "NA"}
+            </p>
+            <IoCaretDown size={10} />
+          </div>
+          <div className="flex gap-3">
+            <h5 className="text-sm font-medium text-[#111111]">
+              Rs. {cartitem.productId?.price}
+            </h5>
+            <h5 className="text-sm font-medium text-[#111111]/50">
+              <del>Rs. 1699.00</del>
+            </h5>{" "}
+            <h5 className="text-sm font-medium text-[#C20000]/50">
+              Rs. 900 OFF
+            </h5>
+          </div>
+        </div>
+        <div className="absolute top-2 right-2">
+          <button onClick={() => handleRemoveItem(cartitem)}>
+            <IoClose />
+          </button>
+        </div>
+      </div>
+    </>
+  );
+}

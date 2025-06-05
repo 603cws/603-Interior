@@ -342,7 +342,6 @@ function Products() {
         <SectionHeader title={"Featured products"} />
         <div className="container px-4 lg:px-12 mx-auto my-10">
           <div className="hidden md:flex justify-end gap-3">
-            {products && <h2 className="text-xl ">Total:{products?.length}</h2>}
             <button
               ref={prevRef3}
               className="text-[#304778] disabled:text-gray-400"
