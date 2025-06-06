@@ -3,12 +3,13 @@ import { MdOutlineKeyboardArrowRight } from "react-icons/md"; //MdOutlineKeyboar
 import { AiFillStar } from "react-icons/ai";
 import { useParams } from "react-router-dom";
 import { supabase } from "../../services/supabase";
-import { FaHeart } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import ReusableSwiper from "./ReusableSwiper";
 import { useApp } from "../../Context/Context";
 import BottomTabs from "./BottomTabs";
 import Header from "./Header";
+import { AiFillHeart } from "react-icons/ai";
+import { GoHeart } from "react-icons/go";
 
 function ProductView() {
   const [mainImageHovered, setMainImageHovered] = useState(false); // For main image hover effect
@@ -25,8 +26,14 @@ function ProductView() {
   //   get the product based on the product id
   const { id: productid } = useParams();
 
-  const { cartItems, isAuthenticated, localcartItems, setLocalCartItems } =
-    useApp();
+  const {
+    cartItems,
+    isAuthenticated,
+    localcartItems,
+    setLocalCartItems,
+    wishlistItems,
+    setWishlistItems,
+  } = useApp();
 
   async function fetchproductbyid() {
     try {
@@ -212,7 +219,7 @@ function ProductView() {
     },
   };
 
-  const handleAddToCart = async (product) => {
+  const handleAddToCart = async (product, type) => {
     if (!isCarted && !isAuthenticated) {
       //format the product for cart
       const formattedproductforcart = {
@@ -231,15 +238,26 @@ function ProductView() {
       });
       setIsCarted(true);
     }
-    if (!isCarted && isAuthenticated) {
+    const isAlreadyInWishlist = wishlistItems?.some(
+      (item) => item.productId?.id === product.id
+    );
+    if (type === "wishlist" && isAlreadyInWishlist) return;
+
+    if ((!isCarted && isAuthenticated) || type === "wishlist") {
       try {
         const { data, error } = await supabase
           .from("userProductCollection")
           .insert([
-            { productId: product.id, type: "cart", quantity: productqunatity },
+            { productId: product.id, type: type, quantity: productqunatity },
           ]);
 
         if (error) throw new Error(error);
+        if (type === "wishlist") {
+          setWishlistItems((prev) => [
+            ...prev,
+            { productId: { ...product }, type: "wishlist" },
+          ]);
+        }
         setIsCarted(true);
       } catch (error) {
         console.log(error);
@@ -386,7 +404,7 @@ function ProductView() {
               {/* add to card and buy now */}
               <div className="my-4 flex gap-8 ">
                 <button
-                  onClick={() => handleAddToCart(product)}
+                  onClick={() => handleAddToCart(product, "cart")}
                   className="text-[#212B36] uppercase bg-[#FFFFFF] border border-[#212B36] w-52 px-10 py-4 rounded-sm "
                 >
                   {isCarted ? "Added to cart" : "ADD to cart"}
@@ -458,6 +476,7 @@ function ProductView() {
               <ReusableSwiper
                 products={similarProducts}
                 CardComponent={Card}
+                handleAddToCart={handleAddToCart}
                 swiperSettings={swiperSettings}
                 prevRef={prevRef}
                 nextRef={nextRef}
@@ -486,6 +505,7 @@ function ProductView() {
               <ReusableSwiper
                 products={productsMayLike}
                 CardComponent={Card}
+                handleAddToCart={handleAddToCart}
                 swiperSettings={productmaylikeSwiperSettings}
                 prevRef={prevRef2}
                 nextRef={nextRef2}
@@ -528,7 +548,12 @@ function ProductDetailreusable({ title1, title2, desc1, desc2 }) {
   );
 }
 
-function Card({ product }) {
+function Card({ product, handleAddToCart }) {
+  const { wishlistItems } = useApp();
+  const isWishlisted = wishlistItems?.some(
+    (item) => item.productId?.id === product.id
+  );
+
   return (
     <div className="font-Poppins w-[245px] h-[350px] border border-[#ccc]">
       <div className="flex justify-center items-center p-2">
@@ -548,8 +573,15 @@ function Card({ product }) {
               <p className="text-[#C20000]">sale</p>
             </div>
           </div>
-          <div className=" text-[#ccc] hover:text-red-950 ">
-            <FaHeart size={25} />
+          <div
+            onClick={() => handleAddToCart(product, "wishlist")}
+            className=" text-[#ccc] hover:text-red-950 cursor-pointer"
+          >
+            {isWishlisted ? (
+              <AiFillHeart size={26} color="red" />
+            ) : (
+              <GoHeart size={25} />
+            )}
           </div>
         </div>
         <button className="text-[#000] uppercase bg-[#FFFFFF] text-xs border border-[#ccc] px-2  py-2 rounded-sm ">

@@ -100,13 +100,14 @@ export const AppProvider = ({ children }) => {
   );
 
   const [resfreshCartItens, SetRefreshCartItems] = useState(false);
+  const [wishlistItems, setWishlistItems] = useState([]);
 
   async function getCartItems() {
     try {
       const { data, error } = await supabase
         .from("userProductCollection")
         .select("*,productId(*)")
-        .eq("type", "cart");
+      // .eq("type", "cart");
 
       if (error) throw new Error(error);
 
@@ -146,7 +147,14 @@ export const AppProvider = ({ children }) => {
           updatedProducts.map((item) => [item.productId.id, item])
         ).values(),
       ];
-      setCartItems(uniquecartitems);
+      const cartProducts = uniquecartitems.filter(
+        (item) => item.type === "cart"
+      );
+      const wishlistProducts = uniquecartitems.filter(
+        (item) => item.type === "wishlist"
+      );
+      setCartItems(cartProducts);
+      setWishlistItems(wishlistProducts);
     } catch (error) {
       console.log(error);
     }
@@ -719,6 +727,8 @@ export const AppProvider = ({ children }) => {
         cartItems,
         SetRefreshCartItems,
         getCartItems,
+	    wishlistItems,
+        setWishlistItems,
         localcartItems,
         setLocalCartItems,
         fetchUserData,

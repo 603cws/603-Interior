@@ -462,6 +462,7 @@ function Products() {
               }}
               modules={[Grid, Navigation, Pagination]}
               slidesPerView={4}
+              slidesPerGroup={4}
               grid={{
                 rows: 2,
                 fill: "row",

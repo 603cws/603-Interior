@@ -14,6 +14,7 @@ const ReusableSwiper = ({
   prevRef,
   nextRef,
   paginationRef,
+  handleAddToCart,
 }) => {
   return (
     <Swiper
@@ -40,7 +41,14 @@ const ReusableSwiper = ({
     >
       {products.map((product, index) => (
         <SwiperSlide key={index}>
-          <CardComponent product={product} />
+          {handleAddToCart ? (
+            <CardComponent
+              product={product}
+              handleAddToCart={handleAddToCart}
+            />
+          ) : (
+            <CardComponent product={product} />
+          )}
         </SwiperSlide>
       ))}
     </Swiper>

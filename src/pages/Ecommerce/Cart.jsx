@@ -59,7 +59,7 @@ function Cart() {
                 cartItems ? (
                   <div className="space-y-2">
                     {cartItems.map((item) => (
-                      <CartCard cartitem={item} key={item.productId.title} />
+                      <CartCard cartitem={item} key={item.id} />
                     ))}
                   </div>
                 ) : (
@@ -70,7 +70,7 @@ function Cart() {
               ) : localcartItems ? (
                 <div className="space-y-2">
                   {localcartItems.map((item) => (
-                    <CartCard cartitem={item} key={item.productId.title} />
+                    <CartCard cartitem={item} key={item.id} />
                   ))}
                 </div>
               ) : (
