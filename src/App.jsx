@@ -136,6 +136,12 @@ function App() {
             <Route path="/brokenlink" element={<Brokenlink />} />
             <Route path="/tokenExpired" element={<TokenExpired />} />
             <Route path="/partnerwithus" element={<PartnerWorkvedInterior />} />
+            <Route path="/products" element={<Products />} />
+            <Route path="/productview" element={<ProductView />} />
+            <Route path="/productview/:id" element={<ProductView />} />
+            <Route path="/shop" element={<ShopProducts />} />
+            <Route path="/cart" element={<Cart />} />
+            <Route path="/address" element={<Addresspage />} />
           </Routes>
         ) : (
           <Routes>

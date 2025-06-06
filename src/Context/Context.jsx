@@ -62,6 +62,7 @@ export const AppProvider = ({ children }) => {
     profileImage: null,
     location: "",
     boqName: "",
+    address: [] || undefined,
   });
   // const [accountHolder, setAccountHolder] = useState(null);
   // const [selectedPlan, setSelectedPlan] = useState(null);
@@ -94,6 +95,9 @@ export const AppProvider = ({ children }) => {
   );
 
   const [cartItems, setCartItems] = useState([]);
+  const [localcartItems, setLocalCartItems] = useState(
+    JSON.parse(localStorage.getItem("cartitems")) || []
+  );
 
   const [resfreshCartItens, SetRefreshCartItems] = useState(false);
 
@@ -404,59 +408,60 @@ export const AppProvider = ({ children }) => {
     }
   }, [selectedData, categories, subCat1]);
 
-  useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        if (isAuthenticated) {
-          // Retrieve the currently authenticated user
-          const {
-            data: { user },
-            error: authError,
-          } = await supabase.auth.getUser();
+  const fetchUserData = async () => {
+    try {
+      if (isAuthenticated) {
+        // Retrieve the currently authenticated user
+        const {
+          data: { user },
+          error: authError,
+        } = await supabase.auth.getUser();
 
-          if (authError) throw authError;
-          if (!user) return;
+        if (authError) throw authError;
+        if (!user) return;
 
-          // Extract user ID and email from authentication
-          const userId = user.id;
-          const userEmail = user.email;
+        // Extract user ID and email from authentication
+        const userId = user.id;
+        const userEmail = user.email;
 
-          // Query the profiles table for phone and companyName
-          const { data, error: profileError } = await supabase
-            .from("profiles")
-            .select(
-              "phone, company_name,role,allowed_category,profile_image,location"
-            )
-            .eq("id", userId)
-            .single();
+        // Query the profiles table for phone and companyName
+        const { data, error: profileError } = await supabase
+          .from("profiles")
+          .select(
+            "phone, company_name,role,allowed_category,profile_image,location,address"
+          )
+          .eq("id", userId)
+          .single();
 
-          if (profileError) throw profileError;
+        if (profileError) throw profileError;
 
-          // Update state with user details
-          // setAccountHolder({
-          //   userId,
-          //   email: userEmail,
-          //   phone: profileError ? "" : data.phone || "",
-          //   companyName: profileError ? "" : data.company_name || "",
-          //   role: profileError ? "" : data.role || "",
-          // });
-          // Update state with user details
-          setAccountHolder({
-            userId,
-            email: userEmail,
-            phone: data.phone || "",
-            companyName: data.company_name || "",
-            role: data.role || "",
-            allowedCategory: JSON.parse(data.allowed_category) || undefined,
-            profileImage: data.profile_image || null,
-            location: data.location || "",
-          });
-        }
-      } catch (error) {
-        console.warn("Error fetching user data:", error.message);
+        // Update state with user details
+        // setAccountHolder({
+        //   userId,
+        //   email: userEmail,
+        //   phone: profileError ? "" : data.phone || "",
+        //   companyName: profileError ? "" : data.company_name || "",
+        //   role: profileError ? "" : data.role || "",
+        // });
+        // Update state with user details
+        setAccountHolder({
+          userId,
+          email: userEmail,
+          phone: data.phone || "",
+          companyName: data.company_name || "",
+          role: data.role || "",
+          allowedCategory: JSON.parse(data.allowed_category) || undefined,
+          profileImage: data.profile_image || null,
+          location: data.location || "",
+          address: JSON.parse(data.address) || [],
+        });
       }
-    };
+    } catch (error) {
+      console.warn("Error fetching user data:", error.message);
+    }
+  };
 
+  useEffect(() => {
     fetchUserData();
   }, [isAuthenticated]);
 
@@ -714,6 +719,9 @@ export const AppProvider = ({ children }) => {
         cartItems,
         SetRefreshCartItems,
         getCartItems,
+        localcartItems,
+        setLocalCartItems,
+        fetchUserData,
       }}
     >
       {children}

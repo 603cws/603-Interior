@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import ReusableSwiper from "./ReusableSwiper";
 import { useApp } from "../../Context/Context";
 import BottomTabs from "./BottomTabs";
+import Header from "./Header";
 
 function ProductView() {
   const [mainImageHovered, setMainImageHovered] = useState(false); // For main image hover effect
@@ -24,7 +25,8 @@ function ProductView() {
   //   get the product based on the product id
   const { id: productid } = useParams();
 
-  const { cartItems } = useApp();
+  const { cartItems, isAuthenticated, localcartItems, setLocalCartItems } =
+    useApp();
 
   async function fetchproductbyid() {
     try {
@@ -38,8 +40,19 @@ function ProductView() {
 
       if (error) throw new Error(error);
 
-      const check = cartItems.some((item) => item.productId?.id === data?.id);
-      setIsCarted(check);
+      if (isAuthenticated) {
+        const check = cartItems.some((item) => item.productId?.id === data?.id);
+
+        setIsCarted(check);
+      } else {
+        console.log(localcartItems);
+
+        const check = localcartItems.some(
+          (item) => item.productId?.id === data?.id
+        );
+
+        setIsCarted(check);
+      }
 
       const productwithoutimage = data;
 
@@ -200,7 +213,25 @@ function ProductView() {
   };
 
   const handleAddToCart = async (product) => {
-    if (!isCarted) {
+    if (!isCarted && !isAuthenticated) {
+      //format the product for cart
+      const formattedproductforcart = {
+        productId: product,
+        type: "cart",
+        quantity: productqunatity,
+      };
+
+      setLocalCartItems((prev) => {
+        const exists = prev.some((item) => item?.productId?.id === product.id);
+        if (exists) return prev;
+
+        const updated = [...prev, formattedproductforcart];
+        localStorage.setItem("cartitems", JSON.stringify(updated));
+        return updated;
+      });
+      setIsCarted(true);
+    }
+    if (!isCarted && isAuthenticated) {
       try {
         const { data, error } = await supabase
           .from("userProductCollection")
@@ -219,6 +250,7 @@ function ProductView() {
 
   return (
     <>
+      <Header />
       <div className="container mx-auto">
         {/* breadcumbs */}
         <div className="mt-10">

@@ -9,12 +9,18 @@ import { useApp } from "../../Context/Context";
 function Header() {
   const naviagte = useNavigate();
 
-  const { cartItems } = useApp();
+  const { cartItems, isAuthenticated, localcartItems } = useApp();
   return (
     <div className="container">
       <div className=" flex bg-[#FFFFFF] rounded-[100px] shadow-[0_4px_12px_rgba(0,0,0,0.1)] my-3 border py-2.5 px-7">
         <div className="w-2/5 flex gap-20">
-          <img src="/logo/workved-interior.png" alt="" className="h-10 w-16" />
+          <button onClick={() => naviagte("/")}>
+            <img
+              src="/logo/workved-interior.png"
+              alt=""
+              className="h-10 w-16"
+            />
+          </button>
           <ul className="flex items-center uppercase gap-10 text-xs font-bold text-[#1A293A] [&_li]:cursor-pointer">
             <li onClick={() => naviagte("/products")}>home</li>
             <li onClick={() => naviagte("/shop")}>shop</li>
@@ -42,11 +48,14 @@ function Header() {
             </button>
             <button className="relative" onClick={() => naviagte("/cart")}>
               <BsCart2 size={23} />
-              {cartItems && (
+              <span className="absolute -top-1/4 -right-1/3 font-semibold text-[8px] bg-[#C16452] text-[#ffffff] rounded-full p-1 h-4 w-4 flex justify-center items-center">
+                {isAuthenticated ? cartItems?.length : localcartItems?.length}
+              </span>
+              {/* {cartItems && (
                 <span className="absolute -top-1/4 -right-1/3 font-semibold text-[8px] bg-[#C16452] text-[#ffffff] rounded-full p-1 h-4 w-4 flex justify-center items-center">
                   {cartItems?.length}
                 </span>
-              )}
+              )} */}
             </button>
           </div>
         </div>

@@ -16,7 +16,8 @@ function Cart() {
   const navigate = useNavigate();
 
   // get the cart items from the cart table
-  const { cartItems, SetRefreshCartItems } = useApp();
+  const { cartItems, SetRefreshCartItems, localcartItems, isAuthenticated } =
+    useApp();
 
   // created a reduce function to calculate the total price
   const totalPrice = cartItems?.reduce(
@@ -35,9 +36,9 @@ function Cart() {
             <p onClick={() => navigate("/products")} className="text-[#334A78]">
               cart
             </p>
-            <hr class="border-t-2 border-dashed border-[#334A78] h-1 w-24 " />
+            <hr className="border-t-2 border-dashed border-[#334A78] h-1 w-24 " />
             <p className="text-[#549DC7]">Address</p>
-            <hr class="border-t-2 border-dashed border-[#334A78] h-1 w-24 " />
+            <hr className="border-t-2 border-dashed border-[#334A78] h-1 w-24 " />
             <p>Payment</p>
           </div>
         </div>
@@ -54,7 +55,31 @@ function Cart() {
                 </button>
               </div>
 
-              {cartItems ? (
+              {isAuthenticated ? (
+                cartItems ? (
+                  <div className="space-y-2">
+                    {cartItems.map((item) => (
+                      <CartCard cartitem={item} key={item.productId.title} />
+                    ))}
+                  </div>
+                ) : (
+                  <div>
+                    <SpinnerFullPage />
+                  </div>
+                )
+              ) : localcartItems ? (
+                <div className="space-y-2">
+                  {localcartItems.map((item) => (
+                    <CartCard cartitem={item} key={item.productId.title} />
+                  ))}
+                </div>
+              ) : (
+                <div>
+                  <SpinnerFullPage />
+                </div>
+              )}
+
+              {/* {cartItems ? (
                 <div className="space-y-2">
                   {cartItems.map((item) => (
                     <CartCard cartitem={item} key={item.productId.title} />
@@ -64,7 +89,7 @@ function Cart() {
                 <div>
                   <SpinnerFullPage />
                 </div>
-              )}
+              )} */}
 
               <div className="border border-[#CCCCCC] rounded-lg font-Poppins flex justify-between items-center py-4 px-3">
                 <div className="flex items-center">
@@ -85,7 +110,9 @@ function Cart() {
 
             <div className="flex-1 border-l-[1px] pl-10">
               <h4 className="uppercase mb-7">
-                price details ({cartItems?.length} Items)
+                price details (
+                {isAuthenticated ? cartItems?.length : localcartItems?.length}{" "}
+                Items)
               </h4>
               <div className="space-y-6 pb-6">
                 <div className="flex justify-between">
@@ -201,23 +228,39 @@ function Cart() {
 export default Cart;
 
 function CartCard({ cartitem }) {
-  const { SetRefreshCartItems, getCartItems } = useApp();
+  const { getCartItems, isAuthenticated, localcartItems } = useApp();
   async function handleRemoveItem(product) {
-    try {
-      console.log("cartproduct", product);
+    if (isAuthenticated) {
+      try {
+        console.log("cartproduct", product);
 
-      const { data, error } = await supabase
-        .from("userProductCollection")
-        .delete()
-        .eq("id", product.id);
+        const { data, error } = await supabase
+          .from("userProductCollection")
+          .delete()
+          .eq("id", product.id);
 
-      console.log("data", data, "error", error);
+        console.log("data", data, "error", error);
 
-      await getCartItems();
+        await getCartItems();
 
-      if (error) throw new Error(error);
-    } catch (error) {
-      console.log(error);
+        if (error) throw new Error(error);
+      } catch (error) {
+        console.log(error);
+      }
+    } else {
+      const removeproductfromlocalCartitems = localcartItems.filter(
+        (item) => item.productId.id !== product?.productId?.id
+      );
+
+      console.log(localcartItems);
+      console.log(product);
+
+      console.log("after product removed", removeproductfromlocalCartitems);
+
+      localStorage.setItem(
+        "cartitems",
+        JSON.stringify(removeproductfromlocalCartitems)
+      );
     }
   }
 
