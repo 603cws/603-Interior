@@ -17,4 +17,8 @@ export const layoutRoomconstant = {
   commonRooms: {
     CabinSize: 5,
   },
+  hrRoom: {
+    CabinSize: 40,
+    SeatCount: 2,
+  },
 };

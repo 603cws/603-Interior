@@ -24,7 +24,7 @@ import beforeImage from "/images/home/before-img-one.png";
 import afterImage from "/images/home/after-img-one.png";
 import { FaRegUser } from "react-icons/fa";
 import { FiMessageSquare } from "react-icons/fi";
-import ReadMoreBtn from "../common-components/ReadMoreBtn";
+import { ReadMoreBtn } from "../common-components/ReadMoreBtn";
 import { useApp } from "../Context/Context";
 
 function Landing() {
@@ -638,17 +638,26 @@ function Landing() {
             className="absolute top-0 left-0 h-full w-full object-cover"
             alt="Before"
           />
+          <div className="absolute top-4 right-4 bg-[#1B2E50]/90 text-white text-sm px-2 py-1 rounded">
+            Before
+          </div>
 
           {/* After image with dynamic width */}
           <div
             className="absolute top-0 left-0 h-full overflow-hidden"
             style={{ width: `${sliderPos}%` }}
           >
-            <img
-              src={afterImage}
-              className="h-full w-full object-cover"
-              alt="After"
-            />
+            <div className="relative h-full w-full">
+              <img
+                src={afterImage}
+                className="h-full w-full object-cover"
+                alt="After"
+              />
+              {/* After Tag (moves and hides with image) */}
+              <div className="absolute top-4 right-4 bg-[#1B2E50]/90 text-white text-sm px-2 py-1 rounded">
+                After
+              </div>
+            </div>
           </div>
 
           {/* Slider handle */}

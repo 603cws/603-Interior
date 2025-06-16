@@ -20,8 +20,6 @@ const AreaCounter = ({
   setSeatCount,
   title,
 }) => {
-  // console.log("seatcount", seatCount);
-
   const min = min2;
   const max = max2;
   const step = step2;
@@ -29,7 +27,7 @@ const AreaCounter = ({
   const usableArea = totalArea - freeSpace; // Area available for building
   const [error, setError] = useState("");
   const [warning, setWarning] = useState(false);
-  const [fixedValue, setFixedValue] = useState(String(value));
+  const [fixedValue, setFixedValue] = useState(String(value || seatCount));
   const [errorMessage, setErrorMessage] = useState();
   const [sizeReached, setSizeReached] = useState(false);
 
@@ -107,7 +105,8 @@ const AreaCounter = ({
   }
 
   const handleIncrement = () => {
-    let checkbuildarea;
+    console.log("type", type);
+
     if (counterValue > 0) {
       if (value < max && totalArea > 0) {
         // onChange(value + step);
@@ -133,8 +132,6 @@ const AreaCounter = ({
           type === "videoRecordingRoom" ||
           type === "ups" ||
           type === "bms" ||
-          // type === "maleWashroom" ||
-          // type === "femaleWashroom"
           type === "washrooms"
         ) {
           // setCabinSize(cabinSize + layoutRoomconstant.commonRooms.CabinSize);
@@ -174,8 +171,19 @@ const AreaCounter = ({
             2
           );
           // setSeatCount(seatCount + layoutRoomconstant.small.SeatCount);
+        } else if (type === "hrRoom" || type === "sales") {
+          CheckBuildExceedwithseatcount(
+            builtArea,
+            layoutRoomconstant.hrRoom.CabinSize,
+            usableArea,
+            setCabinSize,
+            cabinSize,
+            counterValue,
+            seatCount,
+            setSeatCount,
+            2
+          );
         } else {
-          console.log("breakout");
           setCabinSize(cabinSize + 40);
         }
       } else {
@@ -197,11 +205,7 @@ const AreaCounter = ({
   const handleDecrement = () => {
     if (value > min && totalArea > 0 && cabinSize > initialAreaValues[type]) {
       // onChange(value - step);
-      if (
-        type === "financeRoom"
-        // type === "boardRoom" ||
-        // type === "conferenceRoom"
-      ) {
+      if (type === "financeRoom") {
         setCabinSize(cabinSize - layoutRoomconstant.financeRoom.CabinSize);
         setSeatCount(seatCount - layoutRoomconstant.financeRoom.SeatCount);
       } else if (type === "conferenceRoom" || type === "boardRoom") {
@@ -215,87 +219,24 @@ const AreaCounter = ({
         type === "videoRecordingRoom" ||
         type === "ups" ||
         type === "bms" ||
-        // type === "maleWashroom" ||
-        // type === "femaleWashroom"
         type === "washrooms"
       ) {
         setCabinSize(cabinSize - layoutRoomconstant.commonRooms.CabinSize);
       } else if (type === "small") {
         setCabinSize(cabinSize - layoutRoomconstant.small.CabinSize);
         setSeatCount(seatCount - layoutRoomconstant.small.SeatCount);
+      } else if (type === "hrRoom" || type === "sales") {
+        setCabinSize(cabinSize - layoutRoomconstant.hrRoom.CabinSize);
+        setSeatCount(seatCount - layoutRoomconstant.hrRoom.SeatCount);
       } else {
         setCabinSize(cabinSize - 40);
       }
     }
   };
 
-  // const handleInputChange = (event) => {
-  //   const newValue = Number(event.target.value);
-  //   // console.log("newValue", newValue);
-  //   setFixedValue(event.target.value);
-  //   if (newValue >= min && newValue <= max) {
-  //     console.log("hii");
-  //     onChange(newValue);
-  //   }
-  // };
-
-  // Sync input with value from props/state
   useEffect(() => {
     setFixedValue(String(value));
   }, [value]);
-
-  // const handleInputChange = (event) => {
-  //   const raw = event.target.value;
-  //   const digitsOnly = raw.replace(/\D/g, "");
-  //   const newValue = Number(raw);
-
-  //   setFixedValue(raw); // Always allow typing
-
-  //   // Calculate what builtArea will become if this change is allowed
-  //   const projectedBuiltArea =
-  //     counterValue * newValue + builtArea - counterValue * value;
-
-  //   // Allow change only if:
-  //   if (
-  //     digitsOnly.length >= 1 &&
-  //     !isNaN(newValue) &&
-  //     newValue >= min &&
-  //     newValue <= max &&
-  //     projectedBuiltArea <= usableArea
-  //   ) {
-  //     onChange(newValue);
-  //     setError("");
-  //   } else {
-  //     setError(`value must be in range ${min}-${max}sqft`);
-  //   }
-  // };
-
-  // const handleInputChange = (event) => {
-  //   setFixedValue(event.target.value); // let the user type anything (even invalid temporarily)
-  // };
-
-  // const handleKeyDown = (event) => {
-  //   let checkbuildarea = 0;
-  //   if (event.key === "Enter") {
-  //     const newValue = Number(fixedvalue);
-  //     checkbuildarea =
-  //       counterValue * newValue + builtArea - counterValue * value;
-  //     console.log(
-  //       newValue,
-  //       checkbuildarea,
-  //       counterValue,
-  //       builtArea,
-  //       usableArea
-  //     );
-
-  //     if (newValue >= min && newValue <= max && checkbuildarea <= usableArea) {
-  //       onChange(newValue); // update parent
-  //     } else {
-  //       // Optionally reset or show warning
-  //       console.warn("Value out of range");
-  //     }
-  //   }
-  // };
 
   const handleKeyDown = (e) => {
     if (
@@ -307,7 +248,7 @@ const AreaCounter = ({
       e.key === "ArrowUp" ||
       e.key === "ArrowDown"
     ) {
-      e.preventDefault(); // Prevent the default behavior
+      e.preventDefault();
     }
     const digitsOnly = fixedValue.replace(/\D/g, "");
     if (digitsOnly.length >= 3 && /^\d$/.test(e.key)) {
@@ -368,9 +309,6 @@ const AreaCounter = ({
 
   return (
     <div className="text-center">
-      {/* <label htmlFor="md-cabin-size" className="text-xs md:text-base">
-        {name}:{" "}
-      </label> */}
       <div
         className={`flex items-start justify-start gap-2 border-2 rounded-[4px] ${
           error ? "border-red-400" : ""
@@ -386,12 +324,13 @@ const AreaCounter = ({
           max={max}
           step={step}
           value={fixedValue}
-          // value={value}
-          // value={cabinSize}
           onChange={handleInputChange}
           onBlur={handleBlur}
           onKeyDown={handleKeyDown}
-          readOnly={seatCount !== undefined}
+          readOnly={
+            seatCount !== undefined
+            // && !["conferenceRoom", "boardRoom"].includes(type)
+          }
           className={`w-10 rounded text-center [&::-webkit-inner-spin-button]:appearance-none  focus:outline-none focus:ring-0 text-xs md:text-[13px] leading-6 ${
             seatCount !== undefined ? "cursor-default" : "cursor-text"
           }`}

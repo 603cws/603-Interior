@@ -9,7 +9,7 @@ import "../styles/Landing.css";
 import ContactUsPopup from "../common-components/ContactUsPopup";
 import { ServiceCard } from "../common-components/ServiceCard";
 import HeroSection from "./HeroSection";
-import ReadMoreBtn from "../common-components/ReadMoreBtn";
+import { ReadMoreBtn } from "../common-components/ReadMoreBtn";
 import { useInView } from "react-intersection-observer";
 
 const services = [

@@ -19,9 +19,9 @@ function Spacebar({ totalArea, builtArea, availableArea, MIN_AREA }) {
           width: `${roundedUsedPer}%`,
           transition: "width 0.5s ease-in-out", // Added transition
         }}
-        className="bg-[#34BFAD] text-white border-1 relative"
+        className="bg-[#437BAA] text-white border-1 relative"
       >
-        <div className="absolute h-full w-2 right-0 shadow-[0_0_40px_10px_#76F8ED]"></div>
+        <div className="absolute h-full w-2 right-0 shadow-[0_0_40px_10px_#85AED2]"></div>
         <p className="px-4 text-xs flex items-center h-full">
           Used: {builtArea} sq ft
         </p>

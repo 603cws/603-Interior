@@ -80,7 +80,6 @@ function Navbar({
     areaValues,
     areaQuantities,
     totalArea = null,
-    // imageFilename,
     builtArea
   ) => {
     return {
@@ -140,45 +139,9 @@ function Navbar({
       washroomsArea: areaValues.washrooms,
       washroomsQty: areaQuantities.washrooms || 0,
       ...(totalArea !== null && { totalArea }),
-      // layoutImg: imageFilename,
       usedSpace: builtArea,
     };
   };
-
-  // const uploadImage = async (imageDataUrl) => {
-  //   try {
-  //     // ✅ Convert Base64 to Blob Properly
-  //     const blob = await fetch(imageDataUrl)
-  //       .then((res) => res.blob())
-  //       .catch((error) => {
-  //         console.error("Error converting Base64 to Blob:", error);
-  //         return null;
-  //       });
-
-  //     if (!blob) {
-  //       console.error("Blob conversion failed");
-  //       return null;
-  //     }
-
-  //     // ✅ Ensure Correct Filename
-  //     const fileName = `area_distribution_${Date.now()}.png`;
-
-  //     // ✅ Upload Image to Supabase Storage
-  //     const { error } = await supabase.storage
-  //       .from("addon")
-  //       .upload(fileName, blob, { contentType: "image/png" });
-
-  //     if (error) {
-  //       console.error("Image upload failed:", error);
-  //       return null;
-  //     }
-
-  //     return fileName; // ✅ Store filename in DB
-  //   } catch (error) {
-  //     console.error("Upload failed:", error);
-  //     return null;
-  //   }
-  // };
 
   const generateBOQclick = () => {
     if (!totalArea) {
@@ -210,22 +173,12 @@ function Navbar({
         return;
       }
 
-      // Trigger export and wait for image to be available
-      // if (layoutImgRef.current) {
-      //   await layoutImgRef.current();
-      // }
-
-      // Upload image to Supabase
-      // const imageUrl = await uploadImage(layoutImage || "");
-      // const imageFilename = await uploadImage(layoutImage);
-
       if (totalArea) {
         const layoutData = mapAreaValues(
           userId,
           areaValues,
           areaQuantities,
           totalArea,
-          // imageFilename,
           builtArea
         );
 
@@ -328,7 +281,7 @@ function Navbar({
   return (
     <div>
       {!isMobile ? (
-        <div className="hidden md:flex justify-around bg-gradient-to-r from-[#1A3A36] to-[#48A095] py-4 items-center px-5">
+        <div className="hidden md:flex justify-around bg-gradient-to-r from-[#23445B] to-[#487BA0] py-4 items-center px-5">
           {/* logo */}
           <button className=" " onClick={() => navigate("/")}>
             <img
@@ -385,7 +338,7 @@ function Navbar({
           )}
           {/* button for generate boq */}
           <button
-            className="generateBoq bg-[#1A3A36] mt-2 rounded-3xl text-sm py-2 px-5 text-white mb-2 border-2 border-[#34BFAD]"
+            className="generateBoq bg-[#1B2E50] mt-2 rounded-lg text-sm py-2 px-5 text-white mb-2 border-2 border-[#1A8FE3]"
             onClick={generateBOQclick}
             disabled={isSubmitting}
           >

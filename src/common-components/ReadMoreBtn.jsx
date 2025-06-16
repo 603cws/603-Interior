@@ -1,4 +1,4 @@
-export default function ReadMoreBtn({ borderColor = "#000000", onClick }) {
+export function ReadMoreBtn({ borderColor = "#000000", onClick }) {
   return (
     <div>
       <button
@@ -15,6 +15,18 @@ export default function ReadMoreBtn({ borderColor = "#000000", onClick }) {
           style={{ borderColor }}
         ></span>
         read more
+      </button>
+    </div>
+  );
+}
+export function PlaceOrderBtn({ title, disabled }) {
+  return (
+    <div>
+      <button
+        disabled={disabled}
+        className="bg-[#334A78] border border-[#212B36] text-sm text-white tracking-wider w-full uppercase py-3 active:scale-90 transition-transform ease-in-out duration-500 disabled:opacity-75"
+      >
+        {title}
       </button>
     </div>
   );

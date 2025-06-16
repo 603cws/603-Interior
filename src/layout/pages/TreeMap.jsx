@@ -92,7 +92,7 @@ const TreeMap = ({ totalArea, areaQuantities, areaValues }) => {
     "Finance Room": "#081011",
     "Executive Washroom": "#567F7D",
     "Breakout Room": "#74D0C1",
-    "Available Space": "#1F5C54",
+    "Available Space": "#184959",
     Other: "#5E9B96", // Color for the "Other" category
     // "Male Washroom": "#95D5B2",
     // "Female Washroom": "#85CEA8",
