@@ -1,44 +1,135 @@
-import React from "react";
 import { useApp } from "../Context/Context";
 import { supabase } from "../services/supabase";
-import toast from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
 
-export const useLogout = () => {
-  const navigate = useNavigate();
-  const {
-    setIsAuthLoading,
-    setAccountHolder,
-    setTotalArea,
-    setIsAuthenticated,
-  } = useApp();
+import { AddToCartToast } from "./AddToCartToast";
 
-  const handleLogout = async () => {
-    console.log("hello");
+export const useHandleAddToCart = () => {
+  const { isAuthenticated, setLocalCartItems, getCartItems, accountHolder } =
+    useApp();
 
-    try {
-      setIsAuthLoading(true);
-      const { error } = await supabase.auth.signOut();
-      if (error) {
-        console.log("Error signing out:", error.message);
-      } else {
-        toast.success("User signed out successfully");
-        setAccountHolder({
-          companyName: "",
-          email: "",
-          phone: "",
-          role: "",
-          userId: "",
-        });
-        setTotalArea("");
-        localStorage.removeItem("currentLayoutID");
-        navigate("/");
-        setIsAuthenticated(false);
+  const handleAddToCart = async (product, productQuantity = 1) => {
+    console.log("product", product);
+
+    if (!isAuthenticated) {
+      const formattedproductforcart = {
+        productId: product,
+        type: "cart",
+        quantity: productQuantity,
+      };
+
+      setLocalCartItems((prev) => {
+        const exists = prev.some((item) => item?.productId?.id === product.id);
+        if (exists) return prev;
+
+        const updated = [...prev, formattedproductforcart];
+        localStorage.setItem("cartitems", JSON.stringify(updated));
+        return updated;
+      });
+
+      AddToCartToast(product);
+
+      // toast.dark(`${product.title} added to cart succesfully`, {
+      //   position: "bottom-right",
+      //   transition: Slide, // Change this to Zoom, Bounce, Flip for different effects
+      // });
+    } else {
+      try {
+        console.log("acc", accountHolder);
+
+        const {
+          data: { user },
+          error: authError,
+        } = await supabase.auth.getUser();
+
+        const { data: cartdata, error: carterror } = await supabase
+          .from("userProductCollection")
+          .select("*,productId(*)")
+          .eq("userId", user.id);
+
+        // check if the product is already in the db with this user
+
+        console.log("cartdata", cartdata);
+
+        const cartproductid = cartdata?.map((item) => item.productId.id);
+
+        console.log(cartproductid, "cardproductids");
+
+        // check if the product is already in the db with this user
+        // const cartproductid = cartItems.map((item) => item.productId.id);
+
+        // console.log(cartproductid, "cardproductids");
+
+        if (cartproductid.includes(product.id)) {
+          return;
+        }
+
+        const { error } = await supabase.from("userProductCollection").insert([
+          {
+            productId: product.id,
+            type: "cart",
+            quantity: productQuantity,
+            userId: user.id,
+          },
+        ]);
+        if (error) throw new Error(error.message);
+
+        // toast.dark(`${product.title} added to cart succesfully`, {
+        //   position: "bottom-right",
+        //   transition: Slide, // Change this to Zoom, Bounce, Flip for different effects
+        // });
+
+        AddToCartToast(product);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        getCartItems();
       }
-    } finally {
-      setIsAuthLoading(false);
     }
   };
 
-  return handleLogout;
+  const handleAddtoWishlist = async (product, productQuantity = 1) => {
+    if (isAuthenticated) {
+      try {
+        const {
+          data: { user },
+          error: authError,
+        } = await supabase.auth.getUser();
+
+        const { data: cartdata, error: carterror } = await supabase
+          .from("userProductCollection")
+          .select("*,productId(*)")
+          .eq("userId", user.id)
+          .eq("type", "wishlist");
+
+        // check if the product is already in the db with this user
+
+        console.log("cartdata", cartdata);
+
+        const cartproductid = cartdata?.map((item) => item.productId.id);
+
+        console.log(cartproductid, "cardproductids");
+
+        if (cartproductid.includes(product.id)) {
+          return;
+        }
+
+        const { error } = await supabase.from("userProductCollection").insert([
+          {
+            productId: product.id,
+            type: "wishlist",
+            quantity: productQuantity,
+            userId: user.id,
+          },
+        ]);
+        if (error) throw new Error(error.message);
+        AddToCartToast(product, "wishlist");
+      } catch (error) {
+        console.error(error);
+      } finally {
+        getCartItems();
+      }
+    }
+  };
+
+  return { handleAddToCart, handleAddtoWishlist };
 };

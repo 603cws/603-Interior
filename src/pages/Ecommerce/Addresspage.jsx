@@ -6,10 +6,13 @@ import { supabase } from "../../services/supabase";
 import AddressForm from "./AddressForm";
 import { v4 as uuidv4 } from "uuid";
 import toast from "react-hot-toast";
+import CheckoutStepper from "../../common-components/CheckoutStepper";
 
 function Addresspage() {
-  const [isaddressPresent, setIsaddressPresnt] = useState(false);
   const [isAddressFormOpen, setIsAddressFormOpen] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const [removingAddressId, setRemovingAddressId] = useState(null);
 
   const { accountHolder, fetchUserData } = useApp();
 
@@ -26,6 +29,10 @@ function Addresspage() {
     town: "",
     ismarkedDefault: false,
   });
+
+  const sortedAddressList = [...(accountHolder?.address || [])].sort(
+    (a, b) => (b.ismarkedDefault === true) - (a.ismarkedDefault === true)
+  );
 
   const [errors, setErrors] = useState({});
 
@@ -132,7 +139,7 @@ function Addresspage() {
     0
   );
 
-  //   new address
+  //new address
   const handlenewAddress = () => {
     if (accountHolder?.address?.length < 3) {
       setIsAddressFormOpen(true);
@@ -143,7 +150,9 @@ function Addresspage() {
 
   //remove address from the list
   const handleRemoveAddress = async (address) => {
+    setRemovingAddressId(address.id);
     try {
+      setIsSubmitting(true);
       if (address.ismarkedDefault) {
         toast.error("Default address cant be removed");
         return;
@@ -165,21 +174,39 @@ function Addresspage() {
       console.log(error);
     } finally {
       fetchUserData();
+      setIsSubmitting(false);
+      setRemovingAddressId(null);
+    }
+  };
+
+  //change default address
+  const handleSetDefaultAddress = async (selectedId) => {
+    const updatedAddressList = accountHolder.address.map((addr) => ({
+      ...addr,
+      ismarkedDefault: addr.id === selectedId, // only selected becomes true
+    }));
+
+    try {
+      const { error } = await supabase
+        .from("profiles")
+        .update({ address: updatedAddressList })
+        .eq("id", accountHolder?.userId);
+
+      if (error) {
+        console.error("Failed to update default address:", error);
+        return;
+      }
+
+      fetchUserData(); // refreshes the user and address list
+    } catch (err) {
+      console.error("Unexpected error:", err);
     }
   };
   return (
     <>
       <Header />
       <div className="container">
-        <div className="!my-10 flex items-center justify-center text-[#334A78] text-lg capitalize font-Poppins leading-[16.8px]">
-          <div className="flex items-center gap-2">
-            <p className="text-[#334A78]">cart</p>
-            <hr className="border-t-2 border-dashed border-[#334A78] h-1 w-24 " />
-            <p className="text-[#549DC7]">Address</p>
-            <hr className="border-t-2 border-dashed border-[#334A78] h-1 w-24 " />
-            <p>Payment</p>
-          </div>
-        </div>
+        <CheckoutStepper highlighted={"address"} />
 
         <section>
           <div className="flex gap-10 font-Poppins">
@@ -217,7 +244,7 @@ function Addresspage() {
 
               <div className="space-y-3">
                 {accountHolder?.address?.length > 0 &&
-                  accountHolder?.address.map((add, index) => (
+                  sortedAddressList.map((add, index) => (
                     <div
                       key={index}
                       className="font-Poppins flex items-start gap-3 border border-[#ccc] p-5 rounded-md  "
@@ -226,7 +253,8 @@ function Addresspage() {
                         <input
                           type="checkbox"
                           checked={add.ismarkedDefault}
-                          readOnly
+                          onChange={() => handleSetDefaultAddress(add.id)}
+                          className="cursor-pointer"
                         />
                       </div>
                       <div className="">
@@ -251,8 +279,34 @@ function Addresspage() {
                           <button
                             onClick={() => handleRemoveAddress(add)}
                             className="border boder-[#ccc] text-[#000]/60 px-5 py-2 rounded-md"
+                            disabled={removingAddressId === add.id}
                           >
-                            Remove
+                            {removingAddressId === add.id ? (
+                              <div className="spinner flex justify-center items-center">
+                                <svg
+                                  className="animate-spin h-5 w-5 text-blue-500"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  fill="none"
+                                  viewBox="0 0 24 24"
+                                >
+                                  <circle
+                                    className="opacity-25"
+                                    cx="12"
+                                    cy="12"
+                                    r="10"
+                                    stroke="currentColor"
+                                    strokeWidth="4"
+                                  ></circle>
+                                  <path
+                                    className="opacity-75"
+                                    fill="currentColor"
+                                    d="M4 12a8 8 0 018-8v8h8a8 8 0 01-8 8V12H4z"
+                                  ></path>
+                                </svg>
+                              </div>
+                            ) : (
+                              "Remove"
+                            )}
                           </button>
                           <button className="border boder-[#ccc] text-[#000]/60 px-5 py-2 rounded-md">
                             Edit
@@ -275,63 +329,82 @@ function Addresspage() {
               )}
             </div>
             {/* second half */}
-            <div className="flex-1 border-l-[1px] pl-10">
-              <h4 className="uppercase mb-7">
-                price details ({cartItems?.length} Items)
-              </h4>
-              <div className="space-y-6 pb-6">
-                <div className="flex justify-between">
-                  <h5 className="font-medium text-base text-[#111111]/80">
-                    Total MRP
-                  </h5>
-                  <h5 className="font-medium text-base text-[#111111]/80 ">
-                    Rs {totalPrice || 0}
-                  </h5>
-                </div>
+            <div className="flex-1 border-l-[1px] pl-10 font-Poppins ">
+              <div className="mb-6">
+                <h2>DELIVERY ESTIMATES</h2>
 
-                <div className="flex justify-between">
-                  <h5 className="font-medium text-base text-[#111111]/80">
-                    Discount on MRP
-                  </h5>
-                  <h5 className="font-medium text-base text-[#34BFAD]/80 ">
-                    -$3,600
-                  </h5>
-                </div>
-
-                <div className="flex justify-between">
-                  <h5 className="font-medium text-base text-[#111111]/80">
-                    Coupon Discount
-                  </h5>
-                  <h5 className="font-medium text-base text-[#F87171]">
-                    Apply Coupon
-                  </h5>
-                </div>
-
-                <div className="flex justify-between border-b-[1px]">
+                <div className="flex border-b border-b-[#ccc] p-4 font-Poppins font-medium items-center gap-2">
                   <div>
-                    <h5 className="font-medium text-base text-[#111111]/80">
-                      Shipping Fee
-                    </h5>
-                    <p className="text-xs text-[#111111]/50 font-medium pb-2">
-                      Free Shipping for you
-                    </p>
+                    <img
+                      src="images/trendingProduct1.png"
+                      alt="sample prodcut "
+                      className="w-16 object-contain"
+                    />
                   </div>
-                  <h5 className="font-medium text-base text-[#34BFAD]/80 uppercase">
-                    Free
-                  </h5>
+                  <p className="text-sm text-[#111]/60 leading-[22.4px]">
+                    Estimated delivery by {/* date-month-year  */}
+                    <span className="text-[#111]">9 Jun 2025</span>{" "}
+                  </p>
                 </div>
+              </div>
+              <div>
+                <h4 className="uppercase mb-7 text-[#111] text-base font-medium">
+                  price details ({cartItems?.length} Items)
+                </h4>
+                <div className="space-y-6 pb-6">
+                  <div className="flex justify-between">
+                    <h5 className="font-medium text-base text-[#111111]/80">
+                      Total MRP
+                    </h5>
+                    <h5 className="font-medium text-base text-[#111111]/80 ">
+                      Rs {totalPrice || 0}
+                    </h5>
+                  </div>
 
-                <div className="flex justify-between">
-                  <h5 className="font-medium text-xl text-[#111111] uppercase">
-                    Total Amount
-                  </h5>
-                  <h5 className="font-medium text-xl text-[#111111] ">
-                    $3,196
-                  </h5>
+                  <div className="flex justify-between">
+                    <h5 className="font-medium text-base text-[#111111]/80">
+                      Discount on MRP
+                    </h5>
+                    <h5 className="font-medium text-base text-[#34BFAD]/80 ">
+                      -$3,600
+                    </h5>
+                  </div>
+
+                  <div className="flex justify-between">
+                    <h5 className="font-medium text-base text-[#111111]/80">
+                      Coupon Discount
+                    </h5>
+                    <h5 className="font-medium text-base text-[#F87171]">
+                      Apply Coupon
+                    </h5>
+                  </div>
+
+                  <div className="flex justify-between border-b-[1px]">
+                    <div>
+                      <h5 className="font-medium text-base text-[#111111]/80">
+                        Shipping Fee
+                      </h5>
+                      <p className="text-xs text-[#111111]/50 font-medium pb-2">
+                        Free Shipping for you
+                      </p>
+                    </div>
+                    <h5 className="font-medium text-base text-[#34BFAD]/80 uppercase">
+                      Free
+                    </h5>
+                  </div>
+
+                  <div className="flex justify-between">
+                    <h5 className="font-medium text-xl text-[#111111] uppercase">
+                      Total Amount
+                    </h5>
+                    <h5 className="font-medium text-xl text-[#111111] ">
+                      $3,196
+                    </h5>
+                  </div>
                 </div>
               </div>
 
-              {isaddressPresent && (
+              {accountHolder?.address?.length > 0 && (
                 <button className="uppercase text-xl text-[#ffffff] tracking-wider w-full flex justify-center items-center bg-[#334A78] border border-[#212B36] py-3 rounded-sm font-thin">
                   place ORDER
                 </button>

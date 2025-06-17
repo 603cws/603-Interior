@@ -21,6 +21,10 @@ import SpinnerFullPage from "../../common-components/SpinnerFullPage";
 
 import { useNavigate } from "react-router-dom";
 
+import { useHandleAddToCart } from "../../utils/HelperFunction";
+import { toast, Slide } from "react-toastify";
+import { ToastContainer } from "react-toastify";
+
 // <div className="h-[400px]">
 //   <div className="h-full flex flex-col border-[1px] border-[#AAAAAA] relative">
 //     <div className="max-w-xs">
@@ -152,7 +156,6 @@ function Products() {
   const paginationRef3 = useRef(null);
   const prevRef4 = useRef(null);
   const nextRef4 = useRef(null);
-  const paginationRef4 = useRef(null);
 
   const [data, setData] = useState();
   const [products, setProducts] = useState([]);
@@ -207,7 +210,6 @@ function Products() {
         image: urlMap[item.image] || item.image, // fallback if URL not found
       }));
 
-      console.log(updatedProducts);
       // const filteredByCategory = updatedProducts.filter(
       //   (item) => item.product_id.category === selectedCat
       // );
@@ -297,6 +299,7 @@ function Products() {
 
   return (
     <div>
+      <ToastContainer />
       <header>
         <Header />
       </header>
@@ -517,75 +520,6 @@ function Products() {
           />
         </div>
       </section>
-
-      <section>
-        <SectionHeader title={"Latest posts"} />
-        <div className="container mx-auto px-4 lg:px-12 my-10">
-          <div className="relative">
-            <Swiper
-              onBeforeInit={(swiper) => {
-                swiper.params.navigation.prevEl = prevRef2.current;
-                swiper.params.navigation.nextEl = nextRef2.current;
-                swiper.params.pagination.el = paginationRef2.current;
-              }}
-              onSwiper={(swiper) => {
-                swiper.navigation.init();
-                swiper.navigation.update();
-                swiper.pagination.init();
-                swiper.pagination.update();
-              }}
-              modules={[Grid, Navigation, Pagination]}
-              slidesPerView={4}
-              grid={{
-                rows: 1,
-                fill: "row",
-              }}
-              spaceBetween={30}
-              //   navigation={{
-              //     nextEl: ".swiper-button-next",
-              //     prevEl: ".swiper-button-prev",
-              //   }}
-              //   pagination={{ clickable: true, el: ".custom-pagination" }}
-              className="relative pb-10"
-              breakpoints={{
-                0: {
-                  slidesPerView: 1,
-                  spaceBetween: 10,
-                },
-                768: {
-                  slidesPerView: 2,
-                  spaceBetween: 10,
-                },
-                1024: {
-                  slidesPerView: 3,
-                  spaceBetween: 30,
-                },
-              }}
-            >
-              {latestPosts.map((post, index) => (
-                <SwiperSlide key={index}>
-                  <LatestPost post={post} key={post.title} />
-                </SwiperSlide>
-              ))}
-            </Swiper>
-            {/* Custom arrows */}
-            <div
-              ref={prevRef2}
-              className="swiper-button-prev custom-nav absolute top-1/2 -left-10 transform -translate-y-1/2 w-10 h-10 bg-white rounded-full shadow z-50"
-            />
-            <div
-              ref={nextRef2}
-              className="swiper-button-next custom-nav absolute top-1/2 -right-10 transform -translate-y-1/2 w-10 h-10 bg-white rounded-full shadow z-50"
-            />
-          </div>
-
-          {/* Custom pagination */}
-          <div
-            ref={paginationRef2}
-            className="custom-pagination mt-4 flex justify-center gap-2"
-          />
-        </div>
-      </section>
     </div>
   );
 }
@@ -594,11 +528,37 @@ export default Products;
 
 function Card({ product }) {
   const naviagte = useNavigate();
+  const { isAuthenticated, localcartItems, cartItems } = useApp();
+  console.log(cartItems, localcartItems);
+
+  const { handleAddToCart } = useHandleAddToCart();
+
+  const [iscarted, setIsCarted] = useState(false);
+
+  useEffect(() => {
+    if (!product?.id) return;
+
+    if (isAuthenticated) {
+      const check = cartItems?.some(
+        (item) => item.productId?.id === product.id
+      );
+      setIsCarted(check);
+    } else {
+      const check = localcartItems?.some(
+        (item) => item.productId?.id === product.id
+      );
+      setIsCarted(check);
+    }
+  }, [isAuthenticated, cartItems, localcartItems, product?.id]);
+
   return (
     <div className="h-[400px]">
       <div className="h-full flex flex-col border-[1px] border-[#AAAAAA] relative">
         {product.image && (
-          <div className=" ">
+          <div
+            onClick={() => naviagte(`/productview/${product.id}`)}
+            className=" cursor-pointer"
+          >
             <img
               src={product.image}
               alt={product.title}
@@ -621,37 +581,16 @@ function Card({ product }) {
           <p className=" text-center text-xs lg:text-sm">{product.title}</p>
           <h5 className="lg:text-lg">Rs {product.price} </h5>
           <button
+            onClick={() => handleAddToCart(product)}
+            disabled={iscarted}
             className="flex justify-center items-center gap-2 font-Poppins text-[13px] py-1.5"
-            onClick={() => naviagte(`/productview/${product.id}`)}
           >
-            Add to cart <BsArrowRight size={15} />{" "}
+            {iscarted ? "Added to cart" : "Add to cart"}{" "}
+            <BsArrowRight size={15} />{" "}
           </button>
         </div>
       </div>
     </div>
-    // <div className="h-full">
-    //   <div className="h-full flex flex-col border-[1px] border-[#AAAAAA] relative">
-    //     <img src={image} alt={title} className="bg-[#000000]/10" />
-    //     {ispopular && (
-    //       <span
-    //         className={` font-lora text-[11px] capitalize absolute top-2 left-2 p-[5px] ${
-    //           populartext === "popular"
-    //             ? "bg-[#E3F3FF] text-[#000]"
-    //             : "bg-[#374A75] text-white"
-    //         }`}
-    //       >
-    //         {populartext}
-    //       </span>
-    //     )}
-    //     <div className="px-5 flex flex-col justify-center items-center gap-3 font-lora py-3 mt-auto">
-    //       <p className=" text-center text-xs lg:text-sm">{title}</p>
-    //       <h5 className="lg:text-lg">$ {price} </h5>
-    //       <button className="flex justify-center items-center gap-2 font-Poppins text-[13px] py-1.5">
-    //         Add to cart <BsArrowRight size={15} />{" "}
-    //       </button>
-    //     </div>
-    //   </div>
-    // </div>
   );
 }
 

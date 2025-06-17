@@ -1,223 +1,441 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { AiFillHeart } from "react-icons/ai";
 import { GoHeart } from "react-icons/go";
 import { IoCaretDown, IoClose } from "react-icons/io5";
 import { MdOutlineKeyboardArrowRight } from "react-icons/md";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import Header from "./Header";
 import { supabase } from "../../services/supabase";
-import { useEffect } from "react";
 import { useApp } from "../../Context/Context";
 import SpinnerFullPage from "../../common-components/SpinnerFullPage";
 import BottomTabs from "./BottomTabs";
+import CheckoutStepper from "../../common-components/CheckoutStepper";
+import { toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
+import { showRemoveFromCartToast } from "../../utils/AddToCartToast";
+
+function EmptyCart() {
+  const navigate = useNavigate();
+  return (
+    <div className=" flex justify-center items-center">
+      <div className=" my-4 space-y-6">
+        {/* <img src="/images/EmptyCart.png" alt="empty cart" /> */}
+
+        <p className="text-center">
+          There is nothing in your cart. Let's add some items.
+        </p>
+        <div className="flex justify-center items-center">
+          <button
+            onClick={() => navigate("/shop")}
+            className="px-10 py-3 bg-[#334A78] text-white border border-[#212B36]"
+          >
+            start shopping
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 function Cart() {
   const [wishListed, setWishListed] = useState(false);
+  const [couponname, setCouponname] = useState("");
+  const [totalPrice, setTotalPrice] = useState(0);
+  const [orignalTotalPrice, setOriginalToalPrice] = useState(0);
+  const [disableApplycoupon, setDisableApplycoupon] = useState(false);
+
   const navigate = useNavigate();
+  const location = useLocation();
 
   // get the cart items from the cart table
-  const { cartItems, SetRefreshCartItems, localcartItems, isAuthenticated } =
-    useApp();
+  const {
+    cartItems,
+    localcartItems,
+    isAuthenticated,
+    accountHolder,
+    getCartItems,
+  } = useApp();
 
   // created a reduce function to calculate the total price
-  const totalPrice = cartItems?.reduce(
-    (acc, curr) => acc + curr.productId?.price * curr.quantity,
-    0
-  );
+  // let totalPrice = cartItems?.reduce(
+  //   (acc, curr) => acc + curr.productId?.price * curr.quantity,
+  //   0
+  // );
+
+  useEffect(() => {
+    const calculateTotal = () => {
+      const total = cartItems?.reduce(
+        (acc, curr) => acc + curr.productId?.price * curr.quantity,
+        0
+      );
+      setTotalPrice(total || 0);
+      setOriginalToalPrice(total || 0);
+    };
+
+    if (isAuthenticated && cartItems) calculateTotal();
+    else if (!isAuthenticated && localcartItems) {
+      const total = localcartItems?.reduce(
+        (acc, curr) => acc + curr.productId?.price * curr.quantity,
+        0
+      );
+      setTotalPrice(total || 0);
+      setOriginalToalPrice(total || 0);
+    }
+  }, [cartItems, localcartItems, isAuthenticated]);
+
+  console.log(totalPrice, "totalprice");
+
+  const syncLocalCartToDB = async () => {
+    if (!isAuthenticated) return localcartItems;
+
+    const localCart = JSON.parse(localStorage.getItem("cartitems")) || [];
+
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser();
+
+    const formattedLocalItems = localCart.map((item) => ({
+      userId: user.id,
+      productId: item.productId.id || item.productId,
+      type: "cart",
+      quantity: item.quantity,
+    }));
+
+    try {
+      const { data: dbCartItems, error: fetchError } = await supabase
+        .from("userProductCollection")
+        .select("productId")
+        .eq("userId", accountHolder?.userId)
+        .eq("type", "cart");
+
+      if (fetchError) throw new Error(fetchError.message);
+
+      const dbProductIds = dbCartItems.map((item) => item.productId);
+
+      // Filter local items that are NOT already in DB
+      const itemsToInsert = formattedLocalItems.filter(
+        (item) => !dbProductIds.includes(item.productId)
+      );
+
+      if (itemsToInsert.length > 0) {
+        for (const item of itemsToInsert) {
+          const { error: insertError } = await supabase
+            .from("userProductCollection")
+            .insert(item);
+
+          if (insertError) {
+            console.error("Error inserting item:", item, insertError.message);
+            // optionally continue instead of throwing
+            throw new Error(insertError.message);
+          }
+        }
+      }
+
+      // Remove synced items from localStorage
+      // const remainingLocal = localCart.filter(
+      //   (item) => !dbProductIds.includes(item.productId.id || item.productId)
+      // );
+
+      // localStorage.setItem("cartitems", JSON.stringify(cartItems));
+      localStorage.setItem("cartitems", JSON.stringify([]));
+      // localStorage.removeItem()
+    } catch (error) {
+      console.error("Cart sync error:", error);
+    } finally {
+      getCartItems();
+    }
+  };
+
+  useEffect(() => {
+    syncLocalCartToDB();
+  }, []);
 
   // remove a particular item from the cart
 
+  //function to handle the placeorder
+
+  const handlePlaceOrder = () => {
+    if (isAuthenticated) {
+      console.log("user is logged in ");
+      navigate("/address");
+    } else {
+      // navigate("/login");
+
+      console.log("hello");
+
+      navigate("/login", { state: { from: location.pathname } });
+    }
+  };
+
+  const handleRemoveCoupon = async () => {
+    if (couponname.trim() === "") return toast.error("no coupon applied");
+    if (totalPrice === 0) return setCouponname("");
+    if (!disableApplycoupon) return toast.error("coupon already removed");
+    toast.success("remove coupon");
+    setCouponname("");
+    setDisableApplycoupon(false);
+    setTotalPrice(orignalTotalPrice);
+  };
+
+  const handleApplyCoupon = async (e) => {
+    e.preventDefault();
+
+    if (totalPrice === 0) return toast.error("cart is empty");
+
+    if (disableApplycoupon) return toast.error("coupon already applied");
+
+    if (couponname.trim() === 0) return toast.error("enter the coupon");
+    try {
+      const checkcoupon = couponname.toUpperCase();
+      const { data: coupon, error: fetchError } = await supabase
+        .from("coupons")
+        .select("*")
+        .eq("couponName", checkcoupon)
+        .single();
+
+      console.log(checkcoupon, "name");
+
+      if (fetchError) throw new Error(fetchError.message);
+      console.log("couponfromdb", coupon);
+
+      if (coupon?.length === 0) return toast.error("Invalid Coupon");
+
+      const discountedprice =
+        totalPrice - (totalPrice * coupon?.discountPerc) / 100;
+
+      setDisableApplycoupon(true);
+
+      // console.log(discountedprice, "discountedprice");
+
+      toast.success("coupon is valid");
+
+      console.log(totalPrice, "calctotlaprice");
+
+      setTotalPrice(discountedprice);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <>
+      <ToastContainer />
       <Header />
-      <div className="container">
-        <div className="!my-10 flex items-center justify-center text-[#334A78] text-lg capitalize font-Poppins leading-[16.8px]">
-          <div className="flex items-center gap-2">
-            <p onClick={() => navigate("/products")} className="text-[#334A78]">
-              cart
-            </p>
-            <hr className="border-t-2 border-dashed border-[#334A78] h-1 w-24 " />
-            <p className="text-[#549DC7]">Address</p>
-            <hr className="border-t-2 border-dashed border-[#334A78] h-1 w-24 " />
-            <p>Payment</p>
-          </div>
-        </div>
+      <div>
+        <div className="container">
+          <CheckoutStepper highlighted={"cart"} />
 
-        <section>
-          <div className="flex gap-10 font-Poppins">
-            <div className="flex-1 space-y-5">
-              <div className="border border-[#CCCCCC] rounded-lg font-Poppins flex justify-between items-center p-5">
-                <h5 className="text-sm text-[#171717] font-semibold ">
-                  Check delivery time & services
-                </h5>
-                <button className="border border-[#C16452] text-[10px] font-semibold text-[#C16452] px-3.5 py-2">
-                  ENTER PIN CODE
-                </button>
-              </div>
-
-              {isAuthenticated ? (
-                cartItems ? (
-                  <div className="space-y-2">
-                    {cartItems.map((item) => (
-                      <CartCard cartitem={item} key={item.id} />
-                    ))}
-                  </div>
-                ) : (
-                  <div>
-                    <SpinnerFullPage />
-                  </div>
-                )
-              ) : localcartItems ? (
-                <div className="space-y-2">
-                  {localcartItems.map((item) => (
-                    <CartCard cartitem={item} key={item.id} />
-                  ))}
-                </div>
-              ) : (
-                <div>
-                  <SpinnerFullPage />
-                </div>
-              )}
-
-              {/* {cartItems ? (
-                <div className="space-y-2">
-                  {cartItems.map((item) => (
-                    <CartCard cartitem={item} key={item.productId.title} />
-                  ))}
-                </div>
-              ) : (
-                <div>
-                  <SpinnerFullPage />
-                </div>
-              )} */}
-
-              <div className="border border-[#CCCCCC] rounded-lg font-Poppins flex justify-between items-center py-4 px-3">
-                <div className="flex items-center">
-                  <img
-                    src="/images/wishlist.png"
-                    alt="wishlist icon"
-                    className="w-8"
-                  />
-                  <h5 className="text-sm text-[#171717] font-semibold ">
-                    Add more from Wishlist
-                  </h5>
-                </div>
-                <button className="  text-[#000000]">
-                  <MdOutlineKeyboardArrowRight size={25} />
-                </button>
-              </div>
-            </div>
-
-            <div className="flex-1 border-l-[1px] pl-10">
-              <h4 className="uppercase mb-7">
-                price details (
-                {isAuthenticated ? cartItems?.length : localcartItems?.length}{" "}
-                Items)
-              </h4>
-              <div className="space-y-6 pb-6">
-                <div className="flex justify-between">
-                  <h5 className="font-medium text-base text-[#111111]/80">
-                    Total MRP
-                  </h5>
-                  <h5 className="font-medium text-base text-[#111111]/80 ">
-                    Rs {totalPrice || 0}
-                  </h5>
-                </div>
-
-                <div className="flex justify-between">
-                  <h5 className="font-medium text-base text-[#111111]/80">
-                    Discount on MRP
-                  </h5>
-                  <h5 className="font-medium text-base text-[#34BFAD]/80 ">
-                    -$3,600
-                  </h5>
-                </div>
-
-                <div className="flex justify-between">
-                  <h5 className="font-medium text-base text-[#111111]/80">
-                    Coupon Discount
-                  </h5>
-                  <h5 className="font-medium text-base text-[#F87171]">
-                    Apply Coupon
-                  </h5>
-                </div>
-
-                <div className="flex justify-between border-b-[1px]">
-                  <div>
-                    <h5 className="font-medium text-base text-[#111111]/80">
-                      Shipping Fee
+          <div>
+            <section>
+              <div className="flex gap-10 font-Poppins">
+                <div className="flex-1 space-y-5">
+                  <div className="border border-[#CCCCCC] rounded-lg font-Poppins flex justify-between items-center p-5">
+                    <h5 className="text-sm text-[#171717] font-semibold ">
+                      Check delivery time & services
                     </h5>
-                    <p className="text-xs text-[#111111]/50 font-medium pb-2">
-                      Free Shipping for you
-                    </p>
+                    <button className="border border-[#C16452] text-[10px] font-semibold text-[#C16452] px-3.5 py-2">
+                      ENTER PIN CODE
+                    </button>
                   </div>
-                  <h5 className="font-medium text-base text-[#34BFAD]/80 uppercase">
-                    Free
-                  </h5>
-                </div>
 
-                <div className="flex justify-between">
-                  <h5 className="font-medium text-xl text-[#111111] uppercase">
-                    Total Amount
-                  </h5>
-                  <h5 className="font-medium text-xl text-[#111111] ">
-                    $3,196
-                  </h5>
-                </div>
-              </div>
-
-              <button className="uppercase text-xl text-[#ffffff] tracking-wider w-full flex justify-center items-center bg-[#334A78] border border-[#212B36] py-3 rounded-sm font-thin">
-                place ORDER
-              </button>
-            </div>
-          </div>
-        </section>
-
-        {/* You may also like */}
-        <section className="py-14">
-          <h3 className="uppercase font-semibold text-3xl text-[#171717]">
-            You may also like
-          </h3>
-
-          <div className="font-Poppins w-[245px] h-[350px]">
-            <div className="flex justify-center items-center p-2">
-              <img
-                src="/images/home/product-image.png"
-                alt="chair"
-                className="h-52 object-contain"
-              />
-            </div>
-            <div className="bg-[#fff] p-2">
-              <div className="flex mb-4">
-                <div className="flex-1 text-sm  leading-[22.4px]  text-[#111] space-y-1.5">
-                  <h4 className="font-medium text-sm leading-[22.4px] uppercase">
-                    FLAMINGO SLING
-                  </h4>
-                  <div className="flex items-center gap-2">
-                    <p className=" ">Rs 3,0000</p>
-                    <p className="line-through text-[#111] text-opacity-50">
-                      Rs $5678
-                    </p>
-                    <p className="text-[#C20000] uppercase">sale</p>
-                  </div>
-                </div>
-                <div
-                  onClick={() => setWishListed(!wishListed)}
-                  className=" text-[#ccc] hover:text-red-950 cursor-pointer"
-                >
-                  {wishListed ? (
-                    <AiFillHeart size={26} color="red" />
+                  {isAuthenticated ? (
+                    cartItems ? (
+                      <div className="space-y-2">
+                        {cartItems.length > 0 ? (
+                          cartItems.map((item) => (
+                            <CartCard cartitem={item} key={item.id} />
+                          ))
+                        ) : (
+                          <div>
+                            <EmptyCart />
+                          </div>
+                        )}
+                      </div>
+                    ) : (
+                      <div>
+                        <SpinnerFullPage />
+                      </div>
+                    )
+                  ) : localcartItems ? (
+                    <div className="space-y-2">
+                      {localcartItems.length > 0 ? (
+                        localcartItems.map((item) => (
+                          <CartCard cartitem={item} key={item.productId.id} />
+                        ))
+                      ) : (
+                        <EmptyCart />
+                      )}
+                    </div>
                   ) : (
-                    <GoHeart size={25} />
+                    <div>
+                      <SpinnerFullPage />
+                    </div>
+                  )}
+
+                  <div className="border border-[#CCCCCC] rounded-lg font-Poppins flex justify-between items-center py-4 px-3">
+                    <div className="flex items-center">
+                      <img
+                        src="/images/wishlist.png"
+                        alt="wishlist icon"
+                        className="w-8"
+                      />
+                      <h5 className="text-sm text-[#171717] font-semibold ">
+                        Add more from Wishlist
+                      </h5>
+                    </div>
+                    <button
+                      onClick={() => navigate("/wishlist")}
+                      className="  text-[#000000]"
+                    >
+                      <MdOutlineKeyboardArrowRight size={25} />
+                    </button>
+                  </div>
+                </div>
+
+                <div className="flex-1 border-l-[1px] pl-10">
+                  <h4 className="uppercase mb-7">
+                    price details (
+                    {isAuthenticated
+                      ? cartItems?.length
+                      : localcartItems?.length}{" "}
+                    Items)
+                  </h4>
+                  <div className="space-y-6 pb-6">
+                    <div className="flex justify-between">
+                      <h5 className="font-medium text-base text-[#111111]/80">
+                        Total MRP
+                      </h5>
+                      <h5 className="font-medium text-base text-[#111111]/80 ">
+                        Rs {orignalTotalPrice || 0}
+                      </h5>
+                    </div>
+
+                    <div className="flex justify-between">
+                      <h5 className="font-medium text-base text-[#111111]/80">
+                        Discount on MRP
+                      </h5>
+                      <h5 className="font-medium text-base text-[#34BFAD]/80 ">
+                        -Rs 0
+                      </h5>
+                    </div>
+
+                    <div className="flex justify-between">
+                      <h5 className="font-medium text-base text-[#111111]/80">
+                        Coupon Discount
+                      </h5>
+                      <form
+                        onSubmit={handleApplyCoupon}
+                        method="post"
+                        className=""
+                      >
+                        <input
+                          type="text"
+                          value={couponname}
+                          onChange={(e) => setCouponname(e.target.value)}
+                          className="w-full border boder-[#ccc] uppercase"
+                          // disabled={disableApplycoupon}
+                          required
+                        />
+                        <button type="submit">Apply </button>
+                        <button
+                          onClick={handleRemoveCoupon}
+                          type="button"
+                          className="px-5 mx-2"
+                        >
+                          Remove coupon{" "}
+                        </button>
+                      </form>
+                    </div>
+
+                    <div className="flex justify-between border-b-[1px]">
+                      <div>
+                        <h5 className="font-medium text-base text-[#111111]/80">
+                          Shipping Fee
+                        </h5>
+                        <p className="text-xs text-[#111111]/50 font-medium pb-2">
+                          Free Shipping for you
+                        </p>
+                      </div>
+                      <h5 className="font-medium text-base text-[#34BFAD]/80 uppercase">
+                        Free
+                      </h5>
+                    </div>
+
+                    <div className="flex justify-between">
+                      <h5 className="font-medium text-xl text-[#111111] uppercase">
+                        Total Amount
+                      </h5>
+                      <h5 className="font-medium text-xl text-[#111111] ">
+                        Rs {totalPrice || 0}
+                      </h5>
+                    </div>
+                  </div>
+
+                  {/* {totalPrice > 0 && (
+                    <button className="uppercase text-xl text-[#ffffff] tracking-wider w-full flex justify-center items-center bg-[#334A78] border border-[#212B36] py-3 rounded-sm font-thin">
+                      place ORDER
+                    </button>
+                  )} */}
+                  {totalPrice > 0 && (
+                    <button
+                      onClick={handlePlaceOrder}
+                      className="uppercase text-xl text-[#ffffff] tracking-wider w-full flex justify-center items-center bg-[#334A78] border border-[#212B36] py-3 rounded-sm font-thin"
+                    >
+                      place ORDER
+                    </button>
                   )}
                 </div>
               </div>
-              <button className="text-[#000] uppercase bg-[#FFFFFF] text-xs border border-[#ccc] px-2  py-2 rounded-sm ">
-                ADD TO CART
-              </button>
-            </div>
+            </section>
+
+            {/* You may also like */}
+            <section className="py-14">
+              <h3 className="uppercase font-semibold text-3xl text-[#171717]">
+                You may also like
+              </h3>
+
+              <div className="font-Poppins w-[245px] h-[350px]">
+                <div className="flex justify-center items-center p-2">
+                  <img
+                    src="/images/home/product-image.png"
+                    alt="chair"
+                    className="h-52 object-contain"
+                  />
+                </div>
+                <div className="bg-[#fff] p-2">
+                  <div className="flex mb-4">
+                    <div className="flex-1 text-sm  leading-[22.4px]  text-[#111] space-y-1.5">
+                      <h4 className="font-medium text-sm leading-[22.4px] uppercase">
+                        FLAMINGO SLING
+                      </h4>
+                      <div className="flex items-center gap-2">
+                        <p className=" ">Rs 3,0000</p>
+                        <p className="line-through text-[#111] text-opacity-50">
+                          Rs $5678
+                        </p>
+                        <p className="text-[#C20000] uppercase">sale</p>
+                      </div>
+                    </div>
+                    <div
+                      onClick={() => setWishListed(!wishListed)}
+                      className=" text-[#ccc] hover:text-red-950 cursor-pointer"
+                    >
+                      {wishListed ? (
+                        <AiFillHeart size={26} color="red" />
+                      ) : (
+                        <GoHeart size={25} />
+                      )}
+                    </div>
+                  </div>
+                  <button className="text-[#000] uppercase bg-[#FFFFFF] text-xs border border-[#ccc] px-2  py-2 rounded-sm ">
+                    ADD TO CART
+                  </button>
+                </div>
+              </div>
+            </section>
           </div>
-        </section>
+        </div>
       </div>
 
       <BottomTabs />
@@ -228,7 +446,8 @@ function Cart() {
 export default Cart;
 
 function CartCard({ cartitem }) {
-  const { getCartItems, isAuthenticated, localcartItems } = useApp();
+  const { getCartItems, isAuthenticated, localcartItems, setLocalCartItems } =
+    useApp();
   async function handleRemoveItem(product) {
     if (isAuthenticated) {
       try {
@@ -241,11 +460,12 @@ function CartCard({ cartitem }) {
 
         console.log("data", data, "error", error);
 
-        await getCartItems();
-
+        showRemoveFromCartToast(product);
         if (error) throw new Error(error);
       } catch (error) {
         console.log(error);
+      } finally {
+        getCartItems();
       }
     } else {
       const removeproductfromlocalCartitems = localcartItems.filter(
@@ -261,6 +481,8 @@ function CartCard({ cartitem }) {
         "cartitems",
         JSON.stringify(removeproductfromlocalCartitems)
       );
+      setLocalCartItems(removeproductfromlocalCartitems);
+      showRemoveFromCartToast(product);
     }
   }
 

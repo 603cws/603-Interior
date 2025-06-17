@@ -101,15 +101,33 @@ export const AppProvider = ({ children }) => {
 
   const [resfreshCartItens, SetRefreshCartItems] = useState(false);
   const [wishlistItems, setWishlistItems] = useState([]);
+  const [filters, setFilters] = useState({
+    category: [],
+    priceRange: [0, 100000],
+  });
 
   async function getCartItems() {
     try {
+      const {
+        data: { user },
+        error: authError,
+      } = await supabase.auth.getUser();
+
+      if (authError) return [];
+
       const { data, error } = await supabase
         .from("userProductCollection")
         .select("*,productId(*)")
-      // .eq("type", "cart");
+        .eq("userId", user.id);
 
       if (error) throw new Error(error);
+
+      //  If there's no data or it's empty, set empty states and return early
+      if (!data || data.length === 0) {
+        setCartItems([]);
+        setWishlistItems([]);
+        return;
+      }
 
       // 1. Extract unique image names
       const uniqueImages = [
@@ -727,11 +745,13 @@ export const AppProvider = ({ children }) => {
         cartItems,
         SetRefreshCartItems,
         getCartItems,
-	    wishlistItems,
+        wishlistItems,
         setWishlistItems,
         localcartItems,
         setLocalCartItems,
         fetchUserData,
+        filters,
+        setFilters,
       }}
     >
       {children}

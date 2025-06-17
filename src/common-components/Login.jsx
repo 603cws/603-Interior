@@ -3,7 +3,7 @@ import { supabase } from "../services/supabase";
 import { FaAngleLeft } from "react-icons/fa6";
 import { FcGoogle } from "react-icons/fc";
 import { IoEyeOffOutline, IoEyeOutline } from "react-icons/io5";
-import { useLocation, useNavigate } from "react-router-dom";
+import { replace, useLocation, useNavigate } from "react-router-dom";
 import { useApp } from "../Context/Context";
 // import { use } from "react";
 import toast from "react-hot-toast";
@@ -36,6 +36,13 @@ function Login() {
   });
 
   const location = useLocation();
+
+  const from = location.state?.from;
+
+  console.log(location, "previous route");
+
+  // console.log("helloooooo");
+
   // const areas = location.state?.areaQuantities;
   // const areaValues = location.state?.areaValues;
   // const totalArea = location.state?.totalArea;
@@ -230,15 +237,83 @@ function Login() {
     console.log("User logged in successfully:", data);
   };
 
+  const ecommerceLogin = async () => {
+    let { data, error } = await supabase.auth.signInWithPassword({
+      email: formData.email,
+      password: formData.password,
+    });
+
+    if (error) {
+      // alert(error.message);
+      toast.error(error.message);
+      console.error("Error logging in:", error);
+      return;
+    }
+
+    if (data.user?.id) {
+      const userId = data.user.id;
+
+      setUserId(userId);
+      setIsAuthenticated(true);
+
+      navigate("/cart");
+    }
+  };
+
+  const handleEcommerceLogin = async () => {
+    console.log("ecommerce login");
+    if (!isSignUp) {
+      await ecommerceLogin();
+    } else {
+      let { data, error } = await supabase.auth.signUp({
+        email: formData.email,
+        password: formData.password,
+        phone: formData.mobile,
+      });
+
+      if (error) {
+        alert(error);
+        console.error("Error signing up:", error);
+        return;
+      }
+      console.log("User signed up successfully:", data);
+      toast.success("User signed up successfully:");
+
+      const userId = data.user.id;
+
+      await updateUserProfile(
+        userId,
+        "user",
+        formData.location,
+        formData.company,
+        formData.mobile
+      );
+      await ecommerceLogin();
+    }
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (isSignUp) {
-      handleRegister();
+    if (location?.state?.from === "/cart") {
+      handleEcommerceLogin();
     } else {
-      handleLogin();
+      if (isSignUp) {
+        handleRegister();
+      } else {
+        handleLogin();
+      }
     }
     localStorage.removeItem("boqCompleted");
   };
+  // const handleSubmit = (e) => {
+  //   e.preventDefault();
+  //   if (isSignUp) {
+  //     handleRegister();
+  //   } else {
+  //     handleLogin();
+  //   }
+  //   localStorage.removeItem("boqCompleted");
+  // };
 
   const handleForgotPassword = async () => {
     try {
@@ -302,6 +377,17 @@ function Login() {
   };
 
   const signInWithGoogle = async () => {
+    // const from = location?.state?.from || "/"; // fallback to home if undefined
+    // const redirectTo = `${
+    //   window.location.origin
+    // }/complete-profile?from=${encodeURIComponent(from)}`;
+
+    // const { error } = await supabase.auth.signInWithOAuth({
+    //   provider: "google",
+    //   options: {
+    //     redirectTo,
+    //   },
+    // });
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {

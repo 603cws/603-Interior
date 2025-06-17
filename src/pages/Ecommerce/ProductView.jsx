@@ -11,6 +11,10 @@ import Header from "./Header";
 import { AiFillHeart } from "react-icons/ai";
 import { GoHeart } from "react-icons/go";
 
+import { useHandleAddToCart } from "../../utils/HelperFunction";
+import { ToastContainer } from "react-toastify";
+import SpinnerFullPage from "../../common-components/SpinnerFullPage";
+
 function ProductView() {
   const [mainImageHovered, setMainImageHovered] = useState(false); // For main image hover effect
   const [hoveredImage, setHoveredImage] = useState(null); // For additional image hover effect
@@ -18,25 +22,22 @@ function ProductView() {
   const [similarProducts, setSimilarProducts] = useState();
   const [productsMayLike, setProductsMayLike] = useState();
   const [productqunatity, setProductquantity] = useState(1);
+  const [isloading, setIsloading] = useState(false);
 
   const [isCarted, setIsCarted] = useState();
 
   const navigate = useNavigate();
 
+  const { handleAddToCart } = useHandleAddToCart();
+
   //   get the product based on the product id
   const { id: productid } = useParams();
 
-  const {
-    cartItems,
-    isAuthenticated,
-    localcartItems,
-    setLocalCartItems,
-    wishlistItems,
-    setWishlistItems,
-  } = useApp();
+  const { cartItems, isAuthenticated, localcartItems } = useApp();
 
   async function fetchproductbyid() {
     try {
+      setIsloading(true);
       const { data, error } = await supabase
         .from("product_variants")
         .select("*,product_id(*)") // or specify fields like "name, price"
@@ -87,6 +88,8 @@ function ProductView() {
       setproduct(productwithimage);
     } catch (error) {
       console.log(error);
+    } finally {
+      setIsloading(false);
     }
   }
   async function fetchSimilarproduct() {
@@ -94,7 +97,7 @@ function ProductView() {
       //get the current product
       const { data: product, error: Err } = await supabase
         .from("product_variants")
-        .select("*,product_id(*)") // or specify fields like "name, price"
+        .select("*,product_id(*)")
         .eq("id", productid)
         .single();
 
@@ -106,7 +109,6 @@ function ProductView() {
       if (error) throw new Error(error);
 
       // Filter products where it is approved
-
       const filterdata = data.filter(
         (item) =>
           item.status === "approved" &&
@@ -129,9 +131,6 @@ function ProductView() {
 
       // 1. Extract unique image names
       const uniqueImages = [...new Set(data.map((item) => item.image))];
-      //   const uniqueImages = [
-      //     ...new Set(similarFiltered.map((item) => item.image)),
-      //   ];
 
       // 2. Generate signed URLs from Supabase Storage
       const { data: signedUrls, error: signedUrlError } = await supabase.storage
@@ -170,6 +169,22 @@ function ProductView() {
     fetchproductbyid();
     fetchSimilarproduct();
   }, [productid]);
+
+  useEffect(() => {
+    if (!product?.id) return;
+
+    if (isAuthenticated) {
+      const check = cartItems?.some(
+        (item) => item.productId?.id === product.id
+      );
+      setIsCarted(check);
+    } else {
+      const check = localcartItems?.some(
+        (item) => item.productId?.id === product.id
+      );
+      setIsCarted(check);
+    }
+  }, [isAuthenticated, cartItems, localcartItems, product?.id]);
 
   const baseImageUrl =
     "https://bwxzfwsoxwtzhjbzbdzs.supabase.co/storage/v1/object/public/addon/";
@@ -219,311 +234,271 @@ function ProductView() {
     },
   };
 
-  const handleAddToCart = async (product, type) => {
-    if (!isCarted && !isAuthenticated) {
-      //format the product for cart
-      const formattedproductforcart = {
-        productId: product,
-        type: "cart",
-        quantity: productqunatity,
-      };
-
-      setLocalCartItems((prev) => {
-        const exists = prev.some((item) => item?.productId?.id === product.id);
-        if (exists) return prev;
-
-        const updated = [...prev, formattedproductforcart];
-        localStorage.setItem("cartitems", JSON.stringify(updated));
-        return updated;
-      });
-      setIsCarted(true);
-    }
-    const isAlreadyInWishlist = wishlistItems?.some(
-      (item) => item.productId?.id === product.id
-    );
-    if (type === "wishlist" && isAlreadyInWishlist) return;
-
-    if ((!isCarted && isAuthenticated) || type === "wishlist") {
-      try {
-        const { data, error } = await supabase
-          .from("userProductCollection")
-          .insert([
-            { productId: product.id, type: type, quantity: productqunatity },
-          ]);
-
-        if (error) throw new Error(error);
-        if (type === "wishlist") {
-          setWishlistItems((prev) => [
-            ...prev,
-            { productId: { ...product }, type: "wishlist" },
-          ]);
-        }
-        setIsCarted(true);
-      } catch (error) {
-        console.log(error);
-        setIsCarted(false);
-      }
-    }
-  };
-
   return (
     <>
       <Header />
-      <div className="container mx-auto">
-        {/* breadcumbs */}
-        <div className="mt-10">
-          <div className="flex mx-10 items-center text-[#334A78] text-sm mt-4 mb-4 md:mb-0">
-            <button onClick={() => navigate("/products")}>Home</button>
-            <MdOutlineKeyboardArrowRight
-              size={15}
-              style={{ color: "#334A78" }}
-            />
-            <button>{product?.title}</button>
+      <ToastContainer />
+      {isloading ? (
+        <SpinnerFullPage />
+      ) : (
+        <div className="container mx-auto">
+          {/* breadcumbs */}
+          <div className="mt-10">
+            <div className="flex mx-10 items-center text-[#334A78] text-sm mt-4 mb-4 md:mb-0">
+              <button onClick={() => navigate("/products")}>Home</button>
+              <MdOutlineKeyboardArrowRight
+                size={15}
+                style={{ color: "#334A78" }}
+              />
+              <button>{product?.title}</button>
+            </div>
           </div>
-        </div>
-        <div className={`flex p-2 lg:p-5 gap-1`}>
-          <div className="flex-1">
-            {product && (
-              <div>
-                <div
-                  className="max-w-xl"
-                  onMouseEnter={() => setMainImageHovered(true)}
-                  onMouseLeave={() => setMainImageHovered(false)}
-                  style={{ zIndex: mainImageHovered ? 10 : 1 }}
-                >
-                  <img
-                    src={hoveredImage || product.image}
-                    className=""
-                    alt="product name "
-                  />
+          <div className={`flex p-2 lg:p-5 gap-1`}>
+            <div className="flex-1">
+              {product && (
+                <div>
+                  <div
+                    className="max-w-xl"
+                    onMouseEnter={() => setMainImageHovered(true)}
+                    onMouseLeave={() => setMainImageHovered(false)}
+                    style={{ zIndex: mainImageHovered ? 10 : 1 }}
+                  >
+                    <img
+                      src={hoveredImage || product.image}
+                      className=""
+                      alt="product name "
+                    />
+                  </div>
+                  {additionalImagesArray.length > 0 ? (
+                    <div className="flex flex-wrap items-center gap-3 mx-6 ml-16 mt-3">
+                      {additionalImagesArray.map((img, idx) => (
+                        <img
+                          key={idx}
+                          src={img}
+                          alt={`Angle ${idx + 1}`}
+                          width={50}
+                          height={50}
+                          onMouseEnter={() => setHoveredImage(img)}
+                          onMouseLeave={() => setHoveredImage(null)}
+                          className="cursor-pointer rounded-lg border-2 border-transparent"
+                        />
+                      ))}
+                    </div>
+                  ) : (
+                    <div>
+                      <p>no additional images </p>
+                    </div>
+                  )}
                 </div>
-                {additionalImagesArray.length > 0 ? (
-                  <div className="flex flex-wrap items-center gap-3 mx-6 ml-16 mt-3">
-                    {additionalImagesArray.map((img, idx) => (
-                      <img
-                        key={idx}
-                        src={img}
-                        alt={`Angle ${idx + 1}`}
-                        width={50}
-                        height={50}
-                        onMouseEnter={() => setHoveredImage(img)}
-                        onMouseLeave={() => setHoveredImage(null)}
-                        className="cursor-pointer rounded-lg border-2 border-transparent"
+              )}
+            </div>
+
+            <div className="flex-1 flex flex-col mt-2 md:mt-0 font-Poppins ">
+              {/* product info */}
+              <div className="flex flex-col justify-center">
+                <div className="">
+                  <h2 className="font-semibold text-3xl text-[#111]">
+                    {product?.title || "product title"}
+                  </h2>
+                  <p className="text-[#A5A6AD] text-base leading-[38.4px]">
+                    {product?.product_type}
+                  </p>
+
+                  <div className="border border-[#ccc] p-1 w-32">
+                    <p className="flex gap-1">
+                      <span className="text-[#000] font-medium text-[10px]">
+                        2.7
+                      </span>{" "}
+                      <AiFillStar color="#F5B92B" size={14} />
+                      <span className="border-l border-l-[#CCCCCC] text-[#666] text-[10px]">
+                        78 Ratings
+                      </span>
+                    </p>
+                  </div>
+                </div>
+
+                {/* product price section */}
+                <div className="my-3">
+                  <div className="flex items-center gap-2">
+                    <p className="text-xl font-bold text-[#334A78] leading-[38.4px]">
+                      Rs {product?.price || "Rs 3,0000"}
+                    </p>
+                    <p className="text-lg text-[#898994] leading-[38.4px]">
+                      MRP <span className="line-through">$5678</span>
+                    </p>
+                    <p className="text-[#F69E60]">(Rs.2678 OFF)</p>
+                  </div>
+                  <p className="text-xs text-[#3AA495]">
+                    inclusive of all taxes
+                  </p>
+                </div>
+
+                <div className="my-3">
+                  <p className="text-[#334A78] text-sm ">colors</p>
+                  <div className="flex gap-3">
+                    <div className="px-5 py-2 bg-[#000]/5 inline-block text-sm text-[#334A78] uppercase text-center border border-[#334A78]">
+                      black
+                    </div>
+                    <div className="px-4 py-2 bg-[#fff] inline-block text-sm text-[#334A78] uppercase text-center border border-[#ccc]">
+                      GREEN
+                    </div>
+                  </div>
+                </div>
+
+                {/* qunatiy counter */}
+                <div>
+                  <h2 className="font-semibold text-[#334A78] text-sm capitalize">
+                    Quantity
+                  </h2>
+                  <div className=" flex  gap-3 my-2">
+                    <div className="flex items-start justify-start gap-2">
+                      <button
+                        className="border-2 px-2 w-12 py-2 font-semibold"
+                        onClick={handleProductQuantityDec}
+                      >
+                        -
+                      </button>
+                      <input
+                        type="number"
+                        className="border-2 px-2 w-12 py-2 rounded text-center [&::-webkit-inner-spin-button]:appearance-none  focus:outline-none focus:ring-0 text-xs md:text-[13px] leading-6"
+                        min={1}
+                        value={productqunatity}
+                        readOnly
                       />
-                    ))}
+                      <button
+                        className="border-2 px-2 w-12 py-2 font-semibold"
+                        onClick={handleProductQuantityInc}
+                      >
+                        +
+                      </button>
+                    </div>
                   </div>
-                ) : (
-                  <div>
-                    <p>no additional images </p>
-                  </div>
-                )}
+                </div>
+
+                {/* add to card and buy now */}
+                <div className="my-4 flex gap-8 ">
+                  <button
+                    onClick={() => handleAddToCart(product)}
+                    className="text-[#212B36] uppercase bg-[#FFFFFF] border border-[#212B36] w-52 px-10 py-4 rounded-sm "
+                  >
+                    {isCarted ? "Added to cart" : "ADD to cart"}
+                  </button>
+                  <button className="text-[#212B36] uppercase bg-[#FFFFFF] border border-[#212B36] w-52 px-10 py-4 rounded-sm ">
+                    buy now
+                  </button>
+                </div>
+              </div>
+              {/* product description */}
+              <div className="mt-2 md:mt-5 text-[#334A78] font-Poppins xl:w-2/3 ">
+                <h3 className="text-sm  uppercase font-bold  border-b-2">
+                  Product Details
+                </h3>
+                {/* material and water*/}
+                <ProductDetailreusable
+                  title1={"MATERIAL:"}
+                  desc1={"PU Material"}
+                  title2={"WATER RESISTANT:"}
+                  desc2={"Yes"}
+                />
+                <ProductDetailreusable
+                  title1={"PATTERN:"}
+                  desc1={"Yes"}
+                  title2={"COMPARTMENT:"}
+                  desc2={"Yes"}
+                />
+                <ProductDetailreusable
+                  title1={"DIMENSIONS (H x L x W):"}
+                  desc1={"18x22x12 cm"}
+                  title2={"POCKETS:"}
+                  desc2={"Yes"}
+                />
+                <ProductDetailreusable
+                  title1={"HANDLE:"}
+                  desc1={"Yes"}
+                  title2={"CLOSURE:"}
+                  desc2={"Snap Lock"}
+                />
+                <ProductDetailreusable
+                  title1={"CARE INSTRUCTION:"}
+                  desc1={"Wipe with clean, soft cloth"}
+                  title2={"WHAT ALL CAN FIT IN:"}
+                  desc2={"Mobile can fit in"}
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* cusstomer review */}
+          <div className="flex justify-between items-center border-2 border-[#334A78]/20 mt-10 mb-10 p-4 font-Poppins">
+            <div>
+              <h3 className="text-[#171717] font-semibold text-2xl">
+                Customer Reviews
+              </h3>
+              <p className="text-[#334A78] text-sm">No reviews yet</p>
+            </div>
+            <div>
+              <p className="text-[#C16452] text-sm">Write a review</p>
+            </div>
+          </div>
+
+          <div className="my-10 font-Poppins">
+            <h3 className="text-[#171717] text-3xl  uppercase mb-3 font-semibold">
+              Similar Products
+            </h3>
+            {similarProducts && (
+              <div className="relative">
+                <ReusableSwiper
+                  products={similarProducts}
+                  CardComponent={Card}
+                  // handleAddToCart={handleAddToCart}
+                  swiperSettings={swiperSettings}
+                  prevRef={prevRef}
+                  nextRef={nextRef}
+                  paginationRef={paginationRef}
+                />
+                {/* Custom arrows */}
+                <div
+                  ref={prevRef}
+                  className="swiper-button-prev custom-nav absolute top-1/2 -left-10 transform -translate-y-1/2 w-10 h-10 bg-white rounded-full shadow z-50"
+                />
+                <div
+                  ref={nextRef}
+                  className="swiper-button-next custom-nav absolute top-1/2 -right-10 transform -translate-y-1/2 w-10 h-10 bg-white rounded-full shadow z-50"
+                />
               </div>
             )}
           </div>
 
-          <div className="flex-1 flex flex-col mt-2 md:mt-0 font-Poppins ">
-            {/* product info */}
-            <div className="flex flex-col justify-center">
-              <div className="">
-                <h2 className="font-semibold text-3xl text-[#111]">
-                  {product?.title || "product title"}
-                </h2>
-                <p className="text-[#A5A6AD] text-base leading-[38.4px]">
-                  {product?.product_type}
-                </p>
-
-                <div className="border border-[#ccc] p-1 w-32">
-                  <p className="flex gap-1">
-                    <span className="text-[#000] font-medium text-[10px]">
-                      2.7
-                    </span>{" "}
-                    <AiFillStar color="#F5B92B" size={14} />
-                    <span className="border-l border-l-[#CCCCCC] text-[#666] text-[10px]">
-                      78 Ratings
-                    </span>
-                  </p>
-                </div>
-              </div>
-
-              {/* product price section */}
-              <div className="my-3">
-                <div className="flex items-center gap-2">
-                  <p className="text-xl font-bold text-[#334A78] leading-[38.4px]">
-                    Rs {product?.price || "Rs 3,0000"}
-                  </p>
-                  <p className="text-lg text-[#898994] leading-[38.4px]">
-                    MRP <span className="line-through">$5678</span>
-                  </p>
-                  <p className="text-[#F69E60]">(Rs.2678 OFF)</p>
-                </div>
-                <p className="text-xs text-[#3AA495]">inclusive of all taxes</p>
-              </div>
-
-              <div className="my-3">
-                <p className="text-[#334A78] text-sm ">colors</p>
-                <div className="flex gap-3">
-                  <div className="px-5 py-2 bg-[#000]/5 inline-block text-sm text-[#334A78] uppercase text-center border border-[#334A78]">
-                    black
-                  </div>
-                  <div className="px-4 py-2 bg-[#fff] inline-block text-sm text-[#334A78] uppercase text-center border border-[#ccc]">
-                    GREEN
-                  </div>
-                </div>
-              </div>
-
-              {/* qunatiy counter */}
-              <div>
-                <h2 className="font-semibold text-[#334A78] text-sm capitalize">
-                  Quantity
-                </h2>
-                <div className=" flex  gap-3 my-2">
-                  <div className="flex items-start justify-start gap-2">
-                    <button
-                      className="border-2 px-2 w-12 py-2 font-semibold"
-                      onClick={handleProductQuantityDec}
-                    >
-                      -
-                    </button>
-                    <input
-                      type="number"
-                      className="border-2 px-2 w-12 py-2 rounded text-center [&::-webkit-inner-spin-button]:appearance-none  focus:outline-none focus:ring-0 text-xs md:text-[13px] leading-6"
-                      min={1}
-                      value={productqunatity}
-                      readOnly
-                    />
-                    <button
-                      className="border-2 px-2 w-12 py-2 font-semibold"
-                      onClick={handleProductQuantityInc}
-                    >
-                      +
-                    </button>
-                  </div>
-                </div>
-              </div>
-
-              {/* add to card and buy now */}
-              <div className="my-4 flex gap-8 ">
-                <button
-                  onClick={() => handleAddToCart(product, "cart")}
-                  className="text-[#212B36] uppercase bg-[#FFFFFF] border border-[#212B36] w-52 px-10 py-4 rounded-sm "
-                >
-                  {isCarted ? "Added to cart" : "ADD to cart"}
-                </button>
-                <button className="text-[#212B36] uppercase bg-[#FFFFFF] border border-[#212B36] w-52 px-10 py-4 rounded-sm ">
-                  buy now
-                </button>
-              </div>
-            </div>
-            {/* product description */}
-            <div className="mt-2 md:mt-5 text-[#334A78] font-Poppins xl:w-2/3 ">
-              <h3 className="text-sm  uppercase font-bold  border-b-2">
-                Product Details
-              </h3>
-              {/* material and water*/}
-              <ProductDetailreusable
-                title1={"MATERIAL:"}
-                desc1={"PU Material"}
-                title2={"WATER RESISTANT:"}
-                desc2={"Yes"}
-              />
-              <ProductDetailreusable
-                title1={"PATTERN:"}
-                desc1={"Yes"}
-                title2={"COMPARTMENT:"}
-                desc2={"Yes"}
-              />
-              <ProductDetailreusable
-                title1={"DIMENSIONS (H x L x W):"}
-                desc1={"18x22x12 cm"}
-                title2={"POCKETS:"}
-                desc2={"Yes"}
-              />
-              <ProductDetailreusable
-                title1={"HANDLE:"}
-                desc1={"Yes"}
-                title2={"CLOSURE:"}
-                desc2={"Snap Lock"}
-              />
-              <ProductDetailreusable
-                title1={"CARE INSTRUCTION:"}
-                desc1={"Wipe with clean, soft cloth"}
-                title2={"WHAT ALL CAN FIT IN:"}
-                desc2={"Mobile can fit in"}
-              />
-            </div>
-          </div>
-        </div>
-
-        {/* cusstomer review */}
-        <div className="flex justify-between items-center border-2 border-[#334A78]/20 mt-10 mb-10 p-4 font-Poppins">
-          <div>
-            <h3 className="text-[#171717] font-semibold text-2xl">
-              Customer Reviews
+          {/* product you may like */}
+          <div className="my-10 font-Poppins">
+            <h3 className="text-[#171717] text-3xl  uppercase mb-3 font-semibold">
+              You May also like
             </h3>
-            <p className="text-[#334A78] text-sm">No reviews yet</p>
+            {productsMayLike && (
+              <div className="relative">
+                <ReusableSwiper
+                  products={productsMayLike}
+                  CardComponent={Card}
+                  // handleAddToCart={handleAddToCart}
+                  swiperSettings={productmaylikeSwiperSettings}
+                  prevRef={prevRef2}
+                  nextRef={nextRef2}
+                  paginationRef={paginationRef2}
+                />
+                {/* Custom arrows */}
+                <div
+                  ref={prevRef2}
+                  className="swiper-button-prev custom-nav absolute top-1/2 -left-10 transform -translate-y-1/2 w-10 h-10 bg-white rounded-full shadow z-50"
+                />
+                <div
+                  ref={nextRef2}
+                  className="swiper-button-next custom-nav absolute top-1/2 -right-10 transform -translate-y-1/2 w-10 h-10 bg-white rounded-full shadow z-50"
+                />
+              </div>
+            )}
           </div>
-          <div>
-            <p className="text-[#C16452] text-sm">Write a review</p>
-          </div>
         </div>
-
-        <div className="my-10 font-Poppins">
-          <h3 className="text-[#171717] text-3xl  uppercase mb-3 font-semibold">
-            Similar Products
-          </h3>
-          {similarProducts && (
-            <div className="relative">
-              <ReusableSwiper
-                products={similarProducts}
-                CardComponent={Card}
-                handleAddToCart={handleAddToCart}
-                swiperSettings={swiperSettings}
-                prevRef={prevRef}
-                nextRef={nextRef}
-                paginationRef={paginationRef}
-              />
-              {/* Custom arrows */}
-              <div
-                ref={prevRef}
-                className="swiper-button-prev custom-nav absolute top-1/2 -left-10 transform -translate-y-1/2 w-10 h-10 bg-white rounded-full shadow z-50"
-              />
-              <div
-                ref={nextRef}
-                className="swiper-button-next custom-nav absolute top-1/2 -right-10 transform -translate-y-1/2 w-10 h-10 bg-white rounded-full shadow z-50"
-              />
-            </div>
-          )}
-        </div>
-
-        {/* product you may like */}
-        <div className="my-10 font-Poppins">
-          <h3 className="text-[#171717] text-3xl  uppercase mb-3 font-semibold">
-            You May also like
-          </h3>
-          {productsMayLike && (
-            <div className="relative">
-              <ReusableSwiper
-                products={productsMayLike}
-                CardComponent={Card}
-                handleAddToCart={handleAddToCart}
-                swiperSettings={productmaylikeSwiperSettings}
-                prevRef={prevRef2}
-                nextRef={nextRef2}
-                paginationRef={paginationRef2}
-              />
-              {/* Custom arrows */}
-              <div
-                ref={prevRef2}
-                className="swiper-button-prev custom-nav absolute top-1/2 -left-10 transform -translate-y-1/2 w-10 h-10 bg-white rounded-full shadow z-50"
-              />
-              <div
-                ref={nextRef2}
-                className="swiper-button-next custom-nav absolute top-1/2 -right-10 transform -translate-y-1/2 w-10 h-10 bg-white rounded-full shadow z-50"
-              />
-            </div>
-          )}
-        </div>
-      </div>
+      )}
 
       {/* bottom tabs  */}
       <BottomTabs />
@@ -548,15 +523,41 @@ function ProductDetailreusable({ title1, title2, desc1, desc2 }) {
   );
 }
 
-function Card({ product, handleAddToCart }) {
-  const { wishlistItems } = useApp();
+function Card({ product }) {
+  const { isAuthenticated, localcartItems, cartItems, wishlistItems } =
+    useApp();
   const isWishlisted = wishlistItems?.some(
     (item) => item.productId?.id === product.id
   );
 
+  const naviagte = useNavigate();
+
+  const { handleAddtoWishlist, handleAddToCart } = useHandleAddToCart();
+
+  const [iscarted, setIsCarted] = useState(false);
+
+  useEffect(() => {
+    if (!product?.id) return;
+
+    if (isAuthenticated) {
+      const check = cartItems?.some(
+        (item) => item.productId?.id === product.id
+      );
+      setIsCarted(check);
+    } else {
+      const check = localcartItems?.some(
+        (item) => item.productId?.id === product.id
+      );
+      setIsCarted(check);
+    }
+  }, [isAuthenticated, cartItems, localcartItems, product?.id]);
+
   return (
     <div className="font-Poppins w-[245px] h-[350px] border border-[#ccc]">
-      <div className="flex justify-center items-center p-2">
+      <div
+        onClick={() => naviagte(`/productview/${product.id}`)}
+        className="flex justify-center items-center p-2 cursor-pointer"
+      >
         <img src={product.image} alt="chair" className="h-52 object-contain" />
       </div>
       <div className="bg-[#fff] p-2">
@@ -574,7 +575,7 @@ function Card({ product, handleAddToCart }) {
             </div>
           </div>
           <div
-            onClick={() => handleAddToCart(product, "wishlist")}
+            onClick={() => handleAddtoWishlist(product)}
             className=" text-[#ccc] hover:text-red-950 cursor-pointer"
           >
             {isWishlisted ? (
@@ -584,8 +585,11 @@ function Card({ product, handleAddToCart }) {
             )}
           </div>
         </div>
-        <button className="text-[#000] uppercase bg-[#FFFFFF] text-xs border border-[#ccc] px-2  py-2 rounded-sm ">
-          ADD TO CART
+        <button
+          onClick={() => handleAddToCart(product)}
+          className="text-[#000] uppercase bg-[#FFFFFF] text-xs border border-[#ccc] px-2  py-2 rounded-sm "
+        >
+          {iscarted ? "added to cart" : "add to cart"}
         </button>
       </div>
     </div>

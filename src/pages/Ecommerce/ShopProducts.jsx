@@ -1,10 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-
 import { supabase } from "../../services/supabase";
 import SpinnerFullPage from "../../common-components/SpinnerFullPage";
-
-import { useNavigate } from "react-router-dom";
-import { BsArrowRight } from "react-icons/bs";
 import { FaHeart } from "react-icons/fa";
 import { IoFilter } from "react-icons/io5";
 import {
@@ -16,17 +12,32 @@ import { FaArrowRightLong, FaArrowLeftLong } from "react-icons/fa6";
 
 import Header from "./Header";
 
+import { useHandleAddToCart } from "../../utils/HelperFunction";
+
+import { useApp } from "../../Context/Context";
+import { ToastContainer } from "react-toastify";
+import { useNavigate } from "react-router-dom";
+
 function ShopProducts() {
   const [products, setProducts] = useState([]);
   const [productsloading, setProductsloading] = useState(true);
   const containerRef = useRef(null);
+  const [open, setOpen] = useState(false);
 
   const [filterCatName, setFilterCatName] = useState(null);
   const [filteredProducts, setFilteredProducts] = useState([]);
+  // const [filters, setFilters] = useState({
+  //   category: [],
+  //   priceRange: [0, 100000],
+  // });
+
+  const { filters, setFilters } = useApp();
 
   const [currentPage, setCurrentPage] = useState(1);
 
   const [isShopCatOepn, setIsShopCatOpen] = useState(false);
+
+  const [filtersortby, setfiltersortby] = useState("");
 
   let items = filteredProducts;
   let itemsPerPage = 20;
@@ -44,18 +55,6 @@ function ShopProducts() {
   const resultText = `Showing ${indexOfFirstItem + 1}–${end} of ${
     items.length
   } results`;
-
-  console.log(
-    "totalpages",
-    totalPages,
-    "indexoflastitem",
-    indexOfLastItem,
-    "indexoffirstitem",
-    indexOfFirstItem,
-    "currentitems",
-    currentItems
-  );
-
   // Handle page change
   const goToPage = (pageNumber) => {
     setCurrentPage(pageNumber);
@@ -67,28 +66,54 @@ function ShopProducts() {
     fetchProductsData();
   }, []);
 
-  function FiltertheproductsbasedOnConditions() {
-    // filter by cat
-    if (filterCatName) {
-      let allproducts = products;
-      console.log("products", filteredProducts);
+  const applyFiltersAndSort = (products, filters, sortBy) => {
+    let result = [...products];
 
-      const filteredbycat = allproducts.filter(
-        (product) =>
-          product.product_id?.category.toLowerCase() ===
-          filterCatName.toLowerCase()
+    // Category Filter
+    const normalizedFilterCats = filters.category.map((cat) =>
+      cat.toLowerCase()
+    );
+
+    if (normalizedFilterCats.length > 0) {
+      result = result.filter((product) =>
+        normalizedFilterCats.includes(
+          product.product_id?.category?.toLowerCase()
+        )
       );
-
-      console.log("filteredbasedoncat", filteredbycat);
-
-      setFilteredProducts(filteredbycat);
     }
-  }
 
-  //   filter the products based on the product cat
+    // Price Filter
+    result = result.filter(
+      (product) =>
+        product.price >= filters.priceRange[0] &&
+        product.price <= filters.priceRange[1]
+    );
+
+    // Sorting
+    switch (true) {
+      case filtersortby === "low":
+        result.sort((a, b) => a.price - b.price);
+        break;
+      case filtersortby === "high":
+        result.sort((a, b) => b.price - a.price);
+        break;
+      default:
+        // No sorting applied for 'popularity' or default
+        break;
+    }
+
+    return result;
+  };
+
   useEffect(() => {
-    FiltertheproductsbasedOnConditions();
-  }, [filterCatName]);
+    const updated = applyFiltersAndSort(products, filters, filtersortby);
+    setFilteredProducts(updated);
+  }, [filters, filtersortby, products]);
+
+  const handleSortby = (e) => {
+    const sortby = e.value;
+    setfiltersortby(sortby);
+  };
 
   const fetchProductsData = async () => {
     try {
@@ -180,8 +205,45 @@ function ShopProducts() {
       imagename: "/images/icons/Lux.png",
     },
   ];
+
+  const options = [
+    { option: "Popularity", value: "" },
+    { option: "Price: Low to High", value: "low" },
+    { option: "Price: High to Low", value: "high" },
+  ];
+
+  const handleCategoryClick = (catName) => {
+    setFilters((prev) => ({
+      ...prev,
+      category: prev.category.includes(catName)
+        ? prev.category.filter((c) => c !== catName) // remove if exists
+        : [...prev.category, catName], // add if not
+    }));
+  };
+
+  const handleRemove = (type, value) => {
+    if (type === "category") {
+      setFilters((prev) => ({
+        ...prev,
+        category: prev.category.filter((c) => c !== value),
+      }));
+    }
+
+    if (type === "priceRange") {
+      setFilters((prev) => ({
+        ...prev,
+        priceRange: [0, 100000], // adjust to your default
+      }));
+    }
+
+    if (type === "sortBy") {
+      setfiltersortby(""); // reset sort to default
+    }
+  };
+
   return (
     <div>
+      <ToastContainer />
       <Header />
       <section ref={containerRef}>
         <div className="lg:container lg:mx-auto my-10">
@@ -257,7 +319,8 @@ function ShopProducts() {
                   <ul className="font-lora space-y-3">
                     {categoryies.map((cat) => (
                       <li
-                        onClick={() => setFilterCatName(cat.name)}
+                        onClick={() => handleCategoryClick(cat.name)}
+                        // onClick={() => setFilterCatName(cat.name)}
                         className="text-[#111] text-sm cursor-pointer"
                         key={cat.name}
                       >
@@ -295,21 +358,105 @@ function ShopProducts() {
           </div>
           {!productsloading ? (
             <div className="md:w-[80%] w-full ">
-              <div className="flex justify-between items-center font-lora border-b border-b-[#CCCCCC] mb-3 pb-2">
-                <p className="text-[#191716]  text-[13px] leading-3 tracking-[1px]">
-                  {resultText}
-                </p>
-                <div className="flex font-Poppins text-[#334A78] text-[15px] leading-[24px] border border-[#CCCCCC] p-1">
-                  <p>Sort by:</p>
-                  <select name="popularity" id="" className="font-semibold">
-                    <option value="popular">popular</option>
-                    <option value="popular">famous</option>
-                  </select>
+              <div className="border-b border-b-[#CCCCCC] mb-3 pb-2">
+                <div className="flex justify-between items-center font-lora ">
+                  <p className="text-[#191716]  text-[13px] leading-3 tracking-[1px]">
+                    {resultText}
+                  </p>
+                  <div className="relative w-52 font-Poppins text-[#334A78] text-[15px] leading-[24px]">
+                    <div
+                      className="flex items-center border border-[#CCCCCC] p-2 cursor-pointer"
+                      onClick={() => setOpen(!open)}
+                    >
+                      <p className="mr-2">Sort by:</p>
+                      <p className="font-semibold capitalize">{filtersortby}</p>
+                      <span className="ml-auto text-xl">
+                        {" "}
+                        {open ? (
+                          <MdKeyboardArrowUp size={25} />
+                        ) : (
+                          <MdKeyboardArrowDown size={25} />
+                        )}
+                      </span>
+                    </div>
+
+                    {open && (
+                      <ul className="absolute left-0 mt-1 w-full bg-white border border-[#CCCCCC] z-50 shadow-md rounded-sm">
+                        {options.map((opt, idx) => (
+                          <li
+                            key={idx}
+                            className={`px-4 py-2 capitalize cursor-pointer ${
+                              filtersortby === opt.value
+                                ? "border-2 border-[#334A78]"
+                                : ""
+                            } hover:bg-[#F4F4F4]`}
+                            onClick={() => handleSortby(opt)}
+                          >
+                            {opt.option}
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </div>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {/* Category Filters */}
+                  {filters.category.map((cat, i) => (
+                    <span
+                      key={`cat-${i}`}
+                      className="hover:border-[#666] flex items-center px-3 py-1 border border-[#CCCCCC] text-[#666] text-sm bg-white"
+                    >
+                      <p>{cat}</p>
+                      <button
+                        onClick={() => handleRemove("category", cat)}
+                        className="ml-1 text-lg"
+                      >
+                        ×
+                      </button>
+                    </span>
+                  ))}
+
+                  {/* Price Range Filter */}
+                  {filters.priceRange[0] > 0 ||
+                  filters.priceRange[1] < 100000 ? (
+                    <span className="flex items-center px-3 py-1 border border-[#CCCCCC] text-[#666] text-sm bg-white">
+                      <p>
+                        ₹{filters.priceRange[0]} – ₹{filters.priceRange[1]}
+                      </p>
+                      <button
+                        onClick={() => handleRemove("priceRange")}
+                        className="ml-1 text-lg"
+                      >
+                        ×
+                      </button>
+                    </span>
+                  ) : null}
+
+                  {/* Sort By Tag */}
+                  {filtersortby && filtersortby !== "popularity" && (
+                    <span className="flex items-center px-3 py-1 border border-[#CCCCCC] text-[#666] text-sm bg-white">
+                      <p>
+                        Sort:{" "}
+                        {filtersortby === "low"
+                          ? "Price: Low to High"
+                          : filtersortby === "high"
+                          ? "Price: High to Low"
+                          : filtersortby}
+                      </p>
+                      <button
+                        onClick={() => setfiltersortby("")}
+                        className="ml-1 text-lg"
+                      >
+                        ×
+                      </button>
+                    </span>
+                  )}
                 </div>
               </div>
+
               <div className="grid grid-cols-5 gap-8 ">
                 {currentItems.map((product, index) => (
-                  <div>
+                  <div key={index}>
                     <Card product={product} />
                   </div>
                 ))}
@@ -375,9 +522,34 @@ function SectionHeader({ title, isborder = true }) {
 }
 
 function Card({ product }) {
+  const { handleAddToCart } = useHandleAddToCart();
+  const { isAuthenticated, localcartItems, cartItems } = useApp();
+
+  const [iscarted, setIsCarted] = useState(false);
+
+  const naviagte = useNavigate();
+
+  useEffect(() => {
+    if (!product?.id) return;
+
+    if (isAuthenticated) {
+      const check = cartItems?.some(
+        (item) => item.productId?.id === product.id
+      );
+      setIsCarted(check);
+    } else {
+      const check = localcartItems?.some(
+        (item) => item.productId?.id === product.id
+      );
+      setIsCarted(check);
+    }
+  }, [isAuthenticated, cartItems, localcartItems, product?.id]);
   return (
     <div className="font-Poppins max-w-sm max-h-sm  border border-[#ccc]">
-      <div className="flex justify-center items-center p-2">
+      <div
+        onClick={() => naviagte(`/productview/${product.id}`)}
+        className="flex justify-center items-center p-2 cursor-pointer"
+      >
         <img
           src={product.image}
           alt={product.product_id?.category}
@@ -402,46 +574,12 @@ function Card({ product }) {
             <FaHeart size={25} />
           </div>
         </div>
-        <button className="text-[#000] uppercase bg-[#FFFFFF] text-xs border border-[#ccc] px-2  py-2 rounded-sm ">
-          ADD TO CART
-        </button>
-      </div>
-    </div>
-  );
-}
-
-function BannerProduct() {
-  const naviagte = useNavigate();
-  return (
-    <div className="max-w-60 w-full h-96 relative rounded overflow-hidden shadow-lg">
-      <img
-        src="/images/banner-chair.jpg"
-        alt="Meeting Chairs"
-        className="w-full h-full object-cover"
-      />
-
-      <div
-        className="absolute top-0 left-0 w-full bg-[#e0f4ff] text-black flex flex-col justify-evenly px-6"
-        style={{
-          clipPath: "ellipse(95% 100% at 25% 0%)",
-          height: "45%",
-        }}
-      >
-        <p className="text-xs uppercase tracking-[3px] font-lora">
-          New collection
-        </p>
-        <h2 className="text-lg font-lora tracking-wide">
-          MEETING <br /> CHAIRS
-        </h2>
         <button
-          onClick={() => naviagte("/shop")}
-          className="mt-1 text-sm underline underline-offset-4 decoration-[#aaaaaa] flex items-center gap-2 group overflow-hidden relative hover:scale-105 transition-transform duration-700 ease-in-out"
+          onClick={() => handleAddToCart(product)}
+          disabled={iscarted}
+          className="text-[#000] uppercase bg-[#FFFFFF] text-xs border border-[#ccc] px-2  py-2 rounded-sm "
         >
-          <span className="relative z-10">Discover more</span>
-          <BsArrowRight
-            size={15}
-            className="absolute opacity-0 group-hover:opacity-100 translate-x-[550%] group-hover:translate-x-[700%] transition-transform duration-700 ease-in-out"
-          />
+          {iscarted ? "Added to cart" : "Add to cart"}{" "}
         </button>
       </div>
     </div>

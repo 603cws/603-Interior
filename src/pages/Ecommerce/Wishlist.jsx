@@ -1,14 +1,95 @@
-import React from "react";
 import Header from "./Header";
 import { IoClose } from "react-icons/io5";
 import { useApp } from "../../Context/Context";
 import { supabase } from "../../services/supabase";
 import { useNavigate } from "react-router-dom";
 import BottomTabs from "./BottomTabs";
+import { ToastContainer } from "react-toastify";
+
+import { useHandleAddToCart } from "../../utils/HelperFunction";
+import { useEffect, useState } from "react";
+
+import SpinnerFullPage from "../../common-components/SpinnerFullPage";
+import { showRemoveFromCartToast } from "../../utils/AddToCartToast";
 
 function Wishlist() {
-  const { wishlistItems, setWishlistItems } = useApp();
-  console.log(wishlistItems);
+  const [wishlistItems, setWishlistItems] = useState([]);
+
+  const [isloading, setIsloading] = useState(false);
+
+  const { handleAddToCart } = useHandleAddToCart();
+
+  const getWishlistItems = async () => {
+    setIsloading(true);
+    try {
+      const {
+        data: { user },
+        error: authError,
+      } = await supabase.auth.getUser();
+
+      if (authError) return [];
+
+      const { data, error } = await supabase
+        .from("userProductCollection")
+        .select("*,productId(*)")
+        .eq("userId", user.id)
+        .eq("type", "wishlist");
+
+      if (error) throw new Error(error);
+
+      //  If there's no data or it's empty, set empty states and return early
+      if (!data || data.length === 0) {
+        setWishlistItems([]);
+        return;
+      }
+
+      // 1. Extract unique image names
+      const uniqueImages = [
+        ...new Set(data.map((item) => item.productId.image)),
+      ];
+
+      // 2. Generate signed URLs from Supabase Storage
+      const { data: signedUrls, error: signedUrlError } = await supabase.storage
+        .from("addon") // your bucket name
+        .createSignedUrls(uniqueImages, 3600); // 1 hour expiry
+
+      if (signedUrlError) {
+        console.error("Error generating signed URLs:", signedUrlError);
+        return;
+      }
+
+      // 3. Create a map from image name to signed URL
+      const urlMap = {};
+      signedUrls.forEach(({ path, signedUrl }) => {
+        urlMap[path] = signedUrl;
+      });
+
+      // 4. Replace image names with URLs in the array
+      const updatedProducts = data.map((item) => ({
+        ...item,
+        productId: {
+          ...item.productId,
+          image: urlMap[item.productId.image] || item.productId.image,
+        },
+      }));
+
+      //for safety even if a product is added multiple times it will get filtered into one
+      const uniquecartitems = [
+        ...new Map(
+          updatedProducts.map((item) => [item.productId.id, item])
+        ).values(),
+      ];
+      setWishlistItems(uniquecartitems);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsloading(false);
+    }
+  };
+
+  useEffect(() => {
+    getWishlistItems();
+  }, []);
 
   const navigate = useNavigate();
 
@@ -21,6 +102,9 @@ function Wishlist() {
 
       if (error) throw error;
 
+      console.log(product, "product for delete");
+
+      showRemoveFromCartToast(product, "wishlist");
       setWishlistItems((prevItems) =>
         prevItems.filter((item) => item.id !== product.id)
       );
@@ -30,6 +114,7 @@ function Wishlist() {
   };
 
   const handleMoveToCart = async (product) => {
+    console.log(product);
     try {
       const { data, error } = await supabase
         .from("userProductCollection")
@@ -47,10 +132,13 @@ function Wishlist() {
     }
   };
 
+  if (isloading) return <SpinnerFullPage />;
+
   return (
     <div>
       <Header />
-      {wishlistItems.length >= 1 ? (
+      <ToastContainer />
+      {!isloading && wishlistItems?.length >= 1 ? (
         <section className="container">
           <div className=" font-Poppins py-10">
             <h6 className="capitalize text-xl text-[#334A78]">
@@ -94,6 +182,7 @@ function Wishlist() {
                         navigate("/cart");
                       } else {
                         handleMoveToCart(item);
+                        // handleAddToCart(item);
                       }
                     }}
                     className="text-[#000] capitalize bg-[#FFFFFF] text-xs border border-[#ccc] px-2  py-2 rounded-sm "
@@ -114,8 +203,11 @@ function Wishlist() {
           </div>
         </section>
       ) : (
-        <div className="flex flex-col gap-7 justify-center items-center ">
-          <img src="/images/empty-cart.png" alt="" className="max-w-sm" />
+        <div className="flex  flex-col gap-4 justify-center items-center h-full">
+          <img src="/images/emptywishlist.png" alt="" className="max-w-sm" />
+          <h2 className="font-Poppins font-semibold text-2xl text-[#000]">
+            Your Wishlist is Empty
+          </h2>
           <p className="font-Poppins text-xs text-[#000000]">
             There is nothing in your bag. Let's add some items.
           </p>

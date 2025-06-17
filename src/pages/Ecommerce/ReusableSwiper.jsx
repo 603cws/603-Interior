@@ -24,14 +24,14 @@ const ReusableSwiper = ({
           if (prevRef?.current && nextRef?.current) {
             swiper.params.navigation.prevEl = prevRef.current;
             swiper.params.navigation.nextEl = nextRef.current;
-            swiper.navigation.init();
-            swiper.navigation.update();
+            swiper.navigation?.init();
+            swiper.navigation?.update();
           }
 
           if (paginationRef?.current) {
             swiper.params.pagination.el = paginationRef.current;
-            swiper.pagination.init();
-            swiper.pagination.update();
+            swiper.pagination?.init();
+            swiper.pagination?.update();
           }
         }, 0);
       }}
