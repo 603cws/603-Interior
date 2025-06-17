@@ -70,7 +70,6 @@ function Navbar({
     boqTotal,
     setBoqTotal,
     isMobile,
-    currentLayoutData,
     setSelectedPlan,
   } = useApp();
 
@@ -451,9 +450,7 @@ function Navbar({
       };
 
       // Insert into Supabase
-      const { data, error } = await supabase
-        .from("boqdata")
-        .insert([formattedData]);
+      const { error } = await supabase.from("boqdata").insert([formattedData]);
 
       if (error) {
         console.error("Error inserting data into Supabase:", error);

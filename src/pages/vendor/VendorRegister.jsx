@@ -6,7 +6,7 @@ import Select from "react-select";
 
 function VendorRegister() {
   const navigate = useNavigate();
-  const [role, setRole] = useState("");
+  // const [role, setRole] = useState("");
   const [categories, setCategories] = useState([]);
   const [formData, setFormData] = useState({
     company: "",
@@ -19,7 +19,6 @@ function VendorRegister() {
     password: "",
     confirmPassword: "",
   });
-  const [selectedCategories, setSelectedCategories] = useState([]); // Stores selected categories
 
   useEffect(() => {
     const fetchCategories = async () => {

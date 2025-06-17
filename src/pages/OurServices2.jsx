@@ -1,9 +1,7 @@
 import "../styles/Landing.css";
-import LandingNavbar from "../common-components/LandingNavbar";
+// import LandingNavbar from "../common-components/LandingNavbar";
 import Footer from "../common-components/Footer";
 import { IoMdArrowDropright, IoMdArrowRoundDown } from "react-icons/io";
-import { FaDotCircle } from "react-icons/fa";
-import { FaCircleDot } from "react-icons/fa6";
 import HeroSection from "./HeroSection";
 
 const services = [

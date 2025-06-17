@@ -1,4 +1,3 @@
-import React from "react";
 import { lazy, Suspense } from "react";
 // import Layout from "./layout/pages/Layout";
 import Boq from "./boq/pages/Boq";
@@ -10,16 +9,16 @@ import SelectArea from "./boq/components/SelectArea";
 import Landing from "./pages/Landing";
 import SpinnerFullPage from "./common-components/SpinnerFullPage";
 import Contactus from "./pages/Contactus";
-import AboutUs from "./pages/AboutUs";
+// import AboutUs from "./pages/AboutUs";
 import AboutUs2 from "./pages/AboutUs2";
 import Login from "./common-components/Login";
-import OurServices from "./pages/OurServices";
+// import OurServices from "./pages/OurServices";
 import OurServices2 from "./pages/OurServices2";
 import BlogDetail from "./pages/BlogDetail";
 import ProfileCard from "./boq/components/ProfileCard";
 import Dashboard from "./pages/Dashboard";
 import ScrollToTop from "./common-components/ScrollToTop";
-import BecomeSeller from "./pages/BecomeSeller";
+// import BecomeSeller from "./pages/BecomeSeller";
 import { useApp } from "./Context/Context";
 import Plans from "./common-components/Plans";
 import HelpnFaq from "./pages/HelpnFaq";
@@ -50,13 +49,14 @@ import ShopProducts from "./pages/Ecommerce/ShopProducts";
 import Cart from "./pages/Ecommerce/Cart";
 import Addresspage from "./pages/Ecommerce/Addresspage";
 import Wishlist from "./pages/Ecommerce/Wishlist";
-import Payments from "./pages/Ecommerce/Payments";
+// import Payments from "./pages/Ecommerce/Payments";
+import ELogin from "./common-components/ELogin";
 
 const Home = lazy(() => import("./pages/Home"));
 
 // const Homepage = lazy(() => import("./pages/Homepage"));
 const Layout = lazy(() => import("./layout/pages/Layout"));
-const BlogPage = lazy(() => import("./pages/Blog"));
+// const BlogPage = lazy(() => import("./pages/Blog"));
 const Carrer = lazy(() => import("./pages/Carrer"));
 
 function App() {
@@ -144,8 +144,9 @@ function App() {
             <Route path="/shop" element={<ShopProducts />} />
             <Route path="/cart" element={<Cart />} />
             <Route path="/address" element={<Addresspage />} />
-	     <Route path="/wishlist" element={<Wishlist />} />
-            <Route path="/payments" element={<Payments />} />
+            <Route path="/wishlist" element={<Wishlist />} />
+            {/* <Route path="/payments" element={<Payments />} /> */}
+            <Route path="/eLogin" element={<ELogin />} />
           </Routes>
         ) : (
           <Routes>
@@ -189,7 +190,8 @@ function App() {
             <Route path="/cart" element={<Cart />} />
             <Route path="/address" element={<Addresspage />} />
             <Route path="/wishlist" element={<Wishlist />} />
-            <Route path="/payments" element={<Payments />} />
+            {/* <Route path="/payments" element={<Payments />} /> */}
+            <Route path="/eLogin" element={<ELogin />} />
           </Routes>
         )}
       </Suspense>

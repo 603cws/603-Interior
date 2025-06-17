@@ -13,7 +13,6 @@ import { FaArrowLeft } from "react-icons/fa6";
 import { VscSignOut } from "react-icons/vsc";
 import { IoSettingsSharp } from "react-icons/io5";
 import { LuBlend } from "react-icons/lu";
-import { TiHomeOutline } from "react-icons/ti";
 import { BsQuestionCircle } from "react-icons/bs";
 import Spinner from "../common-components/Spinner";
 import DashboardProductCard from "./vendor/DashboardProductCard";
@@ -121,7 +120,7 @@ function Dashboard() {
   // loading
   const [isloading, setIsloading] = useState(false);
   const [productlist, setProductlist] = useState(true);
-  const [imageIsLoaded, setImageIsLoaded] = useState(false);
+  // const [imageIsLoaded, setImageIsLoaded] = useState(false);
 
   const [openMenuId, setOpenMenuId] = useState(null); // Store the ID of the row with an open menu
   // const [isExpanded, setIsExpanded] = useState(false);

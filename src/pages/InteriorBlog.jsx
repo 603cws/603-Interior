@@ -1,4 +1,3 @@
-import DashboardGetPlan from "../common-components/DashboardGetPlan";
 import Footer from "../common-components/Footer";
 import HeroSection from "./HeroSection";
 import { FaHeadphones } from "react-icons/fa6";

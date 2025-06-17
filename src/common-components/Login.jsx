@@ -3,7 +3,7 @@ import { supabase } from "../services/supabase";
 import { FaAngleLeft } from "react-icons/fa6";
 import { FcGoogle } from "react-icons/fc";
 import { IoEyeOffOutline, IoEyeOutline } from "react-icons/io5";
-import { replace, useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useApp } from "../Context/Context";
 // import { use } from "react";
 import toast from "react-hot-toast";

@@ -1,4 +1,4 @@
-import LandingNavbar from "../common-components/LandingNavbar";
+// import LandingNavbar from "../common-components/LandingNavbar";
 import Footer from "../common-components/Footer";
 import { useState, useEffect } from "react";
 import "swiper/css";

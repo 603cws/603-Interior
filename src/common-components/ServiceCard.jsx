@@ -13,7 +13,7 @@ export const ServiceCard = ({ title, description, image }) => {
       {/* Content */}
       <div className="relative z-10">
         <div className="mb-4">
-          <img src={image} className="w-10 h-10 rounded" />
+          <img src={image} alt={title} className="w-10 h-10 rounded" />
         </div>
         <h4 className="font-semibold text-base text-black mb-2 font-lora">
           {title}
