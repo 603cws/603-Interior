@@ -83,8 +83,6 @@ function Cart() {
     }
   }, [cartItems, localcartItems, isAuthenticated]);
 
-  console.log(totalPrice, "totalprice");
-
   const syncLocalCartToDB = async () => {
     if (!isAuthenticated) return localcartItems;
 
@@ -102,27 +100,46 @@ function Cart() {
       quantity: item.quantity,
     }));
 
+    console.log("user id ", user);
+
     try {
       const { data: dbCartItems, error: fetchError } = await supabase
         .from("userProductCollection")
-        .select("productId")
-        .eq("userId", accountHolder?.userId)
+        .select("*,productId(*)")
+        .eq("userId", user.id)
         .eq("type", "cart");
 
       if (fetchError) throw new Error(fetchError.message);
 
-      const dbProductIds = dbCartItems.map((item) => item.productId);
+      console.log(dbCartItems, "dbcartitems");
+
+      const dbProductIds = dbCartItems.map((item) => item.productId.id);
+
+      console.log(dbProductIds, "dbproductids");
+
+      // const dbProductIds = dbCartItems.map((item) => item.productId);
 
       // Filter local items that are NOT already in DB
+
+      console.log("localcart", formattedLocalItems);
+
       const itemsToInsert = formattedLocalItems.filter(
         (item) => !dbProductIds.includes(item.productId)
       );
+
+      console.log(itemsToInsert, "itemstoisnert");
 
       if (itemsToInsert.length > 0) {
         for (const item of itemsToInsert) {
           const { error: insertError } = await supabase
             .from("userProductCollection")
-            .insert(item);
+            .upsert(item, {
+              onConflict: ["userId", "productId", "type"],
+              ignoreDuplicates: true,
+            });
+          // const { error: insertError } = await supabase
+          //   .from("userProductCollection")
+          //   .insert(item);
 
           if (insertError) {
             console.error("Error inserting item:", item, insertError.message);
