@@ -11,24 +11,24 @@ function Header() {
   const { cartItems, isAuthenticated, localcartItems } = useApp();
   return (
     <div className="container">
-      <div className=" flex bg-[#FFFFFF] rounded-[100px] shadow-[0_4px_12px_rgba(0,0,0,0.1)] my-3 border py-2.5 px-7">
-        <div className="w-2/5 flex gap-20">
-          <button onClick={() => navigate("/")}>
-            <img
-              src="/logo/workved-interior.png"
-              alt=""
-              className="h-10 w-16"
-            />
-          </button>
+      <div className=" flex justify-between 3xl:justify-around bg-[#FFFFFF]  shadow-[0_4px_12px_rgba(0,0,0,0.1)] my-3 border px-5 xl:px-16">
+        <div className="flex gap-20 py-5 ">
           <ul className="flex items-center uppercase gap-10 text-xs font-bold text-[#1A293A] [&_li]:cursor-pointer">
             <li onClick={() => navigate("/products")}>home</li>
             <li onClick={() => navigate("/shop")}>shop</li>
-            <li onClick={() => navigate("/shop")}>sell</li>
-            <li onClick={() => navigate("/shop")}>contact us</li>
+            <li onClick={() => navigate("/shop")}>brand</li>
+            {/* <li onClick={() => navigate("/shop")}>contact us</li> */}
           </ul>
         </div>
-        <div className="flex w-3/5 items-center justify-between">
-          <div className="w-2/3 relative text-[#111111]/50">
+        <button onClick={() => navigate("/")} className="">
+          <img
+            src="/logo/workved-interior.png"
+            alt=""
+            className="h-full w-28"
+          />
+        </button>
+        <div className="flex items-center">
+          {/* <div className="w-2/3 relative text-[#111111]/50">
             <input
               type="text"
               placeholder="Search for products, brands and more"
@@ -37,8 +37,8 @@ function Header() {
             <div className="absolute left-1 top-1/2 -translate-y-1/2">
               <IoIosSearch />
             </div>
-          </div>
-          <div className="flex gap-7">
+          </div> */}
+          <div className="flex gap-12 py-5">
             <button>
               <FaRegUser size={20} />
             </button>
