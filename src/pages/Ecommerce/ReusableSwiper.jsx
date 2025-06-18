@@ -15,6 +15,8 @@ const ReusableSwiper = ({
   nextRef,
   paginationRef,
   handleAddToCart,
+  handleCompareToggle,
+  compare,
 }) => {
   return (
     <Swiper
@@ -47,7 +49,11 @@ const ReusableSwiper = ({
               handleAddToCart={handleAddToCart}
             />
           ) : (
-            <CardComponent product={product} />
+            <CardComponent
+              product={product}
+              handleCompareToggle={handleCompareToggle}
+              compare={compare}
+            />
           )}
         </SwiperSlide>
       ))}

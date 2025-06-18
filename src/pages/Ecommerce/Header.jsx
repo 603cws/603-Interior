@@ -8,7 +8,8 @@ import { useApp } from "../../Context/Context";
 function Header() {
   const navigate = useNavigate();
 
-  const { cartItems, isAuthenticated, localcartItems } = useApp();
+  const { cartItems, isAuthenticated, localcartItems, wishlistItems } =
+    useApp();
   return (
     <div className="container">
       <div className=" flex justify-between 3xl:justify-around bg-[#FFFFFF]  shadow-[0_4px_12px_rgba(0,0,0,0.1)] my-3 border px-5 xl:px-16">
@@ -42,8 +43,11 @@ function Header() {
             <button>
               <FaRegUser size={20} />
             </button>
-            <button onClick={() => navigate("/wishlist")}>
+            <button onClick={() => navigate("/wishlist")} className="relative">
               <GoHeart size={22} />
+              <span className="absolute -top-1/4 -right-1/3 font-semibold text-[8px] bg-[#C16452] text-[#ffffff] rounded-full p-1 h-4 w-4 flex justify-center items-center">
+                {wishlistItems?.length}
+              </span>
             </button>
             <button className="relative" onClick={() => navigate("/cart")}>
               <BsCart2 size={23} />

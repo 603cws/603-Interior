@@ -346,22 +346,29 @@ function Cart() {
                         method="post"
                         className=""
                       >
-                        <input
-                          type="text"
-                          value={couponname}
-                          onChange={(e) => setCouponname(e.target.value)}
-                          className="w-full border boder-[#ccc] uppercase"
-                          // disabled={disableApplycoupon}
-                          required
-                        />
-                        <button type="submit">Apply </button>
-                        <button
-                          onClick={handleRemoveCoupon}
-                          type="button"
-                          className="px-5 mx-2"
-                        >
-                          Remove coupon{" "}
-                        </button>
+                        <div className="relative border border-[#ccc] w-full flex">
+                          <input
+                            type="text"
+                            value={couponname}
+                            onChange={(e) => setCouponname(e.target.value)}
+                            className="w-[65%] uppercase focus:outline-none focus:ring-0"
+                            // disabled={disableApplycoupon}
+                            required
+                          />
+                          <button
+                            type="submit"
+                            className="text-xs w-[15%] bg-[#334A78] text-[#fff] font-medium border-none"
+                          >
+                            Apply{" "}
+                          </button>
+                          <button
+                            onClick={handleRemoveCoupon}
+                            type="button"
+                            className=" text-xs w-[20%] bg-[#549DC7] font-medium text-center text-[#fff]"
+                          >
+                            Remove{" "}
+                          </button>
+                        </div>
                       </form>
                     </div>
 

@@ -14,6 +14,8 @@ import { GoHeart } from "react-icons/go";
 import { useHandleAddToCart } from "../../utils/HelperFunction";
 import { ToastContainer } from "react-toastify";
 import SpinnerFullPage from "../../common-components/SpinnerFullPage";
+import CompareProducts from "./CompareProducts";
+import toast from "react-hot-toast";
 
 function ProductView() {
   const [mainImageHovered, setMainImageHovered] = useState(false); // For main image hover effect
@@ -23,6 +25,8 @@ function ProductView() {
   const [productsMayLike, setProductsMayLike] = useState();
   const [productqunatity, setProductquantity] = useState(1);
   const [isloading, setIsloading] = useState(false);
+  const [compare, setCompare] = useState([]);
+  const [showCompare, setShowCompare] = useState(false);
 
   const [isCarted, setIsCarted] = useState();
 
@@ -232,6 +236,23 @@ function ProductView() {
       768: { slidesPerView: 3, grid: { rows: 2 }, spaceBetween: 24 },
       1024: { slidesPerView: 5, grid: { rows: 2 }, spaceBetween: 30 },
     },
+  };
+
+  const handleCompareToggle = (product) => {
+    setCompare((prevCompare) => {
+      const alreadyAdded = prevCompare.some((item) => item.id === product.id);
+      if (alreadyAdded) {
+        return prevCompare.filter((item) => item.id !== product.id);
+      } else if (prevCompare.length < 3) {
+        return [...prevCompare, product];
+      } else {
+        toast.error("You can compare a maximum of 3 products.");
+        return prevCompare;
+      }
+    });
+  };
+  const handleRemoveCompare = (id) => {
+    setCompare((prev) => prev.filter((item) => item.id !== id));
   };
 
   return (
@@ -451,6 +472,8 @@ function ProductView() {
                   products={similarProducts}
                   CardComponent={Card}
                   // handleAddToCart={handleAddToCart}
+                  handleCompareToggle={handleCompareToggle}
+                  compare={compare}
                   swiperSettings={swiperSettings}
                   prevRef={prevRef}
                   nextRef={nextRef}
@@ -480,6 +503,8 @@ function ProductView() {
                   products={productsMayLike}
                   CardComponent={Card}
                   // handleAddToCart={handleAddToCart}
+                  handleCompareToggle={handleCompareToggle}
+                  compare={compare}
                   swiperSettings={productmaylikeSwiperSettings}
                   prevRef={prevRef2}
                   nextRef={nextRef2}
@@ -496,12 +521,29 @@ function ProductView() {
                 />
               </div>
             )}
+            {compare.length > 0 && (
+              <button
+                onClick={() => setShowCompare(true)}
+                className="fixed bottom-20 right-5 px-5 py-3 bg-slate-600 text-white z-10 animate-blink"
+              >
+                compare
+              </button>
+            )}
           </div>
         </div>
       )}
 
       {/* bottom tabs  */}
       <BottomTabs />
+
+      {/* compare window */}
+      {showCompare && (
+        <CompareProducts
+          product={compare}
+          onClose={() => setShowCompare(false)}
+          onRemove={handleRemoveCompare}
+        />
+      )}
     </>
   );
 }
@@ -523,7 +565,7 @@ function ProductDetailreusable({ title1, title2, desc1, desc2 }) {
   );
 }
 
-function Card({ product }) {
+function Card({ product, handleCompareToggle, compare }) {
   const { isAuthenticated, localcartItems, cartItems, wishlistItems } =
     useApp();
   const isWishlisted = wishlistItems?.some(
@@ -548,12 +590,15 @@ function Card({ product }) {
       const check = localcartItems?.some(
         (item) => item.productId?.id === product.id
       );
+      console.log("check", check);
+
       setIsCarted(check);
+      console.log("iscarted", iscarted);
     }
   }, [isAuthenticated, cartItems, localcartItems, product?.id]);
 
   return (
-    <div className="font-Poppins w-[245px] h-[350px] border border-[#ccc]">
+    <div className="font-Poppins w-[245px] h-[360px] border border-[#ccc]">
       <div
         onClick={() => naviagte(`/productview/${product.id}`)}
         className="flex justify-center items-center p-2 cursor-pointer"
@@ -591,6 +636,18 @@ function Card({ product }) {
         >
           {iscarted ? "added to cart" : "add to cart"}
         </button>
+        <div className="flex gap-3">
+          <input
+            type="checkbox"
+            name="compare"
+            id={`compare-${product.id}`}
+            checked={compare?.some((item) => item.id === product.id)}
+            onChange={() => handleCompareToggle(product)}
+          />
+          <label htmlFor="" className="text-xs">
+            Add to compare
+          </label>
+        </div>
       </div>
     </div>
   );

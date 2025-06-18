@@ -303,6 +303,14 @@ function Products() {
       <header>
         <Header />
       </header>
+      {/* Hero section */}
+      <section className="lg:container lg:mx-auto">
+        <div className=" bg-[url('/images/ecom-hero.png')] bg-contain bg-center bg-no-repeat h-[85vh] relative">
+          <button className="absolute bg-[#334A78]/80 text-[#fff] font-semibold font-Poppins uppercase text-sm py-2 px-7 bottom-1/4 left-20 translate-y-7">
+            Order now
+          </button>
+        </div>
+      </section>
       {/* section 2 */}
       <section>
         <div className="lg:container lg:mx-auto my-10">
