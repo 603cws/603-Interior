@@ -231,21 +231,21 @@ function Landing() {
                         "make your space"
                       )}
                     </button>
-                    {import.meta.env.MODE === "development" && (
-                      <button
-                        onClick={handleProductClick}
-                        disabled={loading}
-                        className={`capitalize bg-[#FFD074] hover:bg-[#fbc964] text-base font-Poppins font-semibold text-black h-10 w-52 rounded-3xl self-center lg:self-start flex items-center justify-center gap-2 ${
-                          loading ? "opacity-70 cursor-not-allowed" : ""
-                        }`}
-                      >
-                        {loading ? (
-                          <span className="h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
-                        ) : (
-                          "shop by products"
-                        )}
-                      </button>
-                    )}
+                    {/* {import.meta.env.MODE === "development" && ( */}
+                    <button
+                      onClick={handleProductClick}
+                      disabled={loading}
+                      className={`capitalize bg-[#FFD074] hover:bg-[#fbc964] text-base font-Poppins font-semibold text-black h-10 w-52 rounded-3xl self-center lg:self-start flex items-center justify-center gap-2 ${
+                        loading ? "opacity-70 cursor-not-allowed" : ""
+                      }`}
+                    >
+                      {loading ? (
+                        <span className="h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+                      ) : (
+                        "shop by products"
+                      )}
+                    </button>
+                    {/* )} */}
                   </div>
                   {/* <button
                     onClick={handleClick}
