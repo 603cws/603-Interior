@@ -23,7 +23,13 @@ const ReusableSwiper = ({
       onSwiper={(swiper) => {
         // Delay to ensure refs are attached
         setTimeout(() => {
-          if (prevRef?.current && nextRef?.current) {
+          if (
+            swiper &&
+            swiper.params &&
+            swiper.params.navigation &&
+            prevRef?.current &&
+            nextRef?.current
+          ) {
             swiper.params.navigation.prevEl = prevRef.current;
             swiper.params.navigation.nextEl = nextRef.current;
             swiper.navigation?.init();

@@ -1,5 +1,4 @@
 import { BsArrowRight } from "react-icons/bs";
-
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Grid, Navigation, Pagination } from "swiper/modules";
 import { TiArrowRight } from "react-icons/ti";
@@ -8,22 +7,17 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/grid"; // this is important for grid layout!
 import "./products.css";
-
 import Header from "./Header";
-
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
-
 import { useEffect, useRef, useState } from "react";
 import { useApp } from "../../Context/Context";
-
 import { supabase } from "../../services/supabase";
 import SpinnerFullPage from "../../common-components/SpinnerFullPage";
-
 import { useNavigate } from "react-router-dom";
-
 import { useHandleAddToCart } from "../../utils/HelperFunction";
 import { toast, Slide } from "react-toastify";
 import { ToastContainer } from "react-toastify";
+import CardSection from "./CardSection";
 
 // <div className="h-[400px]">
 //   <div className="h-full flex flex-col border-[1px] border-[#AAAAAA] relative">
@@ -262,16 +256,16 @@ function Products() {
   ];
 
   const brands = [
-    { name: "ikea", image: "/images/brand2.png" },
-    { name: "ikea", image: "/images/brand2.png" },
-    { name: "ikea", image: "/images/brand2.png" },
-    { name: "ikea", image: "/images/brand2.png" },
-    { name: "ikea", image: "/images/brand2.png" },
-    { name: "ikea", image: "/images/brand2.png" },
-    { name: "ikea", image: "/images/brand2.png" },
-    { name: "ikea", image: "/images/brand2.png" },
-    { name: "ikea", image: "/images/brand2.png" },
-    { name: "ikea", image: "/images/brand2.png" },
+    { name: "wellspun", image: "/images/ecommerce/wellspun.png" },
+    { name: "ikea", image: "/images/ecommerce/ikea.png" },
+    { name: "ikea", image: "/images/ecommerce/innova.png" },
+    { name: "ikea", image: "/images/ecommerce/fortis.png" },
+    { name: "ikea", image: "/images/ecommerce/fortis.png" },
+    { name: "ikea", image: "/images/ecommerce/fortis.png" },
+    { name: "ikea", image: "/images/ecommerce/fortis.png" },
+    { name: "ikea", image: "/images/ecommerce/fortis.png" },
+    { name: "ikea", image: "/images/ecommerce/fortis.png" },
+    { name: "ikea", image: "/images/ecommerce/fortis.png" },
   ];
 
   const EcommerceFeatures = [
@@ -311,6 +305,7 @@ function Products() {
           </button>
         </div>
       </section>
+
       {/* section 2 */}
       <section>
         <div className="lg:container lg:mx-auto my-10">
@@ -326,6 +321,7 @@ function Products() {
           </div>
         </div>
       </section>
+
       {/* section 3 */}
       <section>
         <div className="lg:container lg:mx-auto my-10">
@@ -349,6 +345,7 @@ function Products() {
         </div>
       </section>
 
+      {/* section 4 */}
       <section>
         <SectionHeader title={"Featured products"} />
         <div className="container px-4 lg:px-12 mx-auto my-10">
@@ -444,10 +441,17 @@ function Products() {
       <section>
         <div className="lg:container lg:mx-auto my-10">
           <SectionHeader title={"Shop by brands"} />
-          <div className="grid grid-cols-3 lg:grid-cols-5 place-items-center gap-2">
+          <div className="grid grid-cols-3 lg:grid-cols-5 gap-2">
             {brands.map((brand, index) => (
-              <div className="" key={index}>
-                <img src={brand.image} alt={brand.name} className="w-32" />
+              <div
+                className="hover:shadow-lg flex justify-center items-center w-full h-28"
+                key={index}
+              >
+                <img
+                  src={brand.image}
+                  alt={brand.name}
+                  className="object-scale-down h-full"
+                />
               </div>
             ))}
           </div>
@@ -526,6 +530,38 @@ function Products() {
             ref={paginationRef}
             className="custom-pagination mt-4 flex justify-center gap-2"
           />
+        </div>
+      </section>
+
+      {/* section 7*/}
+      <section>
+        <div className="container px-4 lg:px-12 mx-auto my-5">
+          <div className="flex flex-col md:flex-row gap-6">
+            <CardSection className="flex-1" title="Season’s Special" />
+            <CardSection className="flex-1" title="Top Deals On Furniture" />
+          </div>
+        </div>
+      </section>
+
+      {/* section 8*/}
+      <section>
+        <div className="container px-4 lg:px-12 mx-auto mb-10">
+          <div className="flex flex-col md:flex-row md:items-stretch gap-6">
+            {/* Left Column */}
+            <div className="flex-1">
+              <CardSection title="Season’s Special" />
+            </div>
+
+            {/* Right Column: Make this a positioned container */}
+            <div className="flex-1 relative">
+              <img
+                src="/images/ecommerce/image.png"
+                alt="Sale Image"
+                className="md:absolute top-0 left-0 w-full h-full p-2 cursor-pointer"
+                // onClick={navigate}
+              />
+            </div>
+          </div>
         </div>
       </section>
     </div>
