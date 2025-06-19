@@ -84,6 +84,14 @@ function LandingNavbar({ bgColor = false }) {
             >
               Contact Us
             </li>
+            <li
+              onClick={() => navigate("/brands")}
+              className={`cursor-pointer relative after:content-[''] after:absolute after:left-0 after:bottom-[-2px] after:h-[2px] after:bg-[#1A3A36] after:transition-all after:duration-300 ${
+                pathname === "/brands" ? "after:w-full" : "after:w-0"
+              } hover:after:w-full`}
+            >
+              Brands
+            </li>
           </ul>
         </nav>
 

@@ -156,6 +156,8 @@ function Products() {
   const [productsloading, setProductsloading] = useState(true);
   // const [selectedCat, setSelectedCat] = useState("Furniture");
 
+  const navigate = useNavigate();
+
   useEffect(() => {
     // fetchdata();
     fetchProductsData();
@@ -450,7 +452,8 @@ function Products() {
                 <img
                   src={brand.image}
                   alt={brand.name}
-                  className="object-scale-down h-full"
+                  className="object-scale-down h-full cursor-pointer"
+                  onClick={() => navigate("/brands")}
                 />
               </div>
             ))}

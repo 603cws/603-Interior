@@ -51,6 +51,7 @@ import Addresspage from "./pages/Ecommerce/Addresspage";
 import Wishlist from "./pages/Ecommerce/Wishlist";
 // import Payments from "./pages/Ecommerce/Payments";
 import ELogin from "./common-components/ELogin";
+import Brands from "./pages/Ecommerce/Brands";
 
 const Home = lazy(() => import("./pages/Home"));
 
@@ -145,6 +146,7 @@ function App() {
             <Route path="/cart" element={<Cart />} />
             <Route path="/address" element={<Addresspage />} />
             <Route path="/wishlist" element={<Wishlist />} />
+            <Route path="/brands" element={<Brands />} />
             {/* <Route path="/payments" element={<Payments />} /> */}
             <Route path="/eLogin" element={<ELogin />} />
           </Routes>
@@ -190,6 +192,7 @@ function App() {
             <Route path="/cart" element={<Cart />} />
             <Route path="/address" element={<Addresspage />} />
             <Route path="/wishlist" element={<Wishlist />} />
+            <Route path="/brands" element={<Brands />} />
             {/* <Route path="/payments" element={<Payments />} /> */}
             <Route path="/eLogin" element={<ELogin />} />
           </Routes>
