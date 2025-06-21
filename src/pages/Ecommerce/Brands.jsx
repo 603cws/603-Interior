@@ -153,7 +153,7 @@ function Brands() {
             <ProductCard
               key={i}
               image={src}
-              width={i === 0 || i === 4 ? "none" : "[320px]"}
+              width={i === 0 || i === 4 ? "none" : ""}
             />
           ))}
         </div>
@@ -164,7 +164,9 @@ function Brands() {
 
 const ProductCard = ({ image, width }) => (
   <div
-    className={`group relative h-[300px] w-full max-w-${width} rounded-xl shadow-md p-4 transition-all duration-300 hover:scale-[1.02] hover:bg-[#E8F1FF]`}
+    className={`group relative h-[300px] w-full ${
+      width ? "max-w-none" : "max-w-[320px]"
+    } rounded-xl shadow-md p-4 transition-all duration-300 hover:scale-[1.02] hover:bg-[#E8F1FF]`}
   >
     <div className="absolute top-[60%] left-1/2 -translate-x-1/2 w-[80%] h-24 bg-gradient-to-t from-[#A9BAD3] to-[#E0ECFF] blur-[80px] rounded-full z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
 
