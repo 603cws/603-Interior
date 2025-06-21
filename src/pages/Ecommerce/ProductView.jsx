@@ -16,6 +16,7 @@ import { ToastContainer } from "react-toastify";
 import SpinnerFullPage from "../../common-components/SpinnerFullPage";
 import CompareProducts from "./CompareProducts";
 import toast from "react-hot-toast";
+import ProductReview from "./ProductReview";
 
 function ProductView() {
   const [mainImageHovered, setMainImageHovered] = useState(false); // For main image hover effect
@@ -27,6 +28,7 @@ function ProductView() {
   const [isloading, setIsloading] = useState(false);
   const [compare, setCompare] = useState([]);
   const [showCompare, setShowCompare] = useState(false);
+  const [isReview, setIsReview] = useState(false);
 
   const [isCarted, setIsCarted] = useState();
 
@@ -259,6 +261,18 @@ function ProductView() {
     <>
       <Header />
       <ToastContainer />
+      {isReview && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-white w-full max-w-3xl p-6 rounded-lg shadow-lg relative overflow-y-auto max-h-[90vh]">
+            <ProductReview
+              image={product.image}
+              title={product.title}
+              details={product.details}
+              onClose={() => setIsReview(false)}
+            />
+          </div>
+        </div>
+      )}
       {isloading ? (
         <SpinnerFullPage />
       ) : (
@@ -331,7 +345,7 @@ function ProductView() {
                         2.7
                       </span>{" "}
                       <AiFillStar color="#F5B92B" size={14} />
-                      <span className="border-l border-l-[#CCCCCC] text-[#666] text-[10px]">
+                      <span className="border-l border-l-[#CCCCCC] pl-4 text-[#666] text-[10px]">
                         78 Ratings
                       </span>
                     </p>
@@ -345,7 +359,7 @@ function ProductView() {
                       Rs {product?.price || "Rs 3,0000"}
                     </p>
                     <p className="text-lg text-[#898994] leading-[38.4px]">
-                      MRP <span className="line-through">$5678</span>
+                      MRP <span className="line-through">Rs5678</span>
                     </p>
                     <p className="text-[#F69E60]">(Rs.2678 OFF)</p>
                   </div>
@@ -355,7 +369,7 @@ function ProductView() {
                 </div>
 
                 <div className="my-3">
-                  <p className="text-[#334A78] text-sm ">colors</p>
+                  <p className="text-[#334A78] text-sm ">Colors</p>
                   <div className="flex gap-3">
                     <div className="px-5 py-2 bg-[#000]/5 inline-block text-sm text-[#334A78] uppercase text-center border border-[#334A78]">
                       black
@@ -458,7 +472,12 @@ function ProductView() {
               <p className="text-[#334A78] text-sm">No reviews yet</p>
             </div>
             <div>
-              <p className="text-[#C16452] text-sm">Write a review</p>
+              <p
+                className="text-[#C16452] text-sm cursor-pointer hover:underline"
+                onClick={() => setIsReview(true)}
+              >
+                Write a review
+              </p>
             </div>
           </div>
 
@@ -614,7 +633,7 @@ function Card({ product, handleCompareToggle, compare }) {
             <div className="flex items-center gap-2">
               <p className=" ">Rs {product?.price || "Rs 3,0000"}</p>
               <p className="line-through text-[#111] text-opacity-50">
-                Rs $5678
+                Rs 5678
               </p>
               <p className="text-[#C20000]">sale</p>
             </div>
