@@ -10,13 +10,36 @@ import BottomTabs from "./BottomTabs";
 import Header from "./Header";
 import { AiFillHeart } from "react-icons/ai";
 import { GoHeart } from "react-icons/go";
-
 import { useHandleAddToCart } from "../../utils/HelperFunction";
 import { ToastContainer } from "react-toastify";
 import SpinnerFullPage from "../../common-components/SpinnerFullPage";
 import CompareProducts from "./CompareProducts";
 import toast from "react-hot-toast";
 import ProductReview from "./ProductReview";
+import { HandThumbUpIcon, HandThumbDownIcon } from "@heroicons/react/24/solid";
+import {
+  HandThumbUpIcon as HandThumbUpOutline,
+  HandThumbDownIcon as HandThumbDownOutline,
+} from "@heroicons/react/24/outline";
+
+const reviews = [
+  {
+    rating: 4.4,
+    title: "Very good product!!",
+    content:
+      "Poor quality. The seat is not even parallel to the ground, it is tilted to the lift as it is clearly visible observing the plane of the seat or the lines on the backrest compared to the ground. As a result sitting on the chair feels like leaning toward left always. The lower back rest is good........",
+    likes: 21,
+    comments: 21,
+  },
+  {
+    rating: 4.4,
+    title: "Very good product!!",
+    content:
+      "Poor quality. The seat is not even parallel to the ground, it is tilted to the left...",
+    likes: 21,
+    comments: 21,
+  },
+];
 
 function ProductView() {
   const [mainImageHovered, setMainImageHovered] = useState(false); // For main image hover effect
@@ -40,6 +63,19 @@ function ProductView() {
   const { id: productid } = useParams();
 
   const { cartItems, isAuthenticated, localcartItems } = useApp();
+  const hasReviews = reviews && reviews.length > 0;
+
+  const [interactions, setInteractions] = useState({}); // Track likes/dislikes per review index
+
+  const handleInteraction = (index, type) => {
+    setInteractions((prev) => {
+      const current = prev[index];
+      return {
+        ...prev,
+        [index]: current === type ? null : type, // toggle
+      };
+    });
+  };
 
   async function fetchproductbyid() {
     try {
@@ -464,14 +500,16 @@ function ProductView() {
           </div>
 
           {/* cusstomer review */}
-          <div className="flex justify-between items-center border-2 border-[#334A78]/20 mt-10 mb-10 p-4 font-Poppins">
-            <div>
-              <h3 className="text-[#171717] font-semibold text-2xl">
-                Customer Reviews
-              </h3>
-              <p className="text-[#334A78] text-sm">No reviews yet</p>
-            </div>
-            <div>
+          <div className="border-2 border-[#334A78]/20 mt-10 mb-10 p-4 font-Poppins">
+            <div className="flex justify-between items-center mb-6 p-6">
+              <div className="">
+                <h3 className="text-[#171717] font-semibold text-2xl">
+                  Customer Reviews
+                </h3>
+                {!hasReviews && (
+                  <p className="text-[#334A78] text-sm">No reviews yet</p>
+                )}
+              </div>
               <p
                 className="text-[#C16452] text-sm cursor-pointer hover:underline"
                 onClick={() => setIsReview(true)}
@@ -479,6 +517,126 @@ function ProductView() {
                 Write a review
               </p>
             </div>
+
+            {hasReviews && (
+              <div className="space-y-6 p-6">
+                {/* Rating Summary */}
+                <div className="flex gap-10 items-start font-Poppins">
+                  <div className="text-center">
+                    <p className="text-3xl font-semibold">4.4 ★</p>
+                    <p className="text-[#A3A3A3] text-sm">
+                      100 Ratings &<br /> 48 Reviews
+                    </p>
+                  </div>
+                  <div className="space-y-1">
+                    {[5, 4, 3, 2, 1].map((star, i) => {
+                      const count = [40, 5, 2, 1, 2][i];
+                      const barColor = [
+                        "bg-[#304778]",
+                        "bg-[#304778]",
+                        "bg-[#304778]",
+                        "bg-[#FACC15]",
+                        "bg-[#FA9515]",
+                      ][i];
+                      return (
+                        <div key={star} className="flex items-center gap-2">
+                          <span className="text-sm w-4 whitespace-nowrap mr-4">
+                            {star} ★
+                          </span>
+                          <div className="w-48 h-2 bg-gray-200 rounded">
+                            <div
+                              className={`${barColor} h-2 rounded`}
+                              style={{ width: `${count}%` }}
+                            ></div>
+                          </div>
+                          <span className="text-sm pl-4">{count}</span>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* Image thumbnails */}
+                <div className="flex gap-2 pt-8 border-b pb-6">
+                  {[...Array(6)].map((_, i) => (
+                    <div
+                      key={i}
+                      className="w-24 h-24 bg-gray-200 rounded overflow-hidden"
+                    >
+                      {/* Replace with real <img src={...} /> */}
+                      <div
+                        className="w-full h-full bg-cover bg-center"
+                        style={{ backgroundImage: `url('/image${i + 1}.jpg')` }}
+                      ></div>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Reviews List */}
+                {reviews.map((review, idx) => {
+                  const interaction = interactions[idx];
+                  return (
+                    <div key={idx} className="border-b pb-6 font-Poppins">
+                      <div className="flex items-center gap-2 mb-2">
+                        <p className="text-xs px-2 py-1 rounded flex items-center gap-1 border border-[#38938E]">
+                          {review.rating}{" "}
+                          <span className="text-[#38938E]">★</span>
+                        </p>
+                        <span className="font-semibold text-sm">
+                          {review.title}
+                        </span>
+                      </div>
+                      <p className="text-xs">{review.content}</p>
+                      <p className="text-sm text-[#6082AF] font-medium mt-2 cursor-pointer hover:underline">
+                        READ MORE
+                      </p>
+
+                      <div className="flex gap-6 text-sm mt-3 justify-end">
+                        <div
+                          className="flex items-center gap-1 cursor-pointer"
+                          onClick={() => handleInteraction(idx, "like")}
+                        >
+                          {interaction === "like" ? (
+                            <HandThumbUpIcon className="w-5 h-5 text-blue-600" />
+                          ) : (
+                            <HandThumbUpOutline className="w-5 h-5 text-gray-400" />
+                          )}
+                          <span
+                            className={
+                              interaction === "like"
+                                ? "text-blue-600"
+                                : "text-gray-400"
+                            }
+                          >
+                            {review.likes}
+                          </span>
+                        </div>
+
+                        <div
+                          className="flex items-center gap-1 cursor-pointer"
+                          onClick={() => handleInteraction(idx, "dislike")}
+                        >
+                          {interaction === "dislike" ? (
+                            <HandThumbDownIcon className="w-5 h-5 text-red-500" />
+                          ) : (
+                            <HandThumbDownOutline className="w-5 h-5 text-gray-400" />
+                          )}
+                          <span
+                            className={
+                              interaction === "dislike"
+                                ? "text-red-500"
+                                : "text-gray-400"
+                            }
+                          >
+                            {review.dislikes}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
           </div>
 
           <div className="my-10 font-Poppins">
