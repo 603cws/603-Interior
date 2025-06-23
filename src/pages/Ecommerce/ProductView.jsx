@@ -27,7 +27,7 @@ const reviews = [
     rating: 4.4,
     title: "Very good product!!",
     content:
-      "Poor quality. The seat is not even parallel to the ground, it is tilted to the lift as it is clearly visible observing the plane of the seat or the lines on the backrest compared to the ground. As a result sitting on the chair feels like leaning toward left always. The lower back rest is good........",
+      "Poor quality. The seat is not even parallel to the ground, it is tilted to the lift as it is clearly visible observing the plane of the seat or the lines on the backrest compared to the ground. As a result sitting on the chair feels like leaning toward left always. The lower back rest is good........   Poor quality. The seat is not even parallel to the ground, it is tilted to the lift as it is clearly visible observing the plane of the seat or the lines on the backrest compared to the ground. As a result sitting on the chair feels like leaning toward left always. The lower back rest is good........  Poor quality. The seat is not even parallel to the ground, it is tilted to the lift as it is clearly visible observing the plane of the seat or the lines on the backrest compared to the ground. As a result sitting on the chair feels like leaning toward left always. The lower back rest is good........  Poor quality. The seat is not even parallel to the ground, it is tilted to the lift as it is clearly visible observing the plane of the seat or the lines on the backrest compared to the ground. As a result sitting on the chair feels like leaning toward left always. The lower back rest is good........  Poor quality. The seat is not even parallel to the ground, it is tilted to the lift as it is clearly visible observing the plane of the seat or the lines on the backrest compared to the ground. As a result sitting on the chair feels like leaning toward left always. The lower back rest is good........  Poor quality. The seat is not even parallel to the ground, it is tilted to the lift as it is clearly visible observing the plane of the seat or the lines on the backrest compared to the ground. As a result sitting on the chair feels like leaning toward left always. The lower back rest is good........  Poor quality. The seat is not even parallel to the ground, it is tilted to the lift as it is clearly visible observing the plane of the seat or the lines on the backrest compared to the ground. As a result sitting on the chair feels like leaning toward left always. The lower back rest is good........  Poor quality. The seat is not even parallel to the ground, it is tilted to the lift as it is clearly visible observing the plane of the seat or the lines on the backrest compared to the ground. As a result sitting on the chair feels like leaning toward left always. The lower back rest is good........",
     likes: 21,
     comments: 21,
   },
@@ -52,8 +52,11 @@ function ProductView() {
   const [compare, setCompare] = useState([]);
   const [showCompare, setShowCompare] = useState(false);
   const [isReview, setIsReview] = useState(false);
-
   const [isCarted, setIsCarted] = useState();
+  const [expandedStates, setExpandedStates] = useState([]);
+  const [clampedStates, setClampedStates] = useState([]);
+  const [interactions, setInteractions] = useState([]);
+  const contentRefs = useRef([]);
 
   const navigate = useNavigate();
 
@@ -65,15 +68,23 @@ function ProductView() {
   const { cartItems, isAuthenticated, localcartItems } = useApp();
   const hasReviews = reviews && reviews.length > 0;
 
-  const [interactions, setInteractions] = useState({}); // Track likes/dislikes per review index
+  // const [interactions, setInteractions] = useState({}); // Track likes/dislikes per review index
+
+  // const handleInteraction = (index, type) => {
+  //   setInteractions((prev) => {
+  //     const current = prev[index];
+  //     return {
+  //       ...prev,
+  //       [index]: current === type ? null : type, // toggle
+  //     };
+  //   });
+  // };
 
   const handleInteraction = (index, type) => {
     setInteractions((prev) => {
-      const current = prev[index];
-      return {
-        ...prev,
-        [index]: current === type ? null : type, // toggle
-      };
+      const updated = [...prev];
+      updated[index] = prev[index] === type ? null : type;
+      return updated;
     });
   };
 
@@ -206,6 +217,30 @@ function ProductView() {
       console.log(error);
     }
   }
+
+  useEffect(() => {
+    const clamped = reviews.map((_, idx) => {
+      const el = contentRefs.current[idx];
+      if (!el) return false;
+
+      const lineHeight = parseFloat(getComputedStyle(el).lineHeight);
+      const maxHeight = lineHeight * 3;
+
+      return el.scrollHeight > maxHeight;
+    });
+
+    setClampedStates(clamped);
+    setExpandedStates(Array(reviews.length).fill(false));
+    setInteractions(Array(reviews.length).fill(null));
+  }, []);
+
+  const toggleExpanded = (index) => {
+    setExpandedStates((prev) => {
+      const updated = [...prev];
+      updated[index] = !prev[index];
+      return updated;
+    });
+  };
 
   useEffect(() => {
     fetchproductbyid();
@@ -575,6 +610,9 @@ function ProductView() {
                 {/* Reviews List */}
                 {reviews.map((review, idx) => {
                   const interaction = interactions[idx];
+                  const expanded = expandedStates[idx];
+                  const isClamped = clampedStates[idx];
+
                   return (
                     <div key={idx} className="border-b pb-6 font-Poppins">
                       <div className="flex items-center gap-2 mb-2">
@@ -586,10 +624,24 @@ function ProductView() {
                           {review.title}
                         </span>
                       </div>
-                      <p className="text-xs">{review.content}</p>
-                      <p className="text-sm text-[#6082AF] font-medium mt-2 cursor-pointer hover:underline">
-                        READ MORE
+
+                      <p
+                        ref={(el) => (contentRefs.current[idx] = el)}
+                        className={`text-xs ${
+                          !expanded ? "line-clamp-3" : ""
+                        } transition-all duration-300 ease-in-out max-w-7xl`}
+                      >
+                        {review.content}
                       </p>
+
+                      {isClamped && (
+                        <p
+                          className="text-sm text-[#6082AF] font-medium mt-2 cursor-pointer hover:underline"
+                          onClick={() => toggleExpanded(idx)}
+                        >
+                          {expanded ? "READ LESS" : "READ MORE"}
+                        </p>
+                      )}
 
                       <div className="flex gap-6 text-sm mt-3 justify-end">
                         <div
