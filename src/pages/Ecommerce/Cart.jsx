@@ -13,6 +13,8 @@ import CheckoutStepper from "../../common-components/CheckoutStepper";
 import { toast } from "react-toastify";
 import { ToastContainer } from "react-toastify";
 import { showRemoveFromCartToast } from "../../utils/AddToCartToast";
+import { MdOutlineDelete } from "react-icons/md";
+import "animate.css";
 
 function EmptyCart() {
   const navigate = useNavigate();
@@ -61,6 +63,9 @@ function Cart() {
   //   (acc, curr) => acc + curr.productId?.price * curr.quantity,
   //   0
   // );
+  const sortedCartItems = [...cartItems].sort((a, b) =>
+    a.productId.title.localeCompare(b.productId.title)
+  );
 
   useEffect(() => {
     const calculateTotal = () => {
@@ -260,7 +265,7 @@ function Cart() {
                     cartItems ? (
                       <div className="space-y-2">
                         {cartItems.length > 0 ? (
-                          cartItems.map((item) => (
+                          sortedCartItems.map((item) => (
                             <CartCard cartitem={item} key={item.id} />
                           ))
                         ) : (
@@ -277,9 +282,24 @@ function Cart() {
                   ) : localcartItems ? (
                     <div className="space-y-2">
                       {localcartItems.length > 0 ? (
-                        localcartItems.map((item) => (
-                          <CartCard cartitem={item} key={item.productId.id} />
-                        ))
+                        <>
+                          {localcartItems.map((item) => (
+                            <CartCard cartitem={item} key={item.productId.id} />
+                          ))}
+                          <p className="text-sm text-[#777] ml-2 !mt-6">
+                            <span
+                              onClick={() =>
+                                navigate("/login", {
+                                  state: { from: location.pathname },
+                                })
+                              }
+                              className="underline underline-offset-4 cursor-pointer hover:text-[#334A78] font-medium"
+                            >
+                              Login
+                            </span>{" "}
+                            to see full cart.
+                          </p>
+                        </>
                       ) : (
                         <EmptyCart />
                       )}
@@ -470,8 +490,15 @@ function Cart() {
 export default Cart;
 
 function CartCard({ cartitem }) {
+  const [loadingQty, setLoadingQty] = useState(false);
+  const [signedUrl, setSignedUrl] = useState(cartitem.productId.image);
+
   const { getCartItems, isAuthenticated, localcartItems, setLocalCartItems } =
     useApp();
+  const navigate = useNavigate();
+
+  console.log(cartitem);
+
   async function handleRemoveItem(product) {
     if (isAuthenticated) {
       try {
@@ -510,28 +537,165 @@ function CartCard({ cartitem }) {
     }
   }
 
+  const updateQuantity = async (productId, newQuantity) => {
+    setLoadingQty(true);
+    try {
+      const { data, error } = await supabase
+        .from("userProductCollection")
+        .update({ quantity: newQuantity })
+        .eq("productId", productId);
+      console.log(data);
+      if (error) {
+        console.log(error);
+      }
+      setLoadingQty(false);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoadingQty(false);
+      getCartItems();
+    }
+  };
+
+  const handleProductQuantityDec = (product, quantity) => {
+    if (isAuthenticated) {
+      if (quantity === 1) {
+        handleRemoveItem(product);
+      } else {
+        updateQuantity(product.productId?.id, quantity - 1);
+      }
+    } else {
+      if (quantity === 1) {
+        handleRemoveItem(product);
+        return;
+      }
+      const updatedLocalItems = localcartItems.map((item) =>
+        item.productId.id === product.productId.id
+          ? { ...item, quantity: quantity - 1 }
+          : item
+      );
+      localStorage.setItem("cartitems", JSON.stringify(updatedLocalItems));
+      setLocalCartItems(updatedLocalItems);
+    }
+  };
+
+  const handleProductQuantityInc = (product, quantity) => {
+    if (isAuthenticated) {
+      updateQuantity(product.productId?.id, quantity + 1);
+    } else {
+      const updatedLocalItems = localcartItems.map((item) =>
+        item.productId.id === product.productId.id
+          ? { ...item, quantity: quantity + 1 }
+          : item
+      );
+      localStorage.setItem("cartitems", JSON.stringify(updatedLocalItems));
+      setLocalCartItems(updatedLocalItems);
+    }
+  };
+
+  const refreshSignedUrl = async () => {
+    try {
+      const fullSignedUrl = cartitem.productId.image;
+      let imagePath = fullSignedUrl.split("/object/sign/")[1]?.split("?")[0];
+      console.log(imagePath);
+      if (imagePath.startsWith("addon/")) {
+        imagePath = imagePath.replace(/^addon\//, "");
+        console.log(imagePath);
+      }
+      const { data, error } = await supabase.storage
+        .from("addon")
+        .createSignedUrl(imagePath, 3600);
+      if (!error && data?.signedUrl) {
+        setSignedUrl(data.signedUrl);
+        const updatedItems = localcartItems.map((item) =>
+          item.productId.id === cartitem.productId.id
+            ? {
+                ...item,
+                productId: {
+                  ...item.productId,
+                  image: data.signedUrl,
+                },
+              }
+            : item
+        );
+        localStorage.setItem("cartitems", JSON.stringify(updatedItems));
+        setLocalCartItems(updatedItems);
+      } else {
+        console.error("Signed URL error:", error);
+      }
+    } catch (err) {
+      console.error("refreshSignedUrl failed:", err);
+    }
+  };
+
   return (
     <>
-      <div className="flex items-center border border-[#CCCCCC] rounded-lg relative">
+      <div className="flex items-center gap-1 border border-[#CCCCCC] rounded-lg relative">
         <img
-          src={cartitem.productId.image}
+          src={signedUrl}
           alt=""
-          className="h-40 w-36 object-contain"
+          className="h-40 w-36 object-contain cursor-pointer"
+          onClick={() => navigate(`/productview/${cartitem.productId?.id}`)}
+          onError={refreshSignedUrl}
         />
         <div className="flex-1 font-Poppins space-y-3 font-medium">
           <div>
-            <h5 className="text-sm text-[#111111] uppercase">
+            <h5
+              onClick={() => navigate(`/productview/${cartitem.productId?.id}`)}
+              className="text-sm text-[#111111] uppercase cursor-pointer"
+            >
               {cartitem.productId?.title}
             </h5>
             <h5 className="text-sm text-[#111111]/50 capitalize">
               {cartitem.productId?.product_type}
             </h5>
           </div>
-          <div className="flex justify-around items-center border border-[#cccccc] w-20 h-6">
+          {/* <div className="flex justify-around items-center border border-[#cccccc] w-20 h-6">
             <p className="uppercase text-[#000000] text-[10px]">
               qty: {cartitem?.quantity || "NA"}
             </p>
             <IoCaretDown size={10} />
+          </div> */}
+          <div className=" flex  gap-3 my-2">
+            <div className="flex items-start justify-start gap-2">
+              <button
+                className="border w-8 h-7 flex justify-center items-center font-semibold"
+                onClick={() =>
+                  handleProductQuantityDec(cartitem, cartitem?.quantity)
+                }
+                disabled={loadingQty}
+              >
+                {loadingQty ? (
+                  <span className="w-4 h-4 border-2 border-t-transparent border-black rounded-full animate-spin inline-block"></span>
+                ) : cartitem?.quantity === 1 ? (
+                  <div className="hover:animate-shake hover:text-red-400 w-full h-full flex justify-center items-center">
+                    <MdOutlineDelete className="mx-auto" />
+                  </div>
+                ) : (
+                  "-"
+                )}
+              </button>
+              <input
+                type="number"
+                className="border  w-12 h-7 rounded text-center [&::-webkit-inner-spin-button]:appearance-none  focus:outline-none focus:ring-0 text-xs md:text-[13px] leading-6"
+                // min={1}
+                value={cartitem?.quantity || "NA"}
+                readOnly
+              />
+              <button
+                className="border  w-8 h-7 flex justify-center items-center font-semibold"
+                onClick={() =>
+                  handleProductQuantityInc(cartitem, cartitem?.quantity)
+                }
+                disabled={loadingQty}
+              >
+                {loadingQty ? (
+                  <span className="w-4 h-4 border-2 border-t-transparent border-black rounded-full animate-spin inline-block"></span>
+                ) : (
+                  "+"
+                )}
+              </button>
+            </div>
           </div>
           <div className="flex gap-3">
             <h5 className="text-sm font-medium text-[#111111]">

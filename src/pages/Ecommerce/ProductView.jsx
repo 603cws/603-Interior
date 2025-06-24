@@ -21,25 +21,26 @@ import {
   HandThumbUpIcon as HandThumbUpOutline,
   HandThumbDownIcon as HandThumbDownOutline,
 } from "@heroicons/react/24/outline";
+import { IoCloseCircleOutline, IoCloseOutline } from "react-icons/io5";
 
-const reviews = [
-  {
-    rating: 4.4,
-    title: "Very good product!!",
-    content:
-      "Poor quality. The seat is not even parallel to the ground, it is tilted to the lift as it is clearly visible observing the plane of the seat or the lines on the backrest compared to the ground. As a result sitting on the chair feels like leaning toward left always. The lower back rest is good........   Poor quality. The seat is not even parallel to the ground, it is tilted to the lift as it is clearly visible observing the plane of the seat or the lines on the backrest compared to the ground. As a result sitting on the chair feels like leaning toward left always. The lower back rest is good........  Poor quality. The seat is not even parallel to the ground, it is tilted to the lift as it is clearly visible observing the plane of the seat or the lines on the backrest compared to the ground. As a result sitting on the chair feels like leaning toward left always. The lower back rest is good........  Poor quality. The seat is not even parallel to the ground, it is tilted to the lift as it is clearly visible observing the plane of the seat or the lines on the backrest compared to the ground. As a result sitting on the chair feels like leaning toward left always. The lower back rest is good........  Poor quality. The seat is not even parallel to the ground, it is tilted to the lift as it is clearly visible observing the plane of the seat or the lines on the backrest compared to the ground. As a result sitting on the chair feels like leaning toward left always. The lower back rest is good........  Poor quality. The seat is not even parallel to the ground, it is tilted to the lift as it is clearly visible observing the plane of the seat or the lines on the backrest compared to the ground. As a result sitting on the chair feels like leaning toward left always. The lower back rest is good........  Poor quality. The seat is not even parallel to the ground, it is tilted to the lift as it is clearly visible observing the plane of the seat or the lines on the backrest compared to the ground. As a result sitting on the chair feels like leaning toward left always. The lower back rest is good........  Poor quality. The seat is not even parallel to the ground, it is tilted to the lift as it is clearly visible observing the plane of the seat or the lines on the backrest compared to the ground. As a result sitting on the chair feels like leaning toward left always. The lower back rest is good........",
-    likes: 21,
-    comments: 21,
-  },
-  {
-    rating: 4.4,
-    title: "Very good product!!",
-    content:
-      "Poor quality. The seat is not even parallel to the ground, it is tilted to the left...",
-    likes: 21,
-    comments: 21,
-  },
-];
+// const reviews = [
+//   {
+//     rating: 4.4,
+//     title: "Very good product!!",
+//     content:
+//       "Poor quality. The seat is not even parallel to the ground, it is tilted to the lift as it is clearly visible observing the plane of the seat or the lines on the backrest compared to the ground. As a result sitting on the chair feels like leaning toward left always. The lower back rest is good........   Poor quality. The seat is not even parallel to the ground, it is tilted to the lift as it is clearly visible observing the plane of the seat or the lines on the backrest compared to the ground. As a result sitting on the chair feels like leaning toward left always. The lower back rest is good........  Poor quality. The seat is not even parallel to the ground, it is tilted to the lift as it is clearly visible observing the plane of the seat or the lines on the backrest compared to the ground. As a result sitting on the chair feels like leaning toward left always. The lower back rest is good........  Poor quality. The seat is not even parallel to the ground, it is tilted to the lift as it is clearly visible observing the plane of the seat or the lines on the backrest compared to the ground. As a result sitting on the chair feels like leaning toward left always. The lower back rest is good........  Poor quality. The seat is not even parallel to the ground, it is tilted to the lift as it is clearly visible observing the plane of the seat or the lines on the backrest compared to the ground. As a result sitting on the chair feels like leaning toward left always. The lower back rest is good........  Poor quality. The seat is not even parallel to the ground, it is tilted to the lift as it is clearly visible observing the plane of the seat or the lines on the backrest compared to the ground. As a result sitting on the chair feels like leaning toward left always. The lower back rest is good........  Poor quality. The seat is not even parallel to the ground, it is tilted to the lift as it is clearly visible observing the plane of the seat or the lines on the backrest compared to the ground. As a result sitting on the chair feels like leaning toward left always. The lower back rest is good........  Poor quality. The seat is not even parallel to the ground, it is tilted to the lift as it is clearly visible observing the plane of the seat or the lines on the backrest compared to the ground. As a result sitting on the chair feels like leaning toward left always. The lower back rest is good........",
+//     likes: 21,
+//     comments: 21,
+//   },
+//   {
+//     rating: 4.4,
+//     title: "Very good product!!",
+//     content:
+//       "Poor quality. The seat is not even parallel to the ground, it is tilted to the left...",
+//     likes: 21,
+//     comments: 21,
+//   },
+// ];
 
 function ProductView() {
   const [mainImageHovered, setMainImageHovered] = useState(false); // For main image hover effect
@@ -52,10 +53,13 @@ function ProductView() {
   const [compare, setCompare] = useState([]);
   const [showCompare, setShowCompare] = useState(false);
   const [isReview, setIsReview] = useState(false);
+  const [productReviews, setProductReviews] = useState([]);
+  const [selectedReview, setSelectedReview] = useState(null);
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [isCarted, setIsCarted] = useState();
   const [expandedStates, setExpandedStates] = useState([]);
   const [clampedStates, setClampedStates] = useState([]);
-  const [interactions, setInteractions] = useState([]);
+  // const [interactions, setInteractions] = useState([]);
   const contentRefs = useRef([]);
 
   const navigate = useNavigate();
@@ -65,8 +69,9 @@ function ProductView() {
   //   get the product based on the product id
   const { id: productid } = useParams();
 
-  const { cartItems, isAuthenticated, localcartItems } = useApp();
-  const hasReviews = reviews && reviews.length > 0;
+  const { cartItems, isAuthenticated, localcartItems, accountHolder } =
+    useApp();
+  const hasReviews = productReviews && productReviews.length > 0;
 
   // const [interactions, setInteractions] = useState({}); // Track likes/dislikes per review index
 
@@ -80,13 +85,13 @@ function ProductView() {
   //   });
   // };
 
-  const handleInteraction = (index, type) => {
-    setInteractions((prev) => {
-      const updated = [...prev];
-      updated[index] = prev[index] === type ? null : type;
-      return updated;
-    });
-  };
+  // const handleInteraction = (index, type) => {
+  //   setInteractions((prev) => {
+  //     const updated = [...prev];
+  //     updated[index] = prev[index] === type ? null : type;
+  //     return updated;
+  //   });
+  // };
 
   async function fetchproductbyid() {
     try {
@@ -219,7 +224,7 @@ function ProductView() {
   }
 
   useEffect(() => {
-    const clamped = reviews.map((_, idx) => {
+    const clamped = productReviews.map((_, idx) => {
       const el = contentRefs.current[idx];
       if (!el) return false;
 
@@ -230,8 +235,8 @@ function ProductView() {
     });
 
     setClampedStates(clamped);
-    setExpandedStates(Array(reviews.length).fill(false));
-    setInteractions(Array(reviews.length).fill(null));
+    setExpandedStates(Array(productReviews.length).fill(false));
+    // setInteractions(Array(productReviews.length).fill(null));
   }, []);
 
   const toggleExpanded = (index) => {
@@ -242,9 +247,158 @@ function ProductView() {
     });
   };
 
+  const fetchProductReviews = async (productId) => {
+    console.log("productId", productId);
+
+    try {
+      const { data, error } = await supabase
+        .from("reviews")
+        .select(`*,profiles:userId(company_name)`)
+        .eq("productId", productId);
+      if (error) {
+        console.error(error);
+      }
+      setProductReviews(data);
+      console.log(productReviews);
+
+      console.log(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleLikes = async (reviewId, userId) => {
+    try {
+      const { data, error: fetchError } = await supabase
+        .from("reviews")
+        .select("likes")
+        .eq("id", reviewId)
+        .single();
+
+      if (fetchError) {
+        console.error("Error fetching review:", fetchError);
+        return;
+      }
+
+      let existingLikes = data.likes ?? [];
+      let existingDislikes = data.dislikes ?? [];
+
+      // If likes is stored as a JSON string, parse it
+      if (typeof existingLikes === "string") {
+        existingLikes = JSON.parse(existingLikes);
+      }
+      if (typeof existingDislikes === "string") {
+        existingDislikes = JSON.parse(existingDislikes);
+      }
+      existingLikes = existingLikes ?? [];
+
+      let updatedLikes, updatedDislikes;
+      if (existingLikes.includes(userId)) {
+        updatedLikes = existingLikes.filter((id) => id !== userId);
+        updatedDislikes = existingDislikes;
+      } else {
+        updatedLikes = [...existingLikes, userId];
+        updatedDislikes = existingDislikes.filter((id) => id !== userId);
+      }
+
+      const { error: updateError } = await supabase
+        .from("reviews")
+        .update({ likes: updatedLikes, dislikes: updatedDislikes })
+        .eq("id", reviewId);
+
+      if (updateError) {
+        console.error("Error updating likes:", updateError);
+        return;
+      }
+
+      setProductReviews((prevReviews) =>
+        prevReviews.map((review) =>
+          review.id === reviewId
+            ? { ...review, likes: updatedLikes, dislikes: updatedDislikes }
+            : review
+        )
+      );
+    } catch (error) {
+      console.error("Unexpected error:", error);
+    }
+  };
+
+  const handleDislikes = async (reviewId, userId) => {
+    try {
+      const { data, error: fetchError } = await supabase
+        .from("reviews")
+        .select("dislikes")
+        .eq("id", reviewId)
+        .single();
+
+      if (fetchError) {
+        console.error("Error fetching review:", fetchError);
+        return;
+      }
+
+      let existingdislikes = data.dislikes || [];
+      let existingLikes = data.likes ?? [];
+
+      if (typeof existingdislikes === "string") {
+        existingdislikes = JSON.parse(existingdislikes);
+      }
+      if (typeof existingLikes === "string") {
+        existingLikes = JSON.parse(existingLikes);
+      }
+
+      existingdislikes = existingdislikes ?? [];
+
+      let updatedDislikes, updatedLikes;
+      if (existingdislikes.includes(userId)) {
+        updatedDislikes = existingdislikes.filter((id) => id !== userId);
+        updatedLikes = existingLikes;
+      } else {
+        updatedDislikes = [...existingdislikes, userId];
+        updatedLikes = existingLikes.filter((id) => id !== userId);
+      }
+
+      const { error: updateError } = await supabase
+        .from("reviews")
+        .update({ dislikes: updatedDislikes, likes: updatedLikes })
+        .eq("id", reviewId);
+
+      if (updateError) {
+        console.error("Error updating likes:", updateError);
+        return;
+      }
+
+      setProductReviews((prevReviews) =>
+        prevReviews.map((review) =>
+          review.id === reviewId
+            ? { ...review, dislikes: updatedDislikes, likes: updatedLikes }
+            : review
+        )
+      );
+    } catch (error) {
+      console.error("Unexpected error:", error);
+    }
+  };
+
+  const ratingCounts = [0, 0, 0, 0, 0];
+
+  productReviews.forEach((review) => {
+    const index = 5 - review.stars;
+    if (index >= 0 && index < 5) {
+      ratingCounts[index]++;
+    }
+  });
+
+  const totalRatings = ratingCounts.reduce((sum, val) => sum + val, 0);
+  const averageRating =
+    productReviews.length > 0
+      ? productReviews.reduce((sum, r) => sum + r.stars, 0) /
+        productReviews.length
+      : 0;
+
   useEffect(() => {
     fetchproductbyid();
     fetchSimilarproduct();
+    fetchProductReviews(productid);
   }, [productid]);
 
   useEffect(() => {
@@ -336,9 +490,7 @@ function ProductView() {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
           <div className="bg-white w-full max-w-3xl p-6 rounded-lg shadow-lg relative overflow-y-auto max-h-[90vh]">
             <ProductReview
-              image={product.image}
-              title={product.title}
-              details={product.details}
+              product={product}
               onClose={() => setIsReview(false)}
             />
           </div>
@@ -558,21 +710,24 @@ function ProductView() {
                 {/* Rating Summary */}
                 <div className="flex gap-10 items-start font-Poppins">
                   <div className="text-center">
-                    <p className="text-3xl font-semibold">4.4 ★</p>
+                    <p className="text-3xl font-semibold">{averageRating}★</p>
                     <p className="text-[#A3A3A3] text-sm">
-                      100 Ratings &<br /> 48 Reviews
+                      {totalRatings} Ratings &<br /> {productReviews.length}{" "}
+                      Reviews
                     </p>
                   </div>
                   <div className="space-y-1">
                     {[5, 4, 3, 2, 1].map((star, i) => {
-                      const count = [40, 5, 2, 1, 2][i];
-                      const barColor = [
-                        "bg-[#304778]",
-                        "bg-[#304778]",
-                        "bg-[#304778]",
-                        "bg-[#FACC15]",
-                        "bg-[#FA9515]",
-                      ][i];
+                      const count = ratingCounts[i];
+                      const rawPercent =
+                        totalRatings > 0 ? (count / totalRatings) * 100 : 0;
+                      const percent = count > 0 ? Math.max(rawPercent, 5) : 0;
+                      const barColor =
+                        star >= 3
+                          ? "bg-[#304778]"
+                          : star === 2
+                          ? "bg-[#FACC15]"
+                          : "bg-[#FA9515]";
                       return (
                         <div key={star} className="flex items-center gap-2">
                           <span className="text-sm w-4 whitespace-nowrap mr-4">
@@ -581,8 +736,8 @@ function ProductView() {
                           <div className="w-48 h-2 bg-gray-200 rounded">
                             <div
                               className={`${barColor} h-2 rounded`}
-                              style={{ width: `${count}%` }}
-                            ></div>
+                              style={{ width: `${percent}%` }}
+                            />
                           </div>
                           <span className="text-sm pl-4">{count}</span>
                         </div>
@@ -591,33 +746,128 @@ function ProductView() {
                   </div>
                 </div>
 
-                {/* Image thumbnails */}
                 <div className="flex gap-2 pt-8 border-b pb-6">
-                  {[...Array(6)].map((_, i) => (
-                    <div
-                      key={i}
-                      className="w-24 h-24 bg-gray-200 rounded overflow-hidden"
-                    >
-                      {/* Replace with real <img src={...} /> */}
-                      <div
-                        className="w-full h-full bg-cover bg-center"
-                        style={{ backgroundImage: `url('/image${i + 1}.jpg')` }}
-                      ></div>
+                  {productReviews.map((review, index) => (
+                    <div key={index} className="mb-6">
+                      {/* Other review content */}
+                      <div className="flex gap-2 pt-4 border-b pb-4">
+                        {JSON.parse(review.images).map((path, i) => {
+                          const url = supabase.storage
+                            .from("review-images")
+                            .getPublicUrl(path).data.publicUrl;
+                          return (
+                            <div
+                              key={i}
+                              className="w-20 h-20 rounded overflow-hidden bg-gray-200"
+                            >
+                              <img
+                                src={url}
+                                alt={`review-img-${i}`}
+                                className="w-full h-full object-cover cursor-pointer"
+                                onClick={() => setSelectedReview(review)}
+                              />
+                            </div>
+                          );
+                        })}
+                      </div>
                     </div>
                   ))}
+                  {selectedReview && (
+                    <div className="fixed inset-0 z-30 bg-black/20 flex justify-center items-center">
+                      <div className="h-3/4 max-w-screen-sm w-full flex bg-white relative p-4 gap-5">
+                        <div className="absolute -top-1 -right-10">
+                          <button onClick={() => setSelectedReview(null)}>
+                            <IoCloseOutline size={35} />
+                          </button>
+                        </div>
+                        <div className="flex-1">
+                          <div className="flex justify-center items-center">
+                            <img
+                              src={
+                                supabase.storage
+                                  .from("review-images")
+                                  .getPublicUrl(
+                                    JSON.parse(selectedReview.images)[
+                                      selectedImageIndex
+                                    ]
+                                  ).data.publicUrl
+                              }
+                              alt="full view"
+                              onClick={(e) => e.stopPropagation()}
+                              className=" object-contain max-w-sm w-full "
+                            />
+                          </div>
+                          <div className=" flex gap-2 mt-4 px-4">
+                            {JSON.parse(selectedReview.images).map(
+                              (path, index) => {
+                                const url = supabase.storage
+                                  .from("review-images")
+                                  .getPublicUrl(path).data.publicUrl;
+
+                                return (
+                                  <img
+                                    key={index}
+                                    src={url}
+                                    alt={`preview-${index}`}
+                                    onClick={() => setSelectedImageIndex(index)}
+                                    className="w-16 h-16 object-cover rounded border cursor-pointer"
+                                  />
+                                );
+                              }
+                            )}
+                          </div>
+                        </div>
+                        <div className="flex-1">
+                          <div className="flex gap-5">
+                            <p className="text-xs px-2 py-1 rounded flex items-center gap-1 border border-[#38938E] w-10">
+                              {selectedReview.stars}{" "}
+                              <span className="text-[#38938E]">★</span>
+                            </p>
+                            <p className="font-semibold text-sm">
+                              {selectedReview.title}
+                            </p>
+                          </div>
+                          <p className="text-sm text-[#777] my-3">
+                            {selectedReview.description}
+                          </p>
+                          <div className="flex">
+                            <p className="text-sm text-[#777]">
+                              {selectedReview.created_at.split("T")[0]}{" "}
+                              {selectedReview.profiles?.company_name}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </div>
 
                 {/* Reviews List */}
-                {reviews.map((review, idx) => {
-                  const interaction = interactions[idx];
+                {productReviews.map((review, idx) => {
+                  // const interaction = interactions[idx];
                   const expanded = expandedStates[idx];
                   const isClamped = clampedStates[idx];
+                  const likesArray = Array.isArray(review.likes)
+                    ? review.likes
+                    : JSON.parse(review.likes || "[]");
+
+                  const likeCount = likesArray.length;
+                  const userHasLiked = likesArray.includes(
+                    accountHolder?.userId
+                  );
+                  const dislikesArray = Array.isArray(review.dislikes)
+                    ? review.dislikes
+                    : JSON.parse(review.dislikes || "[]");
+                  const dislikeCount = dislikesArray.length;
+                  const userHasDisliked = dislikesArray.includes(
+                    accountHolder?.userId
+                  );
 
                   return (
                     <div key={idx} className="border-b pb-6 font-Poppins">
                       <div className="flex items-center gap-2 mb-2">
                         <p className="text-xs px-2 py-1 rounded flex items-center gap-1 border border-[#38938E]">
-                          {review.rating}{" "}
+                          {review.stars}{" "}
                           <span className="text-[#38938E]">★</span>
                         </p>
                         <span className="font-semibold text-sm">
@@ -631,7 +881,7 @@ function ProductView() {
                           !expanded ? "line-clamp-3" : ""
                         } transition-all duration-300 ease-in-out max-w-7xl`}
                       >
-                        {review.content}
+                        {review.description}
                       </p>
 
                       {isClamped && (
@@ -644,43 +894,52 @@ function ProductView() {
                       )}
 
                       <div className="flex gap-6 text-sm mt-3 justify-end">
-                        <div
-                          className="flex items-center gap-1 cursor-pointer"
-                          onClick={() => handleInteraction(idx, "like")}
-                        >
-                          {interaction === "like" ? (
-                            <HandThumbUpIcon className="w-5 h-5 text-blue-600" />
+                        <div className="flex items-center gap-1 cursor-pointer">
+                          {review.likes?.includes(accountHolder?.userId) ? (
+                            <HandThumbUpIcon
+                              onClick={() =>
+                                handleLikes(review.id, accountHolder?.userId)
+                              }
+                              className="w-5 h-5 text-blue-600"
+                            />
                           ) : (
-                            <HandThumbUpOutline className="w-5 h-5 text-gray-400" />
+                            <HandThumbUpOutline
+                              onClick={() =>
+                                handleLikes(review.id, accountHolder?.userId)
+                              }
+                              className="w-5 h-5 text-gray-400"
+                            />
                           )}
                           <span
                             className={
-                              interaction === "like"
-                                ? "text-blue-600"
-                                : "text-gray-400"
+                              userHasLiked ? "text-blue-600" : "text-gray-400"
                             }
                           >
-                            {review.likes}
+                            {likeCount}
                           </span>
                         </div>
-
-                        <div
-                          className="flex items-center gap-1 cursor-pointer"
-                          onClick={() => handleInteraction(idx, "dislike")}
-                        >
-                          {interaction === "dislike" ? (
-                            <HandThumbDownIcon className="w-5 h-5 text-red-500" />
+                        <div className="flex items-center gap-1 cursor-pointer">
+                          {review.dislikes?.includes(accountHolder?.userId) ? (
+                            <HandThumbDownIcon
+                              onClick={() =>
+                                handleDislikes(review.id, accountHolder?.userId)
+                              }
+                              className="w-5 h-5 text-red-500"
+                            />
                           ) : (
-                            <HandThumbDownOutline className="w-5 h-5 text-gray-400" />
+                            <HandThumbDownOutline
+                              onClick={() =>
+                                handleDislikes(review.id, accountHolder?.userId)
+                              }
+                              className="w-5 h-5 text-gray-400"
+                            />
                           )}
                           <span
                             className={
-                              interaction === "dislike"
-                                ? "text-red-500"
-                                : "text-gray-400"
+                              userHasDisliked ? "text-red-600" : "text-gray-400"
                             }
                           >
-                            {review.dislikes}
+                            {dislikeCount}
                           </span>
                         </div>
                       </div>
@@ -819,10 +1078,8 @@ function Card({ product, handleCompareToggle, compare }) {
       const check = localcartItems?.some(
         (item) => item.productId?.id === product.id
       );
-      console.log("check", check);
 
       setIsCarted(check);
-      console.log("iscarted", iscarted);
     }
   }, [isAuthenticated, cartItems, localcartItems, product?.id]);
 

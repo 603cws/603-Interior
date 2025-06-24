@@ -70,6 +70,12 @@ export default {
           "0%": { transform: "translateY(-100%)", opacity: "0" },
           "100%": { transform: "translateY(0)", opacity: "100%" },
         },
+        shake: {
+          "10%, 90%": { transform: "translateX(-1px)" },
+          "20%, 80%": { transform: "translateX(2px)" },
+          "30%, 50%, 70%": { transform: "translateX(-4px)" },
+          "40%, 60%": { transform: "translateX(4px)" },
+        },
       },
       animation: {
         blink: "blink 1s infinite",
@@ -79,6 +85,7 @@ export default {
         message1: "message1 3s ease-in-out ",
         message3: "message3 3s ease-in-out ",
         message2: "message2 3s ease-in-out ",
+        shake: "shake 0.8s ease-in-out",
       },
       screens: {
         "3xl": "1800px",

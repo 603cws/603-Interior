@@ -576,7 +576,6 @@ export default Products;
 function Card({ product }) {
   const naviagte = useNavigate();
   const { isAuthenticated, localcartItems, cartItems } = useApp();
-  console.log(cartItems, localcartItems);
 
   const { handleAddToCart } = useHandleAddToCart();
 
