@@ -19,25 +19,41 @@ import { ToastContainer } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
 function ShopProducts() {
+  //state
   const [products, setProducts] = useState([]);
   const [productsloading, setProductsloading] = useState(true);
   const containerRef = useRef(null);
   const [open, setOpen] = useState(false);
-
-  const [filterCatName, setFilterCatName] = useState(null);
   const [filteredProducts, setFilteredProducts] = useState([]);
-  // const [filters, setFilters] = useState({
-  //   category: [],
-  //   priceRange: [0, 100000],
-  // });
+  const [currentPage, setCurrentPage] = useState(1);
+  const [isShopCatOepn, setIsShopCatOpen] = useState(false);
+  const [isPriceOpen, setIsPriceOpen] = useState(false);
+  const [filtersortby, setfiltersortby] = useState("Popularity");
 
+  const [isfilterOpen, setIsfilteropen] = useState(false);
+
+  const [isSortOpen, setIsSortOpen] = useState(false);
+
+  const [isBrandOpen, setIsBrandopen] = useState(false);
+
+  //context
   const { filters, setFilters } = useApp();
 
-  const [currentPage, setCurrentPage] = useState(1);
+  const [minPrice, setMinPrice] = useState(filters.priceRange[0]);
+  // const [maxPrice, setMaxPrice] = useState(filters.priceRange[1]);
+  const [maxPrice, setMaxPrice] = useState(filters.priceRange[1]);
 
-  const [isShopCatOepn, setIsShopCatOpen] = useState(false);
+  // console.log(minPrice, maxPrice);
 
-  const [filtersortby, setfiltersortby] = useState("");
+  useEffect(() => {
+    setFilters((prev) => ({
+      ...prev,
+      priceRange: [minPrice, maxPrice],
+    }));
+  }, [minPrice, maxPrice]);
+
+  //ref
+  const dropdownRef = useRef(null);
 
   let items = filteredProducts;
   let itemsPerPage = 20;
@@ -83,10 +99,17 @@ function ShopProducts() {
     }
 
     // Price Filter
+    // if (filters.priceRange.length === 2) {
+    //   const [minPrice, maxPrice] = filters.priceRange;
+    //   result = result.filter(
+    //     (product) => product.price >= minPrice && product.price <= maxPrice
+    //   );
+    // }
+
+    const actualMaxPrice = maxPrice === 10000 ? Infinity : maxPrice;
+
     result = result.filter(
-      (product) =>
-        product.price >= filters.priceRange[0] &&
-        product.price <= filters.priceRange[1]
+      (product) => product.price >= minPrice && product.price <= actualMaxPrice
     );
 
     // Sorting
@@ -158,7 +181,7 @@ function ShopProducts() {
         image: urlMap[item.image] || item.image, // fallback if URL not found
       }));
 
-      console.log(updatedProducts);
+      // console.log(updatedProducts);
       setFilteredProducts(updatedProducts);
       setProducts(updatedProducts);
     } catch (error) {
@@ -207,7 +230,7 @@ function ShopProducts() {
   ];
 
   const options = [
-    { option: "Popularity", value: "" },
+    { option: "Popularity", value: "Popularity" },
     { option: "Price: Low to High", value: "low" },
     { option: "Price: High to Low", value: "high" },
   ];
@@ -230,10 +253,15 @@ function ShopProducts() {
     }
 
     if (type === "priceRange") {
+      // console.log("hello from the rest");
+
       setFilters((prev) => ({
         ...prev,
-        priceRange: [0, 100000], // adjust to your default
+        priceRange: [0, 10000], // adjust to your default
       }));
+
+      setMaxPrice(10000);
+      setMinPrice(0);
     }
 
     if (type === "sortBy") {
@@ -241,12 +269,65 @@ function ShopProducts() {
     }
   };
 
+  // Close dropdown on outside click
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  const priceOptions = [
+    0, 1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500, 5000, 5500, 6000, 6500,
+    7000, 7500, 8000, 8500, 9000, 9500, 10000,
+  ];
+  const brands = ["Ikea", "Pepperfry", "Durian", "Godrej", "Furniture"];
+
+  const handleopencloseoffilter = (filter) => {
+    switch (filter) {
+      case "shop":
+        setIsShopCatOpen(true);
+        setIsPriceOpen(false);
+        break;
+
+      case "price":
+        setIsShopCatOpen(false);
+        setIsPriceOpen(true);
+
+      default:
+        break;
+    }
+  };
+
+  const handleResetOfFilter = () => {
+    //
+    //condition to check already filter is applied or not
+    // if (items.length === products.length)
+    //   setFilters({
+    //     category: [],
+    //     priceRange: [0, 10000],
+    //   });
+
+    // setMaxPrice(10000);
+    // setMinPrice(0);
+
+    setIsfilteropen(false);
+  };
+
   return (
     <div>
       <ToastContainer />
-      <Header />
+      <div className="">
+        <Header />
+      </div>
       <section ref={containerRef}>
-        <div className="lg:container lg:mx-auto my-10">
+        <div className=" hidden lg:block lg:container lg:mx-auto my-6 lg:my-10">
           <SectionHeader title={"Shop "} isborder={false} />
           <div className="flex overflow-x-auto items-center justify-around my-10 gap-6">
             {categoryies.map((cat) => (
@@ -266,12 +347,199 @@ function ShopProducts() {
         </div>
       </section>
 
+      <section>
+        <div className=" flex lg:hidden justify-between items-center font-Poppins text-base text-[#ccc] px-6 border-t border-b border-[#ccc] mb-4">
+          <button onClick={() => setIsSortOpen(!isSortOpen)}>Sort</button>
+          <button onClick={() => setIsfilteropen(true)}>filter</button>
+        </div>
+      </section>
+
+      {/* <div>{items?.length}</div> */}
+
+      {isfilterOpen && (
+        <div
+          className={`absolute top-[80px] left-0 w-full h-[87vh] z-50 bg-white border rounded-3xl p-5 transition-transform ease-in-out duration-500 transform animate-fade-in flex flex-col justify-center ${
+            isfilterOpen ? "translate-y-0" : "-translate-y-full"
+          }`}
+        >
+          <div className="flex items-center border-b border-b-[#ccc]">
+            <button onClick={() => handleResetOfFilter()}>
+              <MdKeyboardArrowLeft size={30} color="#304778" />{" "}
+            </button>
+            <h2 className="uppercase text-[#304778] text-sm leading-[22.4px] ">
+              filter
+            </h2>
+          </div>
+          <div className="flex flex-1 overflow-y-auto pr-2 ">
+            <div className="flex-1 flex mt-2">
+              <ul
+                className={`flex flex-col items-start uppercase [&:li]:bg-[#eee] [&_li]:w-full [&_li]:px-2 [&_li]:py-2 [&_li]:pb-3 p-1 text-xs font-bold text-[#1A293A] [&_li]:cursor-pointer `}
+              >
+                <li
+                  className={`${isShopCatOepn ? "bg-[#fff]" : "bg-[#eee]"}`}
+                  onClick={() => handleopencloseoffilter("shop")}
+                >
+                  shop by categories
+                </li>
+                <li
+                  className={`${isPriceOpen ? "bg-[#fff]" : "bg-[#eee] "} `}
+                  onClick={() => handleopencloseoffilter("price")}
+                >
+                  price
+                </li>
+                <li className="bg-[#eee]">brand</li>
+                <li className="bg-[#eee]">Color</li>
+              </ul>
+            </div>
+            <div className="flex-1">
+              {isShopCatOepn && (
+                <div>
+                  <div className="space-y-4 p-2">
+                    {categoryies.map((cat, i) => (
+                      <label
+                        key={i}
+                        className="flex items-center space-x-3 cursor-pointer"
+                      >
+                        <div
+                          className={`w-5 h-5 border-2 rounded-sm flex items-center justify-center ${
+                            filters.category.includes(cat.name)
+                              ? "bg-[#2A3E65] border-[#2A3E65]"
+                              : "border-[#2A3E65]"
+                          }`}
+                          onClick={() => handleCategoryClick(cat.name)}
+                        >
+                          {/* You can add a checkmark or leave it blank */}
+                        </div>
+                        <span className="text-sm text-[#000000] font-medium">
+                          {cat.name}
+                        </span>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {isPriceOpen && (
+                <div className=" bg-white">
+                  {/* Min and Max Dropdowns */}
+                  <div className="flex flex-wrap justify-around gap-1 mb-4 pt-2">
+                    <select
+                      className="border px-2 py-1 text-[#334A78] text-sm border-[#CCD2DD]"
+                      value={minPrice}
+                      onChange={(e) => {
+                        const value = parseInt(e.target.value);
+                        if (value <= maxPrice) setMinPrice(value);
+                      }}
+                    >
+                      {priceOptions.map((price) => (
+                        <option key={price} value={price}>
+                          ₹{price === 0 ? "Min" : price}
+                        </option>
+                      ))}
+                    </select>
+
+                    <select
+                      className="border px-2 py-1 text-[#334A78] text-sm"
+                      value={maxPrice}
+                      onChange={(e) => {
+                        const value = parseInt(e.target.value);
+                        if (value >= minPrice) setMaxPrice(value);
+                      }}
+                    >
+                      {priceOptions.map((price) => (
+                        <option key={price} value={price}>
+                          ₹{price === 10000 ? "10000+" : price}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  {/* Price Range Slider */}
+                  <div className="mt-2">
+                    <input
+                      type="range"
+                      min={minPrice}
+                      max={10000}
+                      step={500}
+                      value={maxPrice}
+                      onChange={(e) => setMaxPrice(parseInt(e.target.value))}
+                      className="w-full accent-[#334A78]"
+                    />
+                    <div className="flex justify-between text-xs text-gray-600 mt-1">
+                      <span>₹{minPrice}</span>
+                      <span>₹{maxPrice}</span>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* display of no of products  */}
+          <div className="flex justify-between items-center mt-5 font-Poppins">
+            <div>
+              <h2 className="text-[#000] font-semibold text-xl tracking-[1.2px]">
+                {items?.length}
+              </h2>
+              <p className="text-[#ccc] text-sm leading-4 -tracking-[1px]  font-semibold">
+                product found
+              </p>
+            </div>
+            <div>
+              <button
+                onClick={() => setIsfilteropen(false)}
+                className="px-5 py-[10px] bg-[#334A78] text-white border border-[#212B36] font-Poppins font-semibold text-sm leading-[15px] tracking-[1.2px]"
+              >
+                Apply
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {isSortOpen && (
+        <div
+          className={`fixed bottom-0 left-0 w-full  z-50 bg-white border rounded-3xl  transition-transform ease-in-out duration-500 transform animate-fade-in flex flex-col justify-center ${
+            isSortOpen ? "translate-y-0 " : "-translate-y-full"
+          }`}
+        >
+          <div className="flex items-center border-b border-b-[#ccc]">
+            <button onClick={() => setIsSortOpen(false)}>
+              <MdKeyboardArrowLeft size={30} color="#304778" />{" "}
+            </button>
+            <h2 className="uppercase text-[#304778] text-sm leading-[22.4px] ">
+              Sort By
+            </h2>
+          </div>
+          <div className="space-y-4 p-2">
+            {options.map((opt, i) => (
+              <label
+                key={i}
+                className="flex items-center justify-between space-x-3 cursor-pointer"
+              >
+                <span className="text-sm text-[#000000] font-medium">
+                  {opt.option}
+                </span>
+                <div
+                  className={`w-5 h-5 border-2 rounded-full flex items-center justify-center ${
+                    filtersortby === opt.value
+                      ? "bg-[#2A3E65] border-[#2A3E65]"
+                      : "border-[#2A3E65]"
+                  }`}
+                  onClick={() => handleSortby(opt)}
+                ></div>
+              </label>
+            ))}
+          </div>
+        </div>
+      )}
+
       {/* section 2 */}
-      <section className="font-Poppins container mx-auto">
+      <section className="font-Poppins lg:container lg:mx-auto px-4 lg:px-12">
         <div className="flex flex-col md:flex-row gap-6">
-          {/* Left side banners */}
-          <div className="flex flex-col items-center gap-6 md:w-[20%] w-full ">
-            <div className="w-full space-y-4">
+          {/* Left side filters */}
+          <div className="hidden lg:flex flex-col items-center gap-6 lg:w-[20%] w-full ">
+            <div className="w-full space-y-4 [&_h4]:capitalize">
               <div className="flex justify-start gap-2 items-center text-[#334A78] ">
                 <div>
                   <IoFilter size={20} />
@@ -321,7 +589,10 @@ function ShopProducts() {
                       <li
                         onClick={() => handleCategoryClick(cat.name)}
                         // onClick={() => setFilterCatName(cat.name)}
-                        className="text-[#111] text-sm cursor-pointer"
+                        className={`text-[#111] px-4 py-1 text-sm cursor-pointer ${
+                          filters.category.includes(cat.name) &&
+                          "border-2 border-[#334A78]"
+                        } hover:bg-[#F4F4F4]`}
                         key={cat.name}
                       >
                         {cat.name}
@@ -334,10 +605,73 @@ function ShopProducts() {
                 <h4 className="text-[15px] font-semibold leading-[24px]">
                   price
                 </h4>
-                <div className="">
-                  <MdKeyboardArrowDown size={25} />
-                </div>
+                <button
+                  className=""
+                  onClick={() =>
+                    isPriceOpen ? setIsPriceOpen(false) : setIsPriceOpen(true)
+                  }
+                >
+                  {isPriceOpen ? (
+                    <MdKeyboardArrowUp size={25} />
+                  ) : (
+                    <MdKeyboardArrowDown size={25} />
+                  )}
+                </button>
               </div>
+
+              {isPriceOpen && (
+                <div className=" bg-white">
+                  {/* Min and Max Dropdowns */}
+                  <div className="flex flex-wrap justify-around gap-2 mb-4">
+                    <select
+                      className="border px-5 py-2 text-[#334A78] text-sm border-[#CCD2DD]"
+                      value={minPrice}
+                      onChange={(e) => {
+                        const value = parseInt(e.target.value);
+                        if (value <= maxPrice) setMinPrice(value);
+                      }}
+                    >
+                      {priceOptions.map((price) => (
+                        <option key={price} value={price}>
+                          ₹{price === 0 ? "Min" : price}
+                        </option>
+                      ))}
+                    </select>
+
+                    <select
+                      className="border px-5 py-2 text-[#334A78] text-sm"
+                      value={maxPrice}
+                      onChange={(e) => {
+                        const value = parseInt(e.target.value);
+                        if (value >= minPrice) setMaxPrice(value);
+                      }}
+                    >
+                      {priceOptions.map((price) => (
+                        <option key={price} value={price}>
+                          ₹{price === 10000 ? "10000+" : price}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  {/* Price Range Slider */}
+                  <div className="mt-2">
+                    <input
+                      type="range"
+                      min={minPrice}
+                      max={10000}
+                      step={500}
+                      value={maxPrice}
+                      onChange={(e) => setMaxPrice(parseInt(e.target.value))}
+                      className="w-full accent-[#334A78]"
+                    />
+                    <div className="flex justify-between text-xs text-gray-600 mt-1">
+                      <span>₹{minPrice}</span>
+                      <span>₹{maxPrice}</span>
+                    </div>
+                  </div>
+                </div>
+              )}
               <div className="flex justify-between items-center text-[#334A78]">
                 <h4 className="text-[15px] font-semibold leading-[24px]">
                   color
@@ -348,22 +682,53 @@ function ShopProducts() {
               </div>
               <div className="flex justify-between items-center text-[#334A78]">
                 <h4 className="text-[15px] font-semibold leading-[24px]">
-                  brand
+                  Brand
                 </h4>
-                <div className="">
-                  <MdKeyboardArrowDown size={25} />
-                </div>
+                <button
+                  className=""
+                  onClick={() =>
+                    isBrandOpen ? setIsBrandopen(false) : setIsBrandopen(true)
+                  }
+                >
+                  {isBrandOpen ? (
+                    <MdKeyboardArrowUp size={25} />
+                  ) : (
+                    <MdKeyboardArrowDown size={25} />
+                  )}
+                </button>
               </div>
+
+              {isBrandOpen && (
+                <div className="space-y-2">
+                  {brands.map((brand) => (
+                    <label
+                      key={brand}
+                      className="flex items-center gap-2 cursor-pointer text-[#111] text-sm"
+                    >
+                      <input
+                        type="checkbox"
+                        // checked={filters.brand.includes(brand)}
+                        // onChange={() => handleBrandFilter(brand)}
+                        className="w-4 h-4 cursor-pointer text-[#111] capitalize"
+                      />
+                      {brand}
+                    </label>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
           {!productsloading ? (
-            <div className="md:w-[80%] w-full ">
-              <div className="border-b border-b-[#CCCCCC] mb-3 pb-2">
-                <div className="flex justify-between items-center font-lora ">
-                  <p className="text-[#191716]  text-[13px] leading-3 tracking-[1px]">
+            <div className="lg:w-[80%] w-full ">
+              <div className="hidden lg:block border-b border-b-[#CCCCCC] mb-3 pb-2">
+                <div className="flex justify-between items-center font-lora mb-2 ">
+                  <p className="text-[#191716] text-xs lg:text-[13px] leading-3 tracking-[1px]">
                     {resultText}
                   </p>
-                  <div className="relative w-52 font-Poppins text-[#334A78] text-[15px] leading-[24px]">
+                  <div
+                    ref={dropdownRef}
+                    className="relative text-nowrap w-52 font-Poppins text-[#334A78] text-xs lg:text-[15px] leading-[24px]"
+                  >
                     <div
                       className="flex items-center border border-[#CCCCCC] p-2 cursor-pointer"
                       onClick={() => setOpen(!open)}
@@ -417,23 +782,23 @@ function ShopProducts() {
                   ))}
 
                   {/* Price Range Filter */}
-                  {filters.priceRange[0] > 0 ||
-                  filters.priceRange[1] < 100000 ? (
-                    <span className="flex items-center px-3 py-1 border border-[#CCCCCC] text-[#666] text-sm bg-white">
+
+                  {filters.priceRange && (
+                    <span className="flex gap-3 items-center px-3 py-1 border border-[#CCCCCC] text-[#666] text-sm bg-white">
                       <p>
-                        ₹{filters.priceRange[0]} – ₹{filters.priceRange[1]}
+                        ₹{filters.priceRange[0]} - ₹
+                        {filters.priceRange[1] === 10000
+                          ? filters.priceRange[1] + "+"
+                          : filters.priceRange[1]}
                       </p>
-                      <button
-                        onClick={() => handleRemove("priceRange")}
-                        className="ml-1 text-lg"
-                      >
+                      <button onClick={() => handleRemove("priceRange")}>
                         ×
                       </button>
                     </span>
-                  ) : null}
+                  )}
 
                   {/* Sort By Tag */}
-                  {filtersortby && filtersortby !== "popularity" && (
+                  {filtersortby && filtersortby !== "Popularity" && (
                     <span className="flex items-center px-3 py-1 border border-[#CCCCCC] text-[#666] text-sm bg-white">
                       <p>
                         Sort:{" "}
@@ -453,8 +818,8 @@ function ShopProducts() {
                   )}
                 </div>
               </div>
-
-              <div className="grid grid-cols-5 gap-8 ">
+              {/* display of products */}
+              <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-5 gap-4 lg:gap-8 ">
                 {currentItems.map((product, index) => (
                   <div key={index}>
                     <Card product={product} />
@@ -557,7 +922,7 @@ function Card({ product }) {
         />
       </div>
       <div className="bg-[#fff] p-2">
-        <div className="flex ">
+        <div className="flex flex-col md:flex-row ">
           <div className="flex-1 text-sm  leading-[22.4px]  text-[#111] ">
             <h4 className="font-medium text-sm leading-[22.4px] ">
               {product?.title}

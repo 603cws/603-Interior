@@ -53,6 +53,7 @@ import Wishlist from "./pages/Ecommerce/Wishlist";
 import ELogin from "./common-components/ELogin";
 import Brands from "./pages/Ecommerce/Brands";
 import ProductReview from "./pages/Ecommerce/ProductReview";
+import BrandProductView from "./pages/BrandProductView";
 
 const Home = lazy(() => import("./pages/Home"));
 
@@ -151,6 +152,7 @@ function App() {
             <Route path="/productReview" element={<ProductReview />} />
             {/* <Route path="/payments" element={<Payments />} /> */}
             <Route path="/eLogin" element={<ELogin />} />
+            <Route path="/brands/productview" element={<BrandProductView />} />
           </Routes>
         ) : (
           <Routes>
@@ -198,6 +200,7 @@ function App() {
             <Route path="/productReview" element={<ProductReview />} />
             {/* <Route path="/payments" element={<Payments />} /> */}
             <Route path="/eLogin" element={<ELogin />} />
+            <Route path="/brands/productview" element={<BrandProductView />} />
           </Routes>
         )}
       </Suspense>

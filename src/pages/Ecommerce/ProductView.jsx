@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from "react";
-import { MdOutlineKeyboardArrowRight } from "react-icons/md"; //MdOutlineKeyboardArrowLeft
+import { MdOutlineCancel, MdOutlineKeyboardArrowRight } from "react-icons/md"; //MdOutlineKeyboardArrowLeft
 import { AiFillStar } from "react-icons/ai";
 import { useParams } from "react-router-dom";
 import { supabase } from "../../services/supabase";
@@ -16,6 +16,10 @@ import SpinnerFullPage from "../../common-components/SpinnerFullPage";
 import CompareProducts from "./CompareProducts";
 import toast from "react-hot-toast";
 import ProductReview from "./ProductReview";
+import {
+  showLimitReachedToast,
+  showRemoveFromCartToast,
+} from "../../utils/AddToCartToast";
 import { HandThumbUpIcon, HandThumbDownIcon } from "@heroicons/react/24/solid";
 import {
   HandThumbUpIcon as HandThumbUpOutline,
@@ -51,7 +55,7 @@ function ProductView() {
   const [productsMayLike, setProductsMayLike] = useState();
   const [productqunatity, setProductquantity] = useState(1);
   const [isloading, setIsloading] = useState(false);
-  const [compare, setCompare] = useState([]);
+  // const [compare, setCompare] = useState([]);
   const [showCompare, setShowCompare] = useState(false);
   const [isReview, setIsReview] = useState(false);
   const [productReviews, setProductReviews] = useState([]);
@@ -75,6 +79,7 @@ function ProductView() {
   const navigate = useNavigate();
 
   const { handleAddToCart } = useHandleAddToCart();
+  const { compare, setCompare } = useApp();
 
   //   get the product based on the product id
   const { id: productid } = useParams();
@@ -480,21 +485,26 @@ function ProductView() {
   };
 
   const handleCompareToggle = (product) => {
-    setCompare((prevCompare) => {
-      const alreadyAdded = prevCompare.some((item) => item.id === product.id);
-      if (alreadyAdded) {
-        return prevCompare.filter((item) => item.id !== product.id);
-      } else if (prevCompare.length < 3) {
-        return [...prevCompare, product];
-      } else {
-        toast.error("You can compare a maximum of 3 products.");
-        return prevCompare;
-      }
-    });
+    const alreadyAdded = compare.some((item) => item.id === product.id);
+
+    if (alreadyAdded) {
+      setCompare((prev) => prev.filter((item) => item.id !== product.id));
+    } else if (compare.length < 3) {
+      setCompare((prev) => [...prev, product]);
+    } else {
+      showLimitReachedToast();
+    }
   };
   const handleRemoveCompare = (id) => {
     setCompare((prev) => prev.filter((item) => item.id !== id));
   };
+
+  const handleCompareClear = () => {
+    setCompare([]);
+    setShowPreview(false);
+  };
+
+  const [showPreview, setShowPreview] = useState(false);
 
   return (
     <>
@@ -1148,13 +1158,77 @@ function ProductView() {
                 />
               </div>
             )}
-            {compare.length > 0 && (
-              <button
-                onClick={() => setShowCompare(true)}
-                className="fixed bottom-20 right-5 px-5 py-3 bg-slate-600 text-white z-10 animate-blink"
-              >
-                compare
-              </button>
+
+            {compare?.length > 0 && (
+              <div className="fixed bottom-20 right-5 z-50">
+                <div
+                  className="relative"
+                  onMouseEnter={() => setShowPreview(true)}
+                  onMouseLeave={() => setShowPreview(false)}
+                >
+                  <button
+                    onClick={() => setShowCompare(true)}
+                    className="px-3 py-1 bg-[#304778] border border-[#212B36] text-white uppercase animate-blink rounded"
+                  >
+                    compare{" "}
+                    <span className="text-white bg-[#627BB1] rounded-full px-2">
+                      {compare?.length}
+                    </span>
+                  </button>
+
+                  {showPreview && !showCompare && (
+                    <div className="absolute transform transition-all ease-in border border-[#ccc] bottom-full mb-2 left-0 -translate-x-[55%] translate-y-[20%] bg-white shadow-lg rounded-lg p-4 w-[350px] h-[300px]">
+                      <div className="flex  gap-3">
+                        {compare?.map((item) => (
+                          <>
+                            <div
+                              key={item.id}
+                              className="flex flex-col border-r border-[#ccc] items-center gap-3"
+                            >
+                              <div className="relative">
+                                <img
+                                  src={item.image}
+                                  alt={item.title}
+                                  className="h-[200px] w-[200px] object-contain"
+                                />
+
+                                <button
+                                  onClick={() => {
+                                    handleRemoveCompare(item.id);
+                                  }}
+                                  className="absolute top-0 right-0"
+                                >
+                                  <MdOutlineCancel color="#666666" size={20} />
+                                </button>
+                              </div>
+                              <p className="text-sm font-medium text-gray-800 truncate">
+                                {item.title}
+                              </p>
+                            </div>
+                          </>
+                        ))}
+                      </div>
+                      <div className="flex justify-center gap-3 my-2">
+                        <button
+                          onClick={handleCompareClear}
+                          className="border border-[#ccc] font-semibold text-sm text-[#212B36] px-3 py-1 uppercase"
+                        >
+                          remove all
+                        </button>
+                        <button
+                          onClick={() => setShowCompare(true)}
+                          className="px-3 py-1 bg-[#304778] border border-[#212B36]  uppercase text-white  rounded"
+                        >
+                          compare{" "}
+                          <span className="text-white bg-[#627BB1] rounded-full px-2">
+                            {compare?.length}
+                          </span>
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
             )}
           </div>
         </div>

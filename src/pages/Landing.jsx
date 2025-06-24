@@ -217,7 +217,7 @@ function Landing() {
                     Make Your Space For Better Experience
                   </h2>
 
-                  <div className="flex justify-between">
+                  <div className="flex flex-col gap-8 lg:gap-0 lg:flex-row justify-between">
                     <button
                       onClick={handleClick}
                       disabled={loading}

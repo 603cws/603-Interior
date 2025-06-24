@@ -3,6 +3,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { MdOutlineInventory2 } from "react-icons/md"; // Or any icon
 import { IoClose } from "react-icons/io5";
 import { MdRemoveShoppingCart } from "react-icons/md";
+// import { css } from "glamor";
 
 export const AddToCartToast = (product, type = "cart") => {
   toast(
@@ -60,6 +61,31 @@ export const showRemoveFromCartToast = (product, type = "cart") => {
       className: "bg-red-50 border border-red-400 rounded-lg shadow-sm",
       progressClassName: "bg-red-500",
       transition: Slide,
+    }
+  );
+};
+
+export const showLimitReachedToast = () => {
+  toast.error(
+    <div className="flex items-center gap-2 ">
+      <span className="text-red-500 text-sm">⚠️</span>
+      <span className="text-sm">You can compare a maximum of 3 products</span>
+      <button
+        onClick={() => {
+          // Clear list logic
+          toast.dismiss();
+        }}
+        className="text-nowrap text-yellow-400 text-sm  hover:underline"
+      >
+        cancel
+      </button>
+    </div>,
+    {
+      className: "bg-[#1a1a1a] text-white rounded-lg px-4 py-3 font-Poppins",
+      icon: false,
+      closeButton: false,
+      autoClose: true,
+      position: "bottom-center",
     }
   );
 };

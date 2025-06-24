@@ -1,3 +1,4 @@
+import toast from "react-hot-toast";
 import { useApp } from "../Context/Context";
 import { supabase } from "../services/supabase";
 
@@ -128,6 +129,8 @@ export const useHandleAddToCart = () => {
       } finally {
         getCartItems();
       }
+    } else {
+      toast.error("please login to add items to whishlist");
     }
   };
 

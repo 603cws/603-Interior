@@ -1,4 +1,5 @@
 import LandingNavbar from "../../common-components/LandingNavbar";
+import { useNavigate } from "react-router-dom";
 
 function Brands() {
   const brands = [
@@ -162,23 +163,29 @@ function Brands() {
   );
 }
 
-const ProductCard = ({ image, width }) => (
-  <div
-    className={`group relative h-[300px] w-full ${
-      width ? "max-w-none" : "max-w-[320px]"
-    } rounded-xl shadow-md p-4 transition-all duration-300 hover:scale-[1.02] hover:bg-[#E8F1FF]`}
-  >
-    <div className="absolute top-[60%] left-1/2 -translate-x-1/2 w-[80%] h-24 bg-gradient-to-t from-[#A9BAD3] to-[#E0ECFF] blur-[80px] rounded-full z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+const ProductCard = ({ image, width }) => {
+  const navigate = useNavigate();
+  return (
+    <div
+      className={`group relative h-[300px] w-full ${
+        width ? "max-w-none" : "max-w-[320px]"
+      } rounded-xl shadow-md p-4 transition-all duration-300 hover:scale-[1.02] hover:bg-[#E8F1FF]`}
+    >
+      <div className="absolute top-[60%] left-1/2 -translate-x-1/2 w-[80%] h-24 bg-gradient-to-t from-[#A9BAD3] to-[#E0ECFF] blur-[80px] rounded-full z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
 
-    <img src={image} alt="Product" className="w-full p-4 z-0" />
+      <div onClick={() => navigate("productview")}>
+        {" "}
+        <img src={image} alt="Product" className="w-full p-4 z-0" />
+      </div>
 
-    <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-full h-[80px] bg-white/30 group-hover:bg-transparent group-hover:overflow-hidden backdrop-blur-md group-hover:backdrop-blur-none shadow-xl group-hover:shadow-none rounded-xl group-hover:rounded-none z-10">
-      <div className="relative z-10 text-center py-4 font-semibold text-[#304778]">
-        Product By Welspun
+      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-full h-[80px] bg-white/30 group-hover:bg-transparent group-hover:overflow-hidden backdrop-blur-md group-hover:backdrop-blur-none shadow-xl group-hover:shadow-none rounded-xl group-hover:rounded-none z-10">
+        <div className="relative z-10 text-center py-4 font-semibold text-[#304778]">
+          Product By Welspun
+        </div>
       </div>
     </div>
-  </div>
-);
+  );
+};
 
 function Card({ image, title, subtitle }) {
   return (

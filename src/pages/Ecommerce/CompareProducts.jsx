@@ -1,32 +1,14 @@
-import React, { useEffect, useState } from "react";
-import { MdCancel } from "react-icons/md";
+import { useEffect, useState } from "react";
+import { MdOutlineCancel } from "react-icons/md";
 import { useHandleAddToCart } from "../../utils/HelperFunction";
 import { useApp } from "../../Context/Context";
-
 function CompareProducts({ product, onClose, onRemove }) {
-  const { handleAddToCart } = useHandleAddToCart();
-  const { isAuthenticated, localcartItems, cartItems } = useApp();
-  const [iscarted, setIsCarted] = useState(false);
-
+  // Auto-close when product array is empty
   useEffect(() => {
-    // if (!product?.id) return;
-    console.log(product);
-
-    if (isAuthenticated) {
-      const check = cartItems?.some(
-        (item) => item.productId?.id === product.id
-      );
-      setIsCarted(check);
-    } else {
-      console.log("localcartItems", localcartItems);
-
-      const check = localcartItems?.some(
-        (item) => item.productId?.id === product.id
-      );
-      setIsCarted(check);
+    if (product.length === 0) {
+      onClose();
     }
-  }, [isAuthenticated, cartItems, localcartItems, product?.id]);
-
+  }, [product, onClose]);
   return (
     <section>
       <div className="fixed inset-0 bg-[#000]/30 flex justify-center items-center z-20">
@@ -38,22 +20,25 @@ function CompareProducts({ product, onClose, onRemove }) {
         >
           <div className="absolute right-5 top-2 ">
             <button onClick={onClose}>
-              <MdCancel />
+              <MdOutlineCancel color="#666666" size={25} />
             </button>
           </div>
           <div className="max-w-xs w-full flex flex-col max-h-full">
             {" "}
             <div className="w-full h-2/5">
-              <h4 className="uppercase font-medium text-sm text-[#000] mb-5">
-                chair name added first <br />
-                to compare card
+              <h4 className="uppercase font-medium text-sm leading-[22.4px] text-[#000] mb-5">
+                {product?.[0]?.title} <br />
+                compare
               </h4>
-              <p className="uppercase font-medium text-sm text-[#777777]">
-                3 items
+              <p className="uppercase font-medium text-sm text-[#777777] leading-[22.4px]">
+                {product?.length} items
               </p>
-              <div className="flex mt-10">
+              <div className="flex gap-2 mt-10">
                 <input type="checkbox" />
-                <label htmlFor="" className="text-xs text-[#171717] ">
+                <label
+                  htmlFor=""
+                  className="text-xs text-[#171717] leading-[28.8px]"
+                >
                   Show only differences
                 </label>
               </div>
@@ -67,51 +52,66 @@ function CompareProducts({ product, onClose, onRemove }) {
             </div>
           </div>
           {product.map((product, index) => {
-            return (
-              <div
-                key={product.id}
-                className="max-w-xs w-full flex flex-col  relative max-h-full"
-              >
-                <div className="absolute top-0 right-0">
-                  <button
-                    onClick={() => {
-                      onRemove(product.id);
-                    }}
-                  >
-                    <MdCancel />
-                  </button>
-                </div>{" "}
-                <div className="w-5/6 h-2/5">
-                  {/* <img
-                  src="/images/home/banner-chair.jpg"
-                  alt=""
-                  className="object-cover"
-                /> */}
-                  <img
-                    src={product.image}
-                    alt=""
-                    className="object-contain max-h-full"
-                  />
-                </div>
-                <div className="flex flex-col gap-4 [&_h4]:uppercase [&_h4]:font-medium [&_h4]:text-sm [&_h4]:text[#111111]">
-                  <h4>{product?.title}</h4>
-                  <h4>rating</h4>
-                  <h4>{product.price}</h4>
-                  <h4>material</h4>
-                  <h4>brand</h4>
-                </div>
-                <div className="flex flex-col items-start gap-2 [&_button]:border [&_button]:border-[#212B36] [&_button]:uppercase [&_button]:text-[15px] [&_button]:tracking-widest [&_button]:w-36 [&_button]:h-10 [&_button]:rounded-sm">
-                  <button onClick={() => handleAddToCart(product)}>
-                    {iscarted ? "added to cart" : "add to cart"}
-                  </button>
-                  <button>buy now</button>
-                </div>
-              </div>
-            );
+            return <Card product={product} onRemove={onRemove} key={index} />;
           })}
         </div>
       </div>
     </section>
+  );
+}
+
+function Card({ product, onRemove }) {
+  const { handleAddToCart } = useHandleAddToCart();
+  const { isAuthenticated, localcartItems, cartItems } = useApp();
+
+  const [iscarted, setIsCarted] = useState(false);
+
+  useEffect(() => {
+    if (!product?.id) return;
+
+    if (isAuthenticated) {
+      const check = cartItems?.some(
+        (item) => item.productId?.id === product.id
+      );
+      setIsCarted(check);
+    } else {
+      const check = localcartItems?.some(
+        (item) => item.productId?.id === product.id
+      );
+      setIsCarted(check);
+    }
+  }, [isAuthenticated, cartItems, localcartItems, product?.id]);
+  return (
+    <div
+      key={product.id}
+      className="max-w-xs w-full flex flex-col  relative max-h-full"
+    >
+      <div className="absolute top-0 right-0">
+        <button
+          onClick={() => {
+            onRemove(product.id);
+          }}
+        >
+          <MdOutlineCancel color="#666666" size={25} />
+        </button>
+      </div>{" "}
+      <div className="w-5/6 h-2/5">
+        <img src={product.image} alt="" className="object-contain max-h-full" />
+      </div>
+      <div className="flex flex-col gap-4 [&_h4]:uppercase [&_h4]:font-medium [&_h4]:text-sm [&_h4]:text[#111111]">
+        <h4>{product?.title}</h4>
+        <h4>rating</h4>
+        <h4>{product.price}</h4>
+        <h4>material</h4>
+        <h4>brand</h4>
+      </div>
+      <div className="flex flex-col text-[#212B36] items-start gap-2 [&_button]:border [&_button]:border-[#212B36] [&_button]:uppercase [&_button]:text-[15px] [&_button]:tracking-widest [&_button]:w-36 [&_button]:h-10 [&_button]:rounded-sm">
+        <button onClick={() => handleAddToCart(product)}>
+          {iscarted ? "added to cart" : "add to cart"}
+        </button>
+        <button>buy now</button>
+      </div>
+    </div>
   );
 }
 

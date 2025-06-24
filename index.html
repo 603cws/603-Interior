@@ -44,5 +44,28 @@
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
+
+    <script>
+      // Prevent zoom via keyboard
+      document.addEventListener("keydown", function (e) {
+        if (
+          (e.ctrlKey || e.metaKey) &&
+          (e.key === "+" || e.key === "-" || e.key === "=" || e.key === "0")
+        ) {
+          e.preventDefault();
+        }
+      });
+
+      // Prevent zoom via Ctrl + mouse wheel
+      document.addEventListener(
+        "wheel",
+        function (e) {
+          if (e.ctrlKey) {
+            e.preventDefault();
+          }
+        },
+        { passive: false }
+      );
+    </script>
   </body>
 </html>

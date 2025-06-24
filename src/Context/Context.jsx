@@ -103,8 +103,10 @@ export const AppProvider = ({ children }) => {
   const [wishlistItems, setWishlistItems] = useState([]);
   const [filters, setFilters] = useState({
     category: [],
-    priceRange: [0, 100000],
+    priceRange: [0, 10000],
   });
+
+  const [compare, setCompare] = useState([]);
 
   async function getCartItems() {
     try {
@@ -752,6 +754,8 @@ export const AppProvider = ({ children }) => {
         fetchUserData,
         filters,
         setFilters,
+        compare,
+        setCompare,
       }}
     >
       {children}
