@@ -22,6 +22,7 @@ import {
   HandThumbDownIcon as HandThumbDownOutline,
 } from "@heroicons/react/24/outline";
 import { IoCloseCircleOutline, IoCloseOutline } from "react-icons/io5";
+import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 
 // const reviews = [
 //   {
@@ -61,6 +62,15 @@ function ProductView() {
   const [clampedStates, setClampedStates] = useState([]);
   // const [interactions, setInteractions] = useState([]);
   const contentRefs = useRef([]);
+
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [isExpanded2, setIsExpanded2] = useState(false);
+
+  const offers = [
+    "Flat ₹50 Off + Free Surprise Gift On All Prepaid Offers 🎁",
+    "Additional 5% Off On New Arrivals Use Code LOOKO5 🎁",
+    "FLAT 10% OFF on PARTY BAGS collection, Use Code: PARTY10 🎁",
+  ];
 
   const navigate = useNavigate();
 
@@ -153,7 +163,7 @@ function ProductView() {
   async function fetchSimilarproduct() {
     try {
       //get the current product
-      const { data: product, error: Err } = await supabase
+      const { data: product } = await supabase
         .from("product_variants")
         .select("*,product_id(*)")
         .eq("id", productid)
@@ -224,25 +234,29 @@ function ProductView() {
   }
 
   useEffect(() => {
-    const clamped = productReviews.map((_, idx) => {
-      const el = contentRefs.current[idx];
-      if (!el) return false;
+    // Timeout ensures DOM is fully rendered
+    const timeout = setTimeout(() => {
+      const clamped = productReviews.map((_, idx) => {
+        const el = contentRefs.current[idx];
+        if (!el) return false;
 
-      const lineHeight = parseFloat(getComputedStyle(el).lineHeight);
-      const maxHeight = lineHeight * 3;
+        const lineHeight = parseFloat(getComputedStyle(el).lineHeight) || 20;
+        const maxHeight = lineHeight * 3;
 
-      return el.scrollHeight > maxHeight;
-    });
+        return el.scrollHeight > maxHeight;
+      });
 
-    setClampedStates(clamped);
-    setExpandedStates(Array(productReviews.length).fill(false));
-    // setInteractions(Array(productReviews.length).fill(null));
-  }, []);
+      setClampedStates(clamped);
+      setExpandedStates(Array(productReviews.length).fill(false));
+    }, 100); // delay ensures DOM paints first
+
+    return () => clearTimeout(timeout);
+  }, [productReviews]);
 
   const toggleExpanded = (index) => {
     setExpandedStates((prev) => {
       const updated = [...prev];
-      updated[index] = !prev[index];
+      updated[index] = !updated[index];
       return updated;
     });
   };
@@ -499,10 +513,10 @@ function ProductView() {
       {isloading ? (
         <SpinnerFullPage />
       ) : (
-        <div className="container mx-auto">
+        <div className="md:container mx-auto px-4 md:px-12">
           {/* breadcumbs */}
           <div className="mt-10">
-            <div className="flex mx-10 items-center text-[#334A78] text-sm mt-4 mb-4 md:mb-0">
+            <div className="md:flex mx-10 items-center text-[#334A78] text-sm mt-4 mb-4 md:mb-0 hidden">
               <button onClick={() => navigate("/products")}>Home</button>
               <MdOutlineKeyboardArrowRight
                 size={15}
@@ -511,7 +525,7 @@ function ProductView() {
               <button>{product?.title}</button>
             </div>
           </div>
-          <div className={`flex p-2 lg:p-5 gap-1`}>
+          <div className={`md:flex p-2 lg:p-5 gap-1`}>
             <div className="flex-1">
               {product && (
                 <div>
@@ -523,8 +537,8 @@ function ProductView() {
                   >
                     <img
                       src={hoveredImage || product.image}
-                      className=""
-                      alt="product name "
+                      className="md:w-2/3 w-full"
+                      alt="product name"
                     />
                   </div>
                   {additionalImagesArray.length > 0 ? (
@@ -554,7 +568,7 @@ function ProductView() {
             <div className="flex-1 flex flex-col mt-2 md:mt-0 font-Poppins ">
               {/* product info */}
               <div className="flex flex-col justify-center">
-                <div className="">
+                <div className="border-b pb-4 md:border-none md:pb-0">
                   <h2 className="font-semibold text-3xl text-[#111]">
                     {product?.title || "product title"}
                   </h2>
@@ -604,7 +618,7 @@ function ProductView() {
                 </div>
 
                 {/* qunatiy counter */}
-                <div>
+                <div className="border-b pb-4 md:border-none md:pb-0">
                   <h2 className="font-semibold text-[#334A78] text-sm capitalize">
                     Quantity
                   </h2>
@@ -634,7 +648,7 @@ function ProductView() {
                 </div>
 
                 {/* add to card and buy now */}
-                <div className="my-4 flex gap-8 ">
+                <div className="my-4 md:flex gap-8 hidden">
                   <button
                     onClick={() => handleAddToCart(product)}
                     className="text-[#212B36] uppercase bg-[#FFFFFF] border border-[#212B36] w-52 px-10 py-4 rounded-sm "
@@ -646,51 +660,170 @@ function ProductView() {
                   </button>
                 </div>
               </div>
+
+              <div className="my-4">
+                {/* Desktop View (Always Expanded) */}
+                <div className="hidden md:block space-y-3 xl:w-2/3">
+                  <div className="border-b px-0 py-4 rounded text-sm font-medium bg-white shadow-sm">
+                    All Offers & Coupons
+                  </div>
+                  {offers.map((offer, idx) => (
+                    <div
+                      key={idx}
+                      className="text-center px-3 py-2 border border-[#D3E2E0] font-Poppins bg-[#FFFCE6] rounded text-sm font-semibold flex justify-between items-center"
+                    >
+                      <span className="text-left">{offer}</span>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Mobile View (Collapsible) */}
+                <div className="block md:hidden">
+                  <div
+                    className="flex justify-between border-b px-0 py-4 rounded cursor-pointer text-sm font-medium bg-white shadow-sm"
+                    onClick={() => setIsExpanded((prev) => !prev)}
+                  >
+                    <span>All Offers & Coupons</span>
+                    {isExpanded ? (
+                      <IoIosArrowUp className="w-4 h-4" />
+                    ) : (
+                      <IoIosArrowDown className="w-4 h-4" />
+                    )}
+                  </div>
+
+                  {isExpanded && (
+                    <div className="space-y-3 mt-4 border-b pb-4">
+                      {offers.map((offer, idx) => (
+                        <div
+                          key={idx}
+                          className="text-center px-3 py-2 border border-[#D3E2E0] bg-[#FFFDEB] rounded text-sm font-semibold flex justify-between items-center"
+                        >
+                          <span className="text-left">{offer}</span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              <div className="fixed bottom-0 left-0 w-full bg-white p-4 flex justify-between uppercase items-center border-t md:hidden z-50">
+                <button
+                  onClick={() => handleAddToCart(product)}
+                  className="flex-1 border border-[#213626] font-Poppins text-[#212B36] uppercase py-4 mr-2 rounded text-xs tracking-widest"
+                >
+                  {isCarted ? "Go to cart" : "Add to cart"}
+                </button>
+                <button className="flex-1 bg-[#304778] border-[#213625] font-Poppins text-white py-4 ml-2 rounded text-xs tracking-widest">
+                  BUY NOW
+                </button>
+              </div>
+
               {/* product description */}
               <div className="mt-2 md:mt-5 text-[#334A78] font-Poppins xl:w-2/3 ">
-                <h3 className="text-sm  uppercase font-bold  border-b-2">
-                  Product Details
-                </h3>
-                {/* material and water*/}
-                <ProductDetailreusable
-                  title1={"MATERIAL:"}
-                  desc1={"PU Material"}
-                  title2={"WATER RESISTANT:"}
-                  desc2={"Yes"}
-                />
-                <ProductDetailreusable
-                  title1={"PATTERN:"}
-                  desc1={"Yes"}
-                  title2={"COMPARTMENT:"}
-                  desc2={"Yes"}
-                />
-                <ProductDetailreusable
-                  title1={"DIMENSIONS (H x L x W):"}
-                  desc1={"18x22x12 cm"}
-                  title2={"POCKETS:"}
-                  desc2={"Yes"}
-                />
-                <ProductDetailreusable
-                  title1={"HANDLE:"}
-                  desc1={"Yes"}
-                  title2={"CLOSURE:"}
-                  desc2={"Snap Lock"}
-                />
-                <ProductDetailreusable
-                  title1={"CARE INSTRUCTION:"}
-                  desc1={"Wipe with clean, soft cloth"}
-                  title2={"WHAT ALL CAN FIT IN:"}
-                  desc2={"Mobile can fit in"}
-                />
+                {/* Desktop View - Always Expanded */}
+                <div className="hidden md:block">
+                  <h3 className="text-sm uppercase font-bold border-b-2 py-4">
+                    Product Details
+                  </h3>
+                  {/* material and water*/}
+                  <ProductDetailreusable
+                    title1={"MATERIAL:"}
+                    desc1={"PU Material"}
+                    title2={"WATER RESISTANT:"}
+                    desc2={"Yes"}
+                  />
+                  <ProductDetailreusable
+                    title1={"PATTERN:"}
+                    desc1={"Yes"}
+                    title2={"COMPARTMENT:"}
+                    desc2={"Yes"}
+                  />
+                  <ProductDetailreusable
+                    title1={"DIMENSIONS (H x L x W):"}
+                    desc1={"18x22x12 cm"}
+                    title2={"POCKETS:"}
+                    desc2={"Yes"}
+                  />
+                  <ProductDetailreusable
+                    title1={"HANDLE:"}
+                    desc1={"Yes"}
+                    title2={"CLOSURE:"}
+                    desc2={"Snap Lock"}
+                  />
+                  <ProductDetailreusable
+                    title1={"CARE INSTRUCTION:"}
+                    desc1={"Wipe with clean, soft cloth"}
+                    title2={"WHAT ALL CAN FIT IN:"}
+                    desc2={"Mobile can fit in"}
+                  />
+                </div>
+
+                {/* Mobile View - Collapsible */}
+                <div className="block md:hidden">
+                  {/* Toggle Header */}
+                  <div
+                    className="flex justify-between items-center border-b-2 py-2 cursor-pointer"
+                    onClick={() => setIsExpanded2((prev) => !prev)}
+                  >
+                    <h3 className="text-sm uppercase font-bold">
+                      Product Details
+                    </h3>
+                    {isExpanded2 ? (
+                      <IoIosArrowUp className="w-4 h-4" />
+                    ) : (
+                      <IoIosArrowDown className="w-4 h-4" />
+                    )}
+                  </div>
+
+                  {/* Content */}
+                  {isExpanded2 && (
+                    <div className="mt-2">
+                      <ProductDetailreusable
+                        title1="MATERIAL:"
+                        desc1="PU Material"
+                        title2="WATER RESISTANT:"
+                        desc2="Yes"
+                      />
+                      <ProductDetailreusable
+                        title1="PATTERN:"
+                        desc1="Yes"
+                        title2="COMPARTMENT:"
+                        desc2="Yes"
+                      />
+                      <ProductDetailreusable
+                        title1="DIMENSIONS (H x L x W):"
+                        desc1="18x22x12 cm"
+                        title2="POCKETS:"
+                        desc2="Yes"
+                      />
+                      <ProductDetailreusable
+                        title1="HANDLE:"
+                        desc1="Yes"
+                        title2="CLOSURE:"
+                        desc2="Snap Lock"
+                      />
+                      <ProductDetailreusable
+                        title1="CARE INSTRUCTION:"
+                        desc1="Wipe with clean, soft cloth"
+                        title2="WHAT ALL CAN FIT IN:"
+                        desc2="Mobile can fit in"
+                      />
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
           </div>
 
           {/* cusstomer review */}
-          <div className="border-2 border-[#334A78]/20 mt-10 mb-10 p-4 font-Poppins">
-            <div className="flex justify-between items-center mb-6 p-6">
+          <div className="border-2 border-[#334A78]/20 p-4 my-10 font-Poppins">
+            <div
+              className={`flex justify-between items-center ${
+                hasReviews ? "p-6" : "p-0"
+              }`}
+            >
               <div className="">
-                <h3 className="text-[#171717] font-semibold text-2xl">
+                <h3 className="text-[#171717] md:font-semibold font-bold text-sm md:text-2xl ">
                   Customer Reviews
                 </h3>
                 {!hasReviews && (
@@ -698,7 +831,7 @@ function ProductView() {
                 )}
               </div>
               <p
-                className="text-[#C16452] text-sm cursor-pointer hover:underline"
+                className="text-[#C16452] text-sm cursor-pointer hover:underline whitespace-nowrap"
                 onClick={() => setIsReview(true)}
               >
                 Write a review
@@ -706,12 +839,14 @@ function ProductView() {
             </div>
 
             {hasReviews && (
-              <div className="space-y-6 p-6">
+              <div className="space-y-6 md:p-6">
                 {/* Rating Summary */}
-                <div className="flex gap-10 items-start font-Poppins">
+                <div className="flex flex-row gap-10 items-start font-Poppins">
                   <div className="text-center">
-                    <p className="text-3xl font-semibold">{averageRating}★</p>
-                    <p className="text-[#A3A3A3] text-sm">
+                    <p className="md:text-3xl font-semibold">
+                      {averageRating.toFixed(1)}★
+                    </p>
+                    <p className="text-[#A3A3A3] md:text-sm text-xs">
                       {totalRatings} Ratings &<br /> {productReviews.length}{" "}
                       Reviews
                     </p>
@@ -730,7 +865,7 @@ function ProductView() {
                           : "bg-[#FA9515]";
                       return (
                         <div key={star} className="flex items-center gap-2">
-                          <span className="text-sm w-4 whitespace-nowrap mr-4">
+                          <span className="md:text-sm text-xs w-4 whitespace-nowrap md:mr-4">
                             {star} ★
                           </span>
                           <div className="w-48 h-2 bg-gray-200 rounded">
@@ -739,7 +874,9 @@ function ProductView() {
                               style={{ width: `${percent}%` }}
                             />
                           </div>
-                          <span className="text-sm pl-4">{count}</span>
+                          <span className="md:text-sm text-xs pl-4">
+                            {count}
+                          </span>
                         </div>
                       );
                     })}
@@ -750,7 +887,7 @@ function ProductView() {
                   {productReviews.map((review, index) => (
                     <div key={index} className="mb-6">
                       {/* Other review content */}
-                      <div className="flex gap-2 pt-4 border-b pb-4">
+                      <div className="flex flex-wrap gap-2 pt-4 border-b pb-4">
                         {JSON.parse(review.images).map((path, i) => {
                           const url = supabase.storage
                             .from("review-images")
@@ -817,7 +954,7 @@ function ProductView() {
                             )}
                           </div>
                         </div>
-                        <div className="flex-1">
+                        <div className="flex-1 overflow-y-auto">
                           <div className="flex gap-5">
                             <p className="text-xs px-2 py-1 rounded flex items-center gap-1 border border-[#38938E] w-10">
                               {selectedReview.stars}{" "}
@@ -875,15 +1012,17 @@ function ProductView() {
                         </span>
                       </div>
 
+                      {/* Description */}
                       <p
                         ref={(el) => (contentRefs.current[idx] = el)}
-                        className={`text-xs ${
+                        className={`text-xs transition-all max-w-6xl duration-300 ease-in-out ${
                           !expanded ? "line-clamp-3" : ""
-                        } transition-all duration-300 ease-in-out max-w-7xl`}
+                        }`}
                       >
                         {review.description}
                       </p>
 
+                      {/* Read More / Less */}
                       {isClamped && (
                         <p
                           className="text-sm text-[#6082AF] font-medium mt-2 cursor-pointer hover:underline"
@@ -951,7 +1090,7 @@ function ProductView() {
           </div>
 
           <div className="my-10 font-Poppins">
-            <h3 className="text-[#171717] text-3xl  uppercase mb-3 font-semibold">
+            <h3 className="text-[#171717] text-3xl uppercase mb-3 font-semibold">
               Similar Products
             </h3>
             {similarProducts && (
@@ -1022,7 +1161,9 @@ function ProductView() {
       )}
 
       {/* bottom tabs  */}
-      <BottomTabs />
+      <div className="pb-24 md:pb-0">
+        <BottomTabs />
+      </div>
 
       {/* compare window */}
       {showCompare && (
@@ -1040,14 +1181,14 @@ export default ProductView;
 
 function ProductDetailreusable({ title1, title2, desc1, desc2 }) {
   return (
-    <div className=" border-b-2 pt-2 pb-1 flex gap-2">
-      <div className="flex-1">
+    <div className="border-b-2 pt-2 pb-1 flex gap-2 flex-col md:flex-row">
+      <div className="flex-1 border-b-2 pt-2 pb-1 md:border-b-0 md:pb-0 md:pt-0">
         <p className="text-xs md:text-sm uppercase font-bold ">{title1}</p>
-        <span className="text-xs  ">{desc1}</span>
+        <span className="text-xs">{desc1}</span>
       </div>
       <div className="flex-1">
         <p className="text-xs md:text-sm uppercase font-bold ">{title2}</p>
-        <span className="text-xs  ">{desc2}</span>
+        <span className="text-xs">{desc2}</span>
       </div>
     </div>
   );
@@ -1084,7 +1225,7 @@ function Card({ product, handleCompareToggle, compare }) {
   }, [isAuthenticated, cartItems, localcartItems, product?.id]);
 
   return (
-    <div className="font-Poppins w-[245px] h-[360px] border border-[#ccc]">
+    <div className="font-Poppins md:w-[245px] h-[480px] md:h-[400px] border border-[#ccc]">
       <div
         onClick={() => naviagte(`/productview/${product.id}`)}
         className="flex justify-center items-center p-2 cursor-pointer"
@@ -1093,7 +1234,7 @@ function Card({ product, handleCompareToggle, compare }) {
       </div>
       <div className="bg-[#fff] p-2">
         <div className="flex ">
-          <div className="flex-1 text-sm  leading-[22.4px]  text-[#111] ">
+          <div className="flex-1 text-sm leading-[22.4px] text-[#111] ">
             <h4 className="font-medium text-sm leading-[22.4px] ">
               {product?.title}
             </h4>
@@ -1102,8 +1243,9 @@ function Card({ product, handleCompareToggle, compare }) {
               <p className="line-through text-[#111] text-opacity-50">
                 Rs 5678
               </p>
-              <p className="text-[#C20000]">sale</p>
+              <p className="text-[#C20000] hidden md:block">sale</p>
             </div>
+            <p className="text-[#C20000] md:hidden block uppercase">sale</p>
           </div>
           <div
             onClick={() => handleAddtoWishlist(product)}
@@ -1118,7 +1260,7 @@ function Card({ product, handleCompareToggle, compare }) {
         </div>
         <button
           onClick={() => handleAddToCart(product)}
-          className="text-[#000] uppercase bg-[#FFFFFF] text-xs border border-[#ccc] px-2  py-2 rounded-sm "
+          className="text-[#000] uppercase bg-[#FFFFFF] text-xs border border-[#ccc] px-2 py-2 my-4 rounded-sm "
         >
           {iscarted ? "added to cart" : "add to cart"}
         </button>
