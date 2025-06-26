@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 import LandingNavbar from "../common-components/LandingNavbar";
 
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -27,6 +27,7 @@ import { FiMessageSquare } from "react-icons/fi";
 import { ReadMoreBtn } from "../common-components/ReadMoreBtn";
 import { useApp } from "../Context/Context";
 import gsap from "gsap";
+import { motion, useAnimation, useInView } from "framer-motion";
 
 function Landing() {
   const imageContainerRef = useRef(null);
@@ -42,6 +43,26 @@ function Landing() {
     setCurrentLayoutID,
     setCurrentLayoutData,
   } = useApp();
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: false, threshold: 0.2 });
+  const controls = useAnimation();
+  const featuredRef = useRef(null);
+  const featuredInView = useInView(featuredRef, {
+    once: false,
+    threshold: 0.2,
+  });
+  const controlsFeatured = useAnimation();
+
+  useEffect(() => {
+    if (inView) {
+      controls.start("show");
+    }
+  }, [inView, controls]);
+  useEffect(() => {
+    if (featuredInView) {
+      controlsFeatured.start("show");
+    }
+  }, [featuredInView, controlsFeatured]);
 
   const tabData = [
     {
@@ -107,6 +128,44 @@ function Landing() {
       image: "images/credilio-svg-logo.svg",
     },
   ];
+  const containerVariants = {
+    hidden: {},
+    show: {
+      transition: {
+        staggerChildren: 0.5,
+      },
+    },
+  };
+
+  const cardVariants = {
+    hidden: { opacity: 0, y: 50 },
+    show: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.5,
+        ease: "easeOut",
+      },
+    },
+  };
+
+  const featuredProjects = [
+    "/images/home/featured-project-1.png",
+    "/images/home/featured-project-2.png",
+    "/images/home/featured-project-3.png",
+    "/images/home/featured-project-4.png",
+  ];
+  const imageVariants = {
+    hidden: { opacity: 0, x: 100 },
+    show: {
+      opacity: 1,
+      x: 0,
+      transition: {
+        duration: 0.6,
+        ease: "easeOut",
+      },
+    },
+  };
 
   const latestArticles = [
     {
@@ -150,24 +209,28 @@ function Landing() {
   const featureCards = [
     {
       icon: "images/icons/architecture-icon.svg",
+      hovericon: "images/icons/architecture-icon-white.svg",
       title: "architecture",
       description:
         "We develop the full cycle of project documentation & full details. Our clients satisfaction",
     },
     {
-      icon: "images/icons/interior.svg",
+      icon: "images/icons/interior-blue.svg",
+      hovericon: "images/icons/interior.svg",
       title: "Interior Work",
       description:
         "We will take care of the interior designs, build & management of all kind of living projects",
     },
     {
       icon: "images/icons/retail.svg",
+      hovericon: "images/icons/retail-white.svg",
       title: "Retail Designs",
       description:
         "We can help you with the retail interior design and third party management to create best",
     },
     {
       icon: "images/icons/2d-3d_layout.svg",
+      hovericon: "images/icons/2d-3d_layout-white.svg",
       title: "2D/3D Layouts",
       description:
         "We offer professional online 2D and 3D interior designing which will help you visualize",
@@ -576,7 +639,18 @@ function Landing() {
                   <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                 </div>
                 <div className="relative z-10 space-y-5 group-hover:text-white transition-colors duration-300 flex flex-col h justify-between h-full">
-                  <img src={card.icon} alt={card.title} className="h-16 w-16" />
+                  <div className="h-16 w-16">
+                    <img
+                      src={card.hovericon}
+                      alt={card.title}
+                      className="h-full w-full group-hover:block hidden"
+                    />
+                    <img
+                      src={card.icon}
+                      alt={card.title}
+                      className="h-full w-full group-hover:hidden block"
+                    />
+                  </div>
                   <h4 className="font-bold text-xl capitalize">{card.title}</h4>
                   <p>{card.description}</p>
                   <div className="">
@@ -639,10 +713,17 @@ function Landing() {
         </div>
 
         {/* Desktop View */}
-        <div className="hidden lg:flex gap-8 justify-between">
+        <motion.div
+          ref={ref}
+          className="hidden lg:flex gap-8 justify-between"
+          variants={containerVariants}
+          initial="hidden"
+          animate={controls}
+        >
           {testimonials.map((testimonial) => (
-            <div
+            <motion.div
               key={testimonial.id}
+              variants={cardVariants}
               className="border-r-[16px] border-b-[16px] border-[#F7F7F7] max-w-sm space-y-5 p-4"
             >
               <div>
@@ -664,9 +745,9 @@ function Landing() {
                   <h6 className="text-[#777777]">{testimonial.role}</h6>
                 </div>
               </div>
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </section>
 
       {/* section 5 */}
@@ -753,7 +834,7 @@ function Landing() {
           </h3>
         </div>
         {/* Desktop layout */}
-        <div className="relative z-10 w-full justify-end hidden lg:flex">
+        {/* <div className="relative z-10 w-full justify-end hidden lg:flex">
           <div className="max-w-7xl 3xl:mx-auto flex justify-end gap-5">
             <img
               src="/images/home/featured-project-1.png"
@@ -776,7 +857,26 @@ function Landing() {
               className="max-w-xs"
             />
           </div>
-        </div>
+        </div> */}
+        <motion.div
+          ref={featuredRef}
+          className="relative z-10 w-full justify-end hidden lg:flex"
+          initial="hidden"
+          animate={controlsFeatured}
+          variants={containerVariants}
+        >
+          <div className="max-w-7xl 3xl:mx-auto flex justify-end gap-5">
+            {featuredProjects.map((src, index) => (
+              <motion.img
+                key={index}
+                src={src}
+                alt=""
+                variants={imageVariants}
+                className="max-w-xs"
+              />
+            ))}
+          </div>
+        </motion.div>
 
         {/* Swiper for mobile & tablet */}
         <div className="z-10 lg:hidden px-5">
@@ -977,7 +1077,7 @@ function Landing() {
           >
             {latestArticles.map((article, index) => (
               <SwiperSlide key={index}>
-                <div className="max-w-xs">
+                <div className="max-w-xs mx-auto">
                   <div className="relative">
                     <img src={article.image} alt="blogoffice" />
                     <div className="absolute  left-4 bottom-0 bg-white text-center px-3 py-1 shadow-md rounded-sm">

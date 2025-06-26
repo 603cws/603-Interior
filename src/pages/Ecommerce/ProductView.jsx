@@ -262,6 +262,17 @@ function ProductView() {
     return () => clearTimeout(timeout);
   }, [productReviews]);
 
+  useEffect(() => {
+    if (isReview || selectedReview) {
+      document.body.classList.add("no-scroll");
+    } else {
+      document.body.classList.remove("no-scroll");
+    }
+    return () => {
+      document.body.classList.remove("no-scroll");
+    };
+  }, [isReview, selectedReview]);
+
   const toggleExpanded = (index) => {
     setExpandedStates((prev) => {
       const updated = [...prev];
@@ -516,7 +527,7 @@ function ProductView() {
       <ToastContainer />
       {isReview && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-white w-full max-w-3xl p-6 rounded-lg shadow-lg relative overflow-y-auto max-h-[90vh]">
+          <div className="bg-white w-full max-w-sm sm:max-w-md xl:max-w-3xl p-6 rounded-lg shadow-lg relative overflow-y-auto max-h-[90vh]">
             <ProductReview
               product={product}
               onClose={() => setIsReview(false)}
