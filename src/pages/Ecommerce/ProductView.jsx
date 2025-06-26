@@ -851,7 +851,7 @@ function ProductView() {
             {hasReviews && (
               <div className="space-y-6 md:p-6">
                 {/* Rating Summary */}
-                <div className="flex flex-row gap-10 items-start font-Poppins">
+                <div className="flex flex-col md:flex-row items-center mt-5 md:mt-0 gap-10 md:items-start font-Poppins">
                   <div className="text-center">
                     <p className="md:text-3xl font-semibold">
                       {averageRating.toFixed(1)}★
