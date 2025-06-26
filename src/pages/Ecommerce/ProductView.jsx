@@ -553,7 +553,7 @@ function ProductView() {
           <div className={`md:flex p-2 lg:p-5 gap-1`}>
             <div className="flex-1">
               {product && (
-                <div>
+                <div className="md:sticky md:top-8">
                   <div
                     className="max-w-xl"
                     onMouseEnter={() => setMainImageHovered(true)}
