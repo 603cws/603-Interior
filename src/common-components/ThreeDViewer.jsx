@@ -43,7 +43,7 @@ const ThreeDViewer = ({ onClose }) => {
     setProgress(0);
 
     fbxLoader.load(
-      "/model.FBX",
+      "/model2.FBX",
       (fbx) => {
         fbx.scale.set(0.5, 0.5, 0.5);
         scene.add(fbx);

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import ReactApexChart from "react-apexcharts";
 import { useApp } from "../../Context/Context";
 import {

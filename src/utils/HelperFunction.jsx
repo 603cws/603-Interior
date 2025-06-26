@@ -38,11 +38,10 @@ export const useHandleAddToCart = () => {
         console.log("acc", accountHolder);
 
         const {
-          data: { user },
-          error: authError,
+          data: { user }, //error: authError,
         } = await supabase.auth.getUser();
 
-        const { data: cartdata, error: carterror } = await supabase
+        const { data: cartdata } = await supabase
           .from("userProductCollection")
           .select("*,productId(*)")
           .eq("userId", user.id);
@@ -92,11 +91,10 @@ export const useHandleAddToCart = () => {
     if (isAuthenticated) {
       try {
         const {
-          data: { user },
-          error: authError,
+          data: { user }, //error: authError,
         } = await supabase.auth.getUser();
 
-        const { data: cartdata, error: carterror } = await supabase
+        const { data: cartdata } = await supabase
           .from("userProductCollection")
           .select("*,productId(*)")
           .eq("userId", user.id)

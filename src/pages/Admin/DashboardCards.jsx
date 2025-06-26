@@ -1,4 +1,3 @@
-import React from "react";
 import Spinner from "../../common-components/Spinner";
 
 function DashboardCards({

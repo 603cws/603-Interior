@@ -1,36 +1,17 @@
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import LandingNavbar from "../common-components/LandingNavbar";
-
-import { FaAngleDown, FaAngleUp } from "react-icons/fa";
 import { FaRegUser } from "react-icons/fa";
 import { FiMessageSquare } from "react-icons/fi";
-
-import Slider from "react-slick";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/effect-coverflow";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
-import {
-  EffectCoverflow,
-  Pagination,
-  Navigation,
-  Autoplay,
-} from "swiper/modules";
+import { Autoplay } from "swiper/modules";
 import "../styles/Landing.css";
-
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-
 import { useNavigate } from "react-router-dom";
-import Footer from "../common-components/Footer";
-import {
-  BiSolidLeftArrowSquare,
-  BiSolidRightArrowSquare,
-} from "react-icons/bi";
-import { IoIosCall } from "react-icons/io";
-import { useApp } from "../Context/Context";
-import MobileTestimonal from "../common-components/MobileTestimonal";
 import { IoMdCheckmarkCircleOutline } from "react-icons/io";
 import beforeImage from "/images/home/before-img-one.png";
 import afterImage from "/images/home/after-img-one.png";
@@ -53,14 +34,6 @@ function Landing() {
 
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
-  const {
-    isMobile,
-    setTotalArea,
-    setCurrentLayoutID,
-    setCurrentLayoutData,
-    isAuthenticated,
-  } = useApp();
-
   // Change background image every 5 seconds
   useEffect(() => {
     const interval = setInterval(() => {
@@ -76,31 +49,31 @@ function Landing() {
     setExpandedIndex((prevIndex) => (prevIndex === index ? null : index));
   };
 
-  const settings = {
-    dots: false,
-    infinite: true,
-    speed: 1000,
-    slidesToShow: 4,
-    slidesToScroll: 1,
-    autoplay: true,
-    autoplaySpeed: 2000,
-    pauseOnHover: true,
-    arrows: false,
-    responsive: [
-      {
-        breakpoint: 1800, // Tailwind's custom 3xl breakpoint
-        settings: {
-          slidesToShow: 5, // Show 5 slides only on 3xl screens
-        },
-      },
-      {
-        breakpoint: 768,
-        settings: {
-          slidesToShow: 2, // Show 3 slides only on md screens
-        },
-      },
-    ],
-  };
+  // const settings = {
+  //   dots: false,
+  //   infinite: true,
+  //   speed: 1000,
+  //   slidesToShow: 4,
+  //   slidesToScroll: 1,
+  //   autoplay: true,
+  //   autoplaySpeed: 2000,
+  //   pauseOnHover: true,
+  //   arrows: false,
+  //   responsive: [
+  //     {
+  //       breakpoint: 1800, // Tailwind's custom 3xl breakpoint
+  //       settings: {
+  //         slidesToShow: 5, // Show 5 slides only on 3xl screens
+  //       },
+  //     },
+  //     {
+  //       breakpoint: 768,
+  //       settings: {
+  //         slidesToShow: 2, // Show 3 slides only on md screens
+  //       },
+  //     },
+  //   ],
+  // };
 
   const latestArticles = [
     {

@@ -1,6 +1,5 @@
 import { useState, useRef, useEffect } from "react";
 import { VscEye } from "react-icons/vsc";
-import { MdOutlineDelete } from "react-icons/md";
 import { MdOutlineCancel } from "react-icons/md";
 import { CiMenuKebab } from "react-icons/ci";
 import Spinner from "../../common-components/Spinner";
@@ -14,12 +13,12 @@ import { ChevronDownIcon, FunnelIcon } from "@heroicons/react/24/outline";
 function VendorProductlist({
   setVendorproductlist,
   selectedVendor,
-  updateStatus,
+  // updateStatus,
   deleteWarning,
   setDeleteWarning,
   rejectReason,
   setRejectReason,
-  handleConfirmReject,
+  // handleConfirmReject,
 }) {
   const [toggle, setToggle] = useState(true);
   const [isloading, setIsloading] = useState(false);

@@ -1,4 +1,3 @@
-import React from "react";
 import LayoutCard from "../components/LayoutCard"; // Ensure the correct path to LayoutCard.js
 
 const meetingRoomData = [
@@ -144,11 +143,11 @@ const MeetingRooms = ({
   boardRoomSize,
   setBoardRoomSize,
   hrRoomSeatCount,
-  setHrRoomSeatCount,
+  // setHrRoomSeatCount,
   salesSeatCount,
-  setSalesSeatCount,
+  // setSalesSeatCount,
   financeRoomSeatCount,
-  setFinanceRoomSeatCount,
+  // setFinanceRoomSeatCount,
   boardRoomConfig,
   conferenceRoomConfig,
 }) => {

@@ -1,13 +1,8 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { AiFillHeart } from "react-icons/ai";
 import { GoHeart } from "react-icons/go";
-import { IoCaretDown, IoClose } from "react-icons/io5";
-import {
-  MdArrowLeft,
-  MdOutlineCancel,
-  MdOutlineKeyboardArrowLeft,
-  MdOutlineKeyboardArrowRight,
-} from "react-icons/md";
+import { IoClose } from "react-icons/io5";
+import { MdOutlineCancel, MdOutlineKeyboardArrowRight } from "react-icons/md";
 import { useNavigate, useLocation } from "react-router-dom";
 import Header from "./Header";
 import { supabase } from "../../services/supabase";
@@ -18,10 +13,8 @@ import CheckoutStepper from "../../common-components/CheckoutStepper";
 import { toast } from "react-toastify";
 import { ToastContainer } from "react-toastify";
 import { showRemoveFromCartToast } from "../../utils/AddToCartToast";
-
 import { MdOutlineDelete } from "react-icons/md";
 import "animate.css";
-
 import { isCouponValid } from "../../utils/ResuableFunctions";
 import MobileHeader from "../../common-components/MobileHeader";
 
@@ -65,13 +58,7 @@ function Cart() {
   const location = useLocation();
 
   // get the cart items from the cart table
-  const {
-    cartItems,
-    localcartItems,
-    isAuthenticated,
-    accountHolder,
-    getCartItems,
-  } = useApp();
+  const { cartItems, localcartItems, isAuthenticated, getCartItems } = useApp();
 
   // created a reduce function to calculate the total price
   // let totalPrice = cartItems?.reduce(

@@ -1,31 +1,30 @@
-import React from "react";
 import "../styles/NumberAnimation.css";
 
 const NumberAnimation = () => {
   return (
     <div>
-      <div class="circle">
+      <div className="circle">
         <div></div>
         <div></div>
         <div></div>
         <div></div>
         <div></div>
       </div>
-      <div class="big">
+      <div className="big">
         <div></div>
         <div></div>
         <div></div>
         <div></div>
         <div></div>
       </div>
-      <div class="tri"></div>
-      <div class="squ">
+      <div className="tri"></div>
+      <div className="squ">
         <div></div>
         <div></div>
         <div></div>
         <div></div>
       </div>
-      <div class="end">
+      <div className="end">
         <div>6</div>
         <div>0</div>
         <div>3</div>

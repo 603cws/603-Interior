@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useNavigate, useLocation } from "react-router-dom"; //useHref
 import { supabase } from "../../services/supabase"; // Import Supabase client
 import checkIfEmailExists from "../utils/checkIfEmailExists";

@@ -1,5 +1,3 @@
-import React from "react";
-
 function ProtectedRoute() {
   return (
     <div className="fixed inset-0 flex justify-center items-center">

@@ -1,4 +1,3 @@
-import LandingNavbar from "../common-components/LandingNavbar";
 import Footer from "../common-components/Footer";
 import { Link } from "react-router-dom";
 import { FaLocationDot } from "react-icons/fa6";

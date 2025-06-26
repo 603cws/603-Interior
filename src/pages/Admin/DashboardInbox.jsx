@@ -1,5 +1,3 @@
-import React from "react";
-
 function DashboardInbox({ viewDetails, products }) {
   const filteredpending = products.filter(
     (product) => product.status === "pending"

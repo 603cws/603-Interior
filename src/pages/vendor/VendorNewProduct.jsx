@@ -189,10 +189,9 @@ function VendorNewProduct({ setAddNewProduct, setProductlist }) {
 
       if (variant.title && variant.price && variant.mainImage) {
         // Upload the main image to Supabase storage
-        const { data: mainImageUpload, error: mainImageError } =
-          await supabase.storage
-            .from("addon")
-            .upload(`${variant.title}-main-${productId}`, variant.mainImage);
+        const { data: mainImageUpload } = await supabase.storage
+          .from("addon")
+          .upload(`${variant.title}-main-${productId}`, variant.mainImage);
 
         // if (mainImageError) {
         //   console.error(mainImageError);

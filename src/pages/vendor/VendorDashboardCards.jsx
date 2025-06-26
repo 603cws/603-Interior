@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { supabase } from "../../services/supabase";
 import Spinner from "../../common-components/Spinner";
 import { useApp } from "../../Context/Context";
@@ -49,7 +49,6 @@ function VendorDashboardCards({ handleproduct }) {
       console.log("Addons: ", data);
     } catch (error) {
       console.log("Error fetching addons:", error);
-    } finally {
     }
   };
 

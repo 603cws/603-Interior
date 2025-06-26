@@ -1,9 +1,9 @@
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import ErrorModal from "../../common-components/ErrorModal";
 import { layoutRoomconstant } from "../utils/Constants";
 
 const AreaCounter = ({
-  name,
+  // name,
   value,
   onChange,
   min2,

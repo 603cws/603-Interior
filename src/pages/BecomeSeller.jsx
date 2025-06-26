@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { LiaLongArrowAltRightSolid } from "react-icons/lia";
 import Footer from "../common-components/Footer";
 import LandingNavbar from "../common-components/LandingNavbar";

@@ -1,4 +1,3 @@
-import React from "react";
 import { MdClose } from "react-icons/md";
 import { PiWarningCircleFill } from "react-icons/pi";
 

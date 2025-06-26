@@ -1,4 +1,3 @@
-import React from "react";
 import { useApp } from "../../Context/Context";
 
 function UnusedAreaWarning({ onConfirm, onCancel, unusedArea, isSubmitting }) {
