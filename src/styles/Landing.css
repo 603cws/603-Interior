@@ -157,3 +157,41 @@ slick-current {
     max-width: 1800px;
   }
 }
+@keyframes revealScale {
+  from {
+    clip-path: inset(0 50% 0 50%);
+    opacity: 0;
+  }
+  to {
+    clip-path: inset(0 0% 0 0%);
+    opacity: 1;
+  }
+}
+
+.image-reveal {
+  animation: revealScale linear both;
+  animation-timeline: view(); /* or scroll() depending on effect */
+  animation-range: 0% 60%;
+}
+
+.tab-image {
+  position: relative;
+  overflow: hidden;
+}
+
+.tab-image img {
+  mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black 20%,
+    black 80%,
+    transparent 100%
+  );
+  mask-size: 200% 100%;
+  mask-position: left;
+  transition: mask-position 0.5s ease-out;
+}
+
+.tab-content-item.active .tab-image img {
+  mask-position: right;
+}

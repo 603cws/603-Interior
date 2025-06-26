@@ -27,6 +27,7 @@ import {
 } from "@heroicons/react/24/outline";
 import { IoCloseCircleOutline, IoCloseOutline } from "react-icons/io5";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
+import DetailedReview from "./DetailedReview";
 
 // const reviews = [
 //   {
@@ -60,7 +61,6 @@ function ProductView() {
   const [isReview, setIsReview] = useState(false);
   const [productReviews, setProductReviews] = useState([]);
   const [selectedReview, setSelectedReview] = useState(null);
-  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [isCarted, setIsCarted] = useState();
   const [expandedStates, setExpandedStates] = useState([]);
   const [clampedStates, setClampedStates] = useState([]);
@@ -919,74 +919,10 @@ function ProductView() {
                       </div>
                     </div>
                   ))}
-                  {selectedReview && (
-                    <div className="fixed inset-0 z-30 bg-black/20 flex justify-center items-center">
-                      <div className="h-3/4 max-w-screen-sm w-full flex bg-white relative p-4 gap-5">
-                        <div className="absolute -top-1 -right-10">
-                          <button onClick={() => setSelectedReview(null)}>
-                            <IoCloseOutline size={35} />
-                          </button>
-                        </div>
-                        <div className="flex-1">
-                          <div className="flex justify-center items-center">
-                            <img
-                              src={
-                                supabase.storage
-                                  .from("review-images")
-                                  .getPublicUrl(
-                                    JSON.parse(selectedReview.images)[
-                                      selectedImageIndex
-                                    ]
-                                  ).data.publicUrl
-                              }
-                              alt="full view"
-                              onClick={(e) => e.stopPropagation()}
-                              className=" object-contain max-w-sm w-full "
-                            />
-                          </div>
-                          <div className=" flex gap-2 mt-4 px-4">
-                            {JSON.parse(selectedReview.images).map(
-                              (path, index) => {
-                                const url = supabase.storage
-                                  .from("review-images")
-                                  .getPublicUrl(path).data.publicUrl;
-
-                                return (
-                                  <img
-                                    key={index}
-                                    src={url}
-                                    alt={`preview-${index}`}
-                                    onClick={() => setSelectedImageIndex(index)}
-                                    className="w-16 h-16 object-cover rounded border cursor-pointer"
-                                  />
-                                );
-                              }
-                            )}
-                          </div>
-                        </div>
-                        <div className="flex-1 overflow-y-auto">
-                          <div className="flex gap-5">
-                            <p className="text-xs px-2 py-1 rounded flex items-center gap-1 border border-[#38938E] w-10">
-                              {selectedReview.stars}{" "}
-                              <span className="text-[#38938E]">★</span>
-                            </p>
-                            <p className="font-semibold text-sm">
-                              {selectedReview.title}
-                            </p>
-                          </div>
-                          <p className="text-sm text-[#777] my-3">
-                            {selectedReview.description}
-                          </p>
-                          <div className="flex">
-                            <p className="text-sm text-[#777]">
-                              {selectedReview.created_at.split("T")[0]}{" "}
-                              {selectedReview.profiles?.company_name}
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  )}
+                  <DetailedReview
+                    selectedReview={selectedReview}
+                    onClose={() => setSelectedReview(null)}
+                  />
                 </div>
 
                 {/* Reviews List */}

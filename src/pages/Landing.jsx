@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import LandingNavbar from "../common-components/LandingNavbar";
 
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -26,6 +26,7 @@ import { FaRegUser } from "react-icons/fa";
 import { FiMessageSquare } from "react-icons/fi";
 import { ReadMoreBtn } from "../common-components/ReadMoreBtn";
 import { useApp } from "../Context/Context";
+import gsap from "gsap";
 
 function Landing() {
   const imageContainerRef = useRef(null);
@@ -146,6 +147,33 @@ function Landing() {
     },
   ];
 
+  const featureCards = [
+    {
+      icon: "images/icons/architecture-icon.svg",
+      title: "architecture",
+      description:
+        "We develop the full cycle of project documentation & full details. Our clients satisfaction",
+    },
+    {
+      icon: "images/icons/interior.svg",
+      title: "Interior Work",
+      description:
+        "We will take care of the interior designs, build & management of all kind of living projects",
+    },
+    {
+      icon: "images/icons/retail.svg",
+      title: "Retail Designs",
+      description:
+        "We can help you with the retail interior design and third party management to create best",
+    },
+    {
+      icon: "images/icons/2d-3d_layout.svg",
+      title: "2D/3D Layouts",
+      description:
+        "We offer professional online 2D and 3D interior designing which will help you visualize",
+    },
+  ];
+
   const handleImageDrag = (e) => {
     const bounds = imageContainerRef.current.getBoundingClientRect();
     const x = e.clientX || e.touches?.[0]?.clientX;
@@ -169,6 +197,19 @@ function Landing() {
     setLoading(true);
     navigate("/products");
   };
+  useEffect(() => {
+    gsap.fromTo(
+      "[id^=bg-piece-]",
+      { x: "100vw", opacity: 0 },
+      {
+        x: "0%",
+        opacity: 1,
+        duration: 1.2,
+        stagger: 0.12,
+        ease: "power4.out",
+      }
+    );
+  }, []);
 
   function TitleHeader({ title, doubleside = false }) {
     return (
@@ -187,53 +228,56 @@ function Landing() {
   return (
     <>
       {/* header section */}
-      <section
-        className="relative flex flex-col h-screen bg-cover bg-center bg-[url('/images/hero-interior.png')]"
-        // className="relative flex flex-col h-screen bg-cover bg-center bg-[url('/images/home/Home_Header.png')]"
-        style={{ backgroundAttachment: "fixed" }}
-      >
-        <div className="absolute inset-0"></div>
-        {/* <div className="absolute inset-0 bg-black/50"></div> */}
-        <div className="relative z-10 ">
-          <LandingNavbar />
-          <div className="flex justify-center items-center h-svh tranform translate-y-[8%]">
-            <div className="flex-1 flex flex-col gap-10 lg:gap-0 justify-center items-center text-white max-h-fit max-w-fit mx-auto lg:p-5 rounded-xl">
-              <div className="lg:flex max-w-6xl px-5  items-stretch bg-[#000]/25 backdrop-blur-sm border border-white/20 shadow-lg rounded-xl">
-                <div className="lg:w-1/2 flex flex-col justify-center items-center gap-6 py-5">
-                  <h3 className="uppercase lg:self-end font-lora font-bold text-lg">
-                    A Trendy Luxury
-                  </h3>
-                  <p className="font-Poppins text-right hidden lg:block text-white leading-7">
-                    Interior design consultancy firm that brings sensitivity to
-                    the design top offices around the world. We stand for
-                    quality, safety and credibility.
-                  </p>
-                </div>
+      <section className="relative flex flex-col h-screen overflow-hidden">
+        {[...Array(5)].map((_, i) => (
+          <div
+            key={i}
+            className="absolute top-0 h-full"
+            style={{
+              width: "20%",
+              left: `${i * 20}%`,
+              backgroundImage: "url('/images/hero-interior.png')",
+              backgroundSize: "500% 100%",
+              backgroundPosition: `-${i * 100}% 0`,
+              zIndex: 5,
+            }}
+            id={`bg-piece-${i}`}
+          ></div>
+        ))}
 
-                <div className="w-[1px] mx-10 bg-white"></div>
+        <section
+          className="relative flex flex-col z-10"
+          // className="relative flex flex-col h-screen bg-cover bg-center bg-[url('/images/home/Home_Header.png')]"
+          style={{ backgroundAttachment: "fixed" }}
+        >
+          <div className="absolute inset-0"></div>
+          {/* <div className="absolute inset-0 bg-black/50"></div> */}
+          <div className="relative z-10 ">
+            <LandingNavbar />
+            <div className="flex justify-center items-center h-svh tranform translate-y-[8%]">
+              <div className="flex-1 flex flex-col gap-10 lg:gap-0 justify-center items-center text-white max-h-fit max-w-fit mx-auto lg:p-5 rounded-xl">
+                <div className="lg:flex max-w-6xl px-5  items-stretch bg-[#000]/25 backdrop-blur-sm border border-white/20 shadow-lg rounded-xl">
+                  <div className="lg:w-1/2 flex flex-col justify-center items-center gap-6 py-5">
+                    <h3 className="uppercase lg:self-end font-lora font-bold text-lg">
+                      A Trendy Luxury
+                    </h3>
+                    <p className="font-Poppins text-right hidden lg:block text-white leading-7">
+                      Interior design consultancy firm that brings sensitivity
+                      to the design top offices around the world. We stand for
+                      quality, safety and credibility.
+                    </p>
+                  </div>
 
-                <div className="lg:w-1/2 flex flex-col space-y-10 py-5">
-                  <h2 className="text-4xl lg:text-5xl font-bold font-lora text-white">
-                    Make Your Space For Better Experience
-                  </h2>
+                  <div className="w-[1px] mx-10 bg-white"></div>
 
-                  <div className="flex flex-col gap-8 lg:gap-0 lg:flex-row justify-between">
-                    <button
-                      onClick={handleClick}
-                      disabled={loading}
-                      className={`capitalize bg-[#FFD074] hover:bg-[#fbc964] text-base font-Poppins font-semibold text-black h-10 w-52 rounded-3xl self-center lg:self-start flex items-center justify-center gap-2 ${
-                        loading ? "opacity-70 cursor-not-allowed" : ""
-                      }`}
-                    >
-                      {loading ? (
-                        <span className="h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
-                      ) : (
-                        "make your space"
-                      )}
-                    </button>
-                    {import.meta.env.MODE === "development" && (
+                  <div className="lg:w-1/2 flex flex-col space-y-10 py-5">
+                    <h2 className="text-4xl lg:text-5xl font-bold font-lora text-white">
+                      Make Your Space For Better Experience
+                    </h2>
+
+                    <div className="flex flex-col gap-8 lg:gap-0 lg:flex-row justify-between">
                       <button
-                        onClick={handleProductClick}
+                        onClick={handleClick}
                         disabled={loading}
                         className={`capitalize bg-[#FFD074] hover:bg-[#fbc964] text-base font-Poppins font-semibold text-black h-10 w-52 rounded-3xl self-center lg:self-start flex items-center justify-center gap-2 ${
                           loading ? "opacity-70 cursor-not-allowed" : ""
@@ -242,12 +286,26 @@ function Landing() {
                         {loading ? (
                           <span className="h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
                         ) : (
-                          "shop by products"
+                          "make your space"
                         )}
                       </button>
-                    )}
-                  </div>
-                  {/* <button
+                      {import.meta.env.MODE === "development" && (
+                        <button
+                          onClick={handleProductClick}
+                          disabled={loading}
+                          className={`capitalize bg-[#FFD074] hover:bg-[#fbc964] text-base font-Poppins font-semibold text-black h-10 w-52 rounded-3xl self-center lg:self-start flex items-center justify-center gap-2 ${
+                            loading ? "opacity-70 cursor-not-allowed" : ""
+                          }`}
+                        >
+                          {loading ? (
+                            <span className="h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+                          ) : (
+                            "shop by products"
+                          )}
+                        </button>
+                      )}
+                    </div>
+                    {/* <button
                     onClick={handleClick}
                     disabled={loading}
                     className={`capitalize bg-[#FFD074] hover:bg-[#fbc964] text-base font-Poppins font-semibold text-black h-10 w-52 rounded-3xl self-center lg:self-start flex items-center justify-center gap-2 ${
@@ -260,18 +318,23 @@ function Landing() {
                       "discover what we do"
                     )}
                   </button> */}
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
+        </section>
       </section>
 
       {/* section 2 */}
       <section className="about-us px-3 md:container lg:max-w-7xl mx-auto pt-10 ">
         <div className="lg:flex gap-12">
           <div className="pb-6 lg:pb-0">
-            <img src="/images/home/section_1_main.png" alt="" />
+            <img
+              src="/images/home/section_1_main.png"
+              alt=""
+              className="image-reveal w-full object-cover"
+            />
           </div>
           <div className="space-y-2 flex-1">
             <TitleHeader title={"about interior"} />
@@ -313,7 +376,10 @@ function Landing() {
                 {tabData
                   .filter((tab) => tab.key === activeTab)
                   .map((tab) => (
-                    <div key={tab.key} className="flex space-x-5 mt-4">
+                    <div
+                      key={tab.key}
+                      className="flex space-x-5 mt-4 animate-fade-in"
+                    >
                       <img
                         key="img"
                         src={tab.img}
@@ -491,50 +557,34 @@ function Landing() {
           </div>
 
           {/* Original static grid for large screens */}
-          <div className="hidden lg:grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 max-w-fit space-x-5 bg-white shadow-lg">
-            <div className="font-lato space-y-7 px-3 py-5 max-w-xs">
-              <img src="images/icons/architecture-icon.svg" alt="" />
-              <h4 className="font-bold text-xl capitalize">architecture</h4>
-              <p>
-                We develop the full cycle of project documentation & full
-                details. Our clients satisfaction
-              </p>
-
-              <ReadMoreBtn />
-            </div>
-            <div className="font-lato px-3 py-5 max-w-xs bg-[url('/images/home/interior-work-bg.svg')] text-white relative">
-              <div className="absolute inset-0 bg-black/50"></div>
-              <div className="relative space-y-7">
-                <img src="images/icons/interior.svg" alt="" />
-                <h4 className="font-bold text-xl capitalize">Interior Work</h4>
-                <p>
-                  We will take care of the interior designs, build & management
-                  of all kind of living projects
-                </p>
-
-                <ReadMoreBtn borderColor="#ffffff" />
+          <div className="hidden lg:grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 bg-white shadow-lg">
+            {featureCards.map((card, index) => (
+              <div
+                key={index}
+                className="group relative overflow-hidden bg-white font-lato px-4 py-10 max-w-xs w-full h-full transition-all duration-500"
+                style={{
+                  "--borderColor": "#000000",
+                }}
+                onMouseEnter={(e) =>
+                  e.currentTarget.style.setProperty("--borderColor", "#ffffff")
+                }
+                onMouseLeave={(e) =>
+                  e.currentTarget.style.setProperty("--borderColor", "#000000")
+                }
+              >
+                <div className="absolute inset-0 z-0 before:absolute before:inset-0 before:bg-[url('/images/home/interior-work-bg.svg')] before:bg-cover before:bg-center before:translate-y-full group-hover:before:translate-y-0 before:transition-transform before:duration-700 before:ease-in-out">
+                  <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                </div>
+                <div className="relative z-10 space-y-5 group-hover:text-white transition-colors duration-300 flex flex-col h justify-between h-full">
+                  <img src={card.icon} alt={card.title} className="h-16 w-16" />
+                  <h4 className="font-bold text-xl capitalize">{card.title}</h4>
+                  <p>{card.description}</p>
+                  <div className="">
+                    <ReadMoreBtn borderColor="var(--borderColor)" />
+                  </div>
+                </div>
               </div>
-            </div>
-            <div className="font-lato space-y-7 px-3 py-5 max-w-xs">
-              <img src="images/icons/retail.svg" alt="" />
-              <h4 className="font-bold text-xl capitalize">Retail Designs</h4>
-              <p>
-                We can help you with the retail interior design and third party
-                management to create best
-              </p>
-
-              <ReadMoreBtn />
-            </div>
-            <div className="font-lato space-y-7 px-3 py-5 max-w-xs">
-              <img src="images/icons/2d-3d_layout.svg" alt="" />
-              <h4 className="font-bold text-xl capitalize">2D/3D Layouts</h4>
-              <p>
-                We offer professional online 2D and 3D interior designing which
-                will help you visualize
-              </p>
-
-              <ReadMoreBtn />
-            </div>
+            ))}
           </div>
         </div>
       </section>
