@@ -23,6 +23,7 @@ import { MdOutlineDelete } from "react-icons/md";
 import "animate.css";
 
 import { isCouponValid } from "../../utils/ResuableFunctions";
+import MobileHeader from "../../common-components/MobileHeader";
 
 function EmptyCart() {
   const navigate = useNavigate();
@@ -325,14 +326,7 @@ function Cart() {
         <Header />
       </div>
 
-      <div className="flex justify-start items-center lg:hidden border-b border-b-[#ccc] mb-2 py-3">
-        <button onClick={() => navigate(-1)}>
-          <MdOutlineKeyboardArrowLeft size={25} />
-        </button>
-        <h2 className="font-Poppins font-medium text-sm leading-[22.5px] text-[#304778]">
-          Cart
-        </h2>
-      </div>
+      <MobileHeader title={"cart"} />
       <div>
         <div className="lg:container lg:mx-auto px-2 md:px-4 lg:px-12">
           <div className="hidden lg:block">
@@ -521,7 +515,7 @@ function Cart() {
 
                   {ismobileCouponFormOpen && (
                     <div className="inset-0 fixed top-0 z-10 bg-[#000]/20 sm:flex sm:justify-center sm:items-center">
-                      <div className=" bg-[#fff] p-2 h-[100vh] sm:h-[90vh] flex flex-col font-Poppins">
+                      <div className=" bg-[#fff] p-2 h-dvh sm:h-[90vh] flex flex-col font-Poppins">
                         <div className="flex justify-between items-center py-3 font-medium">
                           <h2 className="text-[#171717]">Coupon</h2>
                           <button
@@ -537,7 +531,7 @@ function Cart() {
                             className=""
                           >
                             <div className="w-full max-w-md">
-                              <div className="flex items-center border border-gray-300 rounded-md overflow-hidden">
+                              <div className="flex items-center border border-gray-300 rounded-md ">
                                 <input
                                   type="text"
                                   placeholder="Enter coupon code"
@@ -546,11 +540,11 @@ function Cart() {
                                     setCouponname(e.target.value)
                                   }
                                   required
-                                  className="flex-grow px-4 py-3 text-sm text-gray-700 placeholder-gray-400 focus:outline-none"
+                                  className="w-3/4 px-4 py-3 text-sm text-gray-700 placeholder-gray-400 focus:outline-none"
                                 />
                                 <button
                                   type="submit"
-                                  className="px-5 py-3 text-[#304778] text-sm font-medium leading-7 tracking-wider uppercase"
+                                  className="w-1/4 px-5 py-3 text-[#304778] text-sm font-medium leading-7 tracking-wider uppercase"
                                 >
                                   Check
                                 </button>
@@ -571,7 +565,7 @@ function Cart() {
                           ))}
                         </div>
 
-                        <div className="flex justify-between items-center font-Poppins gap-2">
+                        <div className="flex justify-between items-center font-Poppins gap-2 ">
                           <div className="space-y-3">
                             <h2 className="text-sm leading-4 uppercase text-nowrap">
                               Maximum Saving :
@@ -822,7 +816,7 @@ function CartCard({ cartitem }) {
         <img
           src={signedUrl}
           alt=""
-         className="w-24 h-24 md:h-32 md:w-28 lg:h-40 lg:w-36 object-contain "
+          className="w-24 h-24 md:h-32 md:w-28 lg:h-40 lg:w-36 object-contain "
           onClick={() => navigate(`/productview/${cartitem.productId?.id}`)}
           onError={refreshSignedUrl}
         />

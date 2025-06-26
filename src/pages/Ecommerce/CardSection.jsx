@@ -3,14 +3,15 @@ import Card from "./Card";
 
 export default function CardSection({ title }) {
   return (
-    <div className="bg-[#F9FFF7] rounded-md p-4">
+    <div className="lg:bg-[#F9FFF7] rounded-md lg:p-4">
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-2xl font-lora">{title}</h2>
+        <h2 className="text-base lg:text-2xl font-lora">{title}</h2>
         <button className="w-5 h-5 flex items-center justify-center border-2 border-[#304778] bg-[#304778] hover:bg-[#566587] text-white text-xl rounded-full">
           ›
         </button>
       </div>
-      <div className="flex flex-wrap gap-4">
+      {/* <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-2  gap-4"> */}
+      <div className="flex flex-wrap md:flex-nowrap lg:flex-wrap gap-4">
         <Card
           image="/images/cabin chair.png"
           title="Chairs"

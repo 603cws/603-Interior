@@ -1,5 +1,10 @@
 import { useEffect, useState, useRef } from "react";
-import { MdOutlineCancel, MdOutlineKeyboardArrowRight } from "react-icons/md"; //MdOutlineKeyboardArrowLeft
+import {
+  MdKeyboardArrowLeft,
+  MdKeyboardArrowRight,
+  MdOutlineCancel,
+  MdOutlineKeyboardArrowRight,
+} from "react-icons/md"; //MdOutlineKeyboardArrowLeft
 import { AiFillStar } from "react-icons/ai";
 import { useParams } from "react-router-dom";
 import { supabase } from "../../services/supabase";
@@ -25,7 +30,6 @@ import {
   HandThumbUpIcon as HandThumbUpOutline,
   HandThumbDownIcon as HandThumbDownOutline,
 } from "@heroicons/react/24/outline";
-import { IoCloseCircleOutline, IoCloseOutline } from "react-icons/io5";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import DetailedReview from "./DetailedReview";
 
@@ -469,7 +473,7 @@ function ProductView() {
     spaceBetween: 30,
     breakpoints: {
       0: { slidesPerView: 2.02, grid: { rows: 1 }, spaceBetween: 10 },
-      768: { slidesPerView: 3, grid: { rows: 1 }, spaceBetween: 24 },
+      768: { slidesPerView: 4, grid: { rows: 1 }, spaceBetween: 24 },
       1024: { slidesPerView: 5, grid: { rows: 1 }, spaceBetween: 30 },
     },
   };
@@ -478,8 +482,8 @@ function ProductView() {
     grid: { rows: 2, fill: "row" },
     spaceBetween: 30,
     breakpoints: {
-      0: { slidesPerView: 2.02, grid: { rows: 2 }, spaceBetween: 10 },
-      768: { slidesPerView: 3, grid: { rows: 2 }, spaceBetween: 24 },
+      0: { slidesPerView: 2.02, grid: { rows: 1 }, spaceBetween: 10 },
+      768: { slidesPerView: 4, grid: { rows: 1 }, spaceBetween: 24 },
       1024: { slidesPerView: 5, grid: { rows: 2 }, spaceBetween: 30 },
     },
   };
@@ -523,9 +527,9 @@ function ProductView() {
       {isloading ? (
         <SpinnerFullPage />
       ) : (
-        <div className="md:container mx-auto px-4 md:px-12">
+        <div className="lg:container mx-auto px-3 lg:px-12">
           {/* breadcumbs */}
-          <div className="mt-10">
+          <div className="mt-6 lg:mt-10">
             <div className="md:flex mx-10 items-center text-[#334A78] text-sm mt-4 mb-4 md:mb-0 hidden">
               <button onClick={() => navigate("/products")}>Home</button>
               <MdOutlineKeyboardArrowRight
@@ -552,7 +556,7 @@ function ProductView() {
                     />
                   </div>
                   {additionalImagesArray.length > 0 ? (
-                    <div className="flex flex-wrap items-center gap-3 mx-6 ml-16 mt-3">
+                    <div className="flex lg:flex-wrap items-center gap-3 mx-6 lg:ml-16 mt-3">
                       {additionalImagesArray.map((img, idx) => (
                         <img
                           key={idx}
@@ -568,7 +572,9 @@ function ProductView() {
                     </div>
                   ) : (
                     <div>
-                      <p>no additional images </p>
+                      <p className="text-sm capitalize my-2 ">
+                        no additional images{" "}
+                      </p>
                     </div>
                   )}
                 </div>
@@ -579,7 +585,7 @@ function ProductView() {
               {/* product info */}
               <div className="flex flex-col justify-center">
                 <div className="border-b pb-4 md:border-none md:pb-0">
-                  <h2 className="font-semibold text-3xl text-[#111]">
+                  <h2 className="font-semibold text-lg leading-[22.4px] lg:text-3xl text-[#111]">
                     {product?.title || "product title"}
                   </h2>
                   <p className="text-[#A5A6AD] text-base leading-[38.4px]">
@@ -589,33 +595,35 @@ function ProductView() {
                   <div className="border border-[#ccc] p-1 w-32">
                     <p className="flex gap-1">
                       <span className="text-[#000] font-medium text-[10px]">
-                        2.7
+                        {averageRating.toFixed(1) || 0}
                       </span>{" "}
                       <AiFillStar color="#F5B92B" size={14} />
                       <span className="border-l border-l-[#CCCCCC] pl-4 text-[#666] text-[10px]">
-                        78 Ratings
+                        {totalRatings || 0} Ratings
                       </span>
                     </p>
                   </div>
                 </div>
 
                 {/* product price section */}
-                <div className="my-3">
+                <div className="my-2 lg:my-3 font-Poppins">
                   <div className="flex items-center gap-2">
-                    <p className="text-xl font-bold text-[#334A78] leading-[38.4px]">
+                    <p className="text-sm lg:text-xl font-bold text-[#334A78] leading-[38.4px]">
                       Rs {product?.price || "Rs 3,0000"}
                     </p>
-                    <p className="text-lg text-[#898994] leading-[38.4px]">
+                    <p className="text-sm lg:text-xl text-[#898994] leading-[38.4px]">
                       MRP <span className="line-through">Rs5678</span>
                     </p>
-                    <p className="text-[#F69E60]">(Rs.2678 OFF)</p>
+                    <p className="text-sm lg:text-base text-[#F69E60]">
+                      (Rs.2678 OFF)
+                    </p>
                   </div>
                   <p className="text-xs text-[#3AA495]">
                     inclusive of all taxes
                   </p>
                 </div>
 
-                <div className="my-3">
+                <div className="lg:my-3 space-y-1">
                   <p className="text-[#334A78] text-sm ">Colors</p>
                   <div className="flex gap-3">
                     <div className="px-5 py-2 bg-[#000]/5 inline-block text-sm text-[#334A78] uppercase text-center border border-[#334A78]">
@@ -628,7 +636,7 @@ function ProductView() {
                 </div>
 
                 {/* qunatiy counter */}
-                <div className="border-b pb-4 md:border-none md:pb-0">
+                <div className="border-b pb-2 md:border-none md:pb-0 mt-4 lg:mt-0">
                   <h2 className="font-semibold text-[#334A78] text-sm capitalize">
                     Quantity
                   </h2>
@@ -658,7 +666,7 @@ function ProductView() {
                 </div>
 
                 {/* add to card and buy now */}
-                <div className="my-4 md:flex gap-8 hidden">
+                <div className="my-4 lg:flex gap-8 hidden">
                   <button
                     onClick={() => handleAddToCart(product)}
                     className="text-[#212B36] uppercase bg-[#FFFFFF] border border-[#212B36] w-52 px-10 py-4 rounded-sm "
@@ -673,7 +681,7 @@ function ProductView() {
 
               <div className="my-4">
                 {/* Desktop View (Always Expanded) */}
-                <div className="hidden md:block space-y-3 xl:w-2/3">
+                <div className="hidden lg:block space-y-3 xl:w-2/3">
                   <div className="border-b px-0 py-4 rounded text-sm font-medium bg-white shadow-sm">
                     All Offers & Coupons
                   </div>
@@ -688,9 +696,9 @@ function ProductView() {
                 </div>
 
                 {/* Mobile View (Collapsible) */}
-                <div className="block md:hidden">
+                <div className="block lg:hidden">
                   <div
-                    className="flex justify-between border-b px-0 py-4 rounded cursor-pointer text-sm font-medium bg-white shadow-sm"
+                    className="flex justify-between items-center border-b px-0 py-2 rounded cursor-pointer text-sm font-medium bg-white shadow-sm"
                     onClick={() => setIsExpanded((prev) => !prev)}
                   >
                     <span>All Offers & Coupons</span>
@@ -716,9 +724,11 @@ function ProductView() {
                 </div>
               </div>
 
-              <div className="fixed bottom-0 left-0 w-full bg-white p-4 flex justify-between uppercase items-center border-t md:hidden z-50">
+              <div className="fixed bottom-0 left-0 w-full bg-white p-5 flex justify-between uppercase items-center border-t lg:hidden z-50">
                 <button
-                  onClick={() => handleAddToCart(product)}
+                  onClick={() =>
+                    isCarted ? navigate("/cart") : handleAddToCart(product)
+                  }
                   className="flex-1 border border-[#213626] font-Poppins text-[#212B36] uppercase py-4 mr-2 rounded text-xs tracking-widest"
                 >
                   {isCarted ? "Go to cart" : "Add to cart"}
@@ -731,7 +741,7 @@ function ProductView() {
               {/* product description */}
               <div className="mt-2 md:mt-5 text-[#334A78] font-Poppins xl:w-2/3 ">
                 {/* Desktop View - Always Expanded */}
-                <div className="hidden md:block">
+                <div className="hidden lg:block">
                   <h3 className="text-sm uppercase font-bold border-b-2 py-4">
                     Product Details
                   </h3>
@@ -769,7 +779,7 @@ function ProductView() {
                 </div>
 
                 {/* Mobile View - Collapsible */}
-                <div className="block md:hidden">
+                <div className="block lg:hidden">
                   {/* Toggle Header */}
                   <div
                     className="flex justify-between items-center border-b-2 py-2 cursor-pointer"
@@ -826,7 +836,7 @@ function ProductView() {
           </div>
 
           {/* cusstomer review */}
-          <div className="border-2 border-[#334A78]/20 p-4 my-10 font-Poppins">
+          <div className="border-2 border-[#334A78]/20 p-4 my-6 lg:my-10 font-Poppins">
             <div
               className={`flex justify-between items-center ${
                 hasReviews ? "p-6" : "p-0"
@@ -1035,10 +1045,29 @@ function ProductView() {
             )}
           </div>
 
-          <div className="my-10 font-Poppins">
-            <h3 className="text-[#171717] text-3xl uppercase mb-3 font-semibold">
+          <div className="my-6 lg:my-10 font-Poppins">
+            {/* <h3 className="text-[#171717] text-sm lg:text-3xl uppercase mb-3 font-semibold">
               Similar Products
-            </h3>
+            </h3> */}
+            <div className="flex justify-between items-center">
+              <h3 className="text-[#171717] text-sm lg:text-3xl  uppercase mb-3 font-semibold">
+                Similar Products
+              </h3>
+              <div className="flex">
+                <button
+                  ref={prevRef}
+                  className="text-[#304778] disabled:text-gray-400"
+                >
+                  <MdKeyboardArrowLeft size={30} />
+                </button>
+                <button
+                  ref={nextRef}
+                  className=" text-[#304778] disabled:text-gray-400"
+                >
+                  <MdKeyboardArrowRight size={30} />
+                </button>
+              </div>
+            </div>
             {similarProducts && (
               <div className="relative">
                 <ReusableSwiper
@@ -1053,23 +1082,39 @@ function ProductView() {
                   paginationRef={paginationRef}
                 />
                 {/* Custom arrows */}
-                <div
+                {/* <div
                   ref={prevRef}
                   className="swiper-button-prev custom-nav absolute top-1/2 -left-10 transform -translate-y-1/2 w-10 h-10 bg-white rounded-full shadow z-50"
                 />
                 <div
                   ref={nextRef}
                   className="swiper-button-next custom-nav absolute top-1/2 -right-10 transform -translate-y-1/2 w-10 h-10 bg-white rounded-full shadow z-50"
-                />
+                /> */}
               </div>
             )}
           </div>
 
           {/* product you may like */}
-          <div className="my-10 font-Poppins">
-            <h3 className="text-[#171717] text-3xl  uppercase mb-3 font-semibold">
-              You May also like
-            </h3>
+          <div className=" mb-20 lg:my-10 font-Poppins">
+            <div className="flex justify-between items-center">
+              <h3 className="text-[#171717] text-sm lg:text-3xl  uppercase mb-3 font-semibold">
+                You May also like
+              </h3>
+              <div className="flex">
+                <button
+                  ref={prevRef2}
+                  className="text-[#304778] disabled:text-gray-400"
+                >
+                  <MdKeyboardArrowLeft size={30} />
+                </button>
+                <button
+                  ref={nextRef2}
+                  className=" text-[#304778] disabled:text-gray-400"
+                >
+                  <MdKeyboardArrowRight size={30} />
+                </button>
+              </div>
+            </div>
             {productsMayLike && (
               <div className="relative">
                 <ReusableSwiper
@@ -1084,19 +1129,19 @@ function ProductView() {
                   paginationRef={paginationRef2}
                 />
                 {/* Custom arrows */}
-                <div
+                {/* <div
                   ref={prevRef2}
                   className="swiper-button-prev custom-nav absolute top-1/2 -left-10 transform -translate-y-1/2 w-10 h-10 bg-white rounded-full shadow z-50"
                 />
                 <div
                   ref={nextRef2}
                   className="swiper-button-next custom-nav absolute top-1/2 -right-10 transform -translate-y-1/2 w-10 h-10 bg-white rounded-full shadow z-50"
-                />
+                /> */}
               </div>
             )}
 
             {compare?.length > 0 && (
-              <div className="fixed bottom-20 right-5 z-50">
+              <div className="hidden lg:block fixed bottom-20 right-5 z-50">
                 <div
                   className="relative"
                   onMouseEnter={() => setShowPreview(true)}
@@ -1171,7 +1216,7 @@ function ProductView() {
       )}
 
       {/* bottom tabs  */}
-      <div className="pb-24 md:pb-0">
+      <div className="hidden lg:block pb-24 md:pb-0">
         <BottomTabs />
       </div>
 
@@ -1235,20 +1280,24 @@ function Card({ product, handleCompareToggle, compare }) {
   }, [isAuthenticated, cartItems, localcartItems, product?.id]);
 
   return (
-    <div className="font-Poppins md:w-[245px] h-[480px] md:h-[400px] border border-[#ccc]">
+    <div className="font-Poppins max-w-xs lg:w-[245px] h-[350px] md:h-[320px]  lg:h-[400px] border border-[#ccc]">
       <div
         onClick={() => naviagte(`/productview/${product.id}`)}
         className="flex justify-center items-center p-2 cursor-pointer"
       >
-        <img src={product.image} alt="chair" className="h-52 object-contain" />
+        <img
+          src={product.image}
+          alt="chair"
+          className="h-44 lg:h-52 object-contain"
+        />
       </div>
-      <div className="bg-[#fff] p-2">
+      <div className="bg-[#fff] p-1.5 lg:p-2">
         <div className="flex ">
           <div className="flex-1 text-sm leading-[22.4px] text-[#111] ">
-            <h4 className="font-medium text-sm leading-[22.4px] ">
+            <h4 className="font-medium line-clamp-2 text-xs lg:text-sm leading-[22.4px] ">
               {product?.title}
             </h4>
-            <div className="flex items-center gap-2">
+            <div className="flex text-xs lg:text-sm items-center gap-2">
               <p className=" ">Rs {product?.price || "Rs 3,0000"}</p>
               <p className="line-through text-[#111] text-opacity-50">
                 Rs 5678
@@ -1270,11 +1319,11 @@ function Card({ product, handleCompareToggle, compare }) {
         </div>
         <button
           onClick={() => handleAddToCart(product)}
-          className="text-[#000] uppercase bg-[#FFFFFF] text-xs border border-[#ccc] px-2 py-2 my-4 rounded-sm "
+          className="text-[#000] uppercase bg-[#FFFFFF] text-xs border border-[#ccc] px-2 py-2 my-2 lg:my-4 rounded-sm "
         >
           {iscarted ? "added to cart" : "add to cart"}
         </button>
-        <div className="flex gap-3">
+        <div className="hidden lg:flex gap-3">
           <input
             type="checkbox"
             name="compare"

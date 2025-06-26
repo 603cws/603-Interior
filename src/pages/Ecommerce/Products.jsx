@@ -18,6 +18,8 @@ import { useHandleAddToCart } from "../../utils/HelperFunction";
 import { toast, Slide } from "react-toastify";
 import { ToastContainer } from "react-toastify";
 import CardSection from "./CardSection";
+import { AiFillHeart } from "react-icons/ai";
+import { GoHeart } from "react-icons/go";
 
 // <div className="h-[400px]">
 //   <div className="h-full flex flex-col border-[1px] border-[#AAAAAA] relative">
@@ -142,9 +144,9 @@ function Products() {
   const prevRef = useRef(null);
   const nextRef = useRef(null);
   const paginationRef = useRef(null);
-  const prevRef2 = useRef(null);
-  const nextRef2 = useRef(null);
-  const paginationRef2 = useRef(null);
+  // const prevRef2 = useRef(null);
+  // const nextRef2 = useRef(null);
+  // const paginationRef2 = useRef(null);
   const prevRef3 = useRef(null);
   const nextRef3 = useRef(null);
   const paginationRef3 = useRef(null);
@@ -155,6 +157,8 @@ function Products() {
   const [products, setProducts] = useState([]);
   const [productsloading, setProductsloading] = useState(true);
   // const [selectedCat, setSelectedCat] = useState("Furniture");
+
+  const swiperRef = useRef(null);
 
   const navigate = useNavigate();
 
@@ -266,8 +270,8 @@ function Products() {
     { name: "ikea", image: "/images/ecommerce/fortis.png" },
     { name: "ikea", image: "/images/ecommerce/fortis.png" },
     { name: "ikea", image: "/images/ecommerce/fortis.png" },
-    { name: "ikea", image: "/images/ecommerce/fortis.png" },
-    { name: "ikea", image: "/images/ecommerce/fortis.png" },
+    // { name: "ikea", image: "/images/ecommerce/fortis.png" },
+    // { name: "ikea", image: "/images/ecommerce/fortis.png" },
   ];
 
   const EcommerceFeatures = [
@@ -300,7 +304,7 @@ function Products() {
         <Header />
       </header>
       {/* Hero section */}
-      <section className="lg:container lg:mx-auto">
+      <section className="hidden lg:block lg:container lg:mx-auto">
         <div className=" bg-[url('/images/ecom-hero.png')] bg-contain bg-center bg-no-repeat h-[85vh] relative">
           <button className="absolute bg-[#334A78]/80 text-[#fff] font-semibold font-Poppins uppercase text-sm py-2 px-7 bottom-1/4 left-20 translate-y-7">
             Order now
@@ -310,7 +314,7 @@ function Products() {
 
       {/* section 2 */}
       <section>
-        <div className="lg:container lg:mx-auto my-10">
+        <div className="hidden lg:block lg:container lg:mx-auto my-10">
           <div className="flex flex-col gap-2 md:flex-row justify-between items-stretch ">
             {EcommerceFeatures.map((feature) => (
               <Productitem
@@ -326,8 +330,11 @@ function Products() {
 
       {/* section 3 */}
       <section>
-        <div className="lg:container lg:mx-auto my-10">
-          <SectionHeader title={"Shop by categories"} isborder={false} />
+        <div className="lg:container lg:mx-auto px-3 lg:px-12 my-10">
+          <div className="hidden lg:block">
+            {" "}
+            <SectionHeader title={"Shop by categories"} isborder={false} />
+          </div>
           <div className="flex overflow-x-auto items-center justify-around my-10 gap-6">
             {categoryies.map((cat) => (
               <div
@@ -338,7 +345,7 @@ function Products() {
                 <div className="bg-[#F8F8F8] border border-[#ccc] p-4 w-16 h-16 xl:w-20 xl:h-20">
                   <img src={cat.imagename} alt="category" className="" />
                 </div>
-                <h3 className="font-lora text-[#111] text-xs lg:text-sm">
+                <h3 className="font-lora text-[#111] text-[10px] lg:text-sm">
                   {cat.name}
                 </h3>
               </div>
@@ -347,43 +354,76 @@ function Products() {
         </div>
       </section>
 
+      <section className="px-3">
+        <div className="flex lg:hidden my-6 items-center gap-6 w-full">
+          <BannerProduct />
+          <BannerProduct />
+          <div className="hidden  lg:hidden md:block">
+            <BannerProduct />
+          </div>
+          {/* <div className="hidden  lg:hidden md:block">
+            <BannerProduct />
+          </div> */}
+        </div>
+      </section>
+
+      {/* season splecial only for mobile  */}
+      <section>
+        <div className="lg:hidden px-3">
+          <CardSection className="flex-1" title="Season’s Special" />
+        </div>
+      </section>
+
       {/* section 4 */}
       <section>
-        <SectionHeader title={"Featured products"} />
-        <div className="container px-4 lg:px-12 mx-auto my-10">
-          <div className="hidden md:flex justify-end gap-3">
-            <button
-              ref={prevRef3}
-              className="text-[#304778] disabled:text-gray-400"
-            >
-              <MdKeyboardArrowLeft size={30} />
-            </button>
-            <button
-              ref={nextRef3}
-              className=" text-[#304778] disabled:text-gray-400"
-            >
-              <MdKeyboardArrowRight size={30} />
-            </button>
+        <div className="hidden lg:block">
+          <SectionHeader title={"Featured products"} />
+        </div>
+        <div className="lg:container px-4 lg:px-12 mx-auto my-6 lg:my-10">
+          <div className="flex justify-between lg:justify-end gap-3">
+            <div className="lg:hidden">
+              <SectionHeader title={"Featured products"} />
+            </div>
+            <div className="flex ">
+              <button
+                ref={prevRef3}
+                className="text-[#304778] disabled:text-gray-400"
+              >
+                <MdKeyboardArrowLeft size={30} />
+              </button>
+              <button
+                ref={nextRef3}
+                className=" text-[#304778] disabled:text-gray-400"
+              >
+                <MdKeyboardArrowRight size={30} />
+              </button>
+            </div>
           </div>
           <div className="flex flex-col md:flex-row gap-6">
             {/* Left side banners */}
-            <div className="flex flex-col items-center gap-6 md:w-1/4 w-full">
+            <div className="lg:flex hidden   flex-col items-center gap-6 lg:w-1/4 w-full">
               <BannerProduct />
               <BannerProduct />
             </div>
 
             {/* Right side Swiper grid */}
             {!productsloading ? (
-              <div className="md:w-3/4 w-full relative">
-                <div className="md:hidden flex justify-end gap-3">
-                  <button ref={prevRef4}>
-                    <MdKeyboardArrowLeft size={30} color="#304778" />
-                  </button>
-                  <button ref={nextRef4}>
-                    <MdKeyboardArrowRight size={30} color="#304778" />
-                  </button>
-                </div>
+              <div className="lg:w-3/4 w-full relative">
+                {/* <div className="lg:hidden flex justify-between items-center gap-3">
+                  <div>
+                    <SectionHeader title={"Featured products"} />
+                  </div>
+                  <div className="flex items-center">
+                    <button ref={prevRef4}>
+                      <MdKeyboardArrowLeft size={30} color="#304778" />
+                    </button>
+                    <button ref={nextRef4}>
+                      <MdKeyboardArrowRight size={30} color="#304778" />
+                    </button>
+                  </div>
+                </div> */}
                 <Swiper
+                  ref={swiperRef}
                   onBeforeInit={(swiper) => {
                     swiper.params.navigation.prevEl =
                       prevRef3.current || prevRef4.current;
@@ -408,13 +448,13 @@ function Products() {
                   breakpoints={{
                     0: {
                       slidesPerView: 2.02,
-                      grid: { rows: 2 },
+                      grid: { rows: 1 },
                       spaceBetween: 10,
                     },
                     768: {
-                      slidesPerView: 3,
-                      grid: { rows: 2 },
-                      spaceBetween: 24,
+                      slidesPerView: 5,
+                      grid: { rows: 1 },
+                      spaceBetween: 10,
                     },
                     1024: {
                       slidesPerView: 4,
@@ -441,9 +481,9 @@ function Products() {
 
       {/* section 5 */}
       <section>
-        <div className="lg:container lg:mx-auto my-10">
+        <div className=" lg:container lg:mx-auto my-3 px-3 lg:px-12 lg:my-10">
           <SectionHeader title={"Shop by brands"} />
-          <div className="grid grid-cols-3 lg:grid-cols-5 gap-2">
+          <div className="grid grid-cols-4 lg:grid-cols-4 gap-2">
             {brands.map((brand, index) => (
               <div
                 className="hover:shadow-lg flex justify-center items-center w-full h-28"
@@ -461,10 +501,38 @@ function Products() {
         </div>
       </section>
 
+      {/* shop furniture for mobile view */}
+      <section>
+        <div className="px-3 mb-6 lg:hidden">
+          <CardSection className="flex-1" title="Top Deals On Furniture" />
+        </div>
+      </section>
+
       {/* section 6*/}
       <section>
-        <SectionHeader title={"Trending products"} />
-        <div className="container px-4 lg:px-12 mx-auto my-10">
+        <div className="hidden lg:block px-3">
+          <SectionHeader title={"Trending products"} />
+        </div>
+        <div className=" lg:container px-4 lg:px-12 mx-auto lg:my-10">
+          <div className="flex justify-between lg:justify-end gap-3">
+            <div className="lg:hidden">
+              <SectionHeader title={"Trending products"} />
+            </div>
+            <div className="flex">
+              <button
+                ref={prevRef}
+                className="text-[#304778] disabled:text-gray-400"
+              >
+                <MdKeyboardArrowLeft size={30} />
+              </button>
+              <button
+                ref={nextRef}
+                className=" text-[#304778] disabled:text-gray-400"
+              >
+                <MdKeyboardArrowRight size={30} />
+              </button>
+            </div>
+          </div>
           <div className="relative">
             <Swiper
               onBeforeInit={(swiper) => {
@@ -487,17 +555,17 @@ function Products() {
               }}
               spaceBetween={30}
               //   pagination={{ clickable: true, el: ".custom-pagination" }}
-              className="relative pb-10"
+              className="relative lg:pb-10"
               breakpoints={{
                 0: {
                   slidesPerView: 2.02,
-                  grid: { rows: 2 },
+                  grid: { rows: 1 },
                   spaceBetween: 10,
                 },
                 768: {
-                  slidesPerView: 3,
-                  grid: { rows: 2 },
-                  spaceBetween: 24,
+                  slidesPerView: 5,
+                  grid: { rows: 1 },
+                  spaceBetween: 14,
                 },
                 1024: {
                   slidesPerView: 4,
@@ -508,55 +576,54 @@ function Products() {
             >
               {products.map((product, index) => (
                 <SwiperSlide key={index}>
-                  <ProductCard product={product} />
+                  <ProductCard product={product} trending={true} />
                 </SwiperSlide>
               ))}
-              {/* {Trendingproducts.map((product, index) => (
-                <SwiperSlide key={index}>
-                  <ProductCard product={product} />
-                </SwiperSlide>
-              ))} */}
             </Swiper>
             {/* Custom arrows */}
-            <div
+            {/* <div
               ref={prevRef}
               className="swiper-button-prev custom-nav absolute top-1/2 -left-10 transform -translate-y-1/2 w-10 h-10 bg-white rounded-full shadow z-50"
             />
             <div
               ref={nextRef}
               className="swiper-button-next custom-nav absolute top-1/2 -right-10 transform -translate-y-1/2 w-10 h-10 bg-white rounded-full shadow z-50"
-            />
+            /> */}
           </div>
 
           {/* Custom pagination */}
           <div
             ref={paginationRef}
-            className="custom-pagination mt-4 flex justify-center gap-2"
+            className="custom-pagination hidden mt-4 lg:flex justify-center gap-2"
           />
         </div>
       </section>
 
       {/* section 7*/}
       <section>
-        <div className="container px-4 lg:px-12 mx-auto my-5">
+        <div className="lg:container px-4 lg:px-12 mx-auto my-5">
           <div className="flex flex-col md:flex-row gap-6">
-            <CardSection className="flex-1" title="Season’s Special" />
-            <CardSection className="flex-1" title="Top Deals On Furniture" />
+            <div className="hidden lg:block">
+              <CardSection className="flex-1" title="Season’s Special" />
+            </div>
+            <div className="hidden lg:block">
+              <CardSection className="flex-1" title="Top Deals On Furniture" />
+            </div>
           </div>
         </div>
       </section>
 
       {/* section 8*/}
       <section>
-        <div className="container px-4 lg:px-12 mx-auto mb-10">
+        <div className="lg:container px-4 lg:px-12 mx-auto mb-10">
           <div className="flex flex-col md:flex-row md:items-stretch gap-6">
             {/* Left Column */}
             <div className="flex-1">
-              <CardSection title="Season’s Special" />
+              <CardSection title="Special sale on HVAC" />
             </div>
 
             {/* Right Column: Make this a positioned container */}
-            <div className="flex-1 relative">
+            <div className="hidden lg:block flex-1 relative">
               <img
                 src="/images/ecommerce/image.png"
                 alt="Sale Image"
@@ -575,9 +642,13 @@ export default Products;
 
 function Card({ product }) {
   const naviagte = useNavigate();
-  const { isAuthenticated, localcartItems, cartItems } = useApp();
+  const { isAuthenticated, localcartItems, cartItems, wishlistItems } =
+    useApp();
+  const isWishlisted = wishlistItems?.some(
+    (item) => item.productId?.id === product.id
+  );
 
-  const { handleAddToCart } = useHandleAddToCart();
+  const { handleAddToCart, handleAddtoWishlist } = useHandleAddToCart();
 
   const [iscarted, setIsCarted] = useState(false);
 
@@ -598,7 +669,7 @@ function Card({ product }) {
   }, [isAuthenticated, cartItems, localcartItems, product?.id]);
 
   return (
-    <div className="h-[400px]">
+    <div className="h-[300px] lg:h-[370px]">
       <div className="h-full flex flex-col border-[1px] border-[#AAAAAA] relative">
         {product.image && (
           <div
@@ -608,7 +679,7 @@ function Card({ product }) {
             <img
               src={product.image}
               alt={product.title}
-              className="w-52 h-56 mx-auto mt-4 object-contain"
+              className="w-52 h-40 lg:h-56 mx-auto mt-4 object-contain"
             />
           </div>
         )}
@@ -623,17 +694,32 @@ function Card({ product }) {
             {product.populartext || "eihvihevi"}
           </span>
         )} */}
-        <div className="px-5 flex flex-col justify-center items-center gap-3 font-lora py-3 mt-auto">
+        <div className="px-2 py-2 flex flex-col justify-center gap-3 font-lora  mt-auto">
           <p className=" text-center text-xs lg:text-sm">{product.title}</p>
-          <h5 className="lg:text-lg">Rs {product.price} </h5>
-          <button
-            onClick={() => handleAddToCart(product)}
-            disabled={iscarted}
-            className="flex justify-center items-center gap-2 font-Poppins text-[13px] py-1.5"
-          >
-            {iscarted ? "Added to cart" : "Add to cart"}{" "}
-            <BsArrowRight size={15} />{" "}
-          </button>
+          {/* <h5 className="lg:text-lg">Rs {product.price} </h5> */}
+          <div className="flex justify-between items-center gap-2">
+            <button
+              onClick={() => handleAddToCart(product)}
+              disabled={iscarted}
+              className="flex items-center gap-1 font-Poppins text-[12px] py-1.5 border border-[#ccc] px-2"
+
+              // className="flex justify-center items-center gap-1 font-Poppins text-[12px] py-1.5"
+            >
+              {iscarted ? "Added to cart" : "Add to cart"}{" "}
+              {/* <BsArrowRight size={15} />{" "} */}
+            </button>
+
+            <div
+              onClick={() => handleAddtoWishlist(product)}
+              className=" text-[#ccc] hover:text-red-950 cursor-pointer"
+            >
+              {isWishlisted ? (
+                <AiFillHeart size={20} color="red" />
+              ) : (
+                <GoHeart size={20} />
+              )}
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -719,33 +805,57 @@ function BannerProduct() {
   );
 }
 
-const ProductCard = ({ product }) => (
-  <div className="max-w-xs flex flex-col md:flex-row border border-[#191716]/80 p-3">
-    <div className="flex-1">
-      <img
-        src={product.image}
-        alt="trending product"
-        className="w-[220px] h-[200px] object-contain"
-      />
-    </div>
-    <div className="flex-1 flex flex-col justify-center items-center gap-3 font-lora space-y-2">
-      <p className="text-center text-sm leading-[14px] tracking-[0.96px] lg:text-sm">
-        {product.title}
-      </p>
-      <h2 className="text-base leading-4 tracking-[1px] text-[#374A75]">
-        &#8377; {product.price}
-      </h2>
-      <button className="font-Poppins text-[#000] flex gap-2 leading-[13px] tracking-[1px] text-[13px]">
-        Add to cart <BsArrowRight size={15} />
-      </button>
-    </div>
-  </div>
-);
+function ProductCard({ product, trending = false }) {
+  const naviagte = useNavigate();
+
+  return (
+    <>
+      {!trending && (
+        <div className="max-w-xs flex flex-col md:flex-row border border-[#191716]/80 p-3">
+          <div
+            className="flex-1"
+            onClick={() => naviagte(`/productview/${product.id}`)}
+          >
+            <img
+              src={product.image}
+              alt="trending product"
+              className="w-[220px] h-[200px] object-contain"
+            />
+          </div>
+          <div className="flex-1 flex flex-col justify-center items-center gap-3 font-lora space-y-2">
+            <p className="text-center text-sm leading-[14px] tracking-[0.96px] lg:text-sm">
+              {product.title}
+            </p>
+            <h2 className="text-base leading-4 tracking-[1px] text-[#374A75]">
+              &#8377; {product.price}
+            </h2>
+            <button className="font-Poppins text-[#000] flex gap-2 leading-[13px] tracking-[1px] text-[13px]">
+              Add to cart <BsArrowRight size={15} />
+            </button>
+          </div>
+        </div>
+      )}
+
+      {trending && (
+        <div
+          onClick={() => naviagte(`/productview/${product.id}`)}
+          className="border border-[#ccc] cursor-pointer"
+        >
+          <img
+            src={product.image}
+            alt="trending product"
+            className="max-w-sm h-[200px] w-full object-contain"
+          />
+        </div>
+      )}
+    </>
+  );
+}
 
 function SectionHeader({ title, isborder = true }) {
   return (
-    <div className="flex flex-col justify-center items-center mb-10">
-      <h3 className="font-lora text-2xl text-[#111] tracking-wider uppercase mb-2">
+    <div className="flex flex-col justify-center lg:items-center mb-4 lg:mb-10 ">
+      <h3 className="text-nowrap font-lora text-sm lg:text-2xl text-[#111] tracking-wider uppercase mb-2">
         {title}
       </h3>
       {isborder && (
