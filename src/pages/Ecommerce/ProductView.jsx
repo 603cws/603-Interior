@@ -74,6 +74,9 @@ function ProductView() {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isExpanded2, setIsExpanded2] = useState(false);
 
+  const [detailedMode, setDetailedMode] = useState("normal"); // "normal" or "grid"
+  const [gridViewReview, setGridViewReview] = useState(null);
+
   const offers = [
     "Flat ₹50 Off + Free Surprise Gift On All Prepaid Offers 🎁",
     "Additional 5% Off On New Arrivals Use Code LOOKO5 🎁",
@@ -915,34 +918,62 @@ function ProductView() {
                 </div>
 
                 <div className="flex gap-2 pt-8 border-b pb-6">
-                  {productReviews.map((review, index) => (
-                    <div key={index} className="mb-6">
-                      {/* Other review content */}
-                      <div className="flex flex-wrap gap-2 pt-4 border-b pb-4">
-                        {JSON.parse(review.images).map((path, i) => {
-                          const url = supabase.storage
-                            .from("review-images")
-                            .getPublicUrl(path).data.publicUrl;
-                          return (
+                  {productReviews.map((review, index) => {
+                    const images = JSON.parse(review.images);
+                    const displayedImages = images.slice(0, 2); //no of images to display
+                    const remainingCount =
+                      images.length - displayedImages.length;
+
+                    return (
+                      <div key={index} className="mb-6">
+                        {/* Other review content */}
+                        <div className="flex flex-wrap gap-2 pt-4 border-b pb-4">
+                          {displayedImages.map((path, i) => {
+                            const url = supabase.storage
+                              .from("review-images")
+                              .getPublicUrl(path).data.publicUrl;
+                            return (
+                              <div
+                                key={i}
+                                className="w-20 h-20 rounded overflow-hidden bg-gray-200"
+                              >
+                                <img
+                                  src={url}
+                                  alt={`review-img-${i}`}
+                                  className="w-full h-full object-cover cursor-pointer"
+                                  onClick={() => {
+                                    setSelectedReview(review);
+                                    setDetailedMode("normal");
+                                  }}
+                                />
+                              </div>
+                            );
+                          })}
+                          {remainingCount > 0 && (
                             <div
-                              key={i}
-                              className="w-20 h-20 rounded overflow-hidden bg-gray-200"
+                              className="w-20 h-20 flex items-center justify-center rounded bg-gray-300 text-sm font-medium cursor-pointer"
+                              onClick={() => {
+                                setGridViewReview(review);
+                                setDetailedMode("grid");
+                              }}
                             >
-                              <img
-                                src={url}
-                                alt={`review-img-${i}`}
-                                className="w-full h-full object-cover cursor-pointer"
-                                onClick={() => setSelectedReview(review)}
-                              />
+                              +{remainingCount}
                             </div>
-                          );
-                        })}
+                          )}
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    );
+                  })}
+
                   <DetailedReview
-                    selectedReview={selectedReview}
-                    onClose={() => setSelectedReview(null)}
+                    selectedReview={selectedReview || gridViewReview}
+                    onClose={() => {
+                      setSelectedReview(null);
+                      setGridViewReview(null);
+                    }}
+                    mode={detailedMode}
+                    setMode={setDetailedMode}
+                    setSelectedReview={setSelectedReview}
                   />
                 </div>
 
