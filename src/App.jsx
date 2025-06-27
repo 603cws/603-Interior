@@ -49,7 +49,7 @@ import ShopProducts from "./pages/Ecommerce/ShopProducts";
 import Cart from "./pages/Ecommerce/Cart";
 import Addresspage from "./pages/Ecommerce/Addresspage";
 import Wishlist from "./pages/Ecommerce/Wishlist";
-// import Payments from "./pages/Ecommerce/Payments";
+import Payments from "./pages/Ecommerce/Payments";
 import ELogin from "./common-components/ELogin";
 import Brands from "./pages/Ecommerce/Brands";
 import ProductReview from "./pages/Ecommerce/ProductReview";
@@ -150,7 +150,7 @@ function App() {
             <Route path="/wishlist" element={<Wishlist />} />
             <Route path="/brands" element={<Brands />} />
             <Route path="/productReview" element={<ProductReview />} />
-            {/* <Route path="/payments" element={<Payments />} /> */}
+            <Route path="/payments" element={<Payments />} />
             <Route path="/eLogin" element={<ELogin />} />
             <Route path="/brands/productview" element={<BrandProductView />} />
           </Routes>
@@ -198,7 +198,7 @@ function App() {
             <Route path="/wishlist" element={<Wishlist />} />
             <Route path="/brands" element={<Brands />} />
             <Route path="/productReview" element={<ProductReview />} />
-            {/* <Route path="/payments" element={<Payments />} /> */}
+            <Route path="/payments" element={<Payments />} />
             <Route path="/eLogin" element={<ELogin />} />
             <Route path="/brands/productview" element={<BrandProductView />} />
           </Routes>

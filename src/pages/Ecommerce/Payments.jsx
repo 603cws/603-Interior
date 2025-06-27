@@ -12,6 +12,8 @@ import { FiGift } from "react-icons/fi";
 import { IoEyeOutline, IoEyeOffOutline } from "react-icons/io5";
 import BottomTabs from "./BottomTabs";
 import { PlaceOrderBtn } from "../../common-components/ReadMoreBtn";
+import CheckoutStepper from "../../common-components/CheckoutStepper";
+import MobileHeader from "../../common-components/MobileHeader";
 
 function Payments() {
   const { cartItems } = useApp();
@@ -79,9 +81,14 @@ function Payments() {
 
   return (
     <>
-      <Header />
-      <div className="container">
-        <div className="!my-10 flex items-center justify-center text-[#334A78] text-lg capitalize font-Poppins leading-[16.8px]">
+      <div className="hidden lg:block">
+        <Header />
+      </div>
+      <div className="lg:hidden">
+        <MobileHeader title={"payment"} />
+      </div>
+      <div className="lg:container lg:mx-auto px-3 lg:px-12">
+        {/* <div className="!my-10 flex items-center justify-center text-[#334A78] text-lg capitalize font-Poppins leading-[16.8px]">
           <div className="flex items-center gap-2">
             <p className="text-[#334A78]">cart</p>
             <hr className="border-t-2 border-dashed border-[#334A78] h-1 w-24 " />
@@ -89,11 +96,15 @@ function Payments() {
             <hr className="border-t-2 border-dashed border-[#334A78] h-1 w-24 " />
             <p className="text-[#549DC7]">Payment</p>
           </div>
+        </div> */}
+
+        <div className="hidden lg:block">
+          <CheckoutStepper highlighted={"Payment"} />
         </div>
 
-        <section className="flex gap-10 py-10">
+        <section className="flex flex-col lg:flex-row  lg:gap-10 lg:py-10 mb-14 lg:mb-0">
           <div className="flex-1">
-            <div className="border border-[#CCCCCC] rounded-lg font-Poppins p-5 space-y-3">
+            <div className="border border-[#CCCCCC] rounded-lg font-Poppins p-2 lg:p-5 space-y-3">
               <div className="flex items-center gap-5">
                 <RiDiscountPercentLine size={20} color="#334A78" />
                 <h5 className="text-sm font-medium text-[#000000]">
@@ -114,13 +125,14 @@ function Payments() {
               </button>
             </div>
             <div className="font-Poppins">
-              <h3 className="text-sm font-medium leading-7 text-[#000000] my-5">
+              <h3 className="text-xs lg:text-sm font-medium lg:leading-7 text-[#000000] my-5">
                 {" "}
                 Choose Payment Mode
               </h3>
-              <div className="flex gap-5 border border-[#CCCCCC] rounded-lg p-1">
+              <div className="flex flex-col lg:flex-row gap-4 lg:gap-5 border border-[#CCCCCC] rounded-lg p-1">
                 <div>
-                  <ul className="[&_li]:cursor-pointer [&_li]:py-4 [&_li]:px-5 text-sm font-medium text-[#000000]">
+                  <ul className="[&_li]:cursor-pointer  [&_li]:py-4 [&_li]:px-5 text-sm font-medium text-[#000000]">
+                    {/* <ul className="[&_li]:cursor-pointer [&_li]:py-2 [&_li]:px-3 lg:[&_li]:py-4 lg:[&_li]:px-5 text-sm font-medium text-[#000000]"> */}
                     {paymentOptions.map(
                       (option, index) => (
                         console.log(option.id),
@@ -145,8 +157,8 @@ function Payments() {
                   </ul>
                 </div>
 
-                <div className="flex-1 space-y-3 p-3">
-                  <h3 className="text-sm font-medium leading-7 text-[#000000]">
+                <div className="flex-1 lg:space-y-3 lg:p-3">
+                  <h3 className="text-xs lg:text-sm font-medium lg:leading-7 text-[#000000]">
                     {activeListItem === "recommended"
                       ? "Recommended Payment Option"
                       : `${selectedOption?.label}`}
@@ -162,6 +174,7 @@ function Payments() {
                             onChange={() => setIsChecked(!isChecked)}
                           />
                           <h3 className="text-xs font-bold leading-7 text-[#000000]">
+                            {/* <h3 className="text-xs font-bold lg:leading-7 text-[#000000]"> */}
                             {selectedOption.label}
                           </h3>
                         </div>
@@ -181,7 +194,7 @@ function Payments() {
                   {selectedOption.id === "upi" && (
                     <>
                       <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-5">
+                        <div className="flex items-center gap-4 lg:gap-5 mb-2 lg:mb-0">
                           <input
                             type="radio"
                             name="upiOption"
@@ -204,7 +217,7 @@ function Payments() {
                         <PlaceOrderBtn title="Pay Now" />
                       )}
 
-                      <div className="flex gap-5 items-center mt-3">
+                      <div className="flex gap-4 lg:gap-5 items-center mt-3 mb-2 lg:mb-0">
                         <input
                           type="radio"
                           name="upiOption"
@@ -228,7 +241,7 @@ function Payments() {
                             value={upiId}
                             onChange={(e) => setUpiId(e.target.value)}
                             placeholder="Enter UPI ID"
-                            className="border text-[10px] w-full p-2 mt-2 [&::-webkit-inner-spin-button]:appearance-none  focus:outline-none focus:ring-0"
+                            className="border text-[10px] w-full p-3 lg:p-2 mt-2 mb-2 lg:mb-0 [&::-webkit-inner-spin-button]:appearance-none  focus:outline-none focus:ring-0"
                           />
                           {/* <button
                             disabled={!upiId.trim()}
@@ -251,6 +264,7 @@ function Payments() {
                         <form
                           action=""
                           className="[&_input]:border [&_input]:py-3 [&_input]:text-xs [&_input]:px-1.5  space-y-4"
+                          // className="[&_input]:border [&_input]:py-1 [&_input]:px-1 lg:[&_input]:py-3 [&_input]:text-xs lg:[&_input]:px-1.5  space-y-2 lg:space-y-4"
                         >
                           <input
                             type="text"
@@ -368,24 +382,24 @@ function Payments() {
                 </div>
               </div>
             </div>
-            <div className="flex justify-between items-center font-Poppins border rounded-lg my-7 py-3 px-5">
+            <div className="flex justify-between items-center font-Poppins border rounded-lg my-7 py-3 px-3 lg:px-5">
               <div className="flex items-center gap-2">
                 <FiGift color="#334A78" className="w-6" />
-                <h4 className="text-sm font-medium text-[#000000]  leading-7">
+                <h4 className="text-sm font-medium text-[#000000]  lg:leading-7">
                   Having a Gift Card?
                 </h4>
               </div>
-              <button className="uppercase text-sm font-semibold leading-7 text-[#334A78]">
+              <button className="uppercase text-sm font-semibold lg:leading-7 text-[#334A78]">
                 APPLY GIFT CARD
               </button>
             </div>
           </div>
 
-          <div className="flex-1 border-l-[1px] pl-10">
-            <h4 className="uppercase mb-7">
+          <div className="flex-1 lg:border-l-[1px] lg:pl-10">
+            <h4 className="uppercase mb-3 lg:mb-7">
               price details ({cartItems?.length} Items)
             </h4>
-            <div className="space-y-6 pb-6">
+            <div className="space-y-3 lg:space-y-6 pb-3 lg:pb-6">
               <div className="flex justify-between">
                 <h5 className="font-medium text-base text-[#111111]/80">
                   Total MRP
@@ -400,7 +414,7 @@ function Payments() {
                   Discount on MRP
                 </h5>
                 <h5 className="font-medium text-base text-[#34BFAD]/80 ">
-                  -$3,600
+                  -Rs 0
                 </h5>
               </div>
 
@@ -428,21 +442,34 @@ function Payments() {
               </div>
 
               <div className="flex justify-between">
-                <h5 className="font-medium text-xl text-[#111111] uppercase">
+                <h5 className="font-medium text-lg lg:text-xl text-[#111111] uppercase">
                   Total Amount
                 </h5>
-                <h5 className="font-medium text-xl text-[#111111] ">$3,196</h5>
+                <h5 className="font-medium text-lg lg:text-xl text-[#111111] ">
+                  $3,196
+                </h5>
               </div>
             </div>
 
             {/* <button className="uppercase text-xl text-[#ffffff] tracking-wider w-full flex justify-center items-center bg-[#334A78] border border-[#212B36] py-3 rounded-sm font-thin">
               place ORDER
             </button> */}
-            <PlaceOrderBtn title="place order" />
+            <div className="hidden lg:block">
+              <PlaceOrderBtn title="place order" />
+            </div>
           </div>
         </section>
       </div>
-      <BottomTabs />
+      <div className="hidden lg:block">
+        <BottomTabs />
+      </div>
+      <div className="lg:hidden fixed bottom-0 left-0 w-full flex justify-center items-center mb-2">
+        <div className="w-[90%]">
+          <button className="uppercase text-xl text-white tracking-wider w-full bg-[#334A78] border border-[#212B36] py-3 rounded-sm font-thin">
+            pay now
+          </button>
+        </div>
+      </div>
     </>
   );
 }

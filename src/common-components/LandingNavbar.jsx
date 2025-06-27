@@ -162,6 +162,9 @@ function LandingNavbar({ bgColor = false }) {
             >
               Our Work
             </li>
+            <li className="cursor-pointer" onClick={() => navigate("/brands")}>
+              Brands
+            </li>
             <li
               onClick={() => navigate("/Contactus")}
               className="cursor-pointer"
@@ -171,7 +174,7 @@ function LandingNavbar({ bgColor = false }) {
             <li>
               {isAuthenticated ? (
                 <button
-                  className="px-6 py-1.5 bg-[#1F5C54] border border-[#15423C] rounded-3xl text-white w-full"
+                  className="px-6 py-1.5  bg-[#1F3B5C] border border-[#1F3B5C] rounded-3xl text-white w-full"
                   onClick={() => navigate("/dashboard")}
                 >
                   Dashboard

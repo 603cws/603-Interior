@@ -7,8 +7,10 @@ import AddressForm from "./AddressForm";
 import { v4 as uuidv4 } from "uuid";
 import toast from "react-hot-toast";
 import CheckoutStepper from "../../common-components/CheckoutStepper";
-import { MdOutlineKeyboardArrowLeft } from "react-icons/md";
+import { MdOutlineCancel, MdOutlineKeyboardArrowLeft } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
+import AppliedCoupon from "../../common-components/AppliedCoupon";
+import PriceDetail from "../../common-components/PriceDetail";
 
 function Addresspage() {
   const [isAddressFormOpen, setIsAddressFormOpen] = useState(false);
@@ -21,7 +23,7 @@ function Addresspage() {
 
   const navigate = useNavigate();
 
-  const { accountHolder, fetchUserData } = useApp();
+  const { accountHolder, fetchUserData, isAuthenticated } = useApp();
 
   //   console.log(accountHolder);
 
@@ -217,6 +219,14 @@ function Addresspage() {
       console.error("Unexpected error:", err);
     }
   };
+
+  // handle the continue click
+  const handleContinue = () => {
+    if (isAuthenticated) {
+      navigate("/payments");
+    }
+  };
+
   return (
     <>
       <div className="hidden lg:block">
@@ -570,14 +580,14 @@ function Addresspage() {
                     <h5 className="font-medium  text-[#34BFAD]/80 ">-$3,600</h5>
                   </div>
 
-                  {/* <div className="flex justify-between">
+                  <div className="flex justify-between">
                     <h5 className="font-medium  text-[#111111]/80">
                       Coupon Discount
                     </h5>
                     <h5 className="font-medium  text-[#F87171]">
                       Apply Coupon
                     </h5>
-                  </div> */}
+                  </div>
 
                   <div className="flex justify-between border-b-[1px]">
                     <div>
@@ -604,8 +614,13 @@ function Addresspage() {
                 </div>
               </div>
 
+              {/* <PriceDetail /> */}
+
               {accountHolder?.address?.length > 0 && (
-                <button className="hidden uppercase text-xl text-[#ffffff] tracking-wider w-full lg:flex justify-center items-center bg-[#334A78] border border-[#212B36] py-3 rounded-sm font-thin">
+                <button
+                  onClick={handleContinue}
+                  className="hidden uppercase text-xl text-[#ffffff] tracking-wider w-full lg:flex justify-center items-center bg-[#334A78] border border-[#212B36] py-3 rounded-sm font-thin"
+                >
                   Continue
                 </button>
               )}
@@ -620,7 +635,10 @@ function Addresspage() {
       {accountHolder?.address?.length > 0 && (
         <div className="lg:hidden fixed bottom-0 left-0 w-full flex justify-center items-center mb-2">
           <div className="w-[90%]">
-            <button className="uppercase text-xl text-white tracking-wider w-full bg-[#334A78] border border-[#212B36] py-3 rounded-sm font-thin">
+            <button
+              onClick={handleContinue}
+              className="uppercase text-xl text-white tracking-wider w-full bg-[#334A78] border border-[#212B36] py-3 rounded-sm font-thin"
+            >
               Continue
             </button>
           </div>

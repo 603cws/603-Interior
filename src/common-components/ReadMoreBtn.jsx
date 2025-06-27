@@ -32,7 +32,7 @@ export function PlaceOrderBtn({ title, disabled }) {
     <div>
       <button
         disabled={disabled}
-        className="bg-[#334A78] border border-[#212B36] text-sm text-white tracking-wider w-full uppercase py-3 active:scale-90 transition-transform ease-in-out duration-500 disabled:opacity-75"
+        className="bg-[#334A78] border border-[#212B36] text-xs lg:text-sm text-white tracking-wider  w-full uppercase py-3 active:scale-90 transition-transform ease-in-out duration-500 disabled:opacity-75"
       >
         {title}
       </button>

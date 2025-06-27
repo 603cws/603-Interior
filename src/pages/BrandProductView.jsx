@@ -30,7 +30,7 @@ function BrandProductView() {
         <LandingNavbar />
       </div>
 
-      <div className="lg:container lg:mx-auto px-4 lg:px-12 mt-24">
+      <div className="lg:container lg:mx-auto px-3 lg:px-12 mt-20 lg:mt-24">
         {/* breadcumbs */}
         <div className="mt-10">
           <div className="flex lg:mx-10 items-start lg:items-center text-[#334A78] text-sm mt-4 mb-4 md:mb-0">
@@ -88,14 +88,14 @@ function BrandProductView() {
             <button className="">DOWNLOAD HI-RES TILE IMAGES</button>
           </div>
         </div> */}
-        <div className={`flex flex-col lg:flex-row pt-5 gap-10 mb-12`}>
-          <div className="w-[60%]">
-            <div className="flex">
+        <div className={`flex flex-col lg:flex-row  lg:pt-5 lg:gap-10 mb-12`}>
+          <div className="lg:w-[60%]">
+            <div className="flex ">
               <div>
                 {additionalImagesArray.length > 0 ? (
-                  <div className="flex flex-col  gap-3 mx-6 ml-16 ">
+                  <div className="flex flex-col gap-3 mx-6 lg:ml-16 ">
                     {additionalImagesArray.map((img, idx) => (
-                      <div className="w-32" key={idx}>
+                      <div className="w-12 lg:w-32" key={idx}>
                         <img
                           src={img.img}
                           alt={`Angle ${idx + 1}`}
@@ -120,8 +120,8 @@ function BrandProductView() {
             </div>
           </div>
 
-          <div className="w-[40%] flex flex-col mt-2 md:mt-0 font-Poppins ">
-            <h2 className="text-[41.28px] leading-[41.3px] tracking-[0.75px] text-[#000] mb-8">
+          <div className="lg:w-[40%] flex flex-col mt-2  md:mt-6 lg:mt-0 font-Poppins ">
+            <h2 className="text-xl lg:text-[41.28px] leading-[41.3px] tracking-[0.75px] text-[#000] mb-2 lg:mb-8">
               Gemini (Archer)
             </h2>
             <p className="text-[12.75px] leading-[18px] mb-8">
@@ -143,7 +143,7 @@ function BrandProductView() {
               <p>View More</p>
             </div>
 
-            <div className="flex gap-6">
+            <div className="flex flex-wrap lg:flex-nowrap gap-6 mb-3">
               {Array.from({ length: 12 }, (_, i) => (
                 <div className="max-w-xs">
                   <img
@@ -184,7 +184,7 @@ function BrandProductView() {
           <h2>TILE SPECIFICATIONS</h2>
         </div>
 
-        <div className="flex justify-around mb-10">
+        <div className="flex gap-4 lg:gap-0 flex-wrap lg:flex-nowrap justify-around mb-2 lg:mb-10">
           <Specifications />
           <Specifications />
           <Specifications />
@@ -193,13 +193,14 @@ function BrandProductView() {
           <Specifications />
         </div>
 
-        <div className="flex flex-col gap-6 mt-[89px] mb-16">
+        <div className="flex flex-col gap-6 mt-8 lg:mt-[89px] mb-3 lg:mb-16">
           <h2 className="text-[#1E148F] uppercase text-[12.75px] leading-[12.8px] tracking-[1px]">
             CARE INSTRUCTIONS
           </h2>
-          <h3 className="text-[#000] text-[45px] leading-[45px] mb-4 mx-6">
-            Few care instructions for home flooring <br /> tiles to keep them
-            looking their best
+          <h3 className="text-[#000] text-lg lg:text-[45px] lg:leading-[45px] mb-4 lg:mx-6">
+            Few care instructions for home flooring{" "}
+            <br className="hidden lg:block" /> tiles to keep them looking their
+            best
           </h3>
         </div>
 
@@ -212,7 +213,7 @@ function BrandProductView() {
             Similar Products
           </h3>
 
-          <div className="flex justify-around items-center">
+          <div className=" grid grid-cols-2 gap-2 lg:gap-0 lg:flex  justify-around items-center">
             <Card />
             <Card />
             <Card />
@@ -229,14 +230,14 @@ export default BrandProductView;
 
 function FeatureRow({ features, type = true }) {
   return (
-    <div className="flex justify-between items-start mb-10 ">
+    <div className="flex flex-wrap gap-3 lg:gap-0 lg:flex-nowrap justify-between items-start mb-4 lg:mb-10 ">
       {features.map((text, i) => (
         <div
           key={i}
           className="flex-1 flex flex-col items-center relative text-center px-4"
         >
           {/* Top Star and Divider */}
-          <div className="flex items-center w-full mb-4">
+          <div className="flex items-center w-full mb-2 lg:mb-4">
             <FaStarOfLife className="text-[#2A3E65] text-xs" />
             <div className="w-full h-px bg-gray-300" />
           </div>
@@ -244,15 +245,15 @@ function FeatureRow({ features, type = true }) {
           {/* Text */}
           <p
             className={`${
-              type ? "text-[22.5px]" : "text-xs"
-            } text-[#2A3E65] text-start leading-8`}
+              type ? "text-sm lg:text-[22.5px]" : "text-xs"
+            } text-[#2A3E65] text-start lg:leading-8 line-clamp-6 lg:line-clamp-none`}
           >
             {text}
           </p>
 
           {/* Right vertical divider (except last item) */}
           {i !== features.length - 1 && (
-            <div className="absolute right-0 top-4 h-full w-px bg-gray-300" />
+            <div className="absolute right-0 top-2 lg:top-4 h-full w-px bg-gray-300" />
           )}
         </div>
       ))}
@@ -266,8 +267,10 @@ function Specifications() {
       <div>
         <img src="/images/articlecode.png" alt="articlecode" />
       </div>
-      <h2 className="text-xs leading-[12px] tracking-[2.25px]">Article Code</h2>
-      <p className="text-[13.5px] tracking-[2.25px] text-[#1E148F] mb-5">
+      <h2 className="text-xs lg:leading-[12px] lg:tracking-[2.25px]">
+        Article Code
+      </h2>
+      <p className="text-[13.5px] tracking-[2.25px] text-[#1E148F] lg:mb-5">
         CTY00299
       </p>
     </div>
@@ -314,18 +317,31 @@ function Card() {
         className="flex justify-center items-center p-2 cursor-pointer"
       >
         <img
-          src="/images/blogoffice.png"
+          src="/images/cabin chair.png"
           alt="chair"
-          className="h-52 object-contain"
+          className="h-40 lg:h-52 object-contain"
         />
         {/* <img src={product.image } alt="chair" className="h-52 object-contain" /> */}
       </div>
       <div className="bg-[#fff] p-2">
         <div className="flex ">
           <div className="flex-1 text-sm  leading-[22.4px]  text-[#111] ">
-            <h4 className="font-medium text-sm leading-[22.4px] ">
-              {/* {product?.title} */}enijfioejfo
-            </h4>
+            <div className="flex justify-between items-center lg:flex-none">
+              <h4 className="font-medium text-sm leading-[22.4px] capitalize">
+                {/* {product?.title} */}chair
+              </h4>
+              <div
+                // onClick={() => handleAddtoWishlist(product)}
+                className=" text-[#ccc] hover:text-red-950 cursor-pointer lg:hidden"
+              >
+                {/* {isWishlisted ? (
+                <AiFillHeart size={26} color="red" />
+              ) : (
+                <GoHeart size={25} />
+              )} */}
+                <GoHeart size={22} />
+              </div>
+            </div>
             <div className="flex items-center gap-2">
               <p className=" ">Rs {"Rs 3,0000"}</p>
               <p className="line-through text-[#111] text-opacity-50">
@@ -336,14 +352,14 @@ function Card() {
           </div>
           <div
             // onClick={() => handleAddtoWishlist(product)}
-            className=" text-[#ccc] hover:text-red-950 cursor-pointer"
+            className=" text-[#ccc] hover:text-red-950 cursor-pointer hidden lg:block"
           >
             {/* {isWishlisted ? (
               <AiFillHeart size={26} color="red" />
             ) : (
               <GoHeart size={25} />
             )} */}
-            <GoHeart size={25} />
+            <GoHeart size={20} />
           </div>
         </div>
         <button

@@ -19,6 +19,8 @@ function Wishlist() {
 
   const [isloading, setIsloading] = useState(false);
 
+  const { isAuthenticated } = useApp();
+
   const { handleAddToCart } = useHandleAddToCart();
 
   const getWishlistItems = async () => {
@@ -223,17 +225,25 @@ function Wishlist() {
             <img src="/images/emptywishlist.png" alt="" className="max-w-sm" />
           </div>
           <h2 className="font-Poppins font-semibold text-xl lg:text-2xl text-[#000]">
-            Your Wishlist is Empty
+            {isAuthenticated ? "Your Wishlist is Empty" : "PLEASE LOG IN"}
           </h2>
           <p className="font-Poppins text-xs text-[#000000]">
-            There is nothing in your bag. Let's add some items.
+            {isAuthenticated
+              ? "There is nothing in your bag. Let's add some items."
+              : "Login to view items in your wishlist."}
           </p>
           <button
             onClick={() => navigate("/products")}
             className="bg-[#334A78] border border-[#212B36] text-xs text-white tracking-wider uppercase py-3 active:scale-90 transition-transform ease-in-out duration-500 px-10 font-Poppins font-semibold"
           >
-            start shopping{" "}
+            start shopping
           </button>
+          {/* <button
+            onClick={() => navigate("/products")}
+            className="bg-[#334A78] border border-[#212B36] text-xs text-white tracking-wider uppercase py-3 active:scale-90 transition-transform ease-in-out duration-500 px-10 font-Poppins font-semibold"
+          >
+            {isAuthenticated ? "start shopping" : "Login"}
+          </button> */}
         </div>
       )}
       <div className="hidden lg:block fixed bottom-0 w-full">
