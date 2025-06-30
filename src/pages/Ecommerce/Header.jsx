@@ -31,12 +31,23 @@ function Header() {
     <div className="md:container relative">
       {showProfile && (
         <div className="absolute right-2 top-14 md:right-24 xl:right-20 3xl:right-64 w-40 xl:w-56 mt-1 font-Poppins bg-white text-black rounded-xl shadow-[3px_0px_8px_#000] z-50">
-          <div className="px-4 py-3 font-semibold border-b border-[#CCCCCC]">
-            <span className="ml-2">
-              Hello {accountHolder?.companyName || "User Profile"}
-            </span>
-          </div>
+          <p
+            className="px-4 py-3 font-semibold border-b border-[#CCCCCC] hover:bg-[#f9f9f9] hover:rounded-t-xl cursor-pointer"
+            onClick={() => navigate("/profilePage")}
+          >
+            {/* <span className="ml-2"> */}
+            Hello {accountHolder?.companyName || "User Profile"}
+            {/* </span> */}
+          </p>
           <ul className="py-2 text-sm cursor-pointer">
+            <li className="flex items-center px-4 py-2 ml-2 hover:bg-[#f9f9f9]">
+              <img
+                src="../images/ecommerce/icon6.svg"
+                color="#ffffff"
+                alt="Orders icon"
+              />
+              <span className="ml-2">View Profile</span>
+            </li>
             <li className="flex items-center px-4 py-2 ml-2 hover:bg-[#f9f9f9]">
               <img
                 src="../images/ecommerce/icon1.svg"

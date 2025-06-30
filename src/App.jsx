@@ -54,6 +54,7 @@ import ELogin from "./common-components/ELogin";
 import Brands from "./pages/Ecommerce/Brands";
 import ProductReview from "./pages/Ecommerce/ProductReview";
 import BrandProductView from "./pages/BrandProductView";
+import ProfilePage from "./pages/Ecommerce/ProfilePage";
 
 const Home = lazy(() => import("./pages/Home"));
 
@@ -152,6 +153,7 @@ function App() {
             <Route path="/productReview" element={<ProductReview />} />
             <Route path="/payments" element={<Payments />} />
             <Route path="/eLogin" element={<ELogin />} />
+            <Route path="/profilePage" element={<ProfilePage />} />
             <Route path="/brands/productview" element={<BrandProductView />} />
           </Routes>
         ) : (
@@ -200,6 +202,7 @@ function App() {
             <Route path="/productReview" element={<ProductReview />} />
             <Route path="/payments" element={<Payments />} />
             <Route path="/eLogin" element={<ELogin />} />
+            <Route path="/profilePage" element={<ProfilePage />} />
             <Route path="/brands/productview" element={<BrandProductView />} />
           </Routes>
         )}
