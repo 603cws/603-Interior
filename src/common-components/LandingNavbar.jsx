@@ -16,10 +16,10 @@ function LandingNavbar({ bgColor = false }) {
 
   const bgcolor = bgColor ? "bg-[#ccc]" : "bg-white";
   return (
-    <div className="px-5 pt-3 absolute top-0 w-full z-10">
+    <div className="absolute top-0 w-full z-10">
       {/* Navbar Container */}
       <div
-        className={`${bgcolor} bg-opacity-[0.72] flex justify-between items-center border rounded-full  px-5 py-1.5 container mx-auto`}
+        className={`${bgcolor} bg-opacity-[0.72] flex justify-between items-center border  py-1.5 container mx-auto`}
       >
         {/* Logo */}
         <div className="cursor-pointer" onClick={() => navigate("/")}>

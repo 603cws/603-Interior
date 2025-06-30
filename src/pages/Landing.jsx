@@ -20,8 +20,8 @@ import "slick-carousel/slick/slick-theme.css";
 import { useNavigate } from "react-router-dom";
 import Footer from "../common-components/Footer";
 import { IoMdCheckmarkCircleOutline } from "react-icons/io";
-import beforeImage from "/images/home/before-img-one.png";
-import afterImage from "/images/home/after-img-one.png";
+import beforeImage from "/images/home/before-img-one.jpg";
+import afterImage from "/images/home/after-img-one.jpg";
 import { FaRegUser } from "react-icons/fa";
 import { FiMessageSquare } from "react-icons/fi";
 import { ReadMoreBtn } from "../common-components/ReadMoreBtn";
@@ -52,6 +52,9 @@ function Landing() {
     threshold: 0.2,
   });
   const controlsFeatured = useAnimation();
+  const strategyRef = useRef(null);
+  const strategyInView = useInView(strategyRef, { once: true, threshold: 0.2 });
+  const controlsStrategy = useAnimation();
 
   useEffect(() => {
     if (inView) {
@@ -63,6 +66,11 @@ function Landing() {
       controlsFeatured.start("show");
     }
   }, [featuredInView, controlsFeatured]);
+  useEffect(() => {
+    if (strategyInView) {
+      controlsStrategy.start("show");
+    }
+  }, [strategyInView, controlsStrategy]);
 
   const tabData = [
     {
@@ -166,7 +174,14 @@ function Landing() {
       },
     },
   };
-
+  const strategyAnimation = {
+    hidden: { opacity: 0, x: -100 },
+    show: {
+      opacity: 1,
+      x: 0,
+      transition: { duration: 0.7, ease: "easeOut" },
+    },
+  };
   const latestArticles = [
     {
       image: "/images/recent-article1.png",
@@ -420,15 +435,28 @@ function Landing() {
                   <div
                     key={tab.key}
                     onClick={() => setActiveTab(tab.key)}
-                    className={`relative inline-block px-6 py-2 font-semibold cursor-pointer ${
-                      activeTab === tab.key
-                        ? "border-b-2 border-[#2D437A] text-[#2D437A]"
-                        : "border-b-2 border-gray-200 text-black"
-                    }`}
+                    className={`relative inline-block px-6 py-2 font-semibold cursor-pointer transition-all duration-300
+                        ${
+                          activeTab === tab.key
+                            ? "text-[#2D437A]"
+                            : "text-black"
+                        }
+                      `}
                   >
-                    {tab.title}
+                    <span
+                      className={`relative z-10 ${
+                        activeTab === tab.key ? "text-[#2D437A]" : "text-black"
+                      }`}
+                    >
+                      {tab.title}
+                    </span>
+                    <span
+                      className={`absolute left-0 bottom-0 h-0.5 bg-[#2D437A] transition-all duration-500 ease-in-out
+                          ${activeTab === tab.key ? "w-full" : "w-0"}
+                        `}
+                    ></span>
                     {activeTab === tab.key && (
-                      <div className="absolute left-1/2 -bottom-[6px] transform -translate-x-1/2 rotate-45 w-3 h-3 bg-white border-l-2 border-t-2 border-[#2D437A]" />
+                      <div className="absolute left-1/2 -bottom-[5px] transform -translate-x-1/2 rotate-45 w-3 h-3 bg-white border-l-2 border-t-2 border-[#2D437A]" />
                     )}
                   </div>
                 ))}
@@ -765,12 +793,12 @@ function Landing() {
         >
           {/* Before image */}
           <img
-            src={beforeImage}
+            src={afterImage}
             className="absolute top-0 left-0 h-full w-full object-cover"
             alt="Before"
           />
-          <div className="absolute top-4 right-4 bg-[#1B2E50]/90 text-white text-sm px-2 py-1 rounded">
-            Before
+          <div className="absolute bottom-4 right-4 bg-[#1B2E50]/90 text-white text-base px-4 py-2">
+            After
           </div>
 
           {/* After image with dynamic width */}
@@ -780,13 +808,13 @@ function Landing() {
           >
             <div className="relative h-full w-full">
               <img
-                src={afterImage}
+                src={beforeImage}
                 className="h-full w-full object-cover"
                 alt="After"
               />
               {/* After Tag (moves and hides with image) */}
-              <div className="absolute top-4 right-4 bg-[#1B2E50]/90 text-white text-sm px-2 py-1 rounded">
-                After
+              <div className="absolute bottom-4 right-4 bg-[#1B2E50]/90 text-white text-base px-4 py-2">
+                Before
               </div>
             </div>
           </div>
@@ -818,8 +846,9 @@ function Landing() {
                   { once: true }
                 );
               }}
-              className="w-6 h-6 rounded-full  border-2 border-gray-700 animate-pulse mx-auto absolute left-1/2 -translate-x-1/2 top-1/2 cursor-ew-resize"
+              className="w-6 h-6 rounded-full bg-[#007FB5]  border-2 border-[#007FB5] animate-pulse mx-auto absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-full cursor-ew-resize"
             />
+            <div className="h-1/2 w-[5px] -translate-x-1/2 bg-[#007FB5] absolute bottom-0"></div>
           </div>
         </div>
       </section>
@@ -834,30 +863,6 @@ function Landing() {
           </h3>
         </div>
         {/* Desktop layout */}
-        {/* <div className="relative z-10 w-full justify-end hidden lg:flex">
-          <div className="max-w-7xl 3xl:mx-auto flex justify-end gap-5">
-            <img
-              src="/images/home/featured-project-1.png"
-              alt=""
-              className="max-w-xs"
-            />
-            <img
-              src="/images/home/featured-project-2.png"
-              alt=""
-              className="max-w-xs"
-            />
-            <img
-              src="/images/home/featured-project-3.png"
-              alt=""
-              className="max-w-xs"
-            />
-            <img
-              src="/images/home/featured-project-4.png"
-              alt=""
-              className="max-w-xs"
-            />
-          </div>
-        </div> */}
         <motion.div
           ref={featuredRef}
           className="relative z-10 w-full justify-end hidden lg:flex"
@@ -962,9 +967,15 @@ function Landing() {
       <section className="py-10 relative ">
         <div className="absolute bg-[#F7F7F7] top-0 py-14 w-full z-0 hidden lg:block"></div>
         <div className="relative z-10 max-w-7xl 3xl:mx-auto lg:flex gap-10">
-          <div className="flex-1">
+          <motion.div
+            ref={strategyRef}
+            initial="hidden"
+            animate={controlsStrategy}
+            variants={strategyAnimation}
+            className="flex-1"
+          >
             <img src="images/home/about-interior.png" alt="" />
-          </div>
+          </motion.div>
           <div className="flex-1 flex justify-end items-center flex-col space-y-2 px-3 lg:px-0">
             <div className="space-y-3 mb-6">
               <TitleHeader title={"About Interior"} />
