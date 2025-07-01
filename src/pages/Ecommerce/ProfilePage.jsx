@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { supabase } from "../../services/supabase";
 import { BsBoxSeam, BsStars } from "react-icons/bs";
 import { FaRegCircleUser, FaUser } from "react-icons/fa6";
 import { MdKeyboardArrowRight, MdLogout, MdPayments } from "react-icons/md";
@@ -6,16 +7,88 @@ import { PiDotsThreeVerticalBold } from "react-icons/pi";
 import { useApp } from "../../Context/Context";
 import { useLogout } from "../../utils/HelperFunction";
 import { IoCloseOutline } from "react-icons/io5";
+import { CiStar } from "react-icons/ci";
+import { useNavigate } from "react-router-dom";
 
 const ProfilePage = () => {
   const [activeTab, setActiveTab] = useState("personalInfo");
   const [addGiftCard, setAddGiftCard] = useState(false);
+  const [allCoupons, setAllCoupons] = useState([]);
 
   const { accountHolder } = useApp();
   const logout = useLogout();
+  const navigate = useNavigate();
+  const getallthecouponsFromDB = async () => {
+    try {
+      const { data: coupon, error: fetchError } = await supabase
+        .from("coupons")
+        .select("*");
+
+      console.log("allcoupons", coupon);
+
+      setAllCoupons(coupon);
+
+      if (fetchError) throw new Error(fetchError);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getallthecouponsFromDB();
+  }, []);
+  const today = new Date();
+  const validCoupons = allCoupons.filter(
+    (coupon) => new Date(coupon.expiryDate) >= today
+  );
+  const expiredCoupons = allCoupons.filter(
+    (coupon) => new Date(coupon.expiryDate) < today
+  );
 
   const TAB_COMPONENTS = {
-    orders: <div>orders page here</div>,
+    orders: (
+      <div>
+        <div className="font-Poppins p-5 shadow-[0px_0px_10px_rgba(0,0,0,0.1)] my-2">
+          <div className="flex items-center gap-2">
+            <CiStar size={50} color="#304778" />
+            <div>
+              <h5 className="capitalize text-[#171717] font-semibold">
+                delivered
+              </h5>
+              <p className="text-xs text-[#171717]">On Mon, 30 Jun</p>
+            </div>
+          </div>
+          <div className="flex items-center gap-5 bg-[#F5F8FF] px-3 py-5 my-2">
+            <img
+              src="/images/home/product-image.png"
+              alt=""
+              className="h-28 w-24"
+            />
+            <div>
+              <h4 className="text-sm font-semibold text-[#171717] capitalize">
+                product name
+              </h4>
+              <p className="text-sm text-[#171717]">description</p>
+            </div>
+            <button className="ml-auto">
+              <MdKeyboardArrowRight size={25} color="#304778" />
+            </button>
+          </div>
+          <div className="bg-[#F5F8FF] p-3">
+            <div className="flex gap-1">
+              <CiStar size={20} color="#304778" />
+              <CiStar size={20} color="#304778" />
+              <CiStar size={20} color="#304778" />
+              <CiStar size={20} color="#304778" />
+              <CiStar size={20} color="#304778" />
+            </div>
+            <p className="capitalize text-xs text-[#304778] tracking-wider mt-3">
+              rate & review
+            </p>
+          </div>
+        </div>
+      </div>
+    ),
 
     personalInfo: (
       <form>
@@ -23,8 +96,9 @@ const ProfilePage = () => {
           <input
             type="text"
             value={accountHolder.companyName || ""}
+            readOnly
             placeholder="Smita"
-            className="border border-[#CCCCCC] p-3 flex-1 rounded-md focus:none outline-none"
+            className="border border-[#CCCCCC] p-3 flex-1 rounded-md focus:none outline-none text-[#aaa] cursor-not-allowed"
           />
         </div>
 
@@ -35,8 +109,9 @@ const ProfilePage = () => {
           <input
             type="text"
             value={accountHolder.email || ""}
+            readOnly
             placeholder="smita@gmail.com"
-            className="border border-[#CCCCCC] p-3 w-full rounded-md focus:none outline-none"
+            className="border border-[#CCCCCC] p-3 w-full rounded-md focus:none outline-none text-[#aaa] cursor-not-allowed"
           />
         </div>
 
@@ -47,8 +122,9 @@ const ProfilePage = () => {
           <input
             type="text"
             value={accountHolder.phone || ""}
+            readOnly
             placeholder="9988776650"
-            className="border border-[#CCCCCC] p-3 w-full rounded-md focus:none outline-none"
+            className="border border-[#CCCCCC] p-3 w-full rounded-md focus:none outline-none text-[#aaa] cursor-not-allowed"
           />
         </div>
 
@@ -173,14 +249,68 @@ const ProfilePage = () => {
     ),
 
     myCoupons: (
-      <div className="flex justify-center items-center h-full">
-        <div>
-          {/* <img src="/images/no-saved-cards.png" alt="no saved cards" /> */}
-          <p className="text-[#304778] text-2xl font-semibold mt-10 text-center">
-            No Coupons found
-          </p>
+      <>
+        <div className="border">
+          {validCoupons.map((coupon, index) => {
+            return (
+              <div
+                onClick={() => navigate("/shop")}
+                key={index}
+                className="flex justify-between items-center px-3 py-6 cursor-pointer"
+              >
+                <div>
+                  <h4 className="text-[#45D04C] font-semibold mb-3">
+                    {coupon.couponName}
+                  </h4>
+                  <p className="text-sm text-[#171717]">
+                    Extra {coupon.discountPerc}% Off (Valid till:{" "}
+                    {coupon.expiryDate})
+                  </p>
+                </div>
+                <div className="text-end">
+                  <p className="text-sm font-medium text-[#777] mb-3">
+                    Valid till {coupon.expiryDate}
+                  </p>
+                  <button className="text-[#7AA2FF] text-sm font-medium">
+                    View T&C
+                  </button>
+                </div>
+              </div>
+            );
+          })}
         </div>
-      </div>
+        <h3 className="capitalize text-sm text-[#171717] font-semibold my-5">
+          Expired Coupons
+        </h3>
+        <div className="border">
+          {expiredCoupons.map((coupon, index) => {
+            return (
+              <div
+                key={index}
+                className="flex justify-between items-center px-3 py-6"
+              >
+                <div>
+                  <h4 className="text-[#777] font-semibold mb-3">
+                    {coupon.couponName}
+                  </h4>
+                  <p className="text-sm text-[#171717]">
+                    Extra {coupon.discountPerc}% Off (Expired on:{" "}
+                    {coupon.expiryDate})
+                  </p>
+                </div>
+                <div className="text-end">
+                  <p className="text-sm font-medium text-[#777] mb-3">
+                    Expired on {coupon.expiryDate}
+                  </p>
+                  <button className="text-[#7AA2FF] text-sm font-medium">
+                    View T&C
+                  </button>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </>
     ),
 
     myWishlist: (
@@ -200,7 +330,7 @@ const ProfilePage = () => {
       case "personalInfo":
         return "personal information";
       case "orders":
-        return "my orders";
+        return "all orders";
       case "address":
         return "manage address";
       case "savedCards":
@@ -208,7 +338,7 @@ const ProfilePage = () => {
       case "giftCard":
         return "workved gift card";
       case "myCoupons":
-        return "Coupons";
+        return "All Coupons";
       case "myWishlist":
         return "My Wishlist";
       default:
@@ -225,7 +355,7 @@ const ProfilePage = () => {
 
   return (
     <div>
-      <div className="max-w-screen-xl w-full mx-auto flex items-stretch gap-7 font-Poppins py-5">
+      <div className="max-w-screen-xl w-full mx-auto flex items-stretch gap-7 font-Poppins pt-5">
         {/* sidebar */}
         <div className="max-w-xs w-full">
           <div className="flex gap-4 py-5 mb-3 px-5 shadow-[0px_0px_10px_rgba(0,0,0,0.1)]">
@@ -236,13 +366,19 @@ const ProfilePage = () => {
           </div>
 
           <div className="shadow-[0px_0px_10px_rgba(0,0,0,0.1)] py-px">
-            <div className="capitalize flex justify-between items-center my-2 px-5">
+            <div
+              className={`capitalize flex justify-between items-center py-4 px-5 ${
+                activeTab === "orders" ? "bg-[#F5F8FF]" : ""
+              }`}
+            >
               <div
                 onClick={() => setActiveTab("orders")}
                 className="flex items-center gap-4"
               >
                 <BsBoxSeam size={30} color="#304778" />
-                <p className={tabItemClass("orders")}>my orders</p>
+                <p className="text-base tracking-wider font-medium text-[#777] cursor-pointer">
+                  my orders
+                </p>
               </div>
               <MdKeyboardArrowRight color="#304778" />
             </div>
@@ -312,7 +448,6 @@ const ProfilePage = () => {
                 </li>
               </ul>
             </div>
-
             <hr />
             <div
               className="capitalize flex gap-4 items-center my-5 px-5 cursor-pointer"
@@ -327,7 +462,7 @@ const ProfilePage = () => {
         </div>
 
         {/* right panel */}
-        <div className="flex-1 py-5 px-5 shadow-[0px_0px_10px_rgba(0,0,0,0.1)]">
+        <div className="flex-1 py-5 px-5 shadow-[0px_0px_10px_rgba(0,0,0,0.1)] max-h-[95vh] overflow-y-auto scrollbar-hide">
           <h3 className="capitalize text-sm text-[#171717] font-semibold mb-5">
             {getTabTitle()}
           </h3>
