@@ -1,12 +1,17 @@
 // components/CardSection.jsx
+import { useNavigate } from "react-router-dom";
 import Card from "./Card";
 
 export default function CardSection({ title }) {
+  const naviagte = useNavigate();
   return (
     <div className="lg:bg-[#F9FFF7] rounded-md lg:p-4">
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-base lg:text-2xl font-lora">{title}</h2>
-        <button className="w-5 h-5 flex items-center justify-center border-2 border-[#304778] bg-[#304778] hover:bg-[#566587] text-white text-xl rounded-full">
+        <button
+          onClick={() => naviagte("seasonspecial")}
+          className="w-5 h-5 flex items-center justify-center border-2 border-[#304778] bg-[#304778] hover:bg-[#566587] text-white text-xl rounded-full"
+        >
           ›
         </button>
       </div>

@@ -4,8 +4,8 @@ import { IoCloseOutline } from "react-icons/io5";
 function CheckPinCode({ onClose }) {
   return (
     <>
-      <div className="fixed inset-0 bg-[#000]/20">
-        <div className="max-w-screen-sm w-full bg-[#fff] fixed bottom-0 font-Poppins py-2">
+      <div className="lg:hidden fixed inset-0 bg-[#000]/20">
+        <div className="max-w-screen w-full bg-[#fff] fixed bottom-0 font-Poppins py-2">
           <div className="flex justify-between py-2 px-4">
             <h3 className="text-[10px] text-[#111111] font-medium uppercase">
               Enter Address detail
@@ -58,6 +58,37 @@ function CheckPinCode({ onClose }) {
               add new address
             </button>
           </div> */}
+        </div>
+      </div>
+
+      <div className="hidden  fixed inset-0 bg-black bg-opacity-60 lg:flex items-center justify-center z-50 font-Poppins ">
+        <div className="bg-white w-full max-w-lg rounded-md shadow-lg relative">
+          {/* Header */}
+          <div className="flex justify-between items-center border-b p-4">
+            <h2 className="text-xs  font-medium text-[#111]">
+              ENTER ADDRESS DETAIL
+            </h2>
+            <button
+              onClick={onClose}
+              className="text-[#334A78] hover:text-gray-700 text-xl"
+            >
+              &times;
+            </button>
+          </div>
+
+          {/* Body */}
+          <div className="p-6">
+            <div className="border rounded-md flex items-center justify-between px-4 py-3">
+              <input
+                type="text"
+                placeholder="Enter pin code"
+                className="w-full outline-none text-[#aaa] placeholder-[#aaa]"
+              />
+              <button className="text-[#304778] font-semibold whitespace-nowrap ml-4">
+                CHECK
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </>

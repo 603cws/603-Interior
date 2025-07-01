@@ -55,6 +55,7 @@ import Brands from "./pages/Ecommerce/Brands";
 import ProductReview from "./pages/Ecommerce/ProductReview";
 import BrandProductView from "./pages/BrandProductView";
 import ProfilePage from "./pages/Ecommerce/ProfilePage";
+import SeasonSpecial from "./pages/Ecommerce/SeasonSpecial";
 
 const Home = lazy(() => import("./pages/Home"));
 
@@ -143,6 +144,7 @@ function App() {
             <Route path="/tokenExpired" element={<TokenExpired />} />
             <Route path="/partnerwithus" element={<PartnerWorkvedInterior />} />
             <Route path="/products" element={<Products />} />
+            <Route path="/products/seasonspecial" element={<SeasonSpecial />} />
             <Route path="/productview" element={<ProductView />} />
             <Route path="/productview/:id" element={<ProductView />} />
             <Route path="/shop" element={<ShopProducts />} />
@@ -204,6 +206,7 @@ function App() {
             <Route path="/eLogin" element={<ELogin />} />
             <Route path="/profilePage" element={<ProfilePage />} />
             <Route path="/brands/productview" element={<BrandProductView />} />
+            <Route path="/products/seasonspecial" element={<SeasonSpecial />} />
           </Routes>
         )}
       </Suspense>

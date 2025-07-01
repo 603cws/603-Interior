@@ -15,11 +15,6 @@ function AddressForm({
         <div className="border border-[#CCCCCC] rounded-lg font-Poppins">
           <div className="p-4 space-y-2 lg:space-y-3">
             {isAddressnew && (
-              // <div className="my-6 border-b  border-b-[#ccc]">
-              //   <h1 className="font-semibold text-[#171717] text-sm leading-[28.8px]">
-              //     ADD NEW ADDRESS
-              //   </h1>
-              // </div>
               <div className="flex justify-start items-center lg:hidden border-b border-b-[#ccc] mb-2 py-3">
                 <button className="cursor-pointer">
                   <MdOutlineKeyboardArrowLeft size={25} />

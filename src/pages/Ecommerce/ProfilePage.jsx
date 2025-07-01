@@ -10,6 +10,8 @@ import { IoCloseOutline } from "react-icons/io5";
 import { CiStar } from "react-icons/ci";
 import { useNavigate } from "react-router-dom";
 
+import ProfileAddress from "../../Ecommerce-components/ProfileAddress";
+
 const ProfilePage = () => {
   const [activeTab, setActiveTab] = useState("personalInfo");
   const [addGiftCard, setAddGiftCard] = useState(false);
@@ -139,32 +141,7 @@ const ProfilePage = () => {
       </form>
     ),
 
-    address: (
-      <div className="border-2 border-[#ccc] rounded-md p-10 flex justify-between my-10">
-        <div>
-          <h4 className="text-sm font-medium capitalize text-[#000]">name</h4>
-          <p className="text-xs text-[#000]/60 leading-6">
-            Makhija Arcade, 35th Rd, Khar,
-            <br /> Khar West, Mumbai, Maharashtra 400052
-          </p>
-          <div className="flex text-xs leading-8">
-            <p className="text-[#000]/60">mobile:</p>
-            <p className="text-[#000]">9876543210</p>
-          </div>
-        </div>
-        <div className="relative group inline-block">
-          <button className="self-start">
-            <PiDotsThreeVerticalBold />
-          </button>
-          <div className="absolute right-0 opacity-0 group-hover:opacity-100">
-            <ul className="capitalize text-xs">
-              <li>edit</li>
-              <li>delete</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    ),
+    address: <ProfileAddress />,
 
     savedCards: (
       <div className="flex justify-center items-center h-full">

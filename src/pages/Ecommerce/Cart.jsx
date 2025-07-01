@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { AiFillHeart } from "react-icons/ai";
 import { GoHeart } from "react-icons/go";
 import { IoClose } from "react-icons/io5";
-import { MdOutlineCancel, MdOutlineKeyboardArrowRight } from "react-icons/md";
+import { MdOutlineKeyboardArrowRight } from "react-icons/md";
 import { useNavigate, useLocation } from "react-router-dom";
 import Header from "./Header";
 import { supabase } from "../../services/supabase";
@@ -10,15 +10,13 @@ import { useApp } from "../../Context/Context";
 import SpinnerFullPage from "../../common-components/SpinnerFullPage";
 import BottomTabs from "./BottomTabs";
 import CheckoutStepper from "../../common-components/CheckoutStepper";
-import { toast } from "react-toastify";
 import { ToastContainer } from "react-toastify";
 import { showRemoveFromCartToast } from "../../utils/AddToCartToast";
 import { MdOutlineDelete } from "react-icons/md";
 import "animate.css";
-import { isCouponValid } from "../../utils/ResuableFunctions";
 import MobileHeader from "../../common-components/MobileHeader";
-import AppliedCoupon from "../../common-components/AppliedCoupon";
 import PriceDetail from "../../common-components/PriceDetail";
+import CheckPinCode from "./CheckPinCode";
 
 function EmptyCart() {
   const navigate = useNavigate();
@@ -52,6 +50,8 @@ function Cart() {
   const sortedCartItems = [...cartItems].sort((a, b) =>
     a.productId.title.localeCompare(b.productId.title)
   );
+
+  const [checkPin, setCheckPin] = useState(false);
 
   const syncLocalCartToDB = async () => {
     if (!isAuthenticated) return localcartItems;
@@ -125,6 +125,10 @@ function Cart() {
     syncLocalCartToDB();
   }, []);
 
+  const onClose = () => {
+    setCheckPin(!checkPin);
+  };
+
   return (
     <>
       <ToastContainer />
@@ -148,7 +152,10 @@ function Cart() {
                     <h5 className="text-[10px] lg:text-sm text-[#171717] font-semibold ">
                       Check delivery time & services
                     </h5>
-                    <button className="border border-[#C16452] text-[8px] lg:text-[10px] font-semibold text-[#C16452] px-3.5 py-2">
+                    <button
+                      onClick={() => setCheckPin(true)}
+                      className="border border-[#C16452] text-[8px] lg:text-[10px] font-semibold text-[#C16452] px-3.5 py-2"
+                    >
                       ENTER PIN CODE
                     </button>
                   </div>
@@ -274,6 +281,8 @@ function Cart() {
           </div>
         </div>
       </div>
+
+      {checkPin && <CheckPinCode onClose={onClose} />}
 
       <div className="hidden lg:block">
         {" "}
@@ -510,5 +519,40 @@ function CartCard({ cartitem }) {
         </div>
       </div>
     </>
+  );
+}
+
+function CheckPin({ setCheckPin }) {
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 font-Poppins ">
+      <div className="bg-white w-full max-w-lg rounded-md shadow-lg relative">
+        {/* Header */}
+        <div className="flex justify-between items-center border-b p-4">
+          <h2 className="text-xs  font-medium text-[#111]">
+            ENTER ADDRESS DETAIL
+          </h2>
+          <button
+            onClick={() => setCheckPin(false)}
+            className="text-[#334A78] hover:text-gray-700 text-xl"
+          >
+            &times;
+          </button>
+        </div>
+
+        {/* Body */}
+        <div className="p-6">
+          <div className="border rounded-md flex items-center justify-between px-4 py-3">
+            <input
+              type="text"
+              placeholder="Enter pin code"
+              className="w-full outline-none text-[#aaa] placeholder-[#aaa]"
+            />
+            <button className="text-[#304778] font-semibold whitespace-nowrap ml-4">
+              CHECK
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }
