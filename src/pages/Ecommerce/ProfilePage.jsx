@@ -1,158 +1,208 @@
+import { useState } from "react";
+import { BsBoxSeam, BsStars } from "react-icons/bs";
+import { FaRegCircleUser, FaUser } from "react-icons/fa6";
+import { MdKeyboardArrowRight, MdLogout, MdPayments } from "react-icons/md";
+import {
+  PiDotsThreeCircleVerticalBold,
+  PiDotsThreeVerticalBold,
+} from "react-icons/pi";
+
 const ProfilePage = () => {
+  const [activeTab, setActiveTab] = useState("personalInfo");
+
   return (
-    <div className="flex container mx-auto items-center px-36 py-20 gap-20">
-      {/* Sidebar */}
-      <aside className="w-96 bg-white shadow-sm gap-4 flex flex-col">
-        {/* User Info */}
-        <div className="p-4 border-b border-gray-200 flex items-center gap-3 shadow-custom pb-4">
-          <div className="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center">
-            <svg
-              className="w-6 h-6 text-gray-600"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M5.121 17.804A13.937 13.937 0 0112 15c2.485 0 4.798.753 6.879 2.035M15 11a3 3 0 11-6 0 3 3 0 016 0z"
-              />
-            </svg>
+    <div>
+      <div className="max-w-screen-xl w-full mx-auto flex items-stretch gap-7 font-Poppins py-5">
+        {/* sidebar */}
+        <div className="max-w-xs w-full">
+          <div className="flex gap-4 py-5 mb-3 px-5 shadow-[0px_0px_10px_rgba(0,0,0,0.1)]">
+            <FaRegCircleUser size={30} color="#304778" />
+            <p className="capitalize text-xs font-medium tracking-wider">
+              {" "}
+              Hello <br /> smita n
+            </p>
           </div>
-          <div>
-            <p className="text-sm text-gray-500">Hello</p>
-            <p className="text-sm font-medium text-gray-900">Smita N</p>
-          </div>
-        </div>
-
-        {/* Menu */}
-        <nav className="mt-0 text-sm shadow-[0px_0px_8px_#000]">
-          <div className="px-6 py-3 hover:bg-gray-50 flex items-center justify-between cursor-pointer">
-            <span className="font-medium text-gray-700 flex items-center gap-2">
-              <svg
-                className="w-4 h-4 text-gray-600"
-                fill="currentColor"
-                viewBox="0 0 24 24"
+          <div className="shadow-[0px_0px_10px_rgba(0,0,0,0.1)] py-5">
+            <div className="capitalize flex justify-between items-center my-5 px-5">
+              <div
+                onClick={() => setActiveTab("orders")}
+                className="flex items-center gap-4"
               >
-                <path d="M3 6h18M3 12h18M3 18h18" />
-              </svg>
-              My Orders
-            </span>
-            <span className="text-gray-500">{`>`}</span>
-          </div>
-
-          <div className="mt-3 text-gray-700 font-medium px-6">
-            Account Setting
-          </div>
-          <div className="bg-[#edf2ff] text-[#3758f9] px-6 py-2 font-medium">
-            Profile Information
-          </div>
-          <div className="px-6 py-2 text-gray-600 hover:bg-gray-100 cursor-pointer">
-            Manage Address
-          </div>
-
-          <div className="mt-3 text-gray-700 font-medium px-6">Payment</div>
-          <div className="px-6 py-2 text-gray-600 hover:bg-gray-100 cursor-pointer">
-            Gift Card
-          </div>
-          <div className="px-6 py-2 text-gray-600 hover:bg-gray-100 cursor-pointer">
-            Saved Card
-          </div>
-
-          <div className="mt-3 text-gray-700 font-medium px-6">My Items</div>
-          <div className="px-6 py-2 text-gray-600 hover:bg-gray-100 cursor-pointer">
-            My Coupon
-          </div>
-          <div className="px-6 py-2 text-gray-600 hover:bg-gray-100 cursor-pointer">
-            My Wishlist
-          </div>
-
-          <div className="mt-3 px-6 py-3 text-gray-700 hover:bg-gray-100 cursor-pointer flex items-center gap-2">
-            <svg
-              className="w-5 h-5 text-gray-500"
-              fill="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path d="M16 17l-4-4-4 4m8-8l-4 4-4-4" />
-            </svg>
-            Logout
-          </div>
-        </nav>
-      </aside>
-
-      {/* Right Panel */}
-      <main className="w-full">
-        <div className="bg-white border rounded-lg shadow-sm p-8 w-full mx-auto">
-          <h2 className="text-sm font-semibold text-black mb-6">
-            Personal Information
-          </h2>
-
-          {/* Name Fields */}
-          <div className="grid grid-cols-2 gap-4 mb-6">
-            <input
-              type="text"
-              value="Smita"
-              disabled
-              className="w-full px-4 py-2 border border-gray-300 rounded placeholder-gray-400 text-sm"
-            />
-            <input
-              type="text"
-              value="N"
-              disabled
-              className="w-full px-4 py-2 border border-gray-300 rounded placeholder-gray-400 text-sm"
-            />
-          </div>
-
-          {/* Gender */}
-          <div className="mb-6">
-            <label className="block text-sm font-medium mb-2">
-              Your Gender
-            </label>
-            <div className="flex items-center gap-6 text-sm">
-              <label className="flex items-center gap-2">
-                <input type="radio" name="gender" checked readOnly />
-                <span className="text-gray-800">Male</span>
-              </label>
-              <label className="flex items-center gap-2 text-gray-400">
-                <input type="radio" name="gender" readOnly />
-                <span>Female</span>
-              </label>
+                <BsBoxSeam size={30} color="#304778" />
+                <p className="text-base tracking-wider font-medium text-[#777]">
+                  my orders
+                </p>
+              </div>
+              <MdKeyboardArrowRight color="#304778" />
+            </div>
+            <hr />
+            <div className="capitalize tracking-wider font-medium my-5 px-5">
+              <div className="flex gap-4 items-center ">
+                <FaUser size={30} color="#304778" />
+                <p className="text-base text-[#777]">account setting </p>
+              </div>
+              <ul className="text-xs pl-12 space-y-4 my-4">
+                <li onClick={() => setActiveTab("personalInfo")}>
+                  Profile Information
+                </li>
+                <li onClick={() => setActiveTab("address")}>Manage Address</li>
+              </ul>
+            </div>
+            <hr />
+            <div className="capitalize tracking-wider font-medium my-5 px-5">
+              <div className="flex gap-4 items-center ">
+                <MdPayments size={30} color="#304778" />
+                <p className="text-base text-[#777]">Payment </p>
+              </div>
+              <ul className="text-xs pl-12 space-y-4 my-4">
+                <li onClick={() => setActiveTab("giftCard")}>Gift Card</li>
+                <li onClick={() => setActiveTab("savedCards")}>Saved Card</li>
+              </ul>
+            </div>
+            <hr />
+            <div className="capitalize tracking-wider font-medium my-5 px-5">
+              <div className="flex gap-4 items-center ">
+                <BsStars size={30} color="#304778" />
+                <p className="text-base text-[#777]">My Items </p>
+              </div>
+              <ul className="text-xs pl-12 space-y-4 my-4">
+                <li>My Coupon</li>
+                <li>My Wishlist</li>
+              </ul>
+            </div>
+            <hr />
+            <div className="capitalize flex gap-4 items-center my-5 px-5">
+              <MdLogout size={30} color="#304778" />
+              <p className="text-base tracking-wider font-medium text-[#777]">
+                logout
+              </p>
             </div>
           </div>
-
-          {/* Email */}
-          <div className="mb-6">
-            <label className="block text-sm font-medium mb-2">
-              Email Address
-            </label>
-            <input
-              type="email"
-              value="Smita@gmail.com"
-              disabled
-              className="w-full px-4 py-2 border border-gray-300 rounded placeholder-gray-400 text-sm"
-            />
-          </div>
-
-          {/* Mobile */}
-          <div className="mb-8">
-            <label className="block text-sm font-medium mb-2">
-              Mobile Number
-            </label>
-            <input
-              type="text"
-              value="9988776650"
-              disabled
-              className="w-full px-4 py-2 border border-gray-300 rounded placeholder-gray-400 text-sm"
-            />
-          </div>
-
-          {/* Edit Button */}
-          <button className="w-full bg-[#2c3e70] text-white text-sm py-2 rounded font-semibold tracking-wide">
-            EDIT
-          </button>
         </div>
-      </main>
+
+        <div className="flex-1 py-5 px-5 shadow-[0px_0px_10px_rgba(0,0,0,0.1)]">
+          <h3 className="capitalize text-sm text-[#171717] font-semibold">
+            {activeTab === "personalInfo" && "personal information"}
+            {activeTab === "orders" && "my orders"}
+            {activeTab === "address" && "manage address"}
+            {activeTab === "savedCards" && "manage saved card"}
+            {activeTab === "giftCard" && "workved gift card"}
+          </h3>
+          {activeTab === "orders" && <div>orders page here</div>}
+          {activeTab === "personalInfo" && (
+            <form>
+              <div className="flex w-full gap-10 my-10">
+                <input
+                  type="text"
+                  placeholder="Smita"
+                  className="border border-[#CCCCCC] p-3 flex-1 rounded-md focus:none outline-none"
+                />
+                <input
+                  type="text"
+                  placeholder="N"
+                  className="border border-[#CCCCCC] p-3 flex-1 rounded-md  focus:none outline-none"
+                />
+              </div>
+              <div className="mb-10 space-y-5">
+                <label className="capitalize text-sm text-[#171717] font-semibold">
+                  your gender
+                </label>
+                <div className="text-[#AAA] capitalize flex gap-10">
+                  <div className="flex gap-2">
+                    <input type="radio" name="male" id="male" />
+                    <label htmlFor="radio">male</label>
+                  </div>
+                  <div className="flex gap-2">
+                    <input type="radio" name="female" id="female" />
+                    <label htmlFor="radio">female</label>
+                  </div>
+                </div>
+              </div>
+              <div className="mb-10 space-y-5">
+                <label className="capitalize text-sm text-[#171717] font-semibold">
+                  email address
+                </label>
+                <input
+                  type="text"
+                  placeholder="smita@gmail.com"
+                  className="border border-[#CCCCCC] p-3 w-full rounded-md  focus:none outline-none"
+                />
+              </div>
+
+              <div className="mb-10 space-y-5">
+                <label className="capitalize text-sm text-[#171717] font-semibold">
+                  mobile number
+                </label>
+                <input
+                  type="text"
+                  placeholder="9988776650"
+                  className="border border-[#CCCCCC] p-3 w-full rounded-md  focus:none outline-none"
+                />
+              </div>
+
+              <div className="px-7">
+                <button
+                  type="submit"
+                  className="uppercase bg-[#334A78] border border-[#212B36] text-[#fff] w-full py-2 active:scale-90 transition-transform duration-300 ease-in-out"
+                >
+                  edit
+                </button>
+              </div>
+            </form>
+          )}
+          {activeTab === "address" && (
+            <div>
+              <div className="border-2 border-[#ccc] rounded-md p-10 flex justify-between my-10">
+                <div>
+                  <h4 className="text-sm font-medium capitalize text-[#000]">
+                    name
+                  </h4>
+                  <p className="text-xs text-[#000]/60 leading-6">
+                    Makhija Arcade, 35th Rd, Khar,
+                    <br /> Khar West, Mumbai, Maharashtra 400052
+                  </p>
+                  <div className="flex text-xs leading-8">
+                    <p className="text-[#000]/60">mobile:</p>
+                    <p className="text-[#000]">9876543210</p>
+                  </div>
+                </div>
+                <div className="relative group inline-block">
+                  <button className="self-start">
+                    <PiDotsThreeVerticalBold />
+                  </button>
+                  <div className="absolute right-0 opacity-0 group-hover:opacity-100">
+                    <ul className="capitalize text-xs">
+                      <li>edit</li>
+                      <li>delete</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {activeTab === "savedCards" && (
+            <div className="flex justify-center items-center h-full">
+              <div>
+                <img src="/images/no-saved-cards.png" alt="no saved cards" />
+                <p className="text-[#304778] text-2xl font-semibold mt-10 text-center">
+                  No Card details found
+                </p>
+              </div>
+            </div>
+          )}
+
+          {activeTab === "giftCard" && (
+            <div>
+              <div>
+                <button className="uppercase text-sm text-[#4F88FF] font-medium border border-[#E0E0E0] w-full py-3 text-start px-10">
+                  + add a gift card
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
     </div>
   );
 };
