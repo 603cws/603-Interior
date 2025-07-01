@@ -1,8 +1,8 @@
 import toast from "react-hot-toast";
 import { useApp } from "../Context/Context";
 import { supabase } from "../services/supabase";
-
 import { AddToCartToast } from "./AddToCartToast";
+import { useNavigate } from "react-router-dom";
 
 export const useHandleAddToCart = () => {
   const { isAuthenticated, setLocalCartItems, getCartItems, accountHolder } =
@@ -133,4 +133,41 @@ export const useHandleAddToCart = () => {
   };
 
   return { handleAddToCart, handleAddtoWishlist };
+};
+
+export const useLogout = () => {
+  const navigate = useNavigate();
+  const {
+    setAccountHolder,
+    setIsAuthLoading,
+    setIsAuthenticated,
+    setTotalArea,
+  } = useApp();
+
+  const handleLogout = async () => {
+    try {
+      setIsAuthLoading(true);
+      const { error } = await supabase.auth.signOut();
+      if (error) {
+        console.log("Error signing out:", error.message);
+      } else {
+        toast.success("User signed out successfully");
+        setAccountHolder({
+          companyName: "",
+          email: "",
+          phone: "",
+          role: "",
+          userId: "",
+        });
+        setTotalArea("");
+        localStorage.removeItem("currentLayoutID");
+        navigate("/");
+        setIsAuthenticated(false);
+      }
+    } finally {
+      setIsAuthLoading(false);
+    }
+  };
+
+  return handleLogout;
 };
