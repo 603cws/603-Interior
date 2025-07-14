@@ -5,11 +5,13 @@ import { useNavigate } from "react-router-dom";
 import { useApp } from "../../Context/Context";
 import { FiMenu, FiX } from "react-icons/fi";
 import { useState } from "react";
+import { useLogout } from "../../utils/HelperFunction";
 
 function Header() {
   const navigate = useNavigate();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [showProfile, setshowProfile] = useState(false);
+  const logout = useLogout();
 
   const {
     cartItems,
@@ -71,7 +73,10 @@ function Header() {
               <img src="../images/ecommerce/icon4.svg" alt="Coupon icon" />
               <span className="ml-2">Coupons</span>
             </li>
-            <li className="flex items-center px-4 py-2 hover:bg-[#f9f9f9] border-t border-[#CCCCCC] mt-2">
+            <li
+              className="flex items-center px-4 py-2 hover:bg-[#f9f9f9] border-t border-[#CCCCCC] mt-2"
+              onClick={logout}
+            >
               <p className="ml-2">
                 <img src="../images/ecommerce/icon5.svg" alt="Logout icon" />
               </p>

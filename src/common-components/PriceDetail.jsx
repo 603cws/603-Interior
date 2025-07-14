@@ -94,15 +94,35 @@ function PriceDetail() {
 
   const getallthecouponsFromDB = async () => {
     try {
-      const { data: coupon, error: fetchError } = await supabase
-        .from("coupons")
-        .select("*");
+      const { data: authData } = await supabase.auth.getUser();
+      const userId = authData?.user?.id;
 
-      console.log("allcoupons", coupon);
+      if (!userId) return;
 
-      setAllCoupons(coupon);
+      const { data: profile } = await supabase
+        .from("profiles")
+        .select("newUser, usedWelcomeCoupon")
+        .eq("id", userId)
+        .single();
 
-      if (fetchError) throw new Error(fetchError);
+      const { data: allCoupons } = await supabase.from("coupons").select("*");
+
+      // console.log("allcoupons", allCoupons);
+
+      // Attach disabled status if coupon is new-user only
+      const couponsWithStatus = allCoupons.map((coupon) => {
+        const isWelcomeCoupon = coupon?.couponName
+          ?.toLowerCase()
+          ?.includes("welcome");
+        const shouldDisable = isWelcomeCoupon && profile?.usedWelcomeCoupon;
+
+        return {
+          ...coupon,
+          isDisabled: shouldDisable,
+        };
+      });
+
+      setAllCoupons(couponsWithStatus);
     } catch (error) {
       console.log(error);
     }
@@ -121,6 +141,42 @@ function PriceDetail() {
       navigate("/login", { state: { from: location.pathname } });
     }
   };
+
+  //Below code => When coupon redeemed then disable the coupon in the db.
+  // const handleSubmit = async () => {
+  //   const { data: user, error: userError } = await supabase.auth.getUser();
+
+  //   console.log("user", user);
+
+  //   if (userError || !user?.user?.id) {
+  //     toast.error("User not found. Please Login.");
+  //     return;
+  //   }
+
+  //   const userId = user.user.id;
+
+  //   // 1. Update profile fields after placing order
+  //   const { error } = await supabase
+  //     .from("profiles")
+  //     .update({
+  //       usedWelcomeCoupon: true,
+  //       newUser: false,
+  //     })
+  //     .eq("id", userId);
+
+  //   if (error) {
+  //     toast.error(error);
+  //     return;
+  //   }
+
+  //   // 2. Show popup / toast
+  //   toast.success("🎉 Order placed successfully!");
+
+  //   // Refresh after 2 seconds
+  //   setTimeout(() => {
+  //     window.location.reload();
+  //   }, 2000);
+  // };
 
   const handleApplyofCoupon = async (coupon) => {
     if (totalPrice === 0) return toast.error("cart is empty");
@@ -147,8 +203,7 @@ function PriceDetail() {
       <div className="flex-1 lg:border-l-[1px] lg:pl-10 text-sm lg:text-base">
         <h4 className="uppercase mb-3 lg:mb-7">
           price details (
-          {isAuthenticated ? cartItems?.length : localcartItems?.length}
-          Items)
+          {isAuthenticated ? cartItems?.length : localcartItems?.length} Items)
         </h4>
         <div className="space-y-3 lg:space-y-6 lg:pb-6">
           <div className="flex justify-between">
@@ -315,10 +370,15 @@ function CouponCard({
   console.log(mobilecouponname, "hello");
 
   return (
-    <div className="flex items-start space-x-2 font-Poppins ">
+    <div
+      className={`flex items-start space-x-2 font-Poppins ${
+        coupon?.isDisabled ? "opacity-70 cursor-not-allowed" : "opacity-100"
+      }`}
+    >
       <input
         type="checkbox"
         checked={mobilecouponname?.couponName === coupon?.couponName}
+        disabled={coupon?.isDisabled}
         onChange={(e) => {
           if (e.target.checked) {
             setmobilecouponname(coupon);
@@ -327,19 +387,22 @@ function CouponCard({
             setmobilecouponname("");
           }
         }}
-        className="w-5 h-5 accent-[#304778] mt-1 cursor-pointer"
+        className="w-5 h-5 accent-[#304778] mt-1 cursor-pointer disabled:cursor-not-allowed"
       />
 
-      <div className="flex-1 ">
+      <div className="flex-1">
         <div className="inline-block border-2 border-dashed border-[#304778] text-[#304778] text-[10px] px-4 py-1 font-semibold tracking-wider mb-[10px]">
           {coupon?.couponName}
         </div>
+        {coupon?.isDisabled && (
+          <p className="inline ml-4 text-red-600 text-xs">Already Used*</p>
+        )}
 
         <p className="font-semibold text-xs leading-[28.8px] text-black">
           Save {coupon?.discountPerc}%
         </p>
         <p className="text-xs text-[#304778] leading-[28.8px]">
-          {coupon?.discountPerc}% off on minimum purchase of Rs. 10000.
+          {coupon?.discountPerc}% off on minimum purchase of Rs. 10000
         </p>
 
         <p className="text-xs text-[#304778] leading-[28.8px]">
