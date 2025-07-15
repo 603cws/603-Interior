@@ -15,10 +15,24 @@ function calculateSpace(type, quantity, latestData, keys) {
   return keys.reduce((total, key) => total + (latestData[`${key}Qty`] || 0), 0);
 }
 
-const getCategoryTotal = (keys, totals) => {
+// const getCategoryTotal = (keys, totals) => {
+//   return keys.reduce((sum, key) => {
+//     const totalKey = `${key}Total`;
+//     return sum + (totals[totalKey] || 0);
+//   }, 0);
+// };
+
+const getCategoryTotal = (type, keys, data, latestData) => {
   return keys.reduce((sum, key) => {
-    const totalKey = `${key}Total`;
-    return sum + (totals[totalKey] || 0);
+    if (type === "areas") {
+      const totalKey = `${key}Total`;
+      return sum + (data[totalKey] || 0);
+    } else {
+      //if (type === "quantity")
+      const qtyKey = `${key}Qty`;
+      return sum + (latestData[qtyKey] || 0);
+    }
+    // return sum;
   }, 0);
 };
 
@@ -121,10 +135,20 @@ const processData = (data, type, quantity = {}) => {
   //   openWorkSpacesKeys
   // );
 
-  const openworkspaces = getCategoryTotal(openWorkSpacesKeys, workspaceTotals);
+  const openworkspaces = getCategoryTotal(
+    type,
+    openWorkSpacesKeys,
+    workspaceTotals,
+    latestData
+  );
 
   // const cabins = calculateSpace(type, quantity, latestData, cabinsKeys);
-  const cabins = getCategoryTotal(cabinsKeys, workspaceTotals);
+  const cabins = getCategoryTotal(
+    type,
+    cabinsKeys,
+    workspaceTotals,
+    latestData
+  );
 
   // const meetingrooms = calculateSpace(
   //   type,
@@ -132,7 +156,12 @@ const processData = (data, type, quantity = {}) => {
   //   latestData,
   //   meetingRoomKeys
   // );
-  const meetingrooms = getCategoryTotal(meetingRoomKeys, workspaceTotals);
+  const meetingrooms = getCategoryTotal(
+    type,
+    meetingRoomKeys,
+    workspaceTotals,
+    latestData
+  );
 
   // const publicspaces = calculateSpace(
   //   type,
@@ -140,7 +169,12 @@ const processData = (data, type, quantity = {}) => {
   //   latestData,
   //   publicSpaceKeys
   // );
-  const publicspaces = getCategoryTotal(publicSpaceKeys, workspaceTotals);
+  const publicspaces = getCategoryTotal(
+    type,
+    publicSpaceKeys,
+    workspaceTotals,
+    latestData
+  );
 
   // const supportspaces = calculateSpace(
   //   type,
@@ -148,10 +182,20 @@ const processData = (data, type, quantity = {}) => {
   //   latestData,
   //   supportSpaceKeys
   // );
-  const supportspaces = getCategoryTotal(supportSpaceKeys, workspaceTotals);
+  const supportspaces = getCategoryTotal(
+    type,
+    supportSpaceKeys,
+    workspaceTotals,
+    latestData
+  );
 
   let allAreas =
     openworkspaces + cabins + meetingrooms + publicspaces + supportspaces;
+
+  let centralizedAreas =
+    type === "quantity"
+      ? cabins + meetingrooms + publicspaces + supportspaces
+      : allAreas;
 
   const processedData = {
     linear: type === "quantity" ? latestData.linearQty : latestData.linearArea,
@@ -229,7 +273,7 @@ const processData = (data, type, quantity = {}) => {
     publicspaces: publicspaces,
     supportspaces: supportspaces,
     allareas: allAreas,
-    centralized: allAreas,
+    centralized: centralizedAreas,
     pantry: type === "quantity" ? latestData.loungeQty : latestData.loungeArea,
     usedSpace: latestData.usedSpace,
   };

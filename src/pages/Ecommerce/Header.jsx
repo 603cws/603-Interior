@@ -4,7 +4,7 @@ import { GoHeart } from "react-icons/go";
 import { useNavigate } from "react-router-dom";
 import { useApp } from "../../Context/Context";
 import { FiMenu, FiX } from "react-icons/fi";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useLogout } from "../../utils/HelperFunction";
 
 function Header() {
@@ -13,6 +13,9 @@ function Header() {
   const [showProfile, setshowProfile] = useState(false);
   const logout = useLogout();
 
+  const profileRef = useRef(null);
+  const buttonRef = useRef(null);
+
   const {
     cartItems,
     isAuthenticated,
@@ -20,6 +23,27 @@ function Header() {
     wishlistItems,
     accountHolder,
   } = useApp();
+
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (
+        profileRef.current &&
+        !profileRef.current.contains(event.target) &&
+        buttonRef.current &&
+        !buttonRef.current.contains(event.target)
+      ) {
+        setshowProfile(false);
+      }
+    }
+
+    if (showProfile) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [showProfile]);
 
   function checkLoggedIn() {
     if (isAuthenticated) {
@@ -32,7 +56,10 @@ function Header() {
   return (
     <div className="md:container relative">
       {showProfile && (
-        <div className="absolute right-2 top-14 md:right-24 xl:right-20 3xl:right-64 w-40 xl:w-56 mt-1 font-Poppins bg-white text-black rounded-xl shadow-[3px_0px_8px_#000] z-50">
+        <div
+          ref={profileRef}
+          className="absolute right-2 top-14 md:right-24 xl:right-20 3xl:right-64 w-40 xl:w-56 mt-1 font-Poppins bg-white text-black rounded-xl shadow-[3px_0px_8px_#000] z-50"
+        >
           <p className="px-4 py-3 font-semibold border-b border-[#CCCCCC]">
             {/* <span className="ml-2"> */}
             Hello {accountHolder?.companyName || "User Profile"}
@@ -104,8 +131,8 @@ function Header() {
         </button>
         <div className="flex items-center">
           <div className="flex gap-12 py-5">
-            <button>
-              <FaRegUser size={20} onClick={checkLoggedIn} />
+            <button onClick={checkLoggedIn} ref={buttonRef}>
+              <FaRegUser size={20} />
             </button>
             <button onClick={() => navigate("/wishlist")} className="relative">
               <GoHeart size={22} />
