@@ -376,7 +376,7 @@ function CustomInput({
       />
       <label
         htmlFor={id}
-        className={`absolute left-2 px-1 bg-white transition-all text-sm text-gray-500 
+        className={`absolute left-2 px-[1px] bg-[#fff] transition-all text-sm text-gray-500 
           ${
             isFloating
               ? "-top-2 text-sm text-[#aaa]"

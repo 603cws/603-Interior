@@ -12,15 +12,26 @@ import {
 
 function DetailedReview({
   selectedReview,
+  gridViewReview,
   onClose,
   mode,
   setMode,
   setSelectedReview,
+  selectedImageIndex,
+  setSelectedImageIndex,
 }) {
-  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+  // const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [expanded, setExpanded] = useState(false);
 
-  const images = selectedReview ? JSON.parse(selectedReview.images) : [];
+  // const images = selectedReview ? JSON.parse(selectedReview.images) : [];
+  let images = [];
+
+  if (mode === "normal" && selectedReview) {
+    images = JSON.parse(selectedReview.images || "[]");
+  } else if (mode === "grid" && Array.isArray(gridViewReview)) {
+    images = gridViewReview.map(({ path }) => path);
+  }
+
   const currentImageUrl = images.length
     ? supabase.storage
         .from("review-images")
@@ -49,9 +60,14 @@ function DetailedReview({
     );
   };
 
+  const indexWithinReview = (review, path) => {
+    const imgs = JSON.parse(review.images || "[]");
+    return imgs.findIndex((img) => img === path);
+  };
+
   return (
     <>
-      {selectedReview && (
+      {(selectedReview || gridViewReview) && (
         <div className="fixed inset-0 z-30 bg-black/20 flex justify-center items-center">
           <div className="max-w-screen-md w-full relative">
             <div className="absolute top-0 right-20">
@@ -67,8 +83,9 @@ function DetailedReview({
                   <h2 className="text-lg font-semibold mb-4">
                     All User Images
                   </h2>
-                  <div className="grid grid-cols-3 gap-3">
-                    {JSON.parse(selectedReview.images).map((img, index) => {
+                  <div className="grid grid-cols-3 gap-3 justify-items-center">
+                    {/* {JSON.parse(selectedReview.images).map((img, index) => { */}
+                    {/* {images.map((img, index) => {
                       const url = supabase.storage
                         .from("review-images")
                         .getPublicUrl(img).data.publicUrl;
@@ -77,9 +94,32 @@ function DetailedReview({
                           key={index}
                           src={url}
                           alt={`review-img-${index}`}
-                          className="h-40 w-full object-cover rounded cursor-pointer"
+                          className="h-36 w-36 object-cover rounded cursor-pointer"
                           onClick={() => {
-                            setSelectedReview(selectedReview);
+                            // setSelectedReview(selectedReview);
+                            const clicked = selectedReview[index];
+                            setSelectedReview(clicked.review);
+                            setMode("normal");
+                          }}
+                        />
+                      );
+                    })} */}
+                    {gridViewReview?.map(({ path, review }, index) => {
+                      const url = supabase.storage
+                        .from("review-images")
+                        .getPublicUrl(path).data.publicUrl;
+
+                      return (
+                        <img
+                          key={index}
+                          src={url}
+                          alt={`review-img-${index}`}
+                          className="h-36 w-36 object-cover rounded cursor-pointer"
+                          onClick={() => {
+                            setSelectedReview(review);
+                            setSelectedImageIndex(
+                              indexWithinReview(review, path)
+                            );
                             setMode("normal");
                           }}
                         />

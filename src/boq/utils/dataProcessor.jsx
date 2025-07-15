@@ -15,6 +15,13 @@ function calculateSpace(type, quantity, latestData, keys) {
   return keys.reduce((total, key) => total + (latestData[`${key}Qty`] || 0), 0);
 }
 
+const getCategoryTotal = (keys, totals) => {
+  return keys.reduce((sum, key) => {
+    const totalKey = `${key}Total`;
+    return sum + (totals[totalKey] || 0);
+  }, 0);
+};
+
 // Same calculateSpace function with console logs for debugging
 // function calculateSpace(type, quantity, latestData, keys) {
 //   quantity = quantity[0] || {};
@@ -59,12 +66,25 @@ const processData = (data, type, quantity = {}) => {
 
   const latestData = data[0];
 
+  const workspaceTotals = {};
+
+  Object.keys(latestData).forEach((key) => {
+    if (key.endsWith("Area")) {
+      const prefix = key.replace("Area", "");
+      const qtyKey = `${prefix}Qty`;
+      if (qtyKey in latestData) {
+        workspaceTotals[`${prefix}Total`] =
+          latestData[key] * latestData[qtyKey];
+      }
+    }
+  });
+
   const openWorkSpacesKeys = ["linear", "lType"];
 
   const cabinsKeys = ["md", "manager", "small"];
 
   const meetingRoomKeys = [
-    "discussionRoom",
+    // "discussionRoom",
     "interviewRoom",
     "conferenceRoom",
     "boardRoom",
@@ -94,35 +114,41 @@ const processData = (data, type, quantity = {}) => {
     "executiveWashroom",
   ];
 
-  const openworkspaces = calculateSpace(
-    type,
-    quantity,
-    latestData,
-    openWorkSpacesKeys
-  );
+  // const openworkspaces = calculateSpace(
+  //   type,
+  //   quantity,
+  //   latestData,
+  //   openWorkSpacesKeys
+  // );
 
-  const cabins = calculateSpace(type, quantity, latestData, cabinsKeys);
+  const openworkspaces = getCategoryTotal(openWorkSpacesKeys, workspaceTotals);
 
-  const meetingrooms = calculateSpace(
-    type,
-    quantity,
-    latestData,
-    meetingRoomKeys
-  );
+  // const cabins = calculateSpace(type, quantity, latestData, cabinsKeys);
+  const cabins = getCategoryTotal(cabinsKeys, workspaceTotals);
 
-  const publicspaces = calculateSpace(
-    type,
-    quantity,
-    latestData,
-    publicSpaceKeys
-  );
+  // const meetingrooms = calculateSpace(
+  //   type,
+  //   quantity,
+  //   latestData,
+  //   meetingRoomKeys
+  // );
+  const meetingrooms = getCategoryTotal(meetingRoomKeys, workspaceTotals);
 
-  const supportspaces = calculateSpace(
-    type,
-    quantity,
-    latestData,
-    supportSpaceKeys
-  );
+  // const publicspaces = calculateSpace(
+  //   type,
+  //   quantity,
+  //   latestData,
+  //   publicSpaceKeys
+  // );
+  const publicspaces = getCategoryTotal(publicSpaceKeys, workspaceTotals);
+
+  // const supportspaces = calculateSpace(
+  //   type,
+  //   quantity,
+  //   latestData,
+  //   supportSpaceKeys
+  // );
+  const supportspaces = getCategoryTotal(supportSpaceKeys, workspaceTotals);
 
   let allAreas =
     openworkspaces + cabins + meetingrooms + publicspaces + supportspaces;
@@ -145,10 +171,10 @@ const processData = (data, type, quantity = {}) => {
       type === "quantity"
         ? latestData.phoneBoothQty
         : latestData.phoneBoothArea,
-    discussionroom:
-      type === "quantity"
-        ? latestData.discussionRoomQty
-        : latestData.discussionRoomArea,
+    // discussionroom:
+    //   type === "quantity"
+    //     ? latestData.discussionRoomQty
+    //     : latestData.discussionRoomArea,
     interviewroom:
       type === "quantity"
         ? latestData.interviewRoomQty
