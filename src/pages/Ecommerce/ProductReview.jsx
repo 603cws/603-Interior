@@ -150,6 +150,7 @@ export default function ProductReview({ product, onClose }) {
               name="headline"
               value={headline}
               onChange={(e) => setHeadline(e.target.value)}
+              required
               placeholder="Very good product!!"
               className="w-full border rounded-lg p-4 focus:outline-none focus:ring-0 text-[10px] md:text-xs lg:text-sm"
             />
@@ -165,6 +166,7 @@ export default function ProductReview({ product, onClose }) {
               name="description"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
+              required
               // defaultValue={`Poor quality. The seat is not even parallel to the ground...`}
               className="w-full border rounded-lg p-4 focus:outline-none focus:ring-0 text-[10px] md:text-xs lg:text-sm"
               rows={6}

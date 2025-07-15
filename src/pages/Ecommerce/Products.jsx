@@ -607,7 +607,11 @@ function Products() {
               <CardSection className="flex-1" title="Season’s Special" />
             </div>
             <div className="hidden lg:block">
-              <CardSection className="flex-1" title="Top Deals On Furniture" />
+              <CardSection
+                className="flex-1"
+                title="Top Deals On Furniture"
+                navigationPath="topdeal?category=Furniture"
+              />
             </div>
           </div>
         </div>
@@ -619,7 +623,10 @@ function Products() {
           <div className="flex flex-col md:flex-row md:items-stretch gap-6">
             {/* Left Column */}
             <div className="flex-1">
-              <CardSection title="Special sale on HVAC" />
+              <CardSection
+                title="Special sale on HVAC"
+                navigationPath="topdeal?category=HVAC"
+              />
             </div>
 
             {/* Right Column: Make this a positioned container */}

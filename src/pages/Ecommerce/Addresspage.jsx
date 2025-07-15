@@ -559,7 +559,7 @@ function Addresspage() {
                   <DeliveryEstimate product={item} key={index} />
                 ))}
               </div>
-              <div className="mb-12 lg:mb-0 text-sm lg:text-base">
+              {/* <div className="mb-12 lg:mb-0 text-sm lg:text-base">
                 <h4 className="uppercase mb-7 text-[#111]  font-medium">
                   price details ({cartItems?.length} Items)
                 </h4>
@@ -612,18 +612,20 @@ function Addresspage() {
                     </h5>
                   </div>
                 </div>
+              </div> */}
+
+              <div className="mb-20 lg:mb-0">
+                <PriceDetail handlebtnClick={handleContinue} />
               </div>
 
-              {/* <PriceDetail /> */}
-
-              {accountHolder?.address?.length > 0 && (
+              {/* {accountHolder?.address?.length > 0 && (
                 <button
                   onClick={handleContinue}
                   className="hidden uppercase text-xl text-[#ffffff] tracking-wider w-full lg:flex justify-center items-center bg-[#334A78] border border-[#212B36] py-3 rounded-sm font-thin"
                 >
                   Continue
                 </button>
-              )}
+              )} */}
             </div>
           </div>
         </section>
@@ -632,7 +634,7 @@ function Addresspage() {
         <BottomTabs />
       </div>
 
-      {accountHolder?.address?.length > 0 && (
+      {/* {accountHolder?.address?.length > 0 && (
         <div className="lg:hidden fixed bottom-0 left-0 w-full flex justify-center items-center mb-2">
           <div className="w-[90%]">
             <button
@@ -643,7 +645,7 @@ function Addresspage() {
             </button>
           </div>
         </div>
-      )}
+      )} */}
 
       {/*  && accountHolder?.address?.length < 3 */}
 

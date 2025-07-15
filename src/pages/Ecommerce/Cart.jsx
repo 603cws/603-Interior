@@ -129,6 +129,16 @@ function Cart() {
     setCheckPin(!checkPin);
   };
 
+  const handlePlaceOrder = () => {
+    if (isAuthenticated) {
+      console.log("user is logged in ");
+      navigate("/address");
+    } else {
+      // navigate("/login");
+      navigate("/login", { state: { from: location.pathname } });
+    }
+  };
+
   return (
     <>
       <ToastContainer />
@@ -229,7 +239,7 @@ function Cart() {
                   </div>
                 </div>
 
-                <PriceDetail />
+                <PriceDetail handlebtnClick={handlePlaceOrder} />
               </div>
             </section>
 

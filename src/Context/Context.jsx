@@ -108,6 +108,13 @@ export const AppProvider = ({ children }) => {
 
   const [compare, setCompare] = useState([]);
 
+  // ecommerce state
+  const [mobilecouponname, setmobilecouponname] = useState("");
+  const [disableApplycoupon, setDisableApplycoupon] = useState(false);
+  const [orignalTotalPrice, setOriginalToalPrice] = useState(0);
+  const [differenceInPrice, setDifferenceInPrice] = useState(0);
+  const [carttotalPrice, setCartTotalPrice] = useState(0);
+
   async function getCartItems() {
     try {
       const {
@@ -756,6 +763,16 @@ export const AppProvider = ({ children }) => {
         setFilters,
         compare,
         setCompare,
+        mobilecouponname,
+        setmobilecouponname,
+        disableApplycoupon,
+        setDisableApplycoupon,
+        orignalTotalPrice,
+        setOriginalToalPrice,
+        differenceInPrice,
+        setDifferenceInPrice,
+        carttotalPrice,
+        setCartTotalPrice,
       }}
     >
       {children}
