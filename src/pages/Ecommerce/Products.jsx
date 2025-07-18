@@ -164,45 +164,45 @@ function Products() {
 
   const navigate = useNavigate();
 
-  const availableTon = [
-    0.8, 1, 1.25, 1.5, 2, 2.5, 3, 3.5, 4, 5, 6, 7, 8, 10, 12, 13, 18, 20,
-  ];
-  const requiredTon = 11;
-  let bestPair = null;
-  let minDiff = Infinity;
-  let minGap = Infinity;
-  const findClosestPair = () => {
-    if (availableTon.includes(requiredTon)) {
-      console.log("Exact match found:", requiredTon);
-      return;
-    }
-    if (requiredTon <= 12) {
-      const nextGreater = availableTon.find((ton) => ton > requiredTon);
-      if (nextGreater !== undefined) {
-        console.log("Next greater ton:", nextGreater);
-      } else {
-        console.log("No tonnage greater than requiredTon found.");
-      }
-      return;
-    }
-    for (let i = 0; i < availableTon.length; i++) {
-      for (let j = i + 1; j < availableTon.length; j++) {
-        const sum = availableTon[i] + availableTon[j];
-        const diff = Math.abs(requiredTon - sum);
-        const gap = Math.abs(availableTon[i] - availableTon[j]);
+  // const availableTon = [
+  //   0.8, 1, 1.25, 1.5, 2, 2.5, 3, 3.5, 4, 5, 6, 7, 8, 10, 12, 13, 18, 20,
+  // ];
+  // const requiredTon = 11;
+  // let bestPair = null;
+  // let minDiff = Infinity;
+  // let minGap = Infinity;
+  // const findClosestPair = () => {
+  //   if (availableTon.includes(requiredTon)) {
+  //     console.log("Exact match found:", requiredTon);
+  //     return;
+  //   }
+  //   if (requiredTon <= 12) {
+  //     const nextGreater = availableTon.find((ton) => ton > requiredTon);
+  //     if (nextGreater !== undefined) {
+  //       console.log("Next greater ton:", nextGreater);
+  //     } else {
+  //       console.log("No tonnage greater than requiredTon found.");
+  //     }
+  //     return;
+  //   }
+  //   for (let i = 0; i < availableTon.length; i++) {
+  //     for (let j = i + 1; j < availableTon.length; j++) {
+  //       const sum = availableTon[i] + availableTon[j];
+  //       const diff = Math.abs(requiredTon - sum);
+  //       const gap = Math.abs(availableTon[i] - availableTon[j]);
 
-        if (diff < minDiff || (diff === minDiff && gap < minGap)) {
-          minDiff = diff;
-          minGap = gap;
-          bestPair = [availableTon[i], availableTon[j]];
-        }
-      }
-    }
-    console.log("Best pair:", bestPair);
-  };
-  useEffect(() => {
-    findClosestPair();
-  });
+  //       if (diff < minDiff || (diff === minDiff && gap < minGap)) {
+  //         minDiff = diff;
+  //         minGap = gap;
+  //         bestPair = [availableTon[i], availableTon[j]];
+  //       }
+  //     }
+  //   }
+  //   console.log("Best pair:", bestPair);
+  // };
+  // useEffect(() => {
+  //   findClosestPair();
+  // });
 
   useEffect(() => {
     // fetchdata();
