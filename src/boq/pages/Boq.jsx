@@ -12,21 +12,8 @@ import SelectArea from "../components/SelectArea";
 import MainPage from "./MainPage";
 import ProductCard from "../components/ProductCard";
 import { motion, AnimatePresence } from "framer-motion";
-
-// Define animation variants
-const selectAreaAnimation = {
-  initial: { x: "100vw", opacity: 0 }, // Start from the right
-  animate: {
-    x: "0",
-    opacity: 1,
-    transition: { duration: 0.5, ease: "easeOut" },
-  }, // Move to center
-  exit: {
-    x: "-100vw",
-    opacity: 0,
-    transition: { duration: 0.5, ease: "easeIn" },
-  }, // Exit to the left
-};
+import { calculateCategoryTotal } from "../utils/calculateCategoryTotal";
+import { selectAreaAnimation } from "../constants/animations";
 
 function Boq() {
   // State to control background visibility
@@ -72,6 +59,7 @@ function Boq() {
     setShowProductView,
     searchQuery,
     priceRange,
+    formulaMap,
   } = useApp();
 
   const [runTour, setRunTour] = useState(false); // Controls whether the tour runs
@@ -196,14 +184,12 @@ function Boq() {
       userResponses.height
     );
 
-    let total = 0;
-
-    if (cat === "HVAC") total = baseTotal;
-    else if (cat === "Lighting") total = baseTotal * 200 + variantPrice;
-    // else if (cat === "Civil / Plumbing") total = baseTotal * 100 + variantPrice;
-    else if (cat === "Civil / Plumbing") total = baseTotal * variantPrice;
-    else if (cat === "Paint") total = baseTotal * variantPrice * 3 * 15;
-    else total = baseTotal * variantPrice;
+    const total = calculateCategoryTotal(
+      cat,
+      baseTotal,
+      variantPrice,
+      formulaMap
+    );
 
     return total;
   };

@@ -2,6 +2,7 @@ import {
   calculateTotalPriceHelper,
   calculateAddonTotalPriceHelper,
 } from "../utils/CalculateTotalPriceHelper";
+import { calculateCategoryTotal } from "./calculateCategoryTotal";
 
 export const calculateAddonTotalPrice = (
   category,
@@ -44,7 +45,8 @@ export const calculateTotalPrice = (
   quantityData,
   areasData,
   userResponses,
-  selectedProductView
+  selectedProductView,
+  formulaMap
 ) => {
   // Determine the actual values by prioritizing function parameters, falling back to selected state
   const actualCategory = category || selectedCategory?.category;
@@ -61,22 +63,14 @@ export const calculateTotalPrice = (
     userResponses.height
   );
 
-  // Define price calculation based on category and subcategories
-  if (actualCategory === "HVAC") {
-    return total;
-  }
-  if (actualCategory === "Lighting") {
-    return total * 200 + selectedProductView.price;
-  }
-  if (actualCategory === "Civil / Plumbing") {
-    return total * selectedProductView.price;
-    // return total * 100 + selectedProductView.price;
-  }
-  if (actualCategory === "Paint") {
-    return total * selectedProductView.price * 3 * 15;
-  }
+  const totalPrice = calculateCategoryTotal(
+    actualCategory,
+    total,
+    selectedProductView.price,
+    formulaMap
+  );
 
-  return total * selectedProductView.price;
+  return totalPrice;
 };
 
 export const handleAddOnChange = (variant, setSelectedAddons) => {

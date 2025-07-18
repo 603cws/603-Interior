@@ -2,6 +2,7 @@ const HVACCalculation = ({
   quantity,
   area,
   subcategory = "Centralized",
+  remQuantity,
   subCat1 = "split",
   location = "India", // Default: "India"
   showAlert = false, // Optional: Control whether to show alert or not
@@ -12,6 +13,8 @@ const HVACCalculation = ({
     cassette: { hp: 60000, ton: 48000 },
     duct: { hp: 65000, ton: 53000 },
   };
+
+  console.log("Linear + LType = ", remQuantity);
 
   // Conversion functions
   const tonToHp = (ton) => ton * 0.8;

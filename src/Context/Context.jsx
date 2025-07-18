@@ -106,6 +106,9 @@ export const AppProvider = ({ children }) => {
     priceRange: [0, 10000],
   });
 
+  const [formulaMap, setFormulaMap] = useState({});
+  const [formulasLoading, setFormulasLoading] = useState(true);
+
   const [compare, setCompare] = useState([]);
 
   // ecommerce state
@@ -115,6 +118,36 @@ export const AppProvider = ({ children }) => {
   const [differenceInPrice, setDifferenceInPrice] = useState(0);
   const [carttotalPrice, setCartTotalPrice] = useState(0);
   const [showLoginPopup, setShowLoginPopup] = useState(false);
+
+  const fetchFormulas = async () => {
+    setFormulasLoading(true);
+
+    const { data, error } = await supabase.from("formulas").select("*");
+
+    if (error) {
+      console.error("Error fetching formulas:", error);
+    } else {
+      const map = {};
+
+      data.forEach((row) => {
+        map[row.category] = {
+          formula: row.formula,
+          description: row.description ?? "",
+          // you can include more fields if needed
+        };
+      });
+
+      setFormulaMap(map); // ✅ Store full object instead of just string
+    }
+
+    setFormulasLoading(false);
+  };
+
+  // 🟢 Fetch once on load
+  useEffect(() => {
+    fetchFormulas();
+  }, []);
+
   async function getCartItems() {
     try {
       const {
@@ -654,7 +687,8 @@ export const AppProvider = ({ children }) => {
           quantityData,
           areasData,
           userResponses,
-          selectedProductView
+          selectedProductView,
+          formulaMap
         ),
       };
 
@@ -776,6 +810,9 @@ export const AppProvider = ({ children }) => {
         setCartTotalPrice,
         showLoginPopup,
         setShowLoginPopup,
+        formulaMap,
+        formulasLoading,
+        refetchFormulas: fetchFormulas,
       }}
     >
       {children}

@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from "react";
-import { RiDashboardFill } from "react-icons/ri";
+import { RiDashboardFill, RiFormula } from "react-icons/ri";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useApp } from "../../Context/Context";
 import { supabase, adminsupabase } from "../../services/supabase";
@@ -31,6 +31,7 @@ import { MdDeleteOutline } from "react-icons/md";
 import { FaUserPlus } from "react-icons/fa6";
 import { TbCalendarStats } from "react-icons/tb";
 import Schedule from "./Schedule";
+import FormulaEditor from "../../boq/components/FormulaEditor";
 
 function AdminDashboard() {
   const navigate = useNavigate();
@@ -98,6 +99,7 @@ function AdminDashboard() {
 
   //state schedule
   const [isScheduleOpen, setisScheduleOpen] = useState(false);
+  const [isFormulaeOpen, setisFormulaeOpen] = useState(false);
 
   const tabs = [
     { name: "Products", value: "products" },
@@ -429,6 +431,7 @@ function AdminDashboard() {
     setIsvendoropen(false);
     setCreateProfikle(false);
     setisScheduleOpen(false);
+    setisFormulaeOpen(false);
     setCurrentSection("Setting");
   };
   const handleproduct = () => {
@@ -439,6 +442,7 @@ function AdminDashboard() {
     setIsvendoropen(false);
     setCreateProfikle(false);
     setisScheduleOpen(false);
+    setisFormulaeOpen(false);
     setCurrentSection("Product");
   };
 
@@ -450,6 +454,7 @@ function AdminDashboard() {
     setIsvendoropen(false);
     setCreateProfikle(false);
     setisScheduleOpen(false);
+    setisFormulaeOpen(false);
     setCurrentSection("AdminDashboard");
   };
 
@@ -461,6 +466,7 @@ function AdminDashboard() {
     setIsclientopen(true);
     setCreateProfikle(false);
     setisScheduleOpen(false);
+    setisFormulaeOpen(false);
     setCurrentSection("Client");
   };
 
@@ -472,6 +478,7 @@ function AdminDashboard() {
     setIsvendoropen(true);
     setCreateProfikle(false);
     setisScheduleOpen(false);
+    setisFormulaeOpen(false);
     setCurrentSection("Vendor");
   };
   const handlecreate = () => {
@@ -482,6 +489,7 @@ function AdminDashboard() {
     setIsvendoropen(false);
     setCreateProfikle(true);
     setisScheduleOpen(false);
+    setisFormulaeOpen(false);
     setCurrentSection("create profile");
   };
 
@@ -494,7 +502,21 @@ function AdminDashboard() {
     setIsvendoropen(false);
     setCreateProfikle(false);
     setisScheduleOpen(true);
+    setisFormulaeOpen(false);
     setCurrentSection("schedule");
+  };
+
+  //handle formulae
+  const handleformulae = () => {
+    setIsSettingOpen(false);
+    setIsProductOpen(false);
+    setDashboard(false);
+    setIsclientopen(false);
+    setIsvendoropen(false);
+    setCreateProfikle(false);
+    setisScheduleOpen(false);
+    setisFormulaeOpen(true);
+    setCurrentSection("formulae");
   };
 
   const handleLogout = async () => {
@@ -710,7 +732,7 @@ function AdminDashboard() {
           </div>
 
           {/* Menu Items */}
-          <div className="font-semibold text-lg capitalize leading-normal tracking-wide py-3 xl:py-4 text-[#262626] flex flex-col gap-2 xl:gap-4 px-3">
+          <div className="font-semibold text-lg capitalize leading-normal tracking-wide py-3 xl:py-4 text-[#262626] flex flex-col gap-2 px-3">
             <h3
               className={`capitalize text-[#A1A1A1] ${
                 isExpanded ? "mx-4" : "hidden"
@@ -754,10 +776,16 @@ function AdminDashboard() {
               onClick={handleschedule}
               isExpanded={isExpanded}
             />
+            <SidebarItem
+              icon={<RiFormula />}
+              text="formulae"
+              onClick={handleformulae}
+              isExpanded={isExpanded}
+            />
           </div>
 
           {/* Other Items */}
-          <div className="font-semibold text-lg capitalize leading-normal tracking-wide py-3 xl:py-4 text-[#262626] flex flex-col gap-2 xl:gap-4 px-3">
+          <div className="font-semibold text-lg capitalize leading-normal tracking-wide py-3 xl:py-4 text-[#262626] flex flex-col gap-2 px-3">
             <h3
               className={`capitalize text-[#A1A1A1] ${
                 isExpanded ? "mx-4" : "hidden"
@@ -1318,6 +1346,8 @@ function AdminDashboard() {
 
           {/* schedule  */}
           {isScheduleOpen && <Schedule />}
+
+          {isFormulaeOpen && <FormulaEditor />}
         </div>
       </div>
       {/* product preview */}
