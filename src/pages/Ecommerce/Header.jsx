@@ -113,7 +113,7 @@ function Header() {
         </div>
       )}
       {/* desktop  */}
-      <div className="hidden md:flex justify-between 3xl:justify-around bg-[#FFFFFF]  shadow-[0_4px_12px_rgba(0,0,0,0.1)] my-3 border px-5 xl:px-16">
+      <div className="hidden md:flex justify-between 3xl:justify-around bg-[#FFFFFF]  shadow-[0_4px_12px_rgba(0,0,0,0.1)] border px-5 xl:px-16">
         <div className="flex gap-20 py-5 ">
           <ul className="flex items-center uppercase gap-10 text-xs font-bold text-[#1A293A] [&_li]:cursor-pointer">
             <li onClick={() => navigate("/products")}>home</li>

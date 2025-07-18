@@ -5,8 +5,13 @@ import { AddToCartToast } from "./AddToCartToast";
 import { useNavigate } from "react-router-dom";
 
 export const useHandleAddToCart = () => {
-  const { isAuthenticated, setLocalCartItems, getCartItems, accountHolder } =
-    useApp();
+  const {
+    isAuthenticated,
+    setLocalCartItems,
+    getCartItems,
+    accountHolder,
+    setShowLoginPopup,
+  } = useApp();
 
   const handleAddToCart = async (product, productQuantity = 1) => {
     console.log("product", product);
@@ -128,7 +133,8 @@ export const useHandleAddToCart = () => {
         getCartItems();
       }
     } else {
-      toast.error("please login to add items to whishlist");
+      // toast.error("please login to add items to whishlist");
+      setShowLoginPopup(true);
     }
   };
 

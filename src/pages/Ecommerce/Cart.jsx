@@ -46,7 +46,15 @@ function Cart() {
   const location = useLocation();
 
   // get the cart items from the cart table
-  const { cartItems, localcartItems, isAuthenticated, getCartItems } = useApp();
+  const {
+    cartItems,
+    localcartItems,
+    isAuthenticated,
+    getCartItems,
+    setCartItems,
+    setLocalCartItems,
+    accountHolder,
+  } = useApp();
   const sortedCartItems = [...cartItems].sort((a, b) =>
     a.productId.title.localeCompare(b.productId.title)
   );
@@ -136,6 +144,26 @@ function Cart() {
     } else {
       // navigate("/login");
       navigate("/login", { state: { from: location.pathname } });
+    }
+  };
+  const handleClearCart = async () => {
+    if (isAuthenticated) {
+      const { error } = await supabase
+        .from("userProductCollection")
+        .delete()
+        .eq("userId", accountHolder.userId)
+        .eq("type", "cart");
+
+      if (error) {
+        console.error("Failed to clear cart from database:", error.message);
+      } else {
+        console.log("Cart cleared from database.");
+        setCartItems([]);
+      }
+    } else {
+      localStorage.removeItem("cartitems");
+      console.log("Cart cleared from localStorage.");
+      setLocalCartItems([]);
     }
   };
 
@@ -237,6 +265,16 @@ function Cart() {
                       <MdOutlineKeyboardArrowRight size={25} />
                     </button>
                   </div>
+                  {(cartItems.length > 0 || localcartItems.length > 0) && (
+                    <div className="w-full flex justify-end">
+                      <button
+                        onClick={handleClearCart}
+                        className="border border-[#C16452] text-[8px] lg:text-[10px] font-semibold text-[#C16452] px-3.5 py-2"
+                      >
+                        Clear cart
+                      </button>
+                    </div>
+                  )}
                 </div>
 
                 <PriceDetail handlebtnClick={handlePlaceOrder} />
@@ -311,8 +349,6 @@ function CartCard({ cartitem }) {
   const { getCartItems, isAuthenticated, localcartItems, setLocalCartItems } =
     useApp();
   const navigate = useNavigate();
-
-  console.log(cartitem);
 
   async function handleRemoveItem(product) {
     if (isAuthenticated) {
@@ -442,10 +478,11 @@ function CartCard({ cartitem }) {
       console.error("refreshSignedUrl failed:", err);
     }
   };
+  const cartItemTotal = cartitem.productId.price * cartitem.quantity;
 
   return (
     <>
-      <div className="flex items-center gap-2 lg:border border-[#CCCCCC] rounded-lg relative">
+      <div className="flex items-center gap-2 lg:border border-[#CCCCCC] rounded-lg relative py-2">
         <img
           src={signedUrl}
           alt=""
@@ -521,6 +558,9 @@ function CartCard({ cartitem }) {
             </h5>{" "}
             <h5 className="font-medium text-[#C20000]/50">Rs. 900 OFF</h5>
           </div>
+          <p className="text-xs font-bold text-[#111]">
+            Total : Rs. {cartItemTotal}
+          </p>
         </div>
         <div className="absolute top-2 right-2">
           <button onClick={() => handleRemoveItem(cartitem)}>

@@ -3,6 +3,8 @@ import { supabase } from "../../services/supabase";
 import { useApp } from "../../Context/Context";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import { v4 as uuidv4 } from "uuid";
+
 const ratings = ["Bad", "Average", "OK", "Good", "Very Good"];
 
 export default function ProductReview({ product, onClose }) {
@@ -16,6 +18,7 @@ export default function ProductReview({ product, onClose }) {
   const { accountHolder, isAuthenticated } = useApp();
 
   const navigate = useNavigate();
+  const uniqueID = uuidv4();
 
   const handleFileChange = (e) => {
     // const selected = Array.from(e.target.files);
@@ -37,10 +40,10 @@ export default function ProductReview({ product, onClose }) {
   const insertReview = async (e) => {
     e.preventDefault();
 
-    if (!isAuthenticated) {
-      toast.error("Plaese log in to give review");
-      return;
-    }
+    // if (!isAuthenticated) {
+    //   toast.error("Plaese log in to give review");
+    //   return;
+    // }
 
     setUploading(true);
 
@@ -50,9 +53,10 @@ export default function ProductReview({ product, onClose }) {
       for (let i = 0; i < files.length; i++) {
         const file = files[i];
         const ext = file.name.split(".").pop();
-        const filePath = `${accountHolder?.userId}_${product.id}_review-${
-          i + 1
-        }.${ext}`;
+        const filePath = `${accountHolder?.userId}_${
+          product.id
+        }_${uniqueID}_review-${i + 1}.${ext}`;
+        console.log(filePath);
 
         const { error: uploadError } = await supabase.storage
           .from("review-images")

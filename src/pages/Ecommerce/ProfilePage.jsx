@@ -11,6 +11,7 @@ import { CiStar } from "react-icons/ci";
 import { useNavigate } from "react-router-dom";
 
 import ProfileAddress from "../../Ecommerce-components/ProfileAddress";
+import Header from "./Header";
 
 const ProfilePage = () => {
   const [activeTab, setActiveTab] = useState("personalInfo");
@@ -324,7 +325,7 @@ const ProfilePage = () => {
   };
 
   const tabItemClass = (tabKey) =>
-    `cursor-pointer pl-12 py-3 ${
+    `cursor-pointer pl-12 py-2 ${
       activeTab === tabKey
         ? "text-[#304778] font-semibold bg-[#F5F8FF] "
         : "text-[#777]"
@@ -332,6 +333,7 @@ const ProfilePage = () => {
 
   return (
     <div>
+      <Header />
       <div className="max-w-screen-xl w-full mx-auto flex items-stretch gap-7 font-Poppins pt-5">
         {/* sidebar */}
         <div className="max-w-xs w-full">
@@ -439,7 +441,7 @@ const ProfilePage = () => {
         </div>
 
         {/* right panel */}
-        <div className="flex-1 py-5 px-5 shadow-[0px_0px_10px_rgba(0,0,0,0.1)] max-h-[95vh] overflow-y-auto scrollbar-hide">
+        <div className="flex-1 py-5 px-5 shadow-[0px_0px_10px_rgba(0,0,0,0.1)] max-h-[85vh] overflow-y-auto scrollbar-hide">
           <h3 className="capitalize text-sm text-[#171717] font-semibold mb-5">
             {getTabTitle()}
           </h3>

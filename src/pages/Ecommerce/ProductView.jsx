@@ -521,7 +521,7 @@ function ProductView() {
       <Header />
       <ToastContainer />
       {isReview && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+        <div className="fixed inset-0 z-50 flex lg:items-center justify-center bg-black bg-opacity-50">
           <div className="bg-white w-full max-w-sm sm:max-w-md xl:max-w-3xl p-6 rounded-lg shadow-lg relative overflow-y-auto max-h-[90vh]">
             <ProductReview
               product={product}
@@ -858,7 +858,14 @@ function ProductView() {
               </div>
               <p
                 className="text-[#C16452] text-sm cursor-pointer hover:underline whitespace-nowrap"
-                onClick={() => setIsReview(true)}
+                onClick={() => {
+                  if (isAuthenticated) {
+                    setIsReview(true);
+                  } else {
+                    toast.error("Plaese log in to give review");
+                    return;
+                  }
+                }}
               >
                 Write a review
               </p>
@@ -910,52 +917,6 @@ function ProductView() {
                 </div>
 
                 <div className="flex gap-2 pt-8 border-b pb-6">
-                  {/* {productReviews.map((review, index) => {
-                    const images = JSON.parse(review.images);
-                    const displayedImages = images.slice(0, 2);
-                    const remainingCount =
-                      images.length - displayedImages.length;
-
-                    return (
-                      <div key={index} className="mb-6">
-                        <div className="flex flex-wrap gap-2 pt-4 border-b pb-4">
-                          {displayedImages.map((path, i) => {
-                            const url = supabase.storage
-                              .from("review-images")
-                              .getPublicUrl(path).data.publicUrl;
-                            return (
-                              <div
-                                key={i}
-                                className="w-20 h-20 rounded overflow-hidden bg-gray-200"
-                              >
-                                <img
-                                  src={url}
-                                  alt={`review-img-${i}`}
-                                  className="w-full h-full object-cover cursor-pointer"
-                                  onClick={() => {
-                                    setSelectedReview(review);
-                                    setDetailedMode("normal");
-                                  }}
-                                />
-                              </div>
-                            );
-                          })}
-                          {remainingCount > 0 && (
-                            <div
-                              className="w-20 h-20 flex items-center justify-center rounded bg-gray-300 text-sm font-medium cursor-pointer"
-                              onClick={() => {
-                                setGridViewReview(review);
-                                setDetailedMode("grid");
-                              }}
-                            >
-                              +{remainingCount}
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                    );
-                  })} */}
-
                   <div className="mb-6">
                     {/* Render combined review images */}
                     <div className="flex flex-wrap gap-2 pt-4 border-b pb-4">
@@ -1013,7 +974,7 @@ function ProductView() {
                 </div>
 
                 {/* Reviews List */}
-                {productReviews.map((review, idx) => {
+                {productReviews.slice(0, 2).map((review, idx) => {
                   // const interaction = interactions[idx];
                   const expanded = expandedStates[idx];
                   const isClamped = clampedStates[idx];
@@ -1118,6 +1079,16 @@ function ProductView() {
                     </div>
                   );
                 })}
+                {productReviews.length > 2 && (
+                  <div className="w-full flex justify-end">
+                    <button
+                      onClick={() => navigate(`/reviews/${product.id}`)}
+                      className="text-sm mt-4 text-blue-600 underline"
+                    >
+                      View All Reviews
+                    </button>
+                  </div>
+                )}
               </div>
             )}
           </div>

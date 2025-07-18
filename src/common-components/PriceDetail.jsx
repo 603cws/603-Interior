@@ -105,17 +105,17 @@ function PriceDetail({ handlebtnClick }) {
       setmobilecouponname();
     }
 
-    if (
-      orignalTotalPrice > 0 &&
-      mobilecouponname &&
-      location.pathname === "/cart"
-    ) {
-      handleRemoveCoupon();
-      // setDifferenceInPrice(0);
-      // setCartTotalPrice(0);
-      setCouponname("");
-      setmobilecouponname();
-    }
+    // if (
+    //   orignalTotalPrice > 0 &&
+    //   mobilecouponname &&
+    //   location.pathname === "/cart"
+    // ) {
+    //   handleRemoveCoupon();
+    //   // setDifferenceInPrice(0);
+    //   // setCartTotalPrice(0);
+    //   setCouponname("");
+    //   setmobilecouponname();
+    // }
   }, [orignalTotalPrice]);
 
   const handleCheckCoupon = async (e) => {
@@ -145,7 +145,7 @@ function PriceDetail({ handlebtnClick }) {
         return toast.error("coupon is expired or min purchase not reached");
       calculateTotalDiffertoShow(coupon);
       // calculateTotalDiffer(coupon);
-      setmobilecouponname(coupon);
+      // setmobilecouponname(coupon);
     } catch (error) {
       console.log(error);
       toast.error("Invalid Coupon");
@@ -211,6 +211,8 @@ function PriceDetail({ handlebtnClick }) {
       const discountedprice =
         orignalTotalPrice - (orignalTotalPrice * coupon?.discountPerc) / 100;
       setDisableApplycoupon(true);
+      setmobilecouponname(coupon);
+      localStorage.setItem("appliedCoupon", JSON.stringify(coupon));
       calculateTotalDiffer(coupon);
       const gstprice = calculateGst(discountedprice);
       setGst(gstprice);
@@ -223,6 +225,30 @@ function PriceDetail({ handlebtnClick }) {
       setIsMobileCouponFormOpen(false);
     }
   };
+
+  useEffect(() => {
+    const savedCoupon = localStorage.getItem("appliedCoupon");
+    if (
+      savedCoupon &&
+      !mobilecouponname && // not already restored
+      orignalTotalPrice > 0
+    ) {
+      const parsedCoupon = JSON.parse(savedCoupon);
+      setmobilecouponname(parsedCoupon);
+      setDisableApplycoupon(true);
+
+      const discountedprice =
+        orignalTotalPrice -
+        (orignalTotalPrice * parsedCoupon.discountPerc) / 100;
+
+      setCartTotalPrice(discountedprice);
+      const gstprice = calculateGst(discountedprice);
+      setGst(gstprice);
+
+      const difference = orignalTotalPrice - discountedprice;
+      setDifferenceInPrice(difference);
+    }
+  }, [orignalTotalPrice]);
 
   // create the order
   async function createOrder() {

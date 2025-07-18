@@ -114,7 +114,7 @@ export const AppProvider = ({ children }) => {
   const [orignalTotalPrice, setOriginalToalPrice] = useState(0);
   const [differenceInPrice, setDifferenceInPrice] = useState(0);
   const [carttotalPrice, setCartTotalPrice] = useState(0);
-
+  const [showLoginPopup, setShowLoginPopup] = useState(false);
   async function getCartItems() {
     try {
       const {
@@ -752,6 +752,7 @@ export const AppProvider = ({ children }) => {
         currentLayoutID,
         setCurrentLayoutID,
         cartItems,
+        setCartItems,
         SetRefreshCartItems,
         getCartItems,
         wishlistItems,
@@ -773,6 +774,8 @@ export const AppProvider = ({ children }) => {
         setDifferenceInPrice,
         carttotalPrice,
         setCartTotalPrice,
+        showLoginPopup,
+        setShowLoginPopup,
       }}
     >
       {children}
