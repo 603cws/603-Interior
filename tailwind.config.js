@@ -50,10 +50,10 @@ export default {
           "0%": { opacity: 0, transform: "translateY(20px)" },
           "100%": { opacity: 1, transform: "translateY(0)" },
         },
-        fadeIn: {
-          "0%": { opacity: 0, transform: "translateY(20px)" },
-          "100%": { opacity: 1, transform: "translateY(0)" },
-        },
+        // fadeIn: {
+        //   "0%": { opacity: 0, transform: "translateY(20px)" },
+        //   "100%": { opacity: 1, transform: "translateY(0)" },
+        // },
         bikeSlide: {
           "0%": { transform: "translateX(100%)" },
           "100%": { transform: "translateX(0)" },
@@ -78,7 +78,7 @@ export default {
         },
       },
       animation: {
-        blink: "blink 1s infinite",
+        // blink: "blink 1s infinite",
         blink: "blink 1s ease-in-out 2",
         "fade-in": "fadeIn 0.7s ease-in-out",
         bikeSlide: "bikeSlide 4s ease-out forwards",
