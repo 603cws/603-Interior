@@ -17,6 +17,8 @@ import "animate.css";
 import MobileHeader from "../../common-components/MobileHeader";
 import PriceDetail from "../../common-components/PriceDetail";
 import CheckPinCode from "./CheckPinCode";
+import { IoCartSharp } from "react-icons/io5";
+import toast from "react-hot-toast";
 
 function EmptyCart() {
   const navigate = useNavigate();
@@ -41,6 +43,7 @@ function EmptyCart() {
 
 function Cart() {
   const [wishListed, setWishListed] = useState(false);
+  const [showClearCartPopup, setShowClearCartPopup] = useState(false);
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -159,11 +162,13 @@ function Cart() {
       } else {
         console.log("Cart cleared from database.");
         setCartItems([]);
+        setShowClearCartPopup(false);
       }
     } else {
       localStorage.removeItem("cartitems");
       console.log("Cart cleared from localStorage.");
       setLocalCartItems([]);
+      setShowClearCartPopup(false);
     }
   };
 
@@ -268,7 +273,7 @@ function Cart() {
                   {(cartItems.length > 0 || localcartItems.length > 0) && (
                     <div className="w-full flex justify-end">
                       <button
-                        onClick={handleClearCart}
+                        onClick={() => setShowClearCartPopup(true)}
                         className="border border-[#C16452] text-[8px] lg:text-[10px] font-semibold text-[#C16452] px-3.5 py-2"
                       >
                         Clear cart
@@ -276,6 +281,12 @@ function Cart() {
                     </div>
                   )}
                 </div>
+                {showClearCartPopup && (
+                  <ClearCartPopUp
+                    onConfirm={handleClearCart}
+                    onClose={() => setShowClearCartPopup(false)}
+                  />
+                )}
 
                 <PriceDetail handlebtnClick={handlePlaceOrder} />
               </div>
@@ -601,6 +612,47 @@ function CheckPin({ setCheckPin }) {
               CHECK
             </button>
           </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ClearCartPopUp({ onConfirm, onClose }) {
+  return (
+    <div className="fixed inset-0 flex items-center justify-center bg-[#000]/30">
+      <div className="w-full max-w-md space-y-7 rounded-lg bg-[#fff] p-7 font-garamond">
+        <div className="flex justify-center items-center">
+          <div className="flex justify-center w-24 h-24 relative items-center ">
+            <div className="absolute flex h-24 w-24 items-center justify-center rounded-full bg-[#FDECEC] arrive-out" />
+            <div className="absolute flex h-20 w-20 items-center justify-center rounded-full bg-[#FFE5E5] arrive-mid" />
+            <div className="flex h-14 w-14 items-center justify-center rounded-full bg-[#FAD1D1] z-10">
+              <IoCartSharp size={25} color="#D14242" />
+            </div>
+          </div>
+        </div>
+
+        <div className="text-center">
+          <p className="text-xl font-medium text-[#101828]">
+            Are you sure you want to clear your cart?{" "}
+          </p>
+          <p className="text-sm text-[#4D4D4D]">
+            This action cannot be undone.
+          </p>
+        </div>
+        <div className="flex justify-around gap-10">
+          <button
+            onClick={onClose}
+            className="text-[#344054] border flex-1 rounded-xl py-2.5"
+          >
+            Keep my cart
+          </button>
+          <button
+            onClick={onConfirm}
+            className="border bg-[#225378] text-[#fff] flex-1 rounded-xl py-2.5"
+          >
+            Clear Anyway
+          </button>
         </div>
       </div>
     </div>
