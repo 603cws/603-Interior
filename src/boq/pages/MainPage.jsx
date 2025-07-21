@@ -1,12 +1,7 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { useApp } from "../../Context/Context";
 import { motion, AnimatePresence } from "framer-motion";
-
-const fadeInVariant = {
-  hidden: { opacity: 0, y: 20 }, // Start lower for a smoother effect
-  visible: { opacity: 1, y: 0, transition: { duration: 0.0, ease: "easeOut" } },
-  exit: { opacity: 0, y: 0, transition: { duration: 0.3, ease: "easeInOut" } }, // Prevents jump
-};
+import { fadeInVariant } from "../constants/animations";
 
 const MainPage = ({ userResponses, setSelectedSubCategory1, productsData }) => {
   const {

@@ -103,8 +103,15 @@ export const calculateTotalPriceHelper = (
       }); //return value and do the calculation here
     }
 
+    const remQuantity = areasData?.openworkspaces;
+
     if (category === "HVAC") {
-      value = HVACCalculation({ quantity, area, subcategory }); //return value and do the calculation here
+      value = HVACCalculation({
+        quantity,
+        area,
+        subcategory,
+        remQuantity,
+      }); //return value and do the calculation here
     }
   } else {
     // Calculation of price * area
