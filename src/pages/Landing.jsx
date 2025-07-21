@@ -342,7 +342,7 @@ function Landing() {
                     <p className="font-Poppins text-right hidden lg:block text-white leading-7">
                       Interior design consultancy firm that brings sensitivity
                       to the design top offices around the world. We stand for
-                      quality, safety and credibility.
+                      quality, safety and credibility......
                     </p>
                   </div>
 
