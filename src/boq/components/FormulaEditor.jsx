@@ -75,7 +75,7 @@ export default function FormulaEditor() {
   );
 
   return (
-    <div className="w-full border-2 border-[#000] rounded-3xl my-2.5">
+    <div className="w-full border-2 border-[#000] rounded-3xl my-2.5 font-Poppins">
       <div className="w-full overflow-y-auto scrollbar-hide h-[calc(100vh-120px)] py-2">
         <div>
           <div className="text-xl text-[#000] capitalize font-semibold border-b-2 border-b-[#CCCCCC] px-4">
@@ -85,7 +85,7 @@ export default function FormulaEditor() {
           <div className="grid grid-cols-[1fr,2fr] gap-4">
             {/* Left Column - Add New Formula */}
             <div className="mx-4 my-2">
-              <div className="bg-[#C0C0FF] p-4 rounded-lg mb-4">
+              <div className="bg-[#EEE3FF] p-4 rounded-lg mb-4">
                 <h3 className="text-[#3D194F] font-semibold mb-2">
                   Add New Formula
                 </h3>
@@ -130,7 +130,7 @@ export default function FormulaEditor() {
                     }
                   />
                   <button
-                    className="bg-green-600 text-white w-full py-2 rounded mt-2"
+                    className="bg-[#3A109C] text-white w-full py-2 rounded mt-2"
                     onClick={addFormula}
                   >
                     Add Formula
@@ -190,7 +190,7 @@ export default function FormulaEditor() {
                         </td>
                         <td className="border p-2 space-x-2">
                           <button
-                            className="bg-blue-500 text-white px-3 py-1 rounded"
+                            className="bg-[#896EFF] text-white px-3 py-1 rounded"
                             onClick={() => {
                               const edit = editing[f.id] || {};
                               updateFormula(
@@ -212,7 +212,7 @@ export default function FormulaEditor() {
                             Save
                           </button>
                           <button
-                            className="bg-red-500 text-white px-3 py-1 rounded"
+                            className="bg-[#FA343A] text-white px-3 py-1 rounded"
                             onClick={() => deleteFormula(f.category)}
                           >
                             Delete

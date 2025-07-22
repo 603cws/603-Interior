@@ -13,20 +13,20 @@ function BrandFurniture() {
           <div className="grid grid-cols-2 justify-items-center gap-y-3 md:gap-y-7">
             <div className="relative max-w-sm lg:max-w-[500px] w-full">
               <img
-                src="/images/modula-logo.png"
+                src="/images/brands/modula-logo.png"
                 alt=""
                 className="absolute h-[10%] w-[20%] top-5 right-3 md:right-10"
               />
-              <img src="/images/brand-chair-1.png" alt="" className="" />
+              <img src="/images/brands/brand-chair-1.png" alt="" className="" />
             </div>
             <div className="relative max-w-sm lg:max-w-[500px] w-full">
               <img
-                src="/images/modula-logo.png"
+                src="/images/brands/modula-logo.png"
                 alt=""
                 className="absolute h-[10%] w-[20%]  top-5 right-3 md:right-10"
               />
               <img
-                src="/images/brand-chair-2.png"
+                src="/images/brands/brand-chair-2.png"
                 alt=""
                 className=" border-8"
               />
@@ -35,24 +35,24 @@ function BrandFurniture() {
             {/* <div className="flex items-stretch justify-around"> */}
             <div className="relative max-w-sm lg:max-w-[500px] w-full">
               <img
-                src="/images/modula-logo.png"
+                src="/images/brands/modula-logo.png"
                 alt=""
                 className="absolute h-[10%] w-[20%]  top-5 right-3 md:right-10"
               />
               <img
-                src="/images/brand-chair-3.png"
+                src="/images/brands/brand-chair-3.png"
                 alt=""
                 className=" border-8"
               />
             </div>
             <div className="relative max-w-sm lg:max-w-[500px] w-full">
               <img
-                src="/images/modula-logo.png"
+                src="/images/brands/modula-logo.png"
                 alt=""
                 className="absolute h-[10%] w-[20%]  top-5 right-3 md:right-10"
               />
               <img
-                src="/images/brand-chair-4.png"
+                src="/images/brands/brand-chair-4.png"
                 alt=""
                 className=" border-8"
               />
@@ -61,19 +61,19 @@ function BrandFurniture() {
             {/* <div className="flex items-stretch justify-around"> */}
             <div className="relative max-w-sm lg:max-w-[500px] w-full">
               <img
-                src="/images/modula-logo.png"
+                src="/images/brands/modula-logo.png"
                 alt=""
                 className="absolute h-[10%] w-[20%]  top-5 right-3 md:right-10"
               />
-              <img src="/images/brand-chair-5.png" alt="" className="" />
+              <img src="/images/brands/brand-chair-5.png" alt="" className="" />
             </div>
             <div className="relative max-w-sm lg:max-w-[500px] w-full">
               <img
-                src="/images/modula-logo.png"
+                src="/images/brands/modula-logo.png"
                 alt=""
                 className="absolute h-[10%] w-[20%]  top-5 right-3 md:right-10"
               />
-              <img src="/images/brand-chair-6.png" alt="" className="" />
+              <img src="/images/brands/brand-chair-6.png" alt="" className="" />
             </div>
             {/* </div> */}
           </div>
@@ -93,14 +93,46 @@ function BrandFurniture() {
         </section>
 
         <section className="lg:container px-4 grid grid-cols-2 lg:grid-cols-4">
-          <img src="/images/brand-chair-1.png" alt="" className=" w-full " />
-          <img src="/images/brand-chair-2.png" alt="" className=" w-full " />
-          <img src="/images/brand-chair-3.png" alt="" className=" w-full " />
-          <img src="/images/brand-chair-4.png" alt="" className=" w-full " />
-          <img src="/images/brand-chair-5.png" alt="" className=" w-full " />
-          <img src="/images/brand-chair-6.png" alt="" className=" w-full " />
-          <img src="/images/brand-chair-1.png" alt="" className=" w-full " />
-          <img src="/images/brand-chair-2.png" alt="" className=" w-full " />
+          <img
+            src="/images/brands/brand-chair-1.png"
+            alt=""
+            className=" w-full "
+          />
+          <img
+            src="/images/brands/brand-chair-2.png"
+            alt=""
+            className=" w-full "
+          />
+          <img
+            src="/images/brands/brand-chair-3.png"
+            alt=""
+            className=" w-full "
+          />
+          <img
+            src="/images/brands/brand-chair-4.png"
+            alt=""
+            className=" w-full "
+          />
+          <img
+            src="/images/brands/brand-chair-5.png"
+            alt=""
+            className=" w-full "
+          />
+          <img
+            src="/images/brands/brand-chair-6.png"
+            alt=""
+            className=" w-full "
+          />
+          <img
+            src="/images/brands/brand-chair-1.png"
+            alt=""
+            className=" w-full "
+          />
+          <img
+            src="/images/brands/brand-chair-2.png"
+            alt=""
+            className=" w-full "
+          />
         </section>
       </div>
     </>

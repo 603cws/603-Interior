@@ -4,6 +4,7 @@ import { supabase } from "../services/supabase";
 import { useApp } from "../Context/Context";
 import toast from "react-hot-toast";
 import Spinner from "./Spinner";
+import { motion } from "framer-motion";
 
 function CompleteProfile() {
   const [user, setUser] = useState(null);
@@ -11,6 +12,7 @@ function CompleteProfile() {
   const [location, setLocation] = useState("");
   const [mobileNumber, setMobileNumber] = useState("");
   const [loading, setLoading] = useState(true); // Loading state
+  const [imageLoaded, setImageLoaded] = useState(false);
   const navigate = useNavigate();
 
   const { setUserId, setIsAuthenticated, setCurrentLayoutID } = useApp();
@@ -121,74 +123,109 @@ function CompleteProfile() {
     ); // Full-screen spinner
 
   return (
-    <div className="p-4">
-      <h2>Complete Your Profile</h2>
-      <form onSubmit={handleSubmit}>
-        <div className="flex justify-center gap-2 xl:w-3/4">
-          <label
-            htmlFor="company"
-            className="capitalize text-sm md:text-md font-semibold md:text-black"
-          >
-            Company Name <span>*</span>
-          </label>
+    <div className="relative p-4  bg-login-custom-gradient md:bg-[url(images/Register.png)] bg-center bg-cover bg-no-repeat lg:bg-login-custom-gradient font-Poppins flex gap-10 h-screen">
+      <div className="hidden  md:block fixed inset-0 bg-black bg-opacity-50 lg:hidden" />
+      <div className="hidden lg:flex flex-1  justify-center items-center ">
+        {!imageLoaded && (
+          <div className="xl:max-w-lg sm:max-w-sm w-full h-[450px] bg-gray-300 rounded-2xl animate-pulse" />
+        )}
 
-          <input
-            type="text"
-            placeholder="Company Name"
-            value={companyName}
-            onChange={(e) => setCompanyName(e.target.value)}
-            className="w-full py-1 pl-1 md:py-2 rounded-lg md:pl-2 focus:outline-none"
-            required
-          />
+        {/* Image with fade-in on load */}
+        <motion.img
+          initial={{ opacity: 0 }}
+          animate={{ opacity: imageLoaded ? 1 : 0 }}
+          transition={{ duration: 0.5 }}
+          onLoad={() => setImageLoaded(true)}
+          src="images/Register.png"
+          alt="Register"
+          loading="lazy"
+          className={`xl:max-w-lg sm:max-w-sm w-full h-auto absolute top-0 left-0 ${
+            imageLoaded ? "relative" : "invisible"
+          }`}
+        />
+      </div>
+      <div className="flex justify-center lg:justify-start items-center flex-1 relative">
+        <div className="lg:py-10">
+          <h2 className="text-xl md:text-2xl font-extrabold text-[#fff] text-center my-5">
+            Welcome back. Your workspace is ready.{" "}
+          </h2>
+          <h3 className="text-base md:text-xl font-semibold text-[#fff] text-center mb-5">
+            Please enter your details
+          </h3>
+          <form onSubmit={handleSubmit}>
+            <div className="space-y-7">
+              <div>
+                <label
+                  htmlFor="company"
+                  className="capitalize text-sm md:text-md font-semibold text-[#fff]"
+                >
+                  Company Name <span>*</span>
+                </label>
+                <input
+                  type="text"
+                  placeholder="Company Name"
+                  value={companyName}
+                  onChange={(e) => setCompanyName(e.target.value)}
+                  className="w-full py-1 pl-1 md:py-2 rounded-lg md:pl-2 focus:outline-none"
+                  required
+                />
+              </div>
 
-          <label
-            htmlFor="location"
-            className="capitalize text-sm md:text-md font-semibold md:text-black"
-          >
-            Location <span>*</span>
-          </label>
+              <div>
+                <label
+                  htmlFor="location"
+                  className="capitalize text-sm md:text-md font-semibold text-[#fff]"
+                >
+                  Location <span>*</span>
+                </label>
 
-          <input
-            type="text"
-            placeholder="Location"
-            value={location}
-            onChange={(e) => setLocation(e.target.value)}
-            onInput={(e) => {
-              e.target.value = e.target.value.replace(/[^A-Za-z\s]/g, ""); // Remove everything except letters & spaces
-            }}
-            className="w-full py-1 pl-1 md:py-2 rounded-lg md:pl-2 focus:outline-none"
-            required
-          />
+                <input
+                  type="text"
+                  placeholder="Location"
+                  value={location}
+                  onChange={(e) => setLocation(e.target.value)}
+                  onInput={(e) => {
+                    e.target.value = e.target.value.replace(/[^A-Za-z\s]/g, ""); // Remove everything except letters & spaces
+                  }}
+                  className="w-full py-1 pl-1 md:py-2 rounded-lg md:pl-2 focus:outline-none"
+                  required
+                />
+              </div>
+              <div>
+                <label
+                  htmlFor="mobile"
+                  className="capitalize text-sm md:text-md font-semibold text-[#fff]"
+                >
+                  Mobile Number <span>*</span>
+                </label>
 
-          <label
-            htmlFor="mobile"
-            className="capitalize text-sm md:text-md font-semibold md:text-black"
-          >
-            Mobile Number <span>*</span>
-          </label>
-
-          <input
-            type="text"
-            placeholder="Mobile Number"
-            value={mobileNumber}
-            onChange={(e) => setMobileNumber(e.target.value)}
-            onInput={(e) => {
-              e.target.value = e.target.value.replace(/\D/g, ""); // Remove non-numeric characters
-            }}
-            maxLength="10"
-            inputMode="numeric"
-            pattern="\d{10}"
-            className="w-full py-1 pl-1 md:py-2 rounded-lg md:pl-2 focus:outline-none"
-            required
-          />
-          <button
-            type="submit"
-            className="capitalize xl:w-3/4 bg-[#326f68] hover:bg-[#1A3A36] text-white font-semibold py-2 rounded-lg"
-          >
-            Save & Continue
-          </button>
+                <input
+                  type="text"
+                  placeholder="Mobile Number"
+                  value={mobileNumber}
+                  onChange={(e) => setMobileNumber(e.target.value)}
+                  onInput={(e) => {
+                    e.target.value = e.target.value.replace(/\D/g, ""); // Remove non-numeric characters
+                  }}
+                  maxLength="10"
+                  inputMode="numeric"
+                  pattern="\d{10}"
+                  className="w-full py-1 pl-1 md:py-2 rounded-lg md:pl-2 focus:outline-none"
+                  required
+                />
+              </div>
+              <div className="flex justify-center items-center">
+                <button
+                  type="submit"
+                  className="capitalize xl:w-1/2 bg-[#326f68] hover:bg-[#1A3A36] text-white font-semibold py-2 px-4 rounded-lg"
+                >
+                  Save & Continue
+                </button>
+              </div>
+            </div>
+          </form>
         </div>
-      </form>
+      </div>
     </div>
   );
 }

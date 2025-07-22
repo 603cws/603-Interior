@@ -59,6 +59,8 @@ import SeasonSpecial from "./pages/Ecommerce/SeasonSpecial";
 import TopDeal from "./pages/Ecommerce/TopDeal";
 import AllReviews from "./pages/Ecommerce/AllReviews";
 import BrandFurniture from "./pages/Ecommerce/BrandFurniture";
+import BrandLight from "./pages/Ecommerce/BrandLight";
+import BrandHVAC from "./pages/Ecommerce/BrandHVAC";
 
 const Home = lazy(() => import("./pages/Home"));
 
@@ -162,7 +164,9 @@ function App() {
             <Route path="/profilePage" element={<ProfilePage />} />
             <Route path="/brands/productview" element={<BrandProductView />} />
             <Route path="/reviews/:id" element={<AllReviews />} />
-            <Route path="/brands/brandName" element={<BrandFurniture />} />
+            <Route path="/brands/hvac" element={<BrandHVAC />} />
+            <Route path="/brands/furniture" element={<BrandFurniture />} />
+            <Route path="/brands/light" element={<BrandLight />} />
           </Routes>
         ) : (
           <Routes>
@@ -215,7 +219,9 @@ function App() {
             <Route path="/brands/productview" element={<BrandProductView />} />
             <Route path="/products/seasonspecial" element={<SeasonSpecial />} />
             <Route path="/reviews/:id" element={<AllReviews />} />
-            <Route path="/brands/brandName" element={<BrandFurniture />} />
+            <Route path="/brands/hvac" element={<BrandHVAC />} />
+            <Route path="/brands/furniture" element={<BrandFurniture />} />
+            <Route path="/brands/light" element={<BrandLight />} />
           </Routes>
         )}
       </Suspense>
