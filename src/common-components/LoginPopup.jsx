@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FcGoogle } from "react-icons/fc";
 import { MdClose } from "react-icons/md";
 import { supabase } from "../services/supabase";
@@ -10,7 +10,7 @@ export default function LoginPopup({ onClose }) {
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const [isForgotPassword, setIsForgotPassword] = useState(false);
+  // const [isForgotPassword, setIsForgotPassword] = useState(false);
 
   const { setUserId, setIsAuthenticated } = useApp();
 
@@ -41,10 +41,18 @@ export default function LoginPopup({ onClose }) {
   };
 
   const signInWithGoogle = async () => {
+    let redirectToAddress;
+
+    if (window.location.href.includes("productview")) {
+      redirectToAddress = `${window.location.origin}/products`;
+    } else {
+      redirectToAddress = window.location.href;
+    }
+
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
-        redirectTo: `${window.location.origin}/complete-profile`,
+        redirectTo: redirectToAddress,
       },
     });
 
@@ -173,7 +181,7 @@ export default function LoginPopup({ onClose }) {
           {/* Left Image */}
           <div className="hidden md:block">
             <img
-              src="./images/bg/bg.png"
+              src="../images/bg/bg.png"
               alt="Office"
               className="w-full h-full object-cover object-bottom"
             />
@@ -328,14 +336,14 @@ export default function LoginPopup({ onClose }) {
                     </button>
                   </div>
 
-                  <div className="text-right text-sm mb-4">
+                  {/* <div className="text-right text-sm mb-4">
                     <a
                       // href="/Login?type=recovery"
                       className="text-gray-600 underline"
                     >
                       Forget your password
                     </a>
-                  </div>
+                  </div> */}
                 </>
               )}
 

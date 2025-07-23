@@ -122,7 +122,7 @@ function Boq() {
   }, [selectedPlan]);
 
   useEffect(() => {
-    if (defaultProduct && selectedPlan && productData.length > 0) {
+    if (defaultProduct && selectedPlan !== "Custom" && productData.length > 0) {
       // autoSelectPlanProducts(productData, subCategories);
       autoSelectPlanProducts(productData, categories);
       // setDefaultProduct(false);

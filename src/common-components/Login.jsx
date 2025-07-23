@@ -340,7 +340,8 @@ function Login() {
       const { error } = await supabase.auth.resetPasswordForEmail(
         formData.email,
         {
-          redirectTo: "https://603-interior.vercel.app/Login?type=recovery",
+          // redirectTo: "https://603-interior.vercel.app/Login?type=recovery",
+          redirectTo: `${window.location.origin}/Login?type=recovery`,
         }
       );
 

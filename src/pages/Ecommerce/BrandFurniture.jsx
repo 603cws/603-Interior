@@ -1,4 +1,3 @@
-import React from "react";
 import Header from "./Header";
 
 function BrandFurniture() {
@@ -6,6 +5,15 @@ function BrandFurniture() {
     <>
       <div className="font-Poppins ">
         <Header />
+        <section className="lg:container justify-center flex items-center">
+          <img
+            src="/images/brands/furnitureHeader.png"
+            alt="Furniture header Image"
+            className=""
+          />
+        </section>
+
+        {/* <div className="h-80 w-screen bg-[url('/images/ecommerce/furnitureHeader.png')] bg-center bg-contain bg-no-repeat flex justify-center items-center"></div> */}
         <section className="lg:container px-4 my-10">
           <h2 className="text-3xl md:text-4xl lg:text-5xl uppercase text-center my-10">
             Shop By Categry

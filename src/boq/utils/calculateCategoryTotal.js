@@ -12,7 +12,8 @@ export const calculateCategoryTotal = (
   const categoryFormula = formulaMap[category]?.formula;
   const defaultFormula = formulaMap["Default"]?.formula;
 
-  const formulaString = categoryFormula || defaultFormula;
+  const formulaString =
+    categoryFormula || defaultFormula || "base * multiplier";
 
   try {
     if (!formulaString || typeof formulaString !== "string") {
