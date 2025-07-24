@@ -392,7 +392,7 @@ export const AppProvider = ({ children }) => {
 
   useEffect(() => {
     async function fetchdata() {
-      const sessionData = JSON.parse(localStorage.getItem(session));
+      const sessionData = JSON.parse(sessionStorage.getItem(session));
 
       // const usertoken = localStorage.getItem("usertoken");
       const usertoken = sessionData?.access_token;

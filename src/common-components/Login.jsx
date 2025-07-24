@@ -151,7 +151,7 @@ function Login() {
       return;
     }
     console.log("User signed up successfully:", data);
-    alert("User signed up successfully:", data);
+    toast.success("User signed up successfully:");
 
     const userId = data.user.id;
 

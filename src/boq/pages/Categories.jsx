@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useApp } from "../../Context/Context";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -162,6 +163,28 @@ const Categories = ({
 
     return isCompleted;
   };
+
+  const ITEMS_PER_PAGE = 10;
+  const [currentPage, setCurrentPage] = useState(0);
+
+  // Guard clause: Don't render if selectedCategory or subcategories are missing
+  if (!selectedCategory || !selectedCategory.subcategories) return null;
+
+  const filteredSubcategories = selectedCategory.subcategories.filter(
+    (subCategory) =>
+      selectedCategory.category === "HVAC"
+        ? userResponses.hvacType === "Centralized"
+          ? subCategory === "Centralized"
+          : subCategory !== "Centralized"
+        : true
+  );
+
+  const totalPages = Math.ceil(filteredSubcategories.length / ITEMS_PER_PAGE);
+  const paginatedSubcategories = filteredSubcategories.slice(
+    currentPage * ITEMS_PER_PAGE,
+    (currentPage + 1) * ITEMS_PER_PAGE
+  );
+
   return (
     <>
       <div className="categories flex flex-col pb-1.5 md:pb-3">
@@ -193,18 +216,18 @@ const Categories = ({
                         selectedCategory?.id === id
                           ? "bg-[#A9D3CE]"
                           : "bg-[#ffffff]"
-                      } rounded-xl md:rounded-2xl lg:rounded-3xl border-solid border-[#000000] border-2 flex flex-col gap-0 items-center justify-around shrink-0 w-[72px] md:w-80px  lg:w-[90px] h-[65px] md:h-[70px] lg:h-[80px] relative group-hover:scale-90 transition-transform duration-[300ms] ease-in-out`} // Added hover effect here
+                      } border-solid border-black border-2 flex flex-col gap-0 items-center justify-around rounded-lg shrink-0 w-28 h-28 relative group-hover:scale-90 transition-transform duration-[300ms] ease-in-out`} // Added hover effect here
                     >
                       <div className="flex flex-row gap-2 items-center justify-center shrink-0 w-[50px] relative">
                         <img
-                          className="flex flex-col gap-2.5 items-start justify-start shrink-0 w-5 lg:w-[30px] h-5 lg:h-[30px] relative overflow-hidden"
+                          className="flex flex-col gap-2.5 items-start justify-start shrink-0 w-5 lg:w-[50px] h-5 lg:h-[50px] relative overflow-hidden"
                           src={imageSrc}
                           alt={`${category} icon`}
                         />
                       </div>
                       <div className="flex flex-col gap-2.5 items-start justify-start shrink-0 relative overflow-hidden">
                         <div className="flex flex-row gap-2.5 items-center justify-center shrink-0 relative overflow-hidden">
-                          <div className="text-[#252525] text-center font-['Poppins-Regular',_sans-serif] text-xs md:text-[13px] lg:text-sm leading-5 font-normal relative flex items-center justify-center">
+                          <div className="text-[#252525] text-center font-['Poppins-Regular',_sans-serif] text-md leading-5 font-normal relative flex items-center justify-center">
                             {category}
                           </div>
                         </div>
@@ -316,49 +339,62 @@ const Categories = ({
                   exit={{ opacity: 0, y: -10 }}
                   transition={{ duration: 0.4, ease: "easeInOut" }}
                 >
-                  <h3 className="text-base lg:text-lg font-semibold text-gray-800 lg:ms-5">
+                  {/* <h3 className="text-base lg:text-lg font-semibold text-gray-800 lg:ms-5">
                     Subcategories of {selectedCategory.category}
-                  </h3>
-                  <div className="subcat grid grid-cols-3 md:grid-cols-5 lg:grid-cols-4 xl:grid-cols-6 gap-5 mt-5 justify-center">
-                    {selectedCategory.subcategories
-                      .filter(
-                        (subCategory) =>
-                          selectedCategory.category === "HVAC" // Apply logic only for HVAC
-                            ? userResponses.hvacType === "Centralized"
-                              ? subCategory === "Centralized" // Show only "Centralized"
-                              : subCategory !== "Centralized" // Exclude "Centralized"
-                            : true // Show all subcategories for non-HVAC categories
-                      )
-                      .map((subCategory, index) => {
-                        const imageSrcSubCat = getImageSrcSubCat(
-                          selectedCategory.category,
-                          subCategory
-                        );
+                  </h3> */}
+                  {/* Pagination Dots */}
+                  {totalPages > 1 && (
+                    <div className="flex justify-center mt-4 gap-2">
+                      {Array.from({ length: totalPages }).map(
+                        (_, pageIndex) => (
+                          <button
+                            key={pageIndex}
+                            onClick={() => setCurrentPage(pageIndex)}
+                            className={`w-3 h-3 rounded-full ${
+                              pageIndex === currentPage
+                                ? "bg-[#1A3A36]"
+                                : "bg-[#D9D9D9] hover:bg-[#34BFAD]"
+                            } transition-colors duration-300`}
+                          />
+                        )
+                      )}
+                    </div>
+                  )}
 
-                        return (
-                          <motion.div
-                            key={index}
-                            onClick={() => setSelectedSubCategory(subCategory)}
-                            whileHover={{ scale: 1.05 }}
-                            transition={{ duration: 0.3 }}
-                          >
-                            <div className="flex flex-col items-center justify-evenly flex-wrap relative">
-                              <div className="flex flex-col gap-1 lg:gap-[21px] items-center justify-center w-full relative cursor-pointer hover:scale-105 transition-transform duration-500 ease-in-out">
-                                <div className="relative w-[90px] md:w-[130px] lg:w-[160px] h-24 md:h-[130px] lg:h-[170px] flex items-center justify-center bg-gradient-to-r from-[#003442] to-[#34BFAD] rounded-3xl lg:rounded-[26px]">
-                                  <img
-                                    className="rounded-2xl md:rounded-3xl w-[75px] md:w-[110px] lg:w-[150px] h-[80px] md:h-[115px] lg:h-[150px] object-cover"
-                                    src={imageSrcSubCat}
-                                    alt={`${subCategory} subcategory`}
-                                  />
-                                </div>
-                                <p className="text-[#444444] text-center font-['Montserrat-Medium',_sans-serif] text-xs md:text-[13px] lg:text-sm font-medium relative">
-                                  {subCategory}
-                                </p>
+                  {/* <div className="subcat grid grid-cols-3 md:grid-cols-5 lg:grid-cols-4 xl:grid-cols-6 gap-5 mt-5 justify-center"> */}
+                  <div className="subcat grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5 mt-5 justify-center">
+                    {paginatedSubcategories.map((subCategory, index) => {
+                      const imageSrcSubCat = getImageSrcSubCat(
+                        selectedCategory.category,
+                        subCategory
+                      );
+
+                      return (
+                        <motion.div
+                          key={index}
+                          onClick={() => setSelectedSubCategory(subCategory)}
+                          whileHover={{ scale: 1.05 }}
+                          transition={{ duration: 0.3 }}
+                        >
+                          <div className="flex flex-col items-center justify-evenly flex-wrap relative">
+                            <div className="flex flex-col gap-1 lg:gap-[21px] items-center justify-center w-full relative cursor-pointer hover:scale-105 transition-transform duration-500 ease-in-out">
+                              {/* <div className="relative w-[90px] md:w-[130px] lg:w-[160px] h-24 md:h-[130px] lg:h-[170px] flex items-center justify-center bg-gradient-to-r from-[#003442] to-[#34BFAD] rounded-3xl lg:rounded-[26px]"> */}
+                              <div className="relative w-52 h-52 flex items-center justify-center bg-gradient-to-r from-[#001F42] to-[#347ABF] rounded-3xl lg:rounded-[26px]">
+                                <img
+                                  // className="rounded-2xl md:rounded-3xl w-[75px] md:w-[110px] lg:w-[150px] h-[80px] md:h-[115px] lg:h-[150px] object-cover"
+                                  className="rounded-2xl md:rounded-3xl w-48 h-48 object-cover"
+                                  src={imageSrcSubCat}
+                                  alt={`${subCategory} subcategory`}
+                                />
                               </div>
+                              <p className="text-[#444444] text-center font-['Montserrat-Medium',_sans-serif] text-xs md:text-[13px] lg:text-lg font-medium relative">
+                                {subCategory}
+                              </p>
                             </div>
-                          </motion.div>
-                        );
-                      })}
+                          </div>
+                        </motion.div>
+                      );
+                    })}
                   </div>
                 </motion.div>
               </AnimatePresence>
