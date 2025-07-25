@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useApp } from "../../Context/Context";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -15,6 +15,42 @@ const Categories = ({
     categories,
     userResponses,
   } = useApp();
+
+  const containerRef = useRef(null);
+  const [currentPage, setCurrentPage] = useState(0);
+
+  const [itemsPerPage, setItemsPerPage] = useState(4); // default
+
+  useEffect(() => {
+    const updateItemsPerPage = () => {
+      const width = window.innerWidth;
+
+      if (width < 300) {
+        setItemsPerPage(1);
+      } else if (width < 480) {
+        setItemsPerPage(2);
+      } else if (width < 768) {
+        setItemsPerPage(3);
+      } else if (width < 1024) {
+        setItemsPerPage(4);
+      } else if (width < 1440) {
+        setItemsPerPage(6);
+      } else {
+        setItemsPerPage(9);
+      }
+    };
+
+    updateItemsPerPage();
+    window.addEventListener("resize", updateItemsPerPage);
+    return () => window.removeEventListener("resize", updateItemsPerPage);
+  }, []);
+
+  const totalPages = Math.ceil(categories.length / itemsPerPage);
+
+  const paginatedItems = categories.slice(
+    currentPage * itemsPerPage,
+    currentPage * itemsPerPage + itemsPerPage
+  );
 
   const getCleanedCategoryName = (categoryName) => {
     return categoryName.replace(/[^a-zA-Z0-9]/g, ""); // Removes all non-alphanumeric characters
@@ -164,27 +200,6 @@ const Categories = ({
     return isCompleted;
   };
 
-  const ITEMS_PER_PAGE = 10;
-  const [currentPage, setCurrentPage] = useState(0);
-
-  // Guard clause: Don't render if selectedCategory or subcategories are missing
-  if (!selectedCategory || !selectedCategory.subcategories) return null;
-
-  const filteredSubcategories = selectedCategory.subcategories.filter(
-    (subCategory) =>
-      selectedCategory.category === "HVAC"
-        ? userResponses.hvacType === "Centralized"
-          ? subCategory === "Centralized"
-          : subCategory !== "Centralized"
-        : true
-  );
-
-  const totalPages = Math.ceil(filteredSubcategories.length / ITEMS_PER_PAGE);
-  const paginatedSubcategories = filteredSubcategories.slice(
-    currentPage * ITEMS_PER_PAGE,
-    (currentPage + 1) * ITEMS_PER_PAGE
-  );
-
   return (
     <>
       <div className="categories flex flex-col pb-1.5 md:pb-3">
@@ -194,7 +209,116 @@ const Categories = ({
             minimizedView ? "px-0" : "pb-2 px-2"
           }`}
         >
-          {categories.map(({ id, category, subcategories }) => {
+          {/* === FULL VIEW === */}
+          {!minimizedView && (
+            <div className="flex flex-col items-center w-full px-2 py-1">
+              {/* Scrollable container */}
+              <div
+                ref={containerRef}
+                className="flex flex-row gap-[21px] items-center justify-around relative overflow-hidden w-full"
+              >
+                {paginatedItems.map(({ id, category, subcategories }) => {
+                  const isSelected = selectedCategory?.id === id;
+                  const cleanedCategoryName = getCleanedCategoryName(category);
+                  const imageSrc = `/images/icons/${cleanedCategoryName}.png`;
+
+                  return (
+                    <div
+                      key={id}
+                      onClick={() =>
+                        handleCategoryClick(id, category, subcategories)
+                      }
+                      className={`${
+                        isSelected
+                          ? "bg-[#347ABF] bg-opacity-10 border-[#334A78]"
+                          : "bg-[#ffffff] border-black"
+                      } border-solid border-2 flex flex-col items-center justify-around rounded-lg shrink-0 w-28 h-28 relative group hover:scale-90 transition-transform duration-[300ms] ease-in-out`}
+                    >
+                      <div className="flex flex-row gap-2 items-center justify-center w-[50px]">
+                        <img
+                          className="w-[50px] h-[50px] object-contain"
+                          src={imageSrc}
+                          alt={`${category} icon`}
+                        />
+                      </div>
+                      <div className="text-[#252525] text-center font-['Poppins-Regular',_sans-serif] text-md leading-5 font-normal">
+                        {category}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+
+              {/* Dot Pagination */}
+              {totalPages > 1 && (
+                <div className="flex justify-center mt-3 gap-2">
+                  {Array.from({ length: totalPages }).map((_, index) => (
+                    <button
+                      key={index}
+                      onClick={() => setCurrentPage(index)}
+                      className={`w-3 h-3 rounded-full ${
+                        index === currentPage
+                          ? "bg-[#347ABF]"
+                          : "bg-gray-300 hover:bg-[#347ABF]"
+                      } transition-colors duration-300`}
+                    />
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* === MINIMIZED VIEW === */}
+          {minimizedView &&
+            categories.map(({ id, category, subcategories }) => {
+              const cleanedCategoryName = getCleanedCategoryName(category);
+              const isCategoryCompleted = checkIfCategoryCompleted(category);
+              const isSelected = selectedCategory?.id === id;
+              const imageSrc = `/images/icons/${cleanedCategoryName}.png`;
+
+              return (
+                <div
+                  key={id}
+                  onClick={() =>
+                    handleCategoryClick(id, category, subcategories)
+                  }
+                  className={`transition-transform duration-500 ease-in-out cursor-pointer ${
+                    isSelected ? "scale-100" : "scale-95"
+                  } px-2 py-1`}
+                >
+                  <div
+                    className={`font-Poppins flex flex-col justify-center items-center text-xs gap-1 md:gap-2 md:mt-3 relative group`}
+                  >
+                    <div
+                      className={`border-2 ${
+                        isCategoryCompleted && isSelected
+                          ? "shadow-[0_0_10px_#93FCEE] bg-[#34BFAD] animate-pulse"
+                          : isCategoryCompleted
+                          ? "border-[#f4f4f4] border-[1px] bg-[#34BFAD]"
+                          : isSelected
+                          ? "border-[#34BFAD] scale-110"
+                          : "border-[#000000]"
+                      } w-14 md:w-16 h-14 md:h-16 rounded-full flex justify-center items-center group-hover:scale-105 transition-transform duration-[1000ms] ease-in-out`}
+                    >
+                      <img
+                        className="w-7 md:w-10 h-7 md:h-10"
+                        src={imageSrc}
+                        alt={`${category} icon`}
+                      />
+                    </div>
+                    <div
+                      className={`group-hover:visible ${
+                        isSelected ? "visible" : "invisible"
+                      } transition-all duration-[500ms] ease-in-out`}
+                    >
+                      <p>{category}</p>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+
+          {/* {categories.map(({ id, category, subcategories }) => {
             const cleanedCategoryName = getCleanedCategoryName(category);
             const isCategoryCompleted = checkIfCategoryCompleted(category); // Check if the category is completed
             const isSelected = selectedCategory?.id === id;
@@ -214,9 +338,9 @@ const Categories = ({
                     <div
                       className={`${
                         selectedCategory?.id === id
-                          ? "bg-[#A9D3CE]"
-                          : "bg-[#ffffff]"
-                      } border-solid border-black border-2 flex flex-col gap-0 items-center justify-around rounded-lg shrink-0 w-28 h-28 relative group-hover:scale-90 transition-transform duration-[300ms] ease-in-out`} // Added hover effect here
+                          ? "bg-[#347ABF] bg-opacity-10 border-[#334A78]"
+                          : "bg-[#ffffff] border-black"
+                      } border-solid  border-2 flex flex-col gap-0 items-center justify-around rounded-lg shrink-0 w-28 h-28 relative group-hover:scale-90 transition-transform duration-[300ms] ease-in-out`} // Added hover effect here
                     >
                       <div className="flex flex-row gap-2 items-center justify-center shrink-0 w-[50px] relative">
                         <img
@@ -269,7 +393,7 @@ const Categories = ({
                 )}
               </div>
             );
-          })}
+          })} */}
         </div>
 
         {/* Subcategories */}
@@ -342,59 +466,50 @@ const Categories = ({
                   {/* <h3 className="text-base lg:text-lg font-semibold text-gray-800 lg:ms-5">
                     Subcategories of {selectedCategory.category}
                   </h3> */}
-                  {/* Pagination Dots */}
-                  {totalPages > 1 && (
-                    <div className="flex justify-center mt-4 gap-2">
-                      {Array.from({ length: totalPages }).map(
-                        (_, pageIndex) => (
-                          <button
-                            key={pageIndex}
-                            onClick={() => setCurrentPage(pageIndex)}
-                            className={`w-3 h-3 rounded-full ${
-                              pageIndex === currentPage
-                                ? "bg-[#1A3A36]"
-                                : "bg-[#D9D9D9] hover:bg-[#34BFAD]"
-                            } transition-colors duration-300`}
-                          />
-                        )
-                      )}
-                    </div>
-                  )}
 
                   {/* <div className="subcat grid grid-cols-3 md:grid-cols-5 lg:grid-cols-4 xl:grid-cols-6 gap-5 mt-5 justify-center"> */}
-                  <div className="subcat grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5 mt-5 justify-center">
-                    {paginatedSubcategories.map((subCategory, index) => {
-                      const imageSrcSubCat = getImageSrcSubCat(
-                        selectedCategory.category,
-                        subCategory
-                      );
+                  <div className="subcat grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-5 mt-5 justify-center">
+                    {selectedCategory.subcategories
+                      .filter(
+                        (subCategory) =>
+                          selectedCategory.category === "HVAC" // Apply logic only for HVAC
+                            ? userResponses.hvacType === "Centralized"
+                              ? subCategory === "Centralized" // Show only "Centralized"
+                              : subCategory !== "Centralized" // Exclude "Centralized"
+                            : true // Show all subcategories for non-HVAC categories
+                      )
+                      .map((subCategory, index) => {
+                        const imageSrcSubCat = getImageSrcSubCat(
+                          selectedCategory.category,
+                          subCategory
+                        );
 
-                      return (
-                        <motion.div
-                          key={index}
-                          onClick={() => setSelectedSubCategory(subCategory)}
-                          whileHover={{ scale: 1.05 }}
-                          transition={{ duration: 0.3 }}
-                        >
-                          <div className="flex flex-col items-center justify-evenly flex-wrap relative">
-                            <div className="flex flex-col gap-1 lg:gap-[21px] items-center justify-center w-full relative cursor-pointer hover:scale-105 transition-transform duration-500 ease-in-out">
-                              {/* <div className="relative w-[90px] md:w-[130px] lg:w-[160px] h-24 md:h-[130px] lg:h-[170px] flex items-center justify-center bg-gradient-to-r from-[#003442] to-[#34BFAD] rounded-3xl lg:rounded-[26px]"> */}
-                              <div className="relative w-52 h-52 flex items-center justify-center bg-gradient-to-r from-[#001F42] to-[#347ABF] rounded-3xl lg:rounded-[26px]">
-                                <img
-                                  // className="rounded-2xl md:rounded-3xl w-[75px] md:w-[110px] lg:w-[150px] h-[80px] md:h-[115px] lg:h-[150px] object-cover"
-                                  className="rounded-2xl md:rounded-3xl w-48 h-48 object-cover"
-                                  src={imageSrcSubCat}
-                                  alt={`${subCategory} subcategory`}
-                                />
+                        return (
+                          <motion.div
+                            key={index}
+                            onClick={() => setSelectedSubCategory(subCategory)}
+                            whileHover={{ scale: 1.05 }}
+                            transition={{ duration: 0.3 }}
+                          >
+                            <div className="flex flex-col items-center justify-evenly flex-wrap relative">
+                              <div className="flex flex-col gap-1 lg:gap-[21px] items-center justify-center w-full relative cursor-pointer hover:scale-105 transition-transform duration-500 ease-in-out">
+                                {/* <div className="relative w-[90px] md:w-[130px] lg:w-[160px] h-24 md:h-[130px] lg:h-[170px] flex items-center justify-center bg-gradient-to-r from-[#003442] to-[#34BFAD] rounded-3xl lg:rounded-[26px]"> */}
+                                <div className="relative w-52 h-52 flex items-center justify-center bg-gradient-to-r from-[#334A78] to-[#347ABF] rounded-3xl lg:rounded-[26px]">
+                                  <img
+                                    // className="rounded-2xl md:rounded-3xl w-[75px] md:w-[110px] lg:w-[150px] h-[80px] md:h-[115px] lg:h-[150px] object-cover"
+                                    className="rounded-2xl md:rounded-3xl w-48 h-48 object-cover"
+                                    src={imageSrcSubCat}
+                                    alt={`${subCategory} subcategory`}
+                                  />
+                                </div>
+                                <p className="text-[#444444] text-center font-['Montserrat-Medium',_sans-serif] text-xs md:text-[13px] lg:text-lg font-medium relative">
+                                  {subCategory}
+                                </p>
                               </div>
-                              <p className="text-[#444444] text-center font-['Montserrat-Medium',_sans-serif] text-xs md:text-[13px] lg:text-lg font-medium relative">
-                                {subCategory}
-                              </p>
                             </div>
-                          </div>
-                        </motion.div>
-                      );
-                    })}
+                          </motion.div>
+                        );
+                      })}
                   </div>
                 </motion.div>
               </AnimatePresence>

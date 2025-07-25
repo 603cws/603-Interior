@@ -413,7 +413,7 @@ function Boq() {
             options: {
               zIndex: 10000,
               primaryColor: "#6366f1", // Tailwind's Indigo-500
-              backgroundColor: "#A9D3CE",
+              backgroundColor: "#A9C2D3",
               arrowColor: "#A9D3CE",
               overlayColor: "rgba(0, 0, 0, 0.5)",
             },
