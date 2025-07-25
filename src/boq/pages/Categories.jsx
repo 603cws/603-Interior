@@ -211,11 +211,11 @@ const Categories = ({
         >
           {/* === FULL VIEW === */}
           {!minimizedView && (
-            <div className="flex flex-col items-center w-full px-2 py-1">
+            <div className="flex flex-col items-center w-full px-2 py-2 ">
               {/* Scrollable container */}
               <div
                 ref={containerRef}
-                className="flex flex-row gap-[21px] items-center justify-around relative overflow-hidden w-full"
+                className="flex flex-row gap-[21px] items-center py-2 justify-around relative overflow-hidden w-full"
               >
                 {paginatedItems.map(({ id, category, subcategories }) => {
                   const isSelected = selectedCategory?.id === id;
@@ -228,21 +228,28 @@ const Categories = ({
                       onClick={() =>
                         handleCategoryClick(id, category, subcategories)
                       }
-                      className={`${
-                        isSelected
-                          ? "bg-[#347ABF] bg-opacity-10 border-[#334A78]"
-                          : "bg-[#ffffff] border-black"
-                      } border-solid border-2 flex flex-col items-center justify-around rounded-lg shrink-0 w-28 h-28 relative group hover:scale-90 transition-transform duration-[300ms] ease-in-out`}
+                      className="shrink-0 w-28 h-28 group transition-transform duration-[300ms] ease-in-out hover:scale-90 rounded-[10px]"
                     >
-                      <div className="flex flex-row gap-2 items-center justify-center w-[50px]">
-                        <img
-                          className="w-[50px] h-[50px] object-contain"
-                          src={imageSrc}
-                          alt={`${category} icon`}
-                        />
-                      </div>
-                      <div className="text-[#252525] text-center font-['Poppins-Regular',_sans-serif] text-md leading-5 font-normal">
-                        {category}
+                      {/* Gradient border wrapper */}
+                      <div className="p-[3px] rounded-[10px] bg-gradient-to-br from-[#334A78] to-[#68B2DC] h-full w-full">
+                        <div
+                          className={`flex flex-col items-center justify-around w-full h-full rounded-[10px] border shadow-[0_2px_6px_1px_rgba(0,0,0,0.5),_inset_0_2px_6px_0px_rgba(0,0,0,0.1)] ${
+                            isSelected
+                              ? "bg-[#F0F8FF]"
+                              : "bg-white border-transparent"
+                          }`}
+                        >
+                          <div className="flex flex-row gap-2 items-center justify-center w-[50px]">
+                            <img
+                              className="w-[50px] h-[50px] object-contain"
+                              src={imageSrc}
+                              alt={`${category} icon`}
+                            />
+                          </div>
+                          <div className="text-[#252525] text-center font-['Poppins-Regular',_sans-serif] text-md leading-5 font-normal">
+                            {category}
+                          </div>
+                        </div>
                       </div>
                     </div>
                   );
@@ -257,9 +264,7 @@ const Categories = ({
                       key={index}
                       onClick={() => setCurrentPage(index)}
                       className={`w-3 h-3 rounded-full ${
-                        index === currentPage
-                          ? "bg-[#347ABF]"
-                          : "bg-gray-300 hover:bg-[#347ABF]"
+                        index === currentPage ? "bg-[#334A78]" : "bg-[#D9D9D9]"
                       } transition-colors duration-300`}
                     />
                   ))}
