@@ -1,6 +1,6 @@
 import { MdKeyboardArrowLeft } from "react-icons/md";
 import { BsUpload } from "react-icons/bs";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { FaRegQuestionCircle } from "react-icons/fa";
 
 import { supabase } from "../../services/supabase";
@@ -8,7 +8,11 @@ import { toast } from "react-hot-toast"; //Toaster
 import { useApp } from "../../Context/Context";
 import { AllCatArray, specialArray } from "../../utils/AllCatArray";
 
-function VendorNewAddon({ setAddNewProduct, setProductlist }) {
+function VendorNewAddon({
+  setAddNewProduct,
+  setIsAddonRefresh,
+  setProductlist,
+}) {
   const [file, setFile] = useState(null);
   // const [dragging, setDragging] = useState(false);
   const [preview, setPreview] = useState(null);
@@ -23,30 +27,39 @@ function VendorNewAddon({ setAddNewProduct, setProductlist }) {
 
   const [category, setCategory] = useState("");
 
-  //dimension
-  //   const [dimensionHeight, setDimensionHeight] = useState();
-  //   const [dimensionwidth, setDimensionwidth] = useState();
-  //   const [dimensionLength, setDimensionLength] = useState();
+  const fileInputRef = useRef(null);
 
-  // const [selectedSubcategories, setSelectedSubcategories] = useState();
-  // const [variant, setVariant] = useState({
-  //   title: "",
-  //   price: 0,
-  //   details: "",
-  //   mainImage: null,
-  //   additionalImages: [],
-  //   segment: "",
-  //   dimension: "",
-  //   manufacturer: "",
-  // });
+  const [dimensions, setDimensions] = useState({
+    height: "",
+    length: "",
+    width: "",
+  });
 
   const [addon, setAddon] = useState({
     title: "",
     price: "",
     image: null,
+    dimension: "",
   });
 
   const { accountHolder } = useApp();
+
+  const handleDimensionChange = (e) => {
+    const { name, value } = e.target;
+
+    const updatedDimensions = {
+      ...dimensions,
+      [name]: value,
+    };
+
+    setDimensions(updatedDimensions);
+
+    // Update variant.dimension
+    setAddon((prev) => ({
+      ...prev,
+      dimension: `${updatedDimensions.height}x${updatedDimensions.length}x${updatedDimensions.width}`,
+    }));
+  };
 
   const handleDrop = (event) => {
     event.preventDefault();
@@ -60,6 +73,11 @@ function VendorNewAddon({ setAddNewProduct, setProductlist }) {
   const removeFile = () => {
     setFile(null);
     setPreview(null);
+
+    // Reset file input value to allow same file selection again
+    if (fileInputRef.current) {
+      fileInputRef.current.value = null;
+    }
   };
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -68,6 +86,17 @@ function VendorNewAddon({ setAddNewProduct, setProductlist }) {
       [name]: value,
     }));
   };
+
+  // handle dimention
+  // const handledimension = (e) => {
+  //   e.preventDefault();
+  //   const newWidth = e.target.value;
+  //   setDimensionwidth(newWidth);
+  //   setAddon((prevVariants) => ({
+  //     ...prevVariants,
+  //     dimension: `${dimensionHeight}x${dimensionLength}x${newWidth}`, // Update mainImage field
+  //   }));
+  // };
 
   const handleMainImageChange = (e) => {
     const file = e.target.files[0]; // Get the selected file
@@ -104,8 +133,16 @@ function VendorNewAddon({ setAddNewProduct, setProductlist }) {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    setIsSubmitting(true);
+
+    console.log("addon", addon);
+
+    if (!addon.image) {
+      toast.error("Add image");
+      return;
+    }
+
     try {
+      setIsSubmitting(true);
       // Check if the product already exists based on category, subcategory, and subSubCategory
       const { data: existingProduct, error: existingProductError } =
         await supabase
@@ -147,7 +184,7 @@ function VendorNewAddon({ setAddNewProduct, setProductlist }) {
         }
 
         productId = Product.id;
-        toast.success("New product inserted successfully.");
+        // toast.success("New product inserted successfully.");
       }
 
       // Handle the addons
@@ -190,6 +227,9 @@ function VendorNewAddon({ setAddNewProduct, setProductlist }) {
             price,
             image: addonVariantImage.path,
             vendorId: accountHolder.userId,
+            category: category,
+            specifications: subSubCategory,
+            dimensions: addon?.dimension,
           });
 
         if (addonVariantError) {
@@ -202,7 +242,7 @@ function VendorNewAddon({ setAddNewProduct, setProductlist }) {
       }
 
       // Success message
-      toast.success("Data inserted successfully!");
+      // toast.success("Data inserted successfully!");
     } catch (error) {
       console.log("Error in onSubmit:", error);
       // toast.error("An unexpected error occurred.");
@@ -257,6 +297,12 @@ function VendorNewAddon({ setAddNewProduct, setProductlist }) {
       title: "",
       price: "",
       image: null,
+      dimension: "",
+    });
+    setDimensions({
+      height: "",
+      length: "",
+      width: "",
     });
     setCategory("");
     setSubSubCategory("");
@@ -275,6 +321,7 @@ function VendorNewAddon({ setAddNewProduct, setProductlist }) {
           onClick={() => {
             setAddNewProduct(false);
             setProductlist(true);
+            setIsAddonRefresh((prev) => !prev);
           }}
           className="border-none flex justify-center items-center text-[#A1A1A1]"
         >
@@ -306,6 +353,7 @@ function VendorNewAddon({ setAddNewProduct, setProductlist }) {
                   value={category}
                   className="w-full border-2 py-1.5 px-2 rounded-lg"
                   onChange={(e) => handlecategorychange(e)}
+                  required
                   // onChange={(e) => setCategory(e.target.value)}
                 >
                   <option value="">Select Category</option>
@@ -327,9 +375,10 @@ function VendorNewAddon({ setAddNewProduct, setProductlist }) {
                   className="w-full border-2 py-1.5 px-2 rounded-lg"
                   value={subSubCategory}
                   onChange={(e) => setSubSubCategory(e.target.value)}
+                  required
                 >
                   <option value="" disabled>
-                    Select Category
+                    Select subcatgory
                   </option>
                   {subcat.map((cat, index) => {
                     return (
@@ -356,6 +405,7 @@ function VendorNewAddon({ setAddNewProduct, setProductlist }) {
                   onChange={handleChange}
                   value={addon.title}
                   className="w-full py-1.5 px-2 border-2 rounded-lg"
+                  required
                 />
               </div>
               <div>
@@ -365,8 +415,49 @@ function VendorNewAddon({ setAddNewProduct, setProductlist }) {
                   name="price"
                   onChange={handleChange}
                   value={addon.price}
+                  required
                   className="w-full py-1.5 px-2 border-2 rounded-lg [&::-webkit-inner-spin-button]:appearance-none  focus:outline-none focus:ring-0"
                 />
+              </div>
+              <div>
+                <h4 className="text-[#7B7B7B]">
+                  product dimension:(H x L x W)
+                </h4>
+                <div className="flex gap-5">
+                  <div className="relative">
+                    <input
+                      type="number"
+                      name="height"
+                      value={dimensions.height}
+                      onChange={handleDimensionChange}
+                      className="w-20 xl:w-32 py-1.5 px-2 border-2 rounded-lg [&::-webkit-inner-spin-button]:appearance-none  focus:outline-none focus:ring-0"
+                      required
+                    />
+                    <span className="absolute right-2 top-2">H</span>
+                  </div>
+                  <div className="relative">
+                    <input
+                      type="number"
+                      name="length"
+                      value={dimensions.length}
+                      onChange={handleDimensionChange}
+                      className="w-20 xl:w-32 py-1.5 px-2 border-2 rounded-lg [&::-webkit-inner-spin-button]:appearance-none  focus:outline-none focus:ring-0"
+                      required
+                    />
+                    <span className="absolute top-2 right-2">L</span>
+                  </div>
+                  <div className="relative">
+                    <input
+                      type="number"
+                      name="width"
+                      value={dimensions.width}
+                      onChange={handleDimensionChange}
+                      className="w-20 xl:w-32 py-1.5 px-2 border-2 rounded-lg [&::-webkit-inner-spin-button]:appearance-none  focus:outline-none focus:ring-0"
+                      required
+                    />
+                    <span className="absolute top-2 right-2">W</span>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -393,6 +484,7 @@ function VendorNewAddon({ setAddNewProduct, setProductlist }) {
                     <input
                       type="file"
                       id="file-upload"
+                      ref={fileInputRef}
                       className="hidden"
                       accept="image/*"
                       onChange={handleMainImageChange}

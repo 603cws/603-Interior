@@ -50,7 +50,7 @@ function VendorItem() {
   const [products, setProducts] = useState([]);
   const [addons, setAddons] = useState([]);
   const [rejectedProductView, setRejectedProductView] = useState(false);
-    const [filteredProducts, setFilteredProducts] = useState([]);
+  const [filteredProducts, setFilteredProducts] = useState([]);
   const [filteredAddons, setFilteredAddons] = useState([]);
 
   const tabs = [
@@ -161,10 +161,12 @@ function VendorItem() {
   };
 
   useEffect(() => {
+    console.log("Fetching products...");
     fetchProducts();
   }, [isproductRefresh]);
 
   useEffect(() => {
+    console.log("Fetching addons...");
     fetchAddons();
   }, [isaddonRefresh]);
 
@@ -224,7 +226,7 @@ function VendorItem() {
           .eq("id", selectedProductview.id);
 
         toast.success("Product deleted successfully!");
-        setIsProductRefresh(true);
+        setIsProductRefresh((prev) => !prev);
       }
 
       if (selectedProductview.type === "addon") {
@@ -232,8 +234,8 @@ function VendorItem() {
           .from("addon_variants") // Ensure this matches your table name
           .delete()
           .eq("id", selectedProductview.id);
-        toast.success("Product deleted successfully!");
-        setIsAddonRefresh(true);
+        toast.success("Addon deleted successfully!");
+        setIsAddonRefresh((prev) => !prev);
       }
 
       let imagePaths = [];
@@ -280,10 +282,12 @@ function VendorItem() {
           <VendorNewProduct
             setAddNewProduct={setAddNewProduct}
             setProductlist={setProductlist}
+            setIsProductRefresh={setIsProductRefresh}
           />
         ) : addNewAddon ? (
           <VendorNewAddon
             setAddNewProduct={setAddNewAddon}
+            setIsAddonRefresh={setIsAddonRefresh}
             setProductlist={setProductlist}
           />
         ) : (

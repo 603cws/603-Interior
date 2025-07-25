@@ -6,9 +6,13 @@ import { supabase } from "../../services/supabase";
 import { toast } from "react-hot-toast";
 import { useApp } from "../../Context/Context";
 import { AllCatArray, specialArray } from "../../utils/AllCatArray";
+import { useRef } from "react";
 
-function VendorNewProduct({ setAddNewProduct, setProductlist }) {
-  const [additionalImages, setAdditionalImages] = useState([]);
+function VendorNewProduct({
+  setAddNewProduct,
+  setIsProductRefresh,
+  setProductlist,
+}) {
   const [file, setFile] = useState(null);
   const [preview, setPreview] = useState(null);
   const [resources, setResources] = useState([]);
@@ -20,17 +24,22 @@ function VendorNewProduct({ setAddNewProduct, setProductlist }) {
   const [category, setCategory] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  //dimension
-  const [dimensionHeight, setDimensionHeight] = useState();
-  const [dimensionwidth, setDimensionwidth] = useState();
-  const [dimensionLength, setDimensionLength] = useState();
+  const [dimensions, setDimensions] = useState({
+    height: "",
+    length: "",
+    width: "",
+  });
+
+  const fileInputRef = useRef(null);
+
+  const mulitpleimagesFileinputref = useRef(null);
 
   // const [selectedSubcategories, setSelectedSubcategories] = useState();
   const [variant, setVariant] = useState({
     title: "",
     price: "",
     details: "",
-    mainImage: null,
+    mainImage: [],
     additionalImages: [],
     segment: "",
     dimension: "",
@@ -43,7 +52,8 @@ function VendorNewProduct({ setAddNewProduct, setProductlist }) {
   const handleFileChange = (event) => {
     const selectedFile = event.target.files[0];
 
-    variant.mainImage = selectedFile;
+    // variant.mainImage = selectedFile;
+    setVariant((prev) => ({ ...prev, mainImage: selectedFile }));
     if (selectedFile) {
       setFile(selectedFile);
 
@@ -54,16 +64,23 @@ function VendorNewProduct({ setAddNewProduct, setProductlist }) {
   const handleDrop = (event) => {
     event.preventDefault();
     const droppedFile = event.dataTransfer.files[0];
+    setVariant((prev) => ({ ...prev, mainImage: droppedFile }));
     if (droppedFile) {
       setFile(droppedFile);
       setPreview(URL.createObjectURL(droppedFile));
     }
   };
 
+  // remove file is for main image
   const removeFile = () => {
     setFile(null);
     setPreview(null);
     setVariant((prev) => ({ ...prev, mainImage: null }));
+
+    // Reset file input value to allow same file selection again
+    if (fileInputRef.current) {
+      fileInputRef.current.value = null;
+    }
   };
 
   const handleChange = (e) => {
@@ -77,17 +94,19 @@ function VendorNewProduct({ setAddNewProduct, setProductlist }) {
   const handleAdditionalImagesChange = (event) => {
     const files = Array.from(event.target.files);
 
-    if (files.length && additionalImages.length + files.length <= 5) {
-      setAdditionalImages((prev) => [
-        ...prev,
-        ...files.map((file) => ({ file, preview: URL.createObjectURL(file) })),
-      ]);
+    if (files.length && variant.additionalImages.length + files.length <= 5) {
       setVariant((prevVariants) => ({
         ...prevVariants,
-        additionalImages: [...prevVariants.additionalImages, ...files], // Add a new image
+        additionalImages: [
+          ...files.map((file) => ({
+            file,
+            preview: URL.createObjectURL(file),
+          })),
+        ], // Add a new image
       }));
     } else {
-      alert("You can upload up to 5 additional images only.");
+      toast.error("You can upload up to 5 additional images only.");
+      // alert("You can upload up to 5 additional images only.");
     }
   };
 
@@ -97,22 +116,35 @@ function VendorNewProduct({ setAddNewProduct, setProductlist }) {
 
     if (
       droppedFiles.length &&
-      additionalImages.length + droppedFiles.length <= 5
+      variant?.additionalImages.length + droppedFiles.length <= 5
     ) {
-      setAdditionalImages((prev) => [
-        ...prev,
-        ...droppedFiles.map((file) => ({
-          file,
-          preview: URL.createObjectURL(file),
-        })),
-      ]);
+      setVariant((prevVariants) => ({
+        ...prevVariants,
+        additionalImages: [
+          ...droppedFiles.map((file) => ({
+            file,
+            preview: URL.createObjectURL(file),
+          })),
+        ], // Add a new image
+      }));
     } else {
-      alert("You can upload up to 5 additional images only.");
+      toast.error("You can upload up to 5 additional images only.");
     }
   };
 
   const removeAdditionalImage = (index) => {
-    setAdditionalImages((prev) => prev.filter((_, i) => i !== index));
+    // setAdditionalImages((prev) => prev.filter((_, i) => i !== index));
+    let additionalimages = variant.additionalImages.filter(
+      (_, i) => i !== index
+    );
+    setVariant((prevVariants) => ({
+      ...prevVariants,
+      additionalImages: [...additionalimages], // Add a new image
+    }));
+    // Reset file input value to allow same file selection again
+    if (mulitpleimagesFileinputref.current) {
+      mulitpleimagesFileinputref.current.value = null;
+    }
   };
 
   useEffect(() => {
@@ -132,13 +164,20 @@ function VendorNewProduct({ setAddNewProduct, setProductlist }) {
     setResources(filtered);
   }, [category]);
 
-  // console.log(subSubCategory);
-  // console.log(resources);
-
   const onSubmit = async (e) => {
     e.preventDefault();
-    toast.success("submit got trriggered");
-    console.log("selected subcategories", selectedSubcategories);
+
+    console.log("variant", variant);
+    if (
+      !variant.mainImage ||
+      variant.mainImage.length === 0 ||
+      variant.additionalImages.length === 0
+    ) {
+      console.log("images not found", variant);
+
+      toast.error("images are required ");
+      return;
+    }
     setIsSubmitting(true);
     try {
       // Check if the product already exists based on category, subcategory, and subSubCategory
@@ -160,9 +199,9 @@ function VendorNewProduct({ setAddNewProduct, setProductlist }) {
       if (existingProduct) {
         // If the product already exists, use the existing product ID
         productId = existingProduct.id;
-        toast.success(
-          "Product already exists. Proceeding with variants and addons."
-        );
+        // toast.success(
+        //   "Product already exists. Proceeding with variants and addons."
+        // );
       } else {
         // Insert a new product if it doesn't exist
         const { data: Product, error: insertError } = await supabase
@@ -182,7 +221,7 @@ function VendorNewProduct({ setAddNewProduct, setProductlist }) {
         }
 
         productId = Product.id;
-        toast.success("New product inserted successfully.");
+        // toast.success("New product inserted successfully.");
       }
 
       // Now proceed with adding variants
@@ -207,7 +246,7 @@ function VendorNewProduct({ setAddNewProduct, setProductlist }) {
             .from("addon")
             .upload(
               `${variant.title}-additional-${index}-${productId}`,
-              imageFile
+              imageFile.file
             );
 
           // if (additionalImageError) {
@@ -243,7 +282,7 @@ function VendorNewProduct({ setAddNewProduct, setProductlist }) {
           console.error(variantError);
           toast.error(`Error inserting variant: ${variant.title}`);
         }
-        toast.success(`Variant ${variant.title} added successfully.`);
+        // toast.success(`Variant ${variant.title} added successfully.`);
       }
 
       // Handle the addons
@@ -307,27 +346,20 @@ function VendorNewProduct({ setAddNewProduct, setProductlist }) {
     }
   }, [category, subSubCategory]);
 
-  // const handleMainImageChange = (e) => {
-  //   const file = e.target.files[0]; // Get the selected file
-  //   if (file) {
-  //     setVariant((prevVariants) => ({
-  //       ...prevVariants,
-  //       mainImage: file, // Update mainImage field
-  //     }));
-  //   }
-  // };
+  const handleDimensionChange = (e) => {
+    const { name, value } = e.target;
 
-  // handle dimention
-  const handledimension = (e) => {
-    e.preventDefault();
-    const newWidth = e.target.value;
-    setDimensionwidth(newWidth);
-    // setDimensionwidth(e.target.value);
+    const updatedDimensions = {
+      ...dimensions,
+      [name]: value,
+    };
 
-    // setVariant((prev)=> )
-    setVariant((prevVariants) => ({
-      ...prevVariants,
-      dimension: `${dimensionHeight}x${dimensionLength}x${newWidth}`, // Update mainImage field
+    setDimensions(updatedDimensions);
+
+    // Update variant.dimension
+    setVariant((prev) => ({
+      ...prev,
+      dimension: `${updatedDimensions.height}x${updatedDimensions.length}x${updatedDimensions.width}`,
     }));
   };
 
@@ -342,16 +374,17 @@ function VendorNewProduct({ setAddNewProduct, setProductlist }) {
       additionalImages: [],
       segment: "",
       dimension: "",
-      manufacturer: "",
-      vendor_id: "",
     }));
-    removeFile();
-    setAdditionalImages([]);
+    setFile(null);
+    setPreview(null);
     setCategory("");
     setSubSubCategory("");
-    setDimensionHeight("");
-    setDimensionLength("");
-    setDimensionwidth("");
+
+    setDimensions({
+      height: "",
+      length: "",
+      width: "",
+    });
   };
 
   const handlecategorychange = (e) => {
@@ -366,6 +399,7 @@ function VendorNewProduct({ setAddNewProduct, setProductlist }) {
           onClick={() => {
             setAddNewProduct(false);
             setProductlist(true);
+            setIsProductRefresh((prev) => !prev);
           }}
           className="border-none flex justify-center items-center text-[#A1A1A1]"
         >
@@ -398,6 +432,7 @@ function VendorNewProduct({ setAddNewProduct, setProductlist }) {
                   className="w-full border-2 py-1.5 px-2 rounded-lg"
                   // onChange={(e) => setCategory(e.target.value)}
                   onChange={(e) => handlecategorychange(e)}
+                  required
                 >
                   <option value="">Select Category</option>
 
@@ -418,6 +453,7 @@ function VendorNewProduct({ setAddNewProduct, setProductlist }) {
                   className="w-full border-2 py-1.5 px-2 rounded-lg"
                   value={subSubCategory}
                   onChange={(e) => setSubSubCategory(e.target.value)}
+                  required
                 >
                   <option value="" disabled>
                     Select Category
@@ -481,8 +517,8 @@ function VendorNewProduct({ setAddNewProduct, setProductlist }) {
                     <input
                       type="number"
                       name="height"
-                      value={dimensionHeight}
-                      onChange={(e) => setDimensionHeight(e.target.value)}
+                      value={dimensions.height}
+                      onChange={handleDimensionChange}
                       className="w-20 xl:w-32 py-1.5 px-2 border-2 rounded-lg [&::-webkit-inner-spin-button]:appearance-none  focus:outline-none focus:ring-0"
                       required
                     />
@@ -492,8 +528,8 @@ function VendorNewProduct({ setAddNewProduct, setProductlist }) {
                     <input
                       type="number"
                       name="length"
-                      value={dimensionLength}
-                      onChange={(e) => setDimensionLength(e.target.value)}
+                      value={dimensions.length}
+                      onChange={handleDimensionChange}
                       className="w-20 xl:w-32 py-1.5 px-2 border-2 rounded-lg [&::-webkit-inner-spin-button]:appearance-none  focus:outline-none focus:ring-0"
                       required
                     />
@@ -503,8 +539,8 @@ function VendorNewProduct({ setAddNewProduct, setProductlist }) {
                     <input
                       type="number"
                       name="width"
-                      value={dimensionwidth}
-                      onChange={handledimension}
+                      value={dimensions.width}
+                      onChange={handleDimensionChange}
                       className="w-20 xl:w-32 py-1.5 px-2 border-2 rounded-lg [&::-webkit-inner-spin-button]:appearance-none  focus:outline-none focus:ring-0"
                       required
                     />
@@ -537,10 +573,10 @@ function VendorNewProduct({ setAddNewProduct, setProductlist }) {
                     <input
                       type="file"
                       id="file-upload"
+                      ref={fileInputRef}
                       className="hidden"
                       accept="image/*"
                       onChange={handleFileChange}
-                      // required
                     />
                     <label
                       htmlFor="file-upload"
@@ -592,12 +628,12 @@ function VendorNewProduct({ setAddNewProduct, setProductlist }) {
                     <input
                       type="file"
                       id="additional-file-upload"
+                      ref={mulitpleimagesFileinputref}
                       name="additionalImages"
                       className="hidden"
                       accept="image/*"
                       multiple
                       onChange={handleAdditionalImagesChange}
-                      // required
                     />
                     <label
                       htmlFor="additional-file-upload"
@@ -613,7 +649,7 @@ function VendorNewProduct({ setAddNewProduct, setProductlist }) {
                     </label>
                   </div>
 
-                  {additionalImages.map((img, index) => (
+                  {variant.additionalImages.map((img, index) => (
                     <div
                       key={index}
                       className="relative w-24 h-24 border rounded-lg overflow-hidden group"
@@ -651,6 +687,7 @@ function VendorNewProduct({ setAddNewProduct, setProductlist }) {
                 value={variant.segment}
                 className="w-full border-2 py-1.5 px-2 rounded-lg"
                 onChange={handleChange}
+                required
               >
                 <option value="">select plan</option>
                 <option value="Minimal">Minimal</option>

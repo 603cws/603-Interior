@@ -19,11 +19,17 @@ function DashboardProductCard({
   const [showTextarea, setShowTextarea] = useState(false);
   const { accountHolder } = useApp();
 
+  console.log("product", product);
+
   const baseImageUrl =
     "https://bwxzfwsoxwtzhjbzbdzs.supabase.co/storage/v1/object/public/addon/";
 
   const currentStatus = product.status;
   console.log("current status", currentStatus);
+
+  const additionalImages = product?.additional_images
+    ? JSON.parse(product.additional_images)
+    : [];
 
   return (
     <div className="flex justify-center items-center h-screen fixed inset-0 z-30 top-0 w-screen">
@@ -33,8 +39,23 @@ function DashboardProductCard({
           <div>
             <div className="flex gap-4">
               <div className="flex-1">
-                <img src={`${baseImageUrl}${product.image}`} alt="product" />
+                <div className="max-w-sm">
+                  <img src={`${baseImageUrl}${product.image}`} alt="product" />
+                </div>
+
+                <div className="flex gap-2 ">
+                  {additionalImages.map((image, index) => (
+                    <div key={index}>
+                      <img
+                        src={`${baseImageUrl}${image}`}
+                        alt="product"
+                        className="aspect-auto w-12"
+                      />
+                    </div>
+                  ))}
+                </div>
               </div>
+
               <div className="flex-1 flex flex-col gap-2">
                 <h2 className="font-semibold text-3xl text-[#111] uppercase">
                   {product.title}
@@ -52,14 +73,14 @@ function DashboardProductCard({
                 <h5 className="uppercase text-[#334A78] font-medium text-xs opacity-80">
                   Category:
                   <span className="font-bold text-[#000]">
-                    {product.products?.category}
+                    {product.products?.category || product?.category}
                   </span>
                 </h5>
                 <hr />
                 <h5 className="uppercase text-[#334A78] font-medium text-xs opacity-80">
                   Specification:
                   <span className="font-bold text-[#000]">
-                    {product.products?.subcategory1}
+                    {product.products?.subcategory1 || product?.specifications}
                   </span>
                 </h5>
                 <hr />
@@ -70,12 +91,14 @@ function DashboardProductCard({
                   </span>
                 </h5>
                 <hr />
-                <h5 className="uppercase text-[#334A78] font-medium text-xs opacity-80">
-                  segment:
-                  <span className="font-bold text-[#000]">
-                    {product.segment}
-                  </span>
-                </h5>
+                {product?.segment && (
+                  <h5 className="uppercase text-[#334A78] font-medium text-xs opacity-80">
+                    segment:
+                    <span className="font-bold text-[#000]">
+                      {product.segment}
+                    </span>
+                  </h5>
+                )}
                 <hr />
               </div>
             </div>
