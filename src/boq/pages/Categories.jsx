@@ -27,14 +27,14 @@ const Categories = ({
 
       if (width < 300) {
         setItemsPerPage(1);
-      } else if (width < 480) {
+      } else if (width < 420) {
         setItemsPerPage(2);
       } else if (width < 768) {
         setItemsPerPage(3);
       } else if (width < 1024) {
-        setItemsPerPage(4);
+        setItemsPerPage(5);
       } else if (width < 1440) {
-        setItemsPerPage(6);
+        setItemsPerPage(7);
       } else {
         setItemsPerPage(9);
       }
@@ -46,6 +46,92 @@ const Categories = ({
   }, []);
 
   const totalPages = Math.ceil(categories.length / itemsPerPage);
+
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    let startX = null;
+    let isTouch = false;
+
+    // Mobile touch events
+    const handleTouchStart = (e) => {
+      isTouch = true;
+      startX = e.touches[0].clientX;
+    };
+    const handleTouchEnd = (e) => {
+      if (!isTouch || startX == null) return;
+      const endX = e.changedTouches[0].clientX;
+      handleSwipe(startX, endX);
+      startX = null;
+      isTouch = false;
+    };
+
+    // Desktop mouse drag events
+    const handleMouseDown = (e) => {
+      isTouch = false;
+      startX = e.clientX;
+      window.addEventListener("mouseup", handleMouseUp);
+    };
+    const handleMouseUp = (e) => {
+      if (startX == null) return;
+      const endX = e.clientX;
+      handleSwipe(startX, endX);
+      startX = null;
+      window.removeEventListener("mouseup", handleMouseUp);
+    };
+
+    function handleSwipe(start, end) {
+      const threshold = 40; // minimum px distance to be considered a swipe
+      if (end - start > threshold && currentPage > 0) {
+        setCurrentPage((p) => p - 1); // Swipe RIGHT: previous page
+      } else if (start - end > threshold && currentPage < totalPages - 1) {
+        setCurrentPage((p) => p + 1); // Swipe LEFT: next page
+      }
+    }
+
+    container.addEventListener("touchstart", handleTouchStart, {
+      passive: true,
+    });
+    container.addEventListener("touchend", handleTouchEnd, { passive: true });
+
+    container.addEventListener("mousedown", handleMouseDown);
+
+    return () => {
+      container.removeEventListener("touchstart", handleTouchStart);
+      container.removeEventListener("touchend", handleTouchEnd);
+      container.removeEventListener("mousedown", handleMouseDown);
+      window.removeEventListener("mouseup", handleMouseUp);
+    };
+  }, [currentPage, totalPages]); //Drag funtionality
+
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    // Handle scroll events (horizontal wheel)
+    function handleWheel(e) {
+      // Only act on horizontal scroll (deltaX)
+      if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) {
+        // Scroll right: next page
+        if (e.deltaX > 10 && currentPage < totalPages - 1) {
+          setCurrentPage((p) => p + 1);
+          e.preventDefault();
+        }
+        // Scroll left: previous page
+        if (e.deltaX < -10 && currentPage > 0) {
+          setCurrentPage((p) => p - 1);
+          e.preventDefault();
+        }
+      }
+    }
+
+    container.addEventListener("wheel", handleWheel, { passive: false });
+
+    return () => {
+      container.removeEventListener("wheel", handleWheel);
+    };
+  }, [currentPage, totalPages]); //Swipe functionality
 
   const paginatedItems = categories.slice(
     currentPage * itemsPerPage,
@@ -215,7 +301,7 @@ const Categories = ({
               {/* Scrollable container */}
               <div
                 ref={containerRef}
-                className="flex flex-row gap-[21px] items-center py-2 justify-around relative overflow-hidden w-full"
+                className="flex flex-row gap-[21px] items-center py-2 justify-start relative overflow-hidden w-full swipe-cursor"
               >
                 {paginatedItems.map(({ id, category, subcategories }) => {
                   const isSelected = selectedCategory?.id === id;
@@ -233,7 +319,7 @@ const Categories = ({
                       {/* Gradient border wrapper */}
                       <div className="p-[3px] rounded-[10px] bg-gradient-to-br from-[#334A78] to-[#68B2DC] h-full w-full">
                         <div
-                          className={`flex flex-col items-center justify-around w-full h-full rounded-[10px] border shadow-[0_2px_6px_1px_rgba(0,0,0,0.5),_inset_0_2px_6px_0px_rgba(0,0,0,0.1)] ${
+                          className={`flex flex-col hover:cursor-pointer items-center justify-around w-full h-full rounded-[10px] border shadow-[0_2px_6px_1px_rgba(0,0,0,0.5),_inset_0_2px_6px_0px_rgba(0,0,0,0.1)] ${
                             isSelected
                               ? "bg-[#F0F8FF]"
                               : "bg-white border-transparent"
