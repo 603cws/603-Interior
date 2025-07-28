@@ -335,3 +335,25 @@ slick-current {
   box-shadow: 0 0 100px 0 #85aed2, 0 0 0 1.48px rgba(255, 255, 255, 0.5);
   transition: box-shadow 0.3s ease-in-out;
 }
+
+@layer utilities {
+  /* .gradient-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: #23445b #e5e7eb;
+  } */
+
+  .gradient-scrollbar::-webkit-scrollbar {
+    width: 6px;
+    height: 8px;
+    scrollbar-width: thin;
+  }
+
+  .gradient-scrollbar::-webkit-scrollbar-track {
+    background: #e5e7eb;
+  }
+
+  .gradient-scrollbar::-webkit-scrollbar-thumb {
+    background: linear-gradient(to bottom, #23445b, #487ba0);
+    border-radius: 9999px;
+  }
+}
