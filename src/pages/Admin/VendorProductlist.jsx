@@ -352,6 +352,8 @@ function VendorProductlist({
   };
 
   const handleDelete = async (product) => {
+    console.log("product of vendor ", product);
+
     if (!product.id) return;
 
     try {
@@ -787,13 +789,27 @@ function VendorProductlist({
           // fetchProducts={fetchProducts}
           handleDelete={handleDelete}
           updateStatus={handleUpdateStatus}
+          rejectReason={rejectReason}
+          setRejectReason={setRejectReason}
+          handleConfirmReject={handleUpdateStatus}
+        />
+      )}
+      {/* {productPreview && (
+        <VendorProductCard
+          onClose={() => {
+            setProductPreview(false);
+          }}
+          product={selectedProductview}
+          // fetchProducts={fetchProducts}
+          handleDelete={handleDelete}
+          updateStatus={handleUpdateStatus}
           deleteWarning={deleteWarning}
           setDeleteWarning={setDeleteWarning}
           rejectReason={rejectReason}
           setRejectReason={setRejectReason}
           handleConfirmReject={handleUpdateStatus}
         />
-      )}
+      )} */}
     </div>
   );
 }

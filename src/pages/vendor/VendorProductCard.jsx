@@ -10,13 +10,23 @@ function VendorProductCard({
   product,
   handleDelete,
   updateStatus,
-  deleteWarning,
-  setDeleteWarning,
   rejectReason,
   setRejectReason,
   handleConfirmReject,
 }) {
+  // function VendorProductCard({
+  //   onClose,
+  //   product,
+  //   handleDelete,
+  //   updateStatus,
+  //   deleteWarning,
+  //   setDeleteWarning,
+  //   rejectReason,
+  //   setRejectReason,
+  //   handleConfirmReject,
+  // }) {
   const [showTextarea, setShowTextarea] = useState(false);
+  const [deleteWarning, setDeleteWarning] = useState(false);
   const { accountHolder } = useApp();
 
   const baseImageUrl =
@@ -25,6 +35,8 @@ function VendorProductCard({
   const currentStatus = product.status;
   console.log("current status", currentStatus);
   console.log(product);
+
+  console.log("deletewarning", deleteWarning);
 
   return (
     <div className="flex justify-center items-center h-screen fixed inset-0 z-30 top-0 w-screen">
@@ -158,9 +170,11 @@ function VendorProductCard({
                   // onClick={() => {
                   //   handleDelete(product);
                   // }}
-                  onClick={() => {
-                    setDeleteWarning(true);
-                  }}
+                  // onClick={() => {
+                  //   setDeleteWarning(true);
+                  // }}
+
+                  onClick={() => setDeleteWarning(true)}
                   className="px-3 py-2 capitalize border-[#FF6666] border-2 rounded-2xl flex justify-center items-center gap-2"
                 >
                   <MdDeleteOutline /> delete

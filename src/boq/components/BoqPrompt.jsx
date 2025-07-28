@@ -24,6 +24,8 @@ function BoqPrompt({ onConfirm, onCancel, isProfileCard, setIsProfileCard }) {
       .select("id, title") // Fetch ID and title
       .eq("userId", userId);
 
+    setExistingBoqs(existingBOQs);
+
     if (fetchError) {
       console.error("Error fetching user BOQs:", fetchError);
       return;
@@ -89,7 +91,7 @@ function BoqPrompt({ onConfirm, onCancel, isProfileCard, setIsProfileCard }) {
 
             {existingBoqs?.length > 0 && (
               <div className="mt-4">
-                <label className="block text-lg font-medium ">
+                <label className="block lg:text-lg font-medium ">
                   Select Existing BOQ
                 </label>
                 <select
@@ -109,20 +111,29 @@ function BoqPrompt({ onConfirm, onCancel, isProfileCard, setIsProfileCard }) {
               </div>
             )}
 
-            <div className="mt-4">
-              <label className="block text-lg font-medium ">
-                Or Enter a New BOQ Name
+            {existingBoqs?.length >= 3 ? (
+              <label className="block lg:text-lg font-medium mt-4">
+                Max 3 BOQ can be Created
               </label>
-              <input
-                type="text"
-                placeholder="Enter BOQ Name"
-                value={boqTitle}
-                onKeyDown={handleEnter}
-                onChange={(e) => setBoqTitle(e.target.value)}
-                className="w-full mt-2 p-3 border border-gray-300 rounded text-base focus:outline-none focus:ring-2 focus:ring-[#FFD500] text-black"
-                disabled={!!selectedBoq}
-              />
-            </div>
+            ) : (
+              <div className="mt-4">
+                {existingBoqs?.length > 0 && (
+                  <h2 className="lg:text-lg font-medium text-center">OR</h2>
+                )}
+                <label className="block lg:text-lg font-medium ">
+                  Enter a New BOQ Name
+                </label>
+                <input
+                  type="text"
+                  placeholder="Enter BOQ Name"
+                  value={boqTitle}
+                  onKeyDown={handleEnter}
+                  onChange={(e) => setBoqTitle(e.target.value)}
+                  className="w-full mt-2 p-3 border border-gray-300 rounded text-base focus:outline-none focus:ring-2 focus:ring-[#FFD500] text-black"
+                  disabled={!!selectedBoq}
+                />
+              </div>
+            )}
 
             <div className="mt-6 flex justify-center gap-5 space-x-4">
               <button

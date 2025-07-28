@@ -1226,7 +1226,7 @@ function AdminDashboard() {
                   className={`grid grid-cols-2  ${
                     isExpanded
                       ? "lg:grid-cols-2 xl:grid-cols-4 gap-8"
-                      : "lg:grid-cols-2 xl:grid-cols-4 gap-8"
+                      : "lg:grid-cols-2 xl:grid-cols-4 gap-4"
                   } p-2`}
                 >
                   {filteredvendors.map((user, index) => {
@@ -1236,7 +1236,7 @@ function AdminDashboard() {
                         className={`flex flex-col ${
                           isExpanded
                             ? "lg:w-[200px] xl:w-[270px] h-[170px]"
-                            : "w-[300px] h-[150px]"
+                            : "w-[300px] lg:w-[320px] h-[150px]"
                         }  font-Poppins rounded-2xl bg-[#fff] relative`}
                       >
                         <div
@@ -1255,12 +1255,14 @@ function AdminDashboard() {
                             <h2 className="text-[#000] text-base font-medium">
                               {user.company_name}
                             </h2>
-                            <p className="text-[#ccc] text-sm">{user.email}</p>
+                            <p className="text-[#ccc] text-[13px]">
+                              {user.email}
+                            </p>
                             {/* <p className="text-[#ccc] text-sm">
                               {user.company_name}
                             </p> */}
                           </div>
-                          <div className="ml-auto px-3">
+                          <div className={`ml-auto px-2`}>
                             {" "}
                             <button
                               onClick={() =>

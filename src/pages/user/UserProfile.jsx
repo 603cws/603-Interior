@@ -25,7 +25,7 @@ function UserProfile({ setIsEditopen }) {
         </h2>
         <div className="flex items-center justify-start gap-4 w-full my-2">
           <h3 className="text-[#CACED8] capitalize w-1/2">email</h3>
-          <p className="text-[#194F48] w-1/2 break-words">
+          <p className="text-[#194F48]  w-1/2 break-words">
             {accountHolder.email}
           </p>
         </div>

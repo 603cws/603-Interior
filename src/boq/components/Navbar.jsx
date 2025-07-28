@@ -14,6 +14,7 @@ import Boqcompleted from "../../common-components/Boqcompleted";
 import { CiMenuFries } from "react-icons/ci";
 import { MdOutlineCancel } from "react-icons/md";
 import { BiCheckCircle, BiDownload } from "react-icons/bi";
+import AlertBox from "./AlertBox";
 import { PiStarFourFill } from "react-icons/pi";
 import CurrentLayoutDetails from "./CurrentLayoutDetails";
 
@@ -33,6 +34,10 @@ function Navbar({
   const [completed100, setCompleted100] = useState(() => {
     return localStorage.getItem("boqCompleted") === "done" ? false : false;
   });
+
+  //below two state are for deletion of a boq
+  const [deleteAlert, setDeleteAlert] = useState(false);
+  const [selectedboqid, setSelectedboqid] = useState(null);
 
   const dropdownRef = useRef(null);
 
@@ -199,12 +204,6 @@ function Navbar({
   };
 
   const handleDeleteBOQ = async (boqId) => {
-    const isConfirmed = window.confirm(
-      "Are you sure you want to delete this BOQ?"
-    );
-
-    if (!isConfirmed) return; // If user cancels, stop execution
-
     try {
       const { error } = await supabase.from("boqdata").delete().eq("id", boqId);
 
@@ -216,10 +215,33 @@ function Navbar({
 
       toast.success("BOQ deleted successfully!");
       fetchSavedBOQs(); // Refresh the list after deletion
+      setDeleteAlert(false);
     } catch (err) {
       console.error("Error deleting BOQ:", err);
     }
   };
+  // const handleDeleteBOQ = async (boqId) => {
+  //   const isConfirmed = window.confirm(
+  //     "Are you sure you want to delete this BOQ?"
+  //   );
+
+  //   if (!isConfirmed) return; // If user cancels, stop execution
+
+  //   try {
+  //     const { error } = await supabase.from("boqdata").delete().eq("id", boqId);
+
+  //     if (error) {
+  //       console.error("Error deleting BOQ:", error);
+  //       toast.error("Failed to delete BOQ");
+  //       return;
+  //     }
+
+  //     toast.success("BOQ deleted successfully!");
+  //     fetchSavedBOQs(); // Refresh the list after deletion
+  //   } catch (err) {
+  //     console.error("Error deleting BOQ:", err);
+  //   }
+  // };
 
   // Function to load a BOQ
   const handleLoadBOQ = async (boqId) => {
@@ -740,7 +762,11 @@ function Navbar({
                                 />
                                 <FaTrash
                                   className="text-red-500 cursor-pointer"
-                                  onClick={() => handleDeleteBOQ(boq.id)}
+                                  // onClick={() => handleDeleteBOQ(boq.id)}
+                                  onClick={() => {
+                                    setDeleteAlert(true);
+                                    setSelectedboqid(boq.id);
+                                  }}
                                 />
                               </div>
                             </li>
@@ -865,7 +891,11 @@ function Navbar({
                           />
                           <FaTrash
                             className="text-red-500 cursor-pointer"
-                            onClick={() => handleDeleteBOQ(boq.id)}
+                            // onClick={() => handleDeleteBOQ(boq.id)}
+                            onClick={() => {
+                              setDeleteAlert(true);
+                              setSelectedboqid(boq.id);
+                            }}
                           />
                         </div>
                       </li>
@@ -984,6 +1014,17 @@ function Navbar({
         )}
       {showLayoutDetails && (
         <CurrentLayoutDetails onClose={() => setShowLayoutDetails(false)} />
+      )}
+
+      {deleteAlert && (
+        <div className="fixed inset-0 bg-black/20 pt-4">
+          <AlertBox
+            onClose={setDeleteAlert}
+            onconfirm={handleDeleteBOQ}
+            boqid={selectedboqid}
+            removeboqid={setSelectedboqid}
+          />
+        </div>
       )}
     </div>
   );
