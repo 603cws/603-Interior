@@ -4,6 +4,7 @@ import { useApp } from "../../Context/Context";
 import Addon from "./Addon";
 import { toast, Slide } from "react-toastify";
 import { calculateAddonTotalPrice } from "../utils/productUtils";
+import { AddToCartToast } from "../../utils/AddToCartToast";
 
 function SelectArea({
   setShowSelectArea,
@@ -93,7 +94,8 @@ function SelectArea({
           })),
         };
       });
-      botRight();
+      // botRight();
+      AddToCartToast(selectedProductView, "boq");
 
       localStorage.setItem("selectedData", JSON.stringify(updatedData)); // ✅ Persist correct state
       return updatedData;

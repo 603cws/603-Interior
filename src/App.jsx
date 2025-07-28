@@ -61,6 +61,7 @@ import AllReviews from "./pages/Ecommerce/AllReviews";
 import BrandFurniture from "./pages/Ecommerce/BrandFurniture";
 import BrandLight from "./pages/Ecommerce/BrandLight";
 import BrandHVAC from "./pages/Ecommerce/BrandHVAC";
+import BrandDLink from "./pages/Ecommerce/BrandDLink";
 
 const Home = lazy(() => import("./pages/Home"));
 
@@ -167,6 +168,7 @@ function App() {
             <Route path="/brands/hvac" element={<BrandHVAC />} />
             <Route path="/brands/furniture" element={<BrandFurniture />} />
             <Route path="/brands/light" element={<BrandLight />} />
+            <Route path="/brands/dlink" element={<BrandDLink />} />
           </Routes>
         ) : (
           <Routes>
@@ -222,6 +224,7 @@ function App() {
             <Route path="/brands/hvac" element={<BrandHVAC />} />
             <Route path="/brands/furniture" element={<BrandFurniture />} />
             <Route path="/brands/light" element={<BrandLight />} />
+            <Route path="/brands/dlink" element={<BrandDLink />} />
           </Routes>
         )}
       </Suspense>

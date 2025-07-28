@@ -26,13 +26,13 @@ const Categories = ({
       const width = window.innerWidth;
 
       if (width < 300) {
-        setItemsPerPage(1);
-      } else if (width < 420) {
         setItemsPerPage(2);
-      } else if (width < 768) {
+      } else if (width < 420) {
         setItemsPerPage(3);
+      } else if (width < 768) {
+        setItemsPerPage(4);
       } else if (width < 1024) {
-        setItemsPerPage(5);
+        setItemsPerPage(7);
       } else if (width < 1440) {
         setItemsPerPage(7);
       } else {
@@ -291,7 +291,7 @@ const Categories = ({
       <div className="categories flex flex-col pb-1.5 md:pb-3">
         {/* Categories List */}
         <div
-          className={`cat flex justify-evenly overflow-x-auto gap-1 md:gap-3  lg:px-5 scrollbar-hide ${
+          className={`cat flex overflow-x-auto gap-1 md:gap-3  lg:px-5 scrollbar-hide ${
             minimizedView ? "px-0" : "pb-2 px-2"
           }`}
         >
@@ -301,7 +301,9 @@ const Categories = ({
               {/* Scrollable container */}
               <div
                 ref={containerRef}
-                className="flex flex-row gap-[21px] items-center py-2 justify-start relative overflow-hidden w-full swipe-cursor"
+                className={`flex flex-row gap-[21px] items-center py-2 relative overflow-hidden w-full swipe-cursor justify-around ${
+                  currentPage < 1 ? "lg:justify-around" : "md:justify-start"
+                }`}
               >
                 {paginatedItems.map(({ id, category, subcategories }) => {
                   const isSelected = selectedCategory?.id === id;
@@ -314,7 +316,7 @@ const Categories = ({
                       onClick={() =>
                         handleCategoryClick(id, category, subcategories)
                       }
-                      className="shrink-0 w-28 h-28 group transition-transform duration-[300ms] ease-in-out hover:scale-90 rounded-[10px]"
+                      className="shrink-0 w-[72px] lg:w-28 h-[72px] lg:h-28 group transition-transform duration-[300ms] ease-in-out hover:scale-90 rounded-[10px]"
                     >
                       {/* Gradient border wrapper */}
                       <div className="p-[3px] rounded-[10px] bg-gradient-to-br from-[#334A78] to-[#68B2DC] h-full w-full">
@@ -327,12 +329,12 @@ const Categories = ({
                         >
                           <div className="flex flex-row gap-2 items-center justify-center w-[50px]">
                             <img
-                              className="w-[50px] h-[50px] object-contain"
+                              className="w-8 lg:w-[50px] h-8 lg:h-[50px] object-contain"
                               src={imageSrc}
                               alt={`${category} icon`}
                             />
                           </div>
-                          <div className="text-[#252525] text-center font-['Poppins-Regular',_sans-serif] text-md leading-5 font-normal">
+                          <div className="text-[#252525] text-center font-['Poppins-Regular',_sans-serif] text-[10px] lg:text-base leading-5 font-normal">
                             {category}
                           </div>
                         </div>
@@ -349,7 +351,7 @@ const Categories = ({
                     <button
                       key={index}
                       onClick={() => setCurrentPage(index)}
-                      className={`w-3 h-3 rounded-full ${
+                      className={`w-2 md:w-3 h-2 md:h-3 rounded-full ${
                         index === currentPage ? "bg-[#334A78]" : "bg-[#D9D9D9]"
                       } transition-colors duration-300`}
                     />
@@ -559,7 +561,7 @@ const Categories = ({
                   </h3> */}
 
                   {/* <div className="subcat grid grid-cols-3 md:grid-cols-5 lg:grid-cols-4 xl:grid-cols-6 gap-5 mt-5 justify-center"> */}
-                  <div className="subcat grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-5 mt-5 justify-center">
+                  <div className="subcat grid grid-cols-2 xs:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-5 mt-5 justify-center">
                     {selectedCategory.subcategories
                       .filter(
                         (subCategory) =>
@@ -585,15 +587,15 @@ const Categories = ({
                             <div className="flex flex-col items-center justify-evenly flex-wrap relative">
                               <div className="flex flex-col gap-1 lg:gap-[21px] items-center justify-center w-full relative cursor-pointer hover:scale-105 transition-transform duration-500 ease-in-out">
                                 {/* <div className="relative w-[90px] md:w-[130px] lg:w-[160px] h-24 md:h-[130px] lg:h-[170px] flex items-center justify-center bg-gradient-to-r from-[#003442] to-[#34BFAD] rounded-3xl lg:rounded-[26px]"> */}
-                                <div className="relative w-52 h-52 flex items-center justify-center bg-gradient-to-r from-[#334A78] to-[#347ABF] rounded-3xl lg:rounded-[26px]">
+                                <div className="relative w-28 md:w-40 lg:w-52 h-28 md:h-40 lg:h-52 flex items-center justify-center bg-gradient-to-r from-[#334A78] to-[#347ABF] rounded-xl lg:rounded-[26px]">
                                   <img
                                     // className="rounded-2xl md:rounded-3xl w-[75px] md:w-[110px] lg:w-[150px] h-[80px] md:h-[115px] lg:h-[150px] object-cover"
-                                    className="rounded-2xl md:rounded-3xl w-48 h-48 object-cover"
+                                    className="rounded-xl lg:rounded-3xl w-[102px] md:w-36 lg:w-48 h-[102px] md:h-36 lg:h-48 object-cover"
                                     src={imageSrcSubCat}
                                     alt={`${subCategory} subcategory`}
                                   />
                                 </div>
-                                <p className="text-[#444444] text-center font-['Montserrat-Medium',_sans-serif] text-xs md:text-[13px] lg:text-lg font-medium relative">
+                                <p className="text-[#444444] text-center font-Poppins text-[10px] md:text-[13px] lg:text-lg font-medium relative">
                                   {subCategory}
                                 </p>
                               </div>

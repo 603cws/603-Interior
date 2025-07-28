@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { supabase } from "../../services/supabase";
 import UnusedAreaWarning from "./UnusedAreaWarning";
+import { PiStarFourFill } from "react-icons/pi";
 
 // function Navbar({ totalArea, setTotalArea, MIN_AREA, MAX_AREA, resetAll }) {
 function Navbar({
@@ -281,7 +282,7 @@ function Navbar({
   return (
     <div>
       {!isMobile ? (
-        <div className="hidden md:flex justify-around bg-gradient-to-r from-[#23445B] to-[#487BA0] py-4 items-center px-5">
+        <div className="hidden md:flex justify-around bg-gradient-to-r from-[#23445B] to-[#487BA0] py-4 items-center px-5 overflow-hidden">
           {/* logo */}
           <button className=" " onClick={() => navigate("/")}>
             <img
@@ -337,7 +338,7 @@ function Navbar({
             </div>
           )}
           {/* button for generate boq */}
-          <button
+          {/* <button
             className="generateBoq bg-[#1B2E50] mt-2 rounded-lg text-sm py-2 px-5 text-white mb-2 border-2 border-[#1A8FE3]"
             onClick={generateBOQclick}
             disabled={isSubmitting}
@@ -368,7 +369,34 @@ function Navbar({
             ) : (
               "Generate BOQ"
             )}
+          </button> */}
+
+          <button
+            onClick={generateBOQclick}
+            className="generateBoq glow-on-hover relative flex items-center w-32 h-10 px-4 py-2 bg-[#212B36] border border-[#1A8FE3] text-white overflow-hidden group rounded-[4px] font-Poppins text-xs hover:bg-gradient-to-b from-[#3F56EA] to-[#7c80f3] hover:scale-105 transition-transform duration-300 ease-in-out"
+          >
+            <span className="absolute top-0 left-0 w-full h-full pointer-events-none z-0 hidden group-hover:block">
+              <span className="glow-line glow-top"></span>
+              <span className="glow-line glow-right"></span>
+              <span className="glow-line glow-bottom"></span>
+              <span className="glow-line glow-left"></span>
+            </span>
+            <div className="flex gap-3 w-full h-full">
+              <div className="relative pointer-events-none z-0 w-1/2 h-full">
+                <div className="absolute top-0 left-0 text-[8px] group-hover:blink-on-hover">
+                  <PiStarFourFill />
+                </div>
+                <div className="absolute bottom-0 left-[2px] text-[10px] group-hover:blink-on-hover group-hover:del-200">
+                  <PiStarFourFill />
+                </div>
+                <div className="absolute right-0 top-1/4 text-sm group-hover:blink-on-hover group-hover:del-300">
+                  <PiStarFourFill />
+                </div>
+              </div>
+              <span className="flex justify-center items-center">Generate</span>
+            </div>
           </button>
+
           {isAuthenticated && (
             <button ref={iconRef} className="z-30">
               <img

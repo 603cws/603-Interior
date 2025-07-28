@@ -158,10 +158,10 @@ function Landing() {
   };
 
   const featuredProjects = [
-    "/images/home/featured-project-1.png",
-    "/images/home/featured-project-2.png",
-    "/images/home/featured-project-3.png",
-    "/images/home/featured-project-4.png",
+    "/images/home/featured-project-1.jpg",
+    "/images/home/featured-project-2.jpg",
+    "/images/home/featured-project-3.jpg",
+    "/images/home/featured-project-4.jpg",
   ];
   const imageVariants = {
     hidden: { opacity: 0, x: 100 },
@@ -342,7 +342,7 @@ function Landing() {
                     <p className="font-Poppins text-right hidden lg:block text-white leading-7">
                       Interior design consultancy firm that brings sensitivity
                       to the design top offices around the world. We stand for
-                      quality, safety and credibility......
+                      quality, safety and credibility.
                     </p>
                   </div>
 
@@ -877,7 +877,7 @@ function Landing() {
                 src={src}
                 alt=""
                 variants={imageVariants}
-                className="max-w-xs"
+                className="max-w-xs h-96 object-cover"
               />
             ))}
           </div>
@@ -974,9 +974,9 @@ function Landing() {
             variants={strategyAnimation}
             className="flex-1"
           >
-            <img src="images/home/about-interior.png" alt="" />
+            <img src="images/home/about-interior.jpg" alt="" />
           </motion.div>
-          <div className="flex-1 flex justify-end items-center flex-col space-y-2 px-3 lg:px-0">
+          <div className="flex-1 flex justify-center items-center flex-col space-y-2 px-3 lg:px-0">
             <div className="space-y-3 mb-6">
               <TitleHeader title={"About Interior"} />
               <h3 className="font-bold font-lora text-4xl tracking-wider">

@@ -14,6 +14,9 @@ import Boqcompleted from "../../common-components/Boqcompleted";
 import { CiMenuFries } from "react-icons/ci";
 import { MdOutlineCancel } from "react-icons/md";
 import { BiCheckCircle, BiDownload } from "react-icons/bi";
+import { PiStarFourFill } from "react-icons/pi";
+import CurrentLayoutDetails from "./CurrentLayoutDetails";
+
 // import useAuthRefresh from "../../Context/useAuthRefresh";
 
 function Navbar({
@@ -38,6 +41,7 @@ function Navbar({
 
   const [isDownloading, setIsDownloading] = useState(false);
   const [isCompleted, setIsCompleted] = useState(false);
+  const [showLayoutDetails, setShowLayoutDetails] = useState(false);
 
   // const { signOutUser } = useAuthRefresh(); // Get signOutUser from hook
 
@@ -570,8 +574,8 @@ function Navbar({
   };
 
   return (
-    <div className="navbar sticky top-0 z-20">
-      <div className="flex justify-between bg-gradient-to-r from-[#1A3A36] to-[#48A095] items-center px-4 h-[50px]">
+    <div className="navbar sticky top-0 z-20 font-Poppins">
+      <div className="flex justify-between bg-gradient-to-r from-[#23445B] to-[#487BA0] items-center px-4 h-[50px]">
         <div className="hidden sm:block absolute lg:flex gap-2 right-1/4 lg:right-20 -translate-x-full">
           <div className="flex items-center justify-center gap-1">
             <div className="h-3 w-3 rounded-full border-[1px] bg-[#34BFAD]"></div>
@@ -595,7 +599,7 @@ function Navbar({
           {boqTotal > 0 && (
             <div
               // onClick={signOutUser}
-              className="flex justify-center items-center bg-[#FFF] rounded-xl text-xs px-5 h-fit py-3 self-center text-black border-solid border-1 border-black"
+              className="flex justify-center items-center bg-[#FFF] rounded-sm text-xs px-5 h-fit py-3 self-center text-black border-solid border-1 border-black"
             >
               <span className="font-bold">Total</span>: ₹{" "}
               {boqTotal.toLocaleString("en-IN")}
@@ -621,7 +625,7 @@ function Navbar({
         </div>
       </div>
       {isMobile ? (
-        <div className="bg-[#1A3A36] py-1 flex  justify-around items-center px-5 relative">
+        <div className="bg-[#212B36] py-1 flex  justify-around items-center px-5 relative">
           {/* <div className=" flex items-center">
           <button
             className="bg-[#FFF] text-xs py-2 px-5 text-black rounded-full border-solid border-[1px] border-black"
@@ -630,15 +634,15 @@ function Navbar({
             Layout
           </button>
         </div> */}
-          <div className="w-7/12 mx-auto  py-2.5">
-            <div className="relative h-3 bg-[#385682] rounded-full">
+          <div className="w-10/12 mx-auto  py-2.5">
+            <div className="relative h-5 bg-[#385682] rounded-sm">
               <div
-                className="absolute h-full bg-[#34BFAD] rounded-full"
+                className="absolute h-full bg-[#85AED2] rounded-sm"
                 style={{ width: `${progress}%` }}
               ></div>
               <div
-                className="absolute top-1/2 transform -translate-y-1/2 -translate-x-1/2 bg-[#CCCCCC] border-2 border-white rounded-full glowing-circle"
-                style={{ left: `${progress}%`, width: "16px", height: "16px" }}
+                className="absolute top-1/2 transform -translate-y-1/2 -translate-x-1/2 bg-gradient-to-br from-[#334A78] to-[#1F2937] border-white rounded-sm glowing-circle"
+                style={{ left: `${progress}%`, width: "10px", height: "19px" }}
               ></div>
             </div>
             {/* Progress Label */}
@@ -659,7 +663,7 @@ function Navbar({
           {mobileDropDown && (
             <div className="absolute z-20 translate-y-[60%] right-0 transform transition-all duration-700 ease-in-out opacity-100 scale-100">
               {/* <div className="absolute z-20 translate-y-[60%] translate-x-[60%] transform transition-transform ease-in-out duration-700 "> */}
-              <ul className="text-[#34BFAD] bg-[#00453C] bg-opacity-90 m-3 p-2 text-start">
+              <ul className="text-[#212B36] bg-[#385682] bg-opacity-90 m-3 p-2 text-start">
                 {/* <li className="hover:px-2 hover:bg-white hover:text-[#1A3A36] mb-2 px-2">
                 view boq{" "}
               </li> */}
@@ -668,6 +672,12 @@ function Navbar({
                   className="hover:px-2 hover:bg-white hover:text-[#1A3A36] mb-2 py-1 px-2 rounded-lg cursor-pointer"
                 >
                   Layout
+                </li>
+                <li
+                  onClick={() => setShowLayoutDetails(true)}
+                  className="hover:px-2 hover:bg-white hover:text-[#1A3A36] mb-2 py-1 px-2 rounded-lg cursor-pointer"
+                >
+                  Layout Details
                 </li>
                 <li
                   onClick={() =>
@@ -749,27 +759,33 @@ function Navbar({
           )}
         </div>
       ) : (
-        <div className="bg-[#1A3A36] py-2.5 flex px-5">
-          <div className=" flex items-center">
+        <div className="bg-[#212B36] py-2.5 flex px-5">
+          <div className=" flex items-center gap-1">
             <button
-              className="bg-[#FFF] text-xs py-2 px-5 text-black rounded-full border-solid border-[1px] border-black"
+              className="bg-[#FFF] text-xs py-2 px-5 text-[#000] font-semibold rounded-[4px] border-solid border-[1px] border-black"
               onClick={handleGoTOlayout}
             >
               Go to Layout
             </button>
+            <button
+              onClick={() => setShowLayoutDetails(true)}
+              className="bg-[#FFF] text-xs py-2 px-5 text-[#000] font-semibold rounded-[4px] border-solid border-[1px] border-black capitalize"
+            >
+              layout details
+            </button>
           </div>
           <div className="w-7/12 mx-auto pl-10 py-2.5">
             {/* Progress Bar Container */}
-            <div className="relative h-3 bg-[#385682] rounded-full">
+            <div className="relative h-5 bg-[#385682] rounded-sm">
               {/* Filled Progress */}
               <div
-                className="absolute h-full bg-[#34BFAD] rounded-full"
+                className="absolute h-full bg-[#85AED2] rounded-sm"
                 style={{ width: `${progress}%` }}
               ></div>
               {/* Progress Circle */}
               <div
-                className="absolute top-1/2 transform -translate-y-1/2 -translate-x-1/2 bg-[#CCCCCC] border-2 border-white rounded-full glowing-circle"
-                style={{ left: `${progress}%`, width: "16px", height: "16px" }}
+                className="absolute top-1/2 transform -translate-y-1/2 -translate-x-full bg-gradient-to-br from-[#334A78] to-[#1F2937]  rounded-sm glowing-circle"
+                style={{ left: `${progress}%`, width: "10px", height: "18px" }}
               ></div>
               <div
                 className={`absolute -top-full -translate-y-3/4 bg-[#f4f4f4] text-black text-[10px] px-3 py-1 rounded-md ${
@@ -798,7 +814,7 @@ function Navbar({
             {/* </div> */}
             {/* <div className="justify-items-end"> */}
             <div
-              className="relative inline-flex items-center border border-black rounded-full"
+              className="relative inline-flex items-center border border-black rounded-[4px] bg-white"
               ref={dropdownRef}
             >
               <button
@@ -807,7 +823,7 @@ function Navbar({
                   setShowBoqPrompt(true);
                   setIsProfileCard(false);
                 }}
-                className="bg-white text-xs py-2 px-3 text-black rounded-l-full"
+                className="bg-white text-xs py-2 px-3 text-black rounded-l-[4px] font-semibold"
               >
                 Save BOQ
               </button>
@@ -816,7 +832,7 @@ function Navbar({
                   fetchSavedBOQs();
                   setIsOpen(!isOpen);
                 }}
-                className="bg-white px-3 py-2 border-l border-black flex items-center rounded-r-full"
+                className="bg-white px-3 py-2 border-l border-black flex items-center rounded-r-[4px] h-full"
               >
                 <RiArrowDropDownLine />
               </button>
@@ -879,9 +895,9 @@ function Navbar({
               >
                 Download
               </button> */}
-              <button
+              {/* <button
                 onClick={handleDownload}
-                className={`relative flex items-center justify-center gap-2 bg-[#1A3A36] text-xs py-2 px-6 text-white rounded-full border border-[#34BFAD] transition-all duration-300 ease-in-out 
+                className={`relative flex items-center justify-center gap-2 bg-[#1A3A36] text-xs py-2 px-6 text-white rounded-sm border border-[#34BFAD] transition-all duration-300 ease-in-out 
                 ${
                   isDownloading
                     ? "bg-[#267D6E] border-[#34BFAD] scale-95 cursor-not-allowed"
@@ -909,6 +925,42 @@ function Navbar({
                     <span>Download</span>
                   </>
                 )}
+              </button> */}
+
+              <button
+                onClick={handleDownload}
+                className="generateBoq glow-on-hover-boq relative flex items-center w-32 h-10 px-4 py-2 bg-[#252525] text-white overflow-hidden group rounded-[4px] font-Poppins text-xs hover:scale-105 transition-transform duration-300 ease-in-out active:bf-[#85AED2]"
+              >
+                <span className="absolute top-0 left-0 w-full h-full pointer-events-none z-0 block">
+                  <span className="glow-line glow-top"></span>
+                  <span className="glow-line glow-right"></span>
+                  <span className="glow-line glow-bottom"></span>
+                  <span className="glow-line glow-left"></span>
+                </span>
+                {isDownloading ? (
+                  <>
+                    <span className="absolute w-4 h-4 bg-white opacity-30 rounded-full animate-ping"></span>
+                    <span className="relative w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+                    <span className="relative">Downloading...</span>
+                  </>
+                ) : (
+                  <div className="flex gap-3 w-full h-full">
+                    <div className="relative pointer-events-none z-0 w-1/2 h-full">
+                      <div className="absolute top-0 left-0 text-[8px] group-hover:blink-on-hover">
+                        <PiStarFourFill />
+                      </div>
+                      <div className="absolute bottom-0 left-[2px] text-[10px] group-hover:blink-on-hover group-hover:del-200">
+                        <PiStarFourFill />
+                      </div>
+                      <div className="absolute right-0 top-1/4 text-sm group-hover:blink-on-hover group-hover:del-300">
+                        <PiStarFourFill />
+                      </div>
+                    </div>
+                    <span className="flex justify-center items-center">
+                      Download
+                    </span>
+                  </div>
+                )}
               </button>
             </div>
           </div>
@@ -930,6 +982,9 @@ function Navbar({
           <Boqcompleted setCompleted100={setCompleted100} />,
           document.body // Mounts it at the root level
         )}
+      {showLayoutDetails && (
+        <CurrentLayoutDetails onClose={() => setShowLayoutDetails(false)} />
+      )}
     </div>
   );
 }

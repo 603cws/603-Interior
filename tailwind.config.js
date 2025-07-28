@@ -88,6 +88,7 @@ export default {
         shake: "shake 0.8s ease-in-out",
       },
       screens: {
+        xs: "350px",
         "3xl": "1800px",
       },
       container: {

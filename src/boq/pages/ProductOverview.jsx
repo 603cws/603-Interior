@@ -346,11 +346,12 @@ function ProductOverview() {
             onClick={() => {
               setShowProductView(false);
               setMinimizedView(true);
-              navigate("/boq");
+              // navigate("/boq");
               //Don't change the below setSelectedCategory, setSelectedSubCategory, setSelectedSubCategory1 => Sunny
               setSelectedCategory(cat);
               setSelectedSubCategory(subCat);
               setSelectedSubCategory1(subCat1);
+              navigate(-1);
             }}
           />
 
@@ -394,7 +395,7 @@ function ProductOverview() {
                   height={50}
                   onMouseEnter={() => setHoveredImage(img)}
                   onMouseLeave={() => setHoveredImage(null)}
-                  className="cursor-pointer rounded-lg border-2 border-transparent"
+                  className="cursor-pointer rounded-lg border-2 border-[#385682]"
                 />
               ))}
               {/* View in 3D Button */}
