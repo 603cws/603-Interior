@@ -1,8 +1,11 @@
 import { useEffect, useState } from "react";
 import { useApp } from "../../Context/Context";
-import { CiCirclePlus, CiFilter } from "react-icons/ci";
+import { CiFilter } from "react-icons/ci";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
+import { FaStar } from "react-icons/fa";
+import { GoPlus } from "react-icons/go";
+import { PiStarFourFill } from "react-icons/pi";
 
 // Animation settings for easy customization
 const animations = {
@@ -266,8 +269,8 @@ function ProductCard({
             {paginatedVariants.map((variant) => (
               <motion.div
                 key={variant.id}
-                className="max-w-sm flex flex-col justify-center items-center bg-white rounded-lg shadow-md cursor-pointer my-2 px-3 
-                hover:rounded-lg-21 hover:bg-custom-gradient hover:shadow-custom transition-all duration-300 border-2 relative"
+                className="max-w-sm flex flex-col justify-center items-center bg-white shadow-md cursor-pointer my-2 px-3 group
+                hover:rounded-lg-21 hover:bg-custom-gradient hover:shadow-custom transition-all duration-300 border-2 border-[#F5F5F5] relative"
                 variants={animations.fadeInLeft}
                 initial="hidden"
                 animate="visible"
@@ -275,24 +278,45 @@ function ProductCard({
               >
                 {variant.segment && (
                   <div
-                    className={`absolute top-1 left-1 font-bold font-Poppins text-sm px-5 py-1.5 text-white z-10 ${
+                    className={`absolute top-2 left-2 font-bold font-Poppins text-sm px-3 py-1 text-white z-10 flex items-center gap-2 rounded-tl-sm rounded-bl-lg rounded-tr-md rounded-br-md ${
                       variant.segment === "Minimal"
-                        ? "bg-gray-500"
+                        ? "bg-gradient-to-l from-[#75A2BE] to-[#5584B6]" //"bg-gray-500"
                         : variant.segment === "Luxury"
-                        ? "bg-yellow-500"
-                        : "bg-purple-600"
+                        ? "bg-gradient-to-l from-[#C79733] to-[#8E691D]" //"bg-yellow-500"
+                        : "bg-gradient-to-l from-[#4A4A4A] to-[#1F1F1F]" //"bg-purple-600"
                     }`}
-                    style={{
-                      clipPath: "polygon(0 0, 100% 0, 85% 100%, 0% 100%)",
-                    }}
+                    // style={{
+                    //   clipPath: "polygon(0 0, 100% 0, 85% 100%, 0% 100%)",
+                    // }}
                   >
-                    <h4 className="text-xs md:text-base">{variant.segment}</h4>
+                    {variant.segment === "Luxury" && (
+                      <div className="relative pr-2">
+                        <PiStarFourFill
+                          className="absolute bottom-2 right-1"
+                          size={8}
+                          color="#FFE473"
+                        />
+                        <PiStarFourFill color="#FFE473" />
+                      </div>
+                    )}
+
+                    {variant.segment === "Exclusive" && (
+                      <PiStarFourFill color="#FFE473" />
+                    )}
+
+                    {variant.segment === "Minimal" && (
+                      <FaStar color="#FFE473" />
+                    )}
+
+                    <h4 className="text-xs uppercase md:text-sm">
+                      {variant.segment}
+                    </h4>
                   </div>
                 )}
 
                 {filterSelectedProduct[0]?.id === variant.id && (
-                  <div className="absolute top-1 right-0 bg-[#34BFAD] text-xs font-semibold p-0.5 z-20">
-                    Selected
+                  <div className="absolute top-2 right-2 bg-[#347ABF] text-xs font-semibold text-white px-3 py-2 z-20 rounded-bl-xl">
+                    SELECTED
                   </div>
                 )}
 
@@ -317,10 +341,10 @@ function ProductCard({
                     }}
                   />
                   {/* CiCirclePlus Icon - Positioned at Bottom Right */}
-                  <div className="absolute -bottom-10 md:bottom-2 -right-2 md:right-2 bg-[#82b8b0] rounded-full p-1 shadow-md cursor-pointer">
-                    <CiCirclePlus
-                      size={30}
-                      color="#FFFFFF"
+                  <div className="absolute -bottom-10 md:bottom-2 -right-2 md:right-0 bg-white group-hover:bg-[#EFF8FF] rounded-full p-1 shadow-[0px_2px_6px_0px_rgba(0,0,0,0.1),_inset_0px_4px_6px_0px_rgba(0,0,0,0.1)] cursor-pointer">
+                    <GoPlus
+                      size={28}
+                      color="#334A78"
                       onClick={() => {
                         setSelectedProductView(variant);
                         setShowSelectArea(true);
@@ -330,7 +354,7 @@ function ProductCard({
                 </div>
 
                 {/* Product Name */}
-                <div className="p-4">
+                <div className="px-1 py-3 text-start w-full">
                   <p
                     className="text-sm font-medium text-gray-800 capitalize"
                     onClick={() => {
@@ -339,7 +363,11 @@ function ProductCard({
                       navigate(`${variant.id}`); //new ProductOverview
                     }}
                   >
-                    {variant.title.toLowerCase()}
+                    <span className="group-hover:text-[#347ABF]">
+                      {variant.title.toLowerCase()}
+                    </span>
+                    <br />
+                    <span>₹ {variant.price}</span>
                   </p>
                 </div>
               </motion.div>
@@ -361,7 +389,81 @@ function ProductCard({
       </div>
 
       {totalPages > 1 && (
-        <div className="flex justify-center mt-6 space-x-2">
+        <div className="flex justify-center items-center mt-6 mb-6 px-4 space-x-1">
+          <div className="flex border border-[#CCCCCC] rounded-lg px-3 py-2">
+            {/* Previous Arrow */}
+            <button
+              onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+              disabled={currentPage === 1}
+              className="flex items-center gap-2 px-2 text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              <img
+                src="../images/icons/less.png"
+                alt="Previous"
+                className="w-4 h-4"
+              />
+              <span className="text-[#194F48]">Previous</span>
+            </button>
+
+            {/* Page Numbers */}
+            {(() => {
+              const pages = [];
+              let lastShownPage = 0;
+
+              for (let i = 1; i <= totalPages; i++) {
+                if (
+                  i === 1 ||
+                  i === totalPages ||
+                  (i >= currentPage - 1 && i <= currentPage + 1)
+                ) {
+                  pages.push(
+                    <button
+                      key={i}
+                      onClick={() => setCurrentPage(i)}
+                      className={`px-3 py-1 text-sm rounded text-[#334A78] ${
+                        currentPage === i
+                          ? "text-white bg-[#334A78]"
+                          : "hover:bg-[#F1F1F1]"
+                      }`}
+                    >
+                      {i}
+                    </button>
+                  );
+                  lastShownPage = i;
+                } else if (i > lastShownPage + 1) {
+                  pages.push(
+                    <span key={`ellipsis-${i}`} className="px-2 py-1 text-sm">
+                      ...
+                    </span>
+                  );
+                  lastShownPage = i;
+                }
+              }
+
+              return pages;
+            })()}
+
+            {/* Next Text */}
+            <button
+              onClick={() =>
+                setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+              }
+              disabled={currentPage === totalPages}
+              className="flex items-center gap-2 px-2 text-sm disabled:opacity-50 default:cursor-not-allowed"
+            >
+              <span className="text-[#194F48]">Next</span>
+              <img
+                src="../images/icons/more.png"
+                alt="Next"
+                className="w-4 h-4"
+              />
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* {totalPages > 1 && (
+        <div className="flex justify-center mt-6 space-x-2 py-4">
           <button
             className="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300"
             onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
@@ -394,7 +496,7 @@ function ProductCard({
             Next
           </button>
         </div>
-      )}
+      )} */}
     </div>
   );
 }
