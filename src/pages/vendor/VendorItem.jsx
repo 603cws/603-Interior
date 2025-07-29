@@ -453,15 +453,17 @@ function VendorItem() {
                                   >
                                     <VscEye /> view
                                   </button>
-                                  <button
-                                    onClick={() => {
-                                      setSelectedproduct(item);
-                                      setEditProduct(true);
-                                    }}
-                                    className=" flex gap-2 items-center w-full text-left px-3 py-2 hover:bg-gray-200"
-                                  >
-                                    <VscEye /> Edit
-                                  </button>
+                                  {toggle && (
+                                    <button
+                                      onClick={() => {
+                                        setSelectedproduct(item);
+                                        setEditProduct(true);
+                                      }}
+                                      className=" flex gap-2 items-center w-full text-left px-3 py-2 hover:bg-gray-200"
+                                    >
+                                      <VscEye /> Edit
+                                    </button>
+                                  )}
                                   <button
                                     onClick={() => {
                                       handleDeleteClick(item);
