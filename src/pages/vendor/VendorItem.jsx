@@ -12,6 +12,7 @@ import { MdOutlineCancel } from "react-icons/md";
 import { IoIosAdd } from "react-icons/io";
 import DashboardProductCard from "./DashboardProductCard";
 import RejectedProduct from "./RejectedProduct";
+import VendorProductEdit from "./VendorProductEdit";
 
 function VendorItem() {
   const [toggle, setToggle] = useState(true);
@@ -19,8 +20,14 @@ function VendorItem() {
   const [isAddProduct, setIsAddProduct] = useState(false);
   const [isProductHovered, setIsProductHovered] = useState(false);
   const [isAddonHovered, setIsAddonHovered] = useState(false);
+
+  // state for the dispay in product page
   const [addNewProduct, setAddNewProduct] = useState(false);
   const [addNewAddon, setAddNewAddon] = useState(false);
+  // new edit option
+  const [editProduct, setEditProduct] = useState(false);
+  const [selectedproduct, setSelectedproduct] = useState(null);
+
   const [openMenuId, setOpenMenuId] = useState(null); // Store the ID of the row with an open menu
   const [selectedProductview, setSelectedProductview] = useState({
     product_name: "",
@@ -290,6 +297,13 @@ function VendorItem() {
             setIsAddonRefresh={setIsAddonRefresh}
             setProductlist={setProductlist}
           />
+        ) : editProduct ? (
+          <VendorProductEdit
+            setEditProduct={setEditProduct}
+            setProductlist={setProductlist}
+            setIsProductRefresh={setIsProductRefresh}
+            selectedproduct={selectedproduct}
+          />
         ) : (
           // Default product list and add product UI
           <>
@@ -434,6 +448,15 @@ function VendorItem() {
                                   <button
                                     onClick={() => {
                                       handleProductPreview(item);
+                                    }}
+                                    className=" flex gap-2 items-center w-full text-left px-3 py-2 hover:bg-gray-200"
+                                  >
+                                    <VscEye /> view
+                                  </button>
+                                  <button
+                                    onClick={() => {
+                                      setSelectedproduct(item);
+                                      setEditProduct(true);
                                     }}
                                     className=" flex gap-2 items-center w-full text-left px-3 py-2 hover:bg-gray-200"
                                   >
