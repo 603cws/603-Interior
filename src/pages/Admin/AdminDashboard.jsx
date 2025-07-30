@@ -32,6 +32,8 @@ import { FaUserPlus } from "react-icons/fa6";
 import { TbCalendarStats } from "react-icons/tb";
 import Schedule from "./Schedule";
 import FormulaEditor from "../../boq/components/FormulaEditor";
+import VendorEditAddon from "../vendor/VendorEditAddon";
+import VendorProductEdit from "../vendor/VendorProductEdit";
 
 function AdminDashboard() {
   const navigate = useNavigate();
@@ -155,6 +157,14 @@ function AdminDashboard() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
   const [selectedindex, setSelectedindex] = useState();
+
+  // new edit option product
+  const [editProduct, setEditProduct] = useState(false);
+  const [selectedproduct, setSelectedproduct] = useState(null);
+
+  //new edit option addon
+  const [editAddon, setEditAddon] = useState(false);
+  const [selectedAddon, setSelectedAddon] = useState(null);
 
   //handle functions
   const handleDeletevendirClick = (user, index) => {
@@ -907,6 +917,20 @@ function AdminDashboard() {
                     setAddNewProduct={setAddNewAddon}
                     setProductlist={setProductlist}
                   />
+                ) : editProduct ? (
+                  <VendorProductEdit
+                    setEditProduct={setEditProduct}
+                    setProductlist={setProductlist}
+                    setIsProductRefresh={setIsProductRefresh}
+                    selectedproduct={selectedproduct}
+                  />
+                ) : editAddon ? (
+                  <VendorEditAddon
+                    seteditAddon={setEditAddon}
+                    selectedAddon={selectedAddon}
+                    setProductlist={setProductlist}
+                    setIsAddonRefresh={setIsAddonRefresh}
+                  />
                 ) : (
                   // Default product list and add product UI
                   <>
@@ -1101,8 +1125,29 @@ function AdminDashboard() {
                                             }}
                                             className=" flex gap-2 items-center w-full text-left px-3 py-2 hover:bg-gray-200"
                                           >
-                                            <VscEye /> Edit
+                                            <VscEye /> View
                                           </button>
+                                          {toggle ? (
+                                            <button
+                                              onClick={() => {
+                                                setSelectedproduct(item);
+                                                setEditProduct(true);
+                                              }}
+                                              className=" flex gap-2 items-center w-full text-left px-3 py-2 hover:bg-gray-200"
+                                            >
+                                              <VscEye /> Edit
+                                            </button>
+                                          ) : (
+                                            <button
+                                              onClick={() => {
+                                                setSelectedAddon(item);
+                                                setEditAddon(true);
+                                              }}
+                                              className=" flex gap-2 items-center w-full text-left px-3 py-2 hover:bg-gray-200"
+                                            >
+                                              <VscEye /> Edit
+                                            </button>
+                                          )}
                                           <button
                                             // onClick={() => {
                                             //   handleDelete(item);

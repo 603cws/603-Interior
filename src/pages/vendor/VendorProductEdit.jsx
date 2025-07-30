@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { FaRegQuestionCircle } from "react-icons/fa";
 import { supabase } from "../../services/supabase";
 import { toast } from "react-hot-toast";
-import { useApp } from "../../Context/Context";
+// import { useApp } from "../../Context/Context";
 import { AllCatArray, specialArray } from "../../utils/AllCatArray";
 import { useRef } from "react";
 import { v4 as uuidv4 } from "uuid";
@@ -17,8 +17,12 @@ function VendorProductEdit({
 }) {
   const [file, setFile] = useState(null);
   const [preview, setPreview] = useState(selectedproduct?.image || null);
-  const [resources, setResources] = useState([]);
+  //   const [resources, setResources] = useState([]);
   const [subcat, setSubcat] = useState([]);
+
+  const [loading, setLoading] = useState(true);
+
+  const [vendordata, setVendordata] = useState();
 
   console.log("selected product", selectedproduct);
 
@@ -45,9 +49,34 @@ function VendorProductEdit({
   const baseImageUrl =
     "https://bwxzfwsoxwtzhjbzbdzs.supabase.co/storage/v1/object/public/addon/";
 
-  const additionalImages = selectedproduct?.additional_images
-    ? JSON.parse(selectedproduct.additional_images)
-    : [];
+  useEffect(() => {
+    const fetchVendorData = async () => {
+      setLoading(true);
+      const { data, error } = await supabase
+        .from("profiles") // your table name
+        .select("allowed_category") // select only what you need
+        .eq("id", selectedproduct?.vendor_id) // or whatever your vendor ID field is
+        .single();
+
+      if (error) {
+        console.error("Error fetching vendor:", error.message);
+      } else {
+        // setAccountHolder(data);
+        const parseddata = JSON.parse(data.allowed_category);
+        setVendordata(parseddata);
+        console.log("vendordata", parseddata);
+      }
+      setLoading(false);
+    };
+
+    fetchVendorData();
+    // if (selectedAddon?.vendorId) {
+    // }
+  }, [selectedproduct?.vendor_id]);
+
+  //   const additionalImages = selectedproduct?.additional_images
+  //     ? JSON.parse(selectedproduct.additional_images)
+  //     : [];
 
   // const [selectedSubcategories, setSelectedSubcategories] = useState();
   const [variant, setVariant] = useState({
@@ -75,7 +104,7 @@ function VendorProductEdit({
   //     vendor_id: "",
   //   });
 
-  const { accountHolder } = useApp();
+  //   const { accountHolder } = useApp();
 
   const handleFileChange = (event) => {
     const selectedFile = event.target.files[0];
@@ -214,21 +243,21 @@ function VendorProductEdit({
     }
   };
 
-  useEffect(() => {
-    accountHolder.allowedCategory.map((category) => {
-      const filtered = AllCatArray.filter((cat) => cat.name === category);
+  //   useEffect(() => {
+  //     accountHolder.allowedCategory.map((category) => {
+  //       const filtered = AllCatArray.filter((cat) => cat.name === category);
 
-      const subcattodisplay = filtered.flatMap((subcat) => subcat.subCat1);
-      console.log(subcattodisplay);
-      return subcattodisplay;
-    });
-  }, []);
+  //       const subcattodisplay = filtered.flatMap((subcat) => subcat.subCat1);
+  //       console.log(subcattodisplay);
+  //       return subcattodisplay;
+  //     });
+  //   }, []);
 
   useEffect(() => {
     const filtered = AllCatArray.filter((cat) => cat.name === category);
     const subcattodisplay = filtered.flatMap((subcat) => subcat.subCat1);
     setSubcat(subcattodisplay);
-    setResources(filtered);
+    // setResources(filtered);
   }, [category]);
 
   const onSubmit = async (e) => {
@@ -332,6 +361,8 @@ function VendorProductEdit({
         // setVariant((prev) => ({ ...prev, mainImage: mainImageUpload.path }));
 
         variant.mainImage = mainImageUpload.path;
+
+        setPreview(mainImageUpload.path);
       }
       // additonal images
       if (filebasedadditionalimages.length > 0) {
@@ -360,13 +391,14 @@ function VendorProductEdit({
           additional_images: useradditionalimages, // Store paths of additional images
           segment: variant.segment, // Store segment
           dimensions: variant.dimension, // Store dimension
-          manufacturer: accountHolder?.companyName || variant.manufacturer, // Store manufacturer
-          vendor_id: accountHolder.userId, // Store vendor ID
+          vendor_id: selectedproduct?.vendor_id, // Store vendor ID
           product_type: subSubCategory,
           product_id: productId,
           status: "pending",
         })
         .eq("id", variant.selectedProductId); // Use the correct column and value to match the row you want to update
+
+      //   manufacturer: accountHolder?.companyName || variant.manufacturer, // Store manufacturer
 
       if (variantError) {
         console.error(variantError);
@@ -624,6 +656,12 @@ function VendorProductEdit({
   console.log("imageurl", imageUrl);
   console.log("typeof main image", typeof variant.mainImage === "string");
 
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center">Loading ......</div>
+    );
+  }
+
   return (
     <div className="flex flex-col justify-center items-start font-Poppins relative">
       <div className="px-5 py-2 border-b-2 bg-white w-full border-b-gray-400 sticky top-0 z-10">
@@ -668,13 +706,21 @@ function VendorProductEdit({
                 >
                   <option value="">Select Category</option>
 
-                  {accountHolder.allowedCategory.map((cat, index) => {
+                  {vendordata &&
+                    vendordata?.map((cat, index) => {
+                      return (
+                        <option key={index} value={cat}>
+                          {cat}
+                        </option>
+                      );
+                    })}
+                  {/* {accountHolder.allowedCategory.map((cat, index) => {
                     return (
                       <option key={index} value={cat}>
                         {cat}
                       </option>
                     );
-                  })}
+                  })} */}
                 </select>
               </div>
               <div>
@@ -684,6 +730,7 @@ function VendorProductEdit({
                   id="category"
                   className="w-full border-2 py-1.5 px-2 rounded-lg"
                   value={subSubCategory}
+                  disabled={!category}
                   onChange={(e) => setSubSubCategory(e.target.value)}
                   required
                 >
@@ -940,13 +987,13 @@ function VendorProductEdit({
           </div>
           {/* div for buttons */}
           <div className="w-full flex items-end justify-between mt-5">
-            <button
+            {/* <button
               className="border-2 px-5 py-2 capitalize rounded-lg"
               type="button"
               onClick={handleFormClear}
             >
               Discard
-            </button>
+            </button> */}
             <button
               className="border-2 px-5 py-2 bg-[#194F48] text-white capitalize rounded-lg"
               type="submit"
