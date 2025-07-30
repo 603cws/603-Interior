@@ -14,6 +14,7 @@ import DashboardProductCard from "./DashboardProductCard";
 import RejectedProduct from "./RejectedProduct";
 import VendorProductEdit from "./VendorProductEdit";
 import VendorEditAddon from "./VendorEditAddon";
+// import { ChevronDownIcon, FunnelIcon } from "@heroicons/react/24/outline";
 
 function VendorItem() {
   const [toggle, setToggle] = useState(true);
@@ -65,6 +66,10 @@ function VendorItem() {
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [filteredAddons, setFilteredAddons] = useState([]);
 
+  //for filters status
+  // const [selected, setSelected] = useState("");
+  // const [isOpen, setIsOpen] = useState(false);
+
   const tabs = [
     { name: "Products", value: "products" },
     { name: "Add-Ons", value: "addons" },
@@ -85,6 +90,21 @@ function VendorItem() {
     setSelectedTab(tab);
     setToggle(tab === "products"); // Set toggle dynamically
   };
+
+  // const handleSelect = (e) => {
+  //   setSelected(e.target.value);
+
+  //   if (e.target.value !== "") {
+  //     const filtered = products.filter(
+  //       (item) => item.status.toLowerCase() === e.target.value.toLowerCase()
+  //     );
+  //     setFilteredProducts(filtered);
+  //   } else {
+  //     setFilteredProducts(products);
+  //   }
+
+  //   setIsOpen(false); // close dropdown after selection (optional)
+  // };
 
   // Fetch Products from Supabase
   const fetchProducts = async () => {
@@ -175,11 +195,13 @@ function VendorItem() {
   useEffect(() => {
     console.log("Fetching products...");
     fetchProducts();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isproductRefresh]);
 
   useEffect(() => {
     console.log("Fetching addons...");
     fetchAddons();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isaddonRefresh]);
 
   const handlenewproduct = () => {
@@ -333,6 +355,34 @@ function VendorItem() {
                     onChange={(e) => filterItems(e.target.value)}
                   />
                 </div>
+
+                {/* <div className="relative inline-block text-left">
+             
+                  <button
+                    onClick={() => setIsOpen(!isOpen)}
+                    className="flex items-center gap-2 bg-gray-100 px-4 py-2 rounded-md hover:bg-gray-200"
+                  >
+                    <FunnelIcon className="h-5 w-5 text-gray-600" />
+                    <span className="text-sm text-gray-700">Filter</span>
+                    <ChevronDownIcon className="h-4 w-4 text-gray-500" />
+                  </button>
+
+  
+                  {isOpen && (
+                    <div className="absolute mt-2 w-40 bg-white border rounded-md shadow-lg z-10">
+                      <select
+                        value={selected}
+                        onChange={handleSelect}
+                        className="w-full border-none focus:ring-0 p-2 text-sm"
+                      >
+                        <option value="">All</option>
+                        <option value="pending">Pending</option>
+                        <option value="approved">Approved</option>
+                        <option value="rejected">Rejected</option>
+                      </select>
+                    </div>
+                  )}
+                </div> */}
 
                 <button
                   onClick={handlenewproduct}

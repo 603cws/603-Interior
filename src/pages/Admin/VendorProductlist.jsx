@@ -9,6 +9,8 @@ import toast from "react-hot-toast";
 import VendorProductCard from "../vendor/VendorProductCard";
 import { IoIosArrowBack } from "react-icons/io";
 import { ChevronDownIcon, FunnelIcon } from "@heroicons/react/24/outline";
+import VendorProductEdit from "../vendor/VendorProductEdit";
+import VendorEditAddon from "../vendor/VendorEditAddon";
 
 function VendorProductlist({
   setVendorproductlist,
@@ -57,6 +59,14 @@ function VendorProductlist({
 
   //addon refresh
   const [isaddonRefresh, setIsAddonRefresh] = useState(false);
+
+  // new edit option product
+  const [editProduct, setEditProduct] = useState(false);
+  const [selectedproduct, setSelectedproduct] = useState(null);
+
+  //new edit option addon
+  const [editAddon, setEditAddon] = useState(false);
+  const [selectedAddon, setSelectedAddon] = useState(null);
 
   const vendorcategory = JSON.parse(selectedVendor.allowed_category);
 
@@ -457,326 +467,375 @@ function VendorProductlist({
   return (
     <div className="flex-1  border-2 border-[#000] rounded-3xl my-2.5">
       <div className="overflow-y-auto scrollbar-hide h-[calc(100vh-120px)] rounded-3xl relative ">
-        <div className=" sticky top-0">
-          <div className="flex justify-between items-center px-4 py-2 border-b-2 border-b-gray-400 ">
-            <button
-              //   onClick={setVendorproductlist(false)}
-              onClick={() => setVendorproductlist(false)}
-              className="capitalize font-semibold flex items-center text-xl "
-            >
-              <IoIosArrowBack /> go back
-            </button>
-
-            <div className="w-1/2">
-              <input
-                type="text"
-                value={searchQuery}
-                className="w-full rounded-lg px-2 py-1 outline-none border-2 border-gray-400"
-                placeholder="......search by product name"
-                onChange={(e) => filterItems(e.target.value)}
-              />
-            </div>
-
-            {/* <div>
-              <select>
-                <option value=""></option>
-                <option value="">Pending</option>
-                <option value="">Approved</option>
-                <option value="">Rejected</option>
-              </select>
-            </div> */}
-
-            <div className="relative inline-block text-left">
-              {/* Filter Button */}
-              <button
-                onClick={() => setIsOpen(!isOpen)}
-                className="flex items-center gap-2 bg-gray-100 px-4 py-2 rounded-md hover:bg-gray-200"
-              >
-                <FunnelIcon className="h-5 w-5 text-gray-600" />
-                <span className="text-sm text-gray-700">Filter</span>
-                <ChevronDownIcon className="h-4 w-4 text-gray-500" />
-              </button>
-
-              {/* Dropdown */}
-              {isOpen && (
-                <div className="absolute mt-2 w-40 bg-white border rounded-md shadow-lg z-10">
-                  <select
-                    value={selected}
-                    onChange={handleSelect}
-                    className="w-full border-none focus:ring-0 p-2 text-sm"
-                  >
-                    <option value="">All</option>
-                    <option value="pending">Pending</option>
-                    <option value="approved">Approved</option>
-                    <option value="rejected">Rejected</option>
-                  </select>
-                </div>
-              )}
-            </div>
-
-            {toggle && (
-              <div>
-                <select
-                  name="category"
-                  value={selectedCategory}
-                  // onChange={(e) => setSelectedCategory(e.target.value)}
-                  onChange={(e) => filterbyCategory(e.target.value)}
-                  id="category"
-                >
-                  <option value="">All categories</option>
-                  {vendorcategory.map((category) => (
-                    <option key={category} value={category}>
-                      {category}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            )}
-          </div>
-          <div className="flex gap-3 px-4 py-2 border-b-2 border-b-gray-400">
-            {tabs.map((tab) => (
-              <button
-                key={tab.value}
-                className={`flex items-center gap-2 px-6 py-2 border rounded-xl ${
-                  selectedTab === tab.value ? "bg-[#B4EAEA]" : "bg-white "
-                }`}
-                value={tab.value}
-                onClick={handleTabClick} // Dynamically sets the tab
-              >
-                {tab.name}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/*  */}
-        {productlist &&
-          (isloading ? (
-            <Spinner />
-          ) : items.length > 0 ? (
-            // <section className="mt-2 flex-1 overflow-hidden px-8">
-            <section className=" h-[90%] font-Poppins overflow-hidden">
-              <div
-                className="w-full h-full border-t border-b border-[#CCCCCC] overflow-y-auto custom-scrollbar"
-                ref={scrollContainerRef}
-              >
-                <table className="min-w-full border-collapse" ref={tableRef}>
-                  <thead className="bg-[#FFFFFF] sticky top-0 z-10 px-8 text-center text-[#000] text-base">
-                    <tr>
-                      {toggle ? (
-                        <th className="p-3 font-medium">Product Name</th>
-                      ) : (
-                        <th className="p-3 font-medium">Addon ID</th>
-                      )}
-                      <th className="p-3  font-medium">Price</th>
-                      {toggle ? (
-                        <>
-                          <th className="p-3 font-medium">Details</th>
-                          <th className="p-3 font-medium">Category</th>
-                          <th className="p-3 font-medium">specification</th>
-                        </>
-                      ) : (
-                        <th className="p-3 font-medium">Addon Title</th>
-                      )}
-                      <th className="p-3 font-medium">status</th>
-                      <th className="p-3 font-medium">Action</th>
-                    </tr>
-                  </thead>
-                  <tbody className=" text-sm">
-                    {paginatedItems.map((item) => (
-                      <tr
-                        key={item.id}
-                        className="hover:bg-gray-50 cursor-pointer"
-                      >
-                        <td className="border border-gray-200 p-3 align-middle">
-                          <div className="flex items-center gap-2">
-                            <img
-                              src={`${baseImageUrl}${item.image}`}
-                              alt={item.title}
-                              className="w-10 h-10 object-cover rounded"
-                            />
-                            {toggle ? (
-                              <span>{item.title}</span>
-                            ) : (
-                              <span className="text-wrap">{item.id}</span>
-                            )}
-                          </div>
-                        </td>
-                        <td className="border border-gray-200 p-3 align-middle">
-                          ₹{item.price}
-                        </td>
-                        {toggle ? (
-                          <>
-                            <td className="border border-gray-200 p-3 align-middle">
-                              {item.details}
-                            </td>
-                            <td className="border border-gray-200 p-3 align-middle">
-                              {item.products?.category || "N/A"}
-                            </td>
-                            <td className="border border-gray-200 p-3 align-middle">
-                              {item.products?.subcategory1 || "N/A"}
-                            </td>
-                          </>
-                        ) : (
-                          <td className="border border-gray-200 p-3 align-middle">
-                            {item.addons?.title || item.title}
-                          </td>
-                        )}
-                        <td
-                          className={`border border-gray-200 p-3 align-middle ${
-                            item.status === "pending" ? "text-yellow-700" : ""
-                          }  ${
-                            item.status === "approved" ? "text-green-700" : ""
-                          } ${
-                            item.status === "rejected" ? "text-red-700" : ""
-                          }`}
-                        >
-                          {item.status}
-                        </td>
-                        <td className="border border-gray-200 p-3 align-middle flex justify-center items-center relative">
-                          <button
-                            ref={(el) => (buttonRef.current[item.id] = el)}
-                            className="bg-white flex justify-center items-center py-1.5 w-20 mb-2"
-                            onClick={() => handleMenuToggle(item.id)}
-                          >
-                            <CiMenuKebab size={25} />
-                          </button>
-
-                          {openMenuId === item.id && (
-                            <div
-                              ref={(el) => (menuRef.current[item.id] = el)}
-                              className="absolute top-1/2 left-0 transform mt-2 bg-white border border-gray-300 shadow-md rounded-md w-24 z-10"
-                            >
-                              <button
-                                onClick={() => {
-                                  handleProductPreview(item);
-                                }}
-                                className=" flex gap-2 items-center w-full text-left px-3 py-2 hover:bg-gray-200"
-                              >
-                                <VscEye /> view
-                              </button>
-                              {/* <button
-                                onClick={() => {
-                                  handleDelete(item);
-                                }}
-                                className="flex gap-2 items-center w-full text-left px-3 py-2 hover:bg-gray-200"
-                              >
-                                <MdOutlineDelete /> Delete
-                              </button> */}
-                            </div>
-                          )}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </section>
-          ) : (
-            <>
-              <p className="p-5 text-gray-500 text-center">
-                No {toggle ? "products" : "addons"} found.
-              </p>
-            </>
-          ))}
-
-        {/* Pagination Controls (Always Visible) */}
-        {totalPages > 1 && (
-          <div className="flex justify-center items-center gap-2 mt-10 z-30 sticky bottom-0 bg-[#EBF0FF] mb-4 text-[#3d194f]">
-            <button
-              onClick={() => goToPage(currentPage - 1)}
-              disabled={currentPage === 1}
-              className="px-3 py-1 border rounded disabled:opacity-50 text-[#3d194f]"
-            >
-              Previous
-            </button>
-
-            {/* Page Numbers */}
-            {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) =>
-              page === 1 ||
-              page === totalPages ||
-              (page >= currentPage - 1 && page <= currentPage + 1) ? (
+        {editProduct ? (
+          <VendorProductEdit
+            setEditProduct={setEditProduct}
+            setProductlist={setProductlist}
+            setIsProductRefresh={setIsProductRefresh}
+            selectedproduct={selectedproduct}
+          />
+        ) : editAddon ? (
+          <VendorEditAddon
+            seteditAddon={setEditAddon}
+            selectedAddon={selectedAddon}
+            setProductlist={setProductlist}
+            setIsAddonRefresh={setIsAddonRefresh}
+          />
+        ) : (
+          <>
+            <div className=" sticky top-0">
+              <div className="flex justify-between items-center px-4 py-2 border-b-2 border-b-gray-400 ">
                 <button
-                  key={page}
-                  onClick={() => goToPage(page)}
-                  className={`w-8 h-8 flex items-center justify-center  ${
-                    currentPage === page
-                      ? "bg-[#aca9d3] text-white rounded-full "
-                      : "rounded-md text-[#3d194f]"
-                  }`}
+                  //   onClick={setVendorproductlist(false)}
+                  onClick={() => setVendorproductlist(false)}
+                  className="capitalize font-semibold flex items-center text-xl "
                 >
-                  {page}
+                  <IoIosArrowBack /> go back
                 </button>
-              ) : page === currentPage + 2 || page === currentPage - 2 ? (
-                <span key={page} className="px-2">
-                  ...
-                </span>
-              ) : null
-            )}
 
-            <button
-              onClick={() => goToPage(currentPage + 1)}
-              disabled={currentPage === totalPages}
-              className="px-3 py-1 border rounded disabled:opacity-50 text-[#3d194f]"
-            >
-              Next
-            </button>
-          </div>
-        )}
+                <div className="w-1/2">
+                  <input
+                    type="text"
+                    value={searchQuery}
+                    className="w-full rounded-lg px-2 py-1 outline-none border-2 border-gray-400"
+                    placeholder="......search by product name"
+                    onChange={(e) => filterItems(e.target.value)}
+                  />
+                </div>
 
-        {isAddProduct && (
-          <div className="flex flex-col justify-center items-center h-[90%] font-Poppins overflow-y-hidden">
-            <div className="border-2 border-gray-200 px-28 py-14 flex justify-center items-center gap-10 rounded-2xl shadow-lg capitalize relative">
-              <div
-                onClick={() => {
-                  setAddNewProduct(true);
-                  setIsAddProduct(false);
-                }}
-                onMouseEnter={() => setIsProductHovered(true)}
-                onMouseLeave={() => setIsProductHovered(false)}
-                className="flex flex-col justify-center items-center gap-5 p-10 shadow-[0_4px_10px_rgba(180,234,234,50)] font-bold rounded-xl cursor-pointer hover:bg-[#194F48] hover:text-white hover:scale-110 transition-transform duration-200 ease-in-out"
-              >
-                <img
-                  src={
-                    isProductHovered
-                      ? "images/product-icon-2.png"
-                      : "images/product-icon-1.png"
-                  }
-                  alt=""
-                />
-                <h2 className="text-lg">product</h2>
+                {/* <div>
+                <select>
+                  <option value=""></option>
+                  <option value="">Pending</option>
+                  <option value="">Approved</option>
+                  <option value="">Rejected</option>
+                </select>
+              </div> */}
+
+                <div className="relative inline-block text-left">
+                  {/* Filter Button */}
+                  <button
+                    onClick={() => setIsOpen(!isOpen)}
+                    className="flex items-center gap-2 bg-gray-100 px-4 py-2 rounded-md hover:bg-gray-200"
+                  >
+                    <FunnelIcon className="h-5 w-5 text-gray-600" />
+                    <span className="text-sm text-gray-700">Filter</span>
+                    <ChevronDownIcon className="h-4 w-4 text-gray-500" />
+                  </button>
+
+                  {/* Dropdown */}
+                  {isOpen && (
+                    <div className="absolute mt-2 w-40 bg-white border rounded-md shadow-lg z-10">
+                      <select
+                        value={selected}
+                        onChange={handleSelect}
+                        className="w-full border-none focus:ring-0 p-2 text-sm"
+                      >
+                        <option value="">All</option>
+                        <option value="pending">Pending</option>
+                        <option value="approved">Approved</option>
+                        <option value="rejected">Rejected</option>
+                      </select>
+                    </div>
+                  )}
+                </div>
+
+                {toggle && (
+                  <div>
+                    <select
+                      name="category"
+                      value={selectedCategory}
+                      // onChange={(e) => setSelectedCategory(e.target.value)}
+                      onChange={(e) => filterbyCategory(e.target.value)}
+                      id="category"
+                    >
+                      <option value="">All categories</option>
+                      {vendorcategory.map((category) => (
+                        <option key={category} value={category}>
+                          {category}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                )}
               </div>
-
-              <div
-                onClick={() => {
-                  setAddNewAddon(true);
-                  setIsAddProduct(false);
-                }}
-                onMouseEnter={() => setIsAddonHovered(true)}
-                onMouseLeave={() => setIsAddonHovered(false)}
-                className="flex flex-col justify-center items-center gap-5 p-10 shadow-[0_4px_10px_rgba(180,234,234,100)] font-bold rounded-xl cursor-pointer hover:bg-[#194F48] hover:text-white hover:scale-110 transition-transform duration-200 ease-in-out"
-              >
-                <img
-                  src={
-                    isAddonHovered
-                      ? "images/addOn-icon-2.png"
-                      : "images/addOn-icon-1.png"
-                  }
-                  alt=""
-                />
-                <h2 className="text-lg">add ons</h2>
-              </div>
-
-              <div className="absolute top-2 right-2">
-                <MdOutlineCancel
-                  // onClick={() => setIsAddProduct(false)}
-                  onClick={handleAddproductclose}
-                  size={25}
-                  className="cursor-pointer"
-                />
+              <div className="flex gap-3 px-4 py-2 border-b-2 border-b-gray-400">
+                {tabs.map((tab) => (
+                  <button
+                    key={tab.value}
+                    className={`flex items-center gap-2 px-6 py-2 border rounded-xl ${
+                      selectedTab === tab.value ? "bg-[#B4EAEA]" : "bg-white "
+                    }`}
+                    value={tab.value}
+                    onClick={handleTabClick} // Dynamically sets the tab
+                  >
+                    {tab.name}
+                  </button>
+                ))}
               </div>
             </div>
-          </div>
+
+            {/*  */}
+            {productlist &&
+              (isloading ? (
+                <Spinner />
+              ) : items.length > 0 ? (
+                // <section className="mt-2 flex-1 overflow-hidden px-8">
+                <section className=" h-[90%] font-Poppins overflow-hidden">
+                  <div
+                    className="w-full h-full border-t border-b border-[#CCCCCC] overflow-y-auto custom-scrollbar"
+                    ref={scrollContainerRef}
+                  >
+                    <table
+                      className="min-w-full border-collapse"
+                      ref={tableRef}
+                    >
+                      <thead className="bg-[#FFFFFF] sticky top-0 z-10 px-8 text-center text-[#000] text-base">
+                        <tr>
+                          {toggle ? (
+                            <th className="p-3 font-medium">Product Name</th>
+                          ) : (
+                            <th className="p-3 font-medium">Addon ID</th>
+                          )}
+                          <th className="p-3  font-medium">Price</th>
+                          {toggle ? (
+                            <>
+                              <th className="p-3 font-medium">Details</th>
+                              <th className="p-3 font-medium">Category</th>
+                              <th className="p-3 font-medium">specification</th>
+                            </>
+                          ) : (
+                            <th className="p-3 font-medium">Addon Title</th>
+                          )}
+                          <th className="p-3 font-medium">status</th>
+                          <th className="p-3 font-medium">Action</th>
+                        </tr>
+                      </thead>
+                      <tbody className=" text-sm">
+                        {paginatedItems.map((item) => (
+                          <tr
+                            key={item.id}
+                            className="hover:bg-gray-50 cursor-pointer"
+                          >
+                            <td className="border border-gray-200 p-3 align-middle">
+                              <div className="flex items-center gap-2">
+                                <img
+                                  src={`${baseImageUrl}${item.image}`}
+                                  alt={item.title}
+                                  className="w-10 h-10 object-cover rounded"
+                                />
+                                {toggle ? (
+                                  <span>{item.title}</span>
+                                ) : (
+                                  <span className="text-wrap">{item.id}</span>
+                                )}
+                              </div>
+                            </td>
+                            <td className="border border-gray-200 p-3 align-middle">
+                              ₹{item.price}
+                            </td>
+                            {toggle ? (
+                              <>
+                                <td className="border border-gray-200 p-3 align-middle">
+                                  {item.details}
+                                </td>
+                                <td className="border border-gray-200 p-3 align-middle">
+                                  {item.products?.category || "N/A"}
+                                </td>
+                                <td className="border border-gray-200 p-3 align-middle">
+                                  {item.products?.subcategory1 || "N/A"}
+                                </td>
+                              </>
+                            ) : (
+                              <td className="border border-gray-200 p-3 align-middle">
+                                {item.addons?.title || item.title}
+                              </td>
+                            )}
+                            <td
+                              className={`border border-gray-200 p-3 align-middle ${
+                                item.status === "pending"
+                                  ? "text-yellow-700"
+                                  : ""
+                              }  ${
+                                item.status === "approved"
+                                  ? "text-green-700"
+                                  : ""
+                              } ${
+                                item.status === "rejected" ? "text-red-700" : ""
+                              }`}
+                            >
+                              {item.status}
+                            </td>
+                            <td className="border border-gray-200 p-3 align-middle flex justify-center items-center relative">
+                              <button
+                                ref={(el) => (buttonRef.current[item.id] = el)}
+                                className="bg-white flex justify-center items-center py-1.5 w-20 mb-2"
+                                onClick={() => handleMenuToggle(item.id)}
+                              >
+                                <CiMenuKebab size={25} />
+                              </button>
+
+                              {openMenuId === item.id && (
+                                <div
+                                  ref={(el) => (menuRef.current[item.id] = el)}
+                                  className="absolute top-1/2 left-0 transform mt-2 bg-white border border-gray-300 shadow-md rounded-md w-24 z-10"
+                                >
+                                  <button
+                                    onClick={() => {
+                                      handleProductPreview(item);
+                                    }}
+                                    className=" flex gap-2 items-center w-full text-left px-3 py-2 hover:bg-gray-200"
+                                  >
+                                    <VscEye /> view
+                                  </button>
+                                  {toggle ? (
+                                    <button
+                                      onClick={() => {
+                                        setSelectedproduct(item);
+                                        setEditProduct(true);
+                                      }}
+                                      className=" flex gap-2 items-center w-full text-left px-3 py-2 hover:bg-gray-200"
+                                    >
+                                      <VscEye />
+                                      Edit
+                                    </button>
+                                  ) : (
+                                    <button
+                                      onClick={() => {
+                                        setSelectedAddon(item);
+                                        setEditAddon(true);
+                                      }}
+                                      className=" flex gap-2 items-center w-full text-left px-3 py-2 hover:bg-gray-200"
+                                    >
+                                      <VscEye />
+                                      Edit
+                                    </button>
+                                  )}
+                                  {/* <button
+                                  onClick={() => {
+                                    handleDelete(item);
+                                  }}
+                                  className="flex gap-2 items-center w-full text-left px-3 py-2 hover:bg-gray-200"
+                                >
+                                  <MdOutlineDelete /> Delete
+                                </button> */}
+                                </div>
+                              )}
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </section>
+              ) : (
+                <>
+                  <p className="p-5 text-gray-500 text-center">
+                    No {toggle ? "products" : "addons"} found.
+                  </p>
+                </>
+              ))}
+
+            {/* Pagination Controls (Always Visible) */}
+            {totalPages > 1 && (
+              <div className="flex justify-center items-center gap-2 mt-10 z-30 sticky bottom-0 bg-[#EBF0FF] mb-4 text-[#3d194f]">
+                <button
+                  onClick={() => goToPage(currentPage - 1)}
+                  disabled={currentPage === 1}
+                  className="px-3 py-1 border rounded disabled:opacity-50 text-[#3d194f]"
+                >
+                  Previous
+                </button>
+
+                {/* Page Numbers */}
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map(
+                  (page) =>
+                    page === 1 ||
+                    page === totalPages ||
+                    (page >= currentPage - 1 && page <= currentPage + 1) ? (
+                      <button
+                        key={page}
+                        onClick={() => goToPage(page)}
+                        className={`w-8 h-8 flex items-center justify-center  ${
+                          currentPage === page
+                            ? "bg-[#aca9d3] text-white rounded-full "
+                            : "rounded-md text-[#3d194f]"
+                        }`}
+                      >
+                        {page}
+                      </button>
+                    ) : page === currentPage + 2 || page === currentPage - 2 ? (
+                      <span key={page} className="px-2">
+                        ...
+                      </span>
+                    ) : null
+                )}
+
+                <button
+                  onClick={() => goToPage(currentPage + 1)}
+                  disabled={currentPage === totalPages}
+                  className="px-3 py-1 border rounded disabled:opacity-50 text-[#3d194f]"
+                >
+                  Next
+                </button>
+              </div>
+            )}
+
+            {isAddProduct && (
+              <div className="flex flex-col justify-center items-center h-[90%] font-Poppins overflow-y-hidden">
+                <div className="border-2 border-gray-200 px-28 py-14 flex justify-center items-center gap-10 rounded-2xl shadow-lg capitalize relative">
+                  <div
+                    onClick={() => {
+                      setAddNewProduct(true);
+                      setIsAddProduct(false);
+                    }}
+                    onMouseEnter={() => setIsProductHovered(true)}
+                    onMouseLeave={() => setIsProductHovered(false)}
+                    className="flex flex-col justify-center items-center gap-5 p-10 shadow-[0_4px_10px_rgba(180,234,234,50)] font-bold rounded-xl cursor-pointer hover:bg-[#194F48] hover:text-white hover:scale-110 transition-transform duration-200 ease-in-out"
+                  >
+                    <img
+                      src={
+                        isProductHovered
+                          ? "images/product-icon-2.png"
+                          : "images/product-icon-1.png"
+                      }
+                      alt=""
+                    />
+                    <h2 className="text-lg">product</h2>
+                  </div>
+
+                  <div
+                    onClick={() => {
+                      setAddNewAddon(true);
+                      setIsAddProduct(false);
+                    }}
+                    onMouseEnter={() => setIsAddonHovered(true)}
+                    onMouseLeave={() => setIsAddonHovered(false)}
+                    className="flex flex-col justify-center items-center gap-5 p-10 shadow-[0_4px_10px_rgba(180,234,234,100)] font-bold rounded-xl cursor-pointer hover:bg-[#194F48] hover:text-white hover:scale-110 transition-transform duration-200 ease-in-out"
+                  >
+                    <img
+                      src={
+                        isAddonHovered
+                          ? "images/addOn-icon-2.png"
+                          : "images/addOn-icon-1.png"
+                      }
+                      alt=""
+                    />
+                    <h2 className="text-lg">add ons</h2>
+                  </div>
+
+                  <div className="absolute top-2 right-2">
+                    <MdOutlineCancel
+                      // onClick={() => setIsAddProduct(false)}
+                      onClick={handleAddproductclose}
+                      size={25}
+                      className="cursor-pointer"
+                    />
+                  </div>
+                </div>
+              </div>
+            )}
+          </>
         )}
       </div>
       {/* product preview */}
