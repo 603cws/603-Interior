@@ -13,6 +13,7 @@ import { IoIosAdd } from "react-icons/io";
 import DashboardProductCard from "./DashboardProductCard";
 import RejectedProduct from "./RejectedProduct";
 import VendorProductEdit from "./VendorProductEdit";
+import VendorEditAddon from "./VendorEditAddon";
 
 function VendorItem() {
   const [toggle, setToggle] = useState(true);
@@ -24,9 +25,13 @@ function VendorItem() {
   // state for the dispay in product page
   const [addNewProduct, setAddNewProduct] = useState(false);
   const [addNewAddon, setAddNewAddon] = useState(false);
-  // new edit option
+  // new edit option product
   const [editProduct, setEditProduct] = useState(false);
   const [selectedproduct, setSelectedproduct] = useState(null);
+
+  //new edit option addon
+  const [editAddon, setEditAddon] = useState(false);
+  const [selectedAddon, setSelectedAddon] = useState(null);
 
   const [openMenuId, setOpenMenuId] = useState(null); // Store the ID of the row with an open menu
   const [selectedProductview, setSelectedProductview] = useState({
@@ -44,7 +49,7 @@ function VendorItem() {
   //addon refresh
   const [isaddonRefresh, setIsAddonRefresh] = useState(false);
 
-  console.log("selected product", selectedProductview);
+  // console.log("selected product", selectedProductview);
 
   const menuRef = useRef({});
   const buttonRef = useRef({});
@@ -108,7 +113,7 @@ function VendorItem() {
       setFilteredProducts(sortedData);
       // setProducts(data);
 
-      console.log(data);
+      // console.log(data);
     } catch (error) {
       console.log("Error fetching products:", error);
     } finally {
@@ -121,7 +126,7 @@ function VendorItem() {
       .from("addon_variants")
       .select("*")
       .eq("vendorId", accountHolder.userId);
-    console.log(data);
+    // console.log(data);
 
     if (error) {
       console.log("Error fetching addons:", error);
@@ -137,12 +142,12 @@ function VendorItem() {
       setAddons(sortedData);
       setFilteredAddons(sortedData);
       // setAddons(data);
-      console.log("Addons: ", data);
+      // console.log("Addons: ", data);
     }
   };
 
   const filterItems = (query) => {
-    console.log(query);
+    // console.log(query);
 
     if (toggle) {
       if (!query) {
@@ -152,7 +157,7 @@ function VendorItem() {
       const filtered = products.filter((item) =>
         item.title.toLowerCase().includes(query.toLowerCase())
       );
-      console.log(filtered);
+      // console.log(filtered);
       setFilteredProducts(filtered);
     } else {
       if (!query) {
@@ -163,7 +168,7 @@ function VendorItem() {
         item.title.toLowerCase().includes(query.toLowerCase())
       );
       setFilteredAddons(filtered);
-      console.log(filtered);
+      // console.log(filtered);
     }
   };
 
@@ -213,7 +218,7 @@ function VendorItem() {
   }, [openMenuId]);
 
   const handleProductPreview = (product) => {
-    console.log("in function handleProductPreview", product);
+    // console.log("in function handleProductPreview", product);
 
     setProductPreview(true);
     setSelectedProductview(product);
@@ -303,6 +308,13 @@ function VendorItem() {
             setProductlist={setProductlist}
             setIsProductRefresh={setIsProductRefresh}
             selectedproduct={selectedproduct}
+          />
+        ) : editAddon ? (
+          <VendorEditAddon
+            seteditAddon={setEditAddon}
+            selectedAddon={selectedAddon}
+            setProductlist={setProductlist}
+            setIsAddonRefresh={setIsAddonRefresh}
           />
         ) : (
           // Default product list and add product UI
@@ -453,12 +465,26 @@ function VendorItem() {
                                   >
                                     <VscEye /> view
                                   </button>
-                                  {toggle && (
+                                  {toggle ? (
                                     <button
                                       onClick={() => {
                                         setSelectedproduct(item);
                                         setEditProduct(true);
                                       }}
+                                      className=" flex gap-2 items-center w-full text-left px-3 py-2 hover:bg-gray-200"
+                                    >
+                                      <VscEye /> Edit
+                                    </button>
+                                  ) : (
+                                    <button
+                                      onClick={() => {
+                                        setSelectedAddon(item);
+                                        setEditAddon(true);
+                                      }}
+                                      // onClick={() => {
+                                      //   setSelectedproduct(item);
+                                      //   setEditProduct(true);
+                                      // }}
                                       className=" flex gap-2 items-center w-full text-left px-3 py-2 hover:bg-gray-200"
                                     >
                                       <VscEye /> Edit
