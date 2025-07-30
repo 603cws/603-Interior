@@ -343,38 +343,113 @@ function VendorProductEdit({
       }
 
       // Now proceed with adding variants
+      // if (variant.title && variant.price && file) {
+      //   const mainImageArray = [file];
+      //   // Upload the main image to Supabase storage
+      //   const { data: mainImageUpload, error: mainImageError } =
+      //     await supabase.storage
+      //       .from("addon")
+      //       .upload(`${variant.title}-main-${uniqueID}`, mainImageArray[0]);
+
+      //   if (mainImageError) {
+      //     toast.error(
+      //       `Error uploading main image for variant: ${variant.title}`
+      //     );
+      //     throw new Error("main image error");
+      //   }
+
+      //   // setVariant((prev) => ({ ...prev, mainImage: mainImageUpload.path }));
+
+      //   variant.mainImage = mainImageUpload.path;
+
+      //   setPreview(mainImageUpload.path);
+      // }
       if (variant.title && variant.price && file) {
-        const mainImageArray = [file];
-        // Upload the main image to Supabase storage
-        const { data: mainImageUpload, error: mainImageError } =
-          await supabase.storage
+        const oldImagePath = selectedproduct?.image;
+        // const uniqueID = uuidv4();
+        const newImagePath = `${variant.title}-main-${uniqueID}`;
+        console.log("oldImagePath", oldImagePath);
+        console.log("newImagePath", newImagePath);
+
+        if (oldImagePath) {
+          const { error: removeError } = await supabase.storage
             .from("addon")
-            .upload(`${variant.title}-main-${uniqueID}`, mainImageArray[0]);
+            .remove([oldImagePath]);
+
+          if (removeError) {
+            console.warn("Failed to remove old image:", removeError.message);
+          }
+        }
+
+        const { data: mainImageUpload, error: mainImageError } =
+          await supabase.storage.from("addon").upload(newImagePath, file);
 
         if (mainImageError) {
           toast.error(
             `Error uploading main image for variant: ${variant.title}`
           );
-          throw new Error("main image error");
+          throw new Error("Main image upload failed");
         }
-
-        // setVariant((prev) => ({ ...prev, mainImage: mainImageUpload.path }));
 
         variant.mainImage = mainImageUpload.path;
-
         setPreview(mainImageUpload.path);
       }
+
       // additonal images
-      if (filebasedadditionalimages.length > 0) {
-        for (const [index, imageFile] of filebasedadditionalimages.entries()) {
-          const { data: additionalImageUpload } = await supabase.storage
-            .from("addon")
-            .upload(
-              `${variant.title}-additional-${index}-${uniqueID}`,
-              imageFile.file
-            );
-          useradditionalimages.push(additionalImageUpload.path);
+      // if (filebasedadditionalimages.length > 0) {
+      //   for (const [index, imageFile] of filebasedadditionalimages.entries()) {
+      //     const { data: additionalImageUpload } = await supabase.storage
+      //       .from("addon")
+      //       .upload(
+      //         `${variant.title}-additional-${index}-${uniqueID}`,
+      //         imageFile.file
+      //       );
+      //     useradditionalimages.push(additionalImageUpload.path);
+      //   }
+      // }
+
+      const previousAdditionalImages = JSON.parse(
+        selectedproduct?.additional_images || "[]"
+      );
+
+      const imagesToRemove = previousAdditionalImages.filter(
+        (oldPath) => !variant.additionalImages.includes(oldPath)
+      );
+
+      if (imagesToRemove.length > 0) {
+        const { error: removeError } = await supabase.storage
+          .from("addon")
+          .remove(imagesToRemove);
+
+        if (removeError) {
+          console.warn(
+            "Error removing old additional images:",
+            removeError.message
+          );
         }
+      }
+
+      let currentIndex = variant.additionalImages.filter(
+        (img) => typeof img === "string"
+      ).length;
+
+      for (const imageFile of filebasedadditionalimages) {
+        const fileUuid = uuidv4();
+        const filePath = `${variant.title}-additional-${currentIndex}-${fileUuid}`;
+
+        const { data: additionalImageUpload, error: additionalImageError } =
+          await supabase.storage.from("addon").upload(filePath, imageFile.file);
+
+        if (additionalImageError) {
+          console.warn(
+            `Failed to upload additional image at index ${currentIndex}`,
+            additionalImageError.message
+          );
+          continue;
+        }
+
+        useradditionalimages.push(additionalImageUpload.path);
+        currentIndex++;
       }
 
       // Insert the variant into the product_variants table
