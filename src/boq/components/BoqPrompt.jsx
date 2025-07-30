@@ -111,7 +111,7 @@ function BoqPrompt({ onConfirm, onCancel, isProfileCard, setIsProfileCard }) {
               </div>
             )}
 
-            {existingBoqs?.length > 3 ? (
+            {existingBoqs?.length >= 3 ? (
               <label className="block lg:text-lg font-medium mt-4">
                 Max 3 BOQ can be Created
               </label>

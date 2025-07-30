@@ -557,7 +557,7 @@ function Dashboard() {
       },
     },
     dataLabels: {
-      enabled: true,
+      enabled: totalArea < 2000 ? true : false,
       style: {
         fontSize: "14rem",
         fontWeight: "bold",
@@ -599,7 +599,7 @@ function Dashboard() {
             <img
               src="/logo/workved-interior.png"
               alt="Logo"
-              className={`${isExpanded ? "h-20 w-32" : "size-12"}`}
+              className={`${isExpanded ? "h-20 w-32" : "h-9 w-16"}`}
               onClick={() => navigate("/")}
             />
           </div>

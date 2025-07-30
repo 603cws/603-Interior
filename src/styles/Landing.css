@@ -357,3 +357,74 @@ slick-current {
     border-radius: 9999px;
   }
 }
+
+.lux-svg-wrapper:hover .lux-sparkle {
+  fill: none;
+  stroke: #374a75;
+  stroke-width: 1.2;
+  stroke-dasharray: 100;
+  stroke-dashoffset: 100;
+  animation: draw-star 1.2s ease-out forwards;
+}
+
+.lux-sparkle:nth-of-type(2) {
+  animation-delay: 0.2s;
+}
+.lux-sparkle:nth-of-type(3) {
+  animation-delay: 0.4s;
+}
+.lux-sparkle:nth-of-type(4) {
+  animation-delay: 0.6s;
+}
+.lux-sparkle:nth-of-type(6) {
+  animation-delay: 0.8s;
+}
+
+@keyframes draw-star {
+  to {
+    stroke-dashoffset: 0;
+    fill: #374a75;
+  }
+}
+@keyframes blink-star {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 100;
+  }
+}
+.svg-wrapper:hover .svg-stroke {
+  animation: blink-star 1.5s ease-in-out infinite;
+}
+
+@keyframes paintPath {
+  0% {
+    transform: translate(0, 0);
+  }
+  25% {
+    transform: translate(-10px, -10px);
+  }
+  50% {
+    transform: translate(5px, 5px);
+  }
+  75% {
+    transform: translate(-2px, -2px);
+  }
+  100% {
+    transform: translate(0, 0);
+  }
+}
+
+.roller-container {
+  display: inline-block;
+  cursor: pointer;
+}
+
+.roller {
+  transform-origin: center;
+}
+
+.group:hover .roller {
+  animation: paintPath 1.5s ease-in-out infinite forwards;
+}
