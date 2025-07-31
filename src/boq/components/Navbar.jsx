@@ -13,12 +13,9 @@ import BoqPrompt from "./BoqPrompt";
 import Boqcompleted from "../../common-components/Boqcompleted";
 import { CiMenuFries } from "react-icons/ci";
 import { MdOutlineCancel } from "react-icons/md";
-import { BiCheckCircle, BiDownload } from "react-icons/bi";
 import AlertBox from "./AlertBox";
 import { PiStarFourFill } from "react-icons/pi";
 import CurrentLayoutDetails from "./CurrentLayoutDetails";
-
-// import useAuthRefresh from "../../Context/useAuthRefresh";
 
 function Navbar({
   toggleProfile,
@@ -635,13 +632,20 @@ function Navbar({
           <span className="font-bold">Total</span>: ₹ {calculateGrandTotal()}
         </div> */}
 
-          {/* prfile icon */}
-          <div className="z-30" ref={iconRef}>
+          {/* profile icon */}
+          <div
+            className="z-30 rounded-full"
+            ref={iconRef}
+            style={{
+              backgroundImage:
+                "linear-gradient(to top left, #5B73AF 0%, rgba(255, 255, 255, 0.5) 48%, #1F335C 100%)",
+            }}
+          >
             <img
               onClick={toggleProfile}
               src={accountHolder.profileImage}
               alt="usericon"
-              className="w-8 md:w-12 h-8 md:h-12 cursor-pointer rounded-full"
+              className="w-8 md:w-12 h-8 p-1 md:h-12 cursor-pointer rounded-full"
             />
           </div>
         </div>

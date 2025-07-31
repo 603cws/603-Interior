@@ -77,7 +77,9 @@ function Addon({
   return (
     <div className="addons-grid flex flex-col gap-4  pl-4 w-full lg:w-1/3">
       <div className="flex items-center justify-between whitespace-nowrap">
-        <h3 className="text-sm md:text-lg font-semibold">{selectedRoom}</h3>
+        <h3 className="text-sm md:text-lg font-semibold text-[#68B2DC]">
+          {selectedRoom}
+        </h3>
       </div>
 
       {addonImagesArray.map((variant) => (

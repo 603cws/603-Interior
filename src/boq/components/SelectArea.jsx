@@ -5,6 +5,7 @@ import Addon from "./Addon";
 import { toast, Slide } from "react-toastify";
 import { calculateAddonTotalPrice } from "../utils/productUtils";
 import { AddToCartToast } from "../../utils/AddToCartToast";
+import { RxCrossCircled } from "react-icons/rx";
 
 function SelectArea({
   setShowSelectArea,
@@ -519,20 +520,30 @@ function SelectArea({
 
   return (
     <div className="fixed inset-0 flex justify-center items-center z-20">
-      <div className="relative bg-[#1A3A36] p-2 lg:p-8 rounded-xl max-w-[90%] max-h-screen w-[1000px] scrollbar-hide">
+      <div className="relative bg-gradient-to-br from-[#334A78] to-[#68B2DC] py-12 px-6 lg:p-12 max-w-[90%] max-h-[90%] w-[1000px] scrollbar-hide">
         {/* Close Button (Common for Both Modals) */}
-        <MdOutlineCancel
+        {/* <MdOutlineCancel
           size={30}
-          // color="white"
-          className="absolute top-1 right-1 cursor-pointer z-5 text-white hover:text-red-500 transition-colors duration-300"
+          color="white"
+          className="absolute top-1 right-1 cursor-pointer z-5 text-[#4E7FAB] border border-[#A9BFD3] rounded-full hover:text-red-500 transition-colors duration-300"
+          onClick={() => {
+            setShowBackground(false); // Hide background before exit animation
+            setShowSelectArea(false);
+          }}
+        /> */}
+        <img
+          src="../images/icons/close_btn.svg"
+          alt="close"
+          className="absolute top-2 right-2 lg:top-4  lg:right-4 cursor-pointer z-5 w-7 h-7"
           onClick={() => {
             setShowBackground(false); // Hide background before exit animation
             setShowSelectArea(false);
           }}
         />
 
+        {/* <RxCrossCircled className="absolute top-1 right-1 cursor-pointer z-5 text-[#E5E5E5] border border-[#A9BFD3] rounded-full hover:text-red-500 transition-colors duration-300" /> */}
         {/* Inner White Content (Common Border) */}
-        <div className="bg-white p-6 rounded-lg border-2 border-[#FFD500] relative h-auto lg:h-full">
+        <div className="bg-white p-6 rounded-lg border-[3px] border-[#FFD500] relative h-auto lg:h-full">
           {/* Area Selection Modal */}
           {!showAddon && (
             <div className="overflow-auto">
@@ -641,7 +652,7 @@ function SelectArea({
                 </div>
 
                 {/* Image Section */}
-                <div className="flex justify-center items-center">
+                <div className="hidden sm:flex justify-center items-center ">
                   <img
                     src={image}
                     alt={selectedProductView.title}
@@ -653,7 +664,7 @@ function SelectArea({
               {/* Done Button */}
               <div className="flex justify-center items-center mt-4">
                 <button
-                  className="bg-[#1A3A36] rounded-lg text-xs lg:text-sm py-2 px-10 border-2 border-gray-900 text-white"
+                  className="bg-[#374A75] rounded-lg text-xs lg:text-sm py-2 px-10 border-2 border-black text-white"
                   onClick={() => handleDoneClick()}
                 >
                   {submitBtn ? "Submit" : "Next"}
@@ -687,13 +698,13 @@ function SelectArea({
                 </div>
                 <div className="flex justify-evenly items-center mt-auto pb-4">
                   <button
-                    className="bg-[#1A3A36] rounded-lg text-xs md:text-sm py-2 px-10 border-2 border-gray-900 text-white"
+                    className="bg-[#374A75] rounded-lg text-xs md:text-sm py-2 px-10 border-2 border-black text-white"
                     onClick={() => setShowAddon(false)}
                   >
                     Back
                   </button>
                   <button
-                    className="bg-[#1A3A36] rounded-lg text-xs md:text-sm py-2 px-10 border-2 border-gray-900 text-white"
+                    className="bg-[#374A75] rounded-lg text-xs md:text-sm py-2 px-10 border-2 border-black text-white"
                     onClick={() => handleAddonClick()}
                   >
                     Done

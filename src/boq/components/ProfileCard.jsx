@@ -1,20 +1,14 @@
-import { RiDashboardFill } from "react-icons/ri";
 import { supabase } from "../../services/supabase";
 import { useApp } from "../../Context/Context";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { useRef, useState, useEffect } from "react";
 import { LuCalendarClock } from "react-icons/lu";
-import { RxVideo } from "react-icons/rx";
 import { BsQuestionCircle } from "react-icons/bs";
-import { IoSettingsSharp } from "react-icons/io5";
-import { VscSignOut } from "react-icons/vsc";
 import { PiListStarFill } from "react-icons/pi";
-import { BiUnite } from "react-icons/bi";
 import BookAppointment from "./BookAppointment";
 import { motion } from "framer-motion";
 import { MdClose } from "react-icons/md";
-// import useAuthRefresh from "../../Context/useAuthRefresh";
 
 const profileVariants = {
   hidden: { x: "100%", opacity: 0 }, // Start off-screen (right side)
@@ -50,8 +44,6 @@ function ProfileCard({
 
   let isadmin = accountHolder.role === "user" ? true : false;
   const navigate = useNavigate();
-
-  //   const { signOutUser } = useAuthRefresh(); // Get signOutUser from hook
 
   // Close profile card when clicking outside
   useEffect(() => {
@@ -136,7 +128,7 @@ function ProfileCard({
           layout
             ? "h-dvh md:h-[calc(100vh-85px)] top-0 md:top-[85px]"
             : "h-dvh md:h-[calc(100vh-50px)] top-0 md:top-[50px]"
-        } font-Poppins bg-white z-20 md:rounded-bl-[60px] md:rounded-tl-[60px] md:shadow-lg  md:max-w-sm w-3/4`}
+        } font-Poppins bg-white z-20 md:shadow-lg md:max-w-sm w-3/4`}
       >
         <div className="md:hidden flex justify-end items-center mb-4 absolute top-3 left-5">
           <MdClose
@@ -146,7 +138,7 @@ function ProfileCard({
           />
         </div>
         {/* Profile Card Content */}
-        <div className="md:rounded-bl-[60px] md:rounded-tl-[60px]  shadow-lg overflow-hidden w-full h-full bg-white">
+        <div className="shadow-lg overflow-hidden w-full h-full bg-white">
           {/* Profile Header */}
           <div className="h-1/3 flex flex-col">
             <div className="h-1/2 flex justify-center items-end">
@@ -166,18 +158,28 @@ function ProfileCard({
 
           {/* Features Section */}
           <div className="font-semibold xl:text-lg capitalize leading-normal tracking-wide py-7 text-[#262626] border-y-2 border-[#ccc] flex flex-col gap-4">
-            <div className="flex items-center mx-4 gap-3">
-              <RiDashboardFill />
+            <div className="flex items-center mx-4 gap-3 hover:bg-[#E5F4FF] pl-2 ">
+              {/* <MdOutlineSpaceDashboard /> */}
+              <img
+                src="/images/dashboard.png"
+                alt="dashboard"
+                className="w-6 h-6"
+              />
               <button onClick={() => navigate("/dashboard")}>Dashboard</button>
             </div>
             {!layout && (
               <>
-                <div className="flex items-center mx-4 gap-3">
-                  <BiUnite />
+                <div className="flex items-center mx-4 gap-3 hover:bg-[#E5F4FF] pl-2">
+                  {/* <BiUnite /> */}
+                  <img
+                    src="/images/layout.png"
+                    alt="layout"
+                    className="w-6 h-6"
+                  />
                   <button onClick={() => navigate("/Layout")}>Layout</button>
                 </div>
                 {selectedPlan && (
-                  <div className="flex items-center mx-4 gap-3">
+                  <div className="flex items-center mx-4 gap-3 hover:bg-[#E5F4FF] pl-2">
                     <PiListStarFill />
                     <button
                       onClick={() => {
@@ -203,14 +205,15 @@ function ProfileCard({
                 )}
               </>
             )}
-            <div className="flex items-center mx-4 gap-3">
-              <RxVideo />
+            <div className="flex items-center mx-4 gap-3 hover:bg-[#E5F4FF] pl-2">
+              {/* <RxVideo /> */}
+              <img src="/images/video.png" alt="video" className="w-6 h-6" />
               <p>How it works</p>
             </div>
 
             {accountHolder.role === "user" && (
               <div
-                className={`flex items-center mx-4 gap-3 ${
+                className={`flex items-center mx-4 gap-3 pl-2 ${
                   progress < 90 ? "text-gray-400 cursor-not-allowed" : ""
                 }`}
               >
@@ -222,7 +225,7 @@ function ProfileCard({
 
           {/* Help & Settings Section */}
           <div className="font-semibold xl:text-lg capitalize leading-normal tracking-wide py-7 text-[#262626] border-b-2 border-[#ccc] flex flex-col gap-4">
-            <div className="flex items-center mx-4 gap-3">
+            <div className="flex items-center mx-4 gap-3 hover:bg-[#E5F4FF] pl-2">
               <BsQuestionCircle />
               <button
                 onClick={() =>
@@ -232,8 +235,13 @@ function ProfileCard({
                 Help
               </button>
             </div>
-            <div className="flex items-center mx-4 gap-3">
-              <IoSettingsSharp />
+            <div className="flex items-center mx-4 gap-3 hover:bg-[#E5F4FF] pl-2">
+              {/* <RiSettingsLine /> */}
+              <img
+                src="/images/setting.png"
+                alt="settings"
+                className="w-6 h-6"
+              />
               <button
                 onClick={() =>
                   navigate("/dashboard", { state: { openSettings: true } })
@@ -242,8 +250,9 @@ function ProfileCard({
                 Settings
               </button>
             </div>
-            <div className="flex items-center mx-4 gap-3">
-              <VscSignOut />
+            <div className="flex items-center mx-4 gap-3 hover:bg-[#E5F4FF] pl-2">
+              {/* <PiSignOutBold /> */}
+              <img src="/images/signout.png" alt="logout" className="w-6 h-6" />
               <button onClick={handleLogout}>Sign out</button>
             </div>
           </div>
