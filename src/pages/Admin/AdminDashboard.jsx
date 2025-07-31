@@ -34,6 +34,9 @@ import Schedule from "./Schedule";
 import FormulaEditor from "../../boq/components/FormulaEditor";
 import VendorEditAddon from "../vendor/VendorEditAddon";
 import VendorProductEdit from "../vendor/VendorProductEdit";
+import { ChevronDownIcon, FunnelIcon } from "@heroicons/react/24/outline";
+
+import { exportToExcel } from "../../utils/DataExport";
 
 function AdminDashboard() {
   const navigate = useNavigate();
@@ -109,6 +112,58 @@ function AdminDashboard() {
   ];
 
   const [selectedCategory, setSelectedCategory] = useState("");
+  // state for filter
+  const [isOpen, setIsOpen] = useState(false);
+  const [selected, setSelected] = useState("");
+
+  const normalize = (str) => str.replace(/\s+/g, " ").trim().toLowerCase();
+  const applyFilters = ({ query = "", category = "", status = "" }) => {
+    const source = toggle ? products : addons;
+
+    // Store last page before searching if this is a new search
+    if ((query || category || status) && !isSearching) {
+      setLastPageBeforeSearch(currentPage);
+      setIsSearching(true);
+    }
+
+    // Reset case: No query, category, or status
+    if (!query && !category && !status) {
+      toggle ? setFilteredProducts(products) : setFilteredAddons(addons);
+      if (isSearching) {
+        setCurrentPage(lastPageBeforeSearch);
+        setIsSearching(false);
+      }
+      return;
+    }
+
+    // Apply filters
+    const filtered = source.filter((item) => {
+      const titleMatch = query
+        ? normalize(item.title).includes(normalize(query))
+        : true;
+
+      const categoryMatch = category
+        ? toggle
+          ? item.products?.category?.toLowerCase() === category.toLowerCase()
+          : item.title?.toLowerCase().includes(category.toLowerCase())
+        : true;
+
+      const statusMatch = status
+        ? item.status?.toLowerCase() === status.toLowerCase()
+        : true;
+
+      return titleMatch && categoryMatch && statusMatch;
+    });
+
+    // Apply filtered result
+    if (toggle) {
+      setFilteredProducts(filtered);
+    } else {
+      setFilteredAddons(filtered);
+    }
+
+    setCurrentPage(1); // Always reset to first page on filter
+  };
 
   //baseurlforimg
   const baseImageUrl =
@@ -610,72 +665,6 @@ function AdminDashboard() {
     setFilteredUsers(filtereduser);
   };
 
-  const normalize = (str) => str.replace(/\s+/g, " ").trim().toLowerCase();
-
-  const filterItems = (query) => {
-    // console.log(query);
-    setSearchQuery(query);
-
-    if (toggle) {
-      if (!query && !selectedCategory) {
-        setFilteredProducts(products); // Reset to original list when input is empty
-        if (isSearching) {
-          setCurrentPage(lastPageBeforeSearch); // restore last page
-          setIsSearching(false); // reset
-        }
-        return;
-      }
-
-      if (!query && selectedCategory) {
-        filterbyCategory(selectedCategory);
-        if (isSearching) {
-          setCurrentPage(lastPageBeforeSearch);
-          setIsSearching(false);
-        }
-        return;
-      }
-      // If entering a search query
-      if (!isSearching) {
-        setLastPageBeforeSearch(currentPage); // store page before search
-        setIsSearching(true);
-      }
-      setCurrentPage(1);
-
-      // const filtered = products.filter((item) =>
-      //   item.title.toLowerCase().includes(query.toLowerCase())
-      // );
-      const filtered = products.filter((item) =>
-        normalize(item.title).includes(normalize(query))
-      );
-      // console.log(filtered);
-
-      setFilteredProducts(filtered);
-    } else {
-      if (!query) {
-        setFilteredAddons(addons); // Reset to original list when input is empty
-        if (isSearching) {
-          setCurrentPage(lastPageBeforeSearch);
-          setIsSearching(false);
-        }
-        return;
-      }
-      if (!isSearching) {
-        setLastPageBeforeSearch(currentPage);
-        setIsSearching(true);
-      }
-      setCurrentPage(1);
-      // const filtered = addons.filter((item) =>
-      //   item.title.toLowerCase().includes(query.toLowerCase())
-      // );
-      const filtered = products.filter((item) =>
-        normalize(item.title).includes(normalize(query))
-      );
-      // console.log(filtered);
-
-      setFilteredAddons(filtered);
-    }
-  };
-
   const filterVendorByMultipleFields = (query) => {
     if (!query) {
       setFilteredvendors(allvendors); // Reset to original list when input is empty
@@ -687,36 +676,36 @@ function AdminDashboard() {
     setFilteredvendors(filteredvendor);
   };
 
-  const filterbyCategory = (category) => {
-    // console.log(category);
-    setSelectedCategory(category);
+  // const filterbyCategory = (category) => {
+  //   // console.log(category);
+  //   setSelectedCategory(category);
 
-    if (toggle) {
-      if (!category) {
-        setFilteredProducts(products); // Reset to original list when input is empty
-        return;
-      }
-      const filtered = products.filter(
-        (item) =>
-          item.products.category.toLowerCase() === category.toLowerCase()
-      );
-      // console.log(filtered);
+  //   if (toggle) {
+  //     if (!category) {
+  //       setFilteredProducts(products); // Reset to original list when input is empty
+  //       return;
+  //     }
+  //     const filtered = products.filter(
+  //       (item) =>
+  //         item.products.category.toLowerCase() === category.toLowerCase()
+  //     );
+  //     // console.log(filtered);
 
-      setFilteredProducts(filtered);
-    } else {
-      if (!category) {
-        setFilteredAddons(addons); // Reset to original list when input is empty
-        return;
-      }
-      const filtered = addons.filter((item) =>
-        item.title.toLowerCase().includes(category.toLowerCase())
-      );
-      // console.log(filtered);
+  //     setFilteredProducts(filtered);
+  //   } else {
+  //     if (!category) {
+  //       setFilteredAddons(addons); // Reset to original list when input is empty
+  //       return;
+  //     }
+  //     const filtered = addons.filter((item) =>
+  //       item.title.toLowerCase().includes(category.toLowerCase())
+  //     );
+  //     // console.log(filtered);
 
-      setFilteredAddons(filtered);
-    }
-    setCurrentPage(1);
-  };
+  //     setFilteredAddons(filtered);
+  //   }
+  //   setCurrentPage(1);
+  // };
 
   // console.log(accountHolder);
 
@@ -946,8 +935,80 @@ function AdminDashboard() {
                             value={searchQuery}
                             className="w-full rounded-lg px-2 py-1 outline-none border-2 border-gray-400"
                             placeholder="......search by product name"
-                            onChange={(e) => filterItems(e.target.value)}
+                            onChange={(e) => {
+                              const value = e.target.value;
+                              setSearchQuery(value);
+                              applyFilters({
+                                query: value,
+                                category: selectedCategory,
+                                status: selected,
+                              });
+                            }}
                           />
+                        </div>
+
+                        <div>
+                          <button
+                            onClick={() => {
+                              const exportData = items.map((item) => ({
+                                id: item.id,
+                                [toggle ? "Product Name" : "Addon Name"]:
+                                  item.title,
+                                Price: `₹${item.price}`,
+                                Status: item?.status,
+                                Description: item?.details || "",
+                                Dimension: item?.dimensions || "NA",
+                                company: item?.manufacturer || "",
+                                segment: item?.segment,
+                              }));
+                              exportToExcel(
+                                exportData,
+                                toggle ? "products.xlsx" : "addons.xlsx"
+                              );
+                            }}
+                            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 "
+                          >
+                            Export to Excel
+                          </button>
+                        </div>
+
+                        <div className="relative inline-block text-left">
+                          {/* Filter Button */}
+                          <button
+                            onClick={() => setIsOpen(!isOpen)}
+                            className="flex items-center gap-2 bg-gray-100 px-4 py-2 rounded-md hover:bg-gray-200"
+                          >
+                            <FunnelIcon className="h-5 w-5 text-gray-600" />
+                            <span className="text-sm text-gray-700">
+                              Filter
+                            </span>
+                            <ChevronDownIcon className="h-4 w-4 text-gray-500" />
+                          </button>
+
+                          {/* Dropdown */}
+                          {isOpen && (
+                            <div className="absolute mt-2 w-40 bg-white border rounded-md shadow-lg z-10">
+                              <select
+                                value={selected}
+                                onChange={(e) => {
+                                  const value = e.target.value;
+                                  setSelected(value);
+                                  setIsOpen(false);
+                                  applyFilters({
+                                    query: searchQuery,
+                                    category: selectedCategory,
+                                    status: value,
+                                  });
+                                }}
+                                className="w-full border-none focus:ring-0 p-2 text-sm"
+                              >
+                                <option value="">All</option>
+                                <option value="pending">Pending</option>
+                                <option value="approved">Approved</option>
+                                <option value="rejected">Rejected</option>
+                              </select>
+                            </div>
+                          )}
                         </div>
 
                         {toggle && (
@@ -955,7 +1016,15 @@ function AdminDashboard() {
                             <select
                               name="category"
                               value={selectedCategory}
-                              onChange={(e) => filterbyCategory(e.target.value)}
+                              onChange={(e) => {
+                                const value = e.target.value;
+                                setSelectedCategory(value);
+                                applyFilters({
+                                  query: searchQuery,
+                                  category: value,
+                                  status: selected,
+                                });
+                              }}
                               id="category"
                             >
                               <option value="">All categories</option>
@@ -967,14 +1036,6 @@ function AdminDashboard() {
                             </select>
                           </div>
                         )}
-
-                        {/* <button
-                          onClick={handlenewproduct}
-                          className="capitalize shadow-sm py-2 px-4 text-sm flex justify-center items-center border-2"
-                        >
-                          <IoIosAdd size={20} />
-                          add product
-                        </button> */}
                       </div>
                       <div className="flex gap-3 px-4 py-2 border-b-2 border-b-gray-400">
                         {tabs.map((tab) => (
