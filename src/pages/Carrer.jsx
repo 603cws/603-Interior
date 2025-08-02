@@ -113,9 +113,6 @@ function Carrer() {
                 <div className="pt-6">
                   <Link
                     to={`${encodeURIComponent(key)}`}
-                    onClick={() =>
-                      localStorage.setItem("selectedJob", JSON.stringify(job))
-                    }
                     className="font-Poppins font-semibold text-sm text-black capitalize flex items-center gap-2"
                   >
                     View Details <IoIosArrowForward color="#1F5C54" />

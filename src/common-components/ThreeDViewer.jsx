@@ -5,9 +5,7 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 
 const ThreeDViewer = ({ onClose }) => {
   const mountRef = useRef(null);
-  const [bgColor, setBgColor] = useState(
-    localStorage.getItem("bgColor") || "#ffffff"
-  );
+  const [bgColor, setBgColor] = useState("#ffffff");
   const [loading, setLoading] = useState(true);
   const [progress, setProgress] = useState(0);
   const [isInteracting, setIsInteracting] = useState(false); // Track user interaction
@@ -131,7 +129,6 @@ const ThreeDViewer = ({ onClose }) => {
   const toggleBackground = () => {
     const newColor = bgColor === "#000000" ? "#ffffff" : "#000000";
     setBgColor(newColor);
-    localStorage.setItem("bgColor", newColor);
   };
 
   return (
