@@ -752,11 +752,15 @@ const Categories = ({
 
   return (
     <>
-      <div className="categories flex flex-col pb-1.5 md:pb-3">
+      <div
+        className={`categories flex flex-col pb-1.5 md:pb-3 ${
+          minimizedView ? "px-6" : ""
+        }`}
+      >
         {/* Categories List */}
         <div
-          className={`cat flex overflow-x-auto gap-1 md:gap-3  lg:px-5 scrollbar-hide ${
-            minimizedView ? "px-0 justify-around" : "pb-2 px-2"
+          className={`cat flex overflow-x-auto gap-1 md:gap-3  scrollbar-hide ${
+            minimizedView ? "px-0 justify-between" : "pb-2 px-2 lg:px-5 "
           }`}
         >
           {/* === FULL VIEW === */}
@@ -846,7 +850,7 @@ const Categories = ({
                   }
                   className={`transition-transform duration-500 ease-in-out cursor-pointer ${
                     isSelected ? "scale-100" : "scale-95"
-                  } px-2 py-1`}
+                  } px-0 py-1`}
                 >
                   <div
                     className={`font-Poppins flex flex-col justify-center items-center text-xs gap-1 md:gap-2 md:mt-3 relative group`}
@@ -986,7 +990,7 @@ const Categories = ({
                         onClick={() => setSelectedSubCategory(subCategory)}
                         whileHover={{ scale: 1.05 }}
                         transition={{ duration: 0.3 }}
-                        className={`group rounded flex flex-row items-start justify-center shrink-0 mx-3 group hover:bg-[#E0F0FF] ${
+                        className={`group rounded flex flex-row items-start justify-center shrink-0 mr-5 group hover:bg-[#E0F0FF] ${
                           isCompleted ? " bg-[#374A75]" : ""
                         } ${
                           selectedSubCategory === subCategory && !isCompleted

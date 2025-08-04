@@ -91,6 +91,17 @@ function Navbar({
     }
   }, [progress, completed100]); // ✅ Added `completed100` to prevent unnecessary re-triggers
 
+  useEffect(() => {
+    if (showLayoutDetails) {
+      document.body.classList.add("no-scroll");
+    } else {
+      document.body.classList.remove("no-scroll");
+    }
+    return () => {
+      document.body.classList.remove("no-scroll");
+    };
+  }, [showLayoutDetails]);
+
   const naviagte = useNavigate();
 
   const handleGoTOlayout = () => {

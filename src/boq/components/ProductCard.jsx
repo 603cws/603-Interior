@@ -185,7 +185,7 @@ function ProductCard({
 
   return (
     <div>
-      <div className="product-card grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 3xl:grid-cols-6 gap-6 pb-8 pt-3 md:px-8 relative">
+      <div className="product-card grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 3xl:grid-cols-6 gap-6 pb-8 pt-3 md:px-6 relative">
         {/* <div className="absolute right-0 md:right-10 -top-8 border-2 rounded-lg">
         <select
           name="plans"

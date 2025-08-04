@@ -81,7 +81,7 @@ const MainPage = ({ userResponses, setSelectedSubCategory1, productsData }) => {
       animate="visible"
       exit="exit"
       variants={fadeInVariant}
-      className="main-page flex flex-row gap-4 items-center justify-start relative overflow-auto md:px-8 font-Poppins w-4/5 md:w-full scrollbar-hide"
+      className="main-page flex flex-row gap-4 items-center justify-start relative overflow-auto md:px-6 font-Poppins w-4/5 md:w-full scrollbar-hide my-3"
     >
       <AnimatePresence mode="wait">
         {selectedSubCategories.length > 0 ? (

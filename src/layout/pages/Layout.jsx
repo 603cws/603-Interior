@@ -608,7 +608,10 @@ function Layout() {
   let tempVar = "";
 
   useEffect(() => {
-    if (totalAreaSource !== "ErrorModal" || tempVar !== "layoutLoad") {
+    console.log("totalAreaSource", totalAreaSource);
+    console.log("tempVar", tempVar);
+
+    if (totalAreaSource !== "ErrorModal" && tempVar !== "layoutLoad") {
       const linear = calculateLinear(totalArea);
       const lType = calculateLType(totalArea, areaValues);
       const md = calculateMd(totalArea, areaValues);

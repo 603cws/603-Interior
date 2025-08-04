@@ -72,12 +72,24 @@ function Help({ isvendor }) {
               Our support team is available 24/7 to assist you{" "}
             </p>
             <div className="flex justify-center items-center gap-4 my-1">
-              <button className="px-5 py-3 bg-[#1A3A36] text-[#fff] capitalize rounded-3xl">
+              {/* <button className="px-5 py-3 bg-[#1A3A36] text-[#fff] capitalize rounded-3xl">
                 +91-9136036603
               </button>
               <button className="border-2 border-[#D1D5DB] text-[#1A3A36] px-5 py-2 rounded-2xl">
                 Email
-              </button>
+              </button> */}
+              <a
+                href="tel:+919136036603"
+                className="px-5 py-3 bg-[#1A3A36] text-[#fff] capitalize rounded-3xl"
+              >
+                +91-9136036603
+              </a>
+              <a
+                href="mailto:sales@603thecoworkingspace.com"
+                className="border-2 border-[#D1D5DB] text-[#1A3A36] px-5 py-2 rounded-2xl"
+              >
+                Email
+              </a>
             </div>
           </div>
         </div>

@@ -147,14 +147,18 @@ function Boq() {
       setIsOpen(false); // Otherwise, close it
     };
 
-    if (isOpen) {
+    if (isOpen || questionPopup) {
       document.addEventListener("mousedown", handleClickOutside);
+      document.body.classList.add("no-scroll");
+    } else {
+      document.body.classList.remove("no-scroll");
     }
 
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
+      document.body.classList.remove("no-scroll");
     };
-  }, [isOpen]);
+  }, [isOpen, questionPopup]);
 
   const handleSelectedSubCategory = (subCategory) => {
     setSelectedSubCategory(subCategory);

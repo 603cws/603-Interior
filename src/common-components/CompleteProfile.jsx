@@ -123,9 +123,9 @@ function CompleteProfile() {
     ); // Full-screen spinner
 
   return (
-    <div className="relative p-4  bg-login-custom-gradient md:bg-[url(images/Register.png)] bg-center bg-cover bg-no-repeat lg:bg-login-custom-gradient font-Poppins flex gap-10 h-screen">
-      <div className="hidden  md:block fixed inset-0 bg-black bg-opacity-50 lg:hidden" />
-      <div className="hidden lg:flex flex-1  justify-center items-center ">
+    <div className="relative p-4 md:p-0  bg-gradient-to-br from-[#334A78] to-[#68B2DC] md:bg-none md:bg-[#fff]  bg-center bg-cover bg-no-repeat font-Poppins flex gap-10 h-screen">
+      {/* <div className="hidden  md:block fixed inset-0 bg-black bg-opacity-50 lg:hidden" /> */}
+      <div className="hidden md:block flex-1">
         {!imageLoaded && (
           <div className="xl:max-w-lg sm:max-w-sm w-full h-[450px] bg-gray-300 rounded-2xl animate-pulse" />
         )}
@@ -139,17 +139,17 @@ function CompleteProfile() {
           src="images/Register.png"
           alt="Register"
           loading="lazy"
-          className={`xl:max-w-lg sm:max-w-sm w-full h-auto absolute top-0 left-0 ${
+          className={`w-full h-full object-cover ${
             imageLoaded ? "relative" : "invisible"
           }`}
         />
       </div>
       <div className="flex justify-center lg:justify-start items-center flex-1 relative">
         <div className="lg:py-10">
-          <h2 className="text-xl md:text-2xl font-extrabold text-[#fff] text-center my-5">
+          <h2 className="text-xl md:text-2xl font-extrabold text-[#fff] md:text-[#000] text-center my-5">
             Welcome back. Your workspace is ready.{" "}
           </h2>
-          <h3 className="text-base md:text-xl font-semibold text-[#fff] text-center mb-5">
+          <h3 className="text-base md:text-xl font-semibold text-[#fff] md:text-[#000] text-center mb-5">
             Please enter your details
           </h3>
           <form onSubmit={handleSubmit}>
@@ -157,7 +157,7 @@ function CompleteProfile() {
               <div>
                 <label
                   htmlFor="company"
-                  className="capitalize text-sm md:text-md font-semibold text-[#fff]"
+                  className="capitalize text-sm md:text-md font-semibold text-[#fff] md:text-[#000]"
                 >
                   Company Name <span>*</span>
                 </label>
@@ -166,7 +166,7 @@ function CompleteProfile() {
                   placeholder="Company Name"
                   value={companyName}
                   onChange={(e) => setCompanyName(e.target.value)}
-                  className="w-full py-1 pl-1 md:py-2 rounded-lg md:pl-2 focus:outline-none"
+                  className="w-full py-1 pl-1 md:py-2 rounded-lg md:pl-2 focus:outline-none border"
                   required
                 />
               </div>
@@ -174,7 +174,7 @@ function CompleteProfile() {
               <div>
                 <label
                   htmlFor="location"
-                  className="capitalize text-sm md:text-md font-semibold text-[#fff]"
+                  className="capitalize text-sm md:text-md font-semibold text-[#fff] md:text-[#000]"
                 >
                   Location <span>*</span>
                 </label>
@@ -187,14 +187,14 @@ function CompleteProfile() {
                   onInput={(e) => {
                     e.target.value = e.target.value.replace(/[^A-Za-z\s]/g, ""); // Remove everything except letters & spaces
                   }}
-                  className="w-full py-1 pl-1 md:py-2 rounded-lg md:pl-2 focus:outline-none"
+                  className="w-full py-1 pl-1 md:py-2 rounded-lg md:pl-2 focus:outline-none border"
                   required
                 />
               </div>
               <div>
                 <label
                   htmlFor="mobile"
-                  className="capitalize text-sm md:text-md font-semibold text-[#fff]"
+                  className="capitalize text-sm md:text-md font-semibold text-[#fff] md:text-[#000]"
                 >
                   Mobile Number <span>*</span>
                 </label>
@@ -210,14 +210,14 @@ function CompleteProfile() {
                   maxLength="10"
                   inputMode="numeric"
                   pattern="\d{10}"
-                  className="w-full py-1 pl-1 md:py-2 rounded-lg md:pl-2 focus:outline-none"
+                  className="w-full py-1 pl-1 md:py-2 rounded-lg md:pl-2 focus:outline-none border"
                   required
                 />
               </div>
               <div className="flex justify-center items-center">
                 <button
                   type="submit"
-                  className="capitalize xl:w-1/2 bg-[#326f68] hover:bg-[#1A3A36] text-white font-semibold py-2 px-4 rounded-lg"
+                  className="capitalize xl:w-1/2 bg-[#374A75] hover:bg-[#4b72cc] text-white font-semibold py-2 px-4 rounded-lg"
                 >
                   Save & Continue
                 </button>
