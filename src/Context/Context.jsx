@@ -105,6 +105,7 @@ export const AppProvider = ({ children }) => {
     category: [],
     priceRange: [0, 10000],
   });
+  const [BOQTitle, setBOQTitle] = useState("Draft BOQ");
 
   const [formulaMap, setFormulaMap] = useState({});
   const [formulasLoading, setFormulasLoading] = useState(true);
@@ -812,6 +813,8 @@ export const AppProvider = ({ children }) => {
         setShowLoginPopup,
         formulaMap,
         formulasLoading,
+        BOQTitle,
+        setBOQTitle,
         refetchFormulas: fetchFormulas,
       }}
     >

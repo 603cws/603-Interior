@@ -9,7 +9,9 @@ const PDFGenerator = {
     companyName,
     location,
     areasData,
-    categories
+    categories,
+    BOQTitle,
+    userResponses
   ) => {
     const areas = areasData[0];
     const doc = new jsPDF();
@@ -30,19 +32,20 @@ const PDFGenerator = {
     doc.setFontSize(10);
     doc.setFont("helvetica", "normal");
 
-    // Hardcoded values (replace with props)
-    const projectName = "ABC Corp Office";
     const date = new Date().toLocaleDateString("en-GB"); // DD/MM/YYYY format
 
     const details = [
       `Client: ${companyName}`,
-      `Project: ${projectName}`,
+      `Project: ${BOQTitle}`,
       `Location: ${location}`,
       `Total Area: ${areas.totalArea} sq.ft`,
-      `Date: ${date}`,
+      `HAVC: ${userResponses.hvacType}`,
       `Used Space: ${areas.usedSpace} sq.ft`,
-      ``,
+      `Flooring: ${userResponses.flooring}`,
       `Unused Space: ${areas.totalArea - areas.usedSpace} sq.ft`,
+      `Demolish Status: ${userResponses.demolishTile}`,
+      `Height: ${userResponses.height} ft`,
+      `Date: ${date}`,
     ];
 
     // ✅ Arrange details in two columns

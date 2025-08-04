@@ -4,7 +4,7 @@ export default {
   theme: {
     extend: {
       boxShadow: {
-        custom: "13px 13px 20px #ebebeb, -13px -13px 28px #ffffff",
+        custom: "13px 13px 20px #ebebeb, -13px -13px 10px #ffffff",
       },
       backgroundImage: {
         "custom-gradient": "linear-gradient(145deg, #ffffff, #ffffff)",

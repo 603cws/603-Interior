@@ -42,7 +42,6 @@ function Navbar({
   const [mobileDropDown, setMobileDropDown] = useState(false);
 
   const [isDownloading, setIsDownloading] = useState(false);
-  const [isCompleted, setIsCompleted] = useState(false);
   const [showLayoutDetails, setShowLayoutDetails] = useState(false);
 
   // const { signOutUser } = useAuthRefresh(); // Get signOutUser from hook
@@ -77,6 +76,8 @@ function Navbar({
     setBoqTotal,
     isMobile,
     setSelectedPlan,
+    BOQTitle,
+    setBOQTitle,
   } = useApp();
 
   // const totalArea = currentLayoutData.totalArea;
@@ -331,7 +332,7 @@ function Navbar({
       setUserId(data.userId);
       setTotalArea(data?.total_area);
       setSelectedPlan(data?.planType);
-
+      setBOQTitle(data.title);
       toast.success(`Loaded BOQ: ${data.title}`);
       localStorage.removeItem("boqCompleted");
     } catch (err) {
@@ -478,6 +479,7 @@ function Navbar({
       if (error) {
         console.error("Error inserting data into Supabase:", error);
       } else {
+        setBOQTitle(boqTitle);
         toast.success("BOQ saved successfully!");
       }
     } catch (error) {
@@ -570,7 +572,6 @@ function Navbar({
       return;
     }
     setIsDownloading(true); // Show loading animation
-    setIsCompleted(false);
 
     try {
       await PDFGenerator.generatePDF(
@@ -579,13 +580,11 @@ function Navbar({
         accountHolder.companyName,
         accountHolder.location,
         areasData,
-        categories
+        categories,
+        BOQTitle,
+        userResponses
       );
       setIsDownloading(false);
-      setIsCompleted(true);
-
-      // Reset button after 2 seconds
-      setTimeout(() => setIsCompleted(false), 2000);
     } catch (error) {
       console.error("Error generating PDF:", error);
       setIsDownloading(false);
@@ -596,14 +595,17 @@ function Navbar({
     <div className="navbar sticky top-0 z-20 font-Poppins">
       <div className="flex justify-between bg-gradient-to-r from-[#23445B] to-[#487BA0] items-center px-4 h-[50px]">
         <div className="hidden sm:block absolute lg:flex gap-2 right-1/4 lg:right-20 -translate-x-full">
-          <div className="flex items-center justify-center gap-1">
+          {import.meta.env.MODE === "development" && (
+            <h1 className="text-green-500">Current BOQ: {BOQTitle}</h1>
+          )}
+          {/* <div className="flex items-center justify-center gap-1">
             <div className="h-3 w-3 rounded-full border-[1px] bg-[#34BFAD]"></div>
             <p className="text-xs text-white">Completed</p>
           </div>
           <div className="flex items-center justify-center gap-1">
             <div className="h-3 w-3 rounded-full border-[1px] bg-white"></div>
             <p className="text-xs text-white">Incomplete</p>
-          </div>
+          </div> */}
         </div>
         {/* logo */}
         <button className="" onClick={handlelogo}>
@@ -713,7 +715,8 @@ function Navbar({
                       accountHolder.companyName,
                       accountHolder.location,
                       areasData,
-                      categories
+                      categories,
+                      BOQTitle
                     )
                   }
                   className="hover:px-2 hover:bg-white hover:text-[#1A3A36] mb-2 py-1 px-2 rounded-lg cursor-pointer"
@@ -788,7 +791,7 @@ function Navbar({
             </div>
           )}
         </div>
-      ) : (
+      ) : selectedPlan ? (
         <div className="bg-[#212B36] py-2.5 flex px-5">
           <div className=" flex items-center gap-1">
             <button
@@ -999,7 +1002,7 @@ function Navbar({
             </div>
           </div>
         </div>
-      )}
+      ) : null}
       {showBoqPrompt &&
         createPortal(
           <BoqPrompt
