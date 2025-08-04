@@ -1,8 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { supabase } from "../../services/supabase";
 import { useApp } from "../../Context/Context";
-import toast from "react-hot-toast";
 import { FaArrowLeft } from "react-icons/fa6";
 import VendorProfile from "./VendorProfile";
 import Sidebar from "./Sidebar";
@@ -10,22 +7,17 @@ import VendorItem from "./VendorItem";
 import VendorDashboardCards from "./VendorDashboardCards";
 import Help from "../user/Help";
 import UserSetting from "../user/UserSetting";
+import { useLogout } from "../../utils/HelperFunction";
 
 function VendorDashboard() {
+  const logout = useLogout();
   const [isSettingOpen, setIsSettingOpen] = useState(false);
   const [isProductOpen, setIsProductOpen] = useState(false);
   const [isdashboardopen, setIsdashboardopen] = useState(true);
   const [iseditopen, setIsEditopen] = useState(true);
   const [help, setHelp] = useState(false);
 
-  const navigate = useNavigate();
-  const {
-    setIsAuthenticated,
-    accountHolder,
-    setAccountHolder,
-    setTotalArea,
-    setIsAuthLoading,
-  } = useApp();
+  const { accountHolder } = useApp();
 
   const handlesetting = () => {
     setIsProductOpen(false);
@@ -54,37 +46,12 @@ function VendorDashboard() {
     setHelp(true);
   };
 
-  const handleLogout = async () => {
-    try {
-      setIsAuthLoading(true);
-      const { error } = await supabase.auth.signOut();
-      if (error) {
-        console.log("Error signing out:", error.message);
-      } else {
-        toast.success("User signed out successfully");
-        setAccountHolder({
-          companyName: "",
-          email: "",
-          phone: "",
-          role: "",
-          userId: "",
-        });
-        setTotalArea("");
-        localStorage.removeItem("currentLayoutID");
-        navigate("/");
-        setIsAuthenticated(false);
-      }
-    } finally {
-      setIsAuthLoading(false);
-    }
-  };
-
   return (
     <div className="bg-[url('images/bg/vendor.png')] bg-cover bg-center bg-no-repeat p-3 xl:p-5">
       <div className="flex gap-3 overflow-y-hidden max-h-fit bg-white rounded-3xl">
         {/* sidebar */}
         <Sidebar
-          handleLogout={handleLogout}
+          handleLogout={logout}
           handleproduct={handleproduct}
           handlesetting={handlesetting}
           isProductOpen={isProductOpen}

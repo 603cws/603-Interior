@@ -35,10 +35,11 @@ import FormulaEditor from "../../boq/components/FormulaEditor";
 import VendorEditAddon from "../vendor/VendorEditAddon";
 import VendorProductEdit from "../vendor/VendorProductEdit";
 import { ChevronDownIcon, FunnelIcon } from "@heroicons/react/24/outline";
-
 import { exportToExcel } from "../../utils/DataExport";
+import { useLogout } from "../../utils/HelperFunction";
 
 function AdminDashboard() {
+  const logout = useLogout();
   const navigate = useNavigate();
   const [isSettingOpen, setIsSettingOpen] = useState(false);
   const [isProductOpen, setIsProductOpen] = useState(false);
@@ -169,13 +170,7 @@ function AdminDashboard() {
   const baseImageUrl =
     "https://bwxzfwsoxwtzhjbzbdzs.supabase.co/storage/v1/object/public/addon/";
 
-  const {
-    setAccountHolder,
-    setIsAuthLoading,
-    setIsAuthenticated,
-    setTotalArea,
-    accountHolder,
-  } = useApp();
+  const { accountHolder } = useApp();
 
   const location = useLocation();
 
@@ -584,31 +579,6 @@ function AdminDashboard() {
     setCurrentSection("formulae");
   };
 
-  const handleLogout = async () => {
-    try {
-      setIsAuthLoading(true);
-      const { error } = await supabase.auth.signOut();
-      if (error) {
-        console.log("Error signing out:", error.message);
-      } else {
-        toast.success("User signed out successfully");
-        setAccountHolder({
-          companyName: "",
-          email: "",
-          phone: "",
-          role: "",
-          userId: "",
-        });
-        setTotalArea("");
-        localStorage.removeItem("currentLayoutID");
-        navigate("/");
-        setIsAuthenticated(false);
-      }
-    } finally {
-      setIsAuthLoading(false);
-    }
-  };
-
   const getvendors = async () => {
     // Query the profiles table for phone and companyName
     try {
@@ -801,7 +771,7 @@ function AdminDashboard() {
             <SidebarItem
               icon={<VscSignOut />}
               text="Logout"
-              onClick={handleLogout}
+              onClick={logout}
               isExpanded={isExpanded}
             />
           </div>

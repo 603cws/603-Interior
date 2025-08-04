@@ -148,6 +148,11 @@ export const useLogout = () => {
     setIsAuthLoading,
     setIsAuthenticated,
     setTotalArea,
+    setSelectedData,
+    setSelectedPlan,
+    setBOQTitle,
+    setBOQID,
+    setProgress,
   } = useApp();
 
   const handleLogout = async () => {
@@ -167,6 +172,16 @@ export const useLogout = () => {
         });
         setTotalArea("");
         localStorage.removeItem("currentLayoutID");
+        localStorage.removeItem("session");
+        localStorage.removeItem("usertoken");
+        localStorage.removeItem("BOQID");
+        localStorage.removeItem("selectedPlan");
+        localStorage.removeItem("selectedData");
+        setSelectedPlan(null);
+        setSelectedData([]);
+        setBOQID("");
+        setBOQTitle("");
+        setProgress(0);
         navigate("/");
         setIsAuthenticated(false);
       }

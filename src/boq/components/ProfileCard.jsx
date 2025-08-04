@@ -1,4 +1,3 @@
-import { supabase } from "../../services/supabase";
 import { useApp } from "../../Context/Context";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
@@ -9,6 +8,7 @@ import { PiListStarFill } from "react-icons/pi";
 import BookAppointment from "./BookAppointment";
 import { motion } from "framer-motion";
 import { MdClose } from "react-icons/md";
+import { useLogout } from "../../utils/HelperFunction";
 
 const profileVariants = {
   hidden: { x: "100%", opacity: 0 }, // Start off-screen (right side)
@@ -29,15 +29,14 @@ function ProfileCard({
   setShowBoqPrompt,
   setIsProfileCard,
 }) {
+  const logout = useLogout();
   const {
-    setIsAuthenticated,
     accountHolder,
-    setAccountHolder,
-    setTotalArea,
     setSelectedPlan,
     progress,
     setProgress,
     setBoqTotal,
+    setSelectedData,
   } = useApp();
   const profileRef = useRef(null);
   const [showBookAppointment, setShowBookAppointment] = useState(false);
@@ -76,30 +75,6 @@ function ProfileCard({
   //     document.body.style.overflow = "auto"; // Enable scroll
   //   }
   // }, [isOpen]);
-
-  const handleLogout = async () => {
-    const { error } = await supabase.auth.signOut();
-    if (error) {
-      console.error("Error signing out:", error.message);
-    } else {
-      console.log("User signed out successfully");
-      toast.success("User signed out successfully");
-      setIsAuthenticated(false);
-      isadmin = false;
-      setAccountHolder({
-        companyName: "",
-        email: "",
-        phone: "",
-        role: "",
-        userId: "",
-      });
-      setTotalArea("");
-      localStorage.removeItem("currentLayoutID");
-      localStorage.removeItem("session");
-      localStorage.removeItem("usertoken");
-      navigate("/");
-    }
-  };
 
   const handleAppointment = () => {
     if (progress >= 90) {
@@ -195,6 +170,7 @@ function ProfileCard({
                           setSelectedPlan(null);
                           setProgress(0);
                           localStorage.removeItem("selectedData");
+                          setSelectedData([]);
                           setBoqTotal(0);
                         }
                       }}
@@ -253,7 +229,7 @@ function ProfileCard({
             <div className="flex items-center mx-4 gap-3 hover:bg-[#E5F4FF] pl-2">
               {/* <PiSignOutBold /> */}
               <img src="/images/signout.png" alt="logout" className="w-6 h-6" />
-              <button onClick={handleLogout}>Sign out</button>
+              <button onClick={logout}>Sign out</button>
             </div>
           </div>
         </div>

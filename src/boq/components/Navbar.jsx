@@ -606,7 +606,7 @@ function Navbar({
     <div className="navbar sticky top-0 z-20 font-Poppins">
       <div className="flex justify-between bg-gradient-to-r from-[#23445B] to-[#487BA0] items-center px-4 h-[50px]">
         <div className="hidden sm:block absolute lg:flex gap-2 right-1/4 lg:right-20 -translate-x-full">
-          {import.meta.env.MODE === "development" && (
+          {import.meta.env.MODE === "development" && BOQTitle && (
             <h1 className="text-green-500">Current BOQ: {BOQTitle}</h1>
           )}
           {/* <div className="flex items-center justify-center gap-1">

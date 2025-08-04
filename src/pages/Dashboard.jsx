@@ -18,12 +18,13 @@ import DashboardProductCard from "./vendor/DashboardProductCard";
 import SidebarItem from "../common-components/SidebarItem";
 import Help from "./user/Help";
 import { TbFileInvoice } from "react-icons/tb";
-
 import { category } from "../utils/AllCatArray";
 import { baseImageUrl } from "../utils/HelperConstant";
 import DashboardView from "./user/DashboardView";
+import { useLogout } from "../utils/HelperFunction";
 
 function Dashboard() {
+  const logout = useLogout();
   const navigate = useNavigate();
   const location = useLocation();
   // const [productlist, setProductlist] = useState(true);
@@ -37,10 +38,6 @@ function Dashboard() {
   const [boqdata, setboqdata] = useState();
   const {
     accountHolder,
-    setAccountHolder,
-    setIsAuthLoading,
-    setIsAuthenticated,
-    setTotalArea,
     // layoutImage,
     currentLayoutData,
     totalArea,
@@ -312,32 +309,6 @@ function Dashboard() {
     setCurrentSection("Help");
   };
 
-  const handleLogout = async () => {
-    try {
-      setIsAuthLoading(true);
-      const { error } = await supabase.auth.signOut();
-      if (error) {
-        console.log("Error signing out:", error.message);
-      } else {
-        toast.success("User signed out successfully");
-        setAccountHolder({
-          companyName: "",
-          email: "",
-          phone: "",
-          role: "",
-          userId: "",
-        });
-        console.log("hello");
-        setTotalArea("");
-        localStorage.removeItem("currentLayoutID");
-        navigate("/");
-        setIsAuthenticated(false);
-      }
-    } finally {
-      setIsAuthLoading(false);
-    }
-  };
-
   const fetchboq = async () => {
     try {
       const { data } = await supabase
@@ -524,7 +495,7 @@ function Dashboard() {
           <SidebarItem
             icon={<VscSignOut />}
             text="Logout"
-            onClick={handleLogout}
+            onClick={logout}
             isExpanded={isExpanded}
           />
         </div>
