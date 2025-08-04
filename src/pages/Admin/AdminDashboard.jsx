@@ -1339,69 +1339,68 @@ function AdminDashboard() {
                     return (
                       <div
                         key={index}
-                        className={`flex flex-col ${
-                          isExpanded
-                            ? "lg:w-[200px] xl:w-[270px] h-[170px]"
-                            : "w-[300px] lg:w-[320px] h-[150px]"
-                        }  font-Poppins rounded-2xl bg-[#fff] relative`}
+                        className={`w-full max-w-xs rounded-3xl overflow-hidden shadow-md bg-white relative flex flex-col`}
                       >
+                        {/* Top Section */}
                         <div
-                          className={`flex items-center my-4 ${
-                            isExpanded && "px-4 py-2"
-                          }`}
+                          className={` ${
+                            isExpanded ? " gap-2 p-3" : "gap-3 p-4"
+                          } flex items-start  relative`}
                         >
-                          <div className={`mx-3 ${isExpanded && "hidden"}`}>
-                            <img
-                              src={accountHolder.profileImage}
-                              alt="usericon"
-                              className="w-10"
-                            />
-                          </div>
-                          <div>
-                            <h2 className="text-[#000] text-base font-medium">
+                          {/* Profile Image */}
+                          <img
+                            src={user?.profile_image}
+                            alt="profile"
+                            className={`${
+                              isExpanded ? "w-10 h-10" : "w-12 h-12"
+                            }  rounded-full object-cover`}
+                          />
+
+                          {/* Name and Email */}
+                          <div className="flex flex-col justify-center">
+                            <h2
+                              className={`${
+                                isExpanded ? "text-sm" : "text-base"
+                              }  font-semibold text-black`}
+                            >
                               {user.company_name}
                             </h2>
-                            <p className="text-[#ccc] text-[13px]">
+                            <p
+                              className={`text-gray-400 ${
+                                isExpanded ? "text-xs" : "text-sm"
+                              } leading-tight`}
+                            >
                               {user.email}
                             </p>
-                            {/* <p className="text-[#ccc] text-sm">
-                              {user.company_name}
-                            </p> */}
                           </div>
-                          <div className={`ml-auto px-2`}>
-                            {" "}
-                            <button
-                              onClick={() =>
-                                handleDeletevendirClick(user, index)
-                              }
-                            >
-                              {" "}
-                              <MdDeleteOutline size={25} />{" "}
-                            </button>
-                          </div>
-                        </div>
-                        <div className="flex-1 flex items-end pl-6 gap-3 my-5">
-                          <div className="">
-                            {" "}
-                            <FaBuilding size={22} />
-                          </div>{" "}
+
+                          {/* Delete Icon */}
                           <button
-                            onClick={() => {
-                              setSelectedVendor(user); // Store selected vendor
-                              setVendorproductlist(true); // Show product list
-                            }}
-                            className="font-medium text-[#ccc] text-base"
+                            onClick={() => handleDeletevendirClick(user, index)}
+                            className="absolute top-3 right-3 text-black hover:text-red-500"
                           >
-                            {user.company_name}
+                            <MdDeleteOutline size={20} />
                           </button>
                         </div>
+                        {/* Bottom Section */}
+                        <div
+                          onClick={() => {
+                            setSelectedVendor(user); // Store selected vendor
+                            setVendorproductlist(true); // Show product list
+                          }}
+                          className="bg-black/80 cursor-pointer text-white p-3 flex items-center gap-2 flex-1 mt-auto"
+                        >
+                          <FaBuilding className="text-white" />
+                          <p className="text-sm">{user?.company_name}</p>
+                        </div>
+
                         {isModalOpen && selectedindex === index && (
-                          <div className=" inset-0 flex items-center justify-center bg-opacity-80 absolute w-full h-full">
+                          <div className="absolute inset-0 w-full h-full flex items-center justify-center bg-black/40">
                             <div className="bg-white rounded-lg px-5 py-2">
-                              <h3 className="text-lg font-semibold">
+                              <h3 className="text-sm font-semibold">
                                 Are you sure?
                               </h3>
-                              <p>
+                              <p className="text-sm">
                                 Do you really want to delete{" "}
                                 {selectedUser?.company_name}?
                               </p>
@@ -1423,6 +1422,89 @@ function AdminDashboard() {
                           </div>
                         )}
                       </div>
+                      // <div
+                      //   key={index}
+                      //   className={`flex flex-col ${
+                      //     isExpanded
+                      //       ? "lg:w-[200px] xl:w-[270px] h-[170px]"
+                      //       : "w-[300px] lg:w-[320px] h-[150px]"
+                      //   }  font-Poppins rounded-2xl bg-[#fff] relative`}
+                      // >
+                      //   <div
+                      //     className={`flex items-center my-4 ${
+                      //       isExpanded && "px-4 py-2"
+                      //     }`}
+                      //   >
+                      //     <div className={`mx-3 ${isExpanded && "hidden"}`}>
+                      //       <img
+                      //         src={accountHolder.profileImage}
+                      //         alt="usericon"
+                      //         className="w-10"
+                      //       />
+                      //     </div>
+                      //     <div>
+                      //       <h2 className="text-[#000] text-base font-medium">
+                      //         {user.company_name}
+                      //       </h2>
+                      //       <p className="text-[#ccc] text-wrap text-[13px]">
+                      //         {user.email}
+                      //       </p>
+                      //     </div>
+                      //     <div className={`ml-auto px-2`}>
+                      //       {" "}
+                      //       <button
+                      // onClick={() =>
+                      //   handleDeletevendirClick(user, index)
+                      // }
+                      //       >
+                      //         {" "}
+                      //         <MdDeleteOutline size={25} />{" "}
+                      //       </button>
+                      //     </div>
+                      //   </div>
+                      //   <div className="flex-1 flex items-end pl-6 gap-3 my-5">
+                      //     <div className="">
+                      //       {" "}
+                      //       <FaBuilding size={22} />
+                      //     </div>{" "}
+                      //     <button
+                      //       onClick={() => {
+                      //         setSelectedVendor(user); // Store selected vendor
+                      //         setVendorproductlist(true); // Show product list
+                      //       }}
+                      //       className="font-medium text-[#ccc] text-base"
+                      //     >
+                      //       {user.company_name}
+                      //     </button>
+                      //   </div>
+                      //   {isModalOpen && selectedindex === index && (
+                      //     <div className=" inset-0 flex items-center justify-center bg-opacity-80 absolute w-full h-full">
+                      //       <div className="bg-white rounded-lg px-5 py-2">
+                      //         <h3 className="text-lg font-semibold">
+                      //           Are you sure?
+                      //         </h3>
+                      //         <p>
+                      //           Do you really want to delete{" "}
+                      //           {selectedUser?.company_name}?
+                      //         </p>
+                      //         <div className="flex justify-center mt-4 gap-3">
+                      //           <button
+                      //             onClick={() => setIsModalOpen(false)}
+                      //             className="px-4 py-2 bg-gray-300 rounded"
+                      //           >
+                      //             No
+                      //           </button>
+                      //           <button
+                      //             onClick={handleConfirmDelete}
+                      //             className="px-4 py-2 bg-red-500 text-white rounded"
+                      //           >
+                      //             Yes
+                      //           </button>
+                      //         </div>
+                      //       </div>
+                      //     </div>
+                      //   )}
+                      // </div>
                     );
                   })}
                 </div>

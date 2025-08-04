@@ -44,15 +44,19 @@ function DashboardProductCard({
                 </div>
 
                 <div className="flex gap-2 ">
-                  {additionalImages.map((image, index) => (
-                    <div key={index}>
-                      <img
-                        src={`${baseImageUrl}${image}`}
-                        alt="product"
-                        className="aspect-auto w-12"
-                      />
-                    </div>
-                  ))}
+                  {additionalImages.lenght > 0 ? (
+                    additionalImages.map((image, index) => (
+                      <div key={index}>
+                        <img
+                          src={`${baseImageUrl}${image}`}
+                          alt="product"
+                          className="aspect-auto w-12"
+                        />
+                      </div>
+                    ))
+                  ) : (
+                    <h3 className="pt-3 uppercase">No Additional Images</h3>
+                  )}
                 </div>
               </div>
 
@@ -87,7 +91,7 @@ function DashboardProductCard({
                 <h5 className="uppercase text-[#334A78] font-medium text-xs opacity-80">
                   dimensions:
                   <span className="font-bold text-[#000]">
-                    {product.dimensions}
+                    {product.dimensions || "NA"}
                   </span>
                 </h5>
                 <hr />

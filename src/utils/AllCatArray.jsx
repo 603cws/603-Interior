@@ -145,4 +145,17 @@ export const specialArray = [
   },
 ];
 
+//all the category
+export const category = [
+  "furniture",
+  "HVAC",
+  "paint",
+  "partitions / ceilings",
+  "lux",
+  "civil / plumbing",
+  "flooring",
+  "lighting",
+  "smart solutions",
+];
+
 // export default AllCatArray;

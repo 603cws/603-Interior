@@ -25,9 +25,10 @@ function Help({ isvendor }) {
   ];
   return (
     <div
-      className={`flex-1  ${
-        !isvendor && "border-2 border-[#000]"
-      } rounded-3xl my-2.5 font-Poppins`}
+      className={`flex-1   rounded-3xl my-2.5 font-Poppins`}
+      // className={`flex-1  ${
+      //   !isvendor && "border-2 border-[#000]"
+      // } rounded-3xl my-2.5 font-Poppins`}
     >
       {/* <div className="flex-1  border-2 border-[#000] rounded-3xl my-2.5 font-Poppins"> */}
       <div className="flex-col overflow-y-auto scrollbar-hide h-[calc(100vh-120px)] py-2 px-3">

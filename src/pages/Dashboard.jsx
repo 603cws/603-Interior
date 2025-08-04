@@ -1,5 +1,4 @@
 import { RiDashboardFill } from "react-icons/ri";
-import { MdDeleteOutline } from "react-icons/md";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useApp } from "../Context/Context";
 import { supabase } from "../services/supabase";
@@ -18,71 +17,11 @@ import Spinner from "../common-components/Spinner";
 import DashboardProductCard from "./vendor/DashboardProductCard";
 import SidebarItem from "../common-components/SidebarItem";
 import Help from "./user/Help";
-import ReactApexChart from "react-apexcharts";
 import { TbFileInvoice } from "react-icons/tb";
-// const percentage = 66;
 
-const fullNames = {
-  linear: "Linear Workspace",
-  lType: "L-Type Workspace",
-  md: "MD Cabin",
-  manager: "Manager Cabin",
-  small: "Small Cabin",
-  ups: "UPS Room",
-  bms: "BMS Room",
-  server: "Server Room",
-  reception: "Reception",
-  lounge: "Lounge/Pantry",
-  fitness: "Fitness Zone",
-  sales: "Sales Team",
-  phoneBooth: "Phone Booth",
-  discussionRoom: "Discussion Room",
-  interviewRoom: "Interview Room",
-  conferenceRoom: "Conference Room",
-  boardRoom: "Board Room",
-  meetingRoom: "Meeting Room",
-  meetingRoomLarge: "Meeting Room (Large)",
-  hrRoom: "HR Room",
-  financeRoom: "Finance Room",
-  executiveWashroom: "Executive Washroom",
-  breakoutRoom: "Breakout Room",
-  videoRecordingRoom: "Video Recording Room",
-  other: "Other", // Add new category here
-  // maleWashroom: "Male Washroom",
-  // femaleWashroom: "Female Washroom",
-  washrooms: "Washrooms",
-};
-
-const colors = {
-  "Linear Workspace": "#62897E",
-  "L-Type Workspace": "#3F5855",
-  "MD Cabin": "#1D3130",
-  "Manager Cabin": "#293C3E",
-  "Small Cabin": "#4A5E65",
-  "UPS Room": "#737F85",
-  "BMS Room": "#8CDDCE",
-  "Server Room": "#54A08C",
-  Reception: "#368772",
-  "Lounge/Pantry": "#2A3338",
-  "Video Recording Room": "#354044",
-  "Sales Team": "#3C464F",
-  "Phone Booth": "#515554",
-  "Discussion Room": "#868A8E",
-  "Interview Room": "#A4ACAF",
-  "Conference Room": "#488677",
-  "Board Room": "#3A4B45",
-  "Meeting Room": "#1E8D78",
-  "Meeting Room (Large)": "#07281D",
-  "HR Room": "#233736",
-  "Finance Room": "#081011",
-  "Executive Washroom": "#567F7D",
-  "Breakout Room": "#74D0C1",
-  "Available Space": "#1F5C54",
-  Other: "#5E9B96", // Color for the "Other" category
-  // "Male Washroom": "#95D5B2",
-  // "Female Washroom": "#85CEA8",
-  Washrooms: "#85CEA8",
-};
+import { category } from "../utils/AllCatArray";
+import { baseImageUrl } from "../utils/HelperConstant";
+import DashboardView from "./user/DashboardView";
 
 function Dashboard() {
   const navigate = useNavigate();
@@ -112,7 +51,11 @@ function Dashboard() {
   const [selectedBoq, setSelectedBoq] = useState();
 
   const [products, setProducts] = useState([]);
+  const [filteredProducts, setFilteredProducts] = useState([]);
   const [addons, setAddons] = useState([]);
+  const [filteredAddons, setFilteredAddons] = useState([]);
+
+  const [selectedCategory, setSelectedCategory] = useState("");
 
   const menuRef = useRef({});
   const buttonRef = useRef({});
@@ -123,6 +66,7 @@ function Dashboard() {
   // const [imageIsLoaded, setImageIsLoaded] = useState(false);
 
   const [openMenuId, setOpenMenuId] = useState(null); // Store the ID of the row with an open menu
+  const [searchQuery, setSearchQuery] = useState(""); // to store the latest search input
   // const [isExpanded, setIsExpanded] = useState(false);
   const [selectedProductview, setSelectedProductview] = useState({
     product_name: "",
@@ -142,18 +86,16 @@ function Dashboard() {
 
   const [itemsPerPage, setItemsPerPage] = useState(10); // Default (gets updated dynamically)
   const [currentPage, setCurrentPage] = useState(1);
-  const items = toggle ? products : addons;
+  const items = toggle ? filteredProducts : filteredAddons;
+  // const items = toggle ? products : addons;
   const totalPages = Math.ceil(items.length / itemsPerPage);
   const tableRef = useRef(null);
+  const scrollContainerRef = useRef(null);
+  const [lastPageBeforeSearch, setLastPageBeforeSearch] = useState(1);
+  const [isSearching, setIsSearching] = useState(false);
   //boqdata available or not
   const [isboqavailable, setIsboqavailable] = useState(false);
   const [isfetchBoqDataRefresh, setisfetchBoqDataRefresh] = useState(false);
-  const [currentAreaValues, setCurrentAreaValues] = useState({});
-  const [currentAreaQuantities, setCurrentAreaQuantities] = useState({});
-
-  //baseurlforimg
-  const baseImageUrl =
-    "https://bwxzfwsoxwtzhjbzbdzs.supabase.co/storage/v1/object/public/addon/";
 
   // Slice the items for pagination
   const paginatedItems = items.slice(
@@ -164,6 +106,9 @@ function Dashboard() {
   const goToPage = (page) => {
     if (page > 0 && page <= totalPages) {
       setCurrentPage(page);
+    }
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollTo({ top: 0, behavior: "smooth" });
     }
   };
 
@@ -187,6 +132,7 @@ function Dashboard() {
         console.log(data);
 
         setAddons(data);
+        setFilteredAddons(data);
       }
     } catch (error) {
       console.log(error);
@@ -216,6 +162,7 @@ function Dashboard() {
 
         if (data) {
           setProducts(data);
+          setFilteredProducts(data);
         }
 
         if (error) {
@@ -225,6 +172,7 @@ function Dashboard() {
         console.log(data);
       } else {
         setProducts([]);
+        setFilteredProducts([]);
       }
     } catch (error) {
       console.log(error);
@@ -232,58 +180,56 @@ function Dashboard() {
       setIsloading(false);
     }
   };
-  // const fetchProductsByIds = async () => {
-  //   console.log("hello from the product ");
 
-  //   try {
-  //     setIsloading(true);
-  //     if (!selectedBoq) {
-  //       return;
-  //     }
+  const normalize = (str) => str.replace(/\s+/g, " ").trim().toLowerCase();
 
-  //     console.log(selectedBoq);
+  const applyFilters = ({ query = "", category = "", status = "" }) => {
+    const source = toggle ? products : addons;
 
-  //     const productIdsArray = selectedBoq.product_variant_id
-  //       .split(",")
-  //       .map((id) => id.trim()); // Convert to array of numbers
+    // Store last page before searching if this is a new search
+    if ((query || category || status) && !isSearching) {
+      setLastPageBeforeSearch(currentPage);
+      setIsSearching(true);
+    }
 
-  //     const { data } = await supabase
-  //       .from("product_variants")
-  //       .select("*,products(*)")
-  //       .in("id", productIdsArray); // Use Supabase `in()` filter
-
-  //     console.log(data);
-
-  //     setProducts(data);
-  //   } catch (error) {
-  //     console.log(error);
-  //   } finally {
-  //     setIsloading(false);
-  //   }
-  // };
-  useEffect(() => {
-    if (!currentLayoutData) return;
-
-    const areas = {};
-    const quantities = {};
-
-    Object.entries(currentLayoutData).forEach(([key, value]) => {
-      if (key.includes("Area")) {
-        const name = key.replace("Area", "");
-        areas[name] = value;
-      } else if (key.includes("Qty")) {
-        const name = key.replace("Qty", "");
-        quantities[name] = value;
+    // Reset case: No query, category, or status
+    if (!query && !category && !status) {
+      toggle ? setFilteredProducts(products) : setFilteredAddons(addons);
+      if (isSearching) {
+        setCurrentPage(lastPageBeforeSearch);
+        setIsSearching(false);
       }
+      return;
+    }
+
+    // Apply filters
+    const filtered = source.filter((item) => {
+      const titleMatch = query
+        ? normalize(item.title).includes(normalize(query))
+        : true;
+
+      const categoryMatch = category
+        ? toggle
+          ? item.products?.category?.toLowerCase() === category.toLowerCase()
+          : item.title?.toLowerCase().includes(category.toLowerCase())
+        : true;
+
+      const statusMatch = status
+        ? item.status?.toLowerCase() === status.toLowerCase()
+        : true;
+
+      return titleMatch && categoryMatch && statusMatch;
     });
 
-    console.log("Extracted Areas and Quantities:", areas, quantities);
+    // Apply filtered result
+    if (toggle) {
+      setFilteredProducts(filtered);
+    } else {
+      setFilteredAddons(filtered);
+    }
 
-    setCurrentAreaValues(areas);
-    setCurrentAreaQuantities(quantities);
-    console.log("current areas", currentAreaValues);
-    console.log("current quantities", currentAreaQuantities);
-  }, [currentLayoutData, totalArea, currentLayoutID]);
+    setCurrentPage(1); // Always reset to first page on filter
+  };
 
   const handleMenuToggle = (id) => {
     setOpenMenuId((prev) => (prev === id ? null : id));
@@ -322,6 +268,8 @@ function Dashboard() {
     const tab = event.target.value; // Get value from button
     setSelectedTab(tab);
     setToggle(tab === "products"); // Set toggle dynamically
+    setSearchQuery("");
+    setSelectedCategory("");
   };
 
   const handlesetting = () => {
@@ -499,383 +447,210 @@ function Dashboard() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isfetchBoqDataRefresh]);
 
-  // useEffect(() => {
-  //   if (layoutImage && !imageIsLoaded) {
-  //     setImageIsLoaded(true);
-  //   }
-  // }, [layoutImage, imageIsLoaded]);
-
-  // console.log("selectedboq", selectedBoq);
-
-  const validTotalArea = currentAreaValues.total;
-  const builtArea = Object.keys(currentAreaQuantities).reduce(
-    (acc, key) => acc + currentAreaQuantities[key] * currentAreaValues[key],
-    0
-  );
-  const availableArea = validTotalArea - builtArea;
-
-  const series = [
-    ...Object.keys(currentAreaQuantities).map((key) => {
-      const areaOccupied = currentAreaQuantities[key] * currentAreaValues[key];
-      const percentage = ((areaOccupied / validTotalArea) * 100).toFixed(2);
-      return {
-        x: `${fullNames[key] || key}: ${percentage}%`,
-        y: `${areaOccupied} sq ft`,
-        fillColor: colors[fullNames[key]] || "#000000",
-      };
-    }),
-    {
-      x: `Available Space: ${((availableArea / validTotalArea) * 100).toFixed(
-        2
-      )}%`,
-      y: availableArea,
-      fillColor: colors["Available Space"],
-    },
-  ];
-
-  const options = {
-    chart: {
-      type: "treemap",
-      height: 250,
-      toolbar: {
-        show: true,
-      },
-    },
-    title: {
-      text: "Area Distribution of Workspaces",
-      align: "center",
-      style: {
-        fontSize: "15px",
-        fontWeight: "bold",
-        color: "#263238",
-      },
-    },
-    plotOptions: {
-      treemap: {
-        distributed: true,
-        enableShades: false,
-      },
-    },
-    dataLabels: {
-      enabled: totalArea < 2000 ? true : false,
-      style: {
-        fontSize: "14rem",
-        fontWeight: "bold",
-        colors: ["#FFFFFF"],
-      },
-      formatter: (val, opts) => {
-        if (typeof val === "number") {
-          const percentage = ((val / validTotalArea) * 100).toFixed(2);
-          return `${
-            opts.w.globals.labels[opts.dataPointIndex]
-          } (${percentage}%)`;
-        }
-        return `${opts.w.globals.labels[opts.dataPointIndex]}: ${val}`;
-      },
-    },
-    states: {
-      hover: {
-        filter: {
-          type: "darken",
-          value: 0.1,
-        },
-      },
-    },
-  };
-
   return (
-    <div className="bg-[url('images/bg/vendor.png')] bg-cover bg-center bg-no-repeat p-3 xl:p-5">
-      <div className="flex gap-3 max-h-fit overflow-hidden bg-white rounded-3xl">
-        {/* sidebar */}
-        <div
-          className={`max-h-screen sticky left-0 top-0 bottom-0 bg-white shadow-lg transition-all duration-300 ${
-            isExpanded ? "max-w-sm w-60 absolute" : "w-16"
-          }`}
-          onMouseEnter={() => setIsExpanded(true)}
-          onMouseLeave={() => setIsExpanded(false)}
-        >
-          {/* Logo */}
-          <div className="cursor-pointer flex justify-center items-center py-4">
+    <div className="grid grid-cols-[auto_1fr] bg-gradient-to-r from-[#CFDCE7] to-[#E8EEF3] p-4 h-screen font-Poppins overflow-hidden">
+      {/* sidebar */}
+      <div
+        className={`sticky top-0 bottom-0 left-0 bg-white border-2 border-[#334A78] rounded-lg shadow-lg transition-all duration-300 ${
+          isExpanded ? "max-w-sm w-60 absolute" : "w-16"
+        }`}
+        // className={`border-2 border-[#334A78] rounded-lg max-h-screen sticky left-0 top-0 bottom-0 bg-white  shadow-lg transition-all duration-300 ${
+        //   isExpanded ? "max-w-sm w-60 absolute" : "w-16"
+        // }`}
+        onMouseEnter={() => setIsExpanded(true)}
+        onMouseLeave={() => setIsExpanded(false)}
+      >
+        {/* Logo */}
+        <div className="cursor-pointer flex justify-center items-center py-4">
+          <img
+            src="/logo/workved-interior.png"
+            alt="Logo"
+            className={`${isExpanded ? "h-20 w-32" : "h-9 w-16"}`}
+            onClick={() => navigate("/")}
+          />
+        </div>
+
+        {/* Menu Items */}
+        <div className="font-semibold text-lg capitalize leading-normal tracking-wide py-4 text-[#262626] flex flex-col gap-4 px-3">
+          <h3
+            className={`capitalize text-[#A1A1A1] ${
+              isExpanded ? "mx-4" : "hidden"
+            }`}
+          >
+            main
+          </h3>
+
+          <SidebarItem
+            icon={<RiDashboardFill />}
+            text="Dashboard"
+            onClick={handledashboard}
+            isExpanded={isExpanded}
+          />
+          <SidebarItem
+            icon={<LuBlend />}
+            text="Product"
+            onClick={handleproduct}
+            isExpanded={isExpanded}
+          />
+          <SidebarItem
+            icon={<TbFileInvoice />}
+            text="Go to BOQ"
+            onClick={() => navigate("/boq")}
+            isExpanded={isExpanded}
+          />
+        </div>
+
+        {/* Other Items */}
+        <div className="font-semibold text-lg capitalize leading-normal tracking-wide py-4 text-[#262626] flex flex-col gap-4 px-3">
+          <h3
+            className={`capitalize text-[#A1A1A1] ${
+              isExpanded ? "mx-4" : "hidden"
+            }`}
+          >
+            other
+          </h3>
+          <SidebarItem
+            icon={<BsQuestionCircle />}
+            text="Help"
+            onClick={handlehelp}
+            isExpanded={isExpanded}
+          />
+          <SidebarItem
+            icon={<IoSettingsSharp />}
+            text="Setting"
+            onClick={handlesetting}
+            isExpanded={isExpanded}
+          />
+          <SidebarItem
+            icon={<VscSignOut />}
+            text="Logout"
+            onClick={handleLogout}
+            isExpanded={isExpanded}
+          />
+        </div>
+      </div>
+      {/* main content */}
+      <div className="flex flex-col h-full min-h-0 gap-2 px-2">
+        {/* header for dashboard */}
+        <div className="flex justify-between items-center border-2 border-[#334A78] rounded-lg bg-white h-[50px] shrink-0">
+          <div className="mx-3">
+            <h3 className="font-bold text-2xl text-[#374A75] capitalize">
+              {currentSection}
+            </h3>
+          </div>
+          <div className="mx-3">
             <img
-              src="/logo/workved-interior.png"
-              alt="Logo"
-              className={`${isExpanded ? "h-20 w-32" : "h-9 w-16"}`}
-              onClick={() => navigate("/")}
-            />
-          </div>
-
-          {/* Menu Items */}
-          <div className="font-semibold text-lg capitalize leading-normal tracking-wide py-4 text-[#262626] flex flex-col gap-4 px-3">
-            <h3
-              className={`capitalize text-[#A1A1A1] ${
-                isExpanded ? "mx-4" : "hidden"
-              }`}
-            >
-              main
-            </h3>
-            <SidebarItem
-              icon={<TbFileInvoice />}
-              text="BOQ"
-              onClick={() => navigate("/boq")}
-              isExpanded={isExpanded}
-            />
-            <SidebarItem
-              icon={<RiDashboardFill />}
-              text="Dashboard"
-              onClick={handledashboard}
-              isExpanded={isExpanded}
-            />
-            <SidebarItem
-              icon={<LuBlend />}
-              text="Product"
-              onClick={handleproduct}
-              isExpanded={isExpanded}
-            />
-          </div>
-
-          {/* Other Items */}
-          <div className="font-semibold text-lg capitalize leading-normal tracking-wide py-4 text-[#262626] flex flex-col gap-4 px-3">
-            <h3
-              className={`capitalize text-[#A1A1A1] ${
-                isExpanded ? "mx-4" : "hidden"
-              }`}
-            >
-              other
-            </h3>
-            <SidebarItem
-              icon={<BsQuestionCircle />}
-              text="Help"
-              onClick={handlehelp}
-              isExpanded={isExpanded}
-            />
-            <SidebarItem
-              icon={<IoSettingsSharp />}
-              text="Setting"
-              onClick={handlesetting}
-              isExpanded={isExpanded}
-            />
-            <SidebarItem
-              icon={<VscSignOut />}
-              text="Logout"
-              onClick={handleLogout}
-              isExpanded={isExpanded}
+              src={accountHolder.profileImage}
+              alt="usericon"
+              className="w-10 h-10"
             />
           </div>
         </div>
-        <div className="flex-1 flex flex-col relative h-full px-2">
-          {/* header for dashboard */}
-          <div className="flex justify-between items-center border-2 border-[#194F48] rounded-3xl mt-2 sticky top-3 z-10 bg-white h-[50px]">
-            <div className="mx-3">
-              <h3 className="font-bold text-lg capitalize ">
-                {currentSection}
-              </h3>
+
+        {/* setting */}
+        {isSettingOpen && (
+          <div className="flex flex-col h-full min-h-0 overflow-hidden border-2 border-[#334A78] rounded-lg bg-white">
+            {/* header inside setting */}
+            <div className="border-b-2 border-b-[#ccc] py-2 px-4 shrink-0">
+              {iseditopen ? (
+                <button className="capitalize font-medium text-base px-10 py-2 rounded-2xl border-[#000] border bg-[#B4EAEA]">
+                  Profile
+                </button>
+              ) : (
+                <div className="capitalize font-medium text-base px-10">
+                  <button
+                    className="text-sm text-[#A1A1A1] flex justify-center items-center gap-3"
+                    onClick={() => setIsEditopen(true)}
+                  >
+                    <FaArrowLeft /> back to profile
+                  </button>
+                  <h3>profile edit</h3>
+                </div>
+              )}
             </div>
-            <div className="mx-3">
-              <img
-                src={accountHolder.profileImage}
-                alt="usericon"
-                className="w-10 h-10"
-              />
+
+            {/* Scrollable content section */}
+            <div className="flex-1 overflow-y-auto min-h-0 px-4 py-2">
+              {iseditopen ? (
+                <div className="flex justify-center items-center w-full">
+                  <UserProfile setIsEditopen={setIsEditopen} />
+                </div>
+              ) : (
+                <div className="">
+                  <UserSetting />
+                </div>
+              )}
+
+              {/* Scrollable overflow content */}
+              <div>
+                <p className="text-sm leading-relaxed">
+                  {/* Your long lorem content goes here */}
+                </p>
+              </div>
             </div>
+            {/* <div className="flex-1 overflow-y-auto min-h-0 px-4 py-2">
+              {iseditopen ? (
+                <div className="flex justify-center items-center w-full">
+                  <UserProfile setIsEditopen={setIsEditopen} />
+                </div>
+              ) : (
+                <div className="">
+                  <UserSetting />
+                </div>
+              )}
+
+              <div>
+                <p className="text-sm leading-relaxed"></p>
+              </div>
+            </div> */}
           </div>
+        )}
 
-          {/* div for dashboard */}
-          {dashboard && (
-            <div className="w-full  border-2 border-[#194F48] rounded-3xl my-2.5">
-              {/* for dashboard */}
-              <div className="w-full flex overflow-y-auto scrollbar-hide h-[calc(100vh-120px)] py-2 px-3">
-                {/* dashboard area layout */}
-                <div className="w-2/3">
-                  <div className="p-4">
-                    <h2 className="capitalize font-bold mb-2">
-                      Layout Information
-                    </h2>
-                    {/* div containing information */}
-                    <div className="flex gap-10">
-                      {/* each icon  */}
-                      <div className="xl:flex justify-around items-center gap-3  py-3 px-2">
-                        <div>
-                          <img
-                            src="/images/layouticon.png"
-                            alt=" dashboard layout "
-                            className="w-[45px] h-[45px] xl:w-[60px] xl:h-[60px]"
-                          />
-                        </div>
-                        <div className="capitalize pr-10">
-                          <p className="font-bold text-lg">
-                            {/* {selectedBoq.total_area} */}
-                            {selectedBoq && selectedBoq.total_area}
-                            <span>sqft</span>
-                          </p>
-                          <p className="text-base">total area</p>
-                        </div>
-                      </div>
-                      {/* each icon  */}
-                      <div className="xl:flex justify-around items-center gap-3  py-3 px-2">
-                        <div>
-                          <img
-                            src="/images/totalproduct.png"
-                            alt=" dashboard layout "
-                            className="w-[45px] h-[45px] xl:w-[60px] xl:h-[60px]"
-                          />
-                        </div>
-                        <div className="capitalize pr-10">
-                          <p className="font-bold text-lg">
-                            {/* 1500 <span>sqft</span> */}
-                            {/* {products.length} */}
-                            {selectedBoq && products && products.length}{" "}
-                          </p>
-                          <p className="text-base">Total No Product</p>
-                        </div>
-                      </div>
-                      {/* each icon  */}
-                      <div className="xl:flex justify-around items-center gap-3  py-3 px-2">
-                        <div>
-                          <img
-                            src="/images/grandtotal.png"
-                            alt=" dashboard layout "
-                            className="w-[45px] h-[45px] xl:w-[60px] xl:h-[60px]"
-                          />
-                        </div>
-                        <div className="capitalize pr-10">
-                          <p className="font-bold text-lg">
-                            {/* 1500 <span>sqft</span> */}
-                            {selectedBoq && selectedBoq.totalprice}{" "}
-                            <span>INR</span>
-                          </p>
-                          <p className="text-base">Total Amount</p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  {/* dashboard boq part */}
-                  <div className="p-3">
-                    <h3 className="capitalize font-bold ">BOQ generated</h3>
+        {dashboard && (
+          <div className="flex flex-col h-full min-h-0 overflow-hidden border-2 border-[#334A78] rounded-lg bg-white">
+            <DashboardView
+              totalArea={totalArea}
+              handlecheckboqdetails={handlecheckboqdetails}
+              handledeleteBoq={handledeleteBoq}
+              selectedBoq={selectedBoq}
+              products={products}
+              boqdata={boqdata}
+              currentLayoutData={currentLayoutData}
+              currentLayoutID={currentLayoutID}
+              isboqavailable={isboqavailable}
+            />
+          </div>
+        )}
 
-                    {/* boq card */}
-                    {isboqavailable &&
-                      boqdata.map((boq, index) => {
-                        return (
-                          <div
-                            key={boq.title}
-                            className="rounded-3xl border-2 border-[#ccc] max-w-sm p-2 mb-3"
-                          >
-                            <div className="flex justify-end gap-2 p-2">
-                              {/* <MdOutlineModeEdit size={30} /> */}
-                              <button
-                                className="px-5 py-1 bg-green-300  rounded-2xl capitalize"
-                                onClick={() => handlecheckboqdetails(boq)}
-                              >
-                                details
-                              </button>
-                              <button onClick={() => handledeleteBoq(boq)}>
-                                {" "}
-                                <MdDeleteOutline size={30} />
-                              </button>
-                            </div>
-                            <div>
-                              <h3 className="font-bold">{boq.title}</h3>
-                            </div>
-                          </div>
-                        );
-                      })}
-
-                    {!isboqavailable && (
-                      <div>
-                        <h3>You havent saved a BOQ yet</h3>
-                      </div>
-                    )}
-                  </div>
-                </div>
-                <div className="w-1/3  flex justify-center">
-                  <div className="border-2 p-4 rounded-xl h-96">
-                    {/* {imageIsLoaded ? (
-                      <img
-                        src={layoutImage}
-                        alt="layout"
-                        className="h-80 w-80"
-                      />
-                    ) : (
-                      <Spinner />
-                    )} */}
-                    <ReactApexChart
-                      options={options}
-                      series={[{ data: series }]}
-                      type="treemap"
-                      className="distribution-chart"
-                      height={270}
-                      width={370}
-                    />
-                    <p className="text-sm text-center">
-                      This layout is of total area{" "}
-                      <span className="font-bold">
-                        {currentAreaValues.total} sq. ft.
-                      </span>
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* setting */}
-          {isSettingOpen && (
-            <div className="flex-1  border-2 border-[#000] rounded-3xl my-2.5">
-              <div className="overflow-y-hidden scrollbar-hide h-[calc(100vh-120px)] py-2 relative">
-                <div className="flex flex-col justify-between  pt-2 sticky top-0">
-                  <div className="border-b-2 border-b-[#ccc] py-2 px-4">
-                    {iseditopen ? (
-                      <button className="capitalize font-medium text-base px-10 py-2 rounded-2xl border-[#000] border bg-[#B4EAEA]">
-                        Profile
-                      </button>
-                    ) : (
-                      <div className="capitalize font-medium text-base px-10  ">
-                        <button
-                          className="text-sm text-[#A1A1A1] flex justify-center items-center gap-3"
-                          onClick={() => setIsEditopen(true)}
-                        >
-                          <FaArrowLeft /> back to profile
-                        </button>
-                        <h3>profile edit</h3>
-                      </div>
-                    )}
-                  </div>
-                </div>
-                <div className="flex-1 flex flex-col justify-center items-center h-[90%] font-Poppins ">
-                  {iseditopen ? (
-                    <div className="flex justify-center items-center w-full  h-full">
-                      <UserProfile setIsEditopen={setIsEditopen} />
-                    </div>
-                  ) : (
-                    <UserSetting />
-                  )}
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* product */}
-          {isProductOpen && (
-            <div className="flex-1  border-2 border-[#000] rounded-3xl my-2.5">
-              <div className="overflow-y-auto scrollbar-hide h-[calc(100vh-120px)] rounded-3xl relative ">
+        {/* product */}
+        {isProductOpen && (
+          <div className="flex flex-col h-full min-h-0 overflow-hidden border-2 border-[#334A78] rounded-lg bg-white">
+            <div className="flex-1 ">
+              <div className="overflow-y-auto scrollbar-hide h-[calc(100vh-95px)] rounded-3xl relative ">
                 {/* // Default product list and add product UI */}
                 <div className=" sticky top-0 z-20 bg-white">
                   <div className="flex items-center gap-5 px-4 py-2 border-b-2 border-b-gray-400 ">
-                    <h3 className=" font-semibold text-xl ">BOQs</h3>
+                    <h3 className="  font-semibold text-2xl text-[#374A75] ">
+                      Created BOQs
+                    </h3>
                     {isboqavailable &&
                       boqdata.map((boq, index) => {
                         return (
                           <div
                             key={boq.title}
-                            className={`rounded-3xl border-2 border-[#ccc] px-5 py-3 ${
+                            className={` rounded-lg border-2  px-5 py-2 ${
                               selectedBoq.title === boq.title
-                                ? "bg-[#B4EAEA]"
-                                : ""
+                                ? "bg-[#374A75] text-white border-[#374a75]"
+                                : "bg-white text-[#374a75] border-[#ccc]"
                             }`}
                           >
                             <button
-                              onClick={() => setSelectedBoq(boq)}
-                              className="font-bold"
+                              onClick={() => {
+                                setSelectedBoq(boq);
+                                setSearchQuery("");
+                                setSelectedCategory("");
+                              }}
+                              className=" text-lg"
                             >
                               {boq.title}
                             </button>
@@ -883,14 +658,14 @@ function Dashboard() {
                         );
                       })}
                   </div>
-                  <div className="flex gap-3 px-4 py-2 border-b-2 border-b-gray-400 bg-white z-20">
+                  <div className="flex  items-center gap-3 px-4 py-2 border-b-2 border-b-gray-400 bg-white z-20">
                     {tabs.map((tab) => (
                       <button
                         key={tab.value}
-                        className={`flex items-center gap-2 px-6 py-2 border rounded-xl ${
+                        className={`flex items-center gap-2 px-6 py-2 border rounded-lg  text-[#374A75] text-lg ${
                           selectedTab === tab.value
-                            ? "bg-[#B4EAEA]"
-                            : "bg-white "
+                            ? "bg-[#D3E3F0]  border-[#374A75]"
+                            : "bg-white border-[#374A75]"
                         }`}
                         value={tab.value}
                         onClick={handleTabClick} // Dynamically sets the tab
@@ -898,6 +673,46 @@ function Dashboard() {
                         {tab.name}
                       </button>
                     ))}
+
+                    <div className="w-1/2 ml-auto">
+                      <input
+                        type="text"
+                        value={searchQuery}
+                        className="w-full rounded-lg px-2 py-1 outline-none border-2 border-gray-400"
+                        placeholder="......search by product name"
+                        onChange={(e) => {
+                          const value = e.target.value;
+                          setSearchQuery(value);
+                          applyFilters({
+                            query: value,
+                          });
+                        }}
+                      />
+                    </div>
+                    {toggle && (
+                      <div>
+                        <select
+                          name="category"
+                          value={selectedCategory}
+                          onChange={(e) => {
+                            const value = e.target.value;
+                            setSelectedCategory(value);
+                            applyFilters({
+                              query: searchQuery,
+                              category: value,
+                            });
+                          }}
+                          id="category"
+                        >
+                          <option value="">All categories</option>
+                          {category.map((category) => (
+                            <option key={category} value={category}>
+                              {category}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                    )}
                   </div>
                 </div>
                 {/*  */}
@@ -907,7 +722,11 @@ function Dashboard() {
                   ) : selectedBoq && items.length > 0 ? (
                     // <section className="mt-2 flex-1 overflow-hidden px-8">
                     <section className=" h-[90%] font-Poppins overflow-hidden">
-                      <div className="w-full h-full border-t border-b border-[#CCCCCC] overflow-y-auto custom-scrollbar">
+                      {/* <section className=" h-[90%] font-Poppins overflow-hidden"> */}
+                      <div
+                        ref={scrollContainerRef}
+                        className="w-full h-full border-t border-b border-[#CCCCCC] overflow-y-auto custom-scrollbar"
+                      >
                         <table
                           className="min-w-full border-collapse"
                           ref={tableRef}
@@ -925,8 +744,8 @@ function Dashboard() {
                               {toggle ? (
                                 <>
                                   {/* <th className="p-3 font-medium">
-                                        Details
-                                      </th> */}
+                                          Details
+                                        </th> */}
                                   <th className="p-3 font-medium">Category</th>
                                   <th className="p-3 font-medium">
                                     specification
@@ -1005,13 +824,13 @@ function Dashboard() {
                                           <VscEye /> view
                                         </button>
                                         {/* <button
-                                        onClick={() => {
-                                          handleDelete(item);
-                                        }}
-                                        className="flex gap-2 items-center w-full text-left px-3 py-2 hover:bg-gray-200"
-                                      >
-                                        <MdOutlineDelete /> Delete
-                                      </button> */}
+                                          onClick={() => {
+                                            handleDelete(item);
+                                          }}
+                                          className="flex gap-2 items-center w-full text-left px-3 py-2 hover:bg-gray-200"
+                                        >
+                                          <MdOutlineDelete /> Delete
+                                        </button> */}
                                       </div>
                                     )}
                                   </td>
@@ -1036,7 +855,7 @@ function Dashboard() {
                   ))}
                 {/* Pagination Controls (Always Visible) */}
                 {selectedBoq && totalPages > 1 && (
-                  <div className="flex justify-center items-center gap-2 mt-10 z-30 sticky bottom-0 bg-[#EBF0FF] mb-4 text-[#3d194f]">
+                  <div className="flex justify-center items-center gap-2  z-30 sticky bottom-0 bg-[#EBF0FF]  text-[#3d194f]">
                     <button
                       onClick={() => goToPage(currentPage - 1)}
                       disabled={currentPage === 1}
@@ -1081,12 +900,17 @@ function Dashboard() {
                 )}
               </div>
             </div>
-          )}
+          </div>
+        )}
 
-          {/* help */}
-          {help && <Help isvendor={false} />}
-        </div>
+        {/* help */}
+        {help && (
+          <div className="flex flex-col h-full min-h-0 overflow-hidden border-2 border-[#334A78] rounded-lg bg-white">
+            <Help isvendor={false} />
+          </div>
+        )}
       </div>
+
       {/* product preview */}
       {productPreview && (
         <DashboardProductCard

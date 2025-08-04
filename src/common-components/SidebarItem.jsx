@@ -6,8 +6,12 @@ function SidebarItem({ icon, text, onClick, isExpanded }) {
       }`}
       onClick={onClick}
     >
-      <div className="text-2xl">{icon}</div>
-      <span className={`${isExpanded ? "block" : "hidden"}`}>{text}</span>
+      <div className="text-2xl text-[#374A75]">{icon}</div>
+      <span
+        className={`${isExpanded ? "block" : "hidden"} text-lg text-[#374A75]`}
+      >
+        {text}
+      </span>
     </div>
   );
 }
