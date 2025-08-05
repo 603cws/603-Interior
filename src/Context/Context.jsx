@@ -105,7 +105,10 @@ export const AppProvider = ({ children }) => {
     category: [],
     priceRange: [0, 10000],
   });
-  const [BOQTitle, setBOQTitle] = useState("Draft BOQ");
+  const [BOQTitle, setBOQTitle] = useState(
+    sessionStorage.getItem("BOQTitle") || ""
+  );
+  const [BOQID, setBOQID] = useState(sessionStorage.getItem("BOQID") || "");
 
   const [formulaMap, setFormulaMap] = useState({});
   const [formulasLoading, setFormulasLoading] = useState(true);
@@ -148,6 +151,15 @@ export const AppProvider = ({ children }) => {
   useEffect(() => {
     fetchFormulas();
   }, []);
+
+  useEffect(() => {
+    if (BOQID) {
+      sessionStorage.setItem("BOQID", BOQID);
+    }
+    if (BOQTitle) {
+      sessionStorage.setItem("BOQTitle", BOQTitle);
+    }
+  }, [BOQID, BOQTitle]);
 
   async function getCartItems() {
     try {
@@ -815,6 +827,8 @@ export const AppProvider = ({ children }) => {
         formulasLoading,
         BOQTitle,
         setBOQTitle,
+        BOQID,
+        setBOQID,
         refetchFormulas: fetchFormulas,
       }}
     >
