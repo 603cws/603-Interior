@@ -78,6 +78,7 @@ function Navbar({
     setSelectedPlan,
     BOQTitle,
     setBOQTitle,
+    currentLayoutData,
   } = useApp();
 
   // const totalArea = currentLayoutData.totalArea;
@@ -402,160 +403,246 @@ function Navbar({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedData]);
 
-  const insertDataIntoSupabase = async (
-    selectedData,
-    userId,
-    boqTitle,
-    totalArea
-  ) => {
+  // const insertDataIntoSupabase = async (
+  //   selectedData,
+  //   userId,
+  //   boqTitle,
+  //   totalArea
+  // ) => {
+  //   try {
+  //     // Check how many BOQs the user has already saved
+  //     const { data: existingBOQs, error: fetchError } = await supabase
+  //       .from("boqdata")
+  //       .select("id", { count: "exact" })
+  //       .eq("userId", userId);
+
+  //     if (fetchError) {
+  //       console.error("Error fetching user BOQ count:", fetchError);
+  //       return;
+  //     }
+
+  //     if (existingBOQs.length >= 3) {
+  //       console.warn("User has reached the BOQ limit.");
+  //       toast.error("You can only save up to 3 BOQs.");
+  //       return;
+  //     }
+
+  //     // Ask for BOQ title only if the user has room for more BOQs
+  //     if (!boqTitle) {
+  //       boqTitle = window.prompt("Enter a name for your BOQ:");
+  //       if (!boqTitle) {
+  //         toast.error("BOQ name cannot be empty.");
+  //         return;
+  //       }
+  //     }
+
+  //     // Prepare formatted data
+  //     const formattedData = {
+  //       product_id: selectedData.map((item) => item.id).join(","),
+  //       product_variant_id: selectedData
+  //         .map((item) => item.product_variant?.variant_id || "")
+  //         .join(","),
+  //       addon_id: selectedData
+  //         .flatMap((item) =>
+  //           item.addons
+  //             ? Object.values(item.addons).map((addon) => addon.addonid)
+  //             : []
+  //         )
+  //         .join(","),
+  //       addon_variant_id: selectedData
+  //         .flatMap((item) =>
+  //           item.addons
+  //             ? Object.values(item.addons).map((addon) => addon.id)
+  //             : []
+  //         )
+  //         .join(","),
+  //       addon_final_price: selectedData
+  //         .flatMap((item) =>
+  //           item.addons
+  //             ? Object.values(item.addons).map(
+  //                 (addon) => addon.finalPrice || ""
+  //               )
+  //             : []
+  //         )
+  //         .filter(Boolean) // Removes empty strings
+  //         .join(","), // Store multiple addon final prices as comma-separated values
+  //       group_key: selectedData
+  //         .map((item) => item.groupKey || "")
+  //         .filter(Boolean) // Removes empty strings
+  //         .join(","), // Store multiple group keys as comma-separated values
+  //       userId: userId,
+  //       title: boqTitle, // Save the entered BOQ name
+  //       total_area: totalArea,
+  //       height: userResponses.height,
+  //       flooring: userResponses.flooring,
+  //       demolishTile: userResponses.demolishTile,
+  //       hvacType: userResponses.hvacType,
+  //       planType: selectedPlan,
+  //       final_price: selectedData
+  //         .map((item) => item.finalPrice || "")
+  //         .filter(Boolean) // Removes empty strings
+  //         .join(","), // Store multiple product final prices as comma-separated values
+  //       totalprice: boqTotal,
+  //     };
+
+  //     // Insert into Supabase
+  //     const { error } = await supabase.from("boqdata").insert([formattedData]);
+
+  //     if (error) {
+  //       console.error("Error inserting data into Supabase:", error);
+  //     } else {
+  //       setBOQTitle(boqTitle);
+  //       toast.success("BOQ saved successfully!");
+  //     }
+  //   } catch (error) {
+  //     console.error("Error during insertion:", error);
+  //   }
+  // };
+
+  const handleSaveBOQ = async (boqTitle) => {
     try {
-      // Check how many BOQs the user has already saved
-      const { data: existingBOQs, error: fetchError } = await supabase
-        .from("boqdata")
-        .select("id", { count: "exact" })
-        .eq("userId", userId);
+      const products = selectedData.map((product) => ({
+        id: product.product_variant?.variant_id,
+        title: product.product_variant?.variant_title,
+        finalPrice: product.finalPrice || "",
+        groupKey: product.groupKey,
+      }));
+      const addons = selectedData.flatMap((product) =>
+        (product.addons || []).map((addon) => ({
+          id: addon.id,
+          title: addon.title,
+          finalPrice: addon.price || "",
+          productId: product.product_variant?.variant_id,
+        }))
+      );
+      const answers = [
+        {
+          height: userResponses.height || "",
+          flooring: userResponses.flooring || "",
+          demolishTile: userResponses.demolishTile || "",
+          hvacType: userResponses.hvacType || "",
+        },
+      ];
 
-      if (fetchError) {
-        console.error("Error fetching user BOQ count:", fetchError);
-        return;
-      }
-
-      if (existingBOQs.length >= 3) {
-        console.warn("User has reached the BOQ limit.");
-        toast.error("You can only save up to 3 BOQs.");
-        return;
-      }
-
-      // Ask for BOQ title only if the user has room for more BOQs
-      if (!boqTitle) {
-        boqTitle = window.prompt("Enter a name for your BOQ:");
-        if (!boqTitle) {
-          toast.error("BOQ name cannot be empty.");
-          return;
-        }
-      }
-
-      // Prepare formatted data
-      const formattedData = {
-        product_id: selectedData.map((item) => item.id).join(","),
-        product_variant_id: selectedData
-          .map((item) => item.product_variant?.variant_id || "")
-          .join(","),
-        addon_id: selectedData
-          .flatMap((item) =>
-            item.addons
-              ? Object.values(item.addons).map((addon) => addon.addonid)
-              : []
-          )
-          .join(","),
-        addon_variant_id: selectedData
-          .flatMap((item) =>
-            item.addons
-              ? Object.values(item.addons).map((addon) => addon.id)
-              : []
-          )
-          .join(","),
-        addon_final_price: selectedData
-          .flatMap((item) =>
-            item.addons
-              ? Object.values(item.addons).map(
-                  (addon) => addon.finalPrice || ""
-                )
-              : []
-          )
-          .filter(Boolean) // Removes empty strings
-          .join(","), // Store multiple addon final prices as comma-separated values
-        group_key: selectedData
-          .map((item) => item.groupKey || "")
-          .filter(Boolean) // Removes empty strings
-          .join(","), // Store multiple group keys as comma-separated values
-        userId: userId,
-        title: boqTitle, // Save the entered BOQ name
-        total_area: totalArea,
-        height: userResponses.height,
-        flooring: userResponses.flooring,
-        demolishTile: userResponses.demolishTile,
-        hvacType: userResponses.hvacType,
-        planType: selectedPlan,
-        final_price: selectedData
-          .map((item) => item.finalPrice || "")
-          .filter(Boolean) // Removes empty strings
-          .join(","), // Store multiple product final prices as comma-separated values
-        totalprice: boqTotal,
-      };
-
-      // Insert into Supabase
-      const { error } = await supabase.from("boqdata").insert([formattedData]);
-
+      const { data, error } = await supabase.from("boq_data_new").insert([
+        {
+          userId: accountHolder.userId,
+          products: products,
+          addons: addons,
+          boqTitle: boqTitle,
+          layoutId: currentLayoutData.id,
+          answers: answers,
+          planType: selectedPlan,
+          boqTotalPrice: boqTotal,
+        },
+      ]);
       if (error) {
-        console.error("Error inserting data into Supabase:", error);
+        console.error("Error during insertion:", error);
       } else {
-        setBOQTitle(boqTitle);
-        toast.success("BOQ saved successfully!");
+        console.log("Data inserted successfully:", data);
       }
     } catch (error) {
       console.error("Error during insertion:", error);
     }
   };
 
-  const updateExistingBoq = async (boqId) => {
+  // const updateExistingBoq = async (boqId) => {
+  //   try {
+  //     const { error } = await supabase
+  //       .from("boqdata")
+  //       .update({
+  //         product_id: selectedData.map((item) => item.id).join(","),
+  //         product_variant_id: selectedData
+  //           .map((item) => item.product_variant?.variant_id || "")
+  //           .join(","),
+  //         addon_id: selectedData
+  //           .flatMap((item) =>
+  //             item.addons
+  //               ? Object.values(item.addons).map((addon) => addon.addonid)
+  //               : []
+  //           )
+  //           .join(","),
+  //         addon_variant_id: selectedData
+  //           .flatMap((item) =>
+  //             item.addons
+  //               ? Object.values(item.addons).map((addon) => addon.id)
+  //               : []
+  //           )
+  //           .join(","),
+  //         addon_final_price: selectedData
+  //           .flatMap((item) =>
+  //             item.addons
+  //               ? Object.values(item.addons).map(
+  //                   (addon) => addon.finalPrice || ""
+  //                 )
+  //               : []
+  //           )
+  //           .filter(Boolean)
+  //           .join(","),
+  //         group_key: selectedData
+  //           .map((item) => item.groupKey || "")
+  //           .filter(Boolean)
+  //           .join(","),
+  //         final_price: selectedData
+  //           .map((item) => item.finalPrice || "")
+  //           .filter(Boolean)
+  //           .join(","),
+  //         total_area: totalArea,
+  //         height: userResponses.height,
+  //         flooring: userResponses.flooring,
+  //         demolishTile: userResponses.demolishTile,
+  //         hvacType: userResponses.hvacType,
+  //         planType: selectedPlan,
+  //       })
+  //       .eq("id", boqId);
+
+  //     if (error) {
+  //       console.error("Error updating existing BOQ:", error);
+  //       toast.error("Failed to update BOQ.");
+  //     } else {
+  //       toast.success("BOQ updated successfully!");
+  //     }
+  //   } catch (error) {
+  //     console.error("Error during update:", error);
+  //   }
+  // };
+
+  const handleUpdateBOQ = async (boqId) => {
     try {
-      const { error } = await supabase
-        .from("boqdata")
+      const products = selectedData.map((product) => ({
+        id: product.product_variant?.variant_id,
+        title: product.product_variant?.variant_title,
+        finalPrice: product.finalPrice || "",
+        groupKey: product.groupKey,
+      }));
+      const addons = selectedData.flatMap((product) =>
+        (product.addons || []).map((addon) => ({
+          id: addon.id,
+          title: addon.title,
+          finalPrice: addon.price || "",
+          productId: product.product_variant?.variant_id,
+        }))
+      );
+      const answers = [
+        {
+          height: userResponses.height || "",
+          flooring: userResponses.flooring || "",
+          demolishTile: userResponses.demolishTile || "",
+          hvacType: userResponses.hvacType || "",
+        },
+      ];
+      const { data, error } = await supabase
+        .from("boq_data_new")
         .update({
-          product_id: selectedData.map((item) => item.id).join(","),
-          product_variant_id: selectedData
-            .map((item) => item.product_variant?.variant_id || "")
-            .join(","),
-          addon_id: selectedData
-            .flatMap((item) =>
-              item.addons
-                ? Object.values(item.addons).map((addon) => addon.addonid)
-                : []
-            )
-            .join(","),
-          addon_variant_id: selectedData
-            .flatMap((item) =>
-              item.addons
-                ? Object.values(item.addons).map((addon) => addon.id)
-                : []
-            )
-            .join(","),
-          addon_final_price: selectedData
-            .flatMap((item) =>
-              item.addons
-                ? Object.values(item.addons).map(
-                    (addon) => addon.finalPrice || ""
-                  )
-                : []
-            )
-            .filter(Boolean)
-            .join(","),
-          group_key: selectedData
-            .map((item) => item.groupKey || "")
-            .filter(Boolean)
-            .join(","),
-          final_price: selectedData
-            .map((item) => item.finalPrice || "")
-            .filter(Boolean)
-            .join(","),
-          total_area: totalArea,
-          height: userResponses.height,
-          flooring: userResponses.flooring,
-          demolishTile: userResponses.demolishTile,
-          hvacType: userResponses.hvacType,
+          products: products,
+          addons: addons,
+          answers: answers,
           planType: selectedPlan,
+          boqTotalPrice: boqTotal,
         })
         .eq("id", boqId);
-
-      if (error) {
-        console.error("Error updating existing BOQ:", error);
-        toast.error("Failed to update BOQ.");
-      } else {
-        toast.success("BOQ updated successfully!");
-      }
     } catch (error) {
-      console.error("Error during update:", error);
+      console.log("Error during update", error);
     }
   };
 
@@ -563,9 +650,11 @@ function Navbar({
     setShowBoqPrompt(false);
 
     if (isNew) {
-      insertDataIntoSupabase(selectedData, userId, nameOrId, totalArea);
+      // insertDataIntoSupabase(selectedData, userId, nameOrId, totalArea);
+      handleSaveBOQ(nameOrId);
     } else {
-      updateExistingBoq(nameOrId); // If updating an existing BOQ, use its ID
+      // updateExistingBoq(nameOrId); // If updating an existing BOQ, use its ID
+      handleUpdateBOQ(nameOrId);
     }
   };
 

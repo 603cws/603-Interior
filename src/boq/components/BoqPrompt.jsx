@@ -20,8 +20,8 @@ function BoqPrompt({ onConfirm, onCancel, isProfileCard, setIsProfileCard }) {
 
     // Fetch user's existing BOQs
     const { data: existingBOQs, error: fetchError } = await supabase
-      .from("boqdata")
-      .select("id, title") // Fetch ID and title
+      .from("boq_data_new")
+      .select("id, boqTitle") // Fetch ID and title
       .eq("userId", userId);
 
     setExistingBoqs(existingBOQs);
@@ -104,7 +104,7 @@ function BoqPrompt({ onConfirm, onCancel, isProfileCard, setIsProfileCard }) {
                   </option>
                   {existingBoqs.map((boq) => (
                     <option key={boq.id} value={boq.id}>
-                      {boq.title}
+                      {boq.boqTitle}
                     </option>
                   ))}
                 </select>
