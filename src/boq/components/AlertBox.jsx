@@ -23,25 +23,50 @@ const AlertBox = ({ onClose, boqid, onconfirm, removeboqid }) => {
             Workved Alert
           </h2>
           <p className="text-sm text-[#2B2B2B] mt-1">
-            Are you sure you want to delete this BOQ?
+            {boqid
+              ? "Are you sure you want to delete this BOQ?"
+              : "Are you sure you want to Reset?"}
           </p>
         </div>
       </div>
 
       {/* Buttons */}
       <div className="mt-6 flex justify-end gap-3">
-        {boqid && (
+        {/* {boqid && (
           <button
             onClick={() => onconfirm(boqid)}
             className="px-4 py-1.5 bg-[#AC2734] border border-[#3A1F1A] text-white rounded-full shadow hover:bg-[#922424] text-sm"
           >
             OK
           </button>
+        )} */}
+        {onconfirm && (
+          <button
+            onClick={() => {
+              if (boqid) {
+                onconfirm(boqid);
+              } else {
+                onconfirm();
+              }
+            }}
+            className="px-4 py-1.5 bg-[#AC2734] border border-[#3A1F1A] text-white rounded-full shadow hover:bg-[#922424] text-sm"
+          >
+            OK
+          </button>
         )}
+
         <button
+          // onClick={() => {
+          //   onClose(false);
+          //   removeboqid(null);
+          // }}
           onClick={() => {
-            onClose(false);
-            removeboqid(null);
+            if (boqid) {
+              onClose(false);
+              removeboqid(null);
+            } else {
+              onClose(false);
+            }
           }}
           className="px-4 py-1.5 bg-[#AC2734]/20 border border-[#ac2734]/20 text-[#2B2B2B] rounded-full shadow hover:bg-[#f2caca] text-sm"
         >

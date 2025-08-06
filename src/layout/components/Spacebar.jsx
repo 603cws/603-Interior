@@ -12,17 +12,17 @@ function Spacebar({ totalArea, builtArea, availableArea, MIN_AREA }) {
   }
 
   return (
-    <div className="flex w-full border-2 overflow-hidden bg-[#385682] my-3 h-7">
+    <div className="flex w-full rounded-sm overflow-hidden bg-[#385682] my-3 h-5">
       {/* Used space */}
       <div
         style={{
           width: `${roundedUsedPer}%`,
-          transition: "width 0.5s ease-in-out", // Added transition
+          transition: "width 0.5s ease-in-out",
         }}
-        className="bg-[#437BAA] text-white border-1 relative"
+        className="bg-[#85AED2] text-white border-1 relative"
       >
-        <div className="absolute h-full w-2 right-0 shadow-[0_0_40px_10px_#85AED2]"></div>
-        <p className="px-4 text-xs flex items-center h-full">
+        <div className="absolute w-2 h-[90%] right-0 top-1/2 transform -translate-y-1/2 translate-x-1/4 bg-gradient-to-br from-[#334A78] to-[#1F2937]  rounded-sm glowing-circle"></div>
+        <p className="px-4 text-[10px] flex items-center h-full">
           Used: {builtArea} sq ft
         </p>
       </div>
@@ -30,11 +30,11 @@ function Spacebar({ totalArea, builtArea, availableArea, MIN_AREA }) {
       <div
         style={{
           width: `${unUsedPer}%`,
-          transition: "width 0.5s ease-in-out", // Added transition
+          transition: "width 0.5s ease-in-out",
         }}
         className="bg-[#385682] text-white"
       >
-        <p className="text-xs text-center flex items-center h-full">
+        <p className="text-[10px] flex items-center flex-1 justify-center h-full">
           {availableArea} sq ft
         </p>
       </div>

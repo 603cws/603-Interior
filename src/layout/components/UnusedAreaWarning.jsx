@@ -5,7 +5,7 @@ function UnusedAreaWarning({ onConfirm, onCancel, unusedArea, isSubmitting }) {
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-70 z-30">
       <div className="max-w-lg w-full bg-gradient-to-br from-[#334A78] to-[#68B2DC] p-4 rounded-2xl">
-        <div className="bg-white rounded-xl text-center py-10">
+        <div className="bg-white rounded-lg text-center py-10">
           <h2 className="text-lg font-semibold">Alert: Unused Space Found</h2>
           <p className="mt-5">
             There is {unusedArea} sq ft of unused space.

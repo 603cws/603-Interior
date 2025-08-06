@@ -113,102 +113,200 @@ function Navbar({
     naviagte("/");
   };
 
-  const fetchFilteredBOQProducts = async (reconstructedData) => {
+  // const fetchFilteredBOQProducts = async (reconstructedData) => {
+  //   try {
+  //     if (!Array.isArray(reconstructedData) || reconstructedData.length === 0) {
+  //       console.warn(
+  //         "fetchFilteredBOQProducts received invalid data:",
+  //         reconstructedData
+  //       );
+  //       return [];
+  //     }
+
+  //     // Fetch all products including addons
+  //     const allProducts = await fetchProductsData();
+
+  //     if (!Array.isArray(allProducts) || allProducts.length === 0) {
+  //       console.warn("No products found in the database.");
+  //       return [];
+  //     }
+
+  //     // Filter products that match BOQ data
+  //     const filteredBOQProducts = reconstructedData
+  //       .map((boqItem) => {
+  //         // Find matching product from allProducts
+  //         const matchingProduct = allProducts.find((product) =>
+  //           product.product_variants?.some(
+  //             (variant) => variant.id === boqItem.product_variant?.variant_id
+  //           )
+  //         );
+
+  //         if (!matchingProduct) return null;
+
+  //         // Find matching variant inside the product
+  //         const matchingVariant = matchingProduct.product_variants?.find(
+  //           (variant) => variant.id === boqItem.product_variant?.variant_id
+  //         );
+
+  //         // ✅ Fetch addons that match the BOQ item's addons
+  //         const matchingAddons = boqItem.addons
+  //           ?.map(({ addonid, id, finalPrice }) => {
+  //             // Ensure finalPrice is used
+  //             // Find the corresponding product that contains the addon
+  //             const addonProduct = allProducts.find((product) =>
+  //               product.addons?.some((addon) => addon.id === addonid)
+  //             );
+
+  //             if (!addonProduct) return null;
+
+  //             // Get the addon from the matching product
+  //             const addon = addonProduct.addons?.find((a) => a.id === addonid);
+  //             if (!addon) return null;
+
+  //             // Find the correct addon variant
+  //             const addonVariant = addon.addon_variants?.find(
+  //               (variant) => variant.id === id
+  //             );
+  //             if (!addonVariant) return null;
+
+  //             return {
+  //               addonid: addon.id,
+  //               // typetitle: addon.title,
+  //               price: addonVariant.price,
+  //               id: addonVariant.id,
+  //               title: addonVariant.title,
+  //               status: addonVariant.status,
+  //               vendorId: addonVariant.vendorId,
+  //               image: addonVariant.image,
+  //               finalPrice: finalPrice || addonVariant.price || 0, // ✅ Use saved finalPrice
+  //             };
+  //           })
+  //           .filter(Boolean); // Remove null values
+
+  //         return {
+  //           id: matchingVariant?.id || matchingProduct.id,
+  //           category: boqItem.category,
+  //           subcategory: boqItem.subcategory,
+  //           subcategory1: boqItem.subcategory1,
+  //           product_variant: {
+  //             variant_id: matchingVariant?.id || matchingProduct.id,
+  //             variant_title: matchingVariant?.title || matchingProduct.title,
+  //             variant_details:
+  //               matchingVariant?.details || matchingProduct.details,
+  //             variant_image: matchingVariant?.image || matchingProduct.image,
+  //             variant_price: matchingVariant?.price || matchingProduct.price,
+  //             additional_images: JSON.parse(
+  //               matchingVariant?.additional_images || "[]"
+  //             ),
+  //           },
+  //           addons: matchingAddons, // ✅ Addons now include fetched finalPrice
+  //           groupKey: boqItem.groupKey,
+  //           finalPrice: boqItem.finalPrice || matchingVariant?.price || 0, // Ensure finalPrice is carried over
+  //         };
+  //       })
+  //       .filter(Boolean); // Remove null entries
+
+  //     return filteredBOQProducts;
+  //   } catch (error) {
+  //     console.error("Error fetching and filtering BOQ products:", error);
+  //     return [];
+  //   }
+  // };
+
+  const fetchFilteredBOQProducts = async (products = [], addons = []) => {
     try {
-      if (!Array.isArray(reconstructedData) || reconstructedData.length === 0) {
-        console.warn(
-          "fetchFilteredBOQProducts received invalid data:",
-          reconstructedData
-        );
+      if (!products.length) {
+        console.warn("No products passed to fetchFilteredBOQProducts.");
         return [];
       }
 
-      // Fetch all products including addons
       const allProducts = await fetchProductsData();
-
-      if (!Array.isArray(allProducts) || allProducts.length === 0) {
-        console.warn("No products found in the database.");
+      if (!allProducts.length) {
+        console.warn("No products found in database.");
         return [];
       }
 
-      // Filter products that match BOQ data
-      const filteredBOQProducts = reconstructedData
-        .map((boqItem) => {
-          // Find matching product from allProducts
-          const matchingProduct = allProducts.find((product) =>
-            product.product_variants?.some(
-              (variant) => variant.id === boqItem.product_variant?.variant_id
-            )
-          );
+      return products
+        .map((product, index) => {
+          const { id: variantId, groupKey, finalPrice = 0 } = product;
 
-          if (!matchingProduct) return null;
+          // Parse category/subcategory/subcategory1 from groupKey
+          const parts = groupKey.split("-");
+          const isLType = groupKey.includes("L-Type Workstation");
 
-          // Find matching variant inside the product
-          const matchingVariant = matchingProduct.product_variants?.find(
-            (variant) => variant.id === boqItem.product_variant?.variant_id
-          );
+          const category = parts[0];
+          const subcategory = isLType ? "L-Type Workstation" : parts[1];
+          const subcategory1 = isLType ? parts[3] || "" : parts[2];
+          const productId = parts[parts.length - 1];
 
-          // ✅ Fetch addons that match the BOQ item's addons
-          const matchingAddons = boqItem.addons
-            ?.map(({ addonid, id, finalPrice }) => {
-              // Ensure finalPrice is used
-              // Find the corresponding product that contains the addon
-              const addonProduct = allProducts.find((product) =>
-                product.addons?.some((addon) => addon.id === addonid)
-              );
+          // Find matching product and variant
+          let matchedVariant, matchedProduct;
+          for (const prod of allProducts) {
+            matchedVariant = prod.product_variants?.find(
+              (v) => v.id === variantId
+            );
+            if (matchedVariant) {
+              matchedProduct = prod;
+              break;
+            }
+          }
+          if (!matchedProduct) return null;
 
-              if (!addonProduct) return null;
-
-              // Get the addon from the matching product
-              const addon = addonProduct.addons?.find((a) => a.id === addonid);
-              if (!addon) return null;
-
-              // Find the correct addon variant
-              const addonVariant = addon.addon_variants?.find(
-                (variant) => variant.id === id
-              );
-              if (!addonVariant) return null;
-
-              return {
-                addonid: addon.id,
-                // typetitle: addon.title,
-                price: addonVariant.price,
-                id: addonVariant.id,
-                title: addonVariant.title,
-                status: addonVariant.status,
-                vendorId: addonVariant.vendorId,
-                image: addonVariant.image,
-                finalPrice: finalPrice || addonVariant.price || 0, // ✅ Use saved finalPrice
-              };
-            })
-            .filter(Boolean); // Remove null values
+          // Get addon for this product (if exists at same index)
+          const addonData = addons?.[index];
+          const matchingAddons = addonData
+            ? (() => {
+                const addonProduct = allProducts.find((p) =>
+                  p.addons?.some((a) => a.id === addonData.addonId)
+                );
+                const addon = addonProduct?.addons?.find(
+                  (a) => a.id === addonData.addonId
+                );
+                const addonVariant = addon?.addon_variants?.find(
+                  (v) => v.id === addonData.varinatId
+                );
+                return addon && addonVariant
+                  ? [
+                      {
+                        addonid: addon.id,
+                        id: addonVariant.id,
+                        title: addonVariant.title,
+                        price: addonVariant.price,
+                        image: addonVariant.image,
+                        status: addonVariant.status,
+                        vendorId: addonVariant.vendorId,
+                        finalPrice:
+                          addonData.finalPrice || addonVariant.price || 0,
+                      },
+                    ]
+                  : [];
+              })()
+            : [];
 
           return {
-            id: matchingVariant?.id || matchingProduct.id,
-            category: boqItem.category,
-            subcategory: boqItem.subcategory,
-            subcategory1: boqItem.subcategory1,
+            id: matchedVariant?.id || matchedProduct.id,
+            category,
+            subcategory,
+            subcategory1,
+            groupKey,
+            finalPrice: finalPrice || matchedVariant?.price || 0,
             product_variant: {
-              variant_id: matchingVariant?.id || matchingProduct.id,
-              variant_title: matchingVariant?.title || matchingProduct.title,
+              variant_id: matchedVariant?.id || matchedProduct.id,
+              variant_title: matchedVariant?.title || matchedProduct.title,
               variant_details:
-                matchingVariant?.details || matchingProduct.details,
-              variant_image: matchingVariant?.image || matchingProduct.image,
-              variant_price: matchingVariant?.price || matchingProduct.price,
+                matchedVariant?.details || matchedProduct.details,
+              variant_image: matchedVariant?.image || matchedProduct.image,
+              variant_price: matchedVariant?.price || matchedProduct.price,
               additional_images: JSON.parse(
-                matchingVariant?.additional_images || "[]"
+                matchedVariant?.additional_images || "[]"
               ),
             },
-            addons: matchingAddons, // ✅ Addons now include fetched finalPrice
-            groupKey: boqItem.groupKey,
-            finalPrice: boqItem.finalPrice || matchingVariant?.price || 0, // Ensure finalPrice is carried over
+            addons: matchingAddons,
           };
         })
-        .filter(Boolean); // Remove null entries
-
-      return filteredBOQProducts;
+        .filter(Boolean);
     } catch (error) {
-      console.error("Error fetching and filtering BOQ products:", error);
+      console.error("Error in fetchFilteredBOQProducts:", error);
       return [];
     }
   };
@@ -254,11 +352,109 @@ function Navbar({
   // };
 
   // Function to load a BOQ
+  // const handleLoadBOQ = async (boqId) => {
+  //   try {
+  //     // Fetch BOQ data from Supabase
+  //     const { data, error } = await supabase
+  //       .from("boqdata")
+  //       .select("*")
+  //       .eq("id", boqId)
+  //       .single();
+
+  //     if (error) {
+  //       console.error("Error fetching BOQ:", error);
+  //       toast.error("Failed to load BOQ");
+  //       return;
+  //     }
+
+  //     if (!data) {
+  //       toast.error("BOQ not found");
+  //       return;
+  //     }
+
+  //     // Convert stored comma-separated values into arrays
+  //     const productVariantIds =
+  //       data.product_variant_id?.split(",").map((id) => id.trim()) || [];
+  //     const addonIds = data.addon_id?.split(",").map((id) => id.trim()) || [];
+  //     const addonVariantIds =
+  //       data.addon_variant_id?.split(",").map((id) => id.trim()) || [];
+  //     const groupKeys =
+  //       data.group_key?.split(",").map((key) => key.trim()) || [];
+  //     const finalPrices =
+  //       data.final_price
+  //         ?.split(",")
+  //         .map((price) => parseFloat(price.trim()) || 0) || [];
+  //     const addonFinalPrices =
+  //       data.addon_final_price
+  //         ?.split(",")
+  //         .map((price) => parseFloat(price.trim()) || 0) || [];
+
+  //     // ✅ Reconstruct products and addons based on groupKey
+  //     const reconstructedData = groupKeys.map((groupKey, index) => {
+  //       let category = "";
+  //       let subcategory = "";
+  //       let subcategory1 = "";
+  //       let productId = "";
+
+  //       const parts = groupKey.split("-");
+
+  //       if (groupKey.includes("L-Type Workstation")) {
+  //         // ✅ Special handling for "L-Type Workstation"
+  //         category = parts[0];
+  //         subcategory = "L-Type Workstation"; // Keep it intact
+  //         subcategory1 = parts.length > 3 ? parts[3] : "";
+  //         productId = parts[parts.length - 1];
+  //       } else {
+  //         // Default split behavior
+  //         [category, subcategory, subcategory1, productId] = parts;
+  //       }
+
+  //       return {
+  //         id: productId,
+  //         category,
+  //         subcategory,
+  //         subcategory1,
+  //         product_variant: {
+  //           variant_id: productVariantIds[index] || productId,
+  //         },
+  //         addons:
+  //           addonIds.length > index
+  //             ? [
+  //                 {
+  //                   addonid: addonIds[index],
+  //                   id: addonVariantIds[index],
+  //                   finalPrice: addonFinalPrices[index] || 0, // ✅ Assign finalPrice for addons
+  //                 },
+  //               ]
+  //             : [],
+  //         groupKey,
+  //         finalPrice: finalPrices[index] || 0, // Assign final price for product
+  //       };
+  //     });
+
+  //     // Fetch and transform BOQ-related products and addons
+  //     const formattedBOQProducts = await fetchFilteredBOQProducts(
+  //       reconstructedData
+  //     );
+
+  //     // ✅ Update state with the final BOQ structure
+  //     setSelectedData(formattedBOQProducts);
+  //     setUserId(data.userId);
+  //     setTotalArea(data?.total_area);
+  //     setSelectedPlan(data?.planType);
+  //     setBOQTitle(data.title);
+  //     toast.success(`Loaded BOQ: ${data.title}`);
+  //     localStorage.removeItem("boqCompleted");
+  //   } catch (err) {
+  //     console.error("Error loading BOQ:", err);
+  //     toast.error("Error loading BOQ");
+  //   }
+  // };
   const handleLoadBOQ = async (boqId) => {
     try {
       // Fetch BOQ data from Supabase
       const { data, error } = await supabase
-        .from("boqdata")
+        .from("boq_data_new")
         .select("*")
         .eq("id", boqId)
         .single();
@@ -273,70 +469,75 @@ function Navbar({
         toast.error("BOQ not found");
         return;
       }
+      console.log("loaded data", data);
 
       // Convert stored comma-separated values into arrays
-      const productVariantIds =
-        data.product_variant_id?.split(",").map((id) => id.trim()) || [];
-      const addonIds = data.addon_id?.split(",").map((id) => id.trim()) || [];
-      const addonVariantIds =
-        data.addon_variant_id?.split(",").map((id) => id.trim()) || [];
-      const groupKeys =
-        data.group_key?.split(",").map((key) => key.trim()) || [];
-      const finalPrices =
-        data.final_price
-          ?.split(",")
-          .map((price) => parseFloat(price.trim()) || 0) || [];
-      const addonFinalPrices =
-        data.addon_final_price
-          ?.split(",")
-          .map((price) => parseFloat(price.trim()) || 0) || [];
+      // const productVariantIds =
+      //   data.products?.map((product) => product.id) || [];
+      // console.log(productVariantIds);
 
-      // ✅ Reconstruct products and addons based on groupKey
-      const reconstructedData = groupKeys.map((groupKey, index) => {
-        let category = "";
-        let subcategory = "";
-        let subcategory1 = "";
-        let productId = "";
+      // const addonIds = data.addons?.map((addon) => addon.addonId);
+      // console.log(addonIds);
+      // const addonVariantIds = data.addons?.map((addon) => addon.varinatId);
+      // console.log(addonVariantIds);
 
-        const parts = groupKey.split("-");
+      // const groupKeys = data.products?.map((product) => product.groupKey);
+      // console.log(groupKeys);
+      // const finalPrices = data.products?.map((product) => product.finalPrice);
+      // console.log(finalPrices);
 
-        if (groupKey.includes("L-Type Workstation")) {
-          // ✅ Special handling for "L-Type Workstation"
-          category = parts[0];
-          subcategory = "L-Type Workstation"; // Keep it intact
-          subcategory1 = parts.length > 3 ? parts[3] : "";
-          productId = parts[parts.length - 1];
-        } else {
-          // Default split behavior
-          [category, subcategory, subcategory1, productId] = parts;
-        }
+      // const addonFinalPrices = data.addons?.map((addon) => addon.finalPrice);
+      // console.log(addonFinalPrices);
 
-        return {
-          id: productId,
-          category,
-          subcategory,
-          subcategory1,
-          product_variant: {
-            variant_id: productVariantIds[index] || productId,
-          },
-          addons:
-            addonIds.length > index
-              ? [
-                  {
-                    addonid: addonIds[index],
-                    id: addonVariantIds[index],
-                    finalPrice: addonFinalPrices[index] || 0, // ✅ Assign finalPrice for addons
-                  },
-                ]
-              : [],
-          groupKey,
-          finalPrice: finalPrices[index] || 0, // Assign final price for product
-        };
-      });
+      // // ✅ Reconstruct products and addons based on groupKey
+      // const reconstructedData = groupKeys.map((groupKey, index) => {
+      //   let category = "";
+      //   let subcategory = "";
+      //   let subcategory1 = "";
+      //   let productId = "";
+
+      //   const parts = groupKey.split("-");
+
+      //   if (groupKey.includes("L-Type Workstation")) {
+      //     // ✅ Special handling for "L-Type Workstation"
+      //     category = parts[0];
+      //     subcategory = "L-Type Workstation"; // Keep it intact
+      //     subcategory1 = parts.length > 3 ? parts[3] : "";
+      //     productId = parts[parts.length - 1];
+      //   } else {
+      //     // Default split behavior
+      //     [category, subcategory, subcategory1, productId] = parts;
+      //   }
+
+      //   return {
+      //     id: productVariantIds[index],
+      //     category,
+      //     subcategory,
+      //     subcategory1,
+      //     product_variant: {
+      //       variant_id: productVariantIds[index] || productId,
+      //     },
+      //     addons:
+      //       addonIds.length > index
+      //         ? [
+      //             {
+      //               addonid: addonIds[index],
+      //               id: addonVariantIds[index],
+      //               finalPrice: addonFinalPrices[index] || 0,
+      //             },
+      //           ]
+      //         : [],
+      //     groupKey,
+      //     finalPrice: finalPrices[index] || 0,
+      //   };
+      // });
+
+      // console.log("reconstructedData", reconstructedData);
 
       // Fetch and transform BOQ-related products and addons
       const formattedBOQProducts = await fetchFilteredBOQProducts(
-        reconstructedData
+        data.products,
+        data.addons
       );
 
       // ✅ Update state with the final BOQ structure
@@ -345,8 +546,10 @@ function Navbar({
       setTotalArea(data?.total_area);
       setSelectedPlan(data?.planType);
       setBOQTitle(data.title);
-      toast.success(`Loaded BOQ: ${data.title}`);
+      setBoqTotal(data.boqTotalPrice);
+      toast.success(`Loaded BOQ: ${data.boqTitle}`);
       localStorage.removeItem("boqCompleted");
+      console.log("boqTotal loaded", boqTotal);
     } catch (err) {
       console.error("Error loading BOQ:", err);
       toast.error("Error loading BOQ");
@@ -356,10 +559,10 @@ function Navbar({
   const fetchSavedBOQs = async () => {
     try {
       const { data, error } = await supabase
-        .from("boqdata")
-        .select("id, created_at, title") // Fetch BOQs for the user
+        .from("boq_data_new")
+        .select("id, created_at, boqTitle")
         .eq("userId", userId)
-        .order("created_at", { ascending: false }); // Sort by latest first
+        .order("created_at", { ascending: false });
 
       if (error) {
         console.error("Error fetching BOQs:", error);
@@ -393,7 +596,6 @@ function Navbar({
     if (userResponses.flooring === "bareShell") {
       grandTotal += 150 * totalArea;
     }
-
     setBoqTotal(grandTotal);
   };
 
@@ -509,7 +711,8 @@ function Navbar({
       }));
       const addons = selectedData.flatMap((product) =>
         (product.addons || []).map((addon) => ({
-          id: addon.id,
+          varinatId: addon.id,
+          addonId: addon.addonid,
           title: addon.title,
           finalPrice: addon.price || "",
           productId: product.product_variant?.variant_id,
@@ -540,6 +743,8 @@ function Navbar({
         console.error("Error during insertion:", error);
       } else {
         console.log("Data inserted successfully:", data);
+        toast.success("BOQ saved successfully!");
+        setBOQTitle(boqTitle);
       }
     } catch (error) {
       console.error("Error during insertion:", error);
@@ -617,7 +822,8 @@ function Navbar({
       }));
       const addons = selectedData.flatMap((product) =>
         (product.addons || []).map((addon) => ({
-          id: addon.id,
+          varinatId: addon.id,
+          addonId: addon.addonid,
           title: addon.title,
           finalPrice: addon.price || "",
           productId: product.product_variant?.variant_id,
@@ -641,6 +847,12 @@ function Navbar({
           boqTotalPrice: boqTotal,
         })
         .eq("id", boqId);
+      if (error) {
+        console.error("Error updating existing BOQ:", error);
+        toast.error("Failed to update BOQ.");
+      } else {
+        toast.success("BOQ updated successfully!");
+      }
     } catch (error) {
       console.log("Error during update", error);
     }
@@ -855,11 +1067,11 @@ function Navbar({
                           boqList.map((boq) => (
                             <li
                               key={boq.id}
-                              className="px-4 py-2 grid grid-cols-[2fr_1fr] items-center hover:bg-gray-100 cursor-pointer"
+                              className="px-4 py-2 grid grid-cols-[2fr_1fr] items-center hover:bg-gray-100"
                               // className="px-4 py-2 grid grid-cols-[2fr_1fr] items-center hover:bg-gray-100 cursor-pointer"
                             >
                               <span className="text-left break-words whitespace-normal">
-                                {boq.title}
+                                {boq.boqTitle}
                               </span>
 
                               <div className="flex justify-center gap-2">
@@ -983,11 +1195,11 @@ function Navbar({
                     boqList.map((boq) => (
                       <li
                         key={boq.id}
-                        className="px-4 py-2 grid grid-cols-[2fr_1fr] items-center hover:bg-gray-100 cursor-pointer"
+                        className="px-4 py-2 grid grid-cols-[2fr_1fr] items-center hover:bg-gray-100"
                       >
                         {/* Title with word wrap */}
-                        <span className="text-left break-words whitespace-normal">
-                          {boq.title}
+                        <span className="text-left break-words whitespace-normal cursor-default">
+                          {boq.boqTitle}
                         </span>
 
                         {/* Action Icons */}

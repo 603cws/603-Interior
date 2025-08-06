@@ -7,6 +7,7 @@ import toast from "react-hot-toast";
 import { supabase } from "../../services/supabase";
 import UnusedAreaWarning from "./UnusedAreaWarning";
 import { PiStarFourFill } from "react-icons/pi";
+import AlertBox from "../../boq/components/AlertBox";
 
 // function Navbar({ totalArea, setTotalArea, MIN_AREA, MAX_AREA, resetAll }) {
 function Navbar({
@@ -26,6 +27,7 @@ function Navbar({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [unusedArea, setUnusedArea] = useState(0);
   const [showWarning, setShowWarning] = useState(false);
+  const [resetAlert, setResetAlert] = useState(false);
 
   const {
     isAuthenticated,
@@ -277,6 +279,7 @@ function Navbar({
     // setTotalArea();
     setError(false);
     resetAll(); // Call the resetAll function passed from the parent component
+    setResetAlert(false);
   };
 
   return (
@@ -304,11 +307,19 @@ function Navbar({
               className="absolute left-0"
             />
             {totalArea > 0 && (
-              <MdOutlineCancel
-                size={30}
-                className="absolute right-2 cursor-pointer text-[#FFD43B] border-none hover:text-red-300"
-                onClick={handleReset}
-              />
+              <button
+                className="absolute group inline-block right-2 cursor-pointer text-[#FFD43B] border-none hover:text-red-300"
+                // onClick={handleReset}
+                onClick={() => setResetAlert(true)}
+              >
+                <MdOutlineCancel size={30} />
+                <span
+                  className="absolute top-3/4 left-1/2 transform -translate-x-1/2 mb-2 hidden group-hover:block 
+                   bg-[#334A78] text-[#fff] border-l border-t border-[#FFD43B] text-sm px-3 py-1 rounded-sm whitespace-nowrap z-10"
+                >
+                  Reset
+                </span>
+              </button>
             )}
             <input
               ref={inputRef}
@@ -447,11 +458,13 @@ function Navbar({
               color="#FEBF00"
               className="absolute left-0"
             />
-            <MdOutlineCancel
-              size={30}
+            <button
+              title="Reset"
               className="absolute right-2 cursor-pointer text-[#FFD43B] border-none hover:text-red-300"
               onClick={handleReset}
-            />
+            >
+              <MdOutlineCancel size={30} />
+            </button>
             <input
               type="number"
               className={`w-full rounded-md border-none bg-transparent py-2.5 ms-8 [&::-webkit-inner-spin-button]:appearance-none  focus:outline-none focus:ring-0 text-white ${
@@ -493,6 +506,15 @@ function Navbar({
           }}
           isSubmitting={isSubmitting}
         />
+      )}
+      {resetAlert && (
+        <div className="fixed inset-0 bg-[#000]/30 z-20">
+          <AlertBox
+            onClose={setResetAlert}
+            onconfirm={handleReset}
+            resetLayout={true}
+          />
+        </div>
       )}
     </div>
   );
