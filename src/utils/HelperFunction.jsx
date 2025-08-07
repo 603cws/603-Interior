@@ -177,6 +177,9 @@ export const useLogout = () => {
         localStorage.removeItem("BOQID");
         localStorage.removeItem("selectedPlan");
         localStorage.removeItem("selectedData");
+        sessionStorage.removeItem("BOQTitle");
+        sessionStorage.removeItem("BOQID");
+        sessionStorage.removeItem("selectedPlan");
         setSelectedPlan(null);
         setSelectedData([]);
         setBOQID("");

@@ -14,6 +14,10 @@ import ProductCard from "../components/ProductCard";
 import { motion, AnimatePresence } from "framer-motion";
 import { calculateCategoryTotal } from "../utils/calculateCategoryTotal";
 import { selectAreaAnimation } from "../constants/animations";
+import NewBoq from "../components/NewBoq";
+import toast from "react-hot-toast";
+import { supabase } from "../../services/supabase";
+import { fetchProductsData } from "../utils/dataFetchers";
 
 function Boq() {
   // State to control background visibility
@@ -22,6 +26,7 @@ function Boq() {
   const profileRef = useRef(null);
   const iconRef = useRef(null); //used to close Profile Card when clicked outside of Profile Card area
 
+  const [showNewBoqPopup, setShowNewBoqPopup] = useState(true);
   const [showSelectArea, setShowSelectArea] = useState(false);
   const [selectedAreas, setSelectedAreas] = useState([]);
 
@@ -60,6 +65,17 @@ function Boq() {
     searchQuery,
     priceRange,
     formulaMap,
+    BOQTitle,
+    setBOQTitle,
+    setUserId,
+    setTotalArea,
+    setSelectedPlan,
+    setProgress,
+    setBOQID,
+    setBoqTotal,
+    boqTotal,
+    userId,
+    currentLayoutID,
   } = useApp();
 
   const [runTour, setRunTour] = useState(false); // Controls whether the tour runs
@@ -403,6 +419,195 @@ function Boq() {
       : []
   );
 
+  const fetchFilteredBOQProducts = async (products = [], addons = []) => {
+    try {
+      if (!products.length) {
+        console.warn("No products passed to fetchFilteredBOQProducts.");
+        return [];
+      }
+
+      const allProducts = await fetchProductsData();
+      if (!allProducts.length) {
+        console.warn("No products found in database.");
+        return [];
+      }
+
+      return products
+        .map((product, index) => {
+          const { id: variantId, groupKey, finalPrice = 0 } = product;
+
+          // Parse category/subcategory/subcategory1 from groupKey
+          const parts = groupKey.split("-");
+          const isLType = groupKey.includes("L-Type Workstation");
+
+          const category = parts[0];
+          const subcategory = isLType ? "L-Type Workstation" : parts[1];
+          const subcategory1 = isLType ? parts[3] || "" : parts[2];
+          const productId = parts[parts.length - 1];
+
+          // Find matching product and variant
+          let matchedVariant, matchedProduct;
+          for (const prod of allProducts) {
+            matchedVariant = prod.product_variants?.find(
+              (v) => v.id === variantId
+            );
+            if (matchedVariant) {
+              matchedProduct = prod;
+              break;
+            }
+          }
+          if (!matchedProduct) return null;
+
+          // Get addon for this product (if exists at same index)
+          const addonData = addons?.[index];
+          const matchingAddons = addonData
+            ? (() => {
+                const addonProduct = allProducts.find((p) =>
+                  p.addons?.some((a) => a.id === addonData.addonId)
+                );
+                const addon = addonProduct?.addons?.find(
+                  (a) => a.id === addonData.addonId
+                );
+                const addonVariant = addon?.addon_variants?.find(
+                  (v) => v.id === addonData.varinatId
+                );
+                return addon && addonVariant
+                  ? [
+                      {
+                        addonid: addon.id,
+                        id: addonVariant.id,
+                        title: addonVariant.title,
+                        price: addonVariant.price,
+                        image: addonVariant.image,
+                        status: addonVariant.status,
+                        vendorId: addonVariant.vendorId,
+                        finalPrice:
+                          addonData.finalPrice || addonVariant.price || 0,
+                      },
+                    ]
+                  : [];
+              })()
+            : [];
+
+          return {
+            id: matchedVariant?.id || matchedProduct.id,
+            category,
+            subcategory,
+            subcategory1,
+            groupKey,
+            finalPrice: finalPrice || matchedVariant?.price || 0,
+            product_variant: {
+              variant_id: matchedVariant?.id || matchedProduct.id,
+              variant_title: matchedVariant?.title || matchedProduct.title,
+              variant_details:
+                matchedVariant?.details || matchedProduct.details,
+              variant_image: matchedVariant?.image || matchedProduct.image,
+              variant_price: matchedVariant?.price || matchedProduct.price,
+              additional_images: JSON.parse(
+                matchedVariant?.additional_images || "[]"
+              ),
+            },
+            addons: matchingAddons,
+          };
+        })
+        .filter(Boolean);
+    } catch (error) {
+      console.error("Error in fetchFilteredBOQProducts:", error);
+      return [];
+    }
+  };
+
+  const handleLoadBOQ = async (boqId) => {
+    try {
+      // Fetch BOQ data from Supabase
+      const { data, error } = await supabase
+        .from("boq_data_new")
+        .select("*")
+        .eq("id", boqId)
+        .single();
+
+      if (error) {
+        console.error("Error fetching BOQ:", error);
+        toast.error("Failed to load BOQ");
+        return;
+      }
+
+      if (!data) {
+        toast.error("BOQ not found");
+        return;
+      }
+      console.log("loaded data", data);
+
+      const formattedBOQProducts = await fetchFilteredBOQProducts(
+        data.products,
+        data.addons
+      );
+
+      // ✅ Update state with the final BOQ structure
+      setSelectedData(formattedBOQProducts);
+      setUserId(data.userId);
+      setTotalArea(data?.total_area); //not there
+      setSelectedPlan(data?.planType);
+      setBOQTitle(data.boqTitle);
+      setBoqTotal(data.boqTotalPrice);
+      setBOQID(boqId);
+      toast.success(`Loaded BOQ: ${data.boqTitle}`);
+      localStorage.removeItem("boqCompleted");
+      console.log("boqTotal loaded", boqTotal);
+    } catch (err) {
+      console.error("Error loading BOQ:", err);
+      toast.error("Error loading BOQ");
+    }
+  };
+
+  const createDraftBOQ = async (title = "Draft BOQ") => {
+    try {
+      const payload = {
+        userId: userId, // make sure userId is in scope
+        boqTitle: title,
+        isDraft: true,
+        layoutId: currentLayoutID,
+      };
+
+      const { data, error } = await supabase
+        .from("boq_data_new")
+        .insert(payload)
+        .select()
+        .single();
+
+      if (error) {
+        console.error("Error inserting draft BOQ:", error);
+        toast.error("Failed to create draft BOQ. Try again.");
+        return null;
+      }
+
+      toast.success("New draft BOQ created successfully!");
+      return data; // return the inserted row (with id, created_at, etc.)
+    } catch (err) {
+      console.error("Unexpected error creating draft BOQ:", err);
+      toast.error("Unexpected error. Check console.");
+      return null;
+    }
+  };
+
+  const handleConfirm = async (nameOrId, boqMode) => {
+    if (boqMode === "new") {
+      const draft = await createDraftBOQ(nameOrId);
+      if (!draft) return; // stop if creation failed
+
+      setBOQTitle(draft.boqTitle);
+      setBOQID(draft.id);
+      setSelectedData([]);
+      setProgress(0);
+      setSelectedPlan(null);
+      localStorage.removeItem("selectedData");
+      sessionStorage.removeItem("selectedPlan");
+    } else if (boqMode === "existing") {
+      handleLoadBOQ(nameOrId); // If existing BOQ selected, pass ID
+    }
+    setShowNewBoqPopup(false);
+  };
+
   return (
     <div>
       {selectedPlan && (
@@ -446,6 +651,12 @@ function Boq() {
         isProfileCard={isProfileCard}
         setIsProfileCard={setIsProfileCard}
       />
+      {showNewBoqPopup && !BOQTitle && (
+        <NewBoq
+          onConfirm={handleConfirm}
+          onCancel={() => setShowNewBoqPopup(false)}
+        />
+      )}
       <div className="px-2 lg:px-5">
         {!selectedPlan ? (
           <Plans />

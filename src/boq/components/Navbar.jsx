@@ -543,9 +543,9 @@ function Navbar({
       // ✅ Update state with the final BOQ structure
       setSelectedData(formattedBOQProducts);
       setUserId(data.userId);
-      setTotalArea(data?.total_area);
+      setTotalArea(data?.total_area); //Not there
       setSelectedPlan(data?.planType);
-      setBOQTitle(data.title);
+      setBOQTitle(data.boqTitle);
       setBoqTotal(data.boqTotalPrice);
       toast.success(`Loaded BOQ: ${data.boqTitle}`);
       localStorage.removeItem("boqCompleted");
@@ -1072,6 +1072,7 @@ function Navbar({
                             >
                               <span className="text-left break-words whitespace-normal">
                                 {boq.boqTitle}
+                                {boq.boqTitle === BOQTitle && "*"}
                               </span>
 
                               <div className="flex justify-center gap-2">
@@ -1200,6 +1201,7 @@ function Navbar({
                         {/* Title with word wrap */}
                         <span className="text-left break-words whitespace-normal cursor-default">
                           {boq.boqTitle}
+                          {boq.boqTitle === BOQTitle && "*"}
                         </span>
 
                         {/* Action Icons */}

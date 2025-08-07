@@ -64,10 +64,8 @@ export const AppProvider = ({ children }) => {
     boqName: "",
     address: [] || undefined,
   });
-  // const [accountHolder, setAccountHolder] = useState(null);
-  // const [selectedPlan, setSelectedPlan] = useState(null);
   const [selectedPlan, setSelectedPlan] = useState(
-    localStorage.getItem("selectedPlan")
+    sessionStorage.getItem("selectedPlan") || null
   );
   // const [layoutImage, setLayoutImage] = useState(null);
 
@@ -159,7 +157,87 @@ export const AppProvider = ({ children }) => {
     if (BOQTitle) {
       sessionStorage.setItem("BOQTitle", BOQTitle);
     }
-  }, [BOQID, BOQTitle]);
+    if (selectedPlan) {
+      sessionStorage.setItem("selectedPlan", selectedPlan);
+    }
+  }, [BOQID, BOQTitle, selectedPlan]);
+
+  // useEffect(() => {
+  //   console.log(
+  //     "User Details:",
+  //     userId,
+  //     totalArea,
+  //     currentLayoutData,
+  //     BOQTitle,
+  //     selectedData,
+  //     selectedPlan
+  //   );
+  // }, [
+  //   userId,
+  //   totalArea,
+  //   currentLayoutData,
+  //   BOQTitle,
+  //   selectedPlan,
+  //   selectedData,
+  // ]);
+
+  const handleUpdateBOQ = async (boqId) => {
+    if (!boqId) return;
+    try {
+      const payload = {};
+
+      if (selectedData.length > 0) {
+        payload.products = selectedData.map((p) => ({
+          id: p.product_variant?.variant_id,
+          title: p.product_variant?.variant_title,
+          finalPrice: p.finalPrice || "",
+          groupKey: p.groupKey,
+        }));
+        payload.addons = selectedData.flatMap((product) =>
+          (product.addons || []).map((addon) => ({
+            varinatId: addon.id,
+            addonId: addon.addonid,
+            title: addon.title,
+            finalPrice: addon.price || "",
+            productId: product.product_variant?.variant_id,
+          }))
+        );
+      }
+
+      if (Object.values(userResponses).some((v) => v)) {
+        payload.answers = [userResponses];
+      }
+
+      if (selectedPlan) {
+        payload.planType = selectedPlan;
+      }
+
+      if (boqTotal !== null && boqTotal !== undefined) {
+        payload.boqTotalPrice = boqTotal;
+      }
+
+      if (Object.keys(payload).length === 0) return;
+
+      const { error } = await supabase
+        .from("boq_data_new")
+        .update(payload)
+        .eq("id", boqId);
+
+      if (error) {
+        console.error(error);
+      } else {
+        console.log("Auto-saved draft BOQ");
+      }
+    } catch (err) {
+      console.error("Auto-save error:", err);
+    }
+  };
+
+  // Auto-save effect
+  useEffect(() => {
+    if (!BOQID && !BOQTitle) return;
+    handleUpdateBOQ(BOQID);
+  }, [selectedPlan, selectedData, userResponses, boqTotal]);
 
   async function getCartItems() {
     try {

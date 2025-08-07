@@ -3,6 +3,7 @@ import { Fragment, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { supabase } from "../../services/supabase";
 import { useApp } from "../../Context/Context";
+import { boqLimit } from "../../constants/constant";
 
 function BoqPrompt({ onConfirm, onCancel, isProfileCard, setIsProfileCard }) {
   const [boqTitle, setBoqTitle] = useState("");
@@ -31,8 +32,8 @@ function BoqPrompt({ onConfirm, onCancel, isProfileCard, setIsProfileCard }) {
       return;
     }
 
-    if (existingBOQs.length >= 3) {
-      toast.error("You can only save up to 3 BOQs.");
+    if (existingBOQs.length >= boqLimit) {
+      toast.error(`You can only save up to ${boqLimit} BOQs.`);
       return;
     }
 
@@ -111,9 +112,9 @@ function BoqPrompt({ onConfirm, onCancel, isProfileCard, setIsProfileCard }) {
               </div>
             )}
 
-            {existingBoqs?.length >= 3 ? (
+            {existingBoqs?.length >= boqLimit ? (
               <label className="block lg:text-lg font-medium mt-4">
-                Max 3 BOQ can be Created
+                Max {boqLimit} BOQ can be Created
               </label>
             ) : (
               <div className="mt-4">

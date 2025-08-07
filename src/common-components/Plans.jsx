@@ -82,7 +82,7 @@ function Plans() {
 
   const handlePlanSelect = (planKey) => {
     setSelectedPlan(planKey);
-    localStorage.setItem("selectedPlan", planKey);
+    sessionStorage.setItem("selectedPlan", planKey);
   };
 
   return (
