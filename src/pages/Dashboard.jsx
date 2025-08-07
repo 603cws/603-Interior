@@ -6,22 +6,25 @@ import toast from "react-hot-toast";
 import { useEffect, useState, useRef } from "react";
 import { VscEye } from "react-icons/vsc";
 import { CiMenuKebab } from "react-icons/ci";
-import UserProfile from "./user/UserProfile";
-import UserSetting from "./user/UserSetting";
-import { FaArrowLeft } from "react-icons/fa6";
 import { VscSignOut } from "react-icons/vsc";
 import { IoSettingsSharp } from "react-icons/io5";
 import { LuBlend } from "react-icons/lu";
 import { BsQuestionCircle } from "react-icons/bs";
 import Spinner from "../common-components/Spinner";
-import DashboardProductCard from "./vendor/DashboardProductCard";
-import SidebarItem from "../common-components/SidebarItem";
+// import DashboardProductCard from "./vendor/DashboardProductCard";
+// import SidebarItem from "../common-components/SidebarItem";
 import Help from "./user/Help";
 import { TbFileInvoice } from "react-icons/tb";
 import { category } from "../utils/AllCatArray";
 import { baseImageUrl } from "../utils/HelperConstant";
 import DashboardView from "./user/DashboardView";
 import { useLogout } from "../utils/HelperFunction";
+import ProductView from "./user/ProductView";
+// import { MdMenuOpen } from "react-icons/md";
+import { FaThLarge, FaTimes } from "react-icons/fa";
+import UserCard from "./user/UserCard";
+import UserProfileEdit from "./user/UserProfileEdit";
+import MobileTabProductCard from "./user/MobileTabProductCard";
 
 function Dashboard() {
   const logout = useLogout();
@@ -94,6 +97,26 @@ function Dashboard() {
   const [isboqavailable, setIsboqavailable] = useState(false);
   const [isfetchBoqDataRefresh, setisfetchBoqDataRefresh] = useState(false);
 
+  // mobile navigation
+  const [isOpen, setIsOpen] = useState(false);
+  const mobileMenuRef = useRef(null);
+
+  // Close when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        mobileMenuRef.current &&
+        !mobileMenuRef.current.contains(event.target)
+      ) {
+        setIsOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   // Slice the items for pagination
   const paginatedItems = items.slice(
     (currentPage - 1) * itemsPerPage,
@@ -146,11 +169,11 @@ function Dashboard() {
       if (selectedBoq) {
         setIsloading(true);
 
-        console.log(selectedBoq);
+        console.log("selectedboq", selectedBoq);
 
         const productIdsArray = selectedBoq.product_variant_id
           .split(",")
-          .map((id) => id.trim()); // Convert to array of numbers
+          .map((id) => id.trim()); // Convert to array of ids
 
         const { data, error } = await supabase
           .from("product_variants")
@@ -240,23 +263,25 @@ function Dashboard() {
   };
 
   const handleDelete = async (product) => {
-    if (!product.id) return;
+    // if (!product.id) return;
 
-    try {
-      const { error } = await supabase
-        .from("product_variants") // Ensure this matches your table name
-        .delete()
-        .eq("id", product.id);
+    // try {
+    //   const { error } = await supabase
+    //     .from("product_variants") // Ensure this matches your table name
+    //     .delete()
+    //     .eq("id", product.id);
 
-      if (error) throw error; // Throw error to be caught in catch block
+    //   if (error) throw error; // Throw error to be caught in catch block
 
-      toast.success("Product deleted successfully!");
-      setProductPreview(false); // Close the modal after deletion
-    } catch (error) {
-      toast.error("Failed to delete product.");
-      console.error("Delete error:", error);
-    }
+    //   toast.success("Product deleted successfully!");
+    //   setProductPreview(false); // Close the modal after deletion
+    // } catch (error) {
+    //   toast.error("Failed to delete product.");
+    //   console.error("Delete error:", error);
+    // }
     // fetchProducts(1); // Fetch products after deletion
+
+    toast.error("feature is pending");
   };
 
   const handleTabClick = (event) => {
@@ -419,10 +444,10 @@ function Dashboard() {
   }, [isfetchBoqDataRefresh]);
 
   return (
-    <div className="grid grid-cols-[auto_1fr] bg-gradient-to-r from-[#CFDCE7] to-[#E8EEF3] p-4 h-screen font-Poppins overflow-hidden">
+    <div className="grid lg:grid-cols-[auto_1fr] lg:bg-gradient-to-r from-[#CFDCE7] to-[#E8EEF3] md:p-4 h-dvh md:h-screen font-Poppins lg:overflow-hidden">
       {/* sidebar */}
       <div
-        className={`sticky top-0 bottom-0 left-0 bg-white border-2 border-[#334A78] rounded-lg shadow-lg transition-all duration-300 ${
+        className={`hidden lg:block sticky top-0 bottom-0 left-0 bg-white border-2 border-[#334A78] rounded-lg shadow-lg transition-all duration-300 ${
           isExpanded ? "max-w-sm w-60 absolute" : "w-16"
         }`}
         // className={`border-2 border-[#334A78] rounded-lg max-h-screen sticky left-0 top-0 bottom-0 bg-white  shadow-lg transition-all duration-300 ${
@@ -443,73 +468,176 @@ function Dashboard() {
 
         {/* Menu Items */}
         <div className="font-semibold text-lg capitalize leading-normal tracking-wide py-4 text-[#262626] flex flex-col gap-4 px-3">
-          <h3
+          {/* <h3
             className={`capitalize text-[#A1A1A1] ${
               isExpanded ? "mx-4" : "hidden"
             }`}
           >
             main
-          </h3>
+          </h3> */}
 
           <SidebarItem
             icon={<RiDashboardFill />}
             text="Dashboard"
             onClick={handledashboard}
             isExpanded={isExpanded}
+            currentSection={currentSection}
           />
           <SidebarItem
             icon={<LuBlend />}
             text="Product"
             onClick={handleproduct}
             isExpanded={isExpanded}
+            currentSection={currentSection}
           />
           <SidebarItem
             icon={<TbFileInvoice />}
             text="Go to BOQ"
             onClick={() => navigate("/boq")}
             isExpanded={isExpanded}
+            currentSection={currentSection}
           />
         </div>
 
         {/* Other Items */}
         <div className="font-semibold text-lg capitalize leading-normal tracking-wide py-4 text-[#262626] flex flex-col gap-4 px-3">
-          <h3
+          {/* <h3
             className={`capitalize text-[#A1A1A1] ${
               isExpanded ? "mx-4" : "hidden"
             }`}
           >
             other
-          </h3>
+          </h3> */}
           <SidebarItem
             icon={<BsQuestionCircle />}
             text="Help"
             onClick={handlehelp}
             isExpanded={isExpanded}
+            currentSection={currentSection}
           />
           <SidebarItem
             icon={<IoSettingsSharp />}
             text="Setting"
             onClick={handlesetting}
             isExpanded={isExpanded}
+            currentSection={currentSection}
           />
           <SidebarItem
             icon={<VscSignOut />}
             text="Logout"
             onClick={logout}
             isExpanded={isExpanded}
+            currentSection={currentSection}
           />
         </div>
       </div>
       {/* main content */}
-      <div className="flex flex-col h-full min-h-0 gap-2 px-2">
+      <div className="flex flex-col h-full min-h-0 lg:gap-2 lg:px-2">
+        {/* header for mobile view  */}
+        <div className="lg:hidden flex justify-between items-center border-b-2 border-[#334A78]  bg-white h-[50px] shrink-0">
+          <div className="mx-3">
+            <img
+              src="/logo/workved-interior.png"
+              alt="Logo"
+              className={`${isExpanded ? "h-20 w-32" : "h-9 w-16"}`}
+              onClick={() => navigate("/")}
+            />
+          </div>
+          <div onClick={() => setIsOpen(!isOpen)} className="mx-3">
+            <img
+              src={accountHolder.profileImage}
+              alt="usericon"
+              className="w-10 h-10"
+            />
+          </div>
+
+          {/* <div className=" mx-3">
+            <MdMenuOpen size={30} />
+          </div> */}
+
+          <div
+            ref={mobileMenuRef}
+            className={`fixed top-0 right-0 h-full w-64 bg-white border-l z-50 transform ${
+              isOpen ? "translate-x-0" : "translate-x-full"
+            } transition-transform duration-300 ease-in-out shadow-lg`}
+          >
+            <div className="p-4 flex justify-between items-center border-b">
+              {/* <h2 className="text-lg font-semibold text-[#1A3365]">Menu</h2> */}
+              <button onClick={() => setIsOpen(false)} className="text-xl">
+                <FaTimes />
+              </button>
+            </div>
+
+            <div className="flex gap-2 justify-center items-center">
+              <div>
+                <img
+                  src={accountHolder?.profileImage}
+                  alt="usericon"
+                  className="w-10 h-10"
+                />
+              </div>
+              <div className="text-gray-800 text-sm">
+                <h2>{accountHolder?.companyName}</h2>
+                <p>{accountHolder?.email}</p>
+              </div>
+            </div>
+
+            <ul className="p-4 space-y-4">
+              <MobileMenuItem
+                icon={<FaThLarge />}
+                title={"Dashboard"}
+                currentSection={currentSection}
+                onClick={handledashboard}
+                setIsOpen={setIsOpen}
+              />
+              <MobileMenuItem
+                icon={<LuBlend />}
+                title={"Product"}
+                onClick={handleproduct}
+                currentSection={currentSection}
+                setIsOpen={setIsOpen}
+              />
+              <MobileMenuItem
+                title={"Go to Boq"}
+                icon={<TbFileInvoice />}
+                onClick={() => navigate("/boq")}
+                currentSection={currentSection}
+                setIsOpen={setIsOpen}
+              />
+
+              <hr className="border-gray-200" />
+              <MobileMenuItem
+                title={"Help"}
+                icon={<BsQuestionCircle />}
+                onClick={handlehelp}
+                currentSection={currentSection}
+                setIsOpen={setIsOpen}
+              />
+              <MobileMenuItem
+                icon={<IoSettingsSharp />}
+                onClick={handlesetting}
+                title={"Setting"}
+                currentSection={currentSection}
+                setIsOpen={setIsOpen}
+              />
+              <MobileMenuItem
+                title={"Logout"}
+                icon={<VscSignOut />}
+                onClick={logout}
+                currentSection={currentSection}
+                setIsOpen={setIsOpen}
+              />
+            </ul>
+          </div>
+        </div>
         {/* header for dashboard */}
-        <div className="flex justify-between items-center border-2 border-[#334A78] rounded-lg bg-white h-[50px] shrink-0">
+        <div className="flex justify-between items-center border-b border-[#CCCCCC] lg:border-2 lg:border-[#334A78] lg:rounded-lg bg-white  lg:h-[50px] shrink-0">
           <div className="mx-3">
             <h3 className="font-bold text-2xl text-[#374A75] capitalize">
               {currentSection}
             </h3>
           </div>
-          <div className="mx-3">
+          <div className="hidden lg:block mx-3">
             <img
               src={accountHolder.profileImage}
               alt="usericon"
@@ -520,15 +648,15 @@ function Dashboard() {
 
         {/* setting */}
         {isSettingOpen && (
-          <div className="flex flex-col h-full min-h-0 overflow-hidden border-2 border-[#334A78] rounded-lg bg-white">
+          <div className="flex flex-col h-full min-h-0 overflow-hidden lg:border-2 lg:border-[#334A78] lg:rounded-lg bg-white">
             {/* header inside setting */}
-            <div className="border-b-2 border-b-[#ccc] py-2 px-4 shrink-0">
+            {/* <div className="lg:border-b-2 border-b-[#ccc] py-2 px-4 shrink-0">
               {iseditopen ? (
-                <button className="capitalize font-medium text-base px-10 py-2 rounded-2xl border-[#000] border bg-[#B4EAEA]">
+                <button className="hidden lg:block capitalize font-medium text-base px-10 py-2 text-white rounded-lg border-[#374A75] border bg-[#374A75]">
                   Profile
                 </button>
               ) : (
-                <div className="capitalize font-medium text-base px-10">
+                <div className="capitalize font-medium text-base ">
                   <button
                     className="text-sm text-[#A1A1A1] flex justify-center items-center gap-3"
                     onClick={() => setIsEditopen(true)}
@@ -538,10 +666,21 @@ function Dashboard() {
                   <h3>profile edit</h3>
                 </div>
               )}
-            </div>
+            </div> */}
 
             {/* Scrollable content section */}
-            <div className="flex-1 overflow-y-auto min-h-0 px-4 py-2">
+            {iseditopen ? (
+              <div className="flex-1 flex flex-col justify-center items-center h-[90%] font-Poppins ">
+                <div className="flex justify-center items-center lg:w-full  h-full">
+                  <UserCard setIsEditopen={setIsEditopen} />
+                </div>
+              </div>
+            ) : (
+              <div className="flex-1 overflow-y-auto min-h-0 p-2 md:p-7">
+                <UserProfileEdit setIsEditopen={setIsEditopen} />
+              </div>
+            )}
+            {/* <div className="flex-1 overflow-y-auto min-h-0 px-4 py-2">
               {iseditopen ? (
                 <div className="flex justify-center items-center w-full">
                   <UserProfile setIsEditopen={setIsEditopen} />
@@ -551,14 +690,7 @@ function Dashboard() {
                   <UserSetting />
                 </div>
               )}
-
-              {/* Scrollable overflow content */}
-              <div>
-                <p className="text-sm leading-relaxed">
-                  {/* Your long lorem content goes here */}
-                </p>
-              </div>
-            </div>
+            </div> */}
             {/* <div className="flex-1 overflow-y-auto min-h-0 px-4 py-2">
               {iseditopen ? (
                 <div className="flex justify-center items-center w-full">
@@ -578,7 +710,7 @@ function Dashboard() {
         )}
 
         {dashboard && (
-          <div className="flex flex-col h-full min-h-0 overflow-hidden border-2 border-[#334A78] rounded-lg bg-white">
+          <div className="flex flex-col h-full min-h-0 loverflow-hidden lg:border-2 border-[#334A78] rounded-lg bg-white">
             <DashboardView
               totalArea={totalArea}
               handlecheckboqdetails={handlecheckboqdetails}
@@ -589,51 +721,54 @@ function Dashboard() {
               currentLayoutData={currentLayoutData}
               currentLayoutID={currentLayoutID}
               isboqavailable={isboqavailable}
+              isExpanded={isExpanded}
             />
           </div>
         )}
 
         {/* product */}
         {isProductOpen && (
-          <div className="flex flex-col h-full min-h-0 overflow-hidden border-2 border-[#334A78] rounded-lg bg-white">
+          <div className="flex flex-col h-full min-h-0 overflow-hidden lg:border-2 border-[#334A78] rounded-lg bg-white">
             <div className="flex-1 ">
               <div className="overflow-y-auto scrollbar-hide h-[calc(100vh-95px)] rounded-3xl relative ">
                 {/* // Default product list and add product UI */}
                 <div className=" sticky top-0 z-20 bg-white">
-                  <div className="flex items-center gap-5 px-4 py-2 border-b-2 border-b-gray-400 ">
-                    <h3 className="  font-semibold text-2xl text-[#374A75] ">
+                  <div className="flex flex-col md:flex-row md:items-center px-2 gap-3 lg:gap-5 lg:px-4 py-2 border-b-2 border-b-gray-400 ">
+                    <h3 className="text-sm md:text-base font-semibold lg:text-2xl text-[#374A75] ">
                       Created BOQs
                     </h3>
-                    {isboqavailable &&
-                      boqdata.map((boq, index) => {
-                        return (
-                          <div
-                            key={boq.title}
-                            className={` rounded-lg border-2  px-5 py-2 ${
-                              selectedBoq.title === boq.title
-                                ? "bg-[#374A75] text-white border-[#374a75]"
-                                : "bg-white text-[#374a75] border-[#ccc]"
-                            }`}
-                          >
-                            <button
-                              onClick={() => {
-                                setSelectedBoq(boq);
-                                setSearchQuery("");
-                                setSelectedCategory("");
-                              }}
-                              className=" text-lg"
+                    <div className="flex ">
+                      {isboqavailable &&
+                        boqdata.map((boq, index) => {
+                          return (
+                            <div
+                              key={boq.title}
+                              className={` rounded-lg border-2  px-5 py-2 ${
+                                selectedBoq.title === boq.title
+                                  ? "bg-[#374A75] text-white border-[#374a75]"
+                                  : "bg-white text-[#374a75] border-[#ccc]"
+                              }`}
                             >
-                              {boq.title}
-                            </button>
-                          </div>
-                        );
-                      })}
+                              <button
+                                onClick={() => {
+                                  setSelectedBoq(boq);
+                                  setSearchQuery("");
+                                  setSelectedCategory("");
+                                }}
+                                className="text-sm lg:text-lg"
+                              >
+                                {boq.title}
+                              </button>
+                            </div>
+                          );
+                        })}
+                    </div>
                   </div>
-                  <div className="flex  items-center gap-3 px-4 py-2 border-b-2 border-b-gray-400 bg-white z-20">
+                  <div className="flex  items-center gap-3 px-2 lg:px-4 py-2 border-b-2 border-b-gray-400 bg-white z-20">
                     {tabs.map((tab) => (
                       <button
                         key={tab.value}
-                        className={`flex items-center gap-2 px-6 py-2 border rounded-lg  text-[#374A75] text-lg ${
+                        className={`flex items-center gap-2 px-3 lg:px-6 py-2 border rounded-lg  text-[#374A75] text-sm lg:text-lg ${
                           selectedTab === tab.value
                             ? "bg-[#D3E3F0]  border-[#374A75]"
                             : "bg-white border-[#374A75]"
@@ -645,7 +780,7 @@ function Dashboard() {
                       </button>
                     ))}
 
-                    <div className="w-1/2 ml-auto">
+                    <div className="hidden lg:block w-1/2 ml-auto">
                       <input
                         type="text"
                         value={searchQuery}
@@ -661,7 +796,7 @@ function Dashboard() {
                       />
                     </div>
                     {toggle && (
-                      <div>
+                      <div className="hidden lg:block">
                         <select
                           name="category"
                           value={selectedCategory}
@@ -692,109 +827,116 @@ function Dashboard() {
                     <Spinner />
                   ) : selectedBoq && items.length > 0 ? (
                     // <section className="mt-2 flex-1 overflow-hidden px-8">
-                    <section className=" h-[90%] font-Poppins overflow-hidden">
-                      {/* <section className=" h-[90%] font-Poppins overflow-hidden"> */}
-                      <div
-                        ref={scrollContainerRef}
-                        className="w-full h-full border-t border-b border-[#CCCCCC] overflow-y-auto custom-scrollbar"
-                      >
-                        <table
-                          className="min-w-full border-collapse"
-                          ref={tableRef}
+                    <>
+                      <section className="hidden lg:block h-[90%] font-Poppins overflow-hidden">
+                        {/* <section className=" h-[90%] font-Poppins overflow-hidden"> */}
+                        <div
+                          ref={scrollContainerRef}
+                          className=" w-full h-full border-t border-b border-[#CCCCCC] overflow-y-auto custom-scrollbar"
                         >
-                          <thead className="bg-[#FFFFFF] sticky top-0 z-10 px-8 text-center text-[#000] text-base">
-                            <tr>
-                              {toggle ? (
-                                <th className="p-3 font-medium">
-                                  Product Name
-                                </th>
-                              ) : (
-                                <th className="p-3 font-medium">Addon ID</th>
-                              )}
-                              <th className="p-3  font-medium">Price</th>
-                              {toggle ? (
-                                <>
-                                  {/* <th className="p-3 font-medium">
+                          <table
+                            className="min-w-full border-collapse"
+                            ref={tableRef}
+                          >
+                            <thead className="bg-[#FFFFFF] sticky top-0 z-10 px-8 text-center text-[#000] text-base">
+                              <tr>
+                                {toggle ? (
+                                  <th className="p-3 font-medium">
+                                    Product Name
+                                  </th>
+                                ) : (
+                                  <th className="p-3 font-medium">Addon ID</th>
+                                )}
+                                <th className="p-3  font-medium">Price</th>
+                                {toggle ? (
+                                  <>
+                                    {/* <th className="p-3 font-medium">
                                           Details
                                         </th> */}
-                                  <th className="p-3 font-medium">Category</th>
+                                    <th className="p-3 font-medium">
+                                      Category
+                                    </th>
+                                    <th className="p-3 font-medium">
+                                      specification
+                                    </th>
+                                  </>
+                                ) : (
                                   <th className="p-3 font-medium">
-                                    specification
+                                    Addon Title
                                   </th>
-                                </>
-                              ) : (
-                                <th className="p-3 font-medium">Addon Title</th>
-                              )}
-                              <th className="p-3 font-medium">Action</th>
-                            </tr>
-                          </thead>
-                          <tbody className=" text-sm">
-                            {selectedBoq &&
-                              paginatedItems.map((item) => (
-                                <tr
-                                  key={item.id}
-                                  className="hover:bg-gray-50 cursor-pointer"
-                                >
-                                  <td className="border border-gray-200 p-3 align-middle">
-                                    <div className="flex items-center gap-2">
-                                      <img
-                                        src={`${baseImageUrl}${item.image}`}
-                                        alt={item.title}
-                                        className="w-10 h-10 object-cover rounded"
-                                      />
-                                      {toggle ? (
-                                        <span>{item.title}</span>
-                                      ) : (
-                                        <span className="text-wrap">
-                                          {item.id}
-                                        </span>
-                                      )}
-                                    </div>
-                                  </td>
-                                  <td className="border border-gray-200 p-3 align-middle">
-                                    ₹{item.price}
-                                  </td>
-                                  {toggle ? (
-                                    <>
-                                      <td className="border border-gray-200 p-3 align-middle">
-                                        {item.products?.category || "N/A"}
-                                      </td>
-                                      <td className="border border-gray-200 p-3 align-middle">
-                                        {item.products?.subcategory1 || "N/A"}
-                                      </td>
-                                    </>
-                                  ) : (
+                                )}
+                                <th className="p-3 font-medium">Action</th>
+                              </tr>
+                            </thead>
+                            <tbody className=" text-sm">
+                              {selectedBoq &&
+                                paginatedItems.map((item) => (
+                                  <tr
+                                    key={item.id}
+                                    className="hover:bg-gray-50 cursor-pointer"
+                                  >
                                     <td className="border border-gray-200 p-3 align-middle">
-                                      {item.addons?.title || item.title}
+                                      <div className="flex items-center gap-2">
+                                        <img
+                                          src={`${baseImageUrl}${item.image}`}
+                                          alt={item.title}
+                                          className="w-10 h-10 object-cover rounded"
+                                        />
+                                        {toggle ? (
+                                          <span>{item.title}</span>
+                                        ) : (
+                                          <span className="text-wrap">
+                                            {item.id}
+                                          </span>
+                                        )}
+                                      </div>
                                     </td>
-                                  )}
-                                  <td className="border border-gray-200 p-3 align-middle flex justify-center items-center relative">
-                                    <button
-                                      ref={(el) =>
-                                        (buttonRef.current[item.id] = el)
-                                      }
-                                      className="bg-white flex justify-center items-center py-1.5 w-20 mb-2"
-                                      onClick={() => handleMenuToggle(item.id)}
-                                    >
-                                      <CiMenuKebab size={25} />
-                                    </button>
-
-                                    {openMenuId === item.id && (
-                                      <div
+                                    <td className="border border-gray-200 p-3 align-middle">
+                                      ₹{item.price}
+                                    </td>
+                                    {toggle ? (
+                                      <>
+                                        <td className="border border-gray-200 p-3 align-middle">
+                                          {item.products?.category || "N/A"}
+                                        </td>
+                                        <td className="border border-gray-200 p-3 align-middle">
+                                          {item.products?.subcategory1 || "N/A"}
+                                        </td>
+                                      </>
+                                    ) : (
+                                      <td className="border border-gray-200 p-3 align-middle">
+                                        {item.addons?.title || item.title}
+                                      </td>
+                                    )}
+                                    <td className="border border-gray-200 p-3 align-middle flex justify-center items-center relative">
+                                      <button
                                         ref={(el) =>
-                                          (menuRef.current[item.id] = el)
+                                          (buttonRef.current[item.id] = el)
                                         }
-                                        className="absolute top-1/2 left-0 transform mt-2 bg-white border border-gray-300 shadow-md rounded-md w-24 z-10"
+                                        className="bg-white flex justify-center items-center py-1.5 w-20 mb-2"
+                                        onClick={() =>
+                                          handleMenuToggle(item.id)
+                                        }
                                       >
-                                        <button
-                                          onClick={() => {
-                                            handleProductPreview(item);
-                                          }}
-                                          className=" flex gap-2 items-center w-full text-left px-3 py-2 hover:bg-gray-200"
+                                        <CiMenuKebab size={25} />
+                                      </button>
+
+                                      {openMenuId === item.id && (
+                                        <div
+                                          ref={(el) =>
+                                            (menuRef.current[item.id] = el)
+                                          }
+                                          className="absolute top-1/2 left-0 transform mt-2 bg-white border border-gray-300 shadow-md rounded-md w-24 z-10"
                                         >
-                                          <VscEye /> view
-                                        </button>
-                                        {/* <button
+                                          <button
+                                            onClick={() => {
+                                              handleProductPreview(item);
+                                            }}
+                                            className=" flex gap-2 items-center w-full text-left px-3 py-2 hover:bg-gray-200"
+                                          >
+                                            <VscEye /> view
+                                          </button>
+                                          {/* <button
                                           onClick={() => {
                                             handleDelete(item);
                                           }}
@@ -802,15 +944,26 @@ function Dashboard() {
                                         >
                                           <MdOutlineDelete /> Delete
                                         </button> */}
-                                      </div>
-                                    )}
-                                  </td>
-                                </tr>
-                              ))}
-                          </tbody>
-                        </table>
-                      </div>
-                    </section>
+                                        </div>
+                                      )}
+                                    </td>
+                                  </tr>
+                                ))}
+                            </tbody>
+                          </table>
+                        </div>
+                      </section>
+                      <section className="lg:hidden mb-5">
+                        {selectedBoq &&
+                          paginatedItems.map((item) => (
+                            <MobileTabProductCard
+                              key={item?.id}
+                              product={item}
+                              handleProductPreview={handleProductPreview}
+                            />
+                          ))}
+                      </section>
+                    </>
                   ) : (
                     <>
                       {selectedBoq ? (
@@ -826,7 +979,7 @@ function Dashboard() {
                   ))}
                 {/* Pagination Controls (Always Visible) */}
                 {selectedBoq && totalPages > 1 && (
-                  <div className="flex justify-center items-center gap-2  z-30 sticky bottom-0 bg-[#EBF0FF]  text-[#3d194f]">
+                  <div className="flex justify-center items-center gap-2  z-30 sticky bottom-0  bg-white  text-[#3d194f]">
                     <button
                       onClick={() => goToPage(currentPage - 1)}
                       disabled={currentPage === 1}
@@ -876,7 +1029,7 @@ function Dashboard() {
 
         {/* help */}
         {help && (
-          <div className="flex flex-col h-full min-h-0 overflow-hidden border-2 border-[#334A78] rounded-lg bg-white">
+          <div className="flex flex-col h-full min-h-0 overflow-hidden lg:border-2 lg:border-[#334A78] lg:rounded-lg bg-white">
             <Help isvendor={false} />
           </div>
         )}
@@ -884,12 +1037,11 @@ function Dashboard() {
 
       {/* product preview */}
       {productPreview && (
-        <DashboardProductCard
+        <ProductView
           onClose={() => {
             setProductPreview(false);
           }}
           product={selectedProductview}
-          // fetchProducts={fetchProducts}
           handleDelete={handleDelete}
         />
       )}
@@ -898,3 +1050,42 @@ function Dashboard() {
 }
 
 export default Dashboard;
+
+function MobileMenuItem({ icon, title, currentSection, onClick, setIsOpen }) {
+  return (
+    <li
+      onClick={() => {
+        onClick();
+        setIsOpen((prev) => !prev);
+      }}
+      className={`flex items-center space-x-3 px-2 font-semibold ${
+        currentSection === title
+          ? "bg-gradient-to-r from-[#4C85F5] to-[#6AC7FF]  py-2 rounded-md text-white"
+          : "text-[#1A3365]"
+      }`}
+    >
+      {icon}
+      <span>{title}</span>
+    </li>
+  );
+}
+
+function SidebarItem({ icon, text, onClick, isExpanded, currentSection }) {
+  return (
+    <div
+      className={`flex items-center  gap-3 hover:bg-[#E9E9E9] p-2 rounded cursor-pointer ${
+        isExpanded ? "" : "justify-center"
+      } ${
+        currentSection?.toLowerCase() === text?.toLowerCase()
+          ? "bg-gradient-to-r from-[#334A78] to-[#68B2DC] px-4 py-2 rounded-md text-white"
+          : "text-[#1A3365]"
+      }`}
+      onClick={onClick}
+    >
+      <div className="text-2xl ">{icon}</div>
+      <span className={`${isExpanded ? "block" : "hidden"} text-lg `}>
+        {text}
+      </span>
+    </div>
+  );
+}

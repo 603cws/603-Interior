@@ -44,14 +44,14 @@ function LandingNavbar({ bgColor = false }) {
             >
               Home
             </li>
-            <li
+            {/* <li
               onClick={() => navigate("/Aboutus")}
               className={`cursor-pointer relative after:content-[''] after:absolute after:left-0 after:bottom-[-2px] after:h-[2px] after:bg-[#1A3A36] after:transition-all after:duration-300 ${
                 pathname === "/Aboutus" ? "after:w-full" : "after:w-0"
               } hover:after:w-full`}
             >
               About Us
-            </li>
+            </li> */}
             <li
               onClick={() => navigate("/OurServices")}
               className={`cursor-pointer relative after:content-[''] after:absolute after:left-0 after:bottom-[-2px] after:h-[2px] after:bg-[#1A3A36] after:transition-all after:duration-300 ${
@@ -60,14 +60,14 @@ function LandingNavbar({ bgColor = false }) {
             >
               Services
             </li>
-            <li
+            {/* <li
               onClick={() => navigate("/Blog")}
               className={`cursor-pointer relative after:content-[''] after:absolute after:left-0 after:bottom-[-2px] after:h-[2px] after:bg-[#1A3A36] after:transition-all after:duration-300 ${
                 pathname === "/Blog" ? "after:w-full" : "after:w-0"
               } hover:after:w-full`}
             >
               Blog
-            </li>
+            </li> */}
             <li
               onClick={() => navigate("/becomeseller")}
               className={`cursor-pointer relative after:content-[''] after:absolute after:left-0 after:bottom-[-2px] after:h-[2px] after:bg-[#1A3A36] after:transition-all after:duration-300 ${
@@ -144,18 +144,18 @@ function LandingNavbar({ bgColor = false }) {
               Home
             </li>
             {/* <li className="cursor-pointer">Spaces</li> */}
-            <li onClick={() => navigate("/Aboutus")} className="cursor-pointer">
+            {/* <li onClick={() => navigate("/Aboutus")} className="cursor-pointer">
               About Us
-            </li>
+            </li> */}
             <li
               onClick={() => navigate("/OurServices")}
               className="cursor-pointer"
             >
               Services
             </li>
-            <li onClick={() => navigate("/Blog")} className="cursor-pointer">
+            {/* <li onClick={() => navigate("/Blog")} className="cursor-pointer">
               Blog
-            </li>
+            </li> */}
             <li
               className="cursor-pointer"
               onClick={() => navigate("/becomeseller")}

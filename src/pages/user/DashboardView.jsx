@@ -12,6 +12,7 @@ function DashboardView({
   boqdata,
   handlecheckboqdetails,
   handledeleteBoq,
+  isExpanded,
 }) {
   const [currentAreaValues, setCurrentAreaValues] = useState({});
   const [currentAreaQuantities, setCurrentAreaQuantities] = useState({});
@@ -174,37 +175,65 @@ function DashboardView({
       },
     },
   };
+  // selectedboq
+  //   {
+  //     "id": "94b2dbfd-d40f-4ee3-a1ae-a4aef73a3348",
+  //     "created_at": "2025-08-05T05:00:41.167669+00:00",
+  //     "product_id": "8ff55e5d-77fd-4772-a403-362543bdd3c4,8ff55e5d-77fd-4772-a403-362543bdd3c4,8ff55e5d-77fd-4772-a403-362543bdd3c4,8ff55e5d-77fd-4772-a403-362543bdd3c4,8ff55e5d-77fd-4772-a403-362543bdd3c4,8d9f5cb3-b63f-4c72-8f7d-54a53c72209c,8d9f5cb3-b63f-4c72-8f7d-54a53c72209c,8d9f5cb3-b63f-4c72-8f7d-54a53c72209c,8d9f5cb3-b63f-4c72-8f7d-54a53c72209c,8d9f5cb3-b63f-4c72-8f7d-54a53c72209c,cb49b241-4be9-4a23-8e64-bc91a958146c,cb49b241-4be9-4a23-8e64-bc91a958146c,cb49b241-4be9-4a23-8e64-bc91a958146c,cb49b241-4be9-4a23-8e64-bc91a958146c,4273f792-c25c-4d56-bd31-1b90466ea9e3,2bd93ead-202f-4a12-bee5-ce3cda8ba3fb,2bd93ead-202f-4a12-bee5-ce3cda8ba3fb,2bd93ead-202f-4a12-bee5-ce3cda8ba3fb,2bd93ead-202f-4a12-bee5-ce3cda8ba3fb,40861111-e2d6-4c7d-9de8-0f75f2ad1efd,e1a7742e-e8bf-4541-a4c8-7eb0cb1f1770,e1a7742e-e8bf-4541-a4c8-7eb0cb1f1770,04c62ab1-02e1-4298-8a83-a572c7e29b6b,04c62ab1-02e1-4298-8a83-a572c7e29b6b,76a3ed5a-7431-470e-9597-5f281160ead3,76a3ed5a-7431-470e-9597-5f281160ead3,76a3ed5a-7431-470e-9597-5f281160ead3,76a3ed5a-7431-470e-9597-5f281160ead3,a758001a-12f8-4858-9582-e077527a3f33,a758001a-12f8-4858-9582-e077527a3f33,a758001a-12f8-4858-9582-e077527a3f33,a758001a-12f8-4858-9582-e077527a3f33,d94739fd-a28e-4942-96f7-b8f2845d523d,d94739fd-a28e-4942-96f7-b8f2845d523d,d94739fd-a28e-4942-96f7-b8f2845d523d,d94739fd-a28e-4942-96f7-b8f2845d523d,41c99ebd-7c18-4dae-8e5d-39f52ef2323e,41c99ebd-7c18-4dae-8e5d-39f52ef2323e,41c99ebd-7c18-4dae-8e5d-39f52ef2323e,41c99ebd-7c18-4dae-8e5d-39f52ef2323e",
+  //     "addon_id": "",
+  //     "product_variant_id": "8ff55e5d-77fd-4772-a403-362543bdd3c4,8ff55e5d-77fd-4772-a403-362543bdd3c4,8ff55e5d-77fd-4772-a403-362543bdd3c4,8ff55e5d-77fd-4772-a403-362543bdd3c4,8ff55e5d-77fd-4772-a403-362543bdd3c4,8d9f5cb3-b63f-4c72-8f7d-54a53c72209c,8d9f5cb3-b63f-4c72-8f7d-54a53c72209c,8d9f5cb3-b63f-4c72-8f7d-54a53c72209c,8d9f5cb3-b63f-4c72-8f7d-54a53c72209c,8d9f5cb3-b63f-4c72-8f7d-54a53c72209c,cb49b241-4be9-4a23-8e64-bc91a958146c,cb49b241-4be9-4a23-8e64-bc91a958146c,cb49b241-4be9-4a23-8e64-bc91a958146c,cb49b241-4be9-4a23-8e64-bc91a958146c,4273f792-c25c-4d56-bd31-1b90466ea9e3,2bd93ead-202f-4a12-bee5-ce3cda8ba3fb,2bd93ead-202f-4a12-bee5-ce3cda8ba3fb,2bd93ead-202f-4a12-bee5-ce3cda8ba3fb,2bd93ead-202f-4a12-bee5-ce3cda8ba3fb,40861111-e2d6-4c7d-9de8-0f75f2ad1efd,e1a7742e-e8bf-4541-a4c8-7eb0cb1f1770,e1a7742e-e8bf-4541-a4c8-7eb0cb1f1770,04c62ab1-02e1-4298-8a83-a572c7e29b6b,04c62ab1-02e1-4298-8a83-a572c7e29b6b,76a3ed5a-7431-470e-9597-5f281160ead3,76a3ed5a-7431-470e-9597-5f281160ead3,76a3ed5a-7431-470e-9597-5f281160ead3,76a3ed5a-7431-470e-9597-5f281160ead3,a758001a-12f8-4858-9582-e077527a3f33,a758001a-12f8-4858-9582-e077527a3f33,a758001a-12f8-4858-9582-e077527a3f33,a758001a-12f8-4858-9582-e077527a3f33,d94739fd-a28e-4942-96f7-b8f2845d523d,d94739fd-a28e-4942-96f7-b8f2845d523d,d94739fd-a28e-4942-96f7-b8f2845d523d,d94739fd-a28e-4942-96f7-b8f2845d523d,41c99ebd-7c18-4dae-8e5d-39f52ef2323e,41c99ebd-7c18-4dae-8e5d-39f52ef2323e,41c99ebd-7c18-4dae-8e5d-39f52ef2323e,41c99ebd-7c18-4dae-8e5d-39f52ef2323e",
+  //     "addon_variant_id": "",
+  //     "userId": "21e0b7e5-6276-4608-9f0f-0d0b0f802f46",
+  //     "title": "603dev",
+  //     "group_key": "Furniture-Linear Workstation-Chair-8ff55e5d-77fd-4772-a403-362543bdd3c4,Furniture-Md Cabin-Chair-8ff55e5d-77fd-4772-a403-362543bdd3c4,Furniture-Meeting Room-Chair-8ff55e5d-77fd-4772-a403-362543bdd3c4,Furniture-Reception-Chair-8ff55e5d-77fd-4772-a403-362543bdd3c4,Furniture-Pantry-Chair-8ff55e5d-77fd-4772-a403-362543bdd3c4,Furniture-Linear Workstation-Table-8d9f5cb3-b63f-4c72-8f7d-54a53c72209c,Furniture-Md Cabin-Table-8d9f5cb3-b63f-4c72-8f7d-54a53c72209c,Furniture-Meeting Room-Table-8d9f5cb3-b63f-4c72-8f7d-54a53c72209c,Furniture-Reception-Table-8d9f5cb3-b63f-4c72-8f7d-54a53c72209c,Furniture-Pantry-Table-8d9f5cb3-b63f-4c72-8f7d-54a53c72209c,Lighting-Open Workspaces-Ambient-cb49b241-4be9-4a23-8e64-bc91a958146c,Lighting-Cabins-Ambient-cb49b241-4be9-4a23-8e64-bc91a958146c,Lighting-Meeting Rooms-Ambient-cb49b241-4be9-4a23-8e64-bc91a958146c,Lighting-Public Spaces-Ambient-cb49b241-4be9-4a23-8e64-bc91a958146c,HVAC-Centralized-Centralized AC-4273f792-c25c-4d56-bd31-1b90466ea9e3,Flooring-Open Workspaces-Tile-2bd93ead-202f-4a12-bee5-ce3cda8ba3fb,Flooring-Cabins-Tile-2bd93ead-202f-4a12-bee5-ce3cda8ba3fb,Flooring-Meeting Rooms-Tile-2bd93ead-202f-4a12-bee5-ce3cda8ba3fb,Flooring-Public Spaces-Tile-2bd93ead-202f-4a12-bee5-ce3cda8ba3fb,Civil / Plumbing-Washrooms-Pods-40861111-e2d6-4c7d-9de8-0f75f2ad1efd,Civil / Plumbing-Washrooms-Basin-e1a7742e-e8bf-4541-a4c8-7eb0cb1f1770,Civil / Plumbing-Pantry-Basin-e1a7742e-e8bf-4541-a4c8-7eb0cb1f1770,Civil / Plumbing-Washrooms-Tile-04c62ab1-02e1-4298-8a83-a572c7e29b6b,Civil / Plumbing-Pantry-Tile-04c62ab1-02e1-4298-8a83-a572c7e29b6b,Paint-Open Workspaces-Doors-76a3ed5a-7431-470e-9597-5f281160ead3,Paint-Cabins-Doors-76a3ed5a-7431-470e-9597-5f281160ead3,Paint-Meeting Rooms-Doors-76a3ed5a-7431-470e-9597-5f281160ead3,Paint-Public Spaces-Doors-76a3ed5a-7431-470e-9597-5f281160ead3,Paint-Open Workspaces-Walls-a758001a-12f8-4858-9582-e077527a3f33,Paint-Cabins-Walls-a758001a-12f8-4858-9582-e077527a3f33,Paint-Meeting Rooms-Walls-a758001a-12f8-4858-9582-e077527a3f33,Paint-Public Spaces-Walls-a758001a-12f8-4858-9582-e077527a3f33,Paint-Open Workspaces-Ceilings-d94739fd-a28e-4942-96f7-b8f2845d523d,Paint-Cabins-Ceilings-d94739fd-a28e-4942-96f7-b8f2845d523d,Paint-Meeting Rooms-Ceilings-d94739fd-a28e-4942-96f7-b8f2845d523d,Paint-Public Spaces-Ceilings-d94739fd-a28e-4942-96f7-b8f2845d523d,Partitions / Ceilings-Open Workspaces-Glass Partition-41c99ebd-7c18-4dae-8e5d-39f52ef2323e,Partitions / Ceilings-Cabins-Glass Partition-41c99ebd-7c18-4dae-8e5d-39f52ef2323e,Partitions / Ceilings-Meeting Rooms-Glass Partition-41c99ebd-7c18-4dae-8e5d-39f52ef2323e,Partitions / Ceilings-Public Spaces-Glass Partition-41c99ebd-7c18-4dae-8e5d-39f52ef2323e",
+  //     "total_area": "1500",
+  //     "final_price": "55100,2900,2900,2900,2900,26562,1398,1398,1398,1398,94190,26990,22990,88590,404800,36024,9480,7900,33812,3419820,990000,907500,44640,40920,923400,243000,202500,866700,902880,237600,198000,847440,1128600,297000,247500,1059300,439695.00000000006,216000,225000,550260",
+  //     "height": 10,
+  //     "flooring": "basicTiling",
+  //     "demolishTile": "no",
+  //     "hvacType": "Centralized",
+  //     "planType": "Exclusive",
+  //     "addon_final_price": "",
+  //     "totalprice": 14811385
+  // }
 
   return (
-    <div className="w-full flex overflow-y-auto scrollbar-hide  py-2 px-3 font-Poppins">
+    <div className="lg:w-full container mx-auto max-w-sm md:max-w-full flex flex-col lg:flex-row overflow-auto lg:overflow-y-auto scrollbar-hide  py-2 px-3 font-Poppins">
       {/* dashboard area layout */}
-      <div className="w-2/3">
-        <div className="p-4 border border-[#ccc] rounded-lg">
-          <h2 className="capitalize font-bold mb-2 text-xl">
+      <div className="xl:w-2/3">
+        <div className="p-2 lg:p-4 border border-[#ccc] rounded-lg">
+          <h2 className="capitalize font-bold mb-2 text-base lg:text-xl">
             Layout Information : selected boq {selectedBoq?.title || "NA"}
           </h2>
           {/* div containing information */}
-          <div className="flex gap-10">
+          <div
+            className={`flex flex-col ${
+              isExpanded ? "flex-wrap" : "md:flex-wrap xl:flex-nowrap"
+            } items-center gap-3 md:items-stretch xl:flex-row lg:gap-10`}
+          >
             {/* each icon  */}
-            <div className="xl:flex justify-around items-center gap-3  py-3 px-2">
-              <div>
-                <img
-                  src="/images/layouticon.png"
-                  alt=" dashboard layout "
-                  className="w-[45px] h-[45px] xl:w-[60px] xl:h-[60px]"
-                />
-              </div>
-              <div className="capitalize pr-10">
-                <p className="font-bold text-lg">
-                  {/* {selectedBoq.total_area} */}
-                  {selectedBoq && selectedBoq.total_area}
-                  <span>sqft</span>
-                </p>
-                <p className="text-base">total area</p>
-              </div>
-            </div>
+            <LayoutInfoCard
+              selectedBoq={selectedBoq}
+              value={selectedBoq?.total_area}
+              title={"total Area"}
+              image={"/images/layouticon.png"}
+              spanvalue={"sqft"}
+            />
+            <LayoutInfoCard
+              selectedBoq={selectedBoq}
+              value={products?.length}
+              title={"Total No Product"}
+              image={"/images/totalproduct.png"}
+            />
+            <LayoutInfoCard
+              selectedBoq={selectedBoq}
+              value={selectedBoq?.totalprice}
+              title={"Total Amount"}
+              image={"/images/grandtotal.png"}
+              spanvalue={" INR"}
+            />
             {/* each icon  */}
-            <div className="xl:flex justify-around items-center gap-3  py-3 px-2">
+            {/* <div className="xl:flex justify-around items-center gap-3  py-3 px-2">
               <div>
                 <img
                   src="/images/totalproduct.png"
@@ -218,9 +247,9 @@ function DashboardView({
                 </p>
                 <p className="text-base">Total No Product</p>
               </div>
-            </div>
+            </div> */}
             {/* each icon  */}
-            <div className="xl:flex justify-around items-center gap-3  py-3 px-2">
+            {/* <div className="xl:flex justify-around items-center gap-3  py-3 px-2">
               <div>
                 <img
                   src="/images/grandtotal.png"
@@ -230,12 +259,11 @@ function DashboardView({
               </div>
               <div className="capitalize pr-10">
                 <p className="font-bold text-lg">
-                  {/* 1500 <span>sqft</span> */}
                   {selectedBoq && selectedBoq.totalprice} <span>INR</span>
                 </p>
                 <p className="text-base">Total Amount</p>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
         {/* dashboard boq part */}
@@ -253,7 +281,7 @@ function DashboardView({
                     {/* <MdOutlineModeEdit size={30} /> */}
                     <button
                       className={`px-5 py-1  rounded-lg capitalize border ${
-                        selectedBoq.title == boq.title
+                        selectedBoq?.title === boq?.title
                           ? " bg-[#374A75] border-[#374a75] text-white"
                           : "bg-white border-[#ccc] text-[#374a75]"
                       }`}
@@ -283,16 +311,26 @@ function DashboardView({
           )}
         </div>
       </div>
-      <div className="w-1/3  flex justify-center">
-        <div className="border-2 p-4 rounded-xl h-96">
-          <ReactApexChart
+      <div className="my-6 lg:my-0 xl:w-1/3 lg:flex justify-center">
+        <div className="border-2 p-2 lg:p-4 rounded-xl  lg:h-96">
+          <div className="w-[300px] h-[200px] lg:w-[370px] lg:h-[270px] sm:w-full sm:h-[270px]">
+            <ReactApexChart
+              options={options}
+              series={[{ data: series }]}
+              type="treemap"
+              width="100%"
+              height="100%"
+              className="distribution-chart"
+            />
+          </div>
+          {/* <ReactApexChart
             options={options}
             series={[{ data: series }]}
             type="treemap"
             className="distribution-chart"
             height={270}
             width={370}
-          />
+          /> */}
           <p className="text-sm text-center">
             This layout is of total area{" "}
             <span className="font-bold">{currentAreaValues.total} sq. ft.</span>
@@ -304,3 +342,25 @@ function DashboardView({
 }
 
 export default DashboardView;
+
+function LayoutInfoCard({ selectedBoq, value, title, image, spanvalue }) {
+  return (
+    <div className="w-72 flex  justify-between lg:justify-around items-center gap-3 border border-[#ccc] py-3 px-2">
+      <div className="">
+        <img
+          src={image}
+          alt=" dashboard layout "
+          className="w-[45px] h-[45px] xl:w-[60px] xl:h-[60px]"
+        />
+      </div>
+      <div className="capitalize lg:pr-10">
+        <p className="font-bold text-lg">
+          {/* {selectedBoq.total_area} */}
+          {selectedBoq && value}
+          {spanvalue && <span>{spanvalue}</span>}
+        </p>
+        <p className="text-base">{title}</p>
+      </div>
+    </div>
+  );
+}
