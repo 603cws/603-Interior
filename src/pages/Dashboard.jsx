@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useApp } from "../Context/Context";
 import { supabase } from "../services/supabase";
 import toast from "react-hot-toast";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useReducer } from "react";
 import { VscEye } from "react-icons/vsc";
 import { CiMenuKebab } from "react-icons/ci";
 import { VscSignOut } from "react-icons/vsc";
@@ -26,18 +26,56 @@ import UserCard from "./user/UserCard";
 import UserProfileEdit from "./user/UserProfileEdit";
 import MobileTabProductCard from "./user/MobileTabProductCard";
 
+function handlesidebarState(state, action) {
+  switch (action.type) {
+    case "TOGGLE_SECTION":
+      return {
+        isSettingOpen: action.payload === "Setting",
+        isProductOpen: action.payload === "Product",
+        iseditopen: action.payload === "Edit",
+        dashboard: action.payload === "Dashboard",
+        help: action.payload === "Help",
+        currentSection: action.payload,
+      };
+    default:
+      return state;
+  }
+}
+
+const SECTIONS = {
+  DASHBOARD: "Dashboard",
+  PRODUCT: "Product",
+  SETTING: "Setting",
+  HELP: "Help",
+  EDIT: "Edit",
+};
+
 function Dashboard() {
   const logout = useLogout();
   const navigate = useNavigate();
   const location = useLocation();
   // const [productlist, setProductlist] = useState(true);
-  const [isSettingOpen, setIsSettingOpen] = useState(false);
-  const [isProductOpen, setIsProductOpen] = useState(false);
+  // const [isSettingOpen, setIsSettingOpen] = useState(false);
+  // const [isProductOpen, setIsProductOpen] = useState(false);
   const [iseditopen, setIsEditopen] = useState(true);
-  const [dashboard, setDashboard] = useState(true);
-  const [currentSection, setCurrentSection] = useState("Dashboard");
-  const [help, setHelp] = useState(false);
+  // const [dashboard, setDashboard] = useState(true);
+  // const [currentSection, setCurrentSection] = useState("Dashboard");
+  // const [help, setHelp] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
+
+  const sidebarInitialState = {
+    isSettingOpen: false,
+    isProductOpen: false,
+    iseditopen: false,
+    dashboard: true,
+    help: false,
+    currentSection: "Dashboard",
+  };
+
+  const [sidebarstate, sidebarDispatch] = useReducer(
+    handlesidebarState,
+    sidebarInitialState
+  );
   const [boqdata, setboqdata] = useState();
   const {
     accountHolder,
@@ -295,43 +333,49 @@ function Dashboard() {
   };
 
   const handlesetting = () => {
-    setIsProductOpen(false);
-    setDashboard(false);
-    setIsSettingOpen(true);
-    setHelp(false);
-    setCurrentSection("Setting");
+    // setIsProductOpen(false);
+    // setDashboard(false);
+    // setIsSettingOpen(true);
+    // setHelp(false);
+    // setCurrentSection("Setting");
+
+    sidebarDispatch({ type: "TOGGLE_SECTION", payload: SECTIONS.SETTING });
   };
   const handleproduct = () => {
-    setIsSettingOpen(false);
-    setDashboard(false);
-    setIsProductOpen(true);
-    setHelp(false);
-    setCurrentSection("Product");
+    // setIsSettingOpen(false);
+    // setDashboard(false);
+    // setIsProductOpen(true);
+    // setHelp(false);
+    // setCurrentSection("Product");
+    sidebarDispatch({ type: "TOGGLE_SECTION", payload: SECTIONS.PRODUCT });
   };
 
   const handlecheckboqdetails = (boq) => {
-    setIsSettingOpen(false);
-    setDashboard(false);
-    setIsProductOpen(true);
-    setHelp(false);
-    setSelectedBoq(boq);
-    setCurrentSection("Product");
+    // setIsSettingOpen(false);
+    // setDashboard(false);
+    // setIsProductOpen(true);
+    // setHelp(false);
+    // setSelectedBoq(boq);
+    // setCurrentSection("Product");
+    sidebarDispatch({ type: "TOGGLE_SECTION", payload: SECTIONS.PRODUCT });
   };
 
   const handledashboard = () => {
-    setIsSettingOpen(false);
-    setIsProductOpen(false);
-    setDashboard(true);
-    setHelp(false);
-    setCurrentSection("Dashboard");
+    // setIsSettingOpen(false);
+    // setIsProductOpen(false);
+    // setDashboard(true);
+    // setHelp(false);
+    // setCurrentSection("Dashboard");
+    sidebarDispatch({ type: "TOGGLE_SECTION", payload: SECTIONS.DASHBOARD });
   };
 
   const handlehelp = () => {
-    setIsSettingOpen(false);
-    setIsProductOpen(false);
-    setDashboard(false);
-    setHelp(true);
-    setCurrentSection("Help");
+    // setIsSettingOpen(false);
+    // setIsProductOpen(false);
+    // setDashboard(false);
+    // setHelp(true);
+    // setCurrentSection("Help");
+    sidebarDispatch({ type: "TOGGLE_SECTION", payload: SECTIONS.HELP });
   };
 
   const fetchboq = async () => {
@@ -422,18 +466,20 @@ function Dashboard() {
 
   useEffect(() => {
     if (location.state?.openSettings) {
-      setIsProductOpen(false);
-      setDashboard(false);
-      setIsSettingOpen(true);
-      setHelp(false);
-      setCurrentSection("Setting");
+      // setIsProductOpen(false);
+      // setDashboard(false);
+      // // setIsSettingOpen(true);
+      // setHelp(false);
+      // setCurrentSection("Setting");
+      sidebarDispatch({ type: "TOGGLE_SECTION", payload: SECTIONS.SETTING });
     }
     if (location.state?.openHelp) {
-      setIsSettingOpen(false);
-      setIsProductOpen(false);
-      setDashboard(false);
-      setHelp(true);
-      setCurrentSection("Help");
+      // setIsSettingOpen(false);
+      // setIsProductOpen(false);
+      // setDashboard(false);
+      // setHelp(true);
+      // setCurrentSection("Help");
+      sidebarDispatch({ type: "TOGGLE_SECTION", payload: SECTIONS.HELP });
     }
   }, [location.state]);
 
@@ -481,21 +527,21 @@ function Dashboard() {
             text="Dashboard"
             onClick={handledashboard}
             isExpanded={isExpanded}
-            currentSection={currentSection}
+            currentSection={sidebarstate?.currentSection}
           />
           <SidebarItem
             icon={<LuBlend />}
             text="Product"
             onClick={handleproduct}
             isExpanded={isExpanded}
-            currentSection={currentSection}
+            currentSection={sidebarstate?.currentSection}
           />
           <SidebarItem
             icon={<TbFileInvoice />}
             text="Go to BOQ"
             onClick={() => navigate("/boq")}
             isExpanded={isExpanded}
-            currentSection={currentSection}
+            currentSection={sidebarstate?.currentSection}
           />
         </div>
 
@@ -513,21 +559,21 @@ function Dashboard() {
             text="Help"
             onClick={handlehelp}
             isExpanded={isExpanded}
-            currentSection={currentSection}
+            currentSection={sidebarstate?.currentSection}
           />
           <SidebarItem
             icon={<IoSettingsSharp />}
             text="Setting"
             onClick={handlesetting}
             isExpanded={isExpanded}
-            currentSection={currentSection}
+            currentSection={sidebarstate?.currentSection}
           />
           <SidebarItem
             icon={<VscSignOut />}
             text="Logout"
             onClick={logout}
             isExpanded={isExpanded}
-            currentSection={currentSection}
+            currentSection={sidebarstate?.currentSection}
           />
         </div>
       </div>
@@ -586,7 +632,7 @@ function Dashboard() {
               <MobileMenuItem
                 icon={<FaThLarge />}
                 title={"Dashboard"}
-                currentSection={currentSection}
+                currentSection={sidebarstate?.currentSection}
                 onClick={handledashboard}
                 setIsOpen={setIsOpen}
               />
@@ -594,14 +640,14 @@ function Dashboard() {
                 icon={<LuBlend />}
                 title={"Product"}
                 onClick={handleproduct}
-                currentSection={currentSection}
+                currentSection={sidebarstate?.currentSection}
                 setIsOpen={setIsOpen}
               />
               <MobileMenuItem
                 title={"Go to Boq"}
                 icon={<TbFileInvoice />}
                 onClick={() => navigate("/boq")}
-                currentSection={currentSection}
+                currentSection={sidebarstate?.currentSection}
                 setIsOpen={setIsOpen}
               />
 
@@ -610,21 +656,21 @@ function Dashboard() {
                 title={"Help"}
                 icon={<BsQuestionCircle />}
                 onClick={handlehelp}
-                currentSection={currentSection}
+                currentSection={sidebarstate?.currentSection}
                 setIsOpen={setIsOpen}
               />
               <MobileMenuItem
                 icon={<IoSettingsSharp />}
                 onClick={handlesetting}
                 title={"Setting"}
-                currentSection={currentSection}
+                currentSection={sidebarstate?.currentSection}
                 setIsOpen={setIsOpen}
               />
               <MobileMenuItem
                 title={"Logout"}
                 icon={<VscSignOut />}
                 onClick={logout}
-                currentSection={currentSection}
+                currentSection={sidebarstate?.currentSection}
                 setIsOpen={setIsOpen}
               />
             </ul>
@@ -634,7 +680,7 @@ function Dashboard() {
         <div className="flex justify-between items-center border-b border-[#CCCCCC] lg:border-2 lg:border-[#334A78] lg:rounded-lg bg-white  lg:h-[50px] shrink-0">
           <div className="mx-3">
             <h3 className="font-bold text-2xl text-[#374A75] capitalize">
-              {currentSection}
+              {sidebarstate?.currentSection}
             </h3>
           </div>
           <div className="hidden lg:block mx-3">
@@ -647,7 +693,7 @@ function Dashboard() {
         </div>
 
         {/* setting */}
-        {isSettingOpen && (
+        {sidebarstate?.isSettingOpen && (
           <div className="flex flex-col h-full min-h-0 overflow-hidden lg:border-2 lg:border-[#334A78] lg:rounded-lg bg-white">
             {/* header inside setting */}
             {/* <div className="lg:border-b-2 border-b-[#ccc] py-2 px-4 shrink-0">
@@ -709,7 +755,7 @@ function Dashboard() {
           </div>
         )}
 
-        {dashboard && (
+        {sidebarstate?.dashboard && (
           <div className="flex flex-col h-full min-h-0 loverflow-hidden lg:border-2 border-[#334A78] rounded-lg bg-white">
             <DashboardView
               totalArea={totalArea}
@@ -727,7 +773,7 @@ function Dashboard() {
         )}
 
         {/* product */}
-        {isProductOpen && (
+        {sidebarstate?.isProductOpen && (
           <div className="flex flex-col h-full min-h-0 overflow-hidden lg:border-2 border-[#334A78] rounded-lg bg-white">
             <div className="flex-1 ">
               <div className="overflow-y-auto scrollbar-hide h-[calc(100vh-95px)] rounded-3xl relative ">
@@ -1028,7 +1074,7 @@ function Dashboard() {
         )}
 
         {/* help */}
-        {help && (
+        {sidebarstate?.help && (
           <div className="flex flex-col h-full min-h-0 overflow-hidden lg:border-2 lg:border-[#334A78] lg:rounded-lg bg-white">
             <Help isvendor={false} />
           </div>
