@@ -135,7 +135,7 @@ function UserProfileEdit({ setIsEditopen }) {
               className="w-full rounded-lg p-1.5  focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none border-2 border-[#CACED8] bg-[#fff] placeholder:text-[#000]/40  "
             />
           </div>
-          <div className="flex w-full gap-4 mb-3">
+          <div className="flex flex-col md:flex-row w-full gap-4 mb-3">
             <div className="flex-1">
               <h2 className="mb-2 capitalize">email</h2>
               <input

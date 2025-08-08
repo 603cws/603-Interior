@@ -1,9 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "react-calendar/dist/Calendar.css";
 import { SlCalender } from "react-icons/sl";
 import { PiWarningCircleFill } from "react-icons/pi";
 import "../../styles/calender.css";
-import axios from "axios";
+import axios, { Axios } from "axios";
 import toast from "react-hot-toast";
 import { supabase } from "../../services/supabase";
 
@@ -11,11 +11,13 @@ import Calendar from "react-calendar";
 import { useApp } from "../../Context/Context";
 import AppointmentConfirmation from "./AppointmentConfirmation";
 import { IoMdClose } from "react-icons/io";
-function BookAppointment({ onClose }) {
+function BookAppointment({ onClose, isdashboardbooking = false }) {
   const [value, onChange] = useState(new Date());
   const [selectedTIme, setSelectedTime] = useState();
   const [isSubmitting, setisSubmitting] = useState(false);
   const [isappointmentbooked, setIsappointmentbooked] = useState(false);
+
+  const [todayBookedTimmings, setTodayBookedTimmings] = useState([]);
 
   const { accountHolder } = useApp();
 
@@ -45,6 +47,13 @@ function BookAppointment({ onClose }) {
     "07:00 pm",
     "08:00 pm",
   ];
+
+  const filteredTimings = times?.filter(
+    (time) =>
+      !todayBookedTimmings?.some((booked) => booked?.start_time === time)
+  );
+
+  console.log("filtered timings", filteredTimings);
 
   const handletime = (time) => {
     console.log(time);
@@ -98,26 +107,24 @@ function BookAppointment({ onClose }) {
             user_phoneno: accountHolder.phone,
           },
         };
-        const response = await axios.post(
-          "https://api.emailjs.com/api/v1.0/email/send",
-          data,
-          {
-            headers: { "Content-Type": "application/json" },
-          }
-        );
-        const adminResponse = await axios.post(
-          "https://api.emailjs.com/api/v1.0/email/send",
-          Admindata,
-          {
-            headers: { "Content-Type": "application/json" },
-          }
-        );
-        console.log("Email sent successfully:", response.data);
-        console.log("admin email sent", adminResponse.data);
-        alert("Your mail is sent!");
+        // const response = await axios.post(
+        //   "https://api.emailjs.com/api/v1.0/email/send",
+        //   data,
+        //   {
+        //     headers: { "Content-Type": "application/json" },
+        //   }
+        // );
+        // const adminResponse = await axios.post(
+        //   "https://api.emailjs.com/api/v1.0/email/send",
+        //   Admindata,
+        //   {
+        //     headers: { "Content-Type": "application/json" },
+        //   }
+        // );
         toast.success("we will shortly reach you");
         setIsappointmentbooked(true);
         saveBookingDatainDB(formattedDate, weekday, endtime);
+        CheckThebookingOnSameDateAndGetTimes(value);
       } else {
         toast.error("please select the time");
       }
@@ -127,6 +134,34 @@ function BookAppointment({ onClose }) {
       setisSubmitting(false);
     }
   };
+
+  async function CheckThebookingOnSameDateAndGetTimes(value) {
+    try {
+      const date = value.getDate();
+      const month = value.getMonth() + 1;
+      const year = value.getFullYear();
+      const formattedDate = `${date}/${month}/${year}`;
+
+      const { data, error } = await supabase
+        .from("appointments")
+        .select("start_time")
+        .eq("date", formattedDate);
+
+      if (error) throw new Error("Something went wrong");
+
+      setTodayBookedTimmings(data);
+
+      console.log("data of today", data);
+    } catch (error) {
+      console.log("error", error);
+    }
+  }
+
+  useEffect(() => {
+    CheckThebookingOnSameDateAndGetTimes(value);
+  }, [value]);
+
+  console.log("today booking timing", todayBookedTimmings);
 
   const saveBookingDatainDB = async (date, weekday, endtime) => {
     //
@@ -140,6 +175,7 @@ function BookAppointment({ onClose }) {
             [weekday]: { [selectedTIme]: `${selectedTIme}-${endtime}` },
           }),
           company_name: accountHolder.companyName,
+          start_time: selectedTIme,
         },
       ]);
 
@@ -161,18 +197,36 @@ function BookAppointment({ onClose }) {
   // }, [isappointmentbooked]);
 
   return (
-    <div className="md:fixed md:inset-0 font-Poppins flex justify-center items-center z-20 bg-black bg-opacity-80">
-      <div className="max-w-sm md:max-w-4xl rounded-2xl border bg-[#fff] p-5 relative overflow-auto">
-        <div className="absolute right-5 top-5">
-          <IoMdClose onClick={onClose} size={20} className="cursor-pointer" />
-        </div>
-        <h2 className="font-semibold text-sm md:text-lg text-[#000] capitalize border-b-2 border-[#CCCCCC]">
+    <div
+      className={`${
+        !isdashboardbooking
+          ? "md:fixed md:inset-0  z-20 bg-black bg-opacity-80"
+          : ""
+      } font-Poppins flex justify-center items-center`}
+    >
+      <div
+        className={`${
+          !isdashboardbooking
+            ? "max-w-sm md:max-w-4xl rounded-2xl border bg-[#fff] p-5 relative overflow-auto"
+            : "w-full"
+        }`}
+      >
+        {!isdashboardbooking && (
+          <div className="absolute right-5 top-5">
+            <IoMdClose onClick={onClose} size={20} className="cursor-pointer" />
+          </div>
+        )}
+        <h2
+          className={`font-semibold text-sm md:text-lg text-[#000] capitalize border-b-2 border-[#CCCCCC] ${
+            isdashboardbooking && "px-3 py-3"
+          } `}
+        >
           appointment
         </h2>
         <div className=" flex justify-center items-center ">
           {!isappointmentbooked ? (
-            <div className="max-w-sm md:max-w-3xl p-4 md:my-5">
-              <h3 className="text-[#0BA1A1] text-lg md:text-2xl font-bold text-center my-3">
+            <div className="max-w-xs md:max-w-3xl md:p-4 mb-5 md:my-5">
+              <h3 className="text-[#374A75] text-lg md:text-2xl font-bold text-center my-3">
                 Book an Appointment
               </h3>
               {/* div for calender and times  */}
@@ -207,19 +261,47 @@ function BookAppointment({ onClose }) {
                     select time*
                   </h4>
                   <div className="grid grid-cols-3 gap-x-5 gap-y-3">
-                    {times.map((time, index) => (
-                      <button
-                        key={time}
-                        onClick={(e) => handletime(time)}
-                        className={` border border-[#757575] px-2 py-1 md:px-4 md:py-3 rounded-xl text-xs xl:text-sm ${
-                          selectedTIme === time
-                            ? "text-[#ebffff] bg-[#194f48]"
-                            : "text-[#194F48] bg-[#EBFFFF]"
-                        }`}
-                      >
-                        {time}
-                      </button>
-                    ))}
+                    {filteredTimings.map((time, index) => {
+                      const now = new Date();
+
+                      // Parse selected date from calendar
+                      const selectedDate = new Date(value); // `value` is from your calendar
+                      const isToday =
+                        selectedDate.getDate() === now.getDate() &&
+                        selectedDate.getMonth() === now.getMonth() &&
+                        selectedDate.getFullYear() === now.getFullYear();
+
+                      // Parse the time string into a Date object
+                      const [hourMin, meridian] = time.split(" ");
+                      let [hour, minute] = hourMin.split(":").map(Number);
+
+                      if (meridian.toLowerCase() === "pm" && hour !== 12)
+                        hour += 12;
+                      if (meridian.toLowerCase() === "am" && hour === 12)
+                        hour = 0;
+
+                      const slotTime = new Date(selectedDate); // base on selected day
+                      slotTime.setHours(hour, minute, 0, 0);
+
+                      // Only disable if today AND time is in the past
+                      const isPast = isToday && slotTime < now;
+                      return (
+                        <button
+                          disabled={isPast}
+                          key={time}
+                          onClick={(e) => handletime(time)}
+                          className={`  border  px-2 py-1 md:px-4 md:py-3 rounded-lg text-xs xl:text-sm border-[#757575]  ${
+                            isPast
+                              ? "bg-gray-200 text-gray-500 cursor-not-allowed"
+                              : selectedTIme === time
+                              ? "text-[#F3F8FF] bg-[#374A75]"
+                              : "text-[#374A75] bg-[#F3F8FF] hover:shadow-md"
+                          }`}
+                        >
+                          {time}
+                        </button>
+                      );
+                    })}
                   </div>
                   <div className="flex items-center bg-[#FEF4EB] gap-2 mt-4 md:mt-10">
                     <div>
@@ -235,7 +317,7 @@ function BookAppointment({ onClose }) {
               <div className="flex justify-center items-center my-2 md:my-4">
                 <button
                   onClick={handlesubmi}
-                  className="px-2 py-1 md:px-5 md:py-3 bg-[#0BA1A1] text-[#fafafa] rounded-lg"
+                  className="px-2 py-1 md:px-5 md:py-3 bg-[#374A75] text-[#fafafa] rounded-lg"
                   disabled={isSubmitting}
                 >
                   {isSubmitting ? (

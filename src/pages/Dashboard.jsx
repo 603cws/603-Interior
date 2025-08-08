@@ -25,6 +25,7 @@ import { FaThLarge, FaTimes } from "react-icons/fa";
 import UserCard from "./user/UserCard";
 import UserProfileEdit from "./user/UserProfileEdit";
 import MobileTabProductCard from "./user/MobileTabProductCard";
+import BookAppointment from "../boq/components/BookAppointment";
 
 function handlesidebarState(state, action) {
   switch (action.type) {
@@ -35,6 +36,7 @@ function handlesidebarState(state, action) {
         iseditopen: action.payload === "Edit",
         dashboard: action.payload === "Dashboard",
         help: action.payload === "Help",
+        isBookAppointmentOpen: action.payload === "BookAppointment",
         currentSection: action.payload,
       };
     default:
@@ -48,6 +50,7 @@ const SECTIONS = {
   SETTING: "Setting",
   HELP: "Help",
   EDIT: "Edit",
+  BOOkAPPOINTMENT: "BookAppointment",
 };
 
 function Dashboard() {
@@ -69,6 +72,7 @@ function Dashboard() {
     iseditopen: false,
     dashboard: true,
     help: false,
+    isBookAppointmentOpen: false,
     currentSection: "Dashboard",
   };
 
@@ -543,6 +547,18 @@ function Dashboard() {
             isExpanded={isExpanded}
             currentSection={sidebarstate?.currentSection}
           />
+          <SidebarItem
+            icon={<TbFileInvoice />}
+            text="BookAppointment"
+            onClick={() =>
+              sidebarDispatch({
+                type: "TOGGLE_SECTION",
+                payload: SECTIONS.BOOkAPPOINTMENT,
+              })
+            }
+            isExpanded={isExpanded}
+            currentSection={sidebarstate?.currentSection}
+          />
         </div>
 
         {/* Other Items */}
@@ -607,14 +623,14 @@ function Dashboard() {
               isOpen ? "translate-x-0" : "translate-x-full"
             } transition-transform duration-300 ease-in-out shadow-lg`}
           >
-            <div className="p-4 flex justify-between items-center border-b">
-              {/* <h2 className="text-lg font-semibold text-[#1A3365]">Menu</h2> */}
+            {/* <div className="p-4 flex justify-between items-center border-b">
+              <h2 className="text-lg font-semibold text-[#1A3365]">Menu</h2>
               <button onClick={() => setIsOpen(false)} className="text-xl">
                 <FaTimes />
               </button>
-            </div>
+            </div> */}
 
-            <div className="flex gap-2 justify-center items-center">
+            <div className="flex gap-2 justify-center items-center mt-6">
               <div>
                 <img
                   src={accountHolder?.profileImage}
@@ -647,6 +663,18 @@ function Dashboard() {
                 title={"Go to Boq"}
                 icon={<TbFileInvoice />}
                 onClick={() => navigate("/boq")}
+                currentSection={sidebarstate?.currentSection}
+                setIsOpen={setIsOpen}
+              />
+              <MobileMenuItem
+                title={"BookAppointment"}
+                icon={<TbFileInvoice />}
+                onClick={() =>
+                  sidebarDispatch({
+                    type: "TOGGLE_SECTION",
+                    payload: SECTIONS.BOOkAPPOINTMENT,
+                  })
+                }
                 currentSection={sidebarstate?.currentSection}
                 setIsOpen={setIsOpen}
               />
@@ -769,6 +797,12 @@ function Dashboard() {
               isboqavailable={isboqavailable}
               isExpanded={isExpanded}
             />
+          </div>
+        )}
+
+        {sidebarstate?.isBookAppointmentOpen && (
+          <div className="flex flex-col h-full min-h-0 loverflow-hidden lg:border-2 border-[#334A78] rounded-lg bg-white">
+            <BookAppointment isdashboardbooking={true} />
           </div>
         )}
 
@@ -1129,7 +1163,7 @@ function SidebarItem({ icon, text, onClick, isExpanded, currentSection }) {
       onClick={onClick}
     >
       <div className="text-2xl ">{icon}</div>
-      <span className={`${isExpanded ? "block" : "hidden"} text-lg `}>
+      <span className={`${isExpanded ? "block" : "hidden"} text-base`}>
         {text}
       </span>
     </div>

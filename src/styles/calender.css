@@ -41,7 +41,7 @@
 
 /* 📌 Highlight Selected Date */
 .react-calendar__tile--active {
-  background: #007bff;
+  background: #374a75;
   color: white;
   font-weight: bold;
 }
@@ -63,5 +63,5 @@
 /* 📌 Highlight Weekends */
 .react-calendar__tile:nth-child(7n),
 .react-calendar__tile:nth-child(7n-1) {
-  color: #17facb;
+  color: #68b2dc;
 }
