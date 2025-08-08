@@ -3,7 +3,7 @@ import "react-calendar/dist/Calendar.css";
 import { SlCalender } from "react-icons/sl";
 import { PiWarningCircleFill } from "react-icons/pi";
 import "../../styles/calender.css";
-import axios, { Axios } from "axios";
+import axios from "axios";
 import toast from "react-hot-toast";
 import { supabase } from "../../services/supabase";
 
@@ -107,20 +107,16 @@ function BookAppointment({ onClose, isdashboardbooking = false }) {
             user_phoneno: accountHolder.phone,
           },
         };
-        // const response = await axios.post(
-        //   "https://api.emailjs.com/api/v1.0/email/send",
-        //   data,
-        //   {
-        //     headers: { "Content-Type": "application/json" },
-        //   }
-        // );
-        // const adminResponse = await axios.post(
-        //   "https://api.emailjs.com/api/v1.0/email/send",
-        //   Admindata,
-        //   {
-        //     headers: { "Content-Type": "application/json" },
-        //   }
-        // );
+        await axios.post("https://api.emailjs.com/api/v1.0/email/send", data, {
+          headers: { "Content-Type": "application/json" },
+        });
+        await axios.post(
+          "https://api.emailjs.com/api/v1.0/email/send",
+          Admindata,
+          {
+            headers: { "Content-Type": "application/json" },
+          }
+        );
         toast.success("we will shortly reach you");
         setIsappointmentbooked(true);
         saveBookingDatainDB(formattedDate, weekday, endtime);

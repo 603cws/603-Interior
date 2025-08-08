@@ -26,6 +26,7 @@ import UserCard from "./user/UserCard";
 import UserProfileEdit from "./user/UserProfileEdit";
 import MobileTabProductCard from "./user/MobileTabProductCard";
 import BookAppointment from "../boq/components/BookAppointment";
+import { CiCalendarDate } from "react-icons/ci";
 
 function handlesidebarState(state, action) {
   switch (action.type) {
@@ -548,7 +549,7 @@ function Dashboard() {
             currentSection={sidebarstate?.currentSection}
           />
           <SidebarItem
-            icon={<TbFileInvoice />}
+            icon={<CiCalendarDate />}
             text="BookAppointment"
             onClick={() =>
               sidebarDispatch({
@@ -668,7 +669,7 @@ function Dashboard() {
               />
               <MobileMenuItem
                 title={"BookAppointment"}
-                icon={<TbFileInvoice />}
+                icon={<CiCalendarDate />}
                 onClick={() =>
                   sidebarDispatch({
                     type: "TOGGLE_SECTION",
