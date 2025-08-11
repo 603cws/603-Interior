@@ -1,5 +1,5 @@
 import { Dialog, Transition } from "@headlessui/react";
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useEffect, useState, useRef } from "react";
 import { toast } from "react-toastify";
 import { supabase } from "../../services/supabase";
 import { useApp } from "../../Context/Context";
@@ -13,6 +13,9 @@ function NewBoq({ onConfirm, onCancel }) {
   const [draftBoq, setDraftBoq] = useState(null); // Stores detected draft row (if any)
   const [disabledNewBoq, setDisabledNewBoq] = useState(false);
   const [newBoqAction, setNewBoqAction] = useState("continue"); // 'continue' or 'discard'
+  const [isAtNonDraftLimit, setIsAtNonDraftLimit] = useState(false);
+
+  const hasCreatedFirstDraft = useRef(false);
 
   const { userId } = useApp();
 
@@ -35,14 +38,37 @@ function NewBoq({ onConfirm, onCancel }) {
         const existingDraft = (data || []).find((b) => b.isDraft === true);
         setDraftBoq(existingDraft || null);
 
-        // Disable "New BOQ" if limit reached and no draft exists
-        const totalBoqs = data?.length || 0;
-        if (totalBoqs >= boqLimit && !existingDraft) {
-          setDisabledNewBoq(true);
-          setBoqMode("existing"); // Force switch to existing mode
-        } else {
-          setDisabledNewBoq(false);
+        // If completely new user (no BOQs at all), skip UI and create draft immediately
+        if (
+          !hasCreatedFirstDraft.current &&
+          !existingDraft &&
+          (data || []).length === 0
+        ) {
+          hasCreatedFirstDraft.current = true; // prevent double run
+          toast.success("Welcome! Starting your first Draft BOQ.");
+          onConfirm("Draft BOQ", "new");
+          return; // stop here so UI doesn't show
         }
+
+        // Disable "New BOQ" if limit reached and no draft exists
+        // const totalBoqs = data?.length || 0;
+        // if (totalBoqs >= boqLimit && !existingDraft) {
+        //   setDisabledNewBoq(true);
+        //   setBoqMode("existing"); // Force switch to existing mode
+        // } else {
+        //   setDisabledNewBoq(false);
+        // }
+
+        // Count only non-draft BOQs for the limit
+        const totalNonDraftBoqs = (data || []).filter((b) => !b.isDraft).length;
+
+        // Always allow creating a draft BOQ (New BOQ) — drafts must NOT be counted toward limit.
+        // So never disable New BOQ here. We'll still keep a flag so UI can show a message if needed.
+        setDisabledNewBoq(false);
+
+        // Optional flag to show informational message in UI when saved-BOQ limit is reached.
+        // (You can use this to show a small note: "You can still create a draft, but saving it as a named BOQ may be blocked until you delete/override an existing one.")
+        setIsAtNonDraftLimit(totalNonDraftBoqs >= boqLimit);
       } catch (err) {
         console.error("Error fetching BOQs:", err);
         toast.error("Unexpected error while fetching BOQs");
@@ -196,8 +222,18 @@ function NewBoq({ onConfirm, onCancel }) {
                     </div>
                   ) : (
                     <div>
-                      A new BOQ will be created and saved as{" "}
-                      <strong>"Draft BOQ"</strong>. You can rename it later.
+                      <div>
+                        A new BOQ will be created and saved as{" "}
+                        <strong>"Draft BOQ"</strong>. You can rename it later.
+                      </div>
+                      {isAtNonDraftLimit && (
+                        <div className="mt-2 text-xs text-yellow-200">
+                          Note: you've reached the maximum of {boqLimit} saved
+                          BOQs. You can still create a Draft BOQ, but converting
+                          (saving) it as a named/saved BOQ may require deleting
+                          or overriding an existing BOQ.
+                        </div>
+                      )}
                     </div>
                   )}
                 </div>

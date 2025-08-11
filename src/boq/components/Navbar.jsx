@@ -939,7 +939,7 @@ function Navbar({
         {/* logo */}
         <button className="" onClick={handlelogo}>
           <img
-            src="/logo/workved-logo-white.png"
+            src="/logo/workved-logo.png"
             alt="Workved Interior logo"
             className="h-auto md:h-8 lg:h-10 w-16 lg:w-24 "
           />

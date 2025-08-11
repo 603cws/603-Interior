@@ -8,6 +8,7 @@ import { supabase } from "../../services/supabase";
 import UnusedAreaWarning from "./UnusedAreaWarning";
 import { PiStarFourFill } from "react-icons/pi";
 import AlertBox from "../../boq/components/AlertBox";
+import EnterAreaModal from "./EnterAreaModal";
 
 // function Navbar({ totalArea, setTotalArea, MIN_AREA, MAX_AREA, resetAll }) {
 function Navbar({
@@ -28,6 +29,7 @@ function Navbar({
   const [unusedArea, setUnusedArea] = useState(0);
   const [showWarning, setShowWarning] = useState(false);
   const [resetAlert, setResetAlert] = useState(false);
+  const [areaWarn, setAreaWarn] = useState(false);
 
   const {
     isAuthenticated,
@@ -148,8 +150,7 @@ function Navbar({
 
   const generateBOQclick = () => {
     if (!totalArea) {
-      toast.error("Enter the Area");
-      return;
+      setAreaWarn(true);
     }
 
     if (totalArea >= MIN_AREA && totalArea <= MAX_AREA) {
@@ -284,12 +285,13 @@ function Navbar({
 
   return (
     <div>
+      {areaWarn && <EnterAreaModal onclose={() => setAreaWarn(false)} />}
       {!isMobile ? (
         <div className="hidden md:flex justify-around bg-gradient-to-r from-[#23445B] to-[#487BA0] py-4 items-center px-5 overflow-hidden">
           {/* logo */}
           <button className=" " onClick={() => navigate("/")}>
             <img
-              src="/logo/workved-logo-white.png"
+              src="/logo/workved-logo.png"
               alt="Workved Interior logo"
               className="h-auto w-20"
             />
@@ -429,7 +431,7 @@ function Navbar({
             {/* logo */}
             <button className=" " onClick={() => navigate("/")}>
               <img
-                src="/logo/workved-logo-white.png"
+                src="/logo/workved-logo.png"
                 alt="Workved Interior logo"
                 className="h-auto w-14"
               />

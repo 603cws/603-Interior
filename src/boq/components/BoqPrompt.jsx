@@ -9,60 +9,154 @@ function BoqPrompt({ onConfirm, onCancel, isProfileCard, setIsProfileCard }) {
   const [boqTitle, setBoqTitle] = useState("");
   const [selectedBoq, setSelectedBoq] = useState(""); // Stores selected existing BOQ
   const [existingBoqs, setExistingBoqs] = useState([]); // Stores fetched BOQs
+  const [isDraftBoq, setIsDraftBoq] = useState(false);
 
-  const { userId, selectedData, setSelectedPlan, setBoqTotal, setProgress } =
-    useApp();
+  const {
+    userId,
+    selectedData,
+    setSelectedPlan,
+    setBoqTotal,
+    setProgress,
+    BOQID,
+    BOQTitle,
+    setBOQTitle,
+    setBOQID,
+  } = useApp();
 
-  const handleSave = async () => {
+  const handleLoad = async () => {
     if (!selectedData || selectedData.length === 0) {
       toast.error("No selected data to save.");
       return;
     }
 
-    // Fetch user's existing BOQs
-    const { data: existingBOQs, error: fetchError } = await supabase
+    // Fetch ALL BOQs (including drafts)
+    const { data: allBOQs, error: fetchError } = await supabase
       .from("boq_data_new")
-      .select("id, boqTitle") // Fetch ID and title
+      .select("id, boqTitle, isDraft")
       .eq("userId", userId);
-
-    setExistingBoqs(existingBOQs);
 
     if (fetchError) {
       console.error("Error fetching user BOQs:", fetchError);
       return;
     }
 
-    if (existingBOQs.length >= boqLimit) {
-      toast.error(`You can only save up to ${boqLimit} BOQs.`);
-      return;
+    // Detect if current BOQ is a draft
+    const current = allBOQs.find(
+      (b) => b.id === BOQID && b.boqTitle === BOQTitle
+    );
+    if (current) {
+      setIsDraftBoq(current.isDraft);
     }
 
-    if (existingBOQs.length > 0) {
-      // setShowBoqPrompt(true); // Show the prompt for choosing or naming the BOQ
-      setExistingBoqs(existingBOQs); // Store the fetched BOQs for selection
-    } else {
-      // setShowBoqPrompt(true); // If no existing BOQs, directly show naming prompt
+    // Filter only non-draft BOQs for limit & selection list
+    const nonDraftBOQs = allBOQs.filter((b) => !b.isDraft);
+    setExistingBoqs(nonDraftBOQs);
+
+    if (nonDraftBOQs.length >= boqLimit) {
+      toast.error(
+        `You can only save up to ${boqLimit} BOQs (Drafts excluded).`
+      );
     }
   };
+
   useEffect(() => {
-    handleSave();
+    handleLoad();
   }, []);
 
-  const handleConfirm = () => {
+  const handleConfirm = async () => {
     if (!boqTitle.trim() && !selectedBoq) {
       toast.error("Please enter a name or select an existing BOQ.");
       return;
     }
+
     if (isProfileCard) {
       setSelectedPlan(null);
       setProgress(0);
       localStorage.removeItem("selectedData");
       setBoqTotal(0);
     }
-    if (selectedBoq) {
-      onConfirm(selectedBoq, false); // If existing BOQ selected, pass ID
-    } else {
-      onConfirm(boqTitle, true); // If new BOQ entered, pass name
+
+    try {
+      // Rename draft
+      if (isDraftBoq && boqTitle.trim() && !selectedBoq) {
+        const newName = boqTitle.trim();
+
+        const { error } = await supabase
+          .from("boq_data_new")
+          .update({ boqTitle: newName, isDraft: false })
+          .eq("id", BOQID);
+        if (error) throw error;
+
+        setBOQTitle(newName);
+        toast.success(`Draft BOQ saved as "${newName}"`);
+        onConfirm(BOQID, false);
+      }
+
+      // Override existing
+      else if (isDraftBoq && selectedBoq) {
+        const { data: draftData, error: draftError } = await supabase
+          .from("boq_data_new")
+          .select("products, boqTotal, selectedPlan, userResponses")
+          .eq("id", BOQID)
+          .single();
+        if (draftError) throw draftError;
+
+        const existing = existingBoqs.find((b) => b.id === selectedBoq);
+
+        const { error: updateError } = await supabase
+          .from("boq_data_new")
+          .update({
+            products: draftData.products,
+            boqTotal: draftData.boqTotal,
+            selectedPlan: draftData.selectedPlan,
+            userResponses: draftData.userResponses,
+          })
+          .eq("id", selectedBoq);
+        if (updateError) throw updateError;
+
+        toast.success(`Draft BOQ overridden into "${existing?.boqTitle}"`);
+
+        await supabase
+          .from("boq_data_new")
+          .update({
+            products: [],
+            boqTotal: 0,
+            selectedPlan: null,
+            userResponses: [],
+          })
+          .eq("id", BOQID);
+
+        if (existing) {
+          setBOQID(existing.id);
+          setBOQTitle(existing.boqTitle);
+        }
+
+        onConfirm(selectedBoq, false);
+      }
+
+      // Non-draft save
+      else {
+        if (selectedBoq) {
+          const existing = existingBoqs.find((b) => b.id === selectedBoq);
+          if (existing) {
+            setBOQID(existing.id);
+            setBOQTitle(existing.boqTitle);
+            toast.success(`BOQ saved as "${existing.boqTitle}"`);
+          }
+          onConfirm(selectedBoq, false);
+        } else {
+          const newName = boqTitle.trim();
+          setBOQTitle(newName);
+          const newId = await onConfirm(newName, true);
+          if (newId) {
+            setBOQID(newId);
+            toast.success(`BOQ saved as "${newName}"`);
+          }
+        }
+      }
+    } catch (err) {
+      console.error("Error saving BOQ:", err);
+      toast.error("Something went wrong while saving the BOQ.");
     }
     setIsProfileCard(false);
   };
@@ -88,13 +182,13 @@ function BoqPrompt({ onConfirm, onCancel, isProfileCard, setIsProfileCard }) {
                     You have not saved your details.
                   </p>
                 )}
-                Save BOQ
+              {isDraftBoq ? "Save/Override Draft BOQ" : "Save/Override BOQ"}
               </Dialog.Title>
 
               {existingBoqs?.length > 0 && (
                 <div className="mt-4">
                   <label className="block lg:text-lg font-medium ">
-                    Select Existing BOQ
+                  Override Existing BOQ
                   </label>
                   <select
                     className="w-full mt-2 p-3 border border-gray-300 rounded text-base focus:outline-none focus:ring-1 focus:ring-[#334A78] text-black"
@@ -115,7 +209,7 @@ function BoqPrompt({ onConfirm, onCancel, isProfileCard, setIsProfileCard }) {
 
             {existingBoqs?.length >= boqLimit ? (
               <label className="block lg:text-lg font-medium mt-4">
-                Max {boqLimit} BOQ can be Created
+                Max {boqLimit} BOQ can be created (Drafts excluded)
               </label>
             ) : (
               <div className="mt-4">
@@ -123,7 +217,7 @@ function BoqPrompt({ onConfirm, onCancel, isProfileCard, setIsProfileCard }) {
                   <h2 className="lg:text-lg font-medium text-center">OR</h2>
                 )}
                 <label className="block lg:text-lg font-medium ">
-                  Enter a New BOQ Name
+                  {isDraftBoq ? "Save Draft BOQ" : "Save a New BOQ"}
                 </label>
                 <input
                   type="text"
@@ -139,7 +233,6 @@ function BoqPrompt({ onConfirm, onCancel, isProfileCard, setIsProfileCard }) {
 
               <div className="mt-6 flex justify-center gap-5 space-x-4">
                 <button
-                  // onClick={onCancel}
                   onClick={() => {
                     setIsProfileCard(false);
                     onCancel();

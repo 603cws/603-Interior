@@ -38,19 +38,15 @@ function EnterAreaModal({ onclose }) {
 
   return (
     // <div className="w-full h-svh z-20 absolute top-0 bg-[rgba(25,25,25,0.46)] flex justify-center items-center">
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-70 z-30">
+    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-70 z-30 font-Poppins">
       <div className="w-5/6 2xl:w-1/2 mx-auto bg-[#fff] p-3 rounded-3xl">
         <div className="grid grid-cols-1 md:grid-cols-[2fr_1fr] bg-gradient-to-br from-[#23445B] to-[#487BA0] border-2 rounded-xl  px-4 py-10 text-[#fff]">
-          <div className="flex flex-col justify-center gap-2 pr-4">
-            <p className="text-4xl font-['UbuntuSans-Regular',_sans-serif]">
+          <div className="flex flex-col justify-center gap-4 pr-4">
+            <p className="text-4xl font-bold">
               <span className="text-6xl">O</span>ops!
             </p>
-            <p style={{ fontFamily: "'Poppins', sans-serif" }}>
-              You Forgot To Enter Your Area.
-            </p>
-            <p style={{ fontFamily: "'Poppins', sans-serif'" }}>
-              Please Enter Your Area.
-            </p>
+            <p>You Forgot To Enter Your Area.</p>
+            <p>Please Enter Your Area.</p>
             <input
               type="number"
               value={inputValue} // Bind to inputValue from context
@@ -66,13 +62,13 @@ function EnterAreaModal({ onclose }) {
             <div className="mt-4 flex gap-10">
               <button
                 onClick={onclose}
-                className="py-1 px-2 md:py-2 md:px-4 bg-[#fff] text-[#000] border-2 border-black border-b-8 border-r-8"
+                className="py-1 px-2 md:py-2 md:px-4 bg-[#fff] text-[#000] border border-black border-b-4 border-r-4"
               >
                 Cancel
               </button>
               <button
                 onClick={handleSubmit}
-                className="py-2 px-4 bg-[#334A78] text-white border-2 border-black border-r-8 border-b-8"
+                className="py-2 px-4 bg-[#334A78] text-white border border-black border-r-4 border-b-4"
               >
                 Submit
               </button>

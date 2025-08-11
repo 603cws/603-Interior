@@ -39,18 +39,15 @@ function ErrorModal({ onclose, message, sizeReached }) {
   };
 
   return (
-    <div className="fixed inset-0 z-20 top-0 bg-[rgba(25,25,25,0.46)] flex justify-center items-center">
+    <div className="fixed inset-0 z-20 top-0 bg-[rgba(25,25,25,0.46)] flex justify-center items-center font-Poppins">
       <div className="max-w-4xl mx-auto p-4 bg-[#fff] rounded-3xl">
         <div className="grid grid-cols-1 md:grid-cols-[1.5fr_1fr] bg-gradient-to-br from-[#23445B] to-[#487BA0] border-2 rounded-xl  ">
           <div className="text-white p-5 flex flex-col justify-center gap-4 my-10">
-            <p className="text-2xl md:text-4xl font-['UbuntuSans-Regular',_sans-serif] text-start">
+            <p className="text-2xl md:text-4xl text-start font-bold">
               <span className="text-4xl md:text-6xl tracking-tighter">W</span>
               arning
             </p>
-            <div
-              className="text-xs md:text-base"
-              style={{ fontFamily: "'Poppins', sans-serif" }}
-            >
+            <div className="text-xs md:text-base">
               <ul style={{ paddingLeft: "20px", listStyleType: "disc" }}>
                 {message.split(".").map(
                   (sentence, index) =>
@@ -82,7 +79,7 @@ function ErrorModal({ onclose, message, sizeReached }) {
               {/* Go Back Button */}
               <button
                 onClick={onclose}
-                className="py-1 px-2 md:py-2 md:px-4 bg-gray-500 text-white border-2 border-black border-b-8 border-r-8"
+                className="py-1 px-2 md:py-2 md:px-4 bg-gray-500 text-white border border-black border-b-4 border-r-4"
               >
                 Cancel
               </button>
@@ -90,7 +87,7 @@ function ErrorModal({ onclose, message, sizeReached }) {
               {!sizeReached && (
                 <button
                   onClick={handleSubmit}
-                  className="py-1 px-2 md:py-2 md:px-4 bg-[#334A78] text-white border-2 border-black border-b-8 border-r-8"
+                  className="py-1 px-2 md:py-2 md:px-4 bg-[#334A78] text-white border border-black border-b-4 border-r-4"
                 >
                   Update
                 </button>
