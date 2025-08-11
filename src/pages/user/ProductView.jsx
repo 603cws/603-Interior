@@ -6,17 +6,18 @@ function ProductView({ onClose, product, handleDelete }) {
     : [];
 
   return (
-    <div className="fixed inset-0 z-50 font-Poppins  flex justify-center items-center">
-      <div className=" max-w-sm  lg:max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-md border border-[#ccc]">
+    <div className="fixed inset-0 z-50 font-Poppins  flex justify-center items-center bg-[#000]/20 backdrop-blur-[1px] ">
+      <div className="max-w-xs sm:max-w-sm md:max-w-2xl  lg:max-w-3xl mx-auto p-6 bg-white rounded-lg shadow-md border border-[#ccc] max-h-[85vh] overflow-y-auto gradient-scrollbar">
         {/* Top section with image and details */}
         <div className="flex flex-col md:flex-row gap-6">
           {/* Left Image Section */}
-          <div className="flex-1">
-            <div className="w-[200px] h-[200px]  md:w-[300px] lg:[350px]">
+          <div className="flex-1 flex flex-col">
+            {/* <div className="w-[200px] h-[200px]  md:w-[300px] lg:[350px]"> */}
+            <div className="flex-1">
               <img
                 src={`${baseImageUrl}${product.image}`}
                 alt="product"
-                className=" "
+                className="object-cover max-h-full"
               />
             </div>
             <div className="flex gap-2 ">
@@ -26,18 +27,20 @@ function ProductView({ onClose, product, handleDelete }) {
                     <img
                       src={`${baseImageUrl}${image}`}
                       alt="product"
-                      className="aspect-auto w-12"
+                      className="aspect-auto w-12 object-contain"
                     />
                   </div>
                 ))
               ) : (
-                <h3 className="pt-3 uppercase">No Additional Images</h3>
+                <h3 className="pt-3 uppercase text-[10px] md:text-xs">
+                  No Additional Images
+                </h3>
               )}
             </div>
           </div>
 
           {/* Right Details Section */}
-          <div className="flex-1 px-2">
+          <div className="flex-1">
             <h2 className="text-xl lg:text-2xl  font-semibold text-[#374A75]">
               {product?.title || "NA"}
             </h2>

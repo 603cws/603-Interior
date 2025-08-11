@@ -469,7 +469,7 @@ function Boq() {
                   (a) => a.id === addonData.addonId
                 );
                 const addonVariant = addon?.addon_variants?.find(
-                  (v) => v.id === addonData.varinatId
+                  (v) => v.id === addonData.variantId
                 );
                 return addon && addonVariant
                   ? [

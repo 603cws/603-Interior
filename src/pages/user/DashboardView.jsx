@@ -17,12 +17,12 @@ function DashboardView({
   const [currentAreaValues, setCurrentAreaValues] = useState({});
   const [currentAreaQuantities, setCurrentAreaQuantities] = useState({});
   useEffect(() => {
-    if (!currentLayoutData) return;
+    if (!selectedBoq?.layout) return;
 
     const areas = {};
     const quantities = {};
 
-    Object.entries(currentLayoutData).forEach(([key, value]) => {
+    Object.entries(selectedBoq?.layout).forEach(([key, value]) => {
       if (key.includes("Area")) {
         const name = key.replace("Area", "");
         areas[name] = value;
@@ -36,7 +36,7 @@ function DashboardView({
 
     setCurrentAreaValues(areas);
     setCurrentAreaQuantities(quantities);
-  }, [currentLayoutData, totalArea, currentLayoutID]);
+  }, [selectedBoq]);
 
   const fullNames = {
     linear: "Linear Workspace",
@@ -203,31 +203,31 @@ function DashboardView({
       <div className="xl:w-2/3">
         <div className="p-2 lg:p-4 border border-[#ccc] rounded-lg">
           <h2 className="capitalize font-bold mb-2 text-base lg:text-xl">
-            Layout Information : selected boq {selectedBoq?.title || "NA"}
+            Layout Information : selected boq {selectedBoq?.boqTitle || "NA"}
           </h2>
           {/* div containing information */}
           <div
             className={`flex flex-col ${
               isExpanded ? "flex-wrap" : "md:flex-wrap xl:flex-nowrap"
-            } items-center gap-3 md:items-stretch xl:flex-row lg:gap-10`}
+            } items-center gap-3 md:items-stretch md:flex-row lg:gap-10`}
           >
             {/* each icon  */}
             <LayoutInfoCard
               selectedBoq={selectedBoq}
-              value={selectedBoq?.total_area}
+              value={selectedBoq?.layout.totalArea}
               title={"total Area"}
               image={"/images/layouticon.png"}
               spanvalue={"sqft"}
             />
             <LayoutInfoCard
               selectedBoq={selectedBoq}
-              value={products?.length}
+              value={selectedBoq?.products.length}
               title={"Total No Product"}
               image={"/images/totalproduct.png"}
             />
             <LayoutInfoCard
               selectedBoq={selectedBoq}
-              value={selectedBoq?.totalprice}
+              value={selectedBoq?.boqTotalPrice}
               title={"Total Amount"}
               image={"/images/grandtotal.png"}
               spanvalue={" INR"}
@@ -268,42 +268,50 @@ function DashboardView({
         </div>
         {/* dashboard boq part */}
         <div className="p-3 border border-[#ccc] rounded-lg mt-6 ">
-          <h3 className="capitalize font-bold ">BOQ generated</h3>
+          <h3 className="capitalize font-bold mb-2">BOQ generated</h3>
           {/* boq card */}
-          {isboqavailable &&
-            boqdata.map((boq, index) => {
-              return (
-                <div
-                  key={boq.title}
-                  className="rounded-lg border-2 border-[#ccc] max-w-sm p-2 mb-3"
-                >
-                  <div className="flex justify-end gap-2 p-2">
-                    {/* <MdOutlineModeEdit size={30} /> */}
-                    <button
-                      className={`px-5 py-1  rounded-lg capitalize border ${
-                        selectedBoq?.title === boq?.title
-                          ? " bg-[#374A75] border-[#374a75] text-white"
-                          : "bg-white border-[#ccc] text-[#374a75]"
-                      }`}
-                      onClick={() => handlecheckboqdetails(boq)}
-                    >
-                      details
-                    </button>
-                    <button
-                      onClick={() => handledeleteBoq(boq)}
-                      className="hover:text-red-600"
-                    >
-                      {" "}
-                      <MdDeleteOutline size={30} />
-                    </button>
+          <div className="flex gap-2 flex-wrap justify-center md:justify-normal">
+            {isboqavailable &&
+              boqdata.map((boq, index) => {
+                return (
+                  // <div
+                  //   key={boq.boqTitle}
+                  //   className="rounded-lg border-2 border-[#ccc] max-w-sm p-2 mb-3"
+                  // >
+                  //   <div className="flex justify-end gap-2 p-2">
+                  //     {/* <MdOutlineModeEdit size={30} /> */}
+                  //     <button
+                  //       className={`px-5 py-1  rounded-lg capitalize border ${
+                  //         selectedBoq?.boqTitle === boq?.boqTitle
+                  //           ? " bg-[#374A75] border-[#374a75] text-white"
+                  //           : "bg-white border-[#ccc] text-[#374a75]"
+                  //       }`}
+                  //       onClick={() => handlecheckboqdetails(boq)}
+                  //     >
+                  //       details
+                  //     </button>
+                  //     <button
+                  //       onClick={() => handledeleteBoq(boq)}
+                  //       className="hover:text-red-600"
+                  //     >
+                  //       {" "}
+                  //       <MdDeleteOutline size={30} />
+                  //     </button>
+                  //   </div>
+                  //   <div>
+                  //     <h3 className="font-bold">{boq.boqTitle}</h3>
+                  //   </div>
+                  // </div>
+                  <div key={boq.id}>
+                    <GeneratedBOQCard
+                      boq={boq}
+                      onDelete={handledeleteBoq}
+                      selectedBoq={selectedBoq}
+                    />
                   </div>
-                  <div>
-                    <h3 className="font-bold">{boq.title}</h3>
-                  </div>
-                </div>
-              );
-            })}
-
+                );
+              })}
+          </div>
           {!isboqavailable && (
             <div>
               <h3>You havent saved a BOQ yet</h3>
@@ -345,21 +353,49 @@ export default DashboardView;
 
 function LayoutInfoCard({ selectedBoq, value, title, image, spanvalue }) {
   return (
-    <div className="w-72 flex  justify-between lg:justify-around items-center gap-3 border border-[#ccc] py-3 px-2">
-      <div className="">
+    <div className="w-full md:w-[267px] flex  justify-between lg:justify-around items-center gap-3 border border-[#ccc] py-3 px-2">
+      <div className="flex-1 flex justify-center items-center">
         <img
           src={image}
           alt=" dashboard layout "
           className="w-[45px] h-[45px] xl:w-[60px] xl:h-[60px]"
         />
       </div>
-      <div className="capitalize lg:pr-10">
+      <div className="capitalize lg:pr-10 flex-1">
         <p className="font-bold text-lg">
           {/* {selectedBoq.total_area} */}
           {selectedBoq && value}
           {spanvalue && <span>{spanvalue}</span>}
         </p>
         <p className="text-base">{title}</p>
+      </div>
+    </div>
+  );
+}
+
+function GeneratedBOQCard({ boq, onDelete, selectedBoq }) {
+  return (
+    <div
+      className={`w-[270px]  border border-[#CCCCCC] font-Poppins p-2 rounded-lg text-[#000] ${
+        selectedBoq.id === boq.id
+          ? "bg-gradient-to-br from-[#23445B] to-[#487BA0] text-[#fff]"
+          : ""
+      }`}
+    >
+      <div className="flex justify-between mb-1.5">
+        <h5 className="font-bold text-xl">{boq.boqTitle}</h5>
+        <button onClick={() => onDelete(boq)} className="hover:text-red-600">
+          {" "}
+          <MdDeleteOutline size={25} />
+        </button>
+      </div>
+      <div className="grid grid-cols-2 gap-2.5 font-semibold ">
+        <p>Total Area</p>
+        <p>{boq.layout.totalArea} sqft.</p>
+        <p>Used</p>
+        <p> {boq.layout.usedSpace} sqft.</p>
+        <p>Unused</p>
+        <p> {boq.layout.totalArea - boq.layout.usedSpace}sqft.</p>
       </div>
     </div>
   );

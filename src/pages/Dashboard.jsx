@@ -27,6 +27,9 @@ import UserProfileEdit from "./user/UserProfileEdit";
 import MobileTabProductCard from "./user/MobileTabProductCard";
 import BookAppointment from "../boq/components/BookAppointment";
 import { CiCalendarDate } from "react-icons/ci";
+import { IoIosSearch } from "react-icons/io";
+import { IoCloseCircle, IoCloudDownloadOutline } from "react-icons/io5";
+
 
 function handlesidebarState(state, action) {
   switch (action.type) {
@@ -66,6 +69,8 @@ function Dashboard() {
   // const [currentSection, setCurrentSection] = useState("Dashboard");
   // const [help, setHelp] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
+  const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
+  const [mobileFilterOpen, setMobileFilterOPen] = useState(false);
 
   const sidebarInitialState = {
     isSettingOpen: false,
@@ -182,10 +187,13 @@ function Dashboard() {
         return;
       }
 
-      if (selectedBoq && selectedBoq.addon_varaint_id) {
-        const productIdsArray = selectedBoq.addon_varaint_id
-          .split(",")
-          .map((id) => id.trim());
+      if (selectedBoq && selectedBoq.addons) {
+        // const productIdsArray = selectedBoq.addon_varaint_id
+        //   .split(",")
+        //   .map((id) => id.trim());
+        const productIdsArray = selectedBoq.addons.map(
+          (addon) => addon.variantId
+        );
 
         const { data } = await supabase
           .from("addon_variants")
@@ -214,9 +222,12 @@ function Dashboard() {
 
         console.log("selectedboq", selectedBoq);
 
-        const productIdsArray = selectedBoq.product_variant_id
-          .split(",")
-          .map((id) => id.trim()); // Convert to array of ids
+        // const productIdsArray = selectedBoq.product_variant_id
+        //   .split(",")
+        //   .map((id) => id.trim()); // Convert to array of ids
+        const productIdsArray = selectedBoq.products.map(
+          (product) => product.id
+        );
 
         const { data, error } = await supabase
           .from("product_variants")
@@ -386,8 +397,8 @@ function Dashboard() {
   const fetchboq = async () => {
     try {
       const { data } = await supabase
-        .from("boqdata")
-        .select("*")
+        .from("boq_data_new")
+        .select(`*,layout:layoutId (*)`)
         .eq("userId", accountHolder.userId);
 
       console.log("fetch boq data", data);
@@ -407,7 +418,7 @@ function Dashboard() {
     setisfetchBoqDataRefresh(true);
     try {
       const { error } = await supabase
-        .from("boqdata") // Replace with your table name
+        .from("boq_data_new") // Replace with your table name
         .delete()
         .eq("id", boq.id); // Filtering by id
 
@@ -815,17 +826,54 @@ function Dashboard() {
                 {/* // Default product list and add product UI */}
                 <div className=" sticky top-0 z-20 bg-white">
                   <div className="flex flex-col md:flex-row md:items-center px-2 gap-3 lg:gap-5 lg:px-4 py-2 border-b-2 border-b-gray-400 ">
-                    <h3 className="text-sm md:text-base font-semibold lg:text-2xl text-[#374A75] ">
-                      Created BOQs
-                    </h3>
+                    <div className="flex justify-between ">
+                      <h3 className="text-sm md:text-base font-semibold lg:text-2xl text-[#374A75] ">
+                        Created BOQs
+                      </h3>
+                      <div className="relative md:hidden flex items-center gap-5">
+                        <button>
+                          <IoCloudDownloadOutline size={22} color="#374A75" />
+                        </button>
+                        <button
+                          onClick={() => setMobileFilterOPen(!mobileFilterOpen)}
+                        >
+                          <img src="/images/icons/filter-icon.png" alt="" />
+                        </button>
+                      </div>
+                      {mobileFilterOpen && (
+                        <div className="absolute top-10 right-0 bg-white w-[200px] z-30 p-4 space-y-1">
+                          <h4 className="font-semibold text-sm">
+                            Select Category
+                          </h4>
+                          {category.map((cat) => (
+                            <button
+                              key={cat}
+                              onClick={() => {
+                                setSelectedCategory(cat);
+                                applyFilters({
+                                  query: searchQuery,
+                                  category: cat,
+                                });
+                                setMobileFilterOPen(false);
+                              }}
+                              className={`block w-full text-left py-1 rounded hover:bg-gray-100 text-xs ${
+                                selectedCategory === cat ? "bg-gray-200" : ""
+                              }`}
+                            >
+                              {cat}
+                            </button>
+                          ))}
+                        </div>
+                      )}
+                    </div>
                     <div className="flex ">
                       {isboqavailable &&
                         boqdata.map((boq, index) => {
                           return (
                             <div
-                              key={boq.title}
+                              key={boq.boqTitle}
                               className={` rounded-lg border-2  px-5 py-2 ${
-                                selectedBoq.title === boq.title
+                                selectedBoq.boqTitle === boq.boqTitle
                                   ? "bg-[#374A75] text-white border-[#374a75]"
                                   : "bg-white text-[#374a75] border-[#ccc]"
                               }`}
@@ -838,28 +886,65 @@ function Dashboard() {
                                 }}
                                 className="text-sm lg:text-lg"
                               >
-                                {boq.title}
+                                {boq.boqTitle}
                               </button>
                             </div>
                           );
                         })}
                     </div>
                   </div>
-                  <div className="flex  items-center gap-3 px-2 lg:px-4 py-2 border-b-2 border-b-gray-400 bg-white z-20">
-                    {tabs.map((tab) => (
+                  <div className="flex  items-center justify-between gap-3 px-2 lg:px-4 py-2 border-b-2 border-b-gray-400 bg-white z-20 relative">
+                    <div className="flex gap-2">
+                      {tabs.map((tab) => (
+                        <button
+                          key={tab.value}
+                          className={`flex items-center gap-2 px-3 lg:px-6 py-2 border rounded-lg  text-[#374A75] text-sm lg:text-lg ${
+                            selectedTab === tab.value
+                              ? "bg-[#D3E3F0]  border-[#374A75]"
+                              : "bg-white border-[#374A75]"
+                          }`}
+                          value={tab.value}
+                          onClick={handleTabClick} // Dynamically sets the tab
+                        >
+                          {tab.name}
+                        </button>
+                      ))}
+                    </div>
+
+                    <div className="lg:hidden">
                       <button
-                        key={tab.value}
-                        className={`flex items-center gap-2 px-3 lg:px-6 py-2 border rounded-lg  text-[#374A75] text-sm lg:text-lg ${
-                          selectedTab === tab.value
-                            ? "bg-[#D3E3F0]  border-[#374A75]"
-                            : "bg-white border-[#374A75]"
-                        }`}
-                        value={tab.value}
-                        onClick={handleTabClick} // Dynamically sets the tab
+                        onClick={() => setMobileSearchOpen(true)}
+                        className="py-1.5 px-2 flex justify-center items-center border rounded"
                       >
-                        {tab.name}
+                        <IoIosSearch size={20} color="#374A75" />
                       </button>
-                    ))}
+                      {mobileSearchOpen && (
+                        <div
+                          className={`absolute top-0 bg-[#fff] w-full h-full z-30 flex justify-between items-center px-3 !transition-all !duration-700 !ease-in-out ${
+                            mobileSearchOpen
+                              ? "opacity-100 translate-x-0 left-0"
+                              : "opacity-0 -translate-x-full right-0"
+                          }`}
+                        >
+                          <input
+                            type="text"
+                            value={searchQuery}
+                            placeholder="......search by product name"
+                            onChange={(e) => {
+                              const value = e.target.value;
+                              setSearchQuery(value);
+                              applyFilters({
+                                query: value,
+                              });
+                            }}
+                            className="w-3/4 px-2 py-2.5 border rounded-sm text-[10px]"
+                          />
+                          <button onClick={() => setMobileSearchOpen(false)}>
+                            <IoCloseCircle size={25} color="#374A75" />
+                          </button>
+                        </div>
+                      )}
+                    </div>
 
                     <div className="hidden lg:block w-1/2 ml-auto">
                       <input

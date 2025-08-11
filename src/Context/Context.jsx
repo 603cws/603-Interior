@@ -89,7 +89,7 @@ export const AppProvider = ({ children }) => {
   const [isMobile, setIsMobile] = useState(false);
   const [currentLayoutData, setCurrentLayoutData] = useState({});
   const [currentLayoutID, setCurrentLayoutID] = useState(
-    localStorage.getItem("currentLayoutID")
+    sessionStorage.getItem("currentLayoutID")
   );
 
   const [cartItems, setCartItems] = useState([]);
@@ -160,7 +160,10 @@ export const AppProvider = ({ children }) => {
     if (selectedPlan) {
       sessionStorage.setItem("selectedPlan", selectedPlan);
     }
-  }, [BOQID, BOQTitle, selectedPlan]);
+    if (currentLayoutID) {
+      sessionStorage.setItem("currentLayoutID", currentLayoutID);
+    }
+  }, [BOQID, BOQTitle, selectedPlan, currentLayoutID]);
 
   // useEffect(() => {
   //   console.log(
@@ -195,7 +198,7 @@ export const AppProvider = ({ children }) => {
         }));
         payload.addons = selectedData.flatMap((product) =>
           (product.addons || []).map((addon) => ({
-            varinatId: addon.id,
+            variantId: addon.id,
             addonId: addon.addonid,
             title: addon.title,
             finalPrice: addon.price || "",

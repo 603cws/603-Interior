@@ -127,7 +127,7 @@ function Login() {
 
       if (data) {
         const currentLayoutID = data.id;
-        localStorage.setItem("currentLayoutID", currentLayoutID);
+        sessionStorage.setItem("currentLayoutID", currentLayoutID);
       }
 
       if (error) {
@@ -218,11 +218,11 @@ function Login() {
         // Navigate based on whether areaId and quantityId exist
         if (layoutId && firstElement?.role !== "user") {
           setCurrentLayoutID(layoutId);
-          localStorage.setItem("currentLayoutID", layoutId);
+          sessionStorage.setItem("currentLayoutID", layoutId);
           navigate("/dashboard", { replace: true });
         } else if (layoutId && firstElement?.role === "user") {
           setCurrentLayoutID(layoutId);
-          localStorage.setItem("currentLayoutID", layoutId);
+          sessionStorage.setItem("currentLayoutID", layoutId);
           navigate("/boq", { replace: true });
         } else {
           navigate("/Layout", { replace: true });

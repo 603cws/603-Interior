@@ -569,7 +569,7 @@ const TreeMap = ({ totalArea, areaQuantities, areaValues }) => {
 
         if (data) {
           const currentLayoutID = data.id;
-          localStorage.setItem("currentLayoutID", currentLayoutID);
+          sessionStorage.setItem("currentLayoutID", currentLayoutID);
         }
 
         if (!userId) {

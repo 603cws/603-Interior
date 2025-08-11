@@ -201,7 +201,7 @@ function Navbar({
         if (data) {
           const currentLayoutID = data.id;
           setCurrentLayoutID(currentLayoutID);
-          localStorage.setItem("currentLayoutID", currentLayoutID);
+          sessionStorage.setItem("currentLayoutID", currentLayoutID);
         }
 
         if (!isAuthenticated) {
@@ -404,7 +404,9 @@ function Navbar({
                   <PiStarFourFill />
                 </div>
               </div>
-              <span className="flex justify-center items-center">Generate</span>
+              <span className="flex justify-center items-center">
+                Create BOQ
+              </span>
             </div>
           </button>
 

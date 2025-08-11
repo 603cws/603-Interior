@@ -79,6 +79,7 @@ function Navbar({
     BOQTitle,
     setBOQTitle,
     currentLayoutData,
+    setCurrentLayoutData,
   } = useApp();
 
   // const totalArea = currentLayoutData.totalArea;
@@ -263,7 +264,7 @@ function Navbar({
                   (a) => a.id === addonData.addonId
                 );
                 const addonVariant = addon?.addon_variants?.find(
-                  (v) => v.id === addonData.varinatId
+                  (v) => v.id === addonData.variantId
                 );
                 return addon && addonVariant
                   ? [
@@ -313,7 +314,10 @@ function Navbar({
 
   const handleDeleteBOQ = async (boqId) => {
     try {
-      const { error } = await supabase.from("boqdata").delete().eq("id", boqId);
+      const { error } = await supabase
+        .from("boq_data_new")
+        .delete()
+        .eq("id", boqId);
 
       if (error) {
         console.error("Error deleting BOQ:", error);
@@ -471,6 +475,19 @@ function Navbar({
       }
       console.log("loaded data", data);
 
+      const { data: layoutData, error: layoutError } = await supabase
+        .from("layout")
+        .select("*")
+        .eq("id", data.layoutId)
+        .single();
+      if (layoutError) {
+        console.error("Error fetching layout:", layoutError);
+        return;
+      }
+      setCurrentLayoutData(layoutData);
+      // setTotalArea(layoutData.totalArea);
+      console.log("loaded layout data:", layoutData, "totalArea", totalArea);
+
       // Convert stored comma-separated values into arrays
       // const productVariantIds =
       //   data.products?.map((product) => product.id) || [];
@@ -478,7 +495,7 @@ function Navbar({
 
       // const addonIds = data.addons?.map((addon) => addon.addonId);
       // console.log(addonIds);
-      // const addonVariantIds = data.addons?.map((addon) => addon.varinatId);
+      // const addonVariantIds = data.addons?.map((addon) => addon.variantId);
       // console.log(addonVariantIds);
 
       // const groupKeys = data.products?.map((product) => product.groupKey);
@@ -543,7 +560,7 @@ function Navbar({
       // ✅ Update state with the final BOQ structure
       setSelectedData(formattedBOQProducts);
       setUserId(data.userId);
-      setTotalArea(data?.total_area); //Not there
+      // setTotalArea(data?.total_area);
       setSelectedPlan(data?.planType);
       setBOQTitle(data.boqTitle);
       setBoqTotal(data.boqTotalPrice);
@@ -711,7 +728,7 @@ function Navbar({
       }));
       const addons = selectedData.flatMap((product) =>
         (product.addons || []).map((addon) => ({
-          varinatId: addon.id,
+          variantId: addon.id,
           addonId: addon.addonid,
           title: addon.title,
           finalPrice: addon.price || "",
@@ -822,7 +839,7 @@ function Navbar({
       }));
       const addons = selectedData.flatMap((product) =>
         (product.addons || []).map((addon) => ({
-          varinatId: addon.id,
+          variantId: addon.id,
           addonId: addon.addonid,
           title: addon.title,
           finalPrice: addon.price || "",
@@ -1280,13 +1297,13 @@ function Navbar({
 
               <button
                 onClick={handleDownload}
-                className="generateBoq glow-on-hover-boq relative flex items-center w-32 h-10 px-4 py-2 bg-[#252525] text-white overflow-hidden group rounded-[4px] font-Poppins text-xs hover:scale-105 transition-transform duration-300 ease-in-out active:bf-[#85AED2]"
+                className="generateBoq glow-on-hover-boq relative flex items-center w-32 h-10 px-4 py-2 bg-[#fff]/10 text-white overflow-hidden group rounded-[4px] font-Poppins text-xs hover:scale-105 transition-transform duration-300 ease-in-out active:bf-[#85AED2]"
               >
                 <span className="absolute top-0 left-0 w-full h-full pointer-events-none z-0 block">
-                  <span className="glow-line glow-top"></span>
-                  <span className="glow-line glow-right"></span>
-                  <span className="glow-line glow-bottom"></span>
-                  <span className="glow-line glow-left"></span>
+                  <span className="group-hover:glow-line glow-top"></span>
+                  <span className="group-hover:glow-line glow-right"></span>
+                  <span className="group-hover:glow-line glow-bottom"></span>
+                  <span className="group-hover:glow-line glow-left"></span>
                 </span>
                 {isDownloading ? (
                   <>

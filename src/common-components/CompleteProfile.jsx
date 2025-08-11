@@ -102,7 +102,7 @@ function CompleteProfile() {
       // Navigate based on whether areaId and quantityId exist
       if (layoutId) {
         setCurrentLayoutID(layoutId);
-        localStorage.setItem("currentLayoutID", layoutId);
+        sessionStorage.setItem("currentLayoutID", layoutId);
         console.log("Layout ID found, navigating to /boq");
         navigate("/boq");
       } else {
