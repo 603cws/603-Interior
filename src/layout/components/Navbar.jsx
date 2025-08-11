@@ -384,7 +384,7 @@ function Navbar({
 
           <button
             onClick={generateBOQclick}
-            className="generateBoq glow-on-hover relative flex items-center w-32 h-10 px-4 py-2 bg-[#212B36] border border-[#1A8FE3] text-white overflow-hidden group rounded-[4px] font-Poppins text-xs hover:bg-gradient-to-b from-[#3F56EA] to-[#7c80f3] hover:scale-105 transition-transform duration-300 ease-in-out"
+            className="generateBoq glow-on-hover relative flex items-center w-36 h-10 px-4 py-2 bg-[#212B36] border border-[#1A8FE3] text-white overflow-hidden group rounded-[4px] font-Poppins text-xs hover:bg-gradient-to-b from-[#3F56EA] to-[#7c80f3] hover:scale-105 transition-transform duration-300 ease-in-out"
           >
             <span className="absolute top-0 left-0 w-full h-full pointer-events-none z-0 hidden group-hover:block">
               <span className="glow-line glow-top"></span>
@@ -393,7 +393,7 @@ function Navbar({
               <span className="glow-line glow-left"></span>
             </span>
             <div className="flex gap-3 w-full h-full">
-              <div className="relative pointer-events-none z-0 w-1/2 h-full">
+              <div className="relative pointer-events-none z-0 w-1/4  h-full">
                 <div className="absolute top-0 left-0 text-[8px] group-hover:blink-on-hover">
                   <PiStarFourFill />
                 </div>
