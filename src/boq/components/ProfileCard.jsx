@@ -2,9 +2,6 @@ import { useApp } from "../../Context/Context";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { useRef, useState, useEffect } from "react";
-import { LuCalendarClock } from "react-icons/lu";
-import { BsQuestionCircle } from "react-icons/bs";
-import { PiListStarFill } from "react-icons/pi";
 import BookAppointment from "./BookAppointment";
 import { motion } from "framer-motion";
 import { MdClose } from "react-icons/md";
@@ -92,7 +89,7 @@ function ProfileCard({
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-30 z-20">
+    <div className="fixed inset-0 bg-black bg-opacity-30 z-30">
       <motion.div
         ref={profileRef}
         initial="hidden"
@@ -117,11 +114,20 @@ function ProfileCard({
           {/* Profile Header */}
           <div className="h-1/3 flex flex-col">
             <div className="h-1/2 flex justify-center items-end">
-              <img
-                src={accountHolder.profileImage}
-                alt="usericon"
-                className="w-16 h-16"
-              />
+              <div
+                className="z-30 rounded-full"
+                ref={iconRef}
+                style={{
+                  backgroundImage:
+                    "linear-gradient(to top left, #5B73AF 0%, rgba(255, 255, 255, 0.5) 48%, #1F335C 100%)",
+                }}
+              >
+                <img
+                  src={accountHolder.profileImage}
+                  alt="usericon"
+                  className="w-20 h-20 p-1 cursor-pointer rounded-full"
+                />
+              </div>
             </div>
             <div className="flex-1 flex flex-col items-center justify-center">
               <p className="font-semibold text-lg">
@@ -133,103 +139,125 @@ function ProfileCard({
 
           {/* Features Section */}
           <div className="font-semibold xl:text-lg capitalize leading-normal tracking-wide py-7 text-[#262626] border-y-2 border-[#ccc] flex flex-col gap-4">
-            <div className="flex items-center mx-4 gap-3 hover:bg-[#E5F4FF] pl-2 ">
-              {/* <MdOutlineSpaceDashboard /> */}
+            <div
+              className="flex items-center mx-4 gap-3 hover:bg-[#E5F4FF] hover:cursor-pointer pl-2"
+              onClick={() => navigate("/dashboard")}
+            >
               <img
-                src="/images/dashboard.png"
+                src="/images/profile-card/dashboard.png"
                 alt="dashboard"
                 className="w-6 h-6"
               />
-              <button onClick={() => navigate("/dashboard")}>Dashboard</button>
+              <button>Dashboard</button>
             </div>
             {!layout && (
               <>
-                <div className="flex items-center mx-4 gap-3 hover:bg-[#E5F4FF] pl-2">
-                  {/* <BiUnite /> */}
+                <div
+                  className="flex items-center mx-4 gap-3 hover:bg-[#E5F4FF] hover:cursor-pointer pl-2"
+                  onClick={() => navigate("/Layout")}
+                >
                   <img
-                    src="/images/layout.png"
+                    src="/images/profile-card/layout.png"
                     alt="layout"
                     className="w-6 h-6"
                   />
-                  <button onClick={() => navigate("/Layout")}>Layout</button>
+                  <button>Layout</button>
                 </div>
                 {selectedPlan && (
-                  <div className="flex items-center mx-4 gap-3 hover:bg-[#E5F4FF] pl-2">
-                    <PiListStarFill />
-                    <button
-                      onClick={() => {
-                        // setSelectedPlan(null);
-                        setIsOpen(false);
-                        // setProgress(0);
-                        // localStorage.removeItem("selectedData");
-                        // setBoqTotal(0);
-                        if (import.meta.env.MODE !== "development") {
-                          setShowBoqPrompt(true);
-                          setIsProfileCard(true);
-                        } else {
-                          setSelectedPlan(null);
-                          setProgress(0);
-                          localStorage.removeItem("selectedData");
-                          setSelectedData([]);
-                          setBoqTotal(0);
-                        }
-                      }}
-                    >
-                      Select Your Plan
-                    </button>
+                  <div
+                    className="flex items-center mx-4 gap-3 hover:bg-[#E5F4FF] hover:cursor-pointer pl-2"
+                    onClick={() => {
+                      // setSelectedPlan(null);
+                      setIsOpen(false);
+                      // setProgress(0);
+                      // localStorage.removeItem("selectedData");
+                      // setBoqTotal(0);
+                      if (import.meta.env.MODE !== "development") {
+                        setShowBoqPrompt(true);
+                        setIsProfileCard(true);
+                      } else {
+                        setSelectedPlan(null);
+                        setProgress(0);
+                        localStorage.removeItem("selectedData");
+                        setSelectedData([]);
+                        setBoqTotal(0);
+                      }
+                    }}
+                  >
+                    <img
+                      src="/images/profile-card/plancard.png"
+                      alt="layout"
+                      className="w-6 h-6"
+                    />
+                    <button>Select Your Plan</button>
                   </div>
                 )}
               </>
             )}
-            <div className="flex items-center mx-4 gap-3 hover:bg-[#E5F4FF] pl-2">
-              {/* <RxVideo /> */}
-              <img src="/images/video.png" alt="video" className="w-6 h-6" />
+            <div className="flex items-center mx-4 gap-3 hover:bg-[#E5F4FF] hover:cursor-pointer pl-2">
+              <img
+                src="/images/profile-card/video.png"
+                alt="video"
+                className="w-6 h-6"
+              />
               <p>How it works</p>
             </div>
 
             {accountHolder.role === "user" && (
               <div
+                onClick={handleAppointment}
                 className={`flex items-center mx-4 gap-3 pl-2 ${
                   progress < 90 ? "text-gray-400 cursor-not-allowed" : ""
                 }`}
               >
-                <LuCalendarClock />
-                <button onClick={handleAppointment}>Book Appointment</button>
+                <img
+                  src="/images/profile-card/Appointment.png"
+                  alt="Question"
+                  className="w-6 h-6"
+                />
+                <button>Book Appointment</button>
               </div>
             )}
           </div>
 
           {/* Help & Settings Section */}
           <div className="font-semibold xl:text-lg capitalize leading-normal tracking-wide py-7 text-[#262626] border-b-2 border-[#ccc] flex flex-col gap-4">
-            <div className="flex items-center mx-4 gap-3 hover:bg-[#E5F4FF] pl-2">
-              <BsQuestionCircle />
-              <button
-                onClick={() =>
-                  navigate("/dashboard", { state: { openHelp: true } })
-                }
-              >
-                Help
-              </button>
-            </div>
-            <div className="flex items-center mx-4 gap-3 hover:bg-[#E5F4FF] pl-2">
-              {/* <RiSettingsLine /> */}
+            <div
+              className="flex items-center mx-4 gap-3 hover:bg-[#E5F4FF] hover:cursor-pointer pl-2"
+              onClick={() =>
+                navigate("/dashboard", { state: { openHelp: true } })
+              }
+            >
               <img
-                src="/images/setting.png"
+                src="/images/profile-card/Question.png"
+                alt="Question"
+                className="w-6 h-6"
+              />
+              <button>Help</button>
+            </div>
+            <div
+              className="flex items-center mx-4 gap-3 hover:bg-[#E5F4FF] hover:cursor-pointer pl-2"
+              onClick={() =>
+                navigate("/dashboard", { state: { openSettings: true } })
+              }
+            >
+              <img
+                src="/images/profile-card/setting.png"
                 alt="settings"
                 className="w-6 h-6"
               />
-              <button
-                onClick={() =>
-                  navigate("/dashboard", { state: { openSettings: true } })
-                }
-              >
-                Settings
-              </button>
+              <button>Settings</button>
             </div>
-            <div className="flex items-center mx-4 gap-3 hover:bg-[#E5F4FF] pl-2">
-              {/* <PiSignOutBold /> */}
-              <img src="/images/signout.png" alt="logout" className="w-6 h-6" />
-              <button onClick={logout}>Sign out</button>
+            <div
+              className="flex items-center mx-4 gap-3 hover:bg-[#E5F4FF] hover:cursor-pointer pl-3"
+              onClick={logout}
+            >
+              <img
+                src="/images/profile-card/signout.png"
+                alt="logout"
+                className="w-6 h-6"
+              />
+              <button>Sign out</button>
             </div>
           </div>
         </div>

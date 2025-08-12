@@ -28,6 +28,7 @@ import { ReadMoreBtn } from "../common-components/ReadMoreBtn";
 import { useApp } from "../Context/Context";
 import gsap from "gsap";
 import { motion, useAnimation, useInView } from "framer-motion";
+import LazyImage from "../utils/LazyImage";
 
 function Landing() {
   const imageContainerRef = useRef(null);
@@ -408,7 +409,7 @@ function Landing() {
       <section className="about-us px-3 md:container lg:max-w-7xl mx-auto pt-10 ">
         <div className="lg:flex gap-12">
           <div className="pb-6 lg:pb-0">
-            <img
+            <LazyImage
               src="/images/home/section_1_main.png"
               alt=""
               className="image-reveal w-full object-cover"
@@ -518,7 +519,7 @@ function Landing() {
 
                         {/* Content */}
                         <div className="space-y-4 text-sm ">
-                          <img
+                          <LazyImage
                             src={tab.img}
                             alt=""
                             className="max-w-xs w-full mx-auto"
@@ -573,7 +574,10 @@ function Landing() {
               <SwiperSlide>
                 <div className="flex justify-center items-center">
                   <div className="font-lato space-y-6 px-3 py-5 max-w-xs w-full bg-white shadow-lg">
-                    <img src="images/icons/architecture-icon.svg" alt="" />
+                    <LazyImage
+                      src="images/icons/architecture-icon.svg"
+                      alt=""
+                    />
                     <h4 className="font-bold text-xl capitalize">
                       architecture
                     </h4>
@@ -593,7 +597,7 @@ function Landing() {
                   <div className="font-lato px-3 py-5 max-w-xs w-full bg-[url('/images/home/interior-work-bg.svg')] text-white relative shadow-lg">
                     <div className="absolute inset-0 bg-black/50"></div>
                     <div className="relative space-y-7">
-                      <img src="images/icons/interior.svg" alt="" />
+                      <LazyImage src="images/icons/interior.svg" alt="" />
                       <h4 className="font-bold text-xl capitalize">
                         Interior Work
                       </h4>
@@ -612,7 +616,7 @@ function Landing() {
               <SwiperSlide>
                 <div className="flex justify-center items-center">
                   <div className="font-lato space-y-7 px-3 py-5 max-w-xs w-full bg-white shadow-lg">
-                    <img src="images/icons/retail.svg" alt="" />
+                    <LazyImage src="images/icons/retail.svg" alt="" />
                     <h4 className="font-bold text-xl capitalize">
                       Retail Designs
                     </h4>
@@ -631,7 +635,7 @@ function Landing() {
                 <div className="flex justify-center items-center">
                   {" "}
                   <div className="font-lato space-y-7 px-3 py-5 max-w-xs w-full bg-white shadow-lg">
-                    <img src="images/icons/2d-3d_layout.svg" alt="" />
+                    <LazyImage src="images/icons/2d-3d_layout.svg" alt="" />
                     <h4 className="font-bold text-xl capitalize">
                       2D/3D Layouts
                     </h4>
@@ -668,12 +672,12 @@ function Landing() {
                 </div>
                 <div className="relative z-10 space-y-5 group-hover:text-white transition-colors duration-300 flex flex-col h justify-between h-full">
                   <div className="h-16 w-16">
-                    <img
+                    <LazyImage
                       src={card.hovericon}
                       alt={card.title}
                       className="h-full w-full group-hover:block hidden"
                     />
-                    <img
+                    <LazyImage
                       src={card.icon}
                       alt={card.title}
                       className="h-full w-full group-hover:hidden block"
@@ -716,13 +720,16 @@ function Landing() {
               <SwiperSlide key={testimonial.id}>
                 <div className="border-r-[16px] border-b-[16px] border-[#F7F7F7] max-w-sm space-y-5 mx-auto p-4 bg-white">
                   <div>
-                    <img src="/images/home/stars.svg" alt="rating stars" />
+                    <LazyImage
+                      src="/images/home/stars.svg"
+                      alt="rating stars"
+                    />
                   </div>
                   <p className="font-lato italic text-[#777777]">
                     {testimonial.text}
                   </p>
                   <div className="flex gap-4 items-center">
-                    <img
+                    <LazyImage
                       src={testimonial.image}
                       alt={testimonial.name}
                       className="w-12 h-12 rounded-full"
@@ -755,13 +762,13 @@ function Landing() {
               className="border-r-[16px] border-b-[16px] border-[#F7F7F7] max-w-sm space-y-5 p-4"
             >
               <div>
-                <img src="/images/home/stars.svg" alt="rating stars" />
+                <LazyImage src="/images/home/stars.svg" alt="rating stars" />
               </div>
               <p className="font-lato italic text-[#777777]">
                 {testimonial.text}
               </p>
               <div className="flex gap-4 items-center">
-                <img
+                <LazyImage
                   src={testimonial.image}
                   alt={testimonial.name}
                   className="w-12 h-12 rounded-full"
@@ -792,7 +799,7 @@ function Landing() {
           className="relative w-full  lg:max-w-7xl 3xl:mx-auto  h-[500px] overflow-hidden "
         >
           {/* Before image */}
-          <img
+          <LazyImage
             src={afterImage}
             className="absolute top-0 left-0 h-full w-full object-cover"
             alt="Before"
@@ -807,7 +814,7 @@ function Landing() {
             style={{ width: `${sliderPos}%` }}
           >
             <div className="relative h-full w-full">
-              <img
+              <LazyImage
                 src={beforeImage}
                 className="h-full w-full object-cover"
                 alt="After"
@@ -903,7 +910,7 @@ function Landing() {
           >
             {["1", "2", "3", "4"].map((num) => (
               <SwiperSlide key={num}>
-                <img
+                <LazyImage
                   src={`/images/home/featured-project-${num}.png`}
                   alt={`Featured Project ${num}`}
                   className="w-full max-w-xs mx-auto"
@@ -919,7 +926,7 @@ function Landing() {
         <div className="px-3 md:container lg:max-w-7xl mx-auto ">
           <div className="w-full grid grid-cols-2 lg:grid-cols-4 gap-y-5 gap-x-5">
             <div className="flex lg:justify-center items-center gap-2.5">
-              <img
+              <LazyImage
                 src="/images/icons/creative-premium.svg"
                 alt=""
                 className="h-7 md:h-14"
@@ -929,7 +936,7 @@ function Landing() {
               </h5>
             </div>
             <div className="flex lg:justify-center items-center gap-2.5">
-              <img
+              <LazyImage
                 src="/images/icons/office-interior.svg"
                 alt=""
                 className="h-7 md:h-14"
@@ -939,7 +946,7 @@ function Landing() {
               </h5>
             </div>
             <div className="flex lg:justify-center items-center gap-2.5">
-              <img
+              <LazyImage
                 src="/images/icons/comfort-furniture.svg"
                 alt=""
                 className="h-7 md:h-14"
@@ -949,7 +956,7 @@ function Landing() {
               </h5>
             </div>
             <div className="flex lg:justify-center items-center gap-2.5">
-              <img
+              <LazyImage
                 src="/images/icons/remodeling-interior.svg"
                 alt=""
                 className="h-7 md:h-14"
@@ -974,7 +981,7 @@ function Landing() {
             variants={strategyAnimation}
             className="flex-1"
           >
-            <img src="images/home/about-interior.jpg" alt="" />
+            <LazyImage src="images/home/about-interior.jpg" alt="" />
           </motion.div>
           <div className="flex-1 flex justify-center items-center flex-col space-y-2 px-3 lg:px-0">
             <div className="space-y-3 mb-6">
@@ -990,7 +997,7 @@ function Landing() {
             </div>
             <div className="md:flex">
               <div className=" font-lato space-y-5">
-                <img src="images/icons/modern-living.svg" alt="" />
+                <LazyImage src="images/icons/modern-living.svg" alt="" />
                 <h4 className="font-bold text-xl  ">Modern living quarter</h4>
                 <p className="text-[#000000]/65">
                   Iterative approaches to the corporate strategy foster
@@ -999,7 +1006,7 @@ function Landing() {
               </div>
               <div className="w-px bg-[#000000]/20 mx-10"></div>
               <div className=" font-lato space-y-5">
-                <img src="images/icons/inter-art.svg" alt="" />
+                <LazyImage src="images/icons/inter-art.svg" alt="" />
                 <h4 className="font-bold text-xl  ">
                   Interior Inter Art Design
                 </h4>
@@ -1010,7 +1017,7 @@ function Landing() {
               </div>
             </div>
             <div className="md:flex gap-5 !mt-5">
-              <img
+              <LazyImage
                 src="/images/icons/star-full.svg"
                 alt=""
                 className="self-start"
@@ -1040,7 +1047,7 @@ function Landing() {
           {latestArticles.map((article, index) => (
             <div key={index} className="max-w-sm">
               <div className="relative">
-                <img src={article.image} alt="blogoffice" />
+                <LazyImage src={article.image} alt="blogoffice" />
                 <div className="absolute  left-4 bottom-0 bg-white text-center px-3 py-1 shadow-md rounded-sm">
                   <div className="text-lg font-bold">{article.date}</div>
                   <div className="text-sm text-gray-500 -mt-1 uppercase">
@@ -1090,7 +1097,7 @@ function Landing() {
               <SwiperSlide key={index}>
                 <div className="max-w-xs mx-auto">
                   <div className="relative">
-                    <img src={article.image} alt="blogoffice" />
+                    <LazyImage src={article.image} alt="blogoffice" />
                     <div className="absolute  left-4 bottom-0 bg-white text-center px-3 py-1 shadow-md rounded-sm">
                       <div className="text-lg font-bold">{article.date}</div>
                       <div className="text-sm text-gray-500 -mt-1 uppercase">

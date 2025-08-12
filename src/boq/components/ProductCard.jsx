@@ -1,11 +1,12 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useApp } from "../../Context/Context";
-import { CiFilter } from "react-icons/ci";
+import { CiSliderVertical } from "react-icons/ci";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaStar } from "react-icons/fa";
 import { GoPlus } from "react-icons/go";
 import { PiStarFourFill } from "react-icons/pi";
+import { IoMdSettings } from "react-icons/io";
 
 // Animation settings for easy customization
 const animations = {
@@ -44,12 +45,14 @@ function ProductCard({
     selectedData,
   } = useApp();
 
+  const dropdownRef = useRef(null);
+  const [isOpen, setIsOpen] = useState(false);
+  const options = ["Minimal", "Exclusive", "Luxury", "Custom"];
+
   const productsInCategory = products[selectedCategory?.category] || [];
   // const [loading, setLoading] = useState(true);
   const [loadingImages, setLoadingImages] = useState({}); // Track image loading
-
   const [filtervalue, setFiltervalue] = useState(selectedPlan);
-  const [showMobileFilter, setShowMobileFilter] = useState(false);
 
   const productsInSubCategory = productsInCategory[selectedSubCategory] || [];
 
@@ -132,6 +135,19 @@ function ProductCard({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // Close on outside click
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   // const timeoutRef = useRef(null);
 
   // useEffect(() => {
@@ -176,74 +192,79 @@ function ProductCard({
       data.subcategory1 === selectedSubCategory1
     );
   });
-  console.log(selectedCategory, selectedSubCategory, selectedSubCategory1);
-
-  console.log("filterSelectedProduct", filterSelectedProduct);
-
-  console.log("selectedData", selectedData);
-  console.log("filteredVariants", filteredVariants);
 
   return (
     <div>
       <div className="product-card grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 3xl:grid-cols-6 gap-6 pb-8 pt-3 md:px-6 relative">
-        {/* <div className="absolute right-0 md:right-10 -top-8 border-2 rounded-lg">
-        <select
-          name="plans"
-          id="plans"
-          className="hidden md:block md:px-5 md:py-1 rounded-lg text-xs md:text-base"
-          value={filtervalue}
-          onChange={(e) => setFiltervalue(e.target.value)}
-        >
-          <option value="Custom">Custom</option>
-          <option value="Minimal">Minimal</option>
-          <option value="Exclusive">Exclusive</option>
-          <option value="Luxury">Luxury</option>
-        </select>
-      </div> */}
-
-        <div className="absolute right-0 md:right-10 -top-8 border-2 rounded-lg">
-          {/* Mobile: Filter Icon */}
-          <button
-            className="md:hidden p-2"
-            onClick={() => setShowMobileFilter(!showMobileFilter)} // 👈 Show mobile dropdown/modal
-          >
-            <CiFilter className="h-5 w-5 text-gray-700" />
-          </button>
-
-          {/* Desktop: Show select */}
-          <select
-            name="plans"
-            id="plans"
-            className="hidden md:block md:px-5 md:py-1 rounded-lg text-xs md:text-base"
-            value={filtervalue}
-            onChange={(e) => setFiltervalue(e.target.value)}
-          >
-            <option value="Custom">Custom</option>
-            <option value="Minimal">Minimal</option>
-            <option value="Exclusive">Exclusive</option>
-            <option value="Luxury">Luxury</option>
-          </select>
-
-          {/* Optional: Mobile dropdown (shown when icon is clicked) */}
-          {showMobileFilter && (
-            // <div className="absolute top-10 right-0 bg-white border rounded-lg shadow-md p-2 md:hidden z-20">
-            <select
-              name="plans"
-              id="mobile-plans"
-              className="text-sm px-3 py-1 absolute top-10 right-0 bg-white border rounded-lg shadow-md p-2 md:hidden z-20"
-              value={filtervalue}
-              onChange={(e) => {
-                setFiltervalue(e.target.value);
-                setShowMobileFilter(false); // close after selecting
-              }}
+        <div className="absolute right-0 md:right-10 -top-12" ref={dropdownRef}>
+          <div className="relative">
+            {/* Filter button */}
+            <button
+              className="flex items-center gap-2 md:border md:border-black px-4 py-2"
+              onClick={() => setIsOpen((prev) => !prev)}
             >
-              <option value="Custom">Custom</option>
-              <option value="Minimal">Minimal</option>
-              <option value="Exclusive">Exclusive</option>
-              <option value="Luxury">Luxury</option>
-            </select>
-            // </div>
-          )}
+              <span className="hidden md:block">Filter</span>
+              <CiSliderVertical className="text-[#334A78]" size={20} />
+            </button>
+
+            {/* Dropdown menu */}
+            {isOpen && (
+              <div className="absolute right-0 mt-2 w-36 bg-white shadow-lg z-20">
+                {options.map((option) => (
+                  <button
+                    key={option}
+                    onClick={() => {
+                      setFiltervalue(option);
+                      setIsOpen(false);
+                    }}
+                    className={`flex justify-between items-center border border-black w-full px-4 py-3 ${
+                      filtervalue === option
+                        ? "bg-[#374A75] text-white font-semibold"
+                        : ""
+                    }`}
+                  >
+                    {/* Icon */}
+                    <span className="flex items-center">
+                      {option === "Luxury" && (
+                        <div className="relative">
+                          <PiStarFourFill
+                            className="absolute -top-1 -right-1"
+                            size={8}
+                            color={filtervalue === option ? "#fff" : "#334A78"}
+                          />
+                          <PiStarFourFill
+                            size={16}
+                            color={filtervalue === option ? "#fff" : "#334A78"}
+                          />
+                        </div>
+                      )}
+                      {option === "Exclusive" && (
+                        <PiStarFourFill
+                          size={16}
+                          color={filtervalue === option ? "#fff" : "#334A78"}
+                        />
+                      )}
+                      {option === "Minimal" && (
+                        <FaStar
+                          size={16}
+                          color={filtervalue === option ? "#fff" : "#334A78"}
+                        />
+                      )}
+                      {option === "Custom" && (
+                        <IoMdSettings
+                          size={18}
+                          color={filtervalue === option ? "#fff" : "#334A78"}
+                        />
+                      )}
+                    </span>
+
+                    {/* Text */}
+                    <span className="text-right">{option}</span>
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
 
         {loading ? (
@@ -278,13 +299,12 @@ function ProductCard({
               >
                 {variant.segment && (
                   <div
-                    className={`absolute top-2 left-2 font-bold font-Poppins text-sm px-3 py-1 text-white z-10 flex items-center gap-2 rounded-tl-sm rounded-bl-lg rounded-tr-md rounded-br-md ${
-                      variant.segment === "Minimal"
-                        ? "bg-gradient-to-l from-[#75A2BE] to-[#5584B6]" //"bg-gray-500"
-                        : variant.segment === "Luxury"
-                        ? "bg-gradient-to-l from-[#C79733] to-[#8E691D]" //"bg-yellow-500"
-                        : "bg-gradient-to-l from-[#4A4A4A] to-[#1F1F1F]" //"bg-purple-600"
-                    }`}
+                    className="absolute top-2 left-2 font-bold font-Poppins text-sm px-3 py-1.5 text-white z-10 flex items-center gap-2 rounded-tl-sm rounded-bl-lg rounded-tr-md rounded-br-md bg-gradient-to-l from-[#75A2BE] to-[#5584B6]"
+                    //   variant.segment === "Minimal"
+                    //     ? "bg-gradient-to-l from-[#75A2BE] to-[#5584B6]" //"bg-gray-500"    //keep this sunny
+                    //     : variant.segment === "Luxury"
+                    //     ? "bg-gradient-to-l from-[#C79733] to-[#8E691D]" //"bg-yellow-500"
+                    //     : "bg-gradient-to-l from-[#4A4A4A] to-[#1F1F1F]" //"bg-purple-600"
                     // style={{
                     //   clipPath: "polygon(0 0, 100% 0, 85% 100%, 0% 100%)",
                     // }}
@@ -315,7 +335,7 @@ function ProductCard({
                 )}
 
                 {filterSelectedProduct[0]?.id === variant.id && (
-                  <div className="absolute top-2 right-2 bg-[#347ABF] text-xs font-semibold text-white px-3 py-2 z-20 rounded-bl-xl">
+                  <div className="absolute top-2 right-2 bg-[#347ABF] text-xs font-semibold text-white px-3 py-2 z-10 rounded-bl-xl">
                     SELECTED
                   </div>
                 )}

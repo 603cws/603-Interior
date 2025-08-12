@@ -66,7 +66,6 @@ function Navbar({
     accountHolder,
     categories,
     setUserId,
-    setTotalArea,
     totalArea,
     userId,
     userResponses,
@@ -80,6 +79,7 @@ function Navbar({
     setBOQTitle,
     currentLayoutData,
     setCurrentLayoutData,
+    BOQID,
   } = useApp();
 
   // const totalArea = currentLayoutData.totalArea;
@@ -854,7 +854,7 @@ function Navbar({
           hvacType: userResponses.hvacType || "",
         },
       ];
-      const { data, error } = await supabase
+      const { error } = await supabase
         .from("boq_data_new")
         .update({
           products: products,
@@ -900,9 +900,30 @@ function Navbar({
       toast.error("Please add a product to download BOQ.");
       return;
     }
-    setIsDownloading(true); // Show loading animation
 
     try {
+      // Fetch the BOQ details from Supabase
+      const { data, error } = await supabase
+        .from("boq_data_new")
+        .select("isDraft, boqTitle")
+        .eq("id", BOQID)
+        .single();
+
+      if (error) {
+        console.error("Error fetching BOQ details:", error);
+        toast.error("Unable to check BOQ status. Please try again.");
+        return;
+      }
+
+      // Check if it's a draft BOQ and matches the context title
+      if (data?.isDraft && data?.boqTitle === BOQTitle) {
+        toast.error("Please save the BOQ before downloading.");
+        setShowBoqPrompt(true);
+        return;
+      }
+
+      setIsDownloading(true); // Show loading animation
+
       await PDFGenerator.generatePDF(
         selectedData,
         calculateGrandTotal,
@@ -913,6 +934,7 @@ function Navbar({
         BOQTitle,
         userResponses
       );
+
       setIsDownloading(false);
     } catch (error) {
       console.error("Error generating PDF:", error);
@@ -921,7 +943,7 @@ function Navbar({
   };
 
   return (
-    <div className="navbar sticky top-0 z-20 font-Poppins">
+    <div className="navbar sticky top-0 z-30 font-Poppins">
       <div className="flex justify-between bg-gradient-to-r from-[#23445B] to-[#487BA0] items-center px-4 h-[50px]">
         <div className="hidden sm:block absolute lg:flex gap-2 right-1/4 lg:right-20 -translate-x-full">
           {import.meta.env.MODE === "development" && BOQTitle && (
@@ -1037,17 +1059,7 @@ function Navbar({
                   Layout Details
                 </li>
                 <li
-                  onClick={() =>
-                    PDFGenerator.generatePDF(
-                      selectedData,
-                      calculateGrandTotal,
-                      accountHolder.companyName,
-                      accountHolder.location,
-                      areasData,
-                      categories,
-                      BOQTitle
-                    )
-                  }
+                  onClick={handleDownload}
                   className="hover:px-2 hover:bg-white hover:text-[#1A3A36] mb-2 py-1 px-2 rounded-lg cursor-pointer"
                 >
                   Download
