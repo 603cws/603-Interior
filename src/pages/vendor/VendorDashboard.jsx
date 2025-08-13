@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useReducer, useState } from "react";
 import { useApp } from "../../Context/Context";
 import { FaArrowLeft } from "react-icons/fa6";
 import VendorProfile from "./VendorProfile";
@@ -9,53 +9,71 @@ import Help from "../user/Help";
 import UserSetting from "../user/UserSetting";
 import { useLogout } from "../../utils/HelperFunction";
 
+function handlesidebarState(state, action) {
+  switch (action.type) {
+    case "TOGGLE_SECTION":
+      return {
+        isSettingOpen: action.payload === "Setting",
+        isProductOpen: action.payload === "Product",
+        iseditopen: action.payload === "Edit",
+        dashboard: action.payload === "Dashboard",
+        help: action.payload === "Help",
+        currentSection: action.payload,
+      };
+    default:
+      return state;
+  }
+}
+
+const SECTIONS = {
+  DASHBOARD: "Dashboard",
+  PRODUCT: "Product",
+  SETTING: "Setting",
+  HELP: "Help",
+};
+
+const sidebarInitialState = {
+  isSettingOpen: false,
+  isProductOpen: false,
+  dashboard: true,
+  help: false,
+  currentSection: "Dashboard",
+};
 function VendorDashboard() {
   const logout = useLogout();
-  const [isSettingOpen, setIsSettingOpen] = useState(false);
-  const [isProductOpen, setIsProductOpen] = useState(false);
-  const [isdashboardopen, setIsdashboardopen] = useState(true);
   const [iseditopen, setIsEditopen] = useState(true);
-  const [help, setHelp] = useState(false);
+
+  const [sidebarstate, sidebarDispatch] = useReducer(
+    handlesidebarState,
+    sidebarInitialState
+  );
 
   const { accountHolder } = useApp();
-
   const handlesetting = () => {
-    setIsProductOpen(false);
-    setIsdashboardopen(false);
-    setIsSettingOpen(true);
-    setHelp(false);
+    sidebarDispatch({ type: "TOGGLE_SECTION", payload: SECTIONS.SETTING });
   };
   const handleproduct = () => {
-    setIsSettingOpen(false);
-    setIsdashboardopen(false);
-    setIsProductOpen(true);
-    setHelp(false);
+    sidebarDispatch({ type: "TOGGLE_SECTION", payload: SECTIONS.PRODUCT });
   };
 
   const handledashboard = () => {
-    setIsSettingOpen(false);
-    setIsProductOpen(false);
-    setIsdashboardopen(true);
-    setHelp(false);
+    sidebarDispatch({ type: "TOGGLE_SECTION", payload: SECTIONS.DASHBOARD });
   };
 
   const handleHelp = () => {
-    setIsSettingOpen(false);
-    setIsProductOpen(false);
-    setIsdashboardopen(false);
-    setHelp(true);
+    sidebarDispatch({ type: "TOGGLE_SECTION", payload: SECTIONS.HELP });
   };
 
   return (
-    <div className="bg-[url('images/bg/vendor.png')] bg-cover bg-center bg-no-repeat p-3 xl:p-5">
+    <div className="">
       <div className="flex gap-3 overflow-y-hidden max-h-fit bg-white rounded-3xl">
         {/* sidebar */}
         <Sidebar
           handleLogout={logout}
           handleproduct={handleproduct}
           handlesetting={handlesetting}
-          isProductOpen={isProductOpen}
-          isSettingOpen={isSettingOpen}
+          isProductOpen={sidebarstate?.isProductOpen}
+          isSettingOpen={sidebarstate?.isSettingOpen}
           handledashboard={handledashboard}
           handleHelp={handleHelp}
         />
@@ -80,7 +98,7 @@ function VendorDashboard() {
           <div className="flex-1  border-2 border-gray-400 rounded-3xl my-2">
             {/* dashboard */}
 
-            {isdashboardopen && (
+            {sidebarstate?.dashboard && (
               <div className="overflow-y-hidden scrollbar-hide h-[calc(100vh-120px)] py-2 relative">
                 <div className="p-4">
                   <VendorDashboardCards handleproduct={handleproduct} />
@@ -88,10 +106,10 @@ function VendorDashboard() {
               </div>
             )}
             {/* products */}
-            {isProductOpen && <VendorItem />}
+            {sidebarstate?.isProductOpen && <VendorItem />}
 
             {/* setting */}
-            {isSettingOpen && (
+            {sidebarstate?.isSettingOpen && (
               <div className="overflow-y-hidden scrollbar-hide h-[calc(100vh-120px)] py-2 relative">
                 <div className="flex flex-col justify-between  pt-2 sticky top-0">
                   <div className="border-b-2 border-b-[#ccc] py-2 px-4">
@@ -126,7 +144,7 @@ function VendorDashboard() {
             )}
 
             {/* help */}
-            {help && <Help isvendor={true} />}
+            {sidebarstate?.help && <Help isvendor={true} />}
           </div>
         </div>
       </div>

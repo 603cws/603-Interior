@@ -14,14 +14,17 @@ import DashboardProductCard from "./DashboardProductCard";
 import RejectedProduct from "./RejectedProduct";
 import VendorProductEdit from "./VendorProductEdit";
 import VendorEditAddon from "./VendorEditAddon";
+import ItemList from "./ItemList";
+import { IoIosSearch } from "react-icons/io";
+import { IoCloseCircle, IoCloudDownloadOutline } from "react-icons/io5";
 // import { ChevronDownIcon, FunnelIcon } from "@heroicons/react/24/outline";
 
 function VendorItem() {
   const [toggle, setToggle] = useState(true);
   const [selectedTab, setSelectedTab] = useState("products");
   const [isAddProduct, setIsAddProduct] = useState(false);
-  const [isProductHovered, setIsProductHovered] = useState(false);
-  const [isAddonHovered, setIsAddonHovered] = useState(false);
+  // const [isProductHovered, setIsProductHovered] = useState(false);
+  // const [isAddonHovered, setIsAddonHovered] = useState(false);
 
   // state for the dispay in product page
   const [addNewProduct, setAddNewProduct] = useState(false);
@@ -66,6 +69,39 @@ function VendorItem() {
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [filteredAddons, setFilteredAddons] = useState([]);
 
+  const items = toggle ? filteredProducts : filteredAddons;
+
+  const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
+  const [mobileFilterOpen, setMobileFilterOPen] = useState(false);
+  // const items = Array.from({ length: 55 }, (_, index) => ({
+  //   id: index + 1,
+  //   name: `Item ${index + 1}`,
+  // }));
+
+  // pagination
+  const [itemsPerPage, setItemsPerPage] = useState(20); // Default (gets updated dynamically)
+  const [currentPage, setCurrentPage] = useState(1);
+  const totalPages = Math.ceil(items.length / itemsPerPage);
+  // const totalPages = Math.ceil(items.length / itemsPerPage);
+  const tableRef = useRef(null);
+  const scrollContainerRef = useRef(null);
+  const [lastPageBeforeSearch, setLastPageBeforeSearch] = useState(1);
+
+  // Slice the items for pagination
+  const paginatedItems = items.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
+  const goToPage = (page) => {
+    if (page > 0 && page <= totalPages) {
+      setCurrentPage(page);
+    }
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  };
+
   //for filters status
   // const [selected, setSelected] = useState("");
   // const [isOpen, setIsOpen] = useState(false);
@@ -75,10 +111,11 @@ function VendorItem() {
     { name: "Add-Ons", value: "addons" },
   ];
 
+  const showtabs = products.length > 0 || addons.length > 0;
+
   const { accountHolder } = useApp();
 
   // const items = toggle ? filteredProducts : filteredAddons;
-  const items = toggle ? filteredProducts : filteredAddons;
 
   const baseImageUrl =
     "https://bwxzfwsoxwtzhjbzbdzs.supabase.co/storage/v1/object/public/addon/";
@@ -90,21 +127,6 @@ function VendorItem() {
     setSelectedTab(tab);
     setToggle(tab === "products"); // Set toggle dynamically
   };
-
-  // const handleSelect = (e) => {
-  //   setSelected(e.target.value);
-
-  //   if (e.target.value !== "") {
-  //     const filtered = products.filter(
-  //       (item) => item.status.toLowerCase() === e.target.value.toLowerCase()
-  //     );
-  //     setFilteredProducts(filtered);
-  //   } else {
-  //     setFilteredProducts(products);
-  //   }
-
-  //   setIsOpen(false); // close dropdown after selection (optional)
-  // };
 
   // Fetch Products from Supabase
   const fetchProducts = async () => {
@@ -311,7 +333,7 @@ function VendorItem() {
 
   return (
     <>
-      <div className="overflow-y-auto scrollbar-hide h-[calc(100vh-120px)] rounded-3xl relative ">
+      <div className="overflow-y-auto scrollbar-hide h-[calc(100vh-100px)] rounded-3xl relative ">
         {addNewProduct ? (
           <VendorNewProduct
             setAddNewProduct={setAddNewProduct}
@@ -347,14 +369,14 @@ function VendorItem() {
                   product list
                 </h3>
 
-                <div className="w-1/2">
+                {/* <div className="w-1/2">
                   <input
                     type="text"
                     className="w-full rounded-lg px-2 py-1 outline-none border-2 border-gray-400"
                     placeholder="......search by product name"
                     onChange={(e) => filterItems(e.target.value)}
                   />
-                </div>
+                </div> */}
 
                 {/* <div className="relative inline-block text-left">
              
@@ -386,25 +408,82 @@ function VendorItem() {
 
                 <button
                   onClick={handlenewproduct}
-                  className="capitalize shadow-sm py-2 px-4 text-sm flex justify-center items-center border-2"
+                  className="capitalize bg-[#374A75] text-white shadow-sm py-2 px-4 text-sm flex justify-center items-center border-2"
                 >
                   <IoIosAdd size={20} />
                   add product
                 </button>
               </div>
-              <div className="flex gap-3 px-4 py-2 border-b-2 border-b-gray-400">
-                {tabs.map((tab) => (
+              <div
+                className={`relative flex justify-between items-center gap-3 px-2 md:px-4 py-2 border-b-2 border-b-gray-400 ${
+                  !showtabs && "hidden"
+                }`}
+              >
+                <div className="flex gap-3 items-center">
+                  {showtabs &&
+                    tabs.map((tab) => (
+                      <button
+                        key={tab.value}
+                        className={`flex items-center text-[#374A75] text-xs lg:text-base text-nowrap gap-2 px-6 py-2 border border-[#374A75]  rounded-lg ${
+                          selectedTab === tab.value
+                            ? "bg-[#D3E3F0] "
+                            : "bg-white "
+                        }`}
+                        value={tab.value}
+                        onClick={handleTabClick}
+                      >
+                        {tab.name}
+                      </button>
+                    ))}
+                </div>
+
+                <div className="lg:hidden">
                   <button
-                    key={tab.value}
-                    className={`flex items-center gap-2 px-6 py-2 border rounded-xl ${
-                      selectedTab === tab.value ? "bg-[#B4EAEA]" : "bg-white "
-                    }`}
-                    value={tab.value}
-                    onClick={handleTabClick}
+                    onClick={() => setMobileSearchOpen(true)}
+                    className="py-1.5 px-2 flex justify-center items-center border rounded"
                   >
-                    {tab.name}
+                    <IoIosSearch size={20} color="#374A75" />
                   </button>
-                ))}
+                  {mobileSearchOpen && (
+                    <div
+                      className={`absolute top-0 bg-[#fff] w-full h-full z-30 flex justify-between items-center px-3 !transition-all !duration-700 !ease-in-out ${
+                        mobileSearchOpen
+                          ? "opacity-100 translate-x-0 left-0"
+                          : "opacity-0 -translate-x-full right-0"
+                      }`}
+                    >
+                      <input
+                        type="text"
+                        // value={searchQuery}
+                        placeholder="......search by product name"
+                        onChange={(e) => filterItems(e.target.value)}
+                        className="w-3/4 px-2 py-2.5 border rounded-sm text-[10px]"
+                      />
+                      <button onClick={() => setMobileSearchOpen(false)}>
+                        <IoCloseCircle size={25} color="#374A75" />
+                      </button>
+                    </div>
+                  )}
+                </div>
+
+                <div className="hidden lg:block w-3/2 ml-auto">
+                  <input
+                    type="text"
+                    // value={searchQuery}
+                    className="w-full rounded-lg px-2 py-1 outline-none border-2 border-gray-400"
+                    placeholder="....search"
+                    onChange={(e) => filterItems(e.target.value)}
+                  />
+                </div>
+
+                {/* <div className="w-3/2">
+                  <input
+                    type="text"
+                    className="w-full rounded-lg px-2 py-1 outline-none border-2 text-xs lg:text-base border-gray-400"
+                    placeholder="......search"
+                    onChange={(e) => filterItems(e.target.value)}
+                  />
+                </div> */}
               </div>
             </div>
 
@@ -415,148 +494,194 @@ function VendorItem() {
                 <Spinner />
               ) : // ) : (toggle ? products : addons).length > 0 ? (
               items.length > 0 ? (
-                <section className=" h-[90%] font-Poppins overflow-hidden">
-                  <div className="w-full h-full border-t border-b border-[#CCCCCC] overflow-y-auto custom-scrollbar">
-                    <table className="min-w-full border-collapse">
-                      <thead className="bg-[#FFFFFF] sticky top-0 z-10 px-8 text-center text-[#000] text-base">
-                        <tr>
-                          {toggle ? (
-                            <th className="p-3 font-medium">Product Name</th>
-                          ) : (
-                            <th className="p-3 font-medium">Addon Name</th>
-                          )}
-
-                          <th className="p-3  font-medium">Price</th>
-                          {toggle && (
-                            <>
-                              <th className="p-3 font-medium">Details</th>
-                              {/* <th className="p-3 font-medium">
-                                Category
-                              </th>
-                              <th className="p-3 font-medium">
-                                specification
-                              </th> */}
-                            </>
-                          )}
-                          <th className="p-3 font-medium">status</th>
-                          <th className="p-3 font-medium">Action</th>
-                        </tr>
-                      </thead>
-                      <tbody className=" text-sm">
-                        {/* {(toggle ? products : addons).map((item) => ( */}
-                        {items.map((item) => (
-                          <tr
-                            key={item.id}
-                            className="hover:bg-gray-50 cursor-pointer"
-                          >
-                            <td className="border border-gray-200 p-3 align-middle">
-                              <div className="flex items-center gap-2">
-                                <img
-                                  src={`${baseImageUrl}${item.image}`}
-                                  alt={item.title}
-                                  className="w-10 h-10 object-cover rounded"
-                                />
-                                <span>{item.title}</span>
-                              </div>
-                            </td>
-                            <td className="border border-gray-200 p-3 align-middle">
-                              ₹{item.price}
-                            </td>
+                <>
+                  <section className=" h-[90%] font-Poppins overflow-hidden">
+                    <ItemList
+                      handleProductPreview={handleProductPreview}
+                      items={items}
+                    />
+                  </section>
+                  {/* <section className=" h-[90%] font-Poppins overflow-hidden">
+                    <ItemList />
+                  </section> */}
+                  {/* <section className=" h-[90%] font-Poppins overflow-hidden">
+                    <div
+                      ref={scrollContainerRef}
+                      className="w-full h-full border-t border-b border-[#CCCCCC] overflow-y-auto custom-scrollbar"
+                    >
+                      <table className="min-w-full border-collapse">
+                        <thead className="bg-[#FFFFFF] sticky top-0 z-10 px-8 text-center text-[#000] text-base">
+                          <tr>
+                            {toggle ? (
+                              <th className="p-3 font-medium">Product Name</th>
+                            ) : (
+                              <th className="p-3 font-medium">Addon Name</th>
+                            )}
+  
+                            <th className="p-3  font-medium">Price</th>
                             {toggle && (
                               <>
-                                <td className="border border-gray-200 p-3 align-middle">
-                                  {item.details}
-                                </td>
-                                {/* <td className="border border-gray-200 p-3 align-middle">
-                                  {item.products?.category || "N/A"}
-                                </td>
-                                <td className="border border-gray-200 p-3 align-middle">
-                                  {item.products?.subcategory1 || "N/A"}
-                                </td> */}
+                                <th className="p-3 font-medium">Details</th>
+                            
                               </>
                             )}
-                            <td
-                              onClick={() => {
-                                if (item.status === "rejected") {
-                                  setRejectedProductView(true);
-                                  setSelectedProductview(item);
-                                }
-                              }}
-                              className={`border border-gray-200 p-3 align-middle ${
-                                item.status === "pending" && "text-[#13B2E4]"
-                              } ${
-                                item.status === "approved" && "text-green-600"
-                              } ${
-                                item.status === "rejected" && "text-red-500"
+                            <th className="p-3 font-medium">status</th>
+                            <th className="p-3 font-medium">Action</th>
+                          </tr>
+                        </thead>
+                        <tbody className=" text-sm">
+                        
+                          {items.map((item) => (
+                            <tr
+                              key={item.id}
+                              className="hover:bg-gray-50 cursor-pointer"
+                            >
+                              <td className="border border-gray-200 p-3 align-middle">
+                                <div className="flex items-center gap-2">
+                                  <img
+                                    src={`${baseImageUrl}${item.image}`}
+                                    alt={item.title}
+                                    className="w-10 h-10 object-cover rounded"
+                                  />
+                                  <span>{item.title}</span>
+                                </div>
+                              </td>
+                              <td className="border border-gray-200 p-3 align-middle">
+                                ₹{item.price}
+                              </td>
+                              {toggle && (
+                                <>
+                                  <td className="border border-gray-200 p-3 align-middle">
+                                    {item.details}
+                                  </td>
+                                
+                                </>
+                              )}
+                              <td
+                                onClick={() => {
+                                  if (item.status === "rejected") {
+                                    setRejectedProductView(true);
+                                    setSelectedProductview(item);
+                                  }
+                                }}
+                                className={`border border-gray-200 p-3 align-middle ${
+                                  item.status === "pending" && "text-[#13B2E4]"
+                                } ${
+                                  item.status === "approved" && "text-green-600"
+                                } ${
+                                  item.status === "rejected" && "text-red-500"
+                                }`}
+                              >
+                                {item.status}
+                              </td>
+  
+                              <td className="border border-gray-200 p-3 align-middle flex justify-center items-center relative">
+                                <button
+                                  className="bg-white flex justify-center items-center py-1.5 w-20 mb-2"
+                                  ref={(el) => (buttonRef.current[item.id] = el)}
+                                  onClick={() => handleMenuToggle(item.id)}
+                                >
+                                  <CiMenuKebab size={25} />
+                                </button>
+  
+                                {openMenuId === item.id && (
+                                  <div
+                                    ref={(el) => (menuRef.current[item.id] = el)}
+                                    className="absolute top-1/2 left-0 transform mt-2 bg-white border border-gray-300 shadow-md rounded-md w-24 z-10"
+                                  >
+                                    <button
+                                      onClick={() => {
+                                        handleProductPreview(item);
+                                      }}
+                                      className=" flex gap-2 items-center w-full text-left px-3 py-2 hover:bg-gray-200"
+                                    >
+                                      <VscEye /> view
+                                    </button>
+                                    {toggle ? (
+                                      <button
+                                        onClick={() => {
+                                          setSelectedproduct(item);
+                                          setEditProduct(true);
+                                        }}
+                                        className=" flex gap-2 items-center w-full text-left px-3 py-2 hover:bg-gray-200"
+                                      >
+                                        <VscEye /> Edit
+                                      </button>
+                                    ) : (
+                                      <button
+                                        onClick={() => {
+                                          setSelectedAddon(item);
+                                          setEditAddon(true);
+                                        }}
+                                        
+                                        className=" flex gap-2 items-center w-full text-left px-3 py-2 hover:bg-gray-200"
+                                      >
+                                        <VscEye /> Edit
+                                      </button>
+                                    )}
+                                    <button
+                                      onClick={() => {
+                                        handleDeleteClick(item);
+                                      }}
+                                      className="flex gap-2 items-center w-full text-left px-3 py-2 hover:bg-gray-200"
+                                    >
+                                      <MdOutlineDelete /> Delete
+                                    </button>
+                                  </div>
+                                )}
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    
+                    </div>
+                  </section> */}
+                  {/* {totalPages > 1 && (
+                    <div className="flex justify-center items-center gap-2  z-30 sticky bottom-0  bg-white  text-[#3d194f]">
+                      <button
+                        onClick={() => goToPage(currentPage - 1)}
+                        disabled={currentPage === 1}
+                        className="px-3 py-1 border rounded disabled:opacity-50 text-[#3d194f]"
+                      >
+                        Previous
+                      </button>
+
+                      {Array.from({ length: totalPages }, (_, i) => i + 1).map(
+                        (page) =>
+                          page === 1 ||
+                          page === totalPages ||
+                          (page >= currentPage - 1 &&
+                            page <= currentPage + 1) ? (
+                            <button
+                              key={page}
+                              onClick={() => goToPage(page)}
+                              className={`w-8 h-8 flex items-center justify-center  ${
+                                currentPage === page
+                                  ? "bg-[#aca9d3] text-white rounded-full "
+                                  : "rounded-md text-[#3d194f]"
                               }`}
                             >
-                              {item.status}
-                            </td>
+                              {page}
+                            </button>
+                          ) : page === currentPage + 2 ||
+                            page === currentPage - 2 ? (
+                            <span key={page} className="px-2">
+                              ...
+                            </span>
+                          ) : null
+                      )}
 
-                            <td className="border border-gray-200 p-3 align-middle flex justify-center items-center relative">
-                              <button
-                                className="bg-white flex justify-center items-center py-1.5 w-20 mb-2"
-                                ref={(el) => (buttonRef.current[item.id] = el)}
-                                onClick={() => handleMenuToggle(item.id)}
-                              >
-                                <CiMenuKebab size={25} />
-                              </button>
-
-                              {openMenuId === item.id && (
-                                <div
-                                  ref={(el) => (menuRef.current[item.id] = el)}
-                                  className="absolute top-1/2 left-0 transform mt-2 bg-white border border-gray-300 shadow-md rounded-md w-24 z-10"
-                                >
-                                  <button
-                                    onClick={() => {
-                                      handleProductPreview(item);
-                                    }}
-                                    className=" flex gap-2 items-center w-full text-left px-3 py-2 hover:bg-gray-200"
-                                  >
-                                    <VscEye /> view
-                                  </button>
-                                  {toggle ? (
-                                    <button
-                                      onClick={() => {
-                                        setSelectedproduct(item);
-                                        setEditProduct(true);
-                                      }}
-                                      className=" flex gap-2 items-center w-full text-left px-3 py-2 hover:bg-gray-200"
-                                    >
-                                      <VscEye /> Edit
-                                    </button>
-                                  ) : (
-                                    <button
-                                      onClick={() => {
-                                        setSelectedAddon(item);
-                                        setEditAddon(true);
-                                      }}
-                                      // onClick={() => {
-                                      //   setSelectedproduct(item);
-                                      //   setEditProduct(true);
-                                      // }}
-                                      className=" flex gap-2 items-center w-full text-left px-3 py-2 hover:bg-gray-200"
-                                    >
-                                      <VscEye /> Edit
-                                    </button>
-                                  )}
-                                  <button
-                                    onClick={() => {
-                                      handleDeleteClick(item);
-                                    }}
-                                    className="flex gap-2 items-center w-full text-left px-3 py-2 hover:bg-gray-200"
-                                  >
-                                    <MdOutlineDelete /> Delete
-                                  </button>
-                                </div>
-                              )}
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                </section>
+                      <button
+                        onClick={() => goToPage(currentPage + 1)}
+                        disabled={currentPage === totalPages}
+                        className="px-3 py-1 border rounded disabled:opacity-50 text-[#3d194f]"
+                      >
+                        Next
+                      </button>
+                    </div>
+                  )} */}
+                </>
               ) : (
                 <>
                   <p className="p-5 text-gray-500 text-center">
@@ -566,56 +691,13 @@ function VendorItem() {
               ))}
 
             {isAddProduct && (
-              <div className="flex flex-col justify-center items-center h-[90%] font-Poppins overflow-y-hidden">
-                <div className="border-2 border-gray-200 px-28 py-14 flex justify-center items-center gap-10 rounded-2xl shadow-lg capitalize relative">
-                  <div
-                    onClick={() => {
-                      setAddNewProduct(true);
-                      setIsAddProduct(false);
-                    }}
-                    onMouseEnter={() => setIsProductHovered(true)}
-                    onMouseLeave={() => setIsProductHovered(false)}
-                    className="flex flex-col justify-center items-center gap-5 p-10 shadow-[0_4px_10px_rgba(180,234,234,50)] font-bold rounded-xl cursor-pointer hover:bg-[#194F48] hover:text-white hover:scale-110 transition-transform duration-200 ease-in-out"
-                  >
-                    <img
-                      src={
-                        isProductHovered
-                          ? "images/product-icon-2.png"
-                          : "images/product-icon-1.png"
-                      }
-                      alt=""
-                    />
-                    <h2 className="text-lg">product</h2>
-                  </div>
-
-                  <div
-                    onClick={() => {
-                      setAddNewAddon(true);
-                      setIsAddProduct(false);
-                    }}
-                    onMouseEnter={() => setIsAddonHovered(true)}
-                    onMouseLeave={() => setIsAddonHovered(false)}
-                    className="flex flex-col justify-center items-center gap-5 p-10 shadow-[0_4px_10px_rgba(180,234,234,100)] font-bold rounded-xl cursor-pointer hover:bg-[#194F48] hover:text-white hover:scale-110 transition-transform duration-200 ease-in-out"
-                  >
-                    <img
-                      src={
-                        isAddonHovered
-                          ? "images/addOn-icon-2.png"
-                          : "images/addOn-icon-1.png"
-                      }
-                      alt=""
-                    />
-                    <h2 className="text-lg">add ons</h2>
-                  </div>
-
-                  <div className="absolute top-2 right-2">
-                    <MdOutlineCancel
-                      onClick={handleAddproductclose}
-                      size={25}
-                      className="cursor-pointer"
-                    />
-                  </div>
-                </div>
+              <div className="flex flex-col md:justify-center md:items-center h-[80%] font-Poppins overflow-auto ">
+                <AddItem
+                  handleAddproductclose={handleAddproductclose}
+                  setAddNewAddon={setAddNewAddon}
+                  setAddNewProduct={setAddNewProduct}
+                  setIsAddProduct={setIsAddProduct}
+                />
               </div>
             )}
           </>
@@ -682,3 +764,56 @@ function VendorItem() {
 }
 
 export default VendorItem;
+
+function AddItem({
+  setAddNewProduct,
+  setIsAddProduct,
+  setAddNewAddon,
+  handleAddproductclose,
+}) {
+  return (
+    <div className="p-2 border-2 border-gray-200 md:px-28 md:py-14 flex flex-col  md:flex-row justify-center items-center gap-4 md:gap-10 rounded-2xl shadow-lg capitalize relative">
+      <Item
+        setAddNewitem={setAddNewProduct}
+        setIsAddProduct={setIsAddProduct}
+        title={"product"}
+        img1={"images/pantry-white.png"}
+        img2={"images/pantry-blue.png"}
+      />
+      <Item
+        setAddNewitem={setAddNewAddon}
+        setIsAddProduct={setIsAddProduct}
+        title={"Addon"}
+        img1={"images/chair-white.png"}
+        img2={"images/chair-blue.png"}
+      />
+
+      <div className="absolute top-2 right-2">
+        <MdOutlineCancel
+          onClick={handleAddproductclose}
+          size={25}
+          className="cursor-pointer"
+        />
+      </div>
+    </div>
+  );
+}
+
+function Item({ setIsAddProduct, setAddNewitem, title, img1, img2 }) {
+  const [isHovered, setIsHovered] = useState(false);
+  return (
+    <div
+      onClick={() => {
+        setAddNewitem(true);
+        setIsAddProduct(false);
+      }}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      className="flex flex-col border border-[#ccc] justify-center items-center gap-5 p-10 shadow-lg font-bold rounded-xl cursor-pointer hover:bg-[#374A75] hover:text-white hover:scale-110 transition-transform duration-200 ease-in-out"
+      // className="flex flex-col justify-center items-center gap-5 p-10 shadow-[0_4px_10px_rgba(180,234,234,50)] font-bold rounded-xl cursor-pointer hover:bg-[#374A75] hover:text-white hover:scale-110 transition-transform duration-200 ease-in-out"
+    >
+      <img src={isHovered ? img1 : img2} alt="item" className="w-28" />
+      <h2 className="text-lg">{title}</h2>
+    </div>
+  );
+}

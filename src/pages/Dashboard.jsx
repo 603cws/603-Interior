@@ -796,7 +796,7 @@ function Dashboard() {
         )}
 
         {sidebarstate?.dashboard && (
-          <div className="flex flex-col h-full min-h-0 loverflow-hidden lg:border-2 border-[#334A78] rounded-lg bg-white">
+          <div className="flex flex-col h-full min-h-0 overflow-hidden lg:border-2 border-[#334A78] rounded-lg bg-white">
             <DashboardView
               totalArea={totalArea}
               handlecheckboqdetails={handlecheckboqdetails}
@@ -813,7 +813,7 @@ function Dashboard() {
         )}
 
         {sidebarstate?.isBookAppointmentOpen && (
-          <div className="flex flex-col h-full min-h-0 loverflow-hidden lg:border-2 border-[#334A78] rounded-lg bg-white">
+          <div className="flex flex-col h-full min-h-0  lg:border-2 border-[#334A78] rounded-lg bg-white">
             <BookAppointment isdashboardbooking={true} />
           </div>
         )}

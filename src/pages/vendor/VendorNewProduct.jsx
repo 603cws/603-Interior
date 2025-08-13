@@ -394,7 +394,7 @@ function VendorNewProduct({
 
   return (
     <div className="flex flex-col justify-center items-start font-Poppins relative">
-      <div className="px-5 py-2 border-b-2 bg-white w-full border-b-gray-400 sticky top-0 z-10">
+      <div className="px-3 lg:px-5 py-2 border-b-2 bg-white w-full border-b-gray-400 sticky top-0 z-10">
         <button
           onClick={() => {
             setAddNewProduct(false);
@@ -410,7 +410,7 @@ function VendorNewProduct({
       </div>
       {/* <form action=""> */}
       <form
-        className="lg:flex gap-5 py-3 px-5 w-full"
+        className="lg:flex gap-5 px-3 py-2  lg:py-3 lg:px-5 w-full"
         onSubmit={onSubmit}
         onKeyDown={(e) => {
           if (e.key === "Enter") {
@@ -706,7 +706,7 @@ function VendorNewProduct({
               Discard
             </button>
             <button
-              className="border-2 px-5 py-2 bg-[#194F48] text-white capitalize rounded-lg"
+              className="border-2 px-5 py-2 bg-[#374A75] text-white capitalize rounded-lg"
               type="submit"
               // onClick={onsubmit}
               disabled={isSubmitting}

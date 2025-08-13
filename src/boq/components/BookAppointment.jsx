@@ -107,16 +107,24 @@ function BookAppointment({ onClose, isdashboardbooking = false }) {
             user_phoneno: accountHolder.phone,
           },
         };
-        await axios.post("https://api.emailjs.com/api/v1.0/email/send", data, {
-          headers: { "Content-Type": "application/json" },
-        });
-        await axios.post(
+        const user = await axios.post(
+          "https://api.emailjs.com/api/v1.0/email/send",
+          data,
+          {
+            headers: { "Content-Type": "application/json" },
+          }
+        );
+        const admin = await axios.post(
           "https://api.emailjs.com/api/v1.0/email/send",
           Admindata,
           {
             headers: { "Content-Type": "application/json" },
           }
         );
+
+        console.log("user", user);
+        console.log("admin", admin);
+
         toast.success("we will shortly reach you");
         setIsappointmentbooked(true);
         saveBookingDatainDB(formattedDate, weekday, endtime);
@@ -204,7 +212,7 @@ function BookAppointment({ onClose, isdashboardbooking = false }) {
         className={`${
           !isdashboardbooking
             ? "max-w-sm md:max-w-4xl rounded-2xl border bg-[#fff] p-5 relative overflow-auto"
-            : "w-full"
+            : "w-full "
         }`}
       >
         {!isdashboardbooking && (
@@ -219,9 +227,13 @@ function BookAppointment({ onClose, isdashboardbooking = false }) {
         >
           appointment
         </h2>
-        <div className=" flex justify-center items-center ">
+        <div
+          className={`flex justify-center  items-center ${
+            isdashboardbooking && "overflow-auto md:h-[80vh] scrollbar-hide"
+          }`}
+        >
           {!isappointmentbooked ? (
-            <div className="max-w-xs md:max-w-3xl md:p-4 mb-5 md:my-5">
+            <div className="max-w-xs md:max-w-2xl lg:max-w-3xl lg:p-4 mb-5 lg:my-5">
               <h3 className="text-[#374A75] text-lg md:text-2xl font-bold text-center my-3">
                 Book an Appointment
               </h3>
@@ -256,48 +268,58 @@ function BookAppointment({ onClose, isdashboardbooking = false }) {
                   <h4 className="text-[#111] font-medium text-sm md:text-base mb-3">
                     select time*
                   </h4>
-                  <div className="grid grid-cols-3 gap-x-5 gap-y-3">
-                    {filteredTimings.map((time, index) => {
-                      const now = new Date();
+                  <div
+                    className={`${
+                      filteredTimings?.length > 0
+                        ? "grid grid-cols-3 gap-x-5 gap-y-3"
+                        : ""
+                    }`}
+                  >
+                    {filteredTimings.length > 0 ? (
+                      filteredTimings?.map((time, index) => {
+                        const now = new Date();
 
-                      // Parse selected date from calendar
-                      const selectedDate = new Date(value); // `value` is from your calendar
-                      const isToday =
-                        selectedDate.getDate() === now.getDate() &&
-                        selectedDate.getMonth() === now.getMonth() &&
-                        selectedDate.getFullYear() === now.getFullYear();
+                        // Parse selected date from calendar
+                        const selectedDate = new Date(value); // `value` is from your calendar
+                        const isToday =
+                          selectedDate.getDate() === now.getDate() &&
+                          selectedDate.getMonth() === now.getMonth() &&
+                          selectedDate.getFullYear() === now.getFullYear();
 
-                      // Parse the time string into a Date object
-                      const [hourMin, meridian] = time.split(" ");
-                      let [hour, minute] = hourMin.split(":").map(Number);
+                        // Parse the time string into a Date object
+                        const [hourMin, meridian] = time.split(" ");
+                        let [hour, minute] = hourMin.split(":").map(Number);
 
-                      if (meridian.toLowerCase() === "pm" && hour !== 12)
-                        hour += 12;
-                      if (meridian.toLowerCase() === "am" && hour === 12)
-                        hour = 0;
+                        if (meridian.toLowerCase() === "pm" && hour !== 12)
+                          hour += 12;
+                        if (meridian.toLowerCase() === "am" && hour === 12)
+                          hour = 0;
 
-                      const slotTime = new Date(selectedDate); // base on selected day
-                      slotTime.setHours(hour, minute, 0, 0);
+                        const slotTime = new Date(selectedDate); // base on selected day
+                        slotTime.setHours(hour, minute, 0, 0);
 
-                      // Only disable if today AND time is in the past
-                      const isPast = isToday && slotTime < now;
-                      return (
-                        <button
-                          disabled={isPast}
-                          key={time}
-                          onClick={(e) => handletime(time)}
-                          className={`  border  px-2 py-1 md:px-4 md:py-3 rounded-lg text-xs xl:text-sm border-[#757575]  ${
-                            isPast
-                              ? "bg-gray-200 text-gray-500 cursor-not-allowed"
-                              : selectedTIme === time
-                              ? "text-[#F3F8FF] bg-[#374A75]"
-                              : "text-[#374A75] bg-[#F3F8FF] hover:shadow-md"
-                          }`}
-                        >
-                          {time}
-                        </button>
-                      );
-                    })}
+                        // Only disable if today AND time is in the past
+                        const isPast = isToday && slotTime < now;
+                        return (
+                          <button
+                            disabled={isPast}
+                            key={time}
+                            onClick={(e) => handletime(time)}
+                            className={`  border  px-2 py-1 md:px-4 md:py-3 rounded-lg text-xs xl:text-sm border-[#757575]  ${
+                              isPast
+                                ? "bg-gray-200 text-gray-500 cursor-not-allowed"
+                                : selectedTIme === time
+                                ? "text-[#F3F8FF] bg-[#374A75]"
+                                : "text-[#374A75] bg-[#F3F8FF] hover:shadow-md"
+                            }`}
+                          >
+                            {time}
+                          </button>
+                        );
+                      })
+                    ) : (
+                      <p>No slots available For Today </p>
+                    )}
                   </div>
                   <div className="flex items-center bg-[#FEF4EB] gap-2 mt-4 md:mt-10">
                     <div>

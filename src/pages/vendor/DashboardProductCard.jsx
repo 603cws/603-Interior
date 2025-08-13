@@ -44,13 +44,13 @@ function DashboardProductCard({
                 </div>
 
                 <div className="flex gap-2 ">
-                  {additionalImages.lenght > 0 ? (
+                  {additionalImages.length > 0 ? (
                     additionalImages.map((image, index) => (
                       <div key={index}>
                         <img
                           src={`${baseImageUrl}${image}`}
                           alt="product"
-                          className="aspect-auto w-12"
+                          className="h-12 w-12 "
                         />
                       </div>
                     ))

@@ -755,7 +755,7 @@ function VendorProductEdit({
       </div>
       {/* <form action=""> */}
       <form
-        className="lg:flex gap-5 py-3 px-5 w-full"
+        className="lg:flex gap-5  px-5 w-full"
         onSubmit={onSubmit}
         onKeyDown={(e) => {
           if (e.key === "Enter") {

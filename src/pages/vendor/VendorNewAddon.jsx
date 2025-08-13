@@ -560,7 +560,7 @@ function VendorNewAddon({
               Discard
             </button>
             <button
-              className="border-2 px-5 py-2 bg-[#194F48] text-white capitalize rounded-lg"
+              className="border-2 px-5 py-2 bg-[#374A75] text-white capitalize rounded-lg"
               type="submit"
               // onClick={onsubmit}
               disabled={isSubmitting}

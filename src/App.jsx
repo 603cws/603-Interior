@@ -62,6 +62,7 @@ import BrandFurniture from "./pages/Ecommerce/BrandFurniture";
 import BrandLight from "./pages/Ecommerce/BrandLight";
 import BrandHVAC from "./pages/Ecommerce/BrandHVAC";
 import BrandDLink from "./pages/Ecommerce/BrandDLink";
+import VendorDashboardLayout from "./pages/vendor/VendorDashboardLayout";
 
 const Home = lazy(() => import("./pages/Home"));
 
@@ -122,7 +123,8 @@ function App() {
                     // <Dashboard />
                     <AdminDashboard />
                   ) : accountHolder.role === "vendor" ? (
-                    <VendorDashboard />
+                    // <VendorDashboard />
+                    <VendorDashboardLayout />
                   ) : accountHolder.role === "user" ? (
                     <Dashboard />
                   ) : (
@@ -133,14 +135,16 @@ function App() {
                 )
               }
             />
+
+            <Route path="/vdashboard" element={<VendorDashboardLayout />} />
             <Route path="/becomeseller" element={<OurWork />} />
             <Route path="/plans" element={<Plans />} />
             <Route path="/help" element={<HelpnFaq />} />
             <Route path="/termsNcondition" element={<TermsAndCondition />} />
             <Route path="/boqcompleted" element={<Boqcompleted />} />
             <Route path="/howtosell" element={<Howtosell />} />
-            <Route path="/vendordashboard" element={<VendorDashboard />} />
-            <Route path="/vendorregister" element={<VendorRegister />} />
+            {/* <Route path="/vendordashboard" element={<VendorDashboard />} />
+            <Route path="/vendorregister" element={<VendorRegister />} /> */}
 
             <Route path="/getplan" element={<PricingCard />} />
             <Route path="/admin" element={<AdminDashboard />} />
