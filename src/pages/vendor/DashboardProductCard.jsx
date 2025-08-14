@@ -19,27 +19,24 @@ function DashboardProductCard({
   const [showTextarea, setShowTextarea] = useState(false);
   const { accountHolder } = useApp();
 
-  console.log("product", product);
-
   const baseImageUrl =
     "https://bwxzfwsoxwtzhjbzbdzs.supabase.co/storage/v1/object/public/addon/";
 
-  const currentStatus = product.status;
-  console.log("current status", currentStatus);
+  const currentStatus = product?.status;
 
   const additionalImages = product?.additional_images
     ? JSON.parse(product.additional_images)
     : [];
 
   return (
-    <div className="flex justify-center items-center h-screen fixed inset-0 z-30 top-0 w-screen">
+    <div className="flex  justify-center items-center h-screen fixed inset-0 z-30 top-0 w-screen">
       <div className="absolute inset-0 bg-black opacity-50"></div>
-      <div className="font-Poppins max-w-3xl p-10 rounded-3xl border-2 relative bg-white">
+      <div className=" font-Poppins max-w-xs sm:max-w-sm md:max-w-2xl  lg:max-w-3xl mx-auto p-4 md:p-10 rounded-lg md:rounded-3xl border-2 relative bg-white max-h-[85vh] overflow-y-auto gradient-scrollbar">
         {!deleteWarning ? (
           <div>
-            <div className="flex gap-4">
+            <div className="flex flex-col md:flex-row gap-4">
               <div className="flex-1">
-                <div className="max-w-sm">
+                <div className="max-w-sm mb-2">
                   <img src={`${baseImageUrl}${product.image}`} alt="product" />
                 </div>
 
@@ -100,6 +97,15 @@ function DashboardProductCard({
                     segment:
                     <span className="font-bold text-[#000]">
                       {product.segment}
+                    </span>
+                  </h5>
+                )}
+                <hr />
+                {product?.status && (
+                  <h5 className="uppercase text-[#334A78] font-medium text-xs opacity-80">
+                    status:
+                    <span className="font-bold text-[#000]">
+                      {product?.status}
                     </span>
                   </h5>
                 )}

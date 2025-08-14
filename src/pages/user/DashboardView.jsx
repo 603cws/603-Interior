@@ -214,14 +214,14 @@ function DashboardView({
             {/* each icon  */}
             <LayoutInfoCard
               selectedBoq={selectedBoq}
-              value={selectedBoq?.layout.totalArea}
+              value={selectedBoq?.layout?.totalArea}
               title={"total Area"}
               image={"/images/layouticon.png"}
               spanvalue={"sqft"}
             />
             <LayoutInfoCard
               selectedBoq={selectedBoq}
-              value={selectedBoq?.products.length}
+              value={selectedBoq?.products?.length}
               title={"Total No Product"}
               image={"/images/totalproduct.png"}
             />
@@ -377,7 +377,7 @@ function GeneratedBOQCard({ boq, onDelete, selectedBoq }) {
   return (
     <div
       className={`w-[270px]  border border-[#CCCCCC] font-Poppins p-2 rounded-lg text-[#000] ${
-        selectedBoq.id === boq.id
+        selectedBoq?.id === boq?.id
           ? "bg-gradient-to-br from-[#23445B] to-[#487BA0] text-[#fff]"
           : ""
       }`}
@@ -391,11 +391,11 @@ function GeneratedBOQCard({ boq, onDelete, selectedBoq }) {
       </div>
       <div className="grid grid-cols-2 gap-2.5 font-semibold ">
         <p>Total Area</p>
-        <p>{boq.layout.totalArea} sqft.</p>
+        <p>{boq?.layout?.totalArea} sqft.</p>
         <p>Used</p>
-        <p> {boq.layout.usedSpace} sqft.</p>
+        <p> {boq?.layout?.usedSpace} sqft.</p>
         <p>Unused</p>
-        <p> {boq.layout.totalArea - boq.layout.usedSpace}sqft.</p>
+        <p> {boq?.layout?.totalArea - boq?.layout?.usedSpace}sqft.</p>
       </div>
     </div>
   );

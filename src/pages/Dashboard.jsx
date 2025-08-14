@@ -30,7 +30,6 @@ import { CiCalendarDate } from "react-icons/ci";
 import { IoIosSearch } from "react-icons/io";
 import { IoCloseCircle, IoCloudDownloadOutline } from "react-icons/io5";
 
-
 function handlesidebarState(state, action) {
   switch (action.type) {
     case "TOGGLE_SECTION":
@@ -505,6 +504,85 @@ function Dashboard() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isfetchBoqDataRefresh]);
 
+  // console.log("boq data", boqdata);
+  //   {
+  //     "id": "77346d31-c81b-4006-b381-0722407ec162",
+  //     "created_at": "2025-08-14T06:18:57.224154+00:00",
+  //     "userId": "21e0b7e5-6276-4608-9f0f-0d0b0f802f46",
+  //     "products": null,
+  //     "addons": null,
+  //     "boqTitle": "Draft BOQ",
+  //     "layoutId": "5e0fd671-5b01-4118-9c76-53074fc5ed93",
+  //     "answers": [
+  //         {
+  //             "height": 10,
+  //             "flooring": "basicTiling",
+  //             "hvacType": "Centralized",
+  //             "demolishTile": "no"
+  //         }
+  //     ],
+  //     "planType": null,
+  //     "boqTotalPrice": 0,
+  //     "isDraft": true,
+  //     "layout": {
+  //         "id": "5e0fd671-5b01-4118-9c76-53074fc5ed93",
+  //         "mdQty": 1,
+  //         "bmsQty": 0,
+  //         "mdArea": 120,
+  //         "upsQty": 0,
+  //         "userId": "21e0b7e5-6276-4608-9f0f-0d0b0f802f46",
+  //         "bmsArea": 90,
+  //         "upsArea": 90,
+  //         "lTypeQty": 0,
+  //         "otherQty": 0,
+  //         "salesQty": 0,
+  //         "smallQty": 0,
+  //         "hrRoomQty": 0,
+  //         "lTypeArea": 34,
+  //         "linearQty": 19,
+  //         "loungeQty": 1,
+  //         "otherArea": 1,
+  //         "salesArea": 80,
+  //         "serverQty": 0,
+  //         "smallArea": 80,
+  //         "totalArea": 1500,
+  //         "usedSpace": 1104,
+  //         "created_at": "2025-05-27T07:10:00.737473+00:00",
+  //         "hrRoomArea": 80,
+  //         "linearArea": 24,
+  //         "loungeArea": 165,
+  //         "managerQty": 0,
+  //         "serverArea": 40,
+  //         "managerArea": 80,
+  //         "boardRoomQty": 0,
+  //         "receptionQty": 1,
+  //         "washroomsQty": 1,
+  //         "boardRoomArea": 325,
+  //         "phoneBoothQty": 0,
+  //         "receptionArea": 83,
+  //         "washroomsArea": 180,
+  //         "financeRoomQty": 0,
+  //         "meetingRoomQty": 1,
+  //         "phoneBoothArea": 25,
+  //         "breakoutRoomQty": 0,
+  //         "financeRoomArea": 100,
+  //         "meetingRoomArea": 100,
+  //         "breakoutRoomArea": 80,
+  //         "interviewRoomQty": 0,
+  //         "conferenceRoomQty": 0,
+  //         "discussionRoomQty": 0,
+  //         "interviewRoomArea": 100,
+  //         "conferenceRoomArea": 250,
+  //         "discussionRoomArea": 380,
+  //         "meetingRoomLargeQty": 0,
+  //         "executiveWashroomQty": 0,
+  //         "meetingRoomLargeArea": 120,
+  //         "executiveWashroomArea": 60,
+  //         "videoRecordingRoomQty": 0,
+  //         "videoRecordingRoomArea": 80
+  //     }
+  // }
+
   return (
     <div className="grid lg:grid-cols-[auto_1fr] lg:bg-gradient-to-r from-[#CFDCE7] to-[#E8EEF3] md:p-4 h-dvh md:h-screen font-Poppins lg:overflow-hidden">
       {/* sidebar */}
@@ -841,11 +919,11 @@ function Dashboard() {
                         </button>
                       </div>
                       {mobileFilterOpen && (
-                        <div className="absolute top-10 right-0 bg-white w-[200px] z-30 p-4 space-y-1">
+                        <div className="absolute top-10 right-0 bg-white w-[200px] z-30 p-4 space-y-1 border border-[#ccc]">
                           <h4 className="font-semibold text-sm">
                             Select Category
                           </h4>
-                          {category.map((cat) => (
+                          {category?.map((cat) => (
                             <button
                               key={cat}
                               onClick={() => {
@@ -866,14 +944,14 @@ function Dashboard() {
                         </div>
                       )}
                     </div>
-                    <div className="flex ">
+                    <div className="flex flex-wrap sm:flex-nowrap gap-2">
                       {isboqavailable &&
                         boqdata.map((boq, index) => {
                           return (
                             <div
-                              key={boq.boqTitle}
+                              key={boq?.id}
                               className={` rounded-lg border-2  px-5 py-2 ${
-                                selectedBoq.boqTitle === boq.boqTitle
+                                selectedBoq?.id === boq?.id
                                   ? "bg-[#374A75] text-white border-[#374a75]"
                                   : "bg-white text-[#374a75] border-[#ccc]"
                               }`}

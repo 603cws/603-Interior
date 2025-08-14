@@ -4,6 +4,7 @@ import Spinner from "../../common-components/Spinner";
 import { useApp } from "../../Context/Context";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 import { baseImageUrl } from "../../utils/HelperConstant";
+import RejectedProduct from "./RejectedProduct";
 function VendorDashboardCards({ handleproduct }) {
   // loading
   const [isloading, setIsloading] = useState(false);
@@ -11,6 +12,8 @@ function VendorDashboardCards({ handleproduct }) {
   const [addons, setAddons] = useState([]);
   const [pendingproducts, setPendingproducts] = useState([]);
   const [pendingAddons, setPendingAddons] = useState([]);
+  const [rejectedProductView, setRejectedProductView] = useState(false);
+  const [rejectedProduct, setRejectedProduct] = useState();
 
   const { accountHolder } = useApp();
   // Fetch Products from Supabase
@@ -90,6 +93,11 @@ function VendorDashboardCards({ handleproduct }) {
     },
   ];
 
+  function handlerejectedProduct(item) {
+    setRejectedProduct(item);
+    setRejectedProductView((prev) => !prev);
+  }
+
   if (isloading) {
     return <Spinner />;
   }
@@ -108,12 +116,23 @@ function VendorDashboardCards({ handleproduct }) {
             />
           ))}
         </div>
-        {products.concat(addons).length > 0 && (
+        {products?.concat(addons)?.length > 0 && (
           <div className="flex justify-center sm:block">
-            <ProductTable products={products} addons={addons} />
+            <ProductTable
+              products={products}
+              addons={addons}
+              handlerejectedProduct={handlerejectedProduct}
+            />
           </div>
         )}
       </div>
+
+      {rejectedProductView && (
+        <RejectedProduct
+          onClose={() => setRejectedProductView(false)}
+          product={rejectedProduct}
+        />
+      )}
     </div>
   );
 }
@@ -277,7 +296,7 @@ function formatDate(isoString) {
   });
 }
 
-function ProductTable({ products, addons }) {
+function ProductTable({ products, addons, handlerejectedProduct }) {
   //   {
   //     "id": "b0b9a4de-3821-473f-b49a-83d6cb8df429",
   //     "created_at": "2025-08-12T04:48:37.460192+00:00",
@@ -351,13 +370,20 @@ function ProductTable({ products, addons }) {
                 </td>
                 <td className="py-3 px-2">{product?.price}</td>
                 <td className="py-3 px-2">
-                  <span
-                    className={`px-2 py-1 rounded-full text-xs font-medium ${
-                      statusColors[product.status]
-                    }`}
+                  <div
+                    onClick={() =>
+                      product?.status === "rejected" &&
+                      handlerejectedProduct(product)
+                    }
                   >
-                    {product?.status}
-                  </span>
+                    <span
+                      className={`px-2 py-1 rounded-full text-xs font-medium ${
+                        statusColors[product?.status]
+                      } ${product?.status === "rejected" && "cursor-pointer"} `}
+                    >
+                      {product?.status}
+                    </span>
+                  </div>
                 </td>
                 {/* <td className="py-3 px-2">
                   {product?.created_at || product?.date}

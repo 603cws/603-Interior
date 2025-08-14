@@ -36,14 +36,14 @@ function LandingNavbar({ bgColor = false }) {
         {/* Desktop Menu */}
         <nav className="hidden lg:flex justify-center items-center py-4">
           <ul className="flex gap-8 text-[#1A293A] font-semibold uppercase stroke-nav [&_li]:cursor-pointer ">
-            <li
+            {/* <li
               onClick={() => navigate("/")}
               className={`cursor-pointer relative after:content-[''] after:absolute after:left-0 after:bottom-[-2px] after:h-[2px] after:bg-[#1A3A36] after:transition-all after:duration-300 ${
                 pathname === "/" ? "after:w-full" : "after:w-0"
               } hover:after:w-full`}
             >
               Home
-            </li>
+            </li> */}
             {/* <li
               onClick={() => navigate("/Aboutus")}
               className={`cursor-pointer relative after:content-[''] after:absolute after:left-0 after:bottom-[-2px] after:h-[2px] after:bg-[#1A3A36] after:transition-all after:duration-300 ${
@@ -140,9 +140,9 @@ function LandingNavbar({ bgColor = false }) {
           }`}
         >
           <ul className="flex flex-col gap-4 text-[#1A3A36] font-semibold uppercase bg-white z-10">
-            <li onClick={() => navigate("/")} className="cursor-pointer">
+            {/* <li onClick={() => navigate("/")} className="cursor-pointer">
               Home
-            </li>
+            </li> */}
             {/* <li className="cursor-pointer">Spaces</li> */}
             {/* <li onClick={() => navigate("/Aboutus")} className="cursor-pointer">
               About Us
