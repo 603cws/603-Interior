@@ -1,7 +1,14 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { baseImageUrl } from "../../utils/HelperConstant";
+import { HiDotsVertical } from "react-icons/hi";
+import { PiEyeLight, PiPencilSimpleLight } from "react-icons/pi";
 
-function ItemList({ handleProductPreview, items }) {
+function ItemList({
+  handleProductPreview,
+  items,
+  handleProductEdit,
+  handleAddonEdit,
+}) {
   // testing items
   //   const items = Array.from({ length: 55 }, (_, index) => ({
   //     id: index + 1,
@@ -37,13 +44,16 @@ function ItemList({ handleProductPreview, items }) {
         className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-7 gap-4 p-2 
       h-5/6  overflow-y-auto"
       >
-        {paginatedItems?.map((item) => (
-          <ItemCard
-            handleProductPreview={handleProductPreview}
-            item={item}
-            key={item?.id}
-          />
-        ))}
+        {paginatedItems?.length > 0 &&
+          paginatedItems?.map((item) => (
+            <ItemCard
+              handleProductPreview={handleProductPreview}
+              handleAddonEdit={handleAddonEdit}
+              handleProductEdit={handleProductEdit}
+              item={item}
+              key={item?.id}
+            />
+          ))}
         {/* {Array.from({ length: paginatedItems?.length }, (_, i) => (
           <ItemCard key={i} />
         ))} */}
@@ -96,45 +106,97 @@ function ItemList({ handleProductPreview, items }) {
 
 export default ItemList;
 
-function ItemCard({ handleProductPreview, item }) {
-  // console.log("item", item);
-  //   {
-  //     "id": "b0b9a4de-3821-473f-b49a-83d6cb8df429",
-  //     "created_at": "2025-08-12T04:48:37.460192+00:00",
-  //     "title": "test ",
-  //     "price": 1600,
-  //     "details": "add products for test",
-  //     "image": "test -main-7877aadd-ed3f-46df-98c4-45a759064927",
-  //     "product_id": "7877aadd-ed3f-46df-98c4-45a759064927",
-  //     "additional_images": "[\"test -additional-0-7877aadd-ed3f-46df-98c4-45a759064927\",\"test -additional-1-7877aadd-ed3f-46df-98c4-45a759064927\"]",
-  //     "dimensions": "130x140x150",
-  //     "manufacturer": "workvedDev",
-  //     "segment": "Exclusive",
-  //     "default": null,
-  //     "product_type": "Tile",
-  //     "vendor_id": "f2bb3292-d50b-463e-8b62-9a266e538f4e",
-  //     "status": "pending",
-  //     "type": "product",
-  //     "reject_reason": null,
-  //     "products": {
-  //         "category": "Flooring",
-  //         "subcategory": "Open Workspaces,Cabins,Meeting Rooms,Public Spaces",
-  //         "subcategory1": "Tile"
-  //     }
-  // }
+function ItemCard({
+  handleProductPreview,
+  item,
+  handleProductEdit,
+  handleAddonEdit,
+}) {
+  const [isoptionOpen, setIsoptionOpen] = useState(false);
+  const optionboxref = useRef(null);
+
+  // Detect outside click
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (
+        optionboxref.current &&
+        !optionboxref.current.contains(event.target)
+      ) {
+        setIsoptionOpen(false);
+      }
+    }
+
+    if (isoptionOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isoptionOpen]);
 
   return (
-    <div onClick={() => handleProductPreview(item)} className="cursor-pointer">
-      <div className="max-w-xs md:w-44 md:h-44 flex justify-center items-center rounded-2xl shadow-xl border border-[#ccc] ">
+    <div>
+      {/* <div onClick={() => handleProductPreview(item)} className="cursor-pointer"> */}
+      <div className="relative max-w-xs md:w-44 md:h-44 flex justify-center items-center rounded-2xl shadow-xl border border-[#ccc] ">
         <img
           src={`${baseImageUrl}/${item?.image}`}
           alt="chair"
-          className="w-28 h-36 md:w-40 md:h-40"
+          className="w-28 h-36 md:w-40 md:h-40 p-2"
         />
+        <div className="absolute right-0 bottom-2 text-xl" ref={optionboxref}>
+          {isoptionOpen ? (
+            <button onClick={() => setIsoptionOpen((prev) => !prev)}>
+              <OptionBox
+                handleAddonEdit={handleAddonEdit}
+                handleProductEdit={handleProductEdit}
+                handleProductPreview={handleProductPreview}
+                item={item}
+              />
+            </button>
+          ) : (
+            <button onClick={() => setIsoptionOpen((prev) => !prev)}>
+              <HiDotsVertical />
+            </button>
+          )}
+        </div>
       </div>
       <p className="text-center text-[#444444] font-bold">
         {item?.title || "NA"}
       </p>
+    </div>
+  );
+}
+
+function OptionBox({
+  handleAddonEdit,
+  handleProductEdit,
+  handleProductPreview,
+  item,
+}) {
+  const isItemProduct = item?.type === "product";
+
+  return (
+    <div className="bg-[#F7EEDD] rounded-lg p-2 w-[110px] shadow-md">
+      {/* View Button */}
+      <button
+        onClick={() => handleProductPreview(item)}
+        className="w-full text-xs  flex items-center justify-center gap-2 bg-[#334A78] text-white rounded-md py-2 hover:bg-[#2c3e67]"
+      >
+        <PiEyeLight size={16} />
+        View
+      </button>
+
+      {/* Edit Button */}
+      <button
+        onClick={() =>
+          isItemProduct ? handleProductEdit(item) : handleAddonEdit(item)
+        }
+        className="w-full text-xs flex items-center justify-center gap-2 border border-gray-300 rounded-md py-2 mt-2 hover:bg-gray-100"
+      >
+        <PiPencilSimpleLight size={16} />
+        Edit
+      </button>
     </div>
   );
 }

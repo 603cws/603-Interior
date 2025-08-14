@@ -456,7 +456,7 @@ function VendorNewProduct({
                   required
                 >
                   <option value="" disabled>
-                    Select Category
+                    Select SubCategory
                   </option>
                   {subcat.map((cat, index) => {
                     return (

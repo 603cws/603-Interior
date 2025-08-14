@@ -5,9 +5,7 @@ import { FaRegQuestionCircle } from "react-icons/fa";
 
 import { supabase } from "../../services/supabase";
 import { toast } from "react-hot-toast"; //Toaster
-import { useApp } from "../../Context/Context";
 import { AllCatArray, specialArray } from "../../utils/AllCatArray";
-import { v4 as uuidv4 } from "uuid"; //unique id generator
 
 function VendorEditAddon({
   seteditAddon,
@@ -143,15 +141,6 @@ function VendorEditAddon({
       setPreview(URL.createObjectURL(file));
     }
   };
-
-  //   useEffect(() => {
-  //     accountHolder.allowedCategory.map((category) => {
-  //       const filtered = AllCatArray.filter((cat) => cat.name === category);
-
-  //       const subcattodisplay = filtered.flatMap((subcat) => subcat.subCat1);
-  //       //   console.log(subcattodisplay);
-  //     });
-  //   }, []);
 
   useEffect(() => {
     const filtered = AllCatArray.filter((cat) => cat.name === category);
@@ -622,7 +611,7 @@ function VendorEditAddon({
               Discard
             </button> */}
             <button
-              className="border-2 px-5 py-2 bg-[#194F48] text-white capitalize rounded-lg"
+              className="border-2 px-5 py-2 bg-[#374A75] text-white capitalize rounded-lg"
               type="submit"
               // onClick={onsubmit}
               disabled={isSubmitting}

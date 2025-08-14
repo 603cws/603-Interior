@@ -17,6 +17,7 @@ import VendorEditAddon from "./VendorEditAddon";
 import ItemList from "./ItemList";
 import { IoIosSearch } from "react-icons/io";
 import { IoCloseCircle, IoCloudDownloadOutline } from "react-icons/io5";
+import { HiPlus } from "react-icons/hi";
 // import { ChevronDownIcon, FunnelIcon } from "@heroicons/react/24/outline";
 
 function VendorItem() {
@@ -268,6 +269,16 @@ function VendorItem() {
     setSelectedProductview(product);
   };
 
+  const handleProductEdit = (product) => {
+    setSelectedproduct(product);
+    setEditProduct(true);
+  };
+
+  const handleAddonEdit = (addon) => {
+    setSelectedAddon(addon);
+    setEditAddon(true);
+  };
+
   const handleDeleteClick = (item) => {
     setDeleteWarning(true);
     setSelectedProductview(item);
@@ -378,8 +389,7 @@ function VendorItem() {
                   />
                 </div> */}
 
-                {/* <div className="relative inline-block text-left">
-             
+                {/* <div className="relative inline-block text-left">           
                   <button
                     onClick={() => setIsOpen(!isOpen)}
                     className="flex items-center gap-2 bg-gray-100 px-4 py-2 rounded-md hover:bg-gray-200"
@@ -498,6 +508,8 @@ function VendorItem() {
                   <section className=" h-[90%] font-Poppins overflow-hidden">
                     <ItemList
                       handleProductPreview={handleProductPreview}
+                      handleProductEdit={handleProductEdit}
+                      handleAddonEdit={handleAddonEdit}
                       items={items}
                     />
                   </section>
@@ -684,9 +696,12 @@ function VendorItem() {
                 </>
               ) : (
                 <>
-                  <p className="p-5 text-gray-500 text-center">
+                  {/* <p className="p-5 text-gray-500 text-center">
                     No {toggle ? "products" : "addons"} found.
-                  </p>
+                  </p> */}
+                  <div className="flex justify-center items-center h-[80%]">
+                    <EmptyStateCard toggle={toggle} onAdd={handlenewproduct} />
+                  </div>
                 </>
               ))}
 
@@ -814,6 +829,32 @@ function Item({ setIsAddProduct, setAddNewitem, title, img1, img2 }) {
     >
       <img src={isHovered ? img1 : img2} alt="item" className="w-28" />
       <h2 className="text-lg">{title}</h2>
+    </div>
+  );
+}
+
+function EmptyStateCard({ onAdd, toggle }) {
+  return (
+    <div className="flex flex-col items-center justify-center border border-gray-200 rounded-lg p-8 w-full max-w-sm mx-2 md:max-w-md sm:mx-auto text-center shadow-sm bg-white">
+      {/* Plus Icon */}
+      <HiPlus className="w-8 h-8 text-gray-400 mb-3" />
+
+      {/* Title */}
+      <p className="font-semibold text-gray-800">No data found</p>
+
+      {/* Subtitle */}
+      <p className="text-gray-400 text-sm mb-4">
+        Start Adding {toggle ? "products" : "addons"} to your list.
+      </p>
+
+      {/* Button */}
+      <button
+        onClick={() => onAdd()}
+        className="flex items-center gap-2 bg-[#334A78] text-white px-4 py-2 rounded-md hover:bg-[#2c3e67] transition-colors"
+      >
+        <HiPlus className="w-4 h-4" />
+        Add Product
+      </button>
     </div>
   );
 }

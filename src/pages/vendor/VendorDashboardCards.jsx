@@ -108,9 +108,11 @@ function VendorDashboardCards({ handleproduct }) {
             />
           ))}
         </div>
-        <div className="flex justify-center sm:block">
-          <ProductTable products={products} addons={addons} />
-        </div>
+        {products.concat(addons).length > 0 && (
+          <div className="flex justify-center sm:block">
+            <ProductTable products={products} addons={addons} />
+          </div>
+        )}
       </div>
     </div>
   );
@@ -335,7 +337,7 @@ function ProductTable({ products, addons }) {
             </tr>
           </thead>
           <tbody>
-            {paginatedProducts.map((product, index) => (
+            {paginatedProducts?.map((product, index) => (
               <tr key={index} className="border-b last:border-0">
                 <td className="py-3 px-2 flex items-center gap-2">
                   <div className="w-8 h-8 rounded">

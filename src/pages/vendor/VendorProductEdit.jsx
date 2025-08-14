@@ -74,11 +74,6 @@ function VendorProductEdit({
     // }
   }, [selectedproduct?.vendor_id]);
 
-  //   const additionalImages = selectedproduct?.additional_images
-  //     ? JSON.parse(selectedproduct.additional_images)
-  //     : [];
-
-  // const [selectedSubcategories, setSelectedSubcategories] = useState();
   const [variant, setVariant] = useState({
     title: selectedproduct?.title || "",
     price: selectedproduct?.price || "",
@@ -92,19 +87,6 @@ function VendorProductEdit({
     product_id: selectedproduct?.product_id || "",
     selectedProductId: selectedproduct?.id || "",
   });
-  //   const [variant, setVariant] = useState({
-  //     title: "",
-  //     price: "",
-  //     details: "",
-  //     mainImage: [],
-  //     additionalImages: [],
-  //     segment: "",
-  //     dimension: "",
-  //     manufacturer: "",
-  //     vendor_id: "",
-  //   });
-
-  //   const { accountHolder } = useApp();
 
   const handleFileChange = (event) => {
     const selectedFile = event.target.files[0];
@@ -243,16 +225,6 @@ function VendorProductEdit({
     }
   };
 
-  //   useEffect(() => {
-  //     accountHolder.allowedCategory.map((category) => {
-  //       const filtered = AllCatArray.filter((cat) => cat.name === category);
-
-  //       const subcattodisplay = filtered.flatMap((subcat) => subcat.subCat1);
-  //       console.log(subcattodisplay);
-  //       return subcattodisplay;
-  //     });
-  //   }, []);
-
   useEffect(() => {
     const filtered = AllCatArray.filter((cat) => cat.name === category);
     const subcattodisplay = filtered.flatMap((subcat) => subcat.subCat1);
@@ -314,9 +286,6 @@ function VendorProductEdit({
         if (existingProduct) {
           // If the product already exists, use the existing product ID
           productId = existingProduct.id;
-          // toast.success(
-          //   "Product already exists. Proceeding with variants and addons."
-          // );
         } else {
           // Insert a new product if it doesn't exist
           const { data: Product, error: insertError } = await supabase
@@ -341,29 +310,6 @@ function VendorProductEdit({
       } else {
         productId = variant.product_id;
       }
-
-      // Now proceed with adding variants
-      // if (variant.title && variant.price && file) {
-      //   const mainImageArray = [file];
-      //   // Upload the main image to Supabase storage
-      //   const { data: mainImageUpload, error: mainImageError } =
-      //     await supabase.storage
-      //       .from("addon")
-      //       .upload(`${variant.title}-main-${uniqueID}`, mainImageArray[0]);
-
-      //   if (mainImageError) {
-      //     toast.error(
-      //       `Error uploading main image for variant: ${variant.title}`
-      //     );
-      //     throw new Error("main image error");
-      //   }
-
-      //   // setVariant((prev) => ({ ...prev, mainImage: mainImageUpload.path }));
-
-      //   variant.mainImage = mainImageUpload.path;
-
-      //   setPreview(mainImageUpload.path);
-      // }
       if (variant.title && variant.price && file) {
         const oldImagePath = selectedproduct?.image;
         // const uniqueID = uuidv4();
@@ -394,19 +340,6 @@ function VendorProductEdit({
         variant.mainImage = mainImageUpload.path;
         setPreview(mainImageUpload.path);
       }
-
-      // additonal images
-      // if (filebasedadditionalimages.length > 0) {
-      //   for (const [index, imageFile] of filebasedadditionalimages.entries()) {
-      //     const { data: additionalImageUpload } = await supabase.storage
-      //       .from("addon")
-      //       .upload(
-      //         `${variant.title}-additional-${index}-${uniqueID}`,
-      //         imageFile.file
-      //       );
-      //     useradditionalimages.push(additionalImageUpload.path);
-      //   }
-      // }
 
       const previousAdditionalImages = JSON.parse(
         selectedproduct?.additional_images || "[]"
@@ -494,139 +427,6 @@ function VendorProductEdit({
 
     console.log("varaint data", variant);
   };
-  //   const onSubmit = async (e) => {
-  //     e.preventDefault();
-
-  //     console.log("variant", variant);
-  //     if (
-  //       !variant.mainImage ||
-  //       variant.mainImage.length === 0 ||
-  //       variant.additionalImages.length === 0
-  //     ) {
-  //       console.log("images not found", variant);
-
-  //       toast.error("images are required ");
-  //       return;
-  //     }
-  //     setIsSubmitting(true);
-  //     try {
-  //       // Check if the product already exists based on category, subcategory, and subSubCategory
-  //       const { data: existingProduct, error: existingProductError } =
-  //         await supabase
-  //           .from("products")
-  //           .select("id")
-  //           .eq("category", category)
-  //           .eq("subcategory", selectedSubcategories)
-  //           .eq("subcategory1", subSubCategory) // subSubCategory is from the state
-  //           .single();
-
-  //       if (existingProductError && existingProductError.code !== "PGRST116") {
-  //         toast.error("Error checking existing product.");
-  //         return;
-  //       }
-
-  //       let productId;
-  //       if (existingProduct) {
-  //         // If the product already exists, use the existing product ID
-  //         productId = existingProduct.id;
-  //         // toast.success(
-  //         //   "Product already exists. Proceeding with variants and addons."
-  //         // );
-  //       } else {
-  //         // Insert a new product if it doesn't exist
-  //         const { data: Product, error: insertError } = await supabase
-  //           .from("products")
-  //           .insert({
-  //             category: category,
-  //             subcategory: selectedSubcategories,
-  //             subcategory1: subSubCategory || null, // Insert subSubCategory (from state)
-  //           })
-  //           .select()
-  //           .single();
-
-  //         if (insertError) {
-  //           console.error(insertError);
-  //           toast.error("Error inserting new product.");
-  //           return;
-  //         }
-
-  //         productId = Product.id;
-  //         // toast.success("New product inserted successfully.");
-  //       }
-
-  //       // Now proceed with adding variants
-
-  //       if (variant.title && variant.price && variant.mainImage) {
-  //         // Upload the main image to Supabase storage
-  //         const { data: mainImageUpload } = await supabase.storage
-  //           .from("addon")
-  //           .upload(`${variant.title}-main-${productId}`, variant.mainImage);
-
-  //         // if (mainImageError) {
-  //         //   console.error(mainImageError);
-  //         //   toast.error(
-  //         //     `Error uploading main image for variant: ${variant.title}`
-  //         //   );
-  //         // }
-
-  //         // Upload additional images
-  //         const additionalImagePaths = [];
-  //         for (const [index, imageFile] of variant.additionalImages.entries()) {
-  //           const { data: additionalImageUpload } = await supabase.storage
-  //             .from("addon")
-  //             .upload(
-  //               `${variant.title}-additional-${index}-${productId}`,
-  //               imageFile.file
-  //             );
-
-  //           // if (additionalImageError) {
-  //           //   console.error(additionalImageError);
-  //           //   toast.error(
-  //           //     `Error uploading additional image ${index + 1} for variant: ${
-  //           //       variant.title
-  //           //     }`
-  //           //   );
-  //           //   continue;
-  //           // }
-  //           additionalImagePaths.push(additionalImageUpload.path);
-  //         }
-
-  //         // Insert the variant into the product_variants table
-  //         const { error: variantError } = await supabase
-  //           .from("product_variants")
-  //           .insert({
-  //             product_id: productId,
-  //             title: variant.title,
-  //             price: variant.price,
-  //             details: variant.details,
-  //             image: mainImageUpload.path, // Store the main image path
-  //             additional_images: additionalImagePaths, // Store paths of additional images
-  //             segment: variant.segment, // Store segment
-  //             dimensions: variant.dimension, // Store dimension
-  //             manufacturer: accountHolder?.companyName || variant.manufacturer, // Store manufacturer
-  //             vendor_id: accountHolder.userId, // Store vendor ID
-  //             product_type: subSubCategory,
-  //           });
-
-  //         if (variantError) {
-  //           console.error(variantError);
-  //           toast.error(`Error inserting variant: ${variant.title}`);
-  //         }
-  //         // toast.success(`Variant ${variant.title} added successfully.`);
-  //       }
-
-  //       // Handle the addons
-
-  //       // Success message
-  //       toast.success("Data inserted successfully!");
-  //     } catch (error) {
-  //       console.log("Error in onSubmit:", error);
-  //       toast.error("An unexpected error occurred.");
-  //     } finally {
-  //       handleFormClear();
-  //       setIsSubmitting(false);
-  //     }
-  //   };
 
   // get the categories based on the category and type
   useEffect(() => {
@@ -1070,7 +870,7 @@ function VendorProductEdit({
               Discard
             </button> */}
             <button
-              className="border-2 px-5 py-2 bg-[#194F48] text-white capitalize rounded-lg"
+              className="border-2 px-5 py-2 bg-[#374A75] text-white capitalize rounded-lg"
               type="submit"
               // onClick={onsubmit}
               disabled={isSubmitting}
