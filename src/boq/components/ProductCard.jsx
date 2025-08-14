@@ -286,7 +286,7 @@ function ProductCard({
             </motion.div>
           ))
         ) : paginatedVariants.length > 0 ? (
-          <AnimatePresence mode="wait">
+          <AnimatePresence>
             {paginatedVariants.map((variant) => (
               <motion.div
                 key={variant.id}

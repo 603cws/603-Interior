@@ -944,7 +944,7 @@ function Navbar({
 
   return (
     <div className="navbar sticky top-0 z-30 font-Poppins">
-      <div className="flex justify-between bg-gradient-to-r from-[#23445B] to-[#487BA0] items-center px-4 h-[50px]">
+      <div className="flex justify-between bg-gradient-to-r from-[#23445B] to-[#487BA0] items-center px-3 md:px-10 h-[50px]">
         <div className="hidden sm:block absolute lg:flex gap-2 right-1/4 lg:right-20 -translate-x-full">
           {import.meta.env.MODE === "development" && BOQTitle && (
             <h1 className="text-green-500">Current BOQ: {BOQTitle}</h1>
@@ -1004,7 +1004,7 @@ function Navbar({
         </div>
       </div>
       {isMobile ? (
-        <div className="bg-[#212B36] py-1 flex  justify-around items-center px-5 relative">
+        <div className="bg-[#212B36] py-1 flex justify-around items-center px-5 relative">
           {/* <div className=" flex items-center">
           <button
             className="bg-[#FFF] text-xs py-2 px-5 text-black rounded-full border-solid border-[1px] border-black"
@@ -1134,7 +1134,7 @@ function Navbar({
           )}
         </div>
       ) : selectedPlan ? (
-        <div className="bg-[#212B36] py-2.5 flex px-5">
+        <div className="bg-[#212B36] py-2.5 flex px-3 md:px-10">
           <div className=" flex items-center gap-1">
             <button
               className="bg-[#FFF] text-xs py-2 px-5 text-[#000] font-semibold rounded-[4px] border-solid border-[1px] border-black"

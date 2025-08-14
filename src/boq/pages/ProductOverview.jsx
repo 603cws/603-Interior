@@ -15,8 +15,11 @@ import ThreeDViewer from "../../common-components/ThreeDViewer";
 import { motion, AnimatePresence } from "framer-motion";
 import { selectAreaAnimation } from "../constants/animations";
 import { instructions } from "../constants/instructions";
+import YouMayAlsoLike from "../components/YouMayAlsoLike";
 
 function ProductOverview() {
+  const [relatedProducts, setRelatedProducts] = useState([]);
+
   const [showBackground, setShowBackground] = useState(false);
   const navigate = useNavigate();
   const baseImageUrl =
@@ -61,6 +64,7 @@ function ProductOverview() {
     setMinimizedView,
     selectedPlan,
     formulaMap,
+    setSelectedProductView,
   } = useApp();
 
   // Toggle profile card visibility
@@ -105,7 +109,7 @@ function ProductOverview() {
         };
 
         // Store in localStorage as a single variable
-        localStorage.setItem("productData", JSON.stringify(productData));
+        sessionStorage.setItem("productData", JSON.stringify(productData));
         //add cat,subCat,subCat1 inside products and call an product cat, subCat always. => Sunny
       } else if (id) {
         const { data, error } = await supabase
@@ -124,7 +128,7 @@ function ProductOverview() {
           // setCat(data.products);
 
           const storedProductData = JSON.parse(
-            localStorage.getItem("productData")
+            sessionStorage.getItem("productData")
           );
 
           if (storedProductData) {
@@ -137,13 +141,7 @@ function ProductOverview() {
     };
 
     fetchProduct();
-  }, [
-    id,
-    selectedProductView,
-    selectedCategory,
-    selectedSubCategory,
-    selectedSubCategory1,
-  ]); // Re-fetch when id or selectedProductView changes
+  }, [id, selectedCategory, selectedSubCategory, selectedSubCategory1]); // Re-fetch when id or selectedProductView changes
 
   const product = products[0]; // Access the first product
 
@@ -322,6 +320,56 @@ function ProductOverview() {
       ? product.addons
       : []
   );
+  useEffect(() => {
+    // ⛔ Don't run until all necessary fields are ready
+    if (!cat?.category || !subCat || !product?.id) {
+      console.log("⚠️ Missing required fields — skipping related fetch");
+      return;
+    }
+
+    const fetchRelated = async () => {
+      console.log("🔍 [DEBUG] fetchRelated triggered");
+      console.log("Category:", cat.category);
+      console.log("SubCategory:", subCat);
+      console.log("SubCategory1 (optional):", subCat1);
+      console.log("Current Variant ID:", product?.id, product.title);
+
+      const { data, error } = await supabase
+        .from("products")
+        .select("*, product_variants(*)")
+        .eq("category", cat.category)
+        .like("subcategory", `%${subCat}%`)
+        .eq("subcategory1", subCat1);
+
+      if (error) {
+        console.error("❌ Error fetching related products:", error);
+        return;
+      }
+
+      console.log("📦 Raw related products from Supabase:", data);
+
+      const filtered = data
+        .map((p) => ({
+          ...p,
+          product_variants: (p.product_variants || []).filter(
+            (v) =>
+              v.id !== product?.id && // not current variant
+              v.status !== "pending" && // status filter
+              v.image && // has image
+              v.title // has title
+          ),
+        }))
+        .filter((p) => p.product_variants.length > 0);
+
+      console.log(
+        "📦 After filtering current product & empty variants:",
+        filtered
+      );
+      setRelatedProducts(filtered);
+    };
+
+    fetchRelated();
+  }, [cat?.category, subCat, subCat1, product?.id]);
 
   return (
     // grid
@@ -351,7 +399,8 @@ function ProductOverview() {
               setSelectedCategory(cat);
               setSelectedSubCategory(subCat);
               setSelectedSubCategory1(subCat1);
-              navigate(-1);
+              // navigate(-1);
+              navigate("/boq");
             }}
           />
 
@@ -580,6 +629,19 @@ function ProductOverview() {
           </div>
         )}
       </AnimatePresence>
+
+      {/* You May Also Like Section */}
+      <div className="mt-10 p-5">
+        <h2 className="text-xl font-semibold mb-2">You may also like</h2>
+        {relatedProducts.length > 0 ? (
+          <YouMayAlsoLike
+            products={relatedProducts}
+            setSelectedProductView={setSelectedProductView}
+          />
+        ) : (
+          <p className="text-center text-gray-500">No products found</p>
+        )}{" "}
+      </div>
 
       {/* <div
         className={`addons px-5 my-3 ${

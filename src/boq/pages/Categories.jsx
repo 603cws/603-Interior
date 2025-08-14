@@ -1025,7 +1025,7 @@ const Categories = ({
             )}
 
             {!minimizedView && (
-              <AnimatePresence mode="wait">
+              <AnimatePresence>
                 <motion.div
                   key={selectedCategory.category}
                   initial={{ opacity: 0, y: 10 }}

@@ -98,7 +98,7 @@ function ProfileCard({
         variants={profileVariants}
         className={`fixed right-0 ${
           layout
-            ? "h-dvh md:h-[calc(100vh-85px)] top-0 md:top-[85px]"
+            ? "h-dvh md:h-[calc(100vh-85px)] top-0 md:top-[82px]"
             : "h-dvh md:h-[calc(100vh-50px)] top-0 md:top-[50px]"
         } font-Poppins bg-white z-20 md:shadow-lg md:max-w-sm w-3/4`}
       >
@@ -138,9 +138,9 @@ function ProfileCard({
           </div>
 
           {/* Features Section */}
-          <div className="font-semibold xl:text-lg capitalize leading-normal tracking-wide py-7 text-[#262626] border-y-2 border-[#ccc] flex flex-col gap-4">
+          <div className="font-semibold xl:text-lg capitalize leading-normal tracking-wide py-5 text-[#262626] border-y-2 border-[#ccc] flex flex-col gap-2">
             <div
-              className="flex items-center mx-4 gap-3 hover:bg-[#E5F4FF] hover:cursor-pointer pl-2"
+              className="flex items-center mx-4 gap-3 hover:bg-[#E5F4FF] hover:cursor-pointer hover:rounded-lg pl-2 py-1.5"
               onClick={() => navigate("/dashboard")}
             >
               <img
@@ -153,7 +153,7 @@ function ProfileCard({
             {!layout && (
               <>
                 <div
-                  className="flex items-center mx-4 gap-3 hover:bg-[#E5F4FF] hover:cursor-pointer pl-2"
+                  className="flex items-center mx-4 gap-3 hover:bg-[#E5F4FF] hover:cursor-pointer hover:rounded-lg pl-2 py-1.5"
                   onClick={() => navigate("/Layout")}
                 >
                   <img
@@ -165,7 +165,7 @@ function ProfileCard({
                 </div>
                 {selectedPlan && (
                   <div
-                    className="flex items-center mx-4 gap-3 hover:bg-[#E5F4FF] hover:cursor-pointer pl-2"
+                    className="flex items-center mx-4 gap-3 hover:bg-[#E5F4FF] hover:cursor-pointer hover:rounded-lg pl-2 py-1.5"
                     onClick={() => {
                       // setSelectedPlan(null);
                       setIsOpen(false);
@@ -194,7 +194,7 @@ function ProfileCard({
                 )}
               </>
             )}
-            <div className="flex items-center mx-4 gap-3 hover:bg-[#E5F4FF] hover:cursor-pointer pl-2">
+            <div className="flex items-center mx-4 gap-3 hover:bg-[#E5F4FF] hover:cursor-pointer hover:rounded-lg pl-2 py-1.5">
               <img
                 src="/images/profile-card/video.png"
                 alt="video"
@@ -206,8 +206,10 @@ function ProfileCard({
             {accountHolder.role === "user" && (
               <div
                 onClick={handleAppointment}
-                className={`flex items-center mx-4 gap-3 pl-2 ${
-                  progress < 90 ? "text-gray-400 cursor-not-allowed" : ""
+                className={`flex items-center mx-4 gap-3 pl-2 py-1.5 ${
+                  progress < 90
+                    ? "text-gray-400 cursor-not-allowed"
+                    : "hover:rounded-lg hover:bg-[#E5F4FF] hover:cursor-pointer"
                 }`}
               >
                 <img
@@ -221,9 +223,9 @@ function ProfileCard({
           </div>
 
           {/* Help & Settings Section */}
-          <div className="font-semibold xl:text-lg capitalize leading-normal tracking-wide py-7 text-[#262626] border-b-2 border-[#ccc] flex flex-col gap-4">
+          <div className="font-semibold xl:text-lg capitalize leading-normal tracking-wide py-5 text-[#262626] border-b-2 border-[#ccc] flex flex-col gap-2">
             <div
-              className="flex items-center mx-4 gap-3 hover:bg-[#E5F4FF] hover:cursor-pointer pl-2"
+              className="flex items-center mx-4 gap-3 hover:bg-[#E5F4FF] hover:cursor-pointer hover:rounded-lg pl-2 py-1.5"
               onClick={() =>
                 navigate("/dashboard", { state: { openHelp: true } })
               }
@@ -236,7 +238,7 @@ function ProfileCard({
               <button>Help</button>
             </div>
             <div
-              className="flex items-center mx-4 gap-3 hover:bg-[#E5F4FF] hover:cursor-pointer pl-2"
+              className="flex items-center mx-4 gap-3 hover:bg-[#E5F4FF] hover:cursor-pointer hover:rounded-lg pl-2 py-1.5"
               onClick={() =>
                 navigate("/dashboard", { state: { openSettings: true } })
               }
@@ -249,7 +251,7 @@ function ProfileCard({
               <button>Settings</button>
             </div>
             <div
-              className="flex items-center mx-4 gap-3 hover:bg-[#E5F4FF] hover:cursor-pointer pl-3"
+              className="flex items-center mx-4 gap-2 hover:bg-[#E5F4FF] hover:cursor-pointer hover:rounded-lg pl-3 py-1.5"
               onClick={logout}
             >
               <img
