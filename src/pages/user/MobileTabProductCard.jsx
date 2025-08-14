@@ -1,7 +1,15 @@
+import { useApp } from "../../Context/Context";
 import { baseImageUrl } from "../../utils/HelperConstant";
 import { HiDotsVertical } from "react-icons/hi";
 
 function MobileTabProductCard({ product, handleProductPreview }) {
+  const { accountHolder } = useApp();
+
+  const statusColors = {
+    pending: "bg-[#FDF1E8] text-[#E46A11]",
+    approved: "bg-[#E7F4EE] text-[#0D894F]",
+    rejected: "bg-[#FFBEBE] text-[#FF0000]",
+  };
   //     {
   //     "id": "2bd93ead-202f-4a12-bee5-ce3cda8ba3fb",
   //     "created_at": "2025-01-08T13:53:03.14322+00:00",
@@ -57,6 +65,15 @@ function MobileTabProductCard({ product, handleProductPreview }) {
           value={product?.products?.subcategory1}
         />
         <ContentCard title={"Dimensions:"} value={product?.dimension} />
+        {accountHolder.role !== "user" && (
+          <ContentCard
+            title={"Status:"}
+            value={product?.status}
+            className={`${
+              statusColors[product?.status]
+            } p-1 rounded-lg || "bg-gray-200"`}
+          />
+        )}
       </div>
 
       {/* 3-dot Menu */}
@@ -75,11 +92,13 @@ function MobileTabProductCard({ product, handleProductPreview }) {
 
 export default MobileTabProductCard;
 
-function ContentCard({ title, value }) {
+function ContentCard({ title, value, className }) {
   return (
     <div className="flex justify-between gap-2">
       <h2 className="font-semibold w-28 text-xs">{title}</h2>
-      <p className="text-xs flex-1 text-start">{value || "NA"}</p>
+      <p className={`text-xs flex-1 text-start ${className}`}>
+        {value || "NA"}
+      </p>
     </div>
   );
 }

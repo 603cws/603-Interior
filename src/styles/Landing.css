@@ -428,3 +428,11 @@ slick-current {
 .group:hover .roller {
   animation: paintPath 1.5s ease-in-out infinite forwards;
 }
+.react-calendar {
+  width: 95%;
+  box-shadow: none;
+  border: 1px solid #cccccc;
+  padding: 10px;
+  margin: 0 12px;
+  border-radius: 8px;
+}

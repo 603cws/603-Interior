@@ -116,21 +116,21 @@ function Schedule() {
   };
 
   return (
-    <div className="w-full  border-2 border-[#000] rounded-3xl  my-2.5">
+    <div className="flex flex-col h-full min-h-0 overflow-hidden lg:border-2 lg:border-[#334A78] lg:rounded-lg bg-white ">
       {/* <div className="w-full  border-2 border-[#000] rounded-3xl bg-[#EBF0FF] my-2.5"> */}
       <div className="w-full  overflow-y-auto scrollbar-hide h-[calc(100vh-120px)] py-2 ">
         <div>
-          <div className="text-xl text-[#000] capitalize font-semibold border-b-2 border-b-[#CCCCCC] ">
-            <h2 className="px-4">schedule</h2>
+          <div className="text-xl text-[#000] capitalize font-semibold border-b-2 border-b-[#CCCCCC] py-2">
+            <h2 className="px-4 ">schedule</h2>
           </div>
-          <div className="grid grid-cols-[1fr,2fr]">
+          <div className="lg:grid grid-cols-[1fr,2fr]">
             <div className="">
-              <div className="bg-[#C0C0FF] flex justify-center items-center gap-2 py-3 mx-4 my-2">
+              <div className="bg-[#374A75] flex justify-center items-center gap-2 py-3 m-3 rounded text-[#fff]">
                 <LuPlus />
-                <p className="text-[#3D194F]">Appointment</p>
+                <p className="">Appointment</p>
               </div>
               {/* calender */}
-              <div className="flex justify-center items-center">
+              <div className="flex justify-center items-center my-10">
                 <Calendar
                   onChange={handleDateChange}
                   //   onChange={getdata}
@@ -142,9 +142,9 @@ function Schedule() {
                   }
                 />
               </div>
-              <div className="text-[#000] capitalize ">
-                <div className="mx-3">
-                  <div className="flex justify-between items-center border-b-2 border-b-[#CCCCCC] ">
+              <div className="text-[#000] capitalize border border-[#CCC] rounded-lg m-3 p-2">
+                <div className="">
+                  <div className="flex justify-between items-center border-b border-b-[#CCCCCC] ">
                     <h3 className="font-medium">Event Type</h3>
                     <BsThreeDots />
                   </div>
@@ -167,7 +167,7 @@ function Schedule() {
             </div>
 
             {/* second div of grid for table */}
-            <div>
+            <div className="hidden lg:block">
               <h4 className="border-b-2 border-b-[#000] text-[#3D194F] capitalize">
                 {weekRange
                   ? `${weekRange.start}-${weekRange.end}`
@@ -229,6 +229,41 @@ function Schedule() {
                   </tbody>
                 </table>
               </div>
+            </div>
+
+            {/* card for mobile and tab */}
+            <div className="lg:hidden">
+              {scheduleData && (
+                <div className="m-3">
+                  <p className="text-sm text-[#374A75] my-7 text-left font-semibold">
+                    {weekRange.start} - {weekRange.end}
+                  </p>
+                  {Object.entries(scheduleData).map(([day, slots]) =>
+                    Object.entries(slots).map(([time, details]) => (
+                      <div
+                        key={day + time}
+                        className="bg-[#EFF4FF] text-[#374A75] mb-7 p-3 rounded-2xl flex items-center gap-4"
+                      >
+                        <div>
+                          <img
+                            src="/images/user.png"
+                            alt=""
+                            className="h-10 w-10"
+                          />
+                        </div>
+                        <div>
+                          <h4 className="font-medium text-lg">
+                            {details.company}
+                          </h4>
+                          <p className="text-xs">
+                            {day} - {details.timeRange}
+                          </p>
+                        </div>
+                      </div>
+                    ))
+                  )}
+                </div>
+              )}
             </div>
           </div>
         </div>

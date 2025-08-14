@@ -4,7 +4,7 @@ function DashboardInbox({ viewDetails, products }) {
   );
 
   return (
-    <div className="bg-white rounded-3xl shadow-sm p-10 font-Poppins lg:h-[260px] overflow-y-auto scrollbar-hide">
+    <div className="bg-white rounded-sm shadow-sm font-Poppins lg:h-[300px] overflow-y-auto scrollbar-hide border p-3">
       <div className="flex justify-between items-center">
         <div>
           <h3 className="text-xl font-bold text-[#252733]">Inbox</h3>
@@ -19,15 +19,6 @@ function DashboardInbox({ viewDetails, products }) {
           View Details
         </button>
       </div>
-      {/* <div className="flex gap-3 justify-between items-center my-5 py-2 border-b-2 hover:bg-gray-100">
-        <p className="text-[#252733]">Waiting for approve product#12345</p>
-        <span className="text-[#9FA2B4]">4:39</span>
-      </div>
-      <div className="flex gap-3 justify-between items-center my-5 py-2 border-b-2 hover:bg-gray-100">
-        <p className="text-[#252733]">Waiting for approve order#22234</p>
-        <span className="text-[#9FA2B4]">11:07</span>
-      </div> */}
-
       {filteredpending.map((product) => {
         return (
           <div

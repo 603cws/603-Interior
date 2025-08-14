@@ -244,15 +244,16 @@ function CreateUser() {
   // };
   return (
     // <div className="">
-    <div className="flex-1 rounded-xl bg-[#EBF0FF] mb-5 cursor-default overflow-hidden ">
+    <div className="flex-1 bg-[#FFF] mb-5 cursor-default overflow-auto ">
       <div className="h-[calc(100vh-130px)] flex-col flex justify-center items-center">
-        <div className=" w-11/12 bg-white p-6 border border-black rounded-xl shadow-md flex flex-col items-center text-center">
+        <div className=" w-11/12 h-full bg-white p-6 flex flex-col items-center text-center">
           {/* Header Section */}
           <div className="w-full text-left font-Poppins">
-            <h4 className="text-xl font-semibold mb-2 text-[#231F5C]">
+            <h4 className="text-base font-semibold text-[#374A75]">
               Let's Work Together!
             </h4>
-            <h2 className="text-3xl font-bold mb-4">
+            <img src="images/separator.png" alt="" className="w-20 my-4" />
+            <h2 className="text-3xl font-semibold mb-4">
               Please Fill Your Details.
             </h2>
           </div>
@@ -260,9 +261,9 @@ function CreateUser() {
           {/* Form Fields */}
           <form
             onSubmit={handleSubmit}
-            className="w-full grid grid-cols-2 gap-4 text-left text-base ml-20"
+            className="w-full lg:grid lg:grid-cols-2 gap-4 text-left text-base"
           >
-            <div className="flex flex-col justify-center gap-2">
+            <div className="flex flex-col justify-center gap-5">
               {/* Company Name */}
               <div className="flex flex-col">
                 <label className="font-medium">Company Name*</label>
@@ -272,7 +273,7 @@ function CreateUser() {
                   placeholder="Enter company name"
                   value={formData.company}
                   onChange={handleChange}
-                  className="border p-2 rounded-md max-w-lg"
+                  className="border p-2 rounded-md w-full lg:max-w-lg"
                   required
                 />
               </div>
@@ -282,7 +283,7 @@ function CreateUser() {
                 <label className="font-medium">Role*</label>
                 <select
                   name="role"
-                  className="border p-2 rounded-md max-w-lg"
+                  className="border p-2 rounded-md w-full lg:max-w-lg"
                   value={formData.role}
                   onChange={handleChange}
                   required
@@ -294,24 +295,31 @@ function CreateUser() {
               </div>
 
               {/* Category (Only for Vendor) */}
-              {formData.role === "vendor" && (
-                <div className="flex flex-col">
-                  <label className="font-medium">Category*</label>
-                  <Select
-                    options={categories}
-                    isMulti
-                    className="basic-multi-select max-w-lg"
-                    classNamePrefix="select"
-                    value={formData.category}
-                    onChange={handleCategoryChange}
-                    placeholder="Select Category"
-                    menuPortalTarget={document.body}
-                    styles={{
-                      menuPortal: (base) => ({ ...base, zIndex: 9999 }),
-                    }}
-                  />
-                </div>
-              )}
+              {/* {formData.role === "vendor" && ( */}
+              <div className="flex flex-col">
+                <label className="font-medium">
+                  Category*{" "}
+                  <span className="text-[10px] text-[#ccc]">
+                    {" "}
+                    (For vendors){" "}
+                  </span>{" "}
+                </label>
+                <Select
+                  options={categories}
+                  isMulti
+                  className="basic-multi-select w-full lg:max-w-lg"
+                  classNamePrefix="select"
+                  value={formData.category}
+                  onChange={handleCategoryChange}
+                  placeholder="Select Category"
+                  menuPortalTarget={document.body}
+                  isDisabled={formData.role !== "vendor"}
+                  styles={{
+                    menuPortal: (base) => ({ ...base, zIndex: 9999 }),
+                  }}
+                />
+              </div>
+              {/* // )} */}
 
               {/* Email ID */}
               <div className="flex flex-col">
@@ -322,12 +330,12 @@ function CreateUser() {
                   placeholder="Enter email ID"
                   value={formData.email}
                   onChange={handleChange}
-                  className="border p-2 rounded-md max-w-lg"
+                  className="border p-2 rounded-md w-full lg:max-w-lg"
                   required
                 />
               </div>
             </div>
-            <div className="flex flex-col justify-center gap-2">
+            <div className="flex flex-col justify-center gap-5 mt-5 lg:mt-0">
               {/* Mobile Number - Fixed Position */}
               <div className="flex flex-col">
                 <label className="font-medium">Mobile Number*</label>
@@ -339,7 +347,9 @@ function CreateUser() {
                   value={formData.mobile}
                   onChange={handleChange}
                   className={`border p-2 rounded-md ${
-                    formData.role === "vendor" ? "max-w-md" : "max-w-md"
+                    formData.role === "vendor"
+                      ? "w-full lg:max-w-md"
+                      : "w-full lg:max-w-md"
                   }`}
                   required
                   maxLength={10}
@@ -348,7 +358,7 @@ function CreateUser() {
               </div>
 
               {/* Password - Always on Right Side */}
-              <div className="flex flex-col relative max-w-md">
+              <div className="flex flex-col relative w-full lg:max-w-md">
                 <label className="font-medium">Password*</label>
                 <input
                   type={isPasswordVisible ? "text" : "password"}
@@ -372,7 +382,7 @@ function CreateUser() {
               </div>
 
               {/* Confirm Password - Always on Right Side */}
-              <div className="flex flex-col relative max-w-md">
+              <div className="flex flex-col relative w-full lg:max-w-md">
                 <label className="font-medium">Confirm Password*</label>
                 <input
                   type={isConfirmPasswordVisible ? "text" : "password"}
@@ -405,7 +415,9 @@ function CreateUser() {
                   value={formData.location}
                   onChange={handleChange}
                   className={`border p-2 rounded-md ${
-                    formData.role === "vendor" ? "max-w-md" : "max-w-md"
+                    formData.role === "vendor"
+                      ? "w-full lg:max-w-md"
+                      : "w-full lg:max-w-md"
                   }`}
                   required
                 />
@@ -414,10 +426,10 @@ function CreateUser() {
 
             {/* Submit Button */}
 
-            <div className="col-span-2 flex justify-center mt-5">
+            <div className="col-span-2 flex justify-start mt-5">
               <button
                 type="submit"
-                className="bg-[#231F5C] text-white px-6 py-2 rounded-lg"
+                className="bg-[#374A75] text-white px-6 py-2 rounded border border-[#000] font-bold"
               >
                 Submit
               </button>
