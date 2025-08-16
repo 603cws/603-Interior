@@ -63,6 +63,7 @@ import BrandLight from "./pages/Ecommerce/BrandLight";
 import BrandHVAC from "./pages/Ecommerce/BrandHVAC";
 import BrandDLink from "./pages/Ecommerce/BrandDLink";
 import VendorDashboardLayout from "./pages/vendor/VendorDashboardLayout";
+import PrivateRoute from "./utils/PrivateRoute";
 
 const Home = lazy(() => import("./pages/Home"));
 
@@ -72,7 +73,7 @@ const Layout = lazy(() => import("./layout/pages/Layout"));
 const Carrer = lazy(() => import("./pages/Carrer"));
 
 function App() {
-  const { accountHolder, isAuthenticated, isAuthLoading } = useApp();
+  const { accountHolder, isAuthLoading } = useApp();
 
   // While authentication is loading, show a spinner
   if (isAuthLoading) {
@@ -86,41 +87,50 @@ function App() {
       {/* <Layout /> */}
       {/* <Boq /> */}
       <Suspense fallback={<SpinnerFullPage />}>
-        {isAuthenticated ? (
-          <Routes>
-            <Route path="/" element={<Landing />} />
-            <Route path="/Layout" element={<Layout />} />
-            <Route path="/boq" element={<Boq />} />
-            <Route path="/boq/:id" element={<ProductOverview />} />
-            <Route path="/Recommend" element={<RecommendComp />} />
-            <Route path="/selectArea" element={<SelectArea />} />
-            <Route path="/spinner" element={<SpinnerFullPage />} />
-            <Route path="/Contactus" element={<Contactus />} />
-            <Route path="/Aboutus" element={<AboutUs2 />} />
+        <Routes>
+          <Route path="/" element={<Landing />} />
+          <Route path="/Layout" element={<Layout />} />
+          <Route
+            path="/boq"
+            element={
+              <PrivateRoute>
+                <Boq />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/boq/:id"
+            element={
+              <PrivateRoute>
+                <ProductOverview />
+              </PrivateRoute>
+            }
+          />
+          <Route path="/Contactus" element={<Contactus />} />
+          <Route path="/Aboutus" element={<AboutUs2 />} />
 
-            <Route path="/Blog" element={<InteriorBlog />} />
-            <Route path="/Blog/:title" element={<BlogDetail />} />
-            <Route path="/Career" element={<Carrer />} />
-            <Route path="/privacy-policy" element={<Privacy />} />
-            <Route path="/ThreeDViewer" element={<ThreeDViewer />} />
-            <Route path="*" element={<PageNotFound />} />
-            <Route path="/Login" element={<Login />} />
-            <Route path="/complete-profile" element={<CompleteProfile />} />
-            <Route
-              path="/complete-profile/*"
-              element={<Navigate to="/complete-profile" />}
-            />
-            <Route path="/OurServices" element={<OurServices2 />} />
+          <Route path="/Blog" element={<InteriorBlog />} />
+          <Route path="/Blog/:title" element={<BlogDetail />} />
+          <Route path="/Career" element={<Carrer />} />
+          <Route path="/privacy-policy" element={<Privacy />} />
+          <Route path="/ThreeDViewer" element={<ThreeDViewer />} />
+          <Route path="*" element={<PageNotFound />} />
+          <Route path="/Login" element={<Login />} />
+          <Route path="/complete-profile" element={<CompleteProfile />} />
+          <Route
+            path="/complete-profile/*"
+            element={<Navigate to="/complete-profile" />}
+          />
+          <Route path="/OurServices" element={<OurServices2 />} />
 
-            <Route path="/Career/:jobTitle" element={<JobPage />} />
-            <Route path="/profile" element={<ProfileCard />} />
-            <Route path="/scroll" element={<DoorScrollEffect />} />
-            <Route
-              path="/dashboard"
-              element={
-                accountHolder?.role ? (
+          <Route path="/Career/:jobTitle" element={<JobPage />} />
+          <Route path="/scroll" element={<DoorScrollEffect />} />
+          <Route
+            path="/dashboard"
+            element={
+              <PrivateRoute>
+                {accountHolder?.role ? (
                   accountHolder.role === "admin" ? (
-                    // <Dashboard />
                     <AdminDashboard />
                   ) : accountHolder.role === "vendor" ? (
                     // <VendorDashboard />
@@ -132,105 +142,40 @@ function App() {
                   )
                 ) : (
                   <SpinnerFullPage />
-                )
-              }
-            />
+                )}
+              </PrivateRoute>
+            }
+          />
 
-            <Route path="/vdashboard" element={<VendorDashboardLayout />} />
-            <Route path="/becomeseller" element={<OurWork />} />
-            <Route path="/plans" element={<Plans />} />
-            <Route path="/help" element={<HelpnFaq />} />
-            <Route path="/termsNcondition" element={<TermsAndCondition />} />
-            <Route path="/boqcompleted" element={<Boqcompleted />} />
-            <Route path="/howtosell" element={<Howtosell />} />
-            {/* <Route path="/vendordashboard" element={<VendorDashboard />} />
-            <Route path="/vendorregister" element={<VendorRegister />} /> */}
-
-            <Route path="/getplan" element={<PricingCard />} />
-            <Route path="/admin" element={<AdminDashboard />} />
-            <Route path="/bookappointment" element={<BookAppointment />} />
-            <Route path="/sessiontimeout" element={<Sessiontimeout />} />
-            <Route path="/brokenlink" element={<Brokenlink />} />
-            <Route path="/tokenExpired" element={<TokenExpired />} />
-            <Route path="/partnerwithus" element={<PartnerWorkvedInterior />} />
-            <Route path="/products" element={<Products />} />
-            <Route path="/products/topdeal" element={<TopDeal />} />
-            <Route path="/products/seasonspecial" element={<SeasonSpecial />} />
-            <Route path="/productview" element={<ProductView />} />
-            <Route path="/productview/:id" element={<ProductView />} />
-            <Route path="/shop" element={<ShopProducts />} />
-            <Route path="/cart" element={<Cart />} />
-            <Route path="/address" element={<Addresspage />} />
-            <Route path="/wishlist" element={<Wishlist />} />
-            <Route path="/brands" element={<Brands />} />
-            <Route path="/productReview" element={<ProductReview />} />
-            <Route path="/payments" element={<Payments />} />
-            <Route path="/eLogin" element={<ELogin />} />
-            <Route path="/profilePage" element={<ProfilePage />} />
-            <Route path="/brands/productview" element={<BrandProductView />} />
-            <Route path="/reviews/:id" element={<AllReviews />} />
-            <Route path="/brands/hvac" element={<BrandHVAC />} />
-            <Route path="/brands/furniture" element={<BrandFurniture />} />
-            <Route path="/brands/light" element={<BrandLight />} />
-            <Route path="/brands/dlink" element={<BrandDLink />} />
-          </Routes>
-        ) : (
-          <Routes>
-            <Route path="/" element={<Landing />} />
-            <Route path="/Layout" element={<Layout />} />
-
-            <Route path="/Error" element={<ErrorModal />} />
-            <Route path="/Contactus" element={<Contactus />} />
-            <Route path="/Aboutus" element={<AboutUs2 />} />
-
-            <Route path="/Blog" element={<InteriorBlog />} />
-            <Route path="/Blog/:title" element={<BlogDetail />} />
-            <Route path="/Career" element={<Carrer />} />
-            <Route path="/privacy-policy" element={<Privacy />} />
-            <Route path="/ThreeDViewer" element={<ThreeDViewer />} />
-            <Route path="*" element={<PageNotFound />} />
-            <Route path="/Login" element={<Login />} />
-            <Route path="/complete-profile" element={<CompleteProfile />} />
-            <Route
-              path="/complete-profile/*"
-              element={<Navigate to="/complete-profile" />}
-            />
-            <Route path="/OurServices" element={<OurServices2 />} />
-
-            <Route path="/Career/:jobTitle" element={<JobPage />} />
-            <Route path="/profile" element={<ProfileCard />} />
-            <Route path="/becomeseller" element={<OurWork />} />
-            <Route path="/help" element={<HelpnFaq />} />
-            <Route path="/termsNcondition" element={<TermsAndCondition />} />
-
-            <Route path="/bookappointment" element={<BookAppointment />} />
-            <Route path="/howtosell" element={<Howtosell />} />
-            <Route path="/partnerwithus" element={<PartnerWorkvedInterior />} />
-            <Route path="/scroll" element={<DoorScrollEffect />} />
-            <Route path="/interiorWork" element={<OurWork />} />
-            <Route path="/home" element={<Home />} />
-            <Route path="/products" element={<Products />} />
-            <Route path="/products/topdeal" element={<TopDeal />} />
-            <Route path="/productview" element={<ProductView />} />
-            <Route path="/productview/:id" element={<ProductView />} />
-            <Route path="/shop" element={<ShopProducts />} />
-            <Route path="/cart" element={<Cart />} />
-            <Route path="/address" element={<Addresspage />} />
-            <Route path="/wishlist" element={<Wishlist />} />
-            <Route path="/brands" element={<Brands />} />
-            <Route path="/productReview" element={<ProductReview />} />
-            <Route path="/payments" element={<Payments />} />
-            <Route path="/eLogin" element={<ELogin />} />
-            <Route path="/profilePage" element={<ProfilePage />} />
-            <Route path="/brands/productview" element={<BrandProductView />} />
-            <Route path="/products/seasonspecial" element={<SeasonSpecial />} />
-            <Route path="/reviews/:id" element={<AllReviews />} />
-            <Route path="/brands/hvac" element={<BrandHVAC />} />
-            <Route path="/brands/furniture" element={<BrandFurniture />} />
-            <Route path="/brands/light" element={<BrandLight />} />
-            <Route path="/brands/dlink" element={<BrandDLink />} />
-          </Routes>
-        )}
+          <Route path="/becomeseller" element={<OurWork />} />
+          <Route path="/help" element={<HelpnFaq />} />
+          <Route path="/termsNcondition" element={<TermsAndCondition />} />
+          <Route path="/howtosell" element={<Howtosell />} />
+          <Route path="/sessiontimeout" element={<Sessiontimeout />} />
+          <Route path="/brokenlink" element={<Brokenlink />} />
+          <Route path="/tokenExpired" element={<TokenExpired />} />
+          <Route path="/partnerwithus" element={<PartnerWorkvedInterior />} />
+          <Route path="/products" element={<Products />} />
+          <Route path="/products/topdeal" element={<TopDeal />} />
+          <Route path="/products/seasonspecial" element={<SeasonSpecial />} />
+          <Route path="/productview" element={<ProductView />} />
+          <Route path="/productview/:id" element={<ProductView />} />
+          <Route path="/shop" element={<ShopProducts />} />
+          <Route path="/cart" element={<Cart />} />
+          <Route path="/address" element={<Addresspage />} />
+          <Route path="/wishlist" element={<Wishlist />} />
+          <Route path="/brands" element={<Brands />} />
+          <Route path="/productReview" element={<ProductReview />} />
+          <Route path="/payments" element={<Payments />} />
+          <Route path="/eLogin" element={<ELogin />} />
+          <Route path="/profilePage" element={<ProfilePage />} />
+          <Route path="/brands/productview" element={<BrandProductView />} />
+          <Route path="/reviews/:id" element={<AllReviews />} />
+          <Route path="/brands/hvac" element={<BrandHVAC />} />
+          <Route path="/brands/furniture" element={<BrandFurniture />} />
+          <Route path="/brands/light" element={<BrandLight />} />
+          <Route path="/brands/dlink" element={<BrandDLink />} />
+        </Routes>
       </Suspense>
     </div>
   );
