@@ -3,8 +3,6 @@ import { useApp } from "../../Context/Context";
 import PDFGenerator from "./PDFGenerator";
 import { useState, useEffect, useRef } from "react";
 import { RiArrowDropDownLine } from "react-icons/ri";
-import { FaTrash } from "react-icons/fa";
-import { FiUploadCloud } from "react-icons/fi";
 import { supabase } from "../../services/supabase";
 import toast from "react-hot-toast";
 import { fetchProductsData } from "../utils/dataFetchers";
@@ -1087,8 +1085,8 @@ function Navbar({
                     </button>
 
                     {isOpen && (
-                      <ul className="absolute left-0 -bottom-1/3 min-w-[100px] mt-2 w-auto text-xs bg-white border border-gray-300 rounded-lg shadow-md">
-                        <li className="px-4 py-2 grid grid-cols-[2fr_1fr] font-semibold bg-gray-200 text-center rounded-lg shadow-md">
+                      <ul className="absolute left-0 -bottom-1/3 min-w-[100px] mt-2 w-auto text-xs bg-white rounded-lg shadow-md">
+                        <li className="px-4 py-3 grid grid-cols-[2fr_1fr] font-semibold bg-[#374A75] text-center text-white rounded-t-lg shadow-md">
                           <span className="text-left">Title</span>
                           <span className="text-center">Actions</span>
                         </li>
@@ -1099,19 +1097,22 @@ function Navbar({
                               className="px-4 py-2 grid grid-cols-[2fr_1fr] items-center hover:bg-gray-100"
                               // className="px-4 py-2 grid grid-cols-[2fr_1fr] items-center hover:bg-gray-100 cursor-pointer"
                             >
-                              <span className="text-left break-words whitespace-normal">
+                              <span className="text-left break-words text-[#374A75] whitespace-normal">
                                 {boq.boqTitle}
                                 {boq.boqTitle === BOQTitle && "*"}
                               </span>
 
                               <div className="flex justify-center gap-2">
-                                <FiUploadCloud
-                                  className="cursor-pointer"
+                                <img
+                                  src="../images/icons/download.png"
+                                  alt="Downlaod"
+                                  className="cursor-pointer h-6 w-6"
                                   onClick={() => handleLoadBOQ(boq.id)}
                                 />
-                                <FaTrash
-                                  className="text-red-500 cursor-pointer"
-                                  // onClick={() => handleDeleteBOQ(boq.id)}
+                                <img
+                                  src="../images/icons/delete.png"
+                                  alt="Delete"
+                                  className="cursor-pointer h-6 w-6"
                                   onClick={() => {
                                     setDeleteAlert(true);
                                     setSelectedboqid(boq.id);
@@ -1213,9 +1214,9 @@ function Navbar({
               </button>
 
               {isOpen && (
-                <ul className="absolute left-0 top-7 min-w-[200px] mt-2 w-auto bg-white border border-gray-300 rounded-lg shadow-md">
+                <ul className="absolute left-0 top-7 min-w-[200px] mt-2 w-auto bg-white rounded-lg shadow-md">
                   {/* Header Row */}
-                  <li className="px-4 py-2 grid grid-cols-[2fr_1fr] font-semibold bg-gray-200 text-center rounded-lg shadow-md">
+                  <li className="px-4 py-3 grid grid-cols-[2fr_1fr] font-semibold bg-[#374A75] text-center text-white rounded-t-lg shadow-md">
                     <span className="text-left">Title</span>
                     <span className="text-center">Actions</span>
                   </li>
@@ -1228,20 +1229,36 @@ function Navbar({
                         className="px-4 py-2 grid grid-cols-[2fr_1fr] items-center hover:bg-gray-100"
                       >
                         {/* Title with word wrap */}
-                        <span className="text-left break-words whitespace-normal cursor-default">
-                          {boq.boqTitle}
-                          {boq.boqTitle === BOQTitle && "*"}
-                        </span>
+                        <div
+                          className="flex items-center cursor-default max-w-[100px]"
+                          title={boq.boqTitle}
+                          aria-label={boq.boqTitle}
+                        >
+                          {boq.boqTitle === BOQTitle && (
+                            <span className="w-2 h-2 rounded-full bg-green-500 mr-2 shrink-0"></span>
+                          )}
+
+                          <span className="overflow-hidden whitespace-nowrap text-ellipsis">
+                            {boq.boqTitle}
+                          </span>
+                        </div>
 
                         {/* Action Icons */}
-                        <div className="flex justify-center gap-2">
-                          <FiUploadCloud
-                            className="cursor-pointer"
+                        <div className="flex justify-left gap-3">
+                          <img
+                            src="../images/icons/download.png"
+                            alt="Download"
+                            className="cursor-pointer h-6 w-6"
                             onClick={() => handleLoadBOQ(boq.id)}
+                            title="Load BOQ"
+                            aria-label="Load BOQ"
                           />
-                          <FaTrash
-                            className="text-red-500 cursor-pointer"
-                            // onClick={() => handleDeleteBOQ(boq.id)}
+                          <img
+                            src="../images/icons/delete.png"
+                            alt="Delete"
+                            className="cursor-pointer h-6 w-6"
+                            title="Delete BOQ"
+                            aria-label="Delete BOQ"
                             onClick={() => {
                               setDeleteAlert(true);
                               setSelectedboqid(boq.id);

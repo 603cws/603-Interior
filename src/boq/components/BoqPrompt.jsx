@@ -182,13 +182,13 @@ function BoqPrompt({ onConfirm, onCancel, isProfileCard, setIsProfileCard }) {
                     You have not saved your details.
                   </p>
                 )}
-              {isDraftBoq ? "Save/Override Draft BOQ" : "Save/Override BOQ"}
+                {isDraftBoq ? "Save/Override Draft BOQ" : "Save/Override BOQ"}
               </Dialog.Title>
 
               {existingBoqs?.length > 0 && (
                 <div className="mt-4">
                   <label className="block lg:text-lg font-medium ">
-                  Override Existing BOQ
+                    Override Existing BOQ
                   </label>
                   <select
                     className="w-full mt-2 p-3 border border-gray-300 rounded text-base focus:outline-none focus:ring-1 focus:ring-[#334A78] text-black"
@@ -207,29 +207,29 @@ function BoqPrompt({ onConfirm, onCancel, isProfileCard, setIsProfileCard }) {
                 </div>
               )}
 
-            {existingBoqs?.length >= boqLimit ? (
-              <label className="block lg:text-lg font-medium mt-4">
-                Max {boqLimit} BOQ can be created (Drafts excluded)
-              </label>
-            ) : (
-              <div className="mt-4">
-                {existingBoqs?.length > 0 && (
-                  <h2 className="lg:text-lg font-medium text-center">OR</h2>
-                )}
-                <label className="block lg:text-lg font-medium ">
-                  {isDraftBoq ? "Save Draft BOQ" : "Save a New BOQ"}
+              {existingBoqs?.length >= boqLimit ? (
+                <label className="block lg:text-lg font-medium mt-4">
+                  Max {boqLimit} BOQ can be created (Drafts excluded)
                 </label>
-                <input
-                  type="text"
-                  placeholder="Enter BOQ Name"
-                  value={boqTitle}
-                  onKeyDown={handleEnter}
-                  onChange={(e) => setBoqTitle(e.target.value)}
-                  className="w-full mt-2 p-3 border border-gray-300 rounded text-base focus:outline-none focus:ring-2 focus:ring-[#FFD500] text-black"
-                  disabled={!!selectedBoq}
-                />
-              </div>
-            )}
+              ) : (
+                <div className="mt-4">
+                  {existingBoqs?.length > 0 && (
+                    <h2 className="lg:text-lg font-medium text-center">OR</h2>
+                  )}
+                  <label className="block lg:text-lg font-medium ">
+                    {isDraftBoq ? "Save Draft BOQ" : "Save a New BOQ"}
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="Enter BOQ Name"
+                    value={boqTitle}
+                    onKeyDown={handleEnter}
+                    onChange={(e) => setBoqTitle(e.target.value)}
+                    className="w-full mt-2 p-3 border border-gray-300 rounded text-base focus:outline-none focus:ring-2 focus:ring-[#FFD500] text-black"
+                    disabled={!!selectedBoq}
+                  />
+                </div>
+              )}
 
               <div className="mt-6 flex justify-center gap-5 space-x-4">
                 <button
