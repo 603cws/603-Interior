@@ -105,9 +105,13 @@ function VendorDashboardLayout() {
         {/* Logo */}
         <div className="cursor-pointer flex justify-center items-center py-4">
           <img
-            src="/logo/workved-interior.png"
+            src={`${
+              isExpanded
+                ? "/logo/workved-interior.png"
+                : "/images/bi_layout-sidebar.png"
+            }`}
             alt="Logo"
-            className={`${isExpanded ? "h-16 w-32" : "h-9 w-10"}`}
+            className={`${isExpanded ? "h-20 w-32" : "h-8 w-8"}`}
             onClick={() => navigate("/")}
           />
         </div>

@@ -599,9 +599,13 @@ function Dashboard() {
         {/* Logo */}
         <div className="cursor-pointer flex justify-center items-center py-4">
           <img
-            src="/logo/workved-interior.png"
+            src={`${
+              isExpanded
+                ? "/logo/workved-interior.png"
+                : "/images/bi_layout-sidebar.png"
+            }`}
             alt="Logo"
-            className={`${isExpanded ? "h-20 w-32" : "h-9 w-16"}`}
+            className={`${isExpanded ? "h-20 w-32" : "h-8 w-8"}`}
             onClick={() => navigate("/")}
           />
         </div>
@@ -905,7 +909,7 @@ function Dashboard() {
                 <div className=" sticky top-0 z-20 bg-white">
                   <div className="flex flex-col md:flex-row md:items-center px-2 gap-3 lg:gap-5 lg:px-4 py-2 border-b-2 border-b-gray-400 ">
                     <div className="flex justify-between ">
-                      <h3 className="text-sm md:text-base font-semibold lg:text-2xl text-[#374A75] ">
+                      <h3 className="text-sm md:text-base font-semibold lg:text-xl text-[#374A75] ">
                         Created BOQs
                       </h3>
                       <div className="relative md:hidden flex items-center gap-5">
@@ -944,7 +948,7 @@ function Dashboard() {
                         </div>
                       )}
                     </div>
-                    <div className="flex flex-wrap sm:flex-nowrap gap-2">
+                    <div className="flex flex-wrap sm:flex-nowrap gap-2 xl:gap-4">
                       {isboqavailable &&
                         boqdata.map((boq, index) => {
                           return (
@@ -1119,7 +1123,7 @@ function Dashboard() {
                                     key={item.id}
                                     className="hover:bg-gray-50 cursor-pointer"
                                   >
-                                    <td className="border border-gray-200 p-3 align-middle">
+                                    <td className="border border-gray-200 p-3 align-middle ">
                                       <div className="flex items-center gap-2">
                                         <img
                                           src={`${baseImageUrl}${item.image}`}

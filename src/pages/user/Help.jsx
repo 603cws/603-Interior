@@ -38,7 +38,7 @@ function Help({ isvendor }) {
           </h2>
         </div>
 
-        <div className="bg-[#fff] border-2 p-3 border-[#E6E6E6] rounded-xl">
+        <div className="bg-[#fff] border-2 p-3 border-[#E6E6E6] rounded-lg">
           <h3 className="lg:px-8 text-lg lg:text-2xl capitalize font-medium">
             Common Questions
           </h3>
@@ -50,7 +50,7 @@ function Help({ isvendor }) {
               >
                 <div
                   className={`flex w-full text-left p-4 bg-[#F9F9F9] border border-[#E5E7EB] hover:bg-gray-200 focus:outline-none justify-between cursor-pointer ${
-                    expandedIndex === index ? "rounded-t-xl" : "rounded-xl"
+                    expandedIndex === index ? "rounded-t-lg" : "rounded-lg"
                   } `}
                   onClick={() => handleToggle(index)}
                 >
@@ -60,7 +60,7 @@ function Help({ isvendor }) {
                   {expandedIndex === index ? <FaAngleUp /> : <FaAngleDown />}
                 </div>
                 {expandedIndex === index && (
-                  <div className="p-4 bg-white lg:border border-[#E5E7EB] lg:rounded-b-xl">
+                  <div className="p-4 bg-white lg:border border-[#E5E7EB] lg:rounded-b-lg">
                     <p className="text-black text-xs lg:text-base">
                       {item.content}
                     </p>
@@ -71,7 +71,7 @@ function Help({ isvendor }) {
           </div>
         </div>
 
-        <div className="flex-1 flex justify-center items-center bg-[#F9F9F9] border-2 p-3 border-[#CCCCCC] rounded-xl mt-5 mb-10 lg:mb-0 ">
+        <div className="flex-1 flex justify-center items-center bg-[#F9F9F9] border-2 p-3 border-[#CCCCCC] rounded-lg mt-5 mb-10 lg:mb-0 ">
           <div className="my-4">
             <h4 className="text-[#374A75] font-medium leading-[150%] tracking-[-1.1%] lg:text-xl text-center mb-3">
               Still Need Help?

@@ -87,18 +87,37 @@ function Schedule() {
     setWeekRange(newWeekRange); // This will trigger the useEffect above
   };
 
+  function formatDate(d) {
+    const [day, month, year] = d.split("/");
+    return `${year}-${String(month).padStart(2, "0")}-${String(day).padStart(
+      2,
+      "0"
+    )}`;
+  }
+
   const getdata = async (date) => {
     console.log(date);
     console.log(weekRange);
 
     try {
-      //   console.log(startweekday, endweekday);
+      // console.log(startweekday, endweekday);
+
+      console.log("weekrange", weekRange);
+      const formatted = {
+        start: formatDate(weekRange.start),
+        end: formatDate(weekRange.end),
+      };
 
       const { data, error } = await supabase
         .from("appointments")
         .select("*")
-        .gte("date", weekRange.start)
-        .lte("date", weekRange.end);
+        .gte("date_new", formatted?.start)
+        .lte("date_new", formatted?.end);
+      // const { data, error } = await supabase
+      //   .from("appointments")
+      //   .select("*")
+      //   .gte("date", weekRange.start)
+      //   .lte("date", weekRange.end);
 
       console.log(data);
 

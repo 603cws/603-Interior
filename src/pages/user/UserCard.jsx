@@ -3,7 +3,7 @@ import { useApp } from "../../Context/Context";
 function UserCard({ setIsEditopen }) {
   const { accountHolder } = useApp();
   return (
-    <div className="sm:w-[400px] lg:w-[500px] border border-[#ccc] shadow-xl ">
+    <div className="sm:w-[400px] lg:w-[500px] border border-[#ccc] shadow-xl rounded-lg">
       <div className="text-sm px-5 py-10  md:p-10 w-full ">
         <div className="flex py-3 items-center gap-3 border-b border-b-[#ccc]">
           <div className="">

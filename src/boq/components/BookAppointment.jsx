@@ -68,10 +68,12 @@ function BookAppointment({ onClose, isdashboardbooking = false }) {
   };
 
   const handlesubmi = async () => {
-    const date = value.getDate();
-    const month = value.getMonth() + 1;
+    const date = String(value.getDate()).padStart(2, "0");
+    const month = String(value.getMonth() + 1).padStart(2, "0");
     const year = value.getFullYear();
     const formattedDate = `${date}/${month}/${year}`;
+
+    const newDate = `${year}/${month}/${date}`;
     console.log(formattedDate, selectedTIme);
     setisSubmitting(true);
     console.log(value.toLocaleDateString("en-US", { weekday: "short" }));
@@ -122,12 +124,9 @@ function BookAppointment({ onClose, isdashboardbooking = false }) {
           }
         );
 
-        console.log("user", user);
-        console.log("admin", admin);
-
         toast.success("we will shortly reach you");
         setIsappointmentbooked(true);
-        saveBookingDatainDB(formattedDate, weekday, endtime);
+        saveBookingDatainDB(formattedDate, weekday, endtime, newDate);
         CheckThebookingOnSameDateAndGetTimes(value);
       } else {
         toast.error("please select the time");
@@ -141,8 +140,10 @@ function BookAppointment({ onClose, isdashboardbooking = false }) {
 
   async function CheckThebookingOnSameDateAndGetTimes(value) {
     try {
-      const date = value.getDate();
-      const month = value.getMonth() + 1;
+      // const date = value.getDate();
+      // const month = value.getMonth() + 1;
+      const date = String(value.getDate()).padStart(2, "0");
+      const month = String(value.getMonth() + 1).padStart(2, "0");
       const year = value.getFullYear();
       const formattedDate = `${date}/${month}/${year}`;
 
@@ -167,7 +168,7 @@ function BookAppointment({ onClose, isdashboardbooking = false }) {
 
   console.log("today booking timing", todayBookedTimmings);
 
-  const saveBookingDatainDB = async (date, weekday, endtime) => {
+  const saveBookingDatainDB = async (date, weekday, endtime, newDate) => {
     //
     try {
       const { error } = await supabase.from("appointments").insert([
@@ -175,6 +176,7 @@ function BookAppointment({ onClose, isdashboardbooking = false }) {
         {
           user_id: accountHolder.userId, // Assuming accountHolder contains user ID
           date,
+          date_new: newDate,
           time_slot: JSON.stringify({
             [weekday]: { [selectedTIme]: `${selectedTIme}-${endtime}` },
           }),
@@ -233,14 +235,14 @@ function BookAppointment({ onClose, isdashboardbooking = false }) {
           }`}
         >
           {!isappointmentbooked ? (
-            <div className="max-w-xs md:max-w-2xl lg:max-w-3xl lg:p-4 mb-5 lg:my-5">
+            <div className="max-w-xs md:max-w-2xl lg:max-w-4xl lg:p-2 mb-5 lg:my-5">
               <h3 className="text-[#374A75] text-lg md:text-2xl font-bold text-center my-3">
                 Book an Appointment
               </h3>
               {/* div for calender and times  */}
-              <div className="flex flex-col md:flex-row justify-around items-stretch gap-4 xl:gap-6 mx-3 md:mx-0">
+              <div className=" flex flex-col md:flex-row justify-around items-stretch gap-4 xl:gap-6 mx-3 md:mx-0">
                 {/* calender */}
-                <div>
+                <div className="flex-1">
                   <h3 className="text-sm text-[#111] font-medium ">
                     Schedule date*
                   </h3>
@@ -264,7 +266,7 @@ function BookAppointment({ onClose, isdashboardbooking = false }) {
                   </div>
                 </div>
                 {/* times */}
-                <div>
+                <div className="flex-1">
                   <h4 className="text-[#111] font-medium text-sm md:text-base mb-3">
                     select time*
                   </h4>
@@ -305,7 +307,7 @@ function BookAppointment({ onClose, isdashboardbooking = false }) {
                             disabled={isPast}
                             key={time}
                             onClick={(e) => handletime(time)}
-                            className={`  border  px-2 py-1 md:px-4 md:py-3 rounded-lg text-xs xl:text-sm border-[#757575]  ${
+                            className={`  border  px-2 py-1 md:px-4 md:py-3 rounded-lg text-xs  border-[#757575]  ${
                               isPast
                                 ? "bg-gray-200 text-gray-500 cursor-not-allowed"
                                 : selectedTIme === time
@@ -321,11 +323,11 @@ function BookAppointment({ onClose, isdashboardbooking = false }) {
                       <p>No slots available For Today </p>
                     )}
                   </div>
-                  <div className="flex items-center bg-[#FEF4EB] gap-2 mt-4 md:mt-10">
+                  <div className="flex items-center bg-[#FEF4EB] gap-2 mt-4 md:mt-10 p-2">
                     <div>
                       <PiWarningCircleFill color="#D59E61" size={20} />
                     </div>
-                    <h2 className="text-sm text-[#000]">
+                    <h2 className="text-sm text-[#000] ">
                       All times are in central Time(India)
                     </h2>
                   </div>

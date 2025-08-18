@@ -64,6 +64,7 @@ import BrandHVAC from "./pages/Ecommerce/BrandHVAC";
 import BrandDLink from "./pages/Ecommerce/BrandDLink";
 import VendorDashboardLayout from "./pages/vendor/VendorDashboardLayout";
 import PrivateRoute from "./utils/PrivateRoute";
+import Services from "./pages/Services";
 
 const Home = lazy(() => import("./pages/Home"));
 
@@ -122,6 +123,7 @@ function App() {
             element={<Navigate to="/complete-profile" />}
           />
           <Route path="/OurServices" element={<OurServices2 />} />
+          <Route path="/services" element={<Services />} />
 
           <Route path="/Career/:jobTitle" element={<JobPage />} />
           <Route path="/scroll" element={<DoorScrollEffect />} />

@@ -270,7 +270,7 @@ function DashboardView({
         <div className="p-3 border border-[#ccc] rounded-lg mt-6 ">
           <h3 className="capitalize font-bold mb-2">BOQ generated</h3>
           {/* boq card */}
-          <div className="flex gap-2 flex-wrap justify-center md:justify-normal">
+          <div className="flex gap-2 lg:gap-3 flex-wrap justify-center md:justify-normal">
             {isboqavailable &&
               boqdata.map((boq, index) => {
                 return (
@@ -321,7 +321,7 @@ function DashboardView({
       </div>
       <div className="my-6 lg:my-0 xl:w-1/3 lg:flex justify-center">
         <div className="border-2 p-2 lg:p-4 rounded-xl  lg:h-96">
-          <div className="w-[300px] h-[200px] lg:w-[370px] lg:h-[270px] sm:w-full sm:h-[270px]">
+          <div className="w-[300px] h-[200px] lg:w-[370px] lg:h-[270px] sm:w-full sm:h-[270px] mb-2 lg:mb-3">
             <ReactApexChart
               options={options}
               series={[{ data: series }]}
@@ -383,7 +383,13 @@ function GeneratedBOQCard({ boq, onDelete, selectedBoq }) {
       }`}
     >
       <div className="flex justify-between mb-1.5">
-        <h5 className="font-bold text-xl">{boq.boqTitle}</h5>
+        <h5
+          className="font-bold text-xl text-ellipsis overflow-hidden text-nowrap"
+          title={boq?.boqTitle}
+        >
+          {boq?.boqTitle}
+        </h5>
+
         <button onClick={() => onDelete(boq)} className="hover:text-red-600">
           {" "}
           <MdDeleteOutline size={25} />
