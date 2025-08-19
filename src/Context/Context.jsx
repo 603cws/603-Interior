@@ -151,38 +151,12 @@ export const AppProvider = ({ children }) => {
   }, []);
 
   useEffect(() => {
-    if (BOQID) {
-      sessionStorage.setItem("BOQID", BOQID);
-    }
-    if (BOQTitle) {
-      sessionStorage.setItem("BOQTitle", BOQTitle);
-    }
-    if (selectedPlan) {
-      sessionStorage.setItem("selectedPlan", selectedPlan);
-    }
-    if (currentLayoutID) {
-      sessionStorage.setItem("currentLayoutID", currentLayoutID);
-    }
-  }, [BOQID, BOQTitle, selectedPlan, currentLayoutID]);
+    const items = { BOQID, BOQTitle, selectedPlan, currentLayoutID };
 
-  // useEffect(() => {
-  //   console.log(
-  //     "User Details:",
-  //     userId,
-  //     totalArea,
-  //     currentLayoutData,
-  //     BOQTitle,
-  //     selectedData,
-  //     selectedPlan
-  //   );
-  // }, [
-  //   userId,
-  //   totalArea,
-  //   currentLayoutData,
-  //   BOQTitle,
-  //   selectedPlan,
-  //   selectedData,
-  // ]);
+    Object.entries(items).forEach(([key, value]) => {
+      if (value) sessionStorage.setItem(key, value);
+    });
+  }, [BOQID, BOQTitle, selectedPlan, currentLayoutID]);
 
   const handleUpdateBOQ = async (boqId) => {
     if (!boqId) return;
@@ -325,7 +299,7 @@ export const AppProvider = ({ children }) => {
           await Promise.all([
             fetchCategories(),
             fetchProductsData(),
-            fetchRoomData(userId),
+            fetchRoomData(userId, currentLayoutID),
             fetchCategoriesandSubCat1(),
           ]);
 
@@ -337,6 +311,9 @@ export const AppProvider = ({ children }) => {
         var processedAreasData = {};
 
         if (roomDataResult.layoutData && roomDataResult.layoutData.length > 0) {
+          setTotalArea(roomDataResult.layoutData[0]?.totalArea);
+          setCurrentLayoutData(roomDataResult.layoutData[0]);
+
           processedQuantityData = processData(
             roomDataResult.layoutData,
             "quantity"
@@ -426,7 +403,7 @@ export const AppProvider = ({ children }) => {
       }
     };
 
-    if (userId) {
+    if ((userId, currentLayoutID)) {
       loadData();
     }
   }, [userId, currentLayoutID]);
@@ -445,36 +422,6 @@ export const AppProvider = ({ children }) => {
       }
     }
   }, [selectedPlan]); // On Plan change subCat not updating proeprly for HVAC
-
-  // get the totalarea based on current layout id
-  useEffect(() => {
-    // const currentLayoutID = localStorage.getItem("currentLayoutID");
-    const fetchdata = async () => {
-      try {
-        if (currentLayoutID) {
-          // get the layout details from the supabase
-          const { data, error } = await supabase
-            .from("layout")
-            .select()
-            .eq("id", currentLayoutID); // Filter by userId
-
-          setTotalArea(data[0]?.totalArea);
-          setCurrentLayoutData(data[0]);
-
-          // setLayoutImage(data[0].layoutImg);
-          // setLayoutImage(
-          //   `https://bwxzfwsoxwtzhjbzbdzs.supabase.co/storage/v1/object/public/addon/${data[0].layoutImg}`
-          // );
-
-          if (error) throw error;
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    fetchdata();
-  }, [currentLayoutID]);
 
   useEffect(() => {
     // Check if selectedData is valid and not empty

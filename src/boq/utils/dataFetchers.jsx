@@ -108,12 +108,15 @@ export const fetchProductsData = async () => {
 //   }
 // };
 
-export const fetchRoomData = async (userId) => {
+export const fetchRoomData = async (userId, currentLayoutID) => {
   try {
     const { data: layoutData, error } = await supabase
       .from("layout")
       .select()
-      .eq("userId", userId) // Filter by userId
+      .eq(
+        currentLayoutID ? "id" : "userId", // conditionally choose column
+        currentLayoutID ? currentLayoutID : userId // conditionally choose value
+      )
       .order("created_at", { ascending: false })
       .limit(1);
 

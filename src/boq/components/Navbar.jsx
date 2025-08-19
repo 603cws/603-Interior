@@ -78,6 +78,7 @@ function Navbar({
     currentLayoutData,
     setCurrentLayoutData,
     BOQID,
+    setCurrentLayoutID,
   } = useApp();
 
   // const totalArea = currentLayoutData.totalArea;
@@ -483,6 +484,7 @@ function Navbar({
         return;
       }
       setCurrentLayoutData(layoutData);
+      setCurrentLayoutID(layoutData.id);
       // setTotalArea(layoutData.totalArea);
       console.log("loaded layout data:", layoutData, "totalArea", totalArea);
 
@@ -562,7 +564,14 @@ function Navbar({
       setSelectedPlan(data?.planType);
       setBOQTitle(data.boqTitle);
       setBoqTotal(data.boqTotalPrice);
-      toast.success(`Loaded BOQ: ${data.boqTitle}`);
+      // toast.success(`Loaded BOQ: ${data.boqTitle}`);
+      toast.success(
+        `Loaded BOQ: ${
+          data.boqTitle.length > 50
+            ? data.boqTitle.slice(0, 50) + "..."
+            : data.boqTitle
+        }`
+      );
       localStorage.removeItem("boqCompleted");
       console.log("boqTotal loaded", boqTotal);
     } catch (err) {
