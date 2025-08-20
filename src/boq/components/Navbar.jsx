@@ -22,6 +22,7 @@ function Navbar({
   setShowBoqPrompt,
   isProfileCard,
   setIsProfileCard,
+  setIsDBPlan,
 }) {
   // const progress = 0;
   const [isOpen, setIsOpen] = useState(false);
@@ -79,6 +80,7 @@ function Navbar({
     setCurrentLayoutData,
     BOQID,
     setCurrentLayoutID,
+    quantityData,
   } = useApp();
 
   // const totalArea = currentLayoutData.totalArea;
@@ -564,6 +566,7 @@ function Navbar({
       setSelectedPlan(data?.planType);
       setBOQTitle(data.boqTitle);
       setBoqTotal(data.boqTotalPrice);
+      setIsDBPlan(true); // Toggle isDBPlan state
       // toast.success(`Loaded BOQ: ${data.boqTitle}`);
       toast.success(
         `Loaded BOQ: ${
@@ -933,9 +936,10 @@ function Navbar({
 
       await PDFGenerator.generatePDF(
         selectedData,
-        calculateGrandTotal,
+        boqTotal,
         accountHolder.companyName,
         accountHolder.location,
+        quantityData,
         areasData,
         categories,
         BOQTitle,

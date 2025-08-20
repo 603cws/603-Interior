@@ -25,6 +25,7 @@ function Boq() {
   const [isOpen, setIsOpen] = useState(false);
   const profileRef = useRef(null);
   const iconRef = useRef(null); //used to close Profile Card when clicked outside of Profile Card area
+  const [isDBPlan, setIsDBPlan] = useState(false);
 
   const [showNewBoqPopup, setShowNewBoqPopup] = useState(true);
   const [showSelectArea, setShowSelectArea] = useState(false);
@@ -138,7 +139,12 @@ function Boq() {
   }, [selectedPlan]);
 
   useEffect(() => {
-    if (defaultProduct && selectedPlan !== "Custom" && productData.length > 0) {
+    if (
+      defaultProduct &&
+      selectedPlan !== "Custom" &&
+      productData.length > 0 &&
+      !isDBPlan
+    ) {
       // autoSelectPlanProducts(productData, subCategories);
       autoSelectPlanProducts(productData, categories);
       // setDefaultProduct(false);
@@ -551,6 +557,7 @@ function Boq() {
       setBOQTitle(data.boqTitle);
       setBoqTotal(data.boqTotalPrice);
       setBOQID(boqId);
+      setIsDBPlan(true); // Set flag to indicate this is a DB plan
       toast.success(`Loaded BOQ: ${data.boqTitle}`);
       localStorage.removeItem("boqCompleted");
       console.log("boqTotal loaded", boqTotal);
@@ -650,6 +657,7 @@ function Boq() {
         setExistingBoqs={setExistingBoqs}
         isProfileCard={isProfileCard}
         setIsProfileCard={setIsProfileCard}
+        setIsDBPlan={setIsDBPlan}
       />
       {showNewBoqPopup && !BOQTitle && (
         <NewBoq
@@ -770,6 +778,7 @@ function Boq() {
               setShowBoqPrompt={setShowBoqPrompt}
               existingBoqs={existingBoqs}
               setIsProfileCard={setIsProfileCard}
+              setIsDBPlan={setIsDBPlan}
             />
           </div>
         )}
