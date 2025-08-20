@@ -688,7 +688,7 @@ function SelectArea({
                       onClick={() => setSelectedRoom(room)}
                       className={`px-4 py-2 border text-xs lg:text-base rounded-md transition ${
                         selectedRoom === room
-                          ? "bg-[#1A3A36] text-white"
+                          ? "bg-gradient-to-r from-[#334A78] to-[#68B2DC] text-white"
                           : "bg-gray-200"
                       }`}
                     >

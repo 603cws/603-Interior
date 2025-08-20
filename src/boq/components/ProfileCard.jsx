@@ -25,6 +25,7 @@ function ProfileCard({
   selectedPlan = null,
   setShowBoqPrompt,
   setIsProfileCard,
+  setIsDBPlan,
 }) {
   const logout = useLogout();
   const {
@@ -172,6 +173,7 @@ function ProfileCard({
                       // setProgress(0);
                       // localStorage.removeItem("selectedData");
                       // setBoqTotal(0);
+                      setIsDBPlan(false);
                       if (import.meta.env.MODE !== "development") {
                         setShowBoqPrompt(true);
                         setIsProfileCard(true);
