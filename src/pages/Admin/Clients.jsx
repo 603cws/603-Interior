@@ -3,6 +3,7 @@ import { FaBuilding } from "react-icons/fa";
 import { MdDeleteOutline } from "react-icons/md";
 import { adminsupabase } from "../../services/supabase";
 import { IoIosSearch } from "react-icons/io";
+import { useApp } from "../../Context/Context";
 
 function Clients({
   isExpanded,
@@ -10,12 +11,15 @@ function Clients({
   filteredusers,
   query,
   setIsrefresh,
+  setClientBoqs,
 }) {
   //state
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
   const [selectedindex, setSelectedindex] = useState();
   const [showSearch, setShowSearch] = useState(false);
+
+  const { setSelectedClient, selectedClient } = useApp();
 
   //handle functions
   const handleDeleteClick = (user, index) => {
@@ -37,6 +41,11 @@ function Clients({
         setIsrefresh(true);
       }
     }
+  };
+
+  const handleClientClick = (user) => {
+    setClientBoqs(true);
+    setSelectedClient(user);
   };
 
   // jsx
@@ -123,10 +132,17 @@ function Clients({
                   {/* </div> */}
                 </div>
 
-                <div className=" cursor-pointer text-[#374A75] p-3 flex items-center gap-2 flex-1 mt-auto border-t">
+                <button
+                  // onClick={() => {
+                  //   setClientBoqs(true);
+                  //   setSelectedClient(user);
+                  // }}
+                  onClick={() => handleClientClick(user)}
+                  className=" cursor-pointer text-[#374A75] p-3 flex items-center gap-2 flex-1 mt-auto border-t"
+                >
                   <FaBuilding size={22} color="#374A75" />
                   <h4 className="text-sm">{user.company_name}</h4>
-                </div>
+                </button>
                 {isModalOpen && selectedindex === index && (
                   <div className=" inset-0 flex items-center justify-center bg-opacity-80 absolute w-full h-full">
                     <div className="bg-white rounded-lg px-5 py-2">

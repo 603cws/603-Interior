@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { useApp } from "../../Context/Context";
 import { motion, AnimatePresence } from "framer-motion";
+import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
 
 const Categories = ({
   // setSelectedCategory,
@@ -17,10 +18,24 @@ const Categories = ({
   } = useApp();
 
   const containerRef = useRef(null);
+  const scrollRef = useRef(null);
   const [currentPage, setCurrentPage] = useState(0);
 
   const [itemsPerPage, setItemsPerPage] = useState(4); // default
+  const [hasOverflow, setHasOverflow] = useState(false);
 
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+
+    const checkOverflow = () => {
+      setHasOverflow(el.scrollWidth > el.clientWidth);
+    };
+
+    checkOverflow(); // check initially
+    window.addEventListener("resize", checkOverflow);
+    return () => window.removeEventListener("resize", checkOverflow);
+  }, [selectedCategory]);
   useEffect(() => {
     const updateItemsPerPage = () => {
       const width = window.innerWidth;
@@ -760,7 +775,7 @@ const Categories = ({
         {/* Categories List */}
         <div
           className={`cat flex overflow-x-auto gap-1 md:gap-3  scrollbar-hide ${
-            minimizedView ? "px-0 justify-between" : "pb-2 px-2 lg:px-5 "
+            minimizedView ? "px-1 justify-between" : "pb-2 px-2 lg:px-5 "
           }`}
         >
           {/* === FULL VIEW === */}
@@ -968,59 +983,91 @@ const Categories = ({
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}
                 transition={{ duration: 0.4, ease: "easeInOut" }}
-                className="subcat  flex flex-row items-center justify-start overflow-auto scrollbar-hide py-1"
+                // className="subcat  flex flex-row items-center justify-start overflow-auto scrollbar-hide py-1"
+                className="w-full relative"
               >
-                {selectedCategory?.subcategories
-                  ?.filter(
-                    (subCategory) =>
-                      selectedCategory.category === "HVAC" // Apply logic only for HVAC
-                        ? userResponses.hvacType === "Centralized"
-                          ? subCategory === "Centralized" // Show only "Centralized"
-                          : subCategory !== "Centralized" // Exclude "Centralized"
-                        : true // Show all subcategories for non-HVAC categories
-                  )
-                  .map((subCategory, index) => {
-                    const isCompleted = checkIfSubCategoryCompleted(
-                      selectedCategory.category,
-                      subCategory
-                    );
-                    return (
-                      <motion.div
-                        key={index}
-                        onClick={() => setSelectedSubCategory(subCategory)}
-                        whileHover={{ scale: 1.05 }}
-                        transition={{ duration: 0.3 }}
-                        className={`group rounded flex flex-row items-start justify-center shrink-0 mr-5 group hover:bg-[#E0F0FF] ${
-                          isCompleted ? " bg-[#374A75]" : ""
-                        } ${
-                          selectedSubCategory === subCategory && !isCompleted
-                            ? "bg-[#E0F0FF]"
-                            : ""
-                        }`}
-                      >
-                        <p
-                          className={`relative text-[#252525] text-center text-xs md:text-sm flex items-center justify-center py-3 cursor-pointer group-hover:text-[#334A78] md:px-5 ${
-                            isCompleted
-                              ? "font-semibold text-[#fff]"
-                              : "font-normal"
+                {hasOverflow && (
+                  <>
+                    <button
+                      onClick={() => {
+                        document.querySelector(".subcat-scroll")?.scrollBy({
+                          left: -150,
+                          behavior: "smooth",
+                        });
+                      }}
+                      className="absolute -left-6 top-1/2 -translate-y-1/2 z-10  p-1 text-[#374A75]"
+                    >
+                      <MdKeyboardArrowLeft size={25} />
+                    </button>
+                    <button
+                      onClick={() => {
+                        document.querySelector(".subcat-scroll")?.scrollBy({
+                          left: 150,
+                          behavior: "smooth",
+                        });
+                      }}
+                      className="absolute -right-6 top-1/2 -translate-y-1/2 z-20 p-1 text-[#374A75]"
+                    >
+                      <MdKeyboardArrowRight size={25} />
+                    </button>
+                  </>
+                )}
+                <div
+                  ref={scrollRef}
+                  className="subcat-scroll flex flex-row items-center justify-start overflow-x-auto scrollbar-hide py-1 scroll-smooth"
+                >
+                  {selectedCategory?.subcategories
+                    ?.filter(
+                      (subCategory) =>
+                        selectedCategory.category === "HVAC" // Apply logic only for HVAC
+                          ? userResponses.hvacType === "Centralized"
+                            ? subCategory === "Centralized" // Show only "Centralized"
+                            : subCategory !== "Centralized" // Exclude "Centralized"
+                          : true // Show all subcategories for non-HVAC categories
+                    )
+                    .map((subCategory, index) => {
+                      const isCompleted = checkIfSubCategoryCompleted(
+                        selectedCategory.category,
+                        subCategory
+                      );
+                      return (
+                        <motion.div
+                          key={index}
+                          onClick={() => setSelectedSubCategory(subCategory)}
+                          whileHover={{ scale: 1.05 }}
+                          transition={{ duration: 0.3 }}
+                          className={`group rounded flex flex-row items-start justify-center shrink-0 mr-5 group hover:bg-[#F9F9F9] border hover:border-[#374A75] ${
+                            isCompleted ? "bg-[#374A75]" : ""
+                          } ${
+                            selectedSubCategory === subCategory && !isCompleted
+                              ? "bg-[#E0F0FF]"
+                              : ""
                           }`}
                         >
-                          {subCategory}
-                          <span
-                            className={`absolute left-0 bottom-0 block w-0 h-1 bg-[#334A78] transition-all duration-300 ease-in-out ${
-                              selectedSubCategory === subCategory
-                                ? "w-full"
-                                : "group-hover:w-full"
-                            } ${
+                          <p
+                            className={`relative text-[#252525] text-center text-xs md:text-sm flex items-center justify-center py-3 cursor-pointer group-hover:text-[#334A78] md:px-5 ${
                               isCompleted
-                                ? "bg-[#E0F0FF] group-hover:bg-[#334A78]"
-                                : ""
+                                ? "font-semibold text-[#fff]"
+                                : "font-normal"
                             }`}
-                          ></span>
-                        </p>
-                      </motion.div>
-                    );
-                  })}
+                          >
+                            {subCategory}
+                            <span
+                              className={`absolute left-0 bottom-0 block w-0 h-1 bg-[#334A78] transition-all duration-300 ease-in-out rounded-b-md ${
+                                selectedSubCategory === subCategory
+                                  ? "w-full"
+                                  : "group-hover:w-full"
+                              } ${
+                                isCompleted
+                                  ? "bg-[#E0F0FF] group-hover:bg-[#334A78]"
+                                  : ""
+                              }`}
+                            ></span>
+                          </p>
+                        </motion.div>
+                      );
+                    })}
+                </div>
               </motion.div>
             )}
 

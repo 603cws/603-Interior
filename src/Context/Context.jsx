@@ -120,6 +120,7 @@ export const AppProvider = ({ children }) => {
   const [differenceInPrice, setDifferenceInPrice] = useState(0);
   const [carttotalPrice, setCartTotalPrice] = useState(0);
   const [showLoginPopup, setShowLoginPopup] = useState(false);
+  const [selectedClient, setSelectedClient] = useState(null);
 
   const fetchFormulas = async () => {
     setFormulasLoading(true);
@@ -858,6 +859,8 @@ export const AppProvider = ({ children }) => {
         BOQID,
         setBOQID,
         refetchFormulas: fetchFormulas,
+        selectedClient,
+        setSelectedClient,
       }}
     >
       {children}

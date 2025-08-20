@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useApp } from "../Context/Context";
 import { motion } from "framer-motion";
 import { HiCheckBadge } from "react-icons/hi2";
+import toast from "react-hot-toast";
 
 const plansData = [
   {
@@ -83,6 +84,7 @@ function Plans() {
   const handlePlanSelect = (planKey) => {
     setSelectedPlan(planKey);
     sessionStorage.setItem("selectedPlan", planKey);
+    toast.success(`${planKey} plan selected!`);
   };
 
   return (
@@ -148,9 +150,9 @@ function Plans() {
                         <button
                           // onClick={() => setSelectedPlan(plan.planKey)}
                           onClick={() => handlePlanSelect(plan.planKey)}
-                          className="bg-[#75A2BE] text-[#fff] px-4 py-2 rounded-md font-semibold border border-[#000] hover:bg-gray-200 transition"
+                          className="bg-[#75A2BE] text-[#fff] px-4 py-2 rounded-md font-semibold border border-[#000] hover:bg-gray-200 transition hover:text-[#374A75]"
                         >
-                          Select
+                          Get {plan.planKey}
                         </button>
                       </div>
                     </div>

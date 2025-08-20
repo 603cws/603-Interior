@@ -7,6 +7,8 @@ import { FaStar } from "react-icons/fa";
 import { GoPlus } from "react-icons/go";
 import { PiStarFourFill } from "react-icons/pi";
 import { IoMdSettings } from "react-icons/io";
+import { RiVipCrown2Fill } from "react-icons/ri";
+import { HiMiniCheckBadge } from "react-icons/hi2";
 
 // Animation settings for easy customization
 const animations = {
@@ -200,10 +202,10 @@ function ProductCard({
           <div className="relative">
             {/* Filter button */}
             <button
-              className="flex items-center gap-2 md:border md:border-black px-4 py-2"
+              className="flex items-center gap-2 md:border md:border-black px-4 py-2 text-sm"
               onClick={() => setIsOpen((prev) => !prev)}
             >
-              <span className="hidden md:block">Filter</span>
+              <span className="hidden md:block">Filter By Plan</span>
               <CiSliderVertical className="text-[#334A78]" size={20} />
             </button>
 
@@ -225,7 +227,7 @@ function ProductCard({
                   >
                     {/* Icon */}
                     <span className="flex items-center">
-                      {option === "Luxury" && (
+                      {option === "Exclusive" && (
                         <div className="relative">
                           <PiStarFourFill
                             className="absolute -top-1 -right-1"
@@ -238,8 +240,8 @@ function ProductCard({
                           />
                         </div>
                       )}
-                      {option === "Exclusive" && (
-                        <PiStarFourFill
+                      {option === "Luxury" && (
+                        <RiVipCrown2Fill
                           size={16}
                           color={filtervalue === option ? "#fff" : "#334A78"}
                         />
@@ -299,7 +301,8 @@ function ProductCard({
               >
                 {variant.segment && (
                   <div
-                    className="absolute top-2 left-2 font-bold font-Poppins text-sm px-3 py-1.5 text-white z-10 flex items-center gap-2 rounded-tl-sm rounded-bl-lg rounded-tr-md rounded-br-md bg-gradient-to-l from-[#75A2BE] to-[#5584B6]"
+                    title={`${variant.segment} segment`}
+                    className="absolute top-0 left-0 font-bold font-Poppins text-sm w-7 h-7 text-white z-10 flex justify-center items-center gap-2  rounded-br-md bg-gradient-to-l from-[#75A2BE] to-[#5584B6]"
                     //   variant.segment === "Minimal"
                     //     ? "bg-gradient-to-l from-[#75A2BE] to-[#5584B6]" //"bg-gray-500"    //keep this sunny
                     //     : variant.segment === "Luxury"
@@ -309,7 +312,7 @@ function ProductCard({
                     //   clipPath: "polygon(0 0, 100% 0, 85% 100%, 0% 100%)",
                     // }}
                   >
-                    {variant.segment === "Luxury" && (
+                    {variant.segment === "Exclusive" && (
                       <div className="relative pr-2">
                         <PiStarFourFill
                           className="absolute bottom-2 right-1"
@@ -320,23 +323,27 @@ function ProductCard({
                       </div>
                     )}
 
-                    {variant.segment === "Exclusive" && (
-                      <PiStarFourFill color="#FFE473" />
+                    {variant.segment === "Luxury" && (
+                      <RiVipCrown2Fill color="#FFE473" />
                     )}
 
                     {variant.segment === "Minimal" && (
                       <FaStar color="#FFE473" />
                     )}
 
-                    <h4 className="text-xs uppercase md:text-sm">
+                    {/* <h4 className="text-xs uppercase md:text-sm">
                       {variant.segment}
-                    </h4>
+                    </h4> */}
                   </div>
                 )}
 
                 {filterSelectedProduct[0]?.id === variant.id && (
-                  <div className="absolute top-2 right-2 bg-[#347ABF] text-xs font-semibold text-white px-3 py-2 z-10 rounded-bl-xl">
-                    SELECTED
+                  <div
+                    title="Selected"
+                    className="absolute top-0 right-0 bg-[#347ABF] text-xs font-semibold text-white w-7 h-7 z-10 rounded-bl-xl flex justify-center items-center"
+                  >
+                    {/* SELECTED */}
+                    <HiMiniCheckBadge size={20} color="#A7FF8F" />
                   </div>
                 )}
 

@@ -15,6 +15,7 @@ const cabinData = [
       valueKey: "mdCabinSize",
       setValueKey: "setMdCabinSize",
     },
+    title: "MD Cabin",
   },
   {
     type: "manager",
@@ -30,6 +31,7 @@ const cabinData = [
       valueKey: "managerCabinSize",
       setValueKey: "setManagerCabinSize",
     },
+    title: "Manager Cabin",
   },
   {
     type: "small",
@@ -49,6 +51,7 @@ const cabinData = [
         setRoomSizeKey: "smallCabinConfig.setRoomSize",
       },
     },
+    title: "Small Cabin",
   },
 ];
 
@@ -88,9 +91,10 @@ const Cabins = ({
               }
             }}
             onChange={(value) => updateAreas(room.type, value)}
-            title={`${
-              room.type.charAt(0).toUpperCase() + room.type.slice(1)
-            } Cabin`}
+            // title={`${
+            //   room.type.charAt(0).toUpperCase() + room.type.slice(1)
+            // } Cabin`}
+            title={room.title || room.type}
             showAreaCounter
             tooltipText={
               room.type === "md"

@@ -427,7 +427,7 @@ function Navbar({
         </div>
       ) : (
         <div>
-          <div className="flex  justify-between bg-gradient-to-r from-[#1A3A36] to-[#48A095] py-2 items-center px-5">
+          <div className="flex justify-between bg-gradient-to-r from-[#23445B] to-[#487BA0] py-2 items-center px-5">
             {/* logo */}
             <button className=" " onClick={() => navigate("/")}>
               <img
@@ -452,7 +452,7 @@ function Navbar({
           </div>
           {/* sq feet div */}
           <div
-            className={`joynavarea flex justify-between mx-auto bg-gradient-to-r from-[#1A3A36] to-[#48A095]  border-2 border-[#FFD43B] items-center px-2 rounded-xl relative my-2 w-[90%]  ${
+            className={`joynavarea flex justify-between mx-auto bg-gradient-to-r from-[#23445B] to-[#487BA0] border border-[#FFD43B] items-center px-2 rounded-sm relative my-2 w-[90%]  ${
               error ? "border-t-1" : "border-1"
             }`}
           >
@@ -462,13 +462,22 @@ function Navbar({
               color="#FEBF00"
               className="absolute left-0"
             />
-            <button
-              title="Reset"
-              className="absolute right-2 cursor-pointer text-[#FFD43B] border-none hover:text-red-300"
-              onClick={handleReset}
-            >
-              <MdOutlineCancel size={30} />
-            </button>
+            {totalArea > 0 && (
+              <button
+                title="Reset"
+                className="absolute right-2 cursor-pointer text-[#FFD43B] border-none hover:text-red-300"
+                // onClick={handleReset}
+                onClick={() => setResetAlert(true)}
+              >
+                <MdOutlineCancel size={30} />
+                <span
+                  className="absolute top-3/4 left-1/2 transform -translate-x-1/2 mb-2 hidden group-hover:block 
+                   bg-[#334A78] text-[#fff] border-l border-t border-[#FFD43B] text-sm px-3 py-1 rounded-sm whitespace-nowrap z-10"
+                >
+                  Reset
+                </span>
+              </button>
+            )}
             <input
               type="number"
               className={`w-full rounded-md border-none bg-transparent py-2.5 ms-8 [&::-webkit-inner-spin-button]:appearance-none  focus:outline-none focus:ring-0 text-white ${
@@ -486,7 +495,7 @@ function Navbar({
             />
             {error && (
               <div
-                className="error-message text-[#FFD43B] font-medium text-[11px] mt-1 flex items-center absolute -top-3 bg-transparent left-14 bg-gradient-to-r from-[#325B56] to-[#3D6F68] text-wrap"
+                className="error-message text-[#FFD43B] font-medium text-[10px] mt-1 flex items-center absolute -top-3 bg-transparent left-14 bg-gradient-to-r from-[#23445B] to-[#487BA0] text-wrap"
                 aria-live="polite"
               >
                 <span className="warning-icon">⚠️</span>

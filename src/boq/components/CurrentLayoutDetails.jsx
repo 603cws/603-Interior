@@ -10,13 +10,13 @@ function CurrentLayoutDetails({ onClose }) {
   return (
     <>
       <div className="fixed inset-0 bg-[#000]/30 flex justify-center items-center">
-        <div className="max-w-xl w-full max-h-[80vh] overflow-y-auto  bg-[#fff] flex rounded-lg font-Poppins relative gradient-scrollbar">
-          <div className="bg-[#000]/60 flex-1 flex items-start justify-center pt-3 rounded-l-lg sticky left-0 top-0">
+        <div className="max-w-xl w-full max-h-[80vh] overflow-y-auto   flex rounded-lg font-Poppins relative gradient-scrollbar">
+          <div className="bg-[#fff]/10 backdrop-blur-md flex-1 flex items-start justify-center pt-3 rounded-l-lg sticky left-0 top-0">
             <button onClick={onClose}>
               <IoIosCloseCircle color="#374A75" size={30} />
             </button>
           </div>
-          <div className="max-w-lg w-full p-5">
+          <div className="max-w-lg w-full p-5 bg-[#fff] h-full">
             <div className="text-center mb-4">
               <div className="flex justify-center items-center gap-2">
                 <PiFrameCornersFill size={25} color="#374A75" />

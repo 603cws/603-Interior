@@ -40,6 +40,7 @@ import { IoIosSearch } from "react-icons/io";
 import UserCard from "../user/UserCard";
 import UserProfileEdit from "../user/UserProfileEdit";
 import { GoPlus } from "react-icons/go";
+import ClientBoq from "./ClientBoq";
 
 function handlesidebarState(state, action) {
   switch (action.type) {
@@ -142,6 +143,7 @@ function AdminDashboard() {
   const [deleteWarning, setDeleteWarning] = useState(false);
   const [rejectReason, setRejectReason] = useState("");
   const [rejectReasonPopup, setRejectReasonPopup] = useState(false);
+  const [clientBoqs, setClientBoqs] = useState(false);
 
   //state schedule
   // const [isScheduleOpen, setisScheduleOpen] = useState(false);
@@ -1518,7 +1520,7 @@ function AdminDashboard() {
           </div>
         )}
 
-        {sidebarstate.isClientOpen && (
+        {sidebarstate.isClientOpen && !clientBoqs && (
           <>
             <Clients
               isExpanded={isExpanded}
@@ -1526,8 +1528,12 @@ function AdminDashboard() {
               query={query}
               filteredusers={filteredusers}
               setIsrefresh={setIsrefresh}
+              setClientBoqs={setClientBoqs}
             />
           </>
+        )}
+        {sidebarstate.isClientOpen && clientBoqs && (
+          <ClientBoq setClientBoqs={setClientBoqs} />
         )}
 
         {/*vendor page */}
@@ -1619,7 +1625,7 @@ function AdminDashboard() {
                       {/* Top Section */}
                       <div
                         className={` ${
-                          isExpanded ? " gap-2 p-3" : "gap-3 p-4"
+                          isExpanded ? " gap-2 py-3 px-1" : "gap-3 py-4 px-2"
                         } flex items-start  relative`}
                       >
                         {/* Profile Image */}
@@ -1641,9 +1647,9 @@ function AdminDashboard() {
                             {user.company_name}
                           </h2>
                           <p
-                            className={`text-gray-400 ${
+                            className={`text-gray-400 w-full ${
                               isExpanded ? "text-xs" : "text-sm"
-                            } leading-tight`}
+                            } leading-tight break-all whitespace-normal`}
                           >
                             {user.email}
                           </p>
@@ -1833,9 +1839,9 @@ function AdminDashboard() {
       )}
 
       {deleteWarning && (
-        <div className="flex justify-center items-center h-screen absolute z-30 top-0 w-screen">
+        <div className="flex justify-center items-center fixed inset-0 z-30">
           <div className="absolute inset-0 bg-black opacity-50"></div>
-          <div className="bg-white relative py-7 px-20">
+          <div className="bg-white relative py-7 px-16 md:px-20">
             <div className="flex justify-center items-center">
               <img
                 src="images/icons/delete-icon.png"

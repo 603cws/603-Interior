@@ -15,6 +15,7 @@ const publicSpacesData = [
       max: 700,
       step: 5,
     },
+    title: "Reception",
   },
   {
     type: "lounge",
@@ -30,6 +31,7 @@ const publicSpacesData = [
       max: 1000,
       step: 5,
     },
+    title: "Lounge",
   },
   {
     type: "phoneBooth",
@@ -37,6 +39,7 @@ const publicSpacesData = [
     // image: "/images/workstation-wp/phoneBooth-wp.webp",
     description: "This is the phone booth, providing a quiet space for calls.",
     tooltipText: "Size: 25 sq ft",
+    title: "Phone Booth",
   },
   {
     type: "breakoutRoom",
@@ -53,6 +56,7 @@ const publicSpacesData = [
       step: 5,
     },
     tooltipText: "size: 80 sqft",
+    title: "Breakout Room",
   },
   //   type: "maleWashroom",
   // {
@@ -96,6 +100,7 @@ const publicSpacesData = [
       max: 1200,
       step: 5,
     },
+    title: "Washrooms",
   },
 ];
 
@@ -193,9 +198,10 @@ const PublicSpaces = ({
                 }
               }}
               onChange={(value) => updateAreas(space.type, value)}
-              title={`${
-                space.type.charAt(0).toUpperCase() + space.type.slice(1)
-              }`}
+              // title={`${
+              //   space.type.charAt(0).toUpperCase() + space.type.slice(1)
+              // }`}
+              title={space.title || space.type}
               showAreaCounter={!!space.slider} // Show counter only if space has a slider
               areaCounterProps={sliderProps}
               // tooltipText={space.tooltipText}

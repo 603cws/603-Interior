@@ -16,6 +16,7 @@ const supportSpacesData = [
       step: 5,
     },
     tooltipText: "Size: 60 sq ft",
+    title: "UPS Room",
   },
   {
     type: "bms",
@@ -31,6 +32,7 @@ const supportSpacesData = [
       step: 5,
     },
     tooltipText: "Size: 60 sq ft",
+    title: "BMS Room",
   },
   {
     type: "server",
@@ -38,6 +40,7 @@ const supportSpacesData = [
     // image: "/images/workstation-wp/serverRoom-wp.webp",
     description: "This is the server room, housing critical IT infrastructure.",
     tooltipText: "Size: 40 sq ft",
+    title: "Server Room",
   },
   {
     type: "executiveWashroom",
@@ -46,12 +49,14 @@ const supportSpacesData = [
     description:
       "This is the Executive Washroom, providing premium facilities.",
     tooltipText: "Size: 60 sq ft",
+    title: "Executive Washroom",
   },
   {
     type: "other",
     image: "/images/workspace-image/other.png",
     // image: "/images/workstation-wp/other-wp.webp",
     description: "This is an additional space for miscellaneous purposes.",
+    title: "Other Area",
   },
 ];
 
@@ -125,9 +130,10 @@ const SupportSpaces = ({
                 }
               }}
               onChange={(value) => updateAreas(space.type, value)}
-              title={`${
-                space.type.charAt(0).toUpperCase() + space.type.slice(1)
-              }`}
+              // title={`${
+              //   space.type.charAt(0).toUpperCase() + space.type.slice(1)
+              // }`}
+              title={space.title || space.type}
               showInputField={space.type === "other"}
               tooltipText={
                 space.type === "ups"

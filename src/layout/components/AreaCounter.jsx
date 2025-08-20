@@ -191,7 +191,9 @@ const AreaCounter = ({
         setWarning(true);
         setSizeReached(true);
         setErrorMessage(
-          `You've reached the maximum allowed size for ${title}. This limit is fixed and cannot be increased further. Please enter a value within the allowed range.`
+          `You've reached the maximum allowed size for ${title}. This limit is fixed and cannot be increased further. Please enter a value within the allowed range (${min}-${max})${
+            seatCount ? "Seats" : "sqft"
+          }.`
         );
       }
     } else {

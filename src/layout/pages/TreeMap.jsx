@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { supabase } from "../../services/supabase";
 import UnusedAreaWarning from "../components/UnusedAreaWarning";
+import { PiStarFourFill } from "react-icons/pi";
 
 // import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 // import { faChevronRight, faChevronLeft } from '@fortawesome/free-solid-svg-icons';
@@ -69,34 +70,32 @@ const TreeMap = ({ totalArea, areaQuantities, areaValues }) => {
   const MAX_AREA = 25000;
 
   const colors = {
-    "Linear Workspace": "#62897E",
-    "L-Type Workspace": "#3F5855",
-    "MD Cabin": "#1D3130",
-    "Manager Cabin": "#293C3E",
-    "Small Cabin": "#4A5E65",
-    "UPS Room": "#737F85",
-    "BMS Room": "#8CDDCE",
-    "Server Room": "#54A08C",
-    Reception: "#368772",
-    "Lounge/Pantry": "#2A3338",
-    "Video Recording Room": "#354044",
-    "Sales Team": "#3C464F",
-    "Phone Booth": "#515554",
-    "Discussion Room": "#868A8E",
-    "Interview Room": "#A4ACAF",
-    "Conference Room": "#488677",
-    "Board Room": "#3A4B45",
-    "Meeting Room": "#1E8D78",
-    "Meeting Room (Large)": "#07281D",
-    "HR Room": "#233736",
-    "Finance Room": "#081011",
-    "Executive Washroom": "#567F7D",
-    "Breakout Room": "#74D0C1",
-    "Available Space": "#184959",
-    Other: "#5E9B96", // Color for the "Other" category
-    // "Male Washroom": "#95D5B2",
-    // "Female Washroom": "#85CEA8",
-    Washrooms: "#85CEA8",
+    "Linear Workspace": "#23445B",
+    "L-Type Workspace": "#26506B",
+    "MD Cabin": "#2A5C7A",
+    "Manager Cabin": "#2D688A",
+    "Small Cabin": "#30749A",
+    "UPS Room": "#337FAA",
+    "BMS Room": "#378BB9",
+    "Server Room": "#3A97C9",
+    Reception: "#3DA3D8",
+    "Lounge/Pantry": "#40AFE8",
+    "Video Recording Room": "#4497BA",
+    "Sales Team": "#3E87A7",
+    "Phone Booth": "#397794",
+    "Discussion Room": "#336781",
+    "Interview Room": "#2E576E",
+    "Conference Room": "#29475B",
+    "Board Room": "#244048",
+    "Meeting Room": "#234E5E",
+    "Meeting Room (L)": "#235465",
+    "HR Room": "#236A79",
+    "Finance Room": "#23808D",
+    "Executive Washroom": "#2397A1",
+    "Breakout Room": "#23ADB5",
+    "Available Space": "#23C3C9",
+    Other: "#23D9DD",
+    Washrooms: "#23EFF1",
   };
 
   const workspaceImages = {
@@ -638,7 +637,7 @@ const TreeMap = ({ totalArea, areaQuantities, areaValues }) => {
       {/* button for generate boq */}
       {isMobile && (
         <div className="flex justify-center items-center">
-          <button
+          {/* <button
             className="generateBoq bg-[#1A3A36] mt-2 rounded-3xl text-sm py-3 px-10 text-white mb-2 border-2 border-[#34BFAD]"
             onClick={generateBOQclick}
             disabled={isSubmitting}
@@ -669,6 +668,33 @@ const TreeMap = ({ totalArea, areaQuantities, areaValues }) => {
             ) : (
               "Generate BOQ"
             )}
+          </button> */}
+          <button
+            onClick={generateBOQclick}
+            className="generateBoq glow-on-hover relative flex items-center w-36 h-10 px-4 py-2 mb-2 bg-[#212B36] border border-[#1A8FE3] text-white overflow-hidden group rounded-[4px] font-Poppins text-xs hover:bg-gradient-to-b from-[#3F56EA] to-[#7c80f3] hover:scale-105 transition-transform duration-300 ease-in-out"
+          >
+            <span className="absolute top-0 left-0 w-full h-full pointer-events-none z-0 hidden group-hover:block">
+              <span className="glow-line glow-top"></span>
+              <span className="glow-line glow-right"></span>
+              <span className="glow-line glow-bottom"></span>
+              <span className="glow-line glow-left"></span>
+            </span>
+            <div className="flex gap-3 w-full h-full">
+              <div className="relative pointer-events-none z-0 w-1/4  h-full">
+                <div className="absolute top-0 left-0 text-[8px] group-hover:blink-on-hover">
+                  <PiStarFourFill />
+                </div>
+                <div className="absolute bottom-0 left-[2px] text-[10px] group-hover:blink-on-hover group-hover:del-200">
+                  <PiStarFourFill />
+                </div>
+                <div className="absolute right-0 top-1/4 text-sm group-hover:blink-on-hover group-hover:del-300">
+                  <PiStarFourFill />
+                </div>
+              </div>
+              <span className="flex justify-center items-center">
+                Create BOQ
+              </span>
+            </div>
           </button>
         </div>
       )}

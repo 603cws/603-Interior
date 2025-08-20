@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useApp } from "../Context/Context";
 import { motion } from "framer-motion";
+import Lottie from "lottie-react";
+import ChairAnimation from "../assets/ChairAnimation.json";
 function ErrorModal({ onclose, message, sizeReached }) {
   const {
     totalArea,
@@ -101,12 +103,12 @@ function ErrorModal({ onclose, message, sizeReached }) {
         </div> */}
           <div className="hidden md:flex justify-center md:my-10 relative w-full">
             {/* Skeleton placeholder while image loads */}
-            {!imageLoaded && (
+            {/* {!imageLoaded && (
               <div className="w-full  bg-gray-300/10 rounded-3xl" />
-            )}
+            )} */}
 
             {/* Lazy-loaded Error image with fade-in animation */}
-            <motion.img
+            {/* <motion.img
               initial={{ opacity: 0 }}
               animate={{ opacity: imageLoaded ? 1 : 0 }}
               transition={{ duration: 0.5 }}
@@ -117,7 +119,10 @@ function ErrorModal({ onclose, message, sizeReached }) {
               className={` object-contain rounded-3xl absolute top-0 left-1/2 -translate-x-1/2 ${
                 imageLoaded ? "relative" : "invisible"
               }`}
-            />
+            /> */}
+            <div className="">
+              <Lottie animationData={ChairAnimation} loop={false} />
+            </div>
           </div>
         </div>
       </div>

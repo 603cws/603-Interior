@@ -16,6 +16,7 @@ const meetingRoomData = [
     description:
       "This is the interview room, designed for conducting interviews.",
     tooltipText: "Size: 100 sq ft",
+    title: "Interivew Room",
   },
   {
     type: "conferenceRoom",
@@ -30,6 +31,7 @@ const meetingRoomData = [
       max: 500,
       step: 5,
     },
+    title: "Conference Room",
   },
   {
     type: "boardRoom",
@@ -45,6 +47,7 @@ const meetingRoomData = [
       step: 5,
     },
     tooltipText: "size: 18 pax",
+    title: "Board Room",
   },
   {
     type: "meetingRoom",
@@ -52,6 +55,7 @@ const meetingRoomData = [
     // image: "/images/workstation-wp/meetingroom-wp.webp",
     description: "This is the meeting room, perfect for team meetings.",
     tooltipText: "Size: 120 sq ft \n Seats: 6 pax",
+    title: "Meeting Room",
   },
   {
     type: "meetingRoomLarge",
@@ -59,6 +63,7 @@ const meetingRoomData = [
     // image: "/images/workstation-wp/meetroomlarge-wp.webp",
     description: "This is the large meeting room, accommodating larger groups.",
     tooltipText: "Size: 150 sq ft \n Seats: 8 pax",
+    title: "Meeting Room(Large)",
   },
   {
     type: "hrRoom",
@@ -76,6 +81,7 @@ const meetingRoomData = [
       cabinSizeKey: "roomSize",
       setCabinSizeKey: "setRoomSize",
     },
+    title: "HR Room",
   },
   {
     type: "financeRoom",
@@ -93,6 +99,7 @@ const meetingRoomData = [
       cabinSizeKey: "roomSize",
       setCabinSizeKey: "setRoomSize",
     },
+    title: "Finance Room",
   },
   {
     type: "sales",
@@ -110,6 +117,7 @@ const meetingRoomData = [
       cabinSizeKey: "roomSize",
       setCabinSizeKey: "setRoomSize",
     },
+    title: "Sales Room",
   },
   {
     type: "videoRecordingRoom",
@@ -125,6 +133,7 @@ const meetingRoomData = [
       max: 160,
       step: 5,
     },
+    title: "Video Recording Room",
   },
 ];
 
@@ -239,9 +248,10 @@ const MeetingRooms = ({
                 }
               }}
               onChange={(value) => updateAreas(room.type, value)}
-              title={`${
-                room.type.charAt(0).toUpperCase() + room.type.slice(1)
-              }`}
+              // title={`${
+              //   room.type.charAt(0).toUpperCase() + room.type.slice(1)
+              // }`}
+              title={room.title || room.type}
               showAreaCounter={!!room.slider} // Show counter only if room has a slider
               areaCounterProps={sliderProps}
               tooltipText={
