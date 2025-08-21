@@ -6,11 +6,17 @@ function UserCard({ setIsEditopen }) {
     <div className="sm:w-[400px] lg:w-[500px] border border-[#ccc] shadow-xl rounded-lg">
       <div className="text-sm px-5 py-10  md:p-10 w-full ">
         <div className="flex py-3 items-center gap-3 border-b border-b-[#ccc]">
-          <div className="">
+          <div
+            className="rounded-full"
+            style={{
+              backgroundImage:
+                "linear-gradient(to top left, #5B73AF 0%, rgba(255, 255, 255, 0.5) 48%, #1F335C 100%)",
+            }}
+          >
             <img
               src={accountHolder?.profileImage}
               alt="profile"
-              className="w-16 h-16"
+              className="h-8 w-8 md:w-12 md:h-12 xl:w-16 xl:h-16 p-1"
             />
           </div>
           <div className="">

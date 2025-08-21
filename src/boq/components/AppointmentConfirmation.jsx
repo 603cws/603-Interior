@@ -40,11 +40,19 @@ function AppointmentConfirmation({ onClose, time }) {
             <h3 className="text-sm font-semibold">
               {accountHolder.companyName}
             </h3>
-            <img
-              src={accountHolder.profileImage}
-              alt=""
-              className="h-10 w-10"
-            />
+            <div
+              className="rounded-full"
+              style={{
+                backgroundImage:
+                  "linear-gradient(to top left, #5B73AF 0%, rgba(255, 255, 255, 0.5) 48%, #1F335C 100%)",
+              }}
+            >
+              <img
+                src={accountHolder.profileImage}
+                alt=""
+                className="h-10 w-10 p-1"
+              />
+            </div>
           </div>
           <div className="flex flex-col gap py-5">
             <div className="flex gap-3 items-center border-b-2 py-1">

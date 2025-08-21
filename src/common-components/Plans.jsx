@@ -88,12 +88,12 @@ function Plans() {
   };
 
   return (
-    <div className="md:container md:mx-auto my-8 font-Poppins">
+    <div className="md:container md:mx-auto lg:my-8 font-Poppins">
       <h2 className="text-center font-semibold text-xl lg:text-3xl capitalize text-[#75A2BE] my-4">
         please select your plan
       </h2>
       <div
-        className="hidden  md:grid  transition-all duration-500 h-[450px] gap-2"
+        className="hidden md:grid transition-all duration-500 h-[450px] gap-2"
         style={{ gridTemplateColumns: getGridTemplateColumns(hoveredPlan) }}
         onMouseLeave={() => setHoveredPlan(1)}
       >
@@ -109,7 +109,7 @@ function Plans() {
               {isExpanded ? (
                 <div className="w-full h-full flex flex-row bg-[#374A75]">
                   <div className="h-full px-7 py-10 flex items-end justify-center relative font-Poppins text-white border-r-2">
-                    <div className="absolute top-2 left-1/2 transform -translate-x-1/2  text-3xl font-bold">
+                    <div className="absolute top-2 left-1/2 transform -translate-x-1/2 text-3xl mt-4 font-bold">
                       {plan.planNumber}
                     </div>
 
@@ -121,7 +121,7 @@ function Plans() {
                     </div>
                   </div>
                   <div className="flex-1 flex flex-col-reverse xl:flex-row ">
-                    <div className="flex-1 py-3 px-6  text-white flex flex-col justify-between">
+                    <div className="flex-1 xl:py-6 px-6 text-white flex flex-col justify-between">
                       <div>
                         <h2 className="text-3xl font-bold mb-4">
                           {plan.title}
@@ -150,7 +150,7 @@ function Plans() {
                         <button
                           // onClick={() => setSelectedPlan(plan.planKey)}
                           onClick={() => handlePlanSelect(plan.planKey)}
-                          className="bg-[#75A2BE] text-[#fff] px-4 py-2 rounded-md font-semibold border border-[#000] hover:bg-gray-200 transition hover:text-[#374A75]"
+                          className="bg-[#75A2BE] text-[#fff] px-4 py-2 mb-1 rounded-md font-semibold border border-[#000] hover:bg-gray-200 transition hover:text-[#374A75]"
                         >
                           Get {plan.planKey}
                         </button>
@@ -179,7 +179,7 @@ function Plans() {
                 </div>
               ) : (
                 <div className="w-full h-full flex items-end justify-center relative font-Poppins text-[#75A2BE] py-10">
-                  <div className="absolute top-2 left-1/2 transform -translate-x-1/2  text-3xl font-bold">
+                  <div className="absolute top-6 left-1/2 transform -translate-x-1/2  text-3xl font-bold">
                     {plan.planNumber}
                   </div>
 
@@ -195,7 +195,7 @@ function Plans() {
           );
         })}
       </div>
-      <div className="md:hidden grid " onMouseLeave={() => setHoveredPlan(1)}>
+      <div className="md:hidden grid" onMouseLeave={() => setHoveredPlan(1)}>
         {plansData.map((plan) => {
           return (
             <div
@@ -248,7 +248,7 @@ function Plans() {
                         onClick={() => handlePlanSelect(plan.planKey)}
                         className="bg-[#75A2BE] text-[#fff] px-4 py-2 rounded-md font-semibold border border-[#000] hover:bg-gray-200 transition"
                       >
-                        Select
+                        Get {plan.planKey}
                       </button>
                     </div>
                   </div>

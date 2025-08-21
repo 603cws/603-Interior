@@ -178,11 +178,18 @@ function VendorDashboardLayout() {
               onClick={() => navigate("/")}
             />
           </div>
-          <div onClick={() => setIsOpen(!isOpen)} className="mx-3">
+          <div
+            onClick={() => setIsOpen(!isOpen)}
+            className="mx-3 rounded-full"
+            style={{
+              backgroundImage:
+                "linear-gradient(to top left, #5B73AF 0%, rgba(255, 255, 255, 0.5) 48%, #1F335C 100%)",
+            }}
+          >
             <img
               src={accountHolder.profileImage}
               alt="usericon"
-              className="w-10 h-10"
+              className="w-8 md:w-10 h-8 p-1 md:h-10"
             />
           </div>
 
@@ -261,11 +268,17 @@ function VendorDashboardLayout() {
               {sidebarstate?.currentSection}
             </h3>
           </div>
-          <div className="hidden lg:block mx-3">
+          <div
+            className="hidden lg:block mx-3 rounded-full"
+            style={{
+              backgroundImage:
+                "linear-gradient(to top left, #5B73AF 0%, rgba(255, 255, 255, 0.5) 48%, #1F335C 100%)",
+            }}
+          >
             <img
               src={accountHolder.profileImage}
               alt="usericon"
-              className="w-10 h-10"
+              className="w-10 h-10 p-1"
             />
           </div>
         </div>

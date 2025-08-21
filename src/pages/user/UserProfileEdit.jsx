@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form";
 import { useApp } from "../../Context/Context";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { supabase } from "../../services/supabase";
 import toast from "react-hot-toast";
 
@@ -106,11 +106,17 @@ function UserProfileEdit({ setIsEditopen }) {
       <div className="h-16 bg-gradient-to-r from-[#374A75] to-[#B4CBEA] "></div>
       <div className="flex flex-col gap-2 px-4 ">
         <div className="flex items-center gap-3 mt-4">
-          <div className="">
+          <div
+            className="rounded-full"
+            style={{
+              backgroundImage:
+                "linear-gradient(to top left, #5B73AF 0%, rgba(255, 255, 255, 0.5) 48%, #1F335C 100%)",
+            }}
+          >
             <img
               src={accountHolder?.profileImage}
               alt="profile"
-              className="w-16 h-16 "
+              className="w-16 h-16 p-1"
             />
           </div>
           <div className="">

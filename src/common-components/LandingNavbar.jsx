@@ -99,15 +99,19 @@ function LandingNavbar({ bgColor = false }) {
         <div className="hidden lg:block">
           {isAuthenticated ? (
             <button
-              className=""
+              className="z-30 rounded-full"
               onClick={() => navigate("/dashboard")}
+              style={{
+                backgroundImage:
+                  "linear-gradient(to top left, #5B73AF 0%, rgba(255, 255, 255, 0.5) 48%, #1F335C 100%)",
+              }}
               // disabled={!isadmin}
             >
               <img
                 onClick={toggleProfile}
                 src={accountHolder.profileImage}
                 alt="usericon"
-                className="w-12 h-12 cursor-pointer rounded-full"
+                className="w-8 md:w-12 h-8 p-1 md:h-12 cursor-pointer rounded-full"
               />
             </button>
           ) : (

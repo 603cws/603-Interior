@@ -1019,8 +1019,9 @@ function Navbar({
         </div>
       </div>
       {isMobile ? (
-        <div className="bg-[#212B36] py-1 flex justify-around items-center px-5 relative">
-          {/* <div className=" flex items-center">
+        selectedPlan ? (
+          <div className="bg-[#212B36] py-1 flex justify-around items-center px-5 relative">
+            {/* <div className=" flex items-center">
           <button
             className="bg-[#FFF] text-xs py-2 px-5 text-black rounded-full border-solid border-[1px] border-black"
             onClick={handleGoTOlayout}
@@ -1028,130 +1029,135 @@ function Navbar({
             Layout
           </button>
         </div> */}
-          <div className="w-10/12 mx-auto  py-2.5">
-            <div className="relative h-5 bg-[#385682] rounded-sm">
-              <div
-                className="absolute h-full bg-[#85AED2] rounded-sm"
-                style={{ width: `${progress}%` }}
-              ></div>
-              <div
-                className="absolute top-1/2 transform -translate-y-1/2 -translate-x-1/2 bg-gradient-to-br from-[#334A78] to-[#1F2937] border-white rounded-sm glowing-circle"
-                style={{ left: `${progress}%`, width: "10px", height: "19px" }}
-              ></div>
+            <div className="w-10/12 mx-auto  py-2.5">
+              <div className="relative h-5 bg-[#385682] rounded-sm">
+                <div
+                  className="absolute h-full bg-[#85AED2] rounded-sm"
+                  style={{ width: `${progress}%` }}
+                ></div>
+                <div
+                  className="absolute top-1/2 transform -translate-y-1/2 -translate-x-1/2 bg-gradient-to-br from-[#334A78] to-[#1F2937] border-white rounded-sm glowing-circle"
+                  style={{
+                    left: `${progress}%`,
+                    width: "10px",
+                    height: "19px",
+                  }}
+                ></div>
+              </div>
+              {/* Progress Label */}
+              <div className="text-center mt-2 text-[#C7DDFF] text-[10px]">
+                {progress}% Completed
+              </div>
             </div>
-            {/* Progress Label */}
-            <div className="text-center mt-2 text-[#C7DDFF] text-[10px]">
-              {progress}% Completed
-            </div>
-          </div>
-          {mobileDropDown ? (
-            <button onClick={handleMobileDropDown}>
-              <MdOutlineCancel color="white" size={25} />
-            </button>
-          ) : (
-            <button onClick={handleMobileDropDown}>
-              <CiMenuFries color="white" size={26} />
-            </button>
-          )}
+            {mobileDropDown ? (
+              <button onClick={handleMobileDropDown}>
+                <MdOutlineCancel color="white" size={25} />
+              </button>
+            ) : (
+              <button onClick={handleMobileDropDown}>
+                <CiMenuFries color="white" size={26} />
+              </button>
+            )}
 
-          {mobileDropDown && (
-            <div className="absolute z-20 translate-y-[60%] right-0 transform transition-all duration-700 ease-in-out opacity-100 scale-100">
-              {/* <div className="absolute z-20 translate-y-[60%] translate-x-[60%] transform transition-transform ease-in-out duration-700 "> */}
-              <ul className="text-[#212B36] bg-[#385682] bg-opacity-90 m-3 p-2 text-start">
-                {/* <li className="hover:px-2 hover:bg-white hover:text-[#1A3A36] mb-2 px-2">
+            {mobileDropDown && (
+              <div className="absolute z-20 translate-y-[60%] right-0 transform transition-all duration-700 ease-in-out opacity-100 scale-100">
+                {/* <div className="absolute z-20 translate-y-[60%] translate-x-[60%] transform transition-transform ease-in-out duration-700 "> */}
+                <ul className="text-[#212B36] bg-[#385682] bg-opacity-90 m-3 p-2 text-start">
+                  {/* <li className="hover:px-2 hover:bg-white hover:text-[#1A3A36] mb-2 px-2">
                 view boq{" "}
               </li> */}
-                <li
-                  // onClick={handleGoTOlayout}
-                  onClick={() => setIslayoutWarning((prev) => !prev)}
-                  className="hover:px-2 hover:bg-white hover:text-[#1A3A36] mb-2 py-1 px-2 rounded-lg cursor-pointer"
-                >
-                  Layout
-                </li>
-                <li
-                  onClick={() => setShowLayoutDetails(true)}
-                  className="hover:px-2 hover:bg-white hover:text-[#1A3A36] mb-2 py-1 px-2 rounded-lg cursor-pointer"
-                >
-                  Layout Details
-                </li>
-                <li
-                  onClick={handleDownload}
-                  className="hover:px-2 hover:bg-white hover:text-[#1A3A36] mb-2 py-1 px-2 rounded-lg cursor-pointer"
-                >
-                  Download
-                </li>
-                <li className=" hover:bg-white hover:text-[#1A3A36] mb-2 py-1 px-2 rounded-lg">
-                  <div className=" flex items-center" ref={dropdownRef}>
-                    <button
-                      // onClick={handleSave}
-                      onClick={() => {
-                        setShowBoqPrompt(true);
-                        setIsProfileCard(false);
-                      }}
-                      // className="bg-white text-xs py-2 px-3 text-black rounded-l-full"
-                    >
-                      Save BOQ
-                    </button>
-                    <button
-                      onClick={() => {
-                        fetchSavedBOQs();
-                        setIsOpen(!isOpen);
-                      }}
-                      // className="bg-white px-3 py-2 border-l border-black flex items-center rounded-r-full"
-                    >
-                      <RiArrowDropDownLine />
-                    </button>
+                  <li
+                    // onClick={handleGoTOlayout}
+                    onClick={() => setIslayoutWarning((prev) => !prev)}
+                    className="hover:px-2 hover:bg-white hover:text-[#1A3A36] mb-2 py-1 px-2 rounded-lg cursor-pointer"
+                  >
+                    Layout
+                  </li>
+                  <li
+                    onClick={() => setShowLayoutDetails(true)}
+                    className="hover:px-2 hover:bg-white hover:text-[#1A3A36] mb-2 py-1 px-2 rounded-lg cursor-pointer"
+                  >
+                    Layout Details
+                  </li>
+                  <li
+                    onClick={handleDownload}
+                    className="hover:px-2 hover:bg-white hover:text-[#1A3A36] mb-2 py-1 px-2 rounded-lg cursor-pointer"
+                  >
+                    Download
+                  </li>
+                  <li className=" hover:bg-white hover:text-[#1A3A36] mb-2 py-1 px-2 rounded-lg">
+                    <div className=" flex items-center" ref={dropdownRef}>
+                      <button
+                        // onClick={handleSave}
+                        onClick={() => {
+                          setShowBoqPrompt(true);
+                          setIsProfileCard(false);
+                        }}
+                        // className="bg-white text-xs py-2 px-3 text-black rounded-l-full"
+                      >
+                        Save BOQ
+                      </button>
+                      <button
+                        onClick={() => {
+                          fetchSavedBOQs();
+                          setIsOpen(!isOpen);
+                        }}
+                        // className="bg-white px-3 py-2 border-l border-black flex items-center rounded-r-full"
+                      >
+                        <RiArrowDropDownLine />
+                      </button>
 
-                    {isOpen && (
-                      <ul className="absolute left-0 -bottom-1/3 min-w-[100px] mt-2 w-auto text-xs bg-white rounded-lg shadow-md">
-                        <li className="px-4 py-3 grid grid-cols-[2fr_1fr] font-semibold bg-[#374A75] text-center text-white rounded-t-lg shadow-md">
-                          <span className="text-left">Title</span>
-                          <span className="text-center">Actions</span>
-                        </li>
-                        {boqList.length > 0 ? (
-                          boqList.map((boq) => (
-                            <li
-                              key={boq.id}
-                              className="px-4 py-2 grid grid-cols-[2fr_1fr] items-center hover:bg-gray-100"
-                              // className="px-4 py-2 grid grid-cols-[2fr_1fr] items-center hover:bg-gray-100 cursor-pointer"
-                            >
-                              <span className="text-left break-words text-[#374A75] whitespace-normal">
-                                {boq.boqTitle}
-                                {boq.boqTitle === BOQTitle && "*"}
-                              </span>
-
-                              <div className="flex justify-center gap-2">
-                                <img
-                                  src="../images/icons/download.png"
-                                  alt="Downlaod"
-                                  className="cursor-pointer h-6 w-6"
-                                  onClick={() => handleLoadBOQ(boq.id)}
-                                />
-                                <img
-                                  src="../images/icons/delete.png"
-                                  alt="Delete"
-                                  className="cursor-pointer h-6 w-6"
-                                  onClick={() => {
-                                    setDeleteAlert(true);
-                                    setSelectedboqid(boq.id);
-                                  }}
-                                />
-                              </div>
-                            </li>
-                          ))
-                        ) : (
-                          <li className="px-4 py-2 text-gray-500 text-center">
-                            No BOQs saved
+                      {isOpen && (
+                        <ul className="absolute left-0 -bottom-1/3 min-w-[100px] mt-2 w-auto text-xs bg-white rounded-lg shadow-md">
+                          <li className="px-4 py-3 grid grid-cols-[2fr_1fr] font-semibold bg-[#374A75] text-center text-white rounded-t-lg shadow-md">
+                            <span className="text-left">Title</span>
+                            <span className="text-center">Actions</span>
                           </li>
-                        )}
-                      </ul>
-                    )}
-                  </div>
-                </li>
-              </ul>
-            </div>
-          )}
-        </div>
+                          {boqList.length > 0 ? (
+                            boqList.map((boq) => (
+                              <li
+                                key={boq.id}
+                                className="px-4 py-2 grid grid-cols-[2fr_1fr] items-center hover:bg-gray-100"
+                                // className="px-4 py-2 grid grid-cols-[2fr_1fr] items-center hover:bg-gray-100 cursor-pointer"
+                              >
+                                <span className="text-left break-words text-[#374A75] whitespace-normal">
+                                  {boq.boqTitle}
+                                  {boq.boqTitle === BOQTitle && "*"}
+                                </span>
+
+                                <div className="flex justify-center gap-2">
+                                  <img
+                                    src="../images/icons/download.png"
+                                    alt="Downlaod"
+                                    className="cursor-pointer h-6 w-6"
+                                    onClick={() => handleLoadBOQ(boq.id)}
+                                  />
+                                  <img
+                                    src="../images/icons/delete.png"
+                                    alt="Delete"
+                                    className="cursor-pointer h-6 w-6"
+                                    onClick={() => {
+                                      setDeleteAlert(true);
+                                      setSelectedboqid(boq.id);
+                                    }}
+                                  />
+                                </div>
+                              </li>
+                            ))
+                          ) : (
+                            <li className="px-4 py-2 text-gray-500 text-center">
+                              No BOQs saved
+                            </li>
+                          )}
+                        </ul>
+                      )}
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            )}
+          </div>
+        ) : null
       ) : selectedPlan ? (
         <div className="bg-[#212B36] py-2.5 flex px-3 md:px-10">
           <div className=" flex items-center gap-1">
