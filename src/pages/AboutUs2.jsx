@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import { ServiceCard } from "../common-components/ServiceCard";
 import { RiArrowRightUpLine } from "react-icons/ri";
 import Footer from "../common-components/Footer";
 import LandingNavbar from "../common-components/LandingNavbar";
 import { useNavigate } from "react-router-dom";
+import ContactUsPopup from "./ContactUsPopup";
 
 const services = [
   {
@@ -65,6 +66,7 @@ const work_stages = [
 
 function AboutUs() {
   const navigate = useNavigate();
+  const [showContactPopup, setShowContactPopup] = useState(false);
   return (
     <>
       <LandingNavbar />
@@ -169,7 +171,10 @@ function AboutUs() {
                 share their ideas, preferences, and feedback.
               </p>
               <div className="flex flex-col lg:flex-row gap-2 mt-5">
-                <button className="bg-[#1C346B] border border-[#1C346B] px-4 py-2 rounded-3xl flex justify-center items-center gap-1 text-sm md:text-base w-fit">
+                <button
+                  onClick={() => setShowContactPopup(true)}
+                  className="bg-[#1C346B] border border-[#1C346B] px-4 py-2 rounded-3xl flex justify-center items-center gap-1 text-sm md:text-base w-fit"
+                >
                   <span>Get in touch</span>
                   <RiArrowRightUpLine />
                 </button>
@@ -186,6 +191,10 @@ function AboutUs() {
       </section>
 
       <Footer />
+
+      {showContactPopup && (
+        <ContactUsPopup onClose={() => setShowContactPopup(false)} />
+      )}
     </>
   );
 }

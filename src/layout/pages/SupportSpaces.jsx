@@ -83,11 +83,11 @@ const SupportSpaces = ({
 
   return (
     <div className="section px-3">
-      <h3 className="section-heading bg-white shadow-sm text-md pl-2 py-1.5 sticky top-0 font-semibold z-10">
+      <h3 className="section-heading bg-[#E4E7ED] shadow-sm text-md pl-2 py-1 sticky top-0 font-semibold z-10">
         Support Spaces
       </h3>
       {/* <div className="support-spaces grid grid-cols-2 4xl:grid-cols-3 gap-5"> */}
-      <div className="support-spaces grid grid-cols-2 3xl:grid-cols-3 gap-5 justify-items-center lg:justify-items-stretch">
+      <div className="support-spaces grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-2 3xl:grid-cols-3 gap-5 justify-items-center lg:justify-items-stretch">
         {supportSpacesData.map((space) => {
           const sliderProps = space.slider
             ? {

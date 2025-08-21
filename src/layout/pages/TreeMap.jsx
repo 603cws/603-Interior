@@ -72,7 +72,7 @@ const TreeMap = ({ totalArea, areaQuantities, areaValues }) => {
   const colors = {
     "Linear Workspace": "#23445B",
     "L-Type Workspace": "#26506B",
-    "MD Cabin": "#2A5C7A",
+    "MD Cabin": "#23C3C9",
     "Manager Cabin": "#2D688A",
     "Small Cabin": "#30749A",
     "UPS Room": "#337FAA",
@@ -93,7 +93,7 @@ const TreeMap = ({ totalArea, areaQuantities, areaValues }) => {
     "Finance Room": "#23808D",
     "Executive Washroom": "#2397A1",
     "Breakout Room": "#23ADB5",
-    "Available Space": "#23C3C9",
+    "Available Space": "#2A5C7A",
     Other: "#23D9DD",
     Washrooms: "#23EFF1",
   };
@@ -591,84 +591,65 @@ const TreeMap = ({ totalArea, areaQuantities, areaValues }) => {
   };
 
   return (
-    <div id="chart" style={{ position: "relative" }}>
-      <ReactApexChart
-        options={options}
-        series={[{ data: series }]}
-        type="treemap"
-        className="distribution-chart"
-        height={chartHeight}
-      />
-      <button
-        className="arrow-button"
-        onClick={() => toggleLegend(!isLegendVisible)}
-        style={{
-          position: "absolute",
-          left: "-25px",
-          top: "200px",
-          opacity: "50%",
-          zIndex: 1,
-          display: window.innerWidth <= 1350 ? "block" : "none",
-        }}
-      >
-        {/* <FontAwesomeIcon icon={isLegendVisible ? faChevronLeft : faChevronRight} /> */}
-        {isLegendVisible ? (
-          <MdKeyboardDoubleArrowLeft size={30} />
-        ) : (
-          <MdKeyboardDoubleArrowRight size={30} />
+    <>
+      <div id="chart" className="relative border px-2">
+        <ReactApexChart
+          options={options}
+          series={[{ data: series }]}
+          type="treemap"
+          className="distribution-chart"
+          height={chartHeight}
+        />
+        <button
+          className="arrow-button"
+          onClick={() => toggleLegend(!isLegendVisible)}
+          style={{
+            position: "absolute",
+            left: "-25px",
+            top: "200px",
+            opacity: "50%",
+            zIndex: 1,
+            display: window.innerWidth <= 1350 ? "block" : "none",
+          }}
+        >
+          {/* <FontAwesomeIcon icon={isLegendVisible ? faChevronLeft : faChevronRight} /> */}
+          {isLegendVisible ? (
+            <MdKeyboardDoubleArrowLeft size={30} />
+          ) : (
+            <MdKeyboardDoubleArrowRight size={30} />
+          )}
+        </button>
+        <div
+          className="legend-container w-full h-full grid grid-cols-2 xl:grid-cols-4 gap-3 xl:gap-0 overflow-auto absolute lg:static lg:overflow-visible inset-0 z-20 transition-transform duration-700 ease-in-out lg:transition-none"
+          style={{
+            transform: isLegendVisible ? "translateX(0)" : "translateX(-100%)", // Start hidden and slide in
+            // transition: "transform 1s ease-in-out",
+            // position: "absolute",
+            // top: "0",
+            // left: "0",
+            background: "#fff",
+            padding: "0px",
+            // boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)",
+            visibility: isLegendVisible ? "visible" : "hidden", // Fully hide off-screen
+          }}
+        >
+          {generateLegendItems()}
+        </div>
+
+        {showWarning && (
+          <UnusedAreaWarning
+            unusedArea={unusedArea}
+            onConfirm={handlegenrateboq}
+            onCancel={() => {
+              setShowWarning(false);
+            }}
+            isSubmitting={isSubmitting}
+          />
         )}
-      </button>
-      <div
-        className="legend-container w-full grid grid-cols-2 xl:grid-cols-4 gap-3 xl:gap-0 overflow-x-auto "
-        style={{
-          transform: isLegendVisible ? "translateX(0)" : "translateX(-100%)", // Start hidden and slide in
-          transition: "transform 1s ease-in-out",
-          position: "absolute",
-          top: "10%",
-          left: "0",
-          background: "#fff",
-          padding: "10px",
-          // boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)",
-          visibility: isLegendVisible ? "visible" : "hidden", // Fully hide off-screen
-        }}
-      >
-        {generateLegendItems()}
       </div>
       {/* button for generate boq */}
       {isMobile && (
-        <div className="flex justify-center items-center">
-          {/* <button
-            className="generateBoq bg-[#1A3A36] mt-2 rounded-3xl text-sm py-3 px-10 text-white mb-2 border-2 border-[#34BFAD]"
-            onClick={generateBOQclick}
-            disabled={isSubmitting}
-          >
-            {isSubmitting ? (
-              <div className="spinner flex justify-center items-center">
-                <svg
-                  className="animate-spin h-5 w-5 text-white"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                >
-                  <circle
-                    className="opacity-25"
-                    cx="12"
-                    cy="12"
-                    r="10"
-                    stroke="currentColor"
-                    strokeWidth="4"
-                  ></circle>
-                  <path
-                    className="opacity-75"
-                    fill="currentColor"
-                    d="M4 12a8 8 0 018-8v8h8a8 8 0 01-8 8V12H4z"
-                  ></path>
-                </svg>
-              </div>
-            ) : (
-              "Generate BOQ"
-            )}
-          </button> */}
+        <div className="flex justify-center items-center mt-3">
           <button
             onClick={generateBOQclick}
             className="generateBoq glow-on-hover relative flex items-center w-36 h-10 px-4 py-2 mb-2 bg-[#212B36] border border-[#1A8FE3] text-white overflow-hidden group rounded-[4px] font-Poppins text-xs hover:bg-gradient-to-b from-[#3F56EA] to-[#7c80f3] hover:scale-105 transition-transform duration-300 ease-in-out"
@@ -698,18 +679,7 @@ const TreeMap = ({ totalArea, areaQuantities, areaValues }) => {
           </button>
         </div>
       )}
-
-      {showWarning && (
-        <UnusedAreaWarning
-          unusedArea={unusedArea}
-          onConfirm={handlegenrateboq}
-          onCancel={() => {
-            setShowWarning(false);
-          }}
-          isSubmitting={isSubmitting}
-        />
-      )}
-    </div>
+    </>
   );
 };
 

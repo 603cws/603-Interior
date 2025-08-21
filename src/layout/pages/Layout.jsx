@@ -1004,7 +1004,7 @@ function Layout() {
       </div>
 
       <div className="content w-full lg:flex justify-between gap-3 p-2">
-        <div className="area-distribution-chart h-full w-full lg:w-1/2 px-3 border-2 pl-5">
+        <div className="area-distribution-chart h-full w-full lg:w-1/2 px-3">
           <Spacebar
             builtArea={builtArea}
             availableArea={availableArea}
