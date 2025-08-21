@@ -46,19 +46,17 @@ function MobileTabProductCard({ product, handleProductPreview }) {
             className="w-28 h-28 object-contain"
           />
         </div>
-        <div className="">
+        <div className="flex-1">
           <div className="flex justify-between items-start font-semibold text-sm">
             <h4 className=" ">{product?.title || "NA"}</h4>
             <span className="">Rs:{product?.price || "NA"}</span>
           </div>
-          <p className="text-xs mt-1">
-            Timeless ceramic tiles that add elegance and style to any room.
-          </p>
+          <p className="text-xs mt-1">{product?.details || ""}</p>
         </div>
       </div>
 
       {/* Content */}
-      <div className="flex-1 text-sm space-y-1 w-full">
+      <div className="flex-1  text-sm space-y-1 w-full">
         <ContentCard title={"Category:"} value={product?.products?.category} />
         <ContentCard
           title={"Specification:"}

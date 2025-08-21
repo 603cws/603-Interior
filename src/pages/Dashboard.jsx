@@ -1093,14 +1093,17 @@ function Dashboard() {
                                     Product Name
                                   </th>
                                 ) : (
-                                  <th className="p-3 font-medium">Addon id</th>
+                                  <th className="p-3 font-medium">
+                                    Addon name
+                                  </th>
                                 )}
                                 <th className="p-3  font-medium">Price</th>
-                                {toggle ? (
+                                <th className="p-3 font-medium">Category</th>
+                                <th className="p-3 font-medium">
+                                  specification
+                                </th>
+                                {/* {toggle ? (
                                   <>
-                                    {/* <th className="p-3 font-medium">
-                                          Details
-                                        </th> */}
                                     <th className="p-3 font-medium">
                                       Category
                                     </th>
@@ -1112,7 +1115,7 @@ function Dashboard() {
                                   <th className="p-3 font-medium">
                                     Addon Title
                                   </th>
-                                )}
+                                )} */}
                                 <th className="p-3 font-medium">Action</th>
                               </tr>
                             </thead>
@@ -1131,10 +1134,10 @@ function Dashboard() {
                                           className="w-10 h-10 object-cover rounded"
                                         />
                                         {toggle ? (
-                                          <span>{item.title}</span>
+                                          <span>{item?.title}</span>
                                         ) : (
                                           <span className="text-wrap">
-                                            {item.id}
+                                            {item?.title}
                                           </span>
                                         )}
                                       </div>
@@ -1142,7 +1145,14 @@ function Dashboard() {
                                     <td className="border border-gray-200 p-3 align-middle">
                                       ₹{item.price}
                                     </td>
-                                    {toggle ? (
+                                    <td className="border border-gray-200 p-3 align-middle">
+                                      {item.products?.category || "-"}
+                                    </td>
+                                    <td className="border border-gray-200 p-3 align-middle">
+                                      {item.products?.subcategory1 || "-"}
+                                    </td>
+
+                                    {/* {toggle ? (
                                       <>
                                         <td className="border border-gray-200 p-3 align-middle">
                                           {item.products?.category || "N/A"}
@@ -1155,7 +1165,7 @@ function Dashboard() {
                                       <td className="border border-gray-200 p-3 align-middle">
                                         {item.addons?.title || item.title}
                                       </td>
-                                    )}
+                                    )} */}
                                     <td className="border border-gray-200 p-3 align-middle flex justify-center items-center relative">
                                       <button
                                         ref={(el) =>

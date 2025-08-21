@@ -524,11 +524,16 @@ function Login() {
             </div>
 
             <div
-              className={`content z-10 flex-1 max-h-full h-full flex flex-col items-start ${
+              className={`content z-10 flex-1 max-h-full h-full flex flex-col items-center justify-center ${
                 isSignUp
                   ? "justify-center lg:justify-normal md:pt-10 md:mx-6 lg:mx-0 mx-2"
-                  : "pt-40"
+                  : ""
               }   xl:gap-10`}
+              // className={`content z-10 flex-1 max-h-full h-full flex flex-col items-start ${
+              //   isSignUp
+              //     ? "justify-center lg:justify-normal md:pt-10 md:mx-6 lg:mx-0 mx-2"
+              //     : "pt-40"
+              // }   xl:gap-10`}
             >
               <div className="w-full lg:w-3/4">
                 <h1 className="capitalize text-2xl md:text-3xl font-bold  text-[#fff] md:text-[#000] text-center">
@@ -547,7 +552,8 @@ function Login() {
                 </p>
               </div>
 
-              <div className="w-full flex flex-col gap-2 pr-2">
+              <div className="w-full flex flex-col xl:items-center gap-2 px-4 sm:px-0 sm:pr-2">
+                {/* <div className="w-full flex flex-col gap-2 pr-2"> */}
                 <div className="flex flex-col gap-1 xl:gap-3 xl:w-3/4">
                   <label
                     htmlFor="email"
@@ -570,10 +576,10 @@ function Login() {
                 </div>
 
                 {isForgotPassword ? (
-                  <div>
+                  <div className="w-full xl:3/4">
                     <button
                       onClick={handleForgotPassword}
-                      className="capitalize w-full xl:w-3/4 bg-[#374A75] text-white font-semibold py-2 rounded-lg mt-3"
+                      className="capitalize w-full xl:w-3/4  flex items-center justify-self-center justify-center  bg-[#374A75] text-white font-semibold py-2 rounded-lg mt-3"
                       disabled={isSubmitting}
                     >
                       {isSubmitting ? (
@@ -605,7 +611,7 @@ function Login() {
                     </button>
                     <button
                       onClick={backToSignIn}
-                      className=" text-[#fff] md:text-[#000] capitalize flex items-center justify-center gap-1 w-full xl:w-3/4 my-6"
+                      className=" text-[#fff] justify-self-center md:text-[#000] capitalize flex items-center justify-center gap-1 w-full xl:w-3/4 my-6"
                     >
                       <span className="cursor-pointer text-[#374A75] font-bold  self-center">
                         <FaAngleLeft size={16} />
@@ -781,7 +787,7 @@ function Login() {
                           Already have an account?{" "}
                           <span
                             onClick={toggleForm}
-                            className="cursor-pointer text-[#fff] md:text-[#374A75]"
+                            className="cursor-pointer text-[#fff] md:text-[#374A75] underline"
                           >
                             Sign In
                           </span>
@@ -791,7 +797,7 @@ function Login() {
                           Don't have an account?{" "}
                           <span
                             onClick={toggleForm}
-                            className="cursor-pointer text-[#fff] md:text-[#374A75]"
+                            className="cursor-pointer underline text-[#fff] md:text-[#374A75]"
                           >
                             Sign Up
                           </span>
@@ -810,13 +816,15 @@ function Login() {
                     {/* {import.meta.env.MODE === "development" && ( */}
                     {/* <> */}
                     <div className="flex justify-center gap-3 items-center xl:w-3/4">
-                      <hr className="w-2/5 border md:border-[#000]" />
-                      <span className="text-[#fff] md:text-[#000]">or</span>
-                      <hr className="w-2/5 border md:border-[#000]" />
+                      <hr className="w-1/2 border md:border-[#000]" />
+                      <span className="text-[#fff] md:text-[#000] px-4 ">
+                        or
+                      </span>
+                      <hr className="w-1/2 border md:border-[#000]" />
                     </div>
-                    <div className="xl:w-3/4 flex justify-center gap-5">
+                    <div className="xl:w-3/4 flex justify-center gap-5 mt-3">
                       <div
-                        className="flex items-center gap-2 bg-white text-black px-4 py-2 rounded-md cursor-pointer shadow-md hover:shadow-lg transition"
+                        className="w-full flex items-center justify-center gap-2 bg-white text-black px-4 py-2 rounded-md border border-[#ccc] cursor-pointer  transition"
                         onClick={signInWithGoogle}
                       >
                         <FcGoogle size={24} />
