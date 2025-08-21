@@ -10,10 +10,13 @@ import { supabase } from "../services/supabase";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import toast from "react-hot-toast";
+import { getDateInfo } from "../utils/dateUtils";
 
 function Footer() {
   const [email, setEmail] = useState("");
-  const [error, setError] = useState("");
+  // const [error, setError] = useState("");
+  const { currentYear } = getDateInfo();
+
   const scrollToTop = () => {
     window.scrollTo({
       top: 0,
@@ -35,7 +38,7 @@ function Footer() {
       return;
     }
 
-    const { data, error } = await supabase
+    const { error } = await supabase
       .from("news_letter")
       .insert([{ email, subscribed: true }]);
 
@@ -252,7 +255,7 @@ function Footer() {
           <h4 className="font-semibold">How to sell</h4>
         </div>
         <p className=" text-xs">
-          &copy; 2019-2025 . Workved Interiors | All Rights Reserved
+          &copy; 2019-{currentYear} . Workved Interiors | All Rights Reserved
         </p>
         <div
           className=" rounded-full bg-[#FFD074] cursor-pointer "
