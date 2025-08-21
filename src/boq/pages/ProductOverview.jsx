@@ -354,7 +354,7 @@ function ProductOverview() {
           product_variants: (p.product_variants || []).filter(
             (v) =>
               v.id !== product?.id && // not current variant
-              v.status !== "pending" && // status filter
+              v.status === "approved" && // status filter
               v.image && // has image
               v.title // has title
           ),
@@ -416,6 +416,14 @@ function ProductOverview() {
               style={{ color: "#334A78" }}
             />
             <span>{subCat1}</span>
+
+            <button
+              //   onClick={() => setRequestTour(true)}
+              onClick={() => setShowRecommend(true)}
+              className="md:hidden ml-auto "
+            >
+              <img src="/images/recommend.png" alt="recommend mobile" />
+            </button>
           </div>
 
           {/* Main image container */}
@@ -559,20 +567,22 @@ function ProductOverview() {
         </div>
       </div>
 
-      {import.meta.env.MODE === "development" && (
-        <div
-          className={`fixed z-10 right-0 rotate-90 book-tour-btn ${
-            showSelectArea ? "opacity-50 pointer-events-none" : "opacity-100"
-          }`}
-        >
-          <button
-            //   onClick={() => setRequestTour(true)}
-            onClick={() => setShowRecommend(true)}
-            className="text-base text-md  bg-[#1A3A36] text-white px-4 lg:px-4 py-2  rounded-3xl "
+      {!showRecommend && (
+        <>
+          <div
+            className={`fixed font-Poppins z-10 right-0 rotate-90 book-tour-btn ${
+              showSelectArea ? "opacity-50 pointer-events-none" : "opacity-100"
+            }`}
           >
-            Recommendation
-          </button>
-        </div>
+            <button
+              //   onClick={() => setRequestTour(true)}
+              onClick={() => setShowRecommend(true)}
+              className="hidden md:block text-sm   bg-[#334A78] text-white px-4 lg:px-4 py-2  rounded-3xl "
+            >
+              Recommendation
+            </button>
+          </div>
+        </>
       )}
 
       <AnimatePresence>
@@ -613,6 +623,7 @@ function ProductOverview() {
         <RecommendComp
           showRecommend={showRecommend}
           setShowRecommend={setShowRecommend}
+          currentProduct={product}
         />
       )}
 

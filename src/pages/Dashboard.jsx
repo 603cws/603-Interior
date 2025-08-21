@@ -1093,7 +1093,7 @@ function Dashboard() {
                                     Product Name
                                   </th>
                                 ) : (
-                                  <th className="p-3 font-medium">Addon ID</th>
+                                  <th className="p-3 font-medium">Addon id</th>
                                 )}
                                 <th className="p-3  font-medium">Price</th>
                                 {toggle ? (

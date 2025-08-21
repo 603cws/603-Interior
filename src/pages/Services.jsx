@@ -1,5 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import LandingNavbar from "../common-components/LandingNavbar";
+import { useState } from "react";
+import Footer from "../common-components/Footer";
 const steps = [
   {
     imagePath: "/images/DeliveryService1.png",
@@ -21,33 +23,51 @@ const steps = [
 const FeatureCardDetails = [
   {
     imgpath: "/images/featureIcon1.png",
-    hoveredImgPath: "/images/featureIcon1.png",
+    hoveredImgPath: "/images/featureicon1hover.png",
     title: "Office Layout Planning",
   },
   {
-    imgpath: "/images/featureIcon1.png",
-    hoveredImgPath: "/images/featureIcon1.png",
+    imgpath: "/images/featureicon2.png",
+    hoveredImgPath: "/images/featuricon2hover.png",
     title: "Furniture & Fixtures",
   },
   {
-    imgpath: "/images/featureIcon1.png",
-    hoveredImgPath: "/images/featureIcon1.png",
+    imgpath: "/images/featureicon3.png",
+    hoveredImgPath: "/images/featureicon3hover.png",
     title: "Lighting & Electricals",
   },
   {
-    imgpath: "/images/featureIcon1.png",
-    hoveredImgPath: "/images/featureIcon1.png",
+    imgpath: "/images/featureicon4.png",
+    hoveredImgPath: "/images/featureicon4hover.png",
     title: "HVAC Solutions",
   },
   {
-    imgpath: "/images/featureIcon1.png",
-    hoveredImgPath: "/images/featureIcon1.png",
+    imgpath: "/images/featureicon5.png",
+    hoveredImgPath: "/images/featureicon5hover.png",
     title: "Smart Office Technology",
   },
   {
-    imgpath: "/images/featureIcon1.png",
-    hoveredImgPath: "/images/featureIcon1.png",
+    imgpath: "/images/featureicon6.png",
+    hoveredImgPath: "/images/featureicon6hover.png",
     title: "Decor & Finishing",
+  },
+];
+
+const InfoCardDetails = [
+  {
+    title: "Create Your Layout",
+    imgpath: "/images/service_2.png",
+    description: `Add and remove your Workstations, Meeting rooms, Cabins, and more.`,
+  },
+  {
+    title: "Select Your Product",
+    imgpath: "/images/serviceproduct.png",
+    description: `Browse and choose from Furniture, Lighting, HVAC, Smart Solution, etc.`,
+  },
+  {
+    title: "Get Your BOQ",
+    imgpath: "/images/serviceboq.png",
+    description: `Instantly generate and download your bill of quantities.`,
   },
 ];
 function Services() {
@@ -55,9 +75,14 @@ function Services() {
     <div className="">
       <OfficeLayoutSection />
       <div className="flex flex-col xl:flex-row items-center justify-between  p-16 container mx-auto">
-        <InfoCard />
-        <InfoCard />
-        <InfoCard />
+        {InfoCardDetails.map((info) => (
+          <InfoCard
+            title={info?.title}
+            description={info.description}
+            imgpath={info.imgpath}
+            key={info?.title}
+          />
+        ))}
       </div>
       <div className="container mx-auto">
         <FeaturesSection />
@@ -68,6 +93,7 @@ function Services() {
       <div className="container mx-auto">
         <FeatureDesignSection />
       </div>
+      <Footer />
     </div>
   );
 }
@@ -111,11 +137,11 @@ function InfoCard({ imgpath, title, description }) {
   return (
     <div className="font-lora max-w-sm px-8 space-y-3 flex flex-col justify-center items-center">
       <div className="">
-        <img src="/images/service_2.png" alt="service" />
+        <img src={imgpath} alt="service" className="w-24 h-24" />
       </div>
-      <h2 className="text-[#232323] font-bold text-2xl">Create Your Layout</h2>
+      <h2 className="text-[#232323] font-bold text-2xl">{title}</h2>
       <p className="text-center text-[#777] text-sm tracking-[0.3px]">
-        Add and remove your Workstations, Meeting rooms, Cabins, and more.
+        {description}
       </p>
     </div>
   );
@@ -135,6 +161,7 @@ function FeaturesSection() {
           <FeatureCard
             key={data?.title}
             imgpath={data?.imgpath}
+            hoveredImgPath={data?.hoveredImgPath}
             title={data?.title}
           />
         ))}
@@ -143,14 +170,23 @@ function FeaturesSection() {
   );
 }
 
-function FeatureCard({ title, imgpath }) {
+function FeatureCard({ title, imgpath, hoveredImgPath }) {
+  const [hovered, sethovered] = useState(false);
   return (
-    <div className="w-full border border-[#ccc] font-lora p-4 hover:bg-gradient-to-br from-[#334A78] to-[#68B2DC]  hover:text-white">
+    <div
+      onMouseEnter={() => sethovered(true)}
+      onMouseLeave={() => sethovered(false)}
+      className="group w-full border border-[#ccc] font-lora p-4 hover:bg-gradient-to-br from-[#334A78] to-[#68B2DC]  hover:text-white"
+    >
       <div className="flex flex-col justify-center items-center gap-5">
         <div>
-          <img src={imgpath} alt="feature icon" className="w-20 h-20" />
+          <img
+            src={`${hovered ? hoveredImgPath : imgpath}`}
+            alt="feature icon"
+            className="w-20 h-20"
+          />
         </div>
-        <h3 className="text-center font-bold text-xl text-[#232323] ">
+        <h3 className="text-center font-bold text-xl text-[#232323] group-hover:text-white">
           {title}
         </h3>
       </div>

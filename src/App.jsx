@@ -65,6 +65,7 @@ import BrandDLink from "./pages/Ecommerce/BrandDLink";
 import VendorDashboardLayout from "./pages/vendor/VendorDashboardLayout";
 import PrivateRoute from "./utils/PrivateRoute";
 import Services from "./pages/Services";
+import Contactuscopy from "./pages/Contactus copy";
 
 const Home = lazy(() => import("./pages/Home"));
 
@@ -107,7 +108,8 @@ function App() {
               </PrivateRoute>
             }
           />
-          <Route path="/Contactus" element={<Contactus />} />
+          <Route path="/Contactus" element={<Contactuscopy />} />
+          <Route path="/newContactus" element={<Contactus />} />
           <Route path="/Aboutus" element={<AboutUs2 />} />
 
           <Route path="/Blog" element={<InteriorBlog />} />

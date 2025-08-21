@@ -6,6 +6,7 @@ import BookAppointment from "./BookAppointment";
 import { motion } from "framer-motion";
 import { MdClose } from "react-icons/md";
 import { useLogout } from "../../utils/HelperFunction";
+import GobackLayoutWarning from "./GobackLayoutWarning";
 
 const profileVariants = {
   hidden: { x: "100%", opacity: 0 }, // Start off-screen (right side)
@@ -38,6 +39,9 @@ function ProfileCard({
   } = useApp();
   const profileRef = useRef(null);
   const [showBookAppointment, setShowBookAppointment] = useState(false);
+
+  // layout warning
+  const [isLayoutWarning, setIslayoutWarning] = useState(false);
 
   let isadmin = accountHolder.role === "user" ? true : false;
   const navigate = useNavigate();
@@ -155,7 +159,8 @@ function ProfileCard({
               <>
                 <div
                   className="flex items-center mx-4 gap-3 hover:bg-[#E5F4FF] hover:cursor-pointer hover:rounded-lg pl-2 py-1.5"
-                  onClick={() => navigate("/Layout")}
+                  onClick={() => setIslayoutWarning(true)}
+                  // onClick={() => navigate("/Layout")}
                 >
                   <img
                     src="/images/profile-card/layout.png"
@@ -269,6 +274,13 @@ function ProfileCard({
         {/* Book Appointment Modal */}
         {showBookAppointment && (
           <BookAppointment onClose={() => setShowBookAppointment(false)} />
+        )}
+
+        {isLayoutWarning && (
+          <GobackLayoutWarning
+            onCancel={() => setIslayoutWarning((prev) => !prev)}
+            onConfirm={() => navigate("/Layout")}
+          />
         )}
       </motion.div>
     </div>

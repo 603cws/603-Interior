@@ -14,6 +14,7 @@ import { MdOutlineCancel } from "react-icons/md";
 import AlertBox from "./AlertBox";
 import { PiStarFourFill } from "react-icons/pi";
 import CurrentLayoutDetails from "./CurrentLayoutDetails";
+import GobackLayoutWarning from "./GobackLayoutWarning";
 
 function Navbar({
   toggleProfile,
@@ -42,6 +43,9 @@ function Navbar({
 
   const [isDownloading, setIsDownloading] = useState(false);
   const [showLayoutDetails, setShowLayoutDetails] = useState(false);
+
+  // layout warning
+  const [isLayoutWarning, setIslayoutWarning] = useState(false);
 
   // const { signOutUser } = useAuthRefresh(); // Get signOutUser from hook
 
@@ -1058,7 +1062,8 @@ function Navbar({
                 view boq{" "}
               </li> */}
                 <li
-                  onClick={handleGoTOlayout}
+                  // onClick={handleGoTOlayout}
+                  onClick={() => setIslayoutWarning((prev) => !prev)}
                   className="hover:px-2 hover:bg-white hover:text-[#1A3A36] mb-2 py-1 px-2 rounded-lg cursor-pointer"
                 >
                   Layout
@@ -1152,7 +1157,8 @@ function Navbar({
           <div className=" flex items-center gap-1">
             <button
               className="bg-[#FFF] text-xs py-2 px-5 text-[#000] font-semibold rounded-[4px] border-solid border-[1px] border-black"
-              onClick={handleGoTOlayout}
+              // onClick={handleGoTOlayout}
+              onClick={() => setIslayoutWarning((prev) => !prev)}
             >
               Go to Layout
             </button>
@@ -1405,6 +1411,13 @@ function Navbar({
             removeboqid={setSelectedboqid}
           />
         </div>
+      )}
+
+      {isLayoutWarning && (
+        <GobackLayoutWarning
+          onConfirm={handleGoTOlayout}
+          onCancel={() => setIslayoutWarning(false)}
+        />
       )}
     </div>
   );
