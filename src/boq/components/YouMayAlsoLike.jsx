@@ -1,9 +1,9 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { GoPlus } from "react-icons/go";
 import { PiStarFourFill } from "react-icons/pi";
 import { FaStar } from "react-icons/fa";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { RiVipCrown2Fill } from "react-icons/ri";
 
 const animations = {
   fadeInLeft: {
@@ -60,8 +60,11 @@ export default function YouMayAlsoLike({
               exit="exit"
             >
               {variant.segment && (
-                <div className="absolute top-2 left-2 font-bold font-Poppins text-sm px-3 py-1.5 text-white z-10 flex items-center gap-2 rounded-tl-sm rounded-bl-lg rounded-tr-md rounded-br-md bg-gradient-to-l from-[#75A2BE] to-[#5584B6]">
-                  {variant.segment === "Luxury" && (
+                <div
+                  title={`${variant.segment} segment`}
+                  className="absolute top-0 left-0 font-bold font-Poppins text-sm w-7 h-7 text-white z-10 flex justify-center items-center gap-2  rounded-br-md bg-gradient-to-l from-[#75A2BE] to-[#5584B6]"
+                >
+                  {variant.segment === "Exclusive" && (
                     <div className="relative pr-2">
                       <PiStarFourFill
                         className="absolute bottom-2 right-1"
@@ -71,13 +74,12 @@ export default function YouMayAlsoLike({
                       <PiStarFourFill color="#FFE473" />
                     </div>
                   )}
-                  {variant.segment === "Exclusive" && (
-                    <PiStarFourFill color="#FFE473" />
+
+                  {variant.segment === "Luxury" && (
+                    <RiVipCrown2Fill color="#FFE473" />
                   )}
+
                   {variant.segment === "Minimal" && <FaStar color="#FFE473" />}
-                  <h4 className="text-xs uppercase md:text-sm">
-                    {variant.segment}
-                  </h4>
                 </div>
               )}
 
@@ -101,14 +103,6 @@ export default function YouMayAlsoLike({
                     navigate(`/boq/${variant.id}`);
                   }}
                 />
-                {/* Add button */}
-                <div className="absolute -bottom-10 md:bottom-2 -right-2 md:right-0 bg-white group-hover:bg-[#EFF8FF] rounded-full p-1 shadow-[0px_2px_6px_0px_rgba(0,0,0,0.1),_inset_0px_4px_6px_0px_rgba(0,0,0,0.1)] cursor-pointer">
-                  <GoPlus
-                    size={28}
-                    color="#334A78"
-                    onClick={() => onSelectProduct?.(variant)}
-                  />
-                </div>
               </div>
 
               {/* Product Name & Price */}

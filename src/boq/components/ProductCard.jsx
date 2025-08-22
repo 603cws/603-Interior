@@ -4,7 +4,7 @@ import { CiSliderVertical } from "react-icons/ci";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaStar } from "react-icons/fa";
-import { GoPlus } from "react-icons/go";
+import { GoDash, GoPlus } from "react-icons/go";
 import { PiStarFourFill } from "react-icons/pi";
 import { IoMdSettings } from "react-icons/io";
 import { RiVipCrown2Fill } from "react-icons/ri";
@@ -198,14 +198,14 @@ function ProductCard({
   return (
     <div>
       <div className="product-card grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 3xl:grid-cols-6 gap-6 pb-8 pt-3 md:px-6 relative">
-        <div className="absolute right-0 md:right-10 -top-12" ref={dropdownRef}>
+        <div className="absolute right-0 md:right-6 -top-12" ref={dropdownRef}>
           <div className="relative">
             {/* Filter button */}
             <button
-              className="flex items-center gap-2 md:border md:border-black px-4 py-2 text-sm"
+              className="flex items-center gap-2 border border-black px-2 lg:px-4 py-2 text-sm"
               onClick={() => setIsOpen((prev) => !prev)}
             >
-              <span className="hidden md:block">Filter By Plan</span>
+              <span className="hidden lg:block">Filter By Plan</span>
               <CiSliderVertical className="text-[#334A78]" size={20} />
             </button>
 
@@ -368,16 +368,29 @@ function ProductCard({
                     }}
                   />
                   {/* CiCirclePlus Icon - Positioned at Bottom Right */}
-                  <div className="absolute -bottom-10 md:bottom-2 -right-2 md:right-0 bg-white group-hover:bg-[#EFF8FF] rounded-full p-1 shadow-[0px_2px_6px_0px_rgba(0,0,0,0.1),_inset_0px_4px_6px_0px_rgba(0,0,0,0.1)] cursor-pointer">
-                    <GoPlus
-                      size={28}
-                      color="#334A78"
-                      onClick={() => {
-                        setSelectedProductView(variant);
-                        setShowSelectArea(true);
-                      }}
-                    />
-                  </div>
+                  {filterSelectedProduct[0]?.id === variant.id ? (
+                    <div className="absolute -bottom-10 md:bottom-2 -right-2 md:right-0 bg-white group-hover:bg-[#EFF8FF] rounded-full p-1 shadow-[0px_2px_6px_0px_rgba(0,0,0,0.1),_inset_0px_4px_6px_0px_rgba(0,0,0,0.1)] cursor-pointer">
+                      <GoDash
+                        size={28}
+                        color="#334A78"
+                        onClick={() => {
+                          setSelectedProductView(variant);
+                          setShowSelectArea(true);
+                        }}
+                      />
+                    </div>
+                  ) : (
+                    <div className="absolute -bottom-10 md:bottom-2 -right-2 md:right-0 bg-white group-hover:bg-[#EFF8FF] rounded-full p-1 shadow-[0px_2px_6px_0px_rgba(0,0,0,0.1),_inset_0px_4px_6px_0px_rgba(0,0,0,0.1)] cursor-pointer">
+                      <GoPlus
+                        size={28}
+                        color="#334A78"
+                        onClick={() => {
+                          setSelectedProductView(variant);
+                          setShowSelectArea(true);
+                        }}
+                      />
+                    </div>
+                  )}
                 </div>
 
                 {/* Product Name */}

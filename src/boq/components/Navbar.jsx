@@ -961,9 +961,6 @@ function Navbar({
     <div className="navbar sticky top-0 z-30 font-Poppins">
       <div className="flex justify-between bg-gradient-to-r from-[#23445B] to-[#487BA0] items-center px-3 md:px-10 h-[50px]">
         <div className="hidden sm:block absolute lg:flex gap-2 right-1/4 lg:right-20 -translate-x-full">
-          {import.meta.env.MODE === "development" && BOQTitle && (
-            <h1 className="text-green-500">Current BOQ: {BOQTitle}</h1>
-          )}
           {/* <div className="flex items-center justify-center gap-1">
             <div className="h-3 w-3 rounded-full border-[1px] bg-[#34BFAD]"></div>
             <p className="text-xs text-white">Completed</p>
@@ -983,6 +980,11 @@ function Navbar({
         </button>
         {/* button for generate boq */}
         <div className="pr-2 flex gap-3 items-center">
+          {BOQTitle && (
+            <h1 className="hidden sm:block text-white font-semibold text-sm pr-3">
+              {BOQTitle.length > 20 ? BOQTitle.slice(0, 20) + "..." : BOQTitle}
+            </h1>
+          )}
           {boqTotal > 0 && (
             <div
               // onClick={signOutUser}
@@ -1175,7 +1177,7 @@ function Navbar({
               layout details
             </button>
           </div>
-          <div className="w-7/12 mx-auto pl-10 py-2.5">
+          <div className="w-7/12 lg:w-2/5 xl:w-7/12 mx-auto pl-2 py-2.5">
             {/* Progress Bar Container */}
             <div className="relative h-5 bg-[#385682] rounded-sm">
               {/* Filled Progress */}
