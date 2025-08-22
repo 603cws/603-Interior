@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { useApp } from "../../Context/Context";
+import { baseImageUrl } from "../../utils/HelperConstant";
 
 function Addon({
   allAddons,
@@ -14,8 +15,8 @@ function Addon({
 }) {
   const { selectedCategory, selectedSubCategory1 } = useApp();
 
-  const baseImageUrl =
-    "https://bwxzfwsoxwtzhjbzbdzs.supabase.co/storage/v1/object/public/addon/";
+  // const baseImageUrl =
+  //   "https://bwxzfwsoxwtzhjbzbdzs.supabase.co/storage/v1/object/public/addon/";
 
   useEffect(() => {
     if (!selectedProductView) return;

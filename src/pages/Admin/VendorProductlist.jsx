@@ -14,6 +14,7 @@ import VendorEditAddon from "../vendor/VendorEditAddon";
 import { IoCloseCircle, IoCloudDownloadOutline } from "react-icons/io5";
 import { IoIosSearch } from "react-icons/io";
 import MobileTabProductCard from "../user/MobileTabProductCard";
+import { baseImageUrl } from "../../utils/HelperConstant";
 
 function VendorProductlist({
   setVendorproductlist,
@@ -94,8 +95,8 @@ function VendorProductlist({
   };
 
   //baseurlforimg
-  const baseImageUrl =
-    "https://bwxzfwsoxwtzhjbzbdzs.supabase.co/storage/v1/object/public/addon/";
+  // const baseImageUrl =
+  //   "https://bwxzfwsoxwtzhjbzbdzs.supabase.co/storage/v1/object/public/addon/";
 
   const handleMenuToggle = (id) => {
     setOpenMenuId((prev) => (prev === id ? null : id));

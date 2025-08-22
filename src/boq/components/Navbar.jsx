@@ -83,6 +83,7 @@ function Navbar({
     currentLayoutData,
     setCurrentLayoutData,
     BOQID,
+    setBOQID,
     setCurrentLayoutID,
     quantityData,
   } = useApp();
@@ -572,6 +573,7 @@ function Navbar({
       setBoqTotal(data.boqTotalPrice);
       setIsDBPlan(true); // Toggle isDBPlan state
       // toast.success(`Loaded BOQ: ${data.boqTitle}`);
+      setBOQID(data.id);
       toast.success(
         `Loaded BOQ: ${
           data.boqTitle.length > 50
@@ -1139,8 +1141,14 @@ function Navbar({
                                     alt="Delete"
                                     className="cursor-pointer h-6 w-6"
                                     onClick={() => {
-                                      setDeleteAlert(true);
-                                      setSelectedboqid(boq.id);
+                                      if (boq.id === BOQID) {
+                                        toast.error(
+                                          "Cannot delete current BOQ!"
+                                        );
+                                      } else {
+                                        setDeleteAlert(true);
+                                        setSelectedboqid(boq.id);
+                                      }
                                     }}
                                   />
                                 </div>
@@ -1287,8 +1295,13 @@ function Navbar({
                             title="Delete BOQ"
                             aria-label="Delete BOQ"
                             onClick={() => {
-                              setDeleteAlert(true);
-                              setSelectedboqid(boq.id);
+                              console.log(boq.id, BOQID);
+                              if (boq.id === BOQID) {
+                                toast.error("Cannot delete current BOQ!");
+                              } else {
+                                setDeleteAlert(true);
+                                setSelectedboqid(boq.id);
+                              }
                             }}
                           />
                         </div>

@@ -173,6 +173,7 @@ function ProfileCard({
                   <div
                     className="flex items-center mx-4 gap-3 hover:bg-[#E5F4FF] hover:cursor-pointer hover:rounded-lg pl-2 py-1.5"
                     onClick={() => {
+                      navigate("/boq");
                       // setSelectedPlan(null);
                       setIsOpen(false);
                       // setProgress(0);

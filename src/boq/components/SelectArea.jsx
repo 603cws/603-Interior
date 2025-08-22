@@ -6,6 +6,7 @@ import { toast, Slide } from "react-toastify";
 import { calculateAddonTotalPrice } from "../utils/productUtils";
 import { AddToCartToast } from "../../utils/AddToCartToast";
 import { RxCrossCircled } from "react-icons/rx";
+import { categoriesWithTwoLevelCheck } from "../../constants/constant";
 
 function SelectArea({
   setShowSelectArea,
@@ -13,7 +14,7 @@ function SelectArea({
   selectedAreas,
   setSelectedAreas,
   selectedProductView,
-  categoriesWithTwoLevelCheck,
+  // categoriesWithTwoLevelCheck,
   allAddons,
   onAddonAdd,
   setShowBackground,

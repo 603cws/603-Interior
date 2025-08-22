@@ -16,14 +16,19 @@ import { motion, AnimatePresence } from "framer-motion";
 import { selectAreaAnimation } from "../constants/animations";
 import { instructions } from "../constants/instructions";
 import YouMayAlsoLike from "../components/YouMayAlsoLike";
+import {
+  categoriesWithTwoLevelCheck,
+  priceRange,
+} from "../../constants/constant";
+import { baseImageUrl } from "../../utils/HelperConstant";
 
 function ProductOverview() {
   const [relatedProducts, setRelatedProducts] = useState([]);
 
   const [showBackground, setShowBackground] = useState(false);
   const navigate = useNavigate();
-  const baseImageUrl =
-    "https://bwxzfwsoxwtzhjbzbdzs.supabase.co/storage/v1/object/public/addon/";
+  // const baseImageUrl =
+  //   "https://bwxzfwsoxwtzhjbzbdzs.supabase.co/storage/v1/object/public/addon/";
   const { id } = useParams(); // Extract product ID from URL
   // console.log("id from useParams:", id);
 
@@ -41,6 +46,9 @@ function ProductOverview() {
   const profileRef = useRef(null);
   const iconRef = useRef(null); //used to close Profile Card when clicked outside of Profile Card area
   const [products, setProducts] = useState([]);
+  const [isProfileCard, setIsProfileCard] = useState(false);
+  const [showBoqPrompt, setShowBoqPrompt] = useState(false);
+  const [isDBPlan, setIsDBPlan] = useState(false);
 
   const {
     selectedCategory,
@@ -50,18 +58,18 @@ function ProductOverview() {
     setSelectedSubCategory,
     setSelectedSubCategory1,
     selectedData,
-    categoriesWithTwoLevelCheck,
+    // categoriesWithTwoLevelCheck,
     quantityData,
     areasData,
     userResponses,
     selectedProductView,
-    setShowProductView,
+    // setShowProductView,
     setShowRecommend,
     showRecommend,
     productData,
     searchQuery,
-    priceRange,
-    setMinimizedView,
+    // priceRange,
+    // setMinimizedView,
     selectedPlan,
     formulaMap,
     setSelectedProductView,
@@ -374,7 +382,14 @@ function ProductOverview() {
   return (
     // grid
     <>
-      <Navbar toggleProfile={toggleProfile} iconRef={iconRef} />
+      <Navbar
+        toggleProfile={toggleProfile}
+        iconRef={iconRef}
+        isProfileCard={isProfileCard}
+        setIsProfileCard={setIsProfileCard}
+        showBoqPrompt={showBoqPrompt}
+        setShowBoqPrompt={setShowBoqPrompt}
+      />
       <ToastContainer />
       {/* ThreeJS Viewer with reduced size */}
       {import.meta.env.MODE === "development" && showThreeViewer && (
@@ -392,15 +407,15 @@ function ProductOverview() {
             size={30}
             className="cursor-pointer"
             onClick={() => {
-              setShowProductView(false);
-              setMinimizedView(true);
+              // setShowProductView(false);
+              // setMinimizedView(true);
               // navigate("/boq");
               //Don't change the below setSelectedCategory, setSelectedSubCategory, setSelectedSubCategory1 => Sunny
               setSelectedCategory(cat);
               setSelectedSubCategory(subCat);
               setSelectedSubCategory1(subCat1);
               // navigate(-1);
-              navigate("/boq");
+              navigate("/boq", { state: { minimizedView: true } });
             }}
           />
 
@@ -608,7 +623,7 @@ function ProductOverview() {
               setSelectedAreas={setSelectedAreas}
               selectedProductView={product}
               selectedData={selectedData}
-              categoriesWithTwoLevelCheck={categoriesWithTwoLevelCheck}
+              // categoriesWithTwoLevelCheck={categoriesWithTwoLevelCheck}
               allAddons={allAddons}
               setShowBackground={setShowBackground}
               selectedCategory={cat}
@@ -636,6 +651,7 @@ function ProductOverview() {
               setIsOpen={setIsOpen}
               iconRef={iconRef}
               selectedPlan={selectedPlan}
+              setIsDBPlan={setIsDBPlan}
             />
           </div>
         )}

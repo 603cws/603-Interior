@@ -18,13 +18,15 @@ import NewBoq from "../components/NewBoq";
 import toast from "react-hot-toast";
 import { supabase } from "../../services/supabase";
 import { fetchProductsData } from "../utils/dataFetchers";
+import { useLocation } from "react-router-dom";
+import { categoriesWithModal, priceRange } from "../../constants/constant";
 
 function Boq() {
-  // State to control background visibility
+  const location = useLocation();
   const [showBackground, setShowBackground] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const profileRef = useRef(null);
-  const iconRef = useRef(null); //used to close Profile Card when clicked outside of Profile Card area
+  const iconRef = useRef(null);
   const [isDBPlan, setIsDBPlan] = useState(false);
 
   const [showNewBoqPopup, setShowNewBoqPopup] = useState(true);
@@ -32,10 +34,12 @@ function Boq() {
   const [selectedAreas, setSelectedAreas] = useState([]);
 
   const [questionPopup, setQuestionPopup] = useState(false);
-  // const [selectedPlan, setSelectedPlan] = useState(null);
   const [showBoqPrompt, setShowBoqPrompt] = useState(false);
   const [existingBoqs, setExistingBoqs] = useState([]); // Stores fetched BOQs
   const [isProfileCard, setIsProfileCard] = useState(false);
+  const [minimizedView, setMinimizedView] = useState(
+    location?.state?.minimizedView || false
+  );
 
   const {
     selectedCategory,
@@ -47,24 +51,19 @@ function Boq() {
     selectedData,
     setSelectedData,
     categories,
-    categoriesWithModal,
+    // categoriesWithModal,
     userResponses,
     setUserResponses,
     selectedPlan,
-    defaultProduct,
-    categoriesWithTwoLevelCheck,
+    // defaultProduct,
+    // categoriesWithTwoLevelCheck,
     productData,
     areasData,
     quantityData,
-    handleCategorySelection,
     selectedProductView,
     setSelectedProductView,
-    minimizedView,
-    setMinimizedView,
-    showProductView,
-    setShowProductView,
     searchQuery,
-    priceRange,
+    // priceRange,
     formulaMap,
     BOQTitle,
     setBOQTitle,
@@ -140,7 +139,7 @@ function Boq() {
 
   useEffect(() => {
     if (
-      defaultProduct &&
+      // defaultProduct &&
       selectedPlan !== "Custom" &&
       productData.length > 0 &&
       !isDBPlan
@@ -150,7 +149,7 @@ function Boq() {
       // setDefaultProduct(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedPlan, productData, defaultProduct]);
+  }, [selectedPlan, productData]);
 
   // Toggle profile card visibility
   const toggleProfile = () => {
@@ -338,15 +337,7 @@ function Boq() {
       height: answers.roomHeight,
       flooring: answers.flooringStatus,
       demolishTile: answers.demolishTile,
-      // flooringArea: answers.flooringArea,
-      // flooringType: answers.flooringType,
-      // cabinFlooring: answers.cabinFlooring,
       hvacType: answers.hvacType,
-      // hvacCentralized: answers.hvacCentralized,
-      // partitionArea: answers.partitionArea,
-      // partitionType: answers.partitionType,
-      //  [expandedSubcategory]: answers, // Store answers for the subcategory
-      // [expandedSubcategory]: answers,
     }));
 
     // Hide the modal and reset questions state
@@ -358,14 +349,6 @@ function Boq() {
     ) {
       setSelectedSubCategory(answers.hvacType || null);
     }
-
-    //  setCabinsQuestions(false);
-    // setRunTour(true);
-
-    //  setExpandedSubcategory(expandedSubcategory);
-
-    // Update the total cost or other BOQ data if needed
-    //  updateBOQTotal();
   };
 
   // Filter products based on search query, price range, and category
@@ -676,95 +659,74 @@ function Boq() {
                 onSubmit={handleQuestionSubmit}
               />
             )}
-
-            {!showProductView && (
-              <>
-                <Categories
-                  setSelectedCategory={handleCategorySelection}
-                  setSelectedSubCategory={handleSelectedSubCategory}
-                  handleCategoryClick={handleCategoryClick}
-                />
-                {minimizedView && (
-                  <div>
-                    <ToastContainer />
-                    <AnimatePresence>
-                      {showSelectArea && (
-                        <motion.div
-                          variants={selectAreaAnimation}
-                          initial="initial"
-                          animate="animate"
-                          exit="exit"
-                          className={`fixed inset-0 flex justify-center items-center z-[1000] transition-opacity duration-300 ${
-                            showBackground
-                              ? "bg-black bg-opacity-30"
-                              : "bg-transparent"
-                          }`}
-                          onAnimationComplete={(definition) => {
-                            if (definition === "animate") {
-                              setShowBackground(true); // Only show background after entering animation
-                            }
-                          }}
-                        >
-                          <SelectArea
-                            setShowSelectArea={setShowSelectArea}
-                            image={selectedProductView.image}
-                            selectedAreas={selectedAreas}
-                            setSelectedAreas={setSelectedAreas}
-                            selectedProductView={selectedProductView}
-                            selectedData={selectedData}
-                            categoriesWithTwoLevelCheck={
-                              categoriesWithTwoLevelCheck
-                            }
-                            allAddons={allAddons}
-                            setShowBackground={setShowBackground}
-                            selectedCategory={selectedCategory}
-                            selectedSubCategory={selectedSubCategory}
-                            selectedSubCategory1={selectedSubCategory1}
-                          />
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                    <MainPage
-                      setSelectedSubCategory1={handleSelectedSubCategory1}
-                      userResponses={userResponses}
-                      productsData={productData}
-                    />
-                    <ProductCard
-                      products={groupedProducts}
-                      selectedProductView={selectedProductView}
-                      setShowProductView={setShowProductView}
-                      setSelectedProductView={handleSelectedProductView}
-                      userResponses={userResponses}
-                      showSelectArea={showSelectArea}
-                      setShowSelectArea={setShowSelectArea}
-                    />
-                  </div>
-                )}
-              </>
-            )}
+            {/* {!showProductView && ( */}
+            <>
+              <Categories
+                setSelectedSubCategory={handleSelectedSubCategory}
+                handleCategoryClick={handleCategoryClick}
+                minimizedView={minimizedView}
+              />
+              {minimizedView && (
+                <div>
+                  <ToastContainer />
+                  <AnimatePresence>
+                    {showSelectArea && (
+                      <motion.div
+                        variants={selectAreaAnimation}
+                        initial="initial"
+                        animate="animate"
+                        exit="exit"
+                        className={`fixed inset-0 flex justify-center items-center z-[1000] transition-opacity duration-300 ${
+                          showBackground
+                            ? "bg-black bg-opacity-30"
+                            : "bg-transparent"
+                        }`}
+                        onAnimationComplete={(definition) => {
+                          if (definition === "animate") {
+                            setShowBackground(true); // Only show background after entering animation
+                          }
+                        }}
+                      >
+                        <SelectArea
+                          setShowSelectArea={setShowSelectArea}
+                          image={selectedProductView.image}
+                          selectedAreas={selectedAreas}
+                          setSelectedAreas={setSelectedAreas}
+                          selectedProductView={selectedProductView}
+                          selectedData={selectedData}
+                          // categoriesWithTwoLevelCheck={
+                          //   categoriesWithTwoLevelCheck
+                          // }
+                          allAddons={allAddons}
+                          setShowBackground={setShowBackground}
+                          selectedCategory={selectedCategory}
+                          selectedSubCategory={selectedSubCategory}
+                          selectedSubCategory1={selectedSubCategory1}
+                        />
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                  <MainPage
+                    setSelectedSubCategory1={handleSelectedSubCategory1}
+                    userResponses={userResponses}
+                    productsData={productData}
+                  />
+                  <ProductCard
+                    products={groupedProducts}
+                    selectedProductView={selectedProductView}
+                    // setShowProductView={setShowProductView}
+                    setSelectedProductView={handleSelectedProductView}
+                    userResponses={userResponses}
+                    showSelectArea={showSelectArea}
+                    setShowSelectArea={setShowSelectArea}
+                  />
+                </div>
+              )}
+            </>
+            {/* )} */}
           </>
         )}
       </div>
-
-      {/* {showProductView && ( //Old ProductOverview
-        <div>
-          <ProductOverview
-            selectedProductView={selectedProductView}
-            quantityData={quantityData}
-            areasData={areasData}
-            setShowProductView={setShowProductView}
-            setShowRecommend={setShowRecommend}
-            filteredProducts={filteredProducts}
-          />
-          {showRecommend && (
-            <RecommendComp
-              showRecommend={showRecommend}
-              setShowRecommend={setShowRecommend}
-            />
-          )}
-        </div>
-      )} */}
-      {/* {showProfile && <ProfileCard />} */}
       <AnimatePresence>
         {isOpen && (
           <div ref={profileRef}>

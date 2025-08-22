@@ -4,6 +4,7 @@ import { MdDeleteOutline } from "react-icons/md";
 import { AiTwotoneCheckCircle } from "react-icons/ai";
 import { PiClockCountdown } from "react-icons/pi";
 import { IoCloseCircleOutline } from "react-icons/io5";
+import { baseImageUrl } from "../../utils/HelperConstant";
 
 function DashboardProductCard({
   onClose,
@@ -19,8 +20,8 @@ function DashboardProductCard({
   const [showTextarea, setShowTextarea] = useState(false);
   const { accountHolder } = useApp();
 
-  const baseImageUrl =
-    "https://bwxzfwsoxwtzhjbzbdzs.supabase.co/storage/v1/object/public/addon/";
+  // const baseImageUrl =
+  //   "https://bwxzfwsoxwtzhjbzbdzs.supabase.co/storage/v1/object/public/addon/";
 
   const currentStatus = product?.status;
 

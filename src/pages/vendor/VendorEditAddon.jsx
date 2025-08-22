@@ -6,6 +6,7 @@ import { FaRegQuestionCircle } from "react-icons/fa";
 import { supabase } from "../../services/supabase";
 import { toast } from "react-hot-toast"; //Toaster
 import { AllCatArray, specialArray } from "../../utils/AllCatArray";
+import { baseImageUrl } from "../../utils/HelperConstant";
 
 function VendorEditAddon({
   seteditAddon,
@@ -55,8 +56,8 @@ function VendorEditAddon({
 
   //   const { accountHolder } = useApp();
 
-  const baseImageUrl =
-    "https://bwxzfwsoxwtzhjbzbdzs.supabase.co/storage/v1/object/public/addon/";
+  // const baseImageUrl =
+  //   "https://bwxzfwsoxwtzhjbzbdzs.supabase.co/storage/v1/object/public/addon/";
 
   useEffect(() => {
     const fetchVendorData = async () => {

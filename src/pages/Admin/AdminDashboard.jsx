@@ -41,6 +41,7 @@ import UserCard from "../user/UserCard";
 import UserProfileEdit from "../user/UserProfileEdit";
 import { GoPlus } from "react-icons/go";
 import ClientBoq from "./ClientBoq";
+import { baseImageUrl } from "../../utils/HelperConstant";
 
 function handlesidebarState(state, action) {
   switch (action.type) {
@@ -228,8 +229,8 @@ function AdminDashboard() {
   };
 
   //baseurlforimg
-  const baseImageUrl =
-    "https://bwxzfwsoxwtzhjbzbdzs.supabase.co/storage/v1/object/public/addon/";
+  // const baseImageUrl =
+  //   "https://bwxzfwsoxwtzhjbzbdzs.supabase.co/storage/v1/object/public/addon/";
 
   const { accountHolder } = useApp();
 

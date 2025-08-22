@@ -287,7 +287,7 @@ function Navbar({
     <div>
       {areaWarn && <EnterAreaModal onclose={() => setAreaWarn(false)} />}
       {!isMobile ? (
-        <div className="hidden md:flex justify-around bg-gradient-to-r from-[#23445B] to-[#487BA0] py-4 items-center px-5 overflow-hidden">
+        <div className="hidden md:flex justify-between bg-gradient-to-r from-[#23445B] to-[#487BA0] py-4 items-center px-5 overflow-hidden">
           {/* logo */}
           <button className=" " onClick={() => navigate("/")}>
             <img
@@ -312,7 +312,13 @@ function Navbar({
               <button
                 className="absolute group inline-block right-2 cursor-pointer text-[#FFD43B] border-none hover:text-red-300"
                 // onClick={handleReset}
-                onClick={() => setResetAlert(true)}
+                onClick={() => {
+                  if (totalArea >= MIN_AREA) {
+                    setResetAlert(true);
+                  } else {
+                    handleReset();
+                  }
+                }}
               >
                 <MdOutlineCancel size={30} />
                 <span
@@ -342,7 +348,7 @@ function Navbar({
           </div>
           {error && (
             <div
-              className="error-message text-[#FFD43B] font-medium text-xs mt-1 flex items-center absolute top-1 bg-transparent -translate-x-1/4 bg-gradient-to-r from-[#23445B] to-[#487BA0]"
+              className="error-message text-[#FFD43B] font-medium text-xs mt-1 flex items-center absolute top-1 left-1/2 bg-transparent -translate-x-1/2 bg-gradient-to-r from-[#23445B] to-[#487BA0]"
               aria-live="polite"
             >
               <span className="warning-icon">⚠️</span>

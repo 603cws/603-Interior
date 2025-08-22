@@ -8,6 +8,7 @@ import { toast } from "react-hot-toast";
 import { AllCatArray, specialArray } from "../../utils/AllCatArray";
 import { useRef } from "react";
 import { v4 as uuidv4 } from "uuid";
+import { baseImageUrl } from "../../utils/HelperConstant";
 
 function VendorProductEdit({
   setEditProduct,
@@ -46,8 +47,8 @@ function VendorProductEdit({
 
   const mulitpleimagesFileinputref = useRef(null);
 
-  const baseImageUrl =
-    "https://bwxzfwsoxwtzhjbzbdzs.supabase.co/storage/v1/object/public/addon/";
+  // const baseImageUrl =
+  //   "https://bwxzfwsoxwtzhjbzbdzs.supabase.co/storage/v1/object/public/addon/";
 
   useEffect(() => {
     const fetchVendorData = async () => {

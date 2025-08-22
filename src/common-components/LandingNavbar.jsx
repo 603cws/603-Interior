@@ -7,12 +7,11 @@ function LandingNavbar({ bgColor = false }) {
   const pathname = window.location.pathname;
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  const { setShowProfile, showProfile, isAuthenticated, accountHolder } =
-    useApp();
+  const { isAuthenticated, accountHolder } = useApp();
 
-  const toggleProfile = () => {
-    setShowProfile(!showProfile);
-  };
+  // const toggleProfile = () => {
+  //   setShowProfile(!showProfile);
+  // };
 
   const bgcolor = bgColor ? "bg-[#ccc]" : "bg-white";
   return (
@@ -108,7 +107,7 @@ function LandingNavbar({ bgColor = false }) {
               // disabled={!isadmin}
             >
               <img
-                onClick={toggleProfile}
+                // onClick={toggleProfile}
                 src={accountHolder.profileImage}
                 alt="usericon"
                 className="w-8 md:w-12 h-8 p-1 md:h-12 cursor-pointer rounded-full"

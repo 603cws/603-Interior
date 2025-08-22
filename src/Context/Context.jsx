@@ -13,18 +13,18 @@ const AppContext = createContext();
 
 export const AppProvider = ({ children }) => {
   const session = supabase.storageKey;
-  const categoriesWithModal = ["Flooring", "HVAC"]; // Array of categories that should show the modal/questions when clicked
+  // const categoriesWithModal = ["Flooring", "HVAC"]; // Array of categories that should show the modal/questions when clicked
 
-  const categoriesWithTwoLevelCheck = [
-    "Flooring",
-    "Partitions / Ceilings",
-    "HVAC",
-    "Lighting",
-  ]; //Array of Categories where save data works on dependent subcategories
+  // const categoriesWithTwoLevelCheck = [
+  //   "Flooring",
+  //   "Partitions / Ceilings",
+  //   "HVAC",
+  //   "Lighting",
+  // ]; //Array of Categories where save data works on dependent subcategories
 
   // const naviagte = useNavigate();
   const searchQuery = "";
-  const priceRange = [1, 15000000];
+  // const priceRange = [1, 15000000];
 
   const [totalArea, setTotalArea] = useState("");
   const [inputValue, setInputValue] = useState("");
@@ -51,7 +51,7 @@ export const AppProvider = ({ children }) => {
     demolishTile: "no",
     hvacType: "Centralized",
   });
-  const [showProfile, setShowProfile] = useState(false);
+  // const [showProfile, setShowProfile] = useState(false);
   const [accountHolder, setAccountHolder] = useState({
     userId: "",
     email: "",
@@ -67,23 +67,19 @@ export const AppProvider = ({ children }) => {
   const [selectedPlan, setSelectedPlan] = useState(
     sessionStorage.getItem("selectedPlan") || null
   );
-  // const [layoutImage, setLayoutImage] = useState(null);
 
   const prevSelectedData = useRef(selectedData); // Ref to store previous selectedData
   const prevCategories = useRef(categories); // Ref to store previous categories
   const prevSubCat1 = useRef(subCat1); // Ref to store previous subCat1
-  // const layoutImgRef = useRef(null);
-  // auth
+
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isAuthLoading, setIsAuthLoading] = useState(true);
-  const [defaultProduct, setDefaultProduct] = useState(true);
+  // const [defaultProduct, setDefaultProduct] = useState(true);
 
   const [productData, setProductData] = useState([]);
   const [areasData, setAreasData] = useState([]);
   const [quantityData, setQuantityData] = useState([]);
 
-  const [minimizedView, setMinimizedView] = useState(false);
-  const [showProductView, setShowProductView] = useState(false);
   const [showRecommend, setShowRecommend] = useState(false);
   const [boqTotal, setBoqTotal] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
@@ -780,12 +776,12 @@ export const AppProvider = ({ children }) => {
         setUserId,
         selectedAddons,
         setSelectedAddons,
-        categoriesWithModal,
-        categoriesWithTwoLevelCheck,
+        // categoriesWithModal,
+        // categoriesWithTwoLevelCheck,
         userResponses,
         setUserResponses,
-        showProfile,
-        setShowProfile,
+        // showProfile,
+        // setShowProfile,
         isAuthenticated,
         setIsAuthenticated,
         isAuthLoading,
@@ -793,8 +789,8 @@ export const AppProvider = ({ children }) => {
         setAccountHolder,
         selectedPlan,
         setSelectedPlan,
-        defaultProduct,
-        setDefaultProduct,
+        // defaultProduct,
+        // setDefaultProduct,
         setIsAuthLoading,
         setLoading,
         loading,
@@ -811,14 +807,10 @@ export const AppProvider = ({ children }) => {
         handelSelectedData,
         selectedProductView,
         setSelectedProductView,
-        minimizedView,
-        setMinimizedView,
-        showProductView,
-        setShowProductView,
         showRecommend,
         setShowRecommend,
         searchQuery,
-        priceRange,
+        // priceRange,
         boqTotal,
         setBoqTotal,
         isMobile,

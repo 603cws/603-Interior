@@ -31,7 +31,7 @@ function ProductCard({
   products,
   selectedProductView,
   setSelectedProductView,
-  setShowProductView,
+  // setShowProductView,
   userResponses,
   setShowSelectArea,
 }) {
@@ -189,7 +189,7 @@ function ProductCard({
 
   const filterSelectedProduct = selectedData.filter((data) => {
     return (
-      data.category === selectedCategory.category &&
+      data.category === selectedCategory?.category &&
       data.subcategory === selectedSubCategory &&
       data.subcategory1 === selectedSubCategory1
     );
@@ -363,7 +363,7 @@ function ProductCard({
                     onLoad={() => handleImageLoad(variant.id)}
                     onClick={() => {
                       setSelectedProductView(variant);
-                      setShowProductView(true);
+                      // setShowProductView(true);
                       navigate(`${variant.id}`); //new ProductOverview
                     }}
                   />
@@ -399,7 +399,7 @@ function ProductCard({
                     className="text-sm font-medium text-gray-800 capitalize"
                     onClick={() => {
                       setSelectedProductView(variant);
-                      setShowProductView(true);
+                      // setShowProductView(true);
                       navigate(`${variant.id}`); //new ProductOverview
                     }}
                   >

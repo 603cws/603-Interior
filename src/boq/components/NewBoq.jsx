@@ -141,148 +141,149 @@ function NewBoq({ onConfirm, onCancel }) {
   return (
     <Transition appear show={true} as={Fragment}>
       <Dialog as="div" className="relative z-40" onClose={() => {}}>
-        <div className="fixed inset-0 bg-black bg-opacity-50" />
+        {/* <div className="fixed inset-0 bg-black bg-opacity-50" /> */}
 
-        <div className="fixed inset-0 flex items-center justify-center">
-          <Dialog.Panel className="bg-[#1A3A36] rounded-3xl shadow-lg max-w-sm md:max-w-lg w-full p-5 text-white font-Poppins">
-            <Dialog.Title className="text-2xl font-semibold text-center">
-              New or Load BOQ
-            </Dialog.Title>
+        <div className="fixed inset-0 flex items-center justify-center bg-[#000]/30">
+          <div className="shadow-lg max-w-sm md:max-w-xl w-full rounded-lg p-4 bg-gradient-to-br from-[#334A78] to-[#68B2DC]">
+            <Dialog.Panel className="bg-[#fff] text-[#000] rounded font-Poppins p-3">
+              <Dialog.Title className="text-2xl font-semibold text-center">
+                New or Load BOQ
+              </Dialog.Title>
 
-            <div className="mt-4 space-y-4">
-              {/* Mode Selection */}
-              <div className="flex justify-center gap-6">
-                <label
-                  className={`flex items-center gap-2 cursor-pointer ${
-                    disabledNewBoq ? "opacity-50 cursor-not-allowed" : ""
-                  }`}
-                >
-                  <input
-                    type="radio"
-                    value="new"
-                    checked={boqMode === "new"}
-                    disabled={disabledNewBoq}
-                    onChange={() => {
-                      if (!disabledNewBoq) setBoqMode("new");
-                    }}
-                  />
-                  <span>New BOQ</span>
-                </label>
-
-                {boqList?.length > 0 && (
-                  <label className="flex items-center gap-2 cursor-pointer">
+              <div className="mt-4 space-y-4">
+                {/* Mode Selection */}
+                <div className="flex justify-center gap-6">
+                  <label
+                    className={`flex items-center gap-2 cursor-pointer ${
+                      disabledNewBoq ? "opacity-50 cursor-not-allowed" : ""
+                    }`}
+                  >
                     <input
                       type="radio"
-                      value="existing"
-                      checked={boqMode === "existing"}
-                      onChange={() => setBoqMode("existing")}
+                      value="new"
+                      checked={boqMode === "new"}
+                      disabled={disabledNewBoq}
+                      onChange={() => {
+                        if (!disabledNewBoq) setBoqMode("new");
+                      }}
                     />
-                    <span>Load Existing</span>
+                    <span>New BOQ</span>
                   </label>
+
+                  {boqList?.length > 0 && (
+                    <label className="flex items-center gap-2 cursor-pointer">
+                      <input
+                        type="radio"
+                        value="existing"
+                        checked={boqMode === "existing"}
+                        onChange={() => setBoqMode("existing")}
+                      />
+                      <span>Load Existing</span>
+                    </label>
+                  )}
+                </div>
+
+                {/* New BOQ Input / Draft options */}
+                {boqMode === "new" && (
+                  <div className="text-sm bg-[#f9f9f9] p-3 rounded border border-[#334A78]">
+                    {draftBoq ? (
+                      <div className="space-y-2">
+                        <div>
+                          You have an existing <strong>Draft BOQ</strong> saved
+                          on {new Date(draftBoq.created_at).toLocaleString()}.
+                        </div>
+
+                        <div className="flex flex-col gap-2 text-black">
+                          <label className="flex items-center gap-2">
+                            <input
+                              type="radio"
+                              name="newBoqAction"
+                              value="continue"
+                              checked={newBoqAction === "continue"}
+                              onChange={() => setNewBoqAction("continue")}
+                            />
+                            <span>Continue Draft</span>
+                          </label>
+
+                          <label className="flex items-center gap-2">
+                            <input
+                              type="radio"
+                              name="newBoqAction"
+                              value="discard"
+                              checked={newBoqAction === "discard"}
+                              onChange={() => setNewBoqAction("discard")}
+                            />
+                            <span>Create New Draft (Discard previous)</span>
+                          </label>
+                        </div>
+
+                        <div className="text-xs">
+                          Tip: you can rename or delete the draft later.
+                        </div>
+                      </div>
+                    ) : (
+                      <div>
+                        <div>
+                          A new BOQ will be created and saved as{" "}
+                          <strong>"Draft BOQ"</strong>. You can rename it later.
+                        </div>
+                        {isAtNonDraftLimit && (
+                          <div className="mt-2 text-xs text-yellow-200">
+                            Note: you've reached the maximum of {boqLimit} saved
+                            BOQs. You can still create a Draft BOQ, but
+                            converting (saving) it as a named/saved BOQ may
+                            require deleting or overriding an existing BOQ.
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {/* Existing BOQ Selector */}
+                {boqMode === "existing" && boqList?.length > 0 && (
+                  <div>
+                    <label className="block lg:text-lg font-medium">
+                      Select BOQ
+                    </label>
+                    <select
+                      value={selectedBoq}
+                      onChange={(e) => setSelectedBoq(e.target.value)}
+                      className="w-full mt-2 p-3 border border-gray-300 rounded text-base focus:outline-none focus:ring-2 focus:ring-[#334A78] text-black"
+                    >
+                      <option disabled value="">
+                        -- Select BOQ --
+                      </option>
+                      {boqList.map((boq) => (
+                        <option key={boq.id} value={boq.id}>
+                          {boq.boqTitle} —{" "}
+                          {new Date(boq.created_at).toLocaleDateString()}
+                          {boq.isDraft ? " (Draft)" : ""}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
                 )}
               </div>
 
-              {/* New BOQ Input / Draft options */}
-              {boqMode === "new" && (
-                <div className="text-sm bg-[#2a4f4a] p-3 rounded-lg border border-[#FFD500]">
-                  {draftBoq ? (
-                    <div className="space-y-2">
-                      <div>
-                        You have an existing <strong>Draft BOQ</strong> saved on{" "}
-                        {new Date(draftBoq.created_at).toLocaleString()}.
-                      </div>
+              <div className="mt-6 flex justify-center gap-3">
+                <button
+                  onClick={handleConfirm}
+                  disabled={
+                    (boqMode === "existing" && !selectedBoq) ||
+                    (boqMode === "new" && draftBoq && !newBoqAction)
+                  }
+                  className={`px-5 py-2 text-base border-2 border-black border-r-4 border-b-4 ${
+                    (boqMode === "existing" && !selectedBoq) ||
+                    (boqMode === "new" && draftBoq && !newBoqAction)
+                      ? "bg-gray-400 text-gray-700 cursor-not-allowed"
+                      : "bg-[#334A78] text-[#fff]"
+                  }`}
+                >
+                  Continue
+                </button>
 
-                      <div className="flex flex-col gap-2 text-black">
-                        <label className="flex items-center gap-2">
-                          <input
-                            type="radio"
-                            name="newBoqAction"
-                            value="continue"
-                            checked={newBoqAction === "continue"}
-                            onChange={() => setNewBoqAction("continue")}
-                          />
-                          <span>Continue Draft</span>
-                        </label>
-
-                        <label className="flex items-center gap-2">
-                          <input
-                            type="radio"
-                            name="newBoqAction"
-                            value="discard"
-                            checked={newBoqAction === "discard"}
-                            onChange={() => setNewBoqAction("discard")}
-                          />
-                          <span>Create New Draft (Discard previous)</span>
-                        </label>
-                      </div>
-
-                      <div className="text-xs text-gray-200">
-                        Tip: you can rename or delete the draft later.
-                      </div>
-                    </div>
-                  ) : (
-                    <div>
-                      <div>
-                        A new BOQ will be created and saved as{" "}
-                        <strong>"Draft BOQ"</strong>. You can rename it later.
-                      </div>
-                      {isAtNonDraftLimit && (
-                        <div className="mt-2 text-xs text-yellow-200">
-                          Note: you've reached the maximum of {boqLimit} saved
-                          BOQs. You can still create a Draft BOQ, but converting
-                          (saving) it as a named/saved BOQ may require deleting
-                          or overriding an existing BOQ.
-                        </div>
-                      )}
-                    </div>
-                  )}
-                </div>
-              )}
-
-              {/* Existing BOQ Selector */}
-              {boqMode === "existing" && boqList?.length > 0 && (
-                <div>
-                  <label className="block lg:text-lg font-medium">
-                    Select BOQ
-                  </label>
-                  <select
-                    value={selectedBoq}
-                    onChange={(e) => setSelectedBoq(e.target.value)}
-                    className="w-full mt-2 p-3 border border-gray-300 rounded text-base focus:outline-none focus:ring-2 focus:ring-[#FFD500] text-black"
-                  >
-                    <option disabled value="">
-                      -- Select BOQ --
-                    </option>
-                    {boqList.map((boq) => (
-                      <option key={boq.id} value={boq.id}>
-                        {boq.boqTitle} —{" "}
-                        {new Date(boq.created_at).toLocaleDateString()}
-                        {boq.isDraft ? " (Draft)" : ""}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              )}
-            </div>
-
-            <div className="mt-6 flex justify-center gap-3">
-              <button
-                onClick={handleConfirm}
-                disabled={
-                  (boqMode === "existing" && !selectedBoq) ||
-                  (boqMode === "new" && draftBoq && !newBoqAction)
-                }
-                className={`px-5 py-2 text-base border-2 border-black border-r-4 border-b-4 ${
-                  (boqMode === "existing" && !selectedBoq) ||
-                  (boqMode === "new" && draftBoq && !newBoqAction)
-                    ? "bg-gray-400 text-gray-700 cursor-not-allowed"
-                    : "bg-[#FFD500] text-black"
-                }`}
-              >
-                Continue
-              </button>
-
-              {/* <button
+                {/* <button
                 onClick={() => {
                   if (onCancel) onCancel();
                 }}
@@ -290,8 +291,9 @@ function NewBoq({ onConfirm, onCancel }) {
               >
                 Cancel
               </button> */}
-            </div>
-          </Dialog.Panel>
+              </div>
+            </Dialog.Panel>
+          </div>
         </div>
       </Dialog>
     </Transition>

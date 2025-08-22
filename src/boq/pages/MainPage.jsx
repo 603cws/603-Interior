@@ -57,7 +57,7 @@ const MainPage = ({ userResponses, setSelectedSubCategory1, productsData }) => {
   ]);
 
   const selectedSubCategories =
-    subCat1 && subCat1[selectedCategory.category]
+    subCat1 && subCat1[selectedCategory?.category]
       ? selectedCategory.category === "HVAC"
         ? userResponses.hvacType === "Centralized"
           ? subCat1[selectedCategory.category].filter(
@@ -74,6 +74,14 @@ const MainPage = ({ userResponses, setSelectedSubCategory1, productsData }) => {
         : subCat1[selectedCategory.category]
       : [];
 
+  if (!selectedCategory) {
+    return (
+      <p className="text-[#ccc] font-semibold font-Poppins px-6">
+        Loading data....
+      </p>
+    );
+  }
+
   return (
     <motion.div
       key={selectedCategory?.category + selectedSubCategory} // Force full re-render when switching
@@ -84,7 +92,7 @@ const MainPage = ({ userResponses, setSelectedSubCategory1, productsData }) => {
       className="main-page flex flex-row gap-4 items-center justify-start relative overflow-auto md:px-6 font-Poppins w-4/5 md:w-full scrollbar-hide my-3"
     >
       <AnimatePresence>
-        {selectedSubCategories.length > 0 ? (
+        {selectedSubCategories && selectedSubCategories?.length > 0 ? (
           selectedSubCategories.map((subCategory1) => (
             <motion.div
               key={subCategory1} // Fix: Using subCategory1 as key

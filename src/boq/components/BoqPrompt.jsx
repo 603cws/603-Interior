@@ -221,12 +221,14 @@ function BoqPrompt({ onConfirm, onCancel, isProfileCard, setIsProfileCard }) {
                   </label>
                   <input
                     type="text"
-                    placeholder="Enter BOQ Name"
+                    placeholder="Enter BOQ Name (max 20 characters)"
                     value={boqTitle}
                     onKeyDown={handleEnter}
                     onChange={(e) => setBoqTitle(e.target.value)}
                     className="w-full mt-2 p-3 border border-gray-300 rounded text-base focus:outline-none focus:ring-2 focus:ring-[#FFD500] text-black"
                     disabled={!!selectedBoq}
+                    minLength={5}
+                    maxLength={20}
                   />
                 </div>
               )}

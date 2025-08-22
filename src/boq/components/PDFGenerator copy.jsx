@@ -1,6 +1,7 @@
 import { jsPDF } from "jspdf";
 import "jspdf-autotable";
 // import { supabase } from "../../services/supabase";
+import { baseImageUrl } from "../../utils/HelperConstant";
 
 const PDFGenerator = {
   generatePDF: async (
@@ -15,8 +16,8 @@ const PDFGenerator = {
   ) => {
     const areas = areasData[0];
     const doc = new jsPDF();
-    const baseImageUrl =
-      "https://bwxzfwsoxwtzhjbzbdzs.supabase.co/storage/v1/object/public/addon/";
+    // const baseImageUrl =
+    //   "https://bwxzfwsoxwtzhjbzbdzs.supabase.co/storage/v1/object/public/addon/";
 
     const logoUrl = "/logo/workved-interior.png";
 
