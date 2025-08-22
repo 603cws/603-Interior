@@ -419,7 +419,7 @@ function Login() {
   return (
     <>
       {resetPass ? (
-        <div className="flex flex-col justify-center items-center gap-5 max-h-screen h-screen w-full">
+        <div className="flex flex-col justify-center items-center gap-5 lg:max-h-screen h-screen w-full">
           <div className="w-full sm:w-1/2 px-5 flex flex-col justify-center items-center gap-5">
             <h1 className="capitalize text-3xl font-bold text-white text-center ">
               Reset Password
@@ -502,7 +502,8 @@ function Login() {
             <div className="img flex-1 md:block hidden relative">
               {/* Skeleton placeholder */}
               {!imageLoaded && (
-                <div className="xl:max-w-lg sm:max-w-sm w-full h-[450px] bg-gray-300 rounded-2xl animate-pulse" />
+                <div className=" w-full h-full bg-gray-300 rounded-2xl animate-pulse" />
+                // <div className="xl:max-w-lg sm:max-w-sm w-full h-[450px] bg-gray-300 rounded-2xl animate-pulse" />
               )}
 
               {/* Image with fade-in on load */}
@@ -543,7 +544,7 @@ function Login() {
                     ? "Create Account"
                     : "Welcome back!"}
                 </h1>
-                <p className="capitalize text-[#fff] md:text-[#000] font-semibold text-center my-2">
+                <p className="capitalize text-[#fff] md:text-[#000] text-sm font-semibold text-center my-2">
                   {isForgotPassword
                     ? "No worries, we'll send you reset instructions"
                     : isSignUp

@@ -10,7 +10,7 @@ function Addon({ imagepath, product }) {
       <div className="relative ">
         <div className="flex justify-center">
           <img
-            className=" w-[240px] h-24 lg:h-48"
+            className=" w-[240px] h-24 lg:h-48 object-contain"
             src={`${baseImageUrl}/${imagepath}`}
             alt={imagepath}
           />
@@ -20,7 +20,7 @@ function Addon({ imagepath, product }) {
             setSelectedProductView({});
             navigate(`/boq/${product?.id}`);
           }}
-          className="flex justify-self-center text-black border-[#212B36]  text-xs  border px-8 py-2"
+          className="flex justify-self-center text-black border-[#212B36]  text-xs  border px-8 py-2 hover:bg-[#334A78] hover:text-white"
         >
           View
         </button>

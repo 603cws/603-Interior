@@ -4,7 +4,7 @@ import { supabase } from "../../services/supabase";
 import { useEffect, useState } from "react";
 import Spinner from "../../common-components/Spinner";
 
-function RecommendComp({ setShowRecommend, currentProduct }) {
+function RecommendComp({ setShowRecommend, currentProduct, manufacturer }) {
   // based on the venor id gell all the products to display
   const [recommendedProducts, setRecommededProducts] = useState([]);
   const [isloading, setIsLoading] = useState(true);
@@ -35,7 +35,7 @@ function RecommendComp({ setShowRecommend, currentProduct }) {
   }, [currentProduct]);
 
   return (
-    <div className="z-50  md:z-10 fixed   flex h-[calc(100vh-115px)]  md:w-1/2 md:ml-auto  top-[115px] lg:absolute right-0 border border-[#ccc] ">
+    <div className="z-50  fixed   flex h-[calc(100vh-115px)]  md:w-1/2 md:ml-auto  top-[115px]  right-0 border border-[#ccc] ">
       {/* <div className="z-50  md:z-10 fixed   flex h-[calc(100vh-115px)]  md:w-1/2 md:ml-auto lg:absolute top-[115px]  right-0 border border-[#ccc] "> */}
       {/* first div of grid */}
       <div className="bg-[#D9D9D9] opacity-70 border rounded-l-sm  overflow-hidden">
@@ -55,7 +55,7 @@ function RecommendComp({ setShowRecommend, currentProduct }) {
         {/* button */}
         <div className="flex justify-center items-center py-7">
           <div className="bg-[#334A78] text-white border-2 border-[#334A78] rounded-md text-sm px-10 py-2">
-            Recommendation
+            {`products From ${manufacturer}`}
           </div>
         </div>
         {/* recomended images */}

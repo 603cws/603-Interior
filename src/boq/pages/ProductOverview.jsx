@@ -45,6 +45,7 @@ function ProductOverview() {
   const [isOpen, setIsOpen] = useState(false);
   const profileRef = useRef(null);
   const iconRef = useRef(null); //used to close Profile Card when clicked outside of Profile Card area
+  const recommendationref = useRef(null);
   const [products, setProducts] = useState([]);
   const [isProfileCard, setIsProfileCard] = useState(false);
   const [showBoqPrompt, setShowBoqPrompt] = useState(false);
@@ -100,6 +101,25 @@ function ProductOverview() {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [isOpen]);
+
+  // close recommendation
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (recommendationref.current?.contains(event.target)) {
+        return; // If clicked inside, do nothing
+      }
+
+      setShowRecommend(false); // Otherwise, close it
+    };
+
+    if (showRecommend) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [showRecommend]);
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -403,7 +423,7 @@ function ProductOverview() {
       >
         {/* grid component 1 */}
         <div className="flex flex-col md:gap-0">
-          <TbArrowBackUp
+          {/* <TbArrowBackUp
             size={30}
             className="cursor-pointer"
             onClick={() => {
@@ -417,20 +437,43 @@ function ProductOverview() {
               // navigate(-1);
               navigate("/boq", { state: { minimizedView: true } });
             }}
-          />
+          /> */}
 
-          <div className="flex mx-10 items-center text-[#334A78] text-sm mt-4 mb-4 md:mb-0">
-            <span>{cat?.category}</span>
-            <MdOutlineKeyboardArrowRight
-              size={15}
-              style={{ color: "#334A78" }}
-            />
-            <span>{subCat}</span>
-            <MdOutlineKeyboardArrowRight
-              size={15}
-              style={{ color: "#334A78" }}
-            />
-            <span>{subCat1}</span>
+          <div className="flex lg:mx-10  items-center text-[#334A78]  mt-1 ">
+            <div
+              onClick={() => {
+                // setShowProductView(false);
+                // setMinimizedView(true);
+                // navigate("/boq");
+                //Don't change the below setSelectedCategory, setSelectedSubCategory, setSelectedSubCategory1 => Sunny
+                setSelectedCategory(cat);
+                setSelectedSubCategory(subCat);
+                setSelectedSubCategory1(subCat1);
+                // navigate(-1);
+                navigate("/boq", { state: { minimizedView: true } });
+              }}
+              className="flex cursor-pointer"
+            >
+              <span>{cat?.category}</span>
+              <div className="flex items-center ">
+                <span>
+                  <MdOutlineKeyboardArrowRight
+                    size={20}
+                    style={{ color: "#334A78" }}
+                  />
+                </span>
+              </div>
+              <span>{subCat}</span>
+              <div className="flex items-center">
+                <span>
+                  <MdOutlineKeyboardArrowRight
+                    size={20}
+                    style={{ color: "#334A78" }}
+                  />
+                </span>
+              </div>
+              <span>{subCat1}</span>
+            </div>
 
             <button
               //   onClick={() => setRequestTour(true)}
@@ -488,10 +531,10 @@ function ProductOverview() {
           {/* product info */}
           <div className="flex flex-col justify-center">
             <h2 className="text-sm lg:text-xl font-bold">{product?.title}</h2>
-            <p className="text-xs font-medium w-3/4 text-[#334A78] ">
+            <p className=" font-medium lg:w-3/4 text-[#334A78] lg:mb-2">
               {product?.details}
             </p>
-            <p className="text-sm md:text-base font-semibold">
+            <p className="text-sm md:text-base font-semibold lg:mb-2">
               ₹ {product?.price?.toLocaleString("en-IN")}{" "}
               <span className="text-sm">/ Per Unit</span>
             </p>
@@ -508,12 +551,12 @@ function ProductOverview() {
             {details.quantity > 0 && (
               <p className="text-md font-medium text-[#334A78] mb-1 lg:mb-3">
                 Total Quantity:{" "}
-                <span className="border-[1px] py-1 border-[#334A78] text-[#1a1b1c] rounded-xl px-2 text-sm">
+                <span className="border-[1px] py-1 border-[#334A78] text-[#1a1b1c] rounded-md px-2 text-sm">
                   {details.quantity.toLocaleString("en-IN")}
                 </span>{" "}
               </p>
             )}
-            {details.area > 0 && (
+            {details?.area > 0 && (
               <p className="text-xs lg:text-base font-medium text-[#334A78] mb-1 lg:mb-3">
                 Total Area:{" "}
                 <span className="border-[1px] py-1 border-[#334A78] text-[#1a1b1c] rounded-xl px-2 text-xs lg:text-sm">
@@ -635,11 +678,14 @@ function ProductOverview() {
       </AnimatePresence>
 
       {showRecommend && ( //new ProductOverview
-        <RecommendComp
-          showRecommend={showRecommend}
-          setShowRecommend={setShowRecommend}
-          currentProduct={product}
-        />
+        <div ref={recommendationref}>
+          <RecommendComp
+            showRecommend={showRecommend}
+            setShowRecommend={setShowRecommend}
+            currentProduct={product}
+            manufacturer={product?.manufacturer}
+          />
+        </div>
       )}
 
       <AnimatePresence>
