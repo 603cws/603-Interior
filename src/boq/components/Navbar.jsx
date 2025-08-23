@@ -86,6 +86,7 @@ function Navbar({
     setBOQID,
     setCurrentLayoutID,
     quantityData,
+    setIsSaveBOQ,
   } = useApp();
 
   // const totalArea = currentLayoutData.totalArea;
@@ -981,7 +982,7 @@ function Navbar({
           />
         </button>
         {/* button for generate boq */}
-        <div className="pr-2 flex gap-3 items-center">
+        <div className="flex gap-3 items-center">
           {BOQTitle && (
             <h1 className="hidden sm:block text-white font-semibold text-sm pr-3">
               {BOQTitle.length > 20 ? BOQTitle.slice(0, 20) + "..." : BOQTitle}
@@ -1024,7 +1025,7 @@ function Navbar({
       </div>
       {isMobile ? (
         selectedPlan ? (
-          <div className="bg-[#212B36] py-1 flex justify-around items-center px-5 relative">
+          <div className="bg-[#212B36] py-1 flex justify-between items-center px-5 relative">
             {/* <div className=" flex items-center">
           <button
             className="bg-[#FFF] text-xs py-2 px-5 text-black rounded-full border-solid border-[1px] border-black"
@@ -1033,7 +1034,7 @@ function Navbar({
             Layout
           </button>
         </div> */}
-            <div className="w-10/12 mx-auto  py-2.5">
+            <div className="w-10/12  py-2.5">
               <div className="relative h-5 bg-[#385682] rounded-sm">
                 <div
                   className="absolute h-full bg-[#85AED2] rounded-sm"
@@ -1096,6 +1097,7 @@ function Navbar({
                         onClick={() => {
                           setShowBoqPrompt(true);
                           setIsProfileCard(false);
+                          setIsSaveBOQ(true);
                         }}
                         // className="bg-white text-xs py-2 px-3 text-black rounded-l-full"
                       >
@@ -1199,14 +1201,12 @@ function Navbar({
                 style={{ left: `${progress}%`, width: "10px", height: "18px" }}
               ></div>
               <div
-                className={`absolute -top-full -translate-y-3/4 bg-[#f4f4f4] text-black text-[10px] px-3 py-1 rounded-md ${
-                  progress >= 90 ? "animate-bounce" : "animate-none"
-                }`}
+                className={`absolute -top-full -translate-y-3/4 bg-[#f4f4f4] text-black text-[10px] px-3 py-1 rounded-md`}
                 style={{ left: `${progress - 3}%` }}
               >
                 {" "}
                 <span className="absolute left-1/2 -translate-x-1/2 -bottom-1 w-0 h-0 border-l-4 border-r-4 border-t-4 border-l-transparent border-r-transparent border-t-white"></span>
-                {`${progress} %`}
+                {`${progress}%`}
               </div>
             </div>
             {/* Progress Label */}

@@ -137,19 +137,19 @@ function Boq() {
     }
   }, [selectedPlan]);
 
-  useEffect(() => {
-    if (
-      // defaultProduct &&
-      selectedPlan !== "Custom" &&
-      productData.length > 0 &&
-      !isDBPlan
-    ) {
-      // autoSelectPlanProducts(productData, subCategories);
-      autoSelectPlanProducts(productData, categories);
-      // setDefaultProduct(false);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedPlan, productData]);
+  // useEffect(() => {
+  //   if (
+  //     // defaultProduct &&
+  //     selectedPlan !== "Custom" &&
+  //     productData.length > 0 &&
+  //     !isDBPlan
+  //   ) {
+  //     // autoSelectPlanProducts(productData, subCategories);
+  //     autoSelectPlanProducts(productData, categories);
+  //     // setDefaultProduct(false);
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, []);
 
   // Toggle profile card visibility
   const toggleProfile = () => {
@@ -219,7 +219,7 @@ function Boq() {
     return total;
   };
 
-  const autoSelectPlanProducts = (products, categories) => {
+  const autoSelectPlanProducts = (products, categories, selectedPlan) => {
     if (!selectedPlan || !products.length || !categories.length) return;
 
     const selectedProducts = [];
@@ -642,15 +642,20 @@ function Boq() {
         setIsProfileCard={setIsProfileCard}
         setIsDBPlan={setIsDBPlan}
       />
-      {showNewBoqPopup && !BOQTitle && (
+      {/* {showNewBoqPopup && !BOQTitle && (
         <NewBoq
           onConfirm={handleConfirm}
           onCancel={() => setShowNewBoqPopup(false)}
         />
-      )}
-      <div className="px-2 lg:px-5">
+      )} */}
+      <div className="px-2 md:px-10">
         {!selectedPlan ? (
-          <Plans />
+          <Plans
+            onConfirm={handleConfirm}
+            setShowNewBoqPopup={setShowNewBoqPopup}
+            showNewBoqPopup={showNewBoqPopup}
+            autoSelectPlanProducts={autoSelectPlanProducts}
+          />
         ) : (
           <>
             {selectedPlan === "Custom" && questionPopup && (
@@ -741,6 +746,7 @@ function Boq() {
               existingBoqs={existingBoqs}
               setIsProfileCard={setIsProfileCard}
               setIsDBPlan={setIsDBPlan}
+              setShowNewBoqPopup={setShowNewBoqPopup}
             />
           </div>
         )}

@@ -117,6 +117,11 @@ export const AppProvider = ({ children }) => {
   const [carttotalPrice, setCartTotalPrice] = useState(0);
   const [showLoginPopup, setShowLoginPopup] = useState(false);
   const [selectedClient, setSelectedClient] = useState(null);
+  const [isSaveBOQ, setIsSaveBOQ] = useState(true);
+
+  const handleBOQTitleChange = (title) => {
+    if (isSaveBOQ) setBOQTitle(title);
+  };
 
   const fetchFormulas = async () => {
     setFormulasLoading(true);
@@ -847,12 +852,13 @@ export const AppProvider = ({ children }) => {
         formulaMap,
         formulasLoading,
         BOQTitle,
-        setBOQTitle,
+        setBOQTitle: handleBOQTitleChange,
         BOQID,
         setBOQID,
         refetchFormulas: fetchFormulas,
         selectedClient,
         setSelectedClient,
+        setIsSaveBOQ,
       }}
     >
       {children}

@@ -198,7 +198,7 @@ const QnaPopup = ({ onClose, onSubmit }) => {
   return (
     <div className=" fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
       <div
-        className={`bg-gradient-to-br from-[#334A78] to-[#68B2DC] p-5 md:w-3/5 w-full md:h-1/2 rounded-3xl animate__animated ${animationClass}`}
+        className={`bg-gradient-to-br from-[#334A78] to-[#68B2DC] p-5 md:w-11/12 lg:w-3/5 w-full md:h-1/2 rounded-3xl animate__animated ${animationClass} mx-2`}
       >
         <div className="bg-[#ffd500] w-full h-full p-0.5 rounded-2xl">
           <div
@@ -214,7 +214,7 @@ const QnaPopup = ({ onClose, onSubmit }) => {
               <img
                 src={sideImage}
                 alt=""
-                className="h-full w-full object-contain"
+                className="h-60 md:h-full w-full object-contain"
               />
             </div>
 

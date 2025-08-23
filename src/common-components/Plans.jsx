@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useApp } from "../Context/Context";
 import { motion } from "framer-motion";
 import { HiCheckBadge } from "react-icons/hi2";
 import toast from "react-hot-toast";
+import NewBoq from "../boq/components/NewBoq";
 
 const plansData = [
   {
@@ -74,17 +75,25 @@ function getGridTemplateColumns(hoveredId) {
   }
 }
 
-function Plans() {
-  const { setSelectedPlan } = useApp();
+function Plans({
+  autoSelectPlanProducts,
+  onConfirm,
+  showNewBoqPopup,
+  setShowNewBoqPopup,
+}) {
+  const { setSelectedPlan, productData, categories, BOQTitle, setIsSaveBOQ } =
+    useApp();
 
   // Hovered plan state. 0 = first plan expanded by default.
   const [hoveredPlan, setHoveredPlan] = useState(1);
   const [imageLoaded, setImageLoaded] = useState(false);
+  setIsSaveBOQ(true);
 
-  const handlePlanSelect = (planKey) => {
+  const handlePlanSelect = async (planKey) => {
     setSelectedPlan(planKey);
     sessionStorage.setItem("selectedPlan", planKey);
     toast.success(`${planKey} plan selected!`);
+    await autoSelectPlanProducts(productData, categories, planKey);
   };
 
   return (
@@ -159,7 +168,7 @@ function Plans() {
 
                     <div className="flex-1 px-5 xl:py-7 relative">
                       {!imageLoaded && (
-                        <div className="w-full h-52 xl:h-full rounded-3xl bg-gray-300 animate-pulse" />
+                        <div className="w-full h-52 xl:h-full rounded-3xl bg-gray-300" />
                       )}
 
                       <motion.img
@@ -258,6 +267,12 @@ function Plans() {
           );
         })}
       </div>
+      {showNewBoqPopup && !BOQTitle && (
+        <NewBoq
+          onConfirm={onConfirm}
+          onCancel={() => setShowNewBoqPopup(false)}
+        />
+      )}
     </div>
   );
 }

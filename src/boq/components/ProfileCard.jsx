@@ -27,6 +27,7 @@ function ProfileCard({
   setShowBoqPrompt,
   setIsProfileCard,
   setIsDBPlan,
+  setShowNewBoqPopup,
 }) {
   const logout = useLogout();
   const {
@@ -36,6 +37,8 @@ function ProfileCard({
     setProgress,
     setBoqTotal,
     setSelectedData,
+    setBOQTitle,
+    setIsSaveBOQ,
   } = useApp();
   const profileRef = useRef(null);
   const [showBookAppointment, setShowBookAppointment] = useState(false);
@@ -173,6 +176,8 @@ function ProfileCard({
                   <div
                     className="flex items-center mx-4 gap-3 hover:bg-[#E5F4FF] hover:cursor-pointer hover:rounded-lg pl-2 py-1.5"
                     onClick={() => {
+                      setBOQTitle("");
+                      setIsSaveBOQ(false);
                       navigate("/boq");
                       // setSelectedPlan(null);
                       setIsOpen(false);
@@ -180,16 +185,17 @@ function ProfileCard({
                       // localStorage.removeItem("selectedData");
                       // setBoqTotal(0);
                       setIsDBPlan(false);
-                      if (import.meta.env.MODE !== "development") {
-                        setShowBoqPrompt(true);
-                        setIsProfileCard(true);
-                      } else {
-                        setSelectedPlan(null);
-                        setProgress(0);
-                        localStorage.removeItem("selectedData");
-                        setSelectedData([]);
-                        setBoqTotal(0);
-                      }
+                      // if (import.meta.env.MODE !== "development") {
+                      setShowBoqPrompt(true);
+                      setIsProfileCard(true);
+                      setShowNewBoqPopup(true);
+                      // } else {
+                      //   setSelectedPlan(null);
+                      //   setProgress(0);
+                      //   localStorage.removeItem("selectedData");
+                      //   setSelectedData([]);
+                      //   setBoqTotal(0);
+                      // }
                     }}
                   >
                     <img

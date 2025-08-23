@@ -127,7 +127,7 @@ function CompleteProfile() {
       {/* <div className="hidden  md:block fixed inset-0 bg-black bg-opacity-50 lg:hidden" /> */}
       <div className="hidden md:block flex-1">
         {!imageLoaded && (
-          <div className="xl:max-w-lg sm:max-w-sm w-full h-[450px] bg-gray-300 rounded-2xl animate-pulse" />
+          <div className="xl:max-w-lg sm:max-w-sm w-full h-[450px] bg-gray-300 rounded-2xl" />
         )}
 
         {/* Image with fade-in on load */}

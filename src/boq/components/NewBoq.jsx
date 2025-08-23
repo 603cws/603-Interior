@@ -24,7 +24,7 @@ function NewBoq({ onConfirm, onCancel }) {
       try {
         const { data, error } = await supabase
           .from("boq_data_new")
-          .select("id, created_at, boqTitle, isDraft")
+          .select("id, created_at, boqTitle, isDraft,layoutId(*)")
           .eq("userId", userId)
           .order("created_at", { ascending: false });
 
@@ -104,10 +104,10 @@ function NewBoq({ onConfirm, onCancel }) {
       return;
     }
 
-    const ok = window.confirm(
-      "This will DELETE ALL existing Draft BOQs for your account and create a new one. Do you want to continue?"
-    );
-    if (!ok) return;
+    // const ok = window.confirm(
+    //   "This will DELETE ALL existing Draft BOQs for your account and create a new one. Do you want to continue?"
+    // );
+    // if (!ok) return;
 
     try {
       // Delete all drafts for the current user
@@ -202,7 +202,10 @@ function NewBoq({ onConfirm, onCancel }) {
                               checked={newBoqAction === "continue"}
                               onChange={() => setNewBoqAction("continue")}
                             />
-                            <span>Continue Draft</span>
+                            <span>
+                              Continue Draft [{draftBoq?.layoutId?.totalArea}{" "}
+                              sqft]
+                            </span>
                           </label>
 
                           <label className="flex items-center gap-2">
@@ -218,17 +221,17 @@ function NewBoq({ onConfirm, onCancel }) {
                         </div>
 
                         <div className="text-xs">
-                          Tip: you can rename or delete the draft later.
+                          Tip: you can save/update or delete the draft later.
                         </div>
                       </div>
                     ) : (
                       <div>
                         <div>
                           A new BOQ will be created and saved as{" "}
-                          <strong>"Draft BOQ"</strong>. You can rename it later.
+                          <strong>"Draft BOQ"</strong>. You can update it later.
                         </div>
                         {isAtNonDraftLimit && (
-                          <div className="mt-2 text-xs text-yellow-200">
+                          <div className="mt-2 text-xs text-[#a1a1a1]">
                             Note: you've reached the maximum of {boqLimit} saved
                             BOQs. You can still create a Draft BOQ, but
                             converting (saving) it as a named/saved BOQ may
@@ -256,7 +259,7 @@ function NewBoq({ onConfirm, onCancel }) {
                       </option>
                       {boqList.map((boq) => (
                         <option key={boq.id} value={boq.id}>
-                          {boq.boqTitle} —{" "}
+                          {boq.boqTitle} [{boq?.layoutId?.totalArea} sqft] -
                           {new Date(boq.created_at).toLocaleDateString()}
                           {boq.isDraft ? " (Draft)" : ""}
                         </option>

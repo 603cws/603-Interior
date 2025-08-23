@@ -502,8 +502,8 @@ function Login() {
             <div className="img flex-1 md:block hidden relative">
               {/* Skeleton placeholder */}
               {!imageLoaded && (
-                <div className=" w-full h-full bg-gray-300 rounded-2xl animate-pulse" />
-                // <div className="xl:max-w-lg sm:max-w-sm w-full h-[450px] bg-gray-300 rounded-2xl animate-pulse" />
+                <div className=" w-full h-full bg-gray-300 rounded-2xl" />
+                // <div className="xl:max-w-lg sm:max-w-sm w-full h-[450px] bg-gray-300 rounded-2xl" />
               )}
 
               {/* Image with fade-in on load */}

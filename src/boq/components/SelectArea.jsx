@@ -714,7 +714,7 @@ function SelectArea({
               </div>
 
               {/* Right Side: Addons for Selected Room */}
-              <div className="flex flex-col gap-4 border-2 border-gray-300 p-4 w-full lg:w-[30%] lg:min-h-full shadow-lg overflow-y-auto max-h-[500px]">
+              <div className="flex flex-col gap-4 border-2 border-gray-300 p-4 w-full lg:w-[30%] lg:min-h-full shadow-lg overflow-y-auto max-h-[500px] gradient-scrollbar">
                 <Addon
                   allAddons={allAddons}
                   onAddonSelect={handleAddonSelect}

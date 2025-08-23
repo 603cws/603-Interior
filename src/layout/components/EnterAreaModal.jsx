@@ -77,7 +77,7 @@ function EnterAreaModal({ onclose }) {
           <div className="hidden md:flex justify-center h-full w-full relative">
             {/* Skeleton placeholder */}
             {!imageLoaded && (
-              <div className="w-full h-64 bg-gray-300/10 rounded-3xl animate-pulse" />
+              <div className="w-full h-64 bg-gray-300/10 rounded-3xl" />
             )}
 
             {/* Lazy-loaded image with fade-in */}

@@ -86,7 +86,7 @@ export default function YouMayAlsoLike({
               {/* Image */}
               <div className="w-full aspect-[4/3] rounded-t-lg relative">
                 {loadingImages[variant.id] !== false && (
-                  <div className="absolute inset-0 bg-gray-200 animate-pulse rounded-t-lg"></div>
+                  <div className="absolute inset-0 bg-gray-200 rounded-t-lg"></div>
                 )}
                 <img
                   className={`rounded-t-lg w-full h-36 md:h-64 object-contain transition-opacity duration-300 mt-5 md:mt-0 ${

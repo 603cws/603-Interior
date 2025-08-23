@@ -197,7 +197,7 @@ function ProductCard({
 
   return (
     <div>
-      <div className="product-card grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 3xl:grid-cols-6 gap-6 pb-8 pt-3 md:px-6 relative">
+      <div className="product-card grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 3xl:grid-cols-6 gap-6 pb-8 pt-3 relative">
         <div className="absolute right-0 md:right-6 -top-12" ref={dropdownRef}>
           <div className="relative">
             {/* Filter button */}
@@ -280,10 +280,10 @@ function ProductCard({
               exit="exit"
             >
               {/* Image Skeleton */}
-              <div className="w-full aspect-[4/3] bg-gray-200 animate-pulse rounded-t-lg"></div>
+              <div className="w-full aspect-[4/3] bg-gray-200 rounded-t-lg"></div>
               <div className="p-4 w-full">
-                <div className="h-4 bg-gray-300 animate-pulse w-3/4 mb-2 rounded"></div>
-                <div className="h-4 bg-gray-300 animate-pulse w-1/2 rounded"></div>
+                <div className="h-4 bg-gray-300  w-3/4 mb-2 rounded"></div>
+                <div className="h-4 bg-gray-300  w-1/2 rounded"></div>
               </div>
             </motion.div>
           ))
@@ -350,7 +350,7 @@ function ProductCard({
                 {/* Image with Skeleton */}
                 <div className="w-full aspect-[4/3] rounded-t-lg relative">
                   {loadingImages[variant.id] !== false && (
-                    <div className="absolute inset-0 bg-gray-200 animate-pulse rounded-t-lg"></div>
+                    <div className="absolute inset-0 bg-gray-200 rounded-t-lg"></div>
                   )}
                   <img
                     className={`rounded-t-lg w-full h-36 md:h-64 object-contain transition-opacity duration-300 mt-5 md:mt-0 ${
