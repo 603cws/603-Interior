@@ -24,6 +24,77 @@ export const fetchCategories = async () => {
   }
 };
 
+// export const fetchProductsData = async () => {
+//   try {
+//     const { data, error } = await supabase.from("products").select(`
+//                 *,
+//                 addons(*, addon_variants(*)),
+//                 product_variants (*)
+//             `);
+
+//     if (error) throw error;
+
+//     // Filter products where at least one variant is approved
+//     const approvedProducts = data
+//       .map((product) => {
+//         const approvedVariants = product.product_variants.filter(
+//           (variant) => variant.status === "approved"
+//         );
+
+//         if (approvedVariants.length === 0) return null; // Exclude products without approved variants
+
+//         return {
+//           ...product,
+//           product_variants: approvedVariants,
+//         };
+//       })
+//       .filter(Boolean); // Remove null values
+
+//     const allImages = approvedProducts
+//       .flatMap((product) => [
+//         ...product.product_variants.map((variant) => variant.image),
+//         ...product.addons.flatMap((addon) => [
+//           addon.image,
+//           ...addon.addon_variants.map((variant) => variant.image),
+//         ]),
+//       ])
+//       .filter(Boolean);
+
+//     const uniqueImages = [...new Set(allImages)];
+
+//     const { data: signedUrls, error: signedUrlError } = await supabase.storage
+//       .from("addon")
+//       .createSignedUrls(uniqueImages, 3600);
+
+//     if (signedUrlError) throw signedUrlError;
+
+//     const urlMap = Object.fromEntries(
+//       signedUrls.map((item) => [item.path, item.signedUrl])
+//     );
+
+//     const processedData = approvedProducts.map((product) => ({
+//       ...product,
+//       product_variants: product.product_variants.map((variant) => ({
+//         ...variant,
+//         image: urlMap[variant.image] || "",
+//       })),
+//       addons: product.addons.map((addon) => ({
+//         ...addon,
+//         image: urlMap[addon.image] || "",
+//         addon_variants: addon.addon_variants.map((variant) => ({
+//           ...variant,
+//           image: urlMap[variant.image] || "",
+//         })),
+//       })),
+//     }));
+
+//     return processedData;
+//   } catch (error) {
+//     console.error("Error fetching products data:", error);
+//     return [];
+//   }
+// };
+
 export const fetchProductsData = async () => {
   try {
     const { data, error } = await supabase.from("products").select(`
@@ -41,11 +112,29 @@ export const fetchProductsData = async () => {
           (variant) => variant.status === "approved"
         );
 
-        if (approvedVariants.length === 0) return null; // Exclude products without approved variants
+        // ✅ Filter addons & their variants
+        const approvedAddons = product.addons
+          .map((addon) => {
+            const approvedAddonVariants = addon.addon_variants.filter(
+              (variant) => variant.status === "approved"
+            );
 
+            if (approvedAddonVariants.length === 0) return null; // drop addon if no approved variants
+
+            return {
+              ...addon,
+              addon_variants: approvedAddonVariants,
+            };
+          })
+          .filter(Boolean); // remove null addons
+
+        if (approvedVariants.length === 0 && approvedAddons.length === 0) {
+          return null; // drop product entirely if no approved variants or addons
+        }
         return {
           ...product,
           product_variants: approvedVariants,
+          addons: approvedAddons,
         };
       })
       .filter(Boolean); // Remove null values

@@ -30,16 +30,7 @@ function ProfileCard({
   setShowNewBoqPopup,
 }) {
   const logout = useLogout();
-  const {
-    accountHolder,
-    setSelectedPlan,
-    progress,
-    setProgress,
-    setBoqTotal,
-    setSelectedData,
-    setBOQTitle,
-    setIsSaveBOQ,
-  } = useApp();
+  const { accountHolder, progress, setBOQTitle, setIsSaveBOQ } = useApp();
   const profileRef = useRef(null);
   const [showBookAppointment, setShowBookAppointment] = useState(false);
 

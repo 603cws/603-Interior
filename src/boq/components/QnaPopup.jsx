@@ -310,7 +310,7 @@ const QnaPopup = ({ onClose, onSubmit }) => {
                   </p>
                   <div className="flex justify-center">
                     <button
-                      className="bg-[#1A3A36]  text-xs md:text-base  text-white px-4 py-2 rounded hover:bg-[#145A50]"
+                      className="text-[#000] hover:text-[#fff] border-2 px-4 py-2 rounded text-xs md:text-base border-[#000] hover:border-[#fff] hover:bg-gradient-to-r from-[#334A78] to-[#68B2DC] transition-all duration-500 ease-in-out"
                       onClick={handleDisclaimerClose}
                     >
                       Okay

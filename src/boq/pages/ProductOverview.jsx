@@ -454,7 +454,7 @@ function ProductOverview() {
               }}
               className="flex cursor-pointer"
             >
-              <span>{cat?.category}</span>
+              <span className="hover:underline">{cat?.category}</span>
               <div className="flex items-center ">
                 <span>
                   <MdOutlineKeyboardArrowRight
@@ -463,7 +463,7 @@ function ProductOverview() {
                   />
                 </span>
               </div>
-              <span>{subCat}</span>
+              <span className="hover:underline">{subCat}</span>
               <div className="flex items-center">
                 <span>
                   <MdOutlineKeyboardArrowRight
@@ -472,7 +472,7 @@ function ProductOverview() {
                   />
                 </span>
               </div>
-              <span>{subCat1}</span>
+              <span className="hover:underline">{subCat1}</span>
             </div>
 
             <button

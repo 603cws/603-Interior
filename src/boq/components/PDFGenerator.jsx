@@ -2,7 +2,10 @@ import { jsPDF } from "jspdf";
 import "jspdf-autotable";
 
 function normalize(str) {
-  return str.toLowerCase().replace(/\s+/g, "").replace(/s$/, "");
+  return str
+    .toLowerCase()
+    .replace(/[\s-]+/g, "")
+    .replace(/s$/, ""); // removes trailing "s"
 }
 
 function findKeyWithExactAndPartialMatch(subCategory, dataObject) {
@@ -61,19 +64,20 @@ const PDFGenerator = {
     doc.setFont("helvetica", "bold");
     doc.setFontSize(14);
     doc.setTextColor(255, 255, 255);
-    doc.text("Workved Interiors", 20, 82);
+    doc.text("Workved Interiors", 20, 72);
 
     doc.setFont("helvetica", "normal");
     doc.setFontSize(10);
-    doc.text("Makhija Arcade, 35th Rd, Khar", 20, 96);
-    doc.text("hello@workved.com", 20, 110);
+    doc.text("Makhija Arcade, 35th Rd, Khar West,", 20, 86);
+    doc.text("Mumbai Maharashtra 400052", 20, 98);
+    doc.text("partners@workved.com", 20, 110);
 
     const logoUrl = "../logo/workved-logo.png";
     doc.addImage(logoUrl, "PNG", 240, 38, 100, 40);
 
     doc.setFont("helvetica", "normal");
-    doc.setFontSize(22);
-    doc.text("Invoice", pageWidth - 90, 95);
+    doc.setFontSize(25);
+    doc.text("Invoice", pageWidth - 100, 95);
     doc.setFontSize(10);
     doc.text(
       `INVOICE DATE: ${new Date().toLocaleDateString("en-GB")}`,
@@ -153,7 +157,7 @@ const PDFGenerator = {
           ...(hasAddons ? ["Add Ons"] : []),
           "Specification",
           "Qty",
-          "Area",
+          "Area\n(sqft)",
           "Price",
           "Amount",
         ],
@@ -231,7 +235,7 @@ const PDFGenerator = {
             3: { cellWidth: 120 }, // Add Ons
             4: { cellWidth: 90 },
             5: { halign: "center", cellWidth: 25 },
-            6: { halign: "center", cellWidth: 30 },
+            6: { halign: "center", cellWidth: 32 },
             7: { halign: "right", cellWidth: 60 },
             8: { halign: "right", cellWidth: 60 },
           }
@@ -241,9 +245,9 @@ const PDFGenerator = {
             2: { cellWidth: 120 },
             3: { cellWidth: 90 }, // Specification
             4: { halign: "center", cellWidth: 25 },
-            5: { halign: "center", cellWidth: 30 },
+            5: { halign: "center", cellWidth: 40 },
             6: { halign: "right", cellWidth: 60 },
-            7: { halign: "right", cellWidth: 60 },
+            7: { halign: "right", cellWidth: 80 },
           };
 
       // ✅ Render table
@@ -268,8 +272,8 @@ const PDFGenerator = {
         },
         columnStyles,
         margin: hasAddons
-          ? { left: 20, right: 15 } // when addons exist
-          : { left: 65, right: 10 }, // when no addons
+          ? { left: 18, right: 15 } // when addons exist
+          : { left: 52, right: 10 }, // when no addons
         didParseCell: (data) => {
           if (hasAddons && data.section === "body" && data.column.index === 3) {
             const addonsCount = data.cell.raw.images?.length || 0;
@@ -343,19 +347,19 @@ const PDFGenerator = {
     const finalY = doc.lastAutoTable.finalY + 30;
     doc.setFontSize(10);
     doc.setFont("helvetica", "normal");
-    doc.text("Sub total (excl. GST)", pageWidth - 200, finalY);
+    doc.text("Sub total (excl. GST)", pageWidth - 250, finalY);
     doc.text(
       `Rs. ${boqTotal.toLocaleString("en-IN")}`,
-      pageWidth - 100,
+      pageWidth - 150,
       finalY
     );
 
     doc.setFont("helvetica", "bold");
     doc.setFontSize(12);
-    doc.text("Total Amount", pageWidth - 200, finalY + 20);
+    doc.text("Total Amount", pageWidth - 250, finalY + 20);
     doc.text(
       `Rs. ${boqTotal.toLocaleString("en-IN")}`,
-      pageWidth - 100,
+      pageWidth - 150,
       finalY + 20
     );
 
