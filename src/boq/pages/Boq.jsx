@@ -648,7 +648,7 @@ function Boq() {
           onCancel={() => setShowNewBoqPopup(false)}
         />
       )} */}
-      <div className="px-2 md:px-10">
+      <div className="px-2 md:px-6 3xl:container">
         {!selectedPlan ? (
           <Plans
             onConfirm={handleConfirm}

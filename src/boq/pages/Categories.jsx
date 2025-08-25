@@ -33,10 +33,10 @@ const Categories = ({
       setHasOverflow(el.scrollWidth > el.clientWidth);
     };
 
-    checkOverflow(); // check initially
+    checkOverflow();
     window.addEventListener("resize", checkOverflow);
     return () => window.removeEventListener("resize", checkOverflow);
-  }, [selectedCategory]);
+  });
   useEffect(() => {
     const updateItemsPerPage = () => {
       const width = window.innerWidth;
@@ -770,23 +770,23 @@ const Categories = ({
     <>
       <div
         className={`categories flex flex-col pb-1.5 md:pb-3 ${
-          minimizedView ? "px-6" : ""
+          minimizedView ? "px-0" : ""
         }`}
       >
         {/* Categories List */}
         <div
           className={`cat flex overflow-x-auto gap-1 md:gap-3  scrollbar-hide ${
-            minimizedView ? "px-1 justify-between" : "pb-2 px-2 lg:px-5 "
+            minimizedView ? "px-1 justify-between" : "pb-2 px-0 "
           }`}
         >
           {/* === FULL VIEW === */}
           {!minimizedView && (
-            <div className="flex flex-col items-center w-full px-2 py-2 ">
+            <div className="flex flex-col items-center w-full px-0 py-2 ">
               {/* Scrollable container */}
               <div
                 ref={containerRef}
-                className={`flex flex-row gap-[21px] items-center py-2 relative overflow-hidden w-full swipe-cursor justify-around ${
-                  currentPage < 1 ? "lg:justify-around" : "md:justify-start"
+                className={`flex flex-row gap-[21px] items-center py-2 relative overflow-hidden w-full swipe-cursor justify-between ${
+                  currentPage < 1 ? "lg:justify-between" : "md:justify-start"
                 }`}
               >
                 {paginatedItems.map(({ id, category, subcategories }) => {
@@ -822,7 +822,7 @@ const Categories = ({
                               {SvgIcon}
                             </div>
                           </div>
-                          <div className=" text-center font-['Poppins-Regular',_sans-serif] text-[10px] lg:text-base leading-5 font-normal">
+                          <div className=" text-center font-['Poppins-Regular',_sans-serif] text-[10px] lg:text-base lg:leading-5 font-normal">
                             {category}
                           </div>
                         </div>
@@ -895,83 +895,6 @@ const Categories = ({
                 </div>
               );
             })}
-
-          {/* {categories.map(({ id, category, subcategories }) => {
-            const cleanedCategoryName = getCleanedCategoryName(category);
-            const isCategoryCompleted = checkIfCategoryCompleted(category); // Check if the category is completed
-            const isSelected = selectedCategory?.id === id;
-            const imageSrc = `/images/icons/${cleanedCategoryName}.png`;
-            return (
-              <div
-                key={id}
-                onClick={() => handleCategoryClick(id, category, subcategories)}
-                className={`transition-transform duration-500 ease-in-out cursor-pointer ${
-                  isSelected ? "scale-100" : "scale-95"
-                } ${minimizedView ? "px-2 py-1" : "p-0"}`}
-              >
-                {!minimizedView && (
-                  <div
-                    className={` flex flex-row gap-[21px] top-1 items-center justify-start relative overflow-auto group`} // Added 'group' class here for hover effect
-                  >
-                    <div
-                      className={`${
-                        selectedCategory?.id === id
-                          ? "bg-[#347ABF] bg-opacity-10 border-[#334A78]"
-                          : "bg-[#ffffff] border-black"
-                      } border-solid  border-2 flex flex-col gap-0 items-center justify-around rounded-lg shrink-0 w-28 h-28 relative group-hover:scale-90 transition-transform duration-[300ms] ease-in-out`} // Added hover effect here
-                    >
-                      <div className="flex flex-row gap-2 items-center justify-center shrink-0 w-[50px] relative">
-                        <img
-                          className="flex flex-col gap-2.5 items-start justify-start shrink-0 w-5 lg:w-[50px] h-5 lg:h-[50px] relative overflow-hidden"
-                          src={imageSrc}
-                          alt={`${category} icon`}
-                        />
-                      </div>
-                      <div className="flex flex-col gap-2.5 items-start justify-start shrink-0 relative overflow-hidden">
-                        <div className="flex flex-row gap-2.5 items-center justify-center shrink-0 relative overflow-hidden">
-                          <div className="text-[#252525] text-center font-['Poppins-Regular',_sans-serif] text-md leading-5 font-normal relative flex items-center justify-center">
-                            {category}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                )}
-                {minimizedView && (
-                  <div
-                    // className={` flex flex-row items-center justify-start relative group py-2`}
-                    className={`font-Poppins flex flex-col justify-center items-center text-xs gap-1 md:gap-2 md:mt-3 relative group`}
-                  >
-                    <div
-                      className={`border-2 ${
-                        isCategoryCompleted && selectedCategory?.id === id
-                          ? "shadow-[0_0_10px_#93FCEE] bg-[#34BFAD] animate-pulse"
-                          : isCategoryCompleted
-                          ? "border-[#f4f4f4] border-[1px] bg-[#34BFAD]  "
-                          : selectedCategory?.id === id
-                          ? "border-[#34BFAD] scale-110"
-                          : "border-[#000000] "
-                      }  w-14 md:w-16 h-14 md:h-16 rounded-full flex justify-center items-center group-hover:scale-105 transition-transform duration-[1000ms] ease-in-out`}
-                    >
-                      <img
-                        // className="rounded-full w-[30px] h-[30px] object-contain"
-                        className="w-7 md:w-10 h-7 md:h-10"
-                        src={imageSrc}
-                        alt={`${category} icon`}
-                      />
-                    </div>
-                    <div
-                      className={` group-hover:visible ${
-                        selectedCategory.id === id ? "visible" : "invisible"
-                      } transition-all duration-[500ms] ease-in-out`}
-                    >
-                      <p>{category}</p>
-                    </div>
-                  </div>
-                )}
-              </div>
-            );
-          })} */}
         </div>
 
         {/* Subcategories */}
@@ -988,7 +911,7 @@ const Categories = ({
                 className="w-full relative"
               >
                 {hasOverflow && (
-                  <>
+                  <div className="absolute right-0 -top-1/2 flex gap-2 z-20">
                     <button
                       onClick={() => {
                         document.querySelector(".subcat-scroll")?.scrollBy({
@@ -996,9 +919,9 @@ const Categories = ({
                           behavior: "smooth",
                         });
                       }}
-                      className="absolute -left-6 top-1/2 -translate-y-1/2 z-10  p-1 text-[#374A75]"
+                      className=" p-0.5 text-[#374A75] border border-[#ccc]"
                     >
-                      <MdKeyboardArrowLeft size={25} />
+                      <MdKeyboardArrowLeft size={20} />
                     </button>
                     <button
                       onClick={() => {
@@ -1007,11 +930,11 @@ const Categories = ({
                           behavior: "smooth",
                         });
                       }}
-                      className="absolute -right-6 top-1/2 -translate-y-1/2 z-20 p-1 text-[#374A75]"
+                      className="p-0.5 text-[#374A75] border border-[#ccc]"
                     >
-                      <MdKeyboardArrowRight size={25} />
+                      <MdKeyboardArrowRight size={20} />
                     </button>
-                  </>
+                  </div>
                 )}
                 <div
                   ref={scrollRef}
@@ -1086,7 +1009,7 @@ const Categories = ({
                   </h3> */}
 
                   {/* <div className="subcat grid grid-cols-3 md:grid-cols-5 lg:grid-cols-4 xl:grid-cols-6 gap-5 mt-5 justify-center"> */}
-                  <div className="subcat grid grid-cols-2 xs:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-5 mt-5 justify-center">
+                  <div className="subcat grid grid-cols-2 xs:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 3xl:grid-cols-6 gap-5 2xl:gap-x-24 mt-5 justify-center">
                     {selectedCategory.subcategories
                       .filter(
                         (subCategory) =>
