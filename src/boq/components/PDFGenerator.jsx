@@ -2,10 +2,7 @@ import { jsPDF } from "jspdf";
 import "jspdf-autotable";
 
 function normalize(str) {
-  return str
-    .toLowerCase()
-    .replace(/[\s-]+/g, "")
-    .replace(/s$/, ""); // removes trailing "s"
+  return str.toLowerCase().replace(/[\s-]+/g, "");
 }
 
 function findKeyWithExactAndPartialMatch(subCategory, dataObject) {

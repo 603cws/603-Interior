@@ -198,7 +198,8 @@ function Boq() {
     variantPrice,
     cat,
     subcategory,
-    subcategory1
+    subcategory1,
+    dimensions
   ) => {
     const baseTotal = calculateAutoTotalPriceHelper(
       quantityData[0],
@@ -206,7 +207,8 @@ function Boq() {
       cat,
       subcategory,
       subcategory1,
-      userResponses.height
+      userResponses.height,
+      dimensions
     );
 
     const total = calculateCategoryTotal(
@@ -302,7 +304,8 @@ function Boq() {
               variant.price,
               product.category,
               subcategory,
-              product.subcategory1
+              product.subcategory1,
+              variant.dimensions
             ),
           };
 

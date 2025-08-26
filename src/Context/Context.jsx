@@ -121,6 +121,7 @@ export const AppProvider = ({ children }) => {
 
   const handleBOQTitleChange = (title) => {
     if (isSaveBOQ) setBOQTitle(title);
+    else console.log("Not allowed to change BOQ Title");
   };
 
   const fetchFormulas = async () => {

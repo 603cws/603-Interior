@@ -60,7 +60,8 @@ export const calculateTotalPrice = (
     actualCategory,
     actualSubCategory,
     actualSubCategory1,
-    userResponses.height
+    userResponses.height,
+    selectedProductView.dimensions
   );
 
   const totalPrice = calculateCategoryTotal(

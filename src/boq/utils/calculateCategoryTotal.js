@@ -5,8 +5,8 @@ const parser = new Parser();
 
 export const calculateCategoryTotal = (
   category,
-  base,
-  multiplier = 1,
+  base, //Area
+  multiplier = 1, //Product Price
   formulaMap = {}
 ) => {
   const categoryFormula = formulaMap[category]?.formula;
