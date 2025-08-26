@@ -114,7 +114,7 @@ function ProfileCard({
           <div className="h-1/3 flex flex-col">
             <div className="h-1/2 flex justify-center items-end">
               <div
-                className="z-30 rounded-full"
+                className="rounded-full"
                 ref={iconRef}
                 style={{
                   backgroundImage:

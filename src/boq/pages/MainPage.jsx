@@ -56,23 +56,61 @@ const MainPage = ({ userResponses, setSelectedSubCategory1, productsData }) => {
     setSelectedSubCategory1,
   ]);
 
-  const selectedSubCategories =
-    subCat1 && subCat1[selectedCategory?.category]
-      ? selectedCategory.category === "HVAC"
-        ? userResponses.hvacType === "Centralized"
-          ? subCat1[selectedCategory.category].filter(
-              (subCategory) => subCategory === "Centralized AC"
-            )
-          : subCat1[selectedCategory.category].filter(
-              (subCategory) => subCategory !== "Centralized AC"
-            )
-        : selectedCategory.category === "Civil / Plumbing" &&
-          selectedSubCategory === "Pantry"
-        ? subCat1[selectedCategory.category].filter(
+  // const selectedSubCategories =
+  //   subCat1 && subCat1[selectedCategory?.category]
+  //     ? selectedCategory.category === "HVAC"
+  //       ? userResponses.hvacType === "Centralized"
+  //         ? subCat1[selectedCategory.category].filter(
+  //             (subCategory) => subCategory === "Centralized AC"
+  //           )
+  //         : subCat1[selectedCategory.category].filter(
+  //             (subCategory) => subCategory !== "Centralized AC"
+  //           )
+  //       : selectedCategory.category === "Civil / Plumbing" &&
+  //         selectedSubCategory === "Pantry"
+  //       ? subCat1[selectedCategory.category].filter(
+  //           (subCategory) => subCategory !== "Pods"
+  //         )
+  //       : selectedCategory.category === "Furniture" &&
+  //         selectedSubCategory === "Chair"
+  //       ? subCat1[selectedCategory.category].filter(
+  //           (subCategory) => subCategory !== "Reception"
+  //           // || subCategory !== "Pantry"
+  //         )
+  //       : subCat1[selectedCategory.category]
+  //     : [];
+
+  let selectedSubCategories = [];
+
+  if (subCat1 && subCat1[selectedCategory?.category]) {
+    switch (selectedCategory.category) {
+      case "HVAC":
+        if (userResponses.hvacType === "Centralized") {
+          selectedSubCategories = subCat1["HVAC"].filter(
+            (subCategory) => subCategory === "Centralized AC"
+          );
+        } else {
+          selectedSubCategories = subCat1["HVAC"].filter(
+            (subCategory) => subCategory !== "Centralized AC"
+          );
+        }
+        break;
+
+      case "Civil / Plumbing":
+        if (selectedSubCategory === "Pantry") {
+          selectedSubCategories = subCat1["Civil / Plumbing"].filter(
             (subCategory) => subCategory !== "Pods"
-          )
-        : subCat1[selectedCategory.category]
-      : [];
+          );
+        } else {
+          selectedSubCategories = subCat1["Civil / Plumbing"];
+        }
+        break;
+
+      default:
+        selectedSubCategories = subCat1[selectedCategory.category];
+        break;
+    }
+  }
 
   if (!selectedCategory) {
     return (

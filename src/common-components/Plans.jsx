@@ -87,7 +87,10 @@ function Plans({
   // Hovered plan state. 0 = first plan expanded by default.
   const [hoveredPlan, setHoveredPlan] = useState(1);
   const [imageLoaded, setImageLoaded] = useState(false);
-  setIsSaveBOQ(true);
+
+  useEffect(() => {
+    setIsSaveBOQ(true);
+  }, []);
 
   const handlePlanSelect = async (planKey) => {
     setSelectedPlan(planKey);

@@ -96,7 +96,7 @@ function BoqPrompt({ onConfirm, onCancel, isProfileCard, setIsProfileCard }) {
       else if (isDraftBoq && selectedBoq) {
         const { data: draftData, error: draftError } = await supabase
           .from("boq_data_new")
-          .select("products, boqTotal, selectedPlan, userResponses")
+          .select("products, boqTotalPrice, planType, answers")
           .eq("id", BOQID)
           .single();
         if (draftError) throw draftError;
@@ -107,24 +107,24 @@ function BoqPrompt({ onConfirm, onCancel, isProfileCard, setIsProfileCard }) {
           .from("boq_data_new")
           .update({
             products: draftData.products,
-            boqTotal: draftData.boqTotal,
-            selectedPlan: draftData.selectedPlan,
-            userResponses: draftData.userResponses,
+            boqTotalPrice: draftData.boqTotal,
+            planType: draftData.selectedPlan,
+            answers: draftData.userResponses,
           })
           .eq("id", selectedBoq);
         if (updateError) throw updateError;
 
         toast.success(`Draft BOQ overridden into "${existing?.boqTitle}"`);
 
-        await supabase
-          .from("boq_data_new")
-          .update({
-            products: [],
-            boqTotal: 0,
-            selectedPlan: null,
-            userResponses: [],
-          })
-          .eq("id", BOQID);
+        // await supabase
+        //   .from("boq_data_new")
+        //   .update({
+        //     products: [],
+        //     boqTotalPrice: 0,
+        //     selectedPlan: null,
+        //     userResponses: [],
+        //   })
+        //   .eq("id", BOQID);
 
         if (existing) {
           setBOQID(existing.id);
