@@ -91,40 +91,44 @@ function Contactus() {
 
   return (
     <>
-      <div className="flex my-10">
-        <div className="w-[40%] pl-12 self-center space-y-10">
-          <h1 className="font-bold text-5xl leading-[59px] tracking-[0.3px] text-[#304778]">
+      <div className="flex flex-col md:flex-row gap-6 my-10 px-4 md:px-0">
+        <div className="md:w-[40%] md:pl-12 self-center lg:space-y-10">
+          <h1 className="font-bold text-3xl lg:text-5xl leading-[59px] tracking-[0.3px] text-[#304778]">
             Get in Touch With Us
           </h1>
-          <p className="font-medium text-2xl  text-[#304778]">
+          <p className="font-medium text-lg lg:text-2xl  text-[#304778]">
             Whether you’re ready to start designing your dream office or just
             have a question, our team is here to help. Let’s create a workspace
             that inspires productivity and creativity.
           </p>
         </div>
-        <div className="flex-1 w-[60%]">
-          <img src={background} alt="home background" />
+        <div className="flex-1 md:w-[60%]">
+          <img
+            src={background}
+            alt="home background"
+            className=" w-full h-full"
+          />
         </div>
       </div>
-      <div className="container mx-auto">
+      <div className="xl:container xl:mx-auto">
         {/* <div className="">
           <HeroSection background={background} title={"Contact"} />
         </div> */}
 
-        <section className="hidden  sm:block pt-8 lg:h-screen 3xl:h-[75vh] md:container md:mx-auto">
+        <section className="hidden  sm:block pt-8 lg:h-[120vh] xl:h-screen 3xl:h-[75vh] md:container md:mx-auto">
           <div
             className=" py-3 flex flex-col-reverse
-            lg:flex-row-reverse lg:justify-center lg:items-center  gap-10 h-full 3xl:h-full relative -top-1/6"
+            lg:flex-row-reverse lg:justify-center lg:items-center  gap-10 h-full 3xl:h-full relative transform -translate-y-1/6"
           >
             <div className="lg:relative lg:flex-1 lg:h-full  3xl:h-[720px]">
               <div className="max-w-2xl bg-[#304778] text-white lg:absolute lg:-top-1/4">
-                <div className="px-10 py-10 rounded-3xl pb-5 ">
+                <div className="px-4 py-10 rounded-3xl pb-5 ">
                   {/* text */}
                   <div className="[&_p]:font-Poppins  font-semibold py-3">
-                    <h2 className="font-lora font-medium  text-5xl  pb-4">
+                    <h2 className="font-lora font-medium text-3xl  xl:text-5xl  pb-4">
                       Let’s Connect with us!
                     </h2>
-                    <p className="text-[14.9px] leading-6 text-[#F8F9FA] text-opacity-80">
+                    <p className="text-xs xl:text-[14.9px] leading-6 text-[#F8F9FA] text-opacity-80">
                       We believe in collaboration and value your input
                       throughout the design process. We encourage clients to
                       actively participate in discussions,share their ideas,
@@ -268,8 +272,8 @@ function Contactus() {
               <div className="">
                 <iframe
                   src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3584.3835340214505!2d72.8325178749771!3d19.065149682137243!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be7c91140262913%3A0xc53b6407e4d39f76!2sMakhija%20Arcade%2C%2035th%20Rd%2C%20Khar%2C%20Khar%20West%2C%20Mumbai%2C%20Maharashtra%20400052!5e1!3m2!1sen!2sin!4v1755581526758!5m2!1sen!2sin"
-                  width="600"
-                  height="400"
+                  width="500"
+                  height="300"
                   // style="border:0;"
                   allowfullscreen=""
                   loading="lazy"
@@ -281,8 +285,8 @@ function Contactus() {
         </section>
 
         {/* mobile view */}
-        <section className="sm:hidden pt-8 relative h-[1300px]">
-          <div className=" mt-3 flex flex-col-reverse  bg-white absolute -top-[8%] mx-4">
+        <section className="sm:hidden py-8 ">
+          <div className="flex flex-col-reverse  bg-white   mx-4">
             <div className=" flex-1 ">
               <div className="max-w-2xl bg-[#304778] text-white ">
                 <div className="px-4 pt-10 pb-4 rounded-3xl ">
@@ -406,7 +410,7 @@ function Contactus() {
               </div>
             </div>
 
-            <div className="font-inter bg-white flex-1 space-y-2 px-4 pt-10 pb-4 border">
+            <div className="font-inter bg-white flex-1 space-y-2 px-4  pb-4 border">
               <h2 className="text-[#1C346B] text-3xl ">
                 Interested in working with us!
               </h2>

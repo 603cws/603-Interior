@@ -74,7 +74,7 @@ function Services() {
   return (
     <div className="">
       <OfficeLayoutSection />
-      <div className="flex flex-col xl:flex-row items-center justify-between  p-16 container mx-auto">
+      <div className="flex flex-col gap-6 md:gap-0 md:flex-row items-center justify-between  lg:p-16 lg:container lg:mx-auto lg:px-12 px-4">
         {InfoCardDetails.map((info) => (
           <InfoCard
             title={info?.title}
@@ -84,13 +84,13 @@ function Services() {
           />
         ))}
       </div>
-      <div className="container mx-auto">
+      <div className="lg:container lg:mx-auto lg:px-12 px-4">
         <FeaturesSection />
       </div>
-      <div className="container mx-auto">
+      <div className="lg:container lg:mx-auto lg:px-12 px-4">
         <DeliverServices />
       </div>
-      <div className="container mx-auto">
+      <div className="lg:container lg:mx-auto lg:px-12 px-4">
         <FeatureDesignSection />
       </div>
       <Footer />
@@ -103,10 +103,10 @@ export default Services;
 function OfficeLayoutSection() {
   const navigate = useNavigate();
   return (
-    <div className=" flex flex-col lg:flex-row justify-between items-center my-10 container mx-auto">
+    <div className=" flex flex-col gap-6 lg:gap-0 lg:flex-row justify-between items-center my-10 lg:container lg:mx-auto text-center lg:text-center">
       {/* Left Section */}
       <div>
-        <h2 className="text-3xl xl:text-[44px] xl:leading-[53px] tracking-[0.3px] font-bold text-[#334A78] capitalize">
+        <h2 className=" text-3xl xl:text-[44px] xl:leading-[53px] tracking-[0.3px] font-bold text-[#334A78] capitalize">
           Design your dream <br /> office-from layout <br /> to final Product
         </h2>
         <p className="text-[#334A78] mt-4 text-base md:text-2xl tracking-[0.3px]">
@@ -126,7 +126,7 @@ function OfficeLayoutSection() {
         <img
           src="/images/service_1.png"
           alt="Office Layout"
-          className="w-full lg:max-w-xl xl:max-w-2xl"
+          className="w-full  lg:max-w-xl xl:max-w-2xl"
         />
       </div>
     </div>
@@ -139,8 +139,8 @@ function InfoCard({ imgpath, title, description }) {
       <div className="">
         <img src={imgpath} alt="service" className="w-24 h-24" />
       </div>
-      <h2 className="text-[#232323] font-bold text-2xl">{title}</h2>
-      <p className="text-center text-[#777] text-sm tracking-[0.3px]">
+      <h2 className="text-[#232323] font-bold text-xl lg:text-2xl">{title}</h2>
+      <p className="text-center text-[#777] text-xs lg:text-sm tracking-[0.3px]">
         {description}
       </p>
     </div>
@@ -149,14 +149,14 @@ function InfoCard({ imgpath, title, description }) {
 
 function FeaturesSection() {
   return (
-    <div className="py-16 px-5 ">
+    <div className="lg:py-16 lg:px-5 py-10">
       {/* <h2 className="text-center font-lora font-bold text-[#232323] text-3xl xl:text-[42px] xl:leading-[53px] tracking-[0.3px]">
         We Provide Everything for <br /> your Office Interior
       </h2> */}
       <HeadingSection>
         We Provide Everything for <br /> your Office Interior
       </HeadingSection>
-      <div className="grid grid-cols-3 place-items-center mt-11 gap-6">
+      <div className="grid grid-cols-2 lg:grid-cols-3 place-items-center mt-11 gap-3 lg:gap-6">
         {FeatureCardDetails.map((data) => (
           <FeatureCard
             key={data?.title}
@@ -186,7 +186,7 @@ function FeatureCard({ title, imgpath, hoveredImgPath }) {
             className="w-20 h-20"
           />
         </div>
-        <h3 className="text-center font-bold text-xl text-[#232323] group-hover:text-white">
+        <h3 className="text-center font-bold text-lg lg:text-xl text-[#232323] group-hover:text-white">
           {title}
         </h3>
       </div>
@@ -196,7 +196,7 @@ function FeatureCard({ title, imgpath, hoveredImgPath }) {
 
 function DeliverServices() {
   return (
-    <div className="px-4 py-16">
+    <div className="lg:px-4 lg:py-16 space-y-4">
       <HeadingSection>How We Deliver Our Services</HeadingSection>
       <StepsSection />
     </div>
@@ -205,7 +205,7 @@ function DeliverServices() {
 
 function HeadingSection({ children }) {
   return (
-    <h2 className="text-center font-lora font-bold text-[#232323] text-3xl xl:text-[42px] xl:leading-[53px] tracking-[0.3px]">
+    <h2 className="text-center font-lora font-bold text-[#232323] text-xl lg:text-3xl xl:text-[42px] xl:leading-[53px] tracking-[0.3px]">
       {children}
     </h2>
   );
@@ -213,8 +213,8 @@ function HeadingSection({ children }) {
 //  We Provide Everything for <br /> your Office Interior
 function StepsSection() {
   return (
-    <section className="bg-white py-12">
-      <div className="container mx-auto px-6 relative">
+    <section className="bg-white lg:py-12">
+      <div className="lg:container lg:mx-auto lg:px-6 relative">
         <div className="flex flex-col md:flex-row justify-between items-center md:space-x-10 space-y-10 md:space-y-0 relative">
           {/* {steps} */}
           {steps?.map((stepdata, index) => (
@@ -250,9 +250,9 @@ function Step({ imagePath, title, description, index }) {
 
 function FeatureDesignSection() {
   return (
-    <div className="px-4 py-16">
+    <div className="lg:px-4 lg:py-16 py-6">
       <HeadingSection>Featured Designs</HeadingSection>
-      <div className="flex items-center justify-between mt-11">
+      <div className="flex flex-col md:flex-row items-center gap-6 justify-between mt-11">
         <div>
           <img src="/images/FeaturedDesign1.png" alt="featured design" />
         </div>
