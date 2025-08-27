@@ -96,8 +96,8 @@ const LayoutCard = ({
             counterValue > 0 &&
             (showAreaCounter || sizes) && (
               <div>
-                {areaCounterProps?.name === "Add Extra Seats" ? (
-                  <p className="text-xs md:text-[13px]">Add Extra Seats</p>
+                {areaCounterProps?.name === "Select Seats" ? (
+                  <p className="text-xs md:text-[13px]">Select Seats</p>
                 ) : (
                   <p className="text-xs md:text-[13px]">Select size</p>
                 )}

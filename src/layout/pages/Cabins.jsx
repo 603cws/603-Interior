@@ -40,7 +40,7 @@ const cabinData = [
     description: "This is a small cabin, suitable for individual work.",
     tooltipText: "Size :80 sqft",
     slider: {
-      name: "Add Extra Seats",
+      name: "Select Seats",
       min: 0,
       max: 24,
       step: 2,
@@ -66,7 +66,6 @@ const Cabins = ({
   initialAreaValues,
   managerCabinSize,
   setManagerCabinSize,
-  smallCabinSeatCount,
 }) => {
   return (
     <div className="section px-3">
@@ -103,7 +102,7 @@ const Cabins = ({
                 ? `Size: ${managerCabinSize} sq ft`
                 : room.type === "small"
                 ? `Size: ${smallCabinConfig.roomSize || "80"} sq ft \n Seats: ${
-                    4 + smallCabinSeatCount
+                    smallCabinConfig.seatCount
                   } pax`
                 : "Size: Not available"
             }

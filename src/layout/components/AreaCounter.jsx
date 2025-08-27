@@ -58,10 +58,8 @@ const AreaCounter = ({
     counterValue
   ) {
     let currentbuild = buildArea + value * counterValue;
-    // console.log(currentbuild);
 
     if (currentbuild > usableArea) {
-      // console.log("hiiiii");
       setSizeReached(false);
       setWarning(true);
       setErrorMessage(
@@ -70,7 +68,6 @@ const AreaCounter = ({
           "Increase the total area to add more workspaces."
       );
     } else {
-      // console.log("running ok");
       setCabinSize(cabinSize + value);
     }
   }
@@ -86,10 +83,8 @@ const AreaCounter = ({
     seatcountvalue
   ) {
     let currentbuild = buildArea + value * counterValue;
-    // console.log(currentbuild);
 
     if (currentbuild > usableArea) {
-      // console.log("hiiiii");
       setSizeReached(false);
       setWarning(true);
       setErrorMessage(
@@ -98,15 +93,12 @@ const AreaCounter = ({
           "Increase the total area to add more workspaces."
       );
     } else {
-      // console.log("running ok");
       setCabinSize(cabinSize + value);
       setSeatCount(seatCount + seatcountvalue);
     }
   }
 
   const handleIncrement = () => {
-    console.log("type", type);
-
     if (counterValue > 0) {
       if (value < max && totalArea > 0) {
         // onChange(value + step);

@@ -22,6 +22,7 @@ function Navbar({
   builtArea,
   setAreaQuantities,
   handleVariantChange,
+  seatCounts,
 }) {
   const [error, setError] = useState(false);
 
@@ -31,12 +32,7 @@ function Navbar({
   const [resetAlert, setResetAlert] = useState(false);
   const [areaWarn, setAreaWarn] = useState(false);
 
-  const {
-    isAuthenticated,
-    // layoutImgRef,
-    // layoutImage = "",
-    accountHolder,
-  } = useApp();
+  const { isAuthenticated, accountHolder } = useApp();
 
   const {
     setTotalArea,
@@ -85,7 +81,8 @@ function Navbar({
     areaValues,
     areaQuantities,
     totalArea = null,
-    builtArea
+    builtArea,
+    seatCounts
   ) => {
     return {
       userId: userId || null,
@@ -145,6 +142,7 @@ function Navbar({
       washroomsQty: areaQuantities.washrooms || 0,
       ...(totalArea !== null && { totalArea }),
       usedSpace: builtArea,
+      seatCount: seatCounts,
     };
   };
 
@@ -183,7 +181,8 @@ function Navbar({
           areaValues,
           areaQuantities,
           totalArea,
-          builtArea
+          builtArea,
+          seatCounts
         );
 
         // Insert into tables

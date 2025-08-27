@@ -100,12 +100,12 @@ function Plans({
   };
 
   return (
-    <div className="md:container md:mx-auto lg:my-8 font-Poppins">
+    <div className="lg:container md:mx-auto lg:my-8 font-Poppins">
       <h2 className="text-center font-semibold text-xl lg:text-3xl capitalize text-[#75A2BE] my-4">
         please select your plan
       </h2>
       <div
-        className="hidden md:grid transition-all duration-500 h-[450px] gap-2"
+        className="hidden lg:grid transition-all duration-500 h-[450px] gap-2"
         style={{ gridTemplateColumns: getGridTemplateColumns(hoveredPlan) }}
         onMouseLeave={() => setHoveredPlan(1)}
       >
@@ -207,7 +207,10 @@ function Plans({
           );
         })}
       </div>
-      <div className="md:hidden grid" onMouseLeave={() => setHoveredPlan(1)}>
+      <div
+        className="lg:hidden grid grid-cols-1 md:grid-cols-2 md:gap-3"
+        onMouseLeave={() => setHoveredPlan(1)}
+      >
         {plansData.map((plan) => {
           return (
             <div
