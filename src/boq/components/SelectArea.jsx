@@ -521,7 +521,7 @@ function SelectArea({
 
   return (
     <div className="fixed inset-0 flex justify-center items-center z-20">
-      <div className="relative bg-gradient-to-br from-[#334A78] to-[#68B2DC] py-12 px-6 lg:p-12 max-w-[90%] max-h-[90%] w-[1000px] scrollbar-hide">
+      <div className="relative bg-gradient-to-br from-[#334A78] to-[#68B2DC] py-12 px-6 lg:p-6 max-w-[90%] h-[85vh] 2xl:h-[600px] w-[1000px] scrollbar-hide">
         {/* Close Button (Common for Both Modals) */}
         {/* <MdOutlineCancel
           size={30}
@@ -535,7 +535,7 @@ function SelectArea({
         <img
           src="../images/icons/close_btn.svg"
           alt="close"
-          className="absolute top-2 right-2 lg:top-4  lg:right-4 cursor-pointer z-5 w-7 h-7"
+          className="absolute top-2 right-2 lg:top-1  lg:right-1 cursor-pointer w-6 h-6"
           onClick={() => {
             setShowBackground(false); // Hide background before exit animation
             setShowSelectArea(false);
@@ -581,54 +581,72 @@ function SelectArea({
                       return true; // Default case: show all
                     })
                     .map((name, id) => (
-                      <div key={id} className="flex items-center gap-2">
-                        <input
-                          type="checkbox"
-                          id={`subCategory-${id}`}
-                          value={name}
-                          checked={selectedAreas.includes(name)}
-                          onChange={(e) =>
-                            handleCheckboxChange(
-                              e.target.value,
-                              e.target.checked
-                            )
-                          }
-                          className="appearance-none w-3 h-3 lg:w-4 lg:h-4 cursor-pointer transition duration-300 bg-black checked:border-black
+                      <div className="flex flex-col gap-1">
+                        <div key={id} className="flex items-center gap-2">
+                          <input
+                            type="checkbox"
+                            id={`subCategory-${id}`}
+                            value={name}
+                            checked={selectedAreas.includes(name)}
+                            onChange={(e) =>
+                              handleCheckboxChange(
+                                e.target.value,
+                                e.target.checked
+                              )
+                            }
+                            className="appearance-none w-3 h-3 lg:w-4 lg:h-4 cursor-pointer transition duration-300 bg-black checked:border-black
                       relative checked:before:content-['✔'] checked:before:absolute checked:before:text-white 
                       checked:before:top-1/2 checked:before:left-1/2 checked:before:-translate-x-1/2 checked:before:-translate-y-1/2 
                       checked:before:text-[14px] checked:before:font-bold disabled:bg-gray-400 disabled:cursor-not-allowed disabled:opacity-60"
-                          disabled={
-                            Array.isArray(selectedData) &&
-                            isItemSelected(
-                              selectedData,
-                              selectedCategory,
-                              name,
-                              selectedSubCategory1,
-                              selectedProductView
-                            )
-                            //  ||
-                            // disabledAreas.includes(name)
-                          }
-                        />
-                        <label
-                          htmlFor={`subCategory-${id}`}
-                          className={`text-xs lg:text-sm cursor-pointer  ${
-                            Array.isArray(selectedData) &&
-                            isItemSelected(
-                              selectedData,
-                              selectedCategory,
-                              name,
-                              selectedSubCategory1,
-                              selectedProductView
-                            )
-                            //   ||
-                            // disabledAreas.includes(name)
-                            //   ? "text-gray-400 cursor-not-allowed"
-                            //   : ""
-                          }`}
+                            disabled={
+                              Array.isArray(selectedData) &&
+                              isItemSelected(
+                                selectedData,
+                                selectedCategory,
+                                name,
+                                selectedSubCategory1,
+                                selectedProductView
+                              )
+                              //  ||
+                              // disabledAreas.includes(name)
+                            }
+                          />
+                          <label
+                            htmlFor={`subCategory-${id}`}
+                            className={`text-xs lg:text-sm cursor-pointer  ${
+                              Array.isArray(selectedData) &&
+                              isItemSelected(
+                                selectedData,
+                                selectedCategory,
+                                name,
+                                selectedSubCategory1,
+                                selectedProductView
+                              )
+                              //   ||
+                              // disabledAreas.includes(name)
+                              //   ? "text-gray-400 cursor-not-allowed"
+                              //   : ""
+                            }`}
+                          >
+                            {name}
+                          </label>
+                        </div>
+                        <div
+                          className={`${
+                            selectedAreas.includes(name) ? "flex" : "invisible"
+                          } gap-2 h-6`}
                         >
-                          {name}
-                        </label>
+                          <button className="h-5 w-5 border border-[#ccc] flex justify-center items-center">
+                            -
+                          </button>
+                          <input
+                            type="text"
+                            className="h-5 w-10 border border-[#ccc] flex justify-center items-center"
+                          />
+                          <button className="h-5 w-5 border border-[#ccc] flex justify-center items-center">
+                            +
+                          </button>
+                        </div>
                       </div>
                     ))}
                   <div className="flex items-center gap-2 col-span-full mr-10">
