@@ -5,18 +5,17 @@ import { IoIosCloseCircle } from "react-icons/io";
 
 function CurrentLayoutDetails({ onClose }) {
   const { currentLayoutData } = useApp();
-  console.log(currentLayoutData);
 
   return (
     <>
       <div className="fixed inset-0 bg-[#000]/30 flex justify-center items-center">
         <div className="max-w-xl w-full max-h-[80vh] overflow-y-auto   flex rounded-lg font-Poppins relative gradient-scrollbar">
-          <div className="bg-[#fff]/10 backdrop-blur-md flex-1 flex items-start justify-center pt-3 rounded-l-lg sticky left-0 top-0">
-            <button onClick={onClose}>
-              <IoIosCloseCircle color="#374A75" size={30} />
-            </button>
-          </div>
-          <div className="max-w-lg w-full p-5 bg-[#fff] h-full">
+          {/* <div className="bg-[#fff]/10 backdrop-blur-md flex-1 flex items-start justify-center pt-3 rounded-l-lg sticky left-0 top-0"> */}
+          <button onClick={onClose} className="absolute right-0 top-0">
+            <IoIosCloseCircle color="#374A75" size={30} />
+          </button>
+          {/* </div> */}
+          <div className=" w-full p-5 bg-[#fff] h-full">
             <div className="text-center mb-4">
               <div className="flex justify-center items-center gap-2">
                 <PiFrameCornersFill size={25} color="#374A75" />
@@ -47,39 +46,53 @@ function CurrentLayoutDetails({ onClose }) {
               </div>
             </div>
 
-            <div className="space-y-5">
-              {Object.entries(currentLayoutData)
-                .filter(
-                  ([key]) =>
-                    key.endsWith("Area") &&
-                    key !== "totalArea" &&
-                    key !== "usedSpace"
-                )
-                .map(([areaKey, areaValue]) => {
-                  const baseName = areaKey.replace("Area", "");
-                  const qtyKey = `${baseName}Qty`;
-                  const qtyValue = currentLayoutData[qtyKey];
+            <div className="overflow-x-auto">
+              <table className="min-w-full  text-sm text-left">
+                <thead className="bg-gray-100">
+                  <tr>
+                    <th className=" px-3 py-2">Name</th>
+                    <th className=" px-3 py-2 text-center">Area (sq.ft)</th>
+                    <th className=" px-3 py-2 text-center">Quantity</th>
+                    <th className=" px-3 py-2 text-center">Seats</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {Object.entries(currentLayoutData)
+                    .filter(
+                      ([key]) =>
+                        key.endsWith("Area") &&
+                        key !== "totalArea" &&
+                        key !== "usedSpace"
+                    )
+                    .map(([areaKey, areaValue]) => {
+                      const baseName = areaKey.replace("Area", "");
+                      const qtyKey = `${baseName}Qty`;
+                      const qtyValue = currentLayoutData[qtyKey];
+                      const seatsValue =
+                        currentLayoutData.seatCount?.[baseName] ?? "-";
 
-                  if (!qtyValue || qtyValue === 0) return null;
+                      if (!qtyValue || qtyValue === 0) return null;
 
-                  const displayName = baseName
-                    .replace(/([A-Z])/g, " $1")
-                    .replace(/^./, (char) => char.toUpperCase())
-                    .replace("L Type", "L-Type");
+                      const displayName = baseName
+                        .replace(/([A-Z])/g, " $1")
+                        .replace(/^./, (char) => char.toUpperCase())
+                        .replace("L Type", "L-Type");
 
-                  return (
-                    <div
-                      key={baseName}
-                      className="flex justify-between text-sm text-[#000] border-b pb-2"
-                    >
-                      <span className="w-1/2">{displayName}</span>
-                      <span className="w-1/4 text-center">
-                        {areaValue} sq.ft
-                      </span>
-                      <span className="w-1/4 text-center">{qtyValue}</span>
-                    </div>
-                  );
-                })}
+                      return (
+                        <tr key={baseName} className="hover:bg-gray-50">
+                          <td className=" px-3 py-2">{displayName}</td>
+                          <td className=" px-3 py-2 text-center">
+                            {areaValue}
+                          </td>
+                          <td className=" px-3 py-2 text-center">{qtyValue}</td>
+                          <td className=" px-3 py-2 text-center">
+                            {seatsValue}
+                          </td>
+                        </tr>
+                      );
+                    })}
+                </tbody>
+              </table>
             </div>
           </div>
         </div>
