@@ -74,6 +74,7 @@ function ProductOverview() {
     selectedPlan,
     formulaMap,
     setSelectedProductView,
+    seatCountData,
   } = useApp();
 
   // Toggle profile card visibility
@@ -230,21 +231,22 @@ function ProductOverview() {
 
     const quantity = quantityData[0]?.[normalizedSubCat] || 0;
     const area = areasData[0]?.[normalizedSubCat] || 0;
+    const seatCount = seatCountData?.[normalizedSubCat] || 0;
     if (
       cat?.category === "Furniture" ||
       cat?.category === "Smart Solutions" ||
       cat?.category === "Lux"
     ) {
       // || selectedCategory?.category === "HVAC"
-      return { quantity, price: product?.price || 0 }; //addonPrice
+      return { quantity, price: product?.price || 0, seatCount }; //addonPrice
     } else if (
       cat?.category === "Partitions / Ceilings" ||
       cat?.category === "HVAC"
     ) {
       //currently this category is missing
-      return { quantity, area, price: product?.price || 0 }; //addonPrice
+      return { quantity, area, price: product?.price || 0, seatCount }; //addonPrice
     } else {
-      return { area, price: product?.price || 0 }; //addonPrice
+      return { area, price: product?.price || 0, seatCount }; //addonPrice
     }
   };
 
@@ -291,7 +293,8 @@ function ProductOverview() {
       areasData,
       userResponses,
       product,
-      formulaMap
+      formulaMap,
+      seatCountData
     );
   }, [cat, subCat, subCat1, quantityData, areasData, userResponses, product]);
 
@@ -552,7 +555,11 @@ function ProductOverview() {
               <p className="text-md font-medium text-[#334A78] mb-1 lg:mb-3">
                 Total Quantity:{" "}
                 <span className="border-[1px] py-1 border-[#334A78] text-[#1a1b1c] rounded-md px-2 text-sm">
-                  {details.quantity.toLocaleString("en-IN")}
+                  {subCat1 === "Chair" &&
+                  subCat !== "Linear Workstation" &&
+                  subCat !== "L-Type Workstation"
+                    ? details.quantity.toLocaleString("en-IN")
+                    : details.quantity.toLocaleString("en-IN")}
                 </span>{" "}
               </p>
             )}
@@ -564,6 +571,17 @@ function ProductOverview() {
                 </span>{" "}
               </p>
             )}
+            {details?.seatCount > 0 &&
+              subCat1 === "Chair" &&
+              subCat !== "Linear Workstation" &&
+              subCat !== "L-Type Workstation" && (
+                <p className="text-xs lg:text-base font-medium text-[#334A78] mb-1 lg:mb-3">
+                  Seat Count:{" "}
+                  <span className="border-[1px] py-1 border-[#334A78] text-[#1a1b1c] rounded-xl px-2 text-xs lg:text-sm">
+                    {details.seatCount.toLocaleString("en-IN")}
+                  </span>{" "}
+                </p>
+              )}
             <button
               className=" border-2 lg:border-[1.5px] border-[#212B36] px-2 py-1.5 text-sm lg:text-lg w-full md:w-2/5 mb-1 md:mb-3 mt-2 md:mt-5"
               onClick={

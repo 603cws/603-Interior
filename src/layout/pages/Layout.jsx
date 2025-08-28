@@ -76,8 +76,8 @@ const initialQuantities = {
   washrooms: 0,
 };
 const initialSeatCounts = {
-  linear: 0,
-  lType: 0,
+  linear: 1,
+  lType: 1,
   md: 3,
   manager: 3,
   small: 4,
@@ -89,17 +89,17 @@ const initialSeatCounts = {
   meetingRoomLarge: 8,
   hrRoom: 4,
   financeRoom: 4,
-  ups: 0,
-  bms: 0,
-  server: 0,
-  reception: 0,
-  lounge: 0,
-  phoneBooth: 0,
-  breakoutRoom: 0,
-  executiveWashroom: 0,
-  videoRecordingRoom: 0,
-  other: 0,
-  washrooms: 0,
+  ups: 1,
+  bms: 1,
+  server: 1,
+  reception: 1,
+  lounge: 1,
+  phoneBooth: 1,
+  breakoutRoom: 1,
+  executiveWashroom: 1,
+  videoRecordingRoom: 1,
+  other: 1,
+  washrooms: 1,
 };
 
 const MAX_AREA = 25000;
@@ -501,11 +501,11 @@ function Layout() {
     setSeatCounts((prev) => {
       const newSeatCount = { ...prev };
 
-      Object.keys(areaQuantities).forEach((key) => {
-        if (areaQuantities[key] === 0) {
-          newSeatCount[key] = 0;
-        }
-      });
+      // Object.keys(areaQuantities).forEach((key) => {
+      //   if (areaQuantities[key] === 0) {
+      //     newSeatCount[key] = 0;
+      //   }
+      // });
       newSeatCount.linear = areaQuantities.linear ?? prev.linear;
       newSeatCount.lType = areaQuantities.lType ?? prev.lType;
       newSeatCount.md = areaValues.md >= 150 ? 4 : 3;

@@ -69,11 +69,12 @@ export const calculateTotalPriceHelper = (
   subcategory,
   subcategory1,
   height,
-  dimensions
+  dimensions,
+  seatCountData
 ) => {
   const normalizedSubCat = normalizeKey(subcategory);
 
-  let matchedKey, quantity, area, value;
+  let matchedKey, quantity, area, value, seat, seatCount;
 
   if (
     category === "Furniture" ||
@@ -85,9 +86,19 @@ export const calculateTotalPriceHelper = (
       normalizedSubCat,
       roomNumbersMap
     );
+    seat = findKeyWithExactAndPartialMatch(normalizedSubCat, seatCountData);
+    seatCount = seat ? seatCountData[seat] : 1;
     quantity = matchedKey ? roomNumbersMap[matchedKey] : 1;
-
-    value = quantity;
+    if (
+      category === "Furniture" &&
+      subcategory1 === "Chair" &&
+      subcategory !== "Linear Workstation" &&
+      subcategory !== "L-Type Workstation"
+    ) {
+      value = quantity * seatCount;
+    } else {
+      value = quantity;
+    }
   } else if (category === "Partitions / Ceilings" || category === "HVAC") {
     // Calculation of price * quantity * area   Depending on Quantity and Area both
 

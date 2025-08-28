@@ -52,11 +52,11 @@ function BoqPrompt({ onConfirm, onCancel, isProfileCard, setIsProfileCard }) {
     const nonDraftBOQs = allBOQs.filter((b) => !b.isDraft);
     setExistingBoqs(nonDraftBOQs);
 
-    if (nonDraftBOQs.length >= boqLimit) {
-      toast.error(
-        `You can only save up to ${boqLimit} BOQs (Drafts excluded).`
-      );
-    }
+    // if (nonDraftBOQs.length >= boqLimit) {
+    //   toast.error(
+    //     `You can only save up to ${boqLimit} BOQs (Drafts excluded).`
+    //   );
+    // }
   };
 
   useEffect(() => {

@@ -8,6 +8,7 @@ import {
 } from "../boq/utils/dataFetchers";
 import processData from "../boq/utils/dataProcessor";
 import { calculateTotalPrice } from "../boq/utils/productUtils";
+import { calculateSeatCountTotals } from "../boq/utils/dataProcessor";
 
 const AppContext = createContext();
 
@@ -79,6 +80,7 @@ export const AppProvider = ({ children }) => {
   const [productData, setProductData] = useState([]);
   const [areasData, setAreasData] = useState([]);
   const [quantityData, setQuantityData] = useState([]);
+  const [seatCountData, setSeatCountData] = useState([]);
 
   const [showRecommend, setShowRecommend] = useState(false);
   const [boqTotal, setBoqTotal] = useState(0);
@@ -152,6 +154,10 @@ export const AppProvider = ({ children }) => {
   useEffect(() => {
     fetchFormulas();
   }, []);
+
+  useEffect(() => {
+    console.log("Seat Count Data changed:", seatCountData);
+  }, [seatCountData]);
 
   useEffect(() => {
     const items = { BOQID, BOQTitle, selectedPlan, currentLayoutID };
@@ -316,6 +322,14 @@ export const AppProvider = ({ children }) => {
         if (roomDataResult.layoutData && roomDataResult.layoutData.length > 0) {
           setTotalArea(roomDataResult.layoutData[0]?.totalArea);
           setCurrentLayoutData(roomDataResult.layoutData[0]);
+
+          const baseSeatCount = roomDataResult.layoutData[0].seatCount;
+          const seatCountWithTotals = {
+            ...baseSeatCount,
+            ...calculateSeatCountTotals(baseSeatCount),
+          };
+
+          setSeatCountData(seatCountWithTotals);
 
           processedQuantityData = processData(
             roomDataResult.layoutData,
@@ -732,7 +746,8 @@ export const AppProvider = ({ children }) => {
           areasData,
           userResponses,
           selectedProductView,
-          formulaMap
+          formulaMap,
+          seatCountData
         ),
       };
 
@@ -860,6 +875,8 @@ export const AppProvider = ({ children }) => {
         selectedClient,
         setSelectedClient,
         setIsSaveBOQ,
+        seatCountData,
+        setSeatCountData,
       }}
     >
       {children}

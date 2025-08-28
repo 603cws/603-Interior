@@ -1095,6 +1095,10 @@ function Navbar({
                       <button
                         // onClick={handleSave}
                         onClick={() => {
+                          if (!selectedData || selectedData.length === 0) {
+                            toast.error("No selected data to save.");
+                            return;
+                          }
                           setShowBoqPrompt(true);
                           setIsProfileCard(false);
                           setIsSaveBOQ(true);
@@ -1231,6 +1235,10 @@ function Navbar({
               <button
                 // onClick={handleSave}
                 onClick={() => {
+                  if (!selectedData || selectedData.length === 0) {
+                    toast.error("No selected data to save.");
+                    return;
+                  }
                   setShowBoqPrompt(true);
                   setIsProfileCard(false);
                 }}
