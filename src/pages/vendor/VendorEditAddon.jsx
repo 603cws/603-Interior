@@ -39,9 +39,9 @@ function VendorEditAddon({
   const fileInputRef = useRef(null);
 
   const [dimensions, setDimensions] = useState({
-    height: selectedAddon?.dimensions.split("x")[0] || "",
-    length: selectedAddon?.dimensions.split("x")[1] || "",
-    width: selectedAddon?.dimensions.split("x")[2] || "",
+    height: selectedAddon?.dimensions?.split("x")[0] || "",
+    length: selectedAddon?.dimensions?.split("x")[1] || "",
+    width: selectedAddon?.dimensions?.split("x")[2] || "",
   });
 
   const [addon, setAddon] = useState({
@@ -431,7 +431,7 @@ function VendorEditAddon({
                   <option value="" disabled>
                     Select subcatgory
                   </option>
-                  {subcat.map((cat, index) => {
+                  {subcat?.map((cat, index) => {
                     return (
                       <option key={index} value={cat}>
                         {cat}
@@ -454,7 +454,7 @@ function VendorEditAddon({
                   type="text"
                   name="title"
                   onChange={handleChange}
-                  value={addon.title}
+                  value={addon?.title}
                   className="w-full py-1.5 px-2 border-2 rounded-lg"
                   required
                 />
@@ -465,7 +465,7 @@ function VendorEditAddon({
                   type="number"
                   name="price"
                   onChange={handleChange}
-                  value={addon.price}
+                  value={addon?.price}
                   required
                   className="w-full py-1.5 px-2 border-2 rounded-lg [&::-webkit-inner-spin-button]:appearance-none  focus:outline-none focus:ring-0"
                 />
@@ -479,7 +479,7 @@ function VendorEditAddon({
                     <input
                       type="number"
                       name="height"
-                      value={dimensions.height}
+                      value={dimensions?.height}
                       onChange={handleDimensionChange}
                       className="w-20 xl:w-32 py-1.5 px-2 border-2 rounded-lg [&::-webkit-inner-spin-button]:appearance-none  focus:outline-none focus:ring-0"
                       required
@@ -490,7 +490,7 @@ function VendorEditAddon({
                     <input
                       type="number"
                       name="length"
-                      value={dimensions.length}
+                      value={dimensions?.length}
                       onChange={handleDimensionChange}
                       className="w-20 xl:w-32 py-1.5 px-2 border-2 rounded-lg [&::-webkit-inner-spin-button]:appearance-none  focus:outline-none focus:ring-0"
                       required
@@ -501,7 +501,7 @@ function VendorEditAddon({
                     <input
                       type="number"
                       name="width"
-                      value={dimensions.width}
+                      value={dimensions?.width}
                       onChange={handleDimensionChange}
                       className="w-20 xl:w-32 py-1.5 px-2 border-2 rounded-lg [&::-webkit-inner-spin-button]:appearance-none  focus:outline-none focus:ring-0"
                       required

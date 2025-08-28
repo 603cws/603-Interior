@@ -672,7 +672,7 @@ function VendorProductEdit({
                     <input
                       type="number"
                       name="height"
-                      value={dimensions.height}
+                      value={dimensions?.height}
                       onChange={handleDimensionChange}
                       className="w-20 xl:w-32 py-1.5 px-2 border-2 rounded-lg [&::-webkit-inner-spin-button]:appearance-none  focus:outline-none focus:ring-0"
                       required
@@ -683,7 +683,7 @@ function VendorProductEdit({
                     <input
                       type="number"
                       name="length"
-                      value={dimensions.length}
+                      value={dimensions?.length}
                       onChange={handleDimensionChange}
                       className="w-20 xl:w-32 py-1.5 px-2 border-2 rounded-lg [&::-webkit-inner-spin-button]:appearance-none  focus:outline-none focus:ring-0"
                       required
@@ -694,7 +694,7 @@ function VendorProductEdit({
                     <input
                       type="number"
                       name="width"
-                      value={dimensions.width}
+                      value={dimensions?.width}
                       onChange={handleDimensionChange}
                       className="w-20 xl:w-32 py-1.5 px-2 border-2 rounded-lg [&::-webkit-inner-spin-button]:appearance-none  focus:outline-none focus:ring-0"
                       required
@@ -806,7 +806,7 @@ function VendorProductEdit({
                     </label>
                   </div>
 
-                  {variant.additionalImages.map((img, index) => {
+                  {variant?.additionalImages.map((img, index) => {
                     const imageUrl =
                       typeof img === "string"
                         ? `${baseImageUrl}/${img}`
@@ -849,7 +849,7 @@ function VendorProductEdit({
               <select
                 name="segment"
                 id="segment"
-                value={variant.segment}
+                value={variant?.segment}
                 className="w-full border-2 py-1.5 px-2 rounded-lg"
                 onChange={handleChange}
                 required

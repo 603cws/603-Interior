@@ -70,9 +70,9 @@ function AboutUs() {
   return (
     <>
       <LandingNavbar />
-      <section className="bg-[#304778] h-[570px]">
-        <div className="lg:container px-4 flex justify-between items-center font-Poppins">
-          <div className=" text-[#fff] flex flex-col gap-5 flex-1">
+      <section className="bg-[#304778] lg:h-[570px]">
+        <div className=" lg:container px-4 flex flex-col lg:flex-row justify-between items-center font-Poppins">
+          <div className=" text-[#fff] flex flex-col justify-center items-center lg:items-start text-center lg:text-start gap-5 flex-1">
             <h4 className="font-bold text-4xl capitalize tracking-wider leading-[50px]">
               Creating Workspaces <br /> that inspires
             </h4>
@@ -83,18 +83,18 @@ function AboutUs() {
             </p>
             <button
               onClick={() => navigate("/layout")}
-              className="w-fit bg-gradient-to-r from-[#5584B6] to-[#75A2BE] border border-[#fff] tracking-wider px-5 py-2.5 rounded capitalize mt-7 hover:bg-none hover:scale-105 transition duration-500 ease-in-out"
+              className="w-fit   bg-gradient-to-r from-[#5584B6] to-[#75A2BE] border border-[#fff] tracking-wider px-5 py-2.5 rounded capitalize mt-7 hover:bg-none hover:scale-105 transition duration-500 ease-in-out"
             >
               start your layout
             </button>
           </div>
-          <div className="p-10">
+          <div className="p-10 ">
             <img src="/images/about-us/about-us-hero.png" alt="" />
           </div>
         </div>
       </section>
 
-      <section className="relative py-20 bg-[url('/images/about-us/about-us-bg.png')] bg-no-repeat bg-right-top bg-contain">
+      <section className="relative pt-20 lg:py-20 bg-[url('/images/about-us/about-us-bg.png')] bg-no-repeat bg-right-top bg-contain">
         <div className="lg:container px-4">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 h-3/4">
             <div className="flex flex-col justify-center">

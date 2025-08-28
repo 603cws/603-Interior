@@ -89,7 +89,7 @@ function DashboardProductCard({
                 <h5 className="uppercase text-[#334A78] font-medium text-xs opacity-80">
                   dimensions:
                   <span className="font-bold text-[#000]">
-                    {product.dimensions || "NA"}
+                    {product?.dimensions || "NA"}
                   </span>
                 </h5>
                 <hr />

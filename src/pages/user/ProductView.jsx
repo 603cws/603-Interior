@@ -107,7 +107,8 @@ function ProductView({ onClose, product, handleDelete }) {
                 <h3 className="font-semibold  capitalize w-1/2 ">Dimension:</h3>
                 <p className=" w-1/2">
                   {" "}
-                  {product?.dimensions?.replaceAll(",", " x ") || "NA"}
+                  {product?.dimensions || "NA"}
+                  {/* {product?.dimensions?.replaceAll(",", " x ") || "NA"} */}
                 </p>
               </div>
               <div className="flex items-center justify-start  w-full my-2">

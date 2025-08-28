@@ -108,8 +108,8 @@ function App() {
               </PrivateRoute>
             }
           />
-          <Route path="/Contactus" element={<Contactuscopy />} />
-          <Route path="/newContactus" element={<Contactus />} />
+          <Route path="/Contactus" element={<Contactus />} />
+          {/* <Route path="/newContactus" element={<Contactus />} /> */}
           <Route path="/Aboutus" element={<AboutUs2 />} />
 
           <Route path="/Blog" element={<InteriorBlog />} />
@@ -124,8 +124,9 @@ function App() {
             path="/complete-profile/*"
             element={<Navigate to="/complete-profile" />}
           />
-          <Route path="/OurServices" element={<OurServices2 />} />
-          <Route path="/services" element={<Services />} />
+          <Route path="/OurServices" element={<Services />} />
+          {/* <Route path="/OurServices" element={<OurServices2 />} /> */}
+          {/* <Route path="/services" element={<Services />} /> */}
 
           <Route path="/Career/:jobTitle" element={<JobPage />} />
           <Route path="/scroll" element={<DoorScrollEffect />} />

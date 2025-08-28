@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import LandingNavbar from "../common-components/LandingNavbar";
 import { useState } from "react";
 import Footer from "../common-components/Footer";
+import GetInTouchSection from "../common-components/GetInTouchSection";
 const steps = [
   {
     imagePath: "/images/DeliveryService1.png",
@@ -73,6 +74,7 @@ const InfoCardDetails = [
 function Services() {
   return (
     <div className="">
+      <LandingNavbar />
       <OfficeLayoutSection />
       <div className="flex flex-col gap-6 md:gap-0 md:flex-row items-center justify-between  lg:p-16 lg:container lg:mx-auto lg:px-12 px-4">
         {InfoCardDetails.map((info) => (
@@ -93,6 +95,7 @@ function Services() {
       <div className="lg:container lg:mx-auto lg:px-12 px-4">
         <FeatureDesignSection />
       </div>
+      <GetInTouchSection />
       <Footer />
     </div>
   );

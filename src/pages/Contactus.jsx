@@ -3,6 +3,7 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import { useState } from "react";
 import HeroSection from "./HeroSection";
+import LandingNavbar from "../common-components/LandingNavbar";
 
 function Contactus() {
   const [isSubmitting, setisSubmitting] = useState(false);
@@ -91,6 +92,7 @@ function Contactus() {
 
   return (
     <>
+      <LandingNavbar />
       <div className="flex flex-col md:flex-row gap-6 my-10 px-4 md:px-0">
         <div className="md:w-[40%] md:pl-12 self-center lg:space-y-10">
           <h1 className="font-bold text-3xl lg:text-5xl leading-[59px] tracking-[0.3px] text-[#304778]">
