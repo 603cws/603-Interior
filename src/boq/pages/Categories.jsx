@@ -238,6 +238,16 @@ const Categories = ({
           (item) => item !== "Pods"
         );
       }
+      if (
+        category === "Furniture" &&
+        (subCategory === "Reception" ||
+          subCategory === "Pantry" ||
+          subCategory === "Breakout Room")
+      ) {
+        requiredSubCategory1Items = requiredSubCategory1Items.filter(
+          (item) => item !== "Storage"
+        );
+      }
 
       const isCompleted =
         requiredSubCategory1Items.length > 0 &&

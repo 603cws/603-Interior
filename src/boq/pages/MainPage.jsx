@@ -36,6 +36,16 @@ const MainPage = ({ userResponses, setSelectedSubCategory1, productsData }) => {
           (subCategory) => subCategory !== "Pods"
         );
       }
+      if (
+        selectedCategory.category === "Furniture" &&
+        (selectedSubCategory === "Reception" ||
+          selectedSubCategory === "Pantry" ||
+          selectedSubCategory === "Breakout Room")
+      ) {
+        subCategories = subCategories.filter(
+          (subCategory) => subCategory !== "Storage"
+        );
+      }
 
       // Automatically select the first subcategory when switching categories
       if (
@@ -103,6 +113,20 @@ const MainPage = ({ userResponses, setSelectedSubCategory1, productsData }) => {
           );
         } else {
           selectedSubCategories = subCat1["Civil / Plumbing"];
+        }
+        break;
+
+      case "Furniture":
+        if (
+          selectedSubCategory === "Reception" ||
+          selectedSubCategory === "Pantry" ||
+          selectedSubCategory === "Breakout Room"
+        ) {
+          selectedSubCategories = subCat1["Furniture"].filter(
+            (subCategory) => subCategory !== "Storage"
+          );
+        } else {
+          selectedSubCategories = subCat1["Furniture"];
         }
         break;
 

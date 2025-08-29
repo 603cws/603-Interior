@@ -26,6 +26,9 @@ export default {
         lato: ["Lato", "sans-serif"], // Add Lato font with a fallback
         lexend: ["Lexend Deca", "sans-serif"], // Add Lexend Deca with a fallback
         inter: ["Inter", "sans-serif"],
+        vampiroOne: ["Vampiro One", "cursive"],
+        TimesNewRoman: ["times-new-roman", "sans-serif"],
+        Georgia: ["georgia", "sans-serif"],
       },
       colors: {
         customYellow: "#fff9c9",

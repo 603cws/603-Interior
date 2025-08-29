@@ -120,6 +120,45 @@ export const AppProvider = ({ children }) => {
   const [showLoginPopup, setShowLoginPopup] = useState(false);
   const [selectedClient, setSelectedClient] = useState(null);
   const [isSaveBOQ, setIsSaveBOQ] = useState(true);
+  const [productQuantity, setProductQuantity] = useState({});
+  function normalizeKey(subcategory) {
+    return subcategory
+      .toLowerCase()
+      .replace(/\s+/g, "")
+      .replace(/-/g, "")
+      .replace("workstation", "")
+      .replace("cabin", "");
+  }
+  function normalizeObjectKeys(obj) {
+    const normalized = {};
+    Object.entries(obj).forEach(([key, value]) => {
+      normalized[normalizeKey(key)] = value;
+    });
+    return normalized;
+  }
+  useEffect(() => {
+    const newSeatCountData = normalizeObjectKeys(seatCountData);
+    const newQuantityData = normalizeObjectKeys(quantityData);
+
+    const allQuantities = {};
+
+    subCategories.forEach((subcategory) => {
+      const key = normalizeKey(subcategory);
+
+      // for each subcategory, create object for its products (subcategory1 items)
+      const productQuantities = {};
+      ["Table", "Chair", "Storage"].forEach((productName) => {
+        productQuantities[productName] =
+          newSeatCountData[key] ?? newQuantityData[key] ?? 0;
+      });
+
+      allQuantities[subcategory] = productQuantities;
+    });
+
+    setProductQuantity(allQuantities);
+  }, [subCategories, seatCountData, quantityData]);
+
+  console.log(productQuantity, subCat1);
 
   const handleBOQTitleChange = (title) => {
     if (isSaveBOQ) setBOQTitle(title);
@@ -154,10 +193,6 @@ export const AppProvider = ({ children }) => {
   useEffect(() => {
     fetchFormulas();
   }, []);
-
-  useEffect(() => {
-    console.log("Seat Count Data changed:", seatCountData);
-  }, [seatCountData]);
 
   useEffect(() => {
     const items = { BOQID, BOQTitle, selectedPlan, currentLayoutID };
@@ -672,6 +707,16 @@ export const AppProvider = ({ children }) => {
         if (category === "Civil / Plumbing" && subcategory === "Pantry") {
           validSubCat1List = validSubCat1List.filter((item) => item !== "Pods");
         }
+        if (
+          category === "Furniture" &&
+          (subcategory === "Reception" ||
+            subcategory === "Pantry" ||
+            subcategory === "Breakout Room")
+        ) {
+          validSubCat1List = validSubCat1List.filter(
+            (item) => item !== "Storage"
+          );
+        }
 
         const subCategory1Index = validSubCat1List.indexOf(subcategory1);
         if (subCategory1Index !== -1) {
@@ -749,6 +794,7 @@ export const AppProvider = ({ children }) => {
           formulaMap,
           seatCountData
         ),
+        // quantity: productQuantity,
       };
 
       if (existingProduct) {
@@ -877,6 +923,8 @@ export const AppProvider = ({ children }) => {
         setIsSaveBOQ,
         seatCountData,
         setSeatCountData,
+        productQuantity,
+        setProductQuantity,
       }}
     >
       {children}

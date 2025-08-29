@@ -56,6 +56,7 @@ export const calculateSeatCountTotals = (seatCount) => {
     meetingrooms: getTotal(meetingRoomKeys),
     publicspaces: getTotal(publicSpaceKeys),
     supportspaces: getTotal(supportSpaceKeys),
+    pantry: getTotal(["lounge"]),
   };
 };
 

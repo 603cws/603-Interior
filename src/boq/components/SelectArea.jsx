@@ -29,6 +29,8 @@ function SelectArea({
     areasData,
     quantityData,
     handelSelectedData,
+    productQuantity,
+    setProductQuantity,
     // subCategories,
   } = useApp();
 
@@ -427,7 +429,13 @@ function SelectArea({
           }
 
           return (
-            !(subCategory === "Pantry" && selectedSubCategory1 === "Pods") && // Exclude Pantry when Pods is selected
+            !(
+              (subCategory === "Pantry" && selectedSubCategory1 === "Pods") ||
+              ((subCategory === "Reception" ||
+                subCategory === "Pantry" ||
+                subCategory === "Breakout Room") &&
+                selectedSubCategory1 === "Storage")
+            ) && // Exclude Pantry when Pods is selected
             !isItemSelected(
               selectedData,
               selectedCategory,
@@ -465,7 +473,13 @@ function SelectArea({
           : subCategory !== "Centralized";
       }
 
-      return !(subCategory === "Pantry" && selectedSubCategory1 === "Pods");
+      return !(
+        (subCategory === "Pantry" && selectedSubCategory1 === "Pods") ||
+        ((subCategory === "Reception" ||
+          subCategory === "Pantry" ||
+          subCategory === "Breakout Room") &&
+          selectedSubCategory1 === "Storage")
+      );
     })
     .every((subCategory) =>
       isItemSelected(
@@ -485,7 +499,13 @@ function SelectArea({
             ? subCategory === "Centralized" // Only "Centralized" should be checked
             : subCategory !== "Centralized"; // Exclude "Centralized" for other types
         }
-        return !(subCategory === "Pantry" && selectedSubCategory1 === "Pods"); // Exclude Pantry when Pods is selected
+        return !(
+          (subCategory === "Pantry" && selectedSubCategory1 === "Pods") ||
+          ((subCategory === "Reception" ||
+            subCategory === "Pantry" ||
+            subCategory === "Breakout Room") &&
+            selectedSubCategory1 === "Storage")
+        ); // Exclude Pantry when Pods is selected
       })
       .every(
         (subCategory) =>
@@ -517,6 +537,47 @@ function SelectArea({
     setSelectedAddons((prev) =>
       isChecked ? [...prev, addon] : prev.filter((item) => item.id !== addon.id)
     );
+  };
+
+  // Increment
+  const handleIncrement = (subcategory, productName) => {
+    setProductQuantity((prev) => ({
+      ...prev,
+      [subcategory]: {
+        ...prev[subcategory],
+        [productName]: Math.min(
+          (prev[subcategory]?.[productName] || 1) + 1,
+          1000
+        ),
+      },
+    }));
+  };
+
+  // Decrement
+  const handleDecrement = (subcategory, productName) => {
+    setProductQuantity((prev) => ({
+      ...prev,
+      [subcategory]: {
+        ...prev[subcategory],
+        [productName]: Math.max((prev[subcategory]?.[productName] || 1) - 1, 1),
+      },
+    }));
+  };
+
+  // OnChange
+  const handleChange = (subcategory, productName, value) => {
+    let newValue = parseInt(value, 10);
+    if (isNaN(newValue)) newValue = 1;
+    if (newValue < 1) newValue = 1;
+    if (newValue > 1000) newValue = 1000;
+
+    setProductQuantity((prev) => ({
+      ...prev,
+      [subcategory]: {
+        ...prev[subcategory],
+        [productName]: newValue,
+      },
+    }));
   };
 
   return (
@@ -577,12 +638,26 @@ function SelectArea({
                           return false;
                         }
                       }
+                      if (selectedCategory.category === "Furniture") {
+                        // Always keep "Washrooms"
+                        // if (subCategory === "Washrooms") return true;
+
+                        // Remove "Pantry" when "Pods" exists
+                        if (
+                          (subCategory === "Reception" ||
+                            subCategory === "Pantry" ||
+                            subCategory === "Breakout Room") &&
+                          selectedSubCategory1 === "Storage"
+                        ) {
+                          return false;
+                        }
+                      }
 
                       return true; // Default case: show all
                     })
                     .map((name, id) => (
-                      <div className="flex flex-col gap-1">
-                        <div key={id} className="flex items-center gap-2">
+                      <div key={id} className="flex flex-col gap-1">
+                        <div className="flex items-center gap-2">
                           <input
                             type="checkbox"
                             id={`subCategory-${id}`}
@@ -631,22 +706,78 @@ function SelectArea({
                             {name}
                           </label>
                         </div>
-                        <div
-                          className={`${
-                            selectedAreas.includes(name) ? "flex" : "invisible"
-                          } gap-2 h-6`}
-                        >
-                          <button className="h-5 w-5 border border-[#ccc] flex justify-center items-center">
-                            -
-                          </button>
-                          <input
-                            type="text"
-                            className="h-5 w-10 border border-[#ccc] flex justify-center items-center"
-                          />
-                          <button className="h-5 w-5 border border-[#ccc] flex justify-center items-center">
-                            +
-                          </button>
-                        </div>
+                        {/* table chair */}
+                        {selectedCategory.category === "Furniture" &&
+                          ((name === "Reception" &&
+                            selectedSubCategory1 === "Chair") ||
+                            name === "Pantry" ||
+                            name === "Breakout Room") &&
+                          (selectedSubCategory1 === "Table" ||
+                            selectedSubCategory1 === "Chair") && (
+                            <div
+                              className={`${
+                                selectedAreas.includes(name)
+                                  ? "flex"
+                                  : "invisible"
+                              } gap-2 h-6`}
+                            >
+                              <button
+                                onClick={() =>
+                                  handleDecrement(name, selectedSubCategory1)
+                                }
+                                className="h-5 w-5 border border-[#ccc] flex justify-center items-center"
+                              >
+                                -
+                              </button>
+                              <input
+                                type="text"
+                                value={
+                                  productQuantity[name]?.[
+                                    selectedSubCategory1
+                                  ] || 1
+                                }
+                                onChange={(e) =>
+                                  handleChange(
+                                    name,
+                                    selectedSubCategory1,
+                                    e.target.value
+                                  )
+                                }
+                                className="h-5 w-10 border border-[#ccc] flex justify-center items-center text-center text-xs"
+                              />
+                              <button
+                                onClick={() =>
+                                  handleIncrement(name, selectedSubCategory1)
+                                }
+                                className="h-5 w-5 border border-[#ccc] flex justify-center items-center"
+                              >
+                                +
+                              </button>
+                            </div>
+                          )}
+                        {/* storage */}
+                        {selectedCategory.category === "Furniture" &&
+                          selectedSubCategory1 === "Storage" && (
+                            <div
+                              className={`${
+                                selectedAreas.includes(name)
+                                  ? "flex"
+                                  : "invisible"
+                              } gap-2 h-6`}
+                            >
+                              <button className="h-5 w-5 border border-[#ccc] flex justify-center items-center">
+                                -
+                              </button>
+                              <input
+                                type="text"
+                                value={productQuantity[name]}
+                                className="h-5 w-10 border border-[#ccc] flex justify-center items-center text-center text-xs"
+                              />
+                              <button className="h-5 w-5 border border-[#ccc] flex justify-center items-center">
+                                +
+                              </button>
+                            </div>
+                          )}
                       </div>
                     ))}
                   <div className="flex items-center gap-2 col-span-full mr-10">
