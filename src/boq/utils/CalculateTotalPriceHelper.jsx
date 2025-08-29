@@ -143,6 +143,16 @@ export const calculateTotalPriceHelper = (
 
       let rawValue = area / dimArea;
       value = rawValue ? Math.ceil(rawValue) : 1;
+    }
+    if (category === "Civil / Plumbing" && subcategory1 === "Tile") {
+      //Opp condition written like except Epoxy for rest A / dim * price
+      matchedKey = findKeyWithExactAndPartialMatch(normalizedSubCat, areasData);
+      area = matchedKey ? areasData[matchedKey] : 1;
+
+      const dimArea = multiplyFirstTwoFlexible(dimensions);
+
+      let rawValue = area / dimArea;
+      value = rawValue ? Math.ceil(rawValue) : 1;
     } else {
       matchedKey = findKeyWithExactAndPartialMatch(normalizedSubCat, areasData);
       area = matchedKey ? areasData[matchedKey] : 1;

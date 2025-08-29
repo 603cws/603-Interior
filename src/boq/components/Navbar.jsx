@@ -87,6 +87,7 @@ function Navbar({
     setCurrentLayoutID,
     quantityData,
     setIsSaveBOQ,
+    productQuantity,
   } = useApp();
 
   // const totalArea = currentLayoutData.totalArea;
@@ -950,7 +951,8 @@ function Navbar({
         areasData,
         categories,
         BOQTitle,
-        userResponses
+        userResponses,
+        productQuantity
       );
 
       setIsDownloading(false);

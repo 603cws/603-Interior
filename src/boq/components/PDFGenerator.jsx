@@ -45,7 +45,8 @@ const PDFGenerator = {
     areasData,
     categories,
     BOQTitle,
-    userResponses
+    userResponses,
+    productQuantity
   ) => {
     const areas = areasData[0];
     const quantities = quantityData[0];
@@ -199,11 +200,14 @@ const PDFGenerator = {
             };
           }
 
-          const { area, qty } = getAreaAndQuantity(
+          const { area } = getAreaAndQuantity(
             item.subcategory,
             areas,
             quantities
           );
+
+          const qty = item.quantity || "-";
+          // productQuantity?.[item.subcategory]?.[item.subcategory1] || "—";
 
           return [
             rowNo,

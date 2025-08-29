@@ -1,11 +1,9 @@
-import { useEffect, useState } from "react"; //useState
-import { MdOutlineCancel } from "react-icons/md";
+import { useEffect, useState } from "react";
 import { useApp } from "../../Context/Context";
 import Addon from "./Addon";
 import { toast, Slide } from "react-toastify";
 import { calculateAddonTotalPrice } from "../utils/productUtils";
 import { AddToCartToast } from "../../utils/AddToCartToast";
-import { RxCrossCircled } from "react-icons/rx";
 import { categoriesWithTwoLevelCheck } from "../../constants/constant";
 
 function SelectArea({
@@ -14,14 +12,13 @@ function SelectArea({
   selectedAreas,
   setSelectedAreas,
   selectedProductView,
-  // categoriesWithTwoLevelCheck,
   allAddons,
-  onAddonAdd,
   setShowBackground,
   selectedCategory,
   selectedSubCategory,
   selectedSubCategory1,
 }) {
+  //Don't call the selectedCategory, selectedSubCategory, selectedSubCategory1, subCategories from Context => Sunny
   const {
     selectedData,
     userResponses,
@@ -31,10 +28,7 @@ function SelectArea({
     handelSelectedData,
     productQuantity,
     setProductQuantity,
-    // subCategories,
   } = useApp();
-
-  //Don't call the selectedCategory, selectedSubCategory, selectedSubCategory1, subCategories from Context => Sunny
 
   const subCategories = selectedCategory.subcategories;
 
@@ -43,11 +37,6 @@ function SelectArea({
   const [selectedRoom, setSelectedRoom] = useState(null);
   const [selectedAddons, setSelectedAddons] = useState([]);
   const [submitBtn, setSubmitBtn] = useState(false);
-  // const [disabledAreas, setDisabledAreas] = useState([]);
-
-  // const baseImageUrl =
-  //   "https://bwxzfwsoxwtzhjbzbdzs.supabase.co/storage/v1/object/public/addon/";
-
   const [selectedAddonsMap, setSelectedAddonsMap] = useState({});
 
   // Fetch existing addons whenever `selectedData` changes
@@ -119,77 +108,24 @@ function SelectArea({
     }
   }, [allSubcategories]);
 
-  // useEffect(() => {
-  //   if (Array.isArray(selectedData) && selectedData.length > 0) {
-  //     const hasCentralized = selectedData.some(
-  //       (item) => item.subcategory === "Centralized"
-  //     );
-
-  //     const hasOtherSubCats = selectedData.some(
-  //       (item) => item.subcategory !== "Centralized"
-  //     );
-
-  //     let disabledList = [];
-
-  //     if (hasCentralized) {
-  //       disabledList = subCategories.filter(
-  //         (subCat) => subCat !== "Centralized"
-  //       );
-  //     } else if (hasOtherSubCats) {
-  //       disabledList = ["Centralized"];
-  //     }
-
-  //     // Keep a copy of the original disabled list
-  //     const initialDisabledList = new Set(disabledList);
-
-  //     // Get already selected subcategories
-  //     const alreadySelected = selectedData.map((item) => item.subcategory);
-
-  //     // Merge only if they were originally disabled
-  //     disabledList = [
-  //       ...new Set([
-  //         ...disabledList,
-  //         ...alreadySelected.filter((item) => initialDisabledList.has(item)),
-  //       ]),
-  //     ];
-
-  //     setDisabledAreas(disabledList);
-  //   } else {
-  //     setDisabledAreas([]);
-  //   }
-  // }, [selectedData, subCategories]);
-
-  // Initialize selected areas based on selectedData
-
   useEffect(() => {
     // Only proceed if selectedData is a non-empty array
     if (Array.isArray(selectedData) && selectedData.length > 0) {
-      const initialSelectedAreas = subCategories.filter(
-        (subCat) =>
-          selectedData.some((item) =>
-            // Check for the 'Flooring' category separately
-            categoriesWithTwoLevelCheck.includes(item.category)
-              ? item.id === selectedProductView?.id
-                ? `${item.category}-${item.subcategory}-${item.subcategory1}` ===
-                  `${selectedCategory.category}-${subCat}-${selectedSubCategory1}`
-                : `${item.category}-${item.subcategory}` ===
-                  `${selectedCategory.category}-${subCat}`
-              : `${item.category}-${item.subcategory}-${item.subcategory1}` ===
+      const initialSelectedAreas = subCategories.filter((subCat) =>
+        selectedData.some((item) =>
+          // Check for the 'Flooring' category separately
+          categoriesWithTwoLevelCheck.includes(item.category)
+            ? item.id === selectedProductView?.id
+              ? `${item.category}-${item.subcategory}-${item.subcategory1}` ===
                 `${selectedCategory.category}-${subCat}-${selectedSubCategory1}`
-          )
-
-        // Array.isArray(selectedData) &&
-        // selectedData.length > 0 &&
-        // isItemSelected(
-        //   selectedData,
-        //   selectedCategory,
-        //   subCat,
-        //   selectedSubCategory1
-        // )
+              : `${item.category}-${item.subcategory}` ===
+                `${selectedCategory.category}-${subCat}`
+            : `${item.category}-${item.subcategory}-${item.subcategory1}` ===
+              `${selectedCategory.category}-${subCat}-${selectedSubCategory1}`
+        )
       );
       setSelectedAreas(initialSelectedAreas);
     } else {
-      // If selectedData is empty, clear the selected areas
       setSelectedAreas([]);
     }
 
@@ -203,18 +139,15 @@ function SelectArea({
   ]);
 
   useEffect(() => {
-    // Function to handle "Esc" key press
     const handleEscKey = (e) => {
       if (e.key === "Escape") {
         setShowSelectArea(false);
-        setShowBackground(false); // Hide background before exit animation
+        setShowBackground(false);
       }
     };
 
-    // Add event listener when component is mounted
     document.addEventListener("keydown", handleEscKey);
 
-    // Cleanup event listener on component unmount
     return () => {
       document.removeEventListener("keydown", handleEscKey);
     };
@@ -228,7 +161,6 @@ function SelectArea({
   };
 
   const handleDoneClick = () => {
-    // const allSubcategories = subCategories; // All available subcategories
     let selectedSubcategories = subCategories.filter((subCat) =>
       selectedAreas.includes(subCat)
     );
@@ -247,20 +179,10 @@ function SelectArea({
       );
     });
 
-    // Set only selected subcategories
     setAllSubcategories(selectedSubcategories);
 
-    // Process all subcategories to handle addition and removal
     subCategories.forEach((subCat) => {
       const isDisabled =
-        // Array.isArray(selectedData) &&
-        // selectedData.length > 0 &&
-        // selectedData.some(
-        //   (item) =>
-        //     `${item.category}-${item.subcategory}-${item.subcategory1}` ===
-        //       `${selectedCategory.category}-${subCat}-${selectedSubCategory1}` &&
-        //     item.product_variant.variant_title !== selectedProductView.title
-        // );
         Array.isArray(selectedData) &&
         selectedData.length > 0 &&
         isItemSelected(
@@ -271,29 +193,19 @@ function SelectArea({
           selectedProductView
         );
 
-      // Skip processing if the subcategory is disabled
       if (isDisabled) return;
 
       const isChecked = selectedAreas.includes(subCat);
 
-      // Add or remove the product for the current subcategory
       handelSelectedData(
         selectedProductView,
         selectedCategory,
         subCat,
         selectedSubCategory1,
-        isChecked // Pass whether the subcategory is selected or not
+        isChecked, // Pass whether the subcategory is selected or not
+        productQuantity
       );
     });
-
-    // if (!allAddons || allAddons.length === 0) {
-    //   setShowSelectArea(false);
-    //   if (selectedSubcategories.length > 0) botRight();
-    // } else {
-    //   if (selectedSubcategories.length > 0) setShowAddon(true);
-    //   else setShowSelectArea(false);
-
-    // }
 
     if (selectedSubcategories.length > 0) {
       if (!allAddons || allAddons.length === 0) {
@@ -309,56 +221,6 @@ function SelectArea({
     }
   };
 
-  // const handleAddonClick = () => {
-  //   setShowAddon(false);
-  //   setShowSelectArea(false); // Close the modal
-
-  //   setSelectedData((prevData) => {
-  //     const updatedData = prevData.map((item) => {
-  //       if (
-  //         item.groupKey ===
-  //         `${selectedCategory.category}-${selectedRoom}-${selectedSubCategory1}-${selectedProductView.id}`
-  //       ) {
-  //         return {
-  //           ...item,
-  //           addons:
-  //             selectedAddons.length > 0 ? [...selectedAddons] : item.addons,
-  //           // ✅ If no new addons are selected, keep the old ones
-  //         };
-  //       }
-  //       return item;
-  //     });
-
-  //     localStorage.setItem("selectedData", JSON.stringify(updatedData)); // ✅ Persist state
-
-  //     return updatedData;
-  //   });
-  // };
-
-  // const handleAddonClick = () => {
-  //   setShowAddon(false);
-  //   setShowSelectArea(false); // Close the modal
-
-  //   setSelectedData((prevData) => {
-  //     const updatedData = prevData.map((item) => {
-  //       if (
-  //         item.groupKey ===
-  //         `${selectedCategory.category}-${selectedRoom}-${selectedSubCategory1}-${selectedProductView.id}`
-  //       ) {
-  //         return {
-  //           ...item,
-  //           addons: [...selectedAddons], // ✅ Always update with selectedAddons (even if empty)
-  //         };
-  //       }
-  //       return item;
-  //     });
-
-  //     localStorage.setItem("selectedData", JSON.stringify(updatedData)); // ✅ Persist state
-
-  //     return updatedData;
-  //   });
-  // };
-
   const isItemSelected = (
     selectedData,
     selectedCategory,
@@ -366,9 +228,6 @@ function SelectArea({
     selectedSubCategory1,
     selectedProductView
   ) => {
-    // if (disabledAreas.includes(subCat)) {
-    //   return false;
-    // }
     return (
       Array.isArray(selectedData) &&
       selectedData.some((item) => {
@@ -382,41 +241,10 @@ function SelectArea({
               `${selectedCategory.category}-${subCat}-${selectedSubCategory1}` &&
             item.product_variant.variant_title !== selectedProductView?.title;
 
-        // Directly return baseCondition
         return baseCondition;
       })
     );
   };
-
-  // const handleSelectAll = (checked) => {
-  //   if (checked) {
-  //     const selectableSubCategories = selectedCategory.subcategories.filter(
-  //       (subCategory) => {
-  //         if (selectedCategory.category === "HVAC") {
-  //           return userResponses?.hvacType === "Centralized"
-  //             ? subCategory === "Centralized" // Select only "Centralized"
-  //             : subCategory !== "Centralized"; // Select all except "Centralized"
-  //         }
-
-  //         return (
-  //           !(subCategory === "Pantry" && selectedSubCategory1 === "Pods") && // Exclude Pantry when Pods is selected
-  //           !isItemSelected(
-  //             selectedData,
-  //             selectedCategory,
-  //             subCategory,
-  //             selectedSubCategory1,
-  //             selectedProductView
-  //           ) // Exclude already-selected items
-  //         );
-  //       }
-  //     );
-  //     setSelectedAreas(selectableSubCategories);
-  //   } else {
-  //     setSelectedAreas([]);
-  //   }
-  // };
-
-  // Check if all selectable subcategories are already selected
 
   const handleSelectAll = (checked) => {
     if (checked) {
@@ -442,7 +270,7 @@ function SelectArea({
               subCategory,
               selectedSubCategory1,
               selectedProductView
-            ) // Exclude already-selected items
+            )
           );
         }
       );
@@ -583,16 +411,6 @@ function SelectArea({
   return (
     <div className="fixed inset-0 flex justify-center items-center z-20">
       <div className="relative bg-gradient-to-br from-[#334A78] to-[#68B2DC] py-12 px-6 lg:p-6 max-w-[90%] h-[85vh] 2xl:h-[600px] w-[1000px] scrollbar-hide">
-        {/* Close Button (Common for Both Modals) */}
-        {/* <MdOutlineCancel
-          size={30}
-          color="white"
-          className="absolute top-1 right-1 cursor-pointer z-5 text-[#4E7FAB] border border-[#A9BFD3] rounded-full hover:text-red-500 transition-colors duration-300"
-          onClick={() => {
-            setShowBackground(false); // Hide background before exit animation
-            setShowSelectArea(false);
-          }}
-        /> */}
         <img
           src="../images/icons/close_btn.svg"
           alt="close"
@@ -603,8 +421,6 @@ function SelectArea({
           }}
         />
 
-        {/* <RxCrossCircled className="absolute top-1 right-1 cursor-pointer z-5 text-[#E5E5E5] border border-[#A9BFD3] rounded-full hover:text-red-500 transition-colors duration-300" /> */}
-        {/* Inner White Content (Common Border) */}
         <div className="bg-white p-6 rounded-lg border-[3px] border-[#FFD500] relative h-auto lg:h-full">
           {/* Area Selection Modal */}
           {!showAddon && (
@@ -639,10 +455,6 @@ function SelectArea({
                         }
                       }
                       if (selectedCategory.category === "Furniture") {
-                        // Always keep "Washrooms"
-                        // if (subCategory === "Washrooms") return true;
-
-                        // Remove "Pantry" when "Pods" exists
                         if (
                           (subCategory === "Reception" ||
                             subCategory === "Pantry" ||
@@ -653,7 +465,7 @@ function SelectArea({
                         }
                       }
 
-                      return true; // Default case: show all
+                      return true;
                     })
                     .map((name, id) => (
                       <div key={id} className="flex flex-col gap-1">
@@ -697,10 +509,6 @@ function SelectArea({
                                 selectedSubCategory1,
                                 selectedProductView
                               )
-                              //   ||
-                              // disabledAreas.includes(name)
-                              //   ? "text-gray-400 cursor-not-allowed"
-                              //   : ""
                             }`}
                           >
                             {name}
@@ -765,19 +573,83 @@ function SelectArea({
                                   : "invisible"
                               } gap-2 h-6`}
                             >
-                              <button className="h-5 w-5 border border-[#ccc] flex justify-center items-center">
+                              <button
+                                onClick={() =>
+                                  handleDecrement(name, selectedSubCategory1)
+                                }
+                                className="h-5 w-5 border border-[#ccc] flex justify-center items-center"
+                              >
                                 -
                               </button>
                               <input
                                 type="text"
-                                value={productQuantity[name]}
+                                value={
+                                  productQuantity[name]?.[
+                                    selectedSubCategory1
+                                  ] || 1
+                                }
+                                onChange={(e) =>
+                                  handleChange(
+                                    name,
+                                    selectedSubCategory1,
+                                    e.target.value
+                                  )
+                                }
                                 className="h-5 w-10 border border-[#ccc] flex justify-center items-center text-center text-xs"
                               />
-                              <button className="h-5 w-5 border border-[#ccc] flex justify-center items-center">
+                              <button
+                                onClick={() =>
+                                  handleIncrement(name, selectedSubCategory1)
+                                }
+                                className="h-5 w-5 border border-[#ccc] flex justify-center items-center"
+                              >
                                 +
                               </button>
                             </div>
                           )}
+                        {/* Smart Solution & Lux */}
+                        {(selectedCategory.category === "Smart Solutions" ||
+                          selectedCategory.category === "Lux") && (
+                          <div
+                            className={`${
+                              selectedAreas.includes(name)
+                                ? "flex"
+                                : "invisible"
+                            } gap-2 h-6`}
+                          >
+                            <button
+                              onClick={() =>
+                                handleDecrement(name, selectedSubCategory1)
+                              }
+                              className="h-5 w-5 border border-[#ccc] flex justify-center items-center"
+                            >
+                              -
+                            </button>
+                            <input
+                              type="text"
+                              value={
+                                productQuantity[name]?.[selectedSubCategory1] ||
+                                1
+                              }
+                              onChange={(e) =>
+                                handleChange(
+                                  name,
+                                  selectedSubCategory1,
+                                  e.target.value
+                                )
+                              }
+                              className="h-5 w-10 border border-[#ccc] flex justify-center items-center text-center text-xs"
+                            />
+                            <button
+                              onClick={() =>
+                                handleIncrement(name, selectedSubCategory1)
+                              }
+                              className="h-5 w-5 border border-[#ccc] flex justify-center items-center"
+                            >
+                              +
+                            </button>
+                          </div>
+                        )}
                       </div>
                     ))}
                   <div className="flex items-center gap-2 col-span-full mr-10">

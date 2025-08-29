@@ -127,7 +127,9 @@ export const AppProvider = ({ children }) => {
       .replace(/\s+/g, "")
       .replace(/-/g, "")
       .replace("workstation", "")
-      .replace("cabin", "");
+      .replace("mdcabin", "md")
+      .replace("managercabin", "manager")
+      .replace("smallcabin", "small");
   }
   function normalizeObjectKeys(obj) {
     const normalized = {};
@@ -145,20 +147,45 @@ export const AppProvider = ({ children }) => {
     subCategories.forEach((subcategory) => {
       const key = normalizeKey(subcategory);
 
-      // for each subcategory, create object for its products (subcategory1 items)
+      const categoryProducts = subCat1[selectedCategory?.category] || [];
       const productQuantities = {};
-      ["Table", "Chair", "Storage"].forEach((productName) => {
-        productQuantities[productName] =
-          newSeatCountData[key] ?? newQuantityData[key] ?? 0;
-      });
 
+      // ✅ First check in selectedData
+      const selectedItem = selectedData?.find(
+        (item) =>
+          item.category === selectedCategory?.category &&
+          item.subcategory === subcategory
+      );
+
+      if (selectedItem) {
+        // If found, use that directly
+        categoryProducts.forEach((productName) => {
+          productQuantities[productName] = selectedItem.quantity ?? 0;
+        });
+      } else {
+        categoryProducts.forEach((productName) => {
+          let value = newSeatCountData[key] ?? newQuantityData[0][key] ?? 0;
+
+          // ✅ Apply special Furniture logic
+          if (
+            selectedCategory?.category === "Furniture" &&
+            subcategory !== "Linear Workstation" &&
+            subcategory !== "L-Type Workstation" &&
+            subcategory !== "Md Cabin" &&
+            subcategory !== "Manager Cabin" &&
+            productName === "Chair"
+          ) {
+            value = value * (newQuantityData[0][key] ?? 1);
+          }
+
+          productQuantities[productName] = value;
+        });
+      }
       allQuantities[subcategory] = productQuantities;
     });
 
     setProductQuantity(allQuantities);
-  }, [subCategories, seatCountData, quantityData]);
-
-  console.log(productQuantity, subCat1);
+  }, [subCategories, seatCountData, quantityData, selectedCategory]);
 
   const handleBOQTitleChange = (title) => {
     if (isSaveBOQ) setBOQTitle(title);
@@ -736,12 +763,21 @@ export const AppProvider = ({ children }) => {
     setProgress(Math.round(totalProgress * 100) / 100);
   }
 
+  function multiplyFirstTwoFlexible(dimStr) {
+    const [a = NaN, b = NaN] = String(dimStr)
+      .split(/[,\sxX*]+/) // comma / space / x / * as separators
+      .map((s) => parseFloat(s.trim()));
+
+    return Number.isFinite(a) && Number.isFinite(b) ? Number(a * b) : null;
+  }
+
   const handelSelectedData = (
     product,
     category,
     subCat,
     subcategory1,
-    isChecked
+    isChecked,
+    productQuantity
   ) => {
     if (!product) return;
 
@@ -764,6 +800,22 @@ export const AppProvider = ({ children }) => {
         (item) => item.groupKey === groupKey
       );
 
+      let calQty = 0;
+
+      if (
+        (category.category === "Civil / Plumbing" && subcategory1 === "Tile") ||
+        (category.category === "Flooring" && subcategory1 !== "Epoxy")
+      ) {
+        console.log(subcategory1, subCat);
+
+        calQty = Math.ceil(
+          +areasData[0][normalizeKey(subCat)] /
+            multiplyFirstTwoFlexible(product?.dimensions)
+        );
+      } else {
+        calQty = productQuantity[subCat]?.[selectedSubCategory1];
+      }
+
       const productData = {
         groupKey,
         id: product.id,
@@ -780,21 +832,29 @@ export const AppProvider = ({ children }) => {
         },
         // 🔥 Preserve existing addons if the product exists
         addons: existingProduct ? existingProduct.addons : selectedAddons || [],
-        finalPrice: calculateTotalPrice(
-          category.category,
-          subCat,
-          subcategory1,
-          null, // selectedCategory is not used in this specific calculation, using direct category parameter instead.
-          null, // selectedSubCategory is not used in this specific calculation, using direct subCat parameter instead.
-          null, // selectedSubCategory1 is not used in this specific calculation, using direct subcategory1 parameter instead.
-          quantityData,
-          areasData,
-          userResponses,
-          selectedProductView,
-          formulaMap,
-          seatCountData
-        ),
-        // quantity: productQuantity,
+        finalPrice:
+          category.category === "Flooring" ||
+          category.category === "HVAC" ||
+          category.category === "Lighting" ||
+          category.category == "Civil / Plumbing" ||
+          category.category === "Partitions / Ceilings" ||
+          category.category === "Paint"
+            ? calculateTotalPrice(
+                category.category,
+                subCat,
+                subcategory1,
+                null, // selectedCategory is not used in this specific calculation, using direct category parameter instead.
+                null, // selectedSubCategory is not used in this specific calculation, using direct subCat parameter instead.
+                null, // selectedSubCategory1 is not used in this specific calculation, using direct subcategory1 parameter instead.
+                quantityData,
+                areasData,
+                userResponses,
+                selectedProductView,
+                formulaMap,
+                seatCountData
+              )
+            : product.price * productQuantity[subCat]?.[selectedSubCategory1],
+        quantity: calQty,
       };
 
       if (existingProduct) {
