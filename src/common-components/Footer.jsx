@@ -55,7 +55,7 @@ function Footer() {
 
   const navigate = useNavigate();
   return (
-    <footer className=" bg-[#232323] text-white font-Poppins px-6 lg:px-10 xl:px-40 pt-6 pb-3 lg:pt-12 lg:pb-5">
+    <footer className=" bg-[#1A293A] text-white font-Poppins px-6 lg:px-10 xl:px-40 pt-6 pb-3 lg:pt-12 lg:pb-5">
       <div className="md:container lg:flex justify-stretch w-full mb-10">
         <div className="font-lato flex-1 space-y-2">
           <h4 className="text-2xl text-[#fffff] font-bold">
