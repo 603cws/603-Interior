@@ -181,11 +181,39 @@ export const AppProvider = ({ children }) => {
           productQuantities[productName] = value;
         });
       }
-      allQuantities[subcategory] = productQuantities;
+
+      // ✅ Split Md Cabin into Main + Visitor
+      if (
+        selectedCategory?.category === "Furniture" &&
+        subcategory === "Md Cabin" &&
+        "Chair" in productQuantities
+      ) {
+        const value = productQuantities["Chair"] ?? 0;
+
+        // keep original Md Cabin value
+        allQuantities["Md Cabin"] = productQuantities;
+
+        const mainValue = value > 0 ? 1 : 0;
+        const visitorValue = value > 0 ? value - 1 : 0;
+        // allQuantities["Md Cabin"] = { Chair: value };
+        allQuantities["Md Cabin Main"] = { Chair: mainValue };
+        allQuantities["Md Cabin Visitor"] = { Chair: visitorValue };
+      } else {
+        allQuantities[subcategory] = productQuantities;
+      }
     });
 
     setProductQuantity(allQuantities);
   }, [subCategories, seatCountData, quantityData, selectedCategory]);
+
+  console.log(
+    "Product Quantity:",
+    productQuantity,
+    "quantityData",
+    quantityData[0],
+    "seatCountData",
+    seatCountData
+  );
 
   const handleBOQTitleChange = (title) => {
     if (isSaveBOQ) setBOQTitle(title);
@@ -853,8 +881,20 @@ export const AppProvider = ({ children }) => {
                 formulaMap,
                 seatCountData
               )
-            : product.price * productQuantity[subCat]?.[selectedSubCategory1],
-        quantity: calQty,
+            : category.category === "Furniture" &&
+              subcategory1 === "Chair" &&
+              (subCat === "Md Cabin Main" || subCat === "Md Cabin Visitor")
+            ? product.price *
+              (productQuantity[subCat]?.[selectedSubCategory1] ?? 0) *
+              (quantityData[0]["md"] ?? 1)
+            : product.price *
+              (productQuantity[subCat]?.[selectedSubCategory1] ?? 0),
+        quantity:
+          category.category === "Furniture" &&
+          subcategory1 === "Chair" &&
+          (subCat === "Md Cabin Main" || subCat === "Md Cabin Visitor")
+            ? calQty * (quantityData[0]["md"] ?? 1)
+            : calQty,
       };
 
       if (existingProduct) {
