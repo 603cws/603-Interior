@@ -119,6 +119,13 @@ function SelectArea({
         ) {
           return ["Md Cabin Main", "Md Cabin Visitor"];
         }
+        if (
+          selectedCategory.category === "Furniture" &&
+          selectedSubCategory1 === "Chair" &&
+          subCat === "Manager Cabin"
+        ) {
+          return ["Manager Cabin Main", "Manager Cabin Visitor"];
+        }
         return [subCat];
       });
 
@@ -205,6 +212,13 @@ function SelectArea({
         subCat === "Md Cabin"
       ) {
         return ["Md Cabin Main", "Md Cabin Visitor"];
+      }
+      if (
+        selectedCategory.category === "Furniture" &&
+        selectedSubCategory1 === "Chair" &&
+        subCat === "Manager Cabin"
+      ) {
+        return ["Manager Cabin Main", "Manager Cabin Visitor"];
       }
       return [subCat];
     });
@@ -357,6 +371,13 @@ function SelectArea({
         ) {
           return ["Md Cabin Main", "Md Cabin Visitor"];
         }
+        if (
+          selectedCategory.category === "Furniture" &&
+          selectedSubCategory1 === "Chair" &&
+          subCategory === "Manager Cabin"
+        ) {
+          return ["Manager Cabin Main", "Manager Cabin Visitor"];
+        }
         return [subCategory];
       }
     );
@@ -390,6 +411,13 @@ function SelectArea({
           ) {
             return ["Md Cabin Main", "Md Cabin Visitor"];
           }
+          if (
+            selectedCategory.category === "Furniture" &&
+            selectedSubCategory1 === "Chair" &&
+            subCategory === "Manager Cabin"
+          ) {
+            return ["Manager Cabin Main", "Manager Cabin Visitor"];
+          }
           return [subCategory];
         }
       );
@@ -419,6 +447,13 @@ function SelectArea({
         subCategory === "Md Cabin"
       ) {
         return ["Md Cabin Main", "Md Cabin Visitor"];
+      }
+      if (
+        selectedCategory.category === "Furniture" &&
+        selectedSubCategory1 === "Chair" &&
+        subCategory === "Manager Cabin"
+      ) {
+        return ["Manager Cabin Main", "Manager Cabin Visitor"];
       }
       return [subCategory];
     }
@@ -661,6 +696,13 @@ function SelectArea({
                       ) {
                         return ["Md Cabin Main", "Md Cabin Visitor"];
                       }
+                      if (
+                        selectedCategory.category === "Furniture" &&
+                        selectedSubCategory1 === "Chair" &&
+                        name === "Manager Cabin"
+                      ) {
+                        return ["Manager Cabin Main", "Manager Cabin Visitor"];
+                      }
                       return [name];
                     })
                     .map((name, id) => (
@@ -717,7 +759,9 @@ function SelectArea({
                             name === "Pantry" ||
                             name === "Breakout Room" ||
                             name === "Md Cabin Main" ||
-                            name === "Md Cabin Visitor") &&
+                            name === "Md Cabin Visitor" ||
+                            name === "Manager Cabin Main" ||
+                            name === "Manager Cabin Visitor") &&
                           (selectedSubCategory1 === "Table" ||
                             selectedSubCategory1 === "Chair") && (
                             <div

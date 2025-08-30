@@ -164,7 +164,15 @@ export const AppProvider = ({ children }) => {
         });
       } else {
         categoryProducts.forEach((productName) => {
-          let value = newSeatCountData[key] ?? newQuantityData[0][key] ?? 0;
+          let value;
+          if (
+            selectedCategory?.category === "Furniture" &&
+            productName === "Chair"
+          ) {
+            value = newSeatCountData[key] ?? newQuantityData[0][key] ?? 0;
+          } else {
+            value = newQuantityData[0][key] ?? 0;
+          }
 
           // ✅ Apply special Furniture logic
           if (
@@ -195,9 +203,22 @@ export const AppProvider = ({ children }) => {
 
         const mainValue = value > 0 ? 1 : 0;
         const visitorValue = value > 0 ? value - 1 : 0;
-        // allQuantities["Md Cabin"] = { Chair: value };
         allQuantities["Md Cabin Main"] = { Chair: mainValue };
         allQuantities["Md Cabin Visitor"] = { Chair: visitorValue };
+      } else if (
+        selectedCategory?.category === "Furniture" &&
+        subcategory === "Manager Cabin" &&
+        "Chair" in productQuantities
+      ) {
+        const value = productQuantities["Chair"] ?? 0;
+
+        // keep original Md Cabin value
+        allQuantities["Manager Cabin"] = productQuantities;
+
+        const mainValue = value > 0 ? 1 : 0;
+        const visitorValue = value > 0 ? value - 1 : 0;
+        allQuantities["Manager Cabin Main"] = { Chair: mainValue };
+        allQuantities["Manager Cabin Visitor"] = { Chair: visitorValue };
       } else {
         allQuantities[subcategory] = productQuantities;
       }
@@ -887,6 +908,13 @@ export const AppProvider = ({ children }) => {
             ? product.price *
               (productQuantity[subCat]?.[selectedSubCategory1] ?? 0) *
               (quantityData[0]["md"] ?? 1)
+            : category.category === "Furniture" &&
+              subcategory1 === "Chair" &&
+              (subCat === "Manager Cabin Main" ||
+                subCat === "Manager Cabin Visitor")
+            ? product.price *
+              (productQuantity[subCat]?.[selectedSubCategory1] ?? 0) *
+              (quantityData[0]["manager"] ?? 1)
             : product.price *
               (productQuantity[subCat]?.[selectedSubCategory1] ?? 0),
         quantity:
@@ -894,6 +922,11 @@ export const AppProvider = ({ children }) => {
           subcategory1 === "Chair" &&
           (subCat === "Md Cabin Main" || subCat === "Md Cabin Visitor")
             ? calQty * (quantityData[0]["md"] ?? 1)
+            : category.category === "Furniture" &&
+              subcategory1 === "Chair" &&
+              (subCat === "Manager Cabin Main" ||
+                subCat === "Manager Cabin Visitor")
+            ? calQty * (quantityData[0]["manager"] ?? 1)
             : calQty,
       };
 
