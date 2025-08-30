@@ -14,7 +14,6 @@ import ProductCard from "../components/ProductCard";
 import { motion, AnimatePresence } from "framer-motion";
 import { calculateCategoryTotal } from "../utils/calculateCategoryTotal";
 import { selectAreaAnimation } from "../constants/animations";
-import NewBoq from "../components/NewBoq";
 import toast from "react-hot-toast";
 import { supabase } from "../../services/supabase";
 import { fetchProductsData } from "../utils/dataFetchers";
@@ -76,7 +75,11 @@ function Boq() {
     boqTotal,
     userId,
     currentLayoutID,
+    productQuantity,
+    seatCountData,
   } = useApp();
+
+  console.log("selectedData in boq page", selectedData);
 
   const [runTour, setRunTour] = useState(false); // Controls whether the tour runs
 
@@ -199,7 +202,8 @@ function Boq() {
     cat,
     subcategory,
     subcategory1,
-    dimensions
+    dimensions,
+    seatCountData
   ) => {
     const baseTotal = calculateAutoTotalPriceHelper(
       quantityData[0],
@@ -208,7 +212,8 @@ function Boq() {
       subcategory,
       subcategory1,
       userResponses.height,
-      dimensions
+      dimensions,
+      seatCountData
     );
 
     const total = calculateCategoryTotal(
@@ -220,6 +225,25 @@ function Boq() {
 
     return total;
   };
+
+  function multiplyFirstTwoFlexible(dimStr) {
+    const [a = NaN, b = NaN] = String(dimStr)
+      .split(/[,\sxX*]+/) // comma / space / x / * as separators
+      .map((s) => parseFloat(s.trim()));
+
+    return Number.isFinite(a) && Number.isFinite(b) ? Number(a * b) : null;
+  }
+
+  function normalizeKey(subcategory) {
+    return subcategory
+      .toLowerCase()
+      .replace(/\s+/g, "")
+      .replace(/-/g, "")
+      .replace("workstation", "")
+      .replace("mdcabin", "md")
+      .replace("managercabin", "manager")
+      .replace("smallcabin", "small");
+  }
 
   const autoSelectPlanProducts = (products, categories, selectedPlan) => {
     if (!selectedPlan || !products.length || !categories.length) return;
@@ -283,6 +307,23 @@ function Boq() {
         if (!selectedGroups.has(groupKey)) {
           const { category, subcategory1 } = product;
 
+          let calQty = 0;
+
+          if (
+            (product.category === "Civil / Plumbing" &&
+              subcategory1 === "Tile") ||
+            (product.category === "Flooring" && subcategory1 !== "Epoxy")
+          ) {
+            console.log(subcategory1, subcategory);
+
+            calQty = Math.ceil(
+              +areasData[0][normalizeKey(subcategory)] /
+                multiplyFirstTwoFlexible(product?.dimensions)
+            );
+          } else {
+            calQty = productQuantity[subcategory]?.[subcategory1];
+          }
+
           const productData = {
             groupKey,
             id: variant.id,
@@ -300,13 +341,49 @@ function Boq() {
               additional_images: JSON.parse(variant.additional_images || "[]"),
             },
             // addons: product.addons || [],
-            finalPrice: calculateAutoTotalPrice(
-              variant.price,
-              product.category,
-              subcategory,
-              product.subcategory1,
-              variant.dimensions
-            ),
+            finalPrice:
+              category.category === "Flooring" ||
+              category.category === "HVAC" ||
+              category.category === "Lighting" ||
+              category.category == "Civil / Plumbing" ||
+              category.category === "Partitions / Ceilings" ||
+              category.category === "Paint"
+                ? calculateAutoTotalPrice(
+                    variant.price,
+                    product.category,
+                    subcategory,
+                    product.subcategory1,
+                    variant.dimensions,
+                    seatCountData
+                  )
+                : category.category === "Furniture" &&
+                  subcategory1 === "Chair" &&
+                  (subcategory === "Md Cabin Main" ||
+                    subcategory === "Md Cabin Visitor")
+                ? product.price *
+                  (productQuantity[subcategory]?.[selectedSubCategory1] ?? 0) *
+                  (quantityData[0]["md"] ?? 1)
+                : category.category === "Furniture" &&
+                  subcategory1 === "Chair" &&
+                  (subcategory === "Manager Cabin Main" ||
+                    subcategory === "Manager Cabin Visitor")
+                ? product.price *
+                  (productQuantity[subcategory]?.[selectedSubCategory1] ?? 0) *
+                  (quantityData[0]["manager"] ?? 1)
+                : product.price *
+                  (productQuantity[subcategory]?.[selectedSubCategory1] ?? 0),
+            quantity:
+              product.category === "Furniture" &&
+              subcategory1 === "Chair" &&
+              (subcategory === "Md Cabin Main" ||
+                subcategory === "Md Cabin Visitor")
+                ? calQty * (quantityData[0]["md"] ?? 1)
+                : product.category === "Furniture" &&
+                  subcategory1 === "Chair" &&
+                  (subcategory === "Manager Cabin Main" ||
+                    subcategory === "Manager Cabin Visitor")
+                ? calQty * (quantityData[0]["manager"] ?? 1)
+                : calQty,
           };
 
           selectedProducts.push(productData);
@@ -426,7 +503,7 @@ function Boq() {
 
       return products
         .map((product, index) => {
-          const { id: variantId, groupKey, finalPrice = 0 } = product;
+          const { id: variantId, groupKey, finalPrice = 0, quantity } = product;
 
           // Parse category/subcategory/subcategory1 from groupKey
           const parts = groupKey.split("-");
@@ -488,6 +565,7 @@ function Boq() {
             subcategory1,
             groupKey,
             finalPrice: finalPrice || matchedVariant?.price || 0,
+            quantity,
             product_variant: {
               variant_id: matchedVariant?.id || matchedProduct.id,
               variant_title: matchedVariant?.title || matchedProduct.title,

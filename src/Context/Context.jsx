@@ -289,6 +289,7 @@ export const AppProvider = ({ children }) => {
           title: p.product_variant?.variant_title,
           finalPrice: p.finalPrice || "",
           groupKey: p.groupKey,
+          quantity: p.quantity,
         }));
         payload.addons = selectedData.flatMap((product) =>
           (product.addons || []).map((addon) => ({

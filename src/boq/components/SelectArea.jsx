@@ -226,25 +226,35 @@ function SelectArea({
     // Filter only the ones user hasn’t already added
     let selectedSubcategories = displayedSubCategories
       .filter((subCat) => selectedAreas.includes(subCat))
-      .filter((subCat) => {
-        return !(
-          Array.isArray(selectedData) &&
-          selectedData.length > 0 &&
-          isItemSelected(
+      .filter(
+        (subCat) =>
+          !isItemSelected(
             selectedData,
             selectedCategory,
             subCat,
             selectedSubCategory1,
             selectedProductView
           )
-        );
-      });
+      );
 
     setAllSubcategories(selectedSubcategories);
 
-    // 🔑 Loop through *all* displayed subs, pass checked/unchecked correctly
+    // 🔑 Loop through displayed subs and call only for allowed ones
     displayedSubCategories.forEach((subCat) => {
       const isChecked = selectedAreas.includes(subCat);
+
+      // ⛔ prevent re-adding if already used in another product
+      if (
+        isItemSelected(
+          selectedData,
+          selectedCategory,
+          subCat,
+          selectedSubCategory1,
+          selectedProductView
+        )
+      ) {
+        return;
+      }
 
       handelSelectedData(
         selectedProductView,
@@ -341,21 +351,28 @@ function SelectArea({
     return (
       Array.isArray(selectedData) &&
       selectedData.some((item) => {
+        // ✅ ignore the current product itself
+        if (
+          item.product_variant?.variant_title === selectedProductView?.title
+        ) {
+          return false;
+        }
         // treat Main and Visitor separately
-
         const compareSubCat = subCat;
 
-        const baseCondition = categoriesWithTwoLevelCheck.includes(
-          selectedCategory.category
-        )
-          ? `${item.category}-${item.subcategory}` ===
-              `${selectedCategory.category}-${compareSubCat}` &&
-            item.product_variant.variant_title !== selectedProductView?.title
-          : `${item.category}-${item.subcategory}-${item.subcategory1}` ===
-              `${selectedCategory.category}-${compareSubCat}-${selectedSubCategory1}` &&
-            item.product_variant.variant_title !== selectedProductView?.title;
-
-        return baseCondition;
+        if (categoriesWithTwoLevelCheck.includes(selectedCategory.category)) {
+          // For categories where subcategory1 isn’t relevant
+          return (
+            `${item.category}-${item.subcategory}` ===
+            `${selectedCategory.category}-${compareSubCat}`
+          );
+        } else {
+          // For categories where subcategory1 matters
+          return (
+            `${item.category}-${item.subcategory}-${item.subcategory1}` ===
+            `${selectedCategory.category}-${compareSubCat}-${selectedSubCategory1}`
+          );
+        }
       })
     );
   };
@@ -390,12 +407,24 @@ function SelectArea({
             : subCategory !== "Centralized";
         }
 
-        return !(
+        const notDisabled = !(
           (subCategory === "Pantry" && selectedSubCategory1 === "Pods") ||
           ((subCategory === "Reception" ||
             subCategory === "Pantry" ||
             subCategory === "Breakout Room") &&
             selectedSubCategory1 === "Storage")
+        );
+
+        // ✅ Exclude already used by another product
+        return (
+          notDisabled &&
+          !isItemSelected(
+            selectedData,
+            selectedCategory,
+            subCategory,
+            selectedSubCategory1,
+            selectedProductView
+          )
         );
       });
 
@@ -433,6 +462,7 @@ function SelectArea({
             selectedProductView
           )
       );
+
       setSelectedAreas((prev) =>
         prev.filter((subCat) => !nonDisabled.includes(subCat))
       );

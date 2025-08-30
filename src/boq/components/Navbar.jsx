@@ -237,7 +237,7 @@ function Navbar({
 
       return products
         .map((product, index) => {
-          const { id: variantId, groupKey, finalPrice = 0 } = product;
+          const { id: variantId, groupKey, finalPrice = 0, quantity } = product;
 
           // Parse category/subcategory/subcategory1 from groupKey
           const parts = groupKey.split("-");
@@ -299,6 +299,7 @@ function Navbar({
             subcategory1,
             groupKey,
             finalPrice: finalPrice || matchedVariant?.price || 0,
+            quantity,
             product_variant: {
               variant_id: matchedVariant?.id || matchedProduct.id,
               variant_title: matchedVariant?.title || matchedProduct.title,
@@ -743,6 +744,7 @@ function Navbar({
         title: product.product_variant?.variant_title,
         finalPrice: product.finalPrice || "",
         groupKey: product.groupKey,
+        quantity: product.quantity,
       }));
       const addons = selectedData.flatMap((product) =>
         (product.addons || []).map((addon) => ({
@@ -854,6 +856,7 @@ function Navbar({
         title: product.product_variant?.variant_title,
         finalPrice: product.finalPrice || "",
         groupKey: product.groupKey,
+        quantity: product.quantity,
       }));
       const addons = selectedData.flatMap((product) =>
         (product.addons || []).map((addon) => ({

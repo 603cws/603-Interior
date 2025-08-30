@@ -172,11 +172,12 @@ export const calculateAutoTotalPriceHelper = (
   subcategory,
   subcategory1,
   height,
-  dimensions
+  dimensions,
+  seatCountData
 ) => {
   const normalizedSubCat = normalizeKey(subcategory);
 
-  let matchedKey, quantity, area, value;
+  let matchedKey, quantity, area, value, seat, seatCount;
 
   if (
     category === "Furniture" ||
@@ -189,9 +190,20 @@ export const calculateAutoTotalPriceHelper = (
       normalizedSubCat,
       roomNumbersMap
     );
+    seat = findKeyWithExactAndPartialMatch(normalizedSubCat, seatCountData);
+    seatCount = seat ? seatCountData[seat] : 1;
     quantity = matchedKey ? roomNumbersMap[matchedKey] : 1;
 
-    value = quantity;
+    if (
+      category === "Furniture" &&
+      subcategory1 === "Chair" &&
+      subcategory !== "Linear Workstation" &&
+      subcategory !== "L-Type Workstation"
+    ) {
+      value = quantity * seatCount;
+    } else {
+      value = quantity;
+    }
   } else if (category === "Partitions / Ceilings" || category === "HVAC") {
     //currently this category is missing
     // Calculation of price * quantity * area
@@ -223,6 +235,16 @@ export const calculateAutoTotalPriceHelper = (
     // Calculation of price * area
 
     if (category === "Flooring" && subcategory1 !== "Epoxy") {
+      //Opp condition written like except Epoxy for rest A / dim * price
+      matchedKey = findKeyWithExactAndPartialMatch(normalizedSubCat, areasData);
+      area = matchedKey ? areasData[matchedKey] : 1;
+
+      const dimArea = multiplyFirstTwoFlexible(dimensions);
+
+      let rawValue = area / dimArea;
+      value = rawValue ? Math.ceil(rawValue) : 1;
+    }
+    if (category === "Civil / Plumbing" && subcategory1 === "Tile") {
       //Opp condition written like except Epoxy for rest A / dim * price
       matchedKey = findKeyWithExactAndPartialMatch(normalizedSubCat, areasData);
       area = matchedKey ? areasData[matchedKey] : 1;
