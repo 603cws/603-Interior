@@ -135,40 +135,37 @@ const PDFGenerator = {
       }
 
       // Category Heading
-      doc.setTextColor(0, 0, 0);
+      doc.setTextColor(0, 0, 0); // reset to black
       doc.setFont("helvetica", "bold");
       doc.setFontSize(16);
       doc.text(categoryName, 250, currentY);
       currentY += 10;
 
+      // ✅ Check if category has any addons
       const hasAddons = items.some(
         (item) => item.addons && Object.keys(item.addons).length > 0
       );
 
-      // Exclude Qty for these categories
-      const excludedQtyCategories = [
-        "Lighting",
-        "HVAC",
-        "Partitions / Ceilings",
-      ];
-      const hideQty = excludedQtyCategories.includes(categoryName);
-
-      // ✅ Define columns (with titles and keys)
-      const columns = [
-        { header: "No.", dataKey: "no" },
-        { header: "Image", dataKey: "image" },
-        { header: "Product", dataKey: "product" },
-        ...(hasAddons ? [{ header: "Add Ons", dataKey: "addons" }] : []),
-        { header: "Specification", dataKey: "spec" },
-        ...(hideQty ? [] : [{ header: "Qty", dataKey: "qty" }]),
-        { header: "Area (sqft)", dataKey: "area" },
-        { header: "Price", dataKey: "price" },
-        { header: "Amount", dataKey: "amount" },
+      // ✅ Build headers dynamically
+      const headers = [
+        [
+          "No.",
+          "Image",
+          "Product",
+          ...(hasAddons ? ["Add Ons"] : []),
+          "Specification",
+          "Qty",
+          "Area\n(sqft)",
+          "Price",
+          "Amount",
+        ],
       ];
 
-      // ✅ Build rows as plain objects with keys matching dataKey
+      // ✅ Build rows
       const rows = await Promise.all(
         items.map(async (item, idx) => {
+          const rowNo = idx + 1;
+
           let productImage = null;
           if (item.product_variant?.variant_image) {
             try {
@@ -180,9 +177,27 @@ const PDFGenerator = {
 
           let addonCell = "—";
           if (hasAddons && item.addons) {
-            addonCell = Object.values(item.addons)
-              .map((a) => `${a.title} (Rs. ${a.finalPrice})`)
-              .join("\n");
+            let addonImages = await Promise.all(
+              Object.values(item.addons).map(async (addon) => {
+                if (addon?.image) {
+                  try {
+                    return await loadImage(addon.image);
+                  } catch {
+                    return null;
+                  }
+                }
+                return null;
+              })
+            );
+            addonImages = addonImages.filter(Boolean);
+
+            addonCell = {
+              content: "",
+              images: addonImages,
+              texts: Object.values(item.addons).map(
+                (a) => `${a.title}\nRs. ${a.finalPrice}`
+              ),
+            };
           }
 
           const { area } = getAreaAndQuantity(
@@ -190,57 +205,55 @@ const PDFGenerator = {
             areas,
             quantities
           );
-          const qty = item.quantity || "-";
 
-          return {
-            no: idx + 1,
-            image: " ", // placeholder cell content
-            _imgData: productImage || null,
-            product: `${item.product_variant?.variant_title || "N/A"}\n${
+          const qty = item.quantity || "-";
+          // productQuantity?.[item.subcategory]?.[item.subcategory1] || "—";
+
+          return [
+            rowNo,
+            productImage ? { content: "", image: productImage } : "—",
+            `${item.product_variant?.variant_title || "N/A"}\n${
               item.product_variant?.variant_details || ""
             }`,
-            ...(hasAddons ? { addons: addonCell } : {}),
-            spec: `${item.subcategory}-${item.subcategory1}`,
-            subcategory1: item.subcategory1, // ✅ add this line
-            ...(hideQty ? {} : { qty }),
+            ...(hasAddons ? [addonCell] : []),
+            `${item.subcategory}-${item.subcategory1}`,
+            qty,
             area,
-            price: `Rs. ${
+            `Rs. ${
               item.product_variant?.variant_price.toLocaleString("en-IN") || 0
             }`,
-            amount: `Rs. ${item.finalPrice.toLocaleString("en-IN") || 0}`,
-          };
+            `Rs. ${item.finalPrice.toLocaleString("en-IN") || 0}`,
+          ];
         })
       );
 
-      // ✅ Sort rows by subcategory1 order defined in categories prop
-      const categoryObj = categories.find((c) => c.category === categoryName);
-      if (categoryObj && categoryObj.subcategory1) {
-        const order = categoryObj.subcategory1;
-        rows.sort((a, b) => {
-          const ia = order.indexOf(a.subcategory1);
-          const ib = order.indexOf(b.subcategory1);
-          return (
-            (ia === -1 ? order.length : ia) - (ib === -1 ? order.length : ib)
-          );
-        });
-      }
+      // ✅ Column styles adjust automatically
+      const columnStyles = hasAddons
+        ? {
+            0: { halign: "center", cellWidth: 25 },
+            1: { halign: "center", cellWidth: 50 },
+            2: { cellWidth: 100 },
+            3: { cellWidth: 120 }, // Add Ons
+            4: { cellWidth: 90 },
+            5: { halign: "center", cellWidth: 25 },
+            6: { halign: "center", cellWidth: 32 },
+            7: { halign: "right", cellWidth: 60 },
+            8: { halign: "right", cellWidth: 60 },
+          }
+        : {
+            0: { halign: "center", cellWidth: 25 },
+            1: { halign: "center", cellWidth: 50 },
+            2: { cellWidth: 120 },
+            3: { cellWidth: 90 }, // Specification
+            4: { halign: "center", cellWidth: 25 },
+            5: { halign: "center", cellWidth: 40 },
+            6: { halign: "right", cellWidth: 60 },
+            7: { halign: "right", cellWidth: 80 },
+          };
 
-      // ✅ Column styles with keys (not indexes)
-      const columnStyles = {
-        no: { halign: "center", cellWidth: 25 },
-        image: { halign: "center", cellWidth: 50 },
-        product: { cellWidth: 120 },
-        ...(hasAddons ? { addons: { cellWidth: 120 } } : {}),
-        spec: { cellWidth: 90 },
-        qty: { halign: "center", cellWidth: 25 },
-        area: { halign: "center", cellWidth: 40 },
-        price: { halign: "right", cellWidth: 60 },
-        amount: { halign: "right", cellWidth: 80 },
-      };
-
-      // ✅ Render table with columns + rows
+      // ✅ Render table
       doc.autoTable({
-        columns,
+        head: headers,
         body: rows,
         startY: currentY,
         theme: "grid",
@@ -259,26 +272,69 @@ const PDFGenerator = {
           lineWidth: 0.5,
         },
         columnStyles,
-        margin: hasAddons ? { left: 18, right: 15 } : { left: 52, right: 10 },
+        margin: hasAddons
+          ? { left: 18, right: 15 } // when addons exist
+          : { left: 52, right: 10 }, // when no addons
+        didParseCell: (data) => {
+          if (hasAddons && data.section === "body" && data.column.index === 3) {
+            const addonsCount = data.cell.raw.images?.length || 0;
+            if (addonsCount > 0) {
+              const imgSize = 20;
+              const spacing = 15;
+              const neededHeight = addonsCount * (imgSize + spacing);
+              data.cell.height = Math.max(data.cell.height, neededHeight);
+            }
+          }
+        },
         didDrawCell: (data) => {
-          if (data.section === "body" && data.column.dataKey === "image") {
-            const rowData = data.row.raw;
+          if (data.section === "body") {
+            const cell = data.cell;
 
-            if (rowData._imgData && !data.cell.imageDrawn) {
-              const img = rowData._imgData;
+            // Add Ons column
+            if (
+              hasAddons &&
+              data.column.index === 3 &&
+              cell.raw.images &&
+              !cell.raw.imagesAdded
+            ) {
+              const colWidth = cell.width;
+              const imgSize = 20;
+              const spacing = 15;
+              let offsetY = cell.y + 5;
 
-              const padding = 2;
-              const cellW = data.cell.width - padding * 2;
-              const cellH = data.cell.height - padding * 2;
+              cell.raw.images.forEach((img, i) => {
+                const imgX = cell.x + (colWidth / 2 - imgSize) / 2;
+                doc.addImage(img, "PNG", imgX, offsetY, imgSize, imgSize);
 
-              const size = Math.min(cellW, cellH);
-              const x = data.cell.x + (data.cell.width - size) / 2;
-              const y = data.cell.y + (data.cell.height - size) / 2;
+                const txt = cell.raw.texts[i] || "";
+                const lines = txt.split("\n");
+                let textY = offsetY + 10;
 
-              doc.addImage(img, "PNG", x, y, size, size);
+                lines.forEach((line) => {
+                  doc.text(line, cell.x + colWidth / 2 + 5, textY, {
+                    maxWidth: colWidth / 2 - 10,
+                  });
+                  textY += 10;
+                });
 
-              // ✅ mark as drawn so it won’t draw again on next page
-              data.cell.imageDrawn = true;
+                offsetY += imgSize + spacing;
+              });
+
+              cell.raw.imagesAdded = true;
+            }
+
+            // Product image column
+            if (
+              data.column.index === 1 &&
+              cell.raw.image &&
+              !cell.raw.imageAdded
+            ) {
+              const imgWidth = 35;
+              const imgHeight = 35;
+              const x = cell.x + (cell.width - imgWidth) / 2;
+              const y = cell.y + (cell.height - imgHeight) / 2;
+              doc.addImage(cell.raw.image, "PNG", x, y, imgWidth, imgHeight);
+              cell.raw.imageAdded = true;
             }
           }
         },
@@ -308,12 +364,8 @@ const PDFGenerator = {
       finalY + 20
     );
 
-    // import.meta.env.MODE === "development"
-    //   ? doc.output("dataurlnewwindow")
-    const blob = doc.output("blob");
-    const url = URL.createObjectURL(blob);
     import.meta.env.MODE === "development"
-      ? window.open(url, "_blank")
+      ? doc.output("dataurlnewwindow")
       : doc.save("products_summary.pdf");
   },
 };
@@ -323,8 +375,8 @@ const loadImage = (url) => {
     const img = new Image();
     img.crossOrigin = "anonymous";
     img.onload = () => {
-      const maxWidth = 150;
-      const maxHeight = 120;
+      const maxWidth = 50;
+      const maxHeight = 40;
       let width = img.width;
       let height = img.height;
 
@@ -340,15 +392,13 @@ const loadImage = (url) => {
         }
       }
 
-      const scale = 2;
       const canvas = document.createElement("canvas");
-      canvas.width = width * scale;
-      canvas.height = height * scale;
+      canvas.width = width;
+      canvas.height = height;
       const ctx = canvas.getContext("2d");
-      ctx.scale(scale, scale);
       ctx.drawImage(img, 0, 0, width, height);
 
-      resolve(canvas.toDataURL("image/png", 1.0));
+      resolve(canvas.toDataURL("image/png"));
     };
     img.onerror = reject;
     img.src = url;

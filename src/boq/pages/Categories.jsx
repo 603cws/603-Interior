@@ -238,6 +238,49 @@ const Categories = ({
           (item) => item !== "Pods"
         );
       }
+
+      if (category === "Furniture" && subCategory === "Md Cabin") {
+        const mainFilled = selectedData.some(
+          (item) =>
+            item.category === "Furniture" &&
+            item.subcategory === "Md Cabin Main" &&
+            item.subcategory1 === "Chair"
+        );
+        const visitorFilled = selectedData.some(
+          (item) =>
+            item.category === "Furniture" &&
+            item.subcategory === "Md Cabin Visitor" &&
+            item.subcategory1 === "Chair"
+        );
+
+        // ✅ Only exclude Chair if both Main & Visitor are filled
+        if (mainFilled && visitorFilled) {
+          requiredSubCategory1Items = requiredSubCategory1Items.filter(
+            (item) => item !== "Chair"
+          );
+        }
+      }
+
+      if (category === "Furniture" && subCategory === "Manager Cabin") {
+        const mainFilled = selectedData.some(
+          (item) =>
+            item.category === "Furniture" &&
+            item.subcategory === "Manager Cabin Main" &&
+            item.subcategory1 === "Chair"
+        );
+        const visitorFilled = selectedData.some(
+          (item) =>
+            item.category === "Furniture" &&
+            item.subcategory === "Manager Cabin Visitor" &&
+            item.subcategory1 === "Chair"
+        );
+
+        if (mainFilled && visitorFilled) {
+          requiredSubCategory1Items = requiredSubCategory1Items.filter(
+            (item) => item !== "Chair"
+          );
+        }
+      }
       if (
         category === "Furniture" &&
         (subCategory === "Reception" ||

@@ -260,7 +260,9 @@ export const AppProvider = ({ children }) => {
     "quantityData",
     quantityData[0],
     "seatCountData",
-    seatCountData
+    seatCountData,
+    categories,
+    subCategories
   );
 
   const handleBOQTitleChange = (title) => {
@@ -811,6 +813,49 @@ export const AppProvider = ({ children }) => {
         if (category === "Civil / Plumbing" && subcategory === "Pantry") {
           validSubCat1List = validSubCat1List.filter((item) => item !== "Pods");
         }
+        if (category === "Furniture" && subcategory === "Md Cabin") {
+          const mainFilled = selectedData.some(
+            (item) =>
+              item.category === "Furniture" &&
+              item.subcategory === "Md Cabin Main" &&
+              item.subcategory1 === "Chair"
+          );
+          const visitorFilled = selectedData.some(
+            (item) =>
+              item.category === "Furniture" &&
+              item.subcategory === "Md Cabin Visitor" &&
+              item.subcategory1 === "Chair"
+          );
+
+          // ✅ Only exclude Chair if both Main & Visitor are filled
+          if (mainFilled && visitorFilled) {
+            validSubCat1List = validSubCat1List.filter(
+              (item) => item !== "Chair"
+            );
+          }
+        }
+
+        if (category === "Furniture" && subcategory === "Manager Cabin") {
+          const mainFilled = selectedData.some(
+            (item) =>
+              item.category === "Furniture" &&
+              item.subcategory === "Manager Cabin Main" &&
+              item.subcategory1 === "Chair"
+          );
+          const visitorFilled = selectedData.some(
+            (item) =>
+              item.category === "Furniture" &&
+              item.subcategory === "Manager Cabin Visitor" &&
+              item.subcategory1 === "Chair"
+          );
+
+          if (mainFilled && visitorFilled) {
+            validSubCat1List = validSubCat1List.filter(
+              (item) => item !== "Chair"
+            );
+          }
+        }
+
         if (
           category === "Furniture" &&
           (subcategory === "Reception" ||
