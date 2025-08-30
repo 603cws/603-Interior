@@ -9,6 +9,7 @@ import {
 import processData from "../boq/utils/dataProcessor";
 import { calculateTotalPrice } from "../boq/utils/productUtils";
 import { calculateSeatCountTotals } from "../boq/utils/dataProcessor";
+import { calculateTotalPriceHelper } from "../boq/utils/CalculateTotalPriceHelper";
 
 const AppContext = createContext();
 
@@ -992,9 +993,20 @@ export const AppProvider = ({ children }) => {
             : product.price *
               (productQuantity[subCat]?.[selectedSubCategory1] ?? 0),
         quantity:
-          category.category === "Furniture" &&
-          subcategory1 === "Chair" &&
-          (subCat === "Md Cabin Main" || subCat === "Md Cabin Visitor")
+          category.category === "Paint"
+            ? calculateTotalPriceHelper(
+                quantityData[0],
+                areasData[0],
+                category.category,
+                subCat,
+                subcategory1,
+                userResponses.height,
+                selectedProductView.dimensions,
+                seatCountData
+              )
+            : category.category === "Furniture" &&
+              subcategory1 === "Chair" &&
+              (subCat === "Md Cabin Main" || subCat === "Md Cabin Visitor")
             ? calQty * (quantityData[0]["md"] ?? 1)
             : category.category === "Furniture" &&
               subcategory1 === "Chair" &&
