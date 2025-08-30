@@ -1,5 +1,6 @@
 import HVACCalculation from "./HVACCalculation";
 import ParitionCelingCalculation from "./ParitionCelingCalculation";
+import { numOfCoats } from "../../constants/constant";
 
 // Helper to normalize keys
 export const normalizeKey = (key) => {
@@ -144,15 +145,43 @@ export const calculateTotalPriceHelper = (
       let rawValue = area / dimArea;
       value = rawValue ? Math.ceil(rawValue) : 1;
     }
-    if (category === "Civil / Plumbing" && subcategory1 === "Tile") {
-      //Opp condition written like except Epoxy for rest A / dim * price
+    if (category === "Civil / Plumbing") {
+      if (subcategory1 === "Tile") {
+        //Opp condition written like except Epoxy for rest A / dim * price
+        matchedKey = findKeyWithExactAndPartialMatch(
+          normalizedSubCat,
+          areasData
+        );
+        area = matchedKey ? areasData[matchedKey] : 1;
+
+        const dimArea = multiplyFirstTwoFlexible(dimensions);
+
+        let rawValue = area / dimArea;
+        value = rawValue ? Math.ceil(rawValue) : 1;
+      } else {
+        matchedKey = findKeyWithExactAndPartialMatch(
+          normalizedSubCat,
+          roomNumbersMap
+        );
+
+        quantity = matchedKey ? roomNumbersMap[matchedKey] : 1;
+
+        value = quantity;
+      }
+    }
+    if (category === "Paint") {
       matchedKey = findKeyWithExactAndPartialMatch(normalizedSubCat, areasData);
       area = matchedKey ? areasData[matchedKey] : 1;
+      if (subcategory1 !== "Ceilings") {
+        // area/coverage * 3 * height * price * no of coats   Wall calc
+        let temp = Math.ceil(area / 120);
 
-      const dimArea = multiplyFirstTwoFlexible(dimensions);
-
-      let rawValue = area / dimArea;
-      value = rawValue ? Math.ceil(rawValue) : 1;
+        value = temp * numOfCoats * 3 * height;
+      } else {
+        //Ceiling calc
+        let temp = Math.ceil(area / 120);
+        value = temp * numOfCoats;
+      }
     } else {
       matchedKey = findKeyWithExactAndPartialMatch(normalizedSubCat, areasData);
       area = matchedKey ? areasData[matchedKey] : 1;

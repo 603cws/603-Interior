@@ -158,9 +158,36 @@ export const AppProvider = ({ children }) => {
       );
 
       if (selectedItem) {
-        // If found, use that directly
         categoryProducts.forEach((productName) => {
-          productQuantities[productName] = selectedItem.quantity ?? 0;
+          if (productName === selectedItem.subcategory1) {
+            // ✅ Only update the matched product
+            productQuantities[productName] = selectedItem.quantity ?? 0;
+          } else {
+            // ✅ Preserve or recalc the others
+            let value;
+            if (
+              selectedCategory?.category === "Furniture" &&
+              productName === "Chair"
+            ) {
+              value = newSeatCountData[key] ?? newQuantityData[0][key] ?? 0;
+            } else {
+              value = newQuantityData[0][key] ?? 0;
+            }
+
+            // ✅ Special Furniture logic
+            if (
+              selectedCategory?.category === "Furniture" &&
+              subcategory !== "Linear Workstation" &&
+              subcategory !== "L-Type Workstation" &&
+              subcategory !== "Md Cabin" &&
+              subcategory !== "Manager Cabin" &&
+              productName === "Chair"
+            ) {
+              value = value * (newQuantityData[0][key] ?? 1);
+            }
+
+            productQuantities[productName] = value;
+          }
         });
       } else {
         categoryProducts.forEach((productName) => {
@@ -886,7 +913,8 @@ export const AppProvider = ({ children }) => {
           category.category === "Flooring" ||
           category.category === "HVAC" ||
           category.category === "Lighting" ||
-          category.category == "Civil / Plumbing" ||
+          (category.category == "Civil / Plumbing" &&
+            subcategory1 === "Tile") ||
           category.category === "Partitions / Ceilings" ||
           category.category === "Paint"
             ? calculateTotalPrice(

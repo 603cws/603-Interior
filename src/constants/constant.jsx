@@ -10,3 +10,5 @@ export const categoriesWithTwoLevelCheck = [
 export const categoriesWithModal = ["Flooring", "HVAC"]; // Array of categories that should show the modal/questions when clicked
 
 export const priceRange = [1, 15000000];
+
+export const numOfCoats = 2;

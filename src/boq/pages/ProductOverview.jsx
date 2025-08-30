@@ -246,6 +246,9 @@ function ProductOverview() {
       //currently this category is missing
       return { quantity, area, price: product?.price || 0, seatCount }; //addonPrice
     } else {
+      if (cat?.category === "Civil / Plumbing" && subCat1 !== "Tile") {
+        return { quantity, price: product?.price || 0, seatCount }; //addonPrice
+      }
       return { area, price: product?.price || 0, seatCount }; //addonPrice
     }
   };

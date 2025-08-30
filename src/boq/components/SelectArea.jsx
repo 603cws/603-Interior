@@ -943,6 +943,57 @@ function SelectArea({
                             </button>
                           </div>
                         )}
+                        {/* Civil / Plumbing - Tile exception */}
+                        {selectedCategory.category === "Civil / Plumbing" &&
+                          selectedSubCategory1 !== "Tile" && (
+                            <div
+                              className={`${
+                                selectedAreas.includes(name) &&
+                                !isItemSelected(
+                                  selectedData,
+                                  selectedCategory,
+                                  name,
+                                  selectedSubCategory1,
+                                  selectedProductView
+                                )
+                                  ? "flex"
+                                  : "invisible"
+                              } gap-2 h-6`}
+                            >
+                              <button
+                                onClick={() =>
+                                  handleDecrement(name, selectedSubCategory1)
+                                }
+                                className="h-5 w-5 border border-[#ccc] flex justify-center items-center"
+                              >
+                                -
+                              </button>
+                              <input
+                                type="text"
+                                value={
+                                  productQuantity[name]?.[
+                                    selectedSubCategory1
+                                  ] || 1
+                                }
+                                onChange={(e) =>
+                                  handleChange(
+                                    name,
+                                    selectedSubCategory1,
+                                    e.target.value
+                                  )
+                                }
+                                className="h-5 w-10 border border-[#ccc] flex justify-center items-center text-center text-xs"
+                              />
+                              <button
+                                onClick={() =>
+                                  handleIncrement(name, selectedSubCategory1)
+                                }
+                                className="h-5 w-5 border border-[#ccc] flex justify-center items-center"
+                              >
+                                +
+                              </button>
+                            </div>
+                          )}
                       </div>
                     ))}
                   <div className="flex items-center gap-2 col-span-full mr-10">
