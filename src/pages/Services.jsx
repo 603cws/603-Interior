@@ -12,12 +12,12 @@ const steps = [
   {
     imagePath: "/images/DeliveryService1.png",
     title: "select",
-    description: "Understand your space and needs",
+    description: "Choose your Layout ,Products and needs",
   },
   {
     imagePath: "/images/DeliveryService1.png",
     title: "build",
-    description: "Understand your space and needs",
+    description: "Bring your vision to live",
   },
 ];
 
@@ -106,19 +106,19 @@ export default Services;
 function OfficeLayoutSection() {
   const navigate = useNavigate();
   return (
-    <div className=" flex flex-col gap-6 lg:gap-0 lg:flex-row justify-between items-center my-10 lg:container lg:mx-auto text-center lg:text-center">
+    <div className=" flex flex-col gap-6 lg:gap-0 lg:flex-row justify-between items-center my-10 lg:container lg:mx-auto text-center lg:text-start">
       {/* Left Section */}
       <div>
-        <h2 className=" text-3xl xl:text-[44px] xl:leading-[53px] tracking-[0.3px] font-bold text-[#334A78] capitalize">
+        <h2 className="font-TimesNewRoman italic text-3xl xl:text-[44px] xl:leading-[53px] tracking-[0.3px] font-bold text-[#334A78] capitalize">
           Design your dream <br /> office-from layout <br /> to final Product
         </h2>
-        <p className="text-[#334A78] mt-4 text-base md:text-2xl tracking-[0.3px]">
+        <p className="font-Georgia text-[#334A78] mt-4 text-base md:text-2xl tracking-[0.3px]">
           Plan your workspace, add furniture & <br /> essentials, and get your
           BOQ Instantly.
         </p>
         <button
           onClick={() => navigate("/")}
-          className="mt-6 bg-gradient-to-r from-[#75A2BE] to-[#334A78] text-white px-6 py-3 rounded-md"
+          className=" font-Georgia mt-6 bg-gradient-to-r from-[#75A2BE] to-[#334A78] text-white px-6 py-3 rounded-md"
         >
           Start Your Layout
         </button>
@@ -138,12 +138,14 @@ function OfficeLayoutSection() {
 
 function InfoCard({ imgpath, title, description }) {
   return (
-    <div className="font-lora max-w-sm px-8 space-y-3 flex flex-col justify-center items-center">
+    <div className="font-Georgia max-w-sm px-8 space-y-3 flex flex-col justify-center items-center">
       <div className="">
         <img src={imgpath} alt="service" className="w-24 h-24" />
       </div>
-      <h2 className="text-[#232323] font-bold text-xl lg:text-2xl">{title}</h2>
-      <p className="text-center text-[#777] text-xs lg:text-sm tracking-[0.3px]">
+      <h2 className="text-[#232323] font-bold italic text-lg lg:text-2xl tracking-[0.3px]">
+        {title}
+      </h2>
+      <p className="text-center text-[#777] text-xs lg:text-sm  tracking-[0.3px]">
         {description}
       </p>
     </div>
@@ -179,7 +181,7 @@ function FeatureCard({ title, imgpath, hoveredImgPath }) {
     <div
       onMouseEnter={() => sethovered(true)}
       onMouseLeave={() => sethovered(false)}
-      className="group w-full border border-[#ccc] font-lora p-4 hover:bg-gradient-to-br from-[#334A78] to-[#68B2DC]  hover:text-white"
+      className="group w-full border border-[#ccc] font-Georgia p-4 hover:bg-gradient-to-br from-[#334A78] to-[#68B2DC]  hover:text-white"
     >
       <div className="flex flex-col justify-center items-center gap-5">
         <div>
@@ -189,7 +191,7 @@ function FeatureCard({ title, imgpath, hoveredImgPath }) {
             className="w-20 h-20"
           />
         </div>
-        <h3 className="text-center font-bold text-lg lg:text-xl text-[#232323] group-hover:text-white">
+        <h3 className="text-center font-bold italic text-lg lg:text-xl text-[#232323] group-hover:text-white">
           {title}
         </h3>
       </div>
@@ -208,7 +210,7 @@ function DeliverServices() {
 
 function HeadingSection({ children }) {
   return (
-    <h2 className="text-center font-lora font-bold text-[#232323] text-xl lg:text-3xl xl:text-[42px] xl:leading-[53px] tracking-[0.3px]">
+    <h2 className="text-center font-Georgia italic font-bold text-[#232323] text-xl lg:text-3xl xl:text-[42px] xl:leading-[53px] tracking-[0.3px]">
       {children}
     </h2>
   );
@@ -237,12 +239,12 @@ function StepsSection() {
 
 function Step({ imagePath, title, description, index }) {
   return (
-    <div className="flex-1 text-center relative">
+    <div className="flex-1 text-center relative font-Georgia">
       <div className="w-32 h-32 rounded-full border border-dashed border-gray-400 bg-white mx-auto flex items-center justify-center relative z-10">
         <img src={imagePath} alt="Plan" className="w-12 h-12" />
       </div>
-      <h3 className="mt-6 text-lg font-bold text-gray-800">{title}</h3>
-      <p className="text-gray-500 mt-2 text-sm">{description}</p>
+      <h3 className="mt-6 text-lg font-bold text-gray-800 italic">{title}</h3>
+      <p className="text-gray-500 mt-2 text-sm lg:text-base">{description}</p>
       {/* Connector Line to Step 2 */}
       {(index === 0 || index === 1) && (
         <div className="hidden md:block absolute top-16 left-1/2 w-full border-t border-dashed border-gray-400 z-0"></div>

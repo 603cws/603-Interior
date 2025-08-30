@@ -93,12 +93,12 @@ function Contactus() {
   return (
     <>
       <LandingNavbar />
-      <div className="flex flex-col md:flex-row gap-6 my-10 px-4 md:px-0">
-        <div className="md:w-[40%] md:pl-12 self-center lg:space-y-10">
-          <h1 className="font-bold text-3xl lg:text-5xl leading-[59px] tracking-[0.3px] text-[#304778]">
+      <div className="flex flex-col md:flex-row gap-6 mb-10 px-4 md:px-0">
+        <div className="md:w-[40%] md:pl-6 lg:pl-12 self-center lg:space-y-10">
+          <h1 className="font-TimesNewRoman italic font-bold text-2xl xl:text-5xl xl:leading-[59px] xl:tracking-[0.3px] text-[#304778]">
             Get in Touch With Us
           </h1>
-          <p className="font-medium text-lg lg:text-2xl  text-[#304778]">
+          <p className="  font-Georgia text-lg lg:text-2xl  text-[#304778]">
             Whether you’re ready to start designing your dream office or just
             have a question, our team is here to help. Let’s create a workspace
             that inspires productivity and creativity.
@@ -117,7 +117,7 @@ function Contactus() {
           <HeroSection background={background} title={"Contact"} />
         </div> */}
 
-        <section className="hidden  sm:block pt-8 lg:h-[120vh] xl:h-screen 3xl:h-[75vh] md:container md:mx-auto">
+        <section className="hidden  sm:block lg:pt-8 lg:h-[120vh] xl:h-screen 3xl:h-[75vh] md:container md:mx-auto">
           <div
             className=" py-3 flex flex-col-reverse
             lg:flex-row-reverse lg:justify-center lg:items-center  gap-10 h-full 3xl:h-full relative transform -translate-y-1/6"
@@ -126,8 +126,8 @@ function Contactus() {
               <div className="max-w-2xl bg-[#304778] text-white lg:absolute lg:-top-1/4">
                 <div className="px-4 py-10 rounded-3xl pb-5 ">
                   {/* text */}
-                  <div className="[&_p]:font-Poppins  font-semibold py-3">
-                    <h2 className="font-lora font-medium text-3xl  xl:text-5xl  pb-4">
+                  <div className="[&_p]:font-Georgia  font-semibold py-3">
+                    <h2 className="font-Georgia italic text-3xl  xl:text-5xl  pb-4">
                       Let’s Connect with us!
                     </h2>
                     <p className="text-xs xl:text-[14.9px] leading-6 text-[#F8F9FA] text-opacity-80">
@@ -141,7 +141,7 @@ function Contactus() {
                   <div className="font-Poppins pl-2">
                     <form
                       action=""
-                      className="font-semibold  [&_label]:text-[#F8F9FA] [&_input]:text-[#DBDBDB] [&_input]:bg-[#304778] [&_textarea]:bg-[#304778] [&_input]:border-[#DEE2E6] [&_input]:border-opacity-40 [&_textarea]:border-[#DEE2E6] [&_textarea]:border-opacity-40 "
+                      className="font-semibold  [&_label]:text-[#F8F9FA] [&_input]:text-[#DBDBDB] [&_input]:bg-[#304778] [&_textarea]:bg-[#304778] [&_input]:border-[#DEE2E6] [&_input]:border-opacity-40 [&_textarea]:border-[#DEE2E6] [&_textarea]:border-opacity-40 font-Georgia"
                     >
                       <div className="mb-2 flex flex-col gap-2">
                         <label className="font-semibold ">Full Name*</label>
@@ -245,8 +245,8 @@ function Contactus() {
               </div>
             </div>
 
-            <div className="font-inter lg:flex-1 space-y-4">
-              <h2 className="text-[#1C346B] text-[31.1px] font-medium leading-[48px] ">
+            <div className="font-Georgia lg:flex-1 space-y-4">
+              <h2 className="text-[#1C346B] italic text-[31.1px] font-medium leading-[48px] ">
                 Interested in working with us!
               </h2>
               <p className="text-[#525B5B] text-[17.6px] leading-8">
@@ -294,7 +294,7 @@ function Contactus() {
                 <div className="px-4 pt-10 pb-4 rounded-3xl ">
                   {/* text */}
                   <div className="[&_p]:font-Poppins  font-semibold py-3">
-                    <h2 className="font-lora font-medium  text-4xl  pb-4">
+                    <h2 className="font-Georgia font-medium  text-4xl  pb-4">
                       Let’s Connect with us!
                     </h2>
                     <p className="text-base font-Poppins text-[#F8F9FA] text-opacity-80">

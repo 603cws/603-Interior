@@ -73,17 +73,17 @@ function AboutUs() {
       <section className="bg-[#304778] lg:h-[570px]">
         <div className=" lg:container px-4 flex flex-col lg:flex-row justify-between items-center font-Poppins">
           <div className=" text-[#fff] flex flex-col justify-center items-center lg:items-start text-center lg:text-start gap-5 flex-1">
-            <h4 className="font-bold text-4xl capitalize tracking-wider leading-[50px]">
+            <h4 className="font-TimesNewRoman italic font-bold text-4xl capitalize tracking-wider leading-[50px]">
               Creating Workspaces <br /> that inspires
             </h4>
-            <p className="text-2xl tracking-wide">
+            <p className="text-2xl font-Georgia tracking-wide">
               We help businesses design and build offices that are functional,
               stylish, and perfectly
               <br /> tailored to their needs.
             </p>
             <button
               onClick={() => navigate("/layout")}
-              className="w-fit   bg-gradient-to-r from-[#5584B6] to-[#75A2BE] border border-[#fff] tracking-wider px-5 py-2.5 rounded capitalize mt-7 hover:bg-none hover:scale-105 transition duration-500 ease-in-out"
+              className="w-fit  font-Georgia bg-gradient-to-r from-[#5584B6] to-[#75A2BE] border border-[#fff] tracking-wider px-5 py-2.5 rounded capitalize mt-7 hover:bg-none hover:scale-105 transition duration-500 ease-in-out"
             >
               start your layout
             </button>
@@ -98,7 +98,7 @@ function AboutUs() {
         <div className="lg:container px-4">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 h-3/4">
             <div className="flex flex-col justify-center">
-              <h2 className="text-xl md:text-4xl font-extrabold text-black mb-4 font-lora">
+              <h2 className="text-xl md:text-4xl font-extrabold text-black mb-4 font-Georgia">
                 Services We’re Providing
               </h2>
               <p className="text-black text-sm leading-relaxed font-lato">
@@ -123,7 +123,7 @@ function AboutUs() {
           <span className="w-8 h-px bg-[#304778] mb-2"></span>
         </div>
 
-        <h2 className="text-xl md:text-4xl font-bold mb-6 font-lora text-[#232323] text-center">
+        <h2 className="text-xl md:text-4xl font-bold mb-6 font-Georgia text-[#232323] text-center">
           Best Solutions For Your Dream
         </h2>
         <p className="text-[#777777] mb-10 max-w-lg md:max-w-2xl mx-auto font-Poppins text-center">
@@ -143,11 +143,11 @@ function AboutUs() {
                   alt={stage.title}
                   className="w-14 h-14 mt-6"
                 />
-                <div className="absolute top-0 right-0 w-12 h-12 pl-2 bg-white border border-dashed border-[#181818] border-opacity-60 rounded-full flex items-center justify-center text-xl font-semibold text-[#181818] text-opacity-60 font-lora">
+                <div className="absolute top-0 right-0 w-12 h-12 pl-2 bg-white border border-dashed border-[#181818] border-opacity-60 rounded-full flex items-center justify-center text-xl font-semibold text-[#181818] text-opacity-60 font-Georgia">
                   {stage.id}
                 </div>
               </div>
-              <h3 className="text-lg font-semibold text-[#232323] font-lora mb-2">
+              <h3 className="text-lg font-semibold text-[#232323] font-Georgia mb-2">
                 {stage.title}
               </h3>
               <p className="text-sm text-[#777777] font-Poppins">
