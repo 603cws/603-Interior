@@ -18,7 +18,7 @@ const steps = [
     title: "Trusted brand collaborations",
   },
   {
-    imagePath: "/images/DeliveryService1.png",
+    imagePath: "/images/execution.png",
     title: "Execution",
   },
 ];
@@ -26,28 +26,28 @@ const steps = [
 const cards = [
   {
     title: "Smart Simplicity",
-    image: "/images/ourstory.png",
-    subtitle: "only top-tier vendors and products",
+    image: "/images/brand1.jpg",
+    subtitle: "tech-led processes,zero guesswork",
   },
   {
     title: "Human-centered design",
-    image: "/images/ourstory.png",
-    subtitle: "only top-tier vendors and products",
+    image: "/images/brand2.jpg",
+    subtitle: "tailored to every business unique needs",
   },
   {
     title: "Partnership-driven quality",
     subtitle: "only top-tier vendors and products",
-    image: "/images/ourstory.png",
+    image: "/images/brand3.jpg",
   },
   {
     title: "Speed and reliability",
-    image: "/images/ourstory.png",
-    subtitle: "only top-tier vendors and products",
+    image: "/images/brand4.jpg",
+    subtitle: "cutting down timelines without compromising outcomes",
   },
   {
     title: "Trust and transparency",
-    image: "/images/ourstory.png",
-    subtitle: "only top-tier vendors and products",
+    image: "/images/brand5.jpg",
+    subtitle: "no hidden cost, no missalignment",
   },
 ];
 function OurStory() {
@@ -133,7 +133,8 @@ function StrugglesSection() {
       {/* Right Image */}
       <div className="flex justify-center md:justify-end">
         <img
-          src="/images/ourstory.png" // replace with your image path
+          src="/images/office.JPG" // replace with your image path
+          // src="/images/ourstory.png" // replace with your image path
           alt="Office workspace"
           className="rounded-lg shadow-md max-h-[350px] object-cover"
         />

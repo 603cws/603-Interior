@@ -12,29 +12,34 @@ const services = [
     description:
       "Smart, ergonomic designs that enhance productivity and brand presence.",
     image: "../images/about-us/Vector.png",
+    hoveredImage: "/images/s1.png",
   },
   {
     title: "Premium Office Furniture",
     description:
       "Bespoke desks, seating, and storage crafted for elegance and comfort.",
     image: "../images/about-us/Vector-1.png",
+    hoveredImage: "/images/s1.png",
   },
   {
     title: "Signature Décor & Lighting",
     description:
       "Statement pieces and ambiance solutions that elevate the workspace.",
     image: "../images/about-us/Vector-2.png",
+    hoveredImage: "/images/s1.png",
   },
   {
     title: "Complete Project Development",
     description:
       "From concept to final installation, we manage it all seamlessly.",
     image: "../images/about-us/Vector-3.png",
+    hoveredImage: "/images/s1.png",
   },
   {
     title: "Custom & Turnkey Solutions",
     description: "Ready-to-use spaces tailored to your unique business needs.",
     image: "../images/about-us/Vector-4.png",
+    hoveredImage: "/images/s1.png",
   },
 ];
 const work_stages = [
@@ -73,23 +78,27 @@ function AboutUs() {
       <section className="mt-10 xl:mt-0">
         <div className=" lg:container px-4 flex flex-col gap-6 lg:gap-0 lg:flex-row justify-between items-center ">
           <div className=" text-[#304778] flex flex-col justify-center items-center lg:items-start text-center lg:text-start gap-5 flex-1">
-            <h4 className="font-TimesNewRoman italic font-bold text-4xl capitalize tracking-wider leading-[50px]">
+            {/* <h4 className="font-TimesNewRoman italic font-bold text-4xl capitalize tracking-wider leading-[50px]">
               Creating Workspaces <br /> that inspires
-            </h4>
-            <p className="text-2xl font-Georgia tracking-wide">
+            </h4> */}
+            <h2 className="font-TimesNewRoman italic text-3xl xl:text-[44px] xl:leading-[53px] tracking-[0.3px] font-bold text-[#334A78] capitalize">
+              Creating Workspaces <br /> that inspires
+            </h2>
+            <p className="text-2xl  font-Georgia tracking-wide">
               We help businesses design and build offices that are functional,
               stylish, and perfectly
               <br /> tailored to their needs.
             </p>
             <button
               onClick={() => navigate("/layout")}
-              className="w-fit  font-Georgia bg-gradient-to-r from-[#5584B6] to-[#75A2BE] border border-[#fff] tracking-wider px-5 py-2.5 rounded capitalize mt-7  hover:scale-105 transition duration-500 ease-in-out"
+              className="w-fit  font-Georgia bg-gradient-to-r from-[#75A2BE] to-[#334A78]  border border-[#fff] tracking-wider px-5 py-2.5 rounded capitalize mt-7  hover:scale-105 text-white transition duration-500 ease-in-out"
             >
               start your layout
             </button>
           </div>
           <div className=" xl:py-10 xl:pl-10 flex-1">
-            <img src="/images/about-us/about-us-hero.png" alt="" />
+            <img src="/images/AboutUs-hero.webp" alt="" />
+            {/* <img src="/images/about-us/about-us-hero.png" alt="" /> */}
           </div>
         </div>
       </section>
@@ -242,7 +251,8 @@ function QuoteSection() {
         {/* Right: Image */}
         <div className="relative w-full h-[300px] md:h-auto">
           <img
-            src="/images/ourstory.png" // replace with your image path
+            src="/images/coworking.webp" // replace with your image path
+            // src="/images/ourstory.png" // replace with your image path
             alt="Office Interior"
             className="z-10 absolute inset-0 w-full h-full object-cover rounded-xl"
           />

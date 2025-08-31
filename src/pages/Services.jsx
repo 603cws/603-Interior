@@ -5,17 +5,17 @@ import Footer from "../common-components/Footer";
 import GetInTouchSection from "../common-components/GetInTouchSection";
 const steps = [
   {
-    imagePath: "/images/DeliveryService1.png",
+    imagePath: "/images/plan.png",
     title: "Plan",
     description: "Understand your space and needs",
   },
   {
-    imagePath: "/images/DeliveryService1.png",
+    imagePath: "/images/featureicon2.png",
     title: "select",
     description: "Choose your Layout ,Products and needs",
   },
   {
-    imagePath: "/images/DeliveryService1.png",
+    imagePath: "/images/build.png",
     title: "build",
     description: "Bring your vision to live",
   },
@@ -117,8 +117,8 @@ function OfficeLayoutSection() {
           BOQ Instantly.
         </p>
         <button
-          onClick={() => navigate("/")}
-          className=" font-Georgia mt-6 bg-gradient-to-r from-[#75A2BE] to-[#334A78] text-white px-6 py-3 rounded-md"
+          onClick={() => navigate("/Layout")}
+          className=" font-Georgia mt-6 bg-gradient-to-r from-[#75A2BE] to-[#334A78] text-white px-6 py-3 rounded-md hover:scale-105  transition duration-500 ease-in-out"
         >
           Start Your Layout
         </button>
@@ -127,7 +127,7 @@ function OfficeLayoutSection() {
       {/* Right Section - Image */}
       <div className="flex justify-center">
         <img
-          src="/images/service_1.png"
+          src="/images/service-hero.png"
           alt="Office Layout"
           className="w-full  lg:max-w-xl xl:max-w-2xl"
         />
@@ -262,10 +262,10 @@ function FeatureDesignSection() {
           <img src="/images/FeaturedDesign1.png" alt="featured design" />
         </div>
         <div>
-          <img src="/images/FeaturedDesign1.png" alt="featured design" />
+          <img src="/images/Featureddesign2.png" alt="featured design" />
         </div>
         <div>
-          <img src="/images/FeaturedDesign1.png" alt="featured design" />
+          <img src="/images/Featureddesgin3.png" alt="featured design" />
         </div>
       </div>
     </div>

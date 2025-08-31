@@ -117,7 +117,7 @@ function Contactus() {
           <HeroSection background={background} title={"Contact"} />
         </div> */}
 
-        <section className="hidden  sm:block lg:pt-8 lg:h-[120vh] xl:h-screen 3xl:h-[75vh] md:container md:mx-auto">
+        <section className="hidden  sm:block lg:pt-8 lg:h-[130vh] xl:h-screen 3xl:h-[75vh] md:container md:mx-auto">
           <div
             className=" py-3 flex flex-col-reverse
             lg:flex-row-reverse lg:justify-center lg:items-center  gap-10 h-full 3xl:h-full relative transform -translate-y-1/6"

@@ -1,6 +1,11 @@
-export const ServiceCard = ({ title, description, image }) => {
+import { useState } from "react";
+
+export const ServiceCard = ({ title, description, image, hoveredImage }) => {
+  const [ishovered, setIshovered] = useState(false);
   return (
     <div
+      onMouseEnter={() => setIshovered(true)}
+      onMouseLeave={() => setIshovered(false)}
       className={`relative font-Georgia group border-2 border-black border-opacity-20 p-6 hover:shadow-md transition hover:bg-gradient-to-br from-[#334A78] to-[#68B2DC]`}
     >
       <span
@@ -13,7 +18,11 @@ export const ServiceCard = ({ title, description, image }) => {
       {/* Content */}
       <div className="relative z-10">
         <div className="mb-4">
-          <img src={image} alt={title} className="w-10 h-10 rounded" />
+          <img
+            src={`${ishovered ? hoveredImage : image}`}
+            alt={title}
+            className="w-10 h-10 rounded"
+          />
         </div>
         <h4 className="font-semibold text-base text-black group-hover:text-[#fff] mb-2 ">
           {title}
