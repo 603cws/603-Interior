@@ -178,11 +178,23 @@ const PDFGenerator = {
             } catch {}
           }
 
-          let addonCell = "—";
+          let addonCell = [];
           if (hasAddons && item.addons) {
-            addonCell = Object.values(item.addons)
-              .map((a) => `${a.title} (Rs. ${a.finalPrice})`)
-              .join("\n");
+            addonCell = await Promise.all(
+              Object.values(item.addons).map(async (a) => {
+                let addonImage = null;
+                if (a.image) {
+                  try {
+                    addonImage = await loadImage(a.image);
+                  } catch {}
+                }
+                return {
+                  title: a.title,
+                  price: a.finalPrice,
+                  _imgData: addonImage,
+                };
+              })
+            );
           }
 
           const { area } = getAreaAndQuantity(
@@ -199,7 +211,9 @@ const PDFGenerator = {
             product: `${item.product_variant?.variant_title || "N/A"}\n${
               item.product_variant?.variant_details || ""
             }`,
-            ...(hasAddons ? { addons: addonCell } : {}),
+            ...(hasAddons
+              ? { addons: "", _addons: addonCell, _hasAddons: true } //, _hasAddons: true
+              : {}),
             spec: `${item.subcategory}-${item.subcategory1}`,
             subcategory1: item.subcategory1, // ✅ add this line
             ...(hideQty ? {} : { qty }),
@@ -229,13 +243,20 @@ const PDFGenerator = {
       const columnStyles = {
         no: { halign: "center", cellWidth: 25 },
         image: { halign: "center", cellWidth: 50 },
-        product: { cellWidth: 120 },
-        ...(hasAddons ? { addons: { cellWidth: 120 } } : {}),
+        ...(hasAddons
+          ? { product: { cellWidth: 100 } }
+          : { product: { cellWidth: 120 } }),
+        // product: { cellWidth: 100 },
+        ...(hasAddons ? { addons: { cellWidth: 100 } } : {}),
         spec: { cellWidth: 90 },
         qty: { halign: "center", cellWidth: 25 },
         area: { halign: "center", cellWidth: 40 },
         price: { halign: "right", cellWidth: 60 },
-        amount: { halign: "right", cellWidth: 80 },
+        ...(hasAddons
+          ? { amount: { halign: "right", cellWidth: 70 } }
+          : { amount: { halign: "right", cellWidth: 80 } }),
+
+        // amount: { halign: "right", cellWidth: 70 },
       };
 
       // ✅ Render table with columns + rows
@@ -259,7 +280,11 @@ const PDFGenerator = {
           lineWidth: 0.5,
         },
         columnStyles,
-        margin: hasAddons ? { left: 18, right: 15 } : { left: 52, right: 10 },
+        margin: hasAddons
+          ? { left: 18, right: 15 }
+          : hideQty
+          ? { left: 65, right: 10 }
+          : { left: 52, right: 10 },
         didDrawCell: (data) => {
           if (data.section === "body" && data.column.dataKey === "image") {
             const rowData = data.row.raw;
@@ -279,6 +304,80 @@ const PDFGenerator = {
 
               // ✅ mark as drawn so it won’t draw again on next page
               data.cell.imageDrawn = true;
+            }
+          }
+
+          // ✅ Addon Images inside Addons column
+          if (data.section === "body" && data.column.dataKey === "addons") {
+            const rowData = data.row.raw;
+            if (Array.isArray(rowData._addons) && rowData._addons.length > 0) {
+              const cellPadding = 4;
+              const imgSize = 20;
+              const vGap = 8;
+
+              const contentX = data.cell.x + cellPadding;
+              const maxWidth = data.cell.width - cellPadding * 2;
+              let yOffset = data.cell.y + 6;
+
+              rowData._addons.forEach((addon) => {
+                // left: image
+                if (addon._imgData) {
+                  doc.addImage(
+                    addon._imgData,
+                    "PNG",
+                    contentX,
+                    yOffset,
+                    imgSize,
+                    imgSize
+                  );
+                }
+
+                // right: title (top) + price (below)
+                const textX = contentX + imgSize + 6;
+                const textWidth = maxWidth - imgSize - 6;
+
+                doc.setFontSize(8);
+                doc.text(addon.title || "", textX, yOffset + 8, {
+                  maxWidth: textWidth,
+                });
+                doc.text(
+                  `Rs. ${Number(addon.price || 0).toLocaleString("en-IN")}`,
+                  textX,
+                  yOffset + 18,
+                  { maxWidth: textWidth }
+                );
+
+                yOffset += imgSize + vGap; // stack vertically
+              });
+
+              // don’t let autotable draw its own text
+              data.cell.text = [];
+            }
+          }
+        },
+        didParseCell: (data) => {
+          if (data.section === "body" && data.column.dataKey === "addons") {
+            const rowData = data.row.raw;
+            if (Array.isArray(rowData._addons) && rowData._addons.length > 0) {
+              const imgSize = 20;
+              const vGap = 8; // vertical spacing between addons
+              const topPad = 6; // top padding inside the cell
+              const bottomPad = 6;
+
+              // each addon takes roughly img height + spacing
+              const required =
+                rowData._addons.length * (imgSize + vGap) + topPad + bottomPad;
+
+              // 🔥 make the WHOLE ROW at least this tall
+              data.row.height = Math.max(data.row.height || 0, required);
+
+              // prevent default text (avoid "[object Object]")
+              data.cell.text = [];
+              // ensure this cell can grow; helpful on some versions
+              data.cell.styles.minCellHeight = Math.max(
+                data.cell.styles.minCellHeight || 0,
+                required
+              );
             }
           }
         },
