@@ -332,7 +332,7 @@ function Landing() {
             </h3>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3 justify-between justify-items-stretch my-10">
-            <div className="relative group  w-full h-[450px] bg-[url('images/home/corporateoffice.webp')] bg-cover bg-center bg-no-repeat overflow-hidden rounded-lg">
+            <div className="relative group  w-full h-[450px] bg-[url('../images/home/corporateoffice.webp')] bg-cover bg-center bg-no-repeat overflow-hidden rounded-lg">
               <div className="absolute inset-0 bg-black/50 flex items-end p-5 translate-y-full group-hover:translate-y-0 transition-transform duration-700 ease-in-out">
                 <h3 className="text-[#fff] font-Georgia text-5xl italic text-center tracking-wide capitalize">
                   Corporate office
