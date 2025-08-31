@@ -18,7 +18,11 @@ import toast from "react-hot-toast";
 import { supabase } from "../../services/supabase";
 import { fetchProductsData } from "../utils/dataFetchers";
 import { useLocation } from "react-router-dom";
-import { categoriesWithModal, priceRange } from "../../constants/constant";
+import {
+  categoriesWithModal,
+  numOfCoats,
+  priceRange,
+} from "../../constants/constant";
 
 function Boq() {
   const location = useLocation();
@@ -486,16 +490,8 @@ function Boq() {
                   (allProductQuantities[subcategory]?.[subcategory1] ?? 0),
             quantity:
               category === "Paint"
-                ? calculateAutoTotalPriceHelper(
-                    quantityData[0],
-                    areasData[0],
-                    category,
-                    subcategory,
-                    subcategory1,
-                    userResponses.height,
-                    variant.dimensions,
-                    seatCountData
-                  )
+                ? Math.ceil(+areasData[0][normalizeKey(subcategory)] / 120) *
+                  numOfCoats
                 : product.category === "Furniture" &&
                   subcategory1 === "Chair" &&
                   (subcategory === "Md Cabin Main" ||

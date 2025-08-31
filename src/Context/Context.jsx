@@ -10,6 +10,7 @@ import processData from "../boq/utils/dataProcessor";
 import { calculateTotalPrice } from "../boq/utils/productUtils";
 import { calculateSeatCountTotals } from "../boq/utils/dataProcessor";
 import { calculateTotalPriceHelper } from "../boq/utils/CalculateTotalPriceHelper";
+import { numOfCoats } from "../constants/constant";
 
 const AppContext = createContext();
 
@@ -1062,16 +1063,7 @@ export const AppProvider = ({ children }) => {
               (productQuantity[subCat]?.[selectedSubCategory1] ?? 0),
         quantity:
           category.category === "Paint"
-            ? calculateTotalPriceHelper(
-                quantityData[0],
-                areasData[0],
-                category.category,
-                subCat,
-                subcategory1,
-                userResponses.height,
-                selectedProductView.dimensions,
-                seatCountData
-              )
+            ? Math.ceil(+areasData[0][normalizeKey(subCat)] / 120) * numOfCoats
             : category.category === "Furniture" &&
               subcategory1 === "Chair" &&
               (subCat === "Md Cabin Main" || subCat === "Md Cabin Visitor")

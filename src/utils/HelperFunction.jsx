@@ -180,6 +180,7 @@ export const useLogout = () => {
         sessionStorage.removeItem("BOQTitle");
         sessionStorage.removeItem("BOQID");
         sessionStorage.removeItem("selectedPlan");
+        localStorage.removeItem("answers");
         setSelectedPlan(null);
         setSelectedData([]);
         setBOQID("");

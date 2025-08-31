@@ -144,6 +144,7 @@ export const calculateTotalPriceHelper = (
 
       let rawValue = area / dimArea;
       value = rawValue ? Math.ceil(rawValue) : 1;
+      return value;
     }
     if (category === "Civil / Plumbing") {
       if (subcategory1 === "Tile") {
@@ -158,6 +159,7 @@ export const calculateTotalPriceHelper = (
 
         let rawValue = area / dimArea;
         value = rawValue ? Math.ceil(rawValue) : 1;
+        return value;
       } else {
         matchedKey = findKeyWithExactAndPartialMatch(
           normalizedSubCat,
@@ -167,6 +169,7 @@ export const calculateTotalPriceHelper = (
         quantity = matchedKey ? roomNumbersMap[matchedKey] : 1;
 
         value = quantity;
+        return value;
       }
     }
     if (category === "Paint") {
@@ -177,16 +180,19 @@ export const calculateTotalPriceHelper = (
         let temp = Math.ceil(area / 120);
 
         value = temp * numOfCoats * 3 * height;
+        return value;
       } else {
         //Ceiling calc
         let temp = Math.ceil(area / 120);
         value = temp * numOfCoats;
+        return value;
       }
     } else {
       matchedKey = findKeyWithExactAndPartialMatch(normalizedSubCat, areasData);
       area = matchedKey ? areasData[matchedKey] : 1;
 
       value = area;
+      return value;
     }
   }
 

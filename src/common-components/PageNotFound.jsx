@@ -10,8 +10,11 @@
 //   );
 // }
 import { useNavigate } from "react-router-dom";
+import { useLogout } from "../utils/HelperFunction";
 function PageNotFound() {
   const navigate = useNavigate();
+  const logout = useLogout();
+
   return (
     <div className="flex justify-center items-center w-screen h-screen">
       {/* <img
@@ -113,7 +116,10 @@ function PageNotFound() {
           We’re working on it.
         </p>
         <button
-          onClick={() => navigate("/")}
+          onClick={() => {
+            navigate("/");
+            logout();
+          }}
           className="bg-[#374A75] text-[#fff] px-3 py-2 rounded-sm"
         >
           Go To Home
