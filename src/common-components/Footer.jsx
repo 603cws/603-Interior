@@ -160,7 +160,7 @@ function Footer() {
           <div className="flex gap-24 capitalize text-xs lg:text-sm">
             <ul className="flex flex-col gap-3 font-thin ">
               <li className=" font-bold">company</li>
-              <li className="cursor-pointer" onClick={scrollToTop}>
+              <li className="cursor-pointer" onClick={() => navigate("/")}>
                 home
               </li>
               <li

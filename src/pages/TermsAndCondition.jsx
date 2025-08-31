@@ -93,7 +93,7 @@ function TermsAndCondition() {
         <div className="absolute inset-0 bg-black opacity-50"></div>
         <div className="relative z-10  uppercase font-lato font-extrabold pt-10">
           <h1 className="text-2xl lg:text-4xl text-white drop-shadow-lg ">
-            Terms & condition
+            Terms & conditions
           </h1>
         </div>
       </section>
@@ -104,9 +104,9 @@ function TermsAndCondition() {
           <div className="font-Poppins flex justify-center">
             <div className="mx-6 lg:mx-10 max-w-4xl ">
               {/* title */}
-              <div className="font-semibold xl:text-5xl capitalize text-center mb-10">
+              {/* <div className="font-semibold xl:text-5xl capitalize text-center mb-10">
                 <h2 className="leading-snug">Terms & Conditions</h2>
-              </div>
+              </div> */}
               <p className="text-sm lg:text-lg xl:text-xl mb-5">
                 Welcome to Workved Interiors! By accessing and using our
                 website, you agree to the following terms and conditions. These
