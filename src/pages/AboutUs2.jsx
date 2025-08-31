@@ -179,7 +179,7 @@ function AboutUs() {
         </div>
       </section>
 
-      <section className="font-Georgia bg-[url('images/about-us/contact-section-bg.webp')] bg-no-repeat bg-cover bg-center py-24">
+      <section className="font-Georgia bg-[url('../images/about-us/contact-section-bg.webp')] bg-no-repeat bg-cover bg-center py-24">
         <div className="lg:container px-4 flex justify-center items-center text-[#fff]">
           <div className="md:flex gap-7 bg-[#000]/20 backdrop-blur-sm p-5 md:p-10 rounded-sm">
             <h2 className=" text-3xl md:text-5xl">
