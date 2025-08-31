@@ -11,7 +11,6 @@ function LandingNavbar() {
   const [enquiry, setEnquiry] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { isAuthenticated, accountHolder } = useApp();
-  console.log(accountHolder, isAuthenticated);
 
   const navigate = useNavigate();
   return (
@@ -56,7 +55,7 @@ function LandingNavbar() {
         </div>
         <div className="flex gap-10 uppercase text-xs xl:text-sm font-bold text-[#fff]">
           <div
-            onClick={() => navigate("/layout")}
+            onClick={() => navigate("/Layout")}
             className="flex flex-col justify-center items-center gap-2 cursor-pointer relative after:content-[''] after:absolute after:left-0 after:bottom-[-2px] after:h-[1px] after:bg-[#FFC900] after:w-0 after:transition-all after:duration-300
            hover:after:w-full"
           >
@@ -67,17 +66,19 @@ function LandingNavbar() {
             />
             <p>space calculator</p>
           </div>
-          <div
-            onClick={() => setEnquiry(true)}
-            className="flex flex-col justify-center items-center gap-2 cursor-pointer relative after:content-[''] after:absolute after:left-0 after:bottom-[-2px] after:h-[1px] after:bg-[#FFC900] after:w-0 after:transition-all after:duration-300 hover:after:w-full"
-          >
-            <img
-              src="/images/icons/enquiry-white.png"
-              alt=""
-              className="h-8 w-8"
-            />
-            <p>enquiry</p>
-          </div>
+          {pathname !== "/Contactus" && (
+            <div
+              onClick={() => setEnquiry(true)}
+              className="flex flex-col justify-center items-center gap-2 cursor-pointer relative after:content-[''] after:absolute after:left-0 after:bottom-[-2px] after:h-[1px] after:bg-[#FFC900] after:w-0 after:transition-all after:duration-300 hover:after:w-full"
+            >
+              <img
+                src="/images/icons/enquiry-white.png"
+                alt=""
+                className="h-8 w-8"
+              />
+              <p>enquiry</p>
+            </div>
+          )}
           <div className="flex flex-col justify-center items-center gap-2 cursor-pointer relative after:content-[''] after:absolute after:left-0 after:bottom-[-2px] after:h-[1px] after:bg-[#FFC900] after:w-0 after:transition-all after:duration-300 hover:after:w-full">
             {isAuthenticated ? (
               <button
@@ -148,8 +149,8 @@ function LandingNavbar() {
             <ul className="text-sm font-bold text-[#334A78] uppercase space-y-5">
               <li onClick={() => navigate("/aboutUs")}>about us</li>
               <li onClick={() => navigate("/OurServices")}>our services</li>
-              <li onClick={() => navigate("/ContactUs")}>contact us</li>
-              <li onClick={() => navigate("/layout")} className="flex gap-2">
+              <li onClick={() => navigate("/Contactus")}>contact us</li>
+              <li onClick={() => navigate("/Layout")} className="flex gap-2">
                 <img
                   src="/images/icons/calculator.png"
                   alt=""
@@ -157,7 +158,13 @@ function LandingNavbar() {
                 />{" "}
                 <span>space calculator</span>
               </li>
-              <li onClick={() => setEnquiry(true)} className="flex gap-2">
+
+              <li
+                onClick={() => setEnquiry(true)}
+                className={`flex gap-2 ${
+                  pathname === "/Contactus" ? "hidden" : "block"
+                }`}
+              >
                 <img
                   src="/images/icons/enquiry.png"
                   alt=""
@@ -165,6 +172,7 @@ function LandingNavbar() {
                 />{" "}
                 <span>enquiry</span>
               </li>
+
               <li className="flex gap-2">
                 {isAuthenticated ? (
                   <button
@@ -174,7 +182,10 @@ function LandingNavbar() {
                     Dashboard
                   </button>
                 ) : (
-                  <div onClick={() => navigate("/login")}>
+                  <div
+                    onClick={() => navigate("/login")}
+                    className="flex gap-2"
+                  >
                     <img
                       src="/images/icons/sign-in.png"
                       alt=""
