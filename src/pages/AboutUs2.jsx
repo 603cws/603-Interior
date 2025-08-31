@@ -70,9 +70,9 @@ function AboutUs() {
   return (
     <>
       <LandingNavbar />
-      <section className="bg-[#304778] lg:h-[570px]">
-        <div className=" lg:container px-4 flex flex-col lg:flex-row justify-between items-center font-Poppins">
-          <div className=" text-[#fff] flex flex-col justify-center items-center lg:items-start text-center lg:text-start gap-5 flex-1">
+      <section className="mt-10 xl:mt-0">
+        <div className=" lg:container px-4 flex flex-col gap-6 lg:gap-0 lg:flex-row justify-between items-center ">
+          <div className=" text-[#304778] flex flex-col justify-center items-center lg:items-start text-center lg:text-start gap-5 flex-1">
             <h4 className="font-TimesNewRoman italic font-bold text-4xl capitalize tracking-wider leading-[50px]">
               Creating Workspaces <br /> that inspires
             </h4>
@@ -83,25 +83,25 @@ function AboutUs() {
             </p>
             <button
               onClick={() => navigate("/layout")}
-              className="w-fit  font-Georgia bg-gradient-to-r from-[#5584B6] to-[#75A2BE] border border-[#fff] tracking-wider px-5 py-2.5 rounded capitalize mt-7 hover:bg-none hover:scale-105 transition duration-500 ease-in-out"
+              className="w-fit  font-Georgia bg-gradient-to-r from-[#5584B6] to-[#75A2BE] border border-[#fff] tracking-wider px-5 py-2.5 rounded capitalize mt-7  hover:scale-105 transition duration-500 ease-in-out"
             >
               start your layout
             </button>
           </div>
-          <div className="p-10 ">
+          <div className=" xl:py-10 xl:pl-10 flex-1">
             <img src="/images/about-us/about-us-hero.png" alt="" />
           </div>
         </div>
       </section>
 
-      <section className="relative pt-20 lg:py-20 bg-[url('/images/about-us/about-us-bg.png')] bg-no-repeat bg-right-top bg-contain">
+      <section className="relative pt-20 lg:py-20 bg-[url('/images/about-us/about-us-bg.png')] bg-no-repeat bg-right-top bg-contain font-Georgia">
         <div className="lg:container px-4">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 h-3/4">
             <div className="flex flex-col justify-center">
-              <h2 className="text-xl md:text-4xl font-extrabold text-black mb-4 font-Georgia">
+              <h2 className="text-xl md:text-4xl font-bold italic text-black mb-4 font-Georgia">
                 Services We’re Providing
               </h2>
-              <p className="text-black text-sm leading-relaxed font-lato">
+              <p className="text-black text-sm leading-relaxed font-Georgia">
                 Designing office spaces that range from intimate, bespoke
                 interiors to large-scale, transformative workplaces.
               </p>
@@ -114,19 +114,31 @@ function AboutUs() {
         </div>
       </section>
 
-      <section className="relative py-24 lg:container px-4">
+      <section>
+        <div className="font-Georgia flex flex-col justify-center items-center my-10 capitalize">
+          <h1 className="italic text-[#111827] text-3xl xl:text-[42px] leading-[52px]">
+            Our story of Growth
+          </h1>
+          <p className="text-[#4B5563] text-lg text-center">
+            From Shared spaces - to Design workplaces
+          </p>
+        </div>
+        <QuoteSection />
+      </section>
+
+      <section className="relative py-16 lg:container px-4">
         <div className="flex items-center justify-center gap-4 mb-2">
           <span className="w-8 h-px bg-[#304778] mb-2"></span>
-          <h5 className="text-sm text-[#304778] font-semibold uppercase font-lato">
+          <h5 className="text-sm text-[#304778] font-bold italic uppercase font-Georgia">
             Work Stages
           </h5>
           <span className="w-8 h-px bg-[#304778] mb-2"></span>
         </div>
 
-        <h2 className="text-xl md:text-4xl font-bold mb-6 font-Georgia text-[#232323] text-center">
+        <h2 className="text-xl md:text-4xl font-bold italic mb-6 font-Georgia text-[#232323] text-center">
           Best Solutions For Your Dream
         </h2>
-        <p className="text-[#777777] mb-10 max-w-lg md:max-w-2xl mx-auto font-Poppins text-center">
+        <p className="text-[#777777] mb-10 max-w-lg md:max-w-2xl mx-auto font-Georgia text-center">
           Clients often don’t know what to expect during the interior design
           process, so we’ve put together our guide work stages
         </p>
@@ -147,10 +159,10 @@ function AboutUs() {
                   {stage.id}
                 </div>
               </div>
-              <h3 className="text-lg font-semibold text-[#232323] font-Georgia mb-2">
+              <h3 className="text-lg font-bold italic text-[#232323] font-Georgia mb-2">
                 {stage.title}
               </h3>
-              <p className="text-sm text-[#777777] font-Poppins">
+              <p className="text-sm text-[#777777] font-Georgia">
                 {stage.desc}
               </p>
             </div>
@@ -158,10 +170,10 @@ function AboutUs() {
         </div>
       </section>
 
-      <section className="bg-[url('images/about-us/contact-section-bg.jpg')] bg-no-repeat bg-cover bg-center py-24">
+      <section className="font-Georgia bg-[url('images/about-us/contact-section-bg.jpg')] bg-no-repeat bg-cover bg-center py-24">
         <div className="lg:container px-4 flex justify-center items-center text-[#fff]">
           <div className="md:flex gap-7 bg-[#000]/20 backdrop-blur-sm p-5 md:p-10 rounded-sm">
-            <h2 className="font-medium text-3xl md:text-5xl">
+            <h2 className=" text-3xl md:text-5xl">
               Unlock Your Dream <br /> Office Today!
             </h2>
             <div>
@@ -200,3 +212,42 @@ function AboutUs() {
 }
 
 export default AboutUs;
+
+function QuoteSection() {
+  const navigate = useNavigate();
+  return (
+    <section className="  font-Georgia lg:container mx-auto px-4">
+      <div className="grid md:grid-cols-2 gap-8  bg-[#304778] border border-[#CFF3FF] rounded-2xl p-6 md:p-10 items-stretch h-[800px] md:h-[500px]">
+        {/* Left: Quote */}
+        <div className="text-white self-center">
+          <p className="text-lg leading-relaxed italic relative">
+            <span className="text-4xl  absolute -left-4 -top-2">“</span>
+            Workved Interiors was born out of real challenges we faced while
+            building our own coworking brand—603 The Coworking Space. As we
+            scaled across cities, one thing became crystal clear: setting up
+            high-quality, functional, and well-designed office spaces was
+            unnecessarily complicated.
+            <span className="text-4xl  align-bottom">”</span>
+          </p>
+
+          {/* Button */}
+          <button
+            onClick={() => navigate("/ourstory")}
+            className="mt-8 inline-flex items-center justify-center w-12 h-12 rounded-full border border-white hover:bg-white hover:text-[#2c4d8b] transition"
+          >
+            →
+          </button>
+        </div>
+
+        {/* Right: Image */}
+        <div className="relative w-full h-[300px] md:h-auto">
+          <img
+            src="/images/ourstory.png" // replace with your image path
+            alt="Office Interior"
+            className="z-10 absolute inset-0 w-full h-full object-cover rounded-xl"
+          />
+        </div>
+      </div>
+    </section>
+  );
+}

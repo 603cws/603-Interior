@@ -66,6 +66,7 @@ import VendorDashboardLayout from "./pages/vendor/VendorDashboardLayout";
 import PrivateRoute from "./utils/PrivateRoute";
 import Services from "./pages/Services";
 import Contactuscopy from "./pages/Contactus copy";
+import OurStory from "./pages/OurStory";
 
 const Home = lazy(() => import("./pages/Home"));
 
@@ -111,6 +112,7 @@ function App() {
           <Route path="/Contactus" element={<Contactus />} />
           {/* <Route path="/newContactus" element={<Contactus />} /> */}
           <Route path="/Aboutus" element={<AboutUs2 />} />
+          <Route path="/ourstory" element={<OurStory />} />
 
           <Route path="/Blog" element={<InteriorBlog />} />
           <Route path="/Blog/:title" element={<BlogDetail />} />
