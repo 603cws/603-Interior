@@ -48,15 +48,6 @@ function Landing() {
         duration: 2,
         ease: "power2.out",
       });
-
-      // 2️⃣ Right top table comes left rotating
-      tl.fromTo(
-        ".round-table",
-        { right: "0%", rotate: 0, opacity: 1 },
-        { left: "0%", rotate: -360, opacity: 1, duration: 5 },
-        "<" // start at same time
-      );
-
       // 4️⃣ Interior Design corporate text goes upward & disappears
       tl.to(".interior-text", {
         y: -200,
@@ -66,18 +57,33 @@ function Landing() {
       });
 
       // 5️⃣ And commercial text goes upward & disappears
-      tl.to(".commercial-text", {
-        y: -200,
-        opacity: 0,
-        duration: 2,
-        ease: "power2.out",
-      });
+      tl.to(
+        ".commercial-text",
+        {
+          y: -200,
+          opacity: 0,
+          duration: 2,
+          ease: "power2.out",
+        },
+        "<"
+      );
+
+      // 2️⃣ Right top table comes left rotating
+      tl.fromTo(
+        ".round-table",
+        { right: "0%", rotate: 0, opacity: 1 },
+        { left: "0%", rotate: -360, opacity: 1, duration: 5 }
+        // start at same time
+      );
+
       // 3️⃣ Middle table goes bottom left corner
       tl.fromTo(
         ".rotating-table",
         { left: "0%", top: "40%", rotate: 0, opacity: 1 },
-        { left: "0%", top: "70%", rotate: -90, opacity: 1, duration: 2 }
+        { left: "0%", top: "70%", rotate: -90, opacity: 1, duration: 2 },
+        "<"
       );
+
       // 6️⃣ Bottom right table moves to middle bottom
       tl.fromTo(
         ".down-table",
