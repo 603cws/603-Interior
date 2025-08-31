@@ -39,8 +39,6 @@ function Login() {
 
   const from = location.state?.from;
 
-  console.log(location, "previous route");
-
   // console.log("helloooooo");
 
   // const areas = location.state?.areaQuantities;

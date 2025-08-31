@@ -272,21 +272,55 @@ export const calculateAutoTotalPriceHelper = (
 
       let rawValue = area / dimArea;
       value = rawValue ? Math.ceil(rawValue) : 1;
+      return value;
     }
-    if (category === "Civil / Plumbing" && subcategory1 === "Tile") {
-      //Opp condition written like except Epoxy for rest A / dim * price
+    if (category === "Civil / Plumbing") {
+      if (subcategory1 === "Tile") {
+        //Opp condition written like except Epoxy for rest A / dim * price
+        matchedKey = findKeyWithExactAndPartialMatch(
+          normalizedSubCat,
+          areasData
+        );
+        area = matchedKey ? areasData[matchedKey] : 1;
+
+        const dimArea = multiplyFirstTwoFlexible(dimensions);
+
+        let rawValue = area / dimArea;
+        value = rawValue ? Math.ceil(rawValue) : 1;
+        return value;
+      } else {
+        matchedKey = findKeyWithExactAndPartialMatch(
+          normalizedSubCat,
+          roomNumbersMap
+        );
+
+        quantity = matchedKey ? roomNumbersMap[matchedKey] : 1;
+
+        value = quantity;
+        return value;
+      }
+    }
+    if (category === "Paint") {
       matchedKey = findKeyWithExactAndPartialMatch(normalizedSubCat, areasData);
       area = matchedKey ? areasData[matchedKey] : 1;
+      if (subcategory1 !== "Ceilings") {
+        // area/coverage * 3 * height * price * no of coats   Wall calc
+        let temp = Math.ceil(area / 120);
 
-      const dimArea = multiplyFirstTwoFlexible(dimensions);
-
-      let rawValue = area / dimArea;
-      value = rawValue ? Math.ceil(rawValue) : 1;
+        value = temp * numOfCoats * 3 * height;
+        return value;
+      } else {
+        //Ceiling calc
+        let temp = Math.ceil(area / 120);
+        value = temp * numOfCoats;
+        return value;
+      }
     } else {
       matchedKey = findKeyWithExactAndPartialMatch(normalizedSubCat, areasData);
       area = matchedKey ? areasData[matchedKey] : 1;
 
       value = area;
+      return value;
     }
   }
 

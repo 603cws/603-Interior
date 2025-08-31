@@ -95,7 +95,10 @@ function LandingNavbar() {
                 />
               </button>
             ) : (
-              <div onClick={() => navigate("/Login")}>
+              <div
+                onClick={() => navigate("/Login")}
+                className="flex flex-col justify-center items-center gap-2"
+              >
                 <img
                   src="/images/icons/sign-in-white.png"
                   alt=""

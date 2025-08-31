@@ -77,6 +77,7 @@ function Boq() {
     currentLayoutID,
     productQuantity,
     seatCountData,
+    allProductQuantities,
   } = useApp();
 
   console.log("selectedData in boq page", selectedData);
@@ -289,18 +290,113 @@ function Boq() {
               variant.default === variant.segment // Ensure it is marked as default
           );
 
-          if (matchingVariant) {
-            // const groupKey = `${category}-${subCat}-${subcategory1}-${product.id}`;
-            const groupKey = `${category}-${subCat}-${subcategory1}-${matchingVariant.id}`;
+          // if (matchingVariant) {
+          //   // const groupKey = `${category}-${subCat}-${subcategory1}-${product.id}`;
+          //   const groupKey = `${category}-${subCat}-${subcategory1}-${matchingVariant.id}`;
 
-            productMap.set(groupKey, {
-              product,
-              variant: matchingVariant,
-              subcategory: subCat,
-            });
+          //   productMap.set(groupKey, {
+          //     product,
+          //     variant: matchingVariant,
+          //     subcategory: subCat,
+          //   });
+          // }
+
+          if (matchingVariant) {
+            // ✅ Special case: Furniture Chairs in Md/Manager Cabin
+            if (
+              category === "Furniture" &&
+              subcategory1 === "Chair" &&
+              (subCat === "Md Cabin" || subCat === "Manager Cabin")
+            ) {
+              // Insert Main
+              const mainGroupKey = `${category}-${subCat} Main-${subcategory1}-${matchingVariant.id}`;
+              productMap.set(mainGroupKey, {
+                product,
+                variant: matchingVariant,
+                subcategory: `${subCat} Main`,
+              });
+
+              // Insert Visitor
+              const visitorGroupKey = `${category}-${subCat} Visitor-${subcategory1}-${matchingVariant.id}`;
+              productMap.set(visitorGroupKey, {
+                product,
+                variant: matchingVariant,
+                subcategory: `${subCat} Visitor`,
+              });
+            } else {
+              // ✅ Normal flow
+              const groupKey = `${category}-${subCat}-${subcategory1}-${matchingVariant.id}`;
+              productMap.set(groupKey, {
+                product,
+                variant: matchingVariant,
+                subcategory: subCat,
+              });
+            }
           }
         });
       });
+
+      // filterProducts.forEach((product) => {
+      //   const { category, subcategory, subcategory1, product_variants } =
+      //     product;
+
+      //   if (
+      //     !category ||
+      //     !subcategory ||
+      //     !subcategory1 ||
+      //     !product_variants?.length
+      //   )
+      //     return;
+
+      //   // Split subcategories if they contain multiple comma-separated values
+      //   const subcategories = subcategory.split(",").map((sub) => sub.trim());
+
+      //   subcategories.forEach((subCat) => {
+      //     if (category === "HVAC" && subCat !== "Centralized") return;
+      //     if (!cat.subcategories.includes(subCat)) return;
+
+      //     const matchingVariant = product_variants.find(
+      //       (variant) =>
+      //         variant.segment?.toLowerCase() === selectedPlan?.toLowerCase() &&
+      //         variant.default === variant.segment
+      //     );
+
+      //     if (matchingVariant) {
+      //       // ✅ Special case: Furniture Chairs in Md/Manager Cabin
+      //       if (
+      //         category === "Furniture" &&
+      //         subcategory1 === "Chair" &&
+      //         (subCat === "Md Cabin" || subCat === "Manager Cabin")
+      //       ) {
+      //         // Insert Main
+      //         const mainGroupKey = `${category}-${subCat} Main-${subcategory1}-${matchingVariant.id}`;
+      //         productMap.set(mainGroupKey, {
+      //           product,
+      //           variant: matchingVariant,
+      //           subcategory: `${subCat} Main`,
+      //         });
+
+      //         // Insert Visitor
+      //         const visitorGroupKey = `${category}-${subCat} Visitor-${subcategory1}-${matchingVariant.id}`;
+      //         productMap.set(visitorGroupKey, {
+      //           product,
+      //           variant: matchingVariant,
+      //           subcategory: `${subCat} Visitor`,
+      //         });
+      //       } else {
+      //         // ✅ Normal flow
+      //         const groupKey = `${category}-${subCat}-${subcategory1}-${matchingVariant.id}`;
+      //         productMap.set(groupKey, {
+      //           product,
+      //           variant: matchingVariant,
+      //           subcategory: subCat,
+      //         });
+      //       }
+      //     }
+      //   });
+      // });
+
+      console.log("productMap", productMap);
 
       // Process selected products (one per `subcategory1` for each subcategory)
       productMap.forEach(({ product, variant, subcategory }, groupKey) => {
@@ -314,15 +410,31 @@ function Boq() {
               subcategory1 === "Tile") ||
             (product.category === "Flooring" && subcategory1 !== "Epoxy")
           ) {
-            console.log(subcategory1, subcategory);
-
             calQty = Math.ceil(
               +areasData[0][normalizeKey(subcategory)] /
-                multiplyFirstTwoFlexible(product?.dimensions)
+                multiplyFirstTwoFlexible(variant?.dimensions)
             );
           } else {
-            calQty = productQuantity[subcategory]?.[subcategory1];
+            calQty = allProductQuantities[subcategory]?.[subcategory1];
           }
+
+          // if (
+          //   product.category === "Furniture" &&
+          //   subcategory1 === "Chair" &&
+          //   (subcategory === "Md Cabin Main" ||
+          //     subcategory === "Md Cabin Visitor")
+          // ) {
+          //   calQty *= quantityData[0]["md"] ?? 1;
+          //   console.log(subcategory, calQty);
+          // } else if (
+          //   product.category === "Furniture" &&
+          //   subcategory1 === "Chair" &&
+          //   (subcategory === "Manager Cabin Main" ||
+          //     subcategory === "Manager Cabin Visitor")
+          // ) {
+          //   calQty *= quantityData[0]["manager"] ?? 1;
+          //   console.log(subcategory, calQty);
+          // }
 
           const productData = {
             groupKey,
@@ -342,12 +454,12 @@ function Boq() {
             },
             // addons: product.addons || [],
             finalPrice:
-              category.category === "Flooring" ||
-              category.category === "HVAC" ||
-              category.category === "Lighting" ||
-              category.category == "Civil / Plumbing" ||
-              category.category === "Partitions / Ceilings" ||
-              category.category === "Paint"
+              category === "Flooring" ||
+              category === "HVAC" ||
+              category === "Lighting" ||
+              (category == "Civil / Plumbing" && subcategory1 === "Tile") ||
+              category === "Partitions / Ceilings" ||
+              category === "Paint"
                 ? calculateAutoTotalPrice(
                     variant.price,
                     product.category,
@@ -356,27 +468,38 @@ function Boq() {
                     variant.dimensions,
                     seatCountData
                   )
-                : category.category === "Furniture" &&
+                : category === "Furniture" &&
                   subcategory1 === "Chair" &&
                   (subcategory === "Md Cabin Main" ||
                     subcategory === "Md Cabin Visitor")
-                ? product.price *
-                  (productQuantity[subcategory]?.[selectedSubCategory1] ?? 0) *
+                ? variant.price *
+                  (allProductQuantities[subcategory]?.[subcategory1] ?? 0) *
                   (quantityData[0]["md"] ?? 1)
-                : category.category === "Furniture" &&
+                : category === "Furniture" &&
                   subcategory1 === "Chair" &&
                   (subcategory === "Manager Cabin Main" ||
                     subcategory === "Manager Cabin Visitor")
-                ? product.price *
-                  (productQuantity[subcategory]?.[selectedSubCategory1] ?? 0) *
+                ? variant.price *
+                  (allProductQuantities[subcategory]?.[subcategory1] ?? 0) *
                   (quantityData[0]["manager"] ?? 1)
-                : product.price *
-                  (productQuantity[subcategory]?.[selectedSubCategory1] ?? 0),
+                : variant.price *
+                  (allProductQuantities[subcategory]?.[subcategory1] ?? 0),
             quantity:
-              product.category === "Furniture" &&
-              subcategory1 === "Chair" &&
-              (subcategory === "Md Cabin Main" ||
-                subcategory === "Md Cabin Visitor")
+              category === "Paint"
+                ? calculateAutoTotalPriceHelper(
+                    quantityData[0],
+                    areasData[0],
+                    category,
+                    subcategory,
+                    subcategory1,
+                    userResponses.height,
+                    variant.dimensions,
+                    seatCountData
+                  )
+                : product.category === "Furniture" &&
+                  subcategory1 === "Chair" &&
+                  (subcategory === "Md Cabin Main" ||
+                    subcategory === "Md Cabin Visitor")
                 ? calQty * (quantityData[0]["md"] ?? 1)
                 : product.category === "Furniture" &&
                   subcategory1 === "Chair" &&

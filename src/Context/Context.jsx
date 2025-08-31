@@ -122,6 +122,7 @@ export const AppProvider = ({ children }) => {
   const [selectedClient, setSelectedClient] = useState(null);
   const [isSaveBOQ, setIsSaveBOQ] = useState(true);
   const [productQuantity, setProductQuantity] = useState({});
+  const [allProductQuantities, setAllProductQuantities] = useState({});
   function normalizeKey(subcategory) {
     return subcategory
       .toLowerCase()
@@ -253,6 +254,70 @@ export const AppProvider = ({ children }) => {
     });
 
     setProductQuantity(allQuantities);
+
+    const globalQuantities = {};
+
+    // loop through all categories
+    categories.forEach((category) => {
+      category.subcategories.forEach((subcategory) => {
+        const key = normalizeKey(subcategory);
+
+        // init space bucket if not already
+        if (!globalQuantities[subcategory]) {
+          globalQuantities[subcategory] = {};
+        }
+
+        // pull all products (subcategory1) for this category
+        const products = category.subcategory1 || [];
+
+        products.forEach((productName) => {
+          let value;
+
+          // Furniture chairs logic
+          if (category.category === "Furniture" && productName === "Chair") {
+            value = newSeatCountData[key] ?? newQuantityData[0][key] ?? 0;
+          } else {
+            value = newQuantityData[0][key] ?? 0;
+          }
+
+          if (
+            category.category === "Furniture" &&
+            ![
+              "Linear Workstation",
+              "L-Type Workstation",
+              "Md Cabin",
+              "Manager Cabin",
+            ].includes(subcategory) &&
+            productName === "Chair"
+          ) {
+            value = value * (newQuantityData[0][key] ?? 1);
+          }
+
+          // merge into subcategory bucket
+          globalQuantities[subcategory][productName] = value;
+
+          if (
+            category.category === "Furniture" &&
+            ["Md Cabin", "Manager Cabin"].includes(subcategory) &&
+            "Chair" in globalQuantities[subcategory]
+          ) {
+            const chairValue = globalQuantities[subcategory]["Chair"] ?? 0;
+
+            const mainValue = chairValue > 0 ? 1 : 0;
+            const visitorValue = chairValue > 0 ? chairValue - 1 : 0;
+
+            globalQuantities[`${subcategory} Main`] = { Chair: mainValue };
+            globalQuantities[`${subcategory} Visitor`] = {
+              Chair: visitorValue,
+            };
+          }
+        });
+      });
+    });
+
+    // setAllProductQuantities(globalQuantities);
+
+    setAllProductQuantities(globalQuantities);
   }, [subCategories, seatCountData, quantityData, selectedCategory]);
 
   console.log(
@@ -263,7 +328,10 @@ export const AppProvider = ({ children }) => {
     "seatCountData",
     seatCountData,
     categories,
-    subCategories
+    subCategories,
+    "allProductQuantities",
+    allProductQuantities,
+    subCat1
   );
 
   const handleBOQTitleChange = (title) => {
@@ -1144,6 +1212,7 @@ export const AppProvider = ({ children }) => {
         setSeatCountData,
         productQuantity,
         setProductQuantity,
+        allProductQuantities,
       }}
     >
       {children}
