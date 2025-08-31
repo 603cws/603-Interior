@@ -6,7 +6,7 @@ function GetInTouchSection() {
   const [showContactPopup, setShowContactPopup] = useState(false);
   return (
     <>
-      <section className="bg-[url('images/about-us/contact-section-bg.jpg')] bg-no-repeat bg-cover bg-center py-24 font-Georgia">
+      <section className="bg-[url('images/about-us/contact-section-bg.webp')] bg-no-repeat bg-cover bg-center py-24 font-Georgia">
         <div className="lg:container px-4 flex justify-center items-center text-[#fff]">
           <div className="md:flex gap-7 bg-[#000]/20 backdrop-blur-sm p-5 md:p-10 rounded-sm">
             <h2 className="font-medium  text-3xl md:text-5xl">
