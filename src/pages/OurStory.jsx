@@ -26,27 +26,27 @@ const steps = [
 const cards = [
   {
     title: "Smart Simplicity",
-    image: "/images/brand1.jpg",
+    image: "/images/brand1.webp",
     subtitle: "tech-led processes,zero guesswork",
   },
   {
     title: "Human-centered design",
-    image: "/images/brand2.jpg",
+    image: "/images/brand2.webp",
     subtitle: "tailored to every business unique needs",
   },
   {
     title: "Partnership-driven quality",
     subtitle: "only top-tier vendors and products",
-    image: "/images/brand3.jpg",
+    image: "/images/brand3.webp",
   },
   {
     title: "Speed and reliability",
-    image: "/images/brand4.jpg",
+    image: "/images/brand4.webp",
     subtitle: "cutting down timelines without compromising outcomes",
   },
   {
     title: "Trust and transparency",
-    image: "/images/brand5.jpg",
+    image: "/images/brand5.webp",
     subtitle: "no hidden cost, no missalignment",
   },
 ];
@@ -122,7 +122,7 @@ function StrugglesSection() {
         <h2 className="text-2xl md:text-4xl italic text-black  mb-4">
           The Struggles We Encountered
         </h2>
-        <p className=" text-2xl leading-6">
+        <p className=" text-2xl">
           Setting up high-quality, functional, and well-designed offices was
           unnecessarily complicated. From inconsistent vendors to vague cost
           estimations and endless delays, even with a clear vision, the process

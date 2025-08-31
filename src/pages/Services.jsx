@@ -11,12 +11,12 @@ const steps = [
   },
   {
     imagePath: "/images/featureicon2.png",
-    title: "select",
+    title: "Select",
     description: "Choose your Layout ,Products and needs",
   },
   {
     imagePath: "/images/build.png",
-    title: "build",
+    title: "Build",
     description: "Bring your vision to live",
   },
 ];
