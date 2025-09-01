@@ -11,6 +11,9 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { getDateInfo } from "../utils/dateUtils";
+import { FaPhone } from "react-icons/fa6";
+import { MdEmail } from "react-icons/md";
+import { MdLocationOn } from "react-icons/md";
 
 function Footer() {
   const [email, setEmail] = useState("");
@@ -55,213 +58,199 @@ function Footer() {
 
   const navigate = useNavigate();
   return (
-    <footer className=" bg-[#1A293A] text-white font-Poppins px-6 lg:px-10 xl:px-40 pt-6 pb-3 lg:pt-12 lg:pb-5">
-      <div className="md:container lg:flex justify-stretch w-full mb-10">
-        <div className="font-lato flex-1 space-y-2">
-          <h4 className="text-2xl text-[#fffff] font-bold">
-            Sign Up To Get Latest Update
-          </h4>
-          <p>
-            Sign up for our monthly newsletter for the latest news & articles
-          </p>
-        </div>
-        <form
-          onSubmit={handleSubscribe}
-          className="flex-1 flex justify-center items-center font-lato"
-        >
-          <input
-            type="text"
-            placeholder="Enter Your Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="border-y-[1px] border-l-[1px] border-[#777777] w-full py-3.5 bg-transparent px-2 focus:outline-none focus:ring-0"
-            name="subscribe-email"
-          />
-          <button className="capitalize bg-[#EBEFF9] text-[#000000] text-nowrap py-3.5 border-y-[1px] border-r-[1px] border-[#777777] font-bold px-1">
-            subscribe now
-          </button>
-        </form>
-      </div>
-      <div className="md:container md:mx-auto  flex flex-col md:flex-row justify-between md:justify-center lg:justify-between   gap-10 mb-20">
-        <div className="border-r-2 border-[#FFD074]  pr-10 xl:pr-28  lg:flex flex-col gap-5 text-sm">
-          <div className="capitalize">
-            <h3 className="font-semibold mb-3 lg:mb-0">
-              registered office address
-            </h3>
-            <h3 className="font-semibold mb-2 lg:mb-0 capitalize">
-              Workved Interiors
-            </h3>
+    <footer className="relative bg-[url('/images/bg/footer-bg.png')] bg-cover bg-center bg-no-repeat w-full font-TimesNewRoman py-5">
+      <div className="relative px-4 lg:container">
+        <div className="lg:flex justify-stretch w-full mb-10">
+          <div className="flex-1 space-y-2">
+            <p className="text-lg font-bold tracking-wide text-[#fff]">
+              Get more insights deliverd <br /> straight to your inbox
+            </p>
           </div>
-          <div className="flex mb-5 lg:mb-0 lg:flex-col gap-2.5">
-            {/* Address */}
-            <div className="flex items-center gap-10 capitalize">
-              <a
-                href="https://www.google.com/maps/search/?api=1&query=Makhija+Arcade,+35th+Rd,+Khar+West,+Mumbai+Maharashtra+400052"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <FaLocationDot
-                  size={20}
-                  className="cursor-pointer hover:text-blue-500"
-                />
-              </a>
-              <p className="hidden lg:block font-thin">
-                Makhija Arcade, 35th Rd, Khar West, <br />
-                Mumbai Maharashtra 400052
-              </p>
-            </div>
-
-            {/* Phone */}
-            <div className="flex items-center gap-10 capitalize">
-              <a href="tel:+919136036603">
-                <PiPhoneCallFill
-                  size={20}
-                  className="cursor-pointer hover:text-green-500"
-                />
-              </a>
-              <p className="hidden lg:block">+91-9136036603</p>
-            </div>
-
-            {/* Email */}
-            <div className="flex items-center gap-10">
-              <a href="mailto:sales@603thecoworkingspace.com">
-                <IoIosMail
-                  size={20}
-                  className="cursor-pointer hover:text-red-500"
-                />
-              </a>
-              <p className="hidden lg:block">sales@603thecoworkingspace.com</p>
-            </div>
-          </div>
-          <div
-            className="lg:hidden
-           capitalize"
+          <form
+            onSubmit={handleSubscribe}
+            className="flex-1 flex justify-center items-center"
           >
-            <h3 className="font-semibold lg:text-xl">follow us on</h3>
-            <div className="flex gap-4 mt-2">
-              <a
-                href=" https://www.instagram.com/603.interiors/"
-                target="_blank"
-              >
-                <FaInstagram size={24} className="cursor-pointer " />
-              </a>
-              <a
-                href=" https://www.facebook.com/profile.php?id=61561253712041"
-                target="_blank"
-              >
-                <FiFacebook size={24} className="cursor-pointer" />
-              </a>
-              <RiTwitterXLine size={24} className="cursor-pointer" />
-              <FiLinkedin size={24} className="cursor-pointer" />
+            <input
+              type="text"
+              placeholder="Enter Your Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="border-y-[1px] border-l-[1px] border-[#777777] w-full py-3.5 bg-transparent px-2 focus:outline-none focus:ring-0"
+              name="subscribe-email"
+            />
+            <button className="capitalize bg-[#EBEFF9] text-[#000000] text-nowrap py-3.5 border-y-[1px] border-r-[1px] border-[#777777] font-bold px-1">
+              subscribe now
+            </button>
+          </form>
+        </div>
+        <div className="lg:border-t lg:border-b flex flex-col-reverse lg:flex-row gap-5 lg:gap-20 justify-evenly">
+          {/* logo */}
+          <div className="py-5 flex justify-center items-center">
+            <img src="/logo/workved-logo.png" alt="" className="max-w-xs" />
+          </div>
+          {/* content */}
+          <div className="lg:flex flex-1 justify-around lg:border-l">
+            <div className="flex gap-24 capitalize text-xs lg:text-base text-[#fff] lg:border-r flex-1">
+              <div className="flex justify-center items-center flex-1 border-t border-b lg:border-none py-5 lg:py-0 lg:px-14">
+                <ul className="flex flex-col gap-3 font-thin flex-1">
+                  <li
+                    className="cursor-pointer"
+                    onClick={() => {
+                      navigate("/");
+                      scrollToTop();
+                    }}
+                  >
+                    home
+                  </li>
+                  <li
+                    className="cursor-pointer"
+                    onClick={() => navigate("/Aboutus")}
+                  >
+                    about us
+                  </li>
+                  <li
+                    className="cursor-pointer"
+                    onClick={() => navigate("/OurServices")}
+                  >
+                    services
+                  </li>
+                  <li
+                    className="cursor-pointer"
+                    onClick={() => navigate("/Career")}
+                  >
+                    career
+                  </li>
+                  <li
+                    onClick={() => navigate("/brands")}
+                    className="cursor-pointer"
+                  >
+                    brands
+                  </li>
+                </ul>
+                <ul className="font-thin flex flex-col gap-3 flex-1">
+                  <li
+                    className="cursor-pointer"
+                    onClick={() => navigate("/Contactus")}
+                  >
+                    contact us
+                  </li>
+                  <li
+                    onClick={() => navigate("/help")}
+                    className="hidden xl:block cursor-pointer"
+                  >
+                    help & FAQ's
+                  </li>
+                  <li
+                    onClick={() => navigate("/help")}
+                    className="xl:hidden cursor-pointer"
+                  >
+                    FAQ's
+                  </li>
+                  <li
+                    onClick={() => navigate("/termsNcondition")}
+                    className="hidden xl:block cursor-pointer"
+                  >
+                    terms & conditions
+                  </li>
+                  <li
+                    onClick={() => navigate("/termsNcondition")}
+                    className="xl:hidden cursor-pointer"
+                  >
+                    terms
+                  </li>
+                  <li
+                    onClick={() => navigate("/privacy-policy")}
+                    className=" cursor-pointer"
+                  >
+                    Privacy Policy
+                  </li>
+                  <li
+                    className="cursor-pointer"
+                    onClick={() => navigate("/Blog")}
+                  >
+                    blog
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div className="text-[#fff] flex-1 lg:px-14 py-5">
+              <h3 className="font-bold text-xl tracking-wide ">Contact</h3>
+              <div className="text-base">
+                <div className="flex gap-5 items-center">
+                  <a
+                    href="tel:+919136036603"
+                    className="border h-7 w-7 flex justify-center items-center"
+                  >
+                    <FaPhone size={15} className="cursor-pointer" />
+                  </a>
+                  <div>
+                    <p>Phone Number</p>
+                    <p className="">+91-9136036603</p>
+                  </div>
+                </div>
+                <div className="flex gap-5 items-center">
+                  <a
+                    href="mailto:sales@603thecoworkingspace.com"
+                    className="border h-7 w-7 flex justify-center items-center"
+                  >
+                    <MdEmail size={15} className="cursor-pointer" />
+                  </a>
+                  <div>
+                    <p>Email Address</p>
+                    <p className="">sales@603thecoworkingspace.com</p>
+                  </div>
+                </div>
+                <div className="flex gap-5 items-center">
+                  <a
+                    href="https://www.google.com/maps/search/?api=1&query=Makhija+Arcade,+35th+Rd,+Khar+West,+Mumbai+Maharashtra+400052"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="border h-7 w-7 flex justify-center items-center"
+                  >
+                    <MdLocationOn size={15} className="cursor-pointer" />
+                  </a>
+                  <div>
+                    <p>Location</p>
+                    <p className="">
+                      Makhija Arcade, 35th Rd, Khar West, <br />
+                      Mumbai Maharashtra 400052
+                    </p>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-        <div className="flex flex-col md:flex-row gap-12 xl:gap-36 lg:pl-5 xl:pl-0">
-          <div className="flex gap-24 capitalize text-xs lg:text-sm">
-            <ul className="flex flex-col gap-3 font-thin ">
-              <li className=" font-bold">company</li>
-              <li className="cursor-pointer" onClick={() => navigate("/")}>
-                home
-              </li>
-              <li
-                className="cursor-pointer"
-                onClick={() => navigate("/Aboutus")}
-              >
-                about us
-              </li>
-              <li
-                className="cursor-pointer"
-                onClick={() => navigate("/OurServices")}
-              >
-                services
-              </li>
-              <li
-                className="cursor-pointer"
-                onClick={() => navigate("/Career")}
-              >
-                career
-              </li>
-            </ul>
-            <ul className="font-thin flex flex-col gap-3">
-              <li className="font-bold">resources</li>
-              <li
-                className="cursor-pointer"
-                onClick={() => navigate("/Contactus")}
-              >
-                contact us
-              </li>
-              <li
-                onClick={() => navigate("/help")}
-                className="hidden xl:block cursor-pointer"
-              >
-                help & FAQ's
-              </li>
-              <li
-                onClick={() => navigate("/help")}
-                className="xl:hidden cursor-pointer"
-              >
-                FAQ's
-              </li>
-              <li
-                onClick={() => navigate("/termsNcondition")}
-                className="hidden xl:block cursor-pointer"
-              >
-                terms & conditions
-              </li>
-              <li
-                onClick={() => navigate("/termsNcondition")}
-                className="xl:hidden cursor-pointer"
-              >
-                terms
-              </li>
-              <li
-                onClick={() => navigate("/privacy-policy")}
-                className=" cursor-pointer"
-              >
-                Privacy Policy
-              </li>
-              <li className="cursor-pointer" onClick={() => navigate("/Blog")}>
-                blog
-              </li>
-            </ul>
+        <div className="lg:flex justify-between text-[#fff] pt-4">
+          <p className=" text-xs">
+            &copy; 2019-{currentYear} . Workved Interiors | All Rights Reserved
+          </p>
+
+          <div className="flex gap-4 mt-2 lg:mt-0">
+            <a href=" https://www.instagram.com/603.interiors/" target="_blank">
+              <FaInstagram
+                size={15}
+                className="cursor-pointer flex justify-center items-center w-7 h-7 border p-1"
+              />
+            </a>
+            <a
+              href=" https://www.facebook.com/profile.php?id=61561253712041"
+              target="_blank"
+            >
+              <FiFacebook
+                size={15}
+                className="cursor-pointer flex justify-center items-center w-7 h-7 border p-1"
+              />
+            </a>
+            <RiTwitterXLine
+              size={15}
+              className="cursor-pointer flex justify-center items-center w-7 h-7 border p-1"
+            />
+            <FiLinkedin
+              size={15}
+              className="cursor-pointer flex justify-center items-center w-7 h-7 border p-1"
+            />
           </div>
-          <div className="capitalize hidden lg:block ">
-            <h3 className="font-semibold text-xl">follow us on</h3>
-            <div className="flex gap-4 mt-2">
-              <a
-                href=" https://www.instagram.com/603.interiors/"
-                target="_blank"
-              >
-                <FaInstagram size={24} className="cursor-pointer" />
-              </a>
-              <a
-                href=" https://www.facebook.com/profile.php?id=61561253712041"
-                target="_blank"
-              >
-                <FiFacebook size={24} className="cursor-pointer" />
-              </a>
-              <RiTwitterXLine size={24} className="cursor-pointer" />
-              <FiLinkedin size={24} className="cursor-pointer" />
-            </div>
-          </div>
-        </div>
-      </div>
-      <div className="md:container md:mx-auto  flex flex-col md:flex-row items-start gap-5 lg:gap-0 md:justify-between md:items-center text-sm">
-        <div
-          onClick={() => navigate("/howtosell")}
-          className="flex justify-center items-center gap-3 cursor-pointer"
-        >
-          <BsShop size={16} />
-          <h4 className="font-semibold">How to sell</h4>
-        </div>
-        <p className=" text-xs">
-          &copy; 2019-{currentYear} . Workved Interiors | All Rights Reserved
-        </p>
-        <div
-          className=" rounded-full bg-[#FFD074] cursor-pointer "
-          onClick={scrollToTop}
-        >
-          <FaAngleUp className="w-30 h-30 m-3" />
         </div>
       </div>
     </footer>
