@@ -18,7 +18,7 @@ function LandingNavbar() {
       {/* desktop navbar */}
       <div className="hidden container lg:flex justify-between items-center font-TimesNewRoman">
         <div>
-          <ul className="flex gap-5 [&_li]:cursor-pointer uppercase text-xs xl:text-sm font-bold text-[#fff] tracking-wider">
+          <ul className="flex gap-7 [&_li]:cursor-pointer uppercase text-xs xl:text-sm font-bold text-[#fff] tracking-wider">
             {/* <li>shop</li> */}
             <li
               onClick={() => navigate("/aboutUs")}

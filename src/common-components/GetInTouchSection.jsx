@@ -21,14 +21,14 @@ function GetInTouchSection() {
               <div className="flex flex-col lg:flex-row gap-2 mt-5">
                 <button
                   onClick={() => setShowContactPopup(true)}
-                  className="bg-[#1C346B] border border-[#1C346B] px-4 py-2 rounded-3xl flex justify-center items-center gap-1 text-sm md:text-base w-fit"
+                  className="bg-[#1C346B] hover:bg-[#4D66A1] border border-[#1C346B] hover:border-[#4D66A1] px-4 py-2 rounded-3xl flex justify-center items-center gap-1 text-sm md:text-base w-fit font-TimesNewRoman"
                 >
                   <span>Get in touch</span>
                   <RiArrowRightUpLine />
                 </button>
                 <a
                   href="tel:+919136036603"
-                  className="bg-[#FFFFFF]/20 px-4 py-2 font-TimesNewRoman font-bold rounded-3xl border border-[#fff] text-sm md:text-base w-fit"
+                  className="bg-[#FFFFFF]/20 hover:bg-[#334A78]/20 px-4 py-2 rounded-3xl border border-[#fff] hover:border-[#334A78] text-sm md:text-base w-fit font-TimesNewRoman"
                 >
                   Call us: +91-9136036603
                 </a>

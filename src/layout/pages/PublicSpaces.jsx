@@ -3,8 +3,8 @@ import LayoutCard from "../components/LayoutCard"; // Ensure the correct path to
 const publicSpacesData = [
   {
     type: "reception",
-    image: "/images/workspace-image/reception.png",
-    // image: "/images/workstation-wp/reception-wp.webp",
+    // image: "/images/workspace-image/reception.png",
+    image: "/images/workstation-wp/reception.webp",
     description:
       "This is the reception area, the first point of contact for visitors.",
     slider: {
@@ -19,8 +19,8 @@ const publicSpacesData = [
   },
   {
     type: "lounge",
-    image: "/images/workspace-image/lounge.webp",
-    // image: "/images/workstation-wp/lounge-wp.webp",
+    // image: "/images/workspace-image/lounge.webp",
+    image: "/images/workstation-wp/lounge.webp",
     description:
       "This is the lounge, a comfortable area for informal meetings.",
     slider: {
@@ -35,16 +35,16 @@ const publicSpacesData = [
   },
   {
     type: "phoneBooth",
-    image: "/images/workspace-image/phoneBooth.png",
-    // image: "/images/workstation-wp/phoneBooth-wp.webp",
+    // image: "/images/workspace-image/phoneBooth.png",
+    image: "/images/workstation-wp/phoneBooth.webp",
     description: "This is the phone booth, providing a quiet space for calls.",
     tooltipText: "Size: 25 sq ft",
     title: "Phone Booth",
   },
   {
     type: "breakoutRoom",
-    image: "/images/workspace-image/breakout.webp",
-    // image: "/images/workstation-wp/breakout-wp.webp",
+    // image: "/images/workspace-image/breakout.webp",
+    image: "/images/workstation-wp/breakout.webp",
     description:
       "This is the breakout room, a flexible space for small group discussions.",
     slider: {
@@ -88,7 +88,8 @@ const publicSpacesData = [
   // },
   {
     type: "washrooms",
-    image: "/images/workspace-image/washroom.png",
+    // image: "/images/workspace-image/washroom.png",
+    image: "/images/workstation-wp/washroom.webp",
     description:
       "Common Washroom Area – This includes designated spaces for both male and female washrooms.",
     tooltipText: "size: 100 sqft",

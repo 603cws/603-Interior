@@ -58,11 +58,11 @@ function Footer() {
 
   const navigate = useNavigate();
   return (
-    <footer className="relative bg-[url('/images/bg/footer-bg.png')] bg-cover bg-center bg-no-repeat w-full font-TimesNewRoman py-5">
+    <footer className="relative bg-[url('../images/bg/footer-bg.png')] bg-cover bg-center bg-no-repeat w-full font-TimesNewRoman py-5">
       <div className="relative px-4 lg:container">
-        <div className="lg:flex justify-stretch w-full mb-10">
-          <div className="flex-1 space-y-2">
-            <p className="text-lg font-bold tracking-wide text-[#fff]">
+        <div className="lg:flex justify-stretch w-full mb-4 lg:mb-10">
+          <div className="flex-1 mb-2 lg:mb-0">
+            <p className="text-2xl font-bold tracking-wide text-[#fff]">
               Get more insights deliverd <br /> straight to your inbox
             </p>
           </div>
@@ -75,24 +75,28 @@ function Footer() {
               placeholder="Enter Your Email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="border-y-[1px] border-l-[1px] border-[#777777] w-full py-3.5 bg-transparent px-2 focus:outline-none focus:ring-0"
+              className="border-y-[1px] border-l-[1px] border-[#777777] w-full py-3.5 bg-transparent px-2 focus:outline-none focus:ring-0 text-[#fff]"
               name="subscribe-email"
             />
-            <button className="capitalize bg-[#EBEFF9] text-[#000000] text-nowrap py-3.5 border-y-[1px] border-r-[1px] border-[#777777] font-bold px-1">
+            <button className="capitalize bg-[#EBEFF9] text-[#000000] text-nowrap py-3.5 border-y-[1px] border-r-[1px] border-[#777777] font-bold px-1 hover:bg-[#EBEFF9]/80">
               subscribe now
             </button>
           </form>
         </div>
-        <div className="lg:border-t lg:border-b flex flex-col-reverse lg:flex-row gap-5 lg:gap-20 justify-evenly">
+        <div className="lg:border-t lg:border-b flex flex-col-reverse lg:flex-row gap-5 xl:gap-20 justify-evenly">
           {/* logo */}
-          <div className="py-5 flex justify-center items-center">
-            <img src="/logo/workved-logo.png" alt="" className="max-w-xs" />
+          <div className="lg:py-5 flex justify-center items-start">
+            <img
+              src="/logo/workved-logo.png"
+              alt=""
+              className="max-w-48 xl:max-w-56"
+            />
           </div>
           {/* content */}
           <div className="lg:flex flex-1 justify-around lg:border-l">
-            <div className="flex gap-24 capitalize text-xs lg:text-base text-[#fff] lg:border-r flex-1">
-              <div className="flex justify-center items-center flex-1 border-t border-b lg:border-none py-5 lg:py-0 lg:px-14">
-                <ul className="flex flex-col gap-3 font-thin flex-1">
+            <div className="flex gap-24 capitalize text-[15px] text-[#fff] lg:border-r flex-1 py-5">
+              <div className="flex justify-center items-start flex-1 border-t border-b lg:border-none py-5 lg:py-0 lg:px-5 xl:px-14">
+                <ul className="flex flex-col gap-4 flex-1 tracking-wide list-none m-0 p-0">
                   <li
                     className="cursor-pointer"
                     onClick={() => {
@@ -127,7 +131,7 @@ function Footer() {
                     brands
                   </li>
                 </ul>
-                <ul className="font-thin flex flex-col gap-3 flex-1">
+                <ul className="flex flex-col gap-4 flex-1 tracking-wide list-none m-0 p-0">
                   <li
                     className="cursor-pointer"
                     onClick={() => navigate("/Contactus")}
@@ -173,31 +177,33 @@ function Footer() {
                 </ul>
               </div>
             </div>
-            <div className="text-[#fff] flex-1 lg:px-14 py-5">
-              <h3 className="font-bold text-xl tracking-wide ">Contact</h3>
-              <div className="text-base">
+            <div className="text-[#fff] flex-1 lg:px-14 py-5 space-y-5">
+              <h3 className="font-bold text-xl tracking-wide">Contact</h3>
+              <div className="text-[15px] tracking-wide space-y-1.5">
                 <div className="flex gap-5 items-center">
                   <a
                     href="tel:+919136036603"
-                    className="border h-7 w-7 flex justify-center items-center"
+                    className="border border-[#fff]/40 hover:bg-[#fff]/10 h-9 w-9 flex justify-center items-center"
                   >
                     <FaPhone size={15} className="cursor-pointer" />
                   </a>
                   <div>
-                    <p>Phone Number</p>
-                    <p className="">+91-9136036603</p>
+                    <p className="font-bold">Phone Number</p>
+                    <p className="text-[#fff]/65">+91-9136036603</p>
                   </div>
                 </div>
                 <div className="flex gap-5 items-center">
                   <a
                     href="mailto:sales@603thecoworkingspace.com"
-                    className="border h-7 w-7 flex justify-center items-center"
+                    className="border border-[#fff]/40 hover:bg-[#fff]/10  h-9 w-9 flex justify-center items-center"
                   >
                     <MdEmail size={15} className="cursor-pointer" />
                   </a>
                   <div>
-                    <p>Email Address</p>
-                    <p className="">sales@603thecoworkingspace.com</p>
+                    <p className="font-bold">Email Address</p>
+                    <p className="text-[#fff]/65">
+                      sales@603thecoworkingspace.com
+                    </p>
                   </div>
                 </div>
                 <div className="flex gap-5 items-center">
@@ -205,15 +211,15 @@ function Footer() {
                     href="https://www.google.com/maps/search/?api=1&query=Makhija+Arcade,+35th+Rd,+Khar+West,+Mumbai+Maharashtra+400052"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="border h-7 w-7 flex justify-center items-center"
+                    className="border border-[#fff]/40 hover:bg-[#fff]/10  h-9 w-9 flex justify-center items-center"
                   >
                     <MdLocationOn size={15} className="cursor-pointer" />
                   </a>
-                  <div>
-                    <p>Location</p>
-                    <p className="">
-                      Makhija Arcade, 35th Rd, Khar West, <br />
-                      Mumbai Maharashtra 400052
+                  <div className="flex-1">
+                    <p className="font-bold">Location</p>
+                    <p className="text-[#fff]/65 text-wrap">
+                      Makhija Arcade, 35th Rd, Khar West, Mumbai Maharashtra
+                      400052
                     </p>
                   </div>
                 </div>
@@ -221,35 +227,38 @@ function Footer() {
             </div>
           </div>
         </div>
-        <div className="lg:flex justify-between text-[#fff] pt-4">
+        <div className="lg:flex justify-between items-center text-[#fff] pt-4">
           <p className=" text-xs">
             &copy; 2019-{currentYear} . Workved Interiors | All Rights Reserved
           </p>
 
           <div className="flex gap-4 mt-2 lg:mt-0">
-            <a href=" https://www.instagram.com/603.interiors/" target="_blank">
-              <FaInstagram
-                size={15}
-                className="cursor-pointer flex justify-center items-center w-7 h-7 border p-1"
-              />
+            <a
+              href=" https://www.instagram.com/603.interiors/"
+              target="_blank"
+              className="cursor-pointer flex justify-center items-center w-9 h-9 border border-[#fff]/40 hover:bg-[#fff]/40 p-0.5"
+            >
+              <FaInstagram size={15} />
             </a>
             <a
               href=" https://www.facebook.com/profile.php?id=61561253712041"
               target="_blank"
+              className="cursor-pointer flex justify-center items-center w-9 h-9 border border-[#fff]/40 hover:bg-[#fff]/40 p-0.5"
             >
-              <FiFacebook
-                size={15}
-                className="cursor-pointer flex justify-center items-center w-7 h-7 border p-1"
-              />
+              <FiFacebook size={15} />
             </a>
-            <RiTwitterXLine
-              size={15}
-              className="cursor-pointer flex justify-center items-center w-7 h-7 border p-1"
-            />
-            <FiLinkedin
-              size={15}
-              className="cursor-pointer flex justify-center items-center w-7 h-7 border p-1"
-            />
+            <a
+              href=""
+              className="cursor-pointer flex justify-center items-center w-9 h-9 border border-[#fff]/40 hover:bg-[#fff]/40 p-0.5"
+            >
+              <RiTwitterXLine size={15} />
+            </a>
+            <a
+              href=""
+              className="cursor-pointer flex justify-center items-center w-9 h-9 border border-[#fff]/40 hover:bg-[#fff]/40 p-0.5"
+            >
+              <FiLinkedin size={15} />
+            </a>
           </div>
         </div>
       </div>

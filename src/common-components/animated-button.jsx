@@ -10,11 +10,10 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "text-cyan-400 border border-cyan-400/20 hover:text-cyan-300",
-        outline:
-          "bg-transparent text-cyan-400 border border-cyan-400 hover:text-cyan-300",
+        default: "text-cyan-400 border border-cyan-400/20 ",
+        outline: "bg-transparent text-cyan-400 border border-cyan-400 ",
         ghost: "bg-transparent text-cyan-400 hover:bg-cyan-950/30",
-        glow: "text-cyan-400 border border-cyan-400/30 hover:text-cyan-300 hover:shadow-glow",
+        glow: "text-cyan-400 border border-cyan-400/30 hover:shadow-glow",
       },
       size: {
         default: "h-10 px-6 py-2",
@@ -69,6 +68,7 @@ const AnimatedButton = React.forwardRef(
       shimmerDuration = "3s",
       borderRadius = "100px",
       background = "rgba(0, 0, 0, 1)",
+      hovereBackground = "",
       style,
       children,
       ...props
@@ -84,6 +84,7 @@ const AnimatedButton = React.forwardRef(
       "--speed": shimmerDuration,
       "--cut": shimmerSize,
       "--bg": background,
+      "--hover-bg": hovereBackground,
       "--spread": "90deg",
       borderRadius: rounded === "custom" ? borderRadius : undefined,
     };
@@ -184,7 +185,7 @@ const AnimatedButton = React.forwardRef(
         <div className="absolute size-full rounded-2xl px-4 py-1.5 text-sm font-medium" />
 
         <div
-          className="absolute -z-20 [background:var(--bg)]"
+          className="absolute -z-20 [background:var(--bg)] group-hover:[background:var(--hover-bg)] transition-colors duration-500 ease-in-out"
           style={{ inset: shimmerSize, borderRadius }}
         />
 

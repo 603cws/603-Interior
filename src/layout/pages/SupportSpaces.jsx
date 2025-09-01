@@ -4,8 +4,8 @@ import { useApp } from "../../Context/Context";
 const supportSpacesData = [
   {
     type: "ups",
-    image: "/images/workspace-image/ups.png",
-    // image: "/images/workstation-wp/ups-wp.webp",
+    // image: "/images/workspace-image/ups.png",
+    image: "/images/workstation-wp/ups.webp",
     description: "This is the UPS room, ensuring uninterrupted power supply.",
     slider: {
       name: "UPS Room Size",
@@ -20,8 +20,8 @@ const supportSpacesData = [
   },
   {
     type: "bms",
-    image: "/images/workspace-image/bms.png",
-    // image: "/images/workstation-wp/BMS-WP.webp",
+    // image: "/images/workspace-image/bms.png",
+    image: "/images/workstation-wp/bms.webp",
     description: "This is the BMS room, managing building systems.",
     slider: {
       name: "BMS Room Size",
@@ -36,16 +36,16 @@ const supportSpacesData = [
   },
   {
     type: "server",
-    image: "/images/workspace-image/server.png",
-    // image: "/images/workstation-wp/serverRoom-wp.webp",
+    // image: "/images/workspace-image/server.png",
+    image: "/images/workstation-wp/serverRoom.webp",
     description: "This is the server room, housing critical IT infrastructure.",
     tooltipText: "Size: 40 sq ft",
     title: "Server Room",
   },
   {
     type: "executiveWashroom",
-    image: "/images/workspace-image/executiveWashroom.png",
-    // image: "/images/workstation-wp/executivewash-wp.webp",
+    // image: "/images/workspace-image/executiveWashroom.png",
+    image: "/images/workstation-wp/executiveWashroom.webp",
     description:
       "This is the Executive Washroom, providing premium facilities.",
     tooltipText: "Size: 60 sq ft",
@@ -53,8 +53,8 @@ const supportSpacesData = [
   },
   {
     type: "other",
-    image: "/images/workspace-image/other.png",
-    // image: "/images/workstation-wp/other-wp.webp",
+    // image: "/images/workspace-image/other.png",
+    image: "/images/workstation-wp/others.webp",
     description: "This is an additional space for miscellaneous purposes.",
     title: "Other Area",
   },

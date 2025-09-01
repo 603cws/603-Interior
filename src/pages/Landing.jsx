@@ -233,25 +233,25 @@ function Landing() {
                 <br />
                 <span className="text-[#FFC900]"> smart planning</span>
               </h1>
-              <button onClick={() => navigate("/layout")}>
-                <AnimatedButton
-                  className="!bg-[#3A5D7B] text-white capitalize font-Georgia mt-7 text-lg"
-                  variant="default"
-                  size="lg"
-                  // glow={true}
-                  textEffect="shimmer"
-                  rounded="custom"
-                  asChild={false}
-                  hideAnimations={false}
-                  shimmerColor="#fff"
-                  shimmerSize="0.15em"
-                  shimmerDuration="3s"
-                  borderRadius="10px"
-                  background="rgba(48, 71, 120, 1)"
-                >
-                  make your space
-                </AnimatedButton>
-              </button>
+              <AnimatedButton
+                onClick={() => navigate("/layout")}
+                className="!bg-[#3A5D7B] text-white capitalize font-Georgia mt-7 text-lg"
+                variant="default"
+                size="lg"
+                // glow={true}
+                textEffect="shimmer"
+                rounded="custom"
+                asChild={false}
+                hideAnimations={false}
+                shimmerColor="#fff"
+                shimmerSize="0.15em"
+                shimmerDuration="3s"
+                borderRadius="10px"
+                background="rgba(48, 71, 120, 1)"
+                hovereBackground="linear-gradient(90deg,rgba(85,132,182,1)  0%,  rgba(117,162,190,1) 100%)"
+              >
+                make your space
+              </AnimatedButton>
             </motion.div>
           </div>
         </div>
@@ -340,7 +340,7 @@ function Landing() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3 justify-between justify-items-stretch my-10">
             <div className="relative group  w-full h-[450px] bg-[url('../images/home/corporateoffice.webp')] bg-cover bg-center bg-no-repeat overflow-hidden rounded-lg">
               <div className="absolute inset-0 bg-black/50 flex items-end p-5 translate-y-full group-hover:translate-y-0 transition-transform duration-700 ease-in-out">
-                <h3 className="text-[#fff] font-Georgia text-5xl italic text-center tracking-wide capitalize">
+                <h3 className="text-[#fff] font-Georgia text-4xl lg:text-5xl italic text-center tracking-wide capitalize">
                   Corporate office
                 </h3>
               </div>
@@ -348,7 +348,7 @@ function Landing() {
 
             <div className="relative group  w-full h-[450px] bg-[url('../images/home/tech.jpg')] bg-cover bg-center bg-no-repeat overflow-hidden rounded-lg">
               <div className="absolute inset-0 bg-black/50 flex items-end p-5 translate-y-full group-hover:translate-y-0 transition-transform duration-700 ease-in-out">
-                <h3 className="text-[#fff] font-Georgia text-5xl italic text-center tracking-wide capitalize">
+                <h3 className="text-[#fff] font-Georgia text-4xl lg:text-5xl italic text-center tracking-wide capitalize">
                   tech startup office
                 </h3>
               </div>
@@ -356,7 +356,7 @@ function Landing() {
 
             <div className="relative group w-full h-[450px] bg-[url('../images/home/modern.jpg')] bg-cover bg-center bg-no-repeat overflow-hidden rounded-lg">
               <div className="absolute inset-0 bg-black/50 flex items-end p-5 translate-y-full group-hover:translate-y-0 transition-transform duration-700 ease-in-out">
-                <h3 className="text-[#fff] font-Georgia text-5xl italic text-center tracking-wide capitalize">
+                <h3 className="text-[#fff] font-Georgia text-4xl lg:text-5xl italic text-center tracking-wide capitalize">
                   modern co-working space
                 </h3>
               </div>
