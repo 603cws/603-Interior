@@ -9,11 +9,11 @@ function GetInTouchSection() {
       <section className="bg-[url('../images/about-us/contact-section-bg.webp')] bg-no-repeat bg-cover bg-center py-24 font-Georgia">
         <div className="lg:container px-4 flex justify-center items-center text-[#fff]">
           <div className="md:flex gap-7 bg-[#000]/20 backdrop-blur-sm p-5 md:p-10 rounded-sm">
-            <h2 className="font-medium  text-3xl md:text-5xl">
+            <h2 className="  text-3xl md:text-5xl xl:text-6xl">
               Unlock Your Dream <br /> Office Today!
             </h2>
             <div>
-              <p className="text-sm md:text-base">
+              <p className="text-sm md:text-base xl:text-xl tracking-[0.3px]">
                 We encourage clients to actively participate in discussions,{" "}
                 <br />
                 share their ideas, preferences, and feedback.
@@ -28,7 +28,7 @@ function GetInTouchSection() {
                 </button>
                 <a
                   href="tel:+919136036603"
-                  className="bg-[#FFFFFF]/20 px-4 py-2 rounded-3xl border border-[#fff] text-sm md:text-base w-fit"
+                  className="bg-[#FFFFFF]/20 px-4 py-2 font-TimesNewRoman font-bold rounded-3xl border border-[#fff] text-sm md:text-base w-fit"
                 >
                   Call us: +91-9136036603
                 </a>

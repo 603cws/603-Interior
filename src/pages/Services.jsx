@@ -1,8 +1,11 @@
 import { useNavigate } from "react-router-dom";
 import LandingNavbar from "../common-components/LandingNavbar";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Footer from "../common-components/Footer";
 import GetInTouchSection from "../common-components/GetInTouchSection";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Autoplay } from "swiper/modules";
+import "swiper/css";
 const steps = [
   {
     imagePath: "/images/plan.png",
@@ -127,7 +130,7 @@ function OfficeLayoutSection() {
       {/* Right Section - Image */}
       <div className="flex justify-center">
         <img
-          src="/images/service-hero.png"
+          src="/images/serviceHero.webp"
           alt="Office Layout"
           className="w-full  lg:max-w-xl xl:max-w-2xl"
         />
@@ -155,9 +158,6 @@ function InfoCard({ imgpath, title, description }) {
 function FeaturesSection() {
   return (
     <div className="lg:py-16 lg:px-5 py-10">
-      {/* <h2 className="text-center font-lora font-bold text-[#232323] text-3xl xl:text-[42px] xl:leading-[53px] tracking-[0.3px]">
-        We Provide Everything for <br /> your Office Interior
-      </h2> */}
       <HeadingSection>
         We Provide Everything for <br /> your Office Interior
       </HeadingSection>
@@ -181,7 +181,7 @@ function FeatureCard({ title, imgpath, hoveredImgPath }) {
     <div
       onMouseEnter={() => sethovered(true)}
       onMouseLeave={() => sethovered(false)}
-      className="group w-full border border-[#ccc] font-Georgia p-4 hover:bg-gradient-to-br from-[#334A78] to-[#68B2DC]  hover:text-white"
+      className="group w-full border border-[#ccc] font-Georgia px-4 py-7 hover:bg-gradient-to-br from-[#334A78] to-[#68B2DC]  hover:text-white"
     >
       <div className="flex flex-col justify-center items-center gap-5">
         <div>
@@ -252,21 +252,63 @@ function Step({ imagePath, title, description, index }) {
     </div>
   );
 }
-
+const featuredDesignImages = [
+  {
+    img: "/images/FeaturedDesign1.png",
+  },
+  {
+    img: "/images/Featureddesign2.png",
+  },
+  {
+    img: "/images/Featureddesgin3.png",
+  },
+  {
+    img: "/images/Featureddesign2.png",
+  },
+  {
+    img: "/images/Featureddesgin3.png",
+  },
+];
 function FeatureDesignSection() {
+  const swiperRef = useRef(null);
   return (
-    <div className="lg:px-4 lg:py-16 py-6">
+    <div className="lg:px-4 lg:py-16 py-6 space-y-10">
       <HeadingSection>Featured Designs</HeadingSection>
-      <div className="flex flex-col md:flex-row items-center gap-6 justify-between mt-11">
+      {/* <div className="flex flex-col md:flex-row items-center gap-6 justify-between ">
         <div>
           <img src="/images/FeaturedDesign1.png" alt="featured design" />
         </div>
-        <div>
-          <img src="/images/Featureddesign2.png" alt="featured design" />
-        </div>
-        <div>
-          <img src="/images/Featureddesgin3.png" alt="featured design" />
-        </div>
+      </div> */}
+      <div className=" w-full custom-swiper">
+        <Swiper
+          ref={swiperRef}
+          modules={[Autoplay]}
+          autoplay={{
+            delay: 2000,
+          }}
+          loop={true}
+          slidesPerView={3}
+          className="relative pb-10 xl:pl-10"
+          breakpoints={{
+            0: {
+              slidesPerView: 1.02,
+            },
+            768: {
+              slidesPerView: 2,
+              spaceBetween: 30,
+            },
+            1024: {
+              slidesPerView: 3,
+              spaceBetween: 60,
+            },
+          }}
+        >
+          {featuredDesignImages.map((product, index) => (
+            <SwiperSlide key={index}>
+              <img src={product?.img} />
+            </SwiperSlide>
+          ))}
+        </Swiper>
       </div>
     </div>
   );

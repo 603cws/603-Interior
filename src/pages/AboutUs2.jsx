@@ -97,7 +97,7 @@ function AboutUs() {
             </button>
           </div>
           <div className=" xl:py-10 xl:pl-10 flex-1">
-            <img src="/images/AboutUs-hero.webp" alt="" />
+            <img src="/images/AboutusHero.webp" alt="" />
             {/* <img src="/images/about-us/about-us-hero.png" alt="" /> */}
           </div>
         </div>
