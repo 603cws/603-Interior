@@ -1,4 +1,4 @@
-import { RiDashboardFill } from "react-icons/ri";
+// import { RiDashboardFill } from "react-icons/ri";
 import { useNavigate } from "react-router-dom";
 import { useApp } from "../../Context/Context";
 import { useEffect, useState, useRef, useReducer } from "react";
@@ -14,6 +14,19 @@ import UserCard from ".././user/UserCard";
 import UserProfileEdit from ".././user/UserProfileEdit";
 import VendorDashboardCards from "./VendorDashboardCards";
 import VendorItem from "./VendorItem";
+
+import { MdOutlineSpaceDashboard } from "react-icons/md";
+import { BsBoxSeam } from "react-icons/bs";
+// import { FaUser } from "react-icons/fa";
+// import { FaUserPlus } from "react-icons/fa";
+// import { CiShop } from "react-icons/ci";
+// import { ImBoxAdd } from "react-icons/im";
+import { RiSettingsLine } from "react-icons/ri";
+import { GrCircleQuestion } from "react-icons/gr";
+import { FiLogOut } from "react-icons/fi";
+// import { TbCalculator } from "react-icons/tb";
+// import { IoCalendarOutline } from "react-icons/io5";
+// import { LuCalendarPlus2 } from "react-icons/lu";
 
 function handlesidebarState(state, action) {
   switch (action.type) {
@@ -126,14 +139,16 @@ function VendorDashboardLayout() {
             currentSection={sidebarstate?.currentSection}
           /> */}
           <SidebarItem
-            icon={<RiDashboardFill />}
+            // icon={<RiDashboardFill />}
+            icon={<MdOutlineSpaceDashboard />}
             text="Dashboard"
             onClick={handledashboard}
             isExpanded={isExpanded}
             currentSection={sidebarstate?.currentSection}
           />
           <SidebarItem
-            icon={<LuBlend />}
+            icon={<BsBoxSeam />}
+            // icon={<LuBlend />}
             text="Product"
             onClick={handleproduct}
             isExpanded={isExpanded}
@@ -144,21 +159,24 @@ function VendorDashboardLayout() {
         {/* Other Items */}
         <div className="font-semibold text-lg capitalize leading-normal tracking-wide py-4 text-[#262626] flex flex-col gap-4 px-3">
           <SidebarItem
-            icon={<BsQuestionCircle />}
+            // icon={<BsQuestionCircle />}
+            icon={<GrCircleQuestion />}
             text="Help"
             onClick={handlehelp}
             isExpanded={isExpanded}
             currentSection={sidebarstate?.currentSection}
           />
           <SidebarItem
-            icon={<IoSettingsSharp />}
+            icon={<RiSettingsLine />}
+            // icon={<IoSettingsSharp />}
             text="Setting"
             onClick={handlesetting}
             isExpanded={isExpanded}
             currentSection={sidebarstate?.currentSection}
           />
           <SidebarItem
-            icon={<VscSignOut />}
+            icon={<FiLogOut />}
+            // icon={<VscSignOut />}
             text="Logout"
             onClick={logout}
             isExpanded={isExpanded}
@@ -306,7 +324,7 @@ function VendorDashboardLayout() {
         {sidebarstate?.dashboard && (
           <div className="flex flex-col h-full min-h-0 overflow-hidden lg:border-2 border-[#334A78] rounded-lg bg-white">
             <div className="p-3">
-              <VendorDashboardCards />
+              <VendorDashboardCards handleproduct={handleproduct} />
             </div>
           </div>
         )}
