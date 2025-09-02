@@ -124,8 +124,8 @@ function AboutUs() {
       </section>
 
       <section>
-        <div className="font-Georgia flex flex-col justify-center items-center my-10 capitalize">
-          <h1 className="italic text-[#111827] text-3xl xl:text-[42px] leading-[52px]">
+        <div className="font-Georgia flex flex-col justify-center gap-2 items-center my-10 capitalize">
+          <h1 className="italic font-bold text-[#111827] text-3xl xl:text-[42px] leading-[52px]">
             Our story of Growth
           </h1>
           <p className="text-[#4B5563] text-lg text-center">
@@ -226,17 +226,17 @@ function QuoteSection() {
   const navigate = useNavigate();
   return (
     <section className="font-Georgia lg:container mx-auto px-4">
-      <div className="grid md:grid-cols-2 gap-8  bg-[#304778] border border-[#CFF3FF] rounded-2xl p-6 md:p-10 items-stretch h-[800px] md:h-[500px]">
+      <div className="grid md:grid-cols-2 xl:grid-cols-[1fr,1.4fr] gap-8  bg-[#304778] border border-[#CFF3FF] rounded-2xl p-6 md:p-10 items-stretch h-[800px] md:h-[500px]">
         {/* Left: Quote */}
-        <div className="text-white self-center">
-          <p className="text-lg leading-relaxed italic relative">
-            <span className="text-4xl  absolute -left-4 -top-2">“</span>
+        <div className="flex flex-col justify-between text-white ">
+          <p className="text-lg md:text-2xl xl:leading-[42px] leading-relaxed italic relative">
+            <span className=" text-4xl absolute -left-4 -top-2">“</span>
             Workved Interiors was born out of real challenges we faced while
             building our own coworking brand—603 The Coworking Space. As we
             scaled across cities, one thing became crystal clear: setting up
             high-quality, functional, and well-designed office spaces was
             unnecessarily complicated.
-            <span className="text-4xl  align-bottom">”</span>
+            <span className="text-4xl align-bottom">”</span>
           </p>
 
           {/* Button */}

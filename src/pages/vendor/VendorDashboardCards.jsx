@@ -15,6 +15,11 @@ function VendorDashboardCards({ handleproduct }) {
   const [rejectedProductView, setRejectedProductView] = useState(false);
   const [rejectedProduct, setRejectedProduct] = useState();
 
+  function handleclick() {
+    console.log("hii from click");
+    // handleproduct();
+  }
+
   const { accountHolder } = useApp();
   // Fetch Products from Supabase
   const fetchProducts = async () => {
@@ -107,7 +112,7 @@ function VendorDashboardCards({ handleproduct }) {
         <div className="grid grid-cols-2 md:flex   gap-4 font-Poppins">
           {cardsDetails.map((card) => (
             <Card
-              handleproduct={handleproduct}
+              handleproduct={handleclick}
               item={card?.item}
               imgpath={card?.imgpath}
               className={card?.className}
@@ -297,29 +302,7 @@ function formatDate(isoString) {
 }
 
 function ProductTable({ products, addons, handlerejectedProduct }) {
-  //   {
-  //     "id": "b0b9a4de-3821-473f-b49a-83d6cb8df429",
-  //     "created_at": "2025-08-12T04:48:37.460192+00:00",
-  //     "title": "test ",
-  //     "price": 1600,
-  //     "details": "add products for test",
-  //     "image": "test -main-7877aadd-ed3f-46df-98c4-45a759064927",
-  //     "product_id": "7877aadd-ed3f-46df-98c4-45a759064927",
-  //     "additional_images": "[\"test -additional-0-7877aadd-ed3f-46df-98c4-45a759064927\",\"test -additional-1-7877aadd-ed3f-46df-98c4-45a759064927\"]",
-  //     "dimensions": "130x140x150",
-  //     "manufacturer": "workvedDev",
-  //     "segment": "Exclusive",
-  //     "default": null,
-  //     "product_type": "Tile",
-  //     "vendor_id": "f2bb3292-d50b-463e-8b62-9a266e538f4e",
-  //     "status": "pending",
-  //     "type": "product",
-  //     "reject_reason": null
-  // }
-
   const items = products?.concat(addons) || [];
-
-  console.log("items", items);
 
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
@@ -457,8 +440,9 @@ function ProductTable({ products, addons, handlerejectedProduct }) {
 function Card({ handleproduct, item, imgpath, className, title }) {
   return (
     <div
-      onClick={handleproduct}
-      className={`rounded-lg p-7 flex flex-col justify-between lg:h-48 lg:w-40 xl:h-48 xl:w-52 relative hover:scale-110 transition-transform duration-300 ease-in-out cursor-pointer ${className}`}
+      // onClick={() => handleproduct()}
+      className={`rounded-lg p-7 flex flex-col justify-between lg:h-48 lg:w-40 xl:h-48 xl:w-52 relative  ${className}`}
+      // className={`rounded-lg p-7 flex flex-col justify-between lg:h-48 lg:w-40 xl:h-48 xl:w-52 relative hover:scale-110 transition-transform duration-300 ease-in-out  ${className}`}
     >
       <h2 className="self-center text-xl tracking-wide font-medium capitalize">
         {title}

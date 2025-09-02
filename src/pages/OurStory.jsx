@@ -56,8 +56,8 @@ function OurStory() {
       <LandingNavbar />
       <div className="lg:container lg:mx-auto lg:px-12 px-6">
         {/* section 1 */}
-        <div>
-          <div className="font-Georgia flex flex-col justify-center items-center my-10 capitalize">
+        <div className="font-Georgia">
+          <div className=" flex flex-col justify-center items-center my-10 capitalize">
             <h1 className="italic text-[#111827] text-3xl xl:text-[42px] leading-[52px]">
               Our story of Growth
             </h1>
@@ -68,11 +68,11 @@ function OurStory() {
 
           <div className="relative w-full h-[500px] flex items-center justify-center bg-[url('/images/ourstory.png')] bg-cover bg-center">
             {/* Overlay */}
-            <div className="absolute inset-0 bg-black/40"></div>
+            <div className="absolute inset-0 bg-black/10"></div>
 
             {/* Content */}
             <div className="relative z-10 text-center text-white px-6">
-              <h2 className="text-3xl md:text-5xl font-bold mb-4">
+              <h2 className="text-3xl md:text-5xl font-bold italic mb-4 xl:mb-6 xl:leading-[58px]">
                 From Coworking Challenges to <br /> Simplifying Office Interiors
               </h2>
               <p className="text-lg italic">
@@ -87,7 +87,7 @@ function OurStory() {
 
         {/* section 3 */}
         <section className="max-w-4xl mx-auto lg:px-6 py-6 lg:py-12 text-center font-Georgia">
-          <p className="text-3xl font-bold  italic text-[#334A78] xl:leading-[57px]">
+          <p className="text-[28px] font-bold  italic text-[#334A78] xl:leading-[57px]">
             If we struggled as a workspace brand, how hard must it be for
             companies doing this for the first time?
           </p>
@@ -99,7 +99,7 @@ function OurStory() {
         {/* section 5 */}
         <section>
           <div>
-            <h2 className="pt-10 text-2xl lg:text-[40px] text-[#232323]  lg:leading-[52px] font-bold italic mb-2 lg:mb-4 text-center">
+            <h2 className="font-Georgia pt-10 text-4xl lg:text-[40px] text-[#232323]  lg:leading-[52px] font-bold italic mb-2 lg:mb-4 text-center">
               Our brand values are build on
             </h2>
           </div>
@@ -116,13 +116,14 @@ export default OurStory;
 
 function StrugglesSection() {
   return (
-    <section className="py-12 grid grid-cols-1 md:grid-cols-2 gap-8 items-center font-Georgia">
+    <section className="py-12 grid grid-cols-1 md:grid-cols-[1fr,1.4fr]  gap-8   font-Georgia items-stretch">
       {/* Left Content */}
-      <div>
-        <h2 className="text-2xl md:text-4xl italic text-black  mb-4">
-          The Struggles We Encountered
+      <div className="flex flex-col justify-center gap-6 ">
+        <h2 className="text-4xl italic text-black  mb-4 xl:text-[40px] xl:leading-[55px]">
+          The Struggles We <br />
+          Encountered
         </h2>
-        <p className=" text-2xl">
+        <p className=" text-2xl text-black xl:leading-[40px]">
           Setting up high-quality, functional, and well-designed offices was
           unnecessarily complicated. From inconsistent vendors to vague cost
           estimations and endless delays, even with a clear vision, the process
@@ -131,12 +132,12 @@ function StrugglesSection() {
       </div>
 
       {/* Right Image */}
-      <div className="flex justify-center md:justify-end">
+      <div className="">
         <img
           src="/images/office.JPG" // replace with your image path
           // src="/images/ourstory.png" // replace with your image path
           alt="Office workspace"
-          className="rounded-lg shadow-md max-h-[350px] object-cover"
+          className="rounded-lg shadow-md h-full w-full object-cover"
         />
       </div>
     </section>
@@ -145,9 +146,9 @@ function StrugglesSection() {
 
 function StepsSection() {
   return (
-    <section className="bg-white lg:py-12 font-Georgia">
-      <section className="max-w-3xl mx-auto px-6 pb-10 text-center space-y-5">
-        <h2 className="text-2xl lg:text-[40px] text-[#232323] lg:leading-[52px] font-bold italic mb-4">
+    <section className="bg-white py-12 font-Georgia">
+      <section className="max-w-3xl mx-auto lg:px-6 pb-10 text-center space-y-5">
+        <h2 className="text-4xl lg:text-[40px] text-[#232323] lg:leading-[52px] font-bold italic mb-4">
           Best Solutions For Your <br /> Dream Office
         </h2>
         <p className="text-[#777] text-sm md:text-base tracking-[0.3px]">
@@ -193,11 +194,11 @@ function AccordionCards() {
 
   return (
     <>
-      <div className="hidden lg:flex  w-full h-[400px] gap-4 px-4 my-10">
+      <div className="hidden lg:flex  w-full  gap-4 px-4 my-10">
         {cards.map((card, i) => (
           <div
             key={i}
-            className={`relative rounded-2xl overflow-hidden cursor-pointer transition-all duration-500 ease-in-out ${
+            className={`relative h-[400px] rounded-2xl overflow-hidden cursor-pointer transition-all duration-500 ease-in-out ${
               active === i ? "flex-[3]" : "flex-1"
             }`}
             onMouseEnter={() => setActive(i)}
@@ -228,7 +229,7 @@ function AccordionCards() {
                 </div>
               ) : (
                 <>
-                  <p className="text-lg h-full font-medium rotate-[-90deg] whitespace-nowrap flex  items-center  gap-4">
+                  <p className="text-lg h-full font-medium rotate-[-90deg] whitespace-nowrap flex  items-center justify-end  gap-4">
                     <span>
                       <FaStarOfLife color="#78A3FF" />
                     </span>{" "}

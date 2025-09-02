@@ -177,7 +177,7 @@ function OptionBox({
   const isItemProduct = item?.type === "product";
 
   return (
-    <div className="bg-[#F7EEDD] rounded-lg p-2 w-[110px] shadow-md">
+    <div className="bg-[#F9f9f9] rounded-lg p-2 w-[110px] shadow-md">
       {/* View Button */}
       <button
         onClick={() => handleProductPreview(item)}

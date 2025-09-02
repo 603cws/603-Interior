@@ -6,6 +6,7 @@ import GetInTouchSection from "../common-components/GetInTouchSection";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
 import "swiper/css";
+import { AnimatedButton } from "../common-components/animated-button";
 const steps = [
   {
     imagePath: "/images/plan.png",
@@ -119,12 +120,33 @@ function OfficeLayoutSection() {
           Plan your workspace, add furniture & <br /> essentials, and get your
           BOQ Instantly.
         </p>
-        <button
+        <div className="inline-block">
+          <AnimatedButton
+            onClick={() => navigate("/Layout")}
+            className="!bg-[#3A5D7B] text-white capitalize font-Georgia mt-7 text-lg"
+            variant="default"
+            size="lg"
+            // glow={true}
+            textEffect="shimmer"
+            rounded="custom"
+            asChild={false}
+            hideAnimations={false}
+            shimmerColor="#fff"
+            shimmerSize="0.1em"
+            shimmerDuration="3s"
+            borderRadius="6px"
+            background="rgba(48, 71, 120, 1)"
+            hovereBackground="linear-gradient(90deg,rgba(85,132,182,1)  0%,  rgba(117,162,190,1) 100%)"
+          >
+            Start Your Layout
+          </AnimatedButton>
+        </div>
+        {/* <button
           onClick={() => navigate("/Layout")}
           className=" font-Georgia mt-6 bg-gradient-to-r from-[#75A2BE] to-[#334A78] text-white px-6 py-3 rounded-md hover:scale-105  transition duration-500 ease-in-out"
         >
           Start Your Layout
-        </button>
+        </button> */}
       </div>
 
       {/* Right Section - Image */}
@@ -181,7 +203,7 @@ function FeatureCard({ title, imgpath, hoveredImgPath }) {
     <div
       onMouseEnter={() => sethovered(true)}
       onMouseLeave={() => sethovered(false)}
-      className="group w-full border border-[#ccc] font-Georgia px-4 py-7 hover:bg-gradient-to-br from-[#334A78] to-[#68B2DC]  hover:text-white"
+      className="group w-full border border-[#ccc] font-Georgia px-4 py-7 xl:py-12 hover:bg-gradient-to-br from-[#334A78] to-[#68B2DC]  hover:text-white"
     >
       <div className="flex flex-col justify-center items-center gap-5">
         <div>
@@ -263,10 +285,13 @@ const featuredDesignImages = [
     img: "/images/Featureddesgin3.png",
   },
   {
-    img: "/images/Featureddesign2.png",
+    img: "/images/featuredDesign4.png",
   },
   {
-    img: "/images/Featureddesgin3.png",
+    img: "/images/featuredDesign5.png",
+  },
+  {
+    img: "/images/featuredDesign6.png",
   },
 ];
 function FeatureDesignSection() {
