@@ -110,7 +110,7 @@ function AboutUs() {
               <h2 className="text-xl md:text-4xl font-bold italic text-black mb-4 font-Georgia">
                 Services We’re Providing
               </h2>
-              <p className="text-black text-sm leading-relaxed font-Georgia">
+              <p className="text-black text-sm leading-relaxed font-Georgia mb-8">
                 Designing office spaces that range from intimate, bespoke
                 interiors to large-scale, transformative workplaces.
               </p>
@@ -225,7 +225,7 @@ export default AboutUs;
 function QuoteSection() {
   const navigate = useNavigate();
   return (
-    <section className="  font-Georgia lg:container mx-auto px-4">
+    <section className="font-Georgia lg:container mx-auto px-4">
       <div className="grid md:grid-cols-2 gap-8  bg-[#304778] border border-[#CFF3FF] rounded-2xl p-6 md:p-10 items-stretch h-[800px] md:h-[500px]">
         {/* Left: Quote */}
         <div className="text-white self-center">
