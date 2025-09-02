@@ -43,24 +43,28 @@ function Landing() {
 
       // 1️⃣ Specialized text goes upward and disappears
       tl.to(".specialized-text", {
-        y: -200,
+        y: -100,
         opacity: 0,
         duration: 2,
         ease: "power2.out",
       });
       // 4️⃣ Interior Design corporate text goes upward & disappears
-      tl.to(".interior-text", {
-        y: -200,
-        opacity: 0,
-        duration: 2,
-        ease: "power2.out",
-      });
+      tl.to(
+        ".interior-text",
+        {
+          y: -100,
+          opacity: 0,
+          duration: 2,
+          ease: "power2.out",
+        },
+        "<"
+      );
 
       // 5️⃣ And commercial text goes upward & disappears
       tl.to(
         ".commercial-text",
         {
-          y: -200,
+          y: -100,
           opacity: 0,
           duration: 2,
           ease: "power2.out",
@@ -72,7 +76,7 @@ function Landing() {
       tl.fromTo(
         ".round-table",
         { right: "0%", rotate: 0, opacity: 1 },
-        { left: "0%", rotate: -360, opacity: 1, duration: 5 }
+        { left: "0%", rotate: -360, opacity: 1, duration: 3 }
         // start at same time
       );
 
@@ -80,7 +84,7 @@ function Landing() {
       tl.fromTo(
         ".rotating-table",
         { left: "0%", top: "40%", rotate: 0, opacity: 1 },
-        { left: "0%", top: "70%", rotate: -90, opacity: 1, duration: 2 },
+        { left: "0%", top: "70%", rotate: -90, opacity: 1, duration: 3 },
         "<"
       );
 
@@ -88,7 +92,8 @@ function Landing() {
       tl.fromTo(
         ".down-table",
         { right: "0%", opacity: 1 },
-        { right: "25%", opacity: 1, duration: 2 }
+        { right: "25%", opacity: 1, duration: 2 },
+        "<"
       );
 
       // 7️⃣ Show top middle table (upper-table.png)
@@ -102,14 +107,28 @@ function Landing() {
       tl.fromTo(
         ".circle",
         { scale: 0 },
-        { scale: 1, stagger: 0.2, duration: 1, ease: "back.out(1.7)" }
+        { scale: 1, stagger: 0.2, duration: 1, ease: "back.out(1.7)" },
+        "<"
       );
 
       // 9️⃣ Show right middle table
       tl.fromTo(
         ".side-table",
         { right: "-100%", opacity: 0 },
-        { right: "0%", opacity: 1, duration: 2 }
+        { right: "0%", opacity: 1, duration: 2 },
+        "<"
+      );
+      tl.fromTo(
+        containerRef.current,
+        { borderWidth: 0, borderColor: "transparent", borderStyle: "solid" },
+        {
+          borderWidth: 1,
+          borderColor: "#304778",
+          borderRadius: 20,
+          duration: 2,
+          ease: "power2.out",
+        },
+        "<"
       );
 
       // 🔟 Finally show center text
@@ -261,10 +280,10 @@ function Landing() {
       <section className="hidden lg:block overflow-hidden py-14">
         <div
           ref={containerRef}
-          className="relative max-w-4xl xl:max-w-screen-lg 2xl:max-w-screen-xl mx-auto h-screen font-TimesNewRoman italic overflow-hidden"
+          className="relative max-w-4xl xl:max-w-6xl 2xl:max-w-[1440px] mx-auto h-screen font-TimesNewRoman italic overflow-hidden py-5"
         >
           {/* Specialized text */}
-          <h1 className="absolute top-[15%] text-5xl 2xl:text-7xl specialized-text">
+          <h1 className="absolute top-[15%] text-5xl 2xl:text-7xl specialized-text ">
             Specialized
           </h1>
 
@@ -289,11 +308,11 @@ function Landing() {
           {/* Circles */}
           <img
             src="/images/home/circle.png"
-            className="absolute right-10 top-10 circle h-14 2xl:h-20 w-14 2xl:w-20"
+            className="absolute right-10 top-10 circle h-14 2xl:h-[70px] w-14 2xl:w-[70px]"
           />
           <img
             src="/images/home/circle.png"
-            className="absolute right-10 bottom-10 circle  h-14 2xl:h-20 w-14 2xl:w-20"
+            className="absolute right-10 bottom-10 circle  h-14 2xl:h-[70px] w-14 2xl:w-[70px]"
           />
 
           {/* Interior text */}

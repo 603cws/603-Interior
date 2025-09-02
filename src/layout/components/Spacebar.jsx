@@ -1,5 +1,5 @@
 function Spacebar({ totalArea, builtArea, availableArea, MIN_AREA }) {
-  const usedPer = (builtArea / totalArea) * 100;
+  const usedPer = (+builtArea / +totalArea) * 100;
   const roundedUsedPer = Math.round(usedPer);
   const unUsedPer = 100 - roundedUsedPer;
   if (!totalArea || totalArea < MIN_AREA || totalArea > 25000) {

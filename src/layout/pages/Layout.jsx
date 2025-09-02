@@ -422,7 +422,7 @@ function Layout() {
   // );
   const [washroomsSize, setWashroomsSize] = useState(areaValues.washrooms);
   const [warning, setWarning] = useState(false);
-  const [otherArea, setOtherArea] = useState();
+  const [otherArea, setOtherArea] = useState(0);
 
   const {
     totalArea,
@@ -630,7 +630,7 @@ function Layout() {
         // executiveWashroom: executiveWashroom / areaValues.executiveWashroom,
         // reception: Math.round(receptionArea / areaValues.reception),
         // lounge: Math.round(loungeArea / areaValues.lounge),
-        other: otherArea / areaValues.other,
+        // other: otherArea / areaValues.other,
       }));
 
       if (totalArea >= MIN_AREA && totalArea <= MAX_AREA) {
@@ -678,10 +678,24 @@ function Layout() {
 
   // Calculate builtArea and set it to state
   useEffect(() => {
+    // const calculatedBuiltArea = Object.keys(areaQuantities).reduce(
+    //   (acc, key) => acc + +areaQuantities[key] * +areaValues[key],
+    //   0
+    // );
     const calculatedBuiltArea = Object.keys(areaQuantities).reduce(
-      (acc, key) => acc + areaQuantities[key] * areaValues[key],
+      (acc, key) => {
+        const qty = Number(areaQuantities[key]);
+        const val = Number(areaValues[key]);
+
+        // if qty or val is NaN, treat them as 0
+        const safeQty = isNaN(qty) ? 0 : qty;
+        const safeVal = isNaN(val) ? 0 : val;
+
+        return acc + safeQty * safeVal;
+      },
       0
     );
+
     setBuiltArea(calculatedBuiltArea);
   }, [areaQuantities, areaValues]);
 
@@ -737,8 +751,21 @@ function Layout() {
     }
 
     // Calculate the built area
+    // const calculatedBuiltArea = Object.keys(newAreaQuantities).reduce(
+    //   (acc, key) => acc + +newAreaQuantities[key] * +newAreaValues[key],
+    //   0
+    // );
     const calculatedBuiltArea = Object.keys(newAreaQuantities).reduce(
-      (acc, key) => acc + newAreaQuantities[key] * newAreaValues[key],
+      (acc, key) => {
+        const qty = Number(newAreaQuantities[key]);
+        const val = Number(newAreaValues[key]);
+
+        // if qty or val is NaN, treat them as 0
+        const safeQty = isNaN(qty) ? 0 : qty;
+        const safeVal = isNaN(val) ? 0 : val;
+
+        return acc + safeQty * safeVal;
+      },
       0
     );
 

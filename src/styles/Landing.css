@@ -104,8 +104,26 @@ slick-current {
   }
 }
 
-.apexcharts-datalabel {
+/* .apexcharts-datalabel {
   font-size: 45%;
+  text-wrap: wrap;
+  font-size: 10px;
+} */
+/* .apexcharts-treemap-rect {
+  overflow: hidden !important;
+  max-width: 100%;
+}
+.apexcharts-data-labels {
+  overflow: hidden !important;
+  max-width: 100%;
+} */
+.apexcharts-datalabel {
+  font-size: clamp(8px, 1vw, 10px);
+  white-space: collapse !important;
+  text-align: center !important;
+  text-anchor: middle;
+  max-width: 100%;
+  overflow: hidden;
 }
 
 .container-left {

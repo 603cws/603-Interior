@@ -201,7 +201,186 @@ const TreeMap = ({ totalArea, areaQuantities, areaValues }) => {
     },
   ];
 
+  // function splitTreemapLabels(root) {
+  //   const labels = root.querySelectorAll(
+  //     ".apexcharts-treemap .apexcharts-datalabel"
+  //   );
+
+  //   labels.forEach((label) => {
+  //     const txt = label.textContent || "";
+  //     if (!txt.includes("|||")) return;
+
+  //     // ✅ Go up to the series group (which contains both rect + label)
+  //     const rect = label.closest(
+  //       "g.apexcharts-data-labels"
+  //     )?.previousElementSibling;
+
+  //     if (rect) {
+  //       const width = parseFloat(rect.getAttribute("width"));
+  //       const height = parseFloat(rect.getAttribute("height"));
+
+  //       if (width > 0 && height > 0) {
+  //         const aspectRatio = width / height;
+  //         console.log("Block size:", { txt, width, height, aspectRatio });
+  //       }
+  //     } else {
+  //       console.warn("⚠️ No rect found for label:", label.textContent);
+  //     }
+
+  //     const x = label.getAttribute("x");
+
+  //     // Split lines and clear existing content
+  //     const lines = txt.split("|||");
+  //     while (label.firstChild) label.removeChild(label.firstChild);
+
+  //     // Optional: vertically center the block
+  //     const lh = 1.1;
+  //     const startDy = (-(lines.length - 1) * lh) / 2 + "em";
+
+  //     lines.forEach((line, i) => {
+  //       const tspan = document.createElementNS(
+  //         "http://www.w3.org/2000/svg",
+  //         "tspan"
+  //       );
+  //       tspan.setAttribute("x", x);
+  //       tspan.setAttribute("dy", i === 0 ? startDy : `${lh}em`);
+  //       tspan.textContent = line;
+  //       label.appendChild(tspan);
+  //     });
+  //   });
+  // }
+  // function splitTreemapLabels(root) {
+  //   const labels = root.querySelectorAll(
+  //     ".apexcharts-treemap .apexcharts-datalabel"
+  //   );
+
+  //   labels.forEach((label) => {
+  //     const txt = label.textContent || "";
+  //     if (!txt.includes("|||")) return;
+
+  //     const rect = label.closest(
+  //       "g.apexcharts-data-labels"
+  //     )?.previousElementSibling;
+
+  //     let aspectRatio = 1;
+  //     if (rect) {
+  //       const width = parseFloat(rect.getAttribute("width"));
+  //       const height = parseFloat(rect.getAttribute("height"));
+
+  //       if (width > 0 && height > 0) {
+  //         aspectRatio = width / height;
+  //         console.log("Block size:", { txt, width, height, aspectRatio });
+  //       }
+  //     } else {
+  //       console.warn("⚠️ No rect found for label:", label.textContent);
+  //     }
+
+  //     const x = label.getAttribute("x");
+
+  //     // Decide whether to split or not
+  //     // 👉 Example thresholds:
+  //     // very wide blocks (aspectRatio > 2.5) = keep text in one line
+  //     // very tall blocks (aspectRatio < 0.4) = keep text in one line
+  //     // else split normally
+  //     const shouldSplit = aspectRatio >= 0.4 && aspectRatio <= 2.5;
+
+  //     const lines = shouldSplit ? txt.split("|||") : [txt];
+
+  //     // Clear old content
+  //     while (label.firstChild) label.removeChild(label.firstChild);
+
+  //     // Optional: vertically center
+  //     const lh = 1.1;
+  //     const startDy = (-(lines.length - 1) * lh) / 2 + "em";
+
+  //     lines.forEach((line, i) => {
+  //       const tspan = document.createElementNS(
+  //         "http://www.w3.org/2000/svg",
+  //         "tspan"
+  //       );
+  //       tspan.setAttribute("x", x);
+  //       tspan.setAttribute("dy", i === 0 ? startDy : `${lh}em`);
+  //       tspan.textContent = line;
+  //       label.appendChild(tspan);
+  //     });
+  //   });
+  // }
+
+  function splitTreemapLabels(root) {
+    const labels = root.querySelectorAll(
+      ".apexcharts-treemap .apexcharts-datalabel"
+    );
+
+    labels.forEach((label) => {
+      const txt = label.textContent || "";
+      if (!txt.includes("|||")) return;
+
+      const rect = label.closest(
+        "g.apexcharts-data-labels"
+      )?.previousElementSibling;
+
+      let aspectRatio = 1;
+      if (rect) {
+        const width = parseFloat(rect.getAttribute("width"));
+        const height = parseFloat(rect.getAttribute("height"));
+
+        if (width > 0 && height > 0) {
+          aspectRatio = width / height;
+          console.log("Block size:", { txt, width, height, aspectRatio });
+        }
+      } else {
+        console.warn("⚠️ No rect found for label:", label.textContent);
+      }
+
+      const x = label.getAttribute("x");
+
+      // Decide whether to split or not
+      const shouldSplit = aspectRatio >= 0.4 && aspectRatio <= 2.5;
+
+      // Prepare lines
+      const lines = shouldSplit
+        ? txt.split("|||")
+        : [txt.replace(/\|\|\|/g, " ")];
+
+      // Clear old content
+      while (label.firstChild) label.removeChild(label.firstChild);
+
+      // Optional: vertically center
+      const lh = 1.1;
+      const startDy = (-(lines.length - 1) * lh) / 2 + "em";
+
+      lines.forEach((line, i) => {
+        const tspan = document.createElementNS(
+          "http://www.w3.org/2000/svg",
+          "tspan"
+        );
+        tspan.setAttribute("x", x);
+        tspan.setAttribute("dy", i === 0 ? startDy : `${lh}em`);
+        tspan.textContent = line;
+        label.appendChild(tspan);
+      });
+    });
+  }
+
   const options = {
+    dataLabels: {
+      enabled: true,
+      style: {
+        fontSize: "14px",
+        fontWeight: "bold",
+        colors: ["#FFFFFF"],
+      },
+      formatter: (val, opts) => {
+        if (typeof val === "number") {
+          const percentage = ((val / validTotalArea) * 100).toFixed(2);
+          return `${
+            opts.w.globals.labels[opts.dataPointIndex]
+          } (${percentage}%)`;
+        }
+        const newVal = val.split(":")[0];
+        return newVal.split(" ").join("|||");
+      },
+    },
     chart: {
       type: "treemap",
       height: chartHeight,
@@ -220,6 +399,12 @@ const TreeMap = ({ totalArea, areaQuantities, areaValues }) => {
         // mounted: (chart) => {
         //   chartRef.current = chart; // Store chart instance
         // },
+        mounted: (ctx) =>
+          requestAnimationFrame(() => splitTreemapLabels(ctx.el)),
+        // rendered fires after animations; safest place
+        rendered: (ctx) => splitTreemapLabels(ctx.el),
+        // if your React state causes chart updates, re-split after each update
+        updated: (ctx) => splitTreemapLabels(ctx.el),
       },
     },
     title: {
@@ -245,24 +430,6 @@ const TreeMap = ({ totalArea, areaQuantities, areaValues }) => {
     //     formatter: (value) => `${value} sq ft`,
     //   },
     // },
-    dataLabels: {
-      enabled: true,
-      style: {
-        fontSize: "14px",
-        fontWeight: "bold",
-        colors: ["#FFFFFF"],
-      },
-      formatter: (val, opts) => {
-        if (typeof val === "number") {
-          const percentage = ((val / validTotalArea) * 100).toFixed(2);
-          return `${
-            opts.w.globals.labels[opts.dataPointIndex]
-          } (${percentage}%)`;
-        }
-        const newVal = val.split(":")[0];
-        return `${newVal}`;
-      },
-    },
     states: {
       hover: {
         filter: {
@@ -319,20 +486,6 @@ const TreeMap = ({ totalArea, areaQuantities, areaValues }) => {
       },
     },
   };
-  // useEffect(() => {
-  //   if (layoutImgRef) {
-  //     layoutImgRef.current = exportChart;
-  //   }
-
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, []);
-
-  // const exportChart = async () => {
-  //   if (chartRef.current) {
-  //     const imageURI = await chartRef.current.dataURI(); // Get image
-  //     setLayoutImage(imageURI.imgURI); // Send to context
-  //   }
-  // };
 
   const generateLegendItems = () => {
     return series
@@ -468,41 +621,6 @@ const TreeMap = ({ totalArea, areaQuantities, areaValues }) => {
       usedSpace: builtArea,
     };
   };
-
-  // const uploadImage = async (imageDataUrl) => {
-  //   try {
-  //     // ✅ Convert Base64 to Blob Properly
-  //     const blob = await fetch(imageDataUrl)
-  //       .then((res) => res.blob())
-  //       .catch((error) => {
-  //         console.error("Error converting Base64 to Blob:", error);
-  //         return null;
-  //       });
-
-  //     if (!blob) {
-  //       console.error("Blob conversion failed");
-  //       return null;
-  //     }
-
-  //     // ✅ Ensure Correct Filename
-  //     const fileName = `area_distribution_${Date.now()}.png`;
-
-  //     // ✅ Upload Image to Supabase Storage
-  //     const { error } = await supabase.storage
-  //       .from("addon")
-  //       .upload(fileName, blob, { contentType: "image/png" });
-
-  //     if (error) {
-  //       console.error("Image upload failed:", error);
-  //       return null;
-  //     }
-
-  //     return fileName; // ✅ Store filename in DB
-  //   } catch (error) {
-  //     console.error("Upload failed:", error);
-  //     return null;
-  //   }
-  // };
 
   const generateBOQclick = () => {
     console.log("hii", totalArea);

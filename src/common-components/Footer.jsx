@@ -218,8 +218,7 @@ function Footer() {
                   <div className="flex-1">
                     <p className="font-bold">Location</p>
                     <p className="text-[#fff]/65 text-wrap">
-                      Makhija Arcade, 35th Rd, Khar West, Mumbai Maharashtra
-                      400052
+                      603, Makhija Arcade, Khar West, Mumbai 400052
                     </p>
                   </div>
                 </div>
