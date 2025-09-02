@@ -39,7 +39,7 @@ function handlesidebarState(state, action) {
         iseditopen: action.payload === "Edit",
         dashboard: action.payload === "Dashboard",
         help: action.payload === "Help",
-        isBookAppointmentOpen: action.payload === "BookAppointment",
+        isBookAppointmentOpen: action.payload === "Book Appointment",
         currentSection: action.payload,
       };
     default:
@@ -53,7 +53,7 @@ const SECTIONS = {
   SETTING: "Setting",
   HELP: "Help",
   EDIT: "Edit",
-  BOOkAPPOINTMENT: "BookAppointment",
+  BOOkAPPOINTMENT: "Book Appointment",
 };
 
 function Dashboard() {
@@ -643,7 +643,7 @@ function Dashboard() {
           />
           <SidebarItem
             icon={<CiCalendarDate />}
-            text="BookAppointment"
+            text="Book Appointment"
             onClick={() =>
               sidebarDispatch({
                 type: "TOGGLE_SECTION",
@@ -768,7 +768,7 @@ function Dashboard() {
                 setIsOpen={setIsOpen}
               />
               <MobileMenuItem
-                title={"BookAppointment"}
+                title={"Book Appointment"}
                 icon={<CiCalendarDate />}
                 onClick={() =>
                   sidebarDispatch({
@@ -813,11 +813,12 @@ function Dashboard() {
             </h3>
           </div>
           <div
-            className="hidden lg:block mx-3 rounded-full"
+            className="hidden lg:block mx-3 rounded-full cursor-pointer"
             style={{
               backgroundImage:
                 "linear-gradient(to top left, #5B73AF 0%, rgba(255, 255, 255, 0.5) 48%, #1F335C 100%)",
             }}
+            onClick={handlesetting}
           >
             <img
               src={accountHolder.profileImage}
@@ -922,7 +923,7 @@ function Dashboard() {
                 <div className=" sticky top-0 z-20 bg-white">
                   <div className="flex flex-col md:flex-row md:items-center px-2 gap-3 lg:gap-5 lg:px-4 py-2 border-b-2 border-b-gray-400 ">
                     <div className="flex justify-between ">
-                      <h3 className="text-sm md:text-base font-semibold lg:text-xl text-[#374A75] ">
+                      <h3 className="text-sm md:text-base font-semibold lg:text-xl text-[#374A75]">
                         Created BOQs
                       </h3>
                       <div className="relative md:hidden flex items-center gap-5">
@@ -1184,7 +1185,7 @@ function Dashboard() {
                                         ref={(el) =>
                                           (buttonRef.current[item.id] = el)
                                         }
-                                        className="bg-white flex justify-center items-center py-1.5 w-20 mb-2"
+                                        className="flex justify-center items-center py-1.5 w-20 mb-2"
                                         onClick={() =>
                                           handleMenuToggle(item.id)
                                         }

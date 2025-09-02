@@ -164,7 +164,7 @@ function AboutUs() {
                   alt={stage.title}
                   className="w-14 h-14 mt-6"
                 />
-                <div className="absolute top-0 right-0 w-12 h-12 pl-2 bg-white border border-dashed border-[#181818] border-opacity-60 rounded-full flex items-center justify-center text-xl font-semibold text-[#181818] text-opacity-60 font-Georgia">
+                <div className="absolute top-0 right-0 w-12 h-12 pl-0 pb-1 bg-white border border-dashed border-[#181818] border-opacity-60 rounded-full flex items-center justify-center text-xl font-semibold text-[#181818] text-opacity-60 font-Georgia">
                   {stage.id}
                 </div>
               </div>

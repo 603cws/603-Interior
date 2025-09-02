@@ -1,6 +1,7 @@
 import ReactApexChart from "react-apexcharts";
 import { MdDeleteOutline } from "react-icons/md";
 import { useEffect, useState } from "react";
+import { colors } from "../../constants/constant";
 
 function DashboardView({
   currentLayoutData,
@@ -68,37 +69,35 @@ function DashboardView({
     // femaleWashroom: "Female Washroom",
     washrooms: "Washrooms",
   };
-
-  const colors = {
-    "Linear Workspace": "#62897E",
-    "L-Type Workspace": "#3F5855",
-    "MD Cabin": "#1D3130",
-    "Manager Cabin": "#293C3E",
-    "Small Cabin": "#4A5E65",
-    "UPS Room": "#737F85",
-    "BMS Room": "#8CDDCE",
-    "Server Room": "#54A08C",
-    Reception: "#368772",
-    "Lounge/Pantry": "#2A3338",
-    "Video Recording Room": "#354044",
-    "Sales Team": "#3C464F",
-    "Phone Booth": "#515554",
-    "Discussion Room": "#868A8E",
-    "Interview Room": "#A4ACAF",
-    "Conference Room": "#488677",
-    "Board Room": "#3A4B45",
-    "Meeting Room": "#1E8D78",
-    "Meeting Room (Large)": "#07281D",
-    "HR Room": "#233736",
-    "Finance Room": "#081011",
-    "Executive Washroom": "#567F7D",
-    "Breakout Room": "#74D0C1",
-    "Available Space": "#1F5C54",
-    Other: "#5E9B96", // Color for the "Other" category
-    // "Male Washroom": "#95D5B2",
-    // "Female Washroom": "#85CEA8",
-    Washrooms: "#85CEA8",
-  };
+  //   "Linear Workspace": "#62897E",
+  //   "L-Type Workspace": "#3F5855",
+  //   "MD Cabin": "#1D3130",
+  //   "Manager Cabin": "#293C3E",
+  //   "Small Cabin": "#4A5E65",
+  //   "UPS Room": "#737F85",
+  //   "BMS Room": "#8CDDCE",
+  //   "Server Room": "#54A08C",
+  //   Reception: "#368772",
+  //   "Lounge/Pantry": "#2A3338",
+  //   "Video Recording Room": "#354044",
+  //   "Sales Team": "#3C464F",
+  //   "Phone Booth": "#515554",
+  //   "Discussion Room": "#868A8E",
+  //   "Interview Room": "#A4ACAF",
+  //   "Conference Room": "#488677",
+  //   "Board Room": "#3A4B45",
+  //   "Meeting Room": "#1E8D78",
+  //   "Meeting Room (Large)": "#07281D",
+  //   "HR Room": "#233736",
+  //   "Finance Room": "#081011",
+  //   "Executive Washroom": "#567F7D",
+  //   "Breakout Room": "#74D0C1",
+  //   "Available Space": "#1F5C54",
+  //   Other: "#5E9B96", // Color for the "Other" category
+  //   // "Male Washroom": "#95D5B2",
+  //   // "Female Washroom": "#85CEA8",
+  //   Washrooms: "#85CEA8",
+  // };
 
   const validTotalArea = currentAreaValues.total;
   const builtArea = Object.keys(currentAreaQuantities).reduce(
