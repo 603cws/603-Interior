@@ -137,7 +137,7 @@ function ProfileCard({
           </div>
 
           {/* Features Section */}
-          <div className="font-semibold xl:text-lg capitalize leading-normal tracking-wide py-5 text-[#262626] border-y-2 border-[#ccc] flex flex-col gap-2">
+          <div className="font-semibold xl:text-lg capitalize leading-normal tracking-wide py-4 text-[#262626] border-y-2 border-[#ccc] flex flex-col gap-2">
             <div
               className="flex items-center mx-4 gap-3 hover:bg-[#E5F4FF] hover:cursor-pointer hover:rounded-lg pl-2 py-1.5"
               onClick={() => navigate("/dashboard")}
@@ -212,7 +212,7 @@ function ProfileCard({
               <div
                 onClick={handleAppointment}
                 className={`flex items-center mx-4 gap-3 pl-2 py-1.5 ${
-                  progress < 90
+                  progress < 75
                     ? "text-gray-400 cursor-not-allowed"
                     : "hover:rounded-lg hover:bg-[#E5F4FF] hover:cursor-pointer"
                 }`}
@@ -228,7 +228,7 @@ function ProfileCard({
           </div>
 
           {/* Help & Settings Section */}
-          <div className="font-semibold xl:text-lg capitalize leading-normal tracking-wide py-5 text-[#262626] border-b-2 border-[#ccc] flex flex-col gap-2">
+          <div className="font-semibold xl:text-lg capitalize leading-normal tracking-wide py-4 text-[#262626] flex flex-col gap-2">
             <div
               className="flex items-center mx-4 gap-3 hover:bg-[#E5F4FF] hover:cursor-pointer hover:rounded-lg pl-2 py-1.5"
               onClick={() =>

@@ -1,7 +1,10 @@
 import { useEffect, useState, useRef, useMemo } from "react";
 import { ToastContainer } from "react-toastify";
 import { TbArrowBackUp } from "react-icons/tb";
-import { MdOutlineKeyboardArrowRight } from "react-icons/md"; //MdOutlineKeyboardArrowLeft
+import {
+  MdOutlineKeyboardArrowRight,
+  MdOutlineKeyboardArrowLeft,
+} from "react-icons/md"; //MdOutlineKeyboardArrowLeft
 import { normalizeKey } from "../utils/CalculateTotalPriceHelper";
 import SelectArea from "../components/SelectArea";
 import { useApp } from "../../Context/Context";
@@ -447,6 +450,26 @@ function ProductOverview() {
 
           <div className="flex lg:mx-10  items-center text-[#334A78]  mt-1 ">
             <div
+              className="flex items-center cursor-pointer hover:underline"
+              onClick={() => {
+                // setShowProductView(false);
+                // setMinimizedView(true);
+                // navigate("/boq");
+                //Don't change the below setSelectedCategory, setSelectedSubCategory, setSelectedSubCategory1 => Sunny
+                setSelectedCategory(cat);
+                setSelectedSubCategory(subCat);
+                setSelectedSubCategory1(subCat1);
+                // navigate(-1);
+                navigate("/boq", { state: { minimizedView: true } });
+              }}
+            >
+              <MdOutlineKeyboardArrowLeft
+                size={20}
+                style={{ color: "#334A78" }}
+              />
+              <p className="ml-1">Back</p>
+            </div>
+            {/* <div
               onClick={() => {
                 // setShowProductView(false);
                 // setMinimizedView(true);
@@ -479,7 +502,7 @@ function ProductOverview() {
                 </span>
               </div>
               <span className="hover:underline">{subCat1}</span>
-            </div>
+            </div> */}
 
             <button
               //   onClick={() => setRequestTour(true)}
@@ -586,7 +609,7 @@ function ProductOverview() {
                 </p>
               )}
             <button
-              className=" border-2 lg:border-[1.5px] border-[#212B36] px-2 py-1.5 text-sm lg:text-lg w-full md:w-2/5 mb-1 md:mb-3 mt-2 md:mt-5"
+              className=" border-2 lg:border-[1.5px] border-[#212B36] px-2 py-1.5 text-sm lg:text-lg w-full md:w-2/5 mb-1 md:mb-3 mt-2 md:mt-5 rounded-sm"
               onClick={
                 () => setShowSelectArea(true)
                 // /**/ handelSelectedData(
@@ -656,7 +679,7 @@ function ProductOverview() {
             <button
               //   onClick={() => setRequestTour(true)}
               onClick={() => setShowRecommend(true)}
-              className="hidden md:block text-sm   bg-[#334A78] text-white px-4 lg:px-4 py-2  rounded-3xl "
+              className="hidden md:block text-sm bg-[#334A78] text-white px-4 lg:px-4 py-2 rounded-lg"
             >
               Recommendation
             </button>

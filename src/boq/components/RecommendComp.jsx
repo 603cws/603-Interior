@@ -55,7 +55,7 @@ function RecommendComp({ setShowRecommend, currentProduct, manufacturer }) {
         {/* button */}
         <div className="flex justify-center items-center py-7">
           <div className="bg-[#334A78] text-white border-2 border-[#334A78] rounded-md text-sm px-10 py-2">
-            {`products From ${manufacturer}`}
+            {`Products From ${manufacturer}`}
           </div>
         </div>
         {/* recomended images */}

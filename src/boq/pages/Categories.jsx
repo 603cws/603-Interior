@@ -1022,7 +1022,7 @@ const Categories = ({
                           }`}
                         >
                           <p
-                            className={`relative text-[#252525] text-center text-xs md:text-sm flex items-center justify-center py-3 cursor-pointer group-hover:text-[#334A78] md:px-5 ${
+                            className={`relative text-[#252525] text-center text-xs md:text-sm flex items-center justify-center py-3 cursor-pointer group-hover:text-[#334A78] px-2 md:px-5 ${
                               isCompleted
                                 ? "font-semibold text-[#fff]"
                                 : "font-normal"
