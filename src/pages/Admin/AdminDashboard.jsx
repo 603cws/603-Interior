@@ -1,20 +1,24 @@
 import { useEffect, useState, useRef, useReducer } from "react";
-import { RiDashboardFill, RiFormula } from "react-icons/ri";
+import { RiDashboardFill, RiFormula, RiSettingsLine } from "react-icons/ri";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useApp } from "../../Context/Context";
 import { supabase, adminsupabase } from "../../services/supabase";
 import toast from "react-hot-toast";
 import { VscSignOut } from "react-icons/vsc";
-import { IoCheckmark, IoSettingsSharp } from "react-icons/io5";
+import {
+  IoCalendarOutline,
+  IoCheckmark,
+  IoSettingsSharp,
+} from "react-icons/io5";
 import { LuBlend } from "react-icons/lu";
-import { FaRegUserCircle } from "react-icons/fa";
+import { FaRegUserCircle, FaUser, FaUserPlus } from "react-icons/fa";
 import { FaBuilding } from "react-icons/fa";
 import { PiHandshakeFill } from "react-icons/pi";
 import VendorNewProduct from "../vendor/VendorNewProduct";
 import VendorNewAddon from "../vendor/VendorNewAddon";
 import { VscEye } from "react-icons/vsc";
-import { MdOutlineDelete } from "react-icons/md";
-import { CiMenuKebab } from "react-icons/ci";
+import { MdOutlineDelete, MdOutlineSpaceDashboard } from "react-icons/md";
+import { CiMenuKebab, CiShop } from "react-icons/ci";
 import Spinner from "../../common-components/Spinner";
 import SidebarItem from "../../common-components/SidebarItem";
 import Clients from "./Clients";
@@ -25,8 +29,8 @@ import DashboardInbox from "./DashboardInbox";
 import CreateUser from "./CreateUser";
 import { HiXMark } from "react-icons/hi2";
 import { MdDeleteOutline } from "react-icons/md";
-import { FaUserPlus } from "react-icons/fa6";
-import { TbCalendarStats } from "react-icons/tb";
+// import { FaUserPlus } from "react-icons/fa6";
+import { TbCalculator, TbCalendarStats } from "react-icons/tb";
 import Schedule from "./Schedule";
 import FormulaEditor from "../../boq/components/FormulaEditor";
 import VendorEditAddon from "../vendor/VendorEditAddon";
@@ -42,6 +46,8 @@ import UserProfileEdit from "../user/UserProfileEdit";
 import { GoPlus } from "react-icons/go";
 import ClientBoq from "./ClientBoq";
 import { baseImageUrl } from "../../utils/HelperConstant";
+import { BsBoxSeam } from "react-icons/bs";
+import { FiLogOut } from "react-icons/fi";
 
 function handlesidebarState(state, action) {
   switch (action.type) {
@@ -720,28 +726,28 @@ function AdminDashboard() {
             main
           </h3>
           <SidebarItem
-            icon={<RiDashboardFill />}
+            icon={<MdOutlineSpaceDashboard />}
             text="Dashboard"
             onClick={handledashboard}
             isExpanded={isExpanded}
             currentSection={sidebarstate?.currentSection}
           />
           <SidebarItem
-            icon={<LuBlend />}
+            icon={<BsBoxSeam />}
             text="Product"
             onClick={handleproduct}
             isExpanded={isExpanded}
             currentSection={sidebarstate?.currentSection}
           />
           <SidebarItem
-            icon={<FaRegUserCircle />}
+            icon={<FaUser />}
             text="Client"
             onClick={handleclient}
             isExpanded={isExpanded}
             currentSection={sidebarstate?.currentSection}
           />
           <SidebarItem
-            icon={<PiHandshakeFill />}
+            icon={<CiShop />}
             text="Vendors"
             onClick={handleVendor}
             isExpanded={isExpanded}
@@ -755,14 +761,14 @@ function AdminDashboard() {
             currentSection={sidebarstate?.currentSection}
           />
           <SidebarItem
-            icon={<TbCalendarStats />}
+            icon={<IoCalendarOutline />}
             text="schedule"
             onClick={handleschedule}
             isExpanded={isExpanded}
             currentSection={sidebarstate?.currentSection}
           />
           <SidebarItem
-            icon={<RiFormula />}
+            icon={<TbCalculator />}
             text="formulae"
             onClick={handleformulae}
             isExpanded={isExpanded}
@@ -780,14 +786,14 @@ function AdminDashboard() {
             other
           </h3>
           <SidebarItem
-            icon={<IoSettingsSharp />}
+            icon={<RiSettingsLine />}
             text="Setting"
             onClick={handlesetting}
             isExpanded={isExpanded}
             currentSection={sidebarstate?.currentSection}
           />
           <SidebarItem
-            icon={<VscSignOut />}
+            icon={<FiLogOut />}
             text="Logout"
             onClick={logout}
             isExpanded={isExpanded}
