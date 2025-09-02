@@ -1,4 +1,4 @@
-import { RiDashboardFill } from "react-icons/ri";
+import { RiSettingsLine } from "react-icons/ri";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useApp } from "../Context/Context";
 import { supabase } from "../services/supabase";
@@ -8,11 +8,9 @@ import { VscEye } from "react-icons/vsc";
 import { CiMenuKebab } from "react-icons/ci";
 import { VscSignOut } from "react-icons/vsc";
 import { IoSettingsSharp } from "react-icons/io5";
-import { LuBlend } from "react-icons/lu";
-import { BsQuestionCircle } from "react-icons/bs";
+import { LuBlend, LuCalendarPlus2 } from "react-icons/lu";
+import { BsBoxSeam, BsQuestionCircle } from "react-icons/bs";
 import Spinner from "../common-components/Spinner";
-// import DashboardProductCard from "./vendor/DashboardProductCard";
-// import SidebarItem from "../common-components/SidebarItem";
 import Help from "./user/Help";
 import { TbFileInvoice } from "react-icons/tb";
 import { category } from "../utils/AllCatArray";
@@ -20,8 +18,7 @@ import { baseImageUrl } from "../utils/HelperConstant";
 import DashboardView from "./user/DashboardView";
 import { useLogout } from "../utils/HelperFunction";
 import ProductView from "./user/ProductView";
-// import { MdMenuOpen } from "react-icons/md";
-import { FaThLarge, FaTimes } from "react-icons/fa";
+import { FaThLarge } from "react-icons/fa";
 import UserCard from "./user/UserCard";
 import UserProfileEdit from "./user/UserProfileEdit";
 import MobileTabProductCard from "./user/MobileTabProductCard";
@@ -29,6 +26,9 @@ import BookAppointment from "../boq/components/BookAppointment";
 import { CiCalendarDate } from "react-icons/ci";
 import { IoIosSearch } from "react-icons/io";
 import { IoCloseCircle, IoCloudDownloadOutline } from "react-icons/io5";
+import { MdOutlineSpaceDashboard } from "react-icons/md";
+import { GrCircleQuestion } from "react-icons/gr";
+import { FiLogOut } from "react-icons/fi";
 
 function handlesidebarState(state, action) {
   switch (action.type) {
@@ -621,14 +621,14 @@ function Dashboard() {
           </h3> */}
 
           <SidebarItem
-            icon={<RiDashboardFill />}
+            icon={<MdOutlineSpaceDashboard />}
             text="Dashboard"
             onClick={handledashboard}
             isExpanded={isExpanded}
             currentSection={sidebarstate?.currentSection}
           />
           <SidebarItem
-            icon={<LuBlend />}
+            icon={<BsBoxSeam />}
             text="Product"
             onClick={handleproduct}
             isExpanded={isExpanded}
@@ -642,7 +642,7 @@ function Dashboard() {
             currentSection={sidebarstate?.currentSection}
           />
           <SidebarItem
-            icon={<CiCalendarDate />}
+            icon={<LuCalendarPlus2 />}
             text="Book Appointment"
             onClick={() =>
               sidebarDispatch({
@@ -665,21 +665,21 @@ function Dashboard() {
             other
           </h3> */}
           <SidebarItem
-            icon={<BsQuestionCircle />}
+            icon={<GrCircleQuestion />}
             text="Help"
             onClick={handlehelp}
             isExpanded={isExpanded}
             currentSection={sidebarstate?.currentSection}
           />
           <SidebarItem
-            icon={<IoSettingsSharp />}
+            icon={<RiSettingsLine />}
             text="Setting"
             onClick={handlesetting}
             isExpanded={isExpanded}
             currentSection={sidebarstate?.currentSection}
           />
           <SidebarItem
-            icon={<VscSignOut />}
+            icon={<FiLogOut />}
             text="Logout"
             onClick={logout}
             isExpanded={isExpanded}
