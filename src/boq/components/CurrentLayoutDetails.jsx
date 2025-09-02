@@ -11,7 +11,7 @@ function CurrentLayoutDetails({ onClose }) {
       <div className="fixed inset-0 bg-[#000]/30 flex justify-center items-center">
         <div className="max-w-xl w-full max-h-[80vh] overflow-y-auto   flex rounded-lg font-Poppins relative gradient-scrollbar">
           {/* <div className="bg-[#fff]/10 backdrop-blur-md flex-1 flex items-start justify-center pt-3 rounded-l-lg sticky left-0 top-0"> */}
-          <button onClick={onClose} className="absolute right-0 top-0">
+          <button onClick={onClose} className="absolute right-2 top-2">
             <IoIosCloseCircle color="#374A75" size={30} />
           </button>
           {/* </div> */}

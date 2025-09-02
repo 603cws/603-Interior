@@ -38,7 +38,7 @@ const QnaPopup = ({ onClose, onSubmit }) => {
         { value: "yes", label: "Yes" },
         { value: "no", label: "No" },
       ],
-      ImageUrl: "/images/Chat-bot.gif",
+      ImageUrl: "/images/Flooringquestion.gif",
     },
   ];
 

@@ -139,7 +139,7 @@ function Plans({
                           {plan.title}
                         </h2>
 
-                        <ul className="xl:space-y-2 text-sm">
+                        <ul className="lg:space-y-1 xl:space-y-2 text-sm">
                           {plan.bullets.map((bullet, i) => (
                             <li key={i} className="flex items-center xl:gap-2 ">
                               {/* <img
@@ -162,14 +162,14 @@ function Plans({
                         <button
                           // onClick={() => setSelectedPlan(plan.planKey)}
                           onClick={() => handlePlanSelect(plan.planKey)}
-                          className="bg-[#75A2BE] text-[#fff] px-4 py-2 mb-1 rounded-md font-semibold border border-[#000] hover:bg-gray-200 transition hover:text-[#374A75]"
+                          className="bg-[#75A2BE] text-[#fff] px-4 py-2 lg:mb-3 mb-1 rounded-md font-semibold border border-[#000] hover:bg-gray-200 transition hover:text-[#374A75]"
                         >
                           Get {plan.planKey}
                         </button>
                       </div>
                     </div>
 
-                    <div className="flex-1 px-5 xl:py-7 relative">
+                    <div className="flex-1 px-5 lg:py-4 xl:py-7 relative">
                       {!imageLoaded && (
                         <div className="w-full h-52 xl:h-full rounded-3xl bg-gray-300" />
                       )}
@@ -182,7 +182,7 @@ function Plans({
                         src={plan.image}
                         alt={plan.title}
                         loading="lazy"
-                        className={`w-full h-52 xl:h-full object-cover rounded-3xl absolute top-0 left-0 ${
+                        className={`w-full lg:h-48 h-52 lg:mt-3 xl:mt-0 xl:h-full object-cover rounded-3xl absolute top-0 left-0 ${
                           imageLoaded ? "relative" : "invisible"
                         }`}
                       />

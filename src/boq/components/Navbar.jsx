@@ -1039,7 +1039,7 @@ function Navbar({
             Layout
           </button>
         </div> */}
-            <div className="w-10/12  py-2.5">
+            <div className="w-10/12 py-2.5">
               <div className="relative h-5 bg-[#385682] rounded-sm">
                 <div
                   className="absolute h-full bg-[#85AED2] rounded-sm"
@@ -1072,31 +1072,40 @@ function Navbar({
             {mobileDropDown && (
               <div className="absolute z-20 translate-y-[60%] right-0 transform transition-all duration-700 ease-in-out opacity-100 scale-100">
                 {/* <div className="absolute z-20 translate-y-[60%] translate-x-[60%] transform transition-transform ease-in-out duration-700 "> */}
-                <ul className="text-[#212B36] bg-[#385682] bg-opacity-90 m-3 p-2 text-start">
+                <ul className="bg-white text-[#374A75] rounded-md m-3 py-6 px-4 text-center border">
                   {/* <li className="hover:px-2 hover:bg-white hover:text-[#1A3A36] mb-2 px-2">
                 view boq{" "}
               </li> */}
                   <li
                     // onClick={handleGoTOlayout}
                     onClick={() => setIslayoutWarning((prev) => !prev)}
-                    className="hover:px-2 hover:bg-white hover:text-[#1A3A36] mb-2 py-1 px-2 rounded-lg cursor-pointer"
+                    className="hover:px-2 hover:bg-[#334A78] hover:text-white mb-0 py-2 px-2 cursor-pointer border border-[#CCCCCC]"
                   >
-                    Layout
+                    Go To Layout
                   </li>
                   <li
-                    onClick={() => setShowLayoutDetails(true)}
-                    className="hover:px-2 hover:bg-white hover:text-[#1A3A36] mb-2 py-1 px-2 rounded-lg cursor-pointer"
+                    onClick={() => {
+                      setShowLayoutDetails(true);
+                      setMobileDropDown(false);
+                    }}
+                    className="hover:px-2 hover:bg-white hover:text-[#1A3A36] mb-0 py-2 px-2 cursor-pointer border border-[#CCCCCC]"
                   >
                     Layout Details
                   </li>
                   <li
-                    onClick={handleDownload}
-                    className="hover:px-2 hover:bg-white hover:text-[#1A3A36] mb-2 py-1 px-2 rounded-lg cursor-pointer"
+                    onClick={() => {
+                      handleDownload();
+                      setMobileDropDown(false);
+                    }}
+                    className="hover:px-2 hover:bg-white hover:text-[#1A3A36] mb-0 py-2 px-2 cursor-pointer border border-[#CCCCCC]"
                   >
                     Download
                   </li>
-                  <li className=" hover:bg-white hover:text-[#1A3A36] mb-2 py-1 px-2 rounded-lg">
-                    <div className=" flex items-center" ref={dropdownRef}>
+                  <li className="hover:bg-white hover:text-[#1A3A36] mb-0 py-2 px-2 border border-[#CCCCCC]">
+                    <div
+                      className="flex items-center text-center justify-center ml-2"
+                      ref={dropdownRef}
+                    >
                       <button
                         // onClick={handleSave}
                         onClick={() => {
@@ -1107,6 +1116,7 @@ function Navbar({
                           setShowBoqPrompt(true);
                           setIsProfileCard(false);
                           setIsSaveBOQ(true);
+                          setMobileDropDown(false);
                         }}
                         // className="bg-white text-xs py-2 px-3 text-black rounded-l-full"
                       >
@@ -1116,6 +1126,7 @@ function Navbar({
                         onClick={() => {
                           fetchSavedBOQs();
                           setIsOpen(!isOpen);
+                          // setMobileDropDown(false);
                         }}
                         // className="bg-white px-3 py-2 border-l border-black flex items-center rounded-r-full"
                       >
@@ -1123,7 +1134,7 @@ function Navbar({
                       </button>
 
                       {isOpen && (
-                        <ul className="absolute left-0 -bottom-1/3 min-w-[100px] mt-2 w-auto text-xs bg-white rounded-lg shadow-md">
+                        <ul className="absolute left-0 top-0 min-w-[100px] mt-2 w-auto text-xs bg-white rounded-lg shadow-md">
                           <li className="px-4 py-3 grid grid-cols-[2fr_1fr] font-semibold bg-[#374A75] text-center text-white rounded-t-lg shadow-md">
                             <span className="text-left">Title</span>
                             <span className="text-center">Actions</span>

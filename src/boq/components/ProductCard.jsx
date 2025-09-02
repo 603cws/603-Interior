@@ -1,6 +1,5 @@
 import { useEffect, useState, useRef } from "react";
 import { useApp } from "../../Context/Context";
-import { CiSliderVertical } from "react-icons/ci";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaStar } from "react-icons/fa";
@@ -206,7 +205,12 @@ function ProductCard({
               onClick={() => setIsOpen((prev) => !prev)}
             >
               <span className="hidden lg:block">Filter By Plan</span>
-              <CiSliderVertical className="text-[#334A78]" size={20} />
+              <img
+                src="/images/boq/filter.png"
+                alt="Filter"
+                className="w-4 h-4"
+              />
+              {/* <CiSliderVertical className="text-[#334A78]" size={20} /> */}
             </button>
 
             {/* Dropdown menu */}
