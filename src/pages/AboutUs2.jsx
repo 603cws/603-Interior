@@ -11,35 +11,35 @@ const services = [
     title: "Workspace Layout Planning",
     description:
       "Smart, ergonomic designs that enhance productivity and brand presence.",
-    image: "../images/about-us/Vector.png",
-    hoveredImage: "/images/s1.png",
+    image: "/images/about-us/section 2/N1.png",
+    hoveredImage: "/images/about-us/section 2/s1.png",
   },
   {
     title: "Premium Office Furniture",
     description:
       "Bespoke desks, seating, and storage crafted for elegance and comfort.",
-    image: "../images/about-us/Vector-1.png",
-    hoveredImage: "/images/s1.png",
+    image: "/images/about-us/section 2/N2.png",
+    hoveredImage: "/images/about-us/section 2/s2.png",
   },
   {
     title: "Signature Décor & Lighting",
     description:
       "Statement pieces and ambiance solutions that elevate the workspace.",
-    image: "../images/about-us/Vector-2.png",
-    hoveredImage: "/images/s1.png",
+    image: "/images/about-us/section 2/N3.png",
+    hoveredImage: "/images/about-us/section 2/s3.png",
   },
   {
     title: "Complete Project Development",
     description:
       "From concept to final installation, we manage it all seamlessly.",
-    image: "../images/about-us/Vector-3.png",
-    hoveredImage: "/images/s1.png",
+    image: "/images/about-us/section 2/N4.png",
+    hoveredImage: "/images/about-us/section 2/s4.png",
   },
   {
     title: "Custom & Turnkey Solutions",
     description: "Ready-to-use spaces tailored to your unique business needs.",
-    image: "../images/about-us/Vector-4.png",
-    hoveredImage: "/images/s1.png",
+    image: "/images/about-us/section 2/N5.png",
+    hoveredImage: "/images/about-us/section 2/s5.png",
   },
 ];
 const work_stages = [
@@ -97,7 +97,7 @@ function AboutUs() {
             </button>
           </div>
           <div className=" xl:py-10 xl:pl-10 flex-1">
-            <img src="/images/AboutusHero.webp" alt="" />
+            <img src="/images/aboutusHero.webp" alt="" />
             {/* <img src="/images/about-us/about-us-hero.png" alt="" /> */}
           </div>
         </div>
