@@ -5,6 +5,8 @@ import Footer from "../common-components/Footer";
 import LandingNavbar from "../common-components/LandingNavbar";
 import { useNavigate } from "react-router-dom";
 import ContactUsPopup from "./ContactUsPopup";
+import { motion } from "framer-motion";
+import { AnimatedButton } from "../common-components/animated-button";
 
 const services = [
   {
@@ -76,7 +78,7 @@ function AboutUs() {
     <>
       <LandingNavbar />
       <section className="mt-10 xl:mt-0">
-        <div className=" lg:container px-4 flex flex-col gap-6 lg:gap-0 lg:flex-row justify-between items-center ">
+        <div className=" md:container px-4 flex flex-col gap-6 lg:gap-0 lg:flex-row justify-between items-center ">
           <div className=" text-[#304778] flex flex-col justify-center items-center lg:items-start text-center lg:text-start gap-5 flex-1">
             {/* <h4 className="font-TimesNewRoman italic font-bold text-4xl capitalize tracking-wider leading-[50px]">
               Creating Workspaces <br /> that inspires
@@ -89,17 +91,41 @@ function AboutUs() {
               stylish, and perfectly
               <br /> tailored to their needs.
             </p>
-            <button
+            {/* <button
               onClick={() => navigate("/layout")}
               className="w-fit  font-Georgia bg-gradient-to-r from-[#75A2BE] to-[#334A78]  border border-[#fff] tracking-wider px-5 py-2.5 rounded capitalize mt-7  hover:scale-105 text-white transition duration-500 ease-in-out"
             >
               start your layout
-            </button>
+            </button> */}
+            <AnimatedButton
+              onClick={() => navigate("/Layout")}
+              className="!bg-[#3A5D7B] text-white capitalize font-Georgia mt-7 text-lg"
+              variant="default"
+              size="lg"
+              // glow={true}
+              textEffect="shimmer"
+              rounded="custom"
+              asChild={false}
+              hideAnimations={false}
+              shimmerColor="#fff"
+              shimmerSize="0.1em"
+              shimmerDuration="3s"
+              borderRadius="6px"
+              background="rgba(48, 71, 120, 1)"
+              hovereBackground="linear-gradient(90deg,rgba(85,132,182,1)  0%,  rgba(117,162,190,1) 100%)"
+            >
+              Start Your Layout
+            </AnimatedButton>
           </div>
-          <div className=" xl:py-10 xl:pl-10 flex-1">
+          <motion.div
+            initial={{ x: 300, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            transition={{ duration: 1, ease: "easeOut" }}
+            className=" xl:py-10 xl:pl-10 flex-1"
+          >
             <img src="/images/aboutusHero.webp" alt="" />
             {/* <img src="/images/about-us/about-us-hero.png" alt="" /> */}
-          </div>
+          </motion.div>
         </div>
       </section>
 

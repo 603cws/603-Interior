@@ -223,7 +223,7 @@ function BookAppointment({ onClose, isdashboardbooking = false }) {
           </div>
         )}
         <h2
-          className={`font-semibold text-sm md:text-lg text-[#000] capitalize border-b-2 border-[#CCCCCC] ${
+          className={`font-semibold text-sm md:text-lg text-[#000] capitalize border-b-2 border-[#CCCCCC] hidden lg:block ${
             isdashboardbooking && "px-3 py-3"
           } `}
         >
@@ -231,7 +231,7 @@ function BookAppointment({ onClose, isdashboardbooking = false }) {
         </h2>
         <div
           className={`flex justify-center  items-center ${
-            isdashboardbooking && "overflow-auto md:h-[80vh] scrollbar-hide"
+            isdashboardbooking && "overflow-auto md:h-[90vh] scrollbar-hide"
           }`}
         >
           {!isappointmentbooked ? (

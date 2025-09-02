@@ -94,7 +94,7 @@ function Contactus() {
     <>
       <LandingNavbar />
       <div className="flex flex-col md:flex-row gap-6 mb-10 px-4 md:px-0">
-        <div className="md:w-[40%] md:pl-6 lg:pl-12 self-center lg:space-y-10">
+        <div className="md:w-[40%] md:pl-6 lg:pl-12 self-center lg:space-y-10 pt-5 md:pt-0">
           <h1 className="font-TimesNewRoman italic font-bold text-2xl xl:text-5xl xl:leading-[59px] xl:tracking-[0.3px] text-[#304778]">
             Get in Touch With Us
           </h1>
@@ -123,11 +123,11 @@ function Contactus() {
             lg:flex-row-reverse lg:justify-center lg:items-center  gap-10 h-full 3xl:h-full relative transform -translate-y-1/6"
           >
             <div className="lg:relative lg:flex-1 lg:h-full  3xl:h-[720px]">
-              <div className="max-w-2xl bg-[#304778] text-white lg:absolute lg:-top-1/4">
+              <div className="max-w-2xl bg-[#304778] text-white lg:absolute lg:-top-[20%] xl:-top-1/4">
                 <div className="px-4 py-10 rounded-3xl pb-5 ">
                   {/* text */}
-                  <div className="[&_p]:font-Georgia  font-semibold py-3">
-                    <h2 className="font-Georgia italic text-3xl  xl:text-5xl  pb-4">
+                  <div className="[&_p]:font-Georgia py-3">
+                    <h2 className="font-Georgia text-3xl  xl:text-5xl  pb-4">
                       Let’s Connect with us!
                     </h2>
                     <p className="text-xs xl:text-[14.9px] leading-6 text-[#F8F9FA] text-opacity-80">
@@ -138,13 +138,13 @@ function Contactus() {
                     </p>
                   </div>
                   {/* form part */}
-                  <div className="font-Poppins pl-2">
+                  <div className="font-Georgia">
                     <form
                       action=""
-                      className="font-semibold  [&_label]:text-[#F8F9FA] [&_input]:text-[#DBDBDB] [&_input]:bg-[#304778] [&_textarea]:bg-[#304778] [&_input]:border-[#DEE2E6] [&_input]:border-opacity-40 [&_textarea]:border-[#DEE2E6] [&_textarea]:border-opacity-40 font-Georgia"
+                      className=" [&_label]:text-[#F8F9FA] [&_input]:text-[#DBDBDB] [&_input]:bg-[#304778] [&_textarea]:bg-[#304778] [&_input]:border-[#DEE2E6] [&_input]:border-opacity-40 [&_textarea]:border-[#DEE2E6] [&_textarea]:border-opacity-40 font-Georgia text-[15px]"
                     >
                       <div className="mb-2 flex flex-col gap-2">
-                        <label className="font-semibold ">Full Name*</label>
+                        <label className="">Full Name*</label>
                         <input
                           type="text"
                           name="name"
@@ -160,7 +160,7 @@ function Contactus() {
                         <input
                           type="email"
                           name="email"
-                          className="font-medium w-full rounded-lg p-2 mb-2 border  focus:outline-none "
+                          className="font-medium w-full p-2 mb-2 border  focus:outline-none "
                           placeholder="example@gmail.com"
                           value={form.email}
                           onChange={handleChange}
@@ -172,7 +172,7 @@ function Contactus() {
                         <input
                           type="text"
                           name="companyName"
-                          className="w-full rounded-lg p-2 mb-2 border focus:outline-none  font-medium"
+                          className="w-full p-2 mb-2 border focus:outline-none  font-medium"
                           required
                           value={form.companyName}
                           onChange={handleChange}
@@ -180,13 +180,11 @@ function Contactus() {
                         />
                       </div>
                       <div className="mb-2 flex flex-col gap-2">
-                        <label className="font-semibold mt-2">
-                          Mobile Number*
-                        </label>
+                        <label className=" mt-2">Mobile Number*</label>
                         <input
                           type="Number"
                           name="mobileNo"
-                          className="w-full rounded-lg p-2 mb-2 focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none border font-medium"
+                          className="w-full p-2 mb-2 focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none border font-medium"
                           placeholder="Enter Mobile No"
                           value={form.mobileNo}
                           onChange={handleChange}
@@ -199,7 +197,7 @@ function Contactus() {
                         <textarea
                           rows="4"
                           name="message"
-                          className="w-full rounded-lg p-2 mb-2 border border-[#D1D5DB] focus:outline-none  font-medium"
+                          className="w-full p-2 mb-2 border border-[#D1D5DB] focus:outline-none  font-medium"
                           placeholder="Write your messages..."
                           value={form.message}
                           onChange={handleChange}
@@ -208,7 +206,7 @@ function Contactus() {
                         </textarea>
                       </div>
                       <button
-                        className="px-10 py-4 font-Poppins rounded-3xl  border-white border  mb-2 text-white"
+                        className="px-10 py-4 font-Georgia rounded-3xl  border-white border  mb-2 text-white"
                         onClick={handleformsubmit}
                         disabled={isSubmitting}
                       >
@@ -254,16 +252,16 @@ function Contactus() {
                 and pioneer new paths.
               </p>
               <div className="flex gap-3 items-center [&_h3]:text-[#304778] [&_h4]:text-[#304778] [&_h3]:text-[19.5px] [&_p]:text-[#525B5B] [&_p]:text-[15px]">
-                <div>
+                <div className="space-y-2.5">
                   <h3>Working Mail</h3>
                   <p className="">sales@603thecoworkingspace.com</p>
                 </div>
-                <div>
+                <div className="space-y-2.5">
                   <h3>Office Phone</h3>
                   <p>+91-9136036603</p>
                 </div>
               </div>
-              <div>
+              <div className="space-y-2.5">
                 <h4 className="text-[#304778] text-[19.5px] ">
                   Office Address
                 </h4>
@@ -271,12 +269,13 @@ function Contactus() {
                   Makhija Arcade, 35th Rd, Khar West, Mumbai Maharashtra 400052
                 </p>
               </div>
-              <div className="">
+              <div className="!mt-10">
                 <iframe
                   src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3584.3835340214505!2d72.8325178749771!3d19.065149682137243!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be7c91140262913%3A0xc53b6407e4d39f76!2sMakhija%20Arcade%2C%2035th%20Rd%2C%20Khar%2C%20Khar%20West%2C%20Mumbai%2C%20Maharashtra%20400052!5e1!3m2!1sen!2sin!4v1755581526758!5m2!1sen!2sin"
                   width="500"
                   height="300"
                   // style="border:0;"
+                  style={{ border: "1.5px solid" }}
                   allowfullscreen=""
                   loading="lazy"
                   referrerpolicy="no-referrer-when-downgrade"
@@ -293,11 +292,11 @@ function Contactus() {
               <div className="max-w-2xl bg-[#304778] text-white ">
                 <div className="px-4 pt-10 pb-4 rounded-3xl ">
                   {/* text */}
-                  <div className="[&_p]:font-Poppins  font-semibold py-3">
+                  <div className="[&_p]:font-Georgia  font-semibold py-3">
                     <h2 className="font-Georgia font-medium  text-4xl  pb-4">
                       Let’s Connect with us!
                     </h2>
-                    <p className="text-base font-Poppins text-[#F8F9FA] text-opacity-80">
+                    <p className="text-base font-Georgia text-[#F8F9FA] text-opacity-80">
                       We believe in collaboration and value your input
                       throughout the design process. We encourage clients to
                       actively participate in discussions,share their ideas,
@@ -305,7 +304,7 @@ function Contactus() {
                     </p>
                   </div>
                   {/* form part */}
-                  <div className="font-Poppins ">
+                  <div className="font-Georgia ">
                     <form
                       action=""
                       className="font-semibold  [&_label]:text-[#F8F9FA] [&_input]:text-[#DBDBDB] [&_input]:bg-[#304778] [&_textarea]:bg-[#304778] [&_input]:border-[#DEE2E6] [&_input]:border-opacity-40 [&_textarea]:border-[#DEE2E6] [&_textarea]:border-opacity-40 "
@@ -375,7 +374,7 @@ function Contactus() {
                         </textarea>
                       </div>
                       <button
-                        className="px-10 py-4 font-Poppins rounded-3xl  border-white border  mb-2 text-white"
+                        className="px-10 py-4 font-Georgia rounded-3xl  border-white border  mb-2 text-white"
                         onClick={handleformsubmit}
                         disabled={isSubmitting}
                       >

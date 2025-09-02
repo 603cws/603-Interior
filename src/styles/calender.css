@@ -65,3 +65,12 @@
 .react-calendar__tile:nth-child(7n-1) {
   color: #68b2dc;
 }
+.react-calendar__month-view__days {
+  display: grid !important;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 6px; /* space between days */
+}
+
+.react-calendar__month-view__days__day {
+  width: 100%; /* let grid handle sizing */
+}

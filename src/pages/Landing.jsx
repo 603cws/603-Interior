@@ -95,6 +95,17 @@ function Landing() {
         { right: "25%", opacity: 1, duration: 2 },
         "<"
       );
+      tl.fromTo(
+        containerRef.current,
+        { borderWidth: 0, borderColor: "transparent", borderStyle: "solid" },
+        {
+          borderWidth: 1,
+          borderColor: "#304778",
+          borderRadius: 20,
+          duration: 2,
+          ease: "power2.out",
+        }
+      );
 
       // 7️⃣ Show top middle table (upper-table.png)
       tl.fromTo(
@@ -116,18 +127,6 @@ function Landing() {
         ".side-table",
         { right: "-100%", opacity: 0 },
         { right: "0%", opacity: 1, duration: 2 },
-        "<"
-      );
-      tl.fromTo(
-        containerRef.current,
-        { borderWidth: 0, borderColor: "transparent", borderStyle: "solid" },
-        {
-          borderWidth: 1,
-          borderColor: "#304778",
-          borderRadius: 20,
-          duration: 2,
-          ease: "power2.out",
-        },
         "<"
       );
 
@@ -329,7 +328,7 @@ function Landing() {
           {/* Down table */}
           <img
             src="/images/home/down-table.png"
-            className="absolute bottom-0 max-w-sm 2xl:max-w-lg down-table "
+            className="absolute bottom-0 max-w-sm xl:max-w-2xl w-full down-table h-16"
           />
 
           {/* Side middle table */}

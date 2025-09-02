@@ -9,6 +9,7 @@ import UnusedAreaWarning from "./UnusedAreaWarning";
 import { PiStarFourFill } from "react-icons/pi";
 import AlertBox from "../../boq/components/AlertBox";
 import EnterAreaModal from "./EnterAreaModal";
+import { AnimatedButton } from "../../common-components/animated-button";
 
 // function Navbar({ totalArea, setTotalArea, MIN_AREA, MAX_AREA, resetAll }) {
 function Navbar({
@@ -355,7 +356,7 @@ function Navbar({
               square feet.
             </div>
           )}
-          <button
+          {/* <button
             onClick={generateBOQclick}
             className="generateBoq glow-on-hover relative flex items-center w-36 h-10 px-4 py-2 bg-[#212B36] border border-[#1A8FE3] text-white overflow-hidden group rounded-[4px] font-Poppins text-xs hover:bg-gradient-to-b from-[#3F56EA] to-[#7c80f3] hover:scale-105 transition-transform duration-300 ease-in-out"
           >
@@ -381,7 +382,26 @@ function Navbar({
                 Create BOQ
               </span>
             </div>
-          </button>
+          </button> */}
+          <AnimatedButton
+            onClick={generateBOQclick}
+            className="!bg-[#3A5D7B] text-white capitalize font-Georgia font-semibold tracking-wider hover:shadow-[10px_10px_20px_rgba(0,0,0,0.8)] transition-shadow"
+            variant="default"
+            size="lg"
+            // glow={true}
+            textEffect="shimmer"
+            rounded="custom"
+            asChild={false}
+            hideAnimations={false}
+            shimmerColor="#fff"
+            shimmerSize="0.15em"
+            shimmerDuration="3s"
+            borderRadius="10px"
+            background="rgba(48, 71, 120, 1)"
+            hovereBackground="linear-gradient(90deg,rgba(85,132,182,1)  0%,  rgba(117,162,190,1) 100%)"
+          >
+            Create BOQ
+          </AnimatedButton>
 
           {isAuthenticated && (
             <button

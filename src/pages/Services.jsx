@@ -7,6 +7,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
 import "swiper/css";
 import { AnimatedButton } from "../common-components/animated-button";
+import { motion } from "framer-motion";
 const steps = [
   {
     imagePath: "/images/plan.png",
@@ -110,7 +111,7 @@ export default Services;
 function OfficeLayoutSection() {
   const navigate = useNavigate();
   return (
-    <div className=" flex flex-col gap-6 lg:gap-0 lg:flex-row justify-between items-center my-10 lg:container lg:mx-auto text-center lg:text-start">
+    <div className=" flex flex-col gap-6 lg:gap-0 lg:flex-row justify-between items-center my-10 md:container lg:mx-auto text-center lg:text-start">
       {/* Left Section */}
       <div>
         <h2 className="font-TimesNewRoman italic text-3xl xl:text-[44px] xl:leading-[53px] tracking-[0.3px] font-bold text-[#334A78] capitalize">
@@ -150,13 +151,25 @@ function OfficeLayoutSection() {
       </div>
 
       {/* Right Section - Image */}
-      <div className="flex justify-center">
+      {/* <div className="flex justify-center">
         <img
           src="/images/serviceHero.webp"
           alt="Office Layout"
           className="w-full  lg:max-w-xl xl:max-w-2xl"
         />
-      </div>
+      </div> */}
+      <motion.div
+        className="flex justify-center"
+        initial={{ x: 300, opacity: 0 }}
+        animate={{ x: 0, opacity: 1 }}
+        transition={{ duration: 1, ease: "easeOut" }}
+      >
+        <img
+          src="/images/serviceHero.webp"
+          alt="Office Layout"
+          className="w-full lg:max-w-xl xl:max-w-2xl"
+        />
+      </motion.div>
     </div>
   );
 }
