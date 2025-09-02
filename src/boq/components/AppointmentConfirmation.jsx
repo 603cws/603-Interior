@@ -12,7 +12,7 @@ function AppointmentConfirmation({ onClose, time }) {
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-30 flex justify-center items-center">
-      <div className="max-w-sm md:max-w-2xl bg-white rounded-3xl border-2 p-7 font-Poppins relative">
+      <div className="max-w-sm md:max-w-2xl bg-white rounded-lg border-2 p-7 font-Poppins relative">
         <div className="absolute right-5 top-5">
           <IoMdClose onClick={onClose} size={20} className="cursor-pointer" />
         </div>
@@ -23,11 +23,11 @@ function AppointmentConfirmation({ onClose, time }) {
           />
         </div>
         <div className="my-7 flex flex-col gap-4">
-          <h1 className=" md:text-lg text-center font-bold">
+          <h1 className=" md:text-lg text-center font-semibold">
             ✨ Thank you! Your appointment is confirmed. ✨
           </h1>
-          <div className="flex items-center gap-4 px-3 py-2 border-2 border-[#0BA1A1] rounded-3xl">
-            <span className="bg-[#D6FFFF] px-3 py-1.5 rounded-3xl text-xs">
+          <div className="flex items-center gap-4 p-1 border-2 border-[#374A75] rounded-sm">
+            <span className="bg-[#D6EBFF] px-3 py-1.5 rounded-sm text-xs">
               Email sent
             </span>
             <p className="text-xs">
@@ -35,7 +35,7 @@ function AppointmentConfirmation({ onClose, time }) {
             </p>
           </div>
         </div>
-        <div className="border-2 rounded-2xl p-5">
+        <div className="border-2 rounded-lg p-5">
           <div className="flex justify-between items-center border-b-2 py-2">
             <h3 className="text-sm font-semibold">
               {accountHolder.companyName}
@@ -54,8 +54,8 @@ function AppointmentConfirmation({ onClose, time }) {
               />
             </div>
           </div>
-          <div className="flex flex-col gap py-5">
-            <div className="flex gap-3 items-center border-b-2 py-1">
+          <div className="flex flex-col gap-4 py-4">
+            <div className="flex gap-3 items-center py-1">
               {/* <img
                 src="/images/icons/time-icon.png"
                 alt=""
@@ -65,7 +65,7 @@ function AppointmentConfirmation({ onClose, time }) {
               <h4 className="font-semibold text-xs">Time</h4>
               <p className="text-xs text-[#757575]">{time}</p>
             </div>
-            <div className="flex gap-3 items-center border-b-2 py-1">
+            <div className="flex gap-3 items-center border-t-2 border-b-2 py-5">
               {/* <img
                 src="/images/icons/email-icon.png"
                 alt=""
