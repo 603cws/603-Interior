@@ -49,7 +49,7 @@ function DashboardView({
     bms: "BMS Room",
     server: "Server Room",
     reception: "Reception",
-    lounge: "Lounge/Pantry",
+    lounge: "Lounge",
     fitness: "Fitness Zone",
     sales: "Sales Team",
     phoneBooth: "Phone Booth",
@@ -67,7 +67,7 @@ function DashboardView({
     other: "Other", // Add new category here
     // maleWashroom: "Male Washroom",
     // femaleWashroom: "Female Washroom",
-    washrooms: "Washrooms",
+    washrooms: "Wash rooms",
   };
   //   "Linear Workspace": "#62897E",
   //   "L-Type Workspace": "#3F5855",

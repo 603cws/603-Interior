@@ -29,7 +29,7 @@ function Contactus() {
   //   "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d19404.103720641866!2d72.8237966008724!3d19.057896067431624!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be7c91140262913%3A0xc53b6407e4d39f76!2sMakhija%20Arcade%2C%2035th%20Rd%2C%20Khar%2C%20Khar%20West%2C%20Mumbai%2C%20Maharashtra%20400052!5e0!3m2!1sen!2sin!4v1737115916330!5m2!1sen!2sin"
   // );
 
-  const background = "/images/contact-us/contactpage.png";
+  const background = "/images/contact-us/contactpage.webp";
 
   const handleformsubmit = async (e) => {
     e.preventDefault();
@@ -124,7 +124,7 @@ function Contactus() {
           >
             <div className="lg:relative lg:flex-1 lg:h-full  3xl:h-[720px]">
               <div className="max-w-2xl bg-[#304778] text-white lg:absolute lg:-top-[20%] xl:-top-1/4">
-                <div className="px-4 py-10 rounded-3xl pb-5 ">
+                <div className="px-8 py-10 rounded-3xl pb-5 ">
                   {/* text */}
                   <div className="[&_p]:font-Georgia py-3">
                     <h2 className="font-Georgia text-3xl  xl:text-5xl  pb-4">

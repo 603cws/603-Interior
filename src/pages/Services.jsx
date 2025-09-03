@@ -17,7 +17,7 @@ const steps = [
   {
     imagePath: "/images/featureicon2.png",
     title: "Select",
-    description: "Choose your Layout ,Products and needs",
+    description: "Choose your Layout, Products and needs",
   },
   {
     imagePath: "/images/build.png",

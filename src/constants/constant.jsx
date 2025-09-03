@@ -23,8 +23,8 @@ export const colors = {
   "BMS Room": "#2a5c82",
   "Server Room": "#2e597c",
   Reception: "#005670",
-  "Lounge/Pantry": "#00627a",
-  "Video Recording Room": "#006d77",
+  Lounge: "#00627a",
+  "Video Recording Room": "#52b7d1",
   "Sales Team": "#00798a",
   "Phone Booth": "#008499",
   "Discussion Room": "#0091a4",
@@ -39,5 +39,5 @@ export const colors = {
   "Breakout Room": "#5dd1c1",
   "Available Space": "#2A5C7A",
   Other: "#7ed6d4",
-  Washrooms: "#a3e4e0",
+  "Wash rooms": "#45bed1",
 };

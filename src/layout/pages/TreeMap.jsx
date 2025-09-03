@@ -26,7 +26,7 @@ const fullNames = {
   bms: "BMS Room",
   server: "Server Room",
   reception: "Reception",
-  lounge: "Lounge/Pantry",
+  lounge: "Lounge",
   fitness: "Fitness Zone",
   sales: "Sales Team",
   phoneBooth: "Phone Booth",
@@ -44,7 +44,7 @@ const fullNames = {
   other: "Other", // Add new category here
   // maleWashroom: "Male Washroom",
   // femaleWashroom: "Female Washroom",
-  washrooms: "Washrooms",
+  washrooms: "Wash rooms",
 };
 
 const TreeMap = ({ totalArea, areaQuantities, areaValues }) => {
@@ -375,9 +375,11 @@ const TreeMap = ({ totalArea, areaQuantities, areaValues }) => {
         mounted: (ctx) =>
           requestAnimationFrame(() => splitTreemapLabels(ctx.el)),
         // rendered fires after animations; safest place
-        rendered: (ctx) => splitTreemapLabels(ctx.el),
+        rendered: (ctx) =>
+          requestAnimationFrame(() => splitTreemapLabels(ctx.el)),
         // if your React state causes chart updates, re-split after each update
-        updated: (ctx) => splitTreemapLabels(ctx.el),
+        updated: (ctx) =>
+          requestAnimationFrame(() => splitTreemapLabels(ctx.el)),
       },
     },
     title: {
