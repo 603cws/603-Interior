@@ -81,7 +81,7 @@ function Services() {
     <div className="">
       <LandingNavbar />
       <OfficeLayoutSection />
-      <div className="flex flex-col gap-6 md:gap-0 md:flex-row items-center justify-between  lg:p-16 lg:container lg:mx-auto lg:px-12 px-4">
+      <div className="flex flex-col gap-6 md:gap-0 md:flex-row items-center justify-between  lg:p-16 lg:container xl:max-w-7xl xl:px-0 lg:mx-auto lg:px-12 px-4">
         {InfoCardDetails.map((info) => (
           <InfoCard
             title={info?.title}
@@ -91,7 +91,12 @@ function Services() {
           />
         ))}
       </div>
-      <div className="lg:container lg:mx-auto lg:px-12 px-4">
+      <div className="lg:container xl:max-w-7xl xl:px-0 lg:mx-auto lg:px-12 px-4">
+        <FeaturesSection />
+        <FeatureDesignSection />
+        <DeliverServices />
+      </div>
+      {/* <div className="lg:container lg:mx-auto lg:px-12 px-4">
         <FeaturesSection />
       </div>
       <div className="lg:container lg:mx-auto lg:px-12 px-4">
@@ -99,7 +104,7 @@ function Services() {
       </div>
       <div className="lg:container lg:mx-auto lg:px-12 px-4">
         <FeatureDesignSection />
-      </div>
+      </div> */}
       <GetInTouchSection />
       <Footer />
     </div>
@@ -111,7 +116,7 @@ export default Services;
 function OfficeLayoutSection() {
   const navigate = useNavigate();
   return (
-    <div className=" flex flex-col gap-6 lg:gap-0 lg:flex-row justify-between items-center my-10 md:container lg:mx-auto text-center lg:text-start">
+    <div className=" flex flex-col gap-6 lg:gap-0 lg:flex-row justify-between items-center my-10 md:container  xl:max-w-7xl xl:px-0 lg:mx-auto text-center lg:text-start">
       {/* Left Section */}
       <div>
         <h2 className="font-TimesNewRoman italic text-3xl xl:text-[44px] xl:leading-[53px] tracking-[0.3px] font-bold text-[#334A78] capitalize">
@@ -176,14 +181,14 @@ function OfficeLayoutSection() {
 
 function InfoCard({ imgpath, title, description }) {
   return (
-    <div className="font-Georgia max-w-sm px-8 space-y-3 flex flex-col justify-center items-center">
+    <div className="font-Georgia max-w-sm px-8 space-y-3 flex flex-col justify-center items-center xl:px-0">
       <div className="">
         <img src={imgpath} alt="service" className="w-24 h-24" />
       </div>
-      <h2 className="text-[#232323] font-bold italic text-lg lg:text-2xl tracking-[0.3px]">
+      <h2 className="text-[#232323] font-bold  text-lg lg:text-2xl tracking-[0.3px]">
         {title}
       </h2>
-      <p className="text-center text-[#777] text-xs lg:text-sm  tracking-[0.3px]">
+      <p className="text-center text-[#777] text-xs lg:text-sm xl:text-base  tracking-[0.3px]">
         {description}
       </p>
     </div>
@@ -192,7 +197,7 @@ function InfoCard({ imgpath, title, description }) {
 
 function FeaturesSection() {
   return (
-    <div className="lg:py-16 lg:px-5 py-10">
+    <div className="lg:py-16 lg:px-5 py-10 xl:px-0">
       <HeadingSection>
         We Provide Everything for <br /> your Office Interior
       </HeadingSection>
@@ -226,7 +231,7 @@ function FeatureCard({ title, imgpath, hoveredImgPath }) {
             className="w-20 h-20"
           />
         </div>
-        <h3 className="text-center font-bold italic text-lg lg:text-xl text-[#232323] group-hover:text-white">
+        <h3 className="text-center font-bold  text-lg lg:text-xl text-[#232323] group-hover:text-white">
           {title}
         </h3>
       </div>
@@ -236,7 +241,7 @@ function FeatureCard({ title, imgpath, hoveredImgPath }) {
 
 function DeliverServices() {
   return (
-    <div className="lg:px-4 lg:py-16 space-y-4">
+    <div className="lg:px-4 lg:py-16 space-y-4 xl:px-0">
       <HeadingSection>How We Deliver Our Services</HeadingSection>
       <StepsSection />
     </div>
@@ -245,7 +250,7 @@ function DeliverServices() {
 
 function HeadingSection({ children }) {
   return (
-    <h2 className="text-center font-Georgia italic font-bold text-[#232323] text-xl lg:text-3xl xl:text-[42px] xl:leading-[53px] tracking-[0.3px]">
+    <h2 className="text-center font-Georgia  font-bold text-[#232323] text-xl lg:text-3xl xl:text-[42px] xl:leading-[53px] tracking-[0.3px]">
       {children}
     </h2>
   );
@@ -254,7 +259,7 @@ function HeadingSection({ children }) {
 function StepsSection() {
   return (
     <section className="bg-white lg:py-12">
-      <div className="lg:container lg:mx-auto lg:px-6 relative">
+      <div className=" relative">
         <div className="flex flex-col md:flex-row justify-between items-center md:space-x-10 space-y-10 md:space-y-0 relative">
           {/* {steps} */}
           {steps?.map((stepdata, index) => (
@@ -278,7 +283,7 @@ function Step({ imagePath, title, description, index }) {
       <div className="w-32 h-32 rounded-full border border-dashed border-gray-400 bg-white mx-auto flex items-center justify-center relative z-10">
         <img src={imagePath} alt="Plan" className="w-12 h-12" />
       </div>
-      <h3 className="mt-6 text-lg font-bold text-gray-800 italic">{title}</h3>
+      <h3 className="mt-6 text-lg font-bold text-gray-800 ">{title}</h3>
       <p className="text-gray-500 mt-2 text-sm lg:text-base">{description}</p>
       {/* Connector Line to Step 2 */}
       {(index === 0 || index === 1) && (
@@ -310,7 +315,7 @@ const featuredDesignImages = [
 function FeatureDesignSection() {
   const swiperRef = useRef(null);
   return (
-    <div className="lg:px-4 lg:py-16 py-6 space-y-10">
+    <div className="lg:px-4 lg:py-16 py-6 space-y-10 xl:px-0">
       <HeadingSection>Featured Designs</HeadingSection>
       {/* <div className="flex flex-col md:flex-row items-center gap-6 justify-between ">
         <div>
@@ -326,7 +331,7 @@ function FeatureDesignSection() {
           }}
           loop={true}
           slidesPerView={3}
-          className="relative pb-10 xl:pl-10"
+          className="relative pb-10 "
           breakpoints={{
             0: {
               slidesPerView: 1.02,

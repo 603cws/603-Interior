@@ -1,10 +1,6 @@
-import { IoIosMail } from "react-icons/io";
-import { FaInstagram, FaAngleUp } from "react-icons/fa";
+import { FaInstagram } from "react-icons/fa";
 import { RiTwitterXLine } from "react-icons/ri";
 import { FiFacebook, FiLinkedin } from "react-icons/fi";
-import { BsShop } from "react-icons/bs";
-import { FaLocationDot } from "react-icons/fa6";
-import { PiPhoneCallFill } from "react-icons/pi";
 import { supabase } from "../services/supabase";
 
 import { useNavigate } from "react-router-dom";
@@ -62,8 +58,8 @@ function Footer() {
       <div className="relative px-4 lg:container">
         <div className="lg:flex justify-stretch w-full mb-4 lg:mb-10">
           <div className="flex-1 mb-2 lg:mb-0">
-            <p className="text-2xl font-bold tracking-wide text-[#fff]">
-              Get more insights deliverd <br /> straight to your inbox
+            <p className="text-2xl font-bold font-TimesNewRoman tracking-wide text-[#fff]">
+              Get more insights delivered <br /> straight to your inbox
             </p>
           </div>
           <form
@@ -78,7 +74,7 @@ function Footer() {
               className="border-y-[1px] border-l-[1px] border-[#777777] w-full py-3.5 bg-transparent px-2 focus:outline-none focus:ring-0 text-[#fff]"
               name="subscribe-email"
             />
-            <button className="capitalize bg-[#EBEFF9] text-[#000000] text-nowrap py-3.5 border-y-[1px] border-r-[1px] border-[#777777] font-bold px-1 hover:bg-[#EBEFF9]/80">
+            <button className="capitalize bg-[#EBEFF9] text-[#000000] text-nowrap py-3.5 border-y-[1px] border-r-[1px] border-[#777777] font-bold px-2 lg:px-4 hover:bg-[#EBEFF9]/80">
               subscribe now
             </button>
           </form>
@@ -90,14 +86,14 @@ function Footer() {
             <img
               src="/logo/workved-logo.png"
               alt=""
-              className="max-w-48 xl:max-w-56"
+              className="max-w-48 xl:max-w-xs"
             />
           </div>
           {/* content */}
           {/* <div className="lg:flex flex-1 justify-around lg:border-l"> */}
           <div className="lg:border-r lg:px-2 xl:px-0">
             <div className="flex gap-16 capitalize text-[15px] text-[#fff] py-5">
-              <div className="flex justify-center items-start flex-1 border-t border-b lg:border-none py-5 lg:py-0">
+              <div className="flex justify-center items-start  flex-1 border-t border-b lg:border-none py-5 lg:py-0">
                 <ul className="flex flex-col gap-4 flex-1 tracking-wide list-none m-0 p-0">
                   <li
                     className="cursor-pointer"
@@ -182,7 +178,7 @@ function Footer() {
           </div>
           <div className="text-[#fff] flex-1 py-5 space-y-5 lg:px-2 xl:px-0">
             <h3 className="font-bold text-xl tracking-wide">Contact</h3>
-            <div className="text-[15px] tracking-wide space-y-1.5">
+            <div className="text-[15px] tracking-wide space-y-4">
               <div className="flex gap-5 items-center">
                 <a
                   href="tel:+919136036603"
@@ -197,16 +193,14 @@ function Footer() {
               </div>
               <div className="flex gap-5 items-center">
                 <a
-                  href="mailto:sales@603thecoworkingspace.com"
+                  href="mailto:partners@workved.com"
                   className="border border-[#fff]/40 hover:bg-[#fff]/10  h-9 w-9 flex justify-center items-center"
                 >
                   <MdEmail size={15} className="cursor-pointer" />
                 </a>
                 <div>
                   <p className="font-bold">Email Address</p>
-                  <p className="text-[#fff]/65">
-                    sales@603thecoworkingspace.com
-                  </p>
+                  <p className="text-[#fff]/65">partners@workved.com</p>
                 </div>
               </div>
               <div className="flex gap-5 items-center">
@@ -256,18 +250,18 @@ function Footer() {
             >
               <FiFacebook size={15} />
             </a>
-            <a
-              href=""
+            <span
+              // href="#"
               className="cursor-pointer flex justify-center items-center w-9 h-9 border border-[#fff]/40 hover:bg-[#fff]/40 p-0.5"
             >
               <RiTwitterXLine size={15} />
-            </a>
-            <a
-              href=""
+            </span>
+            <span
+              // href="#"
               className="cursor-pointer flex justify-center items-center w-9 h-9 border border-[#fff]/40 hover:bg-[#fff]/40 p-0.5"
             >
               <FiLinkedin size={15} />
-            </a>
+            </span>
           </div>
         </div>
       </div>

@@ -6,7 +6,7 @@ export const ServiceCard = ({ title, description, image, hoveredImage }) => {
     <div
       onMouseEnter={() => setIshovered(true)}
       onMouseLeave={() => setIshovered(false)}
-      className={`relative font-Georgia group border-2 border-black border-opacity-20 p-6 hover:shadow-md transition hover:bg-gradient-to-br from-[#334A78] to-[#68B2DC]`}
+      className={`relative font-Georgia group border-2 border-black border-opacity-20 px-6 py-6 xl:py-9  hover:shadow-md transition hover:bg-gradient-to-br from-[#334A78] to-[#68B2DC]`}
     >
       <span
         className={`w-2 h-2 absolute top-0 ${
@@ -44,7 +44,7 @@ export const ServiceCard = ({ title, description, image, hoveredImage }) => {
           />
         </div>
 
-        <h4 className="font-bold italic text-base text-black group-hover:text-[#fff] mb-2 transition-all duration-500 ease-in-out">
+        <h4 className="font-bold  text-base text-black group-hover:text-[#fff] mb-2 transition-all duration-500 ease-in-out">
           {title}
         </h4>
         <p className="text-sm text-black group-hover:text-[#fff] text-opacity-65 transition-all duration-500 ease-in-out">

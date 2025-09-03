@@ -78,7 +78,7 @@ function AboutUs() {
     <>
       <LandingNavbar />
       <section className="mt-10 xl:mt-0">
-        <div className=" md:container px-4 flex flex-col gap-6 lg:gap-0 lg:flex-row justify-between items-center ">
+        <div className=" md:container px-4 flex flex-col gap-6 lg:gap-0 lg:flex-row justify-between items-center xl:max-w-7xl xl:px-0">
           <div className=" text-[#304778] flex flex-col justify-center items-center lg:items-start text-center lg:text-start gap-5 flex-1">
             {/* <h4 className="font-TimesNewRoman italic font-bold text-4xl capitalize tracking-wider leading-[50px]">
               Creating Workspaces <br /> that inspires
@@ -130,10 +130,10 @@ function AboutUs() {
       </section>
 
       <section className="relative pt-20 lg:py-20 bg-[url('/images/about-us/about-us-bg.png')] bg-no-repeat bg-right-top bg-contain font-Georgia">
-        <div className="lg:container px-4">
+        <div className="lg:container px-4 xl:max-w-7xl xl:px-0">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 h-3/4">
             <div className="flex flex-col justify-center">
-              <h2 className="text-xl md:text-4xl font-bold italic text-black mb-4 font-Georgia">
+              <h2 className="text-xl md:text-4xl font-bold  text-black mb-4 font-Georgia">
                 Services We’re Providing
               </h2>
               <p className="text-black text-sm leading-relaxed font-Georgia mb-8">
@@ -151,7 +151,7 @@ function AboutUs() {
 
       <section>
         <div className="font-Georgia flex flex-col justify-center gap-2 items-center my-10 capitalize">
-          <h1 className="italic font-bold text-[#111827] text-3xl xl:text-[42px] leading-[52px]">
+          <h1 className=" font-bold text-[#111827] text-3xl xl:text-[42px] leading-[52px]">
             Our story of Growth
           </h1>
           <p className="text-[#4B5563] text-lg text-center">
@@ -161,16 +161,16 @@ function AboutUs() {
         <QuoteSection />
       </section>
 
-      <section className="relative py-16 lg:container px-4">
+      <section className="relative py-16 lg:container px-4 xl:max-w-7xl xl:px-0">
         <div className="flex items-center justify-center gap-4 mb-2">
           <span className="w-8 h-px bg-[#304778] mb-2"></span>
-          <h5 className="text-sm text-[#304778] font-bold italic uppercase font-Georgia">
+          <h5 className="text-sm text-[#304778] font-bold  uppercase font-Georgia">
             Work Stages
           </h5>
           <span className="w-8 h-px bg-[#304778] mb-2"></span>
         </div>
 
-        <h2 className="text-xl md:text-4xl font-bold italic mb-6 font-Georgia text-[#232323] text-center">
+        <h2 className="text-xl md:text-4xl font-bold  mb-6 font-Georgia text-[#232323] text-center">
           Best Solutions For Your Dream
         </h2>
         <p className="text-[#777777] mb-10 max-w-lg md:max-w-2xl mx-auto font-Georgia text-center">
@@ -194,7 +194,7 @@ function AboutUs() {
                   {stage.id}
                 </div>
               </div>
-              <h3 className="text-lg font-bold italic text-[#232323] font-Georgia mb-2">
+              <h3 className="text-lg font-bold  text-[#232323] font-Georgia mb-2">
                 {stage.title}
               </h3>
               <p className="text-sm text-[#777777] font-Georgia">
@@ -251,7 +251,7 @@ export default AboutUs;
 function QuoteSection() {
   const navigate = useNavigate();
   return (
-    <section className="font-Georgia lg:container mx-auto px-4">
+    <section className="font-Georgia lg:container mx-auto px-4 xl:max-w-7xl xl:px-0">
       <div className="grid md:grid-cols-2 xl:grid-cols-[1fr,1.4fr] gap-8  bg-[#304778] border border-[#CFF3FF] rounded-2xl p-6 md:p-10 items-stretch h-[800px] md:h-[500px]">
         {/* Left: Quote */}
         <div className="flex flex-col justify-between text-white ">

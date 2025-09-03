@@ -54,7 +54,7 @@ function OurStory() {
   return (
     <>
       <LandingNavbar />
-      <div className="lg:container lg:mx-auto lg:px-12 px-6">
+      <div className="lg:container lg:mx-auto lg:px-12 px-6 xl:max-w-7xl xl:px-0">
         {/* section 1 */}
         <div className="font-Georgia">
           <div className=" flex flex-col justify-center items-center my-10 capitalize">
@@ -99,7 +99,7 @@ function OurStory() {
         {/* section 5 */}
         <section>
           <div>
-            <h2 className="font-Georgia pt-10 text-4xl lg:text-[40px] text-[#232323]  lg:leading-[52px] font-bold italic mb-2 lg:mb-4 text-center">
+            <h2 className="font-Georgia pt-10 text-4xl lg:text-[40px] text-[#232323]  lg:leading-[52px] font-bold  mb-2 lg:mb-4 text-center">
               Our brand values are build on
             </h2>
           </div>
@@ -119,7 +119,7 @@ function StrugglesSection() {
     <section className="py-12 grid grid-cols-1 md:grid-cols-[1fr,1.4fr]  gap-8   font-Georgia items-stretch">
       {/* Left Content */}
       <div className="flex flex-col justify-center gap-6 ">
-        <h2 className="text-4xl italic text-black  mb-4 xl:text-[40px] xl:leading-[55px]">
+        <h2 className="text-4xl  text-black  mb-4 xl:text-[40px] xl:leading-[55px]">
           The Struggles We <br />
           Encountered
         </h2>
@@ -148,7 +148,7 @@ function StepsSection() {
   return (
     <section className="bg-white py-12 font-Georgia">
       <section className="max-w-3xl mx-auto lg:px-6 pb-10 text-center space-y-5">
-        <h2 className="text-4xl lg:text-[40px] text-[#232323] lg:leading-[52px] font-bold italic mb-4">
+        <h2 className="text-4xl lg:text-[40px] text-[#232323] lg:leading-[52px] font-bold  mb-4">
           Best Solutions For Your <br /> Dream Office
         </h2>
         <p className="text-[#777] text-sm md:text-base tracking-[0.3px]">
@@ -156,7 +156,7 @@ function StepsSection() {
           faster, and more confident way to bring your vision to life.
         </p>
       </section>
-      <div className="lg:container lg:mx-auto lg:px-6 relative">
+      <div className="lg:container lg:mx-auto lg:px-6 relative xl:max-w-7xl xl:px-0">
         <div className="flex flex-col md:flex-row justify-between items-center md:space-x-10 space-y-10 md:space-y-0 relative">
           {/* {steps} */}
           {steps?.map((stepdata, index) => (
@@ -180,7 +180,7 @@ function Step({ imagePath, title, index }) {
       <div className=" w-32 h-32 rounded-full border border-dashed border-gray-400 bg-white mx-auto flex items-center  justify-center relative z-10">
         <img src={imagePath} alt="Plan" className="w-16 h-16" />
       </div>
-      <h3 className="mt-6 text-xl font-bold text-[#232323] italic">{title}</h3>
+      <h3 className="mt-6 text-xl font-bold text-[#232323] ">{title}</h3>
       {/* Connector Line to Step 2 */}
       {(index === 0 || index === 1 || index === 2) && (
         <div className="hidden md:block absolute top-16 left-1/2 w-full border-t border-dashed border-gray-400 z-0"></div>
