@@ -287,7 +287,8 @@ function Navbar({
     <div>
       {areaWarn && <EnterAreaModal onclose={() => setAreaWarn(false)} />}
       {!isMobile ? (
-        <div className="hidden md:flex justify-between bg-gradient-to-r from-[#23445B] to-[#487BA0] py-4 items-center px-5 overflow-hidden">
+        <div className="bg-gradient-to-r from-[#23445B] to-[#487BA0]">
+          <div className="hidden md:flex justify-between  py-4 items-center px-5 overflow-hidden 3xl:container">
           {/* logo */}
           <button className=" " onClick={() => navigate("/")}>
             <img
@@ -424,6 +425,7 @@ function Navbar({
           </div>
 
           {/* </div> */}
+          </div>
         </div>
       ) : (
         <div>

@@ -968,7 +968,7 @@ function Navbar({
 
   return (
     <div className="navbar sticky top-0 z-30 font-Poppins">
-      <div className="flex justify-between bg-gradient-to-r from-[#23445B] to-[#487BA0] items-center px-3 md:px-6 3xl:container  h-[60px]">
+      <div className="flex justify-between bg-gradient-to-r from-[#23445B] to-[#487BA0] items-center px-3 md:px-6 3xl:px-40 h-[50px]">
         <div className="hidden sm:block absolute lg:flex gap-2 right-1/4 lg:right-20 -translate-x-full">
           {/* <div className="flex items-center justify-center gap-1">
             <div className="h-3 w-3 rounded-full border-[1px] bg-[#34BFAD]"></div>
@@ -1192,7 +1192,7 @@ function Navbar({
           </div>
         ) : null
       ) : selectedPlan ? (
-        <div className="bg-[#212B36] py-2.5 flex px-3 md:px-6 3xl:container ">
+        <div className="bg-[#212B36] py-2.5 flex px-3 md:px-6 3xl:px-40">
           <div className=" flex items-center gap-1">
             <button
               className="bg-[#FFF] text-xs py-2 px-5 text-[#000] font-semibold rounded-[4px] border-solid border-[1px] border-black"

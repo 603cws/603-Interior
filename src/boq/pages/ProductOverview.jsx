@@ -419,20 +419,21 @@ function ProductOverview() {
         showBoqPrompt={showBoqPrompt}
         setShowBoqPrompt={setShowBoqPrompt}
       />
-      <ToastContainer />
-      {/* ThreeJS Viewer with reduced size */}
-      {import.meta.env.MODE === "development" && showThreeViewer && (
-        <ThreeDViewer onClose={() => setShowThreeViewer(false)} />
-      )}
+      <div className="px-2 md:px-6 3xl:px-40">
+        <ToastContainer />
+        {/* ThreeJS Viewer with reduced size */}
+        {import.meta.env.MODE === "development" && showThreeViewer && (
+          <ThreeDViewer onClose={() => setShowThreeViewer(false)} />
+        )}
 
-      <div
-        className={`product-overview grid grid-cols-1 md:grid-cols-2 p-2 lg:p-5 gap-1 ${
-          showSelectArea ? "opacity-50 pointer-events-none" : "opacity-100"
-        }`}
-      >
-        {/* grid component 1 */}
-        <div className="flex flex-col md:gap-0">
-          {/* <TbArrowBackUp
+        <div
+          className={`product-overview grid grid-cols-1 md:grid-cols-2 p-2 lg:p-5 gap-1 ${
+            showSelectArea ? "opacity-50 pointer-events-none" : "opacity-100"
+          }`}
+        >
+          {/* grid component 1 */}
+          <div className="flex flex-col md:gap-0">
+            {/* <TbArrowBackUp
             size={30}
             className="cursor-pointer"
             onClick={() => {
@@ -448,28 +449,28 @@ function ProductOverview() {
             }}
           /> */}
 
-          <div className="flex lg:mx-10  items-center text-[#334A78]  mt-1 ">
-            <div
-              className="flex items-center cursor-pointer hover:underline"
-              onClick={() => {
-                // setShowProductView(false);
-                // setMinimizedView(true);
-                // navigate("/boq");
-                //Don't change the below setSelectedCategory, setSelectedSubCategory, setSelectedSubCategory1 => Sunny
-                setSelectedCategory(cat);
-                setSelectedSubCategory(subCat);
-                setSelectedSubCategory1(subCat1);
-                // navigate(-1);
-                navigate("/boq", { state: { minimizedView: true } });
-              }}
-            >
-              <MdOutlineKeyboardArrowLeft
-                size={20}
-                style={{ color: "#334A78" }}
-              />
-              <p className="ml-1">Back</p>
-            </div>
-            {/* <div
+            <div className="flex lg:mx-10  items-center text-[#334A78]  mt-1 ">
+              <div
+                className="flex items-center cursor-pointer hover:underline"
+                onClick={() => {
+                  // setShowProductView(false);
+                  // setMinimizedView(true);
+                  // navigate("/boq");
+                  //Don't change the below setSelectedCategory, setSelectedSubCategory, setSelectedSubCategory1 => Sunny
+                  setSelectedCategory(cat);
+                  setSelectedSubCategory(subCat);
+                  setSelectedSubCategory1(subCat1);
+                  // navigate(-1);
+                  navigate("/boq", { state: { minimizedView: true } });
+                }}
+              >
+                <MdOutlineKeyboardArrowLeft
+                  size={20}
+                  style={{ color: "#334A78" }}
+                />
+                <p className="ml-1">Back</p>
+              </div>
+              {/* <div
               onClick={() => {
                 // setShowProductView(false);
                 // setMinimizedView(true);
@@ -504,263 +505,265 @@ function ProductOverview() {
               <span className="hover:underline">{subCat1}</span>
             </div> */}
 
-            <button
-              //   onClick={() => setRequestTour(true)}
-              onClick={() => setShowRecommend(true)}
-              className="md:hidden ml-auto "
-            >
-              <img src="/images/recommend.png" alt="recommend mobile" />
-            </button>
-          </div>
-
-          {/* Main image container */}
-          <div
-            className="w-3/5 h-3/4 mx-auto mb-2 flex items-center justify-center"
-            onMouseEnter={() => setMainImageHovered(true)}
-            onMouseLeave={() => setMainImageHovered(false)}
-            style={{ zIndex: mainImageHovered ? 10 : 1 }}
-          >
-            <img
-              src={hoveredImage || product?.image}
-              className="object-fit h-80 lg:h-96 max-h-full"
-              alt={product?.title}
-            />
-          </div>
-
-          {/* Additional images + View in 3D Button */}
-          {additionalImagesArray.length > 0 && (
-            <div className="flex flex-wrap items-center gap-3 mx-6 ml-16 mt-3">
-              {additionalImagesArray.map((img, idx) => (
-                <img
-                  key={idx}
-                  src={img}
-                  alt={`Angle ${idx + 1}`}
-                  width={50}
-                  height={50}
-                  onMouseEnter={() => setHoveredImage(img)}
-                  onMouseLeave={() => setHoveredImage(null)}
-                  className="cursor-pointer rounded-lg border-2 border-[#385682]"
-                />
-              ))}
-              {/* View in 3D Button */}
-              {import.meta.env.MODE === "development" && (
-                <button
-                  className="ml-4 px-4 py-2 rounded-md bg-blue-600 text-white hover:bg-blue-700 transition"
-                  onClick={() => setShowThreeViewer(true)}
-                >
-                  View in 3D
-                </button>
-              )}
+              <button
+                //   onClick={() => setRequestTour(true)}
+                onClick={() => setShowRecommend(true)}
+                className="md:hidden ml-auto "
+              >
+                <img src="/images/recommend.png" alt="recommend mobile" />
+              </button>
             </div>
-          )}
-        </div>
 
-        {/* grid component 2 */}
-        <div className=" flex flex-col mt-2 md:mt-0">
-          {/* product info */}
-          <div className="flex flex-col justify-center">
-            <h2 className="text-sm lg:text-xl font-bold">{product?.title}</h2>
-            <p className=" font-medium lg:w-3/4 text-[#334A78] lg:mb-2">
-              {product?.details}
-            </p>
-            <p className="text-sm md:text-base font-semibold lg:mb-2">
-              ₹ {product?.price?.toLocaleString("en-IN")}{" "}
-              <span className="text-sm">/ Per Unit</span>
-            </p>
-            {/* <br ></br> */}
+            {/* Main image container */}
+            <div
+              className="w-3/5 h-3/4 mx-auto mb-2 flex items-center justify-center"
+              onMouseEnter={() => setMainImageHovered(true)}
+              onMouseLeave={() => setMainImageHovered(false)}
+              style={{ zIndex: mainImageHovered ? 10 : 1 }}
+            >
+              <img
+                src={hoveredImage || product?.image}
+                className="object-fit h-80 lg:h-96 max-h-full"
+                alt={product?.title}
+              />
+            </div>
+
+            {/* Additional images + View in 3D Button */}
+            {additionalImagesArray.length > 0 && (
+              <div className="flex flex-wrap items-center gap-3 mx-6 ml-16 mt-3">
+                {additionalImagesArray.map((img, idx) => (
+                  <img
+                    key={idx}
+                    src={img}
+                    alt={`Angle ${idx + 1}`}
+                    width={50}
+                    height={50}
+                    onMouseEnter={() => setHoveredImage(img)}
+                    onMouseLeave={() => setHoveredImage(null)}
+                    className="cursor-pointer rounded-lg border-2 border-[#385682]"
+                  />
+                ))}
+                {/* View in 3D Button */}
+                {import.meta.env.MODE === "development" && (
+                  <button
+                    className="ml-4 px-4 py-2 rounded-md bg-blue-600 text-white hover:bg-blue-700 transition"
+                    onClick={() => setShowThreeViewer(true)}
+                  >
+                    View in 3D
+                  </button>
+                )}
+              </div>
+            )}
           </div>
-          {/* final price section */}
-          <div className="mt-1">
-            <p className="text-sm lg:text-lg font-medium text-[#334A78] ">
-              Final Price
-            </p>
-            <p className="text-sm lg:text-lg font-bold mb-3">
-              ₹ {totalPrice.toLocaleString("en-IN")}
-            </p>
-            {details.quantity > 0 && (
-              <p className="text-md font-medium text-[#334A78] mb-1 lg:mb-3">
-                Total Quantity:{" "}
-                <span className="border-[1px] py-1 border-[#334A78] text-[#1a1b1c] rounded-md px-2 text-sm">
-                  {subCat1 === "Chair" &&
-                  subCat !== "Linear Workstation" &&
-                  subCat !== "L-Type Workstation"
-                    ? details.quantity.toLocaleString("en-IN")
-                    : details.quantity.toLocaleString("en-IN")}
-                </span>{" "}
+
+          {/* grid component 2 */}
+          <div className=" flex flex-col mt-2 md:mt-0">
+            {/* product info */}
+            <div className="flex flex-col justify-center">
+              <h2 className="text-sm lg:text-xl font-bold">{product?.title}</h2>
+              <p className=" font-medium lg:w-3/4 text-[#334A78] lg:mb-2">
+                {product?.details}
               </p>
-            )}
-            {details?.area > 0 && (
-              <p className="text-xs lg:text-base font-medium text-[#334A78] mb-1 lg:mb-3">
-                Total Area:{" "}
-                <span className="border-[1px] py-1 border-[#334A78] text-[#1a1b1c] rounded-xl px-2 text-xs lg:text-sm">
-                  {details.area.toLocaleString("en-IN")}
-                </span>{" "}
+              <p className="text-sm md:text-base font-semibold lg:mb-2">
+                ₹ {product?.price?.toLocaleString("en-IN")}{" "}
+                <span className="text-sm">/ Per Unit</span>
               </p>
-            )}
-            {details?.seatCount > 0 &&
-              subCat1 === "Chair" &&
-              subCat !== "Linear Workstation" &&
-              subCat !== "L-Type Workstation" && (
-                <p className="text-xs lg:text-base font-medium text-[#334A78] mb-1 lg:mb-3">
-                  Seat Count:{" "}
-                  <span className="border-[1px] py-1 border-[#334A78] text-[#1a1b1c] rounded-xl px-2 text-xs lg:text-sm">
-                    {details.seatCount.toLocaleString("en-IN")}
+              {/* <br ></br> */}
+            </div>
+            {/* final price section */}
+            <div className="mt-1">
+              <p className="text-sm lg:text-lg font-medium text-[#334A78] ">
+                Final Price
+              </p>
+              <p className="text-sm lg:text-lg font-bold mb-3">
+                ₹ {totalPrice.toLocaleString("en-IN")}
+              </p>
+              {details.quantity > 0 && (
+                <p className="text-md font-medium text-[#334A78] mb-1 lg:mb-3">
+                  Total Quantity:{" "}
+                  <span className="border-[1px] py-1 border-[#334A78] text-[#1a1b1c] rounded-md px-2 text-sm">
+                    {subCat1 === "Chair" &&
+                    subCat !== "Linear Workstation" &&
+                    subCat !== "L-Type Workstation"
+                      ? details.quantity.toLocaleString("en-IN")
+                      : details.quantity.toLocaleString("en-IN")}
                   </span>{" "}
                 </p>
               )}
-            <button
-              className=" border-2 lg:border-[1.5px] border-[#212B36] px-2 py-1.5 text-sm lg:text-lg w-full md:w-2/5 mb-1 md:mb-3 mt-2 md:mt-5 rounded-sm"
-              onClick={
-                () => setShowSelectArea(true)
-                // /**/ handelSelectedData(
-                //   products,
-                //   // variant,
-                //   selectedCategory,
-                //   selectedSubCategory,
-                //   selectedSubCategory1
-                // )
-              }
-            >
-              {isProductInCart() ? "Remove from BOQ " : "Add to BOQ"}
-            </button>
-          </div>
-          {/* product description */}
-          <div className="mt-2 md:mt-5">
-            <h3 className="text-sm md:text-lg uppercase font-bold text-[#334A78] border-b-2">
-              Product Details
-            </h3>
-            {/* manufacture */}
-            <div className="border-b-2 pt-2 pb-1">
-              <p className="text-xs md:text-sm uppercase font-bold text-[#334A78]">
-                Manufacturer
-              </p>
-              <span className="text-xs text-[#334A78] ">
-                {product?.manufacturer || "N/A"}
-              </span>
-            </div>
-            {/* dimensions */}
-            <div className="border-b-2 pt-2 pb-1">
-              <p className="text-xs md:text-sm uppercase font-bold text-[#334A78] ">
-                dimensions(H x l x W)
-              </p>
-              <span className="text-xs text-[#334A78] ">
-                {formatDimensions(product?.dimensions)}
-              </span>
-            </div>
-            <div className="border-b-2 pt-2 pb-1">
-              <p className="text-xs md:text-sm uppercase font-bold text-[#334A78]">
-                instruction
-              </p>
-              {categoryInstructions.length > 0 ? (
-                <ul className="list-disc pl-5">
-                  {categoryInstructions.map((instruction, index) => (
-                    <li key={index} className="text-xs text-[#334A78]">
-                      {instruction}
-                    </li>
-                  ))}
-                </ul>
-              ) : (
-                <span className="text-xs text-[#334A78]">
-                  No specific instructions available for this category.
-                </span>
+              {details?.area > 0 && (
+                <p className="text-xs lg:text-base font-medium text-[#334A78] mb-1 lg:mb-3">
+                  Total Area:{" "}
+                  <span className="border-[1px] py-1 border-[#334A78] text-[#1a1b1c] rounded-xl px-2 text-xs lg:text-sm">
+                    {details.area.toLocaleString("en-IN")}
+                  </span>{" "}
+                </p>
               )}
+              {details?.seatCount > 0 &&
+                subCat1 === "Chair" &&
+                subCat !== "Linear Workstation" &&
+                subCat !== "L-Type Workstation" && (
+                  <p className="text-xs lg:text-base font-medium text-[#334A78] mb-1 lg:mb-3">
+                    Seat Count:{" "}
+                    <span className="border-[1px] py-1 border-[#334A78] text-[#1a1b1c] rounded-xl px-2 text-xs lg:text-sm">
+                      {details.seatCount.toLocaleString("en-IN")}
+                    </span>{" "}
+                  </p>
+                )}
+              <button
+                className=" border-2 lg:border-[1.5px] border-[#212B36] px-2 py-1.5 text-sm lg:text-lg w-full md:w-2/5 mb-1 md:mb-3 mt-2 md:mt-5 rounded-sm"
+                onClick={
+                  () => setShowSelectArea(true)
+                  // /**/ handelSelectedData(
+                  //   products,
+                  //   // variant,
+                  //   selectedCategory,
+                  //   selectedSubCategory,
+                  //   selectedSubCategory1
+                  // )
+                }
+              >
+                {isProductInCart() ? "Remove from BOQ " : "Add to BOQ"}
+              </button>
+            </div>
+            {/* product description */}
+            <div className="mt-2 md:mt-5">
+              <h3 className="text-sm md:text-lg uppercase font-bold text-[#334A78] border-b-2">
+                Product Details
+              </h3>
+              {/* manufacture */}
+              <div className="border-b-2 pt-2 pb-1">
+                <p className="text-xs md:text-sm uppercase font-bold text-[#334A78]">
+                  Manufacturer
+                </p>
+                <span className="text-xs text-[#334A78] ">
+                  {product?.manufacturer || "N/A"}
+                </span>
+              </div>
+              {/* dimensions */}
+              <div className="border-b-2 pt-2 pb-1">
+                <p className="text-xs md:text-sm uppercase font-bold text-[#334A78] ">
+                  dimensions(H x l x W)
+                </p>
+                <span className="text-xs text-[#334A78] ">
+                  {formatDimensions(product?.dimensions)}
+                </span>
+              </div>
+              <div className="border-b-2 pt-2 pb-1">
+                <p className="text-xs md:text-sm uppercase font-bold text-[#334A78]">
+                  instruction
+                </p>
+                {categoryInstructions.length > 0 ? (
+                  <ul className="list-disc pl-5">
+                    {categoryInstructions.map((instruction, index) => (
+                      <li key={index} className="text-xs text-[#334A78]">
+                        {instruction}
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <span className="text-xs text-[#334A78]">
+                    No specific instructions available for this category.
+                  </span>
+                )}
+              </div>
             </div>
           </div>
         </div>
-      </div>
 
-      {!showRecommend && (
-        <>
-          <div
-            className={`fixed font-Poppins z-10 right-0 rotate-90 book-tour-btn ${
-              showSelectArea ? "opacity-50 pointer-events-none" : "opacity-100"
-            }`}
-          >
-            <button
-              //   onClick={() => setRequestTour(true)}
-              onClick={() => setShowRecommend(true)}
-              className="hidden md:block text-sm bg-[#334A78] text-white px-4 lg:px-4 py-2 rounded-lg"
+        {!showRecommend && (
+          <>
+            <div
+              className={`fixed font-Poppins z-10 right-0 rotate-90 book-tour-btn ${
+                showSelectArea
+                  ? "opacity-50 pointer-events-none"
+                  : "opacity-100"
+              }`}
             >
-              Recommendation
-            </button>
-          </div>
-        </>
-      )}
-
-      <AnimatePresence>
-        {showSelectArea && (
-          <motion.div
-            variants={selectAreaAnimation}
-            initial="initial"
-            animate="animate"
-            exit="exit"
-            className={`fixed inset-0 flex justify-center items-center z-[1000] transition-opacity duration-300 ${
-              showBackground ? "bg-black bg-opacity-30" : "bg-transparent"
-            }`}
-            onAnimationComplete={(definition) => {
-              if (definition === "animate") {
-                setShowBackground(true); // Only show background after entering animation
-              }
-            }}
-          >
-            <SelectArea
-              setShowSelectArea={setShowSelectArea}
-              image={product?.image}
-              selectedAreas={selectedAreas}
-              setSelectedAreas={setSelectedAreas}
-              selectedProductView={product}
-              selectedData={selectedData}
-              // categoriesWithTwoLevelCheck={categoriesWithTwoLevelCheck}
-              allAddons={allAddons}
-              setShowBackground={setShowBackground}
-              selectedCategory={cat}
-              selectedSubCategory={subCat}
-              selectedSubCategory1={subCat1}
-            />
-          </motion.div>
+              <button
+                //   onClick={() => setRequestTour(true)}
+                onClick={() => setShowRecommend(true)}
+                className="hidden md:block text-sm bg-[#334A78] text-white px-4 lg:px-4 py-2 rounded-lg"
+              >
+                Recommendation
+              </button>
+            </div>
+          </>
         )}
-      </AnimatePresence>
 
-      {showRecommend && ( //new ProductOverview
-        <div ref={recommendationref}>
-          <RecommendComp
-            showRecommend={showRecommend}
-            setShowRecommend={setShowRecommend}
-            currentProduct={product}
-            manufacturer={product?.manufacturer}
-          />
+        <AnimatePresence>
+          {showSelectArea && (
+            <motion.div
+              variants={selectAreaAnimation}
+              initial="initial"
+              animate="animate"
+              exit="exit"
+              className={`fixed inset-0 flex justify-center items-center z-[1000] transition-opacity duration-300 ${
+                showBackground ? "bg-black bg-opacity-30" : "bg-transparent"
+              }`}
+              onAnimationComplete={(definition) => {
+                if (definition === "animate") {
+                  setShowBackground(true); // Only show background after entering animation
+                }
+              }}
+            >
+              <SelectArea
+                setShowSelectArea={setShowSelectArea}
+                image={product?.image}
+                selectedAreas={selectedAreas}
+                setSelectedAreas={setSelectedAreas}
+                selectedProductView={product}
+                selectedData={selectedData}
+                // categoriesWithTwoLevelCheck={categoriesWithTwoLevelCheck}
+                allAddons={allAddons}
+                setShowBackground={setShowBackground}
+                selectedCategory={cat}
+                selectedSubCategory={subCat}
+                selectedSubCategory1={subCat1}
+              />
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {showRecommend && ( //new ProductOverview
+          <div ref={recommendationref}>
+            <RecommendComp
+              showRecommend={showRecommend}
+              setShowRecommend={setShowRecommend}
+              currentProduct={product}
+              manufacturer={product?.manufacturer}
+            />
+          </div>
+        )}
+
+        <AnimatePresence>
+          {isOpen && (
+            <div ref={profileRef}>
+              <ProfileCard
+                layout={false}
+                isOpen={isOpen}
+                setIsOpen={setIsOpen}
+                iconRef={iconRef}
+                selectedPlan={selectedPlan}
+                setIsDBPlan={setIsDBPlan}
+              />
+            </div>
+          )}
+        </AnimatePresence>
+
+        {/* You May Also Like Section */}
+        <div className="mt-10 py-4 px-6">
+          <h2 className="text-xl font-semibold mb-2">You may also like</h2>
+          {relatedProducts.length > 0 ? (
+            <YouMayAlsoLike
+              products={relatedProducts}
+              setSelectedProductView={setSelectedProductView}
+            />
+          ) : (
+            <p className="text-center text-gray-500">No products found</p>
+          )}{" "}
         </div>
-      )}
 
-      <AnimatePresence>
-        {isOpen && (
-          <div ref={profileRef}>
-            <ProfileCard
-              layout={false}
-              isOpen={isOpen}
-              setIsOpen={setIsOpen}
-              iconRef={iconRef}
-              selectedPlan={selectedPlan}
-              setIsDBPlan={setIsDBPlan}
-            />
-          </div>
-        )}
-      </AnimatePresence>
-
-      {/* You May Also Like Section */}
-      <div className="mt-10 p-5">
-        <h2 className="text-xl font-semibold mb-2">You may also like</h2>
-        {relatedProducts.length > 0 ? (
-          <YouMayAlsoLike
-            products={relatedProducts}
-            setSelectedProductView={setSelectedProductView}
-          />
-        ) : (
-          <p className="text-center text-gray-500">No products found</p>
-        )}{" "}
-      </div>
-
-      {/* <div
+        {/* <div
         className={`addons px-5 my-3 ${
           showSelectArea ? "opacity-50 pointer-events-none" : "opacity-100"
         }`}
@@ -772,6 +775,7 @@ function ProductOverview() {
           onAddonAdd={handleAddOnChange}  //moved to utils
         />
       </div> */}
+      </div>
     </>
   );
 }

@@ -660,18 +660,18 @@ function SelectArea({
 
   return (
     <div className="fixed inset-0 flex justify-center items-center z-20">
-      <div className="relative bg-gradient-to-br from-[#334A78] to-[#68B2DC] py-12 px-6 lg:p-6 max-w-[90%] h-[85vh] 2xl:h-[600px] w-[1000px] scrollbar-hide">
+      <div className="relative bg-gradient-to-br from-[#334A78] to-[#68B2DC] p-5 md:p-6 scrollbar-hide">
         <img
           src="../images/icons/close_btn.svg"
           alt="close"
-          className="absolute top-2 right-2 lg:top-1  lg:right-1 cursor-pointer w-6 h-6"
+          className="absolute top-1 right-1 lg:top-1 lg:right-1 cursor-pointer w-5 h-5 sm:w-6 sm:h-6"
           onClick={() => {
             setShowBackground(false); // Hide background before exit animation
             setShowSelectArea(false);
           }}
         />
 
-        <div className="bg-white p-6 rounded-lg border-[3px] border-[#FFD500] relative h-auto lg:h-full">
+        <div className="bg-white p-6 rounded-lg border-[3px] border-[#FFD500]">
           {/* Area Selection Modal */}
           {!showAddon && (
             <div className="overflow-auto">
@@ -1018,11 +1018,11 @@ function SelectArea({
                 </div>
 
                 {/* Image Section */}
-                <div className="hidden sm:flex justify-center items-center ">
+                <div className="hidden sm:flex justify-center items-center border border-gray-300 shadow-md rounded-md p-2">
                   <img
                     src={image}
                     alt={selectedProductView.title}
-                    className="rounded-md object-cover max-w-[200px] lg:max-w-[300px] max-h-[300px] border border-gray-300 shadow-md"
+                    className=" object-cover max-w-[200px] max-h-[250px] lg:max-w-[300px] lg:max-h-[300px]"
                   />
                 </div>
               </div>
