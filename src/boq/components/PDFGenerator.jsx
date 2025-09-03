@@ -55,9 +55,11 @@ const PDFGenerator = {
     const pageWidth = doc.internal.pageSize.getWidth();
     const blue = [55, 74, 117];
 
+    let hasAddons, hideQty;
+
     // ================= HEADER =================
     doc.setFillColor(blue[0], blue[1], blue[2]);
-    doc.rect(0, 0, pageWidth, 120, "F");
+    doc.rect(0, 0, pageWidth, 125, "F");
 
     doc.setFont("helvetica", "bold");
     doc.setFontSize(14);
@@ -71,15 +73,15 @@ const PDFGenerator = {
     doc.text("partners@workved.com", 20, 110);
 
     const logoUrl = "../logo/workved-logo.png";
-    doc.addImage(logoUrl, "PNG", 240, 38, 100, 40);
+    doc.addImage(logoUrl, "PNG", 250, 25, 100, 50);
 
     doc.setFont("helvetica", "normal");
     doc.setFontSize(25);
-    doc.text("Invoice", pageWidth - 100, 95);
+    doc.text("BOQ", pageWidth - 73, 95);
     doc.setFontSize(10);
     doc.text(
-      `INVOICE DATE: ${new Date().toLocaleDateString("en-GB")}`,
-      pageWidth - 145,
+      `BOQ DATE: ${new Date().toLocaleDateString("en-GB")}`,
+      pageWidth - 128,
       110
     );
 
@@ -117,6 +119,114 @@ const PDFGenerator = {
       { align: "right" }
     );
 
+    // ================= SUMMARY SECTION =================
+    const categoryTotals = {};
+    const categorizedProducts = {};
+
+    // Calculate totals per category (including addons)
+    categories.forEach((cat) => {
+      const category = cat.category;
+
+      const productsInCategory = selectedData.filter(
+        (item) => item.category === category
+      );
+
+      const totalPrice = productsInCategory.reduce((acc, item) => {
+        // Base price
+        let itemTotal = item.finalPrice || 0;
+
+        // Add all addon prices if present
+        if (item.addons) {
+          const addonSum = Object.values(item.addons).reduce(
+            (addonAcc, addon) => addonAcc + (addon.finalPrice || 0),
+            0
+          );
+          itemTotal += addonSum;
+        }
+
+        return acc + itemTotal;
+      }, 0);
+
+      categoryTotals[category] = totalPrice;
+      categorizedProducts[category] = productsInCategory;
+    });
+
+    let yOffset = y + 80;
+
+    // Plain Summary Heading (no background)
+    doc.setTextColor(0, 0, 0);
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(14);
+    doc.text("Summary", 290, yOffset, {
+      align: "center",
+    });
+    yOffset += 20;
+
+    // Calculate grand total
+    const grandTotalAmount = Object.values(categoryTotals).reduce(
+      (acc, val) => acc + val,
+      0
+    );
+
+    // Prepare summary rows
+    const summaryRows = Object.entries(categoryTotals).map(
+      ([category, total]) => [
+        { content: category, styles: { halign: "center", fontSize: 10 } },
+        {
+          content: `Rs. ${total.toLocaleString("en-IN")}/-`,
+          styles: { halign: "center", fontSize: 10 },
+        },
+      ]
+    );
+
+    // Add Grand Total Row
+    summaryRows.push([
+      {
+        content: "Grand Total",
+        styles: { halign: "center", fontSize: 12, fontStyle: "bold" },
+      },
+      {
+        content: `Rs. ${grandTotalAmount.toLocaleString("en-IN")}/-`,
+        styles: {
+          halign: "center",
+          fontSize: 12,
+          fontStyle: "bold",
+        },
+      },
+    ]);
+
+    // Render summary table with black borders everywhere
+    doc.autoTable({
+      head: [["Category", "Total"]],
+      body: summaryRows,
+      startY: yOffset,
+      theme: "grid", // ensures table + borders
+      styles: {
+        font: "helvetica",
+        fontSize: 9,
+        lineColor: [0, 0, 0], // black border
+        lineWidth: 0.5, // thickness of border
+        valign: "middle",
+        cellPadding: 10,
+      },
+      headStyles: {
+        fillColor: false, // no background
+        textColor: 0, // black text
+        fontStyle: "bold",
+        halign: "center",
+        lineColor: [0, 0, 0],
+        lineWidth: 0.5,
+        fontSize: 14,
+      },
+      columnStyles: {
+        0: { halign: "center", cellWidth: 275 },
+        1: { halign: "center", cellWidth: 285 },
+      },
+      margin: { left: 18, right: 18 }, // 🔥 controls how much space is left at the page sides
+    });
+
+    y = doc.lastAutoTable.finalY + 30; // push Y further down after summary
+
     // ================= GROUP DATA =================
     const grouped = {};
     selectedData.forEach((item) => {
@@ -125,7 +235,7 @@ const PDFGenerator = {
       grouped[cat].push(item);
     });
 
-    let currentY = y + 70;
+    let currentY = y + 20;
     let firstCategory = true;
 
     for (const [categoryName, items] of Object.entries(grouped)) {
@@ -141,7 +251,7 @@ const PDFGenerator = {
       doc.text(categoryName, 250, currentY);
       currentY += 10;
 
-      const hasAddons = items.some(
+      hasAddons = items.some(
         (item) => item.addons && Object.keys(item.addons).length > 0
       );
 
@@ -151,7 +261,7 @@ const PDFGenerator = {
         "HVAC",
         "Partitions / Ceilings",
       ];
-      const hideQty = excludedQtyCategories.includes(categoryName);
+      hideQty = excludedQtyCategories.includes(categoryName);
 
       // ✅ Define columns (with titles and keys)
       const columns = [
@@ -179,6 +289,8 @@ const PDFGenerator = {
           }
 
           let addonCell = [];
+          let addonTotal = 0; // 🔥 track total addon price
+
           if (hasAddons && item.addons) {
             addonCell = await Promise.all(
               Object.values(item.addons).map(async (a) => {
@@ -188,6 +300,7 @@ const PDFGenerator = {
                     addonImage = await loadImage(a.image);
                   } catch {}
                 }
+                addonTotal += a.finalPrice || 0; // 🔥 add each addon price
                 return {
                   title: a.title,
                   price: a.finalPrice,
@@ -203,6 +316,9 @@ const PDFGenerator = {
             quantities
           );
           const qty = item.quantity || "-";
+
+          // total amount = base finalPrice + sum of addons
+          const totalAmount = (item.finalPrice || 0) + addonTotal;
 
           return {
             no: idx + 1,
@@ -221,7 +337,7 @@ const PDFGenerator = {
             price: `Rs. ${
               item.product_variant?.variant_price.toLocaleString("en-IN") || 0
             }`,
-            amount: `Rs. ${item.finalPrice.toLocaleString("en-IN") || 0}`,
+            amount: `Rs. ${totalAmount.toLocaleString("en-IN")}`,
           };
         })
       );
@@ -270,10 +386,10 @@ const PDFGenerator = {
           fontSize: 9,
           valign: "middle",
           lineColor: [0, 0, 0],
-          lineWidth: 0.5,
+          lineWidth: 0.1,
         },
         headStyles: {
-          fillColor: "#E0F8FF",
+          fillColor: "#fff",
           textColor: 0,
           halign: "center",
           lineColor: [0, 0, 0],
@@ -389,22 +505,28 @@ const PDFGenerator = {
 
     // ================= TOTALS =================
     const finalY = doc.lastAutoTable.finalY + 30;
+    const rightMargin2 = hasAddons ? 20 : hideQty ? 65 : 50; // leave 40px from right edge (you can adjust)
+
+    // Sub total row
     doc.setFontSize(10);
     doc.setFont("helvetica", "normal");
     doc.text("Sub total (excl. GST)", pageWidth - 250, finalY);
     doc.text(
       `Rs. ${boqTotal.toLocaleString("en-IN")}`,
-      pageWidth - 150,
-      finalY
+      pageWidth - rightMargin2,
+      finalY,
+      { align: "right" } // 🔥 right align the number
     );
 
+    // Total Amount row
     doc.setFont("helvetica", "bold");
     doc.setFontSize(12);
-    doc.text("Total Amount", pageWidth - 250, finalY + 20);
+    doc.text("Total Amount", pageWidth - 250, finalY + 25);
     doc.text(
       `Rs. ${boqTotal.toLocaleString("en-IN")}`,
-      pageWidth - 150,
-      finalY + 20
+      pageWidth - rightMargin2,
+      finalY + 25,
+      { align: "right" } // 🔥 right align again
     );
 
     // import.meta.env.MODE === "development"
