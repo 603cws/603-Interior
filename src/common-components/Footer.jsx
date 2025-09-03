@@ -83,9 +83,10 @@ function Footer() {
             </button>
           </form>
         </div>
-        <div className="lg:border-t lg:border-b flex flex-col-reverse lg:flex-row gap-5 xl:gap-20 justify-evenly">
+        {/* <div className="lg:border-t lg:border-b flex flex-col-reverse lg:flex-row gap-5 xl:gap-20 justify-evenly"> */}
+        <div className="lg:border-t lg:border-b grid grid-cols-1 lg:grid-cols-3 xl:gap-20">
           {/* logo */}
-          <div className="lg:py-5 flex justify-center items-start">
+          <div className="lg:py-5 hidden lg:flex items-start lg:border-r">
             <img
               src="/logo/workved-logo.png"
               alt=""
@@ -93,9 +94,10 @@ function Footer() {
             />
           </div>
           {/* content */}
-          <div className="lg:flex flex-1 justify-around lg:border-l">
-            <div className="flex gap-24 capitalize text-[15px] text-[#fff] lg:border-r flex-1 py-5">
-              <div className="flex justify-center items-start flex-1 border-t border-b lg:border-none py-5 lg:py-0 lg:px-5 xl:px-14">
+          {/* <div className="lg:flex flex-1 justify-around lg:border-l"> */}
+          <div className="lg:border-r lg:px-2 xl:px-0">
+            <div className="flex gap-16 capitalize text-[15px] text-[#fff] py-5">
+              <div className="flex justify-center items-start flex-1 border-t border-b lg:border-none py-5 lg:py-0">
                 <ul className="flex flex-col gap-4 flex-1 tracking-wide list-none m-0 p-0">
                   <li
                     className="cursor-pointer"
@@ -177,54 +179,62 @@ function Footer() {
                 </ul>
               </div>
             </div>
-            <div className="text-[#fff] flex-1 lg:px-14 py-5 space-y-5">
-              <h3 className="font-bold text-xl tracking-wide">Contact</h3>
-              <div className="text-[15px] tracking-wide space-y-1.5">
-                <div className="flex gap-5 items-center">
-                  <a
-                    href="tel:+919136036603"
-                    className="border border-[#fff]/40 hover:bg-[#fff]/10 h-9 w-9 flex justify-center items-center"
-                  >
-                    <FaPhone size={15} className="cursor-pointer" />
-                  </a>
-                  <div>
-                    <p className="font-bold">Phone Number</p>
-                    <p className="text-[#fff]/65">+91-9136036603</p>
-                  </div>
+          </div>
+          <div className="text-[#fff] flex-1 py-5 space-y-5 lg:px-2 xl:px-0">
+            <h3 className="font-bold text-xl tracking-wide">Contact</h3>
+            <div className="text-[15px] tracking-wide space-y-1.5">
+              <div className="flex gap-5 items-center">
+                <a
+                  href="tel:+919136036603"
+                  className="border border-[#fff]/40 hover:bg-[#fff]/10 h-9 w-9 flex justify-center items-center"
+                >
+                  <FaPhone size={15} className="cursor-pointer" />
+                </a>
+                <div>
+                  <p className="font-bold">Phone Number</p>
+                  <p className="text-[#fff]/65">+91-9136036603</p>
                 </div>
-                <div className="flex gap-5 items-center">
-                  <a
-                    href="mailto:sales@603thecoworkingspace.com"
-                    className="border border-[#fff]/40 hover:bg-[#fff]/10  h-9 w-9 flex justify-center items-center"
-                  >
-                    <MdEmail size={15} className="cursor-pointer" />
-                  </a>
-                  <div>
-                    <p className="font-bold">Email Address</p>
-                    <p className="text-[#fff]/65">
-                      sales@603thecoworkingspace.com
-                    </p>
-                  </div>
+              </div>
+              <div className="flex gap-5 items-center">
+                <a
+                  href="mailto:sales@603thecoworkingspace.com"
+                  className="border border-[#fff]/40 hover:bg-[#fff]/10  h-9 w-9 flex justify-center items-center"
+                >
+                  <MdEmail size={15} className="cursor-pointer" />
+                </a>
+                <div>
+                  <p className="font-bold">Email Address</p>
+                  <p className="text-[#fff]/65">
+                    sales@603thecoworkingspace.com
+                  </p>
                 </div>
-                <div className="flex gap-5 items-center">
-                  <a
-                    href="https://www.google.com/maps/search/?api=1&query=Makhija+Arcade,+35th+Rd,+Khar+West,+Mumbai+Maharashtra+400052"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="border border-[#fff]/40 hover:bg-[#fff]/10  h-9 w-9 flex justify-center items-center"
-                  >
-                    <MdLocationOn size={15} className="cursor-pointer" />
-                  </a>
-                  <div className="flex-1">
-                    <p className="font-bold">Location</p>
-                    <p className="text-[#fff]/65 text-wrap">
-                      603, Makhija Arcade, Khar West, Mumbai 400052
-                    </p>
-                  </div>
+              </div>
+              <div className="flex gap-5 items-center">
+                <a
+                  href="https://www.google.com/maps/search/?api=1&query=Makhija+Arcade,+35th+Rd,+Khar+West,+Mumbai+Maharashtra+400052"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="border border-[#fff]/40 hover:bg-[#fff]/10  h-9 w-9 flex justify-center items-center"
+                >
+                  <MdLocationOn size={15} className="cursor-pointer" />
+                </a>
+                <div className="flex-1">
+                  <p className="font-bold">Location</p>
+                  <p className="text-[#fff]/65 text-wrap">
+                    603, Makhija Arcade, Khar West, Mumbai 400052
+                  </p>
                 </div>
               </div>
             </div>
           </div>
+          <div className="py-3 lg:hidden flex justify-center items-start lg:border-r">
+            <img
+              src="/logo/workved-logo.png"
+              alt=""
+              className="max-w-48 xl:max-w-56"
+            />
+          </div>
+          {/* </div> */}
         </div>
         <div className="lg:flex justify-between items-center text-[#fff] pt-4">
           <p className=" text-xs">
