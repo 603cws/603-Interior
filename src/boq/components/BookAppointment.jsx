@@ -231,12 +231,13 @@ function BookAppointment({ onClose, isdashboardbooking = false }) {
         </h2>
         <div
           className={`flex justify-center  items-center ${
-            isdashboardbooking && "overflow-auto md:h-[90vh] scrollbar-hide"
+            isdashboardbooking &&
+            "overflow-auto md:h-[85vh] lg:h-[80vh] scrollbar-hide"
           }`}
         >
           {!isappointmentbooked ? (
-            <div className="max-w-xs md:max-w-2xl lg:max-w-4xl lg:p-2 mb-5 lg:my-5">
-              <h3 className="text-[#374A75] text-lg md:text-2xl font-bold text-center my-3">
+            <div className="max-w-xs md:max-w-2xl lg:max-w-4xl lg:p-2 mb-5 lg:my-3">
+              <h3 className="text-[#374A75] text-lg md:text-2xl font-bold text-center my-2">
                 Book an Appointment
               </h3>
               {/* div for calender and times  */}
@@ -246,7 +247,7 @@ function BookAppointment({ onClose, isdashboardbooking = false }) {
                   <h3 className="text-sm text-[#111] font-medium ">
                     Schedule date*
                   </h3>
-                  <div className="flex gap-2 items-center rounded-xl bg-[#FAFAFA] border-[#757575] border px-2 mb-3">
+                  <div className="flex gap-2 items-center rounded-lg bg-[#FAFAFA] border-[#757575] border px-2 mb-3">
                     <div>
                       {" "}
                       <SlCalender />{" "}
