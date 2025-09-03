@@ -461,7 +461,7 @@ function Boq() {
               category === "Flooring" ||
               category === "HVAC" ||
               category === "Lighting" ||
-              (category == "Civil / Plumbing" && subcategory1 === "Tile") ||
+              (category === "Civil / Plumbing" && subcategory1 === "Tile") ||
               category === "Partitions / Ceilings" ||
               category === "Paint"
                 ? calculateAutoTotalPrice(

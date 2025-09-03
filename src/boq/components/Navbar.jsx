@@ -15,6 +15,7 @@ import AlertBox from "./AlertBox";
 import { PiStarFourFill } from "react-icons/pi";
 import CurrentLayoutDetails from "./CurrentLayoutDetails";
 import GobackLayoutWarning from "./GobackLayoutWarning";
+import { AnimatedButton } from "../../common-components/animated-button";
 
 function Navbar({
   toggleProfile,
@@ -1388,7 +1389,27 @@ function Navbar({
                 )}
               </button> */}
 
-              <button
+              <AnimatedButton
+                onClick={handleDownload}
+                className="!bg-[#3A5D7B] text-white capitalize font-Georgia font-semibold tracking-wider !px-6 !py-4 transition-shadow" //hover:shadow-[10px_10px_20px_rgba(0,0,0,0.8)]
+                variant="default"
+                size="sm"
+                // glow={true}
+                textEffect="shimmer"
+                rounded="custom"
+                asChild={false}
+                hideAnimations={false}
+                shimmerColor="#fff"
+                shimmerSize="0.15em"
+                shimmerDuration="3s"
+                borderRadius="10px"
+                background="rgba(48, 71, 120, 1)"
+                hovereBackground="linear-gradient(90deg,rgba(85,132,182,1)  0%,  rgba(117,162,190,1) 100%)"
+              >
+                {isDownloading ? "Downloading..." : "Download"}
+              </AnimatedButton>
+
+              {/* <button
                 onClick={handleDownload}
                 className="generateBoq glow-on-hover-boq relative flex items-center w-32 h-10 px-4 py-2 bg-[#fff]/10 text-white overflow-hidden group rounded-[4px] font-Poppins text-xs hover:scale-105 transition-transform duration-300 ease-in-out active:bf-[#85AED2]"
               >
@@ -1422,7 +1443,7 @@ function Navbar({
                     </span>
                   </div>
                 )}
-              </button>
+              </button> */}
             </div>
           </div>
         </div>

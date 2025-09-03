@@ -1028,7 +1028,7 @@ export const AppProvider = ({ children }) => {
           category.category === "Flooring" ||
           category.category === "HVAC" ||
           category.category === "Lighting" ||
-          (category.category == "Civil / Plumbing" &&
+          (category.category === "Civil / Plumbing" &&
             subcategory1 === "Tile") ||
           category.category === "Partitions / Ceilings" ||
           category.category === "Paint"
