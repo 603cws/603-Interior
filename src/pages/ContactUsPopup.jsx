@@ -84,15 +84,15 @@ function ContactUsPopup({ onClose }) {
   return (
     <>
       <div className="fixed inset-0 flex justify-center items-center bg-[#000]/30 z-20">
-        <div className="max-w-sm md:max-w-xl lg:max-w-3xl 2xl:max-w-4xl w-full mx-2 sm:mx-0 flex bg-[#fff] font-Poppins relative max-h-[90vh] overflow-auto">
-          <div className="flex-1 hidden lg:block">
+        <div className="max-w-sm md:max-w-xl lg:max-w-3xl 2xl:max-w-4xl w-full mx-2 sm:mx-0 flex bg-[#fff] font-Poppins relative xl:max-h-[90vh] overflow-auto">
+          <div className="flex-1 hidden lg:block ">
             <img
               src="/images/contact-us/contact-popup.png"
               alt=""
-              className="max-h-full object-cover"
+              className="h-full w-full object-cover"
             />
           </div>
-          <div className="flex-1 relative">
+          <div className="flex-1 relative flex flex-col">
             <div className="absolute right-3 top-3">
               <button onClick={onClose}>
                 <IoIosCloseCircle color="#304778" size={25} />
