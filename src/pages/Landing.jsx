@@ -156,24 +156,34 @@ function Landing() {
 
   const featuredProjects = [
     {
-      img: "project-1.webp",
+      img: "Marathon.webp",
       title: "marathon futurex",
       location: "lower parel",
     },
     {
-      img: "project-2.png",
+      img: "TradeLink.webp",
       title: "trade link",
       location: "lower parel",
     },
     {
-      img: "project-3.png",
-      title: "lawyer's chember",
-      location: "fort",
+      img: "Sunshine.webp",
+      title: "sunshine",
+      location: "lower parel",
     },
     {
-      img: "project-4.png",
+      img: "MarathonFuturex.webp",
+      title: "marathon futurex",
+      location: "lower parel",
+    },
+    {
+      img: "TradeWorld.webp",
       title: "trade world",
       location: "lower parel",
+    },
+    {
+      img: "BKC.webp",
+      title: "pinnacle corporate park",
+      location: "BKC",
     },
   ];
 
@@ -458,6 +468,7 @@ function Landing() {
             loop={true}
             autoplay={{
               disableOnInteraction: false,
+              pauseOnMouseEnter: true,
             }}
             breakpoints={{
               768: { slidesPerView: 2.2 },

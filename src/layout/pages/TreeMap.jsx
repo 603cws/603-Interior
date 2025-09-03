@@ -11,6 +11,7 @@ import { supabase } from "../../services/supabase";
 import UnusedAreaWarning from "../components/UnusedAreaWarning";
 import { PiStarFourFill } from "react-icons/pi";
 import { colors } from "../../constants/constant";
+import { AnimatedButton } from "../../common-components/animated-button";
 
 // import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 // import { faChevronRight, faChevronLeft } from '@fortawesome/free-solid-svg-icons';
@@ -740,7 +741,7 @@ const TreeMap = ({ totalArea, areaQuantities, areaValues }) => {
       {/* button for generate boq */}
       {isMobile && (
         <div className="flex justify-center items-center mt-3">
-          <button
+          {/* <button
             onClick={generateBOQclick}
             className="generateBoq glow-on-hover relative flex items-center w-36 h-10 px-4 py-2 mb-2 bg-[#212B36] border border-[#1A8FE3] text-white overflow-hidden group rounded-[4px] font-Poppins text-xs hover:bg-gradient-to-b from-[#3F56EA] to-[#7c80f3] hover:scale-105 transition-transform duration-300 ease-in-out"
           >
@@ -766,7 +767,26 @@ const TreeMap = ({ totalArea, areaQuantities, areaValues }) => {
                 Create BOQ
               </span>
             </div>
-          </button>
+          </button> */}
+          <AnimatedButton
+            onClick={generateBOQclick}
+            className="!bg-[#3A5D7B] text-white capitalize font-Georgia font-semibold tracking-wider"
+            variant="default"
+            size="lg"
+            // glow={true}
+            textEffect="shimmer"
+            rounded="custom"
+            asChild={false}
+            hideAnimations={false}
+            shimmerColor="#fff"
+            shimmerSize="0.15em"
+            shimmerDuration="3s"
+            borderRadius="10px"
+            background="rgba(48, 71, 120, 1)"
+            hovereBackground="linear-gradient(90deg,rgba(85,132,182,1)  0%,  rgba(117,162,190,1) 100%)"
+          >
+            Create BOQ
+          </AnimatedButton>
         </div>
       )}
     </>

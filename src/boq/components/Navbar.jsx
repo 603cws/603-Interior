@@ -968,7 +968,7 @@ function Navbar({
 
   return (
     <div className="navbar sticky top-0 z-30 font-Poppins">
-      <div className="flex justify-between bg-gradient-to-r from-[#23445B] to-[#487BA0] items-center px-3 md:px-6 3xl:container  h-[50px]">
+      <div className="flex justify-between bg-gradient-to-r from-[#23445B] to-[#487BA0] items-center px-3 md:px-6 3xl:container  h-[60px]">
         <div className="hidden sm:block absolute lg:flex gap-2 right-1/4 lg:right-20 -translate-x-full">
           {/* <div className="flex items-center justify-center gap-1">
             <div className="h-3 w-3 rounded-full border-[1px] bg-[#34BFAD]"></div>
@@ -997,7 +997,7 @@ function Navbar({
           {boqTotal > 0 && (
             <div
               // onClick={signOutUser}
-              className="flex justify-center items-center bg-[#FFF] rounded-sm text-xs px-5 h-fit py-3 self-center text-black border-solid border-1 border-black"
+              className="flex justify-center items-center bg-[#FFF] rounded-sm text-[10px] md:text-xs px-2 md:px-5 h-fit py-2 md:py-3 self-center text-black border-solid border-1 border-black"
             >
               <span className="font-bold">Total</span>: ₹{" "}
               {boqTotal.toLocaleString("en-IN")}
@@ -1024,7 +1024,7 @@ function Navbar({
               onClick={toggleProfile}
               src={accountHolder.profileImage}
               alt="usericon"
-              className="w-8 md:w-12 h-8 p-1 md:h-12 cursor-pointer rounded-full"
+              className="w-10 md:w-12 h-10 p-1 md:h-12 cursor-pointer rounded-full"
             />
           </div>
         </div>

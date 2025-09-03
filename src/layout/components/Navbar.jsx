@@ -383,43 +383,45 @@ function Navbar({
               </span>
             </div>
           </button> */}
-          <AnimatedButton
-            onClick={generateBOQclick}
-            className="!bg-[#3A5D7B] text-white capitalize font-Georgia font-semibold tracking-wider hover:shadow-[10px_10px_20px_rgba(0,0,0,0.8)] transition-shadow"
-            variant="default"
-            size="lg"
-            // glow={true}
-            textEffect="shimmer"
-            rounded="custom"
-            asChild={false}
-            hideAnimations={false}
-            shimmerColor="#fff"
-            shimmerSize="0.15em"
-            shimmerDuration="3s"
-            borderRadius="10px"
-            background="rgba(48, 71, 120, 1)"
-            hovereBackground="linear-gradient(90deg,rgba(85,132,182,1)  0%,  rgba(117,162,190,1) 100%)"
-          >
-            Create BOQ
-          </AnimatedButton>
-
-          {isAuthenticated && (
-            <button
-              ref={iconRef}
-              className="z-30 rounded-full"
-              style={{
-                backgroundImage:
-                  "linear-gradient(to top left, #5B73AF 0%, rgba(255, 255, 255, 0.5) 48%, #1F335C 100%)",
-              }}
+          <div className="flex items-center gap-5">
+            <AnimatedButton
+              onClick={generateBOQclick}
+              className="!bg-[#3A5D7B] text-white capitalize font-Georgia font-semibold tracking-wider"
+              variant="default"
+              size="lg"
+              // glow={true}
+              textEffect="shimmer"
+              rounded="custom"
+              asChild={false}
+              hideAnimations={false}
+              shimmerColor="#fff"
+              shimmerSize="0.15em"
+              shimmerDuration="3s"
+              borderRadius="10px"
+              background="rgba(48, 71, 120, 1)"
+              hovereBackground="linear-gradient(90deg,rgba(85,132,182,1)  0%,  rgba(117,162,190,1) 100%)"
             >
-              <img
-                onClick={toggleProfile}
-                src={accountHolder.profileImage}
-                alt="usericon"
-                className="w-8 md:w-12 h-8 p-1 md:h-12 cursor-pointer rounded-full"
-              />
-            </button>
-          )}
+              Create BOQ
+            </AnimatedButton>
+
+            {isAuthenticated && (
+              <button
+                ref={iconRef}
+                className="z-30 rounded-full"
+                style={{
+                  backgroundImage:
+                    "linear-gradient(to top left, #5B73AF 0%, rgba(255, 255, 255, 0.5) 48%, #1F335C 100%)",
+                }}
+              >
+                <img
+                  onClick={toggleProfile}
+                  src={accountHolder.profileImage}
+                  alt="usericon"
+                  className="w-8 md:w-12 h-8 p-1 md:h-12 cursor-pointer rounded-full"
+                />
+              </button>
+            )}
+          </div>
 
           {/* </div> */}
         </div>
