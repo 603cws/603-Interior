@@ -31,7 +31,7 @@ function Help({ isvendor }) {
       // } rounded-3xl my-2.5 font-Poppins`}
     >
       {/* <div className="flex-1  border-2 border-[#000] rounded-3xl my-2.5 font-Poppins"> */}
-      <div className="flex-col overflow-y-auto scrollbar-hide h-[calc(100vh-120px)] py-2 px-3">
+      <div className="flex-col overflow-y-auto custom-scrollbar h-[calc(100vh-120px)] py-2 px-3">
         <div className="my-4">
           <h2 className="text-[#000] text-xl lg:text-3xl capitalize font-semibold text-center">
             How can we help you?

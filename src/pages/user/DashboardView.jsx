@@ -201,7 +201,7 @@ function DashboardView({
       {/* dashboard area layout */}
       <div className="xl:w-2/3">
         <div className="p-2 lg:p-4 border border-[#ccc] rounded-lg">
-          <h2 className="capitalize font-bold mb-2 text-base lg:text-xl">
+          <h2 className="capitalize font-semibold mb-2 text-base lg:text-xl">
             Layout Information : selected boq {selectedBoq?.boqTitle || "NA"}
           </h2>
           {/* div containing information */}
@@ -267,9 +267,15 @@ function DashboardView({
         </div>
         {/* dashboard boq part */}
         <div className="p-3 border border-[#ccc] rounded-lg mt-6 ">
-          <h3 className="capitalize font-bold mb-2">BOQ generated</h3>
+          <h3 className="capitalize font-semibold mb-2 text-base lg:text-xl">
+            BOQ generated
+          </h3>
           {/* boq card */}
-          <div className="flex gap-2 lg:gap-3 flex-wrap justify-center md:justify-normal">
+          <div
+            className={`flex gap-2 lg:gap-3 flex-wrap justify-center ${
+              isExpanded ? "md:justify-normal" : "md:justify-between"
+            } `}
+          >
             {isboqavailable &&
               boqdata.map((boq, index) => {
                 return (
@@ -361,10 +367,10 @@ function LayoutInfoCard({ selectedBoq, value, title, image, spanvalue }) {
         />
       </div>
       <div className="capitalize lg:pr-10 flex-1">
-        <p className="font-bold text-lg">
+        <p className="font-semibold text-lg">
           {/* {selectedBoq.total_area} */}
           {selectedBoq && value}
-          {spanvalue && <span>{spanvalue}</span>}
+          {spanvalue && <span> {spanvalue}</span>}
         </p>
         <p className="text-base">{title}</p>
       </div>
@@ -375,7 +381,7 @@ function LayoutInfoCard({ selectedBoq, value, title, image, spanvalue }) {
 function GeneratedBOQCard({ boq, onDelete, selectedBoq }) {
   return (
     <div
-      className={`w-[270px]  border border-[#CCCCCC] font-Poppins p-2 rounded-lg text-[#000] ${
+      className={`w-[270px]  border border-[#CCCCCC] font-Poppins p-2 xl:p-4 rounded-lg text-[#000] ${
         selectedBoq?.id === boq?.id
           ? "bg-gradient-to-br from-[#23445B] to-[#487BA0] text-[#fff]"
           : ""
@@ -383,7 +389,7 @@ function GeneratedBOQCard({ boq, onDelete, selectedBoq }) {
     >
       <div className="flex justify-between mb-1.5">
         <h5
-          className="font-bold text-xl text-ellipsis overflow-hidden text-nowrap"
+          className="font-semibold text-xl text-ellipsis overflow-hidden text-nowrap"
           title={boq?.boqTitle}
         >
           {boq?.boqTitle}
@@ -394,7 +400,7 @@ function GeneratedBOQCard({ boq, onDelete, selectedBoq }) {
           <MdDeleteOutline size={25} />
         </button>
       </div>
-      <div className="grid grid-cols-2 gap-2.5 font-semibold ">
+      <div className="grid grid-cols-2 gap-2.5  ">
         <p>Total Area</p>
         <p>{boq?.layout?.totalArea} sqft.</p>
         <p>Used</p>

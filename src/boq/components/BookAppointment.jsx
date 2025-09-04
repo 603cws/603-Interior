@@ -213,7 +213,7 @@ function BookAppointment({ onClose, isdashboardbooking = false }) {
       <div
         className={`${
           !isdashboardbooking
-            ? "max-w-sm md:max-w-4xl rounded-2xl border bg-[#fff] p-5 relative overflow-auto"
+            ? "max-w-sm md:max-w-4xl rounded-2xl border bg-[#fff] p-5 relative  overflow-auto"
             : "w-full "
         }`}
       >
@@ -232,7 +232,7 @@ function BookAppointment({ onClose, isdashboardbooking = false }) {
         <div
           className={`flex justify-center  items-center ${
             isdashboardbooking &&
-            "overflow-auto md:h-[85vh] lg:h-[80vh] scrollbar-hide"
+            "overflow-auto md:h-[85vh] lg:h-[80vh] custom-scrollbar"
           }`}
         >
           {!isappointmentbooked ? (
@@ -244,7 +244,7 @@ function BookAppointment({ onClose, isdashboardbooking = false }) {
               <div className=" flex flex-col md:flex-row justify-around items-stretch gap-4 xl:gap-6 mx-3 md:mx-0">
                 {/* calender */}
                 <div className="flex-1">
-                  <h3 className="text-sm text-[#111] font-medium ">
+                  <h3 className="text-sm text-[#111] xl:mb-2 font-medium ">
                     Schedule date*
                   </h3>
                   <div className="flex gap-2 items-center rounded-lg bg-[#FAFAFA] border-[#757575] border px-2 mb-3">
@@ -335,7 +335,7 @@ function BookAppointment({ onClose, isdashboardbooking = false }) {
                 </div>
               </div>
               {/* button for submit */}
-              <div className="flex justify-center items-center my-2 md:my-4">
+              <div className=" flex justify-center items-center my-2 md:my-4">
                 <button
                   onClick={handlesubmi}
                   className="px-2 py-1 md:px-5 md:py-3 bg-[#374A75] text-[#fafafa] rounded-lg"

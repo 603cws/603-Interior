@@ -605,7 +605,7 @@ function Dashboard() {
                 : "/images/bi_layout-sidebar.png"
             }`}
             alt="Logo"
-            className={`${isExpanded ? "h-20 w-32" : "h-8 w-8"}`}
+            className={`${isExpanded ? "h-20 w-36" : "h-8 w-8"}`}
             onClick={() => navigate("/")}
           />
         </div>
@@ -808,7 +808,7 @@ function Dashboard() {
         {/* header for dashboard */}
         <div className="flex justify-between items-center border-b border-[#CCCCCC] lg:border-2 lg:border-[#334A78] lg:rounded-lg bg-white  lg:h-[50px] shrink-0">
           <div className="mx-3">
-            <h3 className="font-bold text-2xl text-[#374A75] capitalize">
+            <h3 className="font-semibold text-2xl text-[#374A75] capitalize">
               {sidebarstate?.currentSection}
             </h3>
           </div>
@@ -909,7 +909,7 @@ function Dashboard() {
         )}
 
         {sidebarstate?.isBookAppointmentOpen && (
-          <div className="flex flex-col h-full min-h-0  lg:border-2 border-[#334A78] rounded-lg bg-white">
+          <div className="flex flex-col h-full min-h-0  lg:border-2 overflow-hidden border-[#334A78] rounded-lg bg-white">
             <BookAppointment isdashboardbooking={true} />
           </div>
         )}
