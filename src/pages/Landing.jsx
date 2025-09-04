@@ -18,10 +18,10 @@ gsap.registerPlugin(ScrollTrigger);
 function Landing() {
   const navigate = useNavigate();
   const heroImages = [
-    "/images/home/Hero-image-1.jpg",
-    "/images/home/Hero-image-2.jpg",
-    "/images/home/Hero-image-3.jpg",
-    "/images/home/Hero-image-4.jpg",
+    "/images/home/Hero-image-1.webp",
+    "/images/home/Hero-image-2.webp",
+    "/images/home/Hero-image-3.webp",
+    "/images/home/Hero-image-4.webp",
   ];
 
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -261,25 +261,46 @@ function Landing() {
                 <br />
                 <span className="text-[#FFC900]"> smart planning</span>
               </h1>
-              <AnimatedButton
-                onClick={() => navigate("/layout")}
-                className="!bg-[#3A5D7B] text-white capitalize font-Georgia mt-7 text-lg"
-                variant="default"
-                size="lg"
-                // glow={true}
-                textEffect="shimmer"
-                rounded="custom"
-                asChild={false}
-                hideAnimations={false}
-                shimmerColor="#fff"
-                shimmerSize="0.15em"
-                shimmerDuration="3s"
-                borderRadius="10px"
-                background="rgba(48, 71, 120, 1)"
-                hovereBackground="linear-gradient(90deg,rgba(85,132,182,1)  0%,  rgba(117,162,190,1) 100%)"
-              >
-                make your space
-              </AnimatedButton>
+              <div className="flex gap-5 mt-7">
+                <AnimatedButton
+                  onClick={() => navigate("/layout")}
+                  className="!bg-[#3A5D7B] text-white capitalize font-Georgia  text-lg w-60"
+                  variant="default"
+                  size="lg"
+                  // glow={true}
+                  textEffect="shimmer"
+                  rounded="custom"
+                  asChild={false}
+                  hideAnimations={false}
+                  shimmerColor="#fff"
+                  shimmerSize="0.15em"
+                  shimmerDuration="3s"
+                  borderRadius="10px"
+                  background="rgba(48, 71, 120, 1)"
+                  hovereBackground="linear-gradient(90deg,rgba(85,132,182,1)  0%,  rgba(117,162,190,1) 100%)"
+                >
+                  make your space
+                </AnimatedButton>
+                {/* <AnimatedButton
+                  onClick={() => navigate("/layout")}
+                  className="!bg-[#3A5D7B] text-white capitalize font-Georgia  text-lg w-60"
+                  variant="default"
+                  size="lg"
+                  // glow={true}
+                  textEffect="shimmer"
+                  rounded="custom"
+                  asChild={false}
+                  hideAnimations={false}
+                  shimmerColor="#fff"
+                  shimmerSize="0.15em"
+                  shimmerDuration="3s"
+                  borderRadius="10px"
+                  background="rgba(48, 71, 120, 1)"
+                  hovereBackground="linear-gradient(90deg,rgba(85,132,182,1)  0%,  rgba(117,162,190,1) 100%)"
+                >
+                  book appointment
+                </AnimatedButton> */}
+              </div>
             </motion.div>
           </div>
         </div>
@@ -289,7 +310,7 @@ function Landing() {
       <section className="hidden lg:block overflow-hidden py-14">
         <div
           ref={containerRef}
-          className="relative max-w-4xl xl:max-w-6xl 2xl:max-w-[1440px] mx-auto h-screen font-TimesNewRoman italic overflow-hidden py-5"
+          className="relative max-w-4xl xl:max-w-6xl 2xl:max-w-[1280px] mx-auto h-screen font-TimesNewRoman italic overflow-hidden py-5"
         >
           {/* Specialized text */}
           <h1 className="absolute top-[15%] text-5xl 2xl:text-7xl specialized-text ">
@@ -357,10 +378,10 @@ function Landing() {
 
       {/* section 3 */}
       <section>
-        <div className="px-4 lg:container mx-auto py-10">
+        <div className="px-4 lg:container xl:max-w-7xl xl:px-0 mx-auto py-10">
           <div className="flex flex-col items-center space-y-4">
             <TitleHeader title={"service"} />
-            <h3 className="capitalize font-Georgia font-bold italic text-[42px] text-center tracking-wide">
+            <h3 className="capitalize font-Georgia font-bold text-[42px] text-center tracking-wide">
               transform your office
               <br /> interior design
             </h3>
@@ -395,8 +416,8 @@ function Landing() {
 
       {/* section 4 */}
       <section>
-        <div className="px-4 lg:container py-10">
-          <h3 className="font-Georgia font-bold italic text-[42px] text-center tracking-wide">
+        <div className="px-4 mx-auto lg:container xl:max-w-7xl xl:px-0 py-10">
+          <h3 className="font-Georgia font-bold text-[42px] text-center tracking-wide">
             Trusted by Industry Leaders
           </h3>
           <div className="">
@@ -458,7 +479,7 @@ function Landing() {
         <div className="px-4 sm:px-0 w-full 3xl:container py-10">
           <div className="flex flex-col items-center space-y-4">
             <TitleHeader title={"our best projects"} />
-            <h3 className="capitalize font-Georgia font-bold italic text-[42px] text-center tracking-wide">
+            <h3 className="capitalize font-Georgia font-bold text-[42px] text-center tracking-wide">
               our featured projects
             </h3>
           </div>

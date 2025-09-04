@@ -74,3 +74,7 @@
 .react-calendar__month-view__days__day {
   width: 100%; /* let grid handle sizing */
 }
+.react-calendar__month-view__weekdays__weekday {
+  font-family: "Poppins";
+  font-weight: 600;
+}

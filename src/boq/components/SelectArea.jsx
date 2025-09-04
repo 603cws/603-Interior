@@ -738,7 +738,7 @@ function SelectArea({
                     .map((name, id) => (
                       <div key={id} className="flex flex-col gap-1">
                         <div className="flex items-center gap-2">
-                          <input
+                          {/* <input
                             type="checkbox"
                             id={`subCategory-${id}`}
                             value={name}
@@ -780,7 +780,46 @@ function SelectArea({
                             }`}
                           >
                             {name}
-                          </label>
+                          </label> */}
+                          <button
+                            type="button"
+                            onClick={() =>
+                              handleCheckboxChange(
+                                name,
+                                !selectedAreas.includes(name)
+                              )
+                            }
+                            className={`px-4 py-2 border text-xs lg:text-base rounded-md transition w-full
+                                ${
+                                  selectedAreas.includes(name)
+                                    ? "bg-gradient-to-r from-[#334A78] to-[#68B2DC] text-white"
+                                    : "bg-gray-200 text-[#000] hover:bg-gray-100"
+                                }
+                                ${
+                                  Array.isArray(selectedData) &&
+                                  isItemSelected(
+                                    selectedData,
+                                    selectedCategory,
+                                    name,
+                                    selectedSubCategory1,
+                                    selectedProductView
+                                  )
+                                    ? "opacity-60 cursor-not-allowed"
+                                    : "cursor-pointer"
+                                }`}
+                            disabled={
+                              Array.isArray(selectedData) &&
+                              isItemSelected(
+                                selectedData,
+                                selectedCategory,
+                                name,
+                                selectedSubCategory1,
+                                selectedProductView
+                              )
+                            }
+                          >
+                            {name}
+                          </button>
                         </div>
                         {/* table chair */}
                         {selectedCategory.category === "Furniture" &&
@@ -805,7 +844,7 @@ function SelectArea({
                                   selectedProductView
                                 )
                                   ? "flex"
-                                  : "invisible"
+                                  : "hidden"
                               } gap-2 h-6`}
                             >
                               <button
@@ -856,7 +895,7 @@ function SelectArea({
                                   selectedProductView
                                 )
                                   ? "flex"
-                                  : "invisible"
+                                  : "hidden"
                               } gap-2 h-6`}
                             >
                               <button
@@ -907,7 +946,7 @@ function SelectArea({
                                 selectedProductView
                               )
                                 ? "flex"
-                                : "invisible"
+                                : "hidden"
                             } gap-2 h-6`}
                           >
                             <button
@@ -957,7 +996,7 @@ function SelectArea({
                                   selectedProductView
                                 )
                                   ? "flex"
-                                  : "invisible"
+                                  : "hidden"
                               } gap-2 h-6`}
                             >
                               <button
@@ -1003,10 +1042,10 @@ function SelectArea({
                       checked={allSelected}
                       disabled={allSubcategoriesDisabled}
                       onChange={(e) => handleSelectAll(e.target.checked)}
-                      className="appearance-none w-3 h-3 lg:w-4 lg:h-4 cursor-pointer transition duration-300 bg-black checked:border-black
+                      className="appearance-none w-3 h-3 lg:w-4 lg:h-4 cursor-pointer transition duration-300 bg-gray-200 checked:border-black
                   relative checked:before:content-['✔'] checked:before:absolute checked:before:text-white 
                   checked:before:top-1/2 checked:before:left-1/2 checked:before:-translate-x-1/2 checked:before:-translate-y-1/2 
-                  checked:before:text-[14px] checked:before:font-bold disabled:bg-gray-400 disabled:cursor-not-allowed disabled:opacity-60"
+                  checked:before:text-[14px] checked:before:font-bold disabled:bg-gray-400 disabled:cursor-not-allowed disabled:opacity-60 checked:bg-gradient-to-r checked:from-[#334A78] checked:to-[#68B2DC] checked:text-white"
                     />
                     <label
                       htmlFor="selectAll"

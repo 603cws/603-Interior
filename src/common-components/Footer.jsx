@@ -55,7 +55,7 @@ function Footer() {
   const navigate = useNavigate();
   return (
     <footer className="relative bg-[url('../images/bg/footer-bg.png')] bg-cover bg-center bg-no-repeat w-full font-TimesNewRoman py-5">
-      <div className="relative px-4 lg:container">
+      <div className="relative px-4 lg:container xl:max-w-7xl xl:px-0 mx-auto">
         <div className="lg:flex justify-stretch w-full mb-4 lg:mb-10">
           <div className="flex-1 mb-2 lg:mb-0">
             <p className="text-2xl font-bold font-TimesNewRoman tracking-wide text-[#fff]">

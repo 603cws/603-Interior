@@ -66,37 +66,35 @@ const TreeMap = ({ totalArea, areaQuantities, areaValues }) => {
     isMobile,
   } = useApp();
 
-  // const chartRef = useRef(null);
-
   const MIN_AREA = 1000;
   const MAX_AREA = 25000;
 
   const workspaceImages = {
-    "Linear Workspace": "/images/workspace-image/linear.webp",
-    "L-Type Workspace": "/images/workspace-image/lType.webp",
-    "MD Cabin": "/images/workspace-image/md.png",
-    "Manager Cabin": "/images/workspace-image/manager.webp",
-    "Small Cabin": "/images/workspace-image/small.png",
-    "UPS Room": "/images/workspace-image/ups.png",
-    "BMS Room": "/images/workspace-image/bms.png",
-    "Server Room": "/images/workspace-image/server.png",
-    Reception: "/images/workspace-image/reception.png",
-    "Lounge/Pantry": "/images/workspace-image/lounge.png",
-    "Video Recording Room": "/images/workspace-image/videoRecordingRoom.png",
-    "Sales Team": "/images/workspace-image/sales.png",
-    "Phone Booth": "/images/workspace-image/phoneBooth.png",
+    "Linear Workspace": "/images/workstation-wp/linear.webp",
+    "L-Type Workspace": "/images/workstation-wp/lType.webp",
+    "MD Cabin": "/images/workstation-wp/md.webp",
+    "Manager Cabin": "/images/workstation-wp/manager.webp",
+    "Small Cabin": "/images/workstation-wp/smallCabin.webp",
+    "UPS Room": "/images/workstation-wp/ups.webp",
+    "BMS Room": "/images/workstation-wp/bms.webp",
+    "Server Room": "/images/workstation-wp/serverRoom.webp",
+    Reception: "/images/workstation-wp/reception.webp",
+    Lounge: "/images/workstation-wp/lounge.webp",
+    "Video Recording Room": "/images/workstation-wp/videoRoom.webp",
+    "Sales Team": "/images/workstation-wp/salesRoom.webp",
+    "Phone Booth": "/images/workstation-wp/phoneBooth.webp",
     "Discussion Room": "/images/workspace-image/discussionRoom.png",
-    "Interview Room": "/images/workspace-image/interviewRoom.png",
-    "Conference Room": "/images/workspace-image/conferenceRoom.webp",
-    "Board Room": "/images/workspace-image/boardRoom.webp",
-    "Meeting Room": "/images/workspace-image/meetingRoom.png",
-    "Meeting Room (L)": "/images/workspace-image/meetingRoomLarge.png",
-    "HR Room": "/images/workspace-image/hrRoom.webp",
-    "Finance Room": "/images/workspace-image/financeRoom.webp",
-    "Executive Washroom": "/images/workspace-image/executiveWashroom.png",
-    "Breakout Room": "/images/workspace-image/breakout.webp",
-    Other: "/images/workspace-image/other.png",
-    Washrooms: "/images/workspace-image/washroom.png",
+    "Interview Room": "/images/workstation-wp/interview.webp",
+    "Conference Room": "/images/workstation-wp/conferenceRoom.webp",
+    "Board Room": "/images/workstation-wp/boardRoom.webp",
+    "Meeting Room": "/images/workstation-wp/meetingRoom.webp",
+    "Meeting Room (L)": "/images/workstation-wp/meetingRoomLarge.webp",
+    "HR Room": "/images/workstation-wp/hrRoom.webp",
+    "Finance Room": "/images/workstation-wp/financeRoom.webp",
+    "Executive Washroom": "/images/workstation-wp/executiveWashroom.webp",
+    "Breakout Room": "/images/workstation-wp/breakout.webp",
+    Other: "/images/workstation-wp/others.webp",
+    "Wash rooms": "/images/workstation-wp/washroom.webp",
   };
 
   useEffect(() => {
@@ -174,111 +172,6 @@ const TreeMap = ({ totalArea, areaQuantities, areaValues }) => {
     },
   ];
 
-  // function splitTreemapLabels(root) {
-  //   const labels = root.querySelectorAll(
-  //     ".apexcharts-treemap .apexcharts-datalabel"
-  //   );
-
-  //   labels.forEach((label) => {
-  //     const txt = label.textContent || "";
-  //     if (!txt.includes("|||")) return;
-
-  //     // ✅ Go up to the series group (which contains both rect + label)
-  //     const rect = label.closest(
-  //       "g.apexcharts-data-labels"
-  //     )?.previousElementSibling;
-
-  //     if (rect) {
-  //       const width = parseFloat(rect.getAttribute("width"));
-  //       const height = parseFloat(rect.getAttribute("height"));
-
-  //       if (width > 0 && height > 0) {
-  //         const aspectRatio = width / height;
-  //         console.log("Block size:", { txt, width, height, aspectRatio });
-  //       }
-  //     } else {
-  //       console.warn("⚠️ No rect found for label:", label.textContent);
-  //     }
-
-  //     const x = label.getAttribute("x");
-
-  //     // Split lines and clear existing content
-  //     const lines = txt.split("|||");
-  //     while (label.firstChild) label.removeChild(label.firstChild);
-
-  //     // Optional: vertically center the block
-  //     const lh = 1.1;
-  //     const startDy = (-(lines.length - 1) * lh) / 2 + "em";
-
-  //     lines.forEach((line, i) => {
-  //       const tspan = document.createElementNS(
-  //         "http://www.w3.org/2000/svg",
-  //         "tspan"
-  //       );
-  //       tspan.setAttribute("x", x);
-  //       tspan.setAttribute("dy", i === 0 ? startDy : `${lh}em`);
-  //       tspan.textContent = line;
-  //       label.appendChild(tspan);
-  //     });
-  //   });
-  // }
-  // function splitTreemapLabels(root) {
-  //   const labels = root.querySelectorAll(
-  //     ".apexcharts-treemap .apexcharts-datalabel"
-  //   );
-
-  //   labels.forEach((label) => {
-  //     const txt = label.textContent || "";
-  //     if (!txt.includes("|||")) return;
-
-  //     const rect = label.closest(
-  //       "g.apexcharts-data-labels"
-  //     )?.previousElementSibling;
-
-  //     let aspectRatio = 1;
-  //     if (rect) {
-  //       const width = parseFloat(rect.getAttribute("width"));
-  //       const height = parseFloat(rect.getAttribute("height"));
-
-  //       if (width > 0 && height > 0) {
-  //         aspectRatio = width / height;
-  //         console.log("Block size:", { txt, width, height, aspectRatio });
-  //       }
-  //     } else {
-  //       console.warn("⚠️ No rect found for label:", label.textContent);
-  //     }
-
-  //     const x = label.getAttribute("x");
-
-  //     // Decide whether to split or not
-  //     // 👉 Example thresholds:
-  //     // very wide blocks (aspectRatio > 2.5) = keep text in one line
-  //     // very tall blocks (aspectRatio < 0.4) = keep text in one line
-  //     // else split normally
-  //     const shouldSplit = aspectRatio >= 0.4 && aspectRatio <= 2.5;
-
-  //     const lines = shouldSplit ? txt.split("|||") : [txt];
-
-  //     // Clear old content
-  //     while (label.firstChild) label.removeChild(label.firstChild);
-
-  //     // Optional: vertically center
-  //     const lh = 1.1;
-  //     const startDy = (-(lines.length - 1) * lh) / 2 + "em";
-
-  //     lines.forEach((line, i) => {
-  //       const tspan = document.createElementNS(
-  //         "http://www.w3.org/2000/svg",
-  //         "tspan"
-  //       );
-  //       tspan.setAttribute("x", x);
-  //       tspan.setAttribute("dy", i === 0 ? startDy : `${lh}em`);
-  //       tspan.textContent = line;
-  //       label.appendChild(tspan);
-  //     });
-  //   });
-  // }
-
   function splitTreemapLabels(root) {
     const labels = root.querySelectorAll(
       ".apexcharts-treemap .apexcharts-datalabel"
@@ -302,13 +195,13 @@ const TreeMap = ({ totalArea, areaQuantities, areaValues }) => {
           console.log("Block size:", { txt, width, height, aspectRatio });
         }
       } else {
-        console.warn("⚠️ No rect found for label:", label.textContent);
+        console.warn("No rect found for label:", label.textContent);
       }
 
       const x = label.getAttribute("x");
 
       // Decide whether to split or not
-      const shouldSplit = aspectRatio >= 0.4 && aspectRatio <= 2.5;
+      const shouldSplit = aspectRatio >= 0.15 && aspectRatio <= 2.5;
 
       // Prepare lines
       const lines = shouldSplit
@@ -357,6 +250,10 @@ const TreeMap = ({ totalArea, areaQuantities, areaValues }) => {
     chart: {
       type: "treemap",
       height: chartHeight,
+      animations: {
+        enabled: false,
+        dynamicAnimation: { enabled: false },
+      },
       toolbar: {
         show: true,
       },
@@ -374,6 +271,10 @@ const TreeMap = ({ totalArea, areaQuantities, areaValues }) => {
         // },
         mounted: (ctx) =>
           requestAnimationFrame(() => splitTreemapLabels(ctx.el)),
+        // mounted: (ctx) => {
+        //   chartRef.current = ctx; // store instance
+        //   requestAnimationFrame(() => splitTreemapLabels(ctx.el));
+        // },
         // rendered fires after animations; safest place
         rendered: (ctx) =>
           requestAnimationFrame(() => splitTreemapLabels(ctx.el)),
@@ -627,22 +528,12 @@ const TreeMap = ({ totalArea, areaQuantities, areaValues }) => {
         return;
       }
 
-      // Trigger export and wait for image to be available
-      // if (layoutImgRef.current) {
-      //   await layoutImgRef.current();
-      // }
-
-      // Upload image to Supabase
-      // const imageUrl = await uploadImage(layoutImage || "");
-      // const imageFilename = await uploadImage(layoutImage);
-
       if (totalArea) {
         const layoutData = mapAreaValues(
           userId,
           areaValues,
           areaQuantities,
           totalArea,
-          // imageFilename,
           builtArea
         );
 

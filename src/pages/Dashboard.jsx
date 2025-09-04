@@ -605,7 +605,7 @@ function Dashboard() {
                 : "/images/bi_layout-sidebar.png"
             }`}
             alt="Logo"
-            className={`${isExpanded ? "h-20 w-36" : "h-8 w-8"}`}
+            className={`${isExpanded ? "h-[70px] w-36" : "h-8 w-8"}`}
             onClick={() => navigate("/")}
           />
         </div>
