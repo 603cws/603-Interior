@@ -8,6 +8,7 @@ function ItemList({
   items,
   handleProductEdit,
   handleAddonEdit,
+  isExpanded,
 }) {
   // testing items
   //   const items = Array.from({ length: 55 }, (_, index) => ({
@@ -41,8 +42,12 @@ function ItemList({
     <>
       <div
         ref={scrollContainerRef}
-        className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-7 gap-4 p-2 
-      h-5/6  overflow-y-auto"
+        className={`grid grid-cols-2  gap-4 p-2 
+      h-5/6  overflow-y-auto ${
+        isExpanded
+          ? "md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-6"
+          : "md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-7 gap-4"
+      }`}
       >
         {paginatedItems?.length > 0 &&
           paginatedItems?.map((item) => (
@@ -138,7 +143,7 @@ function ItemCard({
   return (
     <div>
       {/* <div onClick={() => handleProductPreview(item)} className="cursor-pointer"> */}
-      <div className="relative max-w-xs md:w-44 md:h-44 flex justify-center items-center rounded-2xl shadow-xl border border-[#ccc] ">
+      <div className="relative max-w-xs md:w-44 md:h-44 flex justify-center items-center rounded-2xl shadow-sm border border-[#ccc] ">
         <img
           src={`${baseImageUrl}/${item?.image}`}
           alt="chair"

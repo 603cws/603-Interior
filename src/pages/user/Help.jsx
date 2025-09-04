@@ -39,7 +39,7 @@ function Help({ isvendor }) {
         </div>
 
         <div className="bg-[#fff] border-2 p-3 border-[#E6E6E6] rounded-lg">
-          <h3 className="lg:px-8 text-lg lg:text-2xl capitalize font-medium">
+          <h3 className="lg:px-8 text-lg lg:text-2xl capitalize font-medium lg:my-3">
             Common Questions
           </h3>
           <div className="flex flex-col m-auto lg:px-8 py-2 ">

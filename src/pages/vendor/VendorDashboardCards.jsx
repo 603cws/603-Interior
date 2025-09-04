@@ -81,15 +81,15 @@ function VendorDashboardCards({ handleproduct }) {
       id: 3,
       item: pendingproducts,
       title: "pending products",
-      imgpath: "/images/dashboard-orders.png",
+      imgpath: "/images/vendorProductPending.png",
       className: "bg-[#D8F7FF]",
     },
     {
       id: 4,
       item: pendingAddons,
       title: "pending Addons",
-      imgpath: "/images/dashboard-orders.png",
-      className: "bg-[#D8F7FF]",
+      imgpath: "/images/vendorAddonPending.png",
+      className: "bg-[#D8DFFF]",
     },
   ];
 

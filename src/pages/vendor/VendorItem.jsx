@@ -16,7 +16,7 @@ import { IoCloseCircle } from "react-icons/io5";
 import { HiPlus } from "react-icons/hi";
 // import { ChevronDownIcon, FunnelIcon } from "@heroicons/react/24/outline";
 
-function VendorItem() {
+function VendorItem({ isExpanded }) {
   const [toggle, setToggle] = useState(true);
   const [selectedTab, setSelectedTab] = useState("products");
   const [isAddProduct, setIsAddProduct] = useState(false);
@@ -447,8 +447,8 @@ function VendorItem() {
                     <input
                       type="text"
                       value={searchQuery}
-                      className="w-full rounded-lg px-2 py-1 outline-none border-2 border-gray-400"
-                      placeholder="....search"
+                      className="w-full rounded-md px-2 py-1 outline-none border-2 border-gray-400"
+                      placeholder="search...."
                       onChange={(e) => {
                         setSearchQuery(e.target.value);
                         filterItems(e.target.value);
@@ -482,6 +482,7 @@ function VendorItem() {
                       handleProductEdit={handleProductEdit}
                       handleAddonEdit={handleAddonEdit}
                       items={items}
+                      isExpanded={isExpanded}
                     />
                   </section>
                 </>

@@ -711,20 +711,20 @@ function AdminDashboard() {
                 : "/images/bi_layout-sidebar.png"
             }`}
             alt="Logo"
-            className={`${isExpanded ? "h-20 w-32" : "h-8 w-8"}`}
+            className={`${isExpanded ? "h-16 w-32" : "h-8 w-8"}`}
             onClick={() => navigate("/")}
           />
         </div>
 
         {/* Menu Items */}
         <div className="font-semibold text-lg capitalize leading-normal tracking-wide py-3 xl:py-4 text-[#262626] flex flex-col gap-2 px-3">
-          <h3
+          {/* <h3
             className={`capitalize text-[#A1A1A1] ${
               isExpanded ? "mx-4" : "hidden"
             }`}
           >
             main
-          </h3>
+          </h3> */}
           <SidebarItem
             icon={<MdOutlineSpaceDashboard />}
             text="Dashboard"
@@ -774,10 +774,23 @@ function AdminDashboard() {
             isExpanded={isExpanded}
             currentSection={sidebarstate?.currentSection}
           />
+          <SidebarItem
+            icon={<RiSettingsLine />}
+            text="Setting"
+            onClick={handlesetting}
+            isExpanded={isExpanded}
+            currentSection={sidebarstate?.currentSection}
+          />
+          <SidebarItem
+            icon={<FiLogOut />}
+            text="Logout"
+            onClick={logout}
+            isExpanded={isExpanded}
+          />
         </div>
 
         {/* Other Items */}
-        <div className="font-semibold text-lg capitalize leading-normal tracking-wide py-3 xl:py-4 text-[#262626] flex flex-col gap-2 px-3">
+        {/* <div className="font-semibold text-lg capitalize leading-normal tracking-wide  text-[#262626] flex flex-col gap-2 px-3">
           <h3
             className={`capitalize text-[#A1A1A1] ${
               isExpanded ? "mx-4" : "hidden"
@@ -798,7 +811,7 @@ function AdminDashboard() {
             onClick={logout}
             isExpanded={isExpanded}
           />
-        </div>
+        </div> */}
       </div>
       <div className="flex flex-col h-full min-h-0 lg:gap-2 lg:px-2">
         {/* header for mobile */}
@@ -929,8 +942,8 @@ function AdminDashboard() {
         {/* header for dashboard */}
         <div className="flex justify-between items-center border-b border-[#CCCCCC] lg:border-2 lg:border-[#334A78] lg:rounded-lg bg-white  lg:h-[50px] shrink-0">
           <div className="mx-3">
-            <h3 className="font-bold text-2xl text-[#374A75] capitalize ">
-              {sidebarstate.currentSection}
+            <h3 className="font-semibold text-2xl text-[#374A75] capitalize ">
+              {sidebarstate?.currentSection}
             </h3>
           </div>
           <div
@@ -1552,6 +1565,7 @@ function AdminDashboard() {
             />
           </>
         )}
+
         {sidebarstate.isClientOpen && clientBoqs && (
           <ClientBoq setClientBoqs={setClientBoqs} />
         )}
@@ -1569,7 +1583,7 @@ function AdminDashboard() {
                   <div className="w-1/2 hidden lg:block">
                     <input
                       type="text"
-                      className="w-full rounded-lg px-2 py-1 outline-none"
+                      className="w-full rounded-lg px-2 py-1 outline-none border border-[#ccc]"
                       placeholder="......search by company name"
                       onChange={(e) =>
                         filterVendorByMultipleFields(e.target.value)
@@ -1654,7 +1668,7 @@ function AdminDashboard() {
                           alt="profile"
                           className={`${
                             isExpanded ? "w-10 h-10" : "w-12 h-12"
-                          }  rounded-full object-cover`}
+                          }  rounded-full object-cover border border-[#ccc]`}
                         />
 
                         {/* Name and Email */}

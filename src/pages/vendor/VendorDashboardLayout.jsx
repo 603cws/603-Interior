@@ -192,7 +192,7 @@ function VendorDashboardLayout() {
             <img
               src="/logo/workved-interior.png"
               alt="Logo"
-              className={`${isExpanded ? "h-20 w-32" : "h-9 w-16"}`}
+              className={`${isExpanded ? "h-16 w-36" : "h-9 w-16"}`}
               onClick={() => navigate("/")}
             />
           </div>
@@ -282,7 +282,7 @@ function VendorDashboardLayout() {
         {/* header for dashboard */}
         <div className="flex justify-between items-center border-b border-[#CCCCCC] lg:border-2 lg:border-[#334A78] lg:rounded-lg bg-white  lg:h-[50px] shrink-0 ">
           <div className="mx-3">
-            <h3 className="font-bold text-2xl text-[#374A75] capitalize">
+            <h3 className="font-semibold text-2xl text-[#374A75] capitalize">
               {sidebarstate?.currentSection}
             </h3>
           </div>
@@ -332,7 +332,7 @@ function VendorDashboardLayout() {
         {sidebarstate?.isProductOpen && (
           <div className="flex flex-col h-full min-h-0 overflow-hidden lg:border-2 border-[#334A78] rounded-lg bg-white">
             <div className="">
-              <VendorItem />
+              <VendorItem isExpanded={isExpanded} />
             </div>
           </div>
         )}

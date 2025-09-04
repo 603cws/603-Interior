@@ -93,8 +93,8 @@ function Clients({
               >
                 <div
                   className={` ${
-                    isExpanded ? " gap-2 p-3" : "gap-3 p-4"
-                  } flex items-start  relative`}
+                    isExpanded ? " gap-2 py-3" : "gap-3 py-4"
+                  } flex items-start   relative`}
                 >
                   {/* <div className={`${isExpanded ? "hidden" : "block"} mx-3`}> */}
                   <img
@@ -102,9 +102,8 @@ function Clients({
                     alt="usericon"
                     className={`${
                       isExpanded ? "w-10 h-10" : "w-12 h-12"
-                    }  rounded-full object-cover`}
+                    }  rounded-full object-cover border border-[#ccc] `}
                   />
-                  {/* </div> */}
                   <div className="flex flex-col justify-center">
                     <h2
                       className={`${
@@ -116,7 +115,7 @@ function Clients({
                     <p
                       className={`text-gray-400 ${
                         isExpanded ? "text-xs" : "text-sm"
-                      } leading-tight`}
+                      } leading-tight break-all whitespace-normal`}
                     >
                       {user.email}
                     </p>
