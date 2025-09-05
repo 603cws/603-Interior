@@ -149,7 +149,7 @@ function Contactus() {
                           type="text"
                           name="name"
                           className="font-medium w-full  p-2 mb-2 border   focus:outline-none  capitalize"
-                          placeholder="John Doe"
+                          placeholder="Full Name"
                           value={form.name}
                           onChange={handleChange}
                           required
@@ -161,7 +161,7 @@ function Contactus() {
                           type="email"
                           name="email"
                           className="font-medium w-full p-2 mb-2 border  focus:outline-none "
-                          placeholder="example@gmail.com"
+                          placeholder="Email Address"
                           value={form.email}
                           onChange={handleChange}
                           required
@@ -251,14 +251,14 @@ function Contactus() {
                 We encourage our team to fearlessly challenge conventions <br />{" "}
                 and pioneer new paths.
               </p>
-              <div className="flex gap-3 items-center [&_h3]:text-[#304778] [&_h4]:text-[#304778] [&_h3]:text-[19.5px] [&_p]:text-[#525B5B] [&_p]:text-[15px]">
+              <div className="flex gap-10 xl:gap-16 items-center [&_h3]:text-[#304778] [&_h4]:text-[#304778] [&_h3]:text-[19.5px] [&_p]:text-[#525B5B] [&_p]:text-[15px]">
                 <div className="space-y-2.5">
                   <h3>Working Mail</h3>
-                  <p className="">sales@603thecoworkingspace.com</p>
+                  <p className="">partners@workved.com</p>
                 </div>
-                <div className="space-y-2.5">
+                <div className="space-y-2.5 ">
                   <h3>Office Phone</h3>
-                  <p>+91-9136036603</p>
+                  <p className="font-TimesNewRoman">+91-9136036603</p>
                 </div>
               </div>
               <div className="space-y-2.5">
@@ -315,7 +315,7 @@ function Contactus() {
                           type="text"
                           name="name"
                           className="font-medium w-full  p-2 mb-2 border   focus:outline-none  capitalize"
-                          placeholder="John Doe"
+                          placeholder="Full Name"
                           value={form.name}
                           onChange={handleChange}
                           required
@@ -327,7 +327,7 @@ function Contactus() {
                           type="email"
                           name="email"
                           className="font-medium w-full  p-2 mb-2 border  focus:outline-none "
-                          placeholder="example@gmail.com"
+                          placeholder="Email Address"
                           value={form.email}
                           onChange={handleChange}
                           required
@@ -422,7 +422,7 @@ function Contactus() {
               <div className="flex flex-col gap-3 [&_h3]:text-[#304778] [&_h4]:text-[#304778] [&_h3]:text-[19.5px] [&_p]:text-[#525B5B] [&_p]:text-[15px]">
                 <div>
                   <h3>Working Mail</h3>
-                  <p className="">sales@603thecoworkingspace.com</p>
+                  <p className="">partners@workved.com</p>
                 </div>
                 <div>
                   <h3>Office Phone</h3>
