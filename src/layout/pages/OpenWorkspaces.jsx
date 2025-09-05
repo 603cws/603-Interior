@@ -6,8 +6,8 @@ import ErrorModal from "../../common-components/ErrorModal";
 const workspaceData = [
   {
     type: "linear",
-    image: "/images/workspace-image/linear.webp",
-    // image: "/images/workstation-wp/linear-wp.webp",
+    // image: "/images/workspace-image/linear.webp",
+    image: "/images/workstation-wp/linear.webp",
     description: "This is a linear workspace, designed for open collaboration.",
     sizes: ["M", "L", "XL"], // Corresponds to sizeMapping keys
     tooltipText:
@@ -16,8 +16,8 @@ const workspaceData = [
   },
   {
     type: "lType",
-    image: "/images/workspace-image/lType.webp",
-    // image: "/images/workstation-wp/ltype-wp.webp",
+    // image: "/images/workspace-image/lType.webp",
+    image: "/images/workstation-wp/lType.webp",
     description:
       "This is an L-type workspace, providing a semi-private environment.",
     // sizes: [], // No size options
@@ -86,11 +86,11 @@ function OpenWorkspaces({
   };
   return (
     <div className="section px-3">
-      <h3 className="section-heading bg-white shadow-sm text-md pl-2 py-1.5 sticky top-0 font-semibold z-10">
+      <h3 className="section-heading bg-[#E4E7ED] shadow-sm text-md pl-2 py-1 sticky top-0 font-semibold z-10">
         Open Workspaces
       </h3>
       {/* <div className="open-workspaces grid grid-cols-2 4xl:grid-cols-3 gap-5"> */}
-      <div className="open-workspaces grid grid-cols-2 3xl:grid-cols-3 gap-5 justify-items-center lg:justify-items-stretch">
+      <div className="open-workspaces grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-2 3xl:grid-cols-3 gap-5 justify-items-center lg:justify-items-stretch">
         {workspaceData.map((workspace) => (
           <LayoutCard
             key={workspace.type}

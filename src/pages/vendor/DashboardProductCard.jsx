@@ -4,6 +4,7 @@ import { MdDeleteOutline } from "react-icons/md";
 import { AiTwotoneCheckCircle } from "react-icons/ai";
 import { PiClockCountdown } from "react-icons/pi";
 import { IoCloseCircleOutline } from "react-icons/io5";
+import { baseImageUrl } from "../../utils/HelperConstant";
 
 function DashboardProductCard({
   onClose,
@@ -19,22 +20,44 @@ function DashboardProductCard({
   const [showTextarea, setShowTextarea] = useState(false);
   const { accountHolder } = useApp();
 
-  const baseImageUrl =
-    "https://bwxzfwsoxwtzhjbzbdzs.supabase.co/storage/v1/object/public/addon/";
+  // const baseImageUrl =
+  //   "https://bwxzfwsoxwtzhjbzbdzs.supabase.co/storage/v1/object/public/addon/";
 
-  const currentStatus = product.status;
-  console.log("current status", currentStatus);
+  const currentStatus = product?.status;
+
+  const additionalImages = product?.additional_images
+    ? JSON.parse(product.additional_images)
+    : [];
 
   return (
-    <div className="flex justify-center items-center h-screen fixed inset-0 z-30 top-0 w-screen">
+    <div className="flex  justify-center items-center h-screen fixed inset-0 z-30 top-0 w-screen">
       <div className="absolute inset-0 bg-black opacity-50"></div>
-      <div className="font-Poppins max-w-3xl p-10 rounded-3xl border-2 relative bg-white">
+      <div className=" font-Poppins max-w-xs sm:max-w-sm md:max-w-2xl  lg:max-w-3xl mx-auto p-4 md:p-10 rounded-lg md:rounded-xl border-2 relative bg-white max-h-[85vh] overflow-y-auto gradient-scrollbar">
         {!deleteWarning ? (
           <div>
-            <div className="flex gap-4">
+            <div className="flex flex-col md:flex-row gap-4">
               <div className="flex-1">
-                <img src={`${baseImageUrl}${product.image}`} alt="product" />
+                <div className="max-w-sm mb-2">
+                  <img src={`${baseImageUrl}${product.image}`} alt="product" />
+                </div>
+
+                <div className="flex gap-2 ">
+                  {additionalImages.length > 0 ? (
+                    additionalImages.map((image, index) => (
+                      <div key={index}>
+                        <img
+                          src={`${baseImageUrl}${image}`}
+                          alt="product"
+                          className="h-12 w-12 "
+                        />
+                      </div>
+                    ))
+                  ) : (
+                    <h3 className="pt-3 uppercase">No Additional Images</h3>
+                  )}
+                </div>
               </div>
+
               <div className="flex-1 flex flex-col gap-2">
                 <h2 className="font-semibold text-3xl text-[#111] uppercase">
                   {product.title}
@@ -52,30 +75,41 @@ function DashboardProductCard({
                 <h5 className="uppercase text-[#334A78] font-medium text-xs opacity-80">
                   Category:
                   <span className="font-bold text-[#000]">
-                    {product.products?.category}
+                    {product.products?.category || product?.category}
                   </span>
                 </h5>
                 <hr />
                 <h5 className="uppercase text-[#334A78] font-medium text-xs opacity-80">
                   Specification:
                   <span className="font-bold text-[#000]">
-                    {product.products?.subcategory1}
+                    {product.products?.subcategory1 || product?.specifications}
                   </span>
                 </h5>
                 <hr />
                 <h5 className="uppercase text-[#334A78] font-medium text-xs opacity-80">
                   dimensions:
                   <span className="font-bold text-[#000]">
-                    {product.dimensions}
+                    {product?.dimensions || "NA"}
                   </span>
                 </h5>
                 <hr />
-                <h5 className="uppercase text-[#334A78] font-medium text-xs opacity-80">
-                  segment:
-                  <span className="font-bold text-[#000]">
-                    {product.segment}
-                  </span>
-                </h5>
+                {product?.segment && (
+                  <h5 className="uppercase text-[#334A78] font-medium text-xs opacity-80">
+                    segment:
+                    <span className="font-bold text-[#000]">
+                      {product.segment}
+                    </span>
+                  </h5>
+                )}
+                <hr />
+                {product?.status && (
+                  <h5 className="uppercase text-[#334A78] font-medium text-xs opacity-80">
+                    status:
+                    <span className="font-bold text-[#000]">
+                      {product?.status}
+                    </span>
+                  </h5>
+                )}
                 <hr />
               </div>
             </div>
@@ -89,8 +123,10 @@ function DashboardProductCard({
                         updateStatus(product, "approved");
                         setRejectReason("");
                       }}
-                      className={`px-5 py-2 bg-[#F8FBFF]  border-[#A3FEE7] transition-all duration-500 flex flex-col justify-center items-center rounded-lg ${
-                        currentStatus === "approved" ? "border-4" : "border-2"
+                      className={`px-2 md:px-5 py-1 md:py-2 bg-[#F8FBFF]  border-[#A3FEE7] transition-all duration-500 flex flex-col justify-center items-center rounded-sm  text-xs md:text-sm ${
+                        currentStatus === "approved"
+                          ? "border-2 md:border-4"
+                          : "border md:border-2"
                       }`}
                     >
                       <AiTwotoneCheckCircle size={25} />
@@ -101,16 +137,20 @@ function DashboardProductCard({
                         updateStatus(product, "pending");
                         setRejectReason("");
                       }}
-                      className={`px-7 py-3 bg-[#FFFEF8] border-[#FFB966] transition-all duration-500 flex flex-col justify-center items-center rounded-lg ${
-                        currentStatus === "pending" ? "border-4" : "border-2"
+                      className={`px-2 md:px-5 py-1 md:py-2 bg-[#FFFEF8] border-[#FFB966] transition-all duration-500 flex flex-col justify-center items-center rounded-sm text-xs md:text-sm ${
+                        currentStatus === "pending"
+                          ? "border-2 md:border-4"
+                          : "border md:border-2"
                       }`}
                     >
                       <PiClockCountdown size={25} />
                       Pending
                     </button>
                     <button
-                      className={`px-7 py-3 bg-[#FFF8F8] border-[#FF6666] transition-all duration-500 flex flex-col justify-center items-center rounded-lg ${
-                        currentStatus === "rejected" ? "border-4" : "border-2"
+                      className={`px-2 md:px-5 py-1 md:py-2 bg-[#FFF8F8] border-[#FF6666] transition-all duration-500 flex flex-col justify-center items-center rounded-sm text-xs md:text-sm ${
+                        currentStatus === "rejected"
+                          ? "border-2 md:border-4"
+                          : "border md:border-2"
                       }`}
                       onClick={() => setShowTextarea(true)}
                     >
@@ -119,16 +159,16 @@ function DashboardProductCard({
                     </button>
                   </div>
                 ) : (
-                  <div className="flex w-full gap-2 transition-all duration-500">
+                  <div className="flex justify-center gap-2 flex-1 transition-all duration-500">
                     <button
                       onClick={() => setShowTextarea(false)}
-                      className="px-7 py-3 border-2 border-red-400 transition-all duration-500 flex flex-col justify-center items-center"
+                      className="px-2 md:px-5 py-1 md:py-2 border-4 border-red-400 transition-all duration-500 flex flex-col justify-center items-center text-xs md:text-sm"
                     >
                       <IoCloseCircleOutline size={25} />
                       {/* Reject */}
                     </button>
                     <textarea
-                      className={`flex-1 p-2 border rounded-md transition-all duration-500 ${
+                      className={`flex-1 px-2 md:px-5 py-1 md:py-2 border rounded-sm transition-all duration-500 text-xs md:text-sm ${
                         showTextarea ? "opacity-100 w-full" : "opacity-0 w-0"
                       }`}
                       rows="2"
@@ -138,7 +178,7 @@ function DashboardProductCard({
                     />
                     <button
                       onClick={handleConfirmReject}
-                      className={`px-5 py-3 border-2 bg-blue-500 text-white rounded-md transition-all duration-500 ${
+                      className={`px-2 md:px-5 py-1 md:py-2 border-2 bg-[#374A75] text-white rounded-sm transition-all duration-500 text-xs md:text-sm ${
                         showTextarea ? "opacity-100 w-auto" : "opacity-0 w-0"
                       }`}
                     >
@@ -158,7 +198,7 @@ function DashboardProductCard({
                   onClick={() => {
                     setDeleteWarning(true);
                   }}
-                  className="px-3 py-2 capitalize border-[#FF6666] border-2 rounded-2xl flex justify-center items-center gap-2"
+                  className="px-3 py-2 capitalize border-[#FF6666] border-2 rounded-sm flex justify-center items-center gap-2"
                 >
                   <MdDeleteOutline /> delete
                 </button>
@@ -167,7 +207,7 @@ function DashboardProductCard({
               <div>
                 <button
                   onClick={onClose}
-                  className=" px-3 py-2 capitalize border-[#BBBBBB] border-2 bg-[#fff] rounded-2xl"
+                  className=" px-3 py-2 capitalize border-[#BBBBBB] border-2 bg-[#fff] rounded-sm"
                 >
                   cancel
                 </button>

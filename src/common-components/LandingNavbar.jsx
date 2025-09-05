@@ -1,196 +1,205 @@
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import ContactUsPopup from "../pages/ContactUsPopup";
 import { FiMenu, FiX } from "react-icons/fi";
 import { useApp } from "../Context/Context";
-function LandingNavbar({ bgColor = false }) {
-  const navigate = useNavigate();
+import { motion } from "framer-motion";
+
+function LandingNavbar() {
   const pathname = window.location.pathname;
+
+  const [enquiry, setEnquiry] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { isAuthenticated, accountHolder } = useApp();
 
-  const { setShowProfile, showProfile, isAuthenticated, accountHolder } =
-    useApp();
-
-  const toggleProfile = () => {
-    setShowProfile(!showProfile);
-  };
-
-  const bgcolor = bgColor ? "bg-[#ccc]" : "bg-white";
+  const navigate = useNavigate();
   return (
-    <div className="absolute top-0 w-full z-10">
-      {/* Navbar Container */}
-      <div
-        className={`${bgcolor} bg-opacity-[0.72] flex justify-between items-center border  py-1.5 container mx-auto`}
-      >
-        {/* Logo */}
-        <div className="cursor-pointer" onClick={() => navigate("/")}>
-          <img
-            src="/logo/workved-interior.png"
-            alt="Logo"
-            className="h-12 w-20"
-          />
-        </div>
-        {/* <div className="cursor-pointer" onClick={() => navigate("/")}>
-          <img src="/logo/logo.png" alt="Logo" className="h-12 w-20" />
-        </div> */}
-
-        {/* Desktop Menu */}
-        <nav className="hidden lg:flex justify-center items-center py-4">
-          <ul className="flex gap-8 text-[#1A293A] font-semibold uppercase stroke-nav [&_li]:cursor-pointer ">
+    <div className="bg-[#334A78] py-2 relative">
+      {/* desktop navbar */}
+      <div className="hidden container lg:flex justify-between items-center font-TimesNewRoman">
+        <div>
+          <ul className="flex gap-7 [&_li]:cursor-pointer uppercase text-xs xl:text-sm font-bold text-[#fff] tracking-wider">
+            {/* <li>shop</li> */}
             <li
-              onClick={() => navigate("/")}
-              className={`cursor-pointer relative after:content-[''] after:absolute after:left-0 after:bottom-[-2px] after:h-[2px] after:bg-[#1A3A36] after:transition-all after:duration-300 ${
-                pathname === "/" ? "after:w-full" : "after:w-0"
+              onClick={() => navigate("/aboutUs")}
+              className={`cursor-pointer relative after:content-[''] after:absolute after:left-0 after:bottom-[-2px] after:h-[1px] after:bg-[#FFC900] after:transition-all after:duration-300 ${
+                pathname === "/aboutUs" ? "after:w-full" : "after:w-0"
               } hover:after:w-full`}
             >
-              Home
-            </li>
-            <li
-              onClick={() => navigate("/Aboutus")}
-              className={`cursor-pointer relative after:content-[''] after:absolute after:left-0 after:bottom-[-2px] after:h-[2px] after:bg-[#1A3A36] after:transition-all after:duration-300 ${
-                pathname === "/Aboutus" ? "after:w-full" : "after:w-0"
-              } hover:after:w-full`}
-            >
-              About Us
+              about us
             </li>
             <li
               onClick={() => navigate("/OurServices")}
-              className={`cursor-pointer relative after:content-[''] after:absolute after:left-0 after:bottom-[-2px] after:h-[2px] after:bg-[#1A3A36] after:transition-all after:duration-300 ${
+              className={`cursor-pointer relative after:content-[''] after:absolute after:left-0 after:bottom-[-2px] after:h-[1px] after:bg-[#FFC900] after:transition-all after:duration-300 ${
                 pathname === "/OurServices" ? "after:w-full" : "after:w-0"
               } hover:after:w-full`}
             >
-              Services
-            </li>
-            <li
-              onClick={() => navigate("/Blog")}
-              className={`cursor-pointer relative after:content-[''] after:absolute after:left-0 after:bottom-[-2px] after:h-[2px] after:bg-[#1A3A36] after:transition-all after:duration-300 ${
-                pathname === "/Blog" ? "after:w-full" : "after:w-0"
-              } hover:after:w-full`}
-            >
-              Blog
-            </li>
-            <li
-              onClick={() => navigate("/becomeseller")}
-              className={`cursor-pointer relative after:content-[''] after:absolute after:left-0 after:bottom-[-2px] after:h-[2px] after:bg-[#1A3A36] after:transition-all after:duration-300 ${
-                pathname === "/becomeseller" ? "after:w-full" : "after:w-0"
-              } hover:after:w-full`}
-            >
-              Our Work
+              our services
             </li>
             <li
               onClick={() => navigate("/Contactus")}
-              className={`cursor-pointer relative after:content-[''] after:absolute after:left-0 after:bottom-[-2px] after:h-[2px] after:bg-[#1A3A36] after:transition-all after:duration-300 ${
+              className={`cursor-pointer relative after:content-[''] after:absolute after:left-0 after:bottom-[-2px] after:h-[1px] after:bg-[#FFC900] after:transition-all after:duration-300 ${
                 pathname === "/Contactus" ? "after:w-full" : "after:w-0"
               } hover:after:w-full`}
             >
-              Contact Us
-            </li>
-            <li
-              onClick={() => navigate("/brands")}
-              className={`cursor-pointer relative after:content-[''] after:absolute after:left-0 after:bottom-[-2px] after:h-[2px] after:bg-[#1A3A36] after:transition-all after:duration-300 ${
-                pathname === "/brands" ? "after:w-full" : "after:w-0"
-              } hover:after:w-full`}
-            >
-              Brands
+              contact us
             </li>
           </ul>
-        </nav>
-
-        {/* Login Button (Desktop) */}
-        <div className="hidden lg:block">
-          {isAuthenticated ? (
-            <button
-              className=""
-              onClick={() => navigate("/dashboard")}
-              // disabled={!isadmin}
+        </div>
+        <div onClick={() => navigate("/")}>
+          <img
+            src="/logo/workved-logo.png"
+            alt=""
+            className="h-[60px] w-[140px] cursor-pointer"
+          />
+        </div>
+        <div className="flex gap-10 uppercase text-xs xl:text-sm font-bold text-[#fff]">
+          <div
+            onClick={() => navigate("/Layout")}
+            className="flex flex-col justify-center items-center gap-2 cursor-pointer relative after:content-[''] after:absolute after:left-0 after:bottom-[-2px] after:h-[1px] after:bg-[#FFC900] after:w-0 after:transition-all after:duration-300
+           hover:after:w-full"
+          >
+            <img
+              src="/images/icons/calculator-white.png"
+              alt=""
+              className="h-8 w-8"
+            />
+            <p>space calculator</p>
+          </div>
+          {pathname !== "/Contactus" && (
+            <div
+              onClick={() => setEnquiry(true)}
+              className="flex flex-col justify-center items-center gap-2 cursor-pointer relative after:content-[''] after:absolute after:left-0 after:bottom-[-2px] after:h-[1px] after:bg-[#FFC900] after:w-0 after:transition-all after:duration-300 hover:after:w-full"
             >
               <img
-                onClick={toggleProfile}
-                src={accountHolder.profileImage}
-                alt="usericon"
-                className="w-12 h-12 cursor-pointer rounded-full"
+                src="/images/icons/enquiry-white.png"
+                alt=""
+                className="h-8 w-8"
               />
-            </button>
-          ) : (
-            <button
-              onClick={() => navigate("/Login")}
-              className="px-8 py-1.5 bg-[#1F3B5C] border border-[#1F3B5C] rounded-3xl text-white uppercase"
-            >
-              Log In
-            </button>
+              <p>enquiry</p>
+            </div>
           )}
-        </div>
-
-        {/* Mobile Menu Button */}
-        <div className="lg:hidden flex items-center">
-          <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
-            {isMobileMenuOpen ? (
-              <FiX className="size-7 text-[#1A3A36]" />
+          <div className="flex flex-col justify-center items-center gap-2 cursor-pointer relative after:content-[''] after:absolute after:left-0 after:bottom-[-2px] after:h-[1px] after:bg-[#FFC900] after:w-0 after:transition-all after:duration-300 hover:after:w-full">
+            {isAuthenticated ? (
+              <button
+                className="z-30 rounded-full"
+                onClick={() => navigate("/dashboard")}
+                style={{
+                  backgroundImage:
+                    "linear-gradient(to top left, #5B73AF 0%, rgba(255, 255, 255, 0.5) 48%, #1F335C 100%)",
+                }}
+              >
+                <img
+                  src={accountHolder.profileImage}
+                  alt="usericon"
+                  className="w-8 md:w-12 h-8 p-1 md:h-12 cursor-pointer rounded-full"
+                />
+              </button>
             ) : (
-              <FiMenu className="size-7 text-[#1A3A36]" />
+              <div
+                onClick={() => navigate("/Login")}
+                className="flex flex-col justify-center items-center gap-2"
+              >
+                <img
+                  src="/images/icons/sign-in-white.png"
+                  alt=""
+                  className="h-8 w-8"
+                />
+                <p>log in</p>
+              </div>
             )}
-          </button>
+          </div>
         </div>
       </div>
 
-      {/* Mobile Menu */}
-      {isMobileMenuOpen && (
-        <div
-          className={`xl:hidden bg-white border mt-2 rounded-3xl p-5 transition-transform ease-in-out duration-500 transform animate-fade-in ${
-            isMobileMenuOpen ? "translate-y-0" : "-translate-y-full"
-          }`}
-        >
-          <ul className="flex flex-col gap-4 text-[#1A3A36] font-semibold uppercase bg-white z-10">
-            <li onClick={() => navigate("/")} className="cursor-pointer">
-              Home
-            </li>
-            {/* <li className="cursor-pointer">Spaces</li> */}
-            <li onClick={() => navigate("/Aboutus")} className="cursor-pointer">
-              About Us
-            </li>
-            <li
-              onClick={() => navigate("/OurServices")}
-              className="cursor-pointer"
-            >
-              Services
-            </li>
-            <li onClick={() => navigate("/Blog")} className="cursor-pointer">
-              Blog
-            </li>
-            <li
-              className="cursor-pointer"
-              onClick={() => navigate("/becomeseller")}
-            >
-              Our Work
-            </li>
-            <li className="cursor-pointer" onClick={() => navigate("/brands")}>
-              Brands
-            </li>
-            <li
-              onClick={() => navigate("/Contactus")}
-              className="cursor-pointer"
-            >
-              Contact Us
-            </li>
-            <li>
-              {isAuthenticated ? (
-                <button
-                  className="px-6 py-1.5  bg-[#1F3B5C] border border-[#1F3B5C] rounded-3xl text-white w-full"
-                  onClick={() => navigate("/dashboard")}
-                >
-                  Dashboard
-                </button>
-              ) : (
-                <button
-                  onClick={() => navigate("/Login")}
-                  className="px-6 py-1.5 bg-[#1F3B5C] border border-[#1F3B5C] rounded-3xl text-white w-full uppercase"
-                >
-                  Log In
-                </button>
-              )}
-            </li>
-          </ul>
+      {/* mobile navbar */}
+      <div className="flex lg:hidden justify-between items-center px-2">
+        <div onClick={() => navigate("/")}>
+          <img
+            src="/logo/workved-logo.png"
+            alt=""
+            className="h-10 cursor-pointer"
+          />
         </div>
-      )}
+        <div>
+          <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
+            {isMobileMenuOpen ? (
+              <FiX className="size-7 text-[#fff]" />
+            ) : (
+              <FiMenu className="size-7 text-[#fff]" />
+            )}
+          </button>
+        </div>
+
+        {isMobileMenuOpen && (
+          <motion.div
+            initial={{ scaleY: 0, opacity: 0 }}
+            animate={{
+              scaleY: isMobileMenuOpen ? 1 : 0,
+              opacity: isMobileMenuOpen ? 1 : 0,
+            }}
+            transition={{ duration: 0.32, ease: "easeInOut" }}
+            style={{
+              transformOrigin: "top",
+              overflow: "hidden",
+              pointerEvents: isMobileMenuOpen ? "auto" : "none",
+            }}
+            className="bg-white w-full absolute top-full left-0 px-2 py-3 overflow-hidden z-10"
+          >
+            <ul className="text-sm font-bold text-[#334A78] uppercase space-y-5">
+              <li onClick={() => navigate("/aboutUs")}>about us</li>
+              <li onClick={() => navigate("/OurServices")}>our services</li>
+              <li onClick={() => navigate("/Contactus")}>contact us</li>
+              <li onClick={() => navigate("/Layout")} className="flex gap-2">
+                <img
+                  src="/images/icons/calculator.png"
+                  alt=""
+                  className="h-5 w-5"
+                />{" "}
+                <span>space calculator</span>
+              </li>
+
+              <li
+                onClick={() => setEnquiry(true)}
+                className={`flex gap-2 ${
+                  pathname === "/Contactus" ? "hidden" : "block"
+                }`}
+              >
+                <img
+                  src="/images/icons/enquiry.png"
+                  alt=""
+                  className="h-5 w-5"
+                />{" "}
+                <span>enquiry</span>
+              </li>
+
+              <li className="flex gap-2">
+                {isAuthenticated ? (
+                  <button
+                    className="px-6 py-1.5  bg-[#1F3B5C] border border-[#1F3B5C] rounded-3xl text-white w-full"
+                    onClick={() => navigate("/dashboard")}
+                  >
+                    Dashboard
+                  </button>
+                ) : (
+                  <div
+                    onClick={() => navigate("/login")}
+                    className="flex gap-2"
+                  >
+                    <img
+                      src="/images/icons/sign-in.png"
+                      alt=""
+                      className="h-5 w-5"
+                    />{" "}
+                    <span>log in</span>
+                  </div>
+                )}
+              </li>
+            </ul>
+          </motion.div>
+        )}
+      </div>
+      {enquiry && <ContactUsPopup onClose={() => setEnquiry(false)} />}
     </div>
   );
 }

@@ -148,6 +148,11 @@ export const useLogout = () => {
     setIsAuthLoading,
     setIsAuthenticated,
     setTotalArea,
+    setSelectedData,
+    setSelectedPlan,
+    setBOQTitle,
+    setBOQID,
+    setProgress,
   } = useApp();
 
   const handleLogout = async () => {
@@ -167,6 +172,20 @@ export const useLogout = () => {
         });
         setTotalArea("");
         localStorage.removeItem("currentLayoutID");
+        localStorage.removeItem("session");
+        localStorage.removeItem("usertoken");
+        localStorage.removeItem("BOQID");
+        localStorage.removeItem("selectedPlan");
+        localStorage.removeItem("selectedData");
+        sessionStorage.removeItem("BOQTitle");
+        sessionStorage.removeItem("BOQID");
+        sessionStorage.removeItem("selectedPlan");
+        localStorage.removeItem("answers");
+        setSelectedPlan(null);
+        setSelectedData([]);
+        setBOQID("");
+        setBOQTitle("");
+        setProgress(0);
         navigate("/");
         setIsAuthenticated(false);
       }
@@ -176,4 +195,30 @@ export const useLogout = () => {
   };
 
   return handleLogout;
+};
+
+export const useResetBOQ = () => {
+  const {
+    setSelectedData,
+    setSelectedPlan,
+    setBOQTitle,
+    setBOQID,
+    setProgress,
+  } = useApp();
+  const resetBOQ = () => {
+    localStorage.removeItem("BOQID");
+    localStorage.removeItem("selectedPlan");
+    localStorage.removeItem("selectedData");
+    sessionStorage.removeItem("BOQTitle");
+    sessionStorage.removeItem("BOQID");
+    sessionStorage.removeItem("selectedPlan");
+    localStorage.removeItem("answers");
+    setSelectedPlan(null);
+    setSelectedData([]);
+    setBOQID("");
+    setBOQTitle("");
+    setProgress(0);
+  };
+
+  return resetBOQ;
 };

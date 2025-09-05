@@ -1,284 +1,184 @@
-// import LandingNavbar from "../common-components/LandingNavbar";
-import Footer from "../common-components/Footer";
-import { useState, useEffect } from "react";
-import "swiper/css";
-import "swiper/css/effect-coverflow";
-import "swiper/css/pagination";
-import "swiper/css/navigation";
-import "../styles/Landing.css";
-import ContactUsPopup from "../common-components/ContactUsPopup";
+import React, { useState } from "react";
 import { ServiceCard } from "../common-components/ServiceCard";
-import HeroSection from "./HeroSection";
-import { ReadMoreBtn } from "../common-components/ReadMoreBtn";
-import { useInView } from "react-intersection-observer";
+import { RiArrowRightUpLine } from "react-icons/ri";
+import Footer from "../common-components/Footer";
+import LandingNavbar from "../common-components/LandingNavbar";
+import { useNavigate } from "react-router-dom";
+import ContactUsPopup from "./ContactUsPopup";
+import { motion } from "framer-motion";
+import { AnimatedButton } from "../common-components/animated-button";
 
 const services = [
   {
-    title: "Residential Interior",
+    title: "Workspace Layout Planning",
     description:
-      "We do all types of the interior designing, decoration & furnishing.",
-    image: "../images/about-us/Vector.png",
+      "Smart, ergonomic designs that enhance productivity and brand presence.",
+    image: "/images/about-us/section 2/N1.png",
+    hoveredImage: "/images/about-us/section 2/s1.png",
   },
   {
-    title: "Custom Solutions",
+    title: "Premium Office Furniture",
     description:
-      "Our creative 3D artists are always ready to translate your designs.",
-    image: "../images/about-us/Vector-1.png",
+      "Bespoke desks, seating, and storage crafted for elegance and comfort.",
+    image: "/images/about-us/section 2/N2.png",
+    hoveredImage: "/images/about-us/section 2/s2.png",
   },
   {
-    title: "Renovate Rooms",
+    title: "Signature Décor & Lighting",
     description:
-      "We are master of renovation & innovation of existing any kind of rooms.",
-    image: "../images/about-us/Vector-2.png",
+      "Statement pieces and ambiance solutions that elevate the workspace.",
+    image: "/images/about-us/section 2/N3.png",
+    hoveredImage: "/images/about-us/section 2/s3.png",
   },
   {
-    title: "3D Design Layouts",
-    description: "We Do All Types Of 2D And 3D design Computerized Designs.",
-    image: "../images/about-us/Vector-3.png",
+    title: "Complete Project Development",
+    description:
+      "From concept to final installation, we manage it all seamlessly.",
+    image: "/images/about-us/section 2/N4.png",
+    hoveredImage: "/images/about-us/section 2/s4.png",
   },
   {
-    title: "Outsourced Service In House",
-    description:
-      "Enforces & strengthens your brand identity by integrating rich experience.",
-    image: "../images/about-us/Vector-4.png",
+    title: "Custom & Turnkey Solutions",
+    description: "Ready-to-use spaces tailored to your unique business needs.",
+    image: "/images/about-us/section 2/N5.png",
+    hoveredImage: "/images/about-us/section 2/s5.png",
   },
 ];
-
-const stats = [
-  { value: "3k", label: "Projects Completed" },
-  { value: "20", label: "Awards Win" },
-  { value: "845", label: "Team Members" },
-  { value: "5k+", label: "Active Customers" },
-];
-
 const work_stages = [
   {
     id: 1,
-    title: "The Feasibility",
-    desc: "This initial phase of the project includes preliminary studies",
-    icon: "./images/about-us/Icon.png",
+    title: "Space Planning",
+    desc: "Start by creating your office layout — add or remove workspaces to fit your needs.",
+    icon: "./images/about-us/space-planning.png",
   },
   {
     id: 2,
-    title: "The Development",
-    desc: "We get into the detail of the scheme. We’ll refine the internal",
-    icon: "./images/about-us/Icon-1.png",
+    title: "Product Selection",
+    desc: "Choose from our range of office essentials, including furniture, lighting, HVAC systems, and more.",
+    icon: "./images/about-us/product-selection.png",
   },
   {
     id: 3,
-    title: "Full Mobilization",
-    desc: "Once the contractor is appointed, will workshops to review",
-    icon: "./images/about-us/Icon-2.png",
+    title: "Design Finalization",
+    desc: "Review and refine your layout and product choices to ensure everything you want.",
+    icon: "./images/about-us/design-final.png",
   },
   {
     id: 4,
-    title: "Post PC Work",
-    desc: "The project concludes, will visit site to inspect all the works",
-    icon: "./images/about-us/Icon-3.png",
+    title: "BOQ & Handover",
+    desc: "Download your customized Bill of Quantities based on your selected products and finalized layout.",
+    icon: "./images/about-us/boq-handover.png",
   },
-];
-
-const faqData = [
-  {
-    question: "How much do you charge?",
-    answer:
-      "For a detailed list of our rates, please refer to our pricing page. You’ll find that we’re below what other business in the interior design industry charges, especially for smaller projects.",
-  },
-  {
-    question: "What is a typical project like?",
-    answer:
-      "A typical project begins with a consultation, followed by concept development, design iterations, and final execution. We ensure client involvement at every key stage.",
-  },
-  {
-    question: "Can you help me pick paint colors?",
-    answer:
-      "Yes, we offer color consultation services as part of our design package. Our experts will help you choose tones that align with your space, lighting, and preferences.",
-  },
-];
-
-const skills = [
-  { label: "Interior Designer", percent: 75 },
-  { label: "Architecture", percent: 80 },
-  { label: "Best UIX Design", percent: 95 },
 ];
 
 function AboutUs() {
+  const navigate = useNavigate();
   const [showContactPopup, setShowContactPopup] = useState(false);
-  const [openIndex, setOpenIndex] = useState(0); // First item open by default
-  const [animatedCounts, setAnimatedCounts] = useState(skills.map(() => 0));
-
-  useEffect(() => {
-    if (showContactPopup) {
-      document.body.style.overflow = "hidden"; // Disable scroll
-    } else {
-      document.body.style.overflow = "auto"; // Enable scroll
-    }
-  }, [showContactPopup]);
-
-  const { ref, inView } = useInView({
-    triggerOnce: false,
-    threshold: 0.3,
-  });
-
-  useEffect(() => {
-    if (inView) {
-      setAnimatedCounts(skills.map(() => 0));
-      const interval = setInterval(() => {
-        setAnimatedCounts((prevCounts) =>
-          prevCounts.map((count, index) =>
-            count < skills[index].percent ? count + 1 : count
-          )
-        );
-      }, 20);
-
-      return () => clearInterval(interval);
-    }
-  }, [inView, skills]);
-
-  const handleToggle = (index) => {
-    setOpenIndex(index === openIndex ? null : index);
-  };
-
   return (
-    <div>
-      {/* Hero image */}
-      {/* <section
-        className="bg-[url('/images/about-us/about-us-bg.png')] w-full h-screen bg-no-repeat bg-cover relative sm:static "
-        style={{ backgroundAttachment: "fixed" }}
-      >
-        <div className="absolute inset-0 bg-black/50"></div>
-        <div className="z-20 absolute sm:relative w-full">
-          <LandingNavbar />
-          <div className="flex flex-col justify-center items-center h-screen text-white font-lato gap-3 font-extrabold">
-            <h1 className="text-4xl md:text-5xl lg:text-7xl">About Us</h1>
+    <>
+      <LandingNavbar />
+      <section className="mt-10 xl:mt-0">
+        <div className=" md:container px-4 flex flex-col gap-6 lg:gap-0 lg:flex-row justify-between items-center xl:max-w-7xl xl:px-0">
+          <div className=" text-[#304778] flex flex-col justify-center items-center lg:items-start text-center lg:text-start gap-5 flex-1">
+            {/* <h4 className="font-TimesNewRoman italic font-bold text-4xl capitalize tracking-wider leading-[50px]">
+              Creating Workspaces <br /> that inspires
+            </h4> */}
+            <h2 className="font-TimesNewRoman italic text-3xl xl:text-[44px] xl:leading-[53px] tracking-[0.3px] font-bold text-[#334A78] capitalize">
+              Creating Workspaces <br /> that inspires
+            </h2>
+            <p className="text-2xl  font-Georgia tracking-wide">
+              We help businesses design and build offices that are functional,
+              stylish, and perfectly
+              <br /> tailored to their needs.
+            </p>
+            {/* <button
+              onClick={() => navigate("/layout")}
+              className="w-fit  font-Georgia bg-gradient-to-r from-[#75A2BE] to-[#334A78]  border border-[#fff] tracking-wider px-5 py-2.5 rounded capitalize mt-7  hover:scale-105 text-white transition duration-500 ease-in-out"
+            >
+              start your layout
+            </button> */}
+            <AnimatedButton
+              onClick={() => navigate("/Layout")}
+              className="!bg-[#3A5D7B] text-white capitalize font-Georgia mt-7 text-lg"
+              variant="default"
+              size="lg"
+              // glow={true}
+              textEffect="shimmer"
+              rounded="custom"
+              asChild={false}
+              hideAnimations={false}
+              shimmerColor="#fff"
+              shimmerSize="0.1em"
+              shimmerDuration="3s"
+              borderRadius="6px"
+              background="rgba(48, 71, 120, 1)"
+              hovereBackground="linear-gradient(90deg,rgba(85,132,182,1)  0%,  rgba(117,162,190,1) 100%)"
+            >
+              Start Your Layout
+            </AnimatedButton>
+          </div>
+          <motion.div
+            initial={{ x: 300, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            transition={{ duration: 1, ease: "easeOut" }}
+            className=" xl:py-10 xl:pl-10 flex-1"
+          >
+            <img src="/images/aboutusHero.webp" alt="" />
+            {/* <img src="/images/about-us/about-us-hero.png" alt="" /> */}
+          </motion.div>
+        </div>
+      </section>
+
+      <section className="relative pt-20 lg:py-20 bg-[url('/images/about-us/about-us-bg.png')] bg-no-repeat bg-right-top bg-contain font-Georgia">
+        <div className="lg:container px-4 xl:max-w-7xl xl:px-0">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 h-3/4">
+            <div className="flex flex-col justify-center">
+              <h2 className="text-xl md:text-4xl font-bold  text-black mb-4 font-Georgia">
+                Services We’re Providing
+              </h2>
+              <p className="text-black text-sm leading-relaxed font-Georgia mb-8">
+                Designing office spaces that range from intimate, bespoke
+                interiors to large-scale, transformative workplaces.
+              </p>
+            </div>
+
+            {services.map((service, idx) => (
+              <ServiceCard key={idx} {...service} />
+            ))}
           </div>
         </div>
-      </section> */}
+      </section>
 
-      <HeroSection
-        title={"About Us"}
-        background={"/images/about-us/about-us-bg.png"}
-      />
-
-      {/* About Us Section */}
-      <section className="flex flex-col lg:flex-row bg-white text-black px-10 lg:px-28 max-w-7xl place-self-center py-4">
-        {/* Image Grid */}
-        <div className="grid grid-cols-2 lg:grid-cols-2 gap-4 w-full pl-0 mb-8">
-          <img
-            src="../images/about-us/single-img1.png"
-            alt="Interior 1"
-            className="h-full object-cover mt-8"
-          />
-          <img
-            src="../images/about-us/single-img2.png"
-            alt="Interior 2"
-            className="h-full object-cover"
-          />
-        </div>
-
-        {/* Text Content */}
-        <div className="w-full space-y-6 lg:pl-10 font-Poppins ">
-          <div className="flex items-center gap-2 mt-8 -mb-4">
-            <span className="w-6 h-px bg-[#304778] mb-2"></span>
-            <h5 className="text-[#304778] text-sm font-semibold tracking-widest uppercase font-lora">
-              About Us
-            </h5>
-          </div>
-          <h2 className="text-xl md:text-4xl lg:text-4xl font-bold leading-snug text-[#232323] font-lora">
-            Partner In Inspiring And
-            <br /> Improving Your Life
-          </h2>
-          <p className="text-[#777777] text-sm leading-relaxed font-Poppins">
-            Our core business is all about aligning our clients’ brands and
-            <br />
-            businesses with environments crafted around real people’s
-            <br /> wants and needs, seeking to balance brand expression with
-            <br />
-            end-user ergonomics. <br />
-            Specialize in mixed-use projects.
+      <section>
+        <div className="font-Georgia flex flex-col justify-center gap-2 items-center my-10 capitalize">
+          <h1 className=" font-bold text-[#111827] text-3xl xl:text-[42px] leading-[52px]">
+            Our story of Growth
+          </h1>
+          <p className="text-[#4B5563] text-lg text-center">
+            From Shared spaces - to Design workplaces
           </p>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-y-2 text-sm text-[#777777] font-Poppins">
-            <div className="flex items-center gap-2">
-              <span>★</span>
-              <span>No hidden commission</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <span>★</span>
-              <span>Fully Vastu Optimized</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <span>★</span>
-              <span>3D Design Included</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <span>★</span>
-              <span>Personalized Designs</span>
-            </div>
-          </div>
-
-          {/* Button */}
-          <ReadMoreBtn borderColor="#232323" />
         </div>
+        <QuoteSection />
       </section>
 
-      {/* Services Section */}
-      <section className="relative max-w-full bg-white py-14 lg:py-24">
-        {/* Background Image */}
-        <img
-          src="./images/about-us/bg-section2.png"
-          alt="Blueprint Background"
-          className="absolute top-4 left-0 w-full h-full object-contain pointer-events-none"
-          style={{ objectPosition: "right top" }} // customize position
-        />
-
-        <div className="lg:max-w-7xl lg:px-28 px-4 place-self-center">
-          <div className="relative">
-            {/* Right Section: Grid of 2x3 Cards */}
-            <div className="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              <div className="lg:col-span-1">
-                <div className="flex items-center gap-2 mb-2">
-                  <span className="w-6 h-px bg-black mb-2"></span>
-                  <h5 className="text-xs font-semibold uppercase text-black tracking-widest font-lora">
-                    Services
-                  </h5>
-                </div>
-                <h2 className="text-xl md:text-4xl font-extrabold text-black mb-4 font-lora">
-                  Services We’re Providing
-                </h2>
-                <p className="text-black text-sm leading-relaxed font-lato">
-                  We are working primarily in and around London and the Home
-                  Counties, on schemes that range from small intimate spaces to
-                  large projects.
-                </p>
-              </div>
-
-              {services.map((service, idx) => (
-                <ServiceCard key={idx} {...service} />
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Work Stages */}
-      <section className="relative z-10 mt-24 text-center max-w-7xl place-self-center px-10 lg:px-28">
+      <section className="relative py-16 lg:container px-4 xl:max-w-7xl xl:px-0">
         <div className="flex items-center justify-center gap-4 mb-2">
           <span className="w-8 h-px bg-[#304778] mb-2"></span>
-          <h5 className="text-sm text-[#304778] font-semibold uppercase font-lato">
+          <h5 className="text-sm text-[#304778] font-bold  uppercase font-Georgia">
             Work Stages
           </h5>
           <span className="w-8 h-px bg-[#304778] mb-2"></span>
         </div>
 
-        <h2 className="text-xl md:text-4xl font-bold mb-6 font-lora text-[#232323]">
+        <h2 className="text-xl md:text-4xl font-bold  mb-6 font-Georgia text-[#232323] text-center">
           Best Solutions For Your Dream
         </h2>
-        <p className="text-[#777777] mb-10 max-w-lg md:max-w-2xl mx-auto font-Poppins">
+        <p className="text-[#777777] mb-10 max-w-lg md:max-w-2xl mx-auto font-Georgia text-center">
           Clients often don’t know what to expect during the interior design
           process, so we’ve put together our guide work stages
         </p>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-10 md:px-12">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-10">
           {work_stages.map((stage) => (
             <div
               key={stage.id}
@@ -290,14 +190,14 @@ function AboutUs() {
                   alt={stage.title}
                   className="w-14 h-14 mt-6"
                 />
-                <div className="absolute top-0 right-0 w-12 h-12 pl-2 bg-white border border-dashed border-[#181818] border-opacity-60 rounded-full flex items-center justify-center text-xl font-semibold text-[#181818] text-opacity-60 font-lora">
+                <div className="absolute top-0 right-0 w-12 h-12 pl-0 pb-1 bg-white border border-dashed border-[#181818] border-opacity-60 rounded-full flex items-center justify-center text-xl font-semibold text-[#181818] text-opacity-60 font-Georgia">
                   {stage.id}
                 </div>
               </div>
-              <h3 className="text-lg font-semibold text-[#232323] font-lora mb-2">
+              <h3 className="text-lg font-bold  text-[#232323] font-Georgia mb-2">
                 {stage.title}
               </h3>
-              <p className="text-sm text-[#777777] font-Poppins">
+              <p className="text-sm text-[#777777] font-Georgia">
                 {stage.desc}
               </p>
             </div>
@@ -305,143 +205,85 @@ function AboutUs() {
         </div>
       </section>
 
-      {/* Stats Section */}
-      <section className="relative bg-[#F7F7F7] mt-20 py-16 z-10">
-        <div className="max-w-7xl mx-auto lg:px-28 px-10">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:md:grid-cols-4 gap-x-12 gap-y-10 text-center">
-            {stats.map((stat) => (
-              <div key={stat.label}>
-                <h3 className="text-[#304778] font-lato font-bold text-6xl md:text-7xl">
-                  {stat.value}
-                </h3>
-                <p className="text-lg md:text-xl font-bold text-[#232323]">
-                  {stat.label}
-                </p>
+      <section className="font-Georgia bg-[url('../images/about-us/contact-section-bg.webp')] bg-no-repeat bg-cover bg-center py-24">
+        <div className="lg:container px-4 flex justify-center items-center text-[#fff]">
+          <div className="md:flex gap-7 bg-[#000]/20 backdrop-blur-sm p-5 md:p-10 rounded-sm">
+            <h2 className=" text-3xl md:text-5xl">
+              Unlock Your Dream <br /> Office Today!
+            </h2>
+            <div>
+              <p className="text-sm md:text-base">
+                We encourage clients to actively participate in discussions,{" "}
+                <br />
+                share their ideas, preferences, and feedback.
+              </p>
+              <div className="flex flex-col lg:flex-row gap-2 mt-5">
+                <button
+                  onClick={() => setShowContactPopup(true)}
+                  className="bg-[#1C346B] border border-[#1C346B] px-4 py-2 rounded-3xl flex justify-center items-center gap-1 text-sm md:text-base w-fit"
+                >
+                  <span>Get in touch</span>
+                  <RiArrowRightUpLine />
+                </button>
+                <a
+                  href="tel:+919136036603"
+                  className="bg-[#FFFFFF]/20 px-4 py-2 rounded-3xl border border-[#fff] text-sm md:text-base w-fit"
+                >
+                  Call us: +91-9136036603
+                </a>
               </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Skills Section */}
-      <section className="relative max-w-7xl place-self-center px-6 lg:py-20 md:px-10 lg:px-28 z-10 grid lg:grid-cols-2 md:grid-cols-1 gap-10 items-center">
-        {/* Left Section */}
-        <div className="text-center md:text-left">
-          <h2 className="text-4xl font-bold text-[#232323] font-lora">
-            We Shape Good Lives
-          </h2>
-          <p className="text-[#777777] mt-4 max-w-md font-Poppins text-sm">
-            Believes that such powerful design aesthetic can only stem from the
-            right work ethic– one
-          </p>
-
-          {/* Circular Progress Indicators */}
-          <div
-            ref={ref}
-            className="mt-10 flex justify-center md:justify-start flex-col md:flex-row gap-10"
-          >
-            {/* {skills.map((skill, index) => (
-              <div key={index} className="flex flex-col items-center">
-                <div className="relative w-24 h-24">
-                  <svg className="transform rotate-0" viewBox="0 0 36 36">
-                    <path
-                      className="text-[#304778]"
-                      strokeWidth="3"
-                      fill="none"
-                      stroke="currentColor"
-                      d="M18 2.0845
-                   a 15.9155 15.9155 0 0 1 0 31.831
-                   a 15.9155 15.9155 0 0 1 0 -31.831"
-                    />
-                    <path
-                      className="text-[#CDA174]"
-                      strokeWidth="3"
-                      fill="none"
-                      strokeDasharray={`${skill.percent}, 100`}
-                      stroke="currentColor"
-                      d="M18 2.0845
-                   a 15.9155 15.9155 0 0 1 0 31.831
-                   a 15.9155 15.9155 0 0 1 0 -31.831"
-                    />
-                  </svg>
-                  <span className="absolute inset-0 flex items-center justify-center text-2xl font-medium text-[#232323] font-lora">
-                    {skill.percent}%
-                  </span>
-                </div>
-                <p className="mt-2 text-[#304778] text-xl font-lora">
-                  {skill.label}
-                </p>
-              </div>
-            ))} */}
-            {skills.map((skill, index) => (
-              <div key={index} className="flex flex-col items-center">
-                <div className="relative w-24 h-24">
-                  <svg className="transform rotate-0" viewBox="0 0 36 36">
-                    <path
-                      className="text-[#304778]"
-                      strokeWidth="3"
-                      fill="none"
-                      stroke="currentColor"
-                      d="M18 2.0845
-             a 15.9155 15.9155 0 0 1 0 31.831
-             a 15.9155 15.9155 0 0 1 0 -31.831"
-                    />
-                    <path
-                      className="text-[#CDA174]"
-                      strokeWidth="3"
-                      fill="none"
-                      strokeDasharray={`${animatedCounts[index]}, 100`}
-                      stroke="currentColor"
-                      d="M18 2.0845
-             a 15.9155 15.9155 0 0 1 0 31.831
-             a 15.9155 15.9155 0 0 1 0 -31.831"
-                    />
-                  </svg>
-                  <span className="absolute inset-0 flex items-center justify-center text-2xl font-medium text-[#232323] font-lora">
-                    {animatedCounts[index]}%
-                  </span>
-                </div>
-                <p className="mt-2 text-[#304778] text-xl font-lora">
-                  {skill.label}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Right Section (FAQs Accordion Style) */}
-        <div className="w-full max-w-xl space-y-2">
-          {faqData.map((faq, index) => (
-            <div key={index} className="space-y-1">
-              {/* Question box */}
-              <div
-                className="border rounded p-4 shadow-sm flex justify-between items-center font-semibold text-[#181818] font-lora cursor-pointer"
-                onClick={() => handleToggle(index)}
-              >
-                <span>{faq.question}</span>
-                <span className="text-xl">
-                  {openIndex === index ? "−" : "+"}
-                </span>
-              </div>
-
-              {/* Answer outside box */}
-              {openIndex === index && (
-                <p className="ml-4 py-2 text-sm text-[#777777] font-Poppins max-w-[90%]">
-                  {faq.answer}
-                </p>
-              )}
             </div>
-          ))}
+          </div>
         </div>
       </section>
 
-      {/* footer */}
       <Footer />
+
       {showContactPopup && (
         <ContactUsPopup onClose={() => setShowContactPopup(false)} />
       )}
-    </div>
+    </>
   );
 }
 
 export default AboutUs;
+
+function QuoteSection() {
+  const navigate = useNavigate();
+  return (
+    <section className="font-Georgia lg:container mx-auto px-4 xl:max-w-7xl xl:px-0">
+      <div className="grid md:grid-cols-2 xl:grid-cols-[1fr,1.4fr] gap-8  bg-[#304778] border border-[#CFF3FF] rounded-2xl p-6 md:p-10 items-stretch h-[800px] md:h-[500px]">
+        {/* Left: Quote */}
+        <div className="flex flex-col justify-between text-white ">
+          <p className="text-lg md:text-2xl xl:leading-[42px] leading-relaxed italic relative">
+            <span className=" text-4xl absolute -left-4 -top-2">“</span>
+            Workved Interiors was born out of real challenges we faced while
+            building our own coworking brand—603 The Coworking Space. As we
+            scaled across cities, one thing became crystal clear: setting up
+            high-quality, functional, and well-designed office spaces was
+            unnecessarily complicated.
+            <span className="text-4xl align-bottom">”</span>
+          </p>
+
+          {/* Button */}
+          <button
+            onClick={() => navigate("/ourstory")}
+            className="mt-8 inline-flex items-center justify-center w-12 h-12 rounded-full border border-white hover:bg-white hover:text-[#2c4d8b] transition"
+          >
+            →
+          </button>
+        </div>
+
+        {/* Right: Image */}
+        <div className="relative w-full h-[300px] md:h-auto">
+          <img
+            src="/images/coworking.webp" // replace with your image path
+            // src="/images/ourstory.png" // replace with your image path
+            alt="Office Interior"
+            className="z-10 absolute inset-0 w-full h-full object-cover rounded-xl"
+          />
+        </div>
+      </div>
+    </section>
+  );
+}

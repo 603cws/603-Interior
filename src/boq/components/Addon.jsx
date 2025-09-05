@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { useApp } from "../../Context/Context";
+import { baseImageUrl } from "../../utils/HelperConstant";
 
 function Addon({
   allAddons,
@@ -14,8 +15,8 @@ function Addon({
 }) {
   const { selectedCategory, selectedSubCategory1 } = useApp();
 
-  const baseImageUrl =
-    "https://bwxzfwsoxwtzhjbzbdzs.supabase.co/storage/v1/object/public/addon/";
+  // const baseImageUrl =
+  //   "https://bwxzfwsoxwtzhjbzbdzs.supabase.co/storage/v1/object/public/addon/";
 
   useEffect(() => {
     if (!selectedProductView) return;
@@ -77,7 +78,9 @@ function Addon({
   return (
     <div className="addons-grid flex flex-col gap-4  pl-4 w-full lg:w-1/3">
       <div className="flex items-center justify-between whitespace-nowrap">
-        <h3 className="text-sm md:text-lg font-semibold">{selectedRoom}</h3>
+        <h3 className="text-sm md:text-lg font-semibold text-[#68B2DC]">
+          {selectedRoom}
+        </h3>
       </div>
 
       {addonImagesArray.map((variant) => (

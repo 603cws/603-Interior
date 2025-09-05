@@ -18,6 +18,24 @@
   background-color: #f4f4f4;
 }
 
+.gradient-border {
+  background: linear-gradient(
+    to bottom,
+    #ff7e5f,
+    #feb47b,
+    #ff7e5f
+  ); /* Customize as needed */
+  padding: 2px; /* Border thickness */
+  border-radius: 0.5rem; /* Optional: for rounded corners */
+}
+
+.gradient-border > .inner {
+  background-color: white;
+  height: 100%;
+  width: 100%;
+  border-radius: inherit; /* Matches parent if you use rounded corners */
+}
+
 /* @media (min-width: 1536px) {
   .container {
     max-width: 1440px;
@@ -89,5 +107,20 @@
   z-index: 9999;
 }
 .no-scroll {
-  overflow: hidden;
+  height: 100vh;
+  overflow: hidden !important;
+}
+
+.gold-text {
+  background: linear-gradient(
+    45deg,
+    #ffd700,
+    #ffc300,
+    #ffb700,
+    #ffaa1d,
+    #ffd700
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: bold;
 }

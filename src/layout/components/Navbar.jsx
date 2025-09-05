@@ -6,6 +6,10 @@ import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { supabase } from "../../services/supabase";
 import UnusedAreaWarning from "./UnusedAreaWarning";
+import { PiStarFourFill } from "react-icons/pi";
+import AlertBox from "../../boq/components/AlertBox";
+import EnterAreaModal from "./EnterAreaModal";
+import { AnimatedButton } from "../../common-components/animated-button";
 
 // function Navbar({ totalArea, setTotalArea, MIN_AREA, MAX_AREA, resetAll }) {
 function Navbar({
@@ -19,19 +23,17 @@ function Navbar({
   builtArea,
   setAreaQuantities,
   handleVariantChange,
+  seatCounts,
 }) {
   const [error, setError] = useState(false);
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [unusedArea, setUnusedArea] = useState(0);
   const [showWarning, setShowWarning] = useState(false);
+  const [resetAlert, setResetAlert] = useState(false);
+  const [areaWarn, setAreaWarn] = useState(false);
 
-  const {
-    isAuthenticated,
-    // layoutImgRef,
-    // layoutImage = "",
-    accountHolder,
-  } = useApp();
+  const { isAuthenticated, accountHolder } = useApp();
 
   const {
     setTotalArea,
@@ -80,7 +82,8 @@ function Navbar({
     areaValues,
     areaQuantities,
     totalArea = null,
-    builtArea
+    builtArea,
+    seatCounts
   ) => {
     return {
       userId: userId || null,
@@ -140,13 +143,13 @@ function Navbar({
       washroomsQty: areaQuantities.washrooms || 0,
       ...(totalArea !== null && { totalArea }),
       usedSpace: builtArea,
+      seatCount: seatCounts,
     };
   };
 
   const generateBOQclick = () => {
     if (!totalArea) {
-      toast.error("Enter the Area");
-      return;
+      setAreaWarn(true);
     }
 
     if (totalArea >= MIN_AREA && totalArea <= MAX_AREA) {
@@ -179,7 +182,8 @@ function Navbar({
           areaValues,
           areaQuantities,
           totalArea,
-          builtArea
+          builtArea,
+          seatCounts
         );
 
         // Insert into tables
@@ -198,7 +202,7 @@ function Navbar({
         if (data) {
           const currentLayoutID = data.id;
           setCurrentLayoutID(currentLayoutID);
-          localStorage.setItem("currentLayoutID", currentLayoutID);
+          sessionStorage.setItem("currentLayoutID", currentLayoutID);
         }
 
         if (!isAuthenticated) {
@@ -276,16 +280,19 @@ function Navbar({
     // setTotalArea();
     setError(false);
     resetAll(); // Call the resetAll function passed from the parent component
+    setResetAlert(false);
   };
 
   return (
     <div>
+      {areaWarn && <EnterAreaModal onclose={() => setAreaWarn(false)} />}
       {!isMobile ? (
-        <div className="hidden md:flex justify-around bg-gradient-to-r from-[#23445B] to-[#487BA0] py-4 items-center px-5">
+        <div className="bg-gradient-to-r from-[#23445B] to-[#487BA0]">
+          <div className="hidden md:flex justify-between  py-4 items-center px-5 overflow-hidden 3xl:container">
           {/* logo */}
           <button className=" " onClick={() => navigate("/")}>
             <img
-              src="/logo/workved-logo-white.png"
+              src="/logo/workved-logo.png"
               alt="Workved Interior logo"
               className="h-auto w-20"
             />
@@ -303,11 +310,25 @@ function Navbar({
               className="absolute left-0"
             />
             {totalArea > 0 && (
-              <MdOutlineCancel
-                size={30}
-                className="absolute right-2 cursor-pointer text-[#FFD43B] border-none hover:text-red-300"
-                onClick={handleReset}
-              />
+              <button
+                className="absolute group inline-block right-2 cursor-pointer text-[#FFD43B] border-none hover:text-red-300"
+                // onClick={handleReset}
+                onClick={() => {
+                  if (totalArea >= MIN_AREA) {
+                    setResetAlert(true);
+                  } else {
+                    handleReset();
+                  }
+                }}
+              >
+                <MdOutlineCancel size={30} />
+                <span
+                  className="absolute top-3/4 left-1/2 transform -translate-x-1/2 mb-2 hidden group-hover:block 
+                   bg-[#334A78] text-[#fff] border-l border-t border-[#FFD43B] text-sm px-3 py-1 rounded-sm whitespace-nowrap z-10"
+                >
+                  Reset
+                </span>
+              </button>
             )}
             <input
               ref={inputRef}
@@ -328,7 +349,7 @@ function Navbar({
           </div>
           {error && (
             <div
-              className="error-message text-[#FFD43B] font-medium text-xs mt-1 flex items-center absolute top-1 bg-transparent left-1/3 bg-gradient-to-r from-[#325B56] to-[#3D6F68]"
+              className="error-message text-[#FFD43B] font-medium text-xs mt-1 flex items-center absolute top-1 left-1/2 bg-transparent -translate-x-1/2 bg-gradient-to-r from-[#23445B] to-[#487BA0]"
               aria-live="polite"
             >
               <span className="warning-icon">⚠️</span>
@@ -336,71 +357,102 @@ function Navbar({
               square feet.
             </div>
           )}
-          {/* button for generate boq */}
-          <button
-            className="generateBoq bg-[#1B2E50] mt-2 rounded-lg text-sm py-2 px-5 text-white mb-2 border-2 border-[#1A8FE3]"
+          {/* <button
             onClick={generateBOQclick}
-            disabled={isSubmitting}
+            className="generateBoq glow-on-hover relative flex items-center w-36 h-10 px-4 py-2 bg-[#212B36] border border-[#1A8FE3] text-white overflow-hidden group rounded-[4px] font-Poppins text-xs hover:bg-gradient-to-b from-[#3F56EA] to-[#7c80f3] hover:scale-105 transition-transform duration-300 ease-in-out"
           >
-            {isSubmitting ? (
-              <div className="spinner flex justify-center items-center">
-                <svg
-                  className="animate-spin h-5 w-5 text-white"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                >
-                  <circle
-                    className="opacity-25"
-                    cx="12"
-                    cy="12"
-                    r="10"
-                    stroke="currentColor"
-                    strokeWidth="4"
-                  ></circle>
-                  <path
-                    className="opacity-75"
-                    fill="currentColor"
-                    d="M4 12a8 8 0 018-8v8h8a8 8 0 01-8 8V12H4z"
-                  ></path>
-                </svg>
+            <span className="absolute top-0 left-0 w-full h-full pointer-events-none z-0 hidden group-hover:block">
+              <span className="glow-line glow-top"></span>
+              <span className="glow-line glow-right"></span>
+              <span className="glow-line glow-bottom"></span>
+              <span className="glow-line glow-left"></span>
+            </span>
+            <div className="flex gap-3 w-full h-full">
+              <div className="relative pointer-events-none z-0 w-1/4  h-full">
+                <div className="absolute top-0 left-0 text-[8px] group-hover:blink-on-hover">
+                  <PiStarFourFill />
+                </div>
+                <div className="absolute bottom-0 left-[2px] text-[10px] group-hover:blink-on-hover group-hover:del-200">
+                  <PiStarFourFill />
+                </div>
+                <div className="absolute right-0 top-1/4 text-sm group-hover:blink-on-hover group-hover:del-300">
+                  <PiStarFourFill />
+                </div>
               </div>
-            ) : (
-              "Generate BOQ"
+              <span className="flex justify-center items-center">
+                Create BOQ
+              </span>
+            </div>
+          </button> */}
+          <div className="flex items-center gap-5">
+            <AnimatedButton
+              onClick={generateBOQclick}
+              className="!bg-[#3A5D7B] text-white capitalize font-Georgia font-semibold tracking-wider"
+              variant="default"
+              size="lg"
+              // glow={true}
+              textEffect="shimmer"
+              rounded="custom"
+              asChild={false}
+              hideAnimations={false}
+              shimmerColor="#fff"
+              shimmerSize="0.15em"
+              shimmerDuration="3s"
+              borderRadius="10px"
+              background="rgba(48, 71, 120, 1)"
+              hovereBackground="linear-gradient(90deg,rgba(85,132,182,1)  0%,  rgba(117,162,190,1) 100%)"
+            >
+              Create BOQ
+            </AnimatedButton>
+
+            {isAuthenticated && (
+              <button
+                ref={iconRef}
+                className="z-30 rounded-full"
+                style={{
+                  backgroundImage:
+                    "linear-gradient(to top left, #5B73AF 0%, rgba(255, 255, 255, 0.5) 48%, #1F335C 100%)",
+                }}
+              >
+                <img
+                  onClick={toggleProfile}
+                  src={accountHolder.profileImage}
+                  alt="usericon"
+                  className="w-8 md:w-12 h-8 p-1 md:h-12 cursor-pointer rounded-full"
+                />
+              </button>
             )}
-          </button>
-          {isAuthenticated && (
-            <button ref={iconRef} className="z-30">
-              <img
-                onClick={toggleProfile}
-                src={accountHolder.profileImage}
-                alt="usericon"
-                className="w-12 h-12 cursor-pointer rounded-full"
-              />
-            </button>
-          )}
+          </div>
 
           {/* </div> */}
+          </div>
         </div>
       ) : (
         <div>
-          <div className="flex  justify-between bg-gradient-to-r from-[#1A3A36] to-[#48A095] py-2 items-center px-5">
+          <div className="flex justify-between bg-gradient-to-r from-[#23445B] to-[#487BA0] py-2 items-center px-5">
             {/* logo */}
             <button className=" " onClick={() => navigate("/")}>
               <img
-                src="/logo/workved-logo-white.png"
+                src="/logo/workved-logo.png"
                 alt="Workved Interior logo"
                 className="h-auto w-14"
               />
             </button>
 
             {isAuthenticated && (
-              <button ref={iconRef}>
+              <button
+                ref={iconRef}
+                className="z-30 rounded-full"
+                style={{
+                  backgroundImage:
+                    "linear-gradient(to top left, #5B73AF 0%, rgba(255, 255, 255, 0.5) 48%, #1F335C 100%)",
+                }}
+              >
                 <img
                   onClick={toggleProfile}
                   src={accountHolder.profileImage}
                   alt="usericon"
-                  className="w-12 h-12 cursor-pointer rounded-full"
+                  className="w-8 md:w-12 h-8 p-1 md:h-12 cursor-pointer rounded-full"
                 />
               </button>
             )}
@@ -408,46 +460,59 @@ function Navbar({
             {/* </div> */}
           </div>
           {/* sq feet div */}
-          <div
-            className={`joynavarea flex justify-between mx-auto bg-gradient-to-r from-[#1A3A36] to-[#48A095]  border-2 border-[#FFD43B] items-center px-2 rounded-xl relative my-2 w-[90%]  ${
-              error ? "border-t-1" : "border-1"
-            }`}
-          >
-            {/* cal icon */}
-            <CiCalculator1
-              size={30}
-              color="#FEBF00"
-              className="absolute left-0"
-            />
-            <MdOutlineCancel
-              size={30}
-              className="absolute right-2 cursor-pointer text-[#FFD43B] border-none hover:text-red-300"
-              onClick={handleReset}
-            />
-            <input
-              type="number"
-              className={`w-full rounded-md border-none bg-transparent py-2.5 ms-8 [&::-webkit-inner-spin-button]:appearance-none  focus:outline-none focus:ring-0 text-white ${
-                error ? "error" : ""
+          <div className="px-5">
+            <div
+              className={`joynavarea flex justify-between mx-auto bg-gradient-to-r from-[#23445B] to-[#487BA0] border border-[#FFD43B] items-center px-2 rounded relative my-2 w-full  ${
+                error ? "border-t-1" : "border-1"
               }`}
-              value={totalArea}
-              onChange={handleInputChange}
-              onKeyDown={handleKeyDown}
-              onKeyUp={handleSubmit}
-              placeholder="Enter total area (sq ft)"
-              title="Set the area value here"
-              aria-label="Total Area Input"
-              data-tip="Enter the total area in square feet"
-              autoFocus
-            />
-            {error && (
-              <div
-                className="error-message text-[#FFD43B] font-medium text-[11px] mt-1 flex items-center absolute -top-3 bg-transparent left-14 bg-gradient-to-r from-[#325B56] to-[#3D6F68] text-wrap"
-                aria-live="polite"
-              >
-                <span className="warning-icon">⚠️</span>
-                Invalid area value. Range {MIN_AREA} to {MAX_AREA} sq ft.
-              </div>
-            )}
+            >
+              {/* cal icon */}
+              <CiCalculator1
+                size={30}
+                color="#FEBF00"
+                className="absolute left-0"
+              />
+              {totalArea > 0 && (
+                <button
+                  title="Reset"
+                  className="absolute right-2 cursor-pointer text-[#FFD43B] border-none hover:text-red-300"
+                  // onClick={handleReset}
+                  onClick={() => setResetAlert(true)}
+                >
+                  <MdOutlineCancel size={30} />
+                  <span
+                    className="absolute top-3/4 left-1/2 transform -translate-x-1/2 mb-2 hidden group-hover:block 
+                   bg-[#334A78] text-[#fff] border-l border-t border-[#FFD43B] text-sm px-3 py-1 rounded-sm whitespace-nowrap z-10"
+                  >
+                    Reset
+                  </span>
+                </button>
+              )}
+              <input
+                type="number"
+                className={`w-full rounded-md border-none bg-transparent py-2.5 ms-8 [&::-webkit-inner-spin-button]:appearance-none  focus:outline-none focus:ring-0 text-white ${
+                  error ? "error" : ""
+                }`}
+                value={totalArea}
+                onChange={handleInputChange}
+                onKeyDown={handleKeyDown}
+                onKeyUp={handleSubmit}
+                placeholder="Enter total area (sq ft)"
+                title="Set the area value here"
+                aria-label="Total Area Input"
+                data-tip="Enter the total area in square feet"
+                autoFocus
+              />
+              {error && (
+                <div
+                  className="error-message text-[#FFD43B] font-medium text-[10px] mt-1 flex items-center absolute -top-3 bg-transparent translate-x-4 xs:translate-x-1/4 sm:translate-x-full bg-gradient-to-r from-[#23445B] to-[#487BA0] text-wrap"
+                  aria-live="polite"
+                >
+                  <span className="warning-icon">⚠️</span>
+                  Invalid area value. Range {MIN_AREA} to {MAX_AREA} sq ft.
+                </div>
+              )}
+            </div>
           </div>
         </div>
       )}
@@ -465,6 +530,15 @@ function Navbar({
           }}
           isSubmitting={isSubmitting}
         />
+      )}
+      {resetAlert && (
+        <div className="fixed inset-0 bg-[#000]/30 z-20">
+          <AlertBox
+            onClose={setResetAlert}
+            onconfirm={handleReset}
+            resetLayout={true}
+          />
+        </div>
       )}
     </div>
   );

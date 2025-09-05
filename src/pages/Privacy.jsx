@@ -100,9 +100,9 @@ function Privacy() {
           <div className="font-Poppins flex justify-center">
             <div className="mx-6 lg:mx-10 max-w-4xl ">
               {/* title */}
-              <div className="font-semibold xl:text-5xl capitalize text-center mb-10">
+              {/* <div className="font-semibold xl:text-5xl capitalize text-center mb-10">
                 <h2 className="leading-snug">Privacy Policy</h2>
-              </div>
+              </div> */}
               <p className="text-sm lg:text-lg xl:text-xl mb-5">
                 Welcome to Workved Interiors. Your privacy is important to us.
                 This Privacy Policy explains how we collect, use, share, and

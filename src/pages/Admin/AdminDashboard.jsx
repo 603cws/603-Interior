@@ -1,23 +1,24 @@
-import { useEffect, useState, useRef } from "react";
-import { RiDashboardFill, RiFormula } from "react-icons/ri";
+import { useEffect, useState, useRef, useReducer } from "react";
+import { RiDashboardFill, RiFormula, RiSettingsLine } from "react-icons/ri";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useApp } from "../../Context/Context";
 import { supabase, adminsupabase } from "../../services/supabase";
 import toast from "react-hot-toast";
-import UserProfile from "../user/UserProfile";
-import UserSetting from "../user/UserSetting";
-import { FaArrowLeft } from "react-icons/fa6";
 import { VscSignOut } from "react-icons/vsc";
-import { IoCheckmark, IoSettingsSharp } from "react-icons/io5";
+import {
+  IoCalendarOutline,
+  IoCheckmark,
+  IoSettingsSharp,
+} from "react-icons/io5";
 import { LuBlend } from "react-icons/lu";
-import { FaRegUserCircle } from "react-icons/fa";
+import { FaRegUserCircle, FaUser, FaUserPlus } from "react-icons/fa";
 import { FaBuilding } from "react-icons/fa";
 import { PiHandshakeFill } from "react-icons/pi";
 import VendorNewProduct from "../vendor/VendorNewProduct";
 import VendorNewAddon from "../vendor/VendorNewAddon";
 import { VscEye } from "react-icons/vsc";
-import { MdOutlineDelete } from "react-icons/md";
-import { CiMenuKebab } from "react-icons/ci";
+import { MdOutlineDelete, MdOutlineSpaceDashboard } from "react-icons/md";
+import { CiMenuKebab, CiShop } from "react-icons/ci";
 import Spinner from "../../common-components/Spinner";
 import SidebarItem from "../../common-components/SidebarItem";
 import Clients from "./Clients";
@@ -28,20 +29,72 @@ import DashboardInbox from "./DashboardInbox";
 import CreateUser from "./CreateUser";
 import { HiXMark } from "react-icons/hi2";
 import { MdDeleteOutline } from "react-icons/md";
-import { FaUserPlus } from "react-icons/fa6";
-import { TbCalendarStats } from "react-icons/tb";
+// import { FaUserPlus } from "react-icons/fa6";
+import { TbCalculator, TbCalendarStats } from "react-icons/tb";
 import Schedule from "./Schedule";
 import FormulaEditor from "../../boq/components/FormulaEditor";
+import VendorEditAddon from "../vendor/VendorEditAddon";
+import VendorProductEdit from "../vendor/VendorProductEdit";
+import { ChevronDownIcon } from "@heroicons/react/24/outline";
+import { exportToExcel } from "../../utils/DataExport";
+import { useLogout } from "../../utils/HelperFunction";
+import MobileTabProductCard from "../user/MobileTabProductCard";
+import { IoCloseCircle, IoCloudDownloadOutline } from "react-icons/io5";
+import { IoIosSearch } from "react-icons/io";
+import UserCard from "../user/UserCard";
+import UserProfileEdit from "../user/UserProfileEdit";
+import { GoPlus } from "react-icons/go";
+import ClientBoq from "./ClientBoq";
+import { baseImageUrl } from "../../utils/HelperConstant";
+import { BsBoxSeam } from "react-icons/bs";
+import { FiLogOut } from "react-icons/fi";
+
+function handlesidebarState(state, action) {
+  switch (action.type) {
+    case "TOGGLE_SECTION":
+      return {
+        isSettingOpen: action.payload === "Setting",
+        isProductOpen: action.payload === "Product",
+        // iseditopen: action.payload === "Edit",
+        dashboard: action.payload === "Dashboard",
+        isClientOpen: action.payload === "Client",
+        isCreateOpen: action.payload === "Create",
+        isVendorOpen: action.payload === "Vendors",
+        isScheduleOpen: action.payload === "Schedule",
+        isFormulaeOpen: action.payload === "Formulae",
+        // help: action.payload === "Help",
+        // isBookAppointmentOpen: action.payload === "BookAppointment",
+        currentSection: action.payload,
+      };
+    default:
+      return state;
+  }
+}
+
+const SECTIONS = {
+  DASHBOARD: "Dashboard",
+  PRODUCT: "Product",
+  CLIENTS: "Client",
+  VENDORS: "Vendors",
+  CREATE: "Create",
+  SCHEDULE: "Schedule",
+  FORMULAE: "Formulae",
+  SETTING: "Setting",
+  // HELP: "Help",
+  // EDIT: "Edit",
+  // BOOkAPPOINTMENT: "BookAppointment",
+};
 
 function AdminDashboard() {
+  const logout = useLogout();
   const navigate = useNavigate();
-  const [isSettingOpen, setIsSettingOpen] = useState(false);
-  const [isProductOpen, setIsProductOpen] = useState(false);
+  // const [isSettingOpen, setIsSettingOpen] = useState(false);
+  // const [isProductOpen, setIsProductOpen] = useState(false);
   const [iseditopen, setIsEditopen] = useState(true);
-  const [dashboard, setDashboard] = useState(true);
-  const [currentSection, setCurrentSection] = useState("AdminDashboard");
-  const [isclientopen, setIsclientopen] = useState(false);
-  const [isvendoropen, setIsvendoropen] = useState(false);
+  // const [dashboard, setDashboard] = useState(true);
+  // const [currentSection, setCurrentSection] = useState("AdminDashboard");
+  // const [isclientopen, setIsclientopen] = useState(false);
+  // const [isvendoropen, setIsvendoropen] = useState(false);
   const [query, setQuery] = useState();
   const [isAddProduct, setIsAddProduct] = useState(false);
   const [openMenuId, setOpenMenuId] = useState(null); // Store the ID of the row with an open menu
@@ -71,6 +124,7 @@ function AdminDashboard() {
 
   const menuRef = useRef({});
   const buttonRef = useRef({});
+  const mobileMenuRef = useRef(null);
 
   // loading
   const [isloading, setIsloading] = useState(false);
@@ -90,16 +144,34 @@ function AdminDashboard() {
   const [selectedTab, setSelectedTab] = useState("products");
 
   // create profile
-  const [createProfile, setCreateProfikle] = useState(false);
+  // const [createProfile, setCreateProfikle] = useState(false);
 
   //delete warning
   const [deleteWarning, setDeleteWarning] = useState(false);
   const [rejectReason, setRejectReason] = useState("");
   const [rejectReasonPopup, setRejectReasonPopup] = useState(false);
+  const [clientBoqs, setClientBoqs] = useState(false);
 
   //state schedule
-  const [isScheduleOpen, setisScheduleOpen] = useState(false);
-  const [isFormulaeOpen, setisFormulaeOpen] = useState(false);
+  // const [isScheduleOpen, setisScheduleOpen] = useState(false);
+  // const [isFormulaeOpen, setisFormulaeOpen] = useState(false);
+  const sidebarInitialState = {
+    dashboard: true,
+    isProductOpen: false,
+    isClientOpen: false,
+    isVendorOpen: false,
+    isCreateOpen: false,
+    isScheduleOpen: false,
+    isFormulaeOpen: false,
+    isSettingOpen: false,
+
+    currentSection: "Dashboard",
+  };
+
+  const [sidebarstate, sidebarDispatch] = useReducer(
+    handlesidebarState,
+    sidebarInitialState
+  );
 
   const tabs = [
     { name: "Products", value: "products" },
@@ -107,28 +179,72 @@ function AdminDashboard() {
   ];
 
   const [selectedCategory, setSelectedCategory] = useState("");
+  // state for filter
+  const [isOpen, setIsOpen] = useState(false);
+  const [filterDropdown, setFilterDropdown] = useState(false);
+  const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
+  const [selected, setSelected] = useState("");
+
+  const normalize = (str) => str.replace(/\s+/g, " ").trim().toLowerCase();
+  const applyFilters = ({ query = "", category = "", status = "" }) => {
+    const source = toggle ? products : addons;
+
+    // Store last page before searching if this is a new search
+    if ((query || category || status) && !isSearching) {
+      setLastPageBeforeSearch(currentPage);
+      setIsSearching(true);
+    }
+
+    // Reset case: No query, category, or status
+    if (!query && !category && !status) {
+      toggle ? setFilteredProducts(products) : setFilteredAddons(addons);
+      if (isSearching) {
+        setCurrentPage(lastPageBeforeSearch);
+        setIsSearching(false);
+      }
+      return;
+    }
+
+    // Apply filters
+    const filtered = source.filter((item) => {
+      const titleMatch = query
+        ? normalize(item.title).includes(normalize(query))
+        : true;
+
+      const categoryMatch = category
+        ? toggle
+          ? item.products?.category?.toLowerCase() === category.toLowerCase()
+          : item.title?.toLowerCase().includes(category.toLowerCase())
+        : true;
+
+      const statusMatch = status
+        ? item.status?.toLowerCase() === status.toLowerCase()
+        : true;
+
+      return titleMatch && categoryMatch && statusMatch;
+    });
+
+    // Apply filtered result
+    if (toggle) {
+      setFilteredProducts(filtered);
+    } else {
+      setFilteredAddons(filtered);
+    }
+
+    setCurrentPage(1); // Always reset to first page on filter
+  };
 
   //baseurlforimg
-  const baseImageUrl =
-    "https://bwxzfwsoxwtzhjbzbdzs.supabase.co/storage/v1/object/public/addon/";
+  // const baseImageUrl =
+  //   "https://bwxzfwsoxwtzhjbzbdzs.supabase.co/storage/v1/object/public/addon/";
 
-  const {
-    setAccountHolder,
-    setIsAuthLoading,
-    setIsAuthenticated,
-    setTotalArea,
-    accountHolder,
-  } = useApp();
+  const { accountHolder } = useApp();
 
   const location = useLocation();
 
   useEffect(() => {
     if (location.state?.openSettings) {
-      setIsProductOpen(false);
-      setDashboard(false);
-      setIsSettingOpen(true);
-      // setHelp(false);
-      setCurrentSection("Setting");
+      sidebarDispatch({ type: "TOGGLE_SECTION", payload: SECTIONS.SETTING });
     }
   }, [location.state]);
 
@@ -155,6 +271,14 @@ function AdminDashboard() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
   const [selectedindex, setSelectedindex] = useState();
+
+  // new edit option product
+  const [editProduct, setEditProduct] = useState(false);
+  const [selectedproduct, setSelectedproduct] = useState(null);
+
+  //new edit option addon
+  const [editAddon, setEditAddon] = useState(false);
+  const [selectedAddon, setSelectedAddon] = useState(null);
 
   //handle functions
   const handleDeletevendirClick = (user, index) => {
@@ -190,6 +314,21 @@ function AdminDashboard() {
     "lighting",
     "smart solutions",
   ];
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        mobileMenuRef.current &&
+        !mobileMenuRef.current.contains(event.target)
+      ) {
+        setIsOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   useEffect(() => {
     const calculateItemsPerPage = () => {
@@ -424,124 +563,33 @@ function AdminDashboard() {
   };
 
   const handlesetting = () => {
-    setIsProductOpen(false);
-    setDashboard(false);
-    setIsSettingOpen(true);
-    setIsclientopen(false);
-    setIsvendoropen(false);
-    setCreateProfikle(false);
-    setisScheduleOpen(false);
-    setisFormulaeOpen(false);
-    setCurrentSection("Setting");
+    sidebarDispatch({ type: "TOGGLE_SECTION", payload: SECTIONS.SETTING });
   };
   const handleproduct = () => {
-    setIsSettingOpen(false);
-    setDashboard(false);
-    setIsclientopen(false);
-    setIsProductOpen(true);
-    setIsvendoropen(false);
-    setCreateProfikle(false);
-    setisScheduleOpen(false);
-    setisFormulaeOpen(false);
-    setCurrentSection("Product");
+    sidebarDispatch({ type: "TOGGLE_SECTION", payload: SECTIONS.PRODUCT });
   };
 
   const handledashboard = () => {
-    setIsSettingOpen(false);
-    setIsProductOpen(false);
-    setIsclientopen(false);
-    setDashboard(true);
-    setIsvendoropen(false);
-    setCreateProfikle(false);
-    setisScheduleOpen(false);
-    setisFormulaeOpen(false);
-    setCurrentSection("AdminDashboard");
+    sidebarDispatch({ type: "TOGGLE_SECTION", payload: SECTIONS.DASHBOARD });
   };
 
   const handleclient = () => {
-    setIsSettingOpen(false);
-    setIsProductOpen(false);
-    setDashboard(false);
-    setIsvendoropen(false);
-    setIsclientopen(true);
-    setCreateProfikle(false);
-    setisScheduleOpen(false);
-    setisFormulaeOpen(false);
-    setCurrentSection("Client");
+    sidebarDispatch({ type: "TOGGLE_SECTION", payload: SECTIONS.CLIENTS });
   };
 
   const handleVendor = () => {
-    setIsSettingOpen(false);
-    setIsProductOpen(false);
-    setDashboard(false);
-    setIsclientopen(false);
-    setIsvendoropen(true);
-    setCreateProfikle(false);
-    setisScheduleOpen(false);
-    setisFormulaeOpen(false);
-    setCurrentSection("Vendor");
+    sidebarDispatch({ type: "TOGGLE_SECTION", payload: SECTIONS.VENDORS });
   };
   const handlecreate = () => {
-    setIsSettingOpen(false);
-    setIsProductOpen(false);
-    setDashboard(false);
-    setIsclientopen(false);
-    setIsvendoropen(false);
-    setCreateProfikle(true);
-    setisScheduleOpen(false);
-    setisFormulaeOpen(false);
-    setCurrentSection("create profile");
+    sidebarDispatch({ type: "TOGGLE_SECTION", payload: SECTIONS.CREATE });
   };
 
-  //handle schedule
   const handleschedule = () => {
-    setIsSettingOpen(false);
-    setIsProductOpen(false);
-    setDashboard(false);
-    setIsclientopen(false);
-    setIsvendoropen(false);
-    setCreateProfikle(false);
-    setisScheduleOpen(true);
-    setisFormulaeOpen(false);
-    setCurrentSection("schedule");
+    sidebarDispatch({ type: "TOGGLE_SECTION", payload: SECTIONS.SCHEDULE });
   };
 
-  //handle formulae
   const handleformulae = () => {
-    setIsSettingOpen(false);
-    setIsProductOpen(false);
-    setDashboard(false);
-    setIsclientopen(false);
-    setIsvendoropen(false);
-    setCreateProfikle(false);
-    setisScheduleOpen(false);
-    setisFormulaeOpen(true);
-    setCurrentSection("formulae");
-  };
-
-  const handleLogout = async () => {
-    try {
-      setIsAuthLoading(true);
-      const { error } = await supabase.auth.signOut();
-      if (error) {
-        console.log("Error signing out:", error.message);
-      } else {
-        toast.success("User signed out successfully");
-        setAccountHolder({
-          companyName: "",
-          email: "",
-          phone: "",
-          role: "",
-          userId: "",
-        });
-        setTotalArea("");
-        localStorage.removeItem("currentLayoutID");
-        navigate("/");
-        setIsAuthenticated(false);
-      }
-    } finally {
-      setIsAuthLoading(false);
-    }
+    sidebarDispatch({ type: "TOGGLE_SECTION", payload: SECTIONS.FORMULAE });
   };
 
   const getvendors = async () => {
@@ -600,72 +648,6 @@ function AdminDashboard() {
     setFilteredUsers(filtereduser);
   };
 
-  const normalize = (str) => str.replace(/\s+/g, " ").trim().toLowerCase();
-
-  const filterItems = (query) => {
-    // console.log(query);
-    setSearchQuery(query);
-
-    if (toggle) {
-      if (!query && !selectedCategory) {
-        setFilteredProducts(products); // Reset to original list when input is empty
-        if (isSearching) {
-          setCurrentPage(lastPageBeforeSearch); // restore last page
-          setIsSearching(false); // reset
-        }
-        return;
-      }
-
-      if (!query && selectedCategory) {
-        filterbyCategory(selectedCategory);
-        if (isSearching) {
-          setCurrentPage(lastPageBeforeSearch);
-          setIsSearching(false);
-        }
-        return;
-      }
-      // If entering a search query
-      if (!isSearching) {
-        setLastPageBeforeSearch(currentPage); // store page before search
-        setIsSearching(true);
-      }
-      setCurrentPage(1);
-
-      // const filtered = products.filter((item) =>
-      //   item.title.toLowerCase().includes(query.toLowerCase())
-      // );
-      const filtered = products.filter((item) =>
-        normalize(item.title).includes(normalize(query))
-      );
-      // console.log(filtered);
-
-      setFilteredProducts(filtered);
-    } else {
-      if (!query) {
-        setFilteredAddons(addons); // Reset to original list when input is empty
-        if (isSearching) {
-          setCurrentPage(lastPageBeforeSearch);
-          setIsSearching(false);
-        }
-        return;
-      }
-      if (!isSearching) {
-        setLastPageBeforeSearch(currentPage);
-        setIsSearching(true);
-      }
-      setCurrentPage(1);
-      // const filtered = addons.filter((item) =>
-      //   item.title.toLowerCase().includes(query.toLowerCase())
-      // );
-      const filtered = products.filter((item) =>
-        normalize(item.title).includes(normalize(query))
-      );
-      // console.log(filtered);
-
-      setFilteredAddons(filtered);
-    }
-  };
-
   const filterVendorByMultipleFields = (query) => {
     if (!query) {
       setFilteredvendors(allvendors); // Reset to original list when input is empty
@@ -677,307 +659,665 @@ function AdminDashboard() {
     setFilteredvendors(filteredvendor);
   };
 
-  const filterbyCategory = (category) => {
-    // console.log(category);
-    setSelectedCategory(category);
+  // const filterbyCategory = (category) => {
+  //   // console.log(category);
+  //   setSelectedCategory(category);
 
-    if (toggle) {
-      if (!category) {
-        setFilteredProducts(products); // Reset to original list when input is empty
-        return;
-      }
-      const filtered = products.filter(
-        (item) =>
-          item.products.category.toLowerCase() === category.toLowerCase()
-      );
-      // console.log(filtered);
+  //   if (toggle) {
+  //     if (!category) {
+  //       setFilteredProducts(products); // Reset to original list when input is empty
+  //       return;
+  //     }
+  //     const filtered = products.filter(
+  //       (item) =>
+  //         item.products.category.toLowerCase() === category.toLowerCase()
+  //     );
+  //     // console.log(filtered);
 
-      setFilteredProducts(filtered);
-    } else {
-      if (!category) {
-        setFilteredAddons(addons); // Reset to original list when input is empty
-        return;
-      }
-      const filtered = addons.filter((item) =>
-        item.title.toLowerCase().includes(category.toLowerCase())
-      );
-      // console.log(filtered);
+  //     setFilteredProducts(filtered);
+  //   } else {
+  //     if (!category) {
+  //       setFilteredAddons(addons); // Reset to original list when input is empty
+  //       return;
+  //     }
+  //     const filtered = addons.filter((item) =>
+  //       item.title.toLowerCase().includes(category.toLowerCase())
+  //     );
+  //     // console.log(filtered);
 
-      setFilteredAddons(filtered);
-    }
-    setCurrentPage(1);
-  };
+  //     setFilteredAddons(filtered);
+  //   }
+  //   setCurrentPage(1);
+  // };
 
   // console.log(accountHolder);
 
   return (
-    <div className="bg-[url('images/bg/Admin.png')] bg-cover bg-center bg-no-repeat p-3 xl:p-5">
-      <div className="flex gap-3 max-h-fit overflow-hidden bg-white rounded-3xl">
-        {/* sidebar */}
-        <div
-          className={`max-h-screen sticky left-0 top-0 bottom-0 bg-white shadow-lg transition-all duration-300 ${
-            isExpanded ? "max-w-sm w-60 absolute" : "w-16"
-          }`}
-          onMouseEnter={() => setIsExpanded(true)}
-          onMouseLeave={() => setIsExpanded(false)}
-        >
-          {/* Logo */}
-          <div className="cursor-pointer flex justify-center items-center py-4">
+    <div className="grid lg:grid-cols-[auto_1fr] lg:bg-gradient-to-r from-[#CFDCE7] to-[#E8EEF3] md:p-4 h-dvh md:h-screen font-Poppins lg:overflow-hidden">
+      {/* sidebar */}
+      <div
+        className={`hidden lg:block sticky top-0 bottom-0 left-0 bg-white border-2 border-[#334A78] rounded-lg shadow-lg transition-all duration-300 ${
+          isExpanded ? "max-w-sm w-60 absolute" : "w-16"
+        }`}
+        onMouseEnter={() => setIsExpanded(true)}
+        onMouseLeave={() => setIsExpanded(false)}
+      >
+        {/* Logo */}
+        <div className="cursor-pointer flex justify-center items-center py-4">
+          <img
+            src={`${
+              isExpanded
+                ? "/logo/workved-interior.png"
+                : "/images/bi_layout-sidebar.png"
+            }`}
+            alt="Logo"
+            className={`${isExpanded ? "h-16 w-32" : "h-8 w-8"}`}
+            onClick={() => navigate("/")}
+          />
+        </div>
+
+        {/* Menu Items */}
+        <div className="font-semibold text-lg capitalize leading-normal tracking-wide py-3 xl:py-4 text-[#262626] flex flex-col gap-2 px-3">
+          {/* <h3
+            className={`capitalize text-[#A1A1A1] ${
+              isExpanded ? "mx-4" : "hidden"
+            }`}
+          >
+            main
+          </h3> */}
+          <SidebarItem
+            icon={<MdOutlineSpaceDashboard />}
+            text="Dashboard"
+            onClick={handledashboard}
+            isExpanded={isExpanded}
+            currentSection={sidebarstate?.currentSection}
+          />
+          <SidebarItem
+            icon={<BsBoxSeam />}
+            text="Product"
+            onClick={handleproduct}
+            isExpanded={isExpanded}
+            currentSection={sidebarstate?.currentSection}
+          />
+          <SidebarItem
+            icon={<FaUser />}
+            text="Client"
+            onClick={handleclient}
+            isExpanded={isExpanded}
+            currentSection={sidebarstate?.currentSection}
+          />
+          <SidebarItem
+            icon={<CiShop />}
+            text="Vendors"
+            onClick={handleVendor}
+            isExpanded={isExpanded}
+            currentSection={sidebarstate?.currentSection}
+          />
+          <SidebarItem
+            icon={<FaUserPlus />}
+            text="create"
+            onClick={handlecreate}
+            isExpanded={isExpanded}
+            currentSection={sidebarstate?.currentSection}
+          />
+          <SidebarItem
+            icon={<IoCalendarOutline />}
+            text="schedule"
+            onClick={handleschedule}
+            isExpanded={isExpanded}
+            currentSection={sidebarstate?.currentSection}
+          />
+          <SidebarItem
+            icon={<TbCalculator />}
+            text="formulae"
+            onClick={handleformulae}
+            isExpanded={isExpanded}
+            currentSection={sidebarstate?.currentSection}
+          />
+          <SidebarItem
+            icon={<RiSettingsLine />}
+            text="Setting"
+            onClick={handlesetting}
+            isExpanded={isExpanded}
+            currentSection={sidebarstate?.currentSection}
+          />
+          <SidebarItem
+            icon={<FiLogOut />}
+            text="Logout"
+            onClick={logout}
+            isExpanded={isExpanded}
+          />
+        </div>
+
+        {/* Other Items */}
+        {/* <div className="font-semibold text-lg capitalize leading-normal tracking-wide  text-[#262626] flex flex-col gap-2 px-3">
+          <h3
+            className={`capitalize text-[#A1A1A1] ${
+              isExpanded ? "mx-4" : "hidden"
+            }`}
+          >
+            other
+          </h3>
+          <SidebarItem
+            icon={<RiSettingsLine />}
+            text="Setting"
+            onClick={handlesetting}
+            isExpanded={isExpanded}
+            currentSection={sidebarstate?.currentSection}
+          />
+          <SidebarItem
+            icon={<FiLogOut />}
+            text="Logout"
+            onClick={logout}
+            isExpanded={isExpanded}
+          />
+        </div> */}
+      </div>
+      <div className="flex flex-col h-full min-h-0 lg:gap-2 lg:px-2">
+        {/* header for mobile */}
+        <div className="lg:hidden flex justify-between items-center border-b-2 border-[#334A78]  bg-white h-[50px] shrink-0">
+          <div className="mx-3">
             <img
               src="/logo/workved-interior.png"
               alt="Logo"
+              className={`${isExpanded ? "h-20 w-32" : "h-9 w-16"}`}
               onClick={() => navigate("/")}
-              className={`${isExpanded ? "h-20 w-32" : "h-10 w-14"}`}
+            />
+          </div>
+          <div
+            onClick={() => setIsOpen(!isOpen)}
+            className="mx-3 rounded-full"
+            style={{
+              backgroundImage:
+                "linear-gradient(to top left, #5B73AF 0%, rgba(255, 255, 255, 0.5) 48%, #1F335C 100%)",
+            }}
+          >
+            <img
+              src={accountHolder.profileImage}
+              alt="usericon"
+              className="w-8 md:w-10 h-8 p-1 md:h-10"
             />
           </div>
 
-          {/* Menu Items */}
-          <div className="font-semibold text-lg capitalize leading-normal tracking-wide py-3 xl:py-4 text-[#262626] flex flex-col gap-2 px-3">
-            <h3
-              className={`capitalize text-[#A1A1A1] ${
-                isExpanded ? "mx-4" : "hidden"
-              }`}
-            >
-              main
-            </h3>
-            <SidebarItem
-              icon={<RiDashboardFill />}
-              text="Dashboard"
-              onClick={handledashboard}
-              isExpanded={isExpanded}
-            />
-            <SidebarItem
-              icon={<LuBlend />}
-              text="Product"
-              onClick={handleproduct}
-              isExpanded={isExpanded}
-            />
-            <SidebarItem
-              icon={<FaRegUserCircle />}
-              text="Clients"
-              onClick={handleclient}
-              isExpanded={isExpanded}
-            />
-            <SidebarItem
-              icon={<PiHandshakeFill />}
-              text="Vendor"
-              onClick={handleVendor}
-              isExpanded={isExpanded}
-            />
-            <SidebarItem
-              icon={<FaUserPlus />}
-              text="create"
-              onClick={handlecreate}
-              isExpanded={isExpanded}
-            />
-            <SidebarItem
-              icon={<TbCalendarStats />}
-              text="schedule"
-              onClick={handleschedule}
-              isExpanded={isExpanded}
-            />
-            <SidebarItem
-              icon={<RiFormula />}
-              text="formulae"
-              onClick={handleformulae}
-              isExpanded={isExpanded}
-            />
-          </div>
+          {/* <div className=" mx-3">
+                    <MdMenuOpen size={30} />
+                  </div> */}
 
-          {/* Other Items */}
-          <div className="font-semibold text-lg capitalize leading-normal tracking-wide py-3 xl:py-4 text-[#262626] flex flex-col gap-2 px-3">
-            <h3
-              className={`capitalize text-[#A1A1A1] ${
-                isExpanded ? "mx-4" : "hidden"
-              }`}
-            >
-              other
+          <div
+            ref={mobileMenuRef}
+            className={`fixed top-0 right-0 h-full w-64 bg-white border-l z-50 transform ${
+              isOpen ? "translate-x-0" : "translate-x-full"
+            } transition-transform duration-300 ease-in-out shadow-lg`}
+          >
+            {/* <div className="p-4 flex justify-between items-center border-b">
+                      <h2 className="text-lg font-semibold text-[#1A3365]">Menu</h2>
+                      <button onClick={() => setIsOpen(false)} className="text-xl">
+                        <FaTimes />
+                      </button>
+                    </div> */}
+
+            <div className="flex gap-2 justify-center items-center mt-6">
+              <div>
+                <img
+                  src={accountHolder?.profileImage}
+                  alt="usericon"
+                  className="w-10 h-10"
+                />
+              </div>
+              <div className="text-gray-800 text-sm">
+                <h2>{accountHolder?.companyName}</h2>
+                <p>{accountHolder?.email}</p>
+              </div>
+            </div>
+
+            <ul className="p-4 space-y-4">
+              <MobileMenuItem
+                icon={<RiDashboardFill />}
+                title={"Dashboard"}
+                currentSection={sidebarstate?.currentSection}
+                onClick={handledashboard}
+                setIsOpen={setIsOpen}
+              />
+              <MobileMenuItem
+                icon={<LuBlend />}
+                title={"Product"}
+                currentSection={sidebarstate?.currentSection}
+                onClick={handleproduct}
+                setIsOpen={setIsOpen}
+              />
+              <MobileMenuItem
+                icon={<FaRegUserCircle />}
+                title="Client"
+                currentSection={sidebarstate?.currentSection}
+                onClick={handleclient}
+                setIsOpen={setIsOpen}
+              />
+              <MobileMenuItem
+                icon={<PiHandshakeFill />}
+                title="Vendors"
+                currentSection={sidebarstate?.currentSection}
+                onClick={handleVendor}
+                setIsOpen={setIsOpen}
+              />
+              <MobileMenuItem
+                icon={<FaUserPlus />}
+                title="Create"
+                currentSection={sidebarstate?.currentSection}
+                onClick={handlecreate}
+                setIsOpen={setIsOpen}
+              />
+              <MobileMenuItem
+                icon={<TbCalendarStats />}
+                title="Schedule"
+                currentSection={sidebarstate?.currentSection}
+                onClick={handleschedule}
+                setIsOpen={setIsOpen}
+              />
+              <MobileMenuItem
+                icon={<RiFormula />}
+                title="Formulae"
+                currentSection={sidebarstate?.currentSection}
+                onClick={handleformulae}
+                setIsOpen={setIsOpen}
+              />
+
+              <hr className="border-gray-200" />
+              <MobileMenuItem
+                icon={<IoSettingsSharp />}
+                onClick={handlesetting}
+                title={"Setting"}
+                currentSection={sidebarstate?.currentSection}
+                setIsOpen={setIsOpen}
+              />
+              <MobileMenuItem
+                title={"Logout"}
+                icon={<VscSignOut />}
+                onClick={logout}
+                currentSection={sidebarstate?.currentSection}
+                setIsOpen={setIsOpen}
+              />
+            </ul>
+          </div>
+        </div>
+        {/* header for dashboard */}
+        <div className="flex justify-between items-center border-b border-[#CCCCCC] lg:border-2 lg:border-[#334A78] lg:rounded-lg bg-white  lg:h-[50px] shrink-0">
+          <div className="mx-3">
+            <h3 className="font-semibold text-2xl text-[#374A75] capitalize ">
+              {sidebarstate?.currentSection}
             </h3>
-            <SidebarItem
-              icon={<IoSettingsSharp />}
-              text="Setting"
-              onClick={handlesetting}
-              isExpanded={isExpanded}
-            />
-            <SidebarItem
-              icon={<VscSignOut />}
-              text="Logout"
-              onClick={handleLogout}
-              isExpanded={isExpanded}
+          </div>
+          <div
+            className="hidden lg:block mx-3 rounded-full"
+            style={{
+              backgroundImage:
+                "linear-gradient(to top left, #5B73AF 0%, rgba(255, 255, 255, 0.5) 48%, #1F335C 100%)",
+            }}
+          >
+            <img
+              src={accountHolder.profileImage}
+              alt="usericon"
+              className="w-10 h-10 p-1"
             />
           </div>
         </div>
-        <div className="flex-1 flex flex-col relative h-full px-2">
-          {/* header for dashboard */}
-          <div className="flex justify-between items-center border-2 rounded-3xl mt-2 sticky top-3 z-10 bg-[#EBF0FF] h-[50px]">
-            <div className="mx-3">
-              <h3 className="font-bold text-lg capitalize ">
-                {currentSection}
-              </h3>
-            </div>
-            <div className="mx-3">
-              <img
-                src={accountHolder.profileImage}
-                alt="usericon"
-                className="w-10"
-              />
+
+        {/* div for dashboard */}
+        {sidebarstate.dashboard && (
+          <div className="flex flex-col h-full min-h-0 loverflow-hidden lg:border-2 border-[#334A78] rounded-lg bg-[#fff]">
+            {/* for dashboard */}
+            <div className="w-full flex-1 flex overflow-y-auto scrollbar-hide  py-2 px-3">
+              {/* <p>this part is under working</p> */}
+              <div className="xl:flex justify-evenly gap-4 w-full flex-1">
+                <div className="p-4 flex-1">
+                  <DashboardCards
+                    totalclients={allusers}
+                    totalVendors={allvendors}
+                    vendors={handleVendor}
+                    clients={handleclient}
+                    products={products}
+                    handleproduct={handleproduct}
+                    addons={addons}
+                  />
+                </div>
+                <div className="flex-1 p-4">
+                  <DashboardInbox
+                    viewDetails={handleproduct}
+                    products={products}
+                  />
+                </div>
+              </div>
             </div>
           </div>
+        )}
 
-          {/* div for dashboard */}
-          {dashboard && (
-            <div className="w-full  border-2 border-[#000] rounded-3xl bg-[#EBF0FF] my-2.5">
-              {/* for dashboard */}
-              <div className="w-full flex overflow-y-auto scrollbar-hide h-[calc(100vh-120px)] py-2 px-3">
-                {/* <p>this part is under working</p> */}
-                <div className="xl:flex justify-evenly gap-4 w-full">
-                  <div className="p-4">
-                    <DashboardCards
-                      totalclients={allusers}
-                      totalVendors={allvendors}
-                      vendors={handleVendor}
-                      clients={handleclient}
-                      products={products}
-                      handleproduct={handleproduct}
-                      addons={addons}
-                    />
-                  </div>
-                  <div className="flex-1 p-4">
-                    {" "}
-                    <DashboardInbox
-                      viewDetails={handleproduct}
-                      products={products}
-                    />
-                  </div>
+        {/* setting */}
+        {sidebarstate?.isSettingOpen && (
+          <div className="flex flex-col h-full min-h-0 overflow-hidden lg:border-2 lg:border-[#334A78] lg:rounded-lg bg-white">
+            {iseditopen ? (
+              <div className="flex-1 flex flex-col justify-center items-center h-[90%] font-Poppins ">
+                <div className="flex justify-center items-center lg:w-full  h-full">
+                  <UserCard setIsEditopen={setIsEditopen} />
                 </div>
               </div>
-            </div>
-          )}
-
-          {/* setting */}
-          {isSettingOpen && (
-            <div className="flex-1  border-2 border-[#000] rounded-3xl my-2.5">
-              <div className="overflow-y-hidden scrollbar-hide h-[calc(100vh-120px)] py-2 relative">
-                <div className="flex flex-col justify-between  pt-2 sticky top-0">
-                  {/* <h3 className="capitalize font-semibold px-4 text-xl border-b-2 border-b-[#ccc]">
-                      setting
-                    </h3> */}
-                  <div className="border-b-2 border-b-[#ccc] py-2 px-4">
-                    {iseditopen ? (
-                      <button className="capitalize font-medium text-base px-10 py-2 rounded-2xl border-[#000] border bg-[#B4EAEA]">
-                        Profile
-                      </button>
-                    ) : (
-                      <div className="capitalize font-medium text-base px-10  ">
-                        <button
-                          className="text-sm text-[#A1A1A1] flex justify-center items-center gap-3"
-                          onClick={() => setIsEditopen(true)}
-                        >
-                          <FaArrowLeft /> back to profile
-                        </button>
-                        <h3>profile edit</h3>
-                      </div>
-                    )}
-                  </div>
-                </div>
-                <div className="flex-1 flex flex-col justify-center items-center h-[90%] font-Poppins ">
-                  {iseditopen ? (
-                    <div className="flex justify-center items-center w-full  h-full">
-                      <UserProfile setIsEditopen={setIsEditopen} />
-                    </div>
-                  ) : (
-                    <UserSetting />
-                  )}
-                </div>
+            ) : (
+              <div className="flex-1 overflow-y-auto min-h-0 p-2 md:p-7">
+                <UserProfileEdit setIsEditopen={setIsEditopen} />
               </div>
-            </div>
-          )}
+            )}
+          </div>
+        )}
 
-          {/* product */}
-          {isProductOpen && (
-            <div className="flex-1  border-2 border-[#000] rounded-3xl my-2.5">
-              <div className="overflow-y-auto scrollbar-hide h-[calc(100vh-120px)] rounded-3xl relative ">
-                {addNewProduct ? (
-                  <VendorNewProduct
-                    setAddNewProduct={setAddNewProduct}
-                    setProductlist={setProductlist}
-                  />
-                ) : addNewAddon ? (
-                  <VendorNewAddon
-                    setAddNewProduct={setAddNewAddon}
-                    setProductlist={setProductlist}
-                  />
-                ) : (
-                  // Default product list and add product UI
-                  <>
-                    <div className=" sticky top-0 z-20 bg-white">
-                      <div className="flex justify-between items-center px-4 py-2 border-b-2 border-b-gray-400 ">
-                        <h3 className="capitalize font-semibold text-xl ">
-                          product list
-                        </h3>
+        {/* product */}
+        {sidebarstate.isProductOpen && (
+          <div className="flex flex-col h-full min-h-0 overflow-hidden lg:border-2 lg:border-[#334A78] lg:rounded-lg bg-white">
+            <div className="overflow-y-auto scrollbar-hide relative ">
+              {addNewProduct ? (
+                <VendorNewProduct
+                  setAddNewProduct={setAddNewProduct}
+                  setProductlist={setProductlist}
+                />
+              ) : addNewAddon ? (
+                <VendorNewAddon
+                  setAddNewProduct={setAddNewAddon}
+                  setProductlist={setProductlist}
+                />
+              ) : editProduct ? (
+                <VendorProductEdit
+                  setEditProduct={setEditProduct}
+                  setProductlist={setProductlist}
+                  setIsProductRefresh={setIsProductRefresh}
+                  selectedproduct={selectedproduct}
+                />
+              ) : editAddon ? (
+                <VendorEditAddon
+                  seteditAddon={setEditAddon}
+                  selectedAddon={selectedAddon}
+                  setProductlist={setProductlist}
+                  setIsAddonRefresh={setIsAddonRefresh}
+                />
+              ) : (
+                // Default product list and add product UI
+                <>
+                  <div className=" sticky top-0 z-20 bg-white">
+                    <div className="hidden lg:flex justify-between items-center px-4 py-2 border-b-2 border-b-gray-400 ">
+                      <h3 className=" capitalize font-semibold text-xl ">
+                        product list
+                      </h3>
 
-                        <div className="w-1/2">
-                          <input
-                            type="text"
-                            value={searchQuery}
-                            className="w-full rounded-lg px-2 py-1 outline-none border-2 border-gray-400"
-                            placeholder="......search by product name"
-                            onChange={(e) => filterItems(e.target.value)}
-                          />
+                      <div className="flex gap-2">
+                        <div className="relative inline-block">
+                          <button
+                            onClick={() => setFilterDropdown(!filterDropdown)}
+                            className="px-4 py-2 rounded text-[#374A75] text-sm flex items-center gap-3 border"
+                          >
+                            <img src="/images/icons/filter-icon.png" alt="" />
+                            <span className="text-sm">Filter</span>
+                            <ChevronDownIcon className="h-4 w-4 text-gray-500" />
+                          </button>
+                          {filterDropdown && (
+                            <div className="absolute mt-2 w-48 -left-1/2 bg-white border rounded-md shadow-lg z-10 p-3">
+                              {/* status filter */}
+                              <div>
+                                <label className="text-sm text-[#374A75]">
+                                  Status
+                                </label>
+                                <select
+                                  value={selected}
+                                  onChange={(e) => {
+                                    const value = e.target.value;
+                                    setSelected(value);
+                                    setFilterDropdown(false);
+                                    applyFilters({
+                                      query: searchQuery,
+                                      category: selectedCategory,
+                                      status: value,
+                                    });
+                                  }}
+                                  className="w-full border-none focus:ring-0 p-2 text-sm"
+                                >
+                                  <option value="">All</option>
+                                  <option value="pending">Pending</option>
+                                  <option value="approved">Approved</option>
+                                  <option value="rejected">Rejected</option>
+                                </select>
+                              </div>
+
+                              <div>
+                                <label className="text-sm text-[#374A75]">
+                                  Categories
+                                </label>
+                                <select
+                                  name="category"
+                                  value={selectedCategory}
+                                  onChange={(e) => {
+                                    const value = e.target.value;
+                                    setSelectedCategory(value);
+                                    applyFilters({
+                                      query: searchQuery,
+                                      category: value,
+                                      status: selected,
+                                    });
+                                  }}
+                                  id="category"
+                                  className="py-2"
+                                >
+                                  <option value="">All categories</option>
+                                  {category.map((category) => (
+                                    <option key={category} value={category}>
+                                      {category}
+                                    </option>
+                                  ))}
+                                </select>
+                              </div>
+                            </div>
+                          )}
                         </div>
-
-                        {toggle && (
-                          <div>
-                            <select
-                              name="category"
-                              value={selectedCategory}
-                              onChange={(e) => filterbyCategory(e.target.value)}
-                              id="category"
-                            >
-                              <option value="">All categories</option>
-                              {category.map((category) => (
-                                <option key={category} value={category}>
-                                  {category}
-                                </option>
-                              ))}
-                            </select>
-                          </div>
-                        )}
-
-                        {/* <button
-                          onClick={handlenewproduct}
-                          className="capitalize shadow-sm py-2 px-4 text-sm flex justify-center items-center border-2"
-                        >
-                          <IoIosAdd size={20} />
-                          add product
-                        </button> */}
+                        <div className="">
+                          <button
+                            onClick={() => {
+                              const exportData = items.map((item) => ({
+                                id: item.id,
+                                [toggle ? "Product Name" : "Addon Name"]:
+                                  item.title,
+                                Price: `₹${item.price}`,
+                                Status: item?.status,
+                                Description: item?.details || "",
+                                Dimension: item?.dimensions || "NA",
+                                company: item?.manufacturer || "",
+                                segment: item?.segment,
+                              }));
+                              exportToExcel(
+                                exportData,
+                                toggle ? "products.xlsx" : "addons.xlsx"
+                              );
+                            }}
+                            className=" px-4 py-2 rounded text-[#374A75] text-sm flex items-center gap-3 border "
+                          >
+                            <IoCloudDownloadOutline /> <span>Export</span>
+                          </button>
+                        </div>
                       </div>
-                      <div className="flex gap-3 px-4 py-2 border-b-2 border-b-gray-400">
+                    </div>
+                    <div className="flex justify-between gap-3 px-4 py-2 border-b-2 border-b-gray-400">
+                      <div className="flex gap-2">
                         {tabs.map((tab) => (
                           <button
                             key={tab.value}
-                            className={`flex items-center gap-2 px-6 py-2 border rounded-xl ${
+                            className={`flex items-center gap-2 px-2 text-sm md:text-base md:px-6 py-1 md:py-2 border border-[#374A75] rounded text-[#374A75] ${
                               selectedTab === tab.value
-                                ? "bg-[#B4EAEA]"
+                                ? "bg-[#D3E3F0] "
                                 : "bg-white "
                             }`}
                             value={tab.value}
-                            onClick={handleTabClick} // Dynamically sets the tab
+                            onClick={handleTabClick}
                           >
                             {tab.name}
                           </button>
                         ))}
                       </div>
+
+                      <div className=" hidden lg:block w-1/4">
+                        <input
+                          type="text"
+                          value={searchQuery}
+                          className="w-full rounded-md p-2 outline-none border-2 border-gray-400"
+                          placeholder="......search by product name"
+                          onChange={(e) => {
+                            const value = e.target.value;
+                            setSearchQuery(value);
+                            applyFilters({
+                              query: value,
+                              category: selectedCategory,
+                              status: selected,
+                            });
+                          }}
+                        />
+                      </div>
+                      <div className="lg:hidden flex gap-2">
+                        <div className="relative inline-block text-xs">
+                          <button
+                            onClick={() => setFilterDropdown(!filterDropdown)}
+                            className="h-10 w-10 flex justify-center items-center border rounded"
+                          >
+                            <img src="/images/icons/filter-icon.png" alt="" />
+                            {/* <span className="text-sm">Filter</span> */}
+                            {/* <ChevronDownIcon className="h-4 w-4 text-gray-500" /> */}
+                          </button>
+                          {filterDropdown && (
+                            <div className="absolute mt-2 w-40 -left-full bg-white border rounded-md shadow-lg z-10 p-3">
+                              {/* status filter */}
+                              <div>
+                                <label className=" text-[#374A75]">
+                                  Status
+                                </label>
+                                <select
+                                  value={selected}
+                                  onChange={(e) => {
+                                    const value = e.target.value;
+                                    setSelected(value);
+                                    setFilterDropdown(false);
+                                    applyFilters({
+                                      query: searchQuery,
+                                      category: selectedCategory,
+                                      status: value,
+                                    });
+                                  }}
+                                  className="w-full border-none focus:ring-0 p-2"
+                                >
+                                  <option value="">All</option>
+                                  <option value="pending">Pending</option>
+                                  <option value="approved">Approved</option>
+                                  <option value="rejected">Rejected</option>
+                                </select>
+                              </div>
+
+                              <div>
+                                <label className=" text-[#374A75]">
+                                  Categories
+                                </label>
+                                <select
+                                  name="category"
+                                  value={selectedCategory}
+                                  onChange={(e) => {
+                                    const value = e.target.value;
+                                    setSelectedCategory(value);
+                                    applyFilters({
+                                      query: searchQuery,
+                                      category: value,
+                                      status: selected,
+                                    });
+                                  }}
+                                  id="category"
+                                  className="py-2"
+                                >
+                                  <option value="">All categories</option>
+                                  {category.map((category) => (
+                                    <option key={category} value={category}>
+                                      {category}
+                                    </option>
+                                  ))}
+                                </select>
+                              </div>
+                            </div>
+                          )}
+                        </div>
+
+                        {/* export button */}
+                        <div className="">
+                          <button
+                            onClick={() => {
+                              const exportData = items.map((item) => ({
+                                id: item.id,
+                                [toggle ? "Product Name" : "Addon Name"]:
+                                  item.title,
+                                Price: `₹${item.price}`,
+                                Status: item?.status,
+                                Description: item?.details || "",
+                                Dimension: item?.dimensions || "NA",
+                                company: item?.manufacturer || "",
+                                segment: item?.segment,
+                              }));
+                              exportToExcel(
+                                exportData,
+                                toggle ? "products.xlsx" : "addons.xlsx"
+                              );
+                            }}
+                            className="h-10 w-10 flex justify-center items-center border rounded "
+                          >
+                            <IoCloudDownloadOutline size={20} color="#374A75" />
+                          </button>
+                        </div>
+                        {/* search button */}
+                        <div>
+                          <button
+                            onClick={() => setMobileSearchOpen(true)}
+                            className="h-10 w-10 flex justify-center items-center border rounded"
+                          >
+                            <IoIosSearch size={20} color="#374A75" />
+                          </button>
+                          {mobileSearchOpen && (
+                            <div
+                              className={`absolute top-0 bg-[#fff] w-full h-[95%] z-30 flex justify-between items-center px-3 !transition-all !duration-700 !ease-in-out ${
+                                mobileSearchOpen
+                                  ? "opacity-100 translate-x-0 left-0"
+                                  : "opacity-0 -translate-x-full right-0"
+                              }`}
+                            >
+                              <input
+                                type="text"
+                                value={searchQuery}
+                                placeholder="......search by product name"
+                                onChange={(e) => {
+                                  const value = e.target.value;
+                                  setSearchQuery(value);
+                                  applyFilters({
+                                    query: value,
+                                  });
+                                }}
+                                className="w-3/4 px-2 py-2.5 border rounded-sm text-[10px]"
+                              />
+                              <button
+                                className="mr-4"
+                                onClick={() => setMobileSearchOpen(false)}
+                              >
+                                <IoCloseCircle size={25} color="#374A75" />
+                              </button>
+                            </div>
+                          )}
+                        </div>
+                      </div>
                     </div>
+                  </div>
 
-                    {/*  */}
+                  {/*  */}
 
-                    {productlist &&
-                      (isloading ? (
-                        <Spinner />
-                      ) : items.length > 0 ? (
-                        // <section className="mt-2 flex-1 overflow-hidden px-8">
-                        <section className=" h-[90%] font-Poppins overflow-hidden">
+                  {productlist &&
+                    (isloading ? (
+                      <Spinner />
+                    ) : items.length > 0 ? (
+                      <>
+                        {/* // <section className="mt-2 flex-1 overflow-hidden px-8"> */}
+                        <section className="hidden lg:block h-[90%] font-Poppins overflow-hidden">
                           <div
                             className="w-full h-full border-t border-b border-[#CCCCCC] overflow-y-auto custom-scrollbar"
                             ref={scrollContainerRef}
@@ -1015,7 +1355,7 @@ function AdminDashboard() {
                                         <img
                                           src={`${baseImageUrl}${item.image}`}
                                           alt={item.title}
-                                          className="w-10 h-10 object-cover rounded"
+                                          className="w-10 h-10 object-contain rounded"
                                         />
 
                                         <span>{item.title}</span>
@@ -1101,8 +1441,29 @@ function AdminDashboard() {
                                             }}
                                             className=" flex gap-2 items-center w-full text-left px-3 py-2 hover:bg-gray-200"
                                           >
-                                            <VscEye /> Edit
+                                            <VscEye /> View
                                           </button>
+                                          {toggle ? (
+                                            <button
+                                              onClick={() => {
+                                                setSelectedproduct(item);
+                                                setEditProduct(true);
+                                              }}
+                                              className=" flex gap-2 items-center w-full text-left px-3 py-2 hover:bg-gray-200"
+                                            >
+                                              <VscEye /> Edit
+                                            </button>
+                                          ) : (
+                                            <button
+                                              onClick={() => {
+                                                setSelectedAddon(item);
+                                                setEditAddon(true);
+                                              }}
+                                              className=" flex gap-2 items-center w-full text-left px-3 py-2 hover:bg-gray-200"
+                                            >
+                                              <VscEye /> Edit
+                                            </button>
+                                          )}
                                           <button
                                             // onClick={() => {
                                             //   handleDelete(item);
@@ -1123,30 +1484,38 @@ function AdminDashboard() {
                             </table>
                           </div>
                         </section>
-                      ) : (
-                        <>
-                          <p className="p-5 text-gray-500 text-center">
-                            No {toggle ? "products" : "addons"} found.
-                          </p>
-                        </>
-                      ))}
+                        <section className="lg:hidden mb-5">
+                          {paginatedItems.map((item) => (
+                            <MobileTabProductCard
+                              key={item?.id}
+                              product={item}
+                              handleProductPreview={handleProductPreview}
+                            />
+                          ))}
+                        </section>
+                      </>
+                    ) : (
+                      <>
+                        <p className="p-5 text-gray-500 text-center">
+                          No {toggle ? "products" : "addons"} found.
+                        </p>
+                      </>
+                    ))}
 
-                    {/* Pagination Controls (Always Visible) */}
-                    {totalPages > 1 && (
-                      <div className="flex justify-center items-center gap-2 mt-10 z-30 sticky bottom-0 bg-[#EBF0FF] mb-4 text-[#3d194f]">
-                        <button
-                          onClick={() => goToPage(currentPage - 1)}
-                          disabled={currentPage === 1}
-                          className="px-3 py-1 border rounded disabled:opacity-50 text-[#3d194f]"
-                        >
-                          Previous
-                        </button>
+                  {/* Pagination Controls (Always Visible) */}
+                  {totalPages > 1 && (
+                    <div className="flex justify-center items-center gap-2 mt-10 z-30 sticky bottom-0 bg-[#EBF0FF] mb-4 text-[#3d194f]">
+                      <button
+                        onClick={() => goToPage(currentPage - 1)}
+                        disabled={currentPage === 1}
+                        className="px-3 py-1 border rounded disabled:opacity-50 text-[#3d194f]"
+                      >
+                        Previous
+                      </button>
 
-                        {/* Page Numbers */}
-                        {Array.from(
-                          { length: totalPages },
-                          (_, i) => i + 1
-                        ).map((page) =>
+                      {/* Page Numbers */}
+                      {Array.from({ length: totalPages }, (_, i) => i + 1).map(
+                        (page) =>
                           page === 1 ||
                           page === totalPages ||
                           (page >= currentPage - 1 &&
@@ -1168,188 +1537,324 @@ function AdminDashboard() {
                               ...
                             </span>
                           ) : null
-                        )}
-
-                        <button
-                          onClick={() => goToPage(currentPage + 1)}
-                          disabled={currentPage === totalPages}
-                          className="px-3 py-1 border rounded disabled:opacity-50 text-[#3d194f]"
-                        >
-                          Next
-                        </button>
-                      </div>
-                    )}
-                  </>
-                )}
-              </div>
+                      )}
+                      <button
+                        onClick={() => goToPage(currentPage + 1)}
+                        disabled={currentPage === totalPages}
+                        className="px-3 py-1 border rounded disabled:opacity-50 text-[#3d194f]"
+                      >
+                        Next
+                      </button>
+                    </div>
+                  )}
+                </>
+              )}
             </div>
-          )}
+          </div>
+        )}
 
-          {isclientopen && (
-            <>
-              <Clients
-                isExpanded={isExpanded}
-                filterByMultipleFields={filterByMultipleFields}
-                query={query}
-                filteredusers={filteredusers}
-                setIsrefresh={setIsrefresh}
-              />
-            </>
-          )}
+        {sidebarstate.isClientOpen && !clientBoqs && (
+          <>
+            <Clients
+              isExpanded={isExpanded}
+              filterByMultipleFields={filterByMultipleFields}
+              query={query}
+              filteredusers={filteredusers}
+              setIsrefresh={setIsrefresh}
+              setClientBoqs={setClientBoqs}
+            />
+          </>
+        )}
 
-          {/*vendor page */}
-          {isvendoropen && !vendorproductlist && (
-            <div className="w-full  bg-[#EBF0FF] rounded-3xl my-2.5">
-              {/* for dashboard */}
-              <div className="w-full flex flex-col overflow-y-auto scrollbar-hide h-[calc(100vh-120px)] pb-2 px-3">
-                <div className=" sticky top-0 z-20 bg-[#EBF0FF] rounded-lg">
-                  <div className="flex justify-between items-center px-4 py-2 border-b-2 border-b-gray-400 ">
-                    <h3 className="capitalize font-semibold text-xl ">
-                      Vendor List
-                    </h3>
-                    <div className="w-1/2">
-                      <input
-                        type="text"
-                        className="w-full rounded-lg px-2 py-1 outline-none"
-                        placeholder="......search by company name"
-                        onChange={(e) =>
-                          filterVendorByMultipleFields(e.target.value)
-                        }
-                        value={query}
-                      />
+        {sidebarstate.isClientOpen && clientBoqs && (
+          <ClientBoq setClientBoqs={setClientBoqs} />
+        )}
+
+        {/*vendor page */}
+        {sidebarstate.isVendorOpen && !vendorproductlist && (
+          <div className="flex flex-col h-full min-h-0 overflow-hidden lg:border-2 lg:border-[#334A78] lg:rounded-lg bg-white">
+            {/* for dashboard */}
+            <div className="w-full flex flex-col overflow-y-auto scrollbar-hide h-[calc(100vh-120px)] pb-2 px-3">
+              <div className=" sticky top-0 z-20 bg-[#FFF]">
+                <div className="flex justify-between items-center px-4 py-2 border-b-2 border-b-gray-400 ">
+                  <h3 className="capitalize font-semibold text-xl ">
+                    Vendor List
+                  </h3>
+                  <div className="w-1/2 hidden lg:block">
+                    <input
+                      type="text"
+                      className="w-full rounded-lg px-2 py-1 outline-none border border-[#ccc]"
+                      placeholder="......search by company name"
+                      onChange={(e) =>
+                        filterVendorByMultipleFields(e.target.value)
+                      }
+                      value={query}
+                    />
+                  </div>
+                  <div className="lg:hidden flex gap-2">
+                    {/* add vendor button */}
+                    <button
+                      onClick={handlecreate}
+                      className="h-10 w-10 flex justify-center items-center bg-[#374A75] text-[#fff] rounded"
+                    >
+                      <GoPlus size={20} />
+                    </button>
+
+                    {/* search button */}
+                    <div>
+                      <button
+                        onClick={() => setMobileSearchOpen(true)}
+                        className="h-10 w-10 flex justify-center items-center border rounded"
+                      >
+                        <IoIosSearch size={20} color="#374A75" />
+                      </button>
+                      {mobileSearchOpen && (
+                        <div
+                          className={`absolute top-0 bg-[#fff] w-full h-[95%] z-30 flex justify-between items-center px-3 !transition-all !duration-700 !ease-in-out ${
+                            mobileSearchOpen
+                              ? "opacity-100 translate-x-0 left-0"
+                              : "opacity-0 -translate-x-full right-0"
+                          }`}
+                        >
+                          <input
+                            type="text"
+                            value={searchQuery}
+                            placeholder="......search by product name"
+                            onChange={(e) => {
+                              const value = e.target.value;
+                              setSearchQuery(value);
+                              applyFilters({
+                                query: value,
+                              });
+                            }}
+                            className="w-3/4 px-2 py-2.5 border rounded-sm text-[10px]"
+                          />
+                          <button
+                            className="mr-4"
+                            onClick={() => setMobileSearchOpen(false)}
+                          >
+                            <IoCloseCircle size={25} color="#374A75" />
+                          </button>
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>
-                {/* client card for display */}
+              </div>
+              {/* client card for display */}
 
-                <div
-                  className={`grid grid-cols-2  ${
-                    isExpanded
-                      ? "lg:grid-cols-2 xl:grid-cols-4 gap-8"
-                      : "lg:grid-cols-2 xl:grid-cols-4 gap-8"
-                  } p-2`}
-                >
-                  {filteredvendors.map((user, index) => {
-                    return (
+              <div
+                className={`grid grid-cols-1 md:grid-cols-2  ${
+                  isExpanded
+                    ? "lg:grid-cols-2 xl:grid-cols-4 gap-8"
+                    : "lg:grid-cols-2 xl:grid-cols-4 gap-4"
+                } p-2`}
+              >
+                {filteredvendors.map((user, index) => {
+                  return (
+                    <div
+                      key={index}
+                      className={`w-full max-w-xs rounded-lg border overflow-hidden shadow-md bg-white relative flex flex-col p-2`}
+                    >
+                      {/* Top Section */}
                       <div
-                        key={index}
-                        className={`flex flex-col ${
-                          isExpanded
-                            ? "lg:w-[200px] xl:w-[270px] h-[170px]"
-                            : "w-[300px] h-[150px]"
-                        }  font-Poppins rounded-2xl bg-[#fff] relative`}
+                        className={` ${
+                          isExpanded ? " gap-2 py-3 px-1" : "gap-3 py-4 px-2"
+                        } flex items-start  relative`}
                       >
-                        <div
-                          className={`flex items-center my-4 ${
-                            isExpanded && "px-4 py-2"
-                          }`}
-                        >
-                          <div className={`mx-3 ${isExpanded && "hidden"}`}>
-                            <img
-                              src={accountHolder.profileImage}
-                              alt="usericon"
-                              className="w-10"
-                            />
-                          </div>
-                          <div>
-                            <h2 className="text-[#000] text-base font-medium">
-                              {user.company_name}
-                            </h2>
-                            <p className="text-[#ccc] text-sm">{user.email}</p>
-                            {/* <p className="text-[#ccc] text-sm">
-                              {user.company_name}
-                            </p> */}
-                          </div>
-                          <div className="ml-auto px-3">
-                            {" "}
-                            <button
-                              onClick={() =>
-                                handleDeletevendirClick(user, index)
-                              }
-                            >
-                              {" "}
-                              <MdDeleteOutline size={25} />{" "}
-                            </button>
-                          </div>
-                        </div>
-                        <div className="flex-1 flex items-end pl-6 gap-3 my-5">
-                          <div className="">
-                            {" "}
-                            <FaBuilding size={22} />
-                          </div>{" "}
-                          <button
-                            onClick={() => {
-                              setSelectedVendor(user); // Store selected vendor
-                              setVendorproductlist(true); // Show product list
-                            }}
-                            className="font-medium text-[#ccc] text-base"
+                        {/* Profile Image */}
+                        <img
+                          src={user?.profile_image}
+                          alt="profile"
+                          className={`${
+                            isExpanded ? "w-10 h-10" : "w-12 h-12"
+                          }  rounded-full object-cover border border-[#ccc]`}
+                        />
+
+                        {/* Name and Email */}
+                        <div className="flex flex-col justify-center">
+                          <h2
+                            className={`${
+                              isExpanded ? "text-sm" : "text-base"
+                            }  font-semibold text-black`}
                           >
                             {user.company_name}
-                          </button>
+                          </h2>
+                          <p
+                            className={`text-gray-400 w-full ${
+                              isExpanded ? "text-xs" : "text-sm"
+                            } leading-tight break-all whitespace-normal`}
+                          >
+                            {user.email}
+                          </p>
                         </div>
-                        {isModalOpen && selectedindex === index && (
-                          <div className=" inset-0 flex items-center justify-center bg-opacity-80 absolute w-full h-full">
-                            <div className="bg-white rounded-lg px-5 py-2">
-                              <h3 className="text-lg font-semibold">
-                                Are you sure?
-                              </h3>
-                              <p>
-                                Do you really want to delete{" "}
-                                {selectedUser?.company_name}?
-                              </p>
-                              <div className="flex justify-center mt-4 gap-3">
-                                <button
-                                  onClick={() => setIsModalOpen(false)}
-                                  className="px-4 py-2 bg-gray-300 rounded"
-                                >
-                                  No
-                                </button>
-                                <button
-                                  onClick={handleConfirmDelete}
-                                  className="px-4 py-2 bg-red-500 text-white rounded"
-                                >
-                                  Yes
-                                </button>
-                              </div>
+
+                        {/* Delete Icon */}
+                        <button
+                          onClick={() => handleDeletevendirClick(user, index)}
+                          className="absolute top-2 right-2 text-black hover:text-red-500"
+                        >
+                          <MdDeleteOutline size={20} />
+                        </button>
+                      </div>
+                      {/* Bottom Section */}
+                      <div
+                        onClick={() => {
+                          setSelectedVendor(user); // Store selected vendor
+                          setVendorproductlist(true); // Show product list
+                        }}
+                        className=" cursor-pointer text-[#374A75] p-3 flex items-center gap-2 flex-1 mt-auto border-t"
+                      >
+                        <FaBuilding className="" />
+                        <p className="text-sm ">{user?.company_name}</p>
+                      </div>
+
+                      {isModalOpen && selectedindex === index && (
+                        <div className="absolute inset-0 w-full h-full flex items-center justify-center bg-black/40">
+                          <div className="bg-white rounded-lg px-5 py-2">
+                            <h3 className="text-sm font-semibold">
+                              Are you sure?
+                            </h3>
+                            <p className="text-sm">
+                              Do you really want to delete{" "}
+                              {selectedUser?.company_name}?
+                            </p>
+                            <div className="flex justify-center mt-4 gap-3">
+                              <button
+                                onClick={() => setIsModalOpen(false)}
+                                className="px-4 py-2 bg-gray-300 rounded"
+                              >
+                                No
+                              </button>
+                              <button
+                                onClick={handleConfirmDelete}
+                                className="px-4 py-2 bg-red-500 text-white rounded"
+                              >
+                                Yes
+                              </button>
                             </div>
                           </div>
-                        )}
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>{" "}
-            </div>
-          )}
-
-          {isvendoropen && vendorproductlist && (
-            <VendorProductlist
-              setVendorproductlist={setVendorproductlist}
-              selectedVendor={selectedVendor}
-              updateStatus={handleUpdateStatus}
-              deleteWarning={deleteWarning}
-              setDeleteWarning={setDeleteWarning}
-              rejectReason={rejectReason}
-              setRejectReason={setRejectReason}
-              handleConfirmReject={handleUpdateStatus}
-            />
-          )}
-
-          {/* create profile */}
-          {createProfile && (
-            <div className="flex-1 bg-[#EBF0FF] border-2 border-[#000] rounded-3xl my-2.5">
-              <div className="overflow-y-auto scrollbar-hide h-[calc(100vh-120px)] rounded-3xl relative ">
-                <CreateUser />
+                        </div>
+                      )}
+                    </div>
+                    // <div
+                    //   key={index}
+                    //   className={`flex flex-col ${
+                    //     isExpanded
+                    //       ? "lg:w-[200px] xl:w-[270px] h-[170px]"
+                    //       : "w-[300px] lg:w-[320px] h-[150px]"
+                    //   }  font-Poppins rounded-2xl bg-[#fff] relative`}
+                    // >
+                    //   <div
+                    //     className={`flex items-center my-4 ${
+                    //       isExpanded && "px-4 py-2"
+                    //     }`}
+                    //   >
+                    //     <div className={`mx-3 ${isExpanded && "hidden"}`}>
+                    //       <img
+                    //         src={accountHolder.profileImage}
+                    //         alt="usericon"
+                    //         className="w-10"
+                    //       />
+                    //     </div>
+                    //     <div>
+                    //       <h2 className="text-[#000] text-base font-medium">
+                    //         {user.company_name}
+                    //       </h2>
+                    //       <p className="text-[#ccc] text-wrap text-[13px]">
+                    //         {user.email}
+                    //       </p>
+                    //     </div>
+                    //     <div className={`ml-auto px-2`}>
+                    //       {" "}
+                    //       <button
+                    // onClick={() =>
+                    //   handleDeletevendirClick(user, index)
+                    // }
+                    //       >
+                    //         {" "}
+                    //         <MdDeleteOutline size={25} />{" "}
+                    //       </button>
+                    //     </div>
+                    //   </div>
+                    //   <div className="flex-1 flex items-end pl-6 gap-3 my-5">
+                    //     <div className="">
+                    //       {" "}
+                    //       <FaBuilding size={22} />
+                    //     </div>{" "}
+                    //     <button
+                    //       onClick={() => {
+                    //         setSelectedVendor(user); // Store selected vendor
+                    //         setVendorproductlist(true); // Show product list
+                    //       }}
+                    //       className="font-medium text-[#ccc] text-base"
+                    //     >
+                    //       {user.company_name}
+                    //     </button>
+                    //   </div>
+                    //   {isModalOpen && selectedindex === index && (
+                    //     <div className=" inset-0 flex items-center justify-center bg-opacity-80 absolute w-full h-full">
+                    //       <div className="bg-white rounded-lg px-5 py-2">
+                    //         <h3 className="text-lg font-semibold">
+                    //           Are you sure?
+                    //         </h3>
+                    //         <p>
+                    //           Do you really want to delete{" "}
+                    //           {selectedUser?.company_name}?
+                    //         </p>
+                    //         <div className="flex justify-center mt-4 gap-3">
+                    //           <button
+                    //             onClick={() => setIsModalOpen(false)}
+                    //             className="px-4 py-2 bg-gray-300 rounded"
+                    //           >
+                    //             No
+                    //           </button>
+                    //           <button
+                    //             onClick={handleConfirmDelete}
+                    //             className="px-4 py-2 bg-red-500 text-white rounded"
+                    //           >
+                    //             Yes
+                    //           </button>
+                    //         </div>
+                    //       </div>
+                    //     </div>
+                    //   )}
+                    // </div>
+                  );
+                })}
               </div>
+            </div>{" "}
+          </div>
+        )}
+
+        {sidebarstate.isVendorOpen && vendorproductlist && (
+          <VendorProductlist
+            setVendorproductlist={setVendorproductlist}
+            selectedVendor={selectedVendor}
+            updateStatus={handleUpdateStatus}
+            deleteWarning={deleteWarning}
+            setDeleteWarning={setDeleteWarning}
+            rejectReason={rejectReason}
+            setRejectReason={setRejectReason}
+            handleConfirmReject={handleUpdateStatus}
+          />
+        )}
+
+        {/* create profile */}
+        {sidebarstate.isCreateOpen && (
+          <div className="flex flex-col h-full min-h-0 overflow-hidden lg:border-2 lg:border-[#334A78] lg:rounded-lg bg-white">
+            <div className="overflow-y-auto scrollbar-hide h-[calc(100vh-120px)] rounded-3xl relative ">
+              <CreateUser />
             </div>
-          )}
+          </div>
+        )}
 
-          {/* schedule  */}
-          {isScheduleOpen && <Schedule />}
+        {/* schedule  */}
+        {sidebarstate.isScheduleOpen && <Schedule />}
 
-          {isFormulaeOpen && <FormulaEditor />}
-        </div>
+        {sidebarstate.isFormulaeOpen && <FormulaEditor />}
       </div>
+      {/* </div> */}
       {/* product preview */}
       {productPreview && (
         <DashboardProductCard
@@ -1368,9 +1873,9 @@ function AdminDashboard() {
       )}
 
       {deleteWarning && (
-        <div className="flex justify-center items-center h-screen absolute z-30 top-0 w-screen">
+        <div className="flex justify-center items-center fixed inset-0 z-30">
           <div className="absolute inset-0 bg-black opacity-50"></div>
-          <div className="bg-white relative py-7 px-20">
+          <div className="bg-white relative py-7 px-16 md:px-20">
             <div className="flex justify-center items-center">
               <img
                 src="images/icons/delete-icon.png"
@@ -1429,8 +1934,28 @@ function AdminDashboard() {
           </div>
         </div>
       )}
+      {/* </div> */}
     </div>
   );
 }
 
 export default AdminDashboard;
+
+function MobileMenuItem({ icon, title, currentSection, onClick, setIsOpen }) {
+  return (
+    <li
+      onClick={() => {
+        onClick();
+        setIsOpen((prev) => !prev);
+      }}
+      className={`flex items-center space-x-3 px-2 font-semibold ${
+        currentSection === title
+          ? "bg-gradient-to-r from-[#4C85F5] to-[#6AC7FF]  py-2 rounded-md text-white"
+          : "text-[#1A3365]"
+      }`}
+    >
+      {icon}
+      <span>{title}</span>
+    </li>
+  );
+}

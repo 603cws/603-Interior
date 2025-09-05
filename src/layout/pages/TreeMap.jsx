@@ -9,6 +9,9 @@ import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { supabase } from "../../services/supabase";
 import UnusedAreaWarning from "../components/UnusedAreaWarning";
+import { PiStarFourFill } from "react-icons/pi";
+import { colors } from "../../constants/constant";
+import { AnimatedButton } from "../../common-components/animated-button";
 
 // import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 // import { faChevronRight, faChevronLeft } from '@fortawesome/free-solid-svg-icons';
@@ -23,7 +26,7 @@ const fullNames = {
   bms: "BMS Room",
   server: "Server Room",
   reception: "Reception",
-  lounge: "Lounge/Pantry",
+  lounge: "Lounge",
   fitness: "Fitness Zone",
   sales: "Sales Team",
   phoneBooth: "Phone Booth",
@@ -41,7 +44,7 @@ const fullNames = {
   other: "Other", // Add new category here
   // maleWashroom: "Male Washroom",
   // femaleWashroom: "Female Washroom",
-  washrooms: "Washrooms",
+  washrooms: "Wash rooms",
 };
 
 const TreeMap = ({ totalArea, areaQuantities, areaValues }) => {
@@ -63,68 +66,35 @@ const TreeMap = ({ totalArea, areaQuantities, areaValues }) => {
     isMobile,
   } = useApp();
 
-  // const chartRef = useRef(null);
-
   const MIN_AREA = 1000;
   const MAX_AREA = 25000;
 
-  const colors = {
-    "Linear Workspace": "#62897E",
-    "L-Type Workspace": "#3F5855",
-    "MD Cabin": "#1D3130",
-    "Manager Cabin": "#293C3E",
-    "Small Cabin": "#4A5E65",
-    "UPS Room": "#737F85",
-    "BMS Room": "#8CDDCE",
-    "Server Room": "#54A08C",
-    Reception: "#368772",
-    "Lounge/Pantry": "#2A3338",
-    "Video Recording Room": "#354044",
-    "Sales Team": "#3C464F",
-    "Phone Booth": "#515554",
-    "Discussion Room": "#868A8E",
-    "Interview Room": "#A4ACAF",
-    "Conference Room": "#488677",
-    "Board Room": "#3A4B45",
-    "Meeting Room": "#1E8D78",
-    "Meeting Room (Large)": "#07281D",
-    "HR Room": "#233736",
-    "Finance Room": "#081011",
-    "Executive Washroom": "#567F7D",
-    "Breakout Room": "#74D0C1",
-    "Available Space": "#184959",
-    Other: "#5E9B96", // Color for the "Other" category
-    // "Male Washroom": "#95D5B2",
-    // "Female Washroom": "#85CEA8",
-    Washrooms: "#85CEA8",
-  };
-
   const workspaceImages = {
-    "Linear Workspace": "/images/workspace-image/linear.webp",
-    "L-Type Workspace": "/images/workspace-image/lType.webp",
-    "MD Cabin": "/images/workspace-image/md.png",
-    "Manager Cabin": "/images/workspace-image/manager.webp",
-    "Small Cabin": "/images/workspace-image/small.png",
-    "UPS Room": "/images/workspace-image/ups.png",
-    "BMS Room": "/images/workspace-image/bms.png",
-    "Server Room": "/images/workspace-image/server.png",
-    Reception: "/images/workspace-image/reception.png",
-    "Lounge/Pantry": "/images/workspace-image/lounge.png",
-    "Video Recording Room": "/images/workspace-image/videoRecordingRoom.png",
-    "Sales Team": "/images/workspace-image/sales.png",
-    "Phone Booth": "/images/workspace-image/phoneBooth.png",
+    "Linear Workspace": "/images/workstation-wp/linear.webp",
+    "L-Type Workspace": "/images/workstation-wp/lType.webp",
+    "MD Cabin": "/images/workstation-wp/md.webp",
+    "Manager Cabin": "/images/workstation-wp/manager.webp",
+    "Small Cabin": "/images/workstation-wp/smallCabin.webp",
+    "UPS Room": "/images/workstation-wp/ups.webp",
+    "BMS Room": "/images/workstation-wp/bms.webp",
+    "Server Room": "/images/workstation-wp/serverRoom.webp",
+    Reception: "/images/workstation-wp/reception.webp",
+    Lounge: "/images/workstation-wp/lounge.webp",
+    "Video Recording Room": "/images/workstation-wp/videoRoom.webp",
+    "Sales Team": "/images/workstation-wp/salesRoom.webp",
+    "Phone Booth": "/images/workstation-wp/phoneBooth.webp",
     "Discussion Room": "/images/workspace-image/discussionRoom.png",
-    "Interview Room": "/images/workspace-image/interviewRoom.png",
-    "Conference Room": "/images/workspace-image/conferenceRoom.webp",
-    "Board Room": "/images/workspace-image/boardRoom.webp",
-    "Meeting Room": "/images/workspace-image/meetingRoom.png",
-    "Meeting Room (L)": "/images/workspace-image/meetingRoomLarge.png",
-    "HR Room": "/images/workspace-image/hrRoom.webp",
-    "Finance Room": "/images/workspace-image/financeRoom.webp",
-    "Executive Washroom": "/images/workspace-image/executiveWashroom.png",
-    "Breakout Room": "/images/workspace-image/breakout.webp",
-    Other: "/images/workspace-image/other.png",
-    Washrooms: "/images/workspace-image/washroom.png",
+    "Interview Room": "/images/workstation-wp/interview.webp",
+    "Conference Room": "/images/workstation-wp/conferenceRoom.webp",
+    "Board Room": "/images/workstation-wp/boardRoom.webp",
+    "Meeting Room": "/images/workstation-wp/meetingRoom.webp",
+    "Meeting Room (L)": "/images/workstation-wp/meetingRoomLarge.webp",
+    "HR Room": "/images/workstation-wp/hrRoom.webp",
+    "Finance Room": "/images/workstation-wp/financeRoom.webp",
+    "Executive Washroom": "/images/workstation-wp/executiveWashroom.webp",
+    "Breakout Room": "/images/workstation-wp/breakout.webp",
+    Other: "/images/workstation-wp/others.webp",
+    "Wash rooms": "/images/workstation-wp/washroom.webp",
   };
 
   useEffect(() => {
@@ -202,10 +172,88 @@ const TreeMap = ({ totalArea, areaQuantities, areaValues }) => {
     },
   ];
 
+  function splitTreemapLabels(root) {
+    const labels = root.querySelectorAll(
+      ".apexcharts-treemap .apexcharts-datalabel"
+    );
+
+    labels.forEach((label) => {
+      const txt = label.textContent || "";
+      if (!txt.includes("|||")) return;
+
+      const rect = label.closest(
+        "g.apexcharts-data-labels"
+      )?.previousElementSibling;
+
+      let aspectRatio = 1;
+      if (rect) {
+        const width = parseFloat(rect.getAttribute("width"));
+        const height = parseFloat(rect.getAttribute("height"));
+
+        if (width > 0 && height > 0) {
+          aspectRatio = width / height;
+          console.log("Block size:", { txt, width, height, aspectRatio });
+        }
+      } else {
+        console.warn("No rect found for label:", label.textContent);
+      }
+
+      const x = label.getAttribute("x");
+
+      // Decide whether to split or not
+      const shouldSplit = aspectRatio >= 0.15 && aspectRatio <= 2.5;
+
+      // Prepare lines
+      const lines = shouldSplit
+        ? txt.split("|||")
+        : [txt.replace(/\|\|\|/g, " ")];
+
+      // Clear old content
+      while (label.firstChild) label.removeChild(label.firstChild);
+
+      // Optional: vertically center
+      const lh = 1.1;
+      const startDy = (-(lines.length - 1) * lh) / 2 + "em";
+
+      lines.forEach((line, i) => {
+        const tspan = document.createElementNS(
+          "http://www.w3.org/2000/svg",
+          "tspan"
+        );
+        tspan.setAttribute("x", x);
+        tspan.setAttribute("dy", i === 0 ? startDy : `${lh}em`);
+        tspan.textContent = line;
+        label.appendChild(tspan);
+      });
+    });
+  }
+
   const options = {
+    dataLabels: {
+      enabled: true,
+      style: {
+        fontSize: "14px",
+        fontWeight: "bold",
+        colors: ["#FFFFFF"],
+      },
+      formatter: (val, opts) => {
+        if (typeof val === "number") {
+          const percentage = ((val / validTotalArea) * 100).toFixed(2);
+          return `${
+            opts.w.globals.labels[opts.dataPointIndex]
+          } (${percentage}%)`;
+        }
+        const newVal = val.split(":")[0];
+        return newVal.split(" ").join("|||");
+      },
+    },
     chart: {
       type: "treemap",
       height: chartHeight,
+      animations: {
+        enabled: false,
+        dynamicAnimation: { enabled: false },
+      },
       toolbar: {
         show: true,
       },
@@ -221,6 +269,18 @@ const TreeMap = ({ totalArea, areaQuantities, areaValues }) => {
         // mounted: (chart) => {
         //   chartRef.current = chart; // Store chart instance
         // },
+        mounted: (ctx) =>
+          requestAnimationFrame(() => splitTreemapLabels(ctx.el)),
+        // mounted: (ctx) => {
+        //   chartRef.current = ctx; // store instance
+        //   requestAnimationFrame(() => splitTreemapLabels(ctx.el));
+        // },
+        // rendered fires after animations; safest place
+        rendered: (ctx) =>
+          requestAnimationFrame(() => splitTreemapLabels(ctx.el)),
+        // if your React state causes chart updates, re-split after each update
+        updated: (ctx) =>
+          requestAnimationFrame(() => splitTreemapLabels(ctx.el)),
       },
     },
     title: {
@@ -246,24 +306,6 @@ const TreeMap = ({ totalArea, areaQuantities, areaValues }) => {
     //     formatter: (value) => `${value} sq ft`,
     //   },
     // },
-    dataLabels: {
-      enabled: true,
-      style: {
-        fontSize: "14px",
-        fontWeight: "bold",
-        colors: ["#FFFFFF"],
-      },
-      formatter: (val, opts) => {
-        if (typeof val === "number") {
-          const percentage = ((val / validTotalArea) * 100).toFixed(2);
-          return `${
-            opts.w.globals.labels[opts.dataPointIndex]
-          } (${percentage}%)`;
-        }
-        const newVal = val.split(":")[0];
-        return `${newVal}`;
-      },
-    },
     states: {
       hover: {
         filter: {
@@ -320,20 +362,6 @@ const TreeMap = ({ totalArea, areaQuantities, areaValues }) => {
       },
     },
   };
-  // useEffect(() => {
-  //   if (layoutImgRef) {
-  //     layoutImgRef.current = exportChart;
-  //   }
-
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, []);
-
-  // const exportChart = async () => {
-  //   if (chartRef.current) {
-  //     const imageURI = await chartRef.current.dataURI(); // Get image
-  //     setLayoutImage(imageURI.imgURI); // Send to context
-  //   }
-  // };
 
   const generateLegendItems = () => {
     return series
@@ -470,41 +498,6 @@ const TreeMap = ({ totalArea, areaQuantities, areaValues }) => {
     };
   };
 
-  // const uploadImage = async (imageDataUrl) => {
-  //   try {
-  //     // ✅ Convert Base64 to Blob Properly
-  //     const blob = await fetch(imageDataUrl)
-  //       .then((res) => res.blob())
-  //       .catch((error) => {
-  //         console.error("Error converting Base64 to Blob:", error);
-  //         return null;
-  //       });
-
-  //     if (!blob) {
-  //       console.error("Blob conversion failed");
-  //       return null;
-  //     }
-
-  //     // ✅ Ensure Correct Filename
-  //     const fileName = `area_distribution_${Date.now()}.png`;
-
-  //     // ✅ Upload Image to Supabase Storage
-  //     const { error } = await supabase.storage
-  //       .from("addon")
-  //       .upload(fileName, blob, { contentType: "image/png" });
-
-  //     if (error) {
-  //       console.error("Image upload failed:", error);
-  //       return null;
-  //     }
-
-  //     return fileName; // ✅ Store filename in DB
-  //   } catch (error) {
-  //     console.error("Upload failed:", error);
-  //     return null;
-  //   }
-  // };
-
   const generateBOQclick = () => {
     console.log("hii", totalArea);
     if (!totalArea) {
@@ -535,22 +528,12 @@ const TreeMap = ({ totalArea, areaQuantities, areaValues }) => {
         return;
       }
 
-      // Trigger export and wait for image to be available
-      // if (layoutImgRef.current) {
-      //   await layoutImgRef.current();
-      // }
-
-      // Upload image to Supabase
-      // const imageUrl = await uploadImage(layoutImage || "");
-      // const imageFilename = await uploadImage(layoutImage);
-
       if (totalArea) {
         const layoutData = mapAreaValues(
           userId,
           areaValues,
           areaQuantities,
           totalArea,
-          // imageFilename,
           builtArea
         );
 
@@ -569,7 +552,7 @@ const TreeMap = ({ totalArea, areaQuantities, areaValues }) => {
 
         if (data) {
           const currentLayoutID = data.id;
-          localStorage.setItem("currentLayoutID", currentLayoutID);
+          sessionStorage.setItem("currentLayoutID", currentLayoutID);
         }
 
         if (!userId) {
@@ -592,98 +575,114 @@ const TreeMap = ({ totalArea, areaQuantities, areaValues }) => {
   };
 
   return (
-    <div id="chart" style={{ position: "relative" }}>
-      <ReactApexChart
-        options={options}
-        series={[{ data: series }]}
-        type="treemap"
-        className="distribution-chart"
-        height={chartHeight}
-      />
-      <button
-        className="arrow-button"
-        onClick={() => toggleLegend(!isLegendVisible)}
-        style={{
-          position: "absolute",
-          left: "-25px",
-          top: "200px",
-          opacity: "50%",
-          zIndex: 1,
-          display: window.innerWidth <= 1350 ? "block" : "none",
-        }}
-      >
-        {/* <FontAwesomeIcon icon={isLegendVisible ? faChevronLeft : faChevronRight} /> */}
-        {isLegendVisible ? (
-          <MdKeyboardDoubleArrowLeft size={30} />
-        ) : (
-          <MdKeyboardDoubleArrowRight size={30} />
+    <>
+      <div id="chart" className="relative border px-2">
+        <ReactApexChart
+          options={options}
+          series={[{ data: series }]}
+          type="treemap"
+          className="distribution-chart"
+          height={chartHeight}
+        />
+        <button
+          className="arrow-button"
+          onClick={() => toggleLegend(!isLegendVisible)}
+          style={{
+            position: "absolute",
+            left: "-25px",
+            top: "200px",
+            opacity: "50%",
+            zIndex: 1,
+            display: window.innerWidth <= 1350 ? "block" : "none",
+          }}
+        >
+          {/* <FontAwesomeIcon icon={isLegendVisible ? faChevronLeft : faChevronRight} /> */}
+          {isLegendVisible ? (
+            <MdKeyboardDoubleArrowLeft size={30} />
+          ) : (
+            <MdKeyboardDoubleArrowRight size={30} />
+          )}
+        </button>
+        <div
+          className="legend-container w-full h-full grid grid-cols-2 xl:grid-cols-4 gap-3 xl:gap-0 overflow-auto absolute lg:static lg:overflow-visible inset-0 z-20 transition-transform duration-700 ease-in-out lg:transition-none"
+          style={{
+            transform: isLegendVisible ? "translateX(0)" : "translateX(-100%)", // Start hidden and slide in
+            // transition: "transform 1s ease-in-out",
+            // position: "absolute",
+            // top: "0",
+            // left: "0",
+            background: "#fff",
+            padding: "0px",
+            // boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)",
+            visibility: isLegendVisible ? "visible" : "hidden", // Fully hide off-screen
+          }}
+        >
+          {generateLegendItems()}
+        </div>
+
+        {showWarning && (
+          <UnusedAreaWarning
+            unusedArea={unusedArea}
+            onConfirm={handlegenrateboq}
+            onCancel={() => {
+              setShowWarning(false);
+            }}
+            isSubmitting={isSubmitting}
+          />
         )}
-      </button>
-      <div
-        className="legend-container w-full grid grid-cols-2 xl:grid-cols-4 gap-3 xl:gap-0 overflow-x-auto "
-        style={{
-          transform: isLegendVisible ? "translateX(0)" : "translateX(-100%)", // Start hidden and slide in
-          transition: "transform 1s ease-in-out",
-          position: "absolute",
-          top: "10%",
-          left: "0",
-          background: "#fff",
-          padding: "10px",
-          // boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)",
-          visibility: isLegendVisible ? "visible" : "hidden", // Fully hide off-screen
-        }}
-      >
-        {generateLegendItems()}
       </div>
       {/* button for generate boq */}
       {isMobile && (
-        <div className="flex justify-center items-center">
-          <button
-            className="generateBoq bg-[#1A3A36] mt-2 rounded-3xl text-sm py-3 px-10 text-white mb-2 border-2 border-[#34BFAD]"
+        <div className="flex justify-center items-center mt-3">
+          {/* <button
             onClick={generateBOQclick}
-            disabled={isSubmitting}
+            className="generateBoq glow-on-hover relative flex items-center w-36 h-10 px-4 py-2 mb-2 bg-[#212B36] border border-[#1A8FE3] text-white overflow-hidden group rounded-[4px] font-Poppins text-xs hover:bg-gradient-to-b from-[#3F56EA] to-[#7c80f3] hover:scale-105 transition-transform duration-300 ease-in-out"
           >
-            {isSubmitting ? (
-              <div className="spinner flex justify-center items-center">
-                <svg
-                  className="animate-spin h-5 w-5 text-white"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                >
-                  <circle
-                    className="opacity-25"
-                    cx="12"
-                    cy="12"
-                    r="10"
-                    stroke="currentColor"
-                    strokeWidth="4"
-                  ></circle>
-                  <path
-                    className="opacity-75"
-                    fill="currentColor"
-                    d="M4 12a8 8 0 018-8v8h8a8 8 0 01-8 8V12H4z"
-                  ></path>
-                </svg>
+            <span className="absolute top-0 left-0 w-full h-full pointer-events-none z-0 hidden group-hover:block">
+              <span className="glow-line glow-top"></span>
+              <span className="glow-line glow-right"></span>
+              <span className="glow-line glow-bottom"></span>
+              <span className="glow-line glow-left"></span>
+            </span>
+            <div className="flex gap-3 w-full h-full">
+              <div className="relative pointer-events-none z-0 w-1/4  h-full">
+                <div className="absolute top-0 left-0 text-[8px] group-hover:blink-on-hover">
+                  <PiStarFourFill />
+                </div>
+                <div className="absolute bottom-0 left-[2px] text-[10px] group-hover:blink-on-hover group-hover:del-200">
+                  <PiStarFourFill />
+                </div>
+                <div className="absolute right-0 top-1/4 text-sm group-hover:blink-on-hover group-hover:del-300">
+                  <PiStarFourFill />
+                </div>
               </div>
-            ) : (
-              "Generate BOQ"
-            )}
-          </button>
+              <span className="flex justify-center items-center">
+                Create BOQ
+              </span>
+            </div>
+          </button> */}
+          <AnimatedButton
+            onClick={generateBOQclick}
+            className="!bg-[#3A5D7B] text-white capitalize font-Georgia font-semibold tracking-wider"
+            variant="default"
+            size="lg"
+            // glow={true}
+            textEffect="shimmer"
+            rounded="custom"
+            asChild={false}
+            hideAnimations={false}
+            shimmerColor="#fff"
+            shimmerSize="0.15em"
+            shimmerDuration="3s"
+            borderRadius="10px"
+            background="rgba(48, 71, 120, 1)"
+            hovereBackground="linear-gradient(90deg,rgba(85,132,182,1)  0%,  rgba(117,162,190,1) 100%)"
+          >
+            Create BOQ
+          </AnimatedButton>
         </div>
       )}
-
-      {showWarning && (
-        <UnusedAreaWarning
-          unusedArea={unusedArea}
-          onConfirm={handlegenrateboq}
-          onCancel={() => {
-            setShowWarning(false);
-          }}
-          isSubmitting={isSubmitting}
-        />
-      )}
-    </div>
+    </>
   );
 };
 

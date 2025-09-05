@@ -36,6 +36,16 @@ const MainPage = ({ userResponses, setSelectedSubCategory1, productsData }) => {
           (subCategory) => subCategory !== "Pods"
         );
       }
+      if (
+        selectedCategory.category === "Furniture" &&
+        (selectedSubCategory === "Reception" ||
+          selectedSubCategory === "Pantry" ||
+          selectedSubCategory === "Breakout Room")
+      ) {
+        subCategories = subCategories.filter(
+          (subCategory) => subCategory !== "Storage"
+        );
+      }
 
       // Automatically select the first subcategory when switching categories
       if (
@@ -56,23 +66,83 @@ const MainPage = ({ userResponses, setSelectedSubCategory1, productsData }) => {
     setSelectedSubCategory1,
   ]);
 
-  const selectedSubCategories =
-    subCat1 && subCat1[selectedCategory.category]
-      ? selectedCategory.category === "HVAC"
-        ? userResponses.hvacType === "Centralized"
-          ? subCat1[selectedCategory.category].filter(
-              (subCategory) => subCategory === "Centralized AC"
-            )
-          : subCat1[selectedCategory.category].filter(
-              (subCategory) => subCategory !== "Centralized AC"
-            )
-        : selectedCategory.category === "Civil / Plumbing" &&
-          selectedSubCategory === "Pantry"
-        ? subCat1[selectedCategory.category].filter(
+  // const selectedSubCategories =
+  //   subCat1 && subCat1[selectedCategory?.category]
+  //     ? selectedCategory.category === "HVAC"
+  //       ? userResponses.hvacType === "Centralized"
+  //         ? subCat1[selectedCategory.category].filter(
+  //             (subCategory) => subCategory === "Centralized AC"
+  //           )
+  //         : subCat1[selectedCategory.category].filter(
+  //             (subCategory) => subCategory !== "Centralized AC"
+  //           )
+  //       : selectedCategory.category === "Civil / Plumbing" &&
+  //         selectedSubCategory === "Pantry"
+  //       ? subCat1[selectedCategory.category].filter(
+  //           (subCategory) => subCategory !== "Pods"
+  //         )
+  //       : selectedCategory.category === "Furniture" &&
+  //         selectedSubCategory === "Chair"
+  //       ? subCat1[selectedCategory.category].filter(
+  //           (subCategory) => subCategory !== "Reception"
+  //           // || subCategory !== "Pantry"
+  //         )
+  //       : subCat1[selectedCategory.category]
+  //     : [];
+
+  let selectedSubCategories = [];
+
+  if (subCat1 && subCat1[selectedCategory?.category]) {
+    switch (selectedCategory.category) {
+      case "HVAC":
+        if (userResponses.hvacType === "Centralized") {
+          selectedSubCategories = subCat1["HVAC"].filter(
+            (subCategory) => subCategory === "Centralized AC"
+          );
+        } else {
+          selectedSubCategories = subCat1["HVAC"].filter(
+            (subCategory) => subCategory !== "Centralized AC"
+          );
+        }
+        break;
+
+      case "Civil / Plumbing":
+        if (selectedSubCategory === "Pantry") {
+          selectedSubCategories = subCat1["Civil / Plumbing"].filter(
             (subCategory) => subCategory !== "Pods"
-          )
-        : subCat1[selectedCategory.category]
-      : [];
+          );
+        } else {
+          selectedSubCategories = subCat1["Civil / Plumbing"];
+        }
+        break;
+
+      case "Furniture":
+        if (
+          selectedSubCategory === "Reception" ||
+          selectedSubCategory === "Pantry" ||
+          selectedSubCategory === "Breakout Room"
+        ) {
+          selectedSubCategories = subCat1["Furniture"].filter(
+            (subCategory) => subCategory !== "Storage"
+          );
+        } else {
+          selectedSubCategories = subCat1["Furniture"];
+        }
+        break;
+
+      default:
+        selectedSubCategories = subCat1[selectedCategory.category];
+        break;
+    }
+  }
+
+  if (!selectedCategory) {
+    return (
+      <p className="text-[#ccc] font-semibold font-Poppins px-6">
+        Loading data....
+      </p>
+    );
+  }
 
   return (
     <motion.div
@@ -81,10 +151,10 @@ const MainPage = ({ userResponses, setSelectedSubCategory1, productsData }) => {
       animate="visible"
       exit="exit"
       variants={fadeInVariant}
-      className="main-page flex flex-row gap-4 items-center justify-start relative overflow-auto md:px-8 font-Poppins w-4/5 md:w-full scrollbar-hide"
+      className="main-page flex flex-row gap-4 items-center justify-start relative overflow-auto font-Poppins w-4/5 md:w-full scrollbar-hide my-3"
     >
-      <AnimatePresence mode="wait">
-        {selectedSubCategories.length > 0 ? (
+      <AnimatePresence>
+        {selectedSubCategories && selectedSubCategories?.length > 0 ? (
           selectedSubCategories.map((subCategory1) => (
             <motion.div
               key={subCategory1} // Fix: Using subCategory1 as key
@@ -92,14 +162,18 @@ const MainPage = ({ userResponses, setSelectedSubCategory1, productsData }) => {
               initial="hidden"
               animate="visible"
               exit="exit"
-              className={`border-solid border-[#000000] border flex flex-col gap-2.5 items-start shrink-0 w-auto h-8 md:h-10 justify-center relative rounded-xl cursor-pointer transition-all duration-300 ${
+              className={` border-[#000000] border flex flex-col gap-2.5 items-start shrink-0 w-auto h-8 md:h-10 justify-center relative rounded-[1px] cursor-pointer transition-all duration-300 ${
                 selectedSubCategory1 === subCategory1
-                  ? "bg-[#82b8b0]" // Selected item styling
-                  : "bg-white hover:bg-[#b9e3de]"
+                  ? "bg-[#334A78]"
+                  : "bg-white hover:bg-[#E0F0FF]"
               }`}
               onClick={() => setSelectedSubCategory1(subCategory1)}
             >
-              <motion.button className="text-[#252525] text-center text-xs md:text-base leading-[30px] font-normal relative flex items-center justify-center px-7">
+              <motion.button
+                className={`text-[#252525] text-center text-xs md:text-base leading-[30px] font-normal relative flex items-center justify-center px-7 ${
+                  selectedSubCategory1 === subCategory1 ? "text-[#fff]" : ""
+                }`}
+              >
                 {subCategory1}
               </motion.button>
             </motion.div>

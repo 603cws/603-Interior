@@ -1,3 +1,4 @@
+@tailwind utilities;
 body {
   margin: 0; /* Remove body margin that may cause scrollbars */
   overflow-x: hidden; /* Prevent horizontal scrolling entirely */
@@ -103,8 +104,26 @@ slick-current {
   }
 }
 
-.apexcharts-datalabel {
+/* .apexcharts-datalabel {
   font-size: 45%;
+  text-wrap: wrap;
+  font-size: 10px;
+} */
+/* .apexcharts-treemap-rect {
+  overflow: hidden !important;
+  max-width: 100%;
+}
+.apexcharts-data-labels {
+  overflow: hidden !important;
+  max-width: 100%;
+} */
+.apexcharts-datalabel {
+  font-size: clamp(8px, 1vw, 10px);
+  white-space: collapse !important;
+  text-align: center !important;
+  text-anchor: middle;
+  max-width: 100%;
+  overflow: hidden;
 }
 
 .container-left {
@@ -194,4 +213,244 @@ slick-current {
 
 .tab-content-item.active .tab-image img {
   mask-position: right;
+}
+
+@keyframes animate-stars {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+@layer utilities {
+  .blink-on-hover {
+    animation: animate-stars 1.2s ease-in-out infinite;
+  }
+
+  .group-hover\:blink-on-hover {
+    animation: animate-stars 1.2s ease-in-out infinite;
+  }
+
+  .del-200 {
+    animation-delay: 0.2s;
+  }
+
+  .del-300 {
+    animation-delay: 0.3s;
+  }
+}
+@keyframes glow-top {
+  0% {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  25% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes glow-right {
+  0%,
+  24% {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  25% {
+    opacity: 0;
+  }
+  35% {
+    opacity: 1;
+  }
+  50% {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes glow-bottom {
+  0%,
+  49% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  50% {
+    opacity: 0;
+  }
+  60% {
+    opacity: 1;
+  }
+  75% {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes glow-left {
+  0%,
+  74% {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  75% {
+    opacity: 0;
+  }
+  85% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+}
+@layer utilities {
+  .glow-line {
+    @apply absolute bg-gradient-to-r from-transparent via-[#ffffff] to-transparent pointer-events-none;
+    filter: drop-shadow(0 0 6px #ffffff);
+  }
+
+  .glow-top {
+    @apply h-[3px] w-1/2 top-0 left-0;
+    animation: glow-top 4s linear infinite;
+  }
+
+  .glow-right {
+    @apply w-[6px] h-3/5 top-0 right-0;
+    animation: glow-right 4s linear infinite;
+  }
+
+  .glow-bottom {
+    @apply h-[3px] w-1/2 bottom-0 right-0;
+    animation: glow-bottom 4s linear infinite;
+  }
+
+  .glow-left {
+    @apply w-[6px] h-3/5 bottom-0 left-0;
+    animation: glow-left 4s linear infinite;
+  }
+}
+.generateBoq.glow-on-hover:hover {
+  box-shadow: 0 0 100px 0 #9917ff, 0 0 0 3.48px rgba(255, 255, 255, 0.5);
+  transition: box-shadow 0.3s ease-in-out;
+}
+.generateBoq.glow-on-hover-boq:hover {
+  box-shadow: 0 0 100px 0 #85aed2, 0 0 0 1.48px rgba(255, 255, 255, 0.5);
+  transition: box-shadow 0.3s ease-in-out;
+}
+
+@layer utilities {
+  /* .gradient-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: #23445b #e5e7eb;
+  } */
+
+  .gradient-scrollbar::-webkit-scrollbar {
+    width: 6px;
+    height: 8px;
+    scrollbar-width: thin;
+  }
+
+  .gradient-scrollbar::-webkit-scrollbar-track {
+    background: #e5e7eb;
+  }
+
+  .gradient-scrollbar::-webkit-scrollbar-thumb {
+    background: linear-gradient(to bottom, #23445b, #487ba0);
+    border-radius: 9999px;
+  }
+}
+
+.lux-svg-wrapper:hover .lux-sparkle {
+  fill: none;
+  stroke: #374a75;
+  stroke-width: 1.2;
+  stroke-dasharray: 100;
+  stroke-dashoffset: 100;
+  animation: draw-star 1.2s ease-out forwards;
+}
+
+.lux-sparkle:nth-of-type(2) {
+  animation-delay: 0.2s;
+}
+.lux-sparkle:nth-of-type(3) {
+  animation-delay: 0.4s;
+}
+.lux-sparkle:nth-of-type(4) {
+  animation-delay: 0.6s;
+}
+.lux-sparkle:nth-of-type(6) {
+  animation-delay: 0.8s;
+}
+
+@keyframes draw-star {
+  to {
+    stroke-dashoffset: 0;
+    fill: #374a75;
+  }
+}
+@keyframes blink-star {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 100;
+  }
+}
+.svg-wrapper:hover .svg-stroke {
+  animation: blink-star 1.5s ease-in-out infinite;
+}
+
+@keyframes paintPath {
+  0% {
+    transform: translate(0, 0);
+  }
+  25% {
+    transform: translate(-10px, -10px);
+  }
+  50% {
+    transform: translate(5px, 5px);
+  }
+  75% {
+    transform: translate(-2px, -2px);
+  }
+  100% {
+    transform: translate(0, 0);
+  }
+}
+
+.roller-container {
+  display: inline-block;
+  cursor: pointer;
+}
+
+.roller {
+  transform-origin: center;
+}
+
+.group:hover .roller {
+  animation: paintPath 1.5s ease-in-out infinite forwards;
+}
+.react-calendar {
+  width: 95%;
+  box-shadow: none;
+  border: 1px solid #cccccc;
+  padding: 10px;
+  margin: 0 12px;
+  border-radius: 8px;
 }

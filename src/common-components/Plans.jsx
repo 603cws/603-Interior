@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useApp } from "../Context/Context";
 import { motion } from "framer-motion";
+import { HiCheckBadge } from "react-icons/hi2";
+import toast from "react-hot-toast";
+import NewBoq from "../boq/components/NewBoq";
 
-// Example bullet points for each plan.
-// You can replace them with your existing content from your original Plans component.
 const plansData = [
   {
     id: 0,
@@ -55,21 +56,16 @@ const plansData = [
       "Offline exposure at Workved Interiors",
     ],
     image: "/images/plan-custom.jpg",
-    planKey: "Custom", // used when "Select" is clicked
+    planKey: "Custom",
   },
 ];
 
-/**
- * Utility: Returns a grid-template-columns string so that the hovered plan
- * is wide, and the others are narrow. Adjust the ratio (e.g. 2fr vs. 1fr) if desired.
- */
 function getGridTemplateColumns(hoveredId) {
-  // For 4 plans, default to plan #0 expanded if none is hovered.
   switch (hoveredId) {
     case 0:
-      return "4fr 1fr 1fr 1fr"; // Plan #0 is wide, others narrow
+      return "4fr 1fr 1fr 1fr";
     case 1:
-      return "1fr 4fr 1fr 1fr"; // Plan #1 is wide, others narrow
+      return "1fr 4fr 1fr 1fr";
     case 2:
       return "1fr 1fr 4fr 1fr";
     case 3:
@@ -79,33 +75,39 @@ function getGridTemplateColumns(hoveredId) {
   }
 }
 
-function Plans() {
-  const { setSelectedPlan } = useApp();
+function Plans({
+  autoSelectPlanProducts,
+  onConfirm,
+  showNewBoqPopup,
+  setShowNewBoqPopup,
+}) {
+  const { setSelectedPlan, productData, categories, BOQTitle, setIsSaveBOQ } =
+    useApp();
 
   // Hovered plan state. 0 = first plan expanded by default.
   const [hoveredPlan, setHoveredPlan] = useState(1);
   const [imageLoaded, setImageLoaded] = useState(false);
 
-  const handlePlanSelect = (planKey) => {
+  useEffect(() => {
+    setIsSaveBOQ(true);
+  }, []);
+
+  const handlePlanSelect = async (planKey) => {
     setSelectedPlan(planKey);
-    localStorage.setItem("selectedPlan", planKey);
+    sessionStorage.setItem("selectedPlan", planKey);
+    toast.success(`${planKey} plan selected!`);
+    await autoSelectPlanProducts(productData, categories, planKey);
   };
 
   return (
-    <div className="md:container md:mx-auto my-8 font-Poppins">
-      <h2 className="text-center font-semibold text-xl lg:text-3xl capitalize text-[#34BFAD] my-4">
+    <div className="lg:container md:mx-auto lg:my-8 font-Poppins">
+      <h2 className="text-center font-semibold text-xl lg:text-3xl capitalize text-[#75A2BE] my-4">
         please select your plan
       </h2>
-      {/* 
-        A grid with 4 columns, where the hovered plan is wide, and the others are narrow.
-        Adjust the gap, height, etc. as needed.
-      */}
       <div
-        className="hidden  md:grid  transition-all duration-500 h-[450px] gap-2"
+        className="hidden lg:grid transition-all duration-500 h-[450px] gap-2"
         style={{ gridTemplateColumns: getGridTemplateColumns(hoveredPlan) }}
         onMouseLeave={() => setHoveredPlan(1)}
-        // ^ If you want the layout to revert to the first plan after leaving the row.
-        // Remove if you prefer the last hovered plan to remain expanded.
       >
         {plansData.map((plan) => {
           const isExpanded = plan.id === hoveredPlan;
@@ -116,20 +118,13 @@ function Plans() {
               onMouseEnter={() => setHoveredPlan(plan.id)}
               className="relative overflow-hidden bg-[#E4F0EC] rounded-xl"
             >
-              {/* 
-                If expanded, show the "large" layout: 
-                - Plan # + Title + Bullets + Image + "Select" button 
-              */}
               {isExpanded ? (
-                <div className="w-full h-full flex flex-row bg-[#183d3d]">
-                  {/* Left side: plan text & bullet points */}
+                <div className="w-full h-full flex flex-row bg-[#374A75]">
                   <div className="h-full px-7 py-10 flex items-end justify-center relative font-Poppins text-white border-r-2">
-                    {/* Plan number in the top-left corner */}
-                    <div className="absolute top-2 left-1/2 transform -translate-x-1/2  text-3xl font-bold">
+                    <div className="absolute top-2 left-1/2 transform -translate-x-1/2 text-3xl mt-4 font-bold">
                       {plan.planNumber}
                     </div>
 
-                    {/* Plan title vertically centered; can rotate or use writing-mode */}
                     <div
                       className="text-2xl font-bold rotate-180 text-end"
                       style={{ writingMode: "vertical-lr" }}
@@ -138,54 +133,47 @@ function Plans() {
                     </div>
                   </div>
                   <div className="flex-1 flex flex-col-reverse xl:flex-row ">
-                    <div className="flex-1 py-3 px-6  text-white flex flex-col justify-between">
-                      {/* Plan Number & Title */}
+                    <div className="flex-1 xl:py-6 px-6 text-white flex flex-col justify-between">
                       <div>
                         <h2 className="text-3xl font-bold mb-4">
                           {plan.title}
                         </h2>
 
-                        {/* Bullet Points */}
-                        <ul className="xl:space-y-2 text-sm">
+                        <ul className="lg:space-y-1 xl:space-y-2 text-sm">
                           {plan.bullets.map((bullet, i) => (
                             <li key={i} className="flex items-center xl:gap-2 ">
-                              <img
+                              {/* <img
                                 src="/images/Check_ring.png"
                                 alt="check"
                                 className="mt-1"
-                              />
+                              /> */}
+                              <div className="bg-white rounded-full h-3 w-3 flex justify-center items-center relative mr-2">
+                                <div className="absolute flex justify-center items-center">
+                                  <HiCheckBadge color="#75A2BE" size={25} />
+                                </div>
+                              </div>
                               <span>{bullet}</span>
                             </li>
                           ))}
                         </ul>
                       </div>
 
-                      {/* "Select" Button */}
                       <div className="text-left mt-4">
                         <button
                           // onClick={() => setSelectedPlan(plan.planKey)}
                           onClick={() => handlePlanSelect(plan.planKey)}
-                          className="bg-[#34BFAD] text-black px-4 py-2 rounded-3xl font-semibold hover:bg-gray-200 transition"
+                          className="bg-[#75A2BE] text-[#fff] px-4 py-2 lg:mb-3 mb-1 rounded-md font-semibold border border-[#000] hover:bg-gray-200 transition hover:text-[#374A75]"
                         >
-                          Select
+                          Get {plan.planKey}
                         </button>
                       </div>
                     </div>
-                    {/* Right side: plan image */}
-                    {/* <div className="flex-1 px-5 xl:py-7">
-                      <img
-                        src={plan.image}
-                        alt={plan.title}
-                        className="w-full h-52 xl:h-full object-cover rounded-3xl"
-                      />
-                    </div> */}
-                    <div className="flex-1 px-5 xl:py-7 relative">
-                      {/* Skeleton placeholder */}
+
+                    <div className="flex-1 px-5 lg:py-4 xl:py-7 relative">
                       {!imageLoaded && (
-                        <div className="w-full h-52 xl:h-full rounded-3xl bg-gray-300 animate-pulse" />
+                        <div className="w-full h-52 xl:h-full rounded-3xl bg-gray-300" />
                       )}
 
-                      {/* Image with fade-in animation */}
                       <motion.img
                         initial={{ opacity: 0 }}
                         animate={{ opacity: imageLoaded ? 1 : 0 }}
@@ -194,7 +182,7 @@ function Plans() {
                         src={plan.image}
                         alt={plan.title}
                         loading="lazy"
-                        className={`w-full h-52 xl:h-full object-cover rounded-3xl absolute top-0 left-0 ${
+                        className={`w-full lg:h-48 h-52 lg:mt-3 xl:mt-0 xl:h-full object-cover rounded-3xl absolute top-0 left-0 ${
                           imageLoaded ? "relative" : "invisible"
                         }`}
                       />
@@ -202,14 +190,11 @@ function Plans() {
                   </div>
                 </div>
               ) : (
-                /* If collapsed, show the "small" layout with vertical text. */
-                <div className="w-full h-full flex items-end justify-center relative font-Poppins text-[#34BFAD] py-10">
-                  {/* Plan number in the top-left corner */}
-                  <div className="absolute top-2 left-1/2 transform -translate-x-1/2  text-3xl font-bold">
+                <div className="w-full h-full flex items-end justify-center relative font-Poppins text-[#75A2BE] py-10">
+                  <div className="absolute top-6 left-1/2 transform -translate-x-1/2  text-3xl font-bold">
                     {plan.planNumber}
                   </div>
 
-                  {/* Plan title vertically centered; can rotate or use writing-mode */}
                   <div
                     className="text-2xl font-bold rotate-180 text-end"
                     style={{ writingMode: "vertical-lr" }}
@@ -223,10 +208,8 @@ function Plans() {
         })}
       </div>
       <div
-        className="md:hidden grid "
+        className="lg:hidden grid grid-cols-1 md:grid-cols-2 md:gap-3"
         onMouseLeave={() => setHoveredPlan(1)}
-        // ^ If you want the layout to revert to the first plan after leaving the row.
-        // Remove if you prefer the last hovered plan to remain expanded.
       >
         {plansData.map((plan) => {
           return (
@@ -235,11 +218,10 @@ function Plans() {
               onMouseEnter={() => setHoveredPlan(plan.id)}
               className="relative overflow-hidden bg-[#E4F0EC] mb-3 rounded-2xl"
             >
-              <div className="w-full h-full flex flex-col bg-[#183d3d]">
-                {/* background rings */}
-                <div className="h-44 w-44 rounded-full border-[14px] border-[#1D4C46] absolute -top-5 -right-10 opacity-90"></div>
-                <div className="h-44 w-44 rounded-full border-8 border-[#1D4C46] absolute top-20 -right-20 opacity-50"></div>
-                <div className="h-44 w-44 rounded-full border-8 border-[#1D4C46] absolute -bottom-10 -left-10 opacity-50"></div>
+              <div className="w-full h-full flex flex-col bg-[#374A75]">
+                <div className="h-44 w-44 rounded-full border-[14px] border-[#11275a] absolute -top-5 -right-10 opacity-90"></div>
+                <div className="h-44 w-44 rounded-full border-8 border-[#2c4174] absolute top-20 -right-20 opacity-50"></div>
+                <div className="h-44 w-44 rounded-full border-8 border-[#283759] absolute -bottom-10 -left-10 opacity-50"></div>
                 <div
                   className="h-full flex items-center justify-between mx-2 my-2
                   font-Poppins text-white border-b-2 relative"
@@ -257,27 +239,31 @@ function Plans() {
                         {plan.bullets.map((bullet, i) => (
                           <li
                             key={i}
-                            className="flex items-center gap-2 relative"
+                            className="flex items-center gap-4 relative"
                           >
-                            <img
+                            {/* <img
                               src="/images/Check_ring.png"
                               alt="check"
                               className="mt-1"
-                            />
+                            /> */}
+                            <div className="bg-white rounded-full h-3 w-3 flex justify-center items-center relative">
+                              <div className="absolute flex justify-center items-center">
+                                <HiCheckBadge color="#75A2BE" size={25} />
+                              </div>
+                            </div>
                             <span>{bullet}</span>
                           </li>
                         ))}
                       </ul>
                     </div>
 
-                    {/* "Select" Button */}
                     <div className="text-left mt-4 relative">
                       <button
                         // onClick={() => setSelectedPlan(plan.planKey)}
                         onClick={() => handlePlanSelect(plan.planKey)}
-                        className="bg-[#34BFAD] text-black px-4 py-2 rounded-3xl font-semibold hover:bg-gray-200 transition"
+                        className="bg-[#75A2BE] text-[#fff] px-4 py-2 rounded-md font-semibold border border-[#000] hover:bg-gray-200 transition"
                       >
-                        Select
+                        Get {plan.planKey}
                       </button>
                     </div>
                   </div>
@@ -287,6 +273,12 @@ function Plans() {
           );
         })}
       </div>
+      {showNewBoqPopup && !BOQTitle && (
+        <NewBoq
+          onConfirm={onConfirm}
+          onCancel={() => setShowNewBoqPopup(false)}
+        />
+      )}
     </div>
   );
 }

@@ -7,6 +7,9 @@ import { VscSignOut } from "react-icons/vsc";
 import { IoSettingsSharp } from "react-icons/io5";
 import { LuBlend } from "react-icons/lu";
 import { BsQuestionCircle } from "react-icons/bs";
+import { MdOutlineSpaceDashboard } from "react-icons/md";
+import { GrCircleQuestion } from "react-icons/gr";
+import { BsBoxSeam } from "react-icons/bs";
 
 function Sidebar({
   handleLogout,
@@ -52,13 +55,15 @@ function Sidebar({
           isExpanded={isExpanded}
         />
         <SidebarItem
-          icon={<RiDashboardFill />}
+          icon={<MdOutlineSpaceDashboard />}
+          // icon={<RiDashboardFill />}
           text="Dashboard"
           onClick={handledashboard}
           isExpanded={isExpanded}
         />
         <SidebarItem
-          icon={<LuBlend />}
+          icon={<BsBoxSeam />}
+          // icon={<LuBlend />}
           text="Product"
           onClick={() => {
             handleproduct();
@@ -78,7 +83,8 @@ function Sidebar({
           others
         </h3>
         <SidebarItem
-          icon={<BsQuestionCircle />}
+          icon={<GrCircleQuestion />}
+          // icon={<BsQuestionCircle />}
           text="Help"
           isExpanded={isExpanded}
           onClick={handleHelp}

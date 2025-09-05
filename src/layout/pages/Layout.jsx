@@ -75,6 +75,32 @@ const initialQuantities = {
   // femaleWashroom: 0,
   washrooms: 0,
 };
+const initialSeatCounts = {
+  linear: 1,
+  lType: 1,
+  md: 3,
+  manager: 3,
+  small: 4,
+  sales: 4,
+  interviewRoom: 3,
+  conferenceRoom: 12,
+  boardRoom: 18,
+  meetingRoom: 6,
+  meetingRoomLarge: 8,
+  hrRoom: 4,
+  financeRoom: 4,
+  ups: 1,
+  bms: 1,
+  server: 1,
+  reception: 1,
+  lounge: 1,
+  phoneBooth: 1,
+  breakoutRoom: 1,
+  executiveWashroom: 1,
+  videoRecordingRoom: 1,
+  other: 1,
+  washrooms: 1,
+};
 
 const MAX_AREA = 25000;
 const MIN_AREA = 1000;
@@ -329,69 +355,6 @@ const calculateServer = (totalArea, areaValues) => {
   }
 };
 
-// const calculateExecutiveWashroom = (totalArea, areaValues) => {
-//   if (totalArea >= 9000 && totalArea <= 25000) {
-//     return areaValues.executiveWashroom * 2;
-//   } else {
-//     return 0;
-//   }
-// };
-// const calculateMaleWashroomArea = (totalArea) => {
-//   if (totalArea >= 1000 && totalArea < 2000) {
-//     return Math.round(totalArea * 0.06);
-//   } else if (totalArea >= 2000 && totalArea < 3000) {
-//     return Math.round(totalArea * 0.05);
-//   } else if (totalArea >= 3000 && totalArea < 4000) {
-//     return Math.round(totalArea * 0.04);
-//   } else if (totalArea >= 4000 && totalArea < 10000) {
-//     return Math.round(totalArea * 0.025);
-//   } else if (totalArea >= 10000 && totalArea < 12000) {
-//     return Math.round(totalArea * 0.02375);
-//   } else if (totalArea >= 12000 && totalArea < 14000) {
-//     return Math.round(totalArea * 0.023);
-//   } else if (totalArea >= 14000 && totalArea < 16000) {
-//     return Math.round(totalArea * 0.0225);
-//   } else if (totalArea >= 16000 && totalArea < 20000) {
-//     return Math.round(totalArea * 0.022);
-//   } else if (totalArea >= 20000 && totalArea < 22000) {
-//     return Math.round(totalArea * 0.0215);
-//   } else if (totalArea >= 22000 && totalArea < 24000) {
-//     return Math.round(totalArea * 0.021);
-//   } else if (totalArea >= 24000 && totalArea <= 25000) {
-//     return Math.round(totalArea * 0.02);
-//   } else {
-//     return 0;
-//   }
-// };
-
-// const calculateFemaleWashroomArea = (totalArea) => {
-//   if (totalArea >= 1000 && totalArea < 2000) {
-//     return Math.round(totalArea * 0.06);
-//   } else if (totalArea >= 2000 && totalArea < 3000) {
-//     return Math.round(totalArea * 0.05);
-//   } else if (totalArea >= 3000 && totalArea < 4000) {
-//     return Math.round(totalArea * 0.04);
-//   } else if (totalArea >= 4000 && totalArea < 10000) {
-//     return Math.round(totalArea * 0.025);
-//   } else if (totalArea >= 10000 && totalArea < 12000) {
-//     return Math.round(totalArea * 0.02375);
-//   } else if (totalArea >= 12000 && totalArea < 14000) {
-//     return Math.round(totalArea * 0.023);
-//   } else if (totalArea >= 14000 && totalArea < 16000) {
-//     return Math.round(totalArea * 0.0225);
-//   } else if (totalArea >= 16000 && totalArea < 20000) {
-//     return Math.round(totalArea * 0.022);
-//   } else if (totalArea >= 20000 && totalArea < 22000) {
-//     return Math.round(totalArea * 0.0215);
-//   } else if (totalArea >= 22000 && totalArea < 24000) {
-//     return Math.round(totalArea * 0.021);
-//   } else if (totalArea >= 24000 && totalArea <= 25000) {
-//     return Math.round(totalArea * 0.02);
-//   } else {
-//     return 0;
-//   }
-// };
-
 const calculateWashroomsArea = (totalArea) => {
   if (totalArea >= 1000 && totalArea < 2000) {
     return Math.round(totalArea * 0.12);
@@ -426,6 +389,7 @@ function Layout() {
   const [availableArea, setAvailableArea] = useState(0);
   const [areaValues, setAreaValues] = useState(initialAreaValues);
   const [areaQuantities, setAreaQuantities] = useState(initialQuantities);
+  const [seatCounts, setSeatCounts] = useState(initialSeatCounts);
   const [variant, setVariant] = useState("L");
   const [errorMessage, setErrorMessage] = useState("");
   const [mdCabinSize, setMdCabinSize] = useState(areaValues.md);
@@ -457,14 +421,8 @@ function Layout() {
   //   areaValues.femaleWashroom
   // );
   const [washroomsSize, setWashroomsSize] = useState(areaValues.washrooms);
-  const [smallCabinSeatCount, setSmallCabinSeatCount] = useState(0);
-  const [hrRoomSeatCount, setHrRoomSeatCount] = useState(0);
-  const [salesSeatCount, setSalesSeatCount] = useState(0);
-  const [financeRoomSeatCount, setFinanceRoomSeatCount] = useState(0);
-  const [boardRoomSeatCount, setBoardRoomSeatCount] = useState(0);
-  const [conferenceRoomSeatCount, setConferenceRoomSeatCount] = useState(0);
   const [warning, setWarning] = useState(false);
-  const [otherArea, setOtherArea] = useState();
+  const [otherArea, setOtherArea] = useState(0);
 
   const {
     totalArea,
@@ -539,6 +497,22 @@ function Layout() {
     // setFemaleWashroomSize(areaValues.femaleWashroom);
     setWashroomsSize(areaValues.washrooms);
   });
+  useEffect(() => {
+    setSeatCounts((prev) => {
+      const newSeatCount = { ...prev };
+
+      // Object.keys(areaQuantities).forEach((key) => {
+      //   if (areaQuantities[key] === 0) {
+      //     newSeatCount[key] = 0;
+      //   }
+      // });
+      newSeatCount.linear = areaQuantities.linear ?? prev.linear;
+      newSeatCount.lType = areaQuantities.lType ?? prev.lType;
+      newSeatCount.md = areaValues.md >= 150 ? 4 : 3;
+
+      return newSeatCount;
+    });
+  }, [areaValues, areaQuantities]);
 
   //setps for joyride
   const tourSteps = [
@@ -608,7 +582,7 @@ function Layout() {
   let tempVar = "";
 
   useEffect(() => {
-    if (totalAreaSource !== "ErrorModal" || tempVar !== "layoutLoad") {
+    if (totalAreaSource !== "ErrorModal" && tempVar !== "layoutLoad") {
       const linear = calculateLinear(totalArea);
       const lType = calculateLType(totalArea, areaValues);
       const md = calculateMd(totalArea, areaValues);
@@ -656,7 +630,7 @@ function Layout() {
         // executiveWashroom: executiveWashroom / areaValues.executiveWashroom,
         // reception: Math.round(receptionArea / areaValues.reception),
         // lounge: Math.round(loungeArea / areaValues.lounge),
-        other: otherArea / areaValues.other,
+        // other: otherArea / areaValues.other,
       }));
 
       if (totalArea >= MIN_AREA && totalArea <= MAX_AREA) {
@@ -704,10 +678,24 @@ function Layout() {
 
   // Calculate builtArea and set it to state
   useEffect(() => {
+    // const calculatedBuiltArea = Object.keys(areaQuantities).reduce(
+    //   (acc, key) => acc + +areaQuantities[key] * +areaValues[key],
+    //   0
+    // );
     const calculatedBuiltArea = Object.keys(areaQuantities).reduce(
-      (acc, key) => acc + areaQuantities[key] * areaValues[key],
+      (acc, key) => {
+        const qty = Number(areaQuantities[key]);
+        const val = Number(areaValues[key]);
+
+        // if qty or val is NaN, treat them as 0
+        const safeQty = isNaN(qty) ? 0 : qty;
+        const safeVal = isNaN(val) ? 0 : val;
+
+        return acc + safeQty * safeVal;
+      },
       0
     );
+
     setBuiltArea(calculatedBuiltArea);
   }, [areaQuantities, areaValues]);
 
@@ -763,8 +751,21 @@ function Layout() {
     }
 
     // Calculate the built area
+    // const calculatedBuiltArea = Object.keys(newAreaQuantities).reduce(
+    //   (acc, key) => acc + +newAreaQuantities[key] * +newAreaValues[key],
+    //   0
+    // );
     const calculatedBuiltArea = Object.keys(newAreaQuantities).reduce(
-      (acc, key) => acc + newAreaQuantities[key] * newAreaValues[key],
+      (acc, key) => {
+        const qty = Number(newAreaQuantities[key]);
+        const val = Number(newAreaValues[key]);
+
+        // if qty or val is NaN, treat them as 0
+        const safeQty = isNaN(qty) ? 0 : qty;
+        const safeVal = isNaN(val) ? 0 : val;
+
+        return acc + safeQty * safeVal;
+      },
       0
     );
 
@@ -798,6 +799,14 @@ function Layout() {
         setOtherArea(otherArea);
       }
     }
+  };
+  const updateSeatCounts = (type, value) => {
+    const seatValue = Number(value);
+
+    setSeatCounts((prev) => ({
+      ...prev,
+      [type]: seatValue,
+    }));
   };
 
   const resetAll = () => {
@@ -887,63 +896,42 @@ function Layout() {
     setWashroomsSize
   );
 
-  const handleSeatCountChange = (setter) => (newCount) => {
-    setter(newCount);
-  };
-
-  const handleSmallCabinSeatCountChange = handleSeatCountChange(
-    setSmallCabinSeatCount
-  );
-  const handleHrRoomSeatCountChange = handleSeatCountChange(setHrRoomSeatCount);
-  const handleSalesRoomSeatCountChange =
-    handleSeatCountChange(setSalesSeatCount);
-  const handleFinanceRoomSeatCountChange = handleSeatCountChange(
-    setFinanceRoomSeatCount
-  );
-  const handleBoardRoomSeatCountChange = handleSeatCountChange(
-    setBoardRoomSeatCount
-  );
-
-  const handleConferenceRoomSeatCountChange = handleSeatCountChange(
-    setConferenceRoomSeatCount
-  );
-
   const hrRoomConfig = {
-    seatCount: hrRoomSeatCount,
-    setSeatCount: handleHrRoomSeatCountChange,
+    seatCount: seatCounts.hrRoom,
+    setSeatCount: (value) => updateSeatCounts("hrRoom", value),
     roomSize: hrRoomSize,
     setRoomSize: handleHrRoomAreaChange,
   };
 
   const salesRoomConfig = {
-    seatCount: salesSeatCount,
-    setSeatCount: handleSalesRoomSeatCountChange,
+    seatCount: seatCounts.sales,
+    setSeatCount: (value) => updateSeatCounts("sales", value),
     roomSize: salesRoomSize,
     setRoomSize: handleSalesRoomAreaChange,
   };
 
   const financeRoomConfig = {
-    seatCount: financeRoomSeatCount,
-    setSeatCount: handleFinanceRoomSeatCountChange,
+    seatCount: seatCounts.financeRoom,
+    setSeatCount: (value) => updateSeatCounts("financeRoom", value),
     roomSize: financeRoomSize,
     setRoomSize: handleFinanceRoomAreaChange,
   };
 
   const smallCabinConfig = {
-    seatCount: smallCabinSeatCount,
-    setSeatCount: handleSmallCabinSeatCountChange,
+    seatCount: seatCounts.small,
+    setSeatCount: (value) => updateSeatCounts("small", value),
     roomSize: smallCabinSize,
     setRoomSize: handleSmallCabinAreaChange,
   };
   const boardRoomConfig = {
-    seatCount: boardRoomSeatCount,
-    setSeatCount: handleBoardRoomSeatCountChange,
+    seatCount: seatCounts.boardRoom,
+    setSeatCount: (value) => updateSeatCounts("boardRoom", value),
     roomSize: boardRoomSize,
     setRoomSize: handleBoardRoomAreaChange,
   };
   const conferenceRoomConfig = {
-    seatCount: conferenceRoomSeatCount,
-    setSeatCount: handleConferenceRoomSeatCountChange,
+    seatCount: seatCounts.conferenceRoom,
+    setSeatCount: (value) => updateSeatCounts("conferenceRoom", value),
     roomSize: conferenceRoomSize,
     setRoomSize: handleConferenceRoomAreaChange,
   };
@@ -997,11 +985,12 @@ function Layout() {
           builtArea={builtArea}
           setAreaQuantities={setAreaQuantities}
           handleVariantChange={handleVariantNameChange}
+          seatCounts={seatCounts}
         />
       </div>
 
-      <div className="content w-full lg:flex justify-between gap-3 p-2">
-        <div className="area-distribution-chart h-full w-full lg:w-1/2 px-3 border-2 pl-5">
+      <div className="content w-full lg:flex justify-between gap-3 p-2 3xl:container">
+        <div className="area-distribution-chart h-full w-full lg:w-1/2 px-3">
           <Spacebar
             builtArea={builtArea}
             availableArea={availableArea}
@@ -1035,7 +1024,6 @@ function Layout() {
             initialAreaValues={initialAreaValues}
             managerCabinSize={managerCabinSize}
             setManagerCabinSize={handleManagerCabinSizeChange}
-            smallCabinSeatCount={smallCabinSeatCount}
           />
           <MeetingRooms
             areaQuantities={areaQuantities}
@@ -1051,12 +1039,6 @@ function Layout() {
             setConferenceRoomSize={handleConferenceRoomAreaChange}
             boardRoomSize={boardRoomSize}
             setBoardRoomSize={handleBoardRoomAreaChange}
-            hrRoomSeatCount={hrRoomSeatCount}
-            setHrRoomSeatCount={setHrRoomSeatCount}
-            salesSeatCount={salesSeatCount}
-            setSalesSeatCount={setSalesSeatCount}
-            financeRoomSeatCount={financeRoomSeatCount}
-            setFinanceRoomSeatCount={setFinanceRoomSeatCount}
             boardRoomConfig={boardRoomConfig}
             conferenceRoomConfig={conferenceRoomConfig}
           />

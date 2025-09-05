@@ -4,7 +4,7 @@ export default {
   theme: {
     extend: {
       boxShadow: {
-        custom: "13px 13px 20px #ebebeb, -13px -13px 28px #ffffff",
+        custom: "13px 13px 20px #ebebeb, -13px -13px 10px #ffffff",
       },
       backgroundImage: {
         "custom-gradient": "linear-gradient(145deg, #ffffff, #ffffff)",
@@ -26,6 +26,9 @@ export default {
         lato: ["Lato", "sans-serif"], // Add Lato font with a fallback
         lexend: ["Lexend Deca", "sans-serif"], // Add Lexend Deca with a fallback
         inter: ["Inter", "sans-serif"],
+        vampiroOne: ["Vampiro One", "cursive"],
+        TimesNewRoman: ["times-new-roman", "sans-serif"],
+        Georgia: ["georgia", "sans-serif"],
       },
       colors: {
         customYellow: "#fff9c9",
@@ -50,10 +53,10 @@ export default {
           "0%": { opacity: 0, transform: "translateY(20px)" },
           "100%": { opacity: 1, transform: "translateY(0)" },
         },
-        fadeIn: {
-          "0%": { opacity: 0, transform: "translateY(20px)" },
-          "100%": { opacity: 1, transform: "translateY(0)" },
-        },
+        // fadeIn: {
+        //   "0%": { opacity: 0, transform: "translateY(20px)" },
+        //   "100%": { opacity: 1, transform: "translateY(0)" },
+        // },
         bikeSlide: {
           "0%": { transform: "translateX(100%)" },
           "100%": { transform: "translateX(0)" },
@@ -78,7 +81,7 @@ export default {
         },
       },
       animation: {
-        blink: "blink 1s infinite",
+        // blink: "blink 1s infinite",
         blink: "blink 1s ease-in-out 2",
         "fade-in": "fadeIn 0.7s ease-in-out",
         bikeSlide: "bikeSlide 4s ease-out forwards",
@@ -88,6 +91,7 @@ export default {
         shake: "shake 0.8s ease-in-out",
       },
       screens: {
+        xs: "350px",
         "3xl": "1800px",
       },
       container: {

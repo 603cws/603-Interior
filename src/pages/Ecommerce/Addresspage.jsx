@@ -8,7 +8,7 @@ import { v4 as uuidv4 } from "uuid";
 import toast from "react-hot-toast";
 import CheckoutStepper from "../../common-components/CheckoutStepper";
 import { MdOutlineCancel, MdOutlineKeyboardArrowLeft } from "react-icons/md";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import AppliedCoupon from "../../common-components/AppliedCoupon";
 import PriceDetail from "../../common-components/PriceDetail";
 
@@ -22,6 +22,11 @@ function Addresspage() {
   const [ismobilenewAddressOpen, setIsMobilenewAddressOpen] = useState(false);
 
   const navigate = useNavigate();
+  const location = useLocation();
+
+  console.log("data from cart page", location.state);
+
+  const pricingdetails = location?.state?.data || null;
 
   const { accountHolder, fetchUserData, isAuthenticated } = useApp();
 
@@ -226,6 +231,10 @@ function Addresspage() {
       navigate("/payments");
     }
   };
+
+  if (!pricingdetails) {
+    return navigate("/cart");
+  }
 
   return (
     <>
@@ -528,7 +537,7 @@ function Addresspage() {
 
               <div className="space-y-3 hidden lg:block">
                 {accountHolder?.address?.length > 0 &&
-                  sortedAddressList.map((add, index) => (
+                  accountHolder?.address.map((add, index) => (
                     <AddressCard
                       removingAddressId={removingAddressId}
                       add={add}
@@ -559,7 +568,7 @@ function Addresspage() {
                   <DeliveryEstimate product={item} key={index} />
                 ))}
               </div>
-              {/* <div className="mb-12 lg:mb-0 text-sm lg:text-base">
+              <div className="mb-12 lg:mb-0 text-sm lg:text-base">
                 <h4 className="uppercase mb-7 text-[#111]  font-medium">
                   price details ({cartItems?.length} Items)
                 </h4>
@@ -569,7 +578,7 @@ function Addresspage() {
                       Total MRP
                     </h5>
                     <h5 className="font-medium  text-[#111111]/80 ">
-                      Rs {totalPrice || 0}
+                      {pricingdetails?.price}
                     </h5>
                   </div>
 
@@ -577,17 +586,29 @@ function Addresspage() {
                     <h5 className="font-medium  text-[#111111]/80">
                       Discount on MRP
                     </h5>
-                    <h5 className="font-medium  text-[#34BFAD]/80 ">-$3,600</h5>
+                    <h5 className="font-medium  text-[#34BFAD]/80 ">
+                      -{pricingdetails?.discount}
+                    </h5>
                   </div>
 
-                  <div className="flex justify-between">
+                  {/* <div className="flex justify-between">
                     <h5 className="font-medium  text-[#111111]/80">
                       Coupon Discount
                     </h5>
                     <h5 className="font-medium  text-[#F87171]">
                       Apply Coupon
                     </h5>
-                  </div>
+                  </div> */}
+
+                  {pricingdetails?.discount > 0 && (
+                    <div>
+                      <AppliedCoupon
+                        savedamount={pricingdetails?.discount}
+                        // handleRemove={handleRemoveCoupon}
+                        code={pricingdetails?.coupon.couponName}
+                      />
+                    </div>
+                  )}
 
                   <div className="flex justify-between border-b-[1px]">
                     <div>
@@ -595,11 +616,25 @@ function Addresspage() {
                         Shipping Fee
                       </h5>
                       <p className="text-xs text-[#111111]/50 font-medium pb-2">
-                        Free Shipping for you
+                        {pricingdetails.shippingFee === 0 &&
+                          "Free Shipping for you"}
                       </p>
                     </div>
                     <h5 className="font-medium  text-[#34BFAD]/80 uppercase">
-                      Free
+                      {pricingdetails.shippingFee > 0
+                        ? pricingdetails.shippingFee
+                        : "Free"}
+                    </h5>
+                  </div>
+
+                  <div className="flex justify-between border-b-[1px]">
+                    <div>
+                      <h5 className="font-medium  text-[#111111]/80">
+                        GST Fee
+                      </h5>
+                    </div>
+                    <h5 className="font-medium  text-[#34BFAD]/80 uppercase">
+                      {pricingdetails?.gst}
                     </h5>
                   </div>
 
@@ -608,24 +643,24 @@ function Addresspage() {
                       Total Amount
                     </h5>
                     <h5 className="font-medium lg:text-xl text-[#111111] ">
-                      $3,196
+                      {pricingdetails.finalValue}
                     </h5>
                   </div>
                 </div>
-              </div> */}
-
-              <div className="mb-20 lg:mb-0">
-                <PriceDetail handlebtnClick={handleContinue} />
               </div>
 
-              {/* {accountHolder?.address?.length > 0 && (
+              {/* <div className="mb-20 lg:mb-0">
+                <PriceDetail handlebtnClick={handleContinue} />
+              </div> */}
+
+              {accountHolder?.address?.length > 0 && (
                 <button
                   onClick={handleContinue}
                   className="hidden uppercase text-xl text-[#ffffff] tracking-wider w-full lg:flex justify-center items-center bg-[#334A78] border border-[#212B36] py-3 rounded-sm font-thin"
                 >
                   Continue
                 </button>
-              )} */}
+              )}
             </div>
           </div>
         </section>
@@ -634,7 +669,7 @@ function Addresspage() {
         <BottomTabs />
       </div>
 
-      {/* {accountHolder?.address?.length > 0 && (
+      {accountHolder?.address?.length > 0 && (
         <div className="lg:hidden fixed bottom-0 left-0 w-full flex justify-center items-center mb-2">
           <div className="w-[90%]">
             <button
@@ -645,7 +680,7 @@ function Addresspage() {
             </button>
           </div>
         </div>
-      )} */}
+      )}
 
       {/*  && accountHolder?.address?.length < 3 */}
 

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "animate.css";
 import { useApp } from "../../Context/Context";
+import { IoIosCloseCircle } from "react-icons/io";
 
 const QnaPopup = ({ onClose, onSubmit }) => {
   const { selectedCategory } = useApp();
@@ -37,7 +38,7 @@ const QnaPopup = ({ onClose, onSubmit }) => {
         { value: "yes", label: "Yes" },
         { value: "no", label: "No" },
       ],
-      ImageUrl: "/images/Chat-bot.gif",
+      ImageUrl: "/images/Flooringquestion.gif",
     },
   ];
 
@@ -197,116 +198,128 @@ const QnaPopup = ({ onClose, onSubmit }) => {
   return (
     <div className=" fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
       <div
-        className={`bg-white mx-4 w-full border-[5px] md:border-[10px] lg:border-[20px] border-[#1A3A36] rounded-xl shadow-lg relative   md:w-3/5 md:h-1/2 animate__animated ${animationClass} flex flex-row-reverse `}
+        className={`bg-gradient-to-br from-[#334A78] to-[#68B2DC] p-5 md:w-11/12 lg:w-3/5 w-full md:h-1/2 rounded-3xl animate__animated ${animationClass} mx-2`}
       >
-        {/* Left Side: Image */}
-        <div
-          className="hidden md:block md:w-1/2 bg-contain bg-no-repeat bg-center border-2 border-[#ffd500] border-l-0"
-          style={{
-            backgroundImage: `url(${sideImage})`,
-          }}
-        ></div>
-
-        {/* Right Side: Questions */}
-        <div className="w-full md:w-1/2 p-3 md:p-6 border-2 border-[#ffd500] border-r-0 flex flex-col md:items-center md:justify-center">
-          <button
-            onClick={handleHeightClose}
-            disabled={Object.keys(answers).length === 0} // Disable if no answers
-            className={`absolute top-4 right-4 text-2xl font-bold ${
-              Object.keys(answers).length === 0
-                ? "text-gray-300 cursor-not-allowed"
-                : "text-gray-500 hover:text-gray-800"
-            }`}
+        <div className="bg-[#ffd500] w-full h-full p-0.5 rounded-2xl">
+          <div
+            className={`bg-white rounded-2xl shadow-lg relative flex flex-col md:flex-row h-full`}
           >
-            &times;
-          </button>
+            {/* Left Side: Image */}
+            <div
+              className="w-full md:w-1/2"
+              // style={{
+              //   backgroundImage: `url(${sideImage})`,
+              // }}
+            >
+              <img
+                src={sideImage}
+                alt=""
+                className="h-60 md:h-full w-full object-contain"
+              />
+            </div>
 
-          {!showDisclaimer ? (
-            <div className="flex flex-col gap-5">
-              <h2 className="text-sm lg:text-lg font-bold mb-4 text-center">
-                Answer These Questions
-              </h2>
-              <form onSubmit={handleFormSubmit} className="space-y-4">
-                <div>
-                  <label className="block font-medium text-gray-700 text-sm">
-                    {currentQuestionIndex + 1}. {currentQuestion.label}
-                  </label>
-                  <div className="my-4 flex justify-around gap-3 md:gap-0 items-center">
-                    {currentQuestion.isNumberInput ? (
-                      <input
-                        type="number"
-                        name={currentQuestion.name}
-                        // value={answers[currentQuestion.name] || 10}
-                        // value={answers.roomHeight}
-                        onChange={handleInputChange}
-                        placeholder="Enter height (default is 10)"
-                        min="5"
-                        max="16"
-                        className="w-full border-2 rounded-md p-2 [&::-webkit-inner-spin-button]:appearance-none  focus:outline-none focus:ring-0"
-                      />
-                    ) : (
-                      currentQuestion.options.map((option) => (
-                        <label
-                          key={option.value}
-                          className="flex items-center gap-1 text-xs"
-                        >
+            {/* Right Side: Questions */}
+            <div className="w-full md:w-1/2 p-3 md:p-6 flex flex-col md:items-center md:justify-center">
+              <button
+                onClick={handleHeightClose}
+                disabled={Object.keys(answers).length === 0} // Disable if no answers
+                className={`absolute top-2 right-2 text-2xl font-bold ${
+                  Object.keys(answers).length === 0
+                    ? "text-gray-300 cursor-not-allowed"
+                    : "text-gray-500 hover:text-gray-800"
+                }`}
+              >
+                <IoIosCloseCircle color="#374A75" />
+              </button>
+
+              {!showDisclaimer ? (
+                <div className="flex flex-col gap-5">
+                  <h2 className="text-sm lg:text-lg font-bold mb-4 text-center">
+                    Answer These Questions
+                  </h2>
+                  <form onSubmit={handleFormSubmit} className="space-y-4">
+                    <div>
+                      <label className="block font-medium text-gray-700 text-sm">
+                        {currentQuestionIndex + 1}. {currentQuestion.label}
+                      </label>
+                      <div className="my-4 flex justify-around gap-3 md:gap-0 items-center">
+                        {currentQuestion.isNumberInput ? (
                           <input
-                            type="radio"
+                            type="number"
                             name={currentQuestion.name}
-                            value={option.value}
+                            // value={answers[currentQuestion.name] || 10}
+                            // value={answers.roomHeight}
                             onChange={handleInputChange}
-                            checked={
-                              answers[currentQuestion.name] === option.value
-                            }
+                            placeholder="Enter height (default is 10)"
+                            min="5"
+                            max="16"
+                            className="w-full border-2 rounded-md p-2 [&::-webkit-inner-spin-button]:appearance-none  focus:outline-none focus:ring-0"
                           />
-                          <span>{option.label}</span>
-                        </label>
-                      ))
-                    )}
+                        ) : (
+                          currentQuestion.options.map((option) => (
+                            <label
+                              key={option.value}
+                              className="flex items-center gap-1 text-xs"
+                            >
+                              <input
+                                type="radio"
+                                name={currentQuestion.name}
+                                value={option.value}
+                                onChange={handleInputChange}
+                                checked={
+                                  answers[currentQuestion.name] === option.value
+                                }
+                              />
+                              <span>{option.label}</span>
+                            </label>
+                          ))
+                        )}
+                      </div>
+                    </div>
+                    <div className="flex justify-around ">
+                      {currentQuestionIndex > 0 && (
+                        <button
+                          type="button"
+                          onClick={handlePreviousClick}
+                          className="px-4 py-2 bg-gray-600 text-xs md:text-base text-white rounded hover:bg-gray-700"
+                          disabled={currentQuestionIndex === 0}
+                        >
+                          Previous
+                        </button>
+                      )}
+                      <button
+                        type="submit"
+                        disabled={Object.keys(answers).length === 0} // Disable if no answers
+                        className={`px-4 py-2 rounded text-xs md:text-base ${
+                          Object.keys(answers).length === 0
+                            ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                            : "text-[#000] hover:text-[#fff] border-2 border-[#000] hover:border-[#fff] hover:bg-gradient-to-r from-[#334A78] to-[#68B2DC] transition-all duration-500 ease-in-out"
+                        }`}
+                      >
+                        {currentQuestionIndex < questions.length - 1
+                          ? "Next"
+                          : "Submit"}
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              ) : (
+                <div className="flex flex-col gap-6 md:gap-10">
+                  <p className="text-sm md:text-base text-center">
+                    Demolishment charges might depend upon the location.
+                  </p>
+                  <div className="flex justify-center">
+                    <button
+                      className="text-[#000] hover:text-[#fff] border-2 px-4 py-2 rounded text-xs md:text-base border-[#000] hover:border-[#fff] hover:bg-gradient-to-r from-[#334A78] to-[#68B2DC] transition-all duration-500 ease-in-out"
+                      onClick={handleDisclaimerClose}
+                    >
+                      Okay
+                    </button>
                   </div>
                 </div>
-                <div className="flex justify-around ">
-                  {currentQuestionIndex > 0 && (
-                    <button
-                      type="button"
-                      onClick={handlePreviousClick}
-                      className="px-4 py-2 bg-gray-600 text-xs md:text-base text-white rounded hover:bg-gray-700"
-                      disabled={currentQuestionIndex === 0}
-                    >
-                      Previous
-                    </button>
-                  )}
-                  <button
-                    type="submit"
-                    disabled={Object.keys(answers).length === 0} // Disable if no answers
-                    className={`px-4 py-2 rounded text-xs md:text-base ${
-                      Object.keys(answers).length === 0
-                        ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-                        : "bg-[#1A3A36] text-white hover:bg-[#145A50]"
-                    }`}
-                  >
-                    {currentQuestionIndex < questions.length - 1
-                      ? "Next"
-                      : "Submit"}
-                  </button>
-                </div>
-              </form>
+              )}
             </div>
-          ) : (
-            <div className="flex flex-col gap-6 md:gap-10">
-              <p className="text-sm md:text-base text-center">
-                Demolishment charges might depend upon the location.
-              </p>
-              <div className="flex justify-center">
-                <button
-                  className="bg-[#1A3A36]  text-xs md:text-base  text-white px-4 py-2 rounded hover:bg-[#145A50]"
-                  onClick={handleDisclaimerClose}
-                >
-                  Okay
-                </button>
-              </div>
-            </div>
-          )}
+          </div>
         </div>
       </div>
     </div>

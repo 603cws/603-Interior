@@ -12,19 +12,12 @@ const JobPage = () => {
   const [job, setJob] = useState(null);
 
   useEffect(() => {
-    // Retrieve job from jobData using jobTitle as the key
     const jobDetails = jobData[jobTitle];
 
     if (jobDetails) {
       setJob(jobDetails);
-      localStorage.setItem("selectedJob", JSON.stringify(jobDetails)); // Save job for persistence
     } else {
-      const savedJob = JSON.parse(localStorage.getItem("selectedJob"));
-      if (savedJob) {
-        setJob(savedJob);
-      } else {
-        navigate("/Career"); // Redirect if job not found
-      }
+      navigate("/Career"); // Redirect if job not found
     }
   }, [jobTitle, navigate]);
 

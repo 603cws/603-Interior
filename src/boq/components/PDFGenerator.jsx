@@ -1,389 +1,549 @@
 import { jsPDF } from "jspdf";
 import "jspdf-autotable";
-// import { supabase } from "../../services/supabase";
+
+function normalize(str) {
+  return str.toLowerCase().replace(/[\s-]+/g, "");
+}
+
+function findKeyWithExactAndPartialMatch(subCategory, dataObject) {
+  if (!subCategory || !dataObject) return null;
+  const normalizedSubCat = normalize(subCategory);
+
+  const exactMatch = Object.keys(dataObject).find(
+    (key) => normalizedSubCat === normalize(key)
+  );
+  if (exactMatch) return exactMatch;
+
+  return (
+    Object.keys(dataObject).find((key) => {
+      const normalizedKey = normalize(key);
+      return (
+        normalizedSubCat.includes(normalizedKey) ||
+        normalizedKey.includes(normalizedSubCat)
+      );
+    }) || null
+  );
+}
+
+function getAreaAndQuantity(subCategory, areas, quantities) {
+  if (!subCategory) return { area: "—", qty: "—" };
+  const matchedKey = findKeyWithExactAndPartialMatch(subCategory, areas);
+  if (!matchedKey) return { area: "—", qty: "—" };
+  return {
+    area: areas[matchedKey] ?? "—",
+    qty: quantities[matchedKey] ?? "—",
+  };
+}
 
 const PDFGenerator = {
   generatePDF: async (
     selectedData,
-    calculateGrandTotal,
+    boqTotal,
     companyName,
     location,
+    quantityData,
     areasData,
-    categories
+    categories,
+    BOQTitle,
+    userResponses,
+    productQuantity
   ) => {
     const areas = areasData[0];
-    const doc = new jsPDF();
-    const baseImageUrl =
-      "https://bwxzfwsoxwtzhjbzbdzs.supabase.co/storage/v1/object/public/addon/";
+    const quantities = quantityData[0];
 
-    const logoUrl = "/logo/workved-interior.png";
+    const doc = new jsPDF("p", "pt", "a4");
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const blue = [55, 74, 117];
 
-    // Add the logo to the top-left corner
-    doc.addImage(logoUrl, "PNG", 10, 10, 20, 20); // Slightly larger for better visibility
+    let hasAddons, hideQty;
 
-    // Add company name
-    doc.setFontSize(14);
+    // ================= HEADER =================
+    doc.setFillColor(blue[0], blue[1], blue[2]);
+    doc.rect(0, 0, pageWidth, 125, "F");
+
     doc.setFont("helvetica", "bold");
-    doc.text("Workved Interiors", 40, 18); // Align with the logo
+    doc.setFontSize(14);
+    doc.setTextColor(255, 255, 255);
+    doc.text("Workved Interiors", 20, 72);
 
-    // Add client details neatly aligned
-    doc.setFontSize(10);
     doc.setFont("helvetica", "normal");
+    doc.setFontSize(10);
+    doc.text("Makhija Arcade, 35th Rd, Khar West,", 20, 86);
+    doc.text("Mumbai Maharashtra 400052", 20, 98);
+    doc.text("partners@workved.com", 20, 110);
 
-    // Hardcoded values (replace with props)
-    const projectName = "ABC Corp Office";
-    const date = new Date().toLocaleDateString("en-GB"); // DD/MM/YYYY format
+    const logoUrl = "../logo/workved-logo.png";
+    doc.addImage(logoUrl, "PNG", 250, 25, 100, 50);
 
-    const details = [
-      `Client: ${companyName}`,
-      `Project: ${projectName}`,
-      `Location: ${location}`,
-      `Total Area: ${areas.totalArea} sq.ft`,
-      `Date: ${date}`,
-      `Used Space: ${areas.usedSpace} sq.ft`,
-      ``,
-      `Unused Space: ${areas.totalArea - areas.usedSpace} sq.ft`,
-    ];
-
-    // ✅ Arrange details in two columns
-    let headerYOffset = 25; // Starting Y position
-    let xOffset = 40;
-
-    // ✅ Dynamically render details
-    details.forEach((detail, index) => {
-      doc.text(detail, xOffset, headerYOffset);
-
-      // Shift Y-axis after 2 items
-      if (index % 2 === 1) {
-        headerYOffset += 5;
-        xOffset = 40;
-      } else {
-        xOffset = 130;
-      }
-    });
-
-    // ✅ Draw Line (with clear spacing after it)
-    headerYOffset += 5;
-    doc.setLineWidth(0.5);
-    doc.setDrawColor(0);
-    doc.line(
-      10,
-      headerYOffset,
-      doc.internal.pageSize.width - 10,
-      headerYOffset
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(25);
+    doc.text("BOQ", pageWidth - 73, 95);
+    doc.setFontSize(10);
+    doc.text(
+      `BOQ DATE: ${new Date().toLocaleDateString("en-GB")}`,
+      pageWidth - 128,
+      110
     );
 
-    // ✅ ✅ ✅ Now declare yOffset globally (this was missing earlier)
-    let yOffset = headerYOffset + 10; // ✅ Add clear space after the line
+    // ================= BOQ DETAILS =================
+    let y = 140;
+    doc.setTextColor(0, 0, 0);
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(10);
+    doc.text(`BOQ Name: ${BOQTitle}`, 20, y);
 
-    // ✅ Format numbers with commas
-    const formatNumber = (num) => num.toLocaleString("en-IN");
+    doc.setTextColor(128, 128, 128);
+    doc.setFont("helvetica", "normal");
+    doc.text(`Height: ${userResponses.height} ft`, 20, y + 15);
+    doc.text(
+      `HVAC: ${userResponses.hvacType ? userResponses.hvacType : "N/A"}`,
+      20,
+      y + 30
+    );
+    doc.text(
+      `Flooring: ${userResponses.flooring ? userResponses.flooring : "N/A"}`,
+      20,
+      y + 45
+    );
 
-    // ✅ Calculate Category Totals (Show ₹0 Categories Too)
+    const rightMargin = 20;
+    const layoutX = pageWidth - rightMargin;
+    doc.setTextColor(0, 0, 0);
+    doc.setFont("helvetica", "bold");
+    doc.text("Layout Details", layoutX, y, { align: "right" });
+
+    doc.setTextColor(128, 128, 128);
+    doc.setFont("helvetica", "normal");
+    doc.text(`Total Area: ${areas.totalArea} sq ft.`, layoutX, y + 15, {
+      align: "right",
+    });
+    doc.text(`Used Area: ${areas.usedSpace} sq ft.`, layoutX, y + 30, {
+      align: "right",
+    });
+    doc.text(
+      `Unused Area: ${areas.totalArea - areas.usedSpace} sq ft.`,
+      layoutX,
+      y + 45,
+      { align: "right" }
+    );
+
+    // ================= SUMMARY SECTION =================
     const categoryTotals = {};
     const categorizedProducts = {};
 
-    // ✅ Loop through categoriesData and ensure ALL categories are shown
+    // Calculate totals per category (including addons)
     categories.forEach((cat) => {
       const category = cat.category;
+
       const productsInCategory = selectedData.filter(
         (item) => item.category === category
       );
 
-      // ✅ Calculate the total price of products in this category
-      const totalPrice = productsInCategory.reduce(
-        (acc, item) => acc + (item.finalPrice || 0),
-        0
-      );
+      const totalPrice = productsInCategory.reduce((acc, item) => {
+        // Base price
+        let itemTotal = item.finalPrice || 0;
 
-      // ✅ Always add the category, even if price is ₹0
+        // Add all addon prices if present
+        if (item.addons) {
+          const addonSum = Object.values(item.addons).reduce(
+            (addonAcc, addon) => addonAcc + (addon.finalPrice || 0),
+            0
+          );
+          itemTotal += addonSum;
+        }
+
+        return acc + itemTotal;
+      }, 0);
+
       categoryTotals[category] = totalPrice;
       categorizedProducts[category] = productsInCategory;
     });
 
-    // ✅ Create Summary Section (with box)
-    doc.setFontSize(14);
+    let yOffset = y + 80;
+
+    // Plain Summary Heading (no background)
+    doc.setTextColor(0, 0, 0);
     doc.setFont("helvetica", "bold");
-
-    // ✅ Calculate the full table width
-    const tablePageWidth = doc.internal.pageSize.width - 20;
-    const xOffsetCenter = 10;
-
-    // ✅ Draw Blue Background for "Summary"
-    doc.setFillColor(17, 69, 112);
-    doc.rect(xOffsetCenter, yOffset, tablePageWidth, 10, "F");
-
-    // ✅ Add "Summary" Text Centered
-    doc.setTextColor(255, 255, 255);
-    doc.text("Summary", doc.internal.pageSize.width / 2, yOffset + 7, {
+    doc.setFontSize(14);
+    doc.text("Summary", 290, yOffset, {
       align: "center",
     });
+    yOffset += 20;
 
-    // ✅ Reset Text Color to Black
-    doc.setTextColor(0, 0, 0);
-
-    // ✅ ✅ ✅ Move yOffset further down after the Summary Header
-    yOffset += 18;
-
-    // ✅ Calculate Grand Total
+    // Calculate grand total
     const grandTotalAmount = Object.values(categoryTotals).reduce(
       (acc, val) => acc + val,
       0
     );
 
-    // ✅ Prepare summary table rows
-    const categoryEntries = Object.entries(categoryTotals);
-    const summaryRows = categoryEntries.map(([category, total]) => [
-      { content: category, styles: { halign: "center", fontSize: 10 } },
-      {
-        content: `Rs. ${formatNumber(total)}/-`,
-        styles: { halign: "center", fontSize: 10 },
-      },
-    ]);
+    // Prepare summary rows
+    const summaryRows = Object.entries(categoryTotals).map(
+      ([category, total]) => [
+        { content: category, styles: { halign: "center", fontSize: 10 } },
+        {
+          content: `Rs. ${total.toLocaleString("en-IN")}/-`,
+          styles: { halign: "center", fontSize: 10 },
+        },
+      ]
+    );
 
-    // ✅ Add Grand Total Row (Bold + Center)
+    // Add Grand Total Row
     summaryRows.push([
       {
         content: "Grand Total",
         styles: { halign: "center", fontSize: 12, fontStyle: "bold" },
       },
       {
-        content: `Rs. ${formatNumber(grandTotalAmount)}/-`,
+        content: `Rs. ${grandTotalAmount.toLocaleString("en-IN")}/-`,
         styles: {
           halign: "center",
           fontSize: 12,
           fontStyle: "bold",
-          textColor: [0, 0, 0],
         },
       },
     ]);
 
-    // ✅ Add Summary Table Center-Aligned
+    // Render summary table with black borders everywhere
     doc.autoTable({
-      head: [["Category", "Price"]],
+      head: [["Category", "Total"]],
       body: summaryRows,
-      columnStyles: {
-        0: { cellWidth: tablePageWidth / 2, halign: "center" },
-        1: { cellWidth: tablePageWidth / 2, halign: "center" },
-      },
       startY: yOffset,
+      theme: "grid", // ensures table + borders
       styles: {
-        fontSize: 10,
-        cellPadding: 5,
-        halign: "center",
+        font: "helvetica",
+        fontSize: 9,
+        lineColor: [0, 0, 0], // black border
+        lineWidth: 0.5, // thickness of border
+        valign: "middle",
+        cellPadding: 10,
       },
       headStyles: {
-        fillColor: [22, 160, 133],
-        textColor: [255, 255, 255],
+        fillColor: false, // no background
+        textColor: 0, // black text
         fontStyle: "bold",
         halign: "center",
+        lineColor: [0, 0, 0],
+        lineWidth: 0.5,
+        fontSize: 14,
       },
-      tableWidth: "auto",
-      margin: {
-        left: xOffsetCenter,
-        right: xOffsetCenter,
+      columnStyles: {
+        0: { halign: "center", cellWidth: 275 },
+        1: { halign: "center", cellWidth: 285 },
       },
+      margin: { left: 18, right: 18 }, // 🔥 controls how much space is left at the page sides
     });
 
-    // ✅ ✅ ✅ FINAL SPACE AFTER TABLE
-    yOffset = doc.autoTable.previous.finalY + 15;
+    y = doc.lastAutoTable.finalY + 30; // push Y further down after summary
 
-    // 3. Process images asynchronously before table rendering
-    for (const [category, products] of Object.entries(categorizedProducts)) {
-      if (products.length === 0) continue;
-      doc.setFontSize(12);
+    // ================= GROUP DATA =================
+    const grouped = {};
+    selectedData.forEach((item) => {
+      const cat = item.category || "Uncategorized";
+      if (!grouped[cat]) grouped[cat] = [];
+      grouped[cat].push(item);
+    });
+
+    let currentY = y + 20;
+    let firstCategory = true;
+
+    for (const [categoryName, items] of Object.entries(grouped)) {
+      if (!firstCategory) {
+        doc.addPage();
+        currentY = 50;
+      }
+
+      // Category Heading
+      doc.setTextColor(0, 0, 0);
       doc.setFont("helvetica", "bold");
+      doc.setFontSize(16);
+      doc.text(categoryName, 250, currentY);
+      currentY += 10;
 
-      // Adjusted width for better alignment
-      const pageWidth = doc.internal.pageSize.width - 20;
-      const textHeight = 10; // Define height of the background
-      const textY = yOffset + textHeight / 2; // Center text vertically
-      const bgX = (doc.internal.pageSize.width - pageWidth) / 2; // Center align the background
+      hasAddons = items.some(
+        (item) => item.addons && Object.keys(item.addons).length > 0
+      );
 
-      doc.setFillColor(17, 69, 112); // Set background color
-      doc.rect(bgX, yOffset, pageWidth, textHeight, "F"); // Center-aligned background
+      // Exclude Qty for these categories
+      const excludedQtyCategories = [
+        "Lighting",
+        "HVAC",
+        "Partitions / Ceilings",
+      ];
+      hideQty = excludedQtyCategories.includes(categoryName);
 
-      doc.setTextColor(255, 255, 255); // Set text color to white
-      doc.text(category, doc.internal.pageSize.width / 2, textY, {
-        align: "center",
-        baseline: "middle",
-      }); // Center text
+      // ✅ Define columns (with titles and keys)
+      const columns = [
+        { header: "No.", dataKey: "no" },
+        { header: "Image", dataKey: "image" },
+        { header: "Product", dataKey: "product" },
+        ...(hasAddons ? [{ header: "Add Ons", dataKey: "addons" }] : []),
+        { header: "Specification", dataKey: "spec" },
+        ...(hideQty ? [] : [{ header: "Qty", dataKey: "qty" }]),
+        { header: "Area (sqft)", dataKey: "area" },
+        { header: "Price", dataKey: "price" },
+        { header: "Amount", dataKey: "amount" },
+      ];
 
-      yOffset += textHeight + 5; // Increase offset for next content
-
-      const headers = ["Product Details", "Product Image", "Addons"];
-      const rows = [];
-
-      // Process images before constructing the table
-      const productRows = await Promise.all(
-        products.map(async (item) => {
-          const productDetails = `
-Title: ${item.product_variant.variant_title || "N/A"}
-Subcategory: ${item.subcategory || "N/A"}
-Subcategory1: ${item.subcategory1 || "N/A"}
-Price: Rs. ${formatNumber(item.finalPrice) || "N/A"}/-
-Description: ${item.product_variant.variant_details || "N/A"}
-                `;
-
-          let productImage = "No image available";
-          if (item.product_variant.variant_image) {
+      // ✅ Build rows as plain objects with keys matching dataKey
+      const rows = await Promise.all(
+        items.map(async (item, idx) => {
+          let productImage = null;
+          if (item.product_variant?.variant_image) {
             try {
-              const fileName = new URL(
+              productImage = await loadImage(
                 item.product_variant.variant_image
-              ).pathname
-                .split("/")
-                .pop();
-              const imageUrl = baseImageUrl + fileName;
-              productImage = await loadImage(imageUrl);
-            } catch (err) {
-              console.error("Failed to load product image:", err);
-            }
+              );
+            } catch {}
           }
 
-          const addonDetails = [];
-          if (item.addons) {
-            for (const addon of Object.values(item.addons)) {
-              const addonText = `
-Addon Title: ${addon.addon_title || "N/A"}
-Addon Price: Rs. ${addon.addon_price || "N/A"}/-
-                        `;
-              addonDetails.push(addonText);
-            }
+          let addonCell = [];
+          let addonTotal = 0; // 🔥 track total addon price
+
+          if (hasAddons && item.addons) {
+            addonCell = await Promise.all(
+              Object.values(item.addons).map(async (a) => {
+                let addonImage = null;
+                if (a.image) {
+                  try {
+                    addonImage = await loadImage(a.image);
+                  } catch {}
+                }
+                addonTotal += a.finalPrice || 0; // 🔥 add each addon price
+                return {
+                  title: a.title,
+                  price: a.finalPrice,
+                  _imgData: addonImage,
+                };
+              })
+            );
           }
 
-          const addonTextCombined = addonDetails.join("\n");
+          const { area } = getAreaAndQuantity(
+            item.subcategory,
+            areas,
+            quantities
+          );
+          const qty = item.quantity || "-";
 
-          return [
-            {
-              content: productDetails,
-              styles: { halign: "left", fontSize: 10 },
-            },
-            productImage !== "No image available"
-              ? { content: "", styles: { cellPadding: 5 }, image: productImage }
-              : "No image available",
-            {
-              content: addonTextCombined,
-              styles: { halign: "left", fontSize: 10 },
-            },
-          ];
+          // total amount = base finalPrice + sum of addons
+          const totalAmount = (item.finalPrice || 0) + addonTotal;
+
+          return {
+            no: idx + 1,
+            image: " ", // placeholder cell content
+            _imgData: productImage || null,
+            product: `${item.product_variant?.variant_title || "N/A"}\n${
+              item.product_variant?.variant_details || ""
+            }`,
+            ...(hasAddons
+              ? { addons: "", _addons: addonCell, _hasAddons: true } //, _hasAddons: true
+              : {}),
+            spec: `${item.subcategory}-${item.subcategory1}`,
+            subcategory1: item.subcategory1, // ✅ add this line
+            ...(hideQty ? {} : { qty }),
+            area,
+            price: `Rs. ${
+              item.product_variant?.variant_price.toLocaleString("en-IN") || 0
+            }`,
+            amount: `Rs. ${totalAmount.toLocaleString("en-IN")}`,
+          };
         })
       );
 
-      rows.push(...productRows);
+      // ✅ Sort rows by subcategory1 order defined in categories prop
+      const categoryObj = categories.find((c) => c.category === categoryName);
+      if (categoryObj && categoryObj.subcategory1) {
+        const order = categoryObj.subcategory1;
+        rows.sort((a, b) => {
+          const ia = order.indexOf(a.subcategory1);
+          const ib = order.indexOf(b.subcategory1);
+          return (
+            (ia === -1 ? order.length : ia) - (ib === -1 ? order.length : ib)
+          );
+        });
+      }
 
-      // Render table for each category
+      // ✅ Column styles with keys (not indexes)
+      const columnStyles = {
+        no: { halign: "center", cellWidth: 25 },
+        image: { halign: "center", cellWidth: 50 },
+        ...(hasAddons
+          ? { product: { cellWidth: 100 } }
+          : { product: { cellWidth: 120 } }),
+        // product: { cellWidth: 100 },
+        ...(hasAddons ? { addons: { cellWidth: 100 } } : {}),
+        spec: { cellWidth: 90 },
+        qty: { halign: "center", cellWidth: 25 },
+        area: { halign: "center", cellWidth: 40 },
+        price: { halign: "right", cellWidth: 60 },
+        ...(hasAddons
+          ? { amount: { halign: "right", cellWidth: 70 } }
+          : { amount: { halign: "right", cellWidth: 80 } }),
+
+        // amount: { halign: "right", cellWidth: 70 },
+      };
+
+      // ✅ Render table with columns + rows
       doc.autoTable({
-        head: [headers],
-        body: rows.map((row) =>
-          row.map((cell, colIndex) => {
-            if (cell.image) {
-              return {
-                content: "",
-                styles: { cellPadding: 5, minCellHeight: 40, valign: "middle" }, // Ensure uniform height
-                image: cell.image,
-              };
-            }
-            return {
-              ...cell,
-              styles: { ...cell.styles, minCellHeight: 40, valign: "middle" }, // Align text too
-            };
-          })
-        ),
+        columns,
+        body: rows,
+        startY: currentY,
+        theme: "grid",
+        styles: {
+          font: "helvetica",
+          fontSize: 9,
+          valign: "middle",
+          lineColor: [0, 0, 0],
+          lineWidth: 0.1,
+        },
+        headStyles: {
+          fillColor: "#fff",
+          textColor: 0,
+          halign: "center",
+          lineColor: [0, 0, 0],
+          lineWidth: 0.5,
+        },
+        columnStyles,
+        margin: hasAddons
+          ? { left: 18, right: 15 }
+          : hideQty
+          ? { left: 65, right: 10 }
+          : { left: 52, right: 10 },
         didDrawCell: (data) => {
-          if (data.section === "body" && data.column.index === 1) {
-            // Image column
-            const cellWidth = data.cell.width;
-            const cellHeight = data.cell.height;
-            const imgSize = 30; // Image size
-            const xPos = data.cell.x + (cellWidth - imgSize) / 2; // Center horizontally
-            const yPos = data.cell.y + (cellHeight - imgSize) / 2; // Center vertically
+          if (data.section === "body" && data.column.dataKey === "image") {
+            const rowData = data.row.raw;
 
-            if (data.cell.raw.image && !data.cell.raw.imageAdded) {
-              doc.addImage(
-                data.cell.raw.image,
-                "PNG",
-                xPos,
-                yPos,
-                imgSize,
-                imgSize
-              );
-              data.cell.raw.imageAdded = true;
+            if (rowData._imgData && !data.cell.imageDrawn) {
+              const img = rowData._imgData;
+
+              const padding = 2;
+              const cellW = data.cell.width - padding * 2;
+              const cellH = data.cell.height - padding * 2;
+
+              const size = Math.min(cellW, cellH);
+              const x = data.cell.x + (data.cell.width - size) / 2;
+              const y = data.cell.y + (data.cell.height - size) / 2;
+
+              doc.addImage(img, "PNG", x, y, size, size);
+
+              // ✅ mark as drawn so it won’t draw again on next page
+              data.cell.imageDrawn = true;
+            }
+          }
+
+          // ✅ Addon Images inside Addons column
+          if (data.section === "body" && data.column.dataKey === "addons") {
+            const rowData = data.row.raw;
+            if (Array.isArray(rowData._addons) && rowData._addons.length > 0) {
+              const cellPadding = 4;
+              const imgSize = 20;
+              const vGap = 8;
+
+              const contentX = data.cell.x + cellPadding;
+              const maxWidth = data.cell.width - cellPadding * 2;
+              let yOffset = data.cell.y + 6;
+
+              rowData._addons.forEach((addon) => {
+                // left: image
+                if (addon._imgData) {
+                  doc.addImage(
+                    addon._imgData,
+                    "PNG",
+                    contentX,
+                    yOffset,
+                    imgSize,
+                    imgSize
+                  );
+                }
+
+                // right: title (top) + price (below)
+                const textX = contentX + imgSize + 6;
+                const textWidth = maxWidth - imgSize - 6;
+
+                doc.setFontSize(8);
+                doc.text(addon.title || "", textX, yOffset + 8, {
+                  maxWidth: textWidth,
+                });
+                doc.text(
+                  `Rs. ${Number(addon.price || 0).toLocaleString("en-IN")}`,
+                  textX,
+                  yOffset + 18,
+                  { maxWidth: textWidth }
+                );
+
+                yOffset += imgSize + vGap; // stack vertically
+              });
+
+              // don’t let autotable draw its own text
+              data.cell.text = [];
             }
           }
         },
-        columnStyles: {
-          0: { cellWidth: 70, valign: "middle" },
-          1: { cellWidth: 50, valign: "middle" }, // Image column
-          2: { cellWidth: 70, valign: "middle" },
-        },
-        headStyles: {
-          fillColor: [22, 160, 133],
-          textColor: [255, 255, 255],
-          fontStyle: "bold",
-          halign: "center", // Center align heading
-          valign: "middle", // Vertically center align heading
-        },
-        bodyStyles: {
-          fontSize: 10,
-          cellPadding: 5,
-          valign: "middle",
-        },
-        startY: yOffset,
-        tableWidth: "wrap",
-        margin: {
-          left: (doc.internal.pageSize.width - (70 + 50 + 70)) / 2,
-          right: (doc.internal.pageSize.width - (70 + 50 + 70)) / 2,
+        didParseCell: (data) => {
+          if (data.section === "body" && data.column.dataKey === "addons") {
+            const rowData = data.row.raw;
+            if (Array.isArray(rowData._addons) && rowData._addons.length > 0) {
+              const imgSize = 20;
+              const vGap = 8; // vertical spacing between addons
+              const topPad = 6; // top padding inside the cell
+              const bottomPad = 6;
+
+              // each addon takes roughly img height + spacing
+              const required =
+                rowData._addons.length * (imgSize + vGap) + topPad + bottomPad;
+
+              // 🔥 make the WHOLE ROW at least this tall
+              data.row.height = Math.max(data.row.height || 0, required);
+
+              // prevent default text (avoid "[object Object]")
+              data.cell.text = [];
+              // ensure this cell can grow; helpful on some versions
+              data.cell.styles.minCellHeight = Math.max(
+                data.cell.styles.minCellHeight || 0,
+                required
+              );
+            }
+          }
         },
       });
 
-      yOffset = doc.autoTable.previous.finalY + 10;
+      currentY = doc.lastAutoTable.finalY + 20;
+      firstCategory = false;
     }
 
-    // Calculate available space on the page
-    const pageHeight = doc.internal.pageSize.height;
-    const bottomMargin = 20; // Space from bottom to avoid cutting off
-    const requiredSpace = 10; // Estimated space for text
+    // ================= TOTALS =================
+    const finalY = doc.lastAutoTable.finalY + 30;
+    const rightMargin2 = hasAddons ? 20 : hideQty ? 65 : 50; // leave 40px from right edge (you can adjust)
 
-    if (yOffset + requiredSpace > pageHeight - bottomMargin) {
-      doc.addPage();
-      yOffset = 20; // Reset yOffset for new page
-    }
-
-    // // 4. Add Grand Total at the bottom
-    // const grandTotalText = `Grand Total: Rs. ${calculateGrandTotal()}/-`;
-    // const pageWidth = doc.internal.pageSize.width;
-    // const marginRight = 15;
-    // const textWidth = doc.getTextWidth(grandTotalText);
-    // const xPos = pageWidth - textWidth - marginRight;
-
-    // doc.setFontSize(12);
-    // doc.setFont("helvetica", "bold");
-    // doc.text(grandTotalText, xPos, yOffset);
-
-    doc.setFontSize(12);
-    doc.setTextColor(100);
+    // Sub total row
+    doc.setFontSize(10);
+    doc.setFont("helvetica", "normal");
+    doc.text("Sub total (excl. GST)", pageWidth - 250, finalY);
     doc.text(
-      "Thank you for choosing Workved Interiors.",
-      10,
-      doc.internal.pageSize.height - 10
+      `Rs. ${boqTotal.toLocaleString("en-IN")}`,
+      pageWidth - rightMargin2,
+      finalY,
+      { align: "right" } // 🔥 right align the number
     );
 
-    const pageCount = doc.internal.getNumberOfPages();
-    for (let i = 1; i <= pageCount; i++) {
-      doc.setPage(i);
-      doc.setFontSize(10);
-      doc.setTextColor(100);
+    // Total Amount row
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(12);
+    doc.text("Total Amount", pageWidth - 250, finalY + 25);
+    doc.text(
+      `Rs. ${boqTotal.toLocaleString("en-IN")}`,
+      pageWidth - rightMargin2,
+      finalY + 25,
+      { align: "right" } // 🔥 right align again
+    );
 
-      const pageText = `Page ${i} of ${pageCount}`;
-      doc.text(
-        pageText,
-        doc.internal.pageSize.width - 30,
-        doc.internal.pageSize.height - 10
-      );
-    }
-
-    // Save the PDF
-    doc.save("products_summary.pdf");
+    // import.meta.env.MODE === "development"
+    //   ? doc.output("dataurlnewwindow")
+    const blob = doc.output("blob");
+    const url = URL.createObjectURL(blob);
+    import.meta.env.MODE === "development"
+      ? window.open(url, "_blank")
+      : doc.save("products_summary.pdf");
   },
 };
 
@@ -392,21 +552,34 @@ const loadImage = (url) => {
     const img = new Image();
     img.crossOrigin = "anonymous";
     img.onload = () => {
+      const maxWidth = 150;
+      const maxHeight = 120;
+      let width = img.width;
+      let height = img.height;
+
+      if (width > height) {
+        if (width > maxWidth) {
+          height = (height * maxWidth) / width;
+          width = maxWidth;
+        }
+      } else {
+        if (height > maxHeight) {
+          width = (width * maxHeight) / height;
+          height = maxHeight;
+        }
+      }
+
+      const scale = 2;
       const canvas = document.createElement("canvas");
-      const maxWidth = 100; // Increase width for better resolution
-      const scale = maxWidth / img.width;
-      canvas.width = maxWidth;
-      canvas.height = img.height * scale;
+      canvas.width = width * scale;
+      canvas.height = height * scale;
       const ctx = canvas.getContext("2d");
+      ctx.scale(scale, scale);
+      ctx.drawImage(img, 0, 0, width, height);
 
-      // Use high-quality rendering
-      ctx.imageSmoothingEnabled = true;
-      ctx.imageSmoothingQuality = "high";
-
-      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-      resolve(canvas.toDataURL("image/png")); // Use PNG for better quality
+      resolve(canvas.toDataURL("image/png", 1.0));
     };
-    img.onerror = (err) => reject(err);
+    img.onerror = reject;
     img.src = url;
   });
 };

@@ -46,3 +46,26 @@
 .custom-pagination .swiper-pagination-bullet-active {
   background-color: #333;
 }
+
+@keyframes arrive {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(0);
+    opacity: 0;
+  }
+}
+
+/* helper classes */
+.arrive-mid {
+  animation: arrive 3s ease-in-out infinite 0s;
+}
+.arrive-out {
+  animation: arrive 3s ease-in-out infinite 3s;
+}

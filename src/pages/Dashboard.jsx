@@ -1,107 +1,93 @@
-import { RiDashboardFill } from "react-icons/ri";
-import { MdDeleteOutline } from "react-icons/md";
+import { RiSettingsLine } from "react-icons/ri";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useApp } from "../Context/Context";
 import { supabase } from "../services/supabase";
 import toast from "react-hot-toast";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useReducer } from "react";
 import { VscEye } from "react-icons/vsc";
 import { CiMenuKebab } from "react-icons/ci";
-import UserProfile from "./user/UserProfile";
-import UserSetting from "./user/UserSetting";
-import { FaArrowLeft } from "react-icons/fa6";
 import { VscSignOut } from "react-icons/vsc";
 import { IoSettingsSharp } from "react-icons/io5";
-import { LuBlend } from "react-icons/lu";
-import { BsQuestionCircle } from "react-icons/bs";
+import { LuBlend, LuCalendarPlus2 } from "react-icons/lu";
+import { BsBoxSeam, BsQuestionCircle } from "react-icons/bs";
 import Spinner from "../common-components/Spinner";
-import DashboardProductCard from "./vendor/DashboardProductCard";
-import SidebarItem from "../common-components/SidebarItem";
 import Help from "./user/Help";
-import ReactApexChart from "react-apexcharts";
 import { TbFileInvoice } from "react-icons/tb";
-// const percentage = 66;
+import { category } from "../utils/AllCatArray";
+import { baseImageUrl } from "../utils/HelperConstant";
+import DashboardView from "./user/DashboardView";
+import { useLogout } from "../utils/HelperFunction";
+import ProductView from "./user/ProductView";
+import { FaThLarge } from "react-icons/fa";
+import UserCard from "./user/UserCard";
+import UserProfileEdit from "./user/UserProfileEdit";
+import MobileTabProductCard from "./user/MobileTabProductCard";
+import BookAppointment from "../boq/components/BookAppointment";
+import { CiCalendarDate } from "react-icons/ci";
+import { IoIosSearch } from "react-icons/io";
+import { IoCloseCircle, IoCloudDownloadOutline } from "react-icons/io5";
+import { MdOutlineSpaceDashboard } from "react-icons/md";
+import { GrCircleQuestion } from "react-icons/gr";
+import { FiLogOut } from "react-icons/fi";
 
-const fullNames = {
-  linear: "Linear Workspace",
-  lType: "L-Type Workspace",
-  md: "MD Cabin",
-  manager: "Manager Cabin",
-  small: "Small Cabin",
-  ups: "UPS Room",
-  bms: "BMS Room",
-  server: "Server Room",
-  reception: "Reception",
-  lounge: "Lounge/Pantry",
-  fitness: "Fitness Zone",
-  sales: "Sales Team",
-  phoneBooth: "Phone Booth",
-  discussionRoom: "Discussion Room",
-  interviewRoom: "Interview Room",
-  conferenceRoom: "Conference Room",
-  boardRoom: "Board Room",
-  meetingRoom: "Meeting Room",
-  meetingRoomLarge: "Meeting Room (Large)",
-  hrRoom: "HR Room",
-  financeRoom: "Finance Room",
-  executiveWashroom: "Executive Washroom",
-  breakoutRoom: "Breakout Room",
-  videoRecordingRoom: "Video Recording Room",
-  other: "Other", // Add new category here
-  // maleWashroom: "Male Washroom",
-  // femaleWashroom: "Female Washroom",
-  washrooms: "Washrooms",
-};
+function handlesidebarState(state, action) {
+  switch (action.type) {
+    case "TOGGLE_SECTION":
+      return {
+        isSettingOpen: action.payload === "Setting",
+        isProductOpen: action.payload === "Product",
+        iseditopen: action.payload === "Edit",
+        dashboard: action.payload === "Dashboard",
+        help: action.payload === "Help",
+        isBookAppointmentOpen: action.payload === "Book Appointment",
+        currentSection: action.payload,
+      };
+    default:
+      return state;
+  }
+}
 
-const colors = {
-  "Linear Workspace": "#62897E",
-  "L-Type Workspace": "#3F5855",
-  "MD Cabin": "#1D3130",
-  "Manager Cabin": "#293C3E",
-  "Small Cabin": "#4A5E65",
-  "UPS Room": "#737F85",
-  "BMS Room": "#8CDDCE",
-  "Server Room": "#54A08C",
-  Reception: "#368772",
-  "Lounge/Pantry": "#2A3338",
-  "Video Recording Room": "#354044",
-  "Sales Team": "#3C464F",
-  "Phone Booth": "#515554",
-  "Discussion Room": "#868A8E",
-  "Interview Room": "#A4ACAF",
-  "Conference Room": "#488677",
-  "Board Room": "#3A4B45",
-  "Meeting Room": "#1E8D78",
-  "Meeting Room (Large)": "#07281D",
-  "HR Room": "#233736",
-  "Finance Room": "#081011",
-  "Executive Washroom": "#567F7D",
-  "Breakout Room": "#74D0C1",
-  "Available Space": "#1F5C54",
-  Other: "#5E9B96", // Color for the "Other" category
-  // "Male Washroom": "#95D5B2",
-  // "Female Washroom": "#85CEA8",
-  Washrooms: "#85CEA8",
+const SECTIONS = {
+  DASHBOARD: "Dashboard",
+  PRODUCT: "Product",
+  SETTING: "Setting",
+  HELP: "Help",
+  EDIT: "Edit",
+  BOOkAPPOINTMENT: "Book Appointment",
 };
 
 function Dashboard() {
+  const logout = useLogout();
   const navigate = useNavigate();
   const location = useLocation();
   // const [productlist, setProductlist] = useState(true);
-  const [isSettingOpen, setIsSettingOpen] = useState(false);
-  const [isProductOpen, setIsProductOpen] = useState(false);
+  // const [isSettingOpen, setIsSettingOpen] = useState(false);
+  // const [isProductOpen, setIsProductOpen] = useState(false);
   const [iseditopen, setIsEditopen] = useState(true);
-  const [dashboard, setDashboard] = useState(true);
-  const [currentSection, setCurrentSection] = useState("Dashboard");
-  const [help, setHelp] = useState(false);
+  // const [dashboard, setDashboard] = useState(true);
+  // const [currentSection, setCurrentSection] = useState("Dashboard");
+  // const [help, setHelp] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
+  const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
+  const [mobileFilterOpen, setMobileFilterOPen] = useState(false);
+
+  const sidebarInitialState = {
+    isSettingOpen: false,
+    isProductOpen: false,
+    iseditopen: false,
+    dashboard: true,
+    help: false,
+    isBookAppointmentOpen: false,
+    currentSection: "Dashboard",
+  };
+
+  const [sidebarstate, sidebarDispatch] = useReducer(
+    handlesidebarState,
+    sidebarInitialState
+  );
   const [boqdata, setboqdata] = useState();
   const {
     accountHolder,
-    setAccountHolder,
-    setIsAuthLoading,
-    setIsAuthenticated,
-    setTotalArea,
     // layoutImage,
     currentLayoutData,
     totalArea,
@@ -112,7 +98,11 @@ function Dashboard() {
   const [selectedBoq, setSelectedBoq] = useState();
 
   const [products, setProducts] = useState([]);
+  const [filteredProducts, setFilteredProducts] = useState([]);
   const [addons, setAddons] = useState([]);
+  const [filteredAddons, setFilteredAddons] = useState([]);
+
+  const [selectedCategory, setSelectedCategory] = useState("");
 
   const menuRef = useRef({});
   const buttonRef = useRef({});
@@ -123,6 +113,7 @@ function Dashboard() {
   // const [imageIsLoaded, setImageIsLoaded] = useState(false);
 
   const [openMenuId, setOpenMenuId] = useState(null); // Store the ID of the row with an open menu
+  const [searchQuery, setSearchQuery] = useState(""); // to store the latest search input
   // const [isExpanded, setIsExpanded] = useState(false);
   const [selectedProductview, setSelectedProductview] = useState({
     product_name: "",
@@ -142,18 +133,36 @@ function Dashboard() {
 
   const [itemsPerPage, setItemsPerPage] = useState(10); // Default (gets updated dynamically)
   const [currentPage, setCurrentPage] = useState(1);
-  const items = toggle ? products : addons;
+  const items = toggle ? filteredProducts : filteredAddons;
+  // const items = toggle ? products : addons;
   const totalPages = Math.ceil(items.length / itemsPerPage);
   const tableRef = useRef(null);
+  const scrollContainerRef = useRef(null);
+  const [lastPageBeforeSearch, setLastPageBeforeSearch] = useState(1);
+  const [isSearching, setIsSearching] = useState(false);
   //boqdata available or not
   const [isboqavailable, setIsboqavailable] = useState(false);
   const [isfetchBoqDataRefresh, setisfetchBoqDataRefresh] = useState(false);
-  const [currentAreaValues, setCurrentAreaValues] = useState({});
-  const [currentAreaQuantities, setCurrentAreaQuantities] = useState({});
 
-  //baseurlforimg
-  const baseImageUrl =
-    "https://bwxzfwsoxwtzhjbzbdzs.supabase.co/storage/v1/object/public/addon/";
+  // mobile navigation
+  const [isOpen, setIsOpen] = useState(false);
+  const mobileMenuRef = useRef(null);
+
+  // Close when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        mobileMenuRef.current &&
+        !mobileMenuRef.current.contains(event.target)
+      ) {
+        setIsOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   // Slice the items for pagination
   const paginatedItems = items.slice(
@@ -165,6 +174,9 @@ function Dashboard() {
     if (page > 0 && page <= totalPages) {
       setCurrentPage(page);
     }
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollTo({ top: 0, behavior: "smooth" });
+    }
   };
 
   const fetchAddonsByIds = async () => {
@@ -174,10 +186,13 @@ function Dashboard() {
         return;
       }
 
-      if (selectedBoq && selectedBoq.addon_varaint_id) {
-        const productIdsArray = selectedBoq.addon_varaint_id
-          .split(",")
-          .map((id) => id.trim());
+      if (selectedBoq && selectedBoq.addons) {
+        // const productIdsArray = selectedBoq.addon_varaint_id
+        //   .split(",")
+        //   .map((id) => id.trim());
+        const productIdsArray = selectedBoq.addons.map(
+          (addon) => addon.variantId
+        );
 
         const { data } = await supabase
           .from("addon_variants")
@@ -187,6 +202,7 @@ function Dashboard() {
         console.log(data);
 
         setAddons(data);
+        setFilteredAddons(data);
       }
     } catch (error) {
       console.log(error);
@@ -203,11 +219,14 @@ function Dashboard() {
       if (selectedBoq) {
         setIsloading(true);
 
-        console.log(selectedBoq);
+        console.log("selectedboq", selectedBoq);
 
-        const productIdsArray = selectedBoq.product_variant_id
-          .split(",")
-          .map((id) => id.trim()); // Convert to array of numbers
+        // const productIdsArray = selectedBoq.product_variant_id
+        //   .split(",")
+        //   .map((id) => id.trim()); // Convert to array of ids
+        const productIdsArray = selectedBoq.products.map(
+          (product) => product.id
+        );
 
         const { data, error } = await supabase
           .from("product_variants")
@@ -216,6 +235,7 @@ function Dashboard() {
 
         if (data) {
           setProducts(data);
+          setFilteredProducts(data);
         }
 
         if (error) {
@@ -225,6 +245,7 @@ function Dashboard() {
         console.log(data);
       } else {
         setProducts([]);
+        setFilteredProducts([]);
       }
     } catch (error) {
       console.log(error);
@@ -232,58 +253,56 @@ function Dashboard() {
       setIsloading(false);
     }
   };
-  // const fetchProductsByIds = async () => {
-  //   console.log("hello from the product ");
 
-  //   try {
-  //     setIsloading(true);
-  //     if (!selectedBoq) {
-  //       return;
-  //     }
+  const normalize = (str) => str.replace(/\s+/g, " ").trim().toLowerCase();
 
-  //     console.log(selectedBoq);
+  const applyFilters = ({ query = "", category = "", status = "" }) => {
+    const source = toggle ? products : addons;
 
-  //     const productIdsArray = selectedBoq.product_variant_id
-  //       .split(",")
-  //       .map((id) => id.trim()); // Convert to array of numbers
+    // Store last page before searching if this is a new search
+    if ((query || category || status) && !isSearching) {
+      setLastPageBeforeSearch(currentPage);
+      setIsSearching(true);
+    }
 
-  //     const { data } = await supabase
-  //       .from("product_variants")
-  //       .select("*,products(*)")
-  //       .in("id", productIdsArray); // Use Supabase `in()` filter
-
-  //     console.log(data);
-
-  //     setProducts(data);
-  //   } catch (error) {
-  //     console.log(error);
-  //   } finally {
-  //     setIsloading(false);
-  //   }
-  // };
-  useEffect(() => {
-    if (!currentLayoutData) return;
-
-    const areas = {};
-    const quantities = {};
-
-    Object.entries(currentLayoutData).forEach(([key, value]) => {
-      if (key.includes("Area")) {
-        const name = key.replace("Area", "");
-        areas[name] = value;
-      } else if (key.includes("Qty")) {
-        const name = key.replace("Qty", "");
-        quantities[name] = value;
+    // Reset case: No query, category, or status
+    if (!query && !category && !status) {
+      toggle ? setFilteredProducts(products) : setFilteredAddons(addons);
+      if (isSearching) {
+        setCurrentPage(lastPageBeforeSearch);
+        setIsSearching(false);
       }
+      return;
+    }
+
+    // Apply filters
+    const filtered = source.filter((item) => {
+      const titleMatch = query
+        ? normalize(item.title).includes(normalize(query))
+        : true;
+
+      const categoryMatch = category
+        ? toggle
+          ? item.products?.category?.toLowerCase() === category.toLowerCase()
+          : item.title?.toLowerCase().includes(category.toLowerCase())
+        : true;
+
+      const statusMatch = status
+        ? item.status?.toLowerCase() === status.toLowerCase()
+        : true;
+
+      return titleMatch && categoryMatch && statusMatch;
     });
 
-    console.log("Extracted Areas and Quantities:", areas, quantities);
+    // Apply filtered result
+    if (toggle) {
+      setFilteredProducts(filtered);
+    } else {
+      setFilteredAddons(filtered);
+    }
 
-    setCurrentAreaValues(areas);
-    setCurrentAreaQuantities(quantities);
-    console.log("current areas", currentAreaValues);
-    console.log("current quantities", currentAreaQuantities);
-  }, [currentLayoutData, totalArea, currentLayoutID]);
+    setCurrentPage(1); // Always reset to first page on filter
+  };
 
   const handleMenuToggle = (id) => {
     setOpenMenuId((prev) => (prev === id ? null : id));
@@ -297,23 +316,25 @@ function Dashboard() {
   };
 
   const handleDelete = async (product) => {
-    if (!product.id) return;
+    // if (!product.id) return;
 
-    try {
-      const { error } = await supabase
-        .from("product_variants") // Ensure this matches your table name
-        .delete()
-        .eq("id", product.id);
+    // try {
+    //   const { error } = await supabase
+    //     .from("product_variants") // Ensure this matches your table name
+    //     .delete()
+    //     .eq("id", product.id);
 
-      if (error) throw error; // Throw error to be caught in catch block
+    //   if (error) throw error; // Throw error to be caught in catch block
 
-      toast.success("Product deleted successfully!");
-      setProductPreview(false); // Close the modal after deletion
-    } catch (error) {
-      toast.error("Failed to delete product.");
-      console.error("Delete error:", error);
-    }
+    //   toast.success("Product deleted successfully!");
+    //   setProductPreview(false); // Close the modal after deletion
+    // } catch (error) {
+    //   toast.error("Failed to delete product.");
+    //   console.error("Delete error:", error);
+    // }
     // fetchProducts(1); // Fetch products after deletion
+
+    toast.error("feature is pending");
   };
 
   const handleTabClick = (event) => {
@@ -322,79 +343,61 @@ function Dashboard() {
     const tab = event.target.value; // Get value from button
     setSelectedTab(tab);
     setToggle(tab === "products"); // Set toggle dynamically
+    setSearchQuery("");
+    setSelectedCategory("");
   };
 
   const handlesetting = () => {
-    setIsProductOpen(false);
-    setDashboard(false);
-    setIsSettingOpen(true);
-    setHelp(false);
-    setCurrentSection("Setting");
+    // setIsProductOpen(false);
+    // setDashboard(false);
+    // setIsSettingOpen(true);
+    // setHelp(false);
+    // setCurrentSection("Setting");
+
+    sidebarDispatch({ type: "TOGGLE_SECTION", payload: SECTIONS.SETTING });
   };
   const handleproduct = () => {
-    setIsSettingOpen(false);
-    setDashboard(false);
-    setIsProductOpen(true);
-    setHelp(false);
-    setCurrentSection("Product");
+    // setIsSettingOpen(false);
+    // setDashboard(false);
+    // setIsProductOpen(true);
+    // setHelp(false);
+    // setCurrentSection("Product");
+    sidebarDispatch({ type: "TOGGLE_SECTION", payload: SECTIONS.PRODUCT });
   };
 
   const handlecheckboqdetails = (boq) => {
-    setIsSettingOpen(false);
-    setDashboard(false);
-    setIsProductOpen(true);
-    setHelp(false);
-    setSelectedBoq(boq);
-    setCurrentSection("Product");
+    // setIsSettingOpen(false);
+    // setDashboard(false);
+    // setIsProductOpen(true);
+    // setHelp(false);
+    // setSelectedBoq(boq);
+    // setCurrentSection("Product");
+    sidebarDispatch({ type: "TOGGLE_SECTION", payload: SECTIONS.PRODUCT });
   };
 
   const handledashboard = () => {
-    setIsSettingOpen(false);
-    setIsProductOpen(false);
-    setDashboard(true);
-    setHelp(false);
-    setCurrentSection("Dashboard");
+    // setIsSettingOpen(false);
+    // setIsProductOpen(false);
+    // setDashboard(true);
+    // setHelp(false);
+    // setCurrentSection("Dashboard");
+    sidebarDispatch({ type: "TOGGLE_SECTION", payload: SECTIONS.DASHBOARD });
   };
 
   const handlehelp = () => {
-    setIsSettingOpen(false);
-    setIsProductOpen(false);
-    setDashboard(false);
-    setHelp(true);
-    setCurrentSection("Help");
-  };
-
-  const handleLogout = async () => {
-    try {
-      setIsAuthLoading(true);
-      const { error } = await supabase.auth.signOut();
-      if (error) {
-        console.log("Error signing out:", error.message);
-      } else {
-        toast.success("User signed out successfully");
-        setAccountHolder({
-          companyName: "",
-          email: "",
-          phone: "",
-          role: "",
-          userId: "",
-        });
-        console.log("hello");
-        setTotalArea("");
-        localStorage.removeItem("currentLayoutID");
-        navigate("/");
-        setIsAuthenticated(false);
-      }
-    } finally {
-      setIsAuthLoading(false);
-    }
+    // setIsSettingOpen(false);
+    // setIsProductOpen(false);
+    // setDashboard(false);
+    // setHelp(true);
+    // setCurrentSection("Help");
+    sidebarDispatch({ type: "TOGGLE_SECTION", payload: SECTIONS.HELP });
   };
 
   const fetchboq = async () => {
     try {
       const { data } = await supabase
-        .from("boqdata")
-        .select("*")
+        .from("boq_data_new")
+        .select(`*,layout:layoutId (*)`)
         .eq("userId", accountHolder.userId);
 
       console.log("fetch boq data", data);
@@ -414,7 +417,7 @@ function Dashboard() {
     setisfetchBoqDataRefresh(true);
     try {
       const { error } = await supabase
-        .from("boqdata") // Replace with your table name
+        .from("boq_data_new") // Replace with your table name
         .delete()
         .eq("id", boq.id); // Filtering by id
 
@@ -478,18 +481,20 @@ function Dashboard() {
 
   useEffect(() => {
     if (location.state?.openSettings) {
-      setIsProductOpen(false);
-      setDashboard(false);
-      setIsSettingOpen(true);
-      setHelp(false);
-      setCurrentSection("Setting");
+      // setIsProductOpen(false);
+      // setDashboard(false);
+      // // setIsSettingOpen(true);
+      // setHelp(false);
+      // setCurrentSection("Setting");
+      sidebarDispatch({ type: "TOGGLE_SECTION", payload: SECTIONS.SETTING });
     }
     if (location.state?.openHelp) {
-      setIsSettingOpen(false);
-      setIsProductOpen(false);
-      setDashboard(false);
-      setHelp(true);
-      setCurrentSection("Help");
+      // setIsSettingOpen(false);
+      // setIsProductOpen(false);
+      // setDashboard(false);
+      // setHelp(true);
+      // setCurrentSection("Help");
+      sidebarDispatch({ type: "TOGGLE_SECTION", payload: SECTIONS.HELP });
     }
   }, [location.state]);
 
@@ -499,405 +504,583 @@ function Dashboard() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isfetchBoqDataRefresh]);
 
-  // useEffect(() => {
-  //   if (layoutImage && !imageIsLoaded) {
-  //     setImageIsLoaded(true);
-  //   }
-  // }, [layoutImage, imageIsLoaded]);
-
-  // console.log("selectedboq", selectedBoq);
-
-  const validTotalArea = currentAreaValues.total;
-  const builtArea = Object.keys(currentAreaQuantities).reduce(
-    (acc, key) => acc + currentAreaQuantities[key] * currentAreaValues[key],
-    0
-  );
-  const availableArea = validTotalArea - builtArea;
-
-  const series = [
-    ...Object.keys(currentAreaQuantities).map((key) => {
-      const areaOccupied = currentAreaQuantities[key] * currentAreaValues[key];
-      const percentage = ((areaOccupied / validTotalArea) * 100).toFixed(2);
-      return {
-        x: `${fullNames[key] || key}: ${percentage}%`,
-        y: `${areaOccupied} sq ft`,
-        fillColor: colors[fullNames[key]] || "#000000",
-      };
-    }),
-    {
-      x: `Available Space: ${((availableArea / validTotalArea) * 100).toFixed(
-        2
-      )}%`,
-      y: availableArea,
-      fillColor: colors["Available Space"],
-    },
-  ];
-
-  const options = {
-    chart: {
-      type: "treemap",
-      height: 250,
-      toolbar: {
-        show: true,
-      },
-    },
-    title: {
-      text: "Area Distribution of Workspaces",
-      align: "center",
-      style: {
-        fontSize: "15px",
-        fontWeight: "bold",
-        color: "#263238",
-      },
-    },
-    plotOptions: {
-      treemap: {
-        distributed: true,
-        enableShades: false,
-      },
-    },
-    dataLabels: {
-      enabled: true,
-      style: {
-        fontSize: "14rem",
-        fontWeight: "bold",
-        colors: ["#FFFFFF"],
-      },
-      formatter: (val, opts) => {
-        if (typeof val === "number") {
-          const percentage = ((val / validTotalArea) * 100).toFixed(2);
-          return `${
-            opts.w.globals.labels[opts.dataPointIndex]
-          } (${percentage}%)`;
-        }
-        return `${opts.w.globals.labels[opts.dataPointIndex]}: ${val}`;
-      },
-    },
-    states: {
-      hover: {
-        filter: {
-          type: "darken",
-          value: 0.1,
-        },
-      },
-    },
-  };
+  // console.log("boq data", boqdata);
+  //   {
+  //     "id": "77346d31-c81b-4006-b381-0722407ec162",
+  //     "created_at": "2025-08-14T06:18:57.224154+00:00",
+  //     "userId": "21e0b7e5-6276-4608-9f0f-0d0b0f802f46",
+  //     "products": null,
+  //     "addons": null,
+  //     "boqTitle": "Draft BOQ",
+  //     "layoutId": "5e0fd671-5b01-4118-9c76-53074fc5ed93",
+  //     "answers": [
+  //         {
+  //             "height": 10,
+  //             "flooring": "basicTiling",
+  //             "hvacType": "Centralized",
+  //             "demolishTile": "no"
+  //         }
+  //     ],
+  //     "planType": null,
+  //     "boqTotalPrice": 0,
+  //     "isDraft": true,
+  //     "layout": {
+  //         "id": "5e0fd671-5b01-4118-9c76-53074fc5ed93",
+  //         "mdQty": 1,
+  //         "bmsQty": 0,
+  //         "mdArea": 120,
+  //         "upsQty": 0,
+  //         "userId": "21e0b7e5-6276-4608-9f0f-0d0b0f802f46",
+  //         "bmsArea": 90,
+  //         "upsArea": 90,
+  //         "lTypeQty": 0,
+  //         "otherQty": 0,
+  //         "salesQty": 0,
+  //         "smallQty": 0,
+  //         "hrRoomQty": 0,
+  //         "lTypeArea": 34,
+  //         "linearQty": 19,
+  //         "loungeQty": 1,
+  //         "otherArea": 1,
+  //         "salesArea": 80,
+  //         "serverQty": 0,
+  //         "smallArea": 80,
+  //         "totalArea": 1500,
+  //         "usedSpace": 1104,
+  //         "created_at": "2025-05-27T07:10:00.737473+00:00",
+  //         "hrRoomArea": 80,
+  //         "linearArea": 24,
+  //         "loungeArea": 165,
+  //         "managerQty": 0,
+  //         "serverArea": 40,
+  //         "managerArea": 80,
+  //         "boardRoomQty": 0,
+  //         "receptionQty": 1,
+  //         "washroomsQty": 1,
+  //         "boardRoomArea": 325,
+  //         "phoneBoothQty": 0,
+  //         "receptionArea": 83,
+  //         "washroomsArea": 180,
+  //         "financeRoomQty": 0,
+  //         "meetingRoomQty": 1,
+  //         "phoneBoothArea": 25,
+  //         "breakoutRoomQty": 0,
+  //         "financeRoomArea": 100,
+  //         "meetingRoomArea": 100,
+  //         "breakoutRoomArea": 80,
+  //         "interviewRoomQty": 0,
+  //         "conferenceRoomQty": 0,
+  //         "discussionRoomQty": 0,
+  //         "interviewRoomArea": 100,
+  //         "conferenceRoomArea": 250,
+  //         "discussionRoomArea": 380,
+  //         "meetingRoomLargeQty": 0,
+  //         "executiveWashroomQty": 0,
+  //         "meetingRoomLargeArea": 120,
+  //         "executiveWashroomArea": 60,
+  //         "videoRecordingRoomQty": 0,
+  //         "videoRecordingRoomArea": 80
+  //     }
+  // }
 
   return (
-    <div className="bg-[url('images/bg/vendor.png')] bg-cover bg-center bg-no-repeat p-3 xl:p-5">
-      <div className="flex gap-3 max-h-fit overflow-hidden bg-white rounded-3xl">
-        {/* sidebar */}
-        <div
-          className={`max-h-screen sticky left-0 top-0 bottom-0 bg-white shadow-lg transition-all duration-300 ${
-            isExpanded ? "max-w-sm w-60 absolute" : "w-16"
-          }`}
-          onMouseEnter={() => setIsExpanded(true)}
-          onMouseLeave={() => setIsExpanded(false)}
-        >
-          {/* Logo */}
-          <div className="cursor-pointer flex justify-center items-center py-4">
+    <div className="grid lg:grid-cols-[auto_1fr] lg:bg-gradient-to-r from-[#CFDCE7] to-[#E8EEF3] md:p-4 h-dvh md:h-screen font-Poppins lg:overflow-hidden">
+      {/* sidebar */}
+      <div
+        className={`hidden lg:block sticky top-0 bottom-0 left-0 bg-white border-2 border-[#334A78] rounded-lg shadow-lg transition-all duration-300 ${
+          isExpanded ? "max-w-sm w-60 absolute" : "w-16"
+        }`}
+        // className={`border-2 border-[#334A78] rounded-lg max-h-screen sticky left-0 top-0 bottom-0 bg-white  shadow-lg transition-all duration-300 ${
+        //   isExpanded ? "max-w-sm w-60 absolute" : "w-16"
+        // }`}
+        onMouseEnter={() => setIsExpanded(true)}
+        onMouseLeave={() => setIsExpanded(false)}
+      >
+        {/* Logo */}
+        <div className="cursor-pointer flex justify-center items-center py-4">
+          <img
+            src={`${
+              isExpanded
+                ? "/logo/workved-interior.png"
+                : "/images/bi_layout-sidebar.png"
+            }`}
+            alt="Logo"
+            className={`${isExpanded ? "h-[70px] w-36" : "h-8 w-8"}`}
+            onClick={() => navigate("/")}
+          />
+        </div>
+
+        {/* Menu Items */}
+        <div className="font-semibold text-lg capitalize leading-normal tracking-wide py-4 text-[#262626] flex flex-col gap-4 px-3">
+          {/* <h3
+            className={`capitalize text-[#A1A1A1] ${
+              isExpanded ? "mx-4" : "hidden"
+            }`}
+          >
+            main
+          </h3> */}
+
+          <SidebarItem
+            icon={<MdOutlineSpaceDashboard />}
+            text="Dashboard"
+            onClick={handledashboard}
+            isExpanded={isExpanded}
+            currentSection={sidebarstate?.currentSection}
+          />
+          <SidebarItem
+            icon={<BsBoxSeam />}
+            text="Product"
+            onClick={handleproduct}
+            isExpanded={isExpanded}
+            currentSection={sidebarstate?.currentSection}
+          />
+          <SidebarItem
+            icon={<TbFileInvoice />}
+            text="Go to BOQ"
+            onClick={() => navigate("/boq")}
+            isExpanded={isExpanded}
+            currentSection={sidebarstate?.currentSection}
+          />
+          <SidebarItem
+            icon={<LuCalendarPlus2 />}
+            text="Book Appointment"
+            onClick={() =>
+              sidebarDispatch({
+                type: "TOGGLE_SECTION",
+                payload: SECTIONS.BOOkAPPOINTMENT,
+              })
+            }
+            isExpanded={isExpanded}
+            currentSection={sidebarstate?.currentSection}
+          />
+        </div>
+
+        {/* Other Items */}
+        <div className="font-semibold text-lg capitalize leading-normal tracking-wide py-4 text-[#262626] flex flex-col gap-4 px-3">
+          {/* <h3
+            className={`capitalize text-[#A1A1A1] ${
+              isExpanded ? "mx-4" : "hidden"
+            }`}
+          >
+            other
+          </h3> */}
+          <SidebarItem
+            icon={<GrCircleQuestion />}
+            text="Help"
+            onClick={handlehelp}
+            isExpanded={isExpanded}
+            currentSection={sidebarstate?.currentSection}
+          />
+          <SidebarItem
+            icon={<RiSettingsLine />}
+            text="Setting"
+            onClick={handlesetting}
+            isExpanded={isExpanded}
+            currentSection={sidebarstate?.currentSection}
+          />
+          <SidebarItem
+            icon={<FiLogOut />}
+            text="Logout"
+            onClick={logout}
+            isExpanded={isExpanded}
+            currentSection={sidebarstate?.currentSection}
+          />
+        </div>
+      </div>
+      {/* main content */}
+      <div className="flex flex-col h-full min-h-0 lg:gap-2 lg:px-2">
+        {/* header for mobile view  */}
+        <div className="lg:hidden flex justify-between items-center border-b-2 border-[#334A78]  bg-white h-[50px] shrink-0">
+          <div className="mx-3">
             <img
               src="/logo/workved-interior.png"
               alt="Logo"
-              className={`${isExpanded ? "h-20 w-32" : "size-12"}`}
+              className={`${isExpanded ? "h-20 w-32" : "h-9 w-16"}`}
               onClick={() => navigate("/")}
             />
           </div>
-
-          {/* Menu Items */}
-          <div className="font-semibold text-lg capitalize leading-normal tracking-wide py-4 text-[#262626] flex flex-col gap-4 px-3">
-            <h3
-              className={`capitalize text-[#A1A1A1] ${
-                isExpanded ? "mx-4" : "hidden"
-              }`}
-            >
-              main
-            </h3>
-            <SidebarItem
-              icon={<TbFileInvoice />}
-              text="BOQ"
-              onClick={() => navigate("/boq")}
-              isExpanded={isExpanded}
-            />
-            <SidebarItem
-              icon={<RiDashboardFill />}
-              text="Dashboard"
-              onClick={handledashboard}
-              isExpanded={isExpanded}
-            />
-            <SidebarItem
-              icon={<LuBlend />}
-              text="Product"
-              onClick={handleproduct}
-              isExpanded={isExpanded}
+          <div
+            onClick={() => setIsOpen(!isOpen)}
+            className="mx-3 rounded-full cursor-pointer"
+            style={{
+              backgroundImage:
+                "linear-gradient(to top left, #5B73AF 0%, rgba(255, 255, 255, 0.5) 48%, #1F335C 100%)",
+            }}
+          >
+            <img
+              src={accountHolder.profileImage}
+              alt="usericon"
+              className="w-8 h-8 sm:w-10 sm:h-10 p-1"
             />
           </div>
 
-          {/* Other Items */}
-          <div className="font-semibold text-lg capitalize leading-normal tracking-wide py-4 text-[#262626] flex flex-col gap-4 px-3">
-            <h3
-              className={`capitalize text-[#A1A1A1] ${
-                isExpanded ? "mx-4" : "hidden"
-              }`}
-            >
-              other
+          {/* <div className=" mx-3">
+            <MdMenuOpen size={30} />
+          </div> */}
+
+          <div
+            ref={mobileMenuRef}
+            className={`fixed top-0 right-0 h-full w-64 bg-white border-l z-50 transform ${
+              isOpen ? "translate-x-0" : "translate-x-full"
+            } transition-transform duration-300 ease-in-out shadow-lg`}
+          >
+            {/* <div className="p-4 flex justify-between items-center border-b">
+              <h2 className="text-lg font-semibold text-[#1A3365]">Menu</h2>
+              <button onClick={() => setIsOpen(false)} className="text-xl">
+                <FaTimes />
+              </button>
+            </div> */}
+
+            <div className="flex gap-2 justify-center items-center mt-6">
+              <div>
+                <img
+                  src={accountHolder?.profileImage}
+                  alt="usericon"
+                  className="w-10 h-10"
+                />
+              </div>
+              <div className="text-gray-800 text-sm">
+                <h2>{accountHolder?.companyName}</h2>
+                <p>{accountHolder?.email}</p>
+              </div>
+            </div>
+
+            <ul className="p-4 space-y-4">
+              <MobileMenuItem
+                icon={<FaThLarge />}
+                title={"Dashboard"}
+                currentSection={sidebarstate?.currentSection}
+                onClick={handledashboard}
+                setIsOpen={setIsOpen}
+              />
+              <MobileMenuItem
+                icon={<LuBlend />}
+                title={"Product"}
+                onClick={handleproduct}
+                currentSection={sidebarstate?.currentSection}
+                setIsOpen={setIsOpen}
+              />
+              <MobileMenuItem
+                title={"Go to Boq"}
+                icon={<TbFileInvoice />}
+                onClick={() => navigate("/boq")}
+                currentSection={sidebarstate?.currentSection}
+                setIsOpen={setIsOpen}
+              />
+              <MobileMenuItem
+                title={"Book Appointment"}
+                icon={<CiCalendarDate />}
+                onClick={() =>
+                  sidebarDispatch({
+                    type: "TOGGLE_SECTION",
+                    payload: SECTIONS.BOOkAPPOINTMENT,
+                  })
+                }
+                currentSection={sidebarstate?.currentSection}
+                setIsOpen={setIsOpen}
+              />
+
+              <hr className="border-gray-200" />
+              <MobileMenuItem
+                title={"Help"}
+                icon={<BsQuestionCircle />}
+                onClick={handlehelp}
+                currentSection={sidebarstate?.currentSection}
+                setIsOpen={setIsOpen}
+              />
+              <MobileMenuItem
+                icon={<IoSettingsSharp />}
+                onClick={handlesetting}
+                title={"Setting"}
+                currentSection={sidebarstate?.currentSection}
+                setIsOpen={setIsOpen}
+              />
+              <MobileMenuItem
+                title={"Logout"}
+                icon={<VscSignOut />}
+                onClick={logout}
+                currentSection={sidebarstate?.currentSection}
+                setIsOpen={setIsOpen}
+              />
+            </ul>
+          </div>
+        </div>
+        {/* header for dashboard */}
+        <div className="flex justify-between items-center border-b border-[#CCCCCC] lg:border-2 lg:border-[#334A78] lg:rounded-lg bg-white  lg:h-[50px] shrink-0">
+          <div className="mx-3">
+            <h3 className="font-semibold text-2xl text-[#374A75] capitalize">
+              {sidebarstate?.currentSection}
             </h3>
-            <SidebarItem
-              icon={<BsQuestionCircle />}
-              text="Help"
-              onClick={handlehelp}
-              isExpanded={isExpanded}
-            />
-            <SidebarItem
-              icon={<IoSettingsSharp />}
-              text="Setting"
-              onClick={handlesetting}
-              isExpanded={isExpanded}
-            />
-            <SidebarItem
-              icon={<VscSignOut />}
-              text="Logout"
-              onClick={handleLogout}
-              isExpanded={isExpanded}
+          </div>
+          <div
+            className="hidden lg:block mx-3 rounded-full cursor-pointer"
+            style={{
+              backgroundImage:
+                "linear-gradient(to top left, #5B73AF 0%, rgba(255, 255, 255, 0.5) 48%, #1F335C 100%)",
+            }}
+            onClick={handlesetting}
+          >
+            <img
+              src={accountHolder.profileImage}
+              alt="usericon"
+              className="w-10 h-10 p-1"
             />
           </div>
         </div>
-        <div className="flex-1 flex flex-col relative h-full px-2">
-          {/* header for dashboard */}
-          <div className="flex justify-between items-center border-2 border-[#194F48] rounded-3xl mt-2 sticky top-3 z-10 bg-white h-[50px]">
-            <div className="mx-3">
-              <h3 className="font-bold text-lg capitalize ">
-                {currentSection}
-              </h3>
-            </div>
-            <div className="mx-3">
-              <img
-                src={accountHolder.profileImage}
-                alt="usericon"
-                className="w-10 h-10"
-              />
-            </div>
+
+        {/* setting */}
+        {sidebarstate?.isSettingOpen && (
+          <div className="flex flex-col h-full min-h-0 overflow-hidden lg:border-2 lg:border-[#334A78] lg:rounded-lg bg-white">
+            {/* header inside setting */}
+            {/* <div className="lg:border-b-2 border-b-[#ccc] py-2 px-4 shrink-0">
+              {iseditopen ? (
+                <button className="hidden lg:block capitalize font-medium text-base px-10 py-2 text-white rounded-lg border-[#374A75] border bg-[#374A75]">
+                  Profile
+                </button>
+              ) : (
+                <div className="capitalize font-medium text-base ">
+                  <button
+                    className="text-sm text-[#A1A1A1] flex justify-center items-center gap-3"
+                    onClick={() => setIsEditopen(true)}
+                  >
+                    <FaArrowLeft /> back to profile
+                  </button>
+                  <h3>profile edit</h3>
+                </div>
+              )}
+            </div> */}
+
+            {/* Scrollable content section */}
+            {iseditopen ? (
+              <div className="flex-1 flex flex-col justify-center items-center h-[90%] font-Poppins ">
+                <div className="flex justify-center items-center lg:w-full  h-full">
+                  <UserCard setIsEditopen={setIsEditopen} />
+                </div>
+              </div>
+            ) : (
+              <div className="flex-1 overflow-y-auto min-h-0 p-2 md:p-7">
+                <UserProfileEdit setIsEditopen={setIsEditopen} />
+              </div>
+            )}
+            {/* <div className="flex-1 overflow-y-auto min-h-0 px-4 py-2">
+              {iseditopen ? (
+                <div className="flex justify-center items-center w-full">
+                  <UserProfile setIsEditopen={setIsEditopen} />
+                </div>
+              ) : (
+                <div className="">
+                  <UserSetting />
+                </div>
+              )}
+            </div> */}
+            {/* <div className="flex-1 overflow-y-auto min-h-0 px-4 py-2">
+              {iseditopen ? (
+                <div className="flex justify-center items-center w-full">
+                  <UserProfile setIsEditopen={setIsEditopen} />
+                </div>
+              ) : (
+                <div className="">
+                  <UserSetting />
+                </div>
+              )}
+
+              <div>
+                <p className="text-sm leading-relaxed"></p>
+              </div>
+            </div> */}
           </div>
+        )}
 
-          {/* div for dashboard */}
-          {dashboard && (
-            <div className="w-full  border-2 border-[#194F48] rounded-3xl my-2.5">
-              {/* for dashboard */}
-              <div className="w-full flex overflow-y-auto scrollbar-hide h-[calc(100vh-120px)] py-2 px-3">
-                {/* dashboard area layout */}
-                <div className="w-2/3">
-                  <div className="p-4">
-                    <h2 className="capitalize font-bold mb-2">
-                      Layout Information
-                    </h2>
-                    {/* div containing information */}
-                    <div className="flex gap-10">
-                      {/* each icon  */}
-                      <div className="xl:flex justify-around items-center gap-3  py-3 px-2">
-                        <div>
-                          <img
-                            src="/images/layouticon.png"
-                            alt=" dashboard layout "
-                            className="w-[45px] h-[45px] xl:w-[60px] xl:h-[60px]"
-                          />
-                        </div>
-                        <div className="capitalize pr-10">
-                          <p className="font-bold text-lg">
-                            {/* {selectedBoq.total_area} */}
-                            {selectedBoq && selectedBoq.total_area}
-                            <span>sqft</span>
-                          </p>
-                          <p className="text-base">total area</p>
-                        </div>
-                      </div>
-                      {/* each icon  */}
-                      <div className="xl:flex justify-around items-center gap-3  py-3 px-2">
-                        <div>
-                          <img
-                            src="/images/totalproduct.png"
-                            alt=" dashboard layout "
-                            className="w-[45px] h-[45px] xl:w-[60px] xl:h-[60px]"
-                          />
-                        </div>
-                        <div className="capitalize pr-10">
-                          <p className="font-bold text-lg">
-                            {/* 1500 <span>sqft</span> */}
-                            {/* {products.length} */}
-                            {selectedBoq && products && products.length}{" "}
-                          </p>
-                          <p className="text-base">Total No Product</p>
-                        </div>
-                      </div>
-                      {/* each icon  */}
-                      <div className="xl:flex justify-around items-center gap-3  py-3 px-2">
-                        <div>
-                          <img
-                            src="/images/grandtotal.png"
-                            alt=" dashboard layout "
-                            className="w-[45px] h-[45px] xl:w-[60px] xl:h-[60px]"
-                          />
-                        </div>
-                        <div className="capitalize pr-10">
-                          <p className="font-bold text-lg">
-                            {/* 1500 <span>sqft</span> */}
-                            {selectedBoq && selectedBoq.totalprice}{" "}
-                            <span>INR</span>
-                          </p>
-                          <p className="text-base">Total Amount</p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  {/* dashboard boq part */}
-                  <div className="p-3">
-                    <h3 className="capitalize font-bold ">BOQ generated</h3>
+        {sidebarstate?.dashboard && (
+          <div className="flex flex-col h-full min-h-0 overflow-hidden lg:border-2 border-[#334A78] rounded-lg bg-white">
+            <DashboardView
+              totalArea={totalArea}
+              handlecheckboqdetails={handlecheckboqdetails}
+              handledeleteBoq={handledeleteBoq}
+              selectedBoq={selectedBoq}
+              products={products}
+              boqdata={boqdata}
+              currentLayoutData={currentLayoutData}
+              currentLayoutID={currentLayoutID}
+              isboqavailable={isboqavailable}
+              isExpanded={isExpanded}
+            />
+          </div>
+        )}
 
-                    {/* boq card */}
-                    {isboqavailable &&
-                      boqdata.map((boq, index) => {
-                        return (
-                          <div
-                            key={boq.title}
-                            className="rounded-3xl border-2 border-[#ccc] max-w-sm p-2 mb-3"
-                          >
-                            <div className="flex justify-end gap-2 p-2">
-                              {/* <MdOutlineModeEdit size={30} /> */}
-                              <button
-                                className="px-5 py-1 bg-green-300  rounded-2xl capitalize"
-                                onClick={() => handlecheckboqdetails(boq)}
-                              >
-                                details
-                              </button>
-                              <button onClick={() => handledeleteBoq(boq)}>
-                                {" "}
-                                <MdDeleteOutline size={30} />
-                              </button>
-                            </div>
-                            <div>
-                              <h3 className="font-bold">{boq.title}</h3>
-                            </div>
-                          </div>
-                        );
-                      })}
+        {sidebarstate?.isBookAppointmentOpen && (
+          <div className="flex flex-col h-full min-h-0  lg:border-2 overflow-hidden border-[#334A78] rounded-lg bg-white">
+            <BookAppointment isdashboardbooking={true} />
+          </div>
+        )}
 
-                    {!isboqavailable && (
-                      <div>
-                        <h3>You havent saved a BOQ yet</h3>
-                      </div>
-                    )}
-                  </div>
-                </div>
-                <div className="w-1/3  flex justify-center">
-                  <div className="border-2 p-4 rounded-xl h-96">
-                    {/* {imageIsLoaded ? (
-                      <img
-                        src={layoutImage}
-                        alt="layout"
-                        className="h-80 w-80"
-                      />
-                    ) : (
-                      <Spinner />
-                    )} */}
-                    <ReactApexChart
-                      options={options}
-                      series={[{ data: series }]}
-                      type="treemap"
-                      className="distribution-chart"
-                      height={270}
-                      width={370}
-                    />
-                    <p className="text-sm text-center">
-                      This layout is of total area{" "}
-                      <span className="font-bold">
-                        {currentAreaValues.total} sq. ft.
-                      </span>
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* setting */}
-          {isSettingOpen && (
-            <div className="flex-1  border-2 border-[#000] rounded-3xl my-2.5">
-              <div className="overflow-y-hidden scrollbar-hide h-[calc(100vh-120px)] py-2 relative">
-                <div className="flex flex-col justify-between  pt-2 sticky top-0">
-                  <div className="border-b-2 border-b-[#ccc] py-2 px-4">
-                    {iseditopen ? (
-                      <button className="capitalize font-medium text-base px-10 py-2 rounded-2xl border-[#000] border bg-[#B4EAEA]">
-                        Profile
-                      </button>
-                    ) : (
-                      <div className="capitalize font-medium text-base px-10  ">
-                        <button
-                          className="text-sm text-[#A1A1A1] flex justify-center items-center gap-3"
-                          onClick={() => setIsEditopen(true)}
-                        >
-                          <FaArrowLeft /> back to profile
-                        </button>
-                        <h3>profile edit</h3>
-                      </div>
-                    )}
-                  </div>
-                </div>
-                <div className="flex-1 flex flex-col justify-center items-center h-[90%] font-Poppins ">
-                  {iseditopen ? (
-                    <div className="flex justify-center items-center w-full  h-full">
-                      <UserProfile setIsEditopen={setIsEditopen} />
-                    </div>
-                  ) : (
-                    <UserSetting />
-                  )}
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* product */}
-          {isProductOpen && (
-            <div className="flex-1  border-2 border-[#000] rounded-3xl my-2.5">
-              <div className="overflow-y-auto scrollbar-hide h-[calc(100vh-120px)] rounded-3xl relative ">
+        {/* product */}
+        {sidebarstate?.isProductOpen && (
+          <div className="flex flex-col h-full min-h-0 overflow-hidden lg:border-2 border-[#334A78] rounded-lg bg-white">
+            <div className="flex-1 ">
+              <div className="overflow-y-auto scrollbar-hide h-[calc(100vh-95px)] rounded-3xl relative ">
                 {/* // Default product list and add product UI */}
                 <div className=" sticky top-0 z-20 bg-white">
-                  <div className="flex items-center gap-5 px-4 py-2 border-b-2 border-b-gray-400 ">
-                    <h3 className=" font-semibold text-xl ">BOQs</h3>
-                    {isboqavailable &&
-                      boqdata.map((boq, index) => {
-                        return (
-                          <div
-                            key={boq.title}
-                            className={`rounded-3xl border-2 border-[#ccc] px-5 py-3 ${
-                              selectedBoq.title === boq.title
-                                ? "bg-[#B4EAEA]"
-                                : ""
-                            }`}
-                          >
+                  <div className="flex flex-col md:flex-row md:items-center px-2 gap-3 lg:gap-5 lg:px-4 py-2 border-b-2 border-b-gray-400 ">
+                    <div className="flex justify-between ">
+                      <h3 className="text-sm md:text-base font-semibold lg:text-xl text-[#374A75]">
+                        Created BOQs
+                      </h3>
+                      <div className="relative md:hidden flex items-center gap-5">
+                        <button>
+                          <IoCloudDownloadOutline size={22} color="#374A75" />
+                        </button>
+                        <button
+                          onClick={() => setMobileFilterOPen(!mobileFilterOpen)}
+                        >
+                          <img src="/images/icons/filter-icon.png" alt="" />
+                        </button>
+                      </div>
+                      {mobileFilterOpen && (
+                        <div className="absolute top-10 right-0 bg-white w-[200px] z-30 p-4 space-y-1 border border-[#ccc]">
+                          <h4 className="font-semibold text-sm">
+                            Select Category
+                          </h4>
+                          {category?.map((cat) => (
                             <button
-                              onClick={() => setSelectedBoq(boq)}
-                              className="font-bold"
+                              key={cat}
+                              onClick={() => {
+                                setSelectedCategory(cat);
+                                applyFilters({
+                                  query: searchQuery,
+                                  category: cat,
+                                });
+                                setMobileFilterOPen(false);
+                              }}
+                              className={`block w-full text-left py-1 rounded hover:bg-gray-100 text-xs ${
+                                selectedCategory === cat ? "bg-gray-200" : ""
+                              }`}
                             >
-                              {boq.title}
+                              {cat}
                             </button>
-                          </div>
-                        );
-                      })}
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                    <div className="flex flex-wrap sm:flex-nowrap gap-2 xl:gap-4">
+                      {isboqavailable &&
+                        boqdata.map((boq, index) => {
+                          return (
+                            <div
+                              key={boq?.id}
+                              className={` rounded-lg border-2  px-5 py-2 ${
+                                selectedBoq?.id === boq?.id
+                                  ? "bg-[#374A75] text-white border-[#374a75]"
+                                  : "bg-white text-[#374a75] border-[#ccc]"
+                              }`}
+                            >
+                              <button
+                                onClick={() => {
+                                  setSelectedBoq(boq);
+                                  setSearchQuery("");
+                                  setSelectedCategory("");
+                                }}
+                                className="text-sm lg:text-lg"
+                              >
+                                {boq.boqTitle}
+                              </button>
+                            </div>
+                          );
+                        })}
+                    </div>
                   </div>
-                  <div className="flex gap-3 px-4 py-2 border-b-2 border-b-gray-400 bg-white z-20">
-                    {tabs.map((tab) => (
+                  <div className="flex  items-center justify-between gap-3 px-2 lg:px-4 py-2 border-b-2 border-b-gray-400 bg-white z-20 relative">
+                    <div className="flex gap-2">
+                      {tabs.map((tab) => (
+                        <button
+                          key={tab.value}
+                          className={`flex items-center gap-2 px-3 lg:px-6 py-2 border rounded-lg  text-[#374A75] text-sm lg:text-lg ${
+                            selectedTab === tab.value
+                              ? "bg-[#D3E3F0]  border-[#374A75]"
+                              : "bg-white border-[#374A75]"
+                          }`}
+                          value={tab.value}
+                          onClick={handleTabClick} // Dynamically sets the tab
+                        >
+                          {tab.name}
+                        </button>
+                      ))}
+                    </div>
+
+                    <div className="lg:hidden">
                       <button
-                        key={tab.value}
-                        className={`flex items-center gap-2 px-6 py-2 border rounded-xl ${
-                          selectedTab === tab.value
-                            ? "bg-[#B4EAEA]"
-                            : "bg-white "
-                        }`}
-                        value={tab.value}
-                        onClick={handleTabClick} // Dynamically sets the tab
+                        onClick={() => setMobileSearchOpen(true)}
+                        className="py-1.5 px-2 flex justify-center items-center border rounded"
                       >
-                        {tab.name}
+                        <IoIosSearch size={20} color="#374A75" />
                       </button>
-                    ))}
+                      {mobileSearchOpen && (
+                        <div
+                          className={`absolute top-0 bg-[#fff] w-full h-full z-30 flex justify-between items-center px-3 !transition-all !duration-700 !ease-in-out ${
+                            mobileSearchOpen
+                              ? "opacity-100 translate-x-0 left-0"
+                              : "opacity-0 -translate-x-full right-0"
+                          }`}
+                        >
+                          <input
+                            type="text"
+                            value={searchQuery}
+                            placeholder="......search by product name"
+                            onChange={(e) => {
+                              const value = e.target.value;
+                              setSearchQuery(value);
+                              applyFilters({
+                                query: value,
+                              });
+                            }}
+                            className="w-3/4 px-2 py-2.5 border rounded-sm text-[10px]"
+                          />
+                          <button onClick={() => setMobileSearchOpen(false)}>
+                            <IoCloseCircle size={25} color="#374A75" />
+                          </button>
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="hidden lg:block w-1/2 ml-auto">
+                      <input
+                        type="text"
+                        value={searchQuery}
+                        className="w-full rounded-lg px-2 py-1 outline-none border-2 border-gray-400"
+                        placeholder="......search by product name"
+                        onChange={(e) => {
+                          const value = e.target.value;
+                          setSearchQuery(value);
+                          applyFilters({
+                            query: value,
+                          });
+                        }}
+                      />
+                    </div>
+                    {toggle && (
+                      <div className="hidden lg:block">
+                        <select
+                          name="category"
+                          value={selectedCategory}
+                          onChange={(e) => {
+                            const value = e.target.value;
+                            setSelectedCategory(value);
+                            applyFilters({
+                              query: searchQuery,
+                              category: value,
+                            });
+                          }}
+                          id="category"
+                        >
+                          <option value="">All categories</option>
+                          {category.map((category) => (
+                            <option key={category} value={category}>
+                              {category}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                    )}
                   </div>
                 </div>
                 {/*  */}
@@ -906,121 +1089,153 @@ function Dashboard() {
                     <Spinner />
                   ) : selectedBoq && items.length > 0 ? (
                     // <section className="mt-2 flex-1 overflow-hidden px-8">
-                    <section className=" h-[90%] font-Poppins overflow-hidden">
-                      <div className="w-full h-full border-t border-b border-[#CCCCCC] overflow-y-auto custom-scrollbar">
-                        <table
-                          className="min-w-full border-collapse"
-                          ref={tableRef}
+                    <>
+                      <section className="hidden lg:block h-[90%] font-Poppins overflow-hidden">
+                        {/* <section className=" h-[90%] font-Poppins overflow-hidden"> */}
+                        <div
+                          ref={scrollContainerRef}
+                          className=" w-full h-full border-t border-b border-[#CCCCCC] overflow-y-auto custom-scrollbar"
                         >
-                          <thead className="bg-[#FFFFFF] sticky top-0 z-10 px-8 text-center text-[#000] text-base">
-                            <tr>
-                              {toggle ? (
-                                <th className="p-3 font-medium">
-                                  Product Name
-                                </th>
-                              ) : (
-                                <th className="p-3 font-medium">Addon ID</th>
-                              )}
-                              <th className="p-3  font-medium">Price</th>
-                              {toggle ? (
-                                <>
-                                  {/* <th className="p-3 font-medium">
-                                        Details
-                                      </th> */}
-                                  <th className="p-3 font-medium">Category</th>
+                          <table
+                            className="min-w-full border-collapse"
+                            ref={tableRef}
+                          >
+                            <thead className="bg-[#FFFFFF] sticky top-0 z-10 px-8 text-center text-[#000] text-base">
+                              <tr>
+                                {toggle ? (
                                   <th className="p-3 font-medium">
-                                    specification
+                                    Product Name
                                   </th>
-                                </>
-                              ) : (
-                                <th className="p-3 font-medium">Addon Title</th>
-                              )}
-                              <th className="p-3 font-medium">Action</th>
-                            </tr>
-                          </thead>
-                          <tbody className=" text-sm">
-                            {selectedBoq &&
-                              paginatedItems.map((item) => (
-                                <tr
-                                  key={item.id}
-                                  className="hover:bg-gray-50 cursor-pointer"
-                                >
-                                  <td className="border border-gray-200 p-3 align-middle">
-                                    <div className="flex items-center gap-2">
-                                      <img
-                                        src={`${baseImageUrl}${item.image}`}
-                                        alt={item.title}
-                                        className="w-10 h-10 object-cover rounded"
-                                      />
-                                      {toggle ? (
-                                        <span>{item.title}</span>
-                                      ) : (
-                                        <span className="text-wrap">
-                                          {item.id}
-                                        </span>
-                                      )}
-                                    </div>
-                                  </td>
-                                  <td className="border border-gray-200 p-3 align-middle">
-                                    ₹{item.price}
-                                  </td>
-                                  {toggle ? (
-                                    <>
-                                      <td className="border border-gray-200 p-3 align-middle">
-                                        {item.products?.category || "N/A"}
-                                      </td>
-                                      <td className="border border-gray-200 p-3 align-middle">
-                                        {item.products?.subcategory1 || "N/A"}
-                                      </td>
-                                    </>
-                                  ) : (
-                                    <td className="border border-gray-200 p-3 align-middle">
-                                      {item.addons?.title || item.title}
-                                    </td>
-                                  )}
-                                  <td className="border border-gray-200 p-3 align-middle flex justify-center items-center relative">
-                                    <button
-                                      ref={(el) =>
-                                        (buttonRef.current[item.id] = el)
-                                      }
-                                      className="bg-white flex justify-center items-center py-1.5 w-20 mb-2"
-                                      onClick={() => handleMenuToggle(item.id)}
-                                    >
-                                      <CiMenuKebab size={25} />
-                                    </button>
-
-                                    {openMenuId === item.id && (
-                                      <div
-                                        ref={(el) =>
-                                          (menuRef.current[item.id] = el)
-                                        }
-                                        className="absolute top-1/2 left-0 transform mt-2 bg-white border border-gray-300 shadow-md rounded-md w-24 z-10"
-                                      >
-                                        <button
-                                          onClick={() => {
-                                            handleProductPreview(item);
-                                          }}
-                                          className=" flex gap-2 items-center w-full text-left px-3 py-2 hover:bg-gray-200"
-                                        >
-                                          <VscEye /> view
-                                        </button>
-                                        {/* <button
-                                        onClick={() => {
-                                          handleDelete(item);
-                                        }}
-                                        className="flex gap-2 items-center w-full text-left px-3 py-2 hover:bg-gray-200"
-                                      >
-                                        <MdOutlineDelete /> Delete
-                                      </button> */}
+                                ) : (
+                                  <th className="p-3 font-medium">
+                                    Addon name
+                                  </th>
+                                )}
+                                <th className="p-3  font-medium">Price</th>
+                                <th className="p-3 font-medium">Category</th>
+                                <th className="p-3 font-medium">
+                                  specification
+                                </th>
+                                {/* {toggle ? (
+                                  <>
+                                    <th className="p-3 font-medium">
+                                      Category
+                                    </th>
+                                    <th className="p-3 font-medium">
+                                      specification
+                                    </th>
+                                  </>
+                                ) : (
+                                  <th className="p-3 font-medium">
+                                    Addon Title
+                                  </th>
+                                )} */}
+                                <th className="p-3 font-medium">Action</th>
+                              </tr>
+                            </thead>
+                            <tbody className=" text-sm">
+                              {selectedBoq &&
+                                paginatedItems.map((item) => (
+                                  <tr
+                                    key={item.id}
+                                    className="hover:bg-gray-50 cursor-pointer"
+                                  >
+                                    <td className="border border-gray-200 p-3 align-middle ">
+                                      <div className="flex items-center gap-2">
+                                        <img
+                                          src={`${baseImageUrl}${item.image}`}
+                                          alt={item.title}
+                                          className="w-10 h-10 object-cover rounded"
+                                        />
+                                        {toggle ? (
+                                          <span>{item?.title}</span>
+                                        ) : (
+                                          <span className="text-wrap">
+                                            {item?.title}
+                                          </span>
+                                        )}
                                       </div>
-                                    )}
-                                  </td>
-                                </tr>
-                              ))}
-                          </tbody>
-                        </table>
-                      </div>
-                    </section>
+                                    </td>
+                                    <td className="border border-gray-200 p-3 align-middle">
+                                      ₹{item.price}
+                                    </td>
+                                    <td className="border border-gray-200 p-3 align-middle">
+                                      {item.products?.category || "-"}
+                                    </td>
+                                    <td className="border border-gray-200 p-3 align-middle">
+                                      {item.products?.subcategory1 || "-"}
+                                    </td>
+
+                                    {/* {toggle ? (
+                                      <>
+                                        <td className="border border-gray-200 p-3 align-middle">
+                                          {item.products?.category || "N/A"}
+                                        </td>
+                                        <td className="border border-gray-200 p-3 align-middle">
+                                          {item.products?.subcategory1 || "N/A"}
+                                        </td>
+                                      </>
+                                    ) : (
+                                      <td className="border border-gray-200 p-3 align-middle">
+                                        {item.addons?.title || item.title}
+                                      </td>
+                                    )} */}
+                                    <td className="border border-gray-200 p-3 align-middle flex justify-center items-center relative">
+                                      <button
+                                        ref={(el) =>
+                                          (buttonRef.current[item.id] = el)
+                                        }
+                                        className="flex justify-center items-center py-1.5 w-20 mb-2"
+                                        onClick={() =>
+                                          handleMenuToggle(item.id)
+                                        }
+                                      >
+                                        <CiMenuKebab size={25} />
+                                      </button>
+
+                                      {openMenuId === item.id && (
+                                        <div
+                                          ref={(el) =>
+                                            (menuRef.current[item.id] = el)
+                                          }
+                                          className="absolute top-1/2 left-0 transform mt-2 bg-white border border-gray-300 shadow-md rounded-md w-24 z-10"
+                                        >
+                                          <button
+                                            onClick={() => {
+                                              handleProductPreview(item);
+                                            }}
+                                            className=" flex gap-2 items-center w-full text-left px-3 py-2 hover:bg-gray-200"
+                                          >
+                                            <VscEye /> view
+                                          </button>
+                                          {/* <button
+                                          onClick={() => {
+                                            handleDelete(item);
+                                          }}
+                                          className="flex gap-2 items-center w-full text-left px-3 py-2 hover:bg-gray-200"
+                                        >
+                                          <MdOutlineDelete /> Delete
+                                        </button> */}
+                                        </div>
+                                      )}
+                                    </td>
+                                  </tr>
+                                ))}
+                            </tbody>
+                          </table>
+                        </div>
+                      </section>
+                      <section className="lg:hidden mb-5">
+                        {selectedBoq &&
+                          paginatedItems.map((item) => (
+                            <MobileTabProductCard
+                              key={item?.id}
+                              product={item}
+                              handleProductPreview={handleProductPreview}
+                            />
+                          ))}
+                      </section>
+                    </>
                   ) : (
                     <>
                       {selectedBoq ? (
@@ -1036,7 +1251,7 @@ function Dashboard() {
                   ))}
                 {/* Pagination Controls (Always Visible) */}
                 {selectedBoq && totalPages > 1 && (
-                  <div className="flex justify-center items-center gap-2 mt-10 z-30 sticky bottom-0 bg-[#EBF0FF] mb-4 text-[#3d194f]">
+                  <div className="flex justify-center items-center gap-2  z-30 sticky bottom-0  bg-white  text-[#3d194f]">
                     <button
                       onClick={() => goToPage(currentPage - 1)}
                       disabled={currentPage === 1}
@@ -1081,20 +1296,24 @@ function Dashboard() {
                 )}
               </div>
             </div>
-          )}
+          </div>
+        )}
 
-          {/* help */}
-          {help && <Help isvendor={false} />}
-        </div>
+        {/* help */}
+        {sidebarstate?.help && (
+          <div className="flex flex-col h-full min-h-0 overflow-hidden lg:border-2 lg:border-[#334A78] lg:rounded-lg bg-white">
+            <Help isvendor={false} />
+          </div>
+        )}
       </div>
+
       {/* product preview */}
       {productPreview && (
-        <DashboardProductCard
+        <ProductView
           onClose={() => {
             setProductPreview(false);
           }}
           product={selectedProductview}
-          // fetchProducts={fetchProducts}
           handleDelete={handleDelete}
         />
       )}
@@ -1103,3 +1322,42 @@ function Dashboard() {
 }
 
 export default Dashboard;
+
+function MobileMenuItem({ icon, title, currentSection, onClick, setIsOpen }) {
+  return (
+    <li
+      onClick={() => {
+        onClick();
+        setIsOpen((prev) => !prev);
+      }}
+      className={`flex items-center space-x-3 px-2 font-semibold ${
+        currentSection === title
+          ? "bg-gradient-to-r from-[#4C85F5] to-[#6AC7FF]  py-2 rounded-md text-white"
+          : "text-[#1A3365]"
+      }`}
+    >
+      {icon}
+      <span>{title}</span>
+    </li>
+  );
+}
+
+function SidebarItem({ icon, text, onClick, isExpanded, currentSection }) {
+  return (
+    <div
+      className={`flex items-center  gap-3 hover:bg-[#E9E9E9] p-2 rounded cursor-pointer ${
+        isExpanded ? "" : "justify-center"
+      } ${
+        currentSection?.toLowerCase() === text?.toLowerCase()
+          ? "bg-gradient-to-r from-[#334A78] to-[#68B2DC] px-4 py-2 rounded-md text-white"
+          : "text-[#1A3365]"
+      }`}
+      onClick={onClick}
+    >
+      <div className="text-2xl ">{icon}</div>
+      <span className={`${isExpanded ? "block" : "hidden"} text-base`}>
+        {text}
+      </span>
+    </div>
+  );
+}

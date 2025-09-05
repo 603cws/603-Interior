@@ -18,16 +18,16 @@ export const AllCatArray = [
       "HR Room",
       "Finance Room",
       "Sales",
-      "Video Recording Room",
+      // "Video Recording Room",
       "Reception",
       "Pantry",
-      "Phone Booth",
-      "Break Out Room",
-      "UPS",
-      "BMS",
-      "Server Room",
+      // "Phone Booth",
+      "Breakout Room",
+      // "UPS",
+      // "BMS",
+      // "Server Room",
       // "Executive Washroom",
-      "Other Area",
+      // "Other Area",
     ],
     subCat1: ["Table", "Chair", "Storage"],
     // subCat1: ["table", "chair"],
@@ -143,6 +143,19 @@ export const specialArray = [
     type: "Pods",
     subcategories: ["Washrooms"],
   },
+];
+
+//all the category
+export const category = [
+  "furniture",
+  "HVAC",
+  "paint",
+  "partitions / ceilings",
+  "lux",
+  "civil / plumbing",
+  "flooring",
+  "lighting",
+  "smart solutions",
 ];
 
 // export default AllCatArray;

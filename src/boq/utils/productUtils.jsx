@@ -46,7 +46,8 @@ export const calculateTotalPrice = (
   areasData,
   userResponses,
   selectedProductView,
-  formulaMap
+  formulaMap,
+  seatCountData
 ) => {
   // Determine the actual values by prioritizing function parameters, falling back to selected state
   const actualCategory = category || selectedCategory?.category;
@@ -60,7 +61,9 @@ export const calculateTotalPrice = (
     actualCategory,
     actualSubCategory,
     actualSubCategory1,
-    userResponses.height
+    userResponses.height,
+    selectedProductView.dimensions,
+    seatCountData
   );
 
   const totalPrice = calculateCategoryTotal(

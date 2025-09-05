@@ -430,7 +430,7 @@ function Landing() {
                   { once: true }
                 );
               }}
-              className="w-6 h-6 rounded-full  border-2 border-gray-700 animate-pulse mx-auto absolute left-1/2 -translate-x-1/2 top-1/2 cursor-ew-resize"
+              className="w-6 h-6 rounded-full  border-2 border-gray-700 mx-auto absolute left-1/2 -translate-x-1/2 top-1/2 cursor-ew-resize"
             />
           </div>
         </div>

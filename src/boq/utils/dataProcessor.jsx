@@ -15,6 +15,51 @@ function calculateSpace(type, quantity, latestData, keys) {
   return keys.reduce((total, key) => total + (latestData[`${key}Qty`] || 0), 0);
 }
 
+const openWorkSpacesKeys = ["linear", "lType"];
+
+const cabinsKeys = ["md", "manager", "small"];
+
+const meetingRoomKeys = [
+  // "discussionRoom",
+  "interviewRoom",
+  "conferenceRoom",
+  "boardRoom",
+  "meetingRoom",
+  "meetingRoomLarge",
+  "hrRoom",
+  "financeRoom",
+  "sales",
+  "videoRecordingRoom",
+];
+
+const publicSpaceKeys = [
+  "reception",
+  "lounge",
+  "phoneBooth",
+  "breakoutRoom",
+  // "maleWashroom",
+  // "femaleWashroom",
+  "washrooms",
+];
+
+const supportSpaceKeys = ["ups", "bms", "server", "other", "executiveWashroom"];
+
+export const calculateSeatCountTotals = (seatCount) => {
+  if (!seatCount) return {};
+
+  const getTotal = (keys) =>
+    keys.reduce((sum, key) => sum + (seatCount[key] || 0), 0);
+
+  return {
+    openworkspaces: getTotal(openWorkSpacesKeys),
+    cabins: getTotal(cabinsKeys),
+    meetingrooms: getTotal(meetingRoomKeys),
+    publicspaces: getTotal(publicSpaceKeys),
+    supportspaces: getTotal(supportSpaceKeys),
+    pantry: getTotal(["lounge"]),
+  };
+};
+
 // const getCategoryTotal = (keys, totals) => {
 //   return keys.reduce((sum, key) => {
 //     const totalKey = `${key}Total`;
@@ -92,41 +137,6 @@ const processData = (data, type, quantity = {}) => {
       }
     }
   });
-
-  const openWorkSpacesKeys = ["linear", "lType"];
-
-  const cabinsKeys = ["md", "manager", "small"];
-
-  const meetingRoomKeys = [
-    // "discussionRoom",
-    "interviewRoom",
-    "conferenceRoom",
-    "boardRoom",
-    "meetingRoom",
-    "meetingRoomLarge",
-    "hrRoom",
-    "financeRoom",
-    "sales",
-    "videoRecordingRoom",
-  ];
-
-  const publicSpaceKeys = [
-    "reception",
-    "lounge",
-    "phoneBooth",
-    "breakoutRoom",
-    // "maleWashroom",
-    // "femaleWashroom",
-    "washrooms",
-  ];
-
-  const supportSpaceKeys = [
-    "ups",
-    "bms",
-    "server",
-    "other",
-    "executiveWashroom",
-  ];
 
   // const openworkspaces = calculateSpace(
   //   type,
@@ -267,7 +277,7 @@ const processData = (data, type, quantity = {}) => {
     other: type === "quantity" ? latestData.otherQty : latestData.otherArea,
     totalArea: type === "areas" ? latestData.totalArea : undefined,
 
-    openworkspaces: openworkspaces,
+    openworkspaces: type === "quantity" ? 1 : openworkspaces,
     cabins: cabins,
     meetingrooms: meetingrooms,
     publicspaces: publicspaces,

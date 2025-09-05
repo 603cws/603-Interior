@@ -4,6 +4,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/free-mode";
 import { FreeMode } from "swiper/modules";
+import Footer from "../../common-components/Footer";
 
 function Brands() {
   const brands = [
@@ -178,6 +179,7 @@ function Brands() {
           ))}
         </div>
       </section>
+      <Footer />
     </div>
   );
 }

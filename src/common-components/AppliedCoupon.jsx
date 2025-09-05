@@ -9,12 +9,14 @@ function AppliedCoupon({ code, savedamount, handleRemove }) {
           Saved ₹{savedamount.toFixed(2) || 0}
         </span>
       </div>
-      <button
-        onClick={handleRemove}
-        className="text-[#F87171] font-medium hover:underline"
-      >
-        Remove
-      </button>
+      {handleRemove && (
+        <button
+          onClick={handleRemove}
+          className="text-[#F87171] font-medium hover:underline"
+        >
+          Remove
+        </button>
+      )}
     </div>
   );
 }

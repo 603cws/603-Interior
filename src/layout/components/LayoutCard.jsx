@@ -24,7 +24,7 @@ const LayoutCard = ({
   const { totalArea } = useApp();
 
   return (
-    <div className="workspacedescription flex flex-col w-40 md:w-[280px] items-center border border-solid bg-[#fff] pb-2 my-3 relative">
+    <div className="workspacedescription flex flex-col w-40 md:w-[230px] lg:w-[280px] items-center border border-solid bg-[#fff] pb-2 mt-2 mb-3 relative">
       {/* Image */}
       <div className="relative group w-full h-32 md:h-48 overflow-hidden">
         <img
@@ -96,8 +96,8 @@ const LayoutCard = ({
             counterValue > 0 &&
             (showAreaCounter || sizes) && (
               <div>
-                {areaCounterProps?.name === "Add Extra Seats" ? (
-                  <p className="text-xs md:text-[13px]">Add Extra Seats</p>
+                {areaCounterProps?.name === "Select Seats" ? (
+                  <p className="text-xs md:text-[13px]">Select Seats</p>
                 ) : (
                   <p className="text-xs md:text-[13px]">Select size</p>
                 )}

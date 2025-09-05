@@ -3,8 +3,8 @@ import LayoutCard from "../components/LayoutCard"; // Ensure the correct path to
 const publicSpacesData = [
   {
     type: "reception",
-    image: "/images/workspace-image/reception.png",
-    // image: "/images/workstation-wp/reception-wp.webp",
+    // image: "/images/workspace-image/reception.png",
+    image: "/images/workstation-wp/reception.webp",
     description:
       "This is the reception area, the first point of contact for visitors.",
     slider: {
@@ -15,11 +15,12 @@ const publicSpacesData = [
       max: 700,
       step: 5,
     },
+    title: "Reception",
   },
   {
     type: "lounge",
-    image: "/images/workspace-image/lounge.webp",
-    // image: "/images/workstation-wp/lounge-wp.webp",
+    // image: "/images/workspace-image/lounge.webp",
+    image: "/images/workstation-wp/lounge.webp",
     description:
       "This is the lounge, a comfortable area for informal meetings.",
     slider: {
@@ -30,18 +31,20 @@ const publicSpacesData = [
       max: 1000,
       step: 5,
     },
+    title: "Lounge",
   },
   {
     type: "phoneBooth",
-    image: "/images/workspace-image/phoneBooth.png",
-    // image: "/images/workstation-wp/phoneBooth-wp.webp",
+    // image: "/images/workspace-image/phoneBooth.png",
+    image: "/images/workstation-wp/phoneBooth.webp",
     description: "This is the phone booth, providing a quiet space for calls.",
     tooltipText: "Size: 25 sq ft",
+    title: "Phone Booth",
   },
   {
     type: "breakoutRoom",
-    image: "/images/workspace-image/breakout.webp",
-    // image: "/images/workstation-wp/breakout-wp.webp",
+    // image: "/images/workspace-image/breakout.webp",
+    image: "/images/workstation-wp/breakout.webp",
     description:
       "This is the breakout room, a flexible space for small group discussions.",
     slider: {
@@ -53,6 +56,7 @@ const publicSpacesData = [
       step: 5,
     },
     tooltipText: "size: 80 sqft",
+    title: "Breakout Room",
   },
   //   type: "maleWashroom",
   // {
@@ -84,7 +88,8 @@ const publicSpacesData = [
   // },
   {
     type: "washrooms",
-    image: "/images/workspace-image/washroom.png",
+    // image: "/images/workspace-image/washroom.png",
+    image: "/images/workstation-wp/washroom.webp",
     description:
       "Common Washroom Area – This includes designated spaces for both male and female washrooms.",
     tooltipText: "size: 100 sqft",
@@ -96,6 +101,7 @@ const publicSpacesData = [
       max: 1200,
       step: 5,
     },
+    title: "Washrooms",
   },
 ];
 
@@ -120,11 +126,11 @@ const PublicSpaces = ({
 }) => {
   return (
     <div className="section px-3">
-      <h3 className="section-heading bg-white shadow-sm text-md pl-2 py-1.5 sticky top-0 font-semibold z-10">
+      <h3 className="section-heading bg-[#E4E7ED] shadow-sm text-md pl-2 py-1 sticky top-0 font-semibold z-10">
         Public Spaces
       </h3>
       {/* <div className="public-spaces grid grid-cols-2 4xl:grid-cols-3 gap-5"> */}
-      <div className="public-spaces grid grid-cols-2 3xl:grid-cols-3 gap-5 justify-items-center lg:justify-items-stretch">
+      <div className="public-spaces grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-2 3xl:grid-cols-3 gap-5 justify-items-center lg:justify-items-stretch">
         {publicSpacesData.map((space) => {
           const sliderProps = space.slider
             ? {
@@ -193,9 +199,10 @@ const PublicSpaces = ({
                 }
               }}
               onChange={(value) => updateAreas(space.type, value)}
-              title={`${
-                space.type.charAt(0).toUpperCase() + space.type.slice(1)
-              }`}
+              // title={`${
+              //   space.type.charAt(0).toUpperCase() + space.type.slice(1)
+              // }`}
+              title={space.title || space.type}
               showAreaCounter={!!space.slider} // Show counter only if space has a slider
               areaCounterProps={sliderProps}
               // tooltipText={space.tooltipText}

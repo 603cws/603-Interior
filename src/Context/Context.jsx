@@ -8,23 +8,26 @@ import {
 } from "../boq/utils/dataFetchers";
 import processData from "../boq/utils/dataProcessor";
 import { calculateTotalPrice } from "../boq/utils/productUtils";
+import { calculateSeatCountTotals } from "../boq/utils/dataProcessor";
+import { calculateTotalPriceHelper } from "../boq/utils/CalculateTotalPriceHelper";
+import { numOfCoats } from "../constants/constant";
 
 const AppContext = createContext();
 
 export const AppProvider = ({ children }) => {
   const session = supabase.storageKey;
-  const categoriesWithModal = ["Flooring", "HVAC"]; // Array of categories that should show the modal/questions when clicked
+  // const categoriesWithModal = ["Flooring", "HVAC"]; // Array of categories that should show the modal/questions when clicked
 
-  const categoriesWithTwoLevelCheck = [
-    "Flooring",
-    "Partitions / Ceilings",
-    "HVAC",
-    "Lighting",
-  ]; //Array of Categories where save data works on dependent subcategories
+  // const categoriesWithTwoLevelCheck = [
+  //   "Flooring",
+  //   "Partitions / Ceilings",
+  //   "HVAC",
+  //   "Lighting",
+  // ]; //Array of Categories where save data works on dependent subcategories
 
   // const naviagte = useNavigate();
   const searchQuery = "";
-  const priceRange = [1, 15000000];
+  // const priceRange = [1, 15000000];
 
   const [totalArea, setTotalArea] = useState("");
   const [inputValue, setInputValue] = useState("");
@@ -51,7 +54,7 @@ export const AppProvider = ({ children }) => {
     demolishTile: "no",
     hvacType: "Centralized",
   });
-  const [showProfile, setShowProfile] = useState(false);
+  // const [showProfile, setShowProfile] = useState(false);
   const [accountHolder, setAccountHolder] = useState({
     userId: "",
     email: "",
@@ -64,34 +67,29 @@ export const AppProvider = ({ children }) => {
     boqName: "",
     address: [] || undefined,
   });
-  // const [accountHolder, setAccountHolder] = useState(null);
-  // const [selectedPlan, setSelectedPlan] = useState(null);
   const [selectedPlan, setSelectedPlan] = useState(
-    localStorage.getItem("selectedPlan")
+    sessionStorage.getItem("selectedPlan") || null
   );
-  // const [layoutImage, setLayoutImage] = useState(null);
 
   const prevSelectedData = useRef(selectedData); // Ref to store previous selectedData
   const prevCategories = useRef(categories); // Ref to store previous categories
   const prevSubCat1 = useRef(subCat1); // Ref to store previous subCat1
-  // const layoutImgRef = useRef(null);
-  // auth
+
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isAuthLoading, setIsAuthLoading] = useState(true);
-  const [defaultProduct, setDefaultProduct] = useState(true);
+  // const [defaultProduct, setDefaultProduct] = useState(true);
 
   const [productData, setProductData] = useState([]);
   const [areasData, setAreasData] = useState([]);
   const [quantityData, setQuantityData] = useState([]);
+  const [seatCountData, setSeatCountData] = useState([]);
 
-  const [minimizedView, setMinimizedView] = useState(false);
-  const [showProductView, setShowProductView] = useState(false);
   const [showRecommend, setShowRecommend] = useState(false);
   const [boqTotal, setBoqTotal] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
   const [currentLayoutData, setCurrentLayoutData] = useState({});
   const [currentLayoutID, setCurrentLayoutID] = useState(
-    localStorage.getItem("currentLayoutID")
+    sessionStorage.getItem("currentLayoutID")
   );
 
   const [cartItems, setCartItems] = useState([]);
@@ -105,6 +103,10 @@ export const AppProvider = ({ children }) => {
     category: [],
     priceRange: [0, 10000],
   });
+  const [BOQTitle, setBOQTitle] = useState(
+    sessionStorage.getItem("BOQTitle") || ""
+  );
+  const [BOQID, setBOQID] = useState(sessionStorage.getItem("BOQID") || "");
 
   const [formulaMap, setFormulaMap] = useState({});
   const [formulasLoading, setFormulasLoading] = useState(true);
@@ -118,6 +120,225 @@ export const AppProvider = ({ children }) => {
   const [differenceInPrice, setDifferenceInPrice] = useState(0);
   const [carttotalPrice, setCartTotalPrice] = useState(0);
   const [showLoginPopup, setShowLoginPopup] = useState(false);
+  const [selectedClient, setSelectedClient] = useState(null);
+  const [isSaveBOQ, setIsSaveBOQ] = useState(true);
+  const [productQuantity, setProductQuantity] = useState({});
+  const [allProductQuantities, setAllProductQuantities] = useState({});
+  function normalizeKey(subcategory) {
+    return subcategory
+      .toLowerCase()
+      .replace(/\s+/g, "")
+      .replace(/-/g, "")
+      .replace("workstation", "")
+      .replace("mdcabin", "md")
+      .replace("managercabin", "manager")
+      .replace("smallcabin", "small");
+  }
+  function normalizeObjectKeys(obj) {
+    const normalized = {};
+    Object.entries(obj).forEach(([key, value]) => {
+      normalized[normalizeKey(key)] = value;
+    });
+    return normalized;
+  }
+  useEffect(() => {
+    const newSeatCountData = normalizeObjectKeys(seatCountData);
+    const newQuantityData = normalizeObjectKeys(quantityData);
+
+    const allQuantities = {};
+
+    subCategories.forEach((subcategory) => {
+      const key = normalizeKey(subcategory);
+
+      const categoryProducts = subCat1[selectedCategory?.category] || [];
+      const productQuantities = {};
+
+      // ✅ First check in selectedData
+      const selectedItem = selectedData?.find(
+        (item) =>
+          item.category === selectedCategory?.category &&
+          item.subcategory === subcategory
+      );
+
+      if (selectedItem) {
+        categoryProducts.forEach((productName) => {
+          if (productName === selectedItem.subcategory1) {
+            // ✅ Only update the matched product
+            productQuantities[productName] = selectedItem.quantity ?? 0;
+          } else {
+            // ✅ Preserve or recalc the others
+            let value;
+            if (
+              selectedCategory?.category === "Furniture" &&
+              productName === "Chair"
+            ) {
+              value = newSeatCountData[key] ?? newQuantityData[0][key] ?? 0;
+            } else {
+              value = newQuantityData[0][key] ?? 0;
+            }
+
+            // ✅ Special Furniture logic
+            if (
+              selectedCategory?.category === "Furniture" &&
+              subcategory !== "Linear Workstation" &&
+              subcategory !== "L-Type Workstation" &&
+              subcategory !== "Md Cabin" &&
+              subcategory !== "Manager Cabin" &&
+              productName === "Chair"
+            ) {
+              value = value * (newQuantityData[0][key] ?? 1);
+            }
+
+            productQuantities[productName] = value;
+          }
+        });
+      } else {
+        categoryProducts.forEach((productName) => {
+          let value;
+          if (
+            selectedCategory?.category === "Furniture" &&
+            productName === "Chair"
+          ) {
+            value = newSeatCountData[key] ?? newQuantityData[0][key] ?? 0;
+          } else {
+            value = newQuantityData[0][key] ?? 0;
+          }
+
+          // ✅ Apply special Furniture logic
+          if (
+            selectedCategory?.category === "Furniture" &&
+            subcategory !== "Linear Workstation" &&
+            subcategory !== "L-Type Workstation" &&
+            subcategory !== "Md Cabin" &&
+            subcategory !== "Manager Cabin" &&
+            productName === "Chair"
+          ) {
+            value = value * (newQuantityData[0][key] ?? 1);
+          }
+
+          productQuantities[productName] = value;
+        });
+      }
+
+      // ✅ Split Md Cabin into Main + Visitor
+      if (
+        selectedCategory?.category === "Furniture" &&
+        subcategory === "Md Cabin" &&
+        "Chair" in productQuantities
+      ) {
+        const value = productQuantities["Chair"] ?? 0;
+
+        // keep original Md Cabin value
+        allQuantities["Md Cabin"] = productQuantities;
+
+        const mainValue = value > 0 ? 1 : 0;
+        const visitorValue = value > 0 ? value - 1 : 0;
+        allQuantities["Md Cabin Main"] = { Chair: mainValue };
+        allQuantities["Md Cabin Visitor"] = { Chair: visitorValue };
+      } else if (
+        selectedCategory?.category === "Furniture" &&
+        subcategory === "Manager Cabin" &&
+        "Chair" in productQuantities
+      ) {
+        const value = productQuantities["Chair"] ?? 0;
+
+        // keep original Md Cabin value
+        allQuantities["Manager Cabin"] = productQuantities;
+
+        const mainValue = value > 0 ? 1 : 0;
+        const visitorValue = value > 0 ? value - 1 : 0;
+        allQuantities["Manager Cabin Main"] = { Chair: mainValue };
+        allQuantities["Manager Cabin Visitor"] = { Chair: visitorValue };
+      } else {
+        allQuantities[subcategory] = productQuantities;
+      }
+    });
+
+    setProductQuantity(allQuantities);
+
+    const globalQuantities = {};
+
+    // loop through all categories
+    categories.forEach((category) => {
+      category.subcategories.forEach((subcategory) => {
+        const key = normalizeKey(subcategory);
+
+        // init space bucket if not already
+        if (!globalQuantities[subcategory]) {
+          globalQuantities[subcategory] = {};
+        }
+
+        // pull all products (subcategory1) for this category
+        const products = category.subcategory1 || [];
+
+        products.forEach((productName) => {
+          let value;
+
+          // Furniture chairs logic
+          if (category.category === "Furniture" && productName === "Chair") {
+            value = newSeatCountData[key] ?? newQuantityData[0][key] ?? 0;
+          } else {
+            value = newQuantityData[0][key] ?? 0;
+          }
+
+          if (
+            category.category === "Furniture" &&
+            ![
+              "Linear Workstation",
+              "L-Type Workstation",
+              "Md Cabin",
+              "Manager Cabin",
+            ].includes(subcategory) &&
+            productName === "Chair"
+          ) {
+            value = value * (newQuantityData[0][key] ?? 1);
+          }
+
+          // merge into subcategory bucket
+          globalQuantities[subcategory][productName] = value;
+
+          if (
+            category.category === "Furniture" &&
+            ["Md Cabin", "Manager Cabin"].includes(subcategory) &&
+            "Chair" in globalQuantities[subcategory]
+          ) {
+            const chairValue = globalQuantities[subcategory]["Chair"] ?? 0;
+
+            const mainValue = chairValue > 0 ? 1 : 0;
+            const visitorValue = chairValue > 0 ? chairValue - 1 : 0;
+
+            globalQuantities[`${subcategory} Main`] = { Chair: mainValue };
+            globalQuantities[`${subcategory} Visitor`] = {
+              Chair: visitorValue,
+            };
+          }
+        });
+      });
+    });
+
+    // setAllProductQuantities(globalQuantities);
+
+    setAllProductQuantities(globalQuantities);
+  }, [subCategories, seatCountData, quantityData, selectedCategory]);
+
+  console.log(
+    "Product Quantity:",
+    productQuantity,
+    "quantityData",
+    quantityData[0],
+    "seatCountData",
+    seatCountData,
+    categories,
+    subCategories,
+    "allProductQuantities",
+    allProductQuantities,
+    subCat1
+  );
+
+  const handleBOQTitleChange = (title) => {
+    if (isSaveBOQ) setBOQTitle(title);
+    else console.log("Not allowed to change BOQ Title");
+  };
 
   const fetchFormulas = async () => {
     setFormulasLoading(true);
@@ -147,6 +368,73 @@ export const AppProvider = ({ children }) => {
   useEffect(() => {
     fetchFormulas();
   }, []);
+
+  useEffect(() => {
+    const items = { BOQID, BOQTitle, selectedPlan, currentLayoutID };
+
+    Object.entries(items).forEach(([key, value]) => {
+      if (value) sessionStorage.setItem(key, value);
+    });
+  }, [BOQID, BOQTitle, selectedPlan, currentLayoutID]);
+
+  const handleUpdateBOQ = async (boqId) => {
+    if (!boqId) return;
+    try {
+      const payload = {};
+
+      if (selectedData.length > 0) {
+        payload.products = selectedData.map((p) => ({
+          id: p.product_variant?.variant_id,
+          title: p.product_variant?.variant_title,
+          finalPrice: p.finalPrice || "",
+          groupKey: p.groupKey,
+          quantity: p.quantity,
+        }));
+        payload.addons = selectedData.flatMap((product) =>
+          (product.addons || []).map((addon) => ({
+            variantId: addon.id,
+            addonId: addon.addonid,
+            title: addon.title,
+            finalPrice: addon.price || "",
+            productId: product.product_variant?.variant_id,
+          }))
+        );
+      }
+
+      if (Object.values(userResponses).some((v) => v)) {
+        payload.answers = [userResponses];
+      }
+
+      if (selectedPlan) {
+        payload.planType = selectedPlan;
+      }
+
+      if (boqTotal !== null && boqTotal !== undefined) {
+        payload.boqTotalPrice = boqTotal;
+      }
+
+      if (Object.keys(payload).length === 0) return;
+
+      const { error } = await supabase
+        .from("boq_data_new")
+        .update(payload)
+        .eq("id", boqId);
+
+      if (error) {
+        console.error(error);
+      } else {
+        console.log("Auto-saved draft BOQ");
+      }
+    } catch (err) {
+      console.error("Auto-save error:", err);
+    }
+  };
+
+  // Auto-save effect
+  useEffect(() => {
+    if (!BOQID || !BOQTitle) return;
+    handleUpdateBOQ(BOQID);
+  }, [selectedPlan, selectedData, userResponses, boqTotal]);
 
   async function getCartItems() {
     try {
@@ -231,7 +519,7 @@ export const AppProvider = ({ children }) => {
           await Promise.all([
             fetchCategories(),
             fetchProductsData(),
-            fetchRoomData(userId),
+            fetchRoomData(userId, currentLayoutID),
             fetchCategoriesandSubCat1(),
           ]);
 
@@ -243,6 +531,17 @@ export const AppProvider = ({ children }) => {
         var processedAreasData = {};
 
         if (roomDataResult.layoutData && roomDataResult.layoutData.length > 0) {
+          setTotalArea(roomDataResult.layoutData[0]?.totalArea);
+          setCurrentLayoutData(roomDataResult.layoutData[0]);
+
+          const baseSeatCount = roomDataResult.layoutData[0].seatCount;
+          const seatCountWithTotals = {
+            ...baseSeatCount,
+            ...calculateSeatCountTotals(baseSeatCount),
+          };
+
+          setSeatCountData(seatCountWithTotals);
+
           processedQuantityData = processData(
             roomDataResult.layoutData,
             "quantity"
@@ -332,7 +631,7 @@ export const AppProvider = ({ children }) => {
       }
     };
 
-    if (userId) {
+    if ((userId, currentLayoutID)) {
       loadData();
     }
   }, [userId, currentLayoutID]);
@@ -352,36 +651,6 @@ export const AppProvider = ({ children }) => {
     }
   }, [selectedPlan]); // On Plan change subCat not updating proeprly for HVAC
 
-  // get the totalarea based on current layout id
-  useEffect(() => {
-    // const currentLayoutID = localStorage.getItem("currentLayoutID");
-    const fetchdata = async () => {
-      try {
-        if (currentLayoutID) {
-          // get the layout details from the supabase
-          const { data, error } = await supabase
-            .from("layout")
-            .select()
-            .eq("id", currentLayoutID); // Filter by userId
-
-          setTotalArea(data[0]?.totalArea);
-          setCurrentLayoutData(data[0]);
-
-          // setLayoutImage(data[0].layoutImg);
-          // setLayoutImage(
-          //   `https://bwxzfwsoxwtzhjbzbdzs.supabase.co/storage/v1/object/public/addon/${data[0].layoutImg}`
-          // );
-
-          if (error) throw error;
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    fetchdata();
-  }, [currentLayoutID]);
-
   useEffect(() => {
     // Check if selectedData is valid and not empty
     if (selectedData && selectedData.length > 0) {
@@ -392,7 +661,7 @@ export const AppProvider = ({ children }) => {
 
   useEffect(() => {
     async function fetchdata() {
-      const sessionData = JSON.parse(localStorage.getItem(session));
+      const sessionData = JSON.parse(sessionStorage.getItem(session));
 
       // const usertoken = localStorage.getItem("usertoken");
       const usertoken = sessionData?.access_token;
@@ -614,6 +883,59 @@ export const AppProvider = ({ children }) => {
         if (category === "Civil / Plumbing" && subcategory === "Pantry") {
           validSubCat1List = validSubCat1List.filter((item) => item !== "Pods");
         }
+        if (category === "Furniture" && subcategory === "Md Cabin") {
+          const mainFilled = selectedData.some(
+            (item) =>
+              item.category === "Furniture" &&
+              item.subcategory === "Md Cabin Main" &&
+              item.subcategory1 === "Chair"
+          );
+          const visitorFilled = selectedData.some(
+            (item) =>
+              item.category === "Furniture" &&
+              item.subcategory === "Md Cabin Visitor" &&
+              item.subcategory1 === "Chair"
+          );
+
+          // ✅ Only exclude Chair if both Main & Visitor are filled
+          if (mainFilled && visitorFilled) {
+            validSubCat1List = validSubCat1List.filter(
+              (item) => item !== "Chair"
+            );
+          }
+        }
+
+        if (category === "Furniture" && subcategory === "Manager Cabin") {
+          const mainFilled = selectedData.some(
+            (item) =>
+              item.category === "Furniture" &&
+              item.subcategory === "Manager Cabin Main" &&
+              item.subcategory1 === "Chair"
+          );
+          const visitorFilled = selectedData.some(
+            (item) =>
+              item.category === "Furniture" &&
+              item.subcategory === "Manager Cabin Visitor" &&
+              item.subcategory1 === "Chair"
+          );
+
+          if (mainFilled && visitorFilled) {
+            validSubCat1List = validSubCat1List.filter(
+              (item) => item !== "Chair"
+            );
+          }
+        }
+
+        if (
+          category === "Furniture" &&
+          (subcategory === "Reception" ||
+            subcategory === "Pantry" ||
+            subcategory === "Breakout Room")
+        ) {
+          validSubCat1List = validSubCat1List.filter(
+            (item) => item !== "Storage"
+          );
+        }
 
         const subCategory1Index = validSubCat1List.indexOf(subcategory1);
         if (subCategory1Index !== -1) {
@@ -633,12 +955,21 @@ export const AppProvider = ({ children }) => {
     setProgress(Math.round(totalProgress * 100) / 100);
   }
 
+  function multiplyFirstTwoFlexible(dimStr) {
+    const [a = NaN, b = NaN] = String(dimStr)
+      .split(/[,\sxX*]+/) // comma / space / x / * as separators
+      .map((s) => parseFloat(s.trim()));
+
+    return Number.isFinite(a) && Number.isFinite(b) ? Number(a * b) : null;
+  }
+
   const handelSelectedData = (
     product,
     category,
     subCat,
     subcategory1,
-    isChecked
+    isChecked,
+    productQuantity
   ) => {
     if (!product) return;
 
@@ -661,6 +992,22 @@ export const AppProvider = ({ children }) => {
         (item) => item.groupKey === groupKey
       );
 
+      let calQty = 0;
+
+      if (
+        (category.category === "Civil / Plumbing" && subcategory1 === "Tile") ||
+        (category.category === "Flooring" && subcategory1 !== "Epoxy")
+      ) {
+        console.log(subcategory1, subCat);
+
+        calQty = Math.ceil(
+          +areasData[0][normalizeKey(subCat)] /
+            multiplyFirstTwoFlexible(product?.dimensions)
+        );
+      } else {
+        calQty = productQuantity[subCat]?.[selectedSubCategory1];
+      }
+
       const productData = {
         groupKey,
         id: product.id,
@@ -677,19 +1024,56 @@ export const AppProvider = ({ children }) => {
         },
         // 🔥 Preserve existing addons if the product exists
         addons: existingProduct ? existingProduct.addons : selectedAddons || [],
-        finalPrice: calculateTotalPrice(
-          category.category,
-          subCat,
-          subcategory1,
-          null, // selectedCategory is not used in this specific calculation, using direct category parameter instead.
-          null, // selectedSubCategory is not used in this specific calculation, using direct subCat parameter instead.
-          null, // selectedSubCategory1 is not used in this specific calculation, using direct subcategory1 parameter instead.
-          quantityData,
-          areasData,
-          userResponses,
-          selectedProductView,
-          formulaMap
-        ),
+        finalPrice:
+          category.category === "Flooring" ||
+          category.category === "HVAC" ||
+          category.category === "Lighting" ||
+          (category.category === "Civil / Plumbing" &&
+            subcategory1 === "Tile") ||
+          category.category === "Partitions / Ceilings" ||
+          category.category === "Paint"
+            ? calculateTotalPrice(
+                category.category,
+                subCat,
+                subcategory1,
+                null, // selectedCategory is not used in this specific calculation, using direct category parameter instead.
+                null, // selectedSubCategory is not used in this specific calculation, using direct subCat parameter instead.
+                null, // selectedSubCategory1 is not used in this specific calculation, using direct subcategory1 parameter instead.
+                quantityData,
+                areasData,
+                userResponses,
+                selectedProductView,
+                formulaMap,
+                seatCountData
+              )
+            : category.category === "Furniture" &&
+              subcategory1 === "Chair" &&
+              (subCat === "Md Cabin Main" || subCat === "Md Cabin Visitor")
+            ? product.price *
+              (productQuantity[subCat]?.[selectedSubCategory1] ?? 0) *
+              (quantityData[0]["md"] ?? 1)
+            : category.category === "Furniture" &&
+              subcategory1 === "Chair" &&
+              (subCat === "Manager Cabin Main" ||
+                subCat === "Manager Cabin Visitor")
+            ? product.price *
+              (productQuantity[subCat]?.[selectedSubCategory1] ?? 0) *
+              (quantityData[0]["manager"] ?? 1)
+            : product.price *
+              (productQuantity[subCat]?.[selectedSubCategory1] ?? 0),
+        quantity:
+          category.category === "Paint"
+            ? Math.ceil(+areasData[0][normalizeKey(subCat)] / 120) * numOfCoats
+            : category.category === "Furniture" &&
+              subcategory1 === "Chair" &&
+              (subCat === "Md Cabin Main" || subCat === "Md Cabin Visitor")
+            ? calQty * (quantityData[0]["md"] ?? 1)
+            : category.category === "Furniture" &&
+              subcategory1 === "Chair" &&
+              (subCat === "Manager Cabin Main" ||
+                subCat === "Manager Cabin Visitor")
+            ? calQty * (quantityData[0]["manager"] ?? 1)
+            : calQty,
       };
 
       if (existingProduct) {
@@ -738,12 +1122,12 @@ export const AppProvider = ({ children }) => {
         setUserId,
         selectedAddons,
         setSelectedAddons,
-        categoriesWithModal,
-        categoriesWithTwoLevelCheck,
+        // categoriesWithModal,
+        // categoriesWithTwoLevelCheck,
         userResponses,
         setUserResponses,
-        showProfile,
-        setShowProfile,
+        // showProfile,
+        // setShowProfile,
         isAuthenticated,
         setIsAuthenticated,
         isAuthLoading,
@@ -751,8 +1135,8 @@ export const AppProvider = ({ children }) => {
         setAccountHolder,
         selectedPlan,
         setSelectedPlan,
-        defaultProduct,
-        setDefaultProduct,
+        // defaultProduct,
+        // setDefaultProduct,
         setIsAuthLoading,
         setLoading,
         loading,
@@ -769,14 +1153,10 @@ export const AppProvider = ({ children }) => {
         handelSelectedData,
         selectedProductView,
         setSelectedProductView,
-        minimizedView,
-        setMinimizedView,
-        showProductView,
-        setShowProductView,
         showRecommend,
         setShowRecommend,
         searchQuery,
-        priceRange,
+        // priceRange,
         boqTotal,
         setBoqTotal,
         isMobile,
@@ -812,7 +1192,19 @@ export const AppProvider = ({ children }) => {
         setShowLoginPopup,
         formulaMap,
         formulasLoading,
+        BOQTitle,
+        setBOQTitle: handleBOQTitleChange,
+        BOQID,
+        setBOQID,
         refetchFormulas: fetchFormulas,
+        selectedClient,
+        setSelectedClient,
+        setIsSaveBOQ,
+        seatCountData,
+        setSeatCountData,
+        productQuantity,
+        setProductQuantity,
+        allProductQuantities,
       }}
     >
       {children}

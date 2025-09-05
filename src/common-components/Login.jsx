@@ -8,6 +8,7 @@ import { useApp } from "../Context/Context";
 // import { use } from "react";
 import toast from "react-hot-toast";
 import { motion } from "framer-motion";
+import { useResetBOQ } from "../utils/HelperFunction";
 
 function Login() {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
@@ -25,7 +26,7 @@ function Login() {
     useApp();
 
   const navigate = useNavigate();
-
+  const resetBOQ = useResetBOQ();
   const [formData, setFormData] = useState({
     email: "",
     company: "",
@@ -38,8 +39,6 @@ function Login() {
   const location = useLocation();
 
   const from = location.state?.from;
-
-  console.log(location, "previous route");
 
   // console.log("helloooooo");
 
@@ -127,7 +126,7 @@ function Login() {
 
       if (data) {
         const currentLayoutID = data.id;
-        localStorage.setItem("currentLayoutID", currentLayoutID);
+        sessionStorage.setItem("currentLayoutID", currentLayoutID);
       }
 
       if (error) {
@@ -151,7 +150,7 @@ function Login() {
       return;
     }
     console.log("User signed up successfully:", data);
-    alert("User signed up successfully:", data);
+    toast.success("User signed up successfully:");
 
     const userId = data.user.id;
 
@@ -218,11 +217,11 @@ function Login() {
         // Navigate based on whether areaId and quantityId exist
         if (layoutId && firstElement?.role !== "user") {
           setCurrentLayoutID(layoutId);
-          localStorage.setItem("currentLayoutID", layoutId);
+          sessionStorage.setItem("currentLayoutID", layoutId);
           navigate("/dashboard", { replace: true });
         } else if (layoutId && firstElement?.role === "user") {
           setCurrentLayoutID(layoutId);
-          localStorage.setItem("currentLayoutID", layoutId);
+          sessionStorage.setItem("currentLayoutID", layoutId);
           navigate("/boq", { replace: true });
         } else {
           navigate("/Layout", { replace: true });
@@ -232,7 +231,8 @@ function Login() {
         navigate("/Layout", { replace: true }); // Default navigation in case of an error
       }
     }
-    setProgress(0);
+    // setProgress(0);
+    resetBOQ();
     toast.success("User logged in successfully!");
     console.log("User logged in successfully:", data);
   };
@@ -340,7 +340,8 @@ function Login() {
       const { error } = await supabase.auth.resetPasswordForEmail(
         formData.email,
         {
-          redirectTo: "https://603-interior.vercel.app/Login?type=recovery",
+          // redirectTo: "https://603-interior.vercel.app/Login?type=recovery",
+          redirectTo: `${window.location.origin}/Login?type=recovery`,
         }
       );
 
@@ -388,6 +389,7 @@ function Login() {
     //     redirectTo,
     //   },
     // });
+    resetBOQ();
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
@@ -418,7 +420,7 @@ function Login() {
   return (
     <>
       {resetPass ? (
-        <div className="flex flex-col justify-center items-center gap-5 max-h-screen h-screen w-full bg-login-custom-gradient">
+        <div className="flex flex-col justify-center items-center gap-5 lg:max-h-screen h-screen w-full">
           <div className="w-full sm:w-1/2 px-5 flex flex-col justify-center items-center gap-5">
             <h1 className="capitalize text-3xl font-bold text-white text-center ">
               Reset Password
@@ -436,7 +438,7 @@ function Login() {
                 value={formData.password}
                 onChange={handleChange}
                 placeholder="Enter New Password"
-                className="py-2 rounded-lg pl-2 focus:outline-none"
+                className="py-2 rounded-lg pl-2 focus:outline-none border"
               />
               <div
                 onClick={togglePasswordVisibility}
@@ -462,7 +464,7 @@ function Login() {
                 value={formData.confirmPassword}
                 onChange={handleChange}
                 placeholder="Enter New Password"
-                className="py-2 rounded-lg pl-2 focus:outline-none"
+                className="py-2 rounded-lg pl-2 focus:outline-none border"
               />
               <div
                 onClick={toggleConfirmPasswordVisibility}
@@ -477,7 +479,7 @@ function Login() {
             </div>
             <button
               onClick={handleResetPassword}
-              className="capitalize w-full xl:w-3/4 bg-[#1A3A36] text-white font-semibold py-2 rounded-lg mt-3"
+              className="capitalize w-full xl:w-3/4 bg-[#212B36] text-white font-semibold py-2 rounded-lg mt-3"
             >
               Reset Password
             </button>
@@ -485,8 +487,10 @@ function Login() {
         </div>
       ) : (
         <form onSubmit={handleSubmit}>
-          <div className="relative main flex justify-center gap-5 h-screen w-full md:bg-[url(images/Register.png)] bg-login-custom-gradient lg:bg-login-custom-gradient md:bg-opacity-20 px-3 lg:px-0">
-            <div className="hidden  md:block fixed inset-0 bg-black bg-opacity-50 lg:hidden" />
+          <div className="relative main flex justify-center gap-5 h-screen w-full bg-gradient-to-br from-[#334A78] to-[#68B2DC] md:bg-none md:bg-[#fff]  overflow-x-hidden">
+            {/* <div className="absolute top-0 -right-20 w-52 h-1/2 rounded-full  bg-[#1A2C3A] opacity-60 blur-[60px] mix-blend-soft-light pointer-events-none z-0" />
+            <div className="absolute bottom-0 -left-10 w-52 h-1/2 rounded-full bg-[#1A2C3A] opacity-70 blur-[60px] mix-blend-darken pointer-events-none z-0" /> */}
+            {/* <div className="hidden  md:block fixed inset-0 bg-black bg-opacity-50 lg:hidden" /> */}
             {/* <div className="img w-1/2 p-5 flex justify-end items-center"> */}
             {/* <div className="img flex-1 p-5 lg:flex justify-end items-center hidden">
               <img
@@ -496,10 +500,11 @@ function Login() {
                 className="xl:max-w-lg sm:max-w-sm"
               />
             </div> */}
-            <div className="img flex-1 p-5 lg:flex justify-end items-center hidden relative">
+            <div className="img flex-1 md:block hidden relative">
               {/* Skeleton placeholder */}
               {!imageLoaded && (
-                <div className="xl:max-w-lg sm:max-w-sm w-full h-[450px] bg-gray-300 rounded-2xl animate-pulse" />
+                <div className=" w-full h-full bg-gray-300 rounded-2xl" />
+                // <div className="xl:max-w-lg sm:max-w-sm w-full h-[450px] bg-gray-300 rounded-2xl" />
               )}
 
               {/* Image with fade-in on load */}
@@ -511,28 +516,36 @@ function Login() {
                 src="images/Register.png"
                 alt="Register"
                 loading="lazy"
-                className={`xl:max-w-lg sm:max-w-sm w-full h-auto absolute top-0 left-0 ${
+                // className={`xl:max-w-lg sm:max-w-sm w-full h-auto absolute top-0 left-0 ${
+                //   imageLoaded ? "relative" : "invisible"
+                // }`}
+                className={`w-full h-full object-cover ${
                   imageLoaded ? "relative" : "invisible"
                 }`}
               />
             </div>
 
             <div
-              className={`content z-10 flex-1 max-h-full h-full flex flex-col items-start ${
+              className={`content z-10 flex-1 max-h-full h-full flex flex-col items-center justify-center ${
                 isSignUp
                   ? "justify-center lg:justify-normal md:pt-10 md:mx-6 lg:mx-0 mx-2"
-                  : "pt-40"
+                  : ""
               }   xl:gap-10`}
+              // className={`content z-10 flex-1 max-h-full h-full flex flex-col items-start ${
+              //   isSignUp
+              //     ? "justify-center lg:justify-normal md:pt-10 md:mx-6 lg:mx-0 mx-2"
+              //     : "pt-40"
+              // }   xl:gap-10`}
             >
               <div className="w-full lg:w-3/4">
-                <h1 className="capitalize text-2xl md:text-3xl font-bold  md:text-white text-center">
+                <h1 className="capitalize text-2xl md:text-3xl font-bold  text-[#fff] md:text-[#000] text-center">
                   {isForgotPassword
                     ? "Forgot password"
                     : isSignUp
                     ? "Create Account"
                     : "Welcome back!"}
                 </h1>
-                <p className="capitalize md:text-white font-semibold text-center my-2">
+                <p className="capitalize text-[#fff] md:text-[#000] text-sm font-semibold text-center my-2">
                   {isForgotPassword
                     ? "No worries, we'll send you reset instructions"
                     : isSignUp
@@ -541,11 +554,12 @@ function Login() {
                 </p>
               </div>
 
-              <div className="w-full flex flex-col gap-2 pr-2">
+              <div className="w-full flex flex-col xl:items-center gap-2 px-4 sm:px-0 sm:pr-2">
+                {/* <div className="w-full flex flex-col gap-2 pr-2"> */}
                 <div className="flex flex-col gap-1 xl:gap-3 xl:w-3/4">
                   <label
                     htmlFor="email"
-                    className="capitalize text-sm md:text-md font-semibold md:text-white"
+                    className="capitalize text-sm md:text-md font-semibold text-[#fff] md:text-[#000]"
                   >
                     Email Id <span>*</span>
                   </label>
@@ -559,15 +573,15 @@ function Login() {
                         ? "Enter your email"
                         : "example@gmail.com"
                     }
-                    className="w-full py-1 pl-1 md:py-2 rounded-lg md:pl-2 focus:outline-none"
+                    className="w-full py-1 pl-1 md:py-2 rounded-lg md:pl-2 focus:outline-none border"
                   />
                 </div>
 
                 {isForgotPassword ? (
-                  <div>
+                  <div className="w-full xl:3/4">
                     <button
                       onClick={handleForgotPassword}
-                      className="capitalize w-full xl:w-3/4 bg-[#1A3A36] text-white font-semibold py-2 rounded-lg mt-3"
+                      className="capitalize w-full xl:w-3/4  flex items-center justify-self-center justify-center  bg-[#374A75] text-white font-semibold py-2 rounded-lg mt-3"
                       disabled={isSubmitting}
                     >
                       {isSubmitting ? (
@@ -599,9 +613,9 @@ function Login() {
                     </button>
                     <button
                       onClick={backToSignIn}
-                      className=" md:text-white capitalize flex items-center justify-center gap-1 w-full xl:w-3/4 my-6"
+                      className=" text-[#fff] justify-self-center md:text-[#000] capitalize flex items-center justify-center gap-1 w-full xl:w-3/4 my-6"
                     >
-                      <span className="cursor-pointer text-black self-center">
+                      <span className="cursor-pointer text-[#374A75] font-bold  self-center">
                         <FaAngleLeft size={16} />
                       </span>
                       Back to log in
@@ -615,7 +629,7 @@ function Login() {
                           <div className="flex flex-col gap-1 xl:gap-3 w-1/2">
                             <label
                               htmlFor="company"
-                              className="capitalize text-sm md:text-md font-semibold md:text-white"
+                              className="capitalize text-sm md:text-md font-semibold text-[#fff] md:text-[#000]"
                             >
                               Company Name <span>*</span>
                             </label>
@@ -625,14 +639,14 @@ function Login() {
                               value={formData.company}
                               onChange={handleChange}
                               placeholder="Your Company Name"
-                              className="w-full py-1 pl-1 md:py-2 rounded-lg md:pl-2 focus:outline-none"
+                              className="w-full py-1 pl-1 md:py-2 rounded-lg md:pl-2 focus:outline-none border"
                             />
                           </div>
 
                           <div className="flex flex-col gap-1 xl:gap-3 w-1/2">
                             <label
                               htmlFor="location"
-                              className="capitalize text-sm md:text-md font-semibold md:text-white"
+                              className="capitalize text-sm md:text-md font-semibold text-[#fff] md:text-[#000]"
                             >
                               Location <span>*</span>
                             </label>
@@ -648,7 +662,7 @@ function Login() {
                                 ); // Remove everything except letters & spaces
                               }}
                               placeholder="Your Location"
-                              className="w-full py-1 pl-1 md:py-2 rounded-lg md:pl-2 focus:outline-none"
+                              className="w-full py-1 pl-1 md:py-2 rounded-lg md:pl-2 focus:outline-none border"
                             />
                           </div>
                         </div>
@@ -656,7 +670,7 @@ function Login() {
                         <div className="xl:w-3/4 flex flex-col gap-1 xl:gap-3">
                           <label
                             htmlFor="mobile"
-                            className="capitalize text-sm md:text-md font-semibold md:text-white"
+                            className="capitalize text-sm md:text-md font-semibold text-[#fff] md:text-[#000]"
                           >
                             Mobile Number <span>*</span>
                           </label>
@@ -675,7 +689,7 @@ function Login() {
                             inputMode="numeric"
                             pattern="\d{10}"
                             placeholder="Your Mobile Number"
-                            className="w-full py-1 pl-1 md:py-2 rounded-lg md:pl-2 focus:outline-none"
+                            className="w-full py-1 pl-1 md:py-2 rounded-lg md:pl-2 focus:outline-none border"
                           />
                         </div>
                       </>
@@ -684,7 +698,7 @@ function Login() {
                     <div className="xl:w-3/4 flex flex-col gap-1 xl:gap-3 relative">
                       <label
                         htmlFor="password"
-                        className="capitalize text-sm md:text-md font-semibold md:text-white"
+                        className="capitalize text-sm md:text-md font-semibold text-[#fff] md:text-[#000]"
                       >
                         Password <span>*</span>
                       </label>
@@ -694,7 +708,7 @@ function Login() {
                         value={formData.password}
                         onChange={handleChange}
                         placeholder="Enter Password"
-                        className="w-full py-1 pl-1 md:py-2 rounded-lg md:pl-2 focus:outline-none"
+                        className="w-full py-1 pl-1 md:py-2 rounded-lg md:pl-2 focus:outline-none border"
                       />
                       <div
                         onClick={togglePasswordVisibility}
@@ -712,7 +726,7 @@ function Login() {
                         <div className="w-full flex justify-end">
                           <p
                             onClick={showForgotPassword}
-                            className="capitalize text-sm md:text-base text-black md:text-white underline cursor-pointer"
+                            className="capitalize text-sm md:text-base text-[#fff] md:text-[#000] underline cursor-pointer"
                           >
                             Forgot Password?
                           </p>
@@ -724,7 +738,7 @@ function Login() {
                       <div className="xl:w-3/4 flex flex-col gap-1 xl:gap-3 relative">
                         <label
                           htmlFor="confirmPassword"
-                          className="capitalize text-sm md:text-md font-semibold md:text-white"
+                          className="capitalize text-sm md:text-md font-semibold text-[#fff] md:text-[#000]"
                         >
                           Confirm Password <span>*</span>
                         </label>
@@ -734,7 +748,7 @@ function Login() {
                           value={formData.confirmPassword}
                           onChange={handleChange}
                           placeholder="Confirm Password"
-                          className="md:py-2 py-1 pl-1 rounded-lg md:pl-2 focus:outline-none"
+                          className="md:py-2 py-1 pl-1 rounded-lg md:pl-2 focus:outline-none border"
                         />
                         <div
                           onClick={toggleConfirmPasswordVisibility}
@@ -762,20 +776,20 @@ function Login() {
                     <button
                       // onClick={handleSubmit}
                       type="submit"
-                      className={`capitalize xl:w-3/4 bg-[#1A3A36] text-white font-semibold py-2 rounded-lg ${
+                      className={`capitalize xl:w-3/4 bg-[#374A75] text-white font-semibold py-2 rounded-lg ${
                         isSignUp ? "my-1" : "my-2"
                       }`}
                     >
                       {isSignUp ? "Sign Up" : "Sign In"}
                     </button>
 
-                    <p className="md:text-white text-sm md:text-base text-center md:text-left">
+                    <p className="text-[#fff] md:text-[#000] text-sm md:text-base text-center md:text-left">
                       {isSignUp ? (
                         <>
                           Already have an account?{" "}
                           <span
                             onClick={toggleForm}
-                            className="cursor-pointer text-black"
+                            className="cursor-pointer text-[#fff] md:text-[#374A75] underline"
                           >
                             Sign In
                           </span>
@@ -785,7 +799,7 @@ function Login() {
                           Don't have an account?{" "}
                           <span
                             onClick={toggleForm}
-                            className="cursor-pointer text-black"
+                            className="cursor-pointer underline text-[#fff] md:text-[#374A75]"
                           >
                             Sign Up
                           </span>
@@ -804,13 +818,15 @@ function Login() {
                     {/* {import.meta.env.MODE === "development" && ( */}
                     {/* <> */}
                     <div className="flex justify-center gap-3 items-center xl:w-3/4">
-                      <hr className="w-2/5" />
-                      <span className="text-white">or</span>
-                      <hr className="w-2/5" />
+                      <hr className="w-1/2 border md:border-[#000]" />
+                      <span className="text-[#fff] md:text-[#000] px-4 ">
+                        or
+                      </span>
+                      <hr className="w-1/2 border md:border-[#000]" />
                     </div>
-                    <div className="xl:w-3/4 flex justify-center gap-5">
+                    <div className="xl:w-3/4 flex justify-center gap-5 mt-3">
                       <div
-                        className="flex items-center gap-2 bg-white text-black px-4 py-2 rounded-md cursor-pointer shadow-md hover:shadow-lg transition"
+                        className="w-full flex items-center justify-center gap-2 bg-white text-black px-4 py-2 rounded-md border border-[#ccc] cursor-pointer  transition"
                         onClick={signInWithGoogle}
                       >
                         <FcGoogle size={24} />

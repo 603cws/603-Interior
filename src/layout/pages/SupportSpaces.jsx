@@ -4,8 +4,8 @@ import { useApp } from "../../Context/Context";
 const supportSpacesData = [
   {
     type: "ups",
-    image: "/images/workspace-image/ups.png",
-    // image: "/images/workstation-wp/ups-wp.webp",
+    // image: "/images/workspace-image/ups.png",
+    image: "/images/workstation-wp/ups.webp",
     description: "This is the UPS room, ensuring uninterrupted power supply.",
     slider: {
       name: "UPS Room Size",
@@ -16,11 +16,12 @@ const supportSpacesData = [
       step: 5,
     },
     tooltipText: "Size: 60 sq ft",
+    title: "UPS Room",
   },
   {
     type: "bms",
-    image: "/images/workspace-image/bms.png",
-    // image: "/images/workstation-wp/BMS-WP.webp",
+    // image: "/images/workspace-image/bms.png",
+    image: "/images/workstation-wp/bms.webp",
     description: "This is the BMS room, managing building systems.",
     slider: {
       name: "BMS Room Size",
@@ -31,27 +32,31 @@ const supportSpacesData = [
       step: 5,
     },
     tooltipText: "Size: 60 sq ft",
+    title: "BMS Room",
   },
   {
     type: "server",
-    image: "/images/workspace-image/server.png",
-    // image: "/images/workstation-wp/serverRoom-wp.webp",
+    // image: "/images/workspace-image/server.png",
+    image: "/images/workstation-wp/serverRoom.webp",
     description: "This is the server room, housing critical IT infrastructure.",
     tooltipText: "Size: 40 sq ft",
+    title: "Server Room",
   },
   {
     type: "executiveWashroom",
-    image: "/images/workspace-image/executiveWashroom.png",
-    // image: "/images/workstation-wp/executivewash-wp.webp",
+    // image: "/images/workspace-image/executiveWashroom.png",
+    image: "/images/workstation-wp/executiveWashroom.webp",
     description:
       "This is the Executive Washroom, providing premium facilities.",
     tooltipText: "Size: 60 sq ft",
+    title: "Executive Washroom",
   },
   {
     type: "other",
-    image: "/images/workspace-image/other.png",
-    // image: "/images/workstation-wp/other-wp.webp",
+    // image: "/images/workspace-image/other.png",
+    image: "/images/workstation-wp/others.webp",
     description: "This is an additional space for miscellaneous purposes.",
+    title: "Other Area",
   },
 ];
 
@@ -78,11 +83,11 @@ const SupportSpaces = ({
 
   return (
     <div className="section px-3">
-      <h3 className="section-heading bg-white shadow-sm text-md pl-2 py-1.5 sticky top-0 font-semibold z-10">
+      <h3 className="section-heading bg-[#E4E7ED] shadow-sm text-md pl-2 py-1 sticky top-0 font-semibold z-10">
         Support Spaces
       </h3>
       {/* <div className="support-spaces grid grid-cols-2 4xl:grid-cols-3 gap-5"> */}
-      <div className="support-spaces grid grid-cols-2 3xl:grid-cols-3 gap-5 justify-items-center lg:justify-items-stretch">
+      <div className="support-spaces grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-2 3xl:grid-cols-3 gap-5 justify-items-center lg:justify-items-stretch">
         {supportSpacesData.map((space) => {
           const sliderProps = space.slider
             ? {
@@ -125,9 +130,10 @@ const SupportSpaces = ({
                 }
               }}
               onChange={(value) => updateAreas(space.type, value)}
-              title={`${
-                space.type.charAt(0).toUpperCase() + space.type.slice(1)
-              }`}
+              // title={`${
+              //   space.type.charAt(0).toUpperCase() + space.type.slice(1)
+              // }`}
+              title={space.title || space.type}
               showInputField={space.type === "other"}
               tooltipText={
                 space.type === "ups"

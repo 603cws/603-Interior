@@ -11,110 +11,118 @@ const meetingRoomData = [
   // },
   {
     type: "interviewRoom",
-    image: "/images/workspace-image/interviewRoom.webp",
-    // image: "/images/workstation-wp/interview-wp.webp",
+    // image: "/images/workspace-image/interviewRoom.webp",
+    image: "/images/workstation-wp/interview.webp",
     description:
       "This is the interview room, designed for conducting interviews.",
     tooltipText: "Size: 100 sq ft",
+    title: "Interivew Room",
   },
   {
     type: "conferenceRoom",
-    image: "/images/workspace-image/conferenceRoom.webp",
-    // image: "/images/workstation-wp/conf-wp.webp",
+    // image: "/images/workspace-image/conferenceRoom.webp",
+    image: "/images/workstation-wp/conferenceRoom.webp",
     description: "This is the conference room, suitable for large meetings.",
     slider: {
       name: "Conference Room Size",
-      valueKey: "conferenceRoomSize",
-      setValueKey: "setConferenceRoomSize",
+      valueKey: "conferenceRoomConfig.roomSize",
+      setValueKey: "conferenceRoomConfig.setRoomSize",
       min: 250,
       max: 500,
       step: 5,
     },
+    title: "Conference Room",
   },
   {
     type: "boardRoom",
-    image: "/images/workspace-image/boardRoom.webp",
-    // image: "/images/workstation-wp/boardroom-wp.webp",
+    // image: "/images/workspace-image/boardRoom.webp",
+    image: "/images/workstation-wp/boardRoom.webp",
     description: "This is the board room, equipped for executive meetings.",
     slider: {
       name: "Board Room Size",
-      valueKey: "boardRoomSize",
-      setValueKey: "setBoardRoomSize",
+      valueKey: "boardRoomConfig.roomSize",
+      setValueKey: "boardRoomConfig.setRoomSize",
       min: 380,
       max: 650,
       step: 5,
     },
     tooltipText: "size: 18 pax",
+    title: "Board Room",
   },
   {
     type: "meetingRoom",
-    image: "/images/workspace-image/meetingRoom.png",
-    // image: "/images/workstation-wp/meetingroom-wp.webp",
+    // image: "/images/workspace-image/meetingRoom.png",
+    image: "/images/workstation-wp/meetingRoom.webp",
     description: "This is the meeting room, perfect for team meetings.",
     tooltipText: "Size: 120 sq ft \n Seats: 6 pax",
+    title: "Meeting Room",
   },
   {
     type: "meetingRoomLarge",
-    image: "/images/workspace-image/meetingRoomLarge.png",
-    // image: "/images/workstation-wp/meetroomlarge-wp.webp",
+    // image: "/images/workspace-image/meetingRoomLarge.png",
+    image: "/images/workstation-wp/meetingRoomLarge.webp",
     description: "This is the large meeting room, accommodating larger groups.",
     tooltipText: "Size: 150 sq ft \n Seats: 8 pax",
+    title: "Meeting Room(Large)",
   },
   {
     type: "hrRoom",
-    image: "/images/workspace-image/hrRoom.webp",
-    // image: "/images/workstation-wp/hr-wp.webp",
+    // image: "/images/workspace-image/hrRoom.webp",
+    image: "/images/workstation-wp/hrRoom.webp",
     description: "This is the HR room, designated for HR activities.",
     tooltipText: "size: 80 sqft",
     slider: {
-      name: "Add Extra Seats",
-      valueKey: "hrRoomSeatCount",
-      setValueKey: "setHrRoomSeatCount",
+      name: "Select Seats",
+      valueKey: "hrRoomConfig.seatCount",
+      setValueKey: "hrRoomConfig.setSeatCount",
       min: 0,
       max: 24,
       step: 2,
       cabinSizeKey: "roomSize",
       setCabinSizeKey: "setRoomSize",
     },
+    title: "HR Room",
   },
   {
     type: "financeRoom",
-    image: "/images/workspace-image/financeRoom.webp",
-    // image: "/images/workstation-wp/finance-wp.webp",
+    // image: "/images/workspace-image/financeRoom.webp",
+    image: "/images/workstation-wp/financeRoom.webp",
     description: "This is the finance room, used for financial discussions.",
     tooltipText: "size: 100 sqft",
     slider: {
-      name: "Add Extra Seats",
-      valueKey: "financeRoomSeatCount",
-      setValueKey: "setFinanceRoomSeatCount",
+      name: "Select Seats",
+      valueKey: "financeRoomConfig.seatCount",
+      setValueKey: "financeRoomConfig.setSeatCount",
       min: 0,
       max: 24,
       step: 2,
       cabinSizeKey: "roomSize",
       setCabinSizeKey: "setRoomSize",
     },
+    title: "Finance Room",
   },
   {
     type: "sales",
-    image: "/images/workspace-image/sales.png",
-    // image: "/images/workstation-wp/sales-wp.webp",
+    // image: "/images/workspace-image/sales.png",
+    image: "/images/workstation-wp/salesRoom.webp",
     description: "This is the sales area, designed for sales team activities.",
     tooltipText: "size: 80 sqft",
     slider: {
-      name: "Add Extra Seats",
-      valueKey: "salesSeatCount",
-      setValueKey: "setSalesSeatCount",
+      name: "Select Seats",
+      valueKey: "salesRoomConfig.seatCount",
+      setValueKey: "salesRoomConfig.setSeatCount",
       min: 0,
       max: 24,
       step: 2,
       cabinSizeKey: "roomSize",
       setCabinSizeKey: "setRoomSize",
     },
+    title: "Sales Room",
   },
   {
     type: "videoRecordingRoom",
-    image: "/images/workspace-image/videoRecordingRoom.png",
-    // image: "/images/workstation-wp/videocon-wp.webp",
+    // image: "/images/workspace-image/videoRecordingRoom.png",
+    image: "/images/workstation-wp/videoRoom.webp",
     description:
       "This is the video recording room, designed for creating professional video content.",
     slider: {
@@ -125,6 +133,7 @@ const meetingRoomData = [
       max: 160,
       step: 5,
     },
+    title: "Video Recording Room",
   },
 ];
 
@@ -142,12 +151,6 @@ const MeetingRooms = ({
   setConferenceRoomSize,
   boardRoomSize,
   setBoardRoomSize,
-  hrRoomSeatCount,
-  setHrRoomSeatCount,
-  salesSeatCount,
-  setSalesSeatCount,
-  financeRoomSeatCount,
-  setFinanceRoomSeatCount,
   boardRoomConfig,
   conferenceRoomConfig,
 }) => {
@@ -155,11 +158,11 @@ const MeetingRooms = ({
 
   return (
     <div className="section px-3">
-      <h3 className="section-heading bg-white shadow-sm text-md pl-2 py-1.5 sticky top-0 font-semibold z-10">
+      <h3 className="section-heading bg-[#E4E7ED] shadow-sm text-md pl-2 py-1 sticky top-0 font-semibold z-10">
         Meeting Rooms
       </h3>
       {/* <div className="meeting-rooms grid grid-cols-2 4xl:grid-cols-3 gap-5"> */}
-      <div className="meeting-rooms grid grid-cols-2 3xl:grid-cols-3 gap-5 justify-items-center lg:justify-items-stretch">
+      <div className="meeting-rooms grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-2 3xl:grid-cols-3 gap-5 justify-items-center lg:justify-items-stretch">
         {meetingRoomData.map((room) => {
           const sliderProps = room.slider
             ? {
@@ -179,8 +182,6 @@ const MeetingRooms = ({
                 type: room.type,
                 ...(room.type === "hrRoom"
                   ? {
-                      // valueKey: hrRoomSeatCount,
-                      // setValueKey: setHrRoomSeatCount,
                       cabinSize: hrRoomConfig.roomSize,
                       setCabinSize: hrRoomConfig.setRoomSize,
                       seatCount: hrRoomConfig.seatCount,
@@ -239,32 +240,33 @@ const MeetingRooms = ({
                 }
               }}
               onChange={(value) => updateAreas(room.type, value)}
-              title={`${
-                room.type.charAt(0).toUpperCase() + room.type.slice(1)
-              }`}
+              // title={`${
+              //   room.type.charAt(0).toUpperCase() + room.type.slice(1)
+              // }`}
+              title={room.title || room.type}
               showAreaCounter={!!room.slider} // Show counter only if room has a slider
               areaCounterProps={sliderProps}
               tooltipText={
                 room.type === "conferenceRoom"
                   ? `Size: ${conferenceRoomSize || 250} sq ft \n Seats: ${
-                      12 + conferenceRoomConfig.seatCount
+                      conferenceRoomConfig.seatCount
                     } pax`
                   : room.type === "boardRoom"
                   ? `Size: ${boardRoomSize || 325} sq ft \n Seats: ${
-                      18 + boardRoomConfig.seatCount
+                      boardRoomConfig.seatCount
                     } pax`
                   : room.type === "hrRoom"
                   ? `Size: ${hrRoomConfig.roomSize || "80"} sq ft \n Seats: ${
-                      4 + hrRoomSeatCount
+                      hrRoomConfig.seatCount
                     } pax`
                   : room.type === "financeRoom"
                   ? `Size: ${
                       financeRoomConfig.roomSize || "100"
-                    } sq ft \n Seats: ${4 + financeRoomSeatCount} pax`
+                    } sq ft \n Seats: ${financeRoomConfig.seatCount} pax`
                   : room.type === "sales"
                   ? `Size: ${
                       salesRoomConfig.roomSize || "80"
-                    } sq ft \n Seats: ${4 + salesSeatCount} pax`
+                    } sq ft \n Seats: ${salesRoomConfig.seatCount} pax`
                   : room.type === "videoRecordingRoom"
                   ? `Size: ${videoRecordingRoomSize || 80} sq ft`
                   : room.tooltipText

@@ -1,20 +1,12 @@
-import { RiDashboardFill } from "react-icons/ri";
-import { supabase } from "../../services/supabase";
 import { useApp } from "../../Context/Context";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { useRef, useState, useEffect } from "react";
-import { LuCalendarClock } from "react-icons/lu";
-import { RxVideo } from "react-icons/rx";
-import { BsQuestionCircle } from "react-icons/bs";
-import { IoSettingsSharp } from "react-icons/io5";
-import { VscSignOut } from "react-icons/vsc";
-import { PiListStarFill } from "react-icons/pi";
-import { BiUnite } from "react-icons/bi";
 import BookAppointment from "./BookAppointment";
 import { motion } from "framer-motion";
 import { MdClose } from "react-icons/md";
-// import useAuthRefresh from "../../Context/useAuthRefresh";
+import { useLogout } from "../../utils/HelperFunction";
+import GobackLayoutWarning from "./GobackLayoutWarning";
 
 const profileVariants = {
   hidden: { x: "100%", opacity: 0 }, // Start off-screen (right side)
@@ -34,24 +26,19 @@ function ProfileCard({
   selectedPlan = null,
   setShowBoqPrompt,
   setIsProfileCard,
+  setIsDBPlan,
+  setShowNewBoqPopup,
 }) {
-  const {
-    setIsAuthenticated,
-    accountHolder,
-    setAccountHolder,
-    setTotalArea,
-    setSelectedPlan,
-    progress,
-    setProgress,
-    setBoqTotal,
-  } = useApp();
+  const logout = useLogout();
+  const { accountHolder, progress, setBOQTitle, setIsSaveBOQ } = useApp();
   const profileRef = useRef(null);
   const [showBookAppointment, setShowBookAppointment] = useState(false);
 
+  // layout warning
+  const [isLayoutWarning, setIslayoutWarning] = useState(false);
+
   let isadmin = accountHolder.role === "user" ? true : false;
   const navigate = useNavigate();
-
-  //   const { signOutUser } = useAuthRefresh(); // Get signOutUser from hook
 
   // Close profile card when clicking outside
   useEffect(() => {
@@ -85,30 +72,6 @@ function ProfileCard({
   //   }
   // }, [isOpen]);
 
-  const handleLogout = async () => {
-    const { error } = await supabase.auth.signOut();
-    if (error) {
-      console.error("Error signing out:", error.message);
-    } else {
-      console.log("User signed out successfully");
-      toast.success("User signed out successfully");
-      setIsAuthenticated(false);
-      isadmin = false;
-      setAccountHolder({
-        companyName: "",
-        email: "",
-        phone: "",
-        role: "",
-        userId: "",
-      });
-      setTotalArea("");
-      localStorage.removeItem("currentLayoutID");
-      localStorage.removeItem("session");
-      localStorage.removeItem("usertoken");
-      navigate("/");
-    }
-  };
-
   const handleAppointment = () => {
     if (progress >= 90) {
       setShowBookAppointment(true);
@@ -125,7 +88,7 @@ function ProfileCard({
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-30 z-20">
+    <div className="fixed inset-0 bg-black bg-opacity-30 z-30">
       <motion.div
         ref={profileRef}
         initial="hidden"
@@ -134,9 +97,9 @@ function ProfileCard({
         variants={profileVariants}
         className={`fixed right-0 ${
           layout
-            ? "h-dvh md:h-[calc(100vh-85px)] top-0 md:top-[85px]"
+            ? "h-dvh md:h-[calc(100vh-85px)] top-0 md:top-[82px]"
             : "h-dvh md:h-[calc(100vh-50px)] top-0 md:top-[50px]"
-        } font-Poppins bg-white z-20 md:rounded-bl-[60px] md:rounded-tl-[60px] md:shadow-lg  md:max-w-sm w-3/4`}
+        } font-Poppins bg-white z-20 md:shadow-lg md:max-w-sm w-3/4`}
       >
         <div className="md:hidden flex justify-end items-center mb-4 absolute top-3 left-5">
           <MdClose
@@ -146,15 +109,24 @@ function ProfileCard({
           />
         </div>
         {/* Profile Card Content */}
-        <div className="md:rounded-bl-[60px] md:rounded-tl-[60px]  shadow-lg overflow-hidden w-full h-full bg-white">
+        <div className="shadow-lg overflow-hidden w-full h-full bg-white">
           {/* Profile Header */}
           <div className="h-1/3 flex flex-col">
             <div className="h-1/2 flex justify-center items-end">
-              <img
-                src={accountHolder.profileImage}
-                alt="usericon"
-                className="w-16 h-16"
-              />
+              <div
+                className="rounded-full"
+                ref={iconRef}
+                style={{
+                  backgroundImage:
+                    "linear-gradient(to top left, #5B73AF 0%, rgba(255, 255, 255, 0.5) 48%, #1F335C 100%)",
+                }}
+              >
+                <img
+                  src={accountHolder.profileImage}
+                  alt="usericon"
+                  className="w-20 h-20 p-1 cursor-pointer rounded-full"
+                />
+              </div>
             </div>
             <div className="flex-1 flex flex-col items-center justify-center">
               <p className="font-semibold text-lg">
@@ -165,86 +137,134 @@ function ProfileCard({
           </div>
 
           {/* Features Section */}
-          <div className="font-semibold xl:text-lg capitalize leading-normal tracking-wide py-7 text-[#262626] border-y-2 border-[#ccc] flex flex-col gap-4">
-            <div className="flex items-center mx-4 gap-3">
-              <RiDashboardFill />
-              <button onClick={() => navigate("/dashboard")}>Dashboard</button>
+          <div className="font-semibold xl:text-lg capitalize leading-normal tracking-wide py-4 text-[#262626] border-y-2 border-[#ccc] flex flex-col gap-2">
+            <div
+              className="flex items-center mx-4 gap-3 hover:bg-[#E5F4FF] hover:cursor-pointer hover:rounded-lg pl-2 py-1.5"
+              onClick={() => navigate("/dashboard")}
+            >
+              <img
+                src="/images/profile-card/dashboard.png"
+                alt="dashboard"
+                className="w-6 h-6"
+              />
+              <button>Dashboard</button>
             </div>
             {!layout && (
               <>
-                <div className="flex items-center mx-4 gap-3">
-                  <BiUnite />
-                  <button onClick={() => navigate("/Layout")}>Layout</button>
+                <div
+                  className="flex items-center mx-4 gap-3 hover:bg-[#E5F4FF] hover:cursor-pointer hover:rounded-lg pl-2 py-1.5"
+                  onClick={() => setIslayoutWarning(true)}
+                  // onClick={() => navigate("/Layout")}
+                >
+                  <img
+                    src="/images/profile-card/layout.png"
+                    alt="layout"
+                    className="w-6 h-6"
+                  />
+                  <button>Layout</button>
                 </div>
                 {selectedPlan && (
-                  <div className="flex items-center mx-4 gap-3">
-                    <PiListStarFill />
-                    <button
-                      onClick={() => {
-                        // setSelectedPlan(null);
-                        setIsOpen(false);
-                        // setProgress(0);
-                        // localStorage.removeItem("selectedData");
-                        // setBoqTotal(0);
-                        if (import.meta.env.MODE !== "development") {
-                          setShowBoqPrompt(true);
-                          setIsProfileCard(true);
-                        } else {
-                          setSelectedPlan(null);
-                          setProgress(0);
-                          localStorage.removeItem("selectedData");
-                          setBoqTotal(0);
-                        }
-                      }}
-                    >
-                      Select Your Plan
-                    </button>
+                  <div
+                    className="flex items-center mx-4 gap-3 hover:bg-[#E5F4FF] hover:cursor-pointer hover:rounded-lg pl-2 py-1.5"
+                    onClick={() => {
+                      setBOQTitle("");
+                      setIsSaveBOQ(false);
+                      navigate("/boq");
+                      // setSelectedPlan(null);
+                      setIsOpen(false);
+                      // setProgress(0);
+                      // localStorage.removeItem("selectedData");
+                      // setBoqTotal(0);
+                      setIsDBPlan(false);
+                      // if (import.meta.env.MODE !== "development") {
+                      setShowBoqPrompt(true);
+                      setIsProfileCard(true);
+                      setShowNewBoqPopup(true);
+                      // } else {
+                      //   setSelectedPlan(null);
+                      //   setProgress(0);
+                      //   localStorage.removeItem("selectedData");
+                      //   setSelectedData([]);
+                      //   setBoqTotal(0);
+                      // }
+                    }}
+                  >
+                    <img
+                      src="/images/profile-card/plancard.png"
+                      alt="layout"
+                      className="w-6 h-6"
+                    />
+                    <button>Select Your Plan</button>
                   </div>
                 )}
               </>
             )}
-            <div className="flex items-center mx-4 gap-3">
-              <RxVideo />
+            <div className="flex items-center mx-4 gap-3 hover:bg-[#E5F4FF] hover:cursor-pointer hover:rounded-lg pl-2 py-1.5">
+              <img
+                src="/images/profile-card/video.png"
+                alt="video"
+                className="w-6 h-6"
+              />
               <p>How it works</p>
             </div>
 
             {accountHolder.role === "user" && (
               <div
-                className={`flex items-center mx-4 gap-3 ${
-                  progress < 90 ? "text-gray-400 cursor-not-allowed" : ""
+                onClick={handleAppointment}
+                className={`flex items-center mx-4 gap-3 pl-2 py-1.5 ${
+                  progress < 75
+                    ? "text-gray-400 cursor-not-allowed"
+                    : "hover:rounded-lg hover:bg-[#E5F4FF] hover:cursor-pointer"
                 }`}
               >
-                <LuCalendarClock />
-                <button onClick={handleAppointment}>Book Appointment</button>
+                <img
+                  src="/images/profile-card/Appointment.png"
+                  alt="Question"
+                  className="w-6 h-6"
+                />
+                <button>Book Appointment</button>
               </div>
             )}
           </div>
 
           {/* Help & Settings Section */}
-          <div className="font-semibold xl:text-lg capitalize leading-normal tracking-wide py-7 text-[#262626] border-b-2 border-[#ccc] flex flex-col gap-4">
-            <div className="flex items-center mx-4 gap-3">
-              <BsQuestionCircle />
-              <button
-                onClick={() =>
-                  navigate("/dashboard", { state: { openHelp: true } })
-                }
-              >
-                Help
-              </button>
+          <div className="font-semibold xl:text-lg capitalize leading-normal tracking-wide py-4 text-[#262626] flex flex-col gap-2">
+            <div
+              className="flex items-center mx-4 gap-3 hover:bg-[#E5F4FF] hover:cursor-pointer hover:rounded-lg pl-2 py-1.5"
+              onClick={() =>
+                navigate("/dashboard", { state: { openHelp: true } })
+              }
+            >
+              <img
+                src="/images/profile-card/Question.png"
+                alt="Question"
+                className="w-6 h-6"
+              />
+              <button>Help</button>
             </div>
-            <div className="flex items-center mx-4 gap-3">
-              <IoSettingsSharp />
-              <button
-                onClick={() =>
-                  navigate("/dashboard", { state: { openSettings: true } })
-                }
-              >
-                Settings
-              </button>
+            <div
+              className="flex items-center mx-4 gap-3 hover:bg-[#E5F4FF] hover:cursor-pointer hover:rounded-lg pl-2 py-1.5"
+              onClick={() =>
+                navigate("/dashboard", { state: { openSettings: true } })
+              }
+            >
+              <img
+                src="/images/profile-card/setting.png"
+                alt="settings"
+                className="w-6 h-6"
+              />
+              <button>Settings</button>
             </div>
-            <div className="flex items-center mx-4 gap-3">
-              <VscSignOut />
-              <button onClick={handleLogout}>Sign out</button>
+            <div
+              className="flex items-center mx-4 gap-2 hover:bg-[#E5F4FF] hover:cursor-pointer hover:rounded-lg pl-3 py-1.5"
+              onClick={logout}
+            >
+              <img
+                src="/images/profile-card/signout.png"
+                alt="logout"
+                className="w-6 h-6"
+              />
+              <button>Sign out</button>
             </div>
           </div>
         </div>
@@ -252,6 +272,13 @@ function ProfileCard({
         {/* Book Appointment Modal */}
         {showBookAppointment && (
           <BookAppointment onClose={() => setShowBookAppointment(false)} />
+        )}
+
+        {isLayoutWarning && (
+          <GobackLayoutWarning
+            onCancel={() => setIslayoutWarning((prev) => !prev)}
+            onConfirm={() => navigate("/Layout")}
+          />
         )}
       </motion.div>
     </div>

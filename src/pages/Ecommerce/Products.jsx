@@ -160,7 +160,7 @@ function Products() {
   // const [selectedCat, setSelectedCat] = useState("Furniture");
 
   const swiperRef = useRef(null);
-  const { showLoginPopup } = useApp();
+  const { showLoginPopup, setShowLoginPopup } = useApp();
 
   const navigate = useNavigate();
 
@@ -684,7 +684,7 @@ function Products() {
         </div>
       </section>
 
-      {showLoginPopup && <Loginpoup />}
+      {showLoginPopup && <Loginpoup onClose={() => setShowLoginPopup(false)} />}
     </div>
   );
 }
