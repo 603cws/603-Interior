@@ -110,3 +110,17 @@
   height: 100vh;
   overflow: hidden !important;
 }
+
+.gold-text {
+  background: linear-gradient(
+    45deg,
+    #ffd700,
+    #ffc300,
+    #ffb700,
+    #ffaa1d,
+    #ffd700
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: bold;
+}

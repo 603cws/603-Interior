@@ -259,7 +259,7 @@ function Landing() {
               <h1 className="text-[#fff] text-5xl md:text-7xl xl:text-8xl font-bold italic capitalize font-TimesNewRoman">
                 Transform your <br /> office space with
                 <br />
-                <span className="text-[#FFC900]"> smart planning</span>
+                <span className="gold-text"> smart planning</span>
               </h1>
               <div className="flex gap-5 mt-7">
                 <AnimatedButton
@@ -369,8 +369,8 @@ function Landing() {
           />
 
           {/* Center final text */}
-          <p className="absolute inset-0 flex items-center justify-center text-3xl text-center center-text">
-            We create spaces tailored to you. <br /> We make every space a
+          <p className="absolute inset-0 flex items-center justify-center text-5xl text-center center-text">
+            We create spaces tailored to you. <br /> We make every space a<br />
             transformative experience.
           </p>
         </div>
@@ -412,6 +412,28 @@ function Landing() {
             </div>
           </div>
         </div>
+        {/* <button className="flex items-center p-2 place-self-center border">
+          Create Your Office
+        </button> */}
+        <AnimatedButton
+          onClick={() => navigate("/layout")}
+          className="!bg-[#3A5D7B] text-white capitalize font-Georgia text-lg w-60 mb-16 place-self-center"
+          variant="default"
+          size="lg"
+          glow={false}
+          textEffect="shimmer"
+          rounded="custom"
+          asChild={false}
+          hideAnimations={true}
+          // shimmerColor="#fff"
+          // shimmerSize="0.15em"
+          // shimmerDuration="3s"
+          borderRadius="10px"
+          background="rgba(48, 71, 120, 1)"
+          hovereBackground="linear-gradient(90deg,rgba(85,132,182,1)  0%,  rgba(117,162,190,1) 100%)"
+        >
+          create your space
+        </AnimatedButton>
       </section>
 
       {/* section 4 */}
