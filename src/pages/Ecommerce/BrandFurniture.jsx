@@ -14,6 +14,7 @@ function BrandFurniture() {
         </section>
 
         {/* <div className="h-80 w-screen bg-[url('/images/ecommerce/furnitureHeader.png')] bg-center bg-contain bg-no-repeat flex justify-center items-center"></div> */}
+
         <section className="lg:container px-4 my-10">
           <h2 className="text-3xl md:text-4xl lg:text-5xl uppercase text-center my-10">
             Shop By Categry
