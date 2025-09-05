@@ -114,7 +114,7 @@ function BoqPrompt({ onConfirm, onCancel, isProfileCard, setIsProfileCard }) {
           .eq("id", selectedBoq);
         if (updateError) throw updateError;
 
-        toast.success(`Draft BOQ overridden into "${existing?.boqTitle}"`);
+        // toast.success(`Draft BOQ overridden into "${existing?.boqTitle}"`);
 
         // await supabase
         //   .from("boq_data_new")

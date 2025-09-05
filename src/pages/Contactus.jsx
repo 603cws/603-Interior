@@ -93,8 +93,8 @@ function Contactus() {
   return (
     <>
       <LandingNavbar />
-      <div className="flex flex-col md:flex-row gap-6 mb-10 px-4 md:px-0">
-        <div className="md:w-[40%] md:pl-6 lg:pl-12 self-center lg:space-y-10 pt-5 md:pt-0">
+      <div className="flex flex-col md:flex-row gap-6 mb-10 px-4 md:px-0 3xl:max-w-7xl mx-auto">
+        <div className="md:w-[40%] md:pl-6 lg:pl-12 3xl:pl-0 self-center lg:space-y-10 pt-5 md:pt-0">
           <h1 className="font-TimesNewRoman italic font-bold text-2xl xl:text-5xl xl:leading-[59px] xl:tracking-[0.3px] text-[#304778]">
             Get in Touch With Us
           </h1>
@@ -112,12 +112,12 @@ function Contactus() {
           />
         </div>
       </div>
-      <div className="xl:container xl:mx-auto">
+      <div className="lg:container xl:max-w-7xl xl:px-0 xl:mx-auto">
         {/* <div className="">
           <HeroSection background={background} title={"Contact"} />
         </div> */}
 
-        <section className="hidden  sm:block lg:pt-8 lg:h-[130vh] xl:h-screen 3xl:h-[75vh] md:container md:mx-auto">
+        <section className="hidden  sm:block lg:pt-8 lg:h-[130vh] xl:h-screen 3xl:h-[75vh]  md:mx-auto">
           <div
             className=" py-3 flex flex-col-reverse
             lg:flex-row-reverse lg:justify-center lg:items-center  gap-10 h-full 3xl:h-full relative transform -translate-y-1/6"
@@ -276,9 +276,9 @@ function Contactus() {
                   height="300"
                   // style="border:0;"
                   style={{ border: "1.5px solid" }}
-                  allowfullscreen=""
+                  allowFullScreen=""
                   loading="lazy"
-                  referrerpolicy="no-referrer-when-downgrade"
+                  referrerPolicy="no-referrer-when-downgrade"
                 ></iframe>
               </div>
             </div>

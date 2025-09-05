@@ -78,7 +78,27 @@ function NewBoq({ onConfirm, onCancel }) {
     if (userId) fetchSavedBOQs();
   }, [userId]);
 
-  const handleConfirm = async () => {
+  // const handleConfirm = async () => {
+  //   if (boqMode === "new") {
+  //     if (draftBoq) {
+  //       if (newBoqAction === "continue") {
+  //         // Continue existing draft
+  //         onConfirm(draftBoq.id, "existing");
+  //       } else if (newBoqAction === "discard") {
+  //         await handleCreateNewAndDiscard(); // already deletes then calls onConfirm
+  //       }
+  //     } else {
+  //       // No draft exists — simply create new
+  //       onConfirm("Draft BOQ", "new");
+  //     }
+  //   } else if (boqMode === "existing") {
+  //     if (!selectedBoq) return alert("Please select a BOQ.");
+  //     onConfirm(selectedBoq, "existing");
+  //   }
+  // };
+
+  const handleConfirm = async (mode, newBoqAction) => {
+    setBoqMode(mode);
     if (boqMode === "new") {
       if (draftBoq) {
         if (newBoqAction === "continue") {
@@ -144,15 +164,15 @@ function NewBoq({ onConfirm, onCancel }) {
         {/* <div className="fixed inset-0 bg-black bg-opacity-50" /> */}
 
         <div className="fixed inset-0 flex items-center justify-center bg-[#000]/30">
-          <div className="shadow-lg max-w-sm md:max-w-xl w-full rounded-lg p-4 bg-gradient-to-br from-[#334A78] to-[#68B2DC]">
-            <Dialog.Panel className="bg-[#fff] text-[#000] rounded font-Poppins p-3">
-              <Dialog.Title className="text-2xl font-semibold text-center">
+          <div className="shadow-lg max-w-sm md:max-w-xl w-full rounded-lg p-4 bg-gradient-to-br from-[#334A78] to-[#68B2DC] ">
+            <Dialog.Panel className="bg-[#fff] text-[#000] rounded font-Poppins p-3 min-h-[300px]">
+              <Dialog.Title className="text-2xl font-semibold text-center text-[#374A75]">
                 New or Load BOQ
               </Dialog.Title>
 
               <div className="mt-4 space-y-4">
                 {/* Mode Selection */}
-                <div className="flex justify-center gap-6">
+                {/* <div className="flex justify-center gap-6">
                   <label
                     className={`flex items-center gap-2 cursor-pointer ${
                       disabledNewBoq ? "opacity-50 cursor-not-allowed" : ""
@@ -181,48 +201,101 @@ function NewBoq({ onConfirm, onCancel }) {
                       <span>Load Existing</span>
                     </label>
                   )}
+                </div> */}
+
+                <div className="flex justify-center gap-6">
+                  {/* New BOQ Button */}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (!disabledNewBoq) setBoqMode("new");
+                    }}
+                    disabled={disabledNewBoq}
+                    className={`px-4 py-2 rounded text-sm transition duration-300 border w-36
+                    ${
+                      boqMode === "new"
+                        ? "bg-[#EBEBEB] text-[#374A75] border-[#374A75]"
+                        : "bg-white text-[#000] border-[#000] hover:bg-gray-200"
+                    }
+                    ${
+                      disabledNewBoq
+                        ? "opacity-50 cursor-not-allowed"
+                        : "cursor-pointer"
+                    }
+                  `}
+                  >
+                    New BOQ
+                  </button>
+
+                  {/* Existing BOQ Button */}
+                  {boqList?.length > 0 && (
+                    <button
+                      type="button"
+                      onClick={() => setBoqMode("existing")}
+                      className={`px-4 py-2 rounded text-sm transition duration-300 border w-36
+                      ${
+                        boqMode === "existing"
+                          ? "bg-[#EBEBEB] text-[#374A75] border-[#374A75]"
+                          : "bg-white text-[#000] border-[#000] hover:bg-gray-200"
+                      }
+                      cursor-pointer
+                    `}
+                    >
+                      Load Existing
+                    </button>
+                  )}
                 </div>
 
                 {/* New BOQ Input / Draft options */}
                 {boqMode === "new" && (
                   <div className="text-sm bg-[#f9f9f9] p-3 rounded border border-[#334A78]">
                     {draftBoq ? (
-                      <div className="space-y-2">
-                        <div>
-                          You have an existing <strong>Draft BOQ</strong> saved
-                          on {new Date(draftBoq.created_at).toLocaleString()}.
-                        </div>
+                      // <div className="space-y-2">
+                      //   <div>
+                      //     You have an existing <strong>Draft BOQ</strong> saved
+                      //     on {new Date(draftBoq.created_at).toLocaleString()}.
+                      //   </div>
 
-                        <div className="flex flex-col gap-2 text-black">
-                          <label className="flex items-center gap-2">
-                            <input
-                              type="radio"
-                              name="newBoqAction"
-                              value="continue"
-                              checked={newBoqAction === "continue"}
-                              onChange={() => setNewBoqAction("continue")}
-                            />
-                            <span>
-                              Continue Draft [{draftBoq?.layoutId?.totalArea}{" "}
-                              sqft]
-                            </span>
-                          </label>
+                      //   <div className="flex flex-col gap-2 text-black">
+                      //     <label className="flex items-center gap-2">
+                      //       <input
+                      //         type="radio"
+                      //         name="newBoqAction"
+                      //         value="continue"
+                      //         checked={newBoqAction === "continue"}
+                      //         onChange={() => setNewBoqAction("continue")}
+                      //       />
+                      //       <span>
+                      //         Continue Draft [{draftBoq?.layoutId?.totalArea}{" "}
+                      //         sqft]
+                      //       </span>
+                      //     </label>
 
-                          <label className="flex items-center gap-2">
-                            <input
-                              type="radio"
-                              name="newBoqAction"
-                              value="discard"
-                              checked={newBoqAction === "discard"}
-                              onChange={() => setNewBoqAction("discard")}
-                            />
-                            <span>Create New Draft (Discard previous)</span>
-                          </label>
-                        </div>
+                      //     <label className="flex items-center gap-2">
+                      //       <input
+                      //         type="radio"
+                      //         name="newBoqAction"
+                      //         value="discard"
+                      //         checked={newBoqAction === "discard"}
+                      //         onChange={() => setNewBoqAction("discard")}
+                      //       />
+                      //       <span>Create New Draft (Discard previous)</span>
+                      //     </label>
+                      //   </div>
 
-                        <div className="text-xs">
+                      //   <div className="text-xs">
+                      //     Tip: you can save/update or delete the draft later.
+                      //   </div>
+                      // </div>
+                      <div className="space-y-3">
+                        <p>
+                          You have an existing <strong>Draft BOQ</strong> [
+                          {draftBoq?.layoutId?.totalArea} sqft] saved on{" "}
+                          {new Date(draftBoq.created_at).toLocaleString()}.
+                        </p>
+                        <p className="text-xs">
                           Tip: you can save/update or delete the draft later.
-                        </div>
+                        </p>
                       </div>
                     ) : (
                       <div>
@@ -270,7 +343,7 @@ function NewBoq({ onConfirm, onCancel }) {
               </div>
 
               <div className="mt-6 flex justify-center gap-3">
-                <button
+                {/* <button
                   onClick={handleConfirm}
                   disabled={
                     (boqMode === "existing" && !selectedBoq) ||
@@ -284,7 +357,32 @@ function NewBoq({ onConfirm, onCancel }) {
                   }`}
                 >
                   Continue
-                </button>
+                </button> */}
+                {boqMode === "new" ? (
+                  <div className="flex justify-between w-full text-sm">
+                    <button
+                      onClick={() => handleConfirm("new", "continue")}
+                      className="capitalize px-4 py-2 border bg-gradient-to-r from-[#334A78] to-[#68B2DC] text-[#fff]"
+                    >
+                      continue draft
+                    </button>
+                    <button
+                      onClick={() => handleConfirm("new", "discard")}
+                      className="capitalize px-4 py-2 border bg-[#334A78] text-[#fff]"
+                    >
+                      create new draft
+                    </button>
+                  </div>
+                ) : (
+                  <button
+                    onClick={() => {
+                      handleConfirm("existing", "continue");
+                    }}
+                    className="capitalize px-6 py-2 border bg-gradient-to-r from-[#334A78] to-[#68B2DC] text-[#fff] text-sm"
+                  >
+                    continue
+                  </button>
+                )}
 
                 {/* <button
                 onClick={() => {

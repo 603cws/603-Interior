@@ -8,6 +8,7 @@ import { useApp } from "../Context/Context";
 // import { use } from "react";
 import toast from "react-hot-toast";
 import { motion } from "framer-motion";
+import { useResetBOQ } from "../utils/HelperFunction";
 
 function Login() {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
@@ -25,7 +26,7 @@ function Login() {
     useApp();
 
   const navigate = useNavigate();
-
+  const resetBOQ = useResetBOQ();
   const [formData, setFormData] = useState({
     email: "",
     company: "",
@@ -230,7 +231,8 @@ function Login() {
         navigate("/Layout", { replace: true }); // Default navigation in case of an error
       }
     }
-    setProgress(0);
+    // setProgress(0);
+    resetBOQ();
     toast.success("User logged in successfully!");
     console.log("User logged in successfully:", data);
   };
@@ -387,6 +389,7 @@ function Login() {
     //     redirectTo,
     //   },
     // });
+    resetBOQ();
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {

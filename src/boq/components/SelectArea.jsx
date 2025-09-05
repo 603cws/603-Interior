@@ -270,7 +270,8 @@ function SelectArea({
       if (!allAddons || allAddons.length === 0) {
         setShowSelectArea(false);
         setShowBackground(false);
-        botRight();
+        // botRight();
+        AddToCartToast(selectedProductView, "boq");
       } else {
         setShowAddon(true);
       }
@@ -1130,7 +1131,6 @@ function SelectArea({
                   selectedAddonsMap={selectedAddonsMap}
                   setSelectedAddonsMap={setSelectedAddonsMap}
                   setShowSelectArea={setShowSelectArea}
-                  botRight={botRight}
                 />
               </div>
             </div>

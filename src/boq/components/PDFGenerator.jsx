@@ -95,8 +95,16 @@ const PDFGenerator = {
     doc.setTextColor(128, 128, 128);
     doc.setFont("helvetica", "normal");
     doc.text(`Height: ${userResponses.height} ft`, 20, y + 15);
-    doc.text(`HVAC: ${userResponses.hvacType}`, 20, y + 30);
-    doc.text(`Flooring: ${userResponses.flooring}`, 20, y + 45);
+    doc.text(
+      `HVAC: ${userResponses.hvacType ? userResponses.hvacType : "N/A"}`,
+      20,
+      y + 30
+    );
+    doc.text(
+      `Flooring: ${userResponses.flooring ? userResponses.flooring : "N/A"}`,
+      20,
+      y + 45
+    );
 
     const rightMargin = 20;
     const layoutX = pageWidth - rightMargin;

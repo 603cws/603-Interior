@@ -432,7 +432,7 @@ export const AppProvider = ({ children }) => {
 
   // Auto-save effect
   useEffect(() => {
-    if (!BOQID && !BOQTitle) return;
+    if (!BOQID || !BOQTitle) return;
     handleUpdateBOQ(BOQID);
   }, [selectedPlan, selectedData, userResponses, boqTotal]);
 
