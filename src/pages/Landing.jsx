@@ -233,7 +233,7 @@ function Landing() {
   return (
     <>
       {/* hero section */}
-      <section className="h-screen flex flex-col">
+      {/* <section className="h-screen flex flex-col">
         <LandingNavbar />
         <div className="flex-1 flex items-center relative ">
           <div className="absolute inset-0">
@@ -281,7 +281,7 @@ function Landing() {
                 >
                   make your space
                 </AnimatedButton>
-                {/* <AnimatedButton
+                <AnimatedButton
                   onClick={() => navigate("/layout")}
                   className="!bg-[#3A5D7B] text-white capitalize font-Georgia  text-lg w-60"
                   variant="default"
@@ -299,9 +299,82 @@ function Landing() {
                   hovereBackground="linear-gradient(90deg,rgba(85,132,182,1)  0%,  rgba(117,162,190,1) 100%)"
                 >
                   book appointment
-                </AnimatedButton> */}
+                </AnimatedButton>
               </div>
             </motion.div>
+          </div>
+        </div>
+      </section> */}
+      <section className="h-screen">
+        <LandingNavbar className="absolute top-0 z-50" />
+        <div className="relative h-full w-full pt-20 lg:pt-24">
+          <div className="hidden lg:block w-52 h-56 absolute top-0 left-1/2 -translate-x-full bg-[#ECECEC] -z-10"></div>
+          <div className="hidden lg:block absolute bottom-0 left-0 w-52 h-56 bg-[#1C3145]"></div>
+          <div className="hidden lg:block absolute bottom-0 right-0 max-w-sm w-full h-12 bg-[#1C3145]"></div>
+          <div className="hidden lg:block absolute bottom-0 left-1/2 translate-x-1/4 -z-10">
+            <img src="/images/home/dom.png" alt="" className="max-w-40" />
+          </div>
+          <div className="hidden absolute left-1/2 top-0 transform -translate-x-3 lg:grid grid-cols-6 gap-x-4 gap-y-2 pt-28 -z-10">
+            {[...Array(36)].map((_, i) => (
+              <span key={i} className="w-1 h-1 bg-[#1E3A5F]"></span>
+            ))}
+          </div>
+          <div className="hidden absolute left-3 top-1/2 transform translate-y-full lg:grid grid-cols-6 gap-x-2 gap-y-3 -z-10">
+            {[...Array(30)].map((_, i) => (
+              <span key={i} className="w-1 h-1 bg-[#1E3A5F]"></span>
+            ))}
+          </div>
+          <div className="px-4 lg:container flex flex-col-reverse lg:grid grid-cols-1 lg:grid-cols-2 justify-items-stretch ">
+            <div className="space-y-2 lg:space-y-4 mt-5 lg:px-10">
+              <div className="relative">
+                <img
+                  src="/images/home/Hero-image-1.webp"
+                  alt="Office image"
+                  className="max-h-32 md:max-h-36 lg:max-h-72 object-cover w-full"
+                />
+                <span className="absolute -top-3 -left-3 w-16 h-16 border-t-2 border-l-2 border-[#1E3A5F]"></span>
+              </div>
+              <div className="relative">
+                <img
+                  src="/images/home/Hero-image-2.webp"
+                  alt="Office image"
+                  className="max-h-32 md:max-h-36 lg:max-h-72 object-cover w-full"
+                />
+                <span className="absolute -bottom-3 -right-3 w-16 h-16 border-b-2 border-r-2 border-[#1E3A5F]"></span>
+              </div>
+            </div>
+            <div className="flex h-full items-center text-center lg:text-right justify-self-end">
+              <div className="space-y-4 lg:space-y-10">
+                <h1 className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl 2xl:text-8xl text-[#555555] uppercase font-Alegreya">
+                  we design <br /> your dreams
+                </h1>
+                <div className="h-1 w-20 bg-[#334A78] place-self-center lg:place-self-end"></div>
+                <p className="text-base xl:text-xl text-[#555555]">
+                  "Transforming ordinary spaces into extraordinary
+                  <span className="hidden lg:inline">
+                    <br />
+                  </span>
+                  experiences. our passion lies in creating interiors
+                  <span className="hidden lg:inline">
+                    <br />
+                  </span>
+                  that are not just beautiful bur functional, timeless, and
+                  <span className="hidden lg:inline">
+                    <br />
+                  </span>
+                  uniquely yours."
+                </p>
+
+                <button
+                  onClick={() => navigate("/Layout")}
+                  className="relative group w-40 lg:w-48 h-11 lg:h-12 rounded-lg p-1 bg-gradient-to-br from-[#334A78] to-[#78A3FF] hover:bg-[#334A78]"
+                >
+                  <span className="flex w-full h-full items-center justify-center rounded-md bg-white text-base lg:text-lg font-bold capitalize text-[#334A78] group-hover:text-[#FFF] group-hover:bg-[#334A78] transition-colors duration-500 ease-in-out">
+                    make your space
+                  </span>
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </section>
