@@ -116,66 +116,68 @@ export default Services;
 function OfficeLayoutSection() {
   const navigate = useNavigate();
   return (
-    <div className=" flex flex-col gap-6 lg:gap-0 lg:flex-row justify-between items-center my-10 md:container  xl:max-w-7xl xl:px-0 lg:mx-auto text-center lg:text-start">
-      {/* Left Section */}
-      <div>
-        <h2 className="font-TimesNewRoman italic text-3xl xl:text-[44px] xl:leading-[53px] tracking-[0.3px] font-bold text-[#334A78] capitalize">
-          Design your dream <br /> office-from layout <br /> to final Product
-        </h2>
-        <p className="font-Georgia text-[#334A78] mt-4 text-base md:text-2xl tracking-[0.3px]">
-          Plan your workspace, add furniture & <br /> essentials, and get your
-          BOQ Instantly.
-        </p>
-        <div className="inline-block">
-          <AnimatedButton
-            onClick={() => navigate("/Layout")}
-            className="!bg-[#3A5D7B] text-white capitalize font-Georgia mt-7 text-lg"
-            variant="default"
-            size="lg"
-            // glow={true}
-            textEffect="shimmer"
-            rounded="custom"
-            asChild={false}
-            hideAnimations={false}
-            shimmerColor="#fff"
-            shimmerSize="0.1em"
-            shimmerDuration="3s"
-            borderRadius="6px"
-            background="rgba(48, 71, 120, 1)"
-            hovereBackground="linear-gradient(90deg,rgba(85,132,182,1)  0%,  rgba(117,162,190,1) 100%)"
-          >
-            Start Your Layout
-          </AnimatedButton>
-        </div>
-        {/* <button
+    <section className="bg-[#334a78]">
+      <div className="flex flex-col gap-6 lg:gap-0 lg:flex-row justify-between items-center mb-10 md:container xl:max-w-7xl xl:px-0 lg:mx-auto text-center lg:text-start">
+        {/* Left Section */}
+        <div className="flex flex-1 flex-col">
+          <h2 className="font-TimesNewRoman italic text-3xl xl:text-[44px] xl:leading-[53px] tracking-[0.3px] font-bold text-white capitalize">
+            Design your dream <br /> office-from layout <br /> to final Product
+          </h2>
+          <p className="font-Georgia text-white mt-4 text-base md:text-2xl tracking-[0.3px]">
+            Plan your workspace, add furniture & <br /> essentials, and get your
+            BOQ Instantly.
+          </p>
+          <div className="inline-block">
+            <AnimatedButton
+              onClick={() => navigate("/Layout")}
+              className="!bg-[#3A5D7B] text-white capitalize font-Georgia mt-7 text-lg"
+              variant="default"
+              size="lg"
+              // glow={true}
+              textEffect="shimmer"
+              rounded="custom"
+              asChild={false}
+              hideAnimations={false}
+              shimmerColor="#fff"
+              shimmerSize="0.1em"
+              shimmerDuration="3s"
+              borderRadius="6px"
+              background="rgba(48, 71, 120, 1)"
+              hovereBackground="linear-gradient(90deg,rgba(85,132,182,1)  0%,  rgba(117,162,190,1) 100%)"
+            >
+              Start Your Layout
+            </AnimatedButton>
+          </div>
+          {/* <button
           onClick={() => navigate("/Layout")}
           className=" font-Georgia mt-6 bg-gradient-to-r from-[#75A2BE] to-[#334A78] text-white px-6 py-3 rounded-md hover:scale-105  transition duration-500 ease-in-out"
         >
           Start Your Layout
         </button> */}
-      </div>
+        </div>
 
-      {/* Right Section - Image */}
-      {/* <div className="flex justify-center">
+        {/* Right Section - Image */}
+        {/* <div className="flex justify-center">
         <img
           src="/images/serviceHero.webp"
           alt="Office Layout"
           className="w-full  lg:max-w-xl xl:max-w-2xl"
         />
       </div> */}
-      <motion.div
-        className="flex justify-center"
-        initial={{ x: 300, opacity: 0 }}
-        animate={{ x: 0, opacity: 1 }}
-        transition={{ duration: 1, ease: "easeOut" }}
-      >
-        <img
-          src="/images/serviceHero.webp"
-          alt="Office Layout"
-          className="w-full lg:max-w-xl xl:max-w-2xl"
-        />
-      </motion.div>
-    </div>
+        <motion.div
+          className="flex justify-center xl:py-8 xl:pl-8 flex-1"
+          initial={{ x: 300, opacity: 0 }}
+          animate={{ x: 0, opacity: 1 }}
+          transition={{ duration: 1, ease: "easeOut" }}
+        >
+          <img
+            src="/images/serviceHero.webp"
+            alt="Office Layout"
+            className="w-full lg:max-w-xl xl:max-w-2xl"
+          />
+        </motion.div>
+      </div>
+    </section>
   );
 }
 
