@@ -79,7 +79,7 @@ const InfoCardDetails = [
 function Services() {
   return (
     <div className="">
-      <LandingNavbar />
+      <LandingNavbar className="relative" />
       <OfficeLayoutSection />
       <div className="flex flex-col gap-6 md:gap-0 md:flex-row items-center justify-between  lg:p-16 lg:container xl:max-w-7xl xl:px-0 lg:mx-auto lg:px-12 px-4">
         {InfoCardDetails.map((info) => (
@@ -117,7 +117,7 @@ function OfficeLayoutSection() {
   const navigate = useNavigate();
   return (
     <section className="bg-[#334a78]">
-      <div className="flex flex-col gap-6 lg:gap-0 lg:flex-row justify-between items-center mb-10 md:container xl:max-w-7xl xl:px-0 lg:mx-auto text-center lg:text-start">
+      <div className="flex flex-col gap-6 lg:gap-0 lg:flex-row justify-between items-center mb-10 md:container xl:max-w-7xl xl:px-0 lg:mx-auto text-center lg:text-start pt-10 lg:pt-0">
         {/* Left Section */}
         <div className="flex flex-1 flex-col">
           <h2 className="font-TimesNewRoman italic text-3xl xl:text-[44px] xl:leading-[53px] tracking-[0.3px] font-bold text-white capitalize">
@@ -127,7 +127,7 @@ function OfficeLayoutSection() {
             Plan your workspace, add furniture & <br /> essentials, and get your
             BOQ Instantly.
           </p>
-          <div className="inline-block">
+          <div className="inline-flex justify-center">
             <AnimatedButton
               onClick={() => navigate("/Layout")}
               className="!bg-[#3A5D7B] text-white capitalize font-Georgia mt-7 text-lg"

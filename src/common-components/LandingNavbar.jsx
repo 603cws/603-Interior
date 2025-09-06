@@ -15,7 +15,7 @@ function LandingNavbar({ className }) {
 
   const navigate = useNavigate();
   return (
-    <div className={cn("bg-transparent py-4 w-full", className)}>
+    <div className={cn("bg-transparent py-2 lg:py-4 w-full", className)}>
       {/* desktop navbar */}
       <div className="hidden container lg:flex justify-between items-center font-TimesNewRoman text-[#334A78]">
         <div>

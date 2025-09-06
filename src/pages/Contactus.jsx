@@ -92,7 +92,7 @@ function Contactus() {
 
   return (
     <>
-      <LandingNavbar />
+      <LandingNavbar className="relative" />
       <div className="flex flex-col md:flex-row gap-6 mb-10 px-4 md:px-0 3xl:max-w-7xl mx-auto">
         <div className="md:w-[40%] md:pl-6 lg:pl-12 3xl:pl-0 self-center lg:space-y-10 pt-5 md:pt-0">
           <h1 className="font-TimesNewRoman italic font-bold text-2xl xl:text-5xl xl:leading-[59px] xl:tracking-[0.3px] text-[#304778]">

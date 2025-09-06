@@ -306,8 +306,8 @@ function Landing() {
         </div>
       </section> */}
       <section className="h-screen 3xl:h-auto">
-        <LandingNavbar className="absolute top-0 z-50 px-6" />
-        <div className="relative h-full w-full pt-20 lg:pt-24 pr-4">
+        <LandingNavbar className="absolute top-0 z-50" />
+        <div className="relative h-full w-full pt-20 lg:pt-24 xl:overflow-y-hidden lg:container">
           <div className="hidden lg:block w-52 h-56 absolute top-0 left-1/2 -translate-x-full bg-[#ECECEC] -z-10"></div>
           <div className="hidden lg:block absolute bottom-0 left-0 w-52 h-56 bg-[#1C3145]"></div>
           <div className="hidden lg:block absolute bottom-0 right-0 max-w-sm w-full h-12 bg-[#1C3145]"></div>
@@ -325,12 +325,12 @@ function Landing() {
             ))}
           </div>
           <div className="px-4 lg:container flex flex-col-reverse lg:grid grid-cols-1 lg:grid-cols-2 justify-items-stretch ">
-            <div className="space-y-2 lg:space-y-4 mt-5 lg:px-10">
+            <div className="space-y-2 lg:space-y-4 mt-5 lg:px-5 xl:px-10 lg:py-5">
               <div className="relative">
                 <img
                   src="/images/home/Hero-image-1.webp"
                   alt="Office image"
-                  className="max-h-32 md:max-h-36 lg:max-h-72 object-cover w-full"
+                  className="max-h-32 md:max-h-36 lg:max-h-[38vh] 3xl:max-h-[35vh] object-cover w-full"
                 />
                 <span className="absolute -top-3 -left-3 w-16 h-16 border-t-2 border-l-2 border-[#1E3A5F]"></span>
               </div>
@@ -338,7 +338,7 @@ function Landing() {
                 <img
                   src="/images/home/Hero-image-2.webp"
                   alt="Office image"
-                  className="max-h-32 md:max-h-36 lg:max-h-72 object-cover w-full"
+                  className="max-h-32 md:max-h-36 lg:max-h-[38vh] 3xl:max-h-[35vh]  object-cover w-full"
                 />
                 <span className="absolute -bottom-3 -right-3 w-16 h-16 border-b-2 border-r-2 border-[#1E3A5F]"></span>
               </div>
