@@ -307,7 +307,7 @@ function Landing() {
       </section> */}
       <section className="h-screen 3xl:h-auto">
         <LandingNavbar className="absolute top-0 z-50" />
-        <div className="relative h-full w-full pt-20 lg:pt-24 xl:overflow-y-hidden lg:container">
+        <div className="relative h-full w-full pt-20 lg:pt-24 xl:overflow-y-hidden 3xl:container">
           <div className="hidden lg:block w-52 h-56 absolute top-0 left-1/2 -translate-x-full bg-[#ECECEC] -z-10"></div>
           <div className="hidden lg:block absolute bottom-0 left-0 w-52 h-56 bg-[#1C3145]"></div>
           <div className="hidden lg:block absolute bottom-0 right-0 max-w-sm w-full h-12 bg-[#1C3145]"></div>
@@ -324,8 +324,8 @@ function Landing() {
               <span key={i} className="w-1 h-1 bg-[#1E3A5F]"></span>
             ))}
           </div>
-          <div className="px-4 lg:container flex flex-col-reverse lg:grid grid-cols-1 lg:grid-cols-2 justify-items-stretch ">
-            <div className="space-y-2 lg:space-y-4 mt-5 lg:px-5 xl:px-10 lg:py-5">
+          <div className="px-4 lg:container 3xl:px-0 flex flex-col-reverse lg:grid grid-cols-1 lg:grid-cols-2 justify-items-stretch ">
+            <div className="space-y-2 lg:space-y-4 mt-5 lg:mt-0 lg:p-5">
               <div className="relative">
                 <img
                   src="/images/home/Hero-image-1.webp"

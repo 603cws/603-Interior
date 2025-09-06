@@ -127,7 +127,7 @@ function OfficeLayoutSection() {
             Plan your workspace, add furniture & <br /> essentials, and get your
             BOQ Instantly.
           </p>
-          <div className="inline-flex justify-center">
+          <div className="inline-flex justify-center lg:inline-block">
             <AnimatedButton
               onClick={() => navigate("/Layout")}
               className="!bg-[#3A5D7B] text-white capitalize font-Georgia mt-7 text-lg"
@@ -260,7 +260,7 @@ function HeadingSection({ children }) {
 //  We Provide Everything for <br /> your Office Interior
 function StepsSection() {
   return (
-    <section className="bg-white lg:py-12">
+    <section className="bg-white pb-5 lg:py-12">
       <div className=" relative">
         <div className="flex flex-col md:flex-row justify-between items-center md:space-x-10 space-y-10 md:space-y-0 relative">
           {/* {steps} */}
