@@ -176,7 +176,7 @@ function Contactus() {
                           required
                           value={form.companyName}
                           onChange={handleChange}
-                          placeholder="your organization name "
+                          placeholder="Your Organization Name "
                         />
                       </div>
                       <div className="mb-2 flex flex-col gap-2">
