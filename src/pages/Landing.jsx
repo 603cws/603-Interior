@@ -305,9 +305,9 @@ function Landing() {
           </div>
         </div>
       </section> */}
-      <section className="h-screen">
-        <LandingNavbar className="absolute top-0 z-50" />
-        <div className="relative h-full w-full pt-20 lg:pt-24">
+      <section className="h-screen 3xl:h-auto">
+        <LandingNavbar className="absolute top-0 z-50 px-6" />
+        <div className="relative h-full w-full pt-20 lg:pt-24 pr-4">
           <div className="hidden lg:block w-52 h-56 absolute top-0 left-1/2 -translate-x-full bg-[#ECECEC] -z-10"></div>
           <div className="hidden lg:block absolute bottom-0 left-0 w-52 h-56 bg-[#1C3145]"></div>
           <div className="hidden lg:block absolute bottom-0 right-0 max-w-sm w-full h-12 bg-[#1C3145]"></div>
@@ -345,20 +345,20 @@ function Landing() {
             </div>
             <div className="flex h-full items-center text-center lg:text-right justify-self-end">
               <div className="space-y-4 lg:space-y-10">
-                <h1 className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl 2xl:text-8xl text-[#555555] uppercase font-Alegreya">
+                <h1 className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl 2xl:text-[82px] text-[#555555] uppercase font-Alegreya">
                   we design <br /> your dreams
                 </h1>
                 <div className="h-1 w-20 bg-[#334A78] place-self-center lg:place-self-end"></div>
-                <p className="text-base xl:text-xl text-[#555555]">
+                <p className="text-base lg:text-[15px] xl:text-[19px] 2xl:text-[21px] text-[#555555]">
                   "Transforming ordinary spaces into extraordinary
                   <span className="hidden lg:inline">
                     <br />
                   </span>
-                  experiences. our passion lies in creating interiors
+                  experiences. our passion lies in creating interiors that
                   <span className="hidden lg:inline">
                     <br />
                   </span>
-                  that are not just beautiful bur functional, timeless, and
+                  are not just beautiful bur functional, timeless, and
                   <span className="hidden lg:inline">
                     <br />
                   </span>
