@@ -75,16 +75,16 @@ function Landing() {
       // 2️⃣ Right top table comes left rotating
       tl.fromTo(
         ".round-table",
-        { right: "0%", rotate: 0, opacity: 1 },
-        { left: "0%", rotate: -360, opacity: 1, duration: 3 }
+        { right: "2%", rotate: 0, opacity: 1 },
+        { left: "2%", rotate: -360, opacity: 1, duration: 3 }
         // start at same time
       );
 
       // 3️⃣ Middle table goes bottom left corner
       tl.fromTo(
         ".rotating-table",
-        { left: "0%", top: "40%", rotate: 0, opacity: 1 },
-        { left: "0%", top: "70%", rotate: -90, opacity: 1, duration: 3 },
+        { left: "2%", top: "40%", rotate: 0, opacity: 1 },
+        { left: "2%", top: "70%", rotate: -90, opacity: 1, duration: 3 },
         "<"
       );
 
@@ -126,7 +126,7 @@ function Landing() {
       tl.fromTo(
         ".side-table",
         { right: "-100%", opacity: 0 },
-        { right: "0%", opacity: 1, duration: 2 },
+        { right: "2%", opacity: 1, duration: 2 },
         "<"
       );
 
@@ -393,7 +393,7 @@ function Landing() {
           {/* Round table */}
           <img
             src="/images/home/round-table.png"
-            className="absolute top-10 right-0 w-44 2xl:h-52 h-44 2xl:w-52 round-table"
+            className="absolute top-10 w-44 2xl:h-52 h-44 2xl:w-52 round-table"
           />
 
           {/* Rotating table */}
@@ -405,7 +405,7 @@ function Landing() {
           {/* Top middle table */}
           <img
             src="/images/home/upper-table.png"
-            className="absolute top-0 left-1/2 -translate-x-1/2 upper-table max-w-60 2xl:max-w-xs"
+            className="absolute top-0 left-1/3 upper-table max-w-60 2xl:max-w-xs"
           />
 
           {/* Circles */}
@@ -432,7 +432,7 @@ function Landing() {
           {/* Down table */}
           <img
             src="/images/home/down-table.png"
-            className="absolute bottom-0 max-w-sm xl:max-w-2xl w-full down-table h-16"
+            className="absolute bottom-2 max-w-sm xl:max-w-2xl w-full down-table h-16"
           />
 
           {/* Side middle table */}
@@ -451,7 +451,7 @@ function Landing() {
 
       {/* section 3 */}
       <section>
-        <div className="px-4 lg:container xl:max-w-7xl xl:px-0 mx-auto py-10">
+        <div className="px-4 lg:container xl:max-w-7xl xl:px-0 mx-auto py-5 lg:py-10">
           <div className="flex flex-col items-center space-y-4">
             <TitleHeader title={"service"} />
             <h3 className="capitalize font-Georgia font-bold text-[42px] text-center tracking-wide">
@@ -488,9 +488,9 @@ function Landing() {
         {/* <button className="flex items-center p-2 place-self-center border">
           Create Your Office
         </button> */}
-        <AnimatedButton
+        {/* <AnimatedButton
           onClick={() => navigate("/layout")}
-          className="!bg-[#3A5D7B] text-white capitalize font-Georgia text-lg w-60 mb-16 place-self-center"
+          className="!bg-[#3A5D7B] text-white capitalize font-Georgia text-lg w-60 mb-0 place-self-center"
           variant="default"
           size="lg"
           glow={false}
@@ -506,12 +506,31 @@ function Landing() {
           hovereBackground="linear-gradient(90deg,rgba(85,132,182,1)  0%,  rgba(117,162,190,1) 100%)"
         >
           create your space
-        </AnimatedButton>
+        </AnimatedButton> */}
       </section>
+      <AnimatedButton
+        onClick={() => navigate("/layout")}
+        className="!bg-[#3A5D7B] text-white capitalize font-Georgia text-lg w-60 mb-6 place-self-center"
+        variant="default"
+        size="lg"
+        glow={false}
+        textEffect="shimmer"
+        rounded="custom"
+        asChild={false}
+        hideAnimations={true}
+        // shimmerColor="#fff"
+        // shimmerSize="0.15em"
+        // shimmerDuration="3s"
+        borderRadius="10px"
+        background="rgba(48, 71, 120, 1)"
+        hovereBackground="linear-gradient(90deg,rgba(85,132,182,1)  0%,  rgba(117,162,190,1) 100%)"
+      >
+        create your space
+      </AnimatedButton>
 
       {/* section 4 */}
       <section>
-        <div className="px-4 mx-auto lg:container xl:max-w-7xl xl:px-0 py-10">
+        <div className="px-4 mx-auto lg:container xl:max-w-7xl xl:px-0 py-5 lg:py-10">
           <h3 className="font-Georgia font-bold text-[42px] text-center tracking-wide">
             Trusted by Industry Leaders
           </h3>
@@ -571,7 +590,7 @@ function Landing() {
 
       {/* section 5 */}
       <section>
-        <div className="px-4 sm:px-0 w-full 3xl:container py-10">
+        <div className="px-4 sm:px-0 w-full 3xl:container py-5 lg:py-10">
           <div className="flex flex-col items-center space-y-4">
             <TitleHeader title={"our best projects"} />
             <h3 className="capitalize font-Georgia font-bold text-[42px] text-center tracking-wide">
