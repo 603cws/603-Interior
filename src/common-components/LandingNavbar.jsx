@@ -67,15 +67,15 @@ function LandingNavbar({ className }) {
             />
             <p>space calculator</p>
           </div>
-          {pathname !== "/Contactus" && (
-            <div
-              onClick={() => setEnquiry(true)}
-              className="flex flex-col justify-center items-center gap-2 cursor-pointer relative after:content-[''] after:absolute after:left-0 after:bottom-[-2px] after:h-[1px] after:bg-[#FFC900] after:w-0 after:transition-all after:duration-300 hover:after:w-full"
-            >
-              <img src="/images/icons/enquiry.png" alt="" className="h-8 w-8" />
-              <p>enquiry</p>
-            </div>
-          )}
+          {/* {pathname !== "/Contactus" && ( */}
+          <div
+            onClick={() => setEnquiry(true)}
+            className={`flex flex-col justify-center items-center gap-2 cursor-pointer relative after:content-[''] after:absolute after:left-0 after:bottom-[-2px] after:h-[1px] after:bg-[#FFC900] after:w-0 after:transition-all after:duration-300 hover:after:w-full`}
+          >
+            <img src="/images/icons/enquiry.png" alt="" className="h-8 w-8" />
+            <p>enquiry</p>
+          </div>
+          {/* )} */}
           <div className="flex flex-col justify-center items-center gap-2 cursor-pointer relative after:content-[''] after:absolute after:left-0 after:bottom-[-2px] after:h-[1px] after:bg-[#FFC900] after:w-0 after:transition-all after:duration-300 hover:after:w-full">
             {isAuthenticated ? (
               <button
