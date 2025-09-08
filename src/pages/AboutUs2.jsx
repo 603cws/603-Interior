@@ -76,17 +76,17 @@ function AboutUs() {
   const [showContactPopup, setShowContactPopup] = useState(false);
   return (
     <>
-      <LandingNavbar />
-      <section className="mt-10 xl:mt-0">
+      <LandingNavbar className="relative" />
+      <section className="pt-10 xl:pt-0 bg-[#334a78]">
         <div className=" md:container px-4 flex flex-col gap-6 lg:gap-0 lg:flex-row justify-between items-center xl:max-w-7xl xl:px-0">
           <div className=" text-[#304778] flex flex-col justify-center items-center lg:items-start text-center lg:text-start gap-5 flex-1">
             {/* <h4 className="font-TimesNewRoman italic font-bold text-4xl capitalize tracking-wider leading-[50px]">
               Creating Workspaces <br /> that inspires
             </h4> */}
-            <h2 className="font-TimesNewRoman italic text-3xl xl:text-[44px] xl:leading-[53px] tracking-[0.3px] font-bold text-[#334A78] capitalize">
+            <h2 className="font-TimesNewRoman italic text-3xl xl:text-[44px] xl:leading-[53px] tracking-[0.3px] font-bold text-white capitalize">
               Creating Workspaces <br /> that inspires
             </h2>
-            <p className="text-2xl  font-Georgia tracking-wide">
+            <p className="text-base md:text-2xl text-white  font-Georgia tracking-wide">
               We help businesses design and build offices that are functional,
               stylish, and perfectly
               <br /> tailored to their needs.

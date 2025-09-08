@@ -75,16 +75,16 @@ function Landing() {
       // 2️⃣ Right top table comes left rotating
       tl.fromTo(
         ".round-table",
-        { right: "0%", rotate: 0, opacity: 1 },
-        { left: "0%", rotate: -360, opacity: 1, duration: 3 }
+        { right: "2%", rotate: 0, opacity: 1 },
+        { left: "2%", rotate: -360, opacity: 1, duration: 3 }
         // start at same time
       );
 
       // 3️⃣ Middle table goes bottom left corner
       tl.fromTo(
         ".rotating-table",
-        { left: "0%", top: "40%", rotate: 0, opacity: 1 },
-        { left: "0%", top: "70%", rotate: -90, opacity: 1, duration: 3 },
+        { left: "2%", top: "40%", rotate: 0, opacity: 1 },
+        { left: "2%", top: "70%", rotate: -90, opacity: 1, duration: 3 },
         "<"
       );
 
@@ -126,7 +126,7 @@ function Landing() {
       tl.fromTo(
         ".side-table",
         { right: "-100%", opacity: 0 },
-        { right: "0%", opacity: 1, duration: 2 },
+        { right: "2%", opacity: 1, duration: 2 },
         "<"
       );
 
@@ -233,7 +233,7 @@ function Landing() {
   return (
     <>
       {/* hero section */}
-      <section className="h-screen flex flex-col">
+      {/* <section className="h-screen flex flex-col">
         <LandingNavbar />
         <div className="flex-1 flex items-center relative ">
           <div className="absolute inset-0">
@@ -281,7 +281,7 @@ function Landing() {
                 >
                   make your space
                 </AnimatedButton>
-                {/* <AnimatedButton
+                <AnimatedButton
                   onClick={() => navigate("/layout")}
                   className="!bg-[#3A5D7B] text-white capitalize font-Georgia  text-lg w-60"
                   variant="default"
@@ -299,9 +299,82 @@ function Landing() {
                   hovereBackground="linear-gradient(90deg,rgba(85,132,182,1)  0%,  rgba(117,162,190,1) 100%)"
                 >
                   book appointment
-                </AnimatedButton> */}
+                </AnimatedButton>
               </div>
             </motion.div>
+          </div>
+        </div>
+      </section> */}
+      <section className="h-screen 3xl:h-auto">
+        <LandingNavbar className="absolute top-0 z-50" />
+        <div className="relative h-full w-full pt-20 lg:pt-24 xl:overflow-y-hidden 3xl:container">
+          <div className="hidden lg:block w-52 h-56 absolute top-0 left-1/2 -translate-x-full bg-[#ECECEC] -z-10"></div>
+          <div className="hidden lg:block absolute bottom-0 left-0 w-52 h-56 bg-[#1C3145]"></div>
+          <div className="hidden lg:block absolute bottom-0 right-0 max-w-sm w-full h-12 bg-[#1C3145]"></div>
+          <div className="hidden lg:block absolute bottom-0 left-1/2 translate-x-1/4 -z-10">
+            <img src="/images/home/dom.png" alt="" className="max-w-40" />
+          </div>
+          <div className="hidden absolute left-1/2 top-0 transform -translate-x-3 lg:grid grid-cols-6 gap-x-4 gap-y-2 pt-28 -z-10">
+            {[...Array(36)].map((_, i) => (
+              <span key={i} className="w-1 h-1 bg-[#1E3A5F]"></span>
+            ))}
+          </div>
+          <div className="hidden absolute left-3 top-1/2 transform translate-y-full lg:grid grid-cols-6 gap-x-2 gap-y-3 -z-10">
+            {[...Array(30)].map((_, i) => (
+              <span key={i} className="w-1 h-1 bg-[#1E3A5F]"></span>
+            ))}
+          </div>
+          <div className="px-4 lg:container 3xl:px-0 flex flex-col-reverse lg:grid grid-cols-1 lg:grid-cols-2 justify-items-stretch ">
+            <div className="space-y-2 lg:space-y-4 mt-5 lg:mt-0 lg:p-5">
+              <div className="relative">
+                <img
+                  src="/images/home/Hero-image-1.webp"
+                  alt="Office image"
+                  className="max-h-32 md:max-h-36 lg:max-h-[38vh] 3xl:max-h-[35vh] object-cover w-full"
+                />
+                <span className="absolute -top-3 -left-3 w-16 h-16 border-t-2 border-l-2 border-[#1E3A5F]"></span>
+              </div>
+              <div className="relative">
+                <img
+                  src="/images/home/Hero-image-2.webp"
+                  alt="Office image"
+                  className="max-h-32 md:max-h-36 lg:max-h-[38vh] 3xl:max-h-[35vh]  object-cover w-full"
+                />
+                <span className="absolute -bottom-3 -right-3 w-16 h-16 border-b-2 border-r-2 border-[#1E3A5F]"></span>
+              </div>
+            </div>
+            <div className="flex h-full items-center text-center lg:text-right justify-self-end">
+              <div className="space-y-4 lg:space-y-10">
+                <h1 className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl 2xl:text-[82px] text-[#555555] uppercase font-Alegreya">
+                  we design <br /> your dreams
+                </h1>
+                <div className="h-1 w-20 bg-[#334A78] place-self-center lg:place-self-end"></div>
+                <p className="text-base lg:text-[15px] xl:text-[19px] 2xl:text-[21px] text-[#555555]">
+                  "Transforming ordinary spaces into extraordinary
+                  <span className="hidden lg:inline">
+                    <br />
+                  </span>
+                  experiences. our passion lies in creating interiors that
+                  <span className="hidden lg:inline">
+                    <br />
+                  </span>
+                  are not just beautiful bur functional, timeless, and
+                  <span className="hidden lg:inline">
+                    <br />
+                  </span>
+                  uniquely yours."
+                </p>
+
+                <button
+                  onClick={() => navigate("/Layout")}
+                  className="relative group w-40 lg:w-48 h-11 lg:h-12 rounded-lg p-1 bg-gradient-to-br from-[#334A78] to-[#78A3FF] hover:bg-[#334A78]"
+                >
+                  <span className="flex w-full h-full items-center justify-center rounded-md bg-white text-base lg:text-lg font-bold capitalize text-[#334A78] group-hover:text-[#FFF] group-hover:bg-[#334A78] transition-colors duration-500 ease-in-out">
+                    make your space
+                  </span>
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -320,7 +393,7 @@ function Landing() {
           {/* Round table */}
           <img
             src="/images/home/round-table.png"
-            className="absolute top-10 right-0 w-44 2xl:h-52 h-44 2xl:w-52 round-table"
+            className="absolute top-10 w-44 2xl:h-52 h-44 2xl:w-52 round-table"
           />
 
           {/* Rotating table */}
@@ -332,7 +405,7 @@ function Landing() {
           {/* Top middle table */}
           <img
             src="/images/home/upper-table.png"
-            className="absolute top-0 left-1/2 -translate-x-1/2 upper-table max-w-60 2xl:max-w-xs"
+            className="absolute top-0 left-1/3 upper-table max-w-60 2xl:max-w-xs"
           />
 
           {/* Circles */}
@@ -359,7 +432,7 @@ function Landing() {
           {/* Down table */}
           <img
             src="/images/home/down-table.png"
-            className="absolute bottom-0 max-w-sm xl:max-w-2xl w-full down-table h-16"
+            className="absolute bottom-2 max-w-sm xl:max-w-2xl w-full down-table h-16"
           />
 
           {/* Side middle table */}
@@ -378,7 +451,7 @@ function Landing() {
 
       {/* section 3 */}
       <section>
-        <div className="px-4 lg:container xl:max-w-7xl xl:px-0 mx-auto py-10">
+        <div className="px-4 lg:container xl:max-w-7xl xl:px-0 mx-auto py-5 lg:py-10">
           <div className="flex flex-col items-center space-y-4">
             <TitleHeader title={"service"} />
             <h3 className="capitalize font-Georgia font-bold text-[42px] text-center tracking-wide">
@@ -415,9 +488,9 @@ function Landing() {
         {/* <button className="flex items-center p-2 place-self-center border">
           Create Your Office
         </button> */}
-        <AnimatedButton
+        {/* <AnimatedButton
           onClick={() => navigate("/layout")}
-          className="!bg-[#3A5D7B] text-white capitalize font-Georgia text-lg w-60 mb-16 place-self-center"
+          className="!bg-[#3A5D7B] text-white capitalize font-Georgia text-lg w-60 mb-0 place-self-center"
           variant="default"
           size="lg"
           glow={false}
@@ -433,12 +506,31 @@ function Landing() {
           hovereBackground="linear-gradient(90deg,rgba(85,132,182,1)  0%,  rgba(117,162,190,1) 100%)"
         >
           create your space
-        </AnimatedButton>
+        </AnimatedButton> */}
       </section>
+      <AnimatedButton
+        onClick={() => navigate("/layout")}
+        className="!bg-[#3A5D7B] text-white capitalize font-Georgia text-lg w-60 mb-6 place-self-center"
+        variant="default"
+        size="lg"
+        glow={false}
+        textEffect="shimmer"
+        rounded="custom"
+        asChild={false}
+        hideAnimations={true}
+        // shimmerColor="#fff"
+        // shimmerSize="0.15em"
+        // shimmerDuration="3s"
+        borderRadius="10px"
+        background="rgba(48, 71, 120, 1)"
+        hovereBackground="linear-gradient(90deg,rgba(85,132,182,1)  0%,  rgba(117,162,190,1) 100%)"
+      >
+        create your space
+      </AnimatedButton>
 
       {/* section 4 */}
       <section>
-        <div className="px-4 mx-auto lg:container xl:max-w-7xl xl:px-0 py-10">
+        <div className="px-4 mx-auto lg:container xl:max-w-7xl xl:px-0 py-5 lg:py-10">
           <h3 className="font-Georgia font-bold text-[42px] text-center tracking-wide">
             Trusted by Industry Leaders
           </h3>
@@ -498,7 +590,7 @@ function Landing() {
 
       {/* section 5 */}
       <section>
-        <div className="px-4 sm:px-0 w-full 3xl:container py-10">
+        <div className="px-4 sm:px-0 w-full 3xl:container py-5 lg:py-10">
           <div className="flex flex-col items-center space-y-4">
             <TitleHeader title={"our best projects"} />
             <h3 className="capitalize font-Georgia font-bold text-[42px] text-center tracking-wide">
