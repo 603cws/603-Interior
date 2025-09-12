@@ -54,7 +54,7 @@ function OurStory() {
   return (
     <>
       <LandingNavbar />
-      <div className="lg:container lg:mx-auto lg:px-12 px-6 xl:max-w-7xl xl:px-0">
+      <div className="lg:container lg:mx-auto lg:px-12 px-6 xl:max-w-7xl 2xl:px-0">
         {/* section 1 */}
         <div className="font-Georgia">
           <div className=" flex flex-col justify-center items-center my-10 capitalize">
@@ -156,7 +156,7 @@ function StepsSection() {
           faster, and more confident way to bring your vision to life.
         </p>
       </section>
-      <div className="lg:container lg:mx-auto lg:px-6 relative xl:max-w-7xl xl:px-0">
+      <div className="lg:container lg:mx-auto lg:px-6 relative xl:max-w-7xl 2xl:px-0">
         <div className="flex flex-col md:flex-row justify-between items-center md:space-x-10 space-y-10 md:space-y-0 relative">
           {/* {steps} */}
           {steps?.map((stepdata, index) => (

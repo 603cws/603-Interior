@@ -330,7 +330,7 @@ function Landing() {
                 <img
                   src="/images/home/Hero-image-1.webp"
                   alt="Office image"
-                  className="max-h-32 md:max-h-36 lg:max-h-[38vh] 3xl:max-h-[35vh] object-cover w-full"
+                  className="max-h-32 md:max-h-36 lg:max-h-[38vh] xl:max-h-[35vh] 2xl:max-h-[38vh] 3xl:max-h-[35vh] object-cover w-full"
                 />
                 <span className="absolute -top-3 -left-3 w-16 h-16 border-t-2 border-l-2 border-[#1E3A5F]"></span>
               </div>
@@ -451,7 +451,7 @@ function Landing() {
 
       {/* section 3 */}
       <section>
-        <div className="px-4 lg:container xl:max-w-7xl xl:px-0 mx-auto py-5 lg:py-10">
+        <div className="px-4 lg:container xl:max-w-7xl 2xl:px-0 mx-auto py-5 lg:py-10">
           <div className="flex flex-col items-center space-y-4">
             <TitleHeader title={"service"} />
             <h3 className="capitalize font-Georgia font-bold text-[42px] text-center tracking-wide">
@@ -530,7 +530,7 @@ function Landing() {
 
       {/* section 4 */}
       <section>
-        <div className="px-4 mx-auto lg:container xl:max-w-7xl xl:px-0 py-5 lg:py-10">
+        <div className="px-4 mx-auto lg:container xl:max-w-7xl 2xl:px-0 py-5 lg:py-10">
           <h3 className="font-Georgia font-bold text-[42px] text-center tracking-wide">
             Trusted by Industry Leaders
           </h3>

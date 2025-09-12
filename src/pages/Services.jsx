@@ -81,7 +81,7 @@ function Services() {
     <div className="">
       <LandingNavbar className="relative" />
       <OfficeLayoutSection />
-      <div className="flex flex-col gap-6 md:gap-0 md:flex-row items-center justify-between  lg:p-16 lg:container xl:max-w-7xl xl:px-0 lg:mx-auto lg:px-12 px-4">
+      <div className="flex flex-col gap-6 md:gap-0 md:flex-row items-center justify-between  lg:p-16 lg:container xl:max-w-7xl 2xl:px-0 lg:mx-auto lg:px-12 px-4">
         {InfoCardDetails.map((info) => (
           <InfoCard
             title={info?.title}
@@ -91,7 +91,7 @@ function Services() {
           />
         ))}
       </div>
-      <div className="lg:container xl:max-w-7xl xl:px-0 lg:mx-auto lg:px-12 px-4">
+      <div className="lg:container xl:max-w-7xl 2xl:px-0 lg:mx-auto lg:px-12 px-4">
         <FeaturesSection />
         <FeatureDesignSection />
         <DeliverServices />
@@ -117,7 +117,7 @@ function OfficeLayoutSection() {
   const navigate = useNavigate();
   return (
     <section className="bg-[#334a78]">
-      <div className="flex flex-col gap-6 lg:gap-0 lg:flex-row justify-between items-center mb-10 md:container xl:max-w-7xl xl:px-0 lg:mx-auto text-center lg:text-start pt-10 lg:pt-0">
+      <div className="flex flex-col gap-6 lg:gap-0 lg:flex-row justify-between items-center mb-10 md:container xl:max-w-7xl 2xl:px-0 lg:mx-auto text-center lg:text-start pt-10 lg:pt-0">
         {/* Left Section */}
         <div className="flex flex-1 flex-col">
           <h2 className="font-TimesNewRoman italic text-3xl xl:text-[44px] xl:leading-[53px] tracking-[0.3px] font-bold text-white capitalize">
