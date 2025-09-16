@@ -13,6 +13,7 @@ import "swiper/css/navigation";
 import { Autoplay, Pagination, Navigation } from "swiper/modules";
 import Footer from "../common-components/Footer";
 import GetInTouchSection from "../common-components/GetInTouchSection";
+import LazyImage from "../utils/LazyImage";
 
 gsap.registerPlugin(ScrollTrigger);
 function Landing() {
@@ -327,7 +328,7 @@ function Landing() {
           <div className="px-4 lg:container 3xl:px-0 flex flex-col-reverse lg:grid grid-cols-1 lg:grid-cols-2 justify-items-stretch ">
             <div className="space-y-2 lg:space-y-4 mt-5 lg:mt-0 lg:p-5">
               <div className="relative">
-                <img
+                <LazyImage
                   src="/images/home/Hero-image-1.webp"
                   alt="Office image"
                   className="max-h-32 md:max-h-36 lg:max-h-[38vh] xl:max-h-[35vh] 2xl:max-h-[38vh] 3xl:max-h-[35vh] object-cover w-full"
@@ -335,7 +336,7 @@ function Landing() {
                 <span className="absolute -top-3 -left-3 w-16 h-16 border-t-2 border-l-2 border-[#1E3A5F]"></span>
               </div>
               <div className="relative">
-                <img
+                <LazyImage
                   src="/images/home/Hero-image-2.webp"
                   alt="Office image"
                   className="max-h-32 md:max-h-36 lg:max-h-[38vh] 3xl:max-h-[35vh]  object-cover w-full"
