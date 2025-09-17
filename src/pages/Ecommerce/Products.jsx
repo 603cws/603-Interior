@@ -143,6 +143,29 @@ const latestPosts = [
   },
 ];
 
+const products2 = {
+  chair: {
+    title: "Orange Chair",
+    price: "Rs. 3799.00",
+    image: "/images/ecommerce/chair.webp", // replace with actual
+  },
+  lamp: {
+    title: "Pendant Lamp",
+    price: "Rs. 2599.00",
+    image: "/images/ecommerce/lamp.webp", // replace with actual
+  },
+  rug: {
+    title: "Rug",
+    price: "Rs. 2599.00",
+    image: "/images/ecommerce/rug.webp", // replace with actual
+  },
+  "chair-green": {
+    title: "Chair Green",
+    price: "Rs. 2599.00",
+    image: "/images/ecommerce/chair-green.png", // replace with actual
+  },
+};
+
 function Products() {
   const prevRef = useRef(null);
   const nextRef = useRef(null);
@@ -165,6 +188,7 @@ function Products() {
 
   const swiperRef = useRef(null);
   const { showLoginPopup, setShowLoginPopup } = useApp();
+  const [selectedProduct, setSelectedProduct] = useState("chair");
 
   const navigate = useNavigate();
 
@@ -1122,6 +1146,87 @@ function Products() {
       </section>
 
       {/* section 7*/}
+      <section className="lg:container lg:mx-auto my-3 px-3 lg:px-12 lg:my-10">
+        <SectionHeader title={"Elegance and Comfort"} />
+
+        <div className="flex flex-col lg:flex-row gap-6 lg:gap-2 w-full items-center place-self-center">
+          {/* Left Image with Hotspots */}
+          <div className="relative w-full lg:w-2/3 items-center">
+            <img
+              src="/images/ecommerce/roomImage.jpg"
+              alt="Room"
+              className="w-full rounded-lg h-full"
+            />
+
+            {/* Hotspot for Chair */}
+            <button
+              onMouseEnter={() => setSelectedProduct("chair")}
+              onClick={() => setSelectedProduct("chair")}
+              className={`absolute top-[65%] left-[30%] w-6 h-6 rounded-full bg-white border-[7px] border-[#374A75] shadow-lg ${
+                selectedProduct === "chair" ? "opacity-100" : "opacity-70"
+              }`}
+            />
+
+            {/* Hotspot for Lamp */}
+            <button
+              onMouseEnter={() => setSelectedProduct("lamp")}
+              onClick={() => setSelectedProduct("lamp")}
+              className={`absolute top-[25%] left-[35%] w-6 h-6 rounded-full bg-white border-[7px] border-[#374A75] shadow-lg ${
+                selectedProduct === "lamp" ? "opacity-100" : "opacity-70"
+              }`}
+            />
+
+            {/* Hotspot for Green Chair */}
+            <button
+              onMouseEnter={() => setSelectedProduct("chair-green")}
+              onClick={() => setSelectedProduct("chair-green")}
+              className={`absolute top-[61%] left-[53%] w-6 h-6 rounded-full bg-white border-[7px] border-[#374A75] shadow-lg ${
+                selectedProduct === "chair-green" ? "opacity-100" : "opacity-70"
+              }`}
+            />
+
+            {/* Hotspot for Rug */}
+            <button
+              onMouseEnter={() => setSelectedProduct("rug")}
+              onClick={() => setSelectedProduct("rug")}
+              className={`absolute bottom-[20%] left-[40%] w-6 h-6 rounded-full bg-white border-[7px] border-[#374A75] shadow-lg ${
+                selectedProduct === "rug" ? "opacity-100" : "opacity-70"
+              }`}
+            />
+          </div>
+
+          {/* Right Product Info */}
+          <div className="lg:w-1/3 flex flex-col items-center lg:items-center lg:text-left">
+            {/* Product Image */}
+            <img
+              src={products2[selectedProduct].image}
+              alt={products2[selectedProduct].title}
+              className="w-96 h-auto rounded-lg shadow-md p-4"
+            />
+
+            {/* Black Dots */}
+            <div className="flex items-center justify-center gap-2 my-4">
+              {Object.keys(products2).map((key, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => setSelectedProduct(key)}
+                  className={`w-3 h-3 rounded-full ${
+                    selectedProduct === key ? "bg-black" : "bg-gray-400"
+                  }`}
+                ></button>
+              ))}
+            </div>
+
+            {/* Title & Price */}
+            <h3 className="text-lg font-medium">
+              {products2[selectedProduct].title}
+            </h3>
+            <p className="text-gray-600">{products2[selectedProduct].price}</p>
+          </div>
+        </div>
+      </section>
+
+      {/* section 8*/}
       <section>
         <div className="lg:container px-4 lg:px-12 mx-auto my-5">
           <div className="flex flex-col md:flex-row gap-6">
@@ -1139,7 +1244,7 @@ function Products() {
         </div>
       </section>
 
-      {/* section 8*/}
+      {/* section 9*/}
       <section>
         <div className="lg:container px-4 lg:px-12 mx-auto mb-10">
           <div className="flex flex-col md:flex-row md:items-stretch gap-6">
