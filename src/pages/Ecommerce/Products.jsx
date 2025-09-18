@@ -166,6 +166,51 @@ const products2 = {
   },
 };
 
+const featuredProducts = [
+  {
+    title: "Lighting",
+    description:
+      "Innovative lighting solutions to brighten and energize your workspace.",
+
+    bg: "/images/ecommerce/lighting-bg.jpg",
+  },
+  {
+    title: "Furniture",
+    description:
+      "Ergonomic and stylish office furniture designed for efficiency and comfort.",
+
+    bg: "/images/ecommerce/furniture-bg.jpg",
+  },
+  {
+    title: "Smart Solutions",
+    description:
+      "Flexible and modern space dividers for privacy and better layout planning.",
+
+    bg: "/images/ecommerce/smart-solution-bg.jpg",
+  },
+  {
+    title: "Luxury",
+    description:
+      "Exclusive décor pieces that add character and a finishing touch of luxury.",
+
+    bg: "/images/ecommerce/lux-bg.jpg",
+  },
+  {
+    title: "HVAC",
+    description:
+      "Advanced climate control ensuring year-round comfort with silent efficiency.",
+
+    bg: "/images/ecommerce/hvac-bg.jpg",
+  },
+  {
+    title: "Flooring",
+    description:
+      "Premium flooring options that bring warmth, durability, and luxury underfoot.",
+
+    bg: "/images/ecommerce/flooring-bg.webp",
+  },
+];
+
 function Products() {
   const prevRef = useRef(null);
   const nextRef = useRef(null);
@@ -846,7 +891,7 @@ function Products() {
 
       {/* section 2 */}
       <section>
-        <div className="hidden lg:block lg:container xl:max-w-7xl lg:mx-auto my-10">
+        <div className="hidden lg:block lg:container lg:mx-auto my-10">
           <div className="flex flex-col gap-2  md:flex-row justify-between items-stretch">
             {EcommerceFeatures.map((feature) => (
               <Productitem
@@ -861,12 +906,9 @@ function Products() {
       </section>
 
       {/* section 3 */}
-      <section className="lg:container xl:max-w-7xl lg:mx-auto px-3 lg:px-12 my-16 font-TimesNewRoman">
+      <section className="lg:container lg:mx-auto px-3 my-16 font-TimesNewRoman">
         <div>
-          <div className="hidden lg:block">
-            {" "}
-            <SectionHeader title={"Shop by categories"} isborder={true} />
-          </div>
+          <SectionHeader title={"Shop by categories"} isborder={true} />
           <div className="flex overflow-x-auto items-center justify-around my-10 gap-6 px-10">
             {Object.entries(categorySvgMap).map(([catName, icon]) => (
               <div
@@ -896,7 +938,7 @@ function Products() {
             <Link to={`/shop/?category=${selectedCategory}`}>view all</Link>
             {/* <Link to={`${encodeURIComponent(selectedCategory)}`}>view all</Link> */}
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-5 gap-5">
+          <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-5">
             {categoryProducts.slice(0, 10).map((product) => {
               return <Card key={product.id} product={product} />;
             })}
@@ -904,127 +946,72 @@ function Products() {
         </div>
       </section>
 
-      <section className="px-3">
-        <div className="flex lg:hidden my-6 items-center gap-6 w-full">
-          <BannerProduct />
-          <BannerProduct />
-          <div className="hidden  lg:hidden md:block">
-            <BannerProduct />
-          </div>
-          {/* <div className="hidden  lg:hidden md:block">
-            <BannerProduct />
-          </div> */}
-        </div>
-      </section>
-
-      {/* season splecial only for mobile  */}
-      <section>
-        <div className="lg:hidden px-3">
-          <CardSection className="flex-1" title="Season’s Special" />
-        </div>
-      </section>
-
       {/* section 4 */}
-      <section>
-        <div className="hidden lg:block">
-          <SectionHeader title={"Featured products"} />
-        </div>
-        <div className="lg:container px-4 lg:px-12 mx-auto my-6 lg:my-10">
-          <div className="flex justify-between lg:justify-end gap-3">
-            <div className="lg:hidden">
-              <SectionHeader title={"Featured products"} />
-            </div>
-            <div className="flex ">
+      <section className="lg:container lg:mx-auto px-3 font-TimesNewRoman py-10">
+        <SectionHeader title="featured products" />
+        <div className="space-y-7">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
+            <div className="bg-[#F3F4F6] space-y-5 px-5 py-10">
+              <h3 className="text-lg tracking-wider">
+                Most Popular product categories
+              </h3>
+              <p className="text-sm tracking-wider">
+                Explore our wide range of office interior solutions design to
+                enhance productivity,comfort, and aesthetic.
+              </p>
               <button
-                ref={prevRef3}
-                className="text-[#304778] disabled:text-gray-400"
+                onClick={() => navigate("/shop")}
+                className="bg-[#334A78] text-[#fff] text-xs px-4 py-2 capitalize font-bold rounded"
               >
-                <MdKeyboardArrowLeft size={30} />
-              </button>
-              <button
-                ref={nextRef3}
-                className=" text-[#304778] disabled:text-gray-400"
-              >
-                <MdKeyboardArrowRight size={30} />
+                discover more{" "}
               </button>
             </div>
+            {featuredProducts.slice(0, 2).map((item, i) => (
+              <div
+                key={i}
+                className={` px-5 py-10 bg-center bg-cover text-[#fff] rounded-lg relative`}
+                style={{ backgroundImage: `url(${item.bg})` }}
+              >
+                <div className="absolute inset-0 bg-[#000]/40 rounded-lg" />
+                <div className="relative space-y-5">
+                  <h3 className="text-lg tracking-wider">{item.title}</h3>
+                  <p className="text-sm">{item.description}</p>
+                  <button
+                    onClick={() => navigate(`/shop/?category=${item.title}`)}
+                    className="bg-[#BACED5] text-[#000] text-xs px-4 py-2 capitalize font-bold rounded"
+                  >
+                    view product
+                  </button>
+                </div>
+              </div>
+            ))}
           </div>
-          <div className="flex flex-col md:flex-row gap-6">
-            {/* Left side banners */}
-            <div className="lg:flex hidden   flex-col items-center gap-6 lg:w-1/4 w-full">
-              <BannerProduct />
-              <BannerProduct />
-            </div>
-
-            {/* Right side Swiper grid */}
-            {!productsloading ? (
-              <div className="lg:w-3/4 w-full relative">
-                {/* <div className="lg:hidden flex justify-between items-center gap-3">
-                  <div>
-                    <SectionHeader title={"Featured products"} />
-                  </div>
-                  <div className="flex items-center">
-                    <button ref={prevRef4}>
-                      <MdKeyboardArrowLeft size={30} color="#304778" />
-                    </button>
-                    <button ref={nextRef4}>
-                      <MdKeyboardArrowRight size={30} color="#304778" />
-                    </button>
-                  </div>
-                </div> */}
-                <Swiper
-                  ref={swiperRef}
-                  onBeforeInit={(swiper) => {
-                    swiper.params.navigation.prevEl =
-                      prevRef3.current || prevRef4.current;
-                    swiper.params.navigation.nextEl =
-                      nextRef3.current || nextRef4.current;
-                    swiper.params.pagination.el = paginationRef3.current;
-                  }}
-                  onSwiper={(swiper) => {
-                    swiper.navigation.init();
-                    swiper.navigation.update();
-                    swiper.pagination.init();
-                    swiper.pagination.update();
-                  }}
-                  modules={[Grid, Navigation, Pagination]}
-                  slidesPerView={4}
-                  grid={{
-                    rows: 2,
-                    fill: "row",
-                  }}
-                  spaceBetween={30}
-                  className="relative pb-10"
-                  breakpoints={{
-                    0: {
-                      slidesPerView: 2.02,
-                      grid: { rows: 1 },
-                      spaceBetween: 10,
-                    },
-                    768: {
-                      slidesPerView: 5,
-                      grid: { rows: 1 },
-                      spaceBetween: 10,
-                    },
-                    1024: {
-                      slidesPerView: 4,
-                      grid: { rows: 2 },
-                      spaceBetween: 30,
-                    },
-                  }}
-                >
-                  {products.map((product, index) => (
-                    <SwiperSlide key={index}>
-                      <Card product={product} />
-                    </SwiperSlide>
-                  ))}
-                </Swiper>
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-5">
+            {featuredProducts.slice(2).map((item, i) => (
+              <div
+                key={i}
+                className={`px-2 md:px-5 py-10 bg-center bg-cover text-[#fff] rounded-lg relative`}
+                style={{ backgroundImage: `url(${item.bg})` }}
+              >
+                <div className="absolute inset-0 bg-[#000]/40 rounded-lg" />
+                <div className="relative space-y-5 ">
+                  <h3 className="text-lg tracking-wider">{item.title}</h3>
+                  <p className="text-sm">{item.description}</p>
+                  <button
+                    onClick={() =>
+                      navigate(
+                        `/shop/?category=${
+                          item.title === "Luxury" ? "Lux" : item.title
+                        }`
+                      )
+                    }
+                    className="bg-[#BACED5] text-[#000] text-xs px-4 py-2 capitalize font-bold rounded"
+                  >
+                    view product
+                  </button>
+                </div>
               </div>
-            ) : (
-              <div className="w-full flex justify-center items-center">
-                <SpinnerFullPage />
-              </div>
-            )}
+            ))}
           </div>
         </div>
       </section>
