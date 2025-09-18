@@ -16,7 +16,8 @@ import { useHandleAddToCart } from "../../utils/HelperFunction";
 
 import { useApp } from "../../Context/Context";
 import { ToastContainer } from "react-toastify";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import LandingNavbar from "../../common-components/LandingNavbar";
 
 function ShopProducts() {
   //state
@@ -26,7 +27,7 @@ function ShopProducts() {
   const [open, setOpen] = useState(false);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [isShopCatOepn, setIsShopCatOpen] = useState(false);
+  const [isShopCatOepn, setIsShopCatOpen] = useState(true);
   const [isPriceOpen, setIsPriceOpen] = useState(false);
   const [filtersortby, setfiltersortby] = useState("Popularity");
 
@@ -43,6 +44,12 @@ function ShopProducts() {
   // const [maxPrice, setMaxPrice] = useState(filters.priceRange[1]);
   const [maxPrice, setMaxPrice] = useState(filters.priceRange[1]);
 
+  //
+  const [searchParams] = useSearchParams();
+  const category = searchParams.get("category");
+
+  // console.log("searchparams", searchParams, "cat", category);
+
   // console.log(minPrice, maxPrice);
 
   useEffect(() => {
@@ -51,6 +58,15 @@ function ShopProducts() {
       priceRange: [minPrice, maxPrice],
     }));
   }, [minPrice, maxPrice]);
+
+  useEffect(() => {
+    if (category) {
+      setFilters((prev) => ({
+        ...prev,
+        category: [category],
+      }));
+    }
+  }, []);
 
   //ref
   const dropdownRef = useRef(null);
@@ -82,7 +98,7 @@ function ShopProducts() {
     fetchProductsData();
   }, []);
 
-  const applyFiltersAndSort = (products, filters, sortBy) => {
+  const applyFiltersAndSort = (products, filters, filtersortby) => {
     let result = [...products];
 
     // Category Filter
@@ -299,6 +315,7 @@ function ShopProducts() {
       case "price":
         setIsShopCatOpen(false);
         setIsPriceOpen(true);
+        break;
 
       default:
         break;
@@ -324,12 +341,13 @@ function ShopProducts() {
     <div>
       <ToastContainer />
       <div className="">
-        <Header />
+        <LandingNavbar />
+        {/* <Header /> */}
       </div>
       <section ref={containerRef}>
         <div className=" hidden lg:block lg:container lg:mx-auto my-6 lg:my-10">
           <SectionHeader title={"Shop "} isborder={false} />
-          <div className="flex overflow-x-auto items-center justify-around my-10 gap-6">
+          {/* <div className="flex overflow-x-auto items-center justify-around my-10 gap-6">
             {categoryies.map((cat) => (
               <div
                 className="flex flex-col lg:justify-center  lg:items-center gap-3"
@@ -338,17 +356,17 @@ function ShopProducts() {
                 <div className="bg-[#F8F8F8] border border-[#ccc] p-4 w-16 h-16 xl:w-20 xl:h-20">
                   <img src={cat.imagename} alt="category" className="" />
                 </div>
-                <h3 className="font-lora text-[#111] text-xs lg:text-sm">
+                <h3 className="font-TimesNewRoman text-[#111] text-xs lg:text-sm">
                   {cat.name}
                 </h3>
               </div>
             ))}
-          </div>
+          </div> */}
         </div>
       </section>
 
       <section>
-        <div className=" flex lg:hidden justify-between items-center font-Poppins text-base text-[#ccc] px-6 border-t border-b border-[#ccc] mb-4">
+        <div className=" flex lg:hidden justify-between items-center font-TimesNewRoman text-base text-[#ccc] px-6 border-t border-b border-[#ccc] mb-4">
           <button onClick={() => setIsSortOpen(!isSortOpen)}>Sort</button>
           <button onClick={() => setIsfilteropen(true)}>filter</button>
         </div>
@@ -370,7 +388,7 @@ function ShopProducts() {
               filter
             </h2>
           </div>
-          <div className="flex flex-1 overflow-y-auto pr-2 ">
+          <div className="font-TimesNewRoman flex flex-1 overflow-y-auto pr-2 ">
             <div className="flex-1 flex mt-2">
               <ul
                 className={`flex flex-col items-start uppercase [&:li]:bg-[#eee] [&_li]:w-full [&_li]:px-2 [&_li]:py-2 [&_li]:pb-3 p-1 text-xs font-bold text-[#1A293A] [&_li]:cursor-pointer `}
@@ -387,8 +405,8 @@ function ShopProducts() {
                 >
                   price
                 </li>
-                <li className="bg-[#eee]">brand</li>
-                <li className="bg-[#eee]">Color</li>
+                {/* <li className="bg-[#eee]">brand</li>
+                <li className="bg-[#eee]">Color</li> */}
               </ul>
             </div>
             <div className="flex-1">
@@ -476,7 +494,7 @@ function ShopProducts() {
           </div>
 
           {/* display of no of products  */}
-          <div className="flex justify-between items-center mt-5 font-Poppins">
+          <div className="flex justify-between items-center mt-5 font-TimesNewRoman">
             <div>
               <h2 className="text-[#000] font-semibold text-xl tracking-[1.2px]">
                 {items?.length}
@@ -488,7 +506,7 @@ function ShopProducts() {
             <div>
               <button
                 onClick={() => setIsfilteropen(false)}
-                className="px-5 py-[10px] bg-[#334A78] text-white border border-[#212B36] font-Poppins font-semibold text-sm leading-[15px] tracking-[1.2px]"
+                className="px-5 py-[10px] bg-[#334A78] text-white border border-[#212B36] font-TimesNewRoman font-semibold text-sm leading-[15px] tracking-[1.2px]"
               >
                 Apply
               </button>
@@ -535,24 +553,24 @@ function ShopProducts() {
       )}
 
       {/* section 2 */}
-      <section className="font-Poppins lg:container lg:mx-auto px-4 lg:px-12">
+      <section className="font-TimesNewRoman lg:container lg:mx-auto px-4 lg:px-12">
         <div className="flex flex-col md:flex-row gap-6">
           {/* Left side filters */}
-          <div className="hidden lg:flex flex-col items-center gap-6 lg:w-[20%] w-full ">
+          <div className="hidden lg:flex flex-col items-center gap-6 lg:w-[20%] w-full border-r pr-4 border-r-[#CCCCCC]">
             <div className="w-full space-y-4 [&_h4]:capitalize">
               <div className="flex justify-start gap-2 items-center text-[#334A78] ">
                 <div>
                   <IoFilter size={20} />
                 </div>
-                <h3 className="font-semibold text-sm">Filter(1) </h3>
-                <div>
+                <h3 className="font-bold text-sm">Filter</h3>
+                {/* <div>
                   <MdKeyboardArrowLeft size={20} />
-                </div>
+                </div> */}
               </div>
 
-              <div className="flex justify-between items-center">
+              {/* <div className="flex justify-between items-center">
                 <div>
-                  <h3 className="text-[#334A78] text-[15px] font-semibold leading-[24px]">
+                  <h3 className="text-[#334A78] text-[15px] font-bold leading-[24px]">
                     Out of stock
                   </h3>
                 </div>
@@ -562,9 +580,9 @@ function ShopProducts() {
                     Hide
                   </button>
                 </div>
-              </div>
+              </div> */}
               <div className="flex justify-between items-center text-[#334A78]">
-                <h4 className="text-[15px] font-semibold leading-[24px]">
+                <h4 className="text-[15px] font-bold leading-[24px]">
                   Shop by Categories
                 </h4>
                 <button
@@ -584,15 +602,16 @@ function ShopProducts() {
               </div>
               {isShopCatOepn && (
                 <div>
-                  <ul className="font-lora space-y-3">
+                  <ul className="font-TimesNewRoman space-y-3">
                     {categoryies.map((cat) => (
                       <li
                         onClick={() => handleCategoryClick(cat.name)}
                         // onClick={() => setFilterCatName(cat.name)}
                         className={`text-[#111] px-4 py-1 text-sm cursor-pointer ${
-                          filters.category.includes(cat.name) &&
-                          "border-2 border-[#334A78]"
-                        } hover:bg-[#F4F4F4]`}
+                          filters.category.includes(cat.name)
+                            ? "border-2 border-[#334A78] bg-[#334A78] text-white"
+                            : "hover:bg-[#F4F4F4]"
+                        } `}
                         key={cat.name}
                       >
                         {cat.name}
@@ -672,14 +691,14 @@ function ShopProducts() {
                   </div>
                 </div>
               )}
-              <div className="flex justify-between items-center text-[#334A78]">
+              {/* <div className="flex justify-between items-center text-[#334A78]">
                 <h4 className="text-[15px] font-semibold leading-[24px]">
                   color
                 </h4>
                 <div className="">
                   <MdKeyboardArrowDown size={25} />
                 </div>
-              </div>
+              </div> */}
               <div className="flex justify-between items-center text-[#334A78]">
                 <h4 className="text-[15px] font-semibold leading-[24px]">
                   Brand
@@ -721,13 +740,13 @@ function ShopProducts() {
           {!productsloading ? (
             <div className="lg:w-[80%] w-full ">
               <div className="hidden lg:block border-b border-b-[#CCCCCC] mb-3 pb-2">
-                <div className="flex justify-between items-center font-lora mb-2 ">
+                <div className="flex justify-between  font-TimesNewRoman mb-2 ">
                   <p className="text-[#191716] text-xs lg:text-[13px] leading-3 tracking-[1px]">
                     {resultText}
                   </p>
                   <div
                     ref={dropdownRef}
-                    className="relative text-nowrap w-52 font-Poppins text-[#334A78] text-xs lg:text-[15px] leading-[24px]"
+                    className="relative text-nowrap w-52 font-TimesNewRoman text-[#334A78] text-xs lg:text-[15px] leading-[24px]"
                   >
                     <div
                       className="flex items-center border border-[#CCCCCC] p-2 cursor-pointer"
@@ -840,7 +859,7 @@ function ShopProducts() {
                     <button
                       key={i}
                       onClick={() => goToPage(i + 1)}
-                      className={`px-5 py-2 rounded font-lora font-semibold ${
+                      className={`px-5 py-2 rounded font-TimesNewRoman font-semibold ${
                         currentPage === i + 1
                           ? "bg-[#304778] text-white"
                           : "bg-[#fff] text-[#232323]"
@@ -876,7 +895,7 @@ export default ShopProducts;
 function SectionHeader({ title, isborder = true }) {
   return (
     <div className="flex flex-col justify-center items-center mb-10">
-      <h3 className="font-lora text-2xl text-[#111] tracking-wider uppercase mb-2">
+      <h3 className="font-TimesNewRoman text-2xl text-[#111] tracking-wider uppercase mb-2">
         {title}
       </h3>
       {isborder && (
@@ -910,7 +929,7 @@ function Card({ product }) {
     }
   }, [isAuthenticated, cartItems, localcartItems, product?.id]);
   return (
-    <div className="font-Poppins max-w-sm max-h-sm  border border-[#ccc]">
+    <div className="font-TimesNewRoman max-w-sm max-h-sm  border border-[#ccc]">
       <div
         onClick={() => naviagte(`/productview/${product.id}`)}
         className="flex justify-center items-center p-2 cursor-pointer"

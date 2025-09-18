@@ -832,7 +832,10 @@ function Products() {
                 Furniture that
                 <br /> mirrors your style
               </h1>
-              <button className="capitalize font-bold text-xl text-[#fff] bg-[#334A78] rounded flex items-center gap-2 px-4 py-2">
+              <button
+                onClick={() => navigate("/shop")}
+                className="capitalize font-bold text-xl text-[#fff] bg-[#334A78] rounded flex items-center gap-2 px-4 py-2"
+              >
                 <span>shop now</span>
                 <HiOutlineArrowSmRight />
               </button>
@@ -890,7 +893,8 @@ function Products() {
         <div>
           <div className="flex justify-end">
             {/* <p>Table</p> */}
-            <Link to={`${encodeURIComponent(selectedCategory)}`}>view all</Link>
+            <Link to={`/shop/?category=${selectedCategory}`}>view all</Link>
+            {/* <Link to={`${encodeURIComponent(selectedCategory)}`}>view all</Link> */}
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-5 gap-5">
             {categoryProducts.slice(0, 10).map((product) => {
