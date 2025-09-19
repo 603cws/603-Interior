@@ -273,8 +273,6 @@ function Products() {
     return () => window.removeEventListener("resize", checkOverflow);
   });
 
-  console.log(hasOverflow);
-
   const fetchProductsData = async () => {
     try {
       setProductsloading(true);
@@ -868,12 +866,12 @@ function Products() {
   return (
     <div>
       <ToastContainer />
-      {/* <header>
+      <header>
         <Header />
-      </header> */}
+      </header>
       {/* Hero section */}
       <section className="h-screen flex flex-col">
-        <LandingNavbar className="relative" />
+        {/* <LandingNavbar className="relative" /> */}
         <div className="flex-1 px-3 w-full lg:container mx-auto font-TimesNewRoman my-5">
           <div className=" bg-[url('/images/ecommerce/e-com-home.png')] bg-no-repeat bg-cover bg-center flex-1 h-full flex items-center ">
             <div className="space-y-10 w-full pl-5 md:pl-10 lg:pl-20">
@@ -1264,7 +1262,7 @@ function Products() {
         <SectionHeader title="best products" />
         <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-5">
           {bestProducts.map((product) => (
-            <Card product={product} />
+            <Card key={product.id} product={product} />
           ))}
         </div>
       </section>
