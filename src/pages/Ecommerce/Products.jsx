@@ -23,32 +23,7 @@ import { GoHeart } from "react-icons/go";
 import Loginpoup from "../../common-components/LoginPopup";
 import LandingNavbar from "../../common-components/LandingNavbar";
 import { HiOutlineArrowSmRight } from "react-icons/hi";
-
-// <div className="h-[400px]">
-//   <div className="h-full flex flex-col border-[1px] border-[#AAAAAA] relative">
-//     <div className="max-w-xs">
-//       <img src={image} alt={title} className="bg-[#000000]/10" />
-//     </div>
-//     {ispopular && (
-//       <span
-//         className={` font-lora text-[11px] capitalize absolute top-2 left-2 p-[5px] ${
-//           populartext === "popular"
-//             ? "bg-[#E3F3FF] text-[#000]"
-//             : "bg-[#374A75] text-white"
-//         }`}
-//       >
-//         {populartext}
-//       </span>
-//     )}
-//     <div className="px-5 flex flex-col justify-center items-center gap-3 font-lora py-3 mt-auto">
-//       <p className=" text-center text-xs lg:text-sm">{title}</p>
-//       <h5 className="lg:text-lg">$ {price} </h5>
-//       <button className="flex justify-center items-center gap-2 font-Poppins text-[13px] py-1.5">
-//         Add to cart <BsArrowRight size={15} />{" "}
-//       </button>
-//     </div>
-//   </div>
-// </div>
+import Footer from "../../common-components/Footer";
 
 const latestPosts = [
   {
@@ -223,6 +198,7 @@ function Products() {
   const paginationRef3 = useRef(null);
   const prevRef4 = useRef(null);
   const nextRef4 = useRef(null);
+  const scrollRef = useRef(null);
 
   const [data, setData] = useState();
   const [products, setProducts] = useState([]);
@@ -234,6 +210,8 @@ function Products() {
   const swiperRef = useRef(null);
   const { showLoginPopup, setShowLoginPopup } = useApp();
   const [selectedProduct, setSelectedProduct] = useState("chair");
+  const [hasOverflow, setHasOverflow] = useState(false);
+  const [bestProducts, setBestProducts] = useState([]);
 
   const navigate = useNavigate();
 
@@ -282,12 +260,27 @@ function Products() {
     fetchProductsData();
   }, []);
 
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+
+    const checkOverflow = () => {
+      setHasOverflow(el.scrollWidth > el.clientWidth);
+    };
+
+    checkOverflow();
+    window.addEventListener("resize", checkOverflow);
+    return () => window.removeEventListener("resize", checkOverflow);
+  });
+
+  console.log(hasOverflow);
+
   const fetchProductsData = async () => {
     try {
       setProductsloading(true);
       const { data, error } = await supabase
         .from("product_variants")
-        .select(`* ,product_id(*)`)
+        .select(`* ,product_id(*),reviews(*)`)
         .order("created_at", { ascending: false });
 
       if (error) throw error;
@@ -337,6 +330,20 @@ function Products() {
           getCleanedCategoryName("Furniture")
       );
       setCategoryProducts(filteredProducts);
+
+      const sortedByStars = [...updatedProducts]
+        .filter((product) => product.reviews && product.reviews.length > 0)
+        .sort((a, b) => {
+          const avgA =
+            a.reviews.reduce((sum, r) => sum + r.stars, 0) / a.reviews.length;
+
+          const avgB =
+            b.reviews.reduce((sum, r) => sum + r.stars, 0) / b.reviews.length;
+
+          return avgB - avgA;
+        });
+
+      setBestProducts(sortedByStars);
     } catch (error) {
       console.error("Error fetching filtered data:", error);
     } finally {
@@ -867,19 +874,19 @@ function Products() {
       {/* Hero section */}
       <section className="h-screen flex flex-col">
         <LandingNavbar className="relative" />
-        <div className="flex-1 container mx-auto font-TimesNewRoman my-5">
+        <div className="flex-1 px-3 w-full lg:container mx-auto font-TimesNewRoman my-5">
           <div className=" bg-[url('/images/ecommerce/e-com-home.png')] bg-no-repeat bg-cover bg-center flex-1 h-full flex items-center ">
-            <div className="space-y-10 max-w-7xl w-full mx-auto">
+            <div className="space-y-10 w-full pl-5 md:pl-10 lg:pl-20">
               <p className="capitalize font-bold text-xl text-[#000]">
                 trending design
               </p>
-              <h1 className="text-6xl font-bold text-[#000]">
+              <h1 className="text-4xl md:text-6xl font-bold text-[#000]">
                 Furniture that
                 <br /> mirrors your style
               </h1>
               <button
                 onClick={() => navigate("/shop")}
-                className="capitalize font-bold text-xl text-[#fff] bg-[#334A78] rounded flex items-center gap-2 px-4 py-2"
+                className="capitalize font-bold text-lg md:text-xl text-[#fff] bg-[#334A78] rounded flex items-center gap-2 px-4 py-2 hover:bg-[#fff] hover:text-[#334A78] border border-[#334A78] transition-colors duration-300 ease-in-out"
               >
                 <span>shop now</span>
                 <HiOutlineArrowSmRight />
@@ -907,9 +914,38 @@ function Products() {
 
       {/* section 3 */}
       <section className="lg:container lg:mx-auto px-3 my-16 font-TimesNewRoman">
-        <div>
+        <div className="relative">
           <SectionHeader title={"Shop by categories"} isborder={true} />
-          <div className="flex overflow-x-auto items-center justify-around my-10 gap-6 px-10">
+          {hasOverflow && (
+            <div className="absolute right-0 top-0 flex gap-2 z-20">
+              <button
+                onClick={() => {
+                  document.querySelector(".cat-scroll")?.scrollBy({
+                    left: -150,
+                    behavior: "smooth",
+                  });
+                }}
+                className=" p-0.5 text-[#374A75] border border-[#ccc]"
+              >
+                <MdKeyboardArrowLeft size={20} />
+              </button>
+              <button
+                onClick={() => {
+                  document.querySelector(".cat-scroll")?.scrollBy({
+                    left: 150,
+                    behavior: "smooth",
+                  });
+                }}
+                className="p-0.5 text-[#374A75] border border-[#ccc]"
+              >
+                <MdKeyboardArrowRight size={20} />
+              </button>
+            </div>
+          )}
+          <div
+            ref={scrollRef}
+            className="flex cat-scroll overflow-x-auto scrollbar-hide items-center justify-around gap-6 md:px-10"
+          >
             {Object.entries(categorySvgMap).map(([catName, icon]) => (
               <div
                 key={catName}
@@ -933,9 +969,15 @@ function Products() {
           </div>
         </div>
         <div>
-          <div className="flex justify-end">
+          <div className="flex justify-end my-2">
             {/* <p>Table</p> */}
-            <Link to={`/shop/?category=${selectedCategory}`}>view all</Link>
+            <button
+              onClick={() => navigate(`/shop/?category=${selectedCategory}`)}
+              className="capitalize text-[#334A78] text-sm font-bold border border-[#334A78] px-3 py-1.5 hover:bg-[#f1f1f1]"
+            >
+              view all
+            </button>
+            {/* <Link to={`/shop/?category=${selectedCategory}`}>view all</Link> */}
             {/* <Link to={`${encodeURIComponent(selectedCategory)}`}>view all</Link> */}
           </div>
           <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-5">
@@ -951,7 +993,7 @@ function Products() {
         <SectionHeader title="featured products" />
         <div className="space-y-7">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
-            <div className="bg-[#F3F4F6] space-y-5 px-5 py-10">
+            <div className="bg-[#F3F4F6] space-y-5 px-5 py-10 rounded-lg">
               <h3 className="text-lg tracking-wider">
                 Most Popular product categories
               </h3>
@@ -961,7 +1003,7 @@ function Products() {
               </p>
               <button
                 onClick={() => navigate("/shop")}
-                className="bg-[#334A78] text-[#fff] text-xs px-4 py-2 capitalize font-bold rounded"
+                className="bg-[#334A78] text-[#fff] text-xs px-4 py-2 capitalize font-bold rounded hover:bg-[#4C69A4]"
               >
                 discover more{" "}
               </button>
@@ -978,7 +1020,7 @@ function Products() {
                   <p className="text-sm">{item.description}</p>
                   <button
                     onClick={() => navigate(`/shop/?category=${item.title}`)}
-                    className="bg-[#BACED5] text-[#000] text-xs px-4 py-2 capitalize font-bold rounded"
+                    className="bg-[#BACED5] text-[#000] text-xs px-4 py-2 capitalize font-bold rounded hover:bg-[#A8BDC5]"
                   >
                     view product
                   </button>
@@ -1005,7 +1047,7 @@ function Products() {
                         }`
                       )
                     }
-                    className="bg-[#BACED5] text-[#000] text-xs px-4 py-2 capitalize font-bold rounded"
+                    className="bg-[#BACED5] text-[#000] text-xs px-4 py-2 capitalize font-bold rounded hover:bg-[#A8BDC5]"
                   >
                     view product
                   </button>
@@ -1218,47 +1260,16 @@ function Products() {
       </section>
 
       {/* section 8*/}
-      <section>
-        <div className="lg:container px-4 lg:px-12 mx-auto my-5">
-          <div className="flex flex-col md:flex-row gap-6">
-            <div className="hidden lg:block">
-              <CardSection className="flex-1" title="Season’s Special" />
-            </div>
-            <div className="hidden lg:block">
-              <CardSection
-                className="flex-1"
-                title="Top Deals On Furniture"
-                navigationPath="topdeal?category=Furniture"
-              />
-            </div>
-          </div>
+      <section className="px-4 lg:container mx-auto py-10">
+        <SectionHeader title="best products" />
+        <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-5">
+          {bestProducts.map((product) => (
+            <Card product={product} />
+          ))}
         </div>
       </section>
 
-      {/* section 9*/}
-      <section>
-        <div className="lg:container px-4 lg:px-12 mx-auto mb-10">
-          <div className="flex flex-col md:flex-row md:items-stretch gap-6">
-            {/* Left Column */}
-            <div className="flex-1">
-              <CardSection
-                title="Special sale on HVAC"
-                navigationPath="topdeal?category=HVAC"
-              />
-            </div>
-
-            {/* Right Column: Make this a positioned container */}
-            <div className="hidden lg:block flex-1 relative">
-              <img
-                src="/images/ecommerce/image.png"
-                alt="Sale Image"
-                className="md:absolute top-0 left-0 w-full h-full p-2 cursor-pointer"
-                // onClick={navigate}
-              />
-            </div>
-          </div>
-        </div>
-      </section>
+      <Footer />
 
       {showLoginPopup && <Loginpoup onClose={() => setShowLoginPopup(false)} />}
     </div>
@@ -1321,14 +1332,20 @@ function Card({ product }) {
             {product.populartext || "eihvihevi"}
           </span>
         )} */}
-        <div className="px-2 py-2 flex flex-col justify-center gap-3 font-lora  mt-auto">
-          <p className=" text-center text-xs lg:text-sm">{product.title}</p>
-          {/* <h5 className="lg:text-lg">Rs {product.price} </h5> */}
+        <div className="px-2 py-2 flex flex-col justify-center gap-3 font-TimesNewRoman  mt-auto">
+          <p className=" text-xs lg:text-sm line-clamp-1">{product.title}</p>
+          <p className="text-xs lg:text-sm">
+            RS.{" "}
+            {product.price.toLocaleString("en-IN", {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            })}
+          </p>
           <div className="flex justify-between items-center gap-2">
             <button
               onClick={() => handleAddToCart(product)}
               disabled={iscarted}
-              className="flex items-center gap-1 font-Poppins text-[12px] py-1.5 border border-[#ccc] px-2"
+              className="flex items-center gap-1 font-TimesNewRoman text-sm py-1.5 border border-[#ccc] px-2"
 
               // className="flex justify-center items-center gap-1 font-Poppins text-[12px] py-1.5"
             >
@@ -1449,14 +1466,14 @@ function ProductCard({ product, trending = false }) {
               className="w-[220px] h-[200px] object-contain"
             />
           </div>
-          <div className="flex-1 flex flex-col justify-center items-center gap-3 font-lora space-y-2">
+          <div className="flex-1 flex flex-col justify-center items-center gap-3 font-TimesNewRoman space-y-2">
             <p className="text-center text-sm leading-[14px] tracking-[0.96px] lg:text-sm">
               {product.title}
             </p>
             <h2 className="text-base leading-4 tracking-[1px] text-[#374A75]">
               &#8377; {product.price}
             </h2>
-            <button className="font-Poppins text-[#000] flex gap-2 leading-[13px] tracking-[1px] text-[13px]">
+            <button className="font-TimesNewRoman text-[#000] flex gap-2 leading-[13px] tracking-[1px] text-[13px]">
               Add to cart <BsArrowRight size={15} />
             </button>
           </div>
@@ -1482,7 +1499,7 @@ function ProductCard({ product, trending = false }) {
 function SectionHeader({ title, isborder = true }) {
   return (
     <div className="flex flex-col justify-center lg:items-center mb-4 lg:mb-10 ">
-      <h3 className="text-nowrap font-lora text-sm lg:text-2xl text-[#111] tracking-wider uppercase mb-2">
+      <h3 className="text-nowrap font-TimesNewRoman text-sm lg:text-2xl text-[#111] tracking-wider uppercase mb-2">
         {title}
       </h3>
       {isborder && (
