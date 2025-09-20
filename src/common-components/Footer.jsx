@@ -96,7 +96,7 @@ function Footer() {
               <div className="flex justify-center items-start  flex-1 border-t border-b lg:border-none py-5 lg:py-0">
                 <ul className="flex flex-col gap-4 flex-1 tracking-wide list-none m-0 p-0">
                   <li
-                    className="cursor-pointer"
+                    className="relative cursor-pointer w-fit after:content-[''] after:block after:h-[1px] after:bg-white after:w-0 after:transition-all after:duration-300 hover:after:w-full"
                     onClick={() => {
                       navigate("/");
                       scrollToTop();
@@ -105,40 +105,40 @@ function Footer() {
                     home
                   </li>
                   <li
-                    className="cursor-pointer"
+                    className="relative cursor-pointer w-fit after:content-[''] after:block after:h-[1px] after:bg-white after:w-0 after:transition-all after:duration-300 hover:after:w-full"
                     onClick={() => navigate("/Aboutus")}
                   >
                     about us
                   </li>
                   <li
-                    className="cursor-pointer"
+                    className="relative cursor-pointer w-fit after:content-[''] after:block after:h-[1px] after:bg-white after:w-0 after:transition-all after:duration-300 hover:after:w-full"
                     onClick={() => navigate("/OurServices")}
                   >
                     services
                   </li>
                   <li
-                    className="cursor-pointer"
+                    className="relative cursor-pointer w-fit after:content-[''] after:block after:h-[1px] after:bg-white after:w-0 after:transition-all after:duration-300 hover:after:w-full"
                     onClick={() => navigate("/Career")}
                   >
                     career
                   </li>
                   <li
                     onClick={() => navigate("/brands")}
-                    className="cursor-pointer"
+                    className="relative cursor-pointer w-fit after:content-[''] after:block after:h-[1px] after:bg-white after:w-0 after:transition-all after:duration-300 hover:after:w-full"
                   >
                     brands
                   </li>
                 </ul>
                 <ul className="flex flex-col gap-4 flex-1 tracking-wide list-none m-0 p-0">
                   <li
-                    className="cursor-pointer"
+                    className="relative cursor-pointer w-fit after:content-[''] after:block after:h-[1px] after:bg-white after:w-0 after:transition-all after:duration-300 hover:after:w-full"
                     onClick={() => navigate("/Contactus")}
                   >
                     contact us
                   </li>
                   <li
                     onClick={() => navigate("/help")}
-                    className="hidden xl:block cursor-pointer"
+                    className="hidden xl:block relative cursor-pointer w-fit after:content-[''] after:block after:h-[1px] after:bg-white after:w-0 after:transition-all after:duration-300 hover:after:w-full"
                   >
                     help & FAQ's
                   </li>
@@ -150,7 +150,7 @@ function Footer() {
                   </li>
                   <li
                     onClick={() => navigate("/termsNcondition")}
-                    className="hidden xl:block cursor-pointer"
+                    className="hidden xl:block relative cursor-pointer w-fit after:content-[''] after:block after:h-[1px] after:bg-white after:w-0 after:transition-all after:duration-300 hover:after:w-full"
                   >
                     terms & conditions
                   </li>
@@ -162,18 +162,18 @@ function Footer() {
                   </li>
                   <li
                     onClick={() => navigate("/privacy-policy")}
-                    className=" cursor-pointer"
+                    className=" relative cursor-pointer w-fit after:content-[''] after:block after:h-[1px] after:bg-white after:w-0 after:transition-all after:duration-300 hover:after:w-full"
                   >
                     Privacy Policy
                   </li>
                   <li
-                    className="cursor-pointer"
+                    className="relative cursor-pointer w-fit after:content-[''] after:block after:h-[1px] after:bg-white after:w-0 after:transition-all after:duration-300 hover:after:w-full"
                     onClick={() => navigate("/Blog")}
                   >
                     blog
                   </li>
                   <li
-                    className="cursor-pointer"
+                    className="relative cursor-pointer w-fit after:content-[''] after:block after:h-[1px] after:bg-white after:w-0 after:transition-all after:duration-300 hover:after:w-full"
                     onClick={() => navigate("/products")}
                   >
                     shop products

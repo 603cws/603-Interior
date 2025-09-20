@@ -629,7 +629,7 @@ function ProductView() {
                   </p>
                 </div>
 
-                <div className="lg:my-3 space-y-1">
+                {/* <div className="lg:my-3 space-y-1">
                   <p className="text-[#334A78] text-sm ">Colors</p>
                   <div className="flex gap-3">
                     <div className="px-5 py-2 bg-[#000]/5 inline-block text-sm text-[#334A78] uppercase text-center border border-[#334A78]">
@@ -639,7 +639,7 @@ function ProductView() {
                       GREEN
                     </div>
                   </div>
-                </div>
+                </div> */}
 
                 {/* qunatiy counter */}
                 <div className="border-b pb-2 md:border-none md:pb-0 mt-4 lg:mt-0">
@@ -674,12 +674,12 @@ function ProductView() {
                 {/* add to card and buy now */}
                 <div className="my-4 lg:flex gap-8 hidden">
                   <button
-                    onClick={() => handleAddToCart(product)}
-                    className="text-[#212B36] uppercase bg-[#FFFFFF] border border-[#212B36] w-52 px-10 py-4 rounded-sm "
+                    onClick={() => handleAddToCart(product, isCarted)}
+                    className="text-[#212B36] uppercase bg-[#FFFFFF] border border-[#212B36] w-52 px-10 py-4 rounded-sm hover:bg-[#334A78] hover:text-[#fff] transition-colors duration-500 ease-in-out"
                   >
-                    {isCarted ? "Added to cart" : "ADD to cart"}
+                    {isCarted ? "go to cart" : "ADD to cart"}
                   </button>
-                  <button className="text-[#212B36] uppercase bg-[#FFFFFF] border border-[#212B36] w-52 px-10 py-4 rounded-sm ">
+                  <button className="text-[#212B36] uppercase bg-[#FFFFFF] border border-[#212B36] w-52 px-10 py-4 rounded-sm hover:bg-[#334A78] hover:text-[#fff] transition-colors duration-500 ease-in-out">
                     buy now
                   </button>
                 </div>
@@ -1366,10 +1366,10 @@ function Card({ product, handleCompareToggle, compare }) {
           </div>
         </div>
         <button
-          onClick={() => handleAddToCart(product)}
-          className="text-[#000] uppercase bg-[#FFFFFF] text-xs border border-[#ccc] px-2 py-2 my-2 lg:my-4 rounded-sm "
+          onClick={() => handleAddToCart(product, iscarted)}
+          className="text-[#000] uppercase bg-[#FFFFFF] text-xs border border-[#ccc] px-2 py-2 my-2 lg:my-4 rounded-sm hover:bg-[#DDDDDD]"
         >
-          {iscarted ? "added to cart" : "add to cart"}
+          {iscarted ? "go to cart" : "add to cart"}
         </button>
         <div className="hidden lg:flex gap-3">
           <input

@@ -13,11 +13,13 @@ import SpinnerFullPage from "../../common-components/SpinnerFullPage";
 import { showRemoveFromCartToast } from "../../utils/AddToCartToast";
 import { MdOutlineKeyboardArrowLeft } from "react-icons/md";
 import MobileHeader from "../../common-components/MobileHeader";
+import LoginPopup from "../../common-components/LoginPopup";
 
 function Wishlist() {
   const [wishlistItems, setWishlistItems] = useState([]);
 
   const [isloading, setIsloading] = useState(false);
+  const [loginPop, setLoginPopup] = useState(false);
 
   const { isAuthenticated } = useApp();
 
@@ -233,10 +235,14 @@ function Wishlist() {
               : "Login to view items in your wishlist."}
           </p>
           <button
-            onClick={() => navigate("/products")}
-            className="bg-[#334A78] border border-[#212B36] text-xs text-white tracking-wider uppercase py-3 active:scale-90 transition-transform ease-in-out duration-500 px-10 font-Poppins font-semibold"
+            onClick={() => {
+              {
+                isAuthenticated ? navigate("/products") : setLoginPopup(true);
+              }
+            }}
+            className="bg-[#334A78] border border-[#212B36] text-xs text-white tracking-wider uppercase py-3 active:scale-90 transition-transform ease-in-out duration-500 px-10 font-Poppins font-semibold hover:bg-[#4464A3] rounded"
           >
-            start shopping
+            {isAuthenticated ? "start shopping" : "Login"}
           </button>
           {/* <button
             onClick={() => navigate("/products")}
@@ -249,6 +255,7 @@ function Wishlist() {
       <div className="hidden lg:block fixed bottom-0 w-full">
         <BottomTabs />
       </div>
+      {loginPop && <LoginPopup onClose={() => setLoginPopup(false)} />}
     </div>
   );
 }

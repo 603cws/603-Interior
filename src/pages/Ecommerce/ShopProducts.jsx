@@ -18,6 +18,7 @@ import { useApp } from "../../Context/Context";
 import { ToastContainer } from "react-toastify";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import LandingNavbar from "../../common-components/LandingNavbar";
+import Footer from "../../common-components/Footer";
 
 function ShopProducts() {
   //state
@@ -341,8 +342,8 @@ function ShopProducts() {
     <div>
       <ToastContainer />
       <div className="">
-        <LandingNavbar />
-        {/* <Header /> */}
+        {/* <LandingNavbar /> */}
+        <Header />
       </div>
       <section ref={containerRef}>
         <div className=" hidden lg:block lg:container lg:mx-auto my-6 lg:my-10">
@@ -886,6 +887,10 @@ function ShopProducts() {
           )}
         </div>
       </section>
+
+      <footer>
+        <Footer />
+      </footer>
     </div>
   );
 }

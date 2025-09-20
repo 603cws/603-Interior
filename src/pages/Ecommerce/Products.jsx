@@ -1341,13 +1341,13 @@ function Card({ product }) {
           </p>
           <div className="flex justify-between items-center gap-2">
             <button
-              onClick={() => handleAddToCart(product)}
-              disabled={iscarted}
-              className="flex items-center gap-1 font-TimesNewRoman text-sm py-1.5 border border-[#ccc] px-2"
+              onClick={() => handleAddToCart(product, iscarted)}
+              // disabled={iscarted}
+              className="flex items-center gap-1 font-TimesNewRoman text-sm py-1.5 border border-[#ccc] px-2 hover:bg-[#DDDDDD]"
 
               // className="flex justify-center items-center gap-1 font-Poppins text-[12px] py-1.5"
             >
-              {iscarted ? "Added to cart" : "Add to cart"}{" "}
+              {iscarted ? "Go to cart" : "Add to cart"}{" "}
               {/* <BsArrowRight size={15} />{" "} */}
             </button>
 

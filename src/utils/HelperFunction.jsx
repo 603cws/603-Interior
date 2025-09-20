@@ -13,8 +13,12 @@ export const useHandleAddToCart = () => {
     setShowLoginPopup,
   } = useApp();
 
-  const handleAddToCart = async (product, productQuantity = 1) => {
-    console.log("product", product);
+  const navigate = useNavigate();
+  const handleAddToCart = async (product, iscarted, productQuantity = 1) => {
+    if (iscarted) {
+      navigate("/cart");
+      return;
+    }
 
     if (!isAuthenticated) {
       const formattedproductforcart = {
