@@ -118,6 +118,33 @@ const latestPosts = [
   },
 ];
 
+const TOP_OFFERS = [
+  {
+    title: "Lighting",
+    subtitle: "Up to 20% off",
+    img: "/images/ecommerce/lighting.png",
+  },
+  {
+    title: "Furniture",
+    subtitle: "Up to 20% off",
+    img: "/images/ecommerce/furniture.png",
+  },
+];
+
+const BOTTOM_OFFERS = [
+  {
+    title: "Partition",
+    subtitle: "Up to 20% off",
+    img: "/images/ecommerce/partition.png",
+  },
+  {
+    title: "Lights",
+    subtitle: "Up to 20% off",
+    img: "/images/ecommerce/lights.png",
+  },
+  { title: "AC", subtitle: "Up to 20% off", img: "/images/ecommerce/ac.png" },
+];
+
 const products2 = {
   chair: {
     title: "Orange Chair",
@@ -1267,6 +1294,93 @@ function Products() {
         </div>
       </section>
 
+      {/* section 9*/}
+      <section className="px-4 lg:container mx-auto pt-10 pb-16">
+        {/* Parent: left hero + right area */}
+        <div className="grid gap-4 md:grid-cols-12 items-center font-TimesNewRoman">
+          {/* LEFT: big hero card */}
+          <div className="col-span-12 lg:col-span-5">
+            <a className="group block rounded-lg overflow-hidden relative h-80 md:h-[545px] hover:cursor-pointer">
+              <img
+                src="/images/ecommerce/festive.png"
+                alt="Festive offers"
+                className="absolute inset-0 w-full h-full object-cover transform transition-transform duration-500 group-hover:scale-105"
+              />
+              <div className="relative z-10 h-full flex flex-col justify-end pl-4 md:pl-8 pb-8 text-white">
+                <h2 className="text-5xl md:text-8xl leading-tight">
+                  Festive
+                  <br />
+                  offers
+                </h2>
+                <p className="mt-2 text-xl md:text-2xl">Up to 20% off</p>
+                <img
+                  src="/images/ecommerce/button.png"
+                  alt="arrow button"
+                  className="mt-2 w-2 md:w-4"
+                />
+              </div>
+            </a>
+          </div>
+
+          {/* RIGHT: nested grid (top row: 2 cols, bottom row: 3 cols) */}
+          <div className="col-span-12 lg:col-span-7">
+            <div className="grid gap-4">
+              {/* Top row: 2 columns */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {TOP_OFFERS.map((o) => (
+                  <a
+                    key={o.title}
+                    className="group rounded-lg overflow-hidden relative h-48 md:h-60"
+                    href="#"
+                  >
+                    <img
+                      src={o.img}
+                      alt={o.title}
+                      className="absolute inset-0 w-full h-full object-cover transform transition-transform duration-500 group-hover:scale-105"
+                    />
+                    <div className="relative z-10 h-full flex flex-col justify-end items-start pl-2 lg:pl-8 pb-6 text-white">
+                      <h3 className="text-xl md:text-3xl">{o.title}</h3>
+                      <p className="text-base md:text-2xl">{o.subtitle}</p>
+                      <img
+                        src="/images/ecommerce/button.png"
+                        alt="arrow button"
+                        className="mt-2 w-2 md:w-4"
+                      />
+                    </div>
+                  </a>
+                ))}
+              </div>
+
+              {/* Bottom row: 3 columns */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                {BOTTOM_OFFERS.map((o) => (
+                  <a
+                    key={o.title}
+                    className="group rounded-lg overflow-hidden relative h-44 md:h-72"
+                    href="#"
+                  >
+                    <img
+                      src={o.img}
+                      alt={o.title}
+                      className="absolute inset-0 w-full h-full object-cover transform transition-transform duration-500 group-hover:scale-105"
+                    />
+                    <div className="relative z-10 h-full flex flex-col justify-end items-start pl-2 lg:pl-6 pb-8 text-white">
+                      <h4 className="text-xl md:text-3xl">{o.title}</h4>
+                      <p className="text-base md:text-2xl">{o.subtitle}</p>
+                      <img
+                        src="/images/ecommerce/button.png"
+                        alt="arrow button"
+                        className="mt-2 w-2 md:w-4"
+                      />
+                    </div>
+                  </a>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <Footer />
 
       {showLoginPopup && <Loginpoup onClose={() => setShowLoginPopup(false)} />}
@@ -1353,7 +1467,7 @@ function Card({ product }) {
 
             <div
               onClick={() => handleAddtoWishlist(product)}
-              className=" text-[#ccc] hover:text-red-950 cursor-pointer"
+              className="text-[#ccc] hover:text-red-600 cursor-pointer"
             >
               {isWishlisted ? (
                 <AiFillHeart size={20} color="red" />

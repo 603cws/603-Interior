@@ -438,7 +438,7 @@ function Cart() {
 
                   {isAuthenticated ? (
                     cartItems ? (
-                      <div className="space-y-2">
+                      <div className="space-y-2 max-h-[370px] overflow-y-scroll custom-scrollbar pb-2">
                         {cartItems.length > 0 ? (
                           sortedCartItems.map((item) => (
                             <CartCard cartitem={item} key={item.id} />

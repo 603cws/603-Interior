@@ -1,7 +1,7 @@
 import toast from "react-hot-toast";
 import { useApp } from "../Context/Context";
 import { supabase } from "../services/supabase";
-import { AddToCartToast } from "./AddToCartToast";
+import { AddToCartToast, RemoveFromCartToast } from "./AddToCartToast";
 import { useNavigate } from "react-router-dom";
 
 export const useHandleAddToCart = () => {
@@ -100,44 +100,50 @@ export const useHandleAddToCart = () => {
     if (isAuthenticated) {
       try {
         const {
-          data: { user }, //error: authError,
+          data: { user },
         } = await supabase.auth.getUser();
 
         const { data: cartdata } = await supabase
           .from("userProductCollection")
-          .select("*,productId(*)")
+          .select("id, productId(*)")
           .eq("userId", user.id)
           .eq("type", "wishlist");
 
-        // check if the product is already in the db with this user
+        const existingItem = cartdata?.find(
+          (item) => item.productId.id === product.id
+        );
 
-        console.log("cartdata", cartdata);
+        if (existingItem) {
+          // ✅ remove from wishlist if already exists
+          const { error } = await supabase
+            .from("userProductCollection")
+            .delete()
+            .eq("id", existingItem.id);
 
-        const cartproductid = cartdata?.map((item) => item.productId.id);
+          if (error) throw new Error(error.message);
+          RemoveFromCartToast(product, "wishlist"); // optional toast
+        } else {
+          // ✅ add to wishlist
+          const { error } = await supabase
+            .from("userProductCollection")
+            .insert([
+              {
+                productId: product.id,
+                type: "wishlist",
+                quantity: productQuantity,
+                userId: user.id,
+              },
+            ]);
 
-        console.log(cartproductid, "cardproductids");
-
-        if (cartproductid.includes(product.id)) {
-          return;
+          if (error) throw new Error(error.message);
+          AddToCartToast(product, "wishlist");
         }
-
-        const { error } = await supabase.from("userProductCollection").insert([
-          {
-            productId: product.id,
-            type: "wishlist",
-            quantity: productQuantity,
-            userId: user.id,
-          },
-        ]);
-        if (error) throw new Error(error.message);
-        AddToCartToast(product, "wishlist");
       } catch (error) {
         console.error(error);
       } finally {
         getCartItems();
       }
     } else {
-      // toast.error("please login to add items to whishlist");
       setShowLoginPopup(true);
     }
   };

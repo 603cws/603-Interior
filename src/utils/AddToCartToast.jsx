@@ -35,6 +35,36 @@ export const AddToCartToast = (product, type = "cart") => {
   );
 };
 
+export const RemoveFromCartToast = (product, type = "cart") => {
+  toast(
+    ({ closeToast }) => (
+      <div className="flex items-center justify-between gap-4 pr-2">
+        <div className="flex items-center gap-3">
+          <div className="bg-red-100 p-2 rounded-full">
+            <MdOutlineInventory2 className="text-red-600 text-xl" />
+          </div>
+          <p className="text-sm font-medium text-black">
+            {product.title} removed from {type} successfully
+          </p>
+        </div>
+        <button onClick={closeToast} className="text-gray-600 hover:text-black">
+          <IoClose className="text-lg" />
+        </button>
+      </div>
+    ),
+    {
+      position: "bottom-right",
+      autoClose: 3000,
+      closeOnClick: false,
+      hideProgressBar: false,
+      closeButton: false,
+      className: "bg-red-50 border border-red-400 rounded-lg shadow-sm",
+      progressClassName: "bg-red-500",
+      transition: Slide,
+    }
+  );
+};
+
 export const showRemoveFromCartToast = (product, type = "cart") => {
   toast(
     ({ closeToast }) => (

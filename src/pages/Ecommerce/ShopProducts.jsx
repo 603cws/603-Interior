@@ -8,17 +8,13 @@ import {
   MdKeyboardArrowDown,
   MdKeyboardArrowUp,
 } from "react-icons/md";
-import { FaArrowRightLong, FaArrowLeftLong } from "react-icons/fa6";
-
 import Header from "./Header";
-
 import { useHandleAddToCart } from "../../utils/HelperFunction";
-
 import { useApp } from "../../Context/Context";
 import { ToastContainer } from "react-toastify";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import LandingNavbar from "../../common-components/LandingNavbar";
 import Footer from "../../common-components/Footer";
+import { BsFillHeartFill } from "react-icons/bs";
 
 function ShopProducts() {
   //state
@@ -31,11 +27,8 @@ function ShopProducts() {
   const [isShopCatOepn, setIsShopCatOpen] = useState(true);
   const [isPriceOpen, setIsPriceOpen] = useState(false);
   const [filtersortby, setfiltersortby] = useState("Popularity");
-
   const [isfilterOpen, setIsfilteropen] = useState(false);
-
   const [isSortOpen, setIsSortOpen] = useState(false);
-
   const [isBrandOpen, setIsBrandopen] = useState(false);
 
   //context
@@ -48,7 +41,6 @@ function ShopProducts() {
   //
   const [searchParams] = useSearchParams();
   const category = searchParams.get("category");
-
   // console.log("searchparams", searchParams, "cat", category);
 
   // console.log(minPrice, maxPrice);
@@ -846,39 +838,62 @@ function ShopProducts() {
                   </div>
                 ))}
               </div>
-              <div className="flex justify-center my-10">
-                <div className="flex gap-2">
-                  <button
-                    disabled={currentPage === 1}
-                    onClick={() => goToPage(currentPage - 1)}
-                    className="px-5 py-2  rounded disabled:hidden"
-                  >
-                    <FaArrowLeftLong />
-                  </button>
-
-                  {Array.from({ length: totalPages }, (_, i) => (
+              {totalPages > 1 && (
+                <div className="flex justify-center my-10">
+                  <div className="inline-flex items-center border border-[#CCCCCC] rounded-lg px-2 overflow-hidden">
+                    {/* Previous */}
                     <button
-                      key={i}
-                      onClick={() => goToPage(i + 1)}
-                      className={`px-5 py-2 rounded font-TimesNewRoman font-semibold ${
-                        currentPage === i + 1
-                          ? "bg-[#304778] text-white"
-                          : "bg-[#fff] text-[#232323]"
+                      disabled={currentPage === 1}
+                      onClick={() => goToPage(currentPage - 1)}
+                      className={`flex items-center gap-2 p-4 text-sm font-medium ${
+                        currentPage === 1
+                          ? "text-gray-400 cursor-not-allowed"
+                          : "text-[#334A78]"
                       }`}
                     >
-                      {i + 1}
+                      <img
+                        src="../images/icons/less.png"
+                        alt="Next"
+                        className="w-4 h-4"
+                      />
+                      Previous
                     </button>
-                  ))}
 
-                  <button
-                    disabled={currentPage === totalPages}
-                    onClick={() => goToPage(currentPage + 1)}
-                    className="px-5 py-2 rounded disabled:hidden"
-                  >
-                    <FaArrowRightLong />
-                  </button>
+                    {/* Page numbers */}
+                    {Array.from({ length: totalPages }, (_, i) => (
+                      <button
+                        key={i}
+                        onClick={() => goToPage(i + 1)}
+                        className={`px-2 py-1 gap-4 text-sm font-medium rounded-sm ${
+                          currentPage === i + 1
+                            ? "bg-[#334A78] text-white"
+                            : "text-[#334A78] hover:bg-[#F1F1F1]"
+                        }`}
+                      >
+                        {i + 1}
+                      </button>
+                    ))}
+
+                    {/* Next */}
+                    <button
+                      disabled={currentPage === totalPages}
+                      onClick={() => goToPage(currentPage + 1)}
+                      className={`flex items-center gap-2 p-4 text-sm font-medium ${
+                        currentPage === totalPages
+                          ? "text-gray-400 cursor-not-allowed"
+                          : "text-[#334A78]"
+                      }`}
+                    >
+                      Next
+                      <img
+                        src="../images/icons/more.png"
+                        alt="Next"
+                        className="w-4 h-4"
+                      />
+                    </button>
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
           ) : (
             <div className="w-full flex justify-center items-center">
@@ -911,8 +926,13 @@ function SectionHeader({ title, isborder = true }) {
 }
 
 function Card({ product }) {
-  const { handleAddToCart } = useHandleAddToCart();
-  const { isAuthenticated, localcartItems, cartItems } = useApp();
+  const { handleAddToCart, handleAddtoWishlist } = useHandleAddToCart();
+  const { isAuthenticated, localcartItems, cartItems, wishlistItems } =
+    useApp();
+
+  const isWishlisted = wishlistItems?.some(
+    (item) => item.productId?.id === product.id
+  );
 
   const [iscarted, setIsCarted] = useState(false);
 
@@ -959,9 +979,20 @@ function Card({ product }) {
               <p className="text-[#C20000]">sale</p>
             </div>
           </div>
-          <div className=" text-[#ccc] hover:text-red-950 ">
-            <FaHeart size={25} />
+          <div
+            onClick={() => handleAddtoWishlist(product)}
+            className="text-[#ccc] hover:text-red-600 cursor-pointer"
+          >
+            {isWishlisted ? (
+              <FaHeart size={25} color="red" />
+            ) : (
+              <BsFillHeartFill size={25} />
+            )}
           </div>
+          {/* <div className=" text-[#ccc] hover:text-red-950 ">
+            <FaHeart size={25} />
+            <BsFillHeartFill />
+          </div> */}
         </div>
         <button
           onClick={() => handleAddToCart(product)}
