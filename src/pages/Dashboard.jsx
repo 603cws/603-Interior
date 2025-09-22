@@ -29,6 +29,7 @@ import { IoCloseCircle, IoCloudDownloadOutline } from "react-icons/io5";
 import { MdOutlineSpaceDashboard } from "react-icons/md";
 import { GrCircleQuestion } from "react-icons/gr";
 import { FiLogOut } from "react-icons/fi";
+import ManageAddress from "./user/ManageAddress";
 
 function handlesidebarState(state, action) {
   switch (action.type) {
@@ -147,6 +148,10 @@ function Dashboard() {
   // mobile navigation
   const [isOpen, setIsOpen] = useState(false);
   const mobileMenuRef = useRef(null);
+
+  // user settings tabs
+  const [profileInfo, setProfileInfo] = useState(true);
+  const [manageAddress, setManageAddress] = useState(false);
 
   // Close when clicking outside
   useEffect(() => {
@@ -832,29 +837,50 @@ function Dashboard() {
         {sidebarstate?.isSettingOpen && (
           <div className="flex flex-col h-full min-h-0 overflow-hidden lg:border-2 lg:border-[#334A78] lg:rounded-lg bg-white">
             {/* header inside setting */}
-            {/* <div className="lg:border-b-2 border-b-[#ccc] py-2 px-4 shrink-0">
-              {iseditopen ? (
-                <button className="hidden lg:block capitalize font-medium text-base px-10 py-2 text-white rounded-lg border-[#374A75] border bg-[#374A75]">
-                  Profile
-                </button>
-              ) : (
-                <div className="capitalize font-medium text-base ">
+            <div className="w-full flex flex-col md:flex-row md:items-center px-2 gap-3 lg:gap-5 lg:px-4 py-2 border-b-2 border-b-gray-400">
+              {iseditopen && (
+                <div className="flex gap-5 mt-2 self-start">
                   <button
-                    className="text-sm text-[#A1A1A1] flex justify-center items-center gap-3"
-                    onClick={() => setIsEditopen(true)}
+                    onClick={() => {
+                      setManageAddress(false);
+                      setProfileInfo(true);
+                    }}
+                    className={`px-5 py-2 capitalize text-[#374A75] border border-[#374A75] rounded hover:bg-[#D3E3F0] ${
+                      profileInfo ? "bg-[#D3E3F0]" : ""
+                    }`}
                   >
-                    <FaArrowLeft /> back to profile
+                    profile information
                   </button>
-                  <h3>profile edit</h3>
+                  <button
+                    onClick={() => {
+                      setProfileInfo(false);
+                      setManageAddress(true);
+                    }}
+                    className={`px-5 py-2 capitalize text-[#374A75] border border-[#374A75] rounded hover:bg-[#D3E3F0] ${
+                      manageAddress ? "bg-[#D3E3F0]" : ""
+                    }`}
+                  >
+                    manage address
+                  </button>
                 </div>
               )}
-            </div> */}
+            </div>
 
             {/* Scrollable content section */}
             {iseditopen ? (
-              <div className="flex-1 flex flex-col justify-center items-center h-[90%] font-Poppins ">
-                <div className="flex justify-center items-center lg:w-full  h-full">
-                  <UserCard setIsEditopen={setIsEditopen} />
+              <div className="flex-1 flex flex-col justify-center items-center h-[90%] font-Poppins">
+                <div
+                  className={`flex items-center lg:w-full  h-full ${
+                    manageAddress ? "justify-start" : "justify-center"
+                  }`}
+                >
+                  {profileInfo ? (
+                    <UserCard setIsEditopen={setIsEditopen} />
+                  ) : manageAddress ? (
+                    <ManageAddress />
+                  ) : (
+                    <UserProfileEdit setIsEditopen={setIsEditopen} />
+                  )}
                 </div>
               </div>
             ) : (
@@ -862,32 +888,6 @@ function Dashboard() {
                 <UserProfileEdit setIsEditopen={setIsEditopen} />
               </div>
             )}
-            {/* <div className="flex-1 overflow-y-auto min-h-0 px-4 py-2">
-              {iseditopen ? (
-                <div className="flex justify-center items-center w-full">
-                  <UserProfile setIsEditopen={setIsEditopen} />
-                </div>
-              ) : (
-                <div className="">
-                  <UserSetting />
-                </div>
-              )}
-            </div> */}
-            {/* <div className="flex-1 overflow-y-auto min-h-0 px-4 py-2">
-              {iseditopen ? (
-                <div className="flex justify-center items-center w-full">
-                  <UserProfile setIsEditopen={setIsEditopen} />
-                </div>
-              ) : (
-                <div className="">
-                  <UserSetting />
-                </div>
-              )}
-
-              <div>
-                <p className="text-sm leading-relaxed"></p>
-              </div>
-            </div> */}
           </div>
         )}
 
@@ -916,7 +916,7 @@ function Dashboard() {
 
         {/* product */}
         {sidebarstate?.isProductOpen && (
-          <div className="flex flex-col h-full min-h-0 overflow-hidden lg:border-2 border-[#334A78] rounded-lg bg-white">
+          <div className="flex flex-col h-full min-h-0 overflow-hidden lg:border-2 border-[#334A78] rounded-lg bg-white ">
             <div className="flex-1 ">
               <div className="overflow-y-auto scrollbar-hide h-[calc(100vh-95px)] rounded-3xl relative ">
                 {/* // Default product list and add product UI */}

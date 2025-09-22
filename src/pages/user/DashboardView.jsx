@@ -149,21 +149,21 @@ function DashboardView({
       },
     },
     dataLabels: {
-      enabled: totalArea < 2000 ? true : false,
-      style: {
-        fontSize: "14rem",
-        fontWeight: "bold",
-        colors: ["#FFFFFF"],
-      },
-      formatter: (val, opts) => {
-        if (typeof val === "number") {
-          const percentage = ((val / validTotalArea) * 100).toFixed(2);
-          return `${
-            opts.w.globals.labels[opts.dataPointIndex]
-          } (${percentage}%)`;
-        }
-        return `${opts.w.globals.labels[opts.dataPointIndex]}: ${val}`;
-      },
+      enabled: false,
+      // style: {
+      //   fontSize: "14rem",
+      //   fontWeight: "bold",
+      //   colors: ["#FFFFFF"],
+      // },
+      // formatter: (val, opts) => {
+      //   if (typeof val === "number") {
+      //     const percentage = ((val / validTotalArea) * 100).toFixed(2);
+      //     return `${
+      //       opts.w.globals.labels[opts.dataPointIndex]
+      //     } (${percentage}%)`;
+      //   }
+      //   return `${opts.w.globals.labels[opts.dataPointIndex]}: ${val}`;
+      // },
     },
     states: {
       hover: {
@@ -325,7 +325,7 @@ function DashboardView({
         </div>
       </div>
       <div className="my-6 lg:my-0 xl:w-1/3 lg:flex justify-center">
-        <div className="border-2 p-2 lg:p-4 rounded-xl  lg:h-96">
+        <div className="border-2 p-2 lg:p-4 rounded-xl  lg:h-96 flex flex-col justify-around">
           <div className="w-[300px] h-[200px] lg:w-[370px] lg:h-[270px] sm:w-full sm:h-[270px] mb-2 lg:mb-3">
             <ReactApexChart
               options={options}
