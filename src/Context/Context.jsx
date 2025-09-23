@@ -489,18 +489,26 @@ export const AppProvider = ({ children }) => {
         },
       }));
 
-      //for safety even if a product is added multiple times it will get filtered into one
-      const uniquecartitems = [
-        ...new Map(
-          updatedProducts.map((item) => [item.productId.id, item])
-        ).values(),
-      ];
-      const cartProducts = uniquecartitems.filter(
+      // Separate first
+      const cartProductsRaw = updatedProducts.filter(
         (item) => item.type === "cart"
       );
-      const wishlistProducts = uniquecartitems.filter(
+      const wishlistProductsRaw = updatedProducts.filter(
         (item) => item.type === "wishlist"
       );
+
+      // Deduplicate inside each group
+      const cartProducts = [
+        ...new Map(
+          cartProductsRaw.map((item) => [item.productId.id, item])
+        ).values(),
+      ];
+      const wishlistProducts = [
+        ...new Map(
+          wishlistProductsRaw.map((item) => [item.productId.id, item])
+        ).values(),
+      ];
+
       setCartItems(cartProducts);
       setWishlistItems(wishlistProducts);
     } catch (error) {

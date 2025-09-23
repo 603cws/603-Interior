@@ -53,7 +53,8 @@ export const useHandleAddToCart = () => {
         const { data: cartdata } = await supabase
           .from("userProductCollection")
           .select("*,productId(*)")
-          .eq("userId", user.id);
+          .eq("userId", user.id)
+          .eq("type", "cart");
 
         // check if the product is already in the db with this user
 
