@@ -379,7 +379,7 @@ function CustomInput({
         className={`absolute left-2 px-[1px] bg-[#fff] transition-all text-sm text-gray-500 
           ${
             isFloating
-              ? "-top-2 text-sm text-[#aaa]"
+              ? "-top-2 text-xs text-[#aaa]"
               : "top-2.5 text-base text-gray-400"
           } 
           peer-focus:-top-2 peer-focus:text-sm peer-focus:text-[#aaa]`}
@@ -483,7 +483,7 @@ function AddressForm({
   clearForm,
 }) {
   return (
-    <div className="bg-[#fff] p-4 ">
+    <div className="bg-[#fff] p-7">
       <form onSubmit={handleSubmit} method="post">
         <h3 className="text-[#171717] text-sm leading-7 font-semibold my-3">
           ADDRESS

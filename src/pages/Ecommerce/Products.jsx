@@ -235,7 +235,7 @@ function Products() {
   const [categoryProducts, setCategoryProducts] = useState([]);
 
   const swiperRef = useRef(null);
-  const { showLoginPopup, setShowLoginPopup } = useApp();
+
   const [selectedProduct, setSelectedProduct] = useState("chair");
   const [hasOverflow, setHasOverflow] = useState(false);
   const [bestProducts, setBestProducts] = useState([]);
@@ -1006,9 +1006,9 @@ function Products() {
             {/* <Link to={`${encodeURIComponent(selectedCategory)}`}>view all</Link> */}
           </div>
           <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-5">
-            {categoryProducts.slice(0, 10).map((product) => {
-              return <Card key={product.id} product={product} />;
-            })}
+            {categoryProducts.slice(0, 10).map((product) => (
+              <Card key={product.id} product={product} />
+            ))}
           </div>
         </div>
       </section>
@@ -1382,8 +1382,6 @@ function Products() {
       </section>
 
       <Footer />
-
-      {showLoginPopup && <Loginpoup onClose={() => setShowLoginPopup(false)} />}
     </div>
   );
 }
@@ -1392,8 +1390,16 @@ export default Products;
 
 function Card({ product }) {
   const naviagte = useNavigate();
-  const { isAuthenticated, localcartItems, cartItems, wishlistItems } =
-    useApp();
+  const {
+    isAuthenticated,
+    localcartItems,
+    cartItems,
+    wishlistItems,
+    showLoginPopup,
+    setShowLoginPopup,
+    pendingProduct,
+    setPendingProduct,
+  } = useApp();
   const isWishlisted = wishlistItems?.some(
     (item) => item.productId?.id === product.id
   );
@@ -1419,21 +1425,22 @@ function Card({ product }) {
   }, [isAuthenticated, cartItems, localcartItems, product?.id]);
 
   return (
-    <div className="h-[300px] lg:h-[370px]">
-      <div className="h-full flex flex-col border-[1px] border-[#AAAAAA] relative">
-        {product.image && (
-          <div
-            onClick={() => naviagte(`/productview/${product.id}`)}
-            className=" cursor-pointer"
-          >
-            <img
-              src={product.image}
-              alt={product.title}
-              className="w-52 h-40 lg:h-56 mx-auto mt-4 object-contain"
-            />
-          </div>
-        )}
-        {/* {product.ispopular && (
+    <>
+      <div className="h-[300px] lg:h-[370px]">
+        <div className="h-full flex flex-col border-[1px] border-[#AAAAAA] relative">
+          {product.image && (
+            <div
+              onClick={() => naviagte(`/productview/${product.id}`)}
+              className=" cursor-pointer"
+            >
+              <img
+                src={product.image}
+                alt={product.title}
+                className="w-52 h-40 lg:h-56 mx-auto mt-4 object-contain"
+              />
+            </div>
+          )}
+          {/* {product.ispopular && (
           <span
             className={` font-lora text-[11px] capitalize absolute top-2 left-2 p-[5px] ${
               populartext === "popular"
@@ -1444,41 +1451,51 @@ function Card({ product }) {
             {product.populartext || "eihvihevi"}
           </span>
         )} */}
-        <div className="px-2 py-2 flex flex-col justify-center gap-3 font-TimesNewRoman  mt-auto">
-          <p className=" text-xs lg:text-sm line-clamp-1">{product.title}</p>
-          <p className="text-xs lg:text-sm">
-            RS.{" "}
-            {product.price.toLocaleString("en-IN", {
-              minimumFractionDigits: 2,
-              maximumFractionDigits: 2,
-            })}
-          </p>
-          <div className="flex justify-between items-center gap-2">
-            <button
-              onClick={() => handleAddToCart(product, iscarted)}
-              // disabled={iscarted}
-              className="flex items-center gap-1 font-TimesNewRoman text-sm py-1.5 border border-[#ccc] px-2 hover:bg-[#DDDDDD]"
+          <div className="px-2 py-2 flex flex-col justify-center gap-3 font-TimesNewRoman  mt-auto">
+            <p className=" text-xs lg:text-sm line-clamp-1">{product.title}</p>
+            <p className="text-xs lg:text-sm">
+              RS.{" "}
+              {product.price.toLocaleString("en-IN", {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              })}
+            </p>
+            <div className="flex justify-between items-center gap-2">
+              <button
+                onClick={() => handleAddToCart(product, iscarted)}
+                // disabled={iscarted}
+                className="flex items-center gap-1 font-TimesNewRoman text-sm py-1.5 border border-[#ccc] px-2 hover:bg-[#DDDDDD]"
 
-              // className="flex justify-center items-center gap-1 font-Poppins text-[12px] py-1.5"
-            >
-              {iscarted ? "Go to cart" : "Add to cart"}{" "}
-              {/* <BsArrowRight size={15} />{" "} */}
-            </button>
+                // className="flex justify-center items-center gap-1 font-Poppins text-[12px] py-1.5"
+              >
+                {iscarted ? "Go to cart" : "Add to cart"}{" "}
+                {/* <BsArrowRight size={15} />{" "} */}
+              </button>
 
-            <div
-              onClick={() => handleAddtoWishlist(product)}
-              className="text-[#ccc] hover:text-red-600 cursor-pointer"
-            >
-              {isWishlisted ? (
-                <AiFillHeart size={20} color="red" />
-              ) : (
-                <GoHeart size={20} />
-              )}
+              <div
+                onClick={() => {
+                  handleAddtoWishlist(product);
+                  setPendingProduct(product);
+                }}
+                className="text-[#ccc] hover:text-red-600 cursor-pointer"
+              >
+                {isWishlisted ? (
+                  <AiFillHeart size={20} color="red" />
+                ) : (
+                  <GoHeart size={20} />
+                )}
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+      {showLoginPopup && (
+        <Loginpoup
+          onClose={() => setShowLoginPopup(false)}
+          product={pendingProduct}
+        />
+      )}
+    </>
   );
 }
 

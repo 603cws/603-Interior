@@ -124,6 +124,8 @@ export const AppProvider = ({ children }) => {
   const [isSaveBOQ, setIsSaveBOQ] = useState(true);
   const [productQuantity, setProductQuantity] = useState({});
   const [allProductQuantities, setAllProductQuantities] = useState({});
+  const [pendingProduct, setPendingProduct] = useState(null);
+
   function normalizeKey(subcategory) {
     return subcategory
       .toLowerCase()
@@ -320,20 +322,6 @@ export const AppProvider = ({ children }) => {
 
     setAllProductQuantities(globalQuantities);
   }, [subCategories, seatCountData, quantityData, selectedCategory]);
-
-  console.log(
-    "Product Quantity:",
-    productQuantity,
-    "quantityData",
-    quantityData[0],
-    "seatCountData",
-    seatCountData,
-    categories,
-    subCategories,
-    "allProductQuantities",
-    allProductQuantities,
-    subCat1
-  );
 
   const handleBOQTitleChange = (title) => {
     if (isSaveBOQ) setBOQTitle(title);
@@ -1213,6 +1201,8 @@ export const AppProvider = ({ children }) => {
         productQuantity,
         setProductQuantity,
         allProductQuantities,
+        pendingProduct,
+        setPendingProduct,
       }}
     >
       {children}

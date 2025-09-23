@@ -97,8 +97,12 @@ export const useHandleAddToCart = () => {
     }
   };
 
-  const handleAddtoWishlist = async (product, productQuantity = 1) => {
-    if (isAuthenticated) {
+  const handleAddtoWishlist = async (
+    product,
+    productQuantity = 1,
+    isUserSignUp = false
+  ) => {
+    if (isAuthenticated || isUserSignUp) {
       try {
         const {
           data: { user },

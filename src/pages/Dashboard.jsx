@@ -61,13 +61,7 @@ function Dashboard() {
   const logout = useLogout();
   const navigate = useNavigate();
   const location = useLocation();
-  // const [productlist, setProductlist] = useState(true);
-  // const [isSettingOpen, setIsSettingOpen] = useState(false);
-  // const [isProductOpen, setIsProductOpen] = useState(false);
   const [iseditopen, setIsEditopen] = useState(true);
-  // const [dashboard, setDashboard] = useState(true);
-  // const [currentSection, setCurrentSection] = useState("Dashboard");
-  // const [help, setHelp] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
   const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
   const [mobileFilterOpen, setMobileFilterOPen] = useState(false);
@@ -111,11 +105,9 @@ function Dashboard() {
   // loading
   const [isloading, setIsloading] = useState(false);
   const [productlist, setProductlist] = useState(true);
-  // const [imageIsLoaded, setImageIsLoaded] = useState(false);
 
   const [openMenuId, setOpenMenuId] = useState(null); // Store the ID of the row with an open menu
   const [searchQuery, setSearchQuery] = useState(""); // to store the latest search input
-  // const [isExpanded, setIsExpanded] = useState(false);
   const [selectedProductview, setSelectedProductview] = useState({
     product_name: "",
     product_price: "",
@@ -135,7 +127,6 @@ function Dashboard() {
   const [itemsPerPage, setItemsPerPage] = useState(10); // Default (gets updated dynamically)
   const [currentPage, setCurrentPage] = useState(1);
   const items = toggle ? filteredProducts : filteredAddons;
-  // const items = toggle ? products : addons;
   const totalPages = Math.ceil(items.length / itemsPerPage);
   const tableRef = useRef(null);
   const scrollContainerRef = useRef(null);
@@ -192,9 +183,6 @@ function Dashboard() {
       }
 
       if (selectedBoq && selectedBoq.addons) {
-        // const productIdsArray = selectedBoq.addon_varaint_id
-        //   .split(",")
-        //   .map((id) => id.trim());
         const productIdsArray = selectedBoq.addons.map(
           (addon) => addon.variantId
         );
@@ -226,9 +214,6 @@ function Dashboard() {
 
         console.log("selectedboq", selectedBoq);
 
-        // const productIdsArray = selectedBoq.product_variant_id
-        //   .split(",")
-        //   .map((id) => id.trim()); // Convert to array of ids
         const productIdsArray = selectedBoq.products.map(
           (product) => product.id
         );
@@ -353,48 +338,21 @@ function Dashboard() {
   };
 
   const handlesetting = () => {
-    // setIsProductOpen(false);
-    // setDashboard(false);
-    // setIsSettingOpen(true);
-    // setHelp(false);
-    // setCurrentSection("Setting");
-
     sidebarDispatch({ type: "TOGGLE_SECTION", payload: SECTIONS.SETTING });
   };
   const handleproduct = () => {
-    // setIsSettingOpen(false);
-    // setDashboard(false);
-    // setIsProductOpen(true);
-    // setHelp(false);
-    // setCurrentSection("Product");
     sidebarDispatch({ type: "TOGGLE_SECTION", payload: SECTIONS.PRODUCT });
   };
 
   const handlecheckboqdetails = (boq) => {
-    // setIsSettingOpen(false);
-    // setDashboard(false);
-    // setIsProductOpen(true);
-    // setHelp(false);
-    // setSelectedBoq(boq);
-    // setCurrentSection("Product");
     sidebarDispatch({ type: "TOGGLE_SECTION", payload: SECTIONS.PRODUCT });
   };
 
   const handledashboard = () => {
-    // setIsSettingOpen(false);
-    // setIsProductOpen(false);
-    // setDashboard(true);
-    // setHelp(false);
-    // setCurrentSection("Dashboard");
     sidebarDispatch({ type: "TOGGLE_SECTION", payload: SECTIONS.DASHBOARD });
   };
 
   const handlehelp = () => {
-    // setIsSettingOpen(false);
-    // setIsProductOpen(false);
-    // setDashboard(false);
-    // setHelp(true);
-    // setCurrentSection("Help");
     sidebarDispatch({ type: "TOGGLE_SECTION", payload: SECTIONS.HELP });
   };
 
@@ -486,19 +444,9 @@ function Dashboard() {
 
   useEffect(() => {
     if (location.state?.openSettings) {
-      // setIsProductOpen(false);
-      // setDashboard(false);
-      // // setIsSettingOpen(true);
-      // setHelp(false);
-      // setCurrentSection("Setting");
       sidebarDispatch({ type: "TOGGLE_SECTION", payload: SECTIONS.SETTING });
     }
     if (location.state?.openHelp) {
-      // setIsSettingOpen(false);
-      // setIsProductOpen(false);
-      // setDashboard(false);
-      // setHelp(true);
-      // setCurrentSection("Help");
       sidebarDispatch({ type: "TOGGLE_SECTION", payload: SECTIONS.HELP });
     }
   }, [location.state]);
@@ -509,85 +457,6 @@ function Dashboard() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isfetchBoqDataRefresh]);
 
-  // console.log("boq data", boqdata);
-  //   {
-  //     "id": "77346d31-c81b-4006-b381-0722407ec162",
-  //     "created_at": "2025-08-14T06:18:57.224154+00:00",
-  //     "userId": "21e0b7e5-6276-4608-9f0f-0d0b0f802f46",
-  //     "products": null,
-  //     "addons": null,
-  //     "boqTitle": "Draft BOQ",
-  //     "layoutId": "5e0fd671-5b01-4118-9c76-53074fc5ed93",
-  //     "answers": [
-  //         {
-  //             "height": 10,
-  //             "flooring": "basicTiling",
-  //             "hvacType": "Centralized",
-  //             "demolishTile": "no"
-  //         }
-  //     ],
-  //     "planType": null,
-  //     "boqTotalPrice": 0,
-  //     "isDraft": true,
-  //     "layout": {
-  //         "id": "5e0fd671-5b01-4118-9c76-53074fc5ed93",
-  //         "mdQty": 1,
-  //         "bmsQty": 0,
-  //         "mdArea": 120,
-  //         "upsQty": 0,
-  //         "userId": "21e0b7e5-6276-4608-9f0f-0d0b0f802f46",
-  //         "bmsArea": 90,
-  //         "upsArea": 90,
-  //         "lTypeQty": 0,
-  //         "otherQty": 0,
-  //         "salesQty": 0,
-  //         "smallQty": 0,
-  //         "hrRoomQty": 0,
-  //         "lTypeArea": 34,
-  //         "linearQty": 19,
-  //         "loungeQty": 1,
-  //         "otherArea": 1,
-  //         "salesArea": 80,
-  //         "serverQty": 0,
-  //         "smallArea": 80,
-  //         "totalArea": 1500,
-  //         "usedSpace": 1104,
-  //         "created_at": "2025-05-27T07:10:00.737473+00:00",
-  //         "hrRoomArea": 80,
-  //         "linearArea": 24,
-  //         "loungeArea": 165,
-  //         "managerQty": 0,
-  //         "serverArea": 40,
-  //         "managerArea": 80,
-  //         "boardRoomQty": 0,
-  //         "receptionQty": 1,
-  //         "washroomsQty": 1,
-  //         "boardRoomArea": 325,
-  //         "phoneBoothQty": 0,
-  //         "receptionArea": 83,
-  //         "washroomsArea": 180,
-  //         "financeRoomQty": 0,
-  //         "meetingRoomQty": 1,
-  //         "phoneBoothArea": 25,
-  //         "breakoutRoomQty": 0,
-  //         "financeRoomArea": 100,
-  //         "meetingRoomArea": 100,
-  //         "breakoutRoomArea": 80,
-  //         "interviewRoomQty": 0,
-  //         "conferenceRoomQty": 0,
-  //         "discussionRoomQty": 0,
-  //         "interviewRoomArea": 100,
-  //         "conferenceRoomArea": 250,
-  //         "discussionRoomArea": 380,
-  //         "meetingRoomLargeQty": 0,
-  //         "executiveWashroomQty": 0,
-  //         "meetingRoomLargeArea": 120,
-  //         "executiveWashroomArea": 60,
-  //         "videoRecordingRoomQty": 0,
-  //         "videoRecordingRoomArea": 80
-  //     }
-  // }
-
   return (
     <div className="grid lg:grid-cols-[auto_1fr] lg:bg-gradient-to-r from-[#CFDCE7] to-[#E8EEF3] md:p-4 h-dvh md:h-screen font-Poppins lg:overflow-hidden">
       {/* sidebar */}
@@ -595,9 +464,6 @@ function Dashboard() {
         className={`hidden lg:block sticky top-0 bottom-0 left-0 bg-white border-2 border-[#334A78] rounded-lg shadow-lg transition-all duration-300 ${
           isExpanded ? "max-w-sm w-60 absolute" : "w-16"
         }`}
-        // className={`border-2 border-[#334A78] rounded-lg max-h-screen sticky left-0 top-0 bottom-0 bg-white  shadow-lg transition-all duration-300 ${
-        //   isExpanded ? "max-w-sm w-60 absolute" : "w-16"
-        // }`}
         onMouseEnter={() => setIsExpanded(true)}
         onMouseLeave={() => setIsExpanded(false)}
       >
@@ -617,14 +483,6 @@ function Dashboard() {
 
         {/* Menu Items */}
         <div className="font-semibold text-lg capitalize leading-normal tracking-wide py-4 text-[#262626] flex flex-col gap-4 px-3">
-          {/* <h3
-            className={`capitalize text-[#A1A1A1] ${
-              isExpanded ? "mx-4" : "hidden"
-            }`}
-          >
-            main
-          </h3> */}
-
           <SidebarItem
             icon={<MdOutlineSpaceDashboard />}
             text="Dashboard"
@@ -662,13 +520,6 @@ function Dashboard() {
 
         {/* Other Items */}
         <div className="font-semibold text-lg capitalize leading-normal tracking-wide py-4 text-[#262626] flex flex-col gap-4 px-3">
-          {/* <h3
-            className={`capitalize text-[#A1A1A1] ${
-              isExpanded ? "mx-4" : "hidden"
-            }`}
-          >
-            other
-          </h3> */}
           <SidebarItem
             icon={<GrCircleQuestion />}
             text="Help"
@@ -729,13 +580,6 @@ function Dashboard() {
               isOpen ? "translate-x-0" : "translate-x-full"
             } transition-transform duration-300 ease-in-out shadow-lg`}
           >
-            {/* <div className="p-4 flex justify-between items-center border-b">
-              <h2 className="text-lg font-semibold text-[#1A3365]">Menu</h2>
-              <button onClick={() => setIsOpen(false)} className="text-xl">
-                <FaTimes />
-              </button>
-            </div> */}
-
             <div className="flex gap-2 justify-center items-center mt-6">
               <div>
                 <img
