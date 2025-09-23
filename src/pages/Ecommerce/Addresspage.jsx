@@ -225,14 +225,90 @@ function Addresspage() {
     }
   };
 
-  // handle the continue click
-  const handleContinue = () => {
-    if (isAuthenticated) {
-      navigate("/payments");
+  const handlePayment = async () => {
+    try {
+      // create a order in db
+      const products = cartItems.map((item) => ({
+        id: item.productId.id,
+        price: item.productId.price,
+        quantity: item.quantity,
+      }));
+
+      const today = new Date();
+      const deliveryDate = new Date(today);
+      deliveryDate.setDate(today.getDate() + 14);
+
+      // Format as (year, month, day)
+      const formattedDeliveryDate = [
+        deliveryDate.getFullYear(),
+        deliveryDate.getMonth() + 1,
+        deliveryDate.getDate(),
+      ];
+      console.log(formattedDeliveryDate);
+
+      const { data: neworder, error } = await supabase
+        .from("orders")
+        .insert([
+          {
+            status: "pending",
+            products: products,
+            userId: accountHolder?.userId,
+            coupon: {
+              name: pricingdetails?.coupon || "",
+              discount: pricingdetails?.discount,
+            },
+            totalMRP: pricingdetails?.price,
+            finalPrice: pricingdetails?.finalValue,
+            charges: {
+              GST: pricingdetails?.gst,
+              delivery: pricingdetails?.shippingFee,
+            },
+            shippingAddress: getDefaultAddress,
+            deliveryDate: formattedDeliveryDate,
+          },
+        ])
+        .select()
+        .single();
+      if (error) {
+        throw new Error("data not insterted");
+      }
+
+      // Generate a unique orderId (you can also do this from backend)
+      const orderId = neworder?.id;
+      const amount = Math.round(neworder?.finalPrice * 100); // amount in paise (10000 = ₹100)
+
+      const res = await fetch(
+        "https://bwxzfwsoxwtzhjbzbdzs.supabase.co/functions/v1/createorder",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ amount, orderId }),
+        }
+      );
+
+      console.log("response", res);
+
+      const data = await res.json();
+
+      if (data.success && data.url) {
+        // Redirect user to PhonePe checkout
+        window.location.href = data.url;
+      } else {
+        alert("Failed to create order: " + data.message);
+      }
+      console.log("new order", neworder);
+    } catch (err) {
+      console.error("Payment error:", err);
+      alert("Something went wrong. Please try again.");
     }
   };
 
-  if (!pricingdetails) {
+  // handle the continue click
+  const handleContinue = () => {
+    handlePayment();
+  };
+
+  if (!pricingdetails || !accountHolder) {
     return navigate("/cart");
   }
 
@@ -658,7 +734,7 @@ function Addresspage() {
                   onClick={handleContinue}
                   className="hidden uppercase text-xl text-[#ffffff] tracking-wider w-full lg:flex justify-center items-center bg-[#334A78] border border-[#212B36] py-3 rounded-sm font-thin"
                 >
-                  Continue
+                  Pay now
                 </button>
               )}
             </div>
@@ -676,7 +752,7 @@ function Addresspage() {
               onClick={handleContinue}
               className="uppercase text-xl text-white tracking-wider w-full bg-[#334A78] border border-[#212B36] py-3 rounded-sm font-thin"
             >
-              Continue
+              pay now
             </button>
           </div>
         </div>
