@@ -124,7 +124,10 @@ export const AppProvider = ({ children }) => {
   const [isSaveBOQ, setIsSaveBOQ] = useState(true);
   const [productQuantity, setProductQuantity] = useState({});
   const [allProductQuantities, setAllProductQuantities] = useState({});
-  const [pendingProduct, setPendingProduct] = useState(null);
+  const [pendingProduct, setPendingProduct] = useState(() => {
+    const stored = sessionStorage.getItem("addToWishlistProduct");
+    return stored ? JSON.parse(stored) : null;
+  });
 
   function normalizeKey(subcategory) {
     return subcategory

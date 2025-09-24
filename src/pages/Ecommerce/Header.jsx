@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { useApp } from "../../Context/Context";
 import { FiMenu, FiX } from "react-icons/fi";
 import { useEffect, useRef, useState } from "react";
-import { useLogout } from "../../utils/HelperFunction";
+import { useHandleAddToCart, useLogout } from "../../utils/HelperFunction";
 import LoginPopup from "../../common-components/LoginPopup";
 import { supabase } from "../../services/supabase";
 import toast from "react-hot-toast";
@@ -30,10 +30,13 @@ function Header() {
     setShowLoginPopup,
     setIsAuthenticated,
     setUserId,
+    pendingProduct,
+    setPendingProduct,
   } = useApp();
 
   let hasShownToast = false;
   const pathname = window.location.pathname;
+  const { handleAddtoWishlist } = useHandleAddToCart();
 
   useEffect(() => {
     const hashParams = new URLSearchParams(window.location.hash.substring(1));
@@ -51,14 +54,19 @@ function Header() {
         setUserId(session.user.id);
         setIsAuthenticated(true);
         toast.success("Logged in successfully with Google");
-        hasShownToast = true; // Clean up URL
+        hasShownToast = true;
+
+        // ✅ Run handleAddtoWishlist only once if pendingProduct exists
+        if (pendingProduct) {
+          handleAddtoWishlist(pendingProduct, 1, true);
+        }
 
         window.history.replaceState(null, "", window.location.pathname);
       }
     }
 
     checkOAuthLogin();
-  }, []);
+  }, [pendingProduct]); // <-- include pendingProduct if it comes from context
 
   useEffect(() => {
     function handleClickOutside(event) {

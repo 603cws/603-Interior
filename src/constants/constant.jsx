@@ -12,6 +12,7 @@ export const categoriesWithModal = ["Flooring", "HVAC"]; // Array of categories 
 export const priceRange = [1, 15000000];
 
 export const numOfCoats = 2;
+export const deliverDays = 15;
 
 export const colors = {
   "Linear Workspace": "#001f3f",

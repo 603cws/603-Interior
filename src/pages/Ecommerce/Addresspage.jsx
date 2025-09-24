@@ -11,6 +11,7 @@ import { MdOutlineCancel, MdOutlineKeyboardArrowLeft } from "react-icons/md";
 import { useLocation, useNavigate } from "react-router-dom";
 import AppliedCoupon from "../../common-components/AppliedCoupon";
 import PriceDetail from "../../common-components/PriceDetail";
+import { deliverDays } from "../../constants/constant";
 
 function Addresspage() {
   const [isAddressFormOpen, setIsAddressFormOpen] = useState(false);
@@ -855,18 +856,27 @@ function AddressCard({
 }
 
 function DeliveryEstimate({ product }) {
+  // Calculate estimated delivery date (15 days from today)
+  const today = new Date();
+  const deliveryDate = new Date(today);
+  deliveryDate.setDate(today.getDate() + deliverDays);
+
+  // Format the date as "day month year", e.g., "30 Jun 2025"
+  const options = { day: "numeric", month: "short", year: "numeric" };
+  const formattedDate = deliveryDate.toLocaleDateString("en-US", options);
+
   return (
     <div className="flex lg:border-b lg:border-b-[#ccc] p-4 font-Poppins font-medium items-center gap-2">
       <div>
         <img
           src={product.productId.image}
-          alt="sample prodcut "
+          alt="sample product"
           className="w-16 object-contain"
         />
       </div>
       <p className="text-sm text-[#111]/60 leading-[22.4px]">
-        Estimated delivery by {/* date-month-year  */}
-        <span className="text-[#111]">9 Jun 2025</span>{" "}
+        Estimated delivery by{" "}
+        <span className="text-[#111]">{formattedDate}</span>
       </p>
     </div>
   );

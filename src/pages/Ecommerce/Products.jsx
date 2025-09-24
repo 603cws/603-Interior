@@ -1476,6 +1476,10 @@ function Card({ product }) {
                 onClick={() => {
                   handleAddtoWishlist(product);
                   setPendingProduct(product);
+                  sessionStorage.setItem(
+                    "addToWishlistProduct",
+                    JSON.stringify(product)
+                  );
                 }}
                 className="text-[#ccc] hover:text-red-600 cursor-pointer"
               >

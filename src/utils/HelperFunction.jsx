@@ -11,6 +11,7 @@ export const useHandleAddToCart = () => {
     getCartItems,
     accountHolder,
     setShowLoginPopup,
+    setPendingProduct,
   } = useApp();
 
   const navigate = useNavigate();
@@ -141,6 +142,8 @@ export const useHandleAddToCart = () => {
             ]);
 
           if (error) throw new Error(error.message);
+          setPendingProduct(null);
+          sessionStorage.removeItem("addToWishlistProduct");
           AddToCartToast(product, "wishlist");
         }
       } catch (error) {
