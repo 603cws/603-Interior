@@ -30,6 +30,7 @@ import { MdOutlineSpaceDashboard } from "react-icons/md";
 import { GrCircleQuestion } from "react-icons/gr";
 import { FiLogOut } from "react-icons/fi";
 import ManageAddress from "./user/ManageAddress";
+import Orders from "./user/Orders";
 
 function handlesidebarState(state, action) {
   switch (action.type) {
@@ -41,6 +42,7 @@ function handlesidebarState(state, action) {
         dashboard: action.payload === "Dashboard",
         help: action.payload === "Help",
         isBookAppointmentOpen: action.payload === "Book Appointment",
+        myOrders: action.payload === "My Orders",
         currentSection: action.payload,
       };
     default:
@@ -55,6 +57,7 @@ const SECTIONS = {
   HELP: "Help",
   EDIT: "Edit",
   BOOkAPPOINTMENT: "Book Appointment",
+  ORDERS: "My Orders",
 };
 
 function Dashboard() {
@@ -73,6 +76,7 @@ function Dashboard() {
     dashboard: true,
     help: false,
     isBookAppointmentOpen: false,
+    myOrders: false,
     currentSection: "Dashboard",
   };
 
@@ -355,6 +359,9 @@ function Dashboard() {
   const handlehelp = () => {
     sidebarDispatch({ type: "TOGGLE_SECTION", payload: SECTIONS.HELP });
   };
+  const handleOrders = () => {
+    sidebarDispatch({ type: "TOGGLE_SECTION", payload: SECTIONS.ORDERS });
+  };
 
   const fetchboq = async () => {
     try {
@@ -516,6 +523,13 @@ function Dashboard() {
             isExpanded={isExpanded}
             currentSection={sidebarstate?.currentSection}
           />
+          <SidebarItem
+            icon={<BsBoxSeam />}
+            text="My Orders"
+            onClick={handleOrders}
+            isExpanded={isExpanded}
+            currentSection={sidebarstate?.currentSection}
+          />
         </div>
 
         {/* Other Items */}
@@ -625,6 +639,13 @@ function Dashboard() {
                     payload: SECTIONS.BOOkAPPOINTMENT,
                   })
                 }
+                currentSection={sidebarstate?.currentSection}
+                setIsOpen={setIsOpen}
+              />
+              <MobileMenuItem
+                icon={<LuBlend />}
+                title={"My Orders"}
+                onClick={handleOrders}
                 currentSection={sidebarstate?.currentSection}
                 setIsOpen={setIsOpen}
               />
@@ -755,6 +776,12 @@ function Dashboard() {
         {sidebarstate?.isBookAppointmentOpen && (
           <div className="flex flex-col h-full min-h-0  lg:border-2 overflow-hidden border-[#334A78] rounded-lg bg-white">
             <BookAppointment isdashboardbooking={true} />
+          </div>
+        )}
+
+        {sidebarstate?.myOrders && (
+          <div className="flex flex-col h-full min-h-0  lg:border-2 overflow-auto gradient-scrollbar  border-[#334A78] rounded-lg bg-white">
+            <Orders />
           </div>
         )}
 
