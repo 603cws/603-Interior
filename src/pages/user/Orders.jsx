@@ -11,6 +11,8 @@ import { BsBoxSeam } from "react-icons/bs";
 import { MdOutlinePendingActions } from "react-icons/md";
 import { LuPackageCheck } from "react-icons/lu";
 import { IoCloseCircleOutline } from "react-icons/io5";
+import { useNavigate } from "react-router-dom";
+import { LuChevronDown } from "react-icons/lu";
 
 const statusIcon = {
   pending: <MdOutlinePendingActions />,
@@ -29,12 +31,13 @@ function Orders() {
   const [selectedProduct, setSelectedProduct] = useState(null);
 
   const { accountHolder } = useApp();
+  const navigate = useNavigate();
 
   useEffect(() => {
-    fetchOrdersWithProducts();
+    fetchOrdersData();
   }, []);
 
-  const fetchOrdersWithProducts = async () => {
+  const fetchOrdersData = async () => {
     try {
       setLoading(true);
       const { data: ordersData, error: ordersError } = await supabase
@@ -93,12 +96,21 @@ function Orders() {
   return (
     <>
       {loading ? (
-        <div className="flex items-center justify-center h-full">
-          <p className="text-xl font-bold text-[#ccc]">Loading orders...</p>
+        <div className="flex flex-col items-center justify-center h-full">
+          <p className="text-xl font-bold text-[#ccc]">Hold On...</p>
+          <p className="text-xl font-bold text-[#ccc]">
+            Fetching orders for {accountHolder.companyName} !!
+          </p>
         </div>
       ) : orders.length === 0 ? (
-        <div className="flex justify-center items-center h-full">
-          <p className="text-xl font-bold text-[#ccc]">No orders found</p>
+        <div className="flex flex-col gap-3 justify-center items-center h-full">
+          <p className="text-xl font-bold text-[#ccc]">No orders yet ?</p>
+          <button
+            onClick={() => navigate("/products")}
+            className="text-sm font-bold px-5 py-2 text-[#fff] bg-[#374A75] hover:bg-[#4C69A4] rounded"
+          >
+            Start shopping
+          </button>
         </div>
       ) : (
         <>
@@ -193,9 +205,9 @@ function Orders() {
 export default Orders;
 
 function OrderProducts({ order, handleProductView }) {
+  const [showPriceDetails, setShowPriceDetails] = useState(false);
   const products = order.products;
   const shippingAddress = order.shippingAddress[0];
-  console.log(order);
 
   return (
     <>
@@ -282,13 +294,31 @@ function OrderProducts({ order, handleProductView }) {
             <p className="capitalize text-[#171717] font-bold text-base md:text-lg">
               total order price
             </p>
-            <p className="font-bold text-sm md:text-base">
-              RS{" "}
-              {order.finalPrice.toLocaleString("en-IN", {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2,
-              })}
-            </p>
+            <div className="flex gap-2 items-center">
+              <p className="font-bold text-sm md:text-base">
+                RS{" "}
+                {order.finalPrice.toLocaleString("en-IN", {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })}
+              </p>
+              <button
+                onClick={() => setShowPriceDetails(!showPriceDetails)}
+                className={`transition-transform duration-300 ${
+                  showPriceDetails ? "rotate-180" : ""
+                }`}
+              >
+                <LuChevronDown />
+              </button>
+            </div>
+          </div>
+
+          <div
+            className={`max-w-sm w-full overflow-hidden transition-all duration-500 ease-in-out place-self-end ${
+              showPriceDetails ? "max-h-[500px] mt-3" : "max-h-0"
+            }`}
+          >
+            <PriceDistribution order={order} />
           </div>
           <p className="text-[#374A75] capitalize font-bold flex items-center gap-5 bg-[#F9F9F9] p-2 text-sm md:text-base">
             <IoCashOutline />
@@ -315,7 +345,6 @@ function OrderProducts({ order, handleProductView }) {
 
 function OrderProductView({ order, product }) {
   const shippingAddress = order?.shippingAddress[0];
-  console.log(product);
 
   return (
     <div className="p-4 font-Poppins">
@@ -442,6 +471,64 @@ function Breadcrumbs({
           <span className="text-gray-500">{product.details.title}</span>
         </>
       )}
+    </div>
+  );
+}
+
+function PriceDistribution({ order }) {
+  return (
+    <div className="font-Poppins bg-[#fff]">
+      {/* <h3 className="capitalize text-[#171717] font-semibold">
+        payment information
+      </h3> */}
+      <div className="">
+        <div className="flex justify-between border-b py-2">
+          <p>Total MRP</p>
+          <p>
+            {order.totalMRP.toLocaleString("en-IN", {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            })}
+          </p>
+        </div>
+        <div className="flex justify-between border-b py-2">
+          <p>Coupon Discount</p>
+          <p>
+            {order.coupon?.discount.toLocaleString("en-IN", {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            })}
+          </p>
+        </div>
+        <div className="flex justify-between border-b py-2">
+          <p>Shipping Fee</p>
+          <p>
+            {order.charges?.delivery.toLocaleString("en-IN", {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            })}
+          </p>
+        </div>
+        <div className="flex justify-between border-b py-2">
+          <p>GST</p>
+          <p>
+            {order.charges?.GST.toLocaleString("en-IN", {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            })}
+          </p>
+        </div>
+        <div className="flex justify-between font-semibold pt-2">
+          <p>Total Amount</p>
+          <p>
+            RS{" "}
+            {order.finalPrice.toLocaleString("en-IN", {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            })}
+          </p>
+        </div>
+      </div>
     </div>
   );
 }
