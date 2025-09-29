@@ -226,7 +226,24 @@ function Addresspage() {
     }
   };
 
+  const deleteOrder = async (id) => {
+    const { error } = await supabase.from("orders").delete().eq("id", id);
+
+    if (error) throw new Error("couldnt delete the order ");
+  };
+
+  const deleteCart = async (userid) => {
+    const { error } = await supabase
+      .from("userProductCollection")
+      .delete()
+      .eq("userId", userid)
+      .eq("type", "cart");
+
+    if (error) throw new Error("couldnt delete the cart ");
+  };
+
   const handlePayment = async () => {
+    // test for iframe
     try {
       // create a order in db
       const products = cartItems.map((item) => ({
@@ -246,7 +263,7 @@ function Addresspage() {
         deliveryDate.getDate(),
       ];
       console.log(formattedDeliveryDate);
-
+      // 1)create the order to avoid the order not getting created afterwards
       const { data: neworder, error } = await supabase
         .from("orders")
         .insert([
@@ -279,7 +296,7 @@ function Addresspage() {
       const amount = Math.round(neworder?.finalPrice * 100); // amount in paise (10000 = ₹100)
 
       const res = await fetch(
-        "https://bwxzfwsoxwtzhjbzbdzs.supabase.co/functions/v1/createorder",
+        "https://bwxzfwsoxwtzhjbzbdzs.supabase.co/functions/v1/newcreateorder",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -290,26 +307,167 @@ function Addresspage() {
       console.log("response", res);
 
       const data = await res.json();
+      console.log("res data", data);
 
-      if (data.success && data.url) {
-        // Redirect user to PhonePe checkout
-        window.location.href = data.url;
+      if (data.success && data.token && window.PhonePeCheckout) {
+        window.PhonePeCheckout.transact({
+          tokenUrl: data.url,
+          type: "IFRAME",
+          callback: async (response) => {
+            console.log("PhonePe response:", response);
+
+            if (response === "USER_CANCEL") {
+              toast.error("Payment cancelled by user.");
+              console.log("user cancelled", response);
+
+              await deleteOrder(orderId);
+              return;
+            } else if (response === "CONCLUDED") {
+              toast.success(" verifying status…");
+              // ✅ Always call your backend status API here
+              // verifyPaymentStatus(orderId);
+
+              const res = await fetch(
+                `https://bwxzfwsoxwtzhjbzbdzs.supabase.co/functions/v1/neworderstatus?id=${orderId}`,
+                {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                }
+              );
+
+              console.log("response from order status", res);
+
+              const data = await res.json();
+
+              console.log("data from order status", data);
+
+              if (data?.success && data?.status === "COMPLETED") {
+                toast.success("payment completed");
+                // clear the cart
+                const userid = accountHolder?.userId;
+                await deleteCart(userid);
+
+                //navigate to a congrats page
+                navigate(`/orderSuccess/${orderId}`);
+              }
+              if (!data?.success && data?.status === "FAILED") {
+                toast.error("something went wrong");
+
+                console.log("data", data);
+                await deleteOrder(orderId);
+                //navigate to a congrats page
+                navigate("/cart");
+              }
+              if (!data?.success && data?.status === "PENDING") {
+                console.log("payment pending");
+                toast.error("payment status pending");
+
+                console.log("data", data);
+              }
+            }
+          },
+        });
       } else {
-        alert("Failed to create order: " + data.message);
+        toast.error("Failed to create order: " + data.message);
+        await deleteOrder(orderId);
       }
-      console.log("new order", neworder);
     } catch (err) {
       console.error("Payment error:", err);
-      alert("Something went wrong. Please try again.");
+      toast.error("Something went wrong. Please try again.");
     }
   };
+
+  // redirect method
+  // const handlePayment = async () => {
+  //   try {
+  //     // create a order in db
+  //     const products = cartItems.map((item) => ({
+  //       id: item.productId.id,
+  //       price: item.productId.price,
+  //       quantity: item.quantity,
+  //     }));
+
+  //     const today = new Date();
+  //     const deliveryDate = new Date(today);
+  //     deliveryDate.setDate(today.getDate() + 14);
+
+  //     // Format as (year, month, day)
+  //     const formattedDeliveryDate = [
+  //       deliveryDate.getFullYear(),
+  //       deliveryDate.getMonth() + 1,
+  //       deliveryDate.getDate(),
+  //     ];
+  //     console.log(formattedDeliveryDate);
+
+  //     const { data: neworder, error } = await supabase
+  //       .from("orders")
+  //       .insert([
+  //         {
+  //           status: "pending",
+  //           products: products,
+  //           userId: accountHolder?.userId,
+  //           coupon: {
+  //             name: pricingdetails?.coupon || "",
+  //             discount: pricingdetails?.discount,
+  //           },
+  //           totalMRP: pricingdetails?.price,
+  //           finalPrice: pricingdetails?.finalValue,
+  //           charges: {
+  //             GST: pricingdetails?.gst,
+  //             delivery: pricingdetails?.shippingFee,
+  //           },
+  //           shippingAddress: getDefaultAddress,
+  //           deliveryDate: formattedDeliveryDate,
+  //         },
+  //       ])
+  //       .select()
+  //       .single();
+
+  //     if (error) {
+  //       throw new Error("data not insterted");
+  //     }
+
+  //     // Generate a unique orderId (you can also do this from backend)
+  //     const orderId = neworder?.id;
+  //     const amount = Math.round(neworder?.finalPrice * 100); // amount in paise (10000 = ₹100)
+
+  //     const res = await fetch(
+  //       "https://bwxzfwsoxwtzhjbzbdzs.supabase.co/functions/v1/createorder",
+  //       {
+  //         method: "POST",
+  //         headers: { "Content-Type": "application/json" },
+  //         body: JSON.stringify({ amount, orderId }),
+  //       }
+  //     );
+
+  //     console.log("response", res);
+
+  //     const data = await res.json();
+
+  //     if (data.success && data.url) {
+  //       // Redirect user to PhonePe checkout
+  //       window.location.href = data.url;
+  //     } else {
+  //       alert("Failed to create order: " + data.message);
+  //     }
+  //     console.log("new order", neworder);
+  //   } catch (err) {
+  //     console.error("Payment error:", err);
+  //     alert("Something went wrong. Please try again.");
+  //   }
+  // };
 
   // handle the continue click
   const handleContinue = () => {
     handlePayment();
   };
 
-  if (!pricingdetails || !accountHolder) {
+  if (
+    !pricingdetails ||
+    !accountHolder ||
+    !isAuthenticated ||
+    cartItems?.length === 0
+  ) {
     return navigate("/cart");
   }
 

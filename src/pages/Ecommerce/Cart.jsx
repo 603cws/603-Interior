@@ -25,22 +25,41 @@ import { MdOutlineCancel } from "react-icons/md";
 
 function EmptyCart() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const { isAuthenticated } = useApp();
   return (
-    <div className=" flex justify-center items-center">
-      <div className=" my-4 space-y-6">
-        <p className="text-center">
-          There is nothing in your cart. Let's add some items.
-        </p>
-        <div className="flex justify-center items-center">
-          <button
-            onClick={() => navigate("/shop")}
-            className="px-10 py-3 bg-[#334A78] text-white border border-[#212B36]"
-          >
-            start shopping
-          </button>
+    <>
+      <div className=" flex justify-center items-center">
+        <div className=" my-4 space-y-6">
+          <p className="text-center">
+            There is nothing in your cart. Let's add some items.
+          </p>
+          <div className="flex justify-center items-center">
+            <button
+              onClick={() => navigate("/shop")}
+              className="px-10 py-3 bg-[#334A78] text-white border border-[#212B36]"
+            >
+              start shopping
+            </button>
+          </div>
         </div>
       </div>
-    </div>
+      {!isAuthenticated && (
+        <p className="text-sm text-[#777] ml-2 !mt-6">
+          <span
+            onClick={() =>
+              navigate("/login", {
+                state: { from: location.pathname },
+              })
+            }
+            className="underline underline-offset-4 cursor-pointer hover:text-[#334A78] font-medium"
+          >
+            Login
+          </span>{" "}
+          to see full cart.
+        </p>
+      )}
+    </>
   );
 }
 

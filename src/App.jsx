@@ -183,7 +183,7 @@ function App() {
           <Route path="/brands/furniture" element={<BrandFurniture />} />
           <Route path="/brands/light" element={<BrandLight />} />
           <Route path="/brands/dlink" element={<BrandDLink />} />
-          <Route path="/orderSuccess" element={<OrderConfirm />} />
+          <Route path="/orderSuccess/:id" element={<OrderConfirm />} />
           {/* testing route */}
           <Route path="/boqcompleted" element={<Boqcompleted />} />
         </Routes>
