@@ -67,7 +67,7 @@ import PrivateRoute from "./utils/PrivateRoute";
 import Services from "./pages/Services";
 import Contactuscopy from "./pages/Contactus copy";
 import OurStory from "./pages/OurStory";
-
+import OrderConfirm from "./pages/Ecommerce/OrderConfirm";
 
 const Home = lazy(() => import("./pages/Home"));
 
@@ -183,6 +183,7 @@ function App() {
           <Route path="/brands/furniture" element={<BrandFurniture />} />
           <Route path="/brands/light" element={<BrandLight />} />
           <Route path="/brands/dlink" element={<BrandDLink />} />
+          <Route path="/orderSuccess" element={<OrderConfirm />} />
           {/* testing route */}
           <Route path="/boqcompleted" element={<Boqcompleted />} />
         </Routes>
