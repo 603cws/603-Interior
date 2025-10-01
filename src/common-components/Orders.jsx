@@ -5,6 +5,7 @@ export default function Orders() {
   const [currentPage, setCurrentPage] = React.useState(1);
   const [itemsPerPage, setItemsPerPage] = React.useState(15);
   const totalPages = Math.ceil(ordersData?.length / itemsPerPage);
+  const [selectedOrder, setSelectedOrder] = React.useState(null);
 
   const paginatedOrders = ordersData?.slice(
     (currentPage - 1) * itemsPerPage,
@@ -26,187 +27,431 @@ export default function Orders() {
   }, []);
 
   return (
-    <div className="flex flex-col h-full min-h-0 lg:border-2 lg:border-[#334A78] lg:rounded-lg bg-white font-Poppins">
-      {/* Header Section */}
-      <div className="sticky top-0 bg-white z-20">
-        <div className="flex justify-between items-center pr-4 py-2 border-b-2 border-b-[#CCCCCC]">
-          <h2 className="text-xl text-[#374A75] font-semibold px-4 py-2">
-            Orders List
-          </h2>
-          <button className="px-4 py-2 rounded text-[#374A75] text-sm flex items-center gap-3 border border-[#CCCCCC]">
-            <img src="/images/icons/filter-icon.png" alt="" />
-            <span className="md:block hidden">Filter</span>
-          </button>
-        </div>
-        <div className="md:px-2 hidden md:block">
-          <div className="py-2 px-2 border-b border-[#232321] border-opacity-20">
-            <h2 className="text-xl font-semibold">Recent Purchases</h2>
+    <section>
+      {selectedOrder ? (
+        <OrderDetails
+          order={selectedOrder}
+          onBack={() => setSelectedOrder(null)}
+        />
+      ) : (
+        <section className="flex flex-col h-full min-h-0 lg:border-2 lg:border-[#334A78] lg:rounded-lg bg-white font-Poppins overflow-hidden">
+          {/* Header Section */}
+          <div className="sticky top-0 bg-white z-20">
+            <div className="flex justify-between items-center pr-4 py-2 border-b-2 border-b-[#CCCCCC]">
+              <h2 className="text-xl text-[#374A75] font-semibold px-4 py-2">
+                Orders List
+              </h2>
+              <button className="px-4 py-2 rounded text-[#374A75] text-sm flex items-center gap-3 border border-[#CCCCCC]">
+                <img src="/images/icons/filter-icon.png" alt="" />
+                <span className="md:block hidden">Filter</span>
+              </button>
+            </div>
+            <div className="md:px-2 hidden md:block">
+              <div className="py-2 px-2 border-b border-[#232321] border-opacity-20">
+                <h2 className="text-xl font-semibold">Recent Purchases</h2>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
 
-      <div className="overflow-x-auto flex-1 custom-scrollbar relative px-2">
-        <table className="min-w-full text-sm table-auto">
-          {/* Table Header: Visible above md */}
-          <thead className="hidden md:table-header-group text-left text-[#232321] text-opacity-80 border-b items-center bg-white sticky top-0 z-10">
-            <tr>
-              <th className="px-4 py-2">Order ID</th>
-              <th className="px-4 py-2">Date</th>
-              <th className="px-4 py-2">Customer Name</th>
-              <th className="px-4 py-2">Status</th>
-              <th className="px-4 py-2">Payment</th>
-              <th className="px-4 py-2">Amount</th>
-            </tr>
-          </thead>
-
-          <tbody>
-            {paginatedOrders?.map((order) => {
-              // Status color constants
-              const statusColors = {
-                shipped: "bg-blue-600",
-                pending: "bg-red-500",
-                canceled: "bg-orange-500",
-                delivered: "bg-green-600",
-                approved: "bg-gray-500",
-              };
-
-              // Payment status and color constants
-              const paymentStatus =
-                order.paymentDetails?.paymentStatus?.toLowerCase() || "unpaid";
-              const paymentColors = {
-                completed: "bg-blue-600",
-                failed: "bg-gray-500",
-                refund: "bg-purple-500",
-                paid: "bg-blue-600",
-                unpaid: "bg-gray-500",
-              };
-
-              return (
-                <tr
-                  key={order.id}
-                  className="border-b hover:bg-gray-100 hover:cursor-pointer"
-                >
-                  {/* Order ID */}
-                  <td className="px-4 py-2">#{order.id.slice(0, 6)}</td>
-                  {/* Date */}
-                  <td className="px-4 py-2">
-                    {new Date(order.created_at).toLocaleDateString("en-US", {
-                      month: "short",
-                      day: "numeric",
-                      year: "numeric",
-                    })}
-                  </td>
-                  {/* Customer Name */}
-                  <td className="px-4 py-2 capitalize">
-                    {order.shippingAddress?.[0]?.name || "N/A"}
-                  </td>
-                  {/* Status */}
-                  <td className="px-4 py-2">
-                    <div className="flex items-center gap-2 capitalize">
-                      <span
-                        className={`w-2 h-2 rounded-full ${
-                          statusColors[order.status?.toLowerCase()] ||
-                          "bg-gray-400"
-                        }`}
-                      ></span>
-                      {order.status}
-                    </div>
-                  </td>
-                  {/* Payment */}
-                  <td className="px-4 py-2">
-                    <div className="flex items-center gap-2 capitalize">
-                      <span
-                        className={`w-2 h-2 rounded-full ${
-                          paymentColors[paymentStatus] || "bg-gray-400"
-                        }`}
-                      ></span>
-                      {paymentStatus === "completed" || paymentStatus === "paid"
-                        ? "Paid"
-                        : paymentStatus.charAt(0).toUpperCase() +
-                          paymentStatus.slice(1)}
-                    </div>
-                  </td>
-                  {/* Amount */}
-                  <td className="px-4 py-2">₹{order.finalPrice}</td>
+          {/* Scrollable Content */}
+          <div className="w-full flex flex-col overflow-y-auto custom-scrollbar h-[calc(100vh-261px)] pb-2 px-3">
+            <table className="min-w-full text-sm table-auto">
+              {/* Table Header */}
+              <thead className="hidden md:table-header-group text-left text-[#232321] text-opacity-80 border-b items-center bg-white sticky top-0 z-10">
+                <tr>
+                  <th className="px-4 py-2">Order ID</th>
+                  <th className="px-4 py-2">Date</th>
+                  <th className="px-4 py-2">Customer Name</th>
+                  <th className="px-4 py-2">Status</th>
+                  <th className="px-4 py-2">Payment</th>
+                  <th className="px-4 py-2">Amount</th>
                 </tr>
-              );
-            })}
-          </tbody>
-        </table>
-      </div>
+              </thead>
 
-      {/* Pagination */}
-      {totalPages > 1 && (
-        <div className="flex justify-center items-center gap-2 my-2 sticky bottom-0 z-30 text-[#3d194f] bg-white">
-          <div className="flex border border-[#CCCCCC] rounded-lg px-3 py-2">
-            {/* Previous */}
-            <button
-              onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-              disabled={currentPage === 1}
-              className="flex items-center gap-2 px-2 text-sm disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              <img
-                src="../images/icons/less.png"
-                alt="Previous"
-                className="w-4 h-4"
-              />
-              <span className="text-[#194F48]">Previous</span>
-            </button>
+              <tbody>
+                {paginatedOrders?.map((order) => {
+                  // Status color constants
+                  const statusColors = {
+                    shipped: "bg-blue-600",
+                    pending: "bg-red-500",
+                    canceled: "bg-orange-500",
+                    delivered: "bg-green-600",
+                    approved: "bg-gray-500",
+                  };
 
-            {/* Page Numbers */}
-            {(() => {
-              const pages = [];
-              let lastShownPage = 0;
-              for (let i = 1; i <= totalPages; i++) {
-                if (
-                  i === 1 ||
-                  i === totalPages ||
-                  (i >= currentPage - 1 && i <= currentPage + 1)
-                ) {
-                  pages.push(
-                    <button
-                      key={i}
-                      onClick={() => setCurrentPage(i)}
-                      className={`px-3 py-1 text-sm rounded text-[#334A78] ${
-                        currentPage === i
-                          ? "text-white bg-[#334A78]"
-                          : "hover:bg-[#F1F1F1]"
-                      }`}
+                  // Payment status and color constants
+                  const paymentStatus =
+                    order.paymentDetails?.state?.toLowerCase() || "unpaid";
+                  const paymentColors = {
+                    completed: "bg-blue-600",
+                    failed: "bg-gray-500",
+                    refund: "bg-purple-500",
+                    paid: "bg-blue-600",
+                    unpaid: "bg-gray-500",
+                  };
+
+                  return (
+                    <tr
+                      key={order.id}
+                      className="border-b hover:bg-gray-100 hover:cursor-pointer"
+                      onClick={() => setSelectedOrder(order)}
                     >
-                      {i}
-                    </button>
+                      {/* Order ID */}
+                      <td className="px-4 py-2">#{order.id.slice(0, 6)}</td>
+                      {/* Date */}
+                      <td className="px-4 py-2">
+                        {new Date(order.created_at).toLocaleDateString(
+                          "en-US",
+                          {
+                            month: "short",
+                            day: "numeric",
+                            year: "numeric",
+                          }
+                        )}
+                      </td>
+                      {/* Customer Name */}
+                      <td className="px-4 py-2 capitalize">
+                        {order.shippingAddress?.[0]?.name || "N/A"}
+                      </td>
+                      {/* Status */}
+                      <td className="px-4 py-2">
+                        <div className="flex items-center gap-2 capitalize">
+                          <span
+                            className={`w-2 h-2 rounded-full ${
+                              statusColors[order.status?.toLowerCase()] ||
+                              "bg-gray-400"
+                            }`}
+                          ></span>
+                          {order.status}
+                        </div>
+                      </td>
+                      {/* Payment */}
+                      <td className="px-4 py-2">
+                        <div className="flex items-center gap-2 capitalize">
+                          <span
+                            className={`w-2 h-2 rounded-full ${
+                              paymentColors[paymentStatus] || "bg-gray-400"
+                            }`}
+                          ></span>
+                          {paymentStatus === "completed" ||
+                          paymentStatus === "paid"
+                            ? "Paid"
+                            : paymentStatus.charAt(0).toUpperCase() +
+                              paymentStatus.slice(1)}
+                        </div>
+                      </td>
+                      {/* Amount */}
+                      <td className="px-4 py-2">₹{order.finalPrice}</td>
+                    </tr>
                   );
-                  lastShownPage = i;
-                } else if (i > lastShownPage + 1) {
-                  pages.push(
-                    <span key={`ellipsis-${i}`} className="px-2 py-1 text-sm">
-                      ...
-                    </span>
-                  );
-                  lastShownPage = i;
-                }
-              }
-              return pages;
-            })()}
+                })}
+              </tbody>
+            </table>
+          </div>
 
-            {/* Next */}
-            <button
-              onClick={() =>
-                setCurrentPage((prev) => Math.min(prev + 1, totalPages))
-              }
-              disabled={currentPage === totalPages}
-              className="flex items-center gap-2 px-2 text-sm disabled:opacity-50 default:cursor-not-allowed"
-            >
-              <span className="text-[#194F48]">Next</span>
+          {/* Pagination */}
+          {totalPages > 1 && (
+            <div className="flex justify-center items-center gap-2 my-2 sticky bottom-0 z-30 text-[#3d194f] bg-white">
+              <div className="flex border border-[#CCCCCC] rounded-lg px-3 py-2">
+                {/* Previous */}
+                <button
+                  onClick={() =>
+                    setCurrentPage((prev) => Math.max(prev - 1, 1))
+                  }
+                  disabled={currentPage === 1}
+                  className="flex items-center gap-2 px-2 text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  <img
+                    src="../images/icons/less.png"
+                    alt="Previous"
+                    className="w-4 h-4"
+                  />
+                  <span className="text-[#194F48]">Previous</span>
+                </button>
+
+                {/* Page Numbers */}
+                {(() => {
+                  const pages = [];
+                  let lastShownPage = 0;
+                  for (let i = 1; i <= totalPages; i++) {
+                    if (
+                      i === 1 ||
+                      i === totalPages ||
+                      (i >= currentPage - 1 && i <= currentPage + 1)
+                    ) {
+                      pages.push(
+                        <button
+                          key={i}
+                          onClick={() => setCurrentPage(i)}
+                          className={`px-3 py-1 text-sm rounded text-[#334A78] ${
+                            currentPage === i
+                              ? "text-white bg-[#334A78]"
+                              : "hover:bg-[#F1F1F1]"
+                          }`}
+                        >
+                          {i}
+                        </button>
+                      );
+                      lastShownPage = i;
+                    } else if (i > lastShownPage + 1) {
+                      pages.push(
+                        <span
+                          key={`ellipsis-${i}`}
+                          className="px-2 py-1 text-sm"
+                        >
+                          ...
+                        </span>
+                      );
+                      lastShownPage = i;
+                    }
+                  }
+                  return pages;
+                })()}
+
+                {/* Next */}
+                <button
+                  onClick={() =>
+                    setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+                  }
+                  disabled={currentPage === totalPages}
+                  className="flex items-center gap-2 px-2 text-sm disabled:opacity-50 default:cursor-not-allowed"
+                >
+                  <span className="text-[#194F48]">Next</span>
+                  <img
+                    src="../images/icons/more.png"
+                    alt="Next"
+                    className="w-4 h-4"
+                  />
+                </button>
+              </div>
+            </div>
+          )}
+        </section>
+      )}
+    </section>
+  );
+}
+
+function OrderDetails({ order, onBack }) {
+  console.log(order);
+
+  return (
+    <section className="flex flex-col h-[calc(100vh-90px)] overflow-hidden min-h-0 lg:border-2 lg:border-[#334A78] lg:rounded-lg bg-white font-Poppins">
+      <button
+        onClick={onBack}
+        className="text-[#555555] text-left py-2 px-6 text-sm group"
+      >
+        &lt; <span className="group-hover:underline">Back to Order List</span>
+      </button>
+
+      <h2 className="text-2xl font-semibold pb-3 px-6 border-b-2 text-[#374A75]">
+        Order Details
+      </h2>
+
+      {/* Scrollable content wrapper */}
+      <div className="flex-1 overflow-y-auto custom-scrollbar px-3 pb-2">
+        {/* Order ID */}
+        <div className="py-4 font-semibold text-xl flex relative mt-4">
+          <p>Orders ID: #{order.id}</p>
+          <p className="ml-6 capitalize bg-[#FF782F] bg-opacity-80 p-2 rounded-lg text-xs">
+            {order.status}
+          </p>
+          <div className="flex gap-2 items-center rounded-md absolute right-0 border p-2 text-[#374A75] text-xl bg-[#F9F9F9]">
+            <img src="/images/icons/export.png" alt="" />
+            Export
+          </div>
+        </div>
+
+        {/* Section 1 */}
+        <div className="py-4 flex gap-4">
+          {/* Customer */}
+          <div className="border p-4 rounded-2xl">
+            <div className="flex gap-3">
               <img
-                src="../images/icons/more.png"
-                alt="Next"
-                className="w-4 h-4"
+                src="/images/profile3.png"
+                alt="Profile"
+                className="w-10 h-10"
               />
+              <div>
+                <h2 className="text-xl font-semibold text-[#232321]">
+                  Customer
+                </h2>
+                <p className="text-base font-semibold capitalize text-[#70706E] mt-2">
+                  Full Name: {order.shippingAddress?.[0]?.name}
+                </p>
+                <p className="text-base font-semibold capitalize text-[#70706E]">
+                  Email: ?
+                </p>
+                <p className="text-base font-semibold capitalize text-[#70706E]">
+                  Phone: {order.shippingAddress?.[0]?.mobile}
+                </p>
+              </div>
+            </div>
+            <button className="mt-3 bg-[#003F62] text-white w-full rounded-lg py-1">
+              View Profile
+            </button>
+          </div>
+          {/* Order Info */}
+          <div className="border p-4 rounded-2xl">
+            <div className="flex gap-3">
+              <img
+                src="/images/profile3.png"
+                alt="Profile"
+                className="w-10 h-10"
+              />
+              <div>
+                <h2 className="text-xl font-semibold text-[#232321]">
+                  Order Info
+                </h2>
+                <p className="text-base font-semibold capitalize text-[#70706E] mt-2">
+                  shipping: ?
+                </p>
+                <p className="text-base font-semibold capitalize text-[#70706E]">
+                  payment method: {order?.paymentMethod || "N/A"}
+                </p>
+                <p className="text-base font-semibold capitalize text-[#70706E]">
+                  status: {order.paymentDetails?.state || "N/A"}
+                </p>
+              </div>
+            </div>
+            <button className="mt-3 bg-[#003F62] text-white w-full rounded-lg py-1">
+              Download info
+            </button>
+          </div>
+          {/* Deliver to */}
+          <div className="border p-4 rounded-2xl">
+            <div className="flex gap-3">
+              <img
+                src="/images/profile3.png"
+                alt="Profile"
+                className="w-10 h-10"
+              />
+              <div>
+                <h2 className="text-xl font-semibold text-[#232321]">
+                  Deliver to
+                </h2>
+                <p className="text-base font-semibold capitalize text-[#70706E] mt-2 max-w-40">
+                  Address: {order.shippingAddress?.[0]?.address}
+                </p>
+              </div>
+            </div>
+            <button className="mt-3 bg-[#003F62] text-white w-full rounded-lg py-1">
+              View Profile
             </button>
           </div>
         </div>
-      )}
-    </div>
+
+        {/* Section 2 */}
+        <div className="py-4 flex gap-4">
+          <div className="border p-4 rounded-2xl">
+            <div className="flex gap-3">
+              <div>
+                <h2 className="text-xl font-semibold text-[#232321]">
+                  Payment info
+                </h2>
+                <p className="text-base font-semibold capitalize text-[#70706E] mt-2">
+                  master card:{" "}
+                  {order.paymentDetails?.splitInstruments[0]?.instrument
+                    ?.maskedAccountNumber || "N/A"}
+                </p>
+                <p className="text-base font-semibold capitalize text-[#70706E]">
+                  business name: ?
+                </p>
+                <p className="text-base font-semibold capitalize text-[#70706E]">
+                  Phone: {order.shippingAddress?.[0]?.mobile}
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="mt-2">
+            <div>
+              <h2 className="text-xl font-semibold text-[#232321]">Note</h2>
+              <textarea
+                className="border p-4 rounded-2xl w-full resize-none"
+                placeholder="Type some notes..."
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Section 3 */}
+        <div className="py-2">
+          <h3 className="text-lg font-semibold mb-2">Products</h3>
+          <div className="bg-white rounded-lg shadow-xs">
+            <table className="w-full min-w-full border-separate border-spacing-0">
+              <thead>
+                <tr className="border-b border-gray-200">
+                  <th className="text-[17px] text-gray-500 font-semibold text-left py-3 px-2">
+                    Product Name
+                  </th>
+                  <th className="text-[15px] text-gray-500 font-semibold text-left py-3">
+                    Order ID
+                  </th>
+                  <th className="text-[15px] text-gray-500 font-semibold text-left py-3">
+                    Quantity
+                  </th>
+                  <th className="text-[15px] text-gray-500 font-semibold text-right py-3 pr-6">
+                    Total
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {[1, 2, 3, 4].map((_, idx) => (
+                  <tr
+                    key={idx}
+                    className="border-b border-gray-200 hover:bg-gray-50"
+                  >
+                    <td className="flex items-center gap-3 py-3 px-3">
+                      <input
+                        type="checkbox"
+                        className="w-5 h-5 accent-gray-400"
+                      />
+                      <div className="w-8 h-8 bg-gray-300 rounded-md" />
+                      <span className="font-semibold text-base text-black ml-2">
+                        Lorem Ipsum
+                      </span>
+                    </td>
+                    <td className="py-3 text-[15px] font-semibold text-[#232321]">
+                      #25421
+                    </td>
+                    <td className="py-3 text-[15px] font-semibold text-[#232321]">
+                      2
+                    </td>
+                    <td className="py-3 text-[15px] font-semibold text-right pr-6">
+                      ₹800.40
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            {/* Summary section */}
+            <div className="flex flex-col items-end mt-5 mr-4">
+              <div className="text-base flex flex-col gap-1 w-52">
+                <div className="flex justify-between">
+                  <span className="text-gray-700">Subtotal</span>
+                  <span className="text-[#232321] font-semibold">₹3,201.6</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-700">Tax (20%)</span>
+                  <span className="text-[#232321] font-semibold">₹640.32</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-700">Discount</span>
+                  <span className="text-[#232321] font-semibold">₹0</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-700">Shipping Rate</span>
+                  <span className="text-[#232321] font-semibold">₹0</span>
+                </div>
+              </div>
+              <div className="flex justify-between items-center mt-2 w-52">
+                <span className="text-xl font-bold">Total</span>
+                <span className="text-2xl font-extrabold">₹3841.92</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
   );
 }
