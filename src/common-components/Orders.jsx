@@ -235,6 +235,17 @@ export default function Orders() {
 function OrderDetails({ order, onBack }) {
   console.log(order);
 
+  const subtotal =
+    order.products?.reduce(
+      (acc, item) => acc + item.price * item.quantity,
+      0
+    ) || 0;
+
+  const tax = subtotal * 0.2; // 20% tax
+  const discount = order.discount || 0; // Use actual discount if available in order
+  const shipping = order.shippingRate || 0; // Use actual shipping rate if available
+  const total = subtotal + tax - discount + shipping;
+
   return (
     <section className="flex flex-col h-[calc(100vh-90px)] overflow-hidden min-h-0 lg:border-2 lg:border-[#334A78] lg:rounded-lg bg-white font-Poppins">
       <button
@@ -352,7 +363,7 @@ function OrderDetails({ order, onBack }) {
                 <p className="text-base font-semibold capitalize text-[#70706E] mt-2">
                   master card:{" "}
                   {order.paymentDetails?.splitInstruments[0]?.instrument
-                    ?.maskedAccountNumber || "N/A"}
+                    ?.maskedCardNumber || "N/A"}
                 </p>
                 <p className="text-base font-semibold capitalize text-[#70706E]">
                   business name: ?
@@ -396,32 +407,45 @@ function OrderDetails({ order, onBack }) {
                 </tr>
               </thead>
               <tbody>
-                {[1, 2, 3, 4].map((_, idx) => (
-                  <tr
-                    key={idx}
-                    className="border-b border-gray-200 hover:bg-gray-50"
-                  >
-                    <td className="flex items-center gap-3 py-3 px-3">
-                      <input
-                        type="checkbox"
-                        className="w-5 h-5 accent-gray-400"
-                      />
-                      <div className="w-8 h-8 bg-gray-300 rounded-md" />
-                      <span className="font-semibold text-base text-black ml-2">
-                        Lorem Ipsum
-                      </span>
-                    </td>
-                    <td className="py-3 text-[15px] font-semibold text-[#232321]">
-                      #25421
-                    </td>
-                    <td className="py-3 text-[15px] font-semibold text-[#232321]">
-                      2
-                    </td>
-                    <td className="py-3 text-[15px] font-semibold text-right pr-6">
-                      ₹800.40
-                    </td>
-                  </tr>
-                ))}
+                {order.products?.map((orderItem, idx) => {
+                  const productName = orderItem.product?.name || "?";
+                  const quantity = orderItem.quantity;
+                  const price = orderItem.price;
+                  const id = orderItem.id;
+
+                  const total = (price * quantity).toFixed(2);
+
+                  return (
+                    <tr
+                      key={id}
+                      className="border-b border-gray-200 hover:bg-gray-50"
+                    >
+                      <td className="flex items-center gap-3 py-3 px-3">
+                        <input
+                          type="checkbox"
+                          className="w-5 h-5 accent-gray-400"
+                        />
+                        <div className="w-8 h-8 bg-gray-300 rounded-md" />
+                        <span className="font-semibold text-base text-black ml-2">
+                          {productName}
+                        </span>
+                      </td>
+                      <td
+                        className="py-3 text-[15px] font-semibold text-[#232321]"
+                        title={`#${id}`} // Tooltip with full id on hover
+                      >
+                        #{id.slice(0, 6)}
+                      </td>
+
+                      <td className="py-3 text-[15px] font-semibold text-[#232321]">
+                        {quantity}
+                      </td>
+                      <td className="py-3 text-[15px] font-semibold text-right pr-6">
+                        ₹{total}
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
             {/* Summary section */}
@@ -429,24 +453,34 @@ function OrderDetails({ order, onBack }) {
               <div className="text-base flex flex-col gap-1 w-52">
                 <div className="flex justify-between">
                   <span className="text-gray-700">Subtotal</span>
-                  <span className="text-[#232321] font-semibold">₹3,201.6</span>
+                  <span className="text-[#232321] font-semibold">
+                    ₹{subtotal.toFixed(2)}
+                  </span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-700">Tax (20%)</span>
-                  <span className="text-[#232321] font-semibold">₹640.32</span>
+                  <span className="text-[#232321] font-semibold">
+                    ₹{tax.toFixed(2)}
+                  </span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-700">Discount</span>
-                  <span className="text-[#232321] font-semibold">₹0</span>
+                  <span className="text-[#232321] font-semibold">
+                    ₹{discount.toFixed(2)}
+                  </span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-700">Shipping Rate</span>
-                  <span className="text-[#232321] font-semibold">₹0</span>
+                  <span className="text-[#232321] font-semibold">
+                    ₹{shipping.toFixed(2)}
+                  </span>
                 </div>
               </div>
               <div className="flex justify-between items-center mt-2 w-52">
                 <span className="text-xl font-bold">Total</span>
-                <span className="text-2xl font-extrabold">₹3841.92</span>
+                <span className="text-2xl font-extrabold">
+                  ₹{total.toFixed(2)}
+                </span>
               </div>
             </div>
           </div>
