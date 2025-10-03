@@ -1,5 +1,7 @@
 import React from "react";
-import { supabase } from "../services/supabase";
+import { supabase } from "../../services/supabase";
+import { baseImageUrl } from "../../utils/HelperConstant";
+
 export default function Orders() {
   const [ordersData, setOrdersData] = React.useState(null);
   const [currentPage, setCurrentPage] = React.useState(1);
@@ -14,13 +16,46 @@ export default function Orders() {
 
   React.useEffect(() => {
     const fetchOrders = async () => {
-      const { data: orders, error } = await supabase.from("orders").select("*");
+      const { data: orders, error } = await supabase
+        .from("orders")
+        .select(`*, users_profiles(*)`);
       if (error) {
         console.error(error);
         return;
       }
 
-      setOrdersData(orders);
+      const ordersWithVariants = await Promise.all(
+        orders.map(async (order) => {
+          const productVariantMap = {};
+
+          if (order.products?.length) {
+            for (const product of order.products) {
+              const productId = product.id;
+              if (productId) {
+                const { data: variants, error: variantsError } = await supabase
+                  .from("product_variants")
+                  .select("*")
+                  .eq("id", productId);
+
+                if (variantsError) {
+                  console.error(variantsError);
+                  productVariantMap[productId] = [];
+                } else {
+                  productVariantMap[productId] = variants;
+                }
+              }
+            }
+          }
+
+          return {
+            ...order,
+            product_variants_map: productVariantMap, // Map from productId to variants array
+          };
+        })
+      );
+
+      setOrdersData(ordersWithVariants);
+      console.log(ordersWithVariants);
     };
 
     fetchOrders();
@@ -242,7 +277,7 @@ function OrderDetails({ order, onBack }) {
     ) || 0;
 
   const tax = subtotal * 0.2; // 20% tax
-  const discount = order.discount || 0; // Use actual discount if available in order
+  const discount = order.coupon?.discount || 0; // Use actual discount if available in order
   const shipping = order.shippingRate || 0; // Use actual shipping rate if available
   const total = subtotal + tax - discount + shipping;
 
@@ -288,13 +323,13 @@ function OrderDetails({ order, onBack }) {
                   Customer
                 </h2>
                 <p className="text-base font-semibold capitalize text-[#70706E] mt-2">
-                  Full Name: {order.shippingAddress?.[0]?.name}
+                  Company Name: {order.users_profiles?.company_name || "N/A"}
+                </p>
+                <p className="text-base font-semibold text-[#70706E]">
+                  Email: {order.users_profiles?.email || "N/A"}
                 </p>
                 <p className="text-base font-semibold capitalize text-[#70706E]">
-                  Email: ?
-                </p>
-                <p className="text-base font-semibold capitalize text-[#70706E]">
-                  Phone: {order.shippingAddress?.[0]?.mobile}
+                  Phone: {order.users_profiles?.phone || "N/A"}
                 </p>
               </div>
             </div>
@@ -315,13 +350,23 @@ function OrderDetails({ order, onBack }) {
                   Order Info
                 </h2>
                 <p className="text-base font-semibold capitalize text-[#70706E] mt-2">
-                  shipping: ?
-                </p>
-                <p className="text-base font-semibold capitalize text-[#70706E]">
-                  payment method: {order?.paymentMethod || "N/A"}
+                  payment mode: {order?.paymentDetails?.paymentMode || "N/A"}
                 </p>
                 <p className="text-base font-semibold capitalize text-[#70706E]">
                   status: {order.paymentDetails?.state || "N/A"}
+                </p>
+                <p className="text-base font-semibold capitalize text-[#70706E]">
+                  transaction id: {order.paymentDetails?.transactionId || "N/A"}
+                </p>
+                <p className="text-base font-semibold capitalize text-[#70706E]">
+                  date:{" "}
+                  {order.created_at
+                    ? new Date(order.created_at).toLocaleDateString("en-US", {
+                        month: "short",
+                        day: "numeric",
+                        year: "numeric",
+                      })
+                    : "N/A"}
                 </p>
               </div>
             </div>
@@ -341,7 +386,7 @@ function OrderDetails({ order, onBack }) {
                 <h2 className="text-xl font-semibold text-[#232321]">
                   Deliver to
                 </h2>
-                <p className="text-base font-semibold capitalize text-[#70706E] mt-2 max-w-40">
+                <p className="text-base font-semibold capitalize text-[#70706E] mt-2">
                   Address: {order.shippingAddress?.[0]?.address}
                 </p>
               </div>
@@ -349,39 +394,6 @@ function OrderDetails({ order, onBack }) {
             <button className="mt-3 bg-[#003F62] text-white w-full rounded-lg py-1">
               View Profile
             </button>
-          </div>
-        </div>
-
-        {/* Section 2 */}
-        <div className="py-4 flex gap-4">
-          <div className="border p-4 rounded-2xl">
-            <div className="flex gap-3">
-              <div>
-                <h2 className="text-xl font-semibold text-[#232321]">
-                  Payment info
-                </h2>
-                <p className="text-base font-semibold capitalize text-[#70706E] mt-2">
-                  master card:{" "}
-                  {order.paymentDetails?.splitInstruments[0]?.instrument
-                    ?.maskedCardNumber || "N/A"}
-                </p>
-                <p className="text-base font-semibold capitalize text-[#70706E]">
-                  business name: ?
-                </p>
-                <p className="text-base font-semibold capitalize text-[#70706E]">
-                  Phone: {order.shippingAddress?.[0]?.mobile}
-                </p>
-              </div>
-            </div>
-          </div>
-          <div className="mt-2">
-            <div>
-              <h2 className="text-xl font-semibold text-[#232321]">Note</h2>
-              <textarea
-                className="border p-4 rounded-2xl w-full resize-none"
-                placeholder="Type some notes..."
-              />
-            </div>
           </div>
         </div>
 
@@ -396,7 +408,7 @@ function OrderDetails({ order, onBack }) {
                     Product Name
                   </th>
                   <th className="text-[15px] text-gray-500 font-semibold text-left py-3">
-                    Order ID
+                    Product ID
                   </th>
                   <th className="text-[15px] text-gray-500 font-semibold text-left py-3">
                     Quantity
@@ -408,11 +420,19 @@ function OrderDetails({ order, onBack }) {
               </thead>
               <tbody>
                 {order.products?.map((orderItem, idx) => {
-                  const productName = orderItem.product?.name || "?";
+                  // Get variants array for this product, using orderItem.id
+                  const variants =
+                    order.product_variants_map?.[orderItem.id] || [];
+                  // Safely get first variant object, or fallback if variants are empty
+                  const variant = variants[0] || {};
+
+                  // Get name and image from the variant data
+                  const productName = variant.title || "?";
+                  const productImage = variant.image || ""; // Adjust this key to your variant schema
+
                   const quantity = orderItem.quantity;
                   const price = orderItem.price;
                   const id = orderItem.id;
-
                   const total = (price * quantity).toFixed(2);
 
                   return (
@@ -421,11 +441,15 @@ function OrderDetails({ order, onBack }) {
                       className="border-b border-gray-200 hover:bg-gray-50"
                     >
                       <td className="flex items-center gap-3 py-3 px-3">
-                        <input
-                          type="checkbox"
-                          className="w-5 h-5 accent-gray-400"
-                        />
-                        <div className="w-8 h-8 bg-gray-300 rounded-md" />
+                        {productImage ? (
+                          <img
+                            src={`${baseImageUrl}${productImage}`}
+                            alt={productName}
+                            className="w-8 h-8 rounded-md object-cover"
+                          />
+                        ) : (
+                          <div className="w-8 h-8 bg-gray-300 rounded-md" />
+                        )}
                         <span className="font-semibold text-base text-black ml-2">
                           {productName}
                         </span>
@@ -436,7 +460,6 @@ function OrderDetails({ order, onBack }) {
                       >
                         #{id.slice(0, 6)}
                       </td>
-
                       <td className="py-3 text-[15px] font-semibold text-[#232321]">
                         {quantity}
                       </td>
@@ -458,7 +481,7 @@ function OrderDetails({ order, onBack }) {
                   </span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-gray-700">Tax (20%)</span>
+                  <span className="text-gray-700">GST</span>
                   <span className="text-[#232321] font-semibold">
                     ₹{tax.toFixed(2)}
                   </span>

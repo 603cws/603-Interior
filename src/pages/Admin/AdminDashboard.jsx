@@ -48,7 +48,7 @@ import ClientBoq from "./ClientBoq";
 import { baseImageUrl } from "../../utils/HelperConstant";
 import { BsBoxSeam } from "react-icons/bs";
 import { FiLogOut } from "react-icons/fi";
-import Orders from "../../common-components/Orders";
+import Orders from "./Orders";
 
 function handlesidebarState(state, action) {
   switch (action.type) {
