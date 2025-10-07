@@ -18,7 +18,8 @@ export default function Orders() {
     const fetchOrders = async () => {
       const { data: orders, error } = await supabase
         .from("orders")
-        .select(`*, users_profiles(*)`);
+        .select(`*, users_profiles(*)`)
+        .order("created_at", { ascending: false });
       if (error) {
         console.error(error);
         return;
@@ -132,7 +133,9 @@ export default function Orders() {
                       onClick={() => setSelectedOrder(order)}
                     >
                       {/* Order ID */}
-                      <td className="px-4 py-2">#{order.id.slice(0, 6)}</td>
+                      <td className="px-4 py-2" title={order.id}>
+                        #{order.id.slice(0, 6)}
+                      </td>
                       {/* Date */}
                       <td className="px-4 py-2">
                         {new Date(order.created_at).toLocaleDateString(
