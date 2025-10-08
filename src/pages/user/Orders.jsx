@@ -13,6 +13,7 @@ import { LuPackageCheck } from "react-icons/lu";
 import { IoCloseCircleOutline } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
 import { LuChevronDown } from "react-icons/lu";
+import { generateInvoicePDF } from "./InvoicePdf";
 
 const statusIcon = {
   pending: <MdOutlinePendingActions />,
@@ -324,8 +325,14 @@ function OrderProducts({ order, handleProductView }) {
             <IoCashOutline />
             <span> {order.paymentMethod} payment</span>
           </p>
-          <button className="text-[#374A75] font-bold text-sm capitalize border border-[#CCCCCC] w-full py-2.5 rounded-md hover:bg-[#f9f9f9]">
-            get invoice{" "}
+          <button
+            className="text-[#374A75] font-bold text-sm capitalize border border-[#CCCCCC] w-full py-2.5 rounded-md hover:bg-[#f9f9f9]"
+            onClick={() => {
+              // generateInvoicePDF();
+              console.log(order);
+            }}
+          >
+            get invoice
           </button>
         </div>
 
@@ -413,7 +420,7 @@ function OrderProductView({ order, product }) {
           Item sold by : {product.details?.manufacturer}
         </p>
         <button className="text-[#374A75] font-bold text-sm capitalize border border-[#CCCCCC] w-full py-2.5 rounded-md hover:bg-[#f9f9f9]">
-          get invoice{" "}
+          get invoice
         </button>
       </div>
       <div className="md:p-5 py-3 text-sm font-bold">
