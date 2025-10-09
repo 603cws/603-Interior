@@ -22,6 +22,8 @@ function Addresspage() {
 
   const [ismobilenewAddressOpen, setIsMobilenewAddressOpen] = useState(false);
 
+  const [ispaymentLoading, setpaymentLoading] = useState(false);
+
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -242,14 +244,22 @@ function Addresspage() {
     if (error) throw new Error("couldnt delete the cart ");
   };
 
+  console.log("cartitems", cartItems);
+
+  console.log("accountholder", accountHolder);
+
   const handlePayment = async () => {
     // test for iframe
+    setpaymentLoading((prev) => !prev);
     try {
       // create a order in db
       const products = cartItems.map((item) => ({
         id: item.productId.id,
         price: item.productId.price,
         quantity: item.quantity,
+        image: item?.productId?.image,
+        name: item?.productId?.title,
+        description: item?.productId?.details,
       }));
 
       const today = new Date();
@@ -294,6 +304,18 @@ function Addresspage() {
       // Generate a unique orderId (you can also do this from backend)
       const orderId = neworder?.id;
       const amount = Math.round(neworder?.finalPrice * 100); // amount in paise (10000 = ₹100)
+
+      // data formatting for email
+      const orderData = {
+        email: accountHolder?.email,
+        name: accountHolder?.companyName,
+        orderId: orderId,
+        total: pricingdetails?.finalValue,
+        items: products,
+        address: getDefaultAddress,
+      };
+
+      console.log("orderdata", orderData);
 
       const res = await fetch(
         "https://bwxzfwsoxwtzhjbzbdzs.supabase.co/functions/v1/newcreateorder",
@@ -347,8 +369,18 @@ function Addresspage() {
                 const userid = accountHolder?.userId;
                 await deleteCart(userid);
 
+                await fetch(
+                  "https://bwxzfwsoxwtzhjbzbdzs.supabase.co/functions/v1/orderemail",
+                  {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(orderData),
+                  }
+                );
+                setpaymentLoading((prev) => !prev);
+
                 //navigate to a congrats page
-                navigate(`/orderSuccess/${orderId}`);
+                navigate(`/orderSuccess/${orderId}`, { replace: true });
               }
               if (!data?.success && data?.status === "FAILED") {
                 toast.error("something went wrong");
@@ -356,6 +388,8 @@ function Addresspage() {
                 console.log("data", data);
                 await deleteOrder(orderId);
                 //navigate to a congrats page
+                setpaymentLoading((prev) => !prev);
+
                 navigate("/cart");
               }
               if (!data?.success && data?.status === "PENDING") {
@@ -363,6 +397,7 @@ function Addresspage() {
                 toast.error("payment status pending");
 
                 console.log("data", data);
+                setpaymentLoading((prev) => !prev);
               }
             }
           },
@@ -370,12 +405,65 @@ function Addresspage() {
       } else {
         toast.error("Failed to create order: " + data.message);
         await deleteOrder(orderId);
+        setpaymentLoading((prev) => !prev);
       }
     } catch (err) {
       console.error("Payment error:", err);
       toast.error("Something went wrong. Please try again.");
+      setpaymentLoading((prev) => !prev);
     }
   };
+
+  // const testingemail = async () => {
+  //   // create a order in db
+  //   const products = cartItems.map((item) => ({
+  //     id: item.productId.id,
+  //     price: item.productId.price,
+  //     quantity: item.quantity,
+  //     image: item?.productId?.image,
+  //   }));
+
+  //   const orderData = {
+  //     email: "yuvraj603cws@gmail.com",
+  //     name: "John Doe",
+  //     orderId: "12345",
+  //     total: 99.99,
+  //     items: products,
+  //     // items: [
+  //     //   {
+  //     //     name: "Product 1",
+  //     //     description: "Awesome product",
+  //     //     price: 49.99,
+  //     //     qty: 1,
+  //     //     image: "https://via.placeholder.com/70",
+  //     //   },
+  //     //   {
+  //     //     name: "Product 2",
+  //     //     description: "Another product",
+  //     //     price: 50.0,
+  //     //     qty: 1,
+  //     //     image: "https://via.placeholder.com/70",
+  //     //   },
+  //     // ],
+  //     address: {
+  //       name: "John Doe",
+  //       street: "123 Main St",
+  //       city: "Mumbai",
+  //       state: "MH",
+  //       pin: "400001",
+  //       phone: "9876543210",
+  //     },
+  //   };
+
+  //   await fetch(
+  //     "https://bwxzfwsoxwtzhjbzbdzs.supabase.co/functions/v1/orderemail",
+  //     {
+  //       method: "POST",
+  //       headers: { "Content-Type": "application/json" },
+  //       body: JSON.stringify(orderData),
+  //     }
+  //   );
+  // };
 
   // redirect method
   // const handlePayment = async () => {
@@ -459,7 +547,12 @@ function Addresspage() {
 
   // handle the continue click
   const handleContinue = () => {
-    handlePayment();
+    // testingemail();
+    if (accountHolder?.role === "user") {
+      handlePayment();
+    } else {
+      toast.error("only acccount with role user can purchase");
+    }
   };
 
   if (
@@ -813,7 +906,7 @@ function Addresspage() {
                       Total MRP
                     </h5>
                     <h5 className="font-medium  text-[#111111]/80 ">
-                      {pricingdetails?.price}
+                      Rs {pricingdetails?.price}
                     </h5>
                   </div>
 
@@ -822,7 +915,7 @@ function Addresspage() {
                       Discount on MRP
                     </h5>
                     <h5 className="font-medium  text-[#34BFAD]/80 ">
-                      -{pricingdetails?.discount}
+                      RS -{pricingdetails?.discount?.toFixed(2)}
                     </h5>
                   </div>
 
@@ -851,14 +944,18 @@ function Addresspage() {
                         Shipping Fee
                       </h5>
                       <p className="text-xs text-[#111111]/50 font-medium pb-2">
-                        {pricingdetails.shippingFee === 0 &&
+                        {pricingdetails?.shippingFee === 0 &&
                           "Free Shipping for you"}
                       </p>
                     </div>
                     <h5 className="font-medium  text-[#34BFAD]/80 uppercase">
-                      {pricingdetails.shippingFee > 0
-                        ? pricingdetails.shippingFee
-                        : "Free"}
+                      {pricingdetails.shippingFee > 0 ? (
+                        <span>
+                          Rs {pricingdetails?.shippingFee?.toFixed(2)}
+                        </span>
+                      ) : (
+                        "Free"
+                      )}
                     </h5>
                   </div>
 
@@ -869,7 +966,7 @@ function Addresspage() {
                       </h5>
                     </div>
                     <h5 className="font-medium  text-[#34BFAD]/80 uppercase">
-                      {pricingdetails?.gst}
+                      Rs {pricingdetails?.gst?.toFixed(2)}
                     </h5>
                   </div>
 
@@ -878,7 +975,7 @@ function Addresspage() {
                       Total Amount
                     </h5>
                     <h5 className="font-medium lg:text-xl text-[#111111] ">
-                      {pricingdetails.finalValue}
+                      Rs {pricingdetails?.finalValue?.toFixed(2)}
                     </h5>
                   </div>
                 </div>
@@ -890,6 +987,7 @@ function Addresspage() {
 
               {accountHolder?.address?.length > 0 && (
                 <button
+                  disabled={ispaymentLoading}
                   onClick={handleContinue}
                   className="hidden uppercase text-xl text-[#ffffff] tracking-wider w-full lg:flex justify-center items-center bg-[#334A78] border border-[#212B36] py-3 rounded-sm font-thin"
                 >
@@ -909,6 +1007,7 @@ function Addresspage() {
           <div className="w-[90%]">
             <button
               onClick={handleContinue}
+              disabled={ispaymentLoading}
               className="uppercase text-xl text-white tracking-wider w-full bg-[#334A78] border border-[#212B36] py-3 rounded-sm font-thin"
             >
               pay now

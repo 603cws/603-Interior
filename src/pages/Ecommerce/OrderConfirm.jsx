@@ -151,7 +151,10 @@ function OrderConfirm() {
             >
               continue shopping
             </button>
-            <button className="flex-1 py-2 uppercase text-[#fff] bg-[#374A75] tracking-wider border border-[#374A75] rounded-md flex justify-center items-center hover:bg-[#4C69A4]">
+            <button
+              onClick={() => navigate("/dashboard")}
+              className="flex-1 py-2 uppercase text-[#fff] bg-[#374A75] tracking-wider border border-[#374A75] rounded-md flex justify-center items-center hover:bg-[#4C69A4]"
+            >
               view order
             </button>
           </div>
