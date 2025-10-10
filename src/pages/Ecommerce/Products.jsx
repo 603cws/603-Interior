@@ -306,7 +306,8 @@ function Products() {
       const { data, error } = await supabase
         .from("product_variants")
         .select(`* ,product_id(*),reviews(*)`)
-        .order("created_at", { ascending: false });
+        .order("created_at", { ascending: false })
+        .neq("productDisplayType", "boq");
 
       if (error) throw error;
 

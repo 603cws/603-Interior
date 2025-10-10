@@ -310,7 +310,15 @@ function Addresspage() {
         email: accountHolder?.email,
         name: accountHolder?.companyName,
         orderId: orderId,
-        total: pricingdetails?.finalValue,
+        total: {
+          totalMRP: pricingdetails?.price,
+          finalPrice: pricingdetails?.finalValue,
+          charges: {
+            GST: pricingdetails?.gst,
+            delivery: pricingdetails?.shippingFee,
+          },
+        },
+        // total: pricingdetails?.finalValue,
         items: products,
         address: getDefaultAddress,
       };

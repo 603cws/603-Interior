@@ -159,6 +159,7 @@ function ProductView() {
         .from("product_variants")
         .select("*,product_id(*)")
         .eq("id", productid)
+        .neq("productDisplayType", "boq")
         .single();
 
       //getting all the products
