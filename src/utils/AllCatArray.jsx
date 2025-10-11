@@ -159,3 +159,6 @@ export const category = [
 ];
 
 // export default AllCatArray;
+
+// display options (boq/ecommerce/both)
+export const displayOptions = ["boq", "ecommerce", "both"];

@@ -29,6 +29,8 @@ function DashboardProductCard({
     ? JSON.parse(product.additional_images)
     : [];
 
+  console.log("product", product);
+
   return (
     <div className="flex  justify-center items-center h-screen fixed inset-0 z-30 top-0 w-screen">
       <div className="absolute inset-0 bg-black opacity-50"></div>
@@ -65,13 +67,51 @@ function DashboardProductCard({
                 <p className="capitalize font-thin text-[#334A78] text-xs">
                   {product.details}
                 </p>
-                <p className="text-[#334A78] text-sm font-medium">Price</p>
-
-                <p className="font-semibold text-[#000] text-xl">
-                  ₹{product.price} 
-                </p>
+                <div>
+                  {(product.productDisplayType === "boq" ||
+                    product.productDisplayType === "both") && (
+                    <div>
+                      <p className="text-[#334A78] text-sm font-medium">
+                        {" "}
+                        BOQ Price
+                      </p>
+                      <p className="font-semibold text-[#000] text-lg">
+                        ₹{product.price} 
+                      </p>
+                    </div>
+                  )}
+                  {(product.productDisplayType === "ecommerce" ||
+                    product.productDisplayType === "both") && (
+                    <div>
+                      <p className="text-[#334A78] text-sm font-medium">MRP</p>
+                      <p className="font-semibold text-[#000] text-lg">
+                        ₹{product.price} 
+                      </p>
+                      <p className="text-[#334A78] text-sm font-medium">
+                        Selling Price
+                      </p>
+                      <p className="font-semibold text-[#000] text-lg">
+                        ₹{product.price} 
+                      </p>
+                      <p className="text-[#334A78] text-sm font-medium mt-4">
+                        Available Stock :
+                        <span className="font-semibold text-[#000] text-sm">
+                          {" "}
+                          {product.stockQty || "NA"}
+                        </span>
+                      </p>
+                    </div>
+                  )}
+                </div>
               </div>
               <div className="flex-1 flex flex-col gap-4">
+                <h5 className="uppercase text-[#334A78] font-medium text-xs opacity-80">
+                  Display on:
+                  <span className="font-bold text-[#000]">
+                    {product.productDisplayType || "NA"}
+                  </span>
+                </h5>
+                <hr />
                 <h5 className="uppercase text-[#334A78] font-medium text-xs opacity-80">
                   Category:
                   <span className="font-bold text-[#000]">

@@ -5,7 +5,11 @@ import { FaRegQuestionCircle } from "react-icons/fa";
 import { supabase } from "../../services/supabase";
 import { toast } from "react-hot-toast";
 // import { useApp } from "../../Context/Context";
-import { AllCatArray, specialArray } from "../../utils/AllCatArray";
+import {
+  AllCatArray,
+  specialArray,
+  displayOptions,
+} from "../../utils/AllCatArray";
 import { useRef } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { baseImageUrl } from "../../utils/HelperConstant";
@@ -42,6 +46,10 @@ function VendorProductEdit({
     length: selectedproduct?.dimensions.split("x")[1] || "",
     width: selectedproduct?.dimensions.split("x")[2] || "",
   });
+  const [displayOption, setDisplayOption] = useState(
+    selectedproduct?.productDisplayType
+  );
+  console.log("displayOption", displayOption);
 
   const fileInputRef = useRef(null);
 
@@ -87,6 +95,9 @@ function VendorProductEdit({
     vendor_id: selectedproduct?.vendor_id || "",
     product_id: selectedproduct?.product_id || "",
     selectedProductId: selectedproduct?.id || "",
+    mrp: selectedproduct?.ecommercePrice?.mrp || "",
+    sellingPrice: selectedproduct?.ecommercePrice?.sellingPrice || "",
+    quantity: selectedproduct?.stockQty || "",
   });
 
   const handleFileChange = (event) => {
@@ -404,6 +415,12 @@ function VendorProductEdit({
           product_type: subSubCategory,
           product_id: productId,
           status: "pending",
+          productDisplayType: displayOption,
+          stockQty: variant.quantity,
+          ecommercePrice: {
+            mrp: variant.mrp,
+            sellingPrice: variant.sellingPrice,
+          },
         })
         .eq("id", variant.selectedProductId); // Use the correct column and value to match the row you want to update
 
@@ -622,6 +639,30 @@ function VendorProductEdit({
                   })}
                 </select>
               </div>
+              <div>
+                <h4 className="text-[#7B7B7B]">
+                  Select where to display the product
+                </h4>
+                <select
+                  name="displayType"
+                  id="displayType"
+                  className="w-full border-2 py-1.5 px-2 rounded-lg"
+                  value={displayOption}
+                  onChange={(e) => setDisplayOption(e.target.value)}
+                  required
+                >
+                  <option value="" disabled>
+                    Select display option
+                  </option>
+                  {displayOptions.map((option, index) => {
+                    return (
+                      <option key={index} value={option}>
+                        {option}
+                      </option>
+                    );
+                  })}
+                </select>
+              </div>
             </div>
           </div>
           {/* div for description */}
@@ -652,17 +693,19 @@ function VendorProductEdit({
                   required
                 />
               </div>
-              <div>
-                <h4 className="text-[#7B7B7B]">product price</h4>
-                <input
-                  type="number"
-                  name="price"
-                  onChange={handleChange}
-                  value={variant.price}
-                  className="w-full py-1.5 px-2 border-2 rounded-lg [&::-webkit-inner-spin-button]:appearance-none  focus:outline-none focus:ring-0"
-                  required
-                />
-              </div>
+              {(displayOption === "boq" || displayOption === "both") && (
+                <div>
+                  <h4 className="text-[#7B7B7B]">BOQ price</h4>
+                  <input
+                    type="number"
+                    name="price"
+                    onChange={handleChange}
+                    value={variant.price}
+                    className="w-full py-1.5 px-2 border-2 rounded-lg [&::-webkit-inner-spin-button]:appearance-none  focus:outline-none focus:ring-0"
+                    required
+                  />
+                </div>
+              )}
               <div>
                 <h4 className="text-[#7B7B7B]">
                   product dimension:(H x L x W)
@@ -705,6 +748,44 @@ function VendorProductEdit({
               </div>
             </div>
           </div>
+          {/* div for e-commerce details */}
+          {(displayOption === "ecommerce" || displayOption === "both") && (
+            <div className="w-full shadow-lg border-2 p-5 my-3 rounded-xl capitalize">
+              <div>
+                <h4 className="text-[#7B7B7B]">MRP</h4>
+                <input
+                  type="number"
+                  name="mrp"
+                  onChange={handleChange}
+                  value={variant?.mrp}
+                  className="w-full py-1.5 px-2 border-2 rounded-lg [&::-webkit-inner-spin-button]:appearance-none  focus:outline-none focus:ring-0"
+                  required
+                />
+              </div>
+              <div>
+                <h4 className="text-[#7B7B7B]">Selling price</h4>
+                <input
+                  type="number"
+                  name="sellingPrice"
+                  onChange={handleChange}
+                  value={variant?.sellingPrice}
+                  className="w-full py-1.5 px-2 border-2 rounded-lg [&::-webkit-inner-spin-button]:appearance-none  focus:outline-none focus:ring-0"
+                  required
+                />
+              </div>
+              <div>
+                <h4 className="text-[#7B7B7B]">Quantity</h4>
+                <input
+                  type="number"
+                  name="quantity"
+                  onChange={handleChange}
+                  value={variant?.quantity}
+                  className="w-full py-1.5 px-2 border-2 rounded-lg [&::-webkit-inner-spin-button]:appearance-none  focus:outline-none focus:ring-0"
+                  required
+                />
+              </div>
+            </div>
+          )}
         </div>
         <div className="w-full lg:w-1/2 ">
           {/* div for images */}

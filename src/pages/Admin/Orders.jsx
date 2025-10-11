@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { supabase } from "../../services/supabase";
 import { baseImageUrl } from "../../utils/HelperConstant";
 
@@ -8,6 +8,7 @@ export default function Orders() {
   const [itemsPerPage, setItemsPerPage] = React.useState(15);
   const totalPages = Math.ceil(ordersData?.length / itemsPerPage);
   const [selectedOrder, setSelectedOrder] = React.useState(null);
+  const [loadingOrders, setLoadingOrders] = useState(false);
 
   const paginatedOrders = ordersData?.slice(
     (currentPage - 1) * itemsPerPage,
@@ -16,6 +17,7 @@ export default function Orders() {
 
   React.useEffect(() => {
     const fetchOrders = async () => {
+      setLoadingOrders(true);
       const { data: orders, error } = await supabase
         .from("orders")
         .select(`*, users_profiles(*)`)
@@ -56,6 +58,7 @@ export default function Orders() {
       );
 
       setOrdersData(ordersWithVariants);
+      setLoadingOrders(false);
       console.log(ordersWithVariants);
     };
 
@@ -63,14 +66,19 @@ export default function Orders() {
   }, []);
 
   return (
-    <section>
-      {selectedOrder ? (
+    <section className="flex flex-col h-full min-h-0 lg:border-2 lg:border-[#334A78] lg:rounded-lg bg-white">
+      {!selectedOrder && loadingOrders ? (
+        <div className="flex flex-col items-center justify-center h-full">
+          <p className="text-xl font-bold text-[#ccc]">Hold On...</p>
+          <p className="text-xl font-bold text-[#ccc]">Fetching orders !!</p>
+        </div>
+      ) : selectedOrder ? (
         <OrderDetails
           order={selectedOrder}
           onBack={() => setSelectedOrder(null)}
         />
       ) : (
-        <section className="flex flex-col h-full min-h-0 lg:border-2 lg:border-[#334A78] lg:rounded-lg bg-white font-Poppins overflow-hidden">
+        <section className="lg:rounded-lg font-Poppins overflow-hidden">
           {/* Header Section */}
           <div className="sticky top-0 bg-white z-20">
             <div className="flex justify-between items-center pr-4 py-2 border-b-2 border-b-[#CCCCCC]">
@@ -90,19 +98,20 @@ export default function Orders() {
           </div>
 
           {/* Scrollable Content */}
-          <div className="w-full flex flex-col overflow-y-auto custom-scrollbar h-[calc(100vh-261px)] pb-2 px-3">
-            <table className="min-w-full text-sm table-auto">
-              {/* Table Header */}
-              <thead className="hidden md:table-header-group text-left text-[#232321] text-opacity-80 border-b items-center bg-white sticky top-0 z-10">
-                <tr>
-                  <th className="px-4 py-2">Order ID</th>
-                  <th className="px-4 py-2">Date</th>
-                  <th className="px-4 py-2">Customer Name</th>
-                  <th className="px-4 py-2">Status</th>
-                  <th className="px-4 py-2">Payment</th>
-                  <th className="px-4 py-2">Amount</th>
-                </tr>
-              </thead>
+          <div className=" w-full flex flex-col overflow-y-auto scrollbar-hide lg:custom-scrollbar h-[70vh] md:h-[60vh] lg:h-[calc(100vh-261px)] pb-2 px-3">
+            <div className="hidden lg:block">
+              <table className="min-w-full text-sm table-auto">
+                {/* Table Header */}
+                <thead className="hidden md:table-header-group text-left text-[#232321] text-opacity-80 border-b items-center bg-white sticky top-0 z-10">
+                  <tr>
+                    <th className="px-4 py-2">Order ID</th>
+                    <th className="px-4 py-2">Date</th>
+                    <th className="px-4 py-2">Customer Name</th>
+                    <th className="px-4 py-2">Status</th>
+                    <th className="px-4 py-2">Payment</th>
+                    <th className="px-4 py-2">Amount</th>
+                  </tr>
+                </thead>
 
               <tbody>
                 {paginatedOrders?.map((order) => {
@@ -185,6 +194,16 @@ export default function Orders() {
                 })}
               </tbody>
             </table>
+            </div>
+            <div className="lg:hidden">
+              {paginatedOrders?.map((order) => (
+                <MobileOrderCard
+                  key={order.id}
+                  order={order}
+                  setSelectedOrder={setSelectedOrder}
+                />
+              ))}
+            </div>
           </div>
 
           {/* Pagination */}
@@ -285,15 +304,15 @@ function OrderDetails({ order, onBack }) {
   const total = subtotal + tax - discount + shipping;
 
   return (
-    <section className="flex flex-col h-[calc(100vh-90px)] overflow-hidden min-h-0 lg:border-2 lg:border-[#334A78] lg:rounded-lg bg-white font-Poppins">
+    <section className="flex flex-col min-h-0 lg:rounded-lg font-Poppins">
       <button
         onClick={onBack}
-        className="text-[#555555] text-left py-2 px-6 text-sm group"
+        className="text-[#555555] text-left py-2 px-2 lg:px-6 text-sm group"
       >
         &lt; <span className="group-hover:underline">Back to Order List</span>
       </button>
 
-      <h2 className="text-2xl font-semibold pb-3 px-6 border-b-2 text-[#374A75]">
+      <h2 className="text-2xl font-semibold pb-3 px-2 lg:px-6 border-b-2 text-[#374A75]">
         Order Details
       </h2>
 
@@ -312,9 +331,10 @@ function OrderDetails({ order, onBack }) {
         </div>
 
         {/* Section 1 */}
-        <div className="py-4 flex gap-4">
+        {/* <div className="py-4 flex gap-4"> */}
+        <div className="py-4 grid grid-cols-1 md:grid-cols-3 gap-4">
           {/* Customer */}
-          <div className="border p-4 rounded-2xl">
+          <div className="border p-4 rounded-2xl flex flex-col gap-3">
             <div className="flex gap-3">
               <img
                 src="/images/profile3.png"
@@ -336,12 +356,12 @@ function OrderDetails({ order, onBack }) {
                 </p>
               </div>
             </div>
-            <button className="mt-3 bg-[#003F62] text-white w-full rounded-lg py-1">
+            <button className=" bg-[#003F62] hover:bg-[#4C69A4] text-white w-full rounded-lg py-1 mt-auto">
               View Profile
             </button>
           </div>
           {/* Order Info */}
-          <div className="border p-4 rounded-2xl">
+          <div className="border p-4 rounded-2xl flex flex-col gap-3">
             <div className="flex gap-3">
               <img
                 src="/images/profile3.png"
@@ -373,12 +393,12 @@ function OrderDetails({ order, onBack }) {
                 </p>
               </div>
             </div>
-            <button className="mt-3 bg-[#003F62] text-white w-full rounded-lg py-1">
+            <button className="bg-[#003F62] hover:bg-[#4C69A4] text-white w-full rounded-lg py-1 mt-auto">
               Download info
             </button>
           </div>
           {/* Deliver to */}
-          <div className="border p-4 rounded-2xl">
+          <div className="border p-4 rounded-2xl flex flex-col gap-3">
             <div className="flex gap-3">
               <img
                 src="/images/profile3.png"
@@ -394,7 +414,7 @@ function OrderDetails({ order, onBack }) {
                 </p>
               </div>
             </div>
-            <button className="mt-3 bg-[#003F62] text-white w-full rounded-lg py-1">
+            <button className="bg-[#003F62] hover:bg-[#4C69A4] text-white w-full rounded-lg py-1 mt-auto">
               View Profile
             </button>
           </div>
@@ -513,5 +533,42 @@ function OrderDetails({ order, onBack }) {
         </div>
       </div>
     </section>
+  );
+}
+
+function MobileOrderCard({ order, setSelectedOrder }) {
+  return (
+    <div
+      onClick={() => setSelectedOrder(order)}
+      className="my-4 py-2 border-b-2 font-Poppins font-semibold"
+    >
+      <div className="flex justify-between text-sm">
+        <p className="text-[#000]">order id #{order.id.split("-")[0]}</p>
+        <p className="text-[#727271]/80">
+          {new Date(order.created_at).toLocaleDateString("en-US", {
+            month: "short",
+            day: "numeric",
+            year: "numeric",
+          })}
+        </p>
+      </div>
+      <div className="flex justify-between text-sm text-[#000] my-2">
+        <p>{order.users_profiles?.company_name}</p>
+        <p>
+          {order.finalPrice.toLocaleString("en-IN", {
+            style: "currency",
+            currency: "INR",
+          })}
+        </p>
+      </div>
+      <div className="flex gap-3 text-xs capitalize">
+        <p className="text-[#374A75] border border-[#E7EEF4] p-1 bg-[#E7EEF4] rounded-sm">
+          {order.status}
+        </p>
+        <p className="p-1 text-[#374A75] border border-[#374A75]/80">
+          {order.paymentDetails?.state || "N/A"}
+        </p>
+      </div>
+    </div>
   );
 }

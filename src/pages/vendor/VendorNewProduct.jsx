@@ -5,7 +5,11 @@ import { FaRegQuestionCircle } from "react-icons/fa";
 import { supabase } from "../../services/supabase";
 import { toast } from "react-hot-toast";
 import { useApp } from "../../Context/Context";
-import { AllCatArray, specialArray } from "../../utils/AllCatArray";
+import {
+  AllCatArray,
+  specialArray,
+  displayOptions,
+} from "../../utils/AllCatArray";
 import { useRef } from "react";
 
 function VendorNewProduct({
@@ -29,6 +33,7 @@ function VendorNewProduct({
     length: "",
     width: "",
   });
+  const [displayOption, setDisplayOption] = useState("");
 
   const fileInputRef = useRef(null);
 
@@ -45,6 +50,9 @@ function VendorNewProduct({
     dimension: "",
     manufacturer: "",
     vendor_id: "",
+    mrp: "",
+    sellingPrice: "",
+    quantity: "",
   });
 
   const { accountHolder } = useApp();
@@ -226,7 +234,11 @@ function VendorNewProduct({
 
       // Now proceed with adding variants
 
-      if (variant.title && variant.price && variant.mainImage) {
+      if (
+        variant.title &&
+        (variant.price || variant.mrp) &&
+        variant.mainImage
+      ) {
         // Upload the main image to Supabase storage
         const { data: mainImageUpload } = await supabase.storage
           .from("addon")
@@ -262,12 +274,12 @@ function VendorNewProduct({
         }
 
         // Insert the variant into the product_variants table
-        const { error: variantError } = await supabase
+        const { data, error: variantError } = await supabase
           .from("product_variants")
           .insert({
             product_id: productId,
             title: variant.title,
-            price: variant.price,
+            price: variant.price || 0,
             details: variant.details,
             image: mainImageUpload.path, // Store the main image path
             additional_images: additionalImagePaths, // Store paths of additional images
@@ -276,7 +288,16 @@ function VendorNewProduct({
             manufacturer: accountHolder?.companyName || variant.manufacturer, // Store manufacturer
             vendor_id: accountHolder.userId, // Store vendor ID
             product_type: subSubCategory,
-          });
+            productDisplayType: displayOption,
+            stockQty: variant.quantity || 0,
+            ecommercePrice: {
+              mrp: variant.mrp,
+              sellingPrice: variant.sellingPrice,
+            },
+          })
+          .select();
+
+        console.log("data inserted", data);
 
         if (variantError) {
           console.error(variantError);
@@ -374,6 +395,9 @@ function VendorNewProduct({
       additionalImages: [],
       segment: "",
       dimension: "",
+      mrp: "",
+      sellingPrice: "",
+      quantity: "",
     }));
     setFile(null);
     setPreview(null);
@@ -385,6 +409,7 @@ function VendorNewProduct({
       length: "",
       width: "",
     });
+    setDisplayOption("");
   };
 
   const handlecategorychange = (e) => {
@@ -467,6 +492,30 @@ function VendorNewProduct({
                   })}
                 </select>
               </div>
+              <div>
+                <h4 className="text-[#7B7B7B]">
+                  Select where to display the product
+                </h4>
+                <select
+                  name="displayType"
+                  id="displayType"
+                  className="w-full border-2 py-1.5 px-2 rounded-lg"
+                  value={displayOption}
+                  onChange={(e) => setDisplayOption(e.target.value)}
+                  required
+                >
+                  <option value="" disabled>
+                    Select display option
+                  </option>
+                  {displayOptions.map((option, index) => {
+                    return (
+                      <option key={index} value={option}>
+                        {option}
+                      </option>
+                    );
+                  })}
+                </select>
+              </div>
             </div>
           </div>
           {/* div for description */}
@@ -497,17 +546,19 @@ function VendorNewProduct({
                   required
                 />
               </div>
-              <div>
-                <h4 className="text-[#7B7B7B]">product price</h4>
-                <input
-                  type="number"
-                  name="price"
-                  onChange={handleChange}
-                  value={variant.price}
-                  className="w-full py-1.5 px-2 border-2 rounded-lg [&::-webkit-inner-spin-button]:appearance-none  focus:outline-none focus:ring-0"
-                  required
-                />
-              </div>
+              {(displayOption === "boq" || displayOption === "both") && (
+                <div>
+                  <h4 className="text-[#7B7B7B]">BOQ price</h4>
+                  <input
+                    type="number"
+                    name="price"
+                    onChange={handleChange}
+                    value={variant.price}
+                    className="w-full py-1.5 px-2 border-2 rounded-lg [&::-webkit-inner-spin-button]:appearance-none  focus:outline-none focus:ring-0"
+                    required
+                  />
+                </div>
+              )}
               <div>
                 <h4 className="text-[#7B7B7B]">
                   product dimension:(H x L x W)
@@ -550,6 +601,44 @@ function VendorNewProduct({
               </div>
             </div>
           </div>
+          {/* div for e-commerce details */}
+          {(displayOption === "ecommerce" || displayOption === "both") && (
+            <div className="w-full shadow-lg border-2 p-5 my-3 rounded-xl capitalize">
+              <div>
+                <h4 className="text-[#7B7B7B]">MRP</h4>
+                <input
+                  type="number"
+                  name="mrp"
+                  onChange={handleChange}
+                  value={variant.mrp}
+                  className="w-full py-1.5 px-2 border-2 rounded-lg [&::-webkit-inner-spin-button]:appearance-none  focus:outline-none focus:ring-0"
+                  required
+                />
+              </div>
+              <div>
+                <h4 className="text-[#7B7B7B]">Selling price</h4>
+                <input
+                  type="number"
+                  name="sellingPrice"
+                  onChange={handleChange}
+                  value={variant.sellingPrice}
+                  className="w-full py-1.5 px-2 border-2 rounded-lg [&::-webkit-inner-spin-button]:appearance-none  focus:outline-none focus:ring-0"
+                  required
+                />
+              </div>
+              <div>
+                <h4 className="text-[#7B7B7B]">Quantity</h4>
+                <input
+                  type="number"
+                  name="quantity"
+                  onChange={handleChange}
+                  value={variant.quantity}
+                  className="w-full py-1.5 px-2 border-2 rounded-lg [&::-webkit-inner-spin-button]:appearance-none  focus:outline-none focus:ring-0"
+                  required
+                />
+              </div>
+            </div>
+          )}
         </div>
         <div className="w-full lg:w-1/2 ">
           {/* div for images */}

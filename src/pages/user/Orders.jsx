@@ -173,7 +173,7 @@ function Orders() {
                         {(order.status === "pending" ||
                           order.status === "approved") && (
                           <button className="px-10 border border-[#213626] uppercase text-xs tracking-wider rounded-sm py-2 hover:bg-[#f9f9f9]">
-                            Cancle
+                            cancel
                           </button>
                         )}
                         {(order.status === "pending" ||
@@ -227,7 +227,7 @@ function OrderProducts({ order, handleProductView }) {
         <div className="flex gap-10">
           {(order.status === "pending" || order.status === "approved") && (
             <button className="flex-1 border border-[#213626] uppercase text-xs tracking-wider rounded-sm py-2 hover:bg-[#f9f9f9]">
-              Cancle
+              cancel
             </button>
           )}
           {(order.status === "pending" ||

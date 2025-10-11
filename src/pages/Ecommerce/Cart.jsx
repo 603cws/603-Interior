@@ -208,8 +208,9 @@ function Cart() {
     const discountedprice =
       orignalTotalPrice - (orignalTotalPrice * coupon?.discountPerc) / 100;
     const difference = orignalTotalPrice - discountedprice;
-
-    setDifferenceInPrice(difference);
+    // const roundDiff = Number((Math.round(difference * 100) / 100).toFixed(2));
+    const roundDiff = parseFloat(difference.toFixed(2));
+    setDifferenceInPrice(roundDiff);
   }
   function calculateTotalDiffertoShow(coupon) {
     //we get the entire coupon for already haved coupon name
@@ -299,9 +300,13 @@ function Cart() {
 
   function calculateGst(price, discount = 0) {
     if (discount) {
-      return discount * 0.18;
+      const discountPrice = discount * 0.18;
+      const roundedDisc = parseFloat(discountPrice.toFixed(2));
+      return roundedDisc;
     } else {
-      return price * 0.18;
+      const gstPrice = price * 0.18;
+      const roundedGst = parseFloat(gstPrice.toFixed(2));
+      return roundedGst;
     }
   }
 

@@ -927,12 +927,19 @@ function AdminDashboard() {
                 onClick={handleschedule}
                 setIsOpen={setIsOpen}
               />
-              <SidebarItem
+              {/* <MobileMenuItem
                 icon={<BsBoxSeam />}
-                text="orders"
-                onClick={handleOrders}
-                isExpanded={isExpanded}
+                title="Orders"
                 currentSection={sidebarstate?.currentSection}
+                onClick={handleOrders}
+                setIsOpen={setIsOpen}
+              /> */}
+              <MobileMenuItem
+                icon={<BsBoxSeam />}
+                title="Orders"
+                currentSection={sidebarstate?.currentSection}
+                onClick={handleOrders}
+                setIsOpen={setIsOpen}
               />
               <MobileMenuItem
                 icon={<RiFormula />}
