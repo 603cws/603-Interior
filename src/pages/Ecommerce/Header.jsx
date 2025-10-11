@@ -173,6 +173,14 @@ function Header() {
           <div className="hidden md:flex justify-between 3xl:justify-around py-3">
             <ul className="flex items-center gap-7 [&_li]:cursor-pointer uppercase text-xs xl:text-sm font-bold [&_li]:tracking-widest font-TimesNewRoman text-[#334A78]">
               <li
+                onClick={() => navigate("/products")}
+                className={`cursor-pointer relative after:content-[''] after:absolute after:left-0 after:bottom-[-2px] after:h-[1px] after:bg-[#FFC900] after:transition-all after:duration-300 ${
+                  pathname === "/products" ? "after:w-full" : "after:w-0"
+                } hover:after:w-full`}
+              >
+                home
+              </li>
+              <li
                 onClick={() => navigate("/shop")}
                 className={`cursor-pointer relative after:content-[''] after:absolute after:left-0 after:bottom-[-2px] after:h-[1px] after:bg-[#FFC900] after:transition-all after:duration-300 ${
                   pathname === "/shop" ? "after:w-full" : "after:w-0"

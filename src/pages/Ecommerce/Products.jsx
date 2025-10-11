@@ -133,16 +133,16 @@ const TOP_OFFERS = [
 
 const BOTTOM_OFFERS = [
   {
-    title: "Partition",
+    title: "Smart Solutions",
     subtitle: "Up to 20% off",
-    img: "/images/ecommerce/partition.png",
+    img: "/images/ecommerce/smart-solution-bg.jpg",
   },
   {
-    title: "Lights",
+    title: "Lux",
     subtitle: "Up to 20% off",
     img: "/images/ecommerce/lights.png",
   },
-  { title: "AC", subtitle: "Up to 20% off", img: "/images/ecommerce/ac.png" },
+  { title: "HVAC", subtitle: "Up to 20% off", img: "/images/ecommerce/ac.png" },
 ];
 
 const products2 = {
@@ -1301,7 +1301,7 @@ function Products() {
         <div className="grid gap-4 md:grid-cols-12 items-center font-TimesNewRoman">
           {/* LEFT: big hero card */}
           <div className="col-span-12 lg:col-span-5">
-            <a className="group block rounded-lg overflow-hidden relative h-80 md:h-[545px] hover:cursor-pointer">
+            <a className="group block rounded-lg overflow-hidden relative h-80 md:h-[545px]">
               <img
                 src="/images/ecommerce/festive.png"
                 alt="Festive offers"
@@ -1317,7 +1317,8 @@ function Products() {
                 <img
                   src="/images/ecommerce/button.png"
                   alt="arrow button"
-                  className="mt-2 w-2 md:w-4"
+                  className="mt-2 w-2 md:w-4 hover:cursor-pointer"
+                  onClick={() => navigate("/shop?category")}
                 />
               </div>
             </a>
@@ -1332,7 +1333,6 @@ function Products() {
                   <a
                     key={o.title}
                     className="group rounded-lg overflow-hidden relative h-48 md:h-60"
-                    href="#"
                   >
                     <img
                       src={o.img}
@@ -1345,7 +1345,8 @@ function Products() {
                       <img
                         src="/images/ecommerce/button.png"
                         alt="arrow button"
-                        className="mt-2 w-2 md:w-4"
+                        className="mt-2 w-2 md:w-4 hover:cursor-pointer"
+                        onClick={() => navigate(`/shop/?category=${o.title}`)}
                       />
                     </div>
                   </a>
@@ -1358,20 +1359,21 @@ function Products() {
                   <a
                     key={o.title}
                     className="group rounded-lg overflow-hidden relative h-44 md:h-72"
-                    href="#"
                   >
                     <img
                       src={o.img}
                       alt={o.title}
                       className="absolute inset-0 w-full h-full object-cover transform transition-transform duration-500 group-hover:scale-105"
                     />
+                    <div className="absolute inset-0 bg-[#000]/40 rounded-lg" />
                     <div className="relative z-10 h-full flex flex-col justify-end items-start pl-2 lg:pl-6 pb-8 text-white">
                       <h4 className="text-xl md:text-3xl">{o.title}</h4>
                       <p className="text-base md:text-2xl">{o.subtitle}</p>
                       <img
                         src="/images/ecommerce/button.png"
                         alt="arrow button"
-                        className="mt-2 w-2 md:w-4"
+                        className="mt-2 w-2 md:w-4 hover:cursor-pointer"
+                        onClick={() => navigate(`/shop/?category=${o.title}`)}
                       />
                     </div>
                   </a>
