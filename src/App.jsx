@@ -68,6 +68,7 @@ import Services from "./pages/Services";
 import Contactuscopy from "./pages/Contactus copy";
 import OurStory from "./pages/OurStory";
 import OrderConfirm from "./pages/Ecommerce/OrderConfirm";
+import AdminDashboardEcom from "./pages/Admin/EcommerceDashboard/AdminDashboardEcom";
 
 const Home = lazy(() => import("./pages/Home"));
 
@@ -186,6 +187,7 @@ function App() {
           <Route path="/orderSuccess/:id" element={<OrderConfirm />} />
           {/* testing route */}
           <Route path="/boqcompleted" element={<Boqcompleted />} />
+          <Route path="/ecommerceadmin" element={<AdminDashboardEcom />} />
         </Routes>
       </Suspense>
     </div>
