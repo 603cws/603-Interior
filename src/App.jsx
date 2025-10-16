@@ -187,7 +187,16 @@ function App() {
           <Route path="/orderSuccess/:id" element={<OrderConfirm />} />
           {/* testing route */}
           <Route path="/boqcompleted" element={<Boqcompleted />} />
-          <Route path="/ecommerceadmin" element={<AdminDashboardEcom />} />
+          <Route
+            path="/ecommerceadmin"
+            element={
+              <PrivateRoute>
+                {accountHolder?.role && accountHolder.role === "admin" && (
+                  <AdminDashboardEcom />
+                )}
+              </PrivateRoute>
+            }
+          />
         </Routes>
       </Suspense>
     </div>

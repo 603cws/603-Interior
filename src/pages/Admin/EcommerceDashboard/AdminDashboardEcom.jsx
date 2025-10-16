@@ -11,6 +11,7 @@ import { useLogout } from "../../../utils/HelperFunction";
 import { BsBoxSeam } from "react-icons/bs";
 import { FiLogOut } from "react-icons/fi";
 import Orders from ".././Orders";
+import Discount from "./Discount";
 
 function handlesidebarState(state, action) {
   switch (action.type) {
@@ -293,7 +294,7 @@ function AdminDashboardEcom() {
         {/* discounts */}
         {sidebarstate.isDiscountOpen && (
           <div className="flex flex-col h-full min-h-0 overflow-hidden lg:border-2 lg:border-[#334A78] lg:rounded-lg bg-white">
-            discounts
+            <Discount />
           </div>
         )}
       </div>
