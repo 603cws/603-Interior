@@ -12,6 +12,7 @@ import { BsBoxSeam } from "react-icons/bs";
 import { FiLogOut } from "react-icons/fi";
 import Orders from ".././Orders";
 import Discount from "./Discount";
+import NewBlog from "./NewBlog";
 
 function handlesidebarState(state, action) {
   switch (action.type) {
@@ -22,6 +23,7 @@ function handlesidebarState(state, action) {
         isProductOpen: action.payload === "Product",
         isCustomerOpen: action.payload === "Customers",
         isDiscountOpen: action.payload === "Discounts",
+        isBlogsOpen: action.payload === "Blogs",
         currentSection: action.payload,
       };
     default:
@@ -35,6 +37,7 @@ const SECTIONS = {
   ORDERS: "Orders",
   CUSTOMERS: "Customers",
   DISCOUNTS: "Discounts",
+  BLOGS: "Blogs",
 };
 
 function AdminDashboardEcom() {
@@ -51,6 +54,7 @@ function AdminDashboardEcom() {
     isProductOpen: false,
     isCustomerOpen: false,
     isDiscountOpen: false,
+    isBlogsOpen: false,
 
     currentSection: "Dashboard",
   };
@@ -81,6 +85,9 @@ function AdminDashboardEcom() {
 
   const handleDiscounts = () => {
     sidebarDispatch({ type: "TOGGLE_SECTION", payload: SECTIONS.DISCOUNTS });
+  };
+  const handleBlogs = () => {
+    sidebarDispatch({ type: "TOGGLE_SECTION", payload: SECTIONS.BLOGS });
   };
 
   return (
@@ -141,6 +148,13 @@ function AdminDashboardEcom() {
             icon={<FaUser />}
             text="Discounts"
             onClick={handleDiscounts}
+            isExpanded={isExpanded}
+            currentSection={sidebarstate?.currentSection}
+          />
+          <SidebarItem
+            icon={<FaUser />}
+            text="Blogs"
+            onClick={handleBlogs}
             isExpanded={isExpanded}
             currentSection={sidebarstate?.currentSection}
           />
@@ -235,6 +249,13 @@ function AdminDashboardEcom() {
                 onClick={handleDiscounts}
                 setIsOpen={setIsOpen}
               />
+              <MobileMenuItem
+                icon={<FaRegUserCircle />}
+                title="Blogs"
+                currentSection={sidebarstate?.currentSection}
+                onClick={handleBlogs}
+                setIsOpen={setIsOpen}
+              />
 
               <MobileMenuItem
                 title={"Logout"}
@@ -295,6 +316,12 @@ function AdminDashboardEcom() {
         {sidebarstate.isDiscountOpen && (
           <div className="flex flex-col h-full min-h-0 overflow-hidden lg:border-2 lg:border-[#334A78] lg:rounded-lg bg-white">
             <Discount />
+          </div>
+        )}
+        {/* blogs */}
+        {sidebarstate.isBlogsOpen && (
+          <div className="flex flex-col h-full min-h-0 overflow-hidden lg:border-2 lg:border-[#334A78] lg:rounded-lg bg-white">
+            <NewBlog />
           </div>
         )}
       </div>
