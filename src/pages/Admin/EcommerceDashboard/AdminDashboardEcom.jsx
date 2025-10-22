@@ -12,7 +12,6 @@ import { BsBoxSeam } from "react-icons/bs";
 import { FiLogOut } from "react-icons/fi";
 import Orders from ".././Orders";
 import Discount from "./Discount";
-import NewBlog from "./NewBlog";
 import Clients from "../Clients";
 import { supabase } from "../../../services/supabase";
 import VendorNewProduct from "../../vendor/VendorNewProduct";
@@ -33,6 +32,7 @@ import toast from "react-hot-toast";
 import { HiXMark } from "react-icons/hi2";
 import { CiMenuKebab } from "react-icons/ci";
 import MobileTabProductCard from "../../user/MobileTabProductCard";
+import Blogs from "./Blogs";
 
 function handlesidebarState(state, action) {
   switch (action.type) {
@@ -1166,7 +1166,7 @@ function AdminDashboardEcom() {
         {/* blogs */}
         {sidebarstate.isBlogsOpen && (
           <div className="flex flex-col h-full min-h-0 overflow-hidden lg:border-2 lg:border-[#334A78] lg:rounded-lg bg-white">
-            <NewBlog />
+            <Blogs />
           </div>
         )}
       </div>

@@ -4,7 +4,7 @@ import { supabase } from "../../../services/supabase";
 import Spinner from "../../../common-components/Spinner";
 import toast from "react-hot-toast";
 
-function NewBlog() {
+function NewBlog({ onClose }) {
   const [heading, setHeading] = useState({
     title: "",
     subtitle: "",
@@ -92,21 +92,33 @@ function NewBlog() {
         return;
       }
 
-      const { data, error } = await supabase.from("blogs").insert({
-        headers: heading,
+      const { error } = await supabase.from("blogs").insert({
+        title: heading.title,
+        headers: {
+          subtitle: heading.subtitle,
+          shortDescription: heading.shortDescription,
+        },
         content: content,
         image: imageName,
         author,
         tags,
       });
-      if (error) console.log(error);
-      console.log(data);
-    } catch (error) {
-      console.log(error);
-    } finally {
+      if (error) {
+        console.error("Error inserting data:", error);
+        toast.error(error.message || "Error inserting data");
+
+        // Clean up uploaded image if blog insert fails
+        //FOR LATER
+        await supabase.storage.from("blog-images").remove([imageName]);
+        return;
+      }
+
       handleDiscard();
-      setInserting(false);
       toast.success("Blog Submitted successfully!");
+    } catch (error) {
+      console.log("Unexpected error:", error);
+    } finally {
+      setInserting(false);
     }
   };
 
@@ -137,12 +149,18 @@ function NewBlog() {
           <Spinner />
         </div>
       ) : (
-        <div className="font-Poppins p-2 overflow-y-auto gradient-scrollbar">
-          <h2 className="text-2xl font-semibold text-[#374A75] py-2">
+        <div className="font-Poppins overflow-y-auto gradient-scrollbar">
+          <h2 className="text-2xl font-semibold text-[#374A75] p-2">
             Add blog post
           </h2>
           <hr />
-          <form onSubmit={handleSubmit}>
+          <button
+            onClick={onClose}
+            className="text-xs text-[#ccc] font-semibold ml-3"
+          >
+            Back to blog list
+          </button>
+          <form onSubmit={handleSubmit} className="p-4">
             <div className="border border-[#DDDDDD] rounded-lg mt-2 p-5 space-y-3">
               <div className="flex flex-col gap-1.5">
                 <label
@@ -157,6 +175,8 @@ function NewBlog() {
                   placeholder="title of a blog post"
                   value={heading.title}
                   onChange={(e) => handleChange(e, "heading")}
+                  required
+                  maxLength={150}
                   className="border-2 border-[#CCCCCC] rounded-md bg-[#F9F9F9] p-1.5 focus:outline-none focus:ring-0 text-sm"
                 />
               </div>
@@ -173,6 +193,8 @@ function NewBlog() {
                   value={heading.subtitle}
                   onChange={(e) => handleChange(e, "heading")}
                   placeholder="subtitle of a blog post"
+                  required
+                  maxLength={250}
                   className="border-2 border-[#CCCCCC] rounded-md bg-[#F9F9F9] p-1.5 focus:outline-none focus:ring-0 text-sm"
                 />
               </div>
@@ -188,6 +210,8 @@ function NewBlog() {
                   name="shortDescription"
                   value={heading.shortDescription}
                   onChange={(e) => handleChange(e, "heading")}
+                  required
+                  maxLength={300}
                   placeholder="short description of a blog post"
                   className="border-2 border-[#CCCCCC] rounded-md bg-[#F9F9F9] p-1.5 focus:outline-none focus:ring-0 text-sm"
                 />
@@ -203,6 +227,8 @@ function NewBlog() {
                   name="introduction"
                   value={content.introduction}
                   onChange={(e) => handleChange(e, "content")}
+                  required
+                  maxLength={1000}
                   placeholder="introduction"
                   className="border-2 border-[#CCCCCC] rounded-md bg-[#F9F9F9] p-1.5 focus:outline-none focus:ring-0 text-sm"
                 />
@@ -210,6 +236,8 @@ function NewBlog() {
                   name="description"
                   value={content.description}
                   onChange={(e) => handleChange(e, "content")}
+                  required
+                  maxLength={5000}
                   placeholder="description"
                   rows={4}
                   className="border-2 border-[#CCCCCC] rounded-md bg-[#F9F9F9] p-1.5 focus:outline-none focus:ring-0 text-sm"
@@ -218,6 +246,8 @@ function NewBlog() {
                   name="conclusion"
                   value={content.conclusion}
                   onChange={(e) => handleChange(e, "content")}
+                  required
+                  maxLength={1000}
                   placeholder="conclusion"
                   className="border-2 border-[#CCCCCC] rounded-md bg-[#F9F9F9] p-1.5 focus:outline-none focus:ring-0 text-sm"
                 />
@@ -231,33 +261,36 @@ function NewBlog() {
                 image
               </h4>
               <div className="flex items-start gap-4">
-                <div
-                  className="w-full h-28 p-2 flex flex-col items-center justify-center border border-dashed rounded-lg text-center text-gray-500 cursor-pointer hover:border-gray-400"
-                  onDragOver={(e) => e.preventDefault()}
-                  onDrop={handleDrop}
-                >
-                  <input
-                    type="file"
-                    id="file-upload"
-                    ref={fileInputRef}
-                    className="hidden"
-                    accept="image/*"
-                    onChange={handleFileChange}
-                  />
-                  <label
-                    htmlFor="file-upload"
-                    className="flex flex-col items-center"
+                {!image && (
+                  <div
+                    className="w-full h-28 p-2 flex flex-col items-center justify-center border border-dashed rounded-lg text-center text-gray-500 cursor-pointer hover:border-gray-400"
+                    onDragOver={(e) => e.preventDefault()}
+                    onDrop={handleDrop}
                   >
-                    <BsUpload className="w-6 h-6 mb-1 text-gray-500" />
-                    <span className="text-xs">
-                      <span className="text-blue-500 cursor-pointer underline">
-                        Click to upload
+                    <input
+                      type="file"
+                      id="file-upload"
+                      ref={fileInputRef}
+                      className="hidden"
+                      accept="image/*"
+                      onChange={handleFileChange}
+                      required
+                    />
+                    <label
+                      htmlFor="file-upload"
+                      className="flex flex-col items-center"
+                    >
+                      <BsUpload className="w-6 h-6 mb-1 text-gray-500" />
+                      <span className="text-xs">
+                        <span className="text-blue-500 cursor-pointer underline">
+                          Click to upload
+                        </span>
+                        <br />
+                        or drag and drop
                       </span>
-                      <br />
-                      or drag and drop
-                    </span>
-                  </label>
-                </div>
+                    </label>
+                  </div>
+                )}
                 {preview && (
                   <div className="relative w-full h-28 border rounded-lg overflow-hidden group">
                     <img
@@ -266,12 +299,6 @@ function NewBlog() {
                       className="w-full h-full object-cover"
                     />
                     <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity">
-                      <label
-                        htmlFor="file-upload"
-                        className="text-white text-xs bg-gray-700 px-2 py-1 rounded cursor-pointer mb-1"
-                      >
-                        Replace
-                      </label>
                       <button
                         onClick={removeFile}
                         type="button"
@@ -300,6 +327,8 @@ function NewBlog() {
                   name="author"
                   value={author}
                   onChange={(e) => setAuthor(e.target.value)}
+                  required
+                  maxLength={100}
                   placeholder="author"
                   className="border-2 border-[#CCCCCC] rounded-md bg-[#F9F9F9] p-1.5 focus:outline-none focus:ring-0 text-sm"
                 />
@@ -315,6 +344,8 @@ function NewBlog() {
                   type="text"
                   name="tags"
                   onChange={handleTagsChange}
+                  required
+                  maxLength={200}
                   placeholder="tags (comma separated)"
                   className="border-2 border-[#CCCCCC] rounded-md bg-[#F9F9F9] p-1.5 focus:outline-none focus:ring-0 text-sm"
                 />
