@@ -69,6 +69,7 @@ import Contactuscopy from "./pages/Contactus copy";
 import OurStory from "./pages/OurStory";
 import OrderConfirm from "./pages/Ecommerce/OrderConfirm";
 import AdminDashboardEcom from "./pages/Admin/EcommerceDashboard/AdminDashboardEcom";
+import DashboardInterface from "./pages/Admin/DashboardInterface";
 
 const Home = lazy(() => import("./pages/Home"));
 
@@ -140,7 +141,8 @@ function App() {
               <PrivateRoute>
                 {accountHolder?.role ? (
                   accountHolder.role === "admin" ? (
-                    <AdminDashboard />
+                    // <AdminDashboard />
+                    <DashboardInterface />
                   ) : accountHolder.role === "vendor" ? (
                     // <VendorDashboard />
                     <VendorDashboardLayout />
@@ -151,6 +153,17 @@ function App() {
                   )
                 ) : (
                   <SpinnerFullPage />
+                )}
+              </PrivateRoute>
+            }
+          />
+
+          <Route
+            path="/admindashboard"
+            element={
+              <PrivateRoute>
+                {accountHolder?.role && accountHolder.role === "admin" && (
+                  <AdminDashboard />
                 )}
               </PrivateRoute>
             }
@@ -193,6 +206,16 @@ function App() {
               <PrivateRoute>
                 {accountHolder?.role && accountHolder.role === "admin" && (
                   <AdminDashboardEcom />
+                )}
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/admindashboardinterface"
+            element={
+              <PrivateRoute>
+                {accountHolder?.role && accountHolder.role === "admin" && (
+                  <DashboardInterface />
                 )}
               </PrivateRoute>
             }
