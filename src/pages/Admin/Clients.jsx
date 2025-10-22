@@ -12,6 +12,7 @@ function Clients({
   query,
   setIsrefresh,
   setClientBoqs,
+  eComm = false,
 }) {
   //state
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -94,7 +95,7 @@ function Clients({
                 <div
                   className={` ${
                     isExpanded ? " gap-2 py-3" : "gap-3 py-4"
-                  } flex items-start   relative`}
+                  } flex items-start relative`}
                 >
                   {/* <div className={`${isExpanded ? "hidden" : "block"} mx-3`}> */}
                   <img
@@ -102,13 +103,13 @@ function Clients({
                     alt="usericon"
                     className={`${
                       isExpanded ? "w-10 h-10" : "w-12 h-12"
-                    }  rounded-full object-cover border border-[#ccc] `}
+                    } rounded-full object-cover border border-[#ccc] `}
                   />
-                  <div className="flex flex-col justify-center">
+                  <div className="flex flex-col justify-center cursor-default">
                     <h2
                       className={`${
                         isExpanded ? "text-sm" : "text-base"
-                      }  font-semibold text-black`}
+                      } font-semibold text-black`}
                     >
                       {user.company_name}
                     </h2>
@@ -136,8 +137,10 @@ function Clients({
                   //   setClientBoqs(true);
                   //   setSelectedClient(user);
                   // }}
-                  onClick={() => handleClientClick(user)}
-                  className=" cursor-pointer text-[#374A75] p-3 flex items-center gap-2 flex-1 mt-auto border-t"
+                  onClick={() => !eComm && handleClientClick(user)}
+                  className={`${
+                    eComm ? "cursor-default" : "cursor-pointer"
+                  } text-[#374A75] p-3 flex items-center gap-2 flex-1 mt-auto border-t`}
                 >
                   <FaBuilding size={22} color="#374A75" />
                   <h4 className="text-sm">{user.company_name}</h4>

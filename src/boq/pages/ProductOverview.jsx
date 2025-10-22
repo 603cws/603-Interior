@@ -148,7 +148,8 @@ function ProductOverview() {
           .from("product_variants")
           .select("*, products(*)") // Fetch all columns from product_variants and related products
           .eq("id", id)
-          .single();
+          .single()
+          .neq("productDisplayType", "ecommerce");
 
         if (error) {
           console.error("Error fetching product:", error);

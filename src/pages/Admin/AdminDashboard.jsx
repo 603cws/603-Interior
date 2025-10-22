@@ -371,7 +371,8 @@ function AdminDashboard() {
       const { data } = await supabase
         .from("product_variants")
         .select("*,products(*)")
-        .order("created_at", { ascending: false });
+        .order("created_at", { ascending: false })
+        .neq("productDisplayType", "ecommerce");
 
       const sortedData = data.sort((a, b) => {
         // Prioritize "pending" status

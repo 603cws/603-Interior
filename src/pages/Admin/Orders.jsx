@@ -113,87 +113,87 @@ export default function Orders() {
                   </tr>
                 </thead>
 
-              <tbody>
-                {paginatedOrders?.map((order) => {
-                  // Status color constants
-                  const statusColors = {
-                    shipped: "bg-blue-600",
-                    pending: "bg-red-500",
-                    canceled: "bg-orange-500",
-                    delivered: "bg-green-600",
-                    approved: "bg-gray-500",
-                  };
+                <tbody>
+                  {paginatedOrders?.map((order) => {
+                    // Status color constants
+                    const statusColors = {
+                      shipped: "bg-blue-600",
+                      pending: "bg-red-500",
+                      canceled: "bg-orange-500",
+                      delivered: "bg-green-600",
+                      approved: "bg-gray-500",
+                    };
 
-                  // Payment status and color constants
-                  const paymentStatus =
-                    order.paymentDetails?.state?.toLowerCase() || "unpaid";
-                  const paymentColors = {
-                    completed: "bg-blue-600",
-                    failed: "bg-gray-500",
-                    refund: "bg-purple-500",
-                    paid: "bg-blue-600",
-                    unpaid: "bg-gray-500",
-                  };
+                    // Payment status and color constants
+                    const paymentStatus =
+                      order.paymentDetails?.state?.toLowerCase() || "unpaid";
+                    const paymentColors = {
+                      completed: "bg-blue-600",
+                      failed: "bg-gray-500",
+                      refund: "bg-purple-500",
+                      paid: "bg-blue-600",
+                      unpaid: "bg-gray-500",
+                    };
 
-                  return (
-                    <tr
-                      key={order.id}
-                      className="border-b hover:bg-gray-100 hover:cursor-pointer"
-                      onClick={() => setSelectedOrder(order)}
-                    >
-                      {/* Order ID */}
-                      <td className="px-4 py-2" title={order.id}>
-                        #{order.id.slice(0, 6)}
-                      </td>
-                      {/* Date */}
-                      <td className="px-4 py-2">
-                        {new Date(order.created_at).toLocaleDateString(
-                          "en-US",
-                          {
-                            month: "short",
-                            day: "numeric",
-                            year: "numeric",
-                          }
-                        )}
-                      </td>
-                      {/* Customer Name */}
-                      <td className="px-4 py-2 capitalize">
-                        {order.shippingAddress?.[0]?.name || "N/A"}
-                      </td>
-                      {/* Status */}
-                      <td className="px-4 py-2">
-                        <div className="flex items-center gap-2 capitalize">
-                          <span
-                            className={`w-2 h-2 rounded-full ${
-                              statusColors[order.status?.toLowerCase()] ||
-                              "bg-gray-400"
-                            }`}
-                          ></span>
-                          {order.status}
-                        </div>
-                      </td>
-                      {/* Payment */}
-                      <td className="px-4 py-2">
-                        <div className="flex items-center gap-2 capitalize">
-                          <span
-                            className={`w-2 h-2 rounded-full ${
-                              paymentColors[paymentStatus] || "bg-gray-400"
-                            }`}
-                          ></span>
-                          {paymentStatus === "completed" ||
-                          paymentStatus === "paid"
-                            ? "Paid"
-                            : paymentStatus.charAt(0).toUpperCase() +
-                              paymentStatus.slice(1)}
-                        </div>
-                      </td>
-                      {/* Amount */}
-                      <td className="px-4 py-2">₹{order.finalPrice}</td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
+                    return (
+                      <tr
+                        key={order.id}
+                        className="border-b hover:bg-gray-100 hover:cursor-pointer"
+                        onClick={() => setSelectedOrder(order)}
+                      >
+                        {/* Order ID */}
+                        <td className="px-4 py-2" title={order.id}>
+                          #{order.id.slice(0, 6)}
+                        </td>
+                        {/* Date */}
+                        <td className="px-4 py-2">
+                          {new Date(order.created_at).toLocaleDateString(
+                            "en-US",
+                            {
+                              month: "short",
+                              day: "numeric",
+                              year: "numeric",
+                            }
+                          )}
+                        </td>
+                        {/* Customer Name */}
+                        <td className="px-4 py-2 capitalize">
+                          {order.shippingAddress?.[0]?.name || "N/A"}
+                        </td>
+                        {/* Status */}
+                        <td className="px-4 py-2">
+                          <div className="flex items-center gap-2 capitalize">
+                            <span
+                              className={`w-2 h-2 rounded-full ${
+                                statusColors[order.status?.toLowerCase()] ||
+                                "bg-gray-400"
+                              }`}
+                            ></span>
+                            {order.status}
+                          </div>
+                        </td>
+                        {/* Payment */}
+                        <td className="px-4 py-2">
+                          <div className="flex items-center gap-2 capitalize">
+                            <span
+                              className={`w-2 h-2 rounded-full ${
+                                paymentColors[paymentStatus] || "bg-gray-400"
+                              }`}
+                            ></span>
+                            {paymentStatus === "completed" ||
+                            paymentStatus === "paid"
+                              ? "Paid"
+                              : paymentStatus.charAt(0).toUpperCase() +
+                                paymentStatus.slice(1)}
+                          </div>
+                        </td>
+                        {/* Amount */}
+                        <td className="px-4 py-2">₹{order.finalPrice}</td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
             </div>
             <div className="lg:hidden">
               {paginatedOrders?.map((order) => (

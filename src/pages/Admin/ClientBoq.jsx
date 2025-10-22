@@ -134,6 +134,7 @@ function ClientBoq({ setClientBoqs }) {
         const { data, error } = await supabase
           .from("product_variants")
           .select("*,products(*)")
+          .neq("productDisplayType", "ecommerce")
           .in("id", productIdsArray); // Use Supabase `in()` filter
 
         if (data) {
