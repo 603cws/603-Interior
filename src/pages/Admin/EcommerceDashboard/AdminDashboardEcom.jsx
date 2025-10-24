@@ -1159,7 +1159,7 @@ function AdminDashboardEcom() {
 
         {/* discounts */}
         {sidebarstate.isDiscountOpen && (
-          <div className="flex flex-col h-full min-h-0 overflow-hidden lg:border-2 lg:border-[#334A78] lg:rounded-lg bg-white">
+          <div className="flex flex-col h-full min-h-0  lg:border-2 lg:border-[#334A78] lg:rounded-lg bg-white">
             <Discount />
           </div>
         )}

@@ -1,8 +1,9 @@
 import { useForm } from "react-hook-form";
 import { supabase } from "../../../services/supabase";
 import toast from "react-hot-toast";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { IoMdArrowBack } from "react-icons/io";
+import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
 
 function Discount() {
   const [createDiscount, setCreateDiscount] = useState(false);
@@ -40,42 +41,129 @@ function Discount() {
 export default Discount;
 
 const CouponTable = () => {
-  const coupons = [
-    {
-      code: "ab5fgt7efcx8",
-      discount: "10%",
-      amount: "10,000",
-      status: "Active",
-      used: 0,
-    },
-    {
-      code: "Free205",
-      discount: "20%",
-      amount: "15,000",
-      status: "Schedule",
-      used: 2,
-    },
-    {
-      code: "klm33004",
-      discount: "10%",
-      amount: "8,000",
-      status: "Expired",
-      used: 1,
-    },
-  ];
+  const [disocunts, setDisounts] = useState([]);
 
-  const getStatusStyle = (status) => {
-    switch (status) {
-      case "Active":
-        return "bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-medium";
-      case "Schedule":
-        return "bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full text-xs font-medium";
-      case "Expired":
-        return "bg-gray-100 text-gray-500 px-3 py-1 rounded-full text-xs font-medium";
-      default:
-        return "";
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const discountCouponPerPage = 10;
+
+  const indexoflastDisocunt = currentPage * discountCouponPerPage;
+  const indexofFirstDiscount = indexoflastDisocunt - discountCouponPerPage;
+  const currentBlogs = disocunts.slice(
+    indexofFirstDiscount,
+    indexoflastDisocunt
+  );
+
+  const totalPages = Math.ceil(disocunts.length / discountCouponPerPage);
+
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
+  useEffect(() => {
+    fetchBlogs();
+  }, []);
+
+  const fetchBlogs = async () => {
+    try {
+      const { data, error } = await supabase.from("coupons").select("*");
+      if (error) console.log("Error fetching disocunts:", error);
+      setDisounts(data);
+    } catch (error) {
+      console.log("Unexpected Error:", error);
     }
   };
+  //   {
+  //     "id": "1adc1692-3f80-44d4-bd66-f91539dd5532",
+  //     "created_at": "2025-06-23T12:23:42.825308+00:00",
+  //     "couponName": "flat30",
+  //     "expiryDate": "2025-11-30",
+  //     "maxLimit": 50,
+  //     "discountPerc": 30,
+  //     "minAmount": 10000
+  // }
+
+  console.log(disocunts);
+
+  // const getStatusStyle = (status) => {
+  //   switch (status) {
+  //     case "Active":
+  //       return "bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-medium";
+  //     case "Schedule":
+  //       return "bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full text-xs font-medium";
+  //     case "Expired":
+  //       return "bg-gray-100 text-gray-500 px-3 py-1 rounded-full text-xs font-medium";
+  //     default:
+  //       return "";
+  //   }
+  // };
+
+  return (
+    <div className="p-4">
+      <table className="w-full text-left">
+        <thead className="text-[#232321]/80 font-semibold ">
+          <tr className="border-b">
+            <th className="py-2">
+              <input type="checkbox" name="" id="" />
+            </th>
+            <th className="py-2">Title</th>
+            <th className="py-2">Expiry</th>
+            <th className="py-2">discount per</th>
+            <th className="py-2">Min Amount</th>
+          </tr>
+        </thead>
+        <tbody>
+          {currentBlogs.map((disocunts) => (
+            <tr
+              key={disocunts.id}
+              className="border-b text-sm text-[#000] font-semibold"
+            >
+              <td className="py-3.5">
+                <input type="checkbox" name="" id="" />
+              </td>
+              <td className="py-3.5">{disocunts?.couponName}</td>
+              <td className="py-3.5">{disocunts?.expiryDate}</td>
+              <td className="py-3.5">{disocunts?.discountPerc}</td>
+              <td className="py-3.5">{disocunts?.minAmount}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      {totalPages > 1 && (
+        <div className="flex justify-center items-center mt-4 gap-2 border px-7 py-1 rounded place-self-center">
+          <button
+            onClick={() => handlePageChange(currentPage - 1)}
+            disabled={currentPage === 1}
+            className="px-3 py-1 disabled:opacity-50 flex items-center gap-0.5 text-[#334A78]"
+          >
+            <MdKeyboardArrowLeft /> Prev
+          </button>
+
+          {Array.from({ length: totalPages }, (_, index) => (
+            <button
+              key={index + 1}
+              onClick={() => handlePageChange(index + 1)}
+              className={`px-3 py-1 rounded-sm  ${
+                currentPage === index + 1
+                  ? "bg-[#334A78] text-white"
+                  : "text-[#334A78]"
+              }`}
+            >
+              {index + 1}
+            </button>
+          ))}
+
+          <button
+            onClick={() => handlePageChange(currentPage + 1)}
+            disabled={currentPage === totalPages}
+            className="px-3 py-1 disabled:opacity-50 flex items-center gap-0.5 text-[#334A78]"
+          >
+            Next <MdKeyboardArrowRight />
+          </button>
+        </div>
+      )}
+    </div>
+  );
 
   //   return (
   //     <>
@@ -370,7 +458,7 @@ function DisocuntForm({ setCreateDiscount }) {
     }
   }
   return (
-    <div className="font-Poppins">
+    <div className="font-Poppins overflow-auto">
       <form
         onKeyDown={(e) => {
           if (e.key === "Enter") {
@@ -389,7 +477,7 @@ function DisocuntForm({ setCreateDiscount }) {
         </div>
         <div className="border border-[#ccc] rounded-md m-3 space-y-9">
           <div className="flex flex-col p-3 space-y-3">
-            <label className="font-medium text-xl text-[#000]">
+            <label className="font-medium text-lg lg:text-xl text-[#000]">
               Discount code
             </label>
             <input
@@ -409,7 +497,7 @@ function DisocuntForm({ setCreateDiscount }) {
             )}
           </div>
         </div>
-        <div className="flex border border-[#ccc] rounded-md m-3 ">
+        <div className="flex flex-col md:flex-row border border-[#ccc] rounded-md m-3 ">
           <div className="flex-1 flex flex-col p-3 space-y-3">
             <label className="font-medium text-xl text-[#000]">
               Discount value(In percentage)
@@ -423,6 +511,7 @@ function DisocuntForm({ setCreateDiscount }) {
                   value: 2,
                   message: "percentage should be less than 100",
                 },
+                min: { value: 1, message: "value should be greater than 0" },
               })}
               required
               className="p-1 border-2 border-[#ccc] "
@@ -454,27 +543,43 @@ function DisocuntForm({ setCreateDiscount }) {
             )}
           </div>
         </div>
-        <div className="flex border border-[#ccc] rounded-md m-3 ">
+        <div className="flex flex-col md:flex-row border border-[#ccc] rounded-md m-3 ">
           <div className="flex-1 flex flex-col p-3 space-y-3">
             <label className="font-medium text-xl text-[#000]">
               expiry date
             </label>
             <input
               type="date"
-              {...register("expiryDate", { required: true })}
+              min={new Date().toISOString().split("T")[0]}
+              {...register("expiryDate", {
+                required: true,
+              })}
               className="p-1 border-2 border-[#ccc] "
               required
             />
+            {errors?.expiryDate && (
+              <p className="text-red-800 text-sm capitalize">
+                {errors?.expiryDate?.message}
+              </p>
+            )}
           </div>
           <div className="flex-1 flex flex-col p-3 space-y-3">
             <label className="font-medium text-xl text-[#000]">max limit</label>
             <input
               type="number"
-              {...register("maxLimit", { required: true })}
+              {...register("maxLimit", {
+                required: true,
+                min: { value: 1, message: "value should be greater than 0" },
+              })}
               className="p-1 border-2 border-[#ccc] rounded-md"
               required
               placeholder="20"
             />
+            {errors?.maxLimit && (
+              <p className="text-red-800 text-sm capitalize">
+                {errors?.maxLimit?.message}
+              </p>
+            )}
           </div>
         </div>
         <div className="flex justify-end space-x-6 m-3">
