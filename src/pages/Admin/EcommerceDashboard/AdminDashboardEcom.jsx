@@ -33,6 +33,11 @@ import { HiXMark } from "react-icons/hi2";
 import { CiMenuKebab } from "react-icons/ci";
 import MobileTabProductCard from "../../user/MobileTabProductCard";
 import Blogs from "./Blogs";
+import Transactions from "./Transactions";
+import StatsSection from "./StatsSection";
+import BestSellingSection from "./BestSellingSection";
+import SalesSection from "./SalesSection";
+import DashboardProductCard from "../../vendor/DashboardProductCard";
 
 function handlesidebarState(state, action) {
   switch (action.type) {
@@ -83,15 +88,15 @@ function AdminDashboardEcom() {
 
   //all the category
   const category = [
-    "furniture",
+    "Furniture",
     "HVAC",
-    "paint",
-    "partitions / ceilings",
-    "lux",
-    "civil / plumbing",
-    "flooring",
-    "lighting",
-    "smart solutions",
+    "Paint",
+    "Partitions / Ceilings",
+    "Lux",
+    "Civil / Plumbing",
+    "Flooring",
+    "Lighting",
+    "Smart Solutions",
   ];
 
   const tabs = [
@@ -236,6 +241,72 @@ function AdminDashboardEcom() {
   const handleDeleteClick = (item) => {
     setDeleteWarning(true);
     setSelectedProductview(item);
+  };
+
+  const handleDelete = async (selectedProductview) => {
+    try {
+      if (selectedProductview && selectedProductview.type === "product") {
+        await supabase
+          .from("product_variants") // Ensure this matches your table name
+          .delete()
+          .eq("id", selectedProductview.id);
+
+        toast.success("Product deleted successfully!");
+        setIsProductRefresh(true);
+      }
+
+      if (selectedProductview.type === "addon") {
+        await supabase
+          .from("addon_variants") // Ensure this matches your table name
+          .delete()
+          .eq("id", selectedProductview.id);
+        toast.success("Product deleted successfully!");
+        setIsAddonRefresh(true);
+      }
+
+      let imagePaths = [];
+
+      if (selectedProductview.image) {
+        imagePaths.push(selectedProductview.image);
+      }
+      if (selectedProductview.additional_images) {
+        try {
+          const parsedAdditionalImages = JSON.parse(
+            selectedProductview.additional_images
+          );
+          if (Array.isArray(parsedAdditionalImages)) {
+            imagePaths = imagePaths.concat(parsedAdditionalImages);
+          }
+        } catch (parseError) {
+          console.log("error parsing error", parseError);
+        }
+      }
+
+      if (imagePaths.length > 0) {
+        const { storageError } = await supabase.storage
+          .from("addon")
+          .remove(imagePaths);
+
+        if (storageError) throw storageError;
+      }
+
+      setProductPreview(false); // Close the modal after deletion
+    } catch (error) {
+      console.log(error);
+    } finally {
+      selectedProductview.type === "product"
+        ? setIsProductRefresh(true)
+        : setIsAddonRefresh(true);
+    }
+    setDeleteWarning(false);
+  };
+
+  const handleConfirmReject = () => {
+    if (!rejectReason) {
+      toast.error("Please enter a reason for rejecting the product");
+      return;
+    }
+    handleUpdateStatus(selectedProductview, "rejected", rejectReason);
   };
 
   const handleUpdateStatus = async (product, newStatus, reason = "") => {
@@ -582,19 +653,26 @@ function AdminDashboardEcom() {
 
         {/* dashboard */}
         {sidebarstate.dashboard && (
-          <div className="flex flex-col h-full min-h-0 loverflow-hidden lg:border-2 border-[#334A78] rounded-lg bg-[#fff]">
-            <p>dashboard</p>
+          <div className="flex flex-col h-full min-h-0 overflow-y-auto lg:border-2 border-[#334A78] rounded-lg bg-white font-lato p-4 custom-scrollbar">
+            {/* Top Stats Cards */}
+            <StatsSection allusers={allusers} />
+
+            {/* Middle Section: Transactions + Sales */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
+              {/* Transactions */}
+              <Transactions sidebarDispatch={sidebarDispatch} />
+
+              {/* Last 7 Days Sales */}
+              <SalesSection />
+            </div>
+
+            {/* Best Selling Products */}
+            <BestSellingSection sidebarDispatch={sidebarDispatch} />
           </div>
         )}
+
         {/* orders */}
         {sidebarstate.isOrdersOpen && <Orders />}
-
-        {/* product */}
-        {/* {sidebarstate.isProductOpen && (
-          <div className="flex flex-col h-full min-h-0 overflow-hidden lg:border-2 lg:border-[#334A78] lg:rounded-lg bg-white">
-            products
-          </div>
-        )} */}
 
         {/* product */}
         {sidebarstate.isProductOpen && (
@@ -928,7 +1006,7 @@ function AdminDashboardEcom() {
                                   )}
                                   <th className="p-3  font-medium">Price</th>
                                   <>
-                                    <th className="p-3 font-medium">status</th>
+                                    <th className="p-3 font-medium">Status</th>
                                   </>
                                   <th className="p-3 font-medium">Action</th>
                                 </tr>
@@ -1163,6 +1241,7 @@ function AdminDashboardEcom() {
             <Discount />
           </div>
         )}
+
         {/* blogs */}
         {sidebarstate.isBlogsOpen && (
           <div className="flex flex-col h-full min-h-0 overflow-hidden lg:border-2 lg:border-[#334A78] lg:rounded-lg bg-white">
@@ -1170,6 +1249,86 @@ function AdminDashboardEcom() {
           </div>
         )}
       </div>
+      {/* product preview */}
+      {productPreview && (
+        <DashboardProductCard
+          onClose={() => {
+            setProductPreview(false);
+          }}
+          product={selectedProductview}
+          handleDelete={handleDelete}
+          updateStatus={handleUpdateStatus}
+          deleteWarning={deleteWarning}
+          setDeleteWarning={setDeleteWarning}
+          rejectReason={rejectReason}
+          setRejectReason={setRejectReason}
+          handleConfirmReject={handleConfirmReject}
+        />
+      )}
+
+      {deleteWarning && (
+        <div className="flex justify-center items-center fixed inset-0 z-30">
+          <div className="absolute inset-0 bg-black opacity-50"></div>
+          <div className="bg-white relative py-7 px-16 md:px-20">
+            <div className="flex justify-center items-center">
+              <img
+                src="images/icons/delete-icon.png"
+                alt=""
+                className="h-12 w-12"
+              />
+            </div>
+
+            <h4 className="font-semibold my-5">
+              Do you want to delete {selectedProductview.title}?
+            </h4>
+            <div className="flex justify-between">
+              <button
+                onClick={() => {
+                  setDeleteWarning(false);
+                }}
+                className="px-5 py-2 bg-[#EEEEEE] rounded-md"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => handleDelete(selectedProductview)}
+                className="px-5 py-2 bg-[#B4EAEA] rounded-md"
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {rejectReasonPopup && (
+        <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-30 font-Poppins">
+          <div className="bg-white py-6 px-10 rounded-2xl shadow-lg ">
+            <h2 className="text-lg font-semibold mb-3">Rejection Reason</h2>
+            <textarea
+              className="w-full p-2 border rounded-md"
+              rows="3"
+              placeholder="Provide a reason..."
+              value={rejectReason}
+              onChange={(e) => setRejectReason(e.target.value)}
+            />
+            <div className="mt-7 flex  gap-20 justify-between">
+              <button
+                className="border-[1px] border-[#BBBBBB] px-4 py-2 rounded-md mr-2"
+                onClick={() => setRejectReasonPopup(false)}
+              >
+                Cancel
+              </button>
+              <button
+                className="border-[1px] border-red-600 px-4 py-2 rounded-md"
+                onClick={handleConfirmReject}
+              >
+                Confirm Reject
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
