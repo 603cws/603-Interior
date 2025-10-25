@@ -51,7 +51,7 @@ function Transactions({ sidebarDispatch }) {
             </tr>
           </thead>
           <tbody className="text-black text-sm">
-            {ordersData?.slice(0, 5).map((t, i) => (
+            {ordersData?.slice(0, 7).map((t, i) => (
               <tr key={i}>
                 <td className="py-2">{i + 1}.</td>
                 <td title={t.id}>

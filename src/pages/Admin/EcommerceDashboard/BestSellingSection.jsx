@@ -3,7 +3,7 @@ import { supabase } from "../../../services/supabase";
 import FilterButton from "./FilterButton";
 import { baseImageUrl } from "../../../utils/HelperConstant";
 
-function BestSellingSection({ sidebarDispatch }) {
+function BestSellingSection({ sidebarDispatch, handleProductPreview }) {
   const [variantsData, setVariantsData] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -68,7 +68,12 @@ function BestSellingSection({ sidebarDispatch }) {
           ) : (
             variantsData.slice(0, 5).map((p, i) => (
               <tr key={i} className="border-b last:border-none">
-                <td className="flex items-center gap-3 py-2">
+                <td
+                  className="flex items-center gap-3 py-2"
+                  onClick={() => {
+                    handleProductPreview(p);
+                  }}
+                >
                   <img
                     src={`${baseImageUrl}${p.image}`}
                     alt={p.title}

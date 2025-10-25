@@ -667,7 +667,10 @@ function AdminDashboardEcom() {
             </div>
 
             {/* Best Selling Products */}
-            <BestSellingSection sidebarDispatch={sidebarDispatch} />
+            <BestSellingSection
+              sidebarDispatch={sidebarDispatch}
+              handleProductPreview={handleProductPreview}
+            />
           </div>
         )}
 
