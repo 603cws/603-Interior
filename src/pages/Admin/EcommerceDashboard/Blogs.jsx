@@ -70,8 +70,6 @@ function Blogs() {
       console.log("imagePaths", imagePaths);
 
       if (imagePaths.length > 0) {
-        console.log("inside delete");
-        //NOT WORKING
         const { data, error: storageError } = await supabase.storage
           .from("blog-images")
           .remove(imagePaths);
@@ -110,33 +108,33 @@ function Blogs() {
         />
       ) : (
         <div className="font-Poppins overflow-y-auto gradient-scrollbar">
-          <div className="flex justify-between items-center p-2">
-            <h2 className="text-2xl font-semibold text-[#374A75] ">
+          <div className="flex justify-between items-center py-2 px-3">
+            <h2 className="text-xl md:text-2xl font-semibold text-[#374A75] ">
               Blog post
             </h2>
             <div className="flex gap-2">
               {selectedBlogs.length > 0 && (
                 <button
                   onClick={handleDelete}
-                  className="px-4 py-2 border border-[#CCCCCC] rounded-md text-[#374A75] text-lg font-medium hover:bg-[#f1f1f1]"
+                  className="px-2 py-1 md:px-4 md:py-2 border border-[#CCCCCC] rounded-md text-[#374A75] text-lg font-medium hover:bg-[#f1f1f1]"
                 >
                   Delete ({selectedBlogs.length})
                 </button>
               )}
               <button
                 onClick={() => setNewBlog(true)}
-                className="px-4 py-2 border border-[#CCCCCC] rounded-md text-[#374A75] text-lg font-medium hover:bg-[#f1f1f1]"
+                className="px-2 py-1 md:px-4 md:py-2 border border-[#CCCCCC] rounded-md text-[#374A75] text-lg font-medium hover:bg-[#f1f1f1] flex items-center gap-1"
               >
-                + Add blog
+                + <span className="hidden lg:block">Add blog</span>
               </button>
             </div>
           </div>
           <hr />
-          <div className="p-4">
+          <div className="p-2 md:p-4">
             <table className="w-full text-left">
               <thead className="text-[#232321]/80 font-semibold ">
                 <tr className="border-b">
-                  <th className="py-2">
+                  <th className="py-2 px-1">
                     <input
                       type="checkbox"
                       name=""
@@ -145,9 +143,9 @@ function Blogs() {
                       onChange={handleSelectAll}
                     />
                   </th>
-                  <th className="py-2">Title</th>
-                  <th className="py-2">Author</th>
-                  <th className="py-2">Updated</th>
+                  <th className="py-2 px-1 text-sm md:text-base">Title</th>
+                  <th className="py-2 px-1 text-sm md:text-base">Author</th>
+                  <th className="py-2 px-1 text-sm md:text-base">Updated</th>
                 </tr>
               </thead>
               <tbody>
@@ -155,9 +153,9 @@ function Blogs() {
                   <tr
                     key={blog.id}
                     onClick={() => setEditBlog(blog)}
-                    className="border-b text-sm text-[#000] font-semibold hover:bg-[#f1f1f1] cursor-pointer"
+                    className="border-b text-xs md:text-sm text-[#000] font-semibold hover:bg-[#f1f1f1] cursor-pointer"
                   >
-                    <td className="py-3.5">
+                    <td className="py-3.5 px-1">
                       <input
                         type="checkbox"
                         name=""
@@ -167,9 +165,9 @@ function Blogs() {
                         onChange={() => handleCheckboxChange(blog.id)}
                       />
                     </td>
-                    <td className="py-3.5">{blog.title}</td>
-                    <td className="py-3.5">{blog.author}</td>
-                    <td className="py-3.5">
+                    <td className="py-3.5 px-1">{blog.title}</td>
+                    <td className="py-3.5 px-1">{blog.author}</td>
+                    <td className="py-3.5 px-1">
                       {blog.updated_at?.split("T")[0] ||
                         blog.created_at.split("T")[0]}
                     </td>

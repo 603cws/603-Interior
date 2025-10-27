@@ -170,7 +170,7 @@ function EditBlog({ blog, onClose, onUpdate }) {
         </div>
       ) : (
         <div className="font-Poppins overflow-y-auto gradient-scrollbar">
-          <h2 className="text-2xl font-semibold text-[#374A75] p-2">
+          <h2 className="text-xl md:text-2xl font-semibold text-[#374A75] py-2 px-3">
             Edit blog post
           </h2>
           <hr />
@@ -180,7 +180,7 @@ function EditBlog({ blog, onClose, onUpdate }) {
           >
             Back to blog list
           </button>
-          <form onSubmit={handleSubmit} className="p-4">
+          <form onSubmit={handleSubmit} className="p-2 md:p-4">
             <div className="border border-[#DDDDDD] rounded-lg mt-2 p-5 space-y-3">
               <div className="flex flex-col gap-1.5">
                 <label

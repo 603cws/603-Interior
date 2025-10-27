@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { supabase } from "../../services/supabase";
 import { baseImageUrl } from "../../utils/HelperConstant";
 
@@ -9,8 +9,12 @@ export default function Orders() {
   const totalPages = Math.ceil(ordersData?.length / itemsPerPage);
   const [selectedOrder, setSelectedOrder] = React.useState(null);
   const [loadingOrders, setLoadingOrders] = useState(false);
+  const [filterDropdown, setFilterDropdown] = useState(false);
+  const [orderStatusFilter, setOrderStatusFilter] = useState("");
+  const [paymentStatusFilter, setPaymentStatusFilter] = useState("");
+  const [filteredOrders, setFilteredOrders] = useState([]);
 
-  const paginatedOrders = ordersData?.slice(
+  const paginatedOrders = filteredOrders?.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
@@ -59,11 +63,63 @@ export default function Orders() {
 
       setOrdersData(ordersWithVariants);
       setLoadingOrders(false);
-      console.log(ordersWithVariants);
     };
 
     fetchOrders();
   }, []);
+
+  useEffect(() => {
+    if (ordersData?.length > 0) {
+      setFilteredOrders(ordersData);
+    }
+  }, [ordersData]);
+
+  // const filterOrders = (type, value = "") => {
+  //   console.log(type, value);
+
+  //   if (type === "orderStatus") {
+  //     const filteredOrders = ordersData.filter(
+  //       (order) => order?.status === value
+  //     );
+  //     setFilteredOrders(filteredOrders);
+  //   } else if (type === "paymentStatus") {
+  //     const filteredOrders = ordersData.filter(
+  //       (order) => order?.paymentDetails?.state?.toLowerCase() === value
+  //     );
+  //     setFilteredOrders(filteredOrders);
+  //   }
+  //   console.log(ordersData);
+  // };
+
+  const filterOrders = (type, value) => {
+    if (type === "orderStatus") {
+      setOrderStatusFilter(value);
+    } else if (type === "paymentStatus") {
+      setPaymentStatusFilter(value);
+    }
+
+    const filtered = ordersData.filter((order) => {
+      const matchOrderStatus = (
+        type === "orderStatus" ? value : orderStatusFilter
+      )
+        ? order.status === (type === "orderStatus" ? value : orderStatusFilter)
+        : true;
+
+      const paymentState =
+        order.paymentDetails?.state?.toLowerCase() || "unpaid";
+      const matchPaymentStatus = (
+        type === "paymentStatus" ? value : paymentStatusFilter
+      )
+        ? (type === "paymentStatus" ? value : paymentStatusFilter) ===
+          (paymentState === "completed" ? "completed" : "unpaid")
+        : true;
+
+      return matchOrderStatus && matchPaymentStatus;
+    });
+
+    setFilteredOrders(filtered);
+  };
+  console.log(filteredOrders);
 
   return (
     <section className="flex flex-col h-full min-h-0 lg:border-2 lg:border-[#334A78] lg:rounded-lg bg-white">
@@ -85,10 +141,61 @@ export default function Orders() {
               <h2 className="text-xl text-[#374A75] font-semibold px-4 py-2">
                 Orders List
               </h2>
-              <button className="px-4 py-2 rounded text-[#374A75] text-sm flex items-center gap-3 border border-[#CCCCCC]">
-                <img src="/images/icons/filter-icon.png" alt="" />
-                <span className="md:block hidden">Filter</span>
-              </button>
+              <div className="relative ">
+                <button
+                  onClick={() => setFilterDropdown(!filterDropdown)}
+                  className="px-4 py-2 rounded text-[#374A75] text-sm flex items-center gap-3 border border-[#CCCCCC]"
+                >
+                  <img src="/images/icons/filter-icon.png" alt="" />
+                  <span className="md:block hidden">Filter</span>
+                </button>
+                {filterDropdown && (
+                  <div className="absolute right-0 bg-[#fff] p-2 text-nowrap border">
+                    <p className="capitalize text-sm text-[#374A75]">
+                      order status
+                    </p>
+                    <hr />
+                    <select
+                      name="orderStatus"
+                      id="orderStatus"
+                      className="mb-2 text-xs focus:outline-none w-full"
+                      value={orderStatusFilter}
+                      onChange={(e) => {
+                        const value = e.target.value;
+                        setOrderStatusFilter(value);
+                        filterOrders("orderStatus", value);
+                      }}
+                    >
+                      <option value="">All</option>
+                      <option value="approved">Approved</option>
+                      <option value="pending">Pending</option>
+                      <option value="shipped">Shipped</option>
+                      <option value="delivered">Delivered</option>
+                      <option value="cancelled">Cancelled</option>
+                      <option value="failed">Failed</option>
+                    </select>
+                    <hr />
+                    <p className="capitalize text-sm text-[#374A75]">
+                      payment status
+                    </p>
+                    <select
+                      name="paymentStatus"
+                      id="paymentStatus"
+                      className="text-xs focus:outline-none w-full"
+                      value={paymentStatusFilter}
+                      onChange={(e) => {
+                        const value = e.target.value;
+                        setPaymentStatusFilter(value);
+                        filterOrders("paymentStatus", value);
+                      }}
+                    >
+                      <option value="">All</option>
+                      <option value="completed">Paid</option>
+                      <option value="unpaid">Unpaid</option>
+                    </select>
+                  </div>
+                )}
+              </div>
             </div>
             <div className="md:px-2 hidden md:block">
               <div className="py-2 px-2 border-b border-[#232321] border-opacity-20">
