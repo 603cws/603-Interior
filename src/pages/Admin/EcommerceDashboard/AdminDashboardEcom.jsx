@@ -22,6 +22,9 @@ import BestSellingSection from "./BestSellingSection";
 import SalesSection from "./SalesSection";
 import DashboardProductCard from "../../vendor/DashboardProductCard";
 import Products from "./Products";
+import { BsArchive } from "react-icons/bs";
+import { CiDiscount1 } from "react-icons/ci";
+import { IoMdImages } from "react-icons/io";
 
 function handlesidebarState(state, action) {
   switch (action.type) {
@@ -291,7 +294,7 @@ function AdminDashboardEcom() {
             currentSection={sidebarstate?.currentSection}
           />
           <SidebarItem
-            icon={<BsBoxSeam />}
+            icon={<BsArchive />}
             text="orders"
             onClick={handleOrders}
             isExpanded={isExpanded}
@@ -312,14 +315,14 @@ function AdminDashboardEcom() {
             currentSection={sidebarstate?.currentSection}
           />
           <SidebarItem
-            icon={<FaUser />}
+            icon={<CiDiscount1 />}
             text="Discounts"
             onClick={handleDiscounts}
             isExpanded={isExpanded}
             currentSection={sidebarstate?.currentSection}
           />
           <SidebarItem
-            icon={<FaUser />}
+            icon={<IoMdImages />}
             text="Blogs"
             onClick={handleBlogs}
             isExpanded={isExpanded}
@@ -389,7 +392,7 @@ function AdminDashboardEcom() {
                 setIsOpen={setIsOpen}
               />
               <MobileMenuItem
-                icon={<BsBoxSeam />}
+                icon={<BsArchive />}
                 title="Orders"
                 currentSection={sidebarstate?.currentSection}
                 onClick={handleOrders}
@@ -410,14 +413,14 @@ function AdminDashboardEcom() {
                 setIsOpen={setIsOpen}
               />
               <MobileMenuItem
-                icon={<FaRegUserCircle />}
+                icon={<CiDiscount1 />}
                 title="Discounts"
                 currentSection={sidebarstate?.currentSection}
                 onClick={handleDiscounts}
                 setIsOpen={setIsOpen}
               />
               <MobileMenuItem
-                icon={<FaRegUserCircle />}
+                icon={<IoMdImages />}
                 title="Blogs"
                 currentSection={sidebarstate?.currentSection}
                 onClick={handleBlogs}

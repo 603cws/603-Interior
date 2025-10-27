@@ -33,12 +33,12 @@ function BestSellingSection({ sidebarDispatch, handleProductPreview }) {
         <h2 className="font-bold text-[#23272E] text-lg">
           Best Selling Product
         </h2>
-        <FilterButton
+        {/* <FilterButton
           iconSrc="./images/ecommerce/sort.png"
           altText="filter icon"
         >
           Filter
-        </FilterButton>
+        </FilterButton> */}
       </div>
 
       <table className="w-full text-sm text-[#23272E]">
@@ -114,7 +114,7 @@ function BestSellingSection({ sidebarDispatch, handleProductPreview }) {
             })
           }
         >
-          Details
+          View More
         </button>
       </div>
     </div>

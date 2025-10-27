@@ -414,27 +414,32 @@ function OrderDetails({ order, onBack }) {
     <section className="flex flex-col min-h-0 lg:rounded-lg font-Poppins">
       <button
         onClick={onBack}
-        className="text-[#555555] text-left py-2 px-2 lg:px-6 text-sm group"
+        className="text-[#555555] text-left py-1 md:py-2 px-2 lg:px-6 text-xs group"
       >
         &lt; <span className="group-hover:underline">Back to Order List</span>
       </button>
-
-      <h2 className="text-2xl font-semibold pb-3 px-2 lg:px-6 border-b-2 text-[#374A75]">
-        Order Details
-      </h2>
+      <div className="flex justify-between items-center pr-5 pb-2 border-b">
+        <h2 className="text-xl md:text-2xl font-semibold px-2 lg:px-6 text-[#374A75]">
+          Order Details
+        </h2>
+        <div className="flex gap-2 items-center rounded-md border p-2 text-[#374A75] text-sm md:text-xl bg-[#F9F9F9]">
+          <img src="/images/icons/export.png" alt="" />
+          Export
+        </div>
+      </div>
 
       {/* Scrollable content wrapper */}
       <div className="flex-1 overflow-y-auto custom-scrollbar px-3 pb-2">
         {/* Order ID */}
-        <div className="py-4 font-semibold text-xl flex relative mt-4">
-          <p>Orders ID: #{order.id}</p>
-          <p className="ml-6 capitalize bg-[#FF782F] bg-opacity-80 p-2 rounded-lg text-xs">
+        <div className="py-4 font-semibold flex flex-col-reverse md:flex-row gap-2 md:mt-4">
+          <p className="text-base md:text-xl">Orders ID: #{order.id}</p>
+          <p className="capitalize bg-[#FF782F] bg-opacity-80 text-[10px] p-1 md:p-2 rounded-lg md:text-xs text-center">
             {order.status}
           </p>
-          <div className="flex gap-2 items-center rounded-md absolute right-0 border p-2 text-[#374A75] text-xl bg-[#F9F9F9]">
+          {/* <div className="flex gap-2 items-center rounded-md absolute right-0 border p-2 text-[#374A75] text-xl bg-[#F9F9F9]">
             <img src="/images/icons/export.png" alt="" />
             Export
-          </div>
+          </div> */}
         </div>
 
         {/* Section 1 */}
@@ -449,21 +454,21 @@ function OrderDetails({ order, onBack }) {
                 className="w-10 h-10"
               />
               <div>
-                <h2 className="text-xl font-semibold text-[#232321]">
+                <h2 className="text-lg md:text-xl font-semibold text-[#232321]">
                   Customer
                 </h2>
-                <p className="text-base font-semibold capitalize text-[#70706E] mt-2">
+                <p className="text-sm md:text-base font-semibold capitalize text-[#70706E] mt-2">
                   Company Name: {order.users_profiles?.company_name || "N/A"}
                 </p>
-                <p className="text-base font-semibold text-[#70706E]">
+                <p className="text-sm md:text-base font-semibold text-[#70706E]">
                   Email: {order.users_profiles?.email || "N/A"}
                 </p>
-                <p className="text-base font-semibold capitalize text-[#70706E]">
+                <p className="text-sm md:text-base font-semibold capitalize text-[#70706E]">
                   Phone: {order.users_profiles?.phone || "N/A"}
                 </p>
               </div>
             </div>
-            <button className=" bg-[#003F62] hover:bg-[#4C69A4] text-white w-full rounded-lg py-1 mt-auto">
+            <button className=" bg-[#003F62] hover:bg-[#4C69A4] text-white w-full rounded-lg py-1 mt-auto text-sm md:text-base">
               View Profile
             </button>
           </div>
@@ -476,19 +481,19 @@ function OrderDetails({ order, onBack }) {
                 className="w-10 h-10"
               />
               <div>
-                <h2 className="text-xl font-semibold text-[#232321]">
+                <h2 className="text-lg md:text-xl font-semibold text-[#232321]">
                   Order Info
                 </h2>
-                <p className="text-base font-semibold capitalize text-[#70706E] mt-2">
+                <p className="text-sm md:text-base font-semibold capitalize text-[#70706E] mt-2">
                   payment mode: {order?.paymentDetails?.paymentMode || "N/A"}
                 </p>
-                <p className="text-base font-semibold capitalize text-[#70706E]">
+                <p className="text-sm md:text-base font-semibold capitalize text-[#70706E]">
                   status: {order.paymentDetails?.state || "N/A"}
                 </p>
-                <p className="text-base font-semibold capitalize text-[#70706E]">
+                <p className="text-sm md:text-base font-semibold capitalize text-[#70706E]">
                   transaction id: {order.paymentDetails?.transactionId || "N/A"}
                 </p>
-                <p className="text-base font-semibold capitalize text-[#70706E]">
+                <p className="text-sm md:text-base font-semibold capitalize text-[#70706E]">
                   date:{" "}
                   {order.created_at
                     ? new Date(order.created_at).toLocaleDateString("en-US", {
@@ -500,7 +505,7 @@ function OrderDetails({ order, onBack }) {
                 </p>
               </div>
             </div>
-            <button className="bg-[#003F62] hover:bg-[#4C69A4] text-white w-full rounded-lg py-1 mt-auto">
+            <button className="bg-[#003F62] hover:bg-[#4C69A4] text-white w-full rounded-lg py-1 mt-auto text-sm md:text-base">
               Download info
             </button>
           </div>
@@ -513,25 +518,25 @@ function OrderDetails({ order, onBack }) {
                 className="w-10 h-10"
               />
               <div>
-                <h2 className="text-xl font-semibold text-[#232321]">
+                <h2 className="text-lg md:text-xl font-semibold text-[#232321]">
                   Deliver to
                 </h2>
-                <p className="text-base font-semibold capitalize text-[#70706E] mt-2">
+                <p className="text-sm md:text-base font-semibold capitalize text-[#70706E] mt-2">
                   Address: {order.shippingAddress?.[0]?.address}
                 </p>
               </div>
             </div>
-            <button className="bg-[#003F62] hover:bg-[#4C69A4] text-white w-full rounded-lg py-1 mt-auto">
+            <button className="bg-[#003F62] hover:bg-[#4C69A4] text-white w-full rounded-lg py-1 mt-auto text-sm md:text-base">
               View Profile
             </button>
           </div>
         </div>
 
         {/* Section 3 */}
-        <div className="py-2">
+        <div className="py-2 ">
           <h3 className="text-lg font-semibold mb-2">Products</h3>
           <div className="bg-white rounded-lg shadow-xs">
-            <table className="w-full min-w-full border-separate border-spacing-0">
+            <table className="w-full min-w-full border-separate border-spacing-0 hidden md:inline-table">
               <thead>
                 <tr className="border-b border-gray-200">
                   <th className="text-[17px] text-gray-500 font-semibold text-left py-3 px-2">
@@ -601,9 +606,26 @@ function OrderDetails({ order, onBack }) {
                 })}
               </tbody>
             </table>
+
+            <div className="md:hidden">
+              {/* {order.product_variants_map.map((product) => (
+              <MobileOrderItem key={product.id} product={product} />
+            ))} */}
+              {order?.products?.map((product) => {
+                const variantDetails =
+                  order?.product_variants_map?.[product.id]?.[0];
+                return (
+                  <MobileOrderItem
+                    key={product.id}
+                    product={product}
+                    variant={variantDetails}
+                  />
+                );
+              })}
+            </div>
             {/* Summary section */}
-            <div className="flex flex-col items-end mt-5 mr-4">
-              <div className="text-base flex flex-col gap-1 w-52">
+            <div className="flex flex-col items-end mt-5 md:mr-4">
+              <div className="text-sm md:text-base flex flex-col gap-1 w-52">
                 <div className="flex justify-between">
                   <span className="text-gray-700">Subtotal</span>
                   <span className="text-[#232321] font-semibold">
@@ -630,8 +652,8 @@ function OrderDetails({ order, onBack }) {
                 </div>
               </div>
               <div className="flex justify-between items-center mt-2 w-52">
-                <span className="text-xl font-bold">Total</span>
-                <span className="text-2xl font-extrabold">
+                <span className="text-base md:text-xl font-bold">Total</span>
+                <span className="text-lg md:text-2xl font-extrabold">
                   ₹{total.toFixed(2)}
                 </span>
               </div>
@@ -674,6 +696,36 @@ function MobileOrderCard({ order, setSelectedOrder }) {
         </p>
         <p className="p-1 text-[#374A75] border border-[#374A75]/80">
           {order.paymentDetails?.state || "N/A"}
+        </p>
+      </div>
+    </div>
+  );
+}
+
+function MobileOrderItem({ product, variant }) {
+  console.log(product, variant);
+
+  return (
+    <div className="font-Poppins border-b my-2">
+      <div className="flex gap-4">
+        <img
+          src={`${baseImageUrl}${variant.image}`}
+          alt=""
+          className="h-16 w-16 border"
+        />
+        <h3 className="font-semibold text-sm line-clamp-1">{variant.title}</h3>
+      </div>
+      <div className="flex justify-between text-sm font-semibold text-[#232321]/80 capitalize">
+        <p>qunatity</p>
+        <p className="p-2 border rounded-sm">{product.quantity}</p>
+      </div>
+      <div className="flex justify-between text-sm font-semibold text-[#232321]/80 capitalize">
+        <p>total</p>
+        <p>
+          {product.price.toLocaleString("en-IN", {
+            style: "currency",
+            currency: "INR",
+          })}
         </p>
       </div>
     </div>

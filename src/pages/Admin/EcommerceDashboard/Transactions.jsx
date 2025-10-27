@@ -28,12 +28,12 @@ function Transactions({ sidebarDispatch }) {
     <div className="border border-gray-200 rounded-lg shadow-sm p-4 cursor-default">
       <div className="flex justify-between items-center mb-3">
         <h2 className="font-bold text-lg text-[#23272E]">Transaction</h2>
-        <FilterButton
+        {/* <FilterButton
           iconSrc="./images/ecommerce/sort.png"
           altText="filter icon"
         >
           Filter
-        </FilterButton>
+        </FilterButton> */}
       </div>
       {loadingOrders ? (
         <div className="flex justify-center items-center py-8 text-[#6A717F] text-lg">
@@ -87,12 +87,12 @@ function Transactions({ sidebarDispatch }) {
       )}
       <div className="flex justify-end mt-3">
         <button
-          className="border border-[#6467F2] text-[#6467F2] text-sm px-4 py-1 rounded-full hover:bg-blue-50"
+          className="capitalize border border-[#6467F2] text-[#6467F2] text-sm px-4 py-1 rounded-full hover:bg-blue-50"
           onClick={() =>
             sidebarDispatch({ type: "TOGGLE_SECTION", payload: "Orders" })
           }
         >
-          Details
+          view all
         </button>
       </div>
     </div>
