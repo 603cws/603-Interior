@@ -12,7 +12,7 @@ function BestSellingSection({ sidebarDispatch, handleProductPreview }) {
       setLoading(true);
       const { data, error } = await supabase
         .from("product_variants")
-        .select("*")
+        .select("*,products(*)")
         .order("created_at", { ascending: false })
         .neq("productDisplayType", "boq");
 

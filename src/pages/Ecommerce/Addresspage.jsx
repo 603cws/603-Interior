@@ -260,6 +260,7 @@ function Addresspage() {
         image: item?.productId?.image,
         name: item?.productId?.title,
         description: item?.productId?.details,
+        vendorId: item?.productId?.vendor_id,
       }));
 
       const today = new Date();

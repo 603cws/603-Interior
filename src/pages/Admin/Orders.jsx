@@ -1,8 +1,8 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { supabase } from "../../services/supabase";
 import { baseImageUrl } from "../../utils/HelperConstant";
 
-export default function Orders() {
+export default function Orders({ vendorId = null }) {
   const [ordersData, setOrdersData] = React.useState(null);
   const [currentPage, setCurrentPage] = React.useState(1);
   const [itemsPerPage, setItemsPerPage] = React.useState(15);
@@ -31,8 +31,17 @@ export default function Orders() {
         return;
       }
 
+      // ✅ Filter by vendorId if provided
+      const filteredOrders = vendorId
+        ? orders.filter(
+            (order) =>
+              Array.isArray(order.products) &&
+              order.products.some((product) => product.vendorId === vendorId)
+          )
+        : orders;
+
       const ordersWithVariants = await Promise.all(
-        orders.map(async (order) => {
+        filteredOrders.map(async (order) => {
           const productVariantMap = {};
 
           if (order.products?.length) {
@@ -132,6 +141,7 @@ export default function Orders() {
         <OrderDetails
           order={selectedOrder}
           onBack={() => setSelectedOrder(null)}
+          vendorId={vendorId}
         />
       ) : (
         <section className="lg:rounded-lg font-Poppins overflow-hidden">
@@ -396,7 +406,7 @@ export default function Orders() {
   );
 }
 
-function OrderDetails({ order, onBack }) {
+function OrderDetails({ order, onBack, vendorId = null }) {
   console.log(order);
 
   const subtotal =
@@ -490,9 +500,12 @@ function OrderDetails({ order, onBack }) {
                 <p className="text-sm md:text-base font-semibold capitalize text-[#70706E]">
                   status: {order.paymentDetails?.state || "N/A"}
                 </p>
-                <p className="text-sm md:text-base font-semibold capitalize text-[#70706E]">
-                  transaction id: {order.paymentDetails?.transactionId || "N/A"}
-                </p>
+                {!vendorId && (
+                  <p className="text-sm md:text-base font-semibold capitalize text-[#70706E]">
+                    transaction id:{" "}
+                    {order.paymentDetails?.transactionId || "N/A"}
+                  </p>
+                )}
                 <p className="text-sm md:text-base font-semibold capitalize text-[#70706E]">
                   date:{" "}
                   {order.created_at
@@ -624,40 +637,42 @@ function OrderDetails({ order, onBack }) {
               })}
             </div>
             {/* Summary section */}
-            <div className="flex flex-col items-end mt-5 md:mr-4">
-              <div className="text-sm md:text-base flex flex-col gap-1 w-52">
-                <div className="flex justify-between">
-                  <span className="text-gray-700">Subtotal</span>
-                  <span className="text-[#232321] font-semibold">
-                    ₹{subtotal.toFixed(2)}
-                  </span>
+            {!vendorId && (
+              <div className="flex flex-col items-end mt-5 md:mr-4">
+                <div className="text-sm md:text-base flex flex-col gap-1 w-52">
+                  <div className="flex justify-between">
+                    <span className="text-gray-700">Subtotal</span>
+                    <span className="text-[#232321] font-semibold">
+                      ₹{subtotal.toFixed(2)}
+                    </span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-700">GST</span>
+                    <span className="text-[#232321] font-semibold">
+                      ₹{tax.toFixed(2)}
+                    </span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-700">Discount</span>
+                    <span className="text-[#232321] font-semibold">
+                      ₹{discount.toFixed(2)}
+                    </span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-700">Shipping Rate</span>
+                    <span className="text-[#232321] font-semibold">
+                      ₹{shipping.toFixed(2)}
+                    </span>
+                  </div>
                 </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-700">GST</span>
-                  <span className="text-[#232321] font-semibold">
-                    ₹{tax.toFixed(2)}
-                  </span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-700">Discount</span>
-                  <span className="text-[#232321] font-semibold">
-                    ₹{discount.toFixed(2)}
-                  </span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-700">Shipping Rate</span>
-                  <span className="text-[#232321] font-semibold">
-                    ₹{shipping.toFixed(2)}
+                <div className="flex justify-between items-center mt-2 w-52">
+                  <span className="text-base md:text-xl font-bold">Total</span>
+                  <span className="text-lg md:text-2xl font-extrabold">
+                    ₹{total.toFixed(2)}
                   </span>
                 </div>
               </div>
-              <div className="flex justify-between items-center mt-2 w-52">
-                <span className="text-base md:text-xl font-bold">Total</span>
-                <span className="text-lg md:text-2xl font-extrabold">
-                  ₹{total.toFixed(2)}
-                </span>
-              </div>
-            </div>
+            )}
           </div>
         </div>
       </div>
