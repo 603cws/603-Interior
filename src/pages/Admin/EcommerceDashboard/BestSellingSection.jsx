@@ -8,24 +8,52 @@ function BestSellingSection({ sidebarDispatch, handleProductPreview }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchVariants = async () => {
+    const fetchData = async () => {
       setLoading(true);
-      const { data, error } = await supabase
+
+      const { data: variants, error: variantError } = await supabase
         .from("product_variants")
         .select("*,products(*)")
         .order("created_at", { ascending: false })
         .neq("productDisplayType", "boq");
+      // .limit(5);
 
-      if (error) {
-        console.error(error);
+      if (variantError) {
+        console.error(variantError);
         setVariantsData([]);
-      } else {
-        setVariantsData(data);
+        setLoading(false);
+        return;
       }
+
+      const { data: orders, error: orderError } = await supabase
+        .from("orders")
+        .select("products");
+
+      if (orderError) {
+        console.error(orderError);
+        setVariantsData([]);
+        setLoading(false);
+        return;
+      }
+
+      // Count how many orders contain each variant
+      const variantsWithCounts = variants.map((variant) => {
+        const totalOrders = orders.filter((order) =>
+          order.products?.some((p) => p.id === variant.id)
+        ).length;
+
+        return { ...variant, count: totalOrders };
+      });
+
+      const sortedVariants = variantsWithCounts.sort(
+        (a, b) => b.count - a.count
+      );
+
+      setVariantsData(sortedVariants);
       setLoading(false);
     };
 
-    fetchVariants();
+    fetchData();
   }, []);
   return (
     <div className="border border-gray-200 rounded-lg shadow-sm p-4">
@@ -47,7 +75,7 @@ function BestSellingSection({ sidebarDispatch, handleProductPreview }) {
             <th className="bg-[#E7EAF8] rounded-l-lg pl-4 py-3 text-[#6A717F] text-left">
               PRODUCT
             </th>
-            <th className="bg-[#E7EAF8] py-3 text-[#6A717F] text-left">
+            <th className="bg-[#E7EAF8] py-3 text-[#6A717F] text-center">
               TOTAL ORDER
             </th>
             <th className="bg-[#E7EAF8] py-3 text-[#6A717F] text-left">
@@ -83,7 +111,7 @@ function BestSellingSection({ sidebarDispatch, handleProductPreview }) {
                     {p.title}
                   </span>
                 </td>
-                <td>{p.total ? p.total : "-"}</td>
+                <td className="text-center">{p.count ?? "-"}</td>
                 <td>
                   <span
                     className={`flex items-center gap-2 ${

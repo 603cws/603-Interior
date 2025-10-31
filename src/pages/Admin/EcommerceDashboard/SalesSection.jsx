@@ -73,21 +73,73 @@ function SalesSection() {
   );
 
   // Prepare chart data - group by date
+  // const getChartData = () => {
+  //   const dateMap = {};
+
+  //   filteredOrders.forEach((order) => {
+  //     const date = new Date(order.created_at).toLocaleDateString("en-GB", {
+  //       day: "2-digit",
+  //       month: "short",
+  //     });
+  //     if (!dateMap[date]) {
+  //       dateMap[date] = 0;
+  //     }
+  //     dateMap[date] += parseFloat(order.finalPrice) || 0;
+  //   });
+
+  //   const categories = Object.keys(dateMap).slice(0, 10).reverse(); // last 10 dates
+  //   const data = categories.map((date) => dateMap[date].toFixed(2));
+
+  //   return { categories, data };
+  // };
+
   const getChartData = () => {
     const dateMap = {};
 
     filteredOrders.forEach((order) => {
-      const date = new Date(order.created_at).toLocaleDateString("en-GB", {
-        day: "2-digit",
-        month: "short",
-      });
-      if (!dateMap[date]) {
-        dateMap[date] = 0;
+      const createdAt = new Date(order.created_at);
+      let key;
+
+      if (timeFilter === 7 || timeFilter === 14 || timeFilter === 31) {
+        // Group by day
+        key = createdAt.toLocaleDateString("en-GB", {
+          day: "2-digit",
+          month: "short",
+        });
+      } else if (timeFilter === 365) {
+        // Group by month
+        key = createdAt.toLocaleDateString("en-GB", {
+          month: "short",
+          year: "numeric",
+        });
+      } else if (timeFilter === "all") {
+        // Group by year
+        key = createdAt.getFullYear().toString();
+      } else {
+        key = createdAt.toLocaleDateString("en-GB", {
+          day: "2-digit",
+          month: "short",
+        });
       }
-      dateMap[date] += parseFloat(order.finalPrice) || 0;
+
+      if (!dateMap[key]) {
+        dateMap[key] = 0;
+      }
+      dateMap[key] += parseFloat(order.finalPrice) || 0;
     });
 
-    const categories = Object.keys(dateMap).slice(0, 10).reverse(); // last 10 dates
+    // Sort keys chronologically
+    const sortedKeys = Object.keys(dateMap).sort((a, b) => {
+      if (timeFilter === "all") return parseInt(a) - parseInt(b); // year comparison
+      return new Date(a) - new Date(b);
+    });
+
+    // For shorter time frames, show last 10 data points max
+    const categories =
+      timeFilter === "all" || timeFilter === 365
+        ? sortedKeys
+        : sortedKeys.slice(-10);
+
     const data = categories.map((date) => dateMap[date].toFixed(2));
 
     return { categories, data };
@@ -123,6 +175,9 @@ function SalesSection() {
     },
     xaxis: {
       categories: chartData.categories,
+      title: {
+        text: "Time Period",
+      },
       labels: {
         style: {
           colors: "#6A717F",
@@ -164,10 +219,10 @@ function SalesSection() {
           }
           className="border border-gray-300 rounded-lg px-3 py-1 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
         >
-          <option value={7}>Last 7 Days</option>
-          <option value={14}>Last 14 Days</option>
-          <option value={31}>Last Month</option>
-          <option value={365}>Last Year</option>
+          <option value={7}>7 Days</option>
+          <option value={14}>14 Days</option>
+          <option value={31}>Month</option>
+          <option value={365}>Year</option>
           <option value="all">All Time</option>
         </select>
       </div>

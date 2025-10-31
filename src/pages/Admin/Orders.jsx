@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { supabase } from "../../services/supabase";
 import { baseImageUrl } from "../../utils/HelperConstant";
+import { exportToExcel } from "../../utils/DataExport";
 
 export default function Orders({ vendorId = null }) {
   const [ordersData, setOrdersData] = React.useState(null);
@@ -128,7 +129,6 @@ export default function Orders({ vendorId = null }) {
 
     setFilteredOrders(filtered);
   };
-  console.log(filteredOrders);
 
   return (
     <section className="flex flex-col h-full min-h-0 lg:border-2 lg:border-[#334A78] lg:rounded-lg bg-white">
@@ -407,23 +407,10 @@ export default function Orders({ vendorId = null }) {
 }
 
 function OrderDetails({ order, onBack, vendorId = null }) {
-  console.log(order);
-
   // Filter products based on vendorId if provided
   const filteredProducts = vendorId
     ? order.products?.filter((item) => item.vendorId === vendorId)
     : order.products;
-
-  const subtotal =
-    filteredProducts?.reduce(
-      (acc, item) => acc + item.price * item.quantity,
-      0
-    ) || 0;
-
-  const tax = subtotal * 0.2; // 20% tax
-  const discount = order.coupon?.discount || 0; // Use actual discount if available in order
-  const shipping = order.shippingRate || 0; // Use actual shipping rate if available
-  const total = subtotal + tax - discount + shipping;
 
   return (
     <section className="flex flex-col min-h-0 lg:rounded-lg font-Poppins">
@@ -437,10 +424,37 @@ function OrderDetails({ order, onBack, vendorId = null }) {
         <h2 className="text-xl md:text-2xl font-semibold px-2 lg:px-6 text-[#374A75]">
           Order Details
         </h2>
-        <div className="flex gap-2 items-center rounded-md border p-2 text-[#374A75] text-sm md:text-xl bg-[#F9F9F9]">
+        <button
+          onClick={() => {
+            const exportData = Object.entries(order.product_variants_map).map(
+              ([variantId, variants]) => {
+                const variant = variants[0];
+                const product = order.products.find((p) => p.id === variant.id);
+
+                return {
+                  "Order ID": order.id || "",
+                  "Order Status": order.status || "",
+                  "Variant ID": variantId || "",
+                  "Product ID": variant.product_id || "",
+                  "Product Name": variant.title || "",
+                  Price: `₹${variant.price}` || "",
+                  Quantity: product?.quantity || "",
+                  Description: variant.details || "",
+                  Dimension: variant.dimensions || "NA",
+                  Manufacturer: variant.manufacturer || "",
+                  Segment: variant.segment || "",
+                  Category: variant.product_type || "",
+                  "Order Date": new Date(order.created_at).toLocaleDateString(),
+                };
+              }
+            );
+            exportToExcel(exportData, `${order.id}-products.xlsx`);
+          }}
+          className="flex gap-2 items-center rounded-md border p-2 text-[#374A75] text-sm md:text-lg hover:bg-[#F9F9F9]"
+        >
           <img src="/images/icons/export.png" alt="" />
           Export
-        </div>
+        </button>
       </div>
 
       {/* Scrollable content wrapper */}
@@ -451,10 +465,6 @@ function OrderDetails({ order, onBack, vendorId = null }) {
           <p className="capitalize bg-[#FF782F] bg-opacity-80 text-[10px] p-1 md:p-2 rounded-lg md:text-xs text-center">
             {order.status}
           </p>
-          {/* <div className="flex gap-2 items-center rounded-md absolute right-0 border p-2 text-[#374A75] text-xl bg-[#F9F9F9]">
-            <img src="/images/icons/export.png" alt="" />
-            Export
-          </div> */}
         </div>
 
         {/* Section 1 */}
@@ -485,9 +495,9 @@ function OrderDetails({ order, onBack, vendorId = null }) {
                 )}
               </div>
             </div>
-            <button className=" bg-[#003F62] hover:bg-[#4C69A4] text-white w-full rounded-lg py-1 mt-auto text-sm md:text-base">
+            {/* <button className=" bg-[#003F62] hover:bg-[#4C69A4] text-white w-full rounded-lg py-1 mt-auto text-sm md:text-base">
               View Profile
-            </button>
+            </button> */}
           </div>
           {/* Order Info */}
           <div className="border p-4 rounded-2xl flex flex-col gap-3">
@@ -525,9 +535,9 @@ function OrderDetails({ order, onBack, vendorId = null }) {
                 </p>
               </div>
             </div>
-            <button className="bg-[#003F62] hover:bg-[#4C69A4] text-white w-full rounded-lg py-1 mt-auto text-sm md:text-base">
+            {/* <button className="bg-[#003F62] hover:bg-[#4C69A4] text-white w-full rounded-lg py-1 mt-auto text-sm md:text-base">
               Download info
-            </button>
+            </button> */}
           </div>
           {/* Deliver to */}
           <div className="border p-4 rounded-2xl flex flex-col gap-3">
@@ -542,13 +552,18 @@ function OrderDetails({ order, onBack, vendorId = null }) {
                   Deliver to
                 </h2>
                 <p className="text-sm md:text-base font-semibold capitalize text-[#70706E] mt-2">
-                  Address: {order.shippingAddress?.[0]?.address}
+                  Address: {order.shippingAddress?.[0].name},
+                  <br />
+                  {order.shippingAddress?.[0]?.address},
+                  {order.shippingAddress?.[0]?.town},
+                  {order.shippingAddress?.[0]?.city}-
+                  {order.shippingAddress?.[0]?.pincode}
                 </p>
               </div>
             </div>
-            <button className="bg-[#003F62] hover:bg-[#4C69A4] text-white w-full rounded-lg py-1 mt-auto text-sm md:text-base">
+            {/* <button className="bg-[#003F62] hover:bg-[#4C69A4] text-white w-full rounded-lg py-1 mt-auto text-sm md:text-base">
               View Profile
-            </button>
+            </button> */}
           </div>
         </div>
 
@@ -628,9 +643,6 @@ function OrderDetails({ order, onBack, vendorId = null }) {
             </table>
 
             <div className="md:hidden">
-              {/* {order.product_variants_map.map((product) => (
-              <MobileOrderItem key={product.id} product={product} />
-            ))} */}
               {filteredProducts?.map((product) => {
                 const variantDetails =
                   order?.product_variants_map?.[product.id]?.[0];
@@ -650,32 +662,32 @@ function OrderDetails({ order, onBack, vendorId = null }) {
                   <div className="flex justify-between">
                     <span className="text-gray-700">Subtotal</span>
                     <span className="text-[#232321] font-semibold">
-                      ₹{subtotal.toFixed(2)}
+                      ₹{order?.totalMRP?.toFixed(2)}
                     </span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-700">GST</span>
                     <span className="text-[#232321] font-semibold">
-                      ₹{tax.toFixed(2)}
+                      ₹{order?.charges?.GST?.toFixed(2)}
                     </span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-700">Discount</span>
                     <span className="text-[#232321] font-semibold">
-                      ₹{discount.toFixed(2)}
+                      -₹{order?.coupon?.discount?.toFixed(2)}
                     </span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-700">Shipping Rate</span>
                     <span className="text-[#232321] font-semibold">
-                      ₹{shipping.toFixed(2)}
+                      ₹{order?.charges?.delivery?.toFixed(2)}
                     </span>
                   </div>
                 </div>
                 <div className="flex justify-between items-center mt-2 w-52">
                   <span className="text-base md:text-xl font-bold">Total</span>
                   <span className="text-lg md:text-2xl font-extrabold">
-                    ₹{total.toFixed(2)}
+                    ₹{order?.finalPrice?.toFixed(2)}
                   </span>
                 </div>
               </div>
@@ -725,26 +737,24 @@ function MobileOrderCard({ order, setSelectedOrder }) {
 }
 
 function MobileOrderItem({ product, variant }) {
-  console.log(product, variant);
-
   return (
     <div className="font-Poppins border-b my-2">
       <div className="flex gap-4">
         <img
-          src={`${baseImageUrl}${variant.image}`}
+          src={`${baseImageUrl}${variant?.image}`}
           alt=""
           className="h-16 w-16 border"
         />
-        <h3 className="font-semibold text-sm line-clamp-1">{variant.title}</h3>
+        <h3 className="font-semibold text-sm line-clamp-1">{variant?.title}</h3>
       </div>
       <div className="flex justify-between text-sm font-semibold text-[#232321]/80 capitalize">
         <p>qunatity</p>
-        <p className="p-2 border rounded-sm">{product.quantity}</p>
+        <p className="p-2 border rounded-sm">{product?.quantity}</p>
       </div>
       <div className="flex justify-between text-sm font-semibold text-[#232321]/80 capitalize">
         <p>total</p>
         <p>
-          {product.price.toLocaleString("en-IN", {
+          {product?.price.toLocaleString("en-IN", {
             style: "currency",
             currency: "INR",
           })}

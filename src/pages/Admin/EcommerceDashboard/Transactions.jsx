@@ -12,7 +12,8 @@ function Transactions({ sidebarDispatch }) {
       const { data: orders, error } = await supabase
         .from("orders")
         .select(`*, users_profiles(*)`)
-        .order("created_at", { ascending: false });
+        .order("created_at", { ascending: false })
+        .limit(7);
       if (error) {
         console.error(error);
         return;
@@ -44,15 +45,15 @@ function Transactions({ sidebarDispatch }) {
           <thead className="border-b text-[#7C7C7C]">
             <tr>
               <th className="py-2 text-left">No.</th>
-              <th className="py-2 text-left">Id Customer</th>
+              <th className="py-2 text-left">Order Id</th>
               <th className="py-2 text-left">Order Date</th>
               <th className="py-2 text-left">Status</th>
               <th className="py-2 text-left">Amount</th>
             </tr>
           </thead>
           <tbody className="text-black text-sm">
-            {ordersData?.slice(0, 7).map((t, i) => (
-              <tr key={i}>
+            {ordersData?.map((t, i) => (
+              <tr key={i} className="cursor-pointer">
                 <td className="py-2">{i + 1}.</td>
                 <td title={t.id}>
                   {t.id.length > 6 ? `${t.id.slice(0, 6)}...` : t.id}
