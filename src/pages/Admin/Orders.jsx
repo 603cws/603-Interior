@@ -409,8 +409,13 @@ export default function Orders({ vendorId = null }) {
 function OrderDetails({ order, onBack, vendorId = null }) {
   console.log(order);
 
+  // Filter products based on vendorId if provided
+  const filteredProducts = vendorId
+    ? order.products?.filter((item) => item.vendorId === vendorId)
+    : order.products;
+
   const subtotal =
-    order.products?.reduce(
+    filteredProducts?.reduce(
       (acc, item) => acc + item.price * item.quantity,
       0
     ) || 0;
@@ -567,7 +572,7 @@ function OrderDetails({ order, onBack, vendorId = null }) {
                 </tr>
               </thead>
               <tbody>
-                {order.products?.map((orderItem, idx) => {
+                {filteredProducts?.map((orderItem, idx) => {
                   // Get variants array for this product, using orderItem.id
                   const variants =
                     order.product_variants_map?.[orderItem.id] || [];
@@ -624,7 +629,7 @@ function OrderDetails({ order, onBack, vendorId = null }) {
               {/* {order.product_variants_map.map((product) => (
               <MobileOrderItem key={product.id} product={product} />
             ))} */}
-              {order?.products?.map((product) => {
+              {filteredProducts?.map((product) => {
                 const variantDetails =
                   order?.product_variants_map?.[product.id]?.[0];
                 return (
