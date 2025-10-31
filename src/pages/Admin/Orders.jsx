@@ -478,9 +478,11 @@ function OrderDetails({ order, onBack, vendorId = null }) {
                 <p className="text-sm md:text-base font-semibold text-[#70706E]">
                   Email: {order.users_profiles?.email || "N/A"}
                 </p>
-                <p className="text-sm md:text-base font-semibold capitalize text-[#70706E]">
-                  Phone: {order.users_profiles?.phone || "N/A"}
-                </p>
+                {!vendorId && (
+                  <p className="text-sm md:text-base font-semibold capitalize text-[#70706E]">
+                    Phone: {order.users_profiles?.phone || "N/A"}
+                  </p>
+                )}
               </div>
             </div>
             <button className=" bg-[#003F62] hover:bg-[#4C69A4] text-white w-full rounded-lg py-1 mt-auto text-sm md:text-base">
