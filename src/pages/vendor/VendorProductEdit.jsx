@@ -439,7 +439,7 @@ function VendorProductEdit({
       console.log("Error in onSubmit:", error);
       toast.error("An unexpected error occurred.");
     } finally {
-      //   handleFormClear();
+      handleFormClear();
       setIsSubmitting(false);
     }
 

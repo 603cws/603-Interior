@@ -6,7 +6,7 @@ import {
   MdOutlineKeyboardArrowRight,
 } from "react-icons/md"; //MdOutlineKeyboardArrowLeft
 import { AiFillStar } from "react-icons/ai";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import { supabase } from "../../services/supabase";
 import { useNavigate } from "react-router-dom";
 import ReusableSwiper from "./ReusableSwiper";
@@ -32,25 +32,6 @@ import {
 } from "@heroicons/react/24/outline";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import DetailedReview from "./DetailedReview";
-
-// const reviews = [
-//   {
-//     rating: 4.4,
-//     title: "Very good product!!",
-//     content:
-//       "Poor quality. The seat is not even parallel to the ground, it is tilted to the lift as it is clearly visible observing the plane of the seat or the lines on the backrest compared to the ground. As a result sitting on the chair feels like leaning toward left always. The lower back rest is good........   Poor quality. The seat is not even parallel to the ground, it is tilted to the lift as it is clearly visible observing the plane of the seat or the lines on the backrest compared to the ground. As a result sitting on the chair feels like leaning toward left always. The lower back rest is good........  Poor quality. The seat is not even parallel to the ground, it is tilted to the lift as it is clearly visible observing the plane of the seat or the lines on the backrest compared to the ground. As a result sitting on the chair feels like leaning toward left always. The lower back rest is good........  Poor quality. The seat is not even parallel to the ground, it is tilted to the lift as it is clearly visible observing the plane of the seat or the lines on the backrest compared to the ground. As a result sitting on the chair feels like leaning toward left always. The lower back rest is good........  Poor quality. The seat is not even parallel to the ground, it is tilted to the lift as it is clearly visible observing the plane of the seat or the lines on the backrest compared to the ground. As a result sitting on the chair feels like leaning toward left always. The lower back rest is good........  Poor quality. The seat is not even parallel to the ground, it is tilted to the lift as it is clearly visible observing the plane of the seat or the lines on the backrest compared to the ground. As a result sitting on the chair feels like leaning toward left always. The lower back rest is good........  Poor quality. The seat is not even parallel to the ground, it is tilted to the lift as it is clearly visible observing the plane of the seat or the lines on the backrest compared to the ground. As a result sitting on the chair feels like leaning toward left always. The lower back rest is good........  Poor quality. The seat is not even parallel to the ground, it is tilted to the lift as it is clearly visible observing the plane of the seat or the lines on the backrest compared to the ground. As a result sitting on the chair feels like leaning toward left always. The lower back rest is good........",
-//     likes: 21,
-//     comments: 21,
-//   },
-//   {
-//     rating: 4.4,
-//     title: "Very good product!!",
-//     content:
-//       "Poor quality. The seat is not even parallel to the ground, it is tilted to the left...",
-//     likes: 21,
-//     comments: 21,
-//   },
-// ];
 
 function ProductView() {
   const [mainImageHovered, setMainImageHovered] = useState(false); // For main image hover effect
@@ -84,12 +65,14 @@ function ProductView() {
   ];
 
   const navigate = useNavigate();
-
+  const location = useLocation();
   const { handleAddToCart } = useHandleAddToCart();
   const { compare, setCompare } = useApp();
 
   //   get the product based on the product id
   const { id: productid } = useParams();
+  const fromPage = location.state?.from || "products";
+  console.log(fromPage);
 
   const { cartItems, isAuthenticated, localcartItems, accountHolder } =
     useApp();
@@ -538,7 +521,10 @@ function ProductView() {
           {/* breadcumbs */}
           <div className="mt-6 lg:mt-10">
             <div className="md:flex mx-10 items-center text-[#334A78] text-sm mt-4 mb-4 md:mb-0 hidden">
-              <button onClick={() => navigate("/products")}>Home</button>
+              <button onClick={() => navigate(`/${fromPage}`)}>
+                {" "}
+                {fromPage === "shop" ? "Shop" : "Home"}
+              </button>
               <MdOutlineKeyboardArrowRight
                 size={15}
                 style={{ color: "#334A78" }}
@@ -650,8 +636,13 @@ function ProductView() {
                   <div className=" flex  gap-3 my-2">
                     <div className="flex items-start justify-start gap-2">
                       <button
-                        className="border-2 px-2 w-12 py-2 font-semibold"
+                        className={`border-2 px-2 w-12 py-2 font-semibold  ${
+                          product?.stockQty < 1
+                            ? "cursor-not-allowed"
+                            : "cursor-pointer"
+                        }`}
                         onClick={handleProductQuantityDec}
+                        disabled={product?.stockQty < 1}
                       >
                         -
                       </button>
@@ -659,28 +650,55 @@ function ProductView() {
                         type="number"
                         className="border-2 px-2 w-12 py-2 rounded text-center [&::-webkit-inner-spin-button]:appearance-none  focus:outline-none focus:ring-0 text-xs md:text-[13px] leading-6"
                         min={1}
-                        value={productqunatity}
+                        value={product?.stockQty > 0 ? productqunatity : 0}
+                        disabled={product?.stockQty < 1}
                         readOnly
                       />
                       <button
-                        className="border-2 px-2 w-12 py-2 font-semibold"
+                        className={`border-2 px-2 w-12 py-2 font-semibold  ${
+                          product?.stockQty < 1
+                            ? "cursor-not-allowed"
+                            : "cursor-pointer"
+                        }`}
                         onClick={handleProductQuantityInc}
+                        disabled={product?.stockQty < 1}
                       >
                         +
                       </button>
                     </div>
                   </div>
+                  {product?.stockQty > 0 && product?.stockQty < 10 ? (
+                    <span className="text-xs text-[#F87171]">
+                      Hurry Up! Only {product.stockQty} left.
+                    </span>
+                  ) : product?.stockQty === 0 ? (
+                    <span className="text-xs text-[#F87171]">
+                      Currently out of stock
+                    </span>
+                  ) : null}
                 </div>
 
                 {/* add to card and buy now */}
                 <div className="my-4 lg:flex gap-8 hidden">
                   <button
                     onClick={() => handleAddToCart(product, isCarted)}
-                    className="text-[#212B36] uppercase bg-[#FFFFFF] border border-[#212B36] w-52 px-10 py-4 rounded-sm hover:bg-[#334A78] hover:text-[#fff] transition-colors duration-500 ease-in-out"
+                    disabled={product?.stockQty < 1}
+                    className={`text-[#212B36] uppercase bg-[#FFFFFF] border border-[#212B36] w-52 px-10 py-4 rounded-sm hover:bg-[#334A78] hover:text-[#fff] transition-colors duration-500 ease-in-out ${
+                      product?.stockQty < 1
+                        ? "cursor-not-allowed"
+                        : "cursor-pointer"
+                    }`}
                   >
                     {isCarted ? "go to cart" : "ADD to cart"}
                   </button>
-                  <button className="text-[#212B36] uppercase bg-[#FFFFFF] border border-[#212B36] w-52 px-10 py-4 rounded-sm hover:bg-[#334A78] hover:text-[#fff] transition-colors duration-500 ease-in-out">
+                  <button
+                    disabled={product?.stockQty < 1}
+                    className={`text-[#212B36] uppercase bg-[#FFFFFF] border border-[#212B36] w-52 px-10 py-4 rounded-sm hover:bg-[#334A78] hover:text-[#fff] transition-colors duration-500 ease-in-out ${
+                      product?.stockQty < 1
+                        ? "cursor-not-allowed"
+                        : "cursor-pointer"
+                    }`}
+                  >
                     buy now
                   </button>
                 </div>

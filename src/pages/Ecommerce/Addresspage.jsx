@@ -248,10 +248,28 @@ function Addresspage() {
 
   console.log("accountholder", accountHolder);
 
+  // const checkStock = (availableStock, requiredQty) => {
+  //   if (availableStock > requiredQty) return true;
+  // };
+
   const handlePayment = async () => {
     // test for iframe
     setpaymentLoading((prev) => !prev);
     try {
+      //check for availability
+      const insufficientStock = cartItems.filter(
+        (item) => item.productId.stockQty < item.quantity
+      );
+
+      if (insufficientStock.length > 0) {
+        insufficientStock.forEach((item) => {
+          toast.error(
+            `${item.productId.title} only has ${item.productId.stockQty} left in stock.`
+          );
+        });
+        setpaymentLoading(false);
+        return;
+      }
       // create a order in db
       const products = cartItems.map((item) => ({
         id: item.productId.id,
@@ -302,7 +320,7 @@ function Addresspage() {
         throw new Error("data not insterted");
       }
 
-      // Generate a unique orderId (you can also do this from backend)
+      // unique orderId (you can also do this from backend)
       const orderId = neworder?.id;
       const amount = Math.round(neworder?.finalPrice * 100); // amount in paise (10000 = ₹100)
 
@@ -374,6 +392,30 @@ function Addresspage() {
 
               if (data?.success && data?.status === "COMPLETED") {
                 toast.success("payment completed");
+
+                //update quantity
+                for (const item of cartItems) {
+                  const newStock = item.productId.stockQty - item.quantity;
+
+                  if (newStock < 0) continue;
+
+                  const { error: stockError } = await supabase
+                    .from("product_variants")
+                    .update({ stockQty: newStock })
+                    .eq("id", item.productId.id);
+
+                  if (stockError) {
+                    console.error(
+                      `Failed to update stock for ${item.productId.title}:`,
+                      stockError
+                    );
+                  } else {
+                    console.log(
+                      `Updated stock for ${item.productId.title}: ${item.productId.stockQty} → ${newStock}`
+                    );
+                  }
+                }
+
                 // clear the cart
                 const userid = accountHolder?.userId;
                 await deleteCart(userid);

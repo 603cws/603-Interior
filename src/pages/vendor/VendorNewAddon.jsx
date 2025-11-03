@@ -6,7 +6,11 @@ import { FaRegQuestionCircle } from "react-icons/fa";
 import { supabase } from "../../services/supabase";
 import { toast } from "react-hot-toast"; //Toaster
 import { useApp } from "../../Context/Context";
-import { AllCatArray, specialArray } from "../../utils/AllCatArray";
+import {
+  AllCatArray,
+  displayOptions,
+  specialArray,
+} from "../../utils/AllCatArray";
 
 function VendorNewAddon({
   setAddNewProduct,
@@ -40,7 +44,11 @@ function VendorNewAddon({
     price: "",
     image: null,
     dimension: "",
+    mrp: "",
+    sellingPrice: "",
+    quantity: "",
   });
+  const [displayOption, setDisplayOption] = useState("");
 
   const { accountHolder } = useApp();
 
@@ -230,6 +238,12 @@ function VendorNewAddon({
             category: category,
             specifications: subSubCategory,
             dimensions: addon?.dimension,
+            productDisplayType: displayOption,
+            stockQty: addon.quantity || 0,
+            ecommercePrice: {
+              mrp: addon.mrp,
+              sellingPrice: addon.sellingPrice,
+            },
           });
 
         if (addonVariantError) {
@@ -298,6 +312,9 @@ function VendorNewAddon({
       price: "",
       image: null,
       dimension: "",
+      mrp: "",
+      sellingPrice: "",
+      quantity: "",
     });
     setDimensions({
       height: "",
@@ -307,6 +324,7 @@ function VendorNewAddon({
     setCategory("");
     setSubSubCategory("");
     removeFile();
+    setDisplayOption("");
   };
 
   const handlecategorychange = (e) => {
@@ -389,6 +407,30 @@ function VendorNewAddon({
                   })}
                 </select>
               </div>
+              <div>
+                <h4 className="text-[#7B7B7B]">
+                  Select where to display the product
+                </h4>
+                <select
+                  name="displayType"
+                  id="displayType"
+                  className="w-full border-2 py-1.5 px-2 rounded-lg"
+                  value={displayOption}
+                  onChange={(e) => setDisplayOption(e.target.value)}
+                  required
+                >
+                  <option value="" disabled>
+                    Select display option
+                  </option>
+                  {displayOptions.map((option, index) => {
+                    return (
+                      <option key={index} value={option}>
+                        {option}
+                      </option>
+                    );
+                  })}
+                </select>
+              </div>
             </div>
           </div>
           {/* div for description */}
@@ -408,17 +450,19 @@ function VendorNewAddon({
                   required
                 />
               </div>
-              <div>
-                <h4 className="text-[#7B7B7B]">Addon price</h4>
-                <input
-                  type="number"
-                  name="price"
-                  onChange={handleChange}
-                  value={addon.price}
-                  required
-                  className="w-full py-1.5 px-2 border-2 rounded-lg [&::-webkit-inner-spin-button]:appearance-none  focus:outline-none focus:ring-0"
-                />
-              </div>
+              {(displayOption === "boq" || displayOption === "both") && (
+                <div>
+                  <h4 className="text-[#7B7B7B]">BOQ price</h4>
+                  <input
+                    type="number"
+                    name="price"
+                    onChange={handleChange}
+                    value={addon.price}
+                    required
+                    className="w-full py-1.5 px-2 border-2 rounded-lg [&::-webkit-inner-spin-button]:appearance-none  focus:outline-none focus:ring-0"
+                  />
+                </div>
+              )}
               <div>
                 <h4 className="text-[#7B7B7B]">
                   product dimension:(H x L x W)
@@ -463,6 +507,48 @@ function VendorNewAddon({
           </div>
         </div>
         <div className="w-full lg:w-1/2 ">
+          {(displayOption === "ecommerce" || displayOption === "both") && (
+            <>
+              <h3 className="capitalize text-xl font-semibold">
+                E-commerce Details
+              </h3>
+              <div className="w-full shadow-lg border-2 p-5 my-3 rounded-xl capitalize">
+                <div>
+                  <h4 className="text-[#7B7B7B]">MRP</h4>
+                  <input
+                    type="number"
+                    name="mrp"
+                    onChange={handleChange}
+                    value={addon.mrp}
+                    className="w-full py-1.5 px-2 border-2 rounded-lg [&::-webkit-inner-spin-button]:appearance-none  focus:outline-none focus:ring-0"
+                    required
+                  />
+                </div>
+                <div>
+                  <h4 className="text-[#7B7B7B]">Selling price</h4>
+                  <input
+                    type="number"
+                    name="sellingPrice"
+                    onChange={handleChange}
+                    value={addon.sellingPrice}
+                    className="w-full py-1.5 px-2 border-2 rounded-lg [&::-webkit-inner-spin-button]:appearance-none  focus:outline-none focus:ring-0"
+                    required
+                  />
+                </div>
+                <div>
+                  <h4 className="text-[#7B7B7B]">Quantity</h4>
+                  <input
+                    type="number"
+                    name="quantity"
+                    onChange={handleChange}
+                    value={addon.quantity}
+                    className="w-full py-1.5 px-2 border-2 rounded-lg [&::-webkit-inner-spin-button]:appearance-none  focus:outline-none focus:ring-0"
+                    required
+                  />
+                </div>
+              </div>
+            </>
+          )}
           {/* div for images */}
           <div>
             <div className="flex justify-start items-center gap-2 mb-3">

@@ -13,15 +13,13 @@ import { useEffect, useRef, useState } from "react";
 import { useApp } from "../../Context/Context";
 import { supabase } from "../../services/supabase";
 import SpinnerFullPage from "../../common-components/SpinnerFullPage";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useHandleAddToCart } from "../../utils/HelperFunction";
-import { toast, Slide } from "react-toastify";
 import { ToastContainer } from "react-toastify";
 import CardSection from "./CardSection";
 import { AiFillHeart } from "react-icons/ai";
 import { GoHeart } from "react-icons/go";
 import Loginpoup from "../../common-components/LoginPopup";
-import LandingNavbar from "../../common-components/LandingNavbar";
 import { HiOutlineArrowSmRight } from "react-icons/hi";
 import Footer from "../../common-components/Footer";
 
@@ -220,11 +218,11 @@ function Products() {
   // const prevRef2 = useRef(null);
   // const nextRef2 = useRef(null);
   // const paginationRef2 = useRef(null);
-  const prevRef3 = useRef(null);
-  const nextRef3 = useRef(null);
-  const paginationRef3 = useRef(null);
-  const prevRef4 = useRef(null);
-  const nextRef4 = useRef(null);
+  // const prevRef3 = useRef(null);
+  // const nextRef3 = useRef(null);
+  // const paginationRef3 = useRef(null);
+  // const prevRef4 = useRef(null);
+  // const nextRef4 = useRef(null);
   const scrollRef = useRef(null);
 
   const [data, setData] = useState();
@@ -1286,14 +1284,16 @@ function Products() {
       </section>
 
       {/* section 8*/}
-      <section className="px-4 lg:container mx-auto py-10">
-        <SectionHeader title="best products" />
-        <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-5">
-          {bestProducts.map((product) => (
-            <Card key={product.id} product={product} />
-          ))}
-        </div>
-      </section>
+      {bestProducts.length > 0 && (
+        <section className="px-4 lg:container mx-auto py-10">
+          <SectionHeader title="best products" />
+          <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-5">
+            {bestProducts.map((product) => (
+              <Card key={product.id} product={product} />
+            ))}
+          </div>
+        </section>
+      )}
 
       {/* section 9*/}
       <section className="px-4 lg:container mx-auto pt-10 pb-16">
@@ -1346,7 +1346,9 @@ function Products() {
                         src="/images/ecommerce/button.png"
                         alt="arrow button"
                         className="mt-2 w-2 md:w-4 hover:cursor-pointer"
-                        onClick={() => navigate(`/shop/?category=${o.title}`)}
+                        onClick={() =>
+                          navigate(`/products/topdeal/?category=${o.title}`)
+                        }
                       />
                     </div>
                   </a>
@@ -1373,7 +1375,9 @@ function Products() {
                         src="/images/ecommerce/button.png"
                         alt="arrow button"
                         className="mt-2 w-2 md:w-4 hover:cursor-pointer"
-                        onClick={() => navigate(`/shop/?category=${o.title}`)}
+                        onClick={() =>
+                          navigate(`/products/topdeal/?category=${o.title}`)
+                        }
                       />
                     </div>
                   </a>
@@ -1433,7 +1437,11 @@ function Card({ product }) {
         <div className="h-full flex flex-col border-[1px] border-[#AAAAAA] relative">
           {product.image && (
             <div
-              onClick={() => naviagte(`/productview/${product.id}`)}
+              onClick={() =>
+                naviagte(`/productview/${product.id}`, {
+                  state: { from: "products" },
+                })
+              }
               className=" cursor-pointer"
             >
               <img
@@ -1464,16 +1472,24 @@ function Card({ product }) {
               })}
             </p>
             <div className="flex justify-between items-center gap-2">
-              <button
-                onClick={() => handleAddToCart(product, iscarted)}
-                // disabled={iscarted}
-                className="flex items-center gap-1 font-TimesNewRoman text-sm py-1.5 border border-[#ccc] px-2 hover:bg-[#DDDDDD]"
+              <div>
+                {product.stockQty > 0 ? (
+                  <button
+                    onClick={() => handleAddToCart(product, iscarted)}
+                    // disabled={iscarted}
+                    className="flex items-center gap-1 font-TimesNewRoman text-sm py-1.5 border border-[#ccc] px-2 hover:bg-[#DDDDDD]"
 
-                // className="flex justify-center items-center gap-1 font-Poppins text-[12px] py-1.5"
-              >
-                {iscarted ? "Go to cart" : "Add to cart"}{" "}
-                {/* <BsArrowRight size={15} />{" "} */}
-              </button>
+                    // className="flex justify-center items-center gap-1 font-Poppins text-[12px] py-1.5"
+                  >
+                    {iscarted ? "Go to cart" : "Add to cart"}{" "}
+                    {/* <BsArrowRight size={15} />{" "} */}
+                  </button>
+                ) : (
+                  <span className="text-sm text-red-500 font-semibold">
+                    Out of stock
+                  </span>
+                )}
+              </div>
 
               <div
                 onClick={() => {
@@ -1506,33 +1522,33 @@ function Card({ product }) {
   );
 }
 
-function LatestPost({ post }) {
-  return (
-    <div className="max-w-sm">
-      <div className="relative">
-        <img src={post.image} alt="blogoffice" />
-        <div className="absolute  left-4 top-4 bg-white text-center px-3 py-1 shadow-md rounded-sm">
-          <div className="text-lg font-bold">{post.date}</div>
-          <div className="text-sm text-gray-500 -mt-1 uppercase">
-            {post.month}
-          </div>
-        </div>
-      </div>
-      <div className="font-lora border border-[#000]/10 p-4 space-y-3">
-        <p className="text-[#9A9A9A] text-[13px] leading-[13px] tracking-[1px]">
-          {post.subhead}
-        </p>
-        <h2 className="font-semibold text-sm leading-[14px] tracking-[0.5px]">
-          {post.title}
-        </h2>
-        <p className="text-sm tracking-[1px]">{post.description}</p>
-        <button className="font-Poppins text-[#374A75] tracking-[1px] text-sm flex gap-3 items-center">
-          Read More <TiArrowRight size={25} />
-        </button>
-      </div>
-    </div>
-  );
-}
+// function LatestPost({ post }) {
+//   return (
+//     <div className="max-w-sm">
+//       <div className="relative">
+//         <img src={post.image} alt="blogoffice" />
+//         <div className="absolute  left-4 top-4 bg-white text-center px-3 py-1 shadow-md rounded-sm">
+//           <div className="text-lg font-bold">{post.date}</div>
+//           <div className="text-sm text-gray-500 -mt-1 uppercase">
+//             {post.month}
+//           </div>
+//         </div>
+//       </div>
+//       <div className="font-lora border border-[#000]/10 p-4 space-y-3">
+//         <p className="text-[#9A9A9A] text-[13px] leading-[13px] tracking-[1px]">
+//           {post.subhead}
+//         </p>
+//         <h2 className="font-semibold text-sm leading-[14px] tracking-[0.5px]">
+//           {post.title}
+//         </h2>
+//         <p className="text-sm tracking-[1px]">{post.description}</p>
+//         <button className="font-Poppins text-[#374A75] tracking-[1px] text-sm flex gap-3 items-center">
+//           Read More <TiArrowRight size={25} />
+//         </button>
+//       </div>
+//     </div>
+//   );
+// }
 
 function Productitem({ image, title, width }) {
   return (
@@ -1547,43 +1563,43 @@ function Productitem({ image, title, width }) {
   );
 }
 
-function BannerProduct() {
-  const naviagte = useNavigate();
-  return (
-    <div className="max-w-60 w-full h-96 relative rounded overflow-hidden shadow-lg">
-      <img
-        src="/images/banner-chair.jpg"
-        alt="Meeting Chairs"
-        className="w-full h-full object-cover"
-      />
+// function BannerProduct() {
+//   const naviagte = useNavigate();
+//   return (
+//     <div className="max-w-60 w-full h-96 relative rounded overflow-hidden shadow-lg">
+//       <img
+//         src="/images/banner-chair.jpg"
+//         alt="Meeting Chairs"
+//         className="w-full h-full object-cover"
+//       />
 
-      <div
-        className="absolute top-0 left-0 w-full bg-[#e0f4ff] text-black flex flex-col justify-evenly px-6"
-        style={{
-          clipPath: "ellipse(95% 100% at 25% 0%)",
-          height: "45%",
-        }}
-      >
-        <p className="text-xs uppercase tracking-[3px] font-lora">
-          New collection
-        </p>
-        <h2 className="text-lg font-lora tracking-wide">
-          MEETING <br /> CHAIRS
-        </h2>
-        <button
-          onClick={() => naviagte("/shop")}
-          className="mt-1 text-sm underline underline-offset-4 decoration-[#aaaaaa] flex items-center gap-2 group overflow-hidden relative hover:scale-105 transition-transform duration-700 ease-in-out"
-        >
-          <span className="relative z-10">Discover more</span>
-          <BsArrowRight
-            size={15}
-            className="absolute opacity-0 group-hover:opacity-100 translate-x-[550%] group-hover:translate-x-[700%] transition-transform duration-700 ease-in-out"
-          />
-        </button>
-      </div>
-    </div>
-  );
-}
+//       <div
+//         className="absolute top-0 left-0 w-full bg-[#e0f4ff] text-black flex flex-col justify-evenly px-6"
+//         style={{
+//           clipPath: "ellipse(95% 100% at 25% 0%)",
+//           height: "45%",
+//         }}
+//       >
+//         <p className="text-xs uppercase tracking-[3px] font-lora">
+//           New collection
+//         </p>
+//         <h2 className="text-lg font-lora tracking-wide">
+//           MEETING <br /> CHAIRS
+//         </h2>
+//         <button
+//           onClick={() => naviagte("/shop")}
+//           className="mt-1 text-sm underline underline-offset-4 decoration-[#aaaaaa] flex items-center gap-2 group overflow-hidden relative hover:scale-105 transition-transform duration-700 ease-in-out"
+//         >
+//           <span className="relative z-10">Discover more</span>
+//           <BsArrowRight
+//             size={15}
+//             className="absolute opacity-0 group-hover:opacity-100 translate-x-[550%] group-hover:translate-x-[700%] transition-transform duration-700 ease-in-out"
+//           />
+//         </button>
+//       </div>
+//     </div>
+//   );
+// }
 
 function ProductCard({ product, trending = false }) {
   const naviagte = useNavigate();

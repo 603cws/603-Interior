@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { supabase } from "../../services/supabase";
 import SpinnerFullPage from "../../common-components/SpinnerFullPage";
-import { FaHeart } from "react-icons/fa";
 import { IoFilter } from "react-icons/io5";
 import {
   MdKeyboardArrowLeft,
@@ -14,7 +13,8 @@ import { useApp } from "../../Context/Context";
 import { ToastContainer } from "react-toastify";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import Footer from "../../common-components/Footer";
-import { BsFillHeartFill } from "react-icons/bs";
+import { AiFillHeart } from "react-icons/ai";
+import { GoHeart } from "react-icons/go";
 
 function ShopProducts() {
   //state
@@ -957,7 +957,9 @@ function Card({ product }) {
   return (
     <div className="font-TimesNewRoman max-w-sm max-h-sm  border border-[#ccc]">
       <div
-        onClick={() => naviagte(`/productview/${product.id}`)}
+        onClick={() =>
+          naviagte(`/productview/${product.id}`, { state: { from: "shop" } })
+        }
         className="flex justify-center items-center p-2 cursor-pointer"
       >
         <img
@@ -969,7 +971,10 @@ function Card({ product }) {
       <div className="bg-[#fff] p-2">
         <div className="flex flex-col md:flex-row ">
           <div className="flex-1 text-sm  leading-[22.4px]  text-[#111] ">
-            <h4 className="font-medium text-sm leading-[22.4px] ">
+            <h4
+              title={product?.title}
+              className="font-medium text-sm leading-[22.4px] line-clamp-1"
+            >
               {product?.title}
             </h4>
             <div className="flex items-center gap-2">
@@ -985,23 +990,25 @@ function Card({ product }) {
             className="text-[#ccc] hover:text-red-600 cursor-pointer"
           >
             {isWishlisted ? (
-              <FaHeart size={25} color="red" />
+              <AiFillHeart size={20} color="red" />
             ) : (
-              <BsFillHeartFill size={25} />
+              <GoHeart size={20} />
             )}
           </div>
-          {/* <div className=" text-[#ccc] hover:text-red-950 ">
-            <FaHeart size={25} />
-            <BsFillHeartFill />
-          </div> */}
         </div>
-        <button
-          onClick={() => handleAddToCart(product)}
-          disabled={iscarted}
-          className="text-[#000] uppercase bg-[#FFFFFF] text-xs border border-[#ccc] px-2  py-2 rounded-sm "
-        >
-          {iscarted ? "Added to cart" : "Add to cart"}{" "}
-        </button>
+        {product.stockQty > 0 ? (
+          <button
+            onClick={() => handleAddToCart(product, iscarted)}
+            // disabled={iscarted}
+            className="text-[#000] uppercase bg-[#FFFFFF] text-xs border border-[#ccc] px-2  py-2 rounded-sm "
+          >
+            {iscarted ? "Go to cart" : "Add to cart"}{" "}
+          </button>
+        ) : (
+          <span className="text-xs text-red-500 font-semibold">
+            Out of stock
+          </span>
+        )}
       </div>
     </div>
   );

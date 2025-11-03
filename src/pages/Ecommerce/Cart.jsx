@@ -438,7 +438,7 @@ function Cart() {
             <section>
               <div className="flex flex-col lg:flex-row gap-6 lg:gap-10 font-Poppins">
                 <div className="flex-1 space-y-2 lg:space-y-5">
-                  <div className="lg:border lg:border-[#CCCCCC] rounded-lg font-Poppins flex justify-between items-center p-2 lg:p-5">
+                  <div className="lg:border lg:border-[#CCCCCC] rounded-lg font-Poppins flex justify-between items-center py-2 lg:p-5">
                     <h5 className="text-[10px] lg:text-sm text-[#171717] font-semibold ">
                       Check delivery time & services
                     </h5>
@@ -462,7 +462,7 @@ function Cart() {
 
                   {isAuthenticated ? (
                     cartItems ? (
-                      <div className="space-y-2 max-h-[370px] overflow-y-scroll custom-scrollbar pb-2">
+                      <div className="space-y-2 max-h-[370px] overflow-y-auto custom-scrollbar pb-2">
                         {cartItems.length > 0 ? (
                           sortedCartItems.map((item) => (
                             <CartCard cartitem={item} key={item.id} />
@@ -734,7 +734,7 @@ function Cart() {
                           </form>
                         </div>
 
-                        <div className="mt-6 flex-1 overflow-y-scroll space-y-2">
+                        <div className="mt-6 flex-1 overflow-y-auto space-y-2">
                           {allCoupons.map((coupon, index) => (
                             <CouponCard
                               key={index}
@@ -940,16 +940,20 @@ function CartCard({ cartitem }) {
   };
 
   const handleProductQuantityInc = (product, quantity) => {
-    if (isAuthenticated) {
+    if (isAuthenticated && product.productId?.stockQty > quantity) {
       updateQuantity(product.productId?.id, quantity + 1);
     } else {
-      const updatedLocalItems = localcartItems.map((item) =>
-        item.productId.id === product.productId.id
-          ? { ...item, quantity: quantity + 1 }
-          : item
-      );
-      localStorage.setItem("cartitems", JSON.stringify(updatedLocalItems));
-      setLocalCartItems(updatedLocalItems);
+      if (product.productId?.stockQty > quantity) {
+        const updatedLocalItems = localcartItems.map((item) =>
+          item.productId.id === product.productId.id
+            ? { ...item, quantity: quantity + 1 }
+            : item
+        );
+        setLocalCartItems(updatedLocalItems);
+        localStorage.setItem("cartitems", JSON.stringify(updatedLocalItems));
+      } else {
+        toast.error("Not Available");
+      }
     }
   };
 
@@ -1056,6 +1060,11 @@ function CartCard({ cartitem }) {
               </button>
             </div>
           </div>
+          {cartitem.productId?.stockQty < 10 && (
+            <span className="text-xs text-[#F87171]">
+              Hurry Up! Only {cartitem.productId?.stockQty} left.
+            </span>
+          )}
           <div className="flex gap-3">
             <h5 className=" font-medium text-[#111111]">
               Rs. {cartitem.productId?.price}
