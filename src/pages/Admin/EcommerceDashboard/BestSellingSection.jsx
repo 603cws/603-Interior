@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { supabase } from "../../../services/supabase";
-import FilterButton from "./FilterButton";
 import { baseImageUrl } from "../../../utils/HelperConstant";
 
 function BestSellingSection({ sidebarDispatch, handleProductPreview }) {
@@ -95,38 +94,37 @@ function BestSellingSection({ sidebarDispatch, handleProductPreview }) {
             </tr>
           ) : (
             variantsData.slice(0, 5).map((p, i) => (
-              <tr key={i} className="border-b last:border-none">
-                <td
-                  className="flex items-center gap-3 py-2"
-                  onClick={() => {
-                    handleProductPreview(p);
-                  }}
-                >
+              <tr
+                key={i}
+                className="border-b last:border-none font-lato hover:bg-gray-100 cursor-pointer"
+                onClick={() => {
+                  handleProductPreview(p);
+                }}
+              >
+                <td className="flex items-center gap-3 py-2">
                   <img
                     src={`${baseImageUrl}${p.image}`}
                     alt={p.title}
                     className="w-8 h-8 object-contain"
                   />
-                  <span className="text-blue-600 hover:underline cursor-pointer">
-                    {p.title}
-                  </span>
+                  <span className="text-[#020D37] font-bold">{p.title}</span>
                 </td>
                 <td className="text-center">{p.count ?? "-"}</td>
                 <td>
                   <span
                     className={`flex items-center gap-2 ${
-                      p.stockQty > 0 ? "text-blue-500" : "text-red-500"
+                      p.stockQty > 0 ? "text-[#374A75]" : "text-red-500"
                     }`}
                   >
                     <span
                       className={`w-2 h-2 rounded-full ${
-                        p.stockQty > 0 ? "bg-blue-500" : "bg-red-500"
+                        p.stockQty > 0 ? "bg-[#374A75]" : "bg-red-500"
                       }`}
                     ></span>
                     {p.stockQty > 0 ? "Stock" : "Stock out"}
                   </span>
                 </td>
-                <td>₹{p.price}</td>
+                <td className="font-bold">₹{p.price}</td>
               </tr>
             ))
           )}

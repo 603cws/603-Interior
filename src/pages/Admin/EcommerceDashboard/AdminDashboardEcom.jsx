@@ -10,7 +10,7 @@ import SidebarItem from "../../../common-components/SidebarItem";
 import { useLogout } from "../../../utils/HelperFunction";
 import { BsBoxSeam } from "react-icons/bs";
 import { FiLogOut } from "react-icons/fi";
-import Orders from ".././Orders";
+import Orders, { OrderDetails } from ".././Orders";
 import Discount from "./Discount";
 import Clients from "../Clients";
 import { supabase } from "../../../services/supabase";
@@ -74,6 +74,8 @@ function AdminDashboardEcom() {
   const [deleteWarning, setDeleteWarning] = useState(false);
   const [productPreview, setProductPreview] = useState(false);
   const [selectedProductview, setSelectedProductview] = useState();
+
+  const [selectedOrder, setSelectedOrder] = useState(null);
 
   const mobileMenuRef = useRef(null);
 
@@ -468,7 +470,16 @@ function AdminDashboardEcom() {
             {/* Middle Section: Transactions + Sales */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
               {/* Transactions */}
-              <Transactions sidebarDispatch={sidebarDispatch} />
+              <Transactions
+                sidebarDispatch={sidebarDispatch}
+                onOrderSelect={(order) => {
+                  setSelectedOrder(order);
+                  sidebarDispatch({
+                    type: "TOGGLE_SECTION",
+                    payload: "Orders",
+                  });
+                }}
+              />
 
               {/* Last 7 Days Sales */}
               <SalesSection />
@@ -483,7 +494,15 @@ function AdminDashboardEcom() {
         )}
 
         {/* orders */}
-        {sidebarstate.isOrdersOpen && <Orders />}
+        {sidebarstate.isOrdersOpen &&
+          (selectedOrder ? (
+            <OrderDetails
+              order={selectedOrder}
+              onBack={() => setSelectedOrder(null)}
+            />
+          ) : (
+            <Orders />
+          ))}
 
         {/* product */}
         {sidebarstate.isProductOpen && (
@@ -529,6 +548,7 @@ function AdminDashboardEcom() {
           </div>
         )}
       </div>
+
       {/* product preview */}
       {productPreview && (
         <DashboardProductCard

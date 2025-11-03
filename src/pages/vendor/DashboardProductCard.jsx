@@ -20,16 +20,11 @@ function DashboardProductCard({
   const [showTextarea, setShowTextarea] = useState(false);
   const { accountHolder } = useApp();
 
-  // const baseImageUrl =
-  //   "https://bwxzfwsoxwtzhjbzbdzs.supabase.co/storage/v1/object/public/addon/";
-
   const currentStatus = product?.status;
 
   const additionalImages = product?.additional_images
     ? JSON.parse(product.additional_images)
     : [];
-
-  console.log("product", product);
 
   return (
     <div className="flex  justify-center items-center h-screen fixed inset-0 z-30 top-0 w-screen">

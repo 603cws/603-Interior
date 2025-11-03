@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 import { supabase } from "../../../services/supabase";
-import FilterButton from "./FilterButton";
 
-function Transactions({ sidebarDispatch }) {
+function Transactions({ sidebarDispatch, onOrderSelect }) {
   const [ordersData, setOrdersData] = useState(null);
   const [loadingOrders, setLoadingOrders] = useState(false);
 
@@ -16,9 +15,42 @@ function Transactions({ sidebarDispatch }) {
         .limit(7);
       if (error) {
         console.error(error);
+        setLoadingOrders(false);
         return;
       }
-      setOrdersData(orders);
+
+      // Fetch variants for products in each order, similar to Orders component
+      const ordersWithVariants = await Promise.all(
+        orders.map(async (order) => {
+          const productVariantMap = {};
+
+          if (order.products?.length) {
+            for (const product of order.products) {
+              const productId = product.id;
+              if (productId) {
+                const { data: variants, error: variantsError } = await supabase
+                  .from("product_variants")
+                  .select("*")
+                  .eq("id", productId);
+
+                if (variantsError) {
+                  console.error(variantsError);
+                  productVariantMap[productId] = [];
+                } else {
+                  productVariantMap[productId] = variants;
+                }
+              }
+            }
+          }
+
+          return {
+            ...order,
+            product_variants_map: productVariantMap,
+          };
+        })
+      );
+
+      setOrdersData(ordersWithVariants);
       setLoadingOrders(false);
     };
 
@@ -53,7 +85,11 @@ function Transactions({ sidebarDispatch }) {
           </thead>
           <tbody className="text-black text-sm">
             {ordersData?.map((t, i) => (
-              <tr key={i} className="cursor-pointer">
+              <tr
+                key={i}
+                className="cursor-pointer hover:bg-gray-100"
+                onClick={() => onOrderSelect(t)}
+              >
                 <td className="py-2">{i + 1}.</td>
                 <td title={t.id}>
                   {t.id.length > 6 ? `${t.id.slice(0, 6)}...` : t.id}

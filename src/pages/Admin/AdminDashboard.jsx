@@ -48,7 +48,7 @@ import ClientBoq from "./ClientBoq";
 import { baseImageUrl } from "../../utils/HelperConstant";
 import { BsBoxSeam } from "react-icons/bs";
 import { FiLogOut } from "react-icons/fi";
-import Orders from "./Orders";
+// import Orders from "./Orders";
 
 function handlesidebarState(state, action) {
   switch (action.type) {
@@ -63,7 +63,7 @@ function handlesidebarState(state, action) {
         isVendorOpen: action.payload === "Vendors",
         isScheduleOpen: action.payload === "Schedule",
         isFormulaeOpen: action.payload === "Formulae",
-        isOrdersOpen: action.payload === "Orders",
+        // isOrdersOpen: action.payload === "Orders",
         // help: action.payload === "Help",
         // isBookAppointmentOpen: action.payload === "BookAppointment",
         currentSection: action.payload,
@@ -82,7 +82,7 @@ const SECTIONS = {
   SCHEDULE: "Schedule",
   FORMULAE: "Formulae",
   SETTING: "Setting",
-  ORDERS: "Orders",
+  // ORDERS: "Orders",
   // HELP: "Help",
   // EDIT: "Edit",
   // BOOkAPPOINTMENT: "BookAppointment",
@@ -596,9 +596,9 @@ function AdminDashboard() {
     sidebarDispatch({ type: "TOGGLE_SECTION", payload: SECTIONS.FORMULAE });
   };
 
-  const handleOrders = () => {
-    sidebarDispatch({ type: "TOGGLE_SECTION", payload: SECTIONS.ORDERS });
-  };
+  // const handleOrders = () => {
+  //   sidebarDispatch({ type: "TOGGLE_SECTION", payload: SECTIONS.ORDERS });
+  // };
 
   const getvendors = async () => {
     // Query the profiles table for phone and companyName
@@ -775,13 +775,13 @@ function AdminDashboard() {
             isExpanded={isExpanded}
             currentSection={sidebarstate?.currentSection}
           />
-          <SidebarItem
+          {/* <SidebarItem
             icon={<BsBoxSeam />}
             text="orders"
             onClick={handleOrders}
             isExpanded={isExpanded}
             currentSection={sidebarstate?.currentSection}
-          />
+          /> */}
           <SidebarItem
             icon={<TbCalculator />}
             text="formulae"
@@ -935,13 +935,13 @@ function AdminDashboard() {
                 onClick={handleOrders}
                 setIsOpen={setIsOpen}
               /> */}
-              <MobileMenuItem
+              {/* <MobileMenuItem
                 icon={<BsBoxSeam />}
                 title="Orders"
                 currentSection={sidebarstate?.currentSection}
                 onClick={handleOrders}
                 setIsOpen={setIsOpen}
-              />
+              /> */}
               <MobileMenuItem
                 icon={<RiFormula />}
                 title="Formulae"
@@ -1885,7 +1885,7 @@ function AdminDashboard() {
         {sidebarstate.isFormulaeOpen && <FormulaEditor />}
 
         {/* Orders */}
-        {sidebarstate.isOrdersOpen && <Orders />}
+        {/* {sidebarstate.isOrdersOpen && <Orders />} */}
       </div>
       {/* </div> */}
       {/* product preview */}

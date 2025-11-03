@@ -527,9 +527,8 @@ function Products({
                               <th className="p-3 font-medium">Addon Name</th>
                             )}
                             <th className="p-3  font-medium">Price</th>
-                            <>
-                              <th className="p-3 font-medium">Status</th>
-                            </>
+                            <th className="p-3  font-medium">Stock</th>
+                            <th className="p-3 font-medium">Status</th>
                             <th className="p-3 font-medium">Action</th>
                           </tr>
                         </thead>
@@ -553,7 +552,9 @@ function Products({
                               <td className="border border-gray-200 p-3 align-middle text-center">
                                 ₹{item.price}
                               </td>
-
+                              <td className="border border-gray-200 p-3 align-middle text-center">
+                                {item.stockQty}
+                              </td>
                               <td className="border border-gray-200 p-3 align-middle text-center group relative">
                                 {item.status === "pending" ? (
                                   <div className="flex items-center justify-center">

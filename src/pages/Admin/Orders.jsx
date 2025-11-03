@@ -406,14 +406,14 @@ export default function Orders({ vendorId = null }) {
   );
 }
 
-function OrderDetails({ order, onBack, vendorId = null }) {
+export function OrderDetails({ order, onBack, vendorId = null }) {
   // Filter products based on vendorId if provided
   const filteredProducts = vendorId
     ? order.products?.filter((item) => item.vendorId === vendorId)
     : order.products;
 
   return (
-    <section className="flex flex-col min-h-0 lg:rounded-lg font-Poppins">
+    <section className="flex flex-col h-full min-h-0 lg:rounded-lg font-Poppins bg-white">
       <button
         onClick={onBack}
         className="text-[#555555] text-left py-1 md:py-2 px-2 lg:px-6 text-xs group"
