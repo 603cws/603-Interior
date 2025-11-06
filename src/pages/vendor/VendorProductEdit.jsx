@@ -42,9 +42,9 @@ function VendorProductEdit({
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [dimensions, setDimensions] = useState({
-    height: selectedproduct?.dimensions.split("x")[0] || "",
-    length: selectedproduct?.dimensions.split("x")[1] || "",
-    width: selectedproduct?.dimensions.split("x")[2] || "",
+    height: selectedproduct?.dimensions?.split("x")[0] || "",
+    length: selectedproduct?.dimensions?.split("x")[1] || "",
+    width: selectedproduct?.dimensions?.split("x")[2] || "",
   });
   const [displayOption, setDisplayOption] = useState(
     selectedproduct?.productDisplayType

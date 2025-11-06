@@ -65,7 +65,8 @@ const JobPage = () => {
             transition={{ duration: 1, ease: "easeOut" }}
             className=" xl:py-10 xl:pl-10 flex-1"
           >
-            <img src="/images/career page/careerHero.png" alt="" />
+            <img src="/images/carrer.png" alt="job posting" />
+            {/* <img src="/images/career page/careerHero.png" alt="" /> */}
           </motion.div>
         </div>
       </section>
