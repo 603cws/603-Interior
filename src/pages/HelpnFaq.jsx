@@ -172,6 +172,14 @@ function HelpnFaq() {
   // };
   const background = "/images/career-page-bg.png";
 
+  const helpAndFaqImages = {
+    general: "/images/help1.png",
+    layoutoffice: "/images/faq1.png",
+    vendor: "/images/faq2.png",
+    execution: "/images/faq3.png",
+    payment: "/images/faq4.png",
+  };
+
   return (
     <div className="font-Poppins">
       {/* Navbar Section */}
@@ -223,8 +231,9 @@ function HelpnFaq() {
             >
               <div className={`flex-1 `}>
                 <img
-                  src="/images/help1.png"
-                  alt="help section 1"
+                  src={helpAndFaqImages[category]}
+                  // src="/images/help1.png"
+                  alt={`help section ${category}`}
                   className=" w-full"
                 />
               </div>
