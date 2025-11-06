@@ -6,7 +6,47 @@ import { IoMdArrowBack } from "react-icons/io";
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
 
 function Discount() {
+  const [disocunts, setDisounts] = useState([]);
   const [createDiscount, setCreateDiscount] = useState(false);
+  const [selectedDiscounts, setSelectedDiscounts] = useState([]);
+
+  useEffect(() => {
+    fetchBlogs();
+  }, []);
+
+  const fetchBlogs = async () => {
+    try {
+      const { data, error } = await supabase.from("coupons").select("*");
+      if (error) console.log("Error fetching disocunts:", error);
+      setDisounts(data);
+    } catch (error) {
+      console.log("Unexpected Error:", error);
+    }
+  };
+
+  const handleDelete = async () => {
+    if (selectedDiscounts.length === 0) return;
+
+    if (
+      !window.confirm("Are you sure you want to delete selected discount(s)?")
+    )
+      return;
+
+    try {
+      const { error } = await supabase
+        .from("coupons")
+        .delete()
+        .in("id", selectedDiscounts);
+
+      if (error) throw error;
+
+      setSelectedDiscounts([]);
+      fetchBlogs();
+    } catch (error) {
+      console.error("Error deleting discounts:", error);
+    }
+  };
+
   return (
     <div>
       {createDiscount ? (
@@ -18,19 +58,31 @@ function Discount() {
               <h2 className="p-2 font-semibold text-[#374A75] lg:text-2xl md:text-xl text-lg ">
                 Discount
               </h2>
-              <div className="px-2 py-2">
+              <div className="px-2 py-2 flex gap-2">
+                {selectedDiscounts.length > 0 && (
+                  <button
+                    onClick={handleDelete}
+                    className="px-2 py-1 md:px-4 md:py-2 border border-[#CCCCCC] rounded-md text-[#374A75] text-lg font-medium hover:bg-[#f1f1f1]"
+                  >
+                    Delete ({selectedDiscounts.length})
+                  </button>
+                )}
                 <button
                   onClick={() => setCreateDiscount((prev) => !prev)}
                   className="px-4 py-3 rounded-md bg-blue-600 text-white text-lg"
                 >
-                  create Discount
+                  Create Discount
                 </button>
               </div>
             </div>
           </div>
           <div>
             {/* display data of the discount */}
-            <CouponTable />
+            <CouponTable
+              selectedDiscounts={selectedDiscounts}
+              setSelectedDiscounts={setSelectedDiscounts}
+              disocunts={disocunts}
+            />
           </div>
         </div>
       )}
@@ -40,9 +92,11 @@ function Discount() {
 
 export default Discount;
 
-const CouponTable = () => {
-  const [disocunts, setDisounts] = useState([]);
-
+const CouponTable = ({
+  selectedDiscounts,
+  setSelectedDiscounts,
+  disocunts,
+}) => {
   const [currentPage, setCurrentPage] = useState(1);
 
   const discountCouponPerPage = 10;
@@ -60,19 +114,6 @@ const CouponTable = () => {
     setCurrentPage(pageNumber);
   };
 
-  useEffect(() => {
-    fetchBlogs();
-  }, []);
-
-  const fetchBlogs = async () => {
-    try {
-      const { data, error } = await supabase.from("coupons").select("*");
-      if (error) console.log("Error fetching disocunts:", error);
-      setDisounts(data);
-    } catch (error) {
-      console.log("Unexpected Error:", error);
-    }
-  };
   //   {
   //     "id": "1adc1692-3f80-44d4-bd66-f91539dd5532",
   //     "created_at": "2025-06-23T12:23:42.825308+00:00",
@@ -82,8 +123,6 @@ const CouponTable = () => {
   //     "discountPerc": 30,
   //     "minAmount": 10000
   // }
-
-  console.log(disocunts);
 
   // const getStatusStyle = (status) => {
   //   switch (status) {
@@ -98,13 +137,38 @@ const CouponTable = () => {
   //   }
   // };
 
+  const allSelected =
+    currentBlogs.length > 0 && selectedDiscounts.length === currentBlogs.length;
+
+  const handleSelectAll = (e) => {
+    if (e.target.checked) {
+      setSelectedDiscounts(currentBlogs.map((b) => b.id));
+    } else {
+      setSelectedDiscounts([]);
+    }
+  };
+
+  const handleCheckboxChange = (blogId) => {
+    setSelectedDiscounts((prev) =>
+      prev.includes(blogId)
+        ? prev.filter((id) => id !== blogId)
+        : [...prev, blogId]
+    );
+  };
+
   return (
     <div className="p-4">
       <table className="w-full text-left">
         <thead className="text-[#232321]/80 font-semibold ">
           <tr className="border-b">
             <th className="py-2">
-              <input type="checkbox" name="" id="" />
+              <input
+                type="checkbox"
+                name=""
+                id=""
+                checked={allSelected}
+                onChange={handleSelectAll}
+              />
             </th>
             <th className="py-2">Title</th>
             <th className="py-2">Expiry</th>
@@ -119,7 +183,13 @@ const CouponTable = () => {
               className="border-b text-sm text-[#000] font-semibold"
             >
               <td className="py-3.5">
-                <input type="checkbox" name="" id="" />
+                <input
+                  type="checkbox"
+                  name=""
+                  id=""
+                  checked={selectedDiscounts.includes(disocunts.id)}
+                  onChange={() => handleCheckboxChange(disocunts.id)}
+                />
               </td>
               <td className="py-3.5">{disocunts?.couponName}</td>
               <td className="py-3.5">{disocunts?.expiryDate}</td>
