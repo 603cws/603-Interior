@@ -25,6 +25,7 @@ import Products from "./Products";
 import { BsArchive } from "react-icons/bs";
 import { CiDiscount1 } from "react-icons/ci";
 import { IoMdImages } from "react-icons/io";
+import { IoMdSwitch } from "react-icons/io";
 
 function handlesidebarState(state, action) {
   switch (action.type) {
@@ -329,6 +330,13 @@ function AdminDashboardEcom() {
             onClick={handleBlogs}
             isExpanded={isExpanded}
             currentSection={sidebarstate?.currentSection}
+          />
+          <SidebarItem
+            icon={<IoMdSwitch />}
+            text="change Dashboard"
+            onClick={() => navigate("/dashboard")}
+            isExpanded={isExpanded}
+            // currentSection={sidebarstate?.currentSection}
           />
 
           <SidebarItem
