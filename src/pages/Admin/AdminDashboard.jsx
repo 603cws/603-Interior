@@ -48,6 +48,8 @@ import ClientBoq from "./ClientBoq";
 import { baseImageUrl } from "../../utils/HelperConstant";
 import { BsBoxSeam } from "react-icons/bs";
 import { FiLogOut } from "react-icons/fi";
+import { IoMdSwitch } from "react-icons/io";
+
 // import Orders from "./Orders";
 
 function handlesidebarState(state, action) {
@@ -167,7 +169,6 @@ function AdminDashboard() {
     isScheduleOpen: false,
     isFormulaeOpen: false,
     isSettingOpen: false,
-
     currentSection: "Dashboard",
   };
 
@@ -569,6 +570,11 @@ function AdminDashboard() {
   const handlesetting = () => {
     sidebarDispatch({ type: "TOGGLE_SECTION", payload: SECTIONS.SETTING });
   };
+
+  const handleswitch = () => {
+    navigate("/dashboard");
+  };
+
   const handleproduct = () => {
     sidebarDispatch({ type: "TOGGLE_SECTION", payload: SECTIONS.PRODUCT });
   };
@@ -795,6 +801,13 @@ function AdminDashboard() {
             onClick={handlesetting}
             isExpanded={isExpanded}
             currentSection={sidebarstate?.currentSection}
+          />
+          <SidebarItem
+            icon={<IoMdSwitch />}
+            text="change dashboard"
+            onClick={handleswitch}
+            isExpanded={isExpanded}
+            // currentSection={sidebarstate?.currentSection}
           />
           <SidebarItem
             icon={<FiLogOut />}
