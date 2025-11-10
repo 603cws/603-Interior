@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 import { BsUpload } from "react-icons/bs";
 import { supabase } from "../../../services/supabase";
 import Spinner from "../../../common-components/Spinner";
@@ -144,19 +144,19 @@ function EditBlog({ blog, onClose, onUpdate }) {
 
   const handleDiscard = () => {
     setHeading({
-      title: "",
-      subtitle: "",
-      shortDescription: "",
+      title: heading?.title ?? "",
+      subtitle: heading?.subtitle ?? "",
+      shortDescription: heading?.shortDescription ?? "",
     });
     setContent({
-      introduction: "",
-      description: "",
-      conclusion: "",
+      introduction: content?.introduction ?? "",
+      description: content?.description ?? "",
+      conclusion: content?.conclusion ?? "",
     });
-    setImage(null);
-    setAuthor("");
-    setTags([]);
-    setPreview(null);
+    setImage(blog.image ?? null);
+    setAuthor(blog?.author ?? "");
+    setTags(JSON.parse(blog?.tags ?? []));
+    setPreview(blog.image ?? null);
   };
 
   return (

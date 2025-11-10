@@ -4,11 +4,13 @@ import toast from "react-hot-toast";
 import { useState, useEffect } from "react";
 import { IoMdArrowBack } from "react-icons/io";
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
+import EditDiscount from "./EditDiscount";
 
 function Discount() {
   const [disocunts, setDisounts] = useState([]);
   const [createDiscount, setCreateDiscount] = useState(false);
   const [selectedDiscounts, setSelectedDiscounts] = useState([]);
+  const [editDiscount, setEditDiscount] = useState(null);
 
   useEffect(() => {
     fetchBlogs();
@@ -50,7 +52,13 @@ function Discount() {
   return (
     <div>
       {createDiscount ? (
-        <DisocuntForm setCreateDiscount={setCreateDiscount} />
+        <DiscountForm setCreateDiscount={setCreateDiscount} />
+      ) : editDiscount ? (
+        <EditDiscount
+          coupon={editDiscount}
+          onClose={() => setEditDiscount(false)}
+          onUpdate={fetchBlogs}
+        />
       ) : (
         <div>
           <div className="border-b border-b-[#ccc]">
@@ -82,6 +90,7 @@ function Discount() {
               selectedDiscounts={selectedDiscounts}
               setSelectedDiscounts={setSelectedDiscounts}
               disocunts={disocunts}
+              setEditDiscount={setEditDiscount}
             />
           </div>
         </div>
@@ -96,6 +105,7 @@ const CouponTable = ({
   selectedDiscounts,
   setSelectedDiscounts,
   disocunts,
+  setEditDiscount,
 }) => {
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -172,7 +182,7 @@ const CouponTable = ({
             </th>
             <th className="py-2">Title</th>
             <th className="py-2">Expiry</th>
-            <th className="py-2">discount per</th>
+            <th className="py-2">Discount Perc(%)</th>
             <th className="py-2">Min Amount</th>
           </tr>
         </thead>
@@ -180,13 +190,15 @@ const CouponTable = ({
           {currentBlogs.map((disocunts) => (
             <tr
               key={disocunts.id}
-              className="border-b text-sm text-[#000] font-semibold"
+              onClick={() => setEditDiscount(disocunts)}
+              className="border-b text-xs md:text-sm text-[#000] font-semibold hover:bg-[#f1f1f1] cursor-pointer"
             >
               <td className="py-3.5">
                 <input
                   type="checkbox"
                   name=""
                   id=""
+                  onClick={(e) => e.stopPropagation()}
                   checked={selectedDiscounts.includes(disocunts.id)}
                   onChange={() => handleCheckboxChange(disocunts.id)}
                 />
@@ -484,7 +496,7 @@ const CouponTable = ({
   //   );
 };
 
-function DisocuntForm({ setCreateDiscount }) {
+function DiscountForm({ setCreateDiscount }) {
   const {
     register,
     handleSubmit,
@@ -594,7 +606,7 @@ function DisocuntForm({ setCreateDiscount }) {
           </div>
           <div className="flex-1 flex flex-col p-3 space-y-3">
             <label className="font-medium text-xl text-[#000]">
-              Minimum purchase Amount
+              Minimum Purchase Amount
             </label>
             <input
               type="number"
@@ -616,7 +628,7 @@ function DisocuntForm({ setCreateDiscount }) {
         <div className="flex flex-col md:flex-row border border-[#ccc] rounded-md m-3 ">
           <div className="flex-1 flex flex-col p-3 space-y-3">
             <label className="font-medium text-xl text-[#000]">
-              expiry date
+              Expiry Date
             </label>
             <input
               type="date"
@@ -634,7 +646,7 @@ function DisocuntForm({ setCreateDiscount }) {
             )}
           </div>
           <div className="flex-1 flex flex-col p-3 space-y-3">
-            <label className="font-medium text-xl text-[#000]">max limit</label>
+            <label className="font-medium text-xl text-[#000]">Max Limit</label>
             <input
               type="number"
               {...register("maxLimit", {
@@ -664,7 +676,7 @@ function DisocuntForm({ setCreateDiscount }) {
             className="border border-[#ccc] px-5 py-3 text-[#fff] bg-[#374A75] rounded-lg "
             type="submit"
           >
-            save
+            Save
           </button>
         </div>
       </form>

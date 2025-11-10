@@ -5,13 +5,10 @@ import { supabase } from "../../services/supabase";
 import { useNavigate } from "react-router-dom";
 import BottomTabs from "./BottomTabs";
 import { ToastContainer } from "react-toastify";
-
-import { useHandleAddToCart } from "../../utils/HelperFunction";
+// import { useHandleAddToCart } from "../../utils/HelperFunction";
 import { useEffect, useState } from "react";
-
 import SpinnerFullPage from "../../common-components/SpinnerFullPage";
 import { showRemoveFromCartToast } from "../../utils/AddToCartToast";
-import { MdOutlineKeyboardArrowLeft } from "react-icons/md";
 import MobileHeader from "../../common-components/MobileHeader";
 import LoginPopup from "../../common-components/LoginPopup";
 
@@ -23,7 +20,7 @@ function Wishlist() {
 
   const { isAuthenticated } = useApp();
 
-  const { handleAddToCart } = useHandleAddToCart();
+  // const { handleAddToCart } = useHandleAddToCart();
 
   const getWishlistItems = async () => {
     setIsloading(true);
@@ -222,7 +219,7 @@ function Wishlist() {
           </div>
         </section>
       ) : (
-        <div className="flex  flex-col gap-4 justify-center items-center h-[75vh] lg:h-full">
+        <div className="flex flex-col gap-4 justify-center items-center h-[80vh]">
           <div className="flex justify-center items-center">
             <img src="/images/emptywishlist.png" alt="" className="max-w-sm" />
           </div>
@@ -236,9 +233,7 @@ function Wishlist() {
           </p>
           <button
             onClick={() => {
-              {
-                isAuthenticated ? navigate("/products") : setLoginPopup(true);
-              }
+              isAuthenticated ? navigate("/products") : setLoginPopup(true);
             }}
             className="bg-[#334A78] border border-[#212B36] text-xs text-white tracking-wider uppercase py-3 active:scale-90 transition-transform ease-in-out duration-500 px-10 font-Poppins font-semibold hover:bg-[#4464A3] rounded"
           >
