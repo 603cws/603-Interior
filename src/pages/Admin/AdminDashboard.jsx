@@ -65,6 +65,7 @@ function handlesidebarState(state, action) {
         isVendorOpen: action.payload === "Vendors",
         isScheduleOpen: action.payload === "Schedule",
         isFormulaeOpen: action.payload === "Formulae",
+
         // isOrdersOpen: action.payload === "Orders",
         // help: action.payload === "Help",
         // isBookAppointmentOpen: action.payload === "BookAppointment",
@@ -84,6 +85,7 @@ const SECTIONS = {
   SCHEDULE: "Schedule",
   FORMULAE: "Formulae",
   SETTING: "Setting",
+
   // ORDERS: "Orders",
   // HELP: "Help",
   // EDIT: "Edit",

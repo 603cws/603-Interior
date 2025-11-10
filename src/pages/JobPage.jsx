@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 import LandingNavbar from "../common-components/LandingNavbar";
 import { FaLocationDot } from "react-icons/fa6";
 import jobData from "../utils/jobData"; // Import the central job data
@@ -18,6 +18,10 @@ const JobPage = () => {
   const navigate = useNavigate();
   const [job, setJob] = useState(null);
   const [jobForm, SetJobForm] = useState(false);
+
+  const location = useLocation();
+
+  const jobdata = location?.state;
 
   useEffect(() => {
     const jobDetails = jobData[jobTitle];
@@ -74,9 +78,92 @@ const JobPage = () => {
             &lt; Back to Jobs
           </button>
 
-          <h1 className="text-3xl font-bold mt-2 text-[#334A78]">{jobTitle}</h1>
+          <h1 className="text-3xl font-bold mt-2 text-[#334A78]">
+            {jobdata?.jobTitle}
+          </h1>
+
+          {/* {
+    "id": "5847bc60-9abd-48ad-86df-40ea15966341",
+    "created_at": "2025-11-10T07:20:14.712463+00:00",
+    "jobTitle": "Interior Designer",
+    "location": "mumbai",
+    "experience": "2",
+    "positionType": "FullTIme",
+    "description": "We are looking for a creative and detail-oriented Interior Designer to conceptualize and execute office space designs. You will work closely with clients to create aesthetically pleasing, functional, and innovative work environments.",
+    "responsibilities": "Assist in digital marketing campaigns and social media management\nConduct market research and competitor analysis.\nWork with architects and contractors to ensure seamless execution.\nPresent design concepts to clients and incorporate feedback.\nStay updated with industry trends and new materials.\nStay updated with industry trends and new materials.",
+    "requirements": "Bachelor's degree in Interior Design or a related field.\nProficiency in AutoCAD, SketchUp, V-Ray, and Adobe Suite.\nStrong creative and problem-solving skills.\nExcellent communication and project management skills."
+} */}
 
           {/* Job Info: Left & Right Alignment */}
+          <div className="flex justify-between items-center mt-2">
+            <div className="flex gap-2 lg:space-x-6 text-[#334A78] flex-wrap lg:flex-nowrap">
+              <p className="flex items-center">
+                <FaLocationDot className="mr-2" />
+                {jobdata?.location}
+              </p>
+              <p className="flex items-center">
+                <IoCalendarSharp className="mr-2" />
+                {jobdata?.experience > 0 ? (
+                  <span>{jobdata?.experience}+ years</span>
+                ) : (
+                  <span>Fresher</span>
+                )}
+              </p>
+              <p className="flex items-center">
+                <HiClock className="mr-2" />
+                {jobdata?.positionType}
+              </p>
+            </div>
+
+            {/* Apply Now Button - Right Aligned */}
+            <button
+              onClick={() => SetJobForm((prev) => !prev)}
+              className="bg-[#334A78] text-white py-2 px-4 rounded-lg hover:bg-[#34BFAD] transition text-nowrap"
+            >
+              Apply Now
+            </button>
+          </div>
+
+          {/* Job Description */}
+          <h2 className="text-lg font-semibold mt-6">Description</h2>
+          <p className="text-gray-700">{jobdata.description}</p>
+
+          {/* Responsibilities */}
+          <h2 className="text-lg font-semibold mt-6">Responsibilities</h2>
+          <ul className="list-disc list-inside text-gray-700 mt-2 space-y-2">
+            {jobdata?.responsibilities
+              ?.split(/\r?\n/)
+              ?.filter((line) => line.trim() !== "")
+              ?.map((task, idx) => (
+                <li key={idx}>{task}</li>
+              ))}
+          </ul>
+
+          {/* Requirements */}
+          <h2 className="text-lg font-semibold mt-6">Requirements</h2>
+          <ul className="list-disc list-inside text-gray-700 mt-2 space-y-2">
+            {jobdata?.requirements
+              ?.split(/\r?\n/)
+              ?.filter((line) => line.trim() !== "")
+              ?.map((requirement, idx) => (
+                <li key={idx}>{requirement}</li>
+              ))}
+          </ul>
+        </div>
+      </div>
+      {/* <div className="min-h-screen bg-white flex justify-center lg:p-6 font-Georgia">
+        <div className="max-w-7xl w-full bg-white p-6">
+         
+          <button
+            onClick={() => navigate("/Career")}
+            className="text-[#334A78] text-sm w-full text-left"
+          >
+            &lt; Back to Jobs
+          </button>
+
+          <h1 className="text-3xl font-bold mt-2 text-[#334A78]">{jobTitle}</h1>
+
+  
           <div className="flex justify-between items-center mt-2">
             <div className="flex gap-2 lg:space-x-6 text-[#334A78] flex-wrap lg:flex-nowrap">
               <p className="flex items-center">
@@ -93,7 +180,7 @@ const JobPage = () => {
               </p>
             </div>
 
-            {/* Apply Now Button - Right Aligned */}
+
             <button
               onClick={() => SetJobForm((prev) => !prev)}
               className="bg-[#334A78] text-white py-2 px-4 rounded-lg hover:bg-[#34BFAD] transition text-nowrap"
@@ -102,14 +189,14 @@ const JobPage = () => {
             </button>
           </div>
 
-          {/* Job Description */}
+       
           <h2 className="text-lg font-semibold mt-6">Description</h2>
           <p
             className="text-gray-700"
             dangerouslySetInnerHTML={{ __html: job.description }}
           ></p>
 
-          {/* Responsibilities */}
+       
           <h2 className="text-lg font-semibold mt-6">Responsibilities</h2>
           <ul className="list-disc list-inside text-gray-700 mt-2 space-y-2">
             {job.responsibilities?.map((task, idx) => (
@@ -117,7 +204,7 @@ const JobPage = () => {
             ))}
           </ul>
 
-          {/* Requirements */}
+      
           <h2 className="text-lg font-semibold mt-6">Requirements</h2>
           <ul className="list-disc list-inside text-gray-700 mt-2 space-y-2">
             {job.requirements?.map((requirement, idx) => (
@@ -128,7 +215,7 @@ const JobPage = () => {
             ))}
           </ul>
         </div>
-      </div>
+      </div> */}
 
       {jobForm && (
         <div className="">
@@ -205,69 +292,75 @@ function JobForm({ SetJobForm, jobDetails, jobTitle }) {
 
   const handleformSubmit = async (formData) => {
     console.log("formdata", formData);
-    // try {
-    //   const { data, error: uploadError } = await supabase.storage
-    //     .from("jobData")
-    //     .upload(formData?.Resume?.name, formData?.Resume);
-    //   if (uploadError) {
-    //     if (uploadError.error === "Duplicate") {
-    //       toast.error("this file was already uploaded");
-    //     }
-    //     console.error("Error uploading image:", uploadError);
-    //     return;
-    //   }
+    try {
+      const { data, error: uploadError } = await supabase.storage
+        .from("jobData")
+        .upload(formData?.Resume?.name, formData?.Resume);
+      if (uploadError) {
+        if (uploadError.error === "Duplicate") {
+          toast.error("this file was already uploaded");
+        }
 
-    //   console.log("data", data);
-    //   //       {
-    //   //     "FullName": "yuvraj machadi",
-    //   //     "Position": "web developer",
-    //   //     "YearsOfExp": "2",
-    //   //     "NoticePeriod": "30",
-    //   //     "CurrentCTC": "250000",
-    //   //     "ExpectedCTC": "600000",
-    //   //     "EmailID": "yuvrajmanchadi321@gmail.com",
-    //   //     "MobileNumber": "9594767165",
-    //   //     "Resume": {}
-    //   // }
+        console.error("Error uploading image:", uploadError);
+        return;
+      }
 
-    //   if (data) {
-    //     const { data: jobTableData, error: ApplicationError } = await supabase
-    //       .from("JobApplication")
-    //       .insert([
-    //         {
-    //           FullName: formData?.FullName,
-    //           Position: formData?.Position,
-    //           Experience: formData?.YearsOfExp,
-    //           CurrentCTC: formData?.CurrentCTC,
-    //           ExpectedCTC: formData?.ExpectedCTC,
-    //           NoticePeriod: formData?.NoticePeriod,
-    //           EmailID: formData?.EmailID,
-    //           MobNo: formData?.MobileNumber,
-    //           ResumePath: data?.path,
-    //         },
-    //       ])
-    //       .select();
+      console.log("data", data);
+      //       {
+      //     "FullName": "yuvraj machadi",
+      //     "Position": "web developer",
+      //     "YearsOfExp": "2",
+      //     "NoticePeriod": "30",
+      //     "CurrentCTC": "250000",
+      //     "ExpectedCTC": "600000",
+      //     "EmailID": "yuvrajmanchadi321@gmail.com",
+      //     "MobileNumber": "9594767165",
+      //     "Resume": {}
+      // }
 
-    //     console.log("data inserted", jobTableData);
+      if (data) {
+        const { data: jobTableData, error: ApplicationError } = await supabase
+          .from("JobApplication")
+          .insert([
+            {
+              FullName: formData?.FullName,
+              Position: formData?.Position,
+              Experience: formData?.YearsOfExp,
+              CurrentCTC: formData?.CurrentCTC,
+              ExpectedCTC: formData?.ExpectedCTC,
+              NoticePeriod: formData?.NoticePeriod,
+              EmailID: formData?.EmailID,
+              MobNo: formData?.MobileNumber,
+              ResumePath: data?.path,
+            },
+          ])
+          .select();
 
-    //     if (ApplicationError) {
-    //       console.log("error", ApplicationError);
-    //       await supabase.storage
-    //         .from("jobData")
-    //         .remove([formData?.Resume?.name]);
-    //     }
-    //   }
-    //   //       {
-    //   //     "path": "products_summary (9).pdf",
-    //   //     "id": "de435385-4ca3-45ac-abc8-70bb9ee8b855",
-    //   //     "fullPath": "jobData/products_summary (9).pdf"
-    //   // }
+        console.log("data inserted", jobTableData);
+        if (jobTableData) {
+          reset();
+          removeFile();
+          toast.success("Job Application submitted successfully");
+        }
 
-    //   // handleDiscard();
-    //   // toast.success("Blog Submitted successfully!");
-    // } catch (error) {
-    //   console.log("Unexpected error:", error);
-    // }
+        if (ApplicationError) {
+          console.log("error", ApplicationError);
+          if (ApplicationError?.code === "23505") {
+            toast.error("this email was already registered");
+          }
+          await supabase.storage
+            .from("jobData")
+            .remove([formData?.Resume?.name]);
+        }
+      }
+      //       {
+      //     "path": "products_summary (9).pdf",
+      //     "id": "de435385-4ca3-45ac-abc8-70bb9ee8b855",
+      //     "fullPath": "jobData/products_summary (9).pdf"
+      // }
+    } catch (error) {
+      console.log("Unexpected error:", error);
+    }
   };
 
   return (

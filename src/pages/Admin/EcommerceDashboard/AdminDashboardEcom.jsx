@@ -26,6 +26,7 @@ import { BsArchive } from "react-icons/bs";
 import { CiDiscount1 } from "react-icons/ci";
 import { IoMdImages } from "react-icons/io";
 import { IoMdSwitch } from "react-icons/io";
+import CareerDash from "./CareerDash";
 
 function handlesidebarState(state, action) {
   switch (action.type) {
@@ -37,6 +38,7 @@ function handlesidebarState(state, action) {
         isCustomerOpen: action.payload === "Customers",
         isDiscountOpen: action.payload === "Discounts",
         isBlogsOpen: action.payload === "Blogs",
+        isCareerOpen: action?.payload === "Career",
         currentSection: action.payload,
       };
     default:
@@ -51,6 +53,7 @@ const SECTIONS = {
   CUSTOMERS: "Customers",
   DISCOUNTS: "Discounts",
   BLOGS: "Blogs",
+  CAREER: "Career",
 };
 
 function AdminDashboardEcom() {
@@ -263,6 +266,10 @@ function AdminDashboardEcom() {
     sidebarDispatch({ type: "TOGGLE_SECTION", payload: SECTIONS.BLOGS });
   };
 
+  const handleCarrer = () => {
+    sidebarDispatch({ type: "TOGGLE_SECTION", payload: SECTIONS.CAREER });
+  };
+
   return (
     <div className="grid lg:grid-cols-[auto_1fr] lg:bg-gradient-to-r from-[#CFDCE7] to-[#E8EEF3] md:p-4 h-dvh md:h-screen font-Poppins lg:overflow-hidden">
       {/* sidebar */}
@@ -328,6 +335,13 @@ function AdminDashboardEcom() {
             icon={<IoMdImages />}
             text="Blogs"
             onClick={handleBlogs}
+            isExpanded={isExpanded}
+            currentSection={sidebarstate?.currentSection}
+          />
+          <SidebarItem
+            icon={<IoMdImages />}
+            text="Career"
+            onClick={handleCarrer}
             isExpanded={isExpanded}
             currentSection={sidebarstate?.currentSection}
           />
@@ -434,6 +448,13 @@ function AdminDashboardEcom() {
                 title="Blogs"
                 currentSection={sidebarstate?.currentSection}
                 onClick={handleBlogs}
+                setIsOpen={setIsOpen}
+              />
+              <MobileMenuItem
+                icon={<IoMdImages />}
+                title="Career"
+                currentSection={sidebarstate?.currentSection}
+                onClick={handleCarrer}
                 setIsOpen={setIsOpen}
               />
 
@@ -553,6 +574,13 @@ function AdminDashboardEcom() {
         {sidebarstate.isBlogsOpen && (
           <div className="flex flex-col h-full min-h-0 overflow-hidden lg:border-2 lg:border-[#334A78] lg:rounded-lg bg-white">
             <Blogs />
+          </div>
+        )}
+
+        {/* career */}
+        {sidebarstate.isCareerOpen && (
+          <div className="flex flex-col h-full min-h-0 overflow-hidden lg:border-2 lg:border-[#334A78] lg:rounded-lg bg-white">
+            <CareerDash />
           </div>
         )}
       </div>

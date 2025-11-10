@@ -1,5 +1,5 @@
 import Footer from "../common-components/Footer";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FaLocationDot } from "react-icons/fa6";
 import { HiClock } from "react-icons/hi2";
 import { IoIosArrowForward } from "react-icons/io";
@@ -7,8 +7,27 @@ import jobListings from "../utils/jobData";
 import { IoCalendarSharp } from "react-icons/io5";
 import { motion } from "framer-motion";
 import LandingNavbar from "../common-components/LandingNavbar";
+import { useEffect, useState } from "react";
+import { supabase } from "../services/supabase";
 
 function Carrer() {
+  const [jobPostings, setJobPostings] = useState();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    async function GetAllJobPosting() {
+      try {
+        const { data, error } = await supabase.from("JobPosting").select("*");
+        setJobPostings(data);
+        console.log("data", data);
+
+        if (error) throw error;
+      } catch (error) {
+        console.log("error", error);
+      }
+    }
+    GetAllJobPosting();
+  }, []);
   return (
     <>
       {/* <HeroSection title={"Join us"} background={background} /> */}
@@ -84,10 +103,21 @@ function Carrer() {
               Our Open Positions
             </h2>
           </div>
+          {/* {
+    "id": "5847bc60-9abd-48ad-86df-40ea15966341",
+    "created_at": "2025-11-10T07:20:14.712463+00:00",
+    "jobTitle": "Interior Designer",
+    "location": "mumbai",
+    "experience": "2",
+    "positionType": "FullTIme",
+    "description": "We are looking for a creative and detail-oriented Interior Designer to conceptualize and execute office space designs. You will work closely with clients to create aesthetically pleasing, functional, and innovative work environments.",
+    "responsibilities": "Assist in digital marketing campaigns and social media management\nConduct market research and competitor analysis.\nWork with architects and contractors to ensure seamless execution.\nPresent design concepts to clients and incorporate feedback.\nStay updated with industry trends and new materials.\nStay updated with industry trends and new materials.",
+    "requirements": "Bachelor's degree in Interior Design or a related field.\nProficiency in AutoCAD, SketchUp, V-Ray, and Adobe Suite.\nStrong creative and problem-solving skills.\nExcellent communication and project management skills."
+} */}
 
           {/* Career Cards Grid */}
           <div className="py-4 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3  gap-6">
-            {Object.entries(jobListings).map(([key, job], index) => (
+            {jobPostings?.map((job, index) => (
               <div
                 key={index}
                 className="hover:bg-[#68B2DC]/20 bg-white p-8 border-[#000] border flex flex-col justify-between h-full "
@@ -95,7 +125,7 @@ function Carrer() {
                 {/* Job Title */}
                 <div className="pb-4">
                   <h2 className="font-Poppins font-semibold text-2xl lg:text-3xl break-words">
-                    {key}
+                    {job?.jobTitle}
                   </h2>
                 </div>
 
@@ -105,24 +135,74 @@ function Carrer() {
                     {/* Job Type */}
                     <div className="flex items-center space-x-2">
                       <HiClock color="#334A78" />
-                      <p className="text-sm">{job.type}</p>
+                      <p className="text-sm">{job?.positionType}</p>
                     </div>
 
                     {/* Experience */}
                     <div className="flex items-center space-x-2">
                       <IoCalendarSharp color="#334A78" />
-                      <p className="text-sm">{job.experience}</p>
+                      {job?.experience > 0 ? (
+                        <p className="text-sm">{job?.experience}+ years</p>
+                      ) : (
+                        " Fresher"
+                      )}
                     </div>
                   </div>
 
                   {/* Location */}
                   <div className="flex items-center space-x-2 mt-3">
                     <FaLocationDot color="#334A78" />
-                    <p className="text-sm">{job.location}</p>
+                    <p className="text-sm">{job?.location}</p>
                   </div>
                 </div>
 
                 {/* Button */}
+                <div className="pt-6">
+                  <button
+                    onClick={() => navigate(`${job?.jobTitle}`, { state: job })}
+                    className="font-Poppins font-semibold text-sm text-black capitalize flex items-center gap-2 hover:underline underline-offset-4"
+                  >
+                    View Details <IoIosArrowForward color="#334A78" />
+                  </button>
+                  {/* <Link
+                    to={`${encodeURIComponent(job?.jobTitle)}`}
+                    className="font-Poppins font-semibold text-sm text-black capitalize flex items-center gap-2 hover:underline underline-offset-4"
+                  >
+                    View Details <IoIosArrowForward color="#334A78" />
+                  </Link> */}
+                </div>
+              </div>
+            ))}
+            {/* {Object.entries(jobListings).map(([key, job], index) => (
+              <div
+                key={index}
+                className="hover:bg-[#68B2DC]/20 bg-white p-8 border-[#000] border flex flex-col justify-between h-full "
+              >
+                <div className="pb-4">
+                  <h2 className="font-Poppins font-semibold text-2xl lg:text-3xl break-words">
+                    {key}
+                  </h2>
+                </div>
+
+                <div className="text-black flex-grow">
+                  <div className="flex justify-between lg:justify-normal  lg:flex-wrap gap-4 lg:gap-16">
+                    <div className="flex items-center space-x-2">
+                      <HiClock color="#334A78" />
+                      <p className="text-sm">{job.type}</p>
+                    </div>
+
+                    <div className="flex items-center space-x-2">
+                      <IoCalendarSharp color="#334A78" />
+                      <p className="text-sm">{job.experience}</p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center space-x-2 mt-3">
+                    <FaLocationDot color="#334A78" />
+                    <p className="text-sm">{job.location}</p>
+                  </div>
+                </div>
+
                 <div className="pt-6">
                   <Link
                     to={`${encodeURIComponent(key)}`}
@@ -132,7 +212,7 @@ function Carrer() {
                   </Link>
                 </div>
               </div>
-            ))}
+            ))} */}
           </div>
         </section>
       </div>
