@@ -966,7 +966,7 @@ function Addresspage() {
                       Discount on MRP
                     </h5>
                     <h5 className="font-medium  text-[#34BFAD]/80 ">
-                      RS -{pricingdetails?.discount?.toFixed(2)}
+                      RS -{pricingdetails?.discountOnMrp?.toFixed(2)}
                     </h5>
                   </div>
 

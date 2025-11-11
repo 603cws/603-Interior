@@ -30,6 +30,8 @@ function ShopProducts() {
   const [isfilterOpen, setIsfilteropen] = useState(false);
   const [isSortOpen, setIsSortOpen] = useState(false);
   const [isBrandOpen, setIsBrandopen] = useState(false);
+  const [allBrands, setAllBrands] = useState([]);
+  const [showAvailableOnly, setShowAvailableOnly] = useState(false);
 
   //context
   const { filters, setFilters } = useApp();
@@ -44,6 +46,7 @@ function ShopProducts() {
   // console.log("searchparams", searchParams, "cat", category);
 
   // console.log(minPrice, maxPrice);
+  // console.log("filters", filters);
 
   useEffect(() => {
     setFilters((prev) => ({
@@ -133,6 +136,20 @@ function ShopProducts() {
         // No sorting applied for 'popularity' or default
         break;
     }
+    // Brand Filter
+    if (filters.brands.length > 0) {
+      result = result.filter((product) => {
+        const productBrand = product?.manufacturer?.trim().toLowerCase();
+        return filters.brands.some(
+          (selected) => selected.trim().toLowerCase() === productBrand
+        );
+      });
+    }
+
+    // Show available only
+    if (showAvailableOnly) {
+      result = result.filter((product) => product.stockQty > 0);
+    }
 
     return result;
   };
@@ -140,7 +157,7 @@ function ShopProducts() {
   useEffect(() => {
     const updated = applyFiltersAndSort(products, filters, filtersortby);
     setFilteredProducts(updated);
-  }, [filters, filtersortby, products]);
+  }, [filters, filtersortby, products, showAvailableOnly]);
 
   useEffect(() => {
     setCurrentPage(1);
@@ -161,6 +178,11 @@ function ShopProducts() {
         .neq("productDisplayType", "boq");
 
       if (error) throw error;
+
+      const manufacturers = data
+        .map((item) => item.manufacturer)
+        .filter(Boolean);
+      setAllBrands([...new Set(manufacturers)]);
 
       // Filter products where it is approved
       const filtered = data.filter(
@@ -258,6 +280,14 @@ function ShopProducts() {
     }));
   };
 
+  const handleBrandClick = (brand) => {
+    setFilters((prev) => ({
+      ...prev,
+      brands: prev.brands.includes(brand)
+        ? prev.brands.filter((c) => c !== brand) // remove if exists
+        : [...prev.brands, brand], // add if not
+    }));
+  };
   const handleRemove = (type, value) => {
     if (type === "category") {
       setFilters((prev) => ({
@@ -301,7 +331,7 @@ function ShopProducts() {
     0, 1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500, 5000, 5500, 6000, 6500,
     7000, 7500, 8000, 8500, 9000, 9500, 10000,
   ];
-  const brands = ["Ikea", "Pepperfry", "Durian", "Godrej", "Furniture"];
+  // const brands = ["Ikea", "Pepperfry", "Durian", "Godrej", "Furniture"];
 
   const handleopencloseoffilter = (filter) => {
     switch (filter) {
@@ -566,19 +596,40 @@ function ShopProducts() {
                 </div> */}
               </div>
 
-              {/* <div className="flex justify-between items-center">
+              <div className="flex justify-between items-center">
                 <div>
                   <h3 className="text-[#334A78] text-[15px] font-bold leading-[24px]">
                     Out of stock
                   </h3>
                 </div>
-                <div className="flex gap-2">
-                  <button className="text-[#334A78]  ">show</button>
-                  <button className="text-[15px] text-[#334A78] border border-[#334A78] p-1">
+
+                <div className="relative flex border border-[#334A78] rounded w-fit overflow-hidden">
+                  <span
+                    className={`absolute top-0 left-0 h-full w-1/2 bg-[#334A78] transition-transform duration-300 ease-in-out rounded ${
+                      showAvailableOnly ? "translate-x-full" : "translate-x-0"
+                    }`}
+                  ></span>
+
+                  <button
+                    onClick={() => setShowAvailableOnly(false)}
+                    className={`relative z-10 px-4 py-1 text-[15px] font-medium transition-colors duration-300 ${
+                      !showAvailableOnly ? "text-white" : "text-[#334A78]"
+                    }`}
+                  >
+                    Show
+                  </button>
+
+                  <button
+                    onClick={() => setShowAvailableOnly(true)}
+                    className={`relative z-10 px-4 py-1 text-[15px] font-medium transition-colors duration-300 ${
+                      showAvailableOnly ? "text-white" : "text-[#334A78]"
+                    }`}
+                  >
                     Hide
                   </button>
                 </div>
-              </div> */}
+              </div>
+
               <div className="flex justify-between items-center text-[#334A78]">
                 <h4 className="text-[15px] font-bold leading-[24px]">
                   Shop by Categories
@@ -717,9 +768,14 @@ function ShopProducts() {
 
               {isBrandOpen && (
                 <div className="space-y-2">
-                  {brands.map((brand) => (
+                  {allBrands.map((brand) => (
                     <label
                       key={brand}
+                      checked={
+                        filters.brands.length === 1 &&
+                        filters.brands.includes(brand)
+                      }
+                      onClick={() => handleBrandClick(brand)}
                       className="flex items-center gap-2 cursor-pointer text-[#111] text-sm"
                     >
                       <input

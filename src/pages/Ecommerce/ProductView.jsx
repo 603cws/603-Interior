@@ -602,13 +602,20 @@ function ProductView() {
                 <div className="my-2 lg:my-3 font-Poppins">
                   <div className="flex items-center gap-2">
                     <p className="text-sm lg:text-xl font-bold text-[#334A78] leading-[38.4px]">
-                      Rs {product?.price || "Rs 3,0000"}
+                      Rs{" "}
+                      {product?.ecommercePrice?.sellingPrice || product?.price}
                     </p>
                     <p className="text-sm lg:text-xl text-[#898994] leading-[38.4px]">
-                      MRP <span className="line-through">Rs5678</span>
+                      MRP{" "}
+                      <span className="line-through">
+                        Rs {product?.ecommercePrice?.mrp || product?.price}
+                      </span>
                     </p>
                     <p className="text-sm lg:text-base text-[#F69E60]">
-                      (Rs.2678 OFF)
+                      (Rs.
+                      {product?.ecommercePrice?.mrp -
+                        product?.ecommercePrice?.sellingPrice}
+                      OFF)
                     </p>
                   </div>
                   <p className="text-xs text-[#3AA495]">
@@ -692,6 +699,10 @@ function ProductView() {
                     {isCarted ? "go to cart" : "ADD to cart"}
                   </button>
                   <button
+                    onClick={() => {
+                      handleAddToCart(product, isCarted);
+                      navigate("/cart");
+                    }}
                     disabled={product?.stockQty < 1}
                     className={`text-[#212B36] uppercase bg-[#FFFFFF] border border-[#212B36] w-52 px-10 py-4 rounded-sm hover:bg-[#334A78] hover:text-[#fff] transition-colors duration-500 ease-in-out ${
                       product?.stockQty < 1

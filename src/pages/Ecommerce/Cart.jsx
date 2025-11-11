@@ -22,6 +22,8 @@ import toast from "react-hot-toast";
 import { isCouponValid } from "../../utils/ResuableFunctions";
 import AppliedCoupon from "../../common-components/AppliedCoupon";
 import { MdOutlineCancel } from "react-icons/md";
+import { useHandleAddToCart } from "../../utils/HelperFunction";
+import { baseImageUrl } from "../../utils/HelperConstant";
 
 function EmptyCart() {
   const navigate = useNavigate();
@@ -92,6 +94,9 @@ function Cart() {
   const [allCoupons, setAllCoupons] = useState([]);
   const [ismobileCouponFormOpen, setIsMobileCouponFormOpen] = useState(false);
   const [couponname, setCouponname] = useState("");
+  const [discountOnMrp, setDiscountOnMrp] = useState(0);
+  const [alsoLike, setAlsoLike] = useState([]);
+  const [similarTypes, setSimilarTypes] = useState();
 
   const [gst, setGst] = useState(0);
   const [shippingcharge, setshippingCharge] = useState(0);
@@ -99,6 +104,7 @@ function Cart() {
   const [mobilecouponname, setmobilecouponname] = useState("");
   const finalValue = (
     orignalTotalPrice -
+    discountOnMrp -
     differenceInPrice +
     shippingcharge +
     gst
@@ -107,7 +113,8 @@ function Cart() {
   useEffect(() => {
     const calculateTotal = () => {
       const total = cartItems?.reduce(
-        (acc, curr) => acc + curr.productId?.price * curr.quantity,
+        (acc, curr) =>
+          acc + curr.productId?.ecommercePrice?.mrp * curr.quantity,
         0
       );
       setOriginalToalPrice(total || 0);
@@ -116,12 +123,30 @@ function Cart() {
     if (isAuthenticated && cartItems) calculateTotal();
     else if (!isAuthenticated && localcartItems) {
       const total = localcartItems?.reduce(
-        (acc, curr) => acc + curr.productId?.price * curr.quantity,
+        (acc, curr) =>
+          acc + curr.productId?.ecommercePrice?.mrp * curr.quantity,
         0
       );
       // setCartTotalPrice(total || 0);
       setOriginalToalPrice(total || 0);
     }
+    const calculateDiscountOnMrp = () => {
+      const items = isAuthenticated ? cartItems : localcartItems;
+      if (!items || items.length === 0) return 0;
+      const discountPrice = items.reduce((acc, item) => {
+        const mrp = parseInt(item.productId?.ecommercePrice?.mrp || 0);
+        const sellingPrice = parseInt(
+          item.productId?.ecommercePrice?.sellingPrice || 0
+        );
+        const quantity = item.quantity || 1;
+        const discount = (mrp - sellingPrice) * quantity;
+        return acc + discount;
+      }, 0);
+
+      setDiscountOnMrp(discountPrice);
+    };
+    calculateDiscountOnMrp();
+    youMayAlsoLike();
   }, [cartItems, localcartItems, isAuthenticated]);
 
   const handleRemoveCoupon = async () => {
@@ -386,6 +411,7 @@ function Cart() {
     if (isAuthenticated) {
       const formatteddata = {
         price: orignalTotalPrice || 0,
+        discountOnMrp: discountOnMrp || 0,
         discount: differenceInPrice || 0,
         gst: gst || 0,
         finalValue: +finalValue,
@@ -416,6 +442,80 @@ function Cart() {
       localStorage.removeItem("cartitems");
       setLocalCartItems([]);
       setShowClearCartPopup(false);
+    }
+  };
+
+  const youMayAlsoLike = async () => {
+    try {
+      const items = isAuthenticated ? cartItems : localcartItems;
+      if (!items?.length) return;
+
+      const productTypes = [
+        ...new Set(items.map((item) => item.productId?.product_type)),
+      ];
+      setSimilarTypes(productTypes);
+
+      if (!productTypes.length) return;
+
+      const { data, error } = await supabase
+        .from("product_variants")
+        .select(`* ,product_id(*),reviews(*)`)
+        .neq("productDisplayType", "boq");
+
+      if (error) throw error;
+
+      const filtered = data.filter((product) =>
+        productTypes.includes(product.product_type)
+      );
+      const uniqueImages = [...new Set(filtered.map((item) => item.image))];
+
+      const { data: signedUrls, error: signedUrlError } = await supabase.storage
+        .from("addon") // your bucket name
+        .createSignedUrls(uniqueImages, 3600); // 1 hour expiry
+
+      if (signedUrlError) {
+        console.error("Error generating signed URLs:", signedUrlError);
+        return;
+      }
+      const urlMap = {};
+      signedUrls.forEach(({ path, signedUrl }) => {
+        urlMap[path] = signedUrl;
+      });
+      const filteredWithUrls = filtered.map((p) => ({
+        ...p,
+        image: urlMap[p.image] || p.image, // fallback if missing
+      }));
+
+      // exclude products already in cart (optional)
+      const cartProductIds = items.map((item) => item.productId?.id);
+      const uniqueProducts = filteredWithUrls.filter(
+        (p) => !cartProductIds.includes(p.id) && p.status === "approved"
+      );
+
+      const grouped = productTypes.reduce((acc, type) => {
+        acc[type] = uniqueProducts.filter((p) => p.product_type === type);
+        return acc;
+      }, {});
+
+      let selected = Object.values(grouped).flatMap((group) => {
+        if (group.length <= 2) return group;
+        const shuffled = [...group].sort(() => Math.random() - 0.5);
+        return shuffled.slice(0, 2);
+      });
+
+      if (selected.length < 12) {
+        const remainingCount = 12 - selected.length;
+        const alreadySelectedIds = selected.map((p) => p.id);
+        const extra = uniqueProducts
+          .filter((p) => !alreadySelectedIds.includes(p.id))
+          .sort(() => Math.random() - 0.5)
+          .slice(0, remainingCount);
+
+        selected = [...selected, ...extra];
+      }
+      setAlsoLike(selected);
+    } catch (err) {
+      console.error("Error fetching recommendations:", err);
     }
   };
 
@@ -479,7 +579,7 @@ function Cart() {
                       </div>
                     )
                   ) : localcartItems ? (
-                    <div className="space-y-2">
+                    <div className="space-y-2 max-h-[370px] overflow-y-auto custom-scrollbar pb-2">
                       {localcartItems.length > 0 ? (
                         <>
                           {localcartItems.map((item) => (
@@ -559,7 +659,7 @@ function Cart() {
                           Discount on MRP
                         </h5>
                         <h5 className="font-medium  text-[#34BFAD]/80 ">
-                          -Rs 0
+                          -Rs {discountOnMrp}
                         </h5>
                       </div>
 
@@ -788,50 +888,67 @@ function Cart() {
             </section>
 
             {/* You may also like */}
-            <section className="pt-6 pb-14 lg:py-14">
-              <h3 className="uppercase text-sm font-medium lg:font-semibold lg:text-3xl text-[#171717]">
-                You may also like
-              </h3>
-
-              <div className="font-Poppins w-[245px] h-[350px]">
-                <div className="flex justify-center items-center p-2">
-                  <img
-                    src="/images/home/product-image.png"
-                    alt="chair"
-                    className="h-52 object-contain"
-                  />
-                </div>
-                <div className="bg-[#fff] p-2">
-                  <div className="flex mb-4">
-                    <div className="flex-1 text-sm  leading-[22.4px]  text-[#111] space-y-1.5">
-                      <h4 className="font-medium text-sm leading-[22.4px] uppercase">
-                        FLAMINGO SLING
-                      </h4>
-                      <div className="flex items-center gap-2">
-                        <p className=" ">Rs 3,0000</p>
-                        <p className="line-through text-[#111] text-opacity-50">
-                          Rs $5678
-                        </p>
-                        <p className="text-[#C20000] uppercase">sale</p>
-                      </div>
-                    </div>
-                    <div
-                      onClick={() => setWishListed(!wishListed)}
-                      className=" text-[#ccc] hover:text-red-950 cursor-pointer"
-                    >
-                      {wishListed ? (
-                        <AiFillHeart size={26} color="red" />
-                      ) : (
-                        <GoHeart size={25} />
-                      )}
-                    </div>
-                  </div>
-                  <button className="text-[#000] uppercase bg-[#FFFFFF] text-xs border border-[#ccc] px-2  py-2 rounded-sm ">
-                    ADD TO CART
+            {alsoLike.length > 0 && (
+              <section className="pt-6 pb-14 lg:py-14">
+                <div className="flex justify-between mb-5">
+                  <h3 className="uppercase text-sm font-medium lg:font-semibold lg:text-3xl text-[#171717]">
+                    You may also like
+                  </h3>
+                  <button
+                    onClick={() =>
+                      navigate(`/cart/similarproducts/?type=${similarTypes}`)
+                    }
+                    className="capitalize text-[#334A78] text-sm font-bold border border-[#334A78] px-3 py-1.5 hover:bg-[#f1f1f1]"
+                  >
+                    view all
                   </button>
                 </div>
-              </div>
-            </section>
+
+                {/* <div className="font-Poppins w-[245px] h-[350px]">
+                  <div className="flex justify-center items-center p-2">
+                    <img
+                      src="/images/home/product-image.png"
+                      alt="chair"
+                      className="h-52 object-contain"
+                    />
+                  </div>
+                  <div className="bg-[#fff] p-2">
+                    <div className="flex mb-4">
+                      <div className="flex-1 text-sm  leading-[22.4px]  text-[#111] space-y-1.5">
+                        <h4 className="font-medium text-sm leading-[22.4px] uppercase">
+                          FLAMINGO SLING
+                        </h4>
+                        <div className="flex items-center gap-2">
+                          <p className=" ">Rs 3,0000</p>
+                          <p className="line-through text-[#111] text-opacity-50">
+                            Rs $5678
+                          </p>
+                          <p className="text-[#C20000] uppercase">sale</p>
+                        </div>
+                      </div>
+                      <div
+                        onClick={() => setWishListed(!wishListed)}
+                        className=" text-[#ccc] hover:text-red-950 cursor-pointer"
+                      >
+                        {wishListed ? (
+                          <AiFillHeart size={26} color="red" />
+                        ) : (
+                          <GoHeart size={25} />
+                        )}
+                      </div>
+                    </div>
+                    <button className="text-[#000] uppercase bg-[#FFFFFF] text-xs border border-[#ccc] px-2  py-2 rounded-sm ">
+                      ADD TO CART
+                    </button>
+                  </div>
+                </div> */}
+                <div className="grid grid-cols-2 lg:grid-cols-4 xl:grid-cols-6 gap-4">
+                  {alsoLike.map((product) => (
+                    <Card key={product.id} product={product} />
+                  ))}
+                </div>
+              </section>
+            )}
           </div>
         </div>
       </div>
@@ -851,7 +968,11 @@ function Cart() {
 
       {checkPin && <CheckPinCode onClose={onClose} />}
 
-      <div className="hidden lg:block">
+      <div
+        className={`hidden lg:block ${
+          alsoLike.length <= 0 ? "fixed bottom-0 w-full" : ""
+        } `}
+      >
         {" "}
         <BottomTabs />
       </div>
@@ -989,7 +1110,8 @@ function CartCard({ cartitem }) {
       console.error("refreshSignedUrl failed:", err);
     }
   };
-  const cartItemTotal = cartitem.productId.price * cartitem.quantity;
+  const cartItemTotal =
+    cartitem?.productId?.ecommercePrice?.sellingPrice * cartitem?.quantity;
 
   return (
     <>
@@ -1060,19 +1182,26 @@ function CartCard({ cartitem }) {
               </button>
             </div>
           </div>
-          {cartitem.productId?.stockQty < 10 && (
+          {cartitem?.productId?.stockQty < 10 && (
             <span className="text-xs text-[#F87171]">
-              Hurry Up! Only {cartitem.productId?.stockQty} left.
+              Hurry Up! Only {cartitem?.productId?.stockQty} left.
             </span>
           )}
           <div className="flex gap-3">
             <h5 className=" font-medium text-[#111111]">
-              Rs. {cartitem.productId?.price}
+              Rs.{" "}
+              {cartitem?.productId?.ecommercePrice?.sellingPrice ||
+                cartitem?.productId?.price}
             </h5>
             <h5 className=" font-medium text-[#111111]/50">
-              <del>Rs. 1699.00</del>
+              <del>{cartitem?.productId?.ecommercePrice?.mrp || ""}</del>
             </h5>{" "}
-            <h5 className="font-medium text-[#C20000]/50">Rs. 900 OFF</h5>
+            <h5 className="font-medium text-[#C20000]/50">
+              Rs.{" "}
+              {cartitem?.productId?.ecommercePrice?.mrp -
+                cartitem?.productId?.ecommercePrice?.sellingPrice}{" "}
+              OFF
+            </h5>
           </div>
           <p className="text-xs font-bold text-[#111]">
             Total : Rs. {cartItemTotal}
@@ -1172,6 +1301,97 @@ function CouponCard({
           <span className="mx-2">|</span>
           <span className="font-semibold">11:59 PM</span>
         </p>
+      </div>
+    </div>
+  );
+}
+
+function Card({ product }) {
+  const { handleAddToCart, handleAddtoWishlist } = useHandleAddToCart();
+  const { isAuthenticated, localcartItems, cartItems, wishlistItems } =
+    useApp();
+
+  const isWishlisted = wishlistItems?.some(
+    (item) => item.productId?.id === product.id
+  );
+
+  // const [iscarted, setIsCarted] = useState(false);
+
+  const naviagte = useNavigate();
+
+  // useEffect(() => {
+  //   if (!product?.id) return;
+
+  //   if (isAuthenticated) {
+  //     const check = cartItems?.some(
+  //       (item) => item.productId?.id === product.id
+  //     );
+  //     setIsCarted(check);
+  //   } else {
+  //     const check = localcartItems?.some(
+  //       (item) => item.productId?.id === product.id
+  //     );
+  //     setIsCarted(check);
+  //   }
+  // }, [isAuthenticated, cartItems, localcartItems, product?.id]);
+  return (
+    <div className="font-TimesNewRoman max-w-sm max-h-sm  border border-[#ccc]">
+      <div
+        onClick={() =>
+          naviagte(`/productview/${product.id}`, { state: { from: "shop" } })
+        }
+        className="flex justify-center items-center p-2 cursor-pointer"
+      >
+        <img
+          src={product.image}
+          alt={product.product_id?.category}
+          className="h-52 object-contain"
+        />
+      </div>
+      <div className="bg-[#fff] p-2">
+        <div className="flex flex-col md:flex-row ">
+          <div className="flex-1 text-sm  leading-[22.4px]  text-[#111] ">
+            <h4
+              title={product?.title}
+              className="font-medium text-sm leading-[22.4px] line-clamp-1"
+            >
+              {product?.title}
+            </h4>
+            <div className="flex items-center gap-2">
+              <p className=" ">
+                Rs {product?.ecommercePrice?.sellingPrice || "Rs 3,0000"}
+              </p>
+              <p className="line-through text-[#111] text-opacity-50">
+                Rs {product?.ecommercePrice?.mrp || "Rs 3,0000"}
+              </p>
+              <p className="text-[#C20000]">sale</p>
+            </div>
+          </div>
+          <div
+            onClick={() => handleAddtoWishlist(product)}
+            className="text-[#ccc] hover:text-red-600 cursor-pointer"
+          >
+            {isWishlisted ? (
+              <AiFillHeart size={20} color="red" />
+            ) : (
+              <GoHeart size={20} />
+            )}
+          </div>
+        </div>
+        {product.stockQty > 0 ? (
+          <button
+            onClick={() => handleAddToCart(product)}
+            // disabled={iscarted}
+            className="text-[#000] uppercase bg-[#FFFFFF] text-xs border border-[#ccc] px-2  py-2 rounded-sm "
+          >
+            {/* {iscarted ? "Go to cart" : "Add to cart"}{" "} */}
+            add to cart
+          </button>
+        ) : (
+          <span className="text-xs text-red-500 font-semibold">
+            Out of stock
+          </span>
+        )}
       </div>
     </div>
   );

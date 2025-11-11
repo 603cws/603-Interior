@@ -70,6 +70,7 @@ import OurStory from "./pages/OurStory";
 import OrderConfirm from "./pages/Ecommerce/OrderConfirm";
 import AdminDashboardEcom from "./pages/Admin/EcommerceDashboard/AdminDashboardEcom";
 import DashboardInterface from "./pages/Admin/DashboardInterface";
+import YouMayAlsoLike from "./pages/Ecommerce/YouMayAlsoLike";
 
 const Home = lazy(() => import("./pages/Home"));
 
@@ -198,6 +199,7 @@ function App() {
           <Route path="/brands/light" element={<BrandLight />} />
           <Route path="/brands/dlink" element={<BrandDLink />} />
           <Route path="/orderSuccess/:id" element={<OrderConfirm />} />
+          <Route path="/cart/similarproducts" element={<YouMayAlsoLike />} />
           {/* testing route */}
           <Route path="/boqcompleted" element={<Boqcompleted />} />
           <Route

@@ -102,6 +102,7 @@ export const AppProvider = ({ children }) => {
   const [filters, setFilters] = useState({
     category: [],
     priceRange: [0, 10000],
+    brands: [],
   });
   const [BOQTitle, setBOQTitle] = useState(
     sessionStorage.getItem("BOQTitle") || ""
