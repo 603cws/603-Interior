@@ -3,3 +3,5 @@ export const baseImageUrl =
 
 export const blogImageUrl =
   "https://bwxzfwsoxwtzhjbzbdzs.supabase.co/storage/v1/object/public/blog-images";
+export const resumeUrl =
+  "https://bwxzfwsoxwtzhjbzbdzs.supabase.co/storage/v1/object/public/jobData";

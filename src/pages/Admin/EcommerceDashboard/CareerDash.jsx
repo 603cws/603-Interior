@@ -1,22 +1,56 @@
-import { useEffect, useState } from "react";
+import { useEffect, useReducer, useState } from "react";
 import { useForm } from "react-hook-form";
 import { MdArrowBackIos } from "react-icons/md";
 import { supabase } from "../../../services/supabase";
-import { BsThreeDots } from "react-icons/bs";
+
 import { FaLocationDot } from "react-icons/fa6";
 import { IoCalendarSharp } from "react-icons/io5";
 import { HiClock } from "react-icons/hi";
 import { MdKeyboardArrowRight } from "react-icons/md";
 import toast from "react-hot-toast";
-import { MdDeleteOutline } from "react-icons/md";
 import { MdEdit } from "react-icons/md";
+import { resumeUrl } from "../../../utils/HelperConstant";
+function handlesidebarState(state, action) {
+  switch (action.type) {
+    case "TOGGLE_SECTION":
+      return {
+        jobposting: action?.payload === SECTIONS?.JOBPOSTINGS,
+        addposting: action?.payload === SECTIONS?.ADDJOB,
+        editPosting: action?.payload === SECTIONS?.EditJob,
+        viewDetails: action?.payload === SECTIONS?.VIEWJOBDETAILS,
+        canditateDetail: action?.payload === SECTIONS?.CANDITATEDETAILS,
+      };
+    default:
+      return state;
+  }
+}
 
+const SECTIONS = {
+  JOBPOSTINGS: "jobpostings",
+  ADDJOB: "addJob",
+  EditJob: "editJob",
+  VIEWJOBDETAILS: "viewJobDetails",
+  CANDITATEDETAILS: "canditateDetails",
+};
 function CareerDash() {
-  const [createJobPost, setCreateJobPost] = useState(false);
   const [jobPostings, setJobPostings] = useState();
   const [jobApplication, setJobApplication] = useState();
-  const [isJobEdit, setIsJobEdit] = useState(false);
   const [jobEditData, setjobEditData] = useState();
+  const [allCanditate, setAllCanditate] = useState();
+  const [canditateDetail, setCanditateDetail] = useState();
+
+  const sidebarInitialState = {
+    jobposting: true,
+    addposting: false,
+    editPosting: false,
+    viewDetails: false,
+    canditateDetail: false,
+  };
+
+  const [careerstate, careerDispatch] = useReducer(
+    handlesidebarState,
+    sidebarInitialState
+  );
 
   useEffect(() => {
     async function GetAllJobPosting() {
@@ -33,7 +67,7 @@ function CareerDash() {
       try {
         const { data, error } = await supabase
           .from("JobApplication")
-          .select("Position");
+          .select("*");
         setJobApplication(data);
         if (error) throw error;
       } catch (error) {
@@ -44,18 +78,38 @@ function CareerDash() {
   }, []);
 
   const onsuccess = () => {
-    setCreateJobPost(false);
-    setIsJobEdit(false);
+    // setCreateJobPost(false);
+    // setIsJobEdit(false);
   };
   return (
     <div className="font-Poppins overflow-y-auto gradient-scrollbar">
       <div className="flex justify-between items-center py-2 px-3">
         <h2 className="flex items-center text-xl md:text-2xl font-semibold text-[#374A75] ">
-          {(createJobPost || isJobEdit) && (
+          {(careerstate?.addposting ||
+            careerstate?.editPosting ||
+            careerstate?.viewDetails) && (
             <button
               onClick={() => {
-                setCreateJobPost(false);
-                setIsJobEdit(false);
+                // setCreateJobPost(false);
+                // setIsJobEdit(false);
+                careerDispatch({
+                  type: "TOGGLE_SECTION",
+                  payload: SECTIONS?.JOBPOSTINGS,
+                });
+              }}
+            >
+              <MdArrowBackIos />
+            </button>
+          )}
+          {careerstate?.canditateDetail && (
+            <button
+              onClick={() => {
+                // setCreateJobPost(false);
+                // setIsJobEdit(false);
+                careerDispatch({
+                  type: "TOGGLE_SECTION",
+                  payload: SECTIONS?.VIEWJOBDETAILS,
+                });
               }}
             >
               <MdArrowBackIos />
@@ -63,10 +117,16 @@ function CareerDash() {
           )}
           Job post
         </h2>
-        {!createJobPost && !isJobEdit && (
+        {careerstate?.jobposting && (
           <div className="flex gap-2">
             <button
-              onClick={() => setCreateJobPost((prev) => !prev)}
+              onClick={() => {
+                careerDispatch({
+                  type: "TOGGLE_SECTION",
+                  payload: SECTIONS?.ADDJOB,
+                });
+              }}
+              //   onClick={() => setCreateJobPost((prev) => !prev)}
               className="px-2 py-1 md:px-4 md:py-2 border border-[#CCCCCC] rounded-md text-[#374A75] text-lg font-medium hover:bg-[#f1f1f1] flex items-center gap-1"
             >
               + <span className="hidden lg:block">Add Job</span>
@@ -75,26 +135,68 @@ function CareerDash() {
         )}
       </div>
       <hr />
-      {createJobPost ? (
-        <JobPostForm />
-      ) : isJobEdit ? (
-        <JobPostForm
-          jobdata={jobEditData}
-          isedit={true}
-          onsuccess={onsuccess}
-        />
-      ) : (
+      {careerstate?.jobposting && (
         <div className="p-4 grid grid-cols-2 gap-x-3 sm:grid-cols-3 gap-y-10">
           {jobPostings?.map((job) => (
             <JobCard
               key={job?.id}
               jobdata={job}
               jobApplication={jobApplication}
-              setIsJobEdit={setIsJobEdit}
+              //   setIsJobEdit={setIsJobEdit}
               setjobEditData={setjobEditData}
-              setCreateJobPost={setCreateJobPost}
+              careerDispatch={careerDispatch}
+              setAllCanditate={setAllCanditate}
+              //   setCreateJobPost={setCreateJobPost}
             />
           ))}
+        </div>
+      )}
+      {careerstate?.addposting && <JobPostForm />}{" "}
+      {/* {createJobPost && <JobPostForm />}{" "} */}
+      {careerstate?.editPosting && (
+        <JobPostForm
+          jobdata={jobEditData}
+          isedit={true}
+          onsuccess={onsuccess}
+        />
+      )}
+      {careerstate?.viewDetails && (
+        <>
+          <div className="p-2  grid grid-cols-2 gap-x-3 sm:grid-cols-4 gap-y-10">
+            {allCanditate?.length > 0 &&
+              allCanditate?.map((canditate) => {
+                return (
+                  <Jobdetails
+                    canditate={canditate}
+                    key={canditate?.id}
+                    setCanditateDetail={setCanditateDetail}
+                    careerDispatch={careerDispatch}
+                  />
+                );
+              })}
+          </div>
+          {allCanditate?.length <= 0 && (
+            <div className=" flex flex-col gap-6 justify-center items-center py-5 ">
+              <div className="flex justify-center items-center rounded-full bg-[#EFEFF1] border border-[#ddd] w-80 ">
+                <img
+                  src="/images/NOCANDITATE.png"
+                  alt="no canditate"
+                  className="p-8 w-72"
+                />
+              </div>
+              <h2 className="font-semibold capitalize ">
+                Zero Canditate Applied yet{" "}
+              </h2>
+            </div>
+          )}
+        </>
+      )}
+      {careerstate?.canditateDetail && (
+        <div>
+          <CanditateDetails
+            canditate={canditateDetail}
+            jobPostings={jobPostings}
+          />
         </div>
       )}
     </div>
@@ -104,23 +206,22 @@ function CareerDash() {
 function JobCard({
   jobdata,
   jobApplication,
-  setIsJobEdit,
   setjobEditData,
-  setCreateJobPost,
+  careerDispatch,
+  setAllCanditate,
 }) {
   return (
     <div className="max-w-sm font-Poppins border border-[#ccc] p-2 rounded-sm">
       <div className="flex justify-between items-center mb-4">
         <h2 className="font-bold italic">{jobdata?.jobTitle}</h2>
         <div className="flex gap-3 items-center text-xl ">
-          {/* <button>
-            <MdDeleteOutline />
-          </button> */}
           <button
             onClick={() => {
-              setIsJobEdit(true);
               setjobEditData(jobdata);
-              setCreateJobPost(false);
+              careerDispatch({
+                type: "TOGGLE_SECTION",
+                payload: SECTIONS?.EditJob,
+              });
             }}
           >
             <MdEdit />
@@ -156,9 +257,204 @@ function JobCard({
         </div>
       </div>
       <div className="flex items-center justify-end">
-        <button className="flex gap-1 items-center justify-center">
+        <button
+          onClick={() => {
+            careerDispatch({
+              type: "TOGGLE_SECTION",
+              payload: SECTIONS?.VIEWJOBDETAILS,
+            });
+            setAllCanditate(
+              jobApplication?.filter(
+                (item) =>
+                  item?.Position?.toLowerCase() ===
+                  jobdata?.jobTitle?.toLowerCase()
+              )
+            );
+          }}
+          className="flex gap-1 items-center justify-center hover:underline"
+        >
           view details <MdKeyboardArrowRight size={22} color="#334A78" />
         </button>
+      </div>
+    </div>
+  );
+}
+
+function Jobdetails({ canditate, setCanditateDetail, careerDispatch }) {
+  console.log("canditate", canditate);
+
+  //   {
+  //     "id": "8e391e4c-02c4-4813-8c59-921f4deac951",
+  //     "created_at": "2025-11-07T11:29:43.93551+00:00",
+  //     "FullName": "yuvraj machadi",
+  //     "Position": "web developer",
+  //     "Experience": null,
+  //     "NoticePeriod": 30,
+  //     "CurrentCTC": 250000,
+  //     "ExpectedCTC": 600000,
+  //     "EmailID": "yuvrajmanchadi321@gmail.com",
+  //     "MobNo": 9594767165,
+  //     "ResumePath": "products_summary (9).pdf"
+  // }
+
+  return (
+    <div className="max-w-xs border border-[#ccc] py-5 px-[18px] font-Poppins rounded-lg">
+      <div className="flex gap-3 items-center">
+        <img
+          src="/images/profile-card/profile-icon.png"
+          alt="profile card"
+          className="w-12 h-12 border border-[#cccc] rounded-full"
+        />
+        <div className="flex flex-col gap-2">
+          <h2 className="text-lg font-semibold">{canditate?.FullName}</h2>
+          <p className="text-[#aaa] text-sm">
+            Applied at{" "}
+            <span className="text-[#111]">
+              {canditate?.created_at?.split("T")?.[0] || "date"}
+            </span>
+          </p>
+        </div>
+      </div>
+      <div className="mt-5">
+        <button
+          onClick={() => {
+            setCanditateDetail(canditate);
+            careerDispatch({
+              type: "TOGGLE_SECTION",
+              payload: SECTIONS?.CANDITATEDETAILS,
+            });
+          }}
+          className="text-sm border text-[#0D894F] bg-[#E7F4EE] rounded-xl p-1 hover:text-green-900"
+        >
+          Applied
+        </button>
+      </div>
+    </div>
+  );
+}
+
+function CanditateDetails({ canditate, jobPostings }) {
+  console.log("applied canditate");
+
+  //   useEffect(() => {
+  //     const handleOpenPdf = async () => {
+  //       const { data } = supabase.storage
+  //         .from("") // your bucket name
+  //         .getPublicUrl("documents/sample.pdf"); // file path inside bucket
+
+  //       // // open in new tab
+  //       // window.open(data.publicUrl, "_blank");
+  //     };
+  //     handleOpenPdf();
+  //   }, []);
+
+  const jobdata = jobPostings?.filter(
+    (job) => job?.jobTitle.toLowerCase() === canditate?.Position.toLowerCase()
+  );
+
+  return (
+    <div className="p-4 space-y-3">
+      <div className=" border border-[#ccc] py-5 px-[18px] font-Poppins ">
+        <div className="flex justify-between items-center">
+          <div className="flex gap-3 items-center">
+            <img
+              src="/images/profile-card/profile-icon.png"
+              alt="profile card"
+              className="w-12 h-12 border border-[#cccc] rounded-full"
+            />
+            <div className="flex flex-col gap-2">
+              <h2 className="text-lg font-semibold">{canditate?.FullName}</h2>
+              <p className="text-[#aaa] text-sm">
+                Applied at{" "}
+                <span className="text-[#111]">
+                  {canditate?.created_at?.split("T")?.[0] || "date"}
+                </span>
+              </p>
+            </div>
+          </div>
+          <div className="mt-5">
+            <button className="text-sm border text-[#0D894F] bg-[#E7F4EE] rounded-xl p-1">
+              Applied
+            </button>
+          </div>
+        </div>
+      </div>
+      <div className=" border border-[#ccc]  p-[18px] font-Poppins space-y-2">
+        <div>
+          <h3 className="font-bold italic text-[#000] text-lg leading-7">
+            Personal Information
+          </h3>
+        </div>
+        <div className="space-y-1">
+          <div className="flex justify-between items-center text-[14px] font-light capitalize">
+            <h4>email</h4>
+            <p className="text-[#0D894F]">{canditate?.EmailID}</p>
+          </div>
+          <div className="flex justify-between items-center text-[14px] font-light capitalize">
+            <h4>Phone number</h4>
+            <p className="text-[#0D894F]">{canditate?.MobNo}</p>
+          </div>
+        </div>
+      </div>
+      <div className=" border border-[#ccc]  p-[18px] font-Poppins space-y-2">
+        <div>
+          <h3 className="font-bold italic text-[#000] text-lg leading-7">
+            {jobdata[0]?.jobTitle}
+          </h3>
+        </div>
+        <div className="flex gap-2 lg:space-x-6 text-[#334A78] flex-wrap lg:flex-nowrap">
+          <p className="flex items-center text-xs leading-4 tracking-[1.2px]">
+            <HiClock className="mr-2" />
+            {jobdata[0]?.positionType}
+          </p>
+          <p className="flex items-center text-xs leading-4 tracking-[1.2px]">
+            <IoCalendarSharp className="mr-2" />
+            {jobdata[0]?.experience} years
+          </p>
+          <p className="flex items-center text-xs leading-4 tracking-[1.2px]">
+            <FaLocationDot className="mr-2" />
+            {jobdata[0]?.location}
+          </p>
+        </div>
+        <div className="flex justify-between items-center flex-wrap sm:flex-nowrap">
+          <div className="flex flex-col gap-2  text-sm leading-4">
+            <h4 className="font-light">Experience in Year</h4>
+            <p className="text-[#000] font-semibold">
+              {canditate?.Experience ?? "0"}
+            </p>
+          </div>
+          <div className="flex flex-col gap-2  text-sm leading-4">
+            <h4 className="font-light">Notice Period</h4>
+            <p className="text-[#000] font-semibold">
+              {canditate?.NoticePeriod}
+            </p>
+          </div>
+          <div className="flex flex-col gap-2  text-sm leading-4">
+            <h4 className="font-light">Current Salary</h4>
+            <p className="text-[#000] font-semibold">{canditate?.CurrentCTC}</p>
+          </div>
+          <div className="flex flex-col gap-2  text-sm leading-4">
+            <h4 className="font-light">Expected Salary</h4>
+            <p className="text-[#000] font-semibold">
+              {canditate?.ExpectedCTC}
+            </p>
+          </div>
+        </div>
+      </div>
+      <div className=" border border-[#ccc]  p-[18px] font-Poppins space-y-2">
+        <div className="space-y-3">
+          <h6 className="text-[#374A75] font-semibold text-xl">Resume</h6>
+          <div>
+            <a
+              href={`${resumeUrl}/${canditate?.ResumePath}`}
+              target="_blank"
+              rel="noreferrer"
+              className="px-5 py-3 rounded-md border border-[#ccc] "
+            >
+              open
+            </a>
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -225,16 +521,6 @@ function JobPostForm({ jobdata = null, isedit = false, onsuccess = null }) {
           toast.success("data inserted successfully");
         }
       }
-      // {
-      //               jobTitle: formData?.JobTitle,
-      //               experience: formData?.Experience,
-      //               location: formData?.Location,
-      //               positionType: formData?.PositionType,
-      //               description: formData?.description,
-      //               responsibilities: formData?.Responsibilities,
-      //               requirements: formData?.Requirements,
-      //             },
-      //   console.log("data", data);
     } catch (error) {
       console.log("error", error);
       toast.error("something went wrong");
