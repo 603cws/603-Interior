@@ -77,24 +77,32 @@ function DashboardProductCard({
                   )}
                   {(product.productDisplayType === "ecommerce" ||
                     product.productDisplayType === "both") && (
-                    <div>
-                      <p className="text-[#334A78] text-sm font-medium">MRP</p>
-                      <p className="font-semibold text-[#000] text-lg">
-                        ₹{product.price} 
-                      </p>
-                      <p className="text-[#334A78] text-sm font-medium">
-                        Selling Price
-                      </p>
-                      <p className="font-semibold text-[#000] text-lg">
-                        ₹{product.price} 
-                      </p>
-                      <p className="text-[#334A78] text-sm font-medium mt-4">
-                        Available Stock :
-                        <span className="font-semibold text-[#000] text-sm">
-                          {" "}
-                          {product.stockQty || "NA"}
-                        </span>
-                      </p>
+                    <div className="flex flex-wrap items-center gap-3 ">
+                      <div>
+                        <p className="text-[#334A78] text-sm font-medium">
+                          MRP
+                        </p>
+                        <p className="font-semibold text-[#000] text-lg">
+                          ₹{product.price} 
+                        </p>
+                      </div>
+                      <div>
+                        <p className="text-[#334A78] text-sm font-medium">
+                          Selling Price
+                        </p>
+                        <p className="font-semibold text-[#000] text-lg">
+                          ₹{product.price} 
+                        </p>
+                      </div>
+                      <div>
+                        <p className="text-[#334A78] text-sm font-medium mt-4">
+                          Available Stock :
+                          <span className="font-semibold text-[#000] text-sm">
+                            {" "}
+                            {product.stockQty || "NA"}
+                          </span>
+                        </p>
+                      </div>
                     </div>
                   )}
                 </div>

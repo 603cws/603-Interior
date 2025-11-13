@@ -1,9 +1,14 @@
 import { useState } from "react";
 import { FaBuilding } from "react-icons/fa";
-import { MdDeleteOutline } from "react-icons/md";
+import {
+  MdDeleteOutline,
+  MdKeyboardArrowLeft,
+  MdKeyboardArrowRight,
+} from "react-icons/md";
 import { adminsupabase } from "../../services/supabase";
 import { IoIosSearch } from "react-icons/io";
 import { useApp } from "../../Context/Context";
+import PagInationNav from "../../common-components/PagInationNav";
 
 function Clients({
   isExpanded,
@@ -19,8 +24,25 @@ function Clients({
   const [selectedUser, setSelectedUser] = useState(null);
   const [selectedindex, setSelectedindex] = useState();
   const [showSearch, setShowSearch] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
 
   const { setSelectedClient, selectedClient } = useApp();
+
+  // pagination
+
+  const itemperPage = 12;
+  const indexoflastClient = currentPage * itemperPage;
+  const indexofFirstClient = indexoflastClient - itemperPage;
+  const currentClients = filteredusers.slice(
+    indexofFirstClient,
+    indexoflastClient
+  );
+
+  const totalPages = Math.ceil(filteredusers.length / itemperPage);
+
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
 
   //handle functions
   const handleDeleteClick = (user, index) => {
@@ -53,7 +75,7 @@ function Clients({
   return (
     <div className="flex flex-col h-full min-h-0 overflow-hidden lg:border-2 lg:border-[#334A78] lg:rounded-lg bg-white">
       {/* for dashboard */}
-      <div className="w-full flex flex-col overflow-y-auto scrollbar-hide h-[calc(100vh-120px)] pb-2 px-3">
+      <div className="w-full flex flex-col overflow-y-auto scrollbar-hide h-[calc(100vh-115px)]  px-3">
         {/* <div className="w-full flex flex-col overflow-y-auto scrollbar-hide h-[calc(100vh-200px)] pb-2 px-3"> */}
         <div className=" sticky top-0 z-20 bg-[#fff]">
           <div className="flex justify-between items-center px-4 py-2 border-b-2 border-b-gray-400">
@@ -86,7 +108,7 @@ function Clients({
               : "lg:grid-cols-3 xl:grid-cols-4 gap-8"
           } p-2 `}
         >
-          {filteredusers.map((user, index) => {
+          {currentClients.map((user, index) => {
             return (
               <div
                 key={index}
@@ -174,6 +196,11 @@ function Clients({
             );
           })}
         </div>
+        <PagInationNav
+          totalPages={totalPages}
+          handlePageChange={handlePageChange}
+          currentPage={currentPage}
+        />
       </div>{" "}
     </div>
   );
