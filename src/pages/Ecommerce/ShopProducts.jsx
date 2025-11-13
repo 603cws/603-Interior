@@ -43,6 +43,7 @@ function ShopProducts() {
   //
   const [searchParams] = useSearchParams();
   const category = searchParams.get("category");
+  const query = searchParams.get("query");
   // console.log("searchparams", searchParams, "cat", category);
 
   // console.log(minPrice, maxPrice);
@@ -150,6 +151,17 @@ function ShopProducts() {
     if (showAvailableOnly) {
       result = result.filter((product) => product.stockQty > 0);
     }
+    console.log(products);
+
+    // search results
+    if (query) {
+      result = result.filter(
+        (item) =>
+          item.title.toLowerCase().includes(query.toLowerCase()) ||
+          item.product_type.toLowerCase().includes(query.toLowerCase()) ||
+          item.product_id?.category?.toLowerCase().includes(query.toLowerCase())
+      );
+    }
 
     return result;
   };
@@ -157,7 +169,7 @@ function ShopProducts() {
   useEffect(() => {
     const updated = applyFiltersAndSort(products, filters, filtersortby);
     setFilteredProducts(updated);
-  }, [filters, filtersortby, products, showAvailableOnly]);
+  }, [filters, filtersortby, products, showAvailableOnly, query]);
 
   useEffect(() => {
     setCurrentPage(1);

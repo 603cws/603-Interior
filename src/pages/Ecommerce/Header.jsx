@@ -1,7 +1,7 @@
 import { BsCart2 } from "react-icons/bs";
 import { FaRegUser } from "react-icons/fa6";
 import { GoHeart } from "react-icons/go";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useApp } from "../../Context/Context";
 import { FiMenu, FiX } from "react-icons/fi";
 import { useEffect, useRef, useState } from "react";
@@ -10,12 +10,17 @@ import LoginPopup from "../../common-components/LoginPopup";
 import { supabase } from "../../services/supabase";
 import toast from "react-hot-toast";
 import { motion } from "framer-motion";
+import { CiSearch } from "react-icons/ci";
 
 function Header() {
   const navigate = useNavigate();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [showProfile, setshowProfile] = useState(false);
+  const [products, setProducts] = useState();
+  const [searchTerm, setSearchTerm] = useState("");
+  const [suggestions, setSuggestions] = useState([]);
   const logout = useLogout();
+  const location = useLocation();
 
   const profileRef = useRef(null);
   const buttonRef = useRef(null);
@@ -97,6 +102,70 @@ function Header() {
       // navigate("/login");
     }
   }
+  const fetchProducts = async () => {
+    try {
+      const { data, error } = await supabase
+        .from("product_variants")
+        .select(`* ,product_id(*)`)
+        .order("created_at", { ascending: false })
+        .neq("productDisplayType", "boq");
+
+      const filtered = data.filter(
+        (item) =>
+          item.status === "approved" &&
+          item.product_id.category !== "Partitions / Ceilings" &&
+          item.product_id.category !== "Civil / Plumbing"
+      );
+      setProducts(filtered);
+    } catch {}
+  };
+
+  useEffect(() => {
+    fetchProducts();
+  }, []);
+
+  // ⭐ Read query from URL and update search field
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const query = params.get("query") || "";
+    setSearchTerm(query);
+  }, [location.search]); // runs whenever route changes
+
+  // Handle search input change
+  const handleChange = (e) => {
+    const value = e.target.value;
+    setSearchTerm(value);
+
+    // Filter suggestions (based on title or product_type)
+    if (value.trim() === "") {
+      setSuggestions([]);
+      return;
+    }
+
+    const filtered = products.filter(
+      (item) =>
+        item.title.toLowerCase().includes(value.toLowerCase()) ||
+        item.product_type.toLowerCase().includes(value.toLowerCase()) ||
+        item.product_id.category.toLowerCase().includes(value.toLowerCase())
+    );
+
+    setSuggestions(filtered.slice(0, 5)); // show max 5 suggestions
+  };
+
+  // On click of search icon → redirect
+  const handleSearch = () => {
+    if (searchTerm.trim() !== "") {
+      navigate(`/shop?query=${encodeURIComponent(searchTerm.trim())}`);
+      setSuggestions([]); // clear suggestions
+    }
+  };
+
+  // On clicking a suggestion
+  const handleSuggestionClick = (item) => {
+    setSearchTerm(item.title);
+    navigate(`/shop?query=${encodeURIComponent(item.title)}`);
+    setSuggestions([]);
+  };
 
   return (
     <>
@@ -171,7 +240,7 @@ function Header() {
 
           {/* desktop  */}
           <div className="hidden md:flex justify-between 3xl:justify-around py-3">
-            <ul className="flex items-center gap-7 [&_li]:cursor-pointer uppercase text-xs xl:text-sm font-bold [&_li]:tracking-widest font-TimesNewRoman text-[#334A78]">
+            <ul className="flex items-center gap-7 [&_li]:cursor-pointer uppercase text-xs xl:text-sm font-bold [&_li]:tracking-widest font-TimesNewRoman text-[#334A78] flex-1">
               <li
                 onClick={() => navigate("/products")}
                 className={`cursor-pointer relative after:content-[''] after:absolute after:left-0 after:bottom-[-2px] after:h-[1px] after:bg-[#FFC900] after:transition-all after:duration-300 ${
@@ -192,7 +261,7 @@ function Header() {
                 onClick={() => navigate("/aboutUs")}
                 className={`cursor-pointer relative after:content-[''] after:absolute after:left-0 after:bottom-[-2px] after:h-[1px] after:bg-[#FFC900] after:transition-all after:duration-300 ${
                   pathname === "/aboutUs" ? "after:w-full" : "after:w-0"
-                } hover:after:w-full`}
+                } hover:after:w-full text-nowrap`}
               >
                 about us
               </li>
@@ -208,20 +277,52 @@ function Header() {
                 onClick={() => navigate("/Contactus")}
                 className={`cursor-pointer relative after:content-[''] after:absolute after:left-0 after:bottom-[-2px] after:h-[1px] after:bg-[#FFC900] after:transition-all after:duration-300 ${
                   pathname === "/Contactus" ? "after:w-full" : "after:w-0"
-                } hover:after:w-full`}
+                } hover:after:w-full text-nowrap`}
               >
                 contact us
               </li>
             </ul>
-            <button onClick={() => navigate("/")} className="">
-              <img
-                src="/logo/workved-interior.png"
-                alt=""
-                className="h-[60px] w-[140px] cursor-pointer"
-              />
-            </button>
-            <div className="flex items-center">
-              <div className="flex gap-12 py-5">
+            <div className="flex-1 flex justify-center">
+              <button onClick={() => navigate("/")}>
+                <img
+                  src="/logo/workved-interior.png"
+                  alt=""
+                  className="h-[60px] w-[140px] cursor-pointer "
+                />
+              </button>
+            </div>
+            <div className="flex items-center flex-1 gap-5">
+              <div className="relative flex-[3_1_auto] border-[2px] rounded py-1 px-1 text-sm flex">
+                <input
+                  type="text"
+                  name=""
+                  id=""
+                  placeholder="Search products..."
+                  value={searchTerm}
+                  onChange={handleChange}
+                  className="flex-1 focus:outline-none border-r-[2px] text-[#334A78]"
+                />
+                <button onClick={handleSearch} className="px-0.5">
+                  <CiSearch color="#334A78" size={18} />
+                </button>
+                {suggestions.length > 0 && (
+                  <ul className="absolute top-[110%] left-0 right-0 bg-white border border-gray-200 rounded-md shadow-md z-10 max-h-48 overflow-auto">
+                    {suggestions.map((item) => (
+                      <li
+                        key={item.id}
+                        onClick={() => handleSuggestionClick(item)}
+                        className="px-3 py-1 text-[#334A78] hover:bg-gray-100 cursor-pointer text-sm"
+                      >
+                        {item.title} —{" "}
+                        <span className="text-gray-500">
+                          {item.product_type}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+              <div className="flex justify-between py-5 flex-[1_3_auto]">
                 <button
                   onClick={() => navigate("/wishlist")}
                   className="relative"
