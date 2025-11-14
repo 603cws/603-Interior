@@ -1,18 +1,16 @@
 import { BsArrowRight } from "react-icons/bs";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Grid, Navigation, Pagination } from "swiper/modules";
-import { TiArrowRight } from "react-icons/ti";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
-import "swiper/css/grid"; // this is important for grid layout!
+import "swiper/css/grid";
 import "./products.css";
 import Header from "./Header";
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
 import { useEffect, useRef, useState } from "react";
 import { useApp } from "../../Context/Context";
 import { supabase } from "../../services/supabase";
-import SpinnerFullPage from "../../common-components/SpinnerFullPage";
 import { useNavigate } from "react-router-dom";
 import { useHandleAddToCart } from "../../utils/HelperFunction";
 import { ToastContainer } from "react-toastify";
@@ -23,98 +21,98 @@ import Loginpoup from "../../common-components/LoginPopup";
 import { HiOutlineArrowSmRight } from "react-icons/hi";
 import Footer from "../../common-components/Footer";
 
-const latestPosts = [
-  {
-    image: "/images/blogoffice.png",
-    date: "05",
-    month: "may",
-    subhead: "info styles",
-    title: "How to Style Mismatched Earrings",
-    description:
-      "Mismatched earrings have become a bold and trendy fashion statement, offering endless opportunities for..",
-  },
-  {
-    image: "/images/blogoffice.png",
-    date: "07",
-    month: "may",
-    subhead: "fashion tips",
-    title: "The Revival of Retro Office Attire",
-    description:
-      "Retro fashion is back, and it's taking over modern workspaces with a splash of bold colors and tailored cuts..",
-  },
-  {
-    image: "/images/blogoffice.png",
-    date: "09",
-    month: "may",
-    subhead: "workwear edit",
-    title: "Balancing Comfort and Style at Work",
-    description:
-      "Modern workwear demands both comfort and professionalism. Here’s how to strike the perfect balance..",
-  },
-  {
-    image: "/images/blogoffice.png",
-    date: "11",
-    month: "may",
-    subhead: "style hacks",
-    title: "5 Ways to Refresh Your Office Look",
-    description:
-      "Looking to spice up your office wardrobe? These simple style hacks can help you stand out while staying professional..",
-  },
-  {
-    image: "/images/blogoffice.png",
-    date: "13",
-    month: "may",
-    subhead: "minimal trends",
-    title: "Minimalist Fashion for Busy Professionals",
-    description:
-      "Clean lines and neutral tones are defining the wardrobes of today’s high-performing professionals..",
-  },
-  {
-    image: "/images/blogoffice.png",
-    date: "15",
-    month: "may",
-    subhead: "quick reads",
-    title: "Blending Colors and Patterns Like a Pro",
-    description:
-      "Don't shy away from bold patterns. Learn how to mix prints with elegance and confidence..",
-  },
-  {
-    image: "/images/blogoffice.png",
-    date: "17",
-    month: "may",
-    subhead: "style daily",
-    title: "Building a Capsule Wardrobe for Work",
-    description:
-      "Simplify your mornings with a capsule wardrobe that saves time without sacrificing style..",
-  },
-  {
-    image: "/images/blogoffice.png",
-    date: "19",
-    month: "may",
-    subhead: "trend alert",
-    title: "Top Accessories to Elevate Your Look",
-    description:
-      "From statement bags to chic scarves, these accessories are redefining office fashion..",
-  },
-  {
-    image: "/images/blogoffice.png",
-    date: "21",
-    month: "may",
-    subhead: "bold moves",
-    title: "Why Power Dressing is Making a Comeback",
-    description:
-      "The modern power suit is sleeker, more versatile, and sends the right message in any meeting..",
-  },
-  {
-    image: "/images/blogoffice.png",
-    date: "23",
-    month: "may",
-    subhead: "style diary",
-    title: "From Desk to Dinner: Outfit Transitions",
-    description:
-      "Learn how to seamlessly transition your office outfit to an evening look with just a few tweaks..",
-  },
-];
+// const latestPosts = [
+//   {
+//     image: "/images/blogoffice.png",
+//     date: "05",
+//     month: "may",
+//     subhead: "info styles",
+//     title: "How to Style Mismatched Earrings",
+//     description:
+//       "Mismatched earrings have become a bold and trendy fashion statement, offering endless opportunities for..",
+//   },
+//   {
+//     image: "/images/blogoffice.png",
+//     date: "07",
+//     month: "may",
+//     subhead: "fashion tips",
+//     title: "The Revival of Retro Office Attire",
+//     description:
+//       "Retro fashion is back, and it's taking over modern workspaces with a splash of bold colors and tailored cuts..",
+//   },
+//   {
+//     image: "/images/blogoffice.png",
+//     date: "09",
+//     month: "may",
+//     subhead: "workwear edit",
+//     title: "Balancing Comfort and Style at Work",
+//     description:
+//       "Modern workwear demands both comfort and professionalism. Here’s how to strike the perfect balance..",
+//   },
+//   {
+//     image: "/images/blogoffice.png",
+//     date: "11",
+//     month: "may",
+//     subhead: "style hacks",
+//     title: "5 Ways to Refresh Your Office Look",
+//     description:
+//       "Looking to spice up your office wardrobe? These simple style hacks can help you stand out while staying professional..",
+//   },
+//   {
+//     image: "/images/blogoffice.png",
+//     date: "13",
+//     month: "may",
+//     subhead: "minimal trends",
+//     title: "Minimalist Fashion for Busy Professionals",
+//     description:
+//       "Clean lines and neutral tones are defining the wardrobes of today’s high-performing professionals..",
+//   },
+//   {
+//     image: "/images/blogoffice.png",
+//     date: "15",
+//     month: "may",
+//     subhead: "quick reads",
+//     title: "Blending Colors and Patterns Like a Pro",
+//     description:
+//       "Don't shy away from bold patterns. Learn how to mix prints with elegance and confidence..",
+//   },
+//   {
+//     image: "/images/blogoffice.png",
+//     date: "17",
+//     month: "may",
+//     subhead: "style daily",
+//     title: "Building a Capsule Wardrobe for Work",
+//     description:
+//       "Simplify your mornings with a capsule wardrobe that saves time without sacrificing style..",
+//   },
+//   {
+//     image: "/images/blogoffice.png",
+//     date: "19",
+//     month: "may",
+//     subhead: "trend alert",
+//     title: "Top Accessories to Elevate Your Look",
+//     description:
+//       "From statement bags to chic scarves, these accessories are redefining office fashion..",
+//   },
+//   {
+//     image: "/images/blogoffice.png",
+//     date: "21",
+//     month: "may",
+//     subhead: "bold moves",
+//     title: "Why Power Dressing is Making a Comeback",
+//     description:
+//       "The modern power suit is sleeker, more versatile, and sends the right message in any meeting..",
+//   },
+//   {
+//     image: "/images/blogoffice.png",
+//     date: "23",
+//     month: "may",
+//     subhead: "style diary",
+//     title: "From Desk to Dinner: Outfit Transitions",
+//     description:
+//       "Learn how to seamlessly transition your office outfit to an evening look with just a few tweaks..",
+//   },
+// ];
 
 const TOP_OFFERS = [
   {
@@ -147,22 +145,30 @@ const products2 = {
   chair: {
     title: "Orange Chair",
     price: "Rs. 3799.00",
-    image: "/images/ecommerce/chair.webp", // replace with actual
+    image: "/images/ecommerce/chair.webp",
+    link: "/productview/d6a99c93-e0b9-4958-9dc5-be9a9afc472e",
+    id: "d6a99c93-e0b9-4958-9dc5-be9a9afc472e",
   },
   lamp: {
     title: "Pendant Lamp",
     price: "Rs. 2599.00",
-    image: "/images/ecommerce/lamp.webp", // replace with actual
+    image: "/images/ecommerce/lamp.webp",
+    link: "/productview/d4bedb5d-b06a-444c-8dd3-9bef55e631de",
+    id: "d4bedb5d-b06a-444c-8dd3-9bef55e631de",
   },
   rug: {
     title: "Rug",
     price: "Rs. 2599.00",
-    image: "/images/ecommerce/rug.webp", // replace with actual
+    image: "/images/ecommerce/rug.webp",
+    link: "/productview/45776063-a918-44f7-858b-8b95738c8e78",
+    id: "45776063-a918-44f7-858b-8b95738c8e78",
   },
   "chair-green": {
     title: "Chair Green",
     price: "Rs. 2599.00",
-    image: "/images/ecommerce/chair-green.png", // replace with actual
+    image: "/images/ecommerce/chair-green.png",
+    link: "/productview/1d352504-f171-41fc-9bc4-333c68ae9200",
+    id: "1d352504-f171-41fc-9bc4-333c68ae9200",
   },
 };
 
@@ -215,25 +221,16 @@ function Products() {
   const prevRef = useRef(null);
   const nextRef = useRef(null);
   const paginationRef = useRef(null);
-  // const prevRef2 = useRef(null);
-  // const nextRef2 = useRef(null);
-  // const paginationRef2 = useRef(null);
-  // const prevRef3 = useRef(null);
-  // const nextRef3 = useRef(null);
-  // const paginationRef3 = useRef(null);
-  // const prevRef4 = useRef(null);
-  // const nextRef4 = useRef(null);
   const scrollRef = useRef(null);
 
-  const [data, setData] = useState();
+  const { handleAddToCart } = useHandleAddToCart();
+
+  // const [data, setData] = useState();
   const [products, setProducts] = useState([]);
-  const [productsloading, setProductsloading] = useState(true);
+  // const [productsloading, setProductsloading] = useState(true);
   // const [selectedCat, setSelectedCat] = useState("Furniture");
   const [selectedCategory, setSelectedCategory] = useState("Furniture");
   const [categoryProducts, setCategoryProducts] = useState([]);
-
-  const swiperRef = useRef(null);
-
   const [selectedProduct, setSelectedProduct] = useState("chair");
   const [hasOverflow, setHasOverflow] = useState(false);
   const [bestProducts, setBestProducts] = useState([]);
@@ -300,7 +297,7 @@ function Products() {
 
   const fetchProductsData = async () => {
     try {
-      setProductsloading(true);
+      // setProductsloading(true);
       const { data, error } = await supabase
         .from("product_variants")
         .select(`* ,product_id(*),reviews(*)`)
@@ -345,7 +342,7 @@ function Products() {
       // const filteredByCategory = updatedProducts.filter(
       //   (item) => item.product_id.category === selectedCat
       // );
-      setData(filtered);
+      // setData(filtered);
       setProducts(updatedProducts);
 
       const filteredProducts = updatedProducts.filter(
@@ -371,7 +368,7 @@ function Products() {
     } catch (error) {
       console.error("Error fetching filtered data:", error);
     } finally {
-      setProductsloading(false);
+      // setProductsloading(false);
     }
   };
 
@@ -1258,7 +1255,8 @@ function Products() {
             <img
               src={products2[selectedProduct].image}
               alt={products2[selectedProduct].title}
-              className="w-96 h-auto rounded-lg shadow-md p-4"
+              className="w-96 h-auto rounded-lg shadow-md p-4 cursor-pointer"
+              onClick={() => navigate(products2[selectedProduct].link)}
             />
 
             {/* Black Dots */}
@@ -1275,10 +1273,27 @@ function Products() {
             </div>
 
             {/* Title & Price */}
-            <h3 className="text-lg font-medium">
+            <h3
+              className="text-lg font-medium cursor-pointer"
+              onClick={() => navigate(products2[selectedProduct].link)}
+            >
               {products2[selectedProduct].title}
             </h3>
-            <p className="text-gray-600">{products2[selectedProduct].price}</p>
+            <p
+              className="text-gray-600 cursor-pointer"
+              onClick={() => navigate(products2[selectedProduct].link)}
+            >
+              {products2[selectedProduct].price}
+            </p>
+            <button
+              onClick={() => {
+                handleAddToCart(products2[selectedProduct], false);
+                navigate("/cart");
+              }}
+              className="bg-[#334A78] text-[#fff] text-xs px-4 py-2 mt-2 capitalize font-bold rounded hover:bg-[#4C69A4] transition-transform duration-300 hover:scale-110"
+            >
+              BUY NOW
+            </button>
           </div>
         </div>
       </section>
