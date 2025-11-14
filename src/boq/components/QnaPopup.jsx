@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import "animate.css";
 import { useApp } from "../../Context/Context";
 import { IoIosCloseCircle } from "react-icons/io";
@@ -82,7 +82,11 @@ const QnaPopup = ({ onClose, onSubmit }) => {
   useEffect(() => {
     // Dynamically set questions based on category name
     if (categoryName === "Flooring") {
-      setQuestions([...flooringQuestions]);
+      if (answers.flooringStatus === "basicTiling") {
+        setQuestions([...flooringQuestions, ...demolishTileQuestion]);
+      } else {
+        setQuestions(flooringQuestions);
+      }
     } else if (categoryName === "HVAC") {
       setQuestions([...hvacQuestions]);
     } else if (categoryName === "Partitions / Ceilings") {
@@ -92,7 +96,7 @@ const QnaPopup = ({ onClose, onSubmit }) => {
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [categoryName]);
+  }, [categoryName, answers.flooringStatus]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -289,9 +293,15 @@ const QnaPopup = ({ onClose, onSubmit }) => {
                       )}
                       <button
                         type="submit"
-                        disabled={Object.keys(answers).length === 0} // Disable if no answers
+                        // disabled={Object.keys(answers).length === 0} // Disable if no answers
+                        // className={`px-4 py-2 rounded text-xs md:text-base ${
+                        //   Object.keys(answers).length === 0
+                        //     ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                        //     : "text-[#000] hover:text-[#fff] border-2 border-[#000] hover:border-[#fff] hover:bg-gradient-to-r from-[#334A78] to-[#68B2DC] transition-all duration-500 ease-in-out"
+                        // }`}
+                        disabled={!answers[currentQuestion.name]}
                         className={`px-4 py-2 rounded text-xs md:text-base ${
-                          Object.keys(answers).length === 0
+                          !answers[currentQuestion.name]
                             ? "bg-gray-300 text-gray-500 cursor-not-allowed"
                             : "text-[#000] hover:text-[#fff] border-2 border-[#000] hover:border-[#fff] hover:bg-gradient-to-r from-[#334A78] to-[#68B2DC] transition-all duration-500 ease-in-out"
                         }`}
