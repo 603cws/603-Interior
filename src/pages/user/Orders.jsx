@@ -14,6 +14,7 @@ import { IoCloseCircleOutline } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
 import { LuChevronDown } from "react-icons/lu";
 import { generateInvoicePDF } from "./InvoicePdf";
+import { v4 as uuidv4 } from "uuid";
 
 const statusIcon = {
   pending: <MdOutlinePendingActions />,
@@ -44,7 +45,8 @@ function Orders() {
       const { data: ordersData, error: ordersError } = await supabase
         .from("orders")
         .select("*")
-        .eq("userId", accountHolder.userId);
+        .eq("userId", accountHolder.userId)
+        .order("created_at", { ascending: false });
 
       if (ordersError) throw ordersError;
       if (!ordersData || ordersData.length === 0) {
@@ -93,6 +95,77 @@ function Orders() {
     setProductView(true);
     setDetailedView(false);
   };
+
+  // cancel order function
+
+  async function handleOrderCancel(order) {
+    console.log("order for cancel", order);
+
+    const uniqueId = uuidv4();
+    console.log(uniqueId);
+
+    const refundAmountInPaisa = order?.finalPrice * 100;
+
+    // note this function for entire order cancellation
+    const reqbody = {
+      amount: refundAmountInPaisa,
+      orderId: order?.id,
+      refundId: uniqueId,
+    };
+    try {
+      const res = await fetch(
+        `https://bwxzfwsoxwtzhjbzbdzs.supabase.co/functions/v1/orderRefund`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(reqbody),
+        }
+      );
+
+      console.log("res", res);
+      const data = await res.json();
+      console.log("data", data);
+
+      if (data?.success) {
+        // code to update in the dB
+        // step 1 -> update the status to cancelled
+      }
+
+      //       {
+      //     "success": true,
+      //     "message": "refund successful initated",
+      //     "data": {
+      //         "originalMerchantOrderId": "2653f5ed-7be6-4d7e-8dd5-c0bf0356bac2",
+      //         "amount": 765800,
+      //         "state": "COMPLETED",
+      //         "timestamp": 1763121002786,
+      //         "refundId": "OMR2511141720027177435276",
+      //         "splitInstruments": [
+      //             {
+      //                 "amount": 765800,
+      //                 "rail": {
+      //                     "type": "PG",
+      //                     "authorizationCode": "<authorizationCode>"
+      //                 },
+      //                 "instrument": {
+      //                     "type": "CREDIT_CARD",
+      //                     "bankId": "SBIN",
+      //                     "arn": "<arn>",
+      //                     "brn": "<brn>",
+      //                     "geoScope": "DOMESTIC",
+      //                     "cardNetwork": "VISA",
+      //                     "maskedCardNumber": "XXXXXXXXXXXX6314",
+      //                     "tokenBin": "<tokenBin>",
+      //                     "cardHolderName": "<cardHolderName>"
+      //                 }
+      //             }
+      //         ]
+      //     }
+      // }
+    } catch (error) {
+      console.log("error", error);
+    }
+  }
 
   return (
     <>
@@ -155,7 +228,7 @@ function Orders() {
                         />
                         <div>
                           <h4 className="text-xs sm:text-sm font-semibold text-[#171717] capitalize">
-                            {order.id}
+                            OrderID: {order.id}
                           </h4>
                           <p className="text-sm text-[#171717]">
                             {order.products.length} items in delivery
@@ -172,7 +245,10 @@ function Orders() {
                       <div className="flex justify-between">
                         {(order.status === "pending" ||
                           order.status === "approved") && (
-                          <button className="px-10 border border-[#213626] uppercase text-xs tracking-wider rounded-sm py-2 hover:bg-[#f9f9f9]">
+                          <button
+                            onClick={() => handleOrderCancel(order)}
+                            className=" px-10 border border-[#213626] uppercase text-xs tracking-wider rounded-sm py-2 hover:bg-red-600"
+                          >
                             cancel
                           </button>
                         )}
@@ -253,10 +329,10 @@ function OrderProducts({ order, handleProductView }) {
                 />
                 <div className="space-y-2">
                   <h4 className="text-sm md:text-lg font-bold text-[#171717] line-clamp-2 md:line-clamp-none">
-                    {product.details.title}
+                    {product?.details?.title}
                   </h4>
                   <p className="text-[#171717] text-xs md:text-sm line-clamp-3 md:line-clamp-none">
-                    {product.details.details}
+                    {product?.details?.details}
                   </p>
                 </div>
                 <div className="space-y-2">
@@ -264,7 +340,7 @@ function OrderProducts({ order, handleProductView }) {
                     price
                   </h4>
                   <p className="text-[#171717] text-xs md:text-sm">
-                    {product.price}
+                    {product?.price}
                   </p>
                 </div>
               </div>

@@ -87,18 +87,19 @@ function Cart() {
     a.productId.title.localeCompare(b.productId.title)
   );
 
-  const [orignalTotalPrice, setOriginalToalPrice] = useState(0);
+  const [orignalTotalPrice, setOriginalToalPrice] = useState(0); //sum of all the items in the cart
+  const [subTotalPrice, setsubToalPrice] = useState(0); //difference of total mrp - discount on mrp
   const [disableApplycoupon, setDisableApplycoupon] = useState(false);
-  const [differenceInPrice, setDifferenceInPrice] = useState(0);
-  const [differenceInPricetoshow, setDifferenceInPricetoshow] = useState();
+  const [differenceInPrice, setDifferenceInPrice] = useState(0); //coupn and original
+  const [differenceInPricetoshow, setDifferenceInPricetoshow] = useState(); //coupon cal on the popup
   const [allCoupons, setAllCoupons] = useState([]);
   const [ismobileCouponFormOpen, setIsMobileCouponFormOpen] = useState(false);
   const [couponname, setCouponname] = useState("");
-  const [discountOnMrp, setDiscountOnMrp] = useState(0);
+  const [discountOnMrp, setDiscountOnMrp] = useState(0); //sum of all the difference in item of selling price and their original mrp
   const [alsoLike, setAlsoLike] = useState([]);
   const [similarTypes, setSimilarTypes] = useState();
 
-  const [gst, setGst] = useState(0);
+  const [gst, setGst] = useState(0); //convet this gst to based on subtotal instead of originaltotal
   const [shippingcharge, setshippingCharge] = useState(0);
   // const [totalPrice, setTotalPrice] = useState(0);
   const [mobilecouponname, setmobilecouponname] = useState("");
@@ -151,10 +152,11 @@ function Cart() {
 
   const handleRemoveCoupon = async () => {
     if (orignalTotalPrice === 0) return setCouponname("");
+    const subtotal = orignalTotalPrice - discountOnMrp;
     setCouponname("");
     toast.success("remove coupon");
     setDisableApplycoupon(false);
-    const Getgstprice = calculateGst(orignalTotalPrice);
+    const Getgstprice = calculateGst(subtotal);
     setGst(Getgstprice);
     setDifferenceInPrice(0);
   };
@@ -162,14 +164,28 @@ function Cart() {
   function RevevaluteAppliedCoupon(coupon) {
     if (disableApplycoupon) {
       const price = cartItems?.reduce(
-        (acc, curr) => acc + curr.productId?.price * curr.quantity,
+        (acc, curr) => acc + curr.ecommercePrice?.mrp * curr.quantity,
         0
       );
-      if (!isCouponValid(coupon, price)) {
+
+      const discountPrice = cartItems.reduce((acc, item) => {
+        const mrp = parseInt(item.productId?.ecommercePrice?.mrp || 0);
+        const sellingPrice = parseInt(
+          item.productId?.ecommercePrice?.sellingPrice || 0
+        );
+        const quantity = item.quantity || 1;
+        const discount = (mrp - sellingPrice) * quantity;
+        return acc + discount;
+      }, 0);
+
+      const subtotal = price - discountPrice;
+
+      if (!isCouponValid(coupon, subtotal)) {
         handleRemoveCoupon();
       } else {
+        const subtotal = orignalTotalPrice - discountOnMrp;
         const discountedprice =
-          orignalTotalPrice - (orignalTotalPrice * coupon?.discountPerc) / 100;
+          subtotal - (subtotal * coupon?.discountPerc) / 100;
         calculateTotalDiffer(coupon);
         const gstprice = calculateGst(discountedprice, discountedprice);
         setGst(gstprice);
@@ -184,23 +200,25 @@ function Cart() {
 
   useEffect(() => {
     const price = orignalTotalPrice.toFixed(2);
+    const subtotal = orignalTotalPrice - discountOnMrp;
 
     if (differenceInPrice > 0) {
       const discountedprice =
-        orignalTotalPrice -
-        (orignalTotalPrice * mobilecouponname?.discountPerc) / 100;
-      const Getgstprice = calculateGst(orignalTotalPrice, discountedprice);
+        subtotal - (subtotal * mobilecouponname?.discountPerc) / 100;
+      const Getgstprice = calculateGst(subtotal, discountedprice);
       setGst(Getgstprice);
     } else {
-      const Getgstprice = calculateGst(price);
+      const Getgstprice = calculateGst(subtotal);
       setGst(Getgstprice);
     }
-    const shippiingFee = GetDeliveryCharges(orignalTotalPrice);
+    const shippiingFee = GetDeliveryCharges(subtotal);
     setshippingCharge(shippiingFee);
   }, [orignalTotalPrice]);
 
   const handleCheckCoupon = async (e) => {
     e.preventDefault();
+
+    const Subtotal = orignalTotalPrice - discountOnMrp;
 
     if (orignalTotalPrice === 0) return toast.error("cart is empty");
 
@@ -217,7 +235,7 @@ function Cart() {
 
       if (fetchError) throw new Error(fetchError.message);
 
-      if (!isCouponValid(coupon, orignalTotalPrice))
+      if (!isCouponValid(coupon, Subtotal))
         return toast.error("coupon is expired or min purchase not reached");
       calculateTotalDiffertoShow(coupon);
       // calculateTotalDiffer(coupon);
@@ -229,19 +247,19 @@ function Cart() {
   };
 
   function calculateTotalDiffer(coupon) {
+    const subtotal = orignalTotalPrice - discountOnMrp;
     //we get the entire coupon for already haved coupon name
-    const discountedprice =
-      orignalTotalPrice - (orignalTotalPrice * coupon?.discountPerc) / 100;
-    const difference = orignalTotalPrice - discountedprice;
+    const discountedprice = subtotal - (subtotal * coupon?.discountPerc) / 100;
+    const difference = subtotal - discountedprice;
     // const roundDiff = Number((Math.round(difference * 100) / 100).toFixed(2));
     const roundDiff = parseFloat(difference.toFixed(2));
     setDifferenceInPrice(roundDiff);
   }
   function calculateTotalDiffertoShow(coupon) {
+    const subtotal = orignalTotalPrice - discountOnMrp;
     //we get the entire coupon for already haved coupon name
-    const discountedprice =
-      orignalTotalPrice - (orignalTotalPrice * coupon?.discountPerc) / 100;
-    const difference = orignalTotalPrice - discountedprice;
+    const discountedprice = subtotal - (subtotal * coupon?.discountPerc) / 100;
+    const difference = subtotal - discountedprice;
 
     setDifferenceInPricetoshow(difference);
 
@@ -267,18 +285,19 @@ function Cart() {
 
   const handleApplyofCoupon = async (coupon) => {
     if (orignalTotalPrice === 0) return toast.error("cart is empty");
+    const subtotal = orignalTotalPrice - discountOnMrp;
 
     if (disableApplycoupon) return toast.error("coupon already applied");
-    if (!isCouponValid(coupon, orignalTotalPrice))
+    if (!isCouponValid(coupon, subtotal))
       return toast.error("coupon is expired or min purchase not reached");
     try {
       const discountedprice =
-        orignalTotalPrice - (orignalTotalPrice * coupon?.discountPerc) / 100;
+        subtotal - (subtotal * coupon?.discountPerc) / 100;
       setDisableApplycoupon(true);
       setmobilecouponname(coupon);
       // localStorage.setItem("appliedCoupon", JSON.stringify(coupon));
       calculateTotalDiffer(coupon);
-      const gstprice = calculateGst(orignalTotalPrice, discountedprice);
+      const gstprice = calculateGst(subtotal, discountedprice);
       setGst(gstprice);
       toast.success("coupon is valid");
       // setCartTotalPrice(discountedprice);
@@ -665,6 +684,15 @@ function Cart() {
 
                       <div className="flex justify-between">
                         <h5 className="font-medium  text-[#111111]/80">
+                          Sub Total
+                        </h5>
+                        <h5 className="font-medium  text-[#111111]/80 ">
+                          Rs {orignalTotalPrice - discountOnMrp}
+                        </h5>
+                      </div>
+
+                      <div className="flex justify-between">
+                        <h5 className="font-medium  text-[#111111]/80">
                           Coupon Discount
                         </h5>
                         {disableApplycoupon ? (
@@ -746,6 +774,13 @@ function Cart() {
                           Discount on MRP
                         </h5>
                         <h5 className="font-medium  text-[#34BFAD]/80 ">--</h5>
+                      </div>
+
+                      <div className="flex justify-between">
+                        <h5 className="font-medium  text-[#111111]/80">
+                          Sub Total
+                        </h5>
+                        <h5 className="font-medium  text-[#111111]/80 ">--</h5>
                       </div>
 
                       <div className="flex justify-between">

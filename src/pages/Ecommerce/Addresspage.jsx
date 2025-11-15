@@ -273,13 +273,17 @@ function Addresspage() {
       // create a order in db
       const products = cartItems.map((item) => ({
         id: item.productId.id,
-        price: item.productId.price,
+        // price: item.productId.price,
+        price: item?.productId?.ecommercePrice?.sellingPrice,
+        ecommercePriceObject: item?.productId?.ecommercePrice,
         quantity: item.quantity,
         image: item?.productId?.image,
         name: item?.productId?.title,
         description: item?.productId?.details,
         vendorId: item?.productId?.vendor_id,
       }));
+
+      console.log("products", products);
 
       const today = new Date();
       const deliveryDate = new Date(today);
@@ -324,6 +328,15 @@ function Addresspage() {
       const orderId = neworder?.id;
       const amount = Math.round(neworder?.finalPrice * 100); // amount in paise (10000 = ₹100)
 
+      //       {
+      //     "price": 5502,
+      //     "discountOnMrp": 304,
+      //     "discount": 0,
+      //     "gst": 990.36,
+      //     "finalValue": 6188.36,
+      //     "coupon": "",
+      //     "shippingFee": 0
+      // }
       // data formatting for email
       const orderData = {
         email: accountHolder?.email,
@@ -419,15 +432,15 @@ function Addresspage() {
                 // clear the cart
                 const userid = accountHolder?.userId;
                 await deleteCart(userid);
-
-                await fetch(
-                  "https://bwxzfwsoxwtzhjbzbdzs.supabase.co/functions/v1/orderemail",
-                  {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(orderData),
-                  }
-                );
+                // send email
+                // await fetch(
+                //   "https://bwxzfwsoxwtzhjbzbdzs.supabase.co/functions/v1/orderemail",
+                //   {
+                //     method: "POST",
+                //     headers: { "Content-Type": "application/json" },
+                //     body: JSON.stringify(orderData),
+                //   }
+                // );
                 setpaymentLoading((prev) => !prev);
 
                 //navigate to a congrats page
