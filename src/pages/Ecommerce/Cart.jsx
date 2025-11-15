@@ -88,7 +88,7 @@ function Cart() {
   );
 
   const [orignalTotalPrice, setOriginalToalPrice] = useState(0); //sum of all the items in the cart
-  const [subTotalPrice, setsubToalPrice] = useState(0); //difference of total mrp - discount on mrp
+  // const [subTotalPrice, setsubToalPrice] = useState(0); //difference of total mrp - discount on mrp
   const [disableApplycoupon, setDisableApplycoupon] = useState(false);
   const [differenceInPrice, setDifferenceInPrice] = useState(0); //coupn and original
   const [differenceInPricetoshow, setDifferenceInPricetoshow] = useState(); //coupon cal on the popup
@@ -164,9 +164,12 @@ function Cart() {
   function RevevaluteAppliedCoupon(coupon) {
     if (disableApplycoupon) {
       const price = cartItems?.reduce(
-        (acc, curr) => acc + curr.ecommercePrice?.mrp * curr.quantity,
+        (acc, curr) =>
+          acc + curr?.productId?.ecommercePrice?.mrp * curr.quantity,
         0
       );
+
+      console.log("price", price);
 
       const discountPrice = cartItems.reduce((acc, item) => {
         const mrp = parseInt(item.productId?.ecommercePrice?.mrp || 0);
@@ -178,7 +181,10 @@ function Cart() {
         return acc + discount;
       }, 0);
 
+      console.log("discountprice", discountPrice);
+
       const subtotal = price - discountPrice;
+      console.log("subtotal", subtotal);
 
       if (!isCouponValid(coupon, subtotal)) {
         handleRemoveCoupon();
@@ -431,6 +437,7 @@ function Cart() {
       const formatteddata = {
         price: orignalTotalPrice || 0,
         discountOnMrp: discountOnMrp || 0,
+        subtotal: orignalTotalPrice - discountOnMrp || 0,
         discount: differenceInPrice || 0,
         gst: gst || 0,
         finalValue: +finalValue,

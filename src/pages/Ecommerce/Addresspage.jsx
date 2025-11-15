@@ -983,6 +983,15 @@ function Addresspage() {
                     </h5>
                   </div>
 
+                  <div className="flex justify-between">
+                    <h5 className="font-medium  text-[#111111]/80">
+                      Total MRP
+                    </h5>
+                    <h5 className="font-medium  text-[#111111]/80 ">
+                      Rs {pricingdetails?.subtotal}
+                    </h5>
+                  </div>
+
                   {/* <div className="flex justify-between">
                     <h5 className="font-medium  text-[#111111]/80">
                       Coupon Discount
