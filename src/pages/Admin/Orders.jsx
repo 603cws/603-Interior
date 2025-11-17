@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { supabase } from "../../services/supabase";
 import { baseImageUrl } from "../../utils/HelperConstant";
 import { exportToExcel } from "../../utils/DataExport";
+import PagInationNav from "../../common-components/PagInationNav";
 
 export default function Orders({ vendorId = null }) {
   const [ordersData, setOrdersData] = React.useState(null);
@@ -324,82 +325,11 @@ export default function Orders({ vendorId = null }) {
           </div>
 
           {/* Pagination */}
-          {totalPages > 1 && (
-            <div className="flex justify-center items-center gap-2 my-2 sticky bottom-0 z-30 text-[#3d194f] bg-white">
-              <div className="flex border border-[#CCCCCC] rounded-lg px-3 py-2">
-                {/* Previous */}
-                <button
-                  onClick={() =>
-                    setCurrentPage((prev) => Math.max(prev - 1, 1))
-                  }
-                  disabled={currentPage === 1}
-                  className="flex items-center gap-2 px-2 text-sm disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  <img
-                    src="../images/icons/less.png"
-                    alt="Previous"
-                    className="w-4 h-4"
-                  />
-                  <span className="text-[#194F48]">Previous</span>
-                </button>
-
-                {/* Page Numbers */}
-                {(() => {
-                  const pages = [];
-                  let lastShownPage = 0;
-                  for (let i = 1; i <= totalPages; i++) {
-                    if (
-                      i === 1 ||
-                      i === totalPages ||
-                      (i >= currentPage - 1 && i <= currentPage + 1)
-                    ) {
-                      pages.push(
-                        <button
-                          key={i}
-                          onClick={() => setCurrentPage(i)}
-                          className={`px-3 py-1 text-sm rounded text-[#334A78] ${
-                            currentPage === i
-                              ? "text-white bg-[#334A78]"
-                              : "hover:bg-[#F1F1F1]"
-                          }`}
-                        >
-                          {i}
-                        </button>
-                      );
-                      lastShownPage = i;
-                    } else if (i > lastShownPage + 1) {
-                      pages.push(
-                        <span
-                          key={`ellipsis-${i}`}
-                          className="px-2 py-1 text-sm"
-                        >
-                          ...
-                        </span>
-                      );
-                      lastShownPage = i;
-                    }
-                  }
-                  return pages;
-                })()}
-
-                {/* Next */}
-                <button
-                  onClick={() =>
-                    setCurrentPage((prev) => Math.min(prev + 1, totalPages))
-                  }
-                  disabled={currentPage === totalPages}
-                  className="flex items-center gap-2 px-2 text-sm disabled:opacity-50 default:cursor-not-allowed"
-                >
-                  <span className="text-[#194F48]">Next</span>
-                  <img
-                    src="../images/icons/more.png"
-                    alt="Next"
-                    className="w-4 h-4"
-                  />
-                </button>
-              </div>
-            </div>
-          )}
+          <PagInationNav
+            totalPages={totalPages}
+            currentPage={currentPage}
+            handlePageChange={setCurrentPage}
+          />
         </section>
       )}
     </section>

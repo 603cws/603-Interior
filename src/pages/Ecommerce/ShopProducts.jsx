@@ -15,6 +15,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import Footer from "../../common-components/Footer";
 import { AiFillHeart } from "react-icons/ai";
 import { GoHeart } from "react-icons/go";
+import PagInationNav from "../../common-components/PagInationNav";
 
 function ShopProducts() {
   //state
@@ -911,62 +912,13 @@ function ShopProducts() {
                   </div>
                 ))}
               </div>
-              {totalPages > 1 && (
-                <div className="flex justify-center my-10">
-                  <div className="inline-flex items-center border border-[#CCCCCC] rounded-lg px-2 overflow-hidden">
-                    {/* Previous */}
-                    <button
-                      disabled={currentPage === 1}
-                      onClick={() => goToPage(currentPage - 1)}
-                      className={`flex items-center gap-2 p-4 text-sm font-medium ${
-                        currentPage === 1
-                          ? "text-gray-400 cursor-not-allowed"
-                          : "text-[#334A78]"
-                      }`}
-                    >
-                      <img
-                        src="../images/icons/less.png"
-                        alt="Next"
-                        className="w-4 h-4"
-                      />
-                      Previous
-                    </button>
-
-                    {/* Page numbers */}
-                    {Array.from({ length: totalPages }, (_, i) => (
-                      <button
-                        key={i}
-                        onClick={() => goToPage(i + 1)}
-                        className={`px-2 py-1 gap-4 text-sm font-medium rounded-sm ${
-                          currentPage === i + 1
-                            ? "bg-[#334A78] text-white"
-                            : "text-[#334A78] hover:bg-[#F1F1F1]"
-                        }`}
-                      >
-                        {i + 1}
-                      </button>
-                    ))}
-
-                    {/* Next */}
-                    <button
-                      disabled={currentPage === totalPages}
-                      onClick={() => goToPage(currentPage + 1)}
-                      className={`flex items-center gap-2 p-4 text-sm font-medium ${
-                        currentPage === totalPages
-                          ? "text-gray-400 cursor-not-allowed"
-                          : "text-[#334A78]"
-                      }`}
-                    >
-                      Next
-                      <img
-                        src="../images/icons/more.png"
-                        alt="Next"
-                        className="w-4 h-4"
-                      />
-                    </button>
-                  </div>
-                </div>
-              )}
+              <div className="my-6">
+                <PagInationNav
+                  totalPages={totalPages}
+                  handlePageChange={goToPage}
+                  currentPage={currentPage}
+                />
+              </div>
             </div>
           ) : (
             <div className="w-full flex justify-center items-center">

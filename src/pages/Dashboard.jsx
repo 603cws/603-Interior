@@ -31,6 +31,7 @@ import { GrCircleQuestion } from "react-icons/gr";
 import { FiLogOut } from "react-icons/fi";
 import ManageAddress from "./user/ManageAddress";
 import Orders from "./user/Orders";
+import PagInationNav from "../common-components/PagInationNav";
 
 function handlesidebarState(state, action) {
   switch (action.type) {
@@ -1121,48 +1122,13 @@ function Dashboard() {
                     </>
                   ))}
                 {/* Pagination Controls (Always Visible) */}
-                {selectedBoq && totalPages > 1 && (
-                  <div className="flex justify-center items-center gap-2  z-30 sticky bottom-0  bg-white  text-[#3d194f]">
-                    <button
-                      onClick={() => goToPage(currentPage - 1)}
-                      disabled={currentPage === 1}
-                      className="px-3 py-1 border rounded disabled:opacity-50 text-[#3d194f]"
-                    >
-                      Previous
-                    </button>
-
-                    {/* Page Numbers */}
-                    {Array.from({ length: totalPages }, (_, i) => i + 1).map(
-                      (page) =>
-                        page === 1 ||
-                        page === totalPages ||
-                        (page >= currentPage - 1 && page <= currentPage + 1) ? (
-                          <button
-                            key={page}
-                            onClick={() => goToPage(page)}
-                            className={`w-8 h-8 flex items-center justify-center  ${
-                              currentPage === page
-                                ? "bg-[#aca9d3] text-white rounded-full "
-                                : "rounded-md text-[#3d194f]"
-                            }`}
-                          >
-                            {page}
-                          </button>
-                        ) : page === currentPage + 2 ||
-                          page === currentPage - 2 ? (
-                          <span key={page} className="px-2">
-                            ...
-                          </span>
-                        ) : null
-                    )}
-
-                    <button
-                      onClick={() => goToPage(currentPage + 1)}
-                      disabled={currentPage === totalPages}
-                      className="px-3 py-1 border rounded disabled:opacity-50 text-[#3d194f]"
-                    >
-                      Next
-                    </button>
+                {selectedBoq && (
+                  <div className="z-30 sticky py-1 bottom-0 bg-white text-[#3d194f]">
+                    <PagInationNav
+                      totalPages={totalPages}
+                      currentPage={currentPage}
+                      handlePageChange={goToPage}
+                    />
                   </div>
                 )}
               </div>

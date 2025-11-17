@@ -476,7 +476,7 @@ function VendorItem({ isExpanded }) {
               ) : // ) : (toggle ? products : addons).length > 0 ? (
               items.length > 0 ? (
                 <>
-                  <section className="px-2 h-[90%] font-Poppins overflow-hidden">
+                  <section className="px-2 h-[85%] font-Poppins overflow-hidden">
                     <ItemList
                       handleProductPreview={handleProductPreview}
                       handleProductEdit={handleProductEdit}

@@ -11,6 +11,7 @@ import { VscEye } from "react-icons/vsc";
 import { baseImageUrl } from "../../utils/HelperConstant";
 import { IoIosSearch } from "react-icons/io";
 import ProductView from "../user/ProductView";
+import PagInationNav from "../../common-components/PagInationNav";
 function ClientBoq({ setClientBoqs }) {
   const [savedBoqs, setSavedBoqs] = useState([]);
   const [selectedBoq, setSelectedBoq] = useState();
@@ -567,47 +568,13 @@ function ClientBoq({ setClientBoqs }) {
                 </>
               ))}
             {/* Pagination Controls (Always Visible) */}
-            {selectedBoq && totalPages > 1 && (
-              <div className="flex justify-center items-center gap-2  z-30 sticky bottom-0  bg-white  text-[#3d194f]">
-                <button
-                  onClick={() => goToPage(currentPage - 1)}
-                  disabled={currentPage === 1}
-                  className="px-3 py-1 border rounded disabled:opacity-50 text-[#3d194f]"
-                >
-                  Previous
-                </button>
-
-                {/* Page Numbers */}
-                {Array.from({ length: totalPages }, (_, i) => i + 1).map(
-                  (page) =>
-                    page === 1 ||
-                    page === totalPages ||
-                    (page >= currentPage - 1 && page <= currentPage + 1) ? (
-                      <button
-                        key={page}
-                        onClick={() => goToPage(page)}
-                        className={`w-8 h-8 flex items-center justify-center  ${
-                          currentPage === page
-                            ? "bg-[#aca9d3] text-white rounded-full "
-                            : "rounded-md text-[#3d194f]"
-                        }`}
-                      >
-                        {page}
-                      </button>
-                    ) : page === currentPage + 2 || page === currentPage - 2 ? (
-                      <span key={page} className="px-2">
-                        ...
-                      </span>
-                    ) : null
-                )}
-
-                <button
-                  onClick={() => goToPage(currentPage + 1)}
-                  disabled={currentPage === totalPages}
-                  className="px-3 py-1 border rounded disabled:opacity-50 text-[#3d194f]"
-                >
-                  Next
-                </button>
+            {selectedBoq && (
+              <div className="z-30 sticky bottom-0 bg-white py-1 text-[#3d194f]">
+                <PagInationNav
+                  totalPages={totalPages}
+                  handlePageChange={goToPage}
+                  currentPage={currentPage}
+                />
               </div>
             )}
           </div>

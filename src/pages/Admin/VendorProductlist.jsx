@@ -15,6 +15,7 @@ import { IoCloseCircle, IoCloudDownloadOutline } from "react-icons/io5";
 import { IoIosSearch } from "react-icons/io";
 import MobileTabProductCard from "../user/MobileTabProductCard";
 import { baseImageUrl } from "../../utils/HelperConstant";
+import PagInationNav from "../../common-components/PagInationNav";
 
 function VendorProductlist({
   setVendorproductlist,
@@ -470,7 +471,7 @@ function VendorProductlist({
   }, [isaddonRefresh]);
   return (
     <div className="flex flex-col h-full min-h-0 loverflow-hidden lg:border-2 border-[#334A78] rounded-lg bg-[#fff]">
-      <div className="overflow-y-auto scrollbar-hide h-[calc(100vh-120px)] relative ">
+      <div className="overflow-y-auto scrollbar-hide h-[calc(100vh-80px)] relative ">
         {editProduct ? (
           <VendorProductEdit
             setEditProduct={setEditProduct}
@@ -487,7 +488,7 @@ function VendorProductlist({
           />
         ) : (
           <>
-            <div className=" sticky top-0 z-20">
+            <div className="sticky top-0 z-20 bg-white">
               <div className="hidden lg:flex justify-between items-center px-4 py-2 border-b-2 border-b-gray-400 ">
                 <button
                   //   onClick={setVendorproductlist(false)}
@@ -690,7 +691,7 @@ function VendorProductlist({
                 <Spinner />
               ) : items.length > 0 ? (
                 <>
-                  <section className="hidden lg:block h-[90%] font-Poppins overflow-hidden relative">
+                  <section className="hidden lg:block h-[72%] font-Poppins overflow-hidden relative">
                     <div
                       className="w-full h-full border-t border-b border-[#CCCCCC] overflow-y-auto custom-scrollbar"
                       ref={scrollContainerRef}
@@ -864,49 +865,13 @@ function VendorProductlist({
               ))}
 
             {/* Pagination Controls (Always Visible) */}
-            {totalPages > 1 && (
-              <div className="flex justify-center items-center gap-2 mt-10 z-30 sticky bottom-0 bg-[#EBF0FF] mb-4 text-[#3d194f]">
-                <button
-                  onClick={() => goToPage(currentPage - 1)}
-                  disabled={currentPage === 1}
-                  className="px-3 py-1 border rounded disabled:opacity-50 text-[#3d194f]"
-                >
-                  Previous
-                </button>
-
-                {/* Page Numbers */}
-                {Array.from({ length: totalPages }, (_, i) => i + 1).map(
-                  (page) =>
-                    page === 1 ||
-                    page === totalPages ||
-                    (page >= currentPage - 1 && page <= currentPage + 1) ? (
-                      <button
-                        key={page}
-                        onClick={() => goToPage(page)}
-                        className={`w-8 h-8 flex items-center justify-center  ${
-                          currentPage === page
-                            ? "bg-[#aca9d3] text-white rounded-full "
-                            : "rounded-md text-[#3d194f]"
-                        }`}
-                      >
-                        {page}
-                      </button>
-                    ) : page === currentPage + 2 || page === currentPage - 2 ? (
-                      <span key={page} className="px-2">
-                        ...
-                      </span>
-                    ) : null
-                )}
-
-                <button
-                  onClick={() => goToPage(currentPage + 1)}
-                  disabled={currentPage === totalPages}
-                  className="px-3 py-1 border rounded disabled:opacity-50 text-[#3d194f]"
-                >
-                  Next
-                </button>
-              </div>
-            )}
+            <div className="z-30 sticky bottom-[-2px] bg-white py-0 text-[#3d194f]">
+              <PagInationNav
+                totalPages={totalPages}
+                handlePageChange={goToPage}
+                currentPage={currentPage}
+              />
+            </div>
 
             {isAddProduct && (
               <div className="flex flex-col justify-center items-center h-[90%] font-Poppins overflow-y-hidden">

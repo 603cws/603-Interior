@@ -49,6 +49,7 @@ import { baseImageUrl } from "../../utils/HelperConstant";
 import { BsBoxSeam } from "react-icons/bs";
 import { FiLogOut } from "react-icons/fi";
 import { IoMdSwitch } from "react-icons/io";
+import PagInationNav from "../../common-components/PagInationNav";
 
 // import Orders from "./Orders";
 
@@ -1082,7 +1083,7 @@ function AdminDashboard() {
               ) : (
                 // Default product list and add product UI
                 <>
-                  <div className=" sticky top-0 z-20 bg-white">
+                  <div className="sticky top-0 z-20 bg-white">
                     <div className="hidden lg:flex justify-between items-center px-4 py-2 border-b-2 border-b-gray-400 ">
                       <h3 className=" capitalize font-semibold text-xl ">
                         product list
@@ -1361,7 +1362,7 @@ function AdminDashboard() {
                     ) : items.length > 0 ? (
                       <>
                         {/* // <section className="mt-2 flex-1 overflow-hidden px-8"> */}
-                        <section className="hidden lg:block h-[90%] font-Poppins overflow-hidden">
+                        <section className="hidden lg:block h-[72%] font-Poppins overflow-hidden">
                           <div
                             className="w-full h-full border-t border-b border-[#CCCCCC] overflow-y-auto custom-scrollbar"
                             ref={scrollContainerRef}
@@ -1547,50 +1548,11 @@ function AdminDashboard() {
                     ))}
 
                   {/* Pagination Controls (Always Visible) */}
-                  {totalPages > 1 && (
-                    <div className="flex justify-center items-center gap-2 mt-10 z-30 sticky bottom-0 bg-[#EBF0FF] mb-4 text-[#3d194f]">
-                      <button
-                        onClick={() => goToPage(currentPage - 1)}
-                        disabled={currentPage === 1}
-                        className="px-3 py-1 border rounded disabled:opacity-50 text-[#3d194f]"
-                      >
-                        Previous
-                      </button>
-
-                      {/* Page Numbers */}
-                      {Array.from({ length: totalPages }, (_, i) => i + 1).map(
-                        (page) =>
-                          page === 1 ||
-                          page === totalPages ||
-                          (page >= currentPage - 1 &&
-                            page <= currentPage + 1) ? (
-                            <button
-                              key={page}
-                              onClick={() => goToPage(page)}
-                              className={`w-8 h-8 flex items-center justify-center  ${
-                                currentPage === page
-                                  ? "bg-[#aca9d3] text-white rounded-full "
-                                  : "rounded-md text-[#3d194f]"
-                              }`}
-                            >
-                              {page}
-                            </button>
-                          ) : page === currentPage + 2 ||
-                            page === currentPage - 2 ? (
-                            <span key={page} className="px-2">
-                              ...
-                            </span>
-                          ) : null
-                      )}
-                      <button
-                        onClick={() => goToPage(currentPage + 1)}
-                        disabled={currentPage === totalPages}
-                        className="px-3 py-1 border rounded disabled:opacity-50 text-[#3d194f]"
-                      >
-                        Next
-                      </button>
-                    </div>
-                  )}
+                  <PagInationNav
+                    totalPages={totalPages}
+                    currentPage={currentPage}
+                    handlePageChange={goToPage}
+                  />
                 </>
               )}
             </div>
