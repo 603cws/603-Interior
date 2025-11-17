@@ -20,6 +20,8 @@ import MobileTabProductCard from "../../user/MobileTabProductCard";
 import { useEffect, useRef, useState } from "react";
 import { supabase } from "../../../services/supabase";
 import PagInationNav from "../../../common-components/PagInationNav";
+import { MdOutlineRateReview } from "react-icons/md";
+import ProductReviews from "./ProductReviews";
 
 function Products({
   isproductRefresh,
@@ -63,6 +65,8 @@ function Products({
   //new edit option addon
   const [editAddon, setEditAddon] = useState(false);
   const [selectedAddon, setSelectedAddon] = useState(null);
+
+  const [reviews, setReviews] = useState(false);
 
   //all the category
   const category = [
@@ -236,6 +240,11 @@ function Products({
             selectedAddon={selectedAddon}
             setProductlist={setProductlist}
             setIsAddonRefresh={setIsAddonRefresh}
+          />
+        ) : reviews ? (
+          <ProductReviews
+            product={selectedproduct}
+            onClose={() => setReviews(false)}
           />
         ) : (
           // Default product list and add product UI
@@ -513,7 +522,7 @@ function Products({
               ) : items.length > 0 ? (
                 <>
                   {/* // <section className="mt-2 flex-1 overflow-hidden px-8"> */}
-                  <section className="hidden lg:block h-[80%] font-Poppins overflow-hidden">
+                  <section className="hidden lg:block h-[73%] font-Poppins overflow-hidden">
                     <div
                       className="w-full h-full border-t border-b border-[#CCCCCC] overflow-y-auto custom-scrollbar"
                       ref={scrollContainerRef}
@@ -537,10 +546,7 @@ function Products({
                         </thead>
                         <tbody className=" text-sm">
                           {paginatedItems.map((item) => (
-                            <tr
-                              key={item.id}
-                              className="hover:bg-gray-50 cursor-pointer"
-                            >
+                            <tr key={item.id} className="hover:bg-gray-50">
                               <td className="border border-gray-200 p-3 align-middle">
                                 <div className="flex items-center gap-2">
                                   <img
@@ -619,7 +625,7 @@ function Products({
                                     ref={(el) =>
                                       (menuRef.current[item.id] = el)
                                     }
-                                    className="absolute top-1/2 left-0 transform mt-2 bg-white border border-gray-300 shadow-md rounded-md w-24 z-10"
+                                    className="absolute top-1/2 left-0 transform mt-2 bg-white border border-gray-300 shadow-md rounded-md w-24 z-40"
                                   >
                                     <button
                                       onClick={() => {
@@ -661,6 +667,16 @@ function Products({
                                     >
                                       <MdOutlineDelete /> Delete
                                     </button>
+                                    <button
+                                      onClick={() => {
+                                        setSelectedproduct(item);
+                                        setReviews(true);
+                                      }}
+                                      className="flex gap-0.5 items-center w-full text-left px-3 py-2 hover:bg-gray-200"
+                                    >
+                                      <MdOutlineRateReview />
+                                      Reviews
+                                    </button>
                                   </div>
                                 )}
                               </td>
@@ -687,15 +703,15 @@ function Products({
                   </p>
                 </>
               ))}
+            {/* Pagination Controls (Always Visible) */}
+            <PagInationNav
+              totalPages={totalPages}
+              currentPage={currentPage}
+              handlePageChange={goToPage}
+            />
           </>
         )}
       </div>
-      {/* Pagination Controls (Always Visible) */}
-      <PagInationNav
-        totalPages={totalPages}
-        currentPage={currentPage}
-        handlePageChange={goToPage}
-      />
     </div>
   );
 }

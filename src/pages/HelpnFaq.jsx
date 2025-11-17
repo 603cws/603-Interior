@@ -2,6 +2,9 @@ import { useState } from "react";
 import Footer from "../common-components/Footer";
 import LandingNavbar from "../common-components/LandingNavbar";
 import { FaAngleDown, FaAngleUp } from "react-icons/fa";
+import { motion } from "framer-motion";
+import HeroSection from "./HeroSection";
+
 function HelpnFaq() {
   const [newexpandedIndex, setnewExpandedIndex] = useState({
     execution: 0,
@@ -173,7 +176,7 @@ function HelpnFaq() {
   const background = "/images/career-page-bg.png";
 
   const helpAndFaqImages = {
-    general: "/images/help1.png",
+    general: "/images/featuredservice3.jpg",
     layoutoffice: "/images/faq1.png",
     vendor: "/images/faq2.png",
     execution: "/images/faq3.png",
@@ -181,34 +184,27 @@ function HelpnFaq() {
   };
 
   return (
-    <div className="font-Poppins">
+    <div className="font-Georgia">
       {/* Navbar Section */}
       <header className="bg-white shadow-lg z-50 relative">
         <LandingNavbar />
       </header>
 
       {/* Hero Section */}
-      <section
-        className="relative h-[60vh] flex items-center text-center justify-center bg-cover bg-center bg-no-repeat bg-gray-100"
-        style={{
-          backgroundImage: `url(${background})`,
-          backgroundAttachment: "fixed",
-        }}
-      >
-        <div className="absolute inset-0 bg-black opacity-50"></div>
-        <div className="relative z-10 uppercase">
-          <h1 className="text-3xl md:text-5xl lg:text-7xl font-extrabold font-lato  text-white drop-shadow-lg tracking-wider">
-            FAQ
-          </h1>
-        </div>
-      </section>
+      <HeroSection
+        title={" Frequently asked \n questions"}
+        description={
+          " Quick answers to help you \n understand our services \n better"
+        }
+        imagePath={"/images/helpnfaq.png"}
+      />
 
-      <section className="container mx-auto text-center  pt-24 pb-6 ">
+      <section className="lg:container px-4 xl:max-w-7xl 2xl:px-0 mx-auto text-center pt-24 pb-6 ">
         <div className="flex flex-col gap-3">
-          <h3 className="font-lato font-bold text-sm text-[#304778]">
+          <h3 className="font-Georgia font-bold text-sm text-[#304778]">
             Have any Questions
           </h3>
-          <h4 className="font-lato font-bold text-[#232323] text-xl lg:text-4xl">
+          <h4 className="font-Georgia font-bold text-[#232323] text-xl lg:text-4xl">
             Recently Asked Questions
           </h4>
           {/* <p className="font-lora text-[#777777] text-[15px]">
@@ -223,7 +219,7 @@ function HelpnFaq() {
         ([category, questions], sectionIndex) => (
           <section className="my-10" key={sectionIndex}>
             <div
-              className={`lg:container mx-2 lg:mx-auto my-3 flex justify-center items-center gap-8 lg:gap-10 flex-col  ${
+              className={`lg:container px-4 xl:max-w-7xl 2xl:px-0 my-3 flex justify-center items-center gap-8 lg:gap-10 flex-col  ${
                 sectionIndex === 1 || sectionIndex === 3
                   ? "lg:flex-row-reverse"
                   : "lg:flex-row"
@@ -242,13 +238,13 @@ function HelpnFaq() {
                 {questions.map((item, index) => (
                   <div
                     key={index}
-                    className="mb-3 font-Poppins font-medium text-xs lg:text-base text-[#232323] border-b last:border-b-0 mx-4"
+                    className="mb-3 font-Georgia font-medium text-xs lg:text-base text-[#232323] border-b last:border-b-0 mx-4"
                   >
                     <div
                       className="flex w-full text-left p-4  focus:outline-none justify-between cursor-pointer "
                       onClick={() => newhandleToggle(index, category)}
                     >
-                      <button className="text-start font-lora font-bold text-lg">
+                      <button className="text-start font-Georgia font-bold text-sm lg:text-lg">
                         {item.title}
                       </button>
                       {newexpandedIndex[category] === index ? (
@@ -258,7 +254,7 @@ function HelpnFaq() {
                       )}
                     </div>
                     {newexpandedIndex[category] === index && (
-                      <div className="p-4 text-[#777] border-t font-lora">
+                      <div className="p-4 text-[#777] border-t font-Georgia">
                         <p>{item.content}</p>
                       </div>
                     )}

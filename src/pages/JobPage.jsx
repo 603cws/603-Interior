@@ -96,8 +96,8 @@ const JobPage = () => {
 
           {/* Job Info: Left & Right Alignment */}
           <div className="flex justify-between items-center mt-2">
-            <div className="flex gap-2 lg:space-x-6 text-[#334A78] flex-wrap lg:flex-nowrap">
-              <p className="flex items-center">
+            <div className="flex gap-2 lg:space-x-6 text-[#334A78] flex-wrap lg:flex-nowrap font-TimesNewRoman">
+              <p className="flex items-center capitalize">
                 <FaLocationDot className="mr-2" />
                 {jobdata?.location}
               </p>
@@ -111,14 +111,16 @@ const JobPage = () => {
               </p>
               <p className="flex items-center">
                 <HiClock className="mr-2" />
-                {jobdata?.positionType}
+                {jobdata?.positionType === "FullTIme"
+                  ? "Full Time"
+                  : jobdata?.positionType}
               </p>
             </div>
 
             {/* Apply Now Button - Right Aligned */}
             <button
               onClick={() => SetJobForm((prev) => !prev)}
-              className="bg-[#334A78] text-white py-2 px-4 rounded-lg hover:bg-[#34BFAD] transition text-nowrap"
+              className="bg-[#334A78] text-white py-2 px-4 rounded hover:bg-[#FFF] hover:text-[#334A78] border border-[#334A78] transition text-nowrap"
             >
               Apply Now
             </button>
@@ -218,7 +220,7 @@ const JobPage = () => {
       </div> */}
 
       {jobForm && (
-        <div className="">
+        <div className="fixed inset-0 bg-[#000]/30 z-50">
           <JobForm
             SetJobForm={SetJobForm}
             jobDetails={job}
@@ -364,7 +366,7 @@ function JobForm({ SetJobForm, jobDetails, jobTitle }) {
   };
 
   return (
-    <div className="my-4 rounded-md max-w-2xl mx-auto border border-[#ccc] inset-0 fixed z-50 bg-white font-Poppins overflow-auto ">
+    <div className="my-4 rounded-md max-w-2xl mx-auto border border-[#ccc] inset-0 fixed z-50 bg-white font-Georgia overflow-auto gradient-scrollbar">
       <form
         onKeyDown={(e) => {
           if (e.key === "Enter") {

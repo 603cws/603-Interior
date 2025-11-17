@@ -1,17 +1,17 @@
 import { motion } from "framer-motion";
 function HeroSection({ title, description, imagePath }) {
   return (
-    <section className="bg-[#334a78] ">
-      <div className=" flex flex-col gap-6 lg:gap-0 lg:flex-row justify-between items-center mb-10 md:container xl:max-w-7xl xl:px-0 lg:mx-auto text-center lg:text-start pt-10 lg:pt-0">
-        <div className="flex flex-1 flex-col gap-8">
+    <section className="pt-10 xl:pt-0 bg-[#334a78]">
+      <div className="md:container px-4 flex flex-col gap-6 lg:gap-0 lg:flex-row justify-between items-center xl:max-w-7xl xl:px-0">
+        <div className="text-[#304778] flex flex-col justify-center items-center lg:items-start text-center lg:text-start gap-5 flex-1">
           {title && (
-            <h2 className="font-TimesNewRoman  italic text-3xl md:text-5xl xl:text-[59px] xl:leading-[53px] tracking-[0.3px] font-bold text-white capitalize">
+            <h2 className="font-TimesNewRoman italic text-3xl xl:text-[44px] xl:leading-[53px] tracking-[0.3px] font-bold text-white capitalize whitespace-pre-line">
               {title}
             </h2>
           )}
           {description && (
             <p
-              className="font-Georgia text-white mt-4 text-base md:text-2xl lg:text-3xl tracking-[0.3px]"
+              className="text-base md:text-2xl text-white  font-Georgia tracking-wide whitespace-pre-line"
               dangerouslySetInnerHTML={{ __html: description }}
             >
               {/* {description} */}
@@ -28,7 +28,7 @@ function HeroSection({ title, description, imagePath }) {
           <img
             src={imagePath ? imagePath : "/images/serviceHero.webp"}
             alt="Office Layout"
-            className="w-full lg:max-w-xl xl:max-w-2xl"
+            className="xl:py-10 xl:pl-10 flex-1"
           />
         </motion.div>
       </div>

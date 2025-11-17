@@ -1,5 +1,7 @@
 import LandingNavbar from "../common-components/LandingNavbar";
 import Footer from "../common-components/Footer";
+import { motion } from "framer-motion";
+import HeroSection from "./HeroSection";
 
 function TermsAndCondition() {
   const background = "/images/contact-us/contactpage.png";
@@ -83,25 +85,18 @@ function TermsAndCondition() {
       </header>
 
       {/* Hero Section */}
-      <section
-        className="relative h-[40vh] flex items-center text-center justify-center bg-cover bg-center bg-no-repeat bg-gray-100"
-        style={{
-          backgroundImage: `url(${background})`,
-          backgroundAttachment: "fixed",
-        }}
-      >
-        <div className="absolute inset-0 bg-black opacity-50"></div>
-        <div className="relative z-10  uppercase font-lato font-extrabold pt-10">
-          <h1 className="text-2xl lg:text-4xl text-white drop-shadow-lg ">
-            Terms & conditions
-          </h1>
-        </div>
-      </section>
+      <HeroSection
+        title={" Terms & Conditions"}
+        description={
+          "Important Policies Outlining \n Service Usage, User Responsibilities, \n and Our Commitments."
+        }
+        imagePath={"/images/termsnconditions.png"}
+      />
 
       {/* context */}
       <section>
         <div className="lg:container lg:mx-auto mx-2 my-10">
-          <div className="font-Poppins flex justify-center">
+          <div className="font-TimesNewRoman flex justify-center">
             <div className="mx-6 lg:mx-10 max-w-4xl ">
               {/* title */}
               {/* <div className="font-semibold xl:text-5xl capitalize text-center mb-10">

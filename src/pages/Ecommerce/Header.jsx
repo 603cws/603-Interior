@@ -124,7 +124,7 @@ function Header() {
     fetchProducts();
   }, []);
 
-  // ⭐ Read query from URL and update search field
+  // Read query from URL and update search field
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const query = params.get("query") || "";
@@ -239,7 +239,7 @@ function Header() {
           )}
 
           {/* desktop  */}
-          <div className="hidden md:flex justify-between 3xl:justify-around py-3">
+          <div className="hidden lg:flex justify-between 3xl:justify-around py-3">
             <ul className="flex items-center gap-7 [&_li]:cursor-pointer uppercase text-xs xl:text-sm font-bold [&_li]:tracking-widest font-TimesNewRoman text-[#334A78] flex-1">
               <li
                 onClick={() => navigate("/products")}
@@ -355,7 +355,7 @@ function Header() {
             </div>
           </div>
           {/* mobile view */}
-          <div className="mx-3 flex md:hidden justify-between 3xl:justify-around ">
+          <div className="mx-3 flex lg:hidden justify-between 3xl:justify-around ">
             <div className="lg:hidden flex items-center">
               <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
                 {isMobileMenuOpen ? (
