@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { supabase } from "../../services/supabase";
 import { baseImageUrl } from "../../utils/HelperConstant";
 import { exportToExcel } from "../../utils/DataExport";
@@ -15,6 +15,7 @@ export default function Orders({ vendorId = null }) {
   const [orderStatusFilter, setOrderStatusFilter] = useState("");
   const [paymentStatusFilter, setPaymentStatusFilter] = useState("");
   const [filteredOrders, setFilteredOrders] = useState([]);
+  const dropdownRef = useRef(null);
 
   const paginatedOrders = filteredOrders?.slice(
     (currentPage - 1) * itemsPerPage,
@@ -85,6 +86,29 @@ export default function Orders({ vendorId = null }) {
     }
   }, [ordersData]);
 
+  useEffect(() => {
+    if (!filterDropdown) return;
+
+    const onDocClick = (e) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        setFilterDropdown(false);
+      }
+    };
+
+    const onKey = (e) => {
+      if (e.key === "Escape") setFilterDropdown(false);
+    };
+
+    document.addEventListener("mousedown", onDocClick);
+    document.addEventListener("touchstart", onDocClick);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("mousedown", onDocClick);
+      document.removeEventListener("touchstart", onDocClick);
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [filterDropdown]);
+
   // const filterOrders = (type, value = "") => {
   //   console.log(type, value);
 
@@ -152,7 +176,7 @@ export default function Orders({ vendorId = null }) {
               <h2 className="text-xl text-[#374A75] font-semibold px-4 py-2">
                 Orders List
               </h2>
-              <div className="relative ">
+              <div className="relative" ref={dropdownRef}>
                 <button
                   onClick={() => setFilterDropdown(!filterDropdown)}
                   className="px-4 py-2 rounded text-[#374A75] text-sm flex items-center gap-3 border border-[#CCCCCC]"

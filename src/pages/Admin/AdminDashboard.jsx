@@ -248,6 +248,30 @@ function AdminDashboard() {
   const { accountHolder } = useApp();
 
   const location = useLocation();
+  const dropdownRef = useRef(null);
+
+  useEffect(() => {
+    if (!filterDropdown) return;
+
+    const onDocClick = (e) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        setFilterDropdown(false);
+      }
+    };
+
+    const onKey = (e) => {
+      if (e.key === "Escape") setFilterDropdown(false);
+    };
+
+    document.addEventListener("mousedown", onDocClick);
+    document.addEventListener("touchstart", onDocClick);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("mousedown", onDocClick);
+      document.removeEventListener("touchstart", onDocClick);
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [filterDropdown]);
 
   useEffect(() => {
     if (location.state?.openSettings) {
@@ -1090,7 +1114,10 @@ function AdminDashboard() {
                       </h3>
 
                       <div className="flex gap-2">
-                        <div className="relative inline-block">
+                        <div
+                          className="relative inline-block"
+                          ref={dropdownRef}
+                        >
                           <button
                             onClick={() => setFilterDropdown(!filterDropdown)}
                             className="px-4 py-2 rounded text-[#374A75] text-sm flex items-center gap-3 border"

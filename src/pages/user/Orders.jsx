@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { supabase } from "../../services/supabase";
 import { useState } from "react";
 import { useApp } from "../../Context/Context";
@@ -13,7 +13,7 @@ import { LuPackageCheck } from "react-icons/lu";
 import { IoCloseCircleOutline } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
 import { LuChevronDown } from "react-icons/lu";
-import { generateInvoicePDF } from "./InvoicePdf";
+// import { generateInvoicePDF } from "./InvoicePdf";
 import { v4 as uuidv4 } from "uuid";
 import toast from "react-hot-toast";
 
@@ -44,7 +44,7 @@ function Orders() {
   const fetchOrdersData = async () => {
     try {
       setLoading(true);
-      const { data: ordersData, error: ordersError } = await supabase
+      const { data: ordersData } = await supabase
         .from("orders_table")
         .select("* ,order_items(*,product_variants(*))")
         .eq("user_id", accountHolder.userId)
@@ -511,7 +511,7 @@ function OrderProducts({ orderID, handleProductView }) {
   const fetchOrdersData = async () => {
     try {
       setLoading(true);
-      const { data: ordersData, error: ordersError } = await supabase
+      const { data: ordersData } = await supabase
         .from("orders_table")
         .select("* ,order_items(*,product_variants(*))")
         .eq("id", orderID)

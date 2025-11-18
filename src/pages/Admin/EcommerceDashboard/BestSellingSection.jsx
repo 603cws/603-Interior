@@ -101,7 +101,7 @@ function BestSellingSection({ sidebarDispatch, handleProductPreview }) {
                   handleProductPreview(p);
                 }}
               >
-                <td className="flex items-center gap-3 py-2">
+                <td className="flex items-center gap-3 py-2 ml-2">
                   <img
                     src={`${baseImageUrl}${p.image}`}
                     alt={p.title}

@@ -86,6 +86,55 @@ function Products({
     { name: "Add-Ons", value: "addons" },
   ];
 
+  useEffect(() => {
+    if (!openMenuId) return;
+
+    const handleDocClick = (e) => {
+      const menuEl = menuRef.current[openMenuId];
+      const btnEl = buttonRef.current[openMenuId];
+
+      if (
+        (menuEl && menuEl.contains(e.target)) ||
+        (btnEl && btnEl.contains(e.target))
+      ) {
+        return; // click inside menu or on the kebab button — do nothing
+      }
+
+      setOpenMenuId(null); // click outside -> close
+    };
+
+    document.addEventListener("mousedown", handleDocClick);
+    document.addEventListener("touchstart", handleDocClick);
+
+    return () => {
+      document.removeEventListener("mousedown", handleDocClick);
+      document.removeEventListener("touchstart", handleDocClick);
+    };
+  }, [openMenuId]);
+
+  useEffect(() => {
+    if (!filterDropdown) return;
+
+    const onDocClick = (e) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        setFilterDropdown(false);
+      }
+    };
+
+    const onKey = (e) => {
+      if (e.key === "Escape") setFilterDropdown(false);
+    };
+
+    document.addEventListener("mousedown", onDocClick);
+    document.addEventListener("touchstart", onDocClick);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("mousedown", onDocClick);
+      document.removeEventListener("touchstart", onDocClick);
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [filterDropdown]);
+
   const applyFilters = ({ query = "", category = "", status = "" }) => {
     const source = toggle ? products : addons;
 
@@ -148,6 +197,7 @@ function Products({
 
   const menuRef = useRef({});
   const buttonRef = useRef({});
+  const dropdownRef = useRef(null);
 
   const totalPages = Math.ceil(items.length / itemsPerPage);
 
@@ -256,10 +306,12 @@ function Products({
                 </h3>
 
                 <div className="flex gap-2">
-                  <div className="relative inline-block">
+                  <div className="relative inline-block" ref={dropdownRef}>
                     <button
                       onClick={() => setFilterDropdown(!filterDropdown)}
                       className="px-4 py-2 rounded text-[#374A75] text-sm flex items-center gap-3 border"
+                      aria-haspopup="true"
+                      aria-expanded={filterDropdown}
                     >
                       <img src="/images/icons/filter-icon.png" alt="" />
                       <span className="text-sm">Filter</span>
@@ -630,38 +682,34 @@ function Products({
                                     <button
                                       onClick={() => {
                                         handleProductPreview(item);
+                                        setOpenMenuId(null);
                                       }}
                                       className=" flex gap-2 items-center w-full text-left px-3 py-2 hover:bg-gray-200"
                                     >
                                       <VscEye /> View
                                     </button>
-                                    {toggle ? (
-                                      <button
-                                        onClick={() => {
+                                    <button
+                                      onClick={() => {
+                                        if (toggle) {
                                           setSelectedproduct(item);
                                           setEditProduct(true);
-                                        }}
-                                        className=" flex gap-2 items-center w-full text-left px-3 py-2 hover:bg-gray-200"
-                                      >
-                                        <VscEye /> Edit
-                                      </button>
-                                    ) : (
-                                      <button
-                                        onClick={() => {
+                                        } else {
                                           setSelectedAddon(item);
                                           setEditAddon(true);
-                                        }}
-                                        className=" flex gap-2 items-center w-full text-left px-3 py-2 hover:bg-gray-200"
-                                      >
-                                        <VscEye /> Edit
-                                      </button>
-                                    )}
+                                        }
+                                        setOpenMenuId(null);
+                                      }}
+                                      className="flex gap-2 items-center w-full text-left px-3 py-2 hover:bg-gray-200"
+                                    >
+                                      <VscEye /> Edit
+                                    </button>
                                     <button
                                       // onClick={() => {
                                       //   handleDelete(item);
                                       // }}
                                       onClick={() => {
                                         handleDeleteClick(item);
+                                        setOpenMenuId(null);
                                       }}
                                       className="flex gap-2 items-center w-full text-left px-3 py-2 hover:bg-gray-200"
                                     >
@@ -671,11 +719,11 @@ function Products({
                                       onClick={() => {
                                         setSelectedproduct(item);
                                         setReviews(true);
+                                        setOpenMenuId(null);
                                       }}
                                       className="flex gap-0.5 items-center w-full text-left px-3 py-2 hover:bg-gray-200"
                                     >
-                                      <MdOutlineRateReview />
-                                      Reviews
+                                      <MdOutlineRateReview /> Reviews
                                     </button>
                                   </div>
                                 )}

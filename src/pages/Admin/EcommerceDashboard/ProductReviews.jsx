@@ -62,6 +62,10 @@ function ProductReviews({ product, onClose }) {
     setSelectedReview();
   };
 
+  const averageStars =
+    productReviews.reduce((a, r) => a + r.stars, 0) / productReviews.length ||
+    0;
+
   return (
     <div>
       <button
@@ -86,10 +90,13 @@ function ProductReviews({ product, onClose }) {
         </div>
       ) : (
         <div className="font-Poppins overflow-y-auto gradient-scrollbar">
-          <div className="px-3">
-            <h2 className="text-xl md:text-2xl font-semibold text-[#374A75] ">
+          <div className="px-3 flex justify-between">
+            <h2 className="text-xl md:text-2xl font-semibold text-[#374A75]">
               Reviews
             </h2>
+            <h4 className="font-semibold mr-4">
+              Avg Rating: <span className="text-[#374A75]">{averageStars}</span>
+            </h4>
           </div>
           <hr />
           <div className="p-2 md:p-4">
@@ -111,38 +118,50 @@ function ProductReviews({ product, onClose }) {
                 </tr>
               </thead>
               <tbody>
-                {productReviews.map((review) => (
-                  <tr
-                    key={review.id}
-                    className="border-b text-xs md:text-sm text-[#000] hover:bg-[#f1f1f1]"
-                  >
-                    <td className="py-3.5 px-1">
-                      {review?.userId?.company_name}
-                    </td>
-                    <td className="py-3.5 px-1 text-[#304778]">
-                      {review.stars} stars
-                    </td>
-                    <td className="py-3.5 px-1 text-center">{review.title}</td>
-                    <td className="py-3.5 px-1 max-w-md">
-                      {review.description}
-                    </td>
-                    <td className="py-3.5 px-1">
-                      Likes: {review.likes?.length || 0} <br />
-                      Dislikes: {review.dislikes?.length || 0}
-                    </td>
-                    <td className="py-3.5 px-1 text-center">
-                      <button
-                        onClick={() => {
-                          setSelectedReview(review);
-                          setDeleteWarning(true);
-                        }}
-                        className="text-lg text-[#304778] hover:text-red-400"
-                      >
-                        <ImBin />
-                      </button>
-                    </td>
-                  </tr>
-                ))}
+                {productReviews.map((review) => {
+                  const likesCount = review.likes
+                    ? JSON.parse(review.likes).length
+                    : 0;
+
+                  const dislikesCount = review.dislikes
+                    ? JSON.parse(review.dislikes).length
+                    : 0;
+
+                  return (
+                    <tr
+                      key={review.id}
+                      className="border-b text-xs md:text-sm text-[#000] hover:bg-[#f1f1f1]"
+                    >
+                      <td className="py-3.5 px-1">
+                        {review?.userId?.company_name}
+                      </td>
+                      <td className="py-3.5 px-1 text-[#304778]">
+                        {review.stars} stars
+                      </td>
+                      <td className="py-3.5 px-1 text-center">
+                        {review.title}
+                      </td>
+                      <td className="py-3.5 px-1 max-w-md">
+                        {review.description}
+                      </td>
+                      <td className="py-3.5 px-1">
+                        Likes: {likesCount} <br />
+                        Dislikes: {dislikesCount}
+                      </td>
+                      <td className="py-3.5 px-1 text-center">
+                        <button
+                          onClick={() => {
+                            setSelectedReview(review);
+                            setDeleteWarning(true);
+                          }}
+                          className="text-lg text-[#304778] hover:text-red-400"
+                        >
+                          <ImBin />
+                        </button>
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
             <PagInationNav
