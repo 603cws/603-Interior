@@ -15,6 +15,7 @@ import { useNavigate } from "react-router-dom";
 import { LuChevronDown } from "react-icons/lu";
 import { generateInvoicePDF } from "./InvoicePdf";
 import { v4 as uuidv4 } from "uuid";
+import toast from "react-hot-toast";
 
 const statusIcon = {
   pending: <MdOutlinePendingActions />,
@@ -31,6 +32,7 @@ function Orders() {
   const [productView, setProductView] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [selectedProduct, setSelectedProduct] = useState(null);
+  const [entireOrderCancellation, setEntireOrderCancellation] = useState(false);
 
   const { accountHolder } = useApp();
   const navigate = useNavigate();
@@ -43,48 +45,66 @@ function Orders() {
     try {
       setLoading(true);
       const { data: ordersData, error: ordersError } = await supabase
-        .from("orders")
-        .select("*")
-        .eq("userId", accountHolder.userId)
+        .from("orders_table")
+        .select("* ,order_items(*,product_variants(*))")
+        .eq("user_id", accountHolder.userId)
         .order("created_at", { ascending: false });
 
-      if (ordersError) throw ordersError;
-      if (!ordersData || ordersData.length === 0) {
-        setOrders([]);
-        return;
-      }
+      console.log("orders", ordersData);
 
-      const productIds = ordersData.flatMap((order) =>
-        order.products.map((p) => p.id)
-      );
-
-      if (productIds.length === 0) {
-        setOrders(ordersData);
-        return;
-      }
-
-      const { data: productsData, error: productsError } = await supabase
-        .from("product_variants")
-        .select("*")
-        .in("id", productIds);
-
-      if (productsError) throw productsError;
-
-      const ordersWithProducts = ordersData.map((order) => ({
-        ...order,
-        products: order.products.map((p) => ({
-          ...p,
-          details: productsData.find((prod) => prod.id === p.id) || null,
-        })),
-      }));
-
-      setOrders(ordersWithProducts);
+      setOrders(ordersData);
     } catch (error) {
       console.error("Error fetching orders with products:", error);
     } finally {
       setLoading(false);
     }
   };
+  // const fetchOrdersData = async () => {
+  //   try {
+  //     setLoading(true);
+  //     const { data: ordersData, error: ordersError } = await supabase
+  //       .from("orders")
+  //       .select("*")
+  //       .eq("userId", accountHolder.userId)
+  //       .order("created_at", { ascending: false });
+
+  //     if (ordersError) throw ordersError;
+  //     if (!ordersData || ordersData.length === 0) {
+  //       setOrders([]);
+  //       return;
+  //     }
+
+  //     const productIds = ordersData.flatMap((order) =>
+  //       order.products.map((p) => p.id)
+  //     );
+
+  //     if (productIds.length === 0) {
+  //       setOrders(ordersData);
+  //       return;
+  //     }
+
+  //     const { data: productsData, error: productsError } = await supabase
+  //       .from("product_variants")
+  //       .select("*")
+  //       .in("id", productIds);
+
+  //     if (productsError) throw productsError;
+
+  //     const ordersWithProducts = ordersData.map((order) => ({
+  //       ...order,
+  //       products: order.products.map((p) => ({
+  //         ...p,
+  //         details: productsData.find((prod) => prod.id === p.id) || null,
+  //       })),
+  //     }));
+
+  //     setOrders(ordersWithProducts);
+  //   } catch (error) {
+  //     console.error("Error fetching orders with products:", error);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
   const handleOrdersView = (order) => {
     setDetailedView(true);
@@ -99,12 +119,13 @@ function Orders() {
   // cancel order function
 
   async function handleOrderCancel(order) {
+    setEntireOrderCancellation((prev) => !prev);
     console.log("order for cancel", order);
 
     const uniqueId = uuidv4();
     console.log(uniqueId);
 
-    const refundAmountInPaisa = order?.finalPrice * 100;
+    const refundAmountInPaisa = order?.final_amount * 100;
 
     // note this function for entire order cancellation
     const reqbody = {
@@ -128,7 +149,22 @@ function Orders() {
 
       if (data?.success) {
         // code to update in the dB
-        // step 1 -> update the status to cancelled
+        // step 1 ->update the status to cancelled
+        await supabase
+          .from("orders_table")
+          .update({
+            status: "cancelled",
+            refund: data?.data,
+            merchent_refund_id: uniqueId,
+          })
+          .eq("id", order?.id);
+
+        await supabase
+          .from("order_items")
+          .update({ item_status: "cancelled" })
+          .eq("order_id", order?.id);
+
+        toast?.success("refund initated");
       }
 
       //       {
@@ -164,8 +200,160 @@ function Orders() {
       // }
     } catch (error) {
       console.log("error", error);
+    } finally {
+      setEntireOrderCancellation((prev) => !prev);
     }
   }
+
+  //   {
+  //     "id": "8b87da9b-9eaf-4206-9ff5-40cb1d9968ad",
+  //     "created_at": "2025-11-17T07:18:59.346748+00:00",
+  //     "status": "approved",
+  //     "user_id": "21e0b7e5-6276-4608-9f0f-0d0b0f802f46",
+  //     "payment_details": {
+  //         "state": "COMPLETED",
+  //         "amount": 754964,
+  //         "timestamp": 1763363972337,
+  //         "paymentMode": "CARD",
+  //         "transactionId": "OM2511171248598855816316",
+  //         "splitInstruments": [
+  //             {
+  //                 "rail": {
+  //                     "type": "PG",
+  //                     "authorizationCode": "<authorizationCode>"
+  //                 },
+  //                 "amount": 754964,
+  //                 "instrument": {
+  //                     "arn": "<arn>",
+  //                     "brn": "<brn>",
+  //                     "type": "CREDIT_CARD",
+  //                     "bankId": "SBIN",
+  //                     "geoScope": "DOMESTIC",
+  //                     "tokenBin": "<tokenBin>",
+  //                     "cardNetwork": "VISA",
+  //                     "cardHolderName": "<cardHolderName>",
+  //                     "maskedCardNumber": "XXXXXXXXXXXX6314"
+  //                 }
+  //             }
+  //         ]
+  //     },
+  //     "coupon": {
+  //         "name": "",
+  //         "discount": 0
+  //     },
+  //     "charges": {
+  //         "GST": 1151.64,
+  //         "delivery": 0
+  //     },
+  //     "total_mrp": 7000,
+  //     "discount_on_mrp": 602,
+  //     "sub_total": 6398,
+  //     "final_amount": 7549.64,
+  //     "shipping_address": [
+  //         {
+  //             "id": "c0845bc0-84c8-45c3-8ed9-17eac9500ad1",
+  //             "city": "mumbai",
+  //             "name": "yuvraj machadi",
+  //             "town": "mumbai",
+  //             "state": "MH",
+  //             "mobile": "9594767165",
+  //             "address": "makhija archade bandra west",
+  //             "pincode": "400053",
+  //             "ismarkedDefault": true
+  //         }
+  //     ],
+  //     "delivery_date": "2025-12-01",
+  //     "merchent_refund_id": null,
+  //     "refund": null,
+  //     "order_items": [
+  //         {
+  //             "id": "05d6c3a5-fe20-412e-a34a-645652f2504d",
+  //             "mrp": 3000,
+  //             "refund": null,
+  //             "order_id": "8b87da9b-9eaf-4206-9ff5-40cb1d9968ad",
+  //             "quantity": 1,
+  //             "sub_total": 2599,
+  //             "created_at": "2025-11-17T07:18:59.393171+00:00",
+  //             "gst_amount": 467.82,
+  //             "product_id": "1d352504-f171-41fc-9bc4-333c68ae9200",
+  //             "item_status": null,
+  //             "final_amount": 3066.82,
+  //             "selling_price": 2599,
+  //             "coupon_discount": 0,
+  //             "discount_on_mrp": 401,
+  //             "product_variants": {
+  //                 "id": "1d352504-f171-41fc-9bc4-333c68ae9200",
+  //                 "type": "product",
+  //                 "image": "Green Chair-main-7d4eb72e-21a6-4894-852a-90d059f23659",
+  //                 "price": 0,
+  //                 "title": "Green Chair",
+  //                 "status": "approved",
+  //                 "default": null,
+  //                 "details": "Green Chair",
+  //                 "segment": "Minimal",
+  //                 "stockQty": 7,
+  //                 "vendor_id": "859f3a20-dcd6-464c-aad1-f0ed495a25cd",
+  //                 "created_at": "2025-11-14T04:49:59.111954+00:00",
+  //                 "dimensions": "10x10x10",
+  //                 "product_id": "7d4eb72e-21a6-4894-852a-90d059f23659",
+  //                 "manufacturer": "Workved",
+  //                 "product_type": "Chair",
+  //                 "reject_reason": "",
+  //                 "ecommercePrice": {
+  //                     "mrp": "3000.00",
+  //                     "sellingPrice": "2599.00"
+  //                 },
+  //                 "additional_images": "[\"Green Chair-additional-0-7d4eb72e-21a6-4894-852a-90d059f23659\"]",
+  //                 "productDisplayType": "ecommerce"
+  //             },
+  //             "refundable_amount": 3066.82,
+  //             "merchant_refund_id": null
+  //         },
+  //         {
+  //             "id": "be3d0caa-e0cb-434d-a231-1b763493f6f9",
+  //             "mrp": 4000,
+  //             "refund": null,
+  //             "order_id": "8b87da9b-9eaf-4206-9ff5-40cb1d9968ad",
+  //             "quantity": 1,
+  //             "sub_total": 3799,
+  //             "created_at": "2025-11-17T07:18:59.393171+00:00",
+  //             "gst_amount": 683.82,
+  //             "product_id": "d6a99c93-e0b9-4958-9dc5-be9a9afc472e",
+  //             "item_status": null,
+  //             "final_amount": 4482.82,
+  //             "selling_price": 3799,
+  //             "coupon_discount": 0,
+  //             "discount_on_mrp": 201,
+  //             "product_variants": {
+  //                 "id": "d6a99c93-e0b9-4958-9dc5-be9a9afc472e",
+  //                 "type": "product",
+  //                 "image": "Orange Chair-main-b3813856-3abd-4738-a76d-3265bf66dbbd",
+  //                 "price": 0,
+  //                 "title": "Orange Chair",
+  //                 "status": "approved",
+  //                 "default": null,
+  //                 "details": "Orange Chair",
+  //                 "segment": "Minimal",
+  //                 "stockQty": 8,
+  //                 "vendor_id": "859f3a20-dcd6-464c-aad1-f0ed495a25cd",
+  //                 "created_at": "2025-11-14T04:46:10.328575+00:00",
+  //                 "dimensions": "10x10x10",
+  //                 "product_id": "7d4eb72e-21a6-4894-852a-90d059f23659",
+  //                 "manufacturer": "Workved",
+  //                 "product_type": "Chair",
+  //                 "reject_reason": "",
+  //                 "ecommercePrice": {
+  //                     "mrp": "4000.00",
+  //                     "sellingPrice": "3799.00"
+  //                 },
+  //                 "additional_images": "[\"Orange Chair-additional-0-b3813856-3abd-4738-a76d-3265bf66dbbd\"]",
+  //                 "productDisplayType": "ecommerce"
+  //             },
+  //             "refundable_amount": 4482.82,
+  //             "merchant_refund_id": null
+  //         }
+  //     ]
+  // }
 
   return (
     <>
@@ -209,29 +397,49 @@ function Orders() {
                     <div className="font-Poppins p-3 shadow-[0px_0px_2px_rgba(0,0,0,0.1)] my-2 border">
                       <div className="flex items-center gap-2">
                         <h2 className="h-9 w-9 bg-[#374A75] rounded-full text-[#fff] text-2xl flex justify-center items-center">
-                          {statusIcon[order.status]}
+                          {statusIcon[order?.status]}
                         </h2>
                         <div>
                           <h5 className="capitalize text-[#171717] font-semibold">
-                            {order.status}
+                            {order?.status}
                           </h5>
-                          <p className="text-xs text-[#171717]">
-                            On {order.deliveryDate}
-                          </p>
+                          {(order.status === "pending" ||
+                            order.status === "approved") && (
+                            <p className="text-xs text-[#171717]">
+                              On {order?.delivery_date}
+                            </p>
+                          )}
+                          {order.status === "cancelled" && (
+                            <p className="text-xs text-[#171717]">
+                              On{" "}
+                              {new Date(order?.refund?.timestamp)
+                                .toLocaleString("en-IN", {
+                                  timeZone: "Asia/Kolkata",
+                                  day: "2-digit",
+                                  month: "2-digit",
+                                  year: "2-digit",
+                                  hour: "2-digit",
+                                  minute: "2-digit",
+                                  hour12: false,
+                                })
+                                .replace(",", "")
+                                .replaceAll("/", "-")}
+                            </p>
+                          )}
                         </div>
                       </div>
                       <div className="flex items-center md:gap-5 bg-[#F5F8FF] px-3 py-5 my-2">
                         <img
-                          src={`${baseImageUrl}/${order.products[0]?.details.image}`}
+                          src={`${baseImageUrl}/${order?.order_items?.[0]?.product_variants.image}`}
                           alt=""
                           className="h-20 md:h-28 w-20 md:w-28 object-contain"
                         />
                         <div>
                           <h4 className="text-xs sm:text-sm font-semibold text-[#171717] capitalize">
-                            OrderID: {order.id}
+                            OrderID: {order?.id}
                           </h4>
                           <p className="text-sm text-[#171717]">
-                            {order.products.length} items in delivery
+                            {order?.order_items?.length} items in delivery
                           </p>
                         </div>
                         <button
@@ -243,13 +451,22 @@ function Orders() {
                       </div>
 
                       <div className="flex justify-between">
-                        {(order.status === "pending" ||
-                          order.status === "approved") && (
+                        {order.status === "pending" ||
+                        order.status === "approved" ? (
                           <button
+                            disabled={entireOrderCancellation}
                             onClick={() => handleOrderCancel(order)}
                             className=" px-10 border border-[#213626] uppercase text-xs tracking-wider rounded-sm py-2 hover:bg-red-600"
                           >
                             cancel
+                          </button>
+                        ) : (
+                          <button
+                            disabled={true}
+                            onClick={() => handleOrderCancel(order)}
+                            className=" px-10 border border-[#213626] uppercase text-xs tracking-wider rounded-sm py-2"
+                          >
+                            cancelled
                           </button>
                         )}
                         {(order.status === "pending" ||
@@ -267,7 +484,7 @@ function Orders() {
             </div>
           ) : detailedView && !productView ? (
             <OrderProducts
-              order={selectedOrder}
+              orderID={selectedOrder?.id}
               handleProductView={handleProductView}
             />
           ) : (
@@ -281,34 +498,126 @@ function Orders() {
 
 export default Orders;
 
-function OrderProducts({ order, handleProductView }) {
+function OrderProducts({ orderID, handleProductView }) {
   const [showPriceDetails, setShowPriceDetails] = useState(false);
-  const products = order.products;
-  const shippingAddress = order.shippingAddress[0];
+  const [loading, setLoading] = useState();
+
+  const [order, setOrder] = useState();
+
+  useEffect(() => {
+    fetchOrdersData();
+  }, []);
+
+  const fetchOrdersData = async () => {
+    try {
+      setLoading(true);
+      const { data: ordersData, error: ordersError } = await supabase
+        .from("orders_table")
+        .select("* ,order_items(*,product_variants(*))")
+        .eq("id", orderID)
+        .single();
+
+      console.log("orders", ordersData);
+
+      setOrder(ordersData);
+    } catch (error) {
+      console.error("Error fetching orders with products:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+  const products = order?.order_items;
+  const shippingAddress = order?.shipping_address?.[0];
+
+  //         {
+  //             "id": "05d6c3a5-fe20-412e-a34a-645652f2504d",
+  //             "mrp": 3000,
+  //             "refund": null,
+  //             "order_id": "8b87da9b-9eaf-4206-9ff5-40cb1d9968ad",
+  //             "quantity": 1,
+  //             "sub_total": 2599,
+  //             "created_at": "2025-11-17T07:18:59.393171+00:00",
+  //             "gst_amount": 467.82,
+  //             "product_id": "1d352504-f171-41fc-9bc4-333c68ae9200",
+  //             "item_status": null,
+  //             "final_amount": 3066.82,
+  //             "selling_price": 2599,
+  //             "coupon_discount": 0,
+  //             "discount_on_mrp": 401,
+  //             "product_variants": {
+  //                 "id": "1d352504-f171-41fc-9bc4-333c68ae9200",
+  //                 "type": "product",
+  //                 "image": "Green Chair-main-7d4eb72e-21a6-4894-852a-90d059f23659",
+  //                 "price": 0,
+  //                 "title": "Green Chair",
+  //                 "status": "approved",
+  //                 "default": null,
+  //                 "details": "Green Chair",
+  //                 "segment": "Minimal",
+  //                 "stockQty": 7,
+  //                 "vendor_id": "859f3a20-dcd6-464c-aad1-f0ed495a25cd",
+  //                 "created_at": "2025-11-14T04:49:59.111954+00:00",
+  //                 "dimensions": "10x10x10",
+  //                 "product_id": "7d4eb72e-21a6-4894-852a-90d059f23659",
+  //                 "manufacturer": "Workved",
+  //                 "product_type": "Chair",
+  //                 "reject_reason": "",
+  //                 "ecommercePrice": {
+  //                     "mrp": "3000.00",
+  //                     "sellingPrice": "2599.00"
+  //                 },
+  //                 "additional_images": "[\"Green Chair-additional-0-7d4eb72e-21a6-4894-852a-90d059f23659\"]",
+  //                 "productDisplayType": "ecommerce"
+  //             },
+  //             "refundable_amount": 3066.82,
+  //             "merchant_refund_id": null
+  //         },
+
+  if (loading) return <p>loading .....</p>;
 
   return (
     <>
       <div className="px-4">
         <div className="bg-[#374A75] text-[#fff] px-4 py-1 rounded-md my-5 flex items-center gap-3">
           <h2 className="h-9 w-9 bg-[#fff] rounded-full text-[#374A75] text-2xl flex justify-center items-center">
-            {statusIcon[order.status]}
+            {statusIcon[order?.status]}
           </h2>
           <div>
             <p className="capitalize font-bold text-sm md:text-base">
-              {order.status}
+              {order?.status}
             </p>
-            <p className="text-xs">On {order.deliveryDate}</p>
+            {(order?.status === "pending" || order?.status === "approved") && (
+              <p className="text-xs ">On {order?.delivery_date}</p>
+            )}
+
+            {order?.status === "cancelled" && (
+              <p className="text-xs ">
+                On{" "}
+                {new Date(order?.refund?.timestamp)
+                  .toLocaleString("en-IN", {
+                    timeZone: "Asia/Kolkata",
+                    day: "2-digit",
+                    month: "2-digit",
+                    year: "2-digit",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                    hour12: false,
+                  })
+                  .replace(",", "")
+                  .replaceAll("/", "-")}
+              </p>
+            )}
           </div>
         </div>
         <div className="flex gap-10">
-          {(order.status === "pending" || order.status === "approved") && (
+          {(order?.status === "pending" || order?.status === "approved") && (
             <button className="flex-1 border border-[#213626] uppercase text-xs tracking-wider rounded-sm py-2 hover:bg-[#f9f9f9]">
               cancel
             </button>
           )}
-          {(order.status === "pending" ||
-            order.status === "approved" ||
-            order.status === "shipped") && (
+          {(order?.status === "pending" ||
+            order?.status === "approved" ||
+            order?.status === "shipped") && (
             <button className="flex-1 border border-[#213626] uppercase text-xs tracking-wider rounded-sm py-2 hover:bg-[#f9f9f9]">
               track
             </button>
@@ -316,23 +625,23 @@ function OrderProducts({ order, handleProductView }) {
         </div>
 
         <div className="space-y-4 my-4">
-          {products.map((product) => (
+          {products?.map((product) => (
             <div
               key={product.id}
               className="border border-[#374A75] px-2 md:px-3 py-2 md:py-4 rounded-md flex lg:grid grid-cols-2 items-center"
             >
               <div className="grid  grid-cols-[1fr,2fr,1fr] gap-2 lg:gap-7 flex-1">
                 <img
-                  src={`${baseImageUrl}/${product.details.image}`}
-                  alt={product.details.title}
+                  src={`${baseImageUrl}/${product?.product_variants?.image}`}
+                  alt={product?.product_variants?.title}
                   className="h-24 w-24 object-contain"
                 />
                 <div className="space-y-2">
                   <h4 className="text-sm md:text-lg font-bold text-[#171717] line-clamp-2 md:line-clamp-none">
-                    {product?.details?.title}
+                    {product?.product_variants?.title}
                   </h4>
                   <p className="text-[#171717] text-xs md:text-sm line-clamp-3 md:line-clamp-none">
-                    {product?.details?.details}
+                    {product?.product_variants?.details}
                   </p>
                 </div>
                 <div className="space-y-2">
@@ -340,7 +649,7 @@ function OrderProducts({ order, handleProductView }) {
                     price
                   </h4>
                   <p className="text-[#171717] text-xs md:text-sm">
-                    {product?.price}
+                    {product?.final_amount}
                   </p>
                 </div>
               </div>
@@ -357,13 +666,13 @@ function OrderProducts({ order, handleProductView }) {
             delivery address
           </h5>
           <p className="capitalize text-sm font-semibold">
-            {shippingAddress.name} <span className="text-[#CCCCCC]">|</span>{" "}
-            {shippingAddress.mobile}
+            {shippingAddress?.name} <span className="text-[#CCCCCC]">|</span>{" "}
+            {shippingAddress?.mobile}
           </p>
           <p className="text-xs md:text-sm">
-            {shippingAddress.address},{shippingAddress.town},
-            {shippingAddress.city},{shippingAddress.state}-
-            {shippingAddress.pincode}
+            {shippingAddress?.address},{shippingAddress?.town},
+            {shippingAddress?.city},{shippingAddress?.state}-
+            {shippingAddress?.pincode}
           </p>
         </div>
         <div className="space-y-3 md:p-5 py-3">
@@ -374,7 +683,7 @@ function OrderProducts({ order, handleProductView }) {
             <div className="flex gap-2 items-center">
               <p className="font-bold text-sm md:text-base">
                 RS{" "}
-                {order.finalPrice.toLocaleString("en-IN", {
+                {order?.final_amount?.toLocaleString("en-IN", {
                   minimumFractionDigits: 2,
                   maximumFractionDigits: 2,
                 })}
@@ -399,7 +708,7 @@ function OrderProducts({ order, handleProductView }) {
           </div>
           <p className="text-[#374A75] capitalize font-bold flex items-center gap-5 bg-[#F9F9F9] p-2 text-sm md:text-base">
             <IoCashOutline />
-            <span> {order.paymentMethod} payment</span>
+            <span> {order?.payment_details?.paymentMode} payment</span>
           </p>
           <button
             className="text-[#374A75] font-bold text-sm capitalize border border-[#CCCCCC] w-full py-2.5 rounded-md hover:bg-[#f9f9f9]"
@@ -415,11 +724,11 @@ function OrderProducts({ order, handleProductView }) {
         <div className="md:p-5 py-3 text-sm font-bold">
           <p>Updates sent to</p>
           <p className="text-[#374A75] flex items-center gap-2 mt-2">
-            <BsTelephone /> {shippingAddress.mobile}
+            <BsTelephone /> {shippingAddress?.mobile}
           </p>
         </div>
         <div className="md:px-5 text-xs md:text-sm font-bold text-[#999]">
-          <p>Order ID #{order.id}</p>
+          <p>Order ID #{order?.id}</p>
         </div>
       </div>
     </>
@@ -427,34 +736,34 @@ function OrderProducts({ order, handleProductView }) {
 }
 
 function OrderProductView({ order, product }) {
-  const shippingAddress = order?.shippingAddress[0];
+  const shippingAddress = order?.shipping_address[0];
 
   return (
     <div className="p-4 font-Poppins">
       <div className="md:flex gap-4">
         <div className="border border-[#374A75] rounded-md px-2 py-4 space-y-3 mb-3 md:mb-0">
           <img
-            src={`${baseImageUrl}/${product.details.image}`}
-            alt={product.details.title}
+            src={`${baseImageUrl}/${product?.product_variants?.image}`}
+            alt={product?.details?.title}
             className="h-52 w-52 object-contain place-self-center"
           />
           <h4 className="text-base md:text-xl font-bold text-[#171717] text-center">
-            {product.details.title}
+            {product?.product_variants?.title}
           </h4>
           <p className="text-[#171717] text-sm line-clamp-1">
-            {product.details.details}
+            {product?.product_variants?.details}
           </p>
         </div>
         <div className="flex-1 flex flex-col justify-between">
           <div className="bg-[#374A75] text-[#fff] px-4 py-1 rounded-md flex items-center gap-3">
             <h2 className="h-9 w-9 bg-[#fff] rounded-full text-[#374A75] text-2xl flex justify-center items-center">
-              {statusIcon[order.status]}
+              {statusIcon[order?.status]}
             </h2>
             <div>
               <p className="capitalize font-bold text-sm md:text-base">
-                {order.status}
+                {order?.status}
               </p>
-              <p className="text-xs ">On {order.deliveryDate}</p>
+              <p className="text-xs ">On {order?.delivery_date}</p>
             </div>
           </div>
           <div className="my-3 md:my-0">
@@ -462,13 +771,13 @@ function OrderProductView({ order, product }) {
               delivery address
             </h5>
             <p className="capitalize text-sm font-semibold">
-              {shippingAddress.name} <span className="text-[#CCCCCC]">|</span>{" "}
-              {shippingAddress.mobile}
+              {shippingAddress?.name} <span className="text-[#CCCCCC]">|</span>{" "}
+              {shippingAddress?.mobile}
             </p>
             <p className="text-sm">
-              {shippingAddress.address},{shippingAddress.town},
-              {shippingAddress.city},{shippingAddress.state}-
-              {shippingAddress.pincode}
+              {shippingAddress?.address},{shippingAddress?.town},
+              {shippingAddress?.city},{shippingAddress?.state}-
+              {shippingAddress?.pincode}
             </p>
           </div>
           <div>
@@ -479,7 +788,7 @@ function OrderProductView({ order, product }) {
               </p>
               <p className="font-bold text-sm md:text-base">
                 RS{" "}
-                {order.finalPrice.toLocaleString("en-IN", {
+                {order?.final_amount?.toLocaleString("en-IN", {
                   minimumFractionDigits: 2,
                   maximumFractionDigits: 2,
                 })}
@@ -487,13 +796,14 @@ function OrderProductView({ order, product }) {
             </div>
           </div>
           <p className="text-[#374A75] capitalize font-bold flex items-center gap-5 bg-[#F9F9F9] p-2.5">
-            <IoCashOutline /> <span> {order.paymentMethod} payment</span>
+            <IoCashOutline />{" "}
+            <span> {order?.payment_details.paymentMode} payment</span>
           </p>
         </div>
       </div>
       <div className="md:p-5 py-3">
         <p className="text-sm font-bold text-[#999]">
-          Item sold by : {product.details?.manufacturer}
+          Item sold by : {product?.product_variants?.manufacturer}
         </p>
         <button className="text-[#374A75] font-bold text-sm capitalize border border-[#CCCCCC] w-full py-2.5 rounded-md hover:bg-[#f9f9f9]">
           get invoice
@@ -502,11 +812,11 @@ function OrderProductView({ order, product }) {
       <div className="md:p-5 py-3 text-sm font-bold">
         <p>Updates sent to</p>
         <p className="text-[#374A75] flex items-center gap-2 mt-2">
-          <BsTelephone /> {shippingAddress.mobile}
+          <BsTelephone /> {shippingAddress?.mobile}
         </p>
       </div>
       <div className="md:px-5 text-sm font-bold text-[#999]">
-        <p>Order ID #{order.id}</p>
+        <p>Order ID #{order?.id}</p>
       </div>
     </div>
   );
@@ -551,7 +861,9 @@ function Breadcrumbs({
       {product && (
         <>
           <span>/</span>
-          <span className="text-gray-500">{product.details.title}</span>
+          <span className="text-gray-500">
+            {product?.product_variants?.title}
+          </span>
         </>
       )}
     </div>
@@ -568,7 +880,25 @@ function PriceDistribution({ order }) {
         <div className="flex justify-between border-b py-2">
           <p>Total MRP</p>
           <p>
-            {order.totalMRP.toLocaleString("en-IN", {
+            {order?.total_mrp?.toLocaleString("en-IN", {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            })}
+          </p>
+        </div>
+        <div className="flex justify-between border-b py-2">
+          <p>Discount on MRP</p>
+          <p>
+            {order?.discount_on_mrp?.toLocaleString("en-IN", {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            })}
+          </p>
+        </div>
+        <div className="flex justify-between border-b py-2">
+          <p>Subtotal</p>
+          <p>
+            {order?.sub_total?.toLocaleString("en-IN", {
               minimumFractionDigits: 2,
               maximumFractionDigits: 2,
             })}
@@ -577,7 +907,7 @@ function PriceDistribution({ order }) {
         <div className="flex justify-between border-b py-2">
           <p>Coupon Discount</p>
           <p>
-            {order.coupon?.discount.toLocaleString("en-IN", {
+            {order?.coupon?.discount?.toLocaleString("en-IN", {
               minimumFractionDigits: 2,
               maximumFractionDigits: 2,
             })}
@@ -586,7 +916,7 @@ function PriceDistribution({ order }) {
         <div className="flex justify-between border-b py-2">
           <p>Shipping Fee</p>
           <p>
-            {order.charges?.delivery.toLocaleString("en-IN", {
+            {order?.charges?.delivery?.toLocaleString("en-IN", {
               minimumFractionDigits: 2,
               maximumFractionDigits: 2,
             })}
@@ -595,7 +925,7 @@ function PriceDistribution({ order }) {
         <div className="flex justify-between border-b py-2">
           <p>GST</p>
           <p>
-            {order.charges?.GST.toLocaleString("en-IN", {
+            {order?.charges?.GST?.toLocaleString("en-IN", {
               minimumFractionDigits: 2,
               maximumFractionDigits: 2,
             })}
@@ -605,7 +935,7 @@ function PriceDistribution({ order }) {
           <p>Total Amount</p>
           <p>
             RS{" "}
-            {order.finalPrice.toLocaleString("en-IN", {
+            {order?.final_amount?.toLocaleString("en-IN", {
               minimumFractionDigits: 2,
               maximumFractionDigits: 2,
             })}
