@@ -33,18 +33,19 @@ function Orders() {
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [entireOrderCancellation, setEntireOrderCancellation] = useState(false);
+  const [refreshOrder, setRefreshOrder] = useState(false);
 
   const { accountHolder } = useApp();
   const navigate = useNavigate();
 
   useEffect(() => {
     fetchOrdersData();
-  }, []);
+  }, [refreshOrder]);
 
   const fetchOrdersData = async () => {
     try {
       setLoading(true);
-      const { data: ordersData } = await supabase
+      const { data: ordersData, error: ordersError } = await supabase
         .from("orders_table")
         .select("* ,order_items(*,product_variants(*))")
         .eq("user_id", accountHolder.userId)
@@ -110,11 +111,11 @@ function Orders() {
     setDetailedView(true);
     setSelectedOrder(order);
   };
-  const handleProductView = (product) => {
-    setSelectedProduct(product);
-    setProductView(true);
-    setDetailedView(false);
-  };
+  // const handleProductView = (product) => {
+  //   setSelectedProduct(product);
+  //   setProductView(true);
+  //   setDetailedView(false);
+  // };
 
   // cancel order function
 
@@ -202,6 +203,7 @@ function Orders() {
       console.log("error", error);
     } finally {
       setEntireOrderCancellation((prev) => !prev);
+      setRefreshOrder((prev) => !prev);
     }
   }
 
@@ -485,7 +487,7 @@ function Orders() {
           ) : detailedView && !productView ? (
             <OrderProducts
               orderID={selectedOrder?.id}
-              handleProductView={handleProductView}
+              // handleProductView={handleProductView}
             />
           ) : (
             <OrderProductView order={selectedOrder} product={selectedProduct} />
@@ -498,20 +500,21 @@ function Orders() {
 
 export default Orders;
 
-function OrderProducts({ orderID, handleProductView }) {
+function OrderProducts({ orderID }) {
   const [showPriceDetails, setShowPriceDetails] = useState(false);
   const [loading, setLoading] = useState();
 
   const [order, setOrder] = useState();
+  const [orderRefresh, setorderRefresh] = useState(false);
 
   useEffect(() => {
     fetchOrdersData();
-  }, []);
+  }, [orderRefresh]);
 
   const fetchOrdersData = async () => {
     try {
       setLoading(true);
-      const { data: ordersData } = await supabase
+      const { data: ordersData, error: ordersError } = await supabase
         .from("orders_table")
         .select("* ,order_items(*,product_variants(*))")
         .eq("id", orderID)
@@ -528,50 +531,79 @@ function OrderProducts({ orderID, handleProductView }) {
   };
   const products = order?.order_items;
   const shippingAddress = order?.shipping_address?.[0];
+  async function handleOrderitemCancel(product) {
+    // indivual product cancel
+    console.log("product for cancel", product);
 
-  //         {
-  //             "id": "05d6c3a5-fe20-412e-a34a-645652f2504d",
-  //             "mrp": 3000,
-  //             "refund": null,
-  //             "order_id": "8b87da9b-9eaf-4206-9ff5-40cb1d9968ad",
-  //             "quantity": 1,
-  //             "sub_total": 2599,
-  //             "created_at": "2025-11-17T07:18:59.393171+00:00",
-  //             "gst_amount": 467.82,
-  //             "product_id": "1d352504-f171-41fc-9bc4-333c68ae9200",
-  //             "item_status": null,
-  //             "final_amount": 3066.82,
-  //             "selling_price": 2599,
-  //             "coupon_discount": 0,
-  //             "discount_on_mrp": 401,
-  //             "product_variants": {
-  //                 "id": "1d352504-f171-41fc-9bc4-333c68ae9200",
-  //                 "type": "product",
-  //                 "image": "Green Chair-main-7d4eb72e-21a6-4894-852a-90d059f23659",
-  //                 "price": 0,
-  //                 "title": "Green Chair",
-  //                 "status": "approved",
-  //                 "default": null,
-  //                 "details": "Green Chair",
-  //                 "segment": "Minimal",
-  //                 "stockQty": 7,
-  //                 "vendor_id": "859f3a20-dcd6-464c-aad1-f0ed495a25cd",
-  //                 "created_at": "2025-11-14T04:49:59.111954+00:00",
-  //                 "dimensions": "10x10x10",
-  //                 "product_id": "7d4eb72e-21a6-4894-852a-90d059f23659",
-  //                 "manufacturer": "Workved",
-  //                 "product_type": "Chair",
-  //                 "reject_reason": "",
-  //                 "ecommercePrice": {
-  //                     "mrp": "3000.00",
-  //                     "sellingPrice": "2599.00"
-  //                 },
-  //                 "additional_images": "[\"Green Chair-additional-0-7d4eb72e-21a6-4894-852a-90d059f23659\"]",
-  //                 "productDisplayType": "ecommerce"
-  //             },
-  //             "refundable_amount": 3066.82,
-  //             "merchant_refund_id": null
-  //         },
+    const uniqueId = uuidv4();
+    console.log(uniqueId);
+
+    const refundAmountInPaisa = product?.refundable_amount * 100;
+
+    // note this function for indiviual order cancellation
+    const reqbody = {
+      amount: refundAmountInPaisa,
+      orderId: product?.order_id,
+      refundId: uniqueId,
+    };
+    try {
+      const res = await fetch(
+        `https://bwxzfwsoxwtzhjbzbdzs.supabase.co/functions/v1/orderRefund`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(reqbody),
+        }
+      );
+
+      console.log("res", res);
+      const data = await res.json();
+      console.log("data", data);
+
+      if (!data?.success) {
+        toast?.error("something went wrong");
+        return;
+      }
+
+      if (data?.success) {
+        // code to update in the dB
+        // step 1 ->update the status to partiallycanccelled
+        const { data: orderdata, error: orddererror } = await supabase
+          .from("orders_table")
+          .update({
+            status: "PartiallyCancelled",
+            refund: data?.data,
+            merchent_refund_id: uniqueId,
+          })
+          .eq("id", order?.id);
+
+        if (orddererror) throw orddererror;
+
+        if (orderdata) console.log("orderdata", orderdata);
+
+        const { data: itemdata, error: itemerror } = await supabase
+          .from("order_items")
+          .update({
+            item_status: "cancelled",
+            merchant_refund_id: uniqueId,
+            refund: data?.data,
+          })
+          .eq("id", product?.id)
+          .eq("order_id", product?.order_id)
+          .select();
+
+        console.log("error", itemerror);
+
+        console.log("data that is updated", itemdata);
+
+        toast?.success("refund initated ,item cancelled");
+        setorderRefresh((prev) => !prev);
+      }
+    } catch (error) {
+      console.log("error", error);
+    } finally {
+    }
+  }
 
   if (loading) return <p>loading .....</p>;
 
@@ -628,9 +660,11 @@ function OrderProducts({ orderID, handleProductView }) {
           {products?.map((product) => (
             <div
               key={product.id}
-              className="border border-[#374A75] px-2 md:px-3 py-2 md:py-4 rounded-md flex lg:grid grid-cols-2 items-center"
+              className="border border-[#374A75] px-2 md:px-3 py-2 md:py-4 rounded-md flex md:grid grid-cols-[3fr,1fr] items-center"
+              // className="border border-[#374A75] px-2 md:px-3 py-2 md:py-4 rounded-md flex lg:grid grid-cols-2 items-center"
             >
-              <div className="grid  grid-cols-[1fr,2fr,1fr] gap-2 lg:gap-7 flex-1">
+              <div className="flex justify-between items-center gap-2 lg:gap-7 flex-1">
+                {/* <div className="grid  grid-cols-[1fr,2fr,1fr] gap-2 lg:gap-7 flex-1"> */}
                 <img
                   src={`${baseImageUrl}/${product?.product_variants?.image}`}
                   alt={product?.product_variants?.title}
@@ -646,18 +680,99 @@ function OrderProducts({ orderID, handleProductView }) {
                 </div>
                 <div className="space-y-2">
                   <h4 className="text-sm md:text-base font-semibold text-[#171717] capitalize">
-                    price
+                    MRP
+                  </h4>
+                  <p className="text-[#171717] text-xs md:text-sm">
+                    {product?.mrp}
+                  </p>
+                </div>
+                <div className="space-y-2">
+                  <h4 className="text-sm md:text-base font-semibold text-[#171717] capitalize">
+                    Price
+                  </h4>
+                  <p className="text-[#171717] text-xs md:text-sm">
+                    {product?.selling_price}
+                  </p>
+                </div>
+                <div className="space-y-2">
+                  <h4 className="text-sm md:text-base font-semibold text-[#171717] capitalize">
+                    quantity
+                  </h4>
+                  <p className="text-[#171717] text-xs md:text-sm">
+                    {product?.quantity}
+                  </p>
+                </div>
+                <div className="space-y-2">
+                  <h4 className="text-sm md:text-base font-semibold text-[#171717] capitalize">
+                    Item Total
+                  </h4>
+                  <p className="text-[#171717] text-xs md:text-sm">
+                    {product?.item_total}
+                  </p>
+                </div>
+                <div className="space-y-2">
+                  <h4 className="text-sm md:text-base font-semibold text-[#171717] capitalize">
+                    coupon Discount
+                  </h4>
+                  <p className="text-[#171717] text-xs text-center md:text-sm">
+                    {product?.coupon_discount}
+                  </p>
+                </div>
+                <div className="space-y-2">
+                  <h4 className="text-sm md:text-base font-semibold text-[#171717] capitalize">
+                    Subtotal
+                  </h4>
+                  <p className="text-[#171717] text-xs md:text-sm">
+                    {product?.sub_total}
+                  </p>
+                </div>
+
+                <div className="space-y-2">
+                  <h4 className="text-sm md:text-base font-semibold text-[#171717] capitalize">
+                    GST
+                  </h4>
+                  <p className="text-[#171717] text-xs md:text-sm">
+                    {product?.gst_amount}
+                  </p>
+                </div>
+
+                <div className="space-y-2">
+                  <h4 className="text-sm md:text-base font-semibold text-[#171717] capitalize">
+                    Total price
                   </h4>
                   <p className="text-[#171717] text-xs md:text-sm">
                     {product?.final_amount}
                   </p>
                 </div>
               </div>
-              <div className="justify-self-end">
+              {/* <div className="justify-self-end">
                 <button onClick={() => handleProductView(product)}>
                   <MdKeyboardArrowRight size={25} color="#304778" />
                 </button>
+              </div> */}
+              <div className="justify-self-end">
+                {product.item_status !== "cancelled" ? (
+                  <button
+                    onClick={() => handleOrderitemCancel(product)}
+                    className=" px-10 border border-[#213626] uppercase text-xs tracking-wider rounded-sm py-2 hover:bg-red-600"
+                  >
+                    cancel
+                  </button>
+                ) : (
+                  <button
+                    disabled={true}
+                    className=" px-10 border border-[#213626] uppercase text-xs tracking-wider rounded-sm py-2"
+                  >
+                    cancelled
+                  </button>
+                )}
               </div>
+              {/* <button
+                onClick={() => handleOrderitemCancel(product)}
+                className=" px-10 border border-[#213626] uppercase text-xs tracking-wider rounded-sm py-2 hover:bg-red-600"
+              >
+                cancel
+              </button> */}
             </div>
           ))}
         </div>
@@ -896,15 +1011,6 @@ function PriceDistribution({ order }) {
           </p>
         </div>
         <div className="flex justify-between border-b py-2">
-          <p>Subtotal</p>
-          <p>
-            {order?.sub_total?.toLocaleString("en-IN", {
-              minimumFractionDigits: 2,
-              maximumFractionDigits: 2,
-            })}
-          </p>
-        </div>
-        <div className="flex justify-between border-b py-2">
           <p>Coupon Discount</p>
           <p>
             {order?.coupon?.discount?.toLocaleString("en-IN", {
@@ -913,6 +1019,16 @@ function PriceDistribution({ order }) {
             })}
           </p>
         </div>
+        <div className="flex justify-between border-b py-2">
+          <p>Subtotal</p>
+          <p>
+            {order?.sub_total?.toLocaleString("en-IN", {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            })}
+          </p>
+        </div>
+
         <div className="flex justify-between border-b py-2">
           <p>Shipping Fee</p>
           <p>

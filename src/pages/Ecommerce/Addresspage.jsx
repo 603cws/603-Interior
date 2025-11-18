@@ -336,11 +336,13 @@ function Addresspage() {
 
         const sellingPrice = item?.productId?.ecommercePrice?.sellingPrice;
 
+        const itemTotal = sellingPrice * item?.quantity;
+
         const coupondiscount =
-          sellingPrice * (pricingdetails?.coupon?.discountPerc / 100) || 0;
+          itemTotal * (pricingdetails?.coupon?.discountPerc / 100) || 0;
 
         //subtotal = sellingprice - coupondiscount
-        const subtotal = sellingPrice - coupondiscount;
+        const subtotal = itemTotal - coupondiscount;
 
         //final price = subtotal + gst
         const gst = subtotal * 0.18;
@@ -348,12 +350,13 @@ function Addresspage() {
         return {
           order_id: neworder?.id, // uuid (FK to order_table)
           product_id: item?.productId?.id, // uuid
+          mrp: item?.productId?.ecommercePrice?.mrp, // number
+          selling_price: sellingPrice, // number
           quantity: item?.quantity, // number
+          item_total: itemTotal || 0,
           coupon_discount: coupondiscount, // number
           gst_amount: subtotal * 0.18, // number
           sub_total: subtotal, // number
-          mrp: item?.productId?.ecommercePrice?.mrp, // number
-          selling_price: item?.productId?.ecommercePrice?.sellingPrice, // number
           refundable_amount: finalprice, // number
           // item_status: "", // string
           // merchant_refund_id: "", // string
@@ -1313,6 +1316,16 @@ function Addresspage() {
                     </h5>
                   </div>
 
+                  {pricingdetails?.discount > 0 && (
+                    <div>
+                      <AppliedCoupon
+                        savedamount={pricingdetails?.discount}
+                        // handleRemove={handleRemoveCoupon}
+                        code={pricingdetails?.coupon.couponName}
+                      />
+                    </div>
+                  )}
+
                   <div className="flex justify-between">
                     <h5 className="font-medium  text-[#111111]/80">
                       Total MRP
@@ -1330,16 +1343,6 @@ function Addresspage() {
                       Apply Coupon
                     </h5>
                   </div> */}
-
-                  {pricingdetails?.discount > 0 && (
-                    <div>
-                      <AppliedCoupon
-                        savedamount={pricingdetails?.discount}
-                        // handleRemove={handleRemoveCoupon}
-                        code={pricingdetails?.coupon.couponName}
-                      />
-                    </div>
-                  )}
 
                   <div className="flex justify-between border-b-[1px]">
                     <div>

@@ -437,7 +437,7 @@ function Cart() {
       const formatteddata = {
         price: orignalTotalPrice || 0,
         discountOnMrp: discountOnMrp || 0,
-        subtotal: orignalTotalPrice - discountOnMrp || 0,
+        subtotal: orignalTotalPrice - discountOnMrp - differenceInPrice || 0,
         discount: differenceInPrice || 0,
         gst: gst || 0,
         finalValue: +finalValue,
@@ -688,16 +688,6 @@ function Cart() {
                           -Rs {discountOnMrp}
                         </h5>
                       </div>
-
-                      <div className="flex justify-between">
-                        <h5 className="font-medium  text-[#111111]/80">
-                          Sub Total
-                        </h5>
-                        <h5 className="font-medium  text-[#111111]/80 ">
-                          Rs {orignalTotalPrice - discountOnMrp}
-                        </h5>
-                      </div>
-
                       <div className="flex justify-between">
                         <h5 className="font-medium  text-[#111111]/80">
                           Coupon Discount
@@ -732,6 +722,18 @@ function Cart() {
                           />
                         </div>
                       )}
+
+                      <div className="flex justify-between">
+                        <h5 className="font-medium  text-[#111111]/80">
+                          Sub Total
+                        </h5>
+                        <h5 className="font-medium  text-[#111111]/80 ">
+                          Rs{" "}
+                          {orignalTotalPrice -
+                            discountOnMrp -
+                            differenceInPrice}
+                        </h5>
+                      </div>
 
                       <div className="flex justify-between border-b-[1px]">
                         <div>
@@ -782,14 +784,6 @@ function Cart() {
                         </h5>
                         <h5 className="font-medium  text-[#34BFAD]/80 ">--</h5>
                       </div>
-
-                      <div className="flex justify-between">
-                        <h5 className="font-medium  text-[#111111]/80">
-                          Sub Total
-                        </h5>
-                        <h5 className="font-medium  text-[#111111]/80 ">--</h5>
-                      </div>
-
                       <div className="flex justify-between">
                         <h5 className="font-medium  text-[#111111]/80">
                           Coupon Discount
@@ -800,6 +794,13 @@ function Cart() {
                         >
                           Apply Coupon
                         </button>
+                      </div>
+
+                      <div className="flex justify-between">
+                        <h5 className="font-medium  text-[#111111]/80">
+                          Sub Total
+                        </h5>
+                        <h5 className="font-medium  text-[#111111]/80 ">--</h5>
                       </div>
 
                       <div className="flex justify-between border-b-[1px]">

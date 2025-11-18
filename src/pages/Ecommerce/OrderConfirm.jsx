@@ -85,13 +85,13 @@ function OrderConfirm() {
           )}
           <div className="flex gap-10 px-5 md:px-10 text-sm md:text-base">
             <button
-              onClick={() => navigate("/shop")}
+              onClick={() => navigate("/shop", { replace: true })}
               className="flex-1 py-2 uppercase text-[#374A75] tracking-wider border border-[#374A75] rounded-md flex justify-center items-center hover:bg-[#f1f1f1]"
             >
               continue shopping
             </button>
             <button
-              onClick={() => navigate("/dashboard")}
+              onClick={() => navigate("/dashboard", { replace: true })}
               className="flex-1 py-2 uppercase text-[#fff] bg-[#374A75] tracking-wider border border-[#374A75] rounded-md flex justify-center items-center hover:bg-[#4C69A4]"
             >
               view order
