@@ -123,6 +123,18 @@ function Orders() {
     setEntireOrderCancellation((prev) => !prev);
     console.log("order for cancel", order);
 
+    // check the status from the db
+    const { data, error } = await supabase
+      .from("orders_table")
+      .select("status")
+      .eq("id", order?.id)
+      .single();
+
+    if (data?.status === "cancelled") {
+      toast.error("order is already cancelled");
+      return;
+    }
+
     const uniqueId = uuidv4();
     console.log(uniqueId);
 
@@ -167,38 +179,6 @@ function Orders() {
 
         toast?.success("refund initated");
       }
-
-      //       {
-      //     "success": true,
-      //     "message": "refund successful initated",
-      //     "data": {
-      //         "originalMerchantOrderId": "2653f5ed-7be6-4d7e-8dd5-c0bf0356bac2",
-      //         "amount": 765800,
-      //         "state": "COMPLETED",
-      //         "timestamp": 1763121002786,
-      //         "refundId": "OMR2511141720027177435276",
-      //         "splitInstruments": [
-      //             {
-      //                 "amount": 765800,
-      //                 "rail": {
-      //                     "type": "PG",
-      //                     "authorizationCode": "<authorizationCode>"
-      //                 },
-      //                 "instrument": {
-      //                     "type": "CREDIT_CARD",
-      //                     "bankId": "SBIN",
-      //                     "arn": "<arn>",
-      //                     "brn": "<brn>",
-      //                     "geoScope": "DOMESTIC",
-      //                     "cardNetwork": "VISA",
-      //                     "maskedCardNumber": "XXXXXXXXXXXX6314",
-      //                     "tokenBin": "<tokenBin>",
-      //                     "cardHolderName": "<cardHolderName>"
-      //                 }
-      //             }
-      //         ]
-      //     }
-      // }
     } catch (error) {
       console.log("error", error);
     } finally {
@@ -309,49 +289,6 @@ function Orders() {
   //                 "productDisplayType": "ecommerce"
   //             },
   //             "refundable_amount": 3066.82,
-  //             "merchant_refund_id": null
-  //         },
-  //         {
-  //             "id": "be3d0caa-e0cb-434d-a231-1b763493f6f9",
-  //             "mrp": 4000,
-  //             "refund": null,
-  //             "order_id": "8b87da9b-9eaf-4206-9ff5-40cb1d9968ad",
-  //             "quantity": 1,
-  //             "sub_total": 3799,
-  //             "created_at": "2025-11-17T07:18:59.393171+00:00",
-  //             "gst_amount": 683.82,
-  //             "product_id": "d6a99c93-e0b9-4958-9dc5-be9a9afc472e",
-  //             "item_status": null,
-  //             "final_amount": 4482.82,
-  //             "selling_price": 3799,
-  //             "coupon_discount": 0,
-  //             "discount_on_mrp": 201,
-  //             "product_variants": {
-  //                 "id": "d6a99c93-e0b9-4958-9dc5-be9a9afc472e",
-  //                 "type": "product",
-  //                 "image": "Orange Chair-main-b3813856-3abd-4738-a76d-3265bf66dbbd",
-  //                 "price": 0,
-  //                 "title": "Orange Chair",
-  //                 "status": "approved",
-  //                 "default": null,
-  //                 "details": "Orange Chair",
-  //                 "segment": "Minimal",
-  //                 "stockQty": 8,
-  //                 "vendor_id": "859f3a20-dcd6-464c-aad1-f0ed495a25cd",
-  //                 "created_at": "2025-11-14T04:46:10.328575+00:00",
-  //                 "dimensions": "10x10x10",
-  //                 "product_id": "7d4eb72e-21a6-4894-852a-90d059f23659",
-  //                 "manufacturer": "Workved",
-  //                 "product_type": "Chair",
-  //                 "reject_reason": "",
-  //                 "ecommercePrice": {
-  //                     "mrp": "4000.00",
-  //                     "sellingPrice": "3799.00"
-  //                 },
-  //                 "additional_images": "[\"Orange Chair-additional-0-b3813856-3abd-4738-a76d-3265bf66dbbd\"]",
-  //                 "productDisplayType": "ecommerce"
-  //             },
-  //             "refundable_amount": 4482.82,
   //             "merchant_refund_id": null
   //         }
   //     ]
@@ -531,9 +468,27 @@ function OrderProducts({ orderID }) {
   };
   const products = order?.order_items;
   const shippingAddress = order?.shipping_address?.[0];
-  async function handleOrderitemCancel(product) {
+  async function handleOrderitemCancel(order, product) {
     // indivual product cancel
     console.log("product for cancel", product);
+
+    // check the order length to make it partial cancel or entire order cancel
+    const cancelType =
+      order?.order_items?.length > 1 ? "PartiallyCancelled" : "cancelled";
+
+    //check the status of the product from the db incase the product is already refunded and still function is called
+    const { data, error } = await supabase
+      .from("order_items")
+      .select("item_status")
+      .eq("id", product?.id)
+      .single();
+
+    console.log("priduct from db ", data);
+
+    if (data?.item_status === "cancelled") {
+      toast.error("the refund is already initated ");
+      return;
+    }
 
     const uniqueId = uuidv4();
     console.log(uniqueId);
@@ -571,7 +526,7 @@ function OrderProducts({ orderID }) {
         const { data: orderdata, error: orddererror } = await supabase
           .from("orders_table")
           .update({
-            status: "PartiallyCancelled",
+            status: cancelType,
             refund: data?.data,
             merchent_refund_id: uniqueId,
           })
@@ -751,6 +706,12 @@ function OrderProducts({ orderID }) {
                 </button>
               </div> */}
               <div className="justify-self-end">
+                {/* <button
+                  onClick={() => handleOrderitemCancel(order, product)}
+                  className=" px-10 border border-[#213626] uppercase text-xs tracking-wider rounded-sm py-2 hover:bg-red-600"
+                >
+                  cancel
+                </button> */}
                 {product.item_status !== "cancelled" ? (
                   <button
                     onClick={() => handleOrderitemCancel(product)}
