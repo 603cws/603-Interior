@@ -1,28 +1,29 @@
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { supabase } from "../../services/supabase";
 import { baseImageUrl } from "../../utils/HelperConstant";
 import { exportToExcel } from "../../utils/DataExport";
 import PagInationNav from "../../common-components/PagInationNav";
 
 export default function Orders({ vendorId = null }) {
-  const [ordersData, setOrdersData] = React.useState(null);
-  const [currentPage, setCurrentPage] = React.useState(1);
-  const [itemsPerPage, setItemsPerPage] = React.useState(15);
+  const [ordersData, setOrdersData] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(15);
   const totalPages = Math.ceil(ordersData?.length / itemsPerPage);
-  const [selectedOrder, setSelectedOrder] = React.useState(null);
+  const [selectedOrder, setSelectedOrder] = useState(null);
   const [loadingOrders, setLoadingOrders] = useState(false);
   const [filterDropdown, setFilterDropdown] = useState(false);
   const [orderStatusFilter, setOrderStatusFilter] = useState("");
   const [paymentStatusFilter, setPaymentStatusFilter] = useState("");
   const [filteredOrders, setFilteredOrders] = useState([]);
   const dropdownRef = useRef(null);
+  const [searchQuery, setSearchQuery] = useState("");
 
   const paginatedOrders = filteredOrders?.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
 
-  React.useEffect(() => {
+  useEffect(() => {
     const fetchOrders = async () => {
       setLoadingOrders(true);
       const { data: orders, error } = await supabase
@@ -109,6 +110,34 @@ export default function Orders({ vendorId = null }) {
     };
   }, [filterDropdown]);
 
+  useEffect(() => {
+    const id = setTimeout(() => {
+      const q = (searchQuery || "").trim().toLowerCase();
+      if (!q) {
+        setFilteredOrders(ordersData);
+        setCurrentPage(1);
+        return;
+      }
+
+      const words = q.split(/\s+/); // split into words
+
+      const result = (ordersData || []).filter((order) => {
+        const idStr = (order.id || "").toLowerCase();
+        const nameStr = (order.shippingAddress?.[0]?.name || "").toLowerCase();
+
+        const hay = `${idStr} ${nameStr}`; // search across both fields
+
+        // true only if ALL words are present somewhere in the haystack
+        return words.every((w) => hay.includes(w));
+      });
+
+      setFilteredOrders(result);
+      setCurrentPage(1);
+    }, 200); // 200ms debounce
+
+    return () => clearTimeout(id);
+  }, [searchQuery, ordersData]);
+
   // const filterOrders = (type, value = "") => {
   //   console.log(type, value);
 
@@ -176,60 +205,81 @@ export default function Orders({ vendorId = null }) {
               <h2 className="text-xl text-[#374A75] font-semibold px-4 py-2">
                 Orders List
               </h2>
-              <div className="relative" ref={dropdownRef}>
-                <button
-                  onClick={() => setFilterDropdown(!filterDropdown)}
-                  className="px-4 py-2 rounded text-[#374A75] text-sm flex items-center gap-3 border border-[#CCCCCC]"
-                >
-                  <img src="/images/icons/filter-icon.png" alt="" />
-                  <span className="md:block hidden">Filter</span>
-                </button>
-                {filterDropdown && (
-                  <div className="absolute right-0 bg-[#fff] p-2 text-nowrap border">
-                    <p className="capitalize text-sm text-[#374A75]">
-                      order status
-                    </p>
-                    <hr />
-                    <select
-                      name="orderStatus"
-                      id="orderStatus"
-                      className="mb-2 text-xs focus:outline-none w-full"
-                      value={orderStatusFilter}
-                      onChange={(e) => {
-                        const value = e.target.value;
-                        setOrderStatusFilter(value);
-                        filterOrders("orderStatus", value);
-                      }}
+              <div className="flex items-center gap-3">
+                <div className="relative">
+                  <input
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    placeholder="Search by order id or name..."
+                    className="px-3 py-2 pr-6 border border-[#CCCCCC] rounded text-sm w-60 focus:outline-none"
+                  />
+                  {/* optional clear button */}
+                  {searchQuery && (
+                    <button
+                      onClick={() => setSearchQuery("")}
+                      className="absolute right-1 top-1/2 -translate-y-1/2 text-md px-2 py-1 hover:text-red-500"
+                      aria-label="clear search"
+                      title="Clear Search"
                     >
-                      <option value="">All</option>
-                      <option value="approved">Approved</option>
-                      <option value="pending">Pending</option>
-                      <option value="shipped">Shipped</option>
-                      <option value="delivered">Delivered</option>
-                      <option value="cancelled">Cancelled</option>
-                      <option value="failed">Failed</option>
-                    </select>
-                    <hr />
-                    <p className="capitalize text-sm text-[#374A75]">
-                      payment status
-                    </p>
-                    <select
-                      name="paymentStatus"
-                      id="paymentStatus"
-                      className="text-xs focus:outline-none w-full"
-                      value={paymentStatusFilter}
-                      onChange={(e) => {
-                        const value = e.target.value;
-                        setPaymentStatusFilter(value);
-                        filterOrders("paymentStatus", value);
-                      }}
-                    >
-                      <option value="">All</option>
-                      <option value="completed">Paid</option>
-                      <option value="unpaid">Unpaid</option>
-                    </select>
-                  </div>
-                )}
+                      ×
+                    </button>
+                  )}
+                </div>
+                <div className="relative" ref={dropdownRef}>
+                  <button
+                    onClick={() => setFilterDropdown(!filterDropdown)}
+                    className="px-4 py-2 rounded text-[#374A75] text-sm flex items-center gap-3 border border-[#CCCCCC]"
+                  >
+                    <img src="/images/icons/filter-icon.png" alt="" />
+                    <span className="md:block hidden">Filter</span>
+                  </button>
+                  {filterDropdown && (
+                    <div className="absolute right-0 bg-[#fff] p-2 text-nowrap border">
+                      <p className="capitalize text-sm text-[#374A75]">
+                        order status
+                      </p>
+                      <hr />
+                      <select
+                        name="orderStatus"
+                        id="orderStatus"
+                        className="mb-2 text-xs focus:outline-none w-full"
+                        value={orderStatusFilter}
+                        onChange={(e) => {
+                          const value = e.target.value;
+                          setOrderStatusFilter(value);
+                          filterOrders("orderStatus", value);
+                        }}
+                      >
+                        <option value="">All</option>
+                        <option value="approved">Approved</option>
+                        <option value="pending">Pending</option>
+                        <option value="shipped">Shipped</option>
+                        <option value="delivered">Delivered</option>
+                        <option value="cancelled">Cancelled</option>
+                        <option value="failed">Failed</option>
+                      </select>
+                      <hr />
+                      <p className="capitalize text-sm text-[#374A75]">
+                        payment status
+                      </p>
+                      <select
+                        name="paymentStatus"
+                        id="paymentStatus"
+                        className="text-xs focus:outline-none w-full"
+                        value={paymentStatusFilter}
+                        onChange={(e) => {
+                          const value = e.target.value;
+                          setPaymentStatusFilter(value);
+                          filterOrders("paymentStatus", value);
+                        }}
+                      >
+                        <option value="">All</option>
+                        <option value="completed">Paid</option>
+                        <option value="unpaid">Unpaid</option>
+                      </select>
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
             <div className="md:px-2 hidden md:block">
@@ -242,100 +292,107 @@ export default function Orders({ vendorId = null }) {
           {/* Scrollable Content */}
           <div className=" w-full flex flex-col overflow-y-auto scrollbar-hide lg:custom-scrollbar h-[70vh] md:h-[60vh] lg:h-[calc(100vh-261px)] pb-2 px-3">
             <div className="hidden lg:block">
-              <table className="min-w-full text-sm table-auto">
-                {/* Table Header */}
-                <thead className="hidden md:table-header-group text-left text-[#232321] text-opacity-80 border-b items-center bg-white sticky top-0 z-10">
-                  <tr>
-                    <th className="px-4 py-2">Order ID</th>
-                    <th className="px-4 py-2">Date</th>
-                    <th className="px-4 py-2">Customer Name</th>
-                    <th className="px-4 py-2">Status</th>
-                    <th className="px-4 py-2">Payment</th>
-                    <th className="px-4 py-2">Amount</th>
-                  </tr>
-                </thead>
+              {paginatedOrders?.length === 0 && (
+                <p className="text-center text-xl font-bold text-[#ccc]">
+                  No data found!
+                </p>
+              )}
+              {paginatedOrders?.length > 0 && (
+                <table className="min-w-full text-sm table-auto">
+                  {/* Table Header */}
+                  <thead className="hidden md:table-header-group text-left text-[#232321] text-opacity-80 border-b items-center bg-white sticky top-0 z-10">
+                    <tr>
+                      <th className="px-4 py-2">Order ID</th>
+                      <th className="px-4 py-2">Date</th>
+                      <th className="px-4 py-2">Customer Name</th>
+                      <th className="px-4 py-2">Status</th>
+                      <th className="px-4 py-2">Payment</th>
+                      <th className="px-4 py-2">Amount</th>
+                    </tr>
+                  </thead>
 
-                <tbody>
-                  {paginatedOrders?.map((order) => {
-                    // Status color constants
-                    const statusColors = {
-                      shipped: "bg-blue-600",
-                      pending: "bg-red-500",
-                      canceled: "bg-orange-500",
-                      delivered: "bg-green-600",
-                      approved: "bg-gray-500",
-                    };
+                  <tbody>
+                    {paginatedOrders?.map((order) => {
+                      // Status color constants
+                      const statusColors = {
+                        shipped: "bg-blue-600",
+                        pending: "bg-red-500",
+                        canceled: "bg-orange-500",
+                        delivered: "bg-green-600",
+                        approved: "bg-gray-500",
+                      };
 
-                    // Payment status and color constants
-                    const paymentStatus =
-                      order.paymentDetails?.state?.toLowerCase() || "unpaid";
-                    const paymentColors = {
-                      completed: "bg-blue-600",
-                      failed: "bg-gray-500",
-                      refund: "bg-purple-500",
-                      paid: "bg-blue-600",
-                      unpaid: "bg-gray-500",
-                    };
+                      // Payment status and color constants
+                      const paymentStatus =
+                        order.paymentDetails?.state?.toLowerCase() || "unpaid";
+                      const paymentColors = {
+                        completed: "bg-blue-600",
+                        failed: "bg-gray-500",
+                        refund: "bg-purple-500",
+                        paid: "bg-blue-600",
+                        unpaid: "bg-gray-500",
+                      };
 
-                    return (
-                      <tr
-                        key={order.id}
-                        className="border-b hover:bg-gray-100 hover:cursor-pointer"
-                        onClick={() => setSelectedOrder(order)}
-                      >
-                        {/* Order ID */}
-                        <td className="px-4 py-2" title={order.id}>
-                          #{order.id.slice(0, 6)}
-                        </td>
-                        {/* Date */}
-                        <td className="px-4 py-2">
-                          {new Date(order.created_at).toLocaleDateString(
-                            "en-US",
-                            {
-                              month: "short",
-                              day: "numeric",
-                              year: "numeric",
-                            }
-                          )}
-                        </td>
-                        {/* Customer Name */}
-                        <td className="px-4 py-2 capitalize">
-                          {order.shippingAddress?.[0]?.name || "N/A"}
-                        </td>
-                        {/* Status */}
-                        <td className="px-4 py-2">
-                          <div className="flex items-center gap-2 capitalize">
-                            <span
-                              className={`w-2 h-2 rounded-full ${
-                                statusColors[order.status?.toLowerCase()] ||
-                                "bg-gray-400"
-                              }`}
-                            ></span>
-                            {order.status}
-                          </div>
-                        </td>
-                        {/* Payment */}
-                        <td className="px-4 py-2">
-                          <div className="flex items-center gap-2 capitalize">
-                            <span
-                              className={`w-2 h-2 rounded-full ${
-                                paymentColors[paymentStatus] || "bg-gray-400"
-                              }`}
-                            ></span>
-                            {paymentStatus === "completed" ||
-                            paymentStatus === "paid"
-                              ? "Paid"
-                              : paymentStatus.charAt(0).toUpperCase() +
-                                paymentStatus.slice(1)}
-                          </div>
-                        </td>
-                        {/* Amount */}
-                        <td className="px-4 py-2">₹{order.finalPrice}</td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
+                      return (
+                        <tr
+                          key={order.id}
+                          className="border-b hover:bg-gray-100 hover:cursor-pointer"
+                          onClick={() => setSelectedOrder(order)}
+                        >
+                          {/* Order ID */}
+                          <td className="px-4 py-2" title={order.id}>
+                            #{order.id.slice(0, 6)}
+                          </td>
+                          {/* Date */}
+                          <td className="px-4 py-2">
+                            {new Date(order.created_at).toLocaleDateString(
+                              "en-US",
+                              {
+                                month: "short",
+                                day: "numeric",
+                                year: "numeric",
+                              }
+                            )}
+                          </td>
+                          {/* Customer Name */}
+                          <td className="px-4 py-2 capitalize">
+                            {order.shippingAddress?.[0]?.name || "N/A"}
+                          </td>
+                          {/* Status */}
+                          <td className="px-4 py-2">
+                            <div className="flex items-center gap-2 capitalize">
+                              <span
+                                className={`w-2 h-2 rounded-full ${
+                                  statusColors[order.status?.toLowerCase()] ||
+                                  "bg-gray-400"
+                                }`}
+                              ></span>
+                              {order.status}
+                            </div>
+                          </td>
+                          {/* Payment */}
+                          <td className="px-4 py-2">
+                            <div className="flex items-center gap-2 capitalize">
+                              <span
+                                className={`w-2 h-2 rounded-full ${
+                                  paymentColors[paymentStatus] || "bg-gray-400"
+                                }`}
+                              ></span>
+                              {paymentStatus === "completed" ||
+                              paymentStatus === "paid"
+                                ? "Paid"
+                                : paymentStatus.charAt(0).toUpperCase() +
+                                  paymentStatus.slice(1)}
+                            </div>
+                          </td>
+                          {/* Amount */}
+                          <td className="px-4 py-2">₹{order.finalPrice}</td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              )}
             </div>
             <div className="lg:hidden">
               {paginatedOrders?.map((order) => (

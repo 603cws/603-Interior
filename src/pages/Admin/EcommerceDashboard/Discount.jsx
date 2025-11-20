@@ -78,9 +78,9 @@ function Discount() {
                 )}
                 <button
                   onClick={() => setCreateDiscount((prev) => !prev)}
-                  className="px-4 py-3 rounded-md bg-blue-600 text-white text-lg"
+                  className="px-2 py-1 md:px-4 md:py-2 border border-[#CCCCCC] rounded-md text-[#374A75] text-lg font-medium hover:bg-[#f1f1f1] flex items-center gap-1"
                 >
-                  Create Discount
+                  + <span className="hidden lg:block">Add Discount</span>
                 </button>
               </div>
             </div>

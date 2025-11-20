@@ -492,7 +492,7 @@ function AdminDashboardEcom() {
 
         {/* dashboard */}
         {sidebarstate.dashboard && (
-          <div className="flex flex-col h-full min-h-0 overflow-y-auto lg:border-2 border-[#334A78] rounded-lg bg-white font-lato p-4 custom-scrollbar">
+          <div className="flex flex-col h-full min-h-0 overflow-y-auto overflow-x-hidden lg:border-2 border-[#334A78] rounded-lg bg-white font-lato p-4 custom-scrollbar">
             {/* Top Stats Cards */}
             <StatsSection allusers={allusers} />
 
