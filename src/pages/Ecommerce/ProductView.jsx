@@ -614,7 +614,7 @@ function ProductView() {
                     <p className="text-sm lg:text-base text-[#F69E60]">
                       (Rs.
                       {product?.ecommercePrice?.mrp -
-                        product?.ecommercePrice?.sellingPrice}
+                        product?.ecommercePrice?.sellingPrice}{" "}
                       OFF)
                     </p>
                   </div>

@@ -1102,14 +1102,14 @@ function Products() {
       </section>
 
       {/* shop furniture for mobile view */}
-      <section>
+      {/* <section>
         <div className="px-3 mb-6 lg:hidden">
           <CardSection className="flex-1" title="Top Deals On Furniture" />
         </div>
-      </section>
+      </section> */}
 
       {/* section 6*/}
-      <section>
+      {/* <section>
         <div className="hidden lg:block px-3">
           <SectionHeader title={"Trending products"} />
         </div>
@@ -1154,7 +1154,6 @@ function Products() {
                 fill: "row",
               }}
               spaceBetween={30}
-              //   pagination={{ clickable: true, el: ".custom-pagination" }}
               className="relative lg:pb-10"
               breakpoints={{
                 0: {
@@ -1180,24 +1179,15 @@ function Products() {
                 </SwiperSlide>
               ))}
             </Swiper>
-            {/* Custom arrows */}
-            {/* <div
-              ref={prevRef}
-              className="swiper-button-prev custom-nav absolute top-1/2 -left-10 transform -translate-y-1/2 w-10 h-10 bg-white rounded-full shadow z-50"
-            />
-            <div
-              ref={nextRef}
-              className="swiper-button-next custom-nav absolute top-1/2 -right-10 transform -translate-y-1/2 w-10 h-10 bg-white rounded-full shadow z-50"
-            /> */}
+          
           </div>
 
-          {/* Custom pagination */}
           <div
             ref={paginationRef}
             className="custom-pagination hidden mt-4 lg:flex justify-center gap-2"
           />
         </div>
-      </section>
+      </section> */}
 
       {/* section 7*/}
       <section className="lg:container lg:mx-auto my-3 px-3 lg:px-12 lg:my-10">
@@ -1481,7 +1471,7 @@ function Card({ product }) {
             <p className=" text-xs lg:text-sm line-clamp-1">{product.title}</p>
             <p className="text-xs lg:text-sm">
               RS.{" "}
-              {product.price.toLocaleString("en-IN", {
+              {product?.ecommercePrice?.sellingPrice.toLocaleString("en-IN", {
                 minimumFractionDigits: 2,
                 maximumFractionDigits: 2,
               })}

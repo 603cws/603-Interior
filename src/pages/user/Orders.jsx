@@ -60,62 +60,11 @@ function Orders() {
       setLoading(false);
     }
   };
-  // const fetchOrdersData = async () => {
-  //   try {
-  //     setLoading(true);
-  //     const { data: ordersData, error: ordersError } = await supabase
-  //       .from("orders")
-  //       .select("*")
-  //       .eq("userId", accountHolder.userId)
-  //       .order("created_at", { ascending: false });
-
-  //     if (ordersError) throw ordersError;
-  //     if (!ordersData || ordersData.length === 0) {
-  //       setOrders([]);
-  //       return;
-  //     }
-
-  //     const productIds = ordersData.flatMap((order) =>
-  //       order.products.map((p) => p.id)
-  //     );
-
-  //     if (productIds.length === 0) {
-  //       setOrders(ordersData);
-  //       return;
-  //     }
-
-  //     const { data: productsData, error: productsError } = await supabase
-  //       .from("product_variants")
-  //       .select("*")
-  //       .in("id", productIds);
-
-  //     if (productsError) throw productsError;
-
-  //     const ordersWithProducts = ordersData.map((order) => ({
-  //       ...order,
-  //       products: order.products.map((p) => ({
-  //         ...p,
-  //         details: productsData.find((prod) => prod.id === p.id) || null,
-  //       })),
-  //     }));
-
-  //     setOrders(ordersWithProducts);
-  //   } catch (error) {
-  //     console.error("Error fetching orders with products:", error);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
 
   const handleOrdersView = (order) => {
     setDetailedView(true);
     setSelectedOrder(order);
   };
-  // const handleProductView = (product) => {
-  //   setSelectedProduct(product);
-  //   setProductView(true);
-  //   setDetailedView(false);
-  // };
 
   // cancel order function
 
@@ -187,113 +136,6 @@ function Orders() {
     }
   }
 
-  //   {
-  //     "id": "8b87da9b-9eaf-4206-9ff5-40cb1d9968ad",
-  //     "created_at": "2025-11-17T07:18:59.346748+00:00",
-  //     "status": "approved",
-  //     "user_id": "21e0b7e5-6276-4608-9f0f-0d0b0f802f46",
-  //     "payment_details": {
-  //         "state": "COMPLETED",
-  //         "amount": 754964,
-  //         "timestamp": 1763363972337,
-  //         "paymentMode": "CARD",
-  //         "transactionId": "OM2511171248598855816316",
-  //         "splitInstruments": [
-  //             {
-  //                 "rail": {
-  //                     "type": "PG",
-  //                     "authorizationCode": "<authorizationCode>"
-  //                 },
-  //                 "amount": 754964,
-  //                 "instrument": {
-  //                     "arn": "<arn>",
-  //                     "brn": "<brn>",
-  //                     "type": "CREDIT_CARD",
-  //                     "bankId": "SBIN",
-  //                     "geoScope": "DOMESTIC",
-  //                     "tokenBin": "<tokenBin>",
-  //                     "cardNetwork": "VISA",
-  //                     "cardHolderName": "<cardHolderName>",
-  //                     "maskedCardNumber": "XXXXXXXXXXXX6314"
-  //                 }
-  //             }
-  //         ]
-  //     },
-  //     "coupon": {
-  //         "name": "",
-  //         "discount": 0
-  //     },
-  //     "charges": {
-  //         "GST": 1151.64,
-  //         "delivery": 0
-  //     },
-  //     "total_mrp": 7000,
-  //     "discount_on_mrp": 602,
-  //     "sub_total": 6398,
-  //     "final_amount": 7549.64,
-  //     "shipping_address": [
-  //         {
-  //             "id": "c0845bc0-84c8-45c3-8ed9-17eac9500ad1",
-  //             "city": "mumbai",
-  //             "name": "yuvraj machadi",
-  //             "town": "mumbai",
-  //             "state": "MH",
-  //             "mobile": "9594767165",
-  //             "address": "makhija archade bandra west",
-  //             "pincode": "400053",
-  //             "ismarkedDefault": true
-  //         }
-  //     ],
-  //     "delivery_date": "2025-12-01",
-  //     "merchent_refund_id": null,
-  //     "refund": null,
-  //     "order_items": [
-  //         {
-  //             "id": "05d6c3a5-fe20-412e-a34a-645652f2504d",
-  //             "mrp": 3000,
-  //             "refund": null,
-  //             "order_id": "8b87da9b-9eaf-4206-9ff5-40cb1d9968ad",
-  //             "quantity": 1,
-  //             "sub_total": 2599,
-  //             "created_at": "2025-11-17T07:18:59.393171+00:00",
-  //             "gst_amount": 467.82,
-  //             "product_id": "1d352504-f171-41fc-9bc4-333c68ae9200",
-  //             "item_status": null,
-  //             "final_amount": 3066.82,
-  //             "selling_price": 2599,
-  //             "coupon_discount": 0,
-  //             "discount_on_mrp": 401,
-  //             "product_variants": {
-  //                 "id": "1d352504-f171-41fc-9bc4-333c68ae9200",
-  //                 "type": "product",
-  //                 "image": "Green Chair-main-7d4eb72e-21a6-4894-852a-90d059f23659",
-  //                 "price": 0,
-  //                 "title": "Green Chair",
-  //                 "status": "approved",
-  //                 "default": null,
-  //                 "details": "Green Chair",
-  //                 "segment": "Minimal",
-  //                 "stockQty": 7,
-  //                 "vendor_id": "859f3a20-dcd6-464c-aad1-f0ed495a25cd",
-  //                 "created_at": "2025-11-14T04:49:59.111954+00:00",
-  //                 "dimensions": "10x10x10",
-  //                 "product_id": "7d4eb72e-21a6-4894-852a-90d059f23659",
-  //                 "manufacturer": "Workved",
-  //                 "product_type": "Chair",
-  //                 "reject_reason": "",
-  //                 "ecommercePrice": {
-  //                     "mrp": "3000.00",
-  //                     "sellingPrice": "2599.00"
-  //                 },
-  //                 "additional_images": "[\"Green Chair-additional-0-7d4eb72e-21a6-4894-852a-90d059f23659\"]",
-  //                 "productDisplayType": "ecommerce"
-  //             },
-  //             "refundable_amount": 3066.82,
-  //             "merchant_refund_id": null
-  //         }
-  //     ]
-  // }
-
   return (
     <>
       {loading ? (
@@ -316,14 +158,16 @@ function Orders() {
       ) : (
         <>
           <div className="px-3 pt-3">
-            <Breadcrumbs
-              order={selectedOrder}
-              product={selectedProduct}
-              setDetailedView={setDetailedView}
-              setProductView={setProductView}
-              setSelectedOrder={setSelectedOrder}
-              setSelectedProduct={setSelectedProduct}
-            />
+            {detailedView && (
+              <Breadcrumbs
+                order={selectedOrder}
+                product={selectedProduct}
+                setDetailedView={setDetailedView}
+                setProductView={setProductView}
+                setSelectedOrder={setSelectedOrder}
+                setSelectedProduct={setSelectedProduct}
+              />
+            )}
           </div>
           {!detailedView && !productView ? (
             <div>
@@ -615,7 +459,7 @@ function OrderProducts({ orderID }) {
           {products?.map((product) => (
             <div
               key={product.id}
-              className="border border-[#374A75] px-2 md:px-3 py-2 md:py-4 rounded-md flex md:grid grid-cols-[3fr,1fr] items-center"
+              className="border border-[#374A75] px-2 md:px-3 py-2 md:py-4 rounded-md flex md:grid grid-cols-[3fr,1fr] items-start"
               // className="border border-[#374A75] px-2 md:px-3 py-2 md:py-4 rounded-md flex lg:grid grid-cols-2 items-center"
             >
               <div className="flex justify-between items-center gap-2 lg:gap-7 flex-1">
@@ -657,7 +501,7 @@ function OrderProducts({ orderID }) {
                     {product?.quantity}
                   </p>
                 </div>
-                <div className="space-y-2">
+                {/* <div className="space-y-2">
                   <h4 className="text-sm md:text-base font-semibold text-[#171717] capitalize">
                     Item Total
                   </h4>
@@ -672,7 +516,7 @@ function OrderProducts({ orderID }) {
                   <p className="text-[#171717] text-xs text-center md:text-sm">
                     {product?.coupon_discount}
                   </p>
-                </div>
+                </div> */}
                 <div className="space-y-2">
                   <h4 className="text-sm md:text-base font-semibold text-[#171717] capitalize">
                     Subtotal
@@ -692,7 +536,7 @@ function OrderProducts({ orderID }) {
                 </div>
 
                 <div className="space-y-2">
-                  <h4 className="text-sm md:text-base font-semibold text-[#171717] capitalize">
+                  <h4 className="text-sm md:text-base font-semibold text-[#171717] capitalize text-nowrap">
                     Total price
                   </h4>
                   <p className="text-[#171717] text-xs md:text-sm">

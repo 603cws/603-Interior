@@ -905,7 +905,7 @@ function ShopProducts() {
                 </div>
               </div>
               {/* display of products */}
-              <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-5 gap-4 lg:gap-8 ">
+              <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-5 gap-4">
                 {currentItems.map((product, index) => (
                   <div key={index}>
                     <Card product={product} />
@@ -1002,11 +1002,11 @@ function Card({ product }) {
               {product?.title}
             </h4>
             <div className="flex items-center gap-2">
-              <p className=" ">
-                ₹ {product?.ecommercePrice?.sellingPrice || "Rs 3,0000"}
+              <p className="text-nowrap">
+                RS {product?.ecommercePrice?.sellingPrice || "Rs 3,0000"}
               </p>
-              <p className="line-through text-[#111] text-opacity-50">
-                ₹ {product?.ecommercePrice?.mrp || "Rs 3,0000"}
+              <p className="line-through text-[#111] text-opacity-50 text-nowrap">
+                RS {product?.ecommercePrice?.mrp || "Rs 3,0000"}
               </p>
               <p className="text-[#C20000] uppercase">sale</p>
             </div>

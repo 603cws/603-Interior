@@ -50,6 +50,7 @@ import { BsBoxSeam } from "react-icons/bs";
 import { FiLogOut } from "react-icons/fi";
 import { IoMdSwitch } from "react-icons/io";
 import PagInationNav from "../../common-components/PagInationNav";
+import SelectSubcategories from "./SelectSubcategories";
 
 // import Orders from "./Orders";
 
@@ -191,6 +192,9 @@ function AdminDashboard() {
   const [filterDropdown, setFilterDropdown] = useState(false);
   const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
   const [selected, setSelected] = useState("");
+
+  const [selectSubcategories, setSelectSubcategories] = useState(false);
+  const [selectedItem, setSelectedItem] = useState(null);
 
   const normalize = (str) => str.replace(/\s+/g, " ").trim().toLowerCase();
   const applyFilters = ({ query = "", category = "", status = "" }) => {
@@ -1446,14 +1450,18 @@ function AdminDashboard() {
                                           <div className="absolute top-0 left-0 w-full h-full bg-white/90 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                                             <button
                                               className="bg-gray-100 text-green-600 p-3 rounded-full mr-2 hover:text-gray-100 hover:bg-green-600"
-                                              onClick={() => {
-                                                handleUpdateStatus(
-                                                  item,
-                                                  "approved"
-                                                );
-                                                setRejectReason("");
-                                              }}
+                                              // onClick={() => {
+                                              //   handleUpdateStatus(
+                                              //     item,
+                                              //     "approved"
+                                              //   );
+                                              //   setRejectReason("");
+                                              // }}
                                               // onClick={() => handleAccept(item)}
+                                              onClick={() => {
+                                                setSelectedItem(item);
+                                                setSelectSubcategories(true);
+                                              }}
                                             >
                                               <IoCheckmark size={20} />
                                             </button>
@@ -1583,6 +1591,14 @@ function AdminDashboard() {
                 </>
               )}
             </div>
+            {selectSubcategories && (
+              <SelectSubcategories
+                onClose={() => setSelectSubcategories(false)}
+                product={selectedItem}
+                handleUpdateStatus={handleUpdateStatus}
+                setRejectReason={setRejectReason}
+              />
+            )}
           </div>
         )}
 
@@ -1971,6 +1987,7 @@ function AdminDashboard() {
           </div>
         </div>
       )}
+
       {/* </div> */}
     </div>
   );

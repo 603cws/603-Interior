@@ -158,10 +158,7 @@ function Wishlist() {
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-6 gap-2">
             {wishlistItems.map((item, index) => (
-              <div
-                key={index}
-                className="font-Poppins max-w-xs lg:w-[245px] lg:h-[350px] relative"
-              >
+              <div key={index} className="font-Poppins relative border">
                 <div className="relative flex justify-center items-center p-2">
                   <img
                     src={item.productId.image}
@@ -180,13 +177,15 @@ function Wishlist() {
                 <div className="bg-[#fff] p-2">
                   <div className="flex mb-2 lg:mb-4">
                     <div className="flex-1 text-[10px] lg:text-sm  leading-[22.4px]  text-[#111]  lg:space-y-1.5">
-                      <h4 className="font-medium text-sm leading-[22.4px] uppercase">
+                      <h4 className="font-medium text-sm leading-[22.4px] uppercase line-clamp-1">
                         {item.productId.title}
                       </h4>
                       <div className="flex items-center gap-2">
-                        <p className=" ">&#8377; {item.productId.price}</p>
+                        <p className=" ">
+                          RS {item?.productId?.ecommercePrice?.sellingPrice}
+                        </p>
                         <p className="line-through text-[#111] text-opacity-50">
-                          Rs &#8377;5678
+                          Rs {item?.productId?.ecommercePrice?.mrp}
                         </p>
                         <p className="text-[#C20000] uppercase">sale</p>
                       </div>
@@ -201,7 +200,7 @@ function Wishlist() {
                         // handleAddToCart(item);
                       }
                     }}
-                    className="text-[#000] capitalize bg-[#FFFFFF] text-[6px] md:text-[10px] lg:text-xs border border-[#ccc] px-2  py-2 rounded-sm "
+                    className="text-[#000] capitalize bg-[#FFFFFF] text-[6px] md:text-[10px] lg:text-xs border border-[#ccc] px-2  py-2 rounded-sm hover:bg-[#DDDDDD]"
                   >
                     {item.type === "cart" ? "Go to Cart" : "Move to Cart"}
                   </button>

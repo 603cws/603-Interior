@@ -124,7 +124,9 @@ function BestSellingSection({ sidebarDispatch, handleProductPreview }) {
                     {p.stockQty > 0 ? "Stock" : "Stock out"}
                   </span>
                 </td>
-                <td className="font-bold">₹{p.price}</td>
+                <td className="font-bold">
+                  ₹{p?.ecommercePrice?.sellingPrice}
+                </td>
               </tr>
             ))
           )}
