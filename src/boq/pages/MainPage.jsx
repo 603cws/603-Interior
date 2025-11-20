@@ -47,6 +47,17 @@ const MainPage = ({ userResponses, setSelectedSubCategory1, productsData }) => {
         );
       }
 
+      if (
+        selectedCategory.category === "Furniture" &&
+        (selectedSubCategory === "Linear Workstation" ||
+          selectedSubCategory === "Pantry" ||
+          selectedSubCategory === "Breakout Room")
+      ) {
+        subCategories = subCategories.filter(
+          (subCategory) => subCategory !== "Sofas"
+        );
+      }
+
       // Automatically select the first subcategory when switching categories
       if (
         !selectedSubCategory1 ||
@@ -91,6 +102,12 @@ const MainPage = ({ userResponses, setSelectedSubCategory1, productsData }) => {
   //     : [];
 
   let selectedSubCategories = [];
+  console.log(
+    subCat1,
+    selectedCategory,
+    selectedSubCategory1,
+    selectedSubCategory
+  );
 
   if (subCat1 && subCat1[selectedCategory?.category]) {
     switch (selectedCategory.category) {
@@ -117,16 +134,35 @@ const MainPage = ({ userResponses, setSelectedSubCategory1, productsData }) => {
         break;
 
       case "Furniture":
-        if (
-          selectedSubCategory === "Reception" ||
-          selectedSubCategory === "Pantry" ||
-          selectedSubCategory === "Breakout Room"
-        ) {
+        if (selectedSubCategory === "Reception") {
           selectedSubCategories = subCat1["Furniture"].filter(
-            (subCategory) => subCategory !== "Storage"
+            (subCategory) => subCategory !== "TV Console"
+          );
+        } else if (selectedSubCategory === "Pantry") {
+          selectedSubCategories = subCat1["Furniture"].filter(
+            (subCategory) => subCategory !== "Side Table"
+          );
+        } else if (selectedSubCategory === "Breakout Room") {
+          selectedSubCategories = subCat1["Furniture"].filter(
+            (subCategory) =>
+              subCategory !== "Side Table" &&
+              subCategory !== "Storage" &&
+              subCategory !== "TV Console"
+          );
+        } else if (selectedSubCategory === "Washrooms") {
+          selectedSubCategories = subCat1["Furniture"].filter(
+            (subCategory) =>
+              subCategory !== "Side Table" &&
+              subCategory !== "Sofas" &&
+              subCategory !== "Table" &&
+              subCategory !== "Chair" &&
+              subCategory !== "Storage"
           );
         } else {
-          selectedSubCategories = subCat1["Furniture"];
+          selectedSubCategories = subCat1["Furniture"].filter(
+            (subCategory) =>
+              subCategory !== "Sofas" && subCategory !== "Side Table"
+          );
         }
         break;
 
