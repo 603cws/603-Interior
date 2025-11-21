@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useApp } from "../../Context/Context";
 import { motion, AnimatePresence } from "framer-motion";
 import { fadeInVariant } from "../constants/animations";
+import categoryConfig from "../../categoryConfig.json";
 
 const MainPage = ({ userResponses, setSelectedSubCategory1, productsData }) => {
   const {
@@ -10,6 +11,18 @@ const MainPage = ({ userResponses, setSelectedSubCategory1, productsData }) => {
     selectedSubCategory1,
     subCat1,
   } = useApp();
+
+  function getSubCategories(category, subCategory, allSubCategories) {
+    const byCategory = categoryConfig[category] || {};
+    const exclusions =
+      byCategory[subCategory]?.exclude || byCategory.Default?.exclude || [];
+    return allSubCategories.filter((subCat) => !exclusions.includes(subCat));
+  }
+
+  function filterExcludedItems(category, subCategory, items, config) {
+    const excludeList = config[category]?.[subCategory]?.exclude || [];
+    return items.filter((item) => !excludeList.includes(item));
+  }
 
   useEffect(() => {
     if (subCat1 && selectedCategory?.category) {
@@ -28,33 +41,21 @@ const MainPage = ({ userResponses, setSelectedSubCategory1, productsData }) => {
       }
 
       // Apply Civil / Plumbing -> Pantry filtering
-      if (
-        selectedCategory.category === "Civil / Plumbing" &&
-        selectedSubCategory === "Pantry"
-      ) {
-        subCategories = subCategories.filter(
-          (subCategory) => subCategory !== "Pods"
-        );
-      }
-      if (
-        selectedCategory.category === "Furniture" &&
-        (selectedSubCategory === "Reception" ||
-          selectedSubCategory === "Pantry" ||
-          selectedSubCategory === "Breakout Room")
-      ) {
-        subCategories = subCategories.filter(
-          (subCategory) => subCategory !== "Storage"
+      if (selectedCategory.category === "Civil / Plumbing") {
+        subCategories = filterExcludedItems(
+          "Civil / Plumbing",
+          selectedSubCategory,
+          subCategories,
+          categoryConfig
         );
       }
 
-      if (
-        selectedCategory.category === "Furniture" &&
-        (selectedSubCategory === "Linear Workstation" ||
-          selectedSubCategory === "Pantry" ||
-          selectedSubCategory === "Breakout Room")
-      ) {
-        subCategories = subCategories.filter(
-          (subCategory) => subCategory !== "Sofas"
+      if (selectedCategory.category === "Furniture") {
+        subCategories = filterExcludedItems(
+          "Furniture",
+          selectedSubCategory,
+          subCategories,
+          categoryConfig
         );
       }
 
@@ -124,46 +125,19 @@ const MainPage = ({ userResponses, setSelectedSubCategory1, productsData }) => {
         break;
 
       case "Civil / Plumbing":
-        if (selectedSubCategory === "Pantry") {
-          selectedSubCategories = subCat1["Civil / Plumbing"].filter(
-            (subCategory) => subCategory !== "Pods"
-          );
-        } else {
-          selectedSubCategories = subCat1["Civil / Plumbing"];
-        }
+        selectedSubCategories = getSubCategories(
+          "Civil / Plumbing",
+          selectedSubCategory,
+          subCat1["Civil / Plumbing"]
+        );
         break;
 
       case "Furniture":
-        if (selectedSubCategory === "Reception") {
-          selectedSubCategories = subCat1["Furniture"].filter(
-            (subCategory) => subCategory !== "TV Console"
-          );
-        } else if (selectedSubCategory === "Pantry") {
-          selectedSubCategories = subCat1["Furniture"].filter(
-            (subCategory) => subCategory !== "Side Table"
-          );
-        } else if (selectedSubCategory === "Breakout Room") {
-          selectedSubCategories = subCat1["Furniture"].filter(
-            (subCategory) =>
-              subCategory !== "Side Table" &&
-              subCategory !== "Storage" &&
-              subCategory !== "TV Console"
-          );
-        } else if (selectedSubCategory === "Washrooms") {
-          selectedSubCategories = subCat1["Furniture"].filter(
-            (subCategory) =>
-              subCategory !== "Side Table" &&
-              subCategory !== "Sofas" &&
-              subCategory !== "Table" &&
-              subCategory !== "Chair" &&
-              subCategory !== "Storage"
-          );
-        } else {
-          selectedSubCategories = subCat1["Furniture"].filter(
-            (subCategory) =>
-              subCategory !== "Sofas" && subCategory !== "Side Table"
-          );
-        }
+        selectedSubCategories = getSubCategories(
+          "Furniture",
+          selectedSubCategory,
+          subCat1["Furniture"]
+        );
         break;
 
       default:

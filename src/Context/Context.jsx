@@ -9,8 +9,9 @@ import {
 import processData from "../boq/utils/dataProcessor";
 import { calculateTotalPrice } from "../boq/utils/productUtils";
 import { calculateSeatCountTotals } from "../boq/utils/dataProcessor";
-import { calculateTotalPriceHelper } from "../boq/utils/CalculateTotalPriceHelper";
+// import { calculateTotalPriceHelper } from "../boq/utils/CalculateTotalPriceHelper";
 import { numOfCoats } from "../constants/constant";
+import categoryConfig from "../categoryConfig.json";
 
 const AppContext = createContext();
 
@@ -816,6 +817,14 @@ export const AppProvider = ({ children }) => {
     setSelectedCategory(categoryData);
   };
 
+  function filterExcludedItems(category, subCategory, items, config) {
+    const excludeList =
+      config[category]?.[subCategory]?.exclude ||
+      config[category]?.Default?.exclude ||
+      [];
+    return items.filter((item) => !excludeList.includes(item));
+  }
+
   function handleProgressBar(selectedData, categories, subCat1) {
     // Validate selectedData and categories to prevent errors
     if (!Array.isArray(selectedData) || selectedData.length === 0) {
@@ -879,10 +888,15 @@ export const AppProvider = ({ children }) => {
       ) {
         let validSubCat1List = subCat1[category];
 
-        // Exclude "pods" when subcategory is "Pantry" under "Civil / Plumbing"
-        if (category === "Civil / Plumbing" && subcategory === "Pantry") {
-          validSubCat1List = validSubCat1List.filter((item) => item !== "Pods");
+        if (category === "Civil / Plumbing") {
+          validSubCat1List = filterExcludedItems(
+            "Civil / Plumbing",
+            subcategory,
+            validSubCat1List,
+            categoryConfig
+          );
         }
+
         if (category === "Furniture" && subcategory === "Md Cabin") {
           const mainFilled = selectedData.some(
             (item) =>
@@ -926,14 +940,12 @@ export const AppProvider = ({ children }) => {
           }
         }
 
-        if (
-          category === "Furniture" &&
-          (subcategory === "Reception" ||
-            subcategory === "Pantry" ||
-            subcategory === "Breakout Room")
-        ) {
-          validSubCat1List = validSubCat1List.filter(
-            (item) => item !== "Storage"
+        if (category === "Furniture") {
+          validSubCat1List = filterExcludedItems(
+            "Furniture",
+            subcategory,
+            validSubCat1List,
+            categoryConfig
           );
         }
 

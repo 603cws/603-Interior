@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { useApp } from "../../Context/Context";
 import { motion, AnimatePresence } from "framer-motion";
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
+import categoryConfig from "../../categoryConfig.json";
 
 const Categories = ({
   // setSelectedCategory,
@@ -199,6 +200,15 @@ const Categories = ({
     // Default case
     return `/images/boq/${cleanedSubCategoryName}.png`;
   };
+
+  function filterExcludedItems(category, subCategory, items, config) {
+    const rules =
+      config[category]?.[subCategory] || config[category]?.Default || {};
+    const excludeList =
+      rules.exclude && Array.isArray(rules.exclude) ? rules.exclude : [];
+    return items.filter((item) => !excludeList.includes(item));
+  }
+
   const checkIfSubCategoryCompleted = (category, subCategory) => {
     if (!selectedData || selectedData.length === 0) return false;
 
@@ -232,12 +242,6 @@ const Categories = ({
         )
 
         .map((item) => item.subcategory1);
-
-      if (category === "Civil / Plumbing" && subCategory === "Pantry") {
-        requiredSubCategory1Items = requiredSubCategory1Items.filter(
-          (item) => item !== "Pods"
-        );
-      }
 
       if (category === "Furniture" && subCategory === "Md Cabin") {
         const mainFilled = selectedData.some(
@@ -281,14 +285,22 @@ const Categories = ({
           );
         }
       }
-      if (
-        category === "Furniture" &&
-        (subCategory === "Reception" ||
-          subCategory === "Pantry" ||
-          subCategory === "Breakout Room")
-      ) {
-        requiredSubCategory1Items = requiredSubCategory1Items.filter(
-          (item) => item !== "Storage"
+
+      if (category === "Civil / Plumbing") {
+        requiredSubCategory1Items = filterExcludedItems(
+          "Civil / Plumbing",
+          subCategory,
+          requiredSubCategory1Items,
+          categoryConfig
+        );
+      }
+
+      if (category === "Furniture") {
+        requiredSubCategory1Items = filterExcludedItems(
+          "Furniture",
+          subCategory,
+          requiredSubCategory1Items,
+          categoryConfig
         );
       }
 
@@ -376,7 +388,7 @@ const Categories = ({
         viewBox="0 0 80 80"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
-        className="h-12 w-12 group relative z-50
+        className="h-12 w-12 group relative
         "
       >
         <path

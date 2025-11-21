@@ -5,6 +5,7 @@ import { toast, Slide } from "react-toastify";
 import { calculateAddonTotalPrice } from "../utils/productUtils";
 import { AddToCartToast } from "../../utils/AddToCartToast";
 import { categoriesWithTwoLevelCheck } from "../../constants/constant";
+import categoryConfig from "../../categoryConfig.json";
 
 function SelectArea({
   setShowSelectArea,
@@ -378,6 +379,18 @@ function SelectArea({
     );
   };
 
+  function isExcluded(category, subCategory, selectedSubCategory1, config) {
+    const categoryRules = config[category] || {};
+    const rules = categoryRules[subCategory] || categoryRules.Default || {};
+
+    // Handle array-type exclude rules
+    if (rules.exclude && Array.isArray(rules.exclude)) {
+      return rules.exclude.includes(selectedSubCategory1);
+    }
+
+    return false; // Not excluded by default
+  }
+
   const handleSelectAll = (checked) => {
     // Expand the list first (so Md Cabin → Main + Visitor)
     let displayedSubCategories = selectedCategory.subcategories.flatMap(
@@ -408,12 +421,11 @@ function SelectArea({
             : subCategory !== "Centralized";
         }
 
-        const notDisabled = !(
-          (subCategory === "Pantry" && selectedSubCategory1 === "Pods") ||
-          ((subCategory === "Reception" ||
-            subCategory === "Pantry" ||
-            subCategory === "Breakout Room") &&
-            selectedSubCategory1 === "Storage")
+        const notDisabled = !isExcluded(
+          selectedCategory.category,
+          subCategory,
+          selectedSubCategory1,
+          categoryConfig
         );
 
         // ✅ Exclude already used by another product
@@ -498,12 +510,11 @@ function SelectArea({
           : subCategory !== "Centralized";
       }
 
-      return !(
-        (subCategory === "Pantry" && selectedSubCategory1 === "Pods") ||
-        ((subCategory === "Reception" ||
-          subCategory === "Pantry" ||
-          subCategory === "Breakout Room") &&
-          selectedSubCategory1 === "Storage")
+      return !isExcluded(
+        selectedCategory.category,
+        subCategory,
+        selectedSubCategory1,
+        categoryConfig
       );
     })
     .every((subCategory) =>
@@ -516,32 +527,6 @@ function SelectArea({
       )
     );
 
-  // const allSubcategoriesDisabled = selectedCategory.subcategories
-  //   ?.filter((subCategory) => {
-  //     if (selectedCategory.category === "HVAC") {
-  //       return userResponses?.hvacType === "Centralized"
-  //         ? subCategory === "Centralized"
-  //         : subCategory !== "Centralized";
-  //     }
-
-  //     return !(
-  //       (subCategory === "Pantry" && selectedSubCategory1 === "Pods") ||
-  //       ((subCategory === "Reception" ||
-  //         subCategory === "Pantry" ||
-  //         subCategory === "Breakout Room") &&
-  //         selectedSubCategory1 === "Storage")
-  //     );
-  //   })
-  //   .every((subCategory) =>
-  //     isItemSelected(
-  //       selectedData,
-  //       selectedCategory,
-  //       subCategory,
-  //       selectedSubCategory1,
-  //       selectedProductView
-  //     )
-  //   );
-
   const allSelected =
     displayedSubCategories
       .filter((subCategory) => {
@@ -550,12 +535,11 @@ function SelectArea({
             ? subCategory === "Centralized"
             : subCategory !== "Centralized";
         }
-        return !(
-          (subCategory === "Pantry" && selectedSubCategory1 === "Pods") ||
-          ((subCategory === "Reception" ||
-            subCategory === "Pantry" ||
-            subCategory === "Breakout Room") &&
-            selectedSubCategory1 === "Storage")
+        return !isExcluded(
+          selectedCategory.category,
+          subCategory,
+          selectedSubCategory1,
+          categoryConfig
         );
       })
       .every(
@@ -569,34 +553,6 @@ function SelectArea({
             selectedProductView
           )
       ) ?? false;
-
-  // const allSelected =
-  //   selectedCategory.subcategories
-  //     ?.filter((subCategory) => {
-  //       if (selectedCategory.category === "HVAC") {
-  //         return userResponses?.hvacType === "Centralized"
-  //           ? subCategory === "Centralized" // Only "Centralized" should be checked
-  //           : subCategory !== "Centralized"; // Exclude "Centralized" for other types
-  //       }
-  //       return !(
-  //         (subCategory === "Pantry" && selectedSubCategory1 === "Pods") ||
-  //         ((subCategory === "Reception" ||
-  //           subCategory === "Pantry" ||
-  //           subCategory === "Breakout Room") &&
-  //           selectedSubCategory1 === "Storage")
-  //       ); // Exclude Pantry when Pods is selected
-  //     })
-  //     .every(
-  //       (subCategory) =>
-  //         selectedAreas.includes(subCategory) ||
-  //         isItemSelected(
-  //           selectedData,
-  //           selectedCategory,
-  //           subCategory,
-  //           selectedSubCategory1,
-  //           selectedProductView
-  //         )
-  //     ) ?? false;
 
   const handleAddonSelect = (addon, isChecked) => {
     const currentGroupKey = `${selectedCategory.category}-${selectedSubCategory}-${selectedSubCategory1}-${selectedProductView.id}`;
@@ -659,6 +615,12 @@ function SelectArea({
     }));
   };
 
+  function isIncluded(category, subCategory, selectedSubCategory1, config) {
+    const categoryRules = config[category] || {};
+    const excludes = categoryRules[subCategory]?.exclude || [];
+    return !excludes.includes(selectedSubCategory1);
+  }
+
   return (
     <div className="fixed inset-0 flex justify-center items-center z-20">
       <div className="relative bg-gradient-to-br from-[#334A78] to-[#68B2DC] p-5 md:p-6 scrollbar-hide">
@@ -692,28 +654,16 @@ function SelectArea({
                           : subCategory !== "Centralized"; // Show all except "Centralized"
                       }
 
-                      // If the main category is "Civil / Plumbing"
-                      if (selectedCategory.category === "Civil / Plumbing") {
-                        // Always keep "Washrooms"
-                        if (subCategory === "Washrooms") return true;
-
-                        // Remove "Pantry" when "Pods" exists
-                        if (
-                          subCategory === "Pantry" &&
-                          selectedSubCategory1 === "Pods"
-                        ) {
-                          return false;
-                        }
-                      }
-                      if (selectedCategory.category === "Furniture") {
-                        if (
-                          (subCategory === "Reception" ||
-                            subCategory === "Pantry" ||
-                            subCategory === "Breakout Room") &&
-                          selectedSubCategory1 === "Storage"
-                        ) {
-                          return false;
-                        }
+                      if (
+                        selectedCategory.category === "Civil / Plumbing" ||
+                        selectedCategory.category === "Furniture"
+                      ) {
+                        return isIncluded(
+                          selectedCategory.category,
+                          subCategory,
+                          selectedSubCategory1,
+                          categoryConfig
+                        );
                       }
 
                       return true;

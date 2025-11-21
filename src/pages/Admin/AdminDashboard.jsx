@@ -187,6 +187,7 @@ function AdminDashboard() {
   ];
 
   const [selectedCategory, setSelectedCategory] = useState("");
+  const [selectedSubCategory, setSelectedSubCategory] = useState("");
   // state for filter
   const [isOpen, setIsOpen] = useState(false);
   const [filterDropdown, setFilterDropdown] = useState(false);
@@ -197,17 +198,22 @@ function AdminDashboard() {
   const [selectedItem, setSelectedItem] = useState(null);
 
   const normalize = (str) => str.replace(/\s+/g, " ").trim().toLowerCase();
-  const applyFilters = ({ query = "", category = "", status = "" }) => {
+  const applyFilters = ({
+    query = "",
+    category = "",
+    status = "",
+    subCategory = "",
+  }) => {
     const source = toggle ? products : addons;
 
     // Store last page before searching if this is a new search
-    if ((query || category || status) && !isSearching) {
+    if ((query || category || status || subCategory) && !isSearching) {
       setLastPageBeforeSearch(currentPage);
       setIsSearching(true);
     }
 
     // Reset case: No query, category, or status
-    if (!query && !category && !status) {
+    if (!query && !category && !status && !subCategory) {
       toggle ? setFilteredProducts(products) : setFilteredAddons(addons);
       if (isSearching) {
         setCurrentPage(lastPageBeforeSearch);
@@ -228,11 +234,19 @@ function AdminDashboard() {
           : item.title?.toLowerCase().includes(category.toLowerCase())
         : true;
 
+      const subCategoryMatch = subCategory
+        ? toggle
+          ? item.products?.subcategory
+              ?.toLowerCase()
+              .includes(subCategory.toLowerCase())
+          : item.title?.toLowerCase().includes(subCategory.toLowerCase())
+        : true;
+
       const statusMatch = status
         ? item.status?.toLowerCase() === status.toLowerCase()
         : true;
 
-      return titleMatch && categoryMatch && statusMatch;
+      return titleMatch && categoryMatch && statusMatch && subCategoryMatch;
     });
 
     // Apply filtered result
@@ -249,7 +263,7 @@ function AdminDashboard() {
   // const baseImageUrl =
   //   "https://bwxzfwsoxwtzhjbzbdzs.supabase.co/storage/v1/object/public/addon/";
 
-  const { accountHolder } = useApp();
+  const { accountHolder, categories } = useApp();
 
   const location = useLocation();
   const dropdownRef = useRef(null);
@@ -337,18 +351,12 @@ function AdminDashboard() {
     }
   };
 
-  //all the category
-  const category = [
-    "furniture",
-    "HVAC",
-    "paint",
-    "partitions / ceilings",
-    "lux",
-    "civil / plumbing",
-    "flooring",
-    "lighting",
-    "smart solutions",
-  ];
+  const categoriesData = categories.map((item) => item.category);
+
+  const subcategoriesByCategory = categories.reduce((acc, item) => {
+    acc[item.category] = item.subcategories || [];
+    return acc;
+  }, {});
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -1083,7 +1091,13 @@ function AdminDashboard() {
         {/* product */}
         {sidebarstate.isProductOpen && (
           <div className="flex flex-col h-full min-h-0 overflow-hidden lg:border-2 lg:border-[#334A78] lg:rounded-lg bg-white">
-            <div className="overflow-y-auto scrollbar-hide relative ">
+            <div
+              className={`${
+                filteredProducts.length > 0
+                  ? "overflow-y-auto"
+                  : "overflow-visible"
+              } scrollbar-hide relative`}
+            >
               {addNewProduct ? (
                 <VendorNewProduct
                   setAddNewProduct={setAddNewProduct}
@@ -1178,13 +1192,48 @@ function AdminDashboard() {
                                   className="py-2"
                                 >
                                   <option value="">All categories</option>
-                                  {category.map((category) => (
+                                  {categoriesData.map((category) => (
                                     <option key={category} value={category}>
                                       {category}
                                     </option>
                                   ))}
                                 </select>
                               </div>
+
+                              {selectedCategory && (
+                                <div>
+                                  <label className="text-sm text-[#374A75]">
+                                    Sub Categories
+                                  </label>
+                                  <select
+                                    name="subCategory"
+                                    value={selectedSubCategory}
+                                    onChange={(e) => {
+                                      const value = e.target.value;
+                                      setSelectedSubCategory(value);
+                                      applyFilters({
+                                        query: searchQuery,
+                                        category: selectedCategory,
+                                        subCategory: value,
+                                        status: selected,
+                                      });
+                                    }}
+                                    id="subCategory"
+                                    className="py-2"
+                                  >
+                                    <option value="">All Sub Categories</option>
+                                    {(
+                                      subcategoriesByCategory[
+                                        selectedCategory
+                                      ] || []
+                                    ).map((subCat) => (
+                                      <option key={subCat} value={subCat}>
+                                        {subCat}
+                                      </option>
+                                    ))}
+                                  </select>
+                                </div>
+                              )}
                             </div>
                           )}
                         </div>
@@ -1307,9 +1356,41 @@ function AdminDashboard() {
                                   className="py-2"
                                 >
                                   <option value="">All categories</option>
-                                  {category.map((category) => (
+                                  {categoriesData.map((category) => (
                                     <option key={category} value={category}>
                                       {category}
+                                    </option>
+                                  ))}
+                                </select>
+                              </div>
+
+                              <div>
+                                <label className="text-[#374A75]">
+                                  Sub Categories
+                                </label>
+                                <select
+                                  name="subCategory"
+                                  value={selectedSubCategory}
+                                  onChange={(e) => {
+                                    const value = e.target.value;
+                                    setSelectedSubCategory(value);
+                                    applyFilters({
+                                      query: searchQuery,
+                                      category: selectedCategory, // include category too
+                                      subCategory: value,
+                                      status: selected,
+                                    });
+                                  }}
+                                  id="subCategory"
+                                  className="py-2"
+                                >
+                                  <option value="">All sub categories</option>
+                                  {(
+                                    subcategoriesByCategory[selectedCategory] ||
+                                    []
+                                  ).map((subCat) => (
+                                    <option key={subCat} value={subCat}>
+                                      {subCat}
                                     </option>
                                   ))}
                                 </select>
