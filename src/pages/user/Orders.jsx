@@ -23,6 +23,7 @@ const statusIcon = {
   shipped: <LiaShippingFastSolid />,
   delivered: <BsBoxSeam />,
   cancelled: <IoCloseCircleOutline />,
+  PartiallyCancelled: <IoCloseCircleOutline />,
 };
 
 function Orders() {
