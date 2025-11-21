@@ -6,7 +6,7 @@ import { supabase } from "../../services/supabase";
 import { toast } from "react-hot-toast";
 import { useApp } from "../../Context/Context";
 import {
-  AllCatArray,
+  useAllCatArray,
   specialArray,
   displayOptions,
 } from "../../utils/AllCatArray";
@@ -56,6 +56,9 @@ function VendorNewProduct({
   });
 
   const { accountHolder } = useApp();
+  const AllCatArray = useAllCatArray();
+
+  console.log(AllCatArray);
 
   const handleFileChange = (event) => {
     const selectedFile = event.target.files[0];
@@ -410,6 +413,7 @@ function VendorNewProduct({
       width: "",
     });
     setDisplayOption("");
+    removeFile();
   };
 
   const handlecategorychange = (e) => {

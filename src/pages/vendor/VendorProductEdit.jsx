@@ -6,7 +6,7 @@ import { supabase } from "../../services/supabase";
 import { toast } from "react-hot-toast";
 // import { useApp } from "../../Context/Context";
 import {
-  AllCatArray,
+  useAllCatArray,
   specialArray,
   displayOptions,
 } from "../../utils/AllCatArray";
@@ -54,6 +54,9 @@ function VendorProductEdit({
   const fileInputRef = useRef(null);
 
   const mulitpleimagesFileinputref = useRef(null);
+  const AllCatArray = useAllCatArray();
+
+  console.log(AllCatArray);
 
   // const baseImageUrl =
   //   "https://bwxzfwsoxwtzhjbzbdzs.supabase.co/storage/v1/object/public/addon/";
@@ -238,11 +241,21 @@ function VendorProductEdit({
   };
 
   useEffect(() => {
-    const filtered = AllCatArray.filter((cat) => cat.name === category);
-    const subcattodisplay = filtered.flatMap((subcat) => subcat.subCat1);
+    console.log("cateogry", category);
+
+    console.log("allcatarray in useeffect", AllCatArray);
+
+    const filtered = AllCatArray?.filter(
+      (cat) => cat?.name?.toLowerCase() === category?.toLowerCase()
+    );
+
+    console.log("filtered", filtered);
+    const subcattodisplay = filtered.flatMap((subcat) => subcat?.subCat1);
     setSubcat(subcattodisplay);
+    console.log("subcat", subcattodisplay);
+
     // setResources(filtered);
-  }, [category]);
+  }, [category, AllCatArray]);
 
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -492,7 +505,7 @@ function VendorProductEdit({
         console.log(filter.join(","));
       }
     }
-  }, [category, subSubCategory]);
+  }, [category, subSubCategory, AllCatArray]);
 
   const handleDimensionChange = (e) => {
     const { name, value } = e.target;
@@ -549,7 +562,7 @@ function VendorProductEdit({
   console.log("imageurl", imageUrl);
   console.log("typeof main image", typeof variant.mainImage === "string");
 
-  if (loading) {
+  if (loading || AllCatArray?.length === 0) {
     return (
       <div className="flex justify-center items-center">Loading ......</div>
     );
@@ -630,7 +643,7 @@ function VendorProductEdit({
                   <option value="" disabled>
                     Select Category
                   </option>
-                  {subcat.map((cat, index) => {
+                  {subcat?.map((cat, index) => {
                     return (
                       <option key={index} value={cat}>
                         {cat}

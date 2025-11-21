@@ -27,54 +27,27 @@ export default function Orders({ vendorId = null }) {
     const fetchOrders = async () => {
       setLoadingOrders(true);
       const { data: orders, error } = await supabase
-        .from("orders")
-        .select(`*, users_profiles(*)`)
+        .from("orders_table")
+        .select(`*,users_profiles(*),order_items(*,product_variants(*))`)
         .order("created_at", { ascending: false });
       if (error) {
         console.error(error);
         return;
       }
 
-      // ✅ Filter by vendorId if provided
+      // Filter by vendorId if provided
       const filteredOrders = vendorId
         ? orders.filter(
             (order) =>
-              Array.isArray(order.products) &&
-              order.products.some((product) => product.vendorId === vendorId)
+              Array.isArray(order.order_items) &&
+              order.order_items.some(
+                (item) => item.product_variants?.vendor_id === vendorId
+              )
           )
         : orders;
+      console.log(filteredOrders);
 
-      const ordersWithVariants = await Promise.all(
-        filteredOrders.map(async (order) => {
-          const productVariantMap = {};
-
-          if (order.products?.length) {
-            for (const product of order.products) {
-              const productId = product.id;
-              if (productId) {
-                const { data: variants, error: variantsError } = await supabase
-                  .from("product_variants")
-                  .select("*")
-                  .eq("id", productId);
-
-                if (variantsError) {
-                  console.error(variantsError);
-                  productVariantMap[productId] = [];
-                } else {
-                  productVariantMap[productId] = variants;
-                }
-              }
-            }
-          }
-
-          return {
-            ...order,
-            product_variants_map: productVariantMap, // Map from productId to variants array
-          };
-        })
-      );
-
-      setOrdersData(ordersWithVariants);
+      setOrdersData(filteredOrders);
       setLoadingOrders(false);
     };
 
@@ -123,7 +96,7 @@ export default function Orders({ vendorId = null }) {
 
       const result = (ordersData || []).filter((order) => {
         const idStr = (order.id || "").toLowerCase();
-        const nameStr = (order.shippingAddress?.[0]?.name || "").toLowerCase();
+        const nameStr = (order.shipping_address?.[0]?.name || "").toLowerCase();
 
         const hay = `${idStr} ${nameStr}`; // search across both fields
 
@@ -137,23 +110,6 @@ export default function Orders({ vendorId = null }) {
 
     return () => clearTimeout(id);
   }, [searchQuery, ordersData]);
-
-  // const filterOrders = (type, value = "") => {
-  //   console.log(type, value);
-
-  //   if (type === "orderStatus") {
-  //     const filteredOrders = ordersData.filter(
-  //       (order) => order?.status === value
-  //     );
-  //     setFilteredOrders(filteredOrders);
-  //   } else if (type === "paymentStatus") {
-  //     const filteredOrders = ordersData.filter(
-  //       (order) => order?.paymentDetails?.state?.toLowerCase() === value
-  //     );
-  //     setFilteredOrders(filteredOrders);
-  //   }
-  //   console.log(ordersData);
-  // };
 
   const filterOrders = (type, value) => {
     if (type === "orderStatus") {
@@ -324,7 +280,7 @@ export default function Orders({ vendorId = null }) {
 
                       // Payment status and color constants
                       const paymentStatus =
-                        order.paymentDetails?.state?.toLowerCase() || "unpaid";
+                        order.payment_details?.state?.toLowerCase() || "unpaid";
                       const paymentColors = {
                         completed: "bg-blue-600",
                         failed: "bg-gray-500",
@@ -356,7 +312,7 @@ export default function Orders({ vendorId = null }) {
                           </td>
                           {/* Customer Name */}
                           <td className="px-4 py-2 capitalize">
-                            {order.shippingAddress?.[0]?.name || "N/A"}
+                            {order.shipping_address?.[0]?.name || "N/A"}
                           </td>
                           {/* Status */}
                           <td className="px-4 py-2">
@@ -386,7 +342,7 @@ export default function Orders({ vendorId = null }) {
                             </div>
                           </td>
                           {/* Amount */}
-                          <td className="px-4 py-2">₹{order.finalPrice}</td>
+                          <td className="px-4 py-2">₹{order.final_amount}</td>
                         </tr>
                       );
                     })}
@@ -420,8 +376,12 @@ export default function Orders({ vendorId = null }) {
 export function OrderDetails({ order, onBack, vendorId = null }) {
   // Filter products based on vendorId if provided
   const filteredProducts = vendorId
-    ? order.products?.filter((item) => item.vendorId === vendorId)
-    : order.products;
+    ? order.order_items?.filter(
+        (item) => item.product_variants?.vendor_id === vendorId
+      )
+    : order.order_items;
+
+  console.log(filteredProducts);
 
   return (
     <section className="flex flex-col h-full min-h-0 lg:rounded-lg font-Poppins bg-white">
@@ -480,7 +440,8 @@ export function OrderDetails({ order, onBack, vendorId = null }) {
 
         {/* Section 1 */}
         {/* <div className="py-4 flex gap-4"> */}
-        <div className="py-4 grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="py-4 grid grid-cols-1 lg:grid-cols-3 gap-4">
+          {/* <div className="py-4 lg:flex gap-4"> */}
           {/* Customer */}
           <div className="border p-4 rounded-2xl flex flex-col gap-3">
             <div className="flex gap-3">
@@ -523,15 +484,15 @@ export function OrderDetails({ order, onBack, vendorId = null }) {
                   Order Info
                 </h2>
                 <p className="text-sm md:text-base font-semibold capitalize text-[#70706E] mt-2">
-                  payment mode: {order?.paymentDetails?.paymentMode || "N/A"}
+                  payment mode: {order?.payment_details?.paymentMode || "N/A"}
                 </p>
                 <p className="text-sm md:text-base font-semibold capitalize text-[#70706E]">
-                  status: {order.paymentDetails?.state || "N/A"}
+                  status: {order.payment_details?.state || "N/A"}
                 </p>
                 {!vendorId && (
                   <p className="text-sm md:text-base font-semibold capitalize text-[#70706E]">
                     transaction id:{" "}
-                    {order.paymentDetails?.transactionId || "N/A"}
+                    {order.payment_details?.transactionId || "N/A"}
                   </p>
                 )}
                 <p className="text-sm md:text-base font-semibold capitalize text-[#70706E]">
@@ -552,23 +513,23 @@ export function OrderDetails({ order, onBack, vendorId = null }) {
           </div>
           {/* Deliver to */}
           <div className="border p-4 rounded-2xl flex flex-col gap-3">
-            <div className="flex gap-3">
+            <div className="flex gap-3 max-w-full text-wrap h-full">
               <img
                 src="/images/profile3.png"
                 alt="Profile"
                 className="w-10 h-10"
               />
-              <div>
+              <div className="text-wrap max-w-full">
                 <h2 className="text-lg md:text-xl font-semibold text-[#232321]">
                   Deliver to
                 </h2>
                 <p className="text-sm md:text-base font-semibold capitalize text-[#70706E] mt-2">
-                  Address: {order.shippingAddress?.[0].name},
+                  Address: {order.shipping_address?.[0].name},
                   <br />
-                  {order.shippingAddress?.[0]?.address},
-                  {order.shippingAddress?.[0]?.town},
-                  {order.shippingAddress?.[0]?.city}-
-                  {order.shippingAddress?.[0]?.pincode}
+                  {order.shipping_address?.[0]?.address},
+                  {order.shipping_address?.[0]?.town},
+                  {order.shipping_address?.[0]?.city}-
+                  {order.shipping_address?.[0]?.pincode}
                 </p>
               </div>
             </div>
@@ -582,7 +543,7 @@ export function OrderDetails({ order, onBack, vendorId = null }) {
         <div className="py-2 ">
           <h3 className="text-lg font-semibold mb-2">Products</h3>
           <div className="bg-white rounded-lg shadow-xs">
-            <table className="w-full min-w-full border-separate border-spacing-0 hidden md:inline-table">
+            <table className="w-full min-w-full border-separate border-spacing-0 hidden lg:inline-table">
               <thead>
                 <tr className="border-b border-gray-200">
                   <th className="text-[17px] text-gray-500 font-semibold text-left py-3 px-2">
@@ -592,7 +553,25 @@ export function OrderDetails({ order, onBack, vendorId = null }) {
                     Product ID
                   </th>
                   <th className="text-[15px] text-gray-500 font-semibold text-left py-3">
+                    MRP
+                  </th>
+                  <th className="text-[15px] text-gray-500 font-semibold text-left py-3">
+                    Price
+                  </th>
+                  <th className="text-[15px] text-gray-500 font-semibold text-left py-3">
                     Quantity
+                  </th>
+                  <th className="text-[15px] text-gray-500 font-semibold text-left py-3">
+                    Item Total
+                  </th>
+                  <th className="text-[15px] text-gray-500 font-semibold text-left py-3">
+                    Coupon Discount
+                  </th>
+                  <th className="text-[15px] text-gray-500 font-semibold text-left py-3">
+                    Subtotal
+                  </th>
+                  <th className="text-[15px] text-gray-500 font-semibold text-left py-3">
+                    GST
                   </th>
                   <th className="text-[15px] text-gray-500 font-semibold text-right py-3 pr-6">
                     Total
@@ -600,52 +579,58 @@ export function OrderDetails({ order, onBack, vendorId = null }) {
                 </tr>
               </thead>
               <tbody>
-                {filteredProducts?.map((orderItem, idx) => {
-                  // Get variants array for this product, using orderItem.id
-                  const variants =
-                    order.product_variants_map?.[orderItem.id] || [];
-                  // Safely get first variant object, or fallback if variants are empty
-                  const variant = variants[0] || {};
-
-                  // Get name and image from the variant data
-                  const productName = variant.title || "?";
-                  const productImage = variant.image || ""; // Adjust this key to your variant schema
-
-                  const quantity = orderItem.quantity;
-                  const price = orderItem.price;
-                  const id = orderItem.id;
-                  const total = (price * quantity).toFixed(2);
-
+                {filteredProducts?.map((orderItem) => {
                   return (
                     <tr
-                      key={id}
+                      key={orderItem.id}
                       className="border-b border-gray-200 hover:bg-gray-50"
                     >
                       <td className="flex items-center gap-3 py-3 px-3">
-                        {productImage ? (
+                        {orderItem?.product_variants?.image ? (
                           <img
-                            src={`${baseImageUrl}${productImage}`}
-                            alt={productName}
+                            src={`${baseImageUrl}${orderItem?.product_variants?.image}`}
+                            alt={orderItem?.product_variants?.title}
                             className="w-8 h-8 rounded-md object-cover"
                           />
                         ) : (
                           <div className="w-8 h-8 bg-gray-300 rounded-md" />
                         )}
                         <span className="font-semibold text-base text-black ml-2">
-                          {productName}
+                          {orderItem?.product_variants?.title}
                         </span>
                       </td>
                       <td
                         className="py-3 text-[15px] font-semibold text-[#232321]"
-                        title={`#${id}`} // Tooltip with full id on hover
+                        title={`#${orderItem?.id}`} // Tooltip with full id on hover
                       >
-                        #{id.slice(0, 6)}
+                        #{orderItem?.id?.slice(0, 6)}
                       </td>
                       <td className="py-3 text-[15px] font-semibold text-[#232321]">
-                        {quantity}
+                        {orderItem?.product_variants?.ecommercePrice?.mrp}
+                      </td>
+                      <td className="py-3 text-[15px] font-semibold text-[#232321]">
+                        {
+                          orderItem?.product_variants?.ecommercePrice
+                            ?.sellingPrice
+                        }
+                      </td>
+                      <td className="py-3 text-[15px] font-semibold text-[#232321]">
+                        {orderItem?.quantity}
+                      </td>
+                      <td className="py-3 text-[15px] font-semibold text-[#232321]">
+                        {orderItem?.item_total}
+                      </td>
+                      <td className="py-3 text-[15px] font-semibold text-[#232321]">
+                        {orderItem?.coupon_discount}
+                      </td>
+                      <td className="py-3 text-[15px] font-semibold text-[#232321]">
+                        {orderItem?.sub_total}
+                      </td>
+                      <td className="py-3 text-[15px] font-semibold text-[#232321]">
+                        {orderItem?.gst_amount}
                       </td>
                       <td className="py-3 text-[15px] font-semibold text-right pr-6">
-                        ₹{total}
+                        ₹{orderItem?.final_amount}
                       </td>
                     </tr>
                   );
@@ -653,53 +638,16 @@ export function OrderDetails({ order, onBack, vendorId = null }) {
               </tbody>
             </table>
 
-            <div className="md:hidden">
+            <div className="lg:hidden">
               {filteredProducts?.map((product) => {
-                const variantDetails =
-                  order?.product_variants_map?.[product.id]?.[0];
-                return (
-                  <MobileOrderItem
-                    key={product.id}
-                    product={product}
-                    variant={variantDetails}
-                  />
-                );
+                return <MobileOrderItem key={product.id} product={product} />;
               })}
             </div>
             {/* Summary section */}
             {!vendorId && (
-              <div className="flex flex-col items-end mt-5 md:mr-4">
-                <div className="text-sm md:text-base flex flex-col gap-1 w-52">
-                  <div className="flex justify-between">
-                    <span className="text-gray-700">Subtotal</span>
-                    <span className="text-[#232321] font-semibold">
-                      ₹{order?.totalMRP?.toFixed(2)}
-                    </span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-700">GST</span>
-                    <span className="text-[#232321] font-semibold">
-                      ₹{order?.charges?.GST?.toFixed(2)}
-                    </span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-700">Discount</span>
-                    <span className="text-[#232321] font-semibold">
-                      -₹{order?.coupon?.discount?.toFixed(2)}
-                    </span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-700">Shipping Rate</span>
-                    <span className="text-[#232321] font-semibold">
-                      ₹{order?.charges?.delivery?.toFixed(2)}
-                    </span>
-                  </div>
-                </div>
-                <div className="flex justify-between items-center mt-2 w-52">
-                  <span className="text-base md:text-xl font-bold">Total</span>
-                  <span className="text-lg md:text-2xl font-extrabold">
-                    ₹{order?.finalPrice?.toFixed(2)}
-                  </span>
+              <div className="flex justify-end mt-3">
+                <div className="max-w-sm w-full">
+                  <PriceDistribution order={order} />
                 </div>
               </div>
             )}
@@ -729,7 +677,7 @@ function MobileOrderCard({ order, setSelectedOrder }) {
       <div className="flex justify-between text-sm text-[#000] my-2">
         <p>{order.users_profiles?.company_name}</p>
         <p>
-          {order.finalPrice.toLocaleString("en-IN", {
+          {order.final_amount.toLocaleString("en-IN", {
             style: "currency",
             currency: "INR",
           })}
@@ -740,36 +688,139 @@ function MobileOrderCard({ order, setSelectedOrder }) {
           {order.status}
         </p>
         <p className="p-1 text-[#374A75] border border-[#374A75]/80">
-          {order.paymentDetails?.state || "N/A"}
+          {order.payment_details?.state || "N/A"}
         </p>
       </div>
     </div>
   );
 }
 
-function MobileOrderItem({ product, variant }) {
+function MobileOrderItem({ product }) {
   return (
-    <div className="font-Poppins border-b my-2">
+    <div className="font-Poppins border-b my-2 py-2">
       <div className="flex gap-4">
         <img
-          src={`${baseImageUrl}${variant?.image}`}
+          src={`${baseImageUrl}${product?.product_variants?.image}`}
           alt=""
           className="h-16 w-16 border"
         />
-        <h3 className="font-semibold text-sm line-clamp-1">{variant?.title}</h3>
+        <h3 className="font-semibold text-sm line-clamp-1">
+          {product?.product_variants?.title}
+        </h3>
+      </div>
+      <div className="flex justify-between text-sm my-1 text-[#232321]/80 font-medium">
+        <p className="flex gap-2">MRP: {product?.mrp}</p>
+        <p className="flex gap-2">Price: {product?.selling_price}</p>
+      </div>
+      <div className="flex justify-between text-sm my-1 text-[#232321]/80 font-medium">
+        <p className="flex gap-2">Quantity: {product?.quantity}</p>
+        <p className="flex gap-2">Item Total: {product?.item_total}</p>
+      </div>
+      <div className="flex justify-between text-sm my-1 text-[#232321]/80 font-medium">
+        <p className="flex gap-2">
+          Coupon Discount: -{product?.coupon_discount}
+        </p>
+        <p className="flex gap-2">GST: {product?.gst_amount}</p>
       </div>
       <div className="flex justify-between text-sm font-semibold text-[#232321]/80 capitalize">
-        <p>qunatity</p>
-        <p className="p-2 border rounded-sm">{product?.quantity}</p>
-      </div>
-      <div className="flex justify-between text-sm font-semibold text-[#232321]/80 capitalize">
-        <p>total</p>
+        <p>subtotal</p>
         <p>
-          {product?.price.toLocaleString("en-IN", {
+          {product?.sub_total.toLocaleString("en-IN", {
             style: "currency",
             currency: "INR",
           })}
         </p>
+      </div>
+      <div className="flex justify-between text-sm font-semibold text-[#232321]/80 capitalize">
+        <p>total</p>
+        <p>
+          {product?.final_amount.toLocaleString("en-IN", {
+            style: "currency",
+            currency: "INR",
+          })}
+        </p>
+      </div>
+    </div>
+  );
+}
+
+function PriceDistribution({ order }) {
+  return (
+    <div className="font-Poppins bg-[#fff] text-sm md:text-base">
+      {/* <h3 className="capitalize text-[#171717] font-semibold">
+        payment information
+      </h3> */}
+      <div className="">
+        <div className="flex justify-between border-b py-2">
+          <p>Total MRP</p>
+          <p>
+            ₹
+            {order?.total_mrp?.toLocaleString("en-IN", {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            })}
+          </p>
+        </div>
+        <div className="flex justify-between border-b py-2">
+          <p>Discount on MRP</p>
+          <p>
+            -₹
+            {order?.discount_on_mrp?.toLocaleString("en-IN", {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            })}
+          </p>
+        </div>
+        <div className="flex justify-between border-b py-2">
+          <p>Coupon Discount</p>
+          <p>
+            -₹{" "}
+            {order?.coupon?.discount?.toLocaleString("en-IN", {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            })}
+          </p>
+        </div>
+        <div className="flex justify-between border-b py-2">
+          <p>Subtotal</p>
+          <p>
+            ₹
+            {order?.sub_total?.toLocaleString("en-IN", {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            })}
+          </p>
+        </div>
+        <div className="flex justify-between border-b py-2">
+          <p>Shipping Fee</p>
+          <p>
+            ₹
+            {order?.charges?.delivery?.toLocaleString("en-IN", {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            })}
+          </p>
+        </div>
+        <div className="flex justify-between border-b py-2">
+          <p>GST</p>
+          <p>
+            ₹
+            {order?.charges?.GST?.toLocaleString("en-IN", {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            })}
+          </p>
+        </div>
+        <div className="flex justify-between font-semibold pt-2">
+          <p>Total Amount</p>
+          <p>
+            RS ₹
+            {order?.final_amount?.toLocaleString("en-IN", {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            })}
+          </p>
+        </div>
       </div>
     </div>
   );

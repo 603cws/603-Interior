@@ -2,33 +2,36 @@ import React, { useState } from "react";
 import { IoIosCloseCircleOutline } from "react-icons/io";
 import { baseImageUrl } from "../../utils/HelperConstant";
 import { supabase } from "../../services/supabase";
+import { specialArray } from "../../utils/AllCatArray";
+import { useAllCatArray } from "../../utils/AllCatArray";
 
-const subcategories = [
-  "Linear Workstation",
-  "L-Type Workstation",
-  "Md Cabin",
-  "Manager Cabin",
-  "Small Cabin",
-  "Discussion Room",
-  "Interview Room",
-  "Conference Room",
-  "Board Room",
-  "Meeting Room",
-  "Meeting Room Large",
-  "HR Room",
-  "Finance Room",
-  "Sales",
-  "Video Recording Room",
-  "Reception",
-  "Pantry",
-  "Phone Booth",
-  "Breakout Room",
-  "UPS",
-  "BMS",
-  "Server Room",
-  "Executive Washroom",
-  "Other Area",
-];
+const getDynamicSubcategories = (category, type, AllCatArray) => {
+  if (!category || !type) return [];
+
+  const normalizedCategory = category.trim().toLowerCase();
+  const normalizedType = type.trim().toLowerCase();
+
+  const special = specialArray.find(
+    (item) =>
+      item.name.trim().toLowerCase() === normalizedCategory &&
+      item.type.trim().toLowerCase() === normalizedType
+  );
+  if (special) {
+    return special.subcategories;
+  }
+  const foundCategory = AllCatArray.find(
+    (item) => item.name.trim().toLowerCase() === normalizedCategory
+  );
+  if (!foundCategory) return [];
+  const matchType = foundCategory.subCat1.find(
+    (sub) => sub.trim().toLowerCase() === normalizedType
+  );
+  if (matchType) {
+    return foundCategory.subcategories;
+  }
+  return [];
+};
+
 function SelectSubcategories({
   onClose,
   product,
@@ -36,6 +39,11 @@ function SelectSubcategories({
   setRejectReason,
 }) {
   const [selectedSubcategories, setSelectedSubcategories] = useState([]);
+  const AllCatArray = useAllCatArray();
+  const category = product?.products?.category;
+  const type = product?.products?.subcategory1;
+
+  const subcategories = getDynamicSubcategories(category, type, AllCatArray);
 
   const handleSelect = (subcategory) => {
     setSelectedSubcategories((prev) =>

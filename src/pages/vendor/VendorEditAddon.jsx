@@ -6,7 +6,7 @@ import { FaRegQuestionCircle } from "react-icons/fa";
 import { supabase } from "../../services/supabase";
 import { toast } from "react-hot-toast"; //Toaster
 import {
-  AllCatArray,
+  useAllCatArray,
   displayOptions,
   specialArray,
 } from "../../utils/AllCatArray";
@@ -63,6 +63,7 @@ function VendorEditAddon({
   const [displayOption, setDisplayOption] = useState(
     selectedAddon?.productDisplayType
   );
+  const AllCatArray = useAllCatArray();
 
   //   const { accountHolder } = useApp();
 

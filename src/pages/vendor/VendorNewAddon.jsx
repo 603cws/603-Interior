@@ -7,7 +7,7 @@ import { supabase } from "../../services/supabase";
 import { toast } from "react-hot-toast"; //Toaster
 import { useApp } from "../../Context/Context";
 import {
-  AllCatArray,
+  useAllCatArray,
   displayOptions,
   specialArray,
 } from "../../utils/AllCatArray";
@@ -51,6 +51,7 @@ function VendorNewAddon({
   const [displayOption, setDisplayOption] = useState("");
 
   const { accountHolder } = useApp();
+  const AllCatArray = useAllCatArray();
 
   const handleDimensionChange = (e) => {
     const { name, value } = e.target;
