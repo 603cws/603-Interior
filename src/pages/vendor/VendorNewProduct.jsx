@@ -11,6 +11,7 @@ import {
   displayOptions,
 } from "../../utils/AllCatArray";
 import { useRef } from "react";
+import ImageCropper from "../ImageCrop/ImageCropper";
 
 function VendorNewProduct({
   setAddNewProduct,
@@ -653,6 +654,9 @@ function VendorNewProduct({
               </h3>
               <FaRegQuestionCircle size={20} className="cursor-pointer" />
             </div>
+            {/* <div>
+              <ImageCropper />
+            </div> */}
             <div>
               <div className="px-4 py-2 bg-white border rounded-xl shadow-lg my-3 w-full">
                 {/* Upload Box */}
