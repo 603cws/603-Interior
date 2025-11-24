@@ -53,7 +53,7 @@ const cards = [
 function OurStory() {
   return (
     <>
-      <LandingNavbar />
+      <LandingNavbar className="relative" />
       <div className="lg:container lg:mx-auto lg:px-12 px-6 xl:max-w-7xl 2xl:px-0">
         {/* section 1 */}
         <div className="font-Georgia">

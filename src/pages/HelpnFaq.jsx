@@ -187,7 +187,7 @@ function HelpnFaq() {
     <div className="font-Georgia">
       {/* Navbar Section */}
       <header className="bg-white shadow-lg z-50 relative">
-        <LandingNavbar />
+        <LandingNavbar className="relative" />
       </header>
 
       {/* Hero Section */}

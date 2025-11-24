@@ -5,6 +5,7 @@ import { PiPhoneCall } from "react-icons/pi";
 import { AiOutlineMail } from "react-icons/ai";
 import { CiLocationOn } from "react-icons/ci";
 import Footer from "../common-components/Footer";
+import LandingNavbar from "../common-components/LandingNavbar";
 
 const background = "/images/career-page-bg.png";
 
@@ -44,7 +45,12 @@ const contactDetails = [
 function OurWork() {
   return (
     <>
-      <HeroSection background={background} title={"Interior Work"} />
+      <LandingNavbar className="relative" />
+      <HeroSection
+        background={background}
+        title={"Interior Work"}
+        description={`Plan your workspace, add \n furniture & essentials,\n and get your BOQ Instantly.`}
+      />
 
       {/* layout */}
       <section className="my-10">

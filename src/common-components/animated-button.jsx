@@ -4,6 +4,7 @@ import * as React from "react";
 import { Slot } from "@radix-ui/react-slot";
 import { cva } from "class-variance-authority";
 import { cn } from "@/lib/utils";
+import { trackCTA } from "../lib/trackCTA";
 
 const buttonVariants = cva(
   "group relative z-0 bg-white dark:bg-[rgba(0,0,0,1)] flex cursor-pointer items-center justify-center overflow-hidden whitespace-nowrap transform-gpu transition-all duration-300 ease-in-out active:translate-y-px",
@@ -71,6 +72,8 @@ const AnimatedButton = React.forwardRef(
       hovereBackground = "",
       style,
       children,
+      ctaLabel,
+      onClick,
       ...props
     },
     ref
@@ -170,6 +173,10 @@ const AnimatedButton = React.forwardRef(
         )}
         style={combinedStyle}
         ref={ref}
+        onClick={(e) => {
+          if (ctaLabel) trackCTA(ctaLabel);
+          if (onClick) onClick(e);
+        }}
         {...props}
       >
         <style>{buttonStyle}</style>

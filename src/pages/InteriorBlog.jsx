@@ -135,7 +135,7 @@ function InteriorBlog() {
 
   return (
     <>
-      <LandingNavbar />
+      <LandingNavbar className="relative" />
       <HeroSection
         title={"Insights & ideas"}
         description={` Explore stories, trends, tricks on <br /> workspaces design and

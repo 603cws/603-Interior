@@ -38,7 +38,7 @@ const JobPage = () => {
   return (
     <>
       <header className="bg-white shadow-lg z-50 relative ">
-        <LandingNavbar />
+        <LandingNavbar className="relative" />
       </header>
 
       <section className="pt-10 xl:pt-0 bg-[#334a78]">
