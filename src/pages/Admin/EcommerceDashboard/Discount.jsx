@@ -3,7 +3,6 @@ import { supabase } from "../../../services/supabase";
 import toast from "react-hot-toast";
 import { useState, useEffect } from "react";
 import { IoMdArrowBack } from "react-icons/io";
-import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
 import EditDiscount from "./EditDiscount";
 import PagInationNav from "../../../common-components/PagInationNav";
 

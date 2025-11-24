@@ -11,7 +11,6 @@ import { calculateTotalPrice } from "../boq/utils/productUtils";
 import { calculateSeatCountTotals } from "../boq/utils/dataProcessor";
 // import { calculateTotalPriceHelper } from "../boq/utils/CalculateTotalPriceHelper";
 import { numOfCoats } from "../constants/constant";
-import categoryConfig from "../categoryConfig.json";
 
 const AppContext = createContext();
 
@@ -130,6 +129,7 @@ export const AppProvider = ({ children }) => {
     const stored = sessionStorage.getItem("addToWishlistProduct");
     return stored ? JSON.parse(stored) : null;
   });
+  const [categoryConfig, setCategoryConfig] = useState(null);
 
   function normalizeKey(subcategory) {
     return subcategory
@@ -148,6 +148,37 @@ export const AppProvider = ({ children }) => {
     });
     return normalized;
   }
+
+  useEffect(() => {
+    async function fetchConfig() {
+      const { data, error } = await supabase
+        .from("category_config")
+        .select("config_data");
+
+      console.log(data);
+      if (error) {
+        console.error(error);
+      } else {
+        setCategoryConfig(data?.[0]?.config_data || {});
+      }
+    }
+    fetchConfig();
+  }, []);
+
+  // Function to update config and persist to Supabase
+  const updateCategoryConfig = async (newConfig) => {
+    setCategoryConfig(newConfig);
+    console.log("triggered");
+
+    const { error } = await supabase
+      .from("category_config")
+      .update({ config_data: newConfig, updated_at: new Date().toISOString() })
+      .eq("id", 1); // Assuming single row with id=1
+    if (error) {
+      console.error("Error updating config:", error);
+    }
+  };
+
   useEffect(() => {
     const newSeatCountData = normalizeObjectKeys(seatCountData);
     const newQuantityData = normalizeObjectKeys(quantityData);
@@ -1219,6 +1250,8 @@ export const AppProvider = ({ children }) => {
         allProductQuantities,
         pendingProduct,
         setPendingProduct,
+        categoryConfig,
+        updateCategoryConfig,
       }}
     >
       {children}

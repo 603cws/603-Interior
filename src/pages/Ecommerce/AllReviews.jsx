@@ -226,7 +226,10 @@ function AllReviews() {
         </button>
         <div className="flex gap-4">
           <div className="w-1/3">
-            <img src={`${baseImageUrl}${productDetails.image}`} alt="" />
+            <img
+              src={`${baseImageUrl}${productDetails.image}`}
+              alt={productDetails.title}
+            />
             <h3 className="uppercase text-[#111] font-semibold tracking-wider text-xl mt-2">
               {productDetails.title}
             </h3>
@@ -409,7 +412,7 @@ function AllReviews() {
                             <img
                               key={index}
                               src={url}
-                              alt=""
+                              alt={`Review ${index + 1}`}
                               className="h-16 w-16 object-cover"
                             />
                           </div>

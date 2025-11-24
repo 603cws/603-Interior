@@ -252,7 +252,11 @@ function CreateUser() {
             <h4 className="text-base font-semibold text-[#374A75]">
               Let's Work Together!
             </h4>
-            <img src="images/separator.png" alt="" className="w-20 my-4" />
+            <img
+              src="images/separator.png"
+              alt="separator design icon"
+              className="w-20 my-4"
+            />
             <h2 className="text-3xl font-semibold mb-4">
               Please Fill Your Details.
             </h2>

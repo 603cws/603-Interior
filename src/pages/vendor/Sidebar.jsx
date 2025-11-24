@@ -1,12 +1,9 @@
 import { useState } from "react";
 import SidebarItem from "../../common-components/SidebarItem";
-import { RiDashboardFill } from "react-icons/ri";
 import { useNavigate } from "react-router-dom";
 import { TiHomeOutline } from "react-icons/ti";
 import { VscSignOut } from "react-icons/vsc";
 import { IoSettingsSharp } from "react-icons/io5";
-import { LuBlend } from "react-icons/lu";
-import { BsQuestionCircle } from "react-icons/bs";
 import { MdOutlineSpaceDashboard } from "react-icons/md";
 import { GrCircleQuestion } from "react-icons/gr";
 import { BsBoxSeam } from "react-icons/bs";

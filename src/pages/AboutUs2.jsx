@@ -123,7 +123,7 @@ function AboutUs() {
             transition={{ duration: 1, ease: "easeOut" }}
             className=" xl:py-10 xl:pl-10 flex-1"
           >
-            <img src="/images/aboutusHero.webp" alt="" />
+            <img src="/images/aboutusHero.webp" alt="about us hero" />
             {/* <img src="/images/about-us/about-us-hero.png" alt="" /> */}
           </motion.div>
         </div>

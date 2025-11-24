@@ -45,7 +45,9 @@ function Payments() {
     {
       id: "upi",
       label: "UPI (Pay via any App)",
-      icon: <img src="/images/icons/upi-logo.svg" alt="" className="w-6" />,
+      icon: (
+        <img src="/images/icons/upi-logo.svg" alt="upi logo" className="w-6" />
+      ),
     },
     {
       id: "card",
@@ -335,7 +337,10 @@ function Payments() {
                             onChange={(e) => setSelectedBank(e.target.value)}
                           />
                           <div className="border border-[#cccccc] rounded-full p-1 w-7 h-7 flex justify-center items-center">
-                            <img src="/images/icons/axis-logo.svg" alt="" />
+                            <img
+                              src="/images/icons/axis-logo.svg"
+                              alt="axis bank logo"
+                            />
                           </div>
                           <h4 className="text-[10px] text-[#334A78] font-Poppins ">
                             Axis Bank
@@ -351,7 +356,10 @@ function Payments() {
                           onChange={(e) => setSelectedBank(e.target.value)}
                         />
                         <div className="border border-[#cccccc] rounded-full p-1 w-7 h-7 flex justify-center items-center">
-                          <img src="/images/icons/hdfc-logo.svg" alt="" />
+                          <img
+                            src="/images/icons/hdfc-logo.svg"
+                            alt="hdfc bank logo"
+                          />
                         </div>
                         <h4 className="text-[10px] text-[#334A78] font-Poppins ">
                           HDFC Bank

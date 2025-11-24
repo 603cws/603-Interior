@@ -266,7 +266,7 @@ function Schedule() {
                         <div>
                           <img
                             src="/images/user.png"
-                            alt=""
+                            alt="user profile icon"
                             className="h-10 w-10"
                           />
                         </div>

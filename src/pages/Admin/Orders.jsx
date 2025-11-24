@@ -186,7 +186,10 @@ export default function Orders({ vendorId = null }) {
                     onClick={() => setFilterDropdown(!filterDropdown)}
                     className="px-4 py-2 rounded text-[#374A75] text-sm flex items-center gap-3 border border-[#CCCCCC]"
                   >
-                    <img src="/images/icons/filter-icon.png" alt="" />
+                    <img
+                      src="/images/icons/filter-icon.png"
+                      alt="filter icon"
+                    />
                     <span className="md:block hidden">Filter</span>
                   </button>
                   {filterDropdown && (
@@ -423,7 +426,7 @@ export function OrderDetails({ order, onBack, vendorId = null }) {
           }}
           className="flex gap-2 items-center rounded-md border p-2 text-[#374A75] text-sm md:text-lg hover:bg-[#F9F9F9]"
         >
-          <img src="/images/icons/export.png" alt="" />
+          <img src="/images/icons/export.png" alt="export icon" />
           Export
         </button>
       </div>
@@ -701,7 +704,7 @@ function MobileOrderItem({ product }) {
       <div className="flex gap-4">
         <img
           src={`${baseImageUrl}${product?.product_variants?.image}`}
-          alt=""
+          alt="product"
           className="h-16 w-16 border"
         />
         <h3 className="font-semibold text-sm line-clamp-1">

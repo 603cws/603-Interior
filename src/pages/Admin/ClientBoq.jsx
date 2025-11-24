@@ -271,7 +271,10 @@ function ClientBoq({ setClientBoqs }) {
                     <button
                       onClick={() => setMobileFilterOPen(!mobileFilterOpen)}
                     >
-                      <img src="/images/icons/filter-icon.png" alt="" />
+                      <img
+                        src="/images/icons/filter-icon.png"
+                        alt="filter icon"
+                      />
                     </button>
                   </div>
                   {mobileFilterOpen && (

@@ -104,7 +104,7 @@ function Header() {
   }
   const fetchProducts = async () => {
     try {
-      const { data, error } = await supabase
+      const { data } = await supabase
         .from("product_variants")
         .select(`* ,product_id(*)`)
         .order("created_at", { ascending: false })
@@ -286,7 +286,7 @@ function Header() {
               <button onClick={() => navigate("/")}>
                 <img
                   src="/logo/workved-interior.png"
-                  alt=""
+                  alt="workved interior logo"
                   className="h-[60px] w-[140px] cursor-pointer "
                 />
               </button>
@@ -346,7 +346,7 @@ function Header() {
                   ) : (
                     <img
                       src="/images/icons/sign-in.png"
-                      alt=""
+                      alt="sign in icon"
                       className="h-5 w-5"
                     />
                   )}
@@ -369,7 +369,7 @@ function Header() {
             <button onClick={() => navigate("/")} className="">
               <img
                 src="/logo/workved-interior.png"
-                alt=""
+                alt="w"
                 className="h-10 cursor-pointer"
               />
             </button>
@@ -398,7 +398,7 @@ function Header() {
                   ) : (
                     <img
                       src="/images/icons/sign-in.png"
-                      alt=""
+                      alt="sign in icon"
                       className="h-5 w-5"
                     />
                   )}

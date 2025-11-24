@@ -2,7 +2,7 @@ import { useApp } from "../Context/Context";
 import PageNotFound from "../common-components/PageNotFound";
 
 function PrivateRoute({ children }) {
-  const { isAuthenticated, accountHolder } = useApp();
+  const { isAuthenticated } = useApp();
 
   //if not authenticated
   if (!isAuthenticated) return <PageNotFound />;

@@ -44,7 +44,7 @@ function Howtosell() {
             <div className="hidden  flex-1 h-full w-1/2 md:flex justify-end items-end relative">
               <img
                 src="/images/how-to-sell-girl.png"
-                alt=""
+                alt="how to sell illustration"
                 className="w-full h-3/4 scale-x-[-1]"
               />
             </div>
@@ -187,7 +187,7 @@ function Howtosell() {
             <div className="hidden w-1/2 md:flex items-end justify-end">
               <img
                 src="images/Delivery-lustrator.png"
-                alt=""
+                alt="delivery illustration"
                 className="h-80 self-end"
               />
             </div>

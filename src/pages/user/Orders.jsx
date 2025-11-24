@@ -46,7 +46,7 @@ function Orders() {
   const fetchOrdersData = async () => {
     try {
       setLoading(true);
-      const { data: ordersData, error: ordersError } = await supabase
+      const { data: ordersData } = await supabase
         .from("orders_table")
         .select("* ,order_items(*,product_variants(*))")
         .eq("user_id", accountHolder.userId)
@@ -74,7 +74,7 @@ function Orders() {
     console.log("order for cancel", order);
 
     // check the status from the db
-    const { data, error } = await supabase
+    const { data } = await supabase
       .from("orders_table")
       .select("status")
       .eq("id", order?.id)
@@ -215,7 +215,7 @@ function Orders() {
                       <div className="flex items-center md:gap-5 bg-[#F5F8FF] px-3 py-5 my-2">
                         <img
                           src={`${baseImageUrl}/${order?.order_items?.[0]?.product_variants.image}`}
-                          alt=""
+                          alt="order item"
                           className="h-20 md:h-28 w-20 md:w-28 object-contain"
                         />
                         <div>
@@ -296,7 +296,7 @@ function OrderProducts({ orderID }) {
   const fetchOrdersData = async () => {
     try {
       setLoading(true);
-      const { data: ordersData, error: ordersError } = await supabase
+      const { data: ordersData } = await supabase
         .from("orders_table")
         .select("* ,order_items(*,product_variants(*))")
         .eq("id", orderID)
@@ -322,7 +322,7 @@ function OrderProducts({ orderID }) {
       order?.order_items?.length > 1 ? "PartiallyCancelled" : "cancelled";
 
     //check the status of the product from the db incase the product is already refunded and still function is called
-    const { data, error } = await supabase
+    const { data } = await supabase
       .from("order_items")
       .select("item_status")
       .eq("id", product?.id)

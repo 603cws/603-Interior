@@ -2,7 +2,6 @@ import { useEffect } from "react";
 import { useApp } from "../../Context/Context";
 import { motion, AnimatePresence } from "framer-motion";
 import { fadeInVariant } from "../constants/animations";
-import categoryConfig from "../../categoryConfig.json";
 
 const MainPage = ({ userResponses, setSelectedSubCategory1, productsData }) => {
   const {
@@ -10,6 +9,7 @@ const MainPage = ({ userResponses, setSelectedSubCategory1, productsData }) => {
     selectedSubCategory,
     selectedSubCategory1,
     subCat1,
+    categoryConfig,
   } = useApp();
 
   function getSubCategories(category, subCategory, allSubCategories) {

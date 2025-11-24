@@ -2,7 +2,6 @@ import { useState, useRef, useEffect } from "react";
 import { useApp } from "../../Context/Context";
 import { motion, AnimatePresence } from "framer-motion";
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
-import categoryConfig from "../../categoryConfig.json";
 
 const Categories = ({
   // setSelectedCategory,
@@ -17,6 +16,7 @@ const Categories = ({
     // minimizedView,
     categories,
     userResponses,
+    categoryConfig,
   } = useApp();
 
   const containerRef = useRef(null);

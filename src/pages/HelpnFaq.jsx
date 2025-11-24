@@ -2,7 +2,6 @@ import { useState } from "react";
 import Footer from "../common-components/Footer";
 import LandingNavbar from "../common-components/LandingNavbar";
 import { FaAngleDown, FaAngleUp } from "react-icons/fa";
-import { motion } from "framer-motion";
 import HeroSection from "./HeroSection";
 
 function HelpnFaq() {
@@ -173,7 +172,7 @@ function HelpnFaq() {
   // const handleToggle = (index, setExpandedIndex) => {
   //   setExpandedIndex((prevIndex) => (prevIndex === index ? null : index));
   // };
-  const background = "/images/career-page-bg.png";
+  // const background = "/images/career-page-bg.png";
 
   const helpAndFaqImages = {
     general: "/images/featuredservice3.jpg",
@@ -228,7 +227,6 @@ function HelpnFaq() {
               <div className={`flex-1 `}>
                 <img
                   src={helpAndFaqImages[category]}
-                  // src="/images/help1.png"
                   alt={`help section ${category}`}
                   className=" w-full"
                 />

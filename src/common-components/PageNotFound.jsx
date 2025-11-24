@@ -7,7 +7,11 @@ function PageNotFound() {
   return (
     <div className="flex justify-center items-center w-screen h-screen">
       <div className="font-Poppins flex flex-col items-center gap-3">
-        <img src="/images/page-not-found.png" alt="" className="max-w-xs" />
+        <img
+          src="/images/page-not-found.png"
+          alt="not found of an small office setup"
+          className="max-w-xs"
+        />
         <h1 className="font-bold  text-[120px] text-[#374A75]">404</h1>
         <p className="text-[#8D8D8D] ">
           Opps! Looks like something went wrong

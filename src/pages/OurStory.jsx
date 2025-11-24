@@ -134,8 +134,7 @@ function StrugglesSection() {
       {/* Right Image */}
       <div className="">
         <img
-          src="/images/office.JPG" // replace with your image path
-          // src="/images/ourstory.png" // replace with your image path
+          src="/images/office.JPG"
           alt="Office workspace"
           className="rounded-lg shadow-md h-full w-full object-cover"
         />
@@ -178,7 +177,7 @@ function Step({ imagePath, title, index }) {
   return (
     <div className="flex-1 text-center relative font-Georgia">
       <div className=" w-32 h-32 rounded-full border border-dashed border-gray-400 bg-white mx-auto flex items-center  justify-center relative z-10">
-        <img src={imagePath} alt="Plan" className="w-16 h-16" />
+        <img src={imagePath} alt={title} className="w-16 h-16" />
       </div>
       <h3 className="mt-6 text-xl font-bold text-[#232323] ">{title}</h3>
       {/* Connector Line to Step 2 */}

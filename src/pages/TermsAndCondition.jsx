@@ -1,10 +1,9 @@
 import LandingNavbar from "../common-components/LandingNavbar";
 import Footer from "../common-components/Footer";
-import { motion } from "framer-motion";
 import HeroSection from "./HeroSection";
 
 function TermsAndCondition() {
-  const background = "/images/contact-us/contactpage.png";
+  // const background = "/images/contact-us/contactpage.png";
   const termsAndConditions = [
     {
       title: "General",

@@ -609,7 +609,7 @@ function AdminDashboardEcom() {
             <div className="flex justify-center items-center">
               <img
                 src="images/icons/delete-icon.png"
-                alt=""
+                alt="delete icon"
                 className="h-12 w-12"
               />
             </div>

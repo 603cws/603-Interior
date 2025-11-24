@@ -217,7 +217,7 @@ const QnaPopup = ({ onClose, onSubmit }) => {
             >
               <img
                 src={sideImage}
-                alt=""
+                alt="qna"
                 className="h-60 md:h-full w-full object-contain"
               />
             </div>

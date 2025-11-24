@@ -22,7 +22,7 @@ function Clients({
   const [showSearch, setShowSearch] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
 
-  const { setSelectedClient, selectedClient } = useApp();
+  const { setSelectedClient } = useApp();
 
   // pagination
 

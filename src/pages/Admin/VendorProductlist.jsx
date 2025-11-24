@@ -8,10 +8,10 @@ import toast from "react-hot-toast";
 // import DashboardProductCard from "../vendor/DashboardProductCard";
 import VendorProductCard from "../vendor/VendorProductCard";
 import { IoIosArrowBack } from "react-icons/io";
-import { ChevronDownIcon, FunnelIcon } from "@heroicons/react/24/outline";
+import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import VendorProductEdit from "../vendor/VendorProductEdit";
 import VendorEditAddon from "../vendor/VendorEditAddon";
-import { IoCloseCircle, IoCloudDownloadOutline } from "react-icons/io5";
+import { IoCloseCircle } from "react-icons/io5";
 import { IoIosSearch } from "react-icons/io";
 import MobileTabProductCard from "../user/MobileTabProductCard";
 import { baseImageUrl } from "../../utils/HelperConstant";
@@ -548,7 +548,10 @@ function VendorProductlist({
                     onClick={() => setFilterDropdown(!filterDropdown)}
                     className="px-4 py-2 rounded text-[#374A75] text-sm flex items-center gap-3 border"
                   >
-                    <img src="/images/icons/filter-icon.png" alt="" />
+                    <img
+                      src="/images/icons/filter-icon.png"
+                      alt="filter icon"
+                    />
                     <span className="text-sm">Filter</span>
                     <ChevronDownIcon className="h-4 w-4 text-gray-500" />
                   </button>
@@ -629,7 +632,10 @@ function VendorProductlist({
                       onClick={() => setFilterDropdown(!filterDropdown)}
                       className="h-10 w-10 flex justify-center items-center border rounded"
                     >
-                      <img src="/images/icons/filter-icon.png" alt="" />
+                      <img
+                        src="/images/icons/filter-icon.png"
+                        alt="filter icon"
+                      />
                     </button>
 
                     {/* Dropdown */}
@@ -891,7 +897,7 @@ function VendorProductlist({
                           ? "images/product-icon-2.png"
                           : "images/product-icon-1.png"
                       }
-                      alt=""
+                      alt="product icon"
                     />
                     <h2 className="text-lg">product</h2>
                   </div>
@@ -911,7 +917,7 @@ function VendorProductlist({
                           ? "images/addOn-icon-2.png"
                           : "images/addOn-icon-1.png"
                       }
-                      alt=""
+                      alt="add ons icon"
                     />
                     <h2 className="text-lg">add ons</h2>
                   </div>

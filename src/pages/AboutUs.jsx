@@ -93,25 +93,37 @@ function AboutUs() {
         </div>
         <div className="grid grid-cols-1 mx-4 sm:mx-0 sm:grid-cols-2 lg:grid-cols-4 lg:gap-4 xl:gap-10  my-10">
           <div className="group  flex flex-col justify-center items-center gap-5 py-12  hover:bg-[#15423C] shadow-[0px_0px_20px_rgba(0,0,0,0.1)]">
-            <img src="/images/about-us/about-us-s2-1.png" alt="" />
+            <img
+              src="/images/about-us/about-us-s2-1.png"
+              alt="about us interior design"
+            />
             <h4 className="uppercase font-Poppins font-extrabold text-2xl group-hover:text-white">
               interior design
             </h4>
           </div>
           <div className="group  flex flex-col justify-center items-center gap-5 py-12  hover:bg-[#15423C] shadow-[0px_0px_20px_rgba(0,0,0,0.1)]">
-            <img src="/images/about-us/about-us-s2-2.png" alt="" />
+            <img
+              src="/images/about-us/about-us-s2-2.png"
+              alt="about us production"
+            />
             <h4 className="uppercase font-Poppins font-extrabold text-2xl group-hover:text-white">
               production
             </h4>
           </div>
           <div className="group  flex flex-col justify-center items-center gap-5 py-12  hover:bg-[#15423C] shadow-[0px_0px_20px_rgba(0,0,0,0.1)]">
-            <img src="/images/about-us/about-us-s2-3.png" alt="" />
+            <img
+              src="/images/about-us/about-us-s2-3.png"
+              alt="about us interior section"
+            />
             <h4 className="uppercase font-Poppins font-extrabold text-2xl group-hover:text-white">
               execution
             </h4>
           </div>
           <div className="group  flex flex-col justify-center items-center gap-5 py-12  hover:bg-[#15423C] shadow-[0px_0px_20px_rgba(0,0,0,0.1)]">
-            <img src="/images/about-us/about-us-s2-4.png" alt="" />
+            <img
+              src="/images/about-us/about-us-s2-4.png"
+              alt="about us after service"
+            />
             <h4 className="uppercase font-Poppins font-extrabold text-2xl group-hover:text-white">
               after service
             </h4>

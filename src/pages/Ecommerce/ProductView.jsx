@@ -21,10 +21,7 @@ import SpinnerFullPage from "../../common-components/SpinnerFullPage";
 import CompareProducts from "./CompareProducts";
 import toast from "react-hot-toast";
 import ProductReview from "./ProductReview";
-import {
-  showLimitReachedToast,
-  showRemoveFromCartToast,
-} from "../../utils/AddToCartToast";
+import { showLimitReachedToast } from "../../utils/AddToCartToast";
 import { HandThumbUpIcon, HandThumbDownIcon } from "@heroicons/react/24/solid";
 import {
   HandThumbUpIcon as HandThumbUpOutline,
@@ -1365,7 +1362,7 @@ function Card({ product, handleCompareToggle, compare }) {
       >
         <img
           src={product.image}
-          alt="chair"
+          alt={product.title}
           className="h-44 lg:h-52 object-contain"
         />
       </div>

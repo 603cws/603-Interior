@@ -85,7 +85,7 @@ function Footer() {
           <div className="lg:py-5 hidden lg:flex items-start lg:border-r">
             <img
               src="/logo/workved-logo.png"
-              alt=""
+              alt="company logo"
               className="max-w-48 xl:max-w-xs"
             />
           </div>
@@ -230,7 +230,7 @@ function Footer() {
           <div className="py-3 lg:hidden flex justify-center items-start lg:border-r">
             <img
               src="/logo/workved-logo.png"
-              alt=""
+              alt="company logo"
               className="max-w-48 xl:max-w-56"
             />
           </div>

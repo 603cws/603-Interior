@@ -13,7 +13,7 @@ import {
 import { LuBlend } from "react-icons/lu";
 import { FaRegUserCircle, FaUser, FaUserPlus } from "react-icons/fa";
 import { FaBuilding } from "react-icons/fa";
-import { PiHandshakeFill } from "react-icons/pi";
+import { PiCodeBlockDuotone, PiHandshakeFill } from "react-icons/pi";
 import VendorNewProduct from "../vendor/VendorNewProduct";
 import VendorNewAddon from "../vendor/VendorNewAddon";
 import { VscEye } from "react-icons/vsc";
@@ -51,6 +51,7 @@ import { FiLogOut } from "react-icons/fi";
 import { IoMdSwitch } from "react-icons/io";
 import PagInationNav from "../../common-components/PagInationNav";
 import SelectSubcategories from "./SelectSubcategories";
+import CategoryEditor from "../../boq/components/CategoryEditor";
 
 // import Orders from "./Orders";
 
@@ -67,6 +68,7 @@ function handlesidebarState(state, action) {
         isVendorOpen: action.payload === "Vendors",
         isScheduleOpen: action.payload === "Schedule",
         isFormulaeOpen: action.payload === "Formulae",
+        isCategoryEditorOpen: action.payload === "CategoryEditor",
 
         // isOrdersOpen: action.payload === "Orders",
         // help: action.payload === "Help",
@@ -86,6 +88,7 @@ const SECTIONS = {
   CREATE: "Create",
   SCHEDULE: "Schedule",
   FORMULAE: "Formulae",
+  CategoryEditor: "CategoryEditor",
   SETTING: "Setting",
 
   // ORDERS: "Orders",
@@ -641,6 +644,13 @@ function AdminDashboard() {
     sidebarDispatch({ type: "TOGGLE_SECTION", payload: SECTIONS.FORMULAE });
   };
 
+  const handleCategoryEditor = () => {
+    sidebarDispatch({
+      type: "TOGGLE_SECTION",
+      payload: SECTIONS.CategoryEditor,
+    });
+  };
+
   // const handleOrders = () => {
   //   sidebarDispatch({ type: "TOGGLE_SECTION", payload: SECTIONS.ORDERS });
   // };
@@ -835,6 +845,13 @@ function AdminDashboard() {
             currentSection={sidebarstate?.currentSection}
           />
           <SidebarItem
+            icon={<PiCodeBlockDuotone />}
+            text="Category Editor"
+            onClick={handleCategoryEditor}
+            isExpanded={isExpanded}
+            currentSection={sidebarstate?.currentSection}
+          />
+          <SidebarItem
             icon={<RiSettingsLine />}
             text="Setting"
             onClick={handlesetting}
@@ -1002,6 +1019,14 @@ function AdminDashboard() {
                 setIsOpen={setIsOpen}
               />
 
+              <MobileMenuItem
+                icon={<PiCodeBlockDuotone />}
+                text="Category Editor"
+                currentSection={sidebarstate?.currentSection}
+                onClick={handleCategoryEditor}
+                setIsOpen={setIsOpen}
+              />
+
               <hr className="border-gray-200" />
               <MobileMenuItem
                 icon={<IoSettingsSharp />}
@@ -1140,7 +1165,10 @@ function AdminDashboard() {
                             onClick={() => setFilterDropdown(!filterDropdown)}
                             className="px-4 py-2 rounded text-[#374A75] text-sm flex items-center gap-3 border"
                           >
-                            <img src="/images/icons/filter-icon.png" alt="" />
+                            <img
+                              src="/images/icons/filter-icon.png"
+                              alt="filter icon"
+                            />
                             <span className="text-sm">Filter</span>
                             <ChevronDownIcon className="h-4 w-4 text-gray-500" />
                           </button>
@@ -1304,7 +1332,10 @@ function AdminDashboard() {
                             onClick={() => setFilterDropdown(!filterDropdown)}
                             className="h-10 w-10 flex justify-center items-center border rounded"
                           >
-                            <img src="/images/icons/filter-icon.png" alt="" />
+                            <img
+                              src="/images/icons/filter-icon.png"
+                              alt="filter icon"
+                            />
                             {/* <span className="text-sm">Filter</span> */}
                             {/* <ChevronDownIcon className="h-4 w-4 text-gray-500" /> */}
                           </button>
@@ -1985,6 +2016,9 @@ function AdminDashboard() {
         {/* Formulae */}
         {sidebarstate.isFormulaeOpen && <FormulaEditor />}
 
+        {/* Category Editor */}
+        {sidebarstate.isCategoryEditorOpen && <CategoryEditor />}
+
         {/* Orders */}
         {/* {sidebarstate.isOrdersOpen && <Orders />} */}
       </div>
@@ -2013,7 +2047,7 @@ function AdminDashboard() {
             <div className="flex justify-center items-center">
               <img
                 src="images/icons/delete-icon.png"
-                alt=""
+                alt="delete icon"
                 className="h-12 w-12"
               />
             </div>

@@ -1,6 +1,3 @@
-import { BsArrowRight } from "react-icons/bs";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Grid, Navigation, Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
@@ -14,7 +11,6 @@ import { supabase } from "../../services/supabase";
 import { useNavigate } from "react-router-dom";
 import { useHandleAddToCart } from "../../utils/HelperFunction";
 import { ToastContainer } from "react-toastify";
-import CardSection from "./CardSection";
 import { AiFillHeart } from "react-icons/ai";
 import { GoHeart } from "react-icons/go";
 import Loginpoup from "../../common-components/LoginPopup";
@@ -218,9 +214,6 @@ const featuredProducts = [
 ];
 
 function Products() {
-  const prevRef = useRef(null);
-  const nextRef = useRef(null);
-  const paginationRef = useRef(null);
   const scrollRef = useRef(null);
 
   const { handleAddToCart } = useHandleAddToCart();
@@ -1560,7 +1553,7 @@ function Productitem({ image, title, width }) {
     <div className="py-3 lg:py-6 px-6 lg:px-10 border border-[#374A75] max-w-xs w-full mx-auto lg:w-full">
       <div className="flex items-center justify-center  font-TimesNewRoman text-base gap-4 ">
         <div className={`${width}`}>
-          <img src={image} alt="" className={`${width}`} />
+          <img src={image} alt={title} className={`${width}`} />
         </div>
         <p className="text-sm lg:text-base text-[#111]">{title}</p>
       </div>
@@ -1606,52 +1599,52 @@ function Productitem({ image, title, width }) {
 //   );
 // }
 
-function ProductCard({ product, trending = false }) {
-  const naviagte = useNavigate();
+// function ProductCard({ product, trending = false }) {
+//   const naviagte = useNavigate();
 
-  return (
-    <>
-      {!trending && (
-        <div className="max-w-xs flex flex-col md:flex-row border border-[#191716]/80 p-3">
-          <div
-            className="flex-1"
-            onClick={() => naviagte(`/productview/${product.id}`)}
-          >
-            <img
-              src={product.image}
-              alt="trending product"
-              className="w-[220px] h-[200px] object-contain"
-            />
-          </div>
-          <div className="flex-1 flex flex-col justify-center items-center gap-3 font-TimesNewRoman space-y-2">
-            <p className="text-center text-sm leading-[14px] tracking-[0.96px] lg:text-sm">
-              {product.title}
-            </p>
-            <h2 className="text-base leading-4 tracking-[1px] text-[#374A75]">
-              &#8377; {product.price}
-            </h2>
-            <button className="font-TimesNewRoman text-[#000] flex gap-2 leading-[13px] tracking-[1px] text-[13px]">
-              Add to cart <BsArrowRight size={15} />
-            </button>
-          </div>
-        </div>
-      )}
+//   return (
+//     <>
+//       {!trending && (
+//         <div className="max-w-xs flex flex-col md:flex-row border border-[#191716]/80 p-3">
+//           <div
+//             className="flex-1"
+//             onClick={() => naviagte(`/productview/${product.id}`)}
+//           >
+//             <img
+//               src={product.image}
+//               alt="trending product"
+//               className="w-[220px] h-[200px] object-contain"
+//             />
+//           </div>
+//           <div className="flex-1 flex flex-col justify-center items-center gap-3 font-TimesNewRoman space-y-2">
+//             <p className="text-center text-sm leading-[14px] tracking-[0.96px] lg:text-sm">
+//               {product.title}
+//             </p>
+//             <h2 className="text-base leading-4 tracking-[1px] text-[#374A75]">
+//               &#8377; {product.price}
+//             </h2>
+//             <button className="font-TimesNewRoman text-[#000] flex gap-2 leading-[13px] tracking-[1px] text-[13px]">
+//               Add to cart <BsArrowRight size={15} />
+//             </button>
+//           </div>
+//         </div>
+//       )}
 
-      {trending && (
-        <div
-          onClick={() => naviagte(`/productview/${product.id}`)}
-          className="border border-[#ccc] cursor-pointer"
-        >
-          <img
-            src={product.image}
-            alt="trending product"
-            className="max-w-sm h-[200px] w-full object-contain"
-          />
-        </div>
-      )}
-    </>
-  );
-}
+//       {trending && (
+//         <div
+//           onClick={() => naviagte(`/productview/${product.id}`)}
+//           className="border border-[#ccc] cursor-pointer"
+//         >
+//           <img
+//             src={product.image}
+//             alt="trending product"
+//             className="max-w-sm h-[200px] w-full object-contain"
+//           />
+//         </div>
+//       )}
+//     </>
+//   );
+// }
 
 function SectionHeader({ title, isborder = true }) {
   return (

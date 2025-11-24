@@ -7,7 +7,7 @@ import AddressForm from "./AddressForm";
 import { v4 as uuidv4 } from "uuid";
 import toast from "react-hot-toast";
 import CheckoutStepper from "../../common-components/CheckoutStepper";
-import { MdOutlineCancel, MdOutlineKeyboardArrowLeft } from "react-icons/md";
+import { MdOutlineKeyboardArrowLeft } from "react-icons/md";
 import { useLocation, useNavigate } from "react-router-dom";
 import AppliedCoupon from "../../common-components/AppliedCoupon";
 // import PriceDetail from "../../common-components/PriceDetail";

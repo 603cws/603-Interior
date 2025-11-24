@@ -103,7 +103,10 @@ function OurWork() {
                     Gallery
                   </h3>
                   <div>
-                    <img src="/images/ourworkgallery.png" alt="gallery" />
+                    <img
+                      src="/images/ourworkgallery.png"
+                      alt="our work gallery"
+                    />
                   </div>
                 </div>
               </div>

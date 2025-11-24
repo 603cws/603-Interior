@@ -1,19 +1,19 @@
-function calculateSpace(type, quantity, latestData, keys) {
-  quantity = quantity[0] || {};
+// function calculateSpace(type, quantity, latestData, keys) {
+//   quantity = quantity[0] || {};
 
-  if (type === "areas") {
-    return keys.reduce((total, key) => {
-      return (
-        total +
-        (quantity[`${key}Qty`] && latestData[`${key}Area`]
-          ? latestData[`${key}Area`]
-          : 0)
-      );
-    }, 0);
-  }
+//   if (type === "areas") {
+//     return keys.reduce((total, key) => {
+//       return (
+//         total +
+//         (quantity[`${key}Qty`] && latestData[`${key}Area`]
+//           ? latestData[`${key}Area`]
+//           : 0)
+//       );
+//     }, 0);
+//   }
 
-  return keys.reduce((total, key) => total + (latestData[`${key}Qty`] || 0), 0);
-}
+//   return keys.reduce((total, key) => total + (latestData[`${key}Qty`] || 0), 0);
+// }
 
 const openWorkSpacesKeys = ["linear", "lType"];
 

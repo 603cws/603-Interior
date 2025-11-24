@@ -22,7 +22,7 @@ function BrandDLink() {
             </div>
           </div>
           <div className="flex-1 flex justify-center">
-            <img src="/images/brands/d-link-router.png" alt="" className="" />
+            <img src="/images/brands/d-link-router.png" alt="D-Link router" />
           </div>
         </div>
       </section>
@@ -34,7 +34,7 @@ function BrandDLink() {
           <div className="flex justify-center items-center lg:h-full">
             <img
               src="/images/brands/dlink-logo-teal.png"
-              alt=""
+              alt="D-Link logo"
               className="h-20 lg:h-auto"
             />
           </div>
@@ -46,7 +46,7 @@ function BrandDLink() {
             </p>
             <img
               src="/images/brands/dlink-devices.png"
-              alt=""
+              alt="D-Link devices"
               className="h-28 md:h-40 md:absolute bottom-1/4 left-1/4 md:translate-y-1/4 md:-translate-x-2"
             />
           </div>
@@ -55,37 +55,37 @@ function BrandDLink() {
 
       <section className="px-4 lg:container mx-auto grid grid-cols-2 md:grid-cols-3 justify-items-center gap-3 md:gap-7 my-10">
         <div className="relative h-full">
-          <img src="/images/brands/mobile-charger.png" alt="" />
+          <img src="/images/brands/mobile-charger.png" alt="Mobile charger" />
           <p className="absolute bottom-0 left-0 w-full text-center bg-black/30 backdrop-blur-sm text-[#fff] py-1 md:py-2 lg:py-4 text-lg md:text-2xl lg:text-3xl border-b-4 border-[#FAA615]">
             Mobile charger
           </p>
         </div>
         <div className="relative h-full">
-          <img src="/images/brands/ai-router.png" alt="" />
+          <img src="/images/brands/ai-router.png" alt="AI router" />
           <p className="absolute bottom-0 left-0 w-full text-center bg-black/30 backdrop-blur-sm text-[#fff] py-1 md:py-2 lg:py-4 text-lg md:text-2xl lg:text-3xl border-b-4 border-[#4F7922]">
             AI Routers
           </p>
         </div>{" "}
         <div className="relative h-full">
-          <img src="/images/brands/switches.png" alt="" />
+          <img src="/images/brands/switches.png" alt="Switches" />
           <p className="absolute bottom-0 left-0 w-full text-center bg-black/30 backdrop-blur-sm text-[#fff] py-1 md:py-2 lg:py-4 text-lg md:text-2xl lg:text-3xl border-b-4 border-[#6B4D19]">
             Switches
           </p>
         </div>{" "}
         <div className="relative h-full">
-          <img src="/images/brands/usb-adapter.png" alt="" />
+          <img src="/images/brands/usb-adapter.png" alt="USB adapter" />
           <p className="absolute bottom-0 left-0 w-full text-center bg-black/30 backdrop-blur-sm text-[#fff] py-1 md:py-2 lg:py-4 text-lg md:text-2xl lg:text-3xl border-b-4 border-[#8F8167]">
             USB Adapter
           </p>
         </div>{" "}
         <div className="relative h-full">
-          <img src="/images/brands/surveillance.png" alt="" />
+          <img src="/images/brands/surveillance.png" alt="Surveillance" />
           <p className="absolute bottom-0 left-0 w-full text-center bg-black/30 backdrop-blur-sm text-[#fff] py-1 md:py-2 lg:py-4 text-lg md:text-2xl lg:text-3xl border-b-4 border-[#678F6B]">
             Surveillance
           </p>
         </div>{" "}
         <div className="relative h-full">
-          <img src="/images/brands/extender.png" alt="" />
+          <img src="/images/brands/extender.png" alt="Extender" />
           <p className="absolute bottom-0 left-0 w-full text-center bg-black/30 backdrop-blur-sm text-[#fff] py-1 md:py-2 lg:py-4 text-lg md:text-2xl lg:text-3xl border-b-4 border-[#678F8B]">
             Extender
           </p>
@@ -100,56 +100,56 @@ function BrandDLink() {
           <div className="p-2 bg-[#fff] flex justify-center items-center shadow-[0px_0px_20px_rgba(0,0,0,0.1)]">
             <img
               src="/images/brands/d-link-product-1.png"
-              alt=""
+              alt="D-Link product 1"
               className="p-10"
             />
           </div>
           <div className="p-2 bg-[#fff] flex justify-center items-center shadow-[0px_0px_20px_rgba(0,0,0,0.1)]">
             <img
               src="/images/brands/d-link-product-2.png"
-              alt=""
+              alt="D-Link product 2"
               className="p-10"
             />
           </div>{" "}
           <div className="p-2 bg-[#fff] flex justify-center items-center shadow-[0px_0px_20px_rgba(0,0,0,0.1)]">
             <img
               src="/images/brands/d-link-product-3.png"
-              alt=""
+              alt="D-Link product 3"
               className="p-10"
             />
           </div>{" "}
           <div className="p-2 bg-[#fff] flex justify-center items-center shadow-[0px_0px_20px_rgba(0,0,0,0.1)]">
             <img
               src="/images/brands/d-link-product-4.png"
-              alt=""
+              alt="D-Link product 4"
               className="p-10"
             />
           </div>{" "}
           <div className="p-2 bg-[#fff] flex justify-center items-center shadow-[0px_0px_20px_rgba(0,0,0,0.1)]">
             <img
               src="/images/brands/d-link-product-5.png"
-              alt=""
+              alt="D-Link product 5"
               className="p-10"
             />
           </div>{" "}
           <div className="p-2 bg-[#fff] flex justify-center items-center shadow-[0px_0px_20px_rgba(0,0,0,0.1)]">
             <img
               src="/images/brands/d-link-product-6.png"
-              alt=""
+              alt="D-Link product 6"
               className="p-10"
             />
           </div>{" "}
           <div className="p-2 bg-[#fff] flex justify-center items-center shadow-[0px_0px_20px_rgba(0,0,0,0.1)]">
             <img
               src="/images/brands/d-link-product-7.png"
-              alt=""
+              alt="D-Link product 7"
               className="p-10"
             />
           </div>{" "}
           <div className="p-2 bg-[#fff] flex justify-center items-center shadow-[0px_0px_20px_rgba(0,0,0,0.1)]">
             <img
               src="/images/brands/d-link-product-8.png"
-              alt=""
+              alt="D-Link product 8"
               className="p-10"
             />
           </div>

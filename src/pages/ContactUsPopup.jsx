@@ -88,7 +88,7 @@ function ContactUsPopup({ onClose }) {
           <div className="flex-1 hidden xl:block sticky top-0 left-0">
             <img
               src="/images/contact-us/contact-popup.png"
-              alt=""
+              alt="contact us background"
               className="h-full w-full object-cover"
             />
           </div>
@@ -103,7 +103,11 @@ function ContactUsPopup({ onClose }) {
                 <h4 className="capitalize font-semibold text-[#304778] text-sm lg:text-base">
                   Get in touch!
                 </h4>
-                <img src="/images/separator.png" alt="" className="w-20 mt-3" />
+                <img
+                  src="/images/separator.png"
+                  alt="separator design icon"
+                  className="w-20 mt-3"
+                />
               </div>
               <h2 className="font-semibold text-xl lg:text-2xl my-3 xl:my-5">
                 Love to hear from you <br /> Get in touch

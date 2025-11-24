@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { FcGoogle } from "react-icons/fc";
 import { MdClose } from "react-icons/md";
 import { supabase } from "../services/supabase";
@@ -100,7 +100,7 @@ export default function LoginPopup({ onClose, product }) {
 
         try {
           setLoading(true);
-          const { data, error } = await supabase.auth.signUp({
+          const { error } = await supabase.auth.signUp({
             email,
             password,
           });

@@ -61,5 +61,8 @@
   },
   "Civil / Plumbing": {
     "Pantry": { "exclude": ["Pods"] }
+  },
+  "HVAC": {
+    "Pantry": { "exclude": ["Pods"] }
   }
 }

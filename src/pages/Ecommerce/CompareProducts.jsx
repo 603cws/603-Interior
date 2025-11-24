@@ -96,7 +96,11 @@ function Card({ product, onRemove }) {
         </button>
       </div>{" "}
       <div className="w-5/6 h-2/5">
-        <img src={product.image} alt="" className="object-contain max-h-full" />
+        <img
+          src={product.image}
+          alt={product.title}
+          className="object-contain max-h-full"
+        />
       </div>
       <div className="flex flex-col gap-4 [&_h4]:uppercase [&_h4]:font-medium [&_h4]:text-sm [&_h4]:text[#111111]">
         <h4>{product?.title}</h4>

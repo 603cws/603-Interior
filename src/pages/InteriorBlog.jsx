@@ -8,68 +8,6 @@ import { supabase } from "../services/supabase";
 import { blogImageUrl } from "../utils/HelperConstant";
 import SpinnerFullPage from "../common-components/SpinnerFullPage";
 
-const blogs = [
-  {
-    image: "/images/blogoffice.png",
-    title:
-      "The Future of Office Design: Trends That Will Shape Workspaces in 2025",
-    date: 5,
-    month: "jun",
-    shortdescription: "Door Windows, Home Land",
-    description:
-      "A small newly opened interior design business that aims to  cover different issues, from sustainability to social, from equal opportunities to education, from giving space",
-  },
-  {
-    image: "/images/blogoffice.png",
-    title: "How to Design a Productive Office Space: A Step-by-Step Guide",
-    shortdescription: "Decoration",
-    date: 5,
-    month: "jun",
-    description:
-      "The scent of lilacs flowing through the house and yard makes me so happy every spring. Unique finds from design shows to sustainable design ideas, you have a never ending supply",
-  },
-  {
-    image: "/images/blogoffice.png",
-    title: "How AI & Automation Are Changing Interior Design for Offices",
-    shortdescription: "Home Land",
-    date: 5,
-    month: "jun",
-    description:
-      "The most important decision you will make when it comes to interior decoration is finding skilled and reliable professionals. At beautiful homes service, we ensure your house design",
-  },
-  {
-    image: "/images/blogoffice.png",
-    title: "How Office Design Impacts Employee Productivity & Well-Being",
-    shortdescription: "Door Windows , Home Land",
-    date: 5,
-    month: "jun",
-    description:
-      "Creative energy positively bubbles over from each of these five engaging red, yellow and blue interior designs. Prolific color clashes create a vivacious spirit that bonds with curious art",
-  },
-  {
-    image: "/images/blogoffice.png",
-    title: "10 Office Design Mistakes That Are Killing Your Productivity",
-    shortdescription: "Door Windows , Home Land",
-    date: 5,
-    month: "jun",
-    description:
-      "Creative energy positively bubbles over from each of these five engaging red, yellow and blue interior designs. Prolific color clashes create a vivacious spirit that bonds with curious art",
-  },
-];
-
-const MainBlog = [
-  {
-    image: "/images/blogoffice.png",
-    title:
-      "The Future of Office Design: Trends That Will Shape Workspaces in 2025",
-    date: 5,
-    month: "jun",
-    shortdescription: "Door Windows, Home Land",
-    description:
-      "A small newly opened interior design business that aims to  cover different issues, from sustainability to social, from equal opportunities to education, from giving space",
-  },
-];
-
 // let items = blogs;
 let itemsPerPage = 4;
 

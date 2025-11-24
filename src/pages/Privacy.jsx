@@ -1,10 +1,8 @@
 import LandingNavbar from "../common-components/LandingNavbar";
 import Footer from "../common-components/Footer";
-import { motion } from "framer-motion";
 import HeroSection from "./HeroSection";
 
 function Privacy() {
-  const background = "/images/contact-us/contactpage.png";
   const termsAndConditions = [
     {
       title: "Information We Collect",

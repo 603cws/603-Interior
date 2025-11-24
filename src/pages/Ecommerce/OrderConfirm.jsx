@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { BsPatchCheckFill } from "react-icons/bs";
 import { useNavigate, useParams } from "react-router-dom";
 import { supabase } from "../../services/supabase";
 

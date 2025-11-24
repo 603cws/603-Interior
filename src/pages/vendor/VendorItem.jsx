@@ -198,9 +198,9 @@ function VendorItem({ isExpanded }) {
     setIsAddProduct(false);
   };
 
-  const handleMenuToggle = (id) => {
-    setOpenMenuId((prev) => (prev === id ? null : id));
-  };
+  // const handleMenuToggle = (id) => {
+  //   setOpenMenuId((prev) => (prev === id ? null : id));
+  // };
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -240,10 +240,10 @@ function VendorItem({ isExpanded }) {
     setEditAddon(true);
   };
 
-  const handleDeleteClick = (item) => {
-    setDeleteWarning(true);
-    setSelectedProductview(item);
-  };
+  // const handleDeleteClick = (item) => {
+  //   setDeleteWarning(true);
+  //   setSelectedProductview(item);
+  // };
 
   const handleDelete = async (selectedProductview) => {
     try {
@@ -539,7 +539,7 @@ function VendorItem({ isExpanded }) {
             <div className="flex justify-center items-center">
               <img
                 src="images/icons/delete-icon.png"
-                alt=""
+                alt="delete icon"
                 className="h-12 w-12"
               />
             </div>
@@ -619,7 +619,7 @@ function Item({ setIsAddProduct, setAddNewitem, title, img1, img2 }) {
       className="flex flex-col border border-[#ccc] justify-center items-center gap-5 p-10 shadow-lg font-bold rounded-xl cursor-pointer hover:bg-[#374A75] hover:text-white hover:scale-110 transition-transform duration-200 ease-in-out"
       // className="flex flex-col justify-center items-center gap-5 p-10 shadow-[0_4px_10px_rgba(180,234,234,50)] font-bold rounded-xl cursor-pointer hover:bg-[#374A75] hover:text-white hover:scale-110 transition-transform duration-200 ease-in-out"
     >
-      <img src={isHovered ? img1 : img2} alt="item" className="w-28" />
+      <img src={isHovered ? img1 : img2} alt={title} className="w-28" />
       <h2 className="text-lg">{title}</h2>
     </div>
   );

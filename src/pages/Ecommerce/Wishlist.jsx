@@ -119,7 +119,7 @@ function Wishlist() {
   const handleMoveToCart = async (product) => {
     console.log(product);
     try {
-      const { data, error } = await supabase
+      const { error } = await supabase
         .from("userProductCollection")
         .update({ type: "cart" })
         .eq("id", product.id);
@@ -220,7 +220,11 @@ function Wishlist() {
       ) : (
         <div className="flex flex-col gap-4 justify-center items-center h-[80vh]">
           <div className="flex justify-center items-center">
-            <img src="/images/emptywishlist.png" alt="" className="max-w-sm" />
+            <img
+              src="/images/emptywishlist.png"
+              alt="empty wishlist"
+              className="max-w-sm"
+            />
           </div>
           <h2 className="font-Poppins font-semibold text-xl lg:text-2xl text-[#000]">
             {isAuthenticated ? "Your Wishlist is Empty" : "PLEASE LOG IN"}

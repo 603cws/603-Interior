@@ -1,11 +1,9 @@
 import { useEffect, useState } from "react";
 import { useApp } from "../../Context/Context";
 import Addon from "./Addon";
-import { toast, Slide } from "react-toastify";
 import { calculateAddonTotalPrice } from "../utils/productUtils";
 import { AddToCartToast } from "../../utils/AddToCartToast";
 import { categoriesWithTwoLevelCheck } from "../../constants/constant";
-import categoryConfig from "../../categoryConfig.json";
 
 function SelectArea({
   setShowSelectArea,
@@ -29,6 +27,7 @@ function SelectArea({
     handelSelectedData,
     productQuantity,
     setProductQuantity,
+    categoryConfig,
   } = useApp();
 
   const subCategories = selectedCategory.subcategories;
@@ -53,12 +52,12 @@ function SelectArea({
     if (!allAddons || allAddons.length === 0) setSubmitBtn(true);
   }, [allAddons]);
 
-  const botRight = () => {
-    toast.dark("Product Added", {
-      position: "bottom-right",
-      transition: Slide, // Change this to Zoom, Bounce, Flip for different effects
-    });
-  };
+  // const botRight = () => {
+  //   toast.dark("Product Added", {
+  //     position: "bottom-right",
+  //     transition: Slide, // Change this to Zoom, Bounce, Flip for different effects
+  //   });
+  // };
 
   const handleAddonClick = () => {
     setShowAddon(false);

@@ -1,6 +1,5 @@
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import LandingNavbar from "../common-components/LandingNavbar";
-import { motion, AnimatePresence } from "framer-motion";
 import { AnimatedButton } from "../common-components/animated-button";
 import { useNavigate } from "react-router-dom";
 import gsap from "gsap";
@@ -20,7 +19,7 @@ gsap.registerPlugin(ScrollTrigger);
 function Landing() {
   const navigate = useNavigate();
 
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  // const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const containerRef = useRef();
 
   useEffect(() => {
@@ -226,7 +225,11 @@ function Landing() {
           <div className="hidden lg:block absolute bottom-0 left-0 w-52 h-56 bg-[#1C3145]"></div>
           <div className="hidden lg:block absolute bottom-0 right-0 max-w-sm w-full h-12 bg-[#1C3145]"></div>
           <div className="hidden lg:block absolute bottom-0 left-1/2 translate-x-1/4 -z-10">
-            <img src="/images/home/dom.png" alt="" className="max-w-40" />
+            <img
+              src="/images/home/dom.png"
+              alt="decorative element"
+              className="max-w-40"
+            />
           </div>
           <div className="hidden absolute left-1/2 top-0 transform -translate-x-3 lg:grid grid-cols-6 gap-x-4 gap-y-2 pt-28 -z-10">
             {[...Array(36)].map((_, i) => (
@@ -311,28 +314,33 @@ function Landing() {
           <img
             src="/images/home/round-table.png"
             className="absolute top-10 w-44 2xl:h-52 h-44 2xl:w-52 round-table"
+            alt="round table"
           />
 
           {/* Rotating table */}
           <img
             src="/images/home/rotating-table.png"
             className="absolute top-[50%] w-44 2xl:h-52 h-44 2xl:w-52 rotating-table"
+            alt="rotating table"
           />
 
           {/* Top middle table */}
           <img
             src="/images/home/upper-table.png"
             className="absolute top-0 left-1/3 upper-table max-w-60 2xl:max-w-xs"
+            alt="upper table"
           />
 
           {/* Circles */}
           <img
             src="/images/home/circle.png"
             className="absolute right-10 top-10 circle h-14 2xl:h-[70px] w-14 2xl:w-[70px]"
+            alt="decorative circle element"
           />
           <img
             src="/images/home/circle.png"
             className="absolute right-10 bottom-10 circle  h-14 2xl:h-[70px] w-14 2xl:w-[70px]"
+            alt="decorative circle element"
           />
 
           {/* Interior text */}
@@ -342,7 +350,7 @@ function Landing() {
           </p>
 
           {/* Commercial text */}
-          <p className="absolute bottom-[10%]  text-5xl 2xl:text-7xl  commercial-text">
+          <p className="absolute bottom-[10%] text-5xl 2xl:text-7xl commercial-text">
             and commercial
           </p>
 
@@ -350,12 +358,14 @@ function Landing() {
           <img
             src="/images/home/down-table.png"
             className="absolute bottom-2 max-w-sm xl:max-w-2xl w-full down-table h-16"
+            alt="down table"
           />
 
           {/* Side middle table */}
           <img
             src="/images/home/table.png"
             className="absolute top-1/4 max-w-sm object-contain h-96 side-table"
+            alt="side table"
           />
 
           {/* Center final text */}

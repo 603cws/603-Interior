@@ -111,11 +111,7 @@ function BrandProductView() {
                 )}
               </div>
               <div className="max-w-xl">
-                <img
-                  src="/images/productviewsample1.jpg"
-                  className=""
-                  alt="product name "
-                />
+                <img src="/images/productviewsample1.jpg" alt="product name" />
               </div>
             </div>
           </div>
@@ -148,7 +144,7 @@ function BrandProductView() {
                 <div className="max-w-xs">
                   <img
                     src="/images/Edencolor.png"
-                    alt="color"
+                    alt="eden color"
                     className="w-full"
                   />
                 </div>
@@ -265,7 +261,7 @@ function Specifications() {
   return (
     <div className="flex p-5 flex-col justify-around items-center gap-6 border border-[#000] font-inter ">
       <div>
-        <img src="/images/articlecode.png" alt="articlecode" />
+        <img src="/images/articlecode.png" alt="article code" />
       </div>
       <h2 className="text-xs lg:leading-[12px] lg:tracking-[2.25px]">
         Article Code
@@ -318,7 +314,7 @@ function Card() {
       >
         <img
           src="/images/cabin chair.png"
-          alt="chair"
+          alt="cabin chair"
           className="h-40 lg:h-52 object-contain"
         />
         {/* <img src={product.image } alt="chair" className="h-52 object-contain" /> */}

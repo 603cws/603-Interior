@@ -313,7 +313,10 @@ function Products({
                       aria-haspopup="true"
                       aria-expanded={filterDropdown}
                     >
-                      <img src="/images/icons/filter-icon.png" alt="" />
+                      <img
+                        src="/images/icons/filter-icon.png"
+                        alt="filter icon"
+                      />
                       <span className="text-sm">Filter</span>
                       <ChevronDownIcon className="h-4 w-4 text-gray-500" />
                     </button>
@@ -441,7 +444,10 @@ function Products({
                       onClick={() => setFilterDropdown(!filterDropdown)}
                       className="h-10 w-10 flex justify-center items-center border rounded"
                     >
-                      <img src="/images/icons/filter-icon.png" alt="" />
+                      <img
+                        src="/images/icons/filter-icon.png"
+                        alt="filter icon"
+                      />
                       {/* <span className="text-sm">Filter</span> */}
                       {/* <ChevronDownIcon className="h-4 w-4 text-gray-500" /> */}
                     </button>

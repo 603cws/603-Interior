@@ -10,26 +10,26 @@ function BrandLight() {
           <div className="flex justify-center my-5">
             <img
               src="/images/brands/acco-led.png"
-              alt=""
+              alt="acco led"
               className="w-full md:w-3/4 lg:w-1/2"
             />
           </div>
           <div className="grid grid-cols-2 justify-items-center gap-3 md:gap-7 ">
             <img
               src="/images/brands/brand-light-1.png"
-              alt=""
+              alt="Brand Light 1"
               className="max-w-sm lg:max-w-[500px] w-full"
             />
             <img
               src="/images/brands/brand-light-2.png"
-              alt=""
+              alt="Brand Light 2"
               className="max-w-sm lg:max-w-[500px] w-full"
             />
           </div>
           <div className="h-[100vh] max-w-5xl mx-auto py-10">
             <img
               src="/images/brands/brand-light-3.png"
-              alt=""
+              alt="Brand Light 3"
               className="h-full w-full"
             />
           </div>
@@ -48,52 +48,52 @@ function BrandLight() {
         <section className="lg:container mx-auto px-4 grid grid-cols-2 justify-items-center gap-3 md:gap-7">
           <img
             src="/images/brands/brand-light-1.png"
-            alt=""
+            alt="brand light 1"
             className="max-w-sm lg:max-w-[500px] w-full"
           />{" "}
           <img
             src="/images/brands/brand-light-2.png"
-            alt=""
+            alt="brand light 2"
             className="max-w-sm lg:max-w-[500px] w-full"
           />{" "}
           <img
             src="/images/brands/brand-light-3.png"
-            alt=""
+            alt="brand light 3"
             className="max-w-sm lg:max-w-[500px] w-full"
           />{" "}
           <img
             src="/images/brands/brand-light-1.png"
-            alt=""
+            alt="brand light 1"
             className="max-w-sm lg:max-w-[500px] w-full"
           />{" "}
           <img
             src="/images/brands/brand-light-2.png"
-            alt=""
+            alt="brand light 2"
             className="max-w-sm lg:max-w-[500px] w-full"
           />{" "}
           <img
             src="/images/brands/brand-light-3.png"
-            alt=""
+            alt="brand light 3"
             className="max-w-sm lg:max-w-[500px] w-full"
           />{" "}
           <img
             src="/images/brands/brand-light-1.png"
-            alt=""
+            alt="brand light 1"
             className="max-w-sm lg:max-w-[500px] w-full"
           />{" "}
           <img
             src="/images/brands/brand-light-2.png"
-            alt=""
+            alt="brand light 2"
             className="max-w-sm lg:max-w-[500px] w-full"
           />
           <img
             src="/images/brands/brand-light-3.png"
-            alt=""
+            alt="brand light 3"
             className="max-w-sm lg:max-w-[500px] w-full"
           />{" "}
           <img
             src="/images/brands/brand-light-1.png"
-            alt=""
+            alt="brand light 1"
             className="max-w-sm lg:max-w-[500px] w-full"
           />
         </section>

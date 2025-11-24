@@ -5,7 +5,7 @@ function ProtectedRoute() {
         <div className="flex justify-center items-center mb-7">
           <img
             src="./images/something-went-wrong.png"
-            alt=""
+            alt="something went wrong image"
             className="max-w-sm"
           />
         </div>

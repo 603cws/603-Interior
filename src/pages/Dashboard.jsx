@@ -483,7 +483,7 @@ function Dashboard() {
                 ? "/logo/workved-interior.png"
                 : "/images/bi_layout-sidebar.png"
             }`}
-            alt="Logo"
+            alt="Workved Logo"
             className={`${isExpanded ? "h-[70px] w-36" : "h-8 w-8"}`}
             onClick={() => navigate("/")}
           />
@@ -565,7 +565,7 @@ function Dashboard() {
           <div className="mx-3">
             <img
               src="/logo/workved-interior.png"
-              alt="Logo"
+              alt="Workved Logo"
               className={`${isExpanded ? "h-20 w-32" : "h-9 w-16"}`}
               onClick={() => navigate("/")}
             />
@@ -805,7 +805,10 @@ function Dashboard() {
                         <button
                           onClick={() => setMobileFilterOPen(!mobileFilterOpen)}
                         >
-                          <img src="/images/icons/filter-icon.png" alt="" />
+                          <img
+                            src="/images/icons/filter-icon.png"
+                            alt="filter icon"
+                          />
                         </button>
                       </div>
                       {mobileFilterOpen && (

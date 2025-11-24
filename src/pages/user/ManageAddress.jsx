@@ -5,7 +5,7 @@ import { useApp } from "../../Context/Context";
 import { supabase } from "../../services/supabase";
 
 function ManageAddress() {
-  const { accountHolder, fetchUserData, isAuthenticated } = useApp();
+  const { accountHolder, fetchUserData } = useApp();
   const [errors, setErrors] = useState({});
   const [isAddressFormOpen, setIsAddressFormOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);

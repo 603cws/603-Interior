@@ -1,10 +1,6 @@
 import { useEffect, useState, useRef, useMemo } from "react";
 import { ToastContainer } from "react-toastify";
-import { TbArrowBackUp } from "react-icons/tb";
-import {
-  MdOutlineKeyboardArrowRight,
-  MdOutlineKeyboardArrowLeft,
-} from "react-icons/md"; //MdOutlineKeyboardArrowLeft
+import { MdOutlineKeyboardArrowLeft } from "react-icons/md"; //MdOutlineKeyboardArrowLeft
 import { normalizeKey } from "../utils/CalculateTotalPriceHelper";
 import SelectArea from "../components/SelectArea";
 import { useApp } from "../../Context/Context";

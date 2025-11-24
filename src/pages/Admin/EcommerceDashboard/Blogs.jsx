@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { supabase } from "../../../services/supabase";
 import NewBlog from "./NewBlog";
-import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
 import EditBlog from "./EditBlog";
 import PagInationNav from "../../../common-components/PagInationNav";
 

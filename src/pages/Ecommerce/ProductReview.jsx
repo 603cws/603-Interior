@@ -15,7 +15,7 @@ export default function ProductReview({ product, onClose }) {
   const [uploading, setUploading] = useState(false);
   const [isTnCchecked, setIsTnCchecked] = useState(false);
 
-  const { accountHolder, isAuthenticated } = useApp();
+  const { accountHolder } = useApp();
 
   const navigate = useNavigate();
   const uniqueID = uuidv4();
@@ -99,7 +99,7 @@ export default function ProductReview({ product, onClose }) {
       <div className="flex items-start gap-4 border p-3 lg:p-6 rounded-lg mb-6">
         <img
           src={product.image}
-          alt="Product"
+          alt={product.title}
           className="w-28 md:w-32 lg:w-40 h-28 md:h-32 lg:h-40 object-contain"
         />
         <p className="font-semibold text-sm md:text-base lg:text-lg font-Poppins line-clamp-4">
@@ -182,7 +182,7 @@ export default function ProductReview({ product, onClose }) {
         <div className="border p-4 rounded-lg mb-6 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mt-6">
           <img
             src="/images/ecommerce/icon.svg"
-            alt="icon image"
+            alt="icon"
             className="h-16 lg:h-auto w-16 lg:w-auto"
           />
           <div className="flex-1">

@@ -50,7 +50,7 @@ function LandingNavbar({ className }) {
         <div onClick={() => navigate("/")}>
           <img
             src="/logo/workved-interior.png"
-            alt=""
+            alt="company logo"
             className="h-[60px] w-[140px] cursor-pointer"
           />
         </div>
@@ -62,7 +62,7 @@ function LandingNavbar({ className }) {
           >
             <img
               src="/images/icons/calculator.png"
-              alt=""
+              alt="space calculator icon"
               className="h-8 w-8"
             />
             <p>space calculator</p>
@@ -72,7 +72,11 @@ function LandingNavbar({ className }) {
             onClick={() => setEnquiry(true)}
             className={`flex flex-col justify-center items-center gap-2 cursor-pointer relative after:content-[''] after:absolute after:left-0 after:bottom-[-2px] after:h-[1px] after:bg-[#FFC900] after:w-0 after:transition-all after:duration-300 hover:after:w-full`}
           >
-            <img src="/images/icons/enquiry.png" alt="" className="h-8 w-8" />
+            <img
+              src="/images/icons/enquiry.png"
+              alt="enquiry icon"
+              className="h-8 w-8"
+            />
             <p>enquiry</p>
           </div>
           {/* )} */}
@@ -99,7 +103,7 @@ function LandingNavbar({ className }) {
               >
                 <img
                   src="/images/icons/sign-in.png"
-                  alt=""
+                  alt="sign in icon"
                   className="h-8 w-8"
                 />
                 <p>log in</p>
@@ -114,7 +118,7 @@ function LandingNavbar({ className }) {
         <div onClick={() => navigate("/")}>
           <img
             src="/logo/workved-interior.png"
-            alt=""
+            alt="company logo"
             className="h-10 cursor-pointer"
           />
         </div>
@@ -150,7 +154,7 @@ function LandingNavbar({ className }) {
               <li onClick={() => navigate("/Layout")} className="flex gap-2">
                 <img
                   src="/images/icons/calculator.png"
-                  alt=""
+                  alt="space calculator icon"
                   className="h-5 w-5"
                 />{" "}
                 <span>space calculator</span>
@@ -164,7 +168,7 @@ function LandingNavbar({ className }) {
               >
                 <img
                   src="/images/icons/enquiry.png"
-                  alt=""
+                  alt="enquiry icon"
                   className="h-5 w-5"
                 />{" "}
                 <span>enquiry</span>
@@ -185,7 +189,7 @@ function LandingNavbar({ className }) {
                   >
                     <img
                       src="/images/icons/sign-in.png"
-                      alt=""
+                      alt="sign in icon"
                       className="h-5 w-5"
                     />{" "}
                     <span>log in</span>

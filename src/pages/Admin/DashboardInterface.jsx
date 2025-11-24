@@ -33,7 +33,7 @@ function Item({ title, img1, img2, navigateTo }) {
       className="flex flex-col border border-[#ccc] justify-center items-center gap-5 p-10 shadow-lg font-bold rounded-xl cursor-pointer hover:bg-[#374A75] hover:text-white hover:scale-110 transition-transform duration-200 ease-in-out"
       // className="flex flex-col justify-center items-center gap-5 p-10 shadow-[0_4px_10px_rgba(180,234,234,50)] font-bold rounded-xl cursor-pointer hover:bg-[#374A75] hover:text-white hover:scale-110 transition-transform duration-200 ease-in-out"
     >
-      <img src={isHovered ? img1 : img2} alt="item" className="w-28" />
+      <img src={isHovered ? img1 : img2} alt={title} className="w-28" />
       <h2 className="text-lg">{title}</h2>
     </div>
   );

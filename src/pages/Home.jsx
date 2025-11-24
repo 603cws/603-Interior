@@ -166,7 +166,10 @@ function Landing() {
       <section className="about-us container py-10">
         <div className="lg:flex gap-12">
           <div className="pb-6 lg:pb-0">
-            <img src="/images/home/section_1_main.png" alt="" />
+            <img
+              src="/images/home/section_1_main.png"
+              alt="home section main image"
+            />
           </div>
           <div className="space-y-2 flex-1">
             <div className="flex justify-normal items-center">
@@ -201,7 +204,10 @@ function Landing() {
               </div>
             </div>
             <div className="flex space-x-5">
-              <img src="/images/home/section_1_design.png" alt="" />
+              <img
+                src="/images/home/section_1_design.png"
+                alt="home section design image"
+              />
               <div className="space-y-3">
                 <p>
                   We are committed to the impeccable craftsmanship and luxury is
@@ -242,7 +248,10 @@ function Landing() {
           </h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 max-w-fit space-x-5 bg-white shadow-lg">
             <div className="font-lato space-y-7 px-3 py-5 max-w-64">
-              <img src="images/icons/architecture-icon.svg" alt="" />
+              <img
+                src="images/icons/architecture-icon.svg"
+                alt="architecture icon"
+              />
               <h4 className="font-bold text-xl capitalize">architecture</h4>
               <p>
                 We develop the full cycle of project documentation & full
@@ -255,7 +264,7 @@ function Landing() {
             <div className="font-lato px-3 py-5 max-w-64 bg-[url('/images/home/interior-work-bg.svg')] text-white relative">
               <div className="absolute inset-0 bg-black/50"></div>
               <div className="relative space-y-7">
-                <img src="images/icons/interior.svg" alt="" />
+                <img src="images/icons/interior.svg" alt="interior work icon" />
                 <h4 className="font-bold text-xl capitalize">Interior Work</h4>
                 <p>
                   We will take care of the interior designs, build & management
@@ -267,7 +276,7 @@ function Landing() {
               </div>
             </div>
             <div className="font-lato space-y-7 px-3 py-5 max-w-64">
-              <img src="images/icons/retail.svg" alt="" />
+              <img src="images/icons/retail.svg" alt="retail designs icon" />
               <h4 className="font-bold text-xl capitalize">Retail Designs</h4>
               <p>
                 We can help you with the retail interior design and third party
@@ -278,7 +287,10 @@ function Landing() {
               </button>
             </div>
             <div className="font-lato space-y-7 px-3 py-5 max-w-64">
-              <img src="images/icons/2d-3d_layout.svg" alt="" />
+              <img
+                src="images/icons/2d-3d_layout.svg"
+                alt="2d 3d layouts icon"
+              />
               <h4 className="font-bold text-xl capitalize">2D/3D Layouts</h4>
               <p>
                 We offer professional online 2D and 3D interior designing which
@@ -307,7 +319,7 @@ function Landing() {
         <div className="flex gap-8 justify-between">
           <div className="border-r-[16px] border-b-[16px] border-[#F7F7F7] max-w-sm space-y-5">
             <div>
-              <img src="/images/home/stars.svg" alt="" />
+              <img src="/images/home/stars.svg" alt="star rating" />
             </div>
             <p className="font-lato italic text-[#777777] ">
               I love everything that put together for my living room! I just
@@ -315,7 +327,10 @@ function Landing() {
               able to help me visualize the room”
             </p>
             <div className="flex">
-              <img src="images/home/testimonial-1.png" alt="" />
+              <img
+                src="images/home/testimonial-1.png"
+                alt="testimonial image"
+              />
               <div>
                 <h5 className="text-[#232323] font-bold font-lato">
                   Natalie Kameron
@@ -326,7 +341,7 @@ function Landing() {
           </div>
           <div className="border-r-[16px] border-b-[16px] border-[#F7F7F7] max-w-sm space-y-5">
             <div>
-              <img src="/images/home/stars.svg" alt="" />
+              <img src="/images/home/stars.svg" alt="star rating" />
             </div>
             <p className="font-lato italic text-[#777777] ">
               I love everything that put together for my living room! I just
@@ -334,7 +349,10 @@ function Landing() {
               able to help me visualize the room”
             </p>
             <div className="flex">
-              <img src="images/home/testimonial-1.png" alt="" />
+              <img
+                src="images/home/testimonial-1.png"
+                alt="testimonial image"
+              />
               <div>
                 <h5 className="text-[#232323] font-bold font-lato">
                   Natalie Kameron
@@ -345,7 +363,7 @@ function Landing() {
           </div>
           <div className="border-r-[16px] border-b-[16px] border-[#F7F7F7] max-w-sm space-y-5">
             <div>
-              <img src="/images/home/stars.svg" alt="" />
+              <img src="/images/home/stars.svg" alt="star rating" />
             </div>
             <p className="font-lato italic text-[#777777] ">
               I love everything that put together for my living room! I just
@@ -353,7 +371,10 @@ function Landing() {
               able to help me visualize the room”
             </p>
             <div className="flex">
-              <img src="images/home/testimonial-1.png" alt="" />
+              <img
+                src="images/home/testimonial-1.png"
+                alt="testimonial image"
+              />
               <div>
                 <h5 className="text-[#232323] font-bold font-lato">
                   Natalie Kameron
@@ -454,22 +475,22 @@ function Landing() {
           <div className="max-w-7xl flex justify-end gap-5">
             <img
               src="/images/home/featured-project-1.png"
-              alt=""
+              alt="featured project 1"
               className="max-w-xs"
             />
             <img
               src="/images/home/featured-project-2.png"
-              alt=""
+              alt="featured project 2"
               className="max-w-xs"
             />
             <img
               src="/images/home/featured-project-3.png"
-              alt=""
+              alt="featured project 3"
               className="max-w-xs"
             />
             <img
               src="/images/home/featured-project-4.png"
-              alt=""
+              alt="featured project 4"
               className="max-w-xs"
             />
           </div>
@@ -483,7 +504,7 @@ function Landing() {
             <div className="flex justify-center items-center gap-2.5">
               <img
                 src="/images/icons/creative-premium.svg"
-                alt=""
+                alt="creative premium icon"
                 className="h-14"
               />
               <h5 className="font-Poppins text-[#374A75] capitalize">
@@ -493,7 +514,7 @@ function Landing() {
             <div className="flex justify-center items-center gap-2.5">
               <img
                 src="/images/icons/office-interior.svg"
-                alt=""
+                alt="office interior icon"
                 className="h-14"
               />
               <h5 className="font-Poppins text-[#374A75] capitalize">
@@ -503,7 +524,7 @@ function Landing() {
             <div className="flex justify-center items-center gap-2.5">
               <img
                 src="/images/icons/comfort-furniture.svg"
-                alt=""
+                alt="comfort furniture icon"
                 className="h-14"
               />
               <h5 className="font-Poppins text-[#374A75] capitalize">
@@ -513,7 +534,7 @@ function Landing() {
             <div className="flex justify-center items-center gap-2.5">
               <img
                 src="/images/icons/remodeling-interior.svg"
-                alt=""
+                alt="remodeling interior icon"
                 className="h-14"
               />
               <h5 className="font-Poppins text-[#374A75] capitalize">
@@ -545,7 +566,7 @@ function Landing() {
           {latestArticles.map((article) => (
             <div className="max-w-sm">
               <div className="relative">
-                <img src={article.image} alt="blogoffice" />
+                <img src={article.image} alt={article.title} />
                 <div className="absolute  left-4 bottom-0 bg-white text-center px-3 py-1 shadow-md rounded-sm">
                   <div className="text-lg font-bold">{article.date}</div>
                   <div className="text-sm text-gray-500 -mt-1 uppercase">
@@ -607,7 +628,7 @@ function Landing() {
               <SwiperSlide key={index}>
                 <div className="max-w-sm">
                   <div className="relative">
-                    <img src={article.image} alt="blogoffice" />
+                    <img src={article.image} alt={article.title} />
                     <div className="absolute  left-4 bottom-0 bg-white text-center px-3 py-1 shadow-md rounded-sm">
                       <div className="text-lg font-bold">{article.date}</div>
                       <div className="text-sm text-gray-500 -mt-1 uppercase">

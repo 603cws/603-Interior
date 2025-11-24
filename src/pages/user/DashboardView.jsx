@@ -362,7 +362,7 @@ function LayoutInfoCard({ selectedBoq, value, title, image, spanvalue }) {
       <div className="flex-1 flex justify-center items-center">
         <img
           src={image}
-          alt=" dashboard layout "
+          alt={title}
           className="w-[45px] h-[45px] xl:w-[60px] xl:h-[60px]"
         />
       </div>

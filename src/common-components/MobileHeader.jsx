@@ -1,6 +1,5 @@
 import { BsCart2 } from "react-icons/bs";
 import { FaRegUser } from "react-icons/fa6";
-import { GoHeart } from "react-icons/go";
 import { MdOutlineKeyboardArrowLeft } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import { useApp } from "../Context/Context";
@@ -8,8 +7,7 @@ import { useApp } from "../Context/Context";
 function MobileHeader({ title, iscartshown = false }) {
   const navigate = useNavigate();
 
-  const { isAuthenticated, cartItems, wishlistItems, localcartItems } =
-    useApp();
+  const { isAuthenticated, cartItems, localcartItems } = useApp();
   return (
     <>
       {!iscartshown && (

@@ -23,7 +23,6 @@ import { isCouponValid } from "../../utils/ResuableFunctions";
 import AppliedCoupon from "../../common-components/AppliedCoupon";
 import { MdOutlineCancel } from "react-icons/md";
 import { useHandleAddToCart } from "../../utils/HelperFunction";
-import { baseImageUrl } from "../../utils/HelperConstant";
 
 function EmptyCart() {
   const navigate = useNavigate();
@@ -66,7 +65,7 @@ function EmptyCart() {
 }
 
 function Cart() {
-  const [wishListed, setWishListed] = useState(false);
+  // const [wishListed, setWishListed] = useState(false);
   const [showClearCartPopup, setShowClearCartPopup] = useState(false);
 
   const navigate = useNavigate();
@@ -1161,7 +1160,7 @@ function CartCard({ cartitem }) {
       <div className="flex items-center gap-2 lg:border border-[#CCCCCC] rounded-lg relative py-2">
         <img
           src={signedUrl}
-          alt=""
+          alt="cart"
           className="w-24 h-24 md:h-32 md:w-28 lg:h-40 lg:w-36 object-contain "
           onClick={() => navigate(`/productview/${cartitem.productId?.id}`)}
           onError={refreshSignedUrl}

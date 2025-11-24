@@ -350,7 +350,7 @@ function FeatureDesignSection() {
         >
           {featuredDesignImages.map((product, index) => (
             <SwiperSlide key={index}>
-              <img src={product?.img} />
+              <img src={product?.img} alt={`Featured design ${index + 1}`} />
             </SwiperSlide>
           ))}
         </Swiper>
