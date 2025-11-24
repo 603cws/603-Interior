@@ -436,7 +436,7 @@ function Products() {
         viewBox="0 0 80 80"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
-        className="h-12 w-12 hover:animate-bounce
+        className="h-12 w-12 group relative
         "
       >
         <path
@@ -444,24 +444,28 @@ function Products() {
           // fill="#374A75"
           // fill={checkIfCategoryCompleted("Furniture") ? "#fff" : "#374A75"}
           fill={getCategoryFill("Furniture", selectedCategory)}
+          className="group-hover:animate-bounceY"
         />
         <path
           d="M20.4562 59.4753C20.0567 61.1154 19.7426 62.7139 19.2707 64.2587C18.7477 65.9703 16.9972 66.8524 15.3574 66.3701C13.7313 65.8921 12.7389 64.1402 13.0885 62.311C13.2457 61.4885 13.4649 60.6792 13.6555 59.8637C13.7129 59.6181 13.789 59.462 14.0997 59.4649C16.193 59.4847 18.2867 59.4753 20.4562 59.4753Z"
           // fill="#374A75"
           // fill={checkIfCategoryCompleted("Furniture") ? "#fff" : "#374A75"}
           fill={getCategoryFill("Furniture", selectedCategory)}
+          className="group-hover:animate-bounceY"
         />
         <path
           d="M59.5508 59.4733C61.7386 59.4733 63.8322 59.4835 65.9257 59.4629C66.2573 59.4597 66.2935 59.6631 66.3484 59.889C66.5401 60.6793 66.7452 61.467 66.9055 62.2648C67.2836 64.1456 66.2361 65.9653 64.5518 66.3917C62.7694 66.8429 61.1118 65.8075 60.6154 63.8927C60.2439 62.4601 59.9201 61.0138 59.5508 59.4733Z"
           // fill="#374A75"
           // fill={checkIfCategoryCompleted("Furniture") ? "#fff" : "#374A75"}
           fill={getCategoryFill("Furniture", selectedCategory)}
+          className="group-hover:animate-bounceY"
         />
         <path
           d="M39.6579 14.0017C46.0148 14.0017 52.3716 13.9987 58.7285 14.0029C63.0764 14.0056 66.506 16.55 67.8031 20.6854C68.4283 22.6785 68.272 24.6655 67.8908 26.669C67.837 26.9523 67.6716 27.006 67.4752 27.0604C63.7688 28.0856 61.8294 30.7223 61.1849 34.6196C60.7507 37.2453 60.2124 39.8519 59.7018 42.463C59.4576 43.7118 58.7477 44.3232 57.5417 44.3239C45.8534 44.3295 34.1648 44.3295 22.4764 44.3243C21.2335 44.3237 20.5432 43.7233 20.2859 42.4137C19.6945 39.4033 19.163 36.3794 18.5344 33.3781C17.8197 29.9658 15.1966 27.4542 11.9371 26.9528C11.6574 26.9099 11.459 26.8735 11.3538 26.5037C9.85312 21.238 12.8296 15.6476 17.8775 14.3012C18.7645 14.0646 19.6728 13.9996 20.5872 14C26.9441 14.0031 33.301 14.0015 39.6579 14.0017Z"
           // fill="#374A75"
           // fill={checkIfCategoryCompleted("Furniture") ? "#fff" : "#374A75"}
           fill={getCategoryFill("Furniture", selectedCategory)}
+          className="group-hover:animate-bounceY"
         />
       </svg>
     ),
@@ -958,12 +962,12 @@ function Products() {
           )}
           <div
             ref={scrollRef}
-            className="flex cat-scroll overflow-x-auto scrollbar-hide items-center justify-around gap-6 md:px-10"
+            className="flex cat-scroll overflow-x-auto scrollbar-hide items-center justify-around gap-6 md:px-10 "
           >
             {Object.entries(categorySvgMap).map(([catName, icon]) => (
               <div
                 key={catName}
-                className="flex flex-col lg:justify-center lg:items-center gap-3 cursor-pointer"
+                className="flex flex-col lg:justify-center lg:items-center gap-3 cursor-pointer group"
                 onClick={() => filterByCategory(catName)}
               >
                 <div
@@ -995,6 +999,11 @@ function Products() {
             {/* <Link to={`${encodeURIComponent(selectedCategory)}`}>view all</Link> */}
           </div>
           <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-5">
+            {categoryProducts.length === 0 && (
+              <p className="text-center col-span-full">
+                No products found in {selectedCategory} category.
+              </p>
+            )}
             {categoryProducts.slice(0, 10).map((product) => (
               <Card key={product.id} product={product} />
             ))}

@@ -905,6 +905,9 @@ function ShopProducts() {
                 </div>
               </div>
               {/* display of products */}
+              {currentItems.length === 0 && (
+                <p className="text-center">No products found</p>
+              )}
               <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-5 gap-4">
                 {currentItems.map((product, index) => (
                   <div key={index}>
@@ -978,8 +981,9 @@ function Card({ product }) {
       setIsCarted(check);
     }
   }, [isAuthenticated, cartItems, localcartItems, product?.id]);
+
   return (
-    <div className="font-TimesNewRoman max-w-sm max-h-sm  border border-[#ccc]">
+    <div className="font-TimesNewRoman max-w-sm max-h-sm border border-[#ccc]">
       <div
         onClick={() =>
           naviagte(`/productview/${product.id}`, { state: { from: "shop" } })
@@ -994,7 +998,7 @@ function Card({ product }) {
       </div>
       <div className="bg-[#fff] p-2">
         <div className="flex flex-col md:flex-row ">
-          <div className="flex-1 text-sm  leading-[22.4px]  text-[#111] ">
+          <div className="flex-1 text-sm leading-[22.4px] text-[#111]">
             <h4
               title={product?.title}
               className="font-medium text-sm leading-[22.4px] line-clamp-1"
@@ -1026,7 +1030,7 @@ function Card({ product }) {
           <button
             onClick={() => handleAddToCart(product, iscarted)}
             // disabled={iscarted}
-            className="text-[#000] uppercase bg-[#FFFFFF] text-xs border border-[#ccc] px-2  py-2 rounded-sm "
+            className="text-[#000] uppercase bg-[#FFFFFF] text-xs border border-[#ccc] px-2 py-2 rounded-sm "
           >
             {iscarted ? "Go to cart" : "Add to cart"}{" "}
           </button>
