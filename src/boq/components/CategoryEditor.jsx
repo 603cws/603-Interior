@@ -61,10 +61,8 @@ export default function CategoryEditor() {
 
   const handleAddCategory = () => {
     const newCat = prompt("Enter new category name");
-    console.log("bbssbs");
 
     if (newCat && newCat.trim()) {
-      console.log("added cat");
       if (categoryConfig[newCat.trim()]) {
         alert("Category already exists.");
         return;

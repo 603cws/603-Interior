@@ -155,7 +155,6 @@ export const AppProvider = ({ children }) => {
         .from("category_config")
         .select("config_data");
 
-      console.log(data);
       if (error) {
         console.error(error);
       } else {
