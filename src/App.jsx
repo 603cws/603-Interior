@@ -71,6 +71,7 @@ import OrderConfirm from "./pages/Ecommerce/OrderConfirm";
 import AdminDashboardEcom from "./pages/Admin/EcommerceDashboard/AdminDashboardEcom";
 import DashboardInterface from "./pages/Admin/DashboardInterface";
 import YouMayAlsoLike from "./pages/Ecommerce/YouMayAlsoLike";
+import DynamicTitle from "./common-components/DynamicTitle";
 
 const Home = lazy(() => import("./pages/Home"));
 
@@ -91,6 +92,7 @@ function App() {
   return (
     <div>
       <ScrollToTop />
+      <DynamicTitle />
       {/* <Layout /> */}
       {/* <Boq /> */}
       <Suspense fallback={<SpinnerFullPage />}>

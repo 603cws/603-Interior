@@ -71,7 +71,20 @@ function ProductCard({
         return product.subcategory1 === selectedSubCategory1;
       }
     })
-    .flatMap((product) => product.product_variants || []);
+    .flatMap((product) =>
+      (product.product_variants || []).map((variant) => ({
+        // keep all existing variant fields
+        ...variant,
+        // add the parent product's fields you want
+        category: product.category,
+        subcategory: product.subcategory
+          ? product.subcategory.split(",").map((s) => s.trim())
+          : [],
+        subcategory1: product.subcategory1,
+        // optional: keep original product id too if you need it
+        product_id: product.id || variant.product_id || product.product_id,
+      }))
+    );
 
   // Now filter variants based on the selected plan.
   // If the plan is "Custom", show all variants. Otherwise, only show variants whose segment matches the selected plan.

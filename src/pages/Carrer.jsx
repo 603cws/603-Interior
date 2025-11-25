@@ -1,11 +1,9 @@
 import Footer from "../common-components/Footer";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { FaLocationDot } from "react-icons/fa6";
 import { HiClock } from "react-icons/hi2";
 import { IoIosArrowForward } from "react-icons/io";
-import jobListings from "../utils/jobData";
 import { IoCalendarSharp } from "react-icons/io5";
-import { motion } from "framer-motion";
 import LandingNavbar from "../common-components/LandingNavbar";
 import { useEffect, useState } from "react";
 import { supabase } from "../services/supabase";

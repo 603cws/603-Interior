@@ -30,7 +30,8 @@ function SelectArea({
     categoryConfig,
   } = useApp();
 
-  const subCategories = selectedCategory.subcategories;
+  // const subCategories = selectedCategory.subcategories;
+  const subCategories = selectedProductView.subcategory;
 
   const [showAddon, setShowAddon] = useState(false);
   const [allSubcategories, setAllSubcategories] = useState([]);
@@ -392,7 +393,8 @@ function SelectArea({
 
   const handleSelectAll = (checked) => {
     // Expand the list first (so Md Cabin → Main + Visitor)
-    let displayedSubCategories = selectedCategory.subcategories.flatMap(
+    //  let displayedSubCategories = selectedCategory.subcategories.flatMap(
+    let displayedSubCategories = selectedProductView.subcategory.flatMap(
       (subCategory) => {
         if (
           selectedCategory.category === "Furniture" &&
@@ -443,7 +445,8 @@ function SelectArea({
       setSelectedAreas(selectable);
     } else {
       // Get the expanded list first
-      let displayedSubCategories = selectedCategory.subcategories.flatMap(
+      // let displayedSubCategories = selectedCategory.subcategories.flatMap(
+      let displayedSubCategories = selectedProductView.subcategory.flatMap(
         (subCategory) => {
           if (
             selectedCategory.category === "Furniture" &&
@@ -481,7 +484,8 @@ function SelectArea({
     }
   };
 
-  const displayedSubCategories = selectedCategory.subcategories.flatMap(
+  // const displayedSubCategories = selectedCategory.subcategories.flatMap(
+  const displayedSubCategories = selectedProductView.subcategory.flatMap(
     (subCategory) => {
       if (
         selectedCategory.category === "Furniture" &&
@@ -644,7 +648,8 @@ function SelectArea({
               <div className="flex flex-col lg:flex-row justify-between gap-8">
                 {/* Subcategories Checkbox List */}
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-                  {selectedCategory.subcategories
+                  {/* {selectedCategory.subcategories */}
+                  {selectedProductView.subcategory
                     ?.filter((subCategory) => {
                       // For HVAC, handle centralized logic
                       if (selectedCategory.category === "HVAC") {

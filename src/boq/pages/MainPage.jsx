@@ -103,12 +103,6 @@ const MainPage = ({ userResponses, setSelectedSubCategory1, productsData }) => {
   //     : [];
 
   let selectedSubCategories = [];
-  console.log(
-    subCat1,
-    selectedCategory,
-    selectedSubCategory1,
-    selectedSubCategory
-  );
 
   if (subCat1 && subCat1[selectedCategory?.category]) {
     switch (selectedCategory.category) {
