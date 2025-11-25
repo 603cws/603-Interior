@@ -31,7 +31,7 @@ function SelectArea({
   } = useApp();
 
   // const subCategories = selectedCategory.subcategories;
-  const subCategories = selectedProductView.subcategory;
+  const subCategories = selectedProductView?.subcategory;
 
   const [showAddon, setShowAddon] = useState(false);
   const [allSubcategories, setAllSubcategories] = useState([]);
@@ -394,7 +394,7 @@ function SelectArea({
   const handleSelectAll = (checked) => {
     // Expand the list first (so Md Cabin → Main + Visitor)
     //  let displayedSubCategories = selectedCategory.subcategories.flatMap(
-    let displayedSubCategories = selectedProductView.subcategory.flatMap(
+    let displayedSubCategories = selectedProductView?.subcategory.flatMap(
       (subCategory) => {
         if (
           selectedCategory.category === "Furniture" &&
@@ -446,7 +446,7 @@ function SelectArea({
     } else {
       // Get the expanded list first
       // let displayedSubCategories = selectedCategory.subcategories.flatMap(
-      let displayedSubCategories = selectedProductView.subcategory.flatMap(
+      let displayedSubCategories = selectedProductView?.subcategory.flatMap(
         (subCategory) => {
           if (
             selectedCategory.category === "Furniture" &&
@@ -485,7 +485,7 @@ function SelectArea({
   };
 
   // const displayedSubCategories = selectedCategory.subcategories.flatMap(
-  const displayedSubCategories = selectedProductView.subcategory.flatMap(
+  const displayedSubCategories = selectedProductView?.subcategory.flatMap(
     (subCategory) => {
       if (
         selectedCategory.category === "Furniture" &&
@@ -649,7 +649,7 @@ function SelectArea({
                 {/* Subcategories Checkbox List */}
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
                   {/* {selectedCategory.subcategories */}
-                  {selectedProductView.subcategory
+                  {selectedProductView?.subcategory
                     ?.filter((subCategory) => {
                       // For HVAC, handle centralized logic
                       if (selectedCategory.category === "HVAC") {
