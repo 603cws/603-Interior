@@ -31,7 +31,7 @@ function SelectArea({
   } = useApp();
 
   // const subCategories = selectedCategory.subcategories;
-  const subCategories = selectedProductView?.subcategory;
+  // const subCategories = selectedProductView?.subcategory;
 
   const [showAddon, setShowAddon] = useState(false);
   const [allSubcategories, setAllSubcategories] = useState([]);
@@ -39,6 +39,7 @@ function SelectArea({
   const [selectedAddons, setSelectedAddons] = useState([]);
   const [submitBtn, setSubmitBtn] = useState(false);
   const [selectedAddonsMap, setSelectedAddonsMap] = useState({});
+  const [commonSubcategories, setCommonSubcategories] = useState([]);
 
   // Fetch existing addons whenever `selectedData` changes
   useEffect(() => {
@@ -59,6 +60,13 @@ function SelectArea({
   //     transition: Slide, // Change this to Zoom, Bounce, Flip for different effects
   //   });
   // };
+  useEffect(() => {
+    const common = selectedProductView.subcategory.filter((item) =>
+      selectedCategory.subcategories.includes(item)
+    );
+    setCommonSubcategories(common);
+  }, [selectedCategory, selectedProductView]);
+  const subCategories = commonSubcategories;
 
   const handleAddonClick = () => {
     setShowAddon(false);
@@ -394,25 +402,23 @@ function SelectArea({
   const handleSelectAll = (checked) => {
     // Expand the list first (so Md Cabin → Main + Visitor)
     //  let displayedSubCategories = selectedCategory.subcategories.flatMap(
-    let displayedSubCategories = selectedProductView?.subcategory.flatMap(
-      (subCategory) => {
-        if (
-          selectedCategory.category === "Furniture" &&
-          selectedSubCategory1 === "Chair" &&
-          subCategory === "Md Cabin"
-        ) {
-          return ["Md Cabin Main", "Md Cabin Visitor"];
-        }
-        if (
-          selectedCategory.category === "Furniture" &&
-          selectedSubCategory1 === "Chair" &&
-          subCategory === "Manager Cabin"
-        ) {
-          return ["Manager Cabin Main", "Manager Cabin Visitor"];
-        }
-        return [subCategory];
+    let displayedSubCategories = commonSubcategories.flatMap((subCategory) => {
+      if (
+        selectedCategory.category === "Furniture" &&
+        selectedSubCategory1 === "Chair" &&
+        subCategory === "Md Cabin"
+      ) {
+        return ["Md Cabin Main", "Md Cabin Visitor"];
       }
-    );
+      if (
+        selectedCategory.category === "Furniture" &&
+        selectedSubCategory1 === "Chair" &&
+        subCategory === "Manager Cabin"
+      ) {
+        return ["Manager Cabin Main", "Manager Cabin Visitor"];
+      }
+      return [subCategory];
+    });
 
     if (checked) {
       const selectable = displayedSubCategories.filter((subCategory) => {
@@ -446,7 +452,7 @@ function SelectArea({
     } else {
       // Get the expanded list first
       // let displayedSubCategories = selectedCategory.subcategories.flatMap(
-      let displayedSubCategories = selectedProductView?.subcategory.flatMap(
+      let displayedSubCategories = commonSubcategories.flatMap(
         (subCategory) => {
           if (
             selectedCategory.category === "Furniture" &&
@@ -485,25 +491,23 @@ function SelectArea({
   };
 
   // const displayedSubCategories = selectedCategory.subcategories.flatMap(
-  const displayedSubCategories = selectedProductView?.subcategory.flatMap(
-    (subCategory) => {
-      if (
-        selectedCategory.category === "Furniture" &&
-        selectedSubCategory1 === "Chair" &&
-        subCategory === "Md Cabin"
-      ) {
-        return ["Md Cabin Main", "Md Cabin Visitor"];
-      }
-      if (
-        selectedCategory.category === "Furniture" &&
-        selectedSubCategory1 === "Chair" &&
-        subCategory === "Manager Cabin"
-      ) {
-        return ["Manager Cabin Main", "Manager Cabin Visitor"];
-      }
-      return [subCategory];
+  const displayedSubCategories = commonSubcategories.flatMap((subCategory) => {
+    if (
+      selectedCategory.category === "Furniture" &&
+      selectedSubCategory1 === "Chair" &&
+      subCategory === "Md Cabin"
+    ) {
+      return ["Md Cabin Main", "Md Cabin Visitor"];
     }
-  );
+    if (
+      selectedCategory.category === "Furniture" &&
+      selectedSubCategory1 === "Chair" &&
+      subCategory === "Manager Cabin"
+    ) {
+      return ["Manager Cabin Main", "Manager Cabin Visitor"];
+    }
+    return [subCategory];
+  });
 
   const allSubcategoriesDisabled = displayedSubCategories
     .filter((subCategory) => {
@@ -649,7 +653,7 @@ function SelectArea({
                 {/* Subcategories Checkbox List */}
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
                   {/* {selectedCategory.subcategories */}
-                  {selectedProductView?.subcategory
+                  {commonSubcategories
                     ?.filter((subCategory) => {
                       // For HVAC, handle centralized logic
                       if (selectedCategory.category === "HVAC") {
