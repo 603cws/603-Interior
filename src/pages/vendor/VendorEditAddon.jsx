@@ -262,14 +262,14 @@ function VendorEditAddon({
         .update({
           addonid: addonId,
           title: addon?.title,
-          price: addon?.price,
+          price: +addon?.price,
           image: addon.image,
           vendorId: addon?.vendorId,
           category: category,
           specifications: subSubCategory,
           dimensions: addon?.dimension,
           productDisplayType: displayOption,
-          stockQty: addon.quantity || 0,
+          stockQty: +addon.quantity || 0,
           ecommercePrice: {
             mrp: addon.mrp,
             sellingPrice: addon.sellingPrice,

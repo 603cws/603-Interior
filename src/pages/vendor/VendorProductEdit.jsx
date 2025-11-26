@@ -418,7 +418,7 @@ function VendorProductEdit({
         .from("product_variants")
         .update({
           title: variant.title,
-          price: variant.price,
+          price: +variant.price,
           details: variant.details,
           image: imagepath, // Store the main image path
           additional_images: useradditionalimages, // Store paths of additional images
@@ -429,7 +429,7 @@ function VendorProductEdit({
           product_id: productId,
           status: "pending",
           productDisplayType: displayOption,
-          stockQty: variant.quantity,
+          stockQty: +variant.quantity,
           ecommercePrice: {
             mrp: variant.mrp,
             sellingPrice: variant.sellingPrice,

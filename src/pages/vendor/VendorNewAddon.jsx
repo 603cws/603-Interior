@@ -233,14 +233,14 @@ function VendorNewAddon({
           .insert({
             addonid: addonId,
             title,
-            price,
+            price: +price,
             image: addonVariantImage.path,
             vendorId: accountHolder.userId,
             category: category,
             specifications: subSubCategory,
             dimensions: addon?.dimension,
             productDisplayType: displayOption,
-            stockQty: addon.quantity || 0,
+            stockQty: +addon.quantity || 0,
             ecommercePrice: {
               mrp: addon.mrp,
               sellingPrice: addon.sellingPrice,
