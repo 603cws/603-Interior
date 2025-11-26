@@ -1149,7 +1149,7 @@ function AdminDashboard() {
                 />
               ) : (
                 // Default product list and add product UI
-                <>
+                <div className="relative">
                   <div className="sticky top-0 z-20 bg-white">
                     <div className="hidden lg:flex justify-between items-center px-4 py-2 border-b-2 border-b-gray-400 ">
                       <h3 className=" capitalize font-semibold text-xl ">
@@ -1700,7 +1700,7 @@ function AdminDashboard() {
                     currentPage={currentPage}
                     handlePageChange={goToPage}
                   />
-                </>
+                </div>
               )}
             </div>
             {selectSubcategories && (

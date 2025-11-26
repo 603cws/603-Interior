@@ -3,7 +3,7 @@ import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
 function PagInationNav({ totalPages, currentPage, handlePageChange }) {
   if (totalPages <= 1) return null;
   return (
-    <div className="flex justify-center items-center my-2 px-4 space-x-1">
+    <div className="flex justify-center items-center py-2 px-4 space-x-1 sticky bottom-0 bg-white">
       <div className="flex border border-[#CCCCCC] rounded-lg px-3 py-2">
         {/* Previous */}
         <button
