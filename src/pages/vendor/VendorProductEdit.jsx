@@ -257,6 +257,10 @@ function VendorProductEdit({
     // setResources(filtered);
   }, [category, AllCatArray]);
 
+  const cleanTitle = (str) => {
+    return str.replace(/[^a-zA-Z0-9 ]/g, "");
+  };
+
   const onSubmit = async (e) => {
     e.preventDefault();
 
@@ -336,9 +340,10 @@ function VendorProductEdit({
         productId = variant.product_id;
       }
       if (variant.title && variant.price && file) {
+        let cleanedTitle = cleanTitle(variant.title);
         const oldImagePath = selectedproduct?.image;
         // const uniqueID = uuidv4();
-        const newImagePath = `${variant.title}-main-${uniqueID}`;
+        const newImagePath = `${cleanedTitle}-main-${uniqueID}`;
         console.log("oldImagePath", oldImagePath);
         console.log("newImagePath", newImagePath);
 
@@ -393,7 +398,8 @@ function VendorProductEdit({
 
       for (const imageFile of filebasedadditionalimages) {
         const fileUuid = uuidv4();
-        const filePath = `${variant.title}-additional-${currentIndex}-${fileUuid}`;
+        let cleanedTitle = cleanTitle(variant.title);
+        const filePath = `${cleanedTitle}-additional-${currentIndex}-${fileUuid}`;
 
         const { data: additionalImageUpload, error: additionalImageError } =
           await supabase.storage.from("addon").upload(filePath, imageFile.file);

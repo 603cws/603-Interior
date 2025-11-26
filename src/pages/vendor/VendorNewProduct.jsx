@@ -176,6 +176,10 @@ function VendorNewProduct({
     setResources(filtered);
   }, [category]);
 
+  const cleanTitle = (str) => {
+    return str.replace(/[^a-zA-Z0-9 ]/g, "");
+  };
+
   const onSubmit = async (e) => {
     e.preventDefault();
 
@@ -243,25 +247,25 @@ function VendorNewProduct({
         (variant.price || variant.mrp) &&
         variant.mainImage
       ) {
+        let cleanedTitle = cleanTitle(variant.title);
         // Upload the main image to Supabase storage
         const { data: mainImageUpload } = await supabase.storage
           .from("addon")
-          .upload(`${variant.title}-main-${productId}`, variant.mainImage);
-
+          .upload(`${cleanedTitle}-main-${productId}`, variant.mainImage);
         // if (mainImageError) {
         //   console.error(mainImageError);
         //   toast.error(
         //     `Error uploading main image for variant: ${variant.title}`
         //   );
         // }
-
+        console.log(mainImageUpload);
         // Upload additional images
         const additionalImagePaths = [];
         for (const [index, imageFile] of variant.additionalImages.entries()) {
           const { data: additionalImageUpload } = await supabase.storage
             .from("addon")
             .upload(
-              `${variant.title}-additional-${index}-${productId}`,
+              `${cleanedTitle}-additional-${index}-${productId}`,
               imageFile.file
             );
 
@@ -274,6 +278,8 @@ function VendorNewProduct({
           //   );
           //   continue;
           // }
+          console.log(additionalImagePaths);
+
           additionalImagePaths.push(additionalImageUpload.path);
         }
 
@@ -414,7 +420,7 @@ function VendorNewProduct({
       width: "",
     });
     setDisplayOption("");
-    removeFile();
+    // removeFile();
   };
 
   const handlecategorychange = (e) => {
