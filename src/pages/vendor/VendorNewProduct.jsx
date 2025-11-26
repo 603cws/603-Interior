@@ -283,7 +283,7 @@ function VendorNewProduct({
           .insert({
             product_id: productId,
             title: variant.title,
-            price: variant.price || 0,
+            price: +variant.price || 0,
             details: variant.details,
             image: mainImageUpload.path, // Store the main image path
             additional_images: additionalImagePaths, // Store paths of additional images
@@ -293,7 +293,7 @@ function VendorNewProduct({
             vendor_id: accountHolder.userId, // Store vendor ID
             product_type: subSubCategory,
             productDisplayType: displayOption,
-            stockQty: variant.quantity || 0,
+            stockQty: +variant.quantity || 0,
             ecommercePrice: {
               mrp: variant.mrp,
               sellingPrice: variant.sellingPrice,
