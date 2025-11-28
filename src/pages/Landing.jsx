@@ -206,9 +206,9 @@ function Landing() {
       <>
         <div className="flex justify-center items-center gap-2">
           <span className="w-8 h-px bg-[#374A75] "></span>
-          <h4 className="uppercase text-[#374A75] font-bold text-[13px] tracking-wide font-Georgia">
+          <h2 className="uppercase text-[#374A75] font-bold text-[13px] tracking-wide font-Georgia">
             {title}
-          </h4>
+          </h2>
           <span className="w-8 h-px bg-[#374A75] "></span>
         </div>
       </>

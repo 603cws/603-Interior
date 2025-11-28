@@ -18,13 +18,13 @@ export default {
         Poppins: ["Poppins", "sans-serif"],
         Raleway: ["Raleway"],
         Convergence: ["Convergence"],
-        zcool: ['"ZCOOL KuaiLe"', "cursive"],
+        // zcool: ['"ZCOOL KuaiLe"', "cursive"],
         sans: ["DM Sans", "sans-serif"],
         montaga: ["Montaga", "serif"],
         montserratAlt: ["Montserrat Alternates", "sans-serif"],
         lora: ["Lora", "serif"], // Add Lora font with a fallback
         lato: ["Lato", "sans-serif"], // Add Lato font with a fallback
-        lexend: ["Lexend Deca", "sans-serif"], // Add Lexend Deca with a fallback
+        // lexend: ["Lexend Deca", "sans-serif"], // Add Lexend Deca with a fallback
         inter: ["Inter", "sans-serif"],
         vampiroOne: ["Vampiro One", "cursive"],
         TimesNewRoman: ["times-new-roman", "sans-serif"],
