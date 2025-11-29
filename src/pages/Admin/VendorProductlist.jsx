@@ -140,6 +140,31 @@ function VendorProductlist({
     }
   };
 
+  const dropdownRef = useRef(null);
+
+  useEffect(() => {
+    if (!filterDropdown) return;
+
+    const onDocClick = (e) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        setFilterDropdown(false);
+      }
+    };
+
+    const onKey = (e) => {
+      if (e.key === "Escape") setFilterDropdown(false);
+    };
+
+    document.addEventListener("mousedown", onDocClick);
+    document.addEventListener("touchstart", onDocClick);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("mousedown", onDocClick);
+      document.removeEventListener("touchstart", onDocClick);
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [filterDropdown]);
+
   useEffect(() => {
     const handleClickOutside = (event) => {
       // If clicking inside the menu OR the menu button, do nothing
@@ -542,7 +567,7 @@ function VendorProductlist({
                   </div>
                 )} */}
 
-                <div className="relative inline-block">
+                <div className="relative inline-block" ref={dropdownRef}>
                   {/* Filter Button */}
                   <button
                     onClick={() => setFilterDropdown(!filterDropdown)}

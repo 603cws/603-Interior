@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef, useReducer } from "react";
+import { useEffect, useState, useRef, useReducer, useMemo } from "react";
 import { RiDashboardFill, RiFormula, RiSettingsLine } from "react-icons/ri";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useApp } from "../../Context/Context";
@@ -27,7 +27,12 @@ import DashboardProductCard from "../vendor/DashboardProductCard";
 import DashboardCards from "./DashboardCards";
 import DashboardInbox from "./DashboardInbox";
 import CreateUser from "./CreateUser";
-import { HiXMark } from "react-icons/hi2";
+import {
+  HiArrowsUpDown,
+  HiBarsArrowDown,
+  HiBarsArrowUp,
+  HiXMark,
+} from "react-icons/hi2";
 import { MdDeleteOutline } from "react-icons/md";
 // import { FaUserPlus } from "react-icons/fa6";
 import { TbCalculator, TbCalendarStats } from "react-icons/tb";
@@ -197,6 +202,14 @@ function AdminDashboard() {
   const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
   const [selected, setSelected] = useState("");
 
+  const [priceMin, setPriceMin] = useState("");
+  const [priceMax, setPriceMax] = useState("");
+  const [dateFrom, setDateFrom] = useState("");
+  const [dateTo, setDateTo] = useState("");
+
+  const [sortField, setSortField] = useState(""); // e.g. "price" or "title" etc.
+  const [sortOrder, setSortOrder] = useState("asc"); // "asc" or "desc"
+
   const [selectSubcategories, setSelectSubcategories] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
 
@@ -206,17 +219,33 @@ function AdminDashboard() {
     category = "",
     status = "",
     subCategory = "",
+    priceMin = "",
+    priceMax = "",
+    dateFrom = "",
+    dateTo = "",
   }) => {
     const source = toggle ? products : addons;
 
+    // detect whether any filter is active (include new filters)
+    const anyFilterActive = !!(
+      query ||
+      category ||
+      status ||
+      subCategory ||
+      priceMin ||
+      priceMax ||
+      dateFrom ||
+      dateTo
+    );
+
     // Store last page before searching if this is a new search
-    if ((query || category || status || subCategory) && !isSearching) {
+    if (anyFilterActive && !isSearching) {
       setLastPageBeforeSearch(currentPage);
       setIsSearching(true);
     }
 
-    // Reset case: No query, category, or status
-    if (!query && !category && !status && !subCategory) {
+    // Reset case: No filters at all
+    if (!anyFilterActive) {
       toggle ? setFilteredProducts(products) : setFilteredAddons(addons);
       if (isSearching) {
         setCurrentPage(lastPageBeforeSearch);
@@ -225,7 +254,64 @@ function AdminDashboard() {
       return;
     }
 
-    // Apply filters
+    // helpers: extract price and date safely from item
+    const getItemPrice = (item) => {
+      // try multiple possible locations, convert to Number or NaN
+      const candidates = [
+        item.price,
+        item.products?.price,
+        item.price?.amount,
+        item.price?.value,
+      ];
+      for (const c of candidates) {
+        if (c !== undefined && c !== null && c !== "") {
+          const n = Number(c);
+          if (!Number.isNaN(n)) return n;
+        }
+      }
+      return NaN;
+    };
+
+    const getItemDate = (item) => {
+      // try common date fields
+      const candidates = [
+        item.date,
+        item.createdAt,
+        item.created_at,
+        item.products?.createdAt,
+        item.products?.date,
+      ];
+      for (const c of candidates) {
+        if (!c && c !== 0) continue;
+        const t = Date.parse(c);
+        if (!Number.isNaN(t)) return new Date(t);
+      }
+      return null;
+    };
+
+    // prepare numeric and date bounds (normalize)
+    const minPrice =
+      priceMin === "" ? Number.NEGATIVE_INFINITY : Number(priceMin);
+    const maxPrice =
+      priceMax === "" ? Number.POSITIVE_INFINITY : Number(priceMax);
+
+    // parse date inputs and create inclusive bounds
+    const parseDateOrNull = (dStr, isEnd = false) => {
+      if (!dStr) return null;
+      // treat input as yyyy-mm-dd (from date input). Make inclusive -- start of day / end of day
+      const base = new Date(dStr);
+      if (Number.isNaN(base.getTime())) return null;
+      if (isEnd) {
+        base.setHours(23, 59, 59, 999);
+      } else {
+        base.setHours(0, 0, 0, 0);
+      }
+      return base;
+    };
+
+    const fromDate = parseDateOrNull(dateFrom, false);
+    const toDate = parseDateOrNull(dateTo, true);
+
     const filtered = source.filter((item) => {
       const titleMatch = query
         ? normalize(item.title).includes(normalize(query))
@@ -249,7 +335,35 @@ function AdminDashboard() {
         ? item.status?.toLowerCase() === status.toLowerCase()
         : true;
 
-      return titleMatch && categoryMatch && statusMatch && subCategoryMatch;
+      // Price matching (if either priceMin or priceMax provided)
+      const itemPrice = getItemPrice(item);
+      const priceMatch =
+        isFinite(minPrice) || isFinite(maxPrice)
+          ? !Number.isNaN(itemPrice) &&
+            itemPrice >= minPrice &&
+            itemPrice <= maxPrice
+          : true;
+
+      // Date matching (if either dateFrom or dateTo provided)
+      const itemDate = getItemDate(item);
+      let dateMatch = true;
+      if (fromDate || toDate) {
+        if (!itemDate) {
+          dateMatch = false;
+        } else {
+          if (fromDate && itemDate < fromDate) dateMatch = false;
+          if (toDate && itemDate > toDate) dateMatch = false;
+        }
+      }
+
+      return (
+        titleMatch &&
+        categoryMatch &&
+        statusMatch &&
+        subCategoryMatch &&
+        priceMatch &&
+        dateMatch
+      );
     });
 
     // Apply filtered result
@@ -261,6 +375,87 @@ function AdminDashboard() {
 
     setCurrentPage(1); // Always reset to first page on filter
   };
+
+  const toggleSort = (field) => {
+    // if clicking a different field, start with ASC
+    if (sortField !== field) {
+      setSortField(field);
+      setSortOrder("asc");
+      return;
+    }
+
+    // if same field: cycle asc → desc → none
+    if (sortOrder === "asc") {
+      setSortOrder("desc");
+    } else if (sortOrder === "desc") {
+      // go to unsorted state
+      setSortField("");
+      setSortOrder("asc"); // default next time
+    }
+  };
+
+  const sortedSource = useMemo(() => {
+    const source = toggle ? filteredProducts : filteredAddons; // your filtered lists
+    if (!sortField) return source;
+
+    const copy = [...source];
+
+    const getVal = (item, field) => {
+      // price -> numeric
+      if (field === "price") {
+        const v =
+          item.price ??
+          item.products?.price ??
+          item.price?.amount ??
+          item.price?.value;
+        if (typeof v === "string")
+          return Number(String(v).replace(/[^\d.-]/g, "")) || 0;
+        return typeof v === "number" ? v : 0;
+      }
+
+      // date -> timestamp (ms). Return a numeric fallback so numeric compare works.
+      if (field === "date") {
+        const d =
+          item.created_at ??
+          item.createdAt ??
+          item.products?.created_at ??
+          item.products?.createdAt ??
+          item.products?.date ??
+          item.date;
+        if (!d) return Number.NEGATIVE_INFINITY; // missing date -> place consistently
+        const t = Date.parse(d);
+        return Number.isNaN(t) ? Number.NEGATIVE_INFINITY : t;
+      }
+
+      // title -> string
+      if (field === "title") return (item.title ?? "").toString();
+
+      // fallback: if the value is number return it, else string
+      const val = item[field];
+      if (typeof val === "number") return val;
+      if (typeof val === "string") return val.toLowerCase();
+      return val ?? "";
+    };
+
+    copy.sort((a, b) => {
+      const A = getVal(a, sortField);
+      const B = getVal(b, sortField);
+
+      // numeric compare if both numbers (covers price/date)
+      if (typeof A === "number" && typeof B === "number") {
+        return sortOrder === "asc" ? A - B : B - A;
+      }
+
+      // string compare
+      const sA = (A ?? "").toString().toLowerCase();
+      const sB = (B ?? "").toString().toLowerCase();
+      if (sA > sB) return sortOrder === "asc" ? 1 : -1;
+      if (sA < sB) return sortOrder === "asc" ? -1 : 1;
+      return 0;
+    });
+
+    return copy;
+  }, [filteredProducts, filteredAddons, sortField, sortOrder, toggle]);
 
   //baseurlforimg
   // const baseImageUrl =
@@ -394,7 +589,7 @@ function AdminDashboard() {
   }, []);
 
   // Slice the items for pagination
-  const paginatedItems = items.slice(
+  const paginatedItems = sortedSource.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
@@ -720,6 +915,17 @@ function AdminDashboard() {
       item.company_name.toLowerCase().includes(query.toLowerCase())
     );
     setFilteredvendors(filteredvendor);
+  };
+
+  const formatDateTime = (dateString) => {
+    const d = new Date(dateString);
+    return d.toLocaleString("en-IN", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
   };
 
   // const filterbyCategory = (category) => {
@@ -1116,13 +1322,7 @@ function AdminDashboard() {
         {/* product */}
         {sidebarstate.isProductOpen && (
           <div className="flex flex-col h-full min-h-0 overflow-hidden lg:border-2 lg:border-[#334A78] lg:rounded-lg bg-white">
-            <div
-              className={`${
-                filteredProducts.length > 0
-                  ? "overflow-y-auto"
-                  : "overflow-visible"
-              } scrollbar-hide relative`}
-            >
+            <div className="scrollbar-hide h-full overflow-y-auto">
               {addNewProduct ? (
                 <VendorNewProduct
                   setAddNewProduct={setAddNewProduct}
@@ -1173,7 +1373,7 @@ function AdminDashboard() {
                             <ChevronDownIcon className="h-4 w-4 text-gray-500" />
                           </button>
                           {filterDropdown && (
-                            <div className="absolute mt-2 w-48 -left-1/2 bg-white border rounded-md shadow-lg z-10 p-3">
+                            <div className="absolute mt-2 w-64 -left-1/2 bg-white border rounded-md shadow-lg z-10 p-3 space-y-3">
                               {/* status filter */}
                               <div>
                                 <label className="text-sm text-[#374A75]">
@@ -1184,11 +1384,16 @@ function AdminDashboard() {
                                   onChange={(e) => {
                                     const value = e.target.value;
                                     setSelected(value);
-                                    setFilterDropdown(false);
+                                    setFilterDropdown(false); // keep original behavior (close on status change)
                                     applyFilters({
                                       query: searchQuery,
                                       category: selectedCategory,
+                                      subCategory: selectedSubCategory,
                                       status: value,
+                                      priceMin,
+                                      priceMax,
+                                      dateFrom,
+                                      dateTo,
                                     });
                                   }}
                                   className="w-full border-none focus:ring-0 p-2 text-sm"
@@ -1200,6 +1405,7 @@ function AdminDashboard() {
                                 </select>
                               </div>
 
+                              {/* category */}
                               <div>
                                 <label className="text-sm text-[#374A75]">
                                   Categories
@@ -1210,14 +1416,20 @@ function AdminDashboard() {
                                   onChange={(e) => {
                                     const value = e.target.value;
                                     setSelectedCategory(value);
+                                    setSelectedSubCategory("");
                                     applyFilters({
                                       query: searchQuery,
                                       category: value,
+                                      subCategory: "",
                                       status: selected,
+                                      priceMin,
+                                      priceMax,
+                                      dateFrom,
+                                      dateTo,
                                     });
                                   }}
                                   id="category"
-                                  className="py-2"
+                                  className="w-full py-2 text-sm"
                                 >
                                   <option value="">All categories</option>
                                   {categoriesData.map((category) => (
@@ -1228,6 +1440,7 @@ function AdminDashboard() {
                                 </select>
                               </div>
 
+                              {/* subcategory (conditional) */}
                               {selectedCategory && (
                                 <div>
                                   <label className="text-sm text-[#374A75]">
@@ -1244,10 +1457,14 @@ function AdminDashboard() {
                                         category: selectedCategory,
                                         subCategory: value,
                                         status: selected,
+                                        priceMin,
+                                        priceMax,
+                                        dateFrom,
+                                        dateTo,
                                       });
                                     }}
                                     id="subCategory"
-                                    className="py-2"
+                                    className="w-full py-2 text-sm"
                                   >
                                     <option value="">All Sub Categories</option>
                                     {(
@@ -1262,6 +1479,135 @@ function AdminDashboard() {
                                   </select>
                                 </div>
                               )}
+
+                              {/* price range */}
+                              <div>
+                                <label className="text-sm text-[#374A75]">
+                                  Price (₹)
+                                </label>
+                                <div className="flex gap-2">
+                                  <input
+                                    type="number"
+                                    min="0"
+                                    placeholder="Min"
+                                    value={priceMin}
+                                    onChange={(e) => {
+                                      const v = e.target.value;
+                                      setPriceMin(v);
+                                      applyFilters({
+                                        query: searchQuery,
+                                        category: selectedCategory,
+                                        subCategory: selectedSubCategory,
+                                        status: selected,
+                                        priceMin: v,
+                                        priceMax,
+                                        dateFrom,
+                                        dateTo,
+                                      });
+                                    }}
+                                    className="w-1/2 border p-2 text-sm rounded"
+                                  />
+                                  <input
+                                    type="number"
+                                    min="0"
+                                    placeholder="Max"
+                                    value={priceMax}
+                                    onChange={(e) => {
+                                      const v = e.target.value;
+                                      setPriceMax(v);
+                                      applyFilters({
+                                        query: searchQuery,
+                                        category: selectedCategory,
+                                        subCategory: selectedSubCategory,
+                                        status: selected,
+                                        priceMin,
+                                        priceMax: v,
+                                        dateFrom,
+                                        dateTo,
+                                      });
+                                    }}
+                                    className="w-1/2 border p-2 text-sm rounded"
+                                  />
+                                </div>
+                              </div>
+
+                              {/* date range */}
+                              <div>
+                                <label className="text-sm text-[#374A75]">
+                                  Date
+                                </label>
+                                <div className="flex gap-2">
+                                  <input
+                                    type="date"
+                                    value={dateFrom}
+                                    onChange={(e) => {
+                                      const v = e.target.value;
+                                      setDateFrom(v);
+                                      applyFilters({
+                                        query: searchQuery,
+                                        category: selectedCategory,
+                                        subCategory: selectedSubCategory,
+                                        status: selected,
+                                        priceMin,
+                                        priceMax,
+                                        dateFrom: v,
+                                        dateTo,
+                                      });
+                                    }}
+                                    className="w-1/2 border p-2 text-sm rounded"
+                                  />
+                                  <input
+                                    type="date"
+                                    value={dateTo}
+                                    onChange={(e) => {
+                                      const v = e.target.value;
+                                      setDateTo(v);
+                                      applyFilters({
+                                        query: searchQuery,
+                                        category: selectedCategory,
+                                        subCategory: selectedSubCategory,
+                                        status: selected,
+                                        priceMin,
+                                        priceMax,
+                                        dateFrom,
+                                        dateTo: v,
+                                      });
+                                    }}
+                                    className="w-1/2 border p-2 text-sm rounded"
+                                  />
+                                </div>
+                              </div>
+
+                              {/* actions: Clear filters */}
+                              <div className="flex justify-end">
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    // reset local filter states
+                                    setSelected("");
+                                    setSelectedCategory("");
+                                    setSelectedSubCategory("");
+                                    setPriceMin("");
+                                    setPriceMax("");
+                                    setDateFrom("");
+                                    setDateTo("");
+                                    // keep dropdown open (you can close if you prefer)
+                                    applyFilters({
+                                      query: searchQuery,
+                                      category: "",
+                                      subCategory: "",
+                                      status: "",
+                                      priceMin: "",
+                                      priceMax: "",
+                                      dateFrom: "",
+                                      dateTo: "",
+                                    });
+                                  }}
+                                  className="text-sm px-3 py-1 rounded bg-gray-100 hover:bg-gray-200"
+                                >
+                                  Reset Filter
+                                </button>
+                              </div>
                             </div>
                           )}
                         </div>
@@ -1525,10 +1871,23 @@ function AdminDashboard() {
                                       Addon Name
                                     </th>
                                   )}
-                                  <th className="p-3  font-medium">Price</th>
-                                  <>
-                                    <th className="p-3 font-medium">status</th>
-                                  </>
+                                  <SortableHeader
+                                    label="Date"
+                                    field="date"
+                                    sortField={sortField}
+                                    sortOrder={sortOrder}
+                                    toggleSort={toggleSort}
+                                  />
+
+                                  <SortableHeader
+                                    label="Price"
+                                    field="price"
+                                    sortField={sortField}
+                                    sortOrder={sortOrder}
+                                    toggleSort={toggleSort}
+                                  />
+
+                                  <th className="p-3 font-medium">Status</th>
                                   <th className="p-3 font-medium">Action</th>
                                 </tr>
                               </thead>
@@ -1538,8 +1897,8 @@ function AdminDashboard() {
                                     key={item.id}
                                     className="hover:bg-gray-50 cursor-pointer"
                                   >
-                                    <td className="border border-gray-200 p-3 align-middle">
-                                      <div className="flex items-center gap-2">
+                                    <td className="border border-gray-200 p-3 align-middle w-1/2">
+                                      <div className="flex items-center gap-2 ">
                                         <img
                                           src={`${baseImageUrl}${item.image}`}
                                           alt={item.title}
@@ -1548,6 +1907,9 @@ function AdminDashboard() {
 
                                         <span>{item.title}</span>
                                       </div>
+                                    </td>
+                                    <td className="border border-gray-200 p-3 align-middle text-center">
+                                      {formatDateTime(item.created_at)}
                                     </td>
                                     <td className="border border-gray-200 p-3 align-middle text-center">
                                       ₹{item.price}
@@ -2126,5 +2488,33 @@ function MobileMenuItem({ icon, title, currentSection, onClick, setIsOpen }) {
       {icon}
       <span>{title}</span>
     </li>
+  );
+}
+
+function SortableHeader({ label, field, sortField, sortOrder, toggleSort }) {
+  const isActive = sortField === field;
+
+  return (
+    <th className="p-3 font-medium text-center">
+      <button
+        type="button"
+        onClick={() => toggleSort(field)}
+        className="flex items-center gap-2 mx-auto"
+      >
+        <span>{label}</span>
+
+        <span aria-hidden className="text-md">
+          {isActive ? (
+            sortOrder === "asc" ? (
+              <HiBarsArrowUp title="Sort ascending" />
+            ) : (
+              <HiBarsArrowDown title="Sort descending" />
+            )
+          ) : (
+            <HiArrowsUpDown title={`Click to sort ${label}`} />
+          )}
+        </span>
+      </button>
+    </th>
   );
 }
