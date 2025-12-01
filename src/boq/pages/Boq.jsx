@@ -609,7 +609,7 @@ function Boq() {
 
   const fetchFilteredBOQProducts = async (products = [], addons = []) => {
     try {
-      if (!products.length) {
+      if (!products?.length) {
         console.warn("No products passed to fetchFilteredBOQProducts.");
         return [];
       }

@@ -4,12 +4,12 @@ import { useNavigate } from "react-router-dom";
 import { useApp } from "../../../Context/Context";
 import { VscSignOut } from "react-icons/vsc";
 import { LuBlend } from "react-icons/lu";
-import { FaRegUserCircle, FaRegUser } from "react-icons/fa";
+import { FaRegUserCircle } from "react-icons/fa";
 import { MdOutlineSpaceDashboard } from "react-icons/md";
 import SidebarItem from "../../../common-components/SidebarItem";
 import { useLogout } from "../../../utils/HelperFunction";
 import { BsBoxSeam } from "react-icons/bs";
-import { FiLogOut } from "react-icons/fi";
+import { FiLogOut, FiUser } from "react-icons/fi";
 import Orders, { OrderDetails } from ".././Orders";
 import Discount from "./Discount";
 import Clients from "../Clients";
@@ -319,7 +319,7 @@ function AdminDashboardEcom() {
             currentSection={sidebarstate?.currentSection}
           />
           <SidebarItem
-            icon={<FaRegUser />}
+            icon={<FiUser />}
             text="Customers"
             onClick={handleCustomers}
             isExpanded={isExpanded}

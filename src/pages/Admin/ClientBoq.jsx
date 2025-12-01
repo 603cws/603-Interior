@@ -252,10 +252,10 @@ function ClientBoq({ setClientBoqs }) {
         ) : savedBoqs.length > 0 ? (
           <div className="overflow-y-auto scrollbar-hide h-[calc(100vh-95px)] relative ">
             {/* // Default product list and add product UI */}
-            <div className=" sticky top-0 z-20 bg-white">
+            <div className="sticky top-0 z-20 bg-white">
               <button
                 onClick={() => setClientBoqs(false)}
-                className="capitalize font-semibold flex items-center text-xs text-[#A1A1A1] "
+                className="capitalize font-semibold flex items-center text-xs text-[#A1A1A1] mt-3 ml-3"
               >
                 <IoIosArrowBack /> Back to client list
               </button>
@@ -307,7 +307,7 @@ function ClientBoq({ setClientBoqs }) {
                       return (
                         <div
                           key={boq?.id}
-                          className={` rounded-lg border-2  px-5 py-2 ${
+                          className={`rounded-lg border-2 px-4 py-1 ${
                             selectedBoq?.id === boq?.id
                               ? "bg-[#374A75] text-white border-[#374a75]"
                               : "bg-white text-[#374a75] border-[#ccc]"
@@ -454,7 +454,7 @@ function ClientBoq({ setClientBoqs }) {
                                         </th> */}
                                 <th className="p-3 font-medium">Category</th>
                                 <th className="p-3 font-medium">
-                                  specification
+                                  Specification
                                 </th>
                               </>
                             ) : (
@@ -585,7 +585,7 @@ function ClientBoq({ setClientBoqs }) {
           <div className="">
             <button
               onClick={() => setClientBoqs(false)}
-              className="capitalize font-semibold flex items-center text-xs text-[#A1A1A1] "
+              className="capitalize font-semibold flex items-center text-xs text-[#A1A1A1]"
             >
               <IoIosArrowBack /> Back to client list
             </button>

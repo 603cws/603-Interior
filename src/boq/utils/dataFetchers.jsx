@@ -97,12 +97,16 @@ export const fetchCategories = async () => {
 
 export const fetchProductsData = async () => {
   try {
-    const { data, error } = await supabase.from("products").select(`
+    const { data, error } = await supabase
+      .from("products")
+      .select(
+        `
                 *,
                 addons(*, addon_variants(*)),
-                product_variants (*)
-            `);
-
+                product_variants(*, profiles(company_name))
+            `
+      )
+      .order("created_at", { ascending: true });
     if (error) throw error;
 
     // Filter products where at least one variant is approved
@@ -163,17 +167,21 @@ export const fetchProductsData = async () => {
 
     const processedData = approvedProducts.map((product) => ({
       ...product,
-      product_variants: product.product_variants.map((variant) => ({
-        ...variant,
-        image: urlMap[variant.image] || "",
-      })),
-      addons: product.addons.map((addon) => ({
-        ...addon,
-        image: urlMap[addon.image] || "",
-        addon_variants: addon.addon_variants.map((variant) => ({
+      product_variants: product.product_variants
+        .filter((variant) => variant.productDisplayType !== "ecommerce")
+        .map((variant) => ({
           ...variant,
           image: urlMap[variant.image] || "",
         })),
+      addons: product.addons.map((addon) => ({
+        ...addon,
+        image: urlMap[addon.image] || "",
+        addon_variants: addon.addon_variants
+          .filter((variant) => variant.productDisplayType !== "ecommerce")
+          .map((variant) => ({
+            ...variant,
+            image: urlMap[variant.image] || "",
+          })),
       })),
     }));
 

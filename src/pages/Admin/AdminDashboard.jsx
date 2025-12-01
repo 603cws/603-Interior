@@ -11,9 +11,8 @@ import {
   IoSettingsSharp,
 } from "react-icons/io5";
 import { LuBlend } from "react-icons/lu";
-import { FaRegUserCircle, FaUser, FaUserPlus } from "react-icons/fa";
 import { FaBuilding } from "react-icons/fa";
-import { PiCodeBlockDuotone, PiHandshakeFill } from "react-icons/pi";
+import { PiCodeBlock, PiHandshakeFill } from "react-icons/pi";
 import VendorNewProduct from "../vendor/VendorNewProduct";
 import VendorNewAddon from "../vendor/VendorNewAddon";
 import { VscEye } from "react-icons/vsc";
@@ -34,7 +33,6 @@ import {
   HiXMark,
 } from "react-icons/hi2";
 import { MdDeleteOutline } from "react-icons/md";
-// import { FaUserPlus } from "react-icons/fa6";
 import { TbCalculator, TbCalendarStats } from "react-icons/tb";
 import Schedule from "./Schedule";
 import FormulaEditor from "../../boq/components/FormulaEditor";
@@ -52,14 +50,11 @@ import { GoPlus } from "react-icons/go";
 import ClientBoq from "./ClientBoq";
 import { baseImageUrl } from "../../utils/HelperConstant";
 import { BsBoxSeam } from "react-icons/bs";
-import { FiLogOut } from "react-icons/fi";
+import { FiLogOut, FiUser, FiUserPlus } from "react-icons/fi";
 import { IoMdSwitch } from "react-icons/io";
 import PagInationNav from "../../common-components/PagInationNav";
 import SelectSubcategories from "./SelectSubcategories";
 import CategoryEditor from "../../boq/components/CategoryEditor";
-
-// import Orders from "./Orders";
-
 function handlesidebarState(state, action) {
   switch (action.type) {
     case "TOGGLE_SECTION":
@@ -1088,7 +1083,7 @@ function AdminDashboard() {
             currentSection={sidebarstate?.currentSection}
           />
           <SidebarItem
-            icon={<FaUser />}
+            icon={<FiUser />}
             text="Client"
             onClick={handleclient}
             isExpanded={isExpanded}
@@ -1102,8 +1097,8 @@ function AdminDashboard() {
             currentSection={sidebarstate?.currentSection}
           />
           <SidebarItem
-            icon={<FaUserPlus />}
-            text="create"
+            icon={<FiUserPlus />}
+            text="Create"
             onClick={handlecreate}
             isExpanded={isExpanded}
             currentSection={sidebarstate?.currentSection}
@@ -1130,7 +1125,7 @@ function AdminDashboard() {
             currentSection={sidebarstate?.currentSection}
           />
           <SidebarItem
-            icon={<PiCodeBlockDuotone />}
+            icon={<PiCodeBlock />}
             text="Category Editor"
             onClick={handleCategoryEditor}
             isExpanded={isExpanded}
@@ -1255,7 +1250,7 @@ function AdminDashboard() {
                 setIsOpen={setIsOpen}
               />
               <MobileMenuItem
-                icon={<FaRegUserCircle />}
+                icon={<FiUser />}
                 title="Client"
                 currentSection={sidebarstate?.currentSection}
                 onClick={handleclient}
@@ -1269,7 +1264,7 @@ function AdminDashboard() {
                 setIsOpen={setIsOpen}
               />
               <MobileMenuItem
-                icon={<FaUserPlus />}
+                icon={<FiUserPlus />}
                 title="Create"
                 currentSection={sidebarstate?.currentSection}
                 onClick={handlecreate}
@@ -1305,7 +1300,7 @@ function AdminDashboard() {
               />
 
               <MobileMenuItem
-                icon={<PiCodeBlockDuotone />}
+                icon={<PiCodeBlock />}
                 text="Category Editor"
                 currentSection={sidebarstate?.currentSection}
                 onClick={handleCategoryEditor}
@@ -2014,7 +2009,7 @@ function AdminDashboard() {
                                         />
                                       </div>
                                     </td>
-                                    <td className="border border-gray-200 p-3 align-middle">
+                                    <td className="border border-gray-200 p-3 align-middle w-1/2">
                                       <div className="flex items-center gap-2">
                                         <img
                                           src={`${baseImageUrl}${item.image}`}

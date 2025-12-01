@@ -840,13 +840,13 @@ function VendorProductlist({
                                 <th className="p-3 font-medium">Details</th>
                                 <th className="p-3 font-medium">Category</th>
                                 <th className="p-3 font-medium">
-                                  specification
+                                  Specification
                                 </th>
                               </>
                             ) : (
                               <th className="p-3 font-medium">Addon Title</th>
                             )}
-                            <th className="p-3 font-medium">status</th>
+                            <th className="p-3 font-medium">Status</th>
                             <th className="p-3 font-medium">Action</th>
                           </tr>
                         </thead>

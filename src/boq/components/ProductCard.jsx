@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useMemo } from "react";
 import { useApp } from "../../Context/Context";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
@@ -48,13 +48,22 @@ function ProductCard({
   } = useApp();
 
   const dropdownRef = useRef(null);
-  const [isOpen, setIsOpen] = useState(false);
-  const options = ["Minimal", "Exclusive", "Luxury", "Custom"];
+  const planOptions = ["Minimal", "Exclusive", "Luxury", "Custom"];
 
   const productsInCategory = products[selectedCategory?.category] || [];
   // const [loading, setLoading] = useState(true);
   const [loadingImages, setLoadingImages] = useState({}); // Track image loading
-  const [filtervalue, setFiltervalue] = useState(selectedPlan);
+
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [openSection, setOpenSection] = useState("plan");
+  const [selectedPlanFilter, setSelectedPlanFilter] = useState(selectedPlan);
+  const [selectedBrands, setSelectedBrands] = useState([]);
+  const [sortOption, setSortOption] = useState("newest");
+  const [isSortOpen, setIsSortOpen] = useState(false);
+
+  const toggleSection = (section) => {
+    setOpenSection((prev) => (prev === section ? null : section));
+  };
 
   const productsInSubCategory = productsInCategory[selectedSubCategory] || [];
 
@@ -72,19 +81,47 @@ function ProductCard({
       }
     })
     .flatMap((product) =>
-      (product.product_variants || []).map((variant) => ({
-        // keep all existing variant fields
-        ...variant,
-        // add the parent product's fields you want
-        category: product.category,
-        subcategory: product.subcategory
-          ? product.subcategory.split(",").map((s) => s.trim())
-          : [],
-        subcategory1: product.subcategory1,
-        // optional: keep original product id too if you need it
-        product_id: product.id || variant.product_id || product.product_id,
-      }))
+      (product.product_variants || [])
+        .filter((variant) => {
+          if (!selectedBrands || selectedBrands.length === 0) return true;
+
+          const brandName =
+            (variant.profiles && variant.profiles.company_name) ||
+            variant.manufacturer ||
+            "";
+
+          return selectedBrands.includes(brandName);
+        })
+        .map((variant) => ({
+          // keep all existing variant fields
+          ...variant,
+          // add the parent product's fields you want
+          category: product.category,
+          subcategory: product.subcategory
+            ? product.subcategory.split(",").map((s) => s.trim())
+            : [],
+          subcategory1: product.subcategory1,
+          // optional: keep original product id too if you need it
+          product_id: product.id || variant.product_id || product.product_id,
+        }))
     );
+
+  const brandsList = Array.from(
+    new Set(
+      productsInSubCategory
+        .flatMap((product) =>
+          product.subcategory1 === selectedSubCategory1
+            ? product.product_variants || []
+            : []
+        )
+        .map((variant) =>
+          variant.profiles && variant.profiles.company_name
+            ? variant.profiles.company_name
+            : null
+        )
+        .filter(Boolean)
+    )
+  );
 
   // Now filter variants based on the selected plan.
   // If the plan is "Custom", show all variants. Otherwise, only show variants whose segment matches the selected plan.
@@ -96,12 +133,13 @@ function ProductCard({
   //     variant.segment.toLowerCase() === selectedPlan.toLowerCase()
   //   );
   // });
+
   const filteredVariants = filteredProducts.filter((variant) => {
-    if (filtervalue === "Custom") return true;
+    if (selectedPlanFilter === "Custom") return true;
 
     return (
       variant.segment &&
-      variant.segment.toLowerCase() === filtervalue.toLowerCase()
+      variant.segment.toLowerCase() === selectedPlanFilter.toLowerCase()
     );
   });
 
@@ -109,7 +147,19 @@ function ProductCard({
   const [itemsPerPage, setItemsPerPage] = useState(12);
   const totalPages = Math.ceil(filteredVariants.length / itemsPerPage);
 
-  const paginatedVariants = filteredVariants.slice(
+  const sortedVariants = useMemo(() => {
+    const arr = [...filteredVariants];
+    if (sortOption === "priceLowHigh") {
+      arr.sort((a, b) => (a.price || 0) - (b.price || 0));
+    } else if (sortOption === "priceHighLow") {
+      arr.sort((a, b) => (b.price || 0) - (a.price || 0));
+    } else if (sortOption === "newest") {
+      arr.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+    }
+    return arr;
+  }, [filteredVariants, sortOption]);
+
+  const paginatedVariants = sortedVariants.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
@@ -154,7 +204,7 @@ function ProductCard({
   useEffect(() => {
     function handleClickOutside(event) {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setIsOpen(false);
+        setIsFilterOpen(false);
       }
     }
     document.addEventListener("mousedown", handleClickOutside);
@@ -212,79 +262,186 @@ function ProductCard({
     <div>
       <div className="product-card grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 3xl:grid-cols-6 gap-6 pb-8 pt-3 relative">
         <div className="absolute right-0 md:right-6 -top-12" ref={dropdownRef}>
-          <div className="relative">
-            {/* Filter button */}
+          {/* FILTER BUTTON */}
+          <div className="flex gap-2 items-center">
             <button
               className="flex items-center gap-2 border border-black px-2 lg:px-4 py-2 text-sm"
-              onClick={() => setIsOpen((prev) => !prev)}
+              onClick={() => setIsFilterOpen((prev) => !prev)}
             >
-              <span className="hidden lg:block">Filter By Plan</span>
+              <span className="hidden lg:block">Filter</span>
               <img
                 src="/images/boq/filter.png"
                 alt="Filter"
                 className="w-4 h-4"
               />
-              {/* <CiSliderVertical className="text-[#334A78]" size={20} /> */}
             </button>
-
-            {/* Dropdown menu */}
-            {isOpen && (
-              <div className="absolute right-0 mt-2 w-36 bg-white shadow-lg z-20">
-                {options.map((option) => (
-                  <button
-                    key={option}
-                    onClick={() => {
-                      setFiltervalue(option);
-                      setIsOpen(false);
-                    }}
-                    className={`flex justify-between items-center border border-black w-full px-4 py-3 ${
-                      filtervalue === option
-                        ? "bg-[#374A75] text-white font-semibold"
-                        : ""
-                    }`}
-                  >
-                    {/* Icon */}
-                    <span className="flex items-center">
-                      {option === "Exclusive" && (
-                        <div className="relative">
-                          <PiStarFourFill
-                            className="absolute -top-1 -right-1"
-                            size={8}
-                            color={filtervalue === option ? "#fff" : "#334A78"}
-                          />
-                          <PiStarFourFill
-                            size={16}
-                            color={filtervalue === option ? "#fff" : "#334A78"}
-                          />
-                        </div>
-                      )}
-                      {option === "Luxury" && (
-                        <RiVipCrown2Fill
-                          size={16}
-                          color={filtervalue === option ? "#fff" : "#334A78"}
-                        />
-                      )}
-                      {option === "Minimal" && (
-                        <FaStar
-                          size={16}
-                          color={filtervalue === option ? "#fff" : "#334A78"}
-                        />
-                      )}
-                      {option === "Custom" && (
-                        <IoMdSettings
-                          size={18}
-                          color={filtervalue === option ? "#fff" : "#334A78"}
-                        />
-                      )}
-                    </span>
-
-                    {/* Text */}
-                    <span className="text-right">{option}</span>
-                  </button>
-                ))}
-              </div>
-            )}
+            <button
+              className="flex items-center gap-2 border border-black px-2 lg:px-4 py-2 text-sm"
+              onClick={() => setIsSortOpen((prev) => !prev)}
+            >
+              <span className="hidden lg:block">Sort by:</span>
+              <span className="font-medium text-xs lg:text-sm">
+                {sortOption === "priceLowHigh" && "Price: Low to High"}
+                {sortOption === "priceHighLow" && "Price: High to Low"}
+                {sortOption === "newest" && "Newest Arrival"}
+              </span>
+            </button>
           </div>
+
+          {/* FILTER PANEL (Plan + Brand) */}
+          {isFilterOpen && (
+            <div className="absolute mt-2 w-36 bg-white shadow-lg z-20">
+              {/* PLAN SECTION */}
+              <div className="border-x border-t">
+                <button
+                  className="flex w-full items-center justify-between px-4 py-3 text-sm"
+                  onClick={() => toggleSection("plan")}
+                >
+                  <span className="font-semibold text-[#334A78]">Plan</span>
+                  <span className="text-sm">▾</span>
+                </button>
+
+                {openSection === "plan" && (
+                  <div className="border-t border-black">
+                    {planOptions.map((option) => (
+                      <button
+                        key={option}
+                        onClick={() => setSelectedPlanFilter(option)}
+                        className={
+                          "flex items-center justify-between w-full px-4 py-3 border-b border-black text-sm " +
+                          (selectedPlanFilter === option
+                            ? "bg-[#374A75] text-white font-semibold"
+                            : "bg-white text-black")
+                        }
+                      >
+                        <span className="flex items-center">
+                          {option === "Exclusive" && (
+                            <div className="relative">
+                              <PiStarFourFill
+                                className="absolute -top-1 -right-1"
+                                size={8}
+                                color={
+                                  selectedPlanFilter === option
+                                    ? "#fff"
+                                    : "#334A78"
+                                }
+                              />
+                              <PiStarFourFill
+                                size={16}
+                                color={
+                                  selectedPlanFilter === option
+                                    ? "#fff"
+                                    : "#334A78"
+                                }
+                              />
+                            </div>
+                          )}
+                          {option === "Luxury" && (
+                            <RiVipCrown2Fill
+                              size={16}
+                              color={
+                                selectedPlanFilter === option
+                                  ? "#fff"
+                                  : "#334A78"
+                              }
+                            />
+                          )}
+                          {option === "Minimal" && (
+                            <FaStar
+                              size={16}
+                              color={
+                                selectedPlanFilter === option
+                                  ? "#fff"
+                                  : "#334A78"
+                              }
+                            />
+                          )}
+                          {option === "Custom" && (
+                            <IoMdSettings
+                              size={18}
+                              color={
+                                selectedPlanFilter === option
+                                  ? "#fff"
+                                  : "#334A78"
+                              }
+                            />
+                          )}
+                        </span>
+                        <span>{option}</span>
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* BRAND SECTION */}
+              <div className="border">
+                <button
+                  className="flex w-full items-center justify-between px-4 py-3 text-sm"
+                  onClick={() => toggleSection("brand")}
+                >
+                  <span className="font-semibold text-[#334A78]">Brand</span>
+                  <span className="text-xs">▾</span>
+                </button>
+
+                {openSection === "brand" && (
+                  <div className=" px-4 py-3 space-y-2 text-sm">
+                    {brandsList.map((brand) => {
+                      const checked = selectedBrands.includes(brand);
+                      return (
+                        <label
+                          key={brand}
+                          className="flex items-center gap-2 cursor-pointer"
+                        >
+                          <input
+                            type="checkbox"
+                            className="h-4 w-4 border border-black"
+                            checked={checked}
+                            onChange={() => {
+                              setSelectedBrands((prev) =>
+                                checked
+                                  ? prev.filter((b) => b !== brand)
+                                  : [...prev, brand]
+                              );
+                            }}
+                          />
+                          <span className="flex-1">{brand}</span>
+                        </label>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+          {isSortOpen && (
+            <div className="absolute right-0 mt-2 w-40 bg-white shadow-lg border border-black z-20 text-sm">
+              {["priceLowHigh", "priceHighLow", "newest"].map((opt) => {
+                const label =
+                  opt === "priceLowHigh"
+                    ? "Price: Low to High"
+                    : opt === "priceHighLow"
+                    ? "Price: High to Low"
+                    : "Newest Arrival";
+                const active = sortOption === opt;
+                return (
+                  <button
+                    key={opt}
+                    onClick={() => {
+                      setSortOption(opt);
+                      setIsSortOpen(false);
+                    }}
+                    className={
+                      "w-full text-left px-3 py-2 border-b last:border-b-0 " +
+                      (active ? "bg-[#374A75] text-white font-semibold" : "")
+                    }
+                  >
+                    {label}
+                  </button>
+                );
+              })}
+            </div>
+          )}
         </div>
 
         {loading ? (
