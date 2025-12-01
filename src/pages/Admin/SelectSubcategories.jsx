@@ -4,6 +4,7 @@ import { baseImageUrl } from "../../utils/HelperConstant";
 import { supabase } from "../../services/supabase";
 import { specialArray } from "../../utils/AllCatArray";
 import { useAllCatArray } from "../../utils/AllCatArray";
+import toast from "react-hot-toast";
 
 const getDynamicSubcategories = (category, type, AllCatArray) => {
   if (!category || !type) return [];
@@ -38,6 +39,8 @@ function SelectSubcategories({
   handleUpdateStatus,
   setRejectReason,
 }) {
+  console.log("product select", product);
+
   const [selectedSubcategories, setSelectedSubcategories] = useState([]);
   const AllCatArray = useAllCatArray();
   const category = product?.products?.category;
@@ -54,6 +57,11 @@ function SelectSubcategories({
   };
 
   const updateSubcategories = async () => {
+    if (selectedSubcategories?.length <= 0) {
+      toast?.error("please select the subcategory");
+      return;
+    }
+
     try {
       const category = product?.products?.category;
       const subcategory1 = product?.products?.subcategory1;
@@ -123,7 +131,7 @@ function SelectSubcategories({
             Select subcategories{" "}
           </h2>
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mt-5">
-            {subcategories.map((subcategory, index) => (
+            {subcategories?.map((subcategory, index) => (
               <button
                 key={index}
                 onClick={() => handleSelect(subcategory)}
@@ -147,12 +155,24 @@ function SelectSubcategories({
             </button>
           </div>
         </div>
-        <div className="max-w-xs flex justify-center items-center">
-          <img
-            src={`${baseImageUrl}${product.image}`}
-            alt={product.title}
-            className="aspect-square object-cover"
-          />
+        <div>
+          <div className="max-w-xs flex justify-center items-center">
+            <img
+              src={`${baseImageUrl}${product.image}`}
+              alt={product.title}
+              className="aspect-square object-cover"
+            />
+          </div>
+          <div>
+            <div className="flex items-center gap-2">
+              <h2>Title</h2>
+              <p>{product?.title}</p>
+            </div>
+            <div className="flex items-center gap-2">
+              <h2>category</h2>
+              <p>{product?.products?.category}</p>
+            </div>
+          </div>
         </div>
       </div>
     </div>

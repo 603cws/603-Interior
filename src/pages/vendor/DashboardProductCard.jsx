@@ -16,6 +16,9 @@ function DashboardProductCard({
   rejectReason,
   setRejectReason,
   handleConfirmReject,
+  setSelectedItem,
+  setSelectSubcategories,
+  AllowProductEditStatus = true,
 }) {
   const [showTextarea, setShowTextarea] = useState(false);
   const { accountHolder } = useApp();
@@ -157,15 +160,19 @@ function DashboardProductCard({
               </div>
             </div>
 
-            {accountHolder.role === "admin" && (
+            {accountHolder.role === "admin" && AllowProductEditStatus && (
               <div className="flex w-full items-start mt-2.5">
                 {!showTextarea ? (
                   <div className="flex justify-center gap-2 flex-1 transition-all duration-500">
                     <button
                       onClick={() => {
-                        updateStatus(product, "approved");
-                        setRejectReason("");
+                        setSelectedItem(product);
+                        setSelectSubcategories(true);
                       }}
+                      // onClick={() => {
+                      //   updateStatus(product, "approved");
+                      //   setRejectReason("");
+                      // }}
                       className={`px-2 md:px-5 py-1 md:py-2 bg-[#F8FBFF]  border-[#A3FEE7] transition-all duration-500 flex flex-col justify-center items-center rounded-sm  text-xs md:text-sm ${
                         currentStatus === "approved"
                           ? "border-2 md:border-4"

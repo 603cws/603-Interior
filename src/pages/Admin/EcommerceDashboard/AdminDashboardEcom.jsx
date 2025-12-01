@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useApp } from "../../../Context/Context";
 import { VscSignOut } from "react-icons/vsc";
 import { LuBlend } from "react-icons/lu";
-import { FaRegUserCircle, FaUser } from "react-icons/fa";
+import { FaRegUserCircle, FaRegUser } from "react-icons/fa";
 import { MdOutlineSpaceDashboard } from "react-icons/md";
 import SidebarItem from "../../../common-components/SidebarItem";
 import { useLogout } from "../../../utils/HelperFunction";
@@ -27,6 +27,7 @@ import { CiDiscount1 } from "react-icons/ci";
 import { IoMdImages } from "react-icons/io";
 import { IoMdSwitch } from "react-icons/io";
 import CareerDash from "./CareerDash";
+import { TbBriefcase2 } from "react-icons/tb";
 
 function handlesidebarState(state, action) {
   switch (action.type) {
@@ -318,7 +319,7 @@ function AdminDashboardEcom() {
             currentSection={sidebarstate?.currentSection}
           />
           <SidebarItem
-            icon={<FaUser />}
+            icon={<FaRegUser />}
             text="Customers"
             onClick={handleCustomers}
             isExpanded={isExpanded}
@@ -339,7 +340,7 @@ function AdminDashboardEcom() {
             currentSection={sidebarstate?.currentSection}
           />
           <SidebarItem
-            icon={<IoMdImages />}
+            icon={<TbBriefcase2 />}
             text="Career"
             onClick={handleCarrer}
             isExpanded={isExpanded}
@@ -451,7 +452,7 @@ function AdminDashboardEcom() {
                 setIsOpen={setIsOpen}
               />
               <MobileMenuItem
-                icon={<IoMdImages />}
+                icon={<TbBriefcase2 />}
                 title="Career"
                 currentSection={sidebarstate?.currentSection}
                 onClick={handleCarrer}
@@ -599,6 +600,7 @@ function AdminDashboardEcom() {
           rejectReason={rejectReason}
           setRejectReason={setRejectReason}
           handleConfirmReject={handleConfirmReject}
+          AllowProductEditStatus={false}
         />
       )}
 

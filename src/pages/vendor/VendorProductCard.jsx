@@ -14,6 +14,8 @@ function VendorProductCard({
   rejectReason,
   setRejectReason,
   handleConfirmReject,
+  setSelectedItem,
+  setSelectSubcategories,
 }) {
   const [showTextarea, setShowTextarea] = useState(false);
   const [deleteWarning, setDeleteWarning] = useState(false);
@@ -105,9 +107,13 @@ function VendorProductCard({
                 {!showTextarea ? (
                   <div className="flex justify-center gap-2 flex-1 transition-all duration-500">
                     <button
+                      // onClick={() => {
+                      //   updateStatus(product, "approved");
+                      //   setRejectReason("");
+                      // }}
                       onClick={() => {
-                        updateStatus(product, "approved");
-                        setRejectReason("");
+                        setSelectedItem(product);
+                        setSelectSubcategories(true);
                       }}
                       className={`px-5 py-2 bg-[#F8FBFF]  border-[#A3FEE7] transition-all duration-500 flex flex-col justify-center items-center rounded-lg ${
                         currentStatus === "approved" ? "border-4" : "border-2"

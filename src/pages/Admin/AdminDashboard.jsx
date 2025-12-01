@@ -165,6 +165,7 @@ function AdminDashboard() {
 
   //delete warning
   const [deleteWarning, setDeleteWarning] = useState(false);
+  const [multipleDeleteWaring, setMultipleDeleteWaring] = useState(false);
   const [rejectReason, setRejectReason] = useState("");
   const [rejectReasonPopup, setRejectReasonPopup] = useState(false);
   const [clientBoqs, setClientBoqs] = useState(false);
@@ -528,6 +529,9 @@ function AdminDashboard() {
   const [editAddon, setEditAddon] = useState(false);
   const [selectedAddon, setSelectedAddon] = useState(null);
 
+  // mutliple delete checkbox
+  const [selectedItemForDelete, setSelectedItemForDelete] = useState([]);
+
   //handle functions
   const handleDeletevendirClick = (user, index) => {
     setSelectedUser(user);
@@ -549,6 +553,73 @@ function AdminDashboard() {
       }
     }
   };
+
+  async function handleMultipleDelete(selectedProducts) {
+    console.log("selectedDeleteItems", selectedProducts);
+
+    if (selectedProducts?.length === 0) return;
+
+    // Filter the items you want to delete
+    const filteredItems = items.filter((item) =>
+      selectedProducts?.includes(item.id)
+    );
+
+    console.log("items after filter", filteredItems);
+
+    try {
+      for (const product of filteredItems) {
+        // DELETE FROM SUPABASE
+        if (product?.type === "product") {
+          await supabase
+            .from("product_variants")
+            .delete()
+            .eq("id", product?.id);
+        }
+
+        if (product?.type === "addon") {
+          await supabase.from("addon_variants").delete().eq("id", product?.id);
+        }
+
+        // DELETE IMAGES (Main + Additional)
+        let imagePaths = [];
+
+        if (product.image) {
+          imagePaths.push(product.image);
+        }
+
+        if (product.additional_images) {
+          try {
+            const parsed = JSON.parse(product.additional_images);
+
+            if (Array.isArray(parsed)) {
+              imagePaths = imagePaths.concat(parsed);
+            }
+          } catch (err) {
+            console.log("Error parsing additional images", err);
+          }
+        }
+
+        if (imagePaths.length > 0) {
+          const { storageError } = await supabase.storage
+            .from("addon") // Or your bucket name
+            .remove(imagePaths);
+
+          if (storageError) throw storageError;
+        }
+      }
+
+      toast.success("Selected items deleted successfully!");
+    } catch (error) {
+      console.log("Delete error:", error);
+      toast.error("Something went wrong while deleting");
+    } finally {
+      setMultipleDeleteWaring(false);
+      setSelectedItemForDelete([]);
+      // Refresh whichever category is being deleted
+      setIsProductRefresh(true);
+      setIsAddonRefresh(true);
+    }
+  }
 
   const categoriesData = categories.map((item) => item.category);
 
@@ -916,6 +987,13 @@ function AdminDashboard() {
       item.company_name.toLowerCase().includes(query.toLowerCase())
     );
     setFilteredvendors(filteredvendor);
+  };
+  const handleCheckboxChange = (blogId) => {
+    setSelectedItemForDelete((prev) =>
+      prev.includes(blogId)
+        ? prev.filter((id) => id !== blogId)
+        : [...prev, blogId]
+    );
   };
 
   const formatDateTime = (dateString) => {
@@ -1656,7 +1734,19 @@ function AdminDashboard() {
                         ))}
                       </div>
 
-                      <div className=" hidden lg:block w-1/4">
+                      <div className=" hidden lg:flex gap-2 w-1/3">
+                        <div>
+                          {selectedItemForDelete?.length > 0 && (
+                            <button
+                              onClick={() =>
+                                setMultipleDeleteWaring((prev) => !prev)
+                              }
+                              className="px-2 py-1 md:px-4 md:py-2 text-nowrap border border-[#CCCCCC] rounded-md text-[#374A75] text-lg font-medium hover:bg-[#f1f1f1]"
+                            >
+                              Delete ({selectedItemForDelete?.length})
+                            </button>
+                          )}
+                        </div>
                         <input
                           type="text"
                           value={searchQuery}
@@ -1863,6 +1953,16 @@ function AdminDashboard() {
                             >
                               <thead className="bg-[#FFFFFF] sticky top-0 z-10 px-8 text-center text-[#000] text-base">
                                 <tr>
+                                  <th className="p-3 font-medium">SR</th>
+                                  {/* <th className="py-2 px-1">
+                                    <input
+                                      type="checkbox"
+                                      name=""
+                                      id=""
+                                      checked={allSelected}
+                                      onChange={handleSelectAll}
+                                    />
+                                  </th> */}
                                   {toggle ? (
                                     <th className="p-3 font-medium">
                                       Product Name
@@ -1898,8 +1998,24 @@ function AdminDashboard() {
                                     key={item.id}
                                     className="hover:bg-gray-50 cursor-pointer"
                                   >
-                                    <td className="border border-gray-200 p-3 align-middle w-1/2">
-                                      <div className="flex items-center gap-2 ">
+                                    <td className="border border-gray-200 p-3 align-middle">
+                                      <div className="flex items-center gap-2">
+                                        <input
+                                          type="checkbox"
+                                          name=""
+                                          id=""
+                                          onClick={(e) => e.stopPropagation()}
+                                          checked={selectedItemForDelete?.includes(
+                                            item.id
+                                          )}
+                                          onChange={() =>
+                                            handleCheckboxChange(item.id)
+                                          }
+                                        />
+                                      </div>
+                                    </td>
+                                    <td className="border border-gray-200 p-3 align-middle">
+                                      <div className="flex items-center gap-2">
                                         <img
                                           src={`${baseImageUrl}${item.image}`}
                                           alt={item.title}
@@ -2400,9 +2516,26 @@ function AdminDashboard() {
           rejectReason={rejectReason}
           setRejectReason={setRejectReason}
           handleConfirmReject={handleConfirmReject}
+          setSelectedItem={setSelectedItem}
+          setSelectSubcategories={setSelectSubcategories}
         />
       )}
-
+      {/* {productPreview && (
+        <DashboardProductCard
+          onClose={() => {
+            setProductPreview(false);
+          }}
+          product={selectedProductview}
+          handleDelete={handleDelete}
+          updateStatus={handleUpdateStatus}
+          deleteWarning={deleteWarning}
+          setDeleteWarning={setDeleteWarning}
+          rejectReason={rejectReason}
+          setRejectReason={setRejectReason}
+          handleConfirmReject={handleConfirmReject}
+        />
+      )} */}
+      {/* delete waring for single item  */}
       {deleteWarning && (
         <div className="flex justify-center items-center fixed inset-0 z-30">
           <div className="absolute inset-0 bg-black opacity-50"></div>
@@ -2436,6 +2569,15 @@ function AdminDashboard() {
             </div>
           </div>
         </div>
+      )}
+
+      {/* delete waring for multiple select item */}
+      {multipleDeleteWaring && (
+        <MultipleDeleteWarningCard
+          setDeleteWarning={setMultipleDeleteWaring}
+          selectedItemForDelete={selectedItemForDelete}
+          handleMultipleDelete={handleMultipleDelete}
+        />
       )}
       {rejectReasonPopup && (
         <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-30 font-Poppins">
@@ -2517,5 +2659,45 @@ function SortableHeader({ label, field, sortField, sortOrder, toggleSort }) {
         </span>
       </button>
     </th>
+  );
+}
+
+function MultipleDeleteWarningCard({
+  setDeleteWarning,
+  selectedItemForDelete,
+  handleMultipleDelete,
+}) {
+  return (
+    <div className="flex justify-center items-center fixed inset-0 z-30">
+      <div className="absolute inset-0 bg-black opacity-50"></div>
+      <div className="bg-white relative py-7 px-16 md:px-20">
+        <div className="flex justify-center items-center">
+          <img
+            src="images/icons/delete-icon.png"
+            alt="delete icon"
+            className="h-12 w-12"
+          />
+        </div>
+        <h4 className="font-semibold my-5">
+          Do you want to delete {selectedItemForDelete?.length}? products
+        </h4>
+        <div className="flex justify-between">
+          <button
+            onClick={() => {
+              setDeleteWarning(false);
+            }}
+            className="px-5 py-2 bg-[#EEEEEE] rounded-md"
+          >
+            Cancel
+          </button>
+          <button
+            onClick={() => handleMultipleDelete(selectedItemForDelete)}
+            className="px-5 py-2 bg-[#B4EAEA] rounded-md"
+          >
+            Delete
+          </button>
+        </div>
+      </div>
+    </div>
   );
 }
