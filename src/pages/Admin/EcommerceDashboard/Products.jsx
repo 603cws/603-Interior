@@ -22,6 +22,7 @@ import { supabase } from "../../../services/supabase";
 import PagInationNav from "../../../common-components/PagInationNav";
 import { MdOutlineRateReview } from "react-icons/md";
 import ProductReviews from "./ProductReviews";
+import { useApp } from "../../../Context/Context";
 
 function Products({
   isproductRefresh,
@@ -41,6 +42,7 @@ function Products({
   const [selected, setSelected] = useState("");
   const [searchQuery, setSearchQuery] = useState(""); // to store the latest search input
   const [selectedCategory, setSelectedCategory] = useState("");
+  const [selectedSubCategory, setSelectedSubCategory] = useState("");
   const [toggle, setToggle] = useState(true);
   const [products, setProducts] = useState([]);
   const [addons, setAddons] = useState([]);
@@ -58,6 +60,11 @@ function Products({
   const [itemsPerPage, setItemsPerPage] = useState(10); // Default (gets updated dynamically)
   const [openMenuId, setOpenMenuId] = useState(null); // Store the ID of the row with an open menu
 
+  const [priceMin, setPriceMin] = useState("");
+  const [priceMax, setPriceMax] = useState("");
+  const [dateFrom, setDateFrom] = useState("");
+  const [dateTo, setDateTo] = useState("");
+
   // new edit option product
   const [editProduct, setEditProduct] = useState(false);
   const [selectedproduct, setSelectedproduct] = useState(null);
@@ -67,6 +74,15 @@ function Products({
   const [selectedAddon, setSelectedAddon] = useState(null);
 
   const [reviews, setReviews] = useState(false);
+
+  const { categories } = useApp();
+
+  const categoriesData = categories.map((item) => item.category);
+
+  const subcategoriesByCategory = categories.reduce((acc, item) => {
+    acc[item.category] = item.subcategories || [];
+    return acc;
+  }, {});
 
   //all the category
   const category = [
@@ -135,17 +151,40 @@ function Products({
     };
   }, [filterDropdown]);
 
-  const applyFilters = ({ query = "", category = "", status = "" }) => {
+  const normalize = (str) => str.replace(/\s+/g, " ").trim().toLowerCase();
+
+  const applyFilters = ({
+    query = "",
+    category = "",
+    status = "",
+    subCategory = "",
+    priceMin = "",
+    priceMax = "",
+    dateFrom = "",
+    dateTo = "",
+  }) => {
     const source = toggle ? products : addons;
 
+    // detect whether any filter is active (include new filters)
+    const anyFilterActive = !!(
+      query ||
+      category ||
+      status ||
+      subCategory ||
+      priceMin ||
+      priceMax ||
+      dateFrom ||
+      dateTo
+    );
+
     // Store last page before searching if this is a new search
-    if ((query || category || status) && !isSearching) {
+    if (anyFilterActive && !isSearching) {
       setLastPageBeforeSearch(currentPage);
       setIsSearching(true);
     }
 
-    // Reset case: No query, category, or status
-    if (!query && !category && !status) {
+    // Reset case: No filters at all
+    if (!anyFilterActive) {
       toggle ? setFilteredProducts(products) : setFilteredAddons(addons);
       if (isSearching) {
         setCurrentPage(lastPageBeforeSearch);
@@ -154,9 +193,64 @@ function Products({
       return;
     }
 
-    const normalize = (str) => str.replace(/\s+/g, " ").trim().toLowerCase();
+    // helpers: extract price and date safely from item
+    const getItemPrice = (item) => {
+      // try multiple possible locations, convert to Number or NaN
+      const candidates = [
+        item.price,
+        item.products?.price,
+        item.price?.amount,
+        item.price?.value,
+      ];
+      for (const c of candidates) {
+        if (c !== undefined && c !== null && c !== "") {
+          const n = Number(c);
+          if (!Number.isNaN(n)) return n;
+        }
+      }
+      return NaN;
+    };
 
-    // Apply filters
+    const getItemDate = (item) => {
+      // try common date fields
+      const candidates = [
+        item.date,
+        item.createdAt,
+        item.created_at,
+        item.products?.createdAt,
+        item.products?.date,
+      ];
+      for (const c of candidates) {
+        if (!c && c !== 0) continue;
+        const t = Date.parse(c);
+        if (!Number.isNaN(t)) return new Date(t);
+      }
+      return null;
+    };
+
+    // prepare numeric and date bounds (normalize)
+    const minPrice =
+      priceMin === "" ? Number.NEGATIVE_INFINITY : Number(priceMin);
+    const maxPrice =
+      priceMax === "" ? Number.POSITIVE_INFINITY : Number(priceMax);
+
+    // parse date inputs and create inclusive bounds
+    const parseDateOrNull = (dStr, isEnd = false) => {
+      if (!dStr) return null;
+      // treat input as yyyy-mm-dd (from date input). Make inclusive -- start of day / end of day
+      const base = new Date(dStr);
+      if (Number.isNaN(base.getTime())) return null;
+      if (isEnd) {
+        base.setHours(23, 59, 59, 999);
+      } else {
+        base.setHours(0, 0, 0, 0);
+      }
+      return base;
+    };
+
+    const fromDate = parseDateOrNull(dateFrom, false);
+    const toDate = parseDateOrNull(dateTo, true);
+
     const filtered = source.filter((item) => {
       const titleMatch = query
         ? normalize(item.title).includes(normalize(query))
@@ -168,11 +262,47 @@ function Products({
           : item.title?.toLowerCase().includes(category.toLowerCase())
         : true;
 
+      const subCategoryMatch = subCategory
+        ? toggle
+          ? item.products?.subcategory
+              ?.toLowerCase()
+              .includes(subCategory.toLowerCase())
+          : item.title?.toLowerCase().includes(subCategory.toLowerCase())
+        : true;
+
       const statusMatch = status
         ? item.status?.toLowerCase() === status.toLowerCase()
         : true;
 
-      return titleMatch && categoryMatch && statusMatch;
+      // Price matching (if either priceMin or priceMax provided)
+      const itemPrice = getItemPrice(item);
+      const priceMatch =
+        isFinite(minPrice) || isFinite(maxPrice)
+          ? !Number.isNaN(itemPrice) &&
+            itemPrice >= minPrice &&
+            itemPrice <= maxPrice
+          : true;
+
+      // Date matching (if either dateFrom or dateTo provided)
+      const itemDate = getItemDate(item);
+      let dateMatch = true;
+      if (fromDate || toDate) {
+        if (!itemDate) {
+          dateMatch = false;
+        } else {
+          if (fromDate && itemDate < fromDate) dateMatch = false;
+          if (toDate && itemDate > toDate) dateMatch = false;
+        }
+      }
+
+      return (
+        titleMatch &&
+        categoryMatch &&
+        statusMatch &&
+        subCategoryMatch &&
+        priceMatch &&
+        dateMatch
+      );
     });
 
     // Apply filtered result
@@ -266,7 +396,7 @@ function Products({
 
   return (
     <div className="flex flex-col h-full min-h-0 overflow-hidden lg:border-2 lg:border-[#334A78] lg:rounded-lg bg-white">
-      <div className="overflow-y-auto scrollbar-hide relative ">
+      <div className="overflow-y-auto scrollbar-hide relative h-full">
         {addNewProduct ? (
           <VendorNewProduct
             setAddNewProduct={setAddNewProduct}
@@ -332,11 +462,16 @@ function Products({
                             onChange={(e) => {
                               const value = e.target.value;
                               setSelected(value);
-                              setFilterDropdown(false);
+                              setFilterDropdown(false); // keep original behavior (close on status change)
                               applyFilters({
                                 query: searchQuery,
                                 category: selectedCategory,
+                                subCategory: selectedSubCategory,
                                 status: value,
+                                priceMin,
+                                priceMax,
+                                dateFrom,
+                                dateTo,
                               });
                             }}
                             className="w-full border-none focus:ring-0 p-2 text-sm"
@@ -348,6 +483,7 @@ function Products({
                           </select>
                         </div>
 
+                        {/* category */}
                         <div>
                           <label className="text-sm text-[#374A75]">
                             Categories
@@ -358,22 +494,193 @@ function Products({
                             onChange={(e) => {
                               const value = e.target.value;
                               setSelectedCategory(value);
+                              setSelectedSubCategory("");
                               applyFilters({
                                 query: searchQuery,
                                 category: value,
+                                subCategory: "",
                                 status: selected,
+                                priceMin,
+                                priceMax,
+                                dateFrom,
+                                dateTo,
                               });
                             }}
                             id="category"
-                            className="py-2"
+                            className="w-full py-2 text-sm"
                           >
                             <option value="">All categories</option>
-                            {category.map((category) => (
+                            {categoriesData.map((category) => (
                               <option key={category} value={category}>
                                 {category}
                               </option>
                             ))}
                           </select>
+                        </div>
+
+                        {/* subcategory (conditional) */}
+                        {selectedCategory && (
+                          <div>
+                            <label className="text-sm text-[#374A75]">
+                              Sub Categories
+                            </label>
+                            <select
+                              name="subCategory"
+                              value={selectedSubCategory}
+                              onChange={(e) => {
+                                const value = e.target.value;
+                                setSelectedSubCategory(value);
+                                applyFilters({
+                                  query: searchQuery,
+                                  category: selectedCategory,
+                                  subCategory: value,
+                                  status: selected,
+                                  priceMin,
+                                  priceMax,
+                                  dateFrom,
+                                  dateTo,
+                                });
+                              }}
+                              id="subCategory"
+                              className="w-full py-2 text-sm"
+                            >
+                              <option value="">All Sub Categories</option>
+                              {(
+                                subcategoriesByCategory[selectedCategory] || []
+                              ).map((subCat) => (
+                                <option key={subCat} value={subCat}>
+                                  {subCat}
+                                </option>
+                              ))}
+                            </select>
+                          </div>
+                        )}
+
+                        {/* price range */}
+                        <div>
+                          <label className="text-sm text-[#374A75]">
+                            Price (₹)
+                          </label>
+                          <div className="flex gap-2">
+                            <input
+                              type="number"
+                              min="0"
+                              placeholder="Min"
+                              value={priceMin}
+                              onChange={(e) => {
+                                const v = e.target.value;
+                                setPriceMin(v);
+                                applyFilters({
+                                  query: searchQuery,
+                                  category: selectedCategory,
+                                  subCategory: selectedSubCategory,
+                                  status: selected,
+                                  priceMin: v,
+                                  priceMax,
+                                  dateFrom,
+                                  dateTo,
+                                });
+                              }}
+                              className="w-1/2 border p-2 text-sm rounded"
+                            />
+                            <input
+                              type="number"
+                              min="0"
+                              placeholder="Max"
+                              value={priceMax}
+                              onChange={(e) => {
+                                const v = e.target.value;
+                                setPriceMax(v);
+                                applyFilters({
+                                  query: searchQuery,
+                                  category: selectedCategory,
+                                  subCategory: selectedSubCategory,
+                                  status: selected,
+                                  priceMin,
+                                  priceMax: v,
+                                  dateFrom,
+                                  dateTo,
+                                });
+                              }}
+                              className="w-1/2 border p-2 text-sm rounded"
+                            />
+                          </div>
+                        </div>
+
+                        {/* date range */}
+                        <div>
+                          <label className="text-sm text-[#374A75]">Date</label>
+                          <div className="flex gap-2">
+                            <input
+                              type="date"
+                              value={dateFrom}
+                              onChange={(e) => {
+                                const v = e.target.value;
+                                setDateFrom(v);
+                                applyFilters({
+                                  query: searchQuery,
+                                  category: selectedCategory,
+                                  subCategory: selectedSubCategory,
+                                  status: selected,
+                                  priceMin,
+                                  priceMax,
+                                  dateFrom: v,
+                                  dateTo,
+                                });
+                              }}
+                              className="w-1/2 border p-2 text-sm rounded"
+                            />
+                            <input
+                              type="date"
+                              value={dateTo}
+                              onChange={(e) => {
+                                const v = e.target.value;
+                                setDateTo(v);
+                                applyFilters({
+                                  query: searchQuery,
+                                  category: selectedCategory,
+                                  subCategory: selectedSubCategory,
+                                  status: selected,
+                                  priceMin,
+                                  priceMax,
+                                  dateFrom,
+                                  dateTo: v,
+                                });
+                              }}
+                              className="w-1/2 border p-2 text-sm rounded"
+                            />
+                          </div>
+                        </div>
+
+                        {/* actions: Clear filters */}
+                        <div className="flex justify-end">
+                          <button
+                            type="button"
+                            onClick={() => {
+                              // reset local filter states
+                              setSelected("");
+                              setSelectedCategory("");
+                              setSelectedSubCategory("");
+                              setPriceMin("");
+                              setPriceMax("");
+                              setDateFrom("");
+                              setDateTo("");
+                              // keep dropdown open (you can close if you prefer)
+                              applyFilters({
+                                query: searchQuery,
+                                category: "",
+                                subCategory: "",
+                                status: "",
+                                priceMin: "",
+                                priceMax: "",
+                                dateFrom: "",
+                                dateTo: "",
+                              });
+                            }}
+                            className="text-sm px-3 py-1 rounded bg-gray-100 hover:bg-gray-200"
+                          >
+                            Reset Filter
+                          </button>
                         </div>
                       </div>
                     )}
@@ -455,20 +762,27 @@ function Products({
                       <div className="absolute mt-2 w-40 -left-full bg-white border rounded-md shadow-lg z-10 p-3">
                         {/* status filter */}
                         <div>
-                          <label className=" text-[#374A75]">Status</label>
+                          <label className="text-sm text-[#374A75]">
+                            Status
+                          </label>
                           <select
                             value={selected}
                             onChange={(e) => {
                               const value = e.target.value;
                               setSelected(value);
-                              setFilterDropdown(false);
+                              setFilterDropdown(false); // keep original behavior (close on status change)
                               applyFilters({
                                 query: searchQuery,
                                 category: selectedCategory,
+                                subCategory: selectedSubCategory,
                                 status: value,
+                                priceMin,
+                                priceMax,
+                                dateFrom,
+                                dateTo,
                               });
                             }}
-                            className="w-full border-none focus:ring-0 p-2"
+                            className="w-full border-none focus:ring-0 p-2 text-sm"
                           >
                             <option value="">All</option>
                             <option value="pending">Pending</option>
@@ -477,30 +791,204 @@ function Products({
                           </select>
                         </div>
 
+                        {/* category */}
                         <div>
-                          <label className=" text-[#374A75]">Categories</label>
+                          <label className="text-sm text-[#374A75]">
+                            Categories
+                          </label>
                           <select
                             name="category"
                             value={selectedCategory}
                             onChange={(e) => {
                               const value = e.target.value;
                               setSelectedCategory(value);
+                              setSelectedSubCategory("");
                               applyFilters({
                                 query: searchQuery,
                                 category: value,
+                                subCategory: "",
                                 status: selected,
+                                priceMin,
+                                priceMax,
+                                dateFrom,
+                                dateTo,
                               });
                             }}
                             id="category"
-                            className="py-2"
+                            className="w-full py-2 text-sm"
                           >
                             <option value="">All categories</option>
-                            {category.map((category) => (
+                            {categoriesData.map((category) => (
                               <option key={category} value={category}>
                                 {category}
                               </option>
                             ))}
                           </select>
+                        </div>
+
+                        {/* subcategory (conditional) */}
+                        {selectedCategory && (
+                          <div>
+                            <label className="text-sm text-[#374A75]">
+                              Sub Categories
+                            </label>
+                            <select
+                              name="subCategory"
+                              value={selectedSubCategory}
+                              onChange={(e) => {
+                                const value = e.target.value;
+                                setSelectedSubCategory(value);
+                                applyFilters({
+                                  query: searchQuery,
+                                  category: selectedCategory,
+                                  subCategory: value,
+                                  status: selected,
+                                  priceMin,
+                                  priceMax,
+                                  dateFrom,
+                                  dateTo,
+                                });
+                              }}
+                              id="subCategory"
+                              className="w-full py-2 text-sm"
+                            >
+                              <option value="">All Sub Categories</option>
+                              {(
+                                subcategoriesByCategory[selectedCategory] || []
+                              ).map((subCat) => (
+                                <option key={subCat} value={subCat}>
+                                  {subCat}
+                                </option>
+                              ))}
+                            </select>
+                          </div>
+                        )}
+
+                        {/* price range */}
+                        <div>
+                          <label className="text-sm text-[#374A75]">
+                            Price (₹)
+                          </label>
+                          <div className="flex gap-2">
+                            <input
+                              type="number"
+                              min="0"
+                              placeholder="Min"
+                              value={priceMin}
+                              onChange={(e) => {
+                                const v = e.target.value;
+                                setPriceMin(v);
+                                applyFilters({
+                                  query: searchQuery,
+                                  category: selectedCategory,
+                                  subCategory: selectedSubCategory,
+                                  status: selected,
+                                  priceMin: v,
+                                  priceMax,
+                                  dateFrom,
+                                  dateTo,
+                                });
+                              }}
+                              className="w-1/2 border p-2 text-sm rounded"
+                            />
+                            <input
+                              type="number"
+                              min="0"
+                              placeholder="Max"
+                              value={priceMax}
+                              onChange={(e) => {
+                                const v = e.target.value;
+                                setPriceMax(v);
+                                applyFilters({
+                                  query: searchQuery,
+                                  category: selectedCategory,
+                                  subCategory: selectedSubCategory,
+                                  status: selected,
+                                  priceMin,
+                                  priceMax: v,
+                                  dateFrom,
+                                  dateTo,
+                                });
+                              }}
+                              className="w-1/2 border p-2 text-sm rounded"
+                            />
+                          </div>
+                        </div>
+
+                        {/* date range */}
+                        <div>
+                          <label className="text-sm text-[#374A75]">Date</label>
+                          <div className="flex gap-2">
+                            <input
+                              type="date"
+                              value={dateFrom}
+                              onChange={(e) => {
+                                const v = e.target.value;
+                                setDateFrom(v);
+                                applyFilters({
+                                  query: searchQuery,
+                                  category: selectedCategory,
+                                  subCategory: selectedSubCategory,
+                                  status: selected,
+                                  priceMin,
+                                  priceMax,
+                                  dateFrom: v,
+                                  dateTo,
+                                });
+                              }}
+                              className="w-1/2 border p-2 text-sm rounded"
+                            />
+                            <input
+                              type="date"
+                              value={dateTo}
+                              onChange={(e) => {
+                                const v = e.target.value;
+                                setDateTo(v);
+                                applyFilters({
+                                  query: searchQuery,
+                                  category: selectedCategory,
+                                  subCategory: selectedSubCategory,
+                                  status: selected,
+                                  priceMin,
+                                  priceMax,
+                                  dateFrom,
+                                  dateTo: v,
+                                });
+                              }}
+                              className="w-1/2 border p-2 text-sm rounded"
+                            />
+                          </div>
+                        </div>
+
+                        {/* actions: Clear filters */}
+                        <div className="flex justify-end">
+                          <button
+                            type="button"
+                            onClick={() => {
+                              // reset local filter states
+                              setSelected("");
+                              setSelectedCategory("");
+                              setSelectedSubCategory("");
+                              setPriceMin("");
+                              setPriceMax("");
+                              setDateFrom("");
+                              setDateTo("");
+                              // keep dropdown open (you can close if you prefer)
+                              applyFilters({
+                                query: searchQuery,
+                                category: "",
+                                subCategory: "",
+                                status: "",
+                                priceMin: "",
+                                priceMax: "",
+                                dateFrom: "",
+                                dateTo: "",
+                              });
+                            }}
+                            className="text-sm px-3 py-1 rounded bg-gray-100 hover:bg-gray-200"
+                          >
+                            Reset Filter
+                          </button>
                         </div>
                       </div>
                     )}
@@ -596,146 +1084,160 @@ function Products({
                             ) : (
                               <th className="p-3 font-medium">Addon Name</th>
                             )}
-                            <th className="p-3  font-medium">Price</th>
+                            <th className="p-3  font-medium">MRP</th>
+                            <th className="p-3  font-medium">Selling Price</th>
                             <th className="p-3  font-medium">Stock</th>
                             <th className="p-3 font-medium">Status</th>
                             <th className="p-3 font-medium">Action</th>
                           </tr>
                         </thead>
                         <tbody className=" text-sm">
-                          {paginatedItems.map((item) => (
-                            <tr key={item.id} className="hover:bg-gray-50">
-                              <td className="border border-gray-200 p-3 align-middle">
-                                <div className="flex items-center gap-2">
-                                  <img
-                                    src={`${baseImageUrl}${item.image}`}
-                                    alt={item.title}
-                                    className="w-10 h-10 object-contain rounded"
-                                  />
+                          {paginatedItems.map(
+                            (item) => (
+                              console.log(item),
+                              (
+                                <tr key={item.id} className="hover:bg-gray-50">
+                                  <td className="border border-gray-200 p-3 align-middle w-1/2">
+                                    <div className="flex items-center gap-2">
+                                      <img
+                                        src={`${baseImageUrl}${item.image}`}
+                                        alt={item.title}
+                                        className="w-10 h-10 object-contain rounded"
+                                      />
 
-                                  <span>{item.title}</span>
-                                </div>
-                              </td>
-                              <td className="border border-gray-200 p-3 align-middle text-center">
-                                ₹{item.price}
-                              </td>
-                              <td className="border border-gray-200 p-3 align-middle text-center">
-                                {item.stockQty}
-                              </td>
-                              <td className="border border-gray-200 p-3 align-middle text-center group relative">
-                                {item.status === "pending" ? (
-                                  <div className="flex items-center justify-center">
-                                    <span className="text-[#13B2E4]">
-                                      Pending
-                                    </span>
-                                    <div className="absolute top-0 left-0 w-full h-full bg-white/90 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                                      <button
-                                        className="bg-gray-100 text-green-600 p-3 rounded-full mr-2 hover:text-gray-100 hover:bg-green-600"
-                                        onClick={() => {
-                                          handleUpdateStatus(item, "approved");
-                                          setRejectReason("");
-                                        }}
-                                        // onClick={() => handleAccept(item)}
-                                      >
-                                        <IoCheckmark size={20} />
-                                      </button>
-                                      <button
-                                        className="bg-gray-100 text-red-600 p-3 rounded-full mr-2 hover:text-gray-100 hover:bg-red-600"
-                                        // onClick={() =>
-                                        //   handleReject(item.id)
-                                        // }
-                                        // onClick={() =>
-                                        //   handleUpdateStatus(
-                                        //     item,
-                                        //     "rejected"
-                                        //   )
-                                        // }
-                                        onClick={() => handleRejectClick(item)}
-                                      >
-                                        <HiXMark size={20} />
-                                      </button>
+                                      <span>{item.title}</span>
                                     </div>
-                                  </div>
-                                ) : item.status === "approved" ? (
-                                  <span className="text-green-400">
-                                    approved
-                                  </span>
-                                ) : (
-                                  <span className="text-red-400">
-                                    {item.status || "N/A"}
-                                  </span>
-                                )}
-                              </td>
+                                  </td>
+                                  <td className="border border-gray-200 p-3 align-middle text-center">
+                                    ₹{item?.ecommercePrice?.mrp}
+                                  </td>
+                                  <td className="border border-gray-200 p-3 align-middle text-center">
+                                    ₹{item?.ecommercePrice?.sellingPrice}
+                                  </td>
+                                  <td className="border border-gray-200 p-3 align-middle text-center">
+                                    {item.stockQty}
+                                  </td>
+                                  <td className="border border-gray-200 p-3 align-middle text-center group relative">
+                                    {item.status === "pending" ? (
+                                      <div className="flex items-center justify-center">
+                                        <span className="text-[#13B2E4]">
+                                          Pending
+                                        </span>
+                                        <div className="absolute top-0 left-0 w-full h-full bg-white/90 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                                          <button
+                                            className="bg-gray-100 text-green-600 p-3 rounded-full mr-2 hover:text-gray-100 hover:bg-green-600"
+                                            onClick={() => {
+                                              handleUpdateStatus(
+                                                item,
+                                                "approved"
+                                              );
+                                              setRejectReason("");
+                                            }}
+                                            // onClick={() => handleAccept(item)}
+                                          >
+                                            <IoCheckmark size={20} />
+                                          </button>
+                                          <button
+                                            className="bg-gray-100 text-red-600 p-3 rounded-full mr-2 hover:text-gray-100 hover:bg-red-600"
+                                            // onClick={() =>
+                                            //   handleReject(item.id)
+                                            // }
+                                            // onClick={() =>
+                                            //   handleUpdateStatus(
+                                            //     item,
+                                            //     "rejected"
+                                            //   )
+                                            // }
+                                            onClick={() =>
+                                              handleRejectClick(item)
+                                            }
+                                          >
+                                            <HiXMark size={20} />
+                                          </button>
+                                        </div>
+                                      </div>
+                                    ) : item.status === "approved" ? (
+                                      <span className="text-green-400">
+                                        approved
+                                      </span>
+                                    ) : (
+                                      <span className="text-red-400">
+                                        {item.status || "N/A"}
+                                      </span>
+                                    )}
+                                  </td>
 
-                              <td className="border border-gray-200 p-3 align-middle flex justify-center items-center relative">
-                                <button
-                                  ref={(el) =>
-                                    (buttonRef.current[item.id] = el)
-                                  }
-                                  className="bg-white flex justify-center items-center py-1.5 w-20 mb-2"
-                                  onClick={() => handleMenuToggle(item.id)}
-                                >
-                                  <CiMenuKebab size={25} />
-                                </button>
-
-                                {openMenuId === item.id && (
-                                  <div
-                                    ref={(el) =>
-                                      (menuRef.current[item.id] = el)
-                                    }
-                                    className="absolute top-1/2 left-0 transform mt-2 bg-white border border-gray-300 shadow-md rounded-md w-24 z-40"
-                                  >
+                                  <td className="border border-gray-200 p-3 align-middle flex justify-center items-center relative">
                                     <button
-                                      onClick={() => {
-                                        handleProductPreview(item);
-                                        setOpenMenuId(null);
-                                      }}
-                                      className=" flex gap-2 items-center w-full text-left px-3 py-2 hover:bg-gray-200"
+                                      ref={(el) =>
+                                        (buttonRef.current[item.id] = el)
+                                      }
+                                      className="bg-white flex justify-center items-center py-1.5 w-20 mb-2"
+                                      onClick={() => handleMenuToggle(item.id)}
                                     >
-                                      <VscEye /> View
+                                      <CiMenuKebab size={25} />
                                     </button>
-                                    <button
-                                      onClick={() => {
-                                        if (toggle) {
-                                          setSelectedproduct(item);
-                                          setEditProduct(true);
-                                        } else {
-                                          setSelectedAddon(item);
-                                          setEditAddon(true);
+
+                                    {openMenuId === item.id && (
+                                      <div
+                                        ref={(el) =>
+                                          (menuRef.current[item.id] = el)
                                         }
-                                        setOpenMenuId(null);
-                                      }}
-                                      className="flex gap-2 items-center w-full text-left px-3 py-2 hover:bg-gray-200"
-                                    >
-                                      <VscEye /> Edit
-                                    </button>
-                                    <button
-                                      // onClick={() => {
-                                      //   handleDelete(item);
-                                      // }}
-                                      onClick={() => {
-                                        handleDeleteClick(item);
-                                        setOpenMenuId(null);
-                                      }}
-                                      className="flex gap-2 items-center w-full text-left px-3 py-2 hover:bg-gray-200"
-                                    >
-                                      <MdOutlineDelete /> Delete
-                                    </button>
-                                    <button
-                                      onClick={() => {
-                                        setSelectedproduct(item);
-                                        setReviews(true);
-                                        setOpenMenuId(null);
-                                      }}
-                                      className="flex gap-0.5 items-center w-full text-left px-3 py-2 hover:bg-gray-200"
-                                    >
-                                      <MdOutlineRateReview /> Reviews
-                                    </button>
-                                  </div>
-                                )}
-                              </td>
-                            </tr>
-                          ))}
+                                        className="absolute top-1/2 left-0 transform mt-2 bg-white border border-gray-300 shadow-md rounded-md w-24 z-40"
+                                      >
+                                        <button
+                                          onClick={() => {
+                                            handleProductPreview(item);
+                                            setOpenMenuId(null);
+                                          }}
+                                          className=" flex gap-2 items-center w-full text-left px-3 py-2 hover:bg-gray-200"
+                                        >
+                                          <VscEye /> View
+                                        </button>
+                                        <button
+                                          onClick={() => {
+                                            if (toggle) {
+                                              setSelectedproduct(item);
+                                              setEditProduct(true);
+                                            } else {
+                                              setSelectedAddon(item);
+                                              setEditAddon(true);
+                                            }
+                                            setOpenMenuId(null);
+                                          }}
+                                          className="flex gap-2 items-center w-full text-left px-3 py-2 hover:bg-gray-200"
+                                        >
+                                          <VscEye /> Edit
+                                        </button>
+                                        <button
+                                          // onClick={() => {
+                                          //   handleDelete(item);
+                                          // }}
+                                          onClick={() => {
+                                            handleDeleteClick(item);
+                                            setOpenMenuId(null);
+                                          }}
+                                          className="flex gap-2 items-center w-full text-left px-3 py-2 hover:bg-gray-200"
+                                        >
+                                          <MdOutlineDelete /> Delete
+                                        </button>
+                                        <button
+                                          onClick={() => {
+                                            setSelectedproduct(item);
+                                            setReviews(true);
+                                            setOpenMenuId(null);
+                                          }}
+                                          className="flex gap-0.5 items-center w-full text-left px-3 py-2 hover:bg-gray-200"
+                                        >
+                                          <MdOutlineRateReview /> Reviews
+                                        </button>
+                                      </div>
+                                    )}
+                                  </td>
+                                </tr>
+                              )
+                            )
+                          )}
                         </tbody>
                       </table>
                     </div>

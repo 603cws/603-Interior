@@ -214,6 +214,7 @@ function AdminDashboard() {
   const [selectedItem, setSelectedItem] = useState(null);
 
   const normalize = (str) => str.replace(/\s+/g, " ").trim().toLowerCase();
+
   const applyFilters = ({
     query = "",
     category = "",
