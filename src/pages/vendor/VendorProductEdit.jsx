@@ -707,6 +707,7 @@ function VendorProductEdit({
                   type="textarea"
                   name="details"
                   onChange={handleChange}
+                  maxLength={150}
                   value={variant.details}
                   className="w-full py-1.5 px-2 border-2 rounded-lg"
                   required

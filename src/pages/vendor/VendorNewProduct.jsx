@@ -553,6 +553,7 @@ function VendorNewProduct({
                   name="details"
                   onChange={handleChange}
                   value={variant.details}
+                  maxLength={150}
                   className="w-full py-1.5 px-2 border-2 rounded-lg"
                   required
                 />
