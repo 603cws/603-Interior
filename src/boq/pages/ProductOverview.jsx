@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef, useMemo } from "react";
 import { ToastContainer } from "react-toastify";
-import { MdOutlineKeyboardArrowLeft } from "react-icons/md"; //MdOutlineKeyboardArrowLeft
+import { MdOutlineKeyboardArrowLeft } from "react-icons/md";
 import { normalizeKey } from "../utils/CalculateTotalPriceHelper";
 import SelectArea from "../components/SelectArea";
 import { useApp } from "../../Context/Context";
@@ -26,13 +26,9 @@ function ProductOverview() {
 
   const [showBackground, setShowBackground] = useState(false);
   const navigate = useNavigate();
-  // const baseImageUrl =
-  //   "https://bwxzfwsoxwtzhjbzbdzs.supabase.co/storage/v1/object/public/addon/";
-  const { id } = useParams(); // Extract product ID from URL
-  // console.log("id from useParams:", id);
-
-  const [mainImageHovered, setMainImageHovered] = useState(false); // For main image hover effect
-  const [hoveredImage, setHoveredImage] = useState(null); // For additional image hover effect
+  const { id } = useParams();
+  const [mainImageHovered, setMainImageHovered] = useState(false);
+  const [hoveredImage, setHoveredImage] = useState(null);
   const [showSelectArea, setShowSelectArea] = useState(false);
   const [selectedAreas, setSelectedAreas] = useState([]);
   const [showThreeViewer, setShowThreeViewer] = useState(false);
@@ -43,7 +39,7 @@ function ProductOverview() {
 
   const [isOpen, setIsOpen] = useState(false);
   const profileRef = useRef(null);
-  const iconRef = useRef(null); //used to close Profile Card when clicked outside of Profile Card area
+  const iconRef = useRef(null);
   const recommendationref = useRef(null);
   const [products, setProducts] = useState([]);
   const [isProfileCard, setIsProfileCard] = useState(false);
@@ -58,39 +54,33 @@ function ProductOverview() {
     setSelectedSubCategory,
     setSelectedSubCategory1,
     selectedData,
-    // categoriesWithTwoLevelCheck,
     quantityData,
     areasData,
     userResponses,
     selectedProductView,
-    // setShowProductView,
     setShowRecommend,
     showRecommend,
     productData,
     searchQuery,
-    // priceRange,
-    // setMinimizedView,
     selectedPlan,
     formulaMap,
     setSelectedProductView,
     seatCountData,
   } = useApp();
 
-  // Toggle profile card visibility
   const toggleProfile = () => {
     setIsOpen((prev) => !prev);
   };
 
-  // Close profile card when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (
         profileRef.current?.contains(event.target) ||
         iconRef.current?.contains(event.target)
       ) {
-        return; // If clicked inside, do nothing
+        return;
       }
-      setIsOpen(false); // Otherwise, close it
+      setIsOpen(false);
     };
 
     if (isOpen) {
@@ -102,14 +92,13 @@ function ProductOverview() {
     };
   }, [isOpen]);
 
-  // close recommendation
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (recommendationref.current?.contains(event.target)) {
-        return; // If clicked inside, do nothing
+        return;
       }
 
-      setShowRecommend(false); // Otherwise, close it
+      setShowRecommend(false);
     };
 
     if (showRecommend) {
@@ -124,25 +113,22 @@ function ProductOverview() {
   useEffect(() => {
     const fetchProduct = async () => {
       if (Object.keys(selectedProductView).length > 0) {
-        setProducts([selectedProductView]); // Use selectedProductView if available
+        setProducts([selectedProductView]);
         setCat(selectedCategory);
         setSubCat(selectedSubCategory);
         setSubCat1(selectedSubCategory1);
 
-        // Combine values into one object
         const productData = {
           category: selectedCategory,
           subCategory: selectedSubCategory,
           subCategory1: selectedSubCategory1,
         };
 
-        // Store in localStorage as a single variable
         sessionStorage.setItem("productData", JSON.stringify(productData));
-        //add cat,subCat,subCat1 inside products and call an product cat, subCat always. => Sunny
       } else if (id) {
         const { data, error } = await supabase
           .from("product_variants")
-          .select("*, products(*)") // Fetch all columns from product_variants and related products
+          .select("*, products(*)")
           .eq("id", id)
           .single()
           .neq("productDisplayType", "ecommerce");
@@ -151,31 +137,30 @@ function ProductOverview() {
           console.error("Error fetching product:", error);
         } else {
           if (data.image) {
-            data.image = `${baseImageUrl}${data.image}`; // Append base URL to image
+            data.image = `${baseImageUrl}${data.image}`;
           }
-          setProducts([data]); // Store fetched data in products
-          // setCat(data.products);
+          setProducts([data]);
 
           const storedProductData = JSON.parse(
             sessionStorage.getItem("productData")
           );
 
           if (storedProductData) {
-            setCat(storedProductData.category); // Selected category
-            setSubCat(storedProductData.subCategory); // Selected subcategory
-            setSubCat1(storedProductData.subCategory1); // Selected subcategory1
+            setCat(storedProductData.category);
+            setSubCat(storedProductData.subCategory);
+            setSubCat1(storedProductData.subCategory1);
           }
         }
       }
     };
 
     fetchProduct();
-  }, [id, selectedCategory, selectedSubCategory, selectedSubCategory1]); // Re-fetch when id or selectedProductView changes
+  }, [id, selectedCategory, selectedSubCategory, selectedSubCategory1]);
 
-  const product = products[0]; // Access the first product
+  const product = products[0];
 
   const getInstructions = (category) => {
-    return instructions[category] || ["No specific instructions found."]; // Provide default message
+    return instructions[category] || ["No specific instructions found."];
   };
 
   const categoryInstructions = getInstructions(cat?.category);
@@ -187,12 +172,10 @@ function ProductOverview() {
     : [];
 
   const isProductInCart = () => {
-    // Check if selectedData is not empty or undefined
     if (!selectedData || selectedData.length === 0) {
-      return false; // Return false if no data is available
+      return false;
     }
 
-    // Proceed with the .some() method if selectedData is non-empty
     return selectedData.some((item) =>
       categoriesWithTwoLevelCheck.includes(item.category)
         ? item.id === product?.id &&
@@ -211,12 +194,10 @@ function ProductOverview() {
     const normalizedTargetKey = normalizeKey(targetKey);
     const keys = Object.keys(dataObject);
 
-    // Try to find an exact match first
     const exactMatch = keys.find(
       (key) => normalizedTargetKey === normalizeKey(key)
     );
 
-    // If no exact match, find the closest one by partial matching
     return (
       exactMatch ||
       keys.find((key) => normalizedTargetKey.includes(normalizeKey(key))) ||
@@ -237,39 +218,30 @@ function ProductOverview() {
       cat?.category === "Smart Solutions" ||
       cat?.category === "Lux"
     ) {
-      // || selectedCategory?.category === "HVAC"
-      return { quantity, price: product?.price || 0, seatCount }; //addonPrice
+      return { quantity, price: product?.price || 0, seatCount };
     } else if (
       cat?.category === "Partitions / Ceilings" ||
       cat?.category === "HVAC"
     ) {
-      //currently this category is missing
-      return { quantity, area, price: product?.price || 0, seatCount }; //addonPrice
+      return { quantity, area, price: product?.price || 0, seatCount };
     } else {
       if (cat?.category === "Civil / Plumbing" && subCat1 !== "Tile") {
-        return { quantity, price: product?.price || 0, seatCount }; //addonPrice
+        return { quantity, price: product?.price || 0, seatCount };
       }
-      return { area, price: product?.price || 0, seatCount }; //addonPrice
+      return { area, price: product?.price || 0, seatCount };
     }
   };
 
   const details = calculationDetails();
-
-  // const allAddons = filteredProducts.flatMap((product) =>
-  //   product.subcategory1 === selectedSubCategory1 &&
-  //   Array.isArray(product.addons)
-  //     ? product.addons
-  //     : []
-  // );
 
   function formatDimensions(dimensions) {
     if (!dimensions) {
       return "N/A";
     }
     return dimensions
-      .split(",") // Split the dimensions by commas
-      .map((dim) => dim.trim() + " cm") // Add "cm" after each number
-      .join(" X "); // Join the dimensions with "X"
+      .split(",")
+      .map((dim) => dim.trim() + " cm")
+      .join(" X ");
   }
 
   const totalPrice = useMemo(() => {
@@ -282,7 +254,7 @@ function ProductOverview() {
       !userResponses ||
       !product
     ) {
-      return 0; // Or return null if needed
+      return 0;
     }
 
     return calculateTotalPrice(
@@ -302,9 +274,6 @@ function ProductOverview() {
   }, [cat, subCat, subCat1, quantityData, areasData, userResponses, product]);
 
   const filteredProducts = useMemo(() => {
-    // if (!selectedCategory) return false;
-    // if (productData.length > 0 || priceRange.length > 0) return []; // Ensure it's an array
-
     return productData.filter((product) => {
       if (!product.product_variants || product.product_variants.length === 0) {
         return false;
@@ -327,47 +296,17 @@ function ProductOverview() {
     });
   }, [productData, searchQuery, priceRange, cat]);
 
-  // Group products by category and subcategory
-  // const groupedProducts = useMemo(() => {
-  //   const grouped = {};
-
-  //   filteredProducts.forEach((product) => {
-  //     const subcategories = product.subcategory
-  //       .split(",")
-  //       .map((sub) => sub.trim());
-
-  //     subcategories.forEach((subcategory) => {
-  //       if (!grouped[product.category]) {
-  //         grouped[product.category] = {};
-  //       }
-  //       if (!grouped[product.category][subcategory]) {
-  //         grouped[product.category][subcategory] = [];
-  //       }
-  //       grouped[product.category][subcategory].push(product);
-  //     });
-  //   });
-  //   return grouped;
-  // }, [filteredProducts]);
-
   const allAddons = filteredProducts.flatMap((product) =>
     product.subcategory1 === subCat1 && Array.isArray(product.addons)
       ? product.addons
       : []
   );
   useEffect(() => {
-    // ⛔ Don't run until all necessary fields are ready
     if (!cat?.category || !subCat || !product?.id) {
-      console.log("⚠️ Missing required fields — skipping related fetch");
       return;
     }
 
     const fetchRelated = async () => {
-      console.log("🔍 [DEBUG] fetchRelated triggered");
-      console.log("Category:", cat.category);
-      console.log("SubCategory:", subCat);
-      console.log("SubCategory1 (optional):", subCat1);
-      console.log("Current Variant ID:", product?.id, product.title);
-
       const { data, error } = await supabase
         .from("products")
         .select("*, product_variants(*)")
@@ -380,25 +319,18 @@ function ProductOverview() {
         return;
       }
 
-      console.log("📦 Raw related products from Supabase:", data);
-
       const filtered = data
         .map((p) => ({
           ...p,
           product_variants: (p.product_variants || []).filter(
             (v) =>
-              v.id !== product?.id && // not current variant
-              v.status === "approved" && // status filter
-              v.image && // has image
-              v.title // has title
+              v.id !== product?.id &&
+              v.status === "approved" &&
+              v.image &&
+              v.title
           ),
         }))
         .filter((p) => p.product_variants.length > 0);
-
-      console.log(
-        "📦 After filtering current product & empty variants:",
-        filtered
-      );
       setRelatedProducts(filtered);
     };
 
@@ -406,7 +338,6 @@ function ProductOverview() {
   }, [cat?.category, subCat, subCat1, product?.id]);
 
   return (
-    // grid
     <>
       <Navbar
         toggleProfile={toggleProfile}
@@ -418,7 +349,6 @@ function ProductOverview() {
       />
       <div className="px-2 md:px-6 3xl:px-40">
         <ToastContainer />
-        {/* ThreeJS Viewer with reduced size */}
         {import.meta.env.MODE === "development" && showThreeViewer && (
           <ThreeDViewer onClose={() => setShowThreeViewer(false)} />
         )}
@@ -428,36 +358,15 @@ function ProductOverview() {
             showSelectArea ? "opacity-50 pointer-events-none" : "opacity-100"
           }`}
         >
-          {/* grid component 1 */}
           <div className="flex flex-col md:gap-0">
-            {/* <TbArrowBackUp
-            size={30}
-            className="cursor-pointer"
-            onClick={() => {
-              // setShowProductView(false);
-              // setMinimizedView(true);
-              // navigate("/boq");
-              //Don't change the below setSelectedCategory, setSelectedSubCategory, setSelectedSubCategory1 => Sunny
-              setSelectedCategory(cat);
-              setSelectedSubCategory(subCat);
-              setSelectedSubCategory1(subCat1);
-              // navigate(-1);
-              navigate("/boq", { state: { minimizedView: true } });
-            }}
-          /> */}
-
-            <div className="flex lg:mx-10  items-center text-[#334A78]  mt-1 ">
+            <div className="flex lg:mx-10 items-center text-[#334A78] mt-1">
               <div
                 className="flex items-center cursor-pointer hover:underline"
                 onClick={() => {
-                  // setShowProductView(false);
-                  // setMinimizedView(true);
-                  // navigate("/boq");
                   //Don't change the below setSelectedCategory, setSelectedSubCategory, setSelectedSubCategory1 => Sunny
                   setSelectedCategory(cat);
                   setSelectedSubCategory(subCat);
                   setSelectedSubCategory1(subCat1);
-                  // navigate(-1);
                   navigate("/boq", { state: { minimizedView: true } });
                 }}
               >
@@ -467,43 +376,8 @@ function ProductOverview() {
                 />
                 <p className="ml-1">Back</p>
               </div>
-              {/* <div
-              onClick={() => {
-                // setShowProductView(false);
-                // setMinimizedView(true);
-                // navigate("/boq");
-                //Don't change the below setSelectedCategory, setSelectedSubCategory, setSelectedSubCategory1 => Sunny
-                setSelectedCategory(cat);
-                setSelectedSubCategory(subCat);
-                setSelectedSubCategory1(subCat1);
-                // navigate(-1);
-                navigate("/boq", { state: { minimizedView: true } });
-              }}
-              className="flex cursor-pointer"
-            >
-              <span className="hover:underline">{cat?.category}</span>
-              <div className="flex items-center ">
-                <span>
-                  <MdOutlineKeyboardArrowRight
-                    size={20}
-                    style={{ color: "#334A78" }}
-                  />
-                </span>
-              </div>
-              <span className="hover:underline">{subCat}</span>
-              <div className="flex items-center">
-                <span>
-                  <MdOutlineKeyboardArrowRight
-                    size={20}
-                    style={{ color: "#334A78" }}
-                  />
-                </span>
-              </div>
-              <span className="hover:underline">{subCat1}</span>
-            </div> */}
 
               <button
-                //   onClick={() => setRequestTour(true)}
                 onClick={() => setShowRecommend(true)}
                 className="md:hidden ml-auto "
               >
@@ -511,7 +385,6 @@ function ProductOverview() {
               </button>
             </div>
 
-            {/* Main image container */}
             <div
               className="w-3/5 h-3/4 mx-auto mb-2 flex items-center justify-center"
               onMouseEnter={() => setMainImageHovered(true)}
@@ -525,7 +398,6 @@ function ProductOverview() {
               />
             </div>
 
-            {/* Additional images + View in 3D Button */}
             {additionalImagesArray.length > 0 && (
               <div className="flex flex-wrap items-center gap-3 mx-6 ml-16 mt-3">
                 {additionalImagesArray.map((img, idx) => (
@@ -540,7 +412,6 @@ function ProductOverview() {
                     className="cursor-pointer rounded-lg border-2 border-[#385682]"
                   />
                 ))}
-                {/* View in 3D Button */}
                 {import.meta.env.MODE === "development" && (
                   <button
                     className="ml-4 px-4 py-2 rounded-md bg-blue-600 text-white hover:bg-blue-700 transition"
@@ -553,9 +424,7 @@ function ProductOverview() {
             )}
           </div>
 
-          {/* grid component 2 */}
           <div className=" flex flex-col mt-2 md:mt-0">
-            {/* product info */}
             <div className="flex flex-col justify-center">
               <h2 className="text-sm lg:text-xl font-bold">{product?.title}</h2>
               <p className=" font-medium lg:w-3/4 text-[#334A78] lg:mb-2">
@@ -565,9 +434,7 @@ function ProductOverview() {
                 ₹ {product?.price?.toLocaleString("en-IN")}{" "}
                 <span className="text-sm">/ Per Unit</span>
               </p>
-              {/* <br ></br> */}
             </div>
-            {/* final price section */}
             <div className="mt-1">
               <p className="text-sm lg:text-lg font-medium text-[#334A78] ">
                 Final Price
@@ -608,26 +475,15 @@ function ProductOverview() {
                 )}
               <button
                 className=" border-2 lg:border-[1.5px] border-[#212B36] px-2 py-1.5 text-sm lg:text-lg w-full md:w-2/5 mb-1 md:mb-3 mt-2 md:mt-5 rounded-sm"
-                onClick={
-                  () => setShowSelectArea(true)
-                  // /**/ handelSelectedData(
-                  //   products,
-                  //   // variant,
-                  //   selectedCategory,
-                  //   selectedSubCategory,
-                  //   selectedSubCategory1
-                  // )
-                }
+                onClick={() => setShowSelectArea(true)}
               >
                 {isProductInCart() ? "Remove from BOQ " : "Add to BOQ"}
               </button>
             </div>
-            {/* product description */}
             <div className="mt-2 md:mt-5">
               <h3 className="text-sm md:text-lg uppercase font-bold text-[#334A78] border-b-2">
                 Product Details
               </h3>
-              {/* manufacture */}
               <div className="border-b-2 pt-2 pb-1">
                 <p className="text-xs md:text-sm uppercase font-bold text-[#334A78]">
                   Manufacturer
@@ -636,7 +492,6 @@ function ProductOverview() {
                   {product?.manufacturer || "N/A"}
                 </span>
               </div>
-              {/* dimensions */}
               <div className="border-b-2 pt-2 pb-1">
                 <p className="text-xs md:text-sm uppercase font-bold text-[#334A78] ">
                   dimensions(H x l x W)
@@ -677,7 +532,6 @@ function ProductOverview() {
               }`}
             >
               <button
-                //   onClick={() => setRequestTour(true)}
                 onClick={() => setShowRecommend(true)}
                 className="hidden md:block text-sm bg-[#334A78] text-white px-4 lg:px-4 py-2 rounded-lg"
               >
@@ -699,7 +553,7 @@ function ProductOverview() {
               }`}
               onAnimationComplete={(definition) => {
                 if (definition === "animate") {
-                  setShowBackground(true); // Only show background after entering animation
+                  setShowBackground(true);
                 }
               }}
             >
@@ -710,7 +564,6 @@ function ProductOverview() {
                 setSelectedAreas={setSelectedAreas}
                 selectedProductView={product}
                 selectedData={selectedData}
-                // categoriesWithTwoLevelCheck={categoriesWithTwoLevelCheck}
                 allAddons={allAddons}
                 setShowBackground={setShowBackground}
                 selectedCategory={cat}
@@ -721,7 +574,7 @@ function ProductOverview() {
           )}
         </AnimatePresence>
 
-        {showRecommend && ( //new ProductOverview
+        {showRecommend && (
           <div ref={recommendationref}>
             <RecommendComp
               showRecommend={showRecommend}
@@ -747,7 +600,6 @@ function ProductOverview() {
           )}
         </AnimatePresence>
 
-        {/* You May Also Like Section */}
         <div className="mt-10 py-4 px-6">
           <h2 className="text-xl font-semibold mb-2">You may also like</h2>
           {relatedProducts.length > 0 ? (
@@ -759,19 +611,6 @@ function ProductOverview() {
             <p className="text-center text-gray-500">No products found</p>
           )}{" "}
         </div>
-
-        {/* <div
-        className={`addons px-5 my-3 ${
-          showSelectArea ? "opacity-50 pointer-events-none" : "opacity-100"
-        }`}
-      >
-        <h4 className="text-md font-semibold mb-2">ADDONS</h4>
-        <Addon
-          allAddons={allAddons}
-          productID={selectedProductView.id}
-          onAddonAdd={handleAddOnChange}  //moved to utils
-        />
-      </div> */}
       </div>
     </>
   );
