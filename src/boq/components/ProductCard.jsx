@@ -5,10 +5,11 @@ import { motion, AnimatePresence } from "framer-motion";
 import { FaStar } from "react-icons/fa";
 import { GoDash, GoPlus } from "react-icons/go";
 import { PiStarFourFill } from "react-icons/pi";
-import { IoMdSettings } from "react-icons/io";
+import { IoIosArrowDown, IoIosArrowUp, IoMdSettings } from "react-icons/io";
 import { RiVipCrown2Fill } from "react-icons/ri";
-import { HiMiniCheckBadge } from "react-icons/hi2";
+import { HiMiniCheckBadge, HiOutlineBarsArrowDown } from "react-icons/hi2";
 import PagInationNav from "../../common-components/PagInationNav";
+import { MdKeyboardArrowLeft } from "react-icons/md";
 
 // Animation settings for easy customization
 const animations = {
@@ -26,6 +27,12 @@ const animations = {
     },
   },
 };
+
+const options = [
+  { option: "Newest Arrival", value: "newest" },
+  { option: "Price: Low to High", value: "low" },
+  { option: "Price: High to Low", value: "high" },
+];
 
 function ProductCard({
   products,
@@ -60,6 +67,8 @@ function ProductCard({
   const [selectedBrands, setSelectedBrands] = useState([]);
   const [sortOption, setSortOption] = useState("newest");
   const [isSortOpen, setIsSortOpen] = useState(false);
+  const [isMobileSortOpen, setIsMobileSortOpen] = useState(false);
+  const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
 
   const toggleSection = (section) => {
     setOpenSection((prev) => (prev === section ? null : section));
@@ -149,9 +158,9 @@ function ProductCard({
 
   const sortedVariants = useMemo(() => {
     const arr = [...filteredVariants];
-    if (sortOption === "priceLowHigh") {
+    if (sortOption === "low") {
       arr.sort((a, b) => (a.price || 0) - (b.price || 0));
-    } else if (sortOption === "priceHighLow") {
+    } else if (sortOption === "high") {
       arr.sort((a, b) => (b.price || 0) - (a.price || 0));
     } else if (sortOption === "newest") {
       arr.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
@@ -205,6 +214,7 @@ function ProductCard({
     function handleClickOutside(event) {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
         setIsFilterOpen(false);
+        setIsSortOpen(false);
       }
     }
     document.addEventListener("mousedown", handleClickOutside);
@@ -260,13 +270,287 @@ function ProductCard({
 
   return (
     <div>
-      <div className="product-card grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 3xl:grid-cols-6 gap-6 pb-8 pt-3 relative">
-        <div className="absolute right-0 md:right-6 -top-12" ref={dropdownRef}>
-          {/* FILTER BUTTON */}
+      <div className="product-card grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 3xl:grid-cols-6 gap-6 pb-8 pt-8 lg:pt-3 relative">
+        {/* Filter & Sort Dropdowns/Buttons for small screens */}
+        <div className="lg:hidden absolute flex justify-between items-center w-full">
+          <button
+            className="border border-black px-3 py-1.5 flex items-center gap-2 text-sm"
+            onClick={() => {
+              setIsMobileSortOpen((prev) => !prev);
+              setIsMobileFilterOpen(false);
+            }}
+          >
+            Sort
+            <HiOutlineBarsArrowDown />
+          </button>
+          <button
+            className="border border-black px-3 py-1.5 flex items-center text-sm gap-2"
+            onClick={() => {
+              setOpenSection("plan");
+              setIsMobileFilterOpen((prev) => !prev);
+              setIsMobileSortOpen(false);
+            }}
+          >
+            Filter
+            <img
+              src="/images/boq/filter.png"
+              alt="Filter"
+              className="w-3 h-3"
+            />
+          </button>
+
+          {isMobileFilterOpen && (
+            // BACKDROP
+            <div
+              className="fixed inset-0 z-40 bg-black/40" // dark overlay
+              onClick={() => setIsMobileFilterOpen(false)} // click outside closes
+            >
+              <div
+                className={`fixed bottom-0 left-0 w-full z-50 bg-white border transition-transform ease-in-out duration-500 transform animate-fade-in flex flex-col justify-between ${
+                  isMobileFilterOpen ? "translate-y-0" : "translate-y-full"
+                }`}
+                onClick={(e) => e.stopPropagation()} // prevent backdrop click
+              >
+                {/* Header */}
+                <div className="flex items-center border-b border-b-[#ccc] px-3 py-2">
+                  <button onClick={() => setIsMobileFilterOpen(false)}>
+                    <MdKeyboardArrowLeft size={30} color="#304778" />
+                  </button>
+                  <h2 className="ml-2 uppercase text-[#304778] text-sm leading-[22.4px]">
+                    Filter
+                  </h2>
+                </div>
+
+                {/* Body */}
+                <div className="p-3 space-y-5 font-TimesNewRoman text-sm overflow-y-auto max-h-[60vh]">
+                  {/* PLAN GROUP (accordion item) */}
+                  <div className="border border-[#ccc] rounded">
+                    <button
+                      className="flex w-full items-center justify-between px-3 py-2 text-xs font-semibold uppercase text-[#334A78]"
+                      onClick={() => toggleSection("plan")}
+                    >
+                      <span>Plan</span>
+                      <span className="text-xs">
+                        {openSection === "plan" ? (
+                          <IoIosArrowUp />
+                        ) : (
+                          <IoIosArrowDown />
+                        )}
+                      </span>
+                    </button>
+
+                    {openSection === "plan" && (
+                      <div className="border-t border-[#ccc]">
+                        {planOptions.map((option) => (
+                          <button
+                            key={option}
+                            onClick={() => setSelectedPlanFilter(option)}
+                            className={
+                              "flex items-center justify-between w-full px-4 py-2 border-b last:border-b-0 border-[#ccc] text-xs " +
+                              (selectedPlanFilter === option
+                                ? "bg-[#374A75] text-white font-semibold"
+                                : "bg-white text-black")
+                            }
+                          >
+                            <span className="flex items-center">
+                              {option === "Exclusive" && (
+                                <div className="relative">
+                                  <PiStarFourFill
+                                    className="absolute -top-1 -right-1"
+                                    size={8}
+                                    color={
+                                      selectedPlanFilter === option
+                                        ? "#fff"
+                                        : "#334A78"
+                                    }
+                                  />
+                                  <PiStarFourFill
+                                    size={16}
+                                    color={
+                                      selectedPlanFilter === option
+                                        ? "#fff"
+                                        : "#334A78"
+                                    }
+                                  />
+                                </div>
+                              )}
+                              {option === "Luxury" && (
+                                <RiVipCrown2Fill
+                                  size={16}
+                                  color={
+                                    selectedPlanFilter === option
+                                      ? "#fff"
+                                      : "#334A78"
+                                  }
+                                />
+                              )}
+                              {option === "Minimal" && (
+                                <FaStar
+                                  size={16}
+                                  color={
+                                    selectedPlanFilter === option
+                                      ? "#fff"
+                                      : "#334A78"
+                                  }
+                                />
+                              )}
+                              {option === "Custom" && (
+                                <IoMdSettings
+                                  size={18}
+                                  color={
+                                    selectedPlanFilter === option
+                                      ? "#fff"
+                                      : "#334A78"
+                                  }
+                                />
+                              )}
+                            </span>
+                            <span>{option}</span>
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* BRAND GROUP (accordion item) */}
+                  <div className="border border-[#ccc] rounded">
+                    <button
+                      className="flex w-full items-center justify-between px-3 py-2 text-xs font-semibold uppercase text-[#334A78]"
+                      onClick={() => toggleSection("brand")}
+                    >
+                      <span>Brand</span>
+                      <span className="text-xs">
+                        {openSection === "brand" ? (
+                          <IoIosArrowUp />
+                        ) : (
+                          <IoIosArrowDown />
+                        )}
+                      </span>
+                    </button>
+
+                    {openSection === "brand" && (
+                      <div className="border-t border-[#ccc] px-4 py-3 space-y-3 text-xs">
+                        {brandsList.map((brand) => {
+                          const checked = selectedBrands.includes(brand);
+                          return (
+                            <label
+                              key={brand}
+                              className="flex items-center justify-between cursor-pointer"
+                            >
+                              <span className="text-[#000000]">{brand}</span>
+                              <input
+                                type="checkbox"
+                                className="h-4 w-4 border border-black"
+                                checked={checked}
+                                onChange={() => {
+                                  setSelectedBrands((prev) => {
+                                    const current = Array.isArray(prev)
+                                      ? prev
+                                      : [];
+                                    return current.includes(brand)
+                                      ? current.filter((b) => b !== brand)
+                                      : [...current, brand];
+                                  });
+                                }}
+                              />
+                            </label>
+                          );
+                        })}
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {/* Footer (optional count + apply) */}
+                <div className="flex justify-between items-center px-4 py-3 border-t border-[#eee] font-TimesNewRoman text-xs">
+                  <div>
+                    <h2 className="text-[#000] font-semibold text-base tracking-[1px]">
+                      {paginatedVariants.length}
+                    </h2>
+                    <p className="text-[#ccc] text-[11px] leading-4 -tracking-[0.5px] font-semibold">
+                      product found
+                    </p>
+                  </div>
+                  <button
+                    onClick={() => setIsMobileFilterOpen(false)}
+                    className="px-4 py-[8px] bg-[#334A78] text-white border border-[#212B36] font-semibold text-xs tracking-[1px]"
+                  >
+                    Apply
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {isMobileSortOpen && (
+            // BACKDROP
+            <div
+              className="fixed inset-0 z-40 bg-black/40" // dark overlay
+              onClick={() => setIsMobileSortOpen(false)} // click outside closes
+            >
+              <div
+                className={`fixed bottom-0 left-0 w-full z-50 bg-white border transition-transform ease-in-out duration-500 transform animate-fade-in flex flex-col justify-center ${
+                  isMobileSortOpen ? "translate-y-0" : "translate-y-full"
+                }`}
+                onClick={(e) => e.stopPropagation()} // prevent backdrop click
+              >
+                {/* Header */}
+                <div className="flex items-center border-b border-b-[#ccc]">
+                  <button onClick={() => setIsMobileSortOpen(false)}>
+                    <MdKeyboardArrowLeft size={30} color="#304778" />
+                  </button>
+                  <h2 className="uppercase text-[#304778] text-sm leading-[22.4px]">
+                    Sort By
+                  </h2>
+                </div>
+
+                {/* Options */}
+                <div className="space-y-4 p-2">
+                  {options.map((opt) => {
+                    const active = sortOption === opt.value; // "newest" | "low" | "high"
+                    return (
+                      <label
+                        key={opt.value}
+                        className="flex items-center justify-between space-x-3 cursor-pointer"
+                        onClick={() => {
+                          setSortOption(opt.value);
+                        }}
+                      >
+                        <span className="text-sm text-[#000000] font-medium">
+                          {opt.option}
+                        </span>
+
+                        {/* Custom radio circle */}
+                        <div
+                          className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
+                            active
+                              ? "bg-[#2A3E65] border-[#2A3E65]"
+                              : "border-[#2A3E65]"
+                          }`}
+                        ></div>
+                      </label>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Filter & Sort Dropdowns/Buttons for large screens */}
+        <div
+          className="absolute right-0 -top-12 hidden lg:block"
+          ref={dropdownRef}
+        >
           <div className="flex gap-2 items-center">
+            {/* FILTER BUTTON */}
             <button
               className="flex items-center gap-2 border border-black px-2 lg:px-4 py-2 text-sm"
-              onClick={() => setIsFilterOpen((prev) => !prev)}
+              onClick={() => {
+                setOpenSection("plan");
+                setIsFilterOpen((prev) => !prev);
+                setIsSortOpen(false);
+              }}
             >
               <span className="hidden lg:block">Filter</span>
               <img
@@ -275,15 +559,18 @@ function ProductCard({
                 className="w-4 h-4"
               />
             </button>
+
+            {/* Sort Button */}
             <button
-              className="flex items-center gap-2 border border-black px-2 lg:px-4 py-2 text-sm"
-              onClick={() => setIsSortOpen((prev) => !prev)}
+              className="flex items-center gap-2 border border-black px-4 py-2 text-sm"
+              onClick={() => {
+                setIsSortOpen((prev) => !prev);
+                setIsFilterOpen(false);
+              }}
             >
               <span className="hidden lg:block">Sort by:</span>
               <span className="font-medium text-xs lg:text-sm">
-                {sortOption === "priceLowHigh" && "Price: Low to High"}
-                {sortOption === "priceHighLow" && "Price: High to Low"}
-                {sortOption === "newest" && "Newest Arrival"}
+                {options.find((o) => o.value === sortOption)?.option}
               </span>
             </button>
           </div>
@@ -298,7 +585,13 @@ function ProductCard({
                   onClick={() => toggleSection("plan")}
                 >
                   <span className="font-semibold text-[#334A78]">Plan</span>
-                  <span className="text-sm">▾</span>
+                  <span className="text-sm">
+                    {openSection === "plan" ? (
+                      <IoIosArrowUp />
+                    ) : (
+                      <IoIosArrowDown />
+                    )}
+                  </span>{" "}
                 </button>
 
                 {openSection === "plan" && (
@@ -381,7 +674,13 @@ function ProductCard({
                   onClick={() => toggleSection("brand")}
                 >
                   <span className="font-semibold text-[#334A78]">Brand</span>
-                  <span className="text-xs">▾</span>
+                  <span className="text-sm">
+                    {openSection === "brand" ? (
+                      <IoIosArrowUp />
+                    ) : (
+                      <IoIosArrowDown />
+                    )}
+                  </span>{" "}
                 </button>
 
                 {openSection === "brand" && (
@@ -416,19 +715,13 @@ function ProductCard({
           )}
           {isSortOpen && (
             <div className="absolute right-0 mt-2 w-40 bg-white shadow-lg border border-black z-20 text-sm">
-              {["priceLowHigh", "priceHighLow", "newest"].map((opt) => {
-                const label =
-                  opt === "priceLowHigh"
-                    ? "Price: Low to High"
-                    : opt === "priceHighLow"
-                    ? "Price: High to Low"
-                    : "Newest Arrival";
-                const active = sortOption === opt;
+              {options.map(({ option, value }) => {
+                const active = sortOption === value;
                 return (
                   <button
-                    key={opt}
+                    key={value}
                     onClick={() => {
-                      setSortOption(opt);
+                      setSortOption(value);
                       setIsSortOpen(false);
                     }}
                     className={
@@ -436,7 +729,7 @@ function ProductCard({
                       (active ? "bg-[#374A75] text-white font-semibold" : "")
                     }
                   >
-                    {label}
+                    {option}
                   </button>
                 );
               })}
@@ -467,7 +760,7 @@ function ProductCard({
             {paginatedVariants.map((variant) => (
               <motion.div
                 key={variant.id}
-                className="max-w-sm flex flex-col justify-center items-center bg-white shadow-md cursor-pointer my-2 px-3 group
+                className="max-w-sm flex flex-col justify-center items-center bg-white shadow-md cursor-pointer my-3 px-3 group
                 hover:rounded-lg-21 hover:bg-custom-gradient hover:shadow-custom transition-all duration-300 border-2 border-[#F5F5F5] relative"
                 variants={animations.fadeInLeft}
                 initial="hidden"
