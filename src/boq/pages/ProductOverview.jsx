@@ -427,7 +427,7 @@ function ProductOverview() {
                     alt={`Angle ${idx + 1}`}
                     onMouseEnter={() => setHoveredImage(img)}
                     onMouseLeave={() => setHoveredImage(null)}
-                    className="cursor-pointer border-2 border-[#385682] max-w-[40px] sm:max-w-[60px] md:max-w-[80px] lg:max-w-[100px] xl:max-w-[120px]"
+                    className="cursor-pointer border-2 border-[#385682] h-full max-w-[40px] sm:max-w-[60px] md:max-w-[80px] lg:max-w-[100px] xl:max-w-[120px]"
                   />
                 ))}
                 {import.meta.env.MODE === "development" && (
@@ -443,7 +443,7 @@ function ProductOverview() {
           </div>
 
           <div className="flex flex-col mt-2 md:mt-10">
-            <div className="flex flex-col justify-center border-b border-[#CCCCCC] max-w-2xl">
+            <div className="flex flex-col justify-center border-b border-[#CCCCCC]">
               <h2 className="text-sm lg:text-xl font-bold capitalize">
                 {product?.title}
               </h2>
@@ -500,7 +500,7 @@ function ProductOverview() {
                 {isProductInCart() ? "Remove from BOQ " : "Add to BOQ"}
               </button>
             </div>
-            <div className="mt-2 md:mt-5 max-w-2xl">
+            <div className="mt-2 md:mt-5">
               <h3 className="text-sm md:text-lg uppercase font-bold text-[#334A78]">
                 Product Details:
               </h3>
