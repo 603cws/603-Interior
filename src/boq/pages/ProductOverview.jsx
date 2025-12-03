@@ -1,6 +1,9 @@
 import { useEffect, useState, useRef, useMemo } from "react";
 import { ToastContainer } from "react-toastify";
-import { MdOutlineKeyboardArrowLeft } from "react-icons/md";
+import {
+  MdKeyboardArrowDown,
+  MdOutlineKeyboardArrowLeft,
+} from "react-icons/md";
 import { normalizeKey } from "../utils/CalculateTotalPriceHelper";
 import SelectArea from "../components/SelectArea";
 import { useApp } from "../../Context/Context";
@@ -45,6 +48,19 @@ function ProductOverview() {
   const [isProfileCard, setIsProfileCard] = useState(false);
   const [showBoqPrompt, setShowBoqPrompt] = useState(false);
   const [isDBPlan, setIsDBPlan] = useState(false);
+
+  const targetRef = useRef(null);
+
+  const scrollToSection = () => {
+    const topOffset = 100; // adjust this based on your navbar height
+    const elementPosition = targetRef.current.getBoundingClientRect().top;
+    const scrollPosition = window.pageYOffset + elementPosition - topOffset;
+
+    window.scrollTo({
+      top: scrollPosition,
+      behavior: "smooth",
+    });
+  };
 
   const {
     selectedCategory,
@@ -158,6 +174,8 @@ function ProductOverview() {
   }, [id, selectedCategory, selectedSubCategory, selectedSubCategory1]);
 
   const product = products[0];
+
+  console.log(product);
 
   const getInstructions = (category) => {
     return instructions[category] || ["No specific instructions found."];
@@ -337,6 +355,8 @@ function ProductOverview() {
     fetchRelated();
   }, [cat?.category, subCat, subCat1, product?.id]);
 
+  const formatKey = (key) => key.replace(/([A-Z])/g, " $1").trim();
+
   return (
     <>
       <Navbar
@@ -399,17 +419,15 @@ function ProductOverview() {
             </div>
 
             {additionalImagesArray.length > 0 && (
-              <div className="flex flex-wrap items-center gap-3 mx-6 ml-16 mt-3">
+              <div className="flex flex-wrap items-center gap-1 mt-3">
                 {additionalImagesArray.map((img, idx) => (
                   <img
                     key={idx}
                     src={img}
                     alt={`Angle ${idx + 1}`}
-                    width={50}
-                    height={50}
                     onMouseEnter={() => setHoveredImage(img)}
                     onMouseLeave={() => setHoveredImage(null)}
-                    className="cursor-pointer rounded-lg border-2 border-[#385682]"
+                    className="cursor-pointer border-2 border-[#385682] max-w-[40px] sm:max-w-[60px] md:max-w-[80px] lg:max-w-[100px] xl:max-w-[120px]"
                   />
                 ))}
                 {import.meta.env.MODE === "development" && (
@@ -424,11 +442,13 @@ function ProductOverview() {
             )}
           </div>
 
-          <div className=" flex flex-col mt-2 md:mt-0">
-            <div className="flex flex-col justify-center">
-              <h2 className="text-sm lg:text-xl font-bold">{product?.title}</h2>
-              <p className=" font-medium lg:w-3/4 text-[#334A78] lg:mb-2">
-                {product?.details}
+          <div className="flex flex-col mt-2 md:mt-10">
+            <div className="flex flex-col justify-center border-b border-[#CCCCCC] max-w-2xl">
+              <h2 className="text-sm lg:text-xl font-bold capitalize">
+                {product?.title}
+              </h2>
+              <p className="font-medium lg:w-3/4 text-[#334A78] lg:mb-2 md:max-w-xs lg:max-w-full">
+                {product?.information?.ShortDescription || "N/A"}
               </p>
               <p className="text-sm md:text-base font-semibold lg:mb-2">
                 ₹ {product?.price?.toLocaleString("en-IN")}{" "}
@@ -445,7 +465,7 @@ function ProductOverview() {
               {details.quantity > 0 && (
                 <p className="text-md font-medium text-[#334A78] mb-1 lg:mb-3">
                   Total Quantity:{" "}
-                  <span className="border-[1px] py-1 border-[#334A78] text-[#1a1b1c] rounded-md px-2 text-sm">
+                  <span className="border-[1px] py-1 border-[#CCD2DD] text-[#1a1b1c] rounded-md px-2 text-sm">
                     {subCat1 === "Chair" &&
                     subCat !== "Linear Workstation" &&
                     subCat !== "L-Type Workstation"
@@ -467,10 +487,10 @@ function ProductOverview() {
                 subCat !== "Linear Workstation" &&
                 subCat !== "L-Type Workstation" && (
                   <p className="text-xs lg:text-base font-medium text-[#334A78] mb-1 lg:mb-3">
-                    Seat Count:{" "}
+                    Seat Count:
                     <span className="border-[1px] py-1 border-[#334A78] text-[#1a1b1c] rounded-xl px-2 text-xs lg:text-sm">
                       {details.seatCount.toLocaleString("en-IN")}
-                    </span>{" "}
+                    </span>
                   </p>
                 )}
               <button
@@ -480,43 +500,48 @@ function ProductOverview() {
                 {isProductInCart() ? "Remove from BOQ " : "Add to BOQ"}
               </button>
             </div>
-            <div className="mt-2 md:mt-5">
-              <h3 className="text-sm md:text-lg uppercase font-bold text-[#334A78] border-b-2">
-                Product Details
+            <div className="mt-2 md:mt-5 max-w-2xl">
+              <h3 className="text-sm md:text-lg uppercase font-bold text-[#334A78]">
+                Product Details:
               </h3>
-              <div className="border-b-2 pt-2 pb-1">
-                <p className="text-xs md:text-sm uppercase font-bold text-[#334A78]">
+              <div className="border-t border-[#E2E2E2] pt-2 pb-1">
+                <p className="text-xs md:text-sm capitalize font-bold text-[#334A78]">
                   Manufacturer
                 </p>
                 <span className="text-xs text-[#334A78] ">
                   {product?.manufacturer || "N/A"}
                 </span>
               </div>
-              <div className="border-b-2 pt-2 pb-1">
-                <p className="text-xs md:text-sm uppercase font-bold text-[#334A78] ">
-                  dimensions(H x l x W)
+              <div className="border-t border-[#E2E2E2] pt-2 pb-1">
+                <p className="text-xs md:text-sm capitalize font-bold text-[#334A78] ">
+                  dimensions (H x L x W)
                 </p>
-                <span className="text-xs text-[#334A78] ">
+                <span className="text-xs text-[#334A78]">
                   {formatDimensions(product?.dimensions)}
                 </span>
               </div>
-              <div className="border-b-2 pt-2 pb-1">
-                <p className="text-xs md:text-sm uppercase font-bold text-[#334A78]">
-                  instruction
+              <div className="border-t border-[#E2E2E2] pt-2 pb-1">
+                <p className="text-xs md:text-sm capitalize font-bold text-[#334A78]">
+                  Color
                 </p>
-                {categoryInstructions.length > 0 ? (
-                  <ul className="list-disc pl-5">
-                    {categoryInstructions.map((instruction, index) => (
-                      <li key={index} className="text-xs text-[#334A78]">
-                        {instruction}
-                      </li>
-                    ))}
-                  </ul>
-                ) : (
-                  <span className="text-xs text-[#334A78]">
-                    No specific instructions available for this category.
-                  </span>
-                )}
+                <span className="text-xs text-[#334A78]">
+                  {product?.information?.ProductColor || "N/A"}
+                </span>
+              </div>
+              <div className="border-y border-[#E2E2E2] pt-2 pb-1">
+                <p className="text-xs md:text-sm capitalize font-bold text-[#334A78]">
+                  Product Weight
+                </p>
+                <span className="text-xs text-[#334A78]">
+                  {product?.information?.ProductWeight || "N/A"}
+                </span>
+              </div>
+              <div
+                className="text-[#334A78] pt-4 flex items-center gap-1"
+                onClick={scrollToSection}
+              >
+                <MdKeyboardArrowDown />
+                <span className="hover:underline cursor-pointer">See more</span>
               </div>
             </div>
           </div>
@@ -600,7 +625,7 @@ function ProductOverview() {
           )}
         </AnimatePresence>
 
-        <div className="mt-10 py-4 px-6">
+        <div className="mt-10 py-4 md:px-6">
           <h2 className="text-xl font-semibold mb-2">You may also like</h2>
           {relatedProducts.length > 0 ? (
             <YouMayAlsoLike
@@ -611,9 +636,57 @@ function ProductOverview() {
             <p className="text-center text-gray-500">No products found</p>
           )}{" "}
         </div>
+
+        <div
+          ref={targetRef}
+          className="py-2 px-2 md:px-6 text-[#334A78] font-Poppins md:pr-10 lg:pr-10 pb-16"
+        >
+          <div className="py-2 uppercase font-bold border-b border-[#E2E2E2]">
+            Product Information
+          </div>
+          {product?.information &&
+            Object.entries(product?.information)
+              .filter(([key, value]) => value && value.trim() !== "") // skip empty values
+              .map(([key, value]) => (
+                <ShortDiv key={key} title={formatKey(key)} value={value} />
+              ))}
+          {product?.additonalinformation &&
+            Object.entries(product?.additonalinformation)
+              .filter(([key, value]) => value && value.trim() !== "") // skip empty values
+              .map(([key, value]) => (
+                <ShortDiv key={key} title={formatKey(key)} value={value} />
+              ))}
+          <ShortDiv
+            title="Manufacturer"
+            value={product?.manufacturer || "N/A"}
+          />
+          <div className="border-[#E2E2E2] py-2 pt-6 gap-4 flex flex-col">
+            <p className="text-xs md:text-sm capitalize font-bold text-[#334A78]">
+              Product Description
+            </p>
+            <span className="text-sm text-[#334A78]">
+              {product?.details || "N/A"}
+            </span>
+          </div>
+        </div>
       </div>
     </>
   );
 }
 
 export default ProductOverview;
+
+function ShortDiv({ title, value, bothBorder = false }) {
+  return (
+    <div
+      className={`border-[#E2E2E2] py-2 flex justify-between ${
+        bothBorder ? "border-y" : "border-b"
+      }`}
+    >
+      <p className="text-xs md:text-sm capitalize font-bold text-[#334A78]">
+        {title}
+      </p>
+      <span className="text-sm text-[#334A78]">{value}</span>
+    </div>
+  );
+}
