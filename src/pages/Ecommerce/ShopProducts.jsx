@@ -42,7 +42,7 @@ function ShopProducts() {
   const [maxPrice, setMaxPrice] = useState(filters.priceRange[1]);
 
   //
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const category = searchParams.get("category");
   const query = searchParams.get("query");
   // console.log("searchparams", searchParams, "cat", category);
@@ -99,6 +99,8 @@ function ShopProducts() {
   const applyFiltersAndSort = (products, filters, filtersortby) => {
     let result = [...products];
 
+    console.log("products", products);
+
     // Category Filter
     const normalizedFilterCats = filters.category.map((cat) =>
       cat.toLowerCase()
@@ -123,8 +125,13 @@ function ShopProducts() {
     const actualMaxPrice = maxPrice === 10000 ? Infinity : maxPrice;
 
     result = result.filter(
-      (product) => product.price >= minPrice && product.price <= actualMaxPrice
+      (product) =>
+        product?.ecommercePrice?.sellingPrice >= minPrice &&
+        product?.ecommercePrice?.sellingPrice <= actualMaxPrice
     );
+    // result = result.filter(
+    //   (product) => product.price >= minPrice && product.price <= actualMaxPrice
+    // );
 
     // Sorting
     switch (true) {
@@ -325,6 +332,29 @@ function ShopProducts() {
       setfiltersortby(""); // reset sort to default
     }
   };
+  const resetFilter = () => {
+    if (category) {
+      setFilters((prev) => ({
+        ...prev,
+        category: [category],
+      }));
+    } else {
+      setFilters((prev) => ({
+        ...prev,
+        category: [],
+      }));
+    }
+
+    setFilters((prev) => ({
+      ...prev,
+      priceRange: [0, 10000], // adjust to your default
+    }));
+
+    setMaxPrice(10000);
+    setMinPrice(0);
+
+    setfiltersortby("Popularity"); // reset sort to default
+  };
 
   // Close dropdown on outside click
   useEffect(() => {
@@ -409,7 +439,7 @@ function ShopProducts() {
       <section>
         <div className=" flex lg:hidden justify-between items-center font-TimesNewRoman text-base text-[#ccc] px-6 border-t border-b border-[#ccc] mb-4">
           <button onClick={() => setIsSortOpen(!isSortOpen)}>Sort</button>
-          <button onClick={() => setIsfilteropen(true)}>filter</button>
+          <button onClick={() => setIsfilteropen(true)}>Filter</button>
         </div>
       </section>
 
@@ -421,13 +451,23 @@ function ShopProducts() {
             isfilterOpen ? "translate-y-0" : "-translate-y-full"
           }`}
         >
-          <div className="flex items-center border-b border-b-[#ccc]">
-            <button onClick={() => handleResetOfFilter()}>
-              <MdKeyboardArrowLeft size={30} color="#304778" />{" "}
-            </button>
-            <h2 className="uppercase text-[#304778] text-sm leading-[22.4px] ">
-              filter
-            </h2>
+          <div className="flex justify-between items-center border-b border-b-[#ccc] pb-2">
+            <div className="flex gap-2 items-center">
+              <button onClick={() => handleResetOfFilter()}>
+                <MdKeyboardArrowLeft size={30} color="#304778" />{" "}
+              </button>
+              <h2 className="uppercase text-[#304778] text-sm leading-[22.4px] ">
+                filter
+              </h2>
+            </div>
+            <div>
+              <button
+                onClick={resetFilter}
+                className="px-4 py-1 hover:bg-[#334A78] border border-[#ccc] text-[#334a78] hover:text-white"
+              >
+                Reset
+              </button>
+            </div>
           </div>
           <div className="font-TimesNewRoman flex flex-1 overflow-y-auto pr-2 ">
             <div className="flex-1 flex mt-2">
@@ -599,14 +639,19 @@ function ShopProducts() {
           {/* Left side filters */}
           <div className="hidden lg:flex flex-col items-center gap-6 lg:w-[20%] w-full border-r pr-4 border-r-[#CCCCCC]">
             <div className="w-full space-y-4 [&_h4]:capitalize">
-              <div className="flex justify-start gap-2 items-center text-[#334A78] ">
-                <div>
+              <div className="flex justify-between gap-2 items-center text-[#334A78] ">
+                <div className="flex gap-2">
                   <IoFilter size={20} />
+                  <h3 className="font-bold text-sm">Filter</h3>
                 </div>
-                <h3 className="font-bold text-sm">Filter</h3>
-                {/* <div>
-                  <MdKeyboardArrowLeft size={20} />
-                </div> */}
+                <div>
+                  <button
+                    onClick={resetFilter}
+                    className="px-4 py-1 hover:bg-[#334A78] border border-[#ccc] text-[#334a78] hover:text-white"
+                  >
+                    Reset Filter
+                  </button>
+                </div>
               </div>
 
               <div className="flex justify-between items-center">
@@ -996,16 +1041,16 @@ function Card({ product }) {
           className="h-52 object-contain"
         />
       </div>
-      <div className="bg-[#fff] p-2">
+      <div className="bg-[#fff] p-1.5 lg:p-2">
         <div className="flex flex-col md:flex-row ">
           <div className="flex-1 text-sm leading-[22.4px] text-[#111]">
             <h4
               title={product?.title}
-              className="font-medium text-sm leading-[22.4px] line-clamp-1"
+              className="font-medium text-sm leading-[22.4px] line-clamp-1 capitalize"
             >
               {product?.title}
             </h4>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 flex-wrap xl:flex-nowrap">
               <p className="text-nowrap">
                 RS {product?.ecommercePrice?.sellingPrice || "Rs 3,0000"}
               </p>

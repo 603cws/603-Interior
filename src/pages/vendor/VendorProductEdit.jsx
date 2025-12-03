@@ -12,7 +12,11 @@ import {
 } from "../../utils/AllCatArray";
 import { useRef } from "react";
 import { v4 as uuidv4 } from "uuid";
-import { baseImageUrl } from "../../utils/HelperConstant";
+import {
+  baseImageUrl,
+  additionalDetailsConfig,
+  productInfoFields,
+} from "../../utils/HelperConstant";
 
 function VendorProductEdit({
   setEditProduct,
@@ -101,6 +105,8 @@ function VendorProductEdit({
     mrp: selectedproduct?.ecommercePrice?.mrp || "",
     sellingPrice: selectedproduct?.ecommercePrice?.sellingPrice || "",
     quantity: selectedproduct?.stockQty || "",
+    information: selectedproduct?.information || {},
+    additionalInformation: selectedproduct?.additonalinformation || {},
   });
 
   const handleFileChange = (event) => {
@@ -440,6 +446,8 @@ function VendorProductEdit({
             mrp: variant.mrp,
             sellingPrice: variant.sellingPrice,
           },
+          information: variant?.information || {},
+          additonalinformation: variant?.additionalInformation || {},
         })
         .eq("id", variant.selectedProductId); // Use the correct column and value to match the row you want to update
 
@@ -458,7 +466,7 @@ function VendorProductEdit({
       console.log("Error in onSubmit:", error);
       toast.error("An unexpected error occurred.");
     } finally {
-      handleFormClear();
+      // handleFormClear();
       setIsSubmitting(false);
     }
 
@@ -573,6 +581,33 @@ function VendorProductEdit({
       <div className="flex justify-center items-center">Loading ......</div>
     );
   }
+
+  const handleChangeAdditionalInformation = (e) => {
+    const { name, value } = e.target;
+    setVariant((prev) => ({
+      ...prev,
+      additionalInformation: {
+        ...prev.additionalInformation,
+        [name]: value,
+      },
+    }));
+  };
+  const handleChangeInformation = (e) => {
+    const { name, value } = e.target;
+    setVariant((prev) => ({
+      ...prev,
+      information: {
+        ...prev.information,
+        [name]: value,
+      },
+    }));
+  };
+
+  const AdditonalInformation = additionalDetailsConfig.filter(
+    (info) =>
+      info.category.toLowerCase() === category.toLowerCase() &&
+      info.subcategory.toLowerCase() === subSubCategory.toLowerCase()
+  );
 
   return (
     <div className="flex flex-col justify-center items-start font-Poppins relative">
@@ -701,6 +736,15 @@ function VendorProductEdit({
                   required
                 />
               </div>
+              <FormInput
+                label={"Short Description"}
+                name={"ShortDescription"}
+                type={"text"}
+                value={variant?.information?.["ShortDescription"] || ""}
+                placeholder={"short despcriton max 150 charcter"}
+                maxLength={150}
+                onChange={handleChangeInformation}
+              />
               <div>
                 <h4 className="text-[#7B7B7B]">product details</h4>
                 <textarea
@@ -766,6 +810,20 @@ function VendorProductEdit({
                   </div>
                 </div>
               </div>
+
+              {productInfoFields?.map((field, idx) => (
+                <>
+                  <FormInput
+                    key={idx}
+                    label={field.label}
+                    name={field.name}
+                    type={field.type}
+                    value={variant?.information?.[field.name] || ""}
+                    placeholder={field.placeholder}
+                    onChange={handleChangeInformation}
+                  />
+                </>
+              ))}
             </div>
           </div>
           {/* div for e-commerce details */}
@@ -808,6 +866,36 @@ function VendorProductEdit({
           )}
         </div>
         <div className="w-full lg:w-1/2 ">
+          {AdditonalInformation?.length > 0 && (
+            <div>
+              <div className="flex justify-start items-center gap-2 mb-3">
+                <h3 className="capitalize text-xl font-semibold">
+                  Additional details
+                </h3>
+              </div>
+              <div className="w-full shadow-lg border-2 p-5 my-3 rounded-xl capitalize">
+                {AdditonalInformation.map((group, index) => (
+                  <div key={index} className="mb-8 space-y-4">
+                    {group.fields.map((field, idx) => (
+                      <>
+                        <FormInput
+                          key={idx}
+                          label={field.label}
+                          name={field.name}
+                          type={field.type}
+                          value={
+                            variant?.additionalInformation?.[field.name] || ""
+                          }
+                          placeholder={field.placeholder}
+                          onChange={handleChangeAdditionalInformation}
+                        />
+                      </>
+                    ))}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
           {/* div for images */}
           <div>
             <div className="flex justify-start items-center gap-2 mb-3">
@@ -1013,3 +1101,29 @@ function VendorProductEdit({
 }
 
 export default VendorProductEdit;
+
+function FormInput({
+  label,
+  name,
+  type,
+  value,
+  placeholder,
+  onChange,
+  ...rest
+}) {
+  return (
+    <div>
+      <p className="text-[#7B7B7B]">{label}</p>
+      <input
+        type={type}
+        name={name}
+        value={value}
+        placeholder={placeholder}
+        onChange={onChange}
+        className="w-full py-1.5 px-2 border-2 rounded-lg"
+        {...rest}
+        required
+      />
+    </div>
+  );
+}
