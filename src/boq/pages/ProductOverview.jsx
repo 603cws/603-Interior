@@ -380,10 +380,18 @@ function ProductOverview() {
         >
           <div className="flex flex-col md:gap-0">
             <div className="flex lg:mx-10 items-center text-[#334A78] mt-1">
-              <div
+              <button
+                onClick={() => setShowRecommend(true)}
+                className="md:hidden ml-auto "
+              >
+                <img src="/images/recommend.png" alt="recommend mobile" />
+              </button>
+            </div>
+
+            <div className="flex items-center">
+              <span
                 className="flex items-center cursor-pointer hover:underline"
                 onClick={() => {
-                  //Don't change the below setSelectedCategory, setSelectedSubCategory, setSelectedSubCategory1 => Sunny
                   setSelectedCategory(cat);
                   setSelectedSubCategory(subCat);
                   setSelectedSubCategory1(subCat1);
@@ -394,15 +402,8 @@ function ProductOverview() {
                   size={20}
                   style={{ color: "#334A78" }}
                 />
-                <p className="ml-1">Back</p>
-              </div>
-
-              <button
-                onClick={() => setShowRecommend(true)}
-                className="md:hidden ml-auto "
-              >
-                <img src="/images/recommend.png" alt="recommend mobile" />
-              </button>
+                <p>Back</p>
+              </span>
             </div>
 
             <div
@@ -536,12 +537,14 @@ function ProductOverview() {
                   {product?.information?.ProductWeight || "N/A"}
                 </span>
               </div>
-              <div
-                className="text-[#334A78] pt-4 flex items-center gap-1"
-                onClick={scrollToSection}
-              >
-                <MdKeyboardArrowDown />
-                <span className="hover:underline cursor-pointer">See more</span>
+              <div className="text-[#334A78] pt-4 flex items-center gap-1">
+                <span
+                  className="flex items-center gap-1 cursor-pointer hover:underline"
+                  onClick={scrollToSection}
+                >
+                  <MdKeyboardArrowDown />
+                  <span>See more</span>
+                </span>
               </div>
             </div>
           </div>
