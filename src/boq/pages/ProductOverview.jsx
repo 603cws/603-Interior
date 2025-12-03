@@ -367,7 +367,7 @@ function ProductOverview() {
         showBoqPrompt={showBoqPrompt}
         setShowBoqPrompt={setShowBoqPrompt}
       />
-      <div className="px-2 md:px-6 3xl:px-40">
+      <div className="px-2 md:px-6 md:pr-10 lg:pr-20 3xl:px-40">
         <ToastContainer />
         {import.meta.env.MODE === "development" && showThreeViewer && (
           <ThreeDViewer onClose={() => setShowThreeViewer(false)} />
@@ -639,7 +639,7 @@ function ProductOverview() {
 
         <div
           ref={targetRef}
-          className="py-2 px-2 md:px-6 text-[#334A78] font-Poppins md:pr-10 lg:pr-10 pb-16"
+          className="py-2 px-2 md:px-6 text-[#334A78] font-Poppins pb-16"
         >
           <div className="py-2 uppercase font-bold border-b border-[#E2E2E2]">
             Product Information
