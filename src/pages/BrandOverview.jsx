@@ -8,26 +8,28 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
+import Footer from "../common-components/Footer";
+import ContactUsPopup from "./ContactUsPopup";
 
 const heroSlides = [
   {
     title: "Furniture that mirrors your style",
-    bg: "/images/brands/brands-bg.png",
+    bg: "/images/brands/brands-bg.jpeg",
     link: "/shop",
   },
   {
     title: "Create comfort with HVAC solutions",
-    bg: "/images/brands/brands-bg.png",
+    bg: "/images/brands/brands-bg.jpeg",
     link: "/hvac",
   },
   {
     title: "Lighting that brightens your vision",
-    bg: "/images/brands/brands-bg.png",
+    bg: "/images/brands/brands-bg.jpeg",
     link: "/lights",
   },
   {
     title: "Flooring that shapes your space",
-    bg: "/images/brands/brands-bg.png",
+    bg: "/images/brands/brands-bg.jpeg",
     link: "/flooring",
   },
 ];
@@ -607,6 +609,9 @@ function BrandsOverview() {
           </div>
         </div>
       </section>
+
+      <PartnerBanner />
+      <Footer />
     </>
   );
 }
@@ -623,5 +628,41 @@ function SectionHeader({ title, isborder = true }) {
         <p className="w-[20%] lg:w-[4%] h-[1.5px] bg-[#374A75] "></p>
       )}
     </div>
+  );
+}
+
+function PartnerBanner() {
+  const [showContactPopup, setShowContactPopup] = useState(false);
+  return (
+    <>
+      <div className="w-full bg-[#374A75] text-white py-10 px-6 md:px-16 font-Georgia">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
+          {/* Left Section */}
+          <div>
+            <h2 className="text-4xl md:text-6xl font-medium leading-tight">
+              Join Our Partner <br /> Network
+            </h2>
+          </div>
+
+          {/* Right Section */}
+          <div className="flex flex-col gap-6 md:pl-10 md:border-l md:border-white/40">
+            <p className="text-sm md:text-base text-white/90 leading-relaxed">
+              Collaborate with us to bring exceptional quality <br />
+              and solutions to more customers.
+            </p>
+
+            <button
+              onClick={() => setShowContactPopup((prev) => !prev)}
+              className="bg-[#1C346B] hover:bg-[#0a142f] transition text-white px-6 py-2 rounded-full w-fit"
+            >
+              Partner with us
+            </button>
+          </div>
+        </div>
+      </div>
+      {showContactPopup && (
+        <ContactUsPopup onClose={() => setShowContactPopup(false)} />
+      )}
+    </>
   );
 }
