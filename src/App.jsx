@@ -56,6 +56,7 @@ import AdminDashboardEcom from "./pages/Admin/EcommerceDashboard/AdminDashboardE
 import DashboardInterface from "./pages/Admin/DashboardInterface";
 import YouMayAlsoLike from "./pages/Ecommerce/YouMayAlsoLike";
 import DynamicTitle from "./common-components/DynamicTitle";
+import BrandsOverview from "./pages/BrandOverview";
 
 // const Homepage = lazy(() => import("./pages/Homepage"));
 const Layout = lazy(() => import("./layout/pages/Layout"));
@@ -178,6 +179,7 @@ function App() {
           <Route path="/brands/dlink" element={<BrandDLink />} />
           <Route path="/orderSuccess/:id" element={<OrderConfirm />} />
           <Route path="/cart/similarproducts" element={<YouMayAlsoLike />} />
+          <Route path="/brandOverview" element={<BrandsOverview />} />
           {/* testing route */}
           <Route path="/boqcompleted" element={<Boqcompleted />} />
           <Route
