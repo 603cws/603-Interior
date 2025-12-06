@@ -11,6 +11,33 @@ import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
 import Footer from "../common-components/Footer";
 import ContactUsPopup from "./ContactUsPopup";
 
+const TOP_OFFERS = [
+  {
+    title: "Lighting",
+    subtitle: "Up to 20% off",
+    img: "/images/ecommerce/lighting.png",
+  },
+  {
+    title: "Paint",
+    subtitle: "Up to 20% off",
+    img: "/images/ecommerce/furniture.png",
+  },
+];
+
+const BOTTOM_OFFERS = [
+  {
+    title: "Partition",
+    subtitle: "Up to 20% off",
+    img: "/images/ecommerce/smart-solution-bg.jpg",
+  },
+  {
+    title: "Lights",
+    subtitle: "Up to 20% off",
+    img: "/images/ecommerce/lights.png",
+  },
+  { title: "AC", subtitle: "Up to 20% off", img: "/images/ecommerce/ac.png" },
+];
+
 const heroSlides = [
   {
     title: "Furniture that mirrors your style",
@@ -538,13 +565,13 @@ function BrandsOverview() {
                       {slide.title}
                     </h1>
 
-                    <button
+                    {/* <button
                       onClick={() => navigate(slide.link)}
                       className="capitalize font-bold text-lg md:text-xl text-white bg-[#334A78] rounded flex items-center gap-2 px-4 py-2 hover:bg-white hover:text-[#334A78] border border-[#334A78] transition-colors duration-300 ease-in-out"
                     >
                       <span>shop now</span>
                       <HiOutlineArrowSmRight />
-                    </button>
+                    </button> */}
                   </div>
                 </div>
               </div>
@@ -610,6 +637,96 @@ function BrandsOverview() {
         </div>
       </section>
 
+      <TopBrands />
+
+      {/* section 9*/}
+      <section className="px-4 lg:container mx-auto pt-10 pb-16">
+        {/* Parent: left hero + right area */}
+        <div className="grid gap-4 md:grid-cols-12 items-center font-TimesNewRoman">
+          {/* LEFT: big hero card */}
+          <div className="col-span-12 lg:col-span-5">
+            <div className="group block rounded-lg overflow-hidden relative h-80 md:h-[545px]">
+              <img
+                src="/images/ecommerce/festive.png"
+                alt="Festive offers"
+                className="absolute inset-0 w-full h-full object-cover transform transition-transform duration-500 group-hover:scale-105"
+              />
+              <div className="relative z-10 h-full flex flex-col justify-end pl-4 md:pl-8 pb-8 text-white">
+                <h2 className="text-5xl md:text-8xl leading-tight">
+                  Furniture
+                </h2>
+                {/* <p className="mt-2 text-xl md:text-2xl">Up to 20% off</p> */}
+                {/* <img
+                  src="/images/ecommerce/button.png"
+                  alt="arrow button"
+                  className="mt-2 w-2 md:w-4 hover:cursor-pointer"
+                  onClick={() => navigate("/shop?category")}
+                /> */}
+              </div>
+            </div>
+          </div>
+
+          {/* RIGHT: nested grid (top row: 2 cols, bottom row: 3 cols) */}
+          <div className="col-span-12 lg:col-span-7">
+            <div className="grid gap-4">
+              {/* Top row: 2 columns */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {TOP_OFFERS.map((o) => (
+                  <div
+                    key={o.title}
+                    className="group rounded-lg overflow-hidden relative h-48 md:h-60"
+                  >
+                    <img
+                      src={o.img}
+                      alt={o.title}
+                      className="absolute inset-0 w-full h-full object-cover transform transition-transform duration-500 group-hover:scale-105"
+                    />
+                    <div className="relative z-10 h-full flex flex-col justify-end items-start pl-2 lg:pl-8 pb-6 text-white">
+                      <h3 className="text-xl md:text-3xl">{o.title}</h3>
+                      {/* <p className="text-base md:text-2xl">{o.subtitle}</p> */}
+                      {/* <img
+                        src="/images/ecommerce/button.png"
+                        alt="arrow button"
+                        className="mt-2 w-2 md:w-4 hover:cursor-pointer"
+                        // onClick={() =>
+                        //   navigate(`/products/topdeal/?category=${o.title}`)
+                        // }
+                      /> */}
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Bottom row: 3 columns */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                {BOTTOM_OFFERS.map((o) => (
+                  <div
+                    key={o.title}
+                    className="group rounded-lg overflow-hidden relative h-44 md:h-72"
+                  >
+                    <img
+                      src={o.img}
+                      alt={o.title}
+                      className="absolute inset-0 w-full h-full object-cover transform transition-transform duration-500 group-hover:scale-105"
+                    />
+                    <div className="absolute inset-0 bg-[#000]/40 rounded-lg" />
+                    <div className="relative z-10 h-full flex flex-col justify-end items-start pl-2 lg:pl-6 pb-8 text-white">
+                      <h4 className="text-xl md:text-3xl">{o.title}</h4>
+                      {/* <p className="text-base md:text-2xl">{o.subtitle}</p> */}
+                      {/* <img
+                        src="/images/ecommerce/button.png"
+                        alt="arrow button"
+                        className="mt-2 w-2 md:w-4 hover:cursor-pointer"
+                      /> */}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <PartnerBanner />
       <Footer />
     </>
@@ -627,6 +744,53 @@ function SectionHeader({ title, isborder = true }) {
       {isborder && (
         <p className="w-[20%] lg:w-[4%] h-[1.5px] bg-[#374A75] "></p>
       )}
+    </div>
+  );
+}
+
+function TopBrands() {
+  const brands = [
+    { id: 1, img: "/images/brand1.jpg", logo: "/images/welspun-logo.png" },
+    { id: 2, img: "/images/brand1.jpg", logo: "/images/welspun-logo.png" },
+    { id: 3, img: "/images/brand1.jpg", logo: "/images/welspun-logo.png" },
+    { id: 4, img: "/images/brand1.jpg", logo: "/images/welspun-logo.png" },
+    { id: 5, img: "/images/brand1.jpg", logo: "/images/welspun-logo.png" },
+  ];
+
+  return (
+    <div className="w-full py-10 lg:container ">
+      {/* Header */}
+      <div className="bg-[#374A75] text-white text-center py-6 mb-10">
+        <h2 className="text-xl font-semibold tracking-wide font-TimesNewRoman">
+          TOP BRANDS
+        </h2>
+      </div>
+
+      {/* Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 xl:grid-cols-5 gap-8 px-6 ">
+        {brands.map((brand) => (
+          <div
+            key={brand.id}
+            className="relative border-8 border-[#4A66B3] rounded-2xl overflow-hidden h-72"
+          >
+            {/* Background Image */}
+            <img
+              src={brand.img}
+              alt="Brand Background"
+              className="absolute inset-0 w-full h-full object-cover"
+            />
+
+            {/* White Strip + Logo */}
+            <div className="absolute bottom-10 w-full bg-white py-3 flex justify-center items-center">
+              <img
+                src={brand.logo}
+                alt="Brand Logo"
+                className="h-7 object-contain"
+              />
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
