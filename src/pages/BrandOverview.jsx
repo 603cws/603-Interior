@@ -248,11 +248,12 @@ function BrandsOverview() {
           </div>
         </div>
       </section>
+      <TrendingProducts />
 
       {/* Section 2 */}
       <section className="px-4 lg:container mx-auto py-10">
         <div className="relative">
-          <SectionHeader title={"Trending Products"} isborder={true} />
+          {/* <SectionHeader title={"Trending Products"} isborder={true} /> */}
           <div className="w-full py-8">
             <div className="max-w-6xl mx-auto">
               <div className="flex items-end justify-between gap-8 px-4 md:px-0">
@@ -408,6 +409,82 @@ function SectionHeader({ title, isborder = true }) {
     </div>
   );
 }
+function TrendingProducts() {
+  const products = [
+    {
+      id: 1,
+      img: "/images/welspunchair.png",
+      logo: "/images/welspun-logo.png",
+      name: "PRODUCT NAME",
+    },
+    {
+      id: 2,
+      img: "/images/welspunchair.png",
+      logo: "/images/welspun-logo.png",
+      name: "PRODUCT NAME",
+    },
+    {
+      id: 3,
+      img: "/images/welspunchair.png",
+      logo: "/images/welspun-logo.png",
+      name: "PRODUCT NAME",
+    },
+    {
+      id: 4,
+      img: "/images/welspunchair.png",
+      logo: "/images/welspun-logo.png",
+      name: "PRODUCT NAME",
+    },
+    {
+      id: 5,
+      img: "/images/welspunchair.png",
+      logo: "/images/welspun-logo.png",
+      name: "PRODUCT NAME",
+    },
+  ];
+
+  return (
+    <div className="py-12">
+      {/* Heading */}
+      {/* <div className="text-center mb-12">
+        <h2 className=" text-lg font-semibold tracking-wide text-gray-800">
+          TRENDING PRODUCTS
+        </h2>
+        <div className="w-12 h-[1px] bg-gray-400 mx-auto mt-2"></div>
+      </div> */}
+      <SectionHeader title={"TRENDING PRODUCTS"} />
+
+      {/* Product Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-8 px-6 md:px-16">
+        {products.map((p) => (
+          <div
+            key={p.id}
+            className="bg-[#324674] rounded-2xl text-white p-6 flex flex-col items-center justify-between shadow-md"
+          >
+            {/* Product Image */}
+            <img
+              src={p.img}
+              alt={p.name}
+              className="h-40 object-contain mb-4"
+            />
+
+            {/* Product Name */}
+            <p className="text-lg font-medium tracking-wide mb-2 font-TimesNewRoman">
+              {p.name}
+            </p>
+
+            {/* Brand Logo */}
+            <img
+              src={p.logo}
+              alt="brand logo"
+              className="h-8 object-contain bg-white py-2 px-4 rounded"
+            />
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
 
 function TopBrands() {
   const brands = [
@@ -419,6 +496,7 @@ function TopBrands() {
   ];
 
   return (
+    // <div className="w-full py-10 ">
     <div className="w-full py-10 lg:container ">
       {/* Header */}
       <div className="bg-[#374A75] text-white text-center py-6 mb-10">
