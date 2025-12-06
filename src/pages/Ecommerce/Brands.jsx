@@ -42,7 +42,7 @@ function Brands() {
       <LandingNavbar />
 
       {/* section 1 */}
-      <section className="container px-4 lg:px-12 mx-auto my-10 mt-24">
+      <section className="container px-4 lg:px-12 mx-auto my-10">
         <img
           src="images/ecommerce/header1.png"
           alt="ecommerce header 1"
@@ -62,7 +62,7 @@ function Brands() {
       {/* section 3 */}
       <section className="container px-4 lg:px-12 mx-auto my-5">
         <div className="bg-[#F7FAFF] rounded-md p-4">
-          <h2 className="text-3xl font-lora text-center mb-4">
+          <h2 className="text-3xl font-TimesNewRoman text-center mb-4">
             New & Trending Products
           </h2>
           <div className="gap-4 grid md:grid-cols-2 md:px-14 xl:px-0 xl:grid-cols-4">
@@ -91,8 +91,8 @@ function Brands() {
       </section>
 
       {/* section 4 */}
-      <section className="container px-4 lg:px-12 mx-auto py-14">
-        <h3 className="font-lora text-3xl text-[#111] items-center justify-center flex">
+      {/* <section className="container px-4 lg:px-12 mx-auto py-14">
+        <h3 className="font-TimesNewRoman text-3xl text-[#111] items-center justify-center flex">
           Shop from your favorite brands
         </h3>
         <div className="pt-8">
@@ -111,18 +111,18 @@ function Brands() {
                 <img
                   src={brand.image}
                   alt={brand.name}
-                  className="xl:h-52 h-40 w-40 xl:w-52"
+                  className="h-40 w-40 "
                 />
               </SwiperSlide>
             ))}
           </Swiper>
         </div>
-      </section>
+      </section> */}
 
       {/* section 5 */}
       <section className="container px-4 lg:px-12 mx-auto py-14">
         <div className="bg-[#F7FAFF] rounded-md p-4">
-          <h2 className="text-3xl font-lora text-center mb-4">
+          <h2 className="text-3xl font-TimesNewRoman text-center mb-4">
             New & Trending Products
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-center justify-self-center w-full p-4">
@@ -146,11 +146,11 @@ function Brands() {
       </section>
 
       {/* section 6 */}
-      <section className="container px-4 lg:px-12 mx-auto py-5 hidden md:block">
-        <h2 className="text-4xl font-lora text-center mb-8">
+      {/* <section className="container px-4 lg:px-12 mx-auto py-5 hidden md:block">
+        <h2 className="text-4xl font-TimesNewRoman text-center mb-8">
           Featured Products
         </h2>
-        <h5 className="text-xl font-Poppins text-[#A0A0A0] text-center mb-6">
+        <h5 className="text-xl font-TimesNewRoman text-[#A0A0A0] text-center mb-6">
           Discover amazing products from our partners
         </h5>
         <div className="2xl:px-40 px-20 xl:px-8">
@@ -160,21 +160,34 @@ function Brands() {
                 className="flex justify-center px-2 whitespace-nowrap xl:w-full h-10 items-center hover:bg-[#304778] m-1 rounded-lg hover:text-white cursor-pointer"
                 key={index}
               >
-                <p className="text-lg font-inter">{name}</p>
+                <p className="text-lg font-TimesNewRoman">{name}</p>
               </div>
             ))}
+          </div>
+        </div>
+      </section> */}
+
+      <section className="my-5">
+        {/* <h2 className="text-3xl md:text-4xl lg:text-5xl uppercase text-center my-10">
+          our usp
+        </h2> */}
+        <div>
+          <div className="h-80 w-screen bg-[url('/images/brands/welspun-bg.png')] bg-center bg-cover bg-no-repeat flex justify-center items-center">
+            <h1 className="font-semibold text-5xl lg:text-6xl text-center text-[#fff]">
+              Browse our collection
+            </h1>
           </div>
         </div>
       </section>
 
       {/* section 7 */}
-      <section className="container px-4 lg:px-12 mx-auto py-5 hidden md:block">
+      <section className="container px-4 mx-auto py-5 hidden md:block">
         <div className="grid xl:grid-cols-3 grid-cols-2 gap-y-10 items-center mx-auto justify-items-center cursor-pointer">
           {images.map((src, i) => (
             <ProductCard
               key={i}
               image={src}
-              width={i === 0 || i === 4 ? "none" : ""}
+              // width={i === 0 || i === 4 ? "none" : ""}
             />
           ))}
         </div>
@@ -196,7 +209,7 @@ const ProductCard = ({ image, width }) => {
 
       <div onClick={() => navigate("productview")}>
         {" "}
-        <img src={image} alt="Product" className="w-full p-4 z-0" />
+        <img src={image} alt="Product" className="w-full h-72 p-4 z-0" />
       </div>
 
       <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-full h-[80px] bg-white/30 group-hover:bg-transparent backdrop-blur-md group-hover:overflow-hidden group-hover:backdrop-blur-none shadow-xl group-hover:shadow-none rounded-xl group-hover:rounded-none z-10">
@@ -212,8 +225,10 @@ function Card({ image, title, subtitle }) {
   return (
     <div className="shadow-sm border w-full border-[#CCCCCC] p-2">
       <img src={image} alt={title} className="w-full object-contain" />
-      <h3 className="text-2xl mt-2 font-Poppins ml-2">{title}</h3>
-      <p className="text-[#378DDB] font-Poppins text-xl ml-2">{subtitle}</p>
+      <h3 className="text-2xl mt-2 font-TimesNewRoman ml-2">{title}</h3>
+      <p className="text-[#378DDB] font-TimesNewRoman text-xl ml-2">
+        {subtitle}
+      </p>
     </div>
   );
 }
