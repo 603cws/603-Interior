@@ -255,8 +255,9 @@ function BrandsOverview() {
         <div className="relative">
           {/* <SectionHeader title={"Trending Products"} isborder={true} /> */}
           <div className="w-full py-8">
-            <div className="max-w-6xl mx-auto">
-              <div className="flex items-end justify-between gap-8 px-4 md:px-0">
+            <div className="">
+              {/* <div className="max-w-6xl mx-auto"> */}
+              <div className="flex items-end justify-between  px-4 md:px-0">
                 {categories.map((it, idx) => (
                   <div
                     key={idx}
