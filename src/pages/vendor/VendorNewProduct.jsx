@@ -12,6 +12,7 @@ import {
 } from "../../utils/AllCatArray";
 import { useRef } from "react";
 import ImageCropper from "../ImageCrop/ImageCropper";
+import { v4 as uuidv4 } from "uuid";
 
 import {
   additionalDetailsConfig,
@@ -200,6 +201,7 @@ function VendorNewProduct({
     }
     setIsSubmitting(true);
     try {
+      const uniqueID = uuidv4();
       // Check if the product already exists based on category, subcategory, and subSubCategory
       const { data: existingProduct, error: existingProductError } =
         await supabase
@@ -255,7 +257,7 @@ function VendorNewProduct({
         // Upload the main image to Supabase storage
         const { data: mainImageUpload } = await supabase.storage
           .from("addon")
-          .upload(`${cleanedTitle}-main-${productId}`, variant.mainImage);
+          .upload(`${cleanedTitle}-main-${uniqueID}`, variant.mainImage);
         // if (mainImageError) {
         //   console.error(mainImageError);
         //   toast.error(
@@ -269,7 +271,7 @@ function VendorNewProduct({
           const { data: additionalImageUpload } = await supabase.storage
             .from("addon")
             .upload(
-              `${cleanedTitle}-additional-${index}-${productId}`,
+              `${cleanedTitle}-additional-${index}-${uniqueID}`,
               imageFile.file
             );
 
@@ -318,19 +320,19 @@ function VendorNewProduct({
         if (variantError) {
           console.error(variantError);
           toast.error(`Error inserting variant: ${variant.title}`);
+        } else {
+          // Success message
+          toast.success("Data inserted successfully!");
+          handleFormClear();
         }
         // toast.success(`Variant ${variant.title} added successfully.`);
       }
 
       // Handle the addons
-
-      // Success message
-      toast.success("Data inserted successfully!");
     } catch (error) {
       console.log("Error in onSubmit:", error);
       toast.error("An unexpected error occurred.");
     } finally {
-      handleFormClear();
       setIsSubmitting(false);
     }
   };

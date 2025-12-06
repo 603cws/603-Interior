@@ -2,6 +2,7 @@ import { MdOutlineKeyboardArrowRight } from "react-icons/md";
 import LandingNavbar from "../common-components/LandingNavbar";
 import { FaStarOfLife } from "react-icons/fa";
 import { GoHeart } from "react-icons/go";
+import Footer from "../common-components/Footer";
 
 function BrandProductView() {
   const additionalImagesArray = [
@@ -18,6 +19,56 @@ function BrandProductView() {
     "Fade Resistant",
   ];
 
+  const similarproducts = [
+    {
+      image: "/images/brandproductview1.png",
+    },
+    {
+      image: "/images/brandproductview2.png",
+    },
+    {
+      image: "/images/brandproductview3.png",
+    },
+    {
+      image: "/images/brandproductview4.png",
+    },
+    {
+      image: "/images/brandproductview2.png",
+    },
+  ];
+  const tileSpecification = [
+    {
+      image: "/images/articlecode.png",
+      title: "article code",
+      code: "CTY00299",
+    },
+    {
+      image: "/images/titlespecification2.png",
+      title: "design code",
+      code: "CA0352 (006)",
+    },
+    {
+      image: "/images/titlespecification3.png",
+      title: "type of yarn",
+      code: "Nylon",
+    },
+    {
+      image: "/images/titlespecification4.png",
+      title: "tufted weight",
+      code: "14.5 oz",
+    },
+    {
+      image: "/images/titlespecification5.png",
+      title: "pile thickness",
+      code: "3-3.5 mm",
+    },
+    {
+      image: "/images/titlespecification6.png",
+      title: "wear layer",
+      code: "4.5-5 mm",
+    },
+  ];
+
   const careInstructions = [
     "Preventative Maintenance: Containing the soil entering the building using the walk-off mats at entrances. This includes outside matting, inside matting, and mats at certain other high-traffic areas",
     "Vaccuming: It is the single most important part of a maintenance program designed to remove soil or dust from the top surface",
@@ -30,7 +81,7 @@ function BrandProductView() {
         <LandingNavbar />
       </div>
 
-      <div className="lg:container lg:mx-auto px-3 lg:px-12 mt-20 lg:mt-24">
+      <div className="lg:container lg:mx-auto px-3 lg:px-12 mt-10 lg:mt-10">
         {/* breadcumbs */}
         <div className="mt-10">
           <div className="flex lg:mx-10 items-start lg:items-center text-[#334A78] text-sm mt-4 mb-4 md:mb-0">
@@ -42,58 +93,14 @@ function BrandProductView() {
             <button>Aged Oak</button>
           </div>
         </div>
-
-        {/* <div className={`grid grid-cols-[2fr,1fr] pt-5`}>
-          <div className="">
-            <div className="flex">
-              <div>
-                {additionalImagesArray.length > 0 ? (
-                  <div className="flex flex-col  gap-3 mx-6 ml-16 ">
-                    {additionalImagesArray.map((img, idx) => (
-                      <img
-                        key={idx}
-                        src={img.img}
-                        alt={`Angle ${idx + 1}`}
-                        className="w-44 h-36 cursor-pointer  border-2 border-transparent"
-                      />
-                    ))}
-                  </div>
-                ) : (
-                  <div>
-                    <p>no additional images </p>
-                  </div>
-                )}
-              </div>
-              <div className="max-w-xl">
-                <img
-                  src="/images/productviewsample1.jpg"
-                  className=""
-                  alt="product name "
-                />
-              </div>
-            </div>
-          </div>
-
-          <div className=" flex flex-col mt-2 md:mt-0 font-Poppins ">
-            <h2 className="text-[41.28px] leading-[41.3px] tracking-[0.75px] text-[#000]">
-              Gemini (Archer)
-            </h2>
-            <p className="text-[12.75px] leading-[18px] ">
-              Experience the epitome of creativity and grace with the Celestial
-              collection's Archer range of the . Archer's solid texture and the
-              splash of blue is an ideal combinations to make your house look
-              stunning.
-            </p>
-
-            <button className="">DOWNLOAD HI-RES TILE IMAGES</button>
-          </div>
-        </div> */}
-        <div className={`flex flex-col lg:flex-row  lg:pt-5 lg:gap-10 mb-12`}>
+        <div
+          className={`flex flex-col lg:flex-row lg:justify-between  lg:pt-5 lg:gap-6  mb-12`}
+        >
           <div className="lg:w-[60%]">
             <div className="flex ">
               <div>
                 {additionalImagesArray.length > 0 ? (
-                  <div className="flex flex-col gap-3 mx-6 lg:ml-16 ">
+                  <div className="flex flex-col gap-3 mx-6 ">
                     {additionalImagesArray.map((img, idx) => (
                       <div className="w-12 lg:w-32" key={idx}>
                         <img
@@ -134,18 +141,18 @@ function BrandProductView() {
               WARRANTY
             </button>
 
-            <div className="flex justify-between text-[11.25px]">
+            <div className="flex justify-between text-xs mb-3">
               <p>More From Eden</p>
               <p>View More</p>
             </div>
 
-            <div className="flex flex-wrap lg:flex-nowrap gap-6 mb-3">
+            <div className="flex flex-wrap  gap-6 mb-3">
               {Array.from({ length: 12 }, (_, i) => (
                 <div className="max-w-xs">
                   <img
                     src="/images/Edencolor.png"
                     alt="eden color"
-                    className="w-full"
+                    className="w-10 h-9"
                   />
                 </div>
               ))}
@@ -162,12 +169,6 @@ function BrandProductView() {
                 </p>
               </div>
             </div>
-
-            {/* <div>
-              <div>
-                <img src="/images/Edencolor.png" alt="color" />{" "}
-              </div>
-            </div> */}
           </div>
         </div>
 
@@ -181,12 +182,9 @@ function BrandProductView() {
         </div>
 
         <div className="flex gap-4 lg:gap-0 flex-wrap lg:flex-nowrap justify-around mb-2 lg:mb-10">
-          <Specifications />
-          <Specifications />
-          <Specifications />
-          <Specifications />
-          <Specifications />
-          <Specifications />
+          {tileSpecification?.map((tile, idx) => (
+            <Specifications key={idx} product={tile} />
+          ))}
         </div>
 
         <div className="flex flex-col gap-6 mt-8 lg:mt-[89px] mb-3 lg:mb-16">
@@ -209,20 +207,49 @@ function BrandProductView() {
             Similar Products
           </h3>
 
-          <div className=" grid grid-cols-2 gap-2 lg:gap-0 lg:flex  justify-around items-center">
-            <Card />
-            <Card />
-            <Card />
-            <Card />
-            <Card />
+          <div className=" grid grid-cols-2 gap-2 lg:gap-0 lg:flex justify-between items-center">
+            {similarproducts?.map((similarProd, idx) => (
+              <Card key={idx} product={similarProd} />
+            ))}
           </div>
         </div>
       </div>
+
+      <PartnerBanner />
+
+      <Footer />
     </div>
   );
 }
 
 export default BrandProductView;
+
+function PartnerBanner() {
+  return (
+    <div className="w-full bg-[#374A75] text-white py-10 px-6 md:px-16 font-Georgia">
+      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
+        {/* Left Section */}
+        <div>
+          <h2 className="text-4xl md:text-6xl font-medium leading-tight">
+            Join Our Partner <br /> Network
+          </h2>
+        </div>
+
+        {/* Right Section */}
+        <div className="flex flex-col gap-6 md:pl-10 md:border-l md:border-white/40">
+          <p className="text-sm md:text-base text-white/90 leading-relaxed">
+            Collaborate with us to bring exceptional quality <br />
+            and solutions to more customers.
+          </p>
+
+          <button className="bg-[#1C346B] hover:bg-[#0a142f] transition text-white px-6 py-2 rounded-full w-fit">
+            Partner with us
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 function FeatureRow({ features, type = true }) {
   return (
@@ -257,23 +284,23 @@ function FeatureRow({ features, type = true }) {
   );
 }
 
-function Specifications() {
+function Specifications({ product }) {
   return (
     <div className="flex p-5 flex-col justify-around items-center gap-6 border border-[#000] font-inter ">
       <div>
-        <img src="/images/articlecode.png" alt="article code" />
+        <img src={product?.image} alt="article code" />
       </div>
-      <h2 className="text-xs lg:leading-[12px] lg:tracking-[2.25px]">
-        Article Code
+      <h2 className="text-xs lg:leading-[12px] lg:tracking-[2.25px] capitalize">
+        {product?.title}
       </h2>
       <p className="text-[13.5px] tracking-[2.25px] text-[#1E148F] lg:mb-5">
-        CTY00299
+        {product?.code}
       </p>
     </div>
   );
 }
 
-function Card() {
+function Card({ product }) {
   // function Card({ product, handleCompareToggle, compare }) {
   //   const { isAuthenticated, localcartItems, cartItems, wishlistItems } =
   //     useApp();
@@ -307,15 +334,16 @@ function Card() {
   //   }, [isAuthenticated, cartItems, localcartItems, product?.id]);
 
   return (
-    <div className="font-Poppins max-w-xs lg:w-[245px] lg:h-[360px] border border-[#ccc]">
+    <div className="font-Poppins max-w-xs lg:w-[245px] lg:h-[340px] border border-[#ccc]">
+      {/* <div className="font-Poppins max-w-xs lg:w-[245px] lg:h-[340px] border border-[#ccc]"> */}
       <div
         // onClick={() => naviagte(`/productview/${product.id}`)}
         className="flex justify-center items-center p-2 cursor-pointer"
       >
         <img
-          src="/images/cabin chair.png"
+          src={product.image}
           alt="cabin chair"
-          className="h-40 lg:h-52 object-contain"
+          className="h-40 lg:h-52 w-full"
         />
         {/* <img src={product.image } alt="chair" className="h-52 object-contain" /> */}
       </div>
