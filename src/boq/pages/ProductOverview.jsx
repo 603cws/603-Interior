@@ -686,10 +686,10 @@ function ShortDiv({ title, value, bothBorder = false }) {
         bothBorder ? "border-y" : "border-b"
       }`}
     >
-      <p className="text-xs md:text-sm capitalize font-bold text-[#334A78]">
+      <p className="text-xs md:text-sm capitalize font-bold text-[#334A78] flex-1">
         {title}
       </p>
-      <span className="text-sm text-[#334A78]">{value}</span>
+      <span className="text-sm text-[#334A78] flex-1 text-right">{value}</span>
     </div>
   );
 }
