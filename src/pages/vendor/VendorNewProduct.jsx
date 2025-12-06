@@ -5,8 +5,18 @@ import { FaRegQuestionCircle } from "react-icons/fa";
 import { supabase } from "../../services/supabase";
 import { toast } from "react-hot-toast";
 import { useApp } from "../../Context/Context";
-import { AllCatArray, specialArray } from "../../utils/AllCatArray";
+import {
+  useAllCatArray,
+  specialArray,
+  displayOptions,
+} from "../../utils/AllCatArray";
 import { useRef } from "react";
+import ImageCropper from "../ImageCrop/ImageCropper";
+
+import {
+  additionalDetailsConfig,
+  productInfoFields,
+} from "../../utils/HelperConstant";
 
 function VendorNewProduct({
   setAddNewProduct,
@@ -29,6 +39,7 @@ function VendorNewProduct({
     length: "",
     width: "",
   });
+  const [displayOption, setDisplayOption] = useState("");
 
   const fileInputRef = useRef(null);
 
@@ -45,9 +56,15 @@ function VendorNewProduct({
     dimension: "",
     manufacturer: "",
     vendor_id: "",
+    mrp: "",
+    sellingPrice: "",
+    quantity: "",
+    information: {},
+    additionalInformation: {},
   });
 
   const { accountHolder } = useApp();
+  const AllCatArray = useAllCatArray();
 
   const handleFileChange = (event) => {
     const selectedFile = event.target.files[0];
@@ -56,7 +73,6 @@ function VendorNewProduct({
     setVariant((prev) => ({ ...prev, mainImage: selectedFile }));
     if (selectedFile) {
       setFile(selectedFile);
-
       setPreview(URL.createObjectURL(selectedFile));
     }
   };
@@ -155,14 +171,18 @@ function VendorNewProduct({
       console.log(subcattodisplay);
       return subcattodisplay;
     });
-  }, []);
+  }, [AllCatArray]);
 
   useEffect(() => {
     const filtered = AllCatArray.filter((cat) => cat.name === category);
     const subcattodisplay = filtered.flatMap((subcat) => subcat.subCat1);
     setSubcat(subcattodisplay);
     setResources(filtered);
-  }, [category]);
+  }, [category, AllCatArray]);
+
+  const cleanTitle = (str) => {
+    return str.replace(/[^a-zA-Z0-9 ]/g, "");
+  };
 
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -226,26 +246,30 @@ function VendorNewProduct({
 
       // Now proceed with adding variants
 
-      if (variant.title && variant.price && variant.mainImage) {
+      if (
+        variant.title &&
+        (variant.price || variant.mrp) &&
+        variant.mainImage
+      ) {
+        let cleanedTitle = cleanTitle(variant.title);
         // Upload the main image to Supabase storage
         const { data: mainImageUpload } = await supabase.storage
           .from("addon")
-          .upload(`${variant.title}-main-${productId}`, variant.mainImage);
-
+          .upload(`${cleanedTitle}-main-${productId}`, variant.mainImage);
         // if (mainImageError) {
         //   console.error(mainImageError);
         //   toast.error(
         //     `Error uploading main image for variant: ${variant.title}`
         //   );
         // }
-
+        console.log(mainImageUpload);
         // Upload additional images
         const additionalImagePaths = [];
         for (const [index, imageFile] of variant.additionalImages.entries()) {
           const { data: additionalImageUpload } = await supabase.storage
             .from("addon")
             .upload(
-              `${variant.title}-additional-${index}-${productId}`,
+              `${cleanedTitle}-additional-${index}-${productId}`,
               imageFile.file
             );
 
@@ -258,16 +282,18 @@ function VendorNewProduct({
           //   );
           //   continue;
           // }
+          console.log(additionalImagePaths);
+
           additionalImagePaths.push(additionalImageUpload.path);
         }
 
         // Insert the variant into the product_variants table
-        const { error: variantError } = await supabase
+        const { data, error: variantError } = await supabase
           .from("product_variants")
           .insert({
             product_id: productId,
             title: variant.title,
-            price: variant.price,
+            price: +variant.price || 0,
             details: variant.details,
             image: mainImageUpload.path, // Store the main image path
             additional_images: additionalImagePaths, // Store paths of additional images
@@ -276,7 +302,18 @@ function VendorNewProduct({
             manufacturer: accountHolder?.companyName || variant.manufacturer, // Store manufacturer
             vendor_id: accountHolder.userId, // Store vendor ID
             product_type: subSubCategory,
-          });
+            productDisplayType: displayOption,
+            stockQty: +variant.quantity || 0,
+            ecommercePrice: {
+              mrp: variant.mrp,
+              sellingPrice: variant.sellingPrice,
+            },
+            information: variant?.information || {},
+            additonalinformation: variant?.additionalInformation || {},
+          })
+          .select();
+
+        console.log("data inserted", data);
 
         if (variantError) {
           console.error(variantError);
@@ -305,8 +342,8 @@ function VendorNewProduct({
         (subcat) => subcat.subcategories
       );
       setSelectedSubcategories(filter.join(","));
-      console.log(filter);
-      console.log(filter.join(","));
+      // console.log(filter);
+      // console.log(filter.join(","));
     }
 
     if (category === "Civil / Plumbing") {
@@ -315,15 +352,15 @@ function VendorNewProduct({
           .filter((cat) => cat.name === category && cat.type === subSubCategory)
           .flatMap((subcat) => subcat.subcategories);
         setSelectedSubcategories(filter.join(","));
-        console.log(filter);
-        console.log(filter.join(","));
+        // console.log(filter);
+        // console.log(filter.join(","));
       } else {
         const filter = specialArray
           .filter((cat) => cat.name === category && cat.type === "other")
           .flatMap((subcat) => subcat.subcategories);
         setSelectedSubcategories(filter.join(","));
-        console.log(filter);
-        console.log(filter.join(","));
+        // console.log(filter);
+        // console.log(filter.join(","));
       }
     }
 
@@ -333,18 +370,18 @@ function VendorNewProduct({
           .filter((cat) => cat.name === category && cat.type === subSubCategory)
           .flatMap((subcat) => subcat.subcategories);
         setSelectedSubcategories(filter.join(","));
-        console.log(filter);
-        console.log(filter.join(","));
+        // console.log(filter);
+        // console.log(filter.join(","));
       } else {
         const filter = specialArray
           .filter((cat) => cat.name === category && cat.type === "other")
           .flatMap((subcat) => subcat.subcategories);
         setSelectedSubcategories(filter.join(","));
-        console.log(filter);
-        console.log(filter.join(","));
+        // console.log(filter);
+        // console.log(filter.join(","));
       }
     }
-  }, [category, subSubCategory]);
+  }, [category, subSubCategory, AllCatArray]);
 
   const handleDimensionChange = (e) => {
     const { name, value } = e.target;
@@ -374,6 +411,11 @@ function VendorNewProduct({
       additionalImages: [],
       segment: "",
       dimension: "",
+      mrp: "",
+      sellingPrice: "",
+      quantity: "",
+      information: {},
+      additionalInformation: {},
     }));
     setFile(null);
     setPreview(null);
@@ -385,12 +427,43 @@ function VendorNewProduct({
       length: "",
       width: "",
     });
+    setDisplayOption("");
+    // removeFile();
   };
 
   const handlecategorychange = (e) => {
     setCategory(e.target.value);
     setSubSubCategory("");
   };
+
+  // const [formData, setFormData] = useState({});
+
+  const handleChangeAdditionalInformation = (e) => {
+    const { name, value } = e.target;
+    setVariant((prev) => ({
+      ...prev,
+      additionalInformation: {
+        ...prev.additionalInformation,
+        [name]: value,
+      },
+    }));
+  };
+  const handleChangeInformation = (e) => {
+    const { name, value } = e.target;
+    setVariant((prev) => ({
+      ...prev,
+      information: {
+        ...prev.information,
+        [name]: value,
+      },
+    }));
+  };
+
+  const AdditonalInformation = additionalDetailsConfig.filter(
+    (info) =>
+      info.category.toLowerCase() === category.toLowerCase() &&
+      info.subcategory.toLowerCase() === subSubCategory.toLowerCase()
+  );
 
   return (
     <div className="flex flex-col justify-center items-start font-Poppins relative">
@@ -467,6 +540,30 @@ function VendorNewProduct({
                   })}
                 </select>
               </div>
+              <div>
+                <h4 className="text-[#7B7B7B]">
+                  Select where to display the product
+                </h4>
+                <select
+                  name="displayType"
+                  id="displayType"
+                  className="w-full border-2 py-1.5 px-2 rounded-lg"
+                  value={displayOption}
+                  onChange={(e) => setDisplayOption(e.target.value)}
+                  required
+                >
+                  <option value="" disabled>
+                    Select display option
+                  </option>
+                  {displayOptions.map((option, index) => {
+                    return (
+                      <option key={index} value={option}>
+                        {option}
+                      </option>
+                    );
+                  })}
+                </select>
+              </div>
             </div>
           </div>
           {/* div for description */}
@@ -486,6 +583,27 @@ function VendorNewProduct({
                   required
                 />
               </div>
+              {/* <div>
+                <h4 className="text-[#7B7B7B]">Short Description</h4>
+                <textarea
+                  type="textarea"
+                  // name="details"
+                  // onChange={handleChange}
+                  // value={variant.details}
+                  // maxLength={150}
+                  className="w-full py-1.5 px-2 border-2 rounded-lg"
+                  required
+                />
+              </div> */}
+              <FormInput
+                label={"Short Description"}
+                name={"ShortDescription"}
+                type={"text"}
+                value={variant?.information?.["ShortDescription"] || ""}
+                placeholder={"short despcriton max 150 charcter"}
+                maxLength={150}
+                onChange={handleChangeInformation}
+              />
               <div>
                 <h4 className="text-[#7B7B7B]">product details</h4>
                 <textarea
@@ -493,21 +611,26 @@ function VendorNewProduct({
                   name="details"
                   onChange={handleChange}
                   value={variant.details}
+                  // maxLength={150}
                   className="w-full py-1.5 px-2 border-2 rounded-lg"
                   required
                 />
               </div>
-              <div>
-                <h4 className="text-[#7B7B7B]">product price</h4>
-                <input
-                  type="number"
-                  name="price"
-                  onChange={handleChange}
-                  value={variant.price}
-                  className="w-full py-1.5 px-2 border-2 rounded-lg [&::-webkit-inner-spin-button]:appearance-none  focus:outline-none focus:ring-0"
-                  required
-                />
-              </div>
+
+              {(displayOption === "boq" || displayOption === "both") && (
+                <div>
+                  <h4 className="text-[#7B7B7B]">BOQ price</h4>
+                  <input
+                    type="number"
+                    name="price"
+                    onChange={handleChange}
+                    value={variant.price}
+                    className="w-full py-1.5 px-2 border-2 rounded-lg [&::-webkit-inner-spin-button]:appearance-none  focus:outline-none focus:ring-0"
+                    required
+                  />
+                </div>
+              )}
+              {/* dimensions */}
               <div>
                 <h4 className="text-[#7B7B7B]">
                   product dimension:(H x L x W)
@@ -548,11 +671,93 @@ function VendorNewProduct({
                   </div>
                 </div>
               </div>
+
+              {productInfoFields?.map((field, idx) => (
+                <>
+                  <FormInput
+                    key={idx}
+                    label={field.label}
+                    name={field.name}
+                    type={field.type}
+                    value={variant?.information?.[field.name] || ""}
+                    placeholder={field.placeholder}
+                    onChange={handleChangeInformation}
+                  />
+                </>
+              ))}
             </div>
           </div>
+          {/* div for e-commerce details */}
+          {(displayOption === "ecommerce" || displayOption === "both") && (
+            <div className="w-full shadow-lg border-2 p-5 my-3 rounded-xl capitalize">
+              <div>
+                <h4 className="text-[#7B7B7B]">MRP</h4>
+                <input
+                  type="number"
+                  name="mrp"
+                  onChange={handleChange}
+                  value={variant.mrp}
+                  className="w-full py-1.5 px-2 border-2 rounded-lg [&::-webkit-inner-spin-button]:appearance-none  focus:outline-none focus:ring-0"
+                  required
+                />
+              </div>
+              <div>
+                <h4 className="text-[#7B7B7B]">Selling price</h4>
+                <input
+                  type="number"
+                  name="sellingPrice"
+                  onChange={handleChange}
+                  value={variant.sellingPrice}
+                  className="w-full py-1.5 px-2 border-2 rounded-lg [&::-webkit-inner-spin-button]:appearance-none  focus:outline-none focus:ring-0"
+                  required
+                />
+              </div>
+              <div>
+                <h4 className="text-[#7B7B7B]">Quantity</h4>
+                <input
+                  type="number"
+                  name="quantity"
+                  onChange={handleChange}
+                  value={variant.quantity}
+                  className="w-full py-1.5 px-2 border-2 rounded-lg [&::-webkit-inner-spin-button]:appearance-none  focus:outline-none focus:ring-0"
+                  required
+                />
+              </div>
+            </div>
+          )}
         </div>
         <div className="w-full lg:w-1/2 ">
           {/* div for images */}
+          {AdditonalInformation?.length > 0 && (
+            <div>
+              <div className="flex justify-start items-center gap-2 mb-3">
+                <h3 className="capitalize text-xl font-semibold">
+                  Additional details
+                </h3>
+              </div>
+              <div className="w-full shadow-lg border-2 p-5 my-3 rounded-xl capitalize">
+                {AdditonalInformation.map((group, index) => (
+                  <div key={index} className="mb-8 space-y-4">
+                    {group.fields.map((field, idx) => (
+                      <>
+                        <FormInput
+                          key={idx}
+                          label={field.label}
+                          name={field.name}
+                          type={field.type}
+                          value={
+                            variant?.additionalInformation?.[field.name] || ""
+                          }
+                          placeholder={field.placeholder}
+                          onChange={handleChangeAdditionalInformation}
+                        />
+                      </>
+                    ))}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
           <div>
             <div className="flex justify-start items-center gap-2 mb-3">
               <h3 className="capitalize text-xl font-semibold">
@@ -560,6 +765,9 @@ function VendorNewProduct({
               </h3>
               <FaRegQuestionCircle size={20} className="cursor-pointer" />
             </div>
+            {/* <div>
+              <ImageCropper />
+            </div> */}
             <div>
               <div className="px-4 py-2 bg-white border rounded-xl shadow-lg my-3 w-full">
                 {/* Upload Box */}
@@ -747,3 +955,28 @@ function VendorNewProduct({
 }
 
 export default VendorNewProduct;
+function FormInput({
+  label,
+  name,
+  type,
+  value,
+  placeholder,
+  onChange,
+  ...rest
+}) {
+  return (
+    <div>
+      <p className="text-[#7B7B7B]">{label}</p>
+      <input
+        type={type}
+        name={name}
+        value={value}
+        placeholder={placeholder}
+        onChange={onChange}
+        className="w-full py-1.5 px-2 border-2 rounded-lg"
+        {...rest}
+        required
+      />
+    </div>
+  );
+}

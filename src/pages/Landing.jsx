@@ -1,6 +1,5 @@
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import LandingNavbar from "../common-components/LandingNavbar";
-import { motion, AnimatePresence } from "framer-motion";
 import { AnimatedButton } from "../common-components/animated-button";
 import { useNavigate } from "react-router-dom";
 import gsap from "gsap";
@@ -13,18 +12,14 @@ import "swiper/css/navigation";
 import { Autoplay, Pagination, Navigation } from "swiper/modules";
 import Footer from "../common-components/Footer";
 import GetInTouchSection from "../common-components/GetInTouchSection";
+import LazyImage from "../utils/LazyImage";
+import { trackCTA } from "../lib/trackCTA";
 
 gsap.registerPlugin(ScrollTrigger);
 function Landing() {
   const navigate = useNavigate();
-  const heroImages = [
-    "/images/home/Hero-image-1.webp",
-    "/images/home/Hero-image-2.webp",
-    "/images/home/Hero-image-3.webp",
-    "/images/home/Hero-image-4.webp",
-  ];
 
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  // const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const containerRef = useRef();
 
   useEffect(() => {
@@ -144,16 +139,6 @@ function Landing() {
     };
   }, []);
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentImageIndex((prevIndex) =>
-        prevIndex === heroImages.length - 1 ? 0 : prevIndex + 1
-      );
-    }, 5000);
-
-    return () => clearInterval(interval);
-  }, [heroImages.length]);
-
   const featuredProjects = [
     {
       img: "Marathon.webp",
@@ -221,9 +206,9 @@ function Landing() {
       <>
         <div className="flex justify-center items-center gap-2">
           <span className="w-8 h-px bg-[#374A75] "></span>
-          <h4 className="uppercase text-[#374A75] font-bold text-[13px] tracking-wide font-Georgia">
+          <h2 className="uppercase text-[#374A75] font-bold text-[13px] tracking-wide font-Georgia">
             {title}
-          </h4>
+          </h2>
           <span className="w-8 h-px bg-[#374A75] "></span>
         </div>
       </>
@@ -233,78 +218,6 @@ function Landing() {
   return (
     <>
       {/* hero section */}
-      {/* <section className="h-screen flex flex-col">
-        <LandingNavbar />
-        <div className="flex-1 flex items-center relative ">
-          <div className="absolute inset-0">
-            {heroImages.map((src, index) => (
-              <motion.div
-                key={index}
-                className="absolute inset-0 bg-cover bg-center"
-                style={{ backgroundImage: `url(${src})` }}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: currentImageIndex === index ? 1 : 0 }}
-                transition={{ duration: 2 }}
-              />
-            ))}
-            <div className="absolute inset-0 bg-gradient-to-r from-[#304778]/70 to-[#FFFFFF]/0" />
-          </div>
-          <div className="px-4 mx-auto lg:container">
-            <motion.div
-              initial={{ x: "-50%", opacity: 0 }}
-              animate={{ x: 0, opacity: 1 }}
-              transition={{ duration: 2, ease: "easeOut" }}
-              className="relative"
-            >
-              <h1 className="text-[#fff] text-5xl md:text-7xl xl:text-8xl font-bold italic capitalize font-TimesNewRoman">
-                Transform your <br /> office space with
-                <br />
-                <span className="gold-text"> smart planning</span>
-              </h1>
-              <div className="flex gap-5 mt-7">
-                <AnimatedButton
-                  onClick={() => navigate("/layout")}
-                  className="!bg-[#3A5D7B] text-white capitalize font-Georgia  text-lg w-60"
-                  variant="default"
-                  size="lg"
-                  // glow={true}
-                  textEffect="shimmer"
-                  rounded="custom"
-                  asChild={false}
-                  hideAnimations={false}
-                  shimmerColor="#fff"
-                  shimmerSize="0.15em"
-                  shimmerDuration="3s"
-                  borderRadius="10px"
-                  background="rgba(48, 71, 120, 1)"
-                  hovereBackground="linear-gradient(90deg,rgba(85,132,182,1)  0%,  rgba(117,162,190,1) 100%)"
-                >
-                  make your space
-                </AnimatedButton>
-                <AnimatedButton
-                  onClick={() => navigate("/layout")}
-                  className="!bg-[#3A5D7B] text-white capitalize font-Georgia  text-lg w-60"
-                  variant="default"
-                  size="lg"
-                  // glow={true}
-                  textEffect="shimmer"
-                  rounded="custom"
-                  asChild={false}
-                  hideAnimations={false}
-                  shimmerColor="#fff"
-                  shimmerSize="0.15em"
-                  shimmerDuration="3s"
-                  borderRadius="10px"
-                  background="rgba(48, 71, 120, 1)"
-                  hovereBackground="linear-gradient(90deg,rgba(85,132,182,1)  0%,  rgba(117,162,190,1) 100%)"
-                >
-                  book appointment
-                </AnimatedButton>
-              </div>
-            </motion.div>
-          </div>
-        </div>
-      </section> */}
       <section className="h-screen 3xl:h-auto">
         <LandingNavbar className="absolute top-0 z-50" />
         <div className="relative h-full w-full pt-20 lg:pt-24 xl:overflow-y-hidden 3xl:container">
@@ -312,7 +225,11 @@ function Landing() {
           <div className="hidden lg:block absolute bottom-0 left-0 w-52 h-56 bg-[#1C3145]"></div>
           <div className="hidden lg:block absolute bottom-0 right-0 max-w-sm w-full h-12 bg-[#1C3145]"></div>
           <div className="hidden lg:block absolute bottom-0 left-1/2 translate-x-1/4 -z-10">
-            <img src="/images/home/dom.png" alt="" className="max-w-40" />
+            <img
+              src="/images/home/dom.png"
+              alt="decorative element"
+              className="max-w-40"
+            />
           </div>
           <div className="hidden absolute left-1/2 top-0 transform -translate-x-3 lg:grid grid-cols-6 gap-x-4 gap-y-2 pt-28 -z-10">
             {[...Array(36)].map((_, i) => (
@@ -327,15 +244,15 @@ function Landing() {
           <div className="px-4 lg:container 3xl:px-0 flex flex-col-reverse lg:grid grid-cols-1 lg:grid-cols-2 justify-items-stretch ">
             <div className="space-y-2 lg:space-y-4 mt-5 lg:mt-0 lg:p-5">
               <div className="relative">
-                <img
+                <LazyImage
                   src="/images/home/Hero-image-1.webp"
                   alt="Office image"
-                  className="max-h-32 md:max-h-36 lg:max-h-[38vh] 3xl:max-h-[35vh] object-cover w-full"
+                  className="max-h-32 md:max-h-36 lg:max-h-[38vh] xl:max-h-[35vh] 2xl:max-h-[38vh] 3xl:max-h-[35vh] object-cover w-full"
                 />
                 <span className="absolute -top-3 -left-3 w-16 h-16 border-t-2 border-l-2 border-[#1E3A5F]"></span>
               </div>
               <div className="relative">
-                <img
+                <LazyImage
                   src="/images/home/Hero-image-2.webp"
                   alt="Office image"
                   className="max-h-32 md:max-h-36 lg:max-h-[38vh] 3xl:max-h-[35vh]  object-cover w-full"
@@ -358,7 +275,7 @@ function Landing() {
                   <span className="hidden lg:inline">
                     <br />
                   </span>
-                  are not just beautiful bur functional, timeless, and
+                  are not just beautiful but functional, timeless, and
                   <span className="hidden lg:inline">
                     <br />
                   </span>
@@ -366,7 +283,10 @@ function Landing() {
                 </p>
 
                 <button
-                  onClick={() => navigate("/Layout")}
+                  onClick={() => {
+                    trackCTA("make your space");
+                    navigate("/Layout");
+                  }}
                   className="relative group w-40 lg:w-48 h-11 lg:h-12 rounded-lg p-1 bg-gradient-to-br from-[#334A78] to-[#78A3FF] hover:bg-[#334A78]"
                 >
                   <span className="flex w-full h-full items-center justify-center rounded-md bg-white text-base lg:text-lg font-bold capitalize text-[#334A78] group-hover:text-[#FFF] group-hover:bg-[#334A78] transition-colors duration-500 ease-in-out">
@@ -386,59 +306,66 @@ function Landing() {
           className="relative max-w-4xl xl:max-w-6xl 2xl:max-w-[1280px] mx-auto h-screen font-TimesNewRoman italic overflow-hidden py-5"
         >
           {/* Specialized text */}
-          <h1 className="absolute top-[15%] text-5xl 2xl:text-7xl specialized-text ">
+          <p className="absolute top-[15%] text-5xl 2xl:text-7xl specialized-text ">
             Specialized
-          </h1>
+          </p>
 
           {/* Round table */}
           <img
             src="/images/home/round-table.png"
             className="absolute top-10 w-44 2xl:h-52 h-44 2xl:w-52 round-table"
+            alt="round table"
           />
 
           {/* Rotating table */}
           <img
             src="/images/home/rotating-table.png"
             className="absolute top-[50%] w-44 2xl:h-52 h-44 2xl:w-52 rotating-table"
+            alt="rotating table"
           />
 
           {/* Top middle table */}
           <img
             src="/images/home/upper-table.png"
             className="absolute top-0 left-1/3 upper-table max-w-60 2xl:max-w-xs"
+            alt="upper table"
           />
 
           {/* Circles */}
           <img
             src="/images/home/circle.png"
             className="absolute right-10 top-10 circle h-14 2xl:h-[70px] w-14 2xl:w-[70px]"
+            alt="decorative circle element"
           />
           <img
             src="/images/home/circle.png"
             className="absolute right-10 bottom-10 circle  h-14 2xl:h-[70px] w-14 2xl:w-[70px]"
+            alt="decorative circle element"
           />
 
           {/* Interior text */}
-          <h1 className="absolute top-[40%] right-0 text-5xl 2xl:text-7xl interior-text">
+          <p className="absolute top-[40%] right-0 text-5xl 2xl:text-7xl interior-text">
             in Interior Design
             <br /> corporate
-          </h1>
+          </p>
 
           {/* Commercial text */}
-          <h1 className="absolute bottom-[10%]  text-5xl 2xl:text-7xl  commercial-text">
+          <p className="absolute bottom-[10%] text-5xl 2xl:text-7xl commercial-text">
             and commercial
-          </h1>
+          </p>
 
           {/* Down table */}
           <img
             src="/images/home/down-table.png"
             className="absolute bottom-2 max-w-sm xl:max-w-2xl w-full down-table h-16"
+            alt="down table"
           />
 
           {/* Side middle table */}
           <img
             src="/images/home/table.png"
             className="absolute top-1/4 max-w-sm object-contain h-96 side-table"
+            alt="side table"
           />
 
           {/* Center final text */}
@@ -451,7 +378,7 @@ function Landing() {
 
       {/* section 3 */}
       <section>
-        <div className="px-4 lg:container xl:max-w-7xl xl:px-0 mx-auto py-5 lg:py-10">
+        <div className="px-4 lg:container xl:max-w-7xl 2xl:px-0 mx-auto py-5 lg:py-10">
           <div className="flex flex-col items-center space-y-4">
             <TitleHeader title={"service"} />
             <h3 className="capitalize font-Georgia font-bold text-[42px] text-center tracking-wide">
@@ -485,31 +412,10 @@ function Landing() {
             </div>
           </div>
         </div>
-        {/* <button className="flex items-center p-2 place-self-center border">
-          Create Your Office
-        </button> */}
-        {/* <AnimatedButton
-          onClick={() => navigate("/layout")}
-          className="!bg-[#3A5D7B] text-white capitalize font-Georgia text-lg w-60 mb-0 place-self-center"
-          variant="default"
-          size="lg"
-          glow={false}
-          textEffect="shimmer"
-          rounded="custom"
-          asChild={false}
-          hideAnimations={true}
-          // shimmerColor="#fff"
-          // shimmerSize="0.15em"
-          // shimmerDuration="3s"
-          borderRadius="10px"
-          background="rgba(48, 71, 120, 1)"
-          hovereBackground="linear-gradient(90deg,rgba(85,132,182,1)  0%,  rgba(117,162,190,1) 100%)"
-        >
-          create your space
-        </AnimatedButton> */}
       </section>
       <AnimatedButton
         onClick={() => navigate("/layout")}
+        ctaLabel="Create Your Space"
         className="!bg-[#3A5D7B] text-white capitalize font-Georgia text-lg w-60 mb-6 place-self-center"
         variant="default"
         size="lg"
@@ -530,7 +436,7 @@ function Landing() {
 
       {/* section 4 */}
       <section>
-        <div className="px-4 mx-auto lg:container xl:max-w-7xl xl:px-0 py-5 lg:py-10">
+        <div className="px-4 mx-auto lg:container xl:max-w-7xl 2xl:px-0 py-5 lg:py-10">
           <h3 className="font-Georgia font-bold text-[42px] text-center tracking-wide">
             Trusted by Industry Leaders
           </h3>

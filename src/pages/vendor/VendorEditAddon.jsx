@@ -5,7 +5,11 @@ import { FaRegQuestionCircle } from "react-icons/fa";
 
 import { supabase } from "../../services/supabase";
 import { toast } from "react-hot-toast"; //Toaster
-import { AllCatArray, specialArray } from "../../utils/AllCatArray";
+import {
+  useAllCatArray,
+  displayOptions,
+  specialArray,
+} from "../../utils/AllCatArray";
 import { baseImageUrl } from "../../utils/HelperConstant";
 
 function VendorEditAddon({
@@ -52,7 +56,14 @@ function VendorEditAddon({
     image: selectedAddon?.image || null,
     dimension: selectedAddon?.dimensions || "",
     vendorId: selectedAddon?.vendorId || "",
+    mrp: selectedAddon?.ecommercePrice?.mrp || "",
+    sellingPrice: selectedAddon?.ecommercePrice?.sellingPrice || "",
+    quantity: selectedAddon?.stockQty || "",
   });
+  const [displayOption, setDisplayOption] = useState(
+    selectedAddon?.productDisplayType
+  );
+  const AllCatArray = useAllCatArray();
 
   //   const { accountHolder } = useApp();
 
@@ -251,12 +262,18 @@ function VendorEditAddon({
         .update({
           addonid: addonId,
           title: addon?.title,
-          price: addon?.price,
+          price: +addon?.price,
           image: addon.image,
           vendorId: addon?.vendorId,
           category: category,
           specifications: subSubCategory,
           dimensions: addon?.dimension,
+          productDisplayType: displayOption,
+          stockQty: +addon.quantity || 0,
+          ecommercePrice: {
+            mrp: addon.mrp,
+            sellingPrice: addon.sellingPrice,
+          },
           status: "pending",
         })
         .eq("id", addon?.id);
@@ -275,7 +292,7 @@ function VendorEditAddon({
       console.log("Error in onSubmit:", error);
       // toast.error("An unexpected error occurred.");
     } finally {
-      //   handleFormClear();
+      handleFormClear();
       setIsSubmitting(false);
     }
   };
@@ -440,6 +457,30 @@ function VendorEditAddon({
                   })}
                 </select>
               </div>
+              <div>
+                <h4 className="text-[#7B7B7B]">
+                  Select where to display the product
+                </h4>
+                <select
+                  name="displayType"
+                  id="displayType"
+                  className="w-full border-2 py-1.5 px-2 rounded-lg"
+                  value={displayOption}
+                  onChange={(e) => setDisplayOption(e.target.value)}
+                  required
+                >
+                  <option value="" disabled>
+                    Select display option
+                  </option>
+                  {displayOptions.map((option, index) => {
+                    return (
+                      <option key={index} value={option}>
+                        {option}
+                      </option>
+                    );
+                  })}
+                </select>
+              </div>
             </div>
           </div>
           {/* div for description */}
@@ -459,17 +500,19 @@ function VendorEditAddon({
                   required
                 />
               </div>
-              <div>
-                <h4 className="text-[#7B7B7B]">Addon price</h4>
-                <input
-                  type="number"
-                  name="price"
-                  onChange={handleChange}
-                  value={addon?.price}
-                  required
-                  className="w-full py-1.5 px-2 border-2 rounded-lg [&::-webkit-inner-spin-button]:appearance-none  focus:outline-none focus:ring-0"
-                />
-              </div>
+              {(displayOption === "boq" || displayOption === "both") && (
+                <div>
+                  <h4 className="text-[#7B7B7B]">BOQ price</h4>
+                  <input
+                    type="number"
+                    name="price"
+                    onChange={handleChange}
+                    value={addon?.price}
+                    required
+                    className="w-full py-1.5 px-2 border-2 rounded-lg [&::-webkit-inner-spin-button]:appearance-none  focus:outline-none focus:ring-0"
+                  />
+                </div>
+              )}
               <div>
                 <h4 className="text-[#7B7B7B]">
                   product dimension:(H x L x W)
@@ -514,6 +557,48 @@ function VendorEditAddon({
           </div>
         </div>
         <div className="w-full lg:w-1/2 ">
+          {(displayOption === "ecommerce" || displayOption === "both") && (
+            <>
+              <h3 className="capitalize text-xl font-semibold">
+                E-commerce Details
+              </h3>
+              <div className="w-full shadow-lg border-2 p-5 my-3 rounded-xl capitalize">
+                <div>
+                  <h4 className="text-[#7B7B7B]">MRP</h4>
+                  <input
+                    type="number"
+                    name="mrp"
+                    onChange={handleChange}
+                    value={addon.mrp}
+                    className="w-full py-1.5 px-2 border-2 rounded-lg [&::-webkit-inner-spin-button]:appearance-none  focus:outline-none focus:ring-0"
+                    required
+                  />
+                </div>
+                <div>
+                  <h4 className="text-[#7B7B7B]">Selling price</h4>
+                  <input
+                    type="number"
+                    name="sellingPrice"
+                    onChange={handleChange}
+                    value={addon.sellingPrice}
+                    className="w-full py-1.5 px-2 border-2 rounded-lg [&::-webkit-inner-spin-button]:appearance-none  focus:outline-none focus:ring-0"
+                    required
+                  />
+                </div>
+                <div>
+                  <h4 className="text-[#7B7B7B]">Quantity</h4>
+                  <input
+                    type="number"
+                    name="quantity"
+                    onChange={handleChange}
+                    value={addon.quantity}
+                    className="w-full py-1.5 px-2 border-2 rounded-lg [&::-webkit-inner-spin-button]:appearance-none  focus:outline-none focus:ring-0"
+                    required
+                  />
+                </div>
+              </div>
+            </>
+          )}
           {/* div for images */}
           <div>
             <div className="flex justify-start items-center gap-2 mb-3">

@@ -215,7 +215,7 @@ function Blog() {
                     </p>
 
                     <div className="flex justify-end items-center my-5">
-                      <img src="/images/blogicon.svg" alt="" />
+                      <img src="/images/blogicon.svg" alt="blog icon" />
                     </div>
                   </div>
                 </div>

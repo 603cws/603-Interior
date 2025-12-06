@@ -49,7 +49,7 @@ function AppointmentConfirmation({ onClose, time }) {
             >
               <img
                 src={accountHolder.profileImage}
-                alt=""
+                alt="profile"
                 className="h-10 w-10 p-1"
               />
             </div>

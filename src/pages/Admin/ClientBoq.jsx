@@ -11,6 +11,7 @@ import { VscEye } from "react-icons/vsc";
 import { baseImageUrl } from "../../utils/HelperConstant";
 import { IoIosSearch } from "react-icons/io";
 import ProductView from "../user/ProductView";
+import PagInationNav from "../../common-components/PagInationNav";
 function ClientBoq({ setClientBoqs }) {
   const [savedBoqs, setSavedBoqs] = useState([]);
   const [selectedBoq, setSelectedBoq] = useState();
@@ -134,6 +135,7 @@ function ClientBoq({ setClientBoqs }) {
         const { data, error } = await supabase
           .from("product_variants")
           .select("*,products(*)")
+          .neq("productDisplayType", "ecommerce")
           .in("id", productIdsArray); // Use Supabase `in()` filter
 
         if (data) {
@@ -250,10 +252,10 @@ function ClientBoq({ setClientBoqs }) {
         ) : savedBoqs.length > 0 ? (
           <div className="overflow-y-auto scrollbar-hide h-[calc(100vh-95px)] relative ">
             {/* // Default product list and add product UI */}
-            <div className=" sticky top-0 z-20 bg-white">
+            <div className="sticky top-0 z-20 bg-white">
               <button
                 onClick={() => setClientBoqs(false)}
-                className="capitalize font-semibold flex items-center text-xs text-[#A1A1A1] "
+                className="capitalize font-semibold flex items-center text-xs text-[#A1A1A1] mt-3 ml-3"
               >
                 <IoIosArrowBack /> Back to client list
               </button>
@@ -269,7 +271,10 @@ function ClientBoq({ setClientBoqs }) {
                     <button
                       onClick={() => setMobileFilterOPen(!mobileFilterOpen)}
                     >
-                      <img src="/images/icons/filter-icon.png" alt="" />
+                      <img
+                        src="/images/icons/filter-icon.png"
+                        alt="filter icon"
+                      />
                     </button>
                   </div>
                   {mobileFilterOpen && (
@@ -302,7 +307,7 @@ function ClientBoq({ setClientBoqs }) {
                       return (
                         <div
                           key={boq?.id}
-                          className={` rounded-lg border-2  px-5 py-2 ${
+                          className={`rounded-lg border-2 px-4 py-1 ${
                             selectedBoq?.id === boq?.id
                               ? "bg-[#374A75] text-white border-[#374a75]"
                               : "bg-white text-[#374a75] border-[#ccc]"
@@ -449,7 +454,7 @@ function ClientBoq({ setClientBoqs }) {
                                         </th> */}
                                 <th className="p-3 font-medium">Category</th>
                                 <th className="p-3 font-medium">
-                                  specification
+                                  Specification
                                 </th>
                               </>
                             ) : (
@@ -566,47 +571,13 @@ function ClientBoq({ setClientBoqs }) {
                 </>
               ))}
             {/* Pagination Controls (Always Visible) */}
-            {selectedBoq && totalPages > 1 && (
-              <div className="flex justify-center items-center gap-2  z-30 sticky bottom-0  bg-white  text-[#3d194f]">
-                <button
-                  onClick={() => goToPage(currentPage - 1)}
-                  disabled={currentPage === 1}
-                  className="px-3 py-1 border rounded disabled:opacity-50 text-[#3d194f]"
-                >
-                  Previous
-                </button>
-
-                {/* Page Numbers */}
-                {Array.from({ length: totalPages }, (_, i) => i + 1).map(
-                  (page) =>
-                    page === 1 ||
-                    page === totalPages ||
-                    (page >= currentPage - 1 && page <= currentPage + 1) ? (
-                      <button
-                        key={page}
-                        onClick={() => goToPage(page)}
-                        className={`w-8 h-8 flex items-center justify-center  ${
-                          currentPage === page
-                            ? "bg-[#aca9d3] text-white rounded-full "
-                            : "rounded-md text-[#3d194f]"
-                        }`}
-                      >
-                        {page}
-                      </button>
-                    ) : page === currentPage + 2 || page === currentPage - 2 ? (
-                      <span key={page} className="px-2">
-                        ...
-                      </span>
-                    ) : null
-                )}
-
-                <button
-                  onClick={() => goToPage(currentPage + 1)}
-                  disabled={currentPage === totalPages}
-                  className="px-3 py-1 border rounded disabled:opacity-50 text-[#3d194f]"
-                >
-                  Next
-                </button>
+            {selectedBoq && (
+              <div className="z-30 sticky bottom-0 bg-white py-1 text-[#3d194f]">
+                <PagInationNav
+                  totalPages={totalPages}
+                  handlePageChange={goToPage}
+                  currentPage={currentPage}
+                />
               </div>
             )}
           </div>
@@ -614,7 +585,7 @@ function ClientBoq({ setClientBoqs }) {
           <div className="">
             <button
               onClick={() => setClientBoqs(false)}
-              className="capitalize font-semibold flex items-center text-xs text-[#A1A1A1] "
+              className="capitalize font-semibold flex items-center text-xs text-[#A1A1A1]"
             >
               <IoIosArrowBack /> Back to client list
             </button>

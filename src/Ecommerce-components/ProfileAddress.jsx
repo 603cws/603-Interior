@@ -5,7 +5,7 @@ import { supabase } from "../services/supabase";
 import toast from "react-hot-toast";
 
 function ProfileAddress() {
-  const { accountHolder, fetchUserData, isAuthenticated } = useApp();
+  const { accountHolder, fetchUserData } = useApp();
   const [errors, setErrors] = useState({});
   const [isAddressFormOpen, setIsAddressFormOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);

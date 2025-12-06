@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef, useReducer } from "react";
+import { useEffect, useState, useRef, useReducer, useMemo } from "react";
 import { RiDashboardFill, RiFormula, RiSettingsLine } from "react-icons/ri";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useApp } from "../../Context/Context";
@@ -11,9 +11,8 @@ import {
   IoSettingsSharp,
 } from "react-icons/io5";
 import { LuBlend } from "react-icons/lu";
-import { FaRegUserCircle, FaUser, FaUserPlus } from "react-icons/fa";
 import { FaBuilding } from "react-icons/fa";
-import { PiHandshakeFill } from "react-icons/pi";
+import { PiCodeBlock, PiHandshakeFill } from "react-icons/pi";
 import VendorNewProduct from "../vendor/VendorNewProduct";
 import VendorNewAddon from "../vendor/VendorNewAddon";
 import { VscEye } from "react-icons/vsc";
@@ -27,9 +26,13 @@ import DashboardProductCard from "../vendor/DashboardProductCard";
 import DashboardCards from "./DashboardCards";
 import DashboardInbox from "./DashboardInbox";
 import CreateUser from "./CreateUser";
-import { HiXMark } from "react-icons/hi2";
+import {
+  HiArrowsUpDown,
+  HiBarsArrowDown,
+  HiBarsArrowUp,
+  HiXMark,
+} from "react-icons/hi2";
 import { MdDeleteOutline } from "react-icons/md";
-// import { FaUserPlus } from "react-icons/fa6";
 import { TbCalculator, TbCalendarStats } from "react-icons/tb";
 import Schedule from "./Schedule";
 import FormulaEditor from "../../boq/components/FormulaEditor";
@@ -47,8 +50,11 @@ import { GoPlus } from "react-icons/go";
 import ClientBoq from "./ClientBoq";
 import { baseImageUrl } from "../../utils/HelperConstant";
 import { BsBoxSeam } from "react-icons/bs";
-import { FiLogOut } from "react-icons/fi";
-
+import { FiLogOut, FiUser, FiUserPlus } from "react-icons/fi";
+import { IoMdSwitch } from "react-icons/io";
+import PagInationNav from "../../common-components/PagInationNav";
+import SelectSubcategories from "./SelectSubcategories";
+import CategoryEditor from "../../boq/components/CategoryEditor";
 function handlesidebarState(state, action) {
   switch (action.type) {
     case "TOGGLE_SECTION":
@@ -62,6 +68,9 @@ function handlesidebarState(state, action) {
         isVendorOpen: action.payload === "Vendors",
         isScheduleOpen: action.payload === "Schedule",
         isFormulaeOpen: action.payload === "Formulae",
+        isCategoryEditorOpen: action.payload === "CategoryEditor",
+
+        // isOrdersOpen: action.payload === "Orders",
         // help: action.payload === "Help",
         // isBookAppointmentOpen: action.payload === "BookAppointment",
         currentSection: action.payload,
@@ -79,7 +88,10 @@ const SECTIONS = {
   CREATE: "Create",
   SCHEDULE: "Schedule",
   FORMULAE: "Formulae",
+  CategoryEditor: "CategoryEditor",
   SETTING: "Setting",
+
+  // ORDERS: "Orders",
   // HELP: "Help",
   // EDIT: "Edit",
   // BOOkAPPOINTMENT: "BookAppointment",
@@ -148,6 +160,7 @@ function AdminDashboard() {
 
   //delete warning
   const [deleteWarning, setDeleteWarning] = useState(false);
+  const [multipleDeleteWaring, setMultipleDeleteWaring] = useState(false);
   const [rejectReason, setRejectReason] = useState("");
   const [rejectReasonPopup, setRejectReasonPopup] = useState(false);
   const [clientBoqs, setClientBoqs] = useState(false);
@@ -164,7 +177,6 @@ function AdminDashboard() {
     isScheduleOpen: false,
     isFormulaeOpen: false,
     isSettingOpen: false,
-
     currentSection: "Dashboard",
   };
 
@@ -179,24 +191,58 @@ function AdminDashboard() {
   ];
 
   const [selectedCategory, setSelectedCategory] = useState("");
+  const [selectedSubCategory, setSelectedSubCategory] = useState("");
   // state for filter
   const [isOpen, setIsOpen] = useState(false);
   const [filterDropdown, setFilterDropdown] = useState(false);
   const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
   const [selected, setSelected] = useState("");
 
+  const [priceMin, setPriceMin] = useState("");
+  const [priceMax, setPriceMax] = useState("");
+  const [dateFrom, setDateFrom] = useState("");
+  const [dateTo, setDateTo] = useState("");
+
+  const [sortField, setSortField] = useState(""); // e.g. "price" or "title" etc.
+  const [sortOrder, setSortOrder] = useState("asc"); // "asc" or "desc"
+
+  const [selectSubcategories, setSelectSubcategories] = useState(false);
+  const [selectedItem, setSelectedItem] = useState(null);
+
   const normalize = (str) => str.replace(/\s+/g, " ").trim().toLowerCase();
-  const applyFilters = ({ query = "", category = "", status = "" }) => {
+
+  const applyFilters = ({
+    query = "",
+    category = "",
+    status = "",
+    subCategory = "",
+    priceMin = "",
+    priceMax = "",
+    dateFrom = "",
+    dateTo = "",
+  }) => {
     const source = toggle ? products : addons;
 
+    // detect whether any filter is active (include new filters)
+    const anyFilterActive = !!(
+      query ||
+      category ||
+      status ||
+      subCategory ||
+      priceMin ||
+      priceMax ||
+      dateFrom ||
+      dateTo
+    );
+
     // Store last page before searching if this is a new search
-    if ((query || category || status) && !isSearching) {
+    if (anyFilterActive && !isSearching) {
       setLastPageBeforeSearch(currentPage);
       setIsSearching(true);
     }
 
-    // Reset case: No query, category, or status
-    if (!query && !category && !status) {
+    // Reset case: No filters at all
+    if (!anyFilterActive) {
       toggle ? setFilteredProducts(products) : setFilteredAddons(addons);
       if (isSearching) {
         setCurrentPage(lastPageBeforeSearch);
@@ -205,7 +251,64 @@ function AdminDashboard() {
       return;
     }
 
-    // Apply filters
+    // helpers: extract price and date safely from item
+    const getItemPrice = (item) => {
+      // try multiple possible locations, convert to Number or NaN
+      const candidates = [
+        item.price,
+        item.products?.price,
+        item.price?.amount,
+        item.price?.value,
+      ];
+      for (const c of candidates) {
+        if (c !== undefined && c !== null && c !== "") {
+          const n = Number(c);
+          if (!Number.isNaN(n)) return n;
+        }
+      }
+      return NaN;
+    };
+
+    const getItemDate = (item) => {
+      // try common date fields
+      const candidates = [
+        item.date,
+        item.createdAt,
+        item.created_at,
+        item.products?.createdAt,
+        item.products?.date,
+      ];
+      for (const c of candidates) {
+        if (!c && c !== 0) continue;
+        const t = Date.parse(c);
+        if (!Number.isNaN(t)) return new Date(t);
+      }
+      return null;
+    };
+
+    // prepare numeric and date bounds (normalize)
+    const minPrice =
+      priceMin === "" ? Number.NEGATIVE_INFINITY : Number(priceMin);
+    const maxPrice =
+      priceMax === "" ? Number.POSITIVE_INFINITY : Number(priceMax);
+
+    // parse date inputs and create inclusive bounds
+    const parseDateOrNull = (dStr, isEnd = false) => {
+      if (!dStr) return null;
+      // treat input as yyyy-mm-dd (from date input). Make inclusive -- start of day / end of day
+      const base = new Date(dStr);
+      if (Number.isNaN(base.getTime())) return null;
+      if (isEnd) {
+        base.setHours(23, 59, 59, 999);
+      } else {
+        base.setHours(0, 0, 0, 0);
+      }
+      return base;
+    };
+
+    const fromDate = parseDateOrNull(dateFrom, false);
+    const toDate = parseDateOrNull(dateTo, true);
+
     const filtered = source.filter((item) => {
       const titleMatch = query
         ? normalize(item.title).includes(normalize(query))
@@ -217,11 +320,47 @@ function AdminDashboard() {
           : item.title?.toLowerCase().includes(category.toLowerCase())
         : true;
 
+      const subCategoryMatch = subCategory
+        ? toggle
+          ? item.products?.subcategory
+              ?.toLowerCase()
+              .includes(subCategory.toLowerCase())
+          : item.title?.toLowerCase().includes(subCategory.toLowerCase())
+        : true;
+
       const statusMatch = status
         ? item.status?.toLowerCase() === status.toLowerCase()
         : true;
 
-      return titleMatch && categoryMatch && statusMatch;
+      // Price matching (if either priceMin or priceMax provided)
+      const itemPrice = getItemPrice(item);
+      const priceMatch =
+        isFinite(minPrice) || isFinite(maxPrice)
+          ? !Number.isNaN(itemPrice) &&
+            itemPrice >= minPrice &&
+            itemPrice <= maxPrice
+          : true;
+
+      // Date matching (if either dateFrom or dateTo provided)
+      const itemDate = getItemDate(item);
+      let dateMatch = true;
+      if (fromDate || toDate) {
+        if (!itemDate) {
+          dateMatch = false;
+        } else {
+          if (fromDate && itemDate < fromDate) dateMatch = false;
+          if (toDate && itemDate > toDate) dateMatch = false;
+        }
+      }
+
+      return (
+        titleMatch &&
+        categoryMatch &&
+        statusMatch &&
+        subCategoryMatch &&
+        priceMatch &&
+        dateMatch
+      );
     });
 
     // Apply filtered result
@@ -234,13 +373,118 @@ function AdminDashboard() {
     setCurrentPage(1); // Always reset to first page on filter
   };
 
+  const toggleSort = (field) => {
+    // if clicking a different field, start with ASC
+    if (sortField !== field) {
+      setSortField(field);
+      setSortOrder("asc");
+      return;
+    }
+
+    // if same field: cycle asc → desc → none
+    if (sortOrder === "asc") {
+      setSortOrder("desc");
+    } else if (sortOrder === "desc") {
+      // go to unsorted state
+      setSortField("");
+      setSortOrder("asc"); // default next time
+    }
+  };
+
+  const sortedSource = useMemo(() => {
+    const source = toggle ? filteredProducts : filteredAddons; // your filtered lists
+    if (!sortField) return source;
+
+    const copy = [...source];
+
+    const getVal = (item, field) => {
+      // price -> numeric
+      if (field === "price") {
+        const v =
+          item.price ??
+          item.products?.price ??
+          item.price?.amount ??
+          item.price?.value;
+        if (typeof v === "string")
+          return Number(String(v).replace(/[^\d.-]/g, "")) || 0;
+        return typeof v === "number" ? v : 0;
+      }
+
+      // date -> timestamp (ms). Return a numeric fallback so numeric compare works.
+      if (field === "date") {
+        const d =
+          item.created_at ??
+          item.createdAt ??
+          item.products?.created_at ??
+          item.products?.createdAt ??
+          item.products?.date ??
+          item.date;
+        if (!d) return Number.NEGATIVE_INFINITY; // missing date -> place consistently
+        const t = Date.parse(d);
+        return Number.isNaN(t) ? Number.NEGATIVE_INFINITY : t;
+      }
+
+      // title -> string
+      if (field === "title") return (item.title ?? "").toString();
+
+      // fallback: if the value is number return it, else string
+      const val = item[field];
+      if (typeof val === "number") return val;
+      if (typeof val === "string") return val.toLowerCase();
+      return val ?? "";
+    };
+
+    copy.sort((a, b) => {
+      const A = getVal(a, sortField);
+      const B = getVal(b, sortField);
+
+      // numeric compare if both numbers (covers price/date)
+      if (typeof A === "number" && typeof B === "number") {
+        return sortOrder === "asc" ? A - B : B - A;
+      }
+
+      // string compare
+      const sA = (A ?? "").toString().toLowerCase();
+      const sB = (B ?? "").toString().toLowerCase();
+      if (sA > sB) return sortOrder === "asc" ? 1 : -1;
+      if (sA < sB) return sortOrder === "asc" ? -1 : 1;
+      return 0;
+    });
+
+    return copy;
+  }, [filteredProducts, filteredAddons, sortField, sortOrder, toggle]);
+
   //baseurlforimg
   // const baseImageUrl =
   //   "https://bwxzfwsoxwtzhjbzbdzs.supabase.co/storage/v1/object/public/addon/";
 
-  const { accountHolder } = useApp();
+  const { accountHolder, categories } = useApp();
 
   const location = useLocation();
+  const dropdownRef = useRef(null);
+
+  useEffect(() => {
+    if (!filterDropdown) return;
+
+    const onDocClick = (e) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        setFilterDropdown(false);
+      }
+    };
+
+    const onKey = (e) => {
+      if (e.key === "Escape") setFilterDropdown(false);
+    };
+
+    document.addEventListener("mousedown", onDocClick);
+    document.addEventListener("touchstart", onDocClick);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("mousedown", onDocClick);
+      document.removeEventListener("touchstart", onDocClick);
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [filterDropdown]);
 
   useEffect(() => {
     if (location.state?.openSettings) {
@@ -280,6 +524,9 @@ function AdminDashboard() {
   const [editAddon, setEditAddon] = useState(false);
   const [selectedAddon, setSelectedAddon] = useState(null);
 
+  // mutliple delete checkbox
+  const [selectedItemForDelete, setSelectedItemForDelete] = useState([]);
+
   //handle functions
   const handleDeletevendirClick = (user, index) => {
     setSelectedUser(user);
@@ -302,18 +549,79 @@ function AdminDashboard() {
     }
   };
 
-  //all the category
-  const category = [
-    "furniture",
-    "HVAC",
-    "paint",
-    "partitions / ceilings",
-    "lux",
-    "civil / plumbing",
-    "flooring",
-    "lighting",
-    "smart solutions",
-  ];
+  async function handleMultipleDelete(selectedProducts) {
+    console.log("selectedDeleteItems", selectedProducts);
+
+    if (selectedProducts?.length === 0) return;
+
+    // Filter the items you want to delete
+    const filteredItems = items.filter((item) =>
+      selectedProducts?.includes(item.id)
+    );
+
+    console.log("items after filter", filteredItems);
+
+    try {
+      for (const product of filteredItems) {
+        // DELETE FROM SUPABASE
+        if (product?.type === "product") {
+          await supabase
+            .from("product_variants")
+            .delete()
+            .eq("id", product?.id);
+        }
+
+        if (product?.type === "addon") {
+          await supabase.from("addon_variants").delete().eq("id", product?.id);
+        }
+
+        // DELETE IMAGES (Main + Additional)
+        let imagePaths = [];
+
+        if (product.image) {
+          imagePaths.push(product.image);
+        }
+
+        if (product.additional_images) {
+          try {
+            const parsed = JSON.parse(product.additional_images);
+
+            if (Array.isArray(parsed)) {
+              imagePaths = imagePaths.concat(parsed);
+            }
+          } catch (err) {
+            console.log("Error parsing additional images", err);
+          }
+        }
+
+        if (imagePaths.length > 0) {
+          const { storageError } = await supabase.storage
+            .from("addon") // Or your bucket name
+            .remove(imagePaths);
+
+          if (storageError) throw storageError;
+        }
+      }
+
+      toast.success("Selected items deleted successfully!");
+    } catch (error) {
+      console.log("Delete error:", error);
+      toast.error("Something went wrong while deleting");
+    } finally {
+      setMultipleDeleteWaring(false);
+      setSelectedItemForDelete([]);
+      // Refresh whichever category is being deleted
+      setIsProductRefresh(true);
+      setIsAddonRefresh(true);
+    }
+  }
+
+  const categoriesData = categories.map((item) => item.category);
+
+  const subcategoriesByCategory = categories.reduce((acc, item) => {
+    acc[item.category] = item.subcategories || [];
+    return acc;
+  }, {});
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -348,7 +656,7 @@ function AdminDashboard() {
   }, []);
 
   // Slice the items for pagination
-  const paginatedItems = items.slice(
+  const paginatedItems = sortedSource.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
@@ -368,7 +676,8 @@ function AdminDashboard() {
       const { data } = await supabase
         .from("product_variants")
         .select("*,products(*)")
-        .order("created_at", { ascending: false });
+        .order("created_at", { ascending: false })
+        .neq("productDisplayType", "ecommerce");
 
       const sortedData = data.sort((a, b) => {
         // Prioritize "pending" status
@@ -565,6 +874,11 @@ function AdminDashboard() {
   const handlesetting = () => {
     sidebarDispatch({ type: "TOGGLE_SECTION", payload: SECTIONS.SETTING });
   };
+
+  const handleswitch = () => {
+    navigate("/dashboard");
+  };
+
   const handleproduct = () => {
     sidebarDispatch({ type: "TOGGLE_SECTION", payload: SECTIONS.PRODUCT });
   };
@@ -591,6 +905,17 @@ function AdminDashboard() {
   const handleformulae = () => {
     sidebarDispatch({ type: "TOGGLE_SECTION", payload: SECTIONS.FORMULAE });
   };
+
+  const handleCategoryEditor = () => {
+    sidebarDispatch({
+      type: "TOGGLE_SECTION",
+      payload: SECTIONS.CategoryEditor,
+    });
+  };
+
+  // const handleOrders = () => {
+  //   sidebarDispatch({ type: "TOGGLE_SECTION", payload: SECTIONS.ORDERS });
+  // };
 
   const getvendors = async () => {
     // Query the profiles table for phone and companyName
@@ -657,6 +982,24 @@ function AdminDashboard() {
       item.company_name.toLowerCase().includes(query.toLowerCase())
     );
     setFilteredvendors(filteredvendor);
+  };
+  const handleCheckboxChange = (blogId) => {
+    setSelectedItemForDelete((prev) =>
+      prev.includes(blogId)
+        ? prev.filter((id) => id !== blogId)
+        : [...prev, blogId]
+    );
+  };
+
+  const formatDateTime = (dateString) => {
+    const d = new Date(dateString);
+    return d.toLocaleString("en-IN", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
   };
 
   // const filterbyCategory = (category) => {
@@ -740,7 +1083,7 @@ function AdminDashboard() {
             currentSection={sidebarstate?.currentSection}
           />
           <SidebarItem
-            icon={<FaUser />}
+            icon={<FiUser />}
             text="Client"
             onClick={handleclient}
             isExpanded={isExpanded}
@@ -754,8 +1097,8 @@ function AdminDashboard() {
             currentSection={sidebarstate?.currentSection}
           />
           <SidebarItem
-            icon={<FaUserPlus />}
-            text="create"
+            icon={<FiUserPlus />}
+            text="Create"
             onClick={handlecreate}
             isExpanded={isExpanded}
             currentSection={sidebarstate?.currentSection}
@@ -767,10 +1110,24 @@ function AdminDashboard() {
             isExpanded={isExpanded}
             currentSection={sidebarstate?.currentSection}
           />
+          {/* <SidebarItem
+            icon={<BsBoxSeam />}
+            text="orders"
+            onClick={handleOrders}
+            isExpanded={isExpanded}
+            currentSection={sidebarstate?.currentSection}
+          /> */}
           <SidebarItem
             icon={<TbCalculator />}
             text="formulae"
             onClick={handleformulae}
+            isExpanded={isExpanded}
+            currentSection={sidebarstate?.currentSection}
+          />
+          <SidebarItem
+            icon={<PiCodeBlock />}
+            text="Category Editor"
+            onClick={handleCategoryEditor}
             isExpanded={isExpanded}
             currentSection={sidebarstate?.currentSection}
           />
@@ -780,6 +1137,13 @@ function AdminDashboard() {
             onClick={handlesetting}
             isExpanded={isExpanded}
             currentSection={sidebarstate?.currentSection}
+          />
+          <SidebarItem
+            icon={<IoMdSwitch />}
+            text="change dashboard"
+            onClick={handleswitch}
+            isExpanded={isExpanded}
+            // currentSection={sidebarstate?.currentSection}
           />
           <SidebarItem
             icon={<FiLogOut />}
@@ -886,7 +1250,7 @@ function AdminDashboard() {
                 setIsOpen={setIsOpen}
               />
               <MobileMenuItem
-                icon={<FaRegUserCircle />}
+                icon={<FiUser />}
                 title="Client"
                 currentSection={sidebarstate?.currentSection}
                 onClick={handleclient}
@@ -900,7 +1264,7 @@ function AdminDashboard() {
                 setIsOpen={setIsOpen}
               />
               <MobileMenuItem
-                icon={<FaUserPlus />}
+                icon={<FiUserPlus />}
                 title="Create"
                 currentSection={sidebarstate?.currentSection}
                 onClick={handlecreate}
@@ -913,11 +1277,33 @@ function AdminDashboard() {
                 onClick={handleschedule}
                 setIsOpen={setIsOpen}
               />
+              {/* <MobileMenuItem
+                icon={<BsBoxSeam />}
+                title="Orders"
+                currentSection={sidebarstate?.currentSection}
+                onClick={handleOrders}
+                setIsOpen={setIsOpen}
+              /> */}
+              {/* <MobileMenuItem
+                icon={<BsBoxSeam />}
+                title="Orders"
+                currentSection={sidebarstate?.currentSection}
+                onClick={handleOrders}
+                setIsOpen={setIsOpen}
+              /> */}
               <MobileMenuItem
                 icon={<RiFormula />}
                 title="Formulae"
                 currentSection={sidebarstate?.currentSection}
                 onClick={handleformulae}
+                setIsOpen={setIsOpen}
+              />
+
+              <MobileMenuItem
+                icon={<PiCodeBlock />}
+                text="Category Editor"
+                currentSection={sidebarstate?.currentSection}
+                onClick={handleCategoryEditor}
                 setIsOpen={setIsOpen}
               />
 
@@ -1010,7 +1396,7 @@ function AdminDashboard() {
         {/* product */}
         {sidebarstate.isProductOpen && (
           <div className="flex flex-col h-full min-h-0 overflow-hidden lg:border-2 lg:border-[#334A78] lg:rounded-lg bg-white">
-            <div className="overflow-y-auto scrollbar-hide relative ">
+            <div className="scrollbar-hide h-full overflow-y-auto">
               {addNewProduct ? (
                 <VendorNewProduct
                   setAddNewProduct={setAddNewProduct}
@@ -1037,25 +1423,31 @@ function AdminDashboard() {
                 />
               ) : (
                 // Default product list and add product UI
-                <>
-                  <div className=" sticky top-0 z-20 bg-white">
+                <div className="relative">
+                  <div className="sticky top-0 z-20 bg-white">
                     <div className="hidden lg:flex justify-between items-center px-4 py-2 border-b-2 border-b-gray-400 ">
                       <h3 className=" capitalize font-semibold text-xl ">
                         product list
                       </h3>
 
                       <div className="flex gap-2">
-                        <div className="relative inline-block">
+                        <div
+                          className="relative inline-block"
+                          ref={dropdownRef}
+                        >
                           <button
                             onClick={() => setFilterDropdown(!filterDropdown)}
                             className="px-4 py-2 rounded text-[#374A75] text-sm flex items-center gap-3 border"
                           >
-                            <img src="/images/icons/filter-icon.png" alt="" />
+                            <img
+                              src="/images/icons/filter-icon.png"
+                              alt="filter icon"
+                            />
                             <span className="text-sm">Filter</span>
                             <ChevronDownIcon className="h-4 w-4 text-gray-500" />
                           </button>
                           {filterDropdown && (
-                            <div className="absolute mt-2 w-48 -left-1/2 bg-white border rounded-md shadow-lg z-10 p-3">
+                            <div className="absolute mt-2 w-64 -left-1/2 bg-white border rounded-md shadow-lg z-10 p-3 space-y-3">
                               {/* status filter */}
                               <div>
                                 <label className="text-sm text-[#374A75]">
@@ -1066,11 +1458,16 @@ function AdminDashboard() {
                                   onChange={(e) => {
                                     const value = e.target.value;
                                     setSelected(value);
-                                    setFilterDropdown(false);
+                                    setFilterDropdown(false); // keep original behavior (close on status change)
                                     applyFilters({
                                       query: searchQuery,
                                       category: selectedCategory,
+                                      subCategory: selectedSubCategory,
                                       status: value,
+                                      priceMin,
+                                      priceMax,
+                                      dateFrom,
+                                      dateTo,
                                     });
                                   }}
                                   className="w-full border-none focus:ring-0 p-2 text-sm"
@@ -1082,6 +1479,7 @@ function AdminDashboard() {
                                 </select>
                               </div>
 
+                              {/* category */}
                               <div>
                                 <label className="text-sm text-[#374A75]">
                                   Categories
@@ -1092,22 +1490,197 @@ function AdminDashboard() {
                                   onChange={(e) => {
                                     const value = e.target.value;
                                     setSelectedCategory(value);
+                                    setSelectedSubCategory("");
                                     applyFilters({
                                       query: searchQuery,
                                       category: value,
+                                      subCategory: "",
                                       status: selected,
+                                      priceMin,
+                                      priceMax,
+                                      dateFrom,
+                                      dateTo,
                                     });
                                   }}
                                   id="category"
-                                  className="py-2"
+                                  className="w-full py-2 text-sm"
                                 >
                                   <option value="">All categories</option>
-                                  {category.map((category) => (
+                                  {categoriesData.map((category) => (
                                     <option key={category} value={category}>
                                       {category}
                                     </option>
                                   ))}
                                 </select>
+                              </div>
+
+                              {/* subcategory (conditional) */}
+                              {selectedCategory && (
+                                <div>
+                                  <label className="text-sm text-[#374A75]">
+                                    Sub Categories
+                                  </label>
+                                  <select
+                                    name="subCategory"
+                                    value={selectedSubCategory}
+                                    onChange={(e) => {
+                                      const value = e.target.value;
+                                      setSelectedSubCategory(value);
+                                      applyFilters({
+                                        query: searchQuery,
+                                        category: selectedCategory,
+                                        subCategory: value,
+                                        status: selected,
+                                        priceMin,
+                                        priceMax,
+                                        dateFrom,
+                                        dateTo,
+                                      });
+                                    }}
+                                    id="subCategory"
+                                    className="w-full py-2 text-sm"
+                                  >
+                                    <option value="">All Sub Categories</option>
+                                    {(
+                                      subcategoriesByCategory[
+                                        selectedCategory
+                                      ] || []
+                                    ).map((subCat) => (
+                                      <option key={subCat} value={subCat}>
+                                        {subCat}
+                                      </option>
+                                    ))}
+                                  </select>
+                                </div>
+                              )}
+
+                              {/* price range */}
+                              <div>
+                                <label className="text-sm text-[#374A75]">
+                                  Price (₹)
+                                </label>
+                                <div className="flex gap-2">
+                                  <input
+                                    type="number"
+                                    min="0"
+                                    placeholder="Min"
+                                    value={priceMin}
+                                    onChange={(e) => {
+                                      const v = e.target.value;
+                                      setPriceMin(v);
+                                      applyFilters({
+                                        query: searchQuery,
+                                        category: selectedCategory,
+                                        subCategory: selectedSubCategory,
+                                        status: selected,
+                                        priceMin: v,
+                                        priceMax,
+                                        dateFrom,
+                                        dateTo,
+                                      });
+                                    }}
+                                    className="w-1/2 border p-2 text-sm rounded"
+                                  />
+                                  <input
+                                    type="number"
+                                    min="0"
+                                    placeholder="Max"
+                                    value={priceMax}
+                                    onChange={(e) => {
+                                      const v = e.target.value;
+                                      setPriceMax(v);
+                                      applyFilters({
+                                        query: searchQuery,
+                                        category: selectedCategory,
+                                        subCategory: selectedSubCategory,
+                                        status: selected,
+                                        priceMin,
+                                        priceMax: v,
+                                        dateFrom,
+                                        dateTo,
+                                      });
+                                    }}
+                                    className="w-1/2 border p-2 text-sm rounded"
+                                  />
+                                </div>
+                              </div>
+
+                              {/* date range */}
+                              <div>
+                                <label className="text-sm text-[#374A75]">
+                                  Date
+                                </label>
+                                <div className="flex gap-2">
+                                  <input
+                                    type="date"
+                                    value={dateFrom}
+                                    onChange={(e) => {
+                                      const v = e.target.value;
+                                      setDateFrom(v);
+                                      applyFilters({
+                                        query: searchQuery,
+                                        category: selectedCategory,
+                                        subCategory: selectedSubCategory,
+                                        status: selected,
+                                        priceMin,
+                                        priceMax,
+                                        dateFrom: v,
+                                        dateTo,
+                                      });
+                                    }}
+                                    className="w-1/2 border p-2 text-sm rounded"
+                                  />
+                                  <input
+                                    type="date"
+                                    value={dateTo}
+                                    onChange={(e) => {
+                                      const v = e.target.value;
+                                      setDateTo(v);
+                                      applyFilters({
+                                        query: searchQuery,
+                                        category: selectedCategory,
+                                        subCategory: selectedSubCategory,
+                                        status: selected,
+                                        priceMin,
+                                        priceMax,
+                                        dateFrom,
+                                        dateTo: v,
+                                      });
+                                    }}
+                                    className="w-1/2 border p-2 text-sm rounded"
+                                  />
+                                </div>
+                              </div>
+
+                              {/* actions: Clear filters */}
+                              <div className="flex justify-end">
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    // reset local filter states
+                                    setSelected("");
+                                    setSelectedCategory("");
+                                    setSelectedSubCategory("");
+                                    setPriceMin("");
+                                    setPriceMax("");
+                                    setDateFrom("");
+                                    setDateTo("");
+                                    // keep dropdown open (you can close if you prefer)
+                                    applyFilters({
+                                      query: searchQuery,
+                                      category: "",
+                                      subCategory: "",
+                                      status: "",
+                                      priceMin: "",
+                                      priceMax: "",
+                                      dateFrom: "",
+                                      dateTo: "",
+                                    });
+                                  }}
+                                  className="text-sm px-3 py-1 rounded bg-gray-100 hover:bg-gray-200"
+                                >
+                                  Reset Filter
+                                </button>
                               </div>
                             </div>
                           )}
@@ -1156,7 +1729,19 @@ function AdminDashboard() {
                         ))}
                       </div>
 
-                      <div className=" hidden lg:block w-1/4">
+                      <div className=" hidden lg:flex gap-2 w-1/3">
+                        <div>
+                          {selectedItemForDelete?.length > 0 && (
+                            <button
+                              onClick={() =>
+                                setMultipleDeleteWaring((prev) => !prev)
+                              }
+                              className="px-2 py-1 md:px-4 md:py-2 text-nowrap border border-[#CCCCCC] rounded-md text-[#374A75] text-lg font-medium hover:bg-[#f1f1f1]"
+                            >
+                              Delete ({selectedItemForDelete?.length})
+                            </button>
+                          )}
+                        </div>
                         <input
                           type="text"
                           value={searchQuery}
@@ -1179,7 +1764,10 @@ function AdminDashboard() {
                             onClick={() => setFilterDropdown(!filterDropdown)}
                             className="h-10 w-10 flex justify-center items-center border rounded"
                           >
-                            <img src="/images/icons/filter-icon.png" alt="" />
+                            <img
+                              src="/images/icons/filter-icon.png"
+                              alt="filter icon"
+                            />
                             {/* <span className="text-sm">Filter</span> */}
                             {/* <ChevronDownIcon className="h-4 w-4 text-gray-500" /> */}
                           </button>
@@ -1231,9 +1819,41 @@ function AdminDashboard() {
                                   className="py-2"
                                 >
                                   <option value="">All categories</option>
-                                  {category.map((category) => (
+                                  {categoriesData.map((category) => (
                                     <option key={category} value={category}>
                                       {category}
+                                    </option>
+                                  ))}
+                                </select>
+                              </div>
+
+                              <div>
+                                <label className="text-[#374A75]">
+                                  Sub Categories
+                                </label>
+                                <select
+                                  name="subCategory"
+                                  value={selectedSubCategory}
+                                  onChange={(e) => {
+                                    const value = e.target.value;
+                                    setSelectedSubCategory(value);
+                                    applyFilters({
+                                      query: searchQuery,
+                                      category: selectedCategory, // include category too
+                                      subCategory: value,
+                                      status: selected,
+                                    });
+                                  }}
+                                  id="subCategory"
+                                  className="py-2"
+                                >
+                                  <option value="">All sub categories</option>
+                                  {(
+                                    subcategoriesByCategory[selectedCategory] ||
+                                    []
+                                  ).map((subCat) => (
+                                    <option key={subCat} value={subCat}>
+                                      {subCat}
                                     </option>
                                   ))}
                                 </select>
@@ -1317,7 +1937,7 @@ function AdminDashboard() {
                     ) : items.length > 0 ? (
                       <>
                         {/* // <section className="mt-2 flex-1 overflow-hidden px-8"> */}
-                        <section className="hidden lg:block h-[90%] font-Poppins overflow-hidden">
+                        <section className="hidden lg:block h-[72%] font-Poppins overflow-hidden">
                           <div
                             className="w-full h-full border-t border-b border-[#CCCCCC] overflow-y-auto custom-scrollbar"
                             ref={scrollContainerRef}
@@ -1328,6 +1948,16 @@ function AdminDashboard() {
                             >
                               <thead className="bg-[#FFFFFF] sticky top-0 z-10 px-8 text-center text-[#000] text-base">
                                 <tr>
+                                  <th className="p-3 font-medium">SR</th>
+                                  {/* <th className="py-2 px-1">
+                                    <input
+                                      type="checkbox"
+                                      name=""
+                                      id=""
+                                      checked={allSelected}
+                                      onChange={handleSelectAll}
+                                    />
+                                  </th> */}
                                   {toggle ? (
                                     <th className="p-3 font-medium">
                                       Product Name
@@ -1337,10 +1967,23 @@ function AdminDashboard() {
                                       Addon Name
                                     </th>
                                   )}
-                                  <th className="p-3  font-medium">Price</th>
-                                  <>
-                                    <th className="p-3 font-medium">status</th>
-                                  </>
+                                  <SortableHeader
+                                    label="Date"
+                                    field="date"
+                                    sortField={sortField}
+                                    sortOrder={sortOrder}
+                                    toggleSort={toggleSort}
+                                  />
+
+                                  <SortableHeader
+                                    label="Price"
+                                    field="price"
+                                    sortField={sortField}
+                                    sortOrder={sortOrder}
+                                    toggleSort={toggleSort}
+                                  />
+
+                                  <th className="p-3 font-medium">Status</th>
                                   <th className="p-3 font-medium">Action</th>
                                 </tr>
                               </thead>
@@ -1352,6 +1995,22 @@ function AdminDashboard() {
                                   >
                                     <td className="border border-gray-200 p-3 align-middle">
                                       <div className="flex items-center gap-2">
+                                        <input
+                                          type="checkbox"
+                                          name=""
+                                          id=""
+                                          onClick={(e) => e.stopPropagation()}
+                                          checked={selectedItemForDelete?.includes(
+                                            item.id
+                                          )}
+                                          onChange={() =>
+                                            handleCheckboxChange(item.id)
+                                          }
+                                        />
+                                      </div>
+                                    </td>
+                                    <td className="border border-gray-200 p-3 align-middle w-1/2">
+                                      <div className="flex items-center gap-2">
                                         <img
                                           src={`${baseImageUrl}${item.image}`}
                                           alt={item.title}
@@ -1360,6 +2019,9 @@ function AdminDashboard() {
 
                                         <span>{item.title}</span>
                                       </div>
+                                    </td>
+                                    <td className="border border-gray-200 p-3 align-middle text-center">
+                                      {formatDateTime(item.created_at)}
                                     </td>
                                     <td className="border border-gray-200 p-3 align-middle text-center">
                                       ₹{item.price}
@@ -1374,14 +2036,18 @@ function AdminDashboard() {
                                           <div className="absolute top-0 left-0 w-full h-full bg-white/90 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                                             <button
                                               className="bg-gray-100 text-green-600 p-3 rounded-full mr-2 hover:text-gray-100 hover:bg-green-600"
-                                              onClick={() => {
-                                                handleUpdateStatus(
-                                                  item,
-                                                  "approved"
-                                                );
-                                                setRejectReason("");
-                                              }}
+                                              // onClick={() => {
+                                              //   handleUpdateStatus(
+                                              //     item,
+                                              //     "approved"
+                                              //   );
+                                              //   setRejectReason("");
+                                              // }}
                                               // onClick={() => handleAccept(item)}
+                                              onClick={() => {
+                                                setSelectedItem(item);
+                                                setSelectSubcategories(true);
+                                              }}
                                             >
                                               <IoCheckmark size={20} />
                                             </button>
@@ -1503,53 +2169,22 @@ function AdminDashboard() {
                     ))}
 
                   {/* Pagination Controls (Always Visible) */}
-                  {totalPages > 1 && (
-                    <div className="flex justify-center items-center gap-2 mt-10 z-30 sticky bottom-0 bg-[#EBF0FF] mb-4 text-[#3d194f]">
-                      <button
-                        onClick={() => goToPage(currentPage - 1)}
-                        disabled={currentPage === 1}
-                        className="px-3 py-1 border rounded disabled:opacity-50 text-[#3d194f]"
-                      >
-                        Previous
-                      </button>
-
-                      {/* Page Numbers */}
-                      {Array.from({ length: totalPages }, (_, i) => i + 1).map(
-                        (page) =>
-                          page === 1 ||
-                          page === totalPages ||
-                          (page >= currentPage - 1 &&
-                            page <= currentPage + 1) ? (
-                            <button
-                              key={page}
-                              onClick={() => goToPage(page)}
-                              className={`w-8 h-8 flex items-center justify-center  ${
-                                currentPage === page
-                                  ? "bg-[#aca9d3] text-white rounded-full "
-                                  : "rounded-md text-[#3d194f]"
-                              }`}
-                            >
-                              {page}
-                            </button>
-                          ) : page === currentPage + 2 ||
-                            page === currentPage - 2 ? (
-                            <span key={page} className="px-2">
-                              ...
-                            </span>
-                          ) : null
-                      )}
-                      <button
-                        onClick={() => goToPage(currentPage + 1)}
-                        disabled={currentPage === totalPages}
-                        className="px-3 py-1 border rounded disabled:opacity-50 text-[#3d194f]"
-                      >
-                        Next
-                      </button>
-                    </div>
-                  )}
-                </>
+                  <PagInationNav
+                    totalPages={totalPages}
+                    currentPage={currentPage}
+                    handlePageChange={goToPage}
+                  />
+                </div>
               )}
             </div>
+            {selectSubcategories && (
+              <SelectSubcategories
+                onClose={() => setSelectSubcategories(false)}
+                product={selectedItem}
+                handleUpdateStatus={handleUpdateStatus}
+                setRejectReason={setRejectReason}
+              />
+            )}
           </div>
         )}
 
@@ -1852,7 +2487,14 @@ function AdminDashboard() {
         {/* schedule  */}
         {sidebarstate.isScheduleOpen && <Schedule />}
 
+        {/* Formulae */}
         {sidebarstate.isFormulaeOpen && <FormulaEditor />}
+
+        {/* Category Editor */}
+        {sidebarstate.isCategoryEditorOpen && <CategoryEditor />}
+
+        {/* Orders */}
+        {/* {sidebarstate.isOrdersOpen && <Orders />} */}
       </div>
       {/* </div> */}
       {/* product preview */}
@@ -1869,9 +2511,26 @@ function AdminDashboard() {
           rejectReason={rejectReason}
           setRejectReason={setRejectReason}
           handleConfirmReject={handleConfirmReject}
+          setSelectedItem={setSelectedItem}
+          setSelectSubcategories={setSelectSubcategories}
         />
       )}
-
+      {/* {productPreview && (
+        <DashboardProductCard
+          onClose={() => {
+            setProductPreview(false);
+          }}
+          product={selectedProductview}
+          handleDelete={handleDelete}
+          updateStatus={handleUpdateStatus}
+          deleteWarning={deleteWarning}
+          setDeleteWarning={setDeleteWarning}
+          rejectReason={rejectReason}
+          setRejectReason={setRejectReason}
+          handleConfirmReject={handleConfirmReject}
+        />
+      )} */}
+      {/* delete waring for single item  */}
       {deleteWarning && (
         <div className="flex justify-center items-center fixed inset-0 z-30">
           <div className="absolute inset-0 bg-black opacity-50"></div>
@@ -1879,7 +2538,7 @@ function AdminDashboard() {
             <div className="flex justify-center items-center">
               <img
                 src="images/icons/delete-icon.png"
-                alt=""
+                alt="delete icon"
                 className="h-12 w-12"
               />
             </div>
@@ -1905,6 +2564,15 @@ function AdminDashboard() {
             </div>
           </div>
         </div>
+      )}
+
+      {/* delete waring for multiple select item */}
+      {multipleDeleteWaring && (
+        <MultipleDeleteWarningCard
+          setDeleteWarning={setMultipleDeleteWaring}
+          selectedItemForDelete={selectedItemForDelete}
+          handleMultipleDelete={handleMultipleDelete}
+        />
       )}
       {rejectReasonPopup && (
         <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-30 font-Poppins">
@@ -1934,6 +2602,7 @@ function AdminDashboard() {
           </div>
         </div>
       )}
+
       {/* </div> */}
     </div>
   );
@@ -1957,5 +2626,73 @@ function MobileMenuItem({ icon, title, currentSection, onClick, setIsOpen }) {
       {icon}
       <span>{title}</span>
     </li>
+  );
+}
+
+function SortableHeader({ label, field, sortField, sortOrder, toggleSort }) {
+  const isActive = sortField === field;
+
+  return (
+    <th className="p-3 font-medium text-center">
+      <button
+        type="button"
+        onClick={() => toggleSort(field)}
+        className="flex items-center gap-2 mx-auto"
+      >
+        <span>{label}</span>
+
+        <span aria-hidden className="text-md">
+          {isActive ? (
+            sortOrder === "asc" ? (
+              <HiBarsArrowUp title="Sort ascending" />
+            ) : (
+              <HiBarsArrowDown title="Sort descending" />
+            )
+          ) : (
+            <HiArrowsUpDown title={`Click to sort ${label}`} />
+          )}
+        </span>
+      </button>
+    </th>
+  );
+}
+
+function MultipleDeleteWarningCard({
+  setDeleteWarning,
+  selectedItemForDelete,
+  handleMultipleDelete,
+}) {
+  return (
+    <div className="flex justify-center items-center fixed inset-0 z-30">
+      <div className="absolute inset-0 bg-black opacity-50"></div>
+      <div className="bg-white relative py-7 px-16 md:px-20">
+        <div className="flex justify-center items-center">
+          <img
+            src="images/icons/delete-icon.png"
+            alt="delete icon"
+            className="h-12 w-12"
+          />
+        </div>
+        <h4 className="font-semibold my-5">
+          Do you want to delete {selectedItemForDelete?.length}? products
+        </h4>
+        <div className="flex justify-between">
+          <button
+            onClick={() => {
+              setDeleteWarning(false);
+            }}
+            className="px-5 py-2 bg-[#EEEEEE] rounded-md"
+          >
+            Cancel
+          </button>
+          <button
+            onClick={() => handleMultipleDelete(selectedItemForDelete)}
+            className="px-5 py-2 bg-[#B4EAEA] rounded-md"
+          >
+            Delete
+          </button>
+        </div>
+      </div>
+    </div>
   );
 }

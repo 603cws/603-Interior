@@ -389,12 +389,14 @@ const PDFGenerator = {
         body: rows,
         startY: currentY,
         theme: "grid",
+        rowPageBreak: "avoid",
         styles: {
           font: "helvetica",
           fontSize: 9,
           valign: "middle",
           lineColor: [0, 0, 0],
           lineWidth: 0.1,
+          overflow: "linebreak",
         },
         headStyles: {
           fillColor: "#fff",
@@ -405,7 +407,7 @@ const PDFGenerator = {
         },
         columnStyles,
         margin: hasAddons
-          ? { left: 18, right: 15 }
+          ? { left: 18, right: 15, bottom: 80 }
           : hideQty
           ? { left: 65, right: 10 }
           : { left: 52, right: 10 },

@@ -1,8 +1,8 @@
 import LandingNavbar from "../common-components/LandingNavbar";
 import Footer from "../common-components/Footer";
+import HeroSection from "./HeroSection";
 
 function Privacy() {
-  const background = "/images/contact-us/contactpage.png";
   const termsAndConditions = [
     {
       title: "Information We Collect",
@@ -69,60 +69,35 @@ function Privacy() {
     },
   ];
 
-  console.log(termsAndConditions);
-
   return (
     <>
       {/* Navbar Section */}
       <header className="bg-white shadow-lg z-50 relative">
-        <LandingNavbar />
+        <LandingNavbar className="relative" />
       </header>
 
       {/* Hero Section */}
-      <section
-        className="relative h-[40vh] flex items-center text-center justify-center bg-cover bg-center bg-no-repeat bg-gray-100"
-        style={{
-          backgroundImage: `url(${background})`,
-          backgroundAttachment: "fixed",
-        }}
-      >
-        <div className="absolute inset-0 bg-black opacity-50"></div>
-        <div className="relative z-10  uppercase font-lato font-extrabold pt-10">
-          <h1 className="text-2xl lg:text-4xl text-white drop-shadow-lg ">
-            Privacy Policy
-          </h1>
-        </div>
-      </section>
+      <HeroSection
+        title={"Privacy & Policies"}
+        description={
+          "Learn How We Secure Your \n Data and Maintain Transparency\n in All Our Practices."
+        }
+        imagePath={"/images/privacypolicy.png"}
+      />
 
       {/* context */}
       <section>
         <div className="lg:container lg:mx-auto mx-2 my-10">
-          <div className="font-Poppins flex justify-center">
+          <div className="font-TimesNewRoman flex justify-center">
             <div className="mx-6 lg:mx-10 max-w-4xl ">
               {/* title */}
-              {/* <div className="font-semibold xl:text-5xl capitalize text-center mb-10">
-                <h2 className="leading-snug">Privacy Policy</h2>
-              </div> */}
+
               <p className="text-sm lg:text-lg xl:text-xl mb-5">
                 Welcome to Workved Interiors. Your privacy is important to us.
                 This Privacy Policy explains how we collect, use, share, and
                 protect your personal information when you visit our website and
                 use our services.
               </p>
-              {/* <div>
-                <h2 className="text-lg font-bold">1. General</h2>
-                <ul className="">
-                  <li className="relative before:content-['●'] before:absolute before:left-0 before:text-black before:text-lg pl-6">
-                    These Terms & Conditions apply to all users of our website
-                    and services, including those exploring our platform,
-                    creating layouts, or engaging with listed vendors.
-                  </li>
-                  <li className="relative before:content-['●'] before:absolute before:left-0 before:text-black before:text-lg pl-6">
-                    We may update these terms periodically, so we encourage you
-                    to review them regularly.
-                  </li>
-                </ul>
-              </div> */}
               <div className="space-y-6">
                 {termsAndConditions.map((term, index) => (
                   <div key={index}>

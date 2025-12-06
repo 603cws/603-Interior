@@ -18,13 +18,13 @@ export default {
         Poppins: ["Poppins", "sans-serif"],
         Raleway: ["Raleway"],
         Convergence: ["Convergence"],
-        zcool: ['"ZCOOL KuaiLe"', "cursive"],
+        // zcool: ['"ZCOOL KuaiLe"', "cursive"],
         sans: ["DM Sans", "sans-serif"],
         montaga: ["Montaga", "serif"],
         montserratAlt: ["Montserrat Alternates", "sans-serif"],
         lora: ["Lora", "serif"], // Add Lora font with a fallback
         lato: ["Lato", "sans-serif"], // Add Lato font with a fallback
-        lexend: ["Lexend Deca", "sans-serif"], // Add Lexend Deca with a fallback
+        // lexend: ["Lexend Deca", "sans-serif"], // Add Lexend Deca with a fallback
         inter: ["Inter", "sans-serif"],
         vampiroOne: ["Vampiro One", "cursive"],
         TimesNewRoman: ["times-new-roman", "sans-serif"],
@@ -80,6 +80,16 @@ export default {
           "30%, 50%, 70%": { transform: "translateX(-4px)" },
           "40%, 60%": { transform: "translateX(4px)" },
         },
+        bounceY: {
+          "0%, 100%": {
+            transform: "translateY(-15%)",
+            "animation-timing-function": "cubic-bezier(0.8, 0, 1, 1)",
+          },
+          "50%": {
+            transform: "translateY(0)",
+            "animation-timing-function": "cubic-bezier(0, 0, 0.2, 1)",
+          },
+        },
       },
       animation: {
         // blink: "blink 1s infinite",
@@ -90,6 +100,7 @@ export default {
         message3: "message3 3s ease-in-out ",
         message2: "message2 3s ease-in-out ",
         shake: "shake 0.8s ease-in-out",
+        bounceY: "bounceY 1s infinite",
       },
       screens: {
         xs: "350px",

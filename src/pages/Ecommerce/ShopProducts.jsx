@@ -1,22 +1,21 @@
 import { useEffect, useRef, useState } from "react";
 import { supabase } from "../../services/supabase";
 import SpinnerFullPage from "../../common-components/SpinnerFullPage";
-import { FaHeart } from "react-icons/fa";
 import { IoFilter } from "react-icons/io5";
 import {
   MdKeyboardArrowLeft,
   MdKeyboardArrowDown,
   MdKeyboardArrowUp,
 } from "react-icons/md";
-import { FaArrowRightLong, FaArrowLeftLong } from "react-icons/fa6";
-
 import Header from "./Header";
-
 import { useHandleAddToCart } from "../../utils/HelperFunction";
-
 import { useApp } from "../../Context/Context";
 import { ToastContainer } from "react-toastify";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import Footer from "../../common-components/Footer";
+import { AiFillHeart } from "react-icons/ai";
+import { GoHeart } from "react-icons/go";
+import PagInationNav from "../../common-components/PagInationNav";
 
 function ShopProducts() {
   //state
@@ -26,15 +25,14 @@ function ShopProducts() {
   const [open, setOpen] = useState(false);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [isShopCatOepn, setIsShopCatOpen] = useState(false);
+  const [isShopCatOepn, setIsShopCatOpen] = useState(true);
   const [isPriceOpen, setIsPriceOpen] = useState(false);
   const [filtersortby, setfiltersortby] = useState("Popularity");
-
   const [isfilterOpen, setIsfilteropen] = useState(false);
-
   const [isSortOpen, setIsSortOpen] = useState(false);
-
   const [isBrandOpen, setIsBrandopen] = useState(false);
+  const [allBrands, setAllBrands] = useState([]);
+  const [showAvailableOnly, setShowAvailableOnly] = useState(false);
 
   //context
   const { filters, setFilters } = useApp();
@@ -43,7 +41,14 @@ function ShopProducts() {
   // const [maxPrice, setMaxPrice] = useState(filters.priceRange[1]);
   const [maxPrice, setMaxPrice] = useState(filters.priceRange[1]);
 
+  //
+  const [searchParams, setSearchParams] = useSearchParams();
+  const category = searchParams.get("category");
+  const query = searchParams.get("query");
+  // console.log("searchparams", searchParams, "cat", category);
+
   // console.log(minPrice, maxPrice);
+  // console.log("filters", filters);
 
   useEffect(() => {
     setFilters((prev) => ({
@@ -51,6 +56,15 @@ function ShopProducts() {
       priceRange: [minPrice, maxPrice],
     }));
   }, [minPrice, maxPrice]);
+
+  useEffect(() => {
+    if (category) {
+      setFilters((prev) => ({
+        ...prev,
+        category: [category],
+      }));
+    }
+  }, []);
 
   //ref
   const dropdownRef = useRef(null);
@@ -82,8 +96,10 @@ function ShopProducts() {
     fetchProductsData();
   }, []);
 
-  const applyFiltersAndSort = (products, filters, sortBy) => {
+  const applyFiltersAndSort = (products, filters, filtersortby) => {
     let result = [...products];
+
+    console.log("products", products);
 
     // Category Filter
     const normalizedFilterCats = filters.category.map((cat) =>
@@ -109,8 +125,13 @@ function ShopProducts() {
     const actualMaxPrice = maxPrice === 10000 ? Infinity : maxPrice;
 
     result = result.filter(
-      (product) => product.price >= minPrice && product.price <= actualMaxPrice
+      (product) =>
+        product?.ecommercePrice?.sellingPrice >= minPrice &&
+        product?.ecommercePrice?.sellingPrice <= actualMaxPrice
     );
+    // result = result.filter(
+    //   (product) => product.price >= minPrice && product.price <= actualMaxPrice
+    // );
 
     // Sorting
     switch (true) {
@@ -124,6 +145,31 @@ function ShopProducts() {
         // No sorting applied for 'popularity' or default
         break;
     }
+    // Brand Filter
+    if (filters.brands.length > 0) {
+      result = result.filter((product) => {
+        const productBrand = product?.manufacturer?.trim().toLowerCase();
+        return filters.brands.some(
+          (selected) => selected.trim().toLowerCase() === productBrand
+        );
+      });
+    }
+
+    // Show available only
+    if (showAvailableOnly) {
+      result = result.filter((product) => product.stockQty > 0);
+    }
+    console.log(products);
+
+    // search results
+    if (query) {
+      result = result.filter(
+        (item) =>
+          item.title.toLowerCase().includes(query.toLowerCase()) ||
+          item.product_type.toLowerCase().includes(query.toLowerCase()) ||
+          item.product_id?.category?.toLowerCase().includes(query.toLowerCase())
+      );
+    }
 
     return result;
   };
@@ -131,7 +177,11 @@ function ShopProducts() {
   useEffect(() => {
     const updated = applyFiltersAndSort(products, filters, filtersortby);
     setFilteredProducts(updated);
-  }, [filters, filtersortby, products]);
+  }, [filters, filtersortby, products, showAvailableOnly, query]);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [filters, filtersortby]);
 
   const handleSortby = (e) => {
     const sortby = e.value;
@@ -144,9 +194,15 @@ function ShopProducts() {
       const { data, error } = await supabase
         .from("product_variants")
         .select(`* ,product_id(*)`)
-        .order("created_at", { ascending: false });
+        .order("created_at", { ascending: false })
+        .neq("productDisplayType", "boq");
 
       if (error) throw error;
+
+      const manufacturers = data
+        .map((item) => item.manufacturer)
+        .filter(Boolean);
+      setAllBrands([...new Set(manufacturers)]);
 
       // Filter products where it is approved
       const filtered = data.filter(
@@ -244,6 +300,14 @@ function ShopProducts() {
     }));
   };
 
+  const handleBrandClick = (brand) => {
+    setFilters((prev) => ({
+      ...prev,
+      brands: prev.brands.includes(brand)
+        ? prev.brands.filter((c) => c !== brand) // remove if exists
+        : [...prev.brands, brand], // add if not
+    }));
+  };
   const handleRemove = (type, value) => {
     if (type === "category") {
       setFilters((prev) => ({
@@ -268,6 +332,29 @@ function ShopProducts() {
       setfiltersortby(""); // reset sort to default
     }
   };
+  const resetFilter = () => {
+    if (category) {
+      setFilters((prev) => ({
+        ...prev,
+        category: [category],
+      }));
+    } else {
+      setFilters((prev) => ({
+        ...prev,
+        category: [],
+      }));
+    }
+
+    setFilters((prev) => ({
+      ...prev,
+      priceRange: [0, 10000], // adjust to your default
+    }));
+
+    setMaxPrice(10000);
+    setMinPrice(0);
+
+    setfiltersortby("Popularity"); // reset sort to default
+  };
 
   // Close dropdown on outside click
   useEffect(() => {
@@ -287,7 +374,7 @@ function ShopProducts() {
     0, 1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500, 5000, 5500, 6000, 6500,
     7000, 7500, 8000, 8500, 9000, 9500, 10000,
   ];
-  const brands = ["Ikea", "Pepperfry", "Durian", "Godrej", "Furniture"];
+  // const brands = ["Ikea", "Pepperfry", "Durian", "Godrej", "Furniture"];
 
   const handleopencloseoffilter = (filter) => {
     switch (filter) {
@@ -299,6 +386,7 @@ function ShopProducts() {
       case "price":
         setIsShopCatOpen(false);
         setIsPriceOpen(true);
+        break;
 
       default:
         break;
@@ -324,12 +412,13 @@ function ShopProducts() {
     <div>
       <ToastContainer />
       <div className="">
+        {/* <LandingNavbar /> */}
         <Header />
       </div>
       <section ref={containerRef}>
         <div className=" hidden lg:block lg:container lg:mx-auto my-6 lg:my-10">
           <SectionHeader title={"Shop "} isborder={false} />
-          <div className="flex overflow-x-auto items-center justify-around my-10 gap-6">
+          {/* <div className="flex overflow-x-auto items-center justify-around my-10 gap-6">
             {categoryies.map((cat) => (
               <div
                 className="flex flex-col lg:justify-center  lg:items-center gap-3"
@@ -338,19 +427,19 @@ function ShopProducts() {
                 <div className="bg-[#F8F8F8] border border-[#ccc] p-4 w-16 h-16 xl:w-20 xl:h-20">
                   <img src={cat.imagename} alt="category" className="" />
                 </div>
-                <h3 className="font-lora text-[#111] text-xs lg:text-sm">
+                <h3 className="font-TimesNewRoman text-[#111] text-xs lg:text-sm">
                   {cat.name}
                 </h3>
               </div>
             ))}
-          </div>
+          </div> */}
         </div>
       </section>
 
       <section>
-        <div className=" flex lg:hidden justify-between items-center font-Poppins text-base text-[#ccc] px-6 border-t border-b border-[#ccc] mb-4">
+        <div className=" flex lg:hidden justify-between items-center font-TimesNewRoman text-base text-[#ccc] px-6 border-t border-b border-[#ccc] mb-4">
           <button onClick={() => setIsSortOpen(!isSortOpen)}>Sort</button>
-          <button onClick={() => setIsfilteropen(true)}>filter</button>
+          <button onClick={() => setIsfilteropen(true)}>Filter</button>
         </div>
       </section>
 
@@ -362,15 +451,25 @@ function ShopProducts() {
             isfilterOpen ? "translate-y-0" : "-translate-y-full"
           }`}
         >
-          <div className="flex items-center border-b border-b-[#ccc]">
-            <button onClick={() => handleResetOfFilter()}>
-              <MdKeyboardArrowLeft size={30} color="#304778" />{" "}
-            </button>
-            <h2 className="uppercase text-[#304778] text-sm leading-[22.4px] ">
-              filter
-            </h2>
+          <div className="flex justify-between items-center border-b border-b-[#ccc] pb-2">
+            <div className="flex gap-2 items-center">
+              <button onClick={() => handleResetOfFilter()}>
+                <MdKeyboardArrowLeft size={30} color="#304778" />{" "}
+              </button>
+              <h2 className="uppercase text-[#304778] text-sm leading-[22.4px] ">
+                filter
+              </h2>
+            </div>
+            <div>
+              <button
+                onClick={resetFilter}
+                className="px-4 py-1 hover:bg-[#334A78] border border-[#ccc] text-[#334a78] hover:text-white"
+              >
+                Reset
+              </button>
+            </div>
           </div>
-          <div className="flex flex-1 overflow-y-auto pr-2 ">
+          <div className="font-TimesNewRoman flex flex-1 overflow-y-auto pr-2 ">
             <div className="flex-1 flex mt-2">
               <ul
                 className={`flex flex-col items-start uppercase [&:li]:bg-[#eee] [&_li]:w-full [&_li]:px-2 [&_li]:py-2 [&_li]:pb-3 p-1 text-xs font-bold text-[#1A293A] [&_li]:cursor-pointer `}
@@ -387,8 +486,8 @@ function ShopProducts() {
                 >
                   price
                 </li>
-                <li className="bg-[#eee]">brand</li>
-                <li className="bg-[#eee]">Color</li>
+                {/* <li className="bg-[#eee]">brand</li>
+                <li className="bg-[#eee]">Color</li> */}
               </ul>
             </div>
             <div className="flex-1">
@@ -476,7 +575,7 @@ function ShopProducts() {
           </div>
 
           {/* display of no of products  */}
-          <div className="flex justify-between items-center mt-5 font-Poppins">
+          <div className="flex justify-between items-center mt-5 font-TimesNewRoman">
             <div>
               <h2 className="text-[#000] font-semibold text-xl tracking-[1.2px]">
                 {items?.length}
@@ -488,7 +587,7 @@ function ShopProducts() {
             <div>
               <button
                 onClick={() => setIsfilteropen(false)}
-                className="px-5 py-[10px] bg-[#334A78] text-white border border-[#212B36] font-Poppins font-semibold text-sm leading-[15px] tracking-[1.2px]"
+                className="px-5 py-[10px] bg-[#334A78] text-white border border-[#212B36] font-TimesNewRoman font-semibold text-sm leading-[15px] tracking-[1.2px]"
               >
                 Apply
               </button>
@@ -535,36 +634,62 @@ function ShopProducts() {
       )}
 
       {/* section 2 */}
-      <section className="font-Poppins lg:container lg:mx-auto px-4 lg:px-12">
+      <section className="font-TimesNewRoman lg:container lg:mx-auto px-4 lg:px-12">
         <div className="flex flex-col md:flex-row gap-6">
           {/* Left side filters */}
-          <div className="hidden lg:flex flex-col items-center gap-6 lg:w-[20%] w-full ">
+          <div className="hidden lg:flex flex-col items-center gap-6 lg:w-[20%] w-full border-r pr-4 border-r-[#CCCCCC]">
             <div className="w-full space-y-4 [&_h4]:capitalize">
-              <div className="flex justify-start gap-2 items-center text-[#334A78] ">
-                <div>
+              <div className="flex justify-between gap-2 items-center text-[#334A78] ">
+                <div className="flex gap-2">
                   <IoFilter size={20} />
+                  <h3 className="font-bold text-sm">Filter</h3>
                 </div>
-                <h3 className="font-semibold text-sm">Filter(1) </h3>
                 <div>
-                  <MdKeyboardArrowLeft size={20} />
+                  <button
+                    onClick={resetFilter}
+                    className="px-4 py-1 hover:bg-[#334A78] border border-[#ccc] text-[#334a78] hover:text-white"
+                  >
+                    Reset Filter
+                  </button>
                 </div>
               </div>
 
               <div className="flex justify-between items-center">
                 <div>
-                  <h3 className="text-[#334A78] text-[15px] font-semibold leading-[24px]">
+                  <h3 className="text-[#334A78] text-[15px] font-bold leading-[24px]">
                     Out of stock
                   </h3>
                 </div>
-                <div className="flex gap-2">
-                  <button className="text-[#334A78]  ">show</button>
-                  <button className="text-[15px] text-[#334A78] border border-[#334A78] p-1">
+
+                <div className="relative flex border border-[#334A78] rounded w-fit overflow-hidden">
+                  <span
+                    className={`absolute top-0 left-0 h-full w-1/2 bg-[#334A78] transition-transform duration-300 ease-in-out rounded ${
+                      showAvailableOnly ? "translate-x-full" : "translate-x-0"
+                    }`}
+                  ></span>
+
+                  <button
+                    onClick={() => setShowAvailableOnly(false)}
+                    className={`relative z-10 px-4 py-1 text-[15px] font-medium transition-colors duration-300 ${
+                      !showAvailableOnly ? "text-white" : "text-[#334A78]"
+                    }`}
+                  >
+                    Show
+                  </button>
+
+                  <button
+                    onClick={() => setShowAvailableOnly(true)}
+                    className={`relative z-10 px-4 py-1 text-[15px] font-medium transition-colors duration-300 ${
+                      showAvailableOnly ? "text-white" : "text-[#334A78]"
+                    }`}
+                  >
                     Hide
                   </button>
                 </div>
               </div>
+
               <div className="flex justify-between items-center text-[#334A78]">
-                <h4 className="text-[15px] font-semibold leading-[24px]">
+                <h4 className="text-[15px] font-bold leading-[24px]">
                   Shop by Categories
                 </h4>
                 <button
@@ -584,15 +709,16 @@ function ShopProducts() {
               </div>
               {isShopCatOepn && (
                 <div>
-                  <ul className="font-lora space-y-3">
+                  <ul className="font-TimesNewRoman space-y-3">
                     {categoryies.map((cat) => (
                       <li
                         onClick={() => handleCategoryClick(cat.name)}
                         // onClick={() => setFilterCatName(cat.name)}
                         className={`text-[#111] px-4 py-1 text-sm cursor-pointer ${
-                          filters.category.includes(cat.name) &&
-                          "border-2 border-[#334A78]"
-                        } hover:bg-[#F4F4F4]`}
+                          filters.category.includes(cat.name)
+                            ? "border-2 border-[#334A78] bg-[#334A78] text-white"
+                            : "hover:bg-[#F4F4F4]"
+                        } `}
                         key={cat.name}
                       >
                         {cat.name}
@@ -672,14 +798,14 @@ function ShopProducts() {
                   </div>
                 </div>
               )}
-              <div className="flex justify-between items-center text-[#334A78]">
+              {/* <div className="flex justify-between items-center text-[#334A78]">
                 <h4 className="text-[15px] font-semibold leading-[24px]">
                   color
                 </h4>
                 <div className="">
                   <MdKeyboardArrowDown size={25} />
                 </div>
-              </div>
+              </div> */}
               <div className="flex justify-between items-center text-[#334A78]">
                 <h4 className="text-[15px] font-semibold leading-[24px]">
                   Brand
@@ -700,9 +826,14 @@ function ShopProducts() {
 
               {isBrandOpen && (
                 <div className="space-y-2">
-                  {brands.map((brand) => (
+                  {allBrands.map((brand) => (
                     <label
                       key={brand}
+                      checked={
+                        filters.brands.length === 1 &&
+                        filters.brands.includes(brand)
+                      }
+                      onClick={() => handleBrandClick(brand)}
                       className="flex items-center gap-2 cursor-pointer text-[#111] text-sm"
                     >
                       <input
@@ -721,13 +852,13 @@ function ShopProducts() {
           {!productsloading ? (
             <div className="lg:w-[80%] w-full ">
               <div className="hidden lg:block border-b border-b-[#CCCCCC] mb-3 pb-2">
-                <div className="flex justify-between items-center font-lora mb-2 ">
+                <div className="flex justify-between  font-TimesNewRoman mb-2 ">
                   <p className="text-[#191716] text-xs lg:text-[13px] leading-3 tracking-[1px]">
                     {resultText}
                   </p>
                   <div
                     ref={dropdownRef}
-                    className="relative text-nowrap w-52 font-Poppins text-[#334A78] text-xs lg:text-[15px] leading-[24px]"
+                    className="relative text-nowrap w-52 font-TimesNewRoman text-[#334A78] text-xs lg:text-[15px] leading-[24px]"
                   >
                     <div
                       className="flex items-center border border-[#CCCCCC] p-2 cursor-pointer"
@@ -819,45 +950,22 @@ function ShopProducts() {
                 </div>
               </div>
               {/* display of products */}
-              <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-5 gap-4 lg:gap-8 ">
+              {currentItems.length === 0 && (
+                <p className="text-center">No products found</p>
+              )}
+              <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-5 gap-4">
                 {currentItems.map((product, index) => (
                   <div key={index}>
                     <Card product={product} />
                   </div>
                 ))}
               </div>
-              <div className="flex justify-center my-10">
-                <div className="flex gap-2">
-                  <button
-                    disabled={currentPage === 1}
-                    onClick={() => goToPage(currentPage - 1)}
-                    className="px-5 py-2  rounded disabled:hidden"
-                  >
-                    <FaArrowLeftLong />
-                  </button>
-
-                  {Array.from({ length: totalPages }, (_, i) => (
-                    <button
-                      key={i}
-                      onClick={() => goToPage(i + 1)}
-                      className={`px-5 py-2 rounded font-lora font-semibold ${
-                        currentPage === i + 1
-                          ? "bg-[#304778] text-white"
-                          : "bg-[#fff] text-[#232323]"
-                      }`}
-                    >
-                      {i + 1}
-                    </button>
-                  ))}
-
-                  <button
-                    disabled={currentPage === totalPages}
-                    onClick={() => goToPage(currentPage + 1)}
-                    className="px-5 py-2 rounded disabled:hidden"
-                  >
-                    <FaArrowRightLong />
-                  </button>
-                </div>
+              <div className="my-6">
+                <PagInationNav
+                  totalPages={totalPages}
+                  handlePageChange={goToPage}
+                  currentPage={currentPage}
+                />
               </div>
             </div>
           ) : (
@@ -867,6 +975,10 @@ function ShopProducts() {
           )}
         </div>
       </section>
+
+      <footer>
+        <Footer />
+      </footer>
     </div>
   );
 }
@@ -876,7 +988,7 @@ export default ShopProducts;
 function SectionHeader({ title, isborder = true }) {
   return (
     <div className="flex flex-col justify-center items-center mb-10">
-      <h3 className="font-lora text-2xl text-[#111] tracking-wider uppercase mb-2">
+      <h3 className="font-TimesNewRoman text-2xl text-[#111] tracking-wider uppercase mb-2">
         {title}
       </h3>
       {isborder && (
@@ -887,8 +999,13 @@ function SectionHeader({ title, isborder = true }) {
 }
 
 function Card({ product }) {
-  const { handleAddToCart } = useHandleAddToCart();
-  const { isAuthenticated, localcartItems, cartItems } = useApp();
+  const { handleAddToCart, handleAddtoWishlist } = useHandleAddToCart();
+  const { isAuthenticated, localcartItems, cartItems, wishlistItems } =
+    useApp();
+
+  const isWishlisted = wishlistItems?.some(
+    (item) => item.productId?.id === product.id
+  );
 
   const [iscarted, setIsCarted] = useState(false);
 
@@ -909,10 +1026,13 @@ function Card({ product }) {
       setIsCarted(check);
     }
   }, [isAuthenticated, cartItems, localcartItems, product?.id]);
+
   return (
-    <div className="font-Poppins max-w-sm max-h-sm  border border-[#ccc]">
+    <div className="font-TimesNewRoman max-w-sm max-h-sm border border-[#ccc]">
       <div
-        onClick={() => naviagte(`/productview/${product.id}`)}
+        onClick={() =>
+          naviagte(`/productview/${product.id}`, { state: { from: "shop" } })
+        }
         className="flex justify-center items-center p-2 cursor-pointer"
       >
         <img
@@ -921,31 +1041,49 @@ function Card({ product }) {
           className="h-52 object-contain"
         />
       </div>
-      <div className="bg-[#fff] p-2">
+      <div className="bg-[#fff] p-1.5 lg:p-2">
         <div className="flex flex-col md:flex-row ">
-          <div className="flex-1 text-sm  leading-[22.4px]  text-[#111] ">
-            <h4 className="font-medium text-sm leading-[22.4px] ">
+          <div className="flex-1 text-sm leading-[22.4px] text-[#111]">
+            <h4
+              title={product?.title}
+              className="font-medium text-sm leading-[22.4px] line-clamp-1 capitalize"
+            >
               {product?.title}
             </h4>
-            <div className="flex items-center gap-2">
-              <p className=" ">Rs {product?.price || "Rs 3,0000"}</p>
-              <p className="line-through text-[#111] text-opacity-50">
-                Rs $5678
+            <div className="flex items-center gap-2 flex-wrap xl:flex-nowrap">
+              <p className="text-nowrap">
+                RS {product?.ecommercePrice?.sellingPrice || "Rs 3,0000"}
               </p>
-              <p className="text-[#C20000]">sale</p>
+              <p className="line-through text-[#111] text-opacity-50 text-nowrap">
+                RS {product?.ecommercePrice?.mrp || "Rs 3,0000"}
+              </p>
+              <p className="text-[#C20000] uppercase">sale</p>
             </div>
           </div>
-          <div className=" text-[#ccc] hover:text-red-950 ">
-            <FaHeart size={25} />
+          <div
+            onClick={() => handleAddtoWishlist(product)}
+            className="text-[#ccc] hover:text-red-600 cursor-pointer"
+          >
+            {isWishlisted ? (
+              <AiFillHeart size={20} color="red" />
+            ) : (
+              <GoHeart size={20} />
+            )}
           </div>
         </div>
-        <button
-          onClick={() => handleAddToCart(product)}
-          disabled={iscarted}
-          className="text-[#000] uppercase bg-[#FFFFFF] text-xs border border-[#ccc] px-2  py-2 rounded-sm "
-        >
-          {iscarted ? "Added to cart" : "Add to cart"}{" "}
-        </button>
+        {product.stockQty > 0 ? (
+          <button
+            onClick={() => handleAddToCart(product, iscarted)}
+            // disabled={iscarted}
+            className="text-[#000] uppercase bg-[#FFFFFF] text-xs border border-[#ccc] px-2 py-2 rounded-sm "
+          >
+            {iscarted ? "Go to cart" : "Add to cart"}{" "}
+          </button>
+        ) : (
+          <span className="text-xs text-red-500 font-semibold">
+            Out of stock
+          </span>
+        )}
       </div>
     </div>
   );

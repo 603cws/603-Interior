@@ -12,7 +12,6 @@ import Boqcompleted from "../../common-components/Boqcompleted";
 import { CiMenuFries } from "react-icons/ci";
 import { MdOutlineCancel } from "react-icons/md";
 import AlertBox from "./AlertBox";
-import { PiStarFourFill } from "react-icons/pi";
 import CurrentLayoutDetails from "./CurrentLayoutDetails";
 import GobackLayoutWarning from "./GobackLayoutWarning";
 import { AnimatedButton } from "../../common-components/animated-button";

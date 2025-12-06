@@ -254,9 +254,7 @@ function OurServices() {
                         ? "/images/services/modernservice4.png"
                         : "/images/services/modernservice3.png"
                     }
-                    // src="/images/modern-ofc.png"
                     alt="modern service 1"
-                    className=""
                   />
                 </div>
                 <h4 className="uppercase font-bold text-xl my-4 lg:my-6">
@@ -282,9 +280,7 @@ function OurServices() {
                         ? "/images/services/modernservice5.png"
                         : "/images/services/modernservice6.png"
                     }
-                    // src="/images/modern-ofc.png"
                     alt="modern service 1"
-                    className=""
                   />
                 </div>
                 <h4 className="uppercase font-bold text-xl my-4 lg:my-6">
@@ -308,9 +304,7 @@ function OurServices() {
                         ? "/images/services/modernservice7.png"
                         : "/images/services/modernservice8.png"
                     }
-                    // src="/images/modern-ofc.png"
                     alt="modern service 1"
-                    className=""
                   />
                 </div>
                 <h4 className="uppercase font-bold text-xl my-4 lg:my-6">
@@ -441,24 +435,24 @@ function OurServices() {
           <div className="sm:flex flex-col gap-5 hidden">
             <img
               src="/images/we-do-1.png"
-              alt=""
+              alt="workspace layout image"
               className="w-[320px] lg:w-[380px] h-[350px] lg:h-[400px]"
             />
             <img
               src="/images/we-do-2.png"
-              alt=""
+              alt="office design image"
               className="w-[320px] lg:w-[380px] h-[350px] lg:h-[400px]"
             />
           </div>
           <div className="lg:flex flex-col gap-5 mt-14 hidden">
             <img
               src="/images/we-do-3.png"
-              alt=""
+              alt="development image"
               className="w-[380px] h-[400px]"
             />
             <img
               src="/images/we-do-4.png"
-              alt=""
+              alt="office execution image"
               className="w-[380px] h-[400px]"
             />
           </div>

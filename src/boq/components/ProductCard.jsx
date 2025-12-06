@@ -1,13 +1,15 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useMemo } from "react";
 import { useApp } from "../../Context/Context";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaStar } from "react-icons/fa";
 import { GoDash, GoPlus } from "react-icons/go";
 import { PiStarFourFill } from "react-icons/pi";
-import { IoMdSettings } from "react-icons/io";
+import { IoIosArrowDown, IoIosArrowUp, IoMdSettings } from "react-icons/io";
 import { RiVipCrown2Fill } from "react-icons/ri";
-import { HiMiniCheckBadge } from "react-icons/hi2";
+import { HiMiniCheckBadge, HiOutlineBarsArrowDown } from "react-icons/hi2";
+import PagInationNav from "../../common-components/PagInationNav";
+import { MdKeyboardArrowLeft } from "react-icons/md";
 
 // Animation settings for easy customization
 const animations = {
@@ -25,6 +27,12 @@ const animations = {
     },
   },
 };
+
+const options = [
+  { option: "Newest Arrival", value: "newest" },
+  { option: "Price: Low to High", value: "low" },
+  { option: "Price: High to Low", value: "high" },
+];
 
 function ProductCard({
   products,
@@ -47,13 +55,24 @@ function ProductCard({
   } = useApp();
 
   const dropdownRef = useRef(null);
-  const [isOpen, setIsOpen] = useState(false);
-  const options = ["Minimal", "Exclusive", "Luxury", "Custom"];
+  const planOptions = ["Minimal", "Exclusive", "Luxury", "Custom"];
 
   const productsInCategory = products[selectedCategory?.category] || [];
   // const [loading, setLoading] = useState(true);
   const [loadingImages, setLoadingImages] = useState({}); // Track image loading
-  const [filtervalue, setFiltervalue] = useState(selectedPlan);
+
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [openSection, setOpenSection] = useState("plan");
+  const [selectedPlanFilter, setSelectedPlanFilter] = useState(selectedPlan);
+  const [selectedBrands, setSelectedBrands] = useState([]);
+  const [sortOption, setSortOption] = useState("newest");
+  const [isSortOpen, setIsSortOpen] = useState(false);
+  const [isMobileSortOpen, setIsMobileSortOpen] = useState(false);
+  const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
+
+  const toggleSection = (section) => {
+    setOpenSection((prev) => (prev === section ? null : section));
+  };
 
   const productsInSubCategory = productsInCategory[selectedSubCategory] || [];
 
@@ -70,7 +89,48 @@ function ProductCard({
         return product.subcategory1 === selectedSubCategory1;
       }
     })
-    .flatMap((product) => product.product_variants || []);
+    .flatMap((product) =>
+      (product.product_variants || [])
+        .filter((variant) => {
+          if (!selectedBrands || selectedBrands.length === 0) return true;
+
+          const brandName =
+            (variant.profiles && variant.profiles.company_name) ||
+            variant.manufacturer ||
+            "";
+
+          return selectedBrands.includes(brandName);
+        })
+        .map((variant) => ({
+          // keep all existing variant fields
+          ...variant,
+          // add the parent product's fields you want
+          category: product.category,
+          subcategory: product.subcategory
+            ? product.subcategory.split(",").map((s) => s.trim())
+            : [],
+          subcategory1: product.subcategory1,
+          // optional: keep original product id too if you need it
+          product_id: product.id || variant.product_id || product.product_id,
+        }))
+    );
+
+  const brandsList = Array.from(
+    new Set(
+      productsInSubCategory
+        .flatMap((product) =>
+          product.subcategory1 === selectedSubCategory1
+            ? product.product_variants || []
+            : []
+        )
+        .map((variant) =>
+          variant.profiles && variant.profiles.company_name
+            ? variant.profiles.company_name
+            : null
+        )
+        .filter(Boolean)
+    )
+  );
 
   // Now filter variants based on the selected plan.
   // If the plan is "Custom", show all variants. Otherwise, only show variants whose segment matches the selected plan.
@@ -82,12 +142,13 @@ function ProductCard({
   //     variant.segment.toLowerCase() === selectedPlan.toLowerCase()
   //   );
   // });
+
   const filteredVariants = filteredProducts.filter((variant) => {
-    if (filtervalue === "Custom") return true;
+    if (selectedPlanFilter === "Custom") return true;
 
     return (
       variant.segment &&
-      variant.segment.toLowerCase() === filtervalue.toLowerCase()
+      variant.segment.toLowerCase() === selectedPlanFilter.toLowerCase()
     );
   });
 
@@ -95,7 +156,19 @@ function ProductCard({
   const [itemsPerPage, setItemsPerPage] = useState(12);
   const totalPages = Math.ceil(filteredVariants.length / itemsPerPage);
 
-  const paginatedVariants = filteredVariants.slice(
+  const sortedVariants = useMemo(() => {
+    const arr = [...filteredVariants];
+    if (sortOption === "low") {
+      arr.sort((a, b) => (a.price || 0) - (b.price || 0));
+    } else if (sortOption === "high") {
+      arr.sort((a, b) => (b.price || 0) - (a.price || 0));
+    } else if (sortOption === "newest") {
+      arr.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+    }
+    return arr;
+  }, [filteredVariants, sortOption]);
+
+  const paginatedVariants = sortedVariants.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
@@ -140,7 +213,8 @@ function ProductCard({
   useEffect(() => {
     function handleClickOutside(event) {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setIsOpen(false);
+        setIsFilterOpen(false);
+        setIsSortOpen(false);
       }
     }
     document.addEventListener("mousedown", handleClickOutside);
@@ -196,81 +270,471 @@ function ProductCard({
 
   return (
     <div>
-      <div className="product-card grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 3xl:grid-cols-6 gap-6 pb-8 pt-3 relative">
-        <div className="absolute right-0 md:right-6 -top-12" ref={dropdownRef}>
-          <div className="relative">
-            {/* Filter button */}
+      <div className="product-card grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 3xl:grid-cols-6 gap-6 pb-8 pt-8 lg:pt-3 relative">
+        {/* Filter & Sort Dropdowns/Buttons for small screens */}
+        <div className="lg:hidden absolute flex justify-between items-center w-full">
+          <button
+            className="border border-black px-3 py-1.5 flex items-center gap-2 text-sm"
+            onClick={() => {
+              setIsMobileSortOpen((prev) => !prev);
+              setIsMobileFilterOpen(false);
+            }}
+          >
+            Sort
+            <HiOutlineBarsArrowDown />
+          </button>
+          <button
+            className="border border-black px-3 py-1.5 flex items-center text-sm gap-2"
+            onClick={() => {
+              setOpenSection("plan");
+              setIsMobileFilterOpen((prev) => !prev);
+              setIsMobileSortOpen(false);
+            }}
+          >
+            Filter
+            <img
+              src="/images/boq/filter.png"
+              alt="Filter"
+              className="w-3 h-3"
+            />
+          </button>
+
+          {isMobileFilterOpen && (
+            // BACKDROP
+            <div
+              className="fixed inset-0 z-40 bg-black/40" // dark overlay
+              onClick={() => setIsMobileFilterOpen(false)} // click outside closes
+            >
+              <div
+                className={`fixed bottom-0 left-0 w-full z-50 bg-white border transition-transform ease-in-out duration-500 transform animate-fade-in flex flex-col justify-between ${
+                  isMobileFilterOpen ? "translate-y-0" : "translate-y-full"
+                }`}
+                onClick={(e) => e.stopPropagation()} // prevent backdrop click
+              >
+                {/* Header */}
+                <div className="flex items-center border-b border-b-[#ccc] px-3 py-2">
+                  <button onClick={() => setIsMobileFilterOpen(false)}>
+                    <MdKeyboardArrowLeft size={30} color="#304778" />
+                  </button>
+                  <h2 className="ml-2 uppercase text-[#304778] text-sm leading-[22.4px]">
+                    Filter
+                  </h2>
+                </div>
+
+                {/* Body */}
+                <div className="p-3 space-y-5 font-TimesNewRoman text-sm overflow-y-auto max-h-[60vh]">
+                  {/* PLAN GROUP (accordion item) */}
+                  <div className="border border-[#ccc] rounded">
+                    <button
+                      className="flex w-full items-center justify-between px-3 py-2 text-xs font-semibold uppercase text-[#334A78]"
+                      onClick={() => toggleSection("plan")}
+                    >
+                      <span>Plan</span>
+                      <span className="text-xs">
+                        {openSection === "plan" ? (
+                          <IoIosArrowUp />
+                        ) : (
+                          <IoIosArrowDown />
+                        )}
+                      </span>
+                    </button>
+
+                    {openSection === "plan" && (
+                      <div className="border-t border-[#ccc]">
+                        {planOptions.map((option) => (
+                          <button
+                            key={option}
+                            onClick={() => setSelectedPlanFilter(option)}
+                            className={
+                              "flex items-center justify-between w-full px-4 py-2 border-b last:border-b-0 border-[#ccc] text-xs " +
+                              (selectedPlanFilter === option
+                                ? "bg-[#374A75] text-white font-semibold"
+                                : "bg-white text-black")
+                            }
+                          >
+                            <span className="flex items-center">
+                              {option === "Exclusive" && (
+                                <div className="relative">
+                                  <PiStarFourFill
+                                    className="absolute -top-1 -right-1"
+                                    size={8}
+                                    color={
+                                      selectedPlanFilter === option
+                                        ? "#fff"
+                                        : "#334A78"
+                                    }
+                                  />
+                                  <PiStarFourFill
+                                    size={16}
+                                    color={
+                                      selectedPlanFilter === option
+                                        ? "#fff"
+                                        : "#334A78"
+                                    }
+                                  />
+                                </div>
+                              )}
+                              {option === "Luxury" && (
+                                <RiVipCrown2Fill
+                                  size={16}
+                                  color={
+                                    selectedPlanFilter === option
+                                      ? "#fff"
+                                      : "#334A78"
+                                  }
+                                />
+                              )}
+                              {option === "Minimal" && (
+                                <FaStar
+                                  size={16}
+                                  color={
+                                    selectedPlanFilter === option
+                                      ? "#fff"
+                                      : "#334A78"
+                                  }
+                                />
+                              )}
+                              {option === "Custom" && (
+                                <IoMdSettings
+                                  size={18}
+                                  color={
+                                    selectedPlanFilter === option
+                                      ? "#fff"
+                                      : "#334A78"
+                                  }
+                                />
+                              )}
+                            </span>
+                            <span>{option}</span>
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* BRAND GROUP (accordion item) */}
+                  <div className="border border-[#ccc] rounded">
+                    <button
+                      className="flex w-full items-center justify-between px-3 py-2 text-xs font-semibold uppercase text-[#334A78]"
+                      onClick={() => toggleSection("brand")}
+                    >
+                      <span>Brand</span>
+                      <span className="text-xs">
+                        {openSection === "brand" ? (
+                          <IoIosArrowUp />
+                        ) : (
+                          <IoIosArrowDown />
+                        )}
+                      </span>
+                    </button>
+
+                    {openSection === "brand" && (
+                      <div className="border-t border-[#ccc] px-4 py-3 space-y-3 text-xs">
+                        {brandsList.map((brand) => {
+                          const checked = selectedBrands.includes(brand);
+                          return (
+                            <label
+                              key={brand}
+                              className="flex items-center justify-between cursor-pointer"
+                            >
+                              <span className="text-[#000000]">{brand}</span>
+                              <input
+                                type="checkbox"
+                                className="h-4 w-4 border border-black"
+                                checked={checked}
+                                onChange={() => {
+                                  setSelectedBrands((prev) => {
+                                    const current = Array.isArray(prev)
+                                      ? prev
+                                      : [];
+                                    return current.includes(brand)
+                                      ? current.filter((b) => b !== brand)
+                                      : [...current, brand];
+                                  });
+                                }}
+                              />
+                            </label>
+                          );
+                        })}
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {/* Footer (optional count + apply) */}
+                <div className="flex justify-between items-center px-4 py-3 border-t border-[#eee] font-TimesNewRoman text-xs">
+                  <div>
+                    <h2 className="text-[#000] font-semibold text-base tracking-[1px]">
+                      {paginatedVariants.length}
+                    </h2>
+                    <p className="text-[#ccc] text-[11px] leading-4 -tracking-[0.5px] font-semibold">
+                      product found
+                    </p>
+                  </div>
+                  <button
+                    onClick={() => setIsMobileFilterOpen(false)}
+                    className="px-4 py-[8px] bg-[#334A78] text-white border border-[#212B36] font-semibold text-xs tracking-[1px]"
+                  >
+                    Apply
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {isMobileSortOpen && (
+            // BACKDROP
+            <div
+              className="fixed inset-0 z-40 bg-black/40" // dark overlay
+              onClick={() => setIsMobileSortOpen(false)} // click outside closes
+            >
+              <div
+                className={`fixed bottom-0 left-0 w-full z-50 bg-white border transition-transform ease-in-out duration-500 transform animate-fade-in flex flex-col justify-center ${
+                  isMobileSortOpen ? "translate-y-0" : "translate-y-full"
+                }`}
+                onClick={(e) => e.stopPropagation()} // prevent backdrop click
+              >
+                {/* Header */}
+                <div className="flex items-center border-b border-b-[#ccc]">
+                  <button onClick={() => setIsMobileSortOpen(false)}>
+                    <MdKeyboardArrowLeft size={30} color="#304778" />
+                  </button>
+                  <h2 className="uppercase text-[#304778] text-sm leading-[22.4px]">
+                    Sort By
+                  </h2>
+                </div>
+
+                {/* Options */}
+                <div className="space-y-4 p-2">
+                  {options.map((opt) => {
+                    const active = sortOption === opt.value; // "newest" | "low" | "high"
+                    return (
+                      <label
+                        key={opt.value}
+                        className="flex items-center justify-between space-x-3 cursor-pointer"
+                        onClick={() => {
+                          setSortOption(opt.value);
+                        }}
+                      >
+                        <span className="text-sm text-[#000000] font-medium">
+                          {opt.option}
+                        </span>
+
+                        {/* Custom radio circle */}
+                        <div
+                          className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
+                            active
+                              ? "bg-[#2A3E65] border-[#2A3E65]"
+                              : "border-[#2A3E65]"
+                          }`}
+                        ></div>
+                      </label>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Filter & Sort Dropdowns/Buttons for large screens */}
+        <div
+          className="absolute right-0 -top-12 hidden lg:block"
+          ref={dropdownRef}
+        >
+          <div className="flex gap-2 items-center">
+            {/* FILTER BUTTON */}
             <button
               className="flex items-center gap-2 border border-black px-2 lg:px-4 py-2 text-sm"
-              onClick={() => setIsOpen((prev) => !prev)}
+              onClick={() => {
+                setOpenSection("plan");
+                setIsFilterOpen((prev) => !prev);
+                setIsSortOpen(false);
+              }}
             >
-              <span className="hidden lg:block">Filter By Plan</span>
+              <span className="hidden lg:block">Filter</span>
               <img
                 src="/images/boq/filter.png"
                 alt="Filter"
                 className="w-4 h-4"
               />
-              {/* <CiSliderVertical className="text-[#334A78]" size={20} /> */}
             </button>
 
-            {/* Dropdown menu */}
-            {isOpen && (
-              <div className="absolute right-0 mt-2 w-36 bg-white shadow-lg z-20">
-                {options.map((option) => (
-                  <button
-                    key={option}
-                    onClick={() => {
-                      setFiltervalue(option);
-                      setIsOpen(false);
-                    }}
-                    className={`flex justify-between items-center border border-black w-full px-4 py-3 ${
-                      filtervalue === option
-                        ? "bg-[#374A75] text-white font-semibold"
-                        : ""
-                    }`}
-                  >
-                    {/* Icon */}
-                    <span className="flex items-center">
-                      {option === "Exclusive" && (
-                        <div className="relative">
-                          <PiStarFourFill
-                            className="absolute -top-1 -right-1"
-                            size={8}
-                            color={filtervalue === option ? "#fff" : "#334A78"}
-                          />
-                          <PiStarFourFill
-                            size={16}
-                            color={filtervalue === option ? "#fff" : "#334A78"}
-                          />
-                        </div>
-                      )}
-                      {option === "Luxury" && (
-                        <RiVipCrown2Fill
-                          size={16}
-                          color={filtervalue === option ? "#fff" : "#334A78"}
-                        />
-                      )}
-                      {option === "Minimal" && (
-                        <FaStar
-                          size={16}
-                          color={filtervalue === option ? "#fff" : "#334A78"}
-                        />
-                      )}
-                      {option === "Custom" && (
-                        <IoMdSettings
-                          size={18}
-                          color={filtervalue === option ? "#fff" : "#334A78"}
-                        />
-                      )}
-                    </span>
-
-                    {/* Text */}
-                    <span className="text-right">{option}</span>
-                  </button>
-                ))}
-              </div>
-            )}
+            {/* Sort Button */}
+            <button
+              className="flex items-center gap-2 border border-black px-4 py-2 text-sm"
+              onClick={() => {
+                setIsSortOpen((prev) => !prev);
+                setIsFilterOpen(false);
+              }}
+            >
+              <span className="hidden lg:block">Sort by:</span>
+              <span className="font-medium text-xs lg:text-sm">
+                {options.find((o) => o.value === sortOption)?.option}
+              </span>
+            </button>
           </div>
+
+          {/* FILTER PANEL (Plan + Brand) */}
+          {isFilterOpen && (
+            <div className="absolute mt-2 w-36 bg-white shadow-lg z-20">
+              {/* PLAN SECTION */}
+              <div className="border-x border-t">
+                <button
+                  className="flex w-full items-center justify-between px-4 py-3 text-sm"
+                  onClick={() => toggleSection("plan")}
+                >
+                  <span className="font-semibold text-[#334A78]">Plan</span>
+                  <span className="text-sm">
+                    {openSection === "plan" ? (
+                      <IoIosArrowUp />
+                    ) : (
+                      <IoIosArrowDown />
+                    )}
+                  </span>{" "}
+                </button>
+
+                {openSection === "plan" && (
+                  <div className="border-t border-black">
+                    {planOptions.map((option) => (
+                      <button
+                        key={option}
+                        onClick={() => setSelectedPlanFilter(option)}
+                        className={
+                          "flex items-center justify-between w-full px-4 py-3 border-b border-black text-sm " +
+                          (selectedPlanFilter === option
+                            ? "bg-[#374A75] text-white font-semibold"
+                            : "bg-white text-black")
+                        }
+                      >
+                        <span className="flex items-center">
+                          {option === "Exclusive" && (
+                            <div className="relative">
+                              <PiStarFourFill
+                                className="absolute -top-1 -right-1"
+                                size={8}
+                                color={
+                                  selectedPlanFilter === option
+                                    ? "#fff"
+                                    : "#334A78"
+                                }
+                              />
+                              <PiStarFourFill
+                                size={16}
+                                color={
+                                  selectedPlanFilter === option
+                                    ? "#fff"
+                                    : "#334A78"
+                                }
+                              />
+                            </div>
+                          )}
+                          {option === "Luxury" && (
+                            <RiVipCrown2Fill
+                              size={16}
+                              color={
+                                selectedPlanFilter === option
+                                  ? "#fff"
+                                  : "#334A78"
+                              }
+                            />
+                          )}
+                          {option === "Minimal" && (
+                            <FaStar
+                              size={16}
+                              color={
+                                selectedPlanFilter === option
+                                  ? "#fff"
+                                  : "#334A78"
+                              }
+                            />
+                          )}
+                          {option === "Custom" && (
+                            <IoMdSettings
+                              size={18}
+                              color={
+                                selectedPlanFilter === option
+                                  ? "#fff"
+                                  : "#334A78"
+                              }
+                            />
+                          )}
+                        </span>
+                        <span>{option}</span>
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* BRAND SECTION */}
+              <div className="border">
+                <button
+                  className="flex w-full items-center justify-between px-4 py-3 text-sm"
+                  onClick={() => toggleSection("brand")}
+                >
+                  <span className="font-semibold text-[#334A78]">Brand</span>
+                  <span className="text-sm">
+                    {openSection === "brand" ? (
+                      <IoIosArrowUp />
+                    ) : (
+                      <IoIosArrowDown />
+                    )}
+                  </span>{" "}
+                </button>
+
+                {openSection === "brand" && (
+                  <div className=" px-4 py-3 space-y-2 text-sm">
+                    {brandsList.map((brand) => {
+                      const checked = selectedBrands.includes(brand);
+                      return (
+                        <label
+                          key={brand}
+                          className="flex items-center gap-2 cursor-pointer"
+                        >
+                          <input
+                            type="checkbox"
+                            className="h-4 w-4 border border-black"
+                            checked={checked}
+                            onChange={() => {
+                              setSelectedBrands((prev) =>
+                                checked
+                                  ? prev.filter((b) => b !== brand)
+                                  : [...prev, brand]
+                              );
+                            }}
+                          />
+                          <span className="flex-1">{brand}</span>
+                        </label>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+          {isSortOpen && (
+            <div className="absolute right-0 mt-2 w-40 bg-white shadow-lg border border-black z-20 text-sm">
+              {options.map(({ option, value }) => {
+                const active = sortOption === value;
+                return (
+                  <button
+                    key={value}
+                    onClick={() => {
+                      setSortOption(value);
+                      setIsSortOpen(false);
+                    }}
+                    className={
+                      "w-full text-left px-3 py-2 border-b last:border-b-0 " +
+                      (active ? "bg-[#374A75] text-white font-semibold" : "")
+                    }
+                  >
+                    {option}
+                  </button>
+                );
+              })}
+            </div>
+          )}
         </div>
 
         {loading ? (
@@ -296,7 +760,7 @@ function ProductCard({
             {paginatedVariants.map((variant) => (
               <motion.div
                 key={variant.id}
-                className="max-w-sm flex flex-col justify-center items-center bg-white shadow-md cursor-pointer my-2 px-3 group
+                className="max-w-sm flex flex-col justify-center items-center bg-white shadow-md cursor-pointer my-3 px-3 group
                 hover:rounded-lg-21 hover:bg-custom-gradient hover:shadow-custom transition-all duration-300 border-2 border-[#F5F5F5] relative"
                 variants={animations.fadeInLeft}
                 initial="hidden"
@@ -432,79 +896,11 @@ function ProductCard({
         )}
       </div>
 
-      {totalPages > 1 && (
-        <div className="flex justify-center items-center mt-6 mb-6 px-4 space-x-1">
-          <div className="flex border border-[#CCCCCC] rounded-lg px-3 py-2">
-            {/* Previous Arrow */}
-            <button
-              onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-              disabled={currentPage === 1}
-              className="flex items-center gap-2 px-2 text-sm disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              <img
-                src="../images/icons/less.png"
-                alt="Previous"
-                className="w-4 h-4"
-              />
-              <span className="text-[#194F48]">Previous</span>
-            </button>
-
-            {/* Page Numbers */}
-            {(() => {
-              const pages = [];
-              let lastShownPage = 0;
-
-              for (let i = 1; i <= totalPages; i++) {
-                if (
-                  i === 1 ||
-                  i === totalPages ||
-                  (i >= currentPage - 1 && i <= currentPage + 1)
-                ) {
-                  pages.push(
-                    <button
-                      key={i}
-                      onClick={() => setCurrentPage(i)}
-                      className={`px-3 py-1 text-sm rounded text-[#334A78] ${
-                        currentPage === i
-                          ? "text-white bg-[#334A78]"
-                          : "hover:bg-[#F1F1F1]"
-                      }`}
-                    >
-                      {i}
-                    </button>
-                  );
-                  lastShownPage = i;
-                } else if (i > lastShownPage + 1) {
-                  pages.push(
-                    <span key={`ellipsis-${i}`} className="px-2 py-1 text-sm">
-                      ...
-                    </span>
-                  );
-                  lastShownPage = i;
-                }
-              }
-
-              return pages;
-            })()}
-
-            {/* Next Text */}
-            <button
-              onClick={() =>
-                setCurrentPage((prev) => Math.min(prev + 1, totalPages))
-              }
-              disabled={currentPage === totalPages}
-              className="flex items-center gap-2 px-2 text-sm disabled:opacity-50 default:cursor-not-allowed"
-            >
-              <span className="text-[#194F48]">Next</span>
-              <img
-                src="../images/icons/more.png"
-                alt="Next"
-                className="w-4 h-4"
-              />
-            </button>
-          </div>
-        </div>
-      )}
+      <PagInationNav
+        totalPages={totalPages}
+        currentPage={currentPage}
+        handlePageChange={setCurrentPage}
+      />
 
       {/* {totalPages > 1 && (
         <div className="flex justify-center mt-6 space-x-2 py-4">

@@ -5,10 +5,18 @@ import { FaRegQuestionCircle } from "react-icons/fa";
 import { supabase } from "../../services/supabase";
 import { toast } from "react-hot-toast";
 // import { useApp } from "../../Context/Context";
-import { AllCatArray, specialArray } from "../../utils/AllCatArray";
+import {
+  useAllCatArray,
+  specialArray,
+  displayOptions,
+} from "../../utils/AllCatArray";
 import { useRef } from "react";
 import { v4 as uuidv4 } from "uuid";
-import { baseImageUrl } from "../../utils/HelperConstant";
+import {
+  baseImageUrl,
+  additionalDetailsConfig,
+  productInfoFields,
+} from "../../utils/HelperConstant";
 
 function VendorProductEdit({
   setEditProduct,
@@ -38,14 +46,21 @@ function VendorProductEdit({
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [dimensions, setDimensions] = useState({
-    height: selectedproduct?.dimensions.split("x")[0] || "",
-    length: selectedproduct?.dimensions.split("x")[1] || "",
-    width: selectedproduct?.dimensions.split("x")[2] || "",
+    height: selectedproduct?.dimensions?.split("x")[0] || "",
+    length: selectedproduct?.dimensions?.split("x")[1] || "",
+    width: selectedproduct?.dimensions?.split("x")[2] || "",
   });
+  const [displayOption, setDisplayOption] = useState(
+    selectedproduct?.productDisplayType
+  );
+  console.log("displayOption", displayOption);
 
   const fileInputRef = useRef(null);
 
   const mulitpleimagesFileinputref = useRef(null);
+  const AllCatArray = useAllCatArray();
+
+  console.log(AllCatArray);
 
   // const baseImageUrl =
   //   "https://bwxzfwsoxwtzhjbzbdzs.supabase.co/storage/v1/object/public/addon/";
@@ -87,6 +102,11 @@ function VendorProductEdit({
     vendor_id: selectedproduct?.vendor_id || "",
     product_id: selectedproduct?.product_id || "",
     selectedProductId: selectedproduct?.id || "",
+    mrp: selectedproduct?.ecommercePrice?.mrp || "",
+    sellingPrice: selectedproduct?.ecommercePrice?.sellingPrice || "",
+    quantity: selectedproduct?.stockQty || "",
+    information: selectedproduct?.information || {},
+    additionalInformation: selectedproduct?.additonalinformation || {},
   });
 
   const handleFileChange = (event) => {
@@ -227,11 +247,25 @@ function VendorProductEdit({
   };
 
   useEffect(() => {
-    const filtered = AllCatArray.filter((cat) => cat.name === category);
-    const subcattodisplay = filtered.flatMap((subcat) => subcat.subCat1);
+    console.log("cateogry", category);
+
+    console.log("allcatarray in useeffect", AllCatArray);
+
+    const filtered = AllCatArray?.filter(
+      (cat) => cat?.name?.toLowerCase() === category?.toLowerCase()
+    );
+
+    console.log("filtered", filtered);
+    const subcattodisplay = filtered.flatMap((subcat) => subcat?.subCat1);
     setSubcat(subcattodisplay);
+    console.log("subcat", subcattodisplay);
+
     // setResources(filtered);
-  }, [category]);
+  }, [category, AllCatArray]);
+
+  const cleanTitle = (str) => {
+    return str.replace(/[^a-zA-Z0-9 ]/g, "");
+  };
 
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -312,9 +346,10 @@ function VendorProductEdit({
         productId = variant.product_id;
       }
       if (variant.title && variant.price && file) {
+        let cleanedTitle = cleanTitle(variant.title);
         const oldImagePath = selectedproduct?.image;
         // const uniqueID = uuidv4();
-        const newImagePath = `${variant.title}-main-${uniqueID}`;
+        const newImagePath = `${cleanedTitle}-main-${uniqueID}`;
         console.log("oldImagePath", oldImagePath);
         console.log("newImagePath", newImagePath);
 
@@ -369,7 +404,8 @@ function VendorProductEdit({
 
       for (const imageFile of filebasedadditionalimages) {
         const fileUuid = uuidv4();
-        const filePath = `${variant.title}-additional-${currentIndex}-${fileUuid}`;
+        let cleanedTitle = cleanTitle(variant.title);
+        const filePath = `${cleanedTitle}-additional-${currentIndex}-${fileUuid}`;
 
         const { data: additionalImageUpload, error: additionalImageError } =
           await supabase.storage.from("addon").upload(filePath, imageFile.file);
@@ -394,7 +430,7 @@ function VendorProductEdit({
         .from("product_variants")
         .update({
           title: variant.title,
-          price: variant.price,
+          price: +variant.price,
           details: variant.details,
           image: imagepath, // Store the main image path
           additional_images: useradditionalimages, // Store paths of additional images
@@ -404,6 +440,14 @@ function VendorProductEdit({
           product_type: subSubCategory,
           product_id: productId,
           status: "pending",
+          productDisplayType: displayOption,
+          stockQty: +variant.quantity,
+          ecommercePrice: {
+            mrp: variant.mrp,
+            sellingPrice: variant.sellingPrice,
+          },
+          information: variant?.information || {},
+          additonalinformation: variant?.additionalInformation || {},
         })
         .eq("id", variant.selectedProductId); // Use the correct column and value to match the row you want to update
 
@@ -422,7 +466,7 @@ function VendorProductEdit({
       console.log("Error in onSubmit:", error);
       toast.error("An unexpected error occurred.");
     } finally {
-      //   handleFormClear();
+      // handleFormClear();
       setIsSubmitting(false);
     }
 
@@ -475,7 +519,7 @@ function VendorProductEdit({
         console.log(filter.join(","));
       }
     }
-  }, [category, subSubCategory]);
+  }, [category, subSubCategory, AllCatArray]);
 
   const handleDimensionChange = (e) => {
     const { name, value } = e.target;
@@ -532,11 +576,38 @@ function VendorProductEdit({
   console.log("imageurl", imageUrl);
   console.log("typeof main image", typeof variant.mainImage === "string");
 
-  if (loading) {
+  if (loading || AllCatArray?.length === 0) {
     return (
       <div className="flex justify-center items-center">Loading ......</div>
     );
   }
+
+  const handleChangeAdditionalInformation = (e) => {
+    const { name, value } = e.target;
+    setVariant((prev) => ({
+      ...prev,
+      additionalInformation: {
+        ...prev.additionalInformation,
+        [name]: value,
+      },
+    }));
+  };
+  const handleChangeInformation = (e) => {
+    const { name, value } = e.target;
+    setVariant((prev) => ({
+      ...prev,
+      information: {
+        ...prev.information,
+        [name]: value,
+      },
+    }));
+  };
+
+  const AdditonalInformation = additionalDetailsConfig.filter(
+    (info) =>
+      info.category.toLowerCase() === category.toLowerCase() &&
+      info.subcategory.toLowerCase() === subSubCategory.toLowerCase()
+  );
 
   return (
     <div className="flex flex-col justify-center items-start font-Poppins relative">
@@ -613,10 +684,34 @@ function VendorProductEdit({
                   <option value="" disabled>
                     Select Category
                   </option>
-                  {subcat.map((cat, index) => {
+                  {subcat?.map((cat, index) => {
                     return (
                       <option key={index} value={cat}>
                         {cat}
+                      </option>
+                    );
+                  })}
+                </select>
+              </div>
+              <div>
+                <h4 className="text-[#7B7B7B]">
+                  Select where to display the product
+                </h4>
+                <select
+                  name="displayType"
+                  id="displayType"
+                  className="w-full border-2 py-1.5 px-2 rounded-lg"
+                  value={displayOption}
+                  onChange={(e) => setDisplayOption(e.target.value)}
+                  required
+                >
+                  <option value="" disabled>
+                    Select display option
+                  </option>
+                  {displayOptions.map((option, index) => {
+                    return (
+                      <option key={index} value={option}>
+                        {option}
                       </option>
                     );
                   })}
@@ -641,28 +736,40 @@ function VendorProductEdit({
                   required
                 />
               </div>
+              <FormInput
+                label={"Short Description"}
+                name={"ShortDescription"}
+                type={"text"}
+                value={variant?.information?.["ShortDescription"] || ""}
+                placeholder={"short despcriton max 150 charcter"}
+                maxLength={150}
+                onChange={handleChangeInformation}
+              />
               <div>
                 <h4 className="text-[#7B7B7B]">product details</h4>
                 <textarea
                   type="textarea"
                   name="details"
                   onChange={handleChange}
+                  maxLength={150}
                   value={variant.details}
                   className="w-full py-1.5 px-2 border-2 rounded-lg"
                   required
                 />
               </div>
-              <div>
-                <h4 className="text-[#7B7B7B]">product price</h4>
-                <input
-                  type="number"
-                  name="price"
-                  onChange={handleChange}
-                  value={variant.price}
-                  className="w-full py-1.5 px-2 border-2 rounded-lg [&::-webkit-inner-spin-button]:appearance-none  focus:outline-none focus:ring-0"
-                  required
-                />
-              </div>
+              {(displayOption === "boq" || displayOption === "both") && (
+                <div>
+                  <h4 className="text-[#7B7B7B]">BOQ price</h4>
+                  <input
+                    type="number"
+                    name="price"
+                    onChange={handleChange}
+                    value={variant.price}
+                    className="w-full py-1.5 px-2 border-2 rounded-lg [&::-webkit-inner-spin-button]:appearance-none  focus:outline-none focus:ring-0"
+                    required
+                  />
+                </div>
+              )}
               <div>
                 <h4 className="text-[#7B7B7B]">
                   product dimension:(H x L x W)
@@ -703,10 +810,92 @@ function VendorProductEdit({
                   </div>
                 </div>
               </div>
+
+              {productInfoFields?.map((field, idx) => (
+                <>
+                  <FormInput
+                    key={idx}
+                    label={field.label}
+                    name={field.name}
+                    type={field.type}
+                    value={variant?.information?.[field.name] || ""}
+                    placeholder={field.placeholder}
+                    onChange={handleChangeInformation}
+                  />
+                </>
+              ))}
             </div>
           </div>
+          {/* div for e-commerce details */}
+          {(displayOption === "ecommerce" || displayOption === "both") && (
+            <div className="w-full shadow-lg border-2 p-5 my-3 rounded-xl capitalize">
+              <div>
+                <h4 className="text-[#7B7B7B]">MRP</h4>
+                <input
+                  type="number"
+                  name="mrp"
+                  onChange={handleChange}
+                  value={variant?.mrp}
+                  className="w-full py-1.5 px-2 border-2 rounded-lg [&::-webkit-inner-spin-button]:appearance-none  focus:outline-none focus:ring-0"
+                  required
+                />
+              </div>
+              <div>
+                <h4 className="text-[#7B7B7B]">Selling price</h4>
+                <input
+                  type="number"
+                  name="sellingPrice"
+                  onChange={handleChange}
+                  value={variant?.sellingPrice}
+                  className="w-full py-1.5 px-2 border-2 rounded-lg [&::-webkit-inner-spin-button]:appearance-none  focus:outline-none focus:ring-0"
+                  required
+                />
+              </div>
+              <div>
+                <h4 className="text-[#7B7B7B]">Quantity</h4>
+                <input
+                  type="number"
+                  name="quantity"
+                  onChange={handleChange}
+                  value={variant?.quantity}
+                  className="w-full py-1.5 px-2 border-2 rounded-lg [&::-webkit-inner-spin-button]:appearance-none  focus:outline-none focus:ring-0"
+                  required
+                />
+              </div>
+            </div>
+          )}
         </div>
         <div className="w-full lg:w-1/2 ">
+          {AdditonalInformation?.length > 0 && (
+            <div>
+              <div className="flex justify-start items-center gap-2 mb-3">
+                <h3 className="capitalize text-xl font-semibold">
+                  Additional details
+                </h3>
+              </div>
+              <div className="w-full shadow-lg border-2 p-5 my-3 rounded-xl capitalize">
+                {AdditonalInformation.map((group, index) => (
+                  <div key={index} className="mb-8 space-y-4">
+                    {group.fields.map((field, idx) => (
+                      <>
+                        <FormInput
+                          key={idx}
+                          label={field.label}
+                          name={field.name}
+                          type={field.type}
+                          value={
+                            variant?.additionalInformation?.[field.name] || ""
+                          }
+                          placeholder={field.placeholder}
+                          onChange={handleChangeAdditionalInformation}
+                        />
+                      </>
+                    ))}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
           {/* div for images */}
           <div>
             <div className="flex justify-start items-center gap-2 mb-3">
@@ -912,3 +1101,29 @@ function VendorProductEdit({
 }
 
 export default VendorProductEdit;
+
+function FormInput({
+  label,
+  name,
+  type,
+  value,
+  placeholder,
+  onChange,
+  ...rest
+}) {
+  return (
+    <div>
+      <p className="text-[#7B7B7B]">{label}</p>
+      <input
+        type={type}
+        name={name}
+        value={value}
+        placeholder={placeholder}
+        onChange={onChange}
+        className="w-full py-1.5 px-2 border-2 rounded-lg"
+        {...rest}
+        required
+      />
+    </div>
+  );
+}

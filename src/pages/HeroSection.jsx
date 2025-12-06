@@ -1,28 +1,38 @@
-import LandingNavbar from "../common-components/LandingNavbar";
-function HeroSection({ background, title }) {
+import { motion } from "framer-motion";
+function HeroSection({ title, description, imagePath }) {
   return (
-    <div>
-      {/* Navbar Section */}
-      <header className="bg-white shadow-lg z-50 relative">
-        <LandingNavbar />
-      </header>
-
-      {/* Hero Section */}
-      <section
-        className="relative h-[60vh] flex items-center text-center justify-center bg-cover bg-center bg-no-repeat bg-gray-100"
-        style={{
-          backgroundImage: `url(${background})`,
-          backgroundAttachment: "fixed",
-        }}
-      >
-        <div className="absolute inset-0 bg-black opacity-50"></div>
-        <div className="relative z-10 font-lora font-bold">
-          <h1 className="text-4xl md:text-5xl  text-white drop-shadow-lg">
-            {title}
-          </h1>
+    <section className="pt-10 xl:pt-0 bg-[#334a78]">
+      <div className="md:container px-4 flex flex-col gap-6 lg:gap-0 lg:flex-row justify-between items-center xl:max-w-7xl xl:px-0">
+        <div className="text-[#304778] flex flex-col justify-center items-center lg:items-start text-center lg:text-start gap-5 flex-1">
+          {title && (
+            <h2 className="font-TimesNewRoman italic text-3xl xl:text-[44px] xl:leading-[53px] tracking-[0.3px] font-bold text-white capitalize whitespace-pre-line">
+              {title}
+            </h2>
+          )}
+          {description && (
+            <p
+              className="text-base md:text-2xl text-white  font-Georgia tracking-wide whitespace-pre-line"
+              dangerouslySetInnerHTML={{ __html: description }}
+            >
+              {/* {description} */}
+            </p>
+          )}
         </div>
-      </section>
-    </div>
+
+        <motion.div
+          className="flex justify-center xl:py-8 xl:pl-8 flex-1"
+          initial={{ x: 300, opacity: 0 }}
+          animate={{ x: 0, opacity: 1 }}
+          transition={{ duration: 1, ease: "easeOut" }}
+        >
+          <img
+            src={imagePath ? imagePath : "/images/serviceHero.webp"}
+            alt="Office Layout"
+            className="xl:py-10 xl:pl-10 flex-1"
+          />
+        </motion.div>
+      </div>
+    </section>
   );
 }
 

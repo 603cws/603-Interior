@@ -7,10 +7,11 @@ import AddressForm from "./AddressForm";
 import { v4 as uuidv4 } from "uuid";
 import toast from "react-hot-toast";
 import CheckoutStepper from "../../common-components/CheckoutStepper";
-import { MdOutlineCancel, MdOutlineKeyboardArrowLeft } from "react-icons/md";
+import { MdOutlineKeyboardArrowLeft } from "react-icons/md";
 import { useLocation, useNavigate } from "react-router-dom";
 import AppliedCoupon from "../../common-components/AppliedCoupon";
-import PriceDetail from "../../common-components/PriceDetail";
+// import PriceDetail from "../../common-components/PriceDetail";
+import { deliverDays } from "../../constants/constant";
 
 function Addresspage() {
   const [isAddressFormOpen, setIsAddressFormOpen] = useState(false);
@@ -21,12 +22,15 @@ function Addresspage() {
 
   const [ismobilenewAddressOpen, setIsMobilenewAddressOpen] = useState(false);
 
+  const [ispaymentLoading, setpaymentLoading] = useState(false);
+
   const navigate = useNavigate();
   const location = useLocation();
 
   console.log("data from cart page", location.state);
 
   const pricingdetails = location?.state?.data || null;
+  console.log("pricing details ", pricingdetails);
 
   const { accountHolder, fetchUserData, isAuthenticated } = useApp();
 
@@ -225,14 +229,735 @@ function Addresspage() {
     }
   };
 
+  const deleteOrder = async (id) => {
+    const { error } = await supabase.from("orders").delete().eq("id", id);
+
+    if (error) throw new Error("couldnt delete the order ");
+  };
+
+  const deleteOrderTableItem = async (id) => {
+    const { error } = await supabase.from("orders_table").delete().eq("id", id);
+
+    if (error) throw new Error("couldnt delete the order ");
+  };
+
+  const deleteCart = async (userid) => {
+    const { error } = await supabase
+      .from("userProductCollection")
+      .delete()
+      .eq("userId", userid)
+      .eq("type", "cart");
+
+    if (error) throw new Error("couldnt delete the cart ");
+  };
+
+  console.log("cartitems", cartItems);
+
+  console.log("accountholder", accountHolder);
+
+  // const checkStock = (availableStock, requiredQty) => {
+  //   if (availableStock > requiredQty) return true;
+  // };
+
+  //   {
+  //     "id": "69114cb6-b408-4cec-852c-6c17cbf2edc0",
+  //     "created_at": "2025-11-15T06:17:51.599394+00:00",
+  //     "productId": {
+  //         "id": "d4bedb5d-b06a-444c-8dd3-9bef55e631de",
+  //         "type": "product",
+  //         "image": "https://bwxzfwsoxwtzhjbzbdzs.supabase.co/storage/v1/object/sign/addon/Pendant%20Lamp-main-aae716e6-c431-43cb-b3d7-3840e952cb4b?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV8wMDY5NzIxYy1kNTEwLTQzNzYtYTE0OS01YzMwMDBjZjVhNGEiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJhZGRvbi9QZW5kYW50IExhbXAtbWFpbi1hYWU3MTZlNi1jNDMxLTQzY2ItYjNkNy0zODQwZTk1MmNiNGIiLCJpYXQiOjE3NjMzNTU2NDcsImV4cCI6MTc2MzM1OTI0N30.kDMpf-9sg3E7w6sQnJ9aTmgZe9FcsZU0OID2w-yVC7k",
+  //         "price": 0,
+  //         "title": "Pendant Lamp",
+  //         "status": "approved",
+  //         "default": null,
+  //         "details": "Pendant Lamp",
+  //         "segment": "Minimal",
+  //         "stockQty": 9,
+  //         "vendor_id": "859f3a20-dcd6-464c-aad1-f0ed495a25cd",
+  //         "created_at": "2025-11-14T04:52:12.345612+00:00",
+  //         "dimensions": "5x5x5",
+  //         "product_id": "aae716e6-c431-43cb-b3d7-3840e952cb4b",
+  //         "manufacturer": "Workved",
+  //         "product_type": "Lights",
+  //         "reject_reason": "",
+  //         "ecommercePrice": {
+  //             "mrp": "2702",
+  //             "sellingPrice": "2599.00"
+  //         },
+  //         "additional_images": "[\"Pendant Lamp-additional-0-aae716e6-c431-43cb-b3d7-3840e952cb4b\"]",
+  //         "productDisplayType": "ecommerce"
+  //     },
+  //     "quantity": 1,
+  //     "type": "cart",
+  //     "userId": "21e0b7e5-6276-4608-9f0f-0d0b0f802f46"
+  // }
+
+  async function OrderAndItemCreation(
+    formattedDeliveryDate,
+    pricingdetails,
+    accountHolder,
+    cartItems
+  ) {
+    try {
+      //1) create the order
+      const { data: neworder, error } = await supabase
+        .from("orders_table")
+        .insert([
+          {
+            status: "pending",
+            user_id: accountHolder?.userId,
+            coupon: {
+              name: pricingdetails?.coupon || "",
+              discount: pricingdetails?.discount,
+            },
+            total_mrp: pricingdetails?.price,
+            sub_total: pricingdetails?.subtotal,
+            discount_on_mrp: pricingdetails?.discountOnMrp,
+            final_amount: pricingdetails?.finalValue,
+            charges: {
+              GST: pricingdetails?.gst,
+              delivery: pricingdetails?.shippingFee,
+            },
+            shipping_address: getDefaultAddress,
+            delivery_date: formattedDeliveryDate,
+          },
+        ])
+        .select()
+        .single();
+
+      if (error) {
+        throw error;
+      }
+      //2) based on this order adding all the products in the order item table
+      const formattedItem = cartItems?.map((item, i) => {
+        const discountOnMrp =
+          item?.productId?.ecommercePrice?.mrp -
+          item?.productId?.ecommercePrice?.sellingPrice;
+
+        const sellingPrice = item?.productId?.ecommercePrice?.sellingPrice;
+
+        const itemTotal = sellingPrice * item?.quantity;
+
+        const coupondiscount =
+          itemTotal * (pricingdetails?.coupon?.discountPerc / 100) || 0;
+
+        //subtotal = sellingprice - coupondiscount
+        const subtotal = itemTotal - coupondiscount;
+
+        //final price = subtotal + gst
+        const gst = subtotal * 0.18;
+        const finalprice = subtotal + gst;
+        return {
+          order_id: neworder?.id, // uuid (FK to order_table)
+          product_id: item?.productId?.id, // uuid
+          mrp: item?.productId?.ecommercePrice?.mrp, // number
+          selling_price: sellingPrice, // number
+          quantity: item?.quantity, // number
+          item_total: itemTotal || 0,
+          coupon_discount: coupondiscount, // number
+          gst_amount: subtotal * 0.18, // number
+          sub_total: subtotal, // number
+          refundable_amount: finalprice, // number
+          // item_status: "", // string
+          // merchant_refund_id: "", // string
+          // refund: {}, // json
+          discount_on_mrp: discountOnMrp, // number
+          final_amount: finalprice, // number
+        };
+      });
+
+      const { data, error: itemError } = await supabase
+        .from("order_items")
+        .insert(formattedItem)
+        .select();
+
+      if (itemError) throw itemError;
+
+      console.log("data", data);
+      return { neworder, data };
+    } catch (error) {
+      console.log("error", error);
+    }
+  }
+
+  const handlePayment = async () => {
+    // test for iframe
+    // setpaymentLoading((prev) => !prev);
+    try {
+      //check for availability
+      const insufficientStock = cartItems.filter(
+        (item) => item.productId.stockQty < item.quantity
+      );
+
+      if (insufficientStock.length > 0) {
+        insufficientStock.forEach((item) => {
+          toast.error(
+            `${item.productId.title} only has ${item.productId.stockQty} left in stock.`
+          );
+        });
+        setpaymentLoading(false);
+        return;
+      }
+      // create a order in db
+      const products = cartItems.map((item) => ({
+        id: item.productId.id,
+        // price: item.productId.price,
+        price: item?.productId?.ecommercePrice?.sellingPrice,
+        ecommercePriceObject: item?.productId?.ecommercePrice,
+        quantity: item.quantity,
+        image: item?.productId?.image,
+        name: item?.productId?.title,
+        description: item?.productId?.details,
+        vendorId: item?.productId?.vendor_id,
+      }));
+
+      console.log("products", products);
+
+      const today = new Date();
+      const deliveryDate = new Date(today);
+      deliveryDate.setDate(today.getDate() + 14);
+
+      // Format as (year, month, day)
+      const formattedDeliveryDate = [
+        deliveryDate.getFullYear(),
+        deliveryDate.getMonth() + 1,
+        deliveryDate.getDate(),
+      ];
+      console.log(formattedDeliveryDate);
+
+      const result = await OrderAndItemCreation(
+        formattedDeliveryDate,
+        pricingdetails,
+        accountHolder,
+        cartItems
+      );
+
+      if (!result) {
+        console.log("Something went wrong. No result returned.");
+        return;
+      }
+
+      const { neworder, data: orderItems } = result;
+
+      console.log("Order created:", neworder);
+      console.log("Order items inserted:", orderItems);
+
+      // unique orderId (you can also do this from backend)
+      const orderId = neworder?.id;
+      const amount = Math.round(neworder?.final_amount * 100); // amount in paise (10000 = ₹100)
+      const orderData = {
+        email: accountHolder?.email,
+        name: accountHolder?.companyName,
+        orderId: orderId,
+        total: {
+          totalMRP: pricingdetails?.price,
+          finalPrice: pricingdetails?.finalValue,
+          charges: {
+            GST: pricingdetails?.gst,
+            delivery: pricingdetails?.shippingFee,
+          },
+        },
+        // total: pricingdetails?.finalValue,
+        items: products,
+        address: getDefaultAddress,
+      };
+
+      console.log("orderdata", orderData);
+
+      const res = await fetch(
+        "https://bwxzfwsoxwtzhjbzbdzs.supabase.co/functions/v1/newcreateorder",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ amount, orderId }),
+        }
+      );
+
+      console.log("response", res);
+
+      const data = await res.json();
+      console.log("res data", data);
+
+      if (data.success && data.token && window.PhonePeCheckout) {
+        window.PhonePeCheckout.transact({
+          tokenUrl: data.url,
+          type: "IFRAME",
+          callback: async (response) => {
+            console.log("PhonePe response:", response);
+
+            if (response === "USER_CANCEL") {
+              toast.error("Payment cancelled by user.");
+              console.log("user cancelled", response);
+
+              await deleteOrderTableItem(orderId);
+              return;
+            } else if (response === "CONCLUDED") {
+              toast.success(" verifying status…");
+              // ✅ Always call your backend status API here
+              // verifyPaymentStatus(orderId);
+
+              const res = await fetch(
+                `https://bwxzfwsoxwtzhjbzbdzs.supabase.co/functions/v1/neworderstatus?id=${orderId}`,
+                {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                }
+              );
+
+              console.log("response from order status", res);
+
+              const data = await res.json();
+
+              console.log("data from order status", data);
+
+              if (data?.success && data?.status === "COMPLETED") {
+                toast.success("payment completed");
+
+                //update quantity
+                for (const item of cartItems) {
+                  const newStock = item.productId.stockQty - item.quantity;
+
+                  if (newStock < 0) continue;
+
+                  const { error: stockError } = await supabase
+                    .from("product_variants")
+                    .update({ stockQty: newStock })
+                    .eq("id", item.productId.id);
+
+                  if (stockError) {
+                    console.error(
+                      `Failed to update stock for ${item.productId.title}:`,
+                      stockError
+                    );
+                  } else {
+                    console.log(
+                      `Updated stock for ${item.productId.title}: ${item.productId.stockQty} → ${newStock}`
+                    );
+                  }
+                }
+
+                // clear the cart
+                const userid = accountHolder?.userId;
+                await deleteCart(userid);
+                // send email
+                // await fetch(
+                //   "https://bwxzfwsoxwtzhjbzbdzs.supabase.co/functions/v1/orderemail",
+                //   {
+                //     method: "POST",
+                //     headers: { "Content-Type": "application/json" },
+                //     body: JSON.stringify(orderData),
+                //   }
+                // );
+                setpaymentLoading((prev) => !prev);
+
+                //navigate to a congrats page
+                navigate(`/orderSuccess/${orderId}`, { replace: true });
+              }
+              if (!data?.success && data?.status === "FAILED") {
+                toast.error("something went wrong");
+
+                console.log("data", data);
+                await deleteOrderTableItem(orderId);
+                //navigate to a congrats page
+                setpaymentLoading((prev) => !prev);
+
+                navigate("/cart");
+              }
+              if (!data?.success && data?.status === "PENDING") {
+                console.log("payment pending");
+                toast.error("payment status pending");
+
+                console.log("data", data);
+                setpaymentLoading((prev) => !prev);
+              }
+            }
+          },
+        });
+      } else {
+        toast.error("Failed to create order: " + data.message);
+        await deleteOrder(orderId);
+        setpaymentLoading((prev) => !prev);
+      }
+    } catch (err) {
+      console.error("Payment error:", err);
+      toast.error("Something went wrong. Please try again.");
+      setpaymentLoading((prev) => !prev);
+    }
+  };
+  // original working payment
+  // const handlePayment = async () => {
+  //   // test for iframe
+  //   setpaymentLoading((prev) => !prev);
+  //   try {
+  //     //check for availability
+  //     const insufficientStock = cartItems.filter(
+  //       (item) => item.productId.stockQty < item.quantity
+  //     );
+
+  //     if (insufficientStock.length > 0) {
+  //       insufficientStock.forEach((item) => {
+  //         toast.error(
+  //           `${item.productId.title} only has ${item.productId.stockQty} left in stock.`
+  //         );
+  //       });
+  //       setpaymentLoading(false);
+  //       return;
+  //     }
+  //     // create a order in db
+  //     const products = cartItems.map((item) => ({
+  //       id: item.productId.id,
+  //       // price: item.productId.price,
+  //       price: item?.productId?.ecommercePrice?.sellingPrice,
+  //       ecommercePriceObject: item?.productId?.ecommercePrice,
+  //       quantity: item.quantity,
+  //       image: item?.productId?.image,
+  //       name: item?.productId?.title,
+  //       description: item?.productId?.details,
+  //       vendorId: item?.productId?.vendor_id,
+  //     }));
+
+  //     console.log("products", products);
+
+  //     const today = new Date();
+  //     const deliveryDate = new Date(today);
+  //     deliveryDate.setDate(today.getDate() + 14);
+
+  //     // Format as (year, month, day)
+  //     const formattedDeliveryDate = [
+  //       deliveryDate.getFullYear(),
+  //       deliveryDate.getMonth() + 1,
+  //       deliveryDate.getDate(),
+  //     ];
+  //     console.log(formattedDeliveryDate);
+  //     // 1)create the order to avoid the order not getting created afterwards
+  //     const { data: neworder, error } = await supabase
+  //       .from("orders")
+  //       .insert([
+  //         {
+  //           status: "pending",
+  //           products: products,
+  //           userId: accountHolder?.userId,
+  //           coupon: {
+  //             name: pricingdetails?.coupon || "",
+  //             discount: pricingdetails?.discount,
+  //           },
+  //           totalMRP: pricingdetails?.price,
+  //           finalPrice: pricingdetails?.finalValue,
+  //           charges: {
+  //             GST: pricingdetails?.gst,
+  //             delivery: pricingdetails?.shippingFee,
+  //           },
+  //           shippingAddress: getDefaultAddress,
+  //           deliveryDate: formattedDeliveryDate,
+  //         },
+  //       ])
+  //       .select()
+  //       .single();
+  //     if (error) {
+  //       throw new Error("data not insterted");
+  //     }
+
+  //     // unique orderId (you can also do this from backend)
+  //     const orderId = neworder?.id;
+  //     const amount = Math.round(neworder?.finalPrice * 100); // amount in paise (10000 = ₹100)
+
+  //     //       {
+  //     //     "price": 5502,
+  //     //     "discountOnMrp": 304,
+  //     //     "discount": 0,
+  //     //     "gst": 990.36,
+  //     //     "finalValue": 6188.36,
+  //     //     "coupon": "",
+  //     //     "shippingFee": 0
+  //     // }
+  //     // data formatting for email
+  //     const orderData = {
+  //       email: accountHolder?.email,
+  //       name: accountHolder?.companyName,
+  //       orderId: orderId,
+  //       total: {
+  //         totalMRP: pricingdetails?.price,
+  //         finalPrice: pricingdetails?.finalValue,
+  //         charges: {
+  //           GST: pricingdetails?.gst,
+  //           delivery: pricingdetails?.shippingFee,
+  //         },
+  //       },
+  //       // total: pricingdetails?.finalValue,
+  //       items: products,
+  //       address: getDefaultAddress,
+  //     };
+
+  //     console.log("orderdata", orderData);
+
+  //     const res = await fetch(
+  //       "https://bwxzfwsoxwtzhjbzbdzs.supabase.co/functions/v1/newcreateorder",
+  //       {
+  //         method: "POST",
+  //         headers: { "Content-Type": "application/json" },
+  //         body: JSON.stringify({ amount, orderId }),
+  //       }
+  //     );
+
+  //     console.log("response", res);
+
+  //     const data = await res.json();
+  //     console.log("res data", data);
+
+  //     if (data.success && data.token && window.PhonePeCheckout) {
+  //       window.PhonePeCheckout.transact({
+  //         tokenUrl: data.url,
+  //         type: "IFRAME",
+  //         callback: async (response) => {
+  //           console.log("PhonePe response:", response);
+
+  //           if (response === "USER_CANCEL") {
+  //             toast.error("Payment cancelled by user.");
+  //             console.log("user cancelled", response);
+
+  //             await deleteOrder(orderId);
+  //             return;
+  //           } else if (response === "CONCLUDED") {
+  //             toast.success(" verifying status…");
+  //             // ✅ Always call your backend status API here
+  //             // verifyPaymentStatus(orderId);
+
+  //             const res = await fetch(
+  //               `https://bwxzfwsoxwtzhjbzbdzs.supabase.co/functions/v1/neworderstatus?id=${orderId}`,
+  //               {
+  //                 method: "POST",
+  //                 headers: { "Content-Type": "application/json" },
+  //               }
+  //             );
+
+  //             console.log("response from order status", res);
+
+  //             const data = await res.json();
+
+  //             console.log("data from order status", data);
+
+  //             if (data?.success && data?.status === "COMPLETED") {
+  //               toast.success("payment completed");
+
+  //               //update quantity
+  //               for (const item of cartItems) {
+  //                 const newStock = item.productId.stockQty - item.quantity;
+
+  //                 if (newStock < 0) continue;
+
+  //                 const { error: stockError } = await supabase
+  //                   .from("product_variants")
+  //                   .update({ stockQty: newStock })
+  //                   .eq("id", item.productId.id);
+
+  //                 if (stockError) {
+  //                   console.error(
+  //                     `Failed to update stock for ${item.productId.title}:`,
+  //                     stockError
+  //                   );
+  //                 } else {
+  //                   console.log(
+  //                     `Updated stock for ${item.productId.title}: ${item.productId.stockQty} → ${newStock}`
+  //                   );
+  //                 }
+  //               }
+
+  //               // clear the cart
+  //               const userid = accountHolder?.userId;
+  //               await deleteCart(userid);
+  //               // send email
+  //               // await fetch(
+  //               //   "https://bwxzfwsoxwtzhjbzbdzs.supabase.co/functions/v1/orderemail",
+  //               //   {
+  //               //     method: "POST",
+  //               //     headers: { "Content-Type": "application/json" },
+  //               //     body: JSON.stringify(orderData),
+  //               //   }
+  //               // );
+  //               setpaymentLoading((prev) => !prev);
+
+  //               //navigate to a congrats page
+  //               navigate(`/orderSuccess/${orderId}`, { replace: true });
+  //             }
+  //             if (!data?.success && data?.status === "FAILED") {
+  //               toast.error("something went wrong");
+
+  //               console.log("data", data);
+  //               await deleteOrder(orderId);
+  //               //navigate to a congrats page
+  //               setpaymentLoading((prev) => !prev);
+
+  //               navigate("/cart");
+  //             }
+  //             if (!data?.success && data?.status === "PENDING") {
+  //               console.log("payment pending");
+  //               toast.error("payment status pending");
+
+  //               console.log("data", data);
+  //               setpaymentLoading((prev) => !prev);
+  //             }
+  //           }
+  //         },
+  //       });
+  //     } else {
+  //       toast.error("Failed to create order: " + data.message);
+  //       await deleteOrder(orderId);
+  //       setpaymentLoading((prev) => !prev);
+  //     }
+  //   } catch (err) {
+  //     console.error("Payment error:", err);
+  //     toast.error("Something went wrong. Please try again.");
+  //     setpaymentLoading((prev) => !prev);
+  //   }
+  // };
+
+  // const testingemail = async () => {
+  //   // create a order in db
+  //   const products = cartItems.map((item) => ({
+  //     id: item.productId.id,
+  //     price: item.productId.price,
+  //     quantity: item.quantity,
+  //     image: item?.productId?.image,
+  //   }));
+
+  //   const orderData = {
+  //     email: "yuvraj603cws@gmail.com",
+  //     name: "John Doe",
+  //     orderId: "12345",
+  //     total: 99.99,
+  //     items: products,
+  //     // items: [
+  //     //   {
+  //     //     name: "Product 1",
+  //     //     description: "Awesome product",
+  //     //     price: 49.99,
+  //     //     qty: 1,
+  //     //     image: "https://via.placeholder.com/70",
+  //     //   },
+  //     //   {
+  //     //     name: "Product 2",
+  //     //     description: "Another product",
+  //     //     price: 50.0,
+  //     //     qty: 1,
+  //     //     image: "https://via.placeholder.com/70",
+  //     //   },
+  //     // ],
+  //     address: {
+  //       name: "John Doe",
+  //       street: "123 Main St",
+  //       city: "Mumbai",
+  //       state: "MH",
+  //       pin: "400001",
+  //       phone: "9876543210",
+  //     },
+  //   };
+
+  //   await fetch(
+  //     "https://bwxzfwsoxwtzhjbzbdzs.supabase.co/functions/v1/orderemail",
+  //     {
+  //       method: "POST",
+  //       headers: { "Content-Type": "application/json" },
+  //       body: JSON.stringify(orderData),
+  //     }
+  //   );
+  // };
+
+  // redirect method
+  // const handlePayment = async () => {
+  //   try {
+  //     // create a order in db
+  //     const products = cartItems.map((item) => ({
+  //       id: item.productId.id,
+  //       price: item.productId.price,
+  //       quantity: item.quantity,
+  //     }));
+
+  //     const today = new Date();
+  //     const deliveryDate = new Date(today);
+  //     deliveryDate.setDate(today.getDate() + 14);
+
+  //     // Format as (year, month, day)
+  //     const formattedDeliveryDate = [
+  //       deliveryDate.getFullYear(),
+  //       deliveryDate.getMonth() + 1,
+  //       deliveryDate.getDate(),
+  //     ];
+  //     console.log(formattedDeliveryDate);
+
+  //     const { data: neworder, error } = await supabase
+  //       .from("orders")
+  //       .insert([
+  //         {
+  //           status: "pending",
+  //           products: products,
+  //           userId: accountHolder?.userId,
+  //           coupon: {
+  //             name: pricingdetails?.coupon || "",
+  //             discount: pricingdetails?.discount,
+  //           },
+  //           totalMRP: pricingdetails?.price,
+  //           finalPrice: pricingdetails?.finalValue,
+  //           charges: {
+  //             GST: pricingdetails?.gst,
+  //             delivery: pricingdetails?.shippingFee,
+  //           },
+  //           shippingAddress: getDefaultAddress,
+  //           deliveryDate: formattedDeliveryDate,
+  //         },
+  //       ])
+  //       .select()
+  //       .single();
+
+  //     if (error) {
+  //       throw new Error("data not insterted");
+  //     }
+
+  //     // Generate a unique orderId (you can also do this from backend)
+  //     const orderId = neworder?.id;
+  //     const amount = Math.round(neworder?.finalPrice * 100); // amount in paise (10000 = ₹100)
+
+  //     const res = await fetch(
+  //       "https://bwxzfwsoxwtzhjbzbdzs.supabase.co/functions/v1/createorder",
+  //       {
+  //         method: "POST",
+  //         headers: { "Content-Type": "application/json" },
+  //         body: JSON.stringify({ amount, orderId }),
+  //       }
+  //     );
+
+  //     console.log("response", res);
+
+  //     const data = await res.json();
+
+  //     if (data.success && data.url) {
+  //       // Redirect user to PhonePe checkout
+  //       window.location.href = data.url;
+  //     } else {
+  //       alert("Failed to create order: " + data.message);
+  //     }
+  //     console.log("new order", neworder);
+  //   } catch (err) {
+  //     console.error("Payment error:", err);
+  //     alert("Something went wrong. Please try again.");
+  //   }
+  // };
+
   // handle the continue click
   const handleContinue = () => {
-    if (isAuthenticated) {
-      navigate("/payments");
+    // testingemail();
+    if (accountHolder?.role === "user") {
+      handlePayment();
+    } else {
+      toast.error("only acccount with role user can purchase");
     }
   };
 
-  if (!pricingdetails) {
+  if (
+    !pricingdetails ||
+    !accountHolder ||
+    !isAuthenticated ||
+    cartItems?.length === 0
+  ) {
     return navigate("/cart");
   }
 
@@ -578,7 +1303,7 @@ function Addresspage() {
                       Total MRP
                     </h5>
                     <h5 className="font-medium  text-[#111111]/80 ">
-                      {pricingdetails?.price}
+                      Rs {pricingdetails?.price}
                     </h5>
                   </div>
 
@@ -587,7 +1312,26 @@ function Addresspage() {
                       Discount on MRP
                     </h5>
                     <h5 className="font-medium  text-[#34BFAD]/80 ">
-                      -{pricingdetails?.discount}
+                      RS -{pricingdetails?.discountOnMrp?.toFixed(2)}
+                    </h5>
+                  </div>
+
+                  {pricingdetails?.discount > 0 && (
+                    <div>
+                      <AppliedCoupon
+                        savedamount={pricingdetails?.discount}
+                        // handleRemove={handleRemoveCoupon}
+                        code={pricingdetails?.coupon.couponName}
+                      />
+                    </div>
+                  )}
+
+                  <div className="flex justify-between">
+                    <h5 className="font-medium  text-[#111111]/80">
+                      Total MRP
+                    </h5>
+                    <h5 className="font-medium  text-[#111111]/80 ">
+                      Rs {pricingdetails?.subtotal}
                     </h5>
                   </div>
 
@@ -600,30 +1344,24 @@ function Addresspage() {
                     </h5>
                   </div> */}
 
-                  {pricingdetails?.discount > 0 && (
-                    <div>
-                      <AppliedCoupon
-                        savedamount={pricingdetails?.discount}
-                        // handleRemove={handleRemoveCoupon}
-                        code={pricingdetails?.coupon.couponName}
-                      />
-                    </div>
-                  )}
-
                   <div className="flex justify-between border-b-[1px]">
                     <div>
                       <h5 className="font-medium  text-[#111111]/80">
                         Shipping Fee
                       </h5>
                       <p className="text-xs text-[#111111]/50 font-medium pb-2">
-                        {pricingdetails.shippingFee === 0 &&
+                        {pricingdetails?.shippingFee === 0 &&
                           "Free Shipping for you"}
                       </p>
                     </div>
                     <h5 className="font-medium  text-[#34BFAD]/80 uppercase">
-                      {pricingdetails.shippingFee > 0
-                        ? pricingdetails.shippingFee
-                        : "Free"}
+                      {pricingdetails.shippingFee > 0 ? (
+                        <span>
+                          Rs {pricingdetails?.shippingFee?.toFixed(2)}
+                        </span>
+                      ) : (
+                        "Free"
+                      )}
                     </h5>
                   </div>
 
@@ -634,7 +1372,7 @@ function Addresspage() {
                       </h5>
                     </div>
                     <h5 className="font-medium  text-[#34BFAD]/80 uppercase">
-                      {pricingdetails?.gst}
+                      Rs {pricingdetails?.gst?.toFixed(2)}
                     </h5>
                   </div>
 
@@ -643,7 +1381,7 @@ function Addresspage() {
                       Total Amount
                     </h5>
                     <h5 className="font-medium lg:text-xl text-[#111111] ">
-                      {pricingdetails.finalValue}
+                      Rs {pricingdetails?.finalValue?.toFixed(2)}
                     </h5>
                   </div>
                 </div>
@@ -655,10 +1393,11 @@ function Addresspage() {
 
               {accountHolder?.address?.length > 0 && (
                 <button
+                  disabled={ispaymentLoading}
                   onClick={handleContinue}
                   className="hidden uppercase text-xl text-[#ffffff] tracking-wider w-full lg:flex justify-center items-center bg-[#334A78] border border-[#212B36] py-3 rounded-sm font-thin"
                 >
-                  Continue
+                  Pay now
                 </button>
               )}
             </div>
@@ -674,9 +1413,10 @@ function Addresspage() {
           <div className="w-[90%]">
             <button
               onClick={handleContinue}
+              disabled={ispaymentLoading}
               className="uppercase text-xl text-white tracking-wider w-full bg-[#334A78] border border-[#212B36] py-3 rounded-sm font-thin"
             >
-              Continue
+              pay now
             </button>
           </div>
         </div>
@@ -779,18 +1519,27 @@ function AddressCard({
 }
 
 function DeliveryEstimate({ product }) {
+  // Calculate estimated delivery date (15 days from today)
+  const today = new Date();
+  const deliveryDate = new Date(today);
+  deliveryDate.setDate(today.getDate() + deliverDays);
+
+  // Format the date as "day month year", e.g., "30 Jun 2025"
+  const options = { day: "numeric", month: "short", year: "numeric" };
+  const formattedDate = deliveryDate.toLocaleDateString("en-US", options);
+
   return (
     <div className="flex lg:border-b lg:border-b-[#ccc] p-4 font-Poppins font-medium items-center gap-2">
       <div>
         <img
           src={product.productId.image}
-          alt="sample prodcut "
+          alt="sample product"
           className="w-16 object-contain"
         />
       </div>
       <p className="text-sm text-[#111]/60 leading-[22.4px]">
-        Estimated delivery by {/* date-month-year  */}
-        <span className="text-[#111]">9 Jun 2025</span>{" "}
+        Estimated delivery by{" "}
+        <span className="text-[#111]">{formattedDate}</span>
       </p>
     </div>
   );

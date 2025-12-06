@@ -78,7 +78,7 @@ function AboutUs() {
     <>
       <LandingNavbar className="relative" />
       <section className="pt-10 xl:pt-0 bg-[#334a78]">
-        <div className=" md:container px-4 flex flex-col gap-6 lg:gap-0 lg:flex-row justify-between items-center xl:max-w-7xl xl:px-0">
+        <div className=" md:container px-4 flex flex-col gap-6 lg:gap-0 lg:flex-row justify-between items-center xl:max-w-7xl 2xl:px-0">
           <div className=" text-[#304778] flex flex-col justify-center items-center lg:items-start text-center lg:text-start gap-5 flex-1">
             {/* <h4 className="font-TimesNewRoman italic font-bold text-4xl capitalize tracking-wider leading-[50px]">
               Creating Workspaces <br /> that inspires
@@ -123,14 +123,14 @@ function AboutUs() {
             transition={{ duration: 1, ease: "easeOut" }}
             className=" xl:py-10 xl:pl-10 flex-1"
           >
-            <img src="/images/aboutusHero.webp" alt="" />
+            <img src="/images/aboutusHero.webp" alt="about us hero" />
             {/* <img src="/images/about-us/about-us-hero.png" alt="" /> */}
           </motion.div>
         </div>
       </section>
 
       <section className="relative pt-20 lg:py-20 bg-[url('/images/about-us/about-us-bg.png')] bg-no-repeat bg-right-top bg-contain font-Georgia">
-        <div className="lg:container px-4 xl:max-w-7xl xl:px-0">
+        <div className="lg:container px-4 xl:max-w-7xl 2xl:px-0">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 h-3/4">
             <div className="flex flex-col justify-center">
               <h2 className="text-xl md:text-4xl font-bold  text-black mb-4 font-Georgia">
@@ -161,7 +161,7 @@ function AboutUs() {
         <QuoteSection />
       </section>
 
-      <section className="relative py-16 lg:container px-4 xl:max-w-7xl xl:px-0">
+      <section className="relative py-16 lg:container px-4 xl:max-w-7xl 2xl:px-0">
         <div className="flex items-center justify-center gap-4 mb-2">
           <span className="w-8 h-px bg-[#304778] mb-2"></span>
           <h5 className="text-sm text-[#304778] font-bold  uppercase font-Georgia">
@@ -251,7 +251,7 @@ export default AboutUs;
 function QuoteSection() {
   const navigate = useNavigate();
   return (
-    <section className="font-Georgia lg:container mx-auto px-4 xl:max-w-7xl xl:px-0">
+    <section className="font-Georgia lg:container mx-auto px-4 xl:max-w-7xl 2xl:px-0">
       <div className="grid md:grid-cols-2 xl:grid-cols-[1fr,1.4fr] gap-8  bg-[#304778] border border-[#CFF3FF] rounded-2xl p-6 md:p-10 items-stretch h-[800px] md:h-[500px]">
         {/* Left: Quote */}
         <div className="flex flex-col justify-between text-white ">

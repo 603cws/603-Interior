@@ -10,14 +10,14 @@ const LazyImage = ({
   const [error, setError] = useState(false);
 
   return (
-    <div className={`relative ${className}`}>
+    <div className="relative w-full">
       {loading && !error && (
         <div className="absolute inset-0 bg-gray-300 rounded"></div>
       )}
       <img
         src={error ? fallback : src}
         alt={alt}
-        className={`w-full h-full object-cover ${
+        className={`${className} ${
           loading ? "opacity-0" : "opacity-100"
         } transition-opacity duration-300`}
         onLoad={() => setLoading(false)}

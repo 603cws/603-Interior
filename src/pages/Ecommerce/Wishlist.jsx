@@ -5,23 +5,22 @@ import { supabase } from "../../services/supabase";
 import { useNavigate } from "react-router-dom";
 import BottomTabs from "./BottomTabs";
 import { ToastContainer } from "react-toastify";
-
-import { useHandleAddToCart } from "../../utils/HelperFunction";
+// import { useHandleAddToCart } from "../../utils/HelperFunction";
 import { useEffect, useState } from "react";
-
 import SpinnerFullPage from "../../common-components/SpinnerFullPage";
 import { showRemoveFromCartToast } from "../../utils/AddToCartToast";
-import { MdOutlineKeyboardArrowLeft } from "react-icons/md";
 import MobileHeader from "../../common-components/MobileHeader";
+import LoginPopup from "../../common-components/LoginPopup";
 
 function Wishlist() {
   const [wishlistItems, setWishlistItems] = useState([]);
 
   const [isloading, setIsloading] = useState(false);
+  const [loginPop, setLoginPopup] = useState(false);
 
   const { isAuthenticated } = useApp();
 
-  const { handleAddToCart } = useHandleAddToCart();
+  // const { handleAddToCart } = useHandleAddToCart();
 
   const getWishlistItems = async () => {
     setIsloading(true);
@@ -120,7 +119,7 @@ function Wishlist() {
   const handleMoveToCart = async (product) => {
     console.log(product);
     try {
-      const { data, error } = await supabase
+      const { error } = await supabase
         .from("userProductCollection")
         .update({ type: "cart" })
         .eq("id", product.id);
@@ -159,10 +158,7 @@ function Wishlist() {
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-6 gap-2">
             {wishlistItems.map((item, index) => (
-              <div
-                key={index}
-                className="font-Poppins max-w-xs lg:w-[245px] lg:h-[350px] relative"
-              >
+              <div key={index} className="font-Poppins relative border">
                 <div className="relative flex justify-center items-center p-2">
                   <img
                     src={item.productId.image}
@@ -181,13 +177,15 @@ function Wishlist() {
                 <div className="bg-[#fff] p-2">
                   <div className="flex mb-2 lg:mb-4">
                     <div className="flex-1 text-[10px] lg:text-sm  leading-[22.4px]  text-[#111]  lg:space-y-1.5">
-                      <h4 className="font-medium text-sm leading-[22.4px] uppercase">
+                      <h4 className="font-medium text-sm leading-[22.4px] uppercase line-clamp-1">
                         {item.productId.title}
                       </h4>
                       <div className="flex items-center gap-2">
-                        <p className=" ">&#8377; {item.productId.price}</p>
+                        <p className=" ">
+                          RS {item?.productId?.ecommercePrice?.sellingPrice}
+                        </p>
                         <p className="line-through text-[#111] text-opacity-50">
-                          Rs &#8377;5678
+                          Rs {item?.productId?.ecommercePrice?.mrp}
                         </p>
                         <p className="text-[#C20000] uppercase">sale</p>
                       </div>
@@ -202,7 +200,7 @@ function Wishlist() {
                         // handleAddToCart(item);
                       }
                     }}
-                    className="text-[#000] capitalize bg-[#FFFFFF] text-[6px] md:text-[10px] lg:text-xs border border-[#ccc] px-2  py-2 rounded-sm "
+                    className="text-[#000] capitalize bg-[#FFFFFF] text-[6px] md:text-[10px] lg:text-xs border border-[#ccc] px-2  py-2 rounded-sm hover:bg-[#DDDDDD]"
                   >
                     {item.type === "cart" ? "Go to Cart" : "Move to Cart"}
                   </button>
@@ -220,9 +218,13 @@ function Wishlist() {
           </div>
         </section>
       ) : (
-        <div className="flex  flex-col gap-4 justify-center items-center h-[75vh] lg:h-full">
+        <div className="flex flex-col gap-4 justify-center items-center h-[80vh]">
           <div className="flex justify-center items-center">
-            <img src="/images/emptywishlist.png" alt="" className="max-w-sm" />
+            <img
+              src="/images/emptywishlist.png"
+              alt="empty wishlist"
+              className="max-w-sm"
+            />
           </div>
           <h2 className="font-Poppins font-semibold text-xl lg:text-2xl text-[#000]">
             {isAuthenticated ? "Your Wishlist is Empty" : "PLEASE LOG IN"}
@@ -233,10 +235,12 @@ function Wishlist() {
               : "Login to view items in your wishlist."}
           </p>
           <button
-            onClick={() => navigate("/products")}
-            className="bg-[#334A78] border border-[#212B36] text-xs text-white tracking-wider uppercase py-3 active:scale-90 transition-transform ease-in-out duration-500 px-10 font-Poppins font-semibold"
+            onClick={() => {
+              isAuthenticated ? navigate("/products") : setLoginPopup(true);
+            }}
+            className="bg-[#334A78] border border-[#212B36] text-xs text-white tracking-wider uppercase py-3 active:scale-90 transition-transform ease-in-out duration-500 px-10 font-Poppins font-semibold hover:bg-[#4464A3] rounded"
           >
-            start shopping
+            {isAuthenticated ? "start shopping" : "Login"}
           </button>
           {/* <button
             onClick={() => navigate("/products")}
@@ -249,6 +253,7 @@ function Wishlist() {
       <div className="hidden lg:block fixed bottom-0 w-full">
         <BottomTabs />
       </div>
+      {loginPop && <LoginPopup onClose={() => setLoginPopup(false)} />}
     </div>
   );
 }

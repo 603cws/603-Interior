@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { supabase } from "../services/supabase";
 import { FaAngleLeft } from "react-icons/fa6";
 import { FcGoogle } from "react-icons/fc";
 import { IoEyeOffOutline, IoEyeOutline } from "react-icons/io5";
-import { replace, useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useApp } from "../Context/Context";
 // import { use } from "react";
 import toast from "react-hot-toast";
@@ -22,8 +22,7 @@ function Login() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(false);
 
-  const { setUserId, setIsAuthenticated, setCurrentLayoutID, setProgress } =
-    useApp();
+  const { setUserId, setIsAuthenticated, setCurrentLayoutID } = useApp();
 
   const navigate = useNavigate();
   const resetBOQ = useResetBOQ();
@@ -38,7 +37,7 @@ function Login() {
 
   const location = useLocation();
 
-  const from = location.state?.from;
+  // const from = location.state?.from;
 
   // console.log("helloooooo");
 

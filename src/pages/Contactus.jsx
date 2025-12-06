@@ -2,7 +2,6 @@ import Footer from "../common-components/Footer";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useState } from "react";
-import HeroSection from "./HeroSection";
 import LandingNavbar from "../common-components/LandingNavbar";
 
 function Contactus() {

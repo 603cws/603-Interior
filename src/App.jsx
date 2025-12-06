@@ -3,9 +3,6 @@ import { lazy, Suspense } from "react";
 import Boq from "./boq/pages/Boq";
 import PageNotFound from "./common-components/PageNotFound";
 import { Navigate, Route, Routes } from "react-router-dom";
-import ErrorModal from "./common-components/ErrorModal";
-import RecommendComp from "./boq/components/RecommendComp";
-import SelectArea from "./boq/components/SelectArea";
 import Landing from "./pages/Landing";
 import SpinnerFullPage from "./common-components/SpinnerFullPage";
 import Contactus from "./pages/Contactus";
@@ -15,33 +12,21 @@ import Login from "./common-components/Login";
 // import OurServices from "./pages/OurServices";
 import OurServices2 from "./pages/OurServices2";
 import BlogDetail from "./pages/BlogDetail";
-import ProfileCard from "./boq/components/ProfileCard";
 import Dashboard from "./pages/Dashboard";
 import ScrollToTop from "./common-components/ScrollToTop";
 // import BecomeSeller from "./pages/BecomeSeller";
 import { useApp } from "./Context/Context";
-import Plans from "./common-components/Plans";
 import HelpnFaq from "./pages/HelpnFaq";
 import TermsAndCondition from "./pages/TermsAndCondition";
 import Boqcompleted from "./common-components/Boqcompleted";
-import Howtosell from "./pages/Howtosell";
-import VendorDashboard from "./pages/vendor/VendorDashboard";
 // import AdminDashboard from "./pages/AdminDashboard";
 import AdminDashboard from "./pages/Admin/AdminDashboard";
-import PricingCard from "./common-components/PricingCard";
-import VendorRegister from "./pages/vendor/VendorRegister";
 import DoorScrollEffect from "./pages/DoorScrollEffect";
-import BookAppointment from "./boq/components/BookAppointment";
 import ProductOverview from "./boq/pages/ProductOverview";
-import Sessiontimeout from "./pages/Sessiontimeout";
-import Brokenlink from "./pages/Brokenlink";
-import TokenExpired from "./pages/TokenExpired";
 import JobPage from "./pages/JobPage";
 import ThreeDViewer from "./common-components/ThreeDViewer";
 import CompleteProfile from "./common-components/CompleteProfile";
-import PartnerWorkvedInterior from "./pages/PartnerWorkvedInterior";
 import Privacy from "./pages/Privacy";
-import OurWork from "./pages/OurWork";
 import InteriorBlog from "./pages/InteriorBlog";
 import Products from "./pages/Ecommerce/Products";
 import ProductView from "./pages/Ecommerce/ProductView";
@@ -65,11 +50,12 @@ import BrandDLink from "./pages/Ecommerce/BrandDLink";
 import VendorDashboardLayout from "./pages/vendor/VendorDashboardLayout";
 import PrivateRoute from "./utils/PrivateRoute";
 import Services from "./pages/Services";
-import Contactuscopy from "./pages/Contactus copy";
 import OurStory from "./pages/OurStory";
-
-
-const Home = lazy(() => import("./pages/Home"));
+import OrderConfirm from "./pages/Ecommerce/OrderConfirm";
+import AdminDashboardEcom from "./pages/Admin/EcommerceDashboard/AdminDashboardEcom";
+import DashboardInterface from "./pages/Admin/DashboardInterface";
+import YouMayAlsoLike from "./pages/Ecommerce/YouMayAlsoLike";
+import DynamicTitle from "./common-components/DynamicTitle";
 
 // const Homepage = lazy(() => import("./pages/Homepage"));
 const Layout = lazy(() => import("./layout/pages/Layout"));
@@ -88,6 +74,7 @@ function App() {
   return (
     <div>
       <ScrollToTop />
+      <DynamicTitle />
       {/* <Layout /> */}
       {/* <Boq /> */}
       <Suspense fallback={<SpinnerFullPage />}>
@@ -139,7 +126,8 @@ function App() {
               <PrivateRoute>
                 {accountHolder?.role ? (
                   accountHolder.role === "admin" ? (
-                    <AdminDashboard />
+                    // <AdminDashboard />
+                    <DashboardInterface />
                   ) : accountHolder.role === "vendor" ? (
                     // <VendorDashboard />
                     <VendorDashboardLayout />
@@ -155,14 +143,19 @@ function App() {
             }
           />
 
-          <Route path="/becomeseller" element={<OurWork />} />
+          <Route
+            path="/admindashboard"
+            element={
+              <PrivateRoute>
+                {accountHolder?.role && accountHolder.role === "admin" && (
+                  <AdminDashboard />
+                )}
+              </PrivateRoute>
+            }
+          />
+
           <Route path="/help" element={<HelpnFaq />} />
           <Route path="/termsNcondition" element={<TermsAndCondition />} />
-          <Route path="/howtosell" element={<Howtosell />} />
-          <Route path="/sessiontimeout" element={<Sessiontimeout />} />
-          <Route path="/brokenlink" element={<Brokenlink />} />
-          <Route path="/tokenExpired" element={<TokenExpired />} />
-          <Route path="/partnerwithus" element={<PartnerWorkvedInterior />} />
           <Route path="/products" element={<Products />} />
           <Route path="/products/topdeal" element={<TopDeal />} />
           <Route path="/products/seasonspecial" element={<SeasonSpecial />} />
@@ -183,8 +176,30 @@ function App() {
           <Route path="/brands/furniture" element={<BrandFurniture />} />
           <Route path="/brands/light" element={<BrandLight />} />
           <Route path="/brands/dlink" element={<BrandDLink />} />
+          <Route path="/orderSuccess/:id" element={<OrderConfirm />} />
+          <Route path="/cart/similarproducts" element={<YouMayAlsoLike />} />
           {/* testing route */}
           <Route path="/boqcompleted" element={<Boqcompleted />} />
+          <Route
+            path="/ecommerceadmin"
+            element={
+              <PrivateRoute>
+                {accountHolder?.role && accountHolder.role === "admin" && (
+                  <AdminDashboardEcom />
+                )}
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/admindashboardinterface"
+            element={
+              <PrivateRoute>
+                {accountHolder?.role && accountHolder.role === "admin" && (
+                  <DashboardInterface />
+                )}
+              </PrivateRoute>
+            }
+          />
         </Routes>
       </Suspense>
     </div>

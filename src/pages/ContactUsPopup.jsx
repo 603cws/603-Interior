@@ -84,11 +84,11 @@ function ContactUsPopup({ onClose }) {
   return (
     <>
       <div className="fixed inset-0 flex justify-center items-center bg-[#000]/30 z-20">
-        <div className="max-w-sm md:max-w-xl lg:max-w-3xl 2xl:max-w-4xl w-full mx-2 sm:mx-0 flex bg-[#fff] font-Poppins relative xl:max-h-[90vh] overflow-auto">
-          <div className="flex-1 hidden lg:block ">
+        <div className="max-w-sm md:max-w-xl lg:max-w-3xl 2xl:max-w-4xl w-full mx-2 sm:mx-0 flex bg-[#fff] font-Poppins relative xl:max-h-[90vh] overflow-auto gradient-scrollbar">
+          <div className="flex-1 hidden xl:block sticky top-0 left-0">
             <img
               src="/images/contact-us/contact-popup.png"
-              alt=""
+              alt="contact us background"
               className="h-full w-full object-cover"
             />
           </div>
@@ -103,7 +103,11 @@ function ContactUsPopup({ onClose }) {
                 <h4 className="capitalize font-semibold text-[#304778] text-sm lg:text-base">
                   Get in touch!
                 </h4>
-                <img src="/images/separator.png" alt="" className="w-20 mt-3" />
+                <img
+                  src="/images/separator.png"
+                  alt="separator design icon"
+                  className="w-20 mt-3"
+                />
               </div>
               <h2 className="font-semibold text-xl lg:text-2xl my-3 xl:my-5">
                 Love to hear from you <br /> Get in touch

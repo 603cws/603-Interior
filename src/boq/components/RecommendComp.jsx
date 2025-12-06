@@ -20,7 +20,8 @@ function RecommendComp({ setShowRecommend, currentProduct, manufacturer }) {
           .eq("manufacturer", currentProduct?.manufacturer)
           .eq("product_type", currentProduct?.product_type)
           .eq("status", "approved")
-          .neq("id", currentProduct?.id);
+          .neq("id", currentProduct?.id)
+          .neq("productDisplayType", "ecommerce");
 
         console.log(data);
         setRecommededProducts(data);

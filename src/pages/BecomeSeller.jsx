@@ -182,12 +182,12 @@ const BecomeSeller = () => {
             {/* <img src="/images/becomeseller.png" alt="seller herosection" /> */}
             <img
               src="/images/collab-bg-2.png"
-              alt=""
+              alt="collab background image"
               className="absolute top-0 left-0 w-2/3 xl:w-3/4"
             />
             <img
               src="/images/collab-bg-1.png"
-              alt=""
+              alt="collab background image"
               className="absolute top-36 right-0 w-2/3 xl:w-3/4"
             />
           </div>

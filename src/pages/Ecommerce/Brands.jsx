@@ -45,7 +45,7 @@ function Brands() {
       <section className="container px-4 lg:px-12 mx-auto my-10 mt-24">
         <img
           src="images/ecommerce/header1.png"
-          alt="dfsfd"
+          alt="ecommerce header 1"
           className="w-full object-contain"
         />
       </section>
@@ -54,7 +54,7 @@ function Brands() {
       <section className="container px-4 lg:px-12 mx-auto my-10">
         <img
           src="images/ecommerce/header2.png"
-          alt="dfsfd"
+          alt="ecommerce header 2"
           className="w-full object-contain"
         />
       </section>
@@ -128,17 +128,17 @@ function Brands() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-center justify-self-center w-full p-4">
             <img
               src="/images/ecommerce/image-7.png"
-              alt="ecommerce"
+              alt="ecommerce 7"
               className="w-full"
             />
             <img
               src="/images/ecommerce/image-8.png"
-              alt="ecommerce"
+              alt="ecommerce 8"
               className="w-full"
             />
             <img
               src="/images/ecommerce/image-9.png"
-              alt="ecommerce"
+              alt="ecommerce 9"
               className="w-full"
             />
           </div>

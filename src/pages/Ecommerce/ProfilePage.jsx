@@ -3,7 +3,6 @@ import { supabase } from "../../services/supabase";
 import { BsBoxSeam, BsStars } from "react-icons/bs";
 import { FaRegCircleUser, FaUser } from "react-icons/fa6";
 import { MdKeyboardArrowRight, MdLogout, MdPayments } from "react-icons/md";
-import { PiDotsThreeVerticalBold } from "react-icons/pi";
 import { useApp } from "../../Context/Context";
 import { useLogout } from "../../utils/HelperFunction";
 import { IoCloseOutline } from "react-icons/io5";
@@ -64,7 +63,7 @@ const ProfilePage = () => {
           <div className="flex items-center gap-5 bg-[#F5F8FF] px-3 py-5 my-2">
             <img
               src="/images/home/product-image.png"
-              alt=""
+              alt="product"
               className="h-28 w-24"
             />
             <div>
@@ -190,7 +189,10 @@ const ProfilePage = () => {
               </button>
             </form>
             <div className="flex-1">
-              <img src="/images/workved-gift-card.png" alt="" />
+              <img
+                src="/images/workved-gift-card.png"
+                alt="workved gift card"
+              />
             </div>
           </div>
         </div>

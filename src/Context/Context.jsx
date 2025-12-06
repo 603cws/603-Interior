@@ -9,7 +9,7 @@ import {
 import processData from "../boq/utils/dataProcessor";
 import { calculateTotalPrice } from "../boq/utils/productUtils";
 import { calculateSeatCountTotals } from "../boq/utils/dataProcessor";
-import { calculateTotalPriceHelper } from "../boq/utils/CalculateTotalPriceHelper";
+// import { calculateTotalPriceHelper } from "../boq/utils/CalculateTotalPriceHelper";
 import { numOfCoats } from "../constants/constant";
 
 const AppContext = createContext();
@@ -102,6 +102,7 @@ export const AppProvider = ({ children }) => {
   const [filters, setFilters] = useState({
     category: [],
     priceRange: [0, 10000],
+    brands: [],
   });
   const [BOQTitle, setBOQTitle] = useState(
     sessionStorage.getItem("BOQTitle") || ""
@@ -124,6 +125,12 @@ export const AppProvider = ({ children }) => {
   const [isSaveBOQ, setIsSaveBOQ] = useState(true);
   const [productQuantity, setProductQuantity] = useState({});
   const [allProductQuantities, setAllProductQuantities] = useState({});
+  const [pendingProduct, setPendingProduct] = useState(() => {
+    const stored = sessionStorage.getItem("addToWishlistProduct");
+    return stored ? JSON.parse(stored) : null;
+  });
+  const [categoryConfig, setCategoryConfig] = useState(null);
+
   function normalizeKey(subcategory) {
     return subcategory
       .toLowerCase()
@@ -141,6 +148,36 @@ export const AppProvider = ({ children }) => {
     });
     return normalized;
   }
+
+  useEffect(() => {
+    async function fetchConfig() {
+      const { data, error } = await supabase
+        .from("category_config")
+        .select("config_data");
+
+      if (error) {
+        console.error(error);
+      } else {
+        setCategoryConfig(data?.[0]?.config_data || {});
+      }
+    }
+    fetchConfig();
+  }, []);
+
+  // Function to update config and persist to Supabase
+  const updateCategoryConfig = async (newConfig) => {
+    setCategoryConfig(newConfig);
+    console.log("triggered");
+
+    const { error } = await supabase
+      .from("category_config")
+      .update({ config_data: newConfig, updated_at: new Date().toISOString() })
+      .eq("id", 1); // Assuming single row with id=1
+    if (error) {
+      console.error("Error updating config:", error);
+    }
+  };
+
   useEffect(() => {
     const newSeatCountData = normalizeObjectKeys(seatCountData);
     const newQuantityData = normalizeObjectKeys(quantityData);
@@ -321,20 +358,6 @@ export const AppProvider = ({ children }) => {
     setAllProductQuantities(globalQuantities);
   }, [subCategories, seatCountData, quantityData, selectedCategory]);
 
-  console.log(
-    "Product Quantity:",
-    productQuantity,
-    "quantityData",
-    quantityData[0],
-    "seatCountData",
-    seatCountData,
-    categories,
-    subCategories,
-    "allProductQuantities",
-    allProductQuantities,
-    subCat1
-  );
-
   const handleBOQTitleChange = (title) => {
     if (isSaveBOQ) setBOQTitle(title);
     else console.log("Not allowed to change BOQ Title");
@@ -489,18 +512,26 @@ export const AppProvider = ({ children }) => {
         },
       }));
 
-      //for safety even if a product is added multiple times it will get filtered into one
-      const uniquecartitems = [
-        ...new Map(
-          updatedProducts.map((item) => [item.productId.id, item])
-        ).values(),
-      ];
-      const cartProducts = uniquecartitems.filter(
+      // Separate first
+      const cartProductsRaw = updatedProducts.filter(
         (item) => item.type === "cart"
       );
-      const wishlistProducts = uniquecartitems.filter(
+      const wishlistProductsRaw = updatedProducts.filter(
         (item) => item.type === "wishlist"
       );
+
+      // Deduplicate inside each group
+      const cartProducts = [
+        ...new Map(
+          cartProductsRaw.map((item) => [item.productId.id, item])
+        ).values(),
+      ];
+      const wishlistProducts = [
+        ...new Map(
+          wishlistProductsRaw.map((item) => [item.productId.id, item])
+        ).values(),
+      ];
+
       setCartItems(cartProducts);
       setWishlistItems(wishlistProducts);
     } catch (error) {
@@ -816,6 +847,14 @@ export const AppProvider = ({ children }) => {
     setSelectedCategory(categoryData);
   };
 
+  function filterExcludedItems(category, subCategory, items, config) {
+    const excludeList =
+      config[category]?.[subCategory]?.exclude ||
+      config[category]?.Default?.exclude ||
+      [];
+    return items.filter((item) => !excludeList.includes(item));
+  }
+
   function handleProgressBar(selectedData, categories, subCat1) {
     // Validate selectedData and categories to prevent errors
     if (!Array.isArray(selectedData) || selectedData.length === 0) {
@@ -879,10 +918,15 @@ export const AppProvider = ({ children }) => {
       ) {
         let validSubCat1List = subCat1[category];
 
-        // Exclude "pods" when subcategory is "Pantry" under "Civil / Plumbing"
-        if (category === "Civil / Plumbing" && subcategory === "Pantry") {
-          validSubCat1List = validSubCat1List.filter((item) => item !== "Pods");
+        if (category === "Civil / Plumbing") {
+          validSubCat1List = filterExcludedItems(
+            "Civil / Plumbing",
+            subcategory,
+            validSubCat1List,
+            categoryConfig
+          );
         }
+
         if (category === "Furniture" && subcategory === "Md Cabin") {
           const mainFilled = selectedData.some(
             (item) =>
@@ -926,14 +970,12 @@ export const AppProvider = ({ children }) => {
           }
         }
 
-        if (
-          category === "Furniture" &&
-          (subcategory === "Reception" ||
-            subcategory === "Pantry" ||
-            subcategory === "Breakout Room")
-        ) {
-          validSubCat1List = validSubCat1List.filter(
-            (item) => item !== "Storage"
+        if (category === "Furniture") {
+          validSubCat1List = filterExcludedItems(
+            "Furniture",
+            subcategory,
+            validSubCat1List,
+            categoryConfig
           );
         }
 
@@ -1205,6 +1247,10 @@ export const AppProvider = ({ children }) => {
         productQuantity,
         setProductQuantity,
         allProductQuantities,
+        pendingProduct,
+        setPendingProduct,
+        categoryConfig,
+        updateCategoryConfig,
       }}
     >
       {children}

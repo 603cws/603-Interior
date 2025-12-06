@@ -12,7 +12,6 @@ function TopDeal() {
   const [productsloading, setProductsloading] = useState();
   const [searchParams] = useSearchParams();
   const category = searchParams.get("category");
-  console.log("category", category);
 
   // const [selectedCat, setSelectedCat] = useState("Furniture");
 
@@ -98,6 +97,7 @@ function TopDeal() {
               subtitle={product?.details}
               key={product?.id}
               productID={product?.id}
+              category={product?.product_id?.category}
             />
           ))}
         </div>
@@ -114,7 +114,7 @@ function TopDeal() {
 
 export default TopDeal;
 
-function Card({ image, title, subtitle, productID }) {
+function Card({ image, title, subtitle, productID, category }) {
   const naviagte = useNavigate();
   return (
     <div className="max-w-sm shadow-sm border border-[#CCCCCC] p-2">
@@ -122,7 +122,11 @@ function Card({ image, title, subtitle, productID }) {
         src={image}
         alt={title}
         className="w-full h-48 object-contain cursor-pointer"
-        onClick={() => naviagte(`/productview/${productID}`)}
+        onClick={() =>
+          naviagte(`/productview/${productID}`, {
+            state: { from: `products/topdeal/?category=${category}` },
+          })
+        }
       />
       <h3 className="text-sm lg:text-xl leading-[24px] tracking-[0.96px] font-medium mt-2 mb-1 lg:mb-2 font-Poppins ml-2">
         {title}

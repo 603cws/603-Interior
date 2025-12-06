@@ -8,7 +8,7 @@ function MobileTestimonal({ message, name, companyname, userprofile }) {
         <img
           className="w-[100px] h-[100px] relative rounded-[100px] border border-[#1a3a36]"
           src={`/images/${userprofile}.png`}
-          alt="testimonal person "
+          alt="testimonal person"
         />
       </div>
       <div className="  text-center text-white text-sm font-bold  uppercase leading-[29.60px] tracking-[3.52px]">

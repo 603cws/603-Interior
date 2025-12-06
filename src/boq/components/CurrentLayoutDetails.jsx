@@ -53,6 +53,9 @@ function CurrentLayoutDetails({ onClose }) {
                     <th className=" px-3 py-2">Name</th>
                     <th className=" px-3 py-2 text-center">Area (sq.ft)</th>
                     <th className=" px-3 py-2 text-center">Quantity</th>
+                    <th className=" px-3 py-2 text-center">
+                      TotalArea (sq.ft)
+                    </th>
                     <th className=" px-3 py-2 text-center">Seats</th>
                   </tr>
                 </thead>
@@ -85,6 +88,9 @@ function CurrentLayoutDetails({ onClose }) {
                             {areaValue}
                           </td>
                           <td className=" px-3 py-2 text-center">{qtyValue}</td>
+                          <td className=" px-3 py-2 text-center">
+                            {areaValue * qtyValue}
+                          </td>
                           <td className=" px-3 py-2 text-center">
                             {seatsValue}
                           </td>

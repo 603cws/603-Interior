@@ -1,11 +1,12 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { FcGoogle } from "react-icons/fc";
 import { MdClose } from "react-icons/md";
 import { supabase } from "../services/supabase";
 import toast from "react-hot-toast";
 import { useApp } from "../Context/Context";
+import { useHandleAddToCart } from "../utils/HelperFunction";
 
-export default function LoginPopup({ onClose }) {
+export default function LoginPopup({ onClose, product }) {
   const [isSignUp, setIsSignUp] = useState(false);
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
@@ -13,6 +14,7 @@ export default function LoginPopup({ onClose }) {
   // const [isForgotPassword, setIsForgotPassword] = useState(false);
 
   const { setUserId, setIsAuthenticated } = useApp();
+  const { handleAddtoWishlist } = useHandleAddToCart();
 
   const [formData, setFormData] = useState({
     email: "",
@@ -98,7 +100,7 @@ export default function LoginPopup({ onClose }) {
 
         try {
           setLoading(true);
-          const { data, error } = await supabase.auth.signUp({
+          const { error } = await supabase.auth.signUp({
             email,
             password,
           });
@@ -133,6 +135,7 @@ export default function LoginPopup({ onClose }) {
           toast.success("Profile completed successfully!");
           setUserId(user.id);
           setIsAuthenticated(true);
+          if (product) handleAddtoWishlist(product, 1, true);
           onClose?.();
         } catch (err) {
           toast.error(err.message);
@@ -159,6 +162,7 @@ export default function LoginPopup({ onClose }) {
         toast.success("Login successful!");
         setUserId(data.user?.id);
         setIsAuthenticated(true);
+        if (product) handleAddtoWishlist(product, 1, true);
         onClose?.();
       } catch (err) {
         toast.error(err.message);
@@ -169,7 +173,7 @@ export default function LoginPopup({ onClose }) {
   };
 
   return (
-    <div className="fixed inset-0 bg-[#000]/30 flex justify-center items-center z-10">
+    <div className="fixed inset-0 bg-[#000]/5 flex justify-center items-center z-10">
       <div className="max-w-3xl lg:max-w-4xl w-full relative flex justify-center items-center">
         <div className="absolute right-0 md:right-7 lg:right-10 top-0">
           <button className="text-xl md:text-[#fff]" onClick={onClose}>

@@ -32,7 +32,7 @@ function DashboardCards({
         </h1>
         <img
           src="/images/dashboard-client.png"
-          alt=""
+          alt="dashboard client"
           className="absolute left-2 bottom-4 h-32 w-32 opacity-50"
         />
       </div>
@@ -47,7 +47,7 @@ function DashboardCards({
         </h1>
         <img
           src="/images/dashboard-vendor.png"
-          alt=""
+          alt="dashboard vendor"
           className="absolute left-2 bottom-4 h-32 w-32 opacity-50"
         />
       </div>
@@ -62,7 +62,7 @@ function DashboardCards({
         </h1>
         <img
           src="/images/dashboard-orders.png"
-          alt=""
+          alt="dashboard pending products"
           className="absolute left-2  bottom-4 h-32 w-32 opacity-50"
         />
       </div>
@@ -77,7 +77,7 @@ function DashboardCards({
         </h1>
         <img
           src="/images/dashboard-new-orders.png"
-          alt=""
+          alt="dashboard pending addons"
           className="absolute left-2  bottom-4 h-32 w-32 opacity-50"
         />
       </div>

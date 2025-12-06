@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useApp } from "../../Context/Context";
 import Addon from "./Addon";
-import { toast, Slide } from "react-toastify";
 import { calculateAddonTotalPrice } from "../utils/productUtils";
 import { AddToCartToast } from "../../utils/AddToCartToast";
 import { categoriesWithTwoLevelCheck } from "../../constants/constant";
@@ -28,9 +27,11 @@ function SelectArea({
     handelSelectedData,
     productQuantity,
     setProductQuantity,
+    categoryConfig,
   } = useApp();
 
-  const subCategories = selectedCategory.subcategories;
+  // const subCategories = selectedCategory.subcategories;
+  // const subCategories = selectedProductView?.subcategory;
 
   const [showAddon, setShowAddon] = useState(false);
   const [allSubcategories, setAllSubcategories] = useState([]);
@@ -38,6 +39,7 @@ function SelectArea({
   const [selectedAddons, setSelectedAddons] = useState([]);
   const [submitBtn, setSubmitBtn] = useState(false);
   const [selectedAddonsMap, setSelectedAddonsMap] = useState({});
+  const [commonSubcategories, setCommonSubcategories] = useState([]);
 
   // Fetch existing addons whenever `selectedData` changes
   useEffect(() => {
@@ -52,12 +54,19 @@ function SelectArea({
     if (!allAddons || allAddons.length === 0) setSubmitBtn(true);
   }, [allAddons]);
 
-  const botRight = () => {
-    toast.dark("Product Added", {
-      position: "bottom-right",
-      transition: Slide, // Change this to Zoom, Bounce, Flip for different effects
-    });
-  };
+  // const botRight = () => {
+  //   toast.dark("Product Added", {
+  //     position: "bottom-right",
+  //     transition: Slide, // Change this to Zoom, Bounce, Flip for different effects
+  //   });
+  // };
+  useEffect(() => {
+    const common = selectedProductView.subcategory.filter((item) =>
+      selectedCategory.subcategories.includes(item)
+    );
+    setCommonSubcategories(common);
+  }, [selectedCategory, selectedProductView]);
+  const subCategories = commonSubcategories;
 
   const handleAddonClick = () => {
     setShowAddon(false);
@@ -378,27 +387,38 @@ function SelectArea({
     );
   };
 
+  function isExcluded(category, subCategory, selectedSubCategory1, config) {
+    const categoryRules = config[category] || {};
+    const rules = categoryRules[subCategory] || categoryRules.Default || {};
+
+    // Handle array-type exclude rules
+    if (rules.exclude && Array.isArray(rules.exclude)) {
+      return rules.exclude.includes(selectedSubCategory1);
+    }
+
+    return false; // Not excluded by default
+  }
+
   const handleSelectAll = (checked) => {
     // Expand the list first (so Md Cabin → Main + Visitor)
-    let displayedSubCategories = selectedCategory.subcategories.flatMap(
-      (subCategory) => {
-        if (
-          selectedCategory.category === "Furniture" &&
-          selectedSubCategory1 === "Chair" &&
-          subCategory === "Md Cabin"
-        ) {
-          return ["Md Cabin Main", "Md Cabin Visitor"];
-        }
-        if (
-          selectedCategory.category === "Furniture" &&
-          selectedSubCategory1 === "Chair" &&
-          subCategory === "Manager Cabin"
-        ) {
-          return ["Manager Cabin Main", "Manager Cabin Visitor"];
-        }
-        return [subCategory];
+    //  let displayedSubCategories = selectedCategory.subcategories.flatMap(
+    let displayedSubCategories = commonSubcategories.flatMap((subCategory) => {
+      if (
+        selectedCategory.category === "Furniture" &&
+        selectedSubCategory1 === "Chair" &&
+        subCategory === "Md Cabin"
+      ) {
+        return ["Md Cabin Main", "Md Cabin Visitor"];
       }
-    );
+      if (
+        selectedCategory.category === "Furniture" &&
+        selectedSubCategory1 === "Chair" &&
+        subCategory === "Manager Cabin"
+      ) {
+        return ["Manager Cabin Main", "Manager Cabin Visitor"];
+      }
+      return [subCategory];
+    });
 
     if (checked) {
       const selectable = displayedSubCategories.filter((subCategory) => {
@@ -408,12 +428,11 @@ function SelectArea({
             : subCategory !== "Centralized";
         }
 
-        const notDisabled = !(
-          (subCategory === "Pantry" && selectedSubCategory1 === "Pods") ||
-          ((subCategory === "Reception" ||
-            subCategory === "Pantry" ||
-            subCategory === "Breakout Room") &&
-            selectedSubCategory1 === "Storage")
+        const notDisabled = !isExcluded(
+          selectedCategory.category,
+          subCategory,
+          selectedSubCategory1,
+          categoryConfig
         );
 
         // ✅ Exclude already used by another product
@@ -432,7 +451,8 @@ function SelectArea({
       setSelectedAreas(selectable);
     } else {
       // Get the expanded list first
-      let displayedSubCategories = selectedCategory.subcategories.flatMap(
+      // let displayedSubCategories = selectedCategory.subcategories.flatMap(
+      let displayedSubCategories = commonSubcategories.flatMap(
         (subCategory) => {
           if (
             selectedCategory.category === "Furniture" &&
@@ -470,25 +490,24 @@ function SelectArea({
     }
   };
 
-  const displayedSubCategories = selectedCategory.subcategories.flatMap(
-    (subCategory) => {
-      if (
-        selectedCategory.category === "Furniture" &&
-        selectedSubCategory1 === "Chair" &&
-        subCategory === "Md Cabin"
-      ) {
-        return ["Md Cabin Main", "Md Cabin Visitor"];
-      }
-      if (
-        selectedCategory.category === "Furniture" &&
-        selectedSubCategory1 === "Chair" &&
-        subCategory === "Manager Cabin"
-      ) {
-        return ["Manager Cabin Main", "Manager Cabin Visitor"];
-      }
-      return [subCategory];
+  // const displayedSubCategories = selectedCategory.subcategories.flatMap(
+  const displayedSubCategories = commonSubcategories.flatMap((subCategory) => {
+    if (
+      selectedCategory.category === "Furniture" &&
+      selectedSubCategory1 === "Chair" &&
+      subCategory === "Md Cabin"
+    ) {
+      return ["Md Cabin Main", "Md Cabin Visitor"];
     }
-  );
+    if (
+      selectedCategory.category === "Furniture" &&
+      selectedSubCategory1 === "Chair" &&
+      subCategory === "Manager Cabin"
+    ) {
+      return ["Manager Cabin Main", "Manager Cabin Visitor"];
+    }
+    return [subCategory];
+  });
 
   const allSubcategoriesDisabled = displayedSubCategories
     .filter((subCategory) => {
@@ -498,12 +517,11 @@ function SelectArea({
           : subCategory !== "Centralized";
       }
 
-      return !(
-        (subCategory === "Pantry" && selectedSubCategory1 === "Pods") ||
-        ((subCategory === "Reception" ||
-          subCategory === "Pantry" ||
-          subCategory === "Breakout Room") &&
-          selectedSubCategory1 === "Storage")
+      return !isExcluded(
+        selectedCategory.category,
+        subCategory,
+        selectedSubCategory1,
+        categoryConfig
       );
     })
     .every((subCategory) =>
@@ -516,32 +534,6 @@ function SelectArea({
       )
     );
 
-  // const allSubcategoriesDisabled = selectedCategory.subcategories
-  //   ?.filter((subCategory) => {
-  //     if (selectedCategory.category === "HVAC") {
-  //       return userResponses?.hvacType === "Centralized"
-  //         ? subCategory === "Centralized"
-  //         : subCategory !== "Centralized";
-  //     }
-
-  //     return !(
-  //       (subCategory === "Pantry" && selectedSubCategory1 === "Pods") ||
-  //       ((subCategory === "Reception" ||
-  //         subCategory === "Pantry" ||
-  //         subCategory === "Breakout Room") &&
-  //         selectedSubCategory1 === "Storage")
-  //     );
-  //   })
-  //   .every((subCategory) =>
-  //     isItemSelected(
-  //       selectedData,
-  //       selectedCategory,
-  //       subCategory,
-  //       selectedSubCategory1,
-  //       selectedProductView
-  //     )
-  //   );
-
   const allSelected =
     displayedSubCategories
       .filter((subCategory) => {
@@ -550,12 +542,11 @@ function SelectArea({
             ? subCategory === "Centralized"
             : subCategory !== "Centralized";
         }
-        return !(
-          (subCategory === "Pantry" && selectedSubCategory1 === "Pods") ||
-          ((subCategory === "Reception" ||
-            subCategory === "Pantry" ||
-            subCategory === "Breakout Room") &&
-            selectedSubCategory1 === "Storage")
+        return !isExcluded(
+          selectedCategory.category,
+          subCategory,
+          selectedSubCategory1,
+          categoryConfig
         );
       })
       .every(
@@ -569,34 +560,6 @@ function SelectArea({
             selectedProductView
           )
       ) ?? false;
-
-  // const allSelected =
-  //   selectedCategory.subcategories
-  //     ?.filter((subCategory) => {
-  //       if (selectedCategory.category === "HVAC") {
-  //         return userResponses?.hvacType === "Centralized"
-  //           ? subCategory === "Centralized" // Only "Centralized" should be checked
-  //           : subCategory !== "Centralized"; // Exclude "Centralized" for other types
-  //       }
-  //       return !(
-  //         (subCategory === "Pantry" && selectedSubCategory1 === "Pods") ||
-  //         ((subCategory === "Reception" ||
-  //           subCategory === "Pantry" ||
-  //           subCategory === "Breakout Room") &&
-  //           selectedSubCategory1 === "Storage")
-  //       ); // Exclude Pantry when Pods is selected
-  //     })
-  //     .every(
-  //       (subCategory) =>
-  //         selectedAreas.includes(subCategory) ||
-  //         isItemSelected(
-  //           selectedData,
-  //           selectedCategory,
-  //           subCategory,
-  //           selectedSubCategory1,
-  //           selectedProductView
-  //         )
-  //     ) ?? false;
 
   const handleAddonSelect = (addon, isChecked) => {
     const currentGroupKey = `${selectedCategory.category}-${selectedSubCategory}-${selectedSubCategory1}-${selectedProductView.id}`;
@@ -659,6 +622,12 @@ function SelectArea({
     }));
   };
 
+  function isIncluded(category, subCategory, selectedSubCategory1, config) {
+    const categoryRules = config[category] || {};
+    const excludes = categoryRules[subCategory]?.exclude || [];
+    return !excludes.includes(selectedSubCategory1);
+  }
+
   return (
     <div className="fixed inset-0 flex justify-center items-center z-20">
       <div className="relative bg-gradient-to-br from-[#334A78] to-[#68B2DC] p-5 md:p-6 scrollbar-hide">
@@ -683,7 +652,8 @@ function SelectArea({
               <div className="flex flex-col lg:flex-row justify-between gap-8">
                 {/* Subcategories Checkbox List */}
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-                  {selectedCategory.subcategories
+                  {/* {selectedCategory.subcategories */}
+                  {commonSubcategories
                     ?.filter((subCategory) => {
                       // For HVAC, handle centralized logic
                       if (selectedCategory.category === "HVAC") {
@@ -692,28 +662,16 @@ function SelectArea({
                           : subCategory !== "Centralized"; // Show all except "Centralized"
                       }
 
-                      // If the main category is "Civil / Plumbing"
-                      if (selectedCategory.category === "Civil / Plumbing") {
-                        // Always keep "Washrooms"
-                        if (subCategory === "Washrooms") return true;
-
-                        // Remove "Pantry" when "Pods" exists
-                        if (
-                          subCategory === "Pantry" &&
-                          selectedSubCategory1 === "Pods"
-                        ) {
-                          return false;
-                        }
-                      }
-                      if (selectedCategory.category === "Furniture") {
-                        if (
-                          (subCategory === "Reception" ||
-                            subCategory === "Pantry" ||
-                            subCategory === "Breakout Room") &&
-                          selectedSubCategory1 === "Storage"
-                        ) {
-                          return false;
-                        }
+                      if (
+                        selectedCategory.category === "Civil / Plumbing" ||
+                        selectedCategory.category === "Furniture"
+                      ) {
+                        return isIncluded(
+                          selectedCategory.category,
+                          subCategory,
+                          selectedSubCategory1,
+                          categoryConfig
+                        );
                       }
 
                       return true;

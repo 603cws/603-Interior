@@ -6,7 +6,7 @@ import { useEffect, useState, useRef, useReducer } from "react";
 import { VscSignOut } from "react-icons/vsc";
 import { IoSettingsSharp } from "react-icons/io5";
 import { LuBlend } from "react-icons/lu";
-import { BsQuestionCircle } from "react-icons/bs";
+import { BsArchive, BsQuestionCircle } from "react-icons/bs";
 import Help from "../user/Help";
 import { useLogout } from "../../utils/HelperFunction";
 import { FaThLarge } from "react-icons/fa";
@@ -24,6 +24,7 @@ import { BsBoxSeam } from "react-icons/bs";
 import { RiSettingsLine } from "react-icons/ri";
 import { GrCircleQuestion } from "react-icons/gr";
 import { FiLogOut } from "react-icons/fi";
+import Orders from "../Admin/Orders";
 // import { TbCalculator } from "react-icons/tb";
 // import { IoCalendarOutline } from "react-icons/io5";
 // import { LuCalendarPlus2 } from "react-icons/lu";
@@ -37,6 +38,7 @@ function handlesidebarState(state, action) {
         iseditopen: action.payload === "Edit",
         dashboard: action.payload === "Dashboard",
         help: action.payload === "Help",
+        orders: action.payload === "Orders",
         currentSection: action.payload,
       };
     default:
@@ -48,6 +50,7 @@ const SECTIONS = {
   DASHBOARD: "Dashboard",
   PRODUCT: "Product",
   SETTING: "Setting",
+  ORDERS: "Orders",
   HELP: "Help",
 };
 
@@ -56,6 +59,7 @@ const sidebarInitialState = {
   isProductOpen: false,
   dashboard: true,
   help: false,
+  orders: false,
   currentSection: "Dashboard",
 };
 function VendorDashboardLayout() {
@@ -95,6 +99,9 @@ function VendorDashboardLayout() {
   };
   const handleproduct = () => {
     sidebarDispatch({ type: "TOGGLE_SECTION", payload: SECTIONS.PRODUCT });
+  };
+  const handleorders = () => {
+    sidebarDispatch({ type: "TOGGLE_SECTION", payload: SECTIONS.ORDERS });
   };
 
   const handledashboard = () => {
@@ -151,6 +158,14 @@ function VendorDashboardLayout() {
             // icon={<LuBlend />}
             text="Product"
             onClick={handleproduct}
+            isExpanded={isExpanded}
+            currentSection={sidebarstate?.currentSection}
+          />
+          <SidebarItem
+            icon={<BsArchive />}
+            // icon={<LuBlend />}
+            text="Orders"
+            onClick={handleorders}
             isExpanded={isExpanded}
             currentSection={sidebarstate?.currentSection}
           />
@@ -253,6 +268,13 @@ function VendorDashboardLayout() {
                 currentSection={sidebarstate?.currentSection}
                 setIsOpen={setIsOpen}
               />
+              <MobileMenuItem
+                icon={<BsArchive />}
+                title={"Orders"}
+                onClick={handleorders}
+                currentSection={sidebarstate?.currentSection}
+                setIsOpen={setIsOpen}
+              />
 
               <hr className="border-gray-200" />
               <MobileMenuItem
@@ -328,6 +350,9 @@ function VendorDashboardLayout() {
             </div>
           </div>
         )}
+
+        {/* orders */}
+        {sidebarstate?.orders && <Orders vendorId={accountHolder.userId} />}
 
         {sidebarstate?.isProductOpen && (
           <div className="flex flex-col h-full min-h-0 overflow-hidden lg:border-2 border-[#334A78] rounded-lg bg-white">
