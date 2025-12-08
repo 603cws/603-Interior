@@ -659,10 +659,12 @@ function ProductOverview() {
               .map(([key, value]) => (
                 <ShortDiv key={key} title={formatKey(key)} value={value} />
               ))}
-          <ShortDiv
-            title="Manufacturer"
-            value={product?.manufacturer || "N/A"}
-          />
+          {cat?.category === "Furniture" && (
+            <ShortDiv
+              title="Manufacturer"
+              value={product?.manufacturer || "N/A"}
+            />
+          )}
           <div className="border-[#E2E2E2] py-2 pt-6 gap-4 flex flex-col">
             <p className="text-xs md:text-sm capitalize font-bold text-[#334A78]">
               Product Description
