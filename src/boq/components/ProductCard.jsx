@@ -11,7 +11,6 @@ import { HiMiniCheckBadge, HiOutlineBarsArrowDown } from "react-icons/hi2";
 import PagInationNav from "../../common-components/PagInationNav";
 import { MdKeyboardArrowLeft } from "react-icons/md";
 
-// Animation settings for easy customization
 const animations = {
   fadeInLeft: {
     hidden: { opacity: 0, x: -50 },
@@ -36,14 +35,11 @@ const options = [
 
 function ProductCard({
   products,
-  selectedProductView,
   setSelectedProductView,
-  // setShowProductView,
   userResponses,
   setShowSelectArea,
 }) {
   const navigate = useNavigate();
-
   const {
     selectedCategory,
     selectedSubCategory,
@@ -56,11 +52,8 @@ function ProductCard({
 
   const dropdownRef = useRef(null);
   const planOptions = ["Minimal", "Exclusive", "Luxury", "Custom"];
-
   const productsInCategory = products[selectedCategory?.category] || [];
-  // const [loading, setLoading] = useState(true);
-  const [loadingImages, setLoadingImages] = useState({}); // Track image loading
-
+  const [loadingImages, setLoadingImages] = useState({});
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [openSection, setOpenSection] = useState("plan");
   const [selectedPlanFilter, setSelectedPlanFilter] = useState(selectedPlan);
@@ -69,14 +62,11 @@ function ProductCard({
   const [isSortOpen, setIsSortOpen] = useState(false);
   const [isMobileSortOpen, setIsMobileSortOpen] = useState(false);
   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
-
   const toggleSection = (section) => {
     setOpenSection((prev) => (prev === section ? null : section));
   };
-
   const productsInSubCategory = productsInCategory[selectedSubCategory] || [];
 
-  // Move `filteredProducts` ABOVE useEffect
   const filteredProducts = productsInSubCategory
     .filter((product) => {
       if (selectedCategory.category === "HVAC") {
@@ -102,15 +92,12 @@ function ProductCard({
           return selectedBrands.includes(brandName);
         })
         .map((variant) => ({
-          // keep all existing variant fields
           ...variant,
-          // add the parent product's fields you want
           category: product.category,
           subcategory: product.subcategory
             ? product.subcategory.split(",").map((s) => s.trim())
             : [],
           subcategory1: product.subcategory1,
-          // optional: keep original product id too if you need it
           product_id: product.id || variant.product_id || product.product_id,
         }))
     );
@@ -131,17 +118,6 @@ function ProductCard({
         .filter(Boolean)
     )
   );
-
-  // Now filter variants based on the selected plan.
-  // If the plan is "Custom", show all variants. Otherwise, only show variants whose segment matches the selected plan.
-  // const filteredVariants = filteredProducts.filter((variant) => {
-  //   if (selectedPlan === "Custom") return true;
-
-  //   return (
-  //     variant.segment &&
-  //     variant.segment.toLowerCase() === selectedPlan.toLowerCase()
-  //   );
-  // });
 
   const filteredVariants = filteredProducts.filter((variant) => {
     if (selectedPlanFilter === "Custom") return true;
@@ -177,39 +153,34 @@ function ProductCard({
     const updateItemsPerPage = () => {
       const width = window.innerWidth;
       if (width < 768) {
-        setItemsPerPage(14); // Mobile
+        setItemsPerPage(14);
       } else if (width < 1024) {
-        setItemsPerPage(15); // Tablet
+        setItemsPerPage(15);
       } else if (width < 1280) {
-        setItemsPerPage(20); // Laptop
+        setItemsPerPage(20);
       } else if (width < 1800) {
-        setItemsPerPage(20); // Laptop L
+        setItemsPerPage(20);
       } else if (width >= 1800) {
-        setItemsPerPage(24); // 4k
+        setItemsPerPage(24);
       } else {
         setItemsPerPage(12);
       }
     };
 
-    updateItemsPerPage(); // Initial run
+    updateItemsPerPage();
     window.addEventListener("resize", updateItemsPerPage);
     return () => window.removeEventListener("resize", updateItemsPerPage);
   }, []);
 
   useEffect(() => {
-    // setLoading(filteredVariants.length === 0);
     if (setLoading) {
-      // console.log(setLoading);
-
       setTimeout(() => {
         setLoading(false);
       }, 2000);
     }
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Close on outside click
   useEffect(() => {
     function handleClickOutside(event) {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -222,26 +193,6 @@ function ProductCard({
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
-
-  // const timeoutRef = useRef(null);
-
-  // useEffect(() => {
-  //   if (filteredVariants.length === 0) {
-  //     setLoading(true);
-
-  //     timeoutRef.current = setTimeout(() => {
-  //       if (filteredVariants.length === 0) {
-  //         setLoading(false);
-  //         console.log("Array is still empty after 4 seconds");
-  //       }
-  //     }, 2000);
-  //   } else {
-  //     setLoading(false);
-  //     clearTimeout(timeoutRef.current);
-  //   }
-
-  //   return () => clearTimeout(timeoutRef.current);
-  // }, [filteredVariants]);
 
   if (!productsInCategory) {
     return <p>Category "{selectedCategory?.category}" not found.</p>;
@@ -271,7 +222,6 @@ function ProductCard({
   return (
     <div>
       <div className="product-card grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 3xl:grid-cols-6 gap-6 pb-8 pt-8 lg:pt-3 relative">
-        {/* Filter & Sort Dropdowns/Buttons for small screens */}
         <div className="lg:hidden absolute flex justify-between items-center w-full">
           <button
             className="border border-black px-3 py-1.5 flex items-center gap-2 text-sm"
@@ -300,18 +250,16 @@ function ProductCard({
           </button>
 
           {isMobileFilterOpen && (
-            // BACKDROP
             <div
-              className="fixed inset-0 z-40 bg-black/40" // dark overlay
-              onClick={() => setIsMobileFilterOpen(false)} // click outside closes
+              className="fixed inset-0 z-40 bg-black/40"
+              onClick={() => setIsMobileFilterOpen(false)}
             >
               <div
                 className={`fixed bottom-0 left-0 w-full z-50 bg-white border transition-transform ease-in-out duration-500 transform animate-fade-in flex flex-col justify-between ${
                   isMobileFilterOpen ? "translate-y-0" : "translate-y-full"
                 }`}
-                onClick={(e) => e.stopPropagation()} // prevent backdrop click
+                onClick={(e) => e.stopPropagation()}
               >
-                {/* Header */}
                 <div className="flex items-center border-b border-b-[#ccc] px-3 py-2">
                   <button onClick={() => setIsMobileFilterOpen(false)}>
                     <MdKeyboardArrowLeft size={30} color="#304778" />
@@ -323,7 +271,6 @@ function ProductCard({
 
                 {/* Body */}
                 <div className="p-3 space-y-5 font-TimesNewRoman text-sm overflow-y-auto max-h-[60vh]">
-                  {/* PLAN GROUP (accordion item) */}
                   <div className="border border-[#ccc] rounded">
                     <button
                       className="flex w-full items-center justify-between px-3 py-2 text-xs font-semibold uppercase text-[#334A78]"
@@ -412,7 +359,6 @@ function ProductCard({
                     )}
                   </div>
 
-                  {/* BRAND GROUP (accordion item) */}
                   <div className="border border-[#ccc] rounded">
                     <button
                       className="flex w-full items-center justify-between px-3 py-2 text-xs font-semibold uppercase text-[#334A78]"
@@ -461,7 +407,6 @@ function ProductCard({
                   </div>
                 </div>
 
-                {/* Footer (optional count + apply) */}
                 <div className="flex justify-between items-center px-4 py-3 border-t border-[#eee] font-TimesNewRoman text-xs">
                   <div>
                     <h2 className="text-[#000] font-semibold text-base tracking-[1px]">
@@ -483,18 +428,16 @@ function ProductCard({
           )}
 
           {isMobileSortOpen && (
-            // BACKDROP
             <div
-              className="fixed inset-0 z-40 bg-black/40" // dark overlay
-              onClick={() => setIsMobileSortOpen(false)} // click outside closes
+              className="fixed inset-0 z-40 bg-black/40"
+              onClick={() => setIsMobileSortOpen(false)}
             >
               <div
                 className={`fixed bottom-0 left-0 w-full z-50 bg-white border transition-transform ease-in-out duration-500 transform animate-fade-in flex flex-col justify-center ${
                   isMobileSortOpen ? "translate-y-0" : "translate-y-full"
                 }`}
-                onClick={(e) => e.stopPropagation()} // prevent backdrop click
+                onClick={(e) => e.stopPropagation()}
               >
-                {/* Header */}
                 <div className="flex items-center border-b border-b-[#ccc]">
                   <button onClick={() => setIsMobileSortOpen(false)}>
                     <MdKeyboardArrowLeft size={30} color="#304778" />
@@ -504,10 +447,9 @@ function ProductCard({
                   </h2>
                 </div>
 
-                {/* Options */}
                 <div className="space-y-4 p-2">
                   {options.map((opt) => {
-                    const active = sortOption === opt.value; // "newest" | "low" | "high"
+                    const active = sortOption === opt.value;
                     return (
                       <label
                         key={opt.value}
@@ -520,7 +462,6 @@ function ProductCard({
                           {opt.option}
                         </span>
 
-                        {/* Custom radio circle */}
                         <div
                           className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
                             active
@@ -537,13 +478,11 @@ function ProductCard({
           )}
         </div>
 
-        {/* Filter & Sort Dropdowns/Buttons for large screens */}
         <div
           className="absolute right-0 -top-12 hidden lg:block"
           ref={dropdownRef}
         >
           <div className="flex gap-2 items-center">
-            {/* FILTER BUTTON */}
             <button
               className="flex items-center gap-2 border border-black px-2 lg:px-4 py-2 text-sm"
               onClick={() => {
@@ -560,7 +499,6 @@ function ProductCard({
               />
             </button>
 
-            {/* Sort Button */}
             <button
               className="flex items-center gap-2 border border-black px-4 py-2 text-sm"
               onClick={() => {
@@ -575,10 +513,8 @@ function ProductCard({
             </button>
           </div>
 
-          {/* FILTER PANEL (Plan + Brand) */}
           {isFilterOpen && (
             <div className="absolute mt-2 w-36 bg-white shadow-lg z-20">
-              {/* PLAN SECTION */}
               <div className="border-x border-t">
                 <button
                   className="flex w-full items-center justify-between px-4 py-3 text-sm"
@@ -667,7 +603,6 @@ function ProductCard({
                 )}
               </div>
 
-              {/* BRAND SECTION */}
               <div className="border">
                 <button
                   className="flex w-full items-center justify-between px-4 py-3 text-sm"
@@ -747,7 +682,6 @@ function ProductCard({
               animate="visible"
               exit="exit"
             >
-              {/* Image Skeleton */}
               <div className="w-full aspect-[4/3] bg-gray-200 rounded-t-lg"></div>
               <div className="p-4 w-full">
                 <div className="h-4 bg-gray-300  w-3/4 mb-2 rounded"></div>
@@ -771,14 +705,6 @@ function ProductCard({
                   <div
                     title={`${variant.segment} segment`}
                     className="absolute top-0 left-0 font-bold font-Poppins text-sm w-7 h-7 text-white z-10 flex justify-center items-center gap-2  rounded-br-md bg-gradient-to-l from-[#75A2BE] to-[#5584B6]"
-                    //   variant.segment === "Minimal"
-                    //     ? "bg-gradient-to-l from-[#75A2BE] to-[#5584B6]" //"bg-gray-500"    //keep this sunny
-                    //     : variant.segment === "Luxury"
-                    //     ? "bg-gradient-to-l from-[#C79733] to-[#8E691D]" //"bg-yellow-500"
-                    //     : "bg-gradient-to-l from-[#4A4A4A] to-[#1F1F1F]" //"bg-purple-600"
-                    // style={{
-                    //   clipPath: "polygon(0 0, 100% 0, 85% 100%, 0% 100%)",
-                    // }}
                   >
                     {variant.segment === "Exclusive" && (
                       <div className="relative pr-2">
@@ -798,10 +724,6 @@ function ProductCard({
                     {variant.segment === "Minimal" && (
                       <FaStar color="#FFE473" />
                     )}
-
-                    {/* <h4 className="text-xs uppercase md:text-sm">
-                      {variant.segment}
-                    </h4> */}
                   </div>
                 )}
 
@@ -810,12 +732,10 @@ function ProductCard({
                     title="Selected"
                     className="absolute top-0 right-0 bg-[#347ABF] text-xs font-semibold text-white w-7 h-7 z-10 rounded-bl-xl flex justify-center items-center"
                   >
-                    {/* SELECTED */}
                     <HiMiniCheckBadge size={20} color="#A7FF8F" />
                   </div>
                 )}
 
-                {/* Image with Skeleton */}
                 <div className="w-full aspect-[4/3] rounded-t-lg relative">
                   {loadingImages[variant.id] !== false && (
                     <div className="absolute inset-0 bg-gray-200 rounded-t-lg"></div>
@@ -831,11 +751,9 @@ function ProductCard({
                     onLoad={() => handleImageLoad(variant.id)}
                     onClick={() => {
                       setSelectedProductView(variant);
-                      // setShowProductView(true);
-                      navigate(`${variant.id}`); //new ProductOverview
+                      navigate(`${variant.id}`);
                     }}
                   />
-                  {/* CiCirclePlus Icon - Positioned at Bottom Right */}
                   {filterSelectedProduct[0]?.id === variant.id ? (
                     <div className="absolute -bottom-10 md:bottom-2 -right-2 md:right-0 bg-white group-hover:bg-[#EFF8FF] rounded-full p-1 shadow-[0px_2px_6px_0px_rgba(0,0,0,0.1),_inset_0px_4px_6px_0px_rgba(0,0,0,0.1)] cursor-pointer">
                       <GoDash
@@ -861,14 +779,12 @@ function ProductCard({
                   )}
                 </div>
 
-                {/* Product Name */}
                 <div className="px-1 py-3 text-start w-full">
                   <p
                     className="text-sm font-medium text-gray-800 capitalize"
                     onClick={() => {
                       setSelectedProductView(variant);
-                      // setShowProductView(true);
-                      navigate(`${variant.id}`); //new ProductOverview
+                      navigate(`${variant.id}`);
                     }}
                   >
                     <span className="group-hover:text-[#347ABF]">
@@ -901,42 +817,6 @@ function ProductCard({
         currentPage={currentPage}
         handlePageChange={setCurrentPage}
       />
-
-      {/* {totalPages > 1 && (
-        <div className="flex justify-center mt-6 space-x-2 py-4">
-          <button
-            className="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300"
-            onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-            disabled={currentPage === 1}
-          >
-            Prev
-          </button>
-
-          {Array.from({ length: totalPages }, (_, i) => (
-            <button
-              key={i}
-              className={`px-3 py-1 rounded ${
-                currentPage === i + 1
-                  ? "bg-blue-500 text-white"
-                  : "bg-gray-200 hover:bg-gray-300"
-              }`}
-              onClick={() => setCurrentPage(i + 1)}
-            >
-              {i + 1}
-            </button>
-          ))}
-
-          <button
-            className="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300"
-            onClick={() =>
-              setCurrentPage((prev) => Math.min(prev + 1, totalPages))
-            }
-            disabled={currentPage === totalPages}
-          >
-            Next
-          </button>
-        </div>
-      )} */}
     </div>
   );
 }

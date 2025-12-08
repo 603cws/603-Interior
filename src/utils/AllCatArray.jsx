@@ -1,4 +1,3 @@
-import { useApp } from "../Context/Context";
 import { supabase } from "../services/supabase";
 import { useEffect, useState } from "react";
 

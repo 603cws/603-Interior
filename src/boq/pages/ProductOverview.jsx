@@ -16,7 +16,6 @@ import { supabase } from "../../services/supabase";
 import ThreeDViewer from "../../common-components/ThreeDViewer";
 import { motion, AnimatePresence } from "framer-motion";
 import { selectAreaAnimation } from "../constants/animations";
-import { instructions } from "../constants/instructions";
 import YouMayAlsoLike from "../components/YouMayAlsoLike";
 import {
   categoriesWithTwoLevelCheck,
@@ -47,12 +46,11 @@ function ProductOverview() {
   const [products, setProducts] = useState([]);
   const [isProfileCard, setIsProfileCard] = useState(false);
   const [showBoqPrompt, setShowBoqPrompt] = useState(false);
-  const [isDBPlan, setIsDBPlan] = useState(false);
 
   const targetRef = useRef(null);
 
   const scrollToSection = () => {
-    const topOffset = 100; // adjust this based on your navbar height
+    const topOffset = 100;
     const elementPosition = targetRef.current.getBoundingClientRect().top;
     const scrollPosition = window.pageYOffset + elementPosition - topOffset;
 
@@ -124,7 +122,7 @@ function ProductOverview() {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [showRecommend]);
+  }, [showRecommend, setShowRecommend]);
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -171,17 +169,15 @@ function ProductOverview() {
     };
 
     fetchProduct();
-  }, [id, selectedCategory, selectedSubCategory, selectedSubCategory1]);
+  }, [
+    id,
+    selectedCategory,
+    selectedSubCategory,
+    selectedSubCategory1,
+    selectedProductView,
+  ]);
 
   const product = products[0];
-
-  console.log(product);
-
-  const getInstructions = (category) => {
-    return instructions[category] || ["No specific instructions found."];
-  };
-
-  const categoryInstructions = getInstructions(cat?.category);
 
   const additionalImagesArray = product?.additional_images
     ? JSON.parse(product?.additional_images).map(
@@ -276,9 +272,9 @@ function ProductOverview() {
     }
 
     return calculateTotalPrice(
-      null, // category parameter is not used.
-      null, // subCat parameter is not used.
-      null, // subcategory1 parameter is not used.
+      null,
+      null,
+      null,
       cat,
       subCat,
       subCat1,
@@ -289,7 +285,17 @@ function ProductOverview() {
       formulaMap,
       seatCountData
     );
-  }, [cat, subCat, subCat1, quantityData, areasData, userResponses, product]);
+  }, [
+    cat,
+    subCat,
+    subCat1,
+    quantityData,
+    areasData,
+    userResponses,
+    product,
+    formulaMap,
+    seatCountData,
+  ]);
 
   const filteredProducts = useMemo(() => {
     return productData.filter((product) => {
@@ -312,7 +318,7 @@ function ProductOverview() {
         cat?.category === "" || product.category === cat?.category;
       return matchesVariant && matchesCategory;
     });
-  }, [productData, searchQuery, priceRange, cat]);
+  }, [productData, searchQuery, cat]);
 
   const allAddons = filteredProducts.flatMap((product) =>
     product.subcategory1 === subCat1 && Array.isArray(product.addons)
@@ -626,7 +632,6 @@ function ProductOverview() {
                 setIsOpen={setIsOpen}
                 iconRef={iconRef}
                 selectedPlan={selectedPlan}
-                setIsDBPlan={setIsDBPlan}
               />
             </div>
           )}
@@ -653,13 +658,13 @@ function ProductOverview() {
           </div>
           {product?.information &&
             Object.entries(product?.information)
-              .filter(([key, value]) => value && value.trim() !== "") // skip empty values
+              .filter(([key, value]) => value && value.trim() !== "")
               .map(([key, value]) => (
                 <ShortDiv key={key} title={formatKey(key)} value={value} />
               ))}
           {product?.additonalinformation &&
             Object.entries(product?.additonalinformation)
-              .filter(([key, value]) => value && value.trim() !== "") // skip empty values
+              .filter(([key, value]) => value && value.trim() !== "")
               .map(([key, value]) => (
                 <ShortDiv key={key} title={formatKey(key)} value={value} />
               ))}

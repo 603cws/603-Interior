@@ -7,8 +7,8 @@ import { boqLimit } from "../../constants/constant";
 
 function BoqPrompt({ onConfirm, onCancel, isProfileCard, setIsProfileCard }) {
   const [boqTitle, setBoqTitle] = useState("");
-  const [selectedBoq, setSelectedBoq] = useState(""); // Stores selected existing BOQ
-  const [existingBoqs, setExistingBoqs] = useState([]); // Stores fetched BOQs
+  const [selectedBoq, setSelectedBoq] = useState("");
+  const [existingBoqs, setExistingBoqs] = useState([]);
   const [isDraftBoq, setIsDraftBoq] = useState(false);
 
   const {
@@ -29,7 +29,6 @@ function BoqPrompt({ onConfirm, onCancel, isProfileCard, setIsProfileCard }) {
       return;
     }
 
-    // Fetch ALL BOQs (including drafts)
     const { data: allBOQs, error: fetchError } = await supabase
       .from("boq_data_new")
       .select("id, boqTitle, isDraft")
@@ -40,7 +39,6 @@ function BoqPrompt({ onConfirm, onCancel, isProfileCard, setIsProfileCard }) {
       return;
     }
 
-    // Detect if current BOQ is a draft
     const current = allBOQs.find(
       (b) => b.id === BOQID && b.boqTitle === BOQTitle
     );
@@ -48,15 +46,8 @@ function BoqPrompt({ onConfirm, onCancel, isProfileCard, setIsProfileCard }) {
       setIsDraftBoq(current.isDraft);
     }
 
-    // Filter only non-draft BOQs for limit & selection list
     const nonDraftBOQs = allBOQs.filter((b) => !b.isDraft);
     setExistingBoqs(nonDraftBOQs);
-
-    // if (nonDraftBOQs.length >= boqLimit) {
-    //   toast.error(
-    //     `You can only save up to ${boqLimit} BOQs (Drafts excluded).`
-    //   );
-    // }
   };
 
   useEffect(() => {
@@ -77,7 +68,6 @@ function BoqPrompt({ onConfirm, onCancel, isProfileCard, setIsProfileCard }) {
     }
 
     try {
-      // Rename draft
       if (isDraftBoq && boqTitle.trim() && !selectedBoq) {
         const newName = boqTitle.trim();
 
@@ -90,10 +80,7 @@ function BoqPrompt({ onConfirm, onCancel, isProfileCard, setIsProfileCard }) {
         setBOQTitle(newName);
         toast.success(`Draft BOQ saved as "${newName}"`);
         onConfirm(BOQID, false);
-      }
-
-      // Override existing
-      else if (isDraftBoq && selectedBoq) {
+      } else if (isDraftBoq && selectedBoq) {
         const { data: draftData, error: draftError } = await supabase
           .from("boq_data_new")
           .select("products, boqTotalPrice, planType, answers")
@@ -114,28 +101,13 @@ function BoqPrompt({ onConfirm, onCancel, isProfileCard, setIsProfileCard }) {
           .eq("id", selectedBoq);
         if (updateError) throw updateError;
 
-        // toast.success(`Draft BOQ overridden into "${existing?.boqTitle}"`);
-
-        // await supabase
-        //   .from("boq_data_new")
-        //   .update({
-        //     products: [],
-        //     boqTotalPrice: 0,
-        //     selectedPlan: null,
-        //     userResponses: [],
-        //   })
-        //   .eq("id", BOQID);
-
         if (existing) {
           setBOQID(existing.id);
           setBOQTitle(existing.boqTitle);
         }
 
         onConfirm(selectedBoq, false);
-      }
-
-      // Non-draft save
-      else {
+      } else {
         if (selectedBoq) {
           const existing = existingBoqs.find((b) => b.id === selectedBoq);
           if (existing) {

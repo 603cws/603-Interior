@@ -1,4 +1,3 @@
-// src/pages/FormulaEditor.tsx
 import { useState, useEffect } from "react";
 import { supabase } from "../../services/supabase";
 import { useApp } from "../../Context/Context";
@@ -68,7 +67,6 @@ export default function FormulaEditor() {
     }
   };
 
-  // Filter out categories already used in formulas
   const usedCategories = Object.keys(formulaMap);
   const availableCategories = categories.filter(
     (cat) => !usedCategories.includes(cat)
@@ -83,7 +81,6 @@ export default function FormulaEditor() {
           </div>
 
           <div className="lg:grid grid-cols-[1fr,2fr] gap-4">
-            {/* Left Column - Add New Formula */}
             <div className="mx-4 my-2">
               <div className="bg-gradient-to-br from-[#334A78] to-[#68B2DC] p-4 rounded-lg mb-4">
                 <h3 className="text-[#fff] font-semibold text-xl mb-5">
@@ -145,7 +142,6 @@ export default function FormulaEditor() {
               </div>
             </div>
 
-            {/* Right Column - Table of Formulas */}
             <div className="px-4">
               <div className="bg-[#F9F9F9] p-4 my-2">
                 <h4 className="border-b-2 border-b-[#000] text-[#000] font-semibold text-lg capitalize mb-2">

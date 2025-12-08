@@ -4,7 +4,6 @@ import { motion, AnimatePresence } from "framer-motion";
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
 
 const Categories = ({
-  // setSelectedCategory,
   setSelectedSubCategory,
   handleCategoryClick,
   minimizedView,
@@ -13,7 +12,6 @@ const Categories = ({
     selectedCategory,
     selectedSubCategory,
     selectedData,
-    // minimizedView,
     categories,
     userResponses,
     categoryConfig,
@@ -22,8 +20,7 @@ const Categories = ({
   const containerRef = useRef(null);
   const scrollRef = useRef(null);
   const [currentPage, setCurrentPage] = useState(0);
-
-  const [itemsPerPage, setItemsPerPage] = useState(4); // default
+  const [itemsPerPage, setItemsPerPage] = useState(4);
   const [hasOverflow, setHasOverflow] = useState(false);
 
   useEffect(() => {
@@ -38,6 +35,7 @@ const Categories = ({
     window.addEventListener("resize", checkOverflow);
     return () => window.removeEventListener("resize", checkOverflow);
   });
+
   useEffect(() => {
     const updateItemsPerPage = () => {
       const width = window.innerWidth;
@@ -71,7 +69,6 @@ const Categories = ({
     let startX = null;
     let isTouch = false;
 
-    // Mobile touch events
     const handleTouchStart = (e) => {
       isTouch = true;
       startX = e.touches[0].clientX;
@@ -84,7 +81,6 @@ const Categories = ({
       isTouch = false;
     };
 
-    // Desktop mouse drag events
     const handleMouseDown = (e) => {
       isTouch = false;
       startX = e.clientX;
@@ -99,11 +95,11 @@ const Categories = ({
     };
 
     function handleSwipe(start, end) {
-      const threshold = 40; // minimum px distance to be considered a swipe
+      const threshold = 40;
       if (end - start > threshold && currentPage > 0) {
-        setCurrentPage((p) => p - 1); // Swipe RIGHT: previous page
+        setCurrentPage((p) => p - 1);
       } else if (start - end > threshold && currentPage < totalPages - 1) {
-        setCurrentPage((p) => p + 1); // Swipe LEFT: next page
+        setCurrentPage((p) => p + 1);
       }
     }
 
@@ -120,22 +116,18 @@ const Categories = ({
       container.removeEventListener("mousedown", handleMouseDown);
       window.removeEventListener("mouseup", handleMouseUp);
     };
-  }, [currentPage, totalPages]); //Drag funtionality
+  }, [currentPage, totalPages]);
 
   useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
 
-    // Handle scroll events (horizontal wheel)
     function handleWheel(e) {
-      // Only act on horizontal scroll (deltaX)
       if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) {
-        // Scroll right: next page
         if (e.deltaX > 10 && currentPage < totalPages - 1) {
           setCurrentPage((p) => p + 1);
           e.preventDefault();
         }
-        // Scroll left: previous page
         if (e.deltaX < -10 && currentPage > 0) {
           setCurrentPage((p) => p - 1);
           e.preventDefault();
@@ -148,7 +140,7 @@ const Categories = ({
     return () => {
       container.removeEventListener("wheel", handleWheel);
     };
-  }, [currentPage, totalPages]); //Swipe functionality
+  }, [currentPage, totalPages]);
 
   const paginatedItems = categories.slice(
     currentPage * itemsPerPage,
@@ -156,7 +148,7 @@ const Categories = ({
   );
 
   const getCleanedCategoryName = (categoryName) => {
-    return categoryName.replace(/[^a-zA-Z0-9]/g, ""); // Removes all non-alphanumeric characters
+    return categoryName.replace(/[^a-zA-Z0-9]/g, "");
   };
 
   const getImageSrcSubCat = (category, subCategory) => {
@@ -164,23 +156,22 @@ const Categories = ({
 
     const getCleanedCategoryName = (name) => {
       return name
-        .replace(/\//g, " ") // Replace `/` with a space
-        .replace(/[^a-zA-Z0-9\s]/g, "") // Remove special characters except spaces
-        .replace(/\s+/g, " ") // Replace multiple spaces with a single space
-        .trim(); // Trim any leading or trailing spaces
+        .replace(/\//g, " ")
+        .replace(/[^a-zA-Z0-9\s]/g, "")
+        .replace(/\s+/g, " ")
+        .trim();
     };
 
     const getCleanedSubCategoryName = (name) => {
       return name
-        .replace(/[^a-zA-Z0-9\s]/g, "") // Remove special characters
-        .replace(/\s(.)/g, (match, group1) => group1.toUpperCase()) // Convert spaces to camel case
-        .replace(/\s+/g, ""); // Remove all spaces
+        .replace(/[^a-zA-Z0-9\s]/g, "")
+        .replace(/\s(.)/g, (match, group1) => group1.toUpperCase())
+        .replace(/\s+/g, "");
     };
 
     const cleanedCategoryName = getCleanedCategoryName(category);
     const cleanedSubCategoryName = getCleanedSubCategoryName(subCategory);
 
-    // Handle specific categories except Furniture
     if (
       [
         "Lighting",
@@ -193,11 +184,9 @@ const Categories = ({
         "Lux",
       ].includes(cleanedCategoryName)
     ) {
-      //Sunny => Maybe reverse logic in future(except Furniture)
       return `/images/boq/${cleanedCategoryName}/${cleanedSubCategoryName}.png`;
     }
 
-    // Default case
     return `/images/boq/${cleanedSubCategoryName}.png`;
   };
 
@@ -218,7 +207,6 @@ const Categories = ({
     );
     if (!categoryObject) return false;
 
-    // Categories where we need to check all subcategories
     const specialCategories = [
       "furniture",
       "civil / plumbing",
@@ -257,7 +245,6 @@ const Categories = ({
             item.subcategory1 === "Chair"
         );
 
-        // ✅ Only exclude Chair if both Main & Visitor are filled
         if (mainFilled && visitorFilled) {
           requiredSubCategory1Items = requiredSubCategory1Items.filter(
             (item) => item !== "Chair"
@@ -311,7 +298,6 @@ const Categories = ({
         );
       return isCompleted;
     } else {
-      // For other categories, check if only one subcategory1 is added
       const selectedSubCategory1Items = (
         Array.isArray(selectedData) ? selectedData : []
       )
@@ -325,13 +311,11 @@ const Categories = ({
 
         .map((item) => item.subcategory1);
 
-      // If only one subcategory1 is selected, mark as completed
       return selectedSubCategory1Items.length === 1;
     }
   };
 
   const checkIfCategoryCompleted = (category) => {
-    // Check if selectedData is available
     if (!selectedData || selectedData.length === 0) return false;
 
     const categoryObject = categories.find(
@@ -356,10 +340,8 @@ const Categories = ({
         (subCategory) => checkIfSubCategoryCompleted(category, subCategory)
       );
 
-      // Mark as completed if HVAC has a "Centralized" product OR all other subcategories are completed
       if (hasCentralizedProduct || areOtherSubcategoriesCompleted) return true;
     }
-    // Loop through all subcategories to check if all are marked as completed
     const isCompleted = requiredSubCategories.every((subCategory) =>
       checkIfSubCategoryCompleted(category, subCategory)
     );
@@ -842,16 +824,13 @@ const Categories = ({
           minimizedView ? "px-0" : ""
         }`}
       >
-        {/* Categories List */}
         <div
           className={`cat flex overflow-x-auto gap-1 md:gap-3  scrollbar-hide ${
             minimizedView ? "px-1 justify-between" : "pb-2 px-0 "
           }`}
         >
-          {/* === FULL VIEW === */}
           {!minimizedView && (
             <div className="flex flex-col items-center w-full px-0 py-2 ">
-              {/* Scrollable container */}
               <div
                 ref={containerRef}
                 className={`flex flex-row gap-[21px] items-center py-2 relative overflow-hidden w-full swipe-cursor justify-between ${
@@ -861,7 +840,6 @@ const Categories = ({
                 {paginatedItems.map(({ id, category, subcategories }) => {
                   const isSelected = selectedCategory?.id === id;
                   const cleanedCategoryName = getCleanedCategoryName(category);
-                  // const imageSrc = `/images/icons/${cleanedCategoryName}.png`;
                   const SvgIcon = categorySvgMap[cleanedCategoryName];
 
                   return (
@@ -872,7 +850,6 @@ const Categories = ({
                       }
                       className="shrink-0 w-[72px] lg:w-28 h-[72px] lg:h-28 group transition-transform duration-[300ms] ease-in-out hover:scale-90 rounded-[10px]"
                     >
-                      {/* Gradient border wrapper */}
                       <div className="p-[3px] rounded-[10px] bg-gradient-to-br from-[#334A78] to-[#68B2DC] h-full w-full">
                         <div
                           className={`flex flex-col hover:cursor-pointer items-center justify-around w-full h-full rounded-[10px] border shadow-[0_2px_6px_1px_rgba(0,0,0,0.5),_inset_0_2px_6px_0px_rgba(0,0,0,0.1)] ${
@@ -882,11 +859,6 @@ const Categories = ({
                           }`}
                         >
                           <div className="flex flex-row gap-2 items-center justify-center w-[50px]">
-                            {/* <img
-                              className="w-8 lg:w-[50px] h-8 lg:h-[50px] object-contain"
-                              src={imageSrc}
-                              alt={`${category} icon`}
-                            /> */}
                             <div className="w-8 lg:w-[60px] h-8 lg:h-[60px] flex items-center justify-center">
                               {SvgIcon}
                             </div>
@@ -901,7 +873,6 @@ const Categories = ({
                 })}
               </div>
 
-              {/* Dot Pagination */}
               {totalPages > 1 && (
                 <div className="flex justify-center mt-3 gap-2">
                   {Array.from({ length: totalPages }).map((_, index) => (
@@ -918,13 +889,11 @@ const Categories = ({
             </div>
           )}
 
-          {/* === MINIMIZED VIEW === */}
           {minimizedView &&
             categories.map(({ id, category, subcategories }) => {
               const cleanedCategoryName = getCleanedCategoryName(category);
               const isCategoryCompleted = checkIfCategoryCompleted(category);
               const isSelected = selectedCategory?.id === id;
-              // const imageSrc = `/images/icons/${cleanedCategoryName}.png`;
               const SvgIcon = categorySvgMap[cleanedCategoryName];
 
               return (
@@ -966,17 +935,15 @@ const Categories = ({
             })}
         </div>
 
-        {/* Subcategories */}
         {selectedCategory && (
           <div className="md:mt-2 font-Poppins">
             {minimizedView && (
               <motion.div
-                key={selectedCategory.category} // Ensures animation applies on category change
+                key={selectedCategory.category}
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}
                 transition={{ duration: 0.4, ease: "easeInOut" }}
-                // className="subcat  flex flex-row items-center justify-start overflow-auto scrollbar-hide py-1"
                 className="w-full relative"
               >
                 {hasOverflow && (
@@ -1010,13 +977,12 @@ const Categories = ({
                   className="subcat-scroll flex flex-row items-center justify-start overflow-x-auto scrollbar-hide py-1 scroll-smooth"
                 >
                   {selectedCategory?.subcategories
-                    ?.filter(
-                      (subCategory) =>
-                        selectedCategory.category === "HVAC" // Apply logic only for HVAC
-                          ? userResponses.hvacType === "Centralized"
-                            ? subCategory === "Centralized" // Show only "Centralized"
-                            : subCategory !== "Centralized" // Exclude "Centralized"
-                          : true // Show all subcategories for non-HVAC categories
+                    ?.filter((subCategory) =>
+                      selectedCategory.category === "HVAC"
+                        ? userResponses.hvacType === "Centralized"
+                          ? subCategory === "Centralized"
+                          : subCategory !== "Centralized"
+                        : true
                     )
                     .map((subCategory, index) => {
                       const isCompleted = checkIfSubCategoryCompleted(
@@ -1027,7 +993,6 @@ const Categories = ({
                         <motion.div
                           key={index}
                           onClick={() => setSelectedSubCategory(subCategory)}
-                          // whileHover={{ scale: 1.05 }}
                           transition={{ duration: 0.3 }}
                           className={`group rounded flex flex-row items-start justify-center shrink-0 mr-5 group hover:bg-[#F9F9F9] border hover:border-[#374A75] ${
                             isCompleted ? "bg-[#374A75]" : ""
@@ -1073,20 +1038,14 @@ const Categories = ({
                   exit={{ opacity: 0, y: -10 }}
                   transition={{ duration: 0.4, ease: "easeInOut" }}
                 >
-                  {/* <h3 className="text-base lg:text-lg font-semibold text-gray-800 lg:ms-5">
-                    Subcategories of {selectedCategory.category}
-                  </h3> */}
-
-                  {/* <div className="subcat grid grid-cols-3 md:grid-cols-5 lg:grid-cols-4 xl:grid-cols-6 gap-5 mt-5 justify-center"> */}
                   <div className="subcat grid grid-cols-2 xs:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 3xl:grid-cols-6 gap-5 2xl:gap-x-24 mt-5 justify-center">
                     {selectedCategory.subcategories
-                      .filter(
-                        (subCategory) =>
-                          selectedCategory.category === "HVAC" // Apply logic only for HVAC
-                            ? userResponses.hvacType === "Centralized"
-                              ? subCategory === "Centralized" // Show only "Centralized"
-                              : subCategory !== "Centralized" // Exclude "Centralized"
-                            : true // Show all subcategories for non-HVAC categories
+                      .filter((subCategory) =>
+                        selectedCategory.category === "HVAC"
+                          ? userResponses.hvacType === "Centralized"
+                            ? subCategory === "Centralized"
+                            : subCategory !== "Centralized"
+                          : true
                       )
                       .map((subCategory, index) => {
                         const imageSrcSubCat = getImageSrcSubCat(
@@ -1103,10 +1062,8 @@ const Categories = ({
                           >
                             <div className="flex flex-col items-center justify-evenly flex-wrap relative">
                               <div className="flex flex-col gap-1 lg:gap-[21px] items-center justify-center w-full relative cursor-pointer hover:scale-105 transition-transform duration-500 ease-in-out">
-                                {/* <div className="relative w-[90px] md:w-[130px] lg:w-[160px] h-24 md:h-[130px] lg:h-[170px] flex items-center justify-center bg-gradient-to-r from-[#003442] to-[#34BFAD] rounded-3xl lg:rounded-[26px]"> */}
                                 <div className="relative w-28 md:w-40 lg:w-52 h-28 md:h-40 lg:h-52 flex items-center justify-center bg-gradient-to-r from-[#334A78] to-[#347ABF] rounded-xl lg:rounded-[26px]">
                                   <img
-                                    // className="rounded-2xl md:rounded-3xl w-[75px] md:w-[110px] lg:w-[150px] h-[80px] md:h-[115px] lg:h-[150px] object-cover"
                                     className="rounded-xl lg:rounded-3xl w-[102px] md:w-36 lg:w-48 h-[102px] md:h-36 lg:h-48 object-cover"
                                     src={imageSrcSubCat}
                                     alt={`${subCategory} subcategory`}

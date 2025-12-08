@@ -1,4 +1,3 @@
-import React from "react";
 import { IoMdClose } from "react-icons/io";
 import { LuClock } from "react-icons/lu";
 import { MdOutlineEmail } from "react-icons/md";
@@ -7,8 +6,6 @@ import { useApp } from "../../Context/Context";
 
 function AppointmentConfirmation({ onClose, time }) {
   const { accountHolder } = useApp();
-
-  console.log("time confirmation", time);
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-30 flex justify-center items-center">
@@ -56,31 +53,16 @@ function AppointmentConfirmation({ onClose, time }) {
           </div>
           <div className="flex flex-col gap-4 py-4">
             <div className="flex gap-3 items-center py-1">
-              {/* <img
-                src="/images/icons/time-icon.png"
-                alt=""
-                className="h-10 w-10"
-              /> */}
               <LuClock size={25} color="gray" />
               <h4 className="font-semibold text-xs">Time</h4>
               <p className="text-xs text-[#757575]">{time}</p>
             </div>
             <div className="flex gap-3 items-center border-t-2 border-b-2 py-5">
-              {/* <img
-                src="/images/icons/email-icon.png"
-                alt=""
-                className="h-10 w-10"
-              /> */}
               <MdOutlineEmail size={25} color="gray" />
               <h4 className="font-semibold text-xs">Email</h4>
               <p className="text-xs text-[#757575]">{accountHolder.email}</p>
             </div>
             <div className="flex gap-3 items-center py-1">
-              {/* <img
-                src="/images/icons/details-icon.png"
-                alt=""
-                className="h-10 w-10"
-              /> */}
               <HiMenuAlt2 size={25} color="gray" />
               <h4 className="font-semibold text-xs">Details</h4>
               <p className="text-xs text-[#757575]">

@@ -4,6 +4,7 @@ import { FaStar } from "react-icons/fa";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { RiVipCrown2Fill } from "react-icons/ri";
+import { baseImageUrl } from "../../utils/HelperConstant";
 
 const animations = {
   fadeInLeft: {
@@ -21,26 +22,16 @@ const animations = {
   },
 };
 
-// Generate Supabase public image URL
-const getImageUrl = (path) =>
-  path
-    ? `https://bwxzfwsoxwtzhjbzbdzs.supabase.co/storage/v1/object/public/addon//${path}`
-    : "/fallback.jpg";
-
 export default function YouMayAlsoLike({
   products,
-  onSelectProduct,
   onViewProduct,
   setSelectedProductView,
 }) {
   const navigate = useNavigate();
   const [loadingImages, setLoadingImages] = useState({});
-
   const handleImageLoad = (id) => {
     setLoadingImages((prev) => ({ ...prev, [id]: false }));
   };
-
-  // Filter valid variants
   const variants = products
     .flatMap((p) => p.product_variants || [])
     .filter((v) => v.status !== "pending" && v.image && v.title);
@@ -74,16 +65,13 @@ export default function YouMayAlsoLike({
                       <PiStarFourFill color="#FFE473" />
                     </div>
                   )}
-
                   {variant.segment === "Luxury" && (
                     <RiVipCrown2Fill color="#FFE473" />
                   )}
-
                   {variant.segment === "Minimal" && <FaStar color="#FFE473" />}
                 </div>
               )}
 
-              {/* Image */}
               <div className="w-full aspect-[4/3] rounded-t-lg relative">
                 {loadingImages[variant.id] !== false && (
                   <div className="absolute inset-0 bg-gray-200 rounded-t-lg"></div>
@@ -94,7 +82,7 @@ export default function YouMayAlsoLike({
                       ? "opacity-0"
                       : "opacity-100"
                   }`}
-                  src={getImageUrl(variant.image)}
+                  src={`${baseImageUrl}${variant.image}`}
                   alt={variant.title}
                   onLoad={() => handleImageLoad(variant.id)}
                   onClick={() => {
@@ -104,8 +92,6 @@ export default function YouMayAlsoLike({
                   }}
                 />
               </div>
-
-              {/* Product Name & Price */}
               <div className="px-1 py-3 text-start w-full">
                 <p
                   className="text-sm font-medium text-gray-800 capitalize"

@@ -3,7 +3,7 @@ import { useApp } from "../../Context/Context";
 import { motion, AnimatePresence } from "framer-motion";
 import { fadeInVariant } from "../constants/animations";
 
-const MainPage = ({ userResponses, setSelectedSubCategory1, productsData }) => {
+const MainPage = ({ userResponses, setSelectedSubCategory1 }) => {
   const {
     selectedCategory,
     selectedSubCategory,
@@ -28,7 +28,6 @@ const MainPage = ({ userResponses, setSelectedSubCategory1, productsData }) => {
     if (subCat1 && selectedCategory?.category) {
       let subCategories = subCat1[selectedCategory.category] || [];
 
-      // Apply HVAC filtering logic
       if (selectedCategory.category === "HVAC") {
         subCategories =
           userResponses.hvacType === "Centralized"
@@ -40,7 +39,6 @@ const MainPage = ({ userResponses, setSelectedSubCategory1, productsData }) => {
               );
       }
 
-      // Apply Civil / Plumbing -> Pantry filtering
       if (selectedCategory.category === "Civil / Plumbing") {
         subCategories = filterExcludedItems(
           "Civil / Plumbing",
@@ -59,7 +57,6 @@ const MainPage = ({ userResponses, setSelectedSubCategory1, productsData }) => {
         );
       }
 
-      // Automatically select the first subcategory when switching categories
       if (
         !selectedSubCategory1 ||
         !subCategories.includes(selectedSubCategory1)
@@ -76,31 +73,8 @@ const MainPage = ({ userResponses, setSelectedSubCategory1, productsData }) => {
     selectedSubCategory,
     userResponses.hvacType,
     setSelectedSubCategory1,
+    categoryConfig,
   ]);
-
-  // const selectedSubCategories =
-  //   subCat1 && subCat1[selectedCategory?.category]
-  //     ? selectedCategory.category === "HVAC"
-  //       ? userResponses.hvacType === "Centralized"
-  //         ? subCat1[selectedCategory.category].filter(
-  //             (subCategory) => subCategory === "Centralized AC"
-  //           )
-  //         : subCat1[selectedCategory.category].filter(
-  //             (subCategory) => subCategory !== "Centralized AC"
-  //           )
-  //       : selectedCategory.category === "Civil / Plumbing" &&
-  //         selectedSubCategory === "Pantry"
-  //       ? subCat1[selectedCategory.category].filter(
-  //           (subCategory) => subCategory !== "Pods"
-  //         )
-  //       : selectedCategory.category === "Furniture" &&
-  //         selectedSubCategory === "Chair"
-  //       ? subCat1[selectedCategory.category].filter(
-  //           (subCategory) => subCategory !== "Reception"
-  //           // || subCategory !== "Pantry"
-  //         )
-  //       : subCat1[selectedCategory.category]
-  //     : [];
 
   let selectedSubCategories = [];
 
@@ -150,7 +124,7 @@ const MainPage = ({ userResponses, setSelectedSubCategory1, productsData }) => {
 
   return (
     <motion.div
-      key={selectedCategory?.category + selectedSubCategory} // Force full re-render when switching
+      key={selectedCategory?.category + selectedSubCategory}
       initial="hidden"
       animate="visible"
       exit="exit"
@@ -161,7 +135,7 @@ const MainPage = ({ userResponses, setSelectedSubCategory1, productsData }) => {
         {selectedSubCategories && selectedSubCategories?.length > 0 ? (
           selectedSubCategories.map((subCategory1) => (
             <motion.div
-              key={subCategory1} // Fix: Using subCategory1 as key
+              key={subCategory1}
               variants={fadeInVariant}
               initial="hidden"
               animate="visible"
@@ -184,7 +158,7 @@ const MainPage = ({ userResponses, setSelectedSubCategory1, productsData }) => {
           ))
         ) : (
           <motion.div
-            key={selectedCategory?.category} // Ensures smooth transition on category change
+            key={selectedCategory?.category}
             variants={fadeInVariant}
             initial="hidden"
             animate="visible"

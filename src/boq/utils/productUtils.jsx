@@ -16,12 +16,10 @@ export const calculateAddonTotalPrice = (
   areasData,
   quantityData
 ) => {
-  // Determine the actual values by prioritizing function parameters, falling back to selected state
   const actualCategory = category || selectedCategory?.category;
   const actualSubCategory = subCat || selectedSubCategory;
   const actualSubCategory1 = subcategory1 || selectedSubCategory1;
 
-  // Calculate base total
   const total = calculateAddonTotalPriceHelper(
     quantityData[0],
     areasData[0],
@@ -49,12 +47,10 @@ export const calculateTotalPrice = (
   formulaMap,
   seatCountData
 ) => {
-  // Determine the actual values by prioritizing function parameters, falling back to selected state
   const actualCategory = category || selectedCategory?.category;
   const actualSubCategory = subCat || selectedSubCategory;
   const actualSubCategory1 = subcategory1 || selectedSubCategory1;
 
-  // Calculate base total
   const total = calculateTotalPriceHelper(
     quantityData[0],
     areasData[0],
@@ -77,22 +73,16 @@ export const calculateTotalPrice = (
 };
 
 export const handleAddOnChange = (variant, setSelectedAddons) => {
-  console.log("addon added");
-
-  // Ensure the variant object has title, price, and image
   if (!variant || !variant.title || variant.price == null || !variant.image)
     return;
 
   setSelectedAddons((prevSelectedAddOns) => {
-    // Check if the add-on is already selected
     const isAlreadySelected = prevSelectedAddOns[variant.title];
 
     if (isAlreadySelected) {
-      // If already selected, remove the add-on
       const { [variant.title]: _, ...rest } = prevSelectedAddOns;
       return rest;
     } else {
-      // If not selected, add the add-on
       return {
         ...prevSelectedAddOns,
         [variant.title]: {

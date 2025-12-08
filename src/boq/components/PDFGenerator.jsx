@@ -8,12 +8,10 @@ function normalize(str) {
 function findKeyWithExactAndPartialMatch(subCategory, dataObject) {
   if (!subCategory || !dataObject) return null;
   const normalizedSubCat = normalize(subCategory);
-
   const exactMatch = Object.keys(dataObject).find(
     (key) => normalizedSubCat === normalize(key)
   );
   if (exactMatch) return exactMatch;
-
   return (
     Object.keys(dataObject).find((key) => {
       const normalizedKey = normalize(key);
@@ -39,42 +37,33 @@ const PDFGenerator = {
   generatePDF: async (
     selectedData,
     boqTotal,
-    companyName,
-    location,
     quantityData,
     areasData,
     categories,
     BOQTitle,
-    userResponses,
-    productQuantity
+    userResponses
   ) => {
     const areas = areasData[0];
     const quantities = quantityData[0];
-
     const doc = new jsPDF("p", "pt", "a4");
     const pageWidth = doc.internal.pageSize.getWidth();
     const blue = [55, 74, 117];
-
     let hasAddons, hideQty;
 
     // ================= HEADER =================
     doc.setFillColor(blue[0], blue[1], blue[2]);
     doc.rect(0, 0, pageWidth, 125, "F");
-
     doc.setFont("helvetica", "bold");
     doc.setFontSize(14);
     doc.setTextColor(255, 255, 255);
     doc.text("Workved Interiors", 20, 72);
-
     doc.setFont("helvetica", "normal");
     doc.setFontSize(10);
     doc.text("Makhija Arcade, 35th Rd, Khar West,", 20, 86);
     doc.text("Mumbai Maharashtra 400052", 20, 98);
     doc.text("partners@workved.com", 20, 110);
-
     const logoUrl = "../logo/workved-logo.png";
     doc.addImage(logoUrl, "PNG", 250, 25, 100, 50);
-
     doc.setFont("helvetica", "normal");
     doc.setFontSize(25);
     doc.text("BOQ", pageWidth - 73, 95);
@@ -91,7 +80,6 @@ const PDFGenerator = {
     doc.setFont("helvetica", "bold");
     doc.setFontSize(10);
     doc.text(`BOQ Name: ${BOQTitle}`, 20, y);
-
     doc.setTextColor(128, 128, 128);
     doc.setFont("helvetica", "normal");
     doc.text(`Height: ${userResponses.height} ft`, 20, y + 15);
@@ -105,13 +93,11 @@ const PDFGenerator = {
       20,
       y + 45
     );
-
     const rightMargin = 20;
     const layoutX = pageWidth - rightMargin;
     doc.setTextColor(0, 0, 0);
     doc.setFont("helvetica", "bold");
     doc.text("Layout Details", layoutX, y, { align: "right" });
-
     doc.setTextColor(128, 128, 128);
     doc.setFont("helvetica", "normal");
     doc.text(`Total Area: ${areas.totalArea} sq ft.`, layoutX, y + 15, {
@@ -130,20 +116,13 @@ const PDFGenerator = {
     // ================= SUMMARY SECTION =================
     const categoryTotals = {};
     const categorizedProducts = {};
-
-    // Calculate totals per category (including addons)
     categories.forEach((cat) => {
       const category = cat.category;
-
       const productsInCategory = selectedData.filter(
         (item) => item.category === category
       );
-
       const totalPrice = productsInCategory.reduce((acc, item) => {
-        // Base price
         let itemTotal = item.finalPrice || 0;
-
-        // Add all addon prices if present
         if (item.addons) {
           const addonSum = Object.values(item.addons).reduce(
             (addonAcc, addon) => addonAcc + (addon.finalPrice || 0),
@@ -151,17 +130,12 @@ const PDFGenerator = {
           );
           itemTotal += addonSum;
         }
-
         return acc + itemTotal;
       }, 0);
-
       categoryTotals[category] = totalPrice;
       categorizedProducts[category] = productsInCategory;
     });
-
     let yOffset = y + 80;
-
-    // Plain Summary Heading (no background)
     doc.setTextColor(0, 0, 0);
     doc.setFont("helvetica", "bold");
     doc.setFontSize(14);
@@ -169,14 +143,10 @@ const PDFGenerator = {
       align: "center",
     });
     yOffset += 20;
-
-    // Calculate grand total
     const grandTotalAmount = Object.values(categoryTotals).reduce(
       (acc, val) => acc + val,
       0
     );
-
-    // Prepare summary rows
     const summaryRows = Object.entries(categoryTotals).map(
       ([category, total]) => [
         { content: category, styles: { halign: "center", fontSize: 10 } },
@@ -186,8 +156,6 @@ const PDFGenerator = {
         },
       ]
     );
-
-    // Add Grand Total Row
     summaryRows.push([
       {
         content: "Grand Total",
@@ -202,24 +170,22 @@ const PDFGenerator = {
         },
       },
     ]);
-
-    // Render summary table with black borders everywhere
     doc.autoTable({
       head: [["Category", "Total"]],
       body: summaryRows,
       startY: yOffset,
-      theme: "grid", // ensures table + borders
+      theme: "grid",
       styles: {
         font: "helvetica",
         fontSize: 9,
-        lineColor: [0, 0, 0], // black border
-        lineWidth: 0.5, // thickness of border
+        lineColor: [0, 0, 0],
+        lineWidth: 0.5,
         valign: "middle",
         cellPadding: 10,
       },
       headStyles: {
-        fillColor: false, // no background
-        textColor: 0, // black text
+        fillColor: false,
+        textColor: 0,
         fontStyle: "bold",
         halign: "center",
         lineColor: [0, 0, 0],
@@ -230,10 +196,9 @@ const PDFGenerator = {
         0: { halign: "center", cellWidth: 275 },
         1: { halign: "center", cellWidth: 285 },
       },
-      margin: { left: 18, right: 18 }, // 🔥 controls how much space is left at the page sides
+      margin: { left: 18, right: 18 },
     });
-
-    y = doc.lastAutoTable.finalY + 30; // push Y further down after summary
+    y = doc.lastAutoTable.finalY + 30;
 
     // ================= GROUP DATA =================
     const grouped = {};
@@ -242,36 +207,27 @@ const PDFGenerator = {
       if (!grouped[cat]) grouped[cat] = [];
       grouped[cat].push(item);
     });
-
     let currentY = y + 20;
     let firstCategory = true;
-
     for (const [categoryName, items] of Object.entries(grouped)) {
       if (!firstCategory) {
         doc.addPage();
         currentY = 50;
       }
-
-      // Category Heading
       doc.setTextColor(0, 0, 0);
       doc.setFont("helvetica", "bold");
       doc.setFontSize(16);
       doc.text(categoryName, 250, currentY);
       currentY += 10;
-
       hasAddons = items.some(
         (item) => item.addons && Object.keys(item.addons).length > 0
       );
-
-      // Exclude Qty for these categories
       const excludedQtyCategories = [
         "Lighting",
         "HVAC",
         "Partitions / Ceilings",
       ];
       hideQty = excludedQtyCategories.includes(categoryName);
-
-      // ✅ Define columns (with titles and keys)
       const columns = [
         { header: "No.", dataKey: "no" },
         { header: "Image", dataKey: "image" },
@@ -283,8 +239,6 @@ const PDFGenerator = {
         { header: "Price", dataKey: "price" },
         { header: "Amount", dataKey: "amount" },
       ];
-
-      // ✅ Build rows as plain objects with keys matching dataKey
       const rows = await Promise.all(
         items.map(async (item, idx) => {
           let productImage = null;
@@ -295,10 +249,8 @@ const PDFGenerator = {
               );
             } catch {}
           }
-
           let addonCell = [];
-          let addonTotal = 0; // 🔥 track total addon price
-
+          let addonTotal = 0;
           if (hasAddons && item.addons) {
             addonCell = await Promise.all(
               Object.values(item.addons).map(async (a) => {
@@ -308,7 +260,7 @@ const PDFGenerator = {
                     addonImage = await loadImage(a.image);
                   } catch {}
                 }
-                addonTotal += a.finalPrice || 0; // 🔥 add each addon price
+                addonTotal += a.finalPrice || 0;
                 return {
                   title: a.title,
                   price: a.finalPrice,
@@ -317,29 +269,25 @@ const PDFGenerator = {
               })
             );
           }
-
           const { area } = getAreaAndQuantity(
             item.subcategory,
             areas,
             quantities
           );
           const qty = item.quantity || "-";
-
-          // total amount = base finalPrice + sum of addons
           const totalAmount = (item.finalPrice || 0) + addonTotal;
-
           return {
             no: idx + 1,
-            image: " ", // placeholder cell content
+            image: " ",
             _imgData: productImage || null,
             product: `${item.product_variant?.variant_title || "N/A"}\n${
               item.product_variant?.variant_details || ""
             }`,
             ...(hasAddons
-              ? { addons: "", _addons: addonCell, _hasAddons: true } //, _hasAddons: true
+              ? { addons: "", _addons: addonCell, _hasAddons: true }
               : {}),
             spec: `${item.subcategory}-${item.subcategory1}`,
-            subcategory1: item.subcategory1, // ✅ add this line
+            subcategory1: item.subcategory1,
             ...(hideQty ? {} : { qty }),
             area,
             price: `Rs. ${
@@ -349,8 +297,6 @@ const PDFGenerator = {
           };
         })
       );
-
-      // ✅ Sort rows by subcategory1 order defined in categories prop
       const categoryObj = categories.find((c) => c.category === categoryName);
       if (categoryObj && categoryObj.subcategory1) {
         const order = categoryObj.subcategory1;
@@ -363,14 +309,12 @@ const PDFGenerator = {
         });
       }
 
-      // ✅ Column styles with keys (not indexes)
       const columnStyles = {
         no: { halign: "center", cellWidth: 25 },
         image: { halign: "center", cellWidth: 50 },
         ...(hasAddons
           ? { product: { cellWidth: 100 } }
           : { product: { cellWidth: 120 } }),
-        // product: { cellWidth: 100 },
         ...(hasAddons ? { addons: { cellWidth: 100 } } : {}),
         spec: { cellWidth: 90 },
         qty: { halign: "center", cellWidth: 25 },
@@ -379,11 +323,8 @@ const PDFGenerator = {
         ...(hasAddons
           ? { amount: { halign: "right", cellWidth: 70 } }
           : { amount: { halign: "right", cellWidth: 80 } }),
-
-        // amount: { halign: "right", cellWidth: 70 },
       };
 
-      // ✅ Render table with columns + rows
       doc.autoTable({
         columns,
         body: rows,
@@ -414,39 +355,30 @@ const PDFGenerator = {
         didDrawCell: (data) => {
           if (data.section === "body" && data.column.dataKey === "image") {
             const rowData = data.row.raw;
-
             if (rowData._imgData && !data.cell.imageDrawn) {
               const img = rowData._imgData;
-
               const padding = 2;
               const cellW = data.cell.width - padding * 2;
               const cellH = data.cell.height - padding * 2;
-
               const size = Math.min(cellW, cellH);
               const x = data.cell.x + (data.cell.width - size) / 2;
               const y = data.cell.y + (data.cell.height - size) / 2;
-
               doc.addImage(img, "PNG", x, y, size, size);
-
-              // ✅ mark as drawn so it won’t draw again on next page
               data.cell.imageDrawn = true;
             }
           }
 
-          // ✅ Addon Images inside Addons column
           if (data.section === "body" && data.column.dataKey === "addons") {
             const rowData = data.row.raw;
             if (Array.isArray(rowData._addons) && rowData._addons.length > 0) {
               const cellPadding = 4;
               const imgSize = 20;
               const vGap = 8;
-
               const contentX = data.cell.x + cellPadding;
               const maxWidth = data.cell.width - cellPadding * 2;
               let yOffset = data.cell.y + 6;
 
               rowData._addons.forEach((addon) => {
-                // left: image
                 if (addon._imgData) {
                   doc.addImage(
                     addon._imgData,
@@ -458,10 +390,8 @@ const PDFGenerator = {
                   );
                 }
 
-                // right: title (top) + price (below)
                 const textX = contentX + imgSize + 6;
                 const textWidth = maxWidth - imgSize - 6;
-
                 doc.setFontSize(8);
                 doc.text(addon.title || "", textX, yOffset + 8, {
                   maxWidth: textWidth,
@@ -472,11 +402,8 @@ const PDFGenerator = {
                   yOffset + 18,
                   { maxWidth: textWidth }
                 );
-
-                yOffset += imgSize + vGap; // stack vertically
+                yOffset += imgSize + vGap;
               });
-
-              // don’t let autotable draw its own text
               data.cell.text = [];
             }
           }
@@ -486,20 +413,13 @@ const PDFGenerator = {
             const rowData = data.row.raw;
             if (Array.isArray(rowData._addons) && rowData._addons.length > 0) {
               const imgSize = 20;
-              const vGap = 8; // vertical spacing between addons
-              const topPad = 6; // top padding inside the cell
+              const vGap = 8;
+              const topPad = 6;
               const bottomPad = 6;
-
-              // each addon takes roughly img height + spacing
               const required =
                 rowData._addons.length * (imgSize + vGap) + topPad + bottomPad;
-
-              // 🔥 make the WHOLE ROW at least this tall
               data.row.height = Math.max(data.row.height || 0, required);
-
-              // prevent default text (avoid "[object Object]")
               data.cell.text = [];
-              // ensure this cell can grow; helpful on some versions
               data.cell.styles.minCellHeight = Math.max(
                 data.cell.styles.minCellHeight || 0,
                 required
@@ -508,16 +428,14 @@ const PDFGenerator = {
           }
         },
       });
-
       currentY = doc.lastAutoTable.finalY + 20;
       firstCategory = false;
     }
 
     // ================= TOTALS =================
     const finalY = doc.lastAutoTable.finalY + 30;
-    const rightMargin2 = hasAddons ? 20 : hideQty ? 65 : 50; // leave 40px from right edge (you can adjust)
+    const rightMargin2 = hasAddons ? 20 : hideQty ? 65 : 50;
 
-    // Sub total row
     doc.setFontSize(10);
     doc.setFont("helvetica", "normal");
     doc.text("Sub total (excl. GST)", pageWidth - 250, finalY);
@@ -525,10 +443,8 @@ const PDFGenerator = {
       `Rs. ${boqTotal.toLocaleString("en-IN")}`,
       pageWidth - rightMargin2,
       finalY,
-      { align: "right" } // 🔥 right align the number
+      { align: "right" }
     );
-
-    // Total Amount row
     doc.setFont("helvetica", "bold");
     doc.setFontSize(12);
     doc.text("Total Amount", pageWidth - 250, finalY + 25);
@@ -536,11 +452,9 @@ const PDFGenerator = {
       `Rs. ${boqTotal.toLocaleString("en-IN")}`,
       pageWidth - rightMargin2,
       finalY + 25,
-      { align: "right" } // 🔥 right align again
+      { align: "right" }
     );
 
-    // import.meta.env.MODE === "development"
-    //   ? doc.output("dataurlnewwindow")
     const blob = doc.output("blob");
     const url = URL.createObjectURL(blob);
     import.meta.env.MODE === "development"
@@ -578,7 +492,6 @@ const loadImage = (url) => {
       const ctx = canvas.getContext("2d");
       ctx.scale(scale, scale);
       ctx.drawImage(img, 0, 0, width, height);
-
       resolve(canvas.toDataURL("image/png", 1.0));
     };
     img.onerror = reject;

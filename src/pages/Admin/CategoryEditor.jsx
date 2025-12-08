@@ -1,36 +1,8 @@
 import { useState } from "react";
-// import categoryConfigData from "../../categoryConfig.json"; // adjust path as needed
 import { useApp } from "../../Context/Context";
 
 export default function CategoryEditor() {
-  //   const [config, setConfig] = useState(categoryConfigData);
-  const [editing, setEditing] = useState({}); // track editing state per subcategory
-
   const { categoryConfig, updateCategoryConfig } = useApp();
-
-  // Toggle edit mode for a subcategory
-  const toggleEdit = (category, subCategory) => {
-    const key = `${category}|${subCategory}`;
-    setEditing((prev) => ({ ...prev, [key]: !prev[key] }));
-  };
-
-  // Handle exclude input changes
-  const handleExcludeChange = (category, subCategory, value) => {
-    const excludes = value
-      .split(",")
-      .map((s) => s.trim())
-      .filter(Boolean);
-
-    const newConfig = {
-      ...categoryConfig,
-      [category]: {
-        ...categoryConfig[category],
-        [subCategory]: { exclude: excludes },
-      },
-    };
-
-    updateCategoryConfig(newConfig);
-  };
 
   const handleDeleteSubCategory = (category, subCategory) => {
     if (
@@ -92,7 +64,6 @@ export default function CategoryEditor() {
           Category Editor
         </h1>
 
-        {/* Add Category Button - place here */}
         <div className="mb-6 flex justify-end">
           <button
             onClick={handleAddCategory}
@@ -127,10 +98,6 @@ export default function CategoryEditor() {
 
             <div className="space-y-4">
               {Object.entries(subCats).map(([subCategory, rules]) => {
-                const key = `${category}|${subCategory}`;
-                const isEditing = editing[key] || false;
-                const excludesAsString = (rules.exclude || []).join(", ");
-
                 return (
                   <div
                     key={subCategory}
@@ -140,8 +107,6 @@ export default function CategoryEditor() {
                       {subCategory}
                     </div>
                     <SubcategoryExcludeInput
-                      category={category}
-                      subCategory={subCategory}
                       excludes={rules.exclude || []}
                       onChange={(newExcludes) => {
                         const newConfig = {
@@ -178,12 +143,7 @@ export default function CategoryEditor() {
   );
 }
 
-function SubcategoryExcludeInput({
-  category,
-  subCategory,
-  excludes,
-  onChange,
-}) {
+function SubcategoryExcludeInput({ excludes, onChange }) {
   const [inputValue, setInputValue] = useState("");
 
   const handleAdd = () => {

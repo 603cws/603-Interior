@@ -35,7 +35,7 @@ import {
 import { MdDeleteOutline } from "react-icons/md";
 import { TbCalculator, TbCalendarStats } from "react-icons/tb";
 import Schedule from "./Schedule";
-import FormulaEditor from "../../boq/components/FormulaEditor";
+import FormulaEditor from "../../pages/Admin/FormulaEditor";
 import VendorEditAddon from "../vendor/VendorEditAddon";
 import VendorProductEdit from "../vendor/VendorProductEdit";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
@@ -54,7 +54,7 @@ import { FiLogOut, FiUser, FiUserPlus } from "react-icons/fi";
 import { IoMdSwitch } from "react-icons/io";
 import PagInationNav from "../../common-components/PagInationNav";
 import SelectSubcategories from "./SelectSubcategories";
-import CategoryEditor from "../../boq/components/CategoryEditor";
+import CategoryEditor from "../../pages/Admin/CategoryEditor";
 function handlesidebarState(state, action) {
   switch (action.type) {
     case "TOGGLE_SECTION":

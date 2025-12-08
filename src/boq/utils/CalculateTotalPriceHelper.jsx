@@ -2,15 +2,13 @@ import HVACCalculation from "./HVACCalculation";
 import ParitionCelingCalculation from "./ParitionCelingCalculation";
 import { numOfCoats } from "../../constants/constant";
 
-// Helper to normalize keys
 export const normalizeKey = (key) => {
   return key?.toLowerCase().replace(/[^a-z0-9]/g, "");
 };
 
-// "7,8,9" => 56  (only 7 * 8)
 function multiplyFirstTwoFlexible(dimStr) {
   const [a = NaN, b = NaN] = String(dimStr)
-    .split(/[,\sxX*]+/) // comma / space / x / * as separators
+    .split(/[,\sxX*]+/)
     .map((s) => parseFloat(s.trim()));
 
   return Number.isFinite(a) && Number.isFinite(b) ? a * b : null;
@@ -21,14 +19,12 @@ function findKeyWithExactAndPartialMatch(subCategory, dataObject) {
 
   const normalizedSubCat = subCategory.toLowerCase();
 
-  // First try to find an exact match
   const exactMatch = Object.keys(dataObject).find(
     (key) => normalizedSubCat === key.toLowerCase()
   );
 
   if (exactMatch) return exactMatch;
 
-  // If no exact match, perform partial match
   return (
     Object.keys(dataObject).find((key) =>
       normalizedSubCat.includes(key.toLowerCase())
@@ -38,19 +34,13 @@ function findKeyWithExactAndPartialMatch(subCategory, dataObject) {
 
 export const calculateAddonTotalPriceHelper = (
   roomNumbersMap,
-  areasData,
-  category,
   subcategory,
-  subcategory1,
-  height,
   addon
 ) => {
   const normalizedSubCat = normalizeKey(subcategory);
 
-  let matchedKey, quantity, value; //area
+  let matchedKey, quantity, value;
 
-  //|| category === "HVAC"
-  // Calculation of price * quantity
   matchedKey = findKeyWithExactAndPartialMatch(
     normalizedSubCat,
     roomNumbersMap
@@ -59,10 +49,9 @@ export const calculateAddonTotalPriceHelper = (
 
   value = quantity * addon.price || 0;
 
-  return value; //return qunatity or area or qunatity * area which will be multiplied by price afterwards
+  return value;
 };
 
-// Pure utility function
 export const calculateTotalPriceHelper = (
   roomNumbersMap,
   areasData,
@@ -82,7 +71,6 @@ export const calculateTotalPriceHelper = (
     category === "Smart Solutions" ||
     category === "Lux"
   ) {
-    // Calculation of price * quantity    Depending on Quantity only
     matchedKey = findKeyWithExactAndPartialMatch(
       normalizedSubCat,
       roomNumbersMap
@@ -101,8 +89,6 @@ export const calculateTotalPriceHelper = (
       value = quantity;
     }
   } else if (category === "Partitions / Ceilings" || category === "HVAC") {
-    // Calculation of price * quantity * area   Depending on Quantity and Area both
-
     matchedKey = findKeyWithExactAndPartialMatch(
       normalizedSubCat,
       roomNumbersMap
@@ -120,7 +106,7 @@ export const calculateTotalPriceHelper = (
         area,
         subcategory1,
         height,
-      }); //return value and do the calculation here
+      });
     }
 
     const remQuantity = areasData?.openworkspaces;
@@ -131,32 +117,25 @@ export const calculateTotalPriceHelper = (
         area,
         subcategory,
         remQuantity,
-      }); //return value and do the calculation here
+      });
     }
   } else {
-    // Calculation of price * area    Depending on Area only
     if (category === "Flooring" && subcategory1 !== "Epoxy") {
-      //Opp condition written like except Epoxy for rest A / dim * price
       matchedKey = findKeyWithExactAndPartialMatch(normalizedSubCat, areasData);
       area = matchedKey ? areasData[matchedKey] : 1;
-
       const dimArea = multiplyFirstTwoFlexible(dimensions);
-
       let rawValue = area / dimArea;
       value = rawValue ? Math.ceil(rawValue) : 1;
       return value;
     }
     if (category === "Civil / Plumbing") {
       if (subcategory1 === "Tile") {
-        //Opp condition written like except Epoxy for rest A / dim * price
         matchedKey = findKeyWithExactAndPartialMatch(
           normalizedSubCat,
           areasData
         );
         area = matchedKey ? areasData[matchedKey] : 1;
-
         const dimArea = multiplyFirstTwoFlexible(dimensions);
-
         let rawValue = area / dimArea;
         value = rawValue ? Math.ceil(rawValue) : 1;
         return value;
@@ -165,9 +144,7 @@ export const calculateTotalPriceHelper = (
           normalizedSubCat,
           roomNumbersMap
         );
-
         quantity = matchedKey ? roomNumbersMap[matchedKey] : 1;
-
         value = quantity;
         return value;
       }
@@ -176,13 +153,10 @@ export const calculateTotalPriceHelper = (
       matchedKey = findKeyWithExactAndPartialMatch(normalizedSubCat, areasData);
       area = matchedKey ? areasData[matchedKey] : 1;
       if (subcategory1 !== "Ceilings") {
-        // area/coverage * 3 * height * price * no of coats   Wall calc
         let temp = Math.ceil(area / 120);
-
         value = temp * numOfCoats * 3 * height;
         return value;
       } else {
-        //Ceiling calc
         let temp = Math.ceil(area / 120);
         value = temp * numOfCoats;
         return value;
@@ -190,13 +164,12 @@ export const calculateTotalPriceHelper = (
     } else {
       matchedKey = findKeyWithExactAndPartialMatch(normalizedSubCat, areasData);
       area = matchedKey ? areasData[matchedKey] : 1;
-
       value = area;
       return value;
     }
   }
 
-  return value; //return qunatity or area or qunatity * area which will be multiplied by price afterwards
+  return value;
 };
 
 //
@@ -219,8 +192,6 @@ export const calculateAutoTotalPriceHelper = (
     category === "Smart Solutions" ||
     category === "Lux"
   ) {
-    //|| category === "HVAC"
-    // Calculation of price * quantity
     matchedKey = findKeyWithExactAndPartialMatch(
       normalizedSubCat,
       roomNumbersMap
@@ -240,9 +211,6 @@ export const calculateAutoTotalPriceHelper = (
       value = quantity;
     }
   } else if (category === "Partitions / Ceilings" || category === "HVAC") {
-    //currently this category is missing
-    // Calculation of price * quantity * area
-
     matchedKey = findKeyWithExactAndPartialMatch(
       normalizedSubCat,
       roomNumbersMap
@@ -260,17 +228,14 @@ export const calculateAutoTotalPriceHelper = (
         area,
         subcategory1,
         height,
-      }); //return value and do the calculation here
+      });
     }
 
     if (category === "HVAC") {
-      value = HVACCalculation({ quantity, area, subcategory }); //return value and do the calculation here
+      value = HVACCalculation({ quantity, area, subcategory });
     }
   } else {
-    // Calculation of price * area
-
     if (category === "Flooring" && subcategory1 !== "Epoxy") {
-      //Opp condition written like except Epoxy for rest A / dim * price
       matchedKey = findKeyWithExactAndPartialMatch(normalizedSubCat, areasData);
       area = matchedKey ? areasData[matchedKey] : 1;
 
@@ -282,7 +247,6 @@ export const calculateAutoTotalPriceHelper = (
     }
     if (category === "Civil / Plumbing") {
       if (subcategory1 === "Tile") {
-        //Opp condition written like except Epoxy for rest A / dim * price
         matchedKey = findKeyWithExactAndPartialMatch(
           normalizedSubCat,
           areasData
@@ -290,7 +254,6 @@ export const calculateAutoTotalPriceHelper = (
         area = matchedKey ? areasData[matchedKey] : 1;
 
         const dimArea = multiplyFirstTwoFlexible(dimensions);
-
         let rawValue = area / dimArea;
         value = rawValue ? Math.ceil(rawValue) : 1;
         return value;
@@ -310,13 +273,11 @@ export const calculateAutoTotalPriceHelper = (
       matchedKey = findKeyWithExactAndPartialMatch(normalizedSubCat, areasData);
       area = matchedKey ? areasData[matchedKey] : 1;
       if (subcategory1 !== "Ceilings") {
-        // area/coverage * 3 * height * price * no of coats   Wall calc
         let temp = Math.ceil(area / 120);
 
         value = temp * numOfCoats * 3 * height;
         return value;
       } else {
-        //Ceiling calc
         let temp = Math.ceil(area / 120);
         value = temp * numOfCoats;
         return value;
@@ -330,12 +291,5 @@ export const calculateAutoTotalPriceHelper = (
     }
   }
 
-  return value; //return qunatity or area or qunatity * area which will be multiplied by price afterwards
+  return value;
 };
-
-//calc of HVAC = sq ft * area * quantity  ? * price
-
-//furniture => quantity * price ,   partitions => done above calc part, ligthing ~(similar to) AC ,  Flooring => Area * price
-
-// if (bareshell = 150 * toatalArea) add in grand Total
-//user Response. flooring

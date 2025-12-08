@@ -281,7 +281,7 @@ function BrandsOverview() {
         <div className="mx-auto font-TimesNewRoman">
           {/* Heading */}
           <div className="text-center mb-10 md:mb-14 items-center flex flex-col">
-            <h2 className="text-xl md:text-2xl xl:text-3xl uppercase italic font-bold text-[#111111]">
+            <h2 className="text-xl md:text-2xl xl:text-3xl uppercase font-bold text-[#111111]">
               Featured Brands
             </h2>
             <p className="mt-3 text-sm md:text-lg text-[#5C5C5C] mb-4">
@@ -353,7 +353,7 @@ function BrandsOverview() {
         <div className="max-w-7xl mx-auto px-4">
           {/* Heading */}
           <div className="text-center max-w-3xl mx-auto">
-            <h2 className="text-xl md:text-3xl xl:text-4xl font-TimesNewRoman italic font-bold text-[#232323]">
+            <h2 className="text-xl md:text-3xl xl:text-4xl font-TimesNewRoman font-bold text-[#232323]">
               Why We Partner With These Brands
             </h2>
             <p className="mt-4 text-sm md:text-base text-[#7A7F87] font-Georgia leading-relaxed">
@@ -491,7 +491,7 @@ export default BrandsOverview;
 function SectionHeader({ title, isborder = true }) {
   return (
     <div className="flex flex-col justify-center lg:items-center mb-4 lg:mb-10 ">
-      <h3 className="text-nowrap font-TimesNewRoman text-sm lg:text-2xl text-[#111] tracking-wider uppercase mb-2">
+      <h3 className="text-nowrap font-TimesNewRoman font-bold text-sm lg:text-2xl text-[#111] tracking-wider uppercase mb-2">
         {title}
       </h3>
       {isborder && (

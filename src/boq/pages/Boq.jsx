@@ -30,7 +30,6 @@ function Boq() {
   const [isOpen, setIsOpen] = useState(false);
   const profileRef = useRef(null);
   const iconRef = useRef(null);
-  const [isDBPlan, setIsDBPlan] = useState(false);
 
   const [showNewBoqPopup, setShowNewBoqPopup] = useState(true);
   const [showSelectArea, setShowSelectArea] = useState(false);
@@ -38,7 +37,7 @@ function Boq() {
 
   const [questionPopup, setQuestionPopup] = useState(false);
   const [showBoqPrompt, setShowBoqPrompt] = useState(false);
-  const [existingBoqs, setExistingBoqs] = useState([]); // Stores fetched BOQs
+  const [existingBoqs, setExistingBoqs] = useState([]);
   const [isProfileCard, setIsProfileCard] = useState(false);
   const [minimizedView, setMinimizedView] = useState(
     location?.state?.minimizedView || false
@@ -53,22 +52,16 @@ function Boq() {
     setSelectedSubCategory1,
     selectedData,
     setSelectedData,
-    categories,
-    // categoriesWithModal,
     userResponses,
     setUserResponses,
     selectedPlan,
-    // defaultProduct,
-    // categoriesWithTwoLevelCheck,
     productData,
     areasData,
     quantityData,
     selectedProductView,
     setSelectedProductView,
     searchQuery,
-    // priceRange,
     formulaMap,
-    BOQTitle,
     setBOQTitle,
     setUserId,
     setTotalArea,
@@ -76,19 +69,14 @@ function Boq() {
     setProgress,
     setBOQID,
     setBoqTotal,
-    boqTotal,
     userId,
     currentLayoutID,
-    productQuantity,
     seatCountData,
     allProductQuantities,
   } = useApp();
 
-  console.log("selectedData in boq page", selectedData);
+  const [runTour, setRunTour] = useState(false);
 
-  const [runTour, setRunTour] = useState(false); // Controls whether the tour runs
-
-  //setps for joyride
   const tourSteps = [
     {
       target: ".cat", // CSS class in the Navbar component
@@ -118,7 +106,6 @@ function Boq() {
     },
   ];
 
-  // Handle the completion or skipping of the tour
   const handleTourCallback = (data) => {
     const { status } = data;
 
@@ -131,49 +118,32 @@ function Boq() {
   };
 
   useEffect(() => {
-    // Check localStorage to decide if the tour should run
-    if (!selectedPlan) return; // Ensure selectedPlan is set before running the tour
+    if (!selectedPlan) return;
     const hasSeenTour = localStorage.getItem("hasSeenBOQTour") === "true";
     const hasSeenPopup =
       localStorage.getItem("hasSeenQuestionPopup") === "true";
 
     if (!hasSeenTour) {
-      setRunTour(true); // Start the tour automatically on first visit
+      setRunTour(true);
     } else if (!hasSeenPopup) {
       setQuestionPopup(true);
       localStorage.setItem("hasSeenQuestionPopup", "true");
     }
   }, [selectedPlan]);
 
-  // useEffect(() => {
-  //   if (
-  //     // defaultProduct &&
-  //     selectedPlan !== "Custom" &&
-  //     productData.length > 0 &&
-  //     !isDBPlan
-  //   ) {
-  //     // autoSelectPlanProducts(productData, subCategories);
-  //     autoSelectPlanProducts(productData, categories);
-  //     // setDefaultProduct(false);
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, []);
-
-  // Toggle profile card visibility
   const toggleProfile = () => {
     setIsOpen((prev) => !prev);
   };
 
-  // Close profile card when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (
         profileRef.current?.contains(event.target) ||
         iconRef.current?.contains(event.target)
       ) {
-        return; // If clicked inside, do nothing
+        return;
       }
-      setIsOpen(false); // Otherwise, close it
+      setIsOpen(false);
     };
 
     if (isOpen || questionPopup) {
@@ -254,7 +224,7 @@ function Boq() {
     if (!selectedPlan || !products.length || !categories.length) return;
 
     const selectedProducts = [];
-    const selectedGroups = new Set(); // To track selected subcategory1 for each category-subcategory combination
+    const selectedGroups = new Set();
     const productMap = new Map();
 
     categories.forEach((cat) => {
@@ -263,8 +233,6 @@ function Boq() {
       );
 
       filterProducts.forEach((product) => {
-        // if(product.category === "HVAC" && product.subc)
-
         const { category, subcategory, subcategory1, product_variants } =
           product;
 
@@ -276,34 +244,17 @@ function Boq() {
         )
           return;
 
-        // Split subcategories if they contain multiple comma-separated values
         const subcategories = subcategory.split(",").map((sub) => sub.trim());
 
         subcategories.forEach((subCat) => {
           if (category === "HVAC" && subCat !== "Centralized") return;
 
-          // Ensure the subcategory is in the selected subcategories list
           if (!cat.subcategories.includes(subCat)) return;
-          // const groupKey = `${category}-${subCat}-${subcategory1}`;
-          // const groupKey = `${category}-${subCat}-${subcategory1}-${product.id}`;
-
-          // Find the variant that matches the selected plan AND has `default` set to true
           const matchingVariant = product_variants.find(
             (variant) =>
               variant.segment?.toLowerCase() === selectedPlan?.toLowerCase() &&
               variant.default === variant.segment // Ensure it is marked as default
           );
-
-          // if (matchingVariant) {
-          //   // const groupKey = `${category}-${subCat}-${subcategory1}-${product.id}`;
-          //   const groupKey = `${category}-${subCat}-${subcategory1}-${matchingVariant.id}`;
-
-          //   productMap.set(groupKey, {
-          //     product,
-          //     variant: matchingVariant,
-          //     subcategory: subCat,
-          //   });
-          // }
 
           if (matchingVariant) {
             // ✅ Special case: Furniture Chairs in Md/Manager Cabin
@@ -312,7 +263,6 @@ function Boq() {
               subcategory1 === "Chair" &&
               (subCat === "Md Cabin" || subCat === "Manager Cabin")
             ) {
-              // Insert Main
               const mainGroupKey = `${category}-${subCat} Main-${subcategory1}-${matchingVariant.id}`;
               productMap.set(mainGroupKey, {
                 product,
@@ -320,7 +270,6 @@ function Boq() {
                 subcategory: `${subCat} Main`,
               });
 
-              // Insert Visitor
               const visitorGroupKey = `${category}-${subCat} Visitor-${subcategory1}-${matchingVariant.id}`;
               productMap.set(visitorGroupKey, {
                 product,
@@ -328,7 +277,6 @@ function Boq() {
                 subcategory: `${subCat} Visitor`,
               });
             } else {
-              // ✅ Normal flow
               const groupKey = `${category}-${subCat}-${subcategory1}-${matchingVariant.id}`;
               productMap.set(groupKey, {
                 product,
@@ -340,69 +288,6 @@ function Boq() {
         });
       });
 
-      // filterProducts.forEach((product) => {
-      //   const { category, subcategory, subcategory1, product_variants } =
-      //     product;
-
-      //   if (
-      //     !category ||
-      //     !subcategory ||
-      //     !subcategory1 ||
-      //     !product_variants?.length
-      //   )
-      //     return;
-
-      //   // Split subcategories if they contain multiple comma-separated values
-      //   const subcategories = subcategory.split(",").map((sub) => sub.trim());
-
-      //   subcategories.forEach((subCat) => {
-      //     if (category === "HVAC" && subCat !== "Centralized") return;
-      //     if (!cat.subcategories.includes(subCat)) return;
-
-      //     const matchingVariant = product_variants.find(
-      //       (variant) =>
-      //         variant.segment?.toLowerCase() === selectedPlan?.toLowerCase() &&
-      //         variant.default === variant.segment
-      //     );
-
-      //     if (matchingVariant) {
-      //       // ✅ Special case: Furniture Chairs in Md/Manager Cabin
-      //       if (
-      //         category === "Furniture" &&
-      //         subcategory1 === "Chair" &&
-      //         (subCat === "Md Cabin" || subCat === "Manager Cabin")
-      //       ) {
-      //         // Insert Main
-      //         const mainGroupKey = `${category}-${subCat} Main-${subcategory1}-${matchingVariant.id}`;
-      //         productMap.set(mainGroupKey, {
-      //           product,
-      //           variant: matchingVariant,
-      //           subcategory: `${subCat} Main`,
-      //         });
-
-      //         // Insert Visitor
-      //         const visitorGroupKey = `${category}-${subCat} Visitor-${subcategory1}-${matchingVariant.id}`;
-      //         productMap.set(visitorGroupKey, {
-      //           product,
-      //           variant: matchingVariant,
-      //           subcategory: `${subCat} Visitor`,
-      //         });
-      //       } else {
-      //         // ✅ Normal flow
-      //         const groupKey = `${category}-${subCat}-${subcategory1}-${matchingVariant.id}`;
-      //         productMap.set(groupKey, {
-      //           product,
-      //           variant: matchingVariant,
-      //           subcategory: subCat,
-      //         });
-      //       }
-      //     }
-      //   });
-      // });
-
-      console.log("productMap", productMap);
-
-      // Process selected products (one per `subcategory1` for each subcategory)
       productMap.forEach(({ product, variant, subcategory }, groupKey) => {
         if (!selectedGroups.has(groupKey)) {
           const { category, subcategory1 } = product;
@@ -422,29 +307,11 @@ function Boq() {
             calQty = allProductQuantities[subcategory]?.[subcategory1];
           }
 
-          // if (
-          //   product.category === "Furniture" &&
-          //   subcategory1 === "Chair" &&
-          //   (subcategory === "Md Cabin Main" ||
-          //     subcategory === "Md Cabin Visitor")
-          // ) {
-          //   calQty *= quantityData[0]["md"] ?? 1;
-          //   console.log(subcategory, calQty);
-          // } else if (
-          //   product.category === "Furniture" &&
-          //   subcategory1 === "Chair" &&
-          //   (subcategory === "Manager Cabin Main" ||
-          //     subcategory === "Manager Cabin Visitor")
-          // ) {
-          //   calQty *= quantityData[0]["manager"] ?? 1;
-          //   console.log(subcategory, calQty);
-          // }
-
           const productData = {
             groupKey,
             id: variant.id,
             category,
-            subcategory, // Individual subcategory
+            subcategory,
             subcategory1,
             product_variant: {
               variant_title: variant.title || product.title || "No Title",
@@ -456,7 +323,6 @@ function Boq() {
               default: variant.default,
               additional_images: JSON.parse(variant.additional_images || "[]"),
             },
-            // addons: product.addons || [],
             finalPrice:
               category === "Flooring" ||
               category === "HVAC" ||
@@ -506,7 +372,6 @@ function Boq() {
           };
 
           selectedProducts.push(productData);
-          // setSelectedData((prev) => [...prev, productData]);
           selectedGroups.add(groupKey);
         }
       });
@@ -518,15 +383,13 @@ function Boq() {
   const handleCategoryClick = (id, category, subcategories) => {
     setSelectedCategory({ id, category, subcategories });
     if (minimizedView) {
-      setSelectedSubCategory(subcategories[0] || null); // Automatically select the first subcategory if available
+      setSelectedSubCategory(subcategories[0] || null);
       if (category === "HVAC" && selectedPlan !== "Custom") {
-        setSelectedSubCategory(userResponses.hvacType); // On Plan change subCat not updating proeprly for HVAC
+        setSelectedSubCategory(userResponses.hvacType);
       }
     }
-    // Check if the category requires the modal
     if (categoriesWithModal.includes(category)) {
       setQuestionPopup(true);
-      // setSelectedCategory(category);
     }
   };
 
@@ -539,7 +402,6 @@ function Boq() {
       hvacType: answers.hvacType,
     }));
 
-    // Hide the modal and reset questions state
     setQuestionPopup(false);
 
     if (
@@ -550,11 +412,7 @@ function Boq() {
     }
   };
 
-  // Filter products based on search query, price range, and category
   const filteredProducts = useMemo(() => {
-    // if (!selectedCategory) return false;
-    // if (productData.length > 0 || priceRange.length > 0) return []; // Ensure it's an array
-
     return productData.filter((product) => {
       if (!product.product_variants || product.product_variants.length === 0) {
         return false;
@@ -576,9 +434,8 @@ function Boq() {
         product.category === selectedCategory?.category;
       return matchesVariant && matchesCategory;
     });
-  }, [productData, searchQuery, priceRange, selectedCategory]);
+  }, [productData, searchQuery, selectedCategory]);
 
-  // Group products by category and subcategory
   const groupedProducts = useMemo(() => {
     const grouped = {};
 
@@ -624,16 +481,13 @@ function Boq() {
         .map((product, index) => {
           const { id: variantId, groupKey, finalPrice = 0, quantity } = product;
 
-          // Parse category/subcategory/subcategory1 from groupKey
           const parts = groupKey.split("-");
           const isLType = groupKey.includes("L-Type Workstation");
 
           const category = parts[0];
           const subcategory = isLType ? "L-Type Workstation" : parts[1];
           const subcategory1 = isLType ? parts[3] || "" : parts[2];
-          const productId = parts[parts.length - 1];
 
-          // Find matching product and variant
           let matchedVariant, matchedProduct;
           for (const prod of allProducts) {
             matchedVariant = prod.product_variants?.find(
@@ -646,7 +500,6 @@ function Boq() {
           }
           if (!matchedProduct) return null;
 
-          // Get addon for this product (if exists at same index)
           const addonData = addons?.[index];
           const matchingAddons = addonData
             ? (() => {
@@ -708,7 +561,6 @@ function Boq() {
 
   const handleLoadBOQ = async (boqId) => {
     try {
-      // Fetch BOQ data from Supabase
       const { data, error } = await supabase
         .from("boq_data_new")
         .select("*")
@@ -725,25 +577,21 @@ function Boq() {
         toast.error("BOQ not found");
         return;
       }
-      console.log("loaded data", data);
 
       const formattedBOQProducts = await fetchFilteredBOQProducts(
         data.products,
         data.addons
       );
 
-      // ✅ Update state with the final BOQ structure
       setSelectedData(formattedBOQProducts);
       setUserId(data.userId);
-      setTotalArea(data?.total_area); //not there
+      setTotalArea(data?.total_area);
       setSelectedPlan(data?.planType);
       setBOQTitle(data.boqTitle);
       setBoqTotal(data.boqTotalPrice);
       setBOQID(boqId);
-      setIsDBPlan(true); // Set flag to indicate this is a DB plan
       toast.success(`Loaded BOQ: ${data.boqTitle}`);
       localStorage.removeItem("boqCompleted");
-      console.log("boqTotal loaded", boqTotal);
     } catch (err) {
       console.error("Error loading BOQ:", err);
       toast.error("Error loading BOQ");
@@ -753,7 +601,7 @@ function Boq() {
   const createDraftBOQ = async (title = "Draft BOQ") => {
     try {
       const payload = {
-        userId: userId, // make sure userId is in scope
+        userId: userId,
         boqTitle: title,
         isDraft: true,
         layoutId: currentLayoutID,
@@ -772,7 +620,7 @@ function Boq() {
       }
 
       toast.success("New draft BOQ created successfully!");
-      return data; // return the inserted row (with id, created_at, etc.)
+      return data;
     } catch (err) {
       console.error("Unexpected error creating draft BOQ:", err);
       toast.error("Unexpected error. Check console.");
@@ -783,7 +631,7 @@ function Boq() {
   const handleConfirm = async (nameOrId, boqMode) => {
     if (boqMode === "new") {
       const draft = await createDraftBOQ(nameOrId);
-      if (!draft) return; // stop if creation failed
+      if (!draft) return;
 
       setBOQTitle(draft.boqTitle);
       setBOQID(draft.id);
@@ -793,7 +641,7 @@ function Boq() {
       localStorage.removeItem("selectedData");
       sessionStorage.removeItem("selectedPlan");
     } else if (boqMode === "existing") {
-      handleLoadBOQ(nameOrId); // If existing BOQ selected, pass ID
+      handleLoadBOQ(nameOrId);
     }
     setShowNewBoqPopup(false);
   };
@@ -811,7 +659,7 @@ function Boq() {
           styles={{
             options: {
               zIndex: 10000,
-              primaryColor: "#6366f1", // Tailwind's Indigo-500
+              primaryColor: "#6366f1",
               backgroundColor: "#A9C2D3",
               arrowColor: "#A9D3CE",
               overlayColor: "rgba(0, 0, 0, 0.5)",
@@ -840,15 +688,7 @@ function Boq() {
         setExistingBoqs={setExistingBoqs}
         isProfileCard={isProfileCard}
         setIsProfileCard={setIsProfileCard}
-        setIsDBPlan={setIsDBPlan}
       />
-      {/* {showNewBoqPopup && !BOQTitle && (
-        <NewBoq
-          onConfirm={handleConfirm}
-          onCancel={() => setShowNewBoqPopup(false)}
-        />
-      )} */}
-      {/* 3xl:container */}
       <div className="px-2 md:px-6 3xl:px-40">
         {!selectedPlan ? (
           <Plans
@@ -865,71 +705,62 @@ function Boq() {
                 onSubmit={handleQuestionSubmit}
               />
             )}
-            {/* {!showProductView && ( */}
-            <>
-              <Categories
-                setSelectedSubCategory={handleSelectedSubCategory}
-                handleCategoryClick={handleCategoryClick}
-                minimizedView={minimizedView}
-              />
-              {minimizedView && (
-                <div>
-                  <ToastContainer />
-                  <AnimatePresence>
-                    {showSelectArea && (
-                      <motion.div
-                        variants={selectAreaAnimation}
-                        initial="initial"
-                        animate="animate"
-                        exit="exit"
-                        className={`fixed inset-0 flex justify-center items-center z-[1000] transition-opacity duration-300 ${
-                          showBackground
-                            ? "bg-black bg-opacity-30"
-                            : "bg-transparent"
-                        }`}
-                        onAnimationComplete={(definition) => {
-                          if (definition === "animate") {
-                            setShowBackground(true); // Only show background after entering animation
-                          }
-                        }}
-                      >
-                        <SelectArea
-                          setShowSelectArea={setShowSelectArea}
-                          image={selectedProductView.image}
-                          selectedAreas={selectedAreas}
-                          setSelectedAreas={setSelectedAreas}
-                          selectedProductView={selectedProductView}
-                          selectedData={selectedData}
-                          // categoriesWithTwoLevelCheck={
-                          //   categoriesWithTwoLevelCheck
-                          // }
-                          allAddons={allAddons}
-                          setShowBackground={setShowBackground}
-                          selectedCategory={selectedCategory}
-                          selectedSubCategory={selectedSubCategory}
-                          selectedSubCategory1={selectedSubCategory1}
-                        />
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                  <MainPage
-                    setSelectedSubCategory1={handleSelectedSubCategory1}
-                    userResponses={userResponses}
-                    productsData={productData}
-                  />
-                  <ProductCard
-                    products={groupedProducts}
-                    selectedProductView={selectedProductView}
-                    // setShowProductView={setShowProductView}
-                    setSelectedProductView={handleSelectedProductView}
-                    userResponses={userResponses}
-                    showSelectArea={showSelectArea}
-                    setShowSelectArea={setShowSelectArea}
-                  />
-                </div>
-              )}
-            </>
-            {/* )} */}
+            <Categories
+              setSelectedSubCategory={handleSelectedSubCategory}
+              handleCategoryClick={handleCategoryClick}
+              minimizedView={minimizedView}
+            />
+            {minimizedView && (
+              <div>
+                <ToastContainer />
+                <AnimatePresence>
+                  {showSelectArea && (
+                    <motion.div
+                      variants={selectAreaAnimation}
+                      initial="initial"
+                      animate="animate"
+                      exit="exit"
+                      className={`fixed inset-0 flex justify-center items-center z-[1000] transition-opacity duration-300 ${
+                        showBackground
+                          ? "bg-black bg-opacity-30"
+                          : "bg-transparent"
+                      }`}
+                      onAnimationComplete={(definition) => {
+                        if (definition === "animate") {
+                          setShowBackground(true);
+                        }
+                      }}
+                    >
+                      <SelectArea
+                        setShowSelectArea={setShowSelectArea}
+                        image={selectedProductView.image}
+                        selectedAreas={selectedAreas}
+                        setSelectedAreas={setSelectedAreas}
+                        selectedProductView={selectedProductView}
+                        selectedData={selectedData}
+                        allAddons={allAddons}
+                        setShowBackground={setShowBackground}
+                        selectedCategory={selectedCategory}
+                        selectedSubCategory={selectedSubCategory}
+                        selectedSubCategory1={selectedSubCategory1}
+                      />
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+                <MainPage
+                  setSelectedSubCategory1={handleSelectedSubCategory1}
+                  userResponses={userResponses}
+                />
+                <ProductCard
+                  products={groupedProducts}
+                  selectedProductView={selectedProductView}
+                  setSelectedProductView={handleSelectedProductView}
+                  userResponses={userResponses}
+                  showSelectArea={showSelectArea}
+                  setShowSelectArea={setShowSelectArea}
+                />
+              </div>
+            )}
           </>
         )}
       </div>
@@ -942,11 +773,9 @@ function Boq() {
               setIsOpen={setIsOpen}
               iconRef={iconRef}
               selectedPlan={selectedPlan}
-              // showBoqPrompt={showBoqPrompt}
               setShowBoqPrompt={setShowBoqPrompt}
               existingBoqs={existingBoqs}
               setIsProfileCard={setIsProfileCard}
-              setIsDBPlan={setIsDBPlan}
               setShowNewBoqPopup={setShowNewBoqPopup}
             />
           </div>
