@@ -11,12 +11,13 @@ import {
   displayOptions,
 } from "../../utils/AllCatArray";
 import { useRef } from "react";
-import ImageCropper from "../ImageCrop/ImageCropper";
+import { v4 as uuidv4 } from "uuid";
 
 import {
   additionalDetailsConfig,
   productInfoFields,
 } from "../../utils/HelperConstant";
+import MultiImageCrop from "../ImageCrop/MultiImageCrop";
 
 function VendorNewProduct({
   setAddNewProduct,
@@ -63,8 +64,19 @@ function VendorNewProduct({
     additionalInformation: {},
   });
 
+  const [showCropper, setShowCropper] = useState(false);
+  const [additionalFiles, setAdditionalFiles] = useState([]);
+  const [showMultiCropper, setShowMultiCropper] = useState(false);
+
   const { accountHolder } = useApp();
   const AllCatArray = useAllCatArray();
+
+  const handleCropped = (file) => {
+    console.log("blob in handlecrop", file);
+
+    setPreview(URL.createObjectURL(file));
+    setVariant((prev) => ({ ...prev, mainImage: file }));
+  };
 
   const handleFileChange = (event) => {
     const selectedFile = event.target.files[0];
@@ -73,7 +85,9 @@ function VendorNewProduct({
     setVariant((prev) => ({ ...prev, mainImage: selectedFile }));
     if (selectedFile) {
       setFile(selectedFile);
-      setPreview(URL.createObjectURL(selectedFile));
+
+      // setPreview(URL.createObjectURL(selectedFile));
+      setShowCropper(true);
     }
   };
 
@@ -83,7 +97,8 @@ function VendorNewProduct({
     setVariant((prev) => ({ ...prev, mainImage: droppedFile }));
     if (droppedFile) {
       setFile(droppedFile);
-      setPreview(URL.createObjectURL(droppedFile));
+      // setPreview(URL.createObjectURL(droppedFile));
+      setShowCropper(true);
     }
   };
 
@@ -109,43 +124,34 @@ function VendorNewProduct({
 
   const handleAdditionalImagesChange = (event) => {
     const files = Array.from(event.target.files);
+    console.log("additional images", files);
 
-    if (files.length && variant.additionalImages.length + files.length <= 5) {
-      setVariant((prevVariants) => ({
-        ...prevVariants,
-        additionalImages: [
-          ...files.map((file) => ({
-            file,
-            preview: URL.createObjectURL(file),
-          })),
-        ], // Add a new image
-      }));
-    } else {
+    if (!files.length) return;
+
+    // Enforce max 5 overall
+    if (variant.additionalImages.length + files.length > 5) {
       toast.error("You can upload up to 5 additional images only.");
-      // alert("You can upload up to 5 additional images only.");
+      mulitpleimagesFileinputref.current.value = null;
+      return;
     }
+
+    setAdditionalFiles(files); // pass only NEW files to cropper
+    setShowMultiCropper(true); // open cropper
+    mulitpleimagesFileinputref.current.value = null;
   };
 
   const handleAdditionalDrop = (event) => {
     event.preventDefault();
     const droppedFiles = Array.from(event.dataTransfer.files);
+    if (!droppedFiles.length) return;
 
-    if (
-      droppedFiles.length &&
-      variant?.additionalImages.length + droppedFiles.length <= 5
-    ) {
-      setVariant((prevVariants) => ({
-        ...prevVariants,
-        additionalImages: [
-          ...droppedFiles.map((file) => ({
-            file,
-            preview: URL.createObjectURL(file),
-          })),
-        ], // Add a new image
-      }));
-    } else {
+    if (variant.additionalImages.length + droppedFiles.length > 5) {
       toast.error("You can upload up to 5 additional images only.");
+      return;
     }
+
+    setAdditionalFiles(droppedFiles);
+    setShowMultiCropper(true);
   };
 
   const removeAdditionalImage = (index) => {
@@ -200,6 +206,7 @@ function VendorNewProduct({
     }
     setIsSubmitting(true);
     try {
+      const uniqueID = uuidv4();
       // Check if the product already exists based on category, subcategory, and subSubCategory
       const { data: existingProduct, error: existingProductError } =
         await supabase
@@ -255,7 +262,7 @@ function VendorNewProduct({
         // Upload the main image to Supabase storage
         const { data: mainImageUpload } = await supabase.storage
           .from("addon")
-          .upload(`${cleanedTitle}-main-${productId}`, variant.mainImage);
+          .upload(`${cleanedTitle}-main-${uniqueID}`, variant.mainImage);
         // if (mainImageError) {
         //   console.error(mainImageError);
         //   toast.error(
@@ -269,7 +276,7 @@ function VendorNewProduct({
           const { data: additionalImageUpload } = await supabase.storage
             .from("addon")
             .upload(
-              `${cleanedTitle}-additional-${index}-${productId}`,
+              `${cleanedTitle}-additional-${index}-${uniqueID}`,
               imageFile.file
             );
 
@@ -318,19 +325,19 @@ function VendorNewProduct({
         if (variantError) {
           console.error(variantError);
           toast.error(`Error inserting variant: ${variant.title}`);
+        } else {
+          // Success message
+          toast.success("Data inserted successfully!");
+          handleFormClear();
         }
         // toast.success(`Variant ${variant.title} added successfully.`);
       }
 
       // Handle the addons
-
-      // Success message
-      toast.success("Data inserted successfully!");
     } catch (error) {
       console.log("Error in onSubmit:", error);
       toast.error("An unexpected error occurred.");
     } finally {
-      handleFormClear();
       setIsSubmitting(false);
     }
   };
@@ -428,7 +435,7 @@ function VendorNewProduct({
       width: "",
     });
     setDisplayOption("");
-    // removeFile();
+    removeFile();
   };
 
   const handlecategorychange = (e) => {
@@ -765,69 +772,88 @@ function VendorNewProduct({
               </h3>
               <FaRegQuestionCircle size={20} className="cursor-pointer" />
             </div>
-            {/* <div>
-              <ImageCropper />
-            </div> */}
             <div>
-              <div className="px-4 py-2 bg-white border rounded-xl shadow-lg my-3 w-full">
-                {/* Upload Box */}
-                <h4 className="text-[#7B7B7B] capitalize">main </h4>
-                <div className="flex items-start gap-4">
-                  <div
-                    className="w-28 h-28 p-2 flex flex-col items-center justify-center border border-dashed rounded-lg text-center text-gray-500 cursor-pointer hover:border-gray-400"
-                    onDragOver={(e) => e.preventDefault()}
-                    onDrop={handleDrop}
-                  >
+              <>
+                <div className="px-4 py-2 bg-white border rounded-xl shadow-lg my-3 w-full">
+                  <h4 className="text-[#7B7B7B] capitalize">main</h4>
+
+                  <div className="flex items-start gap-4">
+                    {/* Upload Box */}
+                    {!preview && (
+                      <div
+                        className="w-28 h-28 p-2 flex flex-col items-center justify-center border border-dashed rounded-lg text-center text-gray-500 cursor-pointer  hover:border-gray-400"
+                        onClick={() => fileInputRef.current.click()}
+                        onDragOver={(e) => e.preventDefault()}
+                        onDrop={handleDrop}
+                      >
+                        <label
+                          htmlFor="file-upload"
+                          className="flex flex-col items-center"
+                        >
+                          <BsUpload className="w-6 h-6 mb-1 text-gray-500" />
+                          <span className="text-xs">
+                            <span className="text-blue-500 cursor-pointer underline">
+                              Click to upload
+                            </span>{" "}
+                            or drag and drop
+                          </span>
+                        </label>
+                      </div>
+                    )}
+
+                    {/* Hidden Input */}
                     <input
                       type="file"
-                      id="file-upload"
                       ref={fileInputRef}
                       className="hidden"
                       accept="image/*"
                       onChange={handleFileChange}
                     />
-                    <label
-                      htmlFor="file-upload"
-                      className="flex flex-col items-center"
-                    >
-                      <BsUpload className="w-6 h-6 mb-1 text-gray-500" />
-                      <span className="text-xs">
-                        <span className="text-blue-500 cursor-pointer underline">
-                          Click to upload
-                        </span>{" "}
-                        or drag and drop
-                      </span>
-                    </label>
-                  </div>
-                  {preview && (
-                    <div className="relative w-24 h-24 border rounded-lg overflow-hidden group">
-                      <img
-                        src={preview}
-                        alt="Preview"
-                        className="w-full h-full object-cover"
-                      />
-                      <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <label
-                          htmlFor="file-upload"
-                          className="text-white text-xs bg-gray-700 px-2 py-1 rounded cursor-pointer mb-1"
-                        >
-                          Replace
-                        </label>
-                        <button
-                          onClick={removeFile}
-                          type="button"
-                          className="text-white text-xs bg-red-600 px-2 py-1 rounded"
-                        >
-                          Remove
-                        </button>
+
+                    {/* Preview Box */}
+                    {preview && (
+                      <div className="relative w-24 h-24 border rounded-lg overflow-hidden group">
+                        <img
+                          src={preview}
+                          alt="product-image"
+                          className="w-full h-full object-cover"
+                        />
+                        <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center">
+                          <button
+                            type="button"
+                            className="text-white text-xs bg-gray-700 px-2 py-1 rounded mb-1"
+                            onClick={() => fileInputRef.current.click()}
+                          >
+                            Replace
+                          </button>
+                          <button
+                            type="button"
+                            onClick={removeFile}
+                            className="text-white text-xs bg-red-600 px-2 py-1 rounded"
+                          >
+                            Remove
+                          </button>
+                        </div>
                       </div>
-                    </div>
-                  )}
+                    )}
+                  </div>
                 </div>
-              </div>
+
+                <MultiImageCrop
+                  open={showCropper}
+                  files={file ? [file] : []}
+                  onClose={() => setShowCropper(false)}
+                  onDone={(croppedFiles) => {
+                    handleCropped(croppedFiles[0]);
+                    setShowCropper(false);
+                  }}
+                />
+              </>
+
               <div className="px-4 py-2 bg-white border rounded-xl shadow-lg my-3 w-full">
                 <h4 className="text-[#7B7B7B] capitalize">additional </h4>
                 <div className="flex flex-wrap gap-4">
+                  {/* Upload Box */}
                   <div
                     onDragOver={(e) => e.preventDefault()}
                     onDrop={handleAdditionalDrop}
@@ -857,6 +883,7 @@ function VendorNewProduct({
                     </label>
                   </div>
 
+                  {/* Preview of Cropped Images */}
                   {variant.additionalImages.map((img, index) => (
                     <div
                       key={index}
@@ -865,7 +892,13 @@ function VendorNewProduct({
                       <img
                         src={img.preview}
                         alt={`Additional Preview ${index}`}
-                        className="w-full h-full object-cover"
+                        className="w-full h-full object-cover cursor-pointer"
+                        onClick={() => {
+                          // setCropMode("additional");
+                          // setAdditionalIndex(index);
+                          setFile(img.file);
+                          setShowMultiCropper(true);
+                        }}
                       />
                       <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity">
                         <button
@@ -880,6 +913,25 @@ function VendorNewProduct({
                   ))}
                 </div>
               </div>
+
+              <MultiImageCrop
+                open={showMultiCropper}
+                files={additionalFiles}
+                onClose={() => setShowMultiCropper(false)}
+                onDone={(croppedFiles) => {
+                  setVariant((prev) => ({
+                    ...prev,
+                    additionalImages: [
+                      ...prev.additionalImages,
+                      ...croppedFiles.map((file) => ({
+                        file,
+                        preview: URL.createObjectURL(file),
+                      })),
+                    ],
+                  }));
+                  setShowMultiCropper(false);
+                }}
+              />
             </div>
           </div>
           {/* div for plan selection */}

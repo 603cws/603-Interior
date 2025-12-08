@@ -17,6 +17,7 @@ import {
   additionalDetailsConfig,
   productInfoFields,
 } from "../../utils/HelperConstant";
+import MultiImageCrop from "../ImageCrop/MultiImageCrop";
 
 function VendorProductEdit({
   setEditProduct,
@@ -53,7 +54,11 @@ function VendorProductEdit({
   const [displayOption, setDisplayOption] = useState(
     selectedproduct?.productDisplayType
   );
-  console.log("displayOption", displayOption);
+
+  const [showCropper, setShowCropper] = useState(false);
+  const [additionalFiles, setAdditionalFiles] = useState([]);
+  const [showMultiCropper, setShowMultiCropper] = useState(false);
+  const [cropperFile, setCropperFile] = useState(null);
 
   const fileInputRef = useRef(null);
 
@@ -111,25 +116,25 @@ function VendorProductEdit({
 
   const handleFileChange = (event) => {
     const selectedFile = event.target.files[0];
+    if (!selectedFile) return;
 
-    // variant.mainImage = selectedFile;
-    setVariant((prev) => ({ ...prev, mainImage: selectedFile }));
-    if (selectedFile) {
-      setFile(selectedFile);
-      console.log(selectedFile);
-      setPreview(URL.createObjectURL(selectedFile));
-    }
+    // setCropperFile(selectedFile); // pass freshly selected file
+    setShowCropper(true);
+
+    // store original file for later
+    setFile(selectedFile);
   };
 
   const handleDrop = (event) => {
     event.preventDefault();
     const droppedFile = event.dataTransfer.files[0];
-    setVariant((prev) => ({ ...prev, mainImage: droppedFile }));
-    if (droppedFile) {
-      setFile(droppedFile);
-      console.log(droppedFile);
-      setPreview(URL.createObjectURL(droppedFile));
-    }
+
+    if (!droppedFile) return;
+
+    // setCropperFile(droppedFile); // pass directly
+    setShowCropper(true);
+
+    setFile(droppedFile);
   };
 
   // remove file is for main image
@@ -155,43 +160,40 @@ function VendorProductEdit({
   const handleAdditionalImagesChange = (event) => {
     const files = Array.from(event.target.files);
 
-    if (files.length && variant.additionalImages.length + files.length <= 5) {
-      setVariant((prevVariants) => ({
-        ...prevVariants,
-        additionalImages: [
-          ...prevVariants.additionalImages, // Preserve existing ones
-          ...files.map((file) => ({
-            file,
-            preview: URL.createObjectURL(file),
-          })),
-        ], // Add a new image
-      }));
-    } else {
+    if (!files.length) return;
+
+    // Enforce max 5 overall
+    if (variant.additionalImages.length + files.length > 5) {
       toast.error("You can upload up to 5 additional images only.");
-      // alert("You can upload up to 5 additional images only.");
+      mulitpleimagesFileinputref.current.value = null;
+      return;
     }
+
+    setAdditionalFiles(files); // pass only NEW files to cropper
+    setShowMultiCropper(true); // open cropper
+    mulitpleimagesFileinputref.current.value = null;
   };
 
   const handleAdditionalDrop = (event) => {
     event.preventDefault();
     const droppedFiles = Array.from(event.dataTransfer.files);
+    if (!droppedFiles.length) return;
 
-    if (
-      droppedFiles.length &&
-      variant?.additionalImages.length + droppedFiles.length <= 5
-    ) {
-      setVariant((prevVariants) => ({
-        ...prevVariants,
-        additionalImages: [
-          ...droppedFiles.map((file) => ({
-            file,
-            preview: URL.createObjectURL(file),
-          })),
-        ], // Add a new image
-      }));
-    } else {
+    if (variant.additionalImages.length + droppedFiles.length > 5) {
       toast.error("You can upload up to 5 additional images only.");
+      return;
     }
+
+    setAdditionalFiles(droppedFiles);
+    setShowMultiCropper(true);
+  };
+
+  const handleCropped = (file) => {
+    console.log("blob in handlecrop", file);
+
+    setPreview(URL.createObjectURL(file));
+    setCropperFile(file);
+    setVariant((prev) => ({ ...prev, mainImage: file }));
   };
 
   const removeAdditionalImage = async (index) => {
@@ -364,7 +366,9 @@ function VendorProductEdit({
         }
 
         const { data: mainImageUpload, error: mainImageError } =
-          await supabase.storage.from("addon").upload(newImagePath, file);
+          await supabase.storage
+            .from("addon")
+            .upload(newImagePath, cropperFile);
 
         if (mainImageError) {
           toast.error(
@@ -466,7 +470,7 @@ function VendorProductEdit({
       console.log("Error in onSubmit:", error);
       toast.error("An unexpected error occurred.");
     } finally {
-      // handleFormClear();
+      handleFormClear();
       setIsSubmitting(false);
     }
 
@@ -905,67 +909,88 @@ function VendorProductEdit({
               <FaRegQuestionCircle size={20} className="cursor-pointer" />
             </div>
             <div>
-              <div className="px-4 py-2 bg-white border rounded-xl shadow-lg my-3 w-full">
-                {/* Upload Box */}
-                <h4 className="text-[#7B7B7B] capitalize">main </h4>
-                <div className="flex items-start gap-4">
-                  <div
-                    className="w-28 h-28 p-2 flex flex-col items-center justify-center border border-dashed rounded-lg text-center text-gray-500 cursor-pointer hover:border-gray-400"
-                    onDragOver={(e) => e.preventDefault()}
-                    onDrop={handleDrop}
-                  >
+              <>
+                <div className="px-4 py-2 bg-white border rounded-xl shadow-lg my-3 w-full">
+                  <h4 className="text-[#7B7B7B] capitalize">main</h4>
+
+                  <div className="flex items-start gap-4">
+                    {/* Upload Box */}
+                    {!preview && (
+                      <div
+                        className="w-28 h-28 p-2 flex flex-col items-center justify-center border border-dashed rounded-lg text-center text-gray-500 cursor-pointer  hover:border-gray-400"
+                        onClick={() => fileInputRef.current.click()}
+                        onDragOver={(e) => e.preventDefault()}
+                        onDrop={handleDrop}
+                      >
+                        <label
+                          htmlFor="file-upload"
+                          className="flex flex-col items-center"
+                        >
+                          <BsUpload className="w-6 h-6 mb-1 text-gray-500" />
+                          <span className="text-xs">
+                            <span className="text-blue-500 cursor-pointer underline">
+                              Click to upload
+                            </span>{" "}
+                            or drag and drop
+                          </span>
+                        </label>
+                      </div>
+                    )}
+
+                    {/* Hidden Input */}
                     <input
                       type="file"
-                      id="file-upload"
                       ref={fileInputRef}
                       className="hidden"
                       accept="image/*"
                       onChange={handleFileChange}
                     />
-                    <label
-                      htmlFor="file-upload"
-                      className="flex flex-col items-center"
-                    >
-                      <BsUpload className="w-6 h-6 mb-1 text-gray-500" />
-                      <span className="text-xs">
-                        <span className="text-blue-500 cursor-pointer underline">
-                          Click to upload
-                        </span>{" "}
-                        or drag and drop
-                      </span>
-                    </label>
-                  </div>
 
-                  {preview && (
-                    <div className="relative w-24 h-24 border rounded-lg overflow-hidden group">
-                      <img
-                        src={imageUrl}
-                        // src={`${baseImageUrl}/${preview}`}
-                        alt="Preview"
-                        className="w-full h-full object-cover"
-                      />
-                      <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <label
-                          htmlFor="file-upload"
-                          className="text-white text-xs bg-gray-700 px-2 py-1 rounded cursor-pointer mb-1"
-                        >
-                          Replace
-                        </label>
-                        <button
-                          onClick={removeFile}
-                          type="button"
-                          className="text-white text-xs bg-red-600 px-2 py-1 rounded"
-                        >
-                          Remove
-                        </button>
+                    {/* Preview Box */}
+                    {preview && (
+                      <div className="relative w-24 h-24 border rounded-lg overflow-hidden group">
+                        <img
+                          src={imageUrl}
+                          alt="product-image"
+                          className="w-full h-full object-cover"
+                        />
+                        <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center">
+                          <button
+                            type="button"
+                            className="text-white text-xs bg-gray-700 px-2 py-1 rounded mb-1"
+                            onClick={() => fileInputRef.current.click()}
+                          >
+                            Replace
+                          </button>
+                          <button
+                            type="button"
+                            onClick={removeFile}
+                            className="text-white text-xs bg-red-600 px-2 py-1 rounded"
+                          >
+                            Remove
+                          </button>
+                        </div>
                       </div>
-                    </div>
-                  )}
+                    )}
+                  </div>
                 </div>
-              </div>
+
+                <MultiImageCrop
+                  open={showCropper}
+                  files={file ? [file] : []}
+                  onClose={() => setShowCropper(false)}
+                  onDone={(croppedFiles) => {
+                    handleCropped(croppedFiles[0]);
+                    setShowCropper(false);
+                  }}
+                />
+              </>
+
               <div className="px-4 py-2 bg-white border rounded-xl shadow-lg my-3 w-full">
                 <h4 className="text-[#7B7B7B] capitalize">additional </h4>
+
                 <div className="flex flex-wrap gap-4">
+                  {/* Upload Box */}
                   <div
                     onDragOver={(e) => e.preventDefault()}
                     onDrop={handleAdditionalDrop}
@@ -981,6 +1006,7 @@ function VendorProductEdit({
                       multiple
                       onChange={handleAdditionalImagesChange}
                     />
+
                     <label
                       htmlFor="additional-file-upload"
                       className="flex flex-col items-center"
@@ -995,12 +1021,12 @@ function VendorProductEdit({
                     </label>
                   </div>
 
-                  {variant?.additionalImages.map((img, index) => {
+                  {/* Preview of Cropped Images */}
+                  {variant.additionalImages.map((img, index) => {
                     const imageUrl =
                       typeof img === "string"
                         ? `${baseImageUrl}/${img}`
                         : img.preview;
-
                     return (
                       <div
                         key={index}
@@ -1008,10 +1034,16 @@ function VendorProductEdit({
                       >
                         <img
                           src={imageUrl}
-                          // src={img.preview}
                           alt={`Additional Preview ${index}`}
-                          className="w-full h-full object-cover"
+                          className="w-full h-full object-cover cursor-pointer"
+                          onClick={() => {
+                            // setCropMode("additional");
+                            // setAdditionalIndex(index);
+                            setFile(img.file);
+                            setShowMultiCropper(true);
+                          }}
                         />
+
                         <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity">
                           <button
                             onClick={() => removeAdditionalImage(index)}
@@ -1026,6 +1058,25 @@ function VendorProductEdit({
                   })}
                 </div>
               </div>
+
+              <MultiImageCrop
+                open={showMultiCropper}
+                files={additionalFiles}
+                onClose={() => setShowMultiCropper(false)}
+                onDone={(croppedFiles) => {
+                  setVariant((prev) => ({
+                    ...prev,
+                    additionalImages: [
+                      ...prev.additionalImages,
+                      ...croppedFiles.map((file) => ({
+                        file,
+                        preview: URL.createObjectURL(file),
+                      })),
+                    ],
+                  }));
+                  setShowMultiCropper(false);
+                }}
+              />
             </div>
           </div>
           {/* div for plan selection */}

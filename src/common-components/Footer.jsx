@@ -55,10 +55,10 @@ function Footer() {
   const navigate = useNavigate();
   return (
     <footer className="relative bg-[url('../images/bg/footer-bg.png')] bg-cover bg-center bg-no-repeat w-full font-TimesNewRoman py-5">
-      <div className="relative px-4 lg:container xl:max-w-7xl xl:px-0 mx-auto">
+      <div className="relative px-4 lg:container xl:max-w-7xl xl:px-0 mx-auto pt-5">
         <div className="lg:flex justify-stretch w-full mb-4 lg:mb-10">
           <div className="flex-1 mb-2 lg:mb-0">
-            <p className="text-2xl font-bold font-TimesNewRoman tracking-wide text-[#fff]">
+            <p className="text-2xl font-bold font-TimesNewRoman tracking-[0.3px] text-[#fff]">
               Get more insights delivered <br /> straight to your inbox
             </p>
           </div>
@@ -82,9 +82,10 @@ function Footer() {
         {/* <div className="lg:border-t lg:border-b flex flex-col-reverse lg:flex-row gap-5 xl:gap-20 justify-evenly"> */}
         <div className="lg:border-t lg:border-b grid grid-cols-1 lg:grid-cols-3 xl:gap-20">
           {/* logo */}
-          <div className="lg:py-5 hidden lg:flex items-start lg:border-r">
+          <div className="lg:py-5 hidden lg:flex items-start lg:border-r ml-2 mt-2">
             <img
-              src="/logo/workved-logo.png"
+              src="/logo/logo-new.png"
+              // src="/logo/workved-logo.png"
               alt="company logo"
               className="max-w-48 xl:max-w-xs"
             />
@@ -123,7 +124,7 @@ function Footer() {
                     career
                   </li>
                   <li
-                    onClick={() => navigate("/brands")}
+                    onClick={() => navigate("/brandOverview")}
                     className="relative cursor-pointer w-fit after:content-[''] after:block after:h-[1px] after:bg-white after:w-0 after:transition-all after:duration-300 hover:after:w-full"
                   >
                     brands

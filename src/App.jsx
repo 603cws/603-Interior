@@ -36,17 +36,17 @@ import Addresspage from "./pages/Ecommerce/Addresspage";
 import Wishlist from "./pages/Ecommerce/Wishlist";
 import Payments from "./pages/Ecommerce/Payments";
 import ELogin from "./common-components/ELogin";
-import Brands from "./pages/Ecommerce/Brands";
+import Brands from "./pages/Brands/Brands";
 import ProductReview from "./pages/Ecommerce/ProductReview";
-import BrandProductView from "./pages/BrandProductView";
+import BrandProductView from "./pages/Brands/BrandProductView";
 import ProfilePage from "./pages/Ecommerce/ProfilePage";
 import SeasonSpecial from "./pages/Ecommerce/SeasonSpecial";
 import TopDeal from "./pages/Ecommerce/TopDeal";
 import AllReviews from "./pages/Ecommerce/AllReviews";
-import BrandFurniture from "./pages/Ecommerce/BrandFurniture";
-import BrandLight from "./pages/Ecommerce/BrandLight";
-import BrandHVAC from "./pages/Ecommerce/BrandHVAC";
-import BrandDLink from "./pages/Ecommerce/BrandDLink";
+import BrandFurniture from "./pages/Brands/BrandFurniture";
+import BrandLight from "./pages/Brands/BrandLight";
+import BrandHVAC from "./pages/Brands/BrandHVAC";
+import BrandDLink from "./pages/Brands/BrandDLink";
 import VendorDashboardLayout from "./pages/vendor/VendorDashboardLayout";
 import PrivateRoute from "./utils/PrivateRoute";
 import Services from "./pages/Services";
@@ -56,6 +56,8 @@ import AdminDashboardEcom from "./pages/Admin/EcommerceDashboard/AdminDashboardE
 import DashboardInterface from "./pages/Admin/DashboardInterface";
 import YouMayAlsoLike from "./pages/Ecommerce/YouMayAlsoLike";
 import DynamicTitle from "./common-components/DynamicTitle";
+import BrandsOverview from "./pages/Brands/BrandOverview";
+import Welspun from "./pages/Brands/Welspun";
 
 // const Homepage = lazy(() => import("./pages/Homepage"));
 const Layout = lazy(() => import("./layout/pages/Layout"));
@@ -170,7 +172,10 @@ function App() {
           <Route path="/payments" element={<Payments />} />
           <Route path="/eLogin" element={<ELogin />} />
           <Route path="/profilePage" element={<ProfilePage />} />
-          <Route path="/brands/productview" element={<BrandProductView />} />
+          <Route
+            path="/brandOverview/welspun/productview"
+            element={<BrandProductView />}
+          />
           <Route path="/reviews/:id" element={<AllReviews />} />
           <Route path="/brands/hvac" element={<BrandHVAC />} />
           <Route path="/brands/furniture" element={<BrandFurniture />} />
@@ -178,6 +183,8 @@ function App() {
           <Route path="/brands/dlink" element={<BrandDLink />} />
           <Route path="/orderSuccess/:id" element={<OrderConfirm />} />
           <Route path="/cart/similarproducts" element={<YouMayAlsoLike />} />
+          <Route path="/brandOverview" element={<BrandsOverview />} />
+          <Route path="/brandOverview/welspun" element={<Welspun />} />
           {/* testing route */}
           <Route path="/boqcompleted" element={<Boqcompleted />} />
           <Route

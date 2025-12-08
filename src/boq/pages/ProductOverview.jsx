@@ -448,9 +448,11 @@ function ProductOverview() {
               <h2 className="text-sm lg:text-xl font-bold capitalize">
                 {product?.title}
               </h2>
-              <p className="font-medium lg:w-3/4 text-[#334A78] lg:mb-2 md:max-w-xs lg:max-w-full">
-                {product?.information?.ShortDescription || "N/A"}
-              </p>
+              {product?.information?.ShortDescription && (
+                <p className="font-medium lg:w-3/4 text-[#334A78] lg:mb-2 md:max-w-xs lg:max-w-full">
+                  {product?.information?.ShortDescription || "N/A"}
+                </p>
+              )}
               <p className="text-sm md:text-base font-semibold lg:mb-2">
                 ₹ {product?.price?.toLocaleString("en-IN")}{" "}
                 <span className="text-sm">/ Per Unit</span>
@@ -505,14 +507,16 @@ function ProductOverview() {
               <h3 className="text-sm md:text-lg uppercase font-bold text-[#334A78]">
                 Product Details:
               </h3>
-              <div className="border-t border-[#E2E2E2] pt-2 pb-1">
-                <p className="text-xs md:text-sm capitalize font-bold text-[#334A78]">
-                  Manufacturer
-                </p>
-                <span className="text-xs text-[#334A78] ">
-                  {product?.manufacturer || "N/A"}
-                </span>
-              </div>
+              {cat?.category === "Furniture" && (
+                <div className="border-t border-[#E2E2E2] pt-2 pb-1">
+                  <p className="text-xs md:text-sm capitalize font-bold text-[#334A78]">
+                    Manufacturer
+                  </p>
+                  <span className="text-xs text-[#334A78] ">
+                    {product?.manufacturer || "N/A"}
+                  </span>
+                </div>
+              )}
               <div className="border-t border-[#E2E2E2] pt-2 pb-1">
                 <p className="text-xs md:text-sm capitalize font-bold text-[#334A78] ">
                   dimensions (H x L x W)
@@ -659,10 +663,12 @@ function ProductOverview() {
               .map(([key, value]) => (
                 <ShortDiv key={key} title={formatKey(key)} value={value} />
               ))}
-          <ShortDiv
-            title="Manufacturer"
-            value={product?.manufacturer || "N/A"}
-          />
+          {cat?.category === "Furniture" && (
+            <ShortDiv
+              title="Manufacturer"
+              value={product?.manufacturer || "N/A"}
+            />
+          )}
           <div className="border-[#E2E2E2] py-2 pt-6 gap-4 flex flex-col">
             <p className="text-xs md:text-sm capitalize font-bold text-[#334A78]">
               Product Description
@@ -686,10 +692,10 @@ function ShortDiv({ title, value, bothBorder = false }) {
         bothBorder ? "border-y" : "border-b"
       }`}
     >
-      <p className="text-xs md:text-sm capitalize font-bold text-[#334A78]">
+      <p className="text-xs md:text-sm capitalize font-bold text-[#334A78] flex-1">
         {title}
       </p>
-      <span className="text-sm text-[#334A78]">{value}</span>
+      <span className="text-sm text-[#334A78] flex-1 text-right">{value}</span>
     </div>
   );
 }
