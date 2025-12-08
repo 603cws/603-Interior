@@ -1,13 +1,11 @@
-import React, { useState, useRef, useEffect } from "react";
+import { useState, useEffect } from "react";
 import LandingNavbar from "../../common-components/LandingNavbar";
-import { HiOutlineArrowSmRight } from "react-icons/hi";
 import { useNavigate } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Navigation, Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
-import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
 import Footer from "../../common-components/Footer";
 import ContactUsPopup from "../ContactUsPopup";
 import { supabase } from "../../services/supabase";
@@ -96,11 +94,90 @@ const categories = [
   { title: "Storage", img: "/images/ecommerce/storage2.jpg" },
 ];
 
+const reasons = [
+  {
+    title: "Quality Assurance",
+    description:
+      "Every brand undergoes rigorous quality checks to ensure premium standards and customer satisfaction.",
+    icon: (
+      <img
+        src="/images/brands/mdi-light_shield.png"
+        className="w-16"
+        alt="Shield"
+      />
+    ),
+  },
+  {
+    title: "Industry Excellence",
+    description:
+      "We partner with award-winning brands recognized for innovation and design leadership.",
+    icon: (
+      <img src="/images/brands/cil_badge.png" className="w-16" alt="Badge" />
+    ),
+  },
+  {
+    title: "Customer Trust",
+    description:
+      "Building long-term relationships through reliable products and exceptional service standards.",
+    icon: (
+      <img
+        src="/images/brands/radix-icons_people.png"
+        className="w-16"
+        alt="People"
+      />
+    ),
+  },
+  {
+    title: "Sustainable Growth",
+    description:
+      "Committed to eco-friendly practices and sustainable manufacturing for a better tomorrow.",
+    icon: (
+      <img
+        src="/images/brands/uil_arrow-growth.png"
+        className="w-16"
+        alt="Growth"
+      />
+    ),
+  },
+];
+
+const featuredBrands = [
+  {
+    title: "Industry-leading ergonomic furniture and workspace solutions",
+    tags: ["Tables", "Chairs", "Storage"],
+    image: "/images/brands/featuredBrands1.jpg",
+  },
+  {
+    title: "Innovative lighting solutions for modern interiors",
+    tags: ["HVAC"],
+    image: "/images/brands/featuredBrands2.jpg",
+  },
+  {
+    title: "Industry-leading ergonomic furniture and workspace solutions",
+    tags: ["Lights"],
+    image: "/images/brands/featuredBrands3.webp",
+  },
+  {
+    title: "Industry-leading ergonomic furniture and workspace solutions",
+    tags: ["Flooring"],
+    image: "/images/brands/featuredBrands4.webp",
+  },
+  {
+    title: "Industry-leading ergonomic furniture and workspace solutions",
+    tags: ["Partitions and Ceilings"],
+    image: "/images/brands/featuredBrands5.webp",
+  },
+  {
+    title: "Industry-leading ergonomic furniture and workspace solutions",
+    tags: ["Civil and Plumbing"],
+    image: "/images/brands/featuredBrands6.jpeg",
+  },
+];
+
 function BrandsOverview() {
   const navigate = useNavigate();
 
   const [selectedCategory, setSelectedCategory] = useState("Furniture");
-  const [hasOverflow, setHasOverflow] = useState(false);
   const [bestProducts, setBestProducts] = useState([]);
   const [products, setProducts] = useState([]);
   const [categoryProducts, setCategoryProducts] = useState([]);
@@ -251,48 +328,42 @@ function BrandsOverview() {
                   src={brand.image}
                   alt={brand.name}
                   className="object-scale-down h-full cursor-pointer"
-                  onClick={() => navigate("/brands")}
+                  onClick={() => navigate("welspun")}
                 />
               </div>
             ))}
           </div>
         </div>
       </section>
+
       <TrendingProducts />
 
       {/* Section 2 */}
       <section className="px-4 lg:container mx-auto py-10">
         <div className="relative">
           {/* <SectionHeader title={"Trending Products"} isborder={true} /> */}
-          <div className="w-full py-8">
-            <div className="">
-              {/* <div className="max-w-6xl mx-auto"> */}
-              <div className="flex items-end justify-between  px-4 md:px-0">
-                {categories.map((it, idx) => (
-                  <div
-                    key={idx}
-                    className="flex flex-col items-center w-28 md:w-44"
-                  >
-                    {/* image container */}
-                    <div className="relative w-28 h-28 md:w-44 md:h-44">
-                      {/* actual image */}
-                      <img
-                        src={it.img}
-                        alt={it.title}
-                        className="absolute inset-0 w-full h-full object-cover rounded-t-[200px] rounded-b-2xl"
-                      />
-                    </div>
+          {/* <div className="max-w-6xl mx-auto"> */}
+          <div className="flex items-center justify-between w-full py-0 md:py-4 flex-col md:flex-row overflow-y-hidden gap-4 md:gap-4 px-8">
+            {categories.map((it, idx) => (
+              <div key={idx} className="flex flex-col items-center">
+                {/* image container */}
+                <div className="relative w-32 h-36 md:w-40 md:h-44 xl:w-48 xl:h-52">
+                  {/* actual image */}
+                  <img
+                    src={it.img}
+                    alt={it.title}
+                    className="absolute inset-0 w-full h-full object-cover rounded-t-[200px] rounded-b-2xl"
+                  />
+                </div>
 
-                    {/* label */}
-                    <div className="mt-4 text-center">
-                      <div className="text-xs md:text-lg font-bold tracking-wider text-[#374A75]">
-                        {it.title}
-                      </div>
-                    </div>
+                {/* label */}
+                <div className="mt-2 text-center">
+                  <div className="text-xs md:text-lg font-bold tracking-wider text-[#374A75]">
+                    {it.title}
                   </div>
-                ))}
+                </div>
               </div>
-            </div>
+            ))}
           </div>
         </div>
       </section>
@@ -308,6 +379,115 @@ function BrandsOverview() {
           </div>
         </section>
       )}
+
+      <section className="px-4 lg:container mx-auto py-10">
+        <div className="mx-auto font-TimesNewRoman">
+          {/* Heading */}
+          <div className="text-center mb-10 md:mb-14 items-center flex flex-col">
+            <h2 className="text-xl md:text-2xl xl:text-3xl uppercase italic font-bold text-[#111111]">
+              Featured Brands
+            </h2>
+            <p className="mt-3 text-sm md:text-lg text-[#5C5C5C] mb-4">
+              Premium partners delivering exceptional quality and design
+            </p>
+            <p className="w-[20%] lg:w-[4%] h-[1.5px] bg-[#374A75]"></p>
+          </div>
+
+          {/* Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-7 lg:gap-8">
+            {featuredBrands.map((brand, idx) => (
+              <article
+                key={idx}
+                className="bg-white rounded-xl border border-[#E4E5EA] shadow-[0_12px_30px_rgba(35,48,80,0.06)] overflow-hidden flex flex-col"
+              >
+                {/* Image */}
+                <div className="w-full h-44 md:h-52 overflow-hidden">
+                  <img
+                    src={brand.image}
+                    alt={brand.title}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+
+                {/* Content */}
+                <div className="flex flex-col justify-between flex-1 p-5 md:p-6 gap-6">
+                  <div>
+                    <p className="text-sm md:text-lg text-black max-w-xs">
+                      {brand.title}
+                    </p>
+
+                    {/* Tags */}
+                    {brand.tags?.length > 0 && (
+                      <div className="mt-4 flex flex-wrap gap-2">
+                        {brand.tags.map((tag) => (
+                          <span
+                            key={tag}
+                            className="inline-flex items-center rounded-full px-3 py-1 text-xs md:text-sm text-black"
+                          >
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Button */}
+                  <button
+                    type="button"
+                    className={`mt-auto w-full inline-flex items-center font-bold justify-center rounded-xl border text-sm md:text-base py-2.5 md:py-3 transition-colors border-[#374A75] text-[#374A75] hover:bg-[#374A75] hover:text-white
+                    `}
+                  >
+                    <span>View Products</span>
+                    <span className="ml-2 text-[13px] md:text-sm" aria-hidden>
+                      →
+                    </span>
+                  </button>
+                </div>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="px-4 lg:container mx-auto py-10">
+        <div className="max-w-7xl mx-auto px-4">
+          {/* Heading */}
+          <div className="text-center max-w-3xl mx-auto">
+            <h2 className="text-xl md:text-3xl xl:text-4xl font-TimesNewRoman italic font-bold text-[#232323]">
+              Why We Partner With These Brands
+            </h2>
+            <p className="mt-4 text-sm md:text-base text-[#7A7F87] font-Georgia leading-relaxed">
+              Our partnerships are built on shared values of quality,
+              innovation, and customer excellence.
+            </p>
+          </div>
+
+          {/* Items */}
+          <div className="mt-10 md:mt-14 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 md:gap-8">
+            {reasons.map((item) => (
+              <div
+                key={item.title}
+                className="flex flex-col items-center text-center"
+              >
+                {/* Dotted circle with icon */}
+                <div className="flex items-center justify-center w-28 h-28 md:w-36 md:h-36 rounded-full border border-dotted border-[#181818]">
+                  {item.icon}
+                </div>
+
+                {/* Title */}
+                <h3 className="mt-6 text-sm md:text-xl font-Georgia italic font-bold text-[#232323]">
+                  {item.title}
+                </h3>
+
+                {/* Description */}
+                <p className="mt-3 text-xs md:text-base font-Georgia leading-relaxed text-[#777777] max-w-xs">
+                  {item.description}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
 
       {/* Section 4 */}
       <TopBrands />
