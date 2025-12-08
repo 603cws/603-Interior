@@ -124,7 +124,7 @@ function Footer() {
                     career
                   </li>
                   <li
-                    onClick={() => navigate("/brands")}
+                    onClick={() => navigate("/brandOverview")}
                     className="relative cursor-pointer w-fit after:content-[''] after:block after:h-[1px] after:bg-white after:w-0 after:transition-all after:duration-300 hover:after:w-full"
                   >
                     brands

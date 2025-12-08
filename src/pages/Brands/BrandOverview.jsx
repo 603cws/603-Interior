@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import LandingNavbar from "../common-components/LandingNavbar";
+import LandingNavbar from "../../common-components/LandingNavbar";
 import { HiOutlineArrowSmRight } from "react-icons/hi";
 import { useNavigate } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -8,12 +8,12 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
-import Footer from "../common-components/Footer";
-import ContactUsPopup from "./ContactUsPopup";
-import { supabase } from "../services/supabase";
-import { useApp } from "../Context/Context";
-import LoginPopup from "../common-components/LoginPopup";
-import CategorySvg from "../common-components/CategorySvg";
+import Footer from "../../common-components/Footer";
+import ContactUsPopup from "../ContactUsPopup";
+import { supabase } from "../../services/supabase";
+import { useApp } from "../../Context/Context";
+import LoginPopup from "../../common-components/LoginPopup";
+import CategorySvg from "../../common-components/CategorySvg";
 
 const TOP_OFFERS = [
   {

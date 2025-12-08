@@ -1,8 +1,8 @@
 import { MdOutlineKeyboardArrowRight } from "react-icons/md";
-import LandingNavbar from "../common-components/LandingNavbar";
+import LandingNavbar from "../../common-components/LandingNavbar";
 import { FaStarOfLife } from "react-icons/fa";
 import { GoHeart } from "react-icons/go";
-import Footer from "../common-components/Footer";
+import Footer from "../../common-components/Footer";
 
 function BrandProductView() {
   const additionalImagesArray = [
