@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import LandingNavbar from "../../common-components/LandingNavbar";
 import { useNavigate } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -8,9 +8,6 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import Footer from "../../common-components/Footer";
 import ContactUsPopup from "../ContactUsPopup";
-import { supabase } from "../../services/supabase";
-import { useApp } from "../../Context/Context";
-import LoginPopup from "../../common-components/LoginPopup";
 import CategorySvg from "../../common-components/CategorySvg";
 
 const TOP_OFFERS = [
@@ -178,94 +175,6 @@ function BrandsOverview() {
   const navigate = useNavigate();
 
   const [selectedCategory, setSelectedCategory] = useState("Furniture");
-  const [bestProducts, setBestProducts] = useState([]);
-  const [products, setProducts] = useState([]);
-  const [categoryProducts, setCategoryProducts] = useState([]);
-
-  const getCleanedCategoryName = (categoryName) => {
-    return categoryName.replace(/[^a-zA-Z0-9]/g, "");
-  };
-
-  useEffect(() => {
-    const fetchProductsData = async () => {
-      try {
-        // setProductsloading(true);
-        const { data, error } = await supabase
-          .from("product_variants")
-          .select(`* ,product_id(*),reviews(*)`)
-          .order("created_at", { ascending: false })
-          .neq("productDisplayType", "boq");
-
-        if (error) throw error;
-
-        // Filter products where it is approved
-        const filtered = data.filter(
-          (item) =>
-            item.status === "approved" &&
-            item.product_id.category !== "Partitions / Ceilings" &&
-            item.product_id.category !== "Civil / Plumbing"
-        );
-
-        // 1. Extract unique image names
-        const uniqueImages = [...new Set(filtered.map((item) => item.image))];
-
-        // 2. Generate signed URLs from Supabase Storage
-        const { data: signedUrls, error: signedUrlError } =
-          await supabase.storage
-            .from("addon") // your bucket name
-            .createSignedUrls(uniqueImages, 3600); // 1 hour expiry
-
-        if (signedUrlError) {
-          console.error("Error generating signed URLs:", signedUrlError);
-          return;
-        }
-
-        // 3. Create a map from image name to signed URL
-        const urlMap = {};
-        signedUrls.forEach(({ path, signedUrl }) => {
-          urlMap[path] = signedUrl;
-        });
-
-        // 4. Replace image names with URLs in the array
-        const updatedProducts = filtered.map((item) => ({
-          ...item,
-          image: urlMap[item.image] || item.image, // fallback if URL not found
-        }));
-
-        // const filteredByCategory = updatedProducts.filter(
-        //   (item) => item.product_id.category === selectedCat
-        // );
-        // setData(filtered);
-        setProducts(updatedProducts);
-
-        const filteredProducts = updatedProducts.filter(
-          (product) =>
-            getCleanedCategoryName(product.product_id.category) ===
-            getCleanedCategoryName("Furniture")
-        );
-        setCategoryProducts(filteredProducts);
-
-        const sortedByStars = [...updatedProducts]
-          .filter((product) => product.reviews && product.reviews.length > 0)
-          .sort((a, b) => {
-            const avgA =
-              a.reviews.reduce((sum, r) => sum + r.stars, 0) / a.reviews.length;
-
-            const avgB =
-              b.reviews.reduce((sum, r) => sum + r.stars, 0) / b.reviews.length;
-
-            return avgB - avgA;
-          });
-
-        setBestProducts(sortedByStars);
-      } catch (error) {
-        console.error("Error fetching filtered data:", error);
-      } finally {
-        // setProductsloading(false);
-      }
-    };
-    fetchProductsData();
-  }, []);
 
   return (
     <div className="font-TimesNewRoman">
@@ -368,18 +277,6 @@ function BrandsOverview() {
         </div>
       </section>
 
-      {/* Section 3 */}
-      {bestProducts.length > 0 && (
-        <section className="px-4 lg:container mx-auto py-10">
-          <SectionHeader title="best products" />
-          <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-5">
-            {bestProducts.map((product) => (
-              <Card key={product.id} product={product} />
-            ))}
-          </div>
-        </section>
-      )}
-
       <section className="px-4 lg:container mx-auto py-10">
         <div className="mx-auto font-TimesNewRoman">
           {/* Heading */}
@@ -433,6 +330,9 @@ function BrandsOverview() {
 
                   {/* Button */}
                   <button
+                    onClick={() =>
+                      brand.tags.includes("Flooring") && navigate("welspun")
+                    }
                     type="button"
                     className={`mt-auto w-full inline-flex items-center font-bold justify-center rounded-xl border text-sm md:text-base py-2.5 md:py-3 transition-colors border-[#374A75] text-[#374A75] hover:bg-[#374A75] hover:text-white
                     `}
@@ -756,93 +656,6 @@ function PartnerBanner() {
       </div>
       {showContactPopup && (
         <ContactUsPopup onClose={() => setShowContactPopup(false)} />
-      )}
-    </>
-  );
-}
-
-function Card({ product }) {
-  const navigate = useNavigate();
-  const {
-    isAuthenticated,
-    localcartItems,
-    cartItems,
-    wishlistItems,
-    showLoginPopup,
-    setShowLoginPopup,
-    pendingProduct,
-    setPendingProduct,
-  } = useApp();
-  // const isWishlisted = wishlistItems?.some(
-  //   (item) => item.productId?.id === product.id
-  // );
-
-  // const { handleAddToCart, handleAddtoWishlist } = useHandleAddToCart();
-
-  const [iscarted, setIsCarted] = useState(false);
-
-  useEffect(() => {
-    if (!product?.id) return;
-
-    if (isAuthenticated) {
-      const check = cartItems?.some(
-        (item) => item.productId?.id === product.id
-      );
-      setIsCarted(check);
-    } else {
-      const check = localcartItems?.some(
-        (item) => item.productId?.id === product.id
-      );
-      setIsCarted(check);
-    }
-  }, [isAuthenticated, cartItems, localcartItems, product?.id]);
-
-  return (
-    <>
-      <div className="h-[300px] lg:h-[340px]">
-        <div className="h-full flex flex-col relative">
-          {product.image && (
-            <div
-              onClick={() =>
-                navigate(`/productview/${product.id}`, {
-                  state: { from: "products" },
-                })
-              }
-              className="cursor-pointer"
-            >
-              <img
-                src={product.image}
-                alt={product.title}
-                className="w-52 h-40 lg:h-56 mx-auto mt-4 object-contain"
-              />
-            </div>
-          )}
-          {/* {product.ispopular && (
-          <span
-            className={` font-lora text-[11px] capitalize absolute top-2 left-2 p-[5px] ${
-              populartext === "popular"
-                ? "bg-[#E3F3FF] text-[#000]"
-                : "bg-[#374A75] text-white"
-            }`}
-          >
-            {product.populartext || "eihvihevi"}
-          </span>
-        )} */}
-          <div className="px-2 py-2 flex flex-col justify-around gap-3 font-TimesNewRoman mt-auto">
-            <p className=" text-xs lg:text-sm line-clamp-1 uppercase">
-              {product.manufacturer}
-            </p>
-            <p className="text-xs lg:text-sm line-clamp-1 uppercase pt-2">
-              {product.title}
-            </p>
-          </div>
-        </div>
-      </div>
-      {showLoginPopup && (
-        <LoginPopup
-          onClose={() => setShowLoginPopup(false)}
-          product={pendingProduct}
-        />
       )}
     </>
   );

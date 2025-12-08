@@ -57,6 +57,7 @@ import DashboardInterface from "./pages/Admin/DashboardInterface";
 import YouMayAlsoLike from "./pages/Ecommerce/YouMayAlsoLike";
 import DynamicTitle from "./common-components/DynamicTitle";
 import BrandsOverview from "./pages/Brands/BrandOverview";
+import Welspun from "./pages/Brands/Welspun";
 
 // const Homepage = lazy(() => import("./pages/Homepage"));
 const Layout = lazy(() => import("./layout/pages/Layout"));
@@ -171,7 +172,10 @@ function App() {
           <Route path="/payments" element={<Payments />} />
           <Route path="/eLogin" element={<ELogin />} />
           <Route path="/profilePage" element={<ProfilePage />} />
-          <Route path="/brands/productview" element={<BrandProductView />} />
+          <Route
+            path="/brandOverview/welspun/productview"
+            element={<BrandProductView />}
+          />
           <Route path="/reviews/:id" element={<AllReviews />} />
           <Route path="/brands/hvac" element={<BrandHVAC />} />
           <Route path="/brands/furniture" element={<BrandFurniture />} />
@@ -180,6 +184,7 @@ function App() {
           <Route path="/orderSuccess/:id" element={<OrderConfirm />} />
           <Route path="/cart/similarproducts" element={<YouMayAlsoLike />} />
           <Route path="/brandOverview" element={<BrandsOverview />} />
+          <Route path="/brandOverview/welspun" element={<Welspun />} />
           {/* testing route */}
           <Route path="/boqcompleted" element={<Boqcompleted />} />
           <Route
