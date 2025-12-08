@@ -86,7 +86,7 @@ function DashboardProductCard({
                           MRP
                         </p>
                         <p className="font-semibold text-[#000] text-lg">
-                          ₹{product.price} 
+                          RS {product?.ecommercePrice?.mrp} 
                         </p>
                       </div>
                       <div>
@@ -94,7 +94,7 @@ function DashboardProductCard({
                           Selling Price
                         </p>
                         <p className="font-semibold text-[#000] text-lg">
-                          ₹{product.price} 
+                          RS {product?.ecommercePrice?.sellingPrice} 
                         </p>
                       </div>
                       <div>

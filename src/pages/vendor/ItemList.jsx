@@ -117,14 +117,14 @@ function ItemCard({
         />
         <div className="absolute right-0 bottom-2 text-xl" ref={optionboxref}>
           {isoptionOpen ? (
-            <button onClick={() => setIsoptionOpen((prev) => !prev)}>
+            <div onClick={() => setIsoptionOpen((prev) => !prev)}>
               <OptionBox
                 handleAddonEdit={handleAddonEdit}
                 handleProductEdit={handleProductEdit}
                 handleProductPreview={handleProductPreview}
                 item={item}
               />
-            </button>
+            </div>
           ) : (
             <button onClick={() => setIsoptionOpen((prev) => !prev)}>
               <HiDotsVertical />
