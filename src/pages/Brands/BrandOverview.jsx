@@ -48,19 +48,29 @@ const heroSlides = [
     bg: "/images/brands/brands-bg.jpeg",
     link: "/shop",
   },
+  // {
+  //   title: "Create comfort with HVAC solutions",
+  //   bg: "/images/brands/brands-bg.jpeg",
+  //   link: "/hvac",
+  // },
+  // {
+  //   title: "Lighting that brightens your vision",
+  //   bg: "/images/brands/brands-bg.jpeg",
+  //   link: "/lights",
+  // },
+  // {
+  //   title: "Flooring that shapes your space",
+  //   bg: "/images/brands/brands-bg.jpeg",
+  //   link: "/flooring",
+  // },
   {
-    title: "Create comfort with HVAC solutions",
-    bg: "/images/brands/brands-bg.jpeg",
-    link: "/hvac",
+    // title: "Flooring that shapes your space",
+    bg: "/images/brands/daikinBrand.png",
+    link: "/flooring",
   },
   {
-    title: "Lighting that brightens your vision",
-    bg: "/images/brands/brands-bg.jpeg",
-    link: "/lights",
-  },
-  {
-    title: "Flooring that shapes your space",
-    bg: "/images/brands/brands-bg.jpeg",
+    // title: "Flooring that shapes your space",
+    bg: "/images/brands/welspunbrand2.png",
     link: "/flooring",
   },
 ];
@@ -414,38 +424,38 @@ function TrendingProducts() {
   const products = [
     {
       id: 1,
-      img: "/images/welspunchair.png",
+      img: "/images/brands/welspunProduct1.webp",
       logo: "/images/welspun-logo.png",
-      name: "PRODUCT NAME",
+      name: "Modern Teal",
     },
     {
       id: 2,
-      img: "/images/welspunchair.png",
+      img: "/images/brands/welspunProduct2.png",
       logo: "/images/welspun-logo.png",
-      name: "PRODUCT NAME",
+      name: "Tundra",
     },
     {
       id: 3,
-      img: "/images/welspunchair.png",
+      img: "/images/brands/welspunProduct3.jpg",
       logo: "/images/welspun-logo.png",
-      name: "PRODUCT NAME",
+      name: "Longitutde Blue",
     },
     {
       id: 4,
-      img: "/images/welspunchair.png",
+      img: "/images/brands/welspunProduct4.jpg",
       logo: "/images/welspun-logo.png",
-      name: "PRODUCT NAME",
+      name: "Calix (Course)",
     },
     {
       id: 5,
-      img: "/images/welspunchair.png",
+      img: "/images/brands/welspunProduct5.jpg",
       logo: "/images/welspun-logo.png",
-      name: "PRODUCT NAME",
+      name: "EON",
     },
   ];
 
   return (
-    <div className="py-12">
+    <div className="px-4 lg:container mx-auto py-12">
       {/* Heading */}
       {/* <div className="text-center mb-12">
         <h2 className=" text-lg font-semibold tracking-wide text-gray-800">
@@ -456,11 +466,11 @@ function TrendingProducts() {
       <SectionHeader title={"TRENDING PRODUCTS"} />
 
       {/* Product Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-8 px-6 md:px-16">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-8 ">
         {products.map((p) => (
           <div
             key={p.id}
-            className="bg-[#324674] rounded-2xl text-white p-6 flex flex-col items-center justify-between shadow-md"
+            className=" rounded-2xl text-white p-6 flex flex-col items-center justify-between border border-[#ccc]"
           >
             {/* Product Image */}
             <img
@@ -470,7 +480,7 @@ function TrendingProducts() {
             />
 
             {/* Product Name */}
-            <p className="text-lg font-medium tracking-wide mb-2 font-TimesNewRoman">
+            <p className="text-lg text-black font-medium tracking-wide mb-2 font-TimesNewRoman">
               {p.name}
             </p>
 

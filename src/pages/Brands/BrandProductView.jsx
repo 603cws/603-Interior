@@ -4,77 +4,82 @@ import { FaStarOfLife } from "react-icons/fa";
 import { GoHeart } from "react-icons/go";
 import Footer from "../../common-components/Footer";
 
+const additionalImagesArray = [
+  { img: "/images/productviewsample2.jpg" },
+  { img: "/images/productviewsample2.jpg" },
+  { img: "/images/productviewsample2.jpg" },
+  { img: "/images/productviewsample2.jpg" },
+];
+
+const features = [
+  "Multiple Design Possibilities",
+  "Highly Resilient Fiber",
+  "Stain Resistant",
+  "Fade Resistant",
+];
+
+const similarproducts = [
+  {
+    image: "/images/brandproductview1.png",
+    title: "Product Name",
+  },
+  {
+    image: "/images/brandproductview2.png",
+    title: "Product Name",
+  },
+  {
+    image: "/images/brandproductview3.png",
+    title: "Product Name",
+  },
+  {
+    image: "/images/brandproductview4.png",
+    title: "Product Name",
+  },
+  {
+    image: "/images/brandproductview2.png",
+    title: "Product Name",
+  },
+];
+const tileSpecification = [
+  {
+    image: "/images/articlecode.png",
+    title: "article code",
+    code: "CTY00299",
+  },
+  {
+    image: "/images/titlespecification2.png",
+    title: "design code",
+    code: "CA0352 (006)",
+  },
+  {
+    image: "/images/titlespecification3.png",
+    title: "type of yarn",
+    code: "Nylon",
+  },
+  {
+    image: "/images/titlespecification4.png",
+    title: "tufted weight",
+    code: "14.5 oz",
+  },
+  {
+    image: "/images/titlespecification5.png",
+    title: "pile thickness",
+    code: "3-3.5 mm",
+  },
+  {
+    image: "/images/titlespecification6.png",
+    title: "wear layer",
+    code: "4.5-5 mm",
+  },
+];
+
+const careInstructions = [
+  "Preventative Maintenance: Containing the soil entering the building using the walk-off mats at entrances. This includes outside matting, inside matting, and mats at certain other high-traffic areas",
+  "Vaccuming: It is the single most important part of a maintenance program designed to remove soil or dust from the top surface",
+  "Quick removal of spills is key to reducing any chance of stain",
+  "Interim Cleaning: Several different methods can be used. Regularly scheduled interim cleaning can prolong the need for restorative cleaning",
+];
 function BrandProductView() {
-  const additionalImagesArray = [
-    { img: "/images/productviewsample2.jpg" },
-    { img: "/images/productviewsample2.jpg" },
-    { img: "/images/productviewsample2.jpg" },
-    { img: "/images/productviewsample2.jpg" },
-  ];
-
-  const features = [
-    "Multiple Design Possibilities",
-    "Highly Resilient Fiber",
-    "Stain Resistant",
-    "Fade Resistant",
-  ];
-
-  const similarproducts = [
-    {
-      image: "/images/brandproductview1.png",
-    },
-    {
-      image: "/images/brandproductview2.png",
-    },
-    {
-      image: "/images/brandproductview3.png",
-    },
-    {
-      image: "/images/brandproductview4.png",
-    },
-    {
-      image: "/images/brandproductview2.png",
-    },
-  ];
-  const tileSpecification = [
-    {
-      image: "/images/articlecode.png",
-      title: "article code",
-      code: "CTY00299",
-    },
-    {
-      image: "/images/titlespecification2.png",
-      title: "design code",
-      code: "CA0352 (006)",
-    },
-    {
-      image: "/images/titlespecification3.png",
-      title: "type of yarn",
-      code: "Nylon",
-    },
-    {
-      image: "/images/titlespecification4.png",
-      title: "tufted weight",
-      code: "14.5 oz",
-    },
-    {
-      image: "/images/titlespecification5.png",
-      title: "pile thickness",
-      code: "3-3.5 mm",
-    },
-    {
-      image: "/images/titlespecification6.png",
-      title: "wear layer",
-      code: "4.5-5 mm",
-    },
-  ];
-
-  const careInstructions = [
-    "Preventative Maintenance: Containing the soil entering the building using the walk-off mats at entrances. This includes outside matting, inside matting, and mats at certain other high-traffic areas",
-    "Vaccuming: It is the single most important part of a maintenance program designed to remove soil or dust from the top surface",
-    "Quick removal of spills is key to reducing any chance of stain",
-    "Interim Cleaning: Several different methods can be used. Regularly scheduled interim cleaning can prolong the need for restorative cleaning",
-  ];
   return (
     <div>
       <div className="">
@@ -123,11 +128,11 @@ function BrandProductView() {
             </div>
           </div>
 
-          <div className="lg:w-[40%] flex flex-col mt-2  md:mt-6 lg:mt-0 font-Poppins ">
+          <div className="lg:w-[40%] flex flex-col mt-2  md:mt-6 lg:mt-0 font-TimesNewRoman ">
             <h2 className="text-xl lg:text-[41.28px] leading-[41.3px] tracking-[0.75px] text-[#000] mb-2 lg:mb-8">
               Gemini (Archer)
             </h2>
-            <p className="text-[12.75px] leading-[18px] mb-8">
+            <p className="text-sm leading-[18px] mb-8">
               Experience the epitome of creativity and grace with the Celestial
               collection's Archer range of the . Archer's solid texture and the
               splash of blue is an ideal combinations to make your house look
@@ -202,7 +207,7 @@ function BrandProductView() {
           <FeatureRow features={careInstructions} type={false} />
         </div>
 
-        <div className="my-10 font-Poppins">
+        <div className="my-10 font-TimesNewRoman">
           <h3 className="text-[#171717] text-2xl lg:text-3xl  uppercase mb-3 font-semibold">
             Similar Products
           </h3>
@@ -228,7 +233,7 @@ function FeatureRow({ features, type = true }) {
       {features.map((text, i) => (
         <div
           key={i}
-          className="flex-1 flex flex-col items-center relative text-center px-4"
+          className="flex-1 flex flex-col  items-center relative text-center px-4"
         >
           {/* Top Star and Divider */}
           <div className="flex items-center w-full mb-2 lg:mb-4">
@@ -257,7 +262,7 @@ function FeatureRow({ features, type = true }) {
 
 function Specifications({ product }) {
   return (
-    <div className="flex p-5 flex-col justify-around items-center gap-6 border border-[#000] font-inter ">
+    <div className="flex-1 md:flex-none flex p-5 flex-col  justify-around items-center gap-6 border border-[#000] font-inter ">
       <div>
         <img src={product?.image} alt="article code" />
       </div>
@@ -305,7 +310,7 @@ function Card({ product }) {
   //   }, [isAuthenticated, cartItems, localcartItems, product?.id]);
 
   return (
-    <div className="font-Poppins max-w-xs lg:w-[245px] lg:h-[340px] border border-[#ccc]">
+    <div className="font-TimesNewRoman max-w-xs lg:w-[245px] lg:h-[310px] border border-[#ccc]">
       {/* <div className="font-Poppins max-w-xs lg:w-[245px] lg:h-[340px] border border-[#ccc]"> */}
       <div
         // onClick={() => naviagte(`/productview/${product.id}`)}
@@ -323,7 +328,7 @@ function Card({ product }) {
           <div className="flex-1 text-sm  leading-[22.4px]  text-[#111] ">
             <div className="flex justify-between items-center lg:flex-none">
               <h4 className="font-medium text-sm leading-[22.4px] capitalize">
-                {/* {product?.title} */}chair
+                {product?.title}
               </h4>
               <div
                 // onClick={() => handleAddtoWishlist(product)}
@@ -334,36 +339,36 @@ function Card({ product }) {
               ) : (
                 <GoHeart size={25} />
               )} */}
-                <GoHeart size={22} />
+                {/* <GoHeart size={22} /> */}
               </div>
             </div>
             <div className="flex items-center gap-2">
-              <p className=" ">Rs {"Rs 3,0000"}</p>
+              <p className=" ">Rs {"3,0000"}</p>
               <p className="line-through text-[#111] text-opacity-50">
-                Rs $5678
+                Rs 5678
               </p>
               <p className="text-[#C20000]">sale</p>
             </div>
           </div>
-          <div
+          {/* <div
             // onClick={() => handleAddtoWishlist(product)}
             className=" text-[#ccc] hover:text-red-950 cursor-pointer hidden lg:block"
           >
-            {/* {isWishlisted ? (
+            {isWishlisted ? (
               <AiFillHeart size={26} color="red" />
             ) : (
               <GoHeart size={25} />
-            )} */}
+            )}
             <GoHeart size={20} />
-          </div>
+          </div> */}
         </div>
-        <button
-          //   onClick={() => handleAddToCart(product)}
+        {/* <button
+            onClick={() => handleAddToCart(product)}
           className="text-[#000] uppercase bg-[#FFFFFF] text-xs border border-[#ccc] px-2  py-2 rounded-sm "
         >
-          {/* {iscarted ? "added to cart" : "add to cart"} */}
+          {iscarted ? "added to cart" : "add to cart"}
           add to cart
-        </button>
+        </button> */}
       </div>
     </div>
   );
