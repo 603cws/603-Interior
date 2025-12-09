@@ -1,60 +1,74 @@
 import { lazy, Suspense } from "react";
 import "./styles/Landing.css";
-import Boq from "./boq/pages/Boq";
-import PageNotFound from "./common-components/PageNotFound";
 import { Navigate, Route, Routes } from "react-router-dom";
-import Landing from "./pages/Landing";
 import SpinnerFullPage from "./common-components/SpinnerFullPage";
-import Contactus from "./pages/Contactus";
-import AboutUs from "./pages/AboutUs";
-import Login from "./common-components/Login";
-import BlogDetail from "./pages/BlogDetail";
-import Dashboard from "./pages/Dashboard";
-import ScrollToTop from "./common-components/ScrollToTop";
 import { useApp } from "./Context/Context";
-import HelpnFaq from "./pages/HelpnFaq";
-import TermsAndCondition from "./pages/TermsAndCondition";
-import Boqcompleted from "./common-components/Boqcompleted";
-import AdminDashboard from "./pages/Admin/AdminDashboard";
-import ProductOverview from "./boq/pages/ProductOverview";
-import JobPage from "./pages/JobPage";
-import ThreeDViewer from "./common-components/ThreeDViewer";
-import CompleteProfile from "./common-components/CompleteProfile";
-import Privacy from "./pages/Privacy";
-import InteriorBlog from "./pages/InteriorBlog";
-import Products from "./pages/Ecommerce/Products";
-import ProductView from "./pages/Ecommerce/ProductView";
-import ShopProducts from "./pages/Ecommerce/ShopProducts";
-import Cart from "./pages/Ecommerce/Cart";
-import Addresspage from "./pages/Ecommerce/Addresspage";
-import Wishlist from "./pages/Ecommerce/Wishlist";
-import Payments from "./pages/Ecommerce/Payments";
-import ELogin from "./common-components/ELogin";
-import Brands from "./pages/Brands/Brands";
-import ProductReview from "./pages/Ecommerce/ProductReview";
-import BrandProductView from "./pages/Brands/BrandProductView";
-import ProfilePage from "./pages/Ecommerce/ProfilePage";
-import SeasonSpecial from "./pages/Ecommerce/SeasonSpecial";
-import TopDeal from "./pages/Ecommerce/TopDeal";
-import AllReviews from "./pages/Ecommerce/AllReviews";
-import BrandFurniture from "./pages/Brands/BrandFurniture";
-import BrandLight from "./pages/Brands/BrandLight";
-import BrandHVAC from "./pages/Brands/BrandHVAC";
-import BrandDLink from "./pages/Brands/BrandDLink";
-import VendorDashboardLayout from "./pages/vendor/VendorDashboardLayout";
 import PrivateRoute from "./utils/PrivateRoute";
-import Services from "./pages/Services";
-import OurStory from "./pages/OurStory";
-import OrderConfirm from "./pages/Ecommerce/OrderConfirm";
-import AdminDashboardEcom from "./pages/Admin/EcommerceDashboard/AdminDashboardEcom";
-import DashboardInterface from "./pages/Admin/DashboardInterface";
-import YouMayAlsoLike from "./pages/Ecommerce/YouMayAlsoLike";
-import DynamicTitle from "./common-components/DynamicTitle";
-import BrandsOverview from "./pages/Brands/BrandOverview";
-import Welspun from "./pages/Brands/Welspun";
+import ScrollToTop from "./common-components/ScrollToTop";
 
+// lazy loading
+const Contactus = lazy(() => import("./pages/Contactus"));
+const AboutUs = lazy(() => import("./pages/AboutUs"));
+const Login = lazy(() => import("./common-components/Login"));
+const BlogDetail = lazy(() => import("./pages/BlogDetail"));
+const Dashboard = lazy(() => import("./pages/Dashboard"));
+const BrandDLink = lazy(() => import("./pages/Brands/BrandDLink"));
+const DashboardInterface = lazy(() =>
+  import("./pages/Admin/DashboardInterface")
+);
+const VendorDashboardLayout = lazy(() =>
+  import("./pages/vendor/VendorDashboardLayout")
+);
+const Services = lazy(() => import("./pages/Services"));
+const OurStory = lazy(() => import("./pages/OurStory"));
+const OrderConfirm = lazy(() => import("./pages/Ecommerce/OrderConfirm"));
+const AdminDashboardEcom = lazy(() =>
+  import("./pages/Admin/EcommerceDashboard/AdminDashboardEcom")
+);
+const DynamicTitle = lazy(() => import("./common-components/DynamicTitle"));
+const YouMayAlsoLike = lazy(() => import("./pages/Ecommerce/YouMayAlsoLike"));
+const Welspun = lazy(() => import("./pages/Brands/Welspun"));
+const BrandsOverview = lazy(() => import("./pages/Brands/BrandOverview"));
 const Layout = lazy(() => import("./layout/pages/Layout"));
 const Carrer = lazy(() => import("./pages/Carrer"));
+
+const HelpnFaq = lazy(() => import("./pages/HelpnFaq"));
+const TermsAndCondition = lazy(() => import("./pages/TermsAndCondition"));
+const Boqcompleted = lazy(() => import("./common-components/Boqcompleted"));
+const AdminDashboard = lazy(() => import("./pages/Admin/AdminDashboard"));
+const ProductOverview = lazy(() => import("./boq/pages/ProductOverview"));
+const JobPage = lazy(() => import("./pages/JobPage"));
+const ThreeDViewer = lazy(() => import("./common-components/ThreeDViewer"));
+const CompleteProfile = lazy(() =>
+  import("./common-components/CompleteProfile")
+);
+const Privacy = lazy(() => import("./pages/Privacy"));
+const InteriorBlog = lazy(() => import("./pages/InteriorBlog"));
+
+const Products = lazy(() => import("./pages/Ecommerce/Products"));
+const ProductView = lazy(() => import("./pages/Ecommerce/ProductView"));
+const ShopProducts = lazy(() => import("./pages/Ecommerce/ShopProducts"));
+const Cart = lazy(() => import("./pages/Ecommerce/Cart"));
+const Addresspage = lazy(() => import("./pages/Ecommerce/Addresspage"));
+const Wishlist = lazy(() => import("./pages/Ecommerce/Wishlist"));
+const Payments = lazy(() => import("./pages/Ecommerce/Payments"));
+const ELogin = lazy(() => import("./common-components/ELogin"));
+
+const Brands = lazy(() => import("./pages/Brands/Brands"));
+const ProductReview = lazy(() => import("./pages/Ecommerce/ProductReview"));
+const BrandProductView = lazy(() => import("./pages/Brands/BrandProductView"));
+const ProfilePage = lazy(() => import("./pages/Ecommerce/ProfilePage"));
+const SeasonSpecial = lazy(() => import("./pages/Ecommerce/SeasonSpecial"));
+const TopDeal = lazy(() => import("./pages/Ecommerce/TopDeal"));
+const AllReviews = lazy(() => import("./pages/Ecommerce/AllReviews"));
+
+const BrandFurniture = lazy(() => import("./pages/Brands/BrandFurniture"));
+const BrandLight = lazy(() => import("./pages/Brands/BrandLight"));
+const BrandHVAC = lazy(() => import("./pages/Brands/BrandHVAC"));
+
+const PageNotFound = lazy(() => import("./common-components/PageNotFound"));
+const Boq = lazy(() => import("./boq/pages/Boq"));
+const Landing = lazy(() => import("./pages/Landing"));
 
 function App() {
   const { accountHolder, isAuthLoading } = useApp();
@@ -126,7 +140,6 @@ function App() {
               </PrivateRoute>
             }
           />
-
           <Route
             path="/admindashboard"
             element={

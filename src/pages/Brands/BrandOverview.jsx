@@ -524,11 +524,11 @@ function TrendingProducts() {
 
 function TopBrands() {
   const brands = [
-    { id: 1, img: "/images/brand1.jpg", logo: "/images/welspun-logo.png" },
-    { id: 2, img: "/images/brand1.jpg", logo: "/images/welspun-logo.png" },
-    { id: 3, img: "/images/brand1.jpg", logo: "/images/welspun-logo.png" },
-    { id: 4, img: "/images/brand1.jpg", logo: "/images/welspun-logo.png" },
-    { id: 5, img: "/images/brand1.jpg", logo: "/images/welspun-logo.png" },
+    { id: 1, img: "/images/brand1.webp", logo: "/images/welspun-logo.png" },
+    { id: 2, img: "/images/brand1.webp", logo: "/images/welspun-logo.png" },
+    { id: 3, img: "/images/brand1.webp", logo: "/images/welspun-logo.png" },
+    { id: 4, img: "/images/brand1.webp", logo: "/images/welspun-logo.png" },
+    { id: 5, img: "/images/brand1.webp", logo: "/images/welspun-logo.png" },
   ];
 
   return (
