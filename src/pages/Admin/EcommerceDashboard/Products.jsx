@@ -57,7 +57,8 @@ function Products({
   const [isloading, setIsloading] = useState(false);
   const scrollContainerRef = useRef(null);
   const tableRef = useRef(null);
-  const [itemsPerPage, setItemsPerPage] = useState(10); // Default (gets updated dynamically)
+  const itemsPerPage = 10;
+
   const [openMenuId, setOpenMenuId] = useState(null); // Store the ID of the row with an open menu
 
   const [priceMin, setPriceMin] = useState("");
@@ -83,19 +84,6 @@ function Products({
     acc[item.category] = item.subcategories || [];
     return acc;
   }, {});
-
-  //all the category
-  const category = [
-    "Furniture",
-    "HVAC",
-    "Paint",
-    "Partitions / Ceilings",
-    "Lux",
-    "Civil / Plumbing",
-    "Flooring",
-    "Lighting",
-    "Smart Solutions",
-  ];
 
   const tabs = [
     { name: "Products", value: "products" },
@@ -370,11 +358,10 @@ function Products({
 
   useEffect(() => {
     fetchProducts();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isproductRefresh]);
 
   const goToPage = (page) => {
-    console.log(page);
-
     if (page > 0 && page <= totalPages) {
       setCurrentPage(page);
 
@@ -1092,152 +1079,132 @@ function Products({
                           </tr>
                         </thead>
                         <tbody className=" text-sm">
-                          {paginatedItems.map(
-                            (item) => (
-                              console.log(item),
-                              (
-                                <tr key={item.id} className="hover:bg-gray-50">
-                                  <td className="border border-gray-200 p-3 align-middle w-1/2">
-                                    <div className="flex items-center gap-2">
-                                      <img
-                                        src={`${baseImageUrl}${item.image}`}
-                                        alt={item.title}
-                                        className="w-10 h-10 object-contain rounded"
-                                      />
+                          {paginatedItems.map((item) => (
+                            <tr key={item.id} className="hover:bg-gray-50">
+                              <td className="border border-gray-200 p-3 align-middle w-1/2">
+                                <div className="flex items-center gap-2">
+                                  <img
+                                    src={`${baseImageUrl}${item.image}`}
+                                    alt={item.title}
+                                    className="w-10 h-10 object-contain rounded"
+                                  />
 
-                                      <span>{item.title}</span>
-                                    </div>
-                                  </td>
-                                  <td className="border border-gray-200 p-3 align-middle text-center">
-                                    ₹{item?.ecommercePrice?.mrp}
-                                  </td>
-                                  <td className="border border-gray-200 p-3 align-middle text-center">
-                                    ₹{item?.ecommercePrice?.sellingPrice}
-                                  </td>
-                                  <td className="border border-gray-200 p-3 align-middle text-center">
-                                    {item.stockQty}
-                                  </td>
-                                  <td className="border border-gray-200 p-3 align-middle text-center group relative">
-                                    {item.status === "pending" ? (
-                                      <div className="flex items-center justify-center">
-                                        <span className="text-[#13B2E4]">
-                                          Pending
-                                        </span>
-                                        <div className="absolute top-0 left-0 w-full h-full bg-white/90 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                                          <button
-                                            className="bg-gray-100 text-green-600 p-3 rounded-full mr-2 hover:text-gray-100 hover:bg-green-600"
-                                            onClick={() => {
-                                              handleUpdateStatus(
-                                                item,
-                                                "approved"
-                                              );
-                                              setRejectReason("");
-                                            }}
-                                            // onClick={() => handleAccept(item)}
-                                          >
-                                            <IoCheckmark size={20} />
-                                          </button>
-                                          <button
-                                            className="bg-gray-100 text-red-600 p-3 rounded-full mr-2 hover:text-gray-100 hover:bg-red-600"
-                                            // onClick={() =>
-                                            //   handleReject(item.id)
-                                            // }
-                                            // onClick={() =>
-                                            //   handleUpdateStatus(
-                                            //     item,
-                                            //     "rejected"
-                                            //   )
-                                            // }
-                                            onClick={() =>
-                                              handleRejectClick(item)
-                                            }
-                                          >
-                                            <HiXMark size={20} />
-                                          </button>
-                                        </div>
-                                      </div>
-                                    ) : item.status === "approved" ? (
-                                      <span className="text-green-400">
-                                        approved
-                                      </span>
-                                    ) : (
-                                      <span className="text-red-400">
-                                        {item.status || "N/A"}
-                                      </span>
-                                    )}
-                                  </td>
-
-                                  <td className="border border-gray-200 p-3 align-middle flex justify-center items-center relative">
-                                    <button
-                                      ref={(el) =>
-                                        (buttonRef.current[item.id] = el)
-                                      }
-                                      className="bg-white flex justify-center items-center py-1.5 w-20 mb-2"
-                                      onClick={() => handleMenuToggle(item.id)}
-                                    >
-                                      <CiMenuKebab size={25} />
-                                    </button>
-
-                                    {openMenuId === item.id && (
-                                      <div
-                                        ref={(el) =>
-                                          (menuRef.current[item.id] = el)
-                                        }
-                                        className="absolute top-1/2 left-0 transform mt-2 bg-white border border-gray-300 shadow-md rounded-md w-24 z-40"
+                                  <span>{item.title}</span>
+                                </div>
+                              </td>
+                              <td className="border border-gray-200 p-3 align-middle text-center">
+                                ₹{item?.ecommercePrice?.mrp}
+                              </td>
+                              <td className="border border-gray-200 p-3 align-middle text-center">
+                                ₹{item?.ecommercePrice?.sellingPrice}
+                              </td>
+                              <td className="border border-gray-200 p-3 align-middle text-center">
+                                {item.stockQty}
+                              </td>
+                              <td className="border border-gray-200 p-3 align-middle text-center group relative">
+                                {item.status === "pending" ? (
+                                  <div className="flex items-center justify-center">
+                                    <span className="text-[#13B2E4]">
+                                      Pending
+                                    </span>
+                                    <div className="absolute top-0 left-0 w-full h-full bg-white/90 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                                      <button
+                                        className="bg-gray-100 text-green-600 p-3 rounded-full mr-2 hover:text-gray-100 hover:bg-green-600"
+                                        onClick={() => {
+                                          handleUpdateStatus(item, "approved");
+                                          setRejectReason("");
+                                        }}
                                       >
-                                        <button
-                                          onClick={() => {
-                                            handleProductPreview(item);
-                                            setOpenMenuId(null);
-                                          }}
-                                          className=" flex gap-2 items-center w-full text-left px-3 py-2 hover:bg-gray-200"
-                                        >
-                                          <VscEye /> View
-                                        </button>
-                                        <button
-                                          onClick={() => {
-                                            if (toggle) {
-                                              setSelectedproduct(item);
-                                              setEditProduct(true);
-                                            } else {
-                                              setSelectedAddon(item);
-                                              setEditAddon(true);
-                                            }
-                                            setOpenMenuId(null);
-                                          }}
-                                          className="flex gap-2 items-center w-full text-left px-3 py-2 hover:bg-gray-200"
-                                        >
-                                          <VscEye /> Edit
-                                        </button>
-                                        <button
-                                          // onClick={() => {
-                                          //   handleDelete(item);
-                                          // }}
-                                          onClick={() => {
-                                            handleDeleteClick(item);
-                                            setOpenMenuId(null);
-                                          }}
-                                          className="flex gap-2 items-center w-full text-left px-3 py-2 hover:bg-gray-200"
-                                        >
-                                          <MdOutlineDelete /> Delete
-                                        </button>
-                                        <button
-                                          onClick={() => {
-                                            setSelectedproduct(item);
-                                            setReviews(true);
-                                            setOpenMenuId(null);
-                                          }}
-                                          className="flex gap-0.5 items-center w-full text-left px-3 py-2 hover:bg-gray-200"
-                                        >
-                                          <MdOutlineRateReview /> Reviews
-                                        </button>
-                                      </div>
-                                    )}
-                                  </td>
-                                </tr>
-                              )
-                            )
-                          )}
+                                        <IoCheckmark size={20} />
+                                      </button>
+                                      <button
+                                        className="bg-gray-100 text-red-600 p-3 rounded-full mr-2 hover:text-gray-100 hover:bg-red-600"
+                                        onClick={() => handleRejectClick(item)}
+                                      >
+                                        <HiXMark size={20} />
+                                      </button>
+                                    </div>
+                                  </div>
+                                ) : item.status === "approved" ? (
+                                  <span className="text-green-400">
+                                    approved
+                                  </span>
+                                ) : (
+                                  <span className="text-red-400">
+                                    {item.status || "N/A"}
+                                  </span>
+                                )}
+                              </td>
+
+                              <td className="border border-gray-200 p-3 align-middle flex justify-center items-center relative">
+                                <button
+                                  ref={(el) =>
+                                    (buttonRef.current[item.id] = el)
+                                  }
+                                  className="bg-white flex justify-center items-center py-1.5 w-20 mb-2"
+                                  onClick={() => handleMenuToggle(item.id)}
+                                >
+                                  <CiMenuKebab size={25} />
+                                </button>
+
+                                {openMenuId === item.id && (
+                                  <div
+                                    ref={(el) =>
+                                      (menuRef.current[item.id] = el)
+                                    }
+                                    className="absolute top-1/2 left-0 transform mt-2 bg-white border border-gray-300 shadow-md rounded-md w-24 z-40"
+                                  >
+                                    <button
+                                      onClick={() => {
+                                        handleProductPreview(item);
+                                        setOpenMenuId(null);
+                                      }}
+                                      className=" flex gap-2 items-center w-full text-left px-3 py-2 hover:bg-gray-200"
+                                    >
+                                      <VscEye /> View
+                                    </button>
+                                    <button
+                                      onClick={() => {
+                                        if (toggle) {
+                                          setSelectedproduct(item);
+                                          setEditProduct(true);
+                                        } else {
+                                          setSelectedAddon(item);
+                                          setEditAddon(true);
+                                        }
+                                        setOpenMenuId(null);
+                                      }}
+                                      className="flex gap-2 items-center w-full text-left px-3 py-2 hover:bg-gray-200"
+                                    >
+                                      <VscEye /> Edit
+                                    </button>
+                                    <button
+                                      // onClick={() => {
+                                      //   handleDelete(item);
+                                      // }}
+                                      onClick={() => {
+                                        handleDeleteClick(item);
+                                        setOpenMenuId(null);
+                                      }}
+                                      className="flex gap-2 items-center w-full text-left px-3 py-2 hover:bg-gray-200"
+                                    >
+                                      <MdOutlineDelete /> Delete
+                                    </button>
+                                    <button
+                                      onClick={() => {
+                                        setSelectedproduct(item);
+                                        setReviews(true);
+                                        setOpenMenuId(null);
+                                      }}
+                                      className="flex gap-0.5 items-center w-full text-left px-3 py-2 hover:bg-gray-200"
+                                    >
+                                      <MdOutlineRateReview /> Reviews
+                                    </button>
+                                  </div>
+                                )}
+                              </td>
+                            </tr>
+                          ))}
                         </tbody>
                       </table>
                     </div>

@@ -281,22 +281,6 @@ function JobCard({
 }
 
 function Jobdetails({ canditate, setCanditateDetail, careerDispatch }) {
-  console.log("canditate", canditate);
-
-  //   {
-  //     "id": "8e391e4c-02c4-4813-8c59-921f4deac951",
-  //     "created_at": "2025-11-07T11:29:43.93551+00:00",
-  //     "FullName": "yuvraj machadi",
-  //     "Position": "web developer",
-  //     "Experience": null,
-  //     "NoticePeriod": 30,
-  //     "CurrentCTC": 250000,
-  //     "ExpectedCTC": 600000,
-  //     "EmailID": "yuvrajmanchadi321@gmail.com",
-  //     "MobNo": 9594767165,
-  //     "ResumePath": "products_summary (9).pdf"
-  // }
-
   return (
     <div className="max-w-xs border border-[#ccc] py-5 px-[18px] font-Poppins rounded-lg">
       <div className="flex gap-3 items-center">
@@ -334,20 +318,6 @@ function Jobdetails({ canditate, setCanditateDetail, careerDispatch }) {
 }
 
 function CanditateDetails({ canditate, jobPostings }) {
-  console.log("applied canditate");
-
-  //   useEffect(() => {
-  //     const handleOpenPdf = async () => {
-  //       const { data } = supabase.storage
-  //         .from("") // your bucket name
-  //         .getPublicUrl("documents/sample.pdf"); // file path inside bucket
-
-  //       // // open in new tab
-  //       // window.open(data.publicUrl, "_blank");
-  //     };
-  //     handleOpenPdf();
-  //   }, []);
-
   const jobdata = jobPostings?.filter(
     (job) => job?.jobTitle.toLowerCase() === canditate?.Position.toLowerCase()
   );
@@ -483,8 +453,6 @@ function JobPostForm({ jobdata = null, isedit = false, onsuccess = null }) {
   }, [jobdata, reset]);
 
   async function handlejobCreate(formData) {
-    console.log("formdata", formData);
-
     try {
       const job = {
         jobTitle: formData?.JobTitle,
@@ -503,7 +471,6 @@ function JobPostForm({ jobdata = null, isedit = false, onsuccess = null }) {
           .select()
           .single();
 
-        console.log("editing data ", data);
         if (error) throw error;
         if (data) {
           toast.success("data updated succcesfully");
@@ -528,14 +495,7 @@ function JobPostForm({ jobdata = null, isedit = false, onsuccess = null }) {
   }
   return (
     <div>
-      <form
-        // onKeyDown={(e) => {
-        //   if (e.key === "Enter") {
-        //     e.preventDefault();
-        //   }
-        // }}
-        onSubmit={handleSubmit(handlejobCreate)}
-      >
+      <form onSubmit={handleSubmit(handlejobCreate)}>
         <div className="border border-[#ccc] rounded-md m-3 space-y-9">
           <div className="flex flex-col p-3 space-y-3">
             <label className="font-medium text-lg lg:text-xl text-[#000]">

@@ -156,8 +156,6 @@ function AdminDashboardEcom() {
   };
 
   const handleUpdateStatus = async (product, newStatus, reason = "") => {
-    console.log("product", product);
-
     try {
       if (product && product.type === "product") {
         await supabase
@@ -209,8 +207,6 @@ function AdminDashboardEcom() {
         .from("users_profiles")
         .select("*")
         .eq("role", "user");
-
-      // console.log(data);
 
       setAllusers(data);
       setFilteredUsers(data);

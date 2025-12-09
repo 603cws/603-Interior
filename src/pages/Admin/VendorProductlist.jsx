@@ -35,7 +35,6 @@ function VendorProductlist({
   const [addNewProduct, setAddNewProduct] = useState(false);
   const [addNewAddon, setAddNewAddon] = useState(false);
   const tableRef = useRef(null);
-  const [itemsPerPage, setItemsPerPage] = useState(10); // Default (gets updated dynamically)
   const [currentPage, setCurrentPage] = useState(1);
   const [openMenuId, setOpenMenuId] = useState(null); // Store the ID of the row with an open menu
   const [productPreview, setProductPreview] = useState(false);
@@ -51,8 +50,6 @@ function VendorProductlist({
 
   // const tableRef = useRef(null);
   const scrollContainerRef = useRef(null);
-  // const [itemsPerPage, setItemsPerPage] = useState(10); // Default (gets updated dynamically)
-  // const [currentPage, setCurrentPage] = useState(1);
   const [lastPageBeforeSearch, setLastPageBeforeSearch] = useState(1);
   const [isSearching, setIsSearching] = useState(false);
   const [searchQuery, setSearchQuery] = useState(""); // to store the latest search input
@@ -104,17 +101,13 @@ function VendorProductlist({
     setIsOpen(false); // close dropdown after selection (optional)
   };
 
-  //baseurlforimg
-  // const baseImageUrl =
-  //   "https://bwxzfwsoxwtzhjbzbdzs.supabase.co/storage/v1/object/public/addon/";
+  const itemsPerPage = 10;
 
   const handleMenuToggle = (id) => {
     setOpenMenuId((prev) => (prev === id ? null : id));
   };
 
   const handleUpdateStatus = async (product, newStatus, reason = "") => {
-    console.log("product", product);
-
     try {
       if (product && product.type === "product") {
         await supabase
@@ -213,13 +206,6 @@ function VendorProductlist({
     setToggle(tab === "products"); // Set toggle dynamically
   };
 
-  // const filteredProducts =
-  //   selectedCategory === ""
-  //     ? products
-  //     : products.filter(
-  //         (product) => product.products?.category === selectedCategory
-  //       );
-
   const items = toggle ? filteredProducts : filteredAddons;
   // const items = toggle ? filteredProducts : addons;
   const totalPages = Math.ceil(items.length / itemsPerPage);
@@ -233,18 +219,12 @@ function VendorProductlist({
       );
       setFilteredProducts(filtered);
     } else {
-      // const filtered = products.filter((item) =>
-      //   normalize(item.title).includes(normalize(query))
-      // );
       setFilteredProducts(products);
     }
   };
 
   const filterItems = (query) => {
-    // console.log(query);
     setSearchQuery(query);
-    console.log(query);
-    console.log("products", products);
 
     if (toggle) {
       if (!query && !selectedCategory) {
@@ -271,10 +251,6 @@ function VendorProductlist({
         setIsSearching(true);
       }
       setCurrentPage(1);
-
-      // const filtered = products.filter((item) =>
-      //   item.title.toLowerCase().includes(query.toLowerCase())
-      // );
       if (selected !== "") {
         const filtered = filteredProducts.filter(
           (item) =>
@@ -288,12 +264,6 @@ function VendorProductlist({
         );
         setFilteredProducts(filtered);
       }
-
-      // const filtered = products.filter((item) =>
-      //   normalize(item.title).includes(normalize(query))
-      // );
-      // setFilteredProducts(filtered);
-      // console.log("filtered", filtered);
     } else {
       if (!query) {
         setFilteredAddons(addons); // Reset to original list when input is empty
@@ -309,9 +279,6 @@ function VendorProductlist({
       }
       setCurrentPage(1);
 
-      // const filtered = addons.filter((item) =>
-      //   item.title.toLowerCase().includes(query.toLowerCase())
-      // );
       if (selected !== "") {
         const filtered = filteredAddons.filter(
           (item) =>
@@ -325,19 +292,10 @@ function VendorProductlist({
         );
         setFilteredAddons(filtered);
       }
-
-      // console.log("filtered", filtered);
-      // const filtered = products.filter((item) =>
-      //   normalize(item.title).includes(normalize(query))
-      // );
-      // // console.log(filtered);
-
-      // setFilteredAddons(filtered);
     }
   };
 
   const filterbyCategory = (category) => {
-    // console.log(category);
     setSelectedCategory(category);
 
     if (toggle) {
@@ -349,7 +307,6 @@ function VendorProductlist({
         (item) =>
           item.products.category.toLowerCase() === category.toLowerCase()
       );
-      // console.log(filtered);
 
       setFilteredProducts(filtered);
     } else {
@@ -360,29 +317,11 @@ function VendorProductlist({
       const filtered = addons.filter((item) =>
         item.title.toLowerCase().includes(category.toLowerCase())
       );
-      // console.log(filtered);
 
       setFilteredAddons(filtered);
     }
     setCurrentPage(1);
   };
-
-  useEffect(() => {
-    const calculateItemsPerPage = () => {
-      if (tableRef.current) {
-        const tableHeight = tableRef.current.clientHeight; // Get table's available height
-        const rowHeight = 60; // Approximate row height (adjust if needed)
-        const headerHeight = 50; // Height of the table header
-        const maxRows = Math.floor((tableHeight - headerHeight) / rowHeight);
-
-        // setItemsPerPage(maxRows > 0 ? maxRows : 1); // Ensure at least 1 row is shown
-      }
-    };
-
-    calculateItemsPerPage();
-    window.addEventListener("resize", calculateItemsPerPage);
-    return () => window.removeEventListener("resize", calculateItemsPerPage);
-  }, []);
 
   // Slice the items for pagination
   const paginatedItems = items.slice(
@@ -401,8 +340,6 @@ function VendorProductlist({
   };
 
   const handleDelete = async (product) => {
-    console.log("product of vendor ", product);
-
     if (!product.id) return;
 
     try {
@@ -465,12 +402,6 @@ function VendorProductlist({
         .from("addon_variants")
         .select("*")
         .eq("vendorId", selectedVendor.id);
-
-      // if (error) {
-      //   console.log("Error fetching addons:", error);
-      // } else {
-      //   setAddons(data);
-      // }
       const sortedData = data.sort((a, b) => {
         // Prioritize "pending" status
         if (a.status === "pending" && b.status !== "pending") return -1;
@@ -491,17 +422,14 @@ function VendorProductlist({
     }
   };
 
-  // useEffect(() => {
-  //   fetchProducts();
-  //   fetchAddons();
-  // }, []);
-
   useEffect(() => {
     fetchProducts();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isproductRefresh]);
 
   useEffect(() => {
     fetchAddons();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isaddonRefresh]);
 
   const handleCheckboxChange = (blogId) => {
@@ -513,16 +441,12 @@ function VendorProductlist({
   };
 
   async function handleMultipleDelete(selectedProducts) {
-    console.log("selectedDeleteItems", selectedProducts);
-
     if (selectedProducts?.length === 0) return;
 
     // Filter the items you want to delete
     const filteredItems = items.filter((item) =>
       selectedProducts?.includes(item.id)
     );
-
-    console.log("items after filter", filteredItems);
 
     try {
       for (const product of filteredItems) {
@@ -607,50 +531,6 @@ function VendorProductlist({
                 >
                   <IoIosArrowBack /> Back to vendor list
                 </button>
-
-                {/* <div className="relative inline-block text-left">
-                  <button
-                    onClick={() => setIsOpen(!isOpen)}
-                    className="flex items-center gap-2 bg-gray-100 px-4 py-2 rounded-md hover:bg-gray-200"
-                  >
-                    <FunnelIcon className="h-5 w-5 text-gray-600" />
-                    <span className="text-sm text-gray-700">Filter</span>
-                    <ChevronDownIcon className="h-4 w-4 text-gray-500" />
-                  </button>
-
-                  {isOpen && (
-                    <div className="absolute mt-2 w-40 bg-white border rounded-md shadow-lg z-10">
-                      <select
-                        value={selected}
-                        onChange={handleSelect}
-                        className="w-full border-none focus:ring-0 p-2 text-sm"
-                      >
-                        <option value="">All</option>
-                        <option value="pending">Pending</option>
-                        <option value="approved">Approved</option>
-                        <option value="rejected">Rejected</option>
-                      </select>
-                    </div>
-                  )}
-                </div>
-
-                {toggle && (
-                  <div>
-                    <select
-                      name="category"
-                      value={selectedCategory}
-                      onChange={(e) => filterbyCategory(e.target.value)}
-                      id="category"
-                    >
-                      <option value="">All categories</option>
-                      {vendorcategory.map((category) => (
-                        <option key={category} value={category}>
-                          {category}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                )} */}
 
                 <div className="relative inline-block" ref={dropdownRef}>
                   {/* Filter Button */}
@@ -972,14 +852,6 @@ function VendorProductlist({
                                         Edit
                                       </button>
                                     )}
-                                    {/* <button
-                                  onClick={() => {
-                                    handleDelete(item);
-                                  }}
-                                  className="flex gap-2 items-center w-full text-left px-3 py-2 hover:bg-gray-200"
-                                >
-                                  <MdOutlineDelete /> Delete
-                                </button> */}
                                   </div>
                                 )}
                               </td>
@@ -1099,22 +971,6 @@ function VendorProductlist({
           setRejectReason={setRejectReason}
         />
       )}
-      {/* {productPreview && (
-        <VendorProductCard
-          onClose={() => {
-            setProductPreview(false);
-          }}
-          product={selectedProductview}
-          // fetchProducts={fetchProducts}
-          handleDelete={handleDelete}
-          updateStatus={handleUpdateStatus}
-          deleteWarning={deleteWarning}
-          setDeleteWarning={setDeleteWarning}
-          rejectReason={rejectReason}
-          setRejectReason={setRejectReason}
-          handleConfirmReject={handleUpdateStatus}
-        />
-      )} */}
 
       {/* delete waring for multiple select item */}
       {multipleDeleteWaring && (

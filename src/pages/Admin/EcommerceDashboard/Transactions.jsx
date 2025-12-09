@@ -61,12 +61,6 @@ function Transactions({ sidebarDispatch, onOrderSelect }) {
     <div className="border border-gray-200 rounded-lg shadow-sm p-4 cursor-default">
       <div className="flex justify-between items-center mb-3">
         <h2 className="font-bold text-lg text-[#23272E]">Transaction</h2>
-        {/* <FilterButton
-          iconSrc="./images/ecommerce/sort.png"
-          altText="filter icon"
-        >
-          Filter
-        </FilterButton> */}
       </div>
       {loadingOrders ? (
         <div className="flex justify-center items-center py-8 text-[#6A717F] text-lg">

@@ -7,8 +7,7 @@ import PagInationNav from "../../common-components/PagInationNav";
 export default function Orders({ vendorId = null }) {
   const [ordersData, setOrdersData] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(15);
-  const totalPages = Math.ceil(ordersData?.length / itemsPerPage);
+
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [loadingOrders, setLoadingOrders] = useState(false);
   const [filterDropdown, setFilterDropdown] = useState(false);
@@ -17,6 +16,9 @@ export default function Orders({ vendorId = null }) {
   const [filteredOrders, setFilteredOrders] = useState([]);
   const dropdownRef = useRef(null);
   const [searchQuery, setSearchQuery] = useState("");
+
+  const itemsPerPage = 15;
+  const totalPages = Math.ceil(ordersData?.length / itemsPerPage);
 
   const paginatedOrders = filteredOrders?.slice(
     (currentPage - 1) * itemsPerPage,
@@ -45,14 +47,13 @@ export default function Orders({ vendorId = null }) {
               )
           )
         : orders;
-      console.log(filteredOrders);
 
       setOrdersData(filteredOrders);
       setLoadingOrders(false);
     };
 
     fetchOrders();
-  }, []);
+  }, [vendorId]);
 
   useEffect(() => {
     if (ordersData?.length > 0) {
@@ -384,8 +385,6 @@ export function OrderDetails({ order, onBack, vendorId = null }) {
       )
     : order.order_items;
 
-  console.log(filteredProducts);
-
   return (
     <section className="flex flex-col h-full min-h-0 lg:rounded-lg font-Poppins bg-white">
       <button
@@ -470,9 +469,6 @@ export function OrderDetails({ order, onBack, vendorId = null }) {
                 )}
               </div>
             </div>
-            {/* <button className=" bg-[#003F62] hover:bg-[#4C69A4] text-white w-full rounded-lg py-1 mt-auto text-sm md:text-base">
-              View Profile
-            </button> */}
           </div>
           {/* Order Info */}
           <div className="border p-4 rounded-2xl flex flex-col gap-3">
@@ -510,9 +506,6 @@ export function OrderDetails({ order, onBack, vendorId = null }) {
                 </p>
               </div>
             </div>
-            {/* <button className="bg-[#003F62] hover:bg-[#4C69A4] text-white w-full rounded-lg py-1 mt-auto text-sm md:text-base">
-              Download info
-            </button> */}
           </div>
           {/* Deliver to */}
           <div className="border p-4 rounded-2xl flex flex-col gap-3">
@@ -536,9 +529,6 @@ export function OrderDetails({ order, onBack, vendorId = null }) {
                 </p>
               </div>
             </div>
-            {/* <button className="bg-[#003F62] hover:bg-[#4C69A4] text-white w-full rounded-lg py-1 mt-auto text-sm md:text-base">
-              View Profile
-            </button> */}
           </div>
         </div>
 

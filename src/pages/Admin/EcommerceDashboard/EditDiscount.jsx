@@ -7,8 +7,6 @@ import Spinner from "../../../common-components/Spinner"; // mirrors your EditBl
 function EditDiscount({ coupon, onClose, onUpdate }) {
   const [updating, setUpdating] = useState(false);
 
-  console.log(coupon);
-
   const {
     register,
     handleSubmit,

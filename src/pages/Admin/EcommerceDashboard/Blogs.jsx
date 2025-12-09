@@ -57,8 +57,6 @@ function Blogs() {
   };
 
   const handleDelete = async () => {
-    console.log("selectedBlogs", selectedBlogs);
-
     if (selectedBlogs.length === 0) return;
     if (!window.confirm("Are you sure you want to delete selected blog(s)?"))
       return;
@@ -67,14 +65,12 @@ function Blogs() {
       const imagePaths = blogs
         .filter((blog) => selectedBlogs.includes(blog.id))
         .map((blog) => blog.image);
-      console.log("imagePaths", imagePaths);
 
       if (imagePaths.length > 0) {
         const { data, error: storageError } = await supabase.storage
           .from("blog-images")
           .remove(imagePaths);
 
-        console.log("Images to delete", data);
         if (storageError)
           console.log("storageError while deleting image", storageError);
 

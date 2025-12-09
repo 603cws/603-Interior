@@ -29,7 +29,6 @@ function ClientBoq({ setClientBoqs }) {
   const [isSearching, setIsSearching] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [productlist, setProductlist] = useState(true);
-  const [itemsPerPage, setItemsPerPage] = useState(10);
   const [openMenuId, setOpenMenuId] = useState(null);
   const [selectedProductview, setSelectedProductview] = useState({
     product_name: "",
@@ -46,6 +45,8 @@ function ClientBoq({ setClientBoqs }) {
     { name: "Products", value: "products" },
     { name: "Add-Ons", value: "addons" },
   ];
+
+  const itemsPerPage = 10;
   const paginatedItems = items.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
@@ -81,6 +82,7 @@ function ClientBoq({ setClientBoqs }) {
 
   useEffect(() => {
     fetchUserBoqs();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedClient]);
 
   const fetchAddonsByIds = async () => {
@@ -91,9 +93,6 @@ function ClientBoq({ setClientBoqs }) {
       }
 
       if (selectedBoq && selectedBoq.addons) {
-        // const productIdsArray = selectedBoq.addon_varaint_id
-        //   .split(",")
-        //   .map((id) => id.trim());
         const productIdsArray = selectedBoq.addons.map(
           (addon) => addon.variantId
         );
@@ -102,8 +101,6 @@ function ClientBoq({ setClientBoqs }) {
           .from("addon_variants")
           .select("*")
           .in("id", productIdsArray); // Use Supabase `in()` filter
-
-        console.log(data);
 
         setAddons(data);
         setFilteredAddons(data);
@@ -117,17 +114,9 @@ function ClientBoq({ setClientBoqs }) {
 
   //fetch the product based on the selected boq
   const fetchProductsByIds = async () => {
-    console.log("hello from the product ");
-
     try {
       if (selectedBoq) {
         setIsloading(true);
-
-        console.log("selectedboq", selectedBoq);
-
-        // const productIdsArray = selectedBoq.product_variant_id
-        //   .split(",")
-        //   .map((id) => id.trim()); // Convert to array of ids
         const productIdsArray = selectedBoq.products.map(
           (product) => product.id
         );
@@ -146,8 +135,6 @@ function ClientBoq({ setClientBoqs }) {
         if (error) {
           throw new Error(error);
         }
-
-        console.log(data);
       } else {
         setProducts([]);
         setFilteredProducts([]);
@@ -238,8 +225,6 @@ function ClientBoq({ setClientBoqs }) {
   };
 
   const handleProductPreview = (product) => {
-    console.log("in function handleProductPreview", product);
-
     setProductPreview(true);
     setSelectedProductview(product);
   };
@@ -529,14 +514,6 @@ function ClientBoq({ setClientBoqs }) {
                                       >
                                         <VscEye /> view
                                       </button>
-                                      {/* <button
-                                          onClick={() => {
-                                            handleDelete(item);
-                                          }}
-                                          className="flex gap-2 items-center w-full text-left px-3 py-2 hover:bg-gray-200"
-                                        >
-                                          <MdOutlineDelete /> Delete
-                                        </button> */}
                                     </div>
                                   )}
                                 </td>

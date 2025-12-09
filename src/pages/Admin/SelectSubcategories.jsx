@@ -39,8 +39,6 @@ function SelectSubcategories({
   handleUpdateStatus,
   setRejectReason,
 }) {
-  console.log("product select", product);
-
   const [selectedSubcategories, setSelectedSubcategories] = useState([]);
   const AllCatArray = useAllCatArray();
   const category = product?.products?.category;
@@ -81,7 +79,6 @@ function SelectSubcategories({
       let productId;
       if (existingProducts && existingProducts.length > 0) {
         productId = existingProducts[0].id;
-        console.log("Existing product found:", productId);
       } else {
         const { data: newProduct, error: insertError } = await supabase
           .from("products")
@@ -99,7 +96,6 @@ function SelectSubcategories({
           return;
         }
         productId = newProduct.id;
-        console.log("New product created:", productId);
       }
       const { error: updateError } = await supabase
         .from("product_variants")
@@ -114,7 +110,6 @@ function SelectSubcategories({
       handleUpdateStatus(product, "approved");
       setRejectReason("");
       onClose();
-      console.log("Updated variant with product id:", productId);
     } catch (error) {
       console.log(error);
     }

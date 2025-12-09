@@ -50,8 +50,6 @@ function Schedule() {
     "08:00 pm",
   ];
 
-  const rows = Array.from({ length: 12 }, (_, rowIndex) => rowIndex + 1);
-
   // Function to get start and end date of the week in 'date/month/year' format
   const getWeekRange = (date) => {
     const dayOfWeek = date.getDay(); // 0 (Sunday) to 6 (Saturday)
@@ -72,8 +70,6 @@ function Schedule() {
     const newWeekRange = getWeekRange(selectedDate);
     setWeekRange(newWeekRange);
   }, [selectedDate]);
-
-  console.log(selectedDate, weekRange);
 
   useEffect(() => {
     if (weekRange.start !== "" && weekRange.end !== "") {
@@ -96,13 +92,7 @@ function Schedule() {
   }
 
   const getdata = async (date) => {
-    console.log(date);
-    console.log(weekRange);
-
     try {
-      // console.log(startweekday, endweekday);
-
-      console.log("weekrange", weekRange);
       const formatted = {
         start: formatDate(weekRange.start),
         end: formatDate(weekRange.end),
@@ -113,17 +103,8 @@ function Schedule() {
         .select("*")
         .gte("date_new", formatted?.start)
         .lte("date_new", formatted?.end);
-      // const { data, error } = await supabase
-      //   .from("appointments")
-      //   .select("*")
-      //   .gte("date", weekRange.start)
-      //   .lte("date", weekRange.end);
-
-      console.log(data);
 
       const appointmentdetails = formatScheduleData(data);
-
-      console.log(formatScheduleData(data));
       setScheduleData(appointmentdetails);
 
       if (error) {
@@ -136,7 +117,6 @@ function Schedule() {
 
   return (
     <div className="flex flex-col h-full min-h-0 overflow-hidden lg:border-2 lg:border-[#334A78] lg:rounded-lg bg-white ">
-      {/* <div className="w-full  border-2 border-[#000] rounded-3xl bg-[#EBF0FF] my-2.5"> */}
       <div className="w-full  overflow-y-auto scrollbar-hide h-[calc(100vh-120px)] py-2 ">
         <div>
           <div className="text-xl text-[#000] capitalize font-semibold border-b-2 border-b-[#CCCCCC] py-2">
@@ -174,12 +154,6 @@ function Schedule() {
                       </p>{" "}
                       <BsThreeDots />{" "}
                     </li>
-                    {/* <li className="flex justify-between items-center">
-                      <p>meeting</p> <BsThreeDots />{" "}
-                    </li>
-                    <li className="flex justify-between items-center">
-                      <p>meeting</p> <BsThreeDots />{" "}
-                    </li> */}
                   </ul>
                 </div>
               </div>
@@ -226,11 +200,6 @@ function Schedule() {
                             >
                               {scheduleData[day]?.[time] && (
                                 <div className="bg-purple-100 rounded-lg p-2 shadow-md flex ">
-                                  {/* <img
-                                    src="https://via.placeholder.com/20"
-                                    alt="icon"
-                                    className="mr-2"
-                                  /> */}
                                   <div>
                                     <p className="font-semibold text-sm">
                                       {scheduleData[day][time].company}

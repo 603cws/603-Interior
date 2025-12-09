@@ -61,7 +61,6 @@ function handlesidebarState(state, action) {
       return {
         isSettingOpen: action.payload === "Setting",
         isProductOpen: action.payload === "Product",
-        // iseditopen: action.payload === "Edit",
         dashboard: action.payload === "Dashboard",
         isClientOpen: action.payload === "Client",
         isCreateOpen: action.payload === "Create",
@@ -69,10 +68,6 @@ function handlesidebarState(state, action) {
         isScheduleOpen: action.payload === "Schedule",
         isFormulaeOpen: action.payload === "Formulae",
         isCategoryEditorOpen: action.payload === "CategoryEditor",
-
-        // isOrdersOpen: action.payload === "Orders",
-        // help: action.payload === "Help",
-        // isBookAppointmentOpen: action.payload === "BookAppointment",
         currentSection: action.payload,
       };
     default:
@@ -90,23 +85,12 @@ const SECTIONS = {
   FORMULAE: "Formulae",
   CategoryEditor: "CategoryEditor",
   SETTING: "Setting",
-
-  // ORDERS: "Orders",
-  // HELP: "Help",
-  // EDIT: "Edit",
-  // BOOkAPPOINTMENT: "BookAppointment",
 };
 
 function AdminDashboard() {
   const logout = useLogout();
   const navigate = useNavigate();
-  // const [isSettingOpen, setIsSettingOpen] = useState(false);
-  // const [isProductOpen, setIsProductOpen] = useState(false);
   const [iseditopen, setIsEditopen] = useState(true);
-  // const [dashboard, setDashboard] = useState(true);
-  // const [currentSection, setCurrentSection] = useState("AdminDashboard");
-  // const [isclientopen, setIsclientopen] = useState(false);
-  // const [isvendoropen, setIsvendoropen] = useState(false);
   const [query, setQuery] = useState();
   const [isAddProduct, setIsAddProduct] = useState(false);
   const [openMenuId, setOpenMenuId] = useState(null); // Store the ID of the row with an open menu
@@ -141,8 +125,6 @@ function AdminDashboard() {
   // loading
   const [isloading, setIsloading] = useState(false);
 
-  // const [vendorsearch, setVendorsearch] = useState();
-
   const [addNewProduct, setAddNewProduct] = useState(false);
   const [addNewAddon, setAddNewAddon] = useState(false);
   const [productlist, setProductlist] = useState(true);
@@ -155,9 +137,6 @@ function AdminDashboard() {
   const [toggle, setToggle] = useState(true);
   const [selectedTab, setSelectedTab] = useState("products");
 
-  // create profile
-  // const [createProfile, setCreateProfikle] = useState(false);
-
   //delete warning
   const [deleteWarning, setDeleteWarning] = useState(false);
   const [multipleDeleteWaring, setMultipleDeleteWaring] = useState(false);
@@ -165,9 +144,6 @@ function AdminDashboard() {
   const [rejectReasonPopup, setRejectReasonPopup] = useState(false);
   const [clientBoqs, setClientBoqs] = useState(false);
 
-  //state schedule
-  // const [isScheduleOpen, setisScheduleOpen] = useState(false);
-  // const [isFormulaeOpen, setisFormulaeOpen] = useState(false);
   const sidebarInitialState = {
     dashboard: true,
     isProductOpen: false,
@@ -454,10 +430,6 @@ function AdminDashboard() {
     return copy;
   }, [filteredProducts, filteredAddons, sortField, sortOrder, toggle]);
 
-  //baseurlforimg
-  // const baseImageUrl =
-  //   "https://bwxzfwsoxwtzhjbzbdzs.supabase.co/storage/v1/object/public/addon/";
-
   const { accountHolder, categories } = useApp();
 
   const location = useLocation();
@@ -508,7 +480,6 @@ function AdminDashboard() {
   const [searchQuery, setSearchQuery] = useState(""); // to store the latest search input
 
   const items = toggle ? filteredProducts : filteredAddons;
-  // const items = toggle ? products : addons;
   const totalPages = Math.ceil(items.length / itemsPerPage);
 
   //state
@@ -558,8 +529,6 @@ function AdminDashboard() {
     const filteredItems = items.filter((item) =>
       selectedProducts?.includes(item.id)
     );
-
-    console.log("items after filter", filteredItems);
 
     try {
       for (const product of filteredItems) {
@@ -636,23 +605,6 @@ function AdminDashboard() {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, []);
-
-  useEffect(() => {
-    const calculateItemsPerPage = () => {
-      if (tableRef.current) {
-        const tableHeight = tableRef.current.clientHeight; // Get table's available height
-        const rowHeight = 60; // Approximate row height (adjust if needed)
-        const headerHeight = 50; // Height of the table header
-        const maxRows = Math.floor((tableHeight - headerHeight) / rowHeight);
-
-        // setItemsPerPage(maxRows > 0 ? maxRows : 1); // Ensure at least 1 row is shown
-      }
-    };
-
-    calculateItemsPerPage();
-    window.addEventListener("resize", calculateItemsPerPage);
-    return () => window.removeEventListener("resize", calculateItemsPerPage);
   }, []);
 
   // Slice the items for pagination
@@ -836,8 +788,6 @@ function AdminDashboard() {
   };
 
   const handleUpdateStatus = async (product, newStatus, reason = "") => {
-    console.log("product", product);
-
     try {
       if (product && product.type === "product") {
         await supabase
@@ -942,8 +892,6 @@ function AdminDashboard() {
         .select("*")
         .eq("role", "user");
 
-      // console.log(data);
-
       setAllusers(data);
       setFilteredUsers(data);
     } catch (error) {
@@ -1001,39 +949,6 @@ function AdminDashboard() {
       minute: "2-digit",
     });
   };
-
-  // const filterbyCategory = (category) => {
-  //   // console.log(category);
-  //   setSelectedCategory(category);
-
-  //   if (toggle) {
-  //     if (!category) {
-  //       setFilteredProducts(products); // Reset to original list when input is empty
-  //       return;
-  //     }
-  //     const filtered = products.filter(
-  //       (item) =>
-  //         item.products.category.toLowerCase() === category.toLowerCase()
-  //     );
-  //     // console.log(filtered);
-
-  //     setFilteredProducts(filtered);
-  //   } else {
-  //     if (!category) {
-  //       setFilteredAddons(addons); // Reset to original list when input is empty
-  //       return;
-  //     }
-  //     const filtered = addons.filter((item) =>
-  //       item.title.toLowerCase().includes(category.toLowerCase())
-  //     );
-  //     // console.log(filtered);
-
-  //     setFilteredAddons(filtered);
-  //   }
-  //   setCurrentPage(1);
-  // };
-
-  // console.log(accountHolder);
 
   return (
     <div className="grid lg:grid-cols-[auto_1fr] lg:bg-gradient-to-r from-[#CFDCE7] to-[#E8EEF3] md:p-4 h-dvh md:h-screen font-Poppins lg:overflow-hidden">
@@ -1949,15 +1864,7 @@ function AdminDashboard() {
                               <thead className="bg-[#FFFFFF] sticky top-0 z-10 px-8 text-center text-[#000] text-base">
                                 <tr>
                                   <th className="p-3 font-medium">SR</th>
-                                  {/* <th className="py-2 px-1">
-                                    <input
-                                      type="checkbox"
-                                      name=""
-                                      id=""
-                                      checked={allSelected}
-                                      onChange={handleSelectAll}
-                                    />
-                                  </th> */}
+
                                   {toggle ? (
                                     <th className="p-3 font-medium">
                                       Product Name
@@ -2036,14 +1943,6 @@ function AdminDashboard() {
                                           <div className="absolute top-0 left-0 w-full h-full bg-white/90 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                                             <button
                                               className="bg-gray-100 text-green-600 p-3 rounded-full mr-2 hover:text-gray-100 hover:bg-green-600"
-                                              // onClick={() => {
-                                              //   handleUpdateStatus(
-                                              //     item,
-                                              //     "approved"
-                                              //   );
-                                              //   setRejectReason("");
-                                              // }}
-                                              // onClick={() => handleAccept(item)}
                                               onClick={() => {
                                                 setSelectedItem(item);
                                                 setSelectSubcategories(true);
@@ -2053,15 +1952,6 @@ function AdminDashboard() {
                                             </button>
                                             <button
                                               className="bg-gray-100 text-red-600 p-3 rounded-full mr-2 hover:text-gray-100 hover:bg-red-600"
-                                              // onClick={() =>
-                                              //   handleReject(item.id)
-                                              // }
-                                              // onClick={() =>
-                                              //   handleUpdateStatus(
-                                              //     item,
-                                              //     "rejected"
-                                              //   )
-                                              // }
                                               onClick={() =>
                                                 handleRejectClick(item)
                                               }
@@ -2131,9 +2021,6 @@ function AdminDashboard() {
                                             </button>
                                           )}
                                           <button
-                                            // onClick={() => {
-                                            //   handleDelete(item);
-                                            // }}
                                             onClick={() => {
                                               handleDeleteClick(item);
                                             }}
@@ -2372,89 +2259,6 @@ function AdminDashboard() {
                         </div>
                       )}
                     </div>
-                    // <div
-                    //   key={index}
-                    //   className={`flex flex-col ${
-                    //     isExpanded
-                    //       ? "lg:w-[200px] xl:w-[270px] h-[170px]"
-                    //       : "w-[300px] lg:w-[320px] h-[150px]"
-                    //   }  font-Poppins rounded-2xl bg-[#fff] relative`}
-                    // >
-                    //   <div
-                    //     className={`flex items-center my-4 ${
-                    //       isExpanded && "px-4 py-2"
-                    //     }`}
-                    //   >
-                    //     <div className={`mx-3 ${isExpanded && "hidden"}`}>
-                    //       <img
-                    //         src={accountHolder.profileImage}
-                    //         alt="usericon"
-                    //         className="w-10"
-                    //       />
-                    //     </div>
-                    //     <div>
-                    //       <h2 className="text-[#000] text-base font-medium">
-                    //         {user.company_name}
-                    //       </h2>
-                    //       <p className="text-[#ccc] text-wrap text-[13px]">
-                    //         {user.email}
-                    //       </p>
-                    //     </div>
-                    //     <div className={`ml-auto px-2`}>
-                    //       {" "}
-                    //       <button
-                    // onClick={() =>
-                    //   handleDeletevendirClick(user, index)
-                    // }
-                    //       >
-                    //         {" "}
-                    //         <MdDeleteOutline size={25} />{" "}
-                    //       </button>
-                    //     </div>
-                    //   </div>
-                    //   <div className="flex-1 flex items-end pl-6 gap-3 my-5">
-                    //     <div className="">
-                    //       {" "}
-                    //       <FaBuilding size={22} />
-                    //     </div>{" "}
-                    //     <button
-                    //       onClick={() => {
-                    //         setSelectedVendor(user); // Store selected vendor
-                    //         setVendorproductlist(true); // Show product list
-                    //       }}
-                    //       className="font-medium text-[#ccc] text-base"
-                    //     >
-                    //       {user.company_name}
-                    //     </button>
-                    //   </div>
-                    //   {isModalOpen && selectedindex === index && (
-                    //     <div className=" inset-0 flex items-center justify-center bg-opacity-80 absolute w-full h-full">
-                    //       <div className="bg-white rounded-lg px-5 py-2">
-                    //         <h3 className="text-lg font-semibold">
-                    //           Are you sure?
-                    //         </h3>
-                    //         <p>
-                    //           Do you really want to delete{" "}
-                    //           {selectedUser?.company_name}?
-                    //         </p>
-                    //         <div className="flex justify-center mt-4 gap-3">
-                    //           <button
-                    //             onClick={() => setIsModalOpen(false)}
-                    //             className="px-4 py-2 bg-gray-300 rounded"
-                    //           >
-                    //             No
-                    //           </button>
-                    //           <button
-                    //             onClick={handleConfirmDelete}
-                    //             className="px-4 py-2 bg-red-500 text-white rounded"
-                    //           >
-                    //             Yes
-                    //           </button>
-                    //         </div>
-                    //       </div>
-                    //     </div>
-                    //   )}
-                    // </div>
                   );
                 })}
               </div>
@@ -2515,21 +2319,6 @@ function AdminDashboard() {
           setSelectSubcategories={setSelectSubcategories}
         />
       )}
-      {/* {productPreview && (
-        <DashboardProductCard
-          onClose={() => {
-            setProductPreview(false);
-          }}
-          product={selectedProductview}
-          handleDelete={handleDelete}
-          updateStatus={handleUpdateStatus}
-          deleteWarning={deleteWarning}
-          setDeleteWarning={setDeleteWarning}
-          rejectReason={rejectReason}
-          setRejectReason={setRejectReason}
-          handleConfirmReject={handleConfirmReject}
-        />
-      )} */}
       {/* delete waring for single item  */}
       {deleteWarning && (
         <div className="flex justify-center items-center fixed inset-0 z-30">
@@ -2602,8 +2391,6 @@ function AdminDashboard() {
           </div>
         </div>
       )}
-
-      {/* </div> */}
     </div>
   );
 }

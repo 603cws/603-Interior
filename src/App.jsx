@@ -197,16 +197,6 @@ function App() {
               </PrivateRoute>
             }
           />
-          <Route
-            path="/admindashboardinterface"
-            element={
-              <PrivateRoute>
-                {accountHolder?.role && accountHolder.role === "admin" && (
-                  <DashboardInterface />
-                )}
-              </PrivateRoute>
-            }
-          />
         </Routes>
       </Suspense>
     </div>

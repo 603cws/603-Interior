@@ -253,7 +253,6 @@ function DiscountForm({ setCreateDiscount }) {
       if (data) {
         reset();
         toast.success("coupon created successfully");
-        console.log("data", data);
       }
     } catch (error) {
       console.log("error", error);

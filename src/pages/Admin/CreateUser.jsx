@@ -104,7 +104,7 @@ function CreateUser() {
     mobile,
     category
   ) => {
-    const { data, error } = await supabase.from("profiles").upsert({
+    const { error } = await supabase.from("profiles").upsert({
       id: userId, // Use the user ID from Supabase
       role: role,
       location: location,
@@ -115,8 +115,6 @@ function CreateUser() {
 
     if (error) {
       console.error("Error updating profile:", error.message);
-    } else {
-      console.log("Profile updated:", data);
     }
   };
 
@@ -162,7 +160,6 @@ function CreateUser() {
       }
 
       if (data.user) {
-        console.log(data);
         const userId = data.user.id;
 
         await updateUserProfile(
@@ -173,75 +170,15 @@ function CreateUser() {
           formData.mobile,
           formData.category ? formData.category.map((cat) => cat.label) : []
         );
-        console.log("User signed up successfully:", data);
+
         toast.success(`${formData.role} created successfully`);
       }
     } catch (error) {
       // toast.error(error);
       console.log("Error signing up:", error);
-      // console.error("Error signing up:", error);
     }
   };
 
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-
-  //   if (
-  //     !formData.company ||
-  //     !formData.role ||
-  //     !formData.email ||
-  //     !formData.mobile ||
-  //     !formData.location ||
-  //     !formData.password ||
-  //     !formData.confirmPassword
-  //   ) {
-  //     toast.error("All fields are required!");
-  //     return;
-  //   }
-
-  //   if (formData.role === "vendor" && formData.category.length === 0) {
-  //     toast.error("Category is required for Vendors!");
-  //     return;
-  //   }
-
-  //   // Password validation
-  //   if (formData.password !== formData.confirmPassword) {
-  //     toast.error("Passwords do not match!");
-  //     return;
-  //   }
-
-  //   // let { data, error } = await supabase.auth.signUp({
-  //   //   email: formData.email,
-  //   //   password: formData.password,
-  //   //   phone: formData.mobile,
-  //   // });
-
-  //   const { data, error } = await adminsupabase.auth.admin.createUser({
-  //     email: formData.email,
-  //     password: formData.password,
-  //     email_confirm: true, // Set to true if you want to auto-confirm the email
-  //     phone: formData.mobile,
-  //   });
-
-  //   if (error) {
-  //     toast.error(error);
-  //     console.log("Error signing up:", error);
-  //     return;
-  //   }
-  //   console.log("User signed up successfully:", data);
-  //   toast.success(`${formData.role} created successfully`);
-
-  //   const userId = data.user.id;
-
-  //   await updateUserProfile(
-  //     userId,
-  //     formData.role,
-  //     formData.location,
-  //     formData.company,
-  //     formData.mobile,
-  //     formData.category ? formData.category.map((cat) => cat.label) : []
-  //   );
-  // };
   return (
     // <div className="">
     <div className="flex-1 bg-[#FFF] mb-5 cursor-default overflow-auto ">
