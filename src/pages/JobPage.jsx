@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import LandingNavbar from "../common-components/LandingNavbar";
 import { FaLocationDot } from "react-icons/fa6";
-import jobData from "../utils/jobData";
 import { IoCalendarSharp } from "react-icons/io5";
 import { HiClock } from "react-icons/hi2";
 import { motion } from "framer-motion";
@@ -22,7 +21,7 @@ const JobPage = () => {
   const jobdata = location?.state;
 
   useEffect(() => {
-    const jobDetails = jobData[jobTitle];
+    const jobDetails = jobdata;
 
     if (jobDetails) {
       setJob(jobDetails);
@@ -205,7 +204,6 @@ function JobForm({ SetJobForm, jobDetails, jobTitle }) {
   };
 
   const handleformSubmit = async (formData) => {
-    console.log("formdata", formData);
     try {
       const { data, error: uploadError } = await supabase.storage
         .from("jobData")

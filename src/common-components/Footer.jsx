@@ -6,7 +6,7 @@ import { supabase } from "../services/supabase";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import toast from "react-hot-toast";
-import { getDateInfo } from "../utils/dateUtils";
+import { getDateInfo } from "../utils/DateUtils";
 import { FaPhone } from "react-icons/fa6";
 import { MdEmail } from "react-icons/md";
 import { MdLocationOn } from "react-icons/md";

@@ -14,7 +14,7 @@ import EnterAreaModal from "../components/EnterAreaModal";
 import ProfileCard from "../../boq/components/ProfileCard";
 import { AnimatePresence } from "framer-motion";
 import toast from "react-hot-toast";
-import { extractAreaAndQuantity } from "../../utils/layoutUtils";
+import { extractAreaAndQuantity } from "../../utils/LayoutUtils";
 
 const initialAreaValues = {
   linear: 24,

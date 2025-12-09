@@ -4,10 +4,8 @@ import PageNotFound from "../common-components/PageNotFound";
 function PrivateRoute({ children }) {
   const { isAuthenticated } = useApp();
 
-  //if not authenticated
   if (!isAuthenticated) return <PageNotFound />;
 
-  //   return the children
   return isAuthenticated && children;
 }
 
