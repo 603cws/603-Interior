@@ -1,17 +1,8 @@
 import LayoutCard from "../components/LayoutCard"; // Ensure the correct path to LayoutCard.js
 
 const meetingRoomData = [
-  // {
-  //   type: "discussionRoom",
-  //   // image: "/images/workspace-image/discussionRoom.png",
-  //   image: "/images/workstation-wp/discuss-wp.webp",
-  //   description:
-  //     "This is the discussion room, ideal for small group discussions.",
-  //   tooltipText: "size: 380 sqft",
-  // },
   {
     type: "interviewRoom",
-    // image: "/images/workspace-image/interviewRoom.webp",
     image: "/images/workstation-wp/interview.webp",
     description:
       "This is the interview room, designed for conducting interviews.",
@@ -20,7 +11,6 @@ const meetingRoomData = [
   },
   {
     type: "conferenceRoom",
-    // image: "/images/workspace-image/conferenceRoom.webp",
     image: "/images/workstation-wp/conferenceRoom.webp",
     description: "This is the conference room, suitable for large meetings.",
     slider: {
@@ -35,7 +25,6 @@ const meetingRoomData = [
   },
   {
     type: "boardRoom",
-    // image: "/images/workspace-image/boardRoom.webp",
     image: "/images/workstation-wp/boardRoom.webp",
     description: "This is the board room, equipped for executive meetings.",
     slider: {
@@ -51,7 +40,6 @@ const meetingRoomData = [
   },
   {
     type: "meetingRoom",
-    // image: "/images/workspace-image/meetingRoom.png",
     image: "/images/workstation-wp/meetingRoom.webp",
     description: "This is the meeting room, perfect for team meetings.",
     tooltipText: "Size: 120 sq ft \n Seats: 6 pax",
@@ -59,7 +47,6 @@ const meetingRoomData = [
   },
   {
     type: "meetingRoomLarge",
-    // image: "/images/workspace-image/meetingRoomLarge.png",
     image: "/images/workstation-wp/meetingRoomLarge.webp",
     description: "This is the large meeting room, accommodating larger groups.",
     tooltipText: "Size: 150 sq ft \n Seats: 8 pax",
@@ -67,7 +54,6 @@ const meetingRoomData = [
   },
   {
     type: "hrRoom",
-    // image: "/images/workspace-image/hrRoom.webp",
     image: "/images/workstation-wp/hrRoom.webp",
     description: "This is the HR room, designated for HR activities.",
     tooltipText: "size: 80 sqft",
@@ -85,7 +71,6 @@ const meetingRoomData = [
   },
   {
     type: "financeRoom",
-    // image: "/images/workspace-image/financeRoom.webp",
     image: "/images/workstation-wp/financeRoom.webp",
     description: "This is the finance room, used for financial discussions.",
     tooltipText: "size: 100 sqft",
@@ -103,7 +88,6 @@ const meetingRoomData = [
   },
   {
     type: "sales",
-    // image: "/images/workspace-image/sales.png",
     image: "/images/workstation-wp/salesRoom.webp",
     description: "This is the sales area, designed for sales team activities.",
     tooltipText: "size: 80 sqft",
@@ -121,7 +105,6 @@ const meetingRoomData = [
   },
   {
     type: "videoRecordingRoom",
-    // image: "/images/workspace-image/videoRecordingRoom.png",
     image: "/images/workstation-wp/videoRoom.webp",
     description:
       "This is the video recording room, designed for creating professional video content.",
@@ -161,7 +144,6 @@ const MeetingRooms = ({
       <h3 className="section-heading bg-[#E4E7ED] shadow-sm text-md pl-2 py-1 sticky top-0 font-semibold z-10">
         Meeting Rooms
       </h3>
-      {/* <div className="meeting-rooms grid grid-cols-2 4xl:grid-cols-3 gap-5"> */}
       <div className="meeting-rooms grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-2 3xl:grid-cols-3 gap-5 justify-items-center lg:justify-items-stretch">
         {meetingRoomData.map((room) => {
           const sliderProps = room.slider
@@ -240,9 +222,6 @@ const MeetingRooms = ({
                 }
               }}
               onChange={(value) => updateAreas(room.type, value)}
-              // title={`${
-              //   room.type.charAt(0).toUpperCase() + room.type.slice(1)
-              // }`}
               title={room.title || room.type}
               showAreaCounter={!!room.slider} // Show counter only if room has a slider
               areaCounterProps={sliderProps}

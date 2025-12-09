@@ -3,7 +3,6 @@ import LayoutCard from "../components/LayoutCard"; // Ensure the correct path to
 const cabinData = [
   {
     type: "md",
-    // image: "/images/workspace-image/md.png",
     image: "/images/workstation-wp/md.webp",
     description:
       "This is the MD's cabin, designed for maximum comfort and productivity.",
@@ -19,7 +18,6 @@ const cabinData = [
   },
   {
     type: "manager",
-    // image: "/images/workspace-image/manager.webp",
     image: "/images/workstation-wp/manager.webp",
     description:
       "This is the Manager's cabin, equipped with all necessary amenities.",
@@ -35,7 +33,6 @@ const cabinData = [
   },
   {
     type: "small",
-    // image: "/images/workspace-image/small.png",
     image: "/images/workstation-wp/smallCabin.webp",
     description: "This is a small cabin, suitable for individual work.",
     tooltipText: "Size :80 sqft",
@@ -72,7 +69,6 @@ const Cabins = ({
       <h3 className="section-heading bg-[#E4E7ED] shadow-sm text-md pl-2 py-1 sticky top-0 font-semibold z-10">
         Cabins
       </h3>
-      {/* <div className="cabins grid grid-cols-2 4xl:grid-cols-3 gap-5"> */}
       <div className="cabins grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-2 3xl:grid-cols-3 gap-5 justify-items-center lg:justify-items-stretch">
         {cabinData.map((room) => (
           <LayoutCard
@@ -90,9 +86,6 @@ const Cabins = ({
               }
             }}
             onChange={(value) => updateAreas(room.type, value)}
-            // title={`${
-            //   room.type.charAt(0).toUpperCase() + room.type.slice(1)
-            // } Cabin`}
             title={room.title || room.type}
             showAreaCounter
             tooltipText={

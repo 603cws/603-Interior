@@ -41,8 +41,6 @@ const initialAreaValues = {
   executiveWashroom: 60,
   videoRecordingRoom: 80,
   other: 1,
-  // maleWashroom: 60,
-  // femaleWashroom: 60,
   washrooms: 100,
 };
 
@@ -71,8 +69,6 @@ const initialQuantities = {
   executiveWashroom: 0,
   videoRecordingRoom: 0,
   other: 0,
-  // maleWashroom: 0,
-  // femaleWashroom: 0,
   washrooms: 0,
 };
 const initialSeatCounts = {
@@ -253,14 +249,6 @@ const calculateSmall = (totalArea, areaValues) => {
   }
 };
 
-// const calculateDiscussionRoom = (totalArea, areaValues) => {
-//   if (totalArea >= 12000 && totalArea <= 25000) {
-//     return areaValues.discussionRoom * 1;
-//   } else {
-//     return 0;
-//   }
-// };
-
 const calculateInterviewRoom = (totalArea, areaValues) => {
   if (totalArea >= 6000 && totalArea < 12000) {
     return areaValues.interviewRoom * 1;
@@ -414,12 +402,6 @@ function Layout() {
   const [loungeSize, setLoungeSize] = useState(areaValues.lounge);
   const [upsRoomSize, setUpsRoomSize] = useState(areaValues.ups);
   const [bmsRoomSize, setBmsRoomSize] = useState(areaValues.bms);
-  // const [maleWashroomSize, setMaleWashroomSize] = useState(
-  //   areaValues.maleWashroom
-  // );
-  // const [femaleWashroomSize, setFemaleWashroomSize] = useState(
-  //   areaValues.femaleWashroom
-  // );
   const [washroomsSize, setWashroomsSize] = useState(areaValues.washrooms);
   const [warning, setWarning] = useState(false);
   const [otherArea, setOtherArea] = useState(0);
@@ -451,61 +433,25 @@ function Layout() {
   };
 
   const [runTour, setRunTour] = useState(false); // Controls whether the tour runs
-
   const [isOpen, setIsOpen] = useState(false);
-
-  // const [isProfileOpen, setIsProfileOpen] = useState(false);
-
   const [areaWarn, setAreaWarn] = useState(false);
   const profileRef = useRef(null);
   const iconRef = useRef(null);
 
-  // const bufferSpace = totalArea < 5000 ? 0.05 : totalArea <= 10000 ? 0.03 : 0; //buffer space
   const bufferSpace = 0.02; //buffer space
-  // console.log("male washroom", maleWashroomSize);
 
-  // Toggle profile card visibility
   const toggleProfile = () => {
     setIsOpen((prev) => !prev);
   };
 
-  // Close profile card when clicking outside
-  // useEffect(() => {
-  //   const handleClickOutside = (event) => {
-  //     if (
-  //       profileRef.current?.contains(event.target) ||
-  //       iconRef.current?.contains(event.target)
-  //     ) {
-  //       return; // If clicked inside, do nothing
-  //     }
-  //     setIsOpen(false); // Otherwise, close it
-  //   };
-
-  //   if (isOpen) {
-  //     document.addEventListener("mousedown", handleClickOutside);
-  //   }
-
-  //   return () => {
-  //     document.removeEventListener("mousedown", handleClickOutside);
-  //   };
-  // }, [isOpen]);
-
   useEffect(() => {
     setReceptionSize(areaValues.reception);
     setLoungeSize(areaValues.lounge);
-    // setMaleWashroomSize(areaValues.maleWashroom);
-    // setFemaleWashroomSize(areaValues.femaleWashroom);
     setWashroomsSize(areaValues.washrooms);
   });
   useEffect(() => {
     setSeatCounts((prev) => {
       const newSeatCount = { ...prev };
-
-      // Object.keys(areaQuantities).forEach((key) => {
-      //   if (areaQuantities[key] === 0) {
-      //     newSeatCount[key] = 0;
-      //   }
-      // });
       newSeatCount.linear = areaQuantities.linear ?? prev.linear;
       newSeatCount.lType = areaQuantities.lType ?? prev.lType;
       newSeatCount.md = areaValues.md >= 150 ? 4 : 3;
@@ -540,7 +486,6 @@ function Layout() {
     },
   ];
 
-  // Handle the completion or skipping of the tour
   const handleTourCallback = (data) => {
     const { status } = data;
 
@@ -552,7 +497,6 @@ function Layout() {
   };
 
   useEffect(() => {
-    // Check localStorage to decide if the tour should run
     const hasSeenTour = localStorage.getItem("hasSeenLayoutTour") === "true";
     if (!hasSeenTour) {
       setRunTour(true); // Start the tour automatically on first visit
@@ -567,18 +511,6 @@ function Layout() {
     }
   }, [warning, areaWarn]);
 
-  // Only run the tour for first-time visitors
-  //   useEffect(() => {
-  //     const hasSeenTour = localStorage.getItem("hasSeenLayoutTour");
-  //     if (hasSeenTour) {
-  //       setRunTour(false); // Don't run the tour if already completed
-  //     }
-  //   }, []);
-
-  // useEffect(() => {
-  //     document.title = '603 Layout';
-  // }, []);
-
   let tempVar = "";
 
   useEffect(() => {
@@ -588,7 +520,6 @@ function Layout() {
       const md = calculateMd(totalArea, areaValues);
       const manager = calculateManager(totalArea, areaValues);
       const small = calculateSmall(totalArea, areaValues);
-      // const discussionRoom = calculateDiscussionRoom(totalArea, areaValues);
       const interviewRoom = calculateInterviewRoom(totalArea, areaValues);
       const conferenceRoom = calculateConferenceRoom(totalArea, areaValues);
       const boardRoom = calculateBoardRoom(totalArea, areaValues);
@@ -600,15 +531,9 @@ function Layout() {
       );
       const phoneBooth = calculatePhoneBooth(totalArea, areaValues);
       const server = calculateServer(totalArea, areaValues);
-      // const executiveWashroom = calculateExecutiveWashroom(
-      //   totalArea,
-      //   areaValues
-      // );
       const receptionArea = calculateReceptionArea(totalArea);
       const loungeArea = calculateLoungeArea(totalArea);
       const otherArea = 0;
-      // const maleWashroom = calculateMaleWashroomArea(totalArea);
-      // const femaleWashroom = calculateFemaleWashroomArea(totalArea);
       const washroomsArea = calculateWashroomsArea(totalArea);
 
       setAreaQuantities((prevAreaQuantities) => ({
@@ -618,7 +543,6 @@ function Layout() {
         md: Math.round(md / areaValues.md),
         manager: manager / areaValues.manager,
         small: small / areaValues.small,
-        // discussionRoom: discussionRoom / areaValues.discussionRoom,
         interviewRoom: interviewRoom / areaValues.interviewRoom,
         conferenceRoom: conferenceRoom / areaValues.conferenceRoom,
         boardRoom: boardRoom / areaValues.boardRoom,
@@ -627,10 +551,6 @@ function Layout() {
         videoRecordingRoom: videoRecordingRoom / areaValues.videoRecordingRoom,
         phoneBooth: phoneBooth / areaValues.phoneBooth,
         server: server / areaValues.server,
-        // executiveWashroom: executiveWashroom / areaValues.executiveWashroom,
-        // reception: Math.round(receptionArea / areaValues.reception),
-        // lounge: Math.round(loungeArea / areaValues.lounge),
-        // other: otherArea / areaValues.other,
       }));
 
       if (totalArea >= MIN_AREA && totalArea <= MAX_AREA) {
@@ -638,33 +558,19 @@ function Layout() {
           ...prevAreaValues,
           reception: Math.round(receptionArea),
           lounge: Math.round(loungeArea),
-          // maleWashroom: Math.round(maleWashroom),
-          // femaleWashroom: Math.round(femaleWashroom),
           washrooms: Math.round(washroomsArea),
         }));
         setAreaQuantities((prevAreaQuantities) => ({
           ...prevAreaQuantities,
           reception: 1,
           lounge: 1,
-          // maleWashroom: 1,
-          // femaleWashroom: 1,
           washrooms: 1,
         }));
       } else {
-        // setAreaQuantities((prevAreaQuantities) => ({
-        //   ...prevAreaQuantities,
-        //   reception: 0,
-        //   lounge: 0,
-        //   // maleWashroom: 0,
-        //   // femaleWashroom: 0,
-        //   washrooms: 0,
-        // }));
         setAreaQuantities(initialQuantities);
       }
     }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [totalArea, totalAreaSource]); //do not add any more dependency
+  }, [totalArea, totalAreaSource]);
 
   const setErrorMessageHandler = (message) => {
     // setShowModal(true);
@@ -676,18 +582,12 @@ function Layout() {
     setAreaWarn(true);
   };
 
-  // Calculate builtArea and set it to state
   useEffect(() => {
-    // const calculatedBuiltArea = Object.keys(areaQuantities).reduce(
-    //   (acc, key) => acc + +areaQuantities[key] * +areaValues[key],
-    //   0
-    // );
     const calculatedBuiltArea = Object.keys(areaQuantities).reduce(
       (acc, key) => {
         const qty = Number(areaQuantities[key]);
         const val = Number(areaValues[key]);
 
-        // if qty or val is NaN, treat them as 0
         const safeQty = isNaN(qty) ? 0 : qty;
         const safeVal = isNaN(val) ? 0 : val;
 
@@ -699,7 +599,6 @@ function Layout() {
     setBuiltArea(calculatedBuiltArea);
   }, [areaQuantities, areaValues]);
 
-  // Calculate availableArea based on totalArea and builtArea
   useEffect(() => {
     setAvailableArea(totalArea - builtArea);
   }, [totalArea, builtArea]);
@@ -721,46 +620,29 @@ function Layout() {
   }, [currentLayoutData]); // only runs when currentLayoutData changes
 
   const updateAreas = (type, value) => {
-    // Ensure the total area is entered before making changes
     if (!totalArea) {
-      // setErrorMessageHandler(
-      //   "The input box for total area cannot be left empty.\n" +
-      //     "Please fill in the total area in square feet before making any changes."
-      // );
       totalAreaWarning();
       return;
     }
 
-    // Clone current area values and area quantities
     const newAreaQuantities = { ...areaQuantities };
     const newAreaValues = { ...areaValues };
 
     if (type === "other") {
-      // Update areaValues for 'other'
       newAreaValues[type] = value;
-
-      // Ensure areaQuantities for 'other' is 1 if areaValues of 'other' is greater than 1
       if (value > 1) {
         newAreaQuantities[type] = 1;
       } else {
         newAreaQuantities[type] = 0; // Optional: Set to 0 if value is 0 or less
       }
     } else {
-      // Update areaQuantities for other types
       newAreaQuantities[type] = value;
     }
 
-    // Calculate the built area
-    // const calculatedBuiltArea = Object.keys(newAreaQuantities).reduce(
-    //   (acc, key) => acc + +newAreaQuantities[key] * +newAreaValues[key],
-    //   0
-    // );
     const calculatedBuiltArea = Object.keys(newAreaQuantities).reduce(
       (acc, key) => {
         const qty = Number(newAreaQuantities[key]);
         const val = Number(newAreaValues[key]);
-
-        // if qty or val is NaN, treat them as 0
         const safeQty = isNaN(qty) ? 0 : qty;
         const safeVal = isNaN(val) ? 0 : val;
 
@@ -772,7 +654,6 @@ function Layout() {
     const freeSpace = totalArea * bufferSpace;
     const usableArea = totalArea - freeSpace; // Area available for building
 
-    // Check if the built area exceeds the usable area
     if (
       totalArea >= MIN_AREA &&
       totalArea <= MAX_AREA &&
@@ -789,8 +670,6 @@ function Layout() {
         "Built area exceeds the available space, showing error message"
       );
       setErrorMessageHandler(
-        // "The built area exceeds the available usable space.\n" +
-        //   "To resolve this, either increase the total area or adjust the number of rooms to ensure the built area fits within the usable space."
         `The built area (${builtArea} sqft) exceeds the available space (${usableArea} sqft).\n` +
           "Adjust the number of workspaces OR.\n" +
           "Increase the total area to add more workspaces."
@@ -816,7 +695,6 @@ function Layout() {
   };
 
   const handleVariantChange = (newVariant) => {
-    console.log("newVariant", newVariant);
     setVariant(newVariant);
     const newAreaValues = { ...areaValues };
     switch (newVariant) {
@@ -883,14 +761,6 @@ function Layout() {
   const handleLoungeSizeChange = handleRoomAreaChange("lounge", setLoungeSize);
   const handleUpsSizeChange = handleRoomAreaChange("ups", setUpsRoomSize);
   const handleBmsSizeChange = handleRoomAreaChange("bms", setBmsRoomSize);
-  // const handleMaleWashroomSizeChange = handleRoomAreaChange(
-  //   "maleWashroom",
-  //   setMaleWashroomSize
-  // );
-  // const handleFemaleWashroomSizeChange = handleRoomAreaChange(
-  //   "femaleWashroom",
-  //   setFemaleWashroomSize
-  // );
   const handleWashroomsSizeChange = handleRoomAreaChange(
     "washrooms",
     setWashroomsSize
@@ -942,7 +812,6 @@ function Layout() {
   };
 
   return (
-    // <div className="max-h-lvh 2xl:overflow-y-hidden">
     <div className="max-h-lvh xl:overflow-y-hidden">
       <Joyride
         steps={tourSteps}
@@ -1054,10 +923,6 @@ function Layout() {
             setReceptionSize={handleReceptionSizeChange}
             loungeSize={loungeSize}
             setLoungeSize={handleLoungeSizeChange}
-            // maleWashroomSize={maleWashroomSize}
-            // setMaleWashroomSize={handleMaleWashroomSizeChange}
-            // femaleWashroomSize={femaleWashroomSize}
-            // setFemaleWashroomSize={handleFemaleWashroomSizeChange}
             washroomsSize={washroomsSize}
             setWashroomsSize={handleWashroomsSizeChange}
           />
@@ -1093,9 +958,6 @@ function Layout() {
           </div>
         )}
       </AnimatePresence>
-
-      {/* <LayoutCard /> */}
-      {/* <QnaPopup question="is the flooring project for residental purpose ?" /> */}
     </div>
   );
 }

@@ -6,7 +6,6 @@ import ErrorModal from "../../common-components/ErrorModal";
 const workspaceData = [
   {
     type: "linear",
-    // image: "/images/workspace-image/linear.webp",
     image: "/images/workstation-wp/linear.webp",
     description: "This is a linear workspace, designed for open collaboration.",
     sizes: ["M", "L", "XL"], // Corresponds to sizeMapping keys
@@ -16,11 +15,9 @@ const workspaceData = [
   },
   {
     type: "lType",
-    // image: "/images/workspace-image/lType.webp",
     image: "/images/workstation-wp/lType.webp",
     description:
       "This is an L-type workspace, providing a semi-private environment.",
-    // sizes: [], // No size options
     tooltipText: "Size: 34 sq ft",
     title: "L-Type Workstation",
   },
@@ -32,13 +29,6 @@ const sizeMapping = {
   XL: "4 X 2",
   lType: "5 X 4",
 };
-
-// const sizeArea = {
-//   M: "20 sq ft",
-//   L: "24 sq ft",
-//   XL: "29 sq ft",
-//   lType: "34 sq ft",
-// };
 
 const sizeAreaMapping = {
   M: 20,
@@ -54,20 +44,11 @@ function OpenWorkspaces({
   onVariantChange,
   builtArea,
 }) {
-  // const [selectedSize, setSelectedSize] = useState(variant);
   const [showError, setShowError] = useState(false);
 
   const { totalArea } = useApp();
 
-  // const handleSizeChange = (newSize, type) => {
-  //   if (type === "linear") {
-  //     setSelectedSize(newSize);
-  //     onVariantChange(newSize); // Notify parent if needed
-  //   }
-  // };
-
   const handleSizeChange = (newSize, type, noOfLinearStation) => {
-    console.log("newSize", newSize);
     const newSizeArea = sizeAreaMapping[newSize];
     const prevSizeArea = sizeAreaMapping[variant];
     const newBuiltArea =
@@ -89,7 +70,6 @@ function OpenWorkspaces({
       <h3 className="section-heading bg-[#E4E7ED] shadow-sm text-md pl-2 py-1 sticky top-0 font-semibold z-10">
         Open Workspaces
       </h3>
-      {/* <div className="open-workspaces grid grid-cols-2 4xl:grid-cols-3 gap-5"> */}
       <div className="open-workspaces grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-2 3xl:grid-cols-3 gap-5 justify-items-center lg:justify-items-stretch">
         {workspaceData.map((workspace) => (
           <LayoutCard

@@ -6,12 +6,10 @@ import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { supabase } from "../../services/supabase";
 import UnusedAreaWarning from "./UnusedAreaWarning";
-import { PiStarFourFill } from "react-icons/pi";
 import AlertBox from "../../boq/components/AlertBox";
 import EnterAreaModal from "./EnterAreaModal";
 import { AnimatedButton } from "../../common-components/AnimatedButton";
 
-// function Navbar({ totalArea, setTotalArea, MIN_AREA, MAX_AREA, resetAll }) {
 function Navbar({
   MIN_AREA,
   MAX_AREA,
@@ -135,10 +133,6 @@ function Navbar({
       videoRecordingRoomQty: areaQuantities.videoRecordingRoom || 0,
       otherArea: areaValues.other,
       otherQty: areaQuantities.other || 0,
-      // maleWashroomArea: areaValues.maleWashroom,
-      // maleWashroomQty: areaQuantities.maleWashroom || 0,
-      // femaleWashroomArea: areaValues.femaleWashroom,
-      // femaleWashroomQty: areaQuantities.femaleWashroom || 0,
       washroomsArea: areaValues.washrooms,
       washroomsQty: areaQuantities.washrooms || 0,
       ...(totalArea !== null && { totalArea }),
@@ -186,7 +180,6 @@ function Navbar({
           seatCounts
         );
 
-        // Insert into tables
         const { data, error } = await supabase
           .from("layout")
           .insert([layoutData])
@@ -196,9 +189,6 @@ function Navbar({
         if (error) {
           console.error("Error inserting into layout:", error.message);
         }
-
-        console.log("layout Data:", data);
-
         if (data) {
           const currentLayoutID = data.id;
           setCurrentLayoutID(currentLayoutID);
@@ -231,12 +221,10 @@ function Navbar({
 
   const handleInputChange = (e) => {
     if (e.target.value.length <= 5) {
-      setTotalAreaSource("NoErrorModal"); // Set the source
-      // setInputValue(e.target.value);
+      setTotalAreaSource("NoErrorModal");
       setTotalArea(e.target.value);
-      setError(false); // Reset error state on input change
+      setError(false);
       const newAreaQuantities = { ...areaQuantities };
-
       setAreaQuantities(newAreaQuantities);
       handleVariantChange(areaValues);
     }
@@ -252,12 +240,11 @@ function Navbar({
       e.key === "ArrowUp" ||
       e.key === "ArrowDown"
     ) {
-      e.preventDefault(); // Prevent the default behavior
+      e.preventDefault();
     }
   };
 
   const handleSubmit = () => {
-    // const area = parseInt(totalArea, 10);
     const area = +totalArea;
     if (!isNaN(area)) {
       if (area >= MIN_AREA && area <= MAX_AREA) {
@@ -265,21 +252,17 @@ function Navbar({
         setError(false);
       } else if (area === 0 || area === undefined) {
         setError(false);
-        // resetAll();
       } else {
-        setError(true); // Set error state if area is out of range
-        // resetAll();
+        setError(true);
       }
     } else {
-      setError(true); // Set error state if input is invalid
+      setError(true);
     }
   };
 
   const handleReset = () => {
-    // setInputValue("");
-    // setTotalArea();
     setError(false);
-    resetAll(); // Call the resetAll function passed from the parent component
+    resetAll();
     setResetAlert(false);
   };
 
@@ -289,7 +272,6 @@ function Navbar({
       {!isMobile ? (
         <div className="bg-gradient-to-r from-[#23445B] to-[#487BA0]">
           <div className="hidden md:flex justify-between  py-4 items-center px-5 overflow-hidden 3xl:container">
-            {/* logo */}
             <button className=" " onClick={() => navigate("/")}>
               <img
                 src="/logo/workved-logo.png"
@@ -297,13 +279,11 @@ function Navbar({
                 className="h-auto w-20"
               />
             </button>
-            {/* sq feet div */}
             <div
               className={`joynavarea flex justify-between w-7/12 border-2 border-[#FFD43B] items-center px-2 rounded-xl relative ${
                 error ? "border-t-1" : "border-1"
               }`}
             >
-              {/* cal icon */}
               <CiCalculator1
                 size={30}
                 color="#FEBF00"
@@ -312,7 +292,6 @@ function Navbar({
               {totalArea > 0 && (
                 <button
                   className="absolute group inline-block right-2 cursor-pointer text-[#FFD43B] border-none hover:text-red-300"
-                  // onClick={handleReset}
                   onClick={() => {
                     if (totalArea >= MIN_AREA) {
                       setResetAlert(true);
@@ -357,40 +336,13 @@ function Navbar({
                 square feet.
               </div>
             )}
-            {/* <button
-            onClick={generateBOQclick}
-            className="generateBoq glow-on-hover relative flex items-center w-36 h-10 px-4 py-2 bg-[#212B36] border border-[#1A8FE3] text-white overflow-hidden group rounded-[4px] font-Poppins text-xs hover:bg-gradient-to-b from-[#3F56EA] to-[#7c80f3] hover:scale-105 transition-transform duration-300 ease-in-out"
-          >
-            <span className="absolute top-0 left-0 w-full h-full pointer-events-none z-0 hidden group-hover:block">
-              <span className="glow-line glow-top"></span>
-              <span className="glow-line glow-right"></span>
-              <span className="glow-line glow-bottom"></span>
-              <span className="glow-line glow-left"></span>
-            </span>
-            <div className="flex gap-3 w-full h-full">
-              <div className="relative pointer-events-none z-0 w-1/4  h-full">
-                <div className="absolute top-0 left-0 text-[8px] group-hover:blink-on-hover">
-                  <PiStarFourFill />
-                </div>
-                <div className="absolute bottom-0 left-[2px] text-[10px] group-hover:blink-on-hover group-hover:del-200">
-                  <PiStarFourFill />
-                </div>
-                <div className="absolute right-0 top-1/4 text-sm group-hover:blink-on-hover group-hover:del-300">
-                  <PiStarFourFill />
-                </div>
-              </div>
-              <span className="flex justify-center items-center">
-                Create BOQ
-              </span>
-            </div>
-          </button> */}
+
             <div className="flex items-center gap-5">
               <AnimatedButton
                 onClick={generateBOQclick}
                 className="!bg-[#3A5D7B] text-white capitalize font-Poppins font-semibold tracking-wider"
                 variant="default"
                 size="lg"
-                // glow={true}
                 textEffect="shimmer"
                 rounded="custom"
                 asChild={false}
@@ -516,11 +468,6 @@ function Navbar({
           </div>
         </div>
       )}
-      {/*desktop navbar */}
-
-      {/* mobile navbar */}
-
-      {/* {warning && <ErrorModal onclose={()=>setWarning(false)} />} */}
       {showWarning && (
         <UnusedAreaWarning
           unusedArea={unusedArea}

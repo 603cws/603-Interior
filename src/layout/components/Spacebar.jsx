@@ -3,7 +3,6 @@ function Spacebar({ totalArea, builtArea, availableArea, MIN_AREA }) {
   const roundedUsedPer = Math.round(usedPer);
   const unUsedPer = 100 - roundedUsedPer;
   if (!totalArea || totalArea < MIN_AREA || totalArea > 25000) {
-    // Reset state when totalArea is 0 or undefined
     return (
       <div className="flex w-full bg-[#385682] my-2 h-[30px] items-center justify-center text-white">
         <p className="text-xs">Enter Area to track usage</p>
@@ -11,11 +10,8 @@ function Spacebar({ totalArea, builtArea, availableArea, MIN_AREA }) {
     );
   }
 
-  console.log(unUsedPer);
-
   return (
     <div className="flex w-full rounded-sm bg-[#385682] my-2 h-[30px]">
-      {/* Used space */}
       <div
         style={{
           width: `${roundedUsedPer}%`,
@@ -29,7 +25,6 @@ function Spacebar({ totalArea, builtArea, availableArea, MIN_AREA }) {
         </p>
       </div>
 
-      {/* Unused space */}
       <div
         style={{
           width: `${unUsedPer}%`,

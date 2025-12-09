@@ -9,12 +9,8 @@ import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { supabase } from "../../services/supabase";
 import UnusedAreaWarning from "../components/UnusedAreaWarning";
-import { PiStarFourFill } from "react-icons/pi";
 import { colors } from "../../constants/constant";
 import { AnimatedButton } from "../../common-components/AnimatedButton";
-
-// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-// import { faChevronRight, faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 
 const fullNames = {
   linear: "Linear Workspace",
@@ -41,9 +37,7 @@ const fullNames = {
   executiveWashroom: "Executive Washroom",
   breakoutRoom: "Breakout Room",
   videoRecordingRoom: "Video Recording Room",
-  other: "Other", // Add new category here
-  // maleWashroom: "Male Washroom",
-  // femaleWashroom: "Female Washroom",
+  other: "Other",
   washrooms: "Wash rooms",
 };
 
@@ -56,15 +50,7 @@ const TreeMap = ({ totalArea, areaQuantities, areaValues }) => {
   const [chartHeight, setChartHeight] = useState("400px");
 
   const navigate = useNavigate();
-
-  const {
-    // layoutImgRef,
-    // setLayoutImage,
-    userId,
-    setSelectedPlan,
-    // layoutImage = "",
-    isMobile,
-  } = useApp();
+  const { userId, setSelectedPlan, isMobile } = useApp();
 
   const MIN_AREA = 1000;
   const MAX_AREA = 25000;
@@ -99,9 +85,9 @@ const TreeMap = ({ totalArea, areaQuantities, areaValues }) => {
 
   useEffect(() => {
     if (showWarning) {
-      document.body.style.overflow = "hidden"; // Disable scroll
+      document.body.style.overflow = "hidden";
     } else {
-      document.body.style.overflow = "auto"; // Enable scroll
+      document.body.style.overflow = "auto";
     }
   }, [showWarning, setShowWarning]);
 
@@ -115,11 +101,8 @@ const TreeMap = ({ totalArea, areaQuantities, areaValues }) => {
   const series = [
     ...Object.keys(areaQuantities).map((key) => {
       const areaOccupied = areaQuantities[key] * areaValues[key];
-      // const areaOccupied = areaQuantities[key] * areaValues[key];
       const percentage = ((areaOccupied / validTotalArea) * 100).toFixed(2);
-
       let newareaoccupied;
-
       switch (true) {
         case totalArea >= 20000:
           newareaoccupied =
@@ -158,7 +141,6 @@ const TreeMap = ({ totalArea, areaQuantities, areaValues }) => {
       return {
         x: `${fullNames[key] || key}: ${percentage}%`,
         y: newareaoccupied,
-        // y: areaOccupied,
         areaOccupied: areaOccupied,
         fillColor: colors[fullNames[key]] || "#000000",
       };
@@ -192,26 +174,19 @@ const TreeMap = ({ totalArea, areaQuantities, areaValues }) => {
 
         if (width > 0 && height > 0) {
           aspectRatio = width / height;
-          console.log("Block size:", { txt, width, height, aspectRatio });
         }
       } else {
         console.warn("No rect found for label:", label.textContent);
       }
 
       const x = label.getAttribute("x");
-
-      // Decide whether to split or not
       const shouldSplit = aspectRatio >= 0.15 && aspectRatio <= 2.5;
-
-      // Prepare lines
       const lines = shouldSplit
         ? txt.split("|||")
         : [txt.replace(/\|\|\|/g, " ")];
 
-      // Clear old content
       while (label.firstChild) label.removeChild(label.firstChild);
 
-      // Optional: vertically center
       const lh = 1.1;
       const startDy = (-(lines.length - 1) * lh) / 2 + "em";
 
@@ -266,19 +241,10 @@ const TreeMap = ({ totalArea, areaQuantities, areaValues }) => {
         dataPointMouseLeave: () => {
           setHoveredArea(null);
         },
-        // mounted: (chart) => {
-        //   chartRef.current = chart; // Store chart instance
-        // },
         mounted: (ctx) =>
           requestAnimationFrame(() => splitTreemapLabels(ctx.el)),
-        // mounted: (ctx) => {
-        //   chartRef.current = ctx; // store instance
-        //   requestAnimationFrame(() => splitTreemapLabels(ctx.el));
-        // },
-        // rendered fires after animations; safest place
         rendered: (ctx) =>
           requestAnimationFrame(() => splitTreemapLabels(ctx.el)),
-        // if your React state causes chart updates, re-split after each update
         updated: (ctx) =>
           requestAnimationFrame(() => splitTreemapLabels(ctx.el)),
       },
@@ -296,16 +262,8 @@ const TreeMap = ({ totalArea, areaQuantities, areaValues }) => {
       treemap: {
         distributed: true,
         enableShades: false,
-        // shadeIntensity: 0, // Disable shade intensity
-        // reverseNegativeShade: false, // Prevent hover shade reversal
-        // useFillColorAsStroke: true // Maintain original fill color as stroke
       },
     },
-    // tooltip: {
-    //   y: {
-    //     formatter: (value) => `${value} sq ft`,
-    //   },
-    // },
     states: {
       hover: {
         filter: {
@@ -318,15 +276,13 @@ const TreeMap = ({ totalArea, areaQuantities, areaValues }) => {
       custom: ({ series, seriesIndex, dataPointIndex, w }) => {
         const dataPoint = w.config.series[0].data[dataPointIndex];
 
-        const workspaceName = dataPoint.x.split(":")[0]; // Extract name
+        const workspaceName = dataPoint.x.split(":")[0];
         const occupiedArea = dataPoint.areaOccupied;
-        // const occupiedArea = dataPoint.y;
-        const percentage = dataPoint.x.split(":")[1]; // Extract percentage
+        const percentage = dataPoint.x.split(":")[1];
         const imageUrl = workspaceImages[workspaceName] || null;
 
-        // Check screen width for mobile responsiveness
-        const isMobile = window.innerWidth < 640; // Adjust for small screens
-        const imageHeight = isMobile ? 120 : 180; // Smaller image on mobile
+        const isMobile = window.innerWidth < 640;
+        const imageHeight = isMobile ? 120 : 180;
 
         const isAvailable = workspaceName.toLowerCase().includes("available");
 
@@ -369,34 +325,21 @@ const TreeMap = ({ totalArea, areaQuantities, areaValues }) => {
       .map((item) => (
         <div
           key={item.x}
-          className={`legend-item ${
+          className={`legend-item flex items-center mr-[5px] ${
             hoveredArea === item.x ? "animate-blink" : ""
           }`}
-          style={{
-            display: "flex",
-            // justifyContent: 'space-evenly',
-            alignItems: "center",
-            // marginBottom: "4px",
-            marginRight: "5px",
-          }}
           onMouseEnter={() => setHoveredArea(item.x)}
           onMouseLeave={() => setHoveredArea(null)}
         >
           <span
-            className={`legend-color ${
+            className={`legend-color w-[10px] h-[10px] mr-[5px] rounded-full ${
               hoveredArea === item.x ? "animate-blink" : ""
             }`}
             style={{
               backgroundColor: item.fillColor,
-              width: "10px",
-              height: "10px",
-              marginRight: "5px",
-              borderRadius: "50%",
             }}
           ></span>
-          <span className="legend-label pr-2" style={{ fontSize: "12px" }}>
-            {item.x}
-          </span>
+          <span className="legend-label pr-2 text-xs">{item.x}</span>
         </div>
       ));
   };
@@ -433,7 +376,6 @@ const TreeMap = ({ totalArea, areaQuantities, areaValues }) => {
     areaValues,
     areaQuantities,
     totalArea = null,
-    imageFilename,
     builtArea
   ) => {
     return {
@@ -486,20 +428,14 @@ const TreeMap = ({ totalArea, areaQuantities, areaValues }) => {
       videoRecordingRoomQty: areaQuantities.videoRecordingRoom || 0,
       otherArea: areaValues.other,
       otherQty: areaQuantities.other || 0,
-      // maleWashroomArea: areaValues.maleWashroom,
-      // maleWashroomQty: areaQuantities.maleWashroom || 0,
-      // femaleWashroomArea: areaValues.femaleWashroom,
-      // femaleWashroomQty: areaQuantities.femaleWashroom || 0,
       washroomsArea: areaValues.washrooms,
       washroomsQty: areaQuantities.washrooms || 0,
       ...(totalArea !== null && { totalArea }),
-      // layoutImg: imageFilename,
       usedSpace: builtArea,
     };
   };
 
   const generateBOQclick = () => {
-    console.log("hii", totalArea);
     if (!totalArea) {
       toast.error("Enter the Area");
       return;
@@ -548,8 +484,6 @@ const TreeMap = ({ totalArea, areaQuantities, areaValues }) => {
           console.error("Error inserting into layout:", error.message);
         }
 
-        console.log("layout Data:", data);
-
         if (data) {
           const currentLayoutID = data.id;
           sessionStorage.setItem("currentLayoutID", currentLayoutID);
@@ -596,7 +530,6 @@ const TreeMap = ({ totalArea, areaQuantities, areaValues }) => {
             display: window.innerWidth <= 1350 ? "block" : "none",
           }}
         >
-          {/* <FontAwesomeIcon icon={isLegendVisible ? faChevronLeft : faChevronRight} /> */}
           {isLegendVisible ? (
             <MdKeyboardDoubleArrowLeft size={30} />
           ) : (
@@ -606,15 +539,10 @@ const TreeMap = ({ totalArea, areaQuantities, areaValues }) => {
         <div
           className="legend-container w-full h-full grid grid-cols-2 xl:grid-cols-4 gap-3 xl:gap-0 overflow-auto absolute lg:static lg:overflow-visible inset-0 z-20 transition-transform duration-700 ease-in-out lg:transition-none"
           style={{
-            transform: isLegendVisible ? "translateX(0)" : "translateX(-100%)", // Start hidden and slide in
-            // transition: "transform 1s ease-in-out",
-            // position: "absolute",
-            // top: "0",
-            // left: "0",
+            transform: isLegendVisible ? "translateX(0)" : "translateX(-100%)",
             background: "#fff",
             padding: "0px",
-            // boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)",
-            visibility: isLegendVisible ? "visible" : "hidden", // Fully hide off-screen
+            visibility: isLegendVisible ? "visible" : "hidden",
           }}
         >
           {generateLegendItems()}
@@ -631,42 +559,13 @@ const TreeMap = ({ totalArea, areaQuantities, areaValues }) => {
           />
         )}
       </div>
-      {/* button for generate boq */}
       {isMobile && (
         <div className="flex justify-center items-center mt-3">
-          {/* <button
-            onClick={generateBOQclick}
-            className="generateBoq glow-on-hover relative flex items-center w-36 h-10 px-4 py-2 mb-2 bg-[#212B36] border border-[#1A8FE3] text-white overflow-hidden group rounded-[4px] font-Poppins text-xs hover:bg-gradient-to-b from-[#3F56EA] to-[#7c80f3] hover:scale-105 transition-transform duration-300 ease-in-out"
-          >
-            <span className="absolute top-0 left-0 w-full h-full pointer-events-none z-0 hidden group-hover:block">
-              <span className="glow-line glow-top"></span>
-              <span className="glow-line glow-right"></span>
-              <span className="glow-line glow-bottom"></span>
-              <span className="glow-line glow-left"></span>
-            </span>
-            <div className="flex gap-3 w-full h-full">
-              <div className="relative pointer-events-none z-0 w-1/4  h-full">
-                <div className="absolute top-0 left-0 text-[8px] group-hover:blink-on-hover">
-                  <PiStarFourFill />
-                </div>
-                <div className="absolute bottom-0 left-[2px] text-[10px] group-hover:blink-on-hover group-hover:del-200">
-                  <PiStarFourFill />
-                </div>
-                <div className="absolute right-0 top-1/4 text-sm group-hover:blink-on-hover group-hover:del-300">
-                  <PiStarFourFill />
-                </div>
-              </div>
-              <span className="flex justify-center items-center">
-                Create BOQ
-              </span>
-            </div>
-          </button> */}
           <AnimatedButton
             onClick={generateBOQclick}
             className="!bg-[#3A5D7B] text-white capitalize font-Georgia font-semibold tracking-wider"
             variant="default"
             size="lg"
-            // glow={true}
             textEffect="shimmer"
             rounded="custom"
             asChild={false}

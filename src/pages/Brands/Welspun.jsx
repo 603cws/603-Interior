@@ -21,6 +21,31 @@ function Welspun() {
     "/images/brands/featured-3.webp",
     "/images/brands/featured-4.jpg",
   ];
+
+  const clickNLock = [
+    {
+      image: "/images/brands/welspun-8.jpg",
+      title: "timeless tile aesthetic",
+      features: [
+        "Modern patterned tiles",
+        "Light neutral tone",
+        "Slip-resistant surface",
+        "Easy maintenance",
+        "Click-lock system",
+      ],
+    },
+    {
+      image: "/images/brands/welspun-8.jpg",
+      title: "effortless interior style",
+      features: [
+        "Durable material",
+        "Contemporary look",
+        "Space-enhancing design",
+        "Plant-friendly aesthetic",
+        "Furniture-compatible style",
+      ],
+    },
+  ];
   return (
     <>
       <section className="h-screen flex flex-col">
@@ -66,7 +91,31 @@ function Welspun() {
       <section className="container my-5">
         <div className="flex justify-between gap-3">
           <img src="/images/brands/welspun-4.jpg" alt="" className="flex-1 " />
-          <img src="/images/brands/welspun-5.png" alt="" className="flex-1 " />
+          <div className="flex-1 flex flex-col gap-5">
+            {clickNLock.map((product, index) => (
+              <div key={index} className="flex-1 bg-[#3B558C] flex">
+                <div className="bg-[#fff] rounded-[100px] flex-1 flex justify-center items-center gap-10">
+                  <img
+                    src={product.image}
+                    alt=""
+                    className="max-w-xs w-full max-h-96"
+                  />
+                  <div className="">
+                    <h2 className="font-inter text-lg font-semibold uppercase text-[#D9A14D] border border-[#A0A0A0] p-2 mb-5">
+                      {product.title}
+                    </h2>
+                    <ul className="list-disc space-y-2 ml-4">
+                      {product.features.map((feature, index) => (
+                        <li key={index} className="text-[#000]/70">
+                          {feature}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
