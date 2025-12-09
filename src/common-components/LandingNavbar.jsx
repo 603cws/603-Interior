@@ -19,9 +19,9 @@ function LandingNavbar({ className }) {
         <div>
           <ul className="flex gap-7 [&_li]:cursor-pointer uppercase text-xs xl:text-sm font-bold tracking-wider">
             <li
-              onClick={() => navigate("/aboutUs")}
+              onClick={() => navigate("/Aboutus")}
               className={`cursor-pointer relative after:content-[''] after:absolute after:left-0 after:bottom-[-2px] after:h-[1px] after:bg-[#FFC900] after:transition-all after:duration-300 ${
-                pathname === "/aboutUs" ? "after:w-full" : "after:w-0"
+                pathname === "/Aboutus" ? "after:w-full" : "after:w-0"
               } hover:after:w-full`}
             >
               about us
@@ -142,7 +142,7 @@ function LandingNavbar({ className }) {
             className="bg-white w-full absolute top-full left-0 px-2 py-3 overflow-hidden z-10"
           >
             <ul className="text-sm font-bold text-[#334A78] uppercase space-y-5">
-              <li onClick={() => navigate("/aboutUs")}>about us</li>
+              <li onClick={() => navigate("/Aboutus")}>about us</li>
               <li onClick={() => navigate("/OurServices")}>our services</li>
               <li onClick={() => navigate("/Contactus")}>contact us</li>
               <li onClick={() => navigate("/Layout")} className="flex gap-2">

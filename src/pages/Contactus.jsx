@@ -7,7 +7,6 @@ import LandingNavbar from "../common-components/LandingNavbar";
 function Contactus() {
   const [isSubmitting, setisSubmitting] = useState(false);
 
-  // template id
   const templateID = "template_0355bfq";
   const serviceid = "service_ae0sgim";
   const your_public_key = "dR0YyJ3Be6H6xVsT7";
@@ -23,11 +22,6 @@ function Contactus() {
   const handleChange = (e) => {
     setFormData({ ...form, [e.target.name]: e.target.value });
   };
-
-  // const [source] = useState(
-  //   "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d19404.103720641866!2d72.8237966008724!3d19.057896067431624!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be7c91140262913%3A0xc53b6407e4d39f76!2sMakhija%20Arcade%2C%2035th%20Rd%2C%20Khar%2C%20Khar%20West%2C%20Mumbai%2C%20Maharashtra%20400052!5e0!3m2!1sen!2sin!4v1737115916330!5m2!1sen!2sin"
-  // );
-
   const background = "/images/contact-us/contactpage.webp";
 
   const handleformsubmit = async (e) => {
@@ -65,12 +59,8 @@ function Contactus() {
             headers: { "Content-Type": "application/json" },
           }
         );
-        console.log("Email sent successfully:", response.data);
-        // alert("Your mail is sent!");
         toast.success("we will shortly reach you");
-        // setFormData({ username: "", user_email: "", message: "" }); // Reset form
 
-        //reset form
         setFormData({
           message: "",
           name: "",
@@ -112,10 +102,6 @@ function Contactus() {
         </div>
       </div>
       <div className="lg:container xl:max-w-7xl xl:px-0 xl:mx-auto">
-        {/* <div className="">
-          <HeroSection background={background} title={"Contact"} />
-        </div> */}
-
         <section className="hidden  sm:block lg:pt-8 lg:h-[130vh] xl:h-screen 3xl:h-[75vh]  md:mx-auto">
           <div
             className=" py-3 flex flex-col-reverse
@@ -124,7 +110,6 @@ function Contactus() {
             <div className="lg:relative lg:flex-1 lg:h-full  3xl:h-[720px]">
               <div className="max-w-2xl bg-[#304778] text-white lg:absolute lg:-top-[20%] xl:-top-1/4">
                 <div className="px-8 py-10 rounded-3xl pb-5 ">
-                  {/* text */}
                   <div className="[&_p]:font-Georgia py-3">
                     <h2 className="font-Georgia text-3xl  xl:text-5xl  pb-4">
                       Let’s Connect with us!
@@ -136,7 +121,6 @@ function Contactus() {
                       preferences, and feedback.
                     </p>
                   </div>
-                  {/* form part */}
                   <div className="font-Georgia">
                     <form
                       action=""
@@ -200,9 +184,7 @@ function Contactus() {
                           placeholder="Write your messages..."
                           value={form.message}
                           onChange={handleChange}
-                        >
-                          {" "}
-                        </textarea>
+                        ></textarea>
                       </div>
                       <button
                         className="px-10 py-4 font-Georgia rounded-3xl  border-white border  mb-2 text-white"
@@ -273,7 +255,6 @@ function Contactus() {
                   src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3584.3835340214505!2d72.8325178749771!3d19.065149682137243!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be7c91140262913%3A0xc53b6407e4d39f76!2sMakhija%20Arcade%2C%2035th%20Rd%2C%20Khar%2C%20Khar%20West%2C%20Mumbai%2C%20Maharashtra%20400052!5e1!3m2!1sen!2sin!4v1755581526758!5m2!1sen!2sin"
                   width="500"
                   height="300"
-                  // style="border:0;"
                   style={{ border: "1.5px solid" }}
                   allowFullScreen=""
                   loading="lazy"
@@ -284,13 +265,11 @@ function Contactus() {
           </div>
         </section>
 
-        {/* mobile view */}
         <section className="sm:hidden py-8 ">
           <div className="flex flex-col-reverse  bg-white   mx-4">
             <div className=" flex-1 ">
               <div className="max-w-2xl bg-[#304778] text-white ">
                 <div className="px-4 pt-10 pb-4 rounded-3xl ">
-                  {/* text */}
                   <div className="[&_p]:font-Georgia  font-semibold py-3">
                     <h2 className="font-Georgia font-medium  text-4xl  pb-4">
                       Let’s Connect with us!
@@ -302,7 +281,6 @@ function Contactus() {
                       preferences, and feedback.
                     </p>
                   </div>
-                  {/* form part */}
                   <div className="font-Georgia ">
                     <form
                       action=""
@@ -368,9 +346,7 @@ function Contactus() {
                           placeholder="Write your messages..."
                           value={form.message}
                           onChange={handleChange}
-                        >
-                          {" "}
-                        </textarea>
+                        ></textarea>
                       </div>
                       <button
                         className="px-10 py-4 font-Georgia rounded-3xl  border-white border  mb-2 text-white"

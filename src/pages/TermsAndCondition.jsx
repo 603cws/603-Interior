@@ -3,7 +3,6 @@ import Footer from "../common-components/Footer";
 import HeroSection from "./HeroSection";
 
 function TermsAndCondition() {
-  // const background = "/images/contact-us/contactpage.png";
   const termsAndConditions = [
     {
       title: "General",
@@ -78,12 +77,10 @@ function TermsAndCondition() {
 
   return (
     <>
-      {/* Navbar Section */}
       <header className="bg-white shadow-lg z-50 relative">
         <LandingNavbar className="relative" />
       </header>
 
-      {/* Hero Section */}
       <HeroSection
         title={" Terms & Conditions"}
         description={
@@ -92,35 +89,16 @@ function TermsAndCondition() {
         imagePath={"/images/termsnconditions.png"}
       />
 
-      {/* context */}
       <section>
         <div className="lg:container lg:mx-auto mx-2 my-10">
           <div className="font-TimesNewRoman flex justify-center">
             <div className="mx-6 lg:mx-10 max-w-4xl ">
-              {/* title */}
-              {/* <div className="font-semibold xl:text-5xl capitalize text-center mb-10">
-                <h2 className="leading-snug">Terms & Conditions</h2>
-              </div> */}
               <p className="text-sm lg:text-lg xl:text-xl mb-5">
                 Welcome to Workved Interiors! By accessing and using our
                 website, you agree to the following terms and conditions. These
                 ensure a smooth experience for all users and help us maintain
                 transparency in our services. Please read them carefully.
               </p>
-              {/* <div>
-                <h2 className="text-lg font-bold">1. General</h2>
-                <ul className="">
-                  <li className="relative before:content-['●'] before:absolute before:left-0 before:text-black before:text-lg pl-6">
-                    These Terms & Conditions apply to all users of our website
-                    and services, including those exploring our platform,
-                    creating layouts, or engaging with listed vendors.
-                  </li>
-                  <li className="relative before:content-['●'] before:absolute before:left-0 before:text-black before:text-lg pl-6">
-                    We may update these terms periodically, so we encourage you
-                    to review them regularly.
-                  </li>
-                </ul>
-              </div> */}
               <div className="space-y-6">
                 {termsAndConditions.map((term, index) => (
                   <div key={index}>
@@ -144,11 +122,7 @@ function TermsAndCondition() {
           </div>
         </div>
       </section>
-
-      {/* footer */}
-      <footer>
-        <Footer />
-      </footer>
+      <Footer />
     </>
   );
 }

@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import LandingNavbar from "../common-components/LandingNavbar";
 import { AnimatedButton } from "../common-components/AnimatedButton";
 import { useNavigate } from "react-router-dom";
@@ -18,8 +18,6 @@ import { trackCTA } from "../lib/trackCTA";
 gsap.registerPlugin(ScrollTrigger);
 function Landing() {
   const navigate = useNavigate();
-
-  // const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const containerRef = useRef();
 
   useEffect(() => {
@@ -31,19 +29,15 @@ function Landing() {
           end: "+=3000",
           scrub: 1.5,
           pin: true,
-          // pin: containerRef.current,
-          // pinSpacing: false,
         },
       });
 
-      // 1️⃣ Specialized text goes upward and disappears
       tl.to(".specialized-text", {
         y: -100,
         opacity: 0,
         duration: 2,
         ease: "power2.out",
       });
-      // 4️⃣ Interior Design corporate text goes upward & disappears
       tl.to(
         ".interior-text",
         {
@@ -55,7 +49,6 @@ function Landing() {
         "<"
       );
 
-      // 5️⃣ And commercial text goes upward & disappears
       tl.to(
         ".commercial-text",
         {
@@ -67,15 +60,12 @@ function Landing() {
         "<"
       );
 
-      // 2️⃣ Right top table comes left rotating
       tl.fromTo(
         ".round-table",
         { right: "2%", rotate: 0, opacity: 1 },
         { left: "2%", rotate: -360, opacity: 1, duration: 3 }
-        // start at same time
       );
 
-      // 3️⃣ Middle table goes bottom left corner
       tl.fromTo(
         ".rotating-table",
         { left: "2%", top: "40%", rotate: 0, opacity: 1 },
@@ -83,7 +73,6 @@ function Landing() {
         "<"
       );
 
-      // 6️⃣ Bottom right table moves to middle bottom
       tl.fromTo(
         ".down-table",
         { right: "0%", opacity: 1 },
@@ -102,14 +91,12 @@ function Landing() {
         }
       );
 
-      // 7️⃣ Show top middle table (upper-table.png)
       tl.fromTo(
         ".upper-table",
         { y: -200, opacity: 0 },
         { y: 0, opacity: 1, duration: 1 }
       );
 
-      // 8️⃣ Show side circles
       tl.fromTo(
         ".circle",
         { scale: 0 },
@@ -117,7 +104,6 @@ function Landing() {
         "<"
       );
 
-      // 9️⃣ Show right middle table
       tl.fromTo(
         ".side-table",
         { right: "-100%", opacity: 0 },
@@ -125,7 +111,6 @@ function Landing() {
         "<"
       );
 
-      // 🔟 Finally show center text
       tl.fromTo(
         ".center-text",
         { opacity: 0, y: 100 },
@@ -217,7 +202,6 @@ function Landing() {
 
   return (
     <>
-      {/* hero section */}
       <section className="h-screen 3xl:h-auto">
         <LandingNavbar className="absolute top-0 z-50" />
         <div className="relative h-full w-full pt-20 lg:pt-24 xl:overflow-y-hidden 3xl:container">
@@ -299,39 +283,33 @@ function Landing() {
         </div>
       </section>
 
-      {/* section 2 */}
       <section className="hidden lg:block overflow-hidden py-14">
         <div
           ref={containerRef}
           className="relative max-w-4xl xl:max-w-6xl 2xl:max-w-[1280px] mx-auto h-screen font-TimesNewRoman italic overflow-hidden py-5"
         >
-          {/* Specialized text */}
           <p className="absolute top-[15%] text-5xl 2xl:text-7xl specialized-text ">
             Specialized
           </p>
 
-          {/* Round table */}
           <img
             src="/images/home/round-table.png"
             className="absolute top-10 w-44 2xl:h-52 h-44 2xl:w-52 round-table"
             alt="round table"
           />
 
-          {/* Rotating table */}
           <img
             src="/images/home/rotating-table.png"
             className="absolute top-[50%] w-44 2xl:h-52 h-44 2xl:w-52 rotating-table"
             alt="rotating table"
           />
 
-          {/* Top middle table */}
           <img
             src="/images/home/upper-table.png"
             className="absolute top-0 left-1/3 upper-table max-w-60 2xl:max-w-xs"
             alt="upper table"
           />
 
-          {/* Circles */}
           <img
             src="/images/home/circle.png"
             className="absolute right-10 top-10 circle h-14 2xl:h-[70px] w-14 2xl:w-[70px]"
@@ -343,32 +321,27 @@ function Landing() {
             alt="decorative circle element"
           />
 
-          {/* Interior text */}
           <p className="absolute top-[40%] right-0 text-5xl 2xl:text-7xl interior-text">
             in Interior Design
             <br /> corporate
           </p>
 
-          {/* Commercial text */}
           <p className="absolute bottom-[10%] text-5xl 2xl:text-7xl commercial-text">
             and commercial
           </p>
 
-          {/* Down table */}
           <img
             src="/images/home/down-table.png"
             className="absolute bottom-2 max-w-sm xl:max-w-2xl w-full down-table h-16"
             alt="down table"
           />
 
-          {/* Side middle table */}
           <img
             src="/images/home/table.png"
             className="absolute top-1/4 max-w-sm object-contain h-96 side-table"
             alt="side table"
           />
 
-          {/* Center final text */}
           <p className="absolute inset-0 flex items-center justify-center text-5xl text-center center-text">
             We create spaces tailored to you. <br /> We make every space a<br />
             transformative experience.
@@ -376,7 +349,6 @@ function Landing() {
         </div>
       </section>
 
-      {/* section 3 */}
       <section>
         <div className="px-4 lg:container xl:max-w-7xl 2xl:px-0 mx-auto py-5 lg:py-10">
           <div className="flex flex-col items-center space-y-4">
@@ -424,9 +396,6 @@ function Landing() {
         rounded="custom"
         asChild={false}
         hideAnimations={true}
-        // shimmerColor="#fff"
-        // shimmerSize="0.15em"
-        // shimmerDuration="3s"
         borderRadius="10px"
         background="rgba(48, 71, 120, 1)"
         hovereBackground="linear-gradient(90deg,rgba(85,132,182,1)  0%,  rgba(117,162,190,1) 100%)"
@@ -434,7 +403,6 @@ function Landing() {
         create your space
       </AnimatedButton>
 
-      {/* section 4 */}
       <section>
         <div className="px-4 mx-auto lg:container xl:max-w-7xl 2xl:px-0 py-5 lg:py-10">
           <h3 className="font-Georgia font-bold text-[42px] text-center tracking-wide">
@@ -494,7 +462,6 @@ function Landing() {
         </div>
       </section>
 
-      {/* section 5 */}
       <section>
         <div className="px-4 sm:px-0 w-full 3xl:container py-5 lg:py-10">
           <div className="flex flex-col items-center space-y-4">
@@ -538,14 +505,9 @@ function Landing() {
         </div>
       </section>
 
-      {/* get in touch */}
-      <section>
-        <GetInTouchSection />
-      </section>
+      <GetInTouchSection />
 
-      <footer>
-        <Footer />
-      </footer>
+      <Footer />
     </>
   );
 }

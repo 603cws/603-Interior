@@ -1,27 +1,21 @@
 import { lazy, Suspense } from "react";
-// import Layout from "./layout/pages/Layout";
+import "./styles/Landing.css";
 import Boq from "./boq/pages/Boq";
 import PageNotFound from "./common-components/PageNotFound";
 import { Navigate, Route, Routes } from "react-router-dom";
 import Landing from "./pages/Landing";
 import SpinnerFullPage from "./common-components/SpinnerFullPage";
 import Contactus from "./pages/Contactus";
-// import AboutUs from "./pages/AboutUs";
-import AboutUs2 from "./pages/AboutUs2";
+import AboutUs from "./pages/AboutUs";
 import Login from "./common-components/Login";
-// import OurServices from "./pages/OurServices";
-import OurServices2 from "./pages/OurServices2";
 import BlogDetail from "./pages/BlogDetail";
 import Dashboard from "./pages/Dashboard";
 import ScrollToTop from "./common-components/ScrollToTop";
-// import BecomeSeller from "./pages/BecomeSeller";
 import { useApp } from "./Context/Context";
 import HelpnFaq from "./pages/HelpnFaq";
 import TermsAndCondition from "./pages/TermsAndCondition";
 import Boqcompleted from "./common-components/Boqcompleted";
-// import AdminDashboard from "./pages/AdminDashboard";
 import AdminDashboard from "./pages/Admin/AdminDashboard";
-import DoorScrollEffect from "./pages/DoorScrollEffect";
 import ProductOverview from "./boq/pages/ProductOverview";
 import JobPage from "./pages/JobPage";
 import ThreeDViewer from "./common-components/ThreeDViewer";
@@ -59,17 +53,13 @@ import DynamicTitle from "./common-components/DynamicTitle";
 import BrandsOverview from "./pages/Brands/BrandOverview";
 import Welspun from "./pages/Brands/Welspun";
 
-// const Homepage = lazy(() => import("./pages/Homepage"));
 const Layout = lazy(() => import("./layout/pages/Layout"));
-// const BlogPage = lazy(() => import("./pages/Blog"));
 const Carrer = lazy(() => import("./pages/Carrer"));
 
 function App() {
   const { accountHolder, isAuthLoading } = useApp();
 
-  // While authentication is loading, show a spinner
   if (isAuthLoading) {
-    // console.log(isAuthLoading);
     return <SpinnerFullPage />;
   }
 
@@ -77,8 +67,6 @@ function App() {
     <div>
       <ScrollToTop />
       <DynamicTitle />
-      {/* <Layout /> */}
-      {/* <Boq /> */}
       <Suspense fallback={<SpinnerFullPage />}>
         <Routes>
           <Route path="/" element={<Landing />} />
@@ -100,10 +88,8 @@ function App() {
             }
           />
           <Route path="/Contactus" element={<Contactus />} />
-          {/* <Route path="/newContactus" element={<Contactus />} /> */}
-          <Route path="/Aboutus" element={<AboutUs2 />} />
+          <Route path="/Aboutus" element={<AboutUs />} />
           <Route path="/ourstory" element={<OurStory />} />
-
           <Route path="/Blog" element={<InteriorBlog />} />
           <Route path="/Blog/:title" element={<BlogDetail />} />
           <Route path="/Career" element={<Carrer />} />
@@ -117,11 +103,7 @@ function App() {
             element={<Navigate to="/complete-profile" />}
           />
           <Route path="/OurServices" element={<Services />} />
-          {/* <Route path="/OurServices" element={<OurServices2 />} /> */}
-          {/* <Route path="/services" element={<Services />} /> */}
-
           <Route path="/Career/:jobTitle" element={<JobPage />} />
-          <Route path="/scroll" element={<DoorScrollEffect />} />
           <Route
             path="/dashboard"
             element={

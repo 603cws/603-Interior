@@ -71,12 +71,10 @@ function Privacy() {
 
   return (
     <>
-      {/* Navbar Section */}
       <header className="bg-white shadow-lg z-50 relative">
         <LandingNavbar className="relative" />
       </header>
 
-      {/* Hero Section */}
       <HeroSection
         title={"Privacy & Policies"}
         description={
@@ -85,13 +83,10 @@ function Privacy() {
         imagePath={"/images/privacypolicy.png"}
       />
 
-      {/* context */}
       <section>
         <div className="lg:container lg:mx-auto mx-2 my-10">
           <div className="font-TimesNewRoman flex justify-center">
             <div className="mx-6 lg:mx-10 max-w-4xl ">
-              {/* title */}
-
               <p className="text-sm lg:text-lg xl:text-xl mb-5">
                 Welcome to Workved Interiors. Your privacy is important to us.
                 This Privacy Policy explains how we collect, use, share, and
@@ -121,11 +116,7 @@ function Privacy() {
           </div>
         </div>
       </section>
-
-      {/* footer */}
-      <footer>
-        <Footer />
-      </footer>
+      <Footer />
     </>
   );
 }

@@ -13,9 +13,7 @@ function HeroSection({ title, description, imagePath }) {
             <p
               className="text-base md:text-2xl text-white  font-Georgia tracking-wide whitespace-pre-line"
               dangerouslySetInnerHTML={{ __html: description }}
-            >
-              {/* {description} */}
-            </p>
+            ></p>
           )}
         </div>
 

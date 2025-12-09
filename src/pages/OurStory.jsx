@@ -55,7 +55,6 @@ function OurStory() {
     <>
       <LandingNavbar className="relative" />
       <div className="lg:container lg:mx-auto lg:px-12 px-6 xl:max-w-7xl 2xl:px-0">
-        {/* section 1 */}
         <div className="font-Georgia">
           <div className=" flex flex-col justify-center items-center my-10 capitalize">
             <h1 className="italic text-[#111827] text-3xl xl:text-[42px] leading-[52px]">
@@ -67,10 +66,8 @@ function OurStory() {
           </div>
 
           <div className="relative w-full h-[500px] flex items-center justify-center bg-[url('/images/ourstory.png')] bg-cover bg-center">
-            {/* Overlay */}
             <div className="absolute inset-0 bg-black/10"></div>
 
-            {/* Content */}
             <div className="relative z-10 text-center text-white px-6">
               <h2 className="text-3xl md:text-5xl font-bold italic mb-4 xl:mb-6 xl:leading-[58px]">
                 From Coworking Challenges to <br /> Simplifying Office Interiors
@@ -82,10 +79,8 @@ function OurStory() {
           </div>
         </div>
 
-        {/* section 2 */}
         <StrugglesSection />
 
-        {/* section 3 */}
         <section className="max-w-4xl mx-auto lg:px-6 py-6 lg:py-12 text-center font-Georgia">
           <p className="text-[28px] font-bold  italic text-[#334A78] xl:leading-[57px]">
             If we struggled as a workspace brand, how hard must it be for
@@ -93,10 +88,8 @@ function OurStory() {
           </p>
         </section>
 
-        {/* section 4 */}
         <StepsSection />
 
-        {/* section 5 */}
         <section>
           <div>
             <h2 className="font-Georgia pt-10 text-4xl lg:text-[40px] text-[#232323]  lg:leading-[52px] font-bold  mb-2 lg:mb-4 text-center">
@@ -117,7 +110,6 @@ export default OurStory;
 function StrugglesSection() {
   return (
     <section className="py-12 grid grid-cols-1 md:grid-cols-[1fr,1.4fr]  gap-8   font-Georgia items-stretch">
-      {/* Left Content */}
       <div className="flex flex-col justify-center gap-6 ">
         <h2 className="text-4xl  text-black  mb-4 xl:text-[40px] xl:leading-[55px]">
           The Struggles We <br />
@@ -131,7 +123,6 @@ function StrugglesSection() {
         </p>
       </div>
 
-      {/* Right Image */}
       <div className="">
         <img
           src="/images/office.JPG"
@@ -157,7 +148,6 @@ function StepsSection() {
       </section>
       <div className="lg:container lg:mx-auto lg:px-6 relative xl:max-w-7xl 2xl:px-0">
         <div className="flex flex-col md:flex-row justify-between items-center md:space-x-10 space-y-10 md:space-y-0 relative">
-          {/* {steps} */}
           {steps?.map((stepdata, index) => (
             <Step
               title={stepdata?.title}
@@ -180,7 +170,6 @@ function Step({ imagePath, title, index }) {
         <img src={imagePath} alt={title} className="w-16 h-16" />
       </div>
       <h3 className="mt-6 text-xl font-bold text-[#232323] ">{title}</h3>
-      {/* Connector Line to Step 2 */}
       {(index === 0 || index === 1 || index === 2) && (
         <div className="hidden md:block absolute top-16 left-1/2 w-full border-t border-dashed border-gray-400 z-0"></div>
       )}
@@ -189,7 +178,7 @@ function Step({ imagePath, title, index }) {
 }
 
 function AccordionCards() {
-  const [active, setActive] = useState(2); // Default expanded (center one)
+  const [active, setActive] = useState(2);
 
   return (
     <>
@@ -202,16 +191,13 @@ function AccordionCards() {
             }`}
             onMouseEnter={() => setActive(i)}
           >
-            {/* Background Image */}
             <div
               className="absolute inset-0 bg-cover bg-center"
               style={{ backgroundImage: `url(${card.image})` }}
             />
 
-            {/* Overlay */}
             <div className="absolute inset-0 bg-black/40"></div>
 
-            {/* Content */}
             <div
               className={`relative z-10 flex h-full  ${
                 active === i
@@ -246,16 +232,13 @@ function AccordionCards() {
             key={i}
             className={`relative h-[250px]  rounded-2xl overflow-hidden cursor-pointer transition-all duration-500 ease-in-out flex flex-col`}
           >
-            {/* Background Image */}
             <div
               className="absolute inset-0 bg-cover bg-center"
               style={{ backgroundImage: `url(${card.image})` }}
             />
 
-            {/* Overlay */}
             <div className="absolute inset-0 bg-black/40"></div>
 
-            {/* Content */}
             <div
               className={`relative z-10 flex h-full justify-start items-end  text-white`}
             >

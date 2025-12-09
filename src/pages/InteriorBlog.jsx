@@ -8,7 +8,6 @@ import { supabase } from "../services/supabase";
 import { blogImageUrl } from "../utils/HelperConstant";
 import SpinnerFullPage from "../common-components/SpinnerFullPage";
 
-// let items = blogs;
 let itemsPerPage = 4;
 
 function InteriorBlog() {
@@ -25,7 +24,7 @@ function InteriorBlog() {
         let getMainBlog = data?.slice(0, 1);
         setMainBlog(getMainBlog);
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     }
     GetBlogsFromDb();
@@ -33,28 +32,13 @@ function InteriorBlog() {
 
   const blogbox = useRef(null);
 
-  // console.log("blogs from db", blogs);
-
-  // Calculate total pages
   const totalPages = Math.ceil(blogs?.length / itemsPerPage);
 
-  // Get current page blogs?
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = blogs?.slice(indexOfFirstItem, indexOfLastItem);
-  // // Calculate total pages
-  // const totalPages = Math.ceil(items.length / itemsPerPage);
-
-  // // Get current page items
-  // const indexOfLastItem = currentPage * itemsPerPage;
-  // const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  // const currentItems = items.slice(indexOfFirstItem, indexOfLastItem);
-
-  // Handle page change
   const goToPage = (pageNumber) => {
     setCurrentPage(pageNumber);
-
-    // requestAnimationFrame is the web api used for the dom to load
 
     requestAnimationFrame(() => {
       if (blogbox.current) {
@@ -80,7 +64,6 @@ function InteriorBlog() {
             innovation`}
       />
 
-      {/* layout */}
       <section className="my-10">
         <div className="lg:container lg:mx-auto xl:max-w-7xl xl:px-0">
           <div className="">
@@ -94,11 +77,6 @@ function InteriorBlog() {
                 <Card blog={blog} index={blog?.id} key={blog?.title} />
               ))}
             </div>
-            {/* <div ref={blogbox} className="grid  lg:grid-cols-2 gap-10">
-              {currentItems.map((blog, index) => (
-                <Card blog={blog} index={index} key={blog?.title} />
-              ))}
-            </div> */}
             <div className="flex justify-center my-10">
               <div className="flex gap-2">
                 <button

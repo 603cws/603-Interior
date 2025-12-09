@@ -13,7 +13,6 @@ function HelpnFaq() {
     vendor: 0,
   });
 
-  // Toggle handler per category
   const newhandleToggle = (index, category) => {
     setnewExpandedIndex((prev) => ({
       ...prev,
@@ -169,11 +168,6 @@ function HelpnFaq() {
     payment: paymentQuestion,
   };
 
-  // const handleToggle = (index, setExpandedIndex) => {
-  //   setExpandedIndex((prevIndex) => (prevIndex === index ? null : index));
-  // };
-  // const background = "/images/career-page-bg.png";
-
   const helpAndFaqImages = {
     general: "/images/featuredservice3.jpg",
     layoutoffice: "/images/faq1.png",
@@ -184,12 +178,10 @@ function HelpnFaq() {
 
   return (
     <div className="font-Georgia">
-      {/* Navbar Section */}
       <header className="bg-white shadow-lg z-50 relative">
         <LandingNavbar className="relative" />
       </header>
 
-      {/* Hero Section */}
       <HeroSection
         title={" Frequently asked \n questions"}
         description={
@@ -206,11 +198,6 @@ function HelpnFaq() {
           <h4 className="font-Georgia font-bold text-[#232323] text-xl lg:text-4xl">
             Recently Asked Questions
           </h4>
-          {/* <p className="font-lora text-[#777777] text-[15px]">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quasi{" "}
-            <br />
-            incidunt repellendus aut neque rerum quam ab animi reprehenderit?
-          </p> */}
         </div>
       </section>
 

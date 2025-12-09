@@ -19,28 +19,17 @@
 }
 
 .gradient-border {
-  background: linear-gradient(
-    to bottom,
-    #ff7e5f,
-    #feb47b,
-    #ff7e5f
-  ); /* Customize as needed */
-  padding: 2px; /* Border thickness */
-  border-radius: 0.5rem; /* Optional: for rounded corners */
+  background: linear-gradient(to bottom, #ff7e5f, #feb47b, #ff7e5f);
+  padding: 2px;
+  border-radius: 0.5rem;
 }
 
 .gradient-border > .inner {
   background-color: white;
   height: 100%;
   width: 100%;
-  border-radius: inherit; /* Matches parent if you use rounded corners */
+  border-radius: inherit;
 }
-
-/* @media (min-width: 1536px) {
-  .container {
-    max-width: 1440px;
-  }
-} */
 
 @keyframes pulse {
   0%,
@@ -68,31 +57,12 @@
   border-radius: 10px;
 }
 
-/* @layer utilities {
-  .bg-angular-gradient {
-    background: conic-gradient(
-      from 180deg at 10%,
-      #62f2ee 0%,
-      #5fffb6 54%,
-      #d1ff89 60%,
-      #55ffbf 66%,
-      #78e7ff 72%,
-      #73f1ee 86%
-    );
-  }
-} */
-
 @media (min-width: 1800px) {
   .max-w-7xl {
     max-width: 1440px !important;
-    /* padding-left: 0 !important;
-    padding-right: 0 !important; */
   }
 }
 
-/* body {
-  cursor: none;
-} */
 .custom-cursor {
   position: fixed;
   top: 0;

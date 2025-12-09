@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { IoIosCloseCircle } from "react-icons/io";
@@ -6,7 +6,6 @@ import { IoIosCloseCircle } from "react-icons/io";
 function ContactUsPopup({ onClose }) {
   const [isSubmitting, setisSubmitting] = useState(false);
 
-  // template id
   const templateID = "template_0355bfq";
   const serviceid = "service_ae0sgim";
   const your_public_key = "dR0YyJ3Be6H6xVsT7";
@@ -58,12 +57,8 @@ function ContactUsPopup({ onClose }) {
             headers: { "Content-Type": "application/json" },
           }
         );
-        console.log("Email sent successfully:", response.data);
-        // alert("Your mail is sent!");
         toast.success("we will shortly reach you");
-        // setFormData({ username: "", user_email: "", message: "" }); // Reset form
 
-        //reset form
         setFormData({
           message: "",
           name: "",

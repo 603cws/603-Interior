@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import LandingNavbar from "../common-components/LandingNavbar";
 import { FaLocationDot } from "react-icons/fa6";
-import jobData from "../utils/jobData"; // Import the central job data
+import jobData from "../utils/jobData";
 import { IoCalendarSharp } from "react-icons/io5";
 import { HiClock } from "react-icons/hi2";
 import { motion } from "framer-motion";
@@ -14,13 +14,11 @@ import { supabase } from "../services/supabase";
 import toast from "react-hot-toast";
 
 const JobPage = () => {
-  const { jobTitle } = useParams(); // Get the job title from URL
+  const { jobTitle } = useParams();
   const navigate = useNavigate();
   const [job, setJob] = useState(null);
   const [jobForm, SetJobForm] = useState(false);
-
   const location = useLocation();
-
   const jobdata = location?.state;
 
   useEffect(() => {
@@ -29,7 +27,7 @@ const JobPage = () => {
     if (jobDetails) {
       setJob(jobDetails);
     } else {
-      navigate("/Career"); // Redirect if job not found
+      navigate("/Career");
     }
   }, [jobTitle, navigate]);
 
@@ -62,15 +60,12 @@ const JobPage = () => {
             className=" xl:py-10 xl:pl-10 flex-1"
           >
             <img src="/images/carrer.png" alt="job posting" />
-            {/* <img src="/images/career page/careerHero.png" alt="" /> */}
           </motion.div>
         </div>
       </section>
 
-      {/* Job Details */}
       <div className="min-h-screen bg-white flex justify-center lg:p-6 font-Georgia">
         <div className="max-w-7xl w-full bg-white p-6">
-          {/* Back to Jobs - Full Width */}
           <button
             onClick={() => navigate("/Career")}
             className="text-[#334A78] text-sm w-full text-left"
@@ -82,19 +77,6 @@ const JobPage = () => {
             {jobdata?.jobTitle}
           </h1>
 
-          {/* {
-    "id": "5847bc60-9abd-48ad-86df-40ea15966341",
-    "created_at": "2025-11-10T07:20:14.712463+00:00",
-    "jobTitle": "Interior Designer",
-    "location": "mumbai",
-    "experience": "2",
-    "positionType": "FullTIme",
-    "description": "We are looking for a creative and detail-oriented Interior Designer to conceptualize and execute office space designs. You will work closely with clients to create aesthetically pleasing, functional, and innovative work environments.",
-    "responsibilities": "Assist in digital marketing campaigns and social media management\nConduct market research and competitor analysis.\nWork with architects and contractors to ensure seamless execution.\nPresent design concepts to clients and incorporate feedback.\nStay updated with industry trends and new materials.\nStay updated with industry trends and new materials.",
-    "requirements": "Bachelor's degree in Interior Design or a related field.\nProficiency in AutoCAD, SketchUp, V-Ray, and Adobe Suite.\nStrong creative and problem-solving skills.\nExcellent communication and project management skills."
-} */}
-
-          {/* Job Info: Left & Right Alignment */}
           <div className="flex justify-between items-center mt-2">
             <div className="flex gap-2 lg:space-x-6 text-[#334A78] flex-wrap lg:flex-nowrap font-TimesNewRoman">
               <p className="flex items-center capitalize">
@@ -117,7 +99,6 @@ const JobPage = () => {
               </p>
             </div>
 
-            {/* Apply Now Button - Right Aligned */}
             <button
               onClick={() => SetJobForm((prev) => !prev)}
               className="bg-[#334A78] text-white py-2 px-4 rounded hover:bg-[#FFF] hover:text-[#334A78] border border-[#334A78] transition text-nowrap"
@@ -126,11 +107,9 @@ const JobPage = () => {
             </button>
           </div>
 
-          {/* Job Description */}
           <h2 className="text-lg font-semibold mt-6">Description</h2>
           <p className="text-gray-700">{jobdata.description}</p>
 
-          {/* Responsibilities */}
           <h2 className="text-lg font-semibold mt-6">Responsibilities</h2>
           <ul className="list-disc list-inside text-gray-700 mt-2 space-y-2">
             {jobdata?.responsibilities
@@ -141,7 +120,6 @@ const JobPage = () => {
               ))}
           </ul>
 
-          {/* Requirements */}
           <h2 className="text-lg font-semibold mt-6">Requirements</h2>
           <ul className="list-disc list-inside text-gray-700 mt-2 space-y-2">
             {jobdata?.requirements
@@ -153,71 +131,6 @@ const JobPage = () => {
           </ul>
         </div>
       </div>
-      {/* <div className="min-h-screen bg-white flex justify-center lg:p-6 font-Georgia">
-        <div className="max-w-7xl w-full bg-white p-6">
-         
-          <button
-            onClick={() => navigate("/Career")}
-            className="text-[#334A78] text-sm w-full text-left"
-          >
-            &lt; Back to Jobs
-          </button>
-
-          <h1 className="text-3xl font-bold mt-2 text-[#334A78]">{jobTitle}</h1>
-
-  
-          <div className="flex justify-between items-center mt-2">
-            <div className="flex gap-2 lg:space-x-6 text-[#334A78] flex-wrap lg:flex-nowrap">
-              <p className="flex items-center">
-                <FaLocationDot className="mr-2" />
-                {job.location}
-              </p>
-              <p className="flex items-center">
-                <IoCalendarSharp className="mr-2" />
-                {job.experience}
-              </p>
-              <p className="flex items-center">
-                <HiClock className="mr-2" />
-                {job.type}
-              </p>
-            </div>
-
-
-            <button
-              onClick={() => SetJobForm((prev) => !prev)}
-              className="bg-[#334A78] text-white py-2 px-4 rounded-lg hover:bg-[#34BFAD] transition text-nowrap"
-            >
-              Apply Now
-            </button>
-          </div>
-
-       
-          <h2 className="text-lg font-semibold mt-6">Description</h2>
-          <p
-            className="text-gray-700"
-            dangerouslySetInnerHTML={{ __html: job.description }}
-          ></p>
-
-       
-          <h2 className="text-lg font-semibold mt-6">Responsibilities</h2>
-          <ul className="list-disc list-inside text-gray-700 mt-2 space-y-2">
-            {job.responsibilities?.map((task, idx) => (
-              <li key={idx}>{task}</li>
-            ))}
-          </ul>
-
-      
-          <h2 className="text-lg font-semibold mt-6">Requirements</h2>
-          <ul className="list-disc list-inside text-gray-700 mt-2 space-y-2">
-            {job.requirements?.map((requirement, idx) => (
-              <li
-                key={idx}
-                dangerouslySetInnerHTML={{ __html: requirement }}
-              ></li>
-            ))}
-          </ul>
-        </div>
-      </div> */}
 
       {jobForm && (
         <div className="fixed inset-0 bg-[#000]/30 z-50">
@@ -277,8 +190,8 @@ function JobForm({ SetJobForm, jobDetails, jobTitle }) {
 
     setResume(file);
     setPreview(file.name);
-    setValue("Resume", file, { shouldValidate: true }); // ✅ updates the form value
-    trigger("Resume"); // ✅ triggers validation
+    setValue("Resume", file, { shouldValidate: true });
+    trigger("Resume");
   };
 
   const removeFile = () => {
@@ -287,7 +200,6 @@ function JobForm({ SetJobForm, jobDetails, jobTitle }) {
     if (fileInputRef.current) {
       fileInputRef.current.value = null;
     }
-    // ✅ Clear value in react-hook-form
     setValue("Resume", null);
     trigger("Resume");
   };
@@ -307,19 +219,6 @@ function JobForm({ SetJobForm, jobDetails, jobTitle }) {
         return;
       }
 
-      console.log("data", data);
-      //       {
-      //     "FullName": "yuvraj machadi",
-      //     "Position": "web developer",
-      //     "YearsOfExp": "2",
-      //     "NoticePeriod": "30",
-      //     "CurrentCTC": "250000",
-      //     "ExpectedCTC": "600000",
-      //     "EmailID": "yuvrajmanchadi321@gmail.com",
-      //     "MobileNumber": "9594767165",
-      //     "Resume": {}
-      // }
-
       if (data) {
         const { data: jobTableData, error: ApplicationError } = await supabase
           .from("JobApplication")
@@ -338,7 +237,6 @@ function JobForm({ SetJobForm, jobDetails, jobTitle }) {
           ])
           .select();
 
-        console.log("data inserted", jobTableData);
         if (jobTableData) {
           reset();
           removeFile();
@@ -346,7 +244,7 @@ function JobForm({ SetJobForm, jobDetails, jobTitle }) {
         }
 
         if (ApplicationError) {
-          console.log("error", ApplicationError);
+          console.error("error", ApplicationError);
           if (ApplicationError?.code === "23505") {
             toast.error("this email was already registered");
           }
@@ -355,13 +253,8 @@ function JobForm({ SetJobForm, jobDetails, jobTitle }) {
             .remove([formData?.Resume?.name]);
         }
       }
-      //       {
-      //     "path": "products_summary (9).pdf",
-      //     "id": "de435385-4ca3-45ac-abc8-70bb9ee8b855",
-      //     "fullPath": "jobData/products_summary (9).pdf"
-      // }
     } catch (error) {
-      console.log("Unexpected error:", error);
+      console.error("Unexpected error:", error);
     }
   };
 
@@ -394,8 +287,6 @@ function JobForm({ SetJobForm, jobDetails, jobTitle }) {
               required: true,
               maxLength: { value: 20, message: "max 20 character " },
             })}
-            // required
-
             placeholder="John Doe"
             className="p-2 border border-[#ccc]"
           />
@@ -434,7 +325,6 @@ function JobForm({ SetJobForm, jobDetails, jobTitle }) {
                 min: 0,
               })}
               placeholder="e.g., 2"
-              // required
               className="p-2 border border-[#ccc]"
               min={0}
             />
@@ -448,7 +338,6 @@ function JobForm({ SetJobForm, jobDetails, jobTitle }) {
               {...register("NoticePeriod", {
                 required: true,
               })}
-              // required
               placeholder="e.g., 2"
               className="p-2 border border-[#ccc]"
             />
@@ -467,7 +356,6 @@ function JobForm({ SetJobForm, jobDetails, jobTitle }) {
                 min: { value: 0, message: "value should be greater than 0" },
               })}
               min={0}
-              // required
               placeholder="Rs"
               className="p-2 border border-[#ccc]"
             />
@@ -564,7 +452,7 @@ function JobForm({ SetJobForm, jobDetails, jobTitle }) {
                   accept=".pdf,.doc,.docx"
                   {...register("Resume", {
                     required: "Please upload your resume (PDF or Word file).",
-                    onChange: (e) => handleFileChange(e), // ✅ this ensures React Hook Form knows about changes
+                    onChange: (e) => handleFileChange(e),
                   })}
                 />
 

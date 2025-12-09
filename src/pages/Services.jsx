@@ -96,15 +96,6 @@ function Services() {
         <FeatureDesignSection />
         <DeliverServices />
       </div>
-      {/* <div className="lg:container lg:mx-auto lg:px-12 px-4">
-        <FeaturesSection />
-      </div>
-      <div className="lg:container lg:mx-auto lg:px-12 px-4">
-        <DeliverServices />
-      </div>
-      <div className="lg:container lg:mx-auto lg:px-12 px-4">
-        <FeatureDesignSection />
-      </div> */}
       <GetInTouchSection />
       <Footer />
     </div>
