@@ -9,44 +9,29 @@ import {
 import processData from "../boq/utils/dataProcessor";
 import { calculateTotalPrice } from "../boq/utils/productUtils";
 import { calculateSeatCountTotals } from "../boq/utils/dataProcessor";
-// import { calculateTotalPriceHelper } from "../boq/utils/CalculateTotalPriceHelper";
 import { numOfCoats } from "../constants/constant";
 
 const AppContext = createContext();
 
 export const AppProvider = ({ children }) => {
   const session = supabase.storageKey;
-  // const categoriesWithModal = ["Flooring", "HVAC"]; // Array of categories that should show the modal/questions when clicked
-
-  // const categoriesWithTwoLevelCheck = [
-  //   "Flooring",
-  //   "Partitions / Ceilings",
-  //   "HVAC",
-  //   "Lighting",
-  // ]; //Array of Categories where save data works on dependent subcategories
-
-  // const naviagte = useNavigate();
   const searchQuery = "";
-  // const priceRange = [1, 15000000];
-
   const [totalArea, setTotalArea] = useState("");
   const [inputValue, setInputValue] = useState("");
-  const [totalAreaSource, setTotalAreaSource] = useState(""); // Track the source of updates
+  const [totalAreaSource, setTotalAreaSource] = useState("");
   const [progress, setProgress] = useState(0);
   const [userId, setUserId] = useState(null);
   const [loading, setLoading] = useState(true);
-
-  const [selectedCategory, setSelectedCategory] = useState(null); //Gets value after data fetching
-  const [selectedSubCategory, setSelectedSubCategory] = useState(null); //Gets value after data fetching
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [selectedSubCategory, setSelectedSubCategory] = useState(null);
   const [selectedSubCategory1, setSelectedSubCategory1] = useState(null);
   const [selectedData, setSelectedData] = useState(
     JSON.parse(localStorage.getItem("selectedData")) || []
   );
   const [selectedAddons, setSelectedAddons] = useState([]);
   const [selectedProductView, setSelectedProductView] = useState([]);
-
   const [categories, setCategories] = useState([]);
-  const [subCategories, setSubCategories] = useState([]); // Extracted subcategories
+  const [subCategories, setSubCategories] = useState([]);
   const [subCat1, setSubCat1] = useState([]);
   const [userResponses, setUserResponses] = useState({
     height: 10,
@@ -54,7 +39,6 @@ export const AppProvider = ({ children }) => {
     demolishTile: "no",
     hvacType: "Centralized",
   });
-  // const [showProfile, setShowProfile] = useState(false);
   const [accountHolder, setAccountHolder] = useState({
     userId: "",
     email: "",
@@ -71,19 +55,16 @@ export const AppProvider = ({ children }) => {
     sessionStorage.getItem("selectedPlan") || null
   );
 
-  const prevSelectedData = useRef(selectedData); // Ref to store previous selectedData
-  const prevCategories = useRef(categories); // Ref to store previous categories
-  const prevSubCat1 = useRef(subCat1); // Ref to store previous subCat1
+  const prevSelectedData = useRef(selectedData);
+  const prevCategories = useRef(categories);
+  const prevSubCat1 = useRef(subCat1);
 
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isAuthLoading, setIsAuthLoading] = useState(true);
-  // const [defaultProduct, setDefaultProduct] = useState(true);
-
   const [productData, setProductData] = useState([]);
   const [areasData, setAreasData] = useState([]);
   const [quantityData, setQuantityData] = useState([]);
   const [seatCountData, setSeatCountData] = useState([]);
-
   const [showRecommend, setShowRecommend] = useState(false);
   const [boqTotal, setBoqTotal] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
@@ -108,13 +89,9 @@ export const AppProvider = ({ children }) => {
     sessionStorage.getItem("BOQTitle") || ""
   );
   const [BOQID, setBOQID] = useState(sessionStorage.getItem("BOQID") || "");
-
   const [formulaMap, setFormulaMap] = useState({});
   const [formulasLoading, setFormulasLoading] = useState(true);
-
   const [compare, setCompare] = useState([]);
-
-  // ecommerce state
   const [mobilecouponname, setmobilecouponname] = useState("");
   const [disableApplycoupon, setDisableApplycoupon] = useState(false);
   const [orignalTotalPrice, setOriginalToalPrice] = useState(0);
@@ -164,15 +141,12 @@ export const AppProvider = ({ children }) => {
     fetchConfig();
   }, []);
 
-  // Function to update config and persist to Supabase
   const updateCategoryConfig = async (newConfig) => {
     setCategoryConfig(newConfig);
-    console.log("triggered");
-
     const { error } = await supabase
       .from("category_config")
       .update({ config_data: newConfig, updated_at: new Date().toISOString() })
-      .eq("id", 1); // Assuming single row with id=1
+      .eq("id", 1);
     if (error) {
       console.error("Error updating config:", error);
     }
@@ -181,16 +155,13 @@ export const AppProvider = ({ children }) => {
   useEffect(() => {
     const newSeatCountData = normalizeObjectKeys(seatCountData);
     const newQuantityData = normalizeObjectKeys(quantityData);
-
     const allQuantities = {};
 
     subCategories.forEach((subcategory) => {
       const key = normalizeKey(subcategory);
-
       const categoryProducts = subCat1[selectedCategory?.category] || [];
       const productQuantities = {};
 
-      // ✅ First check in selectedData
       const selectedItem = selectedData?.find(
         (item) =>
           item.category === selectedCategory?.category &&
@@ -200,10 +171,8 @@ export const AppProvider = ({ children }) => {
       if (selectedItem) {
         categoryProducts.forEach((productName) => {
           if (productName === selectedItem.subcategory1) {
-            // ✅ Only update the matched product
             productQuantities[productName] = selectedItem.quantity ?? 0;
           } else {
-            // ✅ Preserve or recalc the others
             let value;
             if (
               selectedCategory?.category === "Furniture" &&
@@ -214,7 +183,6 @@ export const AppProvider = ({ children }) => {
               value = newQuantityData[0][key] ?? 0;
             }
 
-            // ✅ Special Furniture logic
             if (
               selectedCategory?.category === "Furniture" &&
               subcategory !== "Linear Workstation" &&
@@ -225,7 +193,6 @@ export const AppProvider = ({ children }) => {
             ) {
               value = value * (newQuantityData[0][key] ?? 1);
             }
-
             productQuantities[productName] = value;
           }
         });
@@ -241,7 +208,6 @@ export const AppProvider = ({ children }) => {
             value = newQuantityData[0][key] ?? 0;
           }
 
-          // ✅ Apply special Furniture logic
           if (
             selectedCategory?.category === "Furniture" &&
             subcategory !== "Linear Workstation" &&
@@ -257,7 +223,6 @@ export const AppProvider = ({ children }) => {
         });
       }
 
-      // ✅ Split Md Cabin into Main + Visitor
       if (
         selectedCategory?.category === "Furniture" &&
         subcategory === "Md Cabin" &&
@@ -265,7 +230,6 @@ export const AppProvider = ({ children }) => {
       ) {
         const value = productQuantities["Chair"] ?? 0;
 
-        // keep original Md Cabin value
         allQuantities["Md Cabin"] = productQuantities;
 
         const mainValue = value > 0 ? 1 : 0;
@@ -279,7 +243,6 @@ export const AppProvider = ({ children }) => {
       ) {
         const value = productQuantities["Chair"] ?? 0;
 
-        // keep original Md Cabin value
         allQuantities["Manager Cabin"] = productQuantities;
 
         const mainValue = value > 0 ? 1 : 0;
@@ -295,23 +258,19 @@ export const AppProvider = ({ children }) => {
 
     const globalQuantities = {};
 
-    // loop through all categories
     categories.forEach((category) => {
       category.subcategories.forEach((subcategory) => {
         const key = normalizeKey(subcategory);
 
-        // init space bucket if not already
         if (!globalQuantities[subcategory]) {
           globalQuantities[subcategory] = {};
         }
 
-        // pull all products (subcategory1) for this category
         const products = category.subcategory1 || [];
 
         products.forEach((productName) => {
           let value;
 
-          // Furniture chairs logic
           if (category.category === "Furniture" && productName === "Chair") {
             value = newSeatCountData[key] ?? newQuantityData[0][key] ?? 0;
           } else {
@@ -331,7 +290,6 @@ export const AppProvider = ({ children }) => {
             value = value * (newQuantityData[0][key] ?? 1);
           }
 
-          // merge into subcategory bucket
           globalQuantities[subcategory][productName] = value;
 
           if (
@@ -352,15 +310,11 @@ export const AppProvider = ({ children }) => {
         });
       });
     });
-
-    // setAllProductQuantities(globalQuantities);
-
     setAllProductQuantities(globalQuantities);
   }, [subCategories, seatCountData, quantityData, selectedCategory]);
 
   const handleBOQTitleChange = (title) => {
     if (isSaveBOQ) setBOQTitle(title);
-    else console.log("Not allowed to change BOQ Title");
   };
 
   const fetchFormulas = async () => {
@@ -377,17 +331,14 @@ export const AppProvider = ({ children }) => {
         map[row.category] = {
           formula: row.formula,
           description: row.description ?? "",
-          // you can include more fields if needed
         };
       });
-
-      setFormulaMap(map); // ✅ Store full object instead of just string
+      setFormulaMap(map);
     }
 
     setFormulasLoading(false);
   };
 
-  // 🟢 Fetch once on load
   useEffect(() => {
     fetchFormulas();
   }, []);
@@ -445,15 +396,12 @@ export const AppProvider = ({ children }) => {
 
       if (error) {
         console.error(error);
-      } else {
-        console.log("Auto-saved draft BOQ");
       }
     } catch (err) {
       console.error("Auto-save error:", err);
     }
   };
 
-  // Auto-save effect
   useEffect(() => {
     if (!BOQID || !BOQTitle) return;
     handleUpdateBOQ(BOQID);
@@ -475,35 +423,30 @@ export const AppProvider = ({ children }) => {
 
       if (error) throw new Error(error);
 
-      //  If there's no data or it's empty, set empty states and return early
       if (!data || data.length === 0) {
         setCartItems([]);
         setWishlistItems([]);
         return;
       }
 
-      // 1. Extract unique image names
       const uniqueImages = [
         ...new Set(data.map((item) => item.productId.image)),
       ];
 
-      // 2. Generate signed URLs from Supabase Storage
       const { data: signedUrls, error: signedUrlError } = await supabase.storage
-        .from("addon") // your bucket name
-        .createSignedUrls(uniqueImages, 3600); // 1 hour expiry
+        .from("addon")
+        .createSignedUrls(uniqueImages, 3600);
 
       if (signedUrlError) {
         console.error("Error generating signed URLs:", signedUrlError);
         return;
       }
 
-      // 3. Create a map from image name to signed URL
       const urlMap = {};
       signedUrls.forEach(({ path, signedUrl }) => {
         urlMap[path] = signedUrl;
       });
 
-      // 4. Replace image names with URLs in the array
       const updatedProducts = data.map((item) => ({
         ...item,
         productId: {
@@ -512,7 +455,6 @@ export const AppProvider = ({ children }) => {
         },
       }));
 
-      // Separate first
       const cartProductsRaw = updatedProducts.filter(
         (item) => item.type === "cart"
       );
@@ -520,7 +462,6 @@ export const AppProvider = ({ children }) => {
         (item) => item.type === "wishlist"
       );
 
-      // Deduplicate inside each group
       const cartProducts = [
         ...new Map(
           cartProductsRaw.map((item) => [item.productId.id, item])
@@ -535,7 +476,7 @@ export const AppProvider = ({ children }) => {
       setCartItems(cartProducts);
       setWishlistItems(wishlistProducts);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   }
 
@@ -554,7 +495,7 @@ export const AppProvider = ({ children }) => {
             fetchCategoriesandSubCat1(),
           ]);
 
-        setCategories(categoriesData); // Remove 0 quantity subcategories
+        setCategories(categoriesData);
 
         setProductData(productsData);
 
@@ -591,7 +532,6 @@ export const AppProvider = ({ children }) => {
           }
         }
 
-        // ✅ Fix: Check if they are undefined before accessing length
         if (
           (processedQuantityData &&
             Object.keys(processedQuantityData).length > 0) ||
@@ -600,22 +540,18 @@ export const AppProvider = ({ children }) => {
           categoriesData.forEach((category) => {
             category.subcategories = category.subcategories.filter(
               (subcategory) => {
-                // Normalize the strings for comparison
                 const normalize = (str) =>
-                  str.toLowerCase().replace(/[^a-z0-9]/g, ""); //output of "Civil / Plumbing" => "civilplumbing"
+                  str.toLowerCase().replace(/[^a-z0-9]/g, "");
                 const subcategoryKey = normalize(subcategory);
 
-                // Skip filtering if the category is not "Furniture"
                 const ignoreCat =
                   normalize(category.category) === "civilplumbing";
                 if (ignoreCat) {
                   return true;
                 }
 
-                // Get the room data from quantityData
                 const roomCount = processedQuantityData || {};
 
-                // Handle Meeting Room Large and Meeting Room
                 const meetingRoomLargeQuantity =
                   roomCount["meetingroomlarge"] || 0;
                 const meetingRoomQuantity = roomCount["meetingroom"] || 0;
@@ -633,7 +569,6 @@ export const AppProvider = ({ children }) => {
                   return true;
                 }
 
-                // General logic: check the quantity of the subcategory or matching base room key
                 const baseRoomKey = Object.keys(roomCount).find((roomKey) => {
                   const normalizedRoomKey = normalize(roomKey);
                   return (
@@ -680,12 +615,10 @@ export const AppProvider = ({ children }) => {
         setSelectedSubCategory("Centralized");
       }
     }
-  }, [selectedPlan]); // On Plan change subCat not updating proeprly for HVAC
+  }, [selectedPlan]);
 
   useEffect(() => {
-    // Check if selectedData is valid and not empty
     if (selectedData && selectedData.length > 0) {
-      // Save the data as a JSON string
       localStorage.setItem("selectedData", JSON.stringify(selectedData));
     }
   }, [selectedData]);
@@ -694,19 +627,17 @@ export const AppProvider = ({ children }) => {
     async function fetchdata() {
       const sessionData = JSON.parse(sessionStorage.getItem(session));
 
-      // const usertoken = localStorage.getItem("usertoken");
       const usertoken = sessionData?.access_token;
 
       if (!usertoken) {
-        setIsAuthenticated(false); // Set auth to false if no token
+        setIsAuthenticated(false);
         setIsAuthLoading(false);
-        // naviagte("/");
       }
       if (usertoken) {
         const { data, error } = await supabase.auth.getUser(usertoken);
         if (error) {
           console.warn("Error fetching user:", error);
-          setIsAuthenticated(false); // Set auth to false if no token
+          setIsAuthenticated(false);
           setIsAuthLoading(false);
           return null;
         }
@@ -720,30 +651,26 @@ export const AppProvider = ({ children }) => {
     }
 
     fetchdata();
-    // setUserId(userId);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userId]);
 
   useEffect(() => {
     if (selectedCategory) {
-      // Find the category object matching the selected category ID
       const category = categories.find((cat) => cat.id === selectedCategory.id);
 
-      // Update the subcategories state
       if (category) {
         setSubCategories(category.subcategories || []);
       }
     } else {
-      setSubCategories([]); // Reset subcategories if no category is selected
+      setSubCategories([]);
     }
   }, [selectedCategory, categories]);
 
   useEffect(() => {
-    // Automatically select the first subcategory when the category changes
     if (subCat1 && selectedCategory?.category) {
       const subCategories = subCat1[selectedCategory.category];
       if (subCategories && subCategories.length > 0) {
-        setSelectedSubCategory1(subCategories[0]); // Set the first subcategory as the default
+        setSelectedSubCategory1(subCategories[0]);
       } else {
         setSelectedSubCategory1(null);
       }
@@ -751,9 +678,8 @@ export const AppProvider = ({ children }) => {
   }, [subCat1, selectedCategory]);
 
   useEffect(() => {
-    // Prevent handleProgressBar if subCat1 is undefined
     if (
-      !subCat1 || // 🚀 Prevent call if subCat1 is undefined
+      !subCat1 ||
       !Array.isArray(categories) ||
       categories.length === 0 ||
       !Array.isArray(selectedData) ||
@@ -762,14 +688,12 @@ export const AppProvider = ({ children }) => {
       return;
     }
 
-    // Run only if there are actual changes in the data
     if (
       selectedData !== prevSelectedData.current ||
       categories !== prevCategories.current ||
       subCat1 !== prevSubCat1.current
     ) {
       handleProgressBar(selectedData, categories, subCat1);
-      // Update refs to avoid redundant calls
       prevSelectedData.current = selectedData;
       prevCategories.current = categories;
       prevSubCat1.current = subCat1;
@@ -779,7 +703,6 @@ export const AppProvider = ({ children }) => {
   const fetchUserData = async () => {
     try {
       if (isAuthenticated) {
-        // Retrieve the currently authenticated user
         const {
           data: { user },
           error: authError,
@@ -788,11 +711,9 @@ export const AppProvider = ({ children }) => {
         if (authError) throw authError;
         if (!user) return;
 
-        // Extract user ID and email from authentication
         const userId = user.id;
         const userEmail = user.email;
 
-        // Query the profiles table for phone and companyName
         const { data, error: profileError } = await supabase
           .from("profiles")
           .select(
@@ -803,15 +724,6 @@ export const AppProvider = ({ children }) => {
 
         if (profileError) throw profileError;
 
-        // Update state with user details
-        // setAccountHolder({
-        //   userId,
-        //   email: userEmail,
-        //   phone: profileError ? "" : data.phone || "",
-        //   companyName: profileError ? "" : data.company_name || "",
-        //   role: profileError ? "" : data.role || "",
-        // });
-        // Update state with user details
         setAccountHolder({
           userId,
           email: userEmail,
@@ -833,12 +745,11 @@ export const AppProvider = ({ children }) => {
     fetchUserData();
   }, [isAuthenticated]);
 
-  // Detect screen size
   useEffect(() => {
     const handleResize = () => {
-      setIsMobile(window.innerWidth <= 768); // Mobile & Tablet: < 768px
+      setIsMobile(window.innerWidth <= 768);
     };
-    handleResize(); // Check on mount
+    handleResize();
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
@@ -856,7 +767,6 @@ export const AppProvider = ({ children }) => {
   }
 
   function handleProgressBar(selectedData, categories, subCat1) {
-    // Validate selectedData and categories to prevent errors
     if (!Array.isArray(selectedData) || selectedData.length === 0) {
       console.warn("Invalid or empty selectedData.");
       setProgress(0);
@@ -875,7 +785,6 @@ export const AppProvider = ({ children }) => {
 
       const categoryObj = categories.find((cat) => cat.category === category);
       if (!categoryObj) {
-        console.log(`Category "${category}" not found.`);
         return;
       }
 
@@ -890,21 +799,19 @@ export const AppProvider = ({ children }) => {
 
       let validSubcategories = categoryObj.subcategories;
 
-      // ✅ Special Logic for HVAC category
       if (category === "HVAC") {
         if (subcategory === "Centralized") {
-          validSubcategories = ["Centralized"]; // Only Centralized should be counted
+          validSubcategories = ["Centralized"];
         } else {
           validSubcategories = categoryObj.subcategories.filter(
             (sub) => sub !== "Centralized"
-          ); // Exclude Centralized for Combination
+          );
         }
       }
 
       const subCategoryPercentage =
         categoryPercentage / validSubcategories.length;
 
-      // Handle subCategory1 logic with exclusion for "pods" in "Pantry"
       if (
         (subcategory1 &&
           subCat1 &&
@@ -941,7 +848,6 @@ export const AppProvider = ({ children }) => {
               item.subcategory1 === "Chair"
           );
 
-          // ✅ Only exclude Chair if both Main & Visitor are filled
           if (mainFilled && visitorFilled) {
             validSubCat1List = validSubCat1List.filter(
               (item) => item !== "Chair"
@@ -992,14 +898,13 @@ export const AppProvider = ({ children }) => {
       }
     });
 
-    // Ensure progress does not exceed 100%
     totalProgress = Math.min(totalProgress, 100);
     setProgress(Math.round(totalProgress * 100) / 100);
   }
 
   function multiplyFirstTwoFlexible(dimStr) {
     const [a = NaN, b = NaN] = String(dimStr)
-      .split(/[,\sxX*]+/) // comma / space / x / * as separators
+      .split(/[,\sxX*]+/)
       .map((s) => parseFloat(s.trim()));
 
     return Number.isFinite(a) && Number.isFinite(b) ? Number(a * b) : null;
@@ -1021,7 +926,6 @@ export const AppProvider = ({ children }) => {
       const validPrevData = Array.isArray(prevData) ? prevData : [];
 
       if (!isChecked) {
-        // ❌ Remove the product when unchecked
         const updatedData = validPrevData.filter(
           (item) => item.groupKey !== groupKey
         );
@@ -1029,7 +933,6 @@ export const AppProvider = ({ children }) => {
         return updatedData;
       }
 
-      // 🔍 Check if the product already exists
       const existingProduct = validPrevData.find(
         (item) => item.groupKey === groupKey
       );
@@ -1040,8 +943,6 @@ export const AppProvider = ({ children }) => {
         (category.category === "Civil / Plumbing" && subcategory1 === "Tile") ||
         (category.category === "Flooring" && subcategory1 !== "Epoxy")
       ) {
-        console.log(subcategory1, subCat);
-
         calQty = Math.ceil(
           +areasData[0][normalizeKey(subCat)] /
             multiplyFirstTwoFlexible(product?.dimensions)
@@ -1064,7 +965,6 @@ export const AppProvider = ({ children }) => {
           variant_id: product.id,
           additional_images: JSON.parse(product.additional_images || "[]"),
         },
-        // 🔥 Preserve existing addons if the product exists
         addons: existingProduct ? existingProduct.addons : selectedAddons || [],
         finalPrice:
           category.category === "Flooring" ||
@@ -1078,9 +978,9 @@ export const AppProvider = ({ children }) => {
                 category.category,
                 subCat,
                 subcategory1,
-                null, // selectedCategory is not used in this specific calculation, using direct category parameter instead.
-                null, // selectedSubCategory is not used in this specific calculation, using direct subCat parameter instead.
-                null, // selectedSubCategory1 is not used in this specific calculation, using direct subcategory1 parameter instead.
+                null,
+                null,
+                null,
                 quantityData,
                 areasData,
                 userResponses,
@@ -1119,7 +1019,6 @@ export const AppProvider = ({ children }) => {
       };
 
       if (existingProduct) {
-        // 🛠 Replace the existing product while keeping the previous addons
         const updatedData = validPrevData.map((item) =>
           item.groupKey === groupKey ? productData : item
         );
@@ -1127,7 +1026,6 @@ export const AppProvider = ({ children }) => {
         return updatedData;
       }
 
-      // ➕ Add a new product if it doesn't exist
       const updatedData = [...validPrevData, productData];
       localStorage.setItem("selectedData", JSON.stringify(updatedData));
       return updatedData;
@@ -1164,12 +1062,8 @@ export const AppProvider = ({ children }) => {
         setUserId,
         selectedAddons,
         setSelectedAddons,
-        // categoriesWithModal,
-        // categoriesWithTwoLevelCheck,
         userResponses,
         setUserResponses,
-        // showProfile,
-        // setShowProfile,
         isAuthenticated,
         setIsAuthenticated,
         isAuthLoading,
@@ -1177,14 +1071,9 @@ export const AppProvider = ({ children }) => {
         setAccountHolder,
         selectedPlan,
         setSelectedPlan,
-        // defaultProduct,
-        // setDefaultProduct,
         setIsAuthLoading,
         setLoading,
         loading,
-        // layoutImgRef,
-        // layoutImage,
-        // setLayoutImage,
         productData,
         setProductData,
         areasData,
@@ -1198,7 +1087,6 @@ export const AppProvider = ({ children }) => {
         showRecommend,
         setShowRecommend,
         searchQuery,
-        // priceRange,
         boqTotal,
         setBoqTotal,
         isMobile,
