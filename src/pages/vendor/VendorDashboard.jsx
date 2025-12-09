@@ -53,8 +53,6 @@ function VendorDashboard() {
     sidebarDispatch({ type: "TOGGLE_SECTION", payload: SECTIONS.SETTING });
   };
   const handleproduct = () => {
-    console.log("hoiiiiiii from product ");
-
     sidebarDispatch({ type: "TOGGLE_SECTION", payload: SECTIONS.PRODUCT });
   };
 
@@ -138,7 +136,6 @@ function VendorDashboard() {
                       <VendorProfile setIsEditopen={setIsEditopen} />
                     </div>
                   ) : (
-                    // <VendorSetting />
                     <UserSetting />
                   )}
                 </div>

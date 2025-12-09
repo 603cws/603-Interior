@@ -51,8 +51,6 @@ function ManageAddress() {
     setIsAddressEdit(true);
   };
 
-  console.log("edited format", editaddressFormdata);
-
   //length of add
   const TotalAddress = accountHolder?.address?.length;
 
@@ -143,14 +141,8 @@ function ManageAddress() {
     // Add the new address to the list
     updatedAddressList.push(newAddress);
 
-    // console.log("Form submitted:", updatedAddressList);
-
     if (validate(addressFormdata)) {
-      console.log("Form submitted:", updatedAddressList);
-
       try {
-        console.log("trying to update the supabase with new add");
-
         const { error } = await supabase
           .from("profiles")
           .update({ address: updatedAddressList })
@@ -192,15 +184,8 @@ function ManageAddress() {
       }));
     }
 
-    // console.log("Form submitted:", updatedAddressList);
-    console.log("Form submitted:", updatedAddressList);
-
     if (validate(editaddressFormdata)) {
-      console.log("Form submitted:", updatedAddressList);
-
       try {
-        console.log("trying to update the supabase with new add");
-
         const { error } = await supabase
           .from("profiles")
           .update({ address: updatedAddressList })
@@ -216,7 +201,6 @@ function ManageAddress() {
       } catch (error) {
         console.log(error);
       } finally {
-        // setIsAddressFormOpen(false);
         setIsAddressEdit(false);
         fetchUserData();
       }
@@ -357,7 +341,6 @@ function CustomInput({
   name,
   ...rest
 }) {
-  // const [value, setvalue] = useState();
   const isFloating = value && value.length > 0;
   return (
     <div className="relative w-full">
@@ -367,12 +350,10 @@ function CustomInput({
         value={value}
         onChange={onchange}
         name={name}
-        // onChange={(e) => setvalue(e.target.value)}
         placeholder={label}
         required={required}
         className={`peer placeholder:text-sm border border-[#AAA] px-2 py-2 focus:outline-none focus:[#CCCCCC] w-full rounded-md placeholder-transparent ${className}`}
         {...rest}
-        // className="peer w-full px-4 pt-6 pb-2 text-black bg-white border border-gray-300 rounded-md placeholder-transparent focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
       />
       <label
         htmlFor={id}
@@ -576,8 +557,6 @@ function AddressForm({
             />
             <h2 className="text-sm ">Make this as my default address</h2>
           </div>
-
-          {/* button to add and clear address  */}
 
           <div className="flex mb-2 justify-start items-center gap-5 font-Poppins font-semibold">
             <button

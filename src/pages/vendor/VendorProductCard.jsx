@@ -25,10 +25,6 @@ function VendorProductCard({
   //   "https://bwxzfwsoxwtzhjbzbdzs.supabase.co/storage/v1/object/public/addon/";
 
   const currentStatus = product.status;
-  // console.log("current status", currentStatus);
-  // console.log(product);
-
-  // console.log("deletewarning", deleteWarning);
 
   const additionalImages = product?.additional_images
     ? JSON.parse(product.additional_images)

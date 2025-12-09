@@ -17,17 +17,10 @@ import VendorItem from "./VendorItem";
 
 import { MdOutlineSpaceDashboard } from "react-icons/md";
 import { BsBoxSeam } from "react-icons/bs";
-// import { FaUser } from "react-icons/fa";
-// import { FaUserPlus } from "react-icons/fa";
-// import { CiShop } from "react-icons/ci";
-// import { ImBoxAdd } from "react-icons/im";
 import { RiSettingsLine } from "react-icons/ri";
 import { GrCircleQuestion } from "react-icons/gr";
 import { FiLogOut } from "react-icons/fi";
 import Orders from "../Admin/Orders";
-// import { TbCalculator } from "react-icons/tb";
-// import { IoCalendarOutline } from "react-icons/io5";
-// import { LuCalendarPlus2 } from "react-icons/lu";
 
 function handlesidebarState(state, action) {
   switch (action.type) {
@@ -138,15 +131,7 @@ function VendorDashboardLayout() {
 
         {/* Menu Items */}
         <div className="font-semibold text-lg capitalize leading-normal tracking-wide py-4 text-[#262626] flex flex-col gap-4 px-3">
-          {/* <SidebarItem
-            icon={<TbFileInvoice />}
-            text="Home"
-            onClick={() => navigate("/")}
-            isExpanded={isExpanded}
-            currentSection={sidebarstate?.currentSection}
-          /> */}
           <SidebarItem
-            // icon={<RiDashboardFill />}
             icon={<MdOutlineSpaceDashboard />}
             text="Dashboard"
             onClick={handledashboard}
@@ -155,7 +140,6 @@ function VendorDashboardLayout() {
           />
           <SidebarItem
             icon={<BsBoxSeam />}
-            // icon={<LuBlend />}
             text="Product"
             onClick={handleproduct}
             isExpanded={isExpanded}
@@ -163,7 +147,6 @@ function VendorDashboardLayout() {
           />
           <SidebarItem
             icon={<BsArchive />}
-            // icon={<LuBlend />}
             text="Orders"
             onClick={handleorders}
             isExpanded={isExpanded}
@@ -174,7 +157,6 @@ function VendorDashboardLayout() {
         {/* Other Items */}
         <div className="font-semibold text-lg capitalize leading-normal tracking-wide py-4 text-[#262626] flex flex-col gap-4 px-3">
           <SidebarItem
-            // icon={<BsQuestionCircle />}
             icon={<GrCircleQuestion />}
             text="Help"
             onClick={handlehelp}
@@ -183,7 +165,6 @@ function VendorDashboardLayout() {
           />
           <SidebarItem
             icon={<RiSettingsLine />}
-            // icon={<IoSettingsSharp />}
             text="Setting"
             onClick={handlesetting}
             isExpanded={isExpanded}
@@ -191,7 +172,6 @@ function VendorDashboardLayout() {
           />
           <SidebarItem
             icon={<FiLogOut />}
-            // icon={<VscSignOut />}
             text="Logout"
             onClick={logout}
             isExpanded={isExpanded}
@@ -247,13 +227,6 @@ function VendorDashboardLayout() {
             </div>
 
             <ul className="p-4 space-y-4">
-              {/* <MobileMenuItem
-                title={"Home"}
-                icon={<TbFileInvoice />}
-                onClick={() => navigate("/")}
-                currentSection={sidebarstate?.currentSection}
-                setIsOpen={setIsOpen}
-              /> */}
               <MobileMenuItem
                 icon={<FaThLarge />}
                 title={"Dashboard"}

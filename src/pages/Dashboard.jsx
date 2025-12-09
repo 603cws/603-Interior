@@ -128,8 +128,7 @@ function Dashboard() {
     { name: "Products", value: "products" },
     { name: "Add-Ons", value: "addons" },
   ];
-
-  const [itemsPerPage, setItemsPerPage] = useState(10); // Default (gets updated dynamically)
+  const itemsPerPage = 10;
   const [currentPage, setCurrentPage] = useState(1);
   const items = toggle ? filteredProducts : filteredAddons;
   const totalPages = Math.ceil(items.length / itemsPerPage);
@@ -195,9 +194,7 @@ function Dashboard() {
         const { data } = await supabase
           .from("addon_variants")
           .select("*")
-          .in("id", productIdsArray); // Use Supabase `in()` filter
-
-        console.log(data);
+          .in("id", productIdsArray);
 
         setAddons(data);
         setFilteredAddons(data);
@@ -211,13 +208,9 @@ function Dashboard() {
 
   //fetch the product based on the selected boq
   const fetchProductsByIds = async () => {
-    console.log("hello from the product ");
-
     try {
       if (selectedBoq) {
         setIsloading(true);
-
-        console.log("selectedboq", selectedBoq);
 
         const productIdsArray = selectedBoq.products.map(
           (product) => product.id
@@ -236,8 +229,6 @@ function Dashboard() {
         if (error) {
           throw new Error(error);
         }
-
-        console.log(data);
       } else {
         setProducts([]);
         setFilteredProducts([]);
@@ -304,8 +295,6 @@ function Dashboard() {
   };
 
   const handleProductPreview = (product) => {
-    console.log("in function handleProductPreview", product);
-
     setProductPreview(true);
     setSelectedProductview(product);
   };
@@ -334,7 +323,6 @@ function Dashboard() {
 
   const handleTabClick = (event) => {
     setProductlist(true);
-    // setIsAddProduct(false);
     const tab = event.target.value; // Get value from button
     setSelectedTab(tab);
     setToggle(tab === "products"); // Set toggle dynamically
@@ -371,10 +359,7 @@ function Dashboard() {
         .select(`*,layout:layoutId (*)`)
         .eq("userId", accountHolder.userId);
 
-      console.log("fetch boq data", data);
-
       setboqdata(data);
-      // selectedBoq(data.boq);
       if (data.length > 0) {
         setSelectedBoq(data[0]);
         setIsboqavailable(true);
@@ -404,23 +389,6 @@ function Dashboard() {
   };
 
   useEffect(() => {
-    const calculateItemsPerPage = () => {
-      if (tableRef.current) {
-        const tableHeight = tableRef.current.clientHeight; // Get table's available height
-        const rowHeight = 60; // Approximate row height (adjust if needed)
-        const headerHeight = 50; // Height of the table header
-        const maxRows = Math.floor((tableHeight - headerHeight) / rowHeight);
-
-        // setItemsPerPage(maxRows > 0 ? maxRows : 1); // Ensure at least 1 row is shown
-      }
-    };
-
-    calculateItemsPerPage();
-    window.addEventListener("resize", calculateItemsPerPage);
-    return () => window.removeEventListener("resize", calculateItemsPerPage);
-  }, []);
-
-  useEffect(() => {
     fetchProductsByIds();
     fetchAddonsByIds();
 
@@ -447,8 +415,6 @@ function Dashboard() {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [openMenuId]);
-
-  // console.log("layout image", layoutImage);
 
   useEffect(() => {
     if (location.state?.openSettings) {
@@ -584,10 +550,6 @@ function Dashboard() {
               className="w-8 h-8 sm:w-10 sm:h-10 p-1"
             />
           </div>
-
-          {/* <div className=" mx-3">
-            <MdMenuOpen size={30} />
-          </div> */}
 
           <div
             ref={mobileMenuRef}
@@ -963,10 +925,8 @@ function Dashboard() {
                   (isloading ? (
                     <Spinner />
                   ) : selectedBoq && items.length > 0 ? (
-                    // <section className="mt-2 flex-1 overflow-hidden px-8">
                     <>
                       <section className="hidden lg:block h-[90%] font-Poppins overflow-hidden">
-                        {/* <section className=" h-[90%] font-Poppins overflow-hidden"> */}
                         <div
                           ref={scrollContainerRef}
                           className=" w-full h-full border-t border-b border-[#CCCCCC] overflow-y-auto custom-scrollbar"
@@ -991,20 +951,6 @@ function Dashboard() {
                                 <th className="p-3 font-medium">
                                   specification
                                 </th>
-                                {/* {toggle ? (
-                                  <>
-                                    <th className="p-3 font-medium">
-                                      Category
-                                    </th>
-                                    <th className="p-3 font-medium">
-                                      specification
-                                    </th>
-                                  </>
-                                ) : (
-                                  <th className="p-3 font-medium">
-                                    Addon Title
-                                  </th>
-                                )} */}
                                 <th className="p-3 font-medium">Action</th>
                               </tr>
                             </thead>
@@ -1040,21 +986,6 @@ function Dashboard() {
                                     <td className="border border-gray-200 p-3 align-middle">
                                       {item.products?.subcategory1 || "-"}
                                     </td>
-
-                                    {/* {toggle ? (
-                                      <>
-                                        <td className="border border-gray-200 p-3 align-middle">
-                                          {item.products?.category || "N/A"}
-                                        </td>
-                                        <td className="border border-gray-200 p-3 align-middle">
-                                          {item.products?.subcategory1 || "N/A"}
-                                        </td>
-                                      </>
-                                    ) : (
-                                      <td className="border border-gray-200 p-3 align-middle">
-                                        {item.addons?.title || item.title}
-                                      </td>
-                                    )} */}
                                     <td className="border border-gray-200 p-3 align-middle flex justify-center items-center relative">
                                       <button
                                         ref={(el) =>
@@ -1083,14 +1014,6 @@ function Dashboard() {
                                           >
                                             <VscEye /> view
                                           </button>
-                                          {/* <button
-                                          onClick={() => {
-                                            handleDelete(item);
-                                          }}
-                                          className="flex gap-2 items-center w-full text-left px-3 py-2 hover:bg-gray-200"
-                                        >
-                                          <MdOutlineDelete /> Delete
-                                        </button> */}
                                         </div>
                                       )}
                                     </td>

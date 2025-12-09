@@ -6,7 +6,6 @@ import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 import { baseImageUrl } from "../../utils/HelperConstant";
 import RejectedProduct from "./RejectedProduct";
 function VendorDashboardCards({ handleproduct }) {
-  // loading
   const [isloading, setIsloading] = useState(false);
   const [products, setProducts] = useState([]);
   const [addons, setAddons] = useState([]);
@@ -30,8 +29,6 @@ function VendorDashboardCards({ handleproduct }) {
       setPendingproducts(getpendingproducts);
 
       setProducts(data);
-
-      console.log(data);
     } catch (error) {
       console.log("Error fetching products:", error);
     } finally {
@@ -45,13 +42,11 @@ function VendorDashboardCards({ handleproduct }) {
         .from("addon_variants")
         .select("*")
         .eq("vendorId", accountHolder.userId);
-      console.log(data);
 
       const getpendingAddons = data.filter((el) => el.status === "pending");
 
       setAddons(data);
       setPendingAddons(getpendingAddons);
-      console.log("Addons: ", data);
     } catch (error) {
       console.log("Error fetching addons:", error);
     }
@@ -137,149 +132,6 @@ function VendorDashboardCards({ handleproduct }) {
   );
 }
 
-// const products = [
-//   {
-//     title: "Handmade Pouch",
-//     price: "$121.00",
-//     status: "Unapproved",
-//     date: "12 Dec 2023",
-//   },
-//   {
-//     title: "Smartwatch E2",
-//     price: "$590.00",
-//     status: "Unapproved",
-//     date: "1 Dec 2023",
-//   },
-//   {
-//     title: "Smartwatch E1",
-//     price: "$125.00",
-//     status: "Pending",
-//     date: "10 Nov 2023",
-//   },
-//   {
-//     title: "Headphone G1 Pro",
-//     price: "$348.00",
-//     status: "Pending",
-//     date: "2 Nov 2023",
-//   },
-//   {
-//     title: "Iphone X",
-//     price: "$607.00",
-//     status: "Completed",
-//     date: "7 Sep 2023",
-//   },
-
-//   // Extra unique products
-//   {
-//     title: "Gaming Laptop X15",
-//     price: "$1,250.00",
-//     status: "Pending",
-//     date: "14 Jan 2024",
-//   },
-//   {
-//     title: "Bluetooth Speaker Mini",
-//     price: "$80.00",
-//     status: "Completed",
-//     date: "5 Feb 2024",
-//   },
-//   {
-//     title: "4K Monitor UltraWide",
-//     price: "$740.00",
-//     status: "Unapproved",
-//     date: "21 Mar 2024",
-//   },
-//   {
-//     title: "Ergonomic Chair",
-//     price: "$299.00",
-//     status: "Pending",
-//     date: "8 Apr 2024",
-//   },
-//   {
-//     title: "Mechanical Keyboard RGB",
-//     price: "$150.00",
-//     status: "Completed",
-//     date: "18 Apr 2024",
-//   },
-//   {
-//     title: "Drone Pro 2",
-//     price: "$980.00",
-//     status: "Pending",
-//     date: "9 May 2024",
-//   },
-//   {
-//     title: "Portable Power Bank 20000mAh",
-//     price: "$45.00",
-//     status: "Completed",
-//     date: "22 May 2024",
-//   },
-//   {
-//     title: "Smart Home Hub",
-//     price: "$210.00",
-//     status: "Unapproved",
-//     date: "4 Jun 2024",
-//   },
-//   {
-//     title: "Noise Cancelling Earbuds",
-//     price: "$130.00",
-//     status: "Pending",
-//     date: "15 Jun 2024",
-//   },
-//   {
-//     title: "Fitness Tracker Band 5",
-//     price: "$55.00",
-//     status: "Completed",
-//     date: "25 Jun 2024",
-//   },
-//   {
-//     title: "Smart Coffee Maker",
-//     price: "$165.00",
-//     status: "Unapproved",
-//     date: "1 Jul 2024",
-//   },
-//   {
-//     title: "Portable Projector Mini",
-//     price: "$420.00",
-//     status: "Pending",
-//     date: "9 Jul 2024",
-//   },
-//   {
-//     title: "Electric Scooter X7",
-//     price: "$750.00",
-//     status: "Completed",
-//     date: "18 Jul 2024",
-//   },
-//   {
-//     title: "Action Camera 4K",
-//     price: "$310.00",
-//     status: "Pending",
-//     date: "3 Aug 2024",
-//   },
-//   {
-//     title: "Wireless Charging Pad",
-//     price: "$35.00",
-//     status: "Completed",
-//     date: "12 Aug 2024",
-//   },
-//   {
-//     title: "Smart LED Light Strip",
-//     price: "$29.00",
-//     status: "Unapproved",
-//     date: "20 Aug 2024",
-//   },
-//   {
-//     title: "VR Headset Pro",
-//     price: "$680.00",
-//     status: "Pending",
-//     date: "30 Aug 2024",
-//   },
-//   {
-//     title: "Air Purifier Max",
-//     price: "$240.00",
-//     status: "Completed",
-//     date: "5 Sep 2024",
-//   },
-// ];
-
 const statusColors = {
   rejected: "bg-orange-100 text-orange-600",
   pending: "bg-sky-100 text-sky-600",
@@ -310,16 +162,9 @@ function ProductTable({ products, addons, handlerejectedProduct }) {
 
   return (
     <div className=" max-w-xs sm:max-w-none  bg-white p-4 rounded-lg shadow border  md:h-[calc(100vh-350px)] flex flex-col">
-      {/* <div className="bg-white p-4 rounded-lg shadow border h-[400px] flex flex-col"> */}
       {/* Top header */}
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-lg font-semibold">Product Review</h2>
-        {/* <div className="flex gap-2">
-          <button className="border px-3 py-1 rounded text-sm">
-            Select Date
-          </button>
-          <button className="border px-3 py-1 rounded text-sm">Filters</button>
-        </div> */}
       </div>
 
       {/* Scrollable table */}
@@ -363,9 +208,7 @@ function ProductTable({ products, addons, handlerejectedProduct }) {
                     </span>
                   </div>
                 </td>
-                {/* <td className="py-3 px-2">
-                  {product?.created_at || product?.date}
-                </td> */}
+
                 <td className="py-3 px-2">{formatDate(product?.created_at)}</td>
               </tr>
             ))}
@@ -388,17 +231,6 @@ function ProductTable({ products, addons, handlerejectedProduct }) {
           >
             <ChevronLeftIcon className="w-4 h-4" />
           </button>
-          {/* {Array.from({ length: totalPages }, (_, i) => (
-            <button
-              key={i}
-              onClick={() => setCurrentPage(i + 1)}
-              className={`px-3 py-1 border rounded ${
-                currentPage === i + 1 ? "bg-blue-600 text-white" : ""
-              }`}
-            >
-              {i + 1}
-            </button>
-          ))} */}
 
           {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) =>
             page === 1 ||

@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { FaRegQuestionCircle } from "react-icons/fa";
 import { supabase } from "../../services/supabase";
 import { toast } from "react-hot-toast";
-// import { useApp } from "../../Context/Context";
 import {
   useAllCatArray,
   specialArray,
@@ -27,14 +26,11 @@ function VendorProductEdit({
 }) {
   const [file, setFile] = useState(null);
   const [preview, setPreview] = useState(selectedproduct?.image || null);
-  //   const [resources, setResources] = useState([]);
   const [subcat, setSubcat] = useState([]);
 
   const [loading, setLoading] = useState(true);
 
   const [vendordata, setVendordata] = useState();
-
-  console.log("selected product", selectedproduct);
 
   const [selectedSubcategories, setSelectedSubcategories] = useState();
   const [subSubCategory, setSubSubCategory] = useState(
@@ -65,11 +61,6 @@ function VendorProductEdit({
   const mulitpleimagesFileinputref = useRef(null);
   const AllCatArray = useAllCatArray();
 
-  console.log(AllCatArray);
-
-  // const baseImageUrl =
-  //   "https://bwxzfwsoxwtzhjbzbdzs.supabase.co/storage/v1/object/public/addon/";
-
   useEffect(() => {
     const fetchVendorData = async () => {
       setLoading(true);
@@ -85,14 +76,11 @@ function VendorProductEdit({
         // setAccountHolder(data);
         const parseddata = JSON.parse(data.allowed_category);
         setVendordata(parseddata);
-        console.log("vendordata", parseddata);
       }
       setLoading(false);
     };
 
     fetchVendorData();
-    // if (selectedAddon?.vendorId) {
-    // }
   }, [selectedproduct?.vendor_id]);
 
   const [variant, setVariant] = useState({
@@ -189,49 +177,23 @@ function VendorProductEdit({
   };
 
   const handleCropped = (file) => {
-    console.log("blob in handlecrop", file);
-
     setPreview(URL.createObjectURL(file));
     setCropperFile(file);
     setVariant((prev) => ({ ...prev, mainImage: file }));
   };
 
   const removeAdditionalImage = async (index) => {
-    console.log("index", index);
-
-    // setAdditionalImages((prev) => prev.filter((_, i) => i !== index));
     let additionalimages = variant.additionalImages.filter(
       (_, i) => i !== index
     );
-
-    const removedelement = variant.additionalImages.find(
-      (el, i) => i === index
-    );
-
-    console.log(typeof removedelement); //if new image then its object , if it was previous existing image then its string
 
     setVariant((prevVariants) => ({
       ...prevVariants,
       additionalImages: [...additionalimages], // Add a new image
     }));
 
-    console.log("additional images", additionalimages);
-
     const userimages = additionalimages.filter((el) => typeof el === "string");
 
-    console.log("user images", userimages);
-
-    // look into this later
-    // if (typeof removedelement === "string") {
-    //   const { storageError } = await supabase.storage
-    //     .from("addon")
-    //     .remove(removedelement);
-
-    //   console.log("item removed ");
-    //   console.log("removed element", removedelement);
-
-    //   console.log("storage error", storageError);
-    // }
     // Update the database only for image that was previous product
     const { error } = await supabase
       .from("product_variants")
@@ -249,20 +211,12 @@ function VendorProductEdit({
   };
 
   useEffect(() => {
-    console.log("cateogry", category);
-
-    console.log("allcatarray in useeffect", AllCatArray);
-
     const filtered = AllCatArray?.filter(
       (cat) => cat?.name?.toLowerCase() === category?.toLowerCase()
     );
 
-    console.log("filtered", filtered);
     const subcattodisplay = filtered.flatMap((subcat) => subcat?.subCat1);
     setSubcat(subcattodisplay);
-    console.log("subcat", subcattodisplay);
-
-    // setResources(filtered);
   }, [category, AllCatArray]);
 
   const cleanTitle = (str) => {
@@ -272,18 +226,13 @@ function VendorProductEdit({
   const onSubmit = async (e) => {
     e.preventDefault();
 
-    console.log("variant", variant);
     if (
       (!variant.mainImage && !file) ||
       variant.additionalImages.length === 0
     ) {
-      console.log("images not found", variant);
-
       toast.error("images are required ");
       return;
     }
-
-    console.log("file", file);
 
     //file based additionalimages
     const filebasedadditionalimages = variant.additionalImages.filter(
@@ -342,7 +291,6 @@ function VendorProductEdit({
           }
 
           productId = Product.id;
-          // toast.success("New product inserted successfully.");
         }
       } else {
         productId = variant.product_id;
@@ -352,8 +300,6 @@ function VendorProductEdit({
         const oldImagePath = selectedproduct?.image;
         // const uniqueID = uuidv4();
         const newImagePath = `${cleanedTitle}-main-${uniqueID}`;
-        console.log("oldImagePath", oldImagePath);
-        console.log("newImagePath", newImagePath);
 
         if (oldImagePath) {
           const { error: removeError } = await supabase.storage
@@ -426,9 +372,6 @@ function VendorProductEdit({
         currentIndex++;
       }
 
-      // Insert the variant into the product_variants table
-
-      //   console.log("main image", variant.mainImage);
       const imagepath = file ? variant.mainImage : variant.mainImage[0];
       const { error: variantError } = await supabase
         .from("product_variants")
@@ -455,17 +398,12 @@ function VendorProductEdit({
         })
         .eq("id", variant.selectedProductId); // Use the correct column and value to match the row you want to update
 
-      //   manufacturer: accountHolder?.companyName || variant.manufacturer, // Store manufacturer
-
       if (variantError) {
         console.error(variantError);
         toast.error(`Error inserting variant: ${variant.title}`);
       }
 
       toast.success("product updated successfully");
-      //   setEditProduct(false);
-      //   setProductlist(true);
-      //   setIsProductRefresh((prev) => !prev);
     } catch (error) {
       console.log("Error in onSubmit:", error);
       toast.error("An unexpected error occurred.");
@@ -473,8 +411,6 @@ function VendorProductEdit({
       handleFormClear();
       setIsSubmitting(false);
     }
-
-    console.log("varaint data", variant);
   };
 
   // get the categories based on the category and type
@@ -484,8 +420,6 @@ function VendorProductEdit({
         (subcat) => subcat.subcategories
       );
       setSelectedSubcategories(filter.join(","));
-      console.log(filter);
-      console.log(filter.join(","));
     }
 
     if (category === "Civil / Plumbing") {
@@ -494,15 +428,11 @@ function VendorProductEdit({
           .filter((cat) => cat.name === category && cat.type === subSubCategory)
           .flatMap((subcat) => subcat.subcategories);
         setSelectedSubcategories(filter.join(","));
-        console.log(filter);
-        console.log(filter.join(","));
       } else {
         const filter = specialArray
           .filter((cat) => cat.name === category && cat.type === "other")
           .flatMap((subcat) => subcat.subcategories);
         setSelectedSubcategories(filter.join(","));
-        console.log(filter);
-        console.log(filter.join(","));
       }
     }
 
@@ -512,15 +442,11 @@ function VendorProductEdit({
           .filter((cat) => cat.name === category && cat.type === subSubCategory)
           .flatMap((subcat) => subcat.subcategories);
         setSelectedSubcategories(filter.join(","));
-        console.log(filter);
-        console.log(filter.join(","));
       } else {
         const filter = specialArray
           .filter((cat) => cat.name === category && cat.type === "other")
           .flatMap((subcat) => subcat.subcategories);
         setSelectedSubcategories(filter.join(","));
-        console.log(filter);
-        console.log(filter.join(","));
       }
     }
   }, [category, subSubCategory, AllCatArray]);
@@ -576,9 +502,6 @@ function VendorProductEdit({
         ? `${baseImageUrl}/${preview}`
         : `${preview}`;
   }
-
-  console.log("imageurl", imageUrl);
-  console.log("typeof main image", typeof variant.mainImage === "string");
 
   if (loading || AllCatArray?.length === 0) {
     return (
@@ -651,7 +574,6 @@ function VendorProductEdit({
                   id="category"
                   value={category}
                   className="w-full border-2 py-1.5 px-2 rounded-lg"
-                  // onChange={(e) => setCategory(e.target.value)}
                   onChange={(e) => handlecategorychange(e)}
                   required
                 >
@@ -665,13 +587,6 @@ function VendorProductEdit({
                         </option>
                       );
                     })}
-                  {/* {accountHolder.allowedCategory.map((cat, index) => {
-                    return (
-                      <option key={index} value={cat}>
-                        {cat}
-                      </option>
-                    );
-                  })} */}
                 </select>
               </div>
               <div>
@@ -723,7 +638,7 @@ function VendorProductEdit({
               </div>
             </div>
           </div>
-          {/* div for description */}
+
           <div>
             <h3 className="capitalize mb-3 text-xl font-semibold">
               Description
@@ -1037,8 +952,6 @@ function VendorProductEdit({
                           alt={`Additional Preview ${index}`}
                           className="w-full h-full object-cover cursor-pointer"
                           onClick={() => {
-                            // setCropMode("additional");
-                            // setAdditionalIndex(index);
                             setFile(img.file);
                             setShowMultiCropper(true);
                           }}
@@ -1103,17 +1016,9 @@ function VendorProductEdit({
           </div>
           {/* div for buttons */}
           <div className="w-full flex items-end justify-between mt-5">
-            {/* <button
-              className="border-2 px-5 py-2 capitalize rounded-lg"
-              type="button"
-              onClick={handleFormClear}
-            >
-              Discard
-            </button> */}
             <button
               className="border-2 px-5 py-2 bg-[#374A75] text-white capitalize rounded-lg"
               type="submit"
-              // onClick={onsubmit}
               disabled={isSubmitting}
             >
               {isSubmitting ? (
@@ -1146,7 +1051,6 @@ function VendorProductEdit({
           </div>
         </div>
       </form>
-      {/* </form> */}
     </div>
   );
 }

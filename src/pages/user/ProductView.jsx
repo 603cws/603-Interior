@@ -1,35 +1,6 @@
 import { baseImageUrl } from "../../utils/HelperConstant";
 
 function ProductView({ onClose, product, handleDelete }) {
-  console.log("product", product);
-
-  //   {
-  //     "id": "2bd93ead-202f-4a12-bee5-ce3cda8ba3fb",
-  //     "created_at": "2025-01-08T13:53:03.14322+00:00",
-  //     "title": "Rustic Stone Tile",
-  //     "price": 79,
-  //     "details": "Natural stone tiles with a rustic finish, perfect for creating an earthy look.",
-  //     "image": "Rustic Stone Tile-main-64351a96-9d5c-4b61-860b-8e55af78e41b",
-  //     "product_id": "64351a96-9d5c-4b61-860b-8e55af78e41b",
-  //     "additional_images": "[]",
-  //     "dimensions": null,
-  //     "manufacturer": "Workved",
-  //     "segment": "Exclusive",
-  //     "default": "Exclusive",
-  //     "product_type": "Tile",
-  //     "vendor_id": null,
-  //     "status": "approved",
-  //     "type": "product",
-  //     "reject_reason": null,
-  //     "products": {
-  //         "id": "64351a96-9d5c-4b61-860b-8e55af78e41b",
-  //         "category": "Flooring",
-  //         "created_at": "2025-01-08T13:50:29.024283+00:00",
-  //         "subcategory": "Open Workspaces,Cabins,Meeting Rooms,Public Spaces,All Areas",
-  //         "subcategory1": "Tile"
-  //     }
-  // }
-
   const additionalImages = product?.additional_images
     ? JSON.parse(product.additional_images)
     : [];
@@ -85,15 +56,6 @@ function ProductView({ onClose, product, handleDelete }) {
                 <h3 className="font-semibold  capitalize w-1/2 ">category:</h3>
                 <p className=" w-1/2"> {product?.products?.category || "NA"}</p>
               </div>
-              {/* <div className="flex  justify-start  w-full my-2">
-                <h3 className="font-semibold  capitalize w-1/2 ">
-                  Sub-categories:
-                </h3>
-                <p className=" w-1/2">
-                  {" "}
-                  {product?.products?.subcategory || "NA"}
-                </p>
-              </div> */}
               <div className="flex items-center justify-start  w-full my-2">
                 <h3 className="font-semibold  capitalize w-1/2 ">
                   Specification:
@@ -105,11 +67,7 @@ function ProductView({ onClose, product, handleDelete }) {
               </div>
               <div className="flex items-center justify-start  w-full my-2">
                 <h3 className="font-semibold  capitalize w-1/2 ">Dimension:</h3>
-                <p className=" w-1/2">
-                  {" "}
-                  {product?.dimensions || "NA"}
-                  {/* {product?.dimensions?.replaceAll(",", " x ") || "NA"} */}
-                </p>
+                <p className=" w-1/2"> {product?.dimensions || "NA"}</p>
               </div>
               <div className="flex items-center justify-start  w-full my-2">
                 <h3 className="font-semibold  capitalize w-1/2 ">Segment:</h3>

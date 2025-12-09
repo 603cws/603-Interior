@@ -6,7 +6,6 @@ import Select from "react-select";
 
 function VendorRegister() {
   const navigate = useNavigate();
-  // const [role, setRole] = useState("");
   const [categories, setCategories] = useState([]);
   const [formData, setFormData] = useState({
     company: "",
@@ -103,8 +102,6 @@ function VendorRegister() {
 
     if (error) {
       console.error("Error updating profile:", error.message);
-    } else {
-      console.log("Profile updated:", data);
     }
   };
 
@@ -146,7 +143,6 @@ function VendorRegister() {
       console.error("Error signing up:", error);
       return;
     }
-    console.log("User signed up successfully:", data);
     alert("User signed up successfully:", data);
 
     const userId = data.user.id;
@@ -159,9 +155,6 @@ function VendorRegister() {
       formData.mobile,
       formData.category ? formData.category.map((cat) => cat.label) : []
     );
-
-    console.log("Submitting form data:", formData);
-    // Submit to DB here
   };
 
   return (

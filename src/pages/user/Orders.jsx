@@ -41,6 +41,7 @@ function Orders() {
 
   useEffect(() => {
     fetchOrdersData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [refreshOrder]);
 
   const fetchOrdersData = async () => {
@@ -51,8 +52,6 @@ function Orders() {
         .select("* ,order_items(*,product_variants(*))")
         .eq("user_id", accountHolder.userId)
         .order("created_at", { ascending: false });
-
-      console.log("orders", ordersData);
 
       setOrders(ordersData);
     } catch (error) {
@@ -71,7 +70,6 @@ function Orders() {
 
   async function handleOrderCancel(order) {
     setEntireOrderCancellation((prev) => !prev);
-    console.log("order for cancel", order);
 
     // check the status from the db
     const { data } = await supabase
@@ -86,7 +84,6 @@ function Orders() {
     }
 
     const uniqueId = uuidv4();
-    console.log(uniqueId);
 
     const refundAmountInPaisa = order?.final_amount * 100;
 
@@ -106,9 +103,7 @@ function Orders() {
         }
       );
 
-      console.log("res", res);
       const data = await res.json();
-      console.log("data", data);
 
       if (data?.success) {
         // code to update in the dB
@@ -291,6 +286,7 @@ function OrderProducts({ orderID }) {
 
   useEffect(() => {
     fetchOrdersData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [orderRefresh]);
 
   const fetchOrdersData = async () => {
@@ -301,8 +297,6 @@ function OrderProducts({ orderID }) {
         .select("* ,order_items(*,product_variants(*))")
         .eq("id", orderID)
         .single();
-
-      console.log("orders", ordersData);
 
       setOrder(ordersData);
     } catch (error) {
@@ -315,7 +309,6 @@ function OrderProducts({ orderID }) {
   const shippingAddress = order?.shipping_address?.[0];
   async function handleOrderitemCancel(order, product) {
     // indivual product cancel
-    console.log("product for cancel", product);
 
     // check the order length to make it partial cancel or entire order cancel
     const cancelType =
@@ -328,15 +321,12 @@ function OrderProducts({ orderID }) {
       .eq("id", product?.id)
       .single();
 
-    console.log("priduct from db ", data);
-
     if (data?.item_status === "cancelled") {
       toast.error("the refund is already initated ");
       return;
     }
 
     const uniqueId = uuidv4();
-    console.log(uniqueId);
 
     const refundAmountInPaisa = product?.refundable_amount * 100;
 
@@ -356,9 +346,7 @@ function OrderProducts({ orderID }) {
         }
       );
 
-      console.log("res", res);
       const data = await res.json();
-      console.log("data", data);
 
       if (!data?.success) {
         toast?.error("something went wrong");
@@ -368,7 +356,7 @@ function OrderProducts({ orderID }) {
       if (data?.success) {
         // code to update in the dB
         // step 1 ->update the status to partiallycanccelled
-        const { data: orderdata, error: orddererror } = await supabase
+        const { error: orddererror } = await supabase
           .from("orders_table")
           .update({
             status: cancelType,
@@ -379,9 +367,7 @@ function OrderProducts({ orderID }) {
 
         if (orddererror) throw orddererror;
 
-        if (orderdata) console.log("orderdata", orderdata);
-
-        const { data: itemdata, error: itemerror } = await supabase
+        const { error: itemerror } = await supabase
           .from("order_items")
           .update({
             item_status: "cancelled",
@@ -392,16 +378,13 @@ function OrderProducts({ orderID }) {
           .eq("order_id", product?.order_id)
           .select();
 
-        console.log("error", itemerror);
-
-        console.log("data that is updated", itemdata);
+        if (itemerror) throw itemerror;
 
         toast?.success("refund initated ,item cancelled");
         setorderRefresh((prev) => !prev);
       }
     } catch (error) {
       console.log("error", error);
-    } finally {
     }
   }
 
@@ -461,10 +444,8 @@ function OrderProducts({ orderID }) {
             <div
               key={product.id}
               className="border border-[#374A75] px-2 md:px-3 py-2 md:py-4 rounded-md flex md:grid grid-cols-[3fr,1fr] items-start"
-              // className="border border-[#374A75] px-2 md:px-3 py-2 md:py-4 rounded-md flex lg:grid grid-cols-2 items-center"
             >
               <div className="flex justify-between items-center gap-2 lg:gap-7 flex-1">
-                {/* <div className="grid  grid-cols-[1fr,2fr,1fr] gap-2 lg:gap-7 flex-1"> */}
                 <img
                   src={`${baseImageUrl}/${product?.product_variants?.image}`}
                   alt={product?.product_variants?.title}
@@ -502,22 +483,6 @@ function OrderProducts({ orderID }) {
                     {product?.quantity}
                   </p>
                 </div>
-                {/* <div className="space-y-2">
-                  <h4 className="text-sm md:text-base font-semibold text-[#171717] capitalize">
-                    Item Total
-                  </h4>
-                  <p className="text-[#171717] text-xs md:text-sm">
-                    {product?.item_total}
-                  </p>
-                </div>
-                <div className="space-y-2">
-                  <h4 className="text-sm md:text-base font-semibold text-[#171717] capitalize">
-                    coupon Discount
-                  </h4>
-                  <p className="text-[#171717] text-xs text-center md:text-sm">
-                    {product?.coupon_discount}
-                  </p>
-                </div> */}
                 <div className="space-y-2">
                   <h4 className="text-sm md:text-base font-semibold text-[#171717] capitalize">
                     Subtotal
@@ -545,18 +510,8 @@ function OrderProducts({ orderID }) {
                   </p>
                 </div>
               </div>
-              {/* <div className="justify-self-end">
-                <button onClick={() => handleProductView(product)}>
-                  <MdKeyboardArrowRight size={25} color="#304778" />
-                </button>
-              </div> */}
+
               <div className="justify-self-end">
-                {/* <button
-                  onClick={() => handleOrderitemCancel(order, product)}
-                  className=" px-10 border border-[#213626] uppercase text-xs tracking-wider rounded-sm py-2 hover:bg-red-600"
-                >
-                  cancel
-                </button> */}
                 {product.item_status !== "cancelled" ? (
                   <button
                     onClick={() => handleOrderitemCancel(product)}
@@ -573,12 +528,6 @@ function OrderProducts({ orderID }) {
                   </button>
                 )}
               </div>
-              {/* <button
-                onClick={() => handleOrderitemCancel(product)}
-                className=" px-10 border border-[#213626] uppercase text-xs tracking-wider rounded-sm py-2 hover:bg-red-600"
-              >
-                cancel
-              </button> */}
             </div>
           ))}
         </div>
@@ -631,13 +580,7 @@ function OrderProducts({ orderID }) {
             <IoCashOutline />
             <span> {order?.payment_details?.paymentMode} payment</span>
           </p>
-          <button
-            className="text-[#374A75] font-bold text-sm capitalize border border-[#CCCCCC] w-full py-2.5 rounded-md hover:bg-[#f9f9f9]"
-            onClick={() => {
-              // generateInvoicePDF();
-              console.log(order);
-            }}
-          >
+          <button className="text-[#374A75] font-bold text-sm capitalize border border-[#CCCCCC] w-full py-2.5 rounded-md hover:bg-[#f9f9f9]">
             get invoice
           </button>
         </div>
@@ -702,7 +645,6 @@ function OrderProductView({ order, product }) {
             </p>
           </div>
           <div>
-            {/* <p>Qunatity : {product.quantity}</p> */}
             <div className="flex justify-between items-center">
               <p className="capitalize text-[#171717] font-bold text-base md:text-lg">
                 product price
@@ -794,9 +736,6 @@ function Breadcrumbs({
 function PriceDistribution({ order }) {
   return (
     <div className="font-Poppins bg-[#fff]">
-      {/* <h3 className="capitalize text-[#171717] font-semibold">
-        payment information
-      </h3> */}
       <div className="">
         <div className="flex justify-between border-b py-2">
           <p>Total MRP</p>

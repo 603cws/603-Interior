@@ -26,7 +26,6 @@ function VendorNewProduct({
 }) {
   const [file, setFile] = useState(null);
   const [preview, setPreview] = useState(null);
-  const [resources, setResources] = useState([]);
   const [subcat, setSubcat] = useState([]);
 
   const [selectedSubcategories, setSelectedSubcategories] = useState();
@@ -72,8 +71,6 @@ function VendorNewProduct({
   const AllCatArray = useAllCatArray();
 
   const handleCropped = (file) => {
-    console.log("blob in handlecrop", file);
-
     setPreview(URL.createObjectURL(file));
     setVariant((prev) => ({ ...prev, mainImage: file }));
   };
@@ -124,7 +121,6 @@ function VendorNewProduct({
 
   const handleAdditionalImagesChange = (event) => {
     const files = Array.from(event.target.files);
-    console.log("additional images", files);
 
     if (!files.length) return;
 
@@ -174,16 +170,15 @@ function VendorNewProduct({
       const filtered = AllCatArray.filter((cat) => cat.name === category);
 
       const subcattodisplay = filtered.flatMap((subcat) => subcat.subCat1);
-      console.log(subcattodisplay);
       return subcattodisplay;
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [AllCatArray]);
 
   useEffect(() => {
     const filtered = AllCatArray.filter((cat) => cat.name === category);
     const subcattodisplay = filtered.flatMap((subcat) => subcat.subCat1);
     setSubcat(subcattodisplay);
-    setResources(filtered);
   }, [category, AllCatArray]);
 
   const cleanTitle = (str) => {
@@ -192,15 +187,11 @@ function VendorNewProduct({
 
   const onSubmit = async (e) => {
     e.preventDefault();
-
-    console.log("variant", variant);
     if (
       !variant.mainImage ||
       variant.mainImage.length === 0 ||
       variant.additionalImages.length === 0
     ) {
-      console.log("images not found", variant);
-
       toast.error("images are required ");
       return;
     }
@@ -226,9 +217,6 @@ function VendorNewProduct({
       if (existingProduct) {
         // If the product already exists, use the existing product ID
         productId = existingProduct.id;
-        // toast.success(
-        //   "Product already exists. Proceeding with variants and addons."
-        // );
       } else {
         // Insert a new product if it doesn't exist
         const { data: Product, error: insertError } = await supabase
@@ -248,7 +236,6 @@ function VendorNewProduct({
         }
 
         productId = Product.id;
-        // toast.success("New product inserted successfully.");
       }
 
       // Now proceed with adding variants
@@ -263,13 +250,7 @@ function VendorNewProduct({
         const { data: mainImageUpload } = await supabase.storage
           .from("addon")
           .upload(`${cleanedTitle}-main-${uniqueID}`, variant.mainImage);
-        // if (mainImageError) {
-        //   console.error(mainImageError);
-        //   toast.error(
-        //     `Error uploading main image for variant: ${variant.title}`
-        //   );
-        // }
-        console.log(mainImageUpload);
+
         // Upload additional images
         const additionalImagePaths = [];
         for (const [index, imageFile] of variant.additionalImages.entries()) {
@@ -280,22 +261,11 @@ function VendorNewProduct({
               imageFile.file
             );
 
-          // if (additionalImageError) {
-          //   console.error(additionalImageError);
-          //   toast.error(
-          //     `Error uploading additional image ${index + 1} for variant: ${
-          //       variant.title
-          //     }`
-          //   );
-          //   continue;
-          // }
-          console.log(additionalImagePaths);
-
           additionalImagePaths.push(additionalImageUpload.path);
         }
 
         // Insert the variant into the product_variants table
-        const { data, error: variantError } = await supabase
+        const { error: variantError } = await supabase
           .from("product_variants")
           .insert({
             product_id: productId,
@@ -320,8 +290,6 @@ function VendorNewProduct({
           })
           .select();
 
-        console.log("data inserted", data);
-
         if (variantError) {
           console.error(variantError);
           toast.error(`Error inserting variant: ${variant.title}`);
@@ -330,7 +298,6 @@ function VendorNewProduct({
           toast.success("Data inserted successfully!");
           handleFormClear();
         }
-        // toast.success(`Variant ${variant.title} added successfully.`);
       }
 
       // Handle the addons
@@ -349,8 +316,6 @@ function VendorNewProduct({
         (subcat) => subcat.subcategories
       );
       setSelectedSubcategories(filter.join(","));
-      // console.log(filter);
-      // console.log(filter.join(","));
     }
 
     if (category === "Civil / Plumbing") {
@@ -359,15 +324,11 @@ function VendorNewProduct({
           .filter((cat) => cat.name === category && cat.type === subSubCategory)
           .flatMap((subcat) => subcat.subcategories);
         setSelectedSubcategories(filter.join(","));
-        // console.log(filter);
-        // console.log(filter.join(","));
       } else {
         const filter = specialArray
           .filter((cat) => cat.name === category && cat.type === "other")
           .flatMap((subcat) => subcat.subcategories);
         setSelectedSubcategories(filter.join(","));
-        // console.log(filter);
-        // console.log(filter.join(","));
       }
     }
 
@@ -377,15 +338,11 @@ function VendorNewProduct({
           .filter((cat) => cat.name === category && cat.type === subSubCategory)
           .flatMap((subcat) => subcat.subcategories);
         setSelectedSubcategories(filter.join(","));
-        // console.log(filter);
-        // console.log(filter.join(","));
       } else {
         const filter = specialArray
           .filter((cat) => cat.name === category && cat.type === "other")
           .flatMap((subcat) => subcat.subcategories);
         setSelectedSubcategories(filter.join(","));
-        // console.log(filter);
-        // console.log(filter.join(","));
       }
     }
   }, [category, subSubCategory, AllCatArray]);
@@ -442,8 +399,6 @@ function VendorNewProduct({
     setCategory(e.target.value);
     setSubSubCategory("");
   };
-
-  // const [formData, setFormData] = useState({});
 
   const handleChangeAdditionalInformation = (e) => {
     const { name, value } = e.target;
@@ -590,18 +545,7 @@ function VendorNewProduct({
                   required
                 />
               </div>
-              {/* <div>
-                <h4 className="text-[#7B7B7B]">Short Description</h4>
-                <textarea
-                  type="textarea"
-                  // name="details"
-                  // onChange={handleChange}
-                  // value={variant.details}
-                  // maxLength={150}
-                  className="w-full py-1.5 px-2 border-2 rounded-lg"
-                  required
-                />
-              </div> */}
+
               <FormInput
                 label={"Short Description"}
                 name={"ShortDescription"}
@@ -618,7 +562,6 @@ function VendorNewProduct({
                   name="details"
                   onChange={handleChange}
                   value={variant.details}
-                  // maxLength={150}
                   className="w-full py-1.5 px-2 border-2 rounded-lg"
                   required
                 />
@@ -637,7 +580,7 @@ function VendorNewProduct({
                   />
                 </div>
               )}
-              {/* dimensions */}
+
               <div>
                 <h4 className="text-[#7B7B7B]">
                   product dimension:(H x L x W)
@@ -894,8 +837,6 @@ function VendorNewProduct({
                         alt={`Additional Preview ${index}`}
                         className="w-full h-full object-cover cursor-pointer"
                         onClick={() => {
-                          // setCropMode("additional");
-                          // setAdditionalIndex(index);
                           setFile(img.file);
                           setShowMultiCropper(true);
                         }}
@@ -1001,7 +942,6 @@ function VendorNewProduct({
           </div>
         </div>
       </form>
-      {/* </form> */}
     </div>
   );
 }

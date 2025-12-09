@@ -3,22 +3,23 @@ import { useApp } from "../../Context/Context";
 import { useState } from "react";
 import { BsCameraFill } from "react-icons/bs";
 import { supabase } from "../../services/supabase";
+
+const profileImages = [
+  "/images/Profile.png",
+  "/images/Profile1.png",
+  "/images/Profile2.png",
+  "/images/usericon.png",
+];
+
 function VendorSetting() {
   const { accountHolder, setAccountHolder } = useApp();
   const { register, handleSubmit, reset } = useForm();
   const [profileImage, setProfileImage] = useState(accountHolder.profileImage);
   const [selectedImage, setSelectedImage] = useState(null);
   const [profileImagesOption, setProfileImagesOption] = useState(false);
-  const profileImages = [
-    "/images/Profile.png",
-    "/images/Profile1.png",
-    "/images/Profile2.png",
-    "/images/usericon.png",
-  ];
 
   // Function to update profile image in the database
   const updateProfileImage = async () => {
-    // setLoading(true);
     const { error } = await supabase
       .from("profiles")
       .update({ profile_image: selectedImage })
@@ -34,7 +35,6 @@ function VendorSetting() {
   };
 
   const onSubmit = (data) => {
-    console.log(data);
     reset();
   };
   return (

@@ -50,8 +50,6 @@ function VendorItem({ isExpanded }) {
   //addon refresh
   const [isaddonRefresh, setIsAddonRefresh] = useState(false);
 
-  // console.log("selected product", selectedProductview);
-
   const menuRef = useRef({});
   const buttonRef = useRef({});
   const productview = useRef(null);
@@ -115,9 +113,6 @@ function VendorItem({ isExpanded }) {
       });
       setProducts(sortedData);
       setFilteredProducts(sortedData);
-      // setProducts(data);
-
-      // console.log(data);
     } catch (error) {
       console.log("Error fetching products:", error);
     } finally {
@@ -130,7 +125,6 @@ function VendorItem({ isExpanded }) {
       .from("addon_variants")
       .select("*")
       .eq("vendorId", accountHolder.userId);
-    // console.log(data);
 
     if (error) {
       console.log("Error fetching addons:", error);
@@ -145,14 +139,10 @@ function VendorItem({ isExpanded }) {
       });
       setAddons(sortedData);
       setFilteredAddons(sortedData);
-      // setAddons(data);
-      // console.log("Addons: ", data);
     }
   };
 
   const filterItems = (query) => {
-    // console.log(query);
-
     if (toggle) {
       if (!query) {
         setFilteredProducts(products); // Reset to original list when input is empty
@@ -172,7 +162,6 @@ function VendorItem({ isExpanded }) {
         item.title.toLowerCase().includes(query.toLowerCase())
       );
       setFilteredAddons(filtered);
-      // console.log(filtered);
     }
   };
 
@@ -198,10 +187,6 @@ function VendorItem({ isExpanded }) {
     setIsAddProduct(false);
   };
 
-  // const handleMenuToggle = (id) => {
-  //   setOpenMenuId((prev) => (prev === id ? null : id));
-  // };
-
   useEffect(() => {
     const handleClickOutside = (event) => {
       // If clicking inside the menu OR the menu button, do nothing
@@ -224,8 +209,6 @@ function VendorItem({ isExpanded }) {
   }, [openMenuId]);
 
   const handleProductPreview = (product) => {
-    // console.log("in function handleProductPreview", product);
-
     setProductPreview(true);
     setSelectedProductview(product);
   };
@@ -239,11 +222,6 @@ function VendorItem({ isExpanded }) {
     setSelectedAddon(addon);
     setEditAddon(true);
   };
-
-  // const handleDeleteClick = (item) => {
-  //   setDeleteWarning(true);
-  //   setSelectedProductview(item);
-  // };
 
   const handleDelete = async (selectedProductview) => {
     try {
@@ -341,42 +319,6 @@ function VendorItem({ isExpanded }) {
                   product list
                 </h3>
 
-                {/* <div className="w-1/2">
-                  <input
-                    type="text"
-                    className="w-full rounded-lg px-2 py-1 outline-none border-2 border-gray-400"
-                    placeholder="......search by product name"
-                    onChange={(e) => filterItems(e.target.value)}
-                  />
-                </div> */}
-
-                {/* <div className="relative inline-block text-left">           
-                  <button
-                    onClick={() => setIsOpen(!isOpen)}
-                    className="flex items-center gap-2 bg-gray-100 px-4 py-2 rounded-md hover:bg-gray-200"
-                  >
-                    <FunnelIcon className="h-5 w-5 text-gray-600" />
-                    <span className="text-sm text-gray-700">Filter</span>
-                    <ChevronDownIcon className="h-4 w-4 text-gray-500" />
-                  </button>
-
-  
-                  {isOpen && (
-                    <div className="absolute mt-2 w-40 bg-white border rounded-md shadow-lg z-10">
-                      <select
-                        value={selected}
-                        onChange={handleSelect}
-                        className="w-full border-none focus:ring-0 p-2 text-sm"
-                      >
-                        <option value="">All</option>
-                        <option value="pending">Pending</option>
-                        <option value="approved">Approved</option>
-                        <option value="rejected">Rejected</option>
-                      </select>
-                    </div>
-                  )}
-                </div> */}
-
                 <button
                   onClick={handlenewproduct}
                   className="capitalize bg-[#374A75] text-white shadow-sm py-2 px-4 text-sm flex justify-center items-center border-2"
@@ -456,15 +398,6 @@ function VendorItem({ isExpanded }) {
                     />
                   </div>
                 )}
-
-                {/* <div className="w-3/2">
-                  <input
-                    type="text"
-                    className="w-full rounded-lg px-2 py-1 outline-none border-2 text-xs lg:text-base border-gray-400"
-                    placeholder="......search"
-                    onChange={(e) => filterItems(e.target.value)}
-                  />
-                </div> */}
               </div>
             </div>
 
@@ -473,8 +406,7 @@ function VendorItem({ isExpanded }) {
             {productlist &&
               (isloading ? (
                 <Spinner />
-              ) : // ) : (toggle ? products : addons).length > 0 ? (
-              items.length > 0 ? (
+              ) : items.length > 0 ? (
                 <>
                   <section className="px-2 h-[85%] font-Poppins overflow-hidden">
                     <ItemList
@@ -617,7 +549,6 @@ function Item({ setIsAddProduct, setAddNewitem, title, img1, img2 }) {
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       className="flex flex-col border border-[#ccc] justify-center items-center gap-5 p-10 shadow-lg font-bold rounded-xl cursor-pointer hover:bg-[#374A75] hover:text-white hover:scale-110 transition-transform duration-200 ease-in-out"
-      // className="flex flex-col justify-center items-center gap-5 p-10 shadow-[0_4px_10px_rgba(180,234,234,50)] font-bold rounded-xl cursor-pointer hover:bg-[#374A75] hover:text-white hover:scale-110 transition-transform duration-200 ease-in-out"
     >
       <img src={isHovered ? img1 : img2} alt={title} className="w-28" />
       <h2 className="text-lg">{title}</h2>

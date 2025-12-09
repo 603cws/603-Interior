@@ -11,16 +11,9 @@ function ItemList({
   handleAddonEdit,
   isExpanded,
 }) {
-  // testing items
-  //   const items = Array.from({ length: 55 }, (_, index) => ({
-  //     id: index + 1,
-  //     name: `Item ${index + 1}`,
-  //   }));
-
   // pagination
 
   const itemsPerPage = 20;
-  //   const [itemsPerPage, setItemsPerPage] = useState(20);
   const [currentPage, setCurrentPage] = useState(1);
   const totalPages = Math.ceil(items.length / itemsPerPage);
   const scrollContainerRef = useRef(null);
@@ -60,9 +53,6 @@ function ItemList({
               key={item?.id}
             />
           ))}
-        {/* {Array.from({ length: paginatedItems?.length }, (_, i) => (
-          <ItemCard key={i} />
-        ))} */}
       </div>
       <div className="p-2 z-30 sticky bottom-0">
         <PagInationNav
@@ -108,7 +98,6 @@ function ItemCard({
 
   return (
     <div>
-      {/* <div onClick={() => handleProductPreview(item)} className="cursor-pointer"> */}
       <div className="relative max-w-xs md:w-44 md:h-44 flex justify-center items-center rounded-2xl shadow-sm border border-[#ccc] ">
         <img
           src={`${baseImageUrl}/${item?.image}`}

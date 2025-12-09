@@ -53,14 +53,12 @@ function Sidebar({
         />
         <SidebarItem
           icon={<MdOutlineSpaceDashboard />}
-          // icon={<RiDashboardFill />}
           text="Dashboard"
           onClick={handledashboard}
           isExpanded={isExpanded}
         />
         <SidebarItem
           icon={<BsBoxSeam />}
-          // icon={<LuBlend />}
           text="Product"
           onClick={() => {
             handleproduct();
@@ -81,7 +79,6 @@ function Sidebar({
         </h3>
         <SidebarItem
           icon={<GrCircleQuestion />}
-          // icon={<BsQuestionCircle />}
           text="Help"
           isExpanded={isExpanded}
           onClick={handleHelp}

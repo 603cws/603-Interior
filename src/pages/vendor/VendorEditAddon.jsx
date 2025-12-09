@@ -18,10 +18,7 @@ function VendorEditAddon({
   setProductlist,
   selectedAddon,
 }) {
-  console.log("selectedAddon", selectedAddon);
-
   const [file, setFile] = useState(null);
-  // const [dragging, setDragging] = useState(false);
   const [preview, setPreview] = useState(selectedAddon?.image || null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -29,8 +26,6 @@ function VendorEditAddon({
 
   const [vendordata, setVendordata] = useState();
 
-  // let resources = [];
-  const [resources, setResources] = useState([]);
   const [subcat, setSubcat] = useState([]);
 
   const [selectedSubcategories, setSelectedSubcategories] = useState();
@@ -82,17 +77,13 @@ function VendorEditAddon({
       if (error) {
         console.error("Error fetching vendor:", error.message);
       } else {
-        // setAccountHolder(data);
         const parseddata = JSON.parse(data.allowed_category);
         setVendordata(parseddata);
-        console.log("vendordata", parseddata);
       }
       setLoading(false);
     };
 
     fetchVendorData();
-    // if (selectedAddon?.vendorId) {
-    // }
   }, [selectedAddon?.vendorId]);
 
   const handleDimensionChange = (e) => {
@@ -158,13 +149,11 @@ function VendorEditAddon({
     const filtered = AllCatArray.filter((cat) => cat.name === category);
     const subcattodisplay = filtered.flatMap((subcat) => subcat.subCat1);
     setSubcat(subcattodisplay);
-    setResources(filtered);
-  }, [category]);
+  }, [category, AllCatArray]);
 
   const onSubmit = async (e) => {
     e.preventDefault();
 
-    // console.log("addon", addon);
     if (!addon.image) {
       toast.error("Add image");
       return;
@@ -191,9 +180,6 @@ function VendorEditAddon({
       if (existingProduct) {
         // If the product already exists, use the existing product ID
         productId = existingProduct.id;
-        console.log(
-          "Product already exists. Proceeding with variants and addons."
-        );
       } else {
         // Insert a new product if it doesn't exist
         const { data: Product, error: insertError } = await supabase
@@ -213,7 +199,6 @@ function VendorEditAddon({
         }
 
         productId = Product.id;
-        // toast.success("New product inserted successfully.");
       }
 
       // Handle the addons
@@ -225,20 +210,17 @@ function VendorEditAddon({
 
       if (addonCategoryError) {
         console.error("Error inserting addon category:", addonCategoryError);
-        // toast.error("Failed to save addon category.");
+
         return;
       }
 
       const addonId = addonCategory.id;
-      // toast.success("Addon category saved successfully.");
 
       const { image, title, price } = addon;
 
       //   image upload
       //   let addonVariantImage;
       if (image && title && price && file) {
-        console.log("image was changed");
-
         const { data: addonVariantImage, error: addonVariantImageError } =
           await supabase.storage
             .from("addon")
@@ -249,7 +231,6 @@ function VendorEditAddon({
             "Error uploading addon variant image:",
             addonVariantImageError
           );
-          console.log(`Failed to upload image for addon variant: ${title}`);
         }
 
         addon.image = addonVariantImage.path;
@@ -280,17 +261,13 @@ function VendorEditAddon({
 
       if (addonVariantError) {
         console.error("Error inserting addon variant:", addonVariantError);
-        // toast.error(`Failed to save addon variant: ${title}`);
+
         return;
       } else {
         toast.success(`Addon ${title} Upaded successfully.`);
       }
-
-      // Success message
-      // toast.success("Data inserted successfully!");
     } catch (error) {
       console.log("Error in onSubmit:", error);
-      // toast.error("An unexpected error occurred.");
     } finally {
       handleFormClear();
       setIsSubmitting(false);
@@ -303,7 +280,7 @@ function VendorEditAddon({
       const filter = AllCatArray.filter((cat) => cat.name === category).flatMap(
         (subcat) => subcat.subcategories
       );
-      // setSelectedSubcategories(filter);
+
       setSelectedSubcategories(filter.join(","));
     }
 
@@ -334,7 +311,7 @@ function VendorEditAddon({
         setSelectedSubcategories(filter.join(","));
       }
     }
-  }, [category, subSubCategory]);
+  }, [category, subSubCategory, AllCatArray]);
 
   // clear the form
   const handleFormClear = () => {
@@ -389,7 +366,6 @@ function VendorEditAddon({
         </button>
         <h3 className="capitalize font-semibold text-xl ">Edit Add On</h3>
       </div>
-      {/* <form action=""> */}
       <form
         className="lg:flex gap-5 py-3 px-5 w-full"
         onSubmit={onSubmit}
@@ -425,13 +401,6 @@ function VendorEditAddon({
                         </option>
                       );
                     })}
-                  {/* {accountHolder.allowedCategory.map((cat, index) => {
-                    return (
-                      <option key={index} value={cat}>
-                        {cat}
-                      </option>
-                    );
-                  })} */}
                 </select>
               </div>
               <div>
@@ -483,7 +452,6 @@ function VendorEditAddon({
               </div>
             </div>
           </div>
-          {/* div for description */}
           <div>
             <h3 className="capitalize mb-3 text-xl font-semibold">
               Description
@@ -667,39 +635,11 @@ function VendorEditAddon({
               </div>
             </div>
           </div>
-          {/* div for plan selection */}
-          {/* <div>
-            <h3 className="capitalize mb-3 text-xl font-semibold">
-              plan category
-            </h3>
-            <div className="w-full shadow-lg border-2 p-5 my-3 rounded-xl capitalize">
-              <h4 className="text-[#7B7B7B]">Segment</h4>
-              <select
-                name="segment"
-                id="segment"
-                className="w-full border-2 py-1.5 px-2 rounded-lg"
-                onChange={handleChange}
-              >
-                <option value="">select plan</option>
-                <option value="Minimal">Minimal</option>
-                <option value="Exclusive">Exclusive</option>
-                <option value="Luxury">Luxury</option>
-              </select>
-            </div>
-          </div> */}
-          {/* div for buttons */}
+
           <div className="w-full flex items-end justify-between mt-5">
-            {/* <button
-              className="border-2 px-5 py-2 capitalize rounded-lg"
-              type="button"
-              onClick={handleFormClear}
-            >
-              Discard
-            </button> */}
             <button
               className="border-2 px-5 py-2 bg-[#374A75] text-white capitalize rounded-lg"
               type="submit"
-              // onClick={onsubmit}
               disabled={isSubmitting}
             >
               {isSubmitting ? (
@@ -732,7 +672,6 @@ function VendorEditAddon({
           </div>
         </div>
       </form>
-      {/* </form> */}
     </div>
   );
 }

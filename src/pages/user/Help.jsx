@@ -1,36 +1,30 @@
 import { FaAngleDown, FaAngleUp } from "react-icons/fa";
 import { useState } from "react";
-
+const accordionItems = [
+  {
+    title: "What is Workved Interiors?",
+    content:
+      "Workved Interiors is a tech-driven platform that helps corporates design and set up their office spaces with instant layouts, smart BOQs, and vendor partnerships, ensuring a hassle-free experience",
+  },
+  {
+    title: "Who can use Workved Interiors?",
+    content:
+      "Our platform is designed for corporates, startups, office administrators, HR teams, and real estate decision-makers looking for efficient office space planning and execution.",
+  },
+  {
+    title: "How does Workved Interiors simplify office setup?",
+    content:
+      "We eliminate the need for lengthy consultations by offering instant office layouts, predefined and custom BOQs, and direct vendor collaboration, saving you time and costs.",
+  },
+];
 function Help({ isvendor }) {
   const [expandedIndex, setExpandedIndex] = useState();
   const handleToggle = (index) => {
     setExpandedIndex((prevIndex) => (prevIndex === index ? null : index));
   };
-  const accordionItems = [
-    {
-      title: "What is Workved Interiors?",
-      content:
-        "Workved Interiors is a tech-driven platform that helps corporates design and set up their office spaces with instant layouts, smart BOQs, and vendor partnerships, ensuring a hassle-free experience",
-    },
-    {
-      title: "Who can use Workved Interiors?",
-      content:
-        "Our platform is designed for corporates, startups, office administrators, HR teams, and real estate decision-makers looking for efficient office space planning and execution.",
-    },
-    {
-      title: "How does Workved Interiors simplify office setup?",
-      content:
-        "We eliminate the need for lengthy consultations by offering instant office layouts, predefined and custom BOQs, and direct vendor collaboration, saving you time and costs.",
-    },
-  ];
+
   return (
-    <div
-      className={`flex-1  lg:rounded-3xl lg:my-2.5 font-Poppins`}
-      // className={`flex-1  ${
-      //   !isvendor && "border-2 border-[#000]"
-      // } rounded-3xl my-2.5 font-Poppins`}
-    >
-      {/* <div className="flex-1  border-2 border-[#000] rounded-3xl my-2.5 font-Poppins"> */}
+    <div className={`flex-1  lg:rounded-3xl lg:my-2.5 font-Poppins`}>
       <div className="flex-col overflow-y-auto custom-scrollbar h-[calc(100vh-120px)] py-2 px-3">
         <div className="my-4">
           <h2 className="text-[#000] text-xl lg:text-3xl capitalize font-semibold text-center">
@@ -43,7 +37,7 @@ function Help({ isvendor }) {
             Common Questions
           </h3>
           <div className="flex flex-col m-auto lg:px-8 py-2 ">
-            {accordionItems.map((item, index) => (
+            {accordionItems?.map((item, index) => (
               <div
                 key={index}
                 className="mb-3 text-[#141515] font-Poppins font-medium"

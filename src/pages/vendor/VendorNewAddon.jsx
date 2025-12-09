@@ -18,12 +18,8 @@ function VendorNewAddon({
   setProductlist,
 }) {
   const [file, setFile] = useState(null);
-  // const [dragging, setDragging] = useState(false);
   const [preview, setPreview] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
-
-  // let resources = [];
-  const [resources, setResources] = useState([]);
   const [subcat, setSubcat] = useState([]);
 
   const [selectedSubcategories, setSelectedSubcategories] = useState();
@@ -96,17 +92,6 @@ function VendorNewAddon({
     }));
   };
 
-  // handle dimention
-  // const handledimension = (e) => {
-  //   e.preventDefault();
-  //   const newWidth = e.target.value;
-  //   setDimensionwidth(newWidth);
-  //   setAddon((prevVariants) => ({
-  //     ...prevVariants,
-  //     dimension: `${dimensionHeight}x${dimensionLength}x${newWidth}`, // Update mainImage field
-  //   }));
-  // };
-
   const handleMainImageChange = (e) => {
     const file = e.target.files[0]; // Get the selected file
     if (file) {
@@ -120,30 +105,13 @@ function VendorNewAddon({
   };
 
   useEffect(() => {
-    accountHolder.allowedCategory.map((category) => {
-      const filtered = AllCatArray.filter((cat) => cat.name === category);
-
-      const subcattodisplay = filtered.flatMap((subcat) => subcat.subCat1);
-      console.log(subcattodisplay);
-      // setResources(filtered);
-      // setSubcat(subcattodisplay);
-    });
-  }, []);
-
-  useEffect(() => {
     const filtered = AllCatArray.filter((cat) => cat.name === category);
     const subcattodisplay = filtered.flatMap((subcat) => subcat.subCat1);
     setSubcat(subcattodisplay);
-    setResources(filtered);
-  }, [category]);
-
-  // console.log(subSubCategory);
-  // console.log(resources);
+  }, [category, AllCatArray]);
 
   const onSubmit = async (e) => {
     e.preventDefault();
-
-    console.log("addon", addon);
 
     if (!addon.image) {
       toast.error("Add image");
@@ -171,9 +139,6 @@ function VendorNewAddon({
       if (existingProduct) {
         // If the product already exists, use the existing product ID
         productId = existingProduct.id;
-        console.log(
-          "Product already exists. Proceeding with variants and addons."
-        );
       } else {
         // Insert a new product if it doesn't exist
         const { data: Product, error: insertError } = await supabase
@@ -193,7 +158,6 @@ function VendorNewAddon({
         }
 
         productId = Product.id;
-        // toast.success("New product inserted successfully.");
       }
 
       // Handle the addons
@@ -205,12 +169,11 @@ function VendorNewAddon({
 
       if (addonCategoryError) {
         console.error("Error inserting addon category:", addonCategoryError);
-        // toast.error("Failed to save addon category.");
+
         return;
       }
 
       const addonId = addonCategory.id;
-      // toast.success("Addon category saved successfully.");
 
       const { image, title, price } = addon;
 
@@ -225,7 +188,6 @@ function VendorNewAddon({
             "Error uploading addon variant image:",
             addonVariantImageError
           );
-          console.log(`Failed to upload image for addon variant: ${title}`);
         }
 
         const { error: addonVariantError } = await supabase
@@ -249,18 +211,13 @@ function VendorNewAddon({
 
         if (addonVariantError) {
           console.error("Error inserting addon variant:", addonVariantError);
-          // toast.error(`Failed to save addon variant: ${title}`);
           return;
         } else {
           toast.success(`Addon variant ${title} added successfully.`);
         }
       }
-
-      // Success message
-      // toast.success("Data inserted successfully!");
     } catch (error) {
       console.log("Error in onSubmit:", error);
-      // toast.error("An unexpected error occurred.");
     } finally {
       handleFormClear();
       setIsSubmitting(false);
@@ -273,7 +230,7 @@ function VendorNewAddon({
       const filter = AllCatArray.filter((cat) => cat.name === category).flatMap(
         (subcat) => subcat.subcategories
       );
-      // setSelectedSubcategories(filter);
+
       setSelectedSubcategories(filter.join(","));
     }
 
@@ -304,7 +261,7 @@ function VendorNewAddon({
         setSelectedSubcategories(filter.join(","));
       }
     }
-  }, [category, subSubCategory]);
+  }, [category, subSubCategory, AllCatArray]);
 
   // clear the form
   const handleFormClear = () => {
@@ -349,7 +306,6 @@ function VendorNewAddon({
         </button>
         <h3 className="capitalize font-semibold text-xl ">Add New Add Ons</h3>
       </div>
-      {/* <form action=""> */}
       <form
         className="lg:flex gap-5 py-3 px-5 w-full"
         onSubmit={onSubmit}
@@ -360,7 +316,6 @@ function VendorNewAddon({
         }}
       >
         <div className="w-full lg:w-1/2">
-          {/* div for category */}
           <div>
             <h3 className="capitalize mb-3 text-xl font-semibold">category</h3>
             <div className="w-full shadow-lg border-2 p-5 my-3 rounded-xl capitalize">
@@ -373,7 +328,6 @@ function VendorNewAddon({
                   className="w-full border-2 py-1.5 px-2 rounded-lg"
                   onChange={(e) => handlecategorychange(e)}
                   required
-                  // onChange={(e) => setCategory(e.target.value)}
                 >
                   <option value="">Select Category</option>
 
@@ -434,7 +388,6 @@ function VendorNewAddon({
               </div>
             </div>
           </div>
-          {/* div for description */}
           <div>
             <h3 className="capitalize mb-3 text-xl font-semibold">
               Description
@@ -617,27 +570,6 @@ function VendorNewAddon({
               </div>
             </div>
           </div>
-          {/* div for plan selection */}
-          {/* <div>
-            <h3 className="capitalize mb-3 text-xl font-semibold">
-              plan category
-            </h3>
-            <div className="w-full shadow-lg border-2 p-5 my-3 rounded-xl capitalize">
-              <h4 className="text-[#7B7B7B]">Segment</h4>
-              <select
-                name="segment"
-                id="segment"
-                className="w-full border-2 py-1.5 px-2 rounded-lg"
-                onChange={handleChange}
-              >
-                <option value="">select plan</option>
-                <option value="Minimal">Minimal</option>
-                <option value="Exclusive">Exclusive</option>
-                <option value="Luxury">Luxury</option>
-              </select>
-            </div>
-          </div> */}
-          {/* div for buttons */}
           <div className="w-full flex items-end justify-between mt-5">
             <button
               className="border-2 px-5 py-2 capitalize rounded-lg"
@@ -649,7 +581,6 @@ function VendorNewAddon({
             <button
               className="border-2 px-5 py-2 bg-[#374A75] text-white capitalize rounded-lg"
               type="submit"
-              // onClick={onsubmit}
               disabled={isSubmitting}
             >
               {isSubmitting ? (
@@ -682,7 +613,6 @@ function VendorNewAddon({
           </div>
         </div>
       </form>
-      {/* </form> */}
     </div>
   );
 }

@@ -5,20 +5,12 @@ import { BsCameraFill } from "react-icons/bs";
 import { supabase } from "../../services/supabase";
 import toast from "react-hot-toast";
 
+const profileImages = ["/images/businessman.png", "/images/woman.png"];
 function UserSetting() {
   const { accountHolder, setAccountHolder } = useApp();
   const { register, handleSubmit, setValue } = useForm(); //reset
   const [profileImage, setProfileImage] = useState(accountHolder.profileImage);
   const [profileImagesOption, setProfileImagesOption] = useState(false);
-
-  const profileImages = [
-    // "/images/Profile.png",
-    // "/images/Profile1.png",
-    // "/images/Profile2.png",
-    // "/images/usericon.png",
-    "/images/businessman.png",
-    "/images/woman.png",
-  ];
 
   useEffect(() => {
     fetchProfileData();
@@ -95,14 +87,14 @@ function UserSetting() {
 
       toast.success("Profile updated successfully!");
 
-      // ✅ Update accountHolder state after successful update
+      // Update accountHolder state after successful update
       setAccountHolder((prev) => ({
         ...prev,
         companyName: formData.companyName,
         phone: formData.mobileNo,
       }));
 
-      // ✅ Fetch updated profile data after successful update
+      //  Fetch updated profile data after successful update
       fetchProfileData();
     } catch (err) {
       console.error("Unexpected error:", err);

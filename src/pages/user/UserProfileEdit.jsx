@@ -49,17 +49,6 @@ function UserProfileEdit({ setIsEditopen }) {
     }
   };
 
-  //   userId: "",
-  // email: "",
-  // phone: "",
-  // companyName: "",
-  // role: "",
-  // allowedCategory: [] || undefined,
-  // profileImage: null,
-  // location: "",
-  // boqName: "",
-  // address: [] || undefined,
-
   const onSubmit = async (formData) => {
     try {
       if (
@@ -85,14 +74,14 @@ function UserProfileEdit({ setIsEditopen }) {
 
       toast.success("Profile updated successfully!");
 
-      // ✅ Update accountHolder state after successful update
+      //  Update accountHolder state after successful update
       setAccountHolder((prev) => ({
         ...prev,
         companyName: formData.companyName,
         phone: formData.mobileNo,
       }));
 
-      // ✅ Fetch updated profile data after successful update
+      //  Fetch updated profile data after successful update
       fetchProfileData();
     } catch (err) {
       console.error("Unexpected error:", err);

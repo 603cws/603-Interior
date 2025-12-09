@@ -169,10 +169,6 @@ function DashboardProductCard({
                         setSelectedItem(product);
                         setSelectSubcategories(true);
                       }}
-                      // onClick={() => {
-                      //   updateStatus(product, "approved");
-                      //   setRejectReason("");
-                      // }}
                       className={`px-2 md:px-5 py-1 md:py-2 bg-[#F8FBFF]  border-[#A3FEE7] transition-all duration-500 flex flex-col justify-center items-center rounded-sm  text-xs md:text-sm ${
                         currentStatus === "approved"
                           ? "border-2 md:border-4"
@@ -242,9 +238,6 @@ function DashboardProductCard({
             <div className="flex text-[#000] justify-between  w-full p-4">
               {accountHolder.role !== "user" && (
                 <button
-                  // onClick={() => {
-                  //   handleDelete(product);
-                  // }}
                   onClick={() => {
                     setDeleteWarning(true);
                   }}

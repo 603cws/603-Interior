@@ -10,32 +10,7 @@ function MobileTabProductCard({ product, handleProductPreview }) {
     approved: "bg-[#E7F4EE] text-[#0D894F]",
     rejected: "bg-[#FFBEBE] text-[#FF0000]",
   };
-  //     {
-  //     "id": "2bd93ead-202f-4a12-bee5-ce3cda8ba3fb",
-  //     "created_at": "2025-01-08T13:53:03.14322+00:00",
-  //     "title": "Rustic Stone Tile",
-  //     "price": 79,
-  //     "details": "Natural stone tiles with a rustic finish, perfect for creating an earthy look.",
-  //     "image": "Rustic Stone Tile-main-64351a96-9d5c-4b61-860b-8e55af78e41b",
-  //     "product_id": "64351a96-9d5c-4b61-860b-8e55af78e41b",
-  //     "additional_images": "[]",
-  //     "dimensions": null,
-  //     "manufacturer": "Workved",
-  //     "segment": "Exclusive",
-  //     "default": "Exclusive",
-  //     "product_type": "Tile",
-  //     "vendor_id": null,
-  //     "status": "approved",
-  //     "type": "product",
-  //     "reject_reason": null,
-  //     "products": {
-  //         "id": "64351a96-9d5c-4b61-860b-8e55af78e41b",
-  //         "category": "Flooring",
-  //         "created_at": "2025-01-08T13:50:29.024283+00:00",
-  //         "subcategory": "Open Workspaces,Cabins,Meeting Rooms,Public Spaces,All Areas",
-  //         "subcategory1": "Tile"
-  //     }
-  // }
+
   return (
     <div className="max-w-md md:max-w-4xl md:w-full bg-white shadow-md rounded-lg p-2 flex flex-col md:flex-row md:gap-6  items-start relative border-b border-b-[#ccc]">
       <div className="flex-1 flex gap-2 items-center">
