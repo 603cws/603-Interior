@@ -1,4 +1,3 @@
-import React from "react";
 import { FaLocationDot } from "react-icons/fa6";
 import { GiPadlock } from "react-icons/gi";
 import { HiClock } from "react-icons/hi2";

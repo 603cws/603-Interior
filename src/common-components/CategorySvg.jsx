@@ -515,7 +515,6 @@ function CategorySvg({ selectedCategory, setSelectedCategory }) {
             key={catName}
             className="flex flex-col lg:justify-center lg:items-center gap-3 cursor-pointer group"
             onClick={() => setSelectedCategory(catName)}
-            // onClick={() => filterByCategory(catName)}
           >
             <div
               className={`border border-[#ccc] p-4 w-16 h-16 xl:w-20 xl:h-20 flex items-center justify-center rounded-full ${

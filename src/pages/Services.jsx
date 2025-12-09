@@ -6,7 +6,7 @@ import GetInTouchSection from "../common-components/GetInTouchSection";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
 import "swiper/css";
-import { AnimatedButton } from "../common-components/animated-button";
+import { AnimatedButton } from "../common-components/AnimatedButton";
 import { motion } from "framer-motion";
 const steps = [
   {

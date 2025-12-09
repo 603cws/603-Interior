@@ -13,25 +13,21 @@ import { MdLocationOn } from "react-icons/md";
 
 function Footer() {
   const [email, setEmail] = useState("");
-  // const [error, setError] = useState("");
   const { currentYear } = getDateInfo();
 
   const scrollToTop = () => {
     window.scrollTo({
       top: 0,
-      behavior: "smooth", // Enables smooth scrolling
+      behavior: "smooth",
     });
   };
 
-  // Email regex validator
   const isValidEmail = (email) =>
     /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email);
 
-  //newsletter
   const handleSubscribe = async (e) => {
     e.preventDefault();
 
-    // Frontend validation
     if (!isValidEmail(email)) {
       toast.error("Please enter a valid email address.");
       return;
@@ -42,8 +38,7 @@ function Footer() {
       .insert([{ email, subscribed: true }]);
 
     if (error) {
-      // setMessage("This email is already subscribed or invalid.");
-      console.log(error);
+      console.error(error);
 
       toast.error("Invalid email");
     } else {
@@ -79,19 +74,14 @@ function Footer() {
             </button>
           </form>
         </div>
-        {/* <div className="lg:border-t lg:border-b flex flex-col-reverse lg:flex-row gap-5 xl:gap-20 justify-evenly"> */}
         <div className="lg:border-t lg:border-b grid grid-cols-1 lg:grid-cols-3 xl:gap-20">
-          {/* logo */}
           <div className="lg:py-5 hidden lg:flex items-start lg:border-r ml-2 mt-2">
             <img
               src="/logo/logo-new.png"
-              // src="/logo/workved-logo.png"
               alt="company logo"
               className="max-w-48 xl:max-w-xs"
             />
           </div>
-          {/* content */}
-          {/* <div className="lg:flex flex-1 justify-around lg:border-l"> */}
           <div className="lg:border-r lg:px-2 xl:px-0">
             <div className="flex gap-16 capitalize text-[15px] text-[#fff] py-5">
               <div className="flex justify-center items-start  flex-1 border-t border-b lg:border-none py-5 lg:py-0">
@@ -235,7 +225,6 @@ function Footer() {
               className="max-w-48 xl:max-w-56"
             />
           </div>
-          {/* </div> */}
         </div>
         <div className="lg:flex justify-between items-center text-[#fff] pt-4">
           <p className=" text-xs">
@@ -257,16 +246,10 @@ function Footer() {
             >
               <FiFacebook size={15} />
             </a>
-            <span
-              // href="#"
-              className="cursor-pointer flex justify-center items-center w-9 h-9 border border-[#fff]/40 hover:bg-[#fff]/40 p-0.5"
-            >
+            <span className="cursor-pointer flex justify-center items-center w-9 h-9 border border-[#fff]/40 hover:bg-[#fff]/40 p-0.5">
               <RiTwitterXLine size={15} />
             </span>
-            <span
-              // href="#"
-              className="cursor-pointer flex justify-center items-center w-9 h-9 border border-[#fff]/40 hover:bg-[#fff]/40 p-0.5"
-            >
+            <span className="cursor-pointer flex justify-center items-center w-9 h-9 border border-[#fff]/40 hover:bg-[#fff]/40 p-0.5">
               <FiLinkedin size={15} />
             </span>
           </div>

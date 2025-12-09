@@ -14,7 +14,7 @@ import { MdOutlineCancel } from "react-icons/md";
 import AlertBox from "./AlertBox";
 import CurrentLayoutDetails from "./CurrentLayoutDetails";
 import GobackLayoutWarning from "./GobackLayoutWarning";
-import { AnimatedButton } from "../../common-components/animated-button";
+import { AnimatedButton } from "../../common-components/AnimatedButton";
 
 function Navbar({
   toggleProfile,

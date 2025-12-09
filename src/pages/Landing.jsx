@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import LandingNavbar from "../common-components/LandingNavbar";
-import { AnimatedButton } from "../common-components/animated-button";
+import { AnimatedButton } from "../common-components/AnimatedButton";
 import { useNavigate } from "react-router-dom";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";

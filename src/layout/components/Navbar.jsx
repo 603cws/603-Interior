@@ -9,7 +9,7 @@ import UnusedAreaWarning from "./UnusedAreaWarning";
 import { PiStarFourFill } from "react-icons/pi";
 import AlertBox from "../../boq/components/AlertBox";
 import EnterAreaModal from "./EnterAreaModal";
-import { AnimatedButton } from "../../common-components/animated-button";
+import { AnimatedButton } from "../../common-components/AnimatedButton";
 
 // function Navbar({ totalArea, setTotalArea, MIN_AREA, MAX_AREA, resetAll }) {
 function Navbar({

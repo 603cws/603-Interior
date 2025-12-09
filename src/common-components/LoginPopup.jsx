@@ -11,11 +11,8 @@ export default function LoginPopup({ onClose, product }) {
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  // const [isForgotPassword, setIsForgotPassword] = useState(false);
-
   const { setUserId, setIsAuthenticated } = useApp();
   const { handleAddtoWishlist } = useHandleAddToCart();
-
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -65,7 +62,7 @@ export default function LoginPopup({ onClose, product }) {
   };
 
   const updateUserProfile = async (userId, role, location, company, phone) => {
-    const { data, error } = await supabase.from("profiles").upsert({
+    const { error } = await supabase.from("profiles").upsert({
       id: userId,
       role,
       location,
@@ -76,8 +73,6 @@ export default function LoginPopup({ onClose, product }) {
     if (error) {
       console.error("Profile update failed:", error.message);
       toast.error("Failed to save profile.");
-    } else {
-      console.log("Profile saved:", data);
     }
   };
 
@@ -92,21 +87,17 @@ export default function LoginPopup({ onClose, product }) {
           toast.error("Please fill in all fields.");
           return;
         }
-
         if (password !== confirmPassword) {
           toast.error("Passwords do not match.");
           return;
         }
-
         try {
           setLoading(true);
           const { error } = await supabase.auth.signUp({
             email,
             password,
           });
-
           if (error) throw error;
-
           toast.success("Step 1 complete. Add profile details.");
           setStep(2);
         } catch (err) {
@@ -126,11 +117,9 @@ export default function LoginPopup({ onClose, product }) {
             data: { user },
             error: sessionError,
           } = await supabase.auth.getUser();
-
           if (sessionError || !user) {
             throw new Error("User session not found.");
           }
-
           await updateUserProfile(user.id, "user", location, company, phone);
           toast.success("Profile completed successfully!");
           setUserId(user.id);
@@ -144,7 +133,6 @@ export default function LoginPopup({ onClose, product }) {
         }
       }
     } else {
-      // Sign In
       if (!email || !password) {
         toast.error("Please enter email and password.");
         return;
@@ -182,7 +170,6 @@ export default function LoginPopup({ onClose, product }) {
         </div>
 
         <div className="max-w-2xl lg:max-w-3xl w-full grid grid-cols-1 md:grid-cols-2 bg-white">
-          {/* Left Image */}
           <div className="hidden md:block">
             <img
               src="../images/bg/bg.png"
@@ -191,7 +178,6 @@ export default function LoginPopup({ onClose, product }) {
             />
           </div>
 
-          {/* Right Form */}
           <form
             onSubmit={handleSubmit}
             className="flex flex-col justify-center items-center p-8 relative"
@@ -339,29 +325,18 @@ export default function LoginPopup({ onClose, product }) {
                       {showPassword ? "Hide" : "Show"}
                     </button>
                   </div>
-
-                  {/* <div className="text-right text-sm mb-4">
-                    <a
-                      // href="/Login?type=recovery"
-                      className="text-gray-600 underline"
-                    >
-                      Forget your password
-                    </a>
-                  </div> */}
                 </>
               )}
 
               {!isSignUp && (
-                <>
-                  <button
-                    type="button"
-                    onClick={signInWithGoogle}
-                    className="flex items-center justify-center w-full gap-2 border-2 border-gray-300 rounded-full py-2 mb-4 hover:bg-gray-100 text-sm"
-                  >
-                    <FcGoogle />
-                    <span>Continue with Google</span>
-                  </button>
-                </>
+                <button
+                  type="button"
+                  onClick={signInWithGoogle}
+                  className="flex items-center justify-center w-full gap-2 border-2 border-gray-300 rounded-full py-2 mb-4 hover:bg-gray-100 text-sm"
+                >
+                  <FcGoogle />
+                  <span>Continue with Google</span>
+                </button>
               )}
 
               <button

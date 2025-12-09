@@ -144,7 +144,7 @@ function Wishlist() {
         <Header />
       </div>
       <div className="lg:hidden">
-        <MobileHeader title={"Wishlist"} iscartshown={true} />
+        <MobileHeader title={"Wishlist"} isCartShown={true} />
       </div>
       {!isloading && wishlistItems?.length >= 1 ? (
         <section className="lg:container lg:mx-auto px-3 lg:px-12">

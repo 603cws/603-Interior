@@ -71,7 +71,7 @@ function getGridTemplateColumns(hoveredId) {
     case 3:
       return "1fr 1fr 1fr 4fr";
     default:
-      return "2.5fr 1fr 1fr 1fr"; // Fallback
+      return "2.5fr 1fr 1fr 1fr";
   }
 }
 
@@ -84,7 +84,6 @@ function Plans({
   const { setSelectedPlan, productData, categories, BOQTitle, setIsSaveBOQ } =
     useApp();
 
-  // Hovered plan state. 0 = first plan expanded by default.
   const [hoveredPlan, setHoveredPlan] = useState(1);
   const [imageLoaded, setImageLoaded] = useState(false);
 
@@ -142,11 +141,6 @@ function Plans({
                         <ul className="lg:space-y-1 xl:space-y-2 text-sm">
                           {plan.bullets.map((bullet, i) => (
                             <li key={i} className="flex items-center xl:gap-2 ">
-                              {/* <img
-                                src="/images/Check_ring.png"
-                                alt="check"
-                                className="mt-1"
-                              /> */}
                               <div className="bg-white rounded-full h-3 w-3 flex justify-center items-center relative mr-2">
                                 <div className="absolute flex justify-center items-center">
                                   <HiCheckBadge color="#75A2BE" size={25} />
@@ -160,7 +154,6 @@ function Plans({
 
                       <div className="text-left mt-4">
                         <button
-                          // onClick={() => setSelectedPlan(plan.planKey)}
                           onClick={() => handlePlanSelect(plan.planKey)}
                           className="bg-[#75A2BE] text-[#fff] px-4 py-2 lg:mb-3 mb-1 rounded-md font-semibold border border-[#000] hover:bg-gray-200 transition hover:text-[#374A75]"
                         >
@@ -241,11 +234,6 @@ function Plans({
                             key={i}
                             className="flex items-center gap-4 relative"
                           >
-                            {/* <img
-                              src="/images/Check_ring.png"
-                              alt="check"
-                              className="mt-1"
-                            /> */}
                             <div className="bg-white rounded-full h-3 w-3 flex justify-center items-center relative">
                               <div className="absolute flex justify-center items-center">
                                 <HiCheckBadge color="#75A2BE" size={25} />
@@ -259,7 +247,6 @@ function Plans({
 
                     <div className="text-left mt-4 relative">
                       <button
-                        // onClick={() => setSelectedPlan(plan.planKey)}
                         onClick={() => handlePlanSelect(plan.planKey)}
                         className="bg-[#75A2BE] text-[#fff] px-4 py-2 rounded-md font-semibold border border-[#000] hover:bg-gray-200 transition"
                       >

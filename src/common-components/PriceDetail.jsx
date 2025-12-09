@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { isCouponValid } from "../utils/ResuableFunctions";
 import { supabase } from "../services/supabase";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 function PriceDetail({ handlebtnClick }) {
   const {
@@ -24,21 +24,12 @@ function PriceDetail({ handlebtnClick }) {
     setCartTotalPrice,
   } = useApp();
 
-  // const [orignalTotalPrice, setOriginalToalPrice] = useState(0);
-  // const [disableApplycoupon, setDisableApplycoupon] = useState(false);
-  // const [differenceInPrice, setDifferenceInPrice] = useState(0);
   const [differenceInPricetoshow, setDifferenceInPricetoshow] = useState();
   const [allCoupons, setAllCoupons] = useState([]);
   const [ismobileCouponFormOpen, setIsMobileCouponFormOpen] = useState(false);
   const [couponname, setCouponname] = useState("");
-
   const [gst, setGst] = useState();
   const [shippingcharge, setshippingCharge] = useState();
-  // const [totalPrice, setTotalPrice] = useState(0);
-  // const [mobilecouponname, setmobilecouponname] = useState("");
-
-  // const value = carttotalPrice > 0 ? carttotalPrice : orignalTotalPrice;
-  // const finalValue = value + shippingcharge + gst;
   const finalValue = (
     orignalTotalPrice -
     differenceInPrice +
@@ -46,10 +37,7 @@ function PriceDetail({ handlebtnClick }) {
     gst
   ).toFixed(2);
 
-  const navigate = useNavigate();
   const location = useLocation();
-
-  console.log("location", location.pathname);
 
   useEffect(() => {
     const calculateTotal = () => {
@@ -57,7 +45,6 @@ function PriceDetail({ handlebtnClick }) {
         (acc, curr) => acc + curr.productId?.price * curr.quantity,
         0
       );
-      // setCartTotalPrice(total || 0);
       setOriginalToalPrice(total || 0);
     };
 
@@ -67,7 +54,6 @@ function PriceDetail({ handlebtnClick }) {
         (acc, curr) => acc + curr.productId?.price * curr.quantity,
         0
       );
-      // setCartTotalPrice(total || 0);
       setOriginalToalPrice(total || 0);
     }
   }, [cartItems, localcartItems, isAuthenticated]);
@@ -78,11 +64,8 @@ function PriceDetail({ handlebtnClick }) {
     toast.success("remove coupon");
     setDisableApplycoupon(false);
     setCartTotalPrice(orignalTotalPrice);
-
     const Getgstprice = calculateGst(orignalTotalPrice);
     setGst(Getgstprice);
-
-    //differnce 0
     setDifferenceInPrice(0);
   };
 
@@ -92,8 +75,6 @@ function PriceDetail({ handlebtnClick }) {
     setGst(Getgstprice);
     const shippiingFee = GetDeliveryCharges(orignalTotalPrice);
     setshippingCharge(shippiingFee);
-
-    console.log("hii from the useeffect");
   }, [orignalTotalPrice]);
 
   useEffect(() => {
@@ -111,8 +92,6 @@ function PriceDetail({ handlebtnClick }) {
       location.pathname === "/cart"
     ) {
       handleRemoveCoupon();
-      // setDifferenceInPrice(0);
-      // setCartTotalPrice(0);
       setCouponname("");
       setmobilecouponname();
     }
@@ -120,31 +99,19 @@ function PriceDetail({ handlebtnClick }) {
 
   const handleCheckCoupon = async (e) => {
     e.preventDefault();
-
-    console.log("hello", couponname);
-
     if (carttotalPrice === 0) return toast.error("cart is empty");
-
     if (disableApplycoupon) return toast.error("coupon already applied");
-
     if (couponname.trim() === 0) return toast.error("enter the coupon");
     try {
-      // const checkcoupon = couponname.toUpperCase();
       const { data: coupon, error: fetchError } = await supabase
         .from("coupons")
         .select("*")
         .eq("couponName", couponname)
         .single();
-
-      // console.log(checkcoupon, "name");
-
       if (fetchError) throw new Error(fetchError.message);
-      console.log("couponfromdb", coupon);
-
       if (!isCouponValid(coupon, orignalTotalPrice))
         return toast.error("coupon is expired or min purchase not reached");
       calculateTotalDiffertoShow(coupon);
-      // calculateTotalDiffer(coupon);
       setmobilecouponname(coupon);
     } catch (error) {
       console.log(error);
@@ -153,22 +120,16 @@ function PriceDetail({ handlebtnClick }) {
   };
 
   function calculateTotalDiffer(coupon) {
-    //we get the entire coupon for already haved coupon name
     const discountedprice =
       orignalTotalPrice - (orignalTotalPrice * coupon?.discountPerc) / 100;
     const difference = orignalTotalPrice - discountedprice;
-
     setDifferenceInPrice(difference);
   }
   function calculateTotalDiffertoShow(coupon) {
-    //we get the entire coupon for already haved coupon name
     const discountedprice =
       orignalTotalPrice - (orignalTotalPrice * coupon?.discountPerc) / 100;
     const difference = orignalTotalPrice - discountedprice;
-
     setDifferenceInPricetoshow(difference);
-
-    // setDifferenceInPrice(difference);
   }
 
   const getallthecouponsFromDB = async () => {
@@ -176,30 +137,16 @@ function PriceDetail({ handlebtnClick }) {
       const { data: coupon, error: fetchError } = await supabase
         .from("coupons")
         .select("*");
-
-      console.log("allcoupons", coupon);
-
       setAllCoupons(coupon);
-
       if (fetchError) throw new Error(fetchError);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 
   useEffect(() => {
     getallthecouponsFromDB();
   }, []);
-
-  const handlePlaceOrder = () => {
-    if (isAuthenticated) {
-      console.log("user is logged in ");
-      navigate("/address");
-    } else {
-      // navigate("/login");
-      navigate("/login", { state: { from: location.pathname } });
-    }
-  };
 
   const handleApplyofCoupon = async (coupon) => {
     if (orignalTotalPrice === 0) return toast.error("cart is empty");
@@ -211,8 +158,6 @@ function PriceDetail({ handlebtnClick }) {
       const discountedprice =
         orignalTotalPrice - (orignalTotalPrice * coupon?.discountPerc) / 100;
       setDisableApplycoupon(true);
-      // setmobilecouponname(coupon);
-      // localStorage.setItem("appliedCoupon", JSON.stringify(coupon));
       calculateTotalDiffer(coupon);
       const gstprice = calculateGst(discountedprice);
       setGst(gstprice);
@@ -225,39 +170,6 @@ function PriceDetail({ handlebtnClick }) {
       setIsMobileCouponFormOpen(false);
     }
   };
-
-  // useEffect(() => {
-  //   const savedCoupon = localStorage.getItem("appliedCoupon");
-  //   if (
-  //     savedCoupon &&
-  //     !mobilecouponname && // not already restored
-  //     orignalTotalPrice > 0
-  //   ) {
-  //     const parsedCoupon = JSON.parse(savedCoupon);
-  //     setmobilecouponname(parsedCoupon);
-  //     setDisableApplycoupon(true);
-
-  //     const discountedprice =
-  //       orignalTotalPrice -
-  //       (orignalTotalPrice * parsedCoupon.discountPerc) / 100;
-
-  //     setCartTotalPrice(discountedprice);
-  //     const gstprice = calculateGst(discountedprice);
-  //     setGst(gstprice);
-
-  //     const difference = orignalTotalPrice - discountedprice;
-  //     setDifferenceInPrice(difference);
-  //   }
-  // }, [orignalTotalPrice]);
-
-  // create the order
-  async function createOrder() {
-    try {
-      // get the current user
-      //get all the cart items
-      // shipping address
-    } catch (error) {}
-  }
 
   function calculateGst(price) {
     return price * 0.18;
@@ -342,9 +254,6 @@ function PriceDetail({ handlebtnClick }) {
             <div className="flex justify-between border-b-[1px]">
               <div>
                 <h5 className="font-medium  text-[#111111]/80">GST Fee</h5>
-                {/* <p className="text-xs text-[#111111]/50 font-medium pb-2">
-                Free Shipping for you
-              </p> */}
               </div>
               <h5 className="font-medium  text-[#34BFAD]/80 uppercase">
                 {orignalTotalPrice > 0 ? gst?.toFixed(2) : "--"}
@@ -358,9 +267,6 @@ function PriceDetail({ handlebtnClick }) {
               <h5 className="font-medium  text-[#111111] ">
                 {orignalTotalPrice > 0 ? finalValue : "--"}
               </h5>
-              {/* <h5 className="font-medium  text-[#111111] ">
-              Rs {carttotalPrice || orignalTotalPrice}
-            </h5> */}
             </div>
           </div>
         ) : (
@@ -467,9 +373,6 @@ function PriceDetail({ handlebtnClick }) {
                   <p className="font-semibold text-xl text-[#000] leading-[15px] tracking-[1.2px]">
                     ₹ {differenceInPricetoshow?.toFixed(2) || 0}
                   </p>
-                  {/* <p className="font-semibold text-xl text-[#000] leading-[15px] tracking-[1.2px]">
-                    ₹ {differenceInPrice.toFixed(2) || 0}
-                  </p> */}
                 </div>
                 <div>
                   <button
@@ -486,7 +389,6 @@ function PriceDetail({ handlebtnClick }) {
         {orignalTotalPrice > 0 && (
           <button
             onClick={handlebtnClick}
-            // onClick={handlePlaceOrder}
             className="hidden uppercase text-xl text-[#ffffff] tracking-wider w-full lg:flex justify-center items-center bg-[#334A78] border border-[#212B36] py-3 rounded-sm font-thin"
           >
             place ORDER
@@ -499,7 +401,6 @@ function PriceDetail({ handlebtnClick }) {
           <div className="w-[90%]">
             <button
               onClick={handlebtnClick}
-              // onClick={handlePlaceOrder}
               className="uppercase text-xl text-white tracking-wider w-full bg-[#334A78] border border-[#212B36] py-3 rounded-sm font-thin"
             >
               place ORDER
@@ -519,8 +420,6 @@ function CouponCard({
   mobilecouponname,
   calculateTotalDiffertoShow,
 }) {
-  console.log(mobilecouponname, "hello");
-
   return (
     <div className="flex items-start space-x-2 font-Poppins ">
       <input

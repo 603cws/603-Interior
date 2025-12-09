@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ContactUsPopup from "../pages/ContactUsPopup";
 import { FiMenu, FiX } from "react-icons/fi";
@@ -8,7 +8,6 @@ import { cn } from "../lib/utils";
 
 function LandingNavbar({ className }) {
   const pathname = window.location.pathname;
-
   const [enquiry, setEnquiry] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { isAuthenticated, accountHolder } = useApp();
@@ -16,11 +15,9 @@ function LandingNavbar({ className }) {
   const navigate = useNavigate();
   return (
     <div className={cn("py-2 lg:py-4 w-full", className)}>
-      {/* desktop navbar */}
       <div className="hidden container lg:flex justify-between items-center font-TimesNewRoman text-[#334A78]">
         <div>
           <ul className="flex gap-7 [&_li]:cursor-pointer uppercase text-xs xl:text-sm font-bold tracking-wider">
-            {/* <li>shop</li> */}
             <li
               onClick={() => navigate("/aboutUs")}
               className={`cursor-pointer relative after:content-[''] after:absolute after:left-0 after:bottom-[-2px] after:h-[1px] after:bg-[#FFC900] after:transition-all after:duration-300 ${
@@ -67,7 +64,6 @@ function LandingNavbar({ className }) {
             />
             <p>space calculator</p>
           </div>
-          {/* {pathname !== "/Contactus" && ( */}
           <div
             onClick={() => setEnquiry(true)}
             className={`flex flex-col justify-center items-center gap-2 cursor-pointer relative after:content-[''] after:absolute after:left-0 after:bottom-[-2px] after:h-[1px] after:bg-[#FFC900] after:w-0 after:transition-all after:duration-300 hover:after:w-full`}
@@ -79,7 +75,6 @@ function LandingNavbar({ className }) {
             />
             <p>enquiry</p>
           </div>
-          {/* )} */}
           <div className="flex flex-col justify-center items-center gap-2 cursor-pointer relative after:content-[''] after:absolute after:left-0 after:bottom-[-2px] after:h-[1px] after:bg-[#FFC900] after:w-0 after:transition-all after:duration-300 hover:after:w-full">
             {isAuthenticated ? (
               <button
@@ -113,7 +108,6 @@ function LandingNavbar({ className }) {
         </div>
       </div>
 
-      {/* mobile navbar */}
       <div className="flex lg:hidden justify-between items-center px-2">
         <div onClick={() => navigate("/")}>
           <img

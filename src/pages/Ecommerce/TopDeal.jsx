@@ -78,7 +78,7 @@ function TopDeal() {
       </div>
 
       <div className="lg:hidden">
-        <MobileHeader title={"Season Special"} iscartshown={true} />
+        <MobileHeader title={"Season Special"} isCartShown={true} />
       </div>
 
       <div className="py-6 lg:py-10 flex flex-col justify-center items-center gap-5 font-Poppins">

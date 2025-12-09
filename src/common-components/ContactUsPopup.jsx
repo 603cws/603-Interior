@@ -1,4 +1,3 @@
-import React from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useState } from "react";
@@ -25,8 +24,6 @@ function ContactUsPopup({ onClose }) {
   const handleformsubmit = async (e) => {
     e.preventDefault();
 
-    console.log("hii from log");
-
     if (
       !form.email ||
       !form.companyName ||
@@ -52,19 +49,11 @@ function ContactUsPopup({ onClose }) {
 
       try {
         setisSubmitting(true);
-        const response = await axios.post(
-          "https://api.emailjs.com/api/v1.0/email/send",
-          data,
-          {
-            headers: { "Content-Type": "application/json" },
-          }
-        );
-        console.log("Email sent successfully:", response.data);
-        // alert("Your mail is sent!");
+        await axios.post("https://api.emailjs.com/api/v1.0/email/send", data, {
+          headers: { "Content-Type": "application/json" },
+        });
         toast.success("we will shortly reach you");
-        // setFormData({ username: "", user_email: "", message: "" }); // Reset form
 
-        //reset form
         setFormData({
           message: "",
           name: "",
@@ -83,7 +72,7 @@ function ContactUsPopup({ onClose }) {
     }
   };
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-20 z-30 flex justify-center items-center ">
+    <div className="fixed inset-0 bg-black bg-opacity-20 z-30 flex justify-center items-center">
       <div className="bg-white  max-w-sm lg:max-w-lg w-full mx-auto rounded-2xl relative">
         <div className="flex justify-end items-center mb-4 absolute top-3 right-5">
           <MdClose
@@ -92,14 +81,12 @@ function ContactUsPopup({ onClose }) {
           />
         </div>
         <div className="px-10  rounded-3xl pb-5">
-          {/* text */}
           <div className="font-Poppins font-semibold py-3">
             <p className="text-sm text-[#34BFAD]">Get in Touch!</p>
             <img src="/images/serviceIcon.png" alt="service icon" />
             <h4 className="text-xl">Love to hear from you</h4>
             <h5 className="text-xl">Get in Touch!</h5>
           </div>
-          {/* form part */}
           <div className="font-Poppins pl-2">
             <form action="" className="font-semibold ">
               <div className="mb-2 flex flex-col gap-1.5">
@@ -110,7 +97,6 @@ function ContactUsPopup({ onClose }) {
                   className="font-medium w-full rounded-lg p-2 mb-1 border-2 border-[#D1D5DB] bg-[#F8F8F8] focus:outline-none placeholder:text-[#CCC] capitalize text-sm"
                   placeholder="John Doe"
                   value={form.name}
-                  // onChange={setname((e) => e.target.value)}
                   onChange={handleChange}
                   required
                 />
@@ -122,8 +108,6 @@ function ContactUsPopup({ onClose }) {
                   name="email"
                   className="font-medium w-full rounded-lg p-2 mb-1 border-2 border-[#D1D5DB] bg-[#F8F8F8] focus:outline-none placeholder:text-[#CCC] text-sm"
                   placeholder="example@gmail.com"
-                  // value={email}
-                  // onChange={setEmail((e) => e.target.value)}
                   value={form.email}
                   onChange={handleChange}
                   required
@@ -136,9 +120,6 @@ function ContactUsPopup({ onClose }) {
                   name="companyName"
                   className="w-full rounded-lg p-2 mb-1 border-2 border-[#D1D5DB] bg-[#F8F8F8] focus:outline-none placeholder:text-[#CCC] font-medium text-sm"
                   required
-                  //   placeholder="John Doe"
-                  // value={companyName}
-                  // onChange={setCompanyName((e) => e.target.value)}
                   value={form.companyName}
                   onChange={handleChange}
                 />
@@ -152,8 +133,6 @@ function ContactUsPopup({ onClose }) {
                   name="mobileNo"
                   className="w-full rounded-lg p-2 mb-1 focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none border-2 border-[#D1D5DB] bg-[#F8F8F8] placeholder:text-[#CCC] font-medium text-sm"
                   placeholder="Enter Mobile No"
-                  // value={mobileNo}
-                  // onChange={setMobileNo((e) => e.target.value)}
                   value={form.mobileNo}
                   onChange={handleChange}
                   required
@@ -166,13 +145,9 @@ function ContactUsPopup({ onClose }) {
                   name="message"
                   className="w-full rounded-lg p-2 mb-1 border-2 border-[#D1D5DB] bg-[#F8F8F8] focus:outline-none placeholder:text-[#CCC] font-medium text-sm"
                   placeholder="your message..."
-                  // value={message}
-                  // onChange={(e) => setMessage(e.target.value)}
                   value={form.message}
                   onChange={handleChange}
-                >
-                  {" "}
-                </textarea>
+                ></textarea>
               </div>
               <button
                 className="px-10 py-2 font-bold rounded-lg bg-[#1F5C54] border-black border border-1 mb-2 text-white"

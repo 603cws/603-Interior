@@ -11,7 +11,7 @@ import { supabase } from "../../services/supabase";
 import UnusedAreaWarning from "../components/UnusedAreaWarning";
 import { PiStarFourFill } from "react-icons/pi";
 import { colors } from "../../constants/constant";
-import { AnimatedButton } from "../../common-components/animated-button";
+import { AnimatedButton } from "../../common-components/AnimatedButton";
 
 // import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 // import { faChevronRight, faChevronLeft } from '@fortawesome/free-solid-svg-icons';

@@ -24,7 +24,6 @@ function ErrorModal({ onclose, message, sizeReached }) {
   const handleSubmit = () => {
     const area = parseInt(inputValue, 10);
 
-    // Validation for new totalArea
     if (isNaN(area)) {
       setError("Please enter a valid number.");
     } else if (area <= totalArea) {
@@ -63,27 +62,23 @@ function ErrorModal({ onclose, message, sizeReached }) {
                 )}
               </ul>
             </div>
-            {/* Input Field */}
             {!sizeReached && (
               <input
                 type="number"
-                value={inputValue} // Bind to local inputValue state
-                onChange={handleInputChange} // Update inputValue
+                value={inputValue}
+                onChange={handleInputChange}
                 placeholder="Enter updated total area"
                 className="py-2 px-3 rounded-lg border-2 border-gray-300 focus:ring-yellow-500 bg-transparent text-white [&::-webkit-inner-spin-button]:appearance-none focus:outline-none focus:ring-0"
               />
             )}
             {error && <p className="text-red-500 text-sm mt-2">{error}</p>}{" "}
-            {/* Error Message */}
             <div className="flex gap-4 mt-4">
-              {/* Go Back Button */}
               <button
                 onClick={onclose}
                 className="py-1 px-2 md:py-2 md:px-4 bg-[#fff] text-[#000] border border-black border-b-4 border-r-4"
               >
                 Cancel
               </button>
-              {/* Submit Button */}
               {!sizeReached && (
                 <button
                   onClick={handleSubmit}
@@ -95,7 +90,6 @@ function ErrorModal({ onclose, message, sizeReached }) {
             </div>
           </div>
 
-          {/* Image Section */}
           <div className="hidden md:flex justify-center md:my-10 relative w-full">
             <div className="">
               <Lottie animationData={ChairAnimation} loop={false} />

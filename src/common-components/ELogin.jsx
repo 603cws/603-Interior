@@ -6,7 +6,6 @@ export default function ELogin() {
 
   return (
     <div className="min-h-screen grid grid-cols-1 md:grid-cols-2">
-      {/* Left Image Section */}
       <div className="hidden md:block h-screen">
         <img
           src="./images/bg/bg.png"
@@ -15,33 +14,25 @@ export default function ELogin() {
         />
       </div>
 
-      {/* Right Login Form */}
       <div className="flex flex-col justify-center items-center p-8 relative">
-        {/* Top Sign-up */}
         <div className="absolute top-6 right-6 text-sm text-gray-700">
-          Don’t have an account?{" "}
-          <a href="#" className="underline">
-            Sign up
-          </a>
+          Don’t have an account? <button className="underline">Sign up</button>
         </div>
 
         <div className="w-full max-w-md">
           <h2 className="text-2xl font-semibold text-gray-800 mb-6">Sign in</h2>
 
-          {/* Google Button */}
           <button className="flex items-center justify-center w-full gap-2 border-2 border-gray-300 rounded-full py-2 mb-6 hover:bg-gray-100 text-sm">
             <FcGoogle />
             <span>Continue with Google</span>
           </button>
 
-          {/* Divider */}
           <div className="flex items-center gap-4 mb-6">
             <hr className="flex-grow border-gray-300" />
             <span className="text-gray-400">OR</span>
             <hr className="flex-grow border-gray-300" />
           </div>
 
-          {/* Email */}
           <label className="text-sm block mb-1 text-gray-700">
             User name or email address
           </label>
@@ -51,7 +42,6 @@ export default function ELogin() {
             placeholder="you@example.com"
           />
 
-          {/* Password */}
           <label className="text-sm block mb-1 text-gray-700">
             Your password
           </label>
@@ -70,14 +60,12 @@ export default function ELogin() {
             </button>
           </div>
 
-          {/* Forgot Password */}
           <div className="text-right text-sm mb-4">
-            <a href="#" className="text-gray-600 underline">
+            <button className="text-gray-600 underline">
               Forget your password
-            </a>
+            </button>
           </div>
 
-          {/* Sign In */}
           <button
             className="w-full bg-gray-300 text-white py-2 rounded-full font-semibold cursor-not-allowed"
             disabled
@@ -85,12 +73,9 @@ export default function ELogin() {
             Sign in
           </button>
 
-          {/* Bottom Sign-up */}
           <p className="text-sm text-center mt-4 text-gray-700">
             Don’t have an account?{" "}
-            <a href="#" className="underline">
-              Sign up
-            </a>
+            <button className="underline">Sign up</button>
           </p>
         </div>
       </div>

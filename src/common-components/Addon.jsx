@@ -24,9 +24,6 @@ function Addon({ imagepath, product }) {
         >
           View
         </button>
-        {/* <button className="absolute text-black border-[#212B36] transform -translate-y-2/3 translate-x-1/2  font-bold  uppercase border px-3 py-2">
-          ADD TO Cart
-        </button> */}
       </div>
     </div>
   );

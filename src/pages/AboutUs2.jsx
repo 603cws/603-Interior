@@ -6,7 +6,7 @@ import LandingNavbar from "../common-components/LandingNavbar";
 import { useNavigate } from "react-router-dom";
 import ContactUsPopup from "./ContactUsPopup";
 import { motion } from "framer-motion";
-import { AnimatedButton } from "../common-components/animated-button";
+import { AnimatedButton } from "../common-components/AnimatedButton";
 
 const services = [
   {

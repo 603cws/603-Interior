@@ -5,7 +5,6 @@ import { FcGoogle } from "react-icons/fc";
 import { IoEyeOffOutline, IoEyeOutline } from "react-icons/io5";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useApp } from "../Context/Context";
-// import { use } from "react";
 import toast from "react-hot-toast";
 import { motion } from "framer-motion";
 import { useResetBOQ } from "../utils/HelperFunction";
@@ -16,14 +15,10 @@ function Login() {
     useState(false);
   const [isSignUp, setIsSignUp] = useState(false);
   const [isForgotPassword, setIsForgotPassword] = useState(false);
-  // const [isLogin, setIsLogin] = useState(false);
   const [resetPass, setResetPass] = useState(false);
-
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(false);
-
   const { setUserId, setIsAuthenticated, setCurrentLayoutID } = useApp();
-
   const navigate = useNavigate();
   const resetBOQ = useResetBOQ();
   const [formData, setFormData] = useState({
@@ -34,29 +29,16 @@ function Login() {
     password: "",
     confirmPassword: "",
   });
-
   const location = useLocation();
-
-  // const from = location.state?.from;
-
-  // console.log("helloooooo");
-
-  // const areas = location.state?.areaQuantities;
-  // const areaValues = location.state?.areaValues;
-  // const totalArea = location.state?.totalArea;
-  // const quantityID = location.state?.quantityId;
-  // const areaID = location.state?.areaId;
   const layoutId = location.state?.layoutId;
 
   useEffect(() => {
-    // Parse the hash parameters from the URL
     const hashParams = new URLSearchParams(window.location.hash.substring(1));
     const recoveryType = hashParams.get("type");
-
     if (recoveryType === "recovery") {
       setResetPass(true);
     }
-  }, []); // Run only once when component mounts
+  }, []);
 
   const togglePasswordVisibility = () => {
     setIsPasswordVisible(!isPasswordVisible);
@@ -100,8 +82,8 @@ function Login() {
   };
 
   const updateUserProfile = async (userId, role, location, company, mobile) => {
-    const { data, error } = await supabase.from("profiles").upsert({
-      id: userId, // Use the user ID from Supabase
+    const { error } = await supabase.from("profiles").upsert({
+      id: userId,
       role: role,
       location: location,
       company_name: company,
@@ -110,14 +92,11 @@ function Login() {
 
     if (error) {
       console.error("Error updating profile:", error.message);
-    } else {
-      console.log("Profile updated:", data);
     }
   };
 
   const updateUserId = async (userId) => {
     try {
-      // Update userId in the 'areas' table
       const { data, error } = await supabase
         .from("layout")
         .update({ userId })
@@ -148,7 +127,6 @@ function Login() {
       console.error("Error signing up:", error);
       return;
     }
-    console.log("User signed up successfully:", data);
     toast.success("User signed up successfully:");
 
     const userId = data.user.id;
@@ -173,7 +151,6 @@ function Login() {
     });
 
     if (error) {
-      // alert(error.message);
       toast.error(error.message);
       console.error("Error logging in:", error);
       return;
@@ -182,27 +159,24 @@ function Login() {
     if (data.user?.id) {
       const userId = data.user.id;
       if (layoutId) {
-        await updateUserId(userId); // Ensure this function completes before proceeding
+        await updateUserId(userId);
       }
 
       setUserId(userId);
       setIsAuthenticated(true);
 
       try {
-        // Fetch areaId and quantityId for the logged-in user
         const { data: layoutData, error } = await supabase
           .from("layout")
           .select("id")
           .eq("userId", userId)
-          .order("created_at", { ascending: false }) // Order by latest entry
+          .order("created_at", { ascending: false })
           .limit(1)
           .single();
 
         if (error) console.error("Error fetching layout:", error);
 
         const layoutId = layoutData?.id;
-
-        console.log("Fetched layoutId:", layoutId);
 
         const { data: userData, userError } = await supabase
           .from("users_profiles")
@@ -213,7 +187,6 @@ function Login() {
 
         const firstElement = userData[0];
 
-        // Navigate based on whether areaId and quantityId exist
         if (layoutId && firstElement?.role !== "user") {
           setCurrentLayoutID(layoutId);
           sessionStorage.setItem("currentLayoutID", layoutId);
@@ -227,13 +200,11 @@ function Login() {
         }
       } catch (fetchError) {
         console.error("Error checking area and quantity IDs:", fetchError);
-        navigate("/Layout", { replace: true }); // Default navigation in case of an error
+        navigate("/Layout", { replace: true });
       }
     }
-    // setProgress(0);
     resetBOQ();
     toast.success("User logged in successfully!");
-    console.log("User logged in successfully:", data);
   };
 
   const ecommerceLogin = async () => {
@@ -243,7 +214,6 @@ function Login() {
     });
 
     if (error) {
-      // alert(error.message);
       toast.error(error.message);
       console.error("Error logging in:", error);
       return;
@@ -251,16 +221,13 @@ function Login() {
 
     if (data.user?.id) {
       const userId = data.user.id;
-
       setUserId(userId);
       setIsAuthenticated(true);
-
       navigate("/cart");
     }
   };
 
   const handleEcommerceLogin = async () => {
-    console.log("ecommerce login");
     if (!isSignUp) {
       await ecommerceLogin();
     } else {
@@ -275,11 +242,8 @@ function Login() {
         console.error("Error signing up:", error);
         return;
       }
-      console.log("User signed up successfully:", data);
       toast.success("User signed up successfully:");
-
       const userId = data.user.id;
-
       await updateUserProfile(
         userId,
         "user",
@@ -304,15 +268,6 @@ function Login() {
     }
     localStorage.removeItem("boqCompleted");
   };
-  // const handleSubmit = (e) => {
-  //   e.preventDefault();
-  //   if (isSignUp) {
-  //     handleRegister();
-  //   } else {
-  //     handleLogin();
-  //   }
-  //   localStorage.removeItem("boqCompleted");
-  // };
 
   const handleForgotPassword = async () => {
     try {
@@ -322,7 +277,6 @@ function Login() {
         return;
       }
 
-      // Check if email exists in Supabase Auth
       const { data, error: emailCheckError } = await supabase.rpc(
         "check_user_exists",
         {
@@ -335,18 +289,15 @@ function Login() {
         return;
       }
 
-      // Proceed with sending reset email
       const { error } = await supabase.auth.resetPasswordForEmail(
         formData.email,
         {
-          // redirectTo: "https://603-interior.vercel.app/Login?type=recovery",
           redirectTo: `${window.location.origin}/Login?type=recovery`,
         }
       );
 
       if (error) {
         console.error("Error sending reset email:", error.message);
-
         toast.error("Error sending reset email. Please try again.");
       } else {
         toast.success("Password reset email sent! Check your inbox.");
@@ -377,44 +328,17 @@ function Login() {
   };
 
   const signInWithGoogle = async () => {
-    // const from = location?.state?.from || "/"; // fallback to home if undefined
-    // const redirectTo = `${
-    //   window.location.origin
-    // }/complete-profile?from=${encodeURIComponent(from)}`;
-
-    // const { error } = await supabase.auth.signInWithOAuth({
-    //   provider: "google",
-    //   options: {
-    //     redirectTo,
-    //   },
-    // });
     resetBOQ();
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
-        redirectTo: `${window.location.origin}/complete-profile`, // Redirect to profile completion page
+        redirectTo: `${window.location.origin}/complete-profile`,
       },
     });
-
-    console.log("Window Location:", window.location.origin);
-
     if (error) {
       console.error("Google Login Error:", error.message);
     }
   };
-
-  // const signInWithFacebook = async () => {
-  //   const { error } = await supabase.auth.signInWithOAuth({
-  //     provider: "facebook",
-  //     options: {
-  //       redirectTo: `${window.location.origin}/complete-profile`,
-  //     },
-  //   });
-
-  //   if (error) {
-  //     console.error("Facebook Login Error:", error.message);
-  //   }
-  // };
 
   return (
     <>
@@ -450,7 +374,7 @@ function Login() {
                 )}
               </div>
             </div>
-            <div className="w-full  px-5 flex flex-col gap-3 relative">
+            <div className="w-full px-5 flex flex-col gap-3 relative">
               <label
                 htmlFor="confirmPassword"
                 className="capitalize text-md font-semibold text-white"
@@ -487,26 +411,11 @@ function Login() {
       ) : (
         <form onSubmit={handleSubmit}>
           <div className="relative main flex justify-center gap-5 h-screen w-full bg-gradient-to-br from-[#334A78] to-[#68B2DC] md:bg-none md:bg-[#fff]  overflow-x-hidden">
-            {/* <div className="absolute top-0 -right-20 w-52 h-1/2 rounded-full  bg-[#1A2C3A] opacity-60 blur-[60px] mix-blend-soft-light pointer-events-none z-0" />
-            <div className="absolute bottom-0 -left-10 w-52 h-1/2 rounded-full bg-[#1A2C3A] opacity-70 blur-[60px] mix-blend-darken pointer-events-none z-0" /> */}
-            {/* <div className="hidden  md:block fixed inset-0 bg-black bg-opacity-50 lg:hidden" /> */}
-            {/* <div className="img w-1/2 p-5 flex justify-end items-center"> */}
-            {/* <div className="img flex-1 p-5 lg:flex justify-end items-center hidden">
-              <img
-                src="images/Register.png"
-                alt=""
-                // className="max-h-full h-full xl:h-auto w-full xl:w-3/4"
-                className="xl:max-w-lg sm:max-w-sm"
-              />
-            </div> */}
             <div className="img flex-1 md:block hidden relative">
-              {/* Skeleton placeholder */}
               {!imageLoaded && (
                 <div className=" w-full h-full bg-gray-300 rounded-2xl" />
-                // <div className="xl:max-w-lg sm:max-w-sm w-full h-[450px] bg-gray-300 rounded-2xl" />
               )}
 
-              {/* Image with fade-in on load */}
               <motion.img
                 initial={{ opacity: 0 }}
                 animate={{ opacity: imageLoaded ? 1 : 0 }}
@@ -515,9 +424,6 @@ function Login() {
                 src="images/Register.png"
                 alt="Register"
                 loading="lazy"
-                // className={`xl:max-w-lg sm:max-w-sm w-full h-auto absolute top-0 left-0 ${
-                //   imageLoaded ? "relative" : "invisible"
-                // }`}
                 className={`w-full h-full object-cover ${
                   imageLoaded ? "relative" : "invisible"
                 }`}
@@ -530,11 +436,6 @@ function Login() {
                   ? "justify-center lg:justify-normal md:pt-10 md:mx-6 lg:mx-0 mx-2"
                   : ""
               }   xl:gap-10`}
-              // className={`content z-10 flex-1 max-h-full h-full flex flex-col items-start ${
-              //   isSignUp
-              //     ? "justify-center lg:justify-normal md:pt-10 md:mx-6 lg:mx-0 mx-2"
-              //     : "pt-40"
-              // }   xl:gap-10`}
             >
               <div className="w-full lg:w-3/4">
                 <h1 className="capitalize text-2xl md:text-3xl font-bold  text-[#fff] md:text-[#000] text-center">
@@ -554,7 +455,6 @@ function Login() {
               </div>
 
               <div className="w-full flex flex-col xl:items-center gap-2 px-4 sm:px-0 sm:pr-2">
-                {/* <div className="w-full flex flex-col gap-2 pr-2"> */}
                 <div className="flex flex-col gap-1 xl:gap-3 xl:w-3/4">
                   <label
                     htmlFor="email"
@@ -658,7 +558,7 @@ function Login() {
                                 e.target.value = e.target.value.replace(
                                   /[^A-Za-z\s]/g,
                                   ""
-                                ); // Remove everything except letters & spaces
+                                );
                               }}
                               placeholder="Your Location"
                               className="w-full py-1 pl-1 md:py-2 rounded-lg md:pl-2 focus:outline-none border"
@@ -682,7 +582,7 @@ function Login() {
                               e.target.value = e.target.value.replace(
                                 /\D/g,
                                 ""
-                              ); // Remove non-numeric characters
+                              );
                             }}
                             maxLength="10"
                             inputMode="numeric"
@@ -773,7 +673,6 @@ function Login() {
                     )}
 
                     <button
-                      // onClick={handleSubmit}
                       type="submit"
                       className={`capitalize xl:w-3/4 bg-[#374A75] text-white font-semibold py-2 rounded-lg ${
                         isSignUp ? "my-1" : "my-2"
@@ -806,16 +705,6 @@ function Login() {
                       )}
                     </p>
 
-                    {/* <FaFacebook
-                            fill="blue"
-                            size={30}
-                            className="bg-white rounded-full cursor-pointer bg-contain"
-                            onClick={signInWithFacebook}
-                          /> */}
-
-                    {/* Social Login */}
-                    {/* {import.meta.env.MODE === "development" && ( */}
-                    {/* <> */}
                     <div className="flex justify-center gap-3 items-center xl:w-3/4">
                       <hr className="w-1/2 border md:border-[#000]" />
                       <span className="text-[#fff] md:text-[#000] px-4 ">
@@ -834,8 +723,6 @@ function Login() {
                         </span>
                       </div>
                     </div>
-                    {/* </> */}
-                    {/* )} */}
                   </>
                 )}
               </div>
