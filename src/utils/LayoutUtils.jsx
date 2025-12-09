@@ -1,4 +1,3 @@
-//change
 export function extractAreaAndQuantity(data) {
   const areaValues = {};
   const quantities = {};
