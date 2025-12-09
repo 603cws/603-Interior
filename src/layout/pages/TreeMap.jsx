@@ -69,7 +69,7 @@ const TreeMap = ({ totalArea, areaQuantities, areaValues }) => {
     "Video Recording Room": "/images/workstation-wp/videoRoom.webp",
     "Sales Team": "/images/workstation-wp/salesRoom.webp",
     "Phone Booth": "/images/workstation-wp/phoneBooth.webp",
-    "Discussion Room": "/images/workspace-image/discussionRoom.png",
+    "Discussion Room": "/images/workstation-wp/discussionRoom.png",
     "Interview Room": "/images/workstation-wp/interview.webp",
     "Conference Room": "/images/workstation-wp/conferenceRoom.webp",
     "Board Room": "/images/workstation-wp/boardRoom.webp",
