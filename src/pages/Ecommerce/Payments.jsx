@@ -15,6 +15,36 @@ import { PlaceOrderBtn } from "../../common-components/ReadMoreBtn";
 import CheckoutStepper from "../../common-components/CheckoutStepper";
 import MobileHeader from "../../common-components/MobileHeader";
 
+const paymentOptions = [
+  {
+    id: "recommended",
+    label: "Recommended",
+    icon: <CiStar color="#334A78" size={22} className="w-6" />,
+    target: "cod",
+  },
+  {
+    id: "cod",
+    label: "Cash On Delivery (Cash/UPI)",
+    icon: <IoCashOutline color="#334A78" size={20} className="w-6" />,
+  },
+  {
+    id: "upi",
+    label: "UPI (Pay via any App)",
+    icon: (
+      <img src="/images/icons/upi-logo.svg" alt="upi logo" className="w-6" />
+    ),
+  },
+  {
+    id: "card",
+    label: "Credit/Debit Card",
+    icon: <PiCreditCard color="#334A78" size={22} className="w-6" />,
+  },
+  {
+    id: "netbanking",
+    label: "Net Banking",
+    icon: <BsBank color="#334A78" size={20} className="w-6" />,
+  },
+];
 function Payments() {
   const { cartItems } = useApp();
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState("cod");
@@ -30,36 +60,6 @@ function Payments() {
     (acc, curr) => acc + curr.productId?.price * curr.quantity,
     0
   );
-  const paymentOptions = [
-    {
-      id: "recommended",
-      label: "Recommended",
-      icon: <CiStar color="#334A78" size={22} className="w-6" />,
-      target: "cod",
-    },
-    {
-      id: "cod",
-      label: "Cash On Delivery (Cash/UPI)",
-      icon: <IoCashOutline color="#334A78" size={20} className="w-6" />,
-    },
-    {
-      id: "upi",
-      label: "UPI (Pay via any App)",
-      icon: (
-        <img src="/images/icons/upi-logo.svg" alt="upi logo" className="w-6" />
-      ),
-    },
-    {
-      id: "card",
-      label: "Credit/Debit Card",
-      icon: <PiCreditCard color="#334A78" size={22} className="w-6" />,
-    },
-    {
-      id: "netbanking",
-      label: "Net Banking",
-      icon: <BsBank color="#334A78" size={20} className="w-6" />,
-    },
-  ];
 
   const handleSelect = (item) => {
     setActiveListItem(item.id);
@@ -90,16 +90,6 @@ function Payments() {
         <MobileHeader title={"payment"} />
       </div>
       <div className="lg:container lg:mx-auto px-3 lg:px-12">
-        {/* <div className="!my-10 flex items-center justify-center text-[#334A78] text-lg capitalize font-Poppins leading-[16.8px]">
-          <div className="flex items-center gap-2">
-            <p className="text-[#334A78]">cart</p>
-            <hr className="border-t-2 border-dashed border-[#334A78] h-1 w-24 " />
-            <p>Address</p>
-            <hr className="border-t-2 border-dashed border-[#334A78] h-1 w-24 " />
-            <p className="text-[#549DC7]">Payment</p>
-          </div>
-        </div> */}
-
         <div className="hidden lg:block">
           <CheckoutStepper highlighted={"Payment"} />
         </div>
@@ -135,27 +125,22 @@ function Payments() {
                 <div>
                   <ul className="[&_li]:cursor-pointer  [&_li]:py-4 [&_li]:px-5 text-sm font-medium text-[#000000]">
                     {/* <ul className="[&_li]:cursor-pointer [&_li]:py-2 [&_li]:px-3 lg:[&_li]:py-4 lg:[&_li]:px-5 text-sm font-medium text-[#000000]"> */}
-                    {paymentOptions.map(
-                      (option, index) => (
-                        console.log(option.id),
-                        (
-                          <li
-                            key={option.id}
-                            onClick={() => handleSelect(option)}
-                            className={`flex items-center gap-2 border-t-2 text-xs border-l-4 ${
-                              index === 0 ? "border-t-0" : ""
-                            } ${
-                              activeListItem === option.id
-                                ? "bg-white  border-l-[#334A78] border-t-0"
-                                : "bg-[#cccccc] border-l-[#cccccc]"
-                            }`}
-                          >
-                            {option.icon}
-                            <p>{option.label}</p>
-                          </li>
-                        )
-                      )
-                    )}
+                    {paymentOptions.map((option, index) => (
+                      <li
+                        key={option.id}
+                        onClick={() => handleSelect(option)}
+                        className={`flex items-center gap-2 border-t-2 text-xs border-l-4 ${
+                          index === 0 ? "border-t-0" : ""
+                        } ${
+                          activeListItem === option.id
+                            ? "bg-white  border-l-[#334A78] border-t-0"
+                            : "bg-[#cccccc] border-l-[#cccccc]"
+                        }`}
+                      >
+                        {option.icon}
+                        <p>{option.label}</p>
+                      </li>
+                    ))}
                   </ul>
                 </div>
 
@@ -176,7 +161,6 @@ function Payments() {
                             onChange={() => setIsChecked(!isChecked)}
                           />
                           <h3 className="text-xs font-bold leading-7 text-[#000000]">
-                            {/* <h3 className="text-xs font-bold lg:leading-7 text-[#000000]"> */}
                             {selectedOption.label}
                           </h3>
                         </div>
@@ -184,12 +168,7 @@ function Payments() {
                           {selectedOption.icon}
                         </div>
                       </div>
-                      {isChecked && (
-                        // <button className="bg-[#334A78] border border-[#212B36] text-sm text-white tracking-wider w-full uppercase py-2 active:scale-90 transition-transform ease-in-out duration-500 ">
-                        //   Place Order
-                        // </button>
-                        <PlaceOrderBtn title="Place Order" />
-                      )}
+                      {isChecked && <PlaceOrderBtn title="Place Order" />}
                     </>
                   )}
 
@@ -213,9 +192,6 @@ function Payments() {
                       </div>
 
                       {upiMethod === "scan" && (
-                        // <button className="bg-[#334A78] border border-[#212B36] text-sm text-white tracking-wider w-full uppercase py-1.5">
-                        //   Pay now
-                        // </button>
                         <PlaceOrderBtn title="Pay Now" />
                       )}
 
@@ -245,12 +221,7 @@ function Payments() {
                             placeholder="Enter UPI ID"
                             className="border text-[10px] w-full p-3 lg:p-2 mt-2 mb-2 lg:mb-0 [&::-webkit-inner-spin-button]:appearance-none  focus:outline-none focus:ring-0"
                           />
-                          {/* <button
-                            disabled={!upiId.trim()}
-                            className="bg-[#334A78] border border-[#212B36] text-sm text-white tracking-wider w-full uppercase py-1.5 mt-1 disabled:opacity-50"
-                          >
-                            Pay now
-                          </button> */}
+
                           <PlaceOrderBtn
                             title="Pay Now"
                             disabled={!upiId.trim()}
@@ -266,7 +237,6 @@ function Payments() {
                         <form
                           action=""
                           className="[&_input]:border [&_input]:py-3 [&_input]:text-xs [&_input]:px-1.5  space-y-4"
-                          // className="[&_input]:border [&_input]:py-1 [&_input]:px-1 lg:[&_input]:py-3 [&_input]:text-xs lg:[&_input]:px-1.5  space-y-2 lg:space-y-4"
                         >
                           <input
                             type="text"
@@ -313,12 +283,7 @@ function Payments() {
                               </button>
                             </div>
                           </div>
-                          {/* <button
-                            type="submit"
-                            className="bg-[#334A78] border border-[#212B36] text-sm text-white tracking-wider w-full uppercase py-1.5"
-                          >
-                            Pay now
-                          </button> */}
+
                           <PlaceOrderBtn title="pay now" />
                         </form>
                       </div>
@@ -379,12 +344,7 @@ function Payments() {
                         </select>
                       </div>
 
-                      {selectedBank && (
-                        // <button className="bg-[#334A78] border border-[#212B36] text-sm text-white tracking-wider w-full uppercase py-1.5">
-                        //   Pay now
-                        // </button>
-                        <PlaceOrderBtn title="pay now" />
-                      )}
+                      {selectedBank && <PlaceOrderBtn title="pay now" />}
                     </>
                   )}
                 </div>
@@ -459,9 +419,6 @@ function Payments() {
               </div>
             </div>
 
-            {/* <button className="uppercase text-xl text-[#ffffff] tracking-wider w-full flex justify-center items-center bg-[#334A78] border border-[#212B36] py-3 rounded-sm font-thin">
-              place ORDER
-            </button> */}
             <div className="hidden lg:block">
               <PlaceOrderBtn title="place order" />
             </div>

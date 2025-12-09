@@ -40,11 +40,6 @@ export default function ProductReview({ product, onClose }) {
   const insertReview = async (e) => {
     e.preventDefault();
 
-    // if (!isAuthenticated) {
-    //   toast.error("Plaese log in to give review");
-    //   return;
-    // }
-
     setUploading(true);
 
     try {
@@ -56,7 +51,6 @@ export default function ProductReview({ product, onClose }) {
         const filePath = `${accountHolder?.userId}_${
           product.id
         }_${uniqueID}_review-${i + 1}.${ext}`;
-        console.log(filePath);
 
         const { error: uploadError } = await supabase.storage
           .from("review-images")
@@ -65,7 +59,7 @@ export default function ProductReview({ product, onClose }) {
         uploadedFilePaths.push(filePath);
       }
 
-      const { data, error } = await supabase.from("reviews").insert([
+      const { error } = await supabase.from("reviews").insert([
         {
           title: headline,
           description: description,
@@ -79,7 +73,6 @@ export default function ProductReview({ product, onClose }) {
         console.log(error);
       }
       toast.success("Thank you! Your review has been submitted");
-      console.log(data);
     } catch (error) {
       console.log(error);
     } finally {
@@ -171,7 +164,6 @@ export default function ProductReview({ product, onClose }) {
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               required
-              // defaultValue={`Poor quality. The seat is not even parallel to the ground...`}
               className="w-full border rounded-lg p-4 focus:outline-none focus:ring-0 text-[10px] md:text-xs lg:text-sm"
               rows={6}
             />
@@ -204,13 +196,7 @@ export default function ProductReview({ product, onClose }) {
                 onChange={handleFileChange}
               />
             </label>
-            {/* {files.length > 0 && (
-              <ul className="text-xs text-gray-500 mt-1">
-                {files.map((file, i) => (
-                  <li key={i}>{file.name}</li>
-                ))}
-              </ul>
-            )} */}
+
             <div className="flex gap-2 mt-4 flex-wrap">
               {files.map((file, i) => (
                 <div key={i} className="relative group">

@@ -12,8 +12,6 @@ function BrandFurniture() {
           />
         </section>
 
-        {/* <div className="h-80 w-screen bg-[url('/images/ecommerce/furnitureHeader.png')] bg-center bg-contain bg-no-repeat flex justify-center items-center"></div> */}
-
         <section className="lg:container px-4 my-10">
           <h2 className="text-3xl md:text-4xl lg:text-5xl uppercase text-center my-10">
             Shop By Categry
@@ -40,7 +38,6 @@ function BrandFurniture() {
               />
             </div>
 
-            {/* <div className="flex items-stretch justify-around"> */}
             <div className="relative max-w-sm lg:max-w-[500px] w-full">
               <img
                 src="/images/brands/modula-logo.png"
@@ -65,8 +62,7 @@ function BrandFurniture() {
                 className=" border-8"
               />
             </div>
-            {/* </div> */}
-            {/* <div className="flex items-stretch justify-around"> */}
+
             <div className="relative max-w-sm lg:max-w-[500px] w-full">
               <img
                 src="/images/brands/modula-logo.png"
@@ -91,7 +87,6 @@ function BrandFurniture() {
                 className=""
               />
             </div>
-            {/* </div> */}
           </div>
         </section>
 

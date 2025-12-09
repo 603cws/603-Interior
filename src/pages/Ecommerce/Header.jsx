@@ -60,8 +60,7 @@ function Header() {
         setIsAuthenticated(true);
         toast.success("Logged in successfully with Google");
         hasShownToast = true;
-
-        // ✅ Run handleAddtoWishlist only once if pendingProduct exists
+        //  Run handleAddtoWishlist only once if pendingProduct exists
         if (pendingProduct) {
           handleAddtoWishlist(pendingProduct, 1, true);
         }
@@ -260,19 +259,12 @@ function Header() {
               <li
                 onClick={() => navigate("/Aboutus")}
                 className={`cursor-pointer relative after:content-[''] after:absolute after:left-0 after:bottom-[-2px] after:h-[1px] after:bg-[#FFC900] after:transition-all after:duration-300 ${
-                  pathname === "/Aboutus" ? "after:w-full" : "after:w-0"
+                  pathname === "/aboutUs" ? "after:w-full" : "after:w-0"
                 } hover:after:w-full text-nowrap`}
               >
                 about us
               </li>
-              {/* <li
-                onClick={() => navigate("/OurServices")}
-                className={`cursor-pointer relative after:content-[''] after:absolute after:left-0 after:bottom-[-2px] after:h-[1px] after:bg-[#FFC900] after:transition-all after:duration-300 ${
-                  pathname === "/OurServices" ? "after:w-full" : "after:w-0"
-                } hover:after:w-full`}
-              >
-                our services
-              </li> */}
+
               <li
                 onClick={() => navigate("/Contactus")}
                 className={`cursor-pointer relative after:content-[''] after:absolute after:left-0 after:bottom-[-2px] after:h-[1px] after:bg-[#FFC900] after:transition-all after:duration-300 ${

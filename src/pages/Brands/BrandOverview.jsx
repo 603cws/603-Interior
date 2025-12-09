@@ -43,21 +43,6 @@ const heroSlides = [
     bg: "/images/brands/brands-bg.jpeg",
     link: "/shop",
   },
-  // {
-  //   title: "Create comfort with HVAC solutions",
-  //   bg: "/images/brands/brands-bg.jpeg",
-  //   link: "/hvac",
-  // },
-  // {
-  //   title: "Lighting that brightens your vision",
-  //   bg: "/images/brands/brands-bg.jpeg",
-  //   link: "/lights",
-  // },
-  // {
-  //   title: "Flooring that shapes your space",
-  //   bg: "/images/brands/brands-bg.jpeg",
-  //   link: "/flooring",
-  // },
   {
     // title: "Flooring that shapes your space",
     bg: "/images/brands/daikinBrand.png",
@@ -79,8 +64,6 @@ const brands = [
   { name: "ikea", image: "/images/ecommerce/fortis.png" },
   { name: "ikea", image: "/images/ecommerce/fortis.png" },
   { name: "ikea", image: "/images/ecommerce/fortis.png" },
-  // { name: "ikea", image: "/images/ecommerce/fortis.png" },
-  // { name: "ikea", image: "/images/ecommerce/fortis.png" },
 ];
 
 const categories = [
@@ -201,14 +184,6 @@ function BrandsOverview() {
                     <h1 className="text-4xl md:text-6xl font-bold max-w-xl">
                       {slide.title}
                     </h1>
-
-                    {/* <button
-                      onClick={() => navigate(slide.link)}
-                      className="capitalize font-bold text-lg md:text-xl text-white bg-[#334A78] rounded flex items-center gap-2 px-4 py-2 hover:bg-white hover:text-[#334A78] border border-[#334A78] transition-colors duration-300 ease-in-out"
-                    >
-                      <span>shop now</span>
-                      <HiOutlineArrowSmRight />
-                    </button> */}
                   </div>
                 </div>
               </div>
@@ -250,8 +225,6 @@ function BrandsOverview() {
       {/* Section 2 */}
       <section className="px-4 lg:container mx-auto py-10">
         <div className="relative">
-          {/* <SectionHeader title={"Trending Products"} isborder={true} /> */}
-          {/* <div className="max-w-6xl mx-auto"> */}
           <div className="flex items-center justify-between w-full py-0 md:py-4 flex-col md:flex-row overflow-y-hidden gap-4 md:gap-4 px-8">
             {categories.map((it, idx) => (
               <div key={idx} className="flex flex-col items-center">
@@ -408,13 +381,6 @@ function BrandsOverview() {
                 <h2 className="text-5xl md:text-8xl leading-tight">
                   Furniture
                 </h2>
-                {/* <p className="mt-2 text-xl md:text-2xl">Up to 20% off</p> */}
-                {/* <img
-                  src="/images/ecommerce/button.png"
-                  alt="arrow button"
-                  className="mt-2 w-2 md:w-4 hover:cursor-pointer"
-                  onClick={() => navigate("/shop?category")}
-                /> */}
               </div>
             </div>
           </div>
@@ -436,15 +402,6 @@ function BrandsOverview() {
                     />
                     <div className="relative z-10 h-full flex flex-col justify-end items-start pl-2 lg:pl-8 pb-6 text-white">
                       <h3 className="text-xl md:text-3xl">{o.title}</h3>
-                      {/* <p className="text-base md:text-2xl">{o.subtitle}</p> */}
-                      {/* <img
-                        src="/images/ecommerce/button.png"
-                        alt="arrow button"
-                        className="mt-2 w-2 md:w-4 hover:cursor-pointer"
-                        // onClick={() =>
-                        //   navigate(`/products/topdeal/?category=${o.title}`)
-                        // }
-                      /> */}
                     </div>
                   </div>
                 ))}
@@ -465,12 +422,6 @@ function BrandsOverview() {
                     <div className="absolute inset-0 bg-[#000]/40 rounded-lg" />
                     <div className="relative z-10 h-full flex flex-col justify-end items-start pl-2 lg:pl-6 pb-8 text-white">
                       <h4 className="text-xl md:text-3xl">{o.title}</h4>
-                      {/* <p className="text-base md:text-2xl">{o.subtitle}</p> */}
-                      {/* <img
-                        src="/images/ecommerce/button.png"
-                        alt="arrow button"
-                        className="mt-2 w-2 md:w-4 hover:cursor-pointer"
-                      /> */}
                     </div>
                   </div>
                 ))}
@@ -537,12 +488,6 @@ function TrendingProducts() {
   return (
     <div className="px-4 lg:container mx-auto py-12">
       {/* Heading */}
-      {/* <div className="text-center mb-12">
-        <h2 className=" text-lg font-semibold tracking-wide text-gray-800">
-          TRENDING PRODUCTS
-        </h2>
-        <div className="w-12 h-[1px] bg-gray-400 mx-auto mt-2"></div>
-      </div> */}
       <SectionHeader title={"TRENDING PRODUCTS"} />
 
       {/* Product Grid */}

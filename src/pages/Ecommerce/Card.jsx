@@ -1,4 +1,3 @@
-// components/Card.jsx
 export default function Card({ image, title, subtitle }) {
   return (
     <div className="w-[calc(50%-0.5rem)] shadow-sm border border-[#CCCCCC] p-2">

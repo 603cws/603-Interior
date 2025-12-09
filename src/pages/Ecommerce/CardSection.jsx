@@ -1,4 +1,3 @@
-// components/CardSection.jsx
 import { useNavigate } from "react-router-dom";
 import Card from "./Card";
 
@@ -18,7 +17,6 @@ export default function CardSection({
           ›
         </button>
       </div>
-      {/* <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-2  gap-4"> */}
       <div className="flex flex-wrap md:flex-nowrap lg:flex-wrap gap-4">
         <Card
           image="/images/cabin chair.png"

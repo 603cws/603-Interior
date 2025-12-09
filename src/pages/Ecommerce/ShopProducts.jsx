@@ -38,17 +38,13 @@ function ShopProducts() {
   const { filters, setFilters } = useApp();
 
   const [minPrice, setMinPrice] = useState(filters.priceRange[0]);
-  // const [maxPrice, setMaxPrice] = useState(filters.priceRange[1]);
+
   const [maxPrice, setMaxPrice] = useState(filters.priceRange[1]);
 
   //
   const [searchParams, setSearchParams] = useSearchParams();
   const category = searchParams.get("category");
   const query = searchParams.get("query");
-  // console.log("searchparams", searchParams, "cat", category);
-
-  // console.log(minPrice, maxPrice);
-  // console.log("filters", filters);
 
   useEffect(() => {
     setFilters((prev) => ({
@@ -99,8 +95,6 @@ function ShopProducts() {
   const applyFiltersAndSort = (products, filters, filtersortby) => {
     let result = [...products];
 
-    console.log("products", products);
-
     // Category Filter
     const normalizedFilterCats = filters.category.map((cat) =>
       cat.toLowerCase()
@@ -114,14 +108,6 @@ function ShopProducts() {
       );
     }
 
-    // Price Filter
-    // if (filters.priceRange.length === 2) {
-    //   const [minPrice, maxPrice] = filters.priceRange;
-    //   result = result.filter(
-    //     (product) => product.price >= minPrice && product.price <= maxPrice
-    //   );
-    // }
-
     const actualMaxPrice = maxPrice === 10000 ? Infinity : maxPrice;
 
     result = result.filter(
@@ -129,9 +115,6 @@ function ShopProducts() {
         product?.ecommercePrice?.sellingPrice >= minPrice &&
         product?.ecommercePrice?.sellingPrice <= actualMaxPrice
     );
-    // result = result.filter(
-    //   (product) => product.price >= minPrice && product.price <= actualMaxPrice
-    // );
 
     // Sorting
     switch (true) {
@@ -159,7 +142,6 @@ function ShopProducts() {
     if (showAvailableOnly) {
       result = result.filter((product) => product.stockQty > 0);
     }
-    console.log(products);
 
     // search results
     if (query) {
@@ -237,7 +219,6 @@ function ShopProducts() {
         image: urlMap[item.image] || item.image, // fallback if URL not found
       }));
 
-      // console.log(updatedProducts);
       setFilteredProducts(updatedProducts);
       setProducts(updatedProducts);
     } catch (error) {
@@ -259,18 +240,10 @@ function ShopProducts() {
       name: "Paint",
       imagename: "/images/icons/Paint.png",
     },
-    // {
-    //   name: `Civil & Plumbing`,
-    //   imagename: "/images/icons/CivilPlumbing.png",
-    // },
     {
       name: "Flooring",
       imagename: "/images/icons/Flooring.png",
     },
-    // {
-    //   name: "Partition",
-    //   imagename: "/images/icons/PartitionsCeilings.png",
-    // },
     {
       name: "HVAC",
       imagename: "/images/icons/HVAC.png",
@@ -317,8 +290,6 @@ function ShopProducts() {
     }
 
     if (type === "priceRange") {
-      // console.log("hello from the rest");
-
       setFilters((prev) => ({
         ...prev,
         priceRange: [0, 10000], // adjust to your default
@@ -374,7 +345,6 @@ function ShopProducts() {
     0, 1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500, 5000, 5500, 6000, 6500,
     7000, 7500, 8000, 8500, 9000, 9500, 10000,
   ];
-  // const brands = ["Ikea", "Pepperfry", "Durian", "Godrej", "Furniture"];
 
   const handleopencloseoffilter = (filter) => {
     switch (filter) {
@@ -394,17 +364,6 @@ function ShopProducts() {
   };
 
   const handleResetOfFilter = () => {
-    //
-    //condition to check already filter is applied or not
-    // if (items.length === products.length)
-    //   setFilters({
-    //     category: [],
-    //     priceRange: [0, 10000],
-    //   });
-
-    // setMaxPrice(10000);
-    // setMinPrice(0);
-
     setIsfilteropen(false);
   };
 
@@ -412,27 +371,11 @@ function ShopProducts() {
     <div>
       <ToastContainer />
       <div className="">
-        {/* <LandingNavbar /> */}
         <Header />
       </div>
       <section ref={containerRef}>
         <div className=" hidden lg:block lg:container lg:mx-auto my-6 lg:my-10">
           <SectionHeader title={"Shop "} isborder={false} />
-          {/* <div className="flex overflow-x-auto items-center justify-around my-10 gap-6">
-            {categoryies.map((cat) => (
-              <div
-                className="flex flex-col lg:justify-center  lg:items-center gap-3"
-                key={cat.name}
-              >
-                <div className="bg-[#F8F8F8] border border-[#ccc] p-4 w-16 h-16 xl:w-20 xl:h-20">
-                  <img src={cat.imagename} alt="category" className="" />
-                </div>
-                <h3 className="font-TimesNewRoman text-[#111] text-xs lg:text-sm">
-                  {cat.name}
-                </h3>
-              </div>
-            ))}
-          </div> */}
         </div>
       </section>
 
@@ -442,8 +385,6 @@ function ShopProducts() {
           <button onClick={() => setIsfilteropen(true)}>Filter</button>
         </div>
       </section>
-
-      {/* <div>{items?.length}</div> */}
 
       {isfilterOpen && (
         <div
@@ -486,8 +427,6 @@ function ShopProducts() {
                 >
                   price
                 </li>
-                {/* <li className="bg-[#eee]">brand</li>
-                <li className="bg-[#eee]">Color</li> */}
               </ul>
             </div>
             <div className="flex-1">
@@ -798,14 +737,6 @@ function ShopProducts() {
                   </div>
                 </div>
               )}
-              {/* <div className="flex justify-between items-center text-[#334A78]">
-                <h4 className="text-[15px] font-semibold leading-[24px]">
-                  color
-                </h4>
-                <div className="">
-                  <MdKeyboardArrowDown size={25} />
-                </div>
-              </div> */}
               <div className="flex justify-between items-center text-[#334A78]">
                 <h4 className="text-[15px] font-semibold leading-[24px]">
                   Brand
@@ -838,8 +769,6 @@ function ShopProducts() {
                     >
                       <input
                         type="checkbox"
-                        // checked={filters.brand.includes(brand)}
-                        // onChange={() => handleBrandFilter(brand)}
                         className="w-4 h-4 cursor-pointer text-[#111] capitalize"
                       />
                       {brand}
@@ -1074,7 +1003,6 @@ function Card({ product }) {
         {product.stockQty > 0 ? (
           <button
             onClick={() => handleAddToCart(product, iscarted)}
-            // disabled={iscarted}
             className="text-[#000] uppercase bg-[#FFFFFF] text-xs border border-[#ccc] px-2 py-2 rounded-sm "
           >
             {iscarted ? "Go to cart" : "Add to cart"}{" "}

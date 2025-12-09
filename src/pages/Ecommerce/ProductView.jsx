@@ -38,7 +38,6 @@ function ProductView() {
   const [productsMayLike, setProductsMayLike] = useState();
   const [productqunatity, setProductquantity] = useState(1);
   const [isloading, setIsloading] = useState(false);
-  // const [compare, setCompare] = useState([]);
   const [showCompare, setShowCompare] = useState(false);
   const [isReview, setIsReview] = useState(false);
   const [productReviews, setProductReviews] = useState([]);
@@ -69,7 +68,6 @@ function ProductView() {
   //   get the product based on the product id
   const { id: productid } = useParams();
   const fromPage = location.state?.from || "products";
-  console.log(fromPage);
 
   const { cartItems, isAuthenticated, localcartItems, accountHolder } =
     useApp();
@@ -84,8 +82,6 @@ function ProductView() {
         .eq("id", productid)
         .single();
 
-      console.log(data);
-
       if (error) throw new Error(error);
 
       if (isAuthenticated) {
@@ -93,8 +89,6 @@ function ProductView() {
 
         setIsCarted(check);
       } else {
-        console.log(localcartItems);
-
         const check = localcartItems.some(
           (item) => item.productId?.id === data?.id
         );
@@ -246,8 +240,6 @@ function ProductView() {
   };
 
   const fetchProductReviews = async (productId) => {
-    console.log("productId", productId);
-
     try {
       const { data, error } = await supabase
         .from("reviews")
@@ -257,9 +249,6 @@ function ProductView() {
         console.error(error);
       }
       setProductReviews(data);
-      console.log(productReviews);
-
-      console.log(data);
     } catch (error) {
       console.error(error);
     }
@@ -397,6 +386,7 @@ function ProductView() {
     fetchproductbyid();
     fetchSimilarproduct();
     fetchProductReviews(productid);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [productid]);
 
   useEffect(() => {
@@ -492,7 +482,6 @@ function ProductView() {
       review,
     }));
   });
-  console.log(allImages);
 
   const displayedImages = allImages.slice(0, 6);
   const remainingCount = allImages.length - displayedImages.length;
@@ -619,18 +608,6 @@ function ProductView() {
                     inclusive of all taxes
                   </p>
                 </div>
-
-                {/* <div className="lg:my-3 space-y-1">
-                  <p className="text-[#334A78] text-sm ">Colors</p>
-                  <div className="flex gap-3">
-                    <div className="px-5 py-2 bg-[#000]/5 inline-block text-sm text-[#334A78] uppercase text-center border border-[#334A78]">
-                      black
-                    </div>
-                    <div className="px-4 py-2 bg-[#fff] inline-block text-sm text-[#334A78] uppercase text-center border border-[#ccc]">
-                      GREEN
-                    </div>
-                  </div>
-                </div> */}
 
                 {/* qunatiy counter */}
                 <div className="border-b pb-2 md:border-none md:pb-0 mt-4 lg:mt-0">
@@ -1121,9 +1098,6 @@ function ProductView() {
           </div>
 
           <div className="my-6 lg:my-10 font-Poppins">
-            {/* <h3 className="text-[#171717] text-sm lg:text-3xl uppercase mb-3 font-semibold">
-              Similar Products
-            </h3> */}
             <div className="flex justify-between items-center">
               <h3 className="text-[#171717] text-sm lg:text-3xl  uppercase mb-3 font-semibold">
                 Similar Products
@@ -1156,15 +1130,6 @@ function ProductView() {
                   nextRef={nextRef}
                   paginationRef={paginationRef}
                 />
-                {/* Custom arrows */}
-                {/* <div
-                  ref={prevRef}
-                  className="swiper-button-prev custom-nav absolute top-1/2 -left-10 transform -translate-y-1/2 w-10 h-10 bg-white rounded-full shadow z-50"
-                />
-                <div
-                  ref={nextRef}
-                  className="swiper-button-next custom-nav absolute top-1/2 -right-10 transform -translate-y-1/2 w-10 h-10 bg-white rounded-full shadow z-50"
-                /> */}
               </div>
             )}
           </div>
@@ -1203,15 +1168,6 @@ function ProductView() {
                   nextRef={nextRef2}
                   paginationRef={paginationRef2}
                 />
-                {/* Custom arrows */}
-                {/* <div
-                  ref={prevRef2}
-                  className="swiper-button-prev custom-nav absolute top-1/2 -left-10 transform -translate-y-1/2 w-10 h-10 bg-white rounded-full shadow z-50"
-                />
-                <div
-                  ref={nextRef2}
-                  className="swiper-button-next custom-nav absolute top-1/2 -right-10 transform -translate-y-1/2 w-10 h-10 bg-white rounded-full shadow z-50"
-                /> */}
               </div>
             )}
 

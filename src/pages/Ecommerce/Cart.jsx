@@ -168,8 +168,6 @@ function Cart() {
         0
       );
 
-      console.log("price", price);
-
       const discountPrice = cartItems.reduce((acc, item) => {
         const mrp = parseInt(item.productId?.ecommercePrice?.mrp || 0);
         const sellingPrice = parseInt(
@@ -180,10 +178,7 @@ function Cart() {
         return acc + discount;
       }, 0);
 
-      console.log("discountprice", discountPrice);
-
       const subtotal = price - discountPrice;
-      console.log("subtotal", subtotal);
 
       if (!isCouponValid(coupon, subtotal)) {
         handleRemoveCoupon();
@@ -267,8 +262,6 @@ function Cart() {
     const difference = subtotal - discountedprice;
 
     setDifferenceInPricetoshow(difference);
-
-    // setDifferenceInPrice(difference);
   }
 
   const getallthecouponsFromDB = async () => {
@@ -313,39 +306,6 @@ function Cart() {
       setIsMobileCouponFormOpen(false);
     }
   };
-
-  // useEffect(() => {
-  //   const savedCoupon = localStorage.getItem("appliedCoupon");
-  //   if (
-  //     savedCoupon &&
-  //     !mobilecouponname && // not already restored
-  //     orignalTotalPrice > 0
-  //   ) {
-  //     const parsedCoupon = JSON.parse(savedCoupon);
-  //     setmobilecouponname(parsedCoupon);
-  //     setDisableApplycoupon(true);
-
-  //     const discountedprice =
-  //       orignalTotalPrice -
-  //       (orignalTotalPrice * parsedCoupon.discountPerc) / 100;
-
-  //     setCartTotalPrice(discountedprice);
-  //     const gstprice = calculateGst(discountedprice);
-  //     setGst(gstprice);
-
-  //     const difference = orignalTotalPrice - discountedprice;
-  //     setDifferenceInPrice(difference);
-  //   }
-  // }, [orignalTotalPrice]);
-
-  // create the order
-  // async function createOrder() {
-  //   try {
-  //     // get the current user
-  //     //get all the cart items
-  //     // shipping address
-  //   } catch (error) {}
-  // }
 
   function calculateGst(price, discount = 0) {
     if (discount) {
@@ -898,9 +858,6 @@ function Cart() {
                             <p className="font-semibold text-xl text-[#000] leading-[15px] tracking-[1.2px]">
                               ₹ {differenceInPricetoshow?.toFixed(2) || 0}
                             </p>
-                            {/* <p className="font-semibold text-xl text-[#000] leading-[15px] tracking-[1.2px]">
-                    ₹ {differenceInPrice.toFixed(2) || 0}
-                  </p> */}
                           </div>
                           <div>
                             <button
@@ -918,7 +875,6 @@ function Cart() {
                   )}
                   {orignalTotalPrice > 0 && (
                     <button
-                      // onClick={handlebtnClick}
                       onClick={handlePlaceOrder}
                       className="hidden uppercase text-xl text-[#ffffff] tracking-wider w-full lg:flex justify-center items-center bg-[#334A78] border border-[#212B36] py-3 rounded-sm font-thin"
                     >
@@ -929,7 +885,6 @@ function Cart() {
               </div>
             </section>
 
-            {/* You may also like */}
             {alsoLike.length > 0 && (
               <section className="pt-6 pb-14 lg:py-14">
                 <div className="flex justify-between mb-5">
@@ -946,44 +901,6 @@ function Cart() {
                   </button>
                 </div>
 
-                {/* <div className="font-Poppins w-[245px] h-[350px]">
-                  <div className="flex justify-center items-center p-2">
-                    <img
-                      src="/images/home/product-image.png"
-                      alt="chair"
-                      className="h-52 object-contain"
-                    />
-                  </div>
-                  <div className="bg-[#fff] p-2">
-                    <div className="flex mb-4">
-                      <div className="flex-1 text-sm  leading-[22.4px]  text-[#111] space-y-1.5">
-                        <h4 className="font-medium text-sm leading-[22.4px] uppercase">
-                          FLAMINGO SLING
-                        </h4>
-                        <div className="flex items-center gap-2">
-                          <p className=" ">Rs 3,0000</p>
-                          <p className="line-through text-[#111] text-opacity-50">
-                            Rs $5678
-                          </p>
-                          <p className="text-[#C20000] uppercase">sale</p>
-                        </div>
-                      </div>
-                      <div
-                        onClick={() => setWishListed(!wishListed)}
-                        className=" text-[#ccc] hover:text-red-950 cursor-pointer"
-                      >
-                        {wishListed ? (
-                          <AiFillHeart size={26} color="red" />
-                        ) : (
-                          <GoHeart size={25} />
-                        )}
-                      </div>
-                    </div>
-                    <button className="text-[#000] uppercase bg-[#FFFFFF] text-xs border border-[#ccc] px-2  py-2 rounded-sm ">
-                      ADD TO CART
-                    </button>
-                  </div>
-                </div> */}
                 <div className="grid grid-cols-2 lg:grid-cols-4 xl:grid-cols-6 gap-4">
                   {alsoLike.map((product) => (
                     <Card key={product.id} product={product} />
@@ -1177,12 +1094,7 @@ function CartCard({ cartitem }) {
               {cartitem.productId?.product_type}
             </h5>
           </div>
-          {/* <div className="flex justify-around items-center border border-[#cccccc] w-20 h-6">
-            <p className="uppercase text-[#000000] text-[10px]">
-              qty: {cartitem?.quantity || "NA"}
-            </p>
-            <IoCaretDown size={10} />
-          </div> */}
+
           <div className=" flex  gap-3 my-2">
             <div className="flex items-start justify-start gap-2">
               <button
@@ -1306,8 +1218,6 @@ function CouponCard({
   mobilecouponname,
   calculateTotalDiffertoShow,
 }) {
-  console.log(mobilecouponname, "hello");
-
   return (
     <div className="flex items-start space-x-2 font-Poppins ">
       <input
@@ -1357,25 +1267,7 @@ function Card({ product }) {
     (item) => item.productId?.id === product.id
   );
 
-  // const [iscarted, setIsCarted] = useState(false);
-
   const naviagte = useNavigate();
-
-  // useEffect(() => {
-  //   if (!product?.id) return;
-
-  //   if (isAuthenticated) {
-  //     const check = cartItems?.some(
-  //       (item) => item.productId?.id === product.id
-  //     );
-  //     setIsCarted(check);
-  //   } else {
-  //     const check = localcartItems?.some(
-  //       (item) => item.productId?.id === product.id
-  //     );
-  //     setIsCarted(check);
-  //   }
-  // }, [isAuthenticated, cartItems, localcartItems, product?.id]);
   return (
     <div className="font-TimesNewRoman max-w-sm max-h-sm  border border-[#ccc]">
       <div
@@ -1423,10 +1315,8 @@ function Card({ product }) {
         {product.stockQty > 0 ? (
           <button
             onClick={() => handleAddToCart(product)}
-            // disabled={iscarted}
             className="text-[#000] uppercase bg-[#FFFFFF] text-xs border border-[#ccc] px-2  py-2 rounded-sm "
           >
-            {/* {iscarted ? "Go to cart" : "Add to cart"}{" "} */}
             add to cart
           </button>
         ) : (

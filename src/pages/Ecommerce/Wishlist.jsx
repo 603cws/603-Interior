@@ -20,8 +20,6 @@ function Wishlist() {
 
   const { isAuthenticated } = useApp();
 
-  // const { handleAddToCart } = useHandleAddToCart();
-
   const getWishlistItems = async () => {
     setIsloading(true);
     try {
@@ -105,8 +103,6 @@ function Wishlist() {
 
       if (error) throw error;
 
-      console.log(product, "product for delete");
-
       showRemoveFromCartToast(product, "wishlist");
       setWishlistItems((prevItems) =>
         prevItems.filter((item) => item.id !== product.id)
@@ -117,7 +113,6 @@ function Wishlist() {
   };
 
   const handleMoveToCart = async (product) => {
-    console.log(product);
     try {
       const { error } = await supabase
         .from("userProductCollection")
@@ -197,7 +192,6 @@ function Wishlist() {
                         navigate("/cart");
                       } else {
                         handleMoveToCart(item);
-                        // handleAddToCart(item);
                       }
                     }}
                     className="text-[#000] capitalize bg-[#FFFFFF] text-[6px] md:text-[10px] lg:text-xs border border-[#ccc] px-2  py-2 rounded-sm hover:bg-[#DDDDDD]"
@@ -205,14 +199,6 @@ function Wishlist() {
                     {item.type === "cart" ? "Go to Cart" : "Move to Cart"}
                   </button>
                 </div>
-                {/* <div className="absolute top-2 right-2">
-                  <button
-                    onClick={() => handleRemove(item)}
-                    className="bg-[#ffffff]/30 p-1 rounded-full"
-                  >
-                    <IoClose />
-                  </button>
-                </div> */}
               </div>
             ))}
           </div>
@@ -242,12 +228,6 @@ function Wishlist() {
           >
             {isAuthenticated ? "start shopping" : "Login"}
           </button>
-          {/* <button
-            onClick={() => navigate("/products")}
-            className="bg-[#334A78] border border-[#212B36] text-xs text-white tracking-wider uppercase py-3 active:scale-90 transition-transform ease-in-out duration-500 px-10 font-Poppins font-semibold"
-          >
-            {isAuthenticated ? "start shopping" : "Login"}
-          </button> */}
         </div>
       )}
       <div className="hidden lg:block fixed bottom-0 w-full">

@@ -6,7 +6,6 @@ function OrderConfirm() {
   const { id: orderId } = useParams();
 
   const navigate = useNavigate();
-  // const orderId = searchParams.get("id");
 
   const [order, setOrder] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -19,8 +18,6 @@ function OrderConfirm() {
         .select("*")
         .eq("id", id)
         .single(); // directly return one row
-
-      console.log("order ", data);
 
       if (error) {
         setErrorMsg("Order not found");
@@ -69,17 +66,6 @@ function OrderConfirm() {
                 {" "}
                 {order?.shipping_address[0]?.address}
               </p>
-
-              {/* <button className="uppercase text-[#374A75] tracking-wider px-4 py-2 border border-[#374A75] rounded-md hover:bg-[#f1f1f1]">
-                order details
-              </button>
-              <hr />
-              <div className="flex gap-2 items-center">
-                <BsPatchCheckFill color="#374A75" />
-                <p className="text-[#999]">
-                  You can Track/View/Modify order from orders page.
-                </p>
-              </div> */}
             </div>
           )}
           <div className="flex gap-10 px-5 md:px-10 text-sm md:text-base">

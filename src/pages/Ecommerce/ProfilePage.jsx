@@ -26,8 +26,6 @@ const ProfilePage = () => {
         .from("coupons")
         .select("*");
 
-      console.log("allcoupons", coupon);
-
       setAllCoupons(coupon);
 
       if (fetchError) throw new Error(fetchError);
@@ -296,7 +294,6 @@ const ProfilePage = () => {
     myWishlist: (
       <div className="flex justify-center items-center h-full">
         <div>
-          {/* <img src="/images/no-saved-cards.png" alt="no saved cards" /> */}
           <p className="text-[#304778] text-2xl font-semibold mt-10 text-center">
             No Wishlist found
           </p>

@@ -3,49 +3,50 @@ import LandingNavbar from "../../common-components/LandingNavbar";
 import Footer from "../../common-components/Footer";
 import { useNavigate } from "react-router-dom";
 
+const productCollection = [
+  "/images/brands/welspun-p1.png",
+  "/images/brands/welspun-p2.png",
+  "/images/brands/welspun-p3.png",
+  "/images/brands/welspun-p4.png",
+  "/images/brands/welspun-p5.png",
+  "/images/brands/welspun-p6.png",
+  "/images/brands/welspun-p7.png",
+  "/images/brands/welspun-p8.png",
+];
+const featured = [
+  "/images/brands/featured-1.jpg",
+  "/images/brands/featured-2.jpg",
+  "/images/brands/featured-3.webp",
+  "/images/brands/featured-4.jpg",
+];
+
+const clickNLock = [
+  {
+    image: "/images/brands/welspun-8.jpg",
+    title: "timeless tile aesthetic",
+    features: [
+      "Modern patterned tiles",
+      "Light neutral tone",
+      "Slip-resistant surface",
+      "Easy maintenance",
+      "Click-lock system",
+    ],
+  },
+  {
+    image: "/images/brands/welspun-8.jpg",
+    title: "effortless interior style",
+    features: [
+      "Durable material",
+      "Contemporary look",
+      "Space-enhancing design",
+      "Plant-friendly aesthetic",
+      "Furniture-compatible style",
+    ],
+  },
+];
 function Welspun() {
   const navigate = useNavigate();
-  const productCollection = [
-    "/images/brands/welspun-p1.png",
-    "/images/brands/welspun-p2.png",
-    "/images/brands/welspun-p3.png",
-    "/images/brands/welspun-p4.png",
-    "/images/brands/welspun-p5.png",
-    "/images/brands/welspun-p6.png",
-    "/images/brands/welspun-p7.png",
-    "/images/brands/welspun-p8.png",
-  ];
-  const featured = [
-    "/images/brands/featured-1.jpg",
-    "/images/brands/featured-2.jpg",
-    "/images/brands/featured-3.webp",
-    "/images/brands/featured-4.jpg",
-  ];
 
-  const clickNLock = [
-    {
-      image: "/images/brands/welspun-8.jpg",
-      title: "timeless tile aesthetic",
-      features: [
-        "Modern patterned tiles",
-        "Light neutral tone",
-        "Slip-resistant surface",
-        "Easy maintenance",
-        "Click-lock system",
-      ],
-    },
-    {
-      image: "/images/brands/welspun-8.jpg",
-      title: "effortless interior style",
-      features: [
-        "Durable material",
-        "Contemporary look",
-        "Space-enhancing design",
-        "Plant-friendly aesthetic",
-        "Furniture-compatible style",
-      ],
-    },
-  ];
   return (
     <>
       <section className="h-screen flex flex-col">
@@ -92,7 +93,7 @@ function Welspun() {
         <div className="flex justify-between gap-3">
           <img src="/images/brands/welspun-4.jpg" alt="" className="flex-1 " />
           <div className="flex-1 flex flex-col gap-5">
-            {clickNLock.map((product, index) => (
+            {clickNLock?.map((product, index) => (
               <div key={index} className="flex-1 bg-[#3B558C] flex">
                 <div className="bg-[#fff] rounded-[100px] flex-1 flex justify-center items-center gap-10">
                   <img

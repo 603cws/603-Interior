@@ -1,4 +1,3 @@
-import React from "react";
 import { IoCloseOutline } from "react-icons/io5";
 
 function CheckPinCode({ onClose }) {
@@ -48,16 +47,10 @@ function CheckPinCode({ onClose }) {
               <p className="text-[#000000]">9876543210</p>
             </div>
             <div className="flex gap-3 [&_button]:capitalize [&_button]:border [&_button]:rounded-sm [&_button]:px-5 [&_button]:py-2 text-[10px] my-2">
-              {/* <button>remove</button> */}
               <button>edit</button>
             </div>
           </div>
           <div className="h-1 w-full bg-[#000000]/20 my-1" />
-          {/* <div className="px-4 my-1">
-            <button className="uppercase text-[#334A78] border border-[#334A78] w-full text-[10px] font-semibold py-2">
-              add new address
-            </button>
-          </div> */}
         </div>
       </div>
 

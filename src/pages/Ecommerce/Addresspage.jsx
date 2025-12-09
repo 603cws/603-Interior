@@ -27,14 +27,9 @@ function Addresspage() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  console.log("data from cart page", location.state);
-
   const pricingdetails = location?.state?.data || null;
-  console.log("pricing details ", pricingdetails);
 
   const { accountHolder, fetchUserData, isAuthenticated } = useApp();
-
-  //   console.log(accountHolder);
 
   const [addressFormdata, setaddressFormData] = useState({
     id: "" || undefined,
@@ -84,8 +79,6 @@ function Addresspage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    console.log("form data", addressFormdata);
-
     const uniqueID = uuidv4();
 
     const isFirstAddress = accountHolder?.address?.length === 0;
@@ -114,11 +107,7 @@ function Addresspage() {
     updatedAddressList.push(newAddress);
 
     if (validate()) {
-      console.log("Form submitted:", updatedAddressList);
-
       try {
-        console.log("trying to update the supabase with new add");
-
         const { error } = await supabase
           .from("profiles")
           .update({ address: updatedAddressList })
@@ -251,47 +240,6 @@ function Addresspage() {
     if (error) throw new Error("couldnt delete the cart ");
   };
 
-  console.log("cartitems", cartItems);
-
-  console.log("accountholder", accountHolder);
-
-  // const checkStock = (availableStock, requiredQty) => {
-  //   if (availableStock > requiredQty) return true;
-  // };
-
-  //   {
-  //     "id": "69114cb6-b408-4cec-852c-6c17cbf2edc0",
-  //     "created_at": "2025-11-15T06:17:51.599394+00:00",
-  //     "productId": {
-  //         "id": "d4bedb5d-b06a-444c-8dd3-9bef55e631de",
-  //         "type": "product",
-  //         "image": "https://bwxzfwsoxwtzhjbzbdzs.supabase.co/storage/v1/object/sign/addon/Pendant%20Lamp-main-aae716e6-c431-43cb-b3d7-3840e952cb4b?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV8wMDY5NzIxYy1kNTEwLTQzNzYtYTE0OS01YzMwMDBjZjVhNGEiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJhZGRvbi9QZW5kYW50IExhbXAtbWFpbi1hYWU3MTZlNi1jNDMxLTQzY2ItYjNkNy0zODQwZTk1MmNiNGIiLCJpYXQiOjE3NjMzNTU2NDcsImV4cCI6MTc2MzM1OTI0N30.kDMpf-9sg3E7w6sQnJ9aTmgZe9FcsZU0OID2w-yVC7k",
-  //         "price": 0,
-  //         "title": "Pendant Lamp",
-  //         "status": "approved",
-  //         "default": null,
-  //         "details": "Pendant Lamp",
-  //         "segment": "Minimal",
-  //         "stockQty": 9,
-  //         "vendor_id": "859f3a20-dcd6-464c-aad1-f0ed495a25cd",
-  //         "created_at": "2025-11-14T04:52:12.345612+00:00",
-  //         "dimensions": "5x5x5",
-  //         "product_id": "aae716e6-c431-43cb-b3d7-3840e952cb4b",
-  //         "manufacturer": "Workved",
-  //         "product_type": "Lights",
-  //         "reject_reason": "",
-  //         "ecommercePrice": {
-  //             "mrp": "2702",
-  //             "sellingPrice": "2599.00"
-  //         },
-  //         "additional_images": "[\"Pendant Lamp-additional-0-aae716e6-c431-43cb-b3d7-3840e952cb4b\"]",
-  //         "productDisplayType": "ecommerce"
-  //     },
-  //     "quantity": 1,
-  //     "type": "cart",
-  //     "userId": "21e0b7e5-6276-4608-9f0f-0d0b0f802f46"
-  // }
-
   async function OrderAndItemCreation(
     formattedDeliveryDate,
     pricingdetails,
@@ -373,7 +321,6 @@ function Addresspage() {
 
       if (itemError) throw itemError;
 
-      console.log("data", data);
       return { neworder, data };
     } catch (error) {
       console.log("error", error);
@@ -381,8 +328,6 @@ function Addresspage() {
   }
 
   const handlePayment = async () => {
-    // test for iframe
-    // setpaymentLoading((prev) => !prev);
     try {
       //check for availability
       const insufficientStock = cartItems.filter(
@@ -411,8 +356,6 @@ function Addresspage() {
         vendorId: item?.productId?.vendor_id,
       }));
 
-      console.log("products", products);
-
       const today = new Date();
       const deliveryDate = new Date(today);
       deliveryDate.setDate(today.getDate() + 14);
@@ -423,7 +366,6 @@ function Addresspage() {
         deliveryDate.getMonth() + 1,
         deliveryDate.getDate(),
       ];
-      console.log(formattedDeliveryDate);
 
       const result = await OrderAndItemCreation(
         formattedDeliveryDate,
@@ -438,9 +380,6 @@ function Addresspage() {
       }
 
       const { neworder, data: orderItems } = result;
-
-      console.log("Order created:", neworder);
-      console.log("Order items inserted:", orderItems);
 
       // unique orderId (you can also do this from backend)
       const orderId = neworder?.id;
@@ -462,8 +401,6 @@ function Addresspage() {
         address: getDefaultAddress,
       };
 
-      console.log("orderdata", orderData);
-
       const res = await fetch(
         "https://bwxzfwsoxwtzhjbzbdzs.supabase.co/functions/v1/newcreateorder",
         {
@@ -473,27 +410,21 @@ function Addresspage() {
         }
       );
 
-      console.log("response", res);
-
       const data = await res.json();
-      console.log("res data", data);
 
       if (data.success && data.token && window.PhonePeCheckout) {
         window.PhonePeCheckout.transact({
           tokenUrl: data.url,
           type: "IFRAME",
           callback: async (response) => {
-            console.log("PhonePe response:", response);
-
             if (response === "USER_CANCEL") {
               toast.error("Payment cancelled by user.");
-              console.log("user cancelled", response);
 
               await deleteOrderTableItem(orderId);
               return;
             } else if (response === "CONCLUDED") {
               toast.success(" verifying status…");
-              // ✅ Always call your backend status API here
+              //  Always call your backend status API here
               // verifyPaymentStatus(orderId);
 
               const res = await fetch(
@@ -504,11 +435,7 @@ function Addresspage() {
                 }
               );
 
-              console.log("response from order status", res);
-
               const data = await res.json();
-
-              console.log("data from order status", data);
 
               if (data?.success && data?.status === "COMPLETED") {
                 toast.success("payment completed");
@@ -529,10 +456,6 @@ function Addresspage() {
                       `Failed to update stock for ${item.productId.title}:`,
                       stockError
                     );
-                  } else {
-                    console.log(
-                      `Updated stock for ${item.productId.title}: ${item.productId.stockQty} → ${newStock}`
-                    );
                   }
                 }
 
@@ -540,14 +463,14 @@ function Addresspage() {
                 const userid = accountHolder?.userId;
                 await deleteCart(userid);
                 // send email
-                // await fetch(
-                //   "https://bwxzfwsoxwtzhjbzbdzs.supabase.co/functions/v1/orderemail",
-                //   {
-                //     method: "POST",
-                //     headers: { "Content-Type": "application/json" },
-                //     body: JSON.stringify(orderData),
-                //   }
-                // );
+                await fetch(
+                  "https://bwxzfwsoxwtzhjbzbdzs.supabase.co/functions/v1/orderemail",
+                  {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(orderData),
+                  }
+                );
                 setpaymentLoading((prev) => !prev);
 
                 //navigate to a congrats page
@@ -556,7 +479,6 @@ function Addresspage() {
               if (!data?.success && data?.status === "FAILED") {
                 toast.error("something went wrong");
 
-                console.log("data", data);
                 await deleteOrderTableItem(orderId);
                 //navigate to a congrats page
                 setpaymentLoading((prev) => !prev);
@@ -564,10 +486,7 @@ function Addresspage() {
                 navigate("/cart");
               }
               if (!data?.success && data?.status === "PENDING") {
-                console.log("payment pending");
                 toast.error("payment status pending");
-
-                console.log("data", data);
                 setpaymentLoading((prev) => !prev);
               }
             }
@@ -584,364 +503,6 @@ function Addresspage() {
       setpaymentLoading((prev) => !prev);
     }
   };
-  // original working payment
-  // const handlePayment = async () => {
-  //   // test for iframe
-  //   setpaymentLoading((prev) => !prev);
-  //   try {
-  //     //check for availability
-  //     const insufficientStock = cartItems.filter(
-  //       (item) => item.productId.stockQty < item.quantity
-  //     );
-
-  //     if (insufficientStock.length > 0) {
-  //       insufficientStock.forEach((item) => {
-  //         toast.error(
-  //           `${item.productId.title} only has ${item.productId.stockQty} left in stock.`
-  //         );
-  //       });
-  //       setpaymentLoading(false);
-  //       return;
-  //     }
-  //     // create a order in db
-  //     const products = cartItems.map((item) => ({
-  //       id: item.productId.id,
-  //       // price: item.productId.price,
-  //       price: item?.productId?.ecommercePrice?.sellingPrice,
-  //       ecommercePriceObject: item?.productId?.ecommercePrice,
-  //       quantity: item.quantity,
-  //       image: item?.productId?.image,
-  //       name: item?.productId?.title,
-  //       description: item?.productId?.details,
-  //       vendorId: item?.productId?.vendor_id,
-  //     }));
-
-  //     console.log("products", products);
-
-  //     const today = new Date();
-  //     const deliveryDate = new Date(today);
-  //     deliveryDate.setDate(today.getDate() + 14);
-
-  //     // Format as (year, month, day)
-  //     const formattedDeliveryDate = [
-  //       deliveryDate.getFullYear(),
-  //       deliveryDate.getMonth() + 1,
-  //       deliveryDate.getDate(),
-  //     ];
-  //     console.log(formattedDeliveryDate);
-  //     // 1)create the order to avoid the order not getting created afterwards
-  //     const { data: neworder, error } = await supabase
-  //       .from("orders")
-  //       .insert([
-  //         {
-  //           status: "pending",
-  //           products: products,
-  //           userId: accountHolder?.userId,
-  //           coupon: {
-  //             name: pricingdetails?.coupon || "",
-  //             discount: pricingdetails?.discount,
-  //           },
-  //           totalMRP: pricingdetails?.price,
-  //           finalPrice: pricingdetails?.finalValue,
-  //           charges: {
-  //             GST: pricingdetails?.gst,
-  //             delivery: pricingdetails?.shippingFee,
-  //           },
-  //           shippingAddress: getDefaultAddress,
-  //           deliveryDate: formattedDeliveryDate,
-  //         },
-  //       ])
-  //       .select()
-  //       .single();
-  //     if (error) {
-  //       throw new Error("data not insterted");
-  //     }
-
-  //     // unique orderId (you can also do this from backend)
-  //     const orderId = neworder?.id;
-  //     const amount = Math.round(neworder?.finalPrice * 100); // amount in paise (10000 = ₹100)
-
-  //     //       {
-  //     //     "price": 5502,
-  //     //     "discountOnMrp": 304,
-  //     //     "discount": 0,
-  //     //     "gst": 990.36,
-  //     //     "finalValue": 6188.36,
-  //     //     "coupon": "",
-  //     //     "shippingFee": 0
-  //     // }
-  //     // data formatting for email
-  //     const orderData = {
-  //       email: accountHolder?.email,
-  //       name: accountHolder?.companyName,
-  //       orderId: orderId,
-  //       total: {
-  //         totalMRP: pricingdetails?.price,
-  //         finalPrice: pricingdetails?.finalValue,
-  //         charges: {
-  //           GST: pricingdetails?.gst,
-  //           delivery: pricingdetails?.shippingFee,
-  //         },
-  //       },
-  //       // total: pricingdetails?.finalValue,
-  //       items: products,
-  //       address: getDefaultAddress,
-  //     };
-
-  //     console.log("orderdata", orderData);
-
-  //     const res = await fetch(
-  //       "https://bwxzfwsoxwtzhjbzbdzs.supabase.co/functions/v1/newcreateorder",
-  //       {
-  //         method: "POST",
-  //         headers: { "Content-Type": "application/json" },
-  //         body: JSON.stringify({ amount, orderId }),
-  //       }
-  //     );
-
-  //     console.log("response", res);
-
-  //     const data = await res.json();
-  //     console.log("res data", data);
-
-  //     if (data.success && data.token && window.PhonePeCheckout) {
-  //       window.PhonePeCheckout.transact({
-  //         tokenUrl: data.url,
-  //         type: "IFRAME",
-  //         callback: async (response) => {
-  //           console.log("PhonePe response:", response);
-
-  //           if (response === "USER_CANCEL") {
-  //             toast.error("Payment cancelled by user.");
-  //             console.log("user cancelled", response);
-
-  //             await deleteOrder(orderId);
-  //             return;
-  //           } else if (response === "CONCLUDED") {
-  //             toast.success(" verifying status…");
-  //             // ✅ Always call your backend status API here
-  //             // verifyPaymentStatus(orderId);
-
-  //             const res = await fetch(
-  //               `https://bwxzfwsoxwtzhjbzbdzs.supabase.co/functions/v1/neworderstatus?id=${orderId}`,
-  //               {
-  //                 method: "POST",
-  //                 headers: { "Content-Type": "application/json" },
-  //               }
-  //             );
-
-  //             console.log("response from order status", res);
-
-  //             const data = await res.json();
-
-  //             console.log("data from order status", data);
-
-  //             if (data?.success && data?.status === "COMPLETED") {
-  //               toast.success("payment completed");
-
-  //               //update quantity
-  //               for (const item of cartItems) {
-  //                 const newStock = item.productId.stockQty - item.quantity;
-
-  //                 if (newStock < 0) continue;
-
-  //                 const { error: stockError } = await supabase
-  //                   .from("product_variants")
-  //                   .update({ stockQty: newStock })
-  //                   .eq("id", item.productId.id);
-
-  //                 if (stockError) {
-  //                   console.error(
-  //                     `Failed to update stock for ${item.productId.title}:`,
-  //                     stockError
-  //                   );
-  //                 } else {
-  //                   console.log(
-  //                     `Updated stock for ${item.productId.title}: ${item.productId.stockQty} → ${newStock}`
-  //                   );
-  //                 }
-  //               }
-
-  //               // clear the cart
-  //               const userid = accountHolder?.userId;
-  //               await deleteCart(userid);
-  //               // send email
-  //               // await fetch(
-  //               //   "https://bwxzfwsoxwtzhjbzbdzs.supabase.co/functions/v1/orderemail",
-  //               //   {
-  //               //     method: "POST",
-  //               //     headers: { "Content-Type": "application/json" },
-  //               //     body: JSON.stringify(orderData),
-  //               //   }
-  //               // );
-  //               setpaymentLoading((prev) => !prev);
-
-  //               //navigate to a congrats page
-  //               navigate(`/orderSuccess/${orderId}`, { replace: true });
-  //             }
-  //             if (!data?.success && data?.status === "FAILED") {
-  //               toast.error("something went wrong");
-
-  //               console.log("data", data);
-  //               await deleteOrder(orderId);
-  //               //navigate to a congrats page
-  //               setpaymentLoading((prev) => !prev);
-
-  //               navigate("/cart");
-  //             }
-  //             if (!data?.success && data?.status === "PENDING") {
-  //               console.log("payment pending");
-  //               toast.error("payment status pending");
-
-  //               console.log("data", data);
-  //               setpaymentLoading((prev) => !prev);
-  //             }
-  //           }
-  //         },
-  //       });
-  //     } else {
-  //       toast.error("Failed to create order: " + data.message);
-  //       await deleteOrder(orderId);
-  //       setpaymentLoading((prev) => !prev);
-  //     }
-  //   } catch (err) {
-  //     console.error("Payment error:", err);
-  //     toast.error("Something went wrong. Please try again.");
-  //     setpaymentLoading((prev) => !prev);
-  //   }
-  // };
-
-  // const testingemail = async () => {
-  //   // create a order in db
-  //   const products = cartItems.map((item) => ({
-  //     id: item.productId.id,
-  //     price: item.productId.price,
-  //     quantity: item.quantity,
-  //     image: item?.productId?.image,
-  //   }));
-
-  //   const orderData = {
-  //     email: "yuvraj603cws@gmail.com",
-  //     name: "John Doe",
-  //     orderId: "12345",
-  //     total: 99.99,
-  //     items: products,
-  //     // items: [
-  //     //   {
-  //     //     name: "Product 1",
-  //     //     description: "Awesome product",
-  //     //     price: 49.99,
-  //     //     qty: 1,
-  //     //     image: "https://via.placeholder.com/70",
-  //     //   },
-  //     //   {
-  //     //     name: "Product 2",
-  //     //     description: "Another product",
-  //     //     price: 50.0,
-  //     //     qty: 1,
-  //     //     image: "https://via.placeholder.com/70",
-  //     //   },
-  //     // ],
-  //     address: {
-  //       name: "John Doe",
-  //       street: "123 Main St",
-  //       city: "Mumbai",
-  //       state: "MH",
-  //       pin: "400001",
-  //       phone: "9876543210",
-  //     },
-  //   };
-
-  //   await fetch(
-  //     "https://bwxzfwsoxwtzhjbzbdzs.supabase.co/functions/v1/orderemail",
-  //     {
-  //       method: "POST",
-  //       headers: { "Content-Type": "application/json" },
-  //       body: JSON.stringify(orderData),
-  //     }
-  //   );
-  // };
-
-  // redirect method
-  // const handlePayment = async () => {
-  //   try {
-  //     // create a order in db
-  //     const products = cartItems.map((item) => ({
-  //       id: item.productId.id,
-  //       price: item.productId.price,
-  //       quantity: item.quantity,
-  //     }));
-
-  //     const today = new Date();
-  //     const deliveryDate = new Date(today);
-  //     deliveryDate.setDate(today.getDate() + 14);
-
-  //     // Format as (year, month, day)
-  //     const formattedDeliveryDate = [
-  //       deliveryDate.getFullYear(),
-  //       deliveryDate.getMonth() + 1,
-  //       deliveryDate.getDate(),
-  //     ];
-  //     console.log(formattedDeliveryDate);
-
-  //     const { data: neworder, error } = await supabase
-  //       .from("orders")
-  //       .insert([
-  //         {
-  //           status: "pending",
-  //           products: products,
-  //           userId: accountHolder?.userId,
-  //           coupon: {
-  //             name: pricingdetails?.coupon || "",
-  //             discount: pricingdetails?.discount,
-  //           },
-  //           totalMRP: pricingdetails?.price,
-  //           finalPrice: pricingdetails?.finalValue,
-  //           charges: {
-  //             GST: pricingdetails?.gst,
-  //             delivery: pricingdetails?.shippingFee,
-  //           },
-  //           shippingAddress: getDefaultAddress,
-  //           deliveryDate: formattedDeliveryDate,
-  //         },
-  //       ])
-  //       .select()
-  //       .single();
-
-  //     if (error) {
-  //       throw new Error("data not insterted");
-  //     }
-
-  //     // Generate a unique orderId (you can also do this from backend)
-  //     const orderId = neworder?.id;
-  //     const amount = Math.round(neworder?.finalPrice * 100); // amount in paise (10000 = ₹100)
-
-  //     const res = await fetch(
-  //       "https://bwxzfwsoxwtzhjbzbdzs.supabase.co/functions/v1/createorder",
-  //       {
-  //         method: "POST",
-  //         headers: { "Content-Type": "application/json" },
-  //         body: JSON.stringify({ amount, orderId }),
-  //       }
-  //     );
-
-  //     console.log("response", res);
-
-  //     const data = await res.json();
-
-  //     if (data.success && data.url) {
-  //       // Redirect user to PhonePe checkout
-  //       window.location.href = data.url;
-  //     } else {
-  //       alert("Failed to create order: " + data.message);
-  //     }
-  //     console.log("new order", neworder);
-  //   } catch (err) {
-  //     console.error("Payment error:", err);
-  //     alert("Something went wrong. Please try again.");
-  //   }
-  // };
-
   // handle the continue click
   const handleContinue = () => {
     // testingemail();
@@ -1058,7 +619,6 @@ function Addresspage() {
                       </div>
                       <div>
                         <button
-                          // onClick={handlenewAddress}
                           onClick={() => setIsAddressChangeOpen(true)}
                           className="text-[#F87171] text-[10px] font-Poppins font-medium leading-7"
                         >
@@ -1248,14 +808,6 @@ function Addresspage() {
                           ))}
                       </div>
                     )}
-
-                    {/* {!ismobilenewAddressOpen && (
-                      <div className=" flex justify-between items-center font-Poppins gap-2">
-                        <button className="w-full text-[#fff] bg-[#304778] border border-[#213625] py-2">
-                          Apply
-                        </button>
-                      </div>
-                    )} */}
                   </div>
                 </div>
               )}
@@ -1335,15 +887,6 @@ function Addresspage() {
                     </h5>
                   </div>
 
-                  {/* <div className="flex justify-between">
-                    <h5 className="font-medium  text-[#111111]/80">
-                      Coupon Discount
-                    </h5>
-                    <h5 className="font-medium  text-[#F87171]">
-                      Apply Coupon
-                    </h5>
-                  </div> */}
-
                   <div className="flex justify-between border-b-[1px]">
                     <div>
                       <h5 className="font-medium  text-[#111111]/80">
@@ -1387,10 +930,6 @@ function Addresspage() {
                 </div>
               </div>
 
-              {/* <div className="mb-20 lg:mb-0">
-                <PriceDetail handlebtnClick={handleContinue} />
-              </div> */}
-
               {accountHolder?.address?.length > 0 && (
                 <button
                   disabled={ispaymentLoading}
@@ -1421,8 +960,6 @@ function Addresspage() {
           </div>
         </div>
       )}
-
-      {/*  && accountHolder?.address?.length < 3 */}
 
       {isAddressFormOpen && accountHolder?.address?.length < 3 && (
         <div className="fixed z-10 bg-black/30 inset-0 flex justify-center items-center">
@@ -1519,12 +1056,9 @@ function AddressCard({
 }
 
 function DeliveryEstimate({ product }) {
-  // Calculate estimated delivery date (15 days from today)
   const today = new Date();
   const deliveryDate = new Date(today);
   deliveryDate.setDate(today.getDate() + deliverDays);
-
-  // Format the date as "day month year", e.g., "30 Jun 2025"
   const options = { day: "numeric", month: "short", year: "numeric" };
   const formattedDate = deliveryDate.toLocaleDateString("en-US", options);
 

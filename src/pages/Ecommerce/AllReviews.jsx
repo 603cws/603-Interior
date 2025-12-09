@@ -65,9 +65,6 @@ function AllReviews() {
         price: variant?.price,
         type: variant?.product_type,
       });
-      console.log(productReviews);
-
-      console.log(data);
     } catch (error) {
       console.error(error);
     }
@@ -296,62 +293,6 @@ function AllReviews() {
               </div>
             </div>
 
-            <div className="flex gap-2 pt-8 border-b pb-6">
-              <div className="mb-6">
-                {/* Render combined review images */}
-                {/* <div className="flex flex-wrap gap-2 pt-4 border-b pb-4">
-              {displayedImages.map(({ path, review }, i) => {
-                const url = supabase.storage
-                  .from("review-images")
-                  .getPublicUrl(path).data.publicUrl;
-
-                return (
-                  <div
-                    key={i}
-                    className="w-20 h-20 rounded overflow-hidden bg-gray-200"
-                  >
-                    <img
-                      src={url}
-                      alt={`review-img-${i}`}
-                      className="w-full h-full object-cover cursor-pointer"
-                      // onClick={() => {
-                      //   setSelectedReview(review);
-                      //   setSelectedImageIndex(i);
-                      //   setDetailedMode("normal");
-                      // }}
-                    />
-                  </div>
-                );
-              })}
-
-              {remainingCount > 0 && (
-                <div
-                  className="w-20 h-20 flex items-center justify-center rounded bg-gray-300 text-sm font-medium cursor-pointer"
-                  // onClick={() => {
-                  //   setDetailedMode("grid");
-                  //   setGridViewReview(allImages);
-                  // }}
-                >
-                  +{remainingCount}
-                </div>
-              )}
-            </div> */}
-              </div>
-
-              {/* <DetailedReview
-                    selectedReview={selectedReview}
-                    gridViewReview={gridViewReview}
-                    onClose={() => {
-                      setSelectedReview(null);
-                      setGridViewReview(null);
-                    }}
-                    mode={detailedMode}
-                    setMode={setDetailedMode}
-                    setSelectedReview={setSelectedReview}
-                    selectedImageIndex={selectedImageIndex}
-                    setSelectedImageIndex={setSelectedImageIndex}
-                  /> */}
-            </div>
             <div className="p-4">
               <h2 className="text-lg font-semibold mb-4">All Reviews</h2>
               {productReviews.map((review, idx) => {

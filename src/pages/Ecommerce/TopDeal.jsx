@@ -13,8 +13,6 @@ function TopDeal() {
   const [searchParams] = useSearchParams();
   const category = searchParams.get("category");
 
-  // const [selectedCat, setSelectedCat] = useState("Furniture");
-
   useEffect(() => {
     // fetchdata();
     fetchProductsData();
@@ -60,8 +58,6 @@ function TopDeal() {
         ...item,
         image: urlMap[item.image] || item.image, // fallback if URL not found
       }));
-
-      console.log("product ", product);
 
       setProducts(product);
     } catch (error) {

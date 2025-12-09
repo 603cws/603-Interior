@@ -20,10 +20,8 @@ function DetailedReview({
   selectedImageIndex,
   setSelectedImageIndex,
 }) {
-  // const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [expanded, setExpanded] = useState(false);
 
-  // const images = selectedReview ? JSON.parse(selectedReview.images) : [];
   let images = [];
 
   if (mode === "normal" && selectedReview) {
@@ -37,8 +35,6 @@ function DetailedReview({
         .from("review-images")
         .getPublicUrl(images[selectedImageIndex]).data.publicUrl
     : "";
-
-  console.log(selectedReview);
 
   const likesArray = Array.isArray(selectedReview?.likes)
     ? selectedReview?.likes
@@ -84,26 +80,6 @@ function DetailedReview({
                     All User Images
                   </h2>
                   <div className="grid grid-cols-3 gap-3 justify-items-center">
-                    {/* {JSON.parse(selectedReview.images).map((img, index) => { */}
-                    {/* {images.map((img, index) => {
-                      const url = supabase.storage
-                        .from("review-images")
-                        .getPublicUrl(img).data.publicUrl;
-                      return (
-                        <img
-                          key={index}
-                          src={url}
-                          alt={`review-img-${index}`}
-                          className="h-36 w-36 object-cover rounded cursor-pointer"
-                          onClick={() => {
-                            // setSelectedReview(selectedReview);
-                            const clicked = selectedReview[index];
-                            setSelectedReview(clicked.review);
-                            setMode("normal");
-                          }}
-                        />
-                      );
-                    })} */}
                     {gridViewReview?.map(({ path, review }, index) => {
                       const url = supabase.storage
                         .from("review-images")

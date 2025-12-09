@@ -13,9 +13,6 @@ function YouMayAlsoLike() {
   const [searchParams] = useSearchParams();
   const category = searchParams.get("category");
   const types = searchParams.get("type");
-  console.log(types);
-
-  // const [selectedCat, setSelectedCat] = useState("Furniture");
 
   useEffect(() => {
     // fetchdata();
@@ -66,8 +63,6 @@ function YouMayAlsoLike() {
         ...item,
         image: urlMap[item.image] || item.image, // fallback if URL not found
       }));
-
-      console.log("product ", product);
 
       setProducts(product);
     } catch (error) {
