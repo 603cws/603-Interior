@@ -1,4 +1,3 @@
-//change
 export const getDateInfo = () => {
   const now = new Date();
   return {
