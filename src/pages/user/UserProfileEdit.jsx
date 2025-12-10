@@ -22,8 +22,6 @@ function UserProfileEdit({ setIsEditopen }) {
       if (authError) {
         console.log("Error fetching auth data:", authError);
       }
-
-      // Fetch profile data from "profiles" table
       const { data: profileData, error: profileError } = await supabase
         .from("profiles")
         .select("*")
@@ -33,8 +31,6 @@ function UserProfileEdit({ setIsEditopen }) {
       if (profileError) {
         console.error("Error fetching profile:", profileError);
       }
-
-      // Set form values with fetched data
       if (profileData) {
         setValue("companyName", profileData.company_name || "");
         setValue("mobileNo", profileData.phone || "");
@@ -64,7 +60,7 @@ function UserProfileEdit({ setIsEditopen }) {
           phone: formData.mobileNo,
           location: formData.location,
         })
-        .eq("id", accountHolder.userId); // Update only the current user’s profile
+        .eq("id", accountHolder.userId);
 
       if (error) {
         console.error("Error updating profile:", error);
@@ -73,15 +69,11 @@ function UserProfileEdit({ setIsEditopen }) {
       }
 
       toast.success("Profile updated successfully!");
-
-      //  Update accountHolder state after successful update
       setAccountHolder((prev) => ({
         ...prev,
         companyName: formData.companyName,
         phone: formData.mobileNo,
       }));
-
-      //  Fetch updated profile data after successful update
       fetchProfileData();
     } catch (err) {
       console.error("Unexpected error:", err);

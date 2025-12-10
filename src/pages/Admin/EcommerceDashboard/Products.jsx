@@ -414,7 +414,6 @@ function Products({
             onClose={() => setReviews(false)}
           />
         ) : (
-          // Default product list and add product UI
           <>
             <div className="sticky top-0 z-20 bg-white">
               <div className="hidden lg:flex justify-between items-center px-4 py-2 border-b-2 border-b-gray-400 ">
@@ -439,7 +438,6 @@ function Products({
                     </button>
                     {filterDropdown && (
                       <div className="absolute mt-2 w-48 -left-1/2 bg-white border rounded-md shadow-lg z-10 p-3">
-                        {/* status filter */}
                         <div>
                           <label className="text-sm text-[#374A75]">
                             Status
@@ -449,7 +447,7 @@ function Products({
                             onChange={(e) => {
                               const value = e.target.value;
                               setSelected(value);
-                              setFilterDropdown(false); // keep original behavior (close on status change)
+                              setFilterDropdown(false);
                               applyFilters({
                                 query: searchQuery,
                                 category: selectedCategory,
@@ -469,8 +467,6 @@ function Products({
                             <option value="rejected">Rejected</option>
                           </select>
                         </div>
-
-                        {/* category */}
                         <div>
                           <label className="text-sm text-[#374A75]">
                             Categories
@@ -504,8 +500,6 @@ function Products({
                             ))}
                           </select>
                         </div>
-
-                        {/* subcategory (conditional) */}
                         {selectedCategory && (
                           <div>
                             <label className="text-sm text-[#374A75]">
@@ -638,13 +632,10 @@ function Products({
                             />
                           </div>
                         </div>
-
-                        {/* actions: Clear filters */}
                         <div className="flex justify-end">
                           <button
                             type="button"
                             onClick={() => {
-                              // reset local filter states
                               setSelected("");
                               setSelectedCategory("");
                               setSelectedSubCategory("");
@@ -652,7 +643,6 @@ function Products({
                               setPriceMax("");
                               setDateFrom("");
                               setDateTo("");
-                              // keep dropdown open (you can close if you prefer)
                               applyFilters({
                                 query: searchQuery,
                                 category: "",
@@ -742,8 +732,6 @@ function Products({
                         src="/images/icons/filter-icon.png"
                         alt="filter icon"
                       />
-                      {/* <span className="text-sm">Filter</span> */}
-                      {/* <ChevronDownIcon className="h-4 w-4 text-gray-500" /> */}
                     </button>
                     {filterDropdown && (
                       <div className="absolute mt-2 w-40 -left-full bg-white border rounded-md shadow-lg z-10 p-3">
@@ -946,13 +934,10 @@ function Products({
                             />
                           </div>
                         </div>
-
-                        {/* actions: Clear filters */}
                         <div className="flex justify-end">
                           <button
                             type="button"
                             onClick={() => {
-                              // reset local filter states
                               setSelected("");
                               setSelectedCategory("");
                               setSelectedSubCategory("");
@@ -960,7 +945,6 @@ function Products({
                               setPriceMax("");
                               setDateFrom("");
                               setDateTo("");
-                              // keep dropdown open (you can close if you prefer)
                               applyFilters({
                                 query: searchQuery,
                                 category: "",
@@ -980,8 +964,6 @@ function Products({
                       </div>
                     )}
                   </div>
-
-                  {/* export button */}
                   <div className="">
                     <button
                       onClick={() => {
@@ -1005,7 +987,6 @@ function Products({
                       <IoCloudDownloadOutline size={20} color="#374A75" />
                     </button>
                   </div>
-                  {/* search button */}
                   <div>
                     <button
                       onClick={() => setMobileSearchOpen(true)}
@@ -1054,7 +1035,6 @@ function Products({
                 <Spinner />
               ) : items.length > 0 ? (
                 <>
-                  {/* // <section className="mt-2 flex-1 overflow-hidden px-8"> */}
                   <section className="hidden lg:block h-[73%] font-Poppins overflow-hidden">
                     <div
                       className="w-full h-full border-t border-b border-[#CCCCCC] overflow-y-auto custom-scrollbar"
@@ -1179,9 +1159,6 @@ function Products({
                                       <VscEye /> Edit
                                     </button>
                                     <button
-                                      // onClick={() => {
-                                      //   handleDelete(item);
-                                      // }}
                                       onClick={() => {
                                         handleDeleteClick(item);
                                         setOpenMenuId(null);
@@ -1226,7 +1203,6 @@ function Products({
                   </p>
                 </>
               ))}
-            {/* Pagination Controls (Always Visible) */}
             <PagInationNav
               totalPages={totalPages}
               currentPage={currentPage}

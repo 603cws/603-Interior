@@ -11,14 +11,10 @@ function ItemList({
   handleAddonEdit,
   isExpanded,
 }) {
-  // pagination
-
   const itemsPerPage = 20;
   const [currentPage, setCurrentPage] = useState(1);
   const totalPages = Math.ceil(items.length / itemsPerPage);
   const scrollContainerRef = useRef(null);
-
-  // Slice the items for pagination
   const paginatedItems = items.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
@@ -75,8 +71,6 @@ function ItemCard({
 }) {
   const [isoptionOpen, setIsoptionOpen] = useState(false);
   const optionboxref = useRef(null);
-
-  // Detect outside click
   useEffect(() => {
     function handleClickOutside(event) {
       if (
@@ -138,7 +132,6 @@ function OptionBox({
 
   return (
     <div className="bg-[#F9f9f9] rounded-lg p-2 w-[110px] shadow-md">
-      {/* View Button */}
       <button
         onClick={() => handleProductPreview(item)}
         className="w-full text-xs  flex items-center justify-center gap-2 bg-[#334A78] text-white rounded-md py-2 hover:bg-[#2c3e67]"
@@ -146,8 +139,6 @@ function OptionBox({
         <PiEyeLight size={16} />
         View
       </button>
-
-      {/* Edit Button */}
       <button
         onClick={() =>
           isItemProduct ? handleProductEdit(item) : handleAddonEdit(item)

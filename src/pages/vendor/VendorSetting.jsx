@@ -18,7 +18,6 @@ function VendorSetting() {
   const [selectedImage, setSelectedImage] = useState(null);
   const [profileImagesOption, setProfileImagesOption] = useState(false);
 
-  // Function to update profile image in the database
   const updateProfileImage = async () => {
     const { error } = await supabase
       .from("profiles")

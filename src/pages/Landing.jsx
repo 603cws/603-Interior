@@ -470,7 +470,6 @@ function Landing() {
               our featured projects
             </h3>
           </div>
-
           <Swiper
             spaceBetween={20}
             loop={true}
@@ -506,7 +505,6 @@ function Landing() {
       </section>
 
       <GetInTouchSection />
-
       <Footer />
     </>
   );

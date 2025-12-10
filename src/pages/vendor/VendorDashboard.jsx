@@ -78,7 +78,6 @@ function VendorDashboard() {
           handleHelp={handleHelp}
         />
         <div className="flex-1 flex flex-col relative h-full px-2">
-          {/* header for dashboard */}
           <div className="flex justify-between items-center border-2 rounded-3xl mt-2 sticky top-3 z-10 bg-white h-[50px]">
             <div className="mx-3">
               <h3 className="font-bold text-lg capitalize ">
@@ -93,11 +92,9 @@ function VendorDashboard() {
               />
             </div>
           </div>
-
           {/* div for content */}
           <div className="flex-1  border-2 border-gray-400 rounded-3xl my-2">
             {/* dashboard */}
-
             {sidebarstate?.dashboard && (
               <div className="overflow-y-hidden scrollbar-hide h-[calc(100vh-120px)] py-2 relative">
                 <div className="p-4">
@@ -105,10 +102,7 @@ function VendorDashboard() {
                 </div>
               </div>
             )}
-            {/* products */}
             {sidebarstate?.isProductOpen && <VendorItem />}
-
-            {/* setting */}
             {sidebarstate?.isSettingOpen && (
               <div className="overflow-y-hidden scrollbar-hide h-[calc(100vh-120px)] py-2 relative">
                 <div className="flex flex-col justify-between  pt-2 sticky top-0">
@@ -141,8 +135,6 @@ function VendorDashboard() {
                 </div>
               </div>
             )}
-
-            {/* help */}
             {sidebarstate?.help && <Help isvendor={true} />}
           </div>
         </div>

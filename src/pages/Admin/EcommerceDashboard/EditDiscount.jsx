@@ -59,7 +59,6 @@ function EditDiscount({ coupon, onClose, onUpdate }) {
           minAmount: payload.minAmount,
           maxLimit: payload.maxLimit,
           discountPerc: payload.discountPerc,
-          //   updated_at: new Date().toISOString(),
         })
         .eq("id", coupon.id);
 
@@ -85,7 +84,6 @@ function EditDiscount({ coupon, onClose, onUpdate }) {
   }
 
   const handleDiscard = () => {
-    // reset to current coupon values, not blanks (same UX as EditBlog’s discard -> revert form)
     reset({
       couponName: coupon?.couponName ?? "",
       discountPerc: coupon?.discountPerc ?? "",
@@ -127,7 +125,6 @@ function EditDiscount({ coupon, onClose, onUpdate }) {
             onSubmit={handleSubmit(handleDiscountUpdate)}
             className="p-2 md:p-4"
           >
-            {/* Discount code */}
             <div className="border border-[#ccc] rounded-md m-3 space-y-3 p-3 space-x-2">
               <label className="font-medium text-lg lg:text-xl text-[#000]">
                 Discount code
@@ -148,8 +145,6 @@ function EditDiscount({ coupon, onClose, onUpdate }) {
                 </p>
               )}
             </div>
-
-            {/* Discount value + Min amount */}
             <div className="flex flex-col md:flex-row border border-[#ccc] rounded-md m-3">
               <div className="flex-1 flex flex-col p-3 space-y-3">
                 <label className="font-medium text-xl text-[#000]">
@@ -200,8 +195,6 @@ function EditDiscount({ coupon, onClose, onUpdate }) {
                 )}
               </div>
             </div>
-
-            {/* Expiry + Max limit */}
             <div className="flex flex-col md:flex-row border border-[#ccc] rounded-md m-3">
               <div className="flex-1 flex flex-col p-3 space-y-3">
                 <label className="font-medium text-xl text-[#000]">

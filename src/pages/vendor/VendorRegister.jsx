@@ -75,7 +75,6 @@ function VendorRegister() {
     }));
   };
 
-  // Handle Multi-Select Category Change
   const handleCategoryChange = (selectedOptions) => {
     setFormData((prev) => ({
       ...prev,
@@ -91,8 +90,8 @@ function VendorRegister() {
     mobile,
     category
   ) => {
-    const { data, error } = await supabase.from("profiles").upsert({
-      id: userId, // Use the user ID from Supabase
+    const { error } = await supabase.from("profiles").upsert({
+      id: userId,
       role: role,
       location: location,
       company_name: company,
@@ -160,9 +159,7 @@ function VendorRegister() {
   return (
     <div className="bg-[url('images/admin/Admin.png')] bg-cover bg-center bg-no-repeat  p-5 max-h-full">
       <div className="flex gap-3 overflow-hidden bg-white rounded-xl">
-        {/* Sidebar */}
         <div className=" max-w-sm sticky left-0 top-0 bottom-0">
-          {/* Logo */}
           <div className="cursor-pointer flex justify-center items-center mt-8">
             <img
               src="/logo/workved-interior.png"
@@ -170,8 +167,6 @@ function VendorRegister() {
               className="h-20 w-32"
             />
           </div>
-
-          {/* Main Menu */}
           <div className="font-semibold text-lg capitalize leading-normal tracking-wide py-7 text-[#262626] flex flex-col gap-4 px-7">
             <h3 className="capitalize text-[#A1A1A1] mx-4">main</h3>
             <div className="flex items-center mx-4 gap-3 hover:bg-[#B4EAEA] cursor-pointer">
@@ -191,8 +186,6 @@ function VendorRegister() {
               <p>Products</p>
             </div>
           </div>
-
-          {/* Others Menu */}
           <div className="font-semibold text-lg capitalize leading-normal tracking-wide py-7 text-[#262626] flex flex-col gap-4 px-7">
             <h3 className="capitalize text-[#A1A1A1] mx-4">others</h3>
             <div className="flex items-center mx-4 gap-3 hover:bg-[#B4EAEA] cursor-pointer">
@@ -210,9 +203,7 @@ function VendorRegister() {
           </div>
         </div>
 
-        {/* Main Content */}
         <div className="flex-1 flex flex-col gap-3 relative px-2 overflow-x-auto">
-          {/* Header */}
           <div className="mt-2 sticky top-3 z-10 h-[50px] rounded-3xl p-[2px] bg-gradient-to-r from-[#B4BEEA] to-[#191B4F]">
             <div className="flex justify-between items-center h-full rounded-3xl bg-[#EBF0FF] px-3">
               <div className="">
@@ -227,12 +218,9 @@ function VendorRegister() {
               </div>
             </div>
           </div>
-
-          {/* Content */}
           <div className="flex-1 rounded-xl bg-[#EBF0FF] mb-5 cursor-default overflow-hidden ">
             <div className="h-[calc(100vh-130px)] flex-col flex justify-center items-center">
               <div className=" w-11/12 bg-white p-6 border border-black rounded-xl shadow-md flex flex-col items-center text-center">
-                {/* Header Section */}
                 <div className="w-full text-left font-Poppins ml-20 mt-5">
                   <h4 className="text-xl font-semibold mb-2 text-[#231F5C]">
                     Let's Work Together!
@@ -242,12 +230,10 @@ function VendorRegister() {
                   </h2>
                 </div>
 
-                {/* Form Fields */}
                 <form
                   onSubmit={handleSubmit}
                   className="w-full grid grid-cols-2 gap-4 text-left text-base ml-20"
                 >
-                  {/* Company Name */}
                   <div className="flex flex-col">
                     <label className="font-medium">Company Name*</label>
                     <input
@@ -260,8 +246,6 @@ function VendorRegister() {
                       required
                     />
                   </div>
-
-                  {/* Role */}
                   <div className="flex flex-col">
                     <label className="font-medium">Role*</label>
                     <select
@@ -276,8 +260,6 @@ function VendorRegister() {
                       <option value="vendor">Vendor</option>
                     </select>
                   </div>
-
-                  {/* Email ID */}
                   <div className="flex flex-col">
                     <label className="font-medium">Email ID*</label>
                     <input
@@ -290,8 +272,6 @@ function VendorRegister() {
                       required
                     />
                   </div>
-
-                  {/* Category (Only for Vendor) */}
                   {formData.role === "vendor" && (
                     <div className="flex flex-col">
                       <label className="font-medium">Category*</label>
@@ -306,8 +286,6 @@ function VendorRegister() {
                       />
                     </div>
                   )}
-
-                  {/* Mobile Number - Fixed Position */}
                   <div className="flex flex-col">
                     <label className="font-medium">Mobile Number*</label>
                     <input
@@ -322,10 +300,7 @@ function VendorRegister() {
                       required
                       maxLength={10}
                     />
-                    {/* </div> */}
                   </div>
-
-                  {/* Password - Always on Right Side */}
                   <div className="flex flex-col">
                     <label className="font-medium">Password*</label>
                     <input
@@ -340,8 +315,6 @@ function VendorRegister() {
                       required
                     />
                   </div>
-
-                  {/* Location - Fixed Position */}
                   <div className="flex flex-col">
                     <label className="font-medium">Location*</label>
                     <input
@@ -356,8 +329,6 @@ function VendorRegister() {
                       required
                     />
                   </div>
-
-                  {/* Confirm Password - Always on Right Side */}
                   <div className="flex flex-col">
                     <label className="font-medium">Confirm Password*</label>
                     <input
@@ -372,8 +343,6 @@ function VendorRegister() {
                       required
                     />
                   </div>
-
-                  {/* Submit Button */}
                   <div className="col-span-2 flex justify-center mt-5">
                     <button
                       type="submit"

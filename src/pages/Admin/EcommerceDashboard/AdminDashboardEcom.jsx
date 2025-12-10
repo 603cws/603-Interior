@@ -67,13 +67,8 @@ function AdminDashboardEcom() {
   const [isrefresh, setIsrefresh] = useState(false);
   const [clientBoqs, setClientBoqs] = useState(false);
   const [allusers, setAllusers] = useState();
-
-  //product refresh
   const [isproductRefresh, setIsProductRefresh] = useState(false);
-
-  //addon refresh
   const [isaddonRefresh, setIsAddonRefresh] = useState(false);
-
   const [rejectReasonPopup, setRejectReasonPopup] = useState(false);
   const [rejectReason, setRejectReason] = useState("");
   const [deleteWarning, setDeleteWarning] = useState(false);
@@ -93,7 +88,7 @@ function AdminDashboardEcom() {
     try {
       if (selectedProductview && selectedProductview.type === "product") {
         await supabase
-          .from("product_variants") // Ensure this matches your table name
+          .from("product_variants")
           .delete()
           .eq("id", selectedProductview.id);
 
@@ -103,7 +98,7 @@ function AdminDashboardEcom() {
 
       if (selectedProductview.type === "addon") {
         await supabase
-          .from("addon_variants") // Ensure this matches your table name
+          .from("addon_variants")
           .delete()
           .eq("id", selectedProductview.id);
         toast.success("Product deleted successfully!");
@@ -136,7 +131,7 @@ function AdminDashboardEcom() {
         if (storageError) throw storageError;
       }
 
-      setProductPreview(false); // Close the modal after deletion
+      setProductPreview(false);
     } catch (error) {
       console.log(error);
     } finally {
@@ -159,13 +154,12 @@ function AdminDashboardEcom() {
     try {
       if (product && product.type === "product") {
         await supabase
-          .from("product_variants") // Table name
+          .from("product_variants")
           .update({
             status: newStatus,
-            // ...(newStatus === "rejected" && { reject_reason: reason }),
             reject_reason: reason,
           })
-          .eq("id", product.id); // Matching row
+          .eq("id", product.id);
         toast.success(`product ${newStatus}`);
         setRejectReasonPopup(false);
         setRejectReason("");
@@ -173,9 +167,9 @@ function AdminDashboardEcom() {
 
       if (product.type === "addon") {
         await supabase
-          .from("addon_variants") // Ensure this matches your table name
-          .update({ status: newStatus }) // New status
-          .eq("id", product.id); // Matching row
+          .from("addon_variants")
+          .update({ status: newStatus })
+          .eq("id", product.id);
         toast.success(`Addon ${newStatus}`);
       }
     } finally {
@@ -191,8 +185,7 @@ function AdminDashboardEcom() {
 
   const filterByMultipleFields = (query) => {
     if (!query) {
-      setFilteredUsers(allusers); // Reset to original list when input is empty
-      return;
+      setFilteredUsers(allusers);
     }
     const filtereduser = allusers.filter((item) =>
       item.company_name.toLowerCase().includes(query.toLowerCase())
@@ -202,7 +195,6 @@ function AdminDashboardEcom() {
 
   const getusers = async () => {
     try {
-      // Query the profiles table for phone and companyName
       const { data } = await supabase
         .from("users_profiles")
         .select("*")
@@ -347,7 +339,6 @@ function AdminDashboardEcom() {
             text="change Dashboard"
             onClick={() => navigate("/dashboard")}
             isExpanded={isExpanded}
-            // currentSection={sidebarstate?.currentSection}
           />
 
           <SidebarItem
@@ -359,7 +350,6 @@ function AdminDashboardEcom() {
         </div>
       </div>
       <div className="flex flex-col h-full min-h-0 lg:gap-2 lg:px-2">
-        {/* header for mobile */}
         <div className="lg:hidden flex justify-between items-center border-b-2 border-[#334A78]  bg-white h-[50px] shrink-0">
           <div className="mx-3">
             <img
@@ -490,12 +480,8 @@ function AdminDashboardEcom() {
         {/* dashboard */}
         {sidebarstate.dashboard && (
           <div className="flex flex-col h-full min-h-0 overflow-y-auto overflow-x-hidden lg:border-2 border-[#334A78] rounded-lg bg-white font-lato p-4 custom-scrollbar">
-            {/* Top Stats Cards */}
             <StatsSection allusers={allusers} />
-
-            {/* Middle Section: Transactions + Sales */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
-              {/* Transactions */}
               <Transactions
                 sidebarDispatch={sidebarDispatch}
                 onOrderSelect={(order) => {
@@ -506,20 +492,14 @@ function AdminDashboardEcom() {
                   });
                 }}
               />
-
-              {/* Last 7 Days Sales */}
               <SalesSection />
             </div>
-
-            {/* Best Selling Products */}
             <BestSellingSection
               sidebarDispatch={sidebarDispatch}
               handleProductPreview={handleProductPreview}
             />
           </div>
         )}
-
-        {/* orders */}
         {sidebarstate.isOrdersOpen &&
           (selectedOrder ? (
             <OrderDetails
@@ -529,8 +509,6 @@ function AdminDashboardEcom() {
           ) : (
             <Orders />
           ))}
-
-        {/* product */}
         {sidebarstate.isProductOpen && (
           <Products
             isproductRefresh={isproductRefresh}
@@ -544,8 +522,6 @@ function AdminDashboardEcom() {
             handleProductPreview={handleProductPreview}
           />
         )}
-
-        {/* customers */}
         {sidebarstate.isCustomerOpen && !clientBoqs && (
           <div className="flex flex-col h-full min-h-0 overflow-hidden lg:border-2 lg:border-[#334A78] lg:rounded-lg bg-white">
             <Clients
@@ -559,22 +535,17 @@ function AdminDashboardEcom() {
             />
           </div>
         )}
-
-        {/* discounts */}
         {sidebarstate.isDiscountOpen && (
           <div className="flex flex-col h-full min-h-0  lg:border-2 lg:border-[#334A78] lg:rounded-lg bg-white">
             <Discount />
           </div>
         )}
 
-        {/* blogs */}
         {sidebarstate.isBlogsOpen && (
           <div className="flex flex-col h-full min-h-0 overflow-hidden lg:border-2 lg:border-[#334A78] lg:rounded-lg bg-white">
             <Blogs />
           </div>
         )}
-
-        {/* career */}
         {sidebarstate.isCareerOpen && (
           <div className="flex flex-col h-full min-h-0 overflow-hidden lg:border-2 lg:border-[#334A78] lg:rounded-lg bg-white">
             <CareerDash />
@@ -582,7 +553,6 @@ function AdminDashboardEcom() {
         )}
       </div>
 
-      {/* product preview */}
       {productPreview && (
         <DashboardProductCard
           onClose={() => {

@@ -44,8 +44,6 @@ function VendorNewProduct({
   const fileInputRef = useRef(null);
 
   const mulitpleimagesFileinputref = useRef(null);
-
-  // const [selectedSubcategories, setSelectedSubcategories] = useState();
   const [variant, setVariant] = useState({
     title: "",
     price: "",
@@ -77,13 +75,9 @@ function VendorNewProduct({
 
   const handleFileChange = (event) => {
     const selectedFile = event.target.files[0];
-
-    // variant.mainImage = selectedFile;
     setVariant((prev) => ({ ...prev, mainImage: selectedFile }));
     if (selectedFile) {
       setFile(selectedFile);
-
-      // setPreview(URL.createObjectURL(selectedFile));
       setShowCropper(true);
     }
   };
@@ -94,18 +88,14 @@ function VendorNewProduct({
     setVariant((prev) => ({ ...prev, mainImage: droppedFile }));
     if (droppedFile) {
       setFile(droppedFile);
-      // setPreview(URL.createObjectURL(droppedFile));
       setShowCropper(true);
     }
   };
 
-  // remove file is for main image
   const removeFile = () => {
     setFile(null);
     setPreview(null);
     setVariant((prev) => ({ ...prev, mainImage: null }));
-
-    // Reset file input value to allow same file selection again
     if (fileInputRef.current) {
       fileInputRef.current.value = null;
     }
@@ -123,16 +113,13 @@ function VendorNewProduct({
     const files = Array.from(event.target.files);
 
     if (!files.length) return;
-
-    // Enforce max 5 overall
     if (variant.additionalImages.length + files.length > 5) {
       toast.error("You can upload up to 5 additional images only.");
       mulitpleimagesFileinputref.current.value = null;
       return;
     }
-
-    setAdditionalFiles(files); // pass only NEW files to cropper
-    setShowMultiCropper(true); // open cropper
+    setAdditionalFiles(files);
+    setShowMultiCropper(true);
     mulitpleimagesFileinputref.current.value = null;
   };
 
@@ -151,15 +138,14 @@ function VendorNewProduct({
   };
 
   const removeAdditionalImage = (index) => {
-    // setAdditionalImages((prev) => prev.filter((_, i) => i !== index));
     let additionalimages = variant.additionalImages.filter(
       (_, i) => i !== index
     );
     setVariant((prevVariants) => ({
       ...prevVariants,
-      additionalImages: [...additionalimages], // Add a new image
+      additionalImages: [...additionalimages],
     }));
-    // Reset file input value to allow same file selection again
+
     if (mulitpleimagesFileinputref.current) {
       mulitpleimagesFileinputref.current.value = null;
     }
@@ -198,14 +184,13 @@ function VendorNewProduct({
     setIsSubmitting(true);
     try {
       const uniqueID = uuidv4();
-      // Check if the product already exists based on category, subcategory, and subSubCategory
       const { data: existingProduct, error: existingProductError } =
         await supabase
           .from("products")
           .select("id")
           .eq("category", category)
           .eq("subcategory", selectedSubcategories)
-          .eq("subcategory1", subSubCategory) // subSubCategory is from the state
+          .eq("subcategory1", subSubCategory)
           .single();
 
       if (existingProductError && existingProductError.code !== "PGRST116") {
@@ -215,16 +200,14 @@ function VendorNewProduct({
 
       let productId;
       if (existingProduct) {
-        // If the product already exists, use the existing product ID
         productId = existingProduct.id;
       } else {
-        // Insert a new product if it doesn't exist
         const { data: Product, error: insertError } = await supabase
           .from("products")
           .insert({
             category: category,
             subcategory: selectedSubcategories,
-            subcategory1: subSubCategory || null, // Insert subSubCategory (from state)
+            subcategory1: subSubCategory || null,
           })
           .select()
           .single();
@@ -237,21 +220,16 @@ function VendorNewProduct({
 
         productId = Product.id;
       }
-
-      // Now proceed with adding variants
-
       if (
         variant.title &&
         (variant.price || variant.mrp) &&
         variant.mainImage
       ) {
         let cleanedTitle = cleanTitle(variant.title);
-        // Upload the main image to Supabase storage
         const { data: mainImageUpload } = await supabase.storage
           .from("addon")
           .upload(`${cleanedTitle}-main-${uniqueID}`, variant.mainImage);
 
-        // Upload additional images
         const additionalImagePaths = [];
         for (const [index, imageFile] of variant.additionalImages.entries()) {
           const { data: additionalImageUpload } = await supabase.storage
@@ -263,8 +241,6 @@ function VendorNewProduct({
 
           additionalImagePaths.push(additionalImageUpload.path);
         }
-
-        // Insert the variant into the product_variants table
         const { error: variantError } = await supabase
           .from("product_variants")
           .insert({
@@ -272,12 +248,12 @@ function VendorNewProduct({
             title: variant.title,
             price: +variant.price || 0,
             details: variant.details,
-            image: mainImageUpload.path, // Store the main image path
-            additional_images: additionalImagePaths, // Store paths of additional images
-            segment: variant.segment, // Store segment
-            dimensions: variant.dimension, // Store dimension
-            manufacturer: accountHolder?.companyName || variant.manufacturer, // Store manufacturer
-            vendor_id: accountHolder.userId, // Store vendor ID
+            image: mainImageUpload.path,
+            additional_images: additionalImagePaths,
+            segment: variant.segment,
+            dimensions: variant.dimension,
+            manufacturer: accountHolder?.companyName || variant.manufacturer,
+            vendor_id: accountHolder.userId,
             product_type: subSubCategory,
             productDisplayType: displayOption,
             stockQty: +variant.quantity || 0,
@@ -294,13 +270,10 @@ function VendorNewProduct({
           console.error(variantError);
           toast.error(`Error inserting variant: ${variant.title}`);
         } else {
-          // Success message
           toast.success("Data inserted successfully!");
           handleFormClear();
         }
       }
-
-      // Handle the addons
     } catch (error) {
       console.log("Error in onSubmit:", error);
       toast.error("An unexpected error occurred.");
@@ -308,8 +281,6 @@ function VendorNewProduct({
       setIsSubmitting(false);
     }
   };
-
-  // get the categories based on the category and type
   useEffect(() => {
     if (category !== "HVAC" && category !== "Civil / Plumbing") {
       const filter = AllCatArray.filter((cat) => cat.name === category).flatMap(
@@ -356,15 +327,11 @@ function VendorNewProduct({
     };
 
     setDimensions(updatedDimensions);
-
-    // Update variant.dimension
     setVariant((prev) => ({
       ...prev,
       dimension: `${updatedDimensions.height}x${updatedDimensions.length}x${updatedDimensions.width}`,
     }));
   };
-
-  // clear the form
   const handleFormClear = () => {
     setVariant((prevVariants) => ({
       ...prevVariants,
@@ -443,7 +410,6 @@ function VendorNewProduct({
         </button>
         <h3 className="capitalize font-semibold text-xl ">add new products</h3>
       </div>
-      {/* <form action=""> */}
       <form
         className="lg:flex gap-5 px-3 py-2  lg:py-3 lg:px-5 w-full"
         onSubmit={onSubmit}
@@ -454,7 +420,6 @@ function VendorNewProduct({
         }}
       >
         <div className="w-full lg:w-1/2">
-          {/* div for category */}
           <div>
             <h3 className="capitalize mb-3 text-xl font-semibold">category</h3>
             <div className="w-full shadow-lg border-2 p-5 my-3 rounded-xl capitalize">
@@ -465,7 +430,6 @@ function VendorNewProduct({
                   id="category"
                   value={category}
                   className="w-full border-2 py-1.5 px-2 rounded-lg"
-                  // onChange={(e) => setCategory(e.target.value)}
                   onChange={(e) => handlecategorychange(e)}
                   required
                 >
@@ -528,7 +492,6 @@ function VendorNewProduct({
               </div>
             </div>
           </div>
-          {/* div for description */}
           <div>
             <h3 className="capitalize mb-3 text-xl font-semibold">
               Description
@@ -637,7 +600,6 @@ function VendorNewProduct({
               ))}
             </div>
           </div>
-          {/* div for e-commerce details */}
           {(displayOption === "ecommerce" || displayOption === "both") && (
             <div className="w-full shadow-lg border-2 p-5 my-3 rounded-xl capitalize">
               <div>
@@ -677,7 +639,6 @@ function VendorNewProduct({
           )}
         </div>
         <div className="w-full lg:w-1/2 ">
-          {/* div for images */}
           {AdditonalInformation?.length > 0 && (
             <div>
               <div className="flex justify-start items-center gap-2 mb-3">
@@ -721,7 +682,6 @@ function VendorNewProduct({
                   <h4 className="text-[#7B7B7B] capitalize">main</h4>
 
                   <div className="flex items-start gap-4">
-                    {/* Upload Box */}
                     {!preview && (
                       <div
                         className="w-28 h-28 p-2 flex flex-col items-center justify-center border border-dashed rounded-lg text-center text-gray-500 cursor-pointer  hover:border-gray-400"
@@ -743,8 +703,6 @@ function VendorNewProduct({
                         </label>
                       </div>
                     )}
-
-                    {/* Hidden Input */}
                     <input
                       type="file"
                       ref={fileInputRef}
@@ -796,7 +754,6 @@ function VendorNewProduct({
               <div className="px-4 py-2 bg-white border rounded-xl shadow-lg my-3 w-full">
                 <h4 className="text-[#7B7B7B] capitalize">additional </h4>
                 <div className="flex flex-wrap gap-4">
-                  {/* Upload Box */}
                   <div
                     onDragOver={(e) => e.preventDefault()}
                     onDrop={handleAdditionalDrop}
@@ -825,8 +782,6 @@ function VendorNewProduct({
                       </span>
                     </label>
                   </div>
-
-                  {/* Preview of Cropped Images */}
                   {variant.additionalImages.map((img, index) => (
                     <div
                       key={index}
@@ -875,7 +830,6 @@ function VendorNewProduct({
               />
             </div>
           </div>
-          {/* div for plan selection */}
           <div>
             <h3 className="capitalize mb-3 text-xl font-semibold">
               plan category
@@ -897,7 +851,6 @@ function VendorNewProduct({
               </select>
             </div>
           </div>
-          {/* div for buttons */}
           <div className="w-full flex items-end justify-between mt-5">
             <button
               className="border-2 px-5 py-2 capitalize rounded-lg"
@@ -909,7 +862,6 @@ function VendorNewProduct({
             <button
               className="border-2 px-5 py-2 bg-[#374A75] text-white capitalize rounded-lg"
               type="submit"
-              // onClick={onsubmit}
               disabled={isSubmitting}
             >
               {isSubmitting ? (

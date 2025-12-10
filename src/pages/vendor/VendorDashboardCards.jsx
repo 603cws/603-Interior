@@ -15,7 +15,6 @@ function VendorDashboardCards({ handleproduct }) {
   const [rejectedProduct, setRejectedProduct] = useState();
 
   const { accountHolder } = useApp();
-  // Fetch Products from Supabase
   const fetchProducts = async () => {
     setIsloading(true);
     try {
@@ -137,8 +136,6 @@ const statusColors = {
   pending: "bg-sky-100 text-sky-600",
   approved: "bg-green-100 text-green-600",
 };
-
-// Function to convert ISO string to "DD Mon YYYY"
 function formatDate(isoString) {
   const date = new Date(isoString);
   return date.toLocaleDateString("en-GB", {
@@ -162,12 +159,9 @@ function ProductTable({ products, addons, handlerejectedProduct }) {
 
   return (
     <div className=" max-w-xs sm:max-w-none  bg-white p-4 rounded-lg shadow border  md:h-[calc(100vh-350px)] flex flex-col">
-      {/* Top header */}
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-lg font-semibold">Product Review</h2>
       </div>
-
-      {/* Scrollable table */}
       <div className="flex-1 overflow-y-auto">
         <table className="w-full text-sm text-left">
           <thead className="text-gray-500 border-b sticky top-0 bg-white z-10">
@@ -215,8 +209,6 @@ function ProductTable({ products, addons, handlerejectedProduct }) {
           </tbody>
         </table>
       </div>
-
-      {/* Pagination footer */}
       <div className="flex gap-3 flex-col md:flex-row md:justify-between md:items-center mt-4 text-sm text-gray-500">
         <p>
           Showing {(currentPage - 1) * itemsPerPage + 1}–

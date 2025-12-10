@@ -58,8 +58,6 @@ function VendorNewAddon({
     };
 
     setDimensions(updatedDimensions);
-
-    // Update variant.dimension
     setAddon((prev) => ({
       ...prev,
       dimension: `${updatedDimensions.height}x${updatedDimensions.length}x${updatedDimensions.width}`,
@@ -78,8 +76,6 @@ function VendorNewAddon({
   const removeFile = () => {
     setFile(null);
     setPreview(null);
-
-    // Reset file input value to allow same file selection again
     if (fileInputRef.current) {
       fileInputRef.current.value = null;
     }
@@ -93,11 +89,11 @@ function VendorNewAddon({
   };
 
   const handleMainImageChange = (e) => {
-    const file = e.target.files[0]; // Get the selected file
+    const file = e.target.files[0];
     if (file) {
       setAddon((prevVariants) => ({
         ...prevVariants,
-        image: file, // Update mainImage field
+        image: file,
       }));
       setFile(file);
       setPreview(URL.createObjectURL(file));
@@ -120,14 +116,13 @@ function VendorNewAddon({
 
     try {
       setIsSubmitting(true);
-      // Check if the product already exists based on category, subcategory, and subSubCategory
       const { data: existingProduct, error: existingProductError } =
         await supabase
           .from("products")
           .select("id")
           .eq("category", category)
           .eq("subcategory", selectedSubcategories)
-          .eq("subcategory1", subSubCategory) // subSubCategory is from the state
+          .eq("subcategory1", subSubCategory)
           .single();
 
       if (existingProductError && existingProductError.code !== "PGRST116") {
@@ -137,16 +132,14 @@ function VendorNewAddon({
 
       let productId;
       if (existingProduct) {
-        // If the product already exists, use the existing product ID
         productId = existingProduct.id;
       } else {
-        // Insert a new product if it doesn't exist
         const { data: Product, error: insertError } = await supabase
           .from("products")
           .insert({
             category: category,
             subcategory: selectedSubcategories,
-            subcategory1: subSubCategory || null, // Insert subSubCategory (from state)
+            subcategory1: subSubCategory || null,
           })
           .select()
           .single();
@@ -159,8 +152,6 @@ function VendorNewAddon({
 
         productId = Product.id;
       }
-
-      // Handle the addons
       const { data: addonCategory, error: addonCategoryError } = await supabase
         .from("addons")
         .insert({ title: subSubCategory, productid: productId })
@@ -223,8 +214,6 @@ function VendorNewAddon({
       setIsSubmitting(false);
     }
   };
-
-  // get the categories based on the category and type
   useEffect(() => {
     if (category !== "HVAC" && category !== "Civil / Plumbing") {
       const filter = AllCatArray.filter((cat) => cat.name === category).flatMap(
@@ -263,7 +252,6 @@ function VendorNewAddon({
     }
   }, [category, subSubCategory, AllCatArray]);
 
-  // clear the form
   const handleFormClear = () => {
     setAddon({
       title: "",
@@ -503,7 +491,6 @@ function VendorNewAddon({
               </div>
             </>
           )}
-          {/* div for images */}
           <div>
             <div className="flex justify-start items-center gap-2 mb-3">
               <h3 className="capitalize text-xl font-semibold">
@@ -513,7 +500,6 @@ function VendorNewAddon({
             </div>
             <div>
               <div className="px-4 py-2 bg-white border rounded-xl shadow-lg my-3 w-full">
-                {/* Upload Box */}
                 <h4 className="text-[#7B7B7B] capitalize">main </h4>
                 <div className="flex items-start gap-4">
                   <div

@@ -36,8 +36,6 @@ export default function Orders({ vendorId = null }) {
         console.error(error);
         return;
       }
-
-      // Filter by vendorId if provided
       const filteredOrders = vendorId
         ? orders.filter(
             (order) =>
@@ -156,7 +154,6 @@ export default function Orders({ vendorId = null }) {
         />
       ) : (
         <section className="lg:rounded-lg font-Poppins overflow-hidden">
-          {/* Header Section */}
           <div className="sticky top-0 bg-white z-20">
             <div className="flex justify-between items-center pr-4 py-2 border-b-2 border-b-[#CCCCCC]">
               <h2 className="text-xl text-[#374A75] font-semibold px-4 py-2">
@@ -170,7 +167,6 @@ export default function Orders({ vendorId = null }) {
                     placeholder="Search by order id or name..."
                     className="px-3 py-2 pr-6 border border-[#CCCCCC] rounded text-sm w-60 focus:outline-none"
                   />
-                  {/* optional clear button */}
                   {searchQuery && (
                     <button
                       onClick={() => setSearchQuery("")}
@@ -248,8 +244,6 @@ export default function Orders({ vendorId = null }) {
               </div>
             </div>
           </div>
-
-          {/* Scrollable Content */}
           <div className=" w-full flex flex-col overflow-y-auto scrollbar-hide lg:custom-scrollbar h-[70vh] md:h-[60vh] lg:h-[calc(100vh-261px)] pb-2 px-3">
             <div className="hidden lg:block">
               {paginatedOrders?.length === 0 && (
@@ -259,7 +253,6 @@ export default function Orders({ vendorId = null }) {
               )}
               {paginatedOrders?.length > 0 && (
                 <table className="min-w-full text-sm table-auto">
-                  {/* Table Header */}
                   <thead className="hidden md:table-header-group text-left text-[#232321] text-opacity-80 border-b items-center bg-white sticky top-0 z-10">
                     <tr>
                       <th className="px-4 py-2">Order ID</th>
@@ -273,7 +266,6 @@ export default function Orders({ vendorId = null }) {
 
                   <tbody>
                     {paginatedOrders?.map((order) => {
-                      // Status color constants
                       const statusColors = {
                         shipped: "bg-blue-600",
                         pending: "bg-red-500",
@@ -282,7 +274,6 @@ export default function Orders({ vendorId = null }) {
                         approved: "bg-gray-500",
                       };
 
-                      // Payment status and color constants
                       const paymentStatus =
                         order.payment_details?.state?.toLowerCase() || "unpaid";
                       const paymentColors = {
@@ -378,7 +369,6 @@ export default function Orders({ vendorId = null }) {
 }
 
 export function OrderDetails({ order, onBack, vendorId = null }) {
-  // Filter products based on vendorId if provided
   const filteredProducts = vendorId
     ? order.order_items?.filter(
         (item) => item.product_variants?.vendor_id === vendorId
@@ -429,22 +419,14 @@ export function OrderDetails({ order, onBack, vendorId = null }) {
           Export
         </button>
       </div>
-
-      {/* Scrollable content wrapper */}
       <div className="flex-1 overflow-y-auto custom-scrollbar px-3 pb-2">
-        {/* Order ID */}
         <div className="py-4 font-semibold flex flex-col-reverse md:flex-row gap-2 md:mt-4">
           <p className="text-base md:text-xl">Orders ID: #{order.id}</p>
           <p className="capitalize bg-[#FF782F] bg-opacity-80 text-[10px] p-1 md:p-2 rounded-lg md:text-xs text-center">
             {order.status}
           </p>
         </div>
-
-        {/* Section 1 */}
-        {/* <div className="py-4 flex gap-4"> */}
         <div className="py-4 grid grid-cols-1 lg:grid-cols-3 gap-4">
-          {/* <div className="py-4 lg:flex gap-4"> */}
-          {/* Customer */}
           <div className="border p-4 rounded-2xl flex flex-col gap-3">
             <div className="flex gap-3">
               <img
@@ -594,7 +576,7 @@ export function OrderDetails({ order, onBack, vendorId = null }) {
                       </td>
                       <td
                         className="py-3 text-[15px] font-semibold text-[#232321]"
-                        title={`#${orderItem?.id}`} // Tooltip with full id on hover
+                        title={`#${orderItem?.id}`}
                       >
                         #{orderItem?.id?.slice(0, 6)}
                       </td>
@@ -636,7 +618,6 @@ export function OrderDetails({ order, onBack, vendorId = null }) {
                 return <MobileOrderItem key={product.id} product={product} />;
               })}
             </div>
-            {/* Summary section */}
             {!vendorId && (
               <div className="flex justify-end mt-3">
                 <div className="max-w-sm w-full">

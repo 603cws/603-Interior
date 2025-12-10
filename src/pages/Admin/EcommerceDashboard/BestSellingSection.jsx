@@ -15,8 +15,6 @@ function BestSellingSection({ sidebarDispatch, handleProductPreview }) {
         .select("*,products(*)")
         .order("created_at", { ascending: false })
         .neq("productDisplayType", "boq");
-      // .limit(5);
-
       if (variantError) {
         console.error(variantError);
         setVariantsData([]);
@@ -34,8 +32,6 @@ function BestSellingSection({ sidebarDispatch, handleProductPreview }) {
         setLoading(false);
         return;
       }
-
-      // Count how many orders contain each variant
       const variantsWithCounts = variants.map((variant) => {
         const totalOrders = orders.filter((order) =>
           order.products?.some((p) => p.id === variant.id)

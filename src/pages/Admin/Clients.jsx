@@ -24,8 +24,6 @@ function Clients({
 
   const { setSelectedClient } = useApp();
 
-  // pagination
-
   const itemperPage = 12;
   const indexoflastClient = currentPage * itemperPage;
   const indexofFirstClient = indexoflastClient - itemperPage;
@@ -50,7 +48,6 @@ function Clients({
   const handleConfirmDelete = async () => {
     if (selectedUser) {
       try {
-        // Call your delete function here
         await adminsupabase.auth.admin.deleteUser(selectedUser.id);
         setIsModalOpen(false);
         setSelectedUser(null);
@@ -67,12 +64,9 @@ function Clients({
     setSelectedClient(user);
   };
 
-  // jsx
   return (
     <div className="flex flex-col h-full min-h-0 overflow-hidden lg:border-2 lg:border-[#334A78] lg:rounded-lg bg-white">
-      {/* for dashboard */}
       <div className="w-full flex flex-col overflow-y-auto scrollbar-hide h-[calc(100vh-110px)] px-3">
-        {/* <div className="w-full flex flex-col overflow-y-auto scrollbar-hide h-[calc(100vh-200px)] pb-2 px-3"> */}
         <div className=" sticky top-0 z-20 bg-[#fff]">
           <div className="flex justify-between items-center px-4 py-2 border-b-2 border-b-gray-400">
             <h3 className="capitalize font-semibold text-xl">Client List</h3>
@@ -95,7 +89,6 @@ function Clients({
             </div>
           </div>
         </div>
-        {/* client card for display */}
 
         <div
           className={`grid grid-cols-1 md:grid-cols-2 justify-items-center ${
@@ -115,7 +108,6 @@ function Clients({
                     isExpanded ? " gap-2 py-3" : "gap-3 py-4"
                   } flex items-start relative`}
                 >
-                  {/* <div className={`${isExpanded ? "hidden" : "block"} mx-3`}> */}
                   <img
                     src={`${user.profile_image}`}
                     alt="usericon"
@@ -139,7 +131,7 @@ function Clients({
                       {user.email}
                     </p>
                   </div>
-                  {/* <div className="ml-auto px-3"> */}{" "}
+
                   <button
                     onClick={() => handleDeleteClick(user, index)}
                     className="absolute top-3 right-3 text-black hover:text-red-500"
@@ -147,14 +139,9 @@ function Clients({
                     {" "}
                     <MdDeleteOutline size={25} />{" "}
                   </button>
-                  {/* </div> */}
                 </div>
 
                 <button
-                  // onClick={() => {
-                  //   setClientBoqs(true);
-                  //   setSelectedClient(user);
-                  // }}
                   onClick={() => !eComm && handleClientClick(user)}
                   className={`${
                     eComm ? "cursor-default" : "cursor-pointer"

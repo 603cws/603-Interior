@@ -124,9 +124,6 @@ function EditBlog({ blog, onClose, onUpdate }) {
       if (error) {
         console.error("Error inserting data:", error);
         toast.error(error.message || "Error inserting data");
-
-        // Clean up uploaded image if blog insert fails
-        //FOR LATER
         await supabase.storage.from("blog-images").remove([imageName]);
         return;
       }

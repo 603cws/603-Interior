@@ -66,12 +66,8 @@ function VendorDashboardLayout() {
     sidebarInitialState
   );
   const { accountHolder } = useApp();
-
-  // mobile navigation
   const [isOpen, setIsOpen] = useState(false);
   const mobileMenuRef = useRef(null);
-
-  // Close when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (
@@ -300,7 +296,6 @@ function VendorDashboardLayout() {
         {sidebarstate?.isSettingOpen && (
           <div className="flex flex-col h-full min-h-0 overflow-hidden lg:border-2 lg:border-[#334A78] lg:rounded-lg bg-white">
             {/* header inside setting */}
-
             {/* Scrollable content section */}
             {iseditopen ? (
               <div className="flex-1 flex flex-col justify-center items-center h-[90%] font-Poppins ">

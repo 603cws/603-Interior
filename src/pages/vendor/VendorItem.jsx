@@ -14,27 +14,19 @@ import ItemList from "./ItemList";
 import { IoIosSearch } from "react-icons/io";
 import { IoCloseCircle } from "react-icons/io5";
 import { HiPlus } from "react-icons/hi";
-// import { ChevronDownIcon, FunnelIcon } from "@heroicons/react/24/outline";
 
 function VendorItem({ isExpanded }) {
   const [toggle, setToggle] = useState(true);
   const [selectedTab, setSelectedTab] = useState("products");
   const [isAddProduct, setIsAddProduct] = useState(false);
-  // const [isProductHovered, setIsProductHovered] = useState(false);
-  // const [isAddonHovered, setIsAddonHovered] = useState(false);
-
-  // state for the dispay in product page
   const [addNewProduct, setAddNewProduct] = useState(false);
   const [addNewAddon, setAddNewAddon] = useState(false);
-  // new edit option product
   const [editProduct, setEditProduct] = useState(false);
   const [selectedproduct, setSelectedproduct] = useState(null);
-
-  //new edit option addon
   const [editAddon, setEditAddon] = useState(false);
   const [selectedAddon, setSelectedAddon] = useState(null);
 
-  const [openMenuId, setOpenMenuId] = useState(null); // Store the ID of the row with an open menu
+  const [openMenuId, setOpenMenuId] = useState(null);
   const [selectedProductview, setSelectedProductview] = useState({
     product_name: "",
     product_price: "",
@@ -42,19 +34,13 @@ function VendorItem({ isExpanded }) {
     product_description: "",
   });
   const [productPreview, setProductPreview] = useState(false);
-
-  //delete warning
   const [deleteWarning, setDeleteWarning] = useState(false);
-  //product refresh
   const [isproductRefresh, setIsProductRefresh] = useState(false);
-  //addon refresh
   const [isaddonRefresh, setIsAddonRefresh] = useState(false);
 
   const menuRef = useRef({});
   const buttonRef = useRef({});
   const productview = useRef(null);
-
-  // loading
   const [isloading, setIsloading] = useState(false);
 
   const [productlist, setProductlist] = useState(true);
@@ -83,12 +69,10 @@ function VendorItem({ isExpanded }) {
   const handleTabClick = (event) => {
     setProductlist(true);
     setIsAddProduct(false);
-    const tab = event.target.value; // Get value from button
+    const tab = event.target.value;
     setSelectedTab(tab);
-    setToggle(tab === "products"); // Set toggle dynamically
+    setToggle(tab === "products");
   };
-
-  // Fetch Products from Supabase
   const fetchProducts = async () => {
     setIsloading(true);
 
@@ -311,7 +295,6 @@ function VendorItem({ isExpanded }) {
             setIsAddonRefresh={setIsAddonRefresh}
           />
         ) : (
-          // Default product list and add product UI
           <>
             <div className=" sticky top-0 z-20 bg-white">
               <div className="flex justify-between items-center px-4 py-2 border-b-2 border-b-gray-400 ">
@@ -457,7 +440,6 @@ function VendorItem({ isExpanded }) {
             }}
             product={selectedProductview}
             handleDelete={handleDelete}
-            // updateStatus={handleUpdateStatus}
             deleteWarning={deleteWarning}
             setDeleteWarning={setDeleteWarning}
           />
@@ -559,18 +541,11 @@ function Item({ setIsAddProduct, setAddNewitem, title, img1, img2 }) {
 function EmptyStateCard({ onAdd, toggle }) {
   return (
     <div className="flex flex-col items-center justify-center border border-gray-200 rounded-lg p-8 w-full max-w-sm mx-2 md:max-w-md sm:mx-auto text-center shadow-sm bg-white">
-      {/* Plus Icon */}
       <HiPlus className="w-8 h-8 text-gray-400 mb-3" />
-
-      {/* Title */}
       <p className="font-semibold text-gray-800">No data found</p>
-
-      {/* Subtitle */}
       <p className="text-gray-400 text-sm mb-4">
         Start Adding {toggle ? "products" : "addons"} to your list.
       </p>
-
-      {/* Button */}
       <button
         onClick={() => onAdd()}
         className="flex items-center gap-2 bg-[#334A78] text-white px-4 py-2 rounded-md hover:bg-[#2c3e67] transition-colors"

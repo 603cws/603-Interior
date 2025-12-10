@@ -21,12 +21,10 @@ import SelectSubcategories from "./SelectSubcategories";
 function VendorProductlist({
   setVendorproductlist,
   selectedVendor,
-  // updateStatus,
   deleteWarning,
   setDeleteWarning,
   rejectReason,
   setRejectReason,
-  // handleConfirmReject,
 }) {
   const [toggle, setToggle] = useState(true);
   const [isloading, setIsloading] = useState(false);
@@ -47,27 +45,16 @@ function VendorProductlist({
   const [addons, setAddons] = useState([]);
   const menuRef = useRef({});
   const buttonRef = useRef({});
-
-  // const tableRef = useRef(null);
   const scrollContainerRef = useRef(null);
   const [lastPageBeforeSearch, setLastPageBeforeSearch] = useState(1);
   const [isSearching, setIsSearching] = useState(false);
-  const [searchQuery, setSearchQuery] = useState(""); // to store the latest search input
-
+  const [searchQuery, setSearchQuery] = useState("");
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [filteredAddons, setFilteredAddons] = useState([]);
-
-  //product refresh
   const [isproductRefresh, setIsProductRefresh] = useState(false);
-
-  //addon refresh
   const [isaddonRefresh, setIsAddonRefresh] = useState(false);
-
-  // new edit option product
   const [editProduct, setEditProduct] = useState(false);
   const [selectedproduct, setSelectedproduct] = useState(null);
-
-  //new edit option addon
   const [editAddon, setEditAddon] = useState(false);
   const [selectedAddon, setSelectedAddon] = useState(null);
 
@@ -77,12 +64,8 @@ function VendorProductlist({
   const [selected, setSelected] = useState("");
   const [filterDropdown, setFilterDropdown] = useState(false);
   const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
-
-  // mutliple delete checkbox
   const [selectedItemForDelete, setSelectedItemForDelete] = useState([]);
   const [multipleDeleteWaring, setMultipleDeleteWaring] = useState(false);
-
-  // select subcat
   const [selectSubcategories, setSelectSubcategories] = useState(false);
   const [selectedItem, setSelectedItem] = useState([]);
 
@@ -98,7 +81,7 @@ function VendorProductlist({
       setFilteredProducts(products);
     }
 
-    setIsOpen(false); // close dropdown after selection (optional)
+    setIsOpen(false);
   };
 
   const itemsPerPage = 10;
@@ -111,24 +94,21 @@ function VendorProductlist({
     try {
       if (product && product.type === "product") {
         await supabase
-          .from("product_variants") // Table name
+          .from("product_variants")
           .update({
             status: newStatus,
-            // ...(newStatus === "rejected" && { reject_reason: reason }),
             reject_reason: reason,
           })
-          .eq("id", product.id); // Matching row
+          .eq("id", product.id);
         toast.success(`product ${newStatus}`);
-        // setRejectReasonPopup(false);
-        // setProductPreview(false);
         setRejectReason("");
       }
 
       if (product.type === "addon") {
         await supabase
-          .from("addon_variants") // Ensure this matches your table name
-          .update({ status: newStatus }) // New status
-          .eq("id", product.id); // Matching row
+          .from("addon_variants")
+          .update({ status: newStatus })
+          .eq("id", product.id);
         toast.success(`Addon ${newStatus}`);
       }
     } finally {
@@ -169,7 +149,6 @@ function VendorProductlist({
 
   useEffect(() => {
     const handleClickOutside = (event) => {
-      // If clicking inside the menu OR the menu button, do nothing
       if (
         openMenuId !== null &&
         (menuRef.current[openMenuId]?.contains(event.target) ||
@@ -201,13 +180,12 @@ function VendorProductlist({
   const handleTabClick = (event) => {
     setProductlist(true);
     setIsAddProduct(false);
-    const tab = event.target.value; // Get value from button
+    const tab = event.target.value;
     setSelectedTab(tab);
-    setToggle(tab === "products"); // Set toggle dynamically
+    setToggle(tab === "products");
   };
 
   const items = toggle ? filteredProducts : filteredAddons;
-  // const items = toggle ? filteredProducts : addons;
   const totalPages = Math.ceil(items.length / itemsPerPage);
 
   const normalize = (str) => str.replace(/\s+/g, " ").trim().toLowerCase();
@@ -228,11 +206,11 @@ function VendorProductlist({
 
     if (toggle) {
       if (!query && !selectedCategory) {
-        setFilteredProducts(products); // Reset to original list when input is empty
+        setFilteredProducts(products);
         resetFilterstatuAfterSearch();
         if (isSearching) {
-          setCurrentPage(lastPageBeforeSearch); // restore last page
-          setIsSearching(false); // reset
+          setCurrentPage(lastPageBeforeSearch);
+          setIsSearching(false);
         }
         return;
       }
@@ -245,9 +223,8 @@ function VendorProductlist({
         }
         return;
       }
-      // If entering a search query
       if (!isSearching) {
-        setLastPageBeforeSearch(currentPage); // store page before search
+        setLastPageBeforeSearch(currentPage);
         setIsSearching(true);
       }
       setCurrentPage(1);
@@ -266,7 +243,7 @@ function VendorProductlist({
       }
     } else {
       if (!query) {
-        setFilteredAddons(addons); // Reset to original list when input is empty
+        setFilteredAddons(addons);
         if (isSearching) {
           setCurrentPage(lastPageBeforeSearch);
           setIsSearching(false);
@@ -300,7 +277,7 @@ function VendorProductlist({
 
     if (toggle) {
       if (!category) {
-        setFilteredProducts(products); // Reset to original list when input is empty
+        setFilteredProducts(products);
         return;
       }
       const filtered = products.filter(
@@ -311,7 +288,7 @@ function VendorProductlist({
       setFilteredProducts(filtered);
     } else {
       if (!category) {
-        setFilteredAddons(addons); // Reset to original list when input is empty
+        setFilteredAddons(addons);
         return;
       }
       const filtered = addons.filter((item) =>
@@ -322,8 +299,6 @@ function VendorProductlist({
     }
     setCurrentPage(1);
   };
-
-  // Slice the items for pagination
   const paginatedItems = items.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
@@ -344,19 +319,19 @@ function VendorProductlist({
 
     try {
       const { error } = await supabase
-        .from("product_variants") // Ensure this matches your table name
+        .from("product_variants")
         .delete()
         .eq("id", product.id);
 
-      if (error) throw error; // Throw error to be caught in catch block
+      if (error) throw error;
 
       toast.success("Product deleted successfully!");
-      setProductPreview(false); // Close the modal after deletion
+      setProductPreview(false);
     } catch (error) {
       toast.error("Failed to delete product.");
       console.error("Delete error:", error);
     }
-    fetchProducts(1); // Fetch products after deletion
+    fetchProducts(1);
   };
 
   const handleAddproductclose = () => {
@@ -364,7 +339,6 @@ function VendorProductlist({
     setIsAddProduct(false);
   };
 
-  // Fetch Products from Supabase
   const fetchProducts = async () => {
     setIsloading(true);
     try {
@@ -442,15 +416,12 @@ function VendorProductlist({
 
   async function handleMultipleDelete(selectedProducts) {
     if (selectedProducts?.length === 0) return;
-
-    // Filter the items you want to delete
     const filteredItems = items.filter((item) =>
       selectedProducts?.includes(item.id)
     );
 
     try {
       for (const product of filteredItems) {
-        // DELETE FROM SUPABASE
         if (product?.type === "product") {
           await supabase
             .from("product_variants")
@@ -461,8 +432,6 @@ function VendorProductlist({
         if (product?.type === "addon") {
           await supabase.from("addon_variants").delete().eq("id", product?.id);
         }
-
-        // DELETE IMAGES (Main + Additional)
         let imagePaths = [];
 
         if (product.image) {
@@ -483,7 +452,7 @@ function VendorProductlist({
 
         if (imagePaths.length > 0) {
           const { storageError } = await supabase.storage
-            .from("addon") // Or your bucket name
+            .from("addon")
             .remove(imagePaths);
 
           if (storageError) throw storageError;
@@ -497,7 +466,6 @@ function VendorProductlist({
     } finally {
       setMultipleDeleteWaring(false);
       setSelectedItemForDelete([]);
-      // Refresh whichever category is being deleted
       setIsProductRefresh(true);
       setIsAddonRefresh(true);
     }
@@ -525,7 +493,6 @@ function VendorProductlist({
             <div className="sticky top-0 z-20 bg-white">
               <div className="hidden lg:flex justify-between items-center px-4 py-2 border-b-2 border-b-gray-400 ">
                 <button
-                  //   onClick={setVendorproductlist(false)}
                   onClick={() => setVendorproductlist(false)}
                   className="capitalize font-semibold flex items-center text-xs text-[#A1A1A1] "
                 >
@@ -533,7 +500,6 @@ function VendorProductlist({
                 </button>
 
                 <div className="relative inline-block" ref={dropdownRef}>
-                  {/* Filter Button */}
                   <button
                     onClick={() => setFilterDropdown(!filterDropdown)}
                     className="px-4 py-2 rounded text-[#374A75] text-sm flex items-center gap-3 border"
@@ -545,11 +511,8 @@ function VendorProductlist({
                     <span className="text-sm">Filter</span>
                     <ChevronDownIcon className="h-4 w-4 text-gray-500" />
                   </button>
-
-                  {/* Dropdown */}
                   {filterDropdown && (
                     <div className="absolute mt-2 w-48 -left-1/2 bg-white border rounded-md shadow-lg z-10 p-3 space-y-3">
-                      {/* Status Filter */}
                       <div>
                         <label className="text-xs font-semibold text-gray-500">
                           Status
@@ -565,8 +528,6 @@ function VendorProductlist({
                           <option value="rejected">Rejected</option>
                         </select>
                       </div>
-
-                      {/* Category Filter */}
                       <div>
                         <label className="text-xs font-semibold text-gray-500">
                           Category
@@ -600,7 +561,7 @@ function VendorProductlist({
                           : "bg-white "
                       }`}
                       value={tab.value}
-                      onClick={handleTabClick} // Dynamically sets the tab
+                      onClick={handleTabClick}
                     >
                       {tab.name}
                     </button>
@@ -637,8 +598,6 @@ function VendorProductlist({
                         alt="filter icon"
                       />
                     </button>
-
-                    {/* Dropdown */}
                     {filterDropdown && (
                       <div className="absolute mt-2 w-32 -left-full bg-white border rounded-md shadow-lg z-10">
                         <select
@@ -654,8 +613,6 @@ function VendorProductlist({
                       </div>
                     )}
                   </div>
-
-                  {/* search button */}
                   <div>
                     <button
                       onClick={() => setMobileSearchOpen(true)}
@@ -690,8 +647,6 @@ function VendorProductlist({
                 </div>
               </div>
             </div>
-
-            {/*  */}
             {productlist &&
               (isloading ? (
                 <Spinner />
@@ -879,7 +834,6 @@ function VendorProductlist({
                 </>
               ))}
 
-            {/* Pagination Controls (Always Visible) */}
             <div className="z-30 sticky bottom-[-2px] bg-white py-0 text-[#3d194f]">
               <PagInationNav
                 totalPages={totalPages}
@@ -945,14 +899,12 @@ function VendorProductlist({
           </>
         )}
       </div>
-      {/* product preview */}
       {productPreview && (
         <VendorProductCard
           onClose={() => {
             setProductPreview(false);
           }}
           product={selectedProductview}
-          // fetchProducts={fetchProducts}
           handleDelete={handleDelete}
           updateStatus={handleUpdateStatus}
           rejectReason={rejectReason}
@@ -971,8 +923,6 @@ function VendorProductlist({
           setRejectReason={setRejectReason}
         />
       )}
-
-      {/* delete waring for multiple select item */}
       {multipleDeleteWaring && (
         <MultipleDeleteWarningCard
           setDeleteWarning={setMultipleDeleteWaring}

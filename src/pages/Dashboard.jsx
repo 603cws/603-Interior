@@ -299,28 +299,6 @@ function Dashboard() {
     setSelectedProductview(product);
   };
 
-  const handleDelete = async (product) => {
-    // if (!product.id) return;
-
-    // try {
-    //   const { error } = await supabase
-    //     .from("product_variants") // Ensure this matches your table name
-    //     .delete()
-    //     .eq("id", product.id);
-
-    //   if (error) throw error; // Throw error to be caught in catch block
-
-    //   toast.success("Product deleted successfully!");
-    //   setProductPreview(false); // Close the modal after deletion
-    // } catch (error) {
-    //   toast.error("Failed to delete product.");
-    //   console.error("Delete error:", error);
-    // }
-    // fetchProducts(1); // Fetch products after deletion
-
-    toast.error("feature is pending");
-  };
-
   const handleTabClick = (event) => {
     setProductlist(true);
     const tab = event.target.value; // Get value from button
@@ -373,9 +351,9 @@ function Dashboard() {
     setisfetchBoqDataRefresh(true);
     try {
       const { error } = await supabase
-        .from("boq_data_new") // Replace with your table name
+        .from("boq_data_new")
         .delete()
-        .eq("id", boq.id); // Filtering by id
+        .eq("id", boq.id);
 
       if (error) {
         throw new Error(error);
@@ -1077,7 +1055,6 @@ function Dashboard() {
             setProductPreview(false);
           }}
           product={selectedProductview}
-          handleDelete={handleDelete}
         />
       )}
     </div>

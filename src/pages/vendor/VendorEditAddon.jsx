@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { FaRegQuestionCircle } from "react-icons/fa";
 
 import { supabase } from "../../services/supabase";
-import { toast } from "react-hot-toast"; //Toaster
+import { toast } from "react-hot-toast";
 import {
   useAllCatArray,
   displayOptions,
@@ -60,18 +60,13 @@ function VendorEditAddon({
   );
   const AllCatArray = useAllCatArray();
 
-  //   const { accountHolder } = useApp();
-
-  // const baseImageUrl =
-  //   "https://bwxzfwsoxwtzhjbzbdzs.supabase.co/storage/v1/object/public/addon/";
-
   useEffect(() => {
     const fetchVendorData = async () => {
       setLoading(true);
       const { data, error } = await supabase
-        .from("profiles") // your table name
-        .select("allowed_category") // select only what you need
-        .eq("id", selectedAddon?.vendorId) // or whatever your vendor ID field is
+        .from("profiles")
+        .select("allowed_category")
+        .eq("id", selectedAddon?.vendorId)
         .single();
 
       if (error) {
@@ -95,8 +90,6 @@ function VendorEditAddon({
     };
 
     setDimensions(updatedDimensions);
-
-    // Update variant.dimension
     setAddon((prev) => ({
       ...prev,
       dimension: `${updatedDimensions.height}x${updatedDimensions.length}x${updatedDimensions.width}`,
@@ -109,7 +102,7 @@ function VendorEditAddon({
     if (droppedFile) {
       setAddon((prevVariants) => ({
         ...prevVariants,
-        image: droppedFile, // Update mainImage field
+        image: droppedFile,
       }));
       setFile(droppedFile);
       setPreview(URL.createObjectURL(droppedFile));
@@ -119,8 +112,6 @@ function VendorEditAddon({
   const removeFile = () => {
     setFile(null);
     setPreview(null);
-
-    // Reset file input value to allow same file selection again
     if (fileInputRef.current) {
       fileInputRef.current.value = null;
     }
@@ -134,11 +125,11 @@ function VendorEditAddon({
   };
 
   const handleMainImageChange = (e) => {
-    const file = e.target.files[0]; // Get the selected file
+    const file = e.target.files[0];
     if (file) {
       setAddon((prevVariants) => ({
         ...prevVariants,
-        image: file, // Update mainImage field
+        image: file,
       }));
       setFile(file);
       setPreview(URL.createObjectURL(file));
@@ -161,14 +152,13 @@ function VendorEditAddon({
 
     try {
       setIsSubmitting(true);
-      // Check if the product already exists based on category, subcategory, and subSubCategory
       const { data: existingProduct, error: existingProductError } =
         await supabase
           .from("products")
           .select("id")
           .eq("category", category)
           .eq("subcategory", selectedSubcategories)
-          .eq("subcategory1", subSubCategory) // subSubCategory is from the state
+          .eq("subcategory1", subSubCategory)
           .single();
 
       if (existingProductError && existingProductError.code !== "PGRST116") {
@@ -178,10 +168,8 @@ function VendorEditAddon({
 
       let productId;
       if (existingProduct) {
-        // If the product already exists, use the existing product ID
         productId = existingProduct.id;
       } else {
-        // Insert a new product if it doesn't exist
         const { data: Product, error: insertError } = await supabase
           .from("products")
           .insert({
@@ -201,7 +189,6 @@ function VendorEditAddon({
         productId = Product.id;
       }
 
-      // Handle the addons
       const { data: addonCategory, error: addonCategoryError } = await supabase
         .from("addons")
         .insert({ title: subSubCategory, productid: productId })
@@ -217,9 +204,6 @@ function VendorEditAddon({
       const addonId = addonCategory.id;
 
       const { image, title, price } = addon;
-
-      //   image upload
-      //   let addonVariantImage;
       if (image && title && price && file) {
         const { data: addonVariantImage, error: addonVariantImageError } =
           await supabase.storage
@@ -236,8 +220,6 @@ function VendorEditAddon({
         addon.image = addonVariantImage.path;
         setPreview(addonVariantImage.path);
       }
-
-      //   addon update
       const { error: addonVariantError } = await supabase
         .from("addon_variants")
         .update({
@@ -273,8 +255,6 @@ function VendorEditAddon({
       setIsSubmitting(false);
     }
   };
-
-  // get the categories based on the category and type
   useEffect(() => {
     if (category !== "HVAC" && category !== "Civil / Plumbing") {
       const filter = AllCatArray.filter((cat) => cat.name === category).flatMap(
@@ -313,7 +293,6 @@ function VendorEditAddon({
     }
   }, [category, subSubCategory, AllCatArray]);
 
-  // clear the form
   const handleFormClear = () => {
     setAddon({
       title: "",

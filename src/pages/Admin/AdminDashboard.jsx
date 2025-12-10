@@ -93,24 +93,15 @@ function AdminDashboard() {
   const [iseditopen, setIsEditopen] = useState(true);
   const [query, setQuery] = useState();
   const [isAddProduct, setIsAddProduct] = useState(false);
-  const [openMenuId, setOpenMenuId] = useState(null); // Store the ID of the row with an open menu
+  const [openMenuId, setOpenMenuId] = useState(null);
   const [isExpanded, setIsExpanded] = useState(false);
   const [selectedProductview, setSelectedProductview] = useState();
   const [productPreview, setProductPreview] = useState(false);
   const [selectedVendor, setSelectedVendor] = useState(null);
-
-  //user refresh
   const [isrefresh, setIsrefresh] = useState(false);
-
-  //venbdor refresh
   const [isvendorRefresh, setIsvendorRefresh] = useState(false);
-  //product refresh
   const [isproductRefresh, setIsProductRefresh] = useState(false);
-
-  //addon refresh
   const [isaddonRefresh, setIsAddonRefresh] = useState(false);
-
-  // vendorproductlist
   const [vendorproductlist, setVendorproductlist] = useState(false);
 
   const [products, setProducts] = useState([]);
@@ -168,7 +159,6 @@ function AdminDashboard() {
 
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedSubCategory, setSelectedSubCategory] = useState("");
-  // state for filter
   const [isOpen, setIsOpen] = useState(false);
   const [filterDropdown, setFilterDropdown] = useState(false);
   const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
@@ -473,32 +463,24 @@ function AdminDashboard() {
   };
   const tableRef = useRef(null);
   const scrollContainerRef = useRef(null);
-  const [itemsPerPage, setItemsPerPage] = useState(10); // Default (gets updated dynamically)
+  const [itemsPerPage, setItemsPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
   const [lastPageBeforeSearch, setLastPageBeforeSearch] = useState(1);
   const [isSearching, setIsSearching] = useState(false);
-  const [searchQuery, setSearchQuery] = useState(""); // to store the latest search input
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedUser, setSelectedUser] = useState(null);
+  const [selectedindex, setSelectedindex] = useState();
+  const [editProduct, setEditProduct] = useState(false);
+  const [selectedproduct, setSelectedproduct] = useState(null);
+  const [editAddon, setEditAddon] = useState(false);
+  const [selectedAddon, setSelectedAddon] = useState(null);
+  const [selectedItemForDelete, setSelectedItemForDelete] = useState([]);
 
   const items = toggle ? filteredProducts : filteredAddons;
   const totalPages = Math.ceil(items.length / itemsPerPage);
 
-  //state
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedUser, setSelectedUser] = useState(null);
-  const [selectedindex, setSelectedindex] = useState();
-
-  // new edit option product
-  const [editProduct, setEditProduct] = useState(false);
-  const [selectedproduct, setSelectedproduct] = useState(null);
-
-  //new edit option addon
-  const [editAddon, setEditAddon] = useState(false);
-  const [selectedAddon, setSelectedAddon] = useState(null);
-
-  // mutliple delete checkbox
-  const [selectedItemForDelete, setSelectedItemForDelete] = useState([]);
-
-  //handle functions
   const handleDeletevendirClick = (user, index) => {
     setSelectedUser(user);
     setIsModalOpen(true);
@@ -579,7 +561,6 @@ function AdminDashboard() {
     } finally {
       setMultipleDeleteWaring(false);
       setSelectedItemForDelete([]);
-      // Refresh whichever category is being deleted
       setIsProductRefresh(true);
       setIsAddonRefresh(true);
     }
@@ -607,7 +588,6 @@ function AdminDashboard() {
     };
   }, []);
 
-  // Slice the items for pagination
   const paginatedItems = sortedSource.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
@@ -687,7 +667,6 @@ function AdminDashboard() {
 
   useEffect(() => {
     const handleClickOutside = (event) => {
-      // If clicking inside the menu OR the menu button, do nothing
       if (
         openMenuId !== null &&
         (menuRef.current[openMenuId]?.contains(event.target) ||
@@ -695,8 +674,6 @@ function AdminDashboard() {
       ) {
         return;
       }
-
-      // Otherwise, close the menu
       setOpenMenuId(null);
     };
 
@@ -720,7 +697,7 @@ function AdminDashboard() {
     try {
       if (selectedProductview && selectedProductview.type === "product") {
         await supabase
-          .from("product_variants") // Ensure this matches your table name
+          .from("product_variants")
           .delete()
           .eq("id", selectedProductview.id);
 
@@ -730,7 +707,7 @@ function AdminDashboard() {
 
       if (selectedProductview.type === "addon") {
         await supabase
-          .from("addon_variants") // Ensure this matches your table name
+          .from("addon_variants")
           .delete()
           .eq("id", selectedProductview.id);
         toast.success("Product deleted successfully!");
@@ -763,7 +740,7 @@ function AdminDashboard() {
         if (storageError) throw storageError;
       }
 
-      setProductPreview(false); // Close the modal after deletion
+      setProductPreview(false);
     } catch (error) {
       console.log(error);
     } finally {
@@ -791,13 +768,12 @@ function AdminDashboard() {
     try {
       if (product && product.type === "product") {
         await supabase
-          .from("product_variants") // Table name
+          .from("product_variants")
           .update({
             status: newStatus,
-            // ...(newStatus === "rejected" && { reject_reason: reason }),
             reject_reason: reason,
           })
-          .eq("id", product.id); // Matching row
+          .eq("id", product.id);
         toast.success(`product ${newStatus}`);
         setRejectReasonPopup(false);
         setRejectReason("");
@@ -863,12 +839,7 @@ function AdminDashboard() {
     });
   };
 
-  // const handleOrders = () => {
-  //   sidebarDispatch({ type: "TOGGLE_SECTION", payload: SECTIONS.ORDERS });
-  // };
-
   const getvendors = async () => {
-    // Query the profiles table for phone and companyName
     try {
       const { data } = await supabase
         .from("users_profiles")
@@ -886,7 +857,6 @@ function AdminDashboard() {
 
   const getusers = async () => {
     try {
-      // Query the profiles table for phone and companyName
       const { data } = await supabase
         .from("users_profiles")
         .select("*")
@@ -976,13 +946,6 @@ function AdminDashboard() {
 
         {/* Menu Items */}
         <div className="font-semibold text-lg capitalize leading-normal tracking-wide py-3 xl:py-4 text-[#262626] flex flex-col gap-2 px-3">
-          {/* <h3
-            className={`capitalize text-[#A1A1A1] ${
-              isExpanded ? "mx-4" : "hidden"
-            }`}
-          >
-            main
-          </h3> */}
           <SidebarItem
             icon={<MdOutlineSpaceDashboard />}
             text="Dashboard"
@@ -1025,13 +988,6 @@ function AdminDashboard() {
             isExpanded={isExpanded}
             currentSection={sidebarstate?.currentSection}
           />
-          {/* <SidebarItem
-            icon={<BsBoxSeam />}
-            text="orders"
-            onClick={handleOrders}
-            isExpanded={isExpanded}
-            currentSection={sidebarstate?.currentSection}
-          /> */}
           <SidebarItem
             icon={<TbCalculator />}
             text="formulae"
@@ -1067,30 +1023,6 @@ function AdminDashboard() {
             isExpanded={isExpanded}
           />
         </div>
-
-        {/* Other Items */}
-        {/* <div className="font-semibold text-lg capitalize leading-normal tracking-wide  text-[#262626] flex flex-col gap-2 px-3">
-          <h3
-            className={`capitalize text-[#A1A1A1] ${
-              isExpanded ? "mx-4" : "hidden"
-            }`}
-          >
-            other
-          </h3>
-          <SidebarItem
-            icon={<RiSettingsLine />}
-            text="Setting"
-            onClick={handlesetting}
-            isExpanded={isExpanded}
-            currentSection={sidebarstate?.currentSection}
-          />
-          <SidebarItem
-            icon={<FiLogOut />}
-            text="Logout"
-            onClick={logout}
-            isExpanded={isExpanded}
-          />
-        </div> */}
       </div>
       <div className="flex flex-col h-full min-h-0 lg:gap-2 lg:px-2">
         {/* header for mobile */}
@@ -1118,23 +1050,12 @@ function AdminDashboard() {
             />
           </div>
 
-          {/* <div className=" mx-3">
-                    <MdMenuOpen size={30} />
-                  </div> */}
-
           <div
             ref={mobileMenuRef}
             className={`fixed top-0 right-0 h-full w-64 bg-white border-l z-50 transform ${
               isOpen ? "translate-x-0" : "translate-x-full"
             } transition-transform duration-300 ease-in-out shadow-lg`}
           >
-            {/* <div className="p-4 flex justify-between items-center border-b">
-                      <h2 className="text-lg font-semibold text-[#1A3365]">Menu</h2>
-                      <button onClick={() => setIsOpen(false)} className="text-xl">
-                        <FaTimes />
-                      </button>
-                    </div> */}
-
             <div className="flex gap-2 justify-center items-center mt-6">
               <div>
                 <img
@@ -1192,20 +1113,6 @@ function AdminDashboard() {
                 onClick={handleschedule}
                 setIsOpen={setIsOpen}
               />
-              {/* <MobileMenuItem
-                icon={<BsBoxSeam />}
-                title="Orders"
-                currentSection={sidebarstate?.currentSection}
-                onClick={handleOrders}
-                setIsOpen={setIsOpen}
-              /> */}
-              {/* <MobileMenuItem
-                icon={<BsBoxSeam />}
-                title="Orders"
-                currentSection={sidebarstate?.currentSection}
-                onClick={handleOrders}
-                setIsOpen={setIsOpen}
-              /> */}
               <MobileMenuItem
                 icon={<RiFormula />}
                 title="Formulae"
@@ -1240,7 +1147,6 @@ function AdminDashboard() {
             </ul>
           </div>
         </div>
-        {/* header for dashboard */}
         <div className="flex justify-between items-center border-b border-[#CCCCCC] lg:border-2 lg:border-[#334A78] lg:rounded-lg bg-white  lg:h-[50px] shrink-0">
           <div className="mx-3">
             <h3 className="font-semibold text-2xl text-[#374A75] capitalize ">
@@ -1261,13 +1167,9 @@ function AdminDashboard() {
             />
           </div>
         </div>
-
-        {/* div for dashboard */}
         {sidebarstate.dashboard && (
           <div className="flex flex-col h-full min-h-0 loverflow-hidden lg:border-2 border-[#334A78] rounded-lg bg-[#fff]">
-            {/* for dashboard */}
             <div className="w-full flex-1 flex overflow-y-auto scrollbar-hide  py-2 px-3">
-              {/* <p>this part is under working</p> */}
               <div className="xl:flex justify-evenly gap-4 w-full flex-1">
                 <div className="p-4 flex-1">
                   <DashboardCards
@@ -1291,7 +1193,6 @@ function AdminDashboard() {
           </div>
         )}
 
-        {/* setting */}
         {sidebarstate?.isSettingOpen && (
           <div className="flex flex-col h-full min-h-0 overflow-hidden lg:border-2 lg:border-[#334A78] lg:rounded-lg bg-white">
             {iseditopen ? (
@@ -1307,8 +1208,6 @@ function AdminDashboard() {
             )}
           </div>
         )}
-
-        {/* product */}
         {sidebarstate.isProductOpen && (
           <div className="flex flex-col h-full min-h-0 overflow-hidden lg:border-2 lg:border-[#334A78] lg:rounded-lg bg-white">
             <div className="scrollbar-hide h-full overflow-y-auto">
@@ -1337,7 +1236,6 @@ function AdminDashboard() {
                   setIsAddonRefresh={setIsAddonRefresh}
                 />
               ) : (
-                // Default product list and add product UI
                 <div className="relative">
                   <div className="sticky top-0 z-20 bg-white">
                     <div className="hidden lg:flex justify-between items-center px-4 py-2 border-b-2 border-b-gray-400 ">
@@ -1393,8 +1291,6 @@ function AdminDashboard() {
                                   <option value="rejected">Rejected</option>
                                 </select>
                               </div>
-
-                              {/* category */}
                               <div>
                                 <label className="text-sm text-[#374A75]">
                                   Categories
@@ -1428,8 +1324,6 @@ function AdminDashboard() {
                                   ))}
                                 </select>
                               </div>
-
-                              {/* subcategory (conditional) */}
                               {selectedCategory && (
                                 <div>
                                   <label className="text-sm text-[#374A75]">
@@ -1468,8 +1362,6 @@ function AdminDashboard() {
                                   </select>
                                 </div>
                               )}
-
-                              {/* price range */}
                               <div>
                                 <label className="text-sm text-[#374A75]">
                                   Price (₹)
@@ -1519,8 +1411,6 @@ function AdminDashboard() {
                                   />
                                 </div>
                               </div>
-
-                              {/* date range */}
                               <div>
                                 <label className="text-sm text-[#374A75]">
                                   Date
@@ -1566,13 +1456,10 @@ function AdminDashboard() {
                                   />
                                 </div>
                               </div>
-
-                              {/* actions: Clear filters */}
                               <div className="flex justify-end">
                                 <button
                                   type="button"
                                   onClick={() => {
-                                    // reset local filter states
                                     setSelected("");
                                     setSelectedCategory("");
                                     setSelectedSubCategory("");
@@ -1580,7 +1467,6 @@ function AdminDashboard() {
                                     setPriceMax("");
                                     setDateFrom("");
                                     setDateTo("");
-                                    // keep dropdown open (you can close if you prefer)
                                     applyFilters({
                                       query: searchQuery,
                                       category: "",
@@ -1683,12 +1569,9 @@ function AdminDashboard() {
                               src="/images/icons/filter-icon.png"
                               alt="filter icon"
                             />
-                            {/* <span className="text-sm">Filter</span> */}
-                            {/* <ChevronDownIcon className="h-4 w-4 text-gray-500" /> */}
                           </button>
                           {filterDropdown && (
                             <div className="absolute mt-2 w-40 -left-full bg-white border rounded-md shadow-lg z-10 p-3">
-                              {/* status filter */}
                               <div>
                                 <label className=" text-[#374A75]">
                                   Status
@@ -1776,8 +1659,6 @@ function AdminDashboard() {
                             </div>
                           )}
                         </div>
-
-                        {/* export button */}
                         <div className="">
                           <button
                             onClick={() => {
@@ -1802,7 +1683,6 @@ function AdminDashboard() {
                             <IoCloudDownloadOutline size={20} color="#374A75" />
                           </button>
                         </div>
-                        {/* search button */}
                         <div>
                           <button
                             onClick={() => setMobileSearchOpen(true)}
@@ -1851,7 +1731,6 @@ function AdminDashboard() {
                       <Spinner />
                     ) : items.length > 0 ? (
                       <>
-                        {/* // <section className="mt-2 flex-1 overflow-hidden px-8"> */}
                         <section className="hidden lg:block h-[72%] font-Poppins overflow-hidden">
                           <div
                             className="w-full h-full border-t border-b border-[#CCCCCC] overflow-y-auto custom-scrollbar"
@@ -2055,7 +1934,6 @@ function AdminDashboard() {
                       </>
                     ))}
 
-                  {/* Pagination Controls (Always Visible) */}
                   <PagInationNav
                     totalPages={totalPages}
                     currentPage={currentPage}
@@ -2092,10 +1970,8 @@ function AdminDashboard() {
           <ClientBoq setClientBoqs={setClientBoqs} />
         )}
 
-        {/*vendor page */}
         {sidebarstate.isVendorOpen && !vendorproductlist && (
           <div className="flex flex-col h-full min-h-0 overflow-hidden lg:border-2 lg:border-[#334A78] lg:rounded-lg bg-white">
-            {/* for dashboard */}
             <div className="w-full flex flex-col overflow-y-auto scrollbar-hide h-[calc(100vh-120px)] pb-2 px-3">
               <div className=" sticky top-0 z-20 bg-[#FFF]">
                 <div className="flex justify-between items-center px-4 py-2 border-b-2 border-b-gray-400 ">
@@ -2163,7 +2039,6 @@ function AdminDashboard() {
                   </div>
                 </div>
               </div>
-              {/* client card for display */}
 
               <div
                 className={`grid grid-cols-1 md:grid-cols-2  ${
@@ -2178,13 +2053,11 @@ function AdminDashboard() {
                       key={index}
                       className={`w-full max-w-xs rounded-lg border overflow-hidden shadow-md bg-white relative flex flex-col p-2`}
                     >
-                      {/* Top Section */}
                       <div
                         className={` ${
                           isExpanded ? " gap-2 py-3 px-1" : "gap-3 py-4 px-2"
                         } flex items-start  relative`}
                       >
-                        {/* Profile Image */}
                         <img
                           src={user?.profile_image}
                           alt="profile"
@@ -2193,7 +2066,6 @@ function AdminDashboard() {
                           }  rounded-full object-cover border border-[#ccc]`}
                         />
 
-                        {/* Name and Email */}
                         <div className="flex flex-col justify-center">
                           <h2
                             className={`${
@@ -2211,7 +2083,6 @@ function AdminDashboard() {
                           </p>
                         </div>
 
-                        {/* Delete Icon */}
                         <button
                           onClick={() => handleDeletevendirClick(user, index)}
                           className="absolute top-2 right-2 text-black hover:text-red-500"
@@ -2219,7 +2090,7 @@ function AdminDashboard() {
                           <MdDeleteOutline size={20} />
                         </button>
                       </div>
-                      {/* Bottom Section */}
+
                       <div
                         onClick={() => {
                           setSelectedVendor(user); // Store selected vendor
@@ -2279,7 +2150,6 @@ function AdminDashboard() {
           />
         )}
 
-        {/* create profile */}
         {sidebarstate.isCreateOpen && (
           <div className="flex flex-col h-full min-h-0 overflow-hidden lg:border-2 lg:border-[#334A78] lg:rounded-lg bg-white">
             <div className="overflow-y-auto scrollbar-hide h-[calc(100vh-120px)] rounded-3xl relative ">
@@ -2287,21 +2157,11 @@ function AdminDashboard() {
             </div>
           </div>
         )}
-
-        {/* schedule  */}
         {sidebarstate.isScheduleOpen && <Schedule />}
-
-        {/* Formulae */}
         {sidebarstate.isFormulaeOpen && <FormulaEditor />}
-
-        {/* Category Editor */}
         {sidebarstate.isCategoryEditorOpen && <CategoryEditor />}
-
-        {/* Orders */}
-        {/* {sidebarstate.isOrdersOpen && <Orders />} */}
       </div>
-      {/* </div> */}
-      {/* product preview */}
+
       {productPreview && (
         <DashboardProductCard
           onClose={() => {
@@ -2319,7 +2179,6 @@ function AdminDashboard() {
           setSelectSubcategories={setSelectSubcategories}
         />
       )}
-      {/* delete waring for single item  */}
       {deleteWarning && (
         <div className="flex justify-center items-center fixed inset-0 z-30">
           <div className="absolute inset-0 bg-black opacity-50"></div>
@@ -2355,7 +2214,6 @@ function AdminDashboard() {
         </div>
       )}
 
-      {/* delete waring for multiple select item */}
       {multipleDeleteWaring && (
         <MultipleDeleteWarningCard
           setDeleteWarning={setMultipleDeleteWaring}

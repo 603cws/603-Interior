@@ -20,10 +20,6 @@ function VendorProductCard({
   const [showTextarea, setShowTextarea] = useState(false);
   const [deleteWarning, setDeleteWarning] = useState(false);
   const { accountHolder } = useApp();
-
-  // const baseImageUrl =
-  //   "https://bwxzfwsoxwtzhjbzbdzs.supabase.co/storage/v1/object/public/addon/";
-
   const currentStatus = product.status;
 
   const additionalImages = product?.additional_images
@@ -103,10 +99,6 @@ function VendorProductCard({
                 {!showTextarea ? (
                   <div className="flex justify-center gap-2 flex-1 transition-all duration-500">
                     <button
-                      // onClick={() => {
-                      //   updateStatus(product, "approved");
-                      //   setRejectReason("");
-                      // }}
                       onClick={() => {
                         setSelectedItem(product);
                         setSelectSubcategories(true);
@@ -147,7 +139,6 @@ function VendorProductCard({
                       className="px-7 py-3 border-2 border-red-400 transition-all duration-500 flex flex-col justify-center items-center"
                     >
                       <IoCloseCircleOutline size={25} />
-                      {/* Reject */}
                     </button>
                     <textarea
                       className={`flex-1 p-2 border rounded-md transition-all duration-500 ${
@@ -176,13 +167,6 @@ function VendorProductCard({
             <div className="flex text-[#000] justify-between  w-full p-4">
               {accountHolder.role !== "user" && (
                 <button
-                  // onClick={() => {
-                  //   handleDelete(product);
-                  // }}
-                  // onClick={() => {
-                  //   setDeleteWarning(true);
-                  // }}
-
                   onClick={() => setDeleteWarning(true)}
                   className="px-3 py-2 capitalize border-[#FF6666] border-2 rounded-2xl flex justify-center items-center gap-2"
                 >

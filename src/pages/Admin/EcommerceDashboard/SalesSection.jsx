@@ -209,7 +209,6 @@ function SalesSection() {
         <h2 className="font-semibold text-gray-700">Sales Overview</h2>
 
         <div className="flex items-center gap-2">
-          {/* Chart type toggle */}
           <div className="flex rounded-lg overflow-hidden border border-gray-300">
             <button
               onClick={() => setChartType("bar")}
@@ -289,8 +288,6 @@ function SalesSection() {
               </p>
             </div>
           </div>
-
-          {/* ApexCharts */}
           <Chart
             key={chartKey}
             options={chartType === "pie" ? pieOptions : barOptions}

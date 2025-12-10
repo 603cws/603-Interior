@@ -90,8 +90,6 @@ function CareerDash() {
             careerstate?.viewDetails) && (
             <button
               onClick={() => {
-                // setCreateJobPost(false);
-                // setIsJobEdit(false);
                 careerDispatch({
                   type: "TOGGLE_SECTION",
                   payload: SECTIONS?.JOBPOSTINGS,
@@ -104,8 +102,6 @@ function CareerDash() {
           {careerstate?.canditateDetail && (
             <button
               onClick={() => {
-                // setCreateJobPost(false);
-                // setIsJobEdit(false);
                 careerDispatch({
                   type: "TOGGLE_SECTION",
                   payload: SECTIONS?.VIEWJOBDETAILS,
@@ -126,7 +122,6 @@ function CareerDash() {
                   payload: SECTIONS?.ADDJOB,
                 });
               }}
-              //   onClick={() => setCreateJobPost((prev) => !prev)}
               className="px-2 py-1 md:px-4 md:py-2 border border-[#CCCCCC] rounded-md text-[#374A75] text-lg font-medium hover:bg-[#f1f1f1] flex items-center gap-1"
             >
               + <span className="hidden lg:block">Add Job</span>
@@ -142,17 +137,14 @@ function CareerDash() {
               key={job?.id}
               jobdata={job}
               jobApplication={jobApplication}
-              //   setIsJobEdit={setIsJobEdit}
               setjobEditData={setjobEditData}
               careerDispatch={careerDispatch}
               setAllCanditate={setAllCanditate}
-              //   setCreateJobPost={setCreateJobPost}
             />
           ))}
         </div>
       )}
-      {careerstate?.addposting && <JobPostForm />}{" "}
-      {/* {createJobPost && <JobPostForm />}{" "} */}
+      {careerstate?.addposting && <JobPostForm />}
       {careerstate?.editPosting && (
         <JobPostForm
           jobdata={jobEditData}

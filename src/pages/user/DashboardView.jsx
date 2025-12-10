@@ -132,19 +132,16 @@ function DashboardView({
 
   return (
     <div className="lg:w-full container mx-auto max-w-sm md:max-w-full flex flex-col lg:flex-row overflow-auto lg:overflow-y-auto scrollbar-hide  py-2 px-3 font-Poppins">
-      {/* dashboard area layout */}
       <div className="xl:w-2/3">
         <div className="p-2 lg:p-4 border border-[#ccc] rounded-lg">
           <h2 className="capitalize font-semibold mb-2 text-base lg:text-xl">
             Layout Information : selected boq {selectedBoq?.boqTitle || "NA"}
           </h2>
-          {/* div containing information */}
           <div
             className={`flex flex-col ${
               isExpanded ? "flex-wrap" : "md:flex-wrap xl:flex-nowrap"
             } items-center gap-3 md:items-stretch md:flex-row lg:gap-10`}
           >
-            {/* each icon  */}
             <LayoutInfoCard
               selectedBoq={selectedBoq}
               value={selectedBoq?.layout?.totalArea}
@@ -167,12 +164,10 @@ function DashboardView({
             />
           </div>
         </div>
-        {/* dashboard boq part */}
         <div className="p-3 border border-[#ccc] rounded-lg mt-6 ">
           <h3 className="capitalize font-semibold mb-2 text-base lg:text-xl">
             BOQ generated
           </h3>
-          {/* boq card */}
           <div
             className={`flex gap-2 lg:gap-3 flex-wrap justify-center ${
               isExpanded ? "md:justify-normal" : "md:justify-between"

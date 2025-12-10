@@ -5,23 +5,37 @@ import { useEffect, useState } from "react";
 import { BsThreeDots } from "react-icons/bs";
 import { supabase } from "../../services/supabase";
 
+const timeSlots = [
+  "09:00 am",
+  "10:00 am",
+  "11:00 am",
+  "12:00 pm",
+  "01:00 pm",
+  "02:00 pm",
+  "03:00 pm",
+  "04:00 pm",
+  "05:00 pm",
+  "06:00 pm",
+  "07:00 pm",
+  "08:00 pm",
+];
+
+const columns = ["GMT+5", "Mon", "Tue", "Wed", "Thrus", "Fri", "Sat"];
 function Schedule() {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [weekRange, setWeekRange] = useState({ start: "", end: "" });
   const [scheduleData, setScheduleData] = useState();
 
-  const columns = ["GMT+5", "Mon", "Tue", "Wed", "Thrus", "Fri", "Sat"];
-
   const formatScheduleData = (data) => {
     let scheduleData = {};
 
     data.forEach((entry) => {
-      const parsedTimeSlot = JSON.parse(entry.time_slot); // Parse the JSON string
-      const company = entry.company_name; // Extract company name
+      const parsedTimeSlot = JSON.parse(entry.time_slot);
+      const company = entry.company_name;
 
       for (const [day, slots] of Object.entries(parsedTimeSlot)) {
         if (!scheduleData[day]) {
-          scheduleData[day] = {}; // Initialize the day if not present
+          scheduleData[day] = {};
         }
 
         for (const [startTime, timeRange] of Object.entries(slots)) {
@@ -35,37 +49,20 @@ function Schedule() {
 
     return scheduleData;
   };
-  const timeSlots = [
-    "09:00 am",
-    "10:00 am",
-    "11:00 am",
-    "12:00 pm",
-    "01:00 pm",
-    "02:00 pm",
-    "03:00 pm",
-    "04:00 pm",
-    "05:00 pm",
-    "06:00 pm",
-    "07:00 pm",
-    "08:00 pm",
-  ];
 
-  // Function to get start and end date of the week in 'date/month/year' format
   const getWeekRange = (date) => {
-    const dayOfWeek = date.getDay(); // 0 (Sunday) to 6 (Saturday)
+    const dayOfWeek = date.getDay();
     const startDate = new Date(date);
     const endDate = new Date(date);
 
-    startDate.setDate(date.getDate() - dayOfWeek + 1); // Move to Monday
-    endDate.setDate(date.getDate() + (6 - dayOfWeek)); // Move to Sunday
+    startDate.setDate(date.getDate() - dayOfWeek + 1);
+    endDate.setDate(date.getDate() + (6 - dayOfWeek));
 
     const formatDate = (d) =>
       `${d.getDate()}/${d.getMonth() + 1}/${d.getFullYear()}`;
 
     return { start: formatDate(startDate), end: formatDate(endDate) };
   };
-
-  // Update weekRange whenever selectedDate changes
   useEffect(() => {
     const newWeekRange = getWeekRange(selectedDate);
     setWeekRange(newWeekRange);
@@ -80,7 +77,7 @@ function Schedule() {
   const handleDateChange = (date) => {
     setSelectedDate(date);
     const newWeekRange = getWeekRange(date);
-    setWeekRange(newWeekRange); // This will trigger the useEffect above
+    setWeekRange(newWeekRange);
   };
 
   function formatDate(d) {
@@ -128,11 +125,9 @@ function Schedule() {
                 <LuPlus />
                 <p className="">Appointment</p>
               </div>
-              {/* calender */}
               <div className="flex justify-center items-center my-10">
                 <Calendar
                   onChange={handleDateChange}
-                  //   onChange={getdata}
                   value={selectedDate}
                   minDate={new Date()}
                   tileDisabled={({ date }) =>
@@ -158,8 +153,6 @@ function Schedule() {
                 </div>
               </div>
             </div>
-
-            {/* second div of grid for table */}
             <div className="hidden lg:block">
               <h4 className="border-b-2 border-b-[#000] text-[#3D194F] capitalize">
                 {weekRange
@@ -168,7 +161,6 @@ function Schedule() {
               </h4>
               <div className="overflow-x-auto">
                 <table className="w-full border-collapse border border-[#ccc] text-[#3D194F] ">
-                  {/* Table Header */}
                   <thead>
                     <tr className="">
                       {columns.map((col, index) => (
@@ -181,17 +173,12 @@ function Schedule() {
                       ))}
                     </tr>
                   </thead>
-
-                  {/* Table Body */}
                   <tbody className="3xl:[&_td]:py-4">
                     {timeSlots.map((time, rowIndex) => (
                       <tr key={rowIndex} className="">
-                        {/* Time Slot Column */}
                         <td className="border border-[#ccc] px-4 py-2 font-bold">
                           {time}
                         </td>
-
-                        {/* Dynamic Data Columns for Mon-Sat */}
                         {scheduleData &&
                           columns.slice(1).map((day, colIndex) => (
                             <td
@@ -218,8 +205,6 @@ function Schedule() {
                 </table>
               </div>
             </div>
-
-            {/* card for mobile and tab */}
             <div className="lg:hidden">
               {scheduleData && (
                 <div className="m-3">

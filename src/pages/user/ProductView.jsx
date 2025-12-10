@@ -1,6 +1,6 @@
 import { baseImageUrl } from "../../utils/HelperConstant";
 
-function ProductView({ onClose, product, handleDelete }) {
+function ProductView({ onClose, product }) {
   const additionalImages = product?.additional_images
     ? JSON.parse(product.additional_images)
     : [];
@@ -84,12 +84,6 @@ function ProductView({ onClose, product, handleDelete }) {
             className="px-4 py-2 border border-gray-400 rounded-md"
           >
             Back
-          </button>
-          <button
-            onClick={handleDelete}
-            className="hidden px-4 py-2 text-white bg-red-500 rounded-md"
-          >
-            Delete
           </button>
         </div>
       </div>

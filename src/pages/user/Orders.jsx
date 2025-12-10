@@ -66,8 +66,6 @@ function Orders() {
     setSelectedOrder(order);
   };
 
-  // cancel order function
-
   async function handleOrderCancel(order) {
     setEntireOrderCancellation((prev) => !prev);
 
@@ -86,8 +84,6 @@ function Orders() {
     const uniqueId = uuidv4();
 
     const refundAmountInPaisa = order?.final_amount * 100;
-
-    // note this function for entire order cancellation
     const reqbody = {
       amount: refundAmountInPaisa,
       orderId: order?.id,
@@ -106,8 +102,6 @@ function Orders() {
       const data = await res.json();
 
       if (data?.success) {
-        // code to update in the dB
-        // step 1 ->update the status to cancelled
         await supabase
           .from("orders_table")
           .update({
@@ -262,10 +256,7 @@ function Orders() {
               ))}
             </div>
           ) : detailedView && !productView ? (
-            <OrderProducts
-              orderID={selectedOrder?.id}
-              // handleProductView={handleProductView}
-            />
+            <OrderProducts orderID={selectedOrder?.id} />
           ) : (
             <OrderProductView order={selectedOrder} product={selectedProduct} />
           )}
@@ -354,8 +345,6 @@ function OrderProducts({ orderID }) {
       }
 
       if (data?.success) {
-        // code to update in the dB
-        // step 1 ->update the status to partiallycanccelled
         const { error: orddererror } = await supabase
           .from("orders_table")
           .update({

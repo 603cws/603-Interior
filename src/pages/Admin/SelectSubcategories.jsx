@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { IoIosCloseCircleOutline } from "react-icons/io";
 import { baseImageUrl } from "../../utils/HelperConstant";
 import { supabase } from "../../services/supabase";

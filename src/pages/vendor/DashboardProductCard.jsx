@@ -211,7 +211,6 @@ function DashboardProductCard({
                       className="px-2 md:px-5 py-1 md:py-2 border-4 border-red-400 transition-all duration-500 flex flex-col justify-center items-center text-xs md:text-sm"
                     >
                       <IoCloseCircleOutline size={25} />
-                      {/* Reject */}
                     </button>
                     <textarea
                       className={`flex-1 px-2 md:px-5 py-1 md:py-2 border rounded-sm transition-all duration-500 text-xs md:text-sm ${

@@ -100,7 +100,7 @@ function ClientBoq({ setClientBoqs }) {
         const { data } = await supabase
           .from("addon_variants")
           .select("*")
-          .in("id", productIdsArray); // Use Supabase `in()` filter
+          .in("id", productIdsArray);
 
         setAddons(data);
         setFilteredAddons(data);
@@ -112,7 +112,6 @@ function ClientBoq({ setClientBoqs }) {
     }
   };
 
-  //fetch the product based on the selected boq
   const fetchProductsByIds = async () => {
     try {
       if (selectedBoq) {
@@ -125,7 +124,7 @@ function ClientBoq({ setClientBoqs }) {
           .from("product_variants")
           .select("*,products(*)")
           .neq("productDisplayType", "ecommerce")
-          .in("id", productIdsArray); // Use Supabase `in()` filter
+          .in("id", productIdsArray);
 
         if (data) {
           setProducts(data);
@@ -213,10 +212,9 @@ function ClientBoq({ setClientBoqs }) {
 
   const handleTabClick = (event) => {
     setProductlist(true);
-    // setIsAddProduct(false);
-    const tab = event.target.value; // Get value from button
+    const tab = event.target.value;
     setSelectedTab(tab);
-    setToggle(tab === "products"); // Set toggle dynamically
+    setToggle(tab === "products");
     setSearchQuery("");
     setSelectedCategory("");
   };
@@ -236,7 +234,6 @@ function ClientBoq({ setClientBoqs }) {
           <Spinner />
         ) : savedBoqs.length > 0 ? (
           <div className="overflow-y-auto scrollbar-hide h-[calc(100vh-95px)] relative ">
-            {/* // Default product list and add product UI */}
             <div className="sticky top-0 z-20 bg-white">
               <button
                 onClick={() => setClientBoqs(false)}
@@ -412,10 +409,8 @@ function ClientBoq({ setClientBoqs }) {
               (isloading ? (
                 <Spinner />
               ) : selectedBoq && items.length > 0 ? (
-                // <section className="mt-2 flex-1 overflow-hidden px-8">
                 <>
                   <section className="hidden lg:block h-[90%] font-Poppins overflow-hidden">
-                    {/* <section className=" h-[90%] font-Poppins overflow-hidden"> */}
                     <div
                       ref={scrollContainerRef}
                       className=" w-full h-full border-t border-b border-[#CCCCCC] overflow-y-auto custom-scrollbar"
@@ -434,9 +429,6 @@ function ClientBoq({ setClientBoqs }) {
                             <th className="p-3  font-medium">Price</th>
                             {toggle ? (
                               <>
-                                {/* <th className="p-3 font-medium">
-                                          Details
-                                        </th> */}
                                 <th className="p-3 font-medium">Category</th>
                                 <th className="p-3 font-medium">
                                   Specification
@@ -547,7 +539,6 @@ function ClientBoq({ setClientBoqs }) {
                   )}
                 </>
               ))}
-            {/* Pagination Controls (Always Visible) */}
             {selectedBoq && (
               <div className="z-30 sticky bottom-0 bg-white py-1 text-[#3d194f]">
                 <PagInationNav

@@ -18,8 +18,6 @@ function Transactions({ sidebarDispatch, onOrderSelect }) {
         setLoadingOrders(false);
         return;
       }
-
-      // Fetch variants for products in each order, similar to Orders component
       const ordersWithVariants = await Promise.all(
         orders.map(async (order) => {
           const productVariantMap = {};

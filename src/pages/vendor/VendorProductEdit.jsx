@@ -65,15 +65,14 @@ function VendorProductEdit({
     const fetchVendorData = async () => {
       setLoading(true);
       const { data, error } = await supabase
-        .from("profiles") // your table name
-        .select("allowed_category") // select only what you need
-        .eq("id", selectedproduct?.vendor_id) // or whatever your vendor ID field is
+        .from("profiles")
+        .select("allowed_category")
+        .eq("id", selectedproduct?.vendor_id)
         .single();
 
       if (error) {
         console.error("Error fetching vendor:", error.message);
       } else {
-        // setAccountHolder(data);
         const parseddata = JSON.parse(data.allowed_category);
         setVendordata(parseddata);
       }
@@ -105,11 +104,7 @@ function VendorProductEdit({
   const handleFileChange = (event) => {
     const selectedFile = event.target.files[0];
     if (!selectedFile) return;
-
-    // setCropperFile(selectedFile); // pass freshly selected file
     setShowCropper(true);
-
-    // store original file for later
     setFile(selectedFile);
   };
 
@@ -118,20 +113,15 @@ function VendorProductEdit({
     const droppedFile = event.dataTransfer.files[0];
 
     if (!droppedFile) return;
-
-    // setCropperFile(droppedFile); // pass directly
     setShowCropper(true);
 
     setFile(droppedFile);
   };
 
-  // remove file is for main image
   const removeFile = () => {
     setFile(null);
     setPreview(null);
     setVariant((prev) => ({ ...prev, mainImage: null }));
-
-    // Reset file input value to allow same file selection again
     if (fileInputRef.current) {
       fileInputRef.current.value = null;
     }
@@ -149,16 +139,14 @@ function VendorProductEdit({
     const files = Array.from(event.target.files);
 
     if (!files.length) return;
-
-    // Enforce max 5 overall
     if (variant.additionalImages.length + files.length > 5) {
       toast.error("You can upload up to 5 additional images only.");
       mulitpleimagesFileinputref.current.value = null;
       return;
     }
 
-    setAdditionalFiles(files); // pass only NEW files to cropper
-    setShowMultiCropper(true); // open cropper
+    setAdditionalFiles(files);
+    setShowMultiCropper(true);
     mulitpleimagesFileinputref.current.value = null;
   };
 
@@ -189,12 +177,10 @@ function VendorProductEdit({
 
     setVariant((prevVariants) => ({
       ...prevVariants,
-      additionalImages: [...additionalimages], // Add a new image
+      additionalImages: [...additionalimages],
     }));
 
     const userimages = additionalimages.filter((el) => typeof el === "string");
-
-    // Update the database only for image that was previous product
     const { error } = await supabase
       .from("product_variants")
       .update({ additional_images: userimages })
@@ -204,7 +190,6 @@ function VendorProductEdit({
       console.error("Error deleting additional image:", error.message);
       toast.error("error");
     }
-    // Reset file input value to allow same file selection again
     if (mulitpleimagesFileinputref.current) {
       mulitpleimagesFileinputref.current.value = null;
     }
@@ -233,13 +218,9 @@ function VendorProductEdit({
       toast.error("images are required ");
       return;
     }
-
-    //file based additionalimages
     const filebasedadditionalimages = variant.additionalImages.filter(
       (el) => typeof el !== "string"
     );
-
-    // user previous additional images
     const useradditionalimages = variant.additionalImages.filter(
       (el) => typeof el === "string"
     );
@@ -248,7 +229,6 @@ function VendorProductEdit({
     setIsSubmitting(true);
 
     try {
-      // Check if the product already exists based on category, subcategory, and subSubCategory
       let productId;
       if (
         selectedproduct?.products?.category !== category ||
@@ -261,7 +241,7 @@ function VendorProductEdit({
             .select("id")
             .eq("category", category)
             .eq("subcategory", selectedSubcategories)
-            .eq("subcategory1", subSubCategory) // subSubCategory is from the state
+            .eq("subcategory1", subSubCategory)
             .single();
 
         if (existingProductError && existingProductError.code !== "PGRST116") {
@@ -270,16 +250,14 @@ function VendorProductEdit({
         }
 
         if (existingProduct) {
-          // If the product already exists, use the existing product ID
           productId = existingProduct.id;
         } else {
-          // Insert a new product if it doesn't exist
           const { data: Product, error: insertError } = await supabase
             .from("products")
             .insert({
               category: category,
               subcategory: selectedSubcategories,
-              subcategory1: subSubCategory || null, // Insert subSubCategory (from state)
+              subcategory1: subSubCategory || null,
             })
             .select()
             .single();
@@ -298,7 +276,6 @@ function VendorProductEdit({
       if (variant.title && variant.price && file) {
         let cleanedTitle = cleanTitle(variant.title);
         const oldImagePath = selectedproduct?.image;
-        // const uniqueID = uuidv4();
         const newImagePath = `${cleanedTitle}-main-${uniqueID}`;
 
         if (oldImagePath) {
@@ -379,11 +356,11 @@ function VendorProductEdit({
           title: variant.title,
           price: +variant.price,
           details: variant.details,
-          image: imagepath, // Store the main image path
-          additional_images: useradditionalimages, // Store paths of additional images
-          segment: variant.segment, // Store segment
-          dimensions: variant.dimension, // Store dimension
-          vendor_id: selectedproduct?.vendor_id, // Store vendor ID
+          image: imagepath,
+          additional_images: useradditionalimages,
+          segment: variant.segment,
+          dimensions: variant.dimension,
+          vendor_id: selectedproduct?.vendor_id,
           product_type: subSubCategory,
           product_id: productId,
           status: "pending",
@@ -396,7 +373,7 @@ function VendorProductEdit({
           information: variant?.information || {},
           additonalinformation: variant?.additionalInformation || {},
         })
-        .eq("id", variant.selectedProductId); // Use the correct column and value to match the row you want to update
+        .eq("id", variant.selectedProductId);
 
       if (variantError) {
         console.error(variantError);
@@ -413,7 +390,6 @@ function VendorProductEdit({
     }
   };
 
-  // get the categories based on the category and type
   useEffect(() => {
     if (category !== "HVAC" && category !== "Civil / Plumbing") {
       const filter = AllCatArray.filter((cat) => cat.name === category).flatMap(
@@ -461,14 +437,11 @@ function VendorProductEdit({
 
     setDimensions(updatedDimensions);
 
-    // Update variant.dimension
     setVariant((prev) => ({
       ...prev,
       dimension: `${updatedDimensions.height}x${updatedDimensions.length}x${updatedDimensions.width}`,
     }));
   };
-
-  // clear the form
   const handleFormClear = () => {
     setVariant((prevVariants) => ({
       ...prevVariants,
@@ -552,7 +525,6 @@ function VendorProductEdit({
         </button>
         <h3 className="capitalize font-semibold text-xl ">Edit product</h3>
       </div>
-      {/* <form action=""> */}
       <form
         className="lg:flex gap-5  px-5 w-full"
         onSubmit={onSubmit}
@@ -563,7 +535,6 @@ function VendorProductEdit({
         }}
       >
         <div className="w-full lg:w-1/2">
-          {/* div for category */}
           <div>
             <h3 className="capitalize mb-3 text-xl font-semibold">category</h3>
             <div className="w-full shadow-lg border-2 p-5 my-3 rounded-xl capitalize">
@@ -745,7 +716,6 @@ function VendorProductEdit({
               ))}
             </div>
           </div>
-          {/* div for e-commerce details */}
           {(displayOption === "ecommerce" || displayOption === "both") && (
             <div className="w-full shadow-lg border-2 p-5 my-3 rounded-xl capitalize">
               <div>
@@ -815,7 +785,6 @@ function VendorProductEdit({
               </div>
             </div>
           )}
-          {/* div for images */}
           <div>
             <div className="flex justify-start items-center gap-2 mb-3">
               <h3 className="capitalize text-xl font-semibold">
@@ -829,7 +798,6 @@ function VendorProductEdit({
                   <h4 className="text-[#7B7B7B] capitalize">main</h4>
 
                   <div className="flex items-start gap-4">
-                    {/* Upload Box */}
                     {!preview && (
                       <div
                         className="w-28 h-28 p-2 flex flex-col items-center justify-center border border-dashed rounded-lg text-center text-gray-500 cursor-pointer  hover:border-gray-400"
@@ -851,8 +819,6 @@ function VendorProductEdit({
                         </label>
                       </div>
                     )}
-
-                    {/* Hidden Input */}
                     <input
                       type="file"
                       ref={fileInputRef}
@@ -860,8 +826,6 @@ function VendorProductEdit({
                       accept="image/*"
                       onChange={handleFileChange}
                     />
-
-                    {/* Preview Box */}
                     {preview && (
                       <div className="relative w-24 h-24 border rounded-lg overflow-hidden group">
                         <img
@@ -905,7 +869,6 @@ function VendorProductEdit({
                 <h4 className="text-[#7B7B7B] capitalize">additional </h4>
 
                 <div className="flex flex-wrap gap-4">
-                  {/* Upload Box */}
                   <div
                     onDragOver={(e) => e.preventDefault()}
                     onDrop={handleAdditionalDrop}
@@ -935,8 +898,6 @@ function VendorProductEdit({
                       </span>
                     </label>
                   </div>
-
-                  {/* Preview of Cropped Images */}
                   {variant.additionalImages.map((img, index) => {
                     const imageUrl =
                       typeof img === "string"
@@ -992,7 +953,6 @@ function VendorProductEdit({
               />
             </div>
           </div>
-          {/* div for plan selection */}
           <div>
             <h3 className="capitalize mb-3 text-xl font-semibold">
               plan category
@@ -1014,7 +974,6 @@ function VendorProductEdit({
               </select>
             </div>
           </div>
-          {/* div for buttons */}
           <div className="w-full flex items-end justify-between mt-5">
             <button
               className="border-2 px-5 py-2 bg-[#374A75] text-white capitalize rounded-lg"

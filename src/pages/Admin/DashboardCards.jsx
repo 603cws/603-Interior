@@ -20,7 +20,6 @@ function DashboardCards({
   const pendingAddons = addons.filter((addon) => addon.status === "pending");
 
   return (
-    // <div>
     <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
       <div
         onClick={clients}
@@ -82,7 +81,6 @@ function DashboardCards({
         />
       </div>
     </div>
-    // </div>
   );
 }
 

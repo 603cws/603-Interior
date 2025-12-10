@@ -85,7 +85,6 @@ function Discount() {
             </div>
           </div>
           <div>
-            {/* display data of the discount */}
             <CouponTable
               selectedDiscounts={selectedDiscounts}
               setSelectedDiscounts={setSelectedDiscounts}
@@ -123,29 +122,6 @@ const CouponTable = ({
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
-
-  //   {
-  //     "id": "1adc1692-3f80-44d4-bd66-f91539dd5532",
-  //     "created_at": "2025-06-23T12:23:42.825308+00:00",
-  //     "couponName": "flat30",
-  //     "expiryDate": "2025-11-30",
-  //     "maxLimit": 50,
-  //     "discountPerc": 30,
-  //     "minAmount": 10000
-  // }
-
-  // const getStatusStyle = (status) => {
-  //   switch (status) {
-  //     case "Active":
-  //       return "bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-medium";
-  //     case "Schedule":
-  //       return "bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full text-xs font-medium";
-  //     case "Expired":
-  //       return "bg-gray-100 text-gray-500 px-3 py-1 rounded-full text-xs font-medium";
-  //     default:
-  //       return "";
-  //   }
-  // };
 
   const allSelected =
     currentBlogs.length > 0 && selectedDiscounts.length === currentBlogs.length;
@@ -230,8 +206,6 @@ function DiscountForm({ setCreateDiscount }) {
 
   async function handleDiscountSubmit(formData) {
     try {
-      // insert the data into the db
-
       const { data, error } = await supabase
         .from("coupons")
         .insert([
@@ -248,8 +222,6 @@ function DiscountForm({ setCreateDiscount }) {
       if (error) {
         throw error;
       }
-
-      // if inserted successfuly clear the form
       if (data) {
         reset();
         toast.success("coupon created successfully");

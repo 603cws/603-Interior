@@ -5,7 +5,6 @@ import { IoEyeOffOutline, IoEyeOutline } from "react-icons/io5";
 import toast from "react-hot-toast";
 
 function CreateUser() {
-  // const [role, setRole] = useState("");
   const [categories, setCategories] = useState([]);
   const [formData, setFormData] = useState({
     company: "",
@@ -18,7 +17,6 @@ function CreateUser() {
     password: "",
     confirmPassword: "",
   });
-  // const [selectedCategories, setSelectedCategories] = useState([]); // Stores selected categories
 
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] =
@@ -45,7 +43,6 @@ function CreateUser() {
         }
 
         if (Array.isArray(data)) {
-          // Format data for react-select
           const formattedCategories = data.map((category) => ({
             value: category.name,
             label: category.name,
@@ -62,8 +59,6 @@ function CreateUser() {
 
     fetchCategories();
   }, []);
-
-  // Reset category when switching to Admin
   useEffect(() => {
     if (formData.role !== "vendor") {
       setFormData((prev) => ({
@@ -105,7 +100,7 @@ function CreateUser() {
     category
   ) => {
     const { error } = await supabase.from("profiles").upsert({
-      id: userId, // Use the user ID from Supabase
+      id: userId,
       role: role,
       location: location,
       company_name: company,
@@ -138,8 +133,6 @@ function CreateUser() {
       toast.error("Category is required for Vendors!");
       return;
     }
-
-    // Password validation
     if (formData.password !== formData.confirmPassword) {
       toast.error("Passwords do not match!");
       return;
@@ -149,14 +142,14 @@ function CreateUser() {
       const { data, error } = await adminsupabase.auth.admin.createUser({
         email: formData.email,
         password: formData.password,
-        email_confirm: true, // Set to true if you want to auto-confirm the email
+        email_confirm: true,
         phone: formData.mobile,
       });
 
       if (error) {
-        console.error("Supabase Error:", error); // Logs full error object
+        console.error("Supabase Error:", error);
         toast.error(error.message || "Error creating user");
-        return; // Prevent further execution
+        return;
       }
 
       if (data.user) {
@@ -174,17 +167,14 @@ function CreateUser() {
         toast.success(`${formData.role} created successfully`);
       }
     } catch (error) {
-      // toast.error(error);
       console.log("Error signing up:", error);
     }
   };
 
   return (
-    // <div className="">
     <div className="flex-1 bg-[#FFF] mb-5 cursor-default overflow-auto ">
       <div className="h-[calc(100vh-130px)] flex-col flex justify-center items-center">
         <div className=" w-11/12 h-full bg-white p-6 flex flex-col items-center text-center">
-          {/* Header Section */}
           <div className="w-full text-left font-Poppins">
             <h4 className="text-base font-semibold text-[#374A75]">
               Let's Work Together!
@@ -199,13 +189,11 @@ function CreateUser() {
             </h2>
           </div>
 
-          {/* Form Fields */}
           <form
             onSubmit={handleSubmit}
             className="w-full lg:grid lg:grid-cols-2 gap-4 text-left text-base"
           >
             <div className="flex flex-col justify-center gap-5">
-              {/* Company Name */}
               <div className="flex flex-col">
                 <label className="font-medium">Company Name*</label>
                 <input
@@ -218,8 +206,6 @@ function CreateUser() {
                   required
                 />
               </div>
-
-              {/* Role */}
               <div className="flex flex-col">
                 <label className="font-medium">Role*</label>
                 <select
@@ -234,9 +220,6 @@ function CreateUser() {
                   <option value="vendor">Vendor</option>
                 </select>
               </div>
-
-              {/* Category (Only for Vendor) */}
-              {/* {formData.role === "vendor" && ( */}
               <div className="flex flex-col">
                 <label className="font-medium">
                   Category*{" "}
@@ -260,9 +243,6 @@ function CreateUser() {
                   }}
                 />
               </div>
-              {/* // )} */}
-
-              {/* Email ID */}
               <div className="flex flex-col">
                 <label className="font-medium">Email ID*</label>
                 <input
@@ -277,10 +257,8 @@ function CreateUser() {
               </div>
             </div>
             <div className="flex flex-col justify-center gap-5 mt-5 lg:mt-0">
-              {/* Mobile Number - Fixed Position */}
               <div className="flex flex-col">
                 <label className="font-medium">Mobile Number*</label>
-                {/* <div className="flex gap-2"> */}
                 <input
                   type="tel"
                   name="mobile"
@@ -295,10 +273,7 @@ function CreateUser() {
                   required
                   maxLength={10}
                 />
-                {/* </div> */}
               </div>
-
-              {/* Password - Always on Right Side */}
               <div className="flex flex-col relative w-full lg:max-w-md">
                 <label className="font-medium">Password*</label>
                 <input
@@ -321,8 +296,6 @@ function CreateUser() {
                   )}
                 </div>
               </div>
-
-              {/* Confirm Password - Always on Right Side */}
               <div className="flex flex-col relative w-full lg:max-w-md">
                 <label className="font-medium">Confirm Password*</label>
                 <input
@@ -345,8 +318,6 @@ function CreateUser() {
                   )}
                 </div>
               </div>
-
-              {/* Location - Fixed Position */}
               <div className="flex flex-col">
                 <label className="font-medium">Location*</label>
                 <input
@@ -364,9 +335,6 @@ function CreateUser() {
                 />
               </div>
             </div>
-
-            {/* Submit Button */}
-
             <div className="col-span-2 flex justify-start mt-5">
               <button
                 type="submit"
