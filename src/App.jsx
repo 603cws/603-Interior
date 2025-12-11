@@ -28,7 +28,6 @@ const AdminDashboardEcom = lazy(() =>
 );
 const DynamicTitle = lazy(() => import("./common-components/DynamicTitle"));
 const YouMayAlsoLike = lazy(() => import("./pages/Ecommerce/YouMayAlsoLike"));
-const Welspun = lazy(() => import("./pages/Brands/Welspun"));
 const BrandsOverview = lazy(() => import("./pages/Brands/BrandOverview"));
 const Layout = lazy(() => import("./layout/pages/Layout"));
 const Carrer = lazy(() => import("./pages/Carrer"));
