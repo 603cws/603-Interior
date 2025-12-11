@@ -268,9 +268,7 @@ function BrandsOverview() {
                   alt={brand.name}
                   className="object-scale-down w-32 h-full cursor-pointer"
                   onClick={() => {
-                    // const slug = brand.name.toLowerCase().replace(/\s+/g, "-");
-                    // navigate(`/brands/${slug}`);
-                    navigate(`/brandOverview/${brand.name}`); // or navigate(`/brands/${brand.name}`)
+                    navigate(`/brandOverview/${brand.name}`);
                   }}
                 />
               </div>

@@ -1,4 +1,3 @@
-import React from "react";
 import LandingNavbar from "../../common-components/LandingNavbar";
 import Footer from "../../common-components/Footer";
 import { useNavigate } from "react-router-dom";
