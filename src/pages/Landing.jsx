@@ -483,13 +483,15 @@ function Landing() {
               1440: { slidesPerView: 3.5 },
             }}
             modules={[Autoplay, Pagination, Navigation]}
-            className="my-10"
+            className="my-10 h-[450px]"
           >
             {featuredProjects.map((project, idx) => (
-              <SwiperSlide key={idx} className="h-[450px]">
+              <SwiperSlide key={idx} className="h-full">
                 <div
                   className="relative group w-full h-full bg-cover bg-center bg-no-repeat overflow-hidden rounded-lg"
-                  style={{ backgroundImage: `url(images/home/${project.img})` }}
+                  style={{
+                    backgroundImage: `url("../images/home/${project.img}")`,
+                  }}
                 >
                   <div className="absolute inset-0 bg-black/50 flex items-end p-5 translate-y-full group-hover:translate-y-0 transition-transform duration-700 ease-in-out" />
                   <h3 className="absolute right-0 translate-x-full group-hover:translate-x-0 bottom-5 text-white font-Georgia text-2xl text-right capitalize px-2 transition-transform duration-700 ease-in-out">
