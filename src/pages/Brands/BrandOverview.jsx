@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import LandingNavbar from "../../common-components/LandingNavbar";
 import { useNavigate } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -53,17 +53,6 @@ const heroSlides = [
     bg: "/images/brands/welspunbrand2.png",
     link: "/flooring",
   },
-];
-
-const brands = [
-  { name: "wellspun", image: "/images/ecommerce/wellspun.png" },
-  { name: "ikea", image: "/images/ecommerce/ikea.png" },
-  { name: "ikea", image: "/images/ecommerce/innova.png" },
-  { name: "ikea", image: "/images/ecommerce/fortis.png" },
-  { name: "ikea", image: "/images/ecommerce/fortis.png" },
-  { name: "ikea", image: "/images/ecommerce/fortis.png" },
-  { name: "ikea", image: "/images/ecommerce/fortis.png" },
-  { name: "ikea", image: "/images/ecommerce/fortis.png" },
 ];
 
 const categories = [
@@ -154,10 +143,78 @@ const featuredBrands = [
   },
 ];
 
+const brandImages = {
+  Furniture: [
+    { name: "furniture", image: "/images/brands/Furniture/Featherlite.png" },
+    { name: "furniture", image: "/images/brands/Furniture/godrej.webp" },
+    { name: "furniture", image: "/images/brands/Furniture/hni.jpg" },
+    {
+      name: "furniture",
+      image: "/images/brands/Furniture/Spacewood.png",
+    },
+    { name: "furniture", image: "/images/brands/Furniture/Wipro.svg" },
+  ],
+  Lighting: [
+    { name: "lighting", image: "/images/brands/Lighting/Havells.svg" },
+    { name: "lighting", image: "/images/brands/Lighting/Jaquar.svg" },
+    { name: "lighting", image: "/images/brands/Lighting/Panasonic.svg" },
+    { name: "lighting", image: "/images/brands/Lighting/Philips.svg" },
+    { name: "lighting", image: "/images/brands/Lighting/Wipro.svg" },
+    { name: "lighting", image: "/images/brands/Lighting/Syska.png" },
+  ],
+  Paint: [
+    { name: "#", image: "/images/brands/Paint/asian-paints.png" },
+    { name: "#", image: "/images/brands/Paint/berger-paints.svg" },
+    { name: "#", image: "/images/brands/Paint/birla-opus.svg" },
+    { name: "#", image: "/images/brands/Paint/DULUX.webp" },
+    { name: "#", image: "/images/brands/Paint/JSW.svg" },
+    { name: "#", image: "/images/brands/Paint/nerolac.webp" },
+    { name: "#", image: "/images/brands/Paint/nippon.svg" },
+  ],
+  HVAC: [
+    { name: "#", image: "/images/brands/HVAC/Blue_Star.png" },
+    { name: "daikin", image: "/images/brands/HVAC/DAIKIN.svg" },
+    { name: "#", image: "/images/brands/HVAC/LG.svg" },
+    { name: "#", image: "/images/brands/HVAC/Carrier.svg" },
+    { name: "#", image: "/images/brands/HVAC/Mitsubishi.svg" },
+    { name: "#", image: "/images/brands/HVAC/Voltas.png" },
+  ],
+  SmartSolutions: [
+    { name: "#", image: "/images/brands/SmartSolutions/Cisco.svg" },
+    { name: "dlink", image: "/images/brands/SmartSolutions/D-Link.svg" },
+    { name: "#", image: "/images/brands/SmartSolutions/honeywell.svg" },
+    { name: "#", image: "/images/brands/SmartSolutions/Netgear.svg" },
+    { name: "#", image: "/images/brands/SmartSolutions/Schneider.svg" },
+  ],
+  Flooring: [
+    { name: "#", image: "/images/brands/Flooring/Kajaria.png" },
+    { name: "#", image: "/images/brands/Flooring/johnson.png" },
+    {
+      name: "#",
+      image: "/images/brands/Flooring/Shaw_Industries.svg",
+    },
+    { name: "#", image: "/images/brands/Flooring/Somany.png" },
+    { name: "#", image: "/images/brands/Flooring/welspun.png" },
+  ],
+  Lux: [
+    { name: "#", image: "/images/brands/Lux/Havells.svg" },
+    { name: "#", image: "/images/brands/Lux/Jaquar.svg" },
+    { name: "#", image: "/images/brands/Lux/Panasonic.svg" },
+    { name: "#", image: "/images/brands/Lux/Philips.svg" },
+    { name: "#", image: "/images/brands/Lux/Wipro.svg" },
+    { name: "#", image: "/images/brands/Lux/Syska.png" },
+  ],
+};
+
 function BrandsOverview() {
   const navigate = useNavigate();
 
   const [selectedCategory, setSelectedCategory] = useState("Furniture");
+
+  const images = useMemo(
+    () => brandImages[selectedCategory] || [],
+    [selectedCategory]
+  );
 
   return (
     <div className="font-TimesNewRoman">
@@ -196,23 +253,25 @@ function BrandsOverview() {
       <section className="px-4 lg:container mx-auto py-10">
         <div className="relative">
           <SectionHeader title={"Brands by categories"} isborder={true} />
-          <div className="px-20">
-            <CategorySvg
-              selectedCategory={selectedCategory}
-              setSelectedCategory={setSelectedCategory}
-            />
-          </div>
-          <div className="grid grid-cols-4 lg:grid-cols-4 gap-2 pt-16">
-            {brands.map((brand, index) => (
+          <CategorySvg
+            selectedCategory={selectedCategory}
+            setSelectedCategory={setSelectedCategory}
+          />
+          <div className="grid grid-cols-2 lg:grid-cols-[repeat(auto-fit,_minmax(300px,_1fr))] gap-2 gap-y-8 pt-16">
+            {images.map((brand, idx) => (
               <div
+                key={idx}
                 className="hover:shadow-lg flex justify-center items-center w-full h-28"
-                key={index}
               >
                 <img
                   src={brand.image}
                   alt={brand.name}
-                  className="object-scale-down h-full cursor-pointer"
-                  onClick={() => navigate("welspun")}
+                  className="object-scale-down w-32 h-full cursor-pointer"
+                  onClick={() => {
+                    // const slug = brand.name.toLowerCase().replace(/\s+/g, "-");
+                    // navigate(`/brands/${slug}`);
+                    navigate(`/brandOverview/${brand.name}`); // or navigate(`/brands/${brand.name}`)
+                  }}
                 />
               </div>
             ))}
@@ -271,7 +330,7 @@ function BrandsOverview() {
                 className="bg-white rounded-xl border border-[#E4E5EA] shadow-[0_12px_30px_rgba(35,48,80,0.06)] overflow-hidden flex flex-col"
               >
                 {/* Image */}
-                <div className="w-full h-44 md:h-52 overflow-hidden">
+                <div className="w-full h-44 md:h-72 overflow-hidden">
                   <img
                     src={brand.image}
                     alt={brand.title}

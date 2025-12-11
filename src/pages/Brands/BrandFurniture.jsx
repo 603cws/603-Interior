@@ -1,10 +1,10 @@
-import Header from "../Ecommerce/Header";
+import LandingNavbar from "../../common-components/LandingNavbar";
 
 function BrandFurniture() {
   return (
     <>
       <div className="font-Poppins ">
-        <Header />
+        <LandingNavbar />
         <section className="lg:container justify-center flex items-center">
           <img
             src="/images/brands/furnitureHeader.png"

@@ -5,6 +5,7 @@ import SpinnerFullPage from "./common-components/SpinnerFullPage";
 import { useApp } from "./Context/Context";
 import PrivateRoute from "./utils/PrivateRoute";
 import ScrollToTop from "./common-components/ScrollToTop";
+import BrandRouter from "./pages/Brands/BrandRouter";
 
 // lazy loading
 const Contactus = lazy(() => import("./pages/Contactus"));
@@ -64,7 +65,6 @@ const AllReviews = lazy(() => import("./pages/Ecommerce/AllReviews"));
 
 const BrandFurniture = lazy(() => import("./pages/Brands/BrandFurniture"));
 const BrandLight = lazy(() => import("./pages/Brands/BrandLight"));
-const BrandHVAC = lazy(() => import("./pages/Brands/BrandHVAC"));
 
 const PageNotFound = lazy(() => import("./common-components/PageNotFound"));
 const Boq = lazy(() => import("./boq/pages/Boq"));
@@ -172,14 +172,13 @@ function App() {
             element={<BrandProductView />}
           />
           <Route path="/reviews/:id" element={<AllReviews />} />
-          <Route path="/brands/hvac" element={<BrandHVAC />} />
           <Route path="/brands/furniture" element={<BrandFurniture />} />
           <Route path="/brands/light" element={<BrandLight />} />
           <Route path="/brands/dlink" element={<BrandDLink />} />
           <Route path="/orderSuccess/:id" element={<OrderConfirm />} />
           <Route path="/cart/similarproducts" element={<YouMayAlsoLike />} />
           <Route path="/brandOverview" element={<BrandsOverview />} />
-          <Route path="/brandOverview/welspun" element={<Welspun />} />
+          <Route path="/brandOverview/:brandName" element={<BrandRouter />} />
           {/* testing route */}
           <Route path="/boqcompleted" element={<Boqcompleted />} />
           <Route

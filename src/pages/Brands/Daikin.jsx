@@ -1,11 +1,10 @@
-import React from "react";
-import Header from "../Ecommerce/Header";
+import LandingNavbar from "../../common-components/LandingNavbar";
 
-function BrandHVAC() {
+function Daikin() {
   return (
     <>
       <div className="font-Poppins">
-        <Header />
+        <LandingNavbar />
         <section className="lg:container px-4 my-10">
           <div className="space-y-5">
             <img src="/images/brands/hvac-hero-1.png" alt="hvac hero 1" />
@@ -90,4 +89,4 @@ function BrandHVAC() {
   );
 }
 
-export default BrandHVAC;
+export default Daikin;

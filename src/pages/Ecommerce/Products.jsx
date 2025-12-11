@@ -222,14 +222,14 @@ function Products() {
   };
 
   const brands = [
-    { name: "wellspun", image: "/images/ecommerce/wellspun.png" },
-    { name: "ikea", image: "/images/ecommerce/ikea.png" },
-    { name: "ikea", image: "/images/ecommerce/innova.png" },
-    { name: "ikea", image: "/images/ecommerce/fortis.png" },
-    { name: "ikea", image: "/images/ecommerce/fortis.png" },
-    { name: "ikea", image: "/images/ecommerce/fortis.png" },
-    { name: "ikea", image: "/images/ecommerce/fortis.png" },
-    { name: "ikea", image: "/images/ecommerce/fortis.png" },
+    { name: "welspun", image: "/images/ecommerce/wellspun.png" },
+    { name: "#", image: "/images/ecommerce/ikea.png" },
+    { name: "#", image: "/images/ecommerce/innova.png" },
+    { name: "dlink", image: "/images/brands/SmartSolutions/D-Link.svg" },
+    { name: "daikin", image: "/images/brands/HVAC/DAIKIN.svg" },
+    { name: "#", image: "/images/ecommerce/fortis.png" },
+    { name: "#", image: "/images/ecommerce/fortis.png" },
+    { name: "#", image: "/images/ecommerce/fortis.png" },
   ];
 
   const EcommerceFeatures = [
@@ -408,7 +408,7 @@ function Products() {
       <section>
         <div className=" lg:container lg:mx-auto my-3 px-3 lg:px-12 lg:my-10">
           <SectionHeader title={"Shop by brands"} />
-          <div className="grid grid-cols-4 lg:grid-cols-4 gap-2">
+          <div className="grid grid-cols-4 lg:grid-cols-4 gap-2 gap-y-4">
             {brands.map((brand, index) => (
               <div
                 className="hover:shadow-lg flex justify-center items-center w-full h-28"
@@ -417,8 +417,8 @@ function Products() {
                 <img
                   src={brand.image}
                   alt={brand.name}
-                  className="object-scale-down h-full cursor-pointer"
-                  onClick={() => navigate("/brands")}
+                  className="object-scale-down h-full w-44 cursor-pointer"
+                  onClick={() => navigate(`/brandOverview/${brand.name}`)}
                 />
               </div>
             ))}

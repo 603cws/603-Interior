@@ -489,7 +489,7 @@ function CategorySvg({ selectedCategory, setSelectedCategory }) {
                 behavior: "smooth",
               });
             }}
-            className=" p-0.5 text-[#374A75] border border-[#ccc]"
+            className="p-0.5 text-[#374A75] border border-[#ccc]"
           >
             <MdKeyboardArrowLeft size={20} />
           </button>
@@ -508,7 +508,7 @@ function CategorySvg({ selectedCategory, setSelectedCategory }) {
       )}
       <div
         ref={scrollRef}
-        className="flex cat-scroll overflow-x-auto scrollbar-hide items-center justify-around gap-6 md:px-10 "
+        className="flex cat-scroll overflow-x-auto scrollbar-hide items-center justify-around gap-6 lg:px-10"
       >
         {Object.entries(categorySvgMap).map(([catName, icon]) => (
           <div
@@ -525,7 +525,7 @@ function CategorySvg({ selectedCategory, setSelectedCategory }) {
             >
               {icon}
             </div>
-            <h3 className="font-TimesNewRoman text-[#111] text-[10px] lg:text-sm">
+            <h3 className="font-TimesNewRoman text-[#111] text-[10px] text-center lg:text-sm">
               {catName}
             </h3>
           </div>
