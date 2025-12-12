@@ -106,6 +106,7 @@ function Plans({ showNewBoqPopup, setShowNewBoqPopup }) {
     seatCountData,
     userResponses,
     setSelectedCategory,
+    setSelectedSubCategory,
   } = useApp();
 
   const [hoveredPlan, setHoveredPlan] = useState(1);
@@ -117,6 +118,7 @@ function Plans({ showNewBoqPopup, setShowNewBoqPopup }) {
 
   const handlePlanSelect = (planKey) => {
     setSelectedCategory(categories[0]);
+    setSelectedSubCategory(categories[0]?.subcategories[0]);
     setSelectedPlan(planKey);
     sessionStorage.setItem("selectedPlan", planKey);
     toast.success(`${planKey} plan selected!`);
