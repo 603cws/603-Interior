@@ -1,4 +1,4 @@
-function ErrorFallback({ error }) {
+function ErrorFallback({ error, resetErrorBoundary }) {
   const isDev = import.meta.env.MODE === "development";
   return (
     <div className="min-h-screen w-full flex items-center justify-center bg-gray-50 px-4 ">
@@ -22,12 +22,12 @@ function ErrorFallback({ error }) {
           )}
 
           {/* Retry Button */}
-          {/* <button
+          <button
             onClick={resetErrorBoundary}
             className="mt-4 px-6 py-2 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition"
           >
             Try Again
-          </button> */}
+          </button>
         </div>
       </div>
     </div>
