@@ -254,6 +254,8 @@ function Plans({ showNewBoqPopup, setShowNewBoqPopup }) {
               variant_segment: variant.segment,
               default: variant.default,
               additional_images: JSON.parse(variant.additional_images || "[]"),
+              variant_info: variant.information,
+              variant_additional_info: variant.additonalinformation,
             },
             finalPrice:
               category === "Flooring" ||

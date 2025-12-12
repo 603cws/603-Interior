@@ -104,8 +104,10 @@ export const fetchFilteredBOQProducts = async (products = [], addons = []) => {
             variant_image: matchedVariant?.image || matchedProduct.image,
             variant_price: matchedVariant?.price || matchedProduct.price,
             additional_images: JSON.parse(
-              matchedVariant?.additional_images || "[]"
+              matchedVariant?.additional_images || []
             ),
+            variant_info: matchedVariant?.information || {},
+            variant_additional_info: matchedVariant?.additonalinformation || {},
           },
           addons: matchingAddons,
         };

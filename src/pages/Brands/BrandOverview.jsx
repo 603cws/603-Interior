@@ -194,7 +194,7 @@ const brandImages = {
       image: "/images/brands/Flooring/Shaw_Industries.svg",
     },
     { name: "#", image: "/images/brands/Flooring/Somany.png" },
-    { name: "#", image: "/images/brands/Flooring/welspun.png" },
+    { name: "welspun", image: "/images/brands/Flooring/welspun.png" },
   ],
   Lux: [
     { name: "#", image: "/images/brands/Lux/Havells.svg" },

@@ -964,6 +964,8 @@ export const AppProvider = ({ children }) => {
           variant_price: product.price,
           variant_id: product.id,
           additional_images: JSON.parse(product.additional_images || "[]"),
+          variant_info: product.information,
+          variant_additional_info: product.additonalinformation,
         },
         addons: existingProduct ? existingProduct.addons : selectedAddons || [],
         finalPrice:
