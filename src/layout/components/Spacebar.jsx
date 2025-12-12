@@ -1,4 +1,5 @@
-function Spacebar({ totalArea, builtArea, availableArea, MIN_AREA }) {
+import { MIN_AREA } from "../utils/AreaCalculations";
+function Spacebar({ totalArea, builtArea, availableArea }) {
   const usedPer = (+builtArea / +totalArea) * 100;
   const roundedUsedPer = Math.round(usedPer);
   const unUsedPer = 100 - roundedUsedPer;
@@ -19,7 +20,7 @@ function Spacebar({ totalArea, builtArea, availableArea, MIN_AREA }) {
         }}
         className="bg-[#85AED2] text-white relative overflow-hidden"
       >
-        <div className="absolute w-2 h-[90%] right-0 top-1/2 transform -translate-y-1/2 translate-x-1/4 bg-gradient-to-br from-[#334A78] to-[#1F2937]  rounded-sm glowing-circle"></div>
+        <div className="absolute w-2 h-full right-0 top-0 transform translate-x-1/4 bg-gradient-to-br from-[#334A78] to-[#1F2937]  rounded-sm glowing-circle"></div>
         <p className="px-4 text-[10px] flex items-center h-full">
           Used: {builtArea} sq ft
         </p>
@@ -39,9 +40,9 @@ function Spacebar({ totalArea, builtArea, availableArea, MIN_AREA }) {
         )}
 
         {unUsedPer <= 10 && (
-          <div className="absolute -top-6 right-0 bg-white text-[#1F2937] text-[10px] px-2 py-1 rounded shadow whitespace-nowrap hidden group-hover:block">
+          <p className="absolute -top-6 right-0 bg-white text-[#1F2937] text-[10px] px-2 py-1 rounded shadow whitespace-nowrap hidden group-hover:block">
             {availableArea} sq ft
-          </div>
+          </p>
         )}
       </div>
     </div>

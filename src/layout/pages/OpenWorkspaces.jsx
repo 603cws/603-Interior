@@ -2,26 +2,7 @@ import { useState } from "react";
 import LayoutCard from "../components/LayoutCard";
 import { useApp } from "../../Context/Context";
 import ErrorModal from "../../common-components/ErrorModal";
-
-const workspaceData = [
-  {
-    type: "linear",
-    image: "/images/workstation-wp/linear.webp",
-    description: "This is a linear workspace, designed for open collaboration.",
-    sizes: ["M", "L", "XL"], // Corresponds to sizeMapping keys
-    tooltipText:
-      "M: 3X2 ft (20 sq ft) \n L: 3.5X2 ft (24 sq ft) \n XL: 4X2 ft (29 sq ft)", // Default tooltip text for Linear Workstation
-    title: "Linear Workstation",
-  },
-  {
-    type: "lType",
-    image: "/images/workstation-wp/lType.webp",
-    description:
-      "This is an L-type workspace, providing a semi-private environment.",
-    tooltipText: "Size: 34 sq ft",
-    title: "L-Type Workstation",
-  },
-];
+import { workspaceData } from "../utils/WorkspaceConstants";
 
 const sizeMapping = {
   M: "3 X 2",

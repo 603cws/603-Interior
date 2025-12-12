@@ -1,63 +1,10 @@
-import LayoutCard from "../components/LayoutCard"; // Ensure the correct path to LayoutCard
+import LayoutCard from "../components/LayoutCard";
 import { useApp } from "../../Context/Context";
-
-const supportSpacesData = [
-  {
-    type: "ups",
-    image: "/images/workstation-wp/ups.webp",
-    description: "This is the UPS room, ensuring uninterrupted power supply.",
-    slider: {
-      name: "UPS Room Size",
-      valueKey: "upsRoomSize",
-      setValueKey: "setUpsRoomSize",
-      min: 60,
-      max: 100,
-      step: 5,
-    },
-    tooltipText: "Size: 60 sq ft",
-    title: "UPS Room",
-  },
-  {
-    type: "bms",
-    image: "/images/workstation-wp/bms.webp",
-    description: "This is the BMS room, managing building systems.",
-    slider: {
-      name: "BMS Room Size",
-      valueKey: "bmsRoomSize",
-      setValueKey: "setBmsRoomSize",
-      min: 60,
-      max: 100,
-      step: 5,
-    },
-    tooltipText: "Size: 60 sq ft",
-    title: "BMS Room",
-  },
-  {
-    type: "server",
-    image: "/images/workstation-wp/serverRoom.webp",
-    description: "This is the server room, housing critical IT infrastructure.",
-    tooltipText: "Size: 40 sq ft",
-    title: "Server Room",
-  },
-  {
-    type: "executiveWashroom",
-    image: "/images/workstation-wp/executiveWashroom.webp",
-    description:
-      "This is the Executive Washroom, providing premium facilities.",
-    tooltipText: "Size: 60 sq ft",
-    title: "Executive Washroom",
-  },
-  {
-    type: "other",
-    image: "/images/workstation-wp/others.webp",
-    description: "This is an additional space for miscellaneous purposes.",
-    title: "Other Area",
-  },
-];
+import { initialAreaValues } from "../utils/Constants";
+import { supportSpacesData } from "../utils/WorkspaceConstants";
 
 const SupportSpaces = ({
   builtArea,
-  initialAreaValues,
   areaQuantities,
   updateAreas,
   otherArea,

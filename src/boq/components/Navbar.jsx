@@ -534,7 +534,7 @@ function Navbar({
                   style={{ width: `${progress}%` }}
                 ></div>
                 <div
-                  className="absolute top-1/2 transform -translate-y-1/2 -translate-x-1/2 bg-gradient-to-br from-[#334A78] to-[#1F2937] border-white rounded-sm glowing-circle"
+                  className="absolute top-0 transform -translate-x-1/2 bg-gradient-to-br from-[#334A78] to-[#1F2937] border-white rounded-sm glowing-circle"
                   style={{
                     left: `${progress}%`,
                     width: "10px",
@@ -690,7 +690,7 @@ function Navbar({
                 style={{ width: `${progress}%` }}
               ></div>
               <div
-                className="absolute top-1/2 transform -translate-y-1/2 -translate-x-full bg-gradient-to-br from-[#334A78] to-[#1F2937]  rounded-sm glowing-circle"
+                className="absolute top-0 transform -translate-x-full bg-gradient-to-br from-[#334A78] to-[#1F2937]  rounded-sm glowing-circle"
                 style={{ left: `${progress}%`, width: "10px", height: "18px" }}
               ></div>
               <div

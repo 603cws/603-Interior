@@ -9,10 +9,9 @@ import UnusedAreaWarning from "./UnusedAreaWarning";
 import AlertBox from "../../boq/components/AlertBox";
 import EnterAreaModal from "./EnterAreaModal";
 import { AnimatedButton } from "../../common-components/AnimatedButton";
+import { MIN_AREA, MAX_AREA, mapAreaValues } from "../utils/AreaCalculations";
 
 function Navbar({
-  MIN_AREA,
-  MAX_AREA,
   resetAll,
   areaQuantities,
   areaValues,
@@ -74,72 +73,6 @@ function Navbar({
       input.removeEventListener("wheel", preventScroll);
     };
   }, []);
-
-  const mapAreaValues = (
-    userId,
-    areaValues,
-    areaQuantities,
-    totalArea = null,
-    builtArea,
-    seatCounts
-  ) => {
-    return {
-      userId: userId || null,
-      linearArea: areaValues.linear,
-      linearQty: areaQuantities.linear || 0,
-      lTypeArea: areaValues.lType,
-      lTypeQty: areaQuantities.lType || 0,
-      mdArea: areaValues.md,
-      mdQty: areaQuantities.md || 0,
-      managerArea: areaValues.manager,
-      managerQty: areaQuantities.manager || 0,
-      smallArea: areaValues.small,
-      smallQty: areaQuantities.small || 0,
-      upsArea: areaValues.ups,
-      upsQty: areaQuantities.ups || 0,
-      bmsArea: areaValues.bms,
-      bmsQty: areaQuantities.bms || 0,
-      serverArea: areaValues.server,
-      serverQty: areaQuantities.server || 0,
-      receptionArea: areaValues.reception,
-      receptionQty: areaQuantities.reception || 0,
-      loungeArea: areaValues.lounge,
-      loungeQty: areaQuantities.lounge || 0,
-      salesArea: areaValues.sales,
-      salesQty: areaQuantities.sales || 0,
-      phoneBoothArea: areaValues.phoneBooth,
-      phoneBoothQty: areaQuantities.phoneBooth || 0,
-      discussionRoomArea: areaValues.discussionRoom,
-      discussionRoomQty: areaQuantities.discussionRoom || 0,
-      interviewRoomArea: areaValues.interviewRoom,
-      interviewRoomQty: areaQuantities.interviewRoom || 0,
-      conferenceRoomArea: areaValues.conferenceRoom,
-      conferenceRoomQty: areaQuantities.conferenceRoom || 0,
-      boardRoomArea: areaValues.boardRoom,
-      boardRoomQty: areaQuantities.boardRoom || 0,
-      meetingRoomArea: areaValues.meetingRoom,
-      meetingRoomQty: areaQuantities.meetingRoom || 0,
-      meetingRoomLargeArea: areaValues.meetingRoomLarge,
-      meetingRoomLargeQty: areaQuantities.meetingRoomLarge || 0,
-      hrRoomArea: areaValues.hrRoom,
-      hrRoomQty: areaQuantities.hrRoom || 0,
-      financeRoomArea: areaValues.financeRoom,
-      financeRoomQty: areaQuantities.financeRoom || 0,
-      breakoutRoomArea: areaValues.breakoutRoom,
-      breakoutRoomQty: areaQuantities.breakoutRoom || 0,
-      executiveWashroomArea: areaValues.executiveWashroom,
-      executiveWashroomQty: areaQuantities.executiveWashroom || 0,
-      videoRecordingRoomArea: areaValues.videoRecordingRoom,
-      videoRecordingRoomQty: areaQuantities.videoRecordingRoom || 0,
-      otherArea: areaValues.other,
-      otherQty: areaQuantities.other || 0,
-      washroomsArea: areaValues.washrooms,
-      washroomsQty: areaQuantities.washrooms || 0,
-      ...(totalArea !== null && { totalArea }),
-      usedSpace: builtArea,
-      seatCount: seatCounts,
-    };
-  };
 
   const generateBOQclick = () => {
     if (!totalArea) {
@@ -340,7 +273,7 @@ function Navbar({
             <div className="flex items-center gap-5">
               <AnimatedButton
                 onClick={generateBOQclick}
-                className="!bg-[#3A5D7B] text-white capitalize font-Poppins font-semibold tracking-wider"
+                className="generateBoq !bg-[#3A5D7B] text-white capitalize font-Poppins font-semibold tracking-wider"
                 variant="default"
                 size="lg"
                 textEffect="shimmer"

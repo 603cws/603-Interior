@@ -1,83 +1,12 @@
-import LayoutCard from "../components/LayoutCard"; // Ensure the correct path to LayoutCard.js
-
-const publicSpacesData = [
-  {
-    type: "reception",
-    image: "/images/workstation-wp/reception.webp",
-    description:
-      "This is the reception area, the first point of contact for visitors.",
-    slider: {
-      name: "Reception Size",
-      valueKey: "receptionSize",
-      setValueKey: "setReceptionSize",
-      min: 50,
-      max: 700,
-      step: 5,
-    },
-    title: "Reception",
-  },
-  {
-    type: "lounge",
-    image: "/images/workstation-wp/lounge.webp",
-    description:
-      "This is the lounge, a comfortable area for informal meetings.",
-    slider: {
-      name: "Lounge Size",
-      valueKey: "loungeSize",
-      setValueKey: "setLoungeSize",
-      min: 80,
-      max: 1000,
-      step: 5,
-    },
-    title: "Lounge",
-  },
-  {
-    type: "phoneBooth",
-    image: "/images/workstation-wp/phoneBooth.webp",
-    description: "This is the phone booth, providing a quiet space for calls.",
-    tooltipText: "Size: 25 sq ft",
-    title: "Phone Booth",
-  },
-  {
-    type: "breakoutRoom",
-    image: "/images/workstation-wp/breakout.webp",
-    description:
-      "This is the breakout room, a flexible space for small group discussions.",
-    slider: {
-      name: "Breakout Room Size",
-      valueKey: "breakoutRoomSize",
-      setValueKey: "setBreakoutRoomSize",
-      min: 80,
-      max: 160,
-      step: 5,
-    },
-    tooltipText: "size: 80 sqft",
-    title: "Breakout Room",
-  },
-  {
-    type: "washrooms",
-    image: "/images/workstation-wp/washroom.webp",
-    description:
-      "Common Washroom Area – This includes designated spaces for both male and female washrooms.",
-    tooltipText: "size: 100 sqft",
-    slider: {
-      name: "Washroom Size",
-      valueKey: "washroomsSize",
-      setValueKey: "setWashroomsSize",
-      min: 100,
-      max: 1200,
-      step: 5,
-    },
-    title: "Washrooms",
-  },
-];
+import LayoutCard from "../components/LayoutCard";
+import { initialAreaValues } from "../utils/Constants";
+import { publicSpacesData } from "../utils/WorkspaceConstants";
 
 const PublicSpaces = ({
   areaQuantities,
   updateAreas,
   totalArea,
   builtArea,
-  initialAreaValues,
   receptionSize,
   setReceptionSize,
   loungeSize,
@@ -154,7 +83,6 @@ const PublicSpaces = ({
               title={space.title || space.type}
               showAreaCounter={!!space.slider} // Show counter only if space has a slider
               areaCounterProps={sliderProps}
-              // tooltipText={space.tooltipText}
               tooltipText={
                 space.type === "washrooms"
                   ? `Size: ${washroomsSize || 100} sq ft `

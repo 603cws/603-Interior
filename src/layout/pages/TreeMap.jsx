@@ -11,37 +11,10 @@ import { supabase } from "../../services/supabase";
 import UnusedAreaWarning from "../components/UnusedAreaWarning";
 import { colors } from "../../constants/constant";
 import { AnimatedButton } from "../../common-components/AnimatedButton";
+import { fullNames, workspaceImages } from "../utils/Constants";
+import { MIN_AREA, MAX_AREA, mapAreaValues } from "../utils/AreaCalculations";
 
-const fullNames = {
-  linear: "Linear Workspace",
-  lType: "L-Type Workspace",
-  md: "MD Cabin",
-  manager: "Manager Cabin",
-  small: "Small Cabin",
-  ups: "UPS Room",
-  bms: "BMS Room",
-  server: "Server Room",
-  reception: "Reception",
-  lounge: "Lounge",
-  fitness: "Fitness Zone",
-  sales: "Sales Team",
-  phoneBooth: "Phone Booth",
-  discussionRoom: "Discussion Room",
-  interviewRoom: "Interview Room",
-  conferenceRoom: "Conference Room",
-  boardRoom: "Board Room",
-  meetingRoom: "Meeting Room",
-  meetingRoomLarge: "Meeting Room (L)",
-  hrRoom: "HR Room",
-  financeRoom: "Finance Room",
-  executiveWashroom: "Executive Washroom",
-  breakoutRoom: "Breakout Room",
-  videoRecordingRoom: "Video Recording Room",
-  other: "Other",
-  washrooms: "Wash rooms",
-};
-
-const TreeMap = ({ totalArea, areaQuantities, areaValues }) => {
+const TreeMap = ({ totalArea, areaQuantities, areaValues, seatCounts }) => {
   const [hoveredArea, setHoveredArea] = useState(null);
   const [isLegendVisible, setIsLegendVisible] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -51,37 +24,6 @@ const TreeMap = ({ totalArea, areaQuantities, areaValues }) => {
 
   const navigate = useNavigate();
   const { userId, setSelectedPlan, isMobile } = useApp();
-
-  const MIN_AREA = 1000;
-  const MAX_AREA = 25000;
-
-  const workspaceImages = {
-    "Linear Workspace": "/images/workstation-wp/linear.webp",
-    "L-Type Workspace": "/images/workstation-wp/lType.webp",
-    "MD Cabin": "/images/workstation-wp/md.webp",
-    "Manager Cabin": "/images/workstation-wp/manager.webp",
-    "Small Cabin": "/images/workstation-wp/smallCabin.webp",
-    "UPS Room": "/images/workstation-wp/ups.webp",
-    "BMS Room": "/images/workstation-wp/bms.webp",
-    "Server Room": "/images/workstation-wp/serverRoom.webp",
-    Reception: "/images/workstation-wp/reception.webp",
-    Lounge: "/images/workstation-wp/lounge.webp",
-    "Video Recording Room": "/images/workstation-wp/videoRoom.webp",
-    "Sales Team": "/images/workstation-wp/salesRoom.webp",
-    "Phone Booth": "/images/workstation-wp/phoneBooth.webp",
-    "Discussion Room": "/images/workstation-wp/discussionRoom.png",
-    "Interview Room": "/images/workstation-wp/interview.webp",
-    "Conference Room": "/images/workstation-wp/conferenceRoom.webp",
-    "Board Room": "/images/workstation-wp/boardRoom.webp",
-    "Meeting Room": "/images/workstation-wp/meetingRoom.webp",
-    "Meeting Room (L)": "/images/workstation-wp/meetingRoomLarge.webp",
-    "HR Room": "/images/workstation-wp/hrRoom.webp",
-    "Finance Room": "/images/workstation-wp/financeRoom.webp",
-    "Executive Washroom": "/images/workstation-wp/executiveWashroom.webp",
-    "Breakout Room": "/images/workstation-wp/breakout.webp",
-    Other: "/images/workstation-wp/others.webp",
-    "Wash rooms": "/images/workstation-wp/washroom.webp",
-  };
 
   useEffect(() => {
     if (showWarning) {
@@ -371,70 +313,6 @@ const TreeMap = ({ totalArea, areaQuantities, areaValues }) => {
     };
   }, []);
 
-  const mapAreaValues = (
-    userId,
-    areaValues,
-    areaQuantities,
-    totalArea = null,
-    builtArea
-  ) => {
-    return {
-      userId: userId || null,
-      linearArea: areaValues.linear,
-      linearQty: areaQuantities.linear || 0,
-      lTypeArea: areaValues.lType,
-      lTypeQty: areaQuantities.lType || 0,
-      mdArea: areaValues.md,
-      mdQty: areaQuantities.md || 0,
-      managerArea: areaValues.manager,
-      managerQty: areaQuantities.manager || 0,
-      smallArea: areaValues.small,
-      smallQty: areaQuantities.small || 0,
-      upsArea: areaValues.ups,
-      upsQty: areaQuantities.ups || 0,
-      bmsArea: areaValues.bms,
-      bmsQty: areaQuantities.bms || 0,
-      serverArea: areaValues.server,
-      serverQty: areaQuantities.server || 0,
-      receptionArea: areaValues.reception,
-      receptionQty: areaQuantities.reception || 0,
-      loungeArea: areaValues.lounge,
-      loungeQty: areaQuantities.lounge || 0,
-      salesArea: areaValues.sales,
-      salesQty: areaQuantities.sales || 0,
-      phoneBoothArea: areaValues.phoneBooth,
-      phoneBoothQty: areaQuantities.phoneBooth || 0,
-      discussionRoomArea: areaValues.discussionRoom,
-      discussionRoomQty: areaQuantities.discussionRoom || 0,
-      interviewRoomArea: areaValues.interviewRoom,
-      interviewRoomQty: areaQuantities.interviewRoom || 0,
-      conferenceRoomArea: areaValues.conferenceRoom,
-      conferenceRoomQty: areaQuantities.conferenceRoom || 0,
-      boardRoomArea: areaValues.boardRoom,
-      boardRoomQty: areaQuantities.boardRoom || 0,
-      meetingRoomArea: areaValues.meetingRoom,
-      meetingRoomQty: areaQuantities.meetingRoom || 0,
-      meetingRoomLargeArea: areaValues.meetingRoomLarge,
-      meetingRoomLargeQty: areaQuantities.meetingRoomLarge || 0,
-      hrRoomArea: areaValues.hrRoom,
-      hrRoomQty: areaQuantities.hrRoom || 0,
-      financeRoomArea: areaValues.financeRoom,
-      financeRoomQty: areaQuantities.financeRoom || 0,
-      breakoutRoomArea: areaValues.breakoutRoom,
-      breakoutRoomQty: areaQuantities.breakoutRoom || 0,
-      executiveWashroomArea: areaValues.executiveWashroom,
-      executiveWashroomQty: areaQuantities.executiveWashroom || 0,
-      videoRecordingRoomArea: areaValues.videoRecordingRoom,
-      videoRecordingRoomQty: areaQuantities.videoRecordingRoom || 0,
-      otherArea: areaValues.other,
-      otherQty: areaQuantities.other || 0,
-      washroomsArea: areaValues.washrooms,
-      washroomsQty: areaQuantities.washrooms || 0,
-      ...(totalArea !== null && { totalArea }),
-      usedSpace: builtArea,
-    };
-  };
-
   const generateBOQclick = () => {
     if (!totalArea) {
       toast.error("Enter the Area");
@@ -470,7 +348,8 @@ const TreeMap = ({ totalArea, areaQuantities, areaValues }) => {
           areaValues,
           areaQuantities,
           totalArea,
-          builtArea
+          builtArea,
+          seatCounts
         );
 
         // Insert into tables
