@@ -27,7 +27,7 @@ function DashboardCards({
       >
         <h2 className="self-start text-xl font-bold">Client</h2>
         <h1 className="self-end justify-end font-semibold text-3xl xl:text-5xl">
-          {totalclients.length}
+          {totalclients}
         </h1>
         <img
           src="/images/dashboard-client.png"
@@ -42,7 +42,7 @@ function DashboardCards({
       >
         <h2 className="self-start text-xl font-bold">Vendor</h2>
         <h1 className="self-end justify-end font-semibold text-3xl xl:text-5xl">
-          {totalVendors.length}
+          {totalVendors}
         </h1>
         <img
           src="/images/dashboard-vendor.png"
@@ -57,7 +57,7 @@ function DashboardCards({
       >
         <h2 className="self-start text-xl font-bold">Pending Products</h2>
         <h1 className="self-end justify-end font-semibold text-3xl xl:text-5xl">
-          {pendingproduct.length}
+          {pendingproduct?.length}
         </h1>
         <img
           src="/images/dashboard-orders.png"
@@ -72,7 +72,7 @@ function DashboardCards({
       >
         <h2 className="self-start text-xl font-bold">Pending Addons</h2>
         <h1 className="self-end justify-end font-semibold text-3xl xl:text-5xl">
-          {pendingAddons.length}
+          {pendingAddons?.length}
         </h1>
         <img
           src="/images/dashboard-new-orders.png"

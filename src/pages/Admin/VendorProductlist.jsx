@@ -5,7 +5,6 @@ import { CiMenuKebab } from "react-icons/ci";
 import Spinner from "../../common-components/Spinner";
 import { supabase } from "../../services/supabase";
 import toast from "react-hot-toast";
-// import DashboardProductCard from "../vendor/DashboardProductCard";
 import VendorProductCard from "../vendor/VendorProductCard";
 import { IoIosArrowBack } from "react-icons/io";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
@@ -18,20 +17,12 @@ import { baseImageUrl } from "../../utils/HelperConstant";
 import PagInationNav from "../../common-components/PagInationNav";
 import SelectSubcategories from "./SelectSubcategories";
 
-function VendorProductlist({
-  setVendorproductlist,
-  selectedVendor,
-  deleteWarning,
-  setDeleteWarning,
-  rejectReason,
-  setRejectReason,
-}) {
+function VendorProductlist({ setVendorproductlist, selectedVendor }) {
   const [toggle, setToggle] = useState(true);
   const [isloading, setIsloading] = useState(false);
   const [selectedTab, setSelectedTab] = useState("products");
   const [productlist, setProductlist] = useState(true);
-  const [addNewProduct, setAddNewProduct] = useState(false);
-  const [addNewAddon, setAddNewAddon] = useState(false);
+  const [rejectReason, setRejectReason] = useState();
   const tableRef = useRef(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [openMenuId, setOpenMenuId] = useState(null); // Store the ID of the row with an open menu
@@ -57,9 +48,7 @@ function VendorProductlist({
   const [selectedproduct, setSelectedproduct] = useState(null);
   const [editAddon, setEditAddon] = useState(false);
   const [selectedAddon, setSelectedAddon] = useState(null);
-
   const vendorcategory = JSON.parse(selectedVendor.allowed_category);
-
   const [isOpen, setIsOpen] = useState(false);
   const [selected, setSelected] = useState("");
   const [filterDropdown, setFilterDropdown] = useState(false);
@@ -350,7 +339,7 @@ function VendorProductlist({
               products (category, subcategory, subcategory1)
             `
         )
-        .eq("vendor_id", selectedVendor.id);
+        .eq("vendor_id", selectedVendor?.id);
 
       const sortedData = data.sort((a, b) => {
         // Prioritize "pending" status
@@ -375,7 +364,7 @@ function VendorProductlist({
       const { data, error } = await supabase
         .from("addon_variants")
         .select("*")
-        .eq("vendorId", selectedVendor.id);
+        .eq("vendorId", selectedVendor?.id);
       const sortedData = data.sort((a, b) => {
         // Prioritize "pending" status
         if (a.status === "pending" && b.status !== "pending") return -1;
@@ -847,7 +836,6 @@ function VendorProductlist({
                 <div className="border-2 border-gray-200 px-28 py-14 flex justify-center items-center gap-10 rounded-2xl shadow-lg capitalize relative">
                   <div
                     onClick={() => {
-                      setAddNewProduct(true);
                       setIsAddProduct(false);
                     }}
                     onMouseEnter={() => setIsProductHovered(true)}
@@ -867,7 +855,6 @@ function VendorProductlist({
 
                   <div
                     onClick={() => {
-                      setAddNewAddon(true);
                       setIsAddProduct(false);
                     }}
                     onMouseEnter={() => setIsAddonHovered(true)}

@@ -3,15 +3,77 @@ import { MdDeleteOutline } from "react-icons/md";
 import { useEffect, useState } from "react";
 import { colors } from "../../constants/constant";
 
+const fullNames = {
+  linear: "Linear Workspace",
+  lType: "L-Type Workspace",
+  md: "MD Cabin",
+  manager: "Manager Cabin",
+  small: "Small Cabin",
+  ups: "UPS Room",
+  bms: "BMS Room",
+  server: "Server Room",
+  reception: "Reception",
+  lounge: "Lounge",
+  fitness: "Fitness Zone",
+  sales: "Sales Team",
+  phoneBooth: "Phone Booth",
+  discussionRoom: "Discussion Room",
+  interviewRoom: "Interview Room",
+  conferenceRoom: "Conference Room",
+  boardRoom: "Board Room",
+  meetingRoom: "Meeting Room",
+  meetingRoomLarge: "Meeting Room (Large)",
+  hrRoom: "HR Room",
+  financeRoom: "Finance Room",
+  executiveWashroom: "Executive Washroom",
+  breakoutRoom: "Breakout Room",
+  videoRecordingRoom: "Video Recording Room",
+  other: "Other", // Add new category here
+  // maleWashroom: "Male Washroom",
+  // femaleWashroom: "Female Washroom",
+  washrooms: "Wash rooms",
+};
+
+const options = {
+  chart: {
+    type: "treemap",
+    height: 250,
+    toolbar: {
+      show: true,
+    },
+  },
+  title: {
+    text: "Area Distribution of Workspaces",
+    align: "center",
+    style: {
+      fontSize: "15px",
+      fontWeight: "bold",
+      color: "#263238",
+    },
+  },
+  plotOptions: {
+    treemap: {
+      distributed: true,
+      enableShades: false,
+    },
+  },
+  dataLabels: {
+    enabled: false,
+  },
+  states: {
+    hover: {
+      filter: {
+        type: "darken",
+        value: 0.1,
+      },
+    },
+  },
+};
+
 function DashboardView({
-  currentLayoutData,
-  currentLayoutID,
-  totalArea,
   selectedBoq,
   isboqavailable,
-  products,
   boqdata,
-  handlecheckboqdetails,
   handledeleteBoq,
   isExpanded,
 }) {
@@ -36,37 +98,6 @@ function DashboardView({
     setCurrentAreaValues(areas);
     setCurrentAreaQuantities(quantities);
   }, [selectedBoq]);
-
-  const fullNames = {
-    linear: "Linear Workspace",
-    lType: "L-Type Workspace",
-    md: "MD Cabin",
-    manager: "Manager Cabin",
-    small: "Small Cabin",
-    ups: "UPS Room",
-    bms: "BMS Room",
-    server: "Server Room",
-    reception: "Reception",
-    lounge: "Lounge",
-    fitness: "Fitness Zone",
-    sales: "Sales Team",
-    phoneBooth: "Phone Booth",
-    discussionRoom: "Discussion Room",
-    interviewRoom: "Interview Room",
-    conferenceRoom: "Conference Room",
-    boardRoom: "Board Room",
-    meetingRoom: "Meeting Room",
-    meetingRoomLarge: "Meeting Room (Large)",
-    hrRoom: "HR Room",
-    financeRoom: "Finance Room",
-    executiveWashroom: "Executive Washroom",
-    breakoutRoom: "Breakout Room",
-    videoRecordingRoom: "Video Recording Room",
-    other: "Other", // Add new category here
-    // maleWashroom: "Male Washroom",
-    // femaleWashroom: "Female Washroom",
-    washrooms: "Wash rooms",
-  };
 
   const validTotalArea = currentAreaValues.total;
   const builtArea = Object.keys(currentAreaQuantities).reduce(
@@ -93,42 +124,6 @@ function DashboardView({
       fillColor: colors["Available Space"],
     },
   ];
-
-  const options = {
-    chart: {
-      type: "treemap",
-      height: 250,
-      toolbar: {
-        show: true,
-      },
-    },
-    title: {
-      text: "Area Distribution of Workspaces",
-      align: "center",
-      style: {
-        fontSize: "15px",
-        fontWeight: "bold",
-        color: "#263238",
-      },
-    },
-    plotOptions: {
-      treemap: {
-        distributed: true,
-        enableShades: false,
-      },
-    },
-    dataLabels: {
-      enabled: false,
-    },
-    states: {
-      hover: {
-        filter: {
-          type: "darken",
-          value: 0.1,
-        },
-      },
-    },
-  };
 
   return (
     <div className="lg:w-full container mx-auto max-w-sm md:max-w-full flex flex-col lg:flex-row overflow-auto lg:overflow-y-auto scrollbar-hide  py-2 px-3 font-Poppins">

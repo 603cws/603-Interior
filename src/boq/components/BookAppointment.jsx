@@ -21,10 +21,11 @@ function BookAppointment({ onClose, isdashboardbooking = false }) {
 
   const { accountHolder } = useApp();
 
-  const clienttemplateID = "template_lcl6e5q";
-  const adminTemplateID = "template_biqmorg";
-  const serviceid = "service_jyxdbel";
-  const your_public_key = "jKWDQroc1z20rCjSB";
+  const clienttemplateID = import.meta.env.VITE_CLIENT_TEMPLATE_ID;
+  const adminTemplateID = import.meta.env.VITE_ADMIN_TEMPLATE_ID;
+  const serviceid = import.meta.env.VITE_BOOKING_SERVICE_ID;
+
+  const your_public_key = import.meta.env.VITE_BOOKING_EMAIL_PUBLIC;
 
   const times = [
     "09:00 am",

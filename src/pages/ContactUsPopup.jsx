@@ -6,9 +6,9 @@ import { IoIosCloseCircle } from "react-icons/io";
 function ContactUsPopup({ onClose }) {
   const [isSubmitting, setisSubmitting] = useState(false);
 
-  const templateID = "template_0355bfq";
-  const serviceid = "service_ae0sgim";
-  const your_public_key = "dR0YyJ3Be6H6xVsT7";
+  const templateID = import.meta.env.VITE_TEMPLATE_ID;
+  const serviceid = import.meta.env.VITE_SERVICE_ID;
+  const your_public_key = import.meta.env.VITE_CONTACT_EMAILJS_PUBLIC;
 
   const [form, setFormData] = useState({
     message: "",
@@ -50,13 +50,9 @@ function ContactUsPopup({ onClose }) {
 
       try {
         setisSubmitting(true);
-        const response = await axios.post(
-          "https://api.emailjs.com/api/v1.0/email/send",
-          data,
-          {
-            headers: { "Content-Type": "application/json" },
-          }
-        );
+        await axios.post("https://api.emailjs.com/api/v1.0/email/send", data, {
+          headers: { "Content-Type": "application/json" },
+        });
         toast.success("we will shortly reach you");
 
         setFormData({
