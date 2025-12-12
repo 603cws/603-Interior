@@ -23,7 +23,7 @@ export const multiplyFirstTwoFlexible = (dimStr) => {
   return Number.isFinite(a) && Number.isFinite(b) ? Number(a * b) : null;
 };
 
-const fetchFilteredBOQProducts = async (products = [], addons = []) => {
+export const fetchFilteredBOQProducts = async (products = [], addons = []) => {
   try {
     if (!products?.length) {
       console.warn("No products passed to fetchFilteredBOQProducts.");
