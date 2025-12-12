@@ -622,18 +622,18 @@ function ProductOverview() {
             Object.entries(product.information)
               .filter(([, v]) => v && v.trim() !== "")
               .map(([k, v]) => (
-                <ShortDiv key={k} title={formatKey(k)} value={v} />
+                <ProductInfo key={k} title={formatKey(k)} value={v} />
               ))}
 
           {product?.additonalinformation &&
             Object.entries(product.additonalinformation)
               .filter(([, v]) => v && v.trim() !== "")
               .map(([k, v]) => (
-                <ShortDiv key={k} title={formatKey(k)} value={v} />
+                <ProductInfo key={k} title={formatKey(k)} value={v} />
               ))}
 
           {cat?.category === "Furniture" && (
-            <ShortDiv
+            <ProductInfo
               title="Manufacturer"
               value={product?.manufacturer || "N/A"}
             />
@@ -655,7 +655,7 @@ function ProductOverview() {
 
 export default ProductOverview;
 
-function ShortDiv({ title, value, bothBorder = false }) {
+function ProductInfo({ title, value, bothBorder = false }) {
   return (
     <div
       className={`border-[#E2E2E2] py-2 flex justify-between ${
