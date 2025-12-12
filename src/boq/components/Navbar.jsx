@@ -112,7 +112,6 @@ function Navbar({
     setCurrentLayoutID,
     quantityData,
     setIsSaveBOQ,
-    productQuantity,
   } = useApp();
 
   useClickOutside(dropdownRef, () => setIsOpen(false));
@@ -306,14 +305,11 @@ function Navbar({
       await PDFGenerator.generatePDF(
         selectedData,
         boqTotal,
-        accountHolder.companyName,
-        accountHolder.location,
         quantityData,
         areasData,
         categories,
         BOQTitle,
-        userResponses,
-        productQuantity
+        userResponses
       );
       setIsDownloading(false);
     } catch (error) {

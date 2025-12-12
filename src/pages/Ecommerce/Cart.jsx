@@ -86,9 +86,9 @@ function Cart() {
     a.productId.title.localeCompare(b.productId.title)
   );
 
-  const [orignalTotalPrice, setOriginalToalPrice] = useState(0); //sum of all the items in the cart
+  const [orignalTotalPrice, setOriginalTotalPrice] = useState(0); //sum of all the items in the cart
   // const [subTotalPrice, setsubToalPrice] = useState(0); //difference of total mrp - discount on mrp
-  const [disableApplycoupon, setDisableApplycoupon] = useState(false);
+  const [disableApplyCoupon, setDisableApplyCoupon] = useState(false);
   const [differenceInPrice, setDifferenceInPrice] = useState(0); //coupn and original
   const [differenceInPricetoshow, setDifferenceInPricetoshow] = useState(); //coupon cal on the popup
   const [allCoupons, setAllCoupons] = useState([]);
@@ -101,7 +101,7 @@ function Cart() {
   const [gst, setGst] = useState(0); //convet this gst to based on subtotal instead of originaltotal
   const [shippingcharge, setshippingCharge] = useState(0);
   // const [totalPrice, setTotalPrice] = useState(0);
-  const [mobilecouponname, setmobilecouponname] = useState("");
+  const [mobileCouponName, setMobileCouponName] = useState("");
   const finalValue = (
     orignalTotalPrice -
     discountOnMrp -
@@ -117,7 +117,7 @@ function Cart() {
           acc + curr.productId?.ecommercePrice?.mrp * curr.quantity,
         0
       );
-      setOriginalToalPrice(total || 0);
+      setOriginalTotalPrice(total || 0);
     };
 
     if (isAuthenticated && cartItems) calculateTotal();
@@ -128,7 +128,7 @@ function Cart() {
         0
       );
       // setCartTotalPrice(total || 0);
-      setOriginalToalPrice(total || 0);
+      setOriginalTotalPrice(total || 0);
     }
     const calculateDiscountOnMrp = () => {
       const items = isAuthenticated ? cartItems : localcartItems;
@@ -154,14 +154,14 @@ function Cart() {
     const subtotal = orignalTotalPrice - discountOnMrp;
     setCouponname("");
     toast.success("remove coupon");
-    setDisableApplycoupon(false);
+    setDisableApplyCoupon(false);
     const Getgstprice = calculateGst(subtotal);
     setGst(Getgstprice);
     setDifferenceInPrice(0);
   };
 
   function RevevaluteAppliedCoupon(coupon) {
-    if (disableApplycoupon) {
+    if (disableApplyCoupon) {
       const price = cartItems?.reduce(
         (acc, curr) =>
           acc + curr?.productId?.ecommercePrice?.mrp * curr.quantity,
@@ -195,7 +195,7 @@ function Cart() {
   }
 
   useEffect(() => {
-    RevevaluteAppliedCoupon(mobilecouponname);
+    RevevaluteAppliedCoupon(mobileCouponName);
   }, [orignalTotalPrice]);
 
   useEffect(() => {
@@ -204,7 +204,7 @@ function Cart() {
 
     if (differenceInPrice > 0) {
       const discountedprice =
-        subtotal - (subtotal * mobilecouponname?.discountPerc) / 100;
+        subtotal - (subtotal * mobileCouponName?.discountPerc) / 100;
       const Getgstprice = calculateGst(subtotal, discountedprice);
       setGst(Getgstprice);
     } else {
@@ -222,7 +222,7 @@ function Cart() {
 
     if (orignalTotalPrice === 0) return toast.error("cart is empty");
 
-    if (disableApplycoupon) return toast.error("coupon already applied");
+    if (disableApplyCoupon) return toast.error("coupon already applied");
 
     if (couponname.trim() === 0) return toast.error("enter the coupon");
     try {
@@ -239,7 +239,7 @@ function Cart() {
         return toast.error("coupon is expired or min purchase not reached");
       calculateTotalDiffertoShow(coupon);
       // calculateTotalDiffer(coupon);
-      setmobilecouponname(coupon);
+      setMobileCouponName(coupon);
     } catch (error) {
       console.log(error);
       toast.error("Invalid Coupon");
@@ -285,14 +285,14 @@ function Cart() {
     if (orignalTotalPrice === 0) return toast.error("cart is empty");
     const subtotal = orignalTotalPrice - discountOnMrp;
 
-    if (disableApplycoupon) return toast.error("coupon already applied");
+    if (disableApplyCoupon) return toast.error("coupon already applied");
     if (!isCouponValid(coupon, subtotal))
       return toast.error("coupon is expired or min purchase not reached");
     try {
       const discountedprice =
         subtotal - (subtotal * coupon?.discountPerc) / 100;
-      setDisableApplycoupon(true);
-      setmobilecouponname(coupon);
+      setDisableApplyCoupon(true);
+      setMobileCouponName(coupon);
       // localStorage.setItem("appliedCoupon", JSON.stringify(coupon));
       calculateTotalDiffer(coupon);
       const gstprice = calculateGst(subtotal, discountedprice);
@@ -400,7 +400,7 @@ function Cart() {
         discount: differenceInPrice || 0,
         gst: gst || 0,
         finalValue: +finalValue,
-        coupon: mobilecouponname || "",
+        coupon: mobileCouponName || "",
         shippingFee: shippingcharge || 0,
       };
       navigate("/address", { state: { data: formatteddata } });
@@ -651,7 +651,7 @@ function Cart() {
                         <h5 className="font-medium  text-[#111111]/80">
                           Coupon Discount
                         </h5>
-                        {disableApplycoupon ? (
+                        {disableApplyCoupon ? (
                           <div className="font-medium  text-[#34BFAD]/80 ">
                             -Rs{" "}
                             {orignalTotalPrice > 0
@@ -672,12 +672,12 @@ function Cart() {
                         )}
                       </div>
 
-                      {orignalTotalPrice > 0 && disableApplycoupon && (
+                      {orignalTotalPrice > 0 && disableApplyCoupon && (
                         <div>
                           <AppliedCoupon
                             savedamount={differenceInPrice}
                             handleRemove={handleRemoveCoupon}
-                            code={mobilecouponname?.couponName}
+                            code={mobileCouponName?.couponName}
                           />
                         </div>
                       )}
@@ -841,8 +841,8 @@ function Cart() {
                             <CouponCard
                               key={index}
                               coupon={coupon}
-                              mobilecouponname={mobilecouponname}
-                              setmobilecouponname={setmobilecouponname}
+                              mobileCouponName={mobileCouponName}
+                              setMobileCouponName={setMobileCouponName}
                               calculateTotalDiffertoShow={
                                 calculateTotalDiffertoShow
                               }
@@ -862,7 +862,7 @@ function Cart() {
                           <div>
                             <button
                               onClick={() =>
-                                handleApplyofCoupon(mobilecouponname)
+                                handleApplyofCoupon(mobileCouponName)
                               }
                               className="px-[65px] py-[17px] text-white bg-[#334A78] border border-[#212B36]"
                             >
@@ -1214,21 +1214,21 @@ function ClearCartPopUp({ onConfirm, onClose }) {
 
 function CouponCard({
   coupon,
-  setmobilecouponname,
-  mobilecouponname,
+  setMobileCouponName,
+  mobileCouponName,
   calculateTotalDiffertoShow,
 }) {
   return (
     <div className="flex items-start space-x-2 font-Poppins ">
       <input
         type="checkbox"
-        checked={mobilecouponname?.couponName === coupon?.couponName}
+        checked={mobileCouponName?.couponName === coupon?.couponName}
         onChange={(e) => {
           if (e.target.checked) {
-            setmobilecouponname(coupon);
+            setMobileCouponName(coupon);
             calculateTotalDiffertoShow(coupon);
           } else {
-            setmobilecouponname("");
+            setMobileCouponName("");
           }
         }}
         className="w-5 h-5 accent-[#304778] mt-1 cursor-pointer"

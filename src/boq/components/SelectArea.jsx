@@ -22,9 +22,8 @@ function SelectArea({
     selectedData,
     userResponses,
     setSelectedData,
-    areasData,
     quantityData,
-    handelSelectedData,
+    handleSelectedData,
     productQuantity,
     setProductQuantity,
     categoryConfig,
@@ -71,15 +70,9 @@ function SelectArea({
           addons: (selectedAddonsMap[currentGroupKey] || []).map((addon) => ({
             ...addon,
             finalPrice: calculateAddonTotalPrice(
-              selectedCategory.category,
               item.subcategory,
-              selectedSubCategory1,
               addon,
-              selectedCategory,
               selectedSubCategory,
-              selectedSubCategory1,
-              userResponses,
-              areasData,
               quantityData
             ),
           })),
@@ -216,7 +209,7 @@ function SelectArea({
         return;
       }
 
-      handelSelectedData(
+      handleSelectedData(
         selectedProductView,
         selectedCategory,
         subCat,
@@ -437,24 +430,6 @@ function SelectArea({
             selectedProductView
           )
       ) ?? false;
-
-  const handleAddonSelect = (addon, isChecked) => {
-    const currentGroupKey = `${selectedCategory.category}-${selectedSubCategory}-${selectedSubCategory1}-${selectedProductView.id}`;
-
-    setSelectedAddonsMap((prev) => {
-      const existingAddons = prev[currentGroupKey] || [];
-
-      const updatedAddons = isChecked
-        ? [...existingAddons, addon]
-        : existingAddons.filter((item) => item.id !== addon.id);
-
-      return { ...prev, [currentGroupKey]: updatedAddons };
-    });
-
-    setSelectedAddons((prev) =>
-      isChecked ? [...prev, addon] : prev.filter((item) => item.id !== addon.id)
-    );
-  };
 
   const handleIncrement = (subcategory, productName) => {
     setProductQuantity((prev) => ({
@@ -895,7 +870,6 @@ function SelectArea({
               <div className="flex flex-col gap-4 border-2 border-gray-300 p-4 w-full lg:w-[30%] lg:min-h-full shadow-lg overflow-y-auto max-h-[500px] gradient-scrollbar">
                 <Addon
                   allAddons={allAddons}
-                  onAddonSelect={handleAddonSelect}
                   selectedRoom={selectedRoom}
                   selectedData={selectedData}
                   selectedProductView={selectedProductView}
@@ -903,7 +877,6 @@ function SelectArea({
                   setSelectedAddons={setSelectedAddons}
                   selectedAddonsMap={selectedAddonsMap}
                   setSelectedAddonsMap={setSelectedAddonsMap}
-                  setShowSelectArea={setShowSelectArea}
                 />
               </div>
             </div>

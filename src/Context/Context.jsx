@@ -78,7 +78,7 @@ export const AppProvider = ({ children }) => {
     JSON.parse(localStorage.getItem("cartitems")) || []
   );
 
-  const [resfreshCartItens, SetRefreshCartItems] = useState(false);
+  const [refreshCartItens, SetRefreshCartItems] = useState(false);
   const [wishlistItems, setWishlistItems] = useState([]);
   const [filters, setFilters] = useState({
     category: [],
@@ -92,11 +92,11 @@ export const AppProvider = ({ children }) => {
   const [formulaMap, setFormulaMap] = useState({});
   const [formulasLoading, setFormulasLoading] = useState(true);
   const [compare, setCompare] = useState([]);
-  const [mobilecouponname, setmobilecouponname] = useState("");
-  const [disableApplycoupon, setDisableApplycoupon] = useState(false);
-  const [orignalTotalPrice, setOriginalToalPrice] = useState(0);
+  const [mobileCouponName, setMobileCouponName] = useState("");
+  const [disableApplyCoupon, setDisableApplyCoupon] = useState(false);
+  const [orignalTotalPrice, setOriginalTotalPrice] = useState(0);
   const [differenceInPrice, setDifferenceInPrice] = useState(0);
-  const [carttotalPrice, setCartTotalPrice] = useState(0);
+  const [cartTotalPrice, setCartTotalPrice] = useState(0);
   const [showLoginPopup, setShowLoginPopup] = useState(false);
   const [selectedClient, setSelectedClient] = useState(null);
   const [isSaveBOQ, setIsSaveBOQ] = useState(true);
@@ -482,7 +482,7 @@ export const AppProvider = ({ children }) => {
 
   useEffect(() => {
     getCartItems();
-  }, [resfreshCartItens]);
+  }, [refreshCartItens]);
 
   useEffect(() => {
     const loadData = async () => {
@@ -910,7 +910,7 @@ export const AppProvider = ({ children }) => {
     return Number.isFinite(a) && Number.isFinite(b) ? Number(a * b) : null;
   }
 
-  const handelSelectedData = (
+  const handleSelectedData = (
     product,
     category,
     subCat,
@@ -1081,7 +1081,7 @@ export const AppProvider = ({ children }) => {
         quantityData,
         setQuantityData,
         handleCategorySelection,
-        handelSelectedData,
+        handleSelectedData,
         selectedProductView,
         setSelectedProductView,
         showRecommend,
@@ -1108,15 +1108,15 @@ export const AppProvider = ({ children }) => {
         setFilters,
         compare,
         setCompare,
-        mobilecouponname,
-        setmobilecouponname,
-        disableApplycoupon,
-        setDisableApplycoupon,
+        mobileCouponName,
+        setMobileCouponName,
+        disableApplyCoupon,
+        setDisableApplyCoupon,
         orignalTotalPrice,
-        setOriginalToalPrice,
+        setOriginalTotalPrice,
         differenceInPrice,
         setDifferenceInPrice,
-        carttotalPrice,
+        cartTotalPrice,
         setCartTotalPrice,
         showLoginPopup,
         setShowLoginPopup,

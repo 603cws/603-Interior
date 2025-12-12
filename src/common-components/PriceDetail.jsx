@@ -12,28 +12,28 @@ function PriceDetail({ handlebtnClick }) {
     cartItems,
     isAuthenticated,
     localcartItems,
-    disableApplycoupon,
-    setDisableApplycoupon,
-    mobilecouponname,
-    setmobilecouponname,
+    disableApplyCoupon,
+    setDisableApplyCoupon,
+    mobileCouponName,
+    setMobileCouponName,
     orignalTotalPrice,
-    setOriginalToalPrice,
+    setOriginalTotalPrice,
     differenceInPrice,
     setDifferenceInPrice,
-    carttotalPrice,
+    cartTotalPrice,
     setCartTotalPrice,
   } = useApp();
 
   const [differenceInPricetoshow, setDifferenceInPricetoshow] = useState();
   const [allCoupons, setAllCoupons] = useState([]);
   const [ismobileCouponFormOpen, setIsMobileCouponFormOpen] = useState(false);
-  const [couponname, setCouponname] = useState("");
+  const [couponName, setCouponName] = useState("");
   const [gst, setGst] = useState();
-  const [shippingcharge, setshippingCharge] = useState();
+  const [shippingCharge, setshippingCharge] = useState();
   const finalValue = (
     orignalTotalPrice -
     differenceInPrice +
-    shippingcharge +
+    shippingCharge +
     gst
   ).toFixed(2);
 
@@ -45,7 +45,7 @@ function PriceDetail({ handlebtnClick }) {
         (acc, curr) => acc + curr.productId?.price * curr.quantity,
         0
       );
-      setOriginalToalPrice(total || 0);
+      setOriginalTotalPrice(total || 0);
     };
 
     if (isAuthenticated && cartItems) calculateTotal();
@@ -54,15 +54,15 @@ function PriceDetail({ handlebtnClick }) {
         (acc, curr) => acc + curr.productId?.price * curr.quantity,
         0
       );
-      setOriginalToalPrice(total || 0);
+      setOriginalTotalPrice(total || 0);
     }
   }, [cartItems, localcartItems, isAuthenticated]);
 
   const handleRemoveCoupon = async () => {
-    if (carttotalPrice === 0) return setCouponname("");
-    setCouponname("");
+    if (cartTotalPrice === 0) return setCouponName("");
+    setCouponName("");
     toast.success("remove coupon");
-    setDisableApplycoupon(false);
+    setDisableApplyCoupon(false);
     setCartTotalPrice(orignalTotalPrice);
     const Getgstprice = calculateGst(orignalTotalPrice);
     setGst(Getgstprice);
@@ -82,37 +82,37 @@ function PriceDetail({ handlebtnClick }) {
       handleRemoveCoupon();
       setDifferenceInPrice(0);
       setCartTotalPrice(0);
-      setCouponname("");
-      setmobilecouponname();
+      setCouponName("");
+      setMobileCouponName();
     }
 
     if (
       orignalTotalPrice > 0 &&
-      mobilecouponname &&
+      mobileCouponName &&
       location.pathname === "/cart"
     ) {
       handleRemoveCoupon();
-      setCouponname("");
-      setmobilecouponname();
+      setCouponName("");
+      setMobileCouponName();
     }
   }, [orignalTotalPrice]);
 
   const handleCheckCoupon = async (e) => {
     e.preventDefault();
-    if (carttotalPrice === 0) return toast.error("cart is empty");
-    if (disableApplycoupon) return toast.error("coupon already applied");
-    if (couponname.trim() === 0) return toast.error("enter the coupon");
+    if (cartTotalPrice === 0) return toast.error("cart is empty");
+    if (disableApplyCoupon) return toast.error("coupon already applied");
+    if (couponName.trim() === 0) return toast.error("enter the coupon");
     try {
       const { data: coupon, error: fetchError } = await supabase
         .from("coupons")
         .select("*")
-        .eq("couponName", couponname)
+        .eq("couponName", couponName)
         .single();
       if (fetchError) throw new Error(fetchError.message);
       if (!isCouponValid(coupon, orignalTotalPrice))
         return toast.error("coupon is expired or min purchase not reached");
       calculateTotalDiffertoShow(coupon);
-      setmobilecouponname(coupon);
+      setMobileCouponName(coupon);
     } catch (error) {
       console.log(error);
       toast.error("Invalid Coupon");
@@ -151,13 +151,13 @@ function PriceDetail({ handlebtnClick }) {
   const handleApplyofCoupon = async (coupon) => {
     if (orignalTotalPrice === 0) return toast.error("cart is empty");
 
-    if (disableApplycoupon) return toast.error("coupon already applied");
+    if (disableApplyCoupon) return toast.error("coupon already applied");
     if (!isCouponValid(coupon, orignalTotalPrice))
       return toast.error("coupon is expired or min purchase not reached");
     try {
       const discountedprice =
         orignalTotalPrice - (orignalTotalPrice * coupon?.discountPerc) / 100;
-      setDisableApplycoupon(true);
+      setDisableApplyCoupon(true);
       calculateTotalDiffer(coupon);
       const gstprice = calculateGst(discountedprice);
       setGst(gstprice);
@@ -206,7 +206,7 @@ function PriceDetail({ handlebtnClick }) {
               <h5 className="font-medium  text-[#111111]/80">
                 Coupon Discount
               </h5>
-              {disableApplycoupon ? (
+              {disableApplyCoupon ? (
                 <div className="font-medium  text-[#34BFAD]/80 ">
                   -Rs{" "}
                   {orignalTotalPrice > 0 ? differenceInPrice.toFixed(2) : "--"}
@@ -225,12 +225,12 @@ function PriceDetail({ handlebtnClick }) {
               )}
             </div>
 
-            {orignalTotalPrice > 0 && disableApplycoupon && (
+            {orignalTotalPrice > 0 && disableApplyCoupon && (
               <div>
                 <AppliedCoupon
                   savedamount={differenceInPrice}
                   handleRemove={handleRemoveCoupon}
-                  code={mobilecouponname?.couponName}
+                  code={mobileCouponName?.couponName}
                 />
               </div>
             )}
@@ -244,9 +244,9 @@ function PriceDetail({ handlebtnClick }) {
               </div>
               <h5 className="font-medium  text-[#34BFAD]/80 uppercase">
                 {orignalTotalPrice > 0
-                  ? shippingcharge === 0
+                  ? shippingCharge === 0
                     ? "Free"
-                    : shippingcharge
+                    : shippingCharge
                   : "--"}
               </h5>
             </div>
@@ -337,8 +337,8 @@ function PriceDetail({ handlebtnClick }) {
                       <input
                         type="text"
                         placeholder="Enter coupon code"
-                        value={couponname}
-                        onChange={(e) => setCouponname(e.target.value)}
+                        value={couponName}
+                        onChange={(e) => setCouponName(e.target.value)}
                         required
                         className="w-3/4 px-4 py-3 text-sm text-gray-700 placeholder-gray-400 focus:outline-none"
                       />
@@ -358,8 +358,8 @@ function PriceDetail({ handlebtnClick }) {
                   <CouponCard
                     key={index}
                     coupon={coupon}
-                    mobilecouponname={mobilecouponname}
-                    setmobilecouponname={setmobilecouponname}
+                    mobileCouponName={mobileCouponName}
+                    setMobileCouponName={setMobileCouponName}
                     calculateTotalDiffertoShow={calculateTotalDiffertoShow}
                   />
                 ))}
@@ -376,7 +376,7 @@ function PriceDetail({ handlebtnClick }) {
                 </div>
                 <div>
                   <button
-                    onClick={() => handleApplyofCoupon(mobilecouponname)}
+                    onClick={() => handleApplyofCoupon(mobileCouponName)}
                     className="px-[65px] py-[17px] text-white bg-[#334A78] border border-[#212B36]"
                   >
                     Apply
@@ -416,21 +416,21 @@ export default PriceDetail;
 
 function CouponCard({
   coupon,
-  setmobilecouponname,
-  mobilecouponname,
+  setMobileCouponName,
+  mobileCouponName,
   calculateTotalDiffertoShow,
 }) {
   return (
     <div className="flex items-start space-x-2 font-Poppins ">
       <input
         type="checkbox"
-        checked={mobilecouponname?.couponName === coupon?.couponName}
+        checked={mobileCouponName?.couponName === coupon?.couponName}
         onChange={(e) => {
           if (e.target.checked) {
-            setmobilecouponname(coupon);
+            setMobileCouponName(coupon);
             calculateTotalDiffertoShow(coupon);
           } else {
-            setmobilecouponname("");
+            setMobileCouponName("");
           }
         }}
         className="w-5 h-5 accent-[#304778] mt-1 cursor-pointer"

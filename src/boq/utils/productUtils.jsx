@@ -5,28 +5,16 @@ import {
 import { calculateCategoryTotal } from "./calculateCategoryTotal";
 
 export const calculateAddonTotalPrice = (
-  category,
   subCat,
-  subcategory1,
   addon,
-  selectedCategory,
   selectedSubCategory,
-  selectedSubCategory1,
-  userResponses,
-  areasData,
   quantityData
 ) => {
-  const actualCategory = category || selectedCategory?.category;
   const actualSubCategory = subCat || selectedSubCategory;
-  const actualSubCategory1 = subcategory1 || selectedSubCategory1;
 
   const total = calculateAddonTotalPriceHelper(
     quantityData[0],
-    areasData[0],
-    actualCategory,
     actualSubCategory,
-    actualSubCategory1,
-    userResponses.height,
     addon
   );
 
