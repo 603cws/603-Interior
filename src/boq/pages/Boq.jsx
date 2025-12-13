@@ -80,6 +80,8 @@ function Boq() {
     searchQuery,
   } = useApp();
 
+  console.log(selectedData);
+
   const [runTour, setRunTour] = useState(false);
 
   const handleTourCallback = (data) => {
