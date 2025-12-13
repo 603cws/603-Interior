@@ -544,11 +544,11 @@ export const AppProvider = ({ children }) => {
                   str.toLowerCase().replace(/[^a-z0-9]/g, "");
                 const subcategoryKey = normalize(subcategory);
 
-                const ignoreCat =
-                  normalize(category.category) === "civilplumbing";
-                if (ignoreCat) {
-                  return true;
-                }
+                // const ignoreCat =
+                //   normalize(category.category) === "civilplumbing";
+                // if (ignoreCat) {
+                //   return true;
+                // }
 
                 const roomCount = processedQuantityData || {};
 

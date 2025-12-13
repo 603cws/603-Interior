@@ -10,8 +10,8 @@ import {
   multiplyFirstTwoFlexible,
   normalizeKey,
 } from "../boq/utils/BoqUtils";
-import { calculateAutoTotalPriceHelper } from "../boq/utils/CalculateTotalPriceHelper";
 import { numOfCoats } from "../constants/constant";
+import { calculateTotalPrice } from "../boq/utils/productUtils";
 
 const plansData = [
   {
@@ -264,19 +264,33 @@ function Plans({ showNewBoqPopup, setShowNewBoqPopup }) {
               (category === "Civil / Plumbing" && subcategory1 === "Tile") ||
               category === "Partitions / Ceilings" ||
               category === "Paint"
-                ? calculateAutoTotalPriceHelper(
-                    variant.price,
-                    product.category,
+                ? calculateTotalPrice(
+                    category,
                     subcategory,
-                    product.subcategory1,
-                    variant.dimensions,
-                    seatCountData,
+                    subcategory1,
+                    null,
+                    null,
+                    null,
                     quantityData,
                     areasData,
+                    userResponses,
+                    variant,
                     formulaMap,
-                    userResponses
+                    seatCountData
                   )
-                : category === "Furniture" &&
+                : // calculateTotalPriceHelper(
+                //     quantityData[0],
+                //     areasData[0],
+                //     category,
+                //     subcategory,
+                //     subcategory1,
+                //     userResponses.height,
+                //     variant.dimensions,
+                //     seatCountData,
+                //     variant.price,
+                //     formulaMap
+                //   )
+                category === "Furniture" &&
                   subcategory1 === "Chair" &&
                   (subcategory === "Md Cabin Main" ||
                     subcategory === "Md Cabin Visitor")
