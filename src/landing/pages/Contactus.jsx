@@ -4,12 +4,13 @@ import toast from "react-hot-toast";
 import { useState } from "react";
 import LandingNavbar from "../components/LandingNavbar";
 
+const templateID = import.meta.env.VITE_TEMPLATE_ID;
+const serviceid = import.meta.env.VITE_SERVICE_ID;
+const your_public_key = import.meta.env.VITE_CONTACT_EMAILJS_PUBLIC;
+const background = "/images/contact-us/contactpage.webp";
+
 function Contactus() {
   const [isSubmitting, setisSubmitting] = useState(false);
-
-  const templateID = "template_0355bfq";
-  const serviceid = "service_ae0sgim";
-  const your_public_key = "dR0YyJ3Be6H6xVsT7";
 
   const [form, setFormData] = useState({
     message: "",
@@ -22,7 +23,6 @@ function Contactus() {
   const handleChange = (e) => {
     setFormData({ ...form, [e.target.name]: e.target.value });
   };
-  const background = "/images/contact-us/contactpage.webp";
 
   const handleformsubmit = async (e) => {
     e.preventDefault();

@@ -11,7 +11,6 @@ import HeroSection from "../components/HeroSection";
 
 function Career() {
   const [jobPostings, setJobPostings] = useState();
-  const navigate = useNavigate();
 
   useEffect(() => {
     async function GetAllJobPosting() {
@@ -82,52 +81,7 @@ function Career() {
 
           <div className="py-4 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3  gap-6">
             {jobPostings?.map((job, index) => (
-              <div
-                key={index}
-                className="hover:bg-[#68B2DC]/20 bg-white p-8 border-[#000] border flex flex-col justify-between h-full "
-              >
-                <div className="pb-4">
-                  <h2 className="font-Georgia font-semibold text-2xl lg:text-3xl break-words">
-                    {job?.jobTitle}
-                  </h2>
-                </div>
-
-                <div className="text-black flex-grow font-TimesNewRoman">
-                  <div className="flex justify-between lg:justify-normal  lg:flex-wrap gap-4 lg:gap-16">
-                    <div className="flex items-center space-x-2">
-                      <HiClock color="#334A78" />
-                      <p className="text-sm">
-                        {job?.positionType === "FullTIme"
-                          ? "Full Time"
-                          : job?.positionType}
-                      </p>
-                    </div>
-
-                    <div className="flex items-center space-x-2">
-                      <IoCalendarSharp color="#334A78" />
-                      {job?.experience > 0 ? (
-                        <p className="text-sm">{job?.experience}+ years</p>
-                      ) : (
-                        <p className="text-sm">Fresher</p>
-                      )}
-                    </div>
-                  </div>
-
-                  <div className="flex items-center space-x-2 mt-3">
-                    <FaLocationDot color="#334A78" />
-                    <p className="text-sm capitalize">{job?.location}</p>
-                  </div>
-                </div>
-
-                <div className="pt-6">
-                  <button
-                    onClick={() => navigate(`${job?.jobTitle}`, { state: job })}
-                    className="font-Georgia font-semibold text-sm text-black capitalize flex items-center gap-2 hover:underline underline-offset-4"
-                  >
-                    View Details <IoIosArrowForward color="#334A78" />
-                  </button>
-                </div>
-              </div>
+              <CareerCard job={job} key={index} />
             ))}
           </div>
         </section>
@@ -139,3 +93,52 @@ function Career() {
 }
 
 export default Career;
+
+function CareerCard({ job }) {
+  const navigate = useNavigate();
+  return (
+    <div className="hover:bg-[#68B2DC]/20 bg-white p-8 border-[#000] border flex flex-col justify-between h-full ">
+      <div className="pb-4">
+        <h2 className="font-Georgia font-semibold text-2xl lg:text-3xl break-words">
+          {job?.jobTitle}
+        </h2>
+      </div>
+
+      <div className="text-black flex-grow font-TimesNewRoman">
+        <div className="flex justify-between lg:justify-normal  lg:flex-wrap gap-4 lg:gap-16">
+          <div className="flex items-center space-x-2">
+            <HiClock color="#334A78" />
+            <p className="text-sm">
+              {job?.positionType === "FullTIme"
+                ? "Full Time"
+                : job?.positionType}
+            </p>
+          </div>
+
+          <div className="flex items-center space-x-2">
+            <IoCalendarSharp color="#334A78" />
+            {job?.experience > 0 ? (
+              <p className="text-sm">{job?.experience}+ years</p>
+            ) : (
+              <p className="text-sm">Fresher</p>
+            )}
+          </div>
+        </div>
+
+        <div className="flex items-center space-x-2 mt-3">
+          <FaLocationDot color="#334A78" />
+          <p className="text-sm capitalize">{job?.location}</p>
+        </div>
+      </div>
+
+      <div className="pt-6">
+        <button
+          onClick={() => navigate(`${job?.jobTitle}`, { state: job })}
+          className="font-Georgia font-semibold text-sm text-black capitalize flex items-center gap-2 hover:underline underline-offset-4"
+        >
+          View Details <IoIosArrowForward color="#334A78" />
+        </button>
+      </div>
+    </div>
+  );
+}

@@ -16,6 +16,68 @@ import LazyImage from "../../utils/LazyImage";
 import { trackCTA } from "../../lib/trackCTA";
 
 gsap.registerPlugin(ScrollTrigger);
+
+const featuredProjects = [
+  {
+    img: "Marathon.webp",
+    title: "marathon futurex",
+    location: "lower parel",
+  },
+  {
+    img: "TradeLink.webp",
+    title: "trade link",
+    location: "lower parel",
+  },
+  {
+    img: "Sunshine.webp",
+    title: "sunshine",
+    location: "lower parel",
+  },
+  {
+    img: "MarathonFuturex.webp",
+    title: "marathon futurex",
+    location: "lower parel",
+  },
+  {
+    img: "TradeWorld.webp",
+    title: "trade world",
+    location: "lower parel",
+  },
+  {
+    img: "BKC.webp",
+    title: "pinnacle corporate park",
+    location: "BKC",
+  },
+];
+
+const testimonials = [
+  {
+    id: 1,
+    text: " Workved Interiors transformed our office into a space that perfectly blends functionality with modern aesthetics. Their team understood our requirements and executed the project seamlessly, ensuring a workspace that enhances productivity and employee well-being. The attention to detail and quality craftsmanship truly set them apart!",
+    name: "Hussain Patel",
+    role: "Director, Tripjack",
+    image: "images/tripjack-logo.png",
+  },
+  {
+    id: 2,
+    text: "Workved Interiors has played a key role in shaping our coworking spaces into inspiring and productive environments. Their ability to design offices that are both stylish and highly functional  has been a game-changer for our members. Their expertise, professionalism, and commitment to delivering excellence make them a trusted partner in workspace design.",
+    name: "Kunal Kataria",
+    role: "Founder, 603 CWS",
+    image: "logo/logo.png",
+  },
+  {
+    id: 3,
+    text: `The team at Workved Interiors understood our brand vision and
+                delivered an office space that enhances collaboration,
+                creativity, and efficiency. They were meticulous in their
+                planning and execution, ensuring that every element from layout
+                to furnishings was aligned with our needs. Working with them was
+                a smooth and rewarding experience!`,
+    name: "Aditya Gupta",
+    role: "CEO, Credilio",
+    image: "images/credilio-svg-logo.svg",
+  },
+];
 function Landing() {
   const navigate = useNavigate();
   const containerRef = useRef();
@@ -123,82 +185,6 @@ function Landing() {
       ctx.revert();
     };
   }, []);
-
-  const featuredProjects = [
-    {
-      img: "Marathon.webp",
-      title: "marathon futurex",
-      location: "lower parel",
-    },
-    {
-      img: "TradeLink.webp",
-      title: "trade link",
-      location: "lower parel",
-    },
-    {
-      img: "Sunshine.webp",
-      title: "sunshine",
-      location: "lower parel",
-    },
-    {
-      img: "MarathonFuturex.webp",
-      title: "marathon futurex",
-      location: "lower parel",
-    },
-    {
-      img: "TradeWorld.webp",
-      title: "trade world",
-      location: "lower parel",
-    },
-    {
-      img: "BKC.webp",
-      title: "pinnacle corporate park",
-      location: "BKC",
-    },
-  ];
-
-  const testimonials = [
-    {
-      id: 1,
-      text: " Workved Interiors transformed our office into a space that perfectly blends functionality with modern aesthetics. Their team understood our requirements and executed the project seamlessly, ensuring a workspace that enhances productivity and employee well-being. The attention to detail and quality craftsmanship truly set them apart!",
-      name: "Hussain Patel",
-      role: "Director, Tripjack",
-      image: "images/tripjack-logo.png",
-    },
-    {
-      id: 2,
-      text: "Workved Interiors has played a key role in shaping our coworking spaces into inspiring and productive environments. Their ability to design offices that are both stylish and highly functional  has been a game-changer for our members. Their expertise, professionalism, and commitment to delivering excellence make them a trusted partner in workspace design.",
-      name: "Kunal Kataria",
-      role: "Founder, 603 CWS",
-      image: "logo/logo.png",
-    },
-    {
-      id: 3,
-      text: `The team at Workved Interiors understood our brand vision and
-                delivered an office space that enhances collaboration,
-                creativity, and efficiency. They were meticulous in their
-                planning and execution, ensuring that every element from layout
-                to furnishings was aligned with our needs. Working with them was
-                a smooth and rewarding experience!`,
-      name: "Aditya Gupta",
-      role: "CEO, Credilio",
-      image: "images/credilio-svg-logo.svg",
-    },
-  ];
-
-  function TitleHeader({ title }) {
-    return (
-      <>
-        <div className="flex justify-center items-center gap-2">
-          <span className="w-8 h-px bg-[#374A75] "></span>
-          <h2 className="uppercase text-[#374A75] font-bold text-[13px] tracking-wide font-Georgia">
-            {title}
-          </h2>
-          <span className="w-8 h-px bg-[#374A75] "></span>
-        </div>
-      </>
-    );
-  }
 
   return (
     <>
@@ -513,3 +499,17 @@ function Landing() {
 }
 
 export default Landing;
+
+function TitleHeader({ title }) {
+  return (
+    <>
+      <div className="flex justify-center items-center gap-2">
+        <span className="w-8 h-px bg-[#374A75] "></span>
+        <h2 className="uppercase text-[#374A75] font-bold text-[13px] tracking-wide font-Georgia">
+          {title}
+        </h2>
+        <span className="w-8 h-px bg-[#374A75] "></span>
+      </div>
+    </>
+  );
+}

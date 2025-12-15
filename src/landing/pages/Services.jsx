@@ -26,6 +26,26 @@ const steps = [
   },
 ];
 
+const featuredDesignImages = [
+  {
+    img: "/images/FeaturedDesign1.png",
+  },
+  {
+    img: "/images/Featureddesign2.png",
+  },
+  {
+    img: "/images/Featureddesgin3.png",
+  },
+  {
+    img: "/images/featuredDesign4.png",
+  },
+  {
+    img: "/images/featuredDesign5.png",
+  },
+  {
+    img: "/images/featuredDesign6.png",
+  },
+];
 const FeatureCardDetails = [
   {
     imgpath: "/images/featureIcon1.png",
@@ -124,7 +144,6 @@ function OfficeLayoutSection() {
               className="!bg-[#3A5D7B] text-white capitalize font-Georgia mt-7 text-lg"
               variant="default"
               size="lg"
-              // glow={true}
               textEffect="shimmer"
               rounded="custom"
               asChild={false}
@@ -139,22 +158,7 @@ function OfficeLayoutSection() {
               Start Your Layout
             </AnimatedButton>
           </div>
-          {/* <button
-          onClick={() => navigate("/Layout")}
-          className=" font-Georgia mt-6 bg-gradient-to-r from-[#75A2BE] to-[#334A78] text-white px-6 py-3 rounded-md hover:scale-105  transition duration-500 ease-in-out"
-        >
-          Start Your Layout
-        </button> */}
         </div>
-
-        {/* Right Section - Image */}
-        {/* <div className="flex justify-center">
-        <img
-          src="/images/serviceHero.webp"
-          alt="Office Layout"
-          className="w-full  lg:max-w-xl xl:max-w-2xl"
-        />
-      </div> */}
         <motion.div
           className="flex justify-center xl:py-8 xl:pl-8 flex-1"
           initial={{ x: 300, opacity: 0 }}
@@ -248,7 +252,6 @@ function HeadingSection({ children }) {
     </h2>
   );
 }
-//  We Provide Everything for <br /> your Office Interior
 function StepsSection() {
   return (
     <section className="bg-white pb-5 lg:py-12">
@@ -285,36 +288,12 @@ function Step({ imagePath, title, description, index }) {
     </div>
   );
 }
-const featuredDesignImages = [
-  {
-    img: "/images/FeaturedDesign1.png",
-  },
-  {
-    img: "/images/Featureddesign2.png",
-  },
-  {
-    img: "/images/Featureddesgin3.png",
-  },
-  {
-    img: "/images/featuredDesign4.png",
-  },
-  {
-    img: "/images/featuredDesign5.png",
-  },
-  {
-    img: "/images/featuredDesign6.png",
-  },
-];
+
 function FeatureDesignSection() {
   const swiperRef = useRef(null);
   return (
     <div className="lg:px-4 lg:py-16 py-6 space-y-10 xl:px-0">
       <HeadingSection>Featured Designs</HeadingSection>
-      {/* <div className="flex flex-col md:flex-row items-center gap-6 justify-between ">
-        <div>
-          <img src="/images/FeaturedDesign1.png" alt="featured design" />
-        </div>
-      </div> */}
       <div className=" w-full custom-swiper">
         <Swiper
           ref={swiperRef}
