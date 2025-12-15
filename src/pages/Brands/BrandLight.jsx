@@ -1,4 +1,4 @@
-import LandingNavbar from "../../common-components/LandingNavbar";
+import LandingNavbar from "../../landing/components/LandingNavbar";
 
 function BrandLight() {
   return (

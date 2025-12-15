@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import LandingNavbar from "../../common-components/LandingNavbar";
+import LandingNavbar from "../../landing/components/LandingNavbar";
 import { useNavigate } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Navigation, Pagination } from "swiper/modules";
@@ -7,7 +7,7 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import Footer from "../../common-components/Footer";
-import ContactUsPopup from "../ContactUsPopup";
+import ContactUsPopup from "../../landing/components/ContactUsPopup";
 import CategorySvg from "../../common-components/CategorySvg";
 
 const TOP_OFFERS = [

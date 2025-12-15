@@ -8,11 +8,11 @@ import ScrollToTop from "./common-components/ScrollToTop";
 import BrandRouter from "./pages/Brands/BrandRouter";
 
 // lazy loading
-const Contactus = lazy(() => import("./pages/Contactus"));
-const AboutUs = lazy(() => import("./pages/AboutUs"));
+const Contactus = lazy(() => import("./landing/pages/Contactus"));
+const AboutUs = lazy(() => import("./landing/pages/AboutUs"));
 const Login = lazy(() => import("./common-components/Login"));
-const BlogDetail = lazy(() => import("./pages/BlogDetail"));
-const Dashboard = lazy(() => import("./pages/Dashboard"));
+const BlogDetail = lazy(() => import("./landing/pages/BlogDetail"));
+const Dashboard = lazy(() => import("./pages/user/Dashboard"));
 const BrandDLink = lazy(() => import("./pages/Brands/BrandDLink"));
 const DashboardInterface = lazy(() =>
   import("./pages/Admin/DashboardInterface")
@@ -20,54 +20,57 @@ const DashboardInterface = lazy(() =>
 const VendorDashboardLayout = lazy(() =>
   import("./pages/vendor/VendorDashboardLayout")
 );
-const Services = lazy(() => import("./pages/Services"));
-const OurStory = lazy(() => import("./pages/OurStory"));
-const OrderConfirm = lazy(() => import("./pages/Ecommerce/OrderConfirm"));
+const Services = lazy(() => import("./landing/pages/Services"));
+const OurStory = lazy(() => import("./landing/pages/OurStory"));
+const OrderConfirm = lazy(() => import("./Ecommerce/components/OrderConfirm"));
 const AdminDashboardEcom = lazy(() =>
   import("./pages/Admin/EcommerceDashboard/AdminDashboardEcom")
 );
 const DynamicTitle = lazy(() => import("./common-components/DynamicTitle"));
-const YouMayAlsoLike = lazy(() => import("./pages/Ecommerce/YouMayAlsoLike"));
+const YouMayAlsoLike = lazy(() => import("./Ecommerce/pages/YouMayAlsoLike"));
 const BrandsOverview = lazy(() => import("./pages/Brands/BrandOverview"));
 const Layout = lazy(() => import("./layout/pages/Layout"));
-const Carrer = lazy(() => import("./pages/Carrer"));
+const Career = lazy(() => import("./landing/pages/Career"));
 
-const HelpnFaq = lazy(() => import("./pages/HelpnFaq"));
-const TermsAndCondition = lazy(() => import("./pages/TermsAndCondition"));
+const HelpnFaq = lazy(() => import("./landing/pages/HelpnFaq"));
+const TermsAndCondition = lazy(() =>
+  import("./landing/pages/TermsAndCondition")
+);
 const Boqcompleted = lazy(() => import("./common-components/Boqcompleted"));
 const AdminDashboard = lazy(() => import("./pages/Admin/AdminDashboard"));
 const ProductOverview = lazy(() => import("./boq/pages/ProductOverview"));
-const JobPage = lazy(() => import("./pages/JobPage"));
+const JobPage = lazy(() => import("./landing/pages/JobPage"));
 const ThreeDViewer = lazy(() => import("./common-components/ThreeDViewer"));
 const CompleteProfile = lazy(() =>
   import("./common-components/CompleteProfile")
 );
-const Privacy = lazy(() => import("./pages/Privacy"));
-const InteriorBlog = lazy(() => import("./pages/InteriorBlog"));
+const Privacy = lazy(() => import("./landing/pages/Privacy"));
+const InteriorBlog = lazy(() => import("./landing/pages/InteriorBlog"));
 
-const Products = lazy(() => import("./pages/Ecommerce/Products"));
-const ProductView = lazy(() => import("./pages/Ecommerce/ProductView"));
-const ShopProducts = lazy(() => import("./pages/Ecommerce/ShopProducts"));
-const Cart = lazy(() => import("./pages/Ecommerce/Cart"));
-const Addresspage = lazy(() => import("./pages/Ecommerce/Addresspage"));
-const Wishlist = lazy(() => import("./pages/Ecommerce/Wishlist"));
-const Payments = lazy(() => import("./pages/Ecommerce/Payments"));
+const Products = lazy(() => import("./Ecommerce/pages/Products"));
+const ProductView = lazy(() => import("./Ecommerce/pages/ProductView"));
+const ShopProducts = lazy(() => import("./Ecommerce/pages/ShopProducts"));
+const Cart = lazy(() => import("./Ecommerce/pages/Cart"));
+const Addresspage = lazy(() => import("./Ecommerce/pages/Addresspage"));
+const Wishlist = lazy(() => import("./Ecommerce/pages/Wishlist"));
 const ELogin = lazy(() => import("./common-components/ELogin"));
 
 const Brands = lazy(() => import("./pages/Brands/Brands"));
-const ProductReview = lazy(() => import("./pages/Ecommerce/ProductReview"));
+const ProductReview = lazy(() =>
+  import("./Ecommerce/components/ProductReview")
+);
 const BrandProductView = lazy(() => import("./pages/Brands/BrandProductView"));
-const ProfilePage = lazy(() => import("./pages/Ecommerce/ProfilePage"));
-const SeasonSpecial = lazy(() => import("./pages/Ecommerce/SeasonSpecial"));
-const TopDeal = lazy(() => import("./pages/Ecommerce/TopDeal"));
-const AllReviews = lazy(() => import("./pages/Ecommerce/AllReviews"));
+const ProfilePage = lazy(() => import("./Ecommerce/pages/ProfilePage"));
+const SeasonSpecial = lazy(() => import("./Ecommerce/pages/SeasonSpecial"));
+const TopDeal = lazy(() => import("./Ecommerce/pages/TopDeal"));
+const AllReviews = lazy(() => import("./Ecommerce/pages/AllReviews"));
 
 const BrandFurniture = lazy(() => import("./pages/Brands/BrandFurniture"));
 const BrandLight = lazy(() => import("./pages/Brands/BrandLight"));
 
 const PageNotFound = lazy(() => import("./common-components/PageNotFound"));
 const Boq = lazy(() => import("./boq/pages/Boq"));
-const Landing = lazy(() => import("./pages/Landing"));
+const Landing = lazy(() => import("./landing/pages/Landing"));
 
 function App() {
   const { accountHolder, isAuthLoading } = useApp();
@@ -105,7 +108,7 @@ function App() {
           <Route path="/ourstory" element={<OurStory />} />
           <Route path="/Blog" element={<InteriorBlog />} />
           <Route path="/Blog/:title" element={<BlogDetail />} />
-          <Route path="/Career" element={<Carrer />} />
+          <Route path="/Career" element={<Career />} />
           <Route path="/privacy-policy" element={<Privacy />} />
           <Route path="/ThreeDViewer" element={<ThreeDViewer />} />
           <Route path="*" element={<PageNotFound />} />
@@ -163,7 +166,6 @@ function App() {
           <Route path="/wishlist" element={<Wishlist />} />
           <Route path="/brands" element={<Brands />} />
           <Route path="/productReview" element={<ProductReview />} />
-          <Route path="/payments" element={<Payments />} />
           <Route path="/eLogin" element={<ELogin />} />
           <Route path="/profilePage" element={<ProfilePage />} />
           <Route

@@ -1,5 +1,5 @@
 import { MdOutlineKeyboardArrowRight } from "react-icons/md";
-import LandingNavbar from "../../common-components/LandingNavbar";
+import LandingNavbar from "../../landing/components/LandingNavbar";
 import { FaStarOfLife } from "react-icons/fa";
 import Footer from "../../common-components/Footer";
 

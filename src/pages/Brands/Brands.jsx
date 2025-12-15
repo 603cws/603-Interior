@@ -1,4 +1,4 @@
-import LandingNavbar from "../../common-components/LandingNavbar";
+import LandingNavbar from "../../landing/components/LandingNavbar";
 import { useNavigate } from "react-router-dom";
 import "swiper/css";
 import "swiper/css/free-mode";
