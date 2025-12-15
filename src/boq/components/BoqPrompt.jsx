@@ -23,36 +23,35 @@ function BoqPrompt({ onConfirm, onCancel, isProfileCard, setIsProfileCard }) {
     setBOQID,
   } = useApp();
 
-  const handleLoad = async () => {
-    if (!selectedData || selectedData.length === 0) {
-      toast.error("No selected data to save.");
-      return;
-    }
-
-    const { data: allBOQs, error: fetchError } = await supabase
-      .from("boq_data_new")
-      .select("id, boqTitle, isDraft")
-      .eq("userId", userId);
-
-    if (fetchError) {
-      console.error("Error fetching user BOQs:", fetchError);
-      return;
-    }
-
-    const current = allBOQs.find(
-      (b) => b.id === BOQID && b.boqTitle === BOQTitle
-    );
-    if (current) {
-      setIsDraftBoq(current.isDraft);
-    }
-
-    const nonDraftBOQs = allBOQs.filter((b) => !b.isDraft);
-    setExistingBoqs(nonDraftBOQs);
-  };
-
   useEffect(() => {
+    const handleLoad = async () => {
+      if (!selectedData || selectedData.length === 0) {
+        toast.error("No selected data to save.");
+        return;
+      }
+
+      const { data: allBOQs, error: fetchError } = await supabase
+        .from("boq_data_new")
+        .select("id, boqTitle, isDraft")
+        .eq("userId", userId);
+
+      if (fetchError) {
+        console.error("Error fetching user BOQs:", fetchError);
+        return;
+      }
+
+      const current = allBOQs.find(
+        (b) => b.id === BOQID && b.boqTitle === BOQTitle
+      );
+      if (current) {
+        setIsDraftBoq(current.isDraft);
+      }
+
+      const nonDraftBOQs = allBOQs.filter((b) => !b.isDraft);
+      setExistingBoqs(nonDraftBOQs);
+    };
     handleLoad();
-  }, []);
+  }, [BOQID, BOQTitle, selectedData, userId]);
 
   const handleConfirm = async () => {
     if (!boqTitle.trim() && !selectedBoq) {

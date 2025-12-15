@@ -67,7 +67,7 @@ function Blogs() {
         .map((blog) => blog.image);
 
       if (imagePaths.length > 0) {
-        const { data, error: storageError } = await supabase.storage
+        const { error: storageError } = await supabase.storage
           .from("blog-images")
           .remove(imagePaths);
 
