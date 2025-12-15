@@ -1,4 +1,4 @@
-import LandingNavbar from "../../common-components/LandingNavbar";
+import LandingNavbar from "../../landing/components/LandingNavbar";
 import Footer from "../../common-components/Footer";
 import { useNavigate } from "react-router-dom";
 
