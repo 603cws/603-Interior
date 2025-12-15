@@ -241,7 +241,7 @@ function Cart() {
       // calculateTotalDiffer(coupon);
       setMobileCouponName(coupon);
     } catch (error) {
-      console.log(error);
+      console.error(error);
       toast.error("Invalid Coupon");
     }
   };
@@ -273,7 +273,7 @@ function Cart() {
 
       if (fetchError) throw new Error(fetchError);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 
@@ -300,7 +300,7 @@ function Cart() {
       toast.success("coupon is valid");
       // setCartTotalPrice(discountedprice);
     } catch (error) {
-      console.log(error);
+      console.error(error);
       toast.error("Invalid Coupon");
     } finally {
       setIsMobileCouponFormOpen(false);
@@ -960,7 +960,7 @@ function CartCard({ cartitem }) {
         showRemoveFromCartToast(product);
         if (error) throw new Error(error);
       } catch (error) {
-        console.log(error);
+        console.error(error);
       } finally {
         getCartItems();
       }
@@ -986,11 +986,11 @@ function CartCard({ cartitem }) {
         .update({ quantity: newQuantity })
         .eq("productId", productId);
       if (error) {
-        console.log(error);
+        console.error(error);
       }
       setLoadingQty(false);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     } finally {
       setLoadingQty(false);
       getCartItems();

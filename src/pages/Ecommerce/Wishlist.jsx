@@ -82,7 +82,7 @@ function Wishlist() {
       ];
       setWishlistItems(uniquecartitems);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     } finally {
       setIsloading(false);
     }

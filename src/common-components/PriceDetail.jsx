@@ -164,7 +164,7 @@ function PriceDetail({ handlebtnClick }) {
       toast.success("coupon is valid");
       setCartTotalPrice(discountedprice);
     } catch (error) {
-      console.log(error);
+      console.error(error);
       toast.error("Invalid Coupon");
     } finally {
       setIsMobileCouponFormOpen(false);

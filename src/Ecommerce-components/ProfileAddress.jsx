@@ -149,14 +149,14 @@ function ProfileAddress() {
           .eq("id", accountHolder?.userId);
 
         if (error) {
-          console.log(error);
+          console.error(error);
           return;
         }
 
         //  clear the form on succesful submission
         clearForm();
       } catch (error) {
-        console.log(error);
+        console.error(error);
       } finally {
         setIsAddressFormOpen(false);
         fetchUserData();
@@ -192,14 +192,14 @@ function ProfileAddress() {
           .eq("id", accountHolder?.userId);
 
         if (error) {
-          console.log(error);
+          console.error(error);
           return;
         }
 
         //  clear the form on succesful submission
         clearForm();
       } catch (error) {
-        console.log(error);
+        console.error(error);
       } finally {
         // setIsAddressFormOpen(false);
         setIsAddressEdit(false);
@@ -237,11 +237,11 @@ function ProfileAddress() {
         .eq("id", accountHolder?.userId);
 
       if (error) {
-        console.log(error);
+        console.error(error);
         return;
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
     } finally {
       fetchUserData();
       setIsSubmitting(false);

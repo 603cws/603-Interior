@@ -30,7 +30,7 @@ const ProfilePage = () => {
 
       if (fetchError) throw new Error(fetchError);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 

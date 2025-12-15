@@ -121,7 +121,7 @@ function ProductView() {
       };
       setproduct(productwithimage);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     } finally {
       setIsloading(false);
     }
@@ -196,7 +196,7 @@ function ProductView() {
       setSimilarProducts(updatedProducts);
       setProductsMayLike(updatedproductmaylike);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   }
 

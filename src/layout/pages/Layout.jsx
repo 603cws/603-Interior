@@ -335,7 +335,7 @@ function Layout() {
     } else if (totalArea < MIN_AREA) {
       toast.error("Enter valid area", { duration: 2000 });
     } else {
-      console.log(
+      console.error(
         "Built area exceeds the available space, showing error message"
       );
       setErrorMessageHandler(

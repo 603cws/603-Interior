@@ -114,14 +114,14 @@ function Addresspage() {
           .eq("id", accountHolder?.userId);
 
         if (error) {
-          console.log(error);
+          console.error(error);
           return;
         }
 
         //  clear the form on succesful submission
         clearForm();
       } catch (error) {
-        console.log(error);
+        console.error(error);
       } finally {
         setIsAddressFormOpen(false);
         fetchUserData();
@@ -182,11 +182,11 @@ function Addresspage() {
         .eq("id", accountHolder?.userId);
 
       if (error) {
-        console.log(error);
+        console.error(error);
         return;
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
     } finally {
       fetchUserData();
       setIsSubmitting(false);
@@ -323,7 +323,7 @@ function Addresspage() {
 
       return { neworder, data };
     } catch (error) {
-      console.log("error", error);
+      console.error("error", error);
     }
   }
 
@@ -375,7 +375,7 @@ function Addresspage() {
       );
 
       if (!result) {
-        console.log("Something went wrong. No result returned.");
+        console.error("Something went wrong. No result returned.");
         return;
       }
 

@@ -70,11 +70,11 @@ export default function ProductReview({ product, onClose }) {
         },
       ]);
       if (error) {
-        console.log(error);
+        console.error(error);
       }
       toast.success("Thank you! Your review has been submitted");
     } catch (error) {
-      console.log(error);
+      console.error(error);
     } finally {
       setUploading(false);
       setRating(2);
