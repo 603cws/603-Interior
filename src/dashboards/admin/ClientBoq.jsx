@@ -4,13 +4,13 @@ import { useApp } from "../../Context/Context";
 import { IoIosArrowBack } from "react-icons/io";
 import { IoCloseCircle, IoCloudDownloadOutline } from "react-icons/io5";
 import { category } from "../../utils/AllCatArray";
-import MobileTabProductCard from "../user/MobileTabProductCard";
+import MobileTabProductCard from "../../dashboards/user/MobileTabProductCard";
 import Spinner from "../../common-components/Spinner";
 import { CiMenuKebab } from "react-icons/ci";
 import { VscEye } from "react-icons/vsc";
 import { baseImageUrl } from "../../utils/HelperConstant";
 import { IoIosSearch } from "react-icons/io";
-import ProductView from "../user/ProductView";
+import ProductView from "../components/ProductView";
 import PagInationNav from "../../common-components/PagInationNav";
 function ClientBoq({ setClientBoqs }) {
   const [savedBoqs, setSavedBoqs] = useState([]);

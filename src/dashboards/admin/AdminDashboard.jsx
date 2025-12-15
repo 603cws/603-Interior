@@ -13,12 +13,12 @@ import SidebarItem from "../../common-components/SidebarItem";
 import CreateUser from "./CreateUser";
 import { TbCalculator, TbCalendarStats } from "react-icons/tb";
 import Schedule from "./Schedule";
-import FormulaEditor from "../../pages/Admin/FormulaEditor";
+import FormulaEditor from "./FormulaEditor";
 import { useLogout } from "../../utils/HelperFunction";
 import { BsBoxSeam } from "react-icons/bs";
 import { FiLogOut, FiUser, FiUserPlus } from "react-icons/fi";
 import { IoMdSwitch } from "react-icons/io";
-import CategoryEditor from "../../pages/Admin/CategoryEditor";
+import CategoryEditor from "./CategoryEditor";
 import AdminDashHome from "./AdminDashHome";
 import AdminSetting from "./AdminSetting";
 import AdminDashItems from "./AdminDashItems";
@@ -255,7 +255,7 @@ function AdminDashboard() {
           />
           <SidebarItem
             icon={<PiCodeBlock />}
-            text="Category Editor"
+            text="CategoryEditor"
             onClick={handleCategoryEditor}
             isExpanded={isExpanded}
             currentSection={sidebarstate?.currentSection}
@@ -380,7 +380,7 @@ function AdminDashboard() {
 
               <MobileMenuItem
                 icon={<PiCodeBlock />}
-                title={"Category Editor"}
+                title={"CategoryEditor"}
                 currentSection={sidebarstate?.currentSection}
                 onClick={handleCategoryEditor}
                 setIsOpen={setIsOpen}
@@ -449,7 +449,7 @@ function AdminDashboard() {
         )}
         {sidebarstate?.isProductOpen && (
           <div className="flex flex-col h-full min-h-0 overflow-hidden lg:border-2 lg:border-[#334A78] lg:rounded-lg bg-white">
-            <AdminDashItems />
+            <AdminDashItems mobileMenuRef={mobileMenuRef} />
           </div>
         )}
 

@@ -17,7 +17,7 @@ const accordionItems = [
       "We eliminate the need for lengthy consultations by offering instant office layouts, predefined and custom BOQs, and direct vendor collaboration, saving you time and costs.",
   },
 ];
-function Help({ isvendor }) {
+function Help() {
   const [expandedIndex, setExpandedIndex] = useState();
   const handleToggle = (index) => {
     setExpandedIndex((prevIndex) => (prevIndex === index ? null : index));

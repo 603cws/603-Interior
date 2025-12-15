@@ -5,7 +5,7 @@ function DashboardInbox({ viewDetails, products }) {
 
   return (
     <div className="bg-white rounded-sm shadow-sm font-Poppins lg:h-[300px] overflow-y-auto scrollbar-hide border p-3">
-      <div className="flex justify-between items-center">
+      <div className="flex justify-between items-center pb-1">
         <div>
           <h3 className="text-xl font-bold text-[#252733]">Inbox</h3>
           <p className="text-[#9FA2B4] text-xs capitalize">
@@ -20,7 +20,7 @@ function DashboardInbox({ viewDetails, products }) {
         </button>
       </div>
       {!filteredpending && <div>Loading .......</div>}
-      <div className="overflow-y-auto h-96 mb-3 lg:mb-0">
+      <div className="overflow-y-auto h-96 lg:h-[85%] mb-3 lg:mb-0">
         {filteredpending?.map((product) => {
           return (
             <div

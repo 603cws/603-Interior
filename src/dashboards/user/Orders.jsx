@@ -300,7 +300,6 @@ function OrderProducts({ orderID }) {
   const shippingAddress = order?.shipping_address?.[0];
   async function handleOrderitemCancel(order, product) {
     // indivual product cancel
-
     // check the order length to make it partial cancel or entire order cancel
     const cancelType =
       order?.order_items?.length > 1 ? "PartiallyCancelled" : "cancelled";
@@ -327,6 +326,7 @@ function OrderProducts({ orderID }) {
       orderId: product?.order_id,
       refundId: uniqueId,
     };
+
     try {
       const res = await fetch(
         `https://bwxzfwsoxwtzhjbzbdzs.supabase.co/functions/v1/orderRefund`,

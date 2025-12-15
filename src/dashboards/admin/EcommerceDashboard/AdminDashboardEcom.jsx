@@ -20,7 +20,7 @@ import Transactions from "./Transactions";
 import StatsSection from "./StatsSection";
 import BestSellingSection from "./BestSellingSection";
 import SalesSection from "./SalesSection";
-import DashboardProductCard from "../../vendor/DashboardProductCard";
+import DashboardProductCard from "../../../dashboards/vendor/DashboardProductCard";
 import Products from "./Products";
 import { BsArchive } from "react-icons/bs";
 import { CiDiscount1 } from "react-icons/ci";

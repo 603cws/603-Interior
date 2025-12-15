@@ -2,37 +2,7 @@ import ReactApexChart from "react-apexcharts";
 import { MdDeleteOutline } from "react-icons/md";
 import { useEffect, useState } from "react";
 import { colors } from "../../constants/constant";
-
-const fullNames = {
-  linear: "Linear Workspace",
-  lType: "L-Type Workspace",
-  md: "MD Cabin",
-  manager: "Manager Cabin",
-  small: "Small Cabin",
-  ups: "UPS Room",
-  bms: "BMS Room",
-  server: "Server Room",
-  reception: "Reception",
-  lounge: "Lounge",
-  fitness: "Fitness Zone",
-  sales: "Sales Team",
-  phoneBooth: "Phone Booth",
-  discussionRoom: "Discussion Room",
-  interviewRoom: "Interview Room",
-  conferenceRoom: "Conference Room",
-  boardRoom: "Board Room",
-  meetingRoom: "Meeting Room",
-  meetingRoomLarge: "Meeting Room (Large)",
-  hrRoom: "HR Room",
-  financeRoom: "Finance Room",
-  executiveWashroom: "Executive Washroom",
-  breakoutRoom: "Breakout Room",
-  videoRecordingRoom: "Video Recording Room",
-  other: "Other", // Add new category here
-  // maleWashroom: "Male Washroom",
-  // femaleWashroom: "Female Washroom",
-  washrooms: "Wash rooms",
-};
+import { fullNames } from "../../layout/utils/Constants";
 
 const options = {
   chart: {

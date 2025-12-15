@@ -1,7 +1,7 @@
 import { useState } from "react";
-import UserCard from "./UserCard";
+import UserCard from "../components/UserCard";
 import ManageAddress from "./ManageAddress";
-import UserProfileEdit from "./UserProfileEdit";
+import UserProfileEdit from "../components/UserProfileEdit";
 
 function UserDashSetting() {
   const [profileInfo, setProfileInfo] = useState(true);

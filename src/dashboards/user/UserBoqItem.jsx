@@ -8,7 +8,7 @@ import MobileTabProductCard from "./MobileTabProductCard";
 import { IoIosSearch } from "react-icons/io";
 import { IoCloseCircle, IoCloudDownloadOutline } from "react-icons/io5";
 import { useEffect, useRef, useState } from "react";
-import ProductView from "./ProductView";
+import ProductView from "../components/ProductView";
 import { supabase } from "../../services/supabase";
 
 import Spinner from "../../common-components/Spinner";
@@ -187,7 +187,7 @@ function UserBoqItem({ selectedBoq, setSelectedBoq }) {
 
   const fetchProductsByIds = async () => {
     try {
-      if (selectedBoq) {
+      if (selectedBoq?.products) {
         setIsloading(true);
 
         const productIdsArray = selectedBoq.products.map(
@@ -231,7 +231,7 @@ function UserBoqItem({ selectedBoq, setSelectedBoq }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isfetchBoqDataRefresh]);
   return (
-    <div className="flex-1 ">
+    <div className="flex-1">
       <div className="overflow-y-auto scrollbar-hide h-[calc(100vh-95px)] rounded-3xl relative ">
         <div className=" sticky top-0 z-20 bg-white">
           <div className="flex flex-col md:flex-row md:items-center px-2 gap-3 lg:gap-5 lg:px-4 py-2 border-b-2 border-b-gray-400 ">

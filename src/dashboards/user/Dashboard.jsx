@@ -444,7 +444,7 @@ function Dashboard() {
         )}
         {sidebarstate?.help && (
           <div className="flex flex-col h-full min-h-0 overflow-hidden lg:border-2 lg:border-[#334A78] lg:rounded-lg bg-white">
-            <Help isvendor={false} />
+            <Help />
           </div>
         )}
       </div>

@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { FaRegQuestionCircle } from "react-icons/fa";
 import { supabase } from "../../services/supabase";
 import { toast } from "react-hot-toast";
+import { useApp } from "../../Context/Context";
 import {
   useAllCatArray,
   specialArray,
@@ -11,111 +12,84 @@ import {
 } from "../../utils/AllCatArray";
 import { useRef } from "react";
 import { v4 as uuidv4 } from "uuid";
+
 import {
-  baseImageUrl,
   additionalDetailsConfig,
   productInfoFields,
 } from "../../utils/HelperConstant";
-import MultiImageCrop from "../ImageCrop/MultiImageCrop";
+import MultiImageCrop from "../components/MultiImageCrop";
 
-function VendorProductEdit({
-  setEditProduct,
+function VendorNewProduct({
+  setAddNewProduct,
   setIsProductRefresh,
   setProductlist,
-  selectedproduct,
 }) {
   const [file, setFile] = useState(null);
-  const [preview, setPreview] = useState(selectedproduct?.image || null);
+  const [preview, setPreview] = useState(null);
   const [subcat, setSubcat] = useState([]);
 
-  const [loading, setLoading] = useState(true);
-
-  const [vendordata, setVendordata] = useState();
-
   const [selectedSubcategories, setSelectedSubcategories] = useState();
-  const [subSubCategory, setSubSubCategory] = useState(
-    selectedproduct?.products?.subcategory1 || ""
-  );
+  const [subSubCategory, setSubSubCategory] = useState("");
 
-  const [category, setCategory] = useState(
-    selectedproduct?.products?.category || ""
-  );
+  const [category, setCategory] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [dimensions, setDimensions] = useState({
-    height: selectedproduct?.dimensions?.split("x")[0] || "",
-    length: selectedproduct?.dimensions?.split("x")[1] || "",
-    width: selectedproduct?.dimensions?.split("x")[2] || "",
+    height: "",
+    length: "",
+    width: "",
   });
-  const [displayOption, setDisplayOption] = useState(
-    selectedproduct?.productDisplayType
-  );
-
-  const [showCropper, setShowCropper] = useState(false);
-  const [additionalFiles, setAdditionalFiles] = useState([]);
-  const [showMultiCropper, setShowMultiCropper] = useState(false);
-  const [cropperFile, setCropperFile] = useState(null);
+  const [displayOption, setDisplayOption] = useState("");
 
   const fileInputRef = useRef(null);
 
   const mulitpleimagesFileinputref = useRef(null);
+  const [variant, setVariant] = useState({
+    title: "",
+    price: "",
+    details: "",
+    mainImage: [],
+    additionalImages: [],
+    segment: "",
+    dimension: "",
+    manufacturer: "",
+    vendor_id: "",
+    mrp: "",
+    sellingPrice: "",
+    quantity: "",
+    information: {},
+    additionalInformation: {},
+  });
+
+  const [showCropper, setShowCropper] = useState(false);
+  const [additionalFiles, setAdditionalFiles] = useState([]);
+  const [showMultiCropper, setShowMultiCropper] = useState(false);
+
+  const { accountHolder } = useApp();
   const AllCatArray = useAllCatArray();
 
-  useEffect(() => {
-    const fetchVendorData = async () => {
-      setLoading(true);
-      const { data, error } = await supabase
-        .from("profiles")
-        .select("allowed_category")
-        .eq("id", selectedproduct?.vendor_id)
-        .single();
-
-      if (error) {
-        console.error("Error fetching vendor:", error.message);
-      } else {
-        const parseddata = JSON.parse(data.allowed_category);
-        setVendordata(parseddata);
-      }
-      setLoading(false);
-    };
-
-    fetchVendorData();
-  }, [selectedproduct?.vendor_id]);
-
-  const [variant, setVariant] = useState({
-    title: selectedproduct?.title || "",
-    price: selectedproduct?.price || "",
-    details: selectedproduct?.details || "",
-    mainImage: [selectedproduct?.image] || [],
-    additionalImages: JSON.parse(selectedproduct.additional_images) || [],
-    segment: selectedproduct?.segment || "",
-    dimension: selectedproduct?.dimensions || "",
-    manufacturer: selectedproduct?.manufacturer || "",
-    vendor_id: selectedproduct?.vendor_id || "",
-    product_id: selectedproduct?.product_id || "",
-    selectedProductId: selectedproduct?.id || "",
-    mrp: selectedproduct?.ecommercePrice?.mrp || "",
-    sellingPrice: selectedproduct?.ecommercePrice?.sellingPrice || "",
-    quantity: selectedproduct?.stockQty || "",
-    information: selectedproduct?.information || {},
-    additionalInformation: selectedproduct?.additonalinformation || {},
-  });
+  const handleCropped = (file) => {
+    setPreview(URL.createObjectURL(file));
+    setVariant((prev) => ({ ...prev, mainImage: file }));
+  };
 
   const handleFileChange = (event) => {
     const selectedFile = event.target.files[0];
-    if (!selectedFile) return;
-    setShowCropper(true);
-    setFile(selectedFile);
+    setVariant((prev) => ({ ...prev, mainImage: selectedFile }));
+    if (selectedFile) {
+      setFile(selectedFile);
+      setShowCropper(true);
+    }
   };
 
   const handleDrop = (event) => {
     event.preventDefault();
     const droppedFile = event.dataTransfer.files[0];
-
-    if (!droppedFile) return;
-    setShowCropper(true);
-
-    setFile(droppedFile);
+    setVariant((prev) => ({ ...prev, mainImage: droppedFile }));
+    if (droppedFile) {
+      setFile(droppedFile);
+      setShowCropper(true);
+    }
   };
 
   const removeFile = () => {
@@ -144,7 +118,6 @@ function VendorProductEdit({
       mulitpleimagesFileinputref.current.value = null;
       return;
     }
-
     setAdditionalFiles(files);
     setShowMultiCropper(true);
     mulitpleimagesFileinputref.current.value = null;
@@ -164,43 +137,33 @@ function VendorProductEdit({
     setShowMultiCropper(true);
   };
 
-  const handleCropped = (file) => {
-    setPreview(URL.createObjectURL(file));
-    setCropperFile(file);
-    setVariant((prev) => ({ ...prev, mainImage: file }));
-  };
-
-  const removeAdditionalImage = async (index) => {
+  const removeAdditionalImage = (index) => {
     let additionalimages = variant.additionalImages.filter(
       (_, i) => i !== index
     );
-
     setVariant((prevVariants) => ({
       ...prevVariants,
       additionalImages: [...additionalimages],
     }));
 
-    const userimages = additionalimages.filter((el) => typeof el === "string");
-    const { error } = await supabase
-      .from("product_variants")
-      .update({ additional_images: userimages })
-      .eq("id", variant?.selectedProductId);
-
-    if (error) {
-      console.error("Error deleting additional image:", error.message);
-      toast.error("error");
-    }
     if (mulitpleimagesFileinputref.current) {
       mulitpleimagesFileinputref.current.value = null;
     }
   };
 
   useEffect(() => {
-    const filtered = AllCatArray?.filter(
-      (cat) => cat?.name?.toLowerCase() === category?.toLowerCase()
-    );
+    accountHolder.allowedCategory.map((category) => {
+      const filtered = AllCatArray.filter((cat) => cat.name === category);
 
-    const subcattodisplay = filtered.flatMap((subcat) => subcat?.subCat1);
+      const subcattodisplay = filtered.flatMap((subcat) => subcat.subCat1);
+      return subcattodisplay;
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [AllCatArray]);
+
+  useEffect(() => {
+    const filtered = AllCatArray.filter((cat) => cat.name === category);
+    const subcattodisplay = filtered.flatMap((subcat) => subcat.subCat1);
     setSubcat(subcattodisplay);
   }, [category, AllCatArray]);
 
@@ -210,186 +173,114 @@ function VendorProductEdit({
 
   const onSubmit = async (e) => {
     e.preventDefault();
-
     if (
-      (!variant.mainImage && !file) ||
+      !variant.mainImage ||
+      variant.mainImage.length === 0 ||
       variant.additionalImages.length === 0
     ) {
       toast.error("images are required ");
       return;
     }
-    const filebasedadditionalimages = variant.additionalImages.filter(
-      (el) => typeof el !== "string"
-    );
-    const useradditionalimages = variant.additionalImages.filter(
-      (el) => typeof el === "string"
-    );
-
-    const uniqueID = uuidv4();
     setIsSubmitting(true);
-
     try {
-      let productId;
-      if (
-        selectedproduct?.products?.category !== category ||
-        selectedproduct?.products.subcategory !== selectedSubcategories ||
-        selectedproduct?.products.subcategory1 !== subSubCategory
-      ) {
-        const { data: existingProduct, error: existingProductError } =
-          await supabase
-            .from("products")
-            .select("id")
-            .eq("category", category)
-            .eq("subcategory", selectedSubcategories)
-            .eq("subcategory1", subSubCategory)
-            .single();
+      const uniqueID = uuidv4();
+      const { data: existingProduct, error: existingProductError } =
+        await supabase
+          .from("products")
+          .select("id")
+          .eq("category", category)
+          .eq("subcategory", selectedSubcategories)
+          .eq("subcategory1", subSubCategory)
+          .single();
 
-        if (existingProductError && existingProductError.code !== "PGRST116") {
-          toast.error("Error checking existing product.");
+      if (existingProductError && existingProductError.code !== "PGRST116") {
+        toast.error("Error checking existing product.");
+        return;
+      }
+
+      let productId;
+      if (existingProduct) {
+        productId = existingProduct.id;
+      } else {
+        const { data: Product, error: insertError } = await supabase
+          .from("products")
+          .insert({
+            category: category,
+            subcategory: selectedSubcategories,
+            subcategory1: subSubCategory || null,
+          })
+          .select()
+          .single();
+
+        if (insertError) {
+          console.error(insertError);
+          toast.error("Error inserting new product.");
           return;
         }
 
-        if (existingProduct) {
-          productId = existingProduct.id;
-        } else {
-          const { data: Product, error: insertError } = await supabase
-            .from("products")
-            .insert({
-              category: category,
-              subcategory: selectedSubcategories,
-              subcategory1: subSubCategory || null,
-            })
-            .select()
-            .single();
-
-          if (insertError) {
-            console.error(insertError);
-            toast.error("Error inserting new product.");
-            return;
-          }
-
-          productId = Product.id;
-        }
-      } else {
-        productId = variant.product_id;
+        productId = Product.id;
       }
-      if (variant.title && variant.price && file) {
+      if (
+        variant.title &&
+        (variant.price || variant.mrp) &&
+        variant.mainImage
+      ) {
         let cleanedTitle = cleanTitle(variant.title);
-        const oldImagePath = selectedproduct?.image;
-        const newImagePath = `${cleanedTitle}-main-${uniqueID}`;
-
-        if (oldImagePath) {
-          const { error: removeError } = await supabase.storage
-            .from("addon")
-            .remove([oldImagePath]);
-
-          if (removeError) {
-            console.warn("Failed to remove old image:", removeError.message);
-          }
-        }
-
-        const { data: mainImageUpload, error: mainImageError } =
-          await supabase.storage
-            .from("addon")
-            .upload(newImagePath, cropperFile);
-
-        if (mainImageError) {
-          toast.error(
-            `Error uploading main image for variant: ${variant.title}`
-          );
-          throw new Error("Main image upload failed");
-        }
-
-        variant.mainImage = mainImageUpload.path;
-        setPreview(mainImageUpload.path);
-      }
-
-      const previousAdditionalImages = JSON.parse(
-        selectedproduct?.additional_images || "[]"
-      );
-
-      const imagesToRemove = previousAdditionalImages.filter(
-        (oldPath) => !variant.additionalImages.includes(oldPath)
-      );
-
-      if (imagesToRemove.length > 0) {
-        const { error: removeError } = await supabase.storage
+        const { data: mainImageUpload } = await supabase.storage
           .from("addon")
-          .remove(imagesToRemove);
+          .upload(`${cleanedTitle}-main-${uniqueID}`, variant.mainImage);
 
-        if (removeError) {
-          console.warn(
-            "Error removing old additional images:",
-            removeError.message
-          );
+        const additionalImagePaths = [];
+        for (const [index, imageFile] of variant.additionalImages.entries()) {
+          const { data: additionalImageUpload } = await supabase.storage
+            .from("addon")
+            .upload(
+              `${cleanedTitle}-additional-${index}-${uniqueID}`,
+              imageFile.file
+            );
+
+          additionalImagePaths.push(additionalImageUpload.path);
+        }
+        const { error: variantError } = await supabase
+          .from("product_variants")
+          .insert({
+            product_id: productId,
+            title: variant.title,
+            price: +variant.price || 0,
+            details: variant.details,
+            image: mainImageUpload.path,
+            additional_images: additionalImagePaths,
+            segment: variant.segment,
+            dimensions: variant.dimension,
+            manufacturer: accountHolder?.companyName || variant.manufacturer,
+            vendor_id: accountHolder.userId,
+            product_type: subSubCategory,
+            productDisplayType: displayOption,
+            stockQty: +variant.quantity || 0,
+            ecommercePrice: {
+              mrp: variant.mrp,
+              sellingPrice: variant.sellingPrice,
+            },
+            information: variant?.information || {},
+            additonalinformation: variant?.additionalInformation || {},
+          })
+          .select();
+
+        if (variantError) {
+          console.error(variantError);
+          toast.error(`Error inserting variant: ${variant.title}`);
+        } else {
+          toast.success("Data inserted successfully!");
+          handleFormClear();
         }
       }
-
-      let currentIndex = variant.additionalImages.filter(
-        (img) => typeof img === "string"
-      ).length;
-
-      for (const imageFile of filebasedadditionalimages) {
-        const fileUuid = uuidv4();
-        let cleanedTitle = cleanTitle(variant.title);
-        const filePath = `${cleanedTitle}-additional-${currentIndex}-${fileUuid}`;
-
-        const { data: additionalImageUpload, error: additionalImageError } =
-          await supabase.storage.from("addon").upload(filePath, imageFile.file);
-
-        if (additionalImageError) {
-          console.warn(
-            `Failed to upload additional image at index ${currentIndex}`,
-            additionalImageError.message
-          );
-          continue;
-        }
-
-        useradditionalimages.push(additionalImageUpload.path);
-        currentIndex++;
-      }
-
-      const imagepath = file ? variant.mainImage : variant.mainImage[0];
-      const { error: variantError } = await supabase
-        .from("product_variants")
-        .update({
-          title: variant.title,
-          price: +variant.price,
-          details: variant.details,
-          image: imagepath,
-          additional_images: useradditionalimages,
-          segment: variant.segment,
-          dimensions: variant.dimension,
-          vendor_id: selectedproduct?.vendor_id,
-          product_type: subSubCategory,
-          product_id: productId,
-          status: "pending",
-          productDisplayType: displayOption,
-          stockQty: +variant.quantity,
-          ecommercePrice: {
-            mrp: variant.mrp,
-            sellingPrice: variant.sellingPrice,
-          },
-          information: variant?.information || {},
-          additonalinformation: variant?.additionalInformation || {},
-        })
-        .eq("id", variant.selectedProductId);
-
-      if (variantError) {
-        console.error(variantError);
-        toast.error(`Error inserting variant: ${variant.title}`);
-      }
-
-      toast.success("product updated successfully");
     } catch (error) {
       console.error("Error in onSubmit:", error);
       toast.error("An unexpected error occurred.");
     } finally {
-      handleFormClear();
       setIsSubmitting(false);
     }
   };
-
   useEffect(() => {
     if (category !== "HVAC" && category !== "Civil / Plumbing") {
       const filter = AllCatArray.filter((cat) => cat.name === category).flatMap(
@@ -436,7 +327,6 @@ function VendorProductEdit({
     };
 
     setDimensions(updatedDimensions);
-
     setVariant((prev) => ({
       ...prev,
       dimension: `${updatedDimensions.height}x${updatedDimensions.length}x${updatedDimensions.width}`,
@@ -452,35 +342,30 @@ function VendorProductEdit({
       additionalImages: [],
       segment: "",
       dimension: "",
+      mrp: "",
+      sellingPrice: "",
+      quantity: "",
+      information: {},
+      additionalInformation: {},
     }));
     setFile(null);
     setPreview(null);
     setCategory("");
     setSubSubCategory("");
+
     setDimensions({
       height: "",
       length: "",
       width: "",
     });
+    setDisplayOption("");
+    removeFile();
   };
 
   const handlecategorychange = (e) => {
     setCategory(e.target.value);
     setSubSubCategory("");
   };
-  let imageUrl;
-  if (variant?.mainImage) {
-    imageUrl =
-      typeof variant.mainImage[0] === "string"
-        ? `${baseImageUrl}/${preview}`
-        : `${preview}`;
-  }
-
-  if (loading || AllCatArray?.length === 0) {
-    return (
-      <div className="flex justify-center items-center">Loading ......</div>
-    );
-  }
 
   const handleChangeAdditionalInformation = (e) => {
     const { name, value } = e.target;
@@ -511,10 +396,10 @@ function VendorProductEdit({
 
   return (
     <div className="flex flex-col justify-center items-start font-Poppins relative">
-      <div className="px-5 py-2 border-b-2 bg-white w-full border-b-gray-400 sticky top-0 z-10">
+      <div className="px-3 lg:px-5 py-2 border-b-2 bg-white w-full border-b-gray-400 sticky top-0 z-10">
         <button
           onClick={() => {
-            setEditProduct(false);
+            setAddNewProduct(false);
             setProductlist(true);
             setIsProductRefresh((prev) => !prev);
           }}
@@ -523,10 +408,10 @@ function VendorProductEdit({
           <MdKeyboardArrowLeft />
           Back to product list
         </button>
-        <h3 className="capitalize font-semibold text-xl ">Edit product</h3>
+        <h3 className="capitalize font-semibold text-xl ">add new products</h3>
       </div>
       <form
-        className="lg:flex gap-5  px-5 w-full"
+        className="lg:flex gap-5 px-3 py-2  lg:py-3 lg:px-5 w-full"
         onSubmit={onSubmit}
         onKeyDown={(e) => {
           if (e.key === "Enter") {
@@ -550,14 +435,13 @@ function VendorProductEdit({
                 >
                   <option value="">Select Category</option>
 
-                  {vendordata &&
-                    vendordata?.map((cat, index) => {
-                      return (
-                        <option key={index} value={cat}>
-                          {cat}
-                        </option>
-                      );
-                    })}
+                  {accountHolder.allowedCategory.map((cat, index) => {
+                    return (
+                      <option key={index} value={cat}>
+                        {cat}
+                      </option>
+                    );
+                  })}
                 </select>
               </div>
               <div>
@@ -567,14 +451,13 @@ function VendorProductEdit({
                   id="category"
                   className="w-full border-2 py-1.5 px-2 rounded-lg"
                   value={subSubCategory}
-                  disabled={!category}
                   onChange={(e) => setSubSubCategory(e.target.value)}
                   required
                 >
                   <option value="" disabled>
-                    Select Category
+                    Select SubCategory
                   </option>
-                  {subcat?.map((cat, index) => {
+                  {subcat.map((cat, index) => {
                     return (
                       <option key={index} value={cat}>
                         {cat}
@@ -609,7 +492,6 @@ function VendorProductEdit({
               </div>
             </div>
           </div>
-
           <div>
             <h3 className="capitalize mb-3 text-xl font-semibold">
               Description
@@ -626,6 +508,7 @@ function VendorProductEdit({
                   required
                 />
               </div>
+
               <FormInput
                 label={"Short Description"}
                 name={"ShortDescription"}
@@ -641,12 +524,12 @@ function VendorProductEdit({
                   type="textarea"
                   name="details"
                   onChange={handleChange}
-                  maxLength={150}
                   value={variant.details}
                   className="w-full py-1.5 px-2 border-2 rounded-lg"
                   required
                 />
               </div>
+
               {(displayOption === "boq" || displayOption === "both") && (
                 <div>
                   <h4 className="text-[#7B7B7B]">BOQ price</h4>
@@ -660,6 +543,7 @@ function VendorProductEdit({
                   />
                 </div>
               )}
+
               <div>
                 <h4 className="text-[#7B7B7B]">
                   product dimension:(H x L x W)
@@ -669,7 +553,7 @@ function VendorProductEdit({
                     <input
                       type="number"
                       name="height"
-                      value={dimensions?.height}
+                      value={dimensions.height}
                       onChange={handleDimensionChange}
                       className="w-20 xl:w-32 py-1.5 px-2 border-2 rounded-lg [&::-webkit-inner-spin-button]:appearance-none  focus:outline-none focus:ring-0"
                       required
@@ -680,7 +564,7 @@ function VendorProductEdit({
                     <input
                       type="number"
                       name="length"
-                      value={dimensions?.length}
+                      value={dimensions.length}
                       onChange={handleDimensionChange}
                       className="w-20 xl:w-32 py-1.5 px-2 border-2 rounded-lg [&::-webkit-inner-spin-button]:appearance-none  focus:outline-none focus:ring-0"
                       required
@@ -691,7 +575,7 @@ function VendorProductEdit({
                     <input
                       type="number"
                       name="width"
-                      value={dimensions?.width}
+                      value={dimensions.width}
                       onChange={handleDimensionChange}
                       className="w-20 xl:w-32 py-1.5 px-2 border-2 rounded-lg [&::-webkit-inner-spin-button]:appearance-none  focus:outline-none focus:ring-0"
                       required
@@ -724,7 +608,7 @@ function VendorProductEdit({
                   type="number"
                   name="mrp"
                   onChange={handleChange}
-                  value={variant?.mrp}
+                  value={variant.mrp}
                   className="w-full py-1.5 px-2 border-2 rounded-lg [&::-webkit-inner-spin-button]:appearance-none  focus:outline-none focus:ring-0"
                   required
                 />
@@ -735,7 +619,7 @@ function VendorProductEdit({
                   type="number"
                   name="sellingPrice"
                   onChange={handleChange}
-                  value={variant?.sellingPrice}
+                  value={variant.sellingPrice}
                   className="w-full py-1.5 px-2 border-2 rounded-lg [&::-webkit-inner-spin-button]:appearance-none  focus:outline-none focus:ring-0"
                   required
                 />
@@ -746,7 +630,7 @@ function VendorProductEdit({
                   type="number"
                   name="quantity"
                   onChange={handleChange}
-                  value={variant?.quantity}
+                  value={variant.quantity}
                   className="w-full py-1.5 px-2 border-2 rounded-lg [&::-webkit-inner-spin-button]:appearance-none  focus:outline-none focus:ring-0"
                   required
                 />
@@ -826,10 +710,12 @@ function VendorProductEdit({
                       accept="image/*"
                       onChange={handleFileChange}
                     />
+
+                    {/* Preview Box */}
                     {preview && (
                       <div className="relative w-24 h-24 border rounded-lg overflow-hidden group">
                         <img
-                          src={imageUrl}
+                          src={preview}
                           alt="product-image"
                           className="w-full h-full object-cover"
                         />
@@ -867,7 +753,6 @@ function VendorProductEdit({
 
               <div className="px-4 py-2 bg-white border rounded-xl shadow-lg my-3 w-full">
                 <h4 className="text-[#7B7B7B] capitalize">additional </h4>
-
                 <div className="flex flex-wrap gap-4">
                   <div
                     onDragOver={(e) => e.preventDefault()}
@@ -884,7 +769,6 @@ function VendorProductEdit({
                       multiple
                       onChange={handleAdditionalImagesChange}
                     />
-
                     <label
                       htmlFor="additional-file-upload"
                       className="flex flex-col items-center"
@@ -898,38 +782,31 @@ function VendorProductEdit({
                       </span>
                     </label>
                   </div>
-                  {variant.additionalImages.map((img, index) => {
-                    const imageUrl =
-                      typeof img === "string"
-                        ? `${baseImageUrl}/${img}`
-                        : img.preview;
-                    return (
-                      <div
-                        key={index}
-                        className="relative w-24 h-24 border rounded-lg overflow-hidden group"
-                      >
-                        <img
-                          src={imageUrl}
-                          alt={`Additional Preview ${index}`}
-                          className="w-full h-full object-cover cursor-pointer"
-                          onClick={() => {
-                            setFile(img.file);
-                            setShowMultiCropper(true);
-                          }}
-                        />
-
-                        <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity">
-                          <button
-                            onClick={() => removeAdditionalImage(index)}
-                            className="text-white text-xs bg-red-600 px-2 py-1 rounded"
-                            type="button"
-                          >
-                            Remove
-                          </button>
-                        </div>
+                  {variant.additionalImages.map((img, index) => (
+                    <div
+                      key={index}
+                      className="relative w-24 h-24 border rounded-lg overflow-hidden group"
+                    >
+                      <img
+                        src={img.preview}
+                        alt={`Additional Preview ${index}`}
+                        className="w-full h-full object-cover cursor-pointer"
+                        onClick={() => {
+                          setFile(img.file);
+                          setShowMultiCropper(true);
+                        }}
+                      />
+                      <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <button
+                          onClick={() => removeAdditionalImage(index)}
+                          className="text-white text-xs bg-red-600 px-2 py-1 rounded"
+                          type="button"
+                        >
+                          Remove
+                        </button>
                       </div>
-                    );
-                  })}
+                    </div>
+                  ))}
                 </div>
               </div>
 
@@ -962,7 +839,7 @@ function VendorProductEdit({
               <select
                 name="segment"
                 id="segment"
-                value={variant?.segment}
+                value={variant.segment}
                 className="w-full border-2 py-1.5 px-2 rounded-lg"
                 onChange={handleChange}
                 required
@@ -975,6 +852,13 @@ function VendorProductEdit({
             </div>
           </div>
           <div className="w-full flex items-end justify-between mt-5">
+            <button
+              className="border-2 px-5 py-2 capitalize rounded-lg"
+              type="button"
+              onClick={handleFormClear}
+            >
+              Discard
+            </button>
             <button
               className="border-2 px-5 py-2 bg-[#374A75] text-white capitalize rounded-lg"
               type="submit"
@@ -1004,7 +888,7 @@ function VendorProductEdit({
                   </svg>
                 </div>
               ) : (
-                "Update"
+                "add product"
               )}
             </button>
           </div>
@@ -1014,8 +898,7 @@ function VendorProductEdit({
   );
 }
 
-export default VendorProductEdit;
-
+export default VendorNewProduct;
 function FormInput({
   label,
   name,

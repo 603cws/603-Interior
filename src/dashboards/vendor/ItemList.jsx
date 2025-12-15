@@ -96,7 +96,7 @@ function ItemCard({
         <img
           src={`${baseImageUrl}/${item?.image}`}
           alt="chair"
-          className="w-28 h-36 md:w-40 md:h-40 p-2"
+          className="w-28 h-36 md:w-40 md:h-40 p-2 object-contain"
         />
         <div className="absolute right-0 bottom-2 text-xl" ref={optionboxref}>
           {isoptionOpen ? (

@@ -1,6 +1,6 @@
 import { useState } from "react";
-import UserCard from "../user/UserCard";
-import UserProfileEdit from "../user/UserProfileEdit";
+import UserCard from "../components/UserCard";
+import UserProfileEdit from "../components/UserProfileEdit";
 
 function AdminSetting() {
   const [iseditopen, setIsEditopen] = useState(true);

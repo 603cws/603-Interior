@@ -7,11 +7,11 @@ import { VscSignOut } from "react-icons/vsc";
 import { IoSettingsSharp } from "react-icons/io5";
 import { LuBlend } from "react-icons/lu";
 import { BsArchive, BsQuestionCircle } from "react-icons/bs";
-import Help from "../user/Help";
+import Help from "../../dashboards/user/Help";
 import { useLogout } from "../../utils/HelperFunction";
 import { FaThLarge } from "react-icons/fa";
-import UserCard from ".././user/UserCard";
-import UserProfileEdit from ".././user/UserProfileEdit";
+import UserCard from "../components/UserCard";
+import UserProfileEdit from "../components/UserProfileEdit";
 import VendorDashboardCards from "./VendorDashboardCards";
 import VendorItem from "./VendorItem";
 
@@ -333,7 +333,7 @@ function VendorDashboardLayout() {
         {/* help */}
         {sidebarstate?.help && (
           <div className="flex flex-col h-full min-h-0 overflow-hidden lg:border-2 lg:border-[#334A78] lg:rounded-lg bg-white">
-            <Help isvendor={false} />
+            <Help />
           </div>
         )}
       </div>

@@ -1,9 +1,9 @@
 import { VscEye } from "react-icons/vsc";
 import { MdOutlineDelete } from "react-icons/md";
-import VendorNewProduct from "../../vendor/VendorNewProduct";
-import VendorNewAddon from "../../vendor/VendorNewAddon";
-import VendorProductEdit from "../../vendor/VendorProductEdit";
-import VendorEditAddon from "../../vendor/VendorEditAddon";
+import VendorNewProduct from "../../../dashboards/vendor/VendorNewProduct";
+import VendorNewAddon from "../../../dashboards/vendor/VendorNewAddon";
+import VendorProductEdit from "../../../dashboards/vendor/VendorProductEdit";
+import VendorEditAddon from "../../../dashboards/vendor/VendorEditAddon";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import { exportToExcel } from "../../../utils/DataExport";
 import {
@@ -16,7 +16,7 @@ import Spinner from "../../../common-components/Spinner";
 import { baseImageUrl } from "../../../utils/HelperConstant";
 import { HiXMark } from "react-icons/hi2";
 import { CiMenuKebab } from "react-icons/ci";
-import MobileTabProductCard from "../../user/MobileTabProductCard";
+import MobileTabProductCard from "../../../dashboards/user/MobileTabProductCard";
 import { useEffect, useRef, useState } from "react";
 import { supabase } from "../../../services/supabase";
 import PagInationNav from "../../../common-components/PagInationNav";

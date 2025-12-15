@@ -12,19 +12,19 @@ const Contactus = lazy(() => import("./landing/pages/Contactus"));
 const AboutUs = lazy(() => import("./landing/pages/AboutUs"));
 const Login = lazy(() => import("./common-components/Login"));
 const BlogDetail = lazy(() => import("./landing/pages/BlogDetail"));
-const Dashboard = lazy(() => import("./pages/user/Dashboard"));
+const Dashboard = lazy(() => import("./dashboards/user/Dashboard"));
 const BrandDLink = lazy(() => import("./pages/Brands/BrandDLink"));
 const DashboardInterface = lazy(() =>
-  import("./pages/Admin/DashboardInterface")
+  import("./dashboards/admin/DashboardInterface")
 );
 const VendorDashboardLayout = lazy(() =>
-  import("./pages/vendor/VendorDashboardLayout")
+  import("./dashboards/vendor/VendorDashboardLayout")
 );
 const Services = lazy(() => import("./landing/pages/Services"));
 const OurStory = lazy(() => import("./landing/pages/OurStory"));
 const OrderConfirm = lazy(() => import("./Ecommerce/components/OrderConfirm"));
 const AdminDashboardEcom = lazy(() =>
-  import("./pages/Admin/EcommerceDashboard/AdminDashboardEcom")
+  import("./dashboards/admin/EcommerceDashboard/AdminDashboardEcom")
 );
 const DynamicTitle = lazy(() => import("./common-components/DynamicTitle"));
 const YouMayAlsoLike = lazy(() => import("./Ecommerce/pages/YouMayAlsoLike"));
@@ -37,7 +37,7 @@ const TermsAndCondition = lazy(() =>
   import("./landing/pages/TermsAndCondition")
 );
 const Boqcompleted = lazy(() => import("./common-components/Boqcompleted"));
-const AdminDashboard = lazy(() => import("./pages/Admin/AdminDashboard"));
+const AdminDashboard = lazy(() => import("./dashboards/admin/AdminDashboard"));
 const ProductOverview = lazy(() => import("./boq/pages/ProductOverview"));
 const JobPage = lazy(() => import("./landing/pages/JobPage"));
 const ThreeDViewer = lazy(() => import("./common-components/ThreeDViewer"));
@@ -126,10 +126,8 @@ function App() {
               <PrivateRoute>
                 {accountHolder?.role ? (
                   accountHolder.role === "admin" ? (
-                    // <AdminDashboard />
                     <DashboardInterface />
                   ) : accountHolder.role === "vendor" ? (
-                    // <VendorDashboard />
                     <VendorDashboardLayout />
                   ) : accountHolder.role === "user" ? (
                     <Dashboard />
