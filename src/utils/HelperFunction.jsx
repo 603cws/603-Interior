@@ -152,7 +152,7 @@ export const useLogout = () => {
       setIsAuthLoading(true);
       const { error } = await supabase.auth.signOut();
       if (error) {
-        console.log("Error signing out:", error.message);
+        console.error("Error signing out:", error.message);
       } else {
         toast.success("User signed out successfully");
         setAccountHolder({

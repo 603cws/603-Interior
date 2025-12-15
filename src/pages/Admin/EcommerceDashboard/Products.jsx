@@ -349,7 +349,7 @@ function Products({
       setProducts(sortedData);
       setFilteredProducts(sortedData);
     } catch (error) {
-      console.log("Error fetching products:", error);
+      console.error("Error fetching products:", error);
     } finally {
       setIsloading(false);
       setIsProductRefresh(false);

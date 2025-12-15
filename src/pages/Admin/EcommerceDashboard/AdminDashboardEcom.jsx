@@ -119,7 +119,7 @@ function AdminDashboardEcom() {
             imagePaths = imagePaths.concat(parsedAdditionalImages);
           }
         } catch (parseError) {
-          console.log("error parsing error", parseError);
+          console.error("error parsing error", parseError);
         }
       }
 
@@ -133,7 +133,7 @@ function AdminDashboardEcom() {
 
       setProductPreview(false);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     } finally {
       selectedProductview.type === "product"
         ? setIsProductRefresh(true)
@@ -203,7 +203,7 @@ function AdminDashboardEcom() {
       setAllusers(data);
       setFilteredUsers(data);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     } finally {
       setIsrefresh(false);
     }

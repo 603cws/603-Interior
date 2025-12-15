@@ -64,7 +64,6 @@ const ThreeDViewer = ({ onClose }) => {
       },
       (xhr) => {
         const percentLoaded = ((xhr.loaded / xhr.total) * 100).toFixed(2);
-        console.log(`FBX Loading: ${percentLoaded}% complete`);
         setProgress(percentLoaded);
       },
       (error) => {

@@ -19,10 +19,10 @@ function Discount() {
   const fetchBlogs = async () => {
     try {
       const { data, error } = await supabase.from("coupons").select("*");
-      if (error) console.log("Error fetching disocunts:", error);
+      if (error) console.error("Error fetching disocunts:", error);
       setDisounts(data);
     } catch (error) {
-      console.log("Unexpected Error:", error);
+      console.error("Unexpected Error:", error);
     }
   };
 
@@ -227,7 +227,7 @@ function DiscountForm({ setCreateDiscount }) {
         toast.success("coupon created successfully");
       }
     } catch (error) {
-      console.log("error", error);
+      console.error("error", error);
 
       if (error.code === "23505") {
         toast.error(`coupon with name  ${formData?.couponName}  already exist`);
