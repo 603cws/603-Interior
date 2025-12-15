@@ -333,7 +333,6 @@ function Layout() {
       setAreaQuantities(newAreaQuantities); // Update area quantities
       setAreaValues(newAreaValues); // Update area values
     } else if (totalArea < MIN_AREA) {
-      console.log("area is less than min area");
       toast.error("Enter valid area", { duration: 2000 });
     } else {
       console.log(

@@ -73,8 +73,6 @@ function TermsAndCondition() {
     },
   ];
 
-  console.log(termsAndConditions);
-
   return (
     <>
       <header className="bg-white shadow-lg z-50 relative">
