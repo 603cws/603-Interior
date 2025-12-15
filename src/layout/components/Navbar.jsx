@@ -308,8 +308,6 @@ function Navbar({
                 </button>
               )}
             </div>
-
-            {/* </div> */}
           </div>
         </div>
       ) : (
@@ -341,17 +339,13 @@ function Navbar({
                 />
               </button>
             )}
-
-            {/* </div> */}
           </div>
-          {/* sq feet div */}
           <div className="px-5">
             <div
               className={`joynavarea flex justify-between mx-auto bg-gradient-to-r from-[#23445B] to-[#487BA0] border border-[#FFD43B] items-center px-2 rounded relative my-2 w-full  ${
                 error ? "border-t-1" : "border-1"
               }`}
             >
-              {/* cal icon */}
               <CiCalculator1
                 size={30}
                 color="#FEBF00"
@@ -361,7 +355,6 @@ function Navbar({
                 <button
                   title="Reset"
                   className="absolute right-2 cursor-pointer text-[#FFD43B] border-none hover:text-red-300"
-                  // onClick={handleReset}
                   onClick={() => setResetAlert(true)}
                 >
                   <MdOutlineCancel size={30} />

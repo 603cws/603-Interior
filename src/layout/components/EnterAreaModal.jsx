@@ -1,14 +1,12 @@
 import { useState } from "react";
 import { useApp } from "../../Context/Context";
 import { motion } from "framer-motion";
+import { MAX_AREA, MIN_AREA } from "../utils/AreaCalculations";
 
 function EnterAreaModal({ onclose }) {
   const { inputValue, setInputValue, setTotalArea } = useApp();
   const [error, setError] = useState("");
   const [imageLoaded, setImageLoaded] = useState(false);
-
-  const MIN_AREA = 1000;
-  const MAX_AREA = 25000;
 
   const handleInputChange = (e) => {
     const value = e.target.value;

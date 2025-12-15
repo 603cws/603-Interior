@@ -201,7 +201,6 @@ function ProfileAddress() {
       } catch (error) {
         console.error(error);
       } finally {
-        // setIsAddressFormOpen(false);
         setIsAddressEdit(false);
         fetchUserData();
       }
@@ -218,7 +217,6 @@ function ProfileAddress() {
     (a, b) => (b.ismarkedDefault === true) - (a.ismarkedDefault === true)
   );
 
-  //remove address from the list
   const handleRemoveAddress = async (address) => {
     setRemovingAddressId(address.id);
     try {
@@ -249,7 +247,6 @@ function ProfileAddress() {
     }
   };
 
-  //change default address
   const handleSetDefaultAddress = async (selectedId) => {
     const updatedAddressList = accountHolder.address.map((addr) => ({
       ...addr,
@@ -342,7 +339,6 @@ function CustomInput({
   name,
   ...rest
 }) {
-  // const [value, setvalue] = useState();
   const isFloating = value && value.length > 0;
   return (
     <div className="relative w-full">
@@ -352,12 +348,10 @@ function CustomInput({
         value={value}
         onChange={onchange}
         name={name}
-        // onChange={(e) => setvalue(e.target.value)}
         placeholder={label}
         required={required}
         className={`peer placeholder:text-sm border border-[#AAA] px-2 py-2 focus:outline-none focus:[#CCCCCC] w-full rounded-md placeholder-transparent ${className}`}
         {...rest}
-        // className="peer w-full px-4 pt-6 pb-2 text-black bg-white border border-gray-300 rounded-md placeholder-transparent focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
       />
       <label
         htmlFor={id}
@@ -559,8 +553,6 @@ function AddressForm({
             />
             <h2 className="text-sm ">Make this as my default address</h2>
           </div>
-
-          {/* button to add and clear address  */}
 
           <div className="flex mb-2 justify-start items-center gap-5 font-Poppins font-semibold">
             <button

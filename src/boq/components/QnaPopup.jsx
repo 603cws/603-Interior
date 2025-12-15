@@ -3,66 +3,65 @@ import "animate.css";
 import { useApp } from "../../Context/Context";
 import { IoIosCloseCircle } from "react-icons/io";
 
-const QnaPopup = ({ onClose, onSubmit }) => {
+const heightQuestion = [
+  {
+    name: "roomHeight",
+    label: "Enter the height of the room (in feet). Default is 10ft.",
+    isNumberInput: true,
+    ImageUrl: "/images/flooringimg.png",
+  },
+];
+
+const flooringQuestions = [
+  {
+    name: "flooringStatus",
+    label: "What is the flooring status?",
+    options: [
+      { value: "bareShell", label: "Bare Shell" },
+      { value: "basicTiling", label: "Basic Tiling Done" },
+    ],
+    ImageUrl: "/images/Flooringquestion.gif",
+  },
+];
+
+const demolishTileQuestion = [
+  {
+    name: "demolishTile",
+    label: "Do you want to demolish existing tile?",
+    options: [
+      { value: "yes", label: "Yes" },
+      { value: "no", label: "No" },
+    ],
+    ImageUrl: "/images/Flooringquestion.gif",
+  },
+];
+
+const hvacQuestions = [
+  {
+    name: "hvacType",
+    label: "Do you want full centralized AC or a combination?",
+    options: [
+      { value: "Centralized", label: "Centralized" },
+      { value: "Combination", label: "Combination" },
+    ],
+    ImageUrl: "/images/HVAC.gif",
+  },
+];
+
+const partitionQuestions = [
+  {
+    name: "partitionArea",
+    label: "Do you want the same partition to all areas or customize?",
+    options: [
+      { value: "allArea", label: "All Areas" },
+      { value: "customizeAreas", label: "Customize Areas" },
+    ],
+    ImageUrl: "/images/Chat-bot.gif",
+  },
+];
+function QnaPopup({ onClose, onSubmit }) {
   const { selectedCategory } = useApp();
   const categoryName = selectedCategory?.category || "";
-
-  const heightQuestion = [
-    {
-      name: "roomHeight",
-      label: "Enter the height of the room (in feet). Default is 10ft.",
-      isNumberInput: true,
-      ImageUrl: "/images/flooringimg.png",
-    },
-  ];
-
-  const flooringQuestions = [
-    {
-      name: "flooringStatus",
-      label: "What is the flooring status?",
-      options: [
-        { value: "bareShell", label: "Bare Shell" },
-        { value: "basicTiling", label: "Basic Tiling Done" },
-      ],
-      ImageUrl: "/images/Flooringquestion.gif",
-    },
-  ];
-
-  const demolishTileQuestion = [
-    {
-      name: "demolishTile",
-      label: "Do you want to demolish existing tile?",
-      options: [
-        { value: "yes", label: "Yes" },
-        { value: "no", label: "No" },
-      ],
-      ImageUrl: "/images/Flooringquestion.gif",
-    },
-  ];
-
-  const hvacQuestions = [
-    {
-      name: "hvacType",
-      label: "Do you want full centralized AC or a combination?",
-      options: [
-        { value: "Centralized", label: "Centralized" },
-        { value: "Combination", label: "Combination" },
-      ],
-      ImageUrl: "/images/HVAC.gif",
-    },
-  ];
-
-  const partitionQuestions = [
-    {
-      name: "partitionArea",
-      label: "Do you want the same partition to all areas or customize?",
-      options: [
-        { value: "allArea", label: "All Areas" },
-        { value: "customizeAreas", label: "Customize Areas" },
-      ],
-      ImageUrl: "/images/Chat-bot.gif",
-    },
-  ];
 
   const [questions, setQuestions] = useState(heightQuestion);
   const [answers, setAnswers] = useState({});
@@ -283,6 +282,6 @@ const QnaPopup = ({ onClose, onSubmit }) => {
       </div>
     </div>
   );
-};
+}
 
 export default QnaPopup;

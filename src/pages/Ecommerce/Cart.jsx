@@ -15,7 +15,6 @@ import { showRemoveFromCartToast } from "../../utils/AddToCartToast";
 import { MdOutlineDelete } from "react-icons/md";
 import "animate.css";
 import MobileHeader from "../../common-components/MobileHeader";
-// import PriceDetail from "../../common-components/PriceDetail";
 import CheckPinCode from "./CheckPinCode";
 import { IoCartSharp } from "react-icons/io5";
 import toast from "react-hot-toast";

@@ -10,7 +10,6 @@ import CheckoutStepper from "../../common-components/CheckoutStepper";
 import { MdOutlineKeyboardArrowLeft } from "react-icons/md";
 import { useLocation, useNavigate } from "react-router-dom";
 import AppliedCoupon from "../../common-components/AppliedCoupon";
-// import PriceDetail from "../../common-components/PriceDetail";
 import { deliverDays } from "../../constants/constant";
 
 function Addresspage() {
