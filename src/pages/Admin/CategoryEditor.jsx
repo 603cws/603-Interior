@@ -60,7 +60,7 @@ export default function CategoryEditor() {
   return (
     <div className="flex flex-col h-full min-h-0 overflow-hidden lg:border-2 lg:border-[#334A78] lg:rounded-lg bg-white font-Poppins">
       <div className="w-full overflow-y-auto scrollbar-hide h-[calc(100vh-120px)] py-4 px-6">
-        <h1 className="text-2xl font-semibold text-[#374A75] mb-6">
+        <h1 className="text-xl text-[#000] capitalize font-semibold mb-6">
           Category Editor
         </h1>
 
@@ -78,9 +78,9 @@ export default function CategoryEditor() {
             key={category}
             className="mb-8 border p-4 rounded shadow bg-[#F9F9F9]"
           >
-            <div className="flex justify-between items-center mb-3">
+            <div className="flex gap-3 justify-between items-center mb-3">
               <h2 className="text-xl font-semibold">{category}</h2>
-              <div className="space-x-2">
+              <div className="space-y-2 space-x-2">
                 <button
                   onClick={() => handleAddSubCategory(category)}
                   className="bg-[#334A78] hover:bg-[#2a3f66] text-white px-3 py-1 rounded"
@@ -101,7 +101,7 @@ export default function CategoryEditor() {
                 return (
                   <div
                     key={subCategory}
-                    className="flex items-center space-x-3"
+                    className=" flex  flex-col lg:flex-row  lg:items-center space-y-2 lg:space-y-0 space-x-3"
                   >
                     <div className="w-48 font-semibold text-[#374A75]">
                       {subCategory}

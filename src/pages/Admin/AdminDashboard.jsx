@@ -6,19 +6,15 @@ import { supabase } from "../../services/supabase";
 import { VscSignOut } from "react-icons/vsc";
 import { IoCalendarOutline, IoSettingsSharp } from "react-icons/io5";
 import { LuBlend } from "react-icons/lu";
-
 import { PiCodeBlock, PiHandshakeFill } from "react-icons/pi";
 import { MdOutlineSpaceDashboard } from "react-icons/md";
 import { CiShop } from "react-icons/ci";
 import SidebarItem from "../../common-components/SidebarItem";
 import CreateUser from "./CreateUser";
-
 import { TbCalculator, TbCalendarStats } from "react-icons/tb";
 import Schedule from "./Schedule";
 import FormulaEditor from "../../pages/Admin/FormulaEditor";
-
 import { useLogout } from "../../utils/HelperFunction";
-
 import { BsBoxSeam } from "react-icons/bs";
 import { FiLogOut, FiUser, FiUserPlus } from "react-icons/fi";
 import { IoMdSwitch } from "react-icons/io";
@@ -322,11 +318,11 @@ function AdminDashboard() {
                 <img
                   src={accountHolder?.profileImage}
                   alt="usericon"
-                  className="w-10 h-10"
+                  className="w-10 h-10 border border-[#ccc] rounded-full"
                 />
               </div>
               <div className="text-gray-800 text-sm">
-                <h2>{accountHolder?.companyName}</h2>
+                <h2 className="font-semibold">{accountHolder?.companyName}</h2>
                 <p>{accountHolder?.email}</p>
               </div>
             </div>

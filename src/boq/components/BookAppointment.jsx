@@ -11,36 +11,34 @@ import Calendar from "react-calendar";
 import { useApp } from "../../Context/Context";
 import AppointmentConfirmation from "./AppointmentConfirmation";
 import { IoMdClose } from "react-icons/io";
+
+const times = [
+  "09:00 am",
+  "10:00 am",
+  "11:00 am",
+  "12:00 pm",
+  "01:00 pm",
+  "02:00 pm",
+  "03:00 pm",
+  "04:00 pm",
+  "05:00 pm",
+  "06:00 pm",
+  "07:00 pm",
+  "08:00 pm",
+];
+
+const clienttemplateID = import.meta.env.VITE_CLIENT_TEMPLATE_ID;
+const adminTemplateID = import.meta.env.VITE_ADMIN_TEMPLATE_ID;
+const serviceid = import.meta.env.VITE_BOOKING_SERVICE_ID;
+const your_public_key = import.meta.env.VITE_BOOKING_EMAIL_PUBLIC;
 function BookAppointment({ onClose, isdashboardbooking = false }) {
   const [value, onChange] = useState(new Date());
   const [selectedTIme, setSelectedTime] = useState();
   const [isSubmitting, setisSubmitting] = useState(false);
   const [isappointmentbooked, setIsappointmentbooked] = useState(false);
-
   const [todayBookedTimmings, setTodayBookedTimmings] = useState([]);
 
   const { accountHolder } = useApp();
-
-  const clienttemplateID = import.meta.env.VITE_CLIENT_TEMPLATE_ID;
-  const adminTemplateID = import.meta.env.VITE_ADMIN_TEMPLATE_ID;
-  const serviceid = import.meta.env.VITE_BOOKING_SERVICE_ID;
-
-  const your_public_key = import.meta.env.VITE_BOOKING_EMAIL_PUBLIC;
-
-  const times = [
-    "09:00 am",
-    "10:00 am",
-    "11:00 am",
-    "12:00 pm",
-    "01:00 pm",
-    "02:00 pm",
-    "03:00 pm",
-    "04:00 pm",
-    "05:00 pm",
-    "06:00 pm",
-    "07:00 pm",
-    "08:00 pm",
-  ];
 
   const filteredTimings = times?.filter(
     (time) =>
@@ -58,7 +56,7 @@ function BookAppointment({ onClose, isdashboardbooking = false }) {
       : "09:00 pm";
   };
 
-  const handlesubmi = async () => {
+  const handlesubmit = async () => {
     const date = String(value.getDate()).padStart(2, "0");
     const month = String(value.getMonth() + 1).padStart(2, "0");
     const year = value.getFullYear();
@@ -163,13 +161,14 @@ function BookAppointment({ onClose, isdashboardbooking = false }) {
       ]);
 
       if (error) {
-        console.error("Error inserting data:", error.message);
-        toast.error("Failed to book appointment");
-        return;
+        throw error;
       }
 
       toast.success("Appointment booked successfully");
-    } catch (error) {}
+    } catch (error) {
+      console.error("Error inserting data:", error.message);
+      toast.error("Failed to book appointment");
+    }
   };
 
   return (
@@ -244,7 +243,7 @@ function BookAppointment({ onClose, isdashboardbooking = false }) {
                         : ""
                     }`}
                   >
-                    {filteredTimings.length > 0 ? (
+                    {filteredTimings?.length > 0 ? (
                       filteredTimings?.map((time, index) => {
                         const now = new Date();
 
@@ -299,7 +298,7 @@ function BookAppointment({ onClose, isdashboardbooking = false }) {
               </div>
               <div className=" flex justify-center items-center my-2 md:my-4">
                 <button
-                  onClick={handlesubmi}
+                  onClick={handlesubmit}
                   className="px-2 py-1 md:px-5 md:py-3 bg-[#374A75] text-[#fafafa] rounded-lg"
                   disabled={isSubmitting}
                 >

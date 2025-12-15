@@ -105,7 +105,7 @@ function Schedule() {
       setScheduleData(appointmentdetails);
 
       if (error) {
-        console.log(error);
+        throw error;
       }
     } catch (error) {
       console.log(error);
@@ -114,7 +114,7 @@ function Schedule() {
 
   return (
     <div className="flex flex-col h-full min-h-0 overflow-hidden lg:border-2 lg:border-[#334A78] lg:rounded-lg bg-white ">
-      <div className="w-full  overflow-y-auto scrollbar-hide h-[calc(100vh-120px)] py-2 ">
+      <div className="w-full  overflow-y-auto scrollbar-hide h-[calc(100vh-110px)] py-2 ">
         <div>
           <div className="text-xl text-[#000] capitalize font-semibold border-b-2 border-b-[#CCCCCC] py-2">
             <h2 className="px-4 ">schedule</h2>

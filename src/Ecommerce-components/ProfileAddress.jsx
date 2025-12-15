@@ -51,8 +51,6 @@ function ProfileAddress() {
     setIsAddressEdit(true);
   };
 
-  console.log("edited format", editaddressFormdata);
-
   //length of add
   const TotalAddress = accountHolder?.address?.length;
 
@@ -143,14 +141,8 @@ function ProfileAddress() {
     // Add the new address to the list
     updatedAddressList.push(newAddress);
 
-    // console.log("Form submitted:", updatedAddressList);
-
     if (validate(addressFormdata)) {
-      console.log("Form submitted:", updatedAddressList);
-
       try {
-        console.log("trying to update the supabase with new add");
-
         const { error } = await supabase
           .from("profiles")
           .update({ address: updatedAddressList })
@@ -192,15 +184,8 @@ function ProfileAddress() {
       }));
     }
 
-    // console.log("Form submitted:", updatedAddressList);
-    console.log("Form submitted:", updatedAddressList);
-
     if (validate(editaddressFormdata)) {
-      console.log("Form submitted:", updatedAddressList);
-
       try {
-        console.log("trying to update the supabase with new add");
-
         const { error } = await supabase
           .from("profiles")
           .update({ address: updatedAddressList })

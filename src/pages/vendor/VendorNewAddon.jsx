@@ -126,7 +126,6 @@ function VendorNewAddon({
           .single();
 
       if (existingProductError && existingProductError.code !== "PGRST116") {
-        console.log("Error checking existing product.");
         return;
       }
 

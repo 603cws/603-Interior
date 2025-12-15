@@ -135,7 +135,6 @@ function VendorItem({ isExpanded }) {
       const filtered = products.filter((item) =>
         item.title.toLowerCase().includes(query.toLowerCase())
       );
-      // console.log(filtered);
       setFilteredProducts(filtered);
     } else {
       if (!query) {
@@ -150,13 +149,11 @@ function VendorItem({ isExpanded }) {
   };
 
   useEffect(() => {
-    console.log("Fetching products...");
     fetchProducts();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isproductRefresh]);
 
   useEffect(() => {
-    console.log("Fetching addons...");
     fetchAddons();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isaddonRefresh]);

@@ -63,14 +63,13 @@ function AdminDashItems({ mobileMenuRef }) {
   const { categories } = useApp();
   const dropdownRef = useRef(null);
   const [filterDropdown, setFilterDropdown] = useState(false);
-  const [isAddProduct, setIsAddProduct] = useState(false);
   const [toggle, setToggle] = useState(true);
   const [selectedTab, setSelectedTab] = useState("products");
   const [isproductRefresh, setIsProductRefresh] = useState(false);
   const [isaddonRefresh, setIsAddonRefresh] = useState(false);
 
   const scrollContainerRef = useRef(null);
-  const [itemsPerPage, setItemsPerPage] = useState(10);
+  const itemsPerPage = 10;
   const [currentPage, setCurrentPage] = useState(1);
   const [lastPageBeforeSearch, setLastPageBeforeSearch] = useState(1);
   const [isSearching, setIsSearching] = useState(false);
@@ -114,7 +113,6 @@ function AdminDashItems({ mobileMenuRef }) {
 
   const handleTabClick = (event) => {
     setProductlist(true);
-    setIsAddProduct(false);
     const tab = event.target.value; // Get value from button
     setSelectedTab(tab);
     setToggle(tab === "products"); // Set toggle dynamically
@@ -157,7 +155,8 @@ function AdminDashItems({ mobileMenuRef }) {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isOpen]);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -694,6 +693,7 @@ function AdminDashItems({ mobileMenuRef }) {
       minute: "2-digit",
     });
   };
+
   return (
     <>
       <div className="scrollbar-hide h-full overflow-y-auto">
