@@ -52,7 +52,7 @@ function Clients({
         setIsModalOpen(false);
         setSelectedUser(null);
       } catch (error) {
-        console.log(error);
+        console.error(error);
       } finally {
         setIsrefresh(true);
       }

@@ -162,7 +162,7 @@ function VendorEditAddon({
           .single();
 
       if (existingProductError && existingProductError.code !== "PGRST116") {
-        console.log("Error checking existing product.");
+        console.error("Error checking existing product.");
         return;
       }
 
@@ -249,7 +249,7 @@ function VendorEditAddon({
         toast.success(`Addon ${title} Upaded successfully.`);
       }
     } catch (error) {
-      console.log("Error in onSubmit:", error);
+      console.error("Error in onSubmit:", error);
     } finally {
       handleFormClear();
       setIsSubmitting(false);

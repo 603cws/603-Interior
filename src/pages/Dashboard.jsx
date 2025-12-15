@@ -134,7 +134,7 @@ function Dashboard() {
         setIsboqavailable(true);
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 
@@ -150,7 +150,7 @@ function Dashboard() {
         throw new Error(error);
       }
     } catch (error) {
-      console.log("something went wrong", error);
+      console.error("something went wrong", error);
     } finally {
       setSelectedBoq(() => null);
       setisfetchBoqDataRefresh(false);

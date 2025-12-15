@@ -24,10 +24,10 @@ function ProductReviews({ product, onClose }) {
         .from("reviews")
         .select(`*,userId(company_name)`)
         .eq("productId", product.id);
-      if (error) console.log(error);
+      if (error) console.error(error);
       setProductReviews(data);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     } finally {
       setLoading(false);
     }
@@ -49,11 +49,11 @@ function ProductReviews({ product, onClose }) {
         .from("reviews")
         .delete()
         .eq("id", review.id);
-      if (error) console.log(error);
+      if (error) console.error(error);
       toast.success("Review Deleted Successfully!");
       setDeleteWarning(false);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 

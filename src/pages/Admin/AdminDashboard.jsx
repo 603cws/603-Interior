@@ -148,7 +148,7 @@ function AdminDashboard() {
 
       setAllvendors(data);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     } finally {
       setIsvendorRefresh(false);
     }
@@ -163,7 +163,7 @@ function AdminDashboard() {
 
       setAllusers(data);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     } finally {
       setIsrefresh(false);
     }

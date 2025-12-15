@@ -59,7 +59,7 @@ function CareerDash() {
         setJobPostings(data);
         if (error) throw error;
       } catch (error) {
-        console.log("error", error);
+        console.error("error", error);
       }
     }
     GetAllJobPosting();
@@ -71,7 +71,7 @@ function CareerDash() {
         setJobApplication(data);
         if (error) throw error;
       } catch (error) {
-        console.log("error", error);
+        console.error("error", error);
       }
     }
     GetAllJobApplication();
@@ -481,7 +481,7 @@ function JobPostForm({ jobdata = null, isedit = false, onsuccess = null }) {
         }
       }
     } catch (error) {
-      console.log("error", error);
+      console.error("error", error);
       toast.error("something went wrong");
     }
   }

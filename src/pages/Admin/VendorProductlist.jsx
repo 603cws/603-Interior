@@ -353,7 +353,7 @@ function VendorProductlist({ setVendorproductlist, selectedVendor }) {
       setFilteredProducts(sortedData);
       // setProducts(data);
     } catch (error) {
-      console.log("Error fetching products:", error);
+      console.error("Error fetching products:", error);
     } finally {
       setIsloading(false);
     }
@@ -375,7 +375,7 @@ function VendorProductlist({ setVendorproductlist, selectedVendor }) {
       });
 
       if (error) {
-        console.log("Error fetching addons:", error);
+        console.error("Error fetching addons:", error);
       } else {
         setAddons(sortedData);
         setFilteredAddons(sortedData);
@@ -435,7 +435,7 @@ function VendorProductlist({ setVendorproductlist, selectedVendor }) {
               imagePaths = imagePaths.concat(parsed);
             }
           } catch (err) {
-            console.log("Error parsing additional images", err);
+            console.error("Error parsing additional images", err);
           }
         }
 
@@ -450,7 +450,7 @@ function VendorProductlist({ setVendorproductlist, selectedVendor }) {
 
       toast.success("Selected items deleted successfully!");
     } catch (error) {
-      console.log("Delete error:", error);
+      console.error("Delete error:", error);
       toast.error("Something went wrong while deleting");
     } finally {
       setMultipleDeleteWaring(false);

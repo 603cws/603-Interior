@@ -207,7 +207,7 @@ function VendorNewAddon({
         }
       }
     } catch (error) {
-      console.log("Error in onSubmit:", error);
+      console.error("Error in onSubmit:", error);
     } finally {
       handleFormClear();
       setIsSubmitting(false);

@@ -30,7 +30,7 @@ function AdminDashHome({
       });
       setProducts(sortedData);
     } catch (error) {
-      console.log("Error fetching products:", error);
+      console.error("Error fetching products:", error);
     }
   };
 
@@ -50,7 +50,7 @@ function AdminDashHome({
       });
       setAddons(sortedData);
     } catch (error) {
-      console.log("error", error);
+      console.error("error", error);
     }
   };
 

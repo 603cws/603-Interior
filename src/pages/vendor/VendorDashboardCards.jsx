@@ -29,7 +29,7 @@ function VendorDashboardCards({ handleproduct }) {
 
       setProducts(data);
     } catch (error) {
-      console.log("Error fetching products:", error);
+      console.error("Error fetching products:", error);
     } finally {
       setIsloading(false);
     }
@@ -47,7 +47,7 @@ function VendorDashboardCards({ handleproduct }) {
       setAddons(data);
       setPendingAddons(getpendingAddons);
     } catch (error) {
-      console.log("Error fetching addons:", error);
+      console.error("Error fetching addons:", error);
     }
   };
 

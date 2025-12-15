@@ -275,7 +275,7 @@ function VendorNewProduct({
         }
       }
     } catch (error) {
-      console.log("Error in onSubmit:", error);
+      console.error("Error in onSubmit:", error);
       toast.error("An unexpected error occurred.");
     } finally {
       setIsSubmitting(false);

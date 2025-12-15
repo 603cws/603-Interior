@@ -98,7 +98,7 @@ function VendorItem({ isExpanded }) {
       setProducts(sortedData);
       setFilteredProducts(sortedData);
     } catch (error) {
-      console.log("Error fetching products:", error);
+      console.error("Error fetching products:", error);
     } finally {
       setIsloading(false);
     }
@@ -111,7 +111,7 @@ function VendorItem({ isExpanded }) {
       .eq("vendorId", accountHolder.userId);
 
     if (error) {
-      console.log("Error fetching addons:", error);
+      console.error("Error fetching addons:", error);
     } else {
       const sortedData = data.sort((a, b) => {
         // Prioritize "pending" status
@@ -239,7 +239,7 @@ function VendorItem({ isExpanded }) {
             imagePaths = imagePaths.concat(parsedAdditionalImages);
           }
         } catch (parseError) {
-          console.log("error parsing error", parseError);
+          console.error("error parsing error", parseError);
         }
       }
 
@@ -253,7 +253,7 @@ function VendorItem({ isExpanded }) {
 
       setProductPreview(false); // Close the modal after deletion
     } catch (error) {
-      console.log(error);
+      console.error(error);
     } finally {
       selectedProductview.type === "product"
         ? setIsProductRefresh(true)

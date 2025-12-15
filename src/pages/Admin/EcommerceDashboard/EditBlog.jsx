@@ -133,7 +133,7 @@ function EditBlog({ blog, onClose, onUpdate }) {
       onClose();
       onUpdate();
     } catch (error) {
-      console.log("Unexpected error:", error);
+      console.error("Unexpected error:", error);
     } finally {
       setInserting(false);
     }

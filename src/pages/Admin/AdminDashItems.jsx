@@ -420,8 +420,6 @@ function AdminDashItems({ mobileMenuRef }) {
   }, [filteredProducts, filteredAddons, sortField, sortOrder, toggle]);
 
   async function handleMultipleDelete(selectedProducts) {
-    console.log("selectedDeleteItems", selectedProducts);
-
     if (selectedProducts?.length === 0) return;
 
     // Filter the items you want to delete
@@ -458,7 +456,7 @@ function AdminDashItems({ mobileMenuRef }) {
               imagePaths = imagePaths.concat(parsed);
             }
           } catch (err) {
-            console.log("Error parsing additional images", err);
+            console.error("Error parsing additional images", err);
           }
         }
 
@@ -473,7 +471,7 @@ function AdminDashItems({ mobileMenuRef }) {
 
       toast.success("Selected items deleted successfully!");
     } catch (error) {
-      console.log("Delete error:", error);
+      console.error("Delete error:", error);
       toast.error("Something went wrong while deleting");
     } finally {
       setMultipleDeleteWaring(false);
@@ -518,7 +516,7 @@ function AdminDashItems({ mobileMenuRef }) {
       setProducts(sortedData);
       setFilteredProducts(sortedData);
     } catch (error) {
-      console.log("Error fetching products:", error);
+      console.error("Error fetching products:", error);
     } finally {
       setIsloading(false);
       setIsProductRefresh(false);
@@ -539,7 +537,7 @@ function AdminDashItems({ mobileMenuRef }) {
       });
 
       if (error) {
-        console.log("Error fetching addons:", error);
+        console.error("Error fetching addons:", error);
       } else {
         setAddons(sortedData);
         setFilteredAddons(sortedData);
@@ -619,7 +617,7 @@ function AdminDashItems({ mobileMenuRef }) {
             imagePaths = imagePaths.concat(parsedAdditionalImages);
           }
         } catch (parseError) {
-          console.log("error parsing error", parseError);
+          console.error("error parsing error", parseError);
         }
       }
 
@@ -633,7 +631,7 @@ function AdminDashItems({ mobileMenuRef }) {
 
       setProductPreview(false);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     } finally {
       selectedProductview.type === "product"
         ? setIsProductRefresh(true)

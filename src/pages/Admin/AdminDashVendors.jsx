@@ -37,7 +37,7 @@ function AdminDashVendors({
         setIsModalOpen(false);
         setSelectedUser(null);
       } catch (error) {
-        console.log(error);
+        console.error(error);
       } finally {
         setIsvendorRefresh(true);
       }

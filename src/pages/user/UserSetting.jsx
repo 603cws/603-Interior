@@ -24,7 +24,7 @@ function UserSetting() {
         await supabase.auth.getUser();
 
       if (authError) {
-        console.log("Error fetching auth data:", authError);
+        console.error("Error fetching auth data:", authError);
       }
       const { data: profileData, error: profileError } = await supabase
         .from("profiles")

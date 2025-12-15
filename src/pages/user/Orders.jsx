@@ -119,7 +119,7 @@ function Orders() {
         toast?.success("refund initated");
       }
     } catch (error) {
-      console.log("error", error);
+      console.error("error", error);
     } finally {
       setEntireOrderCancellation((prev) => !prev);
       setRefreshOrder((prev) => !prev);
@@ -373,7 +373,7 @@ function OrderProducts({ orderID }) {
         setorderRefresh((prev) => !prev);
       }
     } catch (error) {
-      console.log("error", error);
+      console.error("error", error);
     }
   }
 

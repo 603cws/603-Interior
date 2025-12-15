@@ -154,7 +154,7 @@ function UserBoqItem({ selectedBoq, setSelectedBoq }) {
         setIsboqavailable(true);
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 
@@ -179,7 +179,7 @@ function UserBoqItem({ selectedBoq, setSelectedBoq }) {
         setFilteredAddons(data);
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
     } finally {
       setIsloading(false);
     }
@@ -212,7 +212,7 @@ function UserBoqItem({ selectedBoq, setSelectedBoq }) {
         setFilteredProducts([]);
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
     } finally {
       setIsloading(false);
     }

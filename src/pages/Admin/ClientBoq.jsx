@@ -72,9 +72,9 @@ function ClientBoq({ setClientBoqs }) {
         setSelectedBoq(data[0]);
         setIsboqavailable(true);
       }
-      if (error) console.log(error);
+      if (error) console.error(error);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     } finally {
       setIsloading(false);
     }
@@ -106,7 +106,7 @@ function ClientBoq({ setClientBoqs }) {
         setFilteredAddons(data);
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
     } finally {
       setIsloading(false);
     }
@@ -139,7 +139,7 @@ function ClientBoq({ setClientBoqs }) {
         setFilteredProducts([]);
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
     } finally {
       setIsloading(false);
     }

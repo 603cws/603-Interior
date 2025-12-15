@@ -113,7 +113,7 @@ function NewBlog({ onClose }) {
       handleDiscard();
       toast.success("Blog Submitted successfully!");
     } catch (error) {
-      console.log("Unexpected error:", error);
+      console.error("Unexpected error:", error);
     } finally {
       setInserting(false);
     }

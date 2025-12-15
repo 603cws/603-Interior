@@ -33,10 +33,10 @@ function Blogs() {
         .from("blogs")
         .select("*")
         .order("created_at", { ascending: false });
-      if (error) console.log("Error fetching blogs:", error);
+      if (error) console.error("Error fetching blogs:", error);
       setBlogs(data);
     } catch (error) {
-      console.log("Unexpected Error:", error);
+      console.error("Unexpected Error:", error);
     }
   };
 
@@ -72,7 +72,7 @@ function Blogs() {
           .remove(imagePaths);
 
         if (storageError)
-          console.log("storageError while deleting image", storageError);
+          console.error("storageError while deleting image", storageError);
 
         if (storageError) throw storageError;
       }

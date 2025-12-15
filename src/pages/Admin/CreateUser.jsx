@@ -167,7 +167,7 @@ function CreateUser() {
         toast.success(`${formData.role} created successfully`);
       }
     } catch (error) {
-      console.log("Error signing up:", error);
+      console.error("Error signing up:", error);
     }
   };
 

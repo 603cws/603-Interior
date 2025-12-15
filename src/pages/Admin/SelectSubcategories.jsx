@@ -111,7 +111,7 @@ function SelectSubcategories({
       setRejectReason("");
       onClose();
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 

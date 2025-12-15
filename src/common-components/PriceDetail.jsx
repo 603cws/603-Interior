@@ -114,7 +114,7 @@ function PriceDetail({ handlebtnClick }) {
       calculateTotalDiffertoShow(coupon);
       setMobileCouponName(coupon);
     } catch (error) {
-      console.log(error);
+      console.error(error);
       toast.error("Invalid Coupon");
     }
   };
