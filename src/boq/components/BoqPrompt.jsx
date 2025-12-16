@@ -2,8 +2,8 @@ import { Dialog, Transition } from "@headlessui/react";
 import { Fragment, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { supabase } from "../../services/supabase";
-import { useApp } from "../../Context/Context";
 import { boqLimit } from "../../constants/constant";
+import { useBoqApp } from "../../Context/BoqContext";
 
 function BoqPrompt({ onConfirm, onCancel, isProfileCard, setIsProfileCard }) {
   const [boqTitle, setBoqTitle] = useState("");
@@ -21,7 +21,7 @@ function BoqPrompt({ onConfirm, onCancel, isProfileCard, setIsProfileCard }) {
     BOQTitle,
     setBOQTitle,
     setBOQID,
-  } = useApp();
+  } = useBoqApp();
 
   useEffect(() => {
     const handleLoad = async () => {

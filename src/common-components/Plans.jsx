@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { useApp } from "../Context/Context";
 import { motion } from "framer-motion";
 import { HiCheckBadge } from "react-icons/hi2";
 import toast from "react-hot-toast";
@@ -12,6 +11,7 @@ import {
 } from "../boq/utils/BoqUtils";
 import { numOfCoats } from "../constants/constant";
 import { calculateTotalPrice } from "../boq/utils/productUtils";
+import { useBoqApp } from "../Context/BoqContext";
 
 const plansData = [
   {
@@ -107,7 +107,7 @@ function Plans({ showNewBoqPopup, setShowNewBoqPopup }) {
     userResponses,
     setSelectedCategory,
     setSelectedSubCategory,
-  } = useApp();
+  } = useBoqApp();
 
   const [hoveredPlan, setHoveredPlan] = useState(1);
   const [imageLoaded, setImageLoaded] = useState(false);

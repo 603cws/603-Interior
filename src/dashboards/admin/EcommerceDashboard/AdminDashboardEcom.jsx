@@ -10,7 +10,6 @@ import SidebarItem from "../../../common-components/SidebarItem";
 import { useLogout } from "../../../utils/HelperFunction";
 import { BsBoxSeam } from "react-icons/bs";
 import { FiLogOut, FiUser } from "react-icons/fi";
-import Orders, { OrderDetails } from ".././Orders";
 import Discount from "./Discount";
 import Clients from "../Clients";
 import { supabase } from "../../../services/supabase";
@@ -28,6 +27,7 @@ import { IoMdImages } from "react-icons/io";
 import { IoMdSwitch } from "react-icons/io";
 import CareerDash from "./CareerDash";
 import { TbBriefcase2 } from "react-icons/tb";
+import Orders, { OrderDetails } from "../Orders";
 
 function handlesidebarState(state, action) {
   switch (action.type) {

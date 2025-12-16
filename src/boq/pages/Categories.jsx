@@ -1,5 +1,4 @@
 import { useState, useRef, useEffect } from "react";
-import { useApp } from "../../Context/Context";
 import { motion, AnimatePresence } from "framer-motion";
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
 import { CategorySvgMap } from "../../common-components/CategorySvgMap";
@@ -8,6 +7,7 @@ import {
   getImageSrcSubCat,
 } from "../utils/CategoryUtils";
 import { useCategoryCompletion } from "../utils/useCategoryCompletion";
+import { useBoqApp } from "../../Context/BoqContext";
 
 const Categories = ({
   setSelectedSubCategory,
@@ -20,8 +20,9 @@ const Categories = ({
     selectedData,
     categories,
     userResponses,
-    categoryConfig,
-  } = useApp();
+  } = useBoqApp();
+
+  const { categoryConfig } = useBoqApp();
 
   const { checkIfSubCategoryCompleted, checkIfCategoryCompleted } =
     useCategoryCompletion(categories, selectedData, categoryConfig);
@@ -197,7 +198,7 @@ const Categories = ({
                   currentPage < 1 ? "lg:justify-between" : "md:justify-start"
                 }`}
               >
-                {paginatedItems.map(({ id, category, subcategories }) => {
+                {paginatedItems?.map(({ id, category, subcategories }) => {
                   const isSelected = selectedCategory?.id === id;
                   const cleanedCategoryName = getCleanedCategoryName(category);
                   const SvgIconFactory = CategorySvgMap[cleanedCategoryName];

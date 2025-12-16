@@ -1,9 +1,9 @@
-import { useApp } from "../../Context/Context";
 import { PiFrameCornersFill } from "react-icons/pi";
 import { IoIosCloseCircle } from "react-icons/io";
+import { useBoqApp } from "../../Context/BoqContext";
 
 function CurrentLayoutDetails({ onClose }) {
-  const { currentLayoutData } = useApp();
+  const { currentLayoutData } = useBoqApp();
 
   return (
     <div className="fixed inset-0 bg-[#000]/30 flex justify-center items-center">

@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { useApp } from "../../Context/Context";
 import { motion } from "framer-motion";
 import { MAX_AREA, MIN_AREA } from "../utils/AreaCalculations";
+import { useBoqApp } from "../../Context/BoqContext";
 
 function EnterAreaModal({ onclose }) {
-  const { inputValue, setInputValue, setTotalArea } = useApp();
+  const { inputValue, setInputValue, setTotalArea } = useBoqApp();
   const [error, setError] = useState("");
   const [imageLoaded, setImageLoaded] = useState(false);
 

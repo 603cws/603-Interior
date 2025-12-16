@@ -1,8 +1,6 @@
-// import { RiDashboardFill } from "react-icons/ri";
 import { useNavigate } from "react-router-dom";
 import { useApp } from "../../Context/Context";
 import { useEffect, useState, useRef, useReducer } from "react";
-
 import { VscSignOut } from "react-icons/vsc";
 import { IoSettingsSharp } from "react-icons/io5";
 import { LuBlend } from "react-icons/lu";
@@ -14,13 +12,12 @@ import UserCard from "../components/UserCard";
 import UserProfileEdit from "../components/UserProfileEdit";
 import VendorDashboardCards from "./VendorDashboardCards";
 import VendorItem from "./VendorItem";
-
 import { MdOutlineSpaceDashboard } from "react-icons/md";
 import { BsBoxSeam } from "react-icons/bs";
 import { RiSettingsLine } from "react-icons/ri";
 import { GrCircleQuestion } from "react-icons/gr";
 import { FiLogOut } from "react-icons/fi";
-import Orders from "../Admin/Orders";
+import Orders from "../admin/Orders";
 
 function handlesidebarState(state, action) {
   switch (action.type) {

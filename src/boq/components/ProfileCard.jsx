@@ -7,6 +7,7 @@ import { motion } from "framer-motion";
 import { MdClose } from "react-icons/md";
 import { useLogout } from "../../utils/HelperFunction";
 import GobackLayoutWarning from "./GobackLayoutWarning";
+import { useBoqApp } from "../../Context/BoqContext";
 
 const profileVariants = {
   hidden: { x: "100%", opacity: 0 },
@@ -29,7 +30,8 @@ function ProfileCard({
   setShowNewBoqPopup,
 }) {
   const logout = useLogout();
-  const { accountHolder, progress, setBOQTitle, setIsSaveBOQ } = useApp();
+  const { accountHolder } = useApp();
+  const { progress, setBOQTitle, setIsSaveBOQ } = useBoqApp();
   const profileRef = useRef(null);
   const [showBookAppointment, setShowBookAppointment] = useState(false);
   const [isLayoutWarning, setIslayoutWarning] = useState(false);
@@ -165,7 +167,7 @@ function ProfileCard({
                 )}
               </>
             )}
-            <div className="flex items-center mx-4 gap-3 hover:bg-[#E5F4FF] hover:cursor-pointer hover:rounded-lg pl-2 py-1.5">
+            <div className="flex items-center mx-4 gap-3 hover:bg-[#E5F4FF] hover:cursor-not-allowed hover:rounded-lg pl-2 py-1.5">
               <img
                 src="/images/profile-card/video.png"
                 alt="video"
@@ -175,7 +177,7 @@ function ProfileCard({
             </div>
 
             {accountHolder.role === "user" && (
-              <div
+              <button
                 onClick={handleAppointment}
                 className={`flex items-center mx-4 gap-3 pl-2 py-1.5 ${
                   progress < 75
@@ -188,8 +190,8 @@ function ProfileCard({
                   alt="Question"
                   className="w-6 h-6"
                 />
-                <button>Book Appointment</button>
-              </div>
+                <span>Book Appointment</span>
+              </button>
             )}
           </div>
 

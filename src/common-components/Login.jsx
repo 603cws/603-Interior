@@ -8,6 +8,7 @@ import { useApp } from "../Context/Context";
 import toast from "react-hot-toast";
 import { motion } from "framer-motion";
 import { useResetBOQ } from "../utils/HelperFunction";
+import { useBoqApp } from "../Context/BoqContext";
 
 function Login() {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
@@ -18,7 +19,8 @@ function Login() {
   const [resetPass, setResetPass] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(false);
-  const { setUserId, setIsAuthenticated, setCurrentLayoutID } = useApp();
+  const { setIsAuthenticated } = useApp();
+  const { setUserId, setCurrentLayoutID } = useBoqApp();
   const navigate = useNavigate();
   const resetBOQ = useResetBOQ();
   const [formData, setFormData] = useState({

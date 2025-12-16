@@ -15,7 +15,7 @@ function GobackLayoutWarning({ onConfirm, onCancel }) {
               onClick={onConfirm}
               className="w-28 px-2 py-2 text-[#fff] hover:text-[#fff] border-2 border-[#000] hover:border-[#fff] bg-[#334A78] hover:bg-gradient-to-r from-[#334A78] to-[#68B2DC] transition-all duration-500 ease-in-out"
             >
-              yes
+              Yes
             </button>
           </div>
         </div>

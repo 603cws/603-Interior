@@ -15,6 +15,7 @@ export const EcomAppProvider = ({ children }) => {
     priceRange: [0, 10000],
     brands: [],
   });
+  const [showLoginPopup, setShowLoginPopup] = useState(false);
 
   const [pendingProduct, setPendingProduct] = useState(() => {
     const stored = sessionStorage.getItem("addToWishlistProduct");
@@ -114,6 +115,8 @@ export const EcomAppProvider = ({ children }) => {
         getCartItems,
         pendingProduct,
         setPendingProduct,
+        showLoginPopup,
+        setShowLoginPopup,
       }}
     >
       {children}

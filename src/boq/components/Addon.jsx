@@ -1,6 +1,6 @@
 import { useEffect } from "react";
-import { useApp } from "../../Context/Context";
 import { baseImageUrl } from "../../utils/HelperConstant";
+import { useBoqApp } from "../../Context/BoqContext";
 
 function Addon({
   allAddons,
@@ -12,7 +12,7 @@ function Addon({
   selectedAddonsMap,
   setSelectedAddonsMap,
 }) {
-  const { selectedCategory, selectedSubCategory1 } = useApp();
+  const { selectedCategory, selectedSubCategory1 } = useBoqApp();
 
   useEffect(() => {
     if (!selectedProductView) return;

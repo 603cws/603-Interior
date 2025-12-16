@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { useApp } from "../Context/Context";
 import Lottie from "lottie-react";
 import ChairAnimation from "../assets/ChairAnimation.json";
+import { useBoqApp } from "../Context/BoqContext";
 function ErrorModal({ onclose, message, sizeReached }) {
   const {
     totalArea,
@@ -9,7 +9,7 @@ function ErrorModal({ onclose, message, sizeReached }) {
     setTotalAreaSource,
     inputValue,
     setInputValue,
-  } = useApp();
+  } = useBoqApp();
   const [error, setError] = useState("");
 
   const MIN_AREA = 1000;

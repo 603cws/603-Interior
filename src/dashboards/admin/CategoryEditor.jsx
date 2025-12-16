@@ -1,8 +1,9 @@
 import { useState } from "react";
-import { useApp } from "../../Context/Context";
+import { supabase } from "../../services/supabase";
+import { useBoqApp } from "../../Context/BoqContext";
 
 export default function CategoryEditor() {
-  const { categoryConfig, updateCategoryConfig } = useApp();
+  const { categoryConfig, setCategoryConfig } = useBoqApp();
 
   const handleDeleteSubCategory = (category, subCategory) => {
     if (
@@ -15,6 +16,17 @@ export default function CategoryEditor() {
 
       const newConfig = { ...categoryConfig, [category]: newCat };
       updateCategoryConfig(newConfig);
+    }
+  };
+
+  const updateCategoryConfig = async (newConfig) => {
+    setCategoryConfig(newConfig);
+    const { error } = await supabase
+      .from("category_config")
+      .update({ config_data: newConfig, updated_at: new Date().toISOString() })
+      .eq("id", 1);
+    if (error) {
+      console.error("Error updating config:", error);
     }
   };
 

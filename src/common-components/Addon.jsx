@@ -1,9 +1,9 @@
 import { useNavigate } from "react-router-dom";
 import { baseImageUrl } from "../utils/HelperConstant";
-import { useApp } from "../Context/Context";
+import { useBoqApp } from "../Context/BoqContext";
 
 function Addon({ imagepath, product }) {
-  const { setSelectedProductView } = useApp();
+  const { setSelectedProductView } = useBoqApp();
   const navigate = useNavigate();
   return (
     <div className=" border border-[#ccc] p-2 font-Poppins">

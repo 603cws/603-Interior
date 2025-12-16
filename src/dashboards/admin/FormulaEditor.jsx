@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import { supabase } from "../../services/supabase";
-import { useApp } from "../../Context/Context";
+import { useBoqApp } from "../../Context/BoqContext";
 
 export default function FormulaEditor() {
-  const { formulaMap, refetchFormulas } = useApp();
+  const { formulaMap, refetchFormulas } = useBoqApp();
   const [editing, setEditing] = useState({});
   const [newFormula, setNewFormula] = useState({
     category: "",

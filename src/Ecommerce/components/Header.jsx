@@ -12,6 +12,7 @@ import toast from "react-hot-toast";
 import { motion } from "framer-motion";
 import { CiSearch } from "react-icons/ci";
 import { useEcomApp } from "../../Context/ecomContext";
+import { useBoqApp } from "../../Context/BoqContext";
 
 function Header() {
   const navigate = useNavigate();
@@ -26,17 +27,18 @@ function Header() {
   const profileRef = useRef(null);
   const buttonRef = useRef(null);
 
+  const { isAuthenticated, accountHolder, setIsAuthenticated } = useApp();
+
+  const { setUserId } = useBoqApp();
+
   const {
-    isAuthenticated,
-    accountHolder,
+    cartItems,
+    localcartItems,
+    wishlistItems,
+    pendingProduct,
     showLoginPopup,
     setShowLoginPopup,
-    setIsAuthenticated,
-    setUserId,
-  } = useApp();
-
-  const { cartItems, localcartItems, wishlistItems, pendingProduct } =
-    useEcomApp();
+  } = useEcomApp();
 
   let hasShownToast = false;
   const pathname = window.location.pathname;

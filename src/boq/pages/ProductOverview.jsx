@@ -6,7 +6,6 @@ import {
 } from "react-icons/md";
 import { normalizeKey } from "../utils/CalculateTotalPriceHelper";
 import SelectArea from "../components/SelectArea";
-import { useApp } from "../../Context/Context";
 import { calculateTotalPrice } from "../utils/productUtils";
 import { useParams, useNavigate } from "react-router-dom";
 import RecommendComp from "../components/RecommendComp";
@@ -22,6 +21,7 @@ import {
   priceRange,
 } from "../../constants/constant";
 import { baseImageUrl } from "../../utils/HelperConstant";
+import { useBoqApp } from "../../Context/BoqContext";
 
 function ProductOverview() {
   const [relatedProducts, setRelatedProducts] = useState([]);
@@ -67,7 +67,7 @@ function ProductOverview() {
     formulaMap,
     setSelectedProductView,
     seatCountData,
-  } = useApp();
+  } = useBoqApp();
 
   const toggleProfile = () => setIsOpen((p) => !p);
 

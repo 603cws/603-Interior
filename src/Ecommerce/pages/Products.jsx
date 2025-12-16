@@ -640,13 +640,15 @@ export default Products;
 
 function Card({ product }) {
   const naviagte = useNavigate();
-  const { isAuthenticated, showLoginPopup, setShowLoginPopup } = useApp();
+  const { isAuthenticated } = useApp();
   const {
     cartItems,
     localcartItems,
     wishlistItems,
     pendingProduct,
     setPendingProduct,
+    showLoginPopup,
+    setShowLoginPopup,
   } = useEcomApp();
   const isWishlisted = wishlistItems?.some(
     (item) => item.productId?.id === product.id

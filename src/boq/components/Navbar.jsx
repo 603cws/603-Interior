@@ -14,6 +14,7 @@ import TopBar from "./TopBar";
 import DesktopActions from "./DesktopActions";
 import MobileActions from "./MobileActions";
 import { fetchFilteredBOQProducts } from "../utils/BoqUtils";
+import { useBoqApp } from "../../Context/BoqContext";
 
 const useBodyNoScroll = (active) => {
   useEffect(() => {
@@ -87,11 +88,12 @@ function Navbar({
   const [showLayoutDetails, setShowLayoutDetails] = useState(false);
   const [isLayoutWarning, setIslayoutWarning] = useState(false);
 
+  const { accountHolder } = useApp();
+
   const {
     progress,
     selectedData,
     setSelectedData,
-    accountHolder,
     categories,
     setUserId,
     totalArea,
@@ -111,7 +113,7 @@ function Navbar({
     setCurrentLayoutID,
     quantityData,
     setIsSaveBOQ,
-  } = useApp();
+  } = useBoqApp();
 
   useClickOutside(dropdownRef, () => setIsOpen(false));
   useBodyNoScroll(showLayoutDetails);

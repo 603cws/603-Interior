@@ -1,6 +1,6 @@
 import AreaCounter from "./AreaCounter";
 import Tooltip from "./ToolTip";
-import { useApp } from "../../Context/Context";
+import { useBoqApp } from "../../Context/BoqContext";
 
 const LayoutCard = ({
   name,
@@ -21,7 +21,7 @@ const LayoutCard = ({
   showAreaCounter, // Boolean to conditionally render AreaCounter
   areaCounterProps, // Props specific to AreaCounter
 }) => {
-  const { totalArea } = useApp();
+  const { totalArea } = useBoqApp();
 
   return (
     <div className="workspacedescription flex flex-col w-40 md:w-[230px] lg:w-[280px] items-center border border-solid bg-[#fff] pb-2 mt-2 mb-3 relative">

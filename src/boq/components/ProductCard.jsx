@@ -1,5 +1,4 @@
 import { useEffect, useState, useRef, useMemo } from "react";
-import { useApp } from "../../Context/Context";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaStar } from "react-icons/fa";
@@ -11,6 +10,7 @@ import PagInationNav from "../../common-components/PagInationNav";
 import ProductSkeleton, { animations } from "./ProductSkeleton";
 import FilterPanel from "./FilterPanel";
 import SortPanel, { options } from "./SortPanel";
+import { useBoqApp } from "../../Context/BoqContext";
 
 function ProductCard({
   products,
@@ -27,7 +27,7 @@ function ProductCard({
     loading,
     setLoading,
     selectedData,
-  } = useApp();
+  } = useBoqApp();
 
   const dropdownRef = useRef(null);
   const productsInCategory = products[selectedCategory?.category] || [];

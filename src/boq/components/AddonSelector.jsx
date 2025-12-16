@@ -1,4 +1,4 @@
-import { useApp } from "../../Context/Context";
+import { useBoqApp } from "../../Context/BoqContext";
 import { AddToCartToast } from "../../utils/AddToCartToast";
 import { calculateAddonTotalPrice } from "../utils/productUtils";
 import Addon from "./Addon";
@@ -20,7 +20,7 @@ function AddonSelector({
   selectedSubCategory,
   selectedSubCategory1,
 }) {
-  const { selectedData, setSelectedData, quantityData } = useApp();
+  const { selectedData, setSelectedData, quantityData } = useBoqApp();
 
   const handleAddonClick = () => {
     setShowAddon(false);

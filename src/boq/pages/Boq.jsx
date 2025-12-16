@@ -3,7 +3,6 @@ import { ToastContainer } from "react-toastify";
 import Navbar from "../../boq/components/Navbar";
 import Categories from "./Categories";
 import QnaPopup from "../components/QnaPopup";
-import { useApp } from "../../Context/Context";
 import Joyride, { STATUS } from "react-joyride";
 import ProfileCard from "../components/ProfileCard";
 import Plans from "../../common-components/Plans";
@@ -14,6 +13,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { selectAreaAnimation } from "../constants/animations";
 import { useLocation } from "react-router-dom";
 import { categoriesWithModal, priceRange } from "../../constants/constant";
+import { useBoqApp } from "../../Context/BoqContext";
 
 const tourSteps = [
   {
@@ -78,7 +78,7 @@ function Boq() {
     selectedProductView,
     setSelectedProductView,
     searchQuery,
-  } = useApp();
+  } = useBoqApp();
 
   const [runTour, setRunTour] = useState(false);
 
@@ -181,7 +181,7 @@ function Boq() {
   };
 
   const filteredProducts = useMemo(() => {
-    return productData.filter((product) => {
+    return productData?.filter((product) => {
       if (!product.product_variants || product.product_variants.length === 0) {
         return false;
       }

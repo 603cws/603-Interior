@@ -1,4 +1,4 @@
-import { useApp } from "../../Context/Context";
+import { useBoqApp } from "../../Context/BoqContext";
 
 function AreaSelector({
   setSelectedAreas,
@@ -21,7 +21,7 @@ function AreaSelector({
     productQuantity,
     setProductQuantity,
     categoryConfig,
-  } = useApp();
+  } = useBoqApp();
 
   const handleCheckboxChange = (value, checked) => {
     setSelectedAreas((prev) =>

@@ -40,6 +40,7 @@ import {
   MAX_AREA,
   MIN_AREA,
 } from "../utils/AreaCalculations";
+import { useBoqApp } from "../../Context/BoqContext";
 
 //setps for joyride
 const tourSteps = [
@@ -101,13 +102,10 @@ function Layout() {
   const [warning, setWarning] = useState(false);
   const [otherArea, setOtherArea] = useState(0);
 
-  const {
-    totalArea,
-    setTotalArea,
-    totalAreaSource,
-    currentLayoutData,
-    isAuthenticated,
-  } = useApp();
+  const { isAuthenticated } = useApp();
+
+  const { totalArea, setTotalArea, totalAreaSource, currentLayoutData } =
+    useBoqApp();
 
   const handleVariantNameChange = (areaValues) => {
     let newVariant;

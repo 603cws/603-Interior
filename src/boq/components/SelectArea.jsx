@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import { useApp } from "../../Context/Context";
 import { categoriesWithTwoLevelCheck } from "../../constants/constant";
 import AddonSelector from "./AddonSelector";
 import AreaSelector from "./AreaSelector";
 import { AddToCartToast } from "../../utils/AddToCartToast";
+import { useBoqApp } from "../../Context/BoqContext";
 
 function SelectArea({
   setShowSelectArea,
@@ -18,7 +18,7 @@ function SelectArea({
   selectedSubCategory1,
 }) {
   //Don't call the selectedCategory, selectedSubCategory, selectedSubCategory1, subCategories from Context => Sunny
-  const { selectedData, productQuantity, handleSelectedData } = useApp();
+  const { selectedData, productQuantity, handleSelectedData } = useBoqApp();
 
   const [showAddon, setShowAddon] = useState(false);
   const [allSubcategories, setAllSubcategories] = useState([]);

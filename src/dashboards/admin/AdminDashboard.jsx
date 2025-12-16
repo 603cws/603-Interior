@@ -60,9 +60,6 @@ const SECTIONS = {
 function AdminDashboard() {
   const logout = useLogout();
   const navigate = useNavigate();
-
-  // const [query, setQuery] = useState();
-
   const [isExpanded, setIsExpanded] = useState(false);
   const [isrefresh, setIsrefresh] = useState(false);
   const [isvendorRefresh, setIsvendorRefresh] = useState(false);

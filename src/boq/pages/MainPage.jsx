@@ -1,7 +1,7 @@
 import { useEffect } from "react";
-import { useApp } from "../../Context/Context";
 import { motion, AnimatePresence } from "framer-motion";
 import { fadeInVariant } from "../constants/animations";
+import { useBoqApp } from "../../Context/BoqContext";
 
 const MainPage = ({ userResponses, setSelectedSubCategory1 }) => {
   const {
@@ -10,7 +10,7 @@ const MainPage = ({ userResponses, setSelectedSubCategory1 }) => {
     selectedSubCategory1,
     subCat1,
     categoryConfig,
-  } = useApp();
+  } = useBoqApp();
 
   function getSubCategories(category, subCategory, allSubCategories) {
     const byCategory = categoryConfig[category] || {};

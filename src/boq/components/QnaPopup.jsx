@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import "animate.css";
-import { useApp } from "../../Context/Context";
 import { IoIosCloseCircle } from "react-icons/io";
+import { useBoqApp } from "../../Context/BoqContext";
 
 const heightQuestion = [
   {
@@ -60,7 +60,7 @@ const partitionQuestions = [
   },
 ];
 function QnaPopup({ onClose, onSubmit }) {
-  const { selectedCategory } = useApp();
+  const { selectedCategory } = useBoqApp();
   const categoryName = selectedCategory?.category || "";
 
   const [questions, setQuestions] = useState(heightQuestion);

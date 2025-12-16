@@ -5,6 +5,7 @@ import { useApp } from "../Context/Context";
 import toast from "react-hot-toast";
 import Spinner from "./Spinner";
 import { motion } from "framer-motion";
+import { useBoqApp } from "../Context/BoqContext";
 
 function CompleteProfile() {
   const [user, setUser] = useState(null);
@@ -14,7 +15,8 @@ function CompleteProfile() {
   const [loading, setLoading] = useState(true);
   const [imageLoaded, setImageLoaded] = useState(false);
   const navigate = useNavigate();
-  const { setUserId, setIsAuthenticated, setCurrentLayoutID } = useApp();
+  const { setIsAuthenticated } = useApp();
+  const { setUserId, setCurrentLayoutID } = useBoqApp();
 
   useEffect(() => {
     const fetchUserData = async () => {

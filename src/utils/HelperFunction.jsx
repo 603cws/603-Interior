@@ -4,10 +4,16 @@ import { supabase } from "../services/supabase";
 import { AddToCartToast, RemoveFromCartToast } from "./AddToCartToast";
 import { useNavigate } from "react-router-dom";
 import { useEcomApp } from "../Context/ecomContext";
+import { useBoqApp } from "../Context/BoqContext";
 
 export const useHandleAddToCart = () => {
-  const { isAuthenticated, setShowLoginPopup } = useApp();
-  const { getCartItems, setLocalCartItems, setPendingProduct } = useEcomApp();
+  const { isAuthenticated } = useApp();
+  const {
+    getCartItems,
+    setLocalCartItems,
+    setPendingProduct,
+    setShowLoginPopup,
+  } = useEcomApp();
 
   const navigate = useNavigate();
   const handleAddToCart = async (product, iscarted, productQuantity = 1) => {
@@ -131,17 +137,16 @@ export const useHandleAddToCart = () => {
 
 export const useLogout = () => {
   const navigate = useNavigate();
+  const { setAccountHolder, setIsAuthLoading, setIsAuthenticated } = useApp();
+
   const {
-    setAccountHolder,
-    setIsAuthLoading,
-    setIsAuthenticated,
     setTotalArea,
     setSelectedData,
     setSelectedPlan,
     setBOQTitle,
     setBOQID,
     setProgress,
-  } = useApp();
+  } = useBoqApp();
 
   const handleLogout = async () => {
     try {
@@ -192,7 +197,8 @@ export const useResetBOQ = () => {
     setBOQTitle,
     setBOQID,
     setProgress,
-  } = useApp();
+  } = useBoqApp();
+
   const resetBOQ = () => {
     localStorage.removeItem("BOQID");
     localStorage.removeItem("selectedPlan");

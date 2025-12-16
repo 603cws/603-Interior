@@ -5,13 +5,15 @@ import { supabase } from "../services/supabase";
 import toast from "react-hot-toast";
 import { useApp } from "../Context/Context";
 import { useHandleAddToCart } from "../utils/HelperFunction";
+import { useBoqApp } from "../Context/BoqContext";
 
 export default function LoginPopup({ onClose, product }) {
   const [isSignUp, setIsSignUp] = useState(false);
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const { setUserId, setIsAuthenticated } = useApp();
+  const { setUserId } = useBoqApp();
+  const { setIsAuthenticated } = useApp();
   const { handleAddtoWishlist } = useHandleAddToCart();
   const [formData, setFormData] = useState({
     email: "",

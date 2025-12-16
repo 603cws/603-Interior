@@ -1,8 +1,8 @@
 import { useState } from "react";
 import LayoutCard from "../components/LayoutCard";
-import { useApp } from "../../Context/Context";
 import ErrorModal from "../../common-components/ErrorModal";
 import { workspaceData } from "../utils/WorkspaceConstants";
+import { useBoqApp } from "../../Context/BoqContext";
 
 const sizeMapping = {
   M: "3 X 2",
@@ -27,7 +27,7 @@ function OpenWorkspaces({
 }) {
   const [showError, setShowError] = useState(false);
 
-  const { totalArea } = useApp();
+  const { totalArea } = useBoqApp();
 
   const handleSizeChange = (newSize, type, noOfLinearStation) => {
     const newSizeArea = sizeAreaMapping[newSize];

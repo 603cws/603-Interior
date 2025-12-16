@@ -1,7 +1,7 @@
 import LayoutCard from "../components/LayoutCard";
-import { useApp } from "../../Context/Context";
 import { initialAreaValues } from "../utils/Constants";
 import { supportSpacesData } from "../utils/WorkspaceConstants";
+import { useBoqApp } from "../../Context/BoqContext";
 
 const SupportSpaces = ({
   builtArea,
@@ -14,7 +14,7 @@ const SupportSpaces = ({
   bmsRoomSize,
   setBmsRoomSize,
 }) => {
-  const { totalArea } = useApp();
+  const { totalArea } = useBoqApp();
   const handleOtherAreaChange = (event) => {
     const value = Math.max(0, Number(event.target.value)); // Prevent negative values
     setOtherArea(value);

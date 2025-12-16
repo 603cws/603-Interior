@@ -10,6 +10,7 @@ import AlertBox from "../../boq/components/AlertBox";
 import EnterAreaModal from "./EnterAreaModal";
 import { AnimatedButton } from "../../common-components/AnimatedButton";
 import { MIN_AREA, MAX_AREA, mapAreaValues } from "../utils/AreaCalculations";
+import { useBoqApp } from "../../Context/BoqContext";
 
 function Navbar({
   resetAll,
@@ -42,7 +43,7 @@ function Navbar({
     setBoqTotal,
     setProgress,
     setSelectedData,
-  } = useApp();
+  } = useBoqApp();
 
   const navigate = useNavigate();
 

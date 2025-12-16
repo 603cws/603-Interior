@@ -2,8 +2,8 @@ import { Dialog, Transition } from "@headlessui/react";
 import { Fragment, useEffect, useState, useRef } from "react";
 import { toast } from "react-toastify";
 import { supabase } from "../../services/supabase";
-import { useApp } from "../../Context/Context";
 import { boqLimit } from "../../constants/constant";
+import { useBoqApp } from "../../Context/BoqContext";
 
 function NewBoq({ onConfirm, onCancel }) {
   const [boqMode, setBoqMode] = useState("new");
@@ -13,7 +13,7 @@ function NewBoq({ onConfirm, onCancel }) {
   const [disabledNewBoq, setDisabledNewBoq] = useState(false);
   const [isAtNonDraftLimit, setIsAtNonDraftLimit] = useState(false);
   const hasCreatedFirstDraft = useRef(false);
-  const { userId } = useApp();
+  const { userId } = useBoqApp();
 
   useEffect(() => {
     const fetchSavedBOQs = async () => {

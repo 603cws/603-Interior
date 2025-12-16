@@ -22,7 +22,7 @@ import { supabase } from "../../../services/supabase";
 import PagInationNav from "../../../common-components/PagInationNav";
 import { MdOutlineRateReview } from "react-icons/md";
 import ProductReviews from "./ProductReviews";
-import { useApp } from "../../../Context/Context";
+import { useBoqApp } from "../../../Context/BoqContext";
 
 function Products({
   isproductRefresh,
@@ -76,7 +76,7 @@ function Products({
 
   const [reviews, setReviews] = useState(false);
 
-  const { categories } = useApp();
+  const { categories } = useBoqApp();
 
   const categoriesData = categories.map((item) => item.category);
 

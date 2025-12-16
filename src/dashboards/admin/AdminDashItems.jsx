@@ -28,9 +28,9 @@ import {
   HiXMark,
 } from "react-icons/hi2";
 import { useEffect, useRef, useState } from "react";
-import { useApp } from "../../Context/Context";
 import DashboardProductCard from "../vendor/DashboardProductCard";
 import MobileTabProductCard from "../user/MobileTabProductCard";
+import { useBoqApp } from "../../Context/BoqContext";
 
 const tabs = [
   { name: "Products", value: "products" },
@@ -60,7 +60,7 @@ function AdminDashItems({ mobileMenuRef }) {
   const [selectedproduct, setSelectedproduct] = useState(null);
   const [editAddon, setEditAddon] = useState(false);
   const [selectedAddon, setSelectedAddon] = useState(null);
-  const { categories } = useApp();
+  const { categories } = useBoqApp();
   const dropdownRef = useRef(null);
   const [filterDropdown, setFilterDropdown] = useState(false);
   const [toggle, setToggle] = useState(true);

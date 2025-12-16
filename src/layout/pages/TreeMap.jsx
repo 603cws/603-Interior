@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import ReactApexChart from "react-apexcharts";
-import { useApp } from "../../Context/Context";
 import {
   MdKeyboardDoubleArrowRight,
   MdKeyboardDoubleArrowLeft,
@@ -13,6 +12,7 @@ import { colors } from "../../constants/constant";
 import { AnimatedButton } from "../../common-components/AnimatedButton";
 import { fullNames, workspaceImages } from "../utils/Constants";
 import { MIN_AREA, MAX_AREA, mapAreaValues } from "../utils/AreaCalculations";
+import { useBoqApp } from "../../Context/BoqContext";
 
 const TreeMap = ({ totalArea, areaQuantities, areaValues, seatCounts }) => {
   const [hoveredArea, setHoveredArea] = useState(null);
@@ -23,7 +23,7 @@ const TreeMap = ({ totalArea, areaQuantities, areaValues, seatCounts }) => {
   const [chartHeight, setChartHeight] = useState("400px");
 
   const navigate = useNavigate();
-  const { userId, setSelectedPlan } = useApp();
+  const { userId, setSelectedPlan } = useBoqApp();
 
   useEffect(() => {
     if (showWarning) {
