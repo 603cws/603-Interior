@@ -117,10 +117,7 @@ export const AppProvider = ({ children }) => {
   const [isSaveBOQ, setIsSaveBOQ] = useState(true);
   const [productQuantity, setProductQuantity] = useState({});
   const [allProductQuantities, setAllProductQuantities] = useState({});
-  const [pendingProduct, setPendingProduct] = useState(() => {
-    const stored = sessionStorage.getItem("addToWishlistProduct");
-    return stored ? JSON.parse(stored) : null;
-  });
+
   const [categoryConfig, setCategoryConfig] = useState(null);
 
   useEffect(() => {
@@ -1008,8 +1005,6 @@ export const AppProvider = ({ children }) => {
         productQuantity,
         setProductQuantity,
         allProductQuantities,
-        pendingProduct,
-        setPendingProduct,
         categoryConfig,
         updateCategoryConfig,
       }}
