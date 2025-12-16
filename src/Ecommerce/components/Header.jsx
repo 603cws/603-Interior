@@ -11,6 +11,7 @@ import { supabase } from "../../services/supabase";
 import toast from "react-hot-toast";
 import { motion } from "framer-motion";
 import { CiSearch } from "react-icons/ci";
+import { useEcomApp } from "../../Context/ecomContext";
 
 function Header() {
   const navigate = useNavigate();
@@ -26,18 +27,16 @@ function Header() {
   const buttonRef = useRef(null);
 
   const {
-    cartItems,
     isAuthenticated,
-    localcartItems,
-    wishlistItems,
     accountHolder,
     showLoginPopup,
     setShowLoginPopup,
     setIsAuthenticated,
     setUserId,
-    pendingProduct,
-    setPendingProduct,
   } = useApp();
+
+  const { cartItems, localcartItems, wishlistItems, pendingProduct } =
+    useEcomApp();
 
   let hasShownToast = false;
   const pathname = window.location.pathname;

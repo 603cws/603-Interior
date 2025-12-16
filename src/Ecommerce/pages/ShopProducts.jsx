@@ -16,6 +16,7 @@ import Footer from "../../common-components/Footer";
 import { AiFillHeart } from "react-icons/ai";
 import { GoHeart } from "react-icons/go";
 import PagInationNav from "../../common-components/PagInationNav";
+import { useEcomApp } from "../../Context/ecomContext";
 
 function ShopProducts() {
   //state
@@ -35,7 +36,7 @@ function ShopProducts() {
   const [showAvailableOnly, setShowAvailableOnly] = useState(false);
 
   //context
-  const { filters, setFilters } = useApp();
+  const { filters, setFilters } = useEcomApp();
 
   const [minPrice, setMinPrice] = useState(filters.priceRange[0]);
 
@@ -929,8 +930,8 @@ function SectionHeader({ title, isborder = true }) {
 
 function Card({ product }) {
   const { handleAddToCart, handleAddtoWishlist } = useHandleAddToCart();
-  const { isAuthenticated, localcartItems, cartItems, wishlistItems } =
-    useApp();
+  const { isAuthenticated } = useApp();
+  const { cartItems, localcartItems, wishlistItems } = useEcomApp();
 
   const isWishlisted = wishlistItems?.some(
     (item) => item.productId?.id === product.id

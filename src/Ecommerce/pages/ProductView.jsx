@@ -29,6 +29,7 @@ import {
 } from "@heroicons/react/24/outline";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import DetailedReview from "../components/DetailedReview";
+import { useEcomApp } from "../../Context/ecomContext";
 
 function ProductView() {
   const [mainImageHovered, setMainImageHovered] = useState(false); // For main image hover effect
@@ -63,14 +64,14 @@ function ProductView() {
   const navigate = useNavigate();
   const location = useLocation();
   const { handleAddToCart } = useHandleAddToCart();
-  const { compare, setCompare } = useApp();
+  const { compare, setCompare } = useEcomApp();
 
   //   get the product based on the product id
   const { id: productid } = useParams();
   const fromPage = location.state?.from || "products";
 
-  const { cartItems, isAuthenticated, localcartItems, accountHolder } =
-    useApp();
+  const { isAuthenticated, accountHolder } = useApp();
+  const { cartItems, localcartItems } = useEcomApp();
   const hasReviews = productReviews && productReviews.length > 0;
 
   async function fetchproductbyid() {
@@ -139,12 +140,13 @@ function ProductView() {
       //getting all the products
       const { data, error } = await supabase
         .from("product_variants")
-        .select("*,product_id(*)");
+        .select("*,product_id(*)")
+        .neq("productDisplayType", "boq");
 
       if (error) throw new Error(error);
 
       // Filter products where it is approved
-      const filterdata = data.filter(
+      const filterdata = data?.filter(
         (item) =>
           item.status === "approved" &&
           item.product_id.category !== "Partitions / Ceilings" &&
@@ -152,16 +154,17 @@ function ProductView() {
       );
 
       //similar product
-      const similarFiltered = filterdata.filter(
+      const similarFiltered = filterdata?.filter(
         (item) =>
-          item.id !== product.id && item.product_type === product.product_type
+          item?.id !== product?.id &&
+          item?.product_type === product?.product_type
       );
 
       //productmaylike filter
-      const productmaylikeFiltered = filterdata.filter(
+      const productmaylikeFiltered = filterdata?.filter(
         (item) =>
-          item.id !== product.id &&
-          item.product_id.category === product.product_id.category
+          item.id !== product?.id &&
+          item.product_id?.category === product?.product_id.category
       );
 
       // 1. Extract unique image names
@@ -1096,28 +1099,27 @@ function ProductView() {
               </div>
             )}
           </div>
-
-          <div className="my-6 lg:my-10 font-Poppins">
-            <div className="flex justify-between items-center">
-              <h3 className="text-[#171717] text-sm lg:text-3xl  uppercase mb-3 font-semibold">
-                Similar Products
-              </h3>
-              <div className="flex">
-                <button
-                  ref={prevRef}
-                  className="text-[#304778] disabled:text-gray-400"
-                >
-                  <MdKeyboardArrowLeft size={30} />
-                </button>
-                <button
-                  ref={nextRef}
-                  className=" text-[#304778] disabled:text-gray-400"
-                >
-                  <MdKeyboardArrowRight size={30} />
-                </button>
+          {similarProducts?.length > 0 && (
+            <div className="my-6 lg:my-10 font-Poppins">
+              <div className="flex justify-between items-center">
+                <h3 className="text-[#171717] text-sm lg:text-3xl  uppercase mb-3 font-semibold">
+                  Similar Products
+                </h3>
+                <div className="flex">
+                  <button
+                    ref={prevRef}
+                    className="text-[#304778] disabled:text-gray-400"
+                  >
+                    <MdKeyboardArrowLeft size={30} />
+                  </button>
+                  <button
+                    ref={nextRef}
+                    className=" text-[#304778] disabled:text-gray-400"
+                  >
+                    <MdKeyboardArrowRight size={30} />
+                  </button>
+                </div>
               </div>
-            </div>
-            {similarProducts && (
               <div className="relative">
                 <ReusableSwiper
                   products={similarProducts}
@@ -1131,31 +1133,31 @@ function ProductView() {
                   paginationRef={paginationRef}
                 />
               </div>
-            )}
-          </div>
+            </div>
+          )}
 
           {/* product you may like */}
-          <div className=" mb-20 lg:my-10 font-Poppins">
-            <div className="flex justify-between items-center">
-              <h3 className="text-[#171717] text-sm lg:text-3xl  uppercase mb-3 font-semibold">
-                You May also like
-              </h3>
-              <div className="flex">
-                <button
-                  ref={prevRef2}
-                  className="text-[#304778] disabled:text-gray-400"
-                >
-                  <MdKeyboardArrowLeft size={30} />
-                </button>
-                <button
-                  ref={nextRef2}
-                  className=" text-[#304778] disabled:text-gray-400"
-                >
-                  <MdKeyboardArrowRight size={30} />
-                </button>
+          {productsMayLike?.length > 0 && (
+            <div className=" mb-20 lg:my-10 font-Poppins">
+              <div className="flex justify-between items-center">
+                <h3 className="text-[#171717] text-sm lg:text-3xl  uppercase mb-3 font-semibold">
+                  You May also like
+                </h3>
+                <div className="flex">
+                  <button
+                    ref={prevRef2}
+                    className="text-[#304778] disabled:text-gray-400"
+                  >
+                    <MdKeyboardArrowLeft size={30} />
+                  </button>
+                  <button
+                    ref={nextRef2}
+                    className=" text-[#304778] disabled:text-gray-400"
+                  >
+                    <MdKeyboardArrowRight size={30} />
+                  </button>
+                </div>
               </div>
-            </div>
-            {productsMayLike && (
               <div className="relative">
                 <ReusableSwiper
                   products={productsMayLike}
@@ -1169,80 +1171,79 @@ function ProductView() {
                   paginationRef={paginationRef2}
                 />
               </div>
-            )}
-
-            {compare?.length > 0 && (
-              <div className="hidden lg:block fixed bottom-20 right-5 z-50">
-                <div
-                  className="relative"
-                  onMouseEnter={() => setShowPreview(true)}
-                  onMouseLeave={() => setShowPreview(false)}
+            </div>
+          )}
+          {compare?.length > 0 && (
+            <div className="hidden lg:block fixed bottom-20 right-5 z-50">
+              <div
+                className="relative"
+                onMouseEnter={() => setShowPreview(true)}
+                onMouseLeave={() => setShowPreview(false)}
+              >
+                <button
+                  onClick={() => setShowCompare(true)}
+                  className="px-3 py-1 bg-[#304778] border border-[#212B36] text-white uppercase animate-blink rounded"
                 >
-                  <button
-                    onClick={() => setShowCompare(true)}
-                    className="px-3 py-1 bg-[#304778] border border-[#212B36] text-white uppercase animate-blink rounded"
-                  >
-                    compare{" "}
-                    <span className="text-white bg-[#627BB1] rounded-full px-2">
-                      {compare?.length}
-                    </span>
-                  </button>
+                  compare{" "}
+                  <span className="text-white bg-[#627BB1] rounded-full px-2">
+                    {compare?.length}
+                  </span>
+                </button>
 
-                  {showPreview && !showCompare && (
-                    <div className="absolute transform transition-all ease-in border border-[#ccc] bottom-full mb-2 left-0 -translate-x-[55%] translate-y-[20%] bg-white shadow-lg rounded-lg p-4 w-[350px] h-[300px]">
-                      <div className="flex  gap-3">
-                        {compare?.map((item) => (
-                          <>
-                            <div
-                              key={item.id}
-                              className="flex flex-col border-r border-[#ccc] items-center gap-3"
-                            >
-                              <div className="relative">
-                                <img
-                                  src={item.image}
-                                  alt={item.title}
-                                  className="h-[200px] w-[200px] object-contain"
-                                />
+                {showPreview && !showCompare && (
+                  <div className="absolute transform transition-all ease-in border border-[#ccc] bottom-full mb-2 left-0 -translate-x-[55%] translate-y-[20%] bg-white shadow-lg rounded-lg p-4 w-[350px] h-[300px]">
+                    <div className="flex  gap-3">
+                      {compare?.map((item) => (
+                        <>
+                          <div
+                            key={item.id}
+                            className="flex flex-col border-r border-[#ccc] items-center gap-3"
+                          >
+                            <div className="relative">
+                              <img
+                                src={item.image}
+                                alt={item.title}
+                                className="h-[200px] w-[200px] object-contain"
+                              />
 
-                                <button
-                                  onClick={() => {
-                                    handleRemoveCompare(item.id);
-                                  }}
-                                  className="absolute top-0 right-0"
-                                >
-                                  <MdOutlineCancel color="#666666" size={20} />
-                                </button>
-                              </div>
-                              <p className="text-sm font-medium text-gray-800 truncate">
-                                {item.title}
-                              </p>
+                              <button
+                                onClick={() => {
+                                  handleRemoveCompare(item.id);
+                                }}
+                                className="absolute top-0 right-0"
+                              >
+                                <MdOutlineCancel color="#666666" size={20} />
+                              </button>
                             </div>
-                          </>
-                        ))}
-                      </div>
-                      <div className="flex justify-center gap-3 my-2">
-                        <button
-                          onClick={handleCompareClear}
-                          className="border border-[#ccc] font-semibold text-sm text-[#212B36] px-3 py-1 uppercase"
-                        >
-                          remove all
-                        </button>
-                        <button
-                          onClick={() => setShowCompare(true)}
-                          className="px-3 py-1 bg-[#304778] border border-[#212B36]  uppercase text-white  rounded"
-                        >
-                          compare{" "}
-                          <span className="text-white bg-[#627BB1] rounded-full px-2">
-                            {compare?.length}
-                          </span>
-                        </button>
-                      </div>
+                            <p className="text-sm font-medium text-gray-800 truncate">
+                              {item.title}
+                            </p>
+                          </div>
+                        </>
+                      ))}
                     </div>
-                  )}
-                </div>
+                    <div className="flex justify-center gap-3 my-2">
+                      <button
+                        onClick={handleCompareClear}
+                        className="border border-[#ccc] font-semibold text-sm text-[#212B36] px-3 py-1 uppercase"
+                      >
+                        remove all
+                      </button>
+                      <button
+                        onClick={() => setShowCompare(true)}
+                        className="px-3 py-1 bg-[#304778] border border-[#212B36]  uppercase text-white  rounded"
+                      >
+                        compare{" "}
+                        <span className="text-white bg-[#627BB1] rounded-full px-2">
+                          {compare?.length}
+                        </span>
+                      </button>
+                    </div>
+                  </div>
+                )}
               </div>
-            )}
-          </div>
+            </div>
+          )}
         </div>
       )}
 
@@ -1281,8 +1282,8 @@ function ProductDetailreusable({ title1, title2, desc1, desc2 }) {
 }
 
 function Card({ product, handleCompareToggle, compare }) {
-  const { isAuthenticated, localcartItems, cartItems, wishlistItems } =
-    useApp();
+  const { isAuthenticated } = useApp();
+  const { cartItems, wishlistItems, localcartItems } = useEcomApp();
   const isWishlisted = wishlistItems?.some(
     (item) => item.productId?.id === product.id
   );

@@ -23,7 +23,7 @@ const TreeMap = ({ totalArea, areaQuantities, areaValues, seatCounts }) => {
   const [chartHeight, setChartHeight] = useState("400px");
 
   const navigate = useNavigate();
-  const { userId, setSelectedPlan, isMobile } = useApp();
+  const { userId, setSelectedPlan } = useApp();
 
   useEffect(() => {
     if (showWarning) {
@@ -438,28 +438,26 @@ const TreeMap = ({ totalArea, areaQuantities, areaValues, seatCounts }) => {
           />
         )}
       </div>
-      {isMobile && (
-        <div className="flex justify-center items-center mt-3">
-          <AnimatedButton
-            onClick={generateBOQclick}
-            className="!bg-[#3A5D7B] text-white capitalize font-Georgia font-semibold tracking-wider"
-            variant="default"
-            size="lg"
-            textEffect="shimmer"
-            rounded="custom"
-            asChild={false}
-            hideAnimations={false}
-            shimmerColor="#fff"
-            shimmerSize="0.15em"
-            shimmerDuration="3s"
-            borderRadius="10px"
-            background="rgba(48, 71, 120, 1)"
-            hovereBackground="linear-gradient(90deg,rgba(85,132,182,1)  0%,  rgba(117,162,190,1) 100%)"
-          >
-            Create BOQ
-          </AnimatedButton>
-        </div>
-      )}
+      <div className="flex justify-center items-center mt-3 lg:hidden">
+        <AnimatedButton
+          onClick={generateBOQclick}
+          className="!bg-[#3A5D7B] text-white capitalize font-Georgia font-semibold tracking-wider"
+          variant="default"
+          size="lg"
+          textEffect="shimmer"
+          rounded="custom"
+          asChild={false}
+          hideAnimations={false}
+          shimmerColor="#fff"
+          shimmerSize="0.15em"
+          shimmerDuration="3s"
+          borderRadius="10px"
+          background="rgba(48, 71, 120, 1)"
+          hovereBackground="linear-gradient(90deg,rgba(85,132,182,1)  0%,  rgba(117,162,190,1) 100%)"
+        >
+          Create BOQ
+        </AnimatedButton>
+      </div>
     </>
   );
 };

@@ -3,11 +3,13 @@ import { FaRegUser } from "react-icons/fa6";
 import { MdOutlineKeyboardArrowLeft } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import { useApp } from "../Context/Context";
+import { useEcomApp } from "../Context/ecomContext";
 
 function MobileHeader({ title, isCartShown = false }) {
   const navigate = useNavigate();
 
-  const { isAuthenticated, cartItems, localcartItems } = useApp();
+  const { isAuthenticated } = useApp();
+  const { cartItems, localcartItems } = useEcomApp();
   return (
     <>
       {!isCartShown && (

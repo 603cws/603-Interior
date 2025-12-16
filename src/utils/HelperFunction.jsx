@@ -3,15 +3,11 @@ import { useApp } from "../Context/Context";
 import { supabase } from "../services/supabase";
 import { AddToCartToast, RemoveFromCartToast } from "./AddToCartToast";
 import { useNavigate } from "react-router-dom";
+import { useEcomApp } from "../Context/ecomContext";
 
 export const useHandleAddToCart = () => {
-  const {
-    isAuthenticated,
-    setLocalCartItems,
-    getCartItems,
-    setShowLoginPopup,
-    setPendingProduct,
-  } = useApp();
+  const { isAuthenticated, setShowLoginPopup } = useApp();
+  const { getCartItems, setLocalCartItems, setPendingProduct } = useEcomApp();
 
   const navigate = useNavigate();
   const handleAddToCart = async (product, iscarted, productQuantity = 1) => {

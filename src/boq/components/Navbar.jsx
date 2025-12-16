@@ -101,7 +101,6 @@ function Navbar({
     areasData,
     boqTotal,
     setBoqTotal,
-    isMobile,
     setSelectedPlan,
     BOQTitle,
     setBOQTitle,
@@ -353,27 +352,31 @@ function Navbar({
         iconRef={iconRef}
         toggleProfile={toggleProfile}
       />
-      {selectedPlan &&
-        (isMobile ? (
-          <MobileActions
-            progress={progress}
-            mobileDropDown={mobileDropDown}
-            setMobileDropDown={setMobileDropDown}
-            setIslayoutWarning={setIslayoutWarning}
-            setShowLayoutDetails={setShowLayoutDetails}
-            dropdownProps={dropdownProps}
-            handleDownload={handleDownload}
-          />
-        ) : (
-          <DesktopActions
-            progress={progress}
-            setIslayoutWarning={setIslayoutWarning}
-            setShowLayoutDetails={setShowLayoutDetails}
-            dropdownProps={dropdownProps}
-            handleDownload={handleDownload}
-            isDownloading={isDownloading}
-          />
-        ))}
+      {selectedPlan && (
+        <>
+          <div className="lg:hidden">
+            <MobileActions
+              progress={progress}
+              mobileDropDown={mobileDropDown}
+              setMobileDropDown={setMobileDropDown}
+              setIslayoutWarning={setIslayoutWarning}
+              setShowLayoutDetails={setShowLayoutDetails}
+              dropdownProps={dropdownProps}
+              handleDownload={handleDownload}
+            />
+          </div>
+          <div className="hidden lg:block">
+            <DesktopActions
+              progress={progress}
+              setIslayoutWarning={setIslayoutWarning}
+              setShowLayoutDetails={setShowLayoutDetails}
+              dropdownProps={dropdownProps}
+              handleDownload={handleDownload}
+              isDownloading={isDownloading}
+            />
+          </div>
+        </>
+      )}
       {showBoqPrompt &&
         createPortal(
           <BoqPrompt

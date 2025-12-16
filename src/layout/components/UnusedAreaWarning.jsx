@@ -1,7 +1,4 @@
-import { useApp } from "../../Context/Context";
-
 function UnusedAreaWarning({ onConfirm, onCancel, unusedArea, isSubmitting }) {
-  const { isMobile } = useApp();
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-70 z-30">
       <div className="max-w-sm mx-2 md:max-w-lg w-full bg-gradient-to-br from-[#334A78] to-[#68B2DC] p-4 rounded-2xl">
@@ -9,7 +6,7 @@ function UnusedAreaWarning({ onConfirm, onCancel, unusedArea, isSubmitting }) {
           <h2 className="text-lg font-semibold">Alert: Unused Space Found</h2>
           <p className="mt-5 text-sm md:text-base">
             There is {unusedArea} sq ft of unused space.
-            {!isMobile && <br />} Are you sure you want to proceed?
+            <br className="hidden md:block" /> Are you sure you want to proceed?
           </p>
           <div className="mt-7 flex justify-around space-x-4">
             <button

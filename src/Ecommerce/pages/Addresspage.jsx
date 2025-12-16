@@ -11,6 +11,7 @@ import { MdOutlineKeyboardArrowLeft } from "react-icons/md";
 import { useLocation, useNavigate } from "react-router-dom";
 import AppliedCoupon from "../../common-components/AppliedCoupon";
 import { deliverDays } from "../../constants/constant";
+import { useEcomApp } from "../../Context/ecomContext";
 
 function Addresspage() {
   const [isAddressFormOpen, setIsAddressFormOpen] = useState(false);
@@ -145,7 +146,7 @@ function Addresspage() {
   }
 
   // get the cart items from the cart table
-  const { cartItems } = useApp();
+  const { cartItems } = useEcomApp();
 
   // created a reduce function to calculate the total price
   const totalPrice = cartItems?.reduce(

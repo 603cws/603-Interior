@@ -22,6 +22,7 @@ import { isCouponValid } from "../../utils/ResuableFunctions";
 import AppliedCoupon from "../../common-components/AppliedCoupon";
 import { MdOutlineCancel } from "react-icons/md";
 import { useHandleAddToCart } from "../../utils/HelperFunction";
+import { useEcomApp } from "../../Context/ecomContext";
 
 function EmptyCart() {
   const navigate = useNavigate();
@@ -71,15 +72,14 @@ function Cart() {
   const location = useLocation();
 
   // get the cart items from the cart table
+  const { isAuthenticated, accountHolder } = useApp();
   const {
     cartItems,
     localcartItems,
-    isAuthenticated,
     getCartItems,
     setCartItems,
     setLocalCartItems,
-    accountHolder,
-  } = useApp();
+  } = useEcomApp();
 
   const sortedCartItems = [...cartItems].sort((a, b) =>
     a.productId.title.localeCompare(b.productId.title)
@@ -944,8 +944,8 @@ function CartCard({ cartitem }) {
   const [loadingQty, setLoadingQty] = useState(false);
   const [signedUrl, setSignedUrl] = useState(cartitem.productId.image);
 
-  const { getCartItems, isAuthenticated, localcartItems, setLocalCartItems } =
-    useApp();
+  const { isAuthenticated } = useApp();
+  const { getCartItems, localcartItems, setLocalCartItems } = useEcomApp();
   const navigate = useNavigate();
 
   async function handleRemoveItem(product) {
@@ -1259,8 +1259,7 @@ function CouponCard({
 
 function Card({ product }) {
   const { handleAddToCart, handleAddtoWishlist } = useHandleAddToCart();
-  const { isAuthenticated, localcartItems, cartItems, wishlistItems } =
-    useApp();
+  const { wishlistItems } = useEcomApp();
 
   const isWishlisted = wishlistItems?.some(
     (item) => item.productId?.id === product.id

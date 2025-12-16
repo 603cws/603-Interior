@@ -16,6 +16,7 @@ import Loginpoup from "../../common-components/LoginPopup";
 import { HiOutlineArrowSmRight } from "react-icons/hi";
 import Footer from "../../common-components/Footer";
 import CategorySvg from "../../common-components/CategorySvg";
+import { useEcomApp } from "../../Context/ecomContext";
 
 const TOP_OFFERS = [
   {
@@ -639,16 +640,14 @@ export default Products;
 
 function Card({ product }) {
   const naviagte = useNavigate();
+  const { isAuthenticated, showLoginPopup, setShowLoginPopup } = useApp();
   const {
-    isAuthenticated,
-    localcartItems,
     cartItems,
+    localcartItems,
     wishlistItems,
-    showLoginPopup,
-    setShowLoginPopup,
     pendingProduct,
     setPendingProduct,
-  } = useApp();
+  } = useEcomApp();
   const isWishlisted = wishlistItems?.some(
     (item) => item.productId?.id === product.id
   );

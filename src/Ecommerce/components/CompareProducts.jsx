@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { MdOutlineCancel } from "react-icons/md";
 import { useHandleAddToCart } from "../../utils/HelperFunction";
 import { useApp } from "../../Context/Context";
+import { useEcomApp } from "../../Context/ecomContext";
 function CompareProducts({ product, onClose, onRemove }) {
   // Auto-close when product array is empty
   useEffect(() => {
@@ -62,7 +63,8 @@ function CompareProducts({ product, onClose, onRemove }) {
 
 function Card({ product, onRemove }) {
   const { handleAddToCart } = useHandleAddToCart();
-  const { isAuthenticated, localcartItems, cartItems } = useApp();
+  const { isAuthenticated } = useApp();
+  const { cartItems, localcartItems } = useEcomApp();
 
   const [iscarted, setIsCarted] = useState(false);
 

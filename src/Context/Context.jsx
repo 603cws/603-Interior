@@ -13,6 +13,38 @@ import { numOfCoats } from "../constants/constant";
 
 const AppContext = createContext();
 
+function normalizeKey(subcategory) {
+  return subcategory
+    .toLowerCase()
+    .replace(/\s+/g, "")
+    .replace(/-/g, "")
+    .replace("workstation", "")
+    .replace("mdcabin", "md")
+    .replace("managercabin", "manager")
+    .replace("smallcabin", "small");
+}
+function normalizeObjectKeys(obj) {
+  const normalized = {};
+  Object.entries(obj).forEach(([key, value]) => {
+    normalized[normalizeKey(key)] = value;
+  });
+  return normalized;
+}
+function filterExcludedItems(category, subCategory, items, config) {
+  const excludeList =
+    config[category]?.[subCategory]?.exclude ||
+    config[category]?.Default?.exclude ||
+    [];
+  return items.filter((item) => !excludeList.includes(item));
+}
+function multiplyFirstTwoFlexible(dimStr) {
+  const [a = NaN, b = NaN] = String(dimStr)
+    .split(/[,\sxX*]+/)
+    .map((s) => parseFloat(s.trim()));
+
+  return Number.isFinite(a) && Number.isFinite(b) ? Number(a * b) : null;
+}
+
 export const AppProvider = ({ children }) => {
   const session = supabase.storageKey;
   const searchQuery = "";
@@ -67,37 +99,20 @@ export const AppProvider = ({ children }) => {
   const [seatCountData, setSeatCountData] = useState([]);
   const [showRecommend, setShowRecommend] = useState(false);
   const [boqTotal, setBoqTotal] = useState(0);
-  const [isMobile, setIsMobile] = useState(false);
   const [currentLayoutData, setCurrentLayoutData] = useState({});
   const [currentLayoutID, setCurrentLayoutID] = useState(
     sessionStorage.getItem("currentLayoutID")
   );
 
-  const [cartItems, setCartItems] = useState([]);
-  const [localcartItems, setLocalCartItems] = useState(
-    JSON.parse(localStorage.getItem("cartitems")) || []
-  );
-
-  const [refreshCartItens, SetRefreshCartItems] = useState(false);
-  const [wishlistItems, setWishlistItems] = useState([]);
-  const [filters, setFilters] = useState({
-    category: [],
-    priceRange: [0, 10000],
-    brands: [],
-  });
   const [BOQTitle, setBOQTitle] = useState(
     sessionStorage.getItem("BOQTitle") || ""
   );
   const [BOQID, setBOQID] = useState(sessionStorage.getItem("BOQID") || "");
   const [formulaMap, setFormulaMap] = useState({});
   const [formulasLoading, setFormulasLoading] = useState(true);
-  const [compare, setCompare] = useState([]);
-  const [mobileCouponName, setMobileCouponName] = useState("");
-  const [disableApplyCoupon, setDisableApplyCoupon] = useState(false);
-  const [orignalTotalPrice, setOriginalTotalPrice] = useState(0);
-  const [differenceInPrice, setDifferenceInPrice] = useState(0);
-  const [cartTotalPrice, setCartTotalPrice] = useState(0);
+
   const [showLoginPopup, setShowLoginPopup] = useState(false);
+
   const [selectedClient, setSelectedClient] = useState(null);
   const [isSaveBOQ, setIsSaveBOQ] = useState(true);
   const [productQuantity, setProductQuantity] = useState({});
@@ -107,24 +122,6 @@ export const AppProvider = ({ children }) => {
     return stored ? JSON.parse(stored) : null;
   });
   const [categoryConfig, setCategoryConfig] = useState(null);
-
-  function normalizeKey(subcategory) {
-    return subcategory
-      .toLowerCase()
-      .replace(/\s+/g, "")
-      .replace(/-/g, "")
-      .replace("workstation", "")
-      .replace("mdcabin", "md")
-      .replace("managercabin", "manager")
-      .replace("smallcabin", "small");
-  }
-  function normalizeObjectKeys(obj) {
-    const normalized = {};
-    Object.entries(obj).forEach(([key, value]) => {
-      normalized[normalizeKey(key)] = value;
-    });
-    return normalized;
-  }
 
   useEffect(() => {
     async function fetchConfig() {
@@ -407,83 +404,6 @@ export const AppProvider = ({ children }) => {
     handleUpdateBOQ(BOQID);
   }, [selectedPlan, selectedData, userResponses, boqTotal]);
 
-  async function getCartItems() {
-    try {
-      const {
-        data: { user },
-        error: authError,
-      } = await supabase.auth.getUser();
-
-      if (authError) return [];
-
-      const { data, error } = await supabase
-        .from("userProductCollection")
-        .select("*,productId(*)")
-        .eq("userId", user.id);
-
-      if (error) throw new Error(error);
-
-      if (!data || data.length === 0) {
-        setCartItems([]);
-        setWishlistItems([]);
-        return;
-      }
-
-      const uniqueImages = [
-        ...new Set(data.map((item) => item.productId.image)),
-      ];
-
-      const { data: signedUrls, error: signedUrlError } = await supabase.storage
-        .from("addon")
-        .createSignedUrls(uniqueImages, 3600);
-
-      if (signedUrlError) {
-        console.error("Error generating signed URLs:", signedUrlError);
-        return;
-      }
-
-      const urlMap = {};
-      signedUrls.forEach(({ path, signedUrl }) => {
-        urlMap[path] = signedUrl;
-      });
-
-      const updatedProducts = data.map((item) => ({
-        ...item,
-        productId: {
-          ...item.productId,
-          image: urlMap[item.productId.image] || item.productId.image,
-        },
-      }));
-
-      const cartProductsRaw = updatedProducts.filter(
-        (item) => item.type === "cart"
-      );
-      const wishlistProductsRaw = updatedProducts.filter(
-        (item) => item.type === "wishlist"
-      );
-
-      const cartProducts = [
-        ...new Map(
-          cartProductsRaw.map((item) => [item.productId.id, item])
-        ).values(),
-      ];
-      const wishlistProducts = [
-        ...new Map(
-          wishlistProductsRaw.map((item) => [item.productId.id, item])
-        ).values(),
-      ];
-
-      setCartItems(cartProducts);
-      setWishlistItems(wishlistProducts);
-    } catch (error) {
-      console.error(error);
-    }
-  }
-
-  useEffect(() => {
-    getCartItems();
-  }, [refreshCartItens]);
-
   useEffect(() => {
     const loadData = async () => {
       try {
@@ -745,26 +665,9 @@ export const AppProvider = ({ children }) => {
     fetchUserData();
   }, [isAuthenticated]);
 
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth <= 768);
-    };
-    handleResize();
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
   const handleCategorySelection = (categoryData) => {
     setSelectedCategory(categoryData);
   };
-
-  function filterExcludedItems(category, subCategory, items, config) {
-    const excludeList =
-      config[category]?.[subCategory]?.exclude ||
-      config[category]?.Default?.exclude ||
-      [];
-    return items.filter((item) => !excludeList.includes(item));
-  }
 
   function handleProgressBar(selectedData, categories, subCat1) {
     if (!Array.isArray(selectedData) || selectedData.length === 0) {
@@ -900,14 +803,6 @@ export const AppProvider = ({ children }) => {
 
     totalProgress = Math.min(totalProgress, 100);
     setProgress(Math.round(totalProgress * 100) / 100);
-  }
-
-  function multiplyFirstTwoFlexible(dimStr) {
-    const [a = NaN, b = NaN] = String(dimStr)
-      .split(/[,\sxX*]+/)
-      .map((s) => parseFloat(s.trim()));
-
-    return Number.isFinite(a) && Number.isFinite(b) ? Number(a * b) : null;
   }
 
   const handleSelectedData = (
@@ -1091,35 +986,11 @@ export const AppProvider = ({ children }) => {
         searchQuery,
         boqTotal,
         setBoqTotal,
-        isMobile,
-        setIsMobile,
         currentLayoutData,
         setCurrentLayoutData,
         currentLayoutID,
         setCurrentLayoutID,
-        cartItems,
-        setCartItems,
-        SetRefreshCartItems,
-        getCartItems,
-        wishlistItems,
-        setWishlistItems,
-        localcartItems,
-        setLocalCartItems,
         fetchUserData,
-        filters,
-        setFilters,
-        compare,
-        setCompare,
-        mobileCouponName,
-        setMobileCouponName,
-        disableApplyCoupon,
-        setDisableApplyCoupon,
-        orignalTotalPrice,
-        setOriginalTotalPrice,
-        differenceInPrice,
-        setDifferenceInPrice,
-        cartTotalPrice,
-        setCartTotalPrice,
         showLoginPopup,
         setShowLoginPopup,
         formulaMap,
