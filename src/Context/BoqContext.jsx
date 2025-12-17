@@ -11,6 +11,8 @@ import processData, {
 } from "../boq/utils/dataProcessor";
 import { calculateTotalPrice } from "../boq/utils/productUtils";
 import { numOfCoats } from "../constants/constant";
+import { useSelectedData } from "../hooks/useSelectedData";
+import { useProgressBar } from "../hooks/useProgressBar";
 
 const BoqContext = createContext();
 
@@ -583,265 +585,27 @@ export const BoqAppProvider = ({ children }) => {
     setSelectedCategory(categoryData);
   };
 
-  function handleProgressBar(selectedData, categories, subCat1) {
-    if (!Array.isArray(selectedData) || selectedData.length === 0) {
-      console.warn("Invalid or empty selectedData.");
-      setProgress(0);
-      return;
-    }
+  const handleProgressBar = useProgressBar({
+    setProgress,
+    filterExcludedItems,
+    categoryConfig,
+  });
 
-    if (!Array.isArray(categories) || categories.length === 0) {
-      console.warn("Invalid or empty categories.");
-      setProgress(0);
-      return;
-    }
-
-    let totalProgress = 0;
-    selectedData.forEach((item) => {
-      const { category, subcategory, subcategory1 } = item;
-
-      const categoryObj = categories.find((cat) => cat.category === category);
-      if (!categoryObj) {
-        return;
-      }
-
-      const totalCategories = categories.length;
-      const categoryPercentage = 100 / totalCategories;
-
-      const subCategoryIndex = categoryObj.subcategories.indexOf(subcategory);
-      if (subCategoryIndex === -1) {
-        console.warn(`Subcategory "${subcategory}" not found.`);
-        return;
-      }
-
-      let validSubcategories = categoryObj.subcategories;
-
-      if (category === "HVAC") {
-        if (subcategory === "Centralized") {
-          validSubcategories = ["Centralized"];
-        } else {
-          validSubcategories = categoryObj.subcategories.filter(
-            (sub) => sub !== "Centralized"
-          );
-        }
-      }
-
-      const subCategoryPercentage =
-        categoryPercentage / validSubcategories.length;
-
-      if (
-        (subcategory1 &&
-          subCat1 &&
-          subCat1[category] &&
-          Array.isArray(subCat1[category]) &&
-          category === "Furniture") ||
-        category === "Smart Solutions" ||
-        category === "Civil / Plumbing" ||
-        category === "Lux" ||
-        category === "Paint"
-      ) {
-        let validSubCat1List = subCat1[category];
-
-        if (category === "Civil / Plumbing") {
-          validSubCat1List = filterExcludedItems(
-            "Civil / Plumbing",
-            subcategory,
-            validSubCat1List,
-            categoryConfig
-          );
-        }
-
-        if (category === "Furniture" && subcategory === "Md Cabin") {
-          const mainFilled = selectedData.some(
-            (item) =>
-              item.category === "Furniture" &&
-              item.subcategory === "Md Cabin Main" &&
-              item.subcategory1 === "Chair"
-          );
-          const visitorFilled = selectedData.some(
-            (item) =>
-              item.category === "Furniture" &&
-              item.subcategory === "Md Cabin Visitor" &&
-              item.subcategory1 === "Chair"
-          );
-
-          if (mainFilled && visitorFilled) {
-            validSubCat1List = validSubCat1List.filter(
-              (item) => item !== "Chair"
-            );
-          }
-        }
-
-        if (category === "Furniture" && subcategory === "Manager Cabin") {
-          const mainFilled = selectedData.some(
-            (item) =>
-              item.category === "Furniture" &&
-              item.subcategory === "Manager Cabin Main" &&
-              item.subcategory1 === "Chair"
-          );
-          const visitorFilled = selectedData.some(
-            (item) =>
-              item.category === "Furniture" &&
-              item.subcategory === "Manager Cabin Visitor" &&
-              item.subcategory1 === "Chair"
-          );
-
-          if (mainFilled && visitorFilled) {
-            validSubCat1List = validSubCat1List.filter(
-              (item) => item !== "Chair"
-            );
-          }
-        }
-
-        if (category === "Furniture") {
-          validSubCat1List = filterExcludedItems(
-            "Furniture",
-            subcategory,
-            validSubCat1List,
-            categoryConfig
-          );
-        }
-
-        const subCategory1Index = validSubCat1List.indexOf(subcategory1);
-        if (subCategory1Index !== -1) {
-          const subCategory1Percentage =
-            subCategoryPercentage / validSubCat1List.length;
-          totalProgress += subCategory1Percentage;
-        } else {
-          console.warn(`SubCategory1 "${subcategory1}" not found or excluded.`);
-        }
-      } else {
-        totalProgress += subCategoryPercentage;
-      }
-    });
-
-    totalProgress = Math.min(totalProgress, 100);
-    setProgress(Math.round(totalProgress * 100) / 100);
-  }
-
-  const handleSelectedData = (
-    product,
-    category,
-    subCat,
-    subcategory1,
-    isChecked,
-    productQuantity
-  ) => {
-    if (!product) return;
-
-    const groupKey = `${category.category}-${subCat}-${subcategory1}-${product.id}`;
-
-    setSelectedData((prevData) => {
-      const validPrevData = Array.isArray(prevData) ? prevData : [];
-
-      if (!isChecked) {
-        const updatedData = validPrevData.filter(
-          (item) => item.groupKey !== groupKey
-        );
-        localStorage.setItem("selectedData", JSON.stringify(updatedData));
-        return updatedData;
-      }
-
-      const existingProduct = validPrevData.find(
-        (item) => item.groupKey === groupKey
-      );
-
-      let calQty = 0;
-
-      if (
-        (category.category === "Civil / Plumbing" && subcategory1 === "Tile") ||
-        (category.category === "Flooring" && subcategory1 !== "Epoxy")
-      ) {
-        calQty = Math.ceil(
-          +areasData[0][normalizeKey(subCat)] /
-            multiplyFirstTwoFlexible(product?.dimensions)
-        );
-      } else {
-        calQty = productQuantity[subCat]?.[selectedSubCategory1];
-      }
-
-      const productData = {
-        groupKey,
-        id: product.id,
-        category: category.category,
-        subcategory: subCat,
-        subcategory1,
-        product_variant: {
-          variant_title: product.title,
-          variant_image: product.image,
-          variant_details: product.details,
-          variant_price: product.price,
-          variant_id: product.id,
-          additional_images: JSON.parse(product.additional_images || "[]"),
-          variant_info: product.information,
-          variant_additional_info: product.additonalinformation,
-        },
-        addons: existingProduct ? existingProduct.addons : selectedAddons || [],
-        finalPrice:
-          category.category === "Flooring" ||
-          category.category === "HVAC" ||
-          category.category === "Lighting" ||
-          (category.category === "Civil / Plumbing" &&
-            subcategory1 === "Tile") ||
-          category.category === "Partitions / Ceilings" ||
-          category.category === "Paint"
-            ? calculateTotalPrice(
-                category.category,
-                subCat,
-                subcategory1,
-                null,
-                null,
-                null,
-                quantityData,
-                areasData,
-                userResponses,
-                selectedProductView,
-                formulaMap,
-                seatCountData
-              )
-            : category.category === "Furniture" &&
-              subcategory1 === "Chair" &&
-              (subCat === "Md Cabin Main" || subCat === "Md Cabin Visitor")
-            ? product.price *
-              (productQuantity[subCat]?.[selectedSubCategory1] ?? 0) *
-              (quantityData[0]["md"] ?? 1)
-            : category.category === "Furniture" &&
-              subcategory1 === "Chair" &&
-              (subCat === "Manager Cabin Main" ||
-                subCat === "Manager Cabin Visitor")
-            ? product.price *
-              (productQuantity[subCat]?.[selectedSubCategory1] ?? 0) *
-              (quantityData[0]["manager"] ?? 1)
-            : product.price *
-              (productQuantity[subCat]?.[selectedSubCategory1] ?? 0),
-        quantity:
-          category.category === "Paint"
-            ? Math.ceil(+areasData[0][normalizeKey(subCat)] / 120) * numOfCoats
-            : category.category === "Furniture" &&
-              subcategory1 === "Chair" &&
-              (subCat === "Md Cabin Main" || subCat === "Md Cabin Visitor")
-            ? calQty * (quantityData[0]["md"] ?? 1)
-            : category.category === "Furniture" &&
-              subcategory1 === "Chair" &&
-              (subCat === "Manager Cabin Main" ||
-                subCat === "Manager Cabin Visitor")
-            ? calQty * (quantityData[0]["manager"] ?? 1)
-            : calQty,
-      };
-
-      if (existingProduct) {
-        const updatedData = validPrevData.map((item) =>
-          item.groupKey === groupKey ? productData : item
-        );
-        localStorage.setItem("selectedData", JSON.stringify(updatedData));
-        return updatedData;
-      }
-
-      const updatedData = [...validPrevData, productData];
-      localStorage.setItem("selectedData", JSON.stringify(updatedData));
-      return updatedData;
-    });
-  };
+  const handleSelectedData = useSelectedData({
+    setSelectedData,
+    areasData,
+    quantityData,
+    userResponses,
+    selectedProductView,
+    formulaMap,
+    seatCountData,
+    selectedSubCategory1,
+    selectedAddons,
+    numOfCoats,
+    normalizeKey,
+    multiplyFirstTwoFlexible,
+    calculateTotalPrice,
+  });
 
   return (
     <BoqContext.Provider
