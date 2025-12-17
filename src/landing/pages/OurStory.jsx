@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Footer from "../../common-components/Footer";
-import GetInTouchSection from "../../common-components/GetInTouchSection";
+import GetInTouchSection from "../components/GetInTouchSection";
 import LandingNavbar from "../components/LandingNavbar";
 import { FaStarOfLife } from "react-icons/fa";
 
