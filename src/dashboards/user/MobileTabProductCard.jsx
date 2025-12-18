@@ -2,14 +2,13 @@ import { useApp } from "../../Context/Context";
 import { baseImageUrl } from "../../utils/HelperConstant";
 import { HiDotsVertical } from "react-icons/hi";
 
+const statusColors = {
+  pending: "bg-[#FDF1E8] text-[#E46A11]",
+  approved: "bg-[#E7F4EE] text-[#0D894F]",
+  rejected: "bg-[#FFBEBE] text-[#FF0000]",
+};
 function MobileTabProductCard({ product, handleProductPreview }) {
   const { accountHolder } = useApp();
-
-  const statusColors = {
-    pending: "bg-[#FDF1E8] text-[#E46A11]",
-    approved: "bg-[#E7F4EE] text-[#0D894F]",
-    rejected: "bg-[#FFBEBE] text-[#FF0000]",
-  };
 
   return (
     <div className="max-w-md md:max-w-4xl md:w-full bg-white shadow-md rounded-lg p-2 flex flex-col md:flex-row md:gap-6  items-start relative border-b border-b-[#ccc]">

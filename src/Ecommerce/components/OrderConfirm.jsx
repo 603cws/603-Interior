@@ -17,7 +17,7 @@ function OrderConfirm() {
         .from("orders_table")
         .select("*")
         .eq("id", id)
-        .single(); // directly return one row
+        .single();
 
       if (error) {
         setErrorMsg("Order not found");

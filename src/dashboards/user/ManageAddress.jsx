@@ -8,7 +8,6 @@ function ManageAddress() {
   const { accountHolder, fetchUserData } = useApp();
   const [errors, setErrors] = useState({});
   const [isAddressFormOpen, setIsAddressFormOpen] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [removingAddressId, setRemovingAddressId] = useState(null);
   const [isAddressEdit, setIsAddressEdit] = useState(false);
 
@@ -221,7 +220,6 @@ function ManageAddress() {
   const handleRemoveAddress = async (address) => {
     setRemovingAddressId(address.id);
     try {
-      setIsSubmitting(true);
       if (address.ismarkedDefault) {
         toast.error("Default address cant be removed");
         return;
@@ -243,7 +241,6 @@ function ManageAddress() {
       console.error(error);
     } finally {
       fetchUserData();
-      setIsSubmitting(false);
       setRemovingAddressId(null);
     }
   };
@@ -273,7 +270,7 @@ function ManageAddress() {
   };
 
   return (
-    <div className="font-Poppins w-full lg:w-3/4 h-full overflow-auto px-4 scrollbar-hide">
+    <div className="font-Poppins w-full h-full overflow-auto px-4 scrollbar-hide">
       {TotalAddress < 3 && (
         <div className="font-Poppins py-2">
           <button

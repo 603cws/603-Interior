@@ -5,6 +5,21 @@ import { useApp } from "../../Context/Context";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 import { baseImageUrl } from "../../utils/HelperConstant";
 import RejectedProduct from "./RejectedProduct";
+
+const statusColors = {
+  rejected: "bg-orange-100 text-orange-600",
+  pending: "bg-sky-100 text-sky-600",
+  approved: "bg-green-100 text-green-600",
+};
+function formatDate(isoString) {
+  const date = new Date(isoString);
+  return date.toLocaleDateString("en-GB", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+  });
+}
+
 function VendorDashboardCards({ handleproduct }) {
   const [isloading, setIsloading] = useState(false);
   const [products, setProducts] = useState([]);
@@ -129,20 +144,6 @@ function VendorDashboardCards({ handleproduct }) {
       )}
     </div>
   );
-}
-
-const statusColors = {
-  rejected: "bg-orange-100 text-orange-600",
-  pending: "bg-sky-100 text-sky-600",
-  approved: "bg-green-100 text-green-600",
-};
-function formatDate(isoString) {
-  const date = new Date(isoString);
-  return date.toLocaleDateString("en-GB", {
-    day: "2-digit",
-    month: "short",
-    year: "numeric",
-  });
 }
 
 function ProductTable({ products, addons, handlerejectedProduct }) {

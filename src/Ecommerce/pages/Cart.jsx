@@ -65,13 +65,10 @@ function EmptyCart() {
 }
 
 function Cart() {
-  // const [wishListed, setWishListed] = useState(false);
   const [showClearCartPopup, setShowClearCartPopup] = useState(false);
 
   const navigate = useNavigate();
   const location = useLocation();
-
-  // get the cart items from the cart table
   const { isAuthenticated, accountHolder } = useApp();
   const {
     cartItems,
@@ -86,7 +83,6 @@ function Cart() {
   );
 
   const [orignalTotalPrice, setOriginalTotalPrice] = useState(0); //sum of all the items in the cart
-  // const [subTotalPrice, setsubToalPrice] = useState(0); //difference of total mrp - discount on mrp
   const [disableApplyCoupon, setDisableApplyCoupon] = useState(false);
   const [differenceInPrice, setDifferenceInPrice] = useState(0); //coupn and original
   const [differenceInPricetoshow, setDifferenceInPricetoshow] = useState(); //coupon cal on the popup
@@ -99,7 +95,6 @@ function Cart() {
 
   const [gst, setGst] = useState(0); //convet this gst to based on subtotal instead of originaltotal
   const [shippingcharge, setshippingCharge] = useState(0);
-  // const [totalPrice, setTotalPrice] = useState(0);
   const [mobileCouponName, setMobileCouponName] = useState("");
   const finalValue = (
     orignalTotalPrice -
@@ -126,7 +121,6 @@ function Cart() {
           acc + curr.productId?.ecommercePrice?.mrp * curr.quantity,
         0
       );
-      // setCartTotalPrice(total || 0);
       setOriginalTotalPrice(total || 0);
     }
     const calculateDiscountOnMrp = () => {
@@ -225,7 +219,6 @@ function Cart() {
 
     if (couponname.trim() === 0) return toast.error("enter the coupon");
     try {
-      // const checkcoupon = couponname.toUpperCase();
       const { data: coupon, error: fetchError } = await supabase
         .from("coupons")
         .select("*")
@@ -237,7 +230,6 @@ function Cart() {
       if (!isCouponValid(coupon, Subtotal))
         return toast.error("coupon is expired or min purchase not reached");
       calculateTotalDiffertoShow(coupon);
-      // calculateTotalDiffer(coupon);
       setMobileCouponName(coupon);
     } catch (error) {
       console.error(error);
@@ -247,16 +239,13 @@ function Cart() {
 
   function calculateTotalDiffer(coupon) {
     const subtotal = orignalTotalPrice - discountOnMrp;
-    //we get the entire coupon for already haved coupon name
     const discountedprice = subtotal - (subtotal * coupon?.discountPerc) / 100;
     const difference = subtotal - discountedprice;
-    // const roundDiff = Number((Math.round(difference * 100) / 100).toFixed(2));
     const roundDiff = parseFloat(difference.toFixed(2));
     setDifferenceInPrice(roundDiff);
   }
   function calculateTotalDiffertoShow(coupon) {
     const subtotal = orignalTotalPrice - discountOnMrp;
-    //we get the entire coupon for already haved coupon name
     const discountedprice = subtotal - (subtotal * coupon?.discountPerc) / 100;
     const difference = subtotal - discountedprice;
 
@@ -292,12 +281,10 @@ function Cart() {
         subtotal - (subtotal * coupon?.discountPerc) / 100;
       setDisableApplyCoupon(true);
       setMobileCouponName(coupon);
-      // localStorage.setItem("appliedCoupon", JSON.stringify(coupon));
       calculateTotalDiffer(coupon);
       const gstprice = calculateGst(subtotal, discountedprice);
       setGst(gstprice);
       toast.success("coupon is valid");
-      // setCartTotalPrice(discountedprice);
     } catch (error) {
       console.error(error);
       toast.error("Invalid Coupon");
@@ -366,7 +353,6 @@ function Cart() {
 
           if (insertError) {
             console.error("Error inserting item:", item, insertError.message);
-            // optionally continue instead of throwing
             throw new Error(insertError.message);
           }
         }
@@ -374,7 +360,6 @@ function Cart() {
 
       // Remove synced items from localStorage
       localStorage.setItem("cartitems", JSON.stringify([]));
-      // localStorage.removeItem()
     } catch (error) {
       console.error("Cart sync error:", error);
     } finally {
@@ -404,7 +389,6 @@ function Cart() {
       };
       navigate("/address", { state: { data: formatteddata } });
     } else {
-      // navigate("/login");
       navigate("/login", { state: { from: location.pathname } });
     }
   };

@@ -5,7 +5,6 @@ const AppContext = createContext();
 
 export const AppProvider = ({ children }) => {
   const session = supabase.storageKey;
-
   const [loading, setLoading] = useState(true);
   const [accountHolder, setAccountHolder] = useState({
     userId: "",

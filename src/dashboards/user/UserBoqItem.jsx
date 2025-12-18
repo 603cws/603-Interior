@@ -13,6 +13,13 @@ import { supabase } from "../../services/supabase";
 
 import Spinner from "../../common-components/Spinner";
 import { useApp } from "../../Context/Context";
+
+const tabs = [
+  { name: "Products", value: "products" },
+  { name: "Add-Ons", value: "addons" },
+];
+
+const normalize = (str) => str.replace(/\s+/g, " ").trim().toLowerCase();
 function UserBoqItem({ selectedBoq, setSelectedBoq }) {
   const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
   const [mobileFilterOpen, setMobileFilterOPen] = useState(false);
@@ -39,11 +46,6 @@ function UserBoqItem({ selectedBoq, setSelectedBoq }) {
 
   const [toggle, setToggle] = useState(true);
   const [selectedTab, setSelectedTab] = useState("products");
-
-  const tabs = [
-    { name: "Products", value: "products" },
-    { name: "Add-Ons", value: "addons" },
-  ];
 
   const itemsPerPage = 10;
   const [currentPage, setCurrentPage] = useState(1);
@@ -78,8 +80,6 @@ function UserBoqItem({ selectedBoq, setSelectedBoq }) {
       scrollContainerRef.current.scrollTo({ top: 0, behavior: "smooth" });
     }
   };
-
-  const normalize = (str) => str.replace(/\s+/g, " ").trim().toLowerCase();
 
   const applyFilters = ({ query = "", category = "", status = "" }) => {
     const source = toggle ? products : addons;

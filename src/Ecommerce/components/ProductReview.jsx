@@ -21,7 +21,6 @@ export default function ProductReview({ product, onClose }) {
   const uniqueID = uuidv4();
 
   const handleFileChange = (e) => {
-    // const selected = Array.from(e.target.files);
     const selected = Array.from(e.target.files).filter((file) =>
       file.type.startsWith("image/")
     );
@@ -29,7 +28,6 @@ export default function ProductReview({ product, onClose }) {
       toast.error("You can only upload up to 3 files.");
       return;
     }
-    // setFiles(selected);
     setFiles((prev) => [...prev, ...selected]);
   };
 
@@ -88,7 +86,6 @@ export default function ProductReview({ product, onClose }) {
 
   return (
     <div className="w-full mx-auto lg:p-2 bg-white ">
-      {/* Product info */}
       <div className="flex items-start gap-4 border p-3 lg:p-6 rounded-lg mb-6">
         <img
           src={product.image}
@@ -103,7 +100,6 @@ export default function ProductReview({ product, onClose }) {
       </div>
       <form action="" onSubmit={insertReview}>
         <div className="rounded-lg border p-3 lg:p-6">
-          {/* Star Rating */}
           <div className="flex justify-between items-center mb-4 px-4 lg:px-16">
             {ratings.map((label, i) => {
               const starValue = i + 1;
@@ -136,8 +132,6 @@ export default function ProductReview({ product, onClose }) {
               );
             })}
           </div>
-
-          {/* Headline */}
           <div className="relative mb-4">
             <label className="absolute -top-2 left-4 bg-white px-1 text-[10px] md:text-xs lg:text-sm text-[#AAAAAA]">
               Headline
@@ -152,8 +146,6 @@ export default function ProductReview({ product, onClose }) {
               className="w-full border rounded-lg p-4 focus:outline-none focus:ring-0 text-[10px] md:text-xs lg:text-sm"
             />
           </div>
-
-          {/* Review */}
           <div className="relative">
             <label className="absolute -top-2 left-4 bg-white px-1 text-sm text-[#AAAAAA]">
               Review
@@ -169,8 +161,6 @@ export default function ProductReview({ product, onClose }) {
             />
           </div>
         </div>
-
-        {/* File Upload */}
         <div className="border p-4 rounded-lg mb-6 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mt-6">
           <img
             src="/images/ecommerce/icon.svg"
@@ -217,8 +207,6 @@ export default function ProductReview({ product, onClose }) {
             </div>
           </div>
         </div>
-
-        {/* Terms and Submit */}
         <div className="flex items-center gap-2 mb-6">
           <input
             type="checkbox"

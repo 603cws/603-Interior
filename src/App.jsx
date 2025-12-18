@@ -150,7 +150,6 @@ function App() {
               </PrivateRoute>
             }
           />
-
           <Route path="/help" element={<HelpnFaq />} />
           <Route path="/termsNcondition" element={<TermsAndCondition />} />
           <Route path="/products" element={<Products />} />
@@ -184,7 +183,7 @@ function App() {
             path="/ecommerceadmin"
             element={
               <PrivateRoute>
-                {accountHolder?.role && accountHolder.role === "admin" && (
+                {accountHolder?.role && accountHolder?.role === "admin" && (
                   <AdminDashboardEcom />
                 )}
               </PrivateRoute>

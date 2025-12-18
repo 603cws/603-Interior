@@ -136,8 +136,6 @@ function AddressForm({
             <h2 className="text-sm ">Make this as my default address</h2>
           </div>
 
-          {/* button to add and clear address  */}
-
           <div className="flex mx-2 mt-3 lg:mt-6 mb-2 justify-around items-center gap-10 font-Poppins font-semibold">
             <button
               type="button"

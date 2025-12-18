@@ -73,7 +73,6 @@ function DetailedReview({
             </div>
 
             <div className="h-[90vh] max-w-screen-sm w-full bg-white p-4 overflow-y-auto">
-              {/* Grid View Mode */}
               {mode === "grid" ? (
                 <>
                   <h2 className="text-lg font-semibold mb-4">

@@ -51,7 +51,6 @@ function ProfileAddress() {
     setIsAddressEdit(true);
   };
 
-  //length of add
   const TotalAddress = accountHolder?.address?.length;
 
   const handleChange = (e) => {
@@ -196,7 +195,6 @@ function ProfileAddress() {
           return;
         }
 
-        //  clear the form on succesful submission
         clearForm();
       } catch (error) {
         console.error(error);
@@ -264,7 +262,7 @@ function ProfileAddress() {
         return;
       }
 
-      fetchUserData(); // refreshes the user and address list
+      fetchUserData();
     } catch (err) {
       console.error("Unexpected error:", err);
     }

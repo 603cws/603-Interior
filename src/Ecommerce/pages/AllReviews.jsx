@@ -74,7 +74,6 @@ function AllReviews() {
   }, [productId]);
 
   useEffect(() => {
-    // Timeout ensures DOM is fully rendered
     const timeout = setTimeout(() => {
       const clamped = productReviews.map((_, idx) => {
         const el = contentRefs.current[idx];
@@ -88,7 +87,7 @@ function AllReviews() {
 
       setClampedStates(clamped);
       setExpandedStates(Array(productReviews.length).fill(false));
-    }, 100); // delay ensures DOM paints first
+    }, 100);
 
     return () => clearTimeout(timeout);
   }, [productReviews]);
@@ -117,7 +116,6 @@ function AllReviews() {
       let existingLikes = data.likes ?? [];
       let existingDislikes = data.dislikes ?? [];
 
-      // If likes is stored as a JSON string, parse it
       if (typeof existingLikes === "string") {
         existingLikes = JSON.parse(existingLikes);
       }
@@ -295,7 +293,6 @@ function AllReviews() {
             <div className="p-4">
               <h2 className="text-lg font-semibold mb-4">All Reviews</h2>
               {productReviews.map((review, idx) => {
-                // const interaction = interactions[idx];
                 const expanded = expandedStates[idx];
                 const isClamped = clampedStates[idx];
                 const likesArray = Array.isArray(review.likes)

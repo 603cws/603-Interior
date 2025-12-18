@@ -20,7 +20,6 @@ const ReusableSwiper = ({
   return (
     <Swiper
       onSwiper={(swiper) => {
-        // Delay to ensure refs are attached
         setTimeout(() => {
           if (
             swiper &&

@@ -145,16 +145,11 @@ function Addresspage() {
     setIsMobilenewAddressOpen(false);
   }
 
-  // get the cart items from the cart table
   const { cartItems } = useEcomApp();
-
-  // created a reduce function to calculate the total price
   const totalPrice = cartItems?.reduce(
     (acc, curr) => acc + curr.productId?.price * curr.quantity,
     0
   );
-
-  //new address
   const handlenewAddress = () => {
     if (accountHolder?.address?.length < 3) {
       setIsAddressFormOpen(true);
@@ -163,7 +158,6 @@ function Addresspage() {
     }
   };
 
-  //remove address from the list
   const handleRemoveAddress = async (address) => {
     setRemovingAddressId(address.id);
     try {
@@ -194,11 +188,10 @@ function Addresspage() {
     }
   };
 
-  //change default address
   const handleSetDefaultAddress = async (selectedId) => {
     const updatedAddressList = accountHolder.address.map((addr) => ({
       ...addr,
-      ismarkedDefault: addr.id === selectedId, // only selected becomes true
+      ismarkedDefault: addr.id === selectedId,
     }));
 
     try {
@@ -212,7 +205,7 @@ function Addresspage() {
         return;
       }
 
-      fetchUserData(); // refreshes the user and address list
+      fetchUserData();
     } catch (err) {
       console.error("Unexpected error:", err);
     }
@@ -289,28 +282,22 @@ function Addresspage() {
         const coupondiscount =
           itemTotal * (pricingdetails?.coupon?.discountPerc / 100) || 0;
 
-        //subtotal = sellingprice - coupondiscount
         const subtotal = itemTotal - coupondiscount;
-
-        //final price = subtotal + gst
         const gst = subtotal * 0.18;
         const finalprice = subtotal + gst;
         return {
-          order_id: neworder?.id, // uuid (FK to order_table)
-          product_id: item?.productId?.id, // uuid
-          mrp: item?.productId?.ecommercePrice?.mrp, // number
-          selling_price: sellingPrice, // number
-          quantity: item?.quantity, // number
+          order_id: neworder?.id,
+          product_id: item?.productId?.id,
+          mrp: item?.productId?.ecommercePrice?.mrp,
+          selling_price: sellingPrice,
+          quantity: item?.quantity,
           item_total: itemTotal || 0,
-          coupon_discount: coupondiscount, // number
-          gst_amount: subtotal * 0.18, // number
-          sub_total: subtotal, // number
-          refundable_amount: finalprice, // number
-          // item_status: "", // string
-          // merchant_refund_id: "", // string
-          // refund: {}, // json
-          discount_on_mrp: discountOnMrp, // number
-          final_amount: finalprice, // number
+          coupon_discount: coupondiscount,
+          gst_amount: subtotal * 0.18,
+          sub_total: subtotal,
+          refundable_amount: finalprice,
+          discount_on_mrp: discountOnMrp,
+          final_amount: finalprice,
         };
       });
 
@@ -329,7 +316,6 @@ function Addresspage() {
 
   const handlePayment = async () => {
     try {
-      //check for availability
       const insufficientStock = cartItems.filter(
         (item) => item.productId.stockQty < item.quantity
       );
@@ -343,10 +329,8 @@ function Addresspage() {
         setpaymentLoading(false);
         return;
       }
-      // create a order in db
       const products = cartItems.map((item) => ({
         id: item.productId.id,
-        // price: item.productId.price,
         price: item?.productId?.ecommercePrice?.sellingPrice,
         ecommercePriceObject: item?.productId?.ecommercePrice,
         quantity: item.quantity,
@@ -360,7 +344,6 @@ function Addresspage() {
       const deliveryDate = new Date(today);
       deliveryDate.setDate(today.getDate() + 14);
 
-      // Format as (year, month, day)
       const formattedDeliveryDate = [
         deliveryDate.getFullYear(),
         deliveryDate.getMonth() + 1,
@@ -381,9 +364,8 @@ function Addresspage() {
 
       const { neworder, data: orderItems } = result;
 
-      // unique orderId (you can also do this from backend)
       const orderId = neworder?.id;
-      const amount = Math.round(neworder?.final_amount * 100); // amount in paise (10000 = ₹100)
+      const amount = Math.round(neworder?.final_amount * 100);
       const orderData = {
         email: accountHolder?.email,
         name: accountHolder?.companyName,
@@ -396,7 +378,6 @@ function Addresspage() {
             delivery: pricingdetails?.shippingFee,
           },
         },
-        // total: pricingdetails?.finalValue,
         items: products,
         address: getDefaultAddress,
       };
@@ -424,8 +405,6 @@ function Addresspage() {
               return;
             } else if (response === "CONCLUDED") {
               toast.success(" verifying status…");
-              //  Always call your backend status API here
-              // verifyPaymentStatus(orderId);
 
               const res = await fetch(
                 `https://bwxzfwsoxwtzhjbzbdzs.supabase.co/functions/v1/neworderstatus?id=${orderId}`,
@@ -440,7 +419,6 @@ function Addresspage() {
               if (data?.success && data?.status === "COMPLETED") {
                 toast.success("payment completed");
 
-                //update quantity
                 for (const item of cartItems) {
                   const newStock = item.productId.stockQty - item.quantity;
 
@@ -473,14 +451,12 @@ function Addresspage() {
                 );
                 setpaymentLoading((prev) => !prev);
 
-                //navigate to a congrats page
                 navigate(`/orderSuccess/${orderId}`, { replace: true });
               }
               if (!data?.success && data?.status === "FAILED") {
                 toast.error("something went wrong");
 
                 await deleteOrderTableItem(orderId);
-                //navigate to a congrats page
                 setpaymentLoading((prev) => !prev);
 
                 navigate("/cart");
@@ -503,9 +479,8 @@ function Addresspage() {
       setpaymentLoading((prev) => !prev);
     }
   };
-  // handle the continue click
+
   const handleContinue = () => {
-    // testingemail();
     if (accountHolder?.role === "user") {
       handlePayment();
     } else {
@@ -543,7 +518,6 @@ function Addresspage() {
 
         <section>
           <div className="flex flex-col lg:flex-row gap-4 lg:gap-10 font-Poppins">
-            {/* 1st half  */}
             <div className="flex-1 lg:space-y-5">
               <div className="lg:hidden">
                 {accountHolder?.address?.length === 0 && (
@@ -772,8 +746,6 @@ function Addresspage() {
                               </h2>
                             </div>
 
-                            {/* button to add and clear address  */}
-
                             <div className="flex mx-2 md:mb-0 mt-2 lg:mt-6  justify-around items-center gap-10 font-Poppins font-semibold">
                               <button
                                 type="button"
@@ -836,7 +808,6 @@ function Addresspage() {
                 </div>
               )}
             </div>
-            {/* second half */}
             <div className="flex-1 lg:border-l-[1px] lg:pl-10 font-Poppins ">
               <div className="mb-6">
                 <h2>DELIVERY ESTIMATES</h2>
@@ -872,7 +843,6 @@ function Addresspage() {
                     <div>
                       <AppliedCoupon
                         savedamount={pricingdetails?.discount}
-                        // handleRemove={handleRemoveCoupon}
                         code={pricingdetails?.coupon.couponName}
                       />
                     </div>

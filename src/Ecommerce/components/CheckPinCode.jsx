@@ -68,8 +68,6 @@ function CheckPinCode({ onClose }) {
               &times;
             </button>
           </div>
-
-          {/* Body */}
           <div className="p-6">
             <div className="border rounded-md flex items-center justify-between px-4 py-3">
               <input

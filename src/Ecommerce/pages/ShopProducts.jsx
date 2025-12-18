@@ -18,6 +18,48 @@ import { GoHeart } from "react-icons/go";
 import PagInationNav from "../../common-components/PagInationNav";
 import { useEcomApp } from "../../Context/ecomContext";
 
+const categoryies = [
+  {
+    name: "Furniture",
+    imagename: "/images/icons/Furniture.png",
+  },
+  {
+    name: "Lighting",
+    imagename: "/images/icons/Lighting.png",
+  },
+  {
+    name: "Paint",
+    imagename: "/images/icons/Paint.png",
+  },
+  {
+    name: "Flooring",
+    imagename: "/images/icons/Flooring.png",
+  },
+  {
+    name: "HVAC",
+    imagename: "/images/icons/HVAC.png",
+  },
+  {
+    name: "Smart Solutions",
+    imagename: "/images/icons/SmartSolutions.png",
+  },
+  {
+    name: "Lux",
+    imagename: "/images/icons/Lux.png",
+  },
+];
+
+const options = [
+  { option: "Popularity", value: "Popularity" },
+  { option: "Price: Low to High", value: "low" },
+  { option: "Price: High to Low", value: "high" },
+];
+
+const priceOptions = [
+  0, 1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500, 5000, 5500, 6000, 6500,
+  7000, 7500, 8000, 8500, 9000, 9500, 10000,
+];
+
 function ShopProducts() {
   //state
   const [products, setProducts] = useState([]);
@@ -68,11 +110,7 @@ function ShopProducts() {
 
   let items = filteredProducts;
   let itemsPerPage = 20;
-
-  // Calculate total pages
   const totalPages = Math.ceil(items.length / itemsPerPage);
-
-  // Get current page items
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = items.slice(indexOfFirstItem, indexOfLastItem);
@@ -82,21 +120,17 @@ function ShopProducts() {
   const resultText = `Showing ${indexOfFirstItem + 1}–${end} of ${
     items.length
   } results`;
-  // Handle page change
   const goToPage = (pageNumber) => {
     setCurrentPage(pageNumber);
     containerRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
   useEffect(() => {
-    // fetchdata();
     fetchProductsData();
   }, []);
 
   const applyFiltersAndSort = (products, filters, filtersortby) => {
     let result = [...products];
-
-    // Category Filter
     const normalizedFilterCats = filters.category.map((cat) =>
       cat.toLowerCase()
     );
@@ -126,7 +160,6 @@ function ShopProducts() {
         result.sort((a, b) => b.price - a.price);
         break;
       default:
-        // No sorting applied for 'popularity' or default
         break;
     }
     // Brand Filter
@@ -186,8 +219,6 @@ function ShopProducts() {
         .map((item) => item.manufacturer)
         .filter(Boolean);
       setAllBrands([...new Set(manufacturers)]);
-
-      // Filter products where it is approved
       const filtered = data.filter(
         (item) =>
           item.status === "approved" &&
@@ -228,42 +259,6 @@ function ShopProducts() {
       setProductsloading(false);
     }
   };
-  const categoryies = [
-    {
-      name: "Furniture",
-      imagename: "/images/icons/Furniture.png",
-    },
-    {
-      name: "Lighting",
-      imagename: "/images/icons/Lighting.png",
-    },
-    {
-      name: "Paint",
-      imagename: "/images/icons/Paint.png",
-    },
-    {
-      name: "Flooring",
-      imagename: "/images/icons/Flooring.png",
-    },
-    {
-      name: "HVAC",
-      imagename: "/images/icons/HVAC.png",
-    },
-    {
-      name: "Smart Solutions",
-      imagename: "/images/icons/SmartSolutions.png",
-    },
-    {
-      name: "Lux",
-      imagename: "/images/icons/Lux.png",
-    },
-  ];
-
-  const options = [
-    { option: "Popularity", value: "Popularity" },
-    { option: "Price: Low to High", value: "low" },
-    { option: "Price: High to Low", value: "high" },
-  ];
 
   const handleCategoryClick = (catName) => {
     setFilters((prev) => ({
@@ -341,11 +336,6 @@ function ShopProducts() {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
-
-  const priceOptions = [
-    0, 1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500, 5000, 5500, 6000, 6500,
-    7000, 7500, 8000, 8500, 9000, 9500, 10000,
-  ];
 
   const handleopencloseoffilter = (filter) => {
     switch (filter) {
@@ -879,7 +869,6 @@ function ShopProducts() {
                   )}
                 </div>
               </div>
-              {/* display of products */}
               {currentItems.length === 0 && (
                 <p className="text-center">No products found</p>
               )}

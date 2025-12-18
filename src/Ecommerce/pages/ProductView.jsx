@@ -982,7 +982,6 @@ function ProductView() {
 
                 {/* Reviews List */}
                 {productReviews.slice(0, 2).map((review, idx) => {
-                  // const interaction = interactions[idx];
                   const expanded = expandedStates[idx];
                   const isClamped = clampedStates[idx];
                   const likesArray = Array.isArray(review.likes)

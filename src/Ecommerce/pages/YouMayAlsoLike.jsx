@@ -15,7 +15,6 @@ function YouMayAlsoLike() {
   const types = searchParams.get("type");
 
   useEffect(() => {
-    // fetchdata();
     fetchProductsData();
   }, []);
 

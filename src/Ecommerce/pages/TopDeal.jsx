@@ -14,7 +14,6 @@ function TopDeal() {
   const category = searchParams.get("category");
 
   useEffect(() => {
-    // fetchdata();
     fetchProductsData();
   }, []);
 
