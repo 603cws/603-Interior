@@ -22,6 +22,7 @@ import {
 } from "../../constants/constant";
 import { baseImageUrl } from "../../utils/HelperConstant";
 import { useBoqApp } from "../../Context/BoqContext";
+import Spinner from "../../common-components/Spinner";
 
 function ProductOverview() {
   const [relatedProducts, setRelatedProducts] = useState([]);
@@ -38,6 +39,7 @@ function ProductOverview() {
   const [products, setProducts] = useState([]);
   const [isProfileCard, setIsProfileCard] = useState(false);
   const [showBoqPrompt, setShowBoqPrompt] = useState(false);
+  const [showRecommend, setShowRecommend] = useState(false);
 
   const profileRef = useRef(null);
   const iconRef = useRef(null);
@@ -59,14 +61,13 @@ function ProductOverview() {
     areasData,
     userResponses,
     selectedProductView,
-    setShowRecommend,
-    showRecommend,
     productData,
     searchQuery,
     selectedPlan,
     formulaMap,
     setSelectedProductView,
     seatCountData,
+    loading,
   } = useBoqApp();
 
   const toggleProfile = () => setIsOpen((p) => !p);
@@ -320,6 +321,14 @@ function ProductOverview() {
   }, [cat?.category, subCat, subCat1, product?.id]);
 
   const formatKey = (key) => key.replace(/([A-Z])/g, " $1").trim();
+
+  if (loading) {
+    return (
+      <div className="fixed inset-0 flex items-center justify-center bg-white">
+        <Spinner />
+      </div>
+    );
+  }
 
   return (
     <>
@@ -576,7 +585,6 @@ function ProductOverview() {
         {showRecommend && (
           <div ref={recommendationref}>
             <RecommendComp
-              showRecommend={showRecommend}
               setShowRecommend={setShowRecommend}
               currentProduct={product}
               manufacturer={product?.manufacturer}

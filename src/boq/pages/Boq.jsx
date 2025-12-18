@@ -14,11 +14,12 @@ import { selectAreaAnimation } from "../constants/animations";
 import { useLocation } from "react-router-dom";
 import { categoriesWithModal, priceRange } from "../../constants/constant";
 import { useBoqApp } from "../../Context/BoqContext";
+import Spinner from "../../common-components/Spinner";
 
 const tourSteps = [
   {
     target: ".cat", // CSS class in the Navbar component
-    content: "these are the category",
+    content: "These are the category",
 
     disableBeacon: true,
     disableOverlayClose: true,
@@ -26,19 +27,19 @@ const tourSteps = [
   },
   {
     target: ".subcat", // Add className in OpenWorkspaces component
-    content: "there are all the subcategory of the selected category.",
+    content: "There are all the subcategory of the selected category.",
     disableBeacon: true,
     placement: "top",
   },
   {
     target: ".viewB", // Add className in Spacebar component
-    content: "you can view your boq here",
+    content: "You can view your boq here",
     disableBeacon: true,
     // placement: "top",
   },
   {
     target: ".downloadB", // Add className in Spacebar component
-    content: "click here to download boq in pdf format",
+    content: "Click here to download boq in pdf format",
     disableBeacon: true,
     // placement: "top",
   },
@@ -78,6 +79,7 @@ function Boq() {
     selectedProductView,
     setSelectedProductView,
     searchQuery,
+    loading,
   } = useBoqApp();
 
   const [runTour, setRunTour] = useState(false);
@@ -231,6 +233,14 @@ function Boq() {
       ? product.addons
       : []
   );
+
+  if (loading) {
+    return (
+      <div className="fixed inset-0 flex items-center justify-center bg-white">
+        <Spinner />
+      </div>
+    );
+  }
 
   return (
     <div>

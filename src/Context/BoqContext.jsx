@@ -1,4 +1,11 @@
-import { createContext, useContext, useEffect, useState, useRef } from "react";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  useRef,
+  useMemo,
+} from "react";
 import { supabase } from "../services/supabase";
 import {
   fetchCategories,
@@ -13,40 +20,17 @@ import { calculateTotalPrice } from "../boq/utils/productUtils";
 import { numOfCoats } from "../constants/constant";
 import { useSelectedData } from "../hooks/useSelectedData";
 import { useProgressBar } from "../hooks/useProgressBar";
+import {
+  normalizeKey,
+  normalizeObjectKeys,
+  filterExcludedItems,
+  multiplyFirstTwoFlexible,
+} from "../utils/BoqUtils";
 
 const BoqContext = createContext();
 
-function normalizeKey(subcategory) {
-  return subcategory
-    .toLowerCase()
-    .replace(/\s+/g, "")
-    .replace(/-/g, "")
-    .replace("workstation", "")
-    .replace("mdcabin", "md")
-    .replace("managercabin", "manager")
-    .replace("smallcabin", "small");
-}
-function normalizeObjectKeys(obj) {
-  const normalized = {};
-  Object.entries(obj).forEach(([key, value]) => {
-    normalized[normalizeKey(key)] = value;
-  });
-  return normalized;
-}
-function filterExcludedItems(category, subCategory, items, config) {
-  const excludeList =
-    config[category]?.[subCategory]?.exclude ||
-    config[category]?.Default?.exclude ||
-    [];
-  return items.filter((item) => !excludeList.includes(item));
-}
-function multiplyFirstTwoFlexible(dimStr) {
-  const [a = NaN, b = NaN] = String(dimStr)
-    .split(/[,\sxX*]+/)
-    .map((s) => parseFloat(s.trim()));
+const normalize = (str) => str.toLowerCase().replace(/[^a-z0-9]/g, "");
 
-  return Number.isFinite(a) && Number.isFinite(b) ? Number(a * b) : null;
-}
 export const BoqAppProvider = ({ children }) => {
   const session = supabase.storageKey;
   const searchQuery = "";
@@ -85,7 +69,6 @@ export const BoqAppProvider = ({ children }) => {
   const [areasData, setAreasData] = useState([]);
   const [quantityData, setQuantityData] = useState([]);
   const [seatCountData, setSeatCountData] = useState([]);
-  const [showRecommend, setShowRecommend] = useState(false);
   const [boqTotal, setBoqTotal] = useState(0);
   const [currentLayoutData, setCurrentLayoutData] = useState({});
   const [currentLayoutID, setCurrentLayoutID] = useState(
@@ -97,12 +80,11 @@ export const BoqAppProvider = ({ children }) => {
   );
   const [BOQID, setBOQID] = useState(sessionStorage.getItem("BOQID") || "");
   const [formulaMap, setFormulaMap] = useState({});
-  const [formulasLoading, setFormulasLoading] = useState(true);
   const [isSaveBOQ, setIsSaveBOQ] = useState(true);
   const [productQuantity, setProductQuantity] = useState({});
   const [allProductQuantities, setAllProductQuantities] = useState({});
-
-  const [categoryConfig, setCategoryConfig] = useState(null);
+  const [categoryConfig, setCategoryConfig] = useState({});
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     async function fetchdata() {
@@ -134,9 +116,9 @@ export const BoqAppProvider = ({ children }) => {
 
       if (error) {
         console.error(error);
-      } else {
-        setCategoryConfig(data?.[0]?.config_data || {});
+        return;
       }
+      setCategoryConfig(data?.[0]?.config_data ?? {});
     }
     fetchConfig();
   }, []);
@@ -300,15 +282,21 @@ export const BoqAppProvider = ({ children }) => {
       });
     });
     setAllProductQuantities(globalQuantities);
-  }, [subCategories, seatCountData, quantityData, selectedCategory]);
+  }, [
+    categories,
+    subCategories,
+    seatCountData,
+    quantityData,
+    selectedCategory,
+    subCat1,
+    selectedData,
+  ]);
 
   const handleBOQTitleChange = (title) => {
     if (isSaveBOQ) setBOQTitle(title);
   };
 
   const fetchFormulas = async () => {
-    setFormulasLoading(true);
-
     const { data, error } = await supabase.from("formulas").select("*");
 
     if (error) {
@@ -324,8 +312,6 @@ export const BoqAppProvider = ({ children }) => {
       });
       setFormulaMap(map);
     }
-
-    setFormulasLoading(false);
   };
 
   useEffect(() => {
@@ -340,65 +326,65 @@ export const BoqAppProvider = ({ children }) => {
     });
   }, [BOQID, BOQTitle, selectedPlan, currentLayoutID]);
 
-  const handleUpdateBOQ = async (boqId) => {
-    if (!boqId) return;
-    try {
-      const payload = {};
-
-      if (selectedData.length > 0) {
-        payload.products = selectedData.map((p) => ({
-          id: p.product_variant?.variant_id,
-          title: p.product_variant?.variant_title,
-          finalPrice: p.finalPrice || "",
-          groupKey: p.groupKey,
-          quantity: p.quantity,
-        }));
-        payload.addons = selectedData.flatMap((product) =>
-          (product.addons || []).map((addon) => ({
-            variantId: addon.id,
-            addonId: addon.addonid,
-            title: addon.title,
-            finalPrice: addon.price || "",
-            productId: product.product_variant?.variant_id,
-          }))
-        );
-      }
-
-      if (Object.values(userResponses).some((v) => v)) {
-        payload.answers = [userResponses];
-      }
-
-      if (selectedPlan) {
-        payload.planType = selectedPlan;
-      }
-
-      if (boqTotal !== null && boqTotal !== undefined) {
-        payload.boqTotalPrice = boqTotal;
-      }
-
-      if (Object.keys(payload).length === 0) return;
-
-      const { error } = await supabase
-        .from("boq_data_new")
-        .update(payload)
-        .eq("id", boqId);
-
-      if (error) {
-        console.error(error);
-      }
-    } catch (err) {
-      console.error("Auto-save error:", err);
-    }
-  };
-
   useEffect(() => {
+    const handleUpdateBOQ = async (boqId) => {
+      if (!boqId) return;
+      try {
+        const payload = {};
+
+        if (selectedData.length > 0) {
+          payload.products = selectedData.map((p) => ({
+            id: p.product_variant?.variant_id,
+            title: p.product_variant?.variant_title,
+            finalPrice: p.finalPrice || "",
+            groupKey: p.groupKey,
+            quantity: p.quantity,
+          }));
+          payload.addons = selectedData.flatMap((product) =>
+            (product.addons || []).map((addon) => ({
+              variantId: addon.id,
+              addonId: addon.addonid,
+              title: addon.title,
+              finalPrice: addon.price || "",
+              productId: product.product_variant?.variant_id,
+            }))
+          );
+        }
+
+        if (Object.values(userResponses).some((v) => v)) {
+          payload.answers = [userResponses];
+        }
+
+        if (selectedPlan) {
+          payload.planType = selectedPlan;
+        }
+
+        if (boqTotal !== null && boqTotal !== undefined) {
+          payload.boqTotalPrice = boqTotal;
+        }
+
+        if (Object.keys(payload).length === 0) return;
+
+        const { error } = await supabase
+          .from("boq_data_new")
+          .update(payload)
+          .eq("id", boqId);
+
+        if (error) {
+          console.error(error);
+        }
+      } catch (err) {
+        console.error("Auto-save error:", err);
+      }
+    };
     if (!BOQID || !BOQTitle) return;
     handleUpdateBOQ(BOQID);
-  }, [selectedPlan, selectedData, userResponses, boqTotal]);
+  }, [selectedPlan, selectedData, userResponses, boqTotal, BOQID, BOQTitle]);
 
   useEffect(() => {
     const loadData = async () => {
       try {
+        setLoading(true);
         const [categoriesData, productsData, roomDataResult, subCategory1Data] =
           await Promise.all([
             fetchCategories(),
@@ -449,24 +435,14 @@ export const BoqAppProvider = ({ children }) => {
             Object.keys(processedQuantityData).length > 0) ||
           (processedAreasData && Object.keys(processedAreasData).length > 0)
         ) {
-          categoriesData.forEach((category) => {
-            category.subcategories = category.subcategories.filter(
+          const roomCount = processedQuantityData || {};
+          const meetingRoomLargeQuantity = roomCount["meetingroomlarge"] || 0;
+          const meetingRoomQuantity = roomCount["meetingroom"] || 0;
+
+          const updatedCategories = categoriesData.map((category) => {
+            const filteredSubcategories = category.subcategories.filter(
               (subcategory) => {
-                const normalize = (str) =>
-                  str.toLowerCase().replace(/[^a-z0-9]/g, "");
                 const subcategoryKey = normalize(subcategory);
-
-                // const ignoreCat =
-                //   normalize(category.category) === "civilplumbing";
-                // if (ignoreCat) {
-                //   return true;
-                // }
-
-                const roomCount = processedQuantityData || {};
-
-                const meetingRoomLargeQuantity =
-                  roomCount["meetingroomlarge"] || 0;
-                const meetingRoomQuantity = roomCount["meetingroom"] || 0;
 
                 if (subcategoryKey === "meetingroomlarge") {
                   if (meetingRoomLargeQuantity === 0) return false;
@@ -496,20 +472,26 @@ export const BoqAppProvider = ({ children }) => {
                 return true;
               }
             );
+
+            return {
+              ...category,
+              subcategories: filteredSubcategories,
+            };
           });
 
-          setCategories(categoriesData);
-          handleCategorySelection(categoriesData[0]);
-          setSelectedSubCategory(categoriesData[0].subcategories[0] || null);
+          setCategories(updatedCategories);
+          handleCategorySelection(updatedCategories[0]);
+          setSelectedSubCategory(updatedCategories[0].subcategories[0] || null);
         }
-
+        setLoading(false);
         setSubCat1(subCategory1Data);
       } catch (error) {
         console.error("Error loading data:", error);
+        setLoading(false);
       }
     };
 
-    if ((userId, currentLayoutID)) {
+    if (userId && currentLayoutID) {
       loadData();
     }
   }, [userId, currentLayoutID]);
@@ -527,7 +509,7 @@ export const BoqAppProvider = ({ children }) => {
         setSelectedSubCategory("Centralized");
       }
     }
-  }, [selectedPlan]);
+  }, [selectedPlan, selectedCategory?.category]);
 
   useEffect(() => {
     if (selectedData && selectedData.length > 0) {
@@ -558,6 +540,12 @@ export const BoqAppProvider = ({ children }) => {
     }
   }, [subCat1, selectedCategory]);
 
+  const handleProgressBar = useProgressBar({
+    setProgress,
+    filterExcludedItems,
+    categoryConfig,
+  });
+
   useEffect(() => {
     if (
       !subCat1 ||
@@ -579,17 +567,11 @@ export const BoqAppProvider = ({ children }) => {
       prevCategories.current = categories;
       prevSubCat1.current = subCat1;
     }
-  }, [selectedData, categories, subCat1]);
+  }, [selectedData, categories, subCat1, handleProgressBar]);
 
   const handleCategorySelection = (categoryData) => {
     setSelectedCategory(categoryData);
   };
-
-  const handleProgressBar = useProgressBar({
-    setProgress,
-    filterExcludedItems,
-    categoryConfig,
-  });
 
   const handleSelectedData = useSelectedData({
     setSelectedData,
@@ -607,79 +589,108 @@ export const BoqAppProvider = ({ children }) => {
     calculateTotalPrice,
   });
 
-  return (
-    <BoqContext.Provider
-      value={{
-        totalArea,
-        setTotalArea,
-        inputValue,
-        setInputValue,
-        totalAreaSource,
-        setTotalAreaSource,
-        progress,
-        setProgress,
-        selectedData,
-        setSelectedData,
-        selectedCategory,
-        setSelectedCategory,
-        selectedSubCategory,
-        setSelectedSubCategory,
-        selectedSubCategory1,
-        setSelectedSubCategory1,
-        categories,
-        setCategories,
-        subCategories,
-        setSubCategories,
-        subCat1,
-        setSubCat1,
-        handleProgressBar,
-        userId,
-        setUserId,
-        selectedAddons,
-        setSelectedAddons,
-        userResponses,
-        setUserResponses,
-        selectedPlan,
-        setSelectedPlan,
-        productData,
-        setProductData,
-        areasData,
-        setAreasData,
-        quantityData,
-        setQuantityData,
-        handleCategorySelection,
-        handleSelectedData,
-        selectedProductView,
-        setSelectedProductView,
-        showRecommend,
-        setShowRecommend,
-        searchQuery,
-        boqTotal,
-        setBoqTotal,
-        currentLayoutData,
-        setCurrentLayoutData,
-        currentLayoutID,
-        setCurrentLayoutID,
-        formulaMap,
-        formulasLoading,
-        BOQTitle,
-        setBOQTitle: handleBOQTitleChange,
-        BOQID,
-        setBOQID,
-        refetchFormulas: fetchFormulas,
-        setIsSaveBOQ,
-        seatCountData,
-        setSeatCountData,
-        productQuantity,
-        setProductQuantity,
-        allProductQuantities,
-        categoryConfig,
-        setCategoryConfig,
-      }}
-    >
-      {children}
-    </BoqContext.Provider>
+  const value = useMemo(
+    () => ({
+      totalArea,
+      setTotalArea,
+      inputValue,
+      setInputValue,
+      totalAreaSource,
+      setTotalAreaSource,
+      progress,
+      setProgress,
+      selectedData,
+      setSelectedData,
+      selectedCategory,
+      setSelectedCategory,
+      selectedSubCategory,
+      setSelectedSubCategory,
+      selectedSubCategory1,
+      setSelectedSubCategory1,
+      categories,
+      setCategories,
+      subCategories,
+      setSubCategories,
+      subCat1,
+      setSubCat1,
+      handleProgressBar,
+      userId,
+      setUserId,
+      selectedAddons,
+      setSelectedAddons,
+      userResponses,
+      setUserResponses,
+      selectedPlan,
+      setSelectedPlan,
+      productData,
+      setProductData,
+      areasData,
+      setAreasData,
+      quantityData,
+      setQuantityData,
+      handleCategorySelection,
+      handleSelectedData,
+      selectedProductView,
+      setSelectedProductView,
+      searchQuery,
+      boqTotal,
+      setBoqTotal,
+      currentLayoutData,
+      setCurrentLayoutData,
+      currentLayoutID,
+      setCurrentLayoutID,
+      formulaMap,
+      BOQTitle,
+      setBOQTitle: handleBOQTitleChange,
+      BOQID,
+      setBOQID,
+      refetchFormulas: fetchFormulas,
+      setIsSaveBOQ,
+      seatCountData,
+      setSeatCountData,
+      productQuantity,
+      setProductQuantity,
+      allProductQuantities,
+      categoryConfig,
+      setCategoryConfig,
+      loading,
+    }),
+    [
+      // ONLY state VALUES (not setters)
+      totalArea,
+      inputValue,
+      totalAreaSource,
+      progress,
+      selectedData,
+      selectedCategory,
+      selectedSubCategory,
+      selectedSubCategory1,
+      categories,
+      subCategories,
+      subCat1,
+      userId,
+      selectedAddons,
+      userResponses,
+      selectedPlan,
+      productData,
+      areasData,
+      quantityData,
+      selectedProductView,
+      boqTotal,
+      currentLayoutData,
+      currentLayoutID,
+      formulaMap,
+      BOQTitle,
+      BOQID,
+      seatCountData,
+      productQuantity,
+      allProductQuantities,
+      categoryConfig,
+      loading,
+    ]
   );
+
+  return <BoqContext.Provider value={value}>{children}</BoqContext.Provider>;
 };
 export const useBoqApp = () => {
   const context = useContext(BoqContext);

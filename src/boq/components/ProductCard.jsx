@@ -11,6 +11,7 @@ import ProductSkeleton, { animations } from "./ProductSkeleton";
 import FilterPanel from "./FilterPanel";
 import SortPanel, { options } from "./SortPanel";
 import { useBoqApp } from "../../Context/BoqContext";
+import { useApp } from "../../Context/Context";
 
 function ProductCard({
   products,
@@ -24,10 +25,10 @@ function ProductCard({
     selectedSubCategory,
     selectedSubCategory1,
     selectedPlan,
-    loading,
-    setLoading,
     selectedData,
   } = useBoqApp();
+
+  const { loading, setLoading } = useApp();
 
   const dropdownRef = useRef(null);
   const productsInCategory = products[selectedCategory?.category] || [];
