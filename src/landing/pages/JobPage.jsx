@@ -4,13 +4,13 @@ import LandingNavbar from "../components/LandingNavbar";
 import { FaLocationDot } from "react-icons/fa6";
 import { IoCalendarSharp } from "react-icons/io5";
 import { HiClock } from "react-icons/hi2";
-import { motion } from "framer-motion";
 import { MdCancel } from "react-icons/md";
 import { BsFileEarmarkPdf, BsFileEarmarkWord, BsUpload } from "react-icons/bs";
 import Footer from "../../common-components/Footer";
 import { useForm } from "react-hook-form";
 import { supabase } from "../../services/supabase";
 import toast from "react-hot-toast";
+import HeroSection from "../components/HeroSection";
 
 const JobPage = () => {
   const { jobTitle } = useParams();
@@ -28,7 +28,7 @@ const JobPage = () => {
     } else {
       navigate("/Career");
     }
-  }, [jobTitle, navigate]);
+  }, [jobTitle, jobdata, navigate]);
 
   if (!job) return <div className="text-center py-10">Loading...</div>;
 
@@ -38,30 +38,12 @@ const JobPage = () => {
         <LandingNavbar className="relative" />
       </header>
 
-      <section className="pt-10 xl:pt-0 bg-[#334a78]">
-        <div className=" md:container px-4 flex flex-col gap-6 lg:gap-0 lg:flex-row justify-between items-center xl:max-w-7xl xl:px-0">
-          <div className=" text-[#304778] flex flex-col justify-center items-center lg:items-start text-center lg:text-start gap-5 flex-1">
-            <h2 className="font-TimesNewRoman italic text-3xl xl:text-[44px] xl:leading-[53px] tracking-[0.3px] font-bold text-white capitalize">
-              Design your future
-              <br /> with us
-            </h2>
-            <p className="text-base md:text-2xl text-white  font-Georgia tracking-wide">
-              We're not just building <br /> offices - we're shaping the <br />{" "}
-              future of how people work.
-              <br />
-              Be part of the journey.
-            </p>
-          </div>
-          <motion.div
-            initial={{ x: 300, opacity: 0 }}
-            animate={{ x: 0, opacity: 1 }}
-            transition={{ duration: 1, ease: "easeOut" }}
-            className=" xl:py-10 xl:pl-10 flex-1"
-          >
-            <img src="/images/carrer.png" alt="job posting" />
-          </motion.div>
-        </div>
-      </section>
+      <HeroSection
+        title={"Design your future \n with us"}
+        description={` We're not just building <br /> offices - we're shaping the \n future of how people work. \n Be part of the journey.`}
+        imagePath={`/images/carrer.png`}
+        showBtn={false}
+      />
 
       <div className="min-h-screen bg-white flex justify-center lg:p-6 font-Georgia">
         <div className="max-w-7xl w-full bg-white p-6">

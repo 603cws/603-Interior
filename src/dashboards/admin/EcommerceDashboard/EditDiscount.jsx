@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { supabase } from "../../../services/supabase";
-import Spinner from "../../../common-components/Spinner"; // mirrors your EditBlog usage
+import Spinner from "../../../common-components/Spinner";
 
 function EditDiscount({ coupon, onClose, onUpdate }) {
   const [updating, setUpdating] = useState(false);
@@ -63,7 +63,6 @@ function EditDiscount({ coupon, onClose, onUpdate }) {
         .eq("id", coupon.id);
 
       if (error) {
-        // 23505 = unique violation (e.g., couponName unique)
         if (error.code === "23505") {
           toast.error(`Coupon with name ${payload.couponName} already exists.`);
         } else {

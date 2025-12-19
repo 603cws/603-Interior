@@ -1,5 +1,8 @@
 import { motion } from "framer-motion";
-function HeroSection({ title, description, imagePath }) {
+import { AnimatedButton } from "../../common-components/AnimatedButton";
+import { useNavigate } from "react-router-dom";
+function HeroSection({ title, description, imagePath, showBtn = true }) {
+  const navigate = useNavigate();
   return (
     <section className="pt-10 xl:pt-0 bg-[#334a78]">
       <div className="md:container px-4 flex flex-col gap-6 lg:gap-0 lg:flex-row justify-between items-center xl:max-w-7xl xl:px-0">
@@ -14,6 +17,26 @@ function HeroSection({ title, description, imagePath }) {
               className="text-base md:text-2xl text-white  font-Georgia tracking-wide whitespace-pre-line"
               dangerouslySetInnerHTML={{ __html: description }}
             ></p>
+          )}
+          {showBtn && (
+            <AnimatedButton
+              onClick={() => navigate("/Layout")}
+              className="!bg-[#3A5D7B] text-white capitalize font-Georgia mt-7 text-lg"
+              variant="default"
+              size="lg"
+              textEffect="shimmer"
+              rounded="custom"
+              asChild={false}
+              hideAnimations={false}
+              shimmerColor="#fff"
+              shimmerSize="0.1em"
+              shimmerDuration="3s"
+              borderRadius="6px"
+              background="rgba(48, 71, 120, 1)"
+              hovereBackground="linear-gradient(90deg,rgba(85,132,182,1)  0%,  rgba(117,162,190,1) 100%)"
+            >
+              Start Your Layout
+            </AnimatedButton>
           )}
         </div>
 

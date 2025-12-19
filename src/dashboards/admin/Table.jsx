@@ -613,7 +613,14 @@ function Table({
         />
       )}
 
-      {rejectReasonPopup && <RejectReasonPopup />}
+      {rejectReasonPopup && (
+        <RejectReasonPopup
+          rejectReason={rejectReason}
+          setRejectReason={setRejectReason}
+          setRejectReasonPopup={setRejectReasonPopup}
+          handleConfirmReject={handleConfirmReject}
+        />
+      )}
 
       {multipleDeleteWaring && (
         <MultipleDeleteWarningCard

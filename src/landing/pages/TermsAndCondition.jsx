@@ -84,6 +84,7 @@ function TermsAndCondition() {
           "Important Policies Outlining \n Service Usage, User Responsibilities, \n and Our Commitments."
         }
         imagePath={"/images/termsnconditions.png"}
+        showBtn={false}
       />
 
       <section>

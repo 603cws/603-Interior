@@ -52,13 +52,9 @@ function Contactus() {
 
       try {
         setisSubmitting(true);
-        const response = await axios.post(
-          "https://api.emailjs.com/api/v1.0/email/send",
-          data,
-          {
-            headers: { "Content-Type": "application/json" },
-          }
-        );
+        await axios.post("https://api.emailjs.com/api/v1.0/email/send", data, {
+          headers: { "Content-Type": "application/json" },
+        });
         toast.success("we will shortly reach you");
 
         setFormData({
@@ -255,6 +251,7 @@ function Contactus() {
                   src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3584.3835340214505!2d72.8325178749771!3d19.065149682137243!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be7c91140262913%3A0xc53b6407e4d39f76!2sMakhija%20Arcade%2C%2035th%20Rd%2C%20Khar%2C%20Khar%20West%2C%20Mumbai%2C%20Maharashtra%20400052!5e1!3m2!1sen!2sin!4v1755581526758!5m2!1sen!2sin"
                   width="500"
                   height="300"
+                  title="map"
                   style={{ border: "1.5px solid" }}
                   allowFullScreen=""
                   loading="lazy"

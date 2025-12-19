@@ -1,4 +1,3 @@
-import { useNavigate } from "react-router-dom";
 import LandingNavbar from "../components/LandingNavbar";
 import { useRef, useState } from "react";
 import Footer from "../../common-components/Footer";
@@ -6,8 +5,7 @@ import GetInTouchSection from "../components/GetInTouchSection";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
 import "swiper/css";
-import { AnimatedButton } from "../../common-components/AnimatedButton";
-import { motion } from "framer-motion";
+import HeroSection from "../components/HeroSection";
 const steps = [
   {
     imagePath: "/images/plan.png",
@@ -100,7 +98,13 @@ function Services() {
   return (
     <div className="">
       <LandingNavbar className="relative" />
-      <OfficeLayoutSection />
+      <HeroSection
+        title={"Design your dream \n office-from layout \n to final Product"}
+        description={
+          "Plan your workspace, add furniture & \n essentials, and get your BOQ Instantly."
+        }
+        imagePath={"/images/serviceHero.webp"}
+      />
       <div className="flex flex-col gap-6 md:gap-0 md:flex-row items-center justify-between  lg:p-16 lg:container xl:max-w-7xl 2xl:px-0 lg:mx-auto lg:px-12 px-4">
         {InfoCardDetails.map((info) => (
           <InfoCard
@@ -123,58 +127,6 @@ function Services() {
 }
 
 export default Services;
-
-function OfficeLayoutSection() {
-  const navigate = useNavigate();
-  return (
-    <section className="bg-[#334a78]">
-      <div className="flex flex-col gap-6 lg:gap-0 lg:flex-row justify-between items-center mb-10 md:container xl:max-w-7xl 2xl:px-0 lg:mx-auto text-center lg:text-start pt-10 lg:pt-0">
-        {/* Left Section */}
-        <div className="flex flex-1 flex-col">
-          <h2 className="font-TimesNewRoman italic text-3xl xl:text-[44px] xl:leading-[53px] tracking-[0.3px] font-bold text-white capitalize">
-            Design your dream <br /> office-from layout <br /> to final Product
-          </h2>
-          <p className="font-Georgia text-white mt-4 text-base md:text-2xl tracking-[0.3px]">
-            Plan your workspace, add furniture & <br /> essentials, and get your
-            BOQ Instantly.
-          </p>
-          <div className="inline-flex justify-center lg:inline-block">
-            <AnimatedButton
-              onClick={() => navigate("/Layout")}
-              className="!bg-[#3A5D7B] text-white capitalize font-Georgia mt-7 text-lg"
-              variant="default"
-              size="lg"
-              textEffect="shimmer"
-              rounded="custom"
-              asChild={false}
-              hideAnimations={false}
-              shimmerColor="#fff"
-              shimmerSize="0.1em"
-              shimmerDuration="3s"
-              borderRadius="6px"
-              background="rgba(48, 71, 120, 1)"
-              hovereBackground="linear-gradient(90deg,rgba(85,132,182,1)  0%,  rgba(117,162,190,1) 100%)"
-            >
-              Start Your Layout
-            </AnimatedButton>
-          </div>
-        </div>
-        <motion.div
-          className="flex justify-center xl:py-8 xl:pl-8 flex-1"
-          initial={{ x: 300, opacity: 0 }}
-          animate={{ x: 0, opacity: 1 }}
-          transition={{ duration: 1, ease: "easeOut" }}
-        >
-          <img
-            src="/images/serviceHero.webp"
-            alt="Office Layout"
-            className="w-full lg:max-w-xl xl:max-w-2xl"
-          />
-        </motion.div>
-      </div>
-    </section>
-  );
-}
 
 function InfoCard({ imgpath, title, description }) {
   return (
@@ -257,7 +209,6 @@ function StepsSection() {
     <section className="bg-white pb-5 lg:py-12">
       <div className=" relative">
         <div className="flex flex-col md:flex-row justify-between items-center md:space-x-10 space-y-10 md:space-y-0 relative">
-          {/* {steps} */}
           {steps?.map((stepdata, index) => (
             <Step
               title={stepdata?.title}

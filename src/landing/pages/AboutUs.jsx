@@ -1,12 +1,9 @@
-import { useState } from "react";
 import { ServiceCard } from "../../common-components/ServiceCard";
-import { RiArrowRightUpLine } from "react-icons/ri";
 import Footer from "../../common-components/Footer";
 import LandingNavbar from "../components/LandingNavbar";
 import { useNavigate } from "react-router-dom";
-import ContactUsPopup from "../components/ContactUsPopup";
-import { motion } from "framer-motion";
-import { AnimatedButton } from "../../common-components/AnimatedButton";
+import GetInTouchSection from "../components/GetInTouchSection";
+import HeroSection from "../components/HeroSection";
 
 const services = [
   {
@@ -72,51 +69,16 @@ const work_stages = [
 ];
 
 function AboutUs() {
-  const navigate = useNavigate();
-  const [showContactPopup, setShowContactPopup] = useState(false);
   return (
     <>
       <LandingNavbar className="relative" />
-      <section className="pt-10 xl:pt-0 bg-[#334a78]">
-        <div className=" md:container px-4 flex flex-col gap-6 lg:gap-0 lg:flex-row justify-between items-center xl:max-w-7xl 2xl:px-0">
-          <div className=" text-[#304778] flex flex-col justify-center items-center lg:items-start text-center lg:text-start gap-5 flex-1">
-            <h2 className="font-TimesNewRoman italic text-3xl xl:text-[44px] xl:leading-[53px] tracking-[0.3px] font-bold text-white capitalize">
-              Creating Workspaces <br /> that inspires
-            </h2>
-            <p className="text-base md:text-2xl text-white  font-Georgia tracking-wide">
-              We help businesses design and build offices that are functional,
-              stylish, and perfectly
-              <br /> tailored to their needs.
-            </p>
-            <AnimatedButton
-              onClick={() => navigate("/Layout")}
-              className="!bg-[#3A5D7B] text-white capitalize font-Georgia mt-7 text-lg"
-              variant="default"
-              size="lg"
-              textEffect="shimmer"
-              rounded="custom"
-              asChild={false}
-              hideAnimations={false}
-              shimmerColor="#fff"
-              shimmerSize="0.1em"
-              shimmerDuration="3s"
-              borderRadius="6px"
-              background="rgba(48, 71, 120, 1)"
-              hovereBackground="linear-gradient(90deg,rgba(85,132,182,1)  0%,  rgba(117,162,190,1) 100%)"
-            >
-              Start Your Layout
-            </AnimatedButton>
-          </div>
-          <motion.div
-            initial={{ x: 300, opacity: 0 }}
-            animate={{ x: 0, opacity: 1 }}
-            transition={{ duration: 1, ease: "easeOut" }}
-            className=" xl:py-10 xl:pl-10 flex-1"
-          >
-            <img src="/images/aboutusHero.webp" alt="about us hero" />
-          </motion.div>
-        </div>
-      </section>
+      <HeroSection
+        title={"Creating Workspaces \n that inspires"}
+        description={
+          "We help businesses design and build offices that are functional,stylish, and perfectly \n tailored to their needs."
+        }
+        imagePath={"/images/aboutusHero.webp"}
+      />
 
       <section className="relative pt-20 lg:py-20 bg-[url('/images/about-us/about-us-bg.png')] bg-no-repeat bg-right-top bg-contain font-Georgia">
         <div className="lg:container px-4 xl:max-w-7xl 2xl:px-0">
@@ -169,68 +131,13 @@ function AboutUs() {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-10">
           {work_stages.map((stage) => (
-            <div
-              key={stage.id}
-              className="flex flex-col items-center text-center"
-            >
-              <div className="relative w-36 h-36 rounded-full border-2 border-dashed border-[#181818] border-opacity-60 flex items-center justify-center mb-4">
-                <img
-                  src={stage.icon}
-                  alt={stage.title}
-                  className="w-14 h-14 mt-6"
-                />
-                <div className="absolute top-0 right-0 w-12 h-12 pl-0 pb-1 bg-white border border-dashed border-[#181818] border-opacity-60 rounded-full flex items-center justify-center text-xl font-semibold text-[#181818] text-opacity-60 font-Georgia">
-                  {stage.id}
-                </div>
-              </div>
-              <h3 className="text-lg font-bold  text-[#232323] font-Georgia mb-2">
-                {stage.title}
-              </h3>
-              <p className="text-sm text-[#777777] font-Georgia">
-                {stage.desc}
-              </p>
-            </div>
+            <WorkStages stage={stage} key={stage?.title} />
           ))}
         </div>
       </section>
 
-      <section className="font-Georgia bg-[url('../images/about-us/contact-section-bg.webp')] bg-no-repeat bg-cover bg-center py-24">
-        <div className="lg:container px-4 flex justify-center items-center text-[#fff]">
-          <div className="md:flex gap-7 bg-[#000]/20 backdrop-blur-sm p-5 md:p-10 rounded-sm">
-            <h2 className=" text-3xl md:text-5xl">
-              Unlock Your Dream <br /> Office Today!
-            </h2>
-            <div>
-              <p className="text-sm md:text-base">
-                We encourage clients to actively participate in discussions,{" "}
-                <br />
-                share their ideas, preferences, and feedback.
-              </p>
-              <div className="flex flex-col lg:flex-row gap-2 mt-5">
-                <button
-                  onClick={() => setShowContactPopup(true)}
-                  className="bg-[#1C346B] border border-[#1C346B] px-4 py-2 rounded-3xl flex justify-center items-center gap-1 text-sm md:text-base w-fit"
-                >
-                  <span>Get in touch</span>
-                  <RiArrowRightUpLine />
-                </button>
-                <a
-                  href="tel:+919136036603"
-                  className="bg-[#FFFFFF]/20 px-4 py-2 rounded-3xl border border-[#fff] text-sm md:text-base w-fit"
-                >
-                  Call us: +91-9136036603
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
+      <GetInTouchSection />
       <Footer />
-
-      {showContactPopup && (
-        <ContactUsPopup onClose={() => setShowContactPopup(false)} />
-      )}
     </>
   );
 }
@@ -270,5 +177,22 @@ function QuoteSection() {
         </div>
       </div>
     </section>
+  );
+}
+
+function WorkStages({ stage }) {
+  return (
+    <div className="flex flex-col items-center text-center">
+      <div className="relative w-36 h-36 rounded-full border-2 border-dashed border-[#181818] border-opacity-60 flex items-center justify-center mb-4">
+        <img src={stage.icon} alt={stage.title} className="w-14 h-14 mt-6" />
+        <div className="absolute top-0 right-0 w-12 h-12 pl-0 pb-1 bg-white border border-dashed border-[#181818] border-opacity-60 rounded-full flex items-center justify-center text-xl font-semibold text-[#181818] text-opacity-60 font-Georgia">
+          {stage.id}
+        </div>
+      </div>
+      <h3 className="text-lg font-bold  text-[#232323] font-Georgia mb-2">
+        {stage.title}
+      </h3>
+      <p className="text-sm text-[#777777] font-Georgia">{stage.desc}</p>
+    </div>
   );
 }

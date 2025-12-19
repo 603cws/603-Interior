@@ -1,7 +1,5 @@
 import { VscEye } from "react-icons/vsc";
 import { MdOutlineDelete } from "react-icons/md";
-import VendorNewProduct from "../../../dashboards/vendor/VendorNewProduct";
-import VendorNewAddon from "../../../dashboards/vendor/VendorNewAddon";
 import VendorProductEdit from "../../../dashboards/vendor/VendorProductEdit";
 import VendorEditAddon from "../../../dashboards/vendor/VendorEditAddon";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
@@ -35,8 +33,6 @@ function Products({
   setRejectReason,
   handleProductPreview,
 }) {
-  const [addNewProduct, setAddNewProduct] = useState(false);
-  const [addNewAddon, setAddNewAddon] = useState(false);
   const [productlist, setProductlist] = useState(true);
   const [filterDropdown, setFilterDropdown] = useState(false);
   const [selected, setSelected] = useState("");
@@ -384,17 +380,7 @@ function Products({
   return (
     <div className="flex flex-col h-full min-h-0 overflow-hidden lg:border-2 lg:border-[#334A78] lg:rounded-lg bg-white">
       <div className="overflow-y-auto scrollbar-hide relative h-full">
-        {addNewProduct ? (
-          <VendorNewProduct
-            setAddNewProduct={setAddNewProduct}
-            setProductlist={setProductlist}
-          />
-        ) : addNewAddon ? (
-          <VendorNewAddon
-            setAddNewProduct={setAddNewAddon}
-            setProductlist={setProductlist}
-          />
-        ) : editProduct ? (
+        {editProduct ? (
           <VendorProductEdit
             setEditProduct={setEditProduct}
             setProductlist={setProductlist}

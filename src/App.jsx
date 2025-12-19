@@ -6,8 +6,6 @@ import { useApp } from "./Context/Context";
 import PrivateRoute from "./utils/PrivateRoute";
 import ScrollToTop from "./common-components/ScrollToTop";
 import BrandRouter from "./pages/Brands/BrandRouter";
-
-// lazy loading
 const Contactus = lazy(() => import("./landing/pages/Contactus"));
 const AboutUs = lazy(() => import("./landing/pages/AboutUs"));
 const Login = lazy(() => import("./common-components/Login"));
