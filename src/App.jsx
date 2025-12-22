@@ -51,7 +51,6 @@ const ShopProducts = lazy(() => import("./Ecommerce/pages/ShopProducts"));
 const Cart = lazy(() => import("./Ecommerce/pages/Cart"));
 const Addresspage = lazy(() => import("./Ecommerce/pages/Addresspage"));
 const Wishlist = lazy(() => import("./Ecommerce/pages/Wishlist"));
-const ELogin = lazy(() => import("./common-components/ELogin"));
 
 const Brands = lazy(() => import("./pages/Brands/Brands"));
 const ProductReview = lazy(() =>
@@ -161,7 +160,6 @@ function App() {
           <Route path="/wishlist" element={<Wishlist />} />
           <Route path="/brands" element={<Brands />} />
           <Route path="/productReview" element={<ProductReview />} />
-          <Route path="/eLogin" element={<ELogin />} />
           <Route path="/profilePage" element={<ProfilePage />} />
           <Route
             path="/brandOverview/welspun/productview"

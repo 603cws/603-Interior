@@ -50,7 +50,6 @@ function VendorProductlist({ setVendorproductlist, selectedVendor }) {
   const [editAddon, setEditAddon] = useState(false);
   const [selectedAddon, setSelectedAddon] = useState(null);
   const vendorcategory = JSON.parse(selectedVendor.allowed_category);
-  const [isOpen, setIsOpen] = useState(false);
   const [selected, setSelected] = useState("");
   const [filterDropdown, setFilterDropdown] = useState(false);
   const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
@@ -70,8 +69,6 @@ function VendorProductlist({ setVendorproductlist, selectedVendor }) {
     } else {
       setFilteredProducts(products);
     }
-
-    setIsOpen(false);
   };
 
   const itemsPerPage = 10;

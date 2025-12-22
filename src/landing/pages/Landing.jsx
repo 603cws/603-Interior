@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import LandingNavbar from "../components/LandingNavbar";
 import { AnimatedButton } from "../../common-components/AnimatedButton";
 import { useNavigate } from "react-router-dom";
@@ -81,6 +81,7 @@ const testimonials = [
 function Landing() {
   const navigate = useNavigate();
   const containerRef = useRef();
+  const [isloading, setIsloading] = useState(false);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -254,13 +255,14 @@ function Landing() {
 
                 <button
                   onClick={() => {
+                    setIsloading((prev) => !prev);
                     trackCTA("make your space");
                     navigate("/Layout");
                   }}
                   className="relative group w-40 lg:w-48 h-11 lg:h-12 rounded-lg p-1 bg-gradient-to-br from-[#334A78] to-[#78A3FF] hover:bg-[#334A78]"
                 >
                   <span className="flex w-full h-full items-center justify-center rounded-md bg-white text-base lg:text-lg font-bold capitalize text-[#334A78] group-hover:text-[#FFF] group-hover:bg-[#334A78] transition-colors duration-500 ease-in-out">
-                    make your space
+                    {isloading ? "loading.." : "make your space"}
                   </span>
                 </button>
               </div>

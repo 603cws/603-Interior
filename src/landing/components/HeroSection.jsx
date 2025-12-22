@@ -3,6 +3,7 @@ import { AnimatedButton } from "../../common-components/AnimatedButton";
 import { useNavigate } from "react-router-dom";
 function HeroSection({ title, description, imagePath, showBtn = true }) {
   const navigate = useNavigate();
+
   return (
     <section className="pt-10 xl:pt-0 bg-[#334a78]">
       <div className="md:container px-4 flex flex-col gap-6 lg:gap-0 lg:flex-row justify-between items-center xl:max-w-7xl xl:px-0">

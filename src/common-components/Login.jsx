@@ -9,6 +9,7 @@ import toast from "react-hot-toast";
 import { motion } from "framer-motion";
 import { useResetBOQ } from "../utils/HelperFunction";
 import { useBoqApp } from "../Context/BoqContext";
+import ResetPassword from "./ResetPassword";
 
 function Login() {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
@@ -18,7 +19,6 @@ function Login() {
   const [isForgotPassword, setIsForgotPassword] = useState(false);
   const [resetPass, setResetPass] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [imageLoaded, setImageLoaded] = useState(false);
   const { setIsAuthenticated } = useApp();
   const { setUserId, setCurrentLayoutID } = useBoqApp();
   const navigate = useNavigate();
@@ -309,26 +309,6 @@ function Login() {
     }
   };
 
-  const handleResetPassword = async () => {
-    if (formData.password !== formData.confirmPassword) {
-      toast.error("Passwords do not match!");
-      return;
-    }
-
-    const { error } = await supabase.auth.updateUser({
-      password: formData.password,
-    });
-
-    if (error) {
-      console.error("Error resetting password:", error.message);
-      toast.error("Error resetting password. Please try again.");
-    } else {
-      toast.success("Password reset successfully! Please log in.");
-      setResetPass(false);
-      navigate("/Login", { replace: true });
-    }
-  };
-
   const signInWithGoogle = async () => {
     resetBOQ();
     const { error } = await supabase.auth.signInWithOAuth({
@@ -345,94 +325,14 @@ function Login() {
   return (
     <>
       {resetPass ? (
-        <div className="flex flex-col justify-center items-center gap-5 lg:max-h-screen h-screen w-full">
-          <div className="w-full sm:w-1/2 px-5 flex flex-col justify-center items-center gap-5">
-            <h1 className="capitalize text-3xl font-bold text-white text-center ">
-              Reset Password
-            </h1>
-            <div className="w-full  px-5 flex flex-col gap-3 relative">
-              <label
-                htmlFor="password"
-                className="capitalize text-md font-semibold text-white"
-              >
-                New Password <span>*</span>
-              </label>
-              <input
-                type={isPasswordVisible ? "text" : "password"}
-                name="password"
-                value={formData.password}
-                onChange={handleChange}
-                placeholder="Enter New Password"
-                className="py-2 rounded-lg pl-2 focus:outline-none border"
-              />
-              <div
-                onClick={togglePasswordVisibility}
-                className={`absolute top-[60%] right-10 cursor-pointer`}
-              >
-                {isPasswordVisible ? (
-                  <IoEyeOutline color="gray" size={20} />
-                ) : (
-                  <IoEyeOffOutline color="gray" size={20} />
-                )}
-              </div>
-            </div>
-            <div className="w-full px-5 flex flex-col gap-3 relative">
-              <label
-                htmlFor="confirmPassword"
-                className="capitalize text-md font-semibold text-white"
-              >
-                confirm Password <span>*</span>
-              </label>
-              <input
-                type={isConfirmPasswordVisible ? "text" : "password"}
-                name="confirmPassword"
-                value={formData.confirmPassword}
-                onChange={handleChange}
-                placeholder="Enter New Password"
-                className="py-2 rounded-lg pl-2 focus:outline-none border"
-              />
-              <div
-                onClick={toggleConfirmPasswordVisibility}
-                className={`absolute top-[60%] right-10 cursor-pointer`}
-              >
-                {isConfirmPasswordVisible ? (
-                  <IoEyeOutline color="gray" size={20} />
-                ) : (
-                  <IoEyeOffOutline color="gray" size={20} />
-                )}
-              </div>
-            </div>
-            <button
-              onClick={handleResetPassword}
-              className="capitalize w-full xl:w-3/4 bg-[#212B36] text-white font-semibold py-2 rounded-lg mt-3"
-            >
-              Reset Password
-            </button>
-          </div>
-        </div>
+        <ResetPassword setResetPass={setResetPass} />
       ) : (
-        <form onSubmit={handleSubmit}>
+        <>
           <div className="relative main flex justify-center gap-5 h-screen w-full bg-gradient-to-br from-[#334A78] to-[#68B2DC] md:bg-none md:bg-[#fff]  overflow-x-hidden">
-            <div className="img flex-1 md:block hidden relative">
-              {!imageLoaded && (
-                <div className=" w-full h-full bg-gray-300 rounded-2xl" />
-              )}
+            <SideImage />
 
-              <motion.img
-                initial={{ opacity: 0 }}
-                animate={{ opacity: imageLoaded ? 1 : 0 }}
-                transition={{ duration: 0.5 }}
-                onLoad={() => setImageLoaded(true)}
-                src="images/Register.png"
-                alt="Register"
-                loading="lazy"
-                className={`w-full h-full object-cover ${
-                  imageLoaded ? "relative" : "invisible"
-                }`}
-              />
-            </div>
-
-            <div
+            <form
+              onSubmit={handleSubmit}
               className={`content z-10 flex-1 max-h-full h-full flex flex-col items-center justify-center ${
                 isSignUp
                   ? "justify-center lg:justify-normal md:pt-10 md:mx-6 lg:mx-0 mx-2"
@@ -728,12 +628,36 @@ function Login() {
                   </>
                 )}
               </div>
-            </div>
+            </form>
           </div>
-        </form>
+        </>
       )}
     </>
   );
 }
 
 export default Login;
+
+function SideImage() {
+  const [imageLoaded, setImageLoaded] = useState(false);
+  return (
+    <div className="img flex-1 md:block hidden relative">
+      {!imageLoaded && (
+        <div className=" w-full h-full bg-gray-300 rounded-2xl" />
+      )}
+
+      <motion.img
+        initial={{ opacity: 0 }}
+        animate={{ opacity: imageLoaded ? 1 : 0 }}
+        transition={{ duration: 0.5 }}
+        onLoad={() => setImageLoaded(true)}
+        src="images/Register.png"
+        alt="Register"
+        loading="lazy"
+        className={`w-full h-full object-cover ${
+          imageLoaded ? "relative" : "invisible"
+        }`}
+      />
+    </div>
+  );
+}

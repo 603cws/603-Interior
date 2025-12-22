@@ -5,6 +5,7 @@ import { Slot } from "@radix-ui/react-slot";
 import { cva } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 import { trackCTA } from "../lib/trackCTA";
+import { useState } from "react";
 
 const buttonVariants = cva(
   "group relative z-0 bg-white dark:bg-[rgba(0,0,0,1)] flex cursor-pointer items-center justify-center overflow-hidden whitespace-nowrap transform-gpu transition-all duration-300 ease-in-out active:translate-y-px",
@@ -79,6 +80,7 @@ const AnimatedButton = React.forwardRef(
     ref
   ) => {
     const Comp = asChild ? Slot : "button";
+    const [isloading, setIsloading] = useState();
 
     const combinedStyle = {
       ...style,
@@ -174,6 +176,7 @@ const AnimatedButton = React.forwardRef(
         style={combinedStyle}
         ref={ref}
         onClick={(e) => {
+          setIsloading((prev) => !prev);
           if (ctaLabel) trackCTA(ctaLabel);
           if (onClick) onClick(e);
         }}
@@ -202,7 +205,7 @@ const AnimatedButton = React.forwardRef(
             textEffect === "spread" && "group-hover:tracking-wider"
           )}
         >
-          {children}
+          {isloading ? "loading" : children}
         </span>
       </Comp>
     );

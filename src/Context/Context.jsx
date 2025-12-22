@@ -96,6 +96,7 @@ export const AppProvider = ({ children }) => {
 
   useEffect(() => {
     fetchUserData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAuthenticated]);
 
   return (
