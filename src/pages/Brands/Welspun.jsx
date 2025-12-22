@@ -1,6 +1,7 @@
 import LandingNavbar from "../../landing/components/LandingNavbar";
 import Footer from "../../common-components/Footer";
 import { useNavigate } from "react-router-dom";
+import { RxArrowRight } from "react-icons/rx";
 
 const productCollection = [
   "/images/brands/welspun-p1.png",
@@ -43,6 +44,14 @@ const clickNLock = [
     ],
   },
 ];
+const colors = [
+  "#B7BAC2",
+  "#C9B994",
+  "#CBB791",
+  "#C4A46C",
+  "#8C7557",
+  "#8E8065",
+];
 function Welspun() {
   const navigate = useNavigate();
 
@@ -50,22 +59,31 @@ function Welspun() {
     <>
       <section className="h-screen flex flex-col">
         <LandingNavbar />
-        <div className="flex-1 bg-[url('/images/brands/welspun-hero.webp')] m-2 relative">
-          <div className="absolute right-5 translate-y-1/3 h-96 w-96 bg-[#304778]/30 flex justify-center items-start py-10 rotate-90 rounded-bl-full">
-            <p className="uppercase text-7xl font-inter font-bold text-[#fff]">
+        <div className="flex-1 bg-[url('/images/brands/welspun-hero.webp')] m-4 lg:m-2 relative">
+          <div className="absolute right-5 translate-y-1/3 h-72 lg:h-96 w-72 lg:w-96 bg-[#304778]/30 flex justify-center items-start py-10 rotate-90 rounded-bl-full">
+            <p className="uppercase text-5xl lg:text-7xl font-Georgia font-bold text-[#fff]">
               style
             </p>
           </div>
         </div>
+        <div className="flex items-center justify-around overflow-y-hidden bg-[#3B558C] max-h-22 my-5 lg:hidden">
+          <img src="/images/brands/saperator.png" alt="" />
+          <p className="uppercase font-Georgia text-[#fff] font-semibold text-center">
+            EXPLORE A WIDE RANGE OF ASSURED QUALITY FLOORING FROM WELSPUN
+            FLOORING
+          </p>
+          <img src="/images/brands/saperator.png" alt="" />
+        </div>
       </section>
-      <section className="flex items-center justify-around overflow-y-hidden bg-[#3B558C] max-h-20 my-5">
+      <section className="hidden lg:flex items-center justify-around overflow-y-hidden bg-[#3B558C] max-h-20 my-5">
         <img src="/images/brands/saperator.png" alt="" />
-        <p className="uppercase font-inter text-[#fff] text-xl font-semibold">
+        <p className="uppercase font-Georgia text-[#fff] lg:text-xl font-semibold">
           EXPLORE A WIDE RANGE OF ASSURED QUALITY FLOORING FROM WELSPUN FLOORING
         </p>
         <img src="/images/brands/saperator.png" alt="" />
       </section>
-      <section className="container">
+
+      <section className="px-4 max-auto lg:container">
         <div className="grid grid-cols-1 lg:grid-cols-3 justify-between gap-3">
           <img
             src="/images/brands/welspun-1.jpg"
@@ -88,25 +106,28 @@ function Welspun() {
         </div>
       </section>
 
-      <section className="container my-5">
-        <div className="flex justify-between gap-3">
+      <section className="px-4 max-auto lg:container my-5">
+        <div className="flex flex-col lg:flex-row justify-between gap-3">
           <img src="/images/brands/welspun-4.jpg" alt="" className="flex-1 " />
           <div className="flex-1 flex flex-col gap-5">
             {clickNLock?.map((product, index) => (
               <div key={index} className="flex-1 bg-[#3B558C] flex">
-                <div className="bg-[#fff] rounded-[100px] flex-1 flex justify-center items-center gap-10">
+                <div className="bg-[#fff] rounded-[100px] flex-1 flex flex-col lg:flex-row justify-center items-center gap-5 lg:gap-10 p-5">
                   <img
                     src={product.image}
                     alt=""
-                    className="max-w-xs w-full max-h-96"
+                    className="max-w-48 lg:max-w-xs w-full max-h-52 lg:max-h-96"
                   />
                   <div className="">
-                    <h2 className="font-inter text-lg font-semibold uppercase text-[#D9A14D] border border-[#A0A0A0] p-2 mb-5">
+                    <h2 className="font-Georgia lg:text-lg font-semibold uppercase text-[#D9A14D] border border-[#A0A0A0] p-2 mb-2 lg:mb-5">
                       {product.title}
                     </h2>
-                    <ul className="list-disc space-y-2 ml-4">
+                    <ul className="list-disc space-y-1 lg:space-y-2 ml-4">
                       {product.features.map((feature, index) => (
-                        <li key={index} className="text-[#000]/70">
+                        <li
+                          key={index}
+                          className="text-[#000]/70 text-sm lg:text-base"
+                        >
                           {feature}
                         </li>
                       ))}
@@ -119,23 +140,71 @@ function Welspun() {
         </div>
       </section>
 
-      <section className="container my-5">
-        <div className="flex justify-between gap-3">
-          <img src="/images/brands/welspun-7.png" alt="" className="flex-1 " />
-          <img src="/images/brands/welspun-6.png" alt="" className="flex-1 " />
+      <section className="px-4 max-auto lg:container min-h-[750px] lg:min-h-[550px] mt-12">
+        <div className="flex flex-col lg:flex-row justify-between gap-4 font-Georgia">
+          <div className="flex-1 flex flex-col min-h-full">
+            <h2 className="text-4xl lg:text-[42px] text-[#000] italic">
+              Transform your space <br className="hidden lg:block" />{" "}
+              effortlessly - Click, Lock
+              <br /> and Live
+            </h2>
+
+            <button
+              onClick={() => navigate("productview")}
+              className="flex items-center gap-2 border border-[#374A75] text-[#374A75] px-4 py-2 rounded-xl font-TimesNewRoman uppercase hover:bg-[#374A75] hover:text-[#fff] transition-colors duration-300 ease-in-out my-2 lg:my-5 w-fit"
+            >
+              show more <RxArrowRight />
+            </button>
+
+            <div className="mt-auto flex flex-col items-center">
+              <div className="flex gap-5 my-5 lg:pl-14">
+                {colors.slice(0, 3).map((color, i) => (
+                  <div
+                    key={i}
+                    className="h-20 w-20"
+                    style={{ backgroundColor: color }}
+                  />
+                ))}
+              </div>
+
+              <div className="flex gap-5 pr-14 lg:pr-0">
+                {colors.slice(3, 6).map((color, i) => (
+                  <div
+                    key={i}
+                    className="h-20 w-20"
+                    style={{ backgroundColor: color }}
+                  />
+                ))}
+              </div>
+            </div>
+          </div>
+
+          <div className="flex-1">
+            <div className="relative">
+              <img
+                src="/images/brands/clicknlock-bgimage.png"
+                alt=""
+                className="max-w-72 lg:max-w-full lg:w-full object-cover max-h-[450px] place-self-end"
+              />
+              <img
+                src="/images/brands/clicknlock-product.png"
+                alt=""
+                className="absolute -translate-y-3/4 -translate-x-2 lg:-translate-x-1/3 max-h-48 lg:max-h-72 "
+              />
+            </div>
+          </div>
         </div>
       </section>
 
-      {/* <section>
-        <div className="h-80 w-screen bg-[url('/images/brands/welspun-bg.png')] bg-center bg-cover bg-no-repeat flex justify-center items-center">
-          <h1 className="font-semibold text-5xl lg:text-6xl text-center text-[#fff]">
+      <section>
+        <div className="h-56 lg:h-96 w-screen bg-[url('/images/brands/welspun-banner.webp')] bg-center bg-cover bg-no-repeat flex justify-center items-center">
+          <h1 className="font-Georgia text-5xl lg:text-8xl text-center text-[#fff] tracking-tight">
             Browse our collection
           </h1>
         </div>
-      </section> */}
-      <img src="/images/brands/welspun-collection.png" alt="" />
+      </section>
 
-      <section className="container grid grid-cols-2 lg:grid-cols-4 gap-3 py-5">
+      <section className="px-4 max-auto lg:container grid grid-cols-2 lg:grid-cols-4 gap-3 py-5">
         {productCollection.map((product, index) => (
           <img
             src={product}
@@ -147,7 +216,7 @@ function Welspun() {
         ))}
       </section>
 
-      <section className="container flex justify-between gap-5">
+      <section className="px-4 max-auto lg:container flex justify-between gap-5">
         <img src="/images/brands/welspun-8.jpg" alt="" className="flex-1" />
         <div className="flex-1 grid grid-cols-2 gap-3">
           {featured.map((product, index) => (
@@ -156,7 +225,7 @@ function Welspun() {
         </div>
       </section>
 
-      <p className="font-inter text-4xl text-center text-[#000] max-w-screen-md mx-auto py-20">
+      <p className="font-Georgia text-2xl lg:text-4xl text-center text-[#000] lg:max-w-screen-md mx-auto py-10 lg:py-20">
         Welspun Flooring presentsthe world with awe-inspiring,holistic flooring
         solutionsthat are inspired by technologicalinnovations
       </p>

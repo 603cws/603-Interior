@@ -38,11 +38,11 @@ const featuredProjects = [
     title: "marathon futurex",
     location: "lower parel",
   },
-  {
-    img: "TradeWorld.webp",
-    title: "trade world",
-    location: "lower parel",
-  },
+  // {
+  //   img: "TradeWorld.webp",
+  //   title: "trade world",
+  //   location: "lower parel",
+  // },
   {
     img: "BKC.webp",
     title: "pinnacle corporate park",
@@ -211,13 +211,13 @@ function Landing() {
               <span key={i} className="w-1 h-1 bg-[#1E3A5F]"></span>
             ))}
           </div>
-          <div className="px-4 lg:container 3xl:px-0 flex flex-col-reverse lg:grid grid-cols-1 lg:grid-cols-2 justify-items-stretch ">
-            <div className="space-y-2 lg:space-y-4 mt-5 lg:mt-0 lg:p-5">
+          <div className="px-4 lg:container 3xl:px-0 flex h-full flex-col-reverse lg:grid grid-cols-1 lg:grid-cols-2 justify-items-stretch">
+            <div className="flex-1 space-y-2 lg:space-y-4 mt-5 lg:mt-0 lg:p-5">
               <div className="relative">
                 <LazyImage
                   src="/images/home/Hero-image-1.webp"
                   alt="Office image"
-                  className="max-h-32 md:max-h-36 lg:max-h-[38vh] xl:max-h-[35vh] 2xl:max-h-[38vh] 3xl:max-h-[35vh] object-cover w-full"
+                  className="max-h-32 md:max-h-36 lg:max-h-[38vh] xl:max-h-[35vh] 2xl:max-h-[38vh] 3xl:max-h-[35vh] h-full object-cover w-full"
                 />
                 <span className="absolute -top-3 -left-3 w-16 h-16 border-t-2 border-l-2 border-[#1E3A5F]"></span>
               </div>
@@ -230,7 +230,7 @@ function Landing() {
                 <span className="absolute -bottom-3 -right-3 w-16 h-16 border-b-2 border-r-2 border-[#1E3A5F]"></span>
               </div>
             </div>
-            <div className="flex h-full items-center text-center lg:text-right justify-self-end">
+            <div className="flex flex-1 h-full items-center text-center lg:text-right justify-self-end">
               <div className="space-y-4 lg:space-y-10">
                 <h1 className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl 2xl:text-[82px] text-[#555555] uppercase font-Alegreya">
                   we design <br /> your dreams
