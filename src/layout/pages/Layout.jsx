@@ -138,12 +138,6 @@ function Layout() {
   };
 
   useEffect(() => {
-    setReceptionSize(areaValues.reception);
-    setLoungeSize(areaValues.lounge);
-    setWashroomsSize(areaValues.washrooms);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-  useEffect(() => {
     setSeatCounts((prev) => {
       const newSeatCount = { ...prev };
       newSeatCount.linear = areaQuantities.linear ?? prev.linear;
@@ -227,6 +221,9 @@ function Layout() {
           lounge: Math.round(loungeArea),
           washrooms: Math.round(washroomsArea),
         }));
+        setReceptionSize(receptionArea);
+        setLoungeSize(loungeArea);
+        setWashroomsSize(washroomsArea);
         setAreaQuantities((prevAreaQuantities) => ({
           ...prevAreaQuantities,
           reception: 1,
@@ -282,6 +279,7 @@ function Layout() {
 
       setAreaValues(areaValues);
       setAreaQuantities(quantities);
+      setSeatCounts(currentLayoutData.seatCount);
 
       handleVariantNameChange(areaValues);
     }
