@@ -16,7 +16,7 @@ import Footer from "../../common-components/Footer";
 import { AiFillHeart } from "react-icons/ai";
 import { GoHeart } from "react-icons/go";
 import PagInationNav from "../../common-components/PagInationNav";
-import { useEcomApp } from "../../Context/ecomContext";
+import { useEcomApp } from "../../Context/EcomContext";
 
 const categoryies = [
   {

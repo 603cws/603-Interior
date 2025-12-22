@@ -11,7 +11,7 @@ import { supabase } from "../../services/supabase";
 import toast from "react-hot-toast";
 import { motion } from "framer-motion";
 import { CiSearch } from "react-icons/ci";
-import { useEcomApp } from "../../Context/ecomContext";
+import { useEcomApp } from "../../Context/EcomContext";
 import { useBoqApp } from "../../Context/BoqContext";
 
 function Header() {

@@ -22,7 +22,7 @@ import { isCouponValid } from "../../utils/ResuableFunctions";
 import AppliedCoupon from "../../common-components/AppliedCoupon";
 import { MdOutlineCancel } from "react-icons/md";
 import { useHandleAddToCart } from "../../utils/HelperFunction";
-import { useEcomApp } from "../../Context/ecomContext";
+import { useEcomApp } from "../../Context/EcomContext";
 
 function EmptyCart() {
   const navigate = useNavigate();

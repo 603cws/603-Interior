@@ -11,7 +11,7 @@ import { MdOutlineKeyboardArrowLeft } from "react-icons/md";
 import { useLocation, useNavigate } from "react-router-dom";
 import AppliedCoupon from "../../common-components/AppliedCoupon";
 import { deliverDays } from "../../constants/constant";
-import { useEcomApp } from "../../Context/ecomContext";
+import { useEcomApp } from "../../Context/EcomContext";
 
 function Addresspage() {
   const [isAddressFormOpen, setIsAddressFormOpen] = useState(false);

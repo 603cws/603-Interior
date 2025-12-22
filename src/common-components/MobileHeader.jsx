@@ -3,7 +3,7 @@ import { FaRegUser } from "react-icons/fa6";
 import { MdOutlineKeyboardArrowLeft } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import { useApp } from "../Context/Context";
-import { useEcomApp } from "../Context/ecomContext";
+import { useEcomApp } from "../Context/EcomContext";
 
 function MobileHeader({ title, isCartShown = false }) {
   const navigate = useNavigate();

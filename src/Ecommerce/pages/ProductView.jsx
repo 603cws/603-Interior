@@ -29,7 +29,7 @@ import {
 } from "@heroicons/react/24/outline";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import DetailedReview from "../components/DetailedReview";
-import { useEcomApp } from "../../Context/ecomContext";
+import { useEcomApp } from "../../Context/EcomContext";
 
 function ProductView() {
   const [mainImageHovered, setMainImageHovered] = useState(false); // For main image hover effect

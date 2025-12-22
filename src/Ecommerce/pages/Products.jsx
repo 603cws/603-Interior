@@ -16,7 +16,7 @@ import Loginpoup from "../../common-components/LoginPopup";
 import { HiOutlineArrowSmRight } from "react-icons/hi";
 import Footer from "../../common-components/Footer";
 import CategorySvg from "../../common-components/CategorySvg";
-import { useEcomApp } from "../../Context/ecomContext";
+import { useEcomApp } from "../../Context/EcomContext";
 
 const TOP_OFFERS = [
   {

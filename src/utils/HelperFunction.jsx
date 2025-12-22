@@ -3,7 +3,7 @@ import { useApp } from "../Context/Context";
 import { supabase } from "../services/supabase";
 import { AddToCartToast, RemoveFromCartToast } from "./AddToCartToast";
 import { useNavigate } from "react-router-dom";
-import { useEcomApp } from "../Context/ecomContext";
+import { useEcomApp } from "../Context/EcomContext";
 import { useBoqApp } from "../Context/BoqContext";
 
 export const useHandleAddToCart = () => {

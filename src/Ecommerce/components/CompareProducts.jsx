@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { MdOutlineCancel } from "react-icons/md";
 import { useHandleAddToCart } from "../../utils/HelperFunction";
 import { useApp } from "../../Context/Context";
-import { useEcomApp } from "../../Context/ecomContext";
+import { useEcomApp } from "../../Context/EcomContext";
 function CompareProducts({ product, onClose, onRemove }) {
   // Auto-close when product array is empty
   useEffect(() => {
