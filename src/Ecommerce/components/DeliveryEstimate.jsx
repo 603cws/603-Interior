@@ -1,3 +1,4 @@
+import { deliverDays } from "../../constants/constant";
 function DeliveryEstimate({ product }) {
   const today = new Date();
   const deliveryDate = new Date(today);
