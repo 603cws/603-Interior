@@ -10,9 +10,9 @@ import CheckoutStepper from "../../common-components/CheckoutStepper";
 import { MdOutlineKeyboardArrowLeft } from "react-icons/md";
 import { useLocation, useNavigate } from "react-router-dom";
 import AppliedCoupon from "../../common-components/AppliedCoupon";
-import { deliverDays } from "../../constants/constant";
 import { useEcomApp } from "../../Context/EcomContext";
 import AddressCard from "../components/AddressCard";
+import DeliveryEstimate from "../components/DeliveryEstimate";
 
 function Addresspage() {
   const [isAddressFormOpen, setIsAddressFormOpen] = useState(false);
