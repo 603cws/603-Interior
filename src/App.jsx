@@ -8,7 +8,7 @@ import ScrollToTop from "./common-components/ScrollToTop";
 import BrandRouter from "./pages/Brands/BrandRouter";
 const Contactus = lazy(() => import("./landing/pages/Contactus"));
 const AboutUs = lazy(() => import("./landing/pages/AboutUs"));
-const Login = lazy(() => import("./common-components/Login"));
+const Login = lazy(() => import("./pages/Login"));
 const BlogDetail = lazy(() => import("./landing/pages/BlogDetail"));
 const Dashboard = lazy(() => import("./dashboards/user/Dashboard"));
 const BrandDLink = lazy(() => import("./pages/Brands/BrandDLink"));

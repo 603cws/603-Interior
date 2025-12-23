@@ -115,7 +115,7 @@ function CompleteProfile() {
           animate={{ opacity: imageLoaded ? 1 : 0 }}
           transition={{ duration: 0.5 }}
           onLoad={() => setImageLoaded(true)}
-          src="images/Register.png"
+          src="images/Register.webp"
           alt="Register"
           loading="lazy"
           className={`w-full h-full object-cover ${
