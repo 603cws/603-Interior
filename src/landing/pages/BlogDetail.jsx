@@ -36,22 +36,22 @@ function BlogDetail() {
 
                 <div className="font-Poppins text-sm xl:text-lg mb-5 space-y-4 ">
                   <div className="[&_h1]:!text-[#374151] [&_h1]:font-bold [&_h1]:text-xl [&_p]:text-[#374151] [&_p]:mb-4 [&_h1]:mb-2">
-                    <h1 class="font-semibold text-xl mb-2">
-                      <span class="font-bold ">1. Introduction</span>
+                    <h1 className="font-semibold text-xl mb-2">
+                      <span className="font-bold ">1. Introduction</span>
                     </h1>
-                    <p class="text-gray-700 mb-4">
+                    <p className="text-gray-700 mb-4">
                       {blog?.content?.introduction}
                     </p>
-                    <h1 class="font-semibold text-xl mb-2">
-                      <span class="font-bold ">2. Description</span>
+                    <h1 className="font-semibold text-xl mb-2">
+                      <span className="font-bold ">2. Description</span>
                     </h1>
-                    <p class="text-gray-700 mb-4">
+                    <p className="text-gray-700 mb-4">
                       {blog?.content?.description}
                     </p>
-                    <h2 class="font-semibold text-xl mb-2">
-                      <span class="font-bold ">3. Conclusion</span>
+                    <h2 className="font-semibold text-xl mb-2">
+                      <span className="font-bold ">3. Conclusion</span>
                     </h2>
-                    <p class="text-gray-700 mb-4">
+                    <p className="text-gray-700 mb-4">
                       {blog?.content?.conclusion}
                     </p>
                   </div>

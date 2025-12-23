@@ -244,7 +244,7 @@ function BookAppointment({ onClose, isdashboardbooking = false }) {
                     }`}
                   >
                     {filteredTimings?.length > 0 ? (
-                      filteredTimings?.map((time, index) => {
+                      filteredTimings?.map((time) => {
                         const now = new Date();
 
                         const selectedDate = new Date(value);
@@ -269,7 +269,7 @@ function BookAppointment({ onClose, isdashboardbooking = false }) {
                           <button
                             disabled={isPast}
                             key={time}
-                            onClick={(e) => handletime(time)}
+                            onClick={() => handletime(time)}
                             className={`  border  px-2 py-1 md:px-4 md:py-3 rounded-lg text-xs  border-[#757575]  ${
                               isPast
                                 ? "bg-gray-200 text-gray-500 cursor-not-allowed"

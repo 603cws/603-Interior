@@ -74,7 +74,7 @@ function DashboardProductCard({
                         BOQ Price
                       </p>
                       <p className="font-semibold text-[#000] text-lg">
-                        ₹{product.price} 
+                        ₹{product.price}
                       </p>
                     </div>
                   )}
@@ -86,7 +86,7 @@ function DashboardProductCard({
                           MRP
                         </p>
                         <p className="font-semibold text-[#000] text-lg">
-                          RS {product?.ecommercePrice?.mrp} 
+                          RS {product?.ecommercePrice?.mrp}
                         </p>
                       </div>
                       <div>
@@ -94,14 +94,13 @@ function DashboardProductCard({
                           Selling Price
                         </p>
                         <p className="font-semibold text-[#000] text-lg">
-                          RS {product?.ecommercePrice?.sellingPrice} 
+                          RS {product?.ecommercePrice?.sellingPrice}
                         </p>
                       </div>
                       <div>
                         <p className="text-[#334A78] text-sm font-medium mt-4">
                           Available Stock :
                           <span className="font-semibold text-[#000] text-sm">
-                            {" "}
                             {product.stockQty || "NA"}
                           </span>
                         </p>

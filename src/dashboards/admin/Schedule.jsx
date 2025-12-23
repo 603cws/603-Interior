@@ -72,6 +72,7 @@ function Schedule() {
     if (weekRange.start !== "" && weekRange.end !== "") {
       getdata();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [weekRange]);
 
   const handleDateChange = (date) => {
@@ -88,7 +89,7 @@ function Schedule() {
     )}`;
   }
 
-  const getdata = async (date) => {
+  const getdata = async () => {
     try {
       const formatted = {
         start: formatDate(weekRange.start),

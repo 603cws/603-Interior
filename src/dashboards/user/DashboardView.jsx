@@ -139,7 +139,7 @@ function DashboardView({
             } `}
           >
             {isboqavailable &&
-              boqdata.map((boq, index) => {
+              boqdata.map((boq) => {
                 return (
                   <div key={boq.id}>
                     <GeneratedBOQCard

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { supabase } from "../../../services/supabase";
 import { ImBin } from "react-icons/im";
 import toast from "react-hot-toast";
@@ -15,6 +15,7 @@ function ProductReviews({ product, onClose }) {
 
   useEffect(() => {
     fetchReviews();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [product]);
 
   const fetchReviews = async () => {

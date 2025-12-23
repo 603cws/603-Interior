@@ -1,5 +1,5 @@
 export const CategorySvgMap = {
-  Furniture: (fill = "#374A75", className = "") => (
+  Furniture: (fill = "#374A75") => (
     <svg
       width="80"
       height="80"
@@ -40,7 +40,7 @@ export const CategorySvgMap = {
     </svg>
   ),
 
-  Lighting: (fill = "#374A75", className = "") => (
+  Lighting: (fill = "#374A75") => (
     <svg
       width="80"
       height="80"
@@ -102,7 +102,7 @@ export const CategorySvgMap = {
       />
     </svg>
   ),
-  HVAC: (fill = "#374A75", className = "") => (
+  HVAC: (fill = "#374A75") => (
     <svg
       width="80"
       height="80"
@@ -155,7 +155,7 @@ export const CategorySvgMap = {
       />
     </svg>
   ),
-  SmartSolutions: (fill = "#374A75", className = "") => (
+  SmartSolutions: (fill = "#374A75") => (
     <svg
       width="80"
       height="80"
@@ -181,7 +181,7 @@ export const CategorySvgMap = {
       />
     </svg>
   ),
-  Flooring: (fill = "#374A75", className = "") => (
+  Flooring: (fill = "#374A75") => (
     <svg
       width="80"
       height="80"
@@ -240,7 +240,7 @@ export const CategorySvgMap = {
       />
     </svg>
   ),
-  Paint: (fill = "#374A75", className = "") => (
+  Paint: (fill = "#374A75") => (
     <svg
       width="80"
       height="80"
@@ -271,7 +271,7 @@ export const CategorySvgMap = {
       />
     </svg>
   ),
-  Lux: (fill = "#374A75", className = "") => (
+  Lux: (fill = "#374A75") => (
     <svg
       width="80"
       height="80"
@@ -316,7 +316,7 @@ export const CategorySvgMap = {
       />
     </svg>
   ),
-  CivilPlumbing: (fill = "#374A75", className = "") => (
+  CivilPlumbing: (fill = "#374A75") => (
     <svg
       width="80"
       height="80"
@@ -398,7 +398,7 @@ export const CategorySvgMap = {
       />
     </svg>
   ),
-  PartitionsCeilings: (fill = "#374A75", className = "") => (
+  PartitionsCeilings: (fill = "#374A75") => (
     <svg
       width="80"
       height="80"

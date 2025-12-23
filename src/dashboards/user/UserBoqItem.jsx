@@ -273,7 +273,7 @@ function UserBoqItem({ selectedBoq, setSelectedBoq }) {
             </div>
             <div className="flex flex-wrap sm:flex-nowrap gap-2 xl:gap-4">
               {isboqavailable &&
-                boqdata.map((boq, index) => {
+                boqdata.map((boq) => {
                   return (
                     <div
                       key={boq?.id}

@@ -115,11 +115,7 @@ const JobPage = () => {
 
       {jobForm && (
         <div className="fixed inset-0 bg-[#000]/30 z-50">
-          <JobForm
-            SetJobForm={SetJobForm}
-            jobDetails={job}
-            jobTitle={jobTitle}
-          />
+          <JobForm SetJobForm={SetJobForm} jobTitle={jobTitle} />
         </div>
       )}
 
@@ -130,7 +126,7 @@ const JobPage = () => {
 
 export default JobPage;
 
-function JobForm({ SetJobForm, jobDetails, jobTitle }) {
+function JobForm({ SetJobForm, jobTitle }) {
   const [resume, setResume] = useState(null);
   const [preview, setPreview] = useState(null);
   const fileInputRef = useRef(null);

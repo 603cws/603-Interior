@@ -69,6 +69,7 @@ function VendorDashboardCards({ handleproduct }) {
   useEffect(() => {
     fetchProducts();
     fetchAddons();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const cardsDetails = [

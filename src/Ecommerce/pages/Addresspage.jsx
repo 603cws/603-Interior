@@ -33,7 +33,7 @@ function Addresspage() {
   const { accountHolder, fetchUserData, isAuthenticated } = useApp();
 
   const [addressFormdata, setaddressFormData] = useState({
-    id: "" || undefined,
+    id: "",
     name: "",
     mobile: "",
     address: "",
@@ -271,7 +271,7 @@ function Addresspage() {
         throw error;
       }
       //2) based on this order adding all the products in the order item table
-      const formattedItem = cartItems?.map((item, i) => {
+      const formattedItem = cartItems?.map((item) => {
         const discountOnMrp =
           item?.productId?.ecommercePrice?.mrp -
           item?.productId?.ecommercePrice?.sellingPrice;

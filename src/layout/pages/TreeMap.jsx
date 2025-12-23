@@ -215,7 +215,7 @@ const TreeMap = ({ totalArea, areaQuantities, areaValues, seatCounts }) => {
       },
     },
     tooltip: {
-      custom: ({ series, seriesIndex, dataPointIndex, w }) => {
+      custom: ({ dataPointIndex, w }) => {
         const dataPoint = w.config.series[0].data[dataPointIndex];
 
         const workspaceName = dataPoint.x.split(":")[0];

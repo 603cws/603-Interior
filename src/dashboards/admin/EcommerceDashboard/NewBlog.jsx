@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import { useState, useRef } from "react";
 import { BsUpload } from "react-icons/bs";
 import { supabase } from "../../../services/supabase";
 import Spinner from "../../../common-components/Spinner";

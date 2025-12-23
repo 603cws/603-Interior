@@ -10,6 +10,7 @@ function UserProfileEdit({ setIsEditopen }) {
 
   useEffect(() => {
     fetchProfileData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [accountHolder?.userId, setValue]);
 
   const fetchProfileData = async () => {

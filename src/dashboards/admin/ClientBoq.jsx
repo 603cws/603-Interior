@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { supabase } from "../../services/supabase";
 import { useApp } from "../../Context/Context";
 import { IoIosArrowBack } from "react-icons/io";
@@ -285,7 +285,7 @@ function ClientBoq({ setClientBoqs }) {
                 </div>
                 <div className="flex flex-wrap sm:flex-nowrap gap-2 xl:gap-4">
                   {isboqavailable &&
-                    savedBoqs.map((boq, index) => {
+                    savedBoqs.map((boq) => {
                       return (
                         <div
                           key={boq?.id}
