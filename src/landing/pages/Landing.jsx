@@ -189,13 +189,13 @@ function Landing() {
 
   return (
     <>
-      <section className="h-screen 3xl:h-auto">
+      <section className="max-h-screen">
         <LandingNavbar className="absolute top-0 z-50" />
-        <div className="relative h-full w-full pt-20 lg:pt-24 xl:overflow-y-hidden 3xl:container">
+        <div className="relative h-full w-full pt-20 lg:pt-24 3xl:container">
           <div className="hidden lg:block w-52 h-56 absolute top-0 left-1/2 -translate-x-full bg-[#ECECEC] -z-10"></div>
-          <div className="hidden lg:block absolute bottom-0 left-0 w-52 h-56 bg-[#1C3145]"></div>
-          <div className="hidden lg:block absolute bottom-0 right-0 max-w-sm w-full h-12 bg-[#1C3145]"></div>
-          <div className="hidden lg:block absolute bottom-0 left-1/2 translate-x-1/4 -z-10">
+          <div className="hidden lg:block absolute -bottom-6 left-0 w-52 h-56 bg-[#1C3145]"></div>
+          <div className="hidden lg:block absolute -bottom-6 right-0 max-w-sm w-full h-12 bg-[#1C3145]"></div>
+          <div className="hidden lg:block absolute -bottom-6 left-1/2 translate-x-1/4 -z-10">
             <img
               src="/images/home/dom.png"
               alt="decorative element"
