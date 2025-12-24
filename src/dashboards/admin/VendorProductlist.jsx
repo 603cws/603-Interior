@@ -318,7 +318,7 @@ function VendorProductlist({ setVendorproductlist, selectedVendor }) {
       toast.error("Failed to delete product.");
       console.error("Delete error:", error);
     }
-    fetchProducts(1);
+    fetchProducts();
   };
 
   const handleAddproductclose = () => {
