@@ -23,10 +23,8 @@ export const ServiceCard = ({ title, description, image, hoveredImage }) => {
         }  border-black border-opacity-20 transition-all duration-300 ease-in-out`}
       />
 
-      {/* Content */}
       <div className="relative z-10 cursor-pointer">
         <div className="mb-4 relative w-10 h-10">
-          {/* Default image */}
           <img
             src={image}
             alt={title}
@@ -34,7 +32,6 @@ export const ServiceCard = ({ title, description, image, hoveredImage }) => {
               ishovered ? "opacity-0" : "opacity-100"
             }`}
           />
-          {/* Hovered image */}
           <img
             src={hoveredImage}
             alt={title}
@@ -54,5 +51,3 @@ export const ServiceCard = ({ title, description, image, hoveredImage }) => {
     </div>
   );
 };
-
-// export default ServiceCard;

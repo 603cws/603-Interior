@@ -1,9 +1,8 @@
 import { toast, Slide } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { MdOutlineInventory2 } from "react-icons/md"; // Or any icon
+import { MdOutlineInventory2 } from "react-icons/md";
 import { IoClose } from "react-icons/io5";
 import { MdRemoveShoppingCart } from "react-icons/md";
-// import { css } from "glamor";
 
 export const AddToCartToast = (product, type = "cart") => {
   toast(
@@ -102,7 +101,6 @@ export const showLimitReachedToast = () => {
       <span className="text-sm">You can compare a maximum of 3 products</span>
       <button
         onClick={() => {
-          // Clear list logic
           toast.dismiss();
         }}
         className="text-nowrap text-yellow-400 text-sm  hover:underline"

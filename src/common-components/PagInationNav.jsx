@@ -5,7 +5,6 @@ function PagInationNav({ totalPages, currentPage, handlePageChange }) {
   return (
     <div className="flex justify-center items-center py-2 px-4 space-x-1 sticky bottom-0 bg-white">
       <div className="flex border border-[#CCCCCC] rounded-lg px-3 py-2">
-        {/* Previous */}
         <button
           onClick={() => handlePageChange(currentPage - 1)}
           disabled={currentPage === 1}
@@ -15,13 +14,11 @@ function PagInationNav({ totalPages, currentPage, handlePageChange }) {
           <span className="hidden sm:block">Previous</span>
         </button>
 
-        {/* Page Numbers */}
         {(() => {
           const pages = [];
           const start = Math.max(2, currentPage - 1);
           const end = Math.min(totalPages - 1, currentPage + 1);
 
-          // page 1
           pages.push(
             <button
               key={1}
@@ -36,10 +33,8 @@ function PagInationNav({ totalPages, currentPage, handlePageChange }) {
             </button>
           );
 
-          // first ellipsis
           if (start > 2) pages.push(<span key="dots1">...</span>);
 
-          // middle pages
           for (let i = start; i <= end; i++) {
             pages.push(
               <button
@@ -56,10 +51,8 @@ function PagInationNav({ totalPages, currentPage, handlePageChange }) {
             );
           }
 
-          // second ellipsis
           if (end < totalPages - 1) pages.push(<span key="dots2">...</span>);
 
-          // last page
           if (totalPages > 1) {
             pages.push(
               <button
@@ -79,7 +72,6 @@ function PagInationNav({ totalPages, currentPage, handlePageChange }) {
           return pages;
         })()}
 
-        {/* Next */}
         <button
           onClick={() => handlePageChange(currentPage + 1)}
           disabled={currentPage === totalPages}

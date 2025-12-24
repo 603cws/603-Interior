@@ -1,0 +1,41 @@
+function MultipleDeleteWarningCard({
+  setDeleteWarning,
+  selectedItemForDelete,
+  handleMultipleDelete,
+}) {
+  return (
+    <div className="flex justify-center items-center fixed inset-0 z-30">
+      <div className="absolute inset-0 bg-black opacity-50"></div>
+      <div className="bg-white relative py-7 px-16 md:px-20">
+        <div className="flex justify-center items-center">
+          <img
+            src="images/icons/delete-icon.png"
+            alt="delete icon"
+            className="h-12 w-12"
+          />
+        </div>
+        <h4 className="font-semibold my-5">
+          Do you want to delete {selectedItemForDelete?.length}? products
+        </h4>
+        <div className="flex justify-between">
+          <button
+            onClick={() => {
+              setDeleteWarning(false);
+            }}
+            className="px-5 py-2 bg-[#EEEEEE] rounded-md"
+          >
+            Cancel
+          </button>
+          <button
+            onClick={() => handleMultipleDelete(selectedItemForDelete)}
+            className="px-5 py-2 bg-[#B4EAEA] rounded-md"
+          >
+            Delete
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default MultipleDeleteWarningCard;

@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import { useApp } from "../../Context/Context";
-import Addon from "./Addon";
-import { calculateAddonTotalPrice } from "../utils/productUtils";
-import { AddToCartToast } from "../../utils/AddToCartToast";
 import { categoriesWithTwoLevelCheck } from "../../constants/constant";
+import AddonSelector from "./AddonSelector";
+import AreaSelector from "./AreaSelector";
+import { AddToCartToast } from "../../utils/AddToCartToast";
+import { useBoqApp } from "../../Context/BoqContext";
 
 function SelectArea({
   setShowSelectArea,
@@ -18,20 +18,7 @@ function SelectArea({
   selectedSubCategory1,
 }) {
   //Don't call the selectedCategory, selectedSubCategory, selectedSubCategory1, subCategories from Context => Sunny
-  const {
-    selectedData,
-    userResponses,
-    setSelectedData,
-    areasData,
-    quantityData,
-    handelSelectedData,
-    productQuantity,
-    setProductQuantity,
-    categoryConfig,
-  } = useApp();
-
-  // const subCategories = selectedCategory.subcategories;
-  // const subCategories = selectedProductView?.subcategory;
+  const { selectedData, productQuantity, handleSelectedData } = useBoqApp();
 
   const [showAddon, setShowAddon] = useState(false);
   const [allSubcategories, setAllSubcategories] = useState([]);
@@ -41,7 +28,6 @@ function SelectArea({
   const [selectedAddonsMap, setSelectedAddonsMap] = useState({});
   const [commonSubcategories, setCommonSubcategories] = useState([]);
 
-  // Fetch existing addons whenever `selectedData` changes
   useEffect(() => {
     const addonsMap = {};
     selectedData.forEach((item) => {
@@ -54,12 +40,6 @@ function SelectArea({
     if (!allAddons || allAddons.length === 0) setSubmitBtn(true);
   }, [allAddons]);
 
-  // const botRight = () => {
-  //   toast.dark("Product Added", {
-  //     position: "bottom-right",
-  //     transition: Slide, // Change this to Zoom, Bounce, Flip for different effects
-  //   });
-  // };
   useEffect(() => {
     const common = selectedProductView.subcategory.filter((item) =>
       selectedCategory.subcategories.includes(item)
@@ -68,58 +48,14 @@ function SelectArea({
   }, [selectedCategory, selectedProductView]);
   const subCategories = commonSubcategories;
 
-  const handleAddonClick = () => {
-    setShowAddon(false);
-    setShowSelectArea(false); // Close the modal
-    setShowBackground(false); // Hide background before exit animation
-
-    setSelectedData((prevData) => {
-      const updatedData = prevData.map((item) => {
-        const currentGroupKey = `${selectedCategory.category}-${item.subcategory}-${selectedSubCategory1}-${item.id}`;
-
-        return {
-          ...item,
-          addons: (selectedAddonsMap[currentGroupKey] || []).map((addon) => ({
-            ...addon,
-            finalPrice: calculateAddonTotalPrice(
-              selectedCategory.category,
-              item.subcategory,
-              selectedSubCategory1,
-              addon,
-              selectedCategory,
-              selectedSubCategory,
-              selectedSubCategory1,
-              userResponses,
-              areasData,
-              quantityData
-            ),
-          })),
-        };
-      });
-      // botRight();
-      AddToCartToast(selectedProductView, "boq");
-
-      localStorage.setItem("selectedData", JSON.stringify(updatedData)); // ✅ Persist correct state
-      return updatedData;
-    });
-
-    // ✅ Update selectedAddonsMap correctly
-    const currentProductKey = `${selectedCategory.category}-${selectedProductView.subcategory}-${selectedSubCategory1}-${selectedProductView.id}`;
-    setSelectedAddonsMap((prev) => ({
-      ...prev,
-      [currentProductKey]: selectedAddons, // Keep only selected addons for the specific product
-    }));
-  };
-
   useEffect(() => {
     if (allSubcategories.length > 0) {
-      setSelectedRoom(allSubcategories[0]); // Select the first room by default
+      setSelectedRoom(allSubcategories[0]);
     }
   }, [allSubcategories]);
 
   useEffect(() => {
     if (Array.isArray(selectedData) && selectedData.length > 0) {
-      // Expand Md Cabin into Main + Visitor just like in UI
       const displayedSubCategories = subCategories.flatMap((subCat) => {
         if (
           selectedCategory.category === "Furniture" &&
@@ -160,36 +96,6 @@ function SelectArea({
     setSelectedAreas,
   ]);
 
-  // useEffect(() => {
-  //   // Only proceed if selectedData is a non-empty array
-  //   if (Array.isArray(selectedData) && selectedData.length > 0) {
-  //     const initialSelectedAreas = subCategories.filter((subCat) =>
-  //       selectedData.some((item) =>
-  //         // Check for the 'Flooring' category separately
-  //         categoriesWithTwoLevelCheck.includes(item.category)
-  //           ? item.id === selectedProductView?.id
-  //             ? `${item.category}-${item.subcategory}-${item.subcategory1}` ===
-  //               `${selectedCategory.category}-${subCat}-${selectedSubCategory1}`
-  //             : `${item.category}-${item.subcategory}` ===
-  //               `${selectedCategory.category}-${subCat}`
-  //           : `${item.category}-${item.subcategory}-${item.subcategory1}` ===
-  //             `${selectedCategory.category}-${subCat}-${selectedSubCategory1}`
-  //       )
-  //     );
-  //     setSelectedAreas(initialSelectedAreas);
-  //   } else {
-  //     setSelectedAreas([]);
-  //   }
-
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [
-  //   subCategories,
-  //   selectedData,
-  //   selectedCategory,
-  //   selectedSubCategory1,
-  //   setSelectedAreas,
-  // ]);
-
   useEffect(() => {
     const handleEscKey = (e) => {
       if (e.key === "Escape") {
@@ -206,291 +112,23 @@ function SelectArea({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const handleCheckboxChange = (value, checked) => {
-    setSelectedAreas((prev) =>
-      checked ? [...prev, value] : prev.filter((item) => item !== value)
-    );
-  };
-
-  const handleDoneClick = () => {
-    // Build the list of what’s actually shown in UI (same as checkbox flatMap logic)
-    let displayedSubCategories = subCategories.flatMap((subCat) => {
-      if (
-        selectedCategory.category === "Furniture" &&
-        selectedSubCategory1 === "Chair" &&
-        subCat === "Md Cabin"
-      ) {
-        return ["Md Cabin Main", "Md Cabin Visitor"];
-      }
-      if (
-        selectedCategory.category === "Furniture" &&
-        selectedSubCategory1 === "Chair" &&
-        subCat === "Manager Cabin"
-      ) {
-        return ["Manager Cabin Main", "Manager Cabin Visitor"];
-      }
-      return [subCat];
-    });
-
-    // Filter only the ones user hasn’t already added
-    let selectedSubcategories = displayedSubCategories
-      .filter((subCat) => selectedAreas.includes(subCat))
-      .filter(
-        (subCat) =>
-          !isItemSelected(
-            selectedData,
-            selectedCategory,
-            subCat,
-            selectedSubCategory1,
-            selectedProductView
-          )
-      );
-
-    setAllSubcategories(selectedSubcategories);
-
-    // 🔑 Loop through displayed subs and call only for allowed ones
-    displayedSubCategories.forEach((subCat) => {
-      const isChecked = selectedAreas.includes(subCat);
-
-      // ⛔ prevent re-adding if already used in another product
-      if (
-        isItemSelected(
-          selectedData,
-          selectedCategory,
-          subCat,
-          selectedSubCategory1,
-          selectedProductView
-        )
-      ) {
-        return;
-      }
-
-      handelSelectedData(
-        selectedProductView,
-        selectedCategory,
-        subCat,
-        selectedSubCategory1,
-        isChecked,
-        productQuantity
-      );
-    });
-
-    if (selectedSubcategories.length > 0) {
-      if (!allAddons || allAddons.length === 0) {
-        setShowSelectArea(false);
-        setShowBackground(false);
-        // botRight();
-        AddToCartToast(selectedProductView, "boq");
-      } else {
-        setShowAddon(true);
-      }
-    } else {
-      setShowSelectArea(false);
-      setShowBackground(false);
-    }
-  };
-
-  // const handleDoneClick = () => {
-  //   let selectedSubcategories = subCategories.filter((subCat) =>
-  //     selectedAreas.includes(subCat)
-  //   );
-
-  //   selectedSubcategories = selectedSubcategories.filter((subCat) => {
-  //     return !(
-  //       Array.isArray(selectedData) &&
-  //       selectedData.length > 0 &&
-  //       isItemSelected(
-  //         selectedData,
-  //         selectedCategory,
-  //         subCat,
-  //         selectedSubCategory1,
-  //         selectedProductView
-  //       )
-  //     );
-  //   });
-
-  //   setAllSubcategories(selectedSubcategories);
-
-  //   subCategories.forEach((subCat) => {
-  //     const isDisabled =
-  //       Array.isArray(selectedData) &&
-  //       selectedData.length > 0 &&
-  //       isItemSelected(
-  //         selectedData,
-  //         selectedCategory,
-  //         subCat,
-  //         selectedSubCategory1,
-  //         selectedProductView
-  //       );
-
-  //     if (isDisabled) return;
-
-  //     const isChecked = selectedAreas.includes(subCat);
-
-  //     handelSelectedData(
-  //       selectedProductView,
-  //       selectedCategory,
-  //       subCat,
-  //       selectedSubCategory1,
-  //       isChecked, // Pass whether the subcategory is selected or not
-  //       productQuantity
-  //     );
-  //   });
-
-  //   if (selectedSubcategories.length > 0) {
-  //     if (!allAddons || allAddons.length === 0) {
-  //       setShowSelectArea(false);
-  //       setShowBackground(false); // Hide background before exit animation
-  //       botRight();
-  //     } else {
-  //       setShowAddon(true);
-  //     }
-  //   } else {
-  //     setShowSelectArea(false);
-  //     setShowBackground(false); // Hide background before exit animation
-  //   }
-  // };
-
-  const isItemSelected = (
-    selectedData,
-    selectedCategory,
-    subCat,
-    selectedSubCategory1,
-    selectedProductView
-  ) => {
-    return (
-      Array.isArray(selectedData) &&
-      selectedData.some((item) => {
-        // ✅ ignore the current product itself
-        if (
-          item.product_variant?.variant_title === selectedProductView?.title
-        ) {
-          return false;
-        }
-        // treat Main and Visitor separately
-        const compareSubCat = subCat;
-
-        if (categoriesWithTwoLevelCheck.includes(selectedCategory.category)) {
-          // For categories where subcategory1 isn’t relevant
-          return (
-            `${item.category}-${item.subcategory}` ===
-            `${selectedCategory.category}-${compareSubCat}`
-          );
-        } else {
-          // For categories where subcategory1 matters
-          return (
-            `${item.category}-${item.subcategory}-${item.subcategory1}` ===
-            `${selectedCategory.category}-${compareSubCat}-${selectedSubCategory1}`
-          );
-        }
-      })
-    );
-  };
+  function isIncluded(category, subCategory, selectedSubCategory1, config) {
+    const categoryRules = config[category] || {};
+    const excludes = categoryRules[subCategory]?.exclude || [];
+    return !excludes.includes(selectedSubCategory1);
+  }
 
   function isExcluded(category, subCategory, selectedSubCategory1, config) {
     const categoryRules = config[category] || {};
     const rules = categoryRules[subCategory] || categoryRules.Default || {};
 
-    // Handle array-type exclude rules
     if (rules.exclude && Array.isArray(rules.exclude)) {
       return rules.exclude.includes(selectedSubCategory1);
     }
 
-    return false; // Not excluded by default
+    return false;
   }
 
-  const handleSelectAll = (checked) => {
-    // Expand the list first (so Md Cabin → Main + Visitor)
-    //  let displayedSubCategories = selectedCategory.subcategories.flatMap(
-    let displayedSubCategories = commonSubcategories.flatMap((subCategory) => {
-      if (
-        selectedCategory.category === "Furniture" &&
-        selectedSubCategory1 === "Chair" &&
-        subCategory === "Md Cabin"
-      ) {
-        return ["Md Cabin Main", "Md Cabin Visitor"];
-      }
-      if (
-        selectedCategory.category === "Furniture" &&
-        selectedSubCategory1 === "Chair" &&
-        subCategory === "Manager Cabin"
-      ) {
-        return ["Manager Cabin Main", "Manager Cabin Visitor"];
-      }
-      return [subCategory];
-    });
-
-    if (checked) {
-      const selectable = displayedSubCategories.filter((subCategory) => {
-        if (selectedCategory.category === "HVAC") {
-          return userResponses?.hvacType === "Centralized"
-            ? subCategory === "Centralized"
-            : subCategory !== "Centralized";
-        }
-
-        const notDisabled = !isExcluded(
-          selectedCategory.category,
-          subCategory,
-          selectedSubCategory1,
-          categoryConfig
-        );
-
-        // ✅ Exclude already used by another product
-        return (
-          notDisabled &&
-          !isItemSelected(
-            selectedData,
-            selectedCategory,
-            subCategory,
-            selectedSubCategory1,
-            selectedProductView
-          )
-        );
-      });
-
-      setSelectedAreas(selectable);
-    } else {
-      // Get the expanded list first
-      // let displayedSubCategories = selectedCategory.subcategories.flatMap(
-      let displayedSubCategories = commonSubcategories.flatMap(
-        (subCategory) => {
-          if (
-            selectedCategory.category === "Furniture" &&
-            selectedSubCategory1 === "Chair" &&
-            subCategory === "Md Cabin"
-          ) {
-            return ["Md Cabin Main", "Md Cabin Visitor"];
-          }
-          if (
-            selectedCategory.category === "Furniture" &&
-            selectedSubCategory1 === "Chair" &&
-            subCategory === "Manager Cabin"
-          ) {
-            return ["Manager Cabin Main", "Manager Cabin Visitor"];
-          }
-          return [subCategory];
-        }
-      );
-
-      // 🟡 Only deselect non-disabled items
-      const nonDisabled = displayedSubCategories.filter(
-        (subCategory) =>
-          !isItemSelected(
-            selectedData,
-            selectedCategory,
-            subCategory,
-            selectedSubCategory1,
-            selectedProductView
-          )
-      );
-
-      setSelectedAreas((prev) =>
-        prev.filter((subCat) => !nonDisabled.includes(subCat))
-      );
-    }
-  };
-
-  // const displayedSubCategories = selectedCategory.subcategories.flatMap(
   const displayedSubCategories = commonSubcategories.flatMap((subCategory) => {
     if (
       selectedCategory.category === "Furniture" &&
@@ -509,124 +147,109 @@ function SelectArea({
     return [subCategory];
   });
 
-  const allSubcategoriesDisabled = displayedSubCategories
-    .filter((subCategory) => {
-      if (selectedCategory.category === "HVAC") {
-        return userResponses?.hvacType === "Centralized"
-          ? subCategory === "Centralized"
-          : subCategory !== "Centralized";
-      }
-
-      return !isExcluded(
-        selectedCategory.category,
-        subCategory,
-        selectedSubCategory1,
-        categoryConfig
-      );
-    })
-    .every((subCategory) =>
-      isItemSelected(
-        selectedData,
-        selectedCategory,
-        subCategory,
-        selectedSubCategory1,
-        selectedProductView
-      )
-    );
-
-  const allSelected =
-    displayedSubCategories
-      .filter((subCategory) => {
-        if (selectedCategory.category === "HVAC") {
-          return userResponses?.hvacType === "Centralized"
-            ? subCategory === "Centralized"
-            : subCategory !== "Centralized";
+  const isItemSelected = (
+    selectedData,
+    selectedCategory,
+    subCat,
+    selectedSubCategory1,
+    selectedProductView
+  ) => {
+    return (
+      Array.isArray(selectedData) &&
+      selectedData.some((item) => {
+        if (
+          item.product_variant?.variant_title === selectedProductView?.title
+        ) {
+          return false;
         }
-        return !isExcluded(
-          selectedCategory.category,
-          subCategory,
-          selectedSubCategory1,
-          categoryConfig
-        );
+        const compareSubCat = subCat;
+
+        if (categoriesWithTwoLevelCheck.includes(selectedCategory.category)) {
+          return (
+            `${item.category}-${item.subcategory}` ===
+            `${selectedCategory.category}-${compareSubCat}`
+          );
+        } else {
+          return (
+            `${item.category}-${item.subcategory}-${item.subcategory1}` ===
+            `${selectedCategory.category}-${compareSubCat}-${selectedSubCategory1}`
+          );
+        }
       })
-      .every(
-        (subCategory) =>
-          selectedAreas.includes(subCategory) ||
-          isItemSelected(
+    );
+  };
+
+  const handleDoneClick = () => {
+    let displayedSubCategories = subCategories.flatMap((subCat) => {
+      if (
+        selectedCategory.category === "Furniture" &&
+        selectedSubCategory1 === "Chair" &&
+        subCat === "Md Cabin"
+      ) {
+        return ["Md Cabin Main", "Md Cabin Visitor"];
+      }
+      if (
+        selectedCategory.category === "Furniture" &&
+        selectedSubCategory1 === "Chair" &&
+        subCat === "Manager Cabin"
+      ) {
+        return ["Manager Cabin Main", "Manager Cabin Visitor"];
+      }
+      return [subCat];
+    });
+
+    let selectedSubcategories = displayedSubCategories
+      .filter((subCat) => selectedAreas.includes(subCat))
+      .filter(
+        (subCat) =>
+          !isItemSelected(
             selectedData,
             selectedCategory,
-            subCategory,
+            subCat,
             selectedSubCategory1,
             selectedProductView
           )
-      ) ?? false;
+      );
 
-  const handleAddonSelect = (addon, isChecked) => {
-    const currentGroupKey = `${selectedCategory.category}-${selectedSubCategory}-${selectedSubCategory1}-${selectedProductView.id}`;
+    setAllSubcategories(selectedSubcategories);
 
-    setSelectedAddonsMap((prev) => {
-      const existingAddons = prev[currentGroupKey] || [];
+    displayedSubCategories.forEach((subCat) => {
+      const isChecked = selectedAreas.includes(subCat);
+      if (
+        isItemSelected(
+          selectedData,
+          selectedCategory,
+          subCat,
+          selectedSubCategory1,
+          selectedProductView
+        )
+      ) {
+        return;
+      }
 
-      // Only update addons for the current product
-      const updatedAddons = isChecked
-        ? [...existingAddons, addon] // Add new addon
-        : existingAddons.filter((item) => item.id !== addon.id); // Remove if unchecked
-
-      return { ...prev, [currentGroupKey]: updatedAddons };
+      handleSelectedData(
+        selectedProductView,
+        selectedCategory,
+        subCat,
+        selectedSubCategory1,
+        isChecked,
+        productQuantity
+      );
     });
 
-    // Keep `selectedAddons` specific to the selected product
-    setSelectedAddons((prev) =>
-      isChecked ? [...prev, addon] : prev.filter((item) => item.id !== addon.id)
-    );
+    if (selectedSubcategories.length > 0) {
+      if (!allAddons || allAddons.length === 0) {
+        setShowSelectArea(false);
+        setShowBackground(false);
+        AddToCartToast(selectedProductView, "boq");
+      } else {
+        setShowAddon(true);
+      }
+    } else {
+      setShowSelectArea(false);
+      setShowBackground(false);
+    }
   };
-
-  // Increment
-  const handleIncrement = (subcategory, productName) => {
-    setProductQuantity((prev) => ({
-      ...prev,
-      [subcategory]: {
-        ...prev[subcategory],
-        [productName]: Math.min(
-          (prev[subcategory]?.[productName] || 1) + 1,
-          1000
-        ),
-      },
-    }));
-  };
-
-  // Decrement
-  const handleDecrement = (subcategory, productName) => {
-    setProductQuantity((prev) => ({
-      ...prev,
-      [subcategory]: {
-        ...prev[subcategory],
-        [productName]: Math.max((prev[subcategory]?.[productName] || 1) - 1, 1),
-      },
-    }));
-  };
-
-  // OnChange
-  const handleChange = (subcategory, productName, value) => {
-    let newValue = parseInt(value, 10);
-    if (isNaN(newValue)) newValue = 1;
-    if (newValue < 1) newValue = 1;
-    if (newValue > 1000) newValue = 1000;
-
-    setProductQuantity((prev) => ({
-      ...prev,
-      [subcategory]: {
-        ...prev[subcategory],
-        [productName]: newValue,
-      },
-    }));
-  };
-
-  function isIncluded(category, subCategory, selectedSubCategory1, config) {
-    const categoryRules = config[category] || {};
-    const excludes = categoryRules[subCategory]?.exclude || [];
-    return !excludes.includes(selectedSubCategory1);
-  }
 
   return (
     <div className="fixed inset-0 flex justify-center items-center z-20">
@@ -636,462 +259,54 @@ function SelectArea({
           alt="close"
           className="absolute top-1 right-1 lg:top-1 lg:right-1 cursor-pointer w-5 h-5 sm:w-6 sm:h-6"
           onClick={() => {
-            setShowBackground(false); // Hide background before exit animation
+            setShowBackground(false);
             setShowSelectArea(false);
           }}
         />
 
         <div className="bg-white p-6 rounded-lg border-[3px] border-[#FFD500]">
-          {/* Area Selection Modal */}
           {!showAddon && (
-            <div className="overflow-auto">
-              <p className="text-center font-semibold text-sm lg:text-lg mb-4">
-                Select Your Area
-              </p>
-
-              <div className="flex flex-col lg:flex-row justify-between gap-8">
-                {/* Subcategories Checkbox List */}
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-                  {/* {selectedCategory.subcategories */}
-                  {commonSubcategories
-                    ?.filter((subCategory) => {
-                      // For HVAC, handle centralized logic
-                      if (selectedCategory.category === "HVAC") {
-                        return userResponses?.hvacType === "Centralized"
-                          ? subCategory === "Centralized" // Show only "Centralized"
-                          : subCategory !== "Centralized"; // Show all except "Centralized"
-                      }
-
-                      if (
-                        selectedCategory.category === "Civil / Plumbing" ||
-                        selectedCategory.category === "Furniture"
-                      ) {
-                        return isIncluded(
-                          selectedCategory.category,
-                          subCategory,
-                          selectedSubCategory1,
-                          categoryConfig
-                        );
-                      }
-
-                      return true;
-                    })
-                    .flatMap((name) => {
-                      // instead of Md Cabin, inject Main + Visitor
-                      if (
-                        selectedCategory.category === "Furniture" &&
-                        selectedSubCategory1 === "Chair" &&
-                        name === "Md Cabin"
-                      ) {
-                        return ["Md Cabin Main", "Md Cabin Visitor"];
-                      }
-                      if (
-                        selectedCategory.category === "Furniture" &&
-                        selectedSubCategory1 === "Chair" &&
-                        name === "Manager Cabin"
-                      ) {
-                        return ["Manager Cabin Main", "Manager Cabin Visitor"];
-                      }
-                      return [name];
-                    })
-                    .map((name, id) => (
-                      <div key={id} className="flex flex-col gap-1">
-                        <div className="flex items-center gap-2">
-                          {/* <input
-                            type="checkbox"
-                            id={`subCategory-${id}`}
-                            value={name}
-                            checked={selectedAreas.includes(name)}
-                            onChange={(e) =>
-                              handleCheckboxChange(
-                                e.target.value,
-                                e.target.checked
-                              )
-                            }
-                            className="appearance-none w-3 h-3 lg:w-4 lg:h-4 cursor-pointer transition duration-300 bg-black checked:border-black
-                      relative checked:before:content-['✔'] checked:before:absolute checked:before:text-white 
-                      checked:before:top-1/2 checked:before:left-1/2 checked:before:-translate-x-1/2 checked:before:-translate-y-1/2 
-                      checked:before:text-[14px] checked:before:font-bold disabled:bg-gray-400 disabled:cursor-not-allowed disabled:opacity-60"
-                            disabled={
-                              Array.isArray(selectedData) &&
-                              isItemSelected(
-                                selectedData,
-                                selectedCategory,
-                                name,
-                                selectedSubCategory1,
-                                selectedProductView
-                              )
-                              //  ||
-                              // disabledAreas.includes(name)
-                            }
-                          />
-                          <label
-                            htmlFor={`subCategory-${id}`}
-                            className={`text-xs lg:text-sm cursor-pointer  ${
-                              Array.isArray(selectedData) &&
-                              isItemSelected(
-                                selectedData,
-                                selectedCategory,
-                                name,
-                                selectedSubCategory1,
-                                selectedProductView
-                              )
-                            }`}
-                          >
-                            {name}
-                          </label> */}
-                          <button
-                            type="button"
-                            onClick={() =>
-                              handleCheckboxChange(
-                                name,
-                                !selectedAreas.includes(name)
-                              )
-                            }
-                            className={`px-4 py-2 border text-xs lg:text-base rounded-md transition w-full
-                                ${
-                                  selectedAreas.includes(name)
-                                    ? "bg-gradient-to-r from-[#334A78] to-[#68B2DC] text-white"
-                                    : "bg-gray-200 text-[#000] hover:bg-gray-100"
-                                }
-                                ${
-                                  Array.isArray(selectedData) &&
-                                  isItemSelected(
-                                    selectedData,
-                                    selectedCategory,
-                                    name,
-                                    selectedSubCategory1,
-                                    selectedProductView
-                                  )
-                                    ? "opacity-60 cursor-not-allowed"
-                                    : "cursor-pointer"
-                                }`}
-                            disabled={
-                              Array.isArray(selectedData) &&
-                              isItemSelected(
-                                selectedData,
-                                selectedCategory,
-                                name,
-                                selectedSubCategory1,
-                                selectedProductView
-                              )
-                            }
-                          >
-                            {name}
-                          </button>
-                        </div>
-                        {/* table chair */}
-                        {selectedCategory.category === "Furniture" &&
-                          ((name === "Reception" &&
-                            selectedSubCategory1 === "Chair") ||
-                            name === "Pantry" ||
-                            name === "Breakout Room" ||
-                            name === "Md Cabin Main" ||
-                            name === "Md Cabin Visitor" ||
-                            name === "Manager Cabin Main" ||
-                            name === "Manager Cabin Visitor") &&
-                          (selectedSubCategory1 === "Table" ||
-                            selectedSubCategory1 === "Chair") && (
-                            <div
-                              className={`${
-                                selectedAreas.includes(name) &&
-                                !isItemSelected(
-                                  selectedData,
-                                  selectedCategory,
-                                  name,
-                                  selectedSubCategory1,
-                                  selectedProductView
-                                )
-                                  ? "flex"
-                                  : "hidden"
-                              } gap-2 h-6`}
-                            >
-                              <button
-                                onClick={() =>
-                                  handleDecrement(name, selectedSubCategory1)
-                                }
-                                className="h-5 w-5 border border-[#ccc] flex justify-center items-center"
-                              >
-                                -
-                              </button>
-                              <input
-                                type="text"
-                                value={
-                                  productQuantity[name]?.[
-                                    selectedSubCategory1
-                                  ] || 1
-                                }
-                                onChange={(e) =>
-                                  handleChange(
-                                    name,
-                                    selectedSubCategory1,
-                                    e.target.value
-                                  )
-                                }
-                                className="h-5 w-10 border border-[#ccc] flex justify-center items-center text-center text-xs"
-                              />
-                              <button
-                                onClick={() =>
-                                  handleIncrement(name, selectedSubCategory1)
-                                }
-                                className="h-5 w-5 border border-[#ccc] flex justify-center items-center"
-                              >
-                                +
-                              </button>
-                            </div>
-                          )}
-                        {/* storage */}
-                        {selectedCategory.category === "Furniture" &&
-                          selectedSubCategory1 === "Storage" && (
-                            <div
-                              className={`${
-                                selectedAreas.includes(name) &&
-                                !isItemSelected(
-                                  selectedData,
-                                  selectedCategory,
-                                  name,
-                                  selectedSubCategory1,
-                                  selectedProductView
-                                )
-                                  ? "flex"
-                                  : "hidden"
-                              } gap-2 h-6`}
-                            >
-                              <button
-                                onClick={() =>
-                                  handleDecrement(name, selectedSubCategory1)
-                                }
-                                className="h-5 w-5 border border-[#ccc] flex justify-center items-center"
-                              >
-                                -
-                              </button>
-                              <input
-                                type="text"
-                                value={
-                                  productQuantity[name]?.[
-                                    selectedSubCategory1
-                                  ] || 1
-                                }
-                                onChange={(e) =>
-                                  handleChange(
-                                    name,
-                                    selectedSubCategory1,
-                                    e.target.value
-                                  )
-                                }
-                                className="h-5 w-10 border border-[#ccc] flex justify-center items-center text-center text-xs"
-                              />
-                              <button
-                                onClick={() =>
-                                  handleIncrement(name, selectedSubCategory1)
-                                }
-                                className="h-5 w-5 border border-[#ccc] flex justify-center items-center"
-                              >
-                                +
-                              </button>
-                            </div>
-                          )}
-                        {/* Smart Solution & Lux */}
-                        {(selectedCategory.category === "Smart Solutions" ||
-                          selectedCategory.category === "Lux") && (
-                          <div
-                            className={`${
-                              selectedAreas.includes(name) &&
-                              !isItemSelected(
-                                selectedData,
-                                selectedCategory,
-                                name,
-                                selectedSubCategory1,
-                                selectedProductView
-                              )
-                                ? "flex"
-                                : "hidden"
-                            } gap-2 h-6`}
-                          >
-                            <button
-                              onClick={() =>
-                                handleDecrement(name, selectedSubCategory1)
-                              }
-                              className="h-5 w-5 border border-[#ccc] flex justify-center items-center"
-                            >
-                              -
-                            </button>
-                            <input
-                              type="text"
-                              value={
-                                productQuantity[name]?.[selectedSubCategory1] ||
-                                1
-                              }
-                              onChange={(e) =>
-                                handleChange(
-                                  name,
-                                  selectedSubCategory1,
-                                  e.target.value
-                                )
-                              }
-                              className="h-5 w-10 border border-[#ccc] flex justify-center items-center text-center text-xs"
-                            />
-                            <button
-                              onClick={() =>
-                                handleIncrement(name, selectedSubCategory1)
-                              }
-                              className="h-5 w-5 border border-[#ccc] flex justify-center items-center"
-                            >
-                              +
-                            </button>
-                          </div>
-                        )}
-                        {/* Civil / Plumbing - Tile exception */}
-                        {selectedCategory.category === "Civil / Plumbing" &&
-                          selectedSubCategory1 !== "Tile" && (
-                            <div
-                              className={`${
-                                selectedAreas.includes(name) &&
-                                !isItemSelected(
-                                  selectedData,
-                                  selectedCategory,
-                                  name,
-                                  selectedSubCategory1,
-                                  selectedProductView
-                                )
-                                  ? "flex"
-                                  : "hidden"
-                              } gap-2 h-6`}
-                            >
-                              <button
-                                onClick={() =>
-                                  handleDecrement(name, selectedSubCategory1)
-                                }
-                                className="h-5 w-5 border border-[#ccc] flex justify-center items-center"
-                              >
-                                -
-                              </button>
-                              <input
-                                type="text"
-                                value={
-                                  productQuantity[name]?.[
-                                    selectedSubCategory1
-                                  ] || 1
-                                }
-                                onChange={(e) =>
-                                  handleChange(
-                                    name,
-                                    selectedSubCategory1,
-                                    e.target.value
-                                  )
-                                }
-                                className="h-5 w-10 border border-[#ccc] flex justify-center items-center text-center text-xs"
-                              />
-                              <button
-                                onClick={() =>
-                                  handleIncrement(name, selectedSubCategory1)
-                                }
-                                className="h-5 w-5 border border-[#ccc] flex justify-center items-center"
-                              >
-                                +
-                              </button>
-                            </div>
-                          )}
-                      </div>
-                    ))}
-                  <div className="flex items-center gap-2 col-span-full mr-10">
-                    <input
-                      type="checkbox"
-                      id="selectAll"
-                      checked={allSelected}
-                      disabled={allSubcategoriesDisabled}
-                      onChange={(e) => handleSelectAll(e.target.checked)}
-                      className="appearance-none w-3 h-3 lg:w-4 lg:h-4 cursor-pointer transition duration-300 bg-gray-200 checked:border-black
-                  relative checked:before:content-['✔'] checked:before:absolute checked:before:text-white 
-                  checked:before:top-1/2 checked:before:left-1/2 checked:before:-translate-x-1/2 checked:before:-translate-y-1/2 
-                  checked:before:text-[14px] checked:before:font-bold disabled:bg-gray-400 disabled:cursor-not-allowed disabled:opacity-60 checked:bg-gradient-to-r checked:from-[#334A78] checked:to-[#68B2DC] checked:text-white"
-                    />
-                    <label
-                      htmlFor="selectAll"
-                      className="text-xs lg:text-sm cursor-pointer"
-                    >
-                      Select All
-                    </label>
-                  </div>
-                </div>
-
-                {/* Image Section */}
-                <div className="hidden sm:flex justify-center items-center border border-gray-300 shadow-md rounded-md p-2">
-                  <img
-                    src={image}
-                    alt={selectedProductView.title}
-                    className=" object-cover max-w-[200px] max-h-[250px] lg:max-w-[300px] lg:max-h-[300px]"
-                  />
-                </div>
-              </div>
-
-              {/* Done Button */}
-              <div className="flex justify-center items-center mt-4">
-                <button
-                  className="bg-[#374A75] rounded-lg text-xs lg:text-sm py-2 px-10 border-2 border-black text-white"
-                  onClick={() => handleDoneClick()}
-                >
-                  {submitBtn ? "Submit" : "Next"}
-                </button>
-              </div>
-            </div>
+            <AreaSelector
+              setSelectedAreas={setSelectedAreas}
+              subCategories={subCategories}
+              selectedCategory={selectedCategory}
+              selectedSubCategory1={selectedSubCategory1}
+              selectedAreas={selectedAreas}
+              selectedProductView={selectedProductView}
+              setAllSubcategories={setAllSubcategories}
+              allAddons={allAddons}
+              setShowSelectArea={setShowSelectArea}
+              setShowBackground={setShowBackground}
+              setShowAddon={setShowAddon}
+              commonSubcategories={commonSubcategories}
+              image={image}
+              submitBtn={submitBtn}
+              isIncluded={isIncluded}
+              isExcluded={isExcluded}
+              displayedSubCategories={displayedSubCategories}
+              isItemSelected={isItemSelected}
+              handleDoneClick={handleDoneClick}
+            />
           )}
 
-          {/* Addon Selection Modal */}
           {showAddon && (
-            <div className="flex flex-col lg:flex-row justify-between gap-8">
-              {/* Left Side: Selected SubCategories */}
-              <div className="flex flex-col gap-2 w-full lg:w-[70%]">
-                <p className="text-center font-semibold text-sm lg:text-lg mb-4">
-                  Select Your Addon
-                </p>
-                <div className="grid grid-cols-3 gap-2">
-                  {allSubcategories.map((room, id) => (
-                    <button
-                      key={id}
-                      onClick={() => setSelectedRoom(room)}
-                      className={`px-4 py-2 border text-xs lg:text-base rounded-md transition ${
-                        selectedRoom === room
-                          ? "bg-gradient-to-r from-[#334A78] to-[#68B2DC] text-white"
-                          : "bg-gray-200"
-                      }`}
-                    >
-                      {room}
-                    </button>
-                  ))}
-                </div>
-                <div className="flex justify-evenly items-center mt-auto pb-4">
-                  <button
-                    className="bg-[#374A75] rounded-lg text-xs md:text-sm py-2 px-10 border-2 border-black text-white"
-                    onClick={() => setShowAddon(false)}
-                  >
-                    Back
-                  </button>
-                  <button
-                    className="bg-[#374A75] rounded-lg text-xs md:text-sm py-2 px-10 border-2 border-black text-white"
-                    onClick={() => handleAddonClick()}
-                  >
-                    Done
-                  </button>
-                </div>
-              </div>
-
-              {/* Right Side: Addons for Selected Room */}
-              <div className="flex flex-col gap-4 border-2 border-gray-300 p-4 w-full lg:w-[30%] lg:min-h-full shadow-lg overflow-y-auto max-h-[500px] gradient-scrollbar">
-                <Addon
-                  allAddons={allAddons}
-                  onAddonSelect={handleAddonSelect}
-                  selectedRoom={selectedRoom}
-                  selectedData={selectedData}
-                  selectedProductView={selectedProductView}
-                  selectedAddons={selectedAddons}
-                  setSelectedAddons={setSelectedAddons}
-                  selectedAddonsMap={selectedAddonsMap}
-                  setSelectedAddonsMap={setSelectedAddonsMap}
-                  setShowSelectArea={setShowSelectArea}
-                />
-              </div>
-            </div>
+            <AddonSelector
+              allSubcategories={allSubcategories}
+              selectedRoom={selectedRoom}
+              setSelectedRoom={setSelectedRoom}
+              setShowAddon={setShowAddon}
+              allAddons={allAddons}
+              selectedProductView={selectedProductView}
+              selectedAddons={selectedAddons}
+              setSelectedAddons={setSelectedAddons}
+              selectedAddonsMap={selectedAddonsMap}
+              setSelectedAddonsMap={setSelectedAddonsMap}
+              setShowSelectArea={setShowSelectArea}
+              setShowBackground={setShowBackground}
+              selectedCategory={selectedCategory}
+              selectedSubCategory={selectedSubCategory}
+              selectedSubCategory1={selectedSubCategory1}
+            />
           )}
         </div>
       </div>

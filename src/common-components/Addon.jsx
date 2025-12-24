@@ -1,9 +1,9 @@
 import { useNavigate } from "react-router-dom";
 import { baseImageUrl } from "../utils/HelperConstant";
-import { useApp } from "../Context/Context";
+import { useBoqApp } from "../Context/BoqContext";
 
 function Addon({ imagepath, product }) {
-  const { setSelectedProductView } = useApp();
+  const { setSelectedProductView } = useBoqApp();
   const navigate = useNavigate();
   return (
     <div className=" border border-[#ccc] p-2 font-Poppins">
@@ -24,9 +24,6 @@ function Addon({ imagepath, product }) {
         >
           View
         </button>
-        {/* <button className="absolute text-black border-[#212B36] transform -translate-y-2/3 translate-x-1/2  font-bold  uppercase border px-3 py-2">
-          ADD TO Cart
-        </button> */}
       </div>
     </div>
   );

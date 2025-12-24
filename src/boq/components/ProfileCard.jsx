@@ -7,15 +7,16 @@ import { motion } from "framer-motion";
 import { MdClose } from "react-icons/md";
 import { useLogout } from "../../utils/HelperFunction";
 import GobackLayoutWarning from "./GobackLayoutWarning";
+import { useBoqApp } from "../../Context/BoqContext";
 
 const profileVariants = {
-  hidden: { x: "100%", opacity: 0 }, // Start off-screen (right side)
-  visible: { x: 0, opacity: 1, transition: { duration: 0.5, ease: "easeOut" } }, // Slide in
+  hidden: { x: "100%", opacity: 0 },
+  visible: { x: 0, opacity: 1, transition: { duration: 0.5, ease: "easeOut" } },
   exit: {
     x: "100%",
     opacity: 0,
     transition: { duration: 0.4, ease: "easeInOut" },
-  }, // Slide out
+  },
 };
 
 function ProfileCard({
@@ -26,32 +27,26 @@ function ProfileCard({
   selectedPlan = null,
   setShowBoqPrompt,
   setIsProfileCard,
-  setIsDBPlan,
   setShowNewBoqPopup,
 }) {
   const logout = useLogout();
-  const { accountHolder, progress, setBOQTitle, setIsSaveBOQ } = useApp();
+  const { accountHolder } = useApp();
+  const { progress, setBOQTitle, setIsSaveBOQ } = useBoqApp();
   const profileRef = useRef(null);
   const [showBookAppointment, setShowBookAppointment] = useState(false);
-
-  // layout warning
   const [isLayoutWarning, setIslayoutWarning] = useState(false);
-
-  let isadmin = accountHolder.role === "user" ? true : false;
   const navigate = useNavigate();
 
-  // Close profile card when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (
         profileRef.current?.contains(event.target) ||
         iconRef.current?.contains(event.target)
       ) {
-        return; // If clicked inside, do nothing
+        return;
       } else {
         setIsOpen(() => false);
       }
-      // setIsOpen(false); // Otherwise, close it
     };
 
     if (isOpen) {
@@ -61,16 +56,7 @@ function ProfileCard({
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [isOpen]);
-
-  // useEffect(() => {
-  //   console.log("profile card", isOpen);
-  //   if (isOpen) {
-  //     document.body.style.overflow = "hidden"; // Disable scroll
-  //   } else {
-  //     document.body.style.overflow = "auto"; // Enable scroll
-  //   }
-  // }, [isOpen]);
+  }, [isOpen, setIsOpen, iconRef]);
 
   const handleAppointment = () => {
     if (progress >= 90) {
@@ -104,13 +90,10 @@ function ProfileCard({
         <div className="md:hidden flex justify-end items-center mb-4 absolute top-3 left-5">
           <MdClose
             className="text-xl cursor-pointer text-gray-600"
-            // onClick={onClose}
             onClick={() => setIsOpen(false)}
           />
         </div>
-        {/* Profile Card Content */}
         <div className="shadow-lg overflow-hidden w-full h-full bg-white">
-          {/* Profile Header */}
           <div className="h-1/3 flex flex-col">
             <div className="h-1/2 flex justify-center items-end">
               <div
@@ -136,7 +119,6 @@ function ProfileCard({
             </div>
           </div>
 
-          {/* Features Section */}
           <div className="font-semibold xl:text-lg capitalize leading-normal tracking-wide py-4 text-[#262626] border-y-2 border-[#ccc] flex flex-col gap-2">
             <div
               className="flex items-center mx-4 gap-3 hover:bg-[#E5F4FF] hover:cursor-pointer hover:rounded-lg pl-2 py-1.5"
@@ -154,7 +136,6 @@ function ProfileCard({
                 <div
                   className="flex items-center mx-4 gap-3 hover:bg-[#E5F4FF] hover:cursor-pointer hover:rounded-lg pl-2 py-1.5"
                   onClick={() => setIslayoutWarning(true)}
-                  // onClick={() => navigate("/Layout")}
                 >
                   <img
                     src="/images/profile-card/layout.png"
@@ -170,23 +151,10 @@ function ProfileCard({
                       setBOQTitle("");
                       setIsSaveBOQ(false);
                       navigate("/boq");
-                      // setSelectedPlan(null);
                       setIsOpen(false);
-                      // setProgress(0);
-                      // localStorage.removeItem("selectedData");
-                      // setBoqTotal(0);
-                      setIsDBPlan(false);
-                      // if (import.meta.env.MODE !== "development") {
                       setShowBoqPrompt(true);
                       setIsProfileCard(true);
                       setShowNewBoqPopup(true);
-                      // } else {
-                      //   setSelectedPlan(null);
-                      //   setProgress(0);
-                      //   localStorage.removeItem("selectedData");
-                      //   setSelectedData([]);
-                      //   setBoqTotal(0);
-                      // }
                     }}
                   >
                     <img
@@ -199,7 +167,7 @@ function ProfileCard({
                 )}
               </>
             )}
-            <div className="flex items-center mx-4 gap-3 hover:bg-[#E5F4FF] hover:cursor-pointer hover:rounded-lg pl-2 py-1.5">
+            <div className="flex items-center mx-4 gap-3 hover:bg-[#E5F4FF] hover:cursor-not-allowed hover:rounded-lg pl-2 py-1.5">
               <img
                 src="/images/profile-card/video.png"
                 alt="video"
@@ -209,7 +177,7 @@ function ProfileCard({
             </div>
 
             {accountHolder.role === "user" && (
-              <div
+              <button
                 onClick={handleAppointment}
                 className={`flex items-center mx-4 gap-3 pl-2 py-1.5 ${
                   progress < 75
@@ -222,12 +190,11 @@ function ProfileCard({
                   alt="Question"
                   className="w-6 h-6"
                 />
-                <button>Book Appointment</button>
-              </div>
+                <span>Book Appointment</span>
+              </button>
             )}
           </div>
 
-          {/* Help & Settings Section */}
           <div className="font-semibold xl:text-lg capitalize leading-normal tracking-wide py-4 text-[#262626] flex flex-col gap-2">
             <div
               className="flex items-center mx-4 gap-3 hover:bg-[#E5F4FF] hover:cursor-pointer hover:rounded-lg pl-2 py-1.5"
@@ -269,7 +236,6 @@ function ProfileCard({
           </div>
         </div>
 
-        {/* Book Appointment Modal */}
         {showBookAppointment && (
           <BookAppointment onClose={() => setShowBookAppointment(false)} />
         )}

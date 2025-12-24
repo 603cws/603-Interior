@@ -1,10 +1,9 @@
-import React, { useEffect } from "react";
-import { useApp } from "../../Context/Context";
+import { useEffect } from "react";
 import { baseImageUrl } from "../../utils/HelperConstant";
+import { useBoqApp } from "../../Context/BoqContext";
 
 function Addon({
   allAddons,
-  onAddonSelect,
   selectedRoom,
   selectedData,
   selectedProductView,
@@ -13,20 +12,15 @@ function Addon({
   selectedAddonsMap,
   setSelectedAddonsMap,
 }) {
-  const { selectedCategory, selectedSubCategory1 } = useApp();
-
-  // const baseImageUrl =
-  //   "https://bwxzfwsoxwtzhjbzbdzs.supabase.co/storage/v1/object/public/addon/";
+  const { selectedCategory, selectedSubCategory1 } = useBoqApp();
 
   useEffect(() => {
     if (!selectedProductView) return;
 
-    // **Find existing addons from selectedAddonsMap for the current groupKey**
     const currentGroupKey = `${selectedCategory.category}-${selectedRoom}-${selectedSubCategory1}-${selectedProductView.id}`;
     const existingAddons = selectedAddonsMap[currentGroupKey] || [];
 
-    setSelectedAddons(existingAddons); // ✅ Always update when selectedData changes
-
+    setSelectedAddons(existingAddons);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     selectedData,
@@ -34,7 +28,7 @@ function Addon({
     selectedRoom,
     selectedSubCategory1,
     selectedProductView,
-    selectedAddonsMap, // ✅ Use this to track previously saved selections correctly
+    selectedAddonsMap,
   ]);
 
   if (!allAddons || allAddons.length === 0) {
@@ -45,17 +39,15 @@ function Addon({
     );
   }
 
-  // Generate image URLs for addon variants
   const addonImagesArray = allAddons.flatMap((addon) =>
     Array.isArray(addon.addon_variants)
       ? addon.addon_variants.map((variant) => ({
           ...variant,
-          imageUrl: variant.image || `${baseImageUrl}${variant.title}.jpg`, // Fallback for missing image
+          imageUrl: variant.image || `${baseImageUrl}${variant.title}.jpg`,
         }))
       : []
   );
 
-  // Handle selection of addons
   const handleAddonSelection = (addon) => {
     const currentGroupKey = `${selectedCategory.category}-${selectedRoom}-${selectedSubCategory1}-${selectedProductView.id}`;
 
@@ -64,10 +56,8 @@ function Addon({
       let updatedAddons;
 
       if (existingAddons.some((a) => a.id === addon.id)) {
-        // Remove if already selected
         updatedAddons = existingAddons.filter((a) => a.id !== addon.id);
       } else {
-        // Add if not selected
         updatedAddons = [...existingAddons, addon];
       }
 
@@ -88,7 +78,6 @@ function Addon({
           key={variant.id}
           className="relative p-3 bg-gray-100 rounded-lg shadow-sm flex gap-4 items-center"
         >
-          {/* Checkbox for Selection */}
           <input
             type="checkbox"
             checked={selectedAddons.some((item) => item.id === variant.id)}
@@ -96,17 +85,15 @@ function Addon({
             className="w-5 h-5 cursor-pointer accent-black"
           />
 
-          {/* Addon Image */}
           <img
             className="w-16 h-16 object-cover rounded-md border border-gray-300"
             src={variant.imageUrl}
             alt={variant.title || "Addon Variant"}
             onError={(e) => {
-              e.target.src = "https://via.placeholder.com/150"; // Fallback image
+              e.target.src = "https://via.placeholder.com/150";
             }}
           />
 
-          {/* Addon Details */}
           <div className="flex-1">
             <h4 className="text-sm font-semibold">{variant.title}</h4>
             <p className="text-xs">

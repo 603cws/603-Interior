@@ -1,7 +1,7 @@
 @tailwind utilities;
 body {
-  margin: 0; /* Remove body margin that may cause scrollbars */
-  overflow-x: hidden; /* Prevent horizontal scrolling entirely */
+  margin: 0;
+  overflow-x: hidden;
 }
 
 html {
@@ -11,11 +11,8 @@ html {
 *,
 *:before,
 *:after {
-  box-sizing: inherit; /* Ensure consistent box-sizing across elements */
+  box-sizing: inherit;
 }
-/* .swiper {
-  overflow-y: auto !important;
-} */
 
 .swiper-pagination {
   position: relative;
@@ -34,14 +31,9 @@ html {
   background: gray;
   scale: 1.3;
 }
-/* .service-card:hover ~ .service-card p {
-  font-size: 10px;
-} */
-
-/*Login page css*/
 
 #checkbox:checked + label span::before {
-  content: "\2713"; /* Check mark */
+  content: "\2713";
   color: green;
   font-size: 16px;
   font-weight: bolder;
@@ -49,20 +41,6 @@ html {
   top: 50%;
   left: 5%;
   transform: translate(-50%, -50%);
-}
-.bring-your-brand {
-  position: relative;
-  overflow: visible;
-}
-
-.horizontal-scroll {
-  display: flex;
-  will-change: transform;
-}
-
-/* Hide scrollbar for a clean UI */
-.horizontal-scroll::-webkit-scrollbar {
-  display: none;
 }
 
 .slick-slide,
@@ -79,7 +57,6 @@ slick-current {
   width: 100% !important;
 }
 .slider-image {
-  /* width: 100%; */
   width: 135px !important;
   display: flex !important;
   justify-content: center !important;
@@ -104,19 +81,6 @@ slick-current {
   }
 }
 
-/* .apexcharts-datalabel {
-  font-size: 45%;
-  text-wrap: wrap;
-  font-size: 10px;
-} */
-/* .apexcharts-treemap-rect {
-  overflow: hidden !important;
-  max-width: 100%;
-}
-.apexcharts-data-labels {
-  overflow: hidden !important;
-  max-width: 100%;
-} */
 .apexcharts-datalabel {
   font-size: clamp(8px, 1vw, 10px);
   white-space: collapse !important;
@@ -126,240 +90,7 @@ slick-current {
   overflow: hidden;
 }
 
-.container-left {
-  width: 100%;
-  /* padding-left: 3rem !important 48px; */
-  padding-right: 0 !important;
-  margin-left: auto;
-  /* margin-right: auto; */
-}
-.container-right {
-  width: 100%;
-  padding-right: 3rem !important /* 48px */;
-  padding-left: 0 !important;
-  /* margin-left: auto; */
-  margin-right: auto;
-}
-@media (min-width: 640px) {
-  .container-left,
-  .container-right {
-    max-width: 640px;
-  }
-}
-@media (min-width: 768px) {
-  .container-left,
-  .container-right {
-    max-width: 768px;
-  }
-}
-@media (min-width: 1024px) {
-  .container-left,
-  .container-right {
-    max-width: 1024px;
-  }
-}
-@media (min-width: 1280px) {
-  .container-left,
-  .container-right {
-    max-width: 1280px;
-  }
-}
-@media (min-width: 1440px) {
-  .container-left,
-  .container-right {
-    max-width: 1440px;
-  }
-}
-@media (min-width: 1800px) {
-  .container-left,
-  .container-right {
-    max-width: 1800px;
-  }
-}
-@keyframes revealScale {
-  from {
-    clip-path: inset(0 50% 0 50%);
-    opacity: 0;
-  }
-  to {
-    clip-path: inset(0 0% 0 0%);
-    opacity: 1;
-  }
-}
-
-.image-reveal {
-  animation: revealScale linear both;
-  animation-timeline: view(); /* or scroll() depending on effect */
-  animation-range: 0% 60%;
-}
-
-.tab-image {
-  position: relative;
-  overflow: hidden;
-}
-
-.tab-image img {
-  mask-image: linear-gradient(
-    to right,
-    transparent 0%,
-    black 20%,
-    black 80%,
-    transparent 100%
-  );
-  mask-size: 200% 100%;
-  mask-position: left;
-  transition: mask-position 0.5s ease-out;
-}
-
-.tab-content-item.active .tab-image img {
-  mask-position: right;
-}
-
-@keyframes animate-stars {
-  0% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.2);
-  }
-  100% {
-    transform: scale(1);
-  }
-}
 @layer utilities {
-  .blink-on-hover {
-    animation: animate-stars 1.2s ease-in-out infinite;
-  }
-
-  .group-hover\:blink-on-hover {
-    animation: animate-stars 1.2s ease-in-out infinite;
-  }
-
-  .del-200 {
-    animation-delay: 0.2s;
-  }
-
-  .del-300 {
-    animation-delay: 0.3s;
-  }
-}
-@keyframes glow-top {
-  0% {
-    transform: translateX(-100%);
-    opacity: 0;
-  }
-  10% {
-    opacity: 1;
-  }
-  25% {
-    transform: translateX(100%);
-    opacity: 0;
-  }
-  100% {
-    opacity: 0;
-  }
-}
-
-@keyframes glow-right {
-  0%,
-  24% {
-    transform: translateY(-100%);
-    opacity: 0;
-  }
-  25% {
-    opacity: 0;
-  }
-  35% {
-    opacity: 1;
-  }
-  50% {
-    transform: translateY(100%);
-    opacity: 0;
-  }
-  100% {
-    opacity: 0;
-  }
-}
-
-@keyframes glow-bottom {
-  0%,
-  49% {
-    transform: translateX(100%);
-    opacity: 0;
-  }
-  50% {
-    opacity: 0;
-  }
-  60% {
-    opacity: 1;
-  }
-  75% {
-    transform: translateX(-100%);
-    opacity: 0;
-  }
-  100% {
-    opacity: 0;
-  }
-}
-
-@keyframes glow-left {
-  0%,
-  74% {
-    transform: translateY(100%);
-    opacity: 0;
-  }
-  75% {
-    opacity: 0;
-  }
-  85% {
-    opacity: 1;
-  }
-  100% {
-    transform: translateY(-100%);
-    opacity: 0;
-  }
-}
-@layer utilities {
-  .glow-line {
-    @apply absolute bg-gradient-to-r from-transparent via-[#ffffff] to-transparent pointer-events-none;
-    filter: drop-shadow(0 0 6px #ffffff);
-  }
-
-  .glow-top {
-    @apply h-[3px] w-1/2 top-0 left-0;
-    animation: glow-top 4s linear infinite;
-  }
-
-  .glow-right {
-    @apply w-[6px] h-3/5 top-0 right-0;
-    animation: glow-right 4s linear infinite;
-  }
-
-  .glow-bottom {
-    @apply h-[3px] w-1/2 bottom-0 right-0;
-    animation: glow-bottom 4s linear infinite;
-  }
-
-  .glow-left {
-    @apply w-[6px] h-3/5 bottom-0 left-0;
-    animation: glow-left 4s linear infinite;
-  }
-}
-.generateBoq.glow-on-hover:hover {
-  box-shadow: 0 0 100px 0 #9917ff, 0 0 0 3.48px rgba(255, 255, 255, 0.5);
-  transition: box-shadow 0.3s ease-in-out;
-}
-.generateBoq.glow-on-hover-boq:hover {
-  box-shadow: 0 0 100px 0 #85aed2, 0 0 0 1.48px rgba(255, 255, 255, 0.5);
-  transition: box-shadow 0.3s ease-in-out;
-}
-
-@layer utilities {
-  /* .gradient-scrollbar {
-    scrollbar-width: thin;
-    scrollbar-color: #23445b #e5e7eb;
-  } */
-
   .gradient-scrollbar::-webkit-scrollbar {
     width: 6px;
     height: 8px;
@@ -445,12 +176,4 @@ slick-current {
 
 .group:hover .roller {
   animation: paintPath 1.5s ease-in-out infinite forwards;
-}
-.react-calendar {
-  width: 95%;
-  box-shadow: none;
-  border: 1px solid #cccccc;
-  padding: 10px;
-  margin: 0 12px;
-  border-radius: 8px;
 }

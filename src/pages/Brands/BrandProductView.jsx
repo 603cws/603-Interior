@@ -1,7 +1,6 @@
 import { MdOutlineKeyboardArrowRight } from "react-icons/md";
-import LandingNavbar from "../../common-components/LandingNavbar";
+import LandingNavbar from "../../landing/components/LandingNavbar";
 import { FaStarOfLife } from "react-icons/fa";
-import { GoHeart } from "react-icons/go";
 import Footer from "../../common-components/Footer";
 
 const additionalImagesArray = [
@@ -134,9 +133,9 @@ function BrandProductView() {
             </h2>
             <p className="text-sm leading-[18px] mb-8">
               Experience the epitome of creativity and grace with the Celestial
-              collection's Archer range of the . Archer's solid texture and the
-              splash of blue is an ideal combinations to make your house look
-              stunning.
+              collection&apos;s Archer range of the. Archer&apos;s solid texture
+              and the splash of blue is an ideal combinations to make your house
+              look stunning.
             </p>
 
             <button className="border-[#000] border py-2 text-[10.5px] mb-5">
@@ -153,7 +152,7 @@ function BrandProductView() {
 
             <div className="flex flex-wrap  gap-6 mb-3">
               {Array.from({ length: 12 }, (_, i) => (
-                <div className="max-w-xs">
+                <div key={i} className="max-w-xs">
                   <img
                     src="/images/Edencolor.png"
                     alt="eden color"
@@ -277,51 +276,14 @@ function Specifications({ product }) {
 }
 
 function Card({ product }) {
-  // function Card({ product, handleCompareToggle, compare }) {
-  //   const { isAuthenticated, localcartItems, cartItems, wishlistItems } =
-  //     useApp();
-  //   const isWishlisted = wishlistItems?.some(
-  //     (item) => item.productId?.id === product.id
-  //   );
-
-  //   const naviagte = useNavigate();
-
-  //   const { handleAddtoWishlist, handleAddToCart } = useHandleAddToCart();
-
-  //   const [iscarted, setIsCarted] = useState(false);
-
-  //   useEffect(() => {
-  //     if (!product?.id) return;
-
-  //     if (isAuthenticated) {
-  //       const check = cartItems?.some(
-  //         (item) => item.productId?.id === product.id
-  //       );
-  //       setIsCarted(check);
-  //     } else {
-  //       const check = localcartItems?.some(
-  //         (item) => item.productId?.id === product.id
-  //       );
-  //       // console.log("check", check);
-
-  //       setIsCarted(check);
-  //       // console.log("iscarted", iscarted);
-  //     }
-  //   }, [isAuthenticated, cartItems, localcartItems, product?.id]);
-
   return (
     <div className="font-TimesNewRoman max-w-xs lg:w-[245px] lg:h-[310px] border border-[#ccc]">
-      {/* <div className="font-Poppins max-w-xs lg:w-[245px] lg:h-[340px] border border-[#ccc]"> */}
-      <div
-        // onClick={() => naviagte(`/productview/${product.id}`)}
-        className="flex justify-center items-center p-2 cursor-pointer"
-      >
+      <div className="flex justify-center items-center p-2 cursor-pointer">
         <img
           src={product.image}
           alt="cabin chair"
           className="h-40 lg:h-52 w-full"
         />
-        {/* <img src={product.image } alt="chair" className="h-52 object-contain" /> */}
       </div>
       <div className="bg-[#fff] p-2">
         <div className="flex ">
@@ -330,17 +292,7 @@ function Card({ product }) {
               <h4 className="font-medium text-sm leading-[22.4px] capitalize">
                 {product?.title}
               </h4>
-              <div
-                // onClick={() => handleAddtoWishlist(product)}
-                className=" text-[#ccc] hover:text-red-950 cursor-pointer lg:hidden"
-              >
-                {/* {isWishlisted ? (
-                <AiFillHeart size={26} color="red" />
-              ) : (
-                <GoHeart size={25} />
-              )} */}
-                {/* <GoHeart size={22} /> */}
-              </div>
+              <div className=" text-[#ccc] hover:text-red-950 cursor-pointer lg:hidden"></div>
             </div>
             <div className="flex items-center gap-2">
               <p className=" ">Rs {"3,0000"}</p>
@@ -350,25 +302,7 @@ function Card({ product }) {
               <p className="text-[#C20000]">sale</p>
             </div>
           </div>
-          {/* <div
-            // onClick={() => handleAddtoWishlist(product)}
-            className=" text-[#ccc] hover:text-red-950 cursor-pointer hidden lg:block"
-          >
-            {isWishlisted ? (
-              <AiFillHeart size={26} color="red" />
-            ) : (
-              <GoHeart size={25} />
-            )}
-            <GoHeart size={20} />
-          </div> */}
         </div>
-        {/* <button
-            onClick={() => handleAddToCart(product)}
-          className="text-[#000] uppercase bg-[#FFFFFF] text-xs border border-[#ccc] px-2  py-2 rounded-sm "
-        >
-          {iscarted ? "added to cart" : "add to cart"}
-          add to cart
-        </button> */}
       </div>
     </div>
   );

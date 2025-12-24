@@ -11,52 +11,41 @@ import Calendar from "react-calendar";
 import { useApp } from "../../Context/Context";
 import AppointmentConfirmation from "./AppointmentConfirmation";
 import { IoMdClose } from "react-icons/io";
+
+const times = [
+  "09:00 am",
+  "10:00 am",
+  "11:00 am",
+  "12:00 pm",
+  "01:00 pm",
+  "02:00 pm",
+  "03:00 pm",
+  "04:00 pm",
+  "05:00 pm",
+  "06:00 pm",
+  "07:00 pm",
+  "08:00 pm",
+];
+
+const clienttemplateID = import.meta.env.VITE_CLIENT_TEMPLATE_ID;
+const adminTemplateID = import.meta.env.VITE_ADMIN_TEMPLATE_ID;
+const serviceid = import.meta.env.VITE_BOOKING_SERVICE_ID;
+const your_public_key = import.meta.env.VITE_BOOKING_EMAIL_PUBLIC;
 function BookAppointment({ onClose, isdashboardbooking = false }) {
   const [value, onChange] = useState(new Date());
   const [selectedTIme, setSelectedTime] = useState();
   const [isSubmitting, setisSubmitting] = useState(false);
   const [isappointmentbooked, setIsappointmentbooked] = useState(false);
-
   const [todayBookedTimmings, setTodayBookedTimmings] = useState([]);
 
   const { accountHolder } = useApp();
-
-  // template id
-  //   const templateID = "template_zovcusr";
-  //   const serviceid = "service_ae0sgim";
-  //   const your_public_key = "dR0YyJ3Be6H6xVsT7";
-
-  const clienttemplateID = "template_lcl6e5q";
-  const adminTemplateID = "template_biqmorg";
-  const serviceid = "service_jyxdbel";
-  const your_public_key = "jKWDQroc1z20rCjSB";
-
-  console.log(value);
-
-  const times = [
-    "09:00 am",
-    "10:00 am",
-    "11:00 am",
-    "12:00 pm",
-    "01:00 pm",
-    "02:00 pm",
-    "03:00 pm",
-    "04:00 pm",
-    "05:00 pm",
-    "06:00 pm",
-    "07:00 pm",
-    "08:00 pm",
-  ];
 
   const filteredTimings = times?.filter(
     (time) =>
       !todayBookedTimmings?.some((booked) => booked?.start_time === time)
   );
 
-  console.log("filtered timings", filteredTimings);
-
   const handletime = (time) => {
-    console.log(time);
     setSelectedTime(time);
   };
 
@@ -67,16 +56,14 @@ function BookAppointment({ onClose, isdashboardbooking = false }) {
       : "09:00 pm";
   };
 
-  const handlesubmi = async () => {
+  const handlesubmit = async () => {
     const date = String(value.getDate()).padStart(2, "0");
     const month = String(value.getMonth() + 1).padStart(2, "0");
     const year = value.getFullYear();
     const formattedDate = `${date}/${month}/${year}`;
 
     const newDate = `${year}/${month}/${date}`;
-    console.log(formattedDate, selectedTIme);
     setisSubmitting(true);
-    console.log(value.toLocaleDateString("en-US", { weekday: "short" }));
 
     const weekday = value.toLocaleDateString("en-US", { weekday: "short" });
 
@@ -109,14 +96,10 @@ function BookAppointment({ onClose, isdashboardbooking = false }) {
             user_phoneno: accountHolder.phone,
           },
         };
-        const user = await axios.post(
-          "https://api.emailjs.com/api/v1.0/email/send",
-          data,
-          {
-            headers: { "Content-Type": "application/json" },
-          }
-        );
-        const admin = await axios.post(
+        await axios.post("https://api.emailjs.com/api/v1.0/email/send", data, {
+          headers: { "Content-Type": "application/json" },
+        });
+        await axios.post(
           "https://api.emailjs.com/api/v1.0/email/send",
           Admindata,
           {
@@ -132,7 +115,7 @@ function BookAppointment({ onClose, isdashboardbooking = false }) {
         toast.error("please select the time");
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
     } finally {
       setisSubmitting(false);
     }
@@ -140,8 +123,6 @@ function BookAppointment({ onClose, isdashboardbooking = false }) {
 
   async function CheckThebookingOnSameDateAndGetTimes(value) {
     try {
-      // const date = value.getDate();
-      // const month = value.getMonth() + 1;
       const date = String(value.getDate()).padStart(2, "0");
       const month = String(value.getMonth() + 1).padStart(2, "0");
       const year = value.getFullYear();
@@ -155,10 +136,8 @@ function BookAppointment({ onClose, isdashboardbooking = false }) {
       if (error) throw new Error("Something went wrong");
 
       setTodayBookedTimmings(data);
-
-      console.log("data of today", data);
     } catch (error) {
-      console.log("error", error);
+      console.error("error", error);
     }
   }
 
@@ -166,15 +145,11 @@ function BookAppointment({ onClose, isdashboardbooking = false }) {
     CheckThebookingOnSameDateAndGetTimes(value);
   }, [value]);
 
-  console.log("today booking timing", todayBookedTimmings);
-
   const saveBookingDatainDB = async (date, weekday, endtime, newDate) => {
-    //
     try {
       const { error } = await supabase.from("appointments").insert([
-        //data
         {
-          user_id: accountHolder.userId, // Assuming accountHolder contains user ID
+          user_id: accountHolder.userId,
           date,
           date_new: newDate,
           time_slot: JSON.stringify({
@@ -186,21 +161,15 @@ function BookAppointment({ onClose, isdashboardbooking = false }) {
       ]);
 
       if (error) {
-        console.error("Error inserting data:", error.message);
-        toast.error("Failed to book appointment");
-        return;
+        throw error;
       }
 
       toast.success("Appointment booked successfully");
-    } catch (error) {}
+    } catch (error) {
+      console.error("Error inserting data:", error.message);
+      toast.error("Failed to book appointment");
+    }
   };
-
-  // useEffect(() => {
-  //   if (isappointmentbooked) {
-  //     const timer = setTimeout(() => setIsappointmentbooked(false), 3000); // Close modal after duration
-  //     return () => clearTimeout(timer);
-  //   }
-  // }, [isappointmentbooked]);
 
   return (
     <div
@@ -240,17 +209,14 @@ function BookAppointment({ onClose, isdashboardbooking = false }) {
               <h3 className="text-[#374A75] text-lg md:text-2xl font-bold text-center my-2">
                 Book an Appointment
               </h3>
-              {/* div for calender and times  */}
               <div className=" flex flex-col md:flex-row justify-around items-stretch gap-4 xl:gap-6 mx-3 md:mx-0">
-                {/* calender */}
                 <div className="flex-1">
                   <h3 className="text-sm text-[#111] xl:mb-2 font-medium ">
                     Schedule date*
                   </h3>
                   <div className="flex gap-2 items-center rounded-lg bg-[#FAFAFA] border-[#757575] border px-2 mb-3">
                     <div>
-                      {" "}
-                      <SlCalender />{" "}
+                      <SlCalender />
                     </div>
                     <h2 className="text-[#C4C4C4]">Select the date</h2>
                   </div>
@@ -262,11 +228,10 @@ function BookAppointment({ onClose, isdashboardbooking = false }) {
                       tileDisabled={({ date }) =>
                         date < new Date().setHours(0, 0, 0, 0) ||
                         date.getDay() === 0
-                      } // Disable past dates and Sundays
+                      }
                     />
                   </div>
                 </div>
-                {/* times */}
                 <div className="flex-1">
                   <h4 className="text-[#111] font-medium text-sm md:text-base mb-3">
                     select time*
@@ -278,18 +243,16 @@ function BookAppointment({ onClose, isdashboardbooking = false }) {
                         : ""
                     }`}
                   >
-                    {filteredTimings.length > 0 ? (
-                      filteredTimings?.map((time, index) => {
+                    {filteredTimings?.length > 0 ? (
+                      filteredTimings?.map((time) => {
                         const now = new Date();
 
-                        // Parse selected date from calendar
-                        const selectedDate = new Date(value); // `value` is from your calendar
+                        const selectedDate = new Date(value);
                         const isToday =
                           selectedDate.getDate() === now.getDate() &&
                           selectedDate.getMonth() === now.getMonth() &&
                           selectedDate.getFullYear() === now.getFullYear();
 
-                        // Parse the time string into a Date object
                         const [hourMin, meridian] = time.split(" ");
                         let [hour, minute] = hourMin.split(":").map(Number);
 
@@ -298,16 +261,15 @@ function BookAppointment({ onClose, isdashboardbooking = false }) {
                         if (meridian.toLowerCase() === "am" && hour === 12)
                           hour = 0;
 
-                        const slotTime = new Date(selectedDate); // base on selected day
+                        const slotTime = new Date(selectedDate);
                         slotTime.setHours(hour, minute, 0, 0);
 
-                        // Only disable if today AND time is in the past
                         const isPast = isToday && slotTime < now;
                         return (
                           <button
                             disabled={isPast}
                             key={time}
-                            onClick={(e) => handletime(time)}
+                            onClick={() => handletime(time)}
                             className={`  border  px-2 py-1 md:px-4 md:py-3 rounded-lg text-xs  border-[#757575]  ${
                               isPast
                                 ? "bg-gray-200 text-gray-500 cursor-not-allowed"
@@ -334,10 +296,9 @@ function BookAppointment({ onClose, isdashboardbooking = false }) {
                   </div>
                 </div>
               </div>
-              {/* button for submit */}
               <div className=" flex justify-center items-center my-2 md:my-4">
                 <button
-                  onClick={handlesubmi}
+                  onClick={handlesubmit}
                   className="px-2 py-1 md:px-5 md:py-3 bg-[#374A75] text-[#fafafa] rounded-lg"
                   disabled={isSubmitting}
                 >
@@ -371,15 +332,6 @@ function BookAppointment({ onClose, isdashboardbooking = false }) {
               </div>
             </div>
           ) : (
-            // <div className="max-w-3xl p-4 my-5 flex justify-center items-center ">
-            //   <div className="w-[280px] h-[250px] m-20 ">
-            //     <img
-            //       src="/images/Appointment.gif"
-            //       alt="bookedappointment gif"
-            //       className="h-full w-full"
-            //     />
-            //   </div>
-            // </div>
             <AppointmentConfirmation
               onClose={() => setIsappointmentbooked(false)}
               time={`${value.toDateString()}-${selectedTIme}`}

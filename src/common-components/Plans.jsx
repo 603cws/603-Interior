@@ -1,9 +1,17 @@
 import { useState, useEffect } from "react";
-import { useApp } from "../Context/Context";
 import { motion } from "framer-motion";
 import { HiCheckBadge } from "react-icons/hi2";
 import toast from "react-hot-toast";
 import NewBoq from "../boq/components/NewBoq";
+import {
+  createDraftBOQ,
+  handleLoadBOQ,
+  multiplyFirstTwoFlexible,
+  normalizeKey,
+} from "../boq/utils/BoqUtils";
+import { numOfCoats } from "../constants/constant";
+import { calculateTotalPrice } from "../boq/utils/productUtils";
+import { useBoqApp } from "../Context/BoqContext";
 
 const plansData = [
   {
@@ -71,32 +79,258 @@ function getGridTemplateColumns(hoveredId) {
     case 3:
       return "1fr 1fr 1fr 4fr";
     default:
-      return "2.5fr 1fr 1fr 1fr"; // Fallback
+      return "2.5fr 1fr 1fr 1fr";
   }
 }
 
-function Plans({
-  autoSelectPlanProducts,
-  onConfirm,
-  showNewBoqPopup,
-  setShowNewBoqPopup,
-}) {
-  const { setSelectedPlan, productData, categories, BOQTitle, setIsSaveBOQ } =
-    useApp();
+function Plans({ showNewBoqPopup, setShowNewBoqPopup }) {
+  const {
+    setSelectedPlan,
+    productData,
+    categories,
+    BOQTitle,
+    setIsSaveBOQ,
+    setBOQTitle,
+    setBOQID,
+    setSelectedData,
+    setProgress,
+    userId,
+    currentLayoutID,
+    setUserId,
+    setTotalArea,
+    setBoqTotal,
+    areasData,
+    quantityData,
+    allProductQuantities,
+    formulaMap,
+    seatCountData,
+    userResponses,
+    setSelectedCategory,
+    setSelectedSubCategory,
+  } = useBoqApp();
 
-  // Hovered plan state. 0 = first plan expanded by default.
   const [hoveredPlan, setHoveredPlan] = useState(1);
   const [imageLoaded, setImageLoaded] = useState(false);
 
   useEffect(() => {
     setIsSaveBOQ(true);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const handlePlanSelect = async (planKey) => {
+  const handlePlanSelect = (planKey) => {
+    setSelectedCategory(categories[0]);
+    setSelectedSubCategory(categories[0]?.subcategories[0]);
     setSelectedPlan(planKey);
     sessionStorage.setItem("selectedPlan", planKey);
     toast.success(`${planKey} plan selected!`);
-    await autoSelectPlanProducts(productData, categories, planKey);
+    autoSelectPlanProducts(productData, categories, planKey);
+  };
+
+  const handleConfirm = async (nameOrId, boqMode) => {
+    if (boqMode === "new") {
+      const draft = await createDraftBOQ(nameOrId, userId, currentLayoutID);
+      if (!draft) return;
+
+      setBOQTitle(draft.boqTitle);
+      setBOQID(draft.id);
+      setSelectedData([]);
+      setProgress(0);
+      setSelectedPlan(null);
+      localStorage.removeItem("selectedData");
+      sessionStorage.removeItem("selectedPlan");
+    } else if (boqMode === "existing") {
+      handleLoadBOQ(
+        nameOrId,
+        setSelectedData,
+        setUserId,
+        setTotalArea,
+        setSelectedPlan,
+        setBOQTitle,
+        setBoqTotal,
+        setBOQID
+      );
+    }
+    setShowNewBoqPopup(false);
+  };
+
+  const autoSelectPlanProducts = (products, categories, selectedPlan) => {
+    if (!selectedPlan || !products.length || !categories.length) return;
+
+    const selectedProducts = [];
+    const selectedGroups = new Set();
+    const productMap = new Map();
+
+    categories.forEach((cat) => {
+      const filterProducts = products.filter(
+        (product) => product.category === cat.category
+      );
+
+      filterProducts.forEach((product) => {
+        const { category, subcategory, subcategory1, product_variants } =
+          product;
+
+        if (
+          !category ||
+          !subcategory ||
+          !subcategory1 ||
+          !product_variants?.length
+        )
+          return;
+
+        const subcategories = subcategory.split(",").map((sub) => sub.trim());
+
+        subcategories.forEach((subCat) => {
+          if (category === "HVAC" && subCat !== "Centralized") return;
+
+          if (!cat.subcategories.includes(subCat)) return;
+          const matchingVariant = product_variants.find(
+            (variant) =>
+              variant.segment?.toLowerCase() === selectedPlan?.toLowerCase() &&
+              variant.default === variant.segment // Ensure it is marked as default
+          );
+
+          if (matchingVariant) {
+            // ✅ Special case: Furniture Chairs in Md/Manager Cabin
+            if (
+              category === "Furniture" &&
+              subcategory1 === "Chair" &&
+              (subCat === "Md Cabin" || subCat === "Manager Cabin")
+            ) {
+              const mainGroupKey = `${category}-${subCat} Main-${subcategory1}-${matchingVariant.id}`;
+              productMap.set(mainGroupKey, {
+                product,
+                variant: matchingVariant,
+                subcategory: `${subCat} Main`,
+              });
+
+              const visitorGroupKey = `${category}-${subCat} Visitor-${subcategory1}-${matchingVariant.id}`;
+              productMap.set(visitorGroupKey, {
+                product,
+                variant: matchingVariant,
+                subcategory: `${subCat} Visitor`,
+              });
+            } else {
+              const groupKey = `${category}-${subCat}-${subcategory1}-${matchingVariant.id}`;
+              productMap.set(groupKey, {
+                product,
+                variant: matchingVariant,
+                subcategory: subCat,
+              });
+            }
+          }
+        });
+      });
+
+      productMap.forEach(({ product, variant, subcategory }, groupKey) => {
+        if (!selectedGroups.has(groupKey)) {
+          const { category, subcategory1 } = product;
+
+          let calQty = 0;
+
+          if (
+            (product.category === "Civil / Plumbing" &&
+              subcategory1 === "Tile") ||
+            (product.category === "Flooring" && subcategory1 !== "Epoxy")
+          ) {
+            calQty = Math.ceil(
+              +areasData[0][normalizeKey(subcategory)] /
+                multiplyFirstTwoFlexible(variant?.dimensions)
+            );
+          } else {
+            calQty = allProductQuantities[subcategory]?.[subcategory1];
+          }
+
+          const productData = {
+            groupKey,
+            id: variant.id,
+            category,
+            subcategory,
+            subcategory1,
+            product_variant: {
+              variant_title: variant.title || product.title || "No Title",
+              variant_image: variant.image || null,
+              variant_details: variant.details || "No Details",
+              variant_price: variant.price || 0,
+              variant_id: variant.id,
+              variant_segment: variant.segment,
+              default: variant.default,
+              additional_images: JSON.parse(variant.additional_images || "[]"),
+              variant_info: variant.information,
+              variant_additional_info: variant.additonalinformation,
+            },
+            finalPrice:
+              category === "Flooring" ||
+              category === "HVAC" ||
+              category === "Lighting" ||
+              (category === "Civil / Plumbing" && subcategory1 === "Tile") ||
+              category === "Partitions / Ceilings" ||
+              category === "Paint"
+                ? calculateTotalPrice(
+                    category,
+                    subcategory,
+                    subcategory1,
+                    null,
+                    null,
+                    null,
+                    quantityData,
+                    areasData,
+                    userResponses,
+                    variant,
+                    formulaMap,
+                    seatCountData
+                  )
+                : // calculateTotalPriceHelper(
+                //     quantityData[0],
+                //     areasData[0],
+                //     category,
+                //     subcategory,
+                //     subcategory1,
+                //     userResponses.height,
+                //     variant.dimensions,
+                //     seatCountData,
+                //     variant.price,
+                //     formulaMap
+                //   )
+                category === "Furniture" &&
+                  subcategory1 === "Chair" &&
+                  (subcategory === "Md Cabin Main" ||
+                    subcategory === "Md Cabin Visitor")
+                ? variant.price *
+                  (allProductQuantities[subcategory]?.[subcategory1] ?? 0) *
+                  (quantityData[0]["md"] ?? 1)
+                : category === "Furniture" &&
+                  subcategory1 === "Chair" &&
+                  (subcategory === "Manager Cabin Main" ||
+                    subcategory === "Manager Cabin Visitor")
+                ? variant.price *
+                  (allProductQuantities[subcategory]?.[subcategory1] ?? 0) *
+                  (quantityData[0]["manager"] ?? 1)
+                : variant.price *
+                  (allProductQuantities[subcategory]?.[subcategory1] ?? 0),
+            quantity:
+              category === "Paint"
+                ? Math.ceil(+areasData[0][normalizeKey(subcategory)] / 120) *
+                  numOfCoats
+                : product.category === "Furniture" &&
+                  subcategory1 === "Chair" &&
+                  (subcategory === "Md Cabin Main" ||
+                    subcategory === "Md Cabin Visitor")
+                ? calQty * (quantityData[0]["md"] ?? 1)
+                : product.category === "Furniture" &&
+                  subcategory1 === "Chair" &&
+                  (subcategory === "Manager Cabin Main" ||
+                    subcategory === "Manager Cabin Visitor")
+                ? calQty * (quantityData[0]["manager"] ?? 1)
+                : calQty,
+          };
+
+          selectedProducts.push(productData);
+          selectedGroups.add(groupKey);
+        }
+      });
+    });
+
+    setSelectedData(selectedProducts);
   };
 
   return (
@@ -142,11 +376,6 @@ function Plans({
                         <ul className="lg:space-y-1 xl:space-y-2 text-sm">
                           {plan.bullets.map((bullet, i) => (
                             <li key={i} className="flex items-center xl:gap-2 ">
-                              {/* <img
-                                src="/images/Check_ring.png"
-                                alt="check"
-                                className="mt-1"
-                              /> */}
                               <div className="bg-white rounded-full h-3 w-3 flex justify-center items-center relative mr-2">
                                 <div className="absolute flex justify-center items-center">
                                   <HiCheckBadge color="#75A2BE" size={25} />
@@ -160,7 +389,6 @@ function Plans({
 
                       <div className="text-left mt-4">
                         <button
-                          // onClick={() => setSelectedPlan(plan.planKey)}
                           onClick={() => handlePlanSelect(plan.planKey)}
                           className="bg-[#75A2BE] text-[#fff] px-4 py-2 lg:mb-3 mb-1 rounded-md font-semibold border border-[#000] hover:bg-gray-200 transition hover:text-[#374A75]"
                         >
@@ -241,11 +469,6 @@ function Plans({
                             key={i}
                             className="flex items-center gap-4 relative"
                           >
-                            {/* <img
-                              src="/images/Check_ring.png"
-                              alt="check"
-                              className="mt-1"
-                            /> */}
                             <div className="bg-white rounded-full h-3 w-3 flex justify-center items-center relative">
                               <div className="absolute flex justify-center items-center">
                                 <HiCheckBadge color="#75A2BE" size={25} />
@@ -259,7 +482,6 @@ function Plans({
 
                     <div className="text-left mt-4 relative">
                       <button
-                        // onClick={() => setSelectedPlan(plan.planKey)}
                         onClick={() => handlePlanSelect(plan.planKey)}
                         className="bg-[#75A2BE] text-[#fff] px-4 py-2 rounded-md font-semibold border border-[#000] hover:bg-gray-200 transition"
                       >
@@ -275,7 +497,7 @@ function Plans({
       </div>
       {showNewBoqPopup && !BOQTitle && (
         <NewBoq
-          onConfirm={onConfirm}
+          onConfirm={handleConfirm}
           onCancel={() => setShowNewBoqPopup(false)}
         />
       )}

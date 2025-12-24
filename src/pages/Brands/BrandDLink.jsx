@@ -1,10 +1,9 @@
-import React from "react";
-import Header from "../Ecommerce/Header";
+import LandingNavbar from "../../landing/components/LandingNavbar";
 
 function BrandDLink() {
   return (
     <>
-      <Header />
+      <LandingNavbar />
       <section className=" bg-gradient-to-r from-[#08022E] to-[#19214F] font-Poppins text-[#fff] my-5 ">
         <div className="px-4 lg:container lg:flex bg-[url('/images/brands/eclips-bg.png')] bg-right bg-no-repeat bg-contain py-10 lg:py-20">
           <div className="flex-1 flex justify-end">

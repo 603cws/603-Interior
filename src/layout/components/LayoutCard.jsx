@@ -1,6 +1,6 @@
 import AreaCounter from "./AreaCounter";
 import Tooltip from "./ToolTip";
-import { useApp } from "../../Context/Context";
+import { useBoqApp } from "../../Context/BoqContext";
 
 const LayoutCard = ({
   name,
@@ -18,21 +18,19 @@ const LayoutCard = ({
   title,
   showInputField, // prop to conditionally render the input field
   inputFieldProps, // Props specific to the input field
-  showAreaCounter, // Boolean to conditionally render AreaCounter   //undefined rohit
+  showAreaCounter, // Boolean to conditionally render AreaCounter
   areaCounterProps, // Props specific to AreaCounter
 }) => {
-  const { totalArea } = useApp();
+  const { totalArea } = useBoqApp();
 
   return (
     <div className="workspacedescription flex flex-col w-40 md:w-[230px] lg:w-[280px] items-center border border-solid bg-[#fff] pb-2 mt-2 mb-3 relative">
-      {/* Image */}
       <div className="relative group w-full h-32 md:h-48 overflow-hidden">
         <img
           src={image}
           alt={title}
           className="RoomImage object-contain w-full h-full cursor-pointer"
         />
-        {/* Tooltip-like description */}
         <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 translate-y-4 group-hover:translate-y-0 bg-white bg-opacity-70 text-black px-4 py-2 text-xs sm:text-sm rounded-md opacity-0 group-hover:opacity-100 transition-all duration-400 shadow-lg pointer-events-none w-full">
           <p className="">{description}</p>
           {tooltipText && (

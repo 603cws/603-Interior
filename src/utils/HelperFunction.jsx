@@ -3,16 +3,17 @@ import { useApp } from "../Context/Context";
 import { supabase } from "../services/supabase";
 import { AddToCartToast, RemoveFromCartToast } from "./AddToCartToast";
 import { useNavigate } from "react-router-dom";
+import { useEcomApp } from "../Context/EcomContext";
+import { useBoqApp } from "../Context/BoqContext";
 
 export const useHandleAddToCart = () => {
+  const { isAuthenticated } = useApp();
   const {
-    isAuthenticated,
-    setLocalCartItems,
     getCartItems,
-    accountHolder,
-    setShowLoginPopup,
+    setLocalCartItems,
     setPendingProduct,
-  } = useApp();
+    setShowLoginPopup,
+  } = useEcomApp();
 
   const navigate = useNavigate();
   const handleAddToCart = async (product, iscarted, productQuantity = 1) => {
@@ -38,17 +39,10 @@ export const useHandleAddToCart = () => {
       });
 
       AddToCartToast(product);
-
-      // toast.dark(`${product.title} added to cart succesfully`, {
-      //   position: "bottom-right",
-      //   transition: Slide, // Change this to Zoom, Bounce, Flip for different effects
-      // });
     } else {
       try {
-        console.log("acc", accountHolder);
-
         const {
-          data: { user }, //error: authError,
+          data: { user },
         } = await supabase.auth.getUser();
 
         const { data: cartdata } = await supabase
@@ -57,18 +51,7 @@ export const useHandleAddToCart = () => {
           .eq("userId", user.id)
           .eq("type", "cart");
 
-        // check if the product is already in the db with this user
-
-        console.log("cartdata", cartdata);
-
         const cartproductid = cartdata?.map((item) => item.productId.id);
-
-        console.log(cartproductid, "cardproductids");
-
-        // check if the product is already in the db with this user
-        // const cartproductid = cartItems.map((item) => item.productId.id);
-
-        // console.log(cartproductid, "cardproductids");
 
         if (cartproductid.includes(product.id)) {
           return;
@@ -83,11 +66,6 @@ export const useHandleAddToCart = () => {
           },
         ]);
         if (error) throw new Error(error.message);
-
-        // toast.dark(`${product.title} added to cart succesfully`, {
-        //   position: "bottom-right",
-        //   transition: Slide, // Change this to Zoom, Bounce, Flip for different effects
-        // });
 
         AddToCartToast(product);
       } catch (error) {
@@ -120,16 +98,14 @@ export const useHandleAddToCart = () => {
         );
 
         if (existingItem) {
-          // ✅ remove from wishlist if already exists
           const { error } = await supabase
             .from("userProductCollection")
             .delete()
             .eq("id", existingItem.id);
 
           if (error) throw new Error(error.message);
-          RemoveFromCartToast(product, "wishlist"); // optional toast
+          RemoveFromCartToast(product, "wishlist");
         } else {
-          // ✅ add to wishlist
           const { error } = await supabase
             .from("userProductCollection")
             .insert([
@@ -161,24 +137,23 @@ export const useHandleAddToCart = () => {
 
 export const useLogout = () => {
   const navigate = useNavigate();
+  const { setAccountHolder, setIsAuthLoading, setIsAuthenticated } = useApp();
+
   const {
-    setAccountHolder,
-    setIsAuthLoading,
-    setIsAuthenticated,
     setTotalArea,
     setSelectedData,
     setSelectedPlan,
     setBOQTitle,
     setBOQID,
     setProgress,
-  } = useApp();
+  } = useBoqApp();
 
   const handleLogout = async () => {
     try {
       setIsAuthLoading(true);
       const { error } = await supabase.auth.signOut();
       if (error) {
-        console.log("Error signing out:", error.message);
+        console.error("Error signing out:", error.message);
       } else {
         toast.success("User signed out successfully");
         setAccountHolder({
@@ -222,7 +197,8 @@ export const useResetBOQ = () => {
     setBOQTitle,
     setBOQID,
     setProgress,
-  } = useApp();
+  } = useBoqApp();
+
   const resetBOQ = () => {
     localStorage.removeItem("BOQID");
     localStorage.removeItem("selectedPlan");

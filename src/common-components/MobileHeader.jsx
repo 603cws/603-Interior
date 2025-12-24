@@ -3,14 +3,16 @@ import { FaRegUser } from "react-icons/fa6";
 import { MdOutlineKeyboardArrowLeft } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import { useApp } from "../Context/Context";
+import { useEcomApp } from "../Context/EcomContext";
 
-function MobileHeader({ title, iscartshown = false }) {
+function MobileHeader({ title, isCartShown = false }) {
   const navigate = useNavigate();
 
-  const { isAuthenticated, cartItems, localcartItems } = useApp();
+  const { isAuthenticated } = useApp();
+  const { cartItems, localcartItems } = useEcomApp();
   return (
     <>
-      {!iscartshown && (
+      {!isCartShown && (
         <div className="flex justify-start gap-2 items-center lg:hidden border-b border-b-[#ccc] mb-2 py-3">
           <button onClick={() => navigate(-1)}>
             <MdOutlineKeyboardArrowLeft size={30} />
@@ -20,7 +22,7 @@ function MobileHeader({ title, iscartshown = false }) {
           </h2>
         </div>
       )}
-      {iscartshown && (
+      {isCartShown && (
         <div className="flex justify-between pr-3 items-center border-b border-b-[#ccc] mb-1 py-3">
           <div className="flex justify-start items-center lg:hidden ">
             <button onClick={() => navigate(-1)}>

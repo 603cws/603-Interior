@@ -1,5 +1,5 @@
-import { useState } from "react";
-import LandingNavbar from "../../common-components/LandingNavbar";
+import { useMemo, useState } from "react";
+import LandingNavbar from "../../landing/components/LandingNavbar";
 import { useNavigate } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Navigation, Pagination } from "swiper/modules";
@@ -7,7 +7,7 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import Footer from "../../common-components/Footer";
-import ContactUsPopup from "../ContactUsPopup";
+import ContactUsPopup from "../../landing/components/ContactUsPopup";
 import CategorySvg from "../../common-components/CategorySvg";
 
 const TOP_OFFERS = [
@@ -43,21 +43,6 @@ const heroSlides = [
     bg: "/images/brands/brands-bg.jpeg",
     link: "/shop",
   },
-  // {
-  //   title: "Create comfort with HVAC solutions",
-  //   bg: "/images/brands/brands-bg.jpeg",
-  //   link: "/hvac",
-  // },
-  // {
-  //   title: "Lighting that brightens your vision",
-  //   bg: "/images/brands/brands-bg.jpeg",
-  //   link: "/lights",
-  // },
-  // {
-  //   title: "Flooring that shapes your space",
-  //   bg: "/images/brands/brands-bg.jpeg",
-  //   link: "/flooring",
-  // },
   {
     // title: "Flooring that shapes your space",
     bg: "/images/brands/daikinBrand.png",
@@ -68,19 +53,6 @@ const heroSlides = [
     bg: "/images/brands/welspunbrand2.png",
     link: "/flooring",
   },
-];
-
-const brands = [
-  { name: "wellspun", image: "/images/ecommerce/wellspun.png" },
-  { name: "ikea", image: "/images/ecommerce/ikea.png" },
-  { name: "ikea", image: "/images/ecommerce/innova.png" },
-  { name: "ikea", image: "/images/ecommerce/fortis.png" },
-  { name: "ikea", image: "/images/ecommerce/fortis.png" },
-  { name: "ikea", image: "/images/ecommerce/fortis.png" },
-  { name: "ikea", image: "/images/ecommerce/fortis.png" },
-  { name: "ikea", image: "/images/ecommerce/fortis.png" },
-  // { name: "ikea", image: "/images/ecommerce/fortis.png" },
-  // { name: "ikea", image: "/images/ecommerce/fortis.png" },
 ];
 
 const categories = [
@@ -171,10 +143,78 @@ const featuredBrands = [
   },
 ];
 
+const brandImages = {
+  Furniture: [
+    { name: "furniture", image: "/images/brands/Furniture/Featherlite.png" },
+    { name: "furniture", image: "/images/brands/Furniture/godrej.webp" },
+    { name: "furniture", image: "/images/brands/Furniture/hni.jpg" },
+    {
+      name: "furniture",
+      image: "/images/brands/Furniture/Spacewood.png",
+    },
+    { name: "furniture", image: "/images/brands/Furniture/Wipro.svg" },
+  ],
+  Lighting: [
+    { name: "lighting", image: "/images/brands/Lighting/Havells.svg" },
+    { name: "lighting", image: "/images/brands/Lighting/Jaquar.svg" },
+    { name: "lighting", image: "/images/brands/Lighting/Panasonic.svg" },
+    { name: "lighting", image: "/images/brands/Lighting/Philips.svg" },
+    { name: "lighting", image: "/images/brands/Lighting/Wipro.svg" },
+    { name: "lighting", image: "/images/brands/Lighting/Syska.png" },
+  ],
+  Paint: [
+    { name: "#", image: "/images/brands/Paint/asian-paints.png" },
+    { name: "#", image: "/images/brands/Paint/berger-paints.svg" },
+    { name: "#", image: "/images/brands/Paint/birla-opus.svg" },
+    { name: "#", image: "/images/brands/Paint/DULUX.webp" },
+    { name: "#", image: "/images/brands/Paint/JSW.svg" },
+    { name: "#", image: "/images/brands/Paint/nerolac.webp" },
+    { name: "#", image: "/images/brands/Paint/nippon.svg" },
+  ],
+  HVAC: [
+    { name: "#", image: "/images/brands/HVAC/Blue_Star.png" },
+    { name: "daikin", image: "/images/brands/HVAC/DAIKIN.svg" },
+    { name: "lg", image: "/images/brands/HVAC/LG.svg" },
+    { name: "#", image: "/images/brands/HVAC/Carrier.svg" },
+    { name: "#", image: "/images/brands/HVAC/Mitsubishi.svg" },
+    { name: "#", image: "/images/brands/HVAC/Voltas.png" },
+  ],
+  SmartSolutions: [
+    { name: "#", image: "/images/brands/SmartSolutions/Cisco.svg" },
+    { name: "dlink", image: "/images/brands/SmartSolutions/D-Link.svg" },
+    { name: "#", image: "/images/brands/SmartSolutions/honeywell.svg" },
+    { name: "#", image: "/images/brands/SmartSolutions/Netgear.svg" },
+    { name: "#", image: "/images/brands/SmartSolutions/Schneider.svg" },
+  ],
+  Flooring: [
+    { name: "#", image: "/images/brands/Flooring/Kajaria.png" },
+    { name: "#", image: "/images/brands/Flooring/johnson.png" },
+    {
+      name: "#",
+      image: "/images/brands/Flooring/Shaw_Industries.svg",
+    },
+    { name: "#", image: "/images/brands/Flooring/Somany.png" },
+    { name: "welspun", image: "/images/brands/Flooring/welspun.png" },
+  ],
+  Lux: [
+    { name: "#", image: "/images/brands/Lux/Havells.svg" },
+    { name: "#", image: "/images/brands/Lux/Jaquar.svg" },
+    { name: "#", image: "/images/brands/Lux/Panasonic.svg" },
+    { name: "#", image: "/images/brands/Lux/Philips.svg" },
+    { name: "#", image: "/images/brands/Lux/Wipro.svg" },
+    { name: "#", image: "/images/brands/Lux/Syska.png" },
+  ],
+};
+
 function BrandsOverview() {
   const navigate = useNavigate();
 
   const [selectedCategory, setSelectedCategory] = useState("Furniture");
+
+  const images = useMemo(
+    () => brandImages[selectedCategory] || [],
+    [selectedCategory]
+  );
 
   return (
     <div className="font-TimesNewRoman">
@@ -201,14 +241,6 @@ function BrandsOverview() {
                     <h1 className="text-4xl md:text-6xl font-bold max-w-xl">
                       {slide.title}
                     </h1>
-
-                    {/* <button
-                      onClick={() => navigate(slide.link)}
-                      className="capitalize font-bold text-lg md:text-xl text-white bg-[#334A78] rounded flex items-center gap-2 px-4 py-2 hover:bg-white hover:text-[#334A78] border border-[#334A78] transition-colors duration-300 ease-in-out"
-                    >
-                      <span>shop now</span>
-                      <HiOutlineArrowSmRight />
-                    </button> */}
                   </div>
                 </div>
               </div>
@@ -221,23 +253,23 @@ function BrandsOverview() {
       <section className="px-4 lg:container mx-auto py-10">
         <div className="relative">
           <SectionHeader title={"Brands by categories"} isborder={true} />
-          <div className="px-20">
-            <CategorySvg
-              selectedCategory={selectedCategory}
-              setSelectedCategory={setSelectedCategory}
-            />
-          </div>
-          <div className="grid grid-cols-4 lg:grid-cols-4 gap-2 pt-16">
-            {brands.map((brand, index) => (
+          <CategorySvg
+            selectedCategory={selectedCategory}
+            setSelectedCategory={setSelectedCategory}
+          />
+          <div className="grid grid-cols-2 lg:grid-cols-[repeat(auto-fit,_minmax(300px,_1fr))] gap-2 gap-y-8 pt-16">
+            {images.map((brand, idx) => (
               <div
-                className="hover:shadow-lg flex justify-center items-center w-full h-28"
-                key={index}
+                key={idx}
+                className="hover:shadow-lg flex justify-center items-center w-full h-28 cursor-pointer"
+                onClick={() => {
+                  navigate(`/brandOverview/${brand.name}`);
+                }}
               >
                 <img
                   src={brand.image}
                   alt={brand.name}
-                  className="object-scale-down h-full cursor-pointer"
-                  onClick={() => navigate("welspun")}
+                  className="object-scale-down w-32 h-full"
                 />
               </div>
             ))}
@@ -250,8 +282,6 @@ function BrandsOverview() {
       {/* Section 2 */}
       <section className="px-4 lg:container mx-auto py-10">
         <div className="relative">
-          {/* <SectionHeader title={"Trending Products"} isborder={true} /> */}
-          {/* <div className="max-w-6xl mx-auto"> */}
           <div className="flex items-center justify-between w-full py-0 md:py-4 flex-col md:flex-row overflow-y-hidden gap-4 md:gap-4 px-8">
             {categories.map((it, idx) => (
               <div key={idx} className="flex flex-col items-center">
@@ -281,7 +311,7 @@ function BrandsOverview() {
         <div className="mx-auto font-TimesNewRoman">
           {/* Heading */}
           <div className="text-center mb-10 md:mb-14 items-center flex flex-col">
-            <h2 className="text-xl md:text-2xl xl:text-3xl uppercase italic font-bold text-[#111111]">
+            <h2 className="text-xl md:text-2xl xl:text-3xl uppercase font-bold text-[#111111]">
               Featured Brands
             </h2>
             <p className="mt-3 text-sm md:text-lg text-[#5C5C5C] mb-4">
@@ -298,7 +328,7 @@ function BrandsOverview() {
                 className="bg-white rounded-xl border border-[#E4E5EA] shadow-[0_12px_30px_rgba(35,48,80,0.06)] overflow-hidden flex flex-col"
               >
                 {/* Image */}
-                <div className="w-full h-44 md:h-52 overflow-hidden">
+                <div className="w-full h-44 md:h-72 overflow-hidden">
                   <img
                     src={brand.image}
                     alt={brand.title}
@@ -353,7 +383,7 @@ function BrandsOverview() {
         <div className="max-w-7xl mx-auto px-4">
           {/* Heading */}
           <div className="text-center max-w-3xl mx-auto">
-            <h2 className="text-xl md:text-3xl xl:text-4xl font-TimesNewRoman italic font-bold text-[#232323]">
+            <h2 className="text-xl md:text-3xl xl:text-4xl font-TimesNewRoman font-bold text-[#232323]">
               Why We Partner With These Brands
             </h2>
             <p className="mt-4 text-sm md:text-base text-[#7A7F87] font-Georgia leading-relaxed">
@@ -408,13 +438,6 @@ function BrandsOverview() {
                 <h2 className="text-5xl md:text-8xl leading-tight">
                   Furniture
                 </h2>
-                {/* <p className="mt-2 text-xl md:text-2xl">Up to 20% off</p> */}
-                {/* <img
-                  src="/images/ecommerce/button.png"
-                  alt="arrow button"
-                  className="mt-2 w-2 md:w-4 hover:cursor-pointer"
-                  onClick={() => navigate("/shop?category")}
-                /> */}
               </div>
             </div>
           </div>
@@ -436,15 +459,6 @@ function BrandsOverview() {
                     />
                     <div className="relative z-10 h-full flex flex-col justify-end items-start pl-2 lg:pl-8 pb-6 text-white">
                       <h3 className="text-xl md:text-3xl">{o.title}</h3>
-                      {/* <p className="text-base md:text-2xl">{o.subtitle}</p> */}
-                      {/* <img
-                        src="/images/ecommerce/button.png"
-                        alt="arrow button"
-                        className="mt-2 w-2 md:w-4 hover:cursor-pointer"
-                        // onClick={() =>
-                        //   navigate(`/products/topdeal/?category=${o.title}`)
-                        // }
-                      /> */}
                     </div>
                   </div>
                 ))}
@@ -465,12 +479,6 @@ function BrandsOverview() {
                     <div className="absolute inset-0 bg-[#000]/40 rounded-lg" />
                     <div className="relative z-10 h-full flex flex-col justify-end items-start pl-2 lg:pl-6 pb-8 text-white">
                       <h4 className="text-xl md:text-3xl">{o.title}</h4>
-                      {/* <p className="text-base md:text-2xl">{o.subtitle}</p> */}
-                      {/* <img
-                        src="/images/ecommerce/button.png"
-                        alt="arrow button"
-                        className="mt-2 w-2 md:w-4 hover:cursor-pointer"
-                      /> */}
                     </div>
                   </div>
                 ))}
@@ -491,7 +499,7 @@ export default BrandsOverview;
 function SectionHeader({ title, isborder = true }) {
   return (
     <div className="flex flex-col justify-center lg:items-center mb-4 lg:mb-10 ">
-      <h3 className="text-nowrap font-TimesNewRoman text-sm lg:text-2xl text-[#111] tracking-wider uppercase mb-2">
+      <h3 className="text-nowrap font-TimesNewRoman font-bold text-sm lg:text-2xl text-[#111] tracking-wider uppercase mb-2">
         {title}
       </h3>
       {isborder && (
@@ -537,12 +545,6 @@ function TrendingProducts() {
   return (
     <div className="px-4 lg:container mx-auto py-12">
       {/* Heading */}
-      {/* <div className="text-center mb-12">
-        <h2 className=" text-lg font-semibold tracking-wide text-gray-800">
-          TRENDING PRODUCTS
-        </h2>
-        <div className="w-12 h-[1px] bg-gray-400 mx-auto mt-2"></div>
-      </div> */}
       <SectionHeader title={"TRENDING PRODUCTS"} />
 
       {/* Product Grid */}
@@ -579,11 +581,11 @@ function TrendingProducts() {
 
 function TopBrands() {
   const brands = [
-    { id: 1, img: "/images/brand1.jpg", logo: "/images/welspun-logo.png" },
-    { id: 2, img: "/images/brand1.jpg", logo: "/images/welspun-logo.png" },
-    { id: 3, img: "/images/brand1.jpg", logo: "/images/welspun-logo.png" },
-    { id: 4, img: "/images/brand1.jpg", logo: "/images/welspun-logo.png" },
-    { id: 5, img: "/images/brand1.jpg", logo: "/images/welspun-logo.png" },
+    { id: 1, img: "/images/brand1.webp", logo: "/images/welspun-logo.png" },
+    { id: 2, img: "/images/brand1.webp", logo: "/images/welspun-logo.png" },
+    { id: 3, img: "/images/brand1.webp", logo: "/images/welspun-logo.png" },
+    { id: 4, img: "/images/brand1.webp", logo: "/images/welspun-logo.png" },
+    { id: 5, img: "/images/brand1.webp", logo: "/images/welspun-logo.png" },
   ];
 
   return (

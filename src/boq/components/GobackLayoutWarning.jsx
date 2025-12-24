@@ -7,18 +7,15 @@ function GobackLayoutWarning({ onConfirm, onCancel }) {
           <div className="mt-7 flex justify-around space-x-4">
             <button
               onClick={onCancel}
-              // className=" w-28 px-2 py-2 bg-[#FFD500] text-black border-r-4 border-b-4 border-black rounded-md shadow-md hover:bg-yellow-400"
               className="w-28 px-2 py-2 text-[#000] hover:text-[#fff] border-2 border-[#000] hover:border-[#fff] hover:bg-gradient-to-r from-[#334A78] to-[#68B2DC] transition-all duration-500 ease-in-out"
             >
               No
             </button>
             <button
-              // onClick={handleProceed}
               onClick={onConfirm}
-              // className="w-28 px-2 py-2 bg-[#FFD500] text-black border-r-4 border-b-4 border-black rounded-md shadow-md hover:bg-yellow-400"
               className="w-28 px-2 py-2 text-[#fff] hover:text-[#fff] border-2 border-[#000] hover:border-[#fff] bg-[#334A78] hover:bg-gradient-to-r from-[#334A78] to-[#68B2DC] transition-all duration-500 ease-in-out"
             >
-              yes
+              Yes
             </button>
           </div>
         </div>

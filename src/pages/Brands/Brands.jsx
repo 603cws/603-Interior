@@ -1,33 +1,10 @@
-import LandingNavbar from "../../common-components/LandingNavbar";
+import LandingNavbar from "../../landing/components/LandingNavbar";
 import { useNavigate } from "react-router-dom";
-import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/free-mode";
-import { FreeMode } from "swiper/modules";
 import Footer from "../../common-components/Footer";
 
 function Brands() {
-  const brands = [
-    { name: "kurt & co", image: "/images/ecommerce/image-1.png" },
-    { name: "patcraft", image: "/images/ecommerce/image-2.png" },
-    { name: "forbo", image: "/images/ecommerce/image-3.png" },
-    { name: "bruce", image: "/images/ecommerce/image-4.png" },
-    { name: "wellspun", image: "/images/ecommerce/image-5.png" },
-    { name: "old town flooring", image: "/images/ecommerce/image-6.png" },
-  ];
-
-  const categories = [
-    "Furniture",
-    "Lighting",
-    "Paint",
-    "Civil Plumning",
-    "Flooring",
-    "Partition/Ceiling",
-    "HVAC",
-    "Smart Solution",
-    "LUX",
-  ];
-
   const images = [
     "./images/ecommerce/tile1.png",
     "./images/ecommerce/tile2.png",
@@ -90,35 +67,6 @@ function Brands() {
         </div>
       </section>
 
-      {/* section 4 */}
-      {/* <section className="container px-4 lg:px-12 mx-auto py-14">
-        <h3 className="font-TimesNewRoman text-3xl text-[#111] items-center justify-center flex">
-          Shop from your favorite brands
-        </h3>
-        <div className="pt-8">
-          <Swiper
-            slidesPerView={"auto"}
-            // spaceBetween={0}
-            freeMode={true}
-            modules={[FreeMode]}
-            className="w-full"
-          >
-            {brands.map((brand, index) => (
-              <SwiperSlide
-                className="!w-[240px] flex justify-center"
-                key={index}
-              >
-                <img
-                  src={brand.image}
-                  alt={brand.name}
-                  className="h-40 w-40 "
-                />
-              </SwiperSlide>
-            ))}
-          </Swiper>
-        </div>
-      </section> */}
-
       {/* section 5 */}
       <section className="container px-4 lg:px-12 mx-auto py-14">
         <div className="bg-[#F7FAFF] rounded-md p-4">
@@ -145,32 +93,7 @@ function Brands() {
         </div>
       </section>
 
-      {/* section 6 */}
-      {/* <section className="container px-4 lg:px-12 mx-auto py-5 hidden md:block">
-        <h2 className="text-4xl font-TimesNewRoman text-center mb-8">
-          Featured Products
-        </h2>
-        <h5 className="text-xl font-TimesNewRoman text-[#A0A0A0] text-center mb-6">
-          Discover amazing products from our partners
-        </h5>
-        <div className="2xl:px-40 px-20 xl:px-8">
-          <div className="flex flex-row flex-wrap gap-4 items-center justify-center xl:flex-nowrap max-w-full border border-[#999999]">
-            {categories.map((name, index) => (
-              <div
-                className="flex justify-center px-2 whitespace-nowrap xl:w-full h-10 items-center hover:bg-[#304778] m-1 rounded-lg hover:text-white cursor-pointer"
-                key={index}
-              >
-                <p className="text-lg font-TimesNewRoman">{name}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section> */}
-
       <section className="my-5">
-        {/* <h2 className="text-3xl md:text-4xl lg:text-5xl uppercase text-center my-10">
-          our usp
-        </h2> */}
         <div>
           <div className="h-80 w-screen bg-[url('/images/brands/welspun-bg.png')] bg-center bg-cover bg-no-repeat flex justify-center items-center">
             <h1 className="font-semibold text-5xl lg:text-6xl text-center text-[#fff]">
@@ -184,11 +107,7 @@ function Brands() {
       <section className="container px-4 mx-auto py-5 hidden md:block">
         <div className="grid xl:grid-cols-3 grid-cols-2 gap-y-10 items-center mx-auto justify-items-center cursor-pointer">
           {images.map((src, i) => (
-            <ProductCard
-              key={i}
-              image={src}
-              // width={i === 0 || i === 4 ? "none" : ""}
-            />
+            <ProductCard key={i} image={src} />
           ))}
         </div>
       </section>

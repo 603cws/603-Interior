@@ -1,11 +1,10 @@
-import React from "react";
-import Header from "../Ecommerce/Header";
+import LandingNavbar from "../../landing/components/LandingNavbar";
 
 function BrandLight() {
   return (
     <>
       <div className="font-Poppins">
-        <Header />
+        <LandingNavbar />
         <section className="lg:container px-4 my-5">
           <div className="flex justify-center my-5">
             <img

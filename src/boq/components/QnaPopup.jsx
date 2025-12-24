@@ -1,72 +1,67 @@
 import { useState, useEffect } from "react";
 import "animate.css";
-import { useApp } from "../../Context/Context";
 import { IoIosCloseCircle } from "react-icons/io";
+import { useBoqApp } from "../../Context/BoqContext";
 
-const QnaPopup = ({ onClose, onSubmit }) => {
-  const { selectedCategory } = useApp();
-  const categoryName = selectedCategory?.category || ""; // Safely access the category name
+const heightQuestion = [
+  {
+    name: "roomHeight",
+    label: "Enter the height of the room (in feet). Default is 10ft.",
+    isNumberInput: true,
+    ImageUrl: "/images/flooringimg.png",
+  },
+];
 
-  // Height question (always the first question)
-  const heightQuestion = [
-    {
-      name: "roomHeight",
-      label: "Enter the height of the room (in feet). Default is 10ft.",
-      isNumberInput: true,
-      ImageUrl: "/images/flooringimg.png",
-    },
-  ];
+const flooringQuestions = [
+  {
+    name: "flooringStatus",
+    label: "What is the flooring status?",
+    options: [
+      { value: "bareShell", label: "Bare Shell" },
+      { value: "basicTiling", label: "Basic Tiling Done" },
+    ],
+    ImageUrl: "/images/Flooringquestion.gif",
+  },
+];
 
-  // Questions for Flooring
-  const flooringQuestions = [
-    {
-      name: "flooringStatus",
-      label: "What is the flooring status?",
-      options: [
-        { value: "bareShell", label: "Bare Shell" },
-        { value: "basicTiling", label: "Basic Tiling Done" },
-      ],
-      ImageUrl: "/images/Flooringquestion.gif",
-    },
-  ];
+const demolishTileQuestion = [
+  {
+    name: "demolishTile",
+    label: "Do you want to demolish existing tile?",
+    options: [
+      { value: "yes", label: "Yes" },
+      { value: "no", label: "No" },
+    ],
+    ImageUrl: "/images/Flooringquestion.gif",
+  },
+];
 
-  const demolishTileQuestion = [
-    {
-      name: "demolishTile",
-      label: "Do you want to demolish existing tile?",
-      options: [
-        { value: "yes", label: "Yes" },
-        { value: "no", label: "No" },
-      ],
-      ImageUrl: "/images/Flooringquestion.gif",
-    },
-  ];
+const hvacQuestions = [
+  {
+    name: "hvacType",
+    label: "Do you want full centralized AC or a combination?",
+    options: [
+      { value: "Centralized", label: "Centralized" },
+      { value: "Combination", label: "Combination" },
+    ],
+    ImageUrl: "/images/HVAC.gif",
+  },
+];
 
-  // AC question
-  const hvacQuestions = [
-    {
-      name: "hvacType",
-      label: "Do you want full centralized AC or a combination?",
-      options: [
-        { value: "Centralized", label: "Centralized" },
-        { value: "Combination", label: "Combination" },
-      ],
-      ImageUrl: "/images/HVAC.gif",
-    },
-  ];
-
-  // partition/ceiling
-  const partitionQuestions = [
-    {
-      name: "partitionArea",
-      label: "Do you want the same partition to all areas or customize?",
-      options: [
-        { value: "allArea", label: "All Areas" },
-        { value: "customizeAreas", label: "Customize Areas" },
-      ],
-      ImageUrl: "/images/Chat-bot.gif",
-    },
-  ];
+const partitionQuestions = [
+  {
+    name: "partitionArea",
+    label: "Do you want the same partition to all areas or customize?",
+    options: [
+      { value: "allArea", label: "All Areas" },
+      { value: "customizeAreas", label: "Customize Areas" },
+    ],
+    ImageUrl: "/images/Chat-bot.gif",
+  },
+];
+function QnaPopup({ onClose, onSubmit }) {
+  const { selectedCategory } = useBoqApp();
+  const categoryName = selectedCategory?.category || "";
 
   const [questions, setQuestions] = useState(heightQuestion);
   const [answers, setAnswers] = useState({});
@@ -80,7 +75,6 @@ const QnaPopup = ({ onClose, onSubmit }) => {
   }, []);
 
   useEffect(() => {
-    // Dynamically set questions based on category name
     if (categoryName === "Flooring") {
       if (answers.flooringStatus === "basicTiling") {
         setQuestions([...flooringQuestions, ...demolishTileQuestion]);
@@ -92,58 +86,30 @@ const QnaPopup = ({ onClose, onSubmit }) => {
     } else if (categoryName === "Partitions / Ceilings") {
       setQuestions([...partitionQuestions]);
     } else {
-      setQuestions(heightQuestion); // Default to height question if no category matches
+      setQuestions(heightQuestion);
     }
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [categoryName, answers.flooringStatus]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     const updatedAnswers = { ...answers, [name]: value };
-    console.log(updatedAnswers);
-
     setAnswers(updatedAnswers);
     localStorage.setItem("answers", JSON.stringify(updatedAnswers));
 
-    // If flooringStatus is selected, check for the demolishTile question
     if (questions.length < 2) {
       if (name === "flooringStatus" && value === "basicTiling") {
         setQuestions((prevQuestions) => [
           ...prevQuestions,
-          ...demolishTileQuestion, // Add demolish tile question if Basic Tiling is selected
+          ...demolishTileQuestion,
         ]);
       }
     }
 
-    //set the question array to default question 1st if value is bareshell
     if (name === "flooringStatus" && value === "bareShell") {
       setQuestions(flooringQuestions);
     }
   };
-  // const handleInputChange = (e) => {
-  //   const { name, value } = e.target;
-  //   const updatedAnswers = { ...answers, [name]: value };
-  //   console.log(updatedAnswers);
-
-  //   setAnswers(updatedAnswers);
-  //   localStorage.setItem("answers", JSON.stringify(updatedAnswers));
-
-  //   // If flooringStatus is selected, check for the demolishTile question
-  //   if (questions.length < 2) {
-  //     if (name === "flooringStatus" && value === "basicTiling") {
-  //       setQuestions((prevQuestions) => [
-  //         ...prevQuestions,
-  //         ...demolishTileQuestion, // Add demolish tile question if Basic Tiling is selected
-  //       ]);
-  //     }
-  //   }
-
-  //   //set the question array to default question 1st if value is bareshell
-  //   if (name === "flooringStatus" && value === "bareShell") {
-  //     setQuestions(flooringQuestions);
-  //   }
-  // };
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
@@ -166,7 +132,7 @@ const QnaPopup = ({ onClose, onSubmit }) => {
       setTimeout(() => {
         onSubmit(finalAnswers);
         onClose();
-      }, 300); // Adjust this delay based on animation duration
+      }, 300);
     }
   };
 
@@ -178,8 +144,8 @@ const QnaPopup = ({ onClose, onSubmit }) => {
     if (currentQuestionIndex < questions.length - 1) {
       setCurrentQuestionIndex((prevIndex) => prevIndex + 1);
     } else {
-      onSubmit(answers); // Submit answers if all questions are done
-      onClose(); // Close the modal
+      onSubmit(answers);
+      onClose();
     }
   };
   const handlePreviousClick = () => {
@@ -196,9 +162,6 @@ const QnaPopup = ({ onClose, onSubmit }) => {
     setTimeout(onClose, 300);
   };
 
-  // console.log("questions", questions);
-  // console.log("answers", answers.roomHeight);
-
   return (
     <div className=" fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
       <div
@@ -208,13 +171,7 @@ const QnaPopup = ({ onClose, onSubmit }) => {
           <div
             className={`bg-white rounded-2xl shadow-lg relative flex flex-col md:flex-row h-full`}
           >
-            {/* Left Side: Image */}
-            <div
-              className="w-full md:w-1/2"
-              // style={{
-              //   backgroundImage: `url(${sideImage})`,
-              // }}
-            >
+            <div className="w-full md:w-1/2">
               <img
                 src={sideImage}
                 alt="qna"
@@ -222,11 +179,10 @@ const QnaPopup = ({ onClose, onSubmit }) => {
               />
             </div>
 
-            {/* Right Side: Questions */}
             <div className="w-full md:w-1/2 p-3 md:p-6 flex flex-col md:items-center md:justify-center">
               <button
                 onClick={handleHeightClose}
-                disabled={Object.keys(answers).length === 0} // Disable if no answers
+                disabled={Object.keys(answers).length === 0}
                 className={`absolute top-2 right-2 text-2xl font-bold ${
                   Object.keys(answers).length === 0
                     ? "text-gray-300 cursor-not-allowed"
@@ -251,8 +207,6 @@ const QnaPopup = ({ onClose, onSubmit }) => {
                           <input
                             type="number"
                             name={currentQuestion.name}
-                            // value={answers[currentQuestion.name] || 10}
-                            // value={answers.roomHeight}
                             onChange={handleInputChange}
                             placeholder="Enter height (default is 10)"
                             min="5"
@@ -293,12 +247,6 @@ const QnaPopup = ({ onClose, onSubmit }) => {
                       )}
                       <button
                         type="submit"
-                        // disabled={Object.keys(answers).length === 0} // Disable if no answers
-                        // className={`px-4 py-2 rounded text-xs md:text-base ${
-                        //   Object.keys(answers).length === 0
-                        //     ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-                        //     : "text-[#000] hover:text-[#fff] border-2 border-[#000] hover:border-[#fff] hover:bg-gradient-to-r from-[#334A78] to-[#68B2DC] transition-all duration-500 ease-in-out"
-                        // }`}
                         disabled={!answers[currentQuestion.name]}
                         className={`px-4 py-2 rounded text-xs md:text-base ${
                           !answers[currentQuestion.name]
@@ -334,6 +282,6 @@ const QnaPopup = ({ onClose, onSubmit }) => {
       </div>
     </div>
   );
-};
+}
 
 export default QnaPopup;
