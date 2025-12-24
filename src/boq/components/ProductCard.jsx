@@ -174,14 +174,15 @@ function ProductCard({
   }, []);
 
   if (!productsInCategory) {
-    return <p>Category "{selectedCategory?.category}" not found.</p>;
+    return <p>Category &quot;{selectedCategory?.category}&quot; not found.</p>;
   }
 
   if (!productsInSubCategory) {
     return (
       <p>
-        Subcategory "{selectedSubCategory}" not found in category "
-        {selectedCategory?.category}".
+        Subcategory &quot;{selectedSubCategory}&quot; not found in category
+        &quot;
+        {selectedCategory?.category}&quot;.
       </p>
     );
   }
@@ -415,8 +416,8 @@ function ProductCard({
           </AnimatePresence>
         ) : (
           <p className="text-gray-500 text-center font-medium col-span-full">
-            No products found for "{selectedSubCategory1}" in "
-            {selectedSubCategory}".
+            No products found for &quot;{selectedSubCategory1}&quot; in &quot;
+            {selectedSubCategory}&quot;.
           </p>
         )}
       </div>

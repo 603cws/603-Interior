@@ -5,7 +5,7 @@ import { supabase } from "../../services/supabase";
 import { boqLimit } from "../../constants/constant";
 import { useBoqApp } from "../../Context/BoqContext";
 
-function NewBoq({ onConfirm, onCancel }) {
+function NewBoq({ onConfirm }) {
   const [boqMode, setBoqMode] = useState("new");
   const [boqList, setBoqList] = useState([]);
   const [selectedBoq, setSelectedBoq] = useState("");
@@ -170,12 +170,13 @@ function NewBoq({ onConfirm, onCancel }) {
                       <div>
                         <div>
                           A new BOQ will be created and saved as{" "}
-                          <strong>"Draft BOQ"</strong>. You can update it later.
+                          <strong>&quot;Draft BOQ&quot;</strong>. You can update
+                          it later.
                         </div>
                         {isAtNonDraftLimit && (
                           <div className="mt-2 text-xs text-[#a1a1a1]">
-                            Note: you've reached the maximum of {boqLimit} saved
-                            BOQs. You can still create a Draft BOQ, but
+                            Note: you&apos;ve reached the maximum of {boqLimit}{" "}
+                            saved BOQs. You can still create a Draft BOQ, but
                             converting (saving) it as a named/saved BOQ may
                             require deleting or overriding an existing BOQ.
                           </div>

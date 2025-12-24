@@ -13,8 +13,6 @@ export default function MultiImageCropper({
 
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
-
-  const [cropAreas, setCropAreas] = useState({});
   const [croppedFiles, setCroppedFiles] = useState({});
 
   // Convert File[] → Preview URLs
@@ -25,7 +23,6 @@ export default function MultiImageCropper({
     setImageURLs(urls);
     setCurrent(0);
     setCroppedFiles({});
-    setCropAreas({});
   }, [files]);
 
   function debounce(fn, delay) {
@@ -101,22 +98,6 @@ export default function MultiImageCropper({
     });
   };
 
-  // Save current crop
-  //   const saveCurrentCrop = async () => {
-  //     const area = cropAreas[current];
-  //     if (!area) {
-  //       alert("No crop area found");
-  //       return;
-  //     }
-
-  //     const file = await getCroppedImg(imageURLs[current], area, files[current]);
-
-  //     setCroppedFiles((prev) => ({
-  //       ...prev,
-  //       [current]: file,
-  //     }));
-  //   };
-
   const autoSave = useCallback(
     debounce(async (index, area) => {
       const file = await getCroppedImg(imageURLs[index], area, files[index]);
@@ -131,10 +112,6 @@ export default function MultiImageCropper({
   // Crop callback
   const onCropComplete = useCallback(
     (_, croppedAreaPixels) => {
-      setCropAreas((prev) => ({
-        ...prev,
-        [current]: croppedAreaPixels,
-      }));
       autoSave(current, croppedAreaPixels);
     },
     [current, autoSave]

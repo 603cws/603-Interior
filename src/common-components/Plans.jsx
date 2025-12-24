@@ -114,6 +114,7 @@ function Plans({ showNewBoqPopup, setShowNewBoqPopup }) {
 
   useEffect(() => {
     setIsSaveBOQ(true);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handlePlanSelect = (planKey) => {

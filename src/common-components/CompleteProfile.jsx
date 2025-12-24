@@ -49,6 +49,7 @@ function CompleteProfile() {
     };
 
     fetchUserData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [navigate]);
 
   const handleSubmit = async (e) => {

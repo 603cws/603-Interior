@@ -69,9 +69,10 @@ function AdminDashVendors({
                     type="text"
                     className="w-full rounded-lg px-2 py-1 outline-none border border-[#ccc]"
                     placeholder="......search by company name"
-                    onChange={(e) =>
-                      filterVendorByMultipleFields(e.target.value)
-                    }
+                    onChange={(e) => {
+                      filterVendorByMultipleFields(e.target.value);
+                      setQuery(e.target.value);
+                    }}
                     value={query}
                   />
                 </div>

@@ -5,30 +5,22 @@ import "./index.css";
 import { AppProvider } from "./Context/Context.jsx";
 import { BrowserRouter } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
-import { ErrorBoundary } from "react-error-boundary";
-import ErrorFallback from "./common-components/ErrorFallBack.jsx";
+// import { ErrorBoundary } from "react-error-boundary";
+// import ErrorFallback from "./common-components/ErrorFallBack.jsx";
 import { EcomAppProvider } from "./Context/EcomContext.jsx";
 import { BoqAppProvider } from "./Context/BoqContext.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <ErrorBoundary
-      FallbackComponent={ErrorFallback}
-      onReset={() => {
-        // action to run when resetErrorBoundary() is called
-        window.location.reload(); // refresh the entire page
-      }}
-    >
-      <BrowserRouter>
-        <AppProvider>
-          <BoqAppProvider>
-            <EcomAppProvider>
-              <Toaster />
-              <App />
-            </EcomAppProvider>
-          </BoqAppProvider>
-        </AppProvider>
-      </BrowserRouter>
-    </ErrorBoundary>
+    <BrowserRouter>
+      <AppProvider>
+        <BoqAppProvider>
+          <EcomAppProvider>
+            <Toaster />
+            <App />
+          </EcomAppProvider>
+        </BoqAppProvider>
+      </AppProvider>
+    </BrowserRouter>
   </StrictMode>
 );

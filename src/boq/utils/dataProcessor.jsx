@@ -52,7 +52,7 @@ const getCategoryTotal = (type, keys, data, latestData) => {
   }, 0);
 };
 
-const processData = (data, type, quantity = {}) => {
+const processData = (data, type) => {
   if (!data || data.length === 0) return null;
 
   const latestData = data[0];

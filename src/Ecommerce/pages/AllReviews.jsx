@@ -11,6 +11,7 @@ import Header from "../components/Header";
 import { useNavigate } from "react-router-dom";
 import { BsArrowLeftShort } from "react-icons/bs";
 import { AiFillStar } from "react-icons/ai";
+import { baseImageUrl } from "../../utils/HelperConstant";
 
 function AllReviews() {
   const [productReviews, setProductReviews] = useState([]);
@@ -40,9 +41,6 @@ function AllReviews() {
         productReviews.length
       : 0;
 
-  const baseImageUrl =
-    "https://bwxzfwsoxwtzhjbzbdzs.supabase.co/storage/v1/object/public/addon/";
-
   const fetchProductReviews = async () => {
     try {
       const { data, error } = await supabase
@@ -71,6 +69,7 @@ function AllReviews() {
 
   useEffect(() => {
     fetchProductReviews();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [productId]);
 
   useEffect(() => {

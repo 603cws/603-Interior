@@ -420,11 +420,7 @@ export const BoqAppProvider = ({ children }) => {
             setQuantityData([processedQuantityData]);
           }
 
-          processedAreasData = processData(
-            roomDataResult.layoutData,
-            "areas",
-            roomDataResult.layoutData
-          );
+          processedAreasData = processData(roomDataResult.layoutData, "areas");
           if (processedAreasData) {
             setAreasData([processedAreasData]);
           }

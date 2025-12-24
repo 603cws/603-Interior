@@ -1,4 +1,5 @@
 /** @type {import('tailwindcss').Config} */
+import scrollbarHide from "tailwind-scrollbar-hide";
 export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
@@ -18,13 +19,11 @@ export default {
         Poppins: ["Poppins", "sans-serif"],
         Raleway: ["Raleway"],
         Convergence: ["Convergence"],
-        // zcool: ['"ZCOOL KuaiLe"', "cursive"],
         sans: ["DM Sans", "sans-serif"],
         montaga: ["Montaga", "serif"],
         montserratAlt: ["Montserrat Alternates", "sans-serif"],
         lora: ["Lora", "serif"], // Add Lora font with a fallback
         lato: ["Lato", "sans-serif"], // Add Lato font with a fallback
-        // lexend: ["Lexend Deca", "sans-serif"], // Add Lexend Deca with a fallback
         inter: ["Inter", "sans-serif"],
         vampiroOne: ["Vampiro One", "cursive"],
         TimesNewRoman: ["times-new-roman", "sans-serif"],
@@ -55,10 +54,6 @@ export default {
           "0%": { opacity: 0, transform: "translateY(20px)" },
           "100%": { opacity: 1, transform: "translateY(0)" },
         },
-        // fadeIn: {
-        //   "0%": { opacity: 0, transform: "translateY(20px)" },
-        //   "100%": { opacity: 1, transform: "translateY(0)" },
-        // },
         bikeSlide: {
           "0%": { transform: "translateX(100%)" },
           "100%": { transform: "translateX(0)" },
@@ -93,7 +88,6 @@ export default {
         },
       },
       animation: {
-        // blink: "blink 1s infinite",
         blink: "blink 1s ease-in-out 2",
         "fade-in": "fadeIn 0.7s ease-in-out",
         bikeSlide: "bikeSlide 4s ease-out forwards",
@@ -113,27 +107,7 @@ export default {
           DEFAULT: "3rem",
         },
       },
-      // screens: {
-      //   sm: "450px", // Full width for small screens
-      //   md: "640px", // Medium screens
-      //   lg: "768px", // Large screens
-      //   xl: "1024px", // Extra-large screens
-      //   "2xl": "1280px", // 2XL screens
-      //   "3xl": "1440px", // Custom 3XL screens
-      //   "4xl": "1920px", // Custom 4XL screens
-      // },
-      // container: {
-      //   center: true,
-      //   padding: {
-      //     DEFAULT: "1rem",
-      //     sm: "2rem",
-      //     lg: "4rem",
-      //     xl: "5rem",
-      //     "2xl": "6rem",
-      //     "3xl": "8rem", // Optional custom padding for 3xl
-      //   },
-      // },
     },
   },
-  plugins: [require("tailwind-scrollbar-hide")],
+  plugins: [scrollbarHide],
 };

@@ -754,14 +754,14 @@ function ShopProducts() {
                   {allBrands.map((brand) => (
                     <label
                       key={brand}
-                      checked={
-                        filters.brands.length === 1 &&
-                        filters.brands.includes(brand)
-                      }
                       onClick={() => handleBrandClick(brand)}
                       className="flex items-center gap-2 cursor-pointer text-[#111] text-sm"
                     >
                       <input
+                        checked={
+                          filters.brands.length === 1 &&
+                          filters.brands.includes(brand)
+                        }
                         type="checkbox"
                         className="w-4 h-4 cursor-pointer text-[#111] capitalize"
                       />

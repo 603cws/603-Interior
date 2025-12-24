@@ -2,7 +2,6 @@ const HVACCalculation = ({
   quantity,
   area,
   subcategory = "Centralized",
-  remQuantity,
   subCat1 = "split",
   location = "India", // Default: "India"
   showAlert = false, // Optional: Control whether to show alert or not

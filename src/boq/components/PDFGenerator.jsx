@@ -247,7 +247,9 @@ const PDFGenerator = {
               productImage = await loadImage(
                 item.product_variant.variant_image
               );
-            } catch {}
+            } catch (error) {
+              console.error(error);
+            }
           }
           let addonCell = [];
           let addonTotal = 0;
@@ -258,7 +260,9 @@ const PDFGenerator = {
                 if (a.image) {
                   try {
                     addonImage = await loadImage(a.image);
-                  } catch {}
+                  } catch (error) {
+                    console.error(error);
+                  }
                 }
                 addonTotal += a.finalPrice || 0;
                 return {

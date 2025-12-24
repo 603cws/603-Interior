@@ -16,7 +16,6 @@ import DeliveryEstimate from "../components/DeliveryEstimate";
 
 function Addresspage() {
   const [isAddressFormOpen, setIsAddressFormOpen] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [removingAddressId, setRemovingAddressId] = useState(null);
   const [isAddressChangeOpen, setIsAddressChangeOpen] = useState(false);
@@ -147,10 +146,10 @@ function Addresspage() {
   }
 
   const { cartItems } = useEcomApp();
-  const totalPrice = cartItems?.reduce(
-    (acc, curr) => acc + curr.productId?.price * curr.quantity,
-    0
-  );
+  // const totalPrice = cartItems?.reduce(
+  //   (acc, curr) => acc + curr.productId?.price * curr.quantity,
+  //   0
+  // );
   const handlenewAddress = () => {
     if (accountHolder?.address?.length < 3) {
       setIsAddressFormOpen(true);
@@ -162,7 +161,6 @@ function Addresspage() {
   const handleRemoveAddress = async (address) => {
     setRemovingAddressId(address.id);
     try {
-      setIsSubmitting(true);
       if (address.ismarkedDefault) {
         toast.error("Default address cant be removed");
         return;
@@ -184,7 +182,6 @@ function Addresspage() {
       console.error(error);
     } finally {
       fetchUserData();
-      setIsSubmitting(false);
       setRemovingAddressId(null);
     }
   };
@@ -363,7 +360,8 @@ function Addresspage() {
         return;
       }
 
-      const { neworder, data: orderItems } = result;
+      const { neworder } = result;
+      // const { neworder, data: orderItems } = result;
 
       const orderId = neworder?.id;
       const amount = Math.round(neworder?.final_amount * 100);
