@@ -89,7 +89,7 @@ function Landing() {
         scrollTrigger: {
           trigger: containerRef.current,
           start: "top top",
-          end: "+=3000",
+          end: "+=4000",
           scrub: 1.5,
           pin: true,
         },
@@ -179,6 +179,7 @@ function Landing() {
         { opacity: 0, y: 100 },
         { opacity: 1, y: 0, duration: 1 }
       );
+      tl.to({}, { duration: 5 });
     }, containerRef);
 
     return () => {
@@ -234,11 +235,13 @@ function Landing() {
             <div className="flex flex-1 h-full items-center text-center lg:text-right justify-self-end">
               <div className="space-y-4 lg:space-y-10">
                 <h1 className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl 2xl:text-[82px] text-[#555555] uppercase font-Alegreya">
-                  we design <br /> your dreams
+                  {/* we design <br /> your dreams */}
+                  Plan your
+                  <br /> Space
                 </h1>
                 <div className="h-1 w-20 bg-[#334A78] place-self-center lg:place-self-end"></div>
-                <p className="text-base lg:text-[15px] xl:text-[19px] 2xl:text-[21px] text-[#555555]">
-                  &quot;Transforming ordinary spaces into extraordinary
+                {/* <p className="text-base lg:text-[15px] xl:text-[19px] 2xl:text-[21px] text-[#555555]">
+                  "Transforming ordinary spaces into extraordinary
                   <span className="hidden lg:inline">
                     <br />
                   </span>
@@ -250,7 +253,20 @@ function Landing() {
                   <span className="hidden lg:inline">
                     <br />
                   </span>
-                  uniquely yours.&quot;
+                  uniquely yours."
+                </p> */}
+                <p className="text-base lg:text-[15px] xl:text-[19px] 2xl:text-[21px] text-[#555555]">
+                  Transforming ordinary spaces into extraordinary{" "}
+                  <br className="hidden lg:inline" />
+                  experiences requires more than just a sketch.
+                  <br className="hidden lg:inline" /> We provide the full
+                  roadmap: a stunning custom design
+                  <br className="hidden lg:inline" />
+                  and a complete Bill of Quantities (BOQ) for the build.
+                  <br className="hidden lg:inline" /> We ensure your renovation
+                  is timeless, functional,
+                  <br className="hidden lg:inline" /> and financially
+                  transparent from day one.
                 </p>
 
                 <button
@@ -259,10 +275,10 @@ function Landing() {
                     trackCTA("make your space");
                     navigate("/Layout");
                   }}
-                  className="relative group w-40 lg:w-48 h-11 lg:h-12 rounded-lg p-1 bg-gradient-to-br from-[#334A78] to-[#78A3FF] hover:bg-[#334A78]"
+                  className="relative group w-44 lg:w-56 h-11 lg:h-14 rounded-lg p-1 bg-gradient-to-br from-[#334A78] to-[#78A3FF] hover:bg-[#334A78]"
                 >
-                  <span className="flex w-full h-full items-center justify-center rounded-md bg-white text-base lg:text-lg font-bold capitalize text-[#334A78] group-hover:text-[#FFF] group-hover:bg-[#334A78] transition-colors duration-500 ease-in-out">
-                    {isloading ? "loading.." : "make your space"}
+                  <span className="flex w-full h-full items-center justify-center rounded-md bg-white text-base lg:text-lg font-bold capitalize text-[#334A78] group-hover:text-[#FFF] group-hover:bg-[#334A78] transition-colors duration-500 ease-in-out whitespace-pre-line">
+                    {isloading ? "loading.." : "Get Your BOQ (Free)"}
                   </span>
                 </button>
               </div>

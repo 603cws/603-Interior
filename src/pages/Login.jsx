@@ -12,13 +12,11 @@ import { useBoqApp } from "../Context/BoqContext";
 import ResetPassword from "../common-components/ResetPassword";
 
 function Login() {
-  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-  const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] =
-    useState(false);
   const [isSignUp, setIsSignUp] = useState(false);
   const [isForgotPassword, setIsForgotPassword] = useState(false);
   const [resetPass, setResetPass] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isLogingIn, setIsLogingIn] = useState(false);
   const { setIsAuthenticated } = useApp();
   const { setUserId, setCurrentLayoutID } = useBoqApp();
   const navigate = useNavigate();
@@ -41,14 +39,6 @@ function Login() {
       setResetPass(true);
     }
   }, []);
-
-  const togglePasswordVisibility = () => {
-    setIsPasswordVisible(!isPasswordVisible);
-  };
-
-  const toggleConfirmPasswordVisibility = () => {
-    setIsConfirmPasswordVisible(!isConfirmPasswordVisible);
-  };
 
   const toggleForm = () => {
     setIsSignUp(!isSignUp);
@@ -147,6 +137,7 @@ function Login() {
   };
 
   const handleLogin = async () => {
+    setIsLogingIn(true);
     let { data, error } = await supabase.auth.signInWithPassword({
       email: formData.email,
       password: formData.password,
@@ -203,6 +194,8 @@ function Login() {
       } catch (fetchError) {
         console.error("Error checking area and quantity IDs:", fetchError);
         navigate("/Layout", { replace: true });
+      } finally {
+        setIsLogingIn(false);
       }
     }
     resetBOQ();
@@ -333,7 +326,7 @@ function Login() {
 
             <form
               onSubmit={handleSubmit}
-              className={`content z-10 flex-1 max-h-full h-full flex flex-col items-center justify-center gap-2 px-5`}
+              className="content z-10 flex-1 max-h-full h-full flex flex-col items-center justify-center gap-2 px-5"
             >
               <Header isSignUp={isSignUp} isForgotPassword={isForgotPassword} />
 
@@ -349,24 +342,18 @@ function Login() {
                 <SignUpForm
                   formData={formData}
                   handleChange={handleChange}
-                  isPasswordVisible={isPasswordVisible}
-                  isConfirmPasswordVisible={isConfirmPasswordVisible}
-                  togglePasswordVisibility={togglePasswordVisibility}
-                  toggleConfirmPasswordVisibility={
-                    toggleConfirmPasswordVisibility
-                  }
                   toggleForm={toggleForm}
                   signInWithGoogle={signInWithGoogle}
+                  isLogingIn={isLogingIn}
                 />
               ) : (
                 <SignInForm
                   formData={formData}
                   handleChange={handleChange}
-                  isPasswordVisible={isPasswordVisible}
-                  togglePasswordVisibility={togglePasswordVisibility}
                   showForgotPassword={showForgotPassword}
                   toggleForm={toggleForm}
                   signInWithGoogle={signInWithGoogle}
+                  isLogingIn={isLogingIn}
                 />
               )}
             </form>
@@ -504,15 +491,12 @@ function MobileField({ formData, handleChange }) {
   );
 }
 
-function PasswordField({
-  label,
-  name,
-  value,
-  onChange,
-  visible,
-  toggleVisibility,
-  placeholder,
-}) {
+function PasswordField({ label, name, value, onChange }) {
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const toggleVisibility = () => {
+    setIsPasswordVisible(!isPasswordVisible);
+  };
+
   return (
     <div className="relative flex flex-col gap-1 xl:gap-3 w-full xl:w-3/4">
       <label
@@ -522,18 +506,20 @@ function PasswordField({
         {label} <span>*</span>
       </label>
       <input
-        type={visible ? "text" : "password"}
+        type={isPasswordVisible ? "text" : "password"}
         name={name}
         value={value}
         onChange={onChange}
-        placeholder={placeholder}
+        placeholder={
+          name === "password" ? "Enter Password" : "Conform Password"
+        }
         className="w-full py-1 pl-1 md:py-2 rounded-lg md:pl-2 focus:outline-none border"
       />
       <span
         onClick={toggleVisibility}
         className="absolute right-3 top-1/2 translate-y-1/2"
       >
-        {visible ? <IoEyeOutline /> : <IoEyeOffOutline />}
+        {isPasswordVisible ? <IoEyeOutline /> : <IoEyeOffOutline />}
       </span>
     </div>
   );
@@ -542,12 +528,9 @@ function PasswordField({
 function SignUpForm({
   formData,
   handleChange,
-  isPasswordVisible,
-  isConfirmPasswordVisible,
-  togglePasswordVisibility,
-  toggleConfirmPasswordVisibility,
   toggleForm,
   signInWithGoogle,
+  isLogingIn,
 }) {
   return (
     <>
@@ -562,9 +545,6 @@ function SignUpForm({
         name="password"
         value={formData.password}
         onChange={handleChange}
-        visible={isPasswordVisible}
-        toggleVisibility={togglePasswordVisibility}
-        placeholder="Enter Password"
       />
 
       <PasswordField
@@ -572,12 +552,9 @@ function SignUpForm({
         name="confirmPassword"
         value={formData.confirmPassword}
         onChange={handleChange}
-        visible={isConfirmPasswordVisible}
-        toggleVisibility={toggleConfirmPasswordVisibility}
-        placeholder="Confirm Password"
       />
 
-      <SubmitButton text="Sign Up" />
+      <SubmitButton text="Sign Up" isLogingIn={isLogingIn} />
 
       <AuthSwitch
         text="Already have an account?"
@@ -594,11 +571,10 @@ function SignUpForm({
 function SignInForm({
   formData,
   handleChange,
-  isPasswordVisible,
-  togglePasswordVisibility,
   showForgotPassword,
   toggleForm,
   signInWithGoogle,
+  isLogingIn,
 }) {
   return (
     <>
@@ -609,9 +585,6 @@ function SignInForm({
         name="password"
         value={formData.password}
         onChange={handleChange}
-        visible={isPasswordVisible}
-        toggleVisibility={togglePasswordVisibility}
-        placeholder="Enter Password"
       />
 
       <div className="flex justify-end w-full lg:w-3/4">
@@ -623,7 +596,7 @@ function SignInForm({
         </p>
       </div>
 
-      <SubmitButton text="Sign In" />
+      <SubmitButton text="Sign In" isLogingIn={isLogingIn} />
 
       <AuthSwitch
         text="Don't have an account?"
@@ -668,13 +641,13 @@ function ForgotPasswordForm({
   );
 }
 
-function SubmitButton({ text }) {
+function SubmitButton({ text, isLogingIn }) {
   return (
     <button
       type="submit"
       className="capitalize w-full xl:w-3/4 bg-[#374A75] text-white font-semibold py-2 rounded-lg my-2"
     >
-      {text}
+      {isLogingIn ? "Logging in..." : text}
     </button>
   );
 }
