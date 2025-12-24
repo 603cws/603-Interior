@@ -242,7 +242,7 @@ export default function ProductReview({ product, onClose }) {
                       : "bg-gray-300 text-gray-500 cursor-not-allowed"
                   }`}
           >
-            Rate Product
+            {uploading ? "loading..." : "Rate Product"}
           </button>
         </div>
       </form>

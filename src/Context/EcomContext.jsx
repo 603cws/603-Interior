@@ -9,7 +9,6 @@ export const EcomAppProvider = ({ children }) => {
     JSON.parse(localStorage.getItem("cartitems")) || []
   );
   const [wishlistItems, setWishlistItems] = useState([]);
-  const [refreshCartItens, SetRefreshCartItems] = useState(false);
   const [filters, setFilters] = useState({
     category: [],
     priceRange: [0, 10000],
@@ -97,7 +96,7 @@ export const EcomAppProvider = ({ children }) => {
 
   useEffect(() => {
     getCartItems();
-  }, [refreshCartItens]);
+  }, []);
 
   return (
     <EcomContext.Provider

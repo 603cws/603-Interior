@@ -400,7 +400,7 @@ export function OrderDetails({ order, onBack, vendorId = null }) {
                   "Variant ID": variantId || "",
                   "Product ID": variant.product_id || "",
                   "Product Name": variant.title || "",
-                  Price: `₹${variant.price}` || "",
+                  Price: variant?.price ? `₹${variant.price}` : "",
                   Quantity: product?.quantity || "",
                   Description: variant.details || "",
                   Dimension: variant.dimensions || "NA",

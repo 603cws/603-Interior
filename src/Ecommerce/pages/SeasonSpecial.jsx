@@ -24,6 +24,7 @@ function SeasonSpecial() {
             image="/images/cabin chair.png"
             title="Chairs"
             subtitle="Special Offer"
+            key={i}
           />
         ))}
       </div>

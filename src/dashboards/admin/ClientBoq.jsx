@@ -559,7 +559,7 @@ function ClientBoq({ setClientBoqs }) {
             </button>
             <div className="flex justify-center items-center">
               <p className="text-[#374A75]">
-                No Saved BOQ's for {selectedClient.company_name}
+                No Saved BOQ&apos;s for {selectedClient.company_name}
               </p>
             </div>
           </div>

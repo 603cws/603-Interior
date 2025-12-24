@@ -104,7 +104,6 @@ function DetailedReview({
                 </>
               ) : (
                 <>
-                  {/* Back Button */}
                   <div className="mb-2">
                     <button
                       className="text-sm text-[#38938E] flex items-center gap-1"
@@ -115,7 +114,6 @@ function DetailedReview({
                     </button>
                   </div>
 
-                  {/* Main Image Section */}
                   <div className="relative flex justify-center items-center h-96">
                     {images.length > 1 && (
                       <button
@@ -141,8 +139,6 @@ function DetailedReview({
                       </button>
                     )}
                   </div>
-
-                  {/* Review Info */}
                   <div className="mt-6">
                     <div className="flex gap-5">
                       <p className="text-xs px-2 py-1 rounded flex items-center gap-1 border border-[#38938E] w-10">

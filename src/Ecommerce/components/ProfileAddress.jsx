@@ -8,12 +8,11 @@ function ProfileAddress() {
   const { accountHolder, fetchUserData } = useApp();
   const [errors, setErrors] = useState({});
   const [isAddressFormOpen, setIsAddressFormOpen] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [removingAddressId, setRemovingAddressId] = useState(null);
   const [isAddressEdit, setIsAddressEdit] = useState(false);
 
   const [addressFormdata, setaddressFormData] = useState({
-    id: "" || undefined,
+    id: "",
     name: "",
     mobile: "",
     address: "",
@@ -24,7 +23,7 @@ function ProfileAddress() {
     ismarkedDefault: false,
   });
   const [editaddressFormdata, setEditaddressFormData] = useState({
-    id: "" || undefined,
+    id: "",
     name: "",
     mobile: "",
     address: "",
@@ -218,7 +217,6 @@ function ProfileAddress() {
   const handleRemoveAddress = async (address) => {
     setRemovingAddressId(address.id);
     try {
-      setIsSubmitting(true);
       if (address.ismarkedDefault) {
         toast.error("Default address cant be removed");
         return;
@@ -240,7 +238,6 @@ function ProfileAddress() {
       console.error(error);
     } finally {
       fetchUserData();
-      setIsSubmitting(false);
       setRemovingAddressId(null);
     }
   };

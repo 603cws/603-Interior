@@ -56,7 +56,6 @@ function CheckPinCode({ onClose }) {
 
       <div className="hidden  fixed inset-0 bg-black bg-opacity-60 lg:flex items-center justify-center z-50 font-Poppins ">
         <div className="bg-white w-full max-w-lg rounded-md shadow-lg relative">
-          {/* Header */}
           <div className="flex justify-between items-center border-b p-4">
             <h2 className="text-xs  font-medium text-[#111]">
               ENTER ADDRESS DETAIL

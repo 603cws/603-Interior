@@ -12,11 +12,11 @@ export const AppProvider = ({ children }) => {
     phone: "",
     companyName: "",
     role: "",
-    allowedCategory: [] || undefined,
+    allowedCategory: [],
     profileImage: null,
     location: "",
     boqName: "",
-    address: [] || undefined,
+    address: [],
   });
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isAuthLoading, setIsAuthLoading] = useState(true);

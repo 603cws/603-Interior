@@ -103,11 +103,13 @@ function Header() {
   }
   const fetchProducts = async () => {
     try {
-      const { data } = await supabase
+      const { data, error } = await supabase
         .from("product_variants")
         .select(`* ,product_id(*)`)
         .order("created_at", { ascending: false })
         .neq("productDisplayType", "boq");
+
+      if (error) throw error;
 
       const filtered = data.filter(
         (item) =>
@@ -116,7 +118,9 @@ function Header() {
           item.product_id.category !== "Civil / Plumbing"
       );
       setProducts(filtered);
-    } catch {}
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   useEffect(() => {

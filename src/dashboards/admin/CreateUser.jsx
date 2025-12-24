@@ -177,7 +177,7 @@ function CreateUser() {
         <div className=" w-11/12 h-full bg-white p-6 flex flex-col items-center text-center">
           <div className="w-full text-left font-Poppins">
             <h4 className="text-base font-semibold text-[#374A75]">
-              Let's Work Together!
+              Let&apos;s Work Together!
             </h4>
             <img
               src="images/separator.png"

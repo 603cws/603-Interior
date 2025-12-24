@@ -121,6 +121,39 @@ const featuredProducts = [
   },
 ];
 
+const brands = [
+  { name: "welspun", image: "/images/ecommerce/wellspun.png" },
+  { name: "#", image: "/images/ecommerce/ikea.png" },
+  { name: "#", image: "/images/ecommerce/innova.png" },
+  { name: "dlink", image: "/images/brands/SmartSolutions/D-Link.svg" },
+  { name: "daikin", image: "/images/brands/HVAC/DAIKIN.svg" },
+  { name: "#", image: "/images/ecommerce/fortis.png" },
+  { name: "#", image: "/images/ecommerce/fortis.png" },
+  { name: "#", image: "/images/ecommerce/fortis.png" },
+];
+
+const EcommerceFeatures = [
+  {
+    title: "EASY PAYMENT",
+    image: "/images/payment.png",
+    width: "w-8",
+  },
+  {
+    title: "FREE SHIPPMENT",
+    image: "/images/shippment.png",
+    width: "w-12",
+  },
+  {
+    title: "EASY INSTALLATION",
+    image: "/images/install.png",
+    width: "w-8",
+  },
+  {
+    title: "GIFT CARTS",
+    image: "/images/gift.png",
+    width: "w-8",
+  },
+];
 function Products() {
   const { handleAddToCart } = useHandleAddToCart();
 
@@ -136,7 +169,6 @@ function Products() {
   useEffect(() => {
     const fetchProductsData = async () => {
       try {
-        // setProductsloading(true);
         const { data, error } = await supabase
           .from("product_variants")
           .select(`* ,product_id(*),reviews(*)`)
@@ -145,7 +177,6 @@ function Products() {
 
         if (error) throw error;
 
-        // Filter products where it is approved
         const filtered = data.filter(
           (item) =>
             item.status === "approved" &&
@@ -221,40 +252,6 @@ function Products() {
     );
     setCategoryProducts(updatedProducts);
   };
-
-  const brands = [
-    { name: "welspun", image: "/images/ecommerce/wellspun.png" },
-    { name: "#", image: "/images/ecommerce/ikea.png" },
-    { name: "#", image: "/images/ecommerce/innova.png" },
-    { name: "dlink", image: "/images/brands/SmartSolutions/D-Link.svg" },
-    { name: "daikin", image: "/images/brands/HVAC/DAIKIN.svg" },
-    { name: "#", image: "/images/ecommerce/fortis.png" },
-    { name: "#", image: "/images/ecommerce/fortis.png" },
-    { name: "#", image: "/images/ecommerce/fortis.png" },
-  ];
-
-  const EcommerceFeatures = [
-    {
-      title: "EASY PAYMENT",
-      image: "/images/payment.png",
-      width: "w-8",
-    },
-    {
-      title: "FREE SHIPPMENT",
-      image: "/images/shippment.png",
-      width: "w-12",
-    },
-    {
-      title: "EASY INSTALLATION",
-      image: "/images/install.png",
-      width: "w-8",
-    },
-    {
-      title: "GIFT CARTS",
-      image: "/images/gift.png",
-      width: "w-8",
-    },
-  ];
 
   return (
     <div>

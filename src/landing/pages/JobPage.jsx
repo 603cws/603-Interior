@@ -395,6 +395,7 @@ function JobForm({ SetJobForm, jobTitle }) {
               required: "Mobile number is required",
               min: 0,
               pattern: {
+                // eslint-disable-next-line no-useless-escape
                 value: /^(\+91[\-\s]?)?[6-9]\d{9}$/,
                 message: "Please enter a valid mobile number",
               },

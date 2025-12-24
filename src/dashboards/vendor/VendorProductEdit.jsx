@@ -84,7 +84,7 @@ function VendorProductEdit({
     title: selectedproduct?.title || "",
     price: selectedproduct?.price || "",
     details: selectedproduct?.details || "",
-    mainImage: [selectedproduct?.image] || [],
+    mainImage: selectedproduct?.image ? [selectedproduct.image] : [],
     additionalImages: JSON.parse(selectedproduct.additional_images) || [],
     segment: selectedproduct?.segment || "",
     dimension: selectedproduct?.dimensions || "",

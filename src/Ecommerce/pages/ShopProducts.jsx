@@ -85,7 +85,7 @@ function ShopProducts() {
   const [maxPrice, setMaxPrice] = useState(filters.priceRange[1]);
 
   //
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const category = searchParams.get("category");
   const query = searchParams.get("query");
 
@@ -94,6 +94,7 @@ function ShopProducts() {
       ...prev,
       priceRange: [minPrice, maxPrice],
     }));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [minPrice, maxPrice]);
 
   useEffect(() => {
@@ -103,6 +104,7 @@ function ShopProducts() {
         category: [category],
       }));
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   //ref
@@ -193,6 +195,7 @@ function ShopProducts() {
   useEffect(() => {
     const updated = applyFiltersAndSort(products, filters, filtersortby);
     setFilteredProducts(updated);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filters, filtersortby, products, showAvailableOnly, query]);
 
   useEffect(() => {

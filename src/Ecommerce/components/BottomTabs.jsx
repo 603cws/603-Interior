@@ -1,24 +1,17 @@
 import { MdOutlineLocalShipping } from "react-icons/md";
+const bottomTabs = [
+  { title: "Free shipping", icon: MdOutlineLocalShipping },
+  { title: "New styles", icon: MdOutlineLocalShipping },
+  { title: "Gift cards", icon: MdOutlineLocalShipping },
+  { title: "5.0 Trustpilot rating", icon: MdOutlineLocalShipping },
+];
 function BottomTabs() {
   return (
     <section className=" w-full bg-[#B8CCCC]/50 lg:px-10 py-2  ">
       <div className="font-Poppins flex justify-between lg:justify-around items-center">
-        <BottomTabComponent
-          Icon={MdOutlineLocalShipping}
-          title={"Free shipping"}
-        />
-        <BottomTabComponent
-          Icon={MdOutlineLocalShipping}
-          title={"New styles"}
-        />
-        <BottomTabComponent
-          Icon={MdOutlineLocalShipping}
-          title={"Gift cards"}
-        />
-        <BottomTabComponent
-          Icon={MdOutlineLocalShipping}
-          title={"5.0 Trustpilot rating"}
-        />
+        {bottomTabs.map(({ title, icon: Icon }) => (
+          <BottomTabComponent key={title} Icon={Icon} title={title} />
+        ))}
       </div>
     </section>
   );

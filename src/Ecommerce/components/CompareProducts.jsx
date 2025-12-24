@@ -4,7 +4,6 @@ import { useHandleAddToCart } from "../../utils/HelperFunction";
 import { useApp } from "../../Context/Context";
 import { useEcomApp } from "../../Context/EcomContext";
 function CompareProducts({ product, onClose, onRemove }) {
-  // Auto-close when product array is empty
   useEffect(() => {
     if (product.length === 0) {
       onClose();

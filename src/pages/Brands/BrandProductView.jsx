@@ -133,9 +133,9 @@ function BrandProductView() {
             </h2>
             <p className="text-sm leading-[18px] mb-8">
               Experience the epitome of creativity and grace with the Celestial
-              collection's Archer range of the . Archer's solid texture and the
-              splash of blue is an ideal combinations to make your house look
-              stunning.
+              collection&apos;s Archer range of the. Archer&apos;s solid texture
+              and the splash of blue is an ideal combinations to make your house
+              look stunning.
             </p>
 
             <button className="border-[#000] border py-2 text-[10.5px] mb-5">
@@ -152,7 +152,7 @@ function BrandProductView() {
 
             <div className="flex flex-wrap  gap-6 mb-3">
               {Array.from({ length: 12 }, (_, i) => (
-                <div className="max-w-xs">
+                <div key={i} className="max-w-xs">
                   <img
                     src="/images/Edencolor.png"
                     alt="eden color"

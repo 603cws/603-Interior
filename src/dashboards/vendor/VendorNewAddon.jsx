@@ -18,7 +18,6 @@ function VendorNewAddon({
   setIsAddonRefresh,
   setProductlist,
 }) {
-  const [file, setFile] = useState(null);
   const [preview, setPreview] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [subcat, setSubcat] = useState([]);
@@ -69,13 +68,11 @@ function VendorNewAddon({
     event.preventDefault();
     const droppedFile = event.dataTransfer.files[0];
     if (droppedFile) {
-      setFile(droppedFile);
       setPreview(URL.createObjectURL(droppedFile));
     }
   };
 
   const removeFile = () => {
-    setFile(null);
     setPreview(null);
     if (fileInputRef.current) {
       fileInputRef.current.value = null;
@@ -96,7 +93,6 @@ function VendorNewAddon({
         ...prevVariants,
         image: file,
       }));
-      setFile(file);
       setPreview(URL.createObjectURL(file));
     }
   };

@@ -238,7 +238,7 @@ function Landing() {
                 </h1>
                 <div className="h-1 w-20 bg-[#334A78] place-self-center lg:place-self-end"></div>
                 <p className="text-base lg:text-[15px] xl:text-[19px] 2xl:text-[21px] text-[#555555]">
-                  "Transforming ordinary spaces into extraordinary
+                  &quot;Transforming ordinary spaces into extraordinary
                   <span className="hidden lg:inline">
                     <br />
                   </span>
@@ -250,7 +250,7 @@ function Landing() {
                   <span className="hidden lg:inline">
                     <br />
                   </span>
-                  uniquely yours."
+                  uniquely yours.&quot;
                 </p>
 
                 <button
@@ -440,7 +440,7 @@ function Landing() {
                       </div>
                     </div>
                     <p className="text-[#374151] leading-relaxed mt-4">
-                      "{t.text}"
+                      &quot;{t.text}&quot;
                     </p>
                   </div>
                 </SwiperSlide>

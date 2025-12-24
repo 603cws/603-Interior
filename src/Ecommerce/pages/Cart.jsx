@@ -33,7 +33,7 @@ function EmptyCart() {
       <div className=" flex justify-center items-center">
         <div className=" my-4 space-y-6">
           <p className="text-center">
-            There is nothing in your cart. Let's add some items.
+            There is nothing in your cart. Let&apos;s add some items.
           </p>
           <div className="flex justify-center items-center">
             <button
@@ -140,6 +140,7 @@ function Cart() {
     };
     calculateDiscountOnMrp();
     youMayAlsoLike();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cartItems, localcartItems, isAuthenticated]);
 
   const handleRemoveCoupon = async () => {
@@ -189,10 +190,10 @@ function Cart() {
 
   useEffect(() => {
     RevevaluteAppliedCoupon(mobileCouponName);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [orignalTotalPrice]);
 
   useEffect(() => {
-    const price = orignalTotalPrice.toFixed(2);
     const subtotal = orignalTotalPrice - discountOnMrp;
 
     if (differenceInPrice > 0) {
@@ -206,6 +207,7 @@ function Cart() {
     }
     const shippiingFee = GetDeliveryCharges(subtotal);
     setshippingCharge(shippiingFee);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [orignalTotalPrice]);
 
   const handleCheckCoupon = async (e) => {
@@ -369,6 +371,7 @@ function Cart() {
 
   useEffect(() => {
     syncLocalCartToDB();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const onClose = () => {
@@ -935,7 +938,7 @@ function CartCard({ cartitem }) {
   async function handleRemoveItem(product) {
     if (isAuthenticated) {
       try {
-        const { data, error } = await supabase
+        const { error } = await supabase
           .from("userProductCollection")
           .delete()
           .eq("id", product.id);
@@ -964,7 +967,7 @@ function CartCard({ cartitem }) {
   const updateQuantity = async (productId, newQuantity) => {
     setLoadingQty(true);
     try {
-      const { data, error } = await supabase
+      const { error } = await supabase
         .from("userProductCollection")
         .update({ quantity: newQuantity })
         .eq("productId", productId);

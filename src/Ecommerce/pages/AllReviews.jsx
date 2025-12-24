@@ -345,9 +345,8 @@ function AllReviews() {
                           .from("review-images")
                           .getPublicUrl(image).data.publicUrl;
                         return (
-                          <div>
+                          <div key={index}>
                             <img
-                              key={index}
                               src={url}
                               alt={`Review ${index + 1}`}
                               className="h-16 w-16 object-cover"
