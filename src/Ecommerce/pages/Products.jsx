@@ -412,14 +412,14 @@ function Products() {
           <div className="grid grid-cols-4 lg:grid-cols-4 gap-2 gap-y-4">
             {brands.map((brand, index) => (
               <div
-                className="hover:shadow-lg flex justify-center items-center w-full h-28"
+                className="hover:shadow-lg flex justify-center items-center w-full h-28 cursor-pointer"
                 key={index}
+                onClick={() => navigate(`/brandOverview/${brand.name}`)}
               >
                 <img
                   src={brand.image}
                   alt={brand.name}
-                  className="object-scale-down h-full w-44 cursor-pointer"
-                  onClick={() => navigate(`/brandOverview/${brand.name}`)}
+                  className="object-scale-down h-full w-44"
                 />
               </div>
             ))}

@@ -174,7 +174,7 @@ const brandImages = {
   HVAC: [
     { name: "#", image: "/images/brands/HVAC/Blue_Star.png" },
     { name: "daikin", image: "/images/brands/HVAC/DAIKIN.svg" },
-    { name: "#", image: "/images/brands/HVAC/LG.svg" },
+    { name: "lg", image: "/images/brands/HVAC/LG.svg" },
     { name: "#", image: "/images/brands/HVAC/Carrier.svg" },
     { name: "#", image: "/images/brands/HVAC/Mitsubishi.svg" },
     { name: "#", image: "/images/brands/HVAC/Voltas.png" },
@@ -261,15 +261,15 @@ function BrandsOverview() {
             {images.map((brand, idx) => (
               <div
                 key={idx}
-                className="hover:shadow-lg flex justify-center items-center w-full h-28"
+                className="hover:shadow-lg flex justify-center items-center w-full h-28 cursor-pointer"
+                onClick={() => {
+                  navigate(`/brandOverview/${brand.name}`);
+                }}
               >
                 <img
                   src={brand.image}
                   alt={brand.name}
-                  className="object-scale-down w-32 h-full cursor-pointer"
-                  onClick={() => {
-                    navigate(`/brandOverview/${brand.name}`);
-                  }}
+                  className="object-scale-down w-32 h-full"
                 />
               </div>
             ))}

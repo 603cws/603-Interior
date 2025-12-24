@@ -4,6 +4,7 @@ import Dlink from "./BrandDLink";
 import Daikin from "./Daikin";
 import Light from "./BrandLight";
 import Furniture from "./BrandFurniture";
+import Lg from "./Lg";
 
 const BrandRouter = () => {
   const { brandName } = useParams();
@@ -14,6 +15,7 @@ const BrandRouter = () => {
     daikin: <Daikin />,
     lighting: <Light />,
     furniture: <Furniture />,
+    lg: <Lg />,
   };
 
   return components[brandName] || <div>Brand Not Found</div>;

@@ -30,6 +30,7 @@ export default {
         TimesNewRoman: ["times-new-roman", "sans-serif"],
         Georgia: ["georgia", "sans-serif"],
         Alegreya: ["Alegreya", "sans-serif"],
+        segoe: ["Segoe UI", "sans-serif"],
       },
       colors: {
         customYellow: "#fff9c9",
