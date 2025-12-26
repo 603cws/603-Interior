@@ -120,7 +120,7 @@ const ThreeDViewer = ({ onClose }) => {
       renderer.domElement.removeEventListener("touchstart", stopAutoRotate);
       renderer.domElement.removeEventListener("wheel", stopAutoRotate);
     };
-  }, [bgColor]);
+  }, [bgColor, isInteracting]);
 
   const toggleBackground = () => {
     const newColor = bgColor === "#000000" ? "#ffffff" : "#000000";

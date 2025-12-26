@@ -15,10 +15,6 @@ import Clients from "../Clients";
 import { supabase } from "../../../services/supabase";
 import toast from "react-hot-toast";
 import Blogs from "./Blogs";
-import Transactions from "./Transactions";
-import StatsSection from "./StatsSection";
-import BestSellingSection from "./BestSellingSection";
-import SalesSection from "./SalesSection";
 import DashboardProductCard from "../../../dashboards/vendor/DashboardProductCard";
 import Products from "./Products";
 import { BsArchive } from "react-icons/bs";
@@ -28,6 +24,8 @@ import { IoMdSwitch } from "react-icons/io";
 import CareerDash from "./CareerDash";
 import { TbBriefcase2 } from "react-icons/tb";
 import Orders, { OrderDetails } from "../Orders";
+import EcomDashHome from "./EcomDashHome";
+import DeleteWarning from "../../components/DeleteWarning";
 
 function handlesidebarState(state, action) {
   switch (action.type) {
@@ -60,15 +58,13 @@ const SECTIONS = {
 function AdminDashboardEcom() {
   const logout = useLogout();
   const navigate = useNavigate();
-
   const [isExpanded, setIsExpanded] = useState(false);
-  const [query, setQuery] = useState();
   const [filteredusers, setFilteredUsers] = useState();
   const [isrefresh, setIsrefresh] = useState(false);
   const [clientBoqs, setClientBoqs] = useState(false);
   const [allusers, setAllusers] = useState();
   const [isproductRefresh, setIsProductRefresh] = useState(false);
-  const [isaddonRefresh, setIsAddonRefresh] = useState(false);
+  // const [isaddonRefresh, setIsAddonRefresh] = useState(false);
   const [rejectReasonPopup, setRejectReasonPopup] = useState(false);
   const [rejectReason, setRejectReason] = useState("");
   const [deleteWarning, setDeleteWarning] = useState(false);
@@ -102,7 +98,7 @@ function AdminDashboardEcom() {
           .delete()
           .eq("id", selectedProductview.id);
         toast.success("Product deleted successfully!");
-        setIsAddonRefresh(true);
+        // setIsAddonRefresh(true);
       }
 
       let imagePaths = [];
@@ -135,9 +131,10 @@ function AdminDashboardEcom() {
     } catch (error) {
       console.error(error);
     } finally {
-      selectedProductview.type === "product"
-        ? setIsProductRefresh(true)
-        : setIsAddonRefresh(true);
+      setIsProductRefresh(true);
+      // selectedProductview.type === "product"
+      //   ? setIsProductRefresh(true)
+      //   : setIsAddonRefresh(true);
     }
     setDeleteWarning(false);
   };
@@ -173,24 +170,15 @@ function AdminDashboardEcom() {
         toast.success(`Addon ${newStatus}`);
       }
     } finally {
-      product.type === "product"
-        ? setIsProductRefresh(true)
-        : setIsAddonRefresh(true);
+      setIsProductRefresh(true);
+      // product.type === "product"
+      //   ? setIsProductRefresh(true)
+      //   : setIsAddonRefresh(true);
 
       if (productPreview) {
         setProductPreview(false);
       }
     }
-  };
-
-  const filterByMultipleFields = (query) => {
-    if (!query) {
-      setFilteredUsers(allusers);
-    }
-    const filtereduser = allusers.filter((item) =>
-      item.company_name.toLowerCase().includes(query.toLowerCase())
-    );
-    setFilteredUsers(filtereduser);
   };
 
   const getusers = async () => {
@@ -480,22 +468,10 @@ function AdminDashboardEcom() {
         {/* dashboard */}
         {sidebarstate.dashboard && (
           <div className="flex flex-col h-full min-h-0 overflow-y-auto overflow-x-hidden lg:border-2 border-[#334A78] rounded-lg bg-white font-lato p-4 custom-scrollbar">
-            <StatsSection allusers={allusers} />
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
-              <Transactions
-                sidebarDispatch={sidebarDispatch}
-                onOrderSelect={(order) => {
-                  setSelectedOrder(order);
-                  sidebarDispatch({
-                    type: "TOGGLE_SECTION",
-                    payload: "Orders",
-                  });
-                }}
-              />
-              <SalesSection />
-            </div>
-            <BestSellingSection
+            <EcomDashHome
+              allusers={allusers}
               sidebarDispatch={sidebarDispatch}
+              setSelectedOrder={setSelectedOrder}
               handleProductPreview={handleProductPreview}
             />
           </div>
@@ -516,7 +492,6 @@ function AdminDashboardEcom() {
             setSelectedProductview={setSelectedProductview}
             setRejectReasonPopup={setRejectReasonPopup}
             setDeleteWarning={setDeleteWarning}
-            setIsAddonRefresh={setIsAddonRefresh}
             handleUpdateStatus={handleUpdateStatus}
             setRejectReason={setRejectReason}
             handleProductPreview={handleProductPreview}
@@ -526,9 +501,7 @@ function AdminDashboardEcom() {
           <div className="flex flex-col h-full min-h-0 overflow-hidden lg:border-2 lg:border-[#334A78] lg:rounded-lg bg-white">
             <Clients
               isExpanded={isExpanded}
-              filterByMultipleFields={filterByMultipleFields}
-              query={query}
-              filteredusers={filteredusers}
+              allusers={filteredusers}
               setIsrefresh={setIsrefresh}
               setClientBoqs={setClientBoqs}
               eComm={true}
@@ -571,38 +544,11 @@ function AdminDashboardEcom() {
       )}
 
       {deleteWarning && (
-        <div className="flex justify-center items-center fixed inset-0 z-30">
-          <div className="absolute inset-0 bg-black opacity-50"></div>
-          <div className="bg-white relative py-7 px-16 md:px-20">
-            <div className="flex justify-center items-center">
-              <img
-                src="images/icons/delete-icon.png"
-                alt="delete icon"
-                className="h-12 w-12"
-              />
-            </div>
-
-            <h4 className="font-semibold my-5">
-              Do you want to delete {selectedProductview.title}?
-            </h4>
-            <div className="flex justify-between">
-              <button
-                onClick={() => {
-                  setDeleteWarning(false);
-                }}
-                className="px-5 py-2 bg-[#EEEEEE] rounded-md"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={() => handleDelete(selectedProductview)}
-                className="px-5 py-2 bg-[#B4EAEA] rounded-md"
-              >
-                Delete
-              </button>
-            </div>
-          </div>
-        </div>
+        <DeleteWarning
+          selectedProductview={selectedProductview}
+          setDeleteWarning={setDeleteWarning}
+          handleDelete={handleDelete}
+        />
       )}
 
       {rejectReasonPopup && (

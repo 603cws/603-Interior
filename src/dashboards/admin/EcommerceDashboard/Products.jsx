@@ -1,7 +1,7 @@
 import { VscEye } from "react-icons/vsc";
 import { MdOutlineDelete } from "react-icons/md";
 import VendorProductEdit from "../../../dashboards/vendor/VendorProductEdit";
-import VendorEditAddon from "../../../dashboards/vendor/VendorEditAddon";
+// import VendorEditAddon from "../../../dashboards/vendor/VendorEditAddon";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import { exportToExcel } from "../../../utils/DataExport";
 import {
@@ -28,7 +28,6 @@ function Products({
   setSelectedProductview,
   setRejectReasonPopup,
   setDeleteWarning,
-  setIsAddonRefresh,
   handleUpdateStatus,
   setRejectReason,
   handleProductPreview,
@@ -41,12 +40,13 @@ function Products({
   const [selectedSubCategory, setSelectedSubCategory] = useState("");
   const [toggle, setToggle] = useState(true);
   const [products, setProducts] = useState([]);
-  const [addons, setAddons] = useState([]);
+  // const [addons, setAddons] = useState([]);
+  const addons = [];
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [filteredAddons, setFilteredAddons] = useState([]);
   const [isSearching, setIsSearching] = useState(false);
   const [selectedTab, setSelectedTab] = useState("products");
-  const [isAddProduct, setIsAddProduct] = useState(false);
+  // const [isAddProduct, setIsAddProduct] = useState(false);
   const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [lastPageBeforeSearch, setLastPageBeforeSearch] = useState(1);
@@ -67,8 +67,10 @@ function Products({
   const [selectedproduct, setSelectedproduct] = useState(null);
 
   //new edit option addon
-  const [editAddon, setEditAddon] = useState(false);
-  const [selectedAddon, setSelectedAddon] = useState(null);
+
+  // const [editAddon, setEditAddon] = useState(false);
+
+  // const [selectedAddon, setSelectedAddon] = useState(null);
 
   const [reviews, setReviews] = useState(false);
 
@@ -301,7 +303,7 @@ function Products({
 
   const handleTabClick = (event) => {
     setProductlist(true);
-    setIsAddProduct(false);
+    // setIsAddProduct(false);
     const tab = event.target.value; // Get value from button
     setSelectedTab(tab);
     setToggle(tab === "products"); // Set toggle dynamically
@@ -377,6 +379,16 @@ function Products({
     setSelectedProductview(item);
   };
 
+  // use this later if want to add addon in this product
+  // : editAddon ? (
+  //         <VendorEditAddon
+  //           seteditAddon={setEditAddon}
+  //           selectedAddon={selectedAddon}
+  //           setProductlist={setProductlist}
+  //           setIsAddonRefresh={setIsAddonRefresh}
+  //         />
+  //       )
+
   return (
     <div className="flex flex-col h-full min-h-0 overflow-hidden lg:border-2 lg:border-[#334A78] lg:rounded-lg bg-white">
       <div className="overflow-y-auto scrollbar-hide relative h-full">
@@ -386,13 +398,6 @@ function Products({
             setProductlist={setProductlist}
             setIsProductRefresh={setIsProductRefresh}
             selectedproduct={selectedproduct}
-          />
-        ) : editAddon ? (
-          <VendorEditAddon
-            seteditAddon={setEditAddon}
-            selectedAddon={selectedAddon}
-            setProductlist={setProductlist}
-            setIsAddonRefresh={setIsAddonRefresh}
           />
         ) : reviews ? (
           <ProductReviews
@@ -1134,10 +1139,11 @@ function Products({
                                         if (toggle) {
                                           setSelectedproduct(item);
                                           setEditProduct(true);
-                                        } else {
-                                          setSelectedAddon(item);
-                                          setEditAddon(true);
                                         }
+                                        // else {
+                                        //   setSelectedAddon(item);
+                                        //   // setEditAddon(true);
+                                        // }
                                         setOpenMenuId(null);
                                       }}
                                       className="flex gap-2 items-center w-full text-left px-3 py-2 hover:bg-gray-200"

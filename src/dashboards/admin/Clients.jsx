@@ -8,9 +8,7 @@ import PagInationNav from "../../common-components/PagInationNav";
 
 function Clients({
   isExpanded,
-  filterByMultipleFields,
-  filteredusers,
-  query,
+  allusers,
   setIsrefresh,
   setClientBoqs,
   eComm = false,
@@ -21,8 +19,20 @@ function Clients({
   const [selectedindex, setSelectedindex] = useState();
   const [showSearch, setShowSearch] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
+  const [filteredusers, setFilteredUsers] = useState(allusers);
+  const [query, setQuery] = useState();
 
   const { setSelectedClient } = useApp();
+
+  const filterByMultipleFields = (query) => {
+    if (!query) {
+      setFilteredUsers(allusers);
+    }
+    const filtereduser = allusers.filter((item) =>
+      item.company_name.toLowerCase().includes(query.toLowerCase())
+    );
+    setFilteredUsers(filtereduser);
+  };
 
   const itemperPage = 12;
   const indexoflastClient = currentPage * itemperPage;
@@ -64,6 +74,13 @@ function Clients({
     setSelectedClient(user);
   };
 
+  if (!allusers)
+    return (
+      <div>
+        <p>loading ....</p>
+      </div>
+    );
+
   return (
     <div className="flex flex-col h-full min-h-0 overflow-hidden lg:border-2 lg:border-[#334A78] lg:rounded-lg bg-white">
       <div className="w-full flex flex-col overflow-y-auto scrollbar-hide h-[calc(100vh-110px)] px-3">
@@ -83,7 +100,10 @@ function Clients({
                   showSearch ? "block" : "hidden"
                 }`}
                 placeholder="......search by company name"
-                onChange={(e) => filterByMultipleFields(e.target.value)}
+                onChange={(e) => {
+                  setQuery(e.target.value);
+                  filterByMultipleFields(e.target.value);
+                }}
                 value={query}
               />
             </div>
