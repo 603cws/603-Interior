@@ -102,6 +102,8 @@ function Layout() {
   const [warning, setWarning] = useState(false);
   const [otherArea, setOtherArea] = useState(0);
 
+  const isRehydratingRef = useRef(false);
+
   const { isAuthenticated } = useApp();
 
   const { totalArea, setTotalArea, totalAreaSource, currentLayoutData } =
@@ -138,6 +140,7 @@ function Layout() {
   };
 
   useEffect(() => {
+    if (isRehydratingRef.current) return;
     setSeatCounts((prev) => {
       const newSeatCount = { ...prev };
       newSeatCount.linear = areaQuantities.linear ?? prev.linear;
@@ -273,6 +276,7 @@ function Layout() {
       if (isAuthenticated) {
         setTotalArea(currentLayoutData?.totalArea);
       }
+      isRehydratingRef.current = true;
       tempVar = "layoutLoad";
       const { areaValues, quantities } =
         extractAreaAndQuantity(currentLayoutData);
@@ -280,8 +284,28 @@ function Layout() {
       setAreaValues(areaValues);
       setAreaQuantities(quantities);
       setSeatCounts(currentLayoutData.seatCount);
+      //setting area for each cabin from fetched data
+      setSmallCabinSize(areaValues.small);
+      setMdCabinSize(areaValues.md);
+      setManagerCabinSize(areaValues.manager);
+      setHrRoomSize(areaValues.hrRoom);
+      setSalesRoomSize(areaValues.sales);
+      setFinanceRoomSize(areaValues.financeRoom);
+      setConferenceRoomSize(areaValues.conferenceRoom);
+      setBoardRoomSize(areaValues.boardRoom);
+      setVideoRecordingRoomSize(areaValues.videoRecordingRoom);
+      setReceptionSize(areaValues.reception);
+      setLoungeSize(areaValues.lounge);
+      setBreakoutRoomSize(areaValues.breakoutRoom);
+      setUpsRoomSize(areaValues.ups);
+      setBmsRoomSize(areaValues.bms);
+      setWashroomsSize(areaValues.washrooms);
+      setOtherArea(areaValues.other);
 
       handleVariantNameChange(areaValues);
+      requestAnimationFrame(() => {
+        isRehydratingRef.current = false;
+      });
     }
   }, [currentLayoutData]); // only runs when currentLayoutData changes
 
@@ -345,6 +369,7 @@ function Layout() {
     }
   };
   const updateSeatCounts = (type, value) => {
+    if (isRehydratingRef.current) return;
     const seatValue = Number(value);
 
     setSeatCounts((prev) => ({
@@ -377,6 +402,7 @@ function Layout() {
   };
 
   const handleRoomAreaChange = (roomType, setRoomSize) => (newCabinSize) => {
+    if (isRehydratingRef.current) return;
     setRoomSize(newCabinSize);
     setAreaValues((prevAreaValues) => ({
       ...prevAreaValues,

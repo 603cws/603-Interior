@@ -7,11 +7,12 @@ import { PiStarFourFill } from "react-icons/pi";
 import { RiVipCrown2Fill } from "react-icons/ri";
 import { HiMiniCheckBadge, HiOutlineBarsArrowDown } from "react-icons/hi2";
 import PagInationNav from "../../common-components/PagInationNav";
-import ProductSkeleton, { animations } from "./ProductSkeleton";
+import ProductSkeleton from "./ProductSkeleton";
 import FilterPanel from "./FilterPanel";
 import SortPanel, { options } from "./SortPanel";
 import { useBoqApp } from "../../Context/BoqContext";
 import { useApp } from "../../Context/Context";
+import { animations } from "../constants/animations";
 
 function ProductCard({
   products,

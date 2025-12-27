@@ -20,6 +20,19 @@ const MeetingRooms = ({
 }) => {
   const { totalArea, builtArea } = areaInfo;
 
+  const valueResolver = {
+    conferenceRoomConfig: conferenceRoomConfig,
+    boardRoomConfig: boardRoomConfig,
+    hrRoomConfig: hrRoomConfig,
+    financeRoomConfig: financeRoomConfig,
+    salesRoomConfig: salesRoomConfig,
+    videoRecordingRoomSize,
+    setVideoRecordingRoomSize,
+  };
+  const resolvePath = (obj, path) => {
+    return path.split(".").reduce((acc, key) => acc?.[key], obj);
+  };
+
   return (
     <div className="section px-3">
       <h3 className="section-heading bg-[#E4E7ED] shadow-sm text-md pl-2 py-1 sticky top-0 font-semibold z-10">
@@ -27,65 +40,76 @@ const MeetingRooms = ({
       </h3>
       <div className="meeting-rooms grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-2 3xl:grid-cols-3 gap-5 justify-items-center lg:justify-items-stretch">
         {meetingRoomData.map((room) => {
-          const sliderProps = room.slider
-            ? {
-                name: room.slider.name,
-                value: room.slider.valueKey
-                  ? eval(room.slider.valueKey) // Dynamically evaluate the value (e.g., videoRecordingRoomSize)
-                  : 0, // Default to 0 if no dynamic value is found
-                onChange: room.slider.setValueKey
-                  ? eval(room.slider.setValueKey) // Dynamically evaluate the setter function (e.g., setVideoRecordingRoomSize)
-                  : () => {}, // Default empty function if no setter is provided
-                min2: room.slider.min,
-                max2: room.slider.max,
-                step2: room.slider.step,
-                totalArea,
-                builtArea,
-                initialAreaValues,
-                type: room.type,
-                ...(room.type === "hrRoom"
-                  ? {
-                      cabinSize: hrRoomConfig.roomSize,
-                      setCabinSize: hrRoomConfig.setRoomSize,
-                      seatCount: hrRoomConfig.seatCount,
-                      setSeatCount: hrRoomConfig.setSeatCount,
-                    }
-                  : room.type === "financeRoom"
-                  ? {
-                      cabinSize: financeRoomConfig.roomSize,
-                      setCabinSize: financeRoomConfig.setRoomSize,
-                      seatCount: financeRoomConfig.seatCount,
-                      setSeatCount: financeRoomConfig.setSeatCount,
-                    }
-                  : room.type === "sales"
-                  ? {
-                      cabinSize: salesRoomConfig.roomSize,
-                      setCabinSize: salesRoomConfig.setRoomSize,
-                      seatCount: salesRoomConfig.seatCount,
-                      setSeatCount: salesRoomConfig.setSeatCount,
-                    }
-                  : room.type === "videoRecordingRoom"
-                  ? {
-                      cabinSize: videoRecordingRoomSize,
-                      setCabinSize: setVideoRecordingRoomSize,
-                    }
-                  : room.type === "conferenceRoom"
-                  ? {
-                      cabinSize: conferenceRoomSize,
-                      setCabinSize: setConferenceRoomSize,
-                      seatCount: conferenceRoomConfig.seatCount,
-                      setSeatCount: conferenceRoomConfig.setSeatCount,
-                    }
-                  : room.type === "boardRoom"
-                  ? {
-                      cabinSize: boardRoomSize,
-                      setCabinSize: setBoardRoomSize,
-                      seatCount: boardRoomConfig.seatCount,
-                      setSeatCount: boardRoomConfig.setSeatCount,
-                    }
-                  : {}),
-              }
-            : null;
+          let sliderProps = null;
+
+          if (room.slider) {
+            const { valueKey, setValueKey } = room.slider;
+
+            const value =
+              valueKey && valueKey.includes(".")
+                ? resolvePath(valueResolver, valueKey)
+                : valueResolver[valueKey] ?? 0;
+
+            const onChange =
+              setValueKey && setValueKey.includes(".")
+                ? resolvePath(valueResolver, setValueKey)
+                : valueResolver[setValueKey] ?? (() => {});
+
+            sliderProps = {
+              name: room.slider.name,
+              value,
+              onChange,
+              min2: room.slider.min,
+              max2: room.slider.max,
+              step2: room.slider.step,
+              totalArea,
+              builtArea,
+              initialAreaValues,
+              type: room.type,
+
+              ...(room.type === "hrRoom"
+                ? {
+                    cabinSize: hrRoomConfig.roomSize,
+                    setCabinSize: hrRoomConfig.setRoomSize,
+                    seatCount: hrRoomConfig.seatCount,
+                    setSeatCount: hrRoomConfig.setSeatCount,
+                  }
+                : room.type === "financeRoom"
+                ? {
+                    cabinSize: financeRoomConfig.roomSize,
+                    setCabinSize: financeRoomConfig.setRoomSize,
+                    seatCount: financeRoomConfig.seatCount,
+                    setSeatCount: financeRoomConfig.setSeatCount,
+                  }
+                : room.type === "sales"
+                ? {
+                    cabinSize: salesRoomConfig.roomSize,
+                    setCabinSize: salesRoomConfig.setRoomSize,
+                    seatCount: salesRoomConfig.seatCount,
+                    setSeatCount: salesRoomConfig.setSeatCount,
+                  }
+                : room.type === "videoRecordingRoom"
+                ? {
+                    cabinSize: videoRecordingRoomSize,
+                    setCabinSize: setVideoRecordingRoomSize,
+                  }
+                : room.type === "conferenceRoom"
+                ? {
+                    cabinSize: conferenceRoomSize,
+                    setCabinSize: setConferenceRoomSize,
+                    seatCount: conferenceRoomConfig.seatCount,
+                    setSeatCount: conferenceRoomConfig.setSeatCount,
+                  }
+                : room.type === "boardRoom"
+                ? {
+                    cabinSize: boardRoomSize,
+                    setCabinSize: setBoardRoomSize,
+                    seatCount: boardRoomConfig.seatCount,
+                    setSeatCount: boardRoomConfig.setSeatCount,
+                  }
+                : {}),
+            };
+          }
 
           return (
             <LayoutCard
