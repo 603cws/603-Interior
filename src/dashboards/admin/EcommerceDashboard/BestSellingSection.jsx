@@ -59,7 +59,7 @@ function BestSellingSection({ sidebarDispatch, handleProductPreview }) {
       </div>
 
       <table className="w-full text-sm text-[#23272E]">
-        <thead className="border-b bg-[#E7EAF8] text-[#6A717F] font-sans font-medium text-[13px]">
+        <thead className="border-b bg-[#E7EAF8] text-[#6A717F] font-Poppins font-medium text-[13px]">
           <tr>
             <th className="bg-[#E7EAF8] rounded-l-lg pl-4 py-3 text-[#6A717F] text-left">
               PRODUCT
@@ -86,7 +86,7 @@ function BestSellingSection({ sidebarDispatch, handleProductPreview }) {
             variantsData.slice(0, 5).map((p, i) => (
               <tr
                 key={i}
-                className="border-b last:border-none font-lato hover:bg-gray-100 cursor-pointer"
+                className="border-b last:border-none font-Poppins hover:bg-gray-100 cursor-pointer"
                 onClick={() => {
                   handleProductPreview(p);
                 }}

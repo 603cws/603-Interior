@@ -261,7 +261,7 @@ function FeatureRow({ features, type = true }) {
 
 function Specifications({ product }) {
   return (
-    <div className="flex-1 md:flex-none flex p-5 flex-col  justify-around items-center gap-6 border border-[#000] font-inter ">
+    <div className="flex-1 md:flex-none flex p-5 flex-col  justify-around items-center gap-6 border border-[#000] font-TimesNewRoman ">
       <div>
         <img src={product?.image} alt="article code" />
       </div>

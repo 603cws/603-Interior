@@ -214,28 +214,22 @@ function NewBoq({ onConfirm }) {
               <div className="mt-6 flex justify-center gap-3">
                 {boqMode === "new" ? (
                   <div className="flex justify-between w-full text-sm">
-                    <button
+                    <ContinueBtn
+                      title="continue draft"
                       onClick={() => handleConfirm("new", "continue")}
-                      className="capitalize px-4 py-2 border bg-gradient-to-r from-[#334A78] to-[#68B2DC] text-[#fff]"
-                    >
-                      continue draft
-                    </button>
-                    <button
+                    />
+                    <ContinueBtn
+                      title="create new draft"
                       onClick={() => handleConfirm("new", "discard")}
-                      className="capitalize px-4 py-2 border bg-[#334A78] text-[#fff]"
-                    >
-                      create new draft
-                    </button>
+                    />
                   </div>
                 ) : (
-                  <button
+                  <ContinueBtn
+                    title="Continue"
                     onClick={() => {
                       handleConfirm("existing", "continue");
                     }}
-                    className="capitalize px-6 py-2 border bg-gradient-to-r from-[#334A78] to-[#68B2DC] text-[#fff] text-sm"
-                  >
-                    continue
-                  </button>
+                  />
                 )}
               </div>
             </Dialog.Panel>
@@ -247,3 +241,14 @@ function NewBoq({ onConfirm }) {
 }
 
 export default NewBoq;
+
+function ContinueBtn({ title, onClick }) {
+  return (
+    <button
+      onClick={onClick}
+      className="capitalize px-6 py-2 border bg-[#334A78] hover:bg-gradient-to-r hover:from-[#334A78] hover:to-[#68B2DC] text-[#fff] text-sm"
+    >
+      {title}
+    </button>
+  );
+}

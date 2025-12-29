@@ -239,7 +239,7 @@ const Categories = ({
                               )}
                             </div>
                           </div>
-                          <div className=" text-center font-['Poppins-Regular',_sans-serif] text-[10px] lg:text-base lg:leading-5 font-normal">
+                          <div className=" text-center font-Poppins text-[10px] lg:text-base lg:leading-5 font-normal">
                             {category}
                           </div>
                         </div>

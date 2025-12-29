@@ -383,7 +383,7 @@ function Contactus() {
               </div>
             </div>
 
-            <div className="font-inter bg-white flex-1 space-y-2 px-4  pb-4 border">
+            <div className="font-TimesNewRoman bg-white flex-1 space-y-2 px-4  pb-4 border">
               <h2 className="text-[#1C346B] text-3xl ">
                 Interested in working with us!
               </h2>
