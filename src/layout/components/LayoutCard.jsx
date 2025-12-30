@@ -41,7 +41,12 @@ const LayoutCard = ({
         </div>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 justify-items-start items-start gap-x-1 w-full px-2">
-        <div className="font-bold text-xs md:text-[13px]">{title}</div>
+        <div
+          className="font-bold text-xs md:text-[13px]"
+          data-testid="layout-title"
+        >
+          {title}
+        </div>
         <div>
           {!showInputField && (
             <>
@@ -57,6 +62,7 @@ const LayoutCard = ({
                   )}
                   <input
                     type="number"
+                    data-testid="layout-value"
                     className="w-10 rounded text-center [&::-webkit-inner-spin-button]:appearance-none  focus:outline-none focus:ring-0 text-xs md:text-[13px] leading-6"
                     value={counterValue}
                     onChange={(e) => onChange(Number(e.target.value))} // Update counterValue on input change

@@ -42,3 +42,8 @@ vi.mock("apexcharts", () => ({
     destroy() {}
   },
 }));
+
+/* react-joyride */
+vi.mock("react-joyride", () => ({
+  default: () => null, // completely disable Joyride in tests
+}));

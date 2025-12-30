@@ -77,7 +77,7 @@ export const meetingRoomData = [
     description:
       "This is the interview room, designed for conducting interviews.",
     tooltipText: "Size: 100 sq ft",
-    title: "Interivew Room",
+    title: "Interview Room",
   },
   {
     type: "conferenceRoom",
