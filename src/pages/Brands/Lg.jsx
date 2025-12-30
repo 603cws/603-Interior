@@ -138,12 +138,130 @@ function Lg() {
         <img src="../images/brands/lg/seperator.png" alt="" />
       </section>
 
-      <section>
-        <img
-          src="../images/brands/lg/banner2.png"
-          alt="cabins"
-          className="w-[700px]"
-        />
+      <section className="px-4 lg:container mx-auto py-2">
+        <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 font-segoe">
+          {/* LEFT – LARGE CABINS */}
+          <div className="relative bg-[#e9e5e4] overflow-hidden">
+            {/* Title */}
+            <div className="p-6 text-center">
+              <h2 className="text-3xl sm:text-6xl font-semibold">
+                Large Cabins
+              </h2>
+              <p className="text-2xl sm:text-4xl mt-1">150–250 sq.ft</p>
+            </div>
+
+            {/* Image */}
+            <div className="h-[565px] xl:rounded-tr-[155px] overflow-hidden">
+              <img
+                src="../images/brands/lg/bg.jpeg"
+                alt="Large cabin office"
+                className="w-full h-full object-cover"
+              />
+            </div>
+
+            {/* Red Badge */}
+            <div className="absolute -bottom-32 -left-16 sm:-bottom-20 sm:-left-8 bg-[#E1384F] text-white rounded-full p-10 w-[300px] h-[300px] text-center">
+              <p className="text-lg sm:text-2xl">
+                Suitable <br /> for big office rooms
+              </p>
+              <p className="text-3xl sm:text-5xl font-bold">
+                2.0 Ton <br /> <span className="font-semibold">ACs</span>
+              </p>
+            </div>
+
+            <button
+              className="group absolute bottom-0 right-0 rounded-tl-lg py-2 px-3 
+  text-white bg-[#E1384F] text-xl overflow-hidden hidden sm:block"
+            >
+              <span className="relative z-10 underline">Explore now</span> &gt;
+              <span
+                className="absolute w-24 h-full bg-white/25 
+    rotate-45 -left-32 top-0
+    transition-all duration-500
+    group-hover:left-full"
+              />
+            </button>
+          </div>
+
+          {/* RIGHT COLUMN */}
+          <div className="grid grid-rows-2 gap-4">
+            {/* MID SIZE CABINS */}
+            <div className="relative bg-[#e9e5e4] overflow-hidden flex">
+              {/* Vertical Text */}
+              <div className="flex flex-col justify-center items-center w-2/5">
+                <div className="rotate-[-90deg]">
+                  <p className="text-3xl sm:text-5xl font-semibold whitespace-nowrap">
+                    Mid Size <br /> Cabins
+                  </p>
+                  <p className="text-xl sm:text-3xl whitespace-nowrap">
+                    110–150 sq.ft
+                  </p>
+                </div>
+              </div>
+
+              {/* Image */}
+              <div className="h-[350px] overflow-hidden relative w-full">
+                <img
+                  src="../images/brands/lg/bg.jpeg"
+                  alt="Mid size cabin"
+                  className="flex-1 object-cover h-full w-full"
+                />
+
+                {/* Red Badge */}
+                <div className="absolute -bottom-20 -left-10 lg:-bottom-16 lg:-left-5 bg-[#E1384F] text-white rounded-full p-10 w-[250px] h-[250px] text-center">
+                  <p className="text-lg lg:text-xl">
+                    Suitable for <br /> conference rooms
+                  </p>
+                  <p className="text-2xl lg:text-4xl font-bold">
+                    1.5 Ton
+                    <br /> ACs
+                  </p>
+                </div>
+              </div>
+
+              <CTABtn />
+            </div>
+
+            {/* SMALL CABINS */}
+            <div className="relative bg-[#e9e5e4] overflow-hidden flex">
+              {/* Vertical Text */}
+              <div className="flex flex-col justify-center items-center w-2/5">
+                <div className="rotate-[-90deg]">
+                  <p className="text-3xl sm:text-5xl font-semibold whitespace-nowrap">
+                    Small <br /> Cabins
+                  </p>
+                  <p className="text-xl sm:text-3xl whitespace-nowrap">
+                    up to 110 sq.ft
+                  </p>
+                </div>
+              </div>
+
+              {/* Image */}
+              <div className="h-[350px] overflow-hidden relative w-full">
+                <img
+                  src="../images/brands/lg/bg.jpeg"
+                  alt="Mid size cabin"
+                  className="flex-1 object-cover h-full w-full"
+                />
+
+                {/* Red Badge */}
+                <div className="absolute -bottom-20 -left-10 lg:-bottom-16 lg:-left-5 bg-[#E1384F] text-white rounded-full p-10 w-[250px] h-[250px] text-center">
+                  <p className="text-lg lg:text-xl">
+                    Suitable for <br />{" "}
+                    <span className="whitespace-nowrap">
+                      small meeting room
+                    </span>
+                  </p>
+                  <p className="text-2xl lg:text-4xl font-bold">
+                    1.0 Ton <br /> ACs
+                  </p>
+                </div>
+              </div>
+
+              <CTABtn />
+            </div>
+          </div>
+        </div>
       </section>
 
       <section className="px-4 lg:container mx-auto py-4 flex flex-col">
@@ -220,5 +338,19 @@ function FeatureCard({ title, img, alt }) {
         <img src={img} alt={alt} className="object-contain max-h-[100px]" />
       </div>
     </div>
+  );
+}
+
+function CTABtn() {
+  return (
+    <button className="group absolute bottom-0 right-0 rounded-tl-lg py-2 px-3 text-white bg-[#E1384F] text-base overflow-hidden hidden sm:block">
+      <span className="underline">Explore now</span> &gt;
+      <span
+        className="absolute w-24 h-full bg-white/25 
+    rotate-45 -left-32 top-0
+    transition-all duration-500
+    group-hover:left-full"
+      />
+    </button>
   );
 }
