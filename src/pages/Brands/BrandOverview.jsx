@@ -152,7 +152,7 @@ const brandImages = {
       name: "furniture",
       image: "/images/brands/Furniture/Spacewood.png",
     },
-    { name: "furniture", image: "/images/brands/Furniture/Wipro.svg" },
+    { name: "wipro", image: "/images/brands/Furniture/Wipro.svg" },
   ],
   Lighting: [
     { name: "lighting", image: "/images/brands/Lighting/Havells.svg" },

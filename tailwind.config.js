@@ -21,6 +21,7 @@ export default {
         Georgia: ["georgia", "sans-serif"],
         Alegreya: ["Alegreya", "sans-serif"],
         segoe: ["Segoe UI", "sans-serif"],
+        inter: ["Inter", "sans-serif"],
       },
       colors: {
         customYellow: "#fff9c9",

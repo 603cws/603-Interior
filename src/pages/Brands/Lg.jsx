@@ -15,7 +15,7 @@ function Lg() {
   return (
     <div className="font-segoe">
       <LandingNavbar />
-      <section className="flex flex-col px-4 lg:container mx-auto py-4">
+      <section className="flex flex-col lg:container mx-auto py-4">
         <img
           src="../images/brands/lg/banner.jpg"
           alt="lg banner"
@@ -23,16 +23,14 @@ function Lg() {
         />
       </section>
 
-      <section className="px-4 lg:container h-screen mx-auto py-10">
+      <section className="px-4 lg:container h-screen mx-auto py-8">
         <div
           className="relative w-full h-full overflow-hidden lg:rounded-s-[500px] lg:rounded-e-[60px] bg-cover bg-top sm:bg-right-top lg:bg-center shadow-md"
           style={{
             backgroundImage: "url('../images/brands/lg/hero-section.webp')",
           }}
         >
-          {/* CONTENT */}
           <div className="relative z-10 grid grid-cols-1 lg:grid-cols-2 h-full pl-4 items-center">
-            {/* LEFT TEXT */}
             <div className="px-8 lg:px-14 py-12 mx-auto">
               <h1 className="text-4xl lg:text-6xl text-black">Diet Mode</h1>
 
@@ -44,7 +42,6 @@ function Lg() {
             </div>
           </div>
 
-          {/* FLOATING BADGE */}
           <div className="hidden lg:block absolute top-3 right-2 xl:top-8 xl:right-8 z-20 bg-gradient-to-b from-[#F4F4F5] to-[#B0B0B2] rounded-xl shadow-md px-2 py-3 w-24 xl:w-28 text-center border-2 border-black">
             <p className="text-[10px] font-semibold text-gray-500 uppercase">
               More Convenience More Saving
@@ -84,7 +81,6 @@ function Lg() {
 
       <section className="px-4 lg:container mx-auto py-4 flex flex-col">
         <div className="flex flex-col sm:flex-row items-start justify-center sm:gap-4">
-          {/* ITEM 1 */}
           <div className="flex-1 items-center">
             <img
               src="../images/brands/lg/lg1.png"
@@ -93,7 +89,6 @@ function Lg() {
             />
           </div>
 
-          {/* ITEM 2 */}
           <div className="flex-1 items-center">
             <img
               src="../images/brands/lg/lg2.png"
@@ -102,7 +97,6 @@ function Lg() {
             />
           </div>
 
-          {/* ITEM 3 */}
           <div className="flex-1 items-center">
             <img
               src="../images/brands/lg/lg3.png"
@@ -140,9 +134,7 @@ function Lg() {
 
       <section className="px-4 lg:container mx-auto py-2">
         <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 font-segoe">
-          {/* LEFT – LARGE CABINS */}
           <div className="relative bg-[#e9e5e4] overflow-hidden">
-            {/* Title */}
             <div className="p-6 text-center">
               <h2 className="text-3xl sm:text-6xl font-semibold">
                 Large Cabins
@@ -150,7 +142,6 @@ function Lg() {
               <p className="text-2xl sm:text-4xl mt-1">150–250 sq.ft</p>
             </div>
 
-            {/* Image */}
             <div className="h-[565px] xl:rounded-tr-[155px] overflow-hidden">
               <img
                 src="../images/brands/lg/bg.jpeg"
@@ -159,7 +150,6 @@ function Lg() {
               />
             </div>
 
-            {/* Red Badge */}
             <div className="absolute -bottom-32 -left-16 sm:-bottom-20 sm:-left-8 bg-[#E1384F] text-white rounded-full p-10 w-[300px] h-[300px] text-center">
               <p className="text-lg sm:text-2xl">
                 Suitable <br /> for big office rooms
@@ -183,11 +173,8 @@ function Lg() {
             </button>
           </div>
 
-          {/* RIGHT COLUMN */}
           <div className="grid grid-rows-2 gap-4">
-            {/* MID SIZE CABINS */}
             <div className="relative bg-[#e9e5e4] overflow-hidden flex">
-              {/* Vertical Text */}
               <div className="flex flex-col justify-center items-center w-2/5">
                 <div className="rotate-[-90deg]">
                   <p className="text-3xl sm:text-5xl font-semibold whitespace-nowrap">
@@ -199,7 +186,6 @@ function Lg() {
                 </div>
               </div>
 
-              {/* Image */}
               <div className="h-[350px] overflow-hidden relative w-full">
                 <img
                   src="../images/brands/lg/bg.jpeg"
@@ -207,7 +193,6 @@ function Lg() {
                   className="flex-1 object-cover h-full w-full"
                 />
 
-                {/* Red Badge */}
                 <div className="absolute -bottom-20 -left-10 lg:-bottom-16 lg:-left-5 bg-[#E1384F] text-white rounded-full p-10 w-[250px] h-[250px] text-center">
                   <p className="text-lg lg:text-xl">
                     Suitable for <br /> conference rooms
@@ -222,9 +207,7 @@ function Lg() {
               <CTABtn />
             </div>
 
-            {/* SMALL CABINS */}
             <div className="relative bg-[#e9e5e4] overflow-hidden flex">
-              {/* Vertical Text */}
               <div className="flex flex-col justify-center items-center w-2/5">
                 <div className="rotate-[-90deg]">
                   <p className="text-3xl sm:text-5xl font-semibold whitespace-nowrap">
@@ -236,7 +219,6 @@ function Lg() {
                 </div>
               </div>
 
-              {/* Image */}
               <div className="h-[350px] overflow-hidden relative w-full">
                 <img
                   src="../images/brands/lg/bg.jpeg"
@@ -244,7 +226,6 @@ function Lg() {
                   className="flex-1 object-cover h-full w-full"
                 />
 
-                {/* Red Badge */}
                 <div className="absolute -bottom-20 -left-10 lg:-bottom-16 lg:-left-5 bg-[#E1384F] text-white rounded-full p-10 w-[250px] h-[250px] text-center">
                   <p className="text-lg lg:text-xl">
                     Suitable for <br />{" "}
@@ -282,10 +263,8 @@ function Lg() {
             backgroundImage: "url('../images/brands/lg/banner2.png')",
           }}
         >
-          {/* Optional overlay tint */}
           <div className="absolute inset-0 bg-[#DE2D4933]/20" />
 
-          {/* TEXT */}
           <div className="relative z-10 flex items-center justify-center h-full px-6 lg:px-12">
             <h2 className="text-white text-5xl lg:text-8xl text-center hover:scale-75 hover:cursor-pointer transition duration-300 ease-in-out">
               Browse our collection
@@ -299,7 +278,7 @@ function Lg() {
           {ourCollection.map((product, index) => (
             <div
               key={index}
-              className="border w-full h-80 flex items-center justify-center p-2 border-[#002F36] overflow-hidden"
+              className="border w-full h-80 flex items-center justify-center p-2 border-[#002F36] overflow-hidden hover:cursor-pointer"
             >
               <img src={product} alt="product" />
             </div>
@@ -323,19 +302,27 @@ export default Lg;
 
 function FeatureCard({ title, img, alt }) {
   return (
-    <div className="flex-1 bg-[#F1F1F1] rounded-3xl pl-6 pt-6 flex flex-col justify-between">
-      <div>
-        <h3 className="text-lg lg:text-xl xl:text-3xl text-black">{title}</h3>
-      </div>
+    <div className="flex-1 bg-[#F1F1F1] rounded-3xl p-6 flex flex-col">
+      {/* Title */}
+      <h3 className="text-lg lg:text-xl xl:text-3xl text-black">{title}</h3>
 
-      <div className="mt-6 flex justify-between">
-        <div>
-          <button className="py-1.5 px-4 text- xl:text-base border border-black rounded-full whitespace-nowrap hover:bg-gray-200">
-            Learn more
-          </button>
+      {/* Spacer */}
+      <div className="flex-1" />
+
+      {/* Bottom content */}
+      <div className="flex items-start justify-between gap-4 mt-2 lg:mt-4">
+        <button className="py-1.5 px-4 text-sm xl:text-base border border-black rounded-full whitespace-nowrap hover:bg-gray-200">
+          Learn more
+        </button>
+
+        {/* Image wrapper controls size */}
+        <div className="flex items-end max-w-[80%]">
+          <img
+            src={img}
+            alt={alt}
+            className="w-full max-h-[160px] object-contain"
+          />
         </div>
-
-        <img src={img} alt={alt} className="object-contain max-h-[100px]" />
       </div>
     </div>
   );
