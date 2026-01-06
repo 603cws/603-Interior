@@ -1,6 +1,5 @@
 import { RiArrowRightUpLine } from "react-icons/ri";
 import Footer from "../../common-components/Footer";
-import GetInTouchSection from "../components/GetInTouchSection";
 import LandingNavbar from "../components/LandingNavbar";
 import { useState } from "react";
 import ContactUsPopup from "../components/ContactUsPopup";
@@ -173,7 +172,11 @@ function OurWork() {
                 key={index}
               >
                 <div className="flex-shrink-0">
-                  <img src={project.image} alt="Icon" className="w-10 h-10" />
+                  <img
+                    src={project.image}
+                    alt="Interiors"
+                    className="w-10 h-10"
+                  />
                 </div>
                 <p className="leading-5">{project.para}</p>
               </div>
@@ -220,39 +223,51 @@ function OurWork() {
             </p>
           </div>
           <div className="flex flex-col gap-6 flex-1">
-            <img src="images/our-work/work-2.png" className="rounded-3xl" />
-            <img src="images/our-work/work-3.png" className="rounded-3xl" />
+            <img
+              src="images/our-work/work-2.png"
+              alt="interiors"
+              className="rounded-3xl"
+            />
+            <img
+              src="images/our-work/work-3.png"
+              alt="interiors"
+              className="rounded-3xl"
+            />
           </div>
         </div>
 
         <div className="flex gap-6 w-full pb-14 justify-center items-center">
           <img
             src="images/our-work/work-2.png"
+            alt="interiors"
             className="w-1/3 rounded-3xl object-cover"
           />
           <img
             src="images/our-work/work-3.png"
+            alt="interiors"
             className="w-1/3 rounded-3xl object-cover"
           />
           <img
             src="images/our-work/work-4.png"
+            alt="interiors"
             className="w-1/3 rounded-3xl object-cover"
           />
         </div>
 
         <div className="bg-[#334A78] text-white h-72 max-w-2xl rounded-2xl items-center flex flex-col justify-center mx-auto py-16">
-          <img src="images/our-work/lucide_quote.svg" />
+          <img src="images/our-work/lucide_quote.svg" alt="quote" />
           <p className="text-center py-6 text-sm md:text-base">
-            "The transformation exceeded our expectations. Our team
+            &quot;The transformation exceeded our expectations. Our team
             <br /> productivity has soared, and the space truly reflects who we
             are
             <br /> as a company. The attention to detail and commitment to
             <br />
-            sustainability were particularly impressive."
+            sustainability were particularly impressive.&quot;
           </p>
           <div className="flex gap-3 items-center">
             <img
               src="images/businessman.png"
+              alt="profile"
               className="w-12 h-12 rounded-full"
             />
             <div className="flex flex-col">
@@ -267,7 +282,7 @@ function OurWork() {
             Ready to Transform Your Space?
           </h2>
           <p className="text-[#334A78] text-base md:text-2xl py-4 text-center">
-            Let's create an inspiring environment that elevates
+            Let&apos;s create an inspiring environment that elevates
             <br /> your brand and empowers your team
           </p>
           <div className="flex flex-col lg:flex-row gap-2 mt-5">
