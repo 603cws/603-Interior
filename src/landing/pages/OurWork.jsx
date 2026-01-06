@@ -3,6 +3,7 @@ import Footer from "../../common-components/Footer";
 import GetInTouchSection from "../components/GetInTouchSection";
 import LandingNavbar from "../components/LandingNavbar";
 import { useState } from "react";
+import ContactUsPopup from "../components/ContactUsPopup";
 
 const projectsData = [
   {
@@ -286,6 +287,10 @@ function OurWork() {
           </div>
         </div>
       </section>
+
+      {showContactPopup && (
+        <ContactUsPopup onClose={() => setShowContactPopup(false)} />
+      )}
 
       <Footer />
     </>
