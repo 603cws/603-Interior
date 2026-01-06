@@ -6,6 +6,7 @@ import Light from "./BrandLight";
 import Furniture from "./BrandFurniture";
 import Lg from "./Lg";
 import Wipro from "./Wipro";
+import Godrej from "./Godrej";
 
 const BrandRouter = () => {
   const { brandName } = useParams();
@@ -18,6 +19,7 @@ const BrandRouter = () => {
     furniture: <Furniture />,
     lg: <Lg />,
     wipro: <Wipro />,
+    godrej: <Godrej />,
   };
 
   return components[brandName] || <div>Brand Not Found</div>;

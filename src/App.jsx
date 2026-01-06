@@ -7,6 +7,7 @@ import PrivateRoute from "./utils/PrivateRoute";
 import ScrollToTop from "./common-components/ScrollToTop";
 import BrandRouter from "./pages/Brands/BrandRouter";
 import DynamicTitle from "./common-components/DynamicTitle";
+import OurWork from "./landing/pages/OurWork";
 const Contactus = lazy(() => import("./landing/pages/Contactus"));
 const AboutUs = lazy(() => import("./landing/pages/AboutUs"));
 const Login = lazy(() => import("./pages/Login"));
@@ -146,6 +147,7 @@ function App() {
               </PrivateRoute>
             }
           />
+          <Route path="/ourWork" element={<OurWork />} />
           <Route path="/help" element={<HelpnFaq />} />
           <Route path="/termsNcondition" element={<TermsAndCondition />} />
           <Route path="/products" element={<Products />} />

@@ -146,7 +146,7 @@ const featuredBrands = [
 const brandImages = {
   Furniture: [
     { name: "furniture", image: "/images/brands/Furniture/Featherlite.png" },
-    { name: "furniture", image: "/images/brands/Furniture/godrej.webp" },
+    { name: "godrej", image: "/images/brands/Furniture/godrej.webp" },
     { name: "furniture", image: "/images/brands/Furniture/hni.jpg" },
     {
       name: "furniture",
