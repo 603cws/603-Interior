@@ -1,4 +1,4 @@
-import LandingNavbar from "../../landing/components/LandingNavbar";
+import LandingNavbar from "../../../landing/components/LandingNavbar";
 
 function BrandDLink() {
   return (

@@ -1,5 +1,5 @@
-import LandingNavbar from "../../landing/components/LandingNavbar";
-import Footer from "../../common-components/Footer";
+import LandingNavbar from "../../../landing/components/LandingNavbar";
+import Footer from "../../../common-components/Footer";
 import { useNavigate } from "react-router-dom";
 import { RxArrowRight } from "react-icons/rx";
 
@@ -75,7 +75,7 @@ function Welspun() {
           <img src="/images/brands/saperator.png" alt="" />
         </div>
       </section>
-      <section className="hidden lg:flex items-center justify-around overflow-y-hidden bg-[#3B558C] max-h-20 my-5">
+      <section className="hidden lg:flex items-center justify-around overflow-y-hidden bg-[#3B558C] max-h-22 my-5">
         <img src="/images/brands/saperator.png" alt="" />
         <p className="uppercase font-Georgia text-[#fff] lg:text-xl font-semibold">
           EXPLORE A WIDE RANGE OF ASSURED QUALITY FLOORING FROM WELSPUN FLOORING
@@ -196,11 +196,21 @@ function Welspun() {
         </div>
       </section>
 
-      <section>
-        <div className="h-56 lg:h-96 w-screen bg-[url('/images/brands/welspun-banner.webp')] bg-center bg-cover bg-no-repeat flex justify-center items-center">
-          <h1 className="font-Georgia text-5xl lg:text-8xl text-center text-[#fff] tracking-tight">
-            Browse our collection
-          </h1>
+      <section className="p-4 lg:container mx-auto">
+        <div
+          className="relative w-full h-[380px] overflow-hidden
+               bg-cover bg-center bg-no-repeat rounded-3xl"
+          style={{
+            backgroundImage: "url('/images/brands/welspun-banner.webp')",
+          }}
+        >
+          <div className="absolute inset-0 bg-[#78A3FF]/20" />
+
+          <div className="relative z-10 flex items-center justify-center h-full px-6 lg:px-12">
+            <h2 className="text-white text-2xl sm:text-5xl xl:text-8xl tracking-tight text-center hover:scale-75 hover:cursor-pointer transition duration-300 ease-in-out font-Georgia">
+              Browse our collection
+            </h2>
+          </div>
         </div>
       </section>
 

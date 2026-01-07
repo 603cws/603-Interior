@@ -1,5 +1,5 @@
-import Footer from "../../common-components/Footer";
-import LandingNavbar from "../../landing/components/LandingNavbar";
+import Footer from "../../../common-components/Footer";
+import LandingNavbar from "../../../landing/components/LandingNavbar";
 
 const ourCollection = [
   "../images/brands/lg/lg-1.webp",

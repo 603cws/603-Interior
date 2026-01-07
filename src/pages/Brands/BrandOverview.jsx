@@ -145,11 +145,11 @@ const featuredBrands = [
 
 const brandImages = {
   Furniture: [
-    { name: "furniture", image: "/images/brands/Furniture/Featherlite.png" },
+    { name: "featherlite", image: "/images/brands/Furniture/Featherlite.png" },
     { name: "godrej", image: "/images/brands/Furniture/godrej.webp" },
-    { name: "furniture", image: "/images/brands/Furniture/hni.jpg" },
+    { name: "hni", image: "/images/brands/Furniture/hni.jpg" },
     {
-      name: "furniture",
+      name: "spacewood",
       image: "/images/brands/Furniture/Spacewood.png",
     },
     { name: "wipro", image: "/images/brands/Furniture/Wipro.svg" },

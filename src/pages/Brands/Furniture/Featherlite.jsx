@@ -1,5 +1,5 @@
-import Footer from "../../common-components/Footer";
-import LandingNavbar from "../../landing/components/LandingNavbar";
+import Footer from "../../../common-components/Footer";
+import LandingNavbar from "../../../landing/components/LandingNavbar";
 
 const ourCollection = [
   "../images/brands/Furniture/wipro/section5-1.png",
@@ -11,7 +11,8 @@ const ourCollection = [
   "../images/brands/Furniture/wipro/section5-7.png",
   "../images/brands/Furniture/wipro/section5-8.png",
 ];
-function Wipro() {
+
+function Featherlite() {
   return (
     <div className="font-inter">
       <LandingNavbar />
@@ -19,29 +20,14 @@ function Wipro() {
       <section className="p-4 lg:container mx-auto">
         <div className="relative rounded-2xl overflow-hidden">
           <img
-            src="../images/brands/Furniture/wipro/banner.png"
-            alt="wipro banner"
+            src="../images/brands/Furniture/featherlite/banner.png"
+            alt="featherlite banner"
             className="w-full h-full object-cover"
           />
-
-          <div className="absolute left-2 sm:left-16 2xl:left-40 inset-0 flex items-center">
-            <div className="max-w-xl px-6 lg:px-12">
-              <h2 className="text-sm sm:text-2xl xl:text-4xl font-semibold text-[#865D36]">
-                Furniture That Crafted For
-                <br /> Comfort, Built To Last
-              </h2>
-
-              <p className="mt-4 text-[9px] sm:text-sm xl:text-2xl text-black whitespace-nowrap">
-                Transform Your Space With Furniture That
-                <br /> Blends Timeless Design And Contemporary
-                <br /> Function, Creating A Truly Personal Sanctuary.
-              </p>
-            </div>
-          </div>
         </div>
       </section>
 
-      <section className="p-4 lg:container mx-auto">
+      <section className="p-4 lg:container mx-auto font-Poppins">
         <div className="flex flex-col xl:flex-row gap-5">
           <div
             className="relative w-full h-[380px] overflow-hidden
@@ -82,35 +68,55 @@ function Wipro() {
         </div>
       </section>
 
-      <section className="p-4 lg:container mx-auto hidden sm:block">
-        <div
-          className="relative w-full h-[492px] overflow-hidden
-               bg-cover bg-center bg-no-repeat rounded-3xl"
-          style={{
-            backgroundImage:
-              "url('../images/brands/Furniture/wipro/section3.png')",
-          }}
-        />
+      <section className="p-4 lg:container mx-auto">
+        <div className="relative rounded-2xl overflow-hidden">
+          <img
+            src="../images/brands/Furniture/featherlite/banner2.png"
+            alt="featherlite banner"
+            className="w-full h-full object-cover"
+          />
+        </div>
       </section>
 
       <section className="p-4 lg:container mx-auto">
-        <div
-          className="relative w-full h-[492px] overflow-hidden
-               bg-cover bg-center bg-no-repeat rounded-3xl"
-          style={{
-            backgroundImage:
-              "url('../images/brands/Furniture/wipro/section4.png')",
-          }}
-        >
-          <div className="relative z-10 flex flex-col items-start text-start justify-center h-full px-6 lg:px-12">
-            <h2 className="text-sm sm:text-2xl xl:text-4xl font-semibold text-white">
-              Blueprint To Masterpiece
-            </h2>
-            <p className="text-sm sm:text-2xl xl:text-3xl text-white mt-3 capitalize">
-              From a blueprint of intention, We create a <br /> masterpiece of
-              furniture, with every detail
-              <br /> meticulously crafted for your home.
-            </p>
+        <div className="relative rounded-2xl overflow-hidden">
+          <img
+            src="../images/brands/Furniture/featherlite/banner3.png"
+            alt="featherlite banner"
+            className="w-full h-full object-cover"
+          />
+        </div>
+      </section>
+
+      <section className="p-4 lg:container mx-auto">
+        <div className="relative rounded-2xl overflow-hidden">
+          <img
+            src="../images/brands/Furniture/featherlite/banner4.png"
+            alt="featherlite banner"
+            className="w-full h-full object-cover"
+          />
+        </div>
+      </section>
+
+      <section className="p-4 lg:container mx-auto">
+        <div className="flex flex-col xl:flex-row gap-5">
+          <img
+            src="../images/brands/Furniture/featherlite/section5-1.png"
+            className="relative w-full h-[700px] overflow-hidden
+               bg-cover bg-left bg-no-repeat border border-[#002F36] flex-1 p-2"
+          />
+          <div className="flex flex-col gap-5 flex-1">
+            <img
+              src="../images/brands/Furniture/featherlite/section5-2.jpg"
+              className="relative w-full h-[340px] overflow-hidden
+               bg-contain bg-center bg-no-repeat"
+            />
+
+            <img
+              src="../images/brands/Furniture/featherlite/section5-3.jpg"
+              className="relative w-full h-[340px] overflow-hidden
+               bg-contain bg-center bg-no-repeat"
+            />
           </div>
         </div>
       </section>
@@ -124,7 +130,7 @@ function Wipro() {
               "url('../images/brands/Furniture/wipro/collection.png')",
           }}
         >
-          <div className="absolute inset-0 bg-[#45454580]/50" />
+          <div className="absolute inset-0 bg-[#454545]/50" />
 
           <div className="relative z-10 flex items-center justify-center h-full px-6 lg:px-12">
             <h2 className="text-white text-2xl sm:text-5xl xl:text-8xl text-center hover:scale-75 hover:cursor-pointer transition duration-300 ease-in-out font-Poppins font-bold">
@@ -151,5 +157,4 @@ function Wipro() {
     </div>
   );
 }
-
-export default Wipro;
+export default Featherlite;

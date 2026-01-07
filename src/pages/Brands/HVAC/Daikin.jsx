@@ -1,4 +1,4 @@
-import LandingNavbar from "../../landing/components/LandingNavbar";
+import LandingNavbar from "../../../landing/components/LandingNavbar";
 
 function Daikin() {
   return (
@@ -35,6 +35,24 @@ function Daikin() {
             alt="hvac sec3 4"
             className="max-w-sm lg:max-w-[500px] w-full"
           />
+        </section>
+
+        <section className="p-4 lg:container mx-auto">
+          <div
+            className="relative w-full h-[380px] overflow-hidden
+               bg-cover bg-top bg-no-repeat"
+            style={{
+              backgroundImage: "url('../images/brands/HVAC/banner.jpg')",
+            }}
+          >
+            <div className="absolute inset-0 bg-[#DE2D49]/20" />
+
+            <div className="relative z-10 flex items-center justify-center h-full px-6 lg:px-12">
+              <h2 className="text-white text-2xl sm:text-5xl xl:text-8xl text-center hover:scale-75 hover:cursor-pointer transition duration-300 ease-in-out font-segoe">
+                Browse our collection
+              </h2>
+            </div>
+          </div>
         </section>
 
         <section className="lg:container px-4 my-5">

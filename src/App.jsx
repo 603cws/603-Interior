@@ -13,7 +13,9 @@ const AboutUs = lazy(() => import("./landing/pages/AboutUs"));
 const Login = lazy(() => import("./pages/Login"));
 const BlogDetail = lazy(() => import("./landing/pages/BlogDetail"));
 const Dashboard = lazy(() => import("./dashboards/user/Dashboard"));
-const BrandDLink = lazy(() => import("./pages/Brands/BrandDLink"));
+const BrandDLink = lazy(() =>
+  import("./pages/Brands/SmartSolutions/BrandDLink")
+);
 const DashboardInterface = lazy(() =>
   import("./dashboards/admin/DashboardInterface")
 );
