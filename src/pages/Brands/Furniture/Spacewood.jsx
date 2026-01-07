@@ -17,34 +17,6 @@ function Spacewood() {
     <div className="font-inter">
       <LandingNavbar />
 
-      <div className="p-4 w-1/2 relative rounded-3xl mx-auto overflow-hidden">
-        <img
-          src="../images/brands/Furniture/1.png"
-          alt="spacewood"
-          className="z-0"
-        />
-        <img
-          src="../images/brands/Furniture/2.png"
-          className="absolute top-4 left-32 -z-10"
-          alt="spacewood"
-        />
-        <img
-          src="../images/brands/Furniture/top.png"
-          className="absolute top-4 left-[45%] -z-30"
-          alt="spacewood"
-        />
-        <img
-          src="../images/brands/Furniture/bottom.png"
-          className="absolute bottom-4 right-0 -z-30"
-          alt="spacewood"
-        />
-        <img
-          src="../images/brands/Furniture/name.png"
-          className="absolute top-12 right-[38%] z-0"
-          alt="spacewood"
-        />
-      </div>
-
       <section className="p-4 lg:container mx-auto">
         <div className="relative rounded-2xl overflow-hidden">
           <img
