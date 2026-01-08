@@ -102,18 +102,21 @@ function Featherlite() {
         <div className="flex flex-col xl:flex-row gap-5">
           <img
             src="../images/brands/Furniture/featherlite/section5-1.png"
+            alt="featherlite"
             className="relative w-full h-[700px] overflow-hidden
                bg-cover bg-left bg-no-repeat border border-[#002F36] flex-1 p-2"
           />
           <div className="flex flex-col gap-5 flex-1">
             <img
               src="../images/brands/Furniture/featherlite/section5-2.jpg"
+              alt="featherlite"
               className="relative w-full h-[340px] overflow-hidden
                bg-contain bg-center bg-no-repeat"
             />
 
             <img
               src="../images/brands/Furniture/featherlite/section5-3.jpg"
+              alt="featherlite"
               className="relative w-full h-[340px] overflow-hidden
                bg-contain bg-center bg-no-repeat"
             />

@@ -29,8 +29,8 @@ function Hni() {
 
       <section className="p-4 lg:container mx-auto font-Poppins">
         <div className="flex flex-col xl:flex-row gap-5">
-          <img src="../images/brands/Furniture/hni/section2-1.png" />
-          <img src="../images/brands/Furniture/hni/section2-2.png" />
+          <img src="../images/brands/Furniture/hni/section2-1.png" alt="hni" />
+          <img src="../images/brands/Furniture/hni/section2-2.png" alt="hni" />
         </div>
       </section>
 

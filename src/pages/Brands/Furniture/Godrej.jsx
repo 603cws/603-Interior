@@ -39,11 +39,13 @@ function Godrej() {
         <div className="flex flex-col xl:flex-row gap-5">
           <img
             src="../images/brands/Furniture/godrej/section2-1.png"
+            alt="godrej"
             className="relative w-full h-[350px] overflow-hidden
                bg-contain bg-left bg-no-repeat"
           />
           <img
             src="../images/brands/Furniture/godrej/section2-2.png"
+            alt="godrej"
             className="relative w-full h-[350px] overflow-hidden
                bg-contain bg-left bg-no-repeat"
           />
@@ -54,18 +56,21 @@ function Godrej() {
         <div className="flex flex-col xl:flex-row gap-5">
           <img
             src="../images/brands/Furniture/godrej/section3-1.png"
+            alt="godrej"
             className="relative w-full h-[700px] overflow-hidden
                bg-cover bg-left bg-no-repeat border border-[#002F36] flex-1 p-2"
           />
           <div className="flex flex-col gap-5 flex-1">
             <img
               src="../images/brands/Furniture/godrej/chair-1.png"
+              alt="godrej"
               className="relative w-full h-[340px] overflow-hidden
                bg-contain bg-center bg-no-repeat"
             />
 
             <img
               src="../images/brands/Furniture/godrej/chair-2.png"
+              alt="godrej"
               className="relative w-full h-[340px] overflow-hidden
                bg-contain bg-center bg-no-repeat"
             />
@@ -77,12 +82,14 @@ function Godrej() {
         <div className="flex flex-col xl:flex-row gap-5">
           <img
             src="../images/brands/Furniture/godrej/section4-1.png"
+            alt="godrej"
             className="relative w-full h-[700px] overflow-hidden
                bg-cover bg-left bg-no-repeat border border-[#002F36] flex-1 p-2"
           />
           <div className="flex flex-col gap-5 flex-1">
             <img
               src="../images/brands/Furniture/godrej/section4-2.png"
+              alt="godrej"
               className="relative w-full h-[340px] overflow-hidden
                bg-contain bg-center bg-no-repeat"
             />
@@ -91,6 +98,7 @@ function Godrej() {
               className="relative w-full h-[340px] overflow-hidden
                bg-contain bg-center bg-no-repeat"
               src="../images/brands/Furniture/godrej/section4-3.png"
+              alt="godrej"
             />
           </div>
         </div>
@@ -132,6 +140,7 @@ function Godrej() {
         <div className="flex flex-col xl:flex-row gap-5">
           <img
             src="../images/brands/Furniture/godrej/section5.png"
+            alt="godrej"
             className="relative w-full h-[700px] overflow-hidden
                bg-cover bg-left bg-no-repeat border border-[#002F36] flex-1 p-2"
           />
