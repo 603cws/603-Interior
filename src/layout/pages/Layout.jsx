@@ -457,40 +457,40 @@ function Layout() {
   );
 
   const hrRoomConfig = {
-    seatCount: seatCounts.hrRoom,
+    seatCount: seatCounts?.hrRoom,
     setSeatCount: (value) => updateSeatCounts("hrRoom", value),
     roomSize: hrRoomSize,
     setRoomSize: handleHrRoomAreaChange,
   };
 
   const salesRoomConfig = {
-    seatCount: seatCounts.sales,
+    seatCount: seatCounts?.sales,
     setSeatCount: (value) => updateSeatCounts("sales", value),
     roomSize: salesRoomSize,
     setRoomSize: handleSalesRoomAreaChange,
   };
 
   const financeRoomConfig = {
-    seatCount: seatCounts.financeRoom,
+    seatCount: seatCounts?.financeRoom,
     setSeatCount: (value) => updateSeatCounts("financeRoom", value),
     roomSize: financeRoomSize,
     setRoomSize: handleFinanceRoomAreaChange,
   };
 
   const smallCabinConfig = {
-    seatCount: seatCounts.small,
+    seatCount: seatCounts?.small,
     setSeatCount: (value) => updateSeatCounts("small", value),
     roomSize: smallCabinSize,
     setRoomSize: handleSmallCabinAreaChange,
   };
   const boardRoomConfig = {
-    seatCount: seatCounts.boardRoom,
+    seatCount: seatCounts?.boardRoom,
     setSeatCount: (value) => updateSeatCounts("boardRoom", value),
     roomSize: boardRoomSize,
     setRoomSize: handleBoardRoomAreaChange,
   };
   const conferenceRoomConfig = {
-    seatCount: seatCounts.conferenceRoom,
+    seatCount: seatCounts?.conferenceRoom,
     setSeatCount: (value) => updateSeatCounts("conferenceRoom", value),
     roomSize: conferenceRoomSize,
     setRoomSize: handleConferenceRoomAreaChange,
