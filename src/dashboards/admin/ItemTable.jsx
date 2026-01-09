@@ -34,6 +34,7 @@ function ItemTable({
   const [dateFrom, setDateFrom] = useState("");
   const [dateTo, setDateTo] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
+  const [productType, setProductType] = useState("");
   const [selectedSubCategory, setSelectedSubCategory] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [lastPageBeforeSearch, setLastPageBeforeSearch] = useState(1);
@@ -70,7 +71,7 @@ function ItemTable({
     setProductlist(true);
     const tab = event.target.value; // Get value from button
     setSelectedTab(tab);
-    setToggle(tab === "products"); // Set toggle dynamically
+    setToggle(tab === "products");
   };
 
   const applyFilters = ({
@@ -82,6 +83,7 @@ function ItemTable({
     priceMax = "",
     dateFrom = "",
     dateTo = "",
+    product = "",
   }) => {
     const source = toggle ? products : addons;
 
@@ -94,7 +96,8 @@ function ItemTable({
       priceMin ||
       priceMax ||
       dateFrom ||
-      dateTo
+      dateTo ||
+      product
     );
 
     // Store last page before searching if this is a new search
@@ -215,13 +218,17 @@ function ItemTable({
         }
       }
 
+      // NEW PRODUCT FILTER
+      const productMatch = product ? item.default : true;
+
       return (
         titleMatch &&
         categoryMatch &&
         statusMatch &&
         subCategoryMatch &&
         priceMatch &&
-        dateMatch
+        dateMatch &&
+        productMatch
       );
     });
 
@@ -356,9 +363,10 @@ function ItemTable({
                             priceMax,
                             dateFrom,
                             dateTo,
+                            product: productType,
                           });
                         }}
-                        className="w-full border-none focus:ring-0 p-2 text-sm"
+                        className="w-full border focus:ring-0 p-2 text-sm"
                       >
                         <option value="">All</option>
                         <option value="pending">Pending</option>
@@ -366,6 +374,7 @@ function ItemTable({
                         <option value="rejected">Rejected</option>
                       </select>
                     </div>
+                    {/* catgeory */}
                     <div>
                       <label className="text-sm text-[#374A75]">
                         Categories
@@ -386,10 +395,11 @@ function ItemTable({
                             priceMax,
                             dateFrom,
                             dateTo,
+                            product: productType,
                           });
                         }}
                         id="category"
-                        className="w-full py-2 text-sm"
+                        className="w-full border py-2 text-sm"
                       >
                         <option value="">All categories</option>
                         {categoriesData.map((category) => (
@@ -399,6 +409,35 @@ function ItemTable({
                         ))}
                       </select>
                     </div>
+                    {/* product */}
+                    <div>
+                      <label className="text-sm text-[#374A75]">product</label>
+                      <select
+                        name="product"
+                        value={productType}
+                        onChange={(e) => {
+                          const value = e.target.value;
+                          setProductType(value);
+                          applyFilters({
+                            query: searchQuery,
+                            category: selectedCategory,
+                            subCategory: selectedSubCategory,
+                            status: selected,
+                            priceMin,
+                            priceMax,
+                            dateFrom,
+                            dateTo,
+                            product: value,
+                          });
+                        }}
+                        id="product"
+                        className="w-full border py-2 text-sm"
+                      >
+                        <option value="">All products</option>
+                        <option value="default">Default</option>
+                      </select>
+                    </div>
+                    {/* subcategory */}
                     {selectedCategory && (
                       <div>
                         <label className="text-sm text-[#374A75]">
@@ -419,6 +458,7 @@ function ItemTable({
                               priceMax,
                               dateFrom,
                               dateTo,
+                              product: productType,
                             });
                           }}
                           id="subCategory"
@@ -457,6 +497,7 @@ function ItemTable({
                               priceMax,
                               dateFrom,
                               dateTo,
+                              product: productType,
                             });
                           }}
                           className="w-1/2 border p-2 text-sm rounded"
@@ -478,6 +519,7 @@ function ItemTable({
                               priceMax: v,
                               dateFrom,
                               dateTo,
+                              product: productType,
                             });
                           }}
                           className="w-1/2 border p-2 text-sm rounded"
@@ -502,6 +544,7 @@ function ItemTable({
                               priceMax,
                               dateFrom: v,
                               dateTo,
+                              product: productType,
                             });
                           }}
                           className="w-1/2 border p-2 text-sm rounded"
@@ -538,6 +581,7 @@ function ItemTable({
                           setPriceMax("");
                           setDateFrom("");
                           setDateTo("");
+                          setProductType("");
                           applyFilters({
                             query: searchQuery,
                             category: "",
@@ -547,6 +591,7 @@ function ItemTable({
                             priceMax: "",
                             dateFrom: "",
                             dateTo: "",
+                            product: "",
                           });
                         }}
                         className="text-sm px-3 py-1 rounded bg-gray-100 hover:bg-gray-200"

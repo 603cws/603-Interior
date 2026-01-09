@@ -207,7 +207,7 @@ function Header() {
                   />
                   <span className="ml-2">Wishlist</span>
                 </li>
-                <li className="flex items-center px-4 py-2 ml-2 hover:bg-[#f9f9f9]">
+                {/* <li className="flex items-center px-4 py-2 ml-2 hover:bg-[#f9f9f9]">
                   <img
                     src="../images/ecommerce/icon3.svg"
                     alt="Gift Card icon"
@@ -217,7 +217,7 @@ function Header() {
                 <li className="flex items-center px-4 py-2 ml-2 hover:bg-[#f9f9f9]">
                   <img src="../images/ecommerce/icon4.svg" alt="Coupon icon" />
                   <span className="ml-2">Coupons</span>
-                </li>
+                </li> */}
                 <li
                   className="flex items-center px-4 py-2 hover:bg-[#f9f9f9] border-t border-[#CCCCCC] mt-2"
                   onClick={logout}

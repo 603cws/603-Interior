@@ -1,7 +1,4 @@
 import { useEffect, useState } from "react";
-import { AiFillHeart } from "react-icons/ai";
-import { GoHeart } from "react-icons/go";
-import { IoClose } from "react-icons/io5";
 import { MdOutlineKeyboardArrowRight } from "react-icons/md";
 import { useNavigate, useLocation } from "react-router-dom";
 import Header from "../components/Header";
@@ -11,8 +8,6 @@ import SpinnerFullPage from "../../common-components/SpinnerFullPage";
 import BottomTabs from "../components/BottomTabs";
 import CheckoutStepper from "../../common-components/CheckoutStepper";
 import { ToastContainer } from "react-toastify";
-import { showRemoveFromCartToast } from "../../utils/AddToCartToast";
-import { MdOutlineDelete } from "react-icons/md";
 import "animate.css";
 import MobileHeader from "../../common-components/MobileHeader";
 import CheckPinCode from "../components/CheckPinCode";
@@ -21,8 +16,8 @@ import toast from "react-hot-toast";
 import { isCouponValid } from "../../utils/ResuableFunctions";
 import AppliedCoupon from "../../common-components/AppliedCoupon";
 import { MdOutlineCancel } from "react-icons/md";
-import { useHandleAddToCart } from "../../utils/HelperFunction";
 import { useEcomApp } from "../../Context/EcomContext";
+import { AlsoLikeCard, CartCard } from "../components/Card";
 
 function EmptyCart() {
   const navigate = useNavigate();
@@ -92,6 +87,7 @@ function Cart() {
   const [discountOnMrp, setDiscountOnMrp] = useState(0); //sum of all the difference in item of selling price and their original mrp
   const [alsoLike, setAlsoLike] = useState([]);
   const [similarTypes, setSimilarTypes] = useState();
+  const [checkPin, setCheckPin] = useState(false);
 
   const [gst, setGst] = useState(0); //convet this gst to based on subtotal instead of originaltotal
   const [shippingcharge, setshippingCharge] = useState(0);
@@ -311,8 +307,6 @@ function Cart() {
     return price > 1000 ? 0 : 200;
   }
 
-  const [checkPin, setCheckPin] = useState(false);
-
   const syncLocalCartToDB = async () => {
     if (!isAuthenticated) return localcartItems;
 
@@ -494,7 +488,6 @@ function Cart() {
     <>
       <ToastContainer />
       <div className="hidden lg:block">
-        {" "}
         <Header />
       </div>
 
@@ -889,7 +882,7 @@ function Cart() {
 
                 <div className="grid grid-cols-2 lg:grid-cols-4 xl:grid-cols-6 gap-4">
                   {alsoLike.map((product) => (
-                    <Card key={product.id} product={product} />
+                    <AlsoLikeCard key={product.id} product={product} />
                   ))}
                 </div>
               </section>
@@ -915,10 +908,9 @@ function Cart() {
 
       <div
         className={`hidden lg:block ${
-          alsoLike.length <= 0 ? "fixed bottom-0 w-full" : ""
+          alsoLike?.length <= 0 ? "fixed bottom-0 w-full" : ""
         } `}
       >
-        {" "}
         <BottomTabs />
       </div>
     </>
@@ -926,236 +918,6 @@ function Cart() {
 }
 
 export default Cart;
-
-function CartCard({ cartitem }) {
-  const [loadingQty, setLoadingQty] = useState(false);
-  const [signedUrl, setSignedUrl] = useState(cartitem.productId.image);
-
-  const { isAuthenticated } = useApp();
-  const { getCartItems, localcartItems, setLocalCartItems } = useEcomApp();
-  const navigate = useNavigate();
-
-  async function handleRemoveItem(product) {
-    if (isAuthenticated) {
-      try {
-        const { error } = await supabase
-          .from("userProductCollection")
-          .delete()
-          .eq("id", product.id);
-
-        showRemoveFromCartToast(product);
-        if (error) throw new Error(error);
-      } catch (error) {
-        console.error(error);
-      } finally {
-        getCartItems();
-      }
-    } else {
-      const removeproductfromlocalCartitems = localcartItems.filter(
-        (item) => item.productId.id !== product?.productId?.id
-      );
-
-      localStorage.setItem(
-        "cartitems",
-        JSON.stringify(removeproductfromlocalCartitems)
-      );
-      setLocalCartItems(removeproductfromlocalCartitems);
-      showRemoveFromCartToast(product);
-    }
-  }
-
-  const updateQuantity = async (productId, newQuantity) => {
-    setLoadingQty(true);
-    try {
-      const { error } = await supabase
-        .from("userProductCollection")
-        .update({ quantity: newQuantity })
-        .eq("productId", productId);
-      if (error) {
-        console.error(error);
-      }
-      setLoadingQty(false);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setLoadingQty(false);
-      getCartItems();
-    }
-  };
-
-  const handleProductQuantityDec = (product, quantity) => {
-    if (isAuthenticated) {
-      if (quantity === 1) {
-        handleRemoveItem(product);
-      } else {
-        updateQuantity(product.productId?.id, quantity - 1);
-      }
-    } else {
-      if (quantity === 1) {
-        handleRemoveItem(product);
-        return;
-      }
-      const updatedLocalItems = localcartItems.map((item) =>
-        item.productId.id === product.productId.id
-          ? { ...item, quantity: quantity - 1 }
-          : item
-      );
-      localStorage.setItem("cartitems", JSON.stringify(updatedLocalItems));
-      setLocalCartItems(updatedLocalItems);
-    }
-  };
-
-  const handleProductQuantityInc = (product, quantity) => {
-    if (isAuthenticated && product.productId?.stockQty > quantity) {
-      updateQuantity(product.productId?.id, quantity + 1);
-    } else {
-      if (product.productId?.stockQty > quantity) {
-        const updatedLocalItems = localcartItems.map((item) =>
-          item.productId.id === product.productId.id
-            ? { ...item, quantity: quantity + 1 }
-            : item
-        );
-        setLocalCartItems(updatedLocalItems);
-        localStorage.setItem("cartitems", JSON.stringify(updatedLocalItems));
-      } else {
-        toast.error("Not Available");
-      }
-    }
-  };
-
-  const refreshSignedUrl = async () => {
-    try {
-      const fullSignedUrl = cartitem.productId.image;
-      let imagePath = fullSignedUrl.split("/object/sign/")[1]?.split("?")[0];
-      if (imagePath.startsWith("addon/")) {
-        imagePath = imagePath.replace(/^addon\//, "");
-      }
-      const { data, error } = await supabase.storage
-        .from("addon")
-        .createSignedUrl(imagePath, 3600);
-      if (!error && data?.signedUrl) {
-        setSignedUrl(data.signedUrl);
-        const updatedItems = localcartItems.map((item) =>
-          item.productId.id === cartitem.productId.id
-            ? {
-                ...item,
-                productId: {
-                  ...item.productId,
-                  image: data.signedUrl,
-                },
-              }
-            : item
-        );
-        localStorage.setItem("cartitems", JSON.stringify(updatedItems));
-        setLocalCartItems(updatedItems);
-      } else {
-        console.error("Signed URL error:", error);
-      }
-    } catch (err) {
-      console.error("refreshSignedUrl failed:", err);
-    }
-  };
-  const cartItemTotal =
-    cartitem?.productId?.ecommercePrice?.sellingPrice * cartitem?.quantity;
-
-  return (
-    <>
-      <div className="flex items-center gap-2 lg:border border-[#CCCCCC] rounded-lg relative py-2">
-        <img
-          src={signedUrl}
-          alt="cart"
-          className="w-24 h-24 md:h-32 md:w-28 lg:h-40 lg:w-36 object-contain "
-          onClick={() => navigate(`/productview/${cartitem.productId?.id}`)}
-          onError={refreshSignedUrl}
-        />
-        <div className="flex-1 font-Poppins space-y-3 font-medium text-[10px] lg:text-sm">
-          <div>
-            <h5
-              onClick={() => navigate(`/productview/${cartitem.productId?.id}`)}
-              className="leading-[22.5px] font-medium text-[#111111] uppercase cursor-pointer"
-            >
-              {cartitem.productId?.title}
-            </h5>
-            <h5 className=" text-[#111111]/50 capitalize">
-              {cartitem.productId?.product_type}
-            </h5>
-          </div>
-
-          <div className=" flex  gap-3 my-2">
-            <div className="flex items-start justify-start gap-2">
-              <button
-                className="border w-8 h-7 flex justify-center items-center font-semibold"
-                onClick={() =>
-                  handleProductQuantityDec(cartitem, cartitem?.quantity)
-                }
-                disabled={loadingQty}
-              >
-                {loadingQty ? (
-                  <span className="w-4 h-4 border-2 border-t-transparent border-black rounded-full animate-spin inline-block"></span>
-                ) : cartitem?.quantity === 1 ? (
-                  <div className="hover:animate-shake hover:text-red-400 w-full h-full flex justify-center items-center">
-                    <MdOutlineDelete className="mx-auto" />
-                  </div>
-                ) : (
-                  "-"
-                )}
-              </button>
-              <input
-                type="number"
-                className="border  w-12 h-7 rounded text-center [&::-webkit-inner-spin-button]:appearance-none  focus:outline-none focus:ring-0 text-xs md:text-[13px] leading-6"
-                // min={1}
-                value={cartitem?.quantity || "NA"}
-                readOnly
-              />
-              <button
-                className="border  w-8 h-7 flex justify-center items-center font-semibold"
-                onClick={() =>
-                  handleProductQuantityInc(cartitem, cartitem?.quantity)
-                }
-                disabled={loadingQty}
-              >
-                {loadingQty ? (
-                  <span className="w-4 h-4 border-2 border-t-transparent border-black rounded-full animate-spin inline-block"></span>
-                ) : (
-                  "+"
-                )}
-              </button>
-            </div>
-          </div>
-          {cartitem?.productId?.stockQty < 10 && (
-            <span className="text-xs text-[#F87171]">
-              Hurry Up! Only {cartitem?.productId?.stockQty} left.
-            </span>
-          )}
-          <div className="flex gap-3">
-            <h5 className=" font-medium text-[#111111]">
-              Rs.{" "}
-              {cartitem?.productId?.ecommercePrice?.sellingPrice ||
-                cartitem?.productId?.price}
-            </h5>
-            <h5 className=" font-medium text-[#111111]/50">
-              <del>{cartitem?.productId?.ecommercePrice?.mrp || ""}</del>
-            </h5>{" "}
-            <h5 className="font-medium text-[#C20000]/50">
-              Rs.{" "}
-              {cartitem?.productId?.ecommercePrice?.mrp -
-                cartitem?.productId?.ecommercePrice?.sellingPrice}{" "}
-              OFF
-            </h5>
-          </div>
-          <p className="text-xs font-bold text-[#111]">
-            Total : Rs. {cartItemTotal}
-          </p>
-        </div>
-        <div className="absolute top-2 right-2">
-          <button onClick={() => handleRemoveItem(cartitem)}>
-            <IoClose />
-          </button>
-        </div>
-      </div>
-    </>
-  );
-}
 
 function ClearCartPopUp({ onConfirm, onClose }) {
   return (
@@ -1239,76 +1001,6 @@ function CouponCard({
           <span className="mx-2">|</span>
           <span className="font-semibold">11:59 PM</span>
         </p>
-      </div>
-    </div>
-  );
-}
-
-function Card({ product }) {
-  const { handleAddToCart, handleAddtoWishlist } = useHandleAddToCart();
-  const { wishlistItems } = useEcomApp();
-
-  const isWishlisted = wishlistItems?.some(
-    (item) => item.productId?.id === product.id
-  );
-
-  const naviagte = useNavigate();
-  return (
-    <div className="font-TimesNewRoman max-w-sm max-h-sm  border border-[#ccc]">
-      <div
-        onClick={() =>
-          naviagte(`/productview/${product.id}`, { state: { from: "shop" } })
-        }
-        className="flex justify-center items-center p-2 cursor-pointer"
-      >
-        <img
-          src={product.image}
-          alt={product.product_id?.category}
-          className="h-52 object-contain"
-        />
-      </div>
-      <div className="bg-[#fff] p-2">
-        <div className="flex flex-col md:flex-row ">
-          <div className="flex-1 text-sm  leading-[22.4px]  text-[#111] ">
-            <h4
-              title={product?.title}
-              className="font-medium text-sm leading-[22.4px] line-clamp-1"
-            >
-              {product?.title}
-            </h4>
-            <div className="flex items-center gap-2">
-              <p className=" ">
-                Rs {product?.ecommercePrice?.sellingPrice || "Rs 3,0000"}
-              </p>
-              <p className="line-through text-[#111] text-opacity-50">
-                Rs {product?.ecommercePrice?.mrp || "Rs 3,0000"}
-              </p>
-              <p className="text-[#C20000]">sale</p>
-            </div>
-          </div>
-          <div
-            onClick={() => handleAddtoWishlist(product)}
-            className="text-[#ccc] hover:text-red-600 cursor-pointer"
-          >
-            {isWishlisted ? (
-              <AiFillHeart size={20} color="red" />
-            ) : (
-              <GoHeart size={20} />
-            )}
-          </div>
-        </div>
-        {product.stockQty > 0 ? (
-          <button
-            onClick={() => handleAddToCart(product)}
-            className="text-[#000] uppercase bg-[#FFFFFF] text-xs border border-[#ccc] px-2  py-2 rounded-sm "
-          >
-            add to cart
-          </button>
-        ) : (
-          <span className="text-xs text-red-500 font-semibold">
-            Out of stock
-          </span>
-        )}
       </div>
     </div>
   );

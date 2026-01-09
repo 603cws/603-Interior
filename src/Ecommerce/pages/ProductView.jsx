@@ -274,7 +274,6 @@ function ProductView() {
         <div className="mt-6 lg:mt-10">
           <div className="md:flex mx-10 items-center text-[#334A78] text-sm mt-4 mb-4 md:mb-0 hidden">
             <button onClick={() => navigate(`/${fromPage}`)}>
-              {" "}
               {fromPage === "shop" ? "Shop" : "Home"}
             </button>
             <MdOutlineKeyboardArrowRight

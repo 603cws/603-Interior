@@ -349,7 +349,7 @@ function Products() {
                 onClick={() => navigate("/shop")}
                 className="bg-[#334A78] text-[#fff] text-xs px-4 py-2 capitalize font-bold rounded hover:bg-[#4C69A4]"
               >
-                discover more{" "}
+                discover more
               </button>
             </div>
             {featuredProducts.slice(0, 2).map((item, i) => (
