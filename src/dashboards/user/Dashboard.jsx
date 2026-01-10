@@ -415,6 +415,7 @@ function Dashboard() {
             <DashboardView
               handledeleteBoq={handledeleteBoq}
               selectedBoq={selectedBoq}
+              setSelectedBoq={setSelectedBoq}
               isboqavailable={isboqavailable}
               boqdata={boqdata}
               isExpanded={isExpanded}

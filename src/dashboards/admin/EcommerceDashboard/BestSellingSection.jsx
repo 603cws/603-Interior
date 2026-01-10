@@ -23,8 +23,10 @@ function BestSellingSection({ sidebarDispatch, handleProductPreview }) {
       }
 
       const { data: orders, error: orderError } = await supabase
-        .from("orders")
-        .select("products");
+        .from("order_items")
+        .select("product_id(*)");
+
+      console.log("orders data", orders);
 
       if (orderError) {
         console.error(orderError);

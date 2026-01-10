@@ -12,8 +12,8 @@ function SalesSection() {
     const fetchOrders = async () => {
       setLoadingOrders(true);
       const { data: orders, error } = await supabase
-        .from("orders")
-        .select("created_at, finalPrice")
+        .from("orders_table")
+        .select("created_at, final_amount")
         .order("created_at", { ascending: false });
 
       if (error) {
@@ -58,7 +58,7 @@ function SalesSection() {
   // Metrics
   const itemsSold = filteredOrders.length;
   const revenue = filteredOrders.reduce(
-    (sum, order) => sum + (parseFloat(order.finalPrice) || 0),
+    (sum, order) => sum + (parseFloat(order.final_amount) || 0),
     0
   );
 
@@ -96,7 +96,7 @@ function SalesSection() {
       }
 
       if (!dateMap[key]) dateMap[key] = 0;
-      dateMap[key] += parseFloat(order.finalPrice) || 0;
+      dateMap[key] += parseFloat(order.final_amount) || 0;
     });
 
     // Sort keys chronologically

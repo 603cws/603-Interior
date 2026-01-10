@@ -282,6 +282,7 @@ function ItemTable({
         // If both are "pending" or both are not "pending", sort by date
         return new Date(b.created_at) - new Date(a.created_at);
       });
+
       setProducts(sortedData);
       setFilteredProducts(sortedData);
     } catch (error) {
@@ -318,6 +319,7 @@ function ItemTable({
 
   useEffect(() => {
     fetchProducts();
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isproductRefresh]);
 

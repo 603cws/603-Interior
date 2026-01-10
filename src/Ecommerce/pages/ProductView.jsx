@@ -295,7 +295,7 @@ function ProductView() {
                 >
                   <img
                     src={hoveredImage || product.image}
-                    className="md:w-2/3 w-full"
+                    className="md:w-2/3 w-full lg:h-[400px]"
                     alt="product name"
                   />
                 </div>
@@ -329,7 +329,7 @@ function ProductView() {
             {/* product info */}
             <div className="flex flex-col justify-center">
               <div className="border-b pb-4 md:border-none md:pb-0">
-                <h2 className="font-semibold text-lg leading-[22.4px] lg:text-3xl text-[#111]">
+                <h2 className="font-semibold text-lg leading-[22.4px] lg:text-3xl text-[#111] capitalize">
                   {product?.title || "product title"}
                 </h2>
                 <p className="text-[#A5A6AD] text-base leading-[38.4px]">
@@ -364,7 +364,7 @@ function ProductView() {
                   <p className="text-sm lg:text-base text-[#F69E60]">
                     (Rs.
                     {product?.ecommercePrice?.mrp -
-                      product?.ecommercePrice?.sellingPrice}{" "}
+                      product?.ecommercePrice?.sellingPrice}
                     OFF)
                   </p>
                 </div>

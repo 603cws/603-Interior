@@ -179,7 +179,7 @@ function Header() {
               </p>
               <ul className="py-2 text-sm [&_li]:cursor-pointer">
                 <li
-                  onClick={() => navigate("/profilePage")}
+                  onClick={() => navigate("/dashboard")}
                   className="flex items-center px-4 py-2 ml-2 hover:bg-[#f9f9f9]"
                 >
                   <img
@@ -189,7 +189,10 @@ function Header() {
                   />
                   <span className="ml-2">View Profile</span>
                 </li>
-                <li className="flex items-center px-4 py-2 ml-2 hover:bg-[#f9f9f9]">
+                <li
+                  className="flex items-center px-4 py-2 ml-2 hover:bg-[#f9f9f9]"
+                  onClick={() => navigate("/dashboard")}
+                >
                   <img
                     src="../images/ecommerce/icon1.svg"
                     color="#ffffff"

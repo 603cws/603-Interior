@@ -8,11 +8,19 @@ function Transactions({ sidebarDispatch, onOrderSelect }) {
   useEffect(() => {
     const fetchOrders = async () => {
       setLoadingOrders(true);
+      // const { data: orders, error } = await supabase
+      //   .from("orders")
+      //   .select(`*, users_profiles(*)`)
+      //   .order("created_at", { ascending: false })
+      //   .limit(7);
       const { data: orders, error } = await supabase
-        .from("orders")
-        .select(`*, users_profiles(*)`)
+        .from("orders_table")
+        .select(`*,users_profiles(*),order_items(*,product_variants(*))`)
         .order("created_at", { ascending: false })
         .limit(7);
+
+      console.log("data orders", orders);
+
       if (error) {
         console.error(error);
         setLoadingOrders(false);
@@ -108,7 +116,7 @@ function Transactions({ sidebarDispatch, onOrderSelect }) {
                     {t.status}
                   </span>
                 </td>
-                <td>₹{t.finalPrice}</td>
+                <td>₹{t.final_amount}</td>
               </tr>
             ))}
           </tbody>
