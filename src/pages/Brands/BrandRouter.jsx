@@ -10,6 +10,7 @@ import Godrej from "./Furniture/Godrej";
 import Featherlite from "./Furniture/Featherlite";
 import Hni from "./Furniture/Hni";
 import Spacewood from "./Furniture/Spacewood";
+import BlueStar from "./HVAC/BlueStar";
 
 const BrandRouter = () => {
   const { brandName } = useParams();
@@ -26,6 +27,7 @@ const BrandRouter = () => {
     featherlite: <Featherlite />,
     hni: <Hni />,
     spacewood: <Spacewood />,
+    bluestar: <BlueStar />,
   };
 
   return components[brandName] || <div>Brand Not Found</div>;

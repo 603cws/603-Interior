@@ -172,7 +172,7 @@ const brandImages = {
     { name: "#", image: "/images/brands/Paint/nippon.svg" },
   ],
   HVAC: [
-    { name: "#", image: "/images/brands/HVAC/Blue_Star.png" },
+    { name: "bluestar", image: "/images/brands/HVAC/Blue_Star.png" },
     { name: "daikin", image: "/images/brands/HVAC/DAIKIN.svg" },
     { name: "lg", image: "/images/brands/HVAC/LG.svg" },
     { name: "#", image: "/images/brands/HVAC/Carrier.svg" },

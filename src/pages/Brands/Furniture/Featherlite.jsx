@@ -22,7 +22,8 @@ function Featherlite() {
           <img
             src="../images/brands/Furniture/featherlite/banner.png"
             alt="featherlite banner"
-            className="w-full h-full object-cover"
+            draggable={false}
+            className="w-full h-full object-cover pointer-events-none select-none"
           />
         </div>
       </section>
@@ -73,7 +74,8 @@ function Featherlite() {
           <img
             src="../images/brands/Furniture/featherlite/banner2.png"
             alt="featherlite banner"
-            className="w-full h-full object-cover"
+            draggable={false}
+            className="w-full h-full object-cover pointer-events-none select-none"
           />
         </div>
       </section>
@@ -83,7 +85,8 @@ function Featherlite() {
           <img
             src="../images/brands/Furniture/featherlite/banner3.png"
             alt="featherlite banner"
-            className="w-full h-full object-cover"
+            draggable={false}
+            className="w-full h-full object-cover pointer-events-none select-none"
           />
         </div>
       </section>
@@ -93,7 +96,8 @@ function Featherlite() {
           <img
             src="../images/brands/Furniture/featherlite/banner4.png"
             alt="featherlite banner"
-            className="w-full h-full object-cover"
+            draggable={false}
+            className="w-full h-full object-cover pointer-events-none select-none"
           />
         </div>
       </section>
@@ -103,22 +107,25 @@ function Featherlite() {
           <img
             src="../images/brands/Furniture/featherlite/section5-1.png"
             alt="featherlite"
+            draggable={false}
             className="relative w-full h-[700px] overflow-hidden
-               bg-cover bg-left bg-no-repeat border border-[#002F36] flex-1 p-2"
+               bg-cover bg-left bg-no-repeat border border-[#002F36] flex-1 p-2 pointer-events-none select-none"
           />
           <div className="flex flex-col gap-5 flex-1">
             <img
               src="../images/brands/Furniture/featherlite/section5-2.jpg"
               alt="featherlite"
+              draggable={false}
               className="relative w-full h-[340px] overflow-hidden
-               bg-contain bg-center bg-no-repeat"
+               bg-contain bg-center bg-no-repeat pointer-events-none select-none"
             />
 
             <img
               src="../images/brands/Furniture/featherlite/section5-3.jpg"
               alt="featherlite"
+              draggable={false}
               className="relative w-full h-[340px] overflow-hidden
-               bg-contain bg-center bg-no-repeat"
+               bg-contain bg-center bg-no-repeat pointer-events-none select-none"
             />
           </div>
         </div>
@@ -150,7 +157,12 @@ function Featherlite() {
               key={index}
               className="border w-full h-80 p-2 flex items-center justify-center border-[#002F36] overflow-hidden hover:cursor-pointer"
             >
-              <img src={product} alt="product" className="h-full" />
+              <img
+                src={product}
+                alt="product"
+                draggable={false}
+                className="h-full pointer-events-none select-none"
+              />
             </div>
           ))}
         </div>
