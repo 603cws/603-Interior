@@ -136,7 +136,9 @@ function DashboardView({
           </h3>
           <div
             className={`flex gap-2 lg:gap-3 flex-wrap justify-center ${
-              isExpanded ? "md:justify-normal" : "md:justify-between"
+              isExpanded
+                ? "md:justify-normal"
+                : "md:justify-between lg:justify-normal"
             } `}
           >
             {isboqavailable &&

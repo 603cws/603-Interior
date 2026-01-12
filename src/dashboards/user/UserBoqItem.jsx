@@ -493,9 +493,16 @@ function UserBoqItem({ selectedBoq, setSelectedBoq }) {
           ) : (
             <>
               {selectedBoq ? (
-                <p className="p-5 text-gray-500 text-center">
-                  No {toggle ? "products" : "addons"} found.
-                </p>
+                <div className="flex justify-center items-center">
+                  <div>
+                    <div className="max-w-sm ">
+                      <img src="/images/empty-product.png" alt="empty item" />
+                    </div>
+                    <p className="p-5 text-gray-500 text-center">
+                      No {toggle ? "products" : "addons"} found.
+                    </p>
+                  </div>
+                </div>
               ) : (
                 <p className="p-5 text-gray-500 text-center">
                   please select a boq
