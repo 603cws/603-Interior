@@ -1,6 +1,5 @@
 import LandingNavbar from "../../../landing/components/LandingNavbar";
 import Footer from "../../../common-components/Footer";
-import { useNavigate } from "react-router-dom";
 import { RxArrowRight } from "react-icons/rx";
 
 const productCollection = [
@@ -53,7 +52,6 @@ const tiles = [
   "/images/brands/Flooring/kajaria/tile-6.jpg",
 ];
 function Kajaria() {
-  const navigate = useNavigate();
 
   return (
     <>
