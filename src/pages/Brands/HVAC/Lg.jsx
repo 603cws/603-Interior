@@ -125,11 +125,11 @@ function Lg() {
       </section>
 
       <section className="flex items-center justify-around overflow-y-hidden bg-[#DE2D49] max-h-32 my-4">
-        <img src="../images/brands/lg/seperator.png" alt="" />
+        <img src="../images/brands/lg/seperator.png" alt="seperator" />
         <p className="text-[#fff] text-3xl text-center lg:text-4xl w-2/3">
           Air Conditioner by room size
         </p>
-        <img src="../images/brands/lg/seperator.png" alt="" />
+        <img src="../images/brands/lg/seperator.png" alt="seperator" />
       </section>
 
       <section className="px-4 lg:container mx-auto py-2">

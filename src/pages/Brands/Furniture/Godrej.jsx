@@ -27,12 +27,18 @@ function Godrej() {
       </section>
 
       <section className="flex items-center justify-around overflow-y-hidden bg-[#FAE0B0] max-h-32 my-4">
-        <img src="../images/brands/Furniture/godrej/seperator.png" alt="" />
+        <img
+          src="../images/brands/Furniture/godrej/seperator.png"
+          alt="seperator"
+        />
         <p className="text-black text-lg font-semibold text-center lg:text-xl w-2/3">
           EXPLORE A WIDE RANGE OF ASSURED QUALITY FURNITURE FROM GODREJ
           INTERIORS
         </p>
-        <img src="../images/brands/Furniture/godrej/seperator.png" alt="" />
+        <img
+          src="../images/brands/Furniture/godrej/seperator.png"
+          alt="seperator"
+        />
       </section>
 
       <section className="p-4 lg:container mx-auto">

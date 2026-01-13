@@ -19,8 +19,6 @@ function Transactions({ sidebarDispatch, onOrderSelect }) {
         .order("created_at", { ascending: false })
         .limit(7);
 
-      console.log("data orders", orders);
-
       if (error) {
         console.error(error);
         setLoadingOrders(false);

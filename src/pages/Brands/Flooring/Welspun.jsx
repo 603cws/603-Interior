@@ -67,39 +67,39 @@ function Welspun() {
           </div>
         </div>
         <div className="flex items-center justify-around overflow-y-hidden bg-[#3B558C] max-h-22 my-5 lg:hidden">
-          <img src="/images/brands/saperator.png" alt="" />
+          <img src="/images/brands/saperator.png" alt="seperator" />
           <p className="uppercase font-Georgia text-[#fff] font-semibold text-center">
             EXPLORE A WIDE RANGE OF ASSURED QUALITY FLOORING FROM WELSPUN
             FLOORING
           </p>
-          <img src="/images/brands/saperator.png" alt="" />
+          <img src="/images/brands/saperator.png" alt="seperator" />
         </div>
       </section>
       <section className="hidden lg:flex items-center justify-around overflow-y-hidden bg-[#3B558C] max-h-22 my-5">
-        <img src="/images/brands/saperator.png" alt="" />
+        <img src="/images/brands/saperator.png" alt="seperator" />
         <p className="uppercase font-Georgia text-[#fff] lg:text-xl font-semibold">
           EXPLORE A WIDE RANGE OF ASSURED QUALITY FLOORING FROM WELSPUN FLOORING
         </p>
-        <img src="/images/brands/saperator.png" alt="" />
+        <img src="/images/brands/saperator.png" alt="seperator" />
       </section>
 
       <section className="px-4 max-auto lg:container">
         <div className="grid grid-cols-1 lg:grid-cols-3 justify-between gap-3">
           <img
             src="/images/brands/welspun-1.jpg"
-            alt=""
+            alt="product-image"
             onClick={() => navigate("productview")}
             className="cursor-pointer"
           />
           <img
             src="/images/brands/welspun-2.webp"
-            alt=""
+            alt="product-image"
             onClick={() => navigate("productview")}
             className="cursor-pointer"
           />
           <img
             src="/images/brands/welspun-3.jpg"
-            alt=""
+            alt="product-image"
             onClick={() => navigate("productview")}
             className="cursor-pointer"
           />
@@ -108,14 +108,18 @@ function Welspun() {
 
       <section className="px-4 max-auto lg:container my-5">
         <div className="flex flex-col lg:flex-row justify-between gap-3">
-          <img src="/images/brands/welspun-4.jpg" alt="" className="flex-1 " />
+          <img
+            src="/images/brands/welspun-4.jpg"
+            alt="product-image"
+            className="flex-1 "
+          />
           <div className="flex-1 flex flex-col gap-5">
             {clickNLock?.map((product, index) => (
               <div key={index} className="flex-1 bg-[#3B558C] flex">
                 <div className="bg-[#fff] rounded-[100px] flex-1 flex flex-col lg:flex-row justify-center items-center gap-5 lg:gap-10 p-5">
                   <img
                     src={product.image}
-                    alt=""
+                    alt="product-image"
                     className="max-w-48 lg:max-w-xs w-full max-h-52 lg:max-h-96"
                   />
                   <div className="">
@@ -183,12 +187,12 @@ function Welspun() {
             <div className="relative">
               <img
                 src="/images/brands/clicknlock-bgimage.png"
-                alt=""
+                alt="product-image"
                 className="max-w-72 lg:max-w-full lg:w-full object-cover max-h-[450px] place-self-end"
               />
               <img
                 src="/images/brands/clicknlock-product.png"
-                alt=""
+                alt="product-image"
                 className="absolute -translate-y-3/4 -translate-x-2 lg:-translate-x-1/3 max-h-48 lg:max-h-72 "
               />
             </div>
@@ -218,7 +222,7 @@ function Welspun() {
         {productCollection.map((product, index) => (
           <img
             src={product}
-            alt=""
+            alt="product-image"
             key={index}
             onClick={() => navigate("productview")}
             className="cursor-pointer"
@@ -227,10 +231,14 @@ function Welspun() {
       </section>
 
       <section className="px-4 max-auto lg:container flex justify-between gap-5">
-        <img src="/images/brands/welspun-8.jpg" alt="" className="flex-1" />
+        <img
+          src="/images/brands/welspun-8.jpg"
+          alt="product-image"
+          className="flex-1"
+        />
         <div className="flex-1 grid grid-cols-2 gap-3">
           {featured.map((product, index) => (
-            <img src={product} alt="" key={index} />
+            <img src={product} alt="product-image" key={index} />
           ))}
         </div>
       </section>

@@ -183,17 +183,17 @@ const brandImages = {
     { name: "#", image: "/images/brands/SmartSolutions/Cisco.svg" },
     { name: "dlink", image: "/images/brands/SmartSolutions/D-Link.svg" },
     { name: "#", image: "/images/brands/SmartSolutions/honeywell.svg" },
-    { name: "#", image: "/images/brands/SmartSolutions/Netgear.svg" },
+    { name: "netgear", image: "/images/brands/SmartSolutions/Netgear.svg" },
     { name: "#", image: "/images/brands/SmartSolutions/Schneider.svg" },
   ],
   Flooring: [
-    { name: "#", image: "/images/brands/Flooring/Kajaria.png" },
-    { name: "#", image: "/images/brands/Flooring/johnson.png" },
+    { name: "kajaria", image: "/images/brands/Flooring/Kajaria.png" },
+    { name: "johnson", image: "/images/brands/Flooring/johnson.png" },
     {
       name: "#",
       image: "/images/brands/Flooring/Shaw_Industries.svg",
     },
-    { name: "#", image: "/images/brands/Flooring/Somany.png" },
+    { name: "somany", image: "/images/brands/Flooring/Somany.png" },
     { name: "welspun", image: "/images/brands/Flooring/welspun.png" },
   ],
   Lux: [

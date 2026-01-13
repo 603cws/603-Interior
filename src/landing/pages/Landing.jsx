@@ -192,7 +192,7 @@ function Landing() {
     <>
       <section className="max-h-screen">
         <LandingNavbar className="absolute top-0 z-50" />
-        <div className="relative h-full w-full pt-20 lg:pt-24 3xl:container">
+        <div className="relative h-full w-full mt-20 lg:mt-0 lg:pt-24 3xl:container">
           <div className="hidden lg:block w-52 h-56 absolute top-0 left-1/2 -translate-x-full bg-[#ECECEC] -z-10"></div>
           <div className="hidden lg:block absolute -bottom-6 left-0 w-52 h-56 bg-[#1C3145]"></div>
           <div className="hidden lg:block absolute -bottom-6 right-0 max-w-sm w-full h-12 bg-[#1C3145]"></div>
@@ -357,9 +357,9 @@ function Landing() {
         <div className="px-4 lg:container xl:max-w-7xl 2xl:px-0 mx-auto py-5 lg:py-10">
           <div className="flex flex-col items-center space-y-4">
             <TitleHeader title={"service"} />
-            <h3 className="capitalize font-Georgia font-bold text-[42px] text-center tracking-wide">
+            <h3 className="capitalize font-Georgia font-bold text-3xl md:text-[42px] text-center tracking-wide">
               transform your office
-              <br /> interior design
+              <br className="hidden md:block" /> interior design
             </h3>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3 justify-between justify-items-stretch my-10">
@@ -409,7 +409,7 @@ function Landing() {
 
       <section>
         <div className="px-4 mx-auto lg:container xl:max-w-7xl 2xl:px-0 py-5 lg:py-10">
-          <h3 className="font-Georgia font-bold text-[42px] text-center tracking-wide">
+          <h3 className="font-Georgia font-bold text-3xl md:text-[42px] text-center tracking-wide">
             Trusted by Industry Leaders
           </h3>
           <div className="">
@@ -470,7 +470,7 @@ function Landing() {
         <div className="px-4 sm:px-0 w-full 3xl:container py-5 lg:py-10">
           <div className="flex flex-col items-center space-y-4">
             <TitleHeader title={"our best projects"} />
-            <h3 className="capitalize font-Georgia font-bold text-[42px] text-center tracking-wide">
+            <h3 className="capitalize font-Georgia font-bold text-3xl md:text-[42px] text-center tracking-wide">
               our featured projects
             </h3>
           </div>

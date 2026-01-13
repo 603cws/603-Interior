@@ -155,7 +155,6 @@ function App() {
           <Route path="/products" element={<Products />} />
           <Route path="/products/topdeal" element={<TopDeal />} />
           <Route path="/products/seasonspecial" element={<SeasonSpecial />} />
-          <Route path="/productview" element={<ProductView />} />
           <Route path="/productview/:id" element={<ProductView />} />
           <Route path="/shop" element={<ShopProducts />} />
           <Route path="/cart" element={<Cart />} />
