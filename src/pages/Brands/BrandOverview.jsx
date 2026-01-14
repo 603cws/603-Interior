@@ -159,7 +159,7 @@ const brandImages = {
     { name: "lighting", image: "/images/brands/Lighting/Jaquar.svg" },
     { name: "lighting", image: "/images/brands/Lighting/Panasonic.svg" },
     { name: "philips", image: "/images/brands/Lighting/Philips.svg" },
-    { name: "lighting", image: "/images/brands/Lighting/Wipro.svg" },
+    { name: "wiproLight", image: "/images/brands/Lighting/Wipro.svg" },
     { name: "lighting", image: "/images/brands/Lighting/Syska.png" },
   ],
   Paint: [
@@ -193,7 +193,7 @@ const brandImages = {
     { name: "kajaria", image: "/images/brands/Flooring/Kajaria.png" },
     { name: "johnson", image: "/images/brands/Flooring/johnson.png" },
     {
-      name: "#",
+      name: "shaw",
       image: "/images/brands/Flooring/Shaw_Industries.svg",
     },
     { name: "somany", image: "/images/brands/Flooring/Somany.png" },

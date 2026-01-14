@@ -18,6 +18,8 @@ import Netgear from "./SmartSolutions/Netgear";
 import HoneyWell from "./SmartSolutions/HoneyWell";
 import SchneiderElectric from "./SmartSolutions/SchneiderElectric";
 import Philips from "./Lighting/Philips";
+import WiproLight from "./Lighting/Wipro";
+import Shaw from "./Flooring/Shaw";
 
 const BrandRouter = () => {
   const { brandName } = useParams();
@@ -42,6 +44,8 @@ const BrandRouter = () => {
     honeywell: <HoneyWell />,
     schneiderElectric: <SchneiderElectric />,
     philips: <Philips />,
+    wiproLight: <WiproLight />,
+    shaw: <Shaw />,
   };
 
   return components[brandName] || <div>Brand Not Found</div>;
