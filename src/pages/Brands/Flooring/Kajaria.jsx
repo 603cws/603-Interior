@@ -52,7 +52,6 @@ const tiles = [
   "/images/brands/Flooring/kajaria/tile-6.jpg",
 ];
 function Kajaria() {
-
   return (
     <>
       <section className="h-screen flex flex-col">
@@ -115,12 +114,14 @@ function Kajaria() {
             {toughTiles?.map((product, index) => (
               <div key={index} className="flex-1 bg-[#3B558C] flex">
                 <div className="bg-[#fff] rounded-[100px] flex-1 flex flex-col lg:flex-row justify-center items-center gap-5 lg:gap-10 p-5">
-                  <img
-                    src={product.image}
-                    alt="product-image"
-                    className="max-w-48 lg:max-w-xs w-full max-h-52 lg:max-h-80"
-                  />
-                  <div className="">
+                  <div className="flex-1">
+                    <img
+                      src={product.image}
+                      alt="product-image"
+                      className="max-h-52 lg:max-h-80 "
+                    />
+                  </div>
+                  <div className="flex-1">
                     <h2 className="font-Georgia lg:text-lg font-semibold uppercase text-[#D9A14D] border border-[#A0A0A0] p-2 mb-2 lg:mb-5">
                       {product.title}
                     </h2>
@@ -181,17 +182,17 @@ function Kajaria() {
             </div>
           </div>
 
-          <div className="flex-1">
+          <div className="flex-1 mb-16">
             <div className="relative">
               <img
                 src="/images/brands/Flooring/kajaria/s4-1.jpg"
                 alt="product-image"
-                className="max-w-72 md:max-w-full lg:w-full object-cover max-h-[450px] md:h-3/4 lg:h-full place-self-end"
+                className="max-w-full md:max-w-full lg:w-full object-cover max-h-[450px] md:h-3/4 lg:h-full place-self-end"
               />
               <img
                 src="/images/brands/Flooring/kajaria/s4-2.jpg"
                 alt="product-image"
-                className="absolute -translate-y-3/4 -translate-x-2 md:-translate-y-full lg:-translate-y-3/4 lg:-translate-x-1/3 max-h-48 lg:max-h-72 max-w-40 md:max-w-60 lg:max-w-52 h-full object-cover"
+                className="absolute -translate-y-3/4 -translate-x-2 lg:-translate-x-1/3 max-h-44 md:max-h-48 lg:max-h-72 max-w-32 md:max-w-60 lg:max-w-52 h-full object-cover"
               />
             </div>
           </div>
@@ -224,13 +225,13 @@ function Kajaria() {
             alt="product-image"
             key={index}
             // onClick={() => navigate("productview")}
-            className="cursor-pointer object-cover max-h-80 w-full"
+            className="cursor-pointer object-cover h-40 md:h-56 lg:h-80 w-full"
           />
         ))}
       </section>
 
-      <section className="px-4 max-auto lg:container flex justify-between items-stretch gap-5">
-        <div className="flex-1 border">
+      <section className="px-4 max-auto lg:container md:flex justify-between items-stretch gap-5">
+        <div className="flex-1 border flex justify-center">
           <img
             src="/images/brands/Flooring/kajaria/catalogue.webp"
             alt="product-image"
