@@ -15,6 +15,9 @@ import Johnson from "./Flooring/Johnson";
 import Kajaria from "./Flooring/Kajaria";
 import Somany from "./Flooring/Somany";
 import Netgear from "./SmartSolutions/Netgear";
+import HoneyWell from "./SmartSolutions/HoneyWell";
+import SchneiderElectric from "./SmartSolutions/SchneiderElectric";
+import Philips from "./Lighting/Philips";
 
 const BrandRouter = () => {
   const { brandName } = useParams();
@@ -36,6 +39,9 @@ const BrandRouter = () => {
     kajaria: <Kajaria />,
     somany: <Somany />,
     netgear: <Netgear />,
+    honeywell: <HoneyWell />,
+    schneiderElectric: <SchneiderElectric />,
+    philips: <Philips />,
   };
 
   return components[brandName] || <div>Brand Not Found</div>;

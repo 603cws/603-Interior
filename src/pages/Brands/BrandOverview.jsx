@@ -158,7 +158,7 @@ const brandImages = {
     { name: "lighting", image: "/images/brands/Lighting/Havells.svg" },
     { name: "lighting", image: "/images/brands/Lighting/Jaquar.svg" },
     { name: "lighting", image: "/images/brands/Lighting/Panasonic.svg" },
-    { name: "lighting", image: "/images/brands/Lighting/Philips.svg" },
+    { name: "philips", image: "/images/brands/Lighting/Philips.svg" },
     { name: "lighting", image: "/images/brands/Lighting/Wipro.svg" },
     { name: "lighting", image: "/images/brands/Lighting/Syska.png" },
   ],
@@ -182,9 +182,12 @@ const brandImages = {
   SmartSolutions: [
     { name: "#", image: "/images/brands/SmartSolutions/Cisco.svg" },
     { name: "dlink", image: "/images/brands/SmartSolutions/D-Link.svg" },
-    { name: "#", image: "/images/brands/SmartSolutions/honeywell.svg" },
+    { name: "honeywell", image: "/images/brands/SmartSolutions/honeywell.svg" },
     { name: "netgear", image: "/images/brands/SmartSolutions/Netgear.svg" },
-    { name: "#", image: "/images/brands/SmartSolutions/Schneider.svg" },
+    {
+      name: "schneiderElectric",
+      image: "/images/brands/SmartSolutions/Schneider.svg",
+    },
   ],
   Flooring: [
     { name: "kajaria", image: "/images/brands/Flooring/Kajaria.png" },
