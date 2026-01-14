@@ -8,11 +8,6 @@ function Transactions({ sidebarDispatch, onOrderSelect }) {
   useEffect(() => {
     const fetchOrders = async () => {
       setLoadingOrders(true);
-      // const { data: orders, error } = await supabase
-      //   .from("orders")
-      //   .select(`*, users_profiles(*)`)
-      //   .order("created_at", { ascending: false })
-      //   .limit(7);
       const { data: orders, error } = await supabase
         .from("orders_table")
         .select(`*,users_profiles(*),order_items(*,product_variants(*))`)

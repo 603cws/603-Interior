@@ -20,11 +20,11 @@ import ProductsMayLike from "../components/ProductsMayLike";
 import CustomerReview from "../components/CustomerReview";
 import ComparePreview from "../components/ComparePreview";
 
-const offers = [
-  "Flat ₹50 Off + Free Surprise Gift On All Prepaid Offers 🎁",
-  "Additional 5% Off On New Arrivals Use Code LOOKO5 🎁",
-  "FLAT 10% OFF on PARTY BAGS collection, Use Code: PARTY10 🎁",
-];
+// const offers = [
+//   "Flat ₹50 Off + Free Surprise Gift On All Prepaid Offers 🎁",
+//   "Additional 5% Off On New Arrivals Use Code LOOKO5 🎁",
+//   "FLAT 10% OFF on PARTY BAGS collection, Use Code: PARTY10 🎁",
+// ];
 
 const productDetails = [
   {
@@ -69,7 +69,7 @@ function ProductView() {
   const [isloading, setIsloading] = useState(false);
 
   const [isCarted, setIsCarted] = useState();
-  const [isExpanded, setIsExpanded] = useState(false);
+  // const [isExpanded, setIsExpanded] = useState(false);
   const [isExpanded2, setIsExpanded2] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
@@ -451,8 +451,7 @@ function ProductView() {
               </div>
             </div>
 
-            <div className="my-4">
-              {/* Desktop View (Always Expanded) */}
+            {/* <div className="my-4">
               <div className="hidden lg:block space-y-3 xl:w-2/3">
                 <div className="border-b px-0 py-4 rounded text-sm font-medium bg-white shadow-sm">
                   All Offers & Coupons
@@ -467,7 +466,6 @@ function ProductView() {
                 ))}
               </div>
 
-              {/* Mobile View (Collapsible) */}
               <div className="block lg:hidden">
                 <div
                   className="flex justify-between items-center border-b px-0 py-2 rounded cursor-pointer text-sm font-medium bg-white shadow-sm"
@@ -494,7 +492,7 @@ function ProductView() {
                   </div>
                 )}
               </div>
-            </div>
+            </div> */}
 
             <div className="fixed bottom-0 left-0 w-full bg-white p-5 flex justify-between uppercase items-center border-t lg:hidden z-50">
               <button

@@ -80,6 +80,7 @@ function Privacy() {
           "Learn How We Secure Your \n Data and Maintain Transparency\n in All Our Practices."
         }
         imagePath={"/images/privacypolicy.png"}
+        showBtn={false}
       />
 
       <section>

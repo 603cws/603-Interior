@@ -81,7 +81,7 @@ function ShopProducts() {
   const [maxPrice, setMaxPrice] = useState(filters.priceRange[1]);
 
   //
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const category = searchParams.get("category");
   const query = searchParams.get("query");
 
@@ -299,17 +299,22 @@ function ShopProducts() {
     }
   };
   const resetFilter = () => {
-    if (category) {
-      setFilters((prev) => ({
-        ...prev,
-        category: [category],
-      }));
-    } else {
-      setFilters((prev) => ({
-        ...prev,
-        category: [],
-      }));
-    }
+    searchParams.delete("category");
+    searchParams.delete("query");
+
+    // update URL after deleting
+    setSearchParams(searchParams);
+    // if (category) {
+    //   setFilters((prev) => ({
+    //     ...prev,
+    //     category: [category],
+    //   }));
+    // } else {
+    // }
+    setFilters((prev) => ({
+      ...prev,
+      category: [],
+    }));
 
     setFilters((prev) => ({
       ...prev,
