@@ -1,6 +1,6 @@
 import LandingNavbar from "../../../landing/components/LandingNavbar";
 import Footer from "../../../common-components/Footer";
-// import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { RxArrowRight } from "react-icons/rx";
 
 const productCollection = [
@@ -53,7 +53,7 @@ const tiles = [
   "/images/brands/Flooring/shaw/tile-6.jpg",
 ];
 function Shaw() {
-  //   const navigate = useNavigate();
+  const navigate = useNavigate();
 
   return (
     <>
@@ -64,7 +64,7 @@ function Shaw() {
           <img
             src="/images/brands/Flooring/shaw/logo.png"
             alt="logo"
-            className="absolute bottom-1/3 right-[5%]"
+            className="absolute bottom-[5%] md:bottom-1/3 right-[5%] max-w-60 lg:max-w-none"
           />
         </div>
         <div className="flex items-center justify-around overflow-y-hidden bg-[#00334A] max-h-22 my-5 lg:hidden">
@@ -118,7 +118,7 @@ function Shaw() {
             <img
               src="/images/brands/Flooring/shaw/s2-banner.webp"
               alt="product-image"
-              className="h-full object-cover max-w-xl"
+              className="h-full object-cover md:max-w-xl"
             />
             <img
               src="/images/brands/Flooring/shaw/logo-blue.png"
@@ -167,7 +167,7 @@ function Shaw() {
             </h2>
 
             <button
-              //   onClick={() => navigate("productview")}
+              onClick={() => navigate("/shop")}
               className="flex items-center gap-2 border border-[#374A75] text-[#374A75] px-4 py-2 rounded-xl font-TimesNewRoman uppercase hover:bg-[#374A75] hover:text-[#fff] transition-colors duration-300 ease-in-out my-2 lg:my-5 w-fit"
             >
               show more <RxArrowRight />
@@ -203,7 +203,7 @@ function Shaw() {
               <img
                 src="/images/brands/Flooring/shaw/tile-room.webp"
                 alt="product-image"
-                className="max-w-full md:max-w-full lg:w-full object-cover max-h-[450px] md:h-3/4 lg:h-full place-self-end"
+                className="w-full object-cover max-h-[450px] md:h-3/4 lg:h-full place-self-end"
               />
               <img
                 src="/images/brands/Flooring/shaw/tile-main.jpg"
@@ -241,7 +241,7 @@ function Shaw() {
             alt="product-image"
             key={index}
             // onClick={() => navigate("productview")}
-            className="cursor-pointer object-cover h-40 md:h-56 lg:h-80 w-full"
+            className="object-cover h-40 md:h-56 lg:h-80 w-full"
           />
         ))}
       </section>
@@ -251,7 +251,7 @@ function Shaw() {
           <img
             src="/images/brands/Flooring/shaw/s6-banner.png"
             alt="product-image"
-            className="h-full object-cover max-w-xl"
+            className="h-full object-cover lg:max-w-xl"
           />
           <img
             src="/images/brands/Flooring/shaw/logo-blue.png"
