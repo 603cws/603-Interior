@@ -20,6 +20,7 @@ import SchneiderElectric from "./SmartSolutions/SchneiderElectric";
 import Philips from "./Lighting/Philips";
 import WiproLight from "./Lighting/Wipro";
 import Shaw from "./Flooring/Shaw";
+import Voltas from "./HVAC/Voltas";
 
 const BrandRouter = () => {
   const { brandName } = useParams();
@@ -46,6 +47,7 @@ const BrandRouter = () => {
     philips: <Philips />,
     wiproLight: <WiproLight />,
     shaw: <Shaw />,
+    voltas: <Voltas />,
   };
 
   return components[brandName] || <div>Brand Not Found</div>;

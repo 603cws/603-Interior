@@ -366,7 +366,7 @@ function BlueStar() {
               "url('../images/brands/HVAC/bluestar/collection.png')",
           }}
         >
-          <div className="absolute inset-0 bg-[##1F4E9A]/20" />
+          <div className="absolute inset-0 bg-[#1F4E9A]/20" />
 
           <div className="relative z-10 flex items-center justify-center h-full px-6 lg:px-12">
             <h2 className="text-white text-2xl sm:text-5xl xl:text-8xl text-center hover:scale-75 hover:cursor-pointer transition duration-300 ease-in-out font-Poppins font-bold">

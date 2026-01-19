@@ -177,7 +177,7 @@ const brandImages = {
     { name: "lg", image: "/images/brands/HVAC/LG.svg" },
     { name: "#", image: "/images/brands/HVAC/Carrier.svg" },
     { name: "#", image: "/images/brands/HVAC/Mitsubishi.svg" },
-    { name: "#", image: "/images/brands/HVAC/Voltas.png" },
+    { name: "voltas", image: "/images/brands/HVAC/Voltas.png" },
   ],
   SmartSolutions: [
     { name: "#", image: "/images/brands/SmartSolutions/Cisco.svg" },
