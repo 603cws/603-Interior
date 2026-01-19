@@ -21,7 +21,7 @@ function SchneiderElectric() {
         <div className="relative overflow-hidden">
           <img
             src="../images/brands/SmartSolutions/schneiderElectric/banner.png"
-            alt="honeywell banner"
+            alt="schneiderElectric banner"
             draggable={false}
             className="w-full h-full object-cover pointer-events-none select-none"
           />
@@ -32,7 +32,7 @@ function SchneiderElectric() {
         <div className="relative overflow-hidden">
           <img
             src="../images/brands/SmartSolutions/schneiderElectric/banner2.png"
-            alt="honeywell banner"
+            alt="schneiderElectric banner"
             draggable={false}
             className="w-full h-full object-cover pointer-events-none select-none"
           />
@@ -43,7 +43,7 @@ function SchneiderElectric() {
         <div className="flex flex-col xl:flex-row gap-5">
           <img
             src="../images/brands/SmartSolutions/schneiderElectric/section3-1.png"
-            alt="featherlite"
+            alt="schneiderElectric"
             draggable={false}
             className="relative w-full h-[700px] overflow-hidden
                bg-cover bg-left bg-no-repeat flex-1 pointer-events-none select-none"
@@ -51,7 +51,7 @@ function SchneiderElectric() {
           <div className="flex flex-col gap-5 flex-1">
             <img
               src="../images/brands/SmartSolutions/schneiderElectric/section3-2.png"
-              alt="featherlite"
+              alt="schneiderElectric"
               draggable={false}
               className="relative w-full h-[340px] overflow-hidden
                bg-contain bg-center bg-no-repeat pointer-events-none select-none"
@@ -59,7 +59,7 @@ function SchneiderElectric() {
             <div className="flex flex-row gap-5 flex-1">
               <img
                 src="../images/brands/SmartSolutions/schneiderElectric/section3-3.png"
-                alt="featherlite"
+                alt="schneiderElectric"
                 draggable={false}
                 className="relative w-full h-[340px] overflow-hidden
                bg-contain bg-center bg-no-repeat pointer-events-none select-none"
@@ -67,7 +67,7 @@ function SchneiderElectric() {
 
               <img
                 src="../images/brands/SmartSolutions/schneiderElectric/section3-3.png"
-                alt="featherlite"
+                alt="schneiderElectric"
                 draggable={false}
                 className="relative w-full h-[340px] overflow-hidden
                bg-contain bg-center bg-no-repeat pointer-events-none select-none"
@@ -81,14 +81,14 @@ function SchneiderElectric() {
         <div className="flex flex-col xl:flex-row gap-5">
           <img
             src="../images/brands/SmartSolutions/schneiderElectric/section4-1.png"
-            alt="featherlite"
+            alt="schneiderElectric"
             draggable={false}
             className="relative w-full overflow-hidden
                bg-cover bg-left bg-no-repeat flex-1 pointer-events-none select-none"
           />
           <img
             src="../images/brands/SmartSolutions/schneiderElectric/section4-2.png"
-            alt="featherlite"
+            alt="schneiderElectric"
             draggable={false}
             className="relative w-full overflow-hidden
                bg-contain bg-center bg-no-repeat flex-1 pointer-events-none select-none"
@@ -100,7 +100,7 @@ function SchneiderElectric() {
         <div className="relative overflow-hidden">
           <img
             src="../images/brands/SmartSolutions/schneiderElectric/banner5.png"
-            alt="honeywell banner"
+            alt="schneiderElectric banner"
             draggable={false}
             className="w-full h-full object-cover pointer-events-none select-none"
           />
@@ -112,14 +112,14 @@ function SchneiderElectric() {
           <div className="flex flex-col xl:flex-row gap-3">
             <img
               src="../images/brands/SmartSolutions/schneiderElectric/section6-1.png"
-              alt="featherlite"
+              alt="schneiderElectric"
               draggable={false}
               className="relative w-full overflow-hidden
                bg-cover bg-left bg-no-repeat flex-1 pointer-events-none select-none"
             />
             <img
               src="../images/brands/SmartSolutions/schneiderElectric/section6-2.png"
-              alt="featherlite"
+              alt="schneiderElectric"
               draggable={false}
               className="relative w-full overflow-hidden
                bg-contain bg-center bg-no-repeat flex-1 pointer-events-none select-none"
@@ -128,14 +128,14 @@ function SchneiderElectric() {
           <div className="flex flex-col xl:flex-row gap-3">
             <img
               src="../images/brands/SmartSolutions/schneiderElectric/section6-3.png"
-              alt="featherlite"
+              alt="schneiderElectric"
               draggable={false}
               className="relative w-full overflow-hidden
                bg-cover bg-left bg-no-repeat flex-1 pointer-events-none select-none"
             />
             <img
               src="../images/brands/SmartSolutions/schneiderElectric/section6-4.png"
-              alt="featherlite"
+              alt="schneiderElectric"
               draggable={false}
               className="relative w-full overflow-hidden
                bg-contain bg-center bg-no-repeat flex-1 pointer-events-none select-none"
