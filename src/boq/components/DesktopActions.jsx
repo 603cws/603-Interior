@@ -39,7 +39,7 @@ function DesktopActions({
       <div className="flex items-center downloadB pl-2">
         <AnimatedButton
           onClick={handleDownload}
-          className="!bg-[#3A5D7B] text-white capitalize font-Georgia font-semibold tracking-wider !px-6 !py-4 transition-shadow"
+          className="!bg-[#3A5D7B] text-white capitalize font-Poppins font-semibold tracking-wider !px-6 !py-4 transition-shadow"
           variant="default"
           size="sm"
           textEffect="shimmer"
