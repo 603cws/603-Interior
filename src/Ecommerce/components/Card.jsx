@@ -535,3 +535,27 @@ export function YouMayAlsoLikeCard({
     </div>
   );
 }
+
+export function TopDealCard({ image, title, subtitle, productID, category }) {
+  const naviagte = useNavigate();
+  return (
+    <div className="max-w-sm shadow-sm border border-[#CCCCCC] p-2">
+      <img
+        src={image}
+        alt={title}
+        className="w-full h-48 object-contain cursor-pointer"
+        onClick={() =>
+          naviagte(`/productview/${productID}`, {
+            state: { from: `products/topdeal/?category=${category}` },
+          })
+        }
+      />
+      <h3 className="text-sm lg:text-xl leading-[24px] tracking-[0.96px] font-medium mt-2 mb-1 lg:mb-2 font-Poppins ml-2">
+        {title}
+      </h3>
+      <p className="text-[#378DDB] leading-[24px] tracking-[0.96px] font-medium font-Poppins text-sm line-clamp-2  ml-2">
+        {subtitle}
+      </p>
+    </div>
+  );
+}

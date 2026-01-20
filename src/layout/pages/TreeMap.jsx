@@ -454,6 +454,7 @@ const TreeMap = ({ totalArea, areaQuantities, areaValues, seatCounts }) => {
           borderRadius="10px"
           background="rgba(48, 71, 120, 1)"
           hovereBackground="linear-gradient(90deg,rgba(85,132,182,1)  0%,  rgba(117,162,190,1) 100%)"
+          isShowLoading={true}
         >
           Create BOQ
         </AnimatedButton>

@@ -156,7 +156,6 @@ const EcommerceFeatures = [
 ];
 function Products() {
   const { handleAddToCart } = useHandleAddToCart();
-
   const [products, setProducts] = useState([]);
 
   const [selectedCategory, setSelectedCategory] = useState("Furniture");

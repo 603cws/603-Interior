@@ -26,6 +26,7 @@ import { TbBriefcase2 } from "react-icons/tb";
 import Orders, { OrderDetails } from "../Orders";
 import EcomDashHome from "./EcomDashHome";
 import DeleteWarning from "../../components/DeleteWarning";
+import SubscripedEmail from "./SubscripedEmail";
 
 function handlesidebarState(state, action) {
   switch (action.type) {
@@ -38,6 +39,7 @@ function handlesidebarState(state, action) {
         isDiscountOpen: action.payload === "Discounts",
         isBlogsOpen: action.payload === "Blogs",
         isCareerOpen: action?.payload === "Career",
+        isSubscripedEmailOpen: action?.payload === "SubscripedEmail",
         currentSection: action.payload,
       };
     default:
@@ -53,6 +55,7 @@ const SECTIONS = {
   DISCOUNTS: "Discounts",
   BLOGS: "Blogs",
   CAREER: "Career",
+  SUBSCRIPEDEMAIL: "SubscripedEmail",
 };
 
 function AdminDashboardEcom() {
@@ -220,6 +223,7 @@ function AdminDashboardEcom() {
     isCustomerOpen: false,
     isDiscountOpen: false,
     isBlogsOpen: false,
+    isSubscripedEmailOpen: false,
 
     currentSection: "Dashboard",
   };
@@ -257,6 +261,12 @@ function AdminDashboardEcom() {
 
   const handleCarrer = () => {
     sidebarDispatch({ type: "TOGGLE_SECTION", payload: SECTIONS.CAREER });
+  };
+  const handleSubscripedEmail = () => {
+    sidebarDispatch({
+      type: "TOGGLE_SECTION",
+      payload: SECTIONS.SUBSCRIPEDEMAIL,
+    });
   };
 
   return (
@@ -331,6 +341,13 @@ function AdminDashboardEcom() {
             icon={<TbBriefcase2 />}
             text="Career"
             onClick={handleCarrer}
+            isExpanded={isExpanded}
+            currentSection={sidebarstate?.currentSection}
+          />
+          <SidebarItem
+            icon={<IoMdImages />}
+            text="SubscripedEmail"
+            onClick={handleSubscripedEmail}
             isExpanded={isExpanded}
             currentSection={sidebarstate?.currentSection}
           />
@@ -444,6 +461,13 @@ function AdminDashboardEcom() {
                 onClick={handleCarrer}
                 setIsOpen={setIsOpen}
               />
+              <MobileMenuItem
+                icon={<IoMdImages />}
+                title="SubscripedEmail"
+                currentSection={sidebarstate?.currentSection}
+                onClick={handleSubscripedEmail}
+                setIsOpen={setIsOpen}
+              />
 
               <MobileMenuItem
                 title={"Logout"}
@@ -534,6 +558,12 @@ function AdminDashboardEcom() {
         {sidebarstate.isCareerOpen && (
           <div className="flex flex-col h-full min-h-0 overflow-hidden lg:border-2 lg:border-[#334A78] lg:rounded-lg bg-white">
             <CareerDash />
+          </div>
+        )}
+
+        {sidebarstate.isSubscripedEmailOpen && (
+          <div className="flex flex-col h-full min-h-0  lg:border-2 lg:border-[#334A78] lg:rounded-lg bg-white">
+            <SubscripedEmail />
           </div>
         )}
       </div>
