@@ -9,6 +9,7 @@ import "swiper/css/pagination";
 import Footer from "../../common-components/Footer";
 import ContactUsPopup from "../../landing/components/ContactUsPopup";
 import CategorySvg from "../../common-components/CategorySvg";
+import { HiOutlineArrowSmRight } from "react-icons/hi";
 
 const TOP_OFFERS = [
   {
@@ -40,18 +41,38 @@ const BOTTOM_OFFERS = [
 const heroSlides = [
   {
     title: "Furniture that mirrors your style",
-    bg: "/images/brands/brands-bg.jpeg",
-    link: "/shop",
+    bg: "/images/brands/furniture-hero.png",
+    category: "furniture",
   },
   {
-    // title: "Flooring that shapes your space",
-    bg: "/images/brands/daikinBrand.png",
-    link: "/flooring",
+    title: "Comfort engineered for modern workplaces",
+    bg: "/images/brands/hvac-hero.png",
+    category: "hvac",
   },
   {
-    // title: "Flooring that shapes your space",
-    bg: "/images/brands/welspunbrand2.png",
-    link: "/flooring",
+    title: "Lighting that sets the tone for productivity",
+    bg: "/images/brands/light-hero.png",
+    category: "light",
+  },
+  {
+    title: "Flooring that defines luxury underfoot",
+    bg: "/images/brands/flooring-hero.png",
+    category: "flooring",
+  },
+  {
+    title: "Intelligent solutions for smarter offices",
+    bg: "/images/brands/SS-hero.png",
+    category: "smart solutions",
+  },
+  {
+    title: "Colors that shape the character of your office",
+    bg: "/images/brands/paint-hero.png",
+    category: "paint",
+  },
+  {
+    title: "Luxury finishes crafted for refined offices",
+    bg: "/images/brands/luxury-hero.png",
+    category: "lux",
   },
 ];
 
@@ -240,10 +261,19 @@ function BrandsOverview() {
                 style={{ backgroundImage: `url(${slide.bg})` }}
               >
                 <div className="px-3 w-full lg:container mx-auto">
-                  <div className="pl-5 md:pl-10 lg:pl-20 text-[#000] space-y-8">
+                  <div className="pl-5 md:pl-10 lg:pl-20 text-[#fff] space-y-8 bg-[#000]/30 w-fit py-2">
                     <h1 className="text-4xl md:text-6xl font-bold max-w-xl">
                       {slide.title}
                     </h1>
+                    <button
+                      onClick={() =>
+                        navigate(`/shop/?category=${slide.category}`)
+                      }
+                      className="capitalize font-bold text-lg md:text-xl text-[#fff] rounded flex items-center gap-2 px-4 py-2 hover:bg-[#fff] hover:text-[#334A78] border border-[#fff] transition-colors duration-300 ease-in-out"
+                    >
+                      <span>Explore More</span>
+                      <HiOutlineArrowSmRight />
+                    </button>
                   </div>
                 </div>
               </div>

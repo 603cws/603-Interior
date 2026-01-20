@@ -35,6 +35,7 @@ function Career() {
           "We're not just building\n offices - we're shaping the \n future of how people work. \n Be part of the journey."
         }
         imagePath={"/images/carrer.png"}
+        showBtn={false}
       />
 
       <div className="md:container px-5 md:px-12 md:mx-auto xl:max-w-7xl">
