@@ -77,10 +77,7 @@ function ShopProducts() {
   const { filters, setFilters } = useEcomApp();
 
   const [minPrice, setMinPrice] = useState(filters.priceRange[0]);
-
   const [maxPrice, setMaxPrice] = useState(filters.priceRange[1]);
-
-  //
   const [searchParams, setSearchParams] = useSearchParams();
   const category = searchParams.get("category");
   const query = searchParams.get("query");

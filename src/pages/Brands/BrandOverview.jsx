@@ -180,7 +180,7 @@ const brandImages = {
     { name: "voltas", image: "/images/brands/HVAC/Voltas.png" },
   ],
   SmartSolutions: [
-    { name: "#", image: "/images/brands/SmartSolutions/Cisco.svg" },
+    { name: "cisco", image: "/images/brands/SmartSolutions/Cisco.svg" },
     { name: "dlink", image: "/images/brands/SmartSolutions/D-Link.svg" },
     { name: "honeywell", image: "/images/brands/SmartSolutions/honeywell.svg" },
     { name: "netgear", image: "/images/brands/SmartSolutions/Netgear.svg" },

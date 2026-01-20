@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import Footer from "../../../common-components/Footer";
 import LandingNavbar from "../../../landing/components/LandingNavbar";
 
@@ -13,6 +14,7 @@ const ourCollection = [
 ];
 
 function Spacewood() {
+  const navigate = useNavigate();
   return (
     <div className="font-inter">
       <LandingNavbar />
@@ -107,6 +109,7 @@ function Spacewood() {
           {ourCollection.map((product, index) => (
             <div
               key={index}
+              onClick={() => navigate("/shop?query=furniture")}
               className="border w-full h-80 p-2 flex items-center justify-center border-[#002F36] overflow-hidden hover:cursor-pointer"
             >
               <img src={product} alt="product" className="h-full" />

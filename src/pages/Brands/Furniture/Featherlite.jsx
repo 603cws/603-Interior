@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import Footer from "../../../common-components/Footer";
 import LandingNavbar from "../../../landing/components/LandingNavbar";
 
@@ -13,6 +14,7 @@ const ourCollection = [
 ];
 
 function Featherlite() {
+  const navigate = useNavigate();
   return (
     <div className="font-inter">
       <LandingNavbar />
@@ -43,7 +45,10 @@ function Featherlite() {
                 Elevate Your Comfort,
                 <br /> Boost Your Productivity
               </h2>
-              <button className="mt-4 bg-white/40 hover:bg-white rounded-3xl px-6 py-2">
+              <button
+                onClick={() => navigate("/shop?query=furniture")}
+                className="mt-4 bg-white/40 hover:bg-white rounded-3xl px-6 py-2"
+              >
                 BUY NOW
               </button>
             </div>
@@ -61,7 +66,10 @@ function Featherlite() {
                 Elevate Your Comfort,
                 <br /> Boost Your Productivity
               </h2>
-              <button className="mt-4 bg-white/40 hover:bg-white rounded-3xl px-6 py-2">
+              <button
+                onClick={() => navigate("/shop?query=furniture")}
+                className="mt-4 bg-white/40 hover:bg-white rounded-3xl px-6 py-2"
+              >
                 BUY NOW
               </button>
             </div>
@@ -155,6 +163,7 @@ function Featherlite() {
           {ourCollection.map((product, index) => (
             <div
               key={index}
+              onClick={() => navigate("/shop?query=furniture")}
               className="border w-full h-80 p-2 flex items-center justify-center border-[#002F36] overflow-hidden hover:cursor-pointer"
             >
               <img

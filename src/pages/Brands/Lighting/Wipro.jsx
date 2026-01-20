@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import Footer from "../../../common-components/Footer";
 import LandingNavbar from "../../../landing/components/LandingNavbar";
 
@@ -18,6 +19,7 @@ const ourProducts = [
   "/images/brands/d-link-product-8.png",
 ];
 function Wipro() {
+  const navigate = useNavigate();
   return (
     <>
       <LandingNavbar className="relative" />
@@ -114,7 +116,8 @@ function Wipro() {
           {ourProducts.map((product, index) => (
             <div
               key={index}
-              className="p-2 bg-[#fff] flex justify-center items-center shadow-[0px_0px_20px_rgba(0,0,0,0.1)] w-full"
+              onClick={() => navigate("/shop?query=lighting")}
+              className="p-2 bg-[#fff] flex justify-center hover:cursor-pointer items-center shadow-[0px_0px_20px_rgba(0,0,0,0.1)] w-full"
             >
               <img src={product} alt="D-Link product 1" className="p-10" />
             </div>

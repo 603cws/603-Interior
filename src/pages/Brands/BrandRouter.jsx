@@ -22,6 +22,7 @@ import WiproLight from "./Lighting/Wipro";
 import Shaw from "./Flooring/Shaw";
 import Voltas from "./HVAC/Voltas";
 import Mitsubishi from "./HVAC/Mitsubishi";
+import Cisco from "./SmartSolutions/Cisco";
 
 const BrandRouter = () => {
   const { brandName } = useParams();
@@ -50,6 +51,7 @@ const BrandRouter = () => {
     shaw: <Shaw />,
     voltas: <Voltas />,
     mitsubishi: <Mitsubishi />,
+    cisco: <Cisco />,
   };
 
   return components[brandName] || <div>Brand Not Found</div>;

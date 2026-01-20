@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import Footer from "../../../common-components/Footer";
 import LandingNavbar from "../../../landing/components/LandingNavbar";
 
@@ -12,6 +13,7 @@ const ourCollection = [
   "../images/brands/lg/lg-8.webp",
 ];
 function Lg() {
+  const navigate = useNavigate();
   return (
     <div className="font-segoe">
       <LandingNavbar />
@@ -160,6 +162,7 @@ function Lg() {
             </div>
 
             <button
+              onClick={() => navigate("/shop?query=hvac")}
               className="group absolute bottom-0 right-0 rounded-tl-lg py-2 px-3 
   text-white bg-[#E1384F] text-xl overflow-hidden hidden sm:block"
             >
@@ -278,6 +281,7 @@ function Lg() {
           {ourCollection.map((product, index) => (
             <div
               key={index}
+              onClick={() => navigate("/shop?query=hvac")}
               className="border w-full h-80 flex items-center justify-center p-2 border-[#002F36] overflow-hidden hover:cursor-pointer"
             >
               <img src={product} alt="product" />
@@ -301,6 +305,7 @@ function Lg() {
 export default Lg;
 
 function FeatureCard({ title, img, alt }) {
+  const navigate = useNavigate();
   return (
     <div className="flex-1 bg-[#F1F1F1] rounded-3xl p-6 flex flex-col">
       {/* Title */}
@@ -311,7 +316,10 @@ function FeatureCard({ title, img, alt }) {
 
       {/* Bottom content */}
       <div className="flex items-start justify-between gap-4 mt-2 lg:mt-4">
-        <button className="py-1.5 px-4 text-sm xl:text-base border border-black rounded-full whitespace-nowrap hover:bg-gray-200">
+        <button
+          onClick={() => navigate("/shop?query=hvac")}
+          className="py-1.5 px-4 text-sm xl:text-base border border-black rounded-full whitespace-nowrap hover:bg-gray-200"
+        >
           Learn more
         </button>
 
@@ -329,8 +337,12 @@ function FeatureCard({ title, img, alt }) {
 }
 
 function CTABtn() {
+  const navigate = useNavigate();
   return (
-    <button className="group absolute bottom-0 right-0 rounded-tl-lg py-2 px-3 text-white bg-[#E1384F] text-base overflow-hidden hidden sm:block">
+    <button
+      onClick={() => navigate("/shop?query=hvac")}
+      className="group absolute bottom-0 right-0 rounded-tl-lg py-2 px-3 text-white bg-[#E1384F] text-base overflow-hidden hidden sm:block"
+    >
       <span className="underline">Explore now</span> &gt;
       <span
         className="absolute w-24 h-full bg-white/25 

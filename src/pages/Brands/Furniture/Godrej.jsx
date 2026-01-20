@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import Footer from "../../../common-components/Footer";
 import LandingNavbar from "../../../landing/components/LandingNavbar";
 
@@ -12,6 +13,7 @@ const ourCollection = [
   "../images/brands/Furniture/wipro/section5-8.png",
 ];
 function Godrej() {
+  const navigate = useNavigate();
   return (
     <div className="font-inter">
       <LandingNavbar />
@@ -134,6 +136,7 @@ function Godrej() {
           {ourCollection.map((product, index) => (
             <div
               key={index}
+              onClick={() => navigate("/shop?query=furniture")}
               className="border w-full h-80 p-2 flex items-center justify-center border-[#002F36] overflow-hidden hover:cursor-pointer"
             >
               <img src={product} alt="product" className="h-full" />
@@ -155,6 +158,7 @@ function Godrej() {
               {ourCollection.slice(0, 4).map((product, index) => (
                 <div
                   key={index}
+                  onClick={() => navigate("/shop?query=furniture")}
                   className="border w-full h-80 p-2 flex items-center justify-center border-[#002F36] overflow-hidden hover:cursor-pointer"
                 >
                   <img src={product} alt="product" className="h-full" />
