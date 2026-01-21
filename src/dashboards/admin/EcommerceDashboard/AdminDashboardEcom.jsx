@@ -27,6 +27,7 @@ import Orders, { OrderDetails } from "../Orders";
 import EcomDashHome from "./EcomDashHome";
 import DeleteWarning from "../../components/DeleteWarning";
 import SubscripedEmail from "./SubscripedEmail";
+import { RiMailAiLine } from "react-icons/ri";
 
 function handlesidebarState(state, action) {
   switch (action.type) {
@@ -39,7 +40,7 @@ function handlesidebarState(state, action) {
         isDiscountOpen: action.payload === "Discounts",
         isBlogsOpen: action.payload === "Blogs",
         isCareerOpen: action?.payload === "Career",
-        isSubscripedEmailOpen: action?.payload === "SubscripedEmail",
+        isSubscripedEmailOpen: action?.payload === "SubscribedEmail",
         currentSection: action.payload,
       };
     default:
@@ -55,7 +56,7 @@ const SECTIONS = {
   DISCOUNTS: "Discounts",
   BLOGS: "Blogs",
   CAREER: "Career",
-  SUBSCRIPEDEMAIL: "SubscripedEmail",
+  SUBSCRIPEDEMAIL: "SubscribedEmail",
 };
 
 function AdminDashboardEcom() {
@@ -345,8 +346,8 @@ function AdminDashboardEcom() {
             currentSection={sidebarstate?.currentSection}
           />
           <SidebarItem
-            icon={<IoMdImages />}
-            text="SubscripedEmail"
+            icon={<RiMailAiLine />}
+            text="Subscribed Email"
             onClick={handleSubscripedEmail}
             isExpanded={isExpanded}
             currentSection={sidebarstate?.currentSection}
@@ -462,8 +463,8 @@ function AdminDashboardEcom() {
                 setIsOpen={setIsOpen}
               />
               <MobileMenuItem
-                icon={<IoMdImages />}
-                title="SubscripedEmail"
+                icon={<RiMailAiLine />}
+                title="Subscribed Email"
                 currentSection={sidebarstate?.currentSection}
                 onClick={handleSubscripedEmail}
                 setIsOpen={setIsOpen}
