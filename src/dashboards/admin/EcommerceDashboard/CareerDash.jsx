@@ -1,6 +1,6 @@
 import { useEffect, useReducer, useState } from "react";
 import { useForm } from "react-hook-form";
-import { MdArrowBackIos } from "react-icons/md";
+import { MdArrowBackIos, MdDelete } from "react-icons/md";
 import { supabase } from "../../../services/supabase";
 
 import { FaLocationDot } from "react-icons/fa6";
@@ -38,6 +38,7 @@ function CareerDash() {
   const [jobEditData, setjobEditData] = useState();
   const [allCanditate, setAllCanditate] = useState();
   const [canditateDetail, setCanditateDetail] = useState();
+  const [isRefresh, setIsRefresh] = useState(false);
 
   const sidebarInitialState = {
     jobposting: true,
@@ -49,7 +50,7 @@ function CareerDash() {
 
   const [careerstate, careerDispatch] = useReducer(
     handlesidebarState,
-    sidebarInitialState
+    sidebarInitialState,
   );
 
   useEffect(() => {
@@ -75,7 +76,7 @@ function CareerDash() {
       }
     }
     GetAllJobApplication();
-  }, []);
+  }, [isRefresh]);
 
   const onsuccess = () => {
     // setCreateJobPost(false);
@@ -131,7 +132,7 @@ function CareerDash() {
       </div>
       <hr />
       {careerstate?.jobposting && (
-        <div className="p-4 grid grid-cols-2 gap-x-3 sm:grid-cols-3 gap-y-10">
+        <div className="p-4 grid grid-cols-1 gap-x-3 sm:grid-cols-3 gap-y-10">
           {jobPostings?.map((job) => (
             <JobCard
               key={job?.id}
@@ -140,11 +141,12 @@ function CareerDash() {
               setjobEditData={setjobEditData}
               careerDispatch={careerDispatch}
               setAllCanditate={setAllCanditate}
+              setIsRefresh={setIsRefresh}
             />
           ))}
         </div>
       )}
-      {careerstate?.addposting && <JobPostForm />}
+      {careerstate?.addposting && <JobPostForm setIsRefresh={setIsRefresh} />}
       {careerstate?.editPosting && (
         <JobPostForm
           jobdata={jobEditData}
@@ -177,7 +179,7 @@ function CareerDash() {
                 />
               </div>
               <h2 className="font-semibold capitalize ">
-                Zero Canditate Applied yet{" "}
+                No Application for this job!
               </h2>
             </div>
           )}
@@ -201,9 +203,61 @@ function JobCard({
   setjobEditData,
   careerDispatch,
   setAllCanditate,
+  setIsRefresh,
 }) {
+  const [deleteWarning, setDeleteWarning] = useState(false);
+  const [deleting, setDeleting] = useState(false);
+
+  const handleDelete = async (jobID) => {
+    try {
+      setDeleting(true);
+      const { data: applications, error: fetchError } = await supabase
+        .from("JobApplication")
+        .select("ResumePath")
+        .eq("JobID", jobID);
+
+      if (fetchError) throw fetchError;
+
+      if (applications && applications.length > 0) {
+        const filePaths = applications
+          .map((app) => app.ResumePath)
+          .filter(Boolean);
+
+        if (filePaths.length > 0) {
+          const { error: storageError } = await supabase.storage
+            .from("jobData")
+            .remove(filePaths);
+
+          if (storageError) throw storageError;
+        }
+      }
+
+      const { error: applicationDeleteError } = await supabase
+        .from("JobApplication")
+        .delete()
+        .eq("JobID", jobID);
+
+      if (applicationDeleteError) throw applicationDeleteError;
+
+      const { error: jobDeleteError } = await supabase
+        .from("JobPosting")
+        .delete()
+        .eq("id", jobID);
+
+      if (jobDeleteError) throw jobDeleteError;
+
+      if (!jobDeleteError) setIsRefresh((prev) => !prev);
+
+      toast.success("Job, applications, and resumes deleted successfully");
+    } catch (error) {
+      console.error("Error deleting job data:", error.message);
+    } finally {
+      setDeleting(false);
+    }
+  };
+
   return (
-    <div className="max-w-sm font-Poppins border border-[#ccc] p-2 rounded-sm">
+    <div className="max-w-sm font-Poppins border border-[#ccc] p-2 rounded-sm relative">
       <div className="flex justify-between items-center mb-4">
         <h2 className="font-bold italic">{jobdata?.jobTitle}</h2>
         <div className="flex gap-3 items-center text-xl ">
@@ -217,6 +271,12 @@ function JobCard({
             }}
           >
             <MdEdit />
+          </button>
+          <button
+            onClick={() => setDeleteWarning(true)}
+            className="hover:text-red-400"
+          >
+            <MdDelete />
           </button>
         </div>
       </div>
@@ -240,15 +300,21 @@ function JobCard({
             {
               jobApplication?.filter(
                 (item) =>
-                  item?.Position?.toLowerCase() ===
-                  jobdata?.jobTitle?.toLowerCase()
+                  item?.JobID?.toLowerCase() === jobdata?.id?.toLowerCase(),
               )?.length
             }{" "}
           </h3>
           <p className="text-xs font-light">Candidate Applied</p>
         </div>
       </div>
-      <div className="flex items-center justify-end">
+      <div className="flex items-center justify-between">
+        <div>
+          <span
+            className={`px-2 py-1 border-2 rounded text-sm ${jobdata?.JobApplicationStatus === "Active" ? "border-green-400 bg-green-400/20" : "border-red-400 bg-red-400/20"}`}
+          >
+            {jobdata?.JobApplicationStatus}
+          </span>
+        </div>
         <button
           onClick={() => {
             careerDispatch({
@@ -258,16 +324,45 @@ function JobCard({
             setAllCanditate(
               jobApplication?.filter(
                 (item) =>
-                  item?.Position?.toLowerCase() ===
-                  jobdata?.jobTitle?.toLowerCase()
-              )
+                  item?.JobID?.toLowerCase() === jobdata?.id?.toLowerCase(),
+              ),
             );
           }}
-          className="flex gap-1 items-center justify-center hover:underline"
+          className="flex gap-1 items-center justify-center hover:underline text-sm lg:text-base"
         >
-          view details <MdKeyboardArrowRight size={22} color="#334A78" />
+          View details <MdKeyboardArrowRight size={22} color="#334A78" />
         </button>
       </div>
+      {deleteWarning && (
+        <div className=" inset-0 flex items-center justify-center absolute bg-[#000]/60">
+          <div className="bg-white rounded-sm p-2 mx-2">
+            <h3 className="text-lg font-semibold">Are you sure?</h3>
+            <p>
+              Do you really want to delete{" "}
+              <span className="font-semibold">"{jobdata?.jobTitle}"</span>
+              job post?
+            </p>
+            <p className="text-xs">
+              (All related applications will be deleted.)
+            </p>
+            <div className="flex justify-center mt-4 gap-3">
+              <button
+                onClick={() => setDeleteWarning(false)}
+                className="px-4 py-2 bg-gray-300 hover:bg-gray-400 rounded"
+              >
+                No
+              </button>
+              <button
+                onClick={() => handleDelete(jobdata.id)}
+                className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded"
+                disabled={deleting}
+              >
+                Yes
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
@@ -300,7 +395,7 @@ function Jobdetails({ canditate, setCanditateDetail, careerDispatch }) {
               payload: SECTIONS?.CANDITATEDETAILS,
             });
           }}
-          className="text-sm border text-[#0D894F] bg-[#E7F4EE] rounded-xl p-1 hover:text-green-900"
+          className="text-sm border text-[#0D894F] bg-[#E7F4EE] rounded px-2 py-1 hover:text-green-900"
         >
           Applied
         </button>
@@ -311,7 +406,7 @@ function Jobdetails({ canditate, setCanditateDetail, careerDispatch }) {
 
 function CanditateDetails({ canditate, jobPostings }) {
   const jobdata = jobPostings?.filter(
-    (job) => job?.jobTitle.toLowerCase() === canditate?.Position.toLowerCase()
+    (job) => job?.jobTitle.toLowerCase() === canditate?.Position.toLowerCase(),
   );
 
   return (
@@ -411,9 +506,9 @@ function CanditateDetails({ canditate, jobPostings }) {
               href={`${resumeUrl}/${canditate?.ResumePath}`}
               target="_blank"
               rel="noreferrer"
-              className="px-5 py-3 rounded-md border border-[#ccc] "
+              className="px-5 py-3 rounded-md border border-[#ccc] capitalize"
             >
-              open
+              View resume
             </a>
           </div>
         </div>
@@ -422,7 +517,12 @@ function CanditateDetails({ canditate, jobPostings }) {
   );
 }
 
-function JobPostForm({ jobdata = null, isedit = false, onsuccess = null }) {
+function JobPostForm({
+  jobdata = null,
+  isedit = false,
+  onsuccess = null,
+  setIsRefresh,
+}) {
   const {
     register,
     handleSubmit,
@@ -440,6 +540,7 @@ function JobPostForm({ jobdata = null, isedit = false, onsuccess = null }) {
         description: jobdata?.description || "",
         Responsibilities: jobdata?.responsibilities || "",
         Requirements: jobdata?.requirements || "",
+        JobApplicationStatus: jobdata?.JobApplicationStatus || "",
       });
     }
   }, [jobdata, reset]);
@@ -454,6 +555,7 @@ function JobPostForm({ jobdata = null, isedit = false, onsuccess = null }) {
         description: formData?.description,
         responsibilities: formData?.Responsibilities,
         requirements: formData?.Requirements,
+        JobApplicationStatus: formData?.JobApplicationStatus,
       };
       if (isedit) {
         const { data, error } = await supabase
@@ -478,6 +580,7 @@ function JobPostForm({ jobdata = null, isedit = false, onsuccess = null }) {
         if (data) {
           reset();
           toast.success("data inserted successfully");
+          setIsRefresh((prev) => !prev);
         }
       }
     } catch (error) {
@@ -629,6 +732,32 @@ function JobPostForm({ jobdata = null, isedit = false, onsuccess = null }) {
             </p>
           )}
         </div>
+        {isedit && (
+          <div className="flex flex-col md:flex-row border border-[#ccc] rounded-md m-3 ">
+            <div className="flex-1 flex flex-col p-3 space-y-3">
+              <label className="font-medium text-xl text-[#000]">
+                Job Application Status
+              </label>
+              <select
+                {...register("JobApplicationStatus", {
+                  required: true,
+                })}
+                className="p-1 border-2 border-[#ccc] "
+                required
+              >
+                <option value="">select</option>
+                <option value="Active">Active</option>
+                <option value="Inactive">Inactive</option>
+              </select>
+              {errors?.JobApplicationStatus && (
+                <p className="text-red-800 text-sm capitalize">
+                  {errors?.JobApplicationStatus?.message}
+                </p>
+              )}
+            </div>
+          </div>
+        )}
+
         <div className="flex justify-end space-x-6 m-3">
           <button
             className="border border-[#ccc] px-5 py-3 text-[#111] rounded-lg "

@@ -15,7 +15,10 @@ function Career() {
   useEffect(() => {
     async function GetAllJobPosting() {
       try {
-        const { data, error } = await supabase.from("JobPosting").select("*");
+        const { data, error } = await supabase
+          .from("JobPosting")
+          .select("*")
+          .eq("JobApplicationStatus", "Active");
         setJobPostings(data);
 
         if (error) throw error;
