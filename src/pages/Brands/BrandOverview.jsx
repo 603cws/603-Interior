@@ -181,7 +181,7 @@ const brandImages = {
     { name: "lighting", image: "/images/brands/Lighting/Panasonic.svg" },
     { name: "philips", image: "/images/brands/Lighting/Philips.svg" },
     { name: "wiproLight", image: "/images/brands/Lighting/Wipro.svg" },
-    { name: "lighting", image: "/images/brands/Lighting/Syska.png" },
+    { name: "syska", image: "/images/brands/Lighting/Syska.png" },
   ],
   Paint: [
     { name: "#", image: "/images/brands/Paint/asian-paints.png" },

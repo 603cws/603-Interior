@@ -23,6 +23,7 @@ import Shaw from "./Flooring/Shaw";
 import Voltas from "./HVAC/Voltas";
 import Mitsubishi from "./HVAC/Mitsubishi";
 import Cisco from "./SmartSolutions/Cisco";
+import Syska from "./Lighting/Syska";
 
 const BrandRouter = () => {
   const { brandName } = useParams();
@@ -52,6 +53,7 @@ const BrandRouter = () => {
     voltas: <Voltas />,
     mitsubishi: <Mitsubishi />,
     cisco: <Cisco />,
+    syska: <Syska />,
   };
 
   return components[brandName] || <div>Brand Not Found</div>;
