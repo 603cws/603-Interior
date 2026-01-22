@@ -502,7 +502,7 @@ function Layout() {
   };
 
   return (
-    <div className="max-h-lvh xl:overflow-y-hidden">
+    <div className="max-h-lvh xl:overflow-y-hidden font-Poppins">
       <Joyride
         steps={tourSteps}
         run={runTour}

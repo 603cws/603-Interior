@@ -271,7 +271,7 @@ function ProductView() {
       <ToastContainer />
       <div className="lg:container mx-auto px-3 lg:px-12">
         {/* breadcumbs */}
-        <div className="mt-6 lg:mt-10">
+        <div className="mt-6 lg:mt-10 font-Poppins">
           <div className="md:flex mx-10 items-center text-[#334A78] text-sm mt-4 mb-4 md:mb-0 hidden">
             <button onClick={() => navigate(`/${fromPage}`)}>
               {fromPage === "shop" ? "Shop" : "Home"}
@@ -325,7 +325,7 @@ function ProductView() {
             )}
           </div>
 
-          <div className="flex-1 flex flex-col mt-2 md:mt-0 font-Poppins ">
+          <div className="flex-1 flex flex-col mt-2 md:mt-0 font-Poppins">
             {/* product info */}
             <div className="flex flex-col justify-center">
               <div className="border-b pb-4 md:border-none md:pb-0">

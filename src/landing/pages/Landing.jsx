@@ -232,7 +232,7 @@ function Landing() {
                 <span className="absolute -bottom-3 -right-3 w-16 h-16 border-b-2 border-r-2 border-[#1E3A5F]"></span>
               </div>
             </div>
-            <div className="flex flex-1 h-full items-center text-center lg:text-right justify-self-end">
+            <div className="flex flex-1 h-full items-center text-center lg:text-right justify-self-end font-Georgia">
               <div className="space-y-4 lg:space-y-10">
                 <h1 className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl 2xl:text-[82px] text-[#555555] uppercase font-Alegreya">
                   {/* we design <br /> your dreams */}

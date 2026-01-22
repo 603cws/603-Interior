@@ -182,7 +182,7 @@ function AccordionCards() {
 
   return (
     <>
-      <div className="hidden lg:flex  w-full  gap-4 px-4 my-10">
+      <div className="hidden lg:flex w-full font-Georgia  gap-4 px-4 my-10">
         {cards.map((card, i) => (
           <div
             key={i}

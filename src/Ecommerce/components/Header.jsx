@@ -282,7 +282,7 @@ function Header() {
               </button>
             </div>
             <div className="flex items-center flex-1 gap-5">
-              <div className="relative flex-[3_1_auto] border-[2px] rounded py-1 px-1 text-sm flex">
+              <div className="relative flex-[3_1_auto] border-[2px] rounded py-1 px-1 text-sm flex font-TimesNewRoman">
                 <input
                   type="text"
                   name=""

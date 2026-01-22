@@ -474,7 +474,7 @@ function Products() {
           </div>
 
           {/* Right Product Info */}
-          <div className="lg:w-1/3 flex flex-col items-center lg:items-center lg:text-left">
+          <div className="lg:w-1/3 flex flex-col items-center lg:items-center lg:text-left font-TimesNewRoman">
             {/* Product Image */}
             <img
               src={products2[selectedProduct].image}

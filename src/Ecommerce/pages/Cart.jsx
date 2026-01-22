@@ -866,7 +866,7 @@ function Cart() {
 
             {alsoLike.length > 0 && (
               <section className="pt-6 pb-14 lg:py-14">
-                <div className="flex justify-between mb-5">
+                <div className="flex justify-between mb-5 font-Poppins">
                   <h3 className="uppercase text-sm font-medium lg:font-semibold lg:text-3xl text-[#171717]">
                     You may also like
                   </h3>

@@ -336,7 +336,7 @@ function Login() {
         <ResetPassword setResetPass={setResetPass} />
       ) : (
         <>
-          <div className="relative main flex justify-center gap-5 h-screen w-full bg-gradient-to-br from-[#334A78] to-[#68B2DC] md:bg-none md:bg-[#fff] overflow-x-hidden">
+          <div className="relative main flex justify-center gap-5 h-screen w-full bg-gradient-to-br from-[#334A78] to-[#68B2DC] md:bg-none md:bg-[#fff] overflow-x-hidden font-Poppins">
             <SideImage />
 
             <form
