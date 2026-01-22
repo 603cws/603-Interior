@@ -9,14 +9,14 @@ const featureBanners = [
   "/images/brands/Lighting/wipro/s2-4.jpg",
 ];
 const ourProducts = [
-  "/images/brands/d-link-product-1.png",
-  "/images/brands/d-link-product-2.png",
-  "/images/brands/d-link-product-3.png",
-  "/images/brands/d-link-product-4.png",
-  "/images/brands/d-link-product-5.png",
-  "/images/brands/d-link-product-6.png",
-  "/images/brands/d-link-product-7.png",
-  "/images/brands/d-link-product-8.png",
+  "../images/brands/Lighting/wipro/section7-1.png",
+  "../images/brands/Lighting/wipro/section7-2.webp",
+  "../images/brands/Lighting/wipro/section7-3.jpg",
+  "../images/brands/Lighting/wipro/section7-4.avif",
+  "../images/brands/Lighting/wipro/section7-5.webp",
+  "../images/brands/Lighting/wipro/section7-6.png",
+  "../images/brands/Lighting/wipro/section7-7.webp",
+  "../images/brands/Lighting/wipro/section7-8.png",
 ];
 function Wipro() {
   const navigate = useNavigate();
@@ -36,12 +36,10 @@ function Wipro() {
           ))}
         </div>
       </section>
-
       <section className="px-4 max-auto lg:container space-y-5">
         <img src="/images/brands/Lighting/wipro/s3-1.jpg" alt="banner-image" />
         <img src="/images/brands/Lighting/wipro/s3-2.jpg" alt="banner-image" />
       </section>
-
       <section className="px-4 max-auto lg:container my-10">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-[1.5fr_1fr] gap-3">
           <div className="font-segoe bg-[#D9ECF8] flex flex-col h-full">
@@ -76,7 +74,6 @@ function Wipro() {
           </div>
         </div>
       </section>
-
       <section className="px-4 max-auto lg:container">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-[1fr_1.5fr] gap-3">
           <div className="font-segoe flex flex-col h-full bg-[url('/images/brands/Lighting/wipro/s5-1.jpg')]">
@@ -106,11 +103,9 @@ function Wipro() {
           </div>
         </div>
       </section>
-
       <section className="px-4 max-auto lg:container my-10">
         <img src="/images/brands/Lighting/wipro/s6-1.jpg" alt="banner-image" />
       </section>
-
       <section className="px-4 mx-auto lg:container mb-5">
         <div className="grid grid-cols-2 md:grid-cols-4 justify-items-center gap-3 md:gap-7">
           {ourProducts.map((product, index) => (
@@ -119,7 +114,11 @@ function Wipro() {
               onClick={() => navigate("/shop?query=lighting")}
               className="p-2 bg-[#fff] flex justify-center hover:cursor-pointer items-center shadow-[0px_0px_20px_rgba(0,0,0,0.1)] w-full"
             >
-              <img src={product} alt="D-Link product 1" className="p-10" />
+              <img
+                src={product}
+                alt={`Wipro product ${index + 1}`}
+                className="p-10"
+              />
             </div>
           ))}
         </div>

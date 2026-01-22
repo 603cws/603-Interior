@@ -3,14 +3,14 @@ import Footer from "../../../common-components/Footer";
 import LandingNavbar from "../../../landing/components/LandingNavbar";
 
 const ourCollection = [
-  "../images/brands/SmartSolutions/schneiderElectric/section8-1.png",
-  "../images/brands/SmartSolutions/schneiderElectric/section8-2.png",
-  "../images/brands/SmartSolutions/schneiderElectric/section8-3.png",
-  "../images/brands/SmartSolutions/schneiderElectric/section8-4.png",
-  "../images/brands/SmartSolutions/schneiderElectric/section8-5.png",
-  "../images/brands/SmartSolutions/schneiderElectric/section8-6.png",
-  "../images/brands/SmartSolutions/schneiderElectric/section8-7.png",
-  "../images/brands/SmartSolutions/schneiderElectric/section8-8.png",
+  "../images/brands/Lighting/philips/section7-1.webp",
+  "../images/brands/Lighting/philips/section7-2.webp",
+  "../images/brands/Lighting/philips/section7-3.jpg",
+  "../images/brands/Lighting/philips/section7-4.webp",
+  "../images/brands/Lighting/philips/section7-5.webp",
+  "../images/brands/Lighting/philips/section7-6.jfif",
+  "../images/brands/Lighting/philips/section7-7.webp",
+  "../images/brands/Lighting/philips/section7-8.webp",
 ];
 
 function Philips() {
@@ -95,11 +95,22 @@ function Philips() {
       <section className="p-4 lg:container mx-auto">
         <div className="relative overflow-hidden">
           <img
-            src="../images/brands/Lighting/philips/banner6.jpg"
+            src="../images/brands/Lighting/philips/banner6.webp"
             alt="philips banner"
             draggable={false}
             className="w-full h-full object-cover pointer-events-none select-none"
           />
+          <div className="absolute left-[10%] sm:left-[15%] lg:left-[22%] top-1/2 -translate-y-1/2 font-segoe text-white font-bold w-fit">
+            <p className="text-lg md:text-4xl xl:text-6xl pb-1 sm:pb-2">
+              Where Light
+              <br /> Becomes Art.
+            </p>
+            <hr />
+            <p className="text-xs md:text-xl xl:text-2xl pt-1 sm:pt-2">
+              Philips Chandelier Collection.
+            </p>
+          </div>
+          <hr />
         </div>
       </section>
 
@@ -120,7 +131,7 @@ function Philips() {
             <div
               key={index}
               onClick={() => navigate("/shop?query=lighting")}
-              className="border w-full h-80 p-12 flex items-center justify-center border-[#002F36] overflow-hidden hover:cursor-pointer"
+              className="border w-full h-80 p-4 flex items-center justify-center border-[#002F36] overflow-hidden hover:cursor-pointer"
             >
               <img
                 src={product}

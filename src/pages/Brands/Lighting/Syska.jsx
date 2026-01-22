@@ -3,14 +3,14 @@ import Footer from "../../../common-components/Footer";
 import LandingNavbar from "../../../landing/components/LandingNavbar";
 
 const ourCollection = [
-  "../images/brands/Lighting/syska/section7-1.jpg",
-  "../images/brands/Lighting/syska/section7-2.png",
-  "../images/brands/Lighting/syska/section7-3.jpg",
-  "../images/brands/Lighting/syska/section7-4.png",
-  "../images/brands/Lighting/syska/section7-5.jpg",
-  "../images/brands/Lighting/syska/section7-6.png",
-  "../images/brands/Lighting/syska/section7-7.jpg",
-  "../images/brands/Lighting/syska/section7-8.jpg",
+  "../images/brands/Lighting/syska/section7-1.webp",
+  "../images/brands/Lighting/syska/section7-2.webp",
+  "../images/brands/Lighting/syska/section7-3.webp",
+  "../images/brands/Lighting/syska/section7-4.webp",
+  "../images/brands/Lighting/syska/section7-5.webp",
+  "../images/brands/Lighting/syska/section7-6.webp",
+  "../images/brands/Lighting/syska/section7-7.webp",
+  "../images/brands/Lighting/syska/section7-8.webp",
 ];
 
 function Syska() {
