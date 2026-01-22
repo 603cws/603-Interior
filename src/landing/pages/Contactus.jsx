@@ -3,6 +3,7 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import { useState } from "react";
 import LandingNavbar from "../components/LandingNavbar";
+import { supabase } from "../../services/supabase";
 
 const templateID = import.meta.env.VITE_TEMPLATE_ID;
 const serviceid = import.meta.env.VITE_SERVICE_ID;
@@ -52,9 +53,26 @@ function Contactus() {
 
       try {
         setisSubmitting(true);
-        await axios.post("https://api.emailjs.com/api/v1.0/email/send", data, {
-          headers: { "Content-Type": "application/json" },
-        });
+        const { data, error } = await supabase
+          .from("contactUsData")
+          .insert([
+            {
+              name: form.name,
+              mobileNo: form.mobileNo,
+              companyName: form.companyName,
+              email: form.email,
+              message: form.message,
+            },
+          ])
+          .select();
+
+        if (error) throw error;
+
+        console.log("data", data);
+
+        // await axios.post("https://api.emailjs.com/api/v1.0/email/send", data, {
+        //   headers: { "Content-Type": "application/json" },
+        // });
         toast.success("we will shortly reach you");
 
         setFormData({
@@ -66,9 +84,6 @@ function Contactus() {
         });
       } catch (error) {
         console.error("Error sending email:", error);
-        alert(
-          "Oops... " + JSON.stringify(error.response?.data || error.message)
-        );
       } finally {
         setisSubmitting(false);
       }

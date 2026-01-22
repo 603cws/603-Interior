@@ -42,7 +42,7 @@ function BookAppointment({ onClose, isdashboardbooking = false }) {
 
   const filteredTimings = times?.filter(
     (time) =>
-      !todayBookedTimmings?.some((booked) => booked?.start_time === time),
+      !todayBookedTimmings?.some((booked) => booked?.start_time === time)
   );
 
   const handletime = (time) => {
@@ -96,6 +96,10 @@ function BookAppointment({ onClose, isdashboardbooking = false }) {
             user_phoneno: accountHolder.phone,
           },
         };
+        toast.success("we will shortly reach you");
+        setIsappointmentbooked(true);
+        saveBookingDatainDB(formattedDate, weekday, endtime, newDate);
+        CheckThebookingOnSameDateAndGetTimes(value);
         await axios.post("https://api.emailjs.com/api/v1.0/email/send", data, {
           headers: { "Content-Type": "application/json" },
         });
@@ -104,13 +108,8 @@ function BookAppointment({ onClose, isdashboardbooking = false }) {
           Admindata,
           {
             headers: { "Content-Type": "application/json" },
-          },
+          }
         );
-
-        toast.success("we will shortly reach you");
-        setIsappointmentbooked(true);
-        saveBookingDatainDB(formattedDate, weekday, endtime, newDate);
-        CheckThebookingOnSameDateAndGetTimes(value);
       } else {
         toast.error("please select the time");
       }
@@ -272,8 +271,8 @@ function BookAppointment({ onClose, isdashboardbooking = false }) {
                               isPast
                                 ? "bg-gray-200 text-gray-500 cursor-not-allowed"
                                 : selectedTIme === time
-                                  ? "text-[#F3F8FF] bg-[#374A75]"
-                                  : "text-[#374A75] bg-[#F3F8FF] hover:shadow-md"
+                                ? "text-[#F3F8FF] bg-[#374A75]"
+                                : "text-[#374A75] bg-[#F3F8FF] hover:shadow-md"
                             }`}
                           >
                             {time}
