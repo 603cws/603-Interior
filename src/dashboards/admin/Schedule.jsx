@@ -20,7 +20,7 @@ const timeSlots = [
   "08:00 pm",
 ];
 
-const columns = ["GMT+5", "Mon", "Tue", "Wed", "Thrus", "Fri", "Sat"];
+const columns = ["GMT+5", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 function Schedule() {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [weekRange, setWeekRange] = useState({ start: "", end: "" });
