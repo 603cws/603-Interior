@@ -16,7 +16,6 @@ const tabs = [
 ];
 
 function ItemTable({
-  mobileMenuRef,
   isaddonRefresh,
   setIsAddonRefresh,
   isproductRefresh,
@@ -619,7 +618,7 @@ function ItemTable({
                     }));
                     exportToExcel(
                       exportData,
-                      toggle ? "products.xlsx" : "addons.xlsx"
+                      toggle ? "products.xlsx" : "addons.xlsx",
                     );
                   }}
                   className=" px-4 py-2 rounded text-[#374A75] text-sm flex items-center gap-3 border "
@@ -755,7 +754,7 @@ function ItemTable({
                             <option key={subCat} value={subCat}>
                               {subCat}
                             </option>
-                          )
+                          ),
                         )}
                       </select>
                     </div>
@@ -777,7 +776,7 @@ function ItemTable({
                     }));
                     exportToExcel(
                       exportData,
-                      toggle ? "products.xlsx" : "addons.xlsx"
+                      toggle ? "products.xlsx" : "addons.xlsx",
                     );
                   }}
                   className="h-10 w-10 flex justify-center items-center border rounded "
@@ -836,7 +835,6 @@ function ItemTable({
             setSelectedAddon={setSelectedAddon}
             setEditProduct={setEditProduct}
             setEditAddon={setEditAddon}
-            mobileMenuRef={mobileMenuRef}
             multipleDeleteWaring={multipleDeleteWaring}
             setMultipleDeleteWaring={setMultipleDeleteWaring}
             filteredAddons={filteredAddons}

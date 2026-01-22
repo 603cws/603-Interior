@@ -49,7 +49,7 @@ function MobileTabProductCard({ product, handleProductPreview }) {
       </div>
 
       {/* 3-dot Menu */}
-      <div className="absolute right-0 bottom-0">
+      <div className="absolute right-0 top-1">
         <button
           onClick={() => handleProductPreview(product)}
           className="text-gray-500 text-xl"

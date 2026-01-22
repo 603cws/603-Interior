@@ -83,7 +83,7 @@ function AdminDashboard() {
 
   const [sidebarstate, sidebarDispatch] = useReducer(
     handlesidebarState,
-    sidebarInitialState
+    sidebarInitialState,
   );
 
   useEffect(() => {
@@ -174,6 +174,22 @@ function AdminDashboard() {
   useEffect(() => {
     getusers();
   }, [isrefresh]);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        mobileMenuRef.current &&
+        !mobileMenuRef.current.contains(event.target)
+      ) {
+        setIsOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className="grid lg:grid-cols-[auto_1fr] lg:bg-gradient-to-r from-[#CFDCE7] to-[#E8EEF3] md:p-4 h-dvh md:h-screen font-Poppins lg:overflow-hidden">
@@ -285,7 +301,7 @@ function AdminDashboard() {
             <img
               src="/logo/workved-interior.png"
               alt="Logo"
-              className={`${isExpanded ? "h-20 w-32" : "h-9 w-16"}`}
+              className={`${isExpanded ? "h-20 w-36" : "h-9 w-20"}`}
               onClick={() => navigate("/")}
             />
           </div>
@@ -446,7 +462,7 @@ function AdminDashboard() {
         )}
         {sidebarstate?.isProductOpen && (
           <div className="flex flex-col h-full min-h-0 overflow-hidden lg:border-2 lg:border-[#334A78] lg:rounded-lg bg-white">
-            <AdminDashItems mobileMenuRef={mobileMenuRef} />
+            <AdminDashItems />
           </div>
         )}
 

@@ -49,8 +49,10 @@ function AdminDashVendors({
       setFilteredvendors(allvendors); // Reset to original list when input is empty
       return;
     }
-    const filteredvendor = allvendors.filter((item) =>
-      item.company_name.toLowerCase().includes(query.toLowerCase())
+    const filteredvendor = allvendors.filter(
+      (item) =>
+        item?.company_name?.toLowerCase().includes(query?.toLowerCase()) ||
+        item?.email?.toLowerCase().includes(query?.toLowerCase()),
     );
     setFilteredvendors(filteredvendor);
   };
@@ -67,8 +69,8 @@ function AdminDashVendors({
                 <div className="w-1/2 hidden lg:block">
                   <input
                     type="text"
-                    className="w-full rounded-lg px-2 py-1 outline-none border border-[#ccc]"
-                    placeholder="......search by company name"
+                    className="w-full rounded-lg px-2 py-1.5 outline-none border text-sm"
+                    placeholder="......search by company name or email"
                     onChange={(e) => {
                       filterVendorByMultipleFields(e.target.value);
                       setQuery(e.target.value);
