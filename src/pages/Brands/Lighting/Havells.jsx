@@ -3,14 +3,14 @@ import Footer from "../../../common-components/Footer";
 import LandingNavbar from "../../../landing/components/LandingNavbar";
 
 const ourCollection = [
-  "../images/brands/Lighting/syska/section7-1.webp",
-  "../images/brands/Lighting/syska/section7-2.webp",
-  "../images/brands/Lighting/syska/section7-3.webp",
-  "../images/brands/Lighting/syska/section7-4.webp",
-  "../images/brands/Lighting/syska/section7-5.webp",
-  "../images/brands/Lighting/syska/section7-6.webp",
-  "../images/brands/Lighting/syska/section7-7.webp",
-  "../images/brands/Lighting/syska/section7-8.webp",
+  "../images/brands/Lighting/havells/section6-1.webp",
+  "../images/brands/Lighting/havells/section6-2.webp",
+  "../images/brands/Lighting/havells/section6-3.webp",
+  "../images/brands/Lighting/havells/section6-4.webp",
+  "../images/brands/Lighting/havells/section6-5.webp",
+  "../images/brands/Lighting/havells/section6-6.webp",
+  "../images/brands/Lighting/havells/section6-7.webp",
+  "../images/brands/Lighting/havells/section6-8.webp",
 ];
 
 function Havells() {
@@ -96,7 +96,7 @@ function Havells() {
             <div
               key={index}
               onClick={() => navigate("/shop?query=lighting")}
-              className="border w-full h-80 p-4 flex items-center justify-center border-[#002F36] overflow-hidden hover:cursor-pointer"
+              className="border w-full h-80 p-2 flex items-center justify-center border-[#002F36] overflow-hidden hover:cursor-pointer"
             >
               <img
                 src={product}
