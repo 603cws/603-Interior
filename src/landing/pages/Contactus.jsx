@@ -1,12 +1,12 @@
 import Footer from "../../common-components/Footer";
-import axios from "axios";
 import toast from "react-hot-toast";
 import { useState } from "react";
 import LandingNavbar from "../components/LandingNavbar";
+import { supabase } from "../../services/supabase";
 
-const templateID = import.meta.env.VITE_TEMPLATE_ID;
-const serviceid = import.meta.env.VITE_SERVICE_ID;
-const your_public_key = import.meta.env.VITE_CONTACT_EMAILJS_PUBLIC;
+// const templateID = import.meta.env.VITE_TEMPLATE_ID;
+// const serviceid = import.meta.env.VITE_SERVICE_ID;
+// const your_public_key = import.meta.env.VITE_CONTACT_EMAILJS_PUBLIC;
 const background = "/images/contact-us/contactpage.webp";
 
 function Contactus() {
@@ -37,25 +37,54 @@ function Contactus() {
       toast.error("form not filled");
       return;
     } else {
-      const data = {
-        service_id: serviceid,
-        template_id: templateID,
-        user_id: your_public_key,
-        template_params: {
-          name: form.name,
-          mobile: form.mobileNo,
-          company: form.companyName,
-          email: form.email,
-          message: form.message,
-        },
-      };
-
       try {
         setisSubmitting(true);
-        await axios.post("https://api.emailjs.com/api/v1.0/email/send", data, {
-          headers: { "Content-Type": "application/json" },
-        });
+        const { data, error } = await supabase
+          .from("contactUsData")
+          .insert([
+            {
+              name: form.name,
+              mobileNo: form.mobileNo,
+              companyName: form.companyName,
+              email: form.email,
+              message: form.message,
+            },
+          ])
+          .select();
+
+        if (error) throw error;
         toast.success("we will shortly reach you");
+
+        console.log("data", data);
+        // send email to user
+        await fetch(
+          "https://bwxzfwsoxwtzhjbzbdzs.supabase.co/functions/v1/ContactUsEmailUser",
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              email: form.email,
+              companyName: form.companyName,
+            }),
+          }
+        );
+        const AdminEmail = "workvedbusinesscentre@gmail.com";
+        // send email to admin
+        await fetch(
+          "https://bwxzfwsoxwtzhjbzbdzs.supabase.co/functions/v1/ContactUsEmailAdmin",
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              email: AdminEmail,
+              companyName: form.companyName,
+              phone: form.mobileNo,
+              message: form.message,
+              userEmail: form.email,
+              name: form.name,
+            }),
+          }
+        );
 
         setFormData({
           message: "",
@@ -66,9 +95,6 @@ function Contactus() {
         });
       } catch (error) {
         console.error("Error sending email:", error);
-        alert(
-          "Oops... " + JSON.stringify(error.response?.data || error.message)
-        );
       } finally {
         setisSubmitting(false);
       }
@@ -383,7 +409,7 @@ function Contactus() {
               </div>
             </div>
 
-            <div className="font-inter bg-white flex-1 space-y-2 px-4  pb-4 border">
+            <div className="font-TimesNewRoman bg-white flex-1 space-y-2 px-4  pb-4 border">
               <h2 className="text-[#1C346B] text-3xl ">
                 Interested in working with us!
               </h2>

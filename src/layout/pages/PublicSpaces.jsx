@@ -16,6 +16,16 @@ const PublicSpaces = ({
   washroomsSize,
   setWashroomsSize,
 }) => {
+  const valueResolver = {
+    receptionSize,
+    setReceptionSize,
+    loungeSize,
+    setLoungeSize,
+    breakoutRoomSize,
+    setBreakoutRoomSize,
+    washroomsSize,
+    setWashroomsSize,
+  };
   return (
     <div className="section px-3">
       <h3 className="section-heading bg-[#E4E7ED] shadow-sm text-md pl-2 py-1 sticky top-0 font-semibold z-10">
@@ -23,45 +33,45 @@ const PublicSpaces = ({
       </h3>
       <div className="public-spaces grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-2 3xl:grid-cols-3 gap-5 justify-items-center lg:justify-items-stretch">
         {publicSpacesData.map((space) => {
-          const sliderProps = space.slider
-            ? {
-                name: space.slider.name,
-                value: space.slider.valueKey
-                  ? eval(space.slider.valueKey) // Dynamically evaluate the value (e.g., videoRecordingRoomSize)
-                  : 0, // Default to 0 if no dynamic value is found
-                onChange: space.slider.setValueKey
-                  ? eval(space.slider.setValueKey) // Dynamically evaluate the setter function (e.g., setVideoRecordingRoomSize)
-                  : () => {}, // Default empty function if no setter is provided
-                min2: space.slider.min,
-                max2: space.slider.max,
-                step2: space.slider.step,
-                totalArea,
-                builtArea,
-                initialAreaValues,
-                type: space.type,
-                ...(space.type === "reception"
-                  ? {
-                      cabinSize: receptionSize,
-                      setCabinSize: setReceptionSize,
-                    }
-                  : space.type === "lounge"
-                  ? {
-                      cabinSize: loungeSize,
-                      setCabinSize: setLoungeSize,
-                    }
-                  : space.type === "breakoutRoom"
-                  ? {
-                      cabinSize: breakoutRoomSize,
-                      setCabinSize: setBreakoutRoomSize,
-                    }
-                  : space.type === "washrooms"
-                  ? {
-                      cabinSize: washroomsSize,
-                      setCabinSize: setWashroomsSize,
-                    }
-                  : {}),
-              }
-            : null;
+          let sliderProps = null;
+          if (space.slider) {
+            const { valueKey, setValueKey } = space.slider;
+            const value = valueResolver[valueKey] ?? 0;
+            const onChange = valueResolver[setValueKey] ?? (() => {});
+            sliderProps = {
+              name: space.slider.name,
+              value,
+              onChange,
+              min2: space.slider.min,
+              max2: space.slider.max,
+              step2: space.slider.step,
+              totalArea,
+              builtArea,
+              initialAreaValues,
+              type: space.type,
+              ...(space.type === "reception"
+                ? {
+                    cabinSize: receptionSize,
+                    setCabinSize: setReceptionSize,
+                  }
+                : space.type === "lounge"
+                ? {
+                    cabinSize: loungeSize,
+                    setCabinSize: setLoungeSize,
+                  }
+                : space.type === "breakoutRoom"
+                ? {
+                    cabinSize: breakoutRoomSize,
+                    setCabinSize: setBreakoutRoomSize,
+                  }
+                : space.type === "washrooms"
+                ? {
+                    cabinSize: washroomsSize,
+                    setCabinSize: setWashroomsSize,
+                  }
+                : {}),
+            };
+          }
 
           return (
             <LayoutCard

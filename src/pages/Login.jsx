@@ -130,11 +130,26 @@ function Login() {
       formData.company,
       formData.mobile
     );
+    await SendWelcomeEmail(formData?.email, formData?.company);
     if (layoutId) {
       await updateUserId(userId);
     }
     await handleLogin();
   };
+
+  async function SendWelcomeEmail(email, companyName) {
+    await fetch(
+      "https://bwxzfwsoxwtzhjbzbdzs.supabase.co/functions/v1/swift-function",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: email,
+          companyName: companyName,
+        }),
+      }
+    );
+  }
 
   const handleLogin = async () => {
     setIsLogingIn(true);
@@ -321,7 +336,7 @@ function Login() {
         <ResetPassword setResetPass={setResetPass} />
       ) : (
         <>
-          <div className="relative main flex justify-center gap-5 h-screen w-full bg-gradient-to-br from-[#334A78] to-[#68B2DC] md:bg-none md:bg-[#fff] overflow-x-hidden">
+          <div className="relative main flex justify-center gap-5 h-screen w-full bg-gradient-to-br from-[#334A78] to-[#68B2DC] md:bg-none md:bg-[#fff] overflow-x-hidden font-Poppins">
             <SideImage />
 
             <form
@@ -476,7 +491,7 @@ function MobileField({ formData, handleChange }) {
         Mobile Number <span>*</span>
       </label>
       <input
-        type="text"
+        type="number"
         name="mobile"
         value={formData.mobile}
         onChange={handleChange}
@@ -485,7 +500,9 @@ function MobileField({ formData, handleChange }) {
         inputMode="numeric"
         pattern="\d{10}"
         placeholder="Your Mobile Number"
-        className="w-full py-1 pl-1 md:py-2 rounded-lg md:pl-2 focus:outline-none border"
+        className="w-full py-1 pl-1 md:py-2 rounded-lg md:pl-2 focus:outline-none border  [appearance:textfield]
+    [&::-webkit-inner-spin-button]:appearance-none
+    [&::-webkit-outer-spin-button]:appearance-none"
       />
     </div>
   );

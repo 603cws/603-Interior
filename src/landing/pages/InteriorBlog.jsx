@@ -91,7 +91,7 @@ function InteriorBlog() {
                   <button
                     key={i}
                     onClick={() => goToPage(i + 1)}
-                    className={`px-5 py-2 rounded font-lora font-semibold ${
+                    className={`px-5 py-2 rounded font-Georgia font-semibold ${
                       currentPage === i + 1
                         ? "bg-[#304778] text-white"
                         : "bg-[#fff] text-[#232323]"
@@ -128,7 +128,7 @@ function Card({ blog, index }) {
   const month = blogdate.toLocaleString("default", { month: "long" });
   const day = blogdate.getDate();
   return (
-    <div className="font-lora mx-auto" key={index}>
+    <div className="font-Georgia mx-auto" key={index}>
       <div>
         <div className="relative">
           <img

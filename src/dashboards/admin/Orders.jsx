@@ -155,8 +155,8 @@ export default function Orders({ vendorId = null }) {
       ) : (
         <section className="lg:rounded-lg font-Poppins overflow-hidden">
           <div className="sticky top-0 bg-white z-20">
-            <div className="flex justify-between items-center pr-4 py-2 border-b-2 border-b-[#CCCCCC]">
-              <h2 className="text-xl text-[#374A75] font-semibold px-4 py-2">
+            <div className="flex flex-wrap md:flex-nowrap md:justify-between md:items-center px-2 md:pr-4 py-2 border-b-2 border-b-[#CCCCCC]">
+              <h2 className="text-xl text-[#374A75] font-semibold md:px-4 py-2">
                 Orders List
               </h2>
               <div className="flex items-center gap-3">
@@ -345,7 +345,7 @@ export default function Orders({ vendorId = null }) {
                 </table>
               )}
             </div>
-            <div className="lg:hidden">
+            <div className=" lg:hidden">
               {paginatedOrders?.map((order) => (
                 <MobileOrderCard
                   key={order.id}
@@ -570,7 +570,7 @@ export function OrderDetails({ order, onBack, vendorId = null }) {
                         ) : (
                           <div className="w-8 h-8 bg-gray-300 rounded-md" />
                         )}
-                        <span className="font-semibold text-base text-black ml-2">
+                        <span className="font-semibold text-base max-w-sm text-black ml-2">
                           {orderItem?.product_variants?.title}
                         </span>
                       </td>
@@ -613,7 +613,7 @@ export function OrderDetails({ order, onBack, vendorId = null }) {
               </tbody>
             </table>
 
-            <div className="lg:hidden">
+            <div className=" lg:hidden">
               {filteredProducts?.map((product) => {
                 return <MobileOrderItem key={product.id} product={product} />;
               })}
@@ -636,7 +636,7 @@ function MobileOrderCard({ order, setSelectedOrder }) {
   return (
     <div
       onClick={() => setSelectedOrder(order)}
-      className="my-4 py-2 border-b-2 font-Poppins font-semibold"
+      className=" my-4 py-2 border-b-2 font-Poppins font-semibold"
     >
       <div className="flex justify-between text-sm">
         <p className="text-[#000]">order id #{order.id.split("-")[0]}</p>

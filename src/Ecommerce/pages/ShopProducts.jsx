@@ -8,15 +8,12 @@ import {
   MdKeyboardArrowUp,
 } from "react-icons/md";
 import Header from "../components/Header";
-import { useHandleAddToCart } from "../../utils/HelperFunction";
-import { useApp } from "../../Context/Context";
 import { ToastContainer } from "react-toastify";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import Footer from "../../common-components/Footer";
-import { AiFillHeart } from "react-icons/ai";
-import { GoHeart } from "react-icons/go";
 import PagInationNav from "../../common-components/PagInationNav";
 import { useEcomApp } from "../../Context/EcomContext";
+import { ShopCard } from "../components/Card";
 
 const categoryies = [
   {
@@ -71,8 +68,7 @@ function ShopProducts() {
   const [isShopCatOepn, setIsShopCatOpen] = useState(true);
   const [isPriceOpen, setIsPriceOpen] = useState(false);
   const [filtersortby, setfiltersortby] = useState("Popularity");
-  const [isfilterOpen, setIsfilteropen] = useState(false);
-  const [isSortOpen, setIsSortOpen] = useState(false);
+
   const [isBrandOpen, setIsBrandopen] = useState(false);
   const [allBrands, setAllBrands] = useState([]);
   const [showAvailableOnly, setShowAvailableOnly] = useState(false);
@@ -81,11 +77,8 @@ function ShopProducts() {
   const { filters, setFilters } = useEcomApp();
 
   const [minPrice, setMinPrice] = useState(filters.priceRange[0]);
-
   const [maxPrice, setMaxPrice] = useState(filters.priceRange[1]);
-
-  //
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const category = searchParams.get("category");
   const query = searchParams.get("query");
 
@@ -303,17 +296,22 @@ function ShopProducts() {
     }
   };
   const resetFilter = () => {
-    if (category) {
-      setFilters((prev) => ({
-        ...prev,
-        category: [category],
-      }));
-    } else {
-      setFilters((prev) => ({
-        ...prev,
-        category: [],
-      }));
-    }
+    searchParams.delete("category");
+    searchParams.delete("query");
+
+    // update URL after deleting
+    setSearchParams(searchParams);
+    // if (category) {
+    //   setFilters((prev) => ({
+    //     ...prev,
+    //     category: [category],
+    //   }));
+    // } else {
+    // }
+    setFilters((prev) => ({
+      ...prev,
+      category: [],
+    }));
 
     setFilters((prev) => ({
       ...prev,
@@ -357,10 +355,6 @@ function ShopProducts() {
     }
   };
 
-  const handleResetOfFilter = () => {
-    setIsfilteropen(false);
-  };
-
   return (
     <div>
       <ToastContainer />
@@ -373,198 +367,22 @@ function ShopProducts() {
         </div>
       </section>
 
-      <section>
-        <div className=" flex lg:hidden justify-between items-center font-TimesNewRoman text-base text-[#ccc] px-6 border-t border-b border-[#ccc] mb-4">
-          <button onClick={() => setIsSortOpen(!isSortOpen)}>Sort</button>
-          <button onClick={() => setIsfilteropen(true)}>Filter</button>
-        </div>
-      </section>
-
-      {isfilterOpen && (
-        <div
-          className={`absolute top-[80px] left-0 w-full h-[87vh] z-50 bg-white border rounded-3xl p-5 transition-transform ease-in-out duration-500 transform animate-fade-in flex flex-col justify-center ${
-            isfilterOpen ? "translate-y-0" : "-translate-y-full"
-          }`}
-        >
-          <div className="flex justify-between items-center border-b border-b-[#ccc] pb-2">
-            <div className="flex gap-2 items-center">
-              <button onClick={() => handleResetOfFilter()}>
-                <MdKeyboardArrowLeft size={30} color="#304778" />{" "}
-              </button>
-              <h2 className="uppercase text-[#304778] text-sm leading-[22.4px] ">
-                filter
-              </h2>
-            </div>
-            <div>
-              <button
-                onClick={resetFilter}
-                className="px-4 py-1 hover:bg-[#334A78] border border-[#ccc] text-[#334a78] hover:text-white"
-              >
-                Reset
-              </button>
-            </div>
-          </div>
-          <div className="font-TimesNewRoman flex flex-1 overflow-y-auto pr-2 ">
-            <div className="flex-1 flex mt-2">
-              <ul
-                className={`flex flex-col items-start uppercase [&:li]:bg-[#eee] [&_li]:w-full [&_li]:px-2 [&_li]:py-2 [&_li]:pb-3 p-1 text-xs font-bold text-[#1A293A] [&_li]:cursor-pointer `}
-              >
-                <li
-                  className={`${isShopCatOepn ? "bg-[#fff]" : "bg-[#eee]"}`}
-                  onClick={() => handleopencloseoffilter("shop")}
-                >
-                  shop by categories
-                </li>
-                <li
-                  className={`${isPriceOpen ? "bg-[#fff]" : "bg-[#eee] "} `}
-                  onClick={() => handleopencloseoffilter("price")}
-                >
-                  price
-                </li>
-              </ul>
-            </div>
-            <div className="flex-1">
-              {isShopCatOepn && (
-                <div>
-                  <div className="space-y-4 p-2">
-                    {categoryies.map((cat, i) => (
-                      <label
-                        key={i}
-                        className="flex items-center space-x-3 cursor-pointer"
-                      >
-                        <div
-                          className={`w-5 h-5 border-2 rounded-sm flex items-center justify-center ${
-                            filters.category.includes(cat.name)
-                              ? "bg-[#2A3E65] border-[#2A3E65]"
-                              : "border-[#2A3E65]"
-                          }`}
-                          onClick={() => handleCategoryClick(cat.name)}
-                        >
-                          {/* You can add a checkmark or leave it blank */}
-                        </div>
-                        <span className="text-sm text-[#000000] font-medium">
-                          {cat.name}
-                        </span>
-                      </label>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {isPriceOpen && (
-                <div className=" bg-white">
-                  {/* Min and Max Dropdowns */}
-                  <div className="flex flex-wrap justify-around gap-1 mb-4 pt-2">
-                    <select
-                      className="border px-2 py-1 text-[#334A78] text-sm border-[#CCD2DD]"
-                      value={minPrice}
-                      onChange={(e) => {
-                        const value = parseInt(e.target.value);
-                        if (value <= maxPrice) setMinPrice(value);
-                      }}
-                    >
-                      {priceOptions.map((price) => (
-                        <option key={price} value={price}>
-                          ₹{price === 0 ? "Min" : price}
-                        </option>
-                      ))}
-                    </select>
-
-                    <select
-                      className="border px-2 py-1 text-[#334A78] text-sm"
-                      value={maxPrice}
-                      onChange={(e) => {
-                        const value = parseInt(e.target.value);
-                        if (value >= minPrice) setMaxPrice(value);
-                      }}
-                    >
-                      {priceOptions.map((price) => (
-                        <option key={price} value={price}>
-                          ₹{price === 10000 ? "10000+" : price}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-
-                  {/* Price Range Slider */}
-                  <div className="mt-2">
-                    <input
-                      type="range"
-                      min={minPrice}
-                      max={10000}
-                      step={500}
-                      value={maxPrice}
-                      onChange={(e) => setMaxPrice(parseInt(e.target.value))}
-                      className="w-full accent-[#334A78]"
-                    />
-                    <div className="flex justify-between text-xs text-gray-600 mt-1">
-                      <span>₹{minPrice}</span>
-                      <span>₹{maxPrice}</span>
-                    </div>
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
-
-          {/* display of no of products  */}
-          <div className="flex justify-between items-center mt-5 font-TimesNewRoman">
-            <div>
-              <h2 className="text-[#000] font-semibold text-xl tracking-[1.2px]">
-                {items?.length}
-              </h2>
-              <p className="text-[#ccc] text-sm leading-4 -tracking-[1px]  font-semibold">
-                product found
-              </p>
-            </div>
-            <div>
-              <button
-                onClick={() => setIsfilteropen(false)}
-                className="px-5 py-[10px] bg-[#334A78] text-white border border-[#212B36] font-TimesNewRoman font-semibold text-sm leading-[15px] tracking-[1.2px]"
-              >
-                Apply
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {isSortOpen && (
-        <div
-          className={`fixed bottom-0 left-0 w-full  z-50 bg-white border rounded-3xl  transition-transform ease-in-out duration-500 transform animate-fade-in flex flex-col justify-center ${
-            isSortOpen ? "translate-y-0 " : "-translate-y-full"
-          }`}
-        >
-          <div className="flex items-center border-b border-b-[#ccc]">
-            <button onClick={() => setIsSortOpen(false)}>
-              <MdKeyboardArrowLeft size={30} color="#304778" />{" "}
-            </button>
-            <h2 className="uppercase text-[#304778] text-sm leading-[22.4px] ">
-              Sort By
-            </h2>
-          </div>
-          <div className="space-y-4 p-2">
-            {options.map((opt, i) => (
-              <label
-                key={i}
-                className="flex items-center justify-between space-x-3 cursor-pointer"
-              >
-                <span className="text-sm text-[#000000] font-medium">
-                  {opt.option}
-                </span>
-                <div
-                  className={`w-5 h-5 border-2 rounded-full flex items-center justify-center ${
-                    filtersortby === opt.value
-                      ? "bg-[#2A3E65] border-[#2A3E65]"
-                      : "border-[#2A3E65]"
-                  }`}
-                  onClick={() => handleSortby(opt)}
-                ></div>
-              </label>
-            ))}
-          </div>
-        </div>
-      )}
+      {/* mobile sort and filter */}
+      <MobileFilterAndSort
+        resetFilter={resetFilter}
+        isShopCatOepn={isShopCatOepn}
+        handleopencloseoffilter={handleopencloseoffilter}
+        isPriceOpen={isPriceOpen}
+        filters={filters}
+        handleCategoryClick={handleCategoryClick}
+        minPrice={minPrice}
+        maxPrice={maxPrice}
+        setMinPrice={setMinPrice}
+        setMaxPrice={setMaxPrice}
+        items={items}
+        filtersortby={filtersortby}
+        handleSortby={handleSortby}
+      />
 
       {/* section 2 */}
       <section className="font-TimesNewRoman lg:container lg:mx-auto px-4 lg:px-12">
@@ -790,7 +608,6 @@ function ShopProducts() {
                       <p className="mr-2">Sort by:</p>
                       <p className="font-semibold capitalize">{filtersortby}</p>
                       <span className="ml-auto text-xl">
-                        {" "}
                         {open ? (
                           <MdKeyboardArrowUp size={25} />
                         ) : (
@@ -878,7 +695,7 @@ function ShopProducts() {
               <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-5 gap-4">
                 {currentItems.map((product, index) => (
                   <div key={index}>
-                    <Card product={product} />
+                    <ShopCard product={product} />
                   </div>
                 ))}
               </div>
@@ -897,10 +714,7 @@ function ShopProducts() {
           )}
         </div>
       </section>
-
-      <footer>
-        <Footer />
-      </footer>
+      <Footer />
     </div>
   );
 }
@@ -920,92 +734,221 @@ function SectionHeader({ title, isborder = true }) {
   );
 }
 
-function Card({ product }) {
-  const { handleAddToCart, handleAddtoWishlist } = useHandleAddToCart();
-  const { isAuthenticated } = useApp();
-  const { cartItems, localcartItems, wishlistItems } = useEcomApp();
+function MobileFilterAndSort({
+  resetFilter,
+  isShopCatOepn,
+  handleopencloseoffilter,
+  isPriceOpen,
+  filters,
+  handleCategoryClick,
+  minPrice,
+  maxPrice,
+  setMinPrice,
+  setMaxPrice,
+  items,
+  filtersortby,
+  handleSortby,
+}) {
+  const [isfilterOpen, setIsfilteropen] = useState(false);
+  const [isSortOpen, setIsSortOpen] = useState(false);
 
-  const isWishlisted = wishlistItems?.some(
-    (item) => item.productId?.id === product.id
-  );
-
-  const [iscarted, setIsCarted] = useState(false);
-
-  const naviagte = useNavigate();
-
-  useEffect(() => {
-    if (!product?.id) return;
-
-    if (isAuthenticated) {
-      const check = cartItems?.some(
-        (item) => item.productId?.id === product.id
-      );
-      setIsCarted(check);
-    } else {
-      const check = localcartItems?.some(
-        (item) => item.productId?.id === product.id
-      );
-      setIsCarted(check);
-    }
-  }, [isAuthenticated, cartItems, localcartItems, product?.id]);
-
+  const handleResetOfFilter = () => {
+    setIsfilteropen(false);
+  };
   return (
-    <div className="font-TimesNewRoman max-w-sm max-h-sm border border-[#ccc]">
-      <div
-        onClick={() =>
-          naviagte(`/productview/${product.id}`, { state: { from: "shop" } })
-        }
-        className="flex justify-center items-center p-2 cursor-pointer"
-      >
-        <img
-          src={product.image}
-          alt={product.product_id?.category}
-          className="h-52 object-contain"
-        />
-      </div>
-      <div className="bg-[#fff] p-1.5 lg:p-2">
-        <div className="flex flex-col md:flex-row ">
-          <div className="flex-1 text-sm leading-[22.4px] text-[#111]">
-            <h4
-              title={product?.title}
-              className="font-medium text-sm leading-[22.4px] line-clamp-1 capitalize"
-            >
-              {product?.title}
-            </h4>
-            <div className="flex items-center gap-2 flex-wrap xl:flex-nowrap">
-              <p className="text-nowrap">
-                RS {product?.ecommercePrice?.sellingPrice || "Rs 3,0000"}
-              </p>
-              <p className="line-through text-[#111] text-opacity-50 text-nowrap">
-                RS {product?.ecommercePrice?.mrp || "Rs 3,0000"}
-              </p>
-              <p className="text-[#C20000] uppercase">sale</p>
+    <>
+      <section>
+        <div className=" flex lg:hidden justify-between items-center font-TimesNewRoman text-base text-[#ccc] px-6 border-t border-b border-[#ccc] mb-4">
+          <button onClick={() => setIsSortOpen(!isSortOpen)}>Sort</button>
+          <button onClick={() => setIsfilteropen(true)}>Filter</button>
+        </div>
+      </section>
+      {/* mobile */}
+      {isfilterOpen && (
+        <div
+          className={`absolute top-[80px] left-0 w-full h-[87vh] z-50 bg-white border rounded-3xl p-5 transition-transform ease-in-out duration-500 transform animate-fade-in flex flex-col justify-center ${
+            isfilterOpen ? "translate-y-0" : "-translate-y-full"
+          }`}
+        >
+          <div className="flex justify-between items-center border-b border-b-[#ccc] pb-2">
+            <div className="flex gap-2 items-center">
+              <button onClick={() => handleResetOfFilter()}>
+                <MdKeyboardArrowLeft size={30} color="#304778" />{" "}
+              </button>
+              <h2 className="uppercase text-[#304778] text-sm leading-[22.4px] ">
+                filter
+              </h2>
+            </div>
+            <div>
+              <button
+                onClick={resetFilter}
+                className="px-4 py-1 hover:bg-[#334A78] border border-[#ccc] text-[#334a78] hover:text-white"
+              >
+                Reset
+              </button>
             </div>
           </div>
-          <div
-            onClick={() => handleAddtoWishlist(product)}
-            className="text-[#ccc] hover:text-red-600 cursor-pointer"
-          >
-            {isWishlisted ? (
-              <AiFillHeart size={20} color="red" />
-            ) : (
-              <GoHeart size={20} />
-            )}
+          <div className="font-TimesNewRoman flex flex-1 overflow-y-auto pr-2 ">
+            <div className="flex-1 flex mt-2">
+              <ul
+                className={`flex flex-col items-start uppercase [&:li]:bg-[#eee] [&_li]:w-full [&_li]:px-2 [&_li]:py-2 [&_li]:pb-3 p-1 text-xs font-bold text-[#1A293A] [&_li]:cursor-pointer `}
+              >
+                <li
+                  className={`${isShopCatOepn ? "bg-[#fff]" : "bg-[#eee]"}`}
+                  onClick={() => handleopencloseoffilter("shop")}
+                >
+                  shop by categories
+                </li>
+                <li
+                  className={`${isPriceOpen ? "bg-[#fff]" : "bg-[#eee] "} `}
+                  onClick={() => handleopencloseoffilter("price")}
+                >
+                  price
+                </li>
+              </ul>
+            </div>
+            <div className="flex-1">
+              {isShopCatOepn && (
+                <div>
+                  <div className="space-y-4 p-2">
+                    {categoryies.map((cat, i) => (
+                      <label
+                        key={i}
+                        className="flex items-center space-x-3 cursor-pointer"
+                      >
+                        <div
+                          className={`w-5 h-5 border-2 rounded-sm flex items-center justify-center ${
+                            filters.category.includes(cat.name)
+                              ? "bg-[#2A3E65] border-[#2A3E65]"
+                              : "border-[#2A3E65]"
+                          }`}
+                          onClick={() => handleCategoryClick(cat.name)}
+                        >
+                          {/* You can add a checkmark or leave it blank */}
+                        </div>
+                        <span className="text-sm text-[#000000] font-medium">
+                          {cat.name}
+                        </span>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {isPriceOpen && (
+                <div className=" bg-white">
+                  {/* Min and Max Dropdowns */}
+                  <div className="flex flex-wrap justify-around gap-1 mb-4 pt-2">
+                    <select
+                      className="border px-2 py-1 text-[#334A78] text-sm border-[#CCD2DD]"
+                      value={minPrice}
+                      onChange={(e) => {
+                        const value = parseInt(e.target.value);
+                        if (value <= maxPrice) setMinPrice(value);
+                      }}
+                    >
+                      {priceOptions.map((price) => (
+                        <option key={price} value={price}>
+                          ₹{price === 0 ? "Min" : price}
+                        </option>
+                      ))}
+                    </select>
+
+                    <select
+                      className="border px-2 py-1 text-[#334A78] text-sm"
+                      value={maxPrice}
+                      onChange={(e) => {
+                        const value = parseInt(e.target.value);
+                        if (value >= minPrice) setMaxPrice(value);
+                      }}
+                    >
+                      {priceOptions.map((price) => (
+                        <option key={price} value={price}>
+                          ₹{price === 10000 ? "10000+" : price}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  {/* Price Range Slider */}
+                  <div className="mt-2">
+                    <input
+                      type="range"
+                      min={minPrice}
+                      max={10000}
+                      step={500}
+                      value={maxPrice}
+                      onChange={(e) => setMaxPrice(parseInt(e.target.value))}
+                      className="w-full accent-[#334A78]"
+                    />
+                    <div className="flex justify-between text-xs text-gray-600 mt-1">
+                      <span>₹{minPrice}</span>
+                      <span>₹{maxPrice}</span>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* display of no of products  */}
+          <div className="flex justify-between items-center mt-5 font-TimesNewRoman">
+            <div>
+              <h2 className="text-[#000] font-semibold text-xl tracking-[1.2px]">
+                {items?.length}
+              </h2>
+              <p className="text-[#ccc] text-sm leading-4 -tracking-[1px]  font-semibold">
+                product found
+              </p>
+            </div>
+            <div>
+              <button
+                onClick={() => setIsfilteropen(false)}
+                className="px-5 py-[10px] bg-[#334A78] text-white border border-[#212B36] font-TimesNewRoman font-semibold text-sm leading-[15px] tracking-[1.2px]"
+              >
+                Apply
+              </button>
+            </div>
           </div>
         </div>
-        {product.stockQty > 0 ? (
-          <button
-            onClick={() => handleAddToCart(product, iscarted)}
-            className="text-[#000] uppercase bg-[#FFFFFF] text-xs border border-[#ccc] px-2 py-2 rounded-sm "
-          >
-            {iscarted ? "Go to cart" : "Add to cart"}{" "}
-          </button>
-        ) : (
-          <span className="text-xs text-red-500 font-semibold">
-            Out of stock
-          </span>
-        )}
-      </div>
-    </div>
+      )}
+      {/* mobile */}
+      {isSortOpen && (
+        <div
+          className={`fixed bottom-0 left-0 w-full  z-50 bg-white border rounded-3xl  transition-transform ease-in-out duration-500 transform animate-fade-in flex flex-col justify-center ${
+            isSortOpen ? "translate-y-0 " : "-translate-y-full"
+          }`}
+        >
+          <div className="flex items-center border-b border-b-[#ccc]">
+            <button onClick={() => setIsSortOpen(false)}>
+              <MdKeyboardArrowLeft size={30} color="#304778" />{" "}
+            </button>
+            <h2 className="uppercase text-[#304778] text-sm leading-[22.4px] ">
+              Sort By
+            </h2>
+          </div>
+          <div className="space-y-4 p-2">
+            {options.map((opt, i) => (
+              <label
+                key={i}
+                className="flex items-center justify-between space-x-3 cursor-pointer"
+              >
+                <span className="text-sm text-[#000000] font-medium">
+                  {opt.option}
+                </span>
+                <div
+                  className={`w-5 h-5 border-2 rounded-full flex items-center justify-center ${
+                    filtersortby === opt.value
+                      ? "bg-[#2A3E65] border-[#2A3E65]"
+                      : "border-[#2A3E65]"
+                  }`}
+                  onClick={() => handleSortby(opt)}
+                ></div>
+              </label>
+            ))}
+          </div>
+        </div>
+      )}
+    </>
   );
 }

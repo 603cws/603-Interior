@@ -131,7 +131,7 @@ function UserProfileEdit({ setIsEditopen }) {
                 placeholder="Enter Email"
                 {...register("email", { required: true })}
                 disabled
-                className="w-full rounded-lg p-1.5 focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none border-2 border-[#CACED8] bg-gray-100 placeholder:text-[#000]/40  "
+                className="w-full cursor-not-allowed rounded-lg p-1.5 focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none border-2 border-[#CACED8] bg-gray-100 placeholder:text-[#000]/40  "
               />
             </div>
             <div className="flex-1">

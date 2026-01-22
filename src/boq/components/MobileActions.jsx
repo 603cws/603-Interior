@@ -45,7 +45,7 @@ function MobileActions({
                 handleDownload();
                 setMobileDropDown(false);
               }}
-              className="hover:px-2 hover:bg-white hover:text-[#1A3A36] mb-0 py-2 px-2 cursor-pointer border border-[#CCCCCC]"
+              className="hover:px-2 hover:bg-white font-Poppins hover:text-[#1A3A36] mb-0 py-2 px-2 cursor-pointer border border-[#CCCCCC]"
             >
               Download
             </li>

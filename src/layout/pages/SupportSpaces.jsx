@@ -15,12 +15,19 @@ const SupportSpaces = ({
   setBmsRoomSize,
 }) => {
   const { totalArea } = useBoqApp();
+
+  const valueResolver = {
+    upsRoomSize,
+    setUpsRoomSize,
+    bmsRoomSize,
+    setBmsRoomSize,
+  };
+
   const handleOtherAreaChange = (event) => {
     const value = Math.max(0, Number(event.target.value)); // Prevent negative values
     setOtherArea(value);
     updateAreas("other", value); // Update the area in the parent component
   };
-
   return (
     <div className="section px-3">
       <h3 className="section-heading bg-[#E4E7ED] shadow-sm text-md pl-2 py-1 sticky top-0 font-semibold z-10">
@@ -28,31 +35,35 @@ const SupportSpaces = ({
       </h3>
       <div className="support-spaces grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-2 3xl:grid-cols-3 gap-5 justify-items-center lg:justify-items-stretch">
         {supportSpacesData.map((space) => {
-          const sliderProps = space.slider
-            ? {
-                name: space.slider.name,
-                value: eval(space.slider.valueKey) || 0,
-                onChange: eval(space.slider.setValueKey),
-                min2: space.slider.min,
-                max2: space.slider.max,
-                step2: space.slider.step,
-                totalArea,
-                builtArea,
-                initialAreaValues,
-                type: space.type,
-                ...(space.type === "ups"
-                  ? {
-                      cabinSize: upsRoomSize,
-                      setCabinSize: setUpsRoomSize,
-                    }
-                  : space.type === "bms"
-                  ? {
-                      cabinSize: bmsRoomSize,
-                      setCabinSize: setBmsRoomSize,
-                    }
-                  : {}),
-              }
-            : null;
+          let sliderProps = null;
+          if (space.slider) {
+            const { valueKey, setValueKey } = space.slider;
+            const value = valueResolver[valueKey] ?? 0;
+            const onChange = valueResolver[setValueKey] ?? (() => {});
+            sliderProps = {
+              name: space.slider.name,
+              value,
+              onChange,
+              min2: space.slider.min,
+              max2: space.slider.max,
+              step2: space.slider.step,
+              totalArea,
+              builtArea,
+              initialAreaValues,
+              type: space.type,
+              ...(space.type === "ups"
+                ? {
+                    cabinSize: upsRoomSize,
+                    setCabinSize: setUpsRoomSize,
+                  }
+                : space.type === "bms"
+                ? {
+                    cabinSize: bmsRoomSize,
+                    setCabinSize: setBmsRoomSize,
+                  }
+                : {}),
+            };
+          }
           return (
             <LayoutCard
               key={space.type}

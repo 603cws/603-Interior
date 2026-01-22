@@ -9,10 +9,11 @@ function Transactions({ sidebarDispatch, onOrderSelect }) {
     const fetchOrders = async () => {
       setLoadingOrders(true);
       const { data: orders, error } = await supabase
-        .from("orders")
-        .select(`*, users_profiles(*)`)
+        .from("orders_table")
+        .select(`*,users_profiles(*),order_items(*,product_variants(*))`)
         .order("created_at", { ascending: false })
         .limit(7);
+
       if (error) {
         console.error(error);
         setLoadingOrders(false);
@@ -65,7 +66,7 @@ function Transactions({ sidebarDispatch, onOrderSelect }) {
           Loading transactions...
         </div>
       ) : (
-        <table className="w-full text-sm text-gray-600">
+        <table className="w-full text-xs sm:text-sm text-gray-600">
           <thead className="border-b text-[#7C7C7C]">
             <tr>
               <th className="py-2 text-left">No.</th>
@@ -75,7 +76,7 @@ function Transactions({ sidebarDispatch, onOrderSelect }) {
               <th className="py-2 text-left">Amount</th>
             </tr>
           </thead>
-          <tbody className="text-black text-sm">
+          <tbody className="text-black text-[9px] sm:text-sm">
             {ordersData?.map((t, i) => (
               <tr
                 key={i}
@@ -108,7 +109,7 @@ function Transactions({ sidebarDispatch, onOrderSelect }) {
                     {t.status}
                   </span>
                 </td>
-                <td>₹{t.finalPrice}</td>
+                <td>₹{t.final_amount}</td>
               </tr>
             ))}
           </tbody>

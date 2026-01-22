@@ -80,13 +80,25 @@ function VendorProductlist({ setVendorproductlist, selectedVendor }) {
   const handleUpdateStatus = async (product, newStatus, reason = "") => {
     try {
       if (product && product.type === "product") {
-        await supabase
-          .from("product_variants")
-          .update({
-            status: newStatus,
-            reject_reason: reason,
-          })
-          .eq("id", product.id);
+        if (newStatus !== "approved") {
+          await supabase
+            .from("product_variants")
+            .update({
+              status: newStatus,
+              reject_reason: reason,
+              defaultSubCat: null,
+              default: null,
+            })
+            .eq("id", product.id);
+        } else {
+          await supabase
+            .from("product_variants")
+            .update({
+              status: newStatus,
+              reject_reason: reason,
+            })
+            .eq("id", product.id);
+        }
         toast.success(`product ${newStatus}`);
         setRejectReason("");
       }
@@ -318,7 +330,7 @@ function VendorProductlist({ setVendorproductlist, selectedVendor }) {
       toast.error("Failed to delete product.");
       console.error("Delete error:", error);
     }
-    fetchProducts(1);
+    fetchProducts();
   };
 
   const handleAddproductclose = () => {

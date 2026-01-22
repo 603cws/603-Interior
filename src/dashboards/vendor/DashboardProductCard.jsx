@@ -62,7 +62,7 @@ function DashboardProductCard({
                 <h2 className="font-semibold text-3xl text-[#111] uppercase">
                   {product.title}
                 </h2>
-                <p className="capitalize font-thin text-[#334A78] text-xs">
+                <p className="capitalize font-thin text-[#334A78] text-xs line-clamp-4">
                   {product.details}
                 </p>
                 <div>
@@ -146,6 +146,7 @@ function DashboardProductCard({
                     </span>
                   </h5>
                 )}
+
                 <hr />
                 {product?.status && (
                   <h5 className="uppercase text-[#334A78] font-medium text-xs opacity-80">
@@ -155,6 +156,16 @@ function DashboardProductCard({
                     </span>
                   </h5>
                 )}
+                <hr />
+                {product?.default && (
+                  <h5 className="uppercase text-[#334A78] font-medium text-xs opacity-80">
+                    Default:
+                    <span className="font-bold text-[#000]">
+                      {product.default}
+                    </span>
+                  </h5>
+                )}
+
                 <hr />
               </div>
             </div>

@@ -11,6 +11,7 @@ import { useForm } from "react-hook-form";
 import { supabase } from "../../services/supabase";
 import toast from "react-hot-toast";
 import HeroSection from "../components/HeroSection";
+import { v4 as uuidv4 } from "uuid";
 
 const JobPage = () => {
   const { jobTitle } = useParams();
@@ -115,7 +116,7 @@ const JobPage = () => {
 
       {jobForm && (
         <div className="fixed inset-0 bg-[#000]/30 z-50">
-          <JobForm SetJobForm={SetJobForm} jobTitle={jobTitle} />
+          <JobForm SetJobForm={SetJobForm} jobTitle={jobTitle} job={jobdata} />
         </div>
       )}
 
@@ -126,7 +127,7 @@ const JobPage = () => {
 
 export default JobPage;
 
-function JobForm({ SetJobForm, jobTitle }) {
+function JobForm({ SetJobForm, jobTitle, job }) {
   const [resume, setResume] = useState(null);
   const [preview, setPreview] = useState(null);
   const fileInputRef = useRef(null);
@@ -183,9 +184,11 @@ function JobForm({ SetJobForm, jobTitle }) {
 
   const handleformSubmit = async (formData) => {
     try {
+      const fileUuid = uuidv4();
+      const fileName = `${formData?.Resume?.name}-${fileUuid}`;
       const { data, error: uploadError } = await supabase.storage
         .from("jobData")
-        .upload(formData?.Resume?.name, formData?.Resume);
+        .upload(fileName, formData?.Resume);
       if (uploadError) {
         if (uploadError.error === "Duplicate") {
           toast.error("this file was already uploaded");
@@ -209,6 +212,7 @@ function JobForm({ SetJobForm, jobTitle }) {
               EmailID: formData?.EmailID,
               MobNo: formData?.MobileNumber,
               ResumePath: data?.path,
+              JobID: job?.id,
             },
           ])
           .select();
@@ -261,7 +265,7 @@ function JobForm({ SetJobForm, jobTitle }) {
             type="text"
             {...register("FullName", {
               required: true,
-              maxLength: { value: 20, message: "max 20 character " },
+              maxLength: { value: 50, message: "max 50 character " },
             })}
             placeholder="John Doe"
             className="p-2 border border-[#ccc]"
@@ -281,7 +285,7 @@ function JobForm({ SetJobForm, jobTitle }) {
             placeholder="Web developer"
             {...register("Position", {
               required: true,
-              maxLength: { value: 20, message: "max 20 character " },
+              maxLength: { value: 50, message: "max 50 character " },
             })}
             value={jobTitle}
             disabled={true}
@@ -299,24 +303,37 @@ function JobForm({ SetJobForm, jobTitle }) {
               {...register("YearsOfExp", {
                 required: true,
                 min: 0,
+                max: { value: 99, message: "Max 2 digits" },
               })}
               placeholder="e.g., 2"
               className="p-2 border border-[#ccc]"
               min={0}
             />
+            {errors?.YearsOfExp && (
+              <p className="text-red-800 text-sm capitalize">
+                {errors?.YearsOfExp?.message}
+              </p>
+            )}
           </div>
           <div className="flex-1 flex flex-col space-y-3 ">
             <label htmlFor="" className="font-semibold text-black text-lg">
               Notice Period (in days)
             </label>
             <input
-              type="text"
+              type="number"
               {...register("NoticePeriod", {
                 required: true,
+                min: 0,
+                max: { value: 180, message: "Max 3 digits" },
               })}
               placeholder="e.g., 2"
               className="p-2 border border-[#ccc]"
             />
+            {errors?.NoticePeriod && (
+              <p className="text-red-800 text-sm capitalize">
+                {errors?.NoticePeriod?.message}
+              </p>
+            )}
           </div>
         </div>
 
@@ -400,7 +417,7 @@ function JobForm({ SetJobForm, jobTitle }) {
                 message: "Please enter a valid mobile number",
               },
             })}
-            placeholder="ENTER MOBILE NO"
+            placeholder="Enter mobile no."
             className="p-2 border border-[#ccc]"
           />
           {errors?.MobileNumber && (

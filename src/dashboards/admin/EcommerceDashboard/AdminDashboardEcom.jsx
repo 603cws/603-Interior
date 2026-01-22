@@ -15,10 +15,6 @@ import Clients from "../Clients";
 import { supabase } from "../../../services/supabase";
 import toast from "react-hot-toast";
 import Blogs from "./Blogs";
-import Transactions from "./Transactions";
-import StatsSection from "./StatsSection";
-import BestSellingSection from "./BestSellingSection";
-import SalesSection from "./SalesSection";
 import DashboardProductCard from "../../../dashboards/vendor/DashboardProductCard";
 import Products from "./Products";
 import { BsArchive } from "react-icons/bs";
@@ -28,6 +24,10 @@ import { IoMdSwitch } from "react-icons/io";
 import CareerDash from "./CareerDash";
 import { TbBriefcase2 } from "react-icons/tb";
 import Orders, { OrderDetails } from "../Orders";
+import EcomDashHome from "./EcomDashHome";
+import DeleteWarning from "../../components/DeleteWarning";
+import SubscripedEmail from "./SubscripedEmail";
+import { RiMailAiLine } from "react-icons/ri";
 
 function handlesidebarState(state, action) {
   switch (action.type) {
@@ -40,6 +40,7 @@ function handlesidebarState(state, action) {
         isDiscountOpen: action.payload === "Discounts",
         isBlogsOpen: action.payload === "Blogs",
         isCareerOpen: action?.payload === "Career",
+        isSubscripedEmailOpen: action?.payload === "Subscribed Email",
         currentSection: action.payload,
       };
     default:
@@ -55,20 +56,19 @@ const SECTIONS = {
   DISCOUNTS: "Discounts",
   BLOGS: "Blogs",
   CAREER: "Career",
+  SUBSCRIBEDEMAIL: "Subscribed Email",
 };
 
 function AdminDashboardEcom() {
   const logout = useLogout();
   const navigate = useNavigate();
-
   const [isExpanded, setIsExpanded] = useState(false);
-  const [query, setQuery] = useState();
   const [filteredusers, setFilteredUsers] = useState();
   const [isrefresh, setIsrefresh] = useState(false);
   const [clientBoqs, setClientBoqs] = useState(false);
   const [allusers, setAllusers] = useState();
   const [isproductRefresh, setIsProductRefresh] = useState(false);
-  const [isaddonRefresh, setIsAddonRefresh] = useState(false);
+  // const [isaddonRefresh, setIsAddonRefresh] = useState(false);
   const [rejectReasonPopup, setRejectReasonPopup] = useState(false);
   const [rejectReason, setRejectReason] = useState("");
   const [deleteWarning, setDeleteWarning] = useState(false);
@@ -102,7 +102,7 @@ function AdminDashboardEcom() {
           .delete()
           .eq("id", selectedProductview.id);
         toast.success("Product deleted successfully!");
-        setIsAddonRefresh(true);
+        // setIsAddonRefresh(true);
       }
 
       let imagePaths = [];
@@ -135,9 +135,10 @@ function AdminDashboardEcom() {
     } catch (error) {
       console.error(error);
     } finally {
-      selectedProductview.type === "product"
-        ? setIsProductRefresh(true)
-        : setIsAddonRefresh(true);
+      setIsProductRefresh(true);
+      // selectedProductview.type === "product"
+      //   ? setIsProductRefresh(true)
+      //   : setIsAddonRefresh(true);
     }
     setDeleteWarning(false);
   };
@@ -153,13 +154,25 @@ function AdminDashboardEcom() {
   const handleUpdateStatus = async (product, newStatus, reason = "") => {
     try {
       if (product && product.type === "product") {
-        await supabase
-          .from("product_variants")
-          .update({
-            status: newStatus,
-            reject_reason: reason,
-          })
-          .eq("id", product.id);
+        if (newStatus !== "approved") {
+          await supabase
+            .from("product_variants")
+            .update({
+              status: newStatus,
+              reject_reason: reason,
+              defaultSubCat: null,
+              default: null,
+            })
+            .eq("id", product.id);
+        } else {
+          await supabase
+            .from("product_variants")
+            .update({
+              status: newStatus,
+              reject_reason: reason,
+            })
+            .eq("id", product.id);
+        }
         toast.success(`product ${newStatus}`);
         setRejectReasonPopup(false);
         setRejectReason("");
@@ -173,24 +186,15 @@ function AdminDashboardEcom() {
         toast.success(`Addon ${newStatus}`);
       }
     } finally {
-      product.type === "product"
-        ? setIsProductRefresh(true)
-        : setIsAddonRefresh(true);
+      setIsProductRefresh(true);
+      // product.type === "product"
+      //   ? setIsProductRefresh(true)
+      //   : setIsAddonRefresh(true);
 
       if (productPreview) {
         setProductPreview(false);
       }
     }
-  };
-
-  const filterByMultipleFields = (query) => {
-    if (!query) {
-      setFilteredUsers(allusers);
-    }
-    const filtereduser = allusers.filter((item) =>
-      item.company_name.toLowerCase().includes(query.toLowerCase())
-    );
-    setFilteredUsers(filtereduser);
   };
 
   const getusers = async () => {
@@ -220,6 +224,7 @@ function AdminDashboardEcom() {
     isCustomerOpen: false,
     isDiscountOpen: false,
     isBlogsOpen: false,
+    isSubscripedEmailOpen: false,
 
     currentSection: "Dashboard",
   };
@@ -257,6 +262,12 @@ function AdminDashboardEcom() {
 
   const handleCarrer = () => {
     sidebarDispatch({ type: "TOGGLE_SECTION", payload: SECTIONS.CAREER });
+  };
+  const handleSubscripedEmail = () => {
+    sidebarDispatch({
+      type: "TOGGLE_SECTION",
+      payload: SECTIONS.SUBSCRIBEDEMAIL,
+    });
   };
 
   return (
@@ -331,6 +342,13 @@ function AdminDashboardEcom() {
             icon={<TbBriefcase2 />}
             text="Career"
             onClick={handleCarrer}
+            isExpanded={isExpanded}
+            currentSection={sidebarstate?.currentSection}
+          />
+          <SidebarItem
+            icon={<RiMailAiLine />}
+            text="Subscribed Email"
+            onClick={handleSubscripedEmail}
             isExpanded={isExpanded}
             currentSection={sidebarstate?.currentSection}
           />
@@ -444,6 +462,13 @@ function AdminDashboardEcom() {
                 onClick={handleCarrer}
                 setIsOpen={setIsOpen}
               />
+              <MobileMenuItem
+                icon={<RiMailAiLine />}
+                title="Subscribed Email"
+                currentSection={sidebarstate?.currentSection}
+                onClick={handleSubscripedEmail}
+                setIsOpen={setIsOpen}
+              />
 
               <MobileMenuItem
                 title={"Logout"}
@@ -479,23 +504,11 @@ function AdminDashboardEcom() {
 
         {/* dashboard */}
         {sidebarstate.dashboard && (
-          <div className="flex flex-col h-full min-h-0 overflow-y-auto overflow-x-hidden lg:border-2 border-[#334A78] rounded-lg bg-white font-lato p-4 custom-scrollbar">
-            <StatsSection allusers={allusers} />
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
-              <Transactions
-                sidebarDispatch={sidebarDispatch}
-                onOrderSelect={(order) => {
-                  setSelectedOrder(order);
-                  sidebarDispatch({
-                    type: "TOGGLE_SECTION",
-                    payload: "Orders",
-                  });
-                }}
-              />
-              <SalesSection />
-            </div>
-            <BestSellingSection
+          <div className="flex flex-col h-full min-h-0 overflow-y-auto overflow-x-hidden lg:border-2 border-[#334A78] rounded-lg bg-white font-Poppins p-4 custom-scrollbar">
+            <EcomDashHome
+              allusers={allusers}
               sidebarDispatch={sidebarDispatch}
+              setSelectedOrder={setSelectedOrder}
               handleProductPreview={handleProductPreview}
             />
           </div>
@@ -516,7 +529,6 @@ function AdminDashboardEcom() {
             setSelectedProductview={setSelectedProductview}
             setRejectReasonPopup={setRejectReasonPopup}
             setDeleteWarning={setDeleteWarning}
-            setIsAddonRefresh={setIsAddonRefresh}
             handleUpdateStatus={handleUpdateStatus}
             setRejectReason={setRejectReason}
             handleProductPreview={handleProductPreview}
@@ -526,9 +538,7 @@ function AdminDashboardEcom() {
           <div className="flex flex-col h-full min-h-0 overflow-hidden lg:border-2 lg:border-[#334A78] lg:rounded-lg bg-white">
             <Clients
               isExpanded={isExpanded}
-              filterByMultipleFields={filterByMultipleFields}
-              query={query}
-              filteredusers={filteredusers}
+              allusers={filteredusers}
               setIsrefresh={setIsrefresh}
               setClientBoqs={setClientBoqs}
               eComm={true}
@@ -551,6 +561,12 @@ function AdminDashboardEcom() {
             <CareerDash />
           </div>
         )}
+
+        {sidebarstate.isSubscripedEmailOpen && (
+          <div className="flex flex-col h-full min-h-0  lg:border-2 lg:border-[#334A78] lg:rounded-lg bg-white">
+            <SubscripedEmail />
+          </div>
+        )}
       </div>
 
       {productPreview && (
@@ -571,38 +587,11 @@ function AdminDashboardEcom() {
       )}
 
       {deleteWarning && (
-        <div className="flex justify-center items-center fixed inset-0 z-30">
-          <div className="absolute inset-0 bg-black opacity-50"></div>
-          <div className="bg-white relative py-7 px-16 md:px-20">
-            <div className="flex justify-center items-center">
-              <img
-                src="images/icons/delete-icon.png"
-                alt="delete icon"
-                className="h-12 w-12"
-              />
-            </div>
-
-            <h4 className="font-semibold my-5">
-              Do you want to delete {selectedProductview.title}?
-            </h4>
-            <div className="flex justify-between">
-              <button
-                onClick={() => {
-                  setDeleteWarning(false);
-                }}
-                className="px-5 py-2 bg-[#EEEEEE] rounded-md"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={() => handleDelete(selectedProductview)}
-                className="px-5 py-2 bg-[#B4EAEA] rounded-md"
-              >
-                Delete
-              </button>
-            </div>
-          </div>
-        </div>
+        <DeleteWarning
+          selectedProductview={selectedProductview}
+          setDeleteWarning={setDeleteWarning}
+          handleDelete={handleDelete}
+        />
       )}
 
       {rejectReasonPopup && (

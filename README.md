@@ -13,4 +13,4 @@ Supabase acts as the single backend, handling user sessions, data storage, and s
 
 ## check for error before Deployment
 
-# npm run check command
+# npm run check

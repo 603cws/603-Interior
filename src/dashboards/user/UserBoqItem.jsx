@@ -65,7 +65,7 @@ function UserBoqItem({ selectedBoq, setSelectedBoq }) {
   const { accountHolder } = useApp();
 
   const [isboqavailable, setIsboqavailable] = useState(false);
-  const [isfetchBoqDataRefresh, setisfetchBoqDataRefresh] = useState(false);
+  // const [isfetchBoqDataRefresh, setisfetchBoqDataRefresh] = useState(false); //keeping this because not sure of this usage
 
   const paginatedItems = items.slice(
     (currentPage - 1) * itemsPerPage,
@@ -223,13 +223,12 @@ function UserBoqItem({ selectedBoq, setSelectedBoq }) {
     fetchAddonsByIds();
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedBoq, isfetchBoqDataRefresh]);
+  }, [selectedBoq]);
 
   useEffect(() => {
     fetchboq();
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isfetchBoqDataRefresh]);
+  }, []);
   return (
     <div className="flex-1">
       <div className="overflow-y-auto scrollbar-hide h-[calc(100vh-95px)] rounded-3xl relative ">
@@ -494,9 +493,16 @@ function UserBoqItem({ selectedBoq, setSelectedBoq }) {
           ) : (
             <>
               {selectedBoq ? (
-                <p className="p-5 text-gray-500 text-center">
-                  No {toggle ? "products" : "addons"} found.
-                </p>
+                <div className="flex justify-center items-center">
+                  <div>
+                    <div className="max-w-sm ">
+                      <img src="/images/empty-product.png" alt="empty item" />
+                    </div>
+                    <p className="p-5 text-gray-500 text-center">
+                      No {toggle ? "products" : "addons"} found.
+                    </p>
+                  </div>
+                </div>
               ) : (
                 <p className="p-5 text-gray-500 text-center">
                   please select a boq

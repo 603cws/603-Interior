@@ -3,7 +3,7 @@ import VendorProductEdit from "../vendor/VendorProductEdit";
 import { useState } from "react";
 import ItemTable from "./ItemTable";
 
-function AdminDashItems({ mobileMenuRef }) {
+function AdminDashItems() {
   const [editProduct, setEditProduct] = useState(false);
   const [editAddon, setEditAddon] = useState(false);
   const [isaddonRefresh, setIsAddonRefresh] = useState(false);
@@ -31,7 +31,6 @@ function AdminDashItems({ mobileMenuRef }) {
           />
         ) : (
           <ItemTable
-            mobileMenuRef={mobileMenuRef}
             isaddonRefresh={isaddonRefresh}
             setIsAddonRefresh={setIsAddonRefresh}
             isproductRefresh={isproductRefresh}

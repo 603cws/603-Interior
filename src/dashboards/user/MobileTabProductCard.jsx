@@ -25,7 +25,7 @@ function MobileTabProductCard({ product, handleProductPreview }) {
             <h4 className=" ">{product?.title || "NA"}</h4>
             <span className="">Rs:{product?.price || "NA"}</span>
           </div>
-          <p className="text-xs mt-1">{product?.details || ""}</p>
+          <p className="text-xs mt-1 line-clamp-4">{product?.details || ""}</p>
         </div>
       </div>
 
@@ -49,7 +49,7 @@ function MobileTabProductCard({ product, handleProductPreview }) {
       </div>
 
       {/* 3-dot Menu */}
-      <div className="absolute right-0 bottom-0">
+      <div className="absolute right-0 top-1">
         <button
           onClick={() => handleProductPreview(product)}
           className="text-gray-500 text-xl"

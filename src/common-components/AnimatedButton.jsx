@@ -75,6 +75,7 @@ const AnimatedButton = React.forwardRef(
       children,
       ctaLabel,
       onClick,
+      isShowLoading = false,
       ...props
     },
     ref
@@ -199,14 +200,25 @@ const AnimatedButton = React.forwardRef(
           style={{ inset: shimmerSize, borderRadius }}
         />
 
-        <span
-          className={cn(
-            "relative z-10 transition-all duration-300 flex items-center justify-center",
-            textEffect === "spread" && "group-hover:tracking-wider"
-          )}
-        >
-          {isloading ? "loading" : children}
-        </span>
+        {isShowLoading ? (
+          <span
+            className={cn(
+              "relative z-10 transition-all duration-300 flex items-center justify-center",
+              textEffect === "spread" && "group-hover:tracking-wider"
+            )}
+          >
+            {children}
+          </span>
+        ) : (
+          <span
+            className={cn(
+              "relative z-10 transition-all duration-300 flex items-center justify-center",
+              textEffect === "spread" && "group-hover:tracking-wider"
+            )}
+          >
+            {isloading ? "loading" : children}
+          </span>
+        )}
       </Comp>
     );
   }

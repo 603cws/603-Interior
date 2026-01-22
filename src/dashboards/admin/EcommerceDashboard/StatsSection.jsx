@@ -11,7 +11,7 @@ function StatsSection({ allusers }) {
     async function fetchOrdersStats() {
       try {
         const { data: orders, error } = await supabase
-          .from("orders")
+          .from("orders_table")
           .select("created_at")
           .order("created_at", { ascending: false });
 

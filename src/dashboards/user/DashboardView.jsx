@@ -46,6 +46,7 @@ function DashboardView({
   boqdata,
   handledeleteBoq,
   isExpanded,
+  setSelectedBoq,
 }) {
   const [currentAreaValues, setCurrentAreaValues] = useState({});
   const [currentAreaQuantities, setCurrentAreaQuantities] = useState({});
@@ -116,13 +117,13 @@ function DashboardView({
             />
             <LayoutInfoCard
               selectedBoq={selectedBoq}
-              value={selectedBoq?.products?.length}
+              value={selectedBoq?.products?.length || 0}
               title={"Total No Product"}
               image={"/images/totalproduct.png"}
             />
             <LayoutInfoCard
               selectedBoq={selectedBoq}
-              value={selectedBoq?.boqTotalPrice}
+              value={selectedBoq?.boqTotalPrice || 0}
               title={"Total Amount"}
               image={"/images/grandtotal.png"}
               spanvalue={" INR"}
@@ -135,7 +136,9 @@ function DashboardView({
           </h3>
           <div
             className={`flex gap-2 lg:gap-3 flex-wrap justify-center ${
-              isExpanded ? "md:justify-normal" : "md:justify-between"
+              isExpanded
+                ? "md:justify-normal"
+                : "md:justify-between lg:justify-normal"
             } `}
           >
             {isboqavailable &&
@@ -146,6 +149,7 @@ function DashboardView({
                       boq={boq}
                       onDelete={handledeleteBoq}
                       selectedBoq={selectedBoq}
+                      setSelectedBoq={setSelectedBoq}
                     />
                   </div>
                 );
@@ -159,22 +163,28 @@ function DashboardView({
         </div>
       </div>
       <div className="my-6 lg:my-0 xl:w-1/3 lg:flex justify-center">
-        <div className="border-2 p-2 lg:p-4 rounded-xl  lg:h-96 flex flex-col justify-around">
-          <div className="w-[300px] h-[200px] lg:w-[370px] lg:h-[270px] sm:w-full sm:h-[270px] mb-2 lg:mb-3">
-            <ReactApexChart
-              options={options}
-              series={[{ data: series }]}
-              type="treemap"
-              width="100%"
-              height="100%"
-              className="distribution-chart"
-            />
+        {isboqavailable && (
+          <div className="border-2 p-2 lg:p-4 rounded-xl  lg:h-96 flex flex-col justify-around">
+            <div className="w-[300px] h-[200px] lg:w-[370px] lg:h-[270px] sm:w-full sm:h-[270px] mb-2 lg:mb-3">
+              {
+                <ReactApexChart
+                  options={options}
+                  series={[{ data: series }]}
+                  type="treemap"
+                  width="100%"
+                  height="100%"
+                  className="distribution-chart"
+                />
+              }
+            </div>
+            <p className="text-sm text-center">
+              This layout is of total area{" "}
+              <span className="font-bold">
+                {currentAreaValues.total} sq. ft.
+              </span>
+            </p>
           </div>
-          <p className="text-sm text-center">
-            This layout is of total area{" "}
-            <span className="font-bold">{currentAreaValues.total} sq. ft.</span>
-          </p>
-        </div>
+        )}
       </div>
     </div>
   );
@@ -203,10 +213,11 @@ function LayoutInfoCard({ selectedBoq, value, title, image, spanvalue }) {
   );
 }
 
-function GeneratedBOQCard({ boq, onDelete, selectedBoq }) {
+function GeneratedBOQCard({ boq, onDelete, selectedBoq, setSelectedBoq }) {
   return (
     <div
-      className={`w-[270px]  border border-[#CCCCCC] font-Poppins p-2 xl:p-4 rounded-lg text-[#000] ${
+      onClick={() => setSelectedBoq(boq)}
+      className={`w-[270px] cursor-pointer  border border-[#CCCCCC] font-Poppins p-2 xl:p-4 rounded-lg text-[#000] ${
         selectedBoq?.id === boq?.id
           ? "bg-gradient-to-br from-[#23445B] to-[#487BA0] text-[#fff]"
           : ""

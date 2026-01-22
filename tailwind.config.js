@@ -17,19 +17,11 @@ export default {
       },
       fontFamily: {
         Poppins: ["Poppins", "sans-serif"],
-        Raleway: ["Raleway"],
-        Convergence: ["Convergence"],
-        sans: ["DM Sans", "sans-serif"],
-        montaga: ["Montaga", "serif"],
-        montserratAlt: ["Montserrat Alternates", "sans-serif"],
-        lora: ["Lora", "serif"], // Add Lora font with a fallback
-        lato: ["Lato", "sans-serif"], // Add Lato font with a fallback
-        inter: ["Inter", "sans-serif"],
-        vampiroOne: ["Vampiro One", "cursive"],
         TimesNewRoman: ["times-new-roman", "sans-serif"],
         Georgia: ["georgia", "sans-serif"],
         Alegreya: ["Alegreya", "sans-serif"],
         segoe: ["Segoe UI", "sans-serif"],
+        inter: ["Inter", "sans-serif"],
       },
       colors: {
         customYellow: "#fff9c9",

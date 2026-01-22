@@ -2,15 +2,12 @@ import { useState } from "react";
 import { FaBuilding } from "react-icons/fa";
 import { MdDeleteOutline } from "react-icons/md";
 import { adminsupabase } from "../../services/supabase";
-import { IoIosSearch } from "react-icons/io";
 import { useApp } from "../../Context/Context";
 import PagInationNav from "../../common-components/PagInationNav";
 
 function Clients({
   isExpanded,
-  filterByMultipleFields,
-  filteredusers,
-  query,
+  allusers,
   setIsrefresh,
   setClientBoqs,
   eComm = false,
@@ -19,17 +16,30 @@ function Clients({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
   const [selectedindex, setSelectedindex] = useState();
-  const [showSearch, setShowSearch] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
+  const [filteredusers, setFilteredUsers] = useState(allusers);
+  const [query, setQuery] = useState("");
 
   const { setSelectedClient } = useApp();
+
+  const filterByMultipleFields = (query) => {
+    if (!query) {
+      setFilteredUsers(allusers);
+    }
+    const filtereduser = allusers.filter(
+      (item) =>
+        item?.company_name?.toLowerCase().includes(query?.toLowerCase()) ||
+        item?.email?.toLowerCase().includes(query?.toLowerCase()),
+    );
+    setFilteredUsers(filtereduser);
+  };
 
   const itemperPage = 12;
   const indexoflastClient = currentPage * itemperPage;
   const indexofFirstClient = indexoflastClient - itemperPage;
   const currentClients = filteredusers.slice(
     indexofFirstClient,
-    indexoflastClient
+    indexoflastClient,
   );
 
   const totalPages = Math.ceil(filteredusers.length / itemperPage);
@@ -64,6 +74,13 @@ function Clients({
     setSelectedClient(user);
   };
 
+  if (!allusers)
+    return (
+      <div>
+        <p>loading ....</p>
+      </div>
+    );
+
   return (
     <div className="flex flex-col h-full min-h-0 overflow-hidden lg:border-2 lg:border-[#334A78] lg:rounded-lg bg-white">
       <div className="w-full flex flex-col overflow-y-auto scrollbar-hide h-[calc(100vh-110px)] px-3">
@@ -71,19 +88,14 @@ function Clients({
           <div className="flex justify-between items-center px-4 py-2 border-b-2 border-b-gray-400">
             <h3 className="capitalize font-semibold text-xl">Client List</h3>
             <div className="flex-1 md:w-1/2 md:flex-none flex flex-row-reverse gap-2">
-              <button
-                onClick={() => setShowSearch(!showSearch)}
-                className="py-1.5 px-2 flex justify-center items-center border rounded"
-              >
-                <IoIosSearch size={20} color="#374A75" />
-              </button>
               <input
                 type="text"
-                className={`w-full rounded-md px-2 py-1 outline-none border ${
-                  showSearch ? "block" : "hidden"
-                }`}
-                placeholder="......search by company name"
-                onChange={(e) => filterByMultipleFields(e.target.value)}
+                className="w-full rounded-md px-2 py-1.5 outline-none border text-sm"
+                placeholder="......search by company name or email"
+                onChange={(e) => {
+                  setQuery(e.target.value);
+                  filterByMultipleFields(e.target.value);
+                }}
                 value={query}
               />
             </div>

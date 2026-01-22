@@ -1,5 +1,5 @@
 import { FaInstagram } from "react-icons/fa";
-import { RiTwitterXLine } from "react-icons/ri";
+// import { RiTwitterXLine } from "react-icons/ri";
 import { FiFacebook, FiLinkedin } from "react-icons/fi";
 import { supabase } from "../services/supabase";
 
@@ -233,8 +233,9 @@ function Footer() {
 
           <div className="flex gap-4 mt-2 lg:mt-0">
             <a
-              href=" https://www.instagram.com/603.interiors/"
+              href="https://www.instagram.com/workved_interiors?igsh=MWFxcTJmZWJybXRvcg=="
               target="_blank"
+              rel="noreferrer"
               className="cursor-pointer flex justify-center items-center w-9 h-9 border border-[#fff]/40 hover:bg-[#fff]/40 p-0.5"
             >
               <FaInstagram size={15} />
@@ -242,16 +243,22 @@ function Footer() {
             <a
               href=" https://www.facebook.com/profile.php?id=61561253712041"
               target="_blank"
+              rel="noreferrer"
               className="cursor-pointer flex justify-center items-center w-9 h-9 border border-[#fff]/40 hover:bg-[#fff]/40 p-0.5"
             >
               <FiFacebook size={15} />
             </a>
-            <span className="cursor-pointer flex justify-center items-center w-9 h-9 border border-[#fff]/40 hover:bg-[#fff]/40 p-0.5">
+            {/* <span className="cursor-pointer flex justify-center items-center w-9 h-9 border border-[#fff]/40 hover:bg-[#fff]/40 p-0.5">
               <RiTwitterXLine size={15} />
-            </span>
-            <span className="cursor-pointer flex justify-center items-center w-9 h-9 border border-[#fff]/40 hover:bg-[#fff]/40 p-0.5">
+            </span> */}
+            <a
+              href="https://www.linkedin.com/company/workved-interiors/"
+              target="_blank"
+              rel="noreferrer"
+              className="cursor-pointer flex justify-center items-center w-9 h-9 border border-[#fff]/40 hover:bg-[#fff]/40 p-0.5"
+            >
               <FiLinkedin size={15} />
-            </span>
+            </a>
           </div>
         </div>
       </div>

@@ -9,6 +9,7 @@ import "swiper/css/pagination";
 import Footer from "../../common-components/Footer";
 import ContactUsPopup from "../../landing/components/ContactUsPopup";
 import CategorySvg from "../../common-components/CategorySvg";
+import { HiOutlineArrowSmRight } from "react-icons/hi";
 
 const TOP_OFFERS = [
   {
@@ -40,18 +41,38 @@ const BOTTOM_OFFERS = [
 const heroSlides = [
   {
     title: "Furniture that mirrors your style",
-    bg: "/images/brands/brands-bg.jpeg",
-    link: "/shop",
+    bg: "/images/brands/furniture-hero.png",
+    category: "furniture",
   },
   {
-    // title: "Flooring that shapes your space",
-    bg: "/images/brands/daikinBrand.png",
-    link: "/flooring",
+    title: "Comfort engineered for modern workplaces",
+    bg: "/images/brands/hvac-hero.png",
+    category: "hvac",
   },
   {
-    // title: "Flooring that shapes your space",
-    bg: "/images/brands/welspunbrand2.png",
-    link: "/flooring",
+    title: "Lighting that sets the tone for productivity",
+    bg: "/images/brands/light-hero.png",
+    category: "light",
+  },
+  {
+    title: "Flooring that defines luxury underfoot",
+    bg: "/images/brands/flooring-hero.png",
+    category: "flooring",
+  },
+  {
+    title: "Intelligent solutions for smarter offices",
+    bg: "/images/brands/SS-hero.png",
+    category: "smart solutions",
+  },
+  {
+    title: "Colors that shape the character of your office",
+    bg: "/images/brands/paint-hero.png",
+    category: "paint",
+  },
+  {
+    title: "Luxury finishes crafted for refined offices",
+    bg: "/images/brands/luxury-hero.png",
+    category: "lux",
   },
 ];
 
@@ -145,22 +166,22 @@ const featuredBrands = [
 
 const brandImages = {
   Furniture: [
-    { name: "furniture", image: "/images/brands/Furniture/Featherlite.png" },
-    { name: "furniture", image: "/images/brands/Furniture/godrej.webp" },
-    { name: "furniture", image: "/images/brands/Furniture/hni.jpg" },
+    { name: "featherlite", image: "/images/brands/Furniture/Featherlite.png" },
+    { name: "godrej", image: "/images/brands/Furniture/godrej.webp" },
+    { name: "hni", image: "/images/brands/Furniture/hni.jpg" },
     {
-      name: "furniture",
+      name: "spacewood",
       image: "/images/brands/Furniture/Spacewood.png",
     },
-    { name: "furniture", image: "/images/brands/Furniture/Wipro.svg" },
+    { name: "wipro", image: "/images/brands/Furniture/Wipro.svg" },
   ],
   Lighting: [
-    { name: "lighting", image: "/images/brands/Lighting/Havells.svg" },
+    { name: "havells", image: "/images/brands/Lighting/Havells.svg" },
     { name: "lighting", image: "/images/brands/Lighting/Jaquar.svg" },
     { name: "lighting", image: "/images/brands/Lighting/Panasonic.svg" },
-    { name: "lighting", image: "/images/brands/Lighting/Philips.svg" },
-    { name: "lighting", image: "/images/brands/Lighting/Wipro.svg" },
-    { name: "lighting", image: "/images/brands/Lighting/Syska.png" },
+    { name: "philips", image: "/images/brands/Lighting/Philips.svg" },
+    { name: "wiproLight", image: "/images/brands/Lighting/Wipro.svg" },
+    { name: "syska", image: "/images/brands/Lighting/Syska.png" },
   ],
   Paint: [
     { name: "#", image: "/images/brands/Paint/asian-paints.png" },
@@ -172,28 +193,31 @@ const brandImages = {
     { name: "#", image: "/images/brands/Paint/nippon.svg" },
   ],
   HVAC: [
-    { name: "#", image: "/images/brands/HVAC/Blue_Star.png" },
+    { name: "bluestar", image: "/images/brands/HVAC/Blue_Star.png" },
     { name: "daikin", image: "/images/brands/HVAC/DAIKIN.svg" },
     { name: "lg", image: "/images/brands/HVAC/LG.svg" },
     { name: "#", image: "/images/brands/HVAC/Carrier.svg" },
-    { name: "#", image: "/images/brands/HVAC/Mitsubishi.svg" },
-    { name: "#", image: "/images/brands/HVAC/Voltas.png" },
+    { name: "mitsubishi", image: "/images/brands/HVAC/Mitsubishi.svg" },
+    { name: "voltas", image: "/images/brands/HVAC/Voltas.png" },
   ],
   SmartSolutions: [
-    { name: "#", image: "/images/brands/SmartSolutions/Cisco.svg" },
+    { name: "cisco", image: "/images/brands/SmartSolutions/Cisco.svg" },
     { name: "dlink", image: "/images/brands/SmartSolutions/D-Link.svg" },
-    { name: "#", image: "/images/brands/SmartSolutions/honeywell.svg" },
-    { name: "#", image: "/images/brands/SmartSolutions/Netgear.svg" },
-    { name: "#", image: "/images/brands/SmartSolutions/Schneider.svg" },
+    { name: "honeywell", image: "/images/brands/SmartSolutions/honeywell.svg" },
+    { name: "netgear", image: "/images/brands/SmartSolutions/Netgear.svg" },
+    {
+      name: "schneiderElectric",
+      image: "/images/brands/SmartSolutions/Schneider.svg",
+    },
   ],
   Flooring: [
-    { name: "#", image: "/images/brands/Flooring/Kajaria.png" },
-    { name: "#", image: "/images/brands/Flooring/johnson.png" },
+    { name: "kajaria", image: "/images/brands/Flooring/Kajaria.png" },
+    { name: "johnson", image: "/images/brands/Flooring/johnson.png" },
     {
-      name: "#",
+      name: "shaw",
       image: "/images/brands/Flooring/Shaw_Industries.svg",
     },
-    { name: "#", image: "/images/brands/Flooring/Somany.png" },
+    { name: "somany", image: "/images/brands/Flooring/Somany.png" },
     { name: "welspun", image: "/images/brands/Flooring/welspun.png" },
   ],
   Lux: [
@@ -237,10 +261,19 @@ function BrandsOverview() {
                 style={{ backgroundImage: `url(${slide.bg})` }}
               >
                 <div className="px-3 w-full lg:container mx-auto">
-                  <div className="pl-5 md:pl-10 lg:pl-20 text-[#000] space-y-8">
+                  <div className="pl-5 md:pl-10 lg:pl-20 text-[#fff] space-y-8 bg-[#000]/30 w-fit py-2">
                     <h1 className="text-4xl md:text-6xl font-bold max-w-xl">
                       {slide.title}
                     </h1>
+                    <button
+                      onClick={() =>
+                        navigate(`/shop/?category=${slide.category}`)
+                      }
+                      className="capitalize font-bold text-lg md:text-xl text-[#fff] rounded flex items-center gap-2 px-4 py-2 hover:bg-[#fff] hover:text-[#334A78] border border-[#fff] transition-colors duration-300 ease-in-out"
+                    >
+                      <span>Explore More</span>
+                      <HiOutlineArrowSmRight />
+                    </button>
                   </div>
                 </div>
               </div>

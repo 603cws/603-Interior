@@ -17,3 +17,18 @@ export const fadeInVariant = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.0, ease: "easeOut" } },
   exit: { opacity: 0, y: 0, transition: { duration: 0.3, ease: "easeInOut" } },
 };
+export const animations = {
+  fadeInLeft: {
+    hidden: { opacity: 0, x: -50 },
+    visible: {
+      opacity: 1,
+      x: 0,
+      transition: { duration: 0.0, ease: "easeOut" },
+    },
+    exit: {
+      opacity: 0,
+      x: 50,
+      transition: { duration: 0.3, ease: "easeInOut" },
+    },
+  },
+};

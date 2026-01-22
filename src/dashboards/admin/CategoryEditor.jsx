@@ -76,6 +76,10 @@ export default function CategoryEditor() {
           Category Editor
         </h1>
 
+        <p className="mt-6 text-sm text-[#3D194F]">
+          Note: Changes are live. Change with caution!
+        </p>
+
         <div className="mb-6 flex justify-end">
           <button
             onClick={handleAddCategory}
@@ -146,10 +150,6 @@ export default function CategoryEditor() {
             </div>
           </div>
         ))}
-
-        <p className="mt-6 text-sm text-[#3D194F]">
-          Note: Changes are live. Change with caution!
-        </p>
       </div>
     </div>
   );

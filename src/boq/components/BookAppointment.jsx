@@ -3,7 +3,6 @@ import "react-calendar/dist/Calendar.css";
 import { SlCalender } from "react-icons/sl";
 import { PiWarningCircleFill } from "react-icons/pi";
 import "../../styles/calender.css";
-import axios from "axios";
 import toast from "react-hot-toast";
 import { supabase } from "../../services/supabase";
 
@@ -26,11 +25,6 @@ const times = [
   "07:00 pm",
   "08:00 pm",
 ];
-
-const clienttemplateID = import.meta.env.VITE_CLIENT_TEMPLATE_ID;
-const adminTemplateID = import.meta.env.VITE_ADMIN_TEMPLATE_ID;
-const serviceid = import.meta.env.VITE_BOOKING_SERVICE_ID;
-const your_public_key = import.meta.env.VITE_BOOKING_EMAIL_PUBLIC;
 function BookAppointment({ onClose, isdashboardbooking = false }) {
   const [value, onChange] = useState(new Date());
   const [selectedTIme, setSelectedTime] = useState();
@@ -71,46 +65,39 @@ function BookAppointment({ onClose, isdashboardbooking = false }) {
 
     try {
       if (selectedTIme) {
-        const data = {
-          service_id: serviceid,
-          template_id: clienttemplateID,
-          user_id: your_public_key,
-          template_params: {
-            our_companyname: "Workved Interiors",
-            username: accountHolder.companyName,
-            date: formattedDate,
-            time: selectedTIme,
-            to_email: accountHolder.email,
-          },
-        };
-        const Admindata = {
-          service_id: serviceid,
-          template_id: adminTemplateID,
-          user_id: your_public_key,
-          template_params: {
-            our_companyname: "Workved Interiors",
-            companyname: accountHolder.companyName,
-            date: formattedDate,
-            time: selectedTIme,
-            user_email: accountHolder.email,
-            user_phoneno: accountHolder.phone,
-          },
-        };
-        await axios.post("https://api.emailjs.com/api/v1.0/email/send", data, {
-          headers: { "Content-Type": "application/json" },
-        });
-        await axios.post(
-          "https://api.emailjs.com/api/v1.0/email/send",
-          Admindata,
-          {
-            headers: { "Content-Type": "application/json" },
-          }
-        );
-
         toast.success("we will shortly reach you");
         setIsappointmentbooked(true);
         saveBookingDatainDB(formattedDate, weekday, endtime, newDate);
         CheckThebookingOnSameDateAndGetTimes(value);
+        await fetch(
+          "https://bwxzfwsoxwtzhjbzbdzs.supabase.co/functions/v1/BookAppointmentEmailClient",
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              companyName: accountHolder.companyName,
+              date: formattedDate,
+              time: selectedTIme,
+              email: accountHolder.email,
+            }),
+          }
+        );
+        // admin email
+        await fetch(
+          "https://bwxzfwsoxwtzhjbzbdzs.supabase.co/functions/v1/BookAppointmentEmailAdmin",
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              email: "workvedbusinesscentre@gmail.com",
+              companyName: accountHolder.companyName,
+              date: formattedDate,
+              time: selectedTIme,
+              userEmail: accountHolder.email,
+              phoneNo: accountHolder?.phone,
+            }),
+          }
+        );
       } else {
         toast.error("please select the time");
       }
@@ -174,15 +161,13 @@ function BookAppointment({ onClose, isdashboardbooking = false }) {
   return (
     <div
       className={`${
-        !isdashboardbooking
-          ? "md:fixed md:inset-0  z-20 bg-black bg-opacity-80"
-          : ""
+        !isdashboardbooking ? "fixed inset-0  z-20 bg-black bg-opacity-80" : ""
       } font-Poppins flex justify-center items-center`}
     >
       <div
         className={`${
           !isdashboardbooking
-            ? "max-w-sm md:max-w-4xl rounded-2xl border bg-[#fff] p-5 relative  overflow-auto"
+            ? "max-w-sm md:max-w-4xl rounded-2xl border bg-[#fff] p-5 relative  overflow-auto h-[85vh] md:h-auto"
             : "w-full "
         }`}
       >
@@ -201,7 +186,7 @@ function BookAppointment({ onClose, isdashboardbooking = false }) {
         <div
           className={`flex justify-center  items-center ${
             isdashboardbooking &&
-            "overflow-auto md:h-[85vh] lg:h-[80vh] custom-scrollbar"
+            "overflow-auto h-[85vh] lg:h-[80vh] gradient-scrollbar pt-56 sm:pt-10 md:pt-0"
           }`}
         >
           {!isappointmentbooked ? (

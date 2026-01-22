@@ -10,6 +10,7 @@ function Blogs() {
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedBlogs, setSelectedBlogs] = useState([]);
   const [editBlog, setEditBlog] = useState(null);
+  const [refreshBlogs, setRefreshBlogs] = useState(false);
   const blogsPerPage = 10;
 
   const indexOfLastBlog = currentPage * blogsPerPage;
@@ -25,7 +26,7 @@ function Blogs() {
 
   useEffect(() => {
     fetchBlogs();
-  }, []);
+  }, [refreshBlogs]);
 
   const fetchBlogs = async () => {
     try {
@@ -44,7 +45,7 @@ function Blogs() {
     setSelectedBlogs((prev) =>
       prev.includes(blogId)
         ? prev.filter((id) => id !== blogId)
-        : [...prev, blogId]
+        : [...prev, blogId],
     );
   };
 
@@ -95,7 +96,12 @@ function Blogs() {
   return (
     <>
       {newBlog ? (
-        <NewBlog onClose={() => setNewBlog(false)} />
+        <NewBlog
+          onClose={() => {
+            setNewBlog(false);
+            setRefreshBlogs((prev) => !prev);
+          }}
+        />
       ) : editBlog ? (
         <EditBlog
           blog={editBlog}

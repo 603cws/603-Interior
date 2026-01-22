@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 function DashboardInterface() {
   return (
-    <div className="h-screen flex flex-col md:flex-row justify-center gap-10 items-center  border-[20px] border-[#334A78] ">
+    <div className="h-screen flex flex-col md:flex-row justify-center gap-10 items-center border-[20px] border-[#334A78]">
       <Item
         title={"Ecommerce"}
         img1={"images/pantry-white.png"}
@@ -30,7 +30,7 @@ function Item({ title, img1, img2, navigateTo }) {
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       onClick={() => navigate(navigateTo)}
-      className="flex flex-col border border-[#ccc] justify-center items-center gap-5 p-10 shadow-lg font-bold rounded-xl cursor-pointer hover:bg-[#374A75] hover:text-white hover:scale-110 transition-transform duration-200 ease-in-out"
+      className="flex flex-col border border-[#ccc] justify-center items-center gap-5 p-10 shadow-lg font-bold rounded-xl cursor-pointer hover:bg-[#374A75] hover:text-white hover:scale-110 transition-transform duration-200 ease-in-out font-Poppins"
     >
       <img src={isHovered ? img1 : img2} alt={title} className="w-28" />
       <h2 className="text-lg">{title}</h2>

@@ -6,50 +6,45 @@ function BestSellingSection({ sidebarDispatch, handleProductPreview }) {
   const [variantsData, setVariantsData] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
+  const fetchData = async () => {
+    setLoading(true);
+    try {
+      const { data, error } = await supabase
+        .from("order_items")
+        .select("quantity,product:product_id(*)");
+      if (error) throw new Error("Error while fetching order products", error);
 
-      const { data: variants, error: variantError } = await supabase
-        .from("product_variants")
-        .select("*,products(*)")
-        .order("created_at", { ascending: false })
-        .neq("productDisplayType", "boq");
-      if (variantError) {
-        console.error(variantError);
-        setVariantsData([]);
-        setLoading(false);
-        return;
-      }
-
-      const { data: orders, error: orderError } = await supabase
-        .from("orders")
-        .select("products");
-
-      if (orderError) {
-        console.error(orderError);
-        setVariantsData([]);
-        setLoading(false);
-        return;
-      }
-      const variantsWithCounts = variants.map((variant) => {
-        const totalOrders = orders.filter((order) =>
-          order.products?.some((p) => p.id === variant.id)
-        ).length;
-
-        return { ...variant, count: totalOrders };
+      const map = {};
+      data.forEach((item) => {
+        const { product, quantity } = item;
+        if (!product) return;
+        const id = product.id;
+        if (!map[id]) {
+          map[id] = {
+            ...product,
+            count: quantity,
+          };
+        } else {
+          map[id].count = map[id].count + quantity;
+        }
       });
 
-      const sortedVariants = variantsWithCounts.sort(
+      const bestSellingProducts = Object.values(map).sort(
         (a, b) => b.count - a.count
       );
 
-      setVariantsData(sortedVariants);
+      setVariantsData(bestSellingProducts.slice(0, 5));
+    } catch (error) {
+      console.error(error);
+    } finally {
       setLoading(false);
-    };
+    }
+  };
 
+  useEffect(() => {
     fetchData();
   }, []);
+
   return (
     <div className="border border-gray-200 rounded-lg shadow-sm p-4">
       <div className="flex justify-between items-center mb-3">
@@ -58,8 +53,8 @@ function BestSellingSection({ sidebarDispatch, handleProductPreview }) {
         </h2>
       </div>
 
-      <table className="w-full text-sm text-[#23272E]">
-        <thead className="border-b bg-[#E7EAF8] text-[#6A717F] font-sans font-medium text-[13px]">
+      <table className="w-full text-[#23272E]">
+        <thead className="border-b bg-[#E7EAF8] text-[#6A717F] font-Poppins font-medium text-xs sm:text-sm">
           <tr>
             <th className="bg-[#E7EAF8] rounded-l-lg pl-4 py-3 text-[#6A717F] text-left">
               PRODUCT
@@ -75,7 +70,7 @@ function BestSellingSection({ sidebarDispatch, handleProductPreview }) {
             </th>
           </tr>
         </thead>
-        <tbody>
+        <tbody className="text-[10px] sm:text-sm">
           {loading ? (
             <tr>
               <td colSpan={5} className="py-4 text-center text-[#6A717F]">
@@ -83,10 +78,10 @@ function BestSellingSection({ sidebarDispatch, handleProductPreview }) {
               </td>
             </tr>
           ) : (
-            variantsData.slice(0, 5).map((p, i) => (
+            variantsData.map((p, i) => (
               <tr
                 key={i}
-                className="border-b last:border-none font-lato hover:bg-gray-100 cursor-pointer"
+                className="border-b last:border-none font-Poppins hover:bg-gray-100 cursor-pointer"
                 onClick={() => {
                   handleProductPreview(p);
                 }}

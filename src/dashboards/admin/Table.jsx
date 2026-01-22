@@ -40,7 +40,6 @@ function Table({
   setSelectedAddon,
   setEditProduct,
   setEditAddon,
-  mobileMenuRef,
   multipleDeleteWaring,
   setMultipleDeleteWaring,
   filteredAddons,
@@ -59,7 +58,6 @@ function Table({
   const [rejectReason, setRejectReason] = useState("");
   const [selectedProductview, setSelectedProductview] = useState();
   const [productPreview, setProductPreview] = useState(false);
-  const [isOpen, setIsOpen] = useState(false);
   const [sortField, setSortField] = useState(""); // e.g. "price" or "title" etc.
   const [sortOrder, setSortOrder] = useState("asc"); // "asc" or "desc"
   const [openMenuId, setOpenMenuId] = useState(null);
@@ -136,22 +134,6 @@ function Table({
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (
-        mobileMenuRef.current &&
-        !mobileMenuRef.current.contains(event.target)
-      ) {
-        setIsOpen(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isOpen]);
-
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (
         openMenuId !== null &&
         (menuRef.current[openMenuId]?.contains(event.target) ||
           buttonRef.current[openMenuId]?.contains(event.target))
@@ -170,13 +152,13 @@ function Table({
   const totalPages = Math.ceil(items.length / itemsPerPage);
   const paginatedItems = sortedSource.slice(
     (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
+    currentPage * itemsPerPage,
   );
   const handleCheckboxChange = (blogId) => {
     setSelectedItemForDelete((prev) =>
       prev.includes(blogId)
         ? prev.filter((id) => id !== blogId)
-        : [...prev, blogId]
+        : [...prev, blogId],
     );
   };
 
@@ -249,7 +231,7 @@ function Table({
       if (selectedProductview.additional_images) {
         try {
           const parsedAdditionalImages = JSON.parse(
-            selectedProductview.additional_images
+            selectedProductview.additional_images,
           );
           if (Array.isArray(parsedAdditionalImages)) {
             imagePaths = imagePaths.concat(parsedAdditionalImages);
@@ -293,7 +275,7 @@ function Table({
 
     // Filter the items you want to delete
     const filteredItems = items.filter((item) =>
-      selectedProducts?.includes(item.id)
+      selectedProducts?.includes(item.id),
     );
 
     try {
@@ -357,13 +339,25 @@ function Table({
   const handleUpdateStatus = async (product, newStatus, reason = "") => {
     try {
       if (product && product.type === "product") {
-        await supabase
-          .from("product_variants")
-          .update({
-            status: newStatus,
-            reject_reason: reason,
-          })
-          .eq("id", product.id);
+        if (newStatus !== "approved") {
+          await supabase
+            .from("product_variants")
+            .update({
+              status: newStatus,
+              reject_reason: reason,
+              defaultSubCat: null,
+              default: null,
+            })
+            .eq("id", product.id);
+        } else {
+          await supabase
+            .from("product_variants")
+            .update({
+              status: newStatus,
+              reject_reason: reason,
+            })
+            .eq("id", product.id);
+        }
         toast.success(`product ${newStatus}`);
         setRejectReasonPopup(false);
         setRejectReason("");
@@ -390,7 +384,7 @@ function Table({
     <>
       {isloading ? (
         <Spinner />
-      ) : items.length > 0 ? (
+      ) : items?.length > 0 ? (
         <>
           <section className="hidden lg:block h-[72%] font-Poppins overflow-hidden">
             <div

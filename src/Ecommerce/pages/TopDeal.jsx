@@ -3,9 +3,10 @@ import MobileHeader from "../../common-components/MobileHeader";
 import BottomTabs from "../components/BottomTabs";
 
 import { useState, useEffect } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import { supabase } from "../../services/supabase";
 import SpinnerFullPage from "../../common-components/SpinnerFullPage";
+import { TopDealCard } from "../components/Card";
 
 function TopDeal() {
   const [products, setProducts] = useState([]);
@@ -87,7 +88,7 @@ function TopDeal() {
       {!productsloading ? (
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 md:gap-6 lg:container lg:mx-auto mb-6 px-3 lg:px-12">
           {products.map((product) => (
-            <Card
+            <TopDealCard
               image={product.image}
               title={product?.title}
               subtitle={product?.details}
@@ -109,27 +110,3 @@ function TopDeal() {
 }
 
 export default TopDeal;
-
-function Card({ image, title, subtitle, productID, category }) {
-  const naviagte = useNavigate();
-  return (
-    <div className="max-w-sm shadow-sm border border-[#CCCCCC] p-2">
-      <img
-        src={image}
-        alt={title}
-        className="w-full h-48 object-contain cursor-pointer"
-        onClick={() =>
-          naviagte(`/productview/${productID}`, {
-            state: { from: `products/topdeal/?category=${category}` },
-          })
-        }
-      />
-      <h3 className="text-sm lg:text-xl leading-[24px] tracking-[0.96px] font-medium mt-2 mb-1 lg:mb-2 font-Poppins ml-2">
-        {title}
-      </h3>
-      <p className="text-[#378DDB] leading-[24px] tracking-[0.96px] font-medium font-Poppins text-sm line-clamp-2  ml-2">
-        {subtitle}
-      </p>
-    </div>
-  );
-}

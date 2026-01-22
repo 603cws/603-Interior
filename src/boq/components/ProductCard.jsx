@@ -7,11 +7,12 @@ import { PiStarFourFill } from "react-icons/pi";
 import { RiVipCrown2Fill } from "react-icons/ri";
 import { HiMiniCheckBadge, HiOutlineBarsArrowDown } from "react-icons/hi2";
 import PagInationNav from "../../common-components/PagInationNav";
-import ProductSkeleton, { animations } from "./ProductSkeleton";
+import ProductSkeleton from "./ProductSkeleton";
 import FilterPanel from "./FilterPanel";
 import SortPanel, { options } from "./SortPanel";
 import { useBoqApp } from "../../Context/BoqContext";
 import { useApp } from "../../Context/Context";
+import { animations } from "../constants/animations";
 
 function ProductCard({
   products,
@@ -201,7 +202,7 @@ function ProductCard({
 
   return (
     <div>
-      <div className="product-card grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 3xl:grid-cols-6 gap-6 pb-8 pt-8 lg:pt-3 relative">
+      <div className="product-card grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 3xl:grid-cols-6 gap-6 pb-8 pt-8 lg:pt-3 relative font-Poppins">
         <div className="lg:hidden absolute flex justify-between items-center w-full">
           <button
             className="border border-black px-3 py-1.5 flex items-center gap-2 text-sm"

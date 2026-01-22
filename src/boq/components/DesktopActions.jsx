@@ -39,7 +39,7 @@ function DesktopActions({
       <div className="flex items-center downloadB pl-2">
         <AnimatedButton
           onClick={handleDownload}
-          className="!bg-[#3A5D7B] text-white capitalize font-Georgia font-semibold tracking-wider !px-6 !py-4 transition-shadow"
+          className="!bg-[#3A5D7B] text-white capitalize font-Poppins font-semibold tracking-wider !px-6 !py-4 transition-shadow"
           variant="default"
           size="sm"
           textEffect="shimmer"
@@ -52,6 +52,7 @@ function DesktopActions({
           borderRadius="10px"
           background="rgba(48, 71, 120, 1)"
           hovereBackground="linear-gradient(90deg,rgba(85,132,182,1) 0%,  rgba(117,162,190,1) 100%)"
+          isShowLoading={true}
         >
           {isDownloading ? "Downloading..." : "Download"}
         </AnimatedButton>

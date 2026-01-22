@@ -74,7 +74,7 @@ function ContactUsPopup({ onClose }) {
   };
   return (
     <>
-      <div className="fixed inset-0 flex justify-center items-center bg-[#000]/30 z-20">
+      <div className="fixed inset-0 flex justify-center items-center bg-[#000]/30 z-50">
         <div className="max-w-sm md:max-w-xl lg:max-w-3xl 2xl:max-w-4xl w-full mx-2 sm:mx-0 flex bg-[#fff] font-Poppins relative xl:max-h-[90vh] overflow-auto gradient-scrollbar">
           <div className="flex-1 hidden xl:block sticky top-0 left-0">
             <img

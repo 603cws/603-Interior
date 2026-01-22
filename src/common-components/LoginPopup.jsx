@@ -163,7 +163,7 @@ export default function LoginPopup({ onClose, product }) {
   };
 
   return (
-    <div className="fixed inset-0 bg-[#000]/5 flex justify-center items-center z-10">
+    <div className="fixed inset-0 bg-[#000]/25 flex justify-center items-center z-10 font-TimesNewRoman">
       <div className="max-w-3xl lg:max-w-4xl w-full relative flex justify-center items-center">
         <div className="absolute right-0 md:right-7 lg:right-10 top-0">
           <button className="text-xl md:text-[#fff]" onClick={onClose}>

@@ -5,22 +5,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { RiVipCrown2Fill } from "react-icons/ri";
 import { baseImageUrl } from "../../utils/HelperConstant";
-
-const animations = {
-  fadeInLeft: {
-    hidden: { opacity: 0, x: -50 },
-    visible: {
-      opacity: 1,
-      x: 0,
-      transition: { duration: 0.0, ease: "easeOut" },
-    },
-    exit: {
-      opacity: 0,
-      x: 50,
-      transition: { duration: 0.3, ease: "easeInOut" },
-    },
-  },
-};
+import { animations } from "../constants/animations";
 
 export default function YouMayAlsoLike({
   products,

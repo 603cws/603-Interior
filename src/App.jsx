@@ -6,12 +6,16 @@ import { useApp } from "./Context/Context";
 import PrivateRoute from "./utils/PrivateRoute";
 import ScrollToTop from "./common-components/ScrollToTop";
 import BrandRouter from "./pages/Brands/BrandRouter";
+import DynamicTitle from "./common-components/DynamicTitle";
+import OurWork from "./landing/pages/OurWork";
 const Contactus = lazy(() => import("./landing/pages/Contactus"));
 const AboutUs = lazy(() => import("./landing/pages/AboutUs"));
 const Login = lazy(() => import("./pages/Login"));
 const BlogDetail = lazy(() => import("./landing/pages/BlogDetail"));
 const Dashboard = lazy(() => import("./dashboards/user/Dashboard"));
-const BrandDLink = lazy(() => import("./pages/Brands/BrandDLink"));
+const BrandDLink = lazy(() =>
+  import("./pages/Brands/SmartSolutions/BrandDLink")
+);
 const DashboardInterface = lazy(() =>
   import("./dashboards/admin/DashboardInterface")
 );
@@ -24,7 +28,6 @@ const OrderConfirm = lazy(() => import("./Ecommerce/components/OrderConfirm"));
 const AdminDashboardEcom = lazy(() =>
   import("./dashboards/admin/EcommerceDashboard/AdminDashboardEcom")
 );
-const DynamicTitle = lazy(() => import("./common-components/DynamicTitle"));
 const YouMayAlsoLike = lazy(() => import("./Ecommerce/pages/YouMayAlsoLike"));
 const BrandsOverview = lazy(() => import("./pages/Brands/BrandOverview"));
 const Layout = lazy(() => import("./layout/pages/Layout"));
@@ -51,7 +54,6 @@ const ShopProducts = lazy(() => import("./Ecommerce/pages/ShopProducts"));
 const Cart = lazy(() => import("./Ecommerce/pages/Cart"));
 const Addresspage = lazy(() => import("./Ecommerce/pages/Addresspage"));
 const Wishlist = lazy(() => import("./Ecommerce/pages/Wishlist"));
-
 const Brands = lazy(() => import("./pages/Brands/Brands"));
 const ProductReview = lazy(() =>
   import("./Ecommerce/components/ProductReview")
@@ -147,12 +149,12 @@ function App() {
               </PrivateRoute>
             }
           />
+          <Route path="/ourWork" element={<OurWork />} />
           <Route path="/help" element={<HelpnFaq />} />
           <Route path="/termsNcondition" element={<TermsAndCondition />} />
           <Route path="/products" element={<Products />} />
           <Route path="/products/topdeal" element={<TopDeal />} />
           <Route path="/products/seasonspecial" element={<SeasonSpecial />} />
-          <Route path="/productview" element={<ProductView />} />
           <Route path="/productview/:id" element={<ProductView />} />
           <Route path="/shop" element={<ShopProducts />} />
           <Route path="/cart" element={<Cart />} />

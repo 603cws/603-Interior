@@ -186,7 +186,8 @@ function Plans({ showNewBoqPopup, setShowNewBoqPopup }) {
           const matchingVariant = product_variants.find(
             (variant) =>
               variant.segment?.toLowerCase() === selectedPlan?.toLowerCase() &&
-              variant.default === variant.segment // Ensure it is marked as default
+              variant?.default === variant?.segment &&
+              variant?.defaultSubCat?.includes(subcategory) // Ensure it is marked as default
           );
 
           if (matchingVariant) {

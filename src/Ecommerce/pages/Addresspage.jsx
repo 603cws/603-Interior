@@ -146,10 +146,6 @@ function Addresspage() {
   }
 
   const { cartItems } = useEcomApp();
-  // const totalPrice = cartItems?.reduce(
-  //   (acc, curr) => acc + curr.productId?.price * curr.quantity,
-  //   0
-  // );
   const handlenewAddress = () => {
     if (accountHolder?.address?.length < 3) {
       setIsAddressFormOpen(true);
@@ -209,11 +205,12 @@ function Addresspage() {
     }
   };
 
-  const deleteOrder = async (id) => {
-    const { error } = await supabase.from("orders").delete().eq("id", id);
+  // check for this
+  // const deleteOrder = async (id) => {
+  //   const { error } = await supabase.from("orders").delete().eq("id", id);
 
-    if (error) throw new Error("couldnt delete the order ");
-  };
+  //   if (error) throw new Error("couldnt delete the order ");
+  // };
 
   const deleteOrderTableItem = async (id) => {
     const { error } = await supabase.from("orders_table").delete().eq("id", id);
@@ -361,7 +358,6 @@ function Addresspage() {
       }
 
       const { neworder } = result;
-      // const { neworder, data: orderItems } = result;
 
       const orderId = neworder?.id;
       const amount = Math.round(neworder?.final_amount * 100);
@@ -469,7 +465,8 @@ function Addresspage() {
         });
       } else {
         toast.error("Failed to create order: " + data.message);
-        await deleteOrder(orderId);
+        await deleteOrderTableItem(orderId);
+        // await deleteOrder(orderId);
         setpaymentLoading((prev) => !prev);
       }
     } catch (err) {
