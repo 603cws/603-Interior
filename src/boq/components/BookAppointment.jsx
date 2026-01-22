@@ -42,7 +42,7 @@ function BookAppointment({ onClose, isdashboardbooking = false }) {
 
   const filteredTimings = times?.filter(
     (time) =>
-      !todayBookedTimmings?.some((booked) => booked?.start_time === time)
+      !todayBookedTimmings?.some((booked) => booked?.start_time === time),
   );
 
   const handletime = (time) => {
@@ -104,7 +104,7 @@ function BookAppointment({ onClose, isdashboardbooking = false }) {
           Admindata,
           {
             headers: { "Content-Type": "application/json" },
-          }
+          },
         );
 
         toast.success("we will shortly reach you");
@@ -174,15 +174,13 @@ function BookAppointment({ onClose, isdashboardbooking = false }) {
   return (
     <div
       className={`${
-        !isdashboardbooking
-          ? "md:fixed md:inset-0  z-20 bg-black bg-opacity-80"
-          : ""
+        !isdashboardbooking ? "fixed inset-0  z-20 bg-black bg-opacity-80" : ""
       } font-Poppins flex justify-center items-center`}
     >
       <div
         className={`${
           !isdashboardbooking
-            ? "max-w-sm md:max-w-4xl rounded-2xl border bg-[#fff] p-5 relative  overflow-auto"
+            ? "max-w-sm md:max-w-4xl rounded-2xl border bg-[#fff] p-5 relative  overflow-auto h-[85vh] md:h-auto"
             : "w-full "
         }`}
       >
@@ -201,7 +199,7 @@ function BookAppointment({ onClose, isdashboardbooking = false }) {
         <div
           className={`flex justify-center  items-center ${
             isdashboardbooking &&
-            "overflow-auto md:h-[85vh] lg:h-[80vh] custom-scrollbar"
+            "overflow-auto h-[85vh] lg:h-[80vh] gradient-scrollbar pt-56 sm:pt-10 md:pt-0"
           }`}
         >
           {!isappointmentbooked ? (
@@ -274,8 +272,8 @@ function BookAppointment({ onClose, isdashboardbooking = false }) {
                               isPast
                                 ? "bg-gray-200 text-gray-500 cursor-not-allowed"
                                 : selectedTIme === time
-                                ? "text-[#F3F8FF] bg-[#374A75]"
-                                : "text-[#374A75] bg-[#F3F8FF] hover:shadow-md"
+                                  ? "text-[#F3F8FF] bg-[#374A75]"
+                                  : "text-[#374A75] bg-[#F3F8FF] hover:shadow-md"
                             }`}
                           >
                             {time}

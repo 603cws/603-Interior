@@ -59,10 +59,10 @@ function ProfileCard({
   }, [isOpen, setIsOpen, iconRef]);
 
   const handleAppointment = () => {
-    if (progress >= 90) {
+    if (progress >= 75) {
       setShowBookAppointment(true);
     } else {
-      toast("Atleast Complete 90% of the BOQ before booking appointment!", {
+      toast("Atleast Complete 75% of the BOQ before booking appointment!", {
         style: {
           border: "1px solid #1A3A36",
           padding: "16px",
