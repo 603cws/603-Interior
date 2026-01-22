@@ -1,7 +1,6 @@
 import { MdKeyboardArrowLeft } from "react-icons/md";
 import { BsUpload } from "react-icons/bs";
 import { useEffect, useState } from "react";
-import { FaRegQuestionCircle } from "react-icons/fa";
 import { supabase } from "../../services/supabase";
 import { toast } from "react-hot-toast";
 import {
@@ -784,7 +783,6 @@ function VendorProductEdit({
               <h3 className="capitalize text-xl font-semibold">
                 product images
               </h3>
-              <FaRegQuestionCircle size={20} className="cursor-pointer" />
             </div>
             <div>
               <>

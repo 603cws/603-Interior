@@ -53,8 +53,8 @@ function BestSellingSection({ sidebarDispatch, handleProductPreview }) {
         </h2>
       </div>
 
-      <table className="w-full text-sm text-[#23272E]">
-        <thead className="border-b bg-[#E7EAF8] text-[#6A717F] font-Poppins font-medium text-[13px]">
+      <table className="w-full text-[#23272E]">
+        <thead className="border-b bg-[#E7EAF8] text-[#6A717F] font-Poppins font-medium text-xs sm:text-sm">
           <tr>
             <th className="bg-[#E7EAF8] rounded-l-lg pl-4 py-3 text-[#6A717F] text-left">
               PRODUCT
@@ -70,7 +70,7 @@ function BestSellingSection({ sidebarDispatch, handleProductPreview }) {
             </th>
           </tr>
         </thead>
-        <tbody>
+        <tbody className="text-[10px] sm:text-sm">
           {loading ? (
             <tr>
               <td colSpan={5} className="py-4 text-center text-[#6A717F]">

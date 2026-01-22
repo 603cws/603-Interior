@@ -40,7 +40,7 @@ function handlesidebarState(state, action) {
         isDiscountOpen: action.payload === "Discounts",
         isBlogsOpen: action.payload === "Blogs",
         isCareerOpen: action?.payload === "Career",
-        isSubscripedEmailOpen: action?.payload === "SubscribedEmail",
+        isSubscripedEmailOpen: action?.payload === "Subscribed Email",
         currentSection: action.payload,
       };
     default:
@@ -56,7 +56,7 @@ const SECTIONS = {
   DISCOUNTS: "Discounts",
   BLOGS: "Blogs",
   CAREER: "Career",
-  SUBSCRIPEDEMAIL: "SubscribedEmail",
+  SUBSCRIBEDEMAIL: "Subscribed Email",
 };
 
 function AdminDashboardEcom() {
@@ -266,7 +266,7 @@ function AdminDashboardEcom() {
   const handleSubscripedEmail = () => {
     sidebarDispatch({
       type: "TOGGLE_SECTION",
-      payload: SECTIONS.SUBSCRIPEDEMAIL,
+      payload: SECTIONS.SUBSCRIBEDEMAIL,
     });
   };
 

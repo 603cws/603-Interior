@@ -66,7 +66,7 @@ function Transactions({ sidebarDispatch, onOrderSelect }) {
           Loading transactions...
         </div>
       ) : (
-        <table className="w-full text-sm text-gray-600">
+        <table className="w-full text-xs sm:text-sm text-gray-600">
           <thead className="border-b text-[#7C7C7C]">
             <tr>
               <th className="py-2 text-left">No.</th>
@@ -76,7 +76,7 @@ function Transactions({ sidebarDispatch, onOrderSelect }) {
               <th className="py-2 text-left">Amount</th>
             </tr>
           </thead>
-          <tbody className="text-black text-sm">
+          <tbody className="text-black text-[9px] sm:text-sm">
             {ordersData?.map((t, i) => (
               <tr
                 key={i}
