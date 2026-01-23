@@ -63,7 +63,7 @@ function Discount() {
         <div>
           <div className="border-b border-b-[#ccc]">
             <div className="flex justify-between items-center">
-              <h2 className="p-2 font-semibold text-[#374A75] lg:text-2xl md:text-xl text-lg ">
+              <h2 className="py-2 px-4 font-semibold text-[#374A75] lg:text-2xl md:text-xl text-lg ">
                 Discount
               </h2>
               <div className="px-2 py-2 flex gap-2">

@@ -283,7 +283,7 @@ function ItemTable({
       });
 
       setProducts(sortedData);
-      setFilteredProducts(sortedData);
+      // setFilteredProducts(sortedData);
     } catch (error) {
       console.error("Error fetching products:", error);
     } finally {
@@ -323,6 +323,31 @@ function ItemTable({
   }, [isproductRefresh]);
 
   useEffect(() => {
+    applyFilters({
+      query: searchQuery,
+      category: selectedCategory,
+      subCategory: selectedSubCategory,
+      status: selected,
+      priceMin,
+      priceMax,
+      dateFrom,
+      dateTo,
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    products,
+    searchQuery,
+    selectedCategory,
+    selectedSubCategory,
+    selected,
+    priceMin,
+    priceMax,
+    dateFrom,
+    dateTo,
+    toggle,
+  ]);
+
+  useEffect(() => {
     fetchAddons();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isaddonRefresh]);
@@ -332,7 +357,7 @@ function ItemTable({
       <div className="relative">
         <div className="sticky top-0 z-20 bg-white">
           <div className="hidden lg:flex justify-between items-center px-4 py-2 border-b-2 border-b-gray-400 ">
-            <h3 className=" capitalize font-semibold text-xl ">product list</h3>
+            <h3 className=" capitalize font-semibold text-xl">product list</h3>
 
             <div className="flex gap-2">
               <div className="relative inline-block" ref={dropdownRef}>
@@ -618,7 +643,7 @@ function ItemTable({
                     }));
                     exportToExcel(
                       exportData,
-                      toggle ? "products.xlsx" : "addons.xlsx",
+                      toggle ? "products.xlsx" : "addons.xlsx"
                     );
                   }}
                   className=" px-4 py-2 rounded text-[#374A75] text-sm flex items-center gap-3 border "
@@ -672,7 +697,7 @@ function ItemTable({
               />
             </div>
             <div className="lg:hidden flex gap-2">
-              <div className="relative inline-block text-xs">
+              <div className="relative inline-block text-xs" ref={dropdownRef}>
                 <button
                   onClick={() => setFilterDropdown(!filterDropdown)}
                   className="h-10 w-10 flex justify-center items-center border rounded"
@@ -680,22 +705,28 @@ function ItemTable({
                   <img src="/images/icons/filter-icon.png" alt="filter icon" />
                 </button>
                 {filterDropdown && (
-                  <div className="absolute mt-2 w-40 -left-full bg-white border rounded-md shadow-lg z-10 p-3">
+                  <div className="absolute mt-2 w-64 -left-full -translate-x-1/4 bg-white border rounded-md shadow-lg z-10 p-3 space-y-3">
+                    {/* STATUS */}
                     <div>
-                      <label className=" text-[#374A75]">Status</label>
+                      <label className="text-[#374A75]">Status</label>
                       <select
                         value={selected}
                         onChange={(e) => {
                           const value = e.target.value;
                           setSelected(value);
-                          setFilterDropdown(false);
                           applyFilters({
                             query: searchQuery,
                             category: selectedCategory,
+                            subCategory: selectedSubCategory,
                             status: value,
+                            priceMin,
+                            priceMax,
+                            dateFrom,
+                            dateTo,
+                            product: productType,
                           });
                         }}
-                        className="w-full border-none focus:ring-0 p-2"
+                        className="w-full border p-2"
                       >
                         <option value="">All</option>
                         <option value="pending">Pending</option>
@@ -704,22 +735,28 @@ function ItemTable({
                       </select>
                     </div>
 
+                    {/* CATEGORY */}
                     <div>
-                      <label className=" text-[#374A75]">Categories</label>
+                      <label className="text-[#374A75]">Categories</label>
                       <select
-                        name="category"
                         value={selectedCategory}
                         onChange={(e) => {
                           const value = e.target.value;
                           setSelectedCategory(value);
+                          setSelectedSubCategory(""); // IMPORTANT reset
                           applyFilters({
                             query: searchQuery,
                             category: value,
+                            subCategory: "",
                             status: selected,
+                            priceMin,
+                            priceMax,
+                            dateFrom,
+                            dateTo,
+                            product: productType,
                           });
                         }}
-                        id="category"
-                        className="py-2"
+                        className="w-full border p-2"
                       >
                         <option value="">All categories</option>
                         {categoriesData.map((category) => (
@@ -730,33 +767,193 @@ function ItemTable({
                       </select>
                     </div>
 
+                    {/* PRODUCT */}
                     <div>
-                      <label className="text-[#374A75]">Sub Categories</label>
+                      <label className="text-[#374A75]">Product</label>
                       <select
-                        name="subCategory"
-                        value={selectedSubCategory}
+                        value={productType}
                         onChange={(e) => {
                           const value = e.target.value;
-                          setSelectedSubCategory(value);
+                          setProductType(value);
                           applyFilters({
                             query: searchQuery,
-                            category: selectedCategory, // include category too
-                            subCategory: value,
+                            category: selectedCategory,
+                            subCategory: selectedSubCategory,
                             status: selected,
+                            priceMin,
+                            priceMax,
+                            dateFrom,
+                            dateTo,
+                            product: value,
                           });
                         }}
-                        id="subCategory"
-                        className="py-2"
+                        className="w-full border p-2"
                       >
-                        <option value="">All sub categories</option>
-                        {(subcategoriesByCategory[selectedCategory] || []).map(
-                          (subCat) => (
+                        <option value="">All products</option>
+                        <option value="default">Default</option>
+                      </select>
+                    </div>
+
+                    {/* SUB CATEGORY */}
+                    {selectedCategory && (
+                      <div>
+                        <label className="text-[#374A75]">Sub Categories</label>
+                        <select
+                          value={selectedSubCategory}
+                          onChange={(e) => {
+                            const value = e.target.value;
+                            setSelectedSubCategory(value);
+                            applyFilters({
+                              query: searchQuery,
+                              category: selectedCategory,
+                              subCategory: value,
+                              status: selected,
+                              priceMin,
+                              priceMax,
+                              dateFrom,
+                              dateTo,
+                              product: productType,
+                            });
+                          }}
+                          className="w-full border p-2"
+                        >
+                          <option value="">All sub categories</option>
+                          {(
+                            subcategoriesByCategory[selectedCategory] || []
+                          ).map((subCat) => (
                             <option key={subCat} value={subCat}>
                               {subCat}
                             </option>
-                          ),
-                        )}
-                      </select>
+                          ))}
+                        </select>
+                      </div>
+                    )}
+
+                    {/* PRICE */}
+                    <div>
+                      <label className="text-[#374A75]">Price (₹)</label>
+                      <div className="flex gap-2">
+                        <input
+                          type="number"
+                          placeholder="Min"
+                          value={priceMin}
+                          onChange={(e) => {
+                            const v = e.target.value;
+                            setPriceMin(v);
+                            applyFilters({
+                              query: searchQuery,
+                              category: selectedCategory,
+                              subCategory: selectedSubCategory,
+                              status: selected,
+                              priceMin: v,
+                              priceMax,
+                              dateFrom,
+                              dateTo,
+                              product: productType,
+                            });
+                          }}
+                          className="w-1/2 border p-2 rounded"
+                        />
+                        <input
+                          type="number"
+                          placeholder="Max"
+                          value={priceMax}
+                          onChange={(e) => {
+                            const v = e.target.value;
+                            setPriceMax(v);
+                            applyFilters({
+                              query: searchQuery,
+                              category: selectedCategory,
+                              subCategory: selectedSubCategory,
+                              status: selected,
+                              priceMin,
+                              priceMax: v,
+                              dateFrom,
+                              dateTo,
+                              product: productType,
+                            });
+                          }}
+                          className="w-1/2 border p-2 rounded"
+                        />
+                      </div>
+                    </div>
+
+                    {/* DATE */}
+                    <div>
+                      <label className="text-[#374A75]">Date</label>
+                      <div className="flex gap-2">
+                        <input
+                          type="date"
+                          value={dateFrom}
+                          onChange={(e) => {
+                            const v = e.target.value;
+                            setDateFrom(v);
+                            applyFilters({
+                              query: searchQuery,
+                              category: selectedCategory,
+                              subCategory: selectedSubCategory,
+                              status: selected,
+                              priceMin,
+                              priceMax,
+                              dateFrom: v,
+                              dateTo,
+                              product: productType,
+                            });
+                          }}
+                          className="w-1/2 border p-2 rounded"
+                        />
+                        <input
+                          type="date"
+                          value={dateTo}
+                          onChange={(e) => {
+                            const v = e.target.value;
+                            setDateTo(v);
+                            applyFilters({
+                              query: searchQuery,
+                              category: selectedCategory,
+                              subCategory: selectedSubCategory,
+                              status: selected,
+                              priceMin,
+                              priceMax,
+                              dateFrom,
+                              dateTo: v,
+                              product: productType,
+                            });
+                          }}
+                          className="w-1/2 border p-2 rounded"
+                        />
+                      </div>
+                    </div>
+
+                    {/* RESET */}
+                    <div className="flex justify-end">
+                      <button
+                        onClick={() => {
+                          setSelected("");
+                          setSelectedCategory("");
+                          setSelectedSubCategory("");
+                          setProductType("");
+                          setPriceMin("");
+                          setPriceMax("");
+                          setDateFrom("");
+                          setDateTo("");
+
+                          applyFilters({
+                            query: searchQuery,
+                            category: "",
+                            subCategory: "",
+                            status: "",
+                            priceMin: "",
+                            priceMax: "",
+                            dateFrom: "",
+                            dateTo: "",
+                            product: "",
+                          });
+                        }}
+                        className="text-xs px-3 py-1 rounded bg-gray-100 hover:bg-gray-200"
+                      >
+                        Reset Filter
+                      </button>
                     </div>
                   </div>
                 )}
@@ -776,7 +973,7 @@ function ItemTable({
                     }));
                     exportToExcel(
                       exportData,
-                      toggle ? "products.xlsx" : "addons.xlsx",
+                      toggle ? "products.xlsx" : "addons.xlsx"
                     );
                   }}
                   className="h-10 w-10 flex justify-center items-center border rounded "

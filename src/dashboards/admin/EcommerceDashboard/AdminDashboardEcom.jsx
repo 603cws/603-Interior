@@ -535,15 +535,13 @@ function AdminDashboardEcom() {
           />
         )}
         {sidebarstate.isCustomerOpen && !clientBoqs && (
-          <div className="flex flex-col h-full min-h-0 overflow-hidden lg:border-2 lg:border-[#334A78] lg:rounded-lg bg-white">
-            <Clients
-              isExpanded={isExpanded}
-              allusers={filteredusers}
-              setIsrefresh={setIsrefresh}
-              setClientBoqs={setClientBoqs}
-              eComm={true}
-            />
-          </div>
+          <Clients
+            isExpanded={isExpanded}
+            allusers={filteredusers}
+            setIsrefresh={setIsrefresh}
+            setClientBoqs={setClientBoqs}
+            eComm={true}
+          />
         )}
         {sidebarstate.isDiscountOpen && (
           <div className="flex flex-col h-full min-h-0  lg:border-2 lg:border-[#334A78] lg:rounded-lg bg-white">
