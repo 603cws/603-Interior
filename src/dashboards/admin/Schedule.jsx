@@ -118,7 +118,7 @@ function Schedule() {
       <div className="w-full  overflow-y-auto scrollbar-hide h-[calc(100vh-110px)] py-2 ">
         <div>
           <div className="text-xl text-[#000] capitalize font-semibold border-b-2 border-b-[#CCCCCC] py-2">
-            <h2 className="px-4 ">schedule</h2>
+            <h2 className="px-4 ">Appointments Overview</h2>
           </div>
           <div className="lg:grid grid-cols-[1fr,2fr]">
             <div className="">
@@ -148,7 +148,7 @@ function Schedule() {
                       <p className="before:content-['•'] before:mr-2">
                         meeting
                       </p>{" "}
-                      <BsThreeDots />{" "}
+                      {/* <BsThreeDots /> */}
                     </li>
                   </ul>
                 </div>

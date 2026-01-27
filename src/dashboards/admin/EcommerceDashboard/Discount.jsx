@@ -13,10 +13,10 @@ function Discount() {
   const [editDiscount, setEditDiscount] = useState(null);
 
   useEffect(() => {
-    fetchBlogs();
+    fetchDiscountCoupons();
   }, []);
 
-  const fetchBlogs = async () => {
+  const fetchDiscountCoupons = async () => {
     try {
       const { data, error } = await supabase.from("coupons").select("*");
       if (error) console.error("Error fetching disocunts:", error);
@@ -43,7 +43,7 @@ function Discount() {
       if (error) throw error;
 
       setSelectedDiscounts([]);
-      fetchBlogs();
+      fetchDiscountCoupons();
     } catch (error) {
       console.error("Error deleting discounts:", error);
     }
@@ -57,14 +57,14 @@ function Discount() {
         <EditDiscount
           coupon={editDiscount}
           onClose={() => setEditDiscount(false)}
-          onUpdate={fetchBlogs}
+          onUpdate={fetchDiscountCoupons}
         />
       ) : (
         <div>
           <div className="border-b border-b-[#ccc]">
             <div className="flex justify-between items-center">
-              <h2 className="py-2 px-4 font-semibold text-[#374A75] lg:text-2xl md:text-xl text-lg ">
-                Discount
+              <h2 className="p-2 font-semibold text-[#374A75] lg:text-2xl md:text-xl text-lg ">
+                Discount Management
               </h2>
               <div className="px-2 py-2 flex gap-2">
                 {selectedDiscounts.length > 0 && (

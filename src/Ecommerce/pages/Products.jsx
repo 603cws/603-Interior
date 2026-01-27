@@ -134,6 +134,11 @@ const brands = [
 
 const EcommerceFeatures = [
   {
+    title: "BEST OFFERS",
+    image: "/images/gift.png",
+    width: "w-8",
+  },
+  {
     title: "EASY PAYMENT",
     image: "/images/payment.png",
     width: "w-8",
@@ -146,11 +151,6 @@ const EcommerceFeatures = [
   {
     title: "EASY INSTALLATION",
     image: "/images/install.png",
-    width: "w-8",
-  },
-  {
-    title: "GIFT CARTS",
-    image: "/images/gift.png",
     width: "w-8",
   },
 ];

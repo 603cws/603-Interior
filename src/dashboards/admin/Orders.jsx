@@ -346,13 +346,21 @@ export default function Orders({ vendorId = null }) {
               )}
             </div>
             <div className=" lg:hidden">
-              {paginatedOrders?.map((order) => (
-                <MobileOrderCard
-                  key={order.id}
-                  order={order}
-                  setSelectedOrder={setSelectedOrder}
-                />
-              ))}
+              {paginatedOrders?.length === 0 && (
+                <div className="flex flex-col items-center justify-center h-[50vh]">
+                  <p className="text-center text-xl font-bold text-[#ccc]">
+                    No data found!
+                  </p>
+                </div>
+              )}
+              {paginatedOrders?.length > 0 &&
+                paginatedOrders?.map((order) => (
+                  <MobileOrderCard
+                    key={order.id}
+                    order={order}
+                    setSelectedOrder={setSelectedOrder}
+                  />
+                ))}
             </div>
           </div>
 

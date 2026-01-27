@@ -270,6 +270,22 @@ function AdminDashboardEcom() {
     });
   };
 
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        mobileMenuRef.current &&
+        !mobileMenuRef.current.contains(event.target)
+      ) {
+        setIsOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <div className="grid lg:grid-cols-[auto_1fr] lg:bg-gradient-to-r from-[#CFDCE7] to-[#E8EEF3] md:p-4 h-dvh md:h-screen font-Poppins lg:overflow-hidden">
       {/* sidebar */}
@@ -436,7 +452,7 @@ function AdminDashboardEcom() {
               />
               <MobileMenuItem
                 icon={<FaRegUserCircle />}
-                title="Customres"
+                title="Customers"
                 currentSection={sidebarstate?.currentSection}
                 onClick={handleCustomers}
                 setIsOpen={setIsOpen}
@@ -467,6 +483,12 @@ function AdminDashboardEcom() {
                 title="Subscribed Email"
                 currentSection={sidebarstate?.currentSection}
                 onClick={handleSubscripedEmail}
+                setIsOpen={setIsOpen}
+              />
+              <MobileMenuItem
+                icon={<IoMdSwitch />}
+                title="change Dashboard"
+                onClick={() => navigate("/dashboard")}
                 setIsOpen={setIsOpen}
               />
 

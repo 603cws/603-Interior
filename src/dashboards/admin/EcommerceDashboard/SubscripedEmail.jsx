@@ -33,7 +33,7 @@ function SubscripedEmail() {
         <MobileCard SubscripedEmail={SubscripedEmail} />
       </div>
       <div className="hidden md:block">
-        <CouponTable SubscripedEmail={SubscripedEmail} />
+        <SubscribedEmailTable SubscripedEmail={SubscripedEmail} />
       </div>
     </div>
   );
@@ -41,7 +41,7 @@ function SubscripedEmail() {
 
 export default SubscripedEmail;
 
-const CouponTable = ({ SubscripedEmail }) => {
+const SubscribedEmailTable = ({ SubscripedEmail }) => {
   const [currentPage, setCurrentPage] = useState(1);
 
   const discountCouponPerPage = 9;

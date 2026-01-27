@@ -61,7 +61,7 @@ function EmptyCart() {
 
 function Cart() {
   const [showClearCartPopup, setShowClearCartPopup] = useState(false);
-
+  const [isPlaceOrderLoading, setIsplaceOrderLoading] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
   const { isAuthenticated, accountHolder } = useApp();
@@ -373,7 +373,8 @@ function Cart() {
   };
 
   const handlePlaceOrder = () => {
-    if (isAuthenticated) {
+    if (isAuthenticated && accountHolder?.role === "user") {
+      setIsplaceOrderLoading((prev) => !prev);
       const formatteddata = {
         price: orignalTotalPrice || 0,
         discountOnMrp: discountOnMrp || 0,
@@ -385,8 +386,13 @@ function Cart() {
         shippingFee: shippingcharge || 0,
       };
       navigate("/address", { state: { data: formatteddata } });
-    } else {
+      setIsplaceOrderLoading((prev) => !prev);
+    } else if (!isAuthenticated) {
       navigate("/login", { state: { from: location.pathname } });
+    } else {
+      toast.error(
+        "only acccount with user role can purchase,Admin and Vendor Cannot"
+      );
     }
   };
   const handleClearCart = async () => {
@@ -857,7 +863,7 @@ function Cart() {
                       onClick={handlePlaceOrder}
                       className="hidden uppercase text-xl text-[#ffffff] tracking-wider w-full lg:flex justify-center items-center bg-[#334A78] border border-[#212B36] py-3 rounded-sm font-thin"
                     >
-                      place ORDER
+                      {isPlaceOrderLoading ? "loading..." : "place ORDER"}
                     </button>
                   )}
                 </div>
@@ -898,7 +904,7 @@ function Cart() {
               onClick={handlePlaceOrder}
               className="uppercase text-xl text-white tracking-wider w-full bg-[#334A78] border border-[#212B36] py-3 rounded-sm font-thin"
             >
-              place order
+              {isPlaceOrderLoading ? "loading..." : "place ORDER"}
             </button>
           </div>
         </div>
