@@ -100,7 +100,7 @@ function ProductView() {
         setIsCarted(check);
       } else {
         const check = localcartItems.some(
-          (item) => item.productId?.id === data?.id
+          (item) => item.productId?.id === data?.id,
         );
 
         setIsCarted(check);
@@ -159,21 +159,21 @@ function ProductView() {
         (item) =>
           item.status === "approved" &&
           item.product_id.category !== "Partitions / Ceilings" &&
-          item.product_id.category !== "Civil / Plumbing"
+          item.product_id.category !== "Civil / Plumbing",
       );
 
       //similar product
       const similarFiltered = filterdata?.filter(
         (item) =>
           item?.id !== product?.id &&
-          item?.product_type === product?.product_type
+          item?.product_type === product?.product_type,
       );
 
       //productmaylike filter
       const productmaylikeFiltered = filterdata?.filter(
         (item) =>
           item.id !== product?.id &&
-          item.product_id?.category === product?.product_id.category
+          item.product_id?.category === product?.product_id.category,
       );
 
       // 1. Extract unique image names
@@ -223,12 +223,12 @@ function ProductView() {
 
     if (isAuthenticated) {
       const check = cartItems?.some(
-        (item) => item.productId?.id === product.id
+        (item) => item.productId?.id === product.id,
       );
       setIsCarted(check);
     } else {
       const check = localcartItems?.some(
-        (item) => item.productId?.id === product.id
+        (item) => item.productId?.id === product.id,
       );
       setIsCarted(check);
     }
@@ -236,7 +236,7 @@ function ProductView() {
 
   const additionalImagesArray = product?.additional_images
     ? JSON.parse(product?.additional_images).map(
-        (imageName) => `${baseImageUrl}${imageName}`
+        (imageName) => `${baseImageUrl}${imageName}`,
       )
     : [];
 
@@ -368,7 +368,7 @@ function ProductView() {
                     OFF)
                   </p>
                 </div>
-                <p className="text-xs text-[#3AA495]">inclusive of all taxes</p>
+                {/* <p className="text-xs text-[#3AA495]">inclusive of all taxes</p> */}
               </div>
 
               {/* qunatiy counter */}

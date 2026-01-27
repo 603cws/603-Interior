@@ -115,7 +115,7 @@ function Header() {
         (item) =>
           item.status === "approved" &&
           item.product_id.category !== "Partitions / Ceilings" &&
-          item.product_id.category !== "Civil / Plumbing"
+          item.product_id.category !== "Civil / Plumbing",
       );
       setProducts(filtered);
     } catch (error) {
@@ -146,7 +146,7 @@ function Header() {
       (item) =>
         item.title.toLowerCase().includes(value.toLowerCase()) ||
         item.product_type.toLowerCase().includes(value.toLowerCase()) ||
-        item.product_id.category.toLowerCase().includes(value.toLowerCase())
+        item.product_id.category.toLowerCase().includes(value.toLowerCase()),
     );
 
     setSuggestions(filtered.slice(0, 5));
@@ -254,7 +254,7 @@ function Header() {
               >
                 shop
               </li>
-              <li
+              {/* <li
                 onClick={() => navigate("/Aboutus")}
                 className={`cursor-pointer relative after:content-[''] after:absolute after:left-0 after:bottom-[-2px] after:h-[1px] after:bg-[#FFC900] after:transition-all after:duration-300 ${
                   pathname === "/aboutUs" ? "after:w-full" : "after:w-0"
@@ -270,7 +270,7 @@ function Header() {
                 } hover:after:w-full text-nowrap`}
               >
                 contact us
-              </li>
+              </li> */}
             </ul>
             <div className="flex-1 flex justify-center">
               <button onClick={() => navigate("/")}>
@@ -295,17 +295,17 @@ function Header() {
                 <button onClick={handleSearch} className="px-0.5">
                   <CiSearch color="#334A78" size={18} />
                 </button>
-                {suggestions.length > 0 && (
+                {suggestions?.length > 0 && (
                   <ul className="absolute top-[110%] left-0 right-0 bg-white border border-gray-200 rounded-md shadow-md z-10 max-h-48 overflow-auto">
-                    {suggestions.map((item) => (
+                    {suggestions?.map((item) => (
                       <li
                         key={item.id}
                         onClick={() => handleSuggestionClick(item)}
                         className="px-3 py-1 text-[#334A78] hover:bg-gray-100 cursor-pointer text-sm"
                       >
-                        {item.title} —{" "}
+                        {item?.title} —{" "}
                         <span className="text-gray-500">
-                          {item.product_type}
+                          {item?.product_type}
                         </span>
                       </li>
                     ))}
@@ -411,9 +411,10 @@ function Header() {
               className="bg-white w-full absolute top-full left-0 px-2 py-3 overflow-hidden z-10"
             >
               <ul className="text-sm font-bold text-[#334A78] uppercase space-y-5">
+                <li onClick={() => navigate("/Products")}>Home</li>
                 <li onClick={() => navigate("/shop")}>shop</li>
-                <li onClick={() => navigate("/Aboutus")}>about us</li>
-                <li onClick={() => navigate("/Contactus")}>contact us</li>
+                {/* <li onClick={() => navigate("/Aboutus")}>about us</li>
+                <li onClick={() => navigate("/Contactus")}>contact us</li> */}
               </ul>
             </motion.div>
           )}

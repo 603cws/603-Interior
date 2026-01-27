@@ -10,7 +10,7 @@ import CheckoutStepper from "../../common-components/CheckoutStepper";
 import { ToastContainer } from "react-toastify";
 import "animate.css";
 import MobileHeader from "../../common-components/MobileHeader";
-import CheckPinCode from "../components/CheckPinCode";
+// import CheckPinCode from "../components/CheckPinCode";
 import { IoCartSharp } from "react-icons/io5";
 import toast from "react-hot-toast";
 import { isCouponValid } from "../../utils/ResuableFunctions";
@@ -74,7 +74,7 @@ function Cart() {
   } = useEcomApp();
 
   const sortedCartItems = [...cartItems].sort((a, b) =>
-    a.productId.title.localeCompare(b.productId.title)
+    a.productId.title.localeCompare(b.productId.title),
   );
 
   const [orignalTotalPrice, setOriginalTotalPrice] = useState(0); //sum of all the items in the cart
@@ -87,7 +87,7 @@ function Cart() {
   const [discountOnMrp, setDiscountOnMrp] = useState(0); //sum of all the difference in item of selling price and their original mrp
   const [alsoLike, setAlsoLike] = useState([]);
   const [similarTypes, setSimilarTypes] = useState();
-  const [checkPin, setCheckPin] = useState(false);
+  // const [checkPin, setCheckPin] = useState(false);
 
   const [gst, setGst] = useState(0); //convet this gst to based on subtotal instead of originaltotal
   const [shippingcharge, setshippingCharge] = useState(0);
@@ -105,7 +105,7 @@ function Cart() {
       const total = cartItems?.reduce(
         (acc, curr) =>
           acc + curr.productId?.ecommercePrice?.mrp * curr.quantity,
-        0
+        0,
       );
       setOriginalTotalPrice(total || 0);
     };
@@ -115,7 +115,7 @@ function Cart() {
       const total = localcartItems?.reduce(
         (acc, curr) =>
           acc + curr.productId?.ecommercePrice?.mrp * curr.quantity,
-        0
+        0,
       );
       setOriginalTotalPrice(total || 0);
     }
@@ -125,7 +125,7 @@ function Cart() {
       const discountPrice = items.reduce((acc, item) => {
         const mrp = parseInt(item.productId?.ecommercePrice?.mrp || 0);
         const sellingPrice = parseInt(
-          item.productId?.ecommercePrice?.sellingPrice || 0
+          item.productId?.ecommercePrice?.sellingPrice || 0,
         );
         const quantity = item.quantity || 1;
         const discount = (mrp - sellingPrice) * quantity;
@@ -155,13 +155,13 @@ function Cart() {
       const price = cartItems?.reduce(
         (acc, curr) =>
           acc + curr?.productId?.ecommercePrice?.mrp * curr.quantity,
-        0
+        0,
       );
 
       const discountPrice = cartItems.reduce((acc, item) => {
         const mrp = parseInt(item.productId?.ecommercePrice?.mrp || 0);
         const sellingPrice = parseInt(
-          item.productId?.ecommercePrice?.sellingPrice || 0
+          item.productId?.ecommercePrice?.sellingPrice || 0,
         );
         const quantity = item.quantity || 1;
         const discount = (mrp - sellingPrice) * quantity;
@@ -335,7 +335,7 @@ function Cart() {
       const dbProductIds = dbCartItems.map((item) => item.productId.id);
 
       const itemsToInsert = formattedLocalItems.filter(
-        (item) => !dbProductIds.includes(item.productId)
+        (item) => !dbProductIds.includes(item.productId),
       );
 
       if (itemsToInsert.length > 0) {
@@ -368,9 +368,9 @@ function Cart() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const onClose = () => {
-    setCheckPin(!checkPin);
-  };
+  // const onClose = () => {
+  //   setCheckPin(!checkPin);
+  // };
 
   const handlePlaceOrder = () => {
     if (isAuthenticated && accountHolder?.role === "user") {
@@ -391,7 +391,7 @@ function Cart() {
       navigate("/login", { state: { from: location.pathname } });
     } else {
       toast.error(
-        "only acccount with user role can purchase,Admin and Vendor Cannot"
+        "only acccount with user role can purchase,Admin and Vendor Cannot",
       );
     }
   };
@@ -436,7 +436,7 @@ function Cart() {
       if (error) throw error;
 
       const filtered = data.filter((product) =>
-        productTypes.includes(product.product_type)
+        productTypes.includes(product.product_type),
       );
       const uniqueImages = [...new Set(filtered.map((item) => item.image))];
 
@@ -460,7 +460,7 @@ function Cart() {
       // exclude products already in cart (optional)
       const cartProductIds = items.map((item) => item.productId?.id);
       const uniqueProducts = filteredWithUrls.filter(
-        (p) => !cartProductIds.includes(p.id) && p.status === "approved"
+        (p) => !cartProductIds.includes(p.id) && p.status === "approved",
       );
 
       const grouped = productTypes.reduce((acc, type) => {
@@ -508,7 +508,7 @@ function Cart() {
             <section>
               <div className="flex flex-col lg:flex-row gap-6 lg:gap-10 font-Poppins">
                 <div className="flex-1 space-y-2 lg:space-y-5">
-                  <div className="lg:border lg:border-[#CCCCCC] rounded-lg font-Poppins flex justify-between items-center py-2 lg:p-5">
+                  {/* <div className="lg:border lg:border-[#CCCCCC] rounded-lg font-Poppins flex justify-between items-center py-2 lg:p-5">
                     <h5 className="text-[10px] lg:text-sm text-[#171717] font-semibold ">
                       Check delivery time & services
                     </h5>
@@ -518,12 +518,12 @@ function Cart() {
                     >
                       ENTER PIN CODE
                     </button>
-                  </div>
+                  </div> */}
                   {(cartItems.length > 0 || localcartItems.length > 0) && (
                     <div className="w-full flex justify-end">
                       <button
                         onClick={() => setShowClearCartPopup(true)}
-                        className="border border-[#C16452] text-[8px] lg:text-[10px] font-semibold text-[#C16452] px-3.5 py-2"
+                        className="border border-[#C16452] hover:bg-[#fff3ef] text-[8px] lg:text-[10px] font-semibold text-[#C16452] px-3.5 py-2"
                       >
                         Clear cart
                       </button>
@@ -880,7 +880,7 @@ function Cart() {
                     onClick={() =>
                       navigate(`/cart/similarproducts/?type=${similarTypes}`)
                     }
-                    className="capitalize text-[#334A78] text-sm font-bold border border-[#334A78] px-3 py-1.5 hover:bg-[#f1f1f1]"
+                    className="capitalize text-[#334A78] text-sm  border border-[#334A78] px-3 py-1.5 hover:bg-[#f1f1f1]"
                   >
                     view all
                   </button>
@@ -910,7 +910,7 @@ function Cart() {
         </div>
       )}
 
-      {checkPin && <CheckPinCode onClose={onClose} />}
+      {/* {checkPin && <CheckPinCode onClose={onClose} />} */}
 
       <div
         className={`hidden lg:block ${
@@ -950,13 +950,13 @@ function ClearCartPopUp({ onConfirm, onClose }) {
         <div className="flex justify-around gap-10">
           <button
             onClick={onClose}
-            className="text-[#344054] border flex-1 rounded-xl py-2.5"
+            className="text-[#344054] border flex-1 rounded-xl py-2.5 hover:bg-[#f4f4f4]"
           >
             Keep my cart
           </button>
           <button
             onClick={onConfirm}
-            className="border bg-[#225378] text-[#fff] flex-1 rounded-xl py-2.5"
+            className="border bg-[#225378] text-[#fff] flex-1 rounded-xl py-2.5 hover:bg-[#3d6e93]"
           >
             Clear Anyway
           </button>

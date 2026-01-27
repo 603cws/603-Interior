@@ -29,7 +29,7 @@ export function CardWithCompare({ product, handleCompareToggle, compare }) {
   const { isAuthenticated } = useApp();
   const { cartItems, wishlistItems, localcartItems } = useEcomApp();
   const isWishlisted = wishlistItems?.some(
-    (item) => item.productId?.id === product.id
+    (item) => item.productId?.id === product.id,
   );
 
   const naviagte = useNavigate();
@@ -43,12 +43,12 @@ export function CardWithCompare({ product, handleCompareToggle, compare }) {
 
     if (isAuthenticated) {
       const check = cartItems?.some(
-        (item) => item.productId?.id === product.id
+        (item) => item.productId?.id === product.id,
       );
       setIsCarted(check);
     } else {
       const check = localcartItems?.some(
-        (item) => item.productId?.id === product.id
+        (item) => item.productId?.id === product.id,
       );
 
       setIsCarted(check);
@@ -122,7 +122,7 @@ export function ShopCard({ product }) {
   const { cartItems, localcartItems, wishlistItems } = useEcomApp();
 
   const isWishlisted = wishlistItems?.some(
-    (item) => item.productId?.id === product.id
+    (item) => item.productId?.id === product.id,
   );
 
   const [iscarted, setIsCarted] = useState(false);
@@ -134,12 +134,12 @@ export function ShopCard({ product }) {
 
     if (isAuthenticated) {
       const check = cartItems?.some(
-        (item) => item.productId?.id === product.id
+        (item) => item.productId?.id === product.id,
       );
       setIsCarted(check);
     } else {
       const check = localcartItems?.some(
-        (item) => item.productId?.id === product.id
+        (item) => item.productId?.id === product.id,
       );
       setIsCarted(check);
     }
@@ -231,12 +231,12 @@ export function CartCard({ cartitem }) {
       }
     } else {
       const removeproductfromlocalCartitems = localcartItems.filter(
-        (item) => item.productId.id !== product?.productId?.id
+        (item) => item.productId.id !== product?.productId?.id,
       );
 
       localStorage.setItem(
         "cartitems",
-        JSON.stringify(removeproductfromlocalCartitems)
+        JSON.stringify(removeproductfromlocalCartitems),
       );
       setLocalCartItems(removeproductfromlocalCartitems);
       showRemoveFromCartToast(product);
@@ -277,7 +277,7 @@ export function CartCard({ cartitem }) {
       const updatedLocalItems = localcartItems.map((item) =>
         item.productId.id === product.productId.id
           ? { ...item, quantity: quantity - 1 }
-          : item
+          : item,
       );
       localStorage.setItem("cartitems", JSON.stringify(updatedLocalItems));
       setLocalCartItems(updatedLocalItems);
@@ -292,7 +292,7 @@ export function CartCard({ cartitem }) {
         const updatedLocalItems = localcartItems.map((item) =>
           item.productId.id === product.productId.id
             ? { ...item, quantity: quantity + 1 }
-            : item
+            : item,
         );
         setLocalCartItems(updatedLocalItems);
         localStorage.setItem("cartitems", JSON.stringify(updatedLocalItems));
@@ -323,7 +323,7 @@ export function CartCard({ cartitem }) {
                   image: data.signedUrl,
                 },
               }
-            : item
+            : item,
         );
         localStorage.setItem("cartitems", JSON.stringify(updatedItems));
         setLocalCartItems(updatedItems);
@@ -343,7 +343,7 @@ export function CartCard({ cartitem }) {
         <img
           src={signedUrl}
           alt="cart"
-          className="w-24 h-24 md:h-32 md:w-28 lg:h-40 lg:w-36 object-contain "
+          className="w-24 h-24 md:h-32 md:w-28 lg:h-40 lg:w-36 object-contain cursor-pointer"
           onClick={() => navigate(`/productview/${cartitem.productId?.id}`)}
           onError={refreshSignedUrl}
         />
@@ -441,7 +441,7 @@ export function AlsoLikeCard({ product }) {
   const { wishlistItems } = useEcomApp();
 
   const isWishlisted = wishlistItems?.some(
-    (item) => item.productId?.id === product.id
+    (item) => item.productId?.id === product.id,
   );
 
   const naviagte = useNavigate();
