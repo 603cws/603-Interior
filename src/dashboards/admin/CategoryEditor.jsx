@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { supabase } from "../../services/supabase";
 import { useBoqApp } from "../../Context/BoqContext";
+import toast from "react-hot-toast";
 
 export default function CategoryEditor() {
   const { categoryConfig, setCategoryConfig } = useBoqApp();
@@ -40,7 +41,7 @@ export default function CategoryEditor() {
 
   const handleAddCategory = (name) => {
     if (categoryConfig[name]) {
-      alert("Category already exists.");
+      toast.error("Category already exists.");
       return;
     }
     const newConfig = { ...categoryConfig, [name]: {} };

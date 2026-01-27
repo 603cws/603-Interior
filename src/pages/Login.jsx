@@ -125,7 +125,7 @@ function Login() {
     });
 
     if (error) {
-      alert(error);
+      toast.error(error);
       console.error("Error signing up:", error);
       return;
     }
@@ -265,7 +265,7 @@ function Login() {
       });
 
       if (error) {
-        alert(error);
+        toast.error(error);
         console.error("Error signing up:", error);
         return;
       }

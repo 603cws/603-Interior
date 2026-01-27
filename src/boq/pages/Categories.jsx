@@ -154,7 +154,7 @@ const Categories = ({
 
   const paginatedItems = categories.slice(
     currentPage * itemsPerPage,
-    currentPage * itemsPerPage + itemsPerPage
+    currentPage * itemsPerPage + itemsPerPage,
   );
 
   const getFillForCategory = (catName) => {
@@ -163,8 +163,8 @@ const Categories = ({
 
     const selValue =
       typeof selectedCategory === "string"
-        ? selectedCategory
-        : selectedCategory?.category;
+        ? getCleanedCategoryName(selectedCategory)
+        : getCleanedCategoryName(selectedCategory?.category);
 
     const isSelected = selValue === catName;
     const isCompleted =
@@ -225,7 +225,7 @@ const Categories = ({
                               {SvgIconFactory ? (
                                 SvgIconFactory(
                                   fill,
-                                  "h-8 w-8 lg:h-[60px] lg:w-[60px]"
+                                  "h-8 w-8 lg:h-[60px] lg:w-[60px]",
                                 )
                               ) : (
                                 <div
@@ -280,8 +280,8 @@ const Categories = ({
                   ? SELECTED
                   : DEFAULT
                 : isSelected
-                ? SELECTED
-                : DEFAULT;
+                  ? SELECTED
+                  : DEFAULT;
 
               return (
                 <div
@@ -301,17 +301,17 @@ const Categories = ({
                         isCategoryCompleted && isSelected
                           ? "shadow-[inset_6px_6px_12px_rgba(0,0,0,0.3),inset_-6px_-6px_12px_rgba(255,255,255,0.1)] bg-gradient-to-r from-[#334A78] to-[#68B2DC]"
                           : isCategoryCompleted
-                          ? "bg-gradient-to-r from-[#334A78] to-[#68B2DC] shadow-[6px_6px_12px_rgba(0,0,0,0.2),-6px_-6px_12px_rgba(255,255,255,0.3)]"
-                          : isSelected
-                          ? "bg-[#fff] shadow-[inset_6px_6px_12px_rgba(0,0,0,0.1),inset_-6px_-6px_12px_rgba(255,255,255,0.8)] scale-105"
-                          : "bg-[#fff] shadow-[6px_6px_12px_rgba(0,0,0,0.2),-6px_-6px_12px_rgba(255,255,255,0.8)] group-hover:scale-105"
+                            ? "bg-gradient-to-r from-[#334A78] to-[#68B2DC] shadow-[6px_6px_12px_rgba(0,0,0,0.2),-6px_-6px_12px_rgba(255,255,255,0.3)]"
+                            : isSelected
+                              ? "bg-[#fff] shadow-[inset_6px_6px_12px_rgba(0,0,0,0.1),inset_-6px_-6px_12px_rgba(255,255,255,0.8)] scale-105"
+                              : "bg-[#fff] shadow-[6px_6px_12px_rgba(0,0,0,0.2),-6px_-6px_12px_rgba(255,255,255,0.8)] group-hover:scale-105"
                       } w-14 md:w-16 lg:w-20 h-14 md:h-16 lg:h-20 rounded-full flex justify-center items-center group-hover:scale-105 transition-transform duration-[1000ms] ease-in-out`}
                     >
                       {SvgIconFactory ? (
                         typeof SvgIconFactory === "function" ? (
                           SvgIconFactory(
                             fill,
-                            "w-8 h-8 lg:w-[60px] lg:h-[60px]"
+                            "w-8 h-8 lg:w-[60px] lg:h-[60px]",
                           )
                         ) : (
                           SvgIconFactory
@@ -387,12 +387,12 @@ const Categories = ({
                         ? userResponses.hvacType === "Centralized"
                           ? subCategory === "Centralized"
                           : subCategory !== "Centralized"
-                        : true
+                        : true,
                     )
                     .map((subCategory, index) => {
                       const isCompleted = checkIfSubCategoryCompleted(
                         selectedCategory.category,
-                        subCategory
+                        subCategory,
                       );
                       return (
                         <motion.div
@@ -450,12 +450,12 @@ const Categories = ({
                           ? userResponses.hvacType === "Centralized"
                             ? subCategory === "Centralized"
                             : subCategory !== "Centralized"
-                          : true
+                          : true,
                       )
                       .map((subCategory, index) => {
                         const imageSrcSubCat = getImageSrcSubCat(
                           selectedCategory.category,
-                          subCategory
+                          subCategory,
                         );
 
                         return (

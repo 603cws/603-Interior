@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { supabase } from "../../services/supabase";
 import { useBoqApp } from "../../Context/BoqContext";
+import toast from "react-hot-toast";
 
 export default function FormulaEditor() {
   const { formulaMap, refetchFormulas } = useBoqApp();
@@ -11,6 +12,7 @@ export default function FormulaEditor() {
     description: "",
   });
   const [categories, setCategories] = useState([]);
+  const [formulaToDelete, setFormulaToDelete] = useState(null);
 
   useEffect(() => {
     fetchCategories();
@@ -42,20 +44,20 @@ export default function FormulaEditor() {
   };
 
   const deleteFormula = async (category) => {
-    if (window.confirm("Are you sure you want to delete this formula?")) {
-      const { error } = await supabase
-        .from("formulas")
-        .delete()
-        .eq("category", category);
-      if (error) console.error("Error deleting formula:", error);
-      else await refetchFormulas();
-    }
+    const { error } = await supabase
+      .from("formulas")
+      .delete()
+      .eq("category", category);
+    if (error) console.error("Error deleting formula:", error);
+    else await refetchFormulas();
   };
 
   const addFormula = async () => {
     const { category, formula, description } = newFormula;
-    if (!category || !formula)
-      return alert("Category and formula are required.");
+    if (!category || !formula) {
+      toast.error("Category and formula are required.");
+      return;
+    }
 
     const { error } = await supabase
       .from("formulas")
@@ -69,7 +71,7 @@ export default function FormulaEditor() {
 
   const usedCategories = Object.keys(formulaMap);
   const availableCategories = categories.filter(
-    (cat) => !usedCategories.includes(cat)
+    (cat) => !usedCategories.includes(cat),
   );
 
   return (
@@ -203,12 +205,12 @@ export default function FormulaEditor() {
                                 updateFormula(
                                   f.category,
                                   "formula",
-                                  edit.formula ?? f.formula
+                                  edit.formula ?? f.formula,
                                 );
                                 updateFormula(
                                   f.category,
                                   "description",
-                                  edit.description ?? f.description
+                                  edit.description ?? f.description,
                                 );
                                 setEditing((prev) => ({
                                   ...prev,
@@ -220,7 +222,8 @@ export default function FormulaEditor() {
                             </button>
                             <button
                               className="bg-[#FA343A] text-white px-3 py-1 rounded"
-                              onClick={() => deleteFormula(f.category)}
+                              // onClick={() => deleteFormula(f.category)}
+                              onClick={() => setFormulaToDelete(f.category)}
                             >
                               Delete
                             </button>
@@ -239,7 +242,7 @@ export default function FormulaEditor() {
                       editing={editing}
                       setEditing={setEditing}
                       updateFormula={updateFormula}
-                      deleteFormula={deleteFormula}
+                      deleteFormula={setFormulaToDelete}
                     />
                   ))}
                 </div>
@@ -271,6 +274,16 @@ export default function FormulaEditor() {
           </div>
         </div>
       </div>
+      {formulaToDelete && (
+        <DeleteFormulaWarning
+          category={formulaToDelete}
+          onCancel={() => setFormulaToDelete(null)}
+          onConfirm={() => {
+            deleteFormula(formulaToDelete);
+            setFormulaToDelete(null);
+          }}
+        />
+      )}
     </div>
   );
 }
@@ -323,12 +336,12 @@ function FormulaCard({
             updateFormula(
               formula.category,
               "formula",
-              currentEdit.formula ?? formula.formula
+              currentEdit.formula ?? formula.formula,
             );
             updateFormula(
               formula.category,
               "description",
-              currentEdit.description ?? formula.description
+              currentEdit.description ?? formula.description,
             );
             setEditing((prev) => ({ ...prev, [formula.id]: undefined }));
           }}
@@ -341,6 +354,35 @@ function FormulaCard({
         >
           Delete
         </button>
+      </div>
+    </div>
+  );
+}
+
+function DeleteFormulaWarning({ category, onCancel, onConfirm }) {
+  return (
+    <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+      <div className="bg-white p-5 rounded-lg max-w-xs md:max-w-sm w-full">
+        <h3 className="text-lg font-semibold text-red-600 mb-2">
+          Confirm Deletion
+        </h3>
+
+        <p className="text-sm text-gray-700 mb-4">
+          Are you sure you want to delete the formula for <b>{category}</b>?
+        </p>
+
+        <div className="flex justify-end gap-3">
+          <button className="px-4 py-1 rounded bg-gray-200" onClick={onCancel}>
+            Cancel
+          </button>
+
+          <button
+            className="px-4 py-1 rounded bg-red-600 text-white"
+            onClick={onConfirm}
+          >
+            Delete
+          </button>
+        </div>
       </div>
     </div>
   );

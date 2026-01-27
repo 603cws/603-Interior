@@ -64,9 +64,7 @@ function ContactUsPopup({ onClose }) {
         });
       } catch (error) {
         console.error("Error sending email:", error);
-        alert(
-          "Oops... " + JSON.stringify(error.response?.data || error.message)
-        );
+        toast.error("Oops... Something went wrong");
       } finally {
         setisSubmitting(false);
       }

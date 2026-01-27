@@ -162,7 +162,7 @@ function JobForm({ SetJobForm, jobTitle, job }) {
     ];
 
     if (!allowedTypes.includes(file.type)) {
-      alert("Only PDF or Word documents are allowed.");
+      toast.error("Only PDF or Word documents are allowed.");
       return;
     }
 
