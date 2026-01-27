@@ -200,7 +200,7 @@ const brandImages = {
     { name: "mitsubishi", image: "/images/brands/HVAC/Mitsubishi.svg" },
     { name: "voltas", image: "/images/brands/HVAC/Voltas.png" },
   ],
-  SmartSolutions: [
+  "Smart Solutions": [
     { name: "cisco", image: "/images/brands/SmartSolutions/Cisco.svg" },
     { name: "dlink", image: "/images/brands/SmartSolutions/D-Link.svg" },
     { name: "honeywell", image: "/images/brands/SmartSolutions/honeywell.svg" },
@@ -237,7 +237,7 @@ function BrandsOverview() {
 
   const images = useMemo(
     () => brandImages[selectedCategory] || [],
-    [selectedCategory]
+    [selectedCategory],
   );
 
   return (

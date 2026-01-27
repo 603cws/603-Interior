@@ -4,19 +4,15 @@ import { useBoqApp } from "../../Context/BoqContext";
 
 export default function CategoryEditor() {
   const { categoryConfig, setCategoryConfig } = useBoqApp();
+  const [deleteTarget, setDeleteTarget] = useState(null);
+  const [addTarget, setAddTarget] = useState(null);
 
   const handleDeleteSubCategory = (category, subCategory) => {
-    if (
-      window.confirm(
-        `Are you sure you want to delete the rule for "${subCategory}" in "${category}"?`
-      )
-    ) {
-      const newCat = { ...categoryConfig[category] };
-      delete newCat[subCategory];
+    const newCat = { ...categoryConfig[category] };
+    delete newCat[subCategory];
 
-      const newConfig = { ...categoryConfig, [category]: newCat };
-      updateCategoryConfig(newConfig);
-    }
+    const newConfig = { ...categoryConfig, [category]: newCat };
+    updateCategoryConfig(newConfig);
   };
 
   const updateCategoryConfig = async (newConfig) => {
@@ -30,43 +26,32 @@ export default function CategoryEditor() {
     }
   };
 
-  const handleAddSubCategory = (category) => {
-    const newSubCat = prompt("Enter new subcategory name");
-    if (newSubCat && newSubCat.trim()) {
-      const newCat = {
+  const handleAddSubCategory = (category, name) => {
+    const newConfig = {
+      ...categoryConfig,
+      [category]: {
         ...categoryConfig[category],
-        [newSubCat.trim()]: { exclude: [] },
-      };
+        [name]: { exclude: [] },
+      },
+    };
 
-      const newConfig = { ...categoryConfig, [category]: newCat };
-      updateCategoryConfig(newConfig);
-    }
+    updateCategoryConfig(newConfig);
   };
 
-  const handleAddCategory = () => {
-    const newCat = prompt("Enter new category name");
-
-    if (newCat && newCat.trim()) {
-      if (categoryConfig[newCat.trim()]) {
-        alert("Category already exists.");
-        return;
-      }
-      const newConfig = { ...categoryConfig, [newCat.trim()]: {} };
-
-      updateCategoryConfig(newConfig);
+  const handleAddCategory = (name) => {
+    if (categoryConfig[name]) {
+      alert("Category already exists.");
+      return;
     }
+    const newConfig = { ...categoryConfig, [name]: {} };
+
+    updateCategoryConfig(newConfig);
   };
 
   const handleDeleteCategory = (category) => {
-    if (
-      window.confirm(
-        `Are you sure you want to delete the category "${category}" and all its subcategories?`
-      )
-    ) {
-      const newConfig = { ...categoryConfig };
-      delete newConfig[category];
-      updateCategoryConfig(newConfig);
-    }
+    const newConfig = { ...categoryConfig };
+    delete newConfig[category];
+    updateCategoryConfig(newConfig);
   };
 
   return (
@@ -82,7 +67,7 @@ export default function CategoryEditor() {
 
         <div className="mb-6 flex justify-end">
           <button
-            onClick={handleAddCategory}
+            onClick={() => setAddTarget({ type: "category" })}
             className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded"
           >
             Add Category
@@ -94,18 +79,28 @@ export default function CategoryEditor() {
             key={category}
             className="mb-8 border p-4 rounded shadow bg-[#F9F9F9]"
           >
-            <div className="flex gap-3 justify-between items-center mb-3">
+            <div className="md:flex gap-3 justify-between items-center mb-3">
               <h2 className="text-xl font-semibold">{category}</h2>
-              <div className="space-y-2 space-x-2">
+              <div className="flex gap-2">
                 <button
-                  onClick={() => handleAddSubCategory(category)}
-                  className="bg-[#334A78] hover:bg-[#2a3f66] text-white px-3 py-1 rounded"
+                  onClick={() =>
+                    setAddTarget({
+                      type: "subcategory",
+                      category,
+                    })
+                  }
+                  className="bg-[#334A78] hover:bg-[#2a3f66] text-white px-3 py-1 rounded text-sm md:text-base"
                 >
                   Add Subcategory
                 </button>
                 <button
-                  onClick={() => handleDeleteCategory(category)}
-                  className="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded"
+                  onClick={() =>
+                    setDeleteTarget({
+                      type: "category",
+                      category,
+                    })
+                  }
+                  className="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded text-sm md:text-base"
                 >
                   Delete Category
                 </button>
@@ -117,10 +112,25 @@ export default function CategoryEditor() {
                 return (
                   <div
                     key={subCategory}
-                    className=" flex  flex-col lg:flex-row  lg:items-center space-y-2 lg:space-y-0 space-x-3"
+                    className="flex flex-col lg:flex-row lg:items-center space-y-2 lg:space-y-0 md:space-x-3 border rounded md:border-none p-1 md:p-0"
                   >
-                    <div className="w-48 font-semibold text-[#374A75]">
-                      {subCategory}
+                    <div className="flex justify-between md:w-48">
+                      <p className="font-semibold text-[#374A75] ">
+                        {subCategory}
+                      </p>
+                      <button
+                        onClick={() =>
+                          setDeleteTarget({
+                            type: "subcategory",
+                            category,
+                            subCategory,
+                          })
+                        }
+                        className="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded md:hidden text-sm md:text-base"
+                        title="Delete"
+                      >
+                        Delete
+                      </button>
                     </div>
                     <SubcategoryExcludeInput
                       excludes={rules.exclude || []}
@@ -137,9 +147,13 @@ export default function CategoryEditor() {
                     />
                     <button
                       onClick={() =>
-                        handleDeleteSubCategory(category, subCategory)
+                        setDeleteTarget({
+                          type: "subcategory",
+                          category,
+                          subCategory,
+                        })
                       }
-                      className="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded"
+                      className="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded hidden md:block"
                       title="Delete"
                     >
                       Delete
@@ -151,12 +165,30 @@ export default function CategoryEditor() {
           </div>
         ))}
       </div>
+      {addTarget && (
+        <AddCategoryModal
+          addTarget={addTarget}
+          setAddTarget={setAddTarget}
+          addCategory={handleAddCategory}
+          addSubCategory={handleAddSubCategory}
+        />
+      )}
+
+      {deleteTarget && (
+        <DeleteWarning
+          deleteTarget={deleteTarget}
+          setDeleteTarget={setDeleteTarget}
+          handleDeleteCategory={handleDeleteCategory}
+          handleDeleteSubCategory={handleDeleteSubCategory}
+        />
+      )}
     </div>
   );
 }
 
 function SubcategoryExcludeInput({ excludes, onChange }) {
   const [inputValue, setInputValue] = useState("");
+  const [itemToRemove, setItemToRemove] = useState(null);
 
   const handleAdd = () => {
     const newItem = inputValue.trim();
@@ -164,10 +196,6 @@ function SubcategoryExcludeInput({ excludes, onChange }) {
       onChange([...excludes, newItem]);
       setInputValue("");
     }
-  };
-
-  const handleRemove = (itemToRemove) => {
-    onChange(excludes.filter((item) => item !== itemToRemove));
   };
 
   const handleKeyDown = (e) => {
@@ -178,16 +206,16 @@ function SubcategoryExcludeInput({ excludes, onChange }) {
   };
 
   return (
-    <div className="flex flex-wrap items-center gap-1 border border-gray-300 rounded px-2 py-1 w-full">
+    <div className="flex flex-wrap items-center gap-1 border border-gray-300 rounded px-2 py-1 md:w-full">
       {excludes.map((item, index) => (
         <div
           key={`${item}-${index}`}
-          className="bg-blue-200 text-blue-800 px-2 py-1 rounded flex items-center space-x-1"
+          className="bg-blue-200 text-blue-800 px-2 py-1 rounded flex items-center space-x-1 text-sm md:text-base"
         >
           <span>{item}</span>
           <button
             type="button"
-            onClick={() => handleRemove(item)}
+            onClick={() => setItemToRemove(item)}
             className="text-blue-800 hover:text-blue-900 font-bold"
             aria-label={`Remove ${item}`}
           >
@@ -204,6 +232,149 @@ function SubcategoryExcludeInput({ excludes, onChange }) {
         className="flex-grow min-w-[80px] outline-none p-1 border-none"
         style={{ minWidth: "0" }}
       />
+
+      {itemToRemove && (
+        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+          <div className="bg-white p-4 rounded max-w-sm w-full">
+            <p className="text-sm text-gray-700 mb-4">
+              Are you sure you want to remove <b>{itemToRemove}</b>?
+            </p>
+            <div className="flex justify-end gap-2">
+              <button
+                className="px-3 py-1 text-sm bg-gray-200 rounded"
+                onClick={() => setItemToRemove(null)}
+              >
+                Cancel
+              </button>
+              <button
+                className="px-3 py-1 text-sm bg-red-500 text-white rounded"
+                onClick={() => {
+                  onChange(excludes.filter((item) => item !== itemToRemove));
+                  setItemToRemove(null);
+                }}
+              >
+                Remove
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function DeleteWarning({
+  deleteTarget,
+  setDeleteTarget,
+  handleDeleteCategory,
+  handleDeleteSubCategory,
+}) {
+  return (
+    <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+      <div className="bg-white p-5 rounded-lg shadow-lg w-[400px]">
+        <h3 className="text-lg font-semibold text-red-600 mb-2">
+          Confirm Deletion
+        </h3>
+
+        <p className="text-sm text-gray-700 mb-4">
+          {deleteTarget.type === "category" ? (
+            <>
+              Are you sure you want to delete the category{" "}
+              <b>{deleteTarget.category}</b> and all its subcategories?
+            </>
+          ) : (
+            <>
+              Are you sure you want to delete the subcategory{" "}
+              <b>{deleteTarget.subCategory}</b> from{" "}
+              <b>{deleteTarget.category}</b>?
+            </>
+          )}
+        </p>
+
+        <div className="flex justify-end gap-3">
+          <button
+            className="px-4 py-1 rounded bg-gray-200 hover:bg-gray-300"
+            onClick={() => setDeleteTarget(null)}
+          >
+            Cancel
+          </button>
+
+          <button
+            className="px-4 py-1 rounded bg-red-600 hover:bg-red-700 text-white"
+            onClick={() => {
+              if (deleteTarget.type === "category") {
+                handleDeleteCategory(deleteTarget.category);
+              } else {
+                handleDeleteSubCategory(
+                  deleteTarget.category,
+                  deleteTarget.subCategory,
+                );
+              }
+              setDeleteTarget(null);
+            }}
+          >
+            Delete
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function AddCategoryModal({
+  addTarget,
+  setAddTarget,
+  addCategory,
+  addSubCategory,
+}) {
+  const [value, setValue] = useState("");
+
+  const handleSubmit = () => {
+    const trimmed = value.trim();
+    if (!trimmed) return;
+
+    if (addTarget.type === "category") {
+      addCategory(trimmed);
+    } else {
+      addSubCategory(addTarget.category, trimmed);
+    }
+
+    setValue("");
+    setAddTarget(null);
+  };
+
+  return (
+    <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+      <div className="bg-white p-5 rounded-lg shadow-lg w-[380px]">
+        <h3 className="text-lg font-semibold mb-3">
+          {addTarget.type === "category"
+            ? "Add Category"
+            : `Add Subcategory to ${addTarget.category}`}
+        </h3>
+
+        <input
+          autoFocus
+          value={value}
+          onChange={(e) => setValue(e.target.value)}
+          placeholder="Enter name"
+          className="w-full border px-3 py-2 rounded mb-4 outline-none"
+        />
+
+        <div className="flex justify-end gap-3">
+          <button
+            className="px-4 py-1 rounded bg-gray-200 hover:bg-gray-300"
+            onClick={() => setAddTarget(null)}
+          >
+            Cancel
+          </button>
+          <button
+            className="px-4 py-1 rounded bg-green-600 hover:bg-green-700 text-white"
+            onClick={handleSubmit}
+          >
+            Add
+          </button>
+        </div>
+      </div>
     </div>
   );
 }

@@ -127,14 +127,14 @@ function ShopProducts() {
   const applyFiltersAndSort = (products, filters, filtersortby) => {
     let result = [...products];
     const normalizedFilterCats = filters.category.map((cat) =>
-      cat.toLowerCase()
+      cat.toLowerCase(),
     );
 
     if (normalizedFilterCats.length > 0) {
       result = result.filter((product) =>
         normalizedFilterCats.includes(
-          product.product_id?.category?.toLowerCase()
-        )
+          product.product_id?.category?.toLowerCase(),
+        ),
       );
     }
 
@@ -143,7 +143,7 @@ function ShopProducts() {
     result = result.filter(
       (product) =>
         product?.ecommercePrice?.sellingPrice >= minPrice &&
-        product?.ecommercePrice?.sellingPrice <= actualMaxPrice
+        product?.ecommercePrice?.sellingPrice <= actualMaxPrice,
     );
 
     // Sorting
@@ -162,7 +162,7 @@ function ShopProducts() {
       result = result.filter((product) => {
         const productBrand = product?.manufacturer?.trim().toLowerCase();
         return filters.brands.some(
-          (selected) => selected.trim().toLowerCase() === productBrand
+          (selected) => selected.trim().toLowerCase() === productBrand,
         );
       });
     }
@@ -178,7 +178,9 @@ function ShopProducts() {
         (item) =>
           item.title.toLowerCase().includes(query.toLowerCase()) ||
           item.product_type.toLowerCase().includes(query.toLowerCase()) ||
-          item.product_id?.category?.toLowerCase().includes(query.toLowerCase())
+          item.product_id?.category
+            ?.toLowerCase()
+            .includes(query.toLowerCase()),
       );
     }
 
@@ -219,7 +221,7 @@ function ShopProducts() {
         (item) =>
           item.status === "approved" &&
           item.product_id.category !== "Partitions / Ceilings" &&
-          item.product_id.category !== "Civil / Plumbing"
+          item.product_id.category !== "Civil / Plumbing",
       );
 
       // 1. Extract unique image names
@@ -572,14 +574,12 @@ function ShopProducts() {
                   {allBrands.map((brand) => (
                     <label
                       key={brand}
-                      onClick={() => handleBrandClick(brand)}
+                      // onClick={() => handleBrandClick(brand)}
                       className="flex items-center gap-2 cursor-pointer text-[#111] text-sm"
                     >
                       <input
-                        checked={
-                          filters.brands.length === 1 &&
-                          filters.brands.includes(brand)
-                        }
+                        checked={filters.brands.includes(brand)}
+                        onChange={() => handleBrandClick(brand)}
                         type="checkbox"
                         className="w-4 h-4 cursor-pointer text-[#111] capitalize"
                       />
@@ -676,8 +676,8 @@ function ShopProducts() {
                         {filtersortby === "low"
                           ? "Price: Low to High"
                           : filtersortby === "high"
-                          ? "Price: High to Low"
-                          : filtersortby}
+                            ? "Price: High to Low"
+                            : filtersortby}
                       </p>
                       <button
                         onClick={() => setfiltersortby("")}
