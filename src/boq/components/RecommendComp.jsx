@@ -34,8 +34,8 @@ function RecommendComp({ setShowRecommend, currentProduct, manufacturer }) {
   }, [currentProduct]);
 
   return (
-    <div className="z-50  fixed   flex h-[calc(100vh-115px)]  md:w-1/2 md:ml-auto  top-[115px]  right-0 border border-[#ccc] ">
-      <div className="bg-[#D9D9D9] opacity-70 border rounded-l-sm  overflow-hidden">
+    <div className="z-50 fixed flex h-[calc(100vh-115px)] md:w-1/2 md:ml-auto top-[115px] right-0 border border-[#ccc]">
+      <div className="bg-[#D9D9D9] opacity-70 border rounded-l-sm overflow-hidden">
         <div
           className="py-3 lg:py-0 px-5"
           onClick={() => setShowRecommend(false)}
@@ -47,9 +47,9 @@ function RecommendComp({ setShowRecommend, currentProduct, manufacturer }) {
           />
         </div>
       </div>
-      <div className="flex-1 bg-white h-full  overflow-auto overflow-y-scroll scrollbar-hide">
+      <div className="flex-1 bg-white h-full overflow-auto overflow-y-scroll scrollbar-hide">
         <div className="flex justify-center items-center py-7">
-          <div className="bg-[#334A78] text-white border-2 border-[#334A78] rounded-md text-sm px-10 py-2">
+          <div className="bg-[#334A78] text-white border-2 border-[#334A78] rounded-md text-xs sm:text-sm px-10 py-2">
             {`Products From ${manufacturer}`}
           </div>
         </div>
@@ -58,10 +58,15 @@ function RecommendComp({ setShowRecommend, currentProduct, manufacturer }) {
             <Spinner />
           </div>
         ) : (
-          <div className="grid grid-cols-2 gap-4 px-2 xl:px-10 mb-2 overflow-auto ">
+          <div className="grid grid-cols-2 gap-4 px-2 xl:px-10 mb-2 overflow-auto">
             {recommendedProducts?.length > 0 ? (
               recommendedProducts?.map((prod) => (
-                <Addon imagepath={prod?.image} key={prod?.id} product={prod} />
+                <Addon
+                  key={prod?.id}
+                  imagepath={prod?.image}
+                  product={prod}
+                  setShowRecommend={setShowRecommend}
+                />
               ))
             ) : (
               <p className="col-span-2 text-center">

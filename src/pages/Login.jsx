@@ -529,7 +529,7 @@ function MobileField({ formData, handleChange }) {
   );
 }
 
-function PasswordField({ label, name, value, onChange }) {
+function PasswordField({ label, name, value, onChange, signIn = false }) {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const toggleVisibility = () => {
     setIsPasswordVisible(!isPasswordVisible);
@@ -548,8 +548,9 @@ function PasswordField({ label, name, value, onChange }) {
         name={name}
         value={value}
         onChange={onChange}
+        autoComplete={signIn ? "current-password" : "new-password"}
         placeholder={
-          name === "password" ? "Enter Password" : "Conform Password"
+          name === "password" ? "Enter Password" : "Confirm Password"
         }
         className="w-full py-1 pl-1 md:py-2 rounded-lg md:pl-2 focus:outline-none border"
         required
@@ -620,6 +621,7 @@ function SignInForm({
         name="password"
         value={formData.password}
         onChange={handleChange}
+        signIn={true}
       />
 
       <div className="flex justify-end w-full lg:w-3/4">

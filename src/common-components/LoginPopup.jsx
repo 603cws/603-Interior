@@ -12,6 +12,7 @@ export default function LoginPopup({ onClose, product }) {
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const { setUserId } = useBoqApp();
   const { setIsAuthenticated } = useApp();
   const { handleAddtoWishlist } = useHandleAddToCart();
@@ -165,7 +166,7 @@ export default function LoginPopup({ onClose, product }) {
   return (
     <div className="fixed inset-0 bg-[#000]/25 flex justify-center items-center z-10 font-TimesNewRoman">
       <div className="max-w-3xl lg:max-w-4xl w-full relative flex justify-center items-center">
-        <div className="absolute right-0 md:right-7 lg:right-10 top-0">
+        <div className="absolute right-0 md:right-7 lg:right-10 top-0 z-50">
           <button className="text-xl md:text-[#fff]" onClick={onClose}>
             <MdClose />
           </button>
@@ -228,6 +229,9 @@ export default function LoginPopup({ onClose, product }) {
                       value={formData.password}
                       onChange={handleChange}
                       className="w-full p-2 border border-gray-300 rounded-md pr-16"
+                      autoComplete={
+                        isSignUp ? "new-password" : "current-password"
+                      }
                       placeholder="••••••••"
                     />
                     <button
@@ -242,14 +246,25 @@ export default function LoginPopup({ onClose, product }) {
                   <label className="text-sm block mb-1 text-gray-700">
                     Confirm Password
                   </label>
-                  <input
-                    type="password"
-                    name="confirmPassword"
-                    value={formData.confirmPassword}
-                    onChange={handleChange}
-                    className="w-full mb-4 p-2 border border-gray-300 rounded-md"
-                    placeholder="••••••••"
-                  />
+                  <div className="relative mb-4">
+                    <input
+                      type={showConfirmPassword ? "text" : "password"}
+                      name="confirmPassword"
+                      value={formData.confirmPassword}
+                      onChange={handleChange}
+                      className="w-full mb-4 p-2 border border-gray-300 rounded-md"
+                      placeholder="••••••••"
+                    />
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setShowConfirmPassword(!showConfirmPassword)
+                      }
+                      className="absolute right-2 top-1/3 transform -translate-y-1/2 text-sm text-gray-600"
+                    >
+                      {showConfirmPassword ? "Hide" : "Show"}
+                    </button>
+                  </div>
                 </>
               )}
 
@@ -351,10 +366,10 @@ export default function LoginPopup({ onClose, product }) {
                 {loading
                   ? "Processing..."
                   : isSignUp
-                  ? step === 1
-                    ? "Next"
-                    : "Submit"
-                  : "Sign In"}
+                    ? step === 1
+                      ? "Next"
+                      : "Submit"
+                    : "Sign In"}
               </button>
             </div>
           </form>

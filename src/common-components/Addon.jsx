@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { baseImageUrl } from "../utils/HelperConstant";
 import { useBoqApp } from "../Context/BoqContext";
 
-function Addon({ imagepath, product }) {
+function Addon({ imagepath, product, setShowRecommend }) {
   const { setSelectedProductView } = useBoqApp();
   const navigate = useNavigate();
   return (
@@ -19,8 +19,9 @@ function Addon({ imagepath, product }) {
           onClick={() => {
             setSelectedProductView({});
             navigate(`/boq/${product?.id}`);
+            setShowRecommend(false);
           }}
-          className="flex justify-self-center text-black border-[#212B36]  text-xs  border px-8 py-2 hover:bg-[#334A78] hover:text-white"
+          className="flex justify-self-center text-black border-[#212B36] text-xs border px-8 py-2 hover:bg-[#334A78] hover:text-white"
         >
           View
         </button>
