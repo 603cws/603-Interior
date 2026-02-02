@@ -40,7 +40,7 @@ function Header() {
     setShowLoginPopup,
   } = useEcomApp();
 
-  let hasShownToast = false;
+  const hasShownToast = useRef(false);
   const pathname = window.location.pathname;
   const { handleAddtoWishlist } = useHandleAddToCart();
 
@@ -60,7 +60,7 @@ function Header() {
         setUserId(session.user.id);
         setIsAuthenticated(true);
         toast.success("Logged in successfully with Google");
-        hasShownToast = true;
+        hasShownToast.current = true;
         //  Run handleAddtoWishlist only once if pendingProduct exists
         if (pendingProduct) {
           handleAddtoWishlist(pendingProduct, 1, true);
@@ -71,6 +71,7 @@ function Header() {
     }
 
     checkOAuthLogin();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pendingProduct]); // <-- include pendingProduct if it comes from context
 
   useEffect(() => {

@@ -120,7 +120,8 @@ function UserProfileEdit({ setIsEditopen }) {
               type="text"
               placeholder="Enter Company Name"
               {...register("companyName", { required: true })}
-              className="w-full rounded-lg p-1.5  focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none border-2 border-[#CACED8] bg-[#fff] placeholder:text-[#000]/40  "
+              disabled
+              className="w-full cursor-not-allowed rounded-lg p-1.5  focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none border-2 border-[#CACED8] bg-[#fff] placeholder:text-[#000]/40  "
             />
           </div>
           <div className="flex flex-col md:flex-row w-full gap-4 mb-3">
@@ -156,12 +157,21 @@ function UserProfileEdit({ setIsEditopen }) {
             </div>
           </div>
 
-          <button
-            type="submit"
-            className="bg-[#374A75]  px-6 py-2 text-[#fff] lg:mt-2 xl:mt-4 capitalize"
-          >
-            save changes
-          </button>
+          <div className="flex justify-between items-center">
+            <button
+              type="button"
+              className="bg-[#fff] border border-[#ccc] px-6 py-2  lg:mt-2 xl:mt-4 capitalize"
+              onClick={() => setIsEditopen((isedit) => !isedit)}
+            >
+              cancel
+            </button>
+            <button
+              type="submit"
+              className="bg-[#374A75]  px-6 py-2 text-[#fff] lg:mt-2 xl:mt-4 capitalize"
+            >
+              save changes
+            </button>
+          </div>
         </form>
       </div>
     </div>

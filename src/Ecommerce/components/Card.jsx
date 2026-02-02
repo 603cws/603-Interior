@@ -106,6 +106,7 @@ export function CardWithCompare({ product, handleCompareToggle, compare }) {
             id={`compare-${product.id}`}
             checked={compare?.some((item) => item.id === product.id)}
             onChange={() => handleCompareToggle(product)}
+            className="cursor-pointer"
           />
           <label htmlFor="" className="text-xs">
             Add to compare

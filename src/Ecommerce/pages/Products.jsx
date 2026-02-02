@@ -180,7 +180,7 @@ function Products() {
           (item) =>
             item.status === "approved" &&
             item.product_id.category !== "Partitions / Ceilings" &&
-            item.product_id.category !== "Civil / Plumbing"
+            item.product_id.category !== "Civil / Plumbing",
         );
 
         // 1. Extract unique image names
@@ -214,7 +214,7 @@ function Products() {
         const filteredProducts = updatedProducts.filter(
           (product) =>
             getCleanedCategoryName(product.product_id.category) ===
-            getCleanedCategoryName("Furniture")
+            getCleanedCategoryName("Furniture"),
         );
         setCategoryProducts(filteredProducts);
 
@@ -247,7 +247,7 @@ function Products() {
     const updatedProducts = products.filter(
       (product) =>
         getCleanedCategoryName(product.product_id.category) ===
-        getCleanedCategoryName(category)
+        getCleanedCategoryName(category),
     );
     setCategoryProducts(updatedProducts);
   };
@@ -387,7 +387,7 @@ function Products() {
                       navigate(
                         `/shop/?category=${
                           item.title === "Luxury" ? "Lux" : item.title
-                        }`
+                        }`,
                       )
                     }
                     className="bg-[#BACED5] text-[#000] text-xs px-4 py-2 capitalize font-bold rounded hover:bg-[#A8BDC5]"
@@ -527,7 +527,7 @@ function Products() {
         <section className="px-4 lg:container mx-auto py-10">
           <SectionHeader title="best products" />
           <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-5">
-            {bestProducts.map((product) => (
+            {bestProducts?.map((product) => (
               <Card key={product.id} product={product} />
             ))}
           </div>
@@ -647,7 +647,7 @@ function Card({ product }) {
     setShowLoginPopup,
   } = useEcomApp();
   const isWishlisted = wishlistItems?.some(
-    (item) => item.productId?.id === product.id
+    (item) => item.productId?.id === product.id,
   );
 
   const { handleAddToCart, handleAddtoWishlist } = useHandleAddToCart();
@@ -659,12 +659,12 @@ function Card({ product }) {
 
     if (isAuthenticated) {
       const check = cartItems?.some(
-        (item) => item.productId?.id === product.id
+        (item) => item.productId?.id === product.id,
       );
       setIsCarted(check);
     } else {
       const check = localcartItems?.some(
-        (item) => item.productId?.id === product.id
+        (item) => item.productId?.id === product.id,
       );
       setIsCarted(check);
     }
@@ -721,7 +721,7 @@ function Card({ product }) {
                   setPendingProduct(product);
                   sessionStorage.setItem(
                     "addToWishlistProduct",
-                    JSON.stringify(product)
+                    JSON.stringify(product),
                   );
                 }}
                 className="text-[#ccc] hover:text-red-600 cursor-pointer"

@@ -117,8 +117,13 @@ function ShopProducts() {
   } results`;
   const goToPage = (pageNumber) => {
     setCurrentPage(pageNumber);
-    containerRef.current?.scrollIntoView({ behavior: "smooth" });
   };
+  useEffect(() => {
+    containerRef.current?.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
+  }, [currentPage]);
 
   useEffect(() => {
     fetchProductsData();
@@ -356,6 +361,9 @@ function ShopProducts() {
         break;
     }
   };
+
+  const defaultprice =
+    filters.priceRange[1] === 10000 && filters.priceRange[0] === 0;
 
   return (
     <div>
@@ -656,8 +664,7 @@ function ShopProducts() {
                     ))}
 
                     {/* Price Range Filter */}
-
-                    {filters.priceRange && (
+                    {!defaultprice && filters.priceRange && (
                       <span className="flex gap-3 items-center px-3 py-1 border border-[#CCCCCC] text-[#666] text-sm bg-white">
                         <p>
                           ₹{filters.priceRange[0]} - ₹
