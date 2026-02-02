@@ -50,6 +50,8 @@ function DashboardView({
 }) {
   const [currentAreaValues, setCurrentAreaValues] = useState({});
   const [currentAreaQuantities, setCurrentAreaQuantities] = useState({});
+  const [boqToDelete, setBoqToDelete] = useState(null);
+
   useEffect(() => {
     if (!selectedBoq?.layout) return;
 
@@ -73,7 +75,7 @@ function DashboardView({
   const validTotalArea = currentAreaValues.total;
   const builtArea = Object.keys(currentAreaQuantities).reduce(
     (acc, key) => acc + currentAreaQuantities[key] * currentAreaValues[key],
-    0
+    0,
   );
   const availableArea = validTotalArea - builtArea;
 
@@ -89,7 +91,7 @@ function DashboardView({
     }),
     {
       x: `Available Space: ${((availableArea / validTotalArea) * 100).toFixed(
-        2
+        2,
       )}%`,
       y: availableArea,
       fillColor: colors["Available Space"],
@@ -147,7 +149,8 @@ function DashboardView({
                   <div key={boq.id}>
                     <GeneratedBOQCard
                       boq={boq}
-                      onDelete={handledeleteBoq}
+                      // onDelete={handledeleteBoq}
+                      onDelete={(boq) => setBoqToDelete(boq)}
                       selectedBoq={selectedBoq}
                       setSelectedBoq={setSelectedBoq}
                     />
@@ -186,6 +189,16 @@ function DashboardView({
           </div>
         )}
       </div>
+      {boqToDelete && (
+        <DeleteBoqWarning
+          boq={boqToDelete}
+          onCancel={() => setBoqToDelete(null)}
+          onConfirm={async () => {
+            await handledeleteBoq(boqToDelete);
+            setBoqToDelete(null);
+          }}
+        />
+      )}
     </div>
   );
 }
@@ -231,7 +244,14 @@ function GeneratedBOQCard({ boq, onDelete, selectedBoq, setSelectedBoq }) {
           {boq?.boqTitle}
         </h5>
 
-        <button onClick={() => onDelete(boq)} className="hover:text-red-600">
+        <button
+          // onClick={() => onDelete(boq)}
+          onClick={(e) => {
+            e.stopPropagation(); // prevents selecting the BOQ
+            onDelete(boq);
+          }}
+          className="hover:text-red-600"
+        >
           {" "}
           <MdDeleteOutline size={25} />
         </button>
@@ -243,6 +263,42 @@ function GeneratedBOQCard({ boq, onDelete, selectedBoq, setSelectedBoq }) {
         <p> {boq?.layout?.usedSpace} sqft.</p>
         <p>Unused</p>
         <p> {boq?.layout?.totalArea - boq?.layout?.usedSpace}sqft.</p>
+      </div>
+    </div>
+  );
+}
+
+function DeleteBoqWarning({ boq, onCancel, onConfirm }) {
+  return (
+    <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+      <div className="bg-white p-5 rounded-lg shadow-lg max-w-xs md:max-w-sm w-full">
+        <h3 className="text-lg font-semibold text-red-500 hover:text-red-600 mb-2">
+          Confirm Deletion
+        </h3>
+
+        <p className="text-sm text-gray-700 mb-4">
+          Are you sure you want to delete the BOQ <b>{boq?.boqTitle}</b>?
+          <br />
+          <span className="text-red-500 text-xs">
+            This action cannot be undone.
+          </span>
+        </p>
+
+        <div className="flex justify-end gap-3">
+          <button
+            className="px-4 py-1 rounded bg-gray-200 hover:bg-gray-300"
+            onClick={onCancel}
+          >
+            Cancel
+          </button>
+
+          <button
+            className="px-4 py-1 rounded bg-red-500 hover:bg-red-600 text-white"
+            onClick={onConfirm}
+          >
+            Delete
+          </button>
+        </div>
       </div>
     </div>
   );

@@ -14,7 +14,7 @@ function AdminDashVendors({
   setIsvendorRefresh,
 }) {
   const [searchQuery, setSearchQuery] = useState("");
-  const [query, setQuery] = useState();
+  const [query, setQuery] = useState("");
   const [selectedVendor, setSelectedVendor] = useState(null);
   const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
 
