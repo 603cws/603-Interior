@@ -178,7 +178,7 @@ const brandImages = {
   Lighting: [
     { name: "havells", image: "/images/brands/Lighting/Havells.svg" },
     { name: "jaguar", image: "/images/brands/Lighting/Jaquar.svg" },
-    { name: "lighting", image: "/images/brands/Lighting/Panasonic.svg" },
+    { name: "panasonic", image: "/images/brands/Lighting/Panasonic.svg" },
     { name: "philips", image: "/images/brands/Lighting/Philips.svg" },
     { name: "wiproLight", image: "/images/brands/Lighting/Wipro.svg" },
     { name: "syska", image: "/images/brands/Lighting/Syska.png" },

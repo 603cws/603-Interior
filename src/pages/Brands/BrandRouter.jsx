@@ -26,6 +26,7 @@ import Cisco from "./SmartSolutions/Cisco";
 import Syska from "./Lighting/Syska";
 import Havells from "./Lighting/Havells";
 import Jaguar from "./Lighting/Jaguar";
+import Panasonic from "./Lighting/Panasonic";
 
 const BrandRouter = () => {
   const { brandName } = useParams();
@@ -58,6 +59,7 @@ const BrandRouter = () => {
     syska: <Syska />,
     havells: <Havells />,
     jaguar: <Jaguar />,
+    panasonic: <Panasonic />,
   };
 
   return components[brandName] || <div>Brand Not Found</div>;
