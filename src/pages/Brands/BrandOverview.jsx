@@ -10,6 +10,7 @@ import Footer from "../../common-components/Footer";
 import ContactUsPopup from "../../landing/components/ContactUsPopup";
 import CategorySvg from "../../common-components/CategorySvg";
 import { HiOutlineArrowSmRight } from "react-icons/hi";
+import { motion, AnimatePresence } from "framer-motion";
 
 const TOP_OFFERS = [
   {
@@ -234,6 +235,7 @@ function BrandsOverview() {
   const navigate = useNavigate();
 
   const [selectedCategory, setSelectedCategory] = useState("Furniture");
+  const [activeIndex, setActiveIndex] = useState(0);
 
   const images = useMemo(
     () => brandImages[selectedCategory] || [],
@@ -290,23 +292,39 @@ function BrandsOverview() {
             selectedCategory={selectedCategory}
             setSelectedCategory={setSelectedCategory}
           />
-          <div className="grid grid-cols-2 lg:grid-cols-[repeat(auto-fit,_minmax(300px,_1fr))] gap-2 gap-y-8 pt-16">
-            {images.map((brand, idx) => (
-              <div
-                key={idx}
-                className="hover:shadow-lg flex justify-center items-center w-full h-28 cursor-pointer"
-                onClick={() => {
-                  navigate(`/brandOverview/${brand.name}`);
-                }}
-              >
-                <img
-                  src={brand.image}
-                  alt={brand.name}
-                  className="object-scale-down w-32 h-full"
-                />
-              </div>
-            ))}
-          </div>
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={selectedCategory}
+              initial={{ opacity: 0, y: 40 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.45, ease: "easeOut" }}
+              className="grid grid-cols-2 lg:grid-cols-[repeat(auto-fit,_minmax(300px,_1fr))] gap-2 gap-y-8 pt-16"
+            >
+              {images.map((brand, idx) => (
+                <motion.div
+                  key={idx}
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{
+                    duration: 0.4,
+                    ease: "easeOut",
+                    delay: idx * 0.12,
+                  }}
+                  className="hover:shadow-lg flex justify-center items-center w-full h-28 cursor-pointer"
+                  onClick={() => {
+                    navigate(`/brandOverview/${brand.name}`);
+                  }}
+                >
+                  <img
+                    src={brand.image}
+                    alt={brand.name}
+                    className="object-scale-down w-32 h-full"
+                  />
+                </motion.div>
+              ))}
+            </motion.div>
+          </AnimatePresence>
         </div>
       </section>
 

@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import ContactUsPopup from "./ContactUsPopup";
 import { FiMenu, FiX } from "react-icons/fi";
 import { useApp } from "../../Context/Context";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { cn } from "../../lib/utils";
 
 function LandingNavbar({ className }) {
@@ -194,7 +194,14 @@ function LandingNavbar({ className }) {
           </motion.div>
         )}
       </div>
-      {enquiry && <ContactUsPopup onClose={() => setEnquiry(false)} />}
+      <AnimatePresence>
+        {enquiry && (
+          <ContactUsPopup
+            key="enquiry-popup"
+            onClose={() => setEnquiry(false)}
+          />
+        )}
+      </AnimatePresence>
     </div>
   );
 }

@@ -14,6 +14,32 @@ import { useBoqApp } from "../../Context/BoqContext";
 import { useApp } from "../../Context/Context";
 import { animations } from "../constants/animations";
 
+const panelVariants = {
+  hidden: {
+    opacity: 0,
+    y: -8,
+    scale: 0.98,
+  },
+  visible: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: {
+      type: "spring",
+      stiffness: 220,
+      damping: 24,
+    },
+  },
+  exit: {
+    opacity: 0,
+    y: -6,
+    scale: 0.98,
+    transition: {
+      duration: 0.15,
+    },
+  },
+};
+
 function ProductCard({
   products,
   setSelectedProductView,
@@ -79,7 +105,7 @@ function ProductCard({
             : [],
           subcategory1: product.subcategory1,
           product_id: product.id || variant.product_id || product.product_id,
-        }))
+        })),
     );
 
   const brandsList = Array.from(
@@ -88,15 +114,15 @@ function ProductCard({
         .flatMap((product) =>
           product.subcategory1 === selectedSubCategory1
             ? product.product_variants || []
-            : []
+            : [],
         )
         .map((variant) =>
           variant.profiles && variant.profiles.company_name
             ? variant.profiles.company_name
-            : null
+            : null,
         )
-        .filter(Boolean)
-    )
+        .filter(Boolean),
+    ),
   );
 
   const filteredVariants = filteredProducts.filter((variant) => {
@@ -126,7 +152,7 @@ function ProductCard({
 
   const paginatedVariants = sortedVariants.slice(
     (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
+    currentPage * itemsPerPage,
   );
 
   useEffect(() => {
@@ -289,20 +315,41 @@ function ProductCard({
             </button>
           </div>
 
-          {isFilterOpen && (
-            <FilterPanel
-              toggleSection={toggleSection}
-              openSection={openSection}
-              selectedPlanFilter={selectedPlanFilter}
-              setSelectedPlanFilter={setSelectedPlanFilter}
-              brandsList={brandsList}
-              selectedBrands={selectedBrands}
-              setSelectedBrands={setSelectedBrands}
-            />
-          )}
-          {isSortOpen && (
-            <SortPanel sortOption={sortOption} setSortOption={setSortOption} />
-          )}
+          <AnimatePresence mode="wait">
+            {isFilterOpen && (
+              <motion.div
+                key="filter-panel"
+                variants={panelVariants}
+                initial="hidden"
+                animate="visible"
+                exit="exit"
+              >
+                <FilterPanel
+                  toggleSection={toggleSection}
+                  openSection={openSection}
+                  selectedPlanFilter={selectedPlanFilter}
+                  setSelectedPlanFilter={setSelectedPlanFilter}
+                  brandsList={brandsList}
+                  selectedBrands={selectedBrands}
+                  setSelectedBrands={setSelectedBrands}
+                />
+              </motion.div>
+            )}
+            {isSortOpen && (
+              <motion.div
+                key="sort-panel"
+                variants={panelVariants}
+                initial="hidden"
+                animate="visible"
+                exit="exit"
+              >
+                <SortPanel
+                  sortOption={sortOption}
+                  setSortOption={setSortOption}
+                />
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
 
         {loading ? (
@@ -312,8 +359,7 @@ function ProductCard({
             {paginatedVariants.map((variant) => (
               <motion.div
                 key={variant.id}
-                className="max-w-sm flex flex-col justify-center items-center bg-white shadow-md cursor-pointer my-3 px-3 group
-                hover:rounded-lg-21 hover:bg-custom-gradient hover:shadow-custom transition-all duration-300 border-2 border-[#F5F5F5] relative"
+                className="max-w-sm flex flex-col justify-center items-center bg-white shadow-md cursor-pointer my-3 px-3 group hover:rounded-lg-21 hover:bg-custom-gradient hover:shadow-custom transition-all duration-300 border-2 border-[#F5F5F5] relative"
                 variants={animations.fadeInLeft}
                 initial="hidden"
                 animate="visible"
