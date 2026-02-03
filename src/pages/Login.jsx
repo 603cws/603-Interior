@@ -125,7 +125,11 @@ function Login() {
     });
 
     if (error) {
-      toast.error(error);
+      if (error?.code === "user_already_exists") {
+        toast.error("email already registered");
+      } else {
+        toast.error("something went error");
+      }
       console.error("Error signing up:", error);
       return;
     }

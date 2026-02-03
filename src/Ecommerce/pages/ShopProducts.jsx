@@ -154,10 +154,16 @@ function ShopProducts() {
     // Sorting
     switch (true) {
       case filtersortby === "low":
-        result.sort((a, b) => a.price - b.price);
+        result.sort(
+          (a, b) =>
+            a.ecommercePrice?.sellingPrice - b.ecommercePrice?.sellingPrice,
+        );
         break;
       case filtersortby === "high":
-        result.sort((a, b) => b.price - a.price);
+        result.sort(
+          (a, b) =>
+            b.ecommercePrice?.sellingPrice - a.ecommercePrice?.sellingPrice,
+        );
         break;
       default:
         break;
@@ -403,7 +409,7 @@ function ShopProducts() {
               <div className="w-full space-y-4 [&_h4]:capitalize">
                 <div className="flex justify-between gap-2 items-center text-[#334A78] ">
                   <div className="flex gap-2">
-                    <IoFilter size={20} />
+                    {/* <IoFilter size={20} /> */}
                     <h3 className="font-bold text-sm">Filter</h3>
                   </div>
                   <div>
@@ -702,11 +708,9 @@ function ShopProducts() {
                 {currentItems.length === 0 && (
                   <p className="text-center">No products found</p>
                 )}
-                <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+                <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-5 gap-4 items-stretch">
                   {currentItems.map((product, index) => (
-                    <div key={index}>
-                      <ShopCard product={product} />
-                    </div>
+                    <ShopCard product={product} key={index} />
                   ))}
                 </div>
                 <div className="my-6">

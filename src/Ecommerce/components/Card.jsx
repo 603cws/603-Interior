@@ -193,7 +193,7 @@ export function ShopCard({ product }) {
         {product?.stockQty > 0 ? (
           <button
             onClick={() => handleAddToCart(product, iscarted)}
-            className="text-[#000] uppercase bg-[#FFFFFF] text-xs border border-[#ccc] px-2 py-2 rounded-sm "
+            className="text-[#000] uppercase bg-[#FFFFFF] text-xs border border-[#ccc] px-2 py-2 rounded-sm hover:bg-[#f2f2f2]"
           >
             {iscarted ? "Go to cart" : "Add to cart"}{" "}
           </button>

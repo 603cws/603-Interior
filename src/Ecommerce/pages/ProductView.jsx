@@ -424,7 +424,9 @@ function ProductView() {
               {/* add to card and buy now */}
               <div className="my-4 lg:flex gap-8 hidden">
                 <button
-                  onClick={() => handleAddToCart(product, isCarted)}
+                  onClick={() =>
+                    handleAddToCart(product, isCarted, productqunatity)
+                  }
                   disabled={product?.stockQty < 1}
                   className={`text-[#212B36] uppercase bg-[#FFFFFF] border border-[#212B36] w-52 px-10 py-4 rounded-sm hover:bg-[#334A78] hover:text-[#fff] transition-colors duration-500 ease-in-out ${
                     product?.stockQty < 1
@@ -436,7 +438,7 @@ function ProductView() {
                 </button>
                 <button
                   onClick={() => {
-                    handleAddToCart(product, isCarted);
+                    handleAddToCart(product, isCarted, productqunatity);
                     navigate("/cart");
                   }}
                   disabled={product?.stockQty < 1}
@@ -497,13 +499,21 @@ function ProductView() {
             <div className="fixed bottom-0 left-0 w-full bg-white p-5 flex justify-between uppercase items-center border-t lg:hidden z-50">
               <button
                 onClick={() =>
-                  isCarted ? navigate("/cart") : handleAddToCart(product)
+                  isCarted
+                    ? navigate("/cart")
+                    : handleAddToCart(product, isCarted, productqunatity)
                 }
                 className="flex-1 border border-[#213626] font-Poppins text-[#212B36] uppercase py-4 mr-2 rounded text-xs tracking-widest"
               >
                 {isCarted ? "Go to cart" : "Add to cart"}
               </button>
-              <button className="flex-1 bg-[#304778] border-[#213625] font-Poppins text-white py-4 ml-2 rounded text-xs tracking-widest">
+              <button
+                onClick={() => {
+                  handleAddToCart(product, isCarted, productqunatity);
+                  navigate("/cart");
+                }}
+                className="flex-1 bg-[#304778] border-[#213625] font-Poppins text-white py-4 ml-2 rounded text-xs tracking-widest"
+              >
                 BUY NOW
               </button>
             </div>

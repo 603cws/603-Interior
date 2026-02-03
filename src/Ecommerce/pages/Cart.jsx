@@ -822,7 +822,7 @@ function Cart() {
                         </div>
 
                         <div className="mt-6 flex-1 overflow-y-auto space-y-2">
-                          {allCoupons.map((coupon, index) => (
+                          {allCoupons?.map((coupon, index) => (
                             <CouponCard
                               key={index}
                               coupon={coupon}
@@ -830,6 +830,9 @@ function Cart() {
                               setMobileCouponName={setMobileCouponName}
                               calculateTotalDiffertoShow={
                                 calculateTotalDiffertoShow
+                              }
+                              setDifferenceInPricetoshow={
+                                setDifferenceInPricetoshow
                               }
                             />
                           ))}
@@ -950,13 +953,13 @@ function ClearCartPopUp({ onConfirm, onClose }) {
         <div className="flex justify-around gap-10">
           <button
             onClick={onClose}
-            className="text-[#344054] border flex-1 rounded-xl py-2.5 hover:bg-[#f4f4f4]"
+            className="text-sm lg:text-base text-[#344054] border flex-1 rounded-xl py-2.5 hover:bg-[#f4f4f4]"
           >
             Keep my cart
           </button>
           <button
             onClick={onConfirm}
-            className="border bg-[#225378] text-[#fff] flex-1 rounded-xl py-2.5 hover:bg-[#3d6e93]"
+            className="text-sm lg:text-base border bg-[#225378] text-[#fff] flex-1 rounded-xl py-2.5 hover:bg-[#3d6e93]"
           >
             Clear Anyway
           </button>
@@ -971,6 +974,7 @@ function CouponCard({
   setMobileCouponName,
   mobileCouponName,
   calculateTotalDiffertoShow,
+  setDifferenceInPricetoshow,
 }) {
   return (
     <div className="flex items-start space-x-2 font-Poppins ">
@@ -983,8 +987,10 @@ function CouponCard({
             calculateTotalDiffertoShow(coupon);
           } else {
             setMobileCouponName("");
+            setDifferenceInPricetoshow(0);
           }
         }}
+        // disabled={!(coupon?.expiryDate > new Date())}
         className="w-5 h-5 accent-[#304778] mt-1 cursor-pointer"
       />
 
