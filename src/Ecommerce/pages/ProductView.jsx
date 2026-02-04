@@ -300,7 +300,7 @@ function ProductView() {
                   />
                 </div>
                 {additionalImagesArray.length > 0 ? (
-                  <div className="flex lg:flex-wrap items-center gap-3 mx-6 lg:ml-16 mt-3">
+                  <div className="flex lg:flex-wrap items-center gap-3 sm:mx-6 lg:ml-16 mt-3">
                     {additionalImagesArray.map((img, idx) => (
                       <img
                         key={idx}
