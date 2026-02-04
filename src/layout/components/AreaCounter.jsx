@@ -31,6 +31,7 @@ const AreaCounter = ({
   const [sizeReached, setSizeReached] = useState(false);
 
   const inputRef = useRef(null);
+  const errorTimeoutRef = useRef(null);
 
   useEffect(() => {
     const input = inputRef.current;
@@ -54,7 +55,7 @@ const AreaCounter = ({
     usableArea,
     setCabinSize,
     cabinSize,
-    counterValue
+    counterValue,
   ) {
     let currentbuild = buildArea + value * counterValue;
 
@@ -64,7 +65,7 @@ const AreaCounter = ({
       setErrorMessage(
         `The built area (${builtArea} sqft) exceeds the available space (${usableArea} sqft).\n` +
           "Adjust the number of workspaces OR.\n" +
-          "Increase the total area to add more workspaces."
+          "Increase the total area to add more workspaces.",
       );
     } else {
       setCabinSize(cabinSize + value);
@@ -79,7 +80,7 @@ const AreaCounter = ({
     counterValue,
     seatCount,
     setSeatCount,
-    seatcountvalue
+    seatcountvalue,
   ) {
     let currentbuild = buildArea + value * counterValue;
 
@@ -89,7 +90,7 @@ const AreaCounter = ({
       setErrorMessage(
         `The built area (${builtArea} sqft) exceeds the available space (${usableArea} sqft).\n` +
           "Adjust the number of workspaces OR.\n" +
-          "Increase the total area to add more workspaces."
+          "Increase the total area to add more workspaces.",
       );
     } else {
       setCabinSize(cabinSize + value);
@@ -110,7 +111,7 @@ const AreaCounter = ({
             counterValue,
             seatCount,
             setSeatCount,
-            2
+            2,
           );
         } else if (
           type === "md" ||
@@ -128,7 +129,7 @@ const AreaCounter = ({
             usableArea,
             setCabinSize,
             cabinSize,
-            counterValue
+            counterValue,
           );
         } else if (type === "conferenceRoom" || type === "boardRoom") {
           CheckBuildExceedwithseatcount(
@@ -140,7 +141,7 @@ const AreaCounter = ({
             counterValue,
             seatCount,
             setSeatCount,
-            2
+            2,
           );
         } else if (type === "small") {
           CheckBuildExceedwithseatcount(
@@ -152,7 +153,7 @@ const AreaCounter = ({
             counterValue,
             seatCount,
             setSeatCount,
-            2
+            2,
           );
         } else if (type === "hrRoom" || type === "sales") {
           CheckBuildExceedwithseatcount(
@@ -164,29 +165,42 @@ const AreaCounter = ({
             counterValue,
             seatCount,
             setSeatCount,
-            2
+            2,
           );
         } else {
           setCabinSize(cabinSize + 40);
         }
       } else {
-        setWarning(true);
+        // setWarning(true);
         setSizeReached(true);
-        setErrorMessage(
-          `You've reached the maximum allowed size for ${title}. This limit is fixed and cannot be increased further. Please enter a value within the allowed range (${min}-${max})${
-            seatCount ? "Seats" : "sqft"
-          }.`
+        // setErrorMessage(
+        //   `You've reached the maximum allowed size for ${title}. This limit is fixed and cannot be increased further. Please enter a value within the allowed range (${min}-${max})${
+        //     seatCount ? "Seats" : "sqft"
+        //   }.`
+        // );
+
+        showError(
+          `Value must be between ${min}–${max} ${seatCount ? "seats" : "sqft"} .`,
         );
       }
     } else {
       setError("Add workspace to increase the area");
       setTimeout(() => {
+        if (errorTimeoutRef.current) {
+          clearTimeout(errorTimeoutRef.current);
+        }
         setError("");
       }, 1500);
     }
   };
 
   const handleDecrement = () => {
+    if (value <= min) {
+      showError(
+        `Minimum allowed value is ${min} ${seatCount ? "seats" : "sqft"}.`,
+      );
+      return;
+    }
     if (value > min && totalArea > 0 && cabinSize > initialAreaValues[type]) {
       if (type === "financeRoom") {
         setCabinSize(cabinSize - layoutRoomconstant.financeRoom.CabinSize);
@@ -255,12 +269,12 @@ const AreaCounter = ({
     }
     // Case 2: Out of range
     if (newValue < min || newValue > max) {
-      setError(`Value must be between ${min}–${max} sqft.`);
+      showError(`Value must be between ${min}–${max} sqft.`);
       return;
     }
     // Case 3: Built area would exceed usable area
     if (projectedBuiltArea > usableArea) {
-      setError(`Total usable area cannot exceed ${usableArea} sqft.`);
+      showError(`Total usable area cannot exceed ${usableArea} sqft.`);
       return;
     }
     onChange(newValue);
@@ -275,6 +289,18 @@ const AreaCounter = ({
       onChange(cabinSize);
       setError("");
     }
+  };
+
+  const showError = (msg) => {
+    if (errorTimeoutRef.current) {
+      clearTimeout(errorTimeoutRef.current);
+    }
+
+    setError(msg);
+
+    errorTimeoutRef.current = setTimeout(() => {
+      setError("");
+    }, 1500);
   };
 
   return (
