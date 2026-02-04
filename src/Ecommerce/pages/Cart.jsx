@@ -620,7 +620,7 @@ function Cart() {
                           Total MRP
                         </h5>
                         <h5 className="font-medium  text-[#111111]/80 ">
-                          Rs {orignalTotalPrice || "--"}
+                          ₹ {orignalTotalPrice || "--"}
                         </h5>
                       </div>
 
@@ -629,7 +629,7 @@ function Cart() {
                           Discount on MRP
                         </h5>
                         <h5 className="font-medium  text-[#34BFAD]/80 ">
-                          -Rs {discountOnMrp}
+                          -₹ {discountOnMrp}
                         </h5>
                       </div>
                       <div className="flex justify-between">
@@ -638,7 +638,7 @@ function Cart() {
                         </h5>
                         {disableApplyCoupon ? (
                           <div className="font-medium  text-[#34BFAD]/80 ">
-                            -Rs{" "}
+                            -₹{" "}
                             {orignalTotalPrice > 0
                               ? differenceInPrice.toFixed(2)
                               : "--"}
@@ -672,7 +672,7 @@ function Cart() {
                           Sub Total
                         </h5>
                         <h5 className="font-medium  text-[#111111]/80 ">
-                          Rs{" "}
+                          ₹{" "}
                           {orignalTotalPrice -
                             discountOnMrp -
                             differenceInPrice}
@@ -689,7 +689,7 @@ function Cart() {
                           </p>
                         </div>
                         <h5 className="font-medium  text-[#34BFAD]/80 uppercase">
-                          {shippingcharge === 0 ? "Free" : shippingcharge}
+                          ₹ {shippingcharge === 0 ? "Free" : shippingcharge}
                         </h5>
                       </div>
 
@@ -700,7 +700,7 @@ function Cart() {
                           </h5>
                         </div>
                         <h5 className="font-medium  text-[#34BFAD]/80 uppercase">
-                          {gst?.toFixed(2)}
+                          ₹ {gst?.toFixed(2)}
                         </h5>
                       </div>
 
@@ -709,7 +709,7 @@ function Cart() {
                           Total Amount
                         </h5>
                         <h5 className="font-medium  text-[#111111] ">
-                          {finalValue}
+                          ₹ {finalValue}
                         </h5>
                       </div>
                     </div>
@@ -1003,7 +1003,7 @@ function CouponCard({
           Save {coupon?.discountPerc}%
         </p>
         <p className="text-xs text-[#304778] leading-[28.8px]">
-          {coupon?.discountPerc}% off on minimum purchase of Rs.
+          {coupon?.discountPerc}% off on minimum purchase of ₹
           {coupon?.minAmount}.
         </p>
 

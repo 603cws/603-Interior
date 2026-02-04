@@ -12,6 +12,7 @@ import { supabase } from "../../services/supabase";
 import toast from "react-hot-toast";
 import HeroSection from "../components/HeroSection";
 import { v4 as uuidv4 } from "uuid";
+import BackButton from "../../common-components/BackButton";
 
 const JobPage = () => {
   const { jobTitle } = useParams();
@@ -48,12 +49,11 @@ const JobPage = () => {
 
       <div className="min-h-screen bg-white flex justify-center lg:p-6 font-Georgia">
         <div className="max-w-7xl w-full bg-white p-6">
-          <button
+          <BackButton
+            label="Back to Jobs"
             onClick={() => navigate("/Career")}
-            className="text-[#334A78] text-sm w-full text-left"
-          >
-            &lt; Back to Jobs
-          </button>
+            className="pb-2"
+          />
 
           <h1 className="text-3xl font-bold mt-2 text-[#334A78]">
             {jobdata?.jobTitle}
@@ -349,7 +349,7 @@ function JobForm({ SetJobForm, jobTitle, job }) {
                 min: { value: 0, message: "value should be greater than 0" },
               })}
               min={0}
-              placeholder="Rs"
+              placeholder="₹"
               className="p-2 border border-[#ccc]"
             />
             {errors?.CurrentCTC && (
@@ -369,7 +369,7 @@ function JobForm({ SetJobForm, jobTitle, job }) {
                 min: { value: 0, message: "value should be greater than 0" },
               })}
               min={0}
-              placeholder="Rs"
+              placeholder="₹"
               className="p-2 border border-[#ccc]"
             />
             {errors?.ExpectedCTC && (

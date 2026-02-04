@@ -311,7 +311,7 @@ function DiscountForm({ setCreateDiscount }) {
             </label>
             <input
               type="number"
-              placeholder="Rs 999"
+              placeholder="₹ 999"
               required
               {...register("minAmount", {
                 required: true,
@@ -367,14 +367,14 @@ function DiscountForm({ setCreateDiscount }) {
         </div>
         <div className="flex justify-end space-x-6 m-3">
           <button
-            className="border border-[#ccc] px-5 py-3 text-[#111] rounded-lg "
+            className="border border-[#ccc] hover:bg-gray-100 px-5 py-3 text-[#111] rounded-lg "
             type="reset"
             onClick={reset}
           >
             Discard
           </button>
           <button
-            className="border border-[#ccc] px-5 py-3 text-[#fff] bg-[#374A75] rounded-lg "
+            className="border border-[#ccc] px-5 py-3 text-[#fff] bg-[#374A75] hover:bg-[#6d87c4] rounded-lg "
             type="submit"
           >
             Save
@@ -403,12 +403,15 @@ function DeleteDiscountWarning({ count, onCancel, onConfirm }) {
         </p>
 
         <div className="flex justify-end gap-3">
-          <button className="px-4 py-1 rounded bg-gray-200" onClick={onCancel}>
+          <button
+            className="px-4 py-1 rounded bg-gray-200 hover:bg-gray-300"
+            onClick={onCancel}
+          >
             Cancel
           </button>
 
           <button
-            className="px-4 py-1 rounded bg-red-600 text-white"
+            className="px-4 py-1 rounded bg-red-600 hover:bg-red-700 text-white"
             onClick={onConfirm}
           >
             Delete

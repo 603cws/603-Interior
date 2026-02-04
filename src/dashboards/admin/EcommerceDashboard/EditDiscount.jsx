@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { supabase } from "../../../services/supabase";
 import Spinner from "../../../common-components/Spinner";
+import BackButton from "../../../common-components/BackButton";
 
 function EditDiscount({ coupon, onClose, onUpdate }) {
   const [updating, setUpdating] = useState(false);
@@ -109,12 +110,11 @@ function EditDiscount({ coupon, onClose, onUpdate }) {
             <h2 className="p-2 font-semibold text-[#374A75] lg:text-2xl md:text-xl text-lg flex items-center gap-3">
               Edit discount
             </h2>
-            <button
+            <BackButton
+              label="Back to blog list"
               onClick={onClose}
-              className="text-xs text-[#ccc] font-semibold ml-3"
-            >
-              Back to discount list
-            </button>
+              className="ml-3 mb-3"
+            />
           </div>
 
           <form
@@ -179,7 +179,7 @@ function EditDiscount({ coupon, onClose, onUpdate }) {
                 </label>
                 <input
                   type="number"
-                  placeholder="Rs 999"
+                  placeholder="₹ 999"
                   required
                   {...register("minAmount", {
                     required: true,
@@ -241,7 +241,7 @@ function EditDiscount({ coupon, onClose, onUpdate }) {
             {/* Actions */}
             <div className="flex justify-end space-x-6 m-3">
               <button
-                className="border border-[#ccc] px-5 py-3 text-[#111] rounded-lg disabled:cursor-not-allowed"
+                className="border border-[#ccc] hover:bg-gray-100 px-5 py-3 text-[#111] rounded-lg disabled:cursor-not-allowed"
                 type="button"
                 onClick={handleDiscard}
                 disabled={!isDirty}
@@ -250,7 +250,7 @@ function EditDiscount({ coupon, onClose, onUpdate }) {
                 Discard
               </button>
               <button
-                className="border border-[#ccc] px-5 py-3 text-[#fff] bg-[#374A75] rounded-lg disabled:opacity-60"
+                className="border border-[#ccc] px-5 py-3 text-[#fff] bg-[#374A75] hover:bg-[#6d87c4] rounded-lg disabled:opacity-60"
                 type="submit"
                 disabled={updating}
               >

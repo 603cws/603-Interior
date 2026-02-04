@@ -6,7 +6,7 @@ function AppliedCoupon({ code, savedamount, handleRemove }) {
           <span className="text-black font-semibold">{code}</span>
         </div>
         <span className="text-[#34BFAD] font-medium">
-          Saved ₹{savedamount.toFixed(2) || 0}
+          Saved ₹ {savedamount.toFixed(2) || 0}
         </span>
       </div>
       {handleRemove && (

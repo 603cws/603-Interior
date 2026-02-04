@@ -613,7 +613,7 @@ function SubcategorySummaryCard({ summary }) {
         <p>
           Workspace cost:{" "}
           <span className="font-medium">
-            ₹{summary.workspaceCost.toLocaleString("en-IN")}
+            ₹ {summary.workspaceCost.toLocaleString("en-IN")}
           </span>
         </p>
         {summary.category === "Furniture" &&
@@ -622,7 +622,7 @@ function SubcategorySummaryCard({ summary }) {
             <p>
               Cost per seat:{" "}
               <span className="font-medium">
-                ₹{summary?.costPerSeat?.toLocaleString("en-IN")}
+                ₹ {summary?.costPerSeat?.toLocaleString("en-IN")}
               </span>
             </p>
           )}

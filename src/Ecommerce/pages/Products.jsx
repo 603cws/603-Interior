@@ -48,28 +48,28 @@ const BOTTOM_OFFERS = [
 const products2 = {
   chair: {
     title: "Orange Chair",
-    price: "Rs. 3799.00",
+    price: "₹ 3799.00",
     image: "/images/ecommerce/chair.webp",
     link: "/productview/d6a99c93-e0b9-4958-9dc5-be9a9afc472e",
     id: "d6a99c93-e0b9-4958-9dc5-be9a9afc472e",
   },
   lamp: {
     title: "Pendant Lamp",
-    price: "Rs. 2599.00",
+    price: "₹ 2599.00",
     image: "/images/ecommerce/lamp.webp",
     link: "/productview/d4bedb5d-b06a-444c-8dd3-9bef55e631de",
     id: "d4bedb5d-b06a-444c-8dd3-9bef55e631de",
   },
   rug: {
     title: "Rug",
-    price: "Rs. 2599.00",
+    price: "₹ 2599.00",
     image: "/images/ecommerce/rug.webp",
     link: "/productview/45776063-a918-44f7-858b-8b95738c8e78",
     id: "45776063-a918-44f7-858b-8b95738c8e78",
   },
   "chair-green": {
     title: "Chair Green",
-    price: "Rs. 2599.00",
+    price: "₹ 2599.00",
     image: "/images/ecommerce/chair-green.png",
     link: "/productview/1d352504-f171-41fc-9bc4-333c68ae9200",
     id: "1d352504-f171-41fc-9bc4-333c68ae9200",
@@ -690,10 +690,10 @@ function Card({ product }) {
               />
             </div>
           )}
-          <div className="px-2 py-2 flex flex-col justify-center gap-3 font-TimesNewRoman  mt-auto">
+          <div className="px-2 py-2 flex flex-col justify-center gap-3 font-TimesNewRoman mt-auto">
             <p className=" text-xs lg:text-sm line-clamp-1">{product.title}</p>
             <p className="text-xs lg:text-sm">
-              RS.{" "}
+              ₹{" "}
               {product?.ecommercePrice?.sellingPrice.toLocaleString("en-IN", {
                 minimumFractionDigits: 2,
                 maximumFractionDigits: 2,

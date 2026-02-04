@@ -193,7 +193,7 @@ function AdminDashVendors({
 
                     {isModalOpen && selectedindex === index && (
                       <div className="absolute inset-0 w-full h-full flex items-center justify-center bg-black/40">
-                        <div className="bg-white rounded-lg px-5 py-2">
+                        <div className="bg-white h-full rounded-lg px-5 py-2">
                           <h3 className="text-sm font-semibold">
                             Are you sure?
                           </h3>
@@ -204,13 +204,13 @@ function AdminDashVendors({
                           <div className="flex justify-center mt-4 gap-3">
                             <button
                               onClick={() => setIsModalOpen(false)}
-                              className="px-4 py-2 bg-gray-300 rounded"
+                              className="px-4 py-2 bg-gray-300 hover:bg-gray-400 rounded"
                             >
                               No
                             </button>
                             <button
                               onClick={handleConfirmDelete}
-                              className="px-4 py-2 bg-red-500 text-white rounded"
+                              className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded"
                             >
                               Yes
                             </button>

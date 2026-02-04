@@ -123,13 +123,13 @@ function Help() {
             <div className="flex flex-col md:flex-row justify-center items-center gap-4 my-1">
               <a
                 href="tel:+919136036603"
-                className="px-5 w-44 py-3 bg-[#374A75] text-white capitalize"
+                className="px-5 w-44 py-3 bg-[#374A75] text-white capitalize hover:bg-[#6d87c4]"
               >
                 +91-9136036603
               </a>
               <a
                 href="mailto:sales@603thecoworkingspace.com"
-                className="border-2 w-44 border-[#ccc] text-[#374A75] px-5 py-2 flex justify-center items-center"
+                className="border-2 w-44 border-[#ccc] text-[#374A75] px-5 py-2 flex justify-center items-center hover:bg-[#eee]"
               >
                 Email
               </a>

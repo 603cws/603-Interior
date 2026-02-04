@@ -135,7 +135,7 @@ export default function FormulaEditor() {
                     }
                   />
                   <button
-                    className="bg-[#374A75] text-white w-full py-2 rounded mt-2"
+                    className="bg-[#374A75] text-white w-full py-2 rounded mt-2 hover:bg-[#435580]"
                     onClick={addFormula}
                   >
                     Add Formula
@@ -199,7 +199,7 @@ export default function FormulaEditor() {
                           </td>
                           <td className=" p-2 space-x-2 text-[#A1A1A1] font-semibold">
                             <button
-                              className="bg-[#374A75] text-white px-3 py-1 rounded"
+                              className="bg-[#374A75] text-white px-3 py-1 rounded hover:bg-[#5c7ebd]"
                               onClick={() => {
                                 const edit = editing[f.id] || {};
                                 updateFormula(
@@ -221,7 +221,7 @@ export default function FormulaEditor() {
                               Save
                             </button>
                             <button
-                              className="bg-[#FA343A] text-white px-3 py-1 rounded"
+                              className="bg-[#FA343A] text-white px-3 py-1 rounded hover:bg-red-700"
                               // onClick={() => deleteFormula(f.category)}
                               onClick={() => setFormulaToDelete(f.category)}
                             >
@@ -372,12 +372,15 @@ function DeleteFormulaWarning({ category, onCancel, onConfirm }) {
         </p>
 
         <div className="flex justify-end gap-3">
-          <button className="px-4 py-1 rounded bg-gray-200" onClick={onCancel}>
+          <button
+            className="px-4 py-1 rounded bg-gray-200 hover:bg-gray-300"
+            onClick={onCancel}
+          >
             Cancel
           </button>
 
           <button
-            className="px-4 py-1 rounded bg-red-600 text-white"
+            className="px-4 py-1 rounded bg-red-600 text-white hover:bg-red-700"
             onClick={onConfirm}
           >
             Delete

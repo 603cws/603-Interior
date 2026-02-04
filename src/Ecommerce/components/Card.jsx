@@ -74,10 +74,8 @@ export function CardWithCompare({ product, handleCompareToggle, compare }) {
               {product?.title}
             </h4>
             <div className="flex text-xs lg:text-sm items-center gap-2">
-              <p className=" ">Rs {product?.price || "Rs 3,0000"}</p>
-              <p className="line-through text-[#111] text-opacity-50">
-                Rs 5678
-              </p>
+              <p className=" ">₹ {product?.price || "3,0000"}</p>
+              <p className="line-through text-[#111] text-opacity-50">₹ 5678</p>
               <p className="text-[#C20000] hidden md:block">sale</p>
             </div>
             <p className="text-[#C20000] md:hidden block uppercase">sale</p>
@@ -171,10 +169,10 @@ export function ShopCard({ product }) {
             </h4>
             <div className="flex items-center gap-2 flex-wrap xl:flex-nowrap">
               <p className="text-nowrap">
-                RS {product?.ecommercePrice?.sellingPrice || "Rs 3,0000"}
+                ₹ {product?.ecommercePrice?.sellingPrice || "3,0000"}
               </p>
               <p className="line-through text-[#111] text-opacity-50 text-nowrap">
-                RS {product?.ecommercePrice?.mrp || "Rs 3,0000"}
+                ₹ {product?.ecommercePrice?.mrp || "3,0000"}
               </p>
               <p className="text-[#C20000] uppercase">sale</p>
             </div>
@@ -409,7 +407,7 @@ export function CartCard({ cartitem }) {
           )}
           <div className="flex gap-3">
             <h5 className=" font-medium text-[#111111]">
-              Rs.{" "}
+              ₹{" "}
               {cartitem?.productId?.ecommercePrice?.sellingPrice ||
                 cartitem?.productId?.price}
             </h5>
@@ -417,14 +415,14 @@ export function CartCard({ cartitem }) {
               <del>{cartitem?.productId?.ecommercePrice?.mrp || ""}</del>
             </h5>{" "}
             <h5 className="font-medium text-[#C20000]/50">
-              Rs.{" "}
+              ₹{" "}
               {cartitem?.productId?.ecommercePrice?.mrp -
                 cartitem?.productId?.ecommercePrice?.sellingPrice}{" "}
               OFF
             </h5>
           </div>
           <p className="text-xs font-bold text-[#111]">
-            Total : Rs. {cartItemTotal}
+            Total : ₹ {cartItemTotal}
           </p>
         </div>
         <div className="absolute top-2 right-2">
@@ -471,10 +469,10 @@ export function AlsoLikeCard({ product }) {
             </h4>
             <div className="flex items-center gap-2">
               <p className=" ">
-                Rs {product?.ecommercePrice?.sellingPrice || "Rs 3,0000"}
+                ₹ {product?.ecommercePrice?.sellingPrice || "3,0000"}
               </p>
               <p className="line-through text-[#111] text-opacity-50">
-                Rs {product?.ecommercePrice?.mrp || "Rs 3,0000"}
+                ₹ {product?.ecommercePrice?.mrp || "3,0000"}
               </p>
               <p className="text-[#C20000]">sale</p>
             </div>

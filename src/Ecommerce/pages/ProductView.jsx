@@ -353,16 +353,16 @@ function ProductView() {
               <div className="my-2 lg:my-3 font-Poppins">
                 <div className="flex items-center gap-2">
                   <p className="text-sm lg:text-xl font-bold text-[#334A78] leading-[38.4px]">
-                    Rs {product?.ecommercePrice?.sellingPrice || product?.price}
+                    ₹ {product?.ecommercePrice?.sellingPrice || product?.price}
                   </p>
                   <p className="text-sm lg:text-xl text-[#898994] leading-[38.4px]">
                     MRP{" "}
                     <span className="line-through">
-                      Rs {product?.ecommercePrice?.mrp || product?.price}
+                      ₹ {product?.ecommercePrice?.mrp || product?.price}
                     </span>
                   </p>
                   <p className="text-sm lg:text-base text-[#F69E60]">
-                    (Rs.
+                    (₹
                     {product?.ecommercePrice?.mrp -
                       product?.ecommercePrice?.sellingPrice}
                     OFF)

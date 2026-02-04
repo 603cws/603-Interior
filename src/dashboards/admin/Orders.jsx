@@ -3,6 +3,7 @@ import { supabase } from "../../services/supabase";
 import { baseImageUrl } from "../../utils/HelperConstant";
 import { exportToExcel } from "../../utils/DataExport";
 import PagInationNav from "../../common-components/PagInationNav";
+import BackButton from "../../common-components/BackButton";
 
 export default function Orders({ vendorId = null }) {
   const [ordersData, setOrdersData] = useState(null);
@@ -22,7 +23,7 @@ export default function Orders({ vendorId = null }) {
 
   const paginatedOrders = filteredOrders?.slice(
     (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
+    currentPage * itemsPerPage,
   );
 
   useEffect(() => {
@@ -41,8 +42,8 @@ export default function Orders({ vendorId = null }) {
             (order) =>
               Array.isArray(order.order_items) &&
               order.order_items.some(
-                (item) => item.product_variants?.vendor_id === vendorId
-              )
+                (item) => item.product_variants?.vendor_id === vendorId,
+              ),
           )
         : orders;
 
@@ -302,7 +303,7 @@ export default function Orders({ vendorId = null }) {
                                 month: "short",
                                 day: "numeric",
                                 year: "numeric",
-                              }
+                              },
                             )}
                           </td>
                           {/* Customer Name */}
@@ -379,18 +380,17 @@ export default function Orders({ vendorId = null }) {
 export function OrderDetails({ order, onBack, vendorId = null }) {
   const filteredProducts = vendorId
     ? order.order_items?.filter(
-        (item) => item.product_variants?.vendor_id === vendorId
+        (item) => item.product_variants?.vendor_id === vendorId,
       )
     : order.order_items;
 
   return (
     <section className="flex flex-col h-full min-h-0 lg:rounded-lg font-Poppins bg-white">
-      <button
+      <BackButton
+        label="Back to Order list"
         onClick={onBack}
-        className="text-[#555555] text-left py-1 md:py-2 px-2 lg:px-6 text-xs group"
-      >
-        &lt; <span className="group-hover:underline">Back to Order List</span>
-      </button>
+        className="py-1 md:py-2 px-2 lg:px-6 w-fit"
+      />
       <div className="flex justify-between items-center pr-5 pb-2 border-b">
         <h2 className="text-xl md:text-2xl font-semibold px-2 lg:px-6 text-[#374A75]">
           Order Details
@@ -417,7 +417,7 @@ export function OrderDetails({ order, onBack, vendorId = null }) {
                   Category: variant.product_type || "",
                   "Order Date": new Date(order.created_at).toLocaleDateString(),
                 };
-              }
+              },
             );
             exportToExcel(exportData, `${order.id}-products.xlsx`);
           }}
@@ -796,7 +796,7 @@ function PriceDistribution({ order }) {
         <div className="flex justify-between font-semibold pt-2">
           <p>Total Amount</p>
           <p>
-            RS ₹
+            ₹
             {order?.final_amount?.toLocaleString("en-IN", {
               minimumFractionDigits: 2,
               maximumFractionDigits: 2,

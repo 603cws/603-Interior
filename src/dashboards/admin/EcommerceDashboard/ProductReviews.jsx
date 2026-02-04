@@ -3,6 +3,7 @@ import { supabase } from "../../../services/supabase";
 import { ImBin } from "react-icons/im";
 import toast from "react-hot-toast";
 import PagInationNav from "../../../common-components/PagInationNav";
+import BackButton from "../../../common-components/BackButton";
 
 function ProductReviews({ product, onClose }) {
   const [productReviews, setProductReviews] = useState([]);
@@ -69,12 +70,11 @@ function ProductReviews({ product, onClose }) {
 
   return (
     <div>
-      <button
+      <BackButton
+        label="Back to Order list"
         onClick={onClose}
-        className="text-[#555555] text-left py-1 text-xs group px-3"
-      >
-        &lt; <span className="group-hover:underline">Back to Order List</span>
-      </button>
+        className="px-3 py-1"
+      />
       {loading ? (
         <div className="flex flex-col items-center justify-center h-full">
           <p className="text-xl font-bold text-[#ccc]">Hold On...</p>

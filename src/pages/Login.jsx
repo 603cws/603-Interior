@@ -10,6 +10,7 @@ import { motion } from "framer-motion";
 import { useResetBOQ } from "../utils/HelperFunction";
 import { useBoqApp } from "../Context/BoqContext";
 import ResetPassword from "../common-components/ResetPassword";
+import BackButton from "../common-components/BackButton";
 
 function Login() {
   const [isSignUp, setIsSignUp] = useState(false);
@@ -675,13 +676,11 @@ function ForgotPasswordForm({
         {isSubmitting ? "Sending..." : "Reset Password"}
       </button>
 
-      <button
-        type="button"
+      <BackButton
+        label="Back to login"
         onClick={backToSignIn}
-        className="flex items-center gap-2 mt-4"
-      >
-        <FaAngleLeft /> Back to login
-      </button>
+        className="mt-4"
+      />
     </>
   );
 }

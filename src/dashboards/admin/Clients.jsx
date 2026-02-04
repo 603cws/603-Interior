@@ -29,7 +29,7 @@ function Clients({
     const filtereduser = allusers.filter(
       (item) =>
         item?.company_name?.toLowerCase().includes(query?.toLowerCase()) ||
-        item?.email?.toLowerCase().includes(query?.toLowerCase())
+        item?.email?.toLowerCase().includes(query?.toLowerCase()),
     );
     setFilteredUsers(filtereduser);
   };
@@ -39,7 +39,7 @@ function Clients({
   const indexofFirstClient = indexoflastClient - itemperPage;
   const currentClients = filteredusers.slice(
     indexofFirstClient,
-    indexoflastClient
+    indexoflastClient,
   );
 
   const totalPages = Math.ceil(filteredusers.length / itemperPage);
@@ -173,13 +173,13 @@ function Clients({
                       <div className="flex justify-center mt-4 gap-3">
                         <button
                           onClick={() => setIsModalOpen(false)}
-                          className="px-4 py-2 bg-gray-300 rounded"
+                          className="px-4 py-2 bg-gray-300 hover:bg-gray-400 rounded"
                         >
                           No
                         </button>
                         <button
                           onClick={handleConfirmDelete}
-                          className="px-4 py-2 bg-red-500 text-white rounded"
+                          className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded"
                         >
                           Yes
                         </button>

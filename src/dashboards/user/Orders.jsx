@@ -96,7 +96,7 @@ function Orders() {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(reqbody),
-        }
+        },
       );
 
       const data = await res.json();
@@ -334,7 +334,7 @@ function OrderProducts({ orderID }) {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(reqbody),
-        }
+        },
       );
 
       const data = await res.json();
@@ -543,7 +543,7 @@ function OrderProducts({ orderID }) {
             </p>
             <div className="flex gap-2 items-center">
               <p className="font-bold text-sm md:text-base">
-                RS{" "}
+                ₹{" "}
                 {order?.final_amount?.toLocaleString("en-IN", {
                   minimumFractionDigits: 2,
                   maximumFractionDigits: 2,
@@ -641,7 +641,7 @@ function OrderProductView({ order, product }) {
                 product price
               </p>
               <p className="font-bold text-sm md:text-base">
-                RS{" "}
+                ₹{" "}
                 {order?.final_amount?.toLocaleString("en-IN", {
                   minimumFractionDigits: 2,
                   maximumFractionDigits: 2,
@@ -786,7 +786,7 @@ function PriceDistribution({ order }) {
         <div className="flex justify-between font-semibold pt-2">
           <p>Total Amount</p>
           <p>
-            RS{" "}
+            ₹{" "}
             {order?.final_amount?.toLocaleString("en-IN", {
               minimumFractionDigits: 2,
               maximumFractionDigits: 2,

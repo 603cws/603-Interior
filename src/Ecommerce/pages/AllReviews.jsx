@@ -48,7 +48,7 @@ function AllReviews() {
         .select(
           `*,profiles:userId(company_name),product_variants:productId (
       image,title,price,product_type
-    )`
+    )`,
         )
         .eq("productId", productId);
       if (error) {
@@ -146,8 +146,8 @@ function AllReviews() {
         prevReviews.map((review) =>
           review.id === reviewId
             ? { ...review, likes: updatedLikes, dislikes: updatedDislikes }
-            : review
-        )
+            : review,
+        ),
       );
     } catch (error) {
       console.error("Unexpected error:", error);
@@ -202,8 +202,8 @@ function AllReviews() {
         prevReviews.map((review) =>
           review.id === reviewId
             ? { ...review, dislikes: updatedDislikes, likes: updatedLikes }
-            : review
-        )
+            : review,
+        ),
       );
     } catch (error) {
       console.error("Unexpected error:", error);
@@ -241,12 +241,12 @@ function AllReviews() {
             <hr className="my-2" />
             <div className="flex items-center gap-2">
               <p className="text-sm font-bold text-[#334A78] leading-[38.4px]">
-                Rs {productDetails.price || "Rs 3,0000"}
+                ₹ {productDetails.price || "3,0000"}
               </p>
               <p className="text-sm  text-[#898994] leading-[38.4px]">
-                MRP <span className="line-through">Rs5678</span>
+                MRP <span className="line-through">₹5678</span>
               </p>
-              <p className="text-sm text-[#F69E60]">(Rs.2678 OFF)</p>
+              <p className="text-sm text-[#F69E60]">(₹2678 OFF)</p>
             </div>
           </div>
           <div className="w-2/3">
@@ -269,8 +269,8 @@ function AllReviews() {
                     star >= 3
                       ? "bg-[#304778]"
                       : star === 2
-                      ? "bg-[#FACC15]"
-                      : "bg-[#FA9515]";
+                        ? "bg-[#FACC15]"
+                        : "bg-[#FA9515]";
                   return (
                     <div key={star} className="flex items-center gap-2">
                       <span className="md:text-sm text-xs w-4 whitespace-nowrap md:mr-4">
@@ -305,7 +305,7 @@ function AllReviews() {
                   : JSON.parse(review.dislikes || "[]");
                 const dislikeCount = dislikesArray.length;
                 const userHasDisliked = dislikesArray.includes(
-                  accountHolder?.userId
+                  accountHolder?.userId,
                 );
 
                 return (

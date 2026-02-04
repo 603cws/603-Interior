@@ -176,10 +176,10 @@ function Wishlist() {
                       </h4>
                       <div className="flex items-center gap-2">
                         <p className=" ">
-                          RS {item?.productId?.ecommercePrice?.sellingPrice}
+                          ₹ {item?.productId?.ecommercePrice?.sellingPrice}
                         </p>
                         <p className="line-through text-[#111] text-opacity-50">
-                          Rs {item?.productId?.ecommercePrice?.mrp}
+                          ₹ {item?.productId?.ecommercePrice?.mrp}
                         </p>
                         <p className="text-[#C20000] uppercase">sale</p>
                       </div>

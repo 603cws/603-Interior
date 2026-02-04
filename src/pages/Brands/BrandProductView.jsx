@@ -295,10 +295,8 @@ function Card({ product }) {
               <div className=" text-[#ccc] hover:text-red-950 cursor-pointer lg:hidden"></div>
             </div>
             <div className="flex items-center gap-2">
-              <p className=" ">Rs {"3,0000"}</p>
-              <p className="line-through text-[#111] text-opacity-50">
-                Rs 5678
-              </p>
+              <p className=" ">₹ {"3,0000"}</p>
+              <p className="line-through text-[#111] text-opacity-50">₹ 5678</p>
               <p className="text-[#C20000]">sale</p>
             </div>
           </div>

@@ -45,7 +45,7 @@ function ProductView({ onClose, product }) {
               {product?.title || "NA"}
             </h2>
             <p className="text-[#374A75] font-semibold text-xl lg:text-2xl mt-1">
-              Rs: {product?.price || "NA"}
+              ₹: {product?.price || "NA"}
             </p>
             <p className="mt-2 text-black text-sm">
               {product?.details || "NA"}
@@ -81,7 +81,7 @@ function ProductView({ onClose, product }) {
         <div className="flex justify-between mt-6">
           <button
             onClick={onClose}
-            className="px-4 py-2 border border-gray-400 rounded-md"
+            className="px-4 py-2 border border-gray-400 hover:bg-[#eee] rounded-md"
           >
             Back
           </button>

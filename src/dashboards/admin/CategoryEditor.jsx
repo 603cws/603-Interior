@@ -211,13 +211,13 @@ function SubcategoryExcludeInput({ excludes, onChange }) {
       {excludes.map((item, index) => (
         <div
           key={`${item}-${index}`}
-          className="bg-blue-200 text-blue-800 px-2 py-1 rounded flex items-center space-x-1 text-sm md:text-base"
+          className="bg-blue-200 text-blue-800 hover:bg-blue-300 px-2 py-1 rounded flex items-center space-x-1 text-sm md:text-base"
         >
           <span>{item}</span>
           <button
             type="button"
             onClick={() => setItemToRemove(item)}
-            className="text-blue-800 hover:text-blue-900 font-bold"
+            className="text-blue-800 hover:text-red-700 font-bold"
             aria-label={`Remove ${item}`}
           >
             &times;
@@ -242,13 +242,13 @@ function SubcategoryExcludeInput({ excludes, onChange }) {
             </p>
             <div className="flex justify-end gap-2">
               <button
-                className="px-3 py-1 text-sm bg-gray-200 rounded"
+                className="px-3 py-1 text-sm bg-gray-200 hover:bg-gray-300 rounded"
                 onClick={() => setItemToRemove(null)}
               >
                 Cancel
               </button>
               <button
-                className="px-3 py-1 text-sm bg-red-500 text-white rounded"
+                className="px-3 py-1 text-sm bg-red-500 hover:bg-red-600 text-white rounded"
                 onClick={() => {
                   onChange(excludes.filter((item) => item !== itemToRemove));
                   setItemToRemove(null);

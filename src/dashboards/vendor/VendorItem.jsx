@@ -83,7 +83,7 @@ function VendorItem({ isExpanded }) {
           `
             *,
               products (category, subcategory, subcategory1)
-            `
+            `,
         )
         .eq("vendor_id", accountHolder.userId);
 
@@ -133,7 +133,7 @@ function VendorItem({ isExpanded }) {
         return;
       }
       const filtered = products.filter((item) =>
-        item.title.toLowerCase().includes(query.toLowerCase())
+        item.title.toLowerCase().includes(query.toLowerCase()),
       );
       setFilteredProducts(filtered);
     } else {
@@ -142,7 +142,7 @@ function VendorItem({ isExpanded }) {
         return;
       }
       const filtered = addons.filter((item) =>
-        item.title.toLowerCase().includes(query.toLowerCase())
+        item.title.toLowerCase().includes(query.toLowerCase()),
       );
       setFilteredAddons(filtered);
     }
@@ -233,7 +233,7 @@ function VendorItem({ isExpanded }) {
       if (selectedProductview.additional_images) {
         try {
           const parsedAdditionalImages = JSON.parse(
-            selectedProductview.additional_images
+            selectedProductview.additional_images,
           );
           if (Array.isArray(parsedAdditionalImages)) {
             imagePaths = imagePaths.concat(parsedAdditionalImages);
@@ -317,7 +317,7 @@ function VendorItem({ isExpanded }) {
                     tabs.map((tab) => (
                       <button
                         key={tab.value}
-                        className={`flex items-center text-[#374A75] text-xs lg:text-base text-nowrap gap-2 px-6 py-2 border border-[#374A75]  rounded-lg ${
+                        className={`flex items-center text-[#374A75] text-xs lg:text-base text-nowrap gap-2 px-6 py-2 border border-[#374A75] rounded-lg ${
                           selectedTab === tab.value
                             ? "bg-[#D3E3F0] "
                             : "bg-white "

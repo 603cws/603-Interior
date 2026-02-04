@@ -106,7 +106,7 @@ function Card({ product, onRemove }) {
       <div className="flex flex-col gap-4 [&_h4]:uppercase [&_h4]:font-medium [&_h4]:text-sm [&_h4]:text[#111111]">
         <h4>{product?.title}</h4>
         {/* <h4>rating</h4> */}
-        <h4>{product?.ecommercePrice?.sellingPrice || 0} Rs</h4>
+        <h4>{product?.ecommercePrice?.sellingPrice || 0} ₹</h4>
         {/* <h4>material</h4> */}
         <h4>{product?.manufacturer}</h4>
       </div>

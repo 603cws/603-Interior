@@ -160,14 +160,14 @@ function UserProfileEdit({ setIsEditopen }) {
           <div className="flex justify-between items-center">
             <button
               type="button"
-              className="bg-[#fff] border border-[#ccc] px-6 py-2  lg:mt-2 xl:mt-4 capitalize"
+              className="bg-[#fff] border border-[#ccc] px-6 py-2 lg:mt-2 xl:mt-4 capitalize hover:bg-[#eee]"
               onClick={() => setIsEditopen((isedit) => !isedit)}
             >
               cancel
             </button>
             <button
               type="submit"
-              className="bg-[#374A75]  px-6 py-2 text-[#fff] lg:mt-2 xl:mt-4 capitalize"
+              className="bg-[#374A75] px-6 py-2 text-[#fff] lg:mt-2 xl:mt-4 capitalize hover:bg-[#6d87c4]"
             >
               save changes
             </button>

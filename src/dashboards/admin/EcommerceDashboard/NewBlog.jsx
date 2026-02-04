@@ -3,6 +3,7 @@ import { BsUpload } from "react-icons/bs";
 import { supabase } from "../../../services/supabase";
 import Spinner from "../../../common-components/Spinner";
 import toast from "react-hot-toast";
+import BackButton from "../../../common-components/BackButton";
 
 function NewBlog({ onClose }) {
   const [heading, setHeading] = useState({
@@ -151,12 +152,11 @@ function NewBlog({ onClose }) {
             Add blog post
           </h2>
           <hr />
-          <button
+          <BackButton
+            label="Back to blog list"
             onClick={onClose}
-            className="text-xs text-[#ccc] font-semibold ml-3"
-          >
-            Back to blog list
-          </button>
+            className="ml-3 mt-3"
+          />
           <form onSubmit={handleSubmit} className="p-2 md:p-4">
             <div className="border border-[#DDDDDD] rounded-lg mt-2 p-5 space-y-3">
               <div className="flex flex-col gap-1.5">

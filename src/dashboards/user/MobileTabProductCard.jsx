@@ -23,7 +23,7 @@ function MobileTabProductCard({ product, handleProductPreview }) {
         <div className="flex-1">
           <div className="flex justify-between items-start font-semibold text-sm">
             <h4 className=" ">{product?.title || "NA"}</h4>
-            <span className="">Rs:{product?.price || "NA"}</span>
+            <span className="">₹:{product?.price || "NA"}</span>
           </div>
           <p className="text-xs mt-1 line-clamp-4">{product?.details || ""}</p>
         </div>

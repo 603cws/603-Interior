@@ -112,7 +112,7 @@ function Blogs() {
         <div className="font-Poppins overflow-y-auto gradient-scrollbar">
           <div className="flex justify-between items-center py-2 px-3">
             <h2 className="text-xl md:text-2xl font-semibold text-[#374A75] ">
-              Blog post
+              Blog Post
             </h2>
             <div className="flex gap-2">
               {selectedBlogs.length > 0 && (

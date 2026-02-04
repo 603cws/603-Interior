@@ -643,7 +643,7 @@ function ItemTable({
                     }));
                     exportToExcel(
                       exportData,
-                      toggle ? "products.xlsx" : "addons.xlsx"
+                      toggle ? "products.xlsx" : "addons.xlsx",
                     );
                   }}
                   className=" px-4 py-2 rounded text-[#374A75] text-sm flex items-center gap-3 border "
@@ -973,7 +973,7 @@ function ItemTable({
                     }));
                     exportToExcel(
                       exportData,
-                      toggle ? "products.xlsx" : "addons.xlsx"
+                      toggle ? "products.xlsx" : "addons.xlsx",
                     );
                   }}
                   className="h-10 w-10 flex justify-center items-center border rounded "
