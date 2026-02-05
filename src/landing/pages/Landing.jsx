@@ -244,21 +244,6 @@ function Landing() {
                   <br /> Space
                 </h1>
                 <div className="h-1 w-20 bg-[#334A78] place-self-center lg:place-self-end"></div>
-                {/* <p className="text-base lg:text-[15px] xl:text-[19px] 2xl:text-[21px] text-[#555555]">
-                  "Transforming ordinary spaces into extraordinary
-                  <span className="hidden lg:inline">
-                    <br />
-                  </span>
-                  experiences. our passion lies in creating interiors that
-                  <span className="hidden lg:inline">
-                    <br />
-                  </span>
-                  are not just beautiful but functional, timeless, and
-                  <span className="hidden lg:inline">
-                    <br />
-                  </span>
-                  uniquely yours."
-                </p> */}
                 <p className="text-base lg:text-[15px] xl:text-[19px] 2xl:text-[21px] text-[#555555]">
                   Transforming ordinary spaces into extraordinary{" "}
                   <br className="hidden lg:inline" />
@@ -294,8 +279,8 @@ function Landing() {
               className="animate-bounce group w-12 h-12 bg-[#78A3FF] rounded-full flex justify-center items-center text-xl cursor-pointer shadow-lg"
             >
               <FaQuestion />
-              <p className="absolute pointer-events-none bottom-full right-1/2 translate-x-1/2 mb-3 bg-[#334A78] text-white text-sm font-medium px-2 py-2 rounded-md shadow-2xl opacity-0 translate-y-2 transition-all duration-300 ease-out group-hover:opacity-100 group-hover:scale-100 group-hover:translate-y-0 w-28">
-                See how it works ?
+              <p className="text-center absolute pointer-events-none bottom-full right-1/2 translate-x-1/2 mb-3 bg-[#334A78] text-white text-sm font-medium px-2 py-2 rounded-md shadow-2xl opacity-0 translate-y-2 transition-all duration-300 ease-out group-hover:opacity-100 group-hover:scale-100 group-hover:translate-y-0 w-28">
+                See how we work ?
                 <span className="absolute top-full left-1/2 -translate-x-1/2 w-2 h-2 bg-[#334A78] rotate-45" />
               </p>
             </div>

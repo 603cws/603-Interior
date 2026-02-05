@@ -1,8 +1,16 @@
 import { FaCheck, FaFilePdf, FaUser } from "react-icons/fa";
 import { useRef } from "react";
 
-import { CategorySvgMap } from "../../common-components/CategorySvgMap";
 import { useNavigate } from "react-router-dom";
+import {
+  cabins,
+  categories,
+  features,
+  openworkspaces,
+  stats,
+  subcat,
+} from "./constants";
+
 export const LandingScreen = () => (
   <div className="flex flex-col h-full bg-white font-TimesNewRoman overflow-hidden">
     <div className="container flex justify-between items-center font-TimesNewRoman text-[#334A78] py-1.5">
@@ -106,12 +114,7 @@ export const LayoutScreen = () => {
   return (
     <div className="flex flex-col h-full bg-[#f4f7f9] font-TimesNewRoman">
       <div className="bg-[#334A78] p-4 flex justify-between items-center h-20 shrink-0">
-        <img
-          src="./logo/workved-logo-white.png"
-          alt=""
-          className="max-w-[100px] h-auto"
-        />
-
+        <img src="/logo/logo-new.png" alt="" className="max-w-[100px] h-auto" />
         <div className="flex-1 flex justify-center">
           <div className="w-full max-w-xl bg-[#334A78] border border-yellow-500 rounded-lg py-2 px-6 flex items-center justify-between shadow-inner">
             <div className="flex items-center gap-4">
@@ -221,13 +224,7 @@ export const LayoutScreen = () => {
             </div>
           </div>
           <div className="grid grid-cols-3 mt-6 gap-x-4 gap-y-2">
-            {[
-              "Linear: 40.0%",
-              "Cabins: 8.5%",
-              "Meeting: 4.8%",
-              "Lounge: 4.0%",
-              "Washrooms: 4.5%",
-            ].map((stat) => (
+            {stats?.map((stat) => (
               <div
                 key={stat}
                 className="flex items-center gap-2 text-[9px] font-black text-gray-500 uppercase tracking-widest"
@@ -245,18 +242,7 @@ export const LayoutScreen = () => {
               Open Workspaces
             </h3>
             <div className="grid grid-cols-2 gap-4">
-              {[
-                {
-                  name: "Linear Workspace",
-                  img: "/images/workstation-wp/linear.webp",
-                  count: 250,
-                },
-                {
-                  name: "L-Type Workspace",
-                  img: "/images/workstation-wp/lType.webp",
-                  count: 15,
-                },
-              ].map((item, i) => (
+              {openworkspaces?.map((item, i) => (
                 <div key={i} className="flex flex-col gap-2">
                   <div className="h-32 rounded-sm overflow-hidden bg-gray-100 border">
                     <img
@@ -292,18 +278,7 @@ export const LayoutScreen = () => {
               Cabins
             </h3>
             <div className="grid grid-cols-2 gap-4">
-              {[
-                {
-                  name: "MD Cabin",
-                  img: "/images/workstation-wp/md.webp",
-                  count: 5,
-                },
-                {
-                  name: "Manager Cabin",
-                  img: "/images/workstation-wp/manager.webp",
-                  count: 6,
-                },
-              ].map((item, i) => (
+              {cabins?.map((item, i) => (
                 <div key={i} className="flex flex-col gap-2">
                   <div className="h-32 rounded-lg overflow-hidden bg-gray-100 border">
                     <img
@@ -340,11 +315,7 @@ export const PlanSelectionScreen = () => {
     <div className="flex flex-col h-[300px] bg-white relative font-TimesNewRoman">
       {/* Minimal Header */}
       <div className="bg-[#334A78] p-4 flex justify-between items-center h-14 shrink-0">
-        <img
-          src="./logo/workved-logo-white.png"
-          alt=""
-          className="max-w-[100px] h-auto"
-        />
+        <img src="/logo/logo-new.png" alt="" className="max-w-[100px] h-auto" />
 
         <div className="flex items-center gap-6">
           <span className="text-white text-xs font-bold">Draft BOQ</span>
@@ -389,12 +360,7 @@ export const PlanSelectionScreen = () => {
                   Exclusive
                 </h3>
                 <ul className="space-y-4 mb-auto">
-                  {[
-                    "Premium materials with a refined look.",
-                    "Stylish finishes and modern features.",
-                    "Balanced cost and luxury.",
-                    "Energy-efficient solutions.",
-                  ].map((text, i) => (
+                  {features?.map((text, i) => (
                     <li
                       key={i}
                       className="flex items-start gap-3 text-white/90 text-sm font-medium"
@@ -487,17 +453,7 @@ export const CustomizationScreen = () => (
     </div>
 
     <div className="flex justify-between px-12 py-6 bg-gray-50 border-b shadow-sm">
-      {[
-        { name: "Furniture", icon: CategorySvgMap.Furniture, active: true },
-        { name: "Lighting", icon: CategorySvgMap.Lighting },
-        { name: "HVAC", icon: CategorySvgMap.HVAC },
-        { name: "Flooring", icon: CategorySvgMap.Flooring },
-        { name: "Civil", icon: CategorySvgMap.CivilPlumbing },
-        { name: "Partitions", icon: CategorySvgMap.PartitionsCeilings },
-        { name: "Paint", icon: CategorySvgMap.Paint },
-        { name: "Smart", icon: CategorySvgMap["Smart Solutions"] },
-        { name: "Lux", icon: CategorySvgMap.Lux },
-      ].map((cat) => (
+      {categories?.map((cat) => (
         <div key={cat.name} className="flex flex-col items-center gap-3 group">
           <div
             className={`w-14 h-14 rounded-2xl flex items-center justify-center text-xl transition-all ${cat.active ? "bg-[#3b5998] text-white shadow-xl scale-110" : "bg-white text-[#334A78]/20 border-2 border-gray-100"}`}
@@ -517,7 +473,7 @@ export const CustomizationScreen = () => (
           <span
             className={`text-[8px] font-black uppercase tracking-[0.2em] ${cat.active ? "text-[#3b5998]" : "text-gray-300"}`}
           >
-            {cat.name}
+            {cat?.name}
           </span>
         </div>
       ))}
@@ -525,41 +481,19 @@ export const CustomizationScreen = () => (
 
     <div className="flex-1 p-10 overflow-y-auto bg-gray-50/30">
       <div className="grid grid-cols-5 gap-8">
-        {[
-          {
-            name: "Linear Workstation",
-            img: "/images/boq/LinearWorkstation.png",
-          },
-          {
-            name: "L-Type Workstation",
-            img: "/images/boq/LTypeWorkstation.png",
-          },
-          {
-            name: "Md Cabin",
-            img: "/images/boq/MdCabin.png",
-            active: true,
-          },
-          {
-            name: "Manager Cabin",
-            img: "/images/boq/ManagerCabin.png",
-          },
-          {
-            name: "Small Cabin",
-            img: "/images/boq/SmallCabin.png",
-          },
-        ].map((prod, i) => (
+        {subcat?.map((prod, i) => (
           <div key={i} className="flex flex-col items-center gap-4">
             <div
               className={`w-full aspect-square overflow-hidden border transition-all bg-gradient-to-r from-[#334A78] to-[#347ABF] p-2 shadow-lg rounded-2xl ${prod.active ? "border-[#3b5998] shadow-2xl scale-105" : "border-gray-100"}`}
             >
               <img
-                src={prod.img}
+                src={prod?.img}
                 className="w-full h-full object-cover"
-                alt={prod.name}
+                alt={prod?.name}
               />
             </div>
             <span className="text-[10px] font-black text-[#334A78]/70 uppercase tracking-widest text-center truncate w-full px-2">
-              {prod.name}
+              {prod?.name}
             </span>
           </div>
         ))}
@@ -593,18 +527,19 @@ export const DownloadScreen = () => {
       <div className="flex gap-6">
         <button
           id="download-pdf-btn"
-          className="px-12 py-4 bg-[#334A78] text-white rounded-2xl font-black text-xs uppercase tracking-widest shadow-2xl flex items-center gap-4 hover:scale-105 transition-all"
+          onClick={() => navigate("/layout")}
+          className="px-12 py-4 bg-[#334A78] text-white rounded-2xl font-black animate-bounce text-xs uppercase tracking-widest shadow-2xl flex items-center gap-4 hover:scale-105 transition-all"
         >
           <i className="fas fa-file-download text-base"></i>
-          Download PDF
-        </button>
-        <button
-          id="start-journey-btn"
-          onClick={() => navigate("/layout")}
-          className="px-12 py-4 bg-[#3b5998] text-white rounded-2xl font-black text-xs uppercase tracking-widest shadow-2xl flex items-center gap-4 hover:scale-105 transition-all animate-bounce"
-        >
           Start Your Journey
         </button>
+        {/* <button
+          id="start-journey-btn"
+          onClick={() => navigate("/layout")}
+          className="px-12 py-4 bg-[#3b5998] text-white rounded-2xl font-black text-xs uppercase tracking-widest shadow-2xl flex items-center gap-4 hover:scale-105 transition-all "
+        >
+          Start Your Journey
+        </button> */}
       </div>
     </div>
   );
