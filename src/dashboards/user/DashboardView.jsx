@@ -125,7 +125,10 @@ function DashboardView({
             />
             <LayoutInfoCard
               selectedBoq={selectedBoq}
-              value={selectedBoq?.boqTotalPrice || 0}
+              value={(selectedBoq?.boqTotalPrice || 0).toLocaleString("en-IN", {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              })}
               title={"Total Amount"}
               image={"/images/grandtotal.png"}
               spanvalue={" INR"}

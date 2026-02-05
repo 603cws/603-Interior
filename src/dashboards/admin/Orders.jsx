@@ -127,7 +127,7 @@ export default function Orders({ vendorId = null }) {
         : true;
 
       const paymentState =
-        order.paymentDetails?.state?.toLowerCase() || "unpaid";
+        order.payment_details?.state?.toLowerCase() || "unpaid";
       const matchPaymentStatus = (
         type === "paymentStatus" ? value : paymentStatusFilter
       )

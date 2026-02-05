@@ -34,6 +34,7 @@ function Orders() {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [entireOrderCancellation, setEntireOrderCancellation] = useState(false);
   const [refreshOrder, setRefreshOrder] = useState(false);
+  const [orderToCancel, setOrderToCancel] = useState(null);
 
   const { accountHolder } = useApp();
   const navigate = useNavigate();
@@ -178,7 +179,7 @@ function Orders() {
                           {(order.status === "pending" ||
                             order.status === "approved") && (
                             <p className="text-xs text-[#171717]">
-                              On {order?.delivery_date}
+                              On {order?.created_at?.split("T")?.[0]}
                             </p>
                           )}
                           {order.status === "cancelled" && (
@@ -227,8 +228,9 @@ function Orders() {
                         order.status === "approved" ? (
                           <button
                             disabled={entireOrderCancellation}
-                            onClick={() => handleOrderCancel(order)}
-                            className=" px-10 border border-[#213626] uppercase text-xs tracking-wider rounded-sm py-2 hover:bg-red-600"
+                            // onClick={() => handleOrderCancel(order)}
+                            onClick={() => setOrderToCancel(order)}
+                            className=" px-10 border border-[#213626] uppercase text-xs tracking-wider rounded-sm py-2 hover:bg-red-500"
                           >
                             cancel
                           </button>
@@ -255,9 +257,32 @@ function Orders() {
               ))}
             </div>
           ) : detailedView && !productView ? (
-            <OrderProducts orderID={selectedOrder?.id} />
+            <OrderProducts
+              orderID={selectedOrder?.id}
+              setOrderToCancel={setOrderToCancel}
+            />
           ) : (
             <OrderProductView order={selectedOrder} product={selectedProduct} />
+          )}
+          {orderToCancel && (
+            <CancelWarning
+              title="Cancel Order"
+              description={
+                <>
+                  Are you sure you want to cancel this order?
+                  <br />
+                  <span className="text-xs text-gray-600">
+                    Order ID: {orderToCancel.id}
+                  </span>
+                </>
+              }
+              confirmLabel="Cancel Order"
+              onCancel={() => setOrderToCancel(null)}
+              onConfirm={async () => {
+                await handleOrderCancel(orderToCancel);
+                setOrderToCancel(null);
+              }}
+            />
           )}
         </>
       )}
@@ -267,12 +292,13 @@ function Orders() {
 
 export default Orders;
 
-function OrderProducts({ orderID }) {
+function OrderProducts({ orderID, setOrderToCancel }) {
   const [showPriceDetails, setShowPriceDetails] = useState(false);
   const [loading, setLoading] = useState();
 
   const [order, setOrder] = useState();
   const [orderRefresh, setorderRefresh] = useState(false);
+  const [productToCancel, setProductToCancel] = useState(null);
 
   useEffect(() => {
     fetchOrdersData();
@@ -416,7 +442,10 @@ function OrderProducts({ orderID }) {
         </div>
         <div className="flex gap-10">
           {(order?.status === "pending" || order?.status === "approved") && (
-            <button className="flex-1 border border-[#213626] uppercase text-xs tracking-wider rounded-sm py-2 hover:bg-[#f9f9f9]">
+            <button
+              onClick={() => setOrderToCancel(order)}
+              className="flex-1 border border-[#213626] uppercase text-xs tracking-wider rounded-sm py-2 hover:bg-[#f9f9f9]"
+            >
               cancel
             </button>
           )}
@@ -504,8 +533,9 @@ function OrderProducts({ orderID }) {
               <div className="justify-self-end">
                 {product.item_status !== "cancelled" ? (
                   <button
-                    onClick={() => handleOrderitemCancel(product)}
-                    className=" px-10 border border-[#213626] uppercase text-xs tracking-wider rounded-sm py-2 hover:bg-red-600"
+                    // onClick={() => handleOrderitemCancel(product)}
+                    onClick={() => setProductToCancel({ order, product })}
+                    className=" px-10 border border-[#213626] uppercase text-xs tracking-wider rounded-sm py-2 hover:bg-red-500"
                   >
                     cancel
                   </button>
@@ -584,6 +614,29 @@ function OrderProducts({ orderID }) {
         <div className="md:px-5 text-xs md:text-sm font-bold text-[#999]">
           <p>Order ID #{order?.id}</p>
         </div>
+        {productToCancel && (
+          <CancelWarning
+            title="Cancel Product"
+            description={
+              <>
+                Are you sure you want to cancel this product?
+                <br />
+                <span className="text-xs text-gray-600">
+                  {productToCancel.product?.product_variants?.title}
+                </span>
+              </>
+            }
+            confirmLabel="Cancel Product"
+            onCancel={() => setProductToCancel(null)}
+            onConfirm={async () => {
+              await handleOrderitemCancel(
+                productToCancel.order,
+                productToCancel.product,
+              );
+              setProductToCancel(null);
+            }}
+          />
+        )}
       </div>
     </>
   );
@@ -791,6 +844,44 @@ function PriceDistribution({ order }) {
               maximumFractionDigits: 2,
             })}
           </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function CancelWarning({
+  title,
+  description,
+  confirmLabel = "Confirm",
+  onCancel,
+  onConfirm,
+}) {
+  return (
+    <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+      <div className="bg-white p-5 rounded-lg shadow-lg w-full max-w-xs md:max-w-sm">
+        <h3 className="text-lg font-semibold text-red-500 mb-2">{title}</h3>
+        <div className="mb-4">
+          <p className="text-sm text-gray-700 ">{description}</p>
+          <p className="text-red-500 text-xs">
+            Refund will be initiated if applicable.
+          </p>
+        </div>
+
+        <div className="flex justify-end gap-3">
+          <button
+            className="px-4 py-1 rounded bg-gray-200 hover:bg-gray-300"
+            onClick={onCancel}
+          >
+            Go Back
+          </button>
+
+          <button
+            className="px-4 py-1 rounded bg-red-500 hover:bg-red-600 text-white"
+            onClick={onConfirm}
+          >
+            {confirmLabel}
+          </button>
         </div>
       </div>
     </div>
