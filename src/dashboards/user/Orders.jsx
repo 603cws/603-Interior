@@ -4,7 +4,6 @@ import { useState } from "react";
 import { useApp } from "../../Context/Context";
 import { MdKeyboardArrowRight } from "react-icons/md";
 import { baseImageUrl } from "../../utils/HelperConstant";
-import { BsTelephone } from "react-icons/bs";
 import { IoCashOutline } from "react-icons/io5";
 import { LiaShippingFastSolid } from "react-icons/lia";
 import { BsBoxSeam } from "react-icons/bs";

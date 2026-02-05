@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { supabase } from "../../services/supabase";
 import SpinnerFullPage from "../../common-components/SpinnerFullPage";
-import { IoFilter } from "react-icons/io5";
 import {
   MdKeyboardArrowLeft,
   MdKeyboardArrowDown,

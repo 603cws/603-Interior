@@ -6,7 +6,6 @@ import Spinner from "../../common-components/Spinner";
 import { supabase } from "../../services/supabase";
 import toast from "react-hot-toast";
 import VendorProductCard from "./VendorProductCard";
-import { IoIosArrowBack } from "react-icons/io";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import VendorProductEdit from "../vendor/VendorProductEdit";
 import VendorEditAddon from "../vendor/VendorEditAddon";

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 const Cursor = ({ targetId, isClicking }) => {
   const [position, setPosition] = useState({ x: 400, y: 300 });

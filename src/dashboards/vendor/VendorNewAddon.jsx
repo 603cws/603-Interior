@@ -1,4 +1,3 @@
-import { MdKeyboardArrowLeft } from "react-icons/md";
 import { BsUpload } from "react-icons/bs";
 import { useEffect, useRef, useState } from "react";
 import { supabase } from "../../services/supabase";

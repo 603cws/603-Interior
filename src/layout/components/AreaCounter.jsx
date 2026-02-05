@@ -17,7 +17,6 @@ const AreaCounter = ({
   counterValue,
   seatCount,
   setSeatCount,
-  title,
 }) => {
   const min = min2;
   const max = max2;
