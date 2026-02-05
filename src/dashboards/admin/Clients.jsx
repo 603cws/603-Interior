@@ -85,7 +85,7 @@ function Clients({
     <div className="flex flex-col h-full min-h-0 overflow-hidden lg:border-2 lg:border-[#334A78] lg:rounded-lg bg-white">
       <div className="w-full flex flex-col overflow-y-auto scrollbar-hide h-[calc(100vh-110px)] px-3">
         <div className=" sticky top-0 z-20 bg-[#fff]">
-          <div className="flex justify-between items-center px-4 py-2 border-b-2 border-b-gray-400">
+          <div className="flex justify-between items-center px-1 py-2 border-b-2 border-b-gray-400">
             <h3 className="capitalize font-semibold text-xl">Client List</h3>
             <div className="flex-1 md:w-1/2 md:flex-none flex flex-row-reverse gap-2">
               <input
@@ -173,13 +173,13 @@ function Clients({
                       <div className="flex justify-center mt-4 gap-3">
                         <button
                           onClick={() => setIsModalOpen(false)}
-                          className="px-4 py-2 bg-gray-300 rounded"
+                          className="px-4 py-2 bg-gray-300 hover:bg-gray-400 rounded"
                         >
                           No
                         </button>
                         <button
                           onClick={handleConfirmDelete}
-                          className="px-4 py-2 bg-red-500 text-white rounded"
+                          className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded"
                         >
                           Yes
                         </button>

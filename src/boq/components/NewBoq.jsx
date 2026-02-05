@@ -1,6 +1,6 @@
 import { Dialog, Transition } from "@headlessui/react";
 import { Fragment, useEffect, useState, useRef } from "react";
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 import { supabase } from "../../services/supabase";
 import { boqLimit } from "../../constants/constant";
 import { useBoqApp } from "../../Context/BoqContext";
@@ -66,8 +66,12 @@ function NewBoq({ onConfirm }) {
         onConfirm("Draft BOQ", "new");
       }
     } else if (boqMode === "existing") {
-      if (!selectedBoq) return alert("Please select a BOQ.");
-      onConfirm(selectedBoq, "existing");
+      if (!selectedBoq) {
+        toast.error("Please select a BOQ");
+        return;
+      } else {
+        onConfirm(selectedBoq, "existing");
+      }
     }
   };
 
@@ -85,7 +89,7 @@ function NewBoq({ onConfirm }) {
       if (deleteError) {
         console.error("Delete error:", deleteError);
         toast.error(
-          "Failed to delete previous drafts: " + (deleteError.message || "")
+          "Failed to delete previous drafts: " + (deleteError.message || ""),
         );
         return;
       }

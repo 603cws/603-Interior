@@ -1,4 +1,3 @@
-import { MdKeyboardArrowLeft } from "react-icons/md";
 import { BsUpload } from "react-icons/bs";
 import { useEffect, useState } from "react";
 import { supabase } from "../../services/supabase";
@@ -17,6 +16,7 @@ import {
 } from "../../utils/HelperConstant";
 import MultiImageCrop from "../components/MultiImageCrop";
 import ButtonSpinner from "../../utils/ButtonSpinner";
+import BackButton from "../../common-components/BackButton";
 
 function VendorProductEdit({
   setEditProduct,
@@ -31,11 +31,11 @@ function VendorProductEdit({
   const [vendordata, setVendordata] = useState();
   const [selectedSubcategories, setSelectedSubcategories] = useState();
   const [subSubCategory, setSubSubCategory] = useState(
-    selectedproduct?.products?.subcategory1 || ""
+    selectedproduct?.products?.subcategory1 || "",
   );
 
   const [category, setCategory] = useState(
-    selectedproduct?.products?.category || ""
+    selectedproduct?.products?.category || "",
   );
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -45,7 +45,7 @@ function VendorProductEdit({
     width: selectedproduct?.dimensions?.split("x")[2] || "",
   });
   const [displayOption, setDisplayOption] = useState(
-    selectedproduct?.productDisplayType
+    selectedproduct?.productDisplayType,
   );
 
   const [showCropper, setShowCropper] = useState(false);
@@ -169,7 +169,7 @@ function VendorProductEdit({
 
   const removeAdditionalImage = async (index) => {
     let additionalimages = variant.additionalImages.filter(
-      (_, i) => i !== index
+      (_, i) => i !== index,
     );
 
     setVariant((prevVariants) => ({
@@ -194,7 +194,7 @@ function VendorProductEdit({
 
   useEffect(() => {
     const filtered = AllCatArray?.filter(
-      (cat) => cat?.name?.toLowerCase() === category?.toLowerCase()
+      (cat) => cat?.name?.toLowerCase() === category?.toLowerCase(),
     );
 
     const subcattodisplay = filtered.flatMap((subcat) => subcat?.subCat1);
@@ -216,10 +216,10 @@ function VendorProductEdit({
       return;
     }
     const filebasedadditionalimages = variant.additionalImages.filter(
-      (el) => typeof el !== "string"
+      (el) => typeof el !== "string",
     );
     const useradditionalimages = variant.additionalImages.filter(
-      (el) => typeof el === "string"
+      (el) => typeof el === "string",
     );
 
     const uniqueID = uuidv4();
@@ -292,7 +292,7 @@ function VendorProductEdit({
 
         if (mainImageError) {
           toast.error(
-            `Error uploading main image for variant: ${variant.title}`
+            `Error uploading main image for variant: ${variant.title}`,
           );
           throw new Error("Main image upload failed");
         }
@@ -302,11 +302,11 @@ function VendorProductEdit({
       }
 
       const previousAdditionalImages = JSON.parse(
-        selectedproduct?.additional_images || "[]"
+        selectedproduct?.additional_images || "[]",
       );
 
       const imagesToRemove = previousAdditionalImages.filter(
-        (oldPath) => !variant.additionalImages.includes(oldPath)
+        (oldPath) => !variant.additionalImages.includes(oldPath),
       );
 
       if (imagesToRemove.length > 0) {
@@ -317,13 +317,13 @@ function VendorProductEdit({
         if (removeError) {
           console.warn(
             "Error removing old additional images:",
-            removeError.message
+            removeError.message,
           );
         }
       }
 
       let currentIndex = variant.additionalImages.filter(
-        (img) => typeof img === "string"
+        (img) => typeof img === "string",
       ).length;
 
       for (const imageFile of filebasedadditionalimages) {
@@ -337,7 +337,7 @@ function VendorProductEdit({
         if (additionalImageError) {
           console.warn(
             `Failed to upload additional image at index ${currentIndex}`,
-            additionalImageError.message
+            additionalImageError.message,
           );
           continue;
         }
@@ -390,7 +390,7 @@ function VendorProductEdit({
   useEffect(() => {
     if (category !== "HVAC" && category !== "Civil / Plumbing") {
       const filter = AllCatArray.filter((cat) => cat.name === category).flatMap(
-        (subcat) => subcat.subcategories
+        (subcat) => subcat.subcategories,
       );
       setSelectedSubcategories(filter.join(","));
     }
@@ -503,23 +503,21 @@ function VendorProductEdit({
   const AdditonalInformation = additionalDetailsConfig.filter(
     (info) =>
       info.category.toLowerCase() === category.toLowerCase() &&
-      info.subcategory.toLowerCase() === subSubCategory.toLowerCase()
+      info.subcategory.toLowerCase() === subSubCategory.toLowerCase(),
   );
 
   return (
     <div className="flex flex-col justify-center items-start font-Poppins relative">
       <div className="px-5 py-2 border-b-2 bg-white w-full border-b-gray-400 sticky top-0 z-10">
-        <button
+        <BackButton
+          label="Back to product list"
           onClick={() => {
             setEditProduct(false);
             setProductlist(true);
             setIsProductRefresh((prev) => !prev);
           }}
-          className="border-none flex justify-center items-center text-[#A1A1A1]"
-        >
-          <MdKeyboardArrowLeft />
-          Back to product list
-        </button>
+          className="py-2"
+        />
         <h3 className="capitalize font-semibold text-xl ">Edit product</h3>
       </div>
       <form
@@ -968,7 +966,7 @@ function VendorProductEdit({
           </div>
           <div className="w-full flex items-end justify-between mt-5">
             <button
-              className="border-2 px-5 py-2 bg-[#374A75] text-white capitalize rounded-lg"
+              className="border-2 px-5 py-2 bg-[#374A75] hover:bg-[#6d87c4] text-white capitalize rounded-lg"
               type="submit"
               disabled={isSubmitting}
             >

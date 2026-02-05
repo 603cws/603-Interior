@@ -48,7 +48,7 @@ function UserCard({ setIsEditopen }) {
 
         <div className="flex justify-start items-center   pt-2 w-full">
           <button
-            className="capitalize font-medium text-base px-5 py-2 rounded-lg text-white border-[#374A75] border bg-[#374A75]"
+            className="capitalize font-medium text-base px-5 py-2 rounded-lg text-white border-[#374A75] border bg-[#374A75] hover:bg-[#6d87c4]"
             onClick={() => setIsEditopen(false)}
           >
             edit

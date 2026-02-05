@@ -69,7 +69,7 @@ function UserBoqItem({ selectedBoq, setSelectedBoq }) {
 
   const paginatedItems = items.slice(
     (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
+    currentPage * itemsPerPage,
   );
 
   const goToPage = (page) => {
@@ -167,7 +167,7 @@ function UserBoqItem({ selectedBoq, setSelectedBoq }) {
 
       if (selectedBoq && selectedBoq.addons) {
         const productIdsArray = selectedBoq.addons.map(
-          (addon) => addon.variantId
+          (addon) => addon.variantId,
         );
 
         const { data } = await supabase
@@ -191,7 +191,7 @@ function UserBoqItem({ selectedBoq, setSelectedBoq }) {
         setIsloading(true);
 
         const productIdsArray = selectedBoq.products.map(
-          (product) => product.id
+          (product) => product.id,
         );
 
         const { data, error } = await supabase
@@ -276,20 +276,18 @@ function UserBoqItem({ selectedBoq, setSelectedBoq }) {
                   return (
                     <div
                       key={boq?.id}
-                      className={` rounded-lg border-2  px-5 py-2 ${
+                      onClick={() => {
+                        setSelectedBoq(boq);
+                        setSearchQuery("");
+                        setSelectedCategory("");
+                      }}
+                      className={`hover:cursor-pointer rounded-lg border-2  px-5 py-2 ${
                         selectedBoq?.id === boq?.id
                           ? "bg-[#374A75] text-white border-[#374a75]"
                           : "bg-white text-[#374a75] border-[#ccc]"
                       }`}
                     >
-                      <button
-                        onClick={() => {
-                          setSelectedBoq(boq);
-                          setSearchQuery("");
-                          setSelectedCategory("");
-                        }}
-                        className="text-sm lg:text-lg"
-                      >
+                      <button className="text-sm lg:text-lg">
                         {boq.boqTitle}
                       </button>
                     </div>

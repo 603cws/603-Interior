@@ -13,20 +13,20 @@ const AboutUs = lazy(() => import("./landing/pages/AboutUs"));
 const Login = lazy(() => import("./pages/Login"));
 const BlogDetail = lazy(() => import("./landing/pages/BlogDetail"));
 const Dashboard = lazy(() => import("./dashboards/user/Dashboard"));
-const BrandDLink = lazy(() =>
-  import("./pages/Brands/SmartSolutions/BrandDLink")
+const BrandDLink = lazy(
+  () => import("./pages/Brands/SmartSolutions/BrandDLink"),
 );
-const DashboardInterface = lazy(() =>
-  import("./dashboards/admin/DashboardInterface")
+const DashboardInterface = lazy(
+  () => import("./dashboards/admin/DashboardInterface"),
 );
-const VendorDashboardLayout = lazy(() =>
-  import("./dashboards/vendor/VendorDashboardLayout")
+const VendorDashboardLayout = lazy(
+  () => import("./dashboards/vendor/VendorDashboardLayout"),
 );
 const Services = lazy(() => import("./landing/pages/Services"));
 const OurStory = lazy(() => import("./landing/pages/OurStory"));
 const OrderConfirm = lazy(() => import("./Ecommerce/components/OrderConfirm"));
-const AdminDashboardEcom = lazy(() =>
-  import("./dashboards/admin/EcommerceDashboard/AdminDashboardEcom")
+const AdminDashboardEcom = lazy(
+  () => import("./dashboards/admin/EcommerceDashboard/AdminDashboardEcom"),
 );
 const YouMayAlsoLike = lazy(() => import("./Ecommerce/pages/YouMayAlsoLike"));
 const BrandsOverview = lazy(() => import("./pages/Brands/BrandOverview"));
@@ -34,16 +34,15 @@ const Layout = lazy(() => import("./layout/pages/Layout"));
 const Career = lazy(() => import("./landing/pages/Career"));
 
 const HelpnFaq = lazy(() => import("./landing/pages/HelpnFaq"));
-const TermsAndCondition = lazy(() =>
-  import("./landing/pages/TermsAndCondition")
+const TermsAndCondition = lazy(
+  () => import("./landing/pages/TermsAndCondition"),
 );
-const Boqcompleted = lazy(() => import("./common-components/Boqcompleted"));
 const AdminDashboard = lazy(() => import("./dashboards/admin/AdminDashboard"));
 const ProductOverview = lazy(() => import("./boq/pages/ProductOverview"));
 const JobPage = lazy(() => import("./landing/pages/JobPage"));
 const ThreeDViewer = lazy(() => import("./common-components/ThreeDViewer"));
-const CompleteProfile = lazy(() =>
-  import("./common-components/CompleteProfile")
+const CompleteProfile = lazy(
+  () => import("./common-components/CompleteProfile"),
 );
 const Privacy = lazy(() => import("./landing/pages/Privacy"));
 const InteriorBlog = lazy(() => import("./landing/pages/InteriorBlog"));
@@ -55,8 +54,8 @@ const Cart = lazy(() => import("./Ecommerce/pages/Cart"));
 const Addresspage = lazy(() => import("./Ecommerce/pages/Addresspage"));
 const Wishlist = lazy(() => import("./Ecommerce/pages/Wishlist"));
 const Brands = lazy(() => import("./pages/Brands/Brands"));
-const ProductReview = lazy(() =>
-  import("./Ecommerce/components/ProductReview")
+const ProductReview = lazy(
+  () => import("./Ecommerce/components/ProductReview"),
 );
 const BrandProductView = lazy(() => import("./pages/Brands/BrandProductView"));
 const ProfilePage = lazy(() => import("./Ecommerce/pages/ProfilePage"));
@@ -175,8 +174,6 @@ function App() {
           <Route path="/cart/similarproducts" element={<YouMayAlsoLike />} />
           <Route path="/brandOverview" element={<BrandsOverview />} />
           <Route path="/brandOverview/:brandName" element={<BrandRouter />} />
-          {/* testing route */}
-          <Route path="/boqcompleted" element={<Boqcompleted />} />
           <Route
             path="/ecommerceadmin"
             element={

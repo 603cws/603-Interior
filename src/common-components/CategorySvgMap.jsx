@@ -155,7 +155,7 @@ export const CategorySvgMap = {
       />
     </svg>
   ),
-  SmartSolutions: (fill = "#374A75") => (
+  "Smart Solutions": (fill = "#374A75") => (
     <svg
       width="80"
       height="80"

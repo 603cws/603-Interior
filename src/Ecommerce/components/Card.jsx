@@ -29,7 +29,7 @@ export function CardWithCompare({ product, handleCompareToggle, compare }) {
   const { isAuthenticated } = useApp();
   const { cartItems, wishlistItems, localcartItems } = useEcomApp();
   const isWishlisted = wishlistItems?.some(
-    (item) => item.productId?.id === product.id
+    (item) => item.productId?.id === product.id,
   );
 
   const naviagte = useNavigate();
@@ -43,12 +43,12 @@ export function CardWithCompare({ product, handleCompareToggle, compare }) {
 
     if (isAuthenticated) {
       const check = cartItems?.some(
-        (item) => item.productId?.id === product.id
+        (item) => item.productId?.id === product.id,
       );
       setIsCarted(check);
     } else {
       const check = localcartItems?.some(
-        (item) => item.productId?.id === product.id
+        (item) => item.productId?.id === product.id,
       );
 
       setIsCarted(check);
@@ -74,10 +74,8 @@ export function CardWithCompare({ product, handleCompareToggle, compare }) {
               {product?.title}
             </h4>
             <div className="flex text-xs lg:text-sm items-center gap-2">
-              <p className=" ">Rs {product?.price || "Rs 3,0000"}</p>
-              <p className="line-through text-[#111] text-opacity-50">
-                Rs 5678
-              </p>
+              <p className=" ">₹ {product?.price || "3,0000"}</p>
+              <p className="line-through text-[#111] text-opacity-50">₹ 5678</p>
               <p className="text-[#C20000] hidden md:block">sale</p>
             </div>
             <p className="text-[#C20000] md:hidden block uppercase">sale</p>
@@ -106,6 +104,7 @@ export function CardWithCompare({ product, handleCompareToggle, compare }) {
             id={`compare-${product.id}`}
             checked={compare?.some((item) => item.id === product.id)}
             onChange={() => handleCompareToggle(product)}
+            className="cursor-pointer"
           />
           <label htmlFor="" className="text-xs">
             Add to compare
@@ -122,7 +121,7 @@ export function ShopCard({ product }) {
   const { cartItems, localcartItems, wishlistItems } = useEcomApp();
 
   const isWishlisted = wishlistItems?.some(
-    (item) => item.productId?.id === product.id
+    (item) => item.productId?.id === product.id,
   );
 
   const [iscarted, setIsCarted] = useState(false);
@@ -134,12 +133,12 @@ export function ShopCard({ product }) {
 
     if (isAuthenticated) {
       const check = cartItems?.some(
-        (item) => item.productId?.id === product.id
+        (item) => item.productId?.id === product.id,
       );
       setIsCarted(check);
     } else {
       const check = localcartItems?.some(
-        (item) => item.productId?.id === product.id
+        (item) => item.productId?.id === product.id,
       );
       setIsCarted(check);
     }
@@ -170,10 +169,10 @@ export function ShopCard({ product }) {
             </h4>
             <div className="flex items-center gap-2 flex-wrap xl:flex-nowrap">
               <p className="text-nowrap">
-                RS {product?.ecommercePrice?.sellingPrice || "Rs 3,0000"}
+                ₹ {product?.ecommercePrice?.sellingPrice || "3,0000"}
               </p>
               <p className="line-through text-[#111] text-opacity-50 text-nowrap">
-                RS {product?.ecommercePrice?.mrp || "Rs 3,0000"}
+                ₹ {product?.ecommercePrice?.mrp || "3,0000"}
               </p>
               <p className="text-[#C20000] uppercase">sale</p>
             </div>
@@ -192,7 +191,7 @@ export function ShopCard({ product }) {
         {product?.stockQty > 0 ? (
           <button
             onClick={() => handleAddToCart(product, iscarted)}
-            className="text-[#000] uppercase bg-[#FFFFFF] text-xs border border-[#ccc] px-2 py-2 rounded-sm "
+            className="text-[#000] uppercase bg-[#FFFFFF] text-xs border border-[#ccc] px-2 py-2 rounded-sm hover:bg-[#f2f2f2]"
           >
             {iscarted ? "Go to cart" : "Add to cart"}{" "}
           </button>
@@ -231,12 +230,12 @@ export function CartCard({ cartitem }) {
       }
     } else {
       const removeproductfromlocalCartitems = localcartItems.filter(
-        (item) => item.productId.id !== product?.productId?.id
+        (item) => item.productId.id !== product?.productId?.id,
       );
 
       localStorage.setItem(
         "cartitems",
-        JSON.stringify(removeproductfromlocalCartitems)
+        JSON.stringify(removeproductfromlocalCartitems),
       );
       setLocalCartItems(removeproductfromlocalCartitems);
       showRemoveFromCartToast(product);
@@ -277,7 +276,7 @@ export function CartCard({ cartitem }) {
       const updatedLocalItems = localcartItems.map((item) =>
         item.productId.id === product.productId.id
           ? { ...item, quantity: quantity - 1 }
-          : item
+          : item,
       );
       localStorage.setItem("cartitems", JSON.stringify(updatedLocalItems));
       setLocalCartItems(updatedLocalItems);
@@ -292,7 +291,7 @@ export function CartCard({ cartitem }) {
         const updatedLocalItems = localcartItems.map((item) =>
           item.productId.id === product.productId.id
             ? { ...item, quantity: quantity + 1 }
-            : item
+            : item,
         );
         setLocalCartItems(updatedLocalItems);
         localStorage.setItem("cartitems", JSON.stringify(updatedLocalItems));
@@ -323,7 +322,7 @@ export function CartCard({ cartitem }) {
                   image: data.signedUrl,
                 },
               }
-            : item
+            : item,
         );
         localStorage.setItem("cartitems", JSON.stringify(updatedItems));
         setLocalCartItems(updatedItems);
@@ -343,7 +342,7 @@ export function CartCard({ cartitem }) {
         <img
           src={signedUrl}
           alt="cart"
-          className="w-24 h-24 md:h-32 md:w-28 lg:h-40 lg:w-36 object-contain "
+          className="w-24 h-24 md:h-32 md:w-28 lg:h-40 lg:w-36 object-contain cursor-pointer"
           onClick={() => navigate(`/productview/${cartitem.productId?.id}`)}
           onError={refreshSignedUrl}
         />
@@ -408,7 +407,7 @@ export function CartCard({ cartitem }) {
           )}
           <div className="flex gap-3">
             <h5 className=" font-medium text-[#111111]">
-              Rs.{" "}
+              ₹{" "}
               {cartitem?.productId?.ecommercePrice?.sellingPrice ||
                 cartitem?.productId?.price}
             </h5>
@@ -416,14 +415,14 @@ export function CartCard({ cartitem }) {
               <del>{cartitem?.productId?.ecommercePrice?.mrp || ""}</del>
             </h5>{" "}
             <h5 className="font-medium text-[#C20000]/50">
-              Rs.{" "}
+              ₹{" "}
               {cartitem?.productId?.ecommercePrice?.mrp -
                 cartitem?.productId?.ecommercePrice?.sellingPrice}{" "}
               OFF
             </h5>
           </div>
           <p className="text-xs font-bold text-[#111]">
-            Total : Rs. {cartItemTotal}
+            Total : ₹ {cartItemTotal}
           </p>
         </div>
         <div className="absolute top-2 right-2">
@@ -441,7 +440,7 @@ export function AlsoLikeCard({ product }) {
   const { wishlistItems } = useEcomApp();
 
   const isWishlisted = wishlistItems?.some(
-    (item) => item.productId?.id === product.id
+    (item) => item.productId?.id === product.id,
   );
 
   const naviagte = useNavigate();
@@ -470,10 +469,10 @@ export function AlsoLikeCard({ product }) {
             </h4>
             <div className="flex items-center gap-2">
               <p className=" ">
-                Rs {product?.ecommercePrice?.sellingPrice || "Rs 3,0000"}
+                ₹ {product?.ecommercePrice?.sellingPrice || "3,0000"}
               </p>
               <p className="line-through text-[#111] text-opacity-50">
-                Rs {product?.ecommercePrice?.mrp || "Rs 3,0000"}
+                ₹ {product?.ecommercePrice?.mrp || "3,0000"}
               </p>
               <p className="text-[#C20000]">sale</p>
             </div>

@@ -44,11 +44,11 @@ function Addresspage() {
   });
 
   const sortedAddressList = [...(accountHolder?.address || [])].sort(
-    (a, b) => (b.ismarkedDefault === true) - (a.ismarkedDefault === true)
+    (a, b) => (b.ismarkedDefault === true) - (a.ismarkedDefault === true),
   );
 
   const getDefaultAddress = sortedAddressList.filter(
-    (add) => add.ismarkedDefault === true
+    (add) => add.ismarkedDefault === true,
   );
 
   const [errors, setErrors] = useState({});
@@ -162,7 +162,7 @@ function Addresspage() {
         return;
       }
       const updatedAddresslist = accountHolder?.address.filter(
-        (add) => add.id !== address.id
+        (add) => add.id !== address.id,
       );
 
       const { error } = await supabase
@@ -232,7 +232,7 @@ function Addresspage() {
     formattedDeliveryDate,
     pricingdetails,
     accountHolder,
-    cartItems
+    cartItems,
   ) {
     try {
       //1) create the order
@@ -312,13 +312,13 @@ function Addresspage() {
   const handlePayment = async () => {
     try {
       const insufficientStock = cartItems.filter(
-        (item) => item.productId.stockQty < item.quantity
+        (item) => item.productId.stockQty < item.quantity,
       );
 
       if (insufficientStock.length > 0) {
         insufficientStock.forEach((item) => {
           toast.error(
-            `${item.productId.title} only has ${item.productId.stockQty} left in stock.`
+            `${item.productId.title} only has ${item.productId.stockQty} left in stock.`,
           );
         });
         setpaymentLoading(false);
@@ -349,7 +349,7 @@ function Addresspage() {
         formattedDeliveryDate,
         pricingdetails,
         accountHolder,
-        cartItems
+        cartItems,
       );
 
       if (!result) {
@@ -383,7 +383,7 @@ function Addresspage() {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ amount, orderId }),
-        }
+        },
       );
 
       const data = await res.json();
@@ -406,7 +406,7 @@ function Addresspage() {
                 {
                   method: "POST",
                   headers: { "Content-Type": "application/json" },
-                }
+                },
               );
 
               const data = await res.json();
@@ -427,7 +427,7 @@ function Addresspage() {
                   if (stockError) {
                     console.error(
                       `Failed to update stock for ${item.productId.title}:`,
-                      stockError
+                      stockError,
                     );
                   }
                 }
@@ -442,7 +442,7 @@ function Addresspage() {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify(orderData),
-                  }
+                  },
                 );
                 setpaymentLoading((prev) => !prev);
 
@@ -822,7 +822,7 @@ function Addresspage() {
                       Total MRP
                     </h5>
                     <h5 className="font-medium  text-[#111111]/80 ">
-                      Rs {pricingdetails?.price}
+                      ₹ {pricingdetails?.price}
                     </h5>
                   </div>
 
@@ -831,7 +831,7 @@ function Addresspage() {
                       Discount on MRP
                     </h5>
                     <h5 className="font-medium  text-[#34BFAD]/80 ">
-                      RS -{pricingdetails?.discountOnMrp?.toFixed(2)}
+                      ₹ -{pricingdetails?.discountOnMrp?.toFixed(2)}
                     </h5>
                   </div>
 
@@ -849,7 +849,7 @@ function Addresspage() {
                       Total MRP
                     </h5>
                     <h5 className="font-medium  text-[#111111]/80 ">
-                      Rs {pricingdetails?.subtotal}
+                      ₹ {pricingdetails?.subtotal}
                     </h5>
                   </div>
 
@@ -865,9 +865,7 @@ function Addresspage() {
                     </div>
                     <h5 className="font-medium  text-[#34BFAD]/80 uppercase">
                       {pricingdetails.shippingFee > 0 ? (
-                        <span>
-                          Rs {pricingdetails?.shippingFee?.toFixed(2)}
-                        </span>
+                        <span>₹ {pricingdetails?.shippingFee?.toFixed(2)}</span>
                       ) : (
                         "Free"
                       )}
@@ -881,7 +879,7 @@ function Addresspage() {
                       </h5>
                     </div>
                     <h5 className="font-medium  text-[#34BFAD]/80 uppercase">
-                      Rs {pricingdetails?.gst?.toFixed(2)}
+                      ₹ {pricingdetails?.gst?.toFixed(2)}
                     </h5>
                   </div>
 
@@ -890,7 +888,7 @@ function Addresspage() {
                       Total Amount
                     </h5>
                     <h5 className="font-medium lg:text-xl text-[#111111] ">
-                      Rs {pricingdetails?.finalValue?.toFixed(2)}
+                      ₹ {pricingdetails?.finalValue?.toFixed(2)}
                     </h5>
                   </div>
                 </div>

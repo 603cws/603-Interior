@@ -86,7 +86,7 @@ function DashboardProductCard({
                           MRP
                         </p>
                         <p className="font-semibold text-[#000] text-lg">
-                          RS {product?.ecommercePrice?.mrp}
+                          ₹ {product?.ecommercePrice?.mrp}
                         </p>
                       </div>
                       <div>
@@ -94,7 +94,7 @@ function DashboardProductCard({
                           Selling Price
                         </p>
                         <p className="font-semibold text-[#000] text-lg">
-                          RS {product?.ecommercePrice?.sellingPrice}
+                          ₹ {product?.ecommercePrice?.sellingPrice}
                         </p>
                       </div>
                       <div>
@@ -179,13 +179,12 @@ function DashboardProductCard({
                         setSelectedItem(product);
                         setSelectSubcategories(true);
                       }}
-                      className={`px-2 md:px-5 py-1 md:py-2 bg-[#F8FBFF]  border-[#A3FEE7] transition-all duration-500 flex flex-col justify-center items-center rounded-sm  text-xs md:text-sm ${
-                        currentStatus === "approved"
-                          ? "border-2 md:border-4"
-                          : "border md:border-2"
-                      }`}
+                      className={`group px-2 md:px-5 py-1 md:py-2 bg-[#F8FBFF] border-[#A3FEE7] flex flex-col items-center justify-center rounded-sm text-xs md:text-sm transition-all duration-300 ease-out hover:bg-[#E9FFF9] hover:shadow-[0_6px_18px_rgba(163,254,231,0.45)] hover:-translate-y-1 active:scale-95 ${currentStatus === "approved" ? "border-2 md:border-4 shadow-[0_0_0_2px_rgba(72,187,120,0.45)]" : "border md:border-2"}`}
                     >
-                      <AiTwotoneCheckCircle size={25} />
+                      <AiTwotoneCheckCircle
+                        size={25}
+                        className="text-[#2DBE9D] transition-transform duration-300 group-hover:scale-125"
+                      />
                       {currentStatus === "approved" ? "Approved" : "Approve"}
                     </button>
                     <button
@@ -193,24 +192,22 @@ function DashboardProductCard({
                         updateStatus(product, "pending");
                         setRejectReason("");
                       }}
-                      className={`px-2 md:px-5 py-1 md:py-2 bg-[#FFFEF8] border-[#FFB966] transition-all duration-500 flex flex-col justify-center items-center rounded-sm text-xs md:text-sm ${
-                        currentStatus === "pending"
-                          ? "border-2 md:border-4"
-                          : "border md:border-2"
-                      }`}
+                      className={`group px-2 md:px-5 py-1 md:py-2 bg-[#FFFEF8] border-[#FFB966] flex flex-col items-center justify-center rounded-sm text-xs md:text-sm transition-all duration-300 ease-out hover:bg-[#FFF4E0] hover:shadow-[0_4px_14px_rgba(255,185,102,0.35)] hover:-translate-y-1 active:scale-95 ${currentStatus === "pending" ? "border-2 md:border-4 shadow-[0_0_0_2px_rgba(255,185,102,0.4)]" : "border md:border-2"}`}
                     >
-                      <PiClockCountdown size={25} />
+                      <PiClockCountdown
+                        size={25}
+                        className="transition-transform duration-300 group-hover:-translate-y-1 group-hover:scale-110"
+                      />
                       Pending
                     </button>
                     <button
-                      className={`px-2 md:px-5 py-1 md:py-2 bg-[#FFF8F8] border-[#FF6666] transition-all duration-500 flex flex-col justify-center items-center rounded-sm text-xs md:text-sm ${
-                        currentStatus === "rejected"
-                          ? "border-2 md:border-4"
-                          : "border md:border-2"
-                      }`}
                       onClick={() => setShowTextarea(true)}
+                      className={`group px-2 md:px-5 py-1 md:py-2 bg-[#FFF8F8] border-[#FF6666] flex flex-col items-center justify-center rounded-sm text-xs md:text-sm transition-all duration-300 ease-out hover:bg-[#FFECEC] hover:shadow-[0_6px_18px_rgba(255,102,102,0.4)] hover:-translate-y-1 active:scale-95 ${currentStatus === "rejected" ? "border-2 md:border-4 shadow-[0_0_0_2px_rgba(255,102,102,0.45)]" : "border md:border-2"}`}
                     >
-                      <IoCloseCircleOutline size={25} />
+                      <IoCloseCircleOutline
+                        size={25}
+                        className="transition-transform duration-300 group-hover:rotate-6 group-hover:scale-110"
+                      />
                       {currentStatus === "rejected" ? "Rejected" : "Reject"}
                     </button>
                   </div>
@@ -250,7 +247,7 @@ function DashboardProductCard({
                   onClick={() => {
                     setDeleteWarning(true);
                   }}
-                  className="px-3 py-2 capitalize border-[#FF6666] border-2 rounded-sm flex justify-center items-center gap-2"
+                  className="px-3 py-2 capitalize border-2 border-[#FF6666] text-[#FF4D4D] rounded-sm flex items-center gap-2 transition-all duration-200 hover:bg-[#FF4D4D] hover:text-white"
                 >
                   <MdDeleteOutline /> delete
                 </button>
@@ -259,7 +256,7 @@ function DashboardProductCard({
               <div>
                 <button
                   onClick={onClose}
-                  className=" px-3 py-2 capitalize border-[#BBBBBB] border-2 bg-[#fff] rounded-sm"
+                  className="px-3 py-2 capitalize border-2 border-[#BBBBBB] bg-white rounded-sm transition-all duration-200 hover:bg-[#F5F5F5] hover:border-[#999999]"
                 >
                   cancel
                 </button>

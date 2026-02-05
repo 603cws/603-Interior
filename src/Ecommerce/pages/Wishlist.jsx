@@ -76,7 +76,7 @@ function Wishlist() {
       //for safety even if a product is added multiple times it will get filtered into one
       const uniquecartitems = [
         ...new Map(
-          updatedProducts.map((item) => [item.productId.id, item])
+          updatedProducts.map((item) => [item.productId.id, item]),
         ).values(),
       ];
       setWishlistItems(uniquecartitems);
@@ -104,7 +104,7 @@ function Wishlist() {
 
       showRemoveFromCartToast(product, "wishlist");
       setWishlistItems((prevItems) =>
-        prevItems.filter((item) => item.id !== product.id)
+        prevItems.filter((item) => item.id !== product.id),
       );
     } catch (err) {
       console.error(err);
@@ -121,8 +121,8 @@ function Wishlist() {
 
       setWishlistItems((prevItems) =>
         prevItems.map((item) =>
-          item.id === product.id ? { ...item, type: "cart" } : item
-        )
+          item.id === product.id ? { ...item, type: "cart" } : item,
+        ),
       );
     } catch (err) {
       console.error(err);
@@ -176,10 +176,10 @@ function Wishlist() {
                       </h4>
                       <div className="flex items-center gap-2">
                         <p className=" ">
-                          RS {item?.productId?.ecommercePrice?.sellingPrice}
+                          ₹ {item?.productId?.ecommercePrice?.sellingPrice}
                         </p>
                         <p className="line-through text-[#111] text-opacity-50">
-                          Rs {item?.productId?.ecommercePrice?.mrp}
+                          ₹ {item?.productId?.ecommercePrice?.mrp}
                         </p>
                         <p className="text-[#C20000] uppercase">sale</p>
                       </div>
@@ -221,7 +221,7 @@ function Wishlist() {
           </p>
           <button
             onClick={() => {
-              isAuthenticated ? navigate("/products") : setLoginPopup(true);
+              isAuthenticated ? navigate("/shop") : setLoginPopup(true);
             }}
             className="bg-[#334A78] border border-[#212B36] text-xs text-white tracking-wider uppercase py-3 active:scale-90 transition-transform ease-in-out duration-500 px-10 font-Poppins font-semibold hover:bg-[#4464A3] rounded"
           >

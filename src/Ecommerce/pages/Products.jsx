@@ -48,28 +48,28 @@ const BOTTOM_OFFERS = [
 const products2 = {
   chair: {
     title: "Orange Chair",
-    price: "Rs. 3799.00",
+    price: "₹ 3799.00",
     image: "/images/ecommerce/chair.webp",
     link: "/productview/d6a99c93-e0b9-4958-9dc5-be9a9afc472e",
     id: "d6a99c93-e0b9-4958-9dc5-be9a9afc472e",
   },
   lamp: {
     title: "Pendant Lamp",
-    price: "Rs. 2599.00",
+    price: "₹ 2599.00",
     image: "/images/ecommerce/lamp.webp",
     link: "/productview/d4bedb5d-b06a-444c-8dd3-9bef55e631de",
     id: "d4bedb5d-b06a-444c-8dd3-9bef55e631de",
   },
   rug: {
     title: "Rug",
-    price: "Rs. 2599.00",
+    price: "₹ 2599.00",
     image: "/images/ecommerce/rug.webp",
     link: "/productview/45776063-a918-44f7-858b-8b95738c8e78",
     id: "45776063-a918-44f7-858b-8b95738c8e78",
   },
   "chair-green": {
     title: "Chair Green",
-    price: "Rs. 2599.00",
+    price: "₹ 2599.00",
     image: "/images/ecommerce/chair-green.png",
     link: "/productview/1d352504-f171-41fc-9bc4-333c68ae9200",
     id: "1d352504-f171-41fc-9bc4-333c68ae9200",
@@ -134,6 +134,11 @@ const brands = [
 
 const EcommerceFeatures = [
   {
+    title: "BEST OFFERS",
+    image: "/images/gift.png",
+    width: "w-8",
+  },
+  {
     title: "EASY PAYMENT",
     image: "/images/payment.png",
     width: "w-8",
@@ -146,11 +151,6 @@ const EcommerceFeatures = [
   {
     title: "EASY INSTALLATION",
     image: "/images/install.png",
-    width: "w-8",
-  },
-  {
-    title: "GIFT CARTS",
-    image: "/images/gift.png",
     width: "w-8",
   },
 ];
@@ -180,7 +180,7 @@ function Products() {
           (item) =>
             item.status === "approved" &&
             item.product_id.category !== "Partitions / Ceilings" &&
-            item.product_id.category !== "Civil / Plumbing"
+            item.product_id.category !== "Civil / Plumbing",
         );
 
         // 1. Extract unique image names
@@ -214,7 +214,7 @@ function Products() {
         const filteredProducts = updatedProducts.filter(
           (product) =>
             getCleanedCategoryName(product.product_id.category) ===
-            getCleanedCategoryName("Furniture")
+            getCleanedCategoryName("Furniture"),
         );
         setCategoryProducts(filteredProducts);
 
@@ -247,7 +247,7 @@ function Products() {
     const updatedProducts = products.filter(
       (product) =>
         getCleanedCategoryName(product.product_id.category) ===
-        getCleanedCategoryName(category)
+        getCleanedCategoryName(category),
     );
     setCategoryProducts(updatedProducts);
   };
@@ -387,7 +387,7 @@ function Products() {
                       navigate(
                         `/shop/?category=${
                           item.title === "Luxury" ? "Lux" : item.title
-                        }`
+                        }`,
                       )
                     }
                     className="bg-[#BACED5] text-[#000] text-xs px-4 py-2 capitalize font-bold rounded hover:bg-[#A8BDC5]"
@@ -527,7 +527,7 @@ function Products() {
         <section className="px-4 lg:container mx-auto py-10">
           <SectionHeader title="best products" />
           <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-5">
-            {bestProducts.map((product) => (
+            {bestProducts?.map((product) => (
               <Card key={product.id} product={product} />
             ))}
           </div>
@@ -647,7 +647,7 @@ function Card({ product }) {
     setShowLoginPopup,
   } = useEcomApp();
   const isWishlisted = wishlistItems?.some(
-    (item) => item.productId?.id === product.id
+    (item) => item.productId?.id === product.id,
   );
 
   const { handleAddToCart, handleAddtoWishlist } = useHandleAddToCart();
@@ -659,12 +659,12 @@ function Card({ product }) {
 
     if (isAuthenticated) {
       const check = cartItems?.some(
-        (item) => item.productId?.id === product.id
+        (item) => item.productId?.id === product.id,
       );
       setIsCarted(check);
     } else {
       const check = localcartItems?.some(
-        (item) => item.productId?.id === product.id
+        (item) => item.productId?.id === product.id,
       );
       setIsCarted(check);
     }
@@ -690,10 +690,10 @@ function Card({ product }) {
               />
             </div>
           )}
-          <div className="px-2 py-2 flex flex-col justify-center gap-3 font-TimesNewRoman  mt-auto">
+          <div className="px-2 py-2 flex flex-col justify-center gap-3 font-TimesNewRoman mt-auto">
             <p className=" text-xs lg:text-sm line-clamp-1">{product.title}</p>
             <p className="text-xs lg:text-sm">
-              RS.{" "}
+              ₹{" "}
               {product?.ecommercePrice?.sellingPrice.toLocaleString("en-IN", {
                 minimumFractionDigits: 2,
                 maximumFractionDigits: 2,
@@ -721,7 +721,7 @@ function Card({ product }) {
                   setPendingProduct(product);
                   sessionStorage.setItem(
                     "addToWishlistProduct",
-                    JSON.stringify(product)
+                    JSON.stringify(product),
                   );
                 }}
                 className="text-[#ccc] hover:text-red-600 cursor-pointer"

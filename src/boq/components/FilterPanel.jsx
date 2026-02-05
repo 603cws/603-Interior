@@ -3,6 +3,41 @@ import { IoIosArrowDown, IoIosArrowUp, IoMdSettings } from "react-icons/io";
 import { MdKeyboardArrowLeft } from "react-icons/md";
 import { PiStarFourFill } from "react-icons/pi";
 import { RiVipCrown2Fill } from "react-icons/ri";
+import { motion, AnimatePresence } from "framer-motion";
+
+const accordionVariants = {
+  collapsed: {
+    height: 0,
+    opacity: 0,
+  },
+  open: {
+    height: "auto",
+    opacity: 1,
+    transition: {
+      height: {
+        duration: 0.35,
+        ease: "easeInOut",
+      },
+      opacity: {
+        duration: 0.2,
+        delay: 0.05,
+      },
+    },
+  },
+  exit: {
+    height: 0,
+    opacity: 0,
+    transition: {
+      height: {
+        duration: 0.25,
+        ease: "easeInOut",
+      },
+      opacity: {
+        duration: 0.15,
+      },
+    },
+  },
+};
 
 function FilterPanel({
   toggleSection,
@@ -32,67 +67,75 @@ function FilterPanel({
             </span>{" "}
           </button>
 
-          {openSection === "plan" && (
-            <div className="border-t border-black">
-              {planOptions.map((option) => (
-                <button
-                  key={option}
-                  onClick={() => setSelectedPlanFilter(option)}
-                  className={
-                    "flex items-center justify-between w-full px-4 py-3 border-b border-black text-sm " +
-                    (selectedPlanFilter === option
-                      ? "bg-[#374A75] text-white font-semibold"
-                      : "bg-white text-black")
-                  }
-                >
-                  <span className="flex items-center">
-                    {option === "Exclusive" && (
-                      <div className="relative">
-                        <PiStarFourFill
-                          className="absolute -top-1 -right-1"
-                          size={8}
-                          color={
-                            selectedPlanFilter === option ? "#fff" : "#334A78"
-                          }
-                        />
-                        <PiStarFourFill
+          <AnimatePresence initial={false}>
+            {openSection === "plan" && (
+              <motion.div
+                variants={accordionVariants}
+                initial="collapsed"
+                animate="open"
+                exit="exit"
+                className="overflow-hidden border-t border-black"
+              >
+                {planOptions.map((option) => (
+                  <button
+                    key={option}
+                    onClick={() => setSelectedPlanFilter(option)}
+                    className={
+                      "flex items-center justify-between w-full px-4 py-3 border-b border-black text-sm " +
+                      (selectedPlanFilter === option
+                        ? "bg-[#374A75] text-white font-semibold"
+                        : "bg-white text-black")
+                    }
+                  >
+                    <span className="flex items-center">
+                      {option === "Exclusive" && (
+                        <div className="relative">
+                          <PiStarFourFill
+                            className="absolute -top-1 -right-1"
+                            size={8}
+                            color={
+                              selectedPlanFilter === option ? "#fff" : "#334A78"
+                            }
+                          />
+                          <PiStarFourFill
+                            size={16}
+                            color={
+                              selectedPlanFilter === option ? "#fff" : "#334A78"
+                            }
+                          />
+                        </div>
+                      )}
+                      {option === "Luxury" && (
+                        <RiVipCrown2Fill
                           size={16}
                           color={
                             selectedPlanFilter === option ? "#fff" : "#334A78"
                           }
                         />
-                      </div>
-                    )}
-                    {option === "Luxury" && (
-                      <RiVipCrown2Fill
-                        size={16}
-                        color={
-                          selectedPlanFilter === option ? "#fff" : "#334A78"
-                        }
-                      />
-                    )}
-                    {option === "Minimal" && (
-                      <FaStar
-                        size={16}
-                        color={
-                          selectedPlanFilter === option ? "#fff" : "#334A78"
-                        }
-                      />
-                    )}
-                    {option === "Custom" && (
-                      <IoMdSettings
-                        size={18}
-                        color={
-                          selectedPlanFilter === option ? "#fff" : "#334A78"
-                        }
-                      />
-                    )}
-                  </span>
-                  <span>{option}</span>
-                </button>
-              ))}
-            </div>
-          )}
+                      )}
+                      {option === "Minimal" && (
+                        <FaStar
+                          size={16}
+                          color={
+                            selectedPlanFilter === option ? "#fff" : "#334A78"
+                          }
+                        />
+                      )}
+                      {option === "Custom" && (
+                        <IoMdSettings
+                          size={18}
+                          color={
+                            selectedPlanFilter === option ? "#fff" : "#334A78"
+                          }
+                        />
+                      )}
+                    </span>
+                    <span>{option}</span>
+                  </button>
+                ))}
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
 
         <div className="border">
@@ -106,33 +149,44 @@ function FilterPanel({
             </span>{" "}
           </button>
 
-          {openSection === "brand" && (
-            <div className=" px-4 py-3 space-y-2 text-sm">
-              {brandsList.map((brand) => {
-                const checked = selectedBrands.includes(brand);
-                return (
-                  <label
-                    key={brand}
-                    className="flex items-center gap-2 cursor-pointer"
-                  >
-                    <input
-                      type="checkbox"
-                      className="h-4 w-4 border border-black"
-                      checked={checked}
-                      onChange={() => {
-                        setSelectedBrands((prev) =>
-                          checked
-                            ? prev.filter((b) => b !== brand)
-                            : [...prev, brand]
-                        );
-                      }}
-                    />
-                    <span className="flex-1">{brand}</span>
-                  </label>
-                );
-              })}
-            </div>
-          )}
+          <AnimatePresence initial={false}>
+            {openSection === "brand" && (
+              <motion.div
+                variants={accordionVariants}
+                initial="collapsed"
+                animate="open"
+                exit="exit"
+                className="overflow-hidden border-t border-black"
+                // className=" px-4 py-3 space-y-2 text-sm"
+              >
+                <div className="px-4 py-3 space-y-2 text-sm bg-white">
+                  {brandsList.map((brand) => {
+                    const checked = selectedBrands.includes(brand);
+                    return (
+                      <label
+                        key={brand}
+                        className="flex items-center gap-2 cursor-pointer"
+                      >
+                        <input
+                          type="checkbox"
+                          className="h-4 w-4 border border-black"
+                          checked={checked}
+                          onChange={() => {
+                            setSelectedBrands((prev) =>
+                              checked
+                                ? prev.filter((b) => b !== brand)
+                                : [...prev, brand],
+                            );
+                          }}
+                        />
+                        <span className="flex-1">{brand}</span>
+                      </label>
+                    );
+                  })}
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       </div>
       <div

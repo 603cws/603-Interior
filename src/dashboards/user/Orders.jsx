@@ -96,7 +96,7 @@ function Orders() {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(reqbody),
-        }
+        },
       );
 
       const data = await res.json();
@@ -334,7 +334,7 @@ function OrderProducts({ orderID }) {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(reqbody),
-        }
+        },
       );
 
       const data = await res.json();
@@ -378,6 +378,8 @@ function OrderProducts({ orderID }) {
   }
 
   if (loading) return <p>loading .....</p>;
+
+  console.log("order", order);
 
   return (
     <>
@@ -541,7 +543,7 @@ function OrderProducts({ orderID }) {
             </p>
             <div className="flex gap-2 items-center">
               <p className="font-bold text-sm md:text-base">
-                RS{" "}
+                ₹{" "}
                 {order?.final_amount?.toLocaleString("en-IN", {
                   minimumFractionDigits: 2,
                   maximumFractionDigits: 2,
@@ -569,17 +571,17 @@ function OrderProducts({ orderID }) {
             <IoCashOutline />
             <span> {order?.payment_details?.paymentMode} payment</span>
           </p>
-          <button className="text-[#374A75] font-bold text-sm capitalize border border-[#CCCCCC] w-full py-2.5 rounded-md hover:bg-[#f9f9f9]">
+          {/* <button className="text-[#374A75] font-bold text-sm capitalize border border-[#CCCCCC] w-full py-2.5 rounded-md hover:bg-[#f9f9f9]">
             get invoice
-          </button>
+          </button> */}
         </div>
 
-        <div className="md:p-5 py-3 text-sm font-bold">
+        {/* <div className="md:p-5 py-3 text-sm font-bold">
           <p>Updates sent to</p>
           <p className="text-[#374A75] flex items-center gap-2 mt-2">
-            <BsTelephone /> {shippingAddress?.mobile}
+            <BsTelephone /> {shippingAddress?.email}
           </p>
-        </div>
+        </div> */}
         <div className="md:px-5 text-xs md:text-sm font-bold text-[#999]">
           <p>Order ID #{order?.id}</p>
         </div>
@@ -639,7 +641,7 @@ function OrderProductView({ order, product }) {
                 product price
               </p>
               <p className="font-bold text-sm md:text-base">
-                RS{" "}
+                ₹{" "}
                 {order?.final_amount?.toLocaleString("en-IN", {
                   minimumFractionDigits: 2,
                   maximumFractionDigits: 2,
@@ -657,16 +659,16 @@ function OrderProductView({ order, product }) {
         <p className="text-sm font-bold text-[#999]">
           Item sold by : {product?.product_variants?.manufacturer}
         </p>
-        <button className="text-[#374A75] font-bold text-sm capitalize border border-[#CCCCCC] w-full py-2.5 rounded-md hover:bg-[#f9f9f9]">
+        {/* <button className="text-[#374A75] font-bold text-sm capitalize border border-[#CCCCCC] w-full py-2.5 rounded-md hover:bg-[#f9f9f9]">
           get invoice
-        </button>
+        </button> */}
       </div>
-      <div className="md:p-5 py-3 text-sm font-bold">
+      {/* <div className="md:p-5 py-3 text-sm font-bold">
         <p>Updates sent to</p>
         <p className="text-[#374A75] flex items-center gap-2 mt-2">
-          <BsTelephone /> {shippingAddress?.mobile}
+          <BsTelephone /> {shippingAddress?.email}
         </p>
-      </div>
+      </div> */}
       <div className="md:px-5 text-sm font-bold text-[#999]">
         <p>Order ID #{order?.id}</p>
       </div>
@@ -784,7 +786,7 @@ function PriceDistribution({ order }) {
         <div className="flex justify-between font-semibold pt-2">
           <p>Total Amount</p>
           <p>
-            RS{" "}
+            ₹{" "}
             {order?.final_amount?.toLocaleString("en-IN", {
               minimumFractionDigits: 2,
               maximumFractionDigits: 2,

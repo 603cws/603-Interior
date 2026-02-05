@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { supabase } from "../../services/supabase";
 import { useApp } from "../../Context/Context";
-import { IoIosArrowBack } from "react-icons/io";
 import { IoCloseCircle, IoCloudDownloadOutline } from "react-icons/io5";
 import { category } from "../../utils/AllCatArray";
 import MobileTabProductCard from "../../dashboards/user/MobileTabProductCard";
@@ -12,6 +11,7 @@ import { baseImageUrl } from "../../utils/HelperConstant";
 import { IoIosSearch } from "react-icons/io";
 import ProductView from "../components/ProductView";
 import PagInationNav from "../../common-components/PagInationNav";
+import BackButton from "../../common-components/BackButton";
 function ClientBoq({ setClientBoqs }) {
   const [savedBoqs, setSavedBoqs] = useState([]);
   const [selectedBoq, setSelectedBoq] = useState();
@@ -49,7 +49,7 @@ function ClientBoq({ setClientBoqs }) {
   const itemsPerPage = 10;
   const paginatedItems = items.slice(
     (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
+    currentPage * itemsPerPage,
   );
   const totalPages = Math.ceil(items.length / itemsPerPage);
 
@@ -94,7 +94,7 @@ function ClientBoq({ setClientBoqs }) {
 
       if (selectedBoq && selectedBoq.addons) {
         const productIdsArray = selectedBoq.addons.map(
-          (addon) => addon.variantId
+          (addon) => addon.variantId,
         );
 
         const { data } = await supabase
@@ -117,7 +117,7 @@ function ClientBoq({ setClientBoqs }) {
       if (selectedBoq) {
         setIsloading(true);
         const productIdsArray = selectedBoq.products.map(
-          (product) => product.id
+          (product) => product.id,
         );
 
         const { data, error } = await supabase
@@ -235,12 +235,11 @@ function ClientBoq({ setClientBoqs }) {
         ) : savedBoqs.length > 0 ? (
           <div className="overflow-y-auto scrollbar-hide h-[calc(100vh-95px)] relative ">
             <div className="sticky top-0 z-20 bg-white">
-              <button
+              <BackButton
+                label="Back to client list"
                 onClick={() => setClientBoqs(false)}
-                className="capitalize font-semibold flex items-center text-xs text-[#A1A1A1] mt-3 ml-3"
-              >
-                <IoIosArrowBack /> Back to client list
-              </button>
+                className="mt-3 ml-3"
+              />
               <div className="flex flex-col md:flex-row md:items-center px-2 gap-3 lg:gap-5 lg:px-4 py-2 border-b-2 border-b-gray-400 ">
                 <div className="flex justify-between ">
                   <h3 className="text-sm md:text-base font-semibold lg:text-xl text-[#374A75] ">
@@ -289,20 +288,18 @@ function ClientBoq({ setClientBoqs }) {
                       return (
                         <div
                           key={boq?.id}
-                          className={`rounded-lg border-2 px-4 py-1 ${
+                          onClick={() => {
+                            setSelectedBoq(boq);
+                            setSearchQuery("");
+                            setSelectedCategory("");
+                          }}
+                          className={`rounded-lg border-2 px-4 py-1 hover:cursor-pointer ${
                             selectedBoq?.id === boq?.id
                               ? "bg-[#374A75] text-white border-[#374a75]"
                               : "bg-white text-[#374a75] border-[#ccc]"
                           }`}
                         >
-                          <button
-                            onClick={() => {
-                              setSelectedBoq(boq);
-                              setSearchQuery("");
-                              setSelectedCategory("");
-                            }}
-                            className="text-sm lg:text-lg"
-                          >
+                          <button className="text-sm lg:text-lg">
                             {boq.boqTitle}
                           </button>
                         </div>
@@ -321,7 +318,7 @@ function ClientBoq({ setClientBoqs }) {
                           : "bg-white border-[#374A75]"
                       }`}
                       value={tab.value}
-                      onClick={handleTabClick} // Dynamically sets the tab
+                      onClick={handleTabClick}
                     >
                       {tab.name}
                     </button>
@@ -464,7 +461,7 @@ function ClientBoq({ setClientBoqs }) {
                                   </div>
                                 </td>
                                 <td className="border border-gray-200 p-3 align-middle">
-                                  ₹{item.price}
+                                  ₹ {item.price}
                                 </td>
                                 {toggle ? (
                                   <>
@@ -551,12 +548,11 @@ function ClientBoq({ setClientBoqs }) {
           </div>
         ) : (
           <div className="">
-            <button
+            <BackButton
+              label="Back to client list"
               onClick={() => setClientBoqs(false)}
-              className="capitalize font-semibold flex items-center text-xs text-[#A1A1A1]"
-            >
-              <IoIosArrowBack /> Back to client list
-            </button>
+              className=""
+            />
             <div className="flex justify-center items-center">
               <p className="text-[#374A75]">
                 No Saved BOQ&apos;s for {selectedClient.company_name}

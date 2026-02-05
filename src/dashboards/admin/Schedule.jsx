@@ -85,7 +85,7 @@ function Schedule() {
     const [day, month, year] = d.split("/");
     return `${year}-${String(month).padStart(2, "0")}-${String(day).padStart(
       2,
-      "0"
+      "0",
     )}`;
   }
 
@@ -118,11 +118,11 @@ function Schedule() {
       <div className="w-full  overflow-y-auto scrollbar-hide h-[calc(100vh-110px)] py-2 ">
         <div>
           <div className="text-xl text-[#000] capitalize font-semibold border-b-2 border-b-[#CCCCCC] py-2">
-            <h2 className="px-4 ">schedule</h2>
+            <h2 className="px-4 ">Appointments Overview</h2>
           </div>
           <div className="lg:grid grid-cols-[1fr,2fr]">
             <div className="">
-              <div className="bg-[#374A75] flex justify-center items-center gap-2 py-3 m-3 rounded text-[#fff]">
+              <div className="bg-[#374A75] flex justify-center items-center gap-2 py-3 m-3 rounded text-[#fff] hover:bg-[#6d87c4]">
                 <LuPlus />
                 <p className="">Appointment</p>
               </div>
@@ -148,7 +148,7 @@ function Schedule() {
                       <p className="before:content-['•'] before:mr-2">
                         meeting
                       </p>{" "}
-                      <BsThreeDots />{" "}
+                      {/* <BsThreeDots /> */}
                     </li>
                   </ul>
                 </div>
@@ -234,7 +234,7 @@ function Schedule() {
                           </p>
                         </div>
                       </div>
-                    ))
+                    )),
                   )}
                 </div>
               )}

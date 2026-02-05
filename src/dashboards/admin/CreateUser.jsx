@@ -97,7 +97,7 @@ function CreateUser() {
     location,
     company,
     mobile,
-    category
+    category,
   ) => {
     const { error } = await supabase.from("profiles").upsert({
       id: userId,
@@ -161,7 +161,7 @@ function CreateUser() {
           formData.location,
           formData.company,
           formData.mobile,
-          formData.category ? formData.category.map((cat) => cat.label) : []
+          formData.category ? formData.category.map((cat) => cat.label) : [],
         );
 
         toast.success(`${formData.role} created successfully`);
@@ -185,7 +185,7 @@ function CreateUser() {
               className="w-20 my-4"
             />
             <h2 className="text-3xl font-semibold mb-4">
-              Please Fill Your Details.
+              Please Fill Your Details
             </h2>
           </div>
 
@@ -338,7 +338,7 @@ function CreateUser() {
             <div className="col-span-2 flex justify-start mt-5">
               <button
                 type="submit"
-                className="bg-[#374A75] text-white px-6 py-2 rounded border border-[#000] font-bold"
+                className="bg-[#374A75] text-white px-6 py-2 rounded border border-[#000] font-bold hover:bg-[#6d87c4]"
               >
                 Submit
               </button>

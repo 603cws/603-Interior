@@ -54,7 +54,7 @@ export default function MultiImageCropper({
           0,
           0,
           cropAreaPixels.width,
-          cropAreaPixels.height
+          cropAreaPixels.height,
         );
 
         canvas.toBlob(
@@ -65,7 +65,7 @@ export default function MultiImageCropper({
             resolve(file);
           },
           originalFile.type,
-          1
+          1,
         );
       };
     });
@@ -107,14 +107,14 @@ export default function MultiImageCropper({
         [index]: file,
       }));
     }, 400),
-    [imageURLs, files]
+    [imageURLs, files],
   );
   // Crop callback
   const onCropComplete = useCallback(
     (_, croppedAreaPixels) => {
       autoSave(current, croppedAreaPixels);
     },
-    [current, autoSave]
+    [current, autoSave],
   );
 
   // Finalization

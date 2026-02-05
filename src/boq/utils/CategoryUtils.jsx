@@ -1,7 +1,9 @@
 export const normalize = (str = "") => str.toLowerCase().trim();
 
 export const getCleanedCategoryName = (categoryName = "") =>
-  categoryName.replace(/[^a-zA-Z0-9]/g, "");
+  categoryName === "Smart Solutions"
+    ? categoryName.replace(/[^a-zA-Z0-9 ]/g, "")
+    : categoryName.replace(/[^a-zA-Z0-9]/g, "");
 
 export const getCleanedCategoryNameFull = (name = "") =>
   name

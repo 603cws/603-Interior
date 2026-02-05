@@ -34,7 +34,7 @@ function handlesidebarState(state, action) {
         dashboard: action.payload === "Dashboard",
         isClientOpen: action.payload === "Client",
         isCreateOpen: action.payload === "Create",
-        isVendorOpen: action.payload === "Vendors",
+        isVendorOpen: action.payload === "Vendor",
         isScheduleOpen: action.payload === "Schedule",
         isFormulaeOpen: action.payload === "Formulae",
         isCategoryEditorOpen: action.payload === "CategoryEditor",
@@ -49,7 +49,7 @@ const SECTIONS = {
   DASHBOARD: "Dashboard",
   PRODUCT: "Product",
   CLIENTS: "Client",
-  VENDORS: "Vendors",
+  VENDORS: "Vendor",
   CREATE: "Create",
   SCHEDULE: "Schedule",
   FORMULAE: "Formulae",
@@ -83,7 +83,7 @@ function AdminDashboard() {
 
   const [sidebarstate, sidebarDispatch] = useReducer(
     handlesidebarState,
-    sidebarInitialState,
+    sidebarInitialState
   );
 
   useEffect(() => {
@@ -240,7 +240,7 @@ function AdminDashboard() {
           />
           <SidebarItem
             icon={<CiShop />}
-            text="Vendors"
+            text="Vendor"
             onClick={handleVendor}
             isExpanded={isExpanded}
             currentSection={sidebarstate?.currentSection}
@@ -364,7 +364,7 @@ function AdminDashboard() {
               />
               <MobileMenuItem
                 icon={<PiHandshakeFill />}
-                title="Vendors"
+                title="Vendor"
                 currentSection={sidebarstate?.currentSection}
                 onClick={handleVendor}
                 setIsOpen={setIsOpen}

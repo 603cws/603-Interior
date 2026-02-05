@@ -24,7 +24,6 @@ function CompareProducts({ product, onClose, onRemove }) {
             </button>
           </div>
           <div className="max-w-xs w-full flex flex-col max-h-full">
-            {" "}
             <div className="w-full h-2/5">
               <h4 className="uppercase font-medium text-sm leading-[22.4px] text-[#000] mb-5">
                 {product?.[0]?.title} <br />
@@ -33,7 +32,7 @@ function CompareProducts({ product, onClose, onRemove }) {
               <p className="uppercase font-medium text-sm text-[#777777] leading-[22.4px]">
                 {product?.length} items
               </p>
-              <div className="flex gap-2 mt-10">
+              {/* <div className="flex gap-2 mt-10">
                 <input type="checkbox" />
                 <label
                   htmlFor=""
@@ -41,17 +40,17 @@ function CompareProducts({ product, onClose, onRemove }) {
                 >
                   Show only differences
                 </label>
-              </div>
+              </div> */}
             </div>
             <div className="flex flex-col gap-4 [&_h4]:uppercase [&_h4]:font-medium [&_h4]:text-sm [&_h4]:text[#111111]">
               <h4>product name</h4>
-              <h4>rating</h4>
+              {/* <h4>rating</h4> */}
               <h4>price</h4>
-              <h4>material</h4>
+              {/* <h4>material</h4> */}
               <h4>brand</h4>
             </div>
           </div>
-          {product.map((product, index) => {
+          {product?.map((product, index) => {
             return <Card product={product} onRemove={onRemove} key={index} />;
           })}
         </div>
@@ -66,18 +65,19 @@ function Card({ product, onRemove }) {
   const { cartItems, localcartItems } = useEcomApp();
 
   const [iscarted, setIsCarted] = useState(false);
+  console.log("product", product);
 
   useEffect(() => {
     if (!product?.id) return;
 
     if (isAuthenticated) {
       const check = cartItems?.some(
-        (item) => item.productId?.id === product.id
+        (item) => item.productId?.id === product.id,
       );
       setIsCarted(check);
     } else {
       const check = localcartItems?.some(
-        (item) => item.productId?.id === product.id
+        (item) => item.productId?.id === product.id,
       );
       setIsCarted(check);
     }
@@ -105,16 +105,16 @@ function Card({ product, onRemove }) {
       </div>
       <div className="flex flex-col gap-4 [&_h4]:uppercase [&_h4]:font-medium [&_h4]:text-sm [&_h4]:text[#111111]">
         <h4>{product?.title}</h4>
-        <h4>rating</h4>
-        <h4>{product.price}</h4>
-        <h4>material</h4>
-        <h4>brand</h4>
+        {/* <h4>rating</h4> */}
+        <h4>{product?.ecommercePrice?.sellingPrice || 0} ₹</h4>
+        {/* <h4>material</h4> */}
+        <h4>{product?.manufacturer}</h4>
       </div>
-      <div className="flex flex-col text-[#212B36] items-start gap-2 [&_button]:border [&_button]:border-[#212B36] [&_button]:uppercase [&_button]:text-[15px] [&_button]:tracking-widest [&_button]:w-36 [&_button]:h-10 [&_button]:rounded-sm">
+      <div className="pt-4 flex flex-col text-[#212B36] items-start gap-2 [&_button]:border [&_button]:border-[#212B36] [&_button]:uppercase [&_button]:text-[15px] [&_button]:tracking-widest [&_button]:w-36 [&_button]:h-10 [&_button]:rounded-sm">
         <button onClick={() => handleAddToCart(product)}>
           {iscarted ? "added to cart" : "add to cart"}
         </button>
-        <button>buy now</button>
+        {/* <button>buy now</button> */}
       </div>
     </div>
   );

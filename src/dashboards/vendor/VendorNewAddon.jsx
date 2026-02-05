@@ -10,6 +10,7 @@ import {
   specialArray,
 } from "../../utils/AllCatArray";
 import ButtonSpinner from "../../utils/ButtonSpinner";
+import BackButton from "../../common-components/BackButton";
 
 function VendorNewAddon({
   setAddNewProduct,
@@ -171,7 +172,7 @@ function VendorNewAddon({
         if (addonVariantImageError) {
           console.error(
             "Error uploading addon variant image:",
-            addonVariantImageError
+            addonVariantImageError,
           );
         }
 
@@ -211,7 +212,7 @@ function VendorNewAddon({
   useEffect(() => {
     if (category !== "HVAC" && category !== "Civil / Plumbing") {
       const filter = AllCatArray.filter((cat) => cat.name === category).flatMap(
-        (subcat) => subcat.subcategories
+        (subcat) => subcat.subcategories,
       );
 
       setSelectedSubcategories(filter.join(","));
@@ -275,17 +276,15 @@ function VendorNewAddon({
   return (
     <div className="flex flex-col justify-center items-start font-Poppins relative">
       <div className="px-5 py-2 border-b-2 bg-white w-full border-b-gray-400 sticky top-0 z-10">
-        <button
+        <BackButton
+          label="Back to product list"
           onClick={() => {
             setAddNewProduct(false);
             setProductlist(true);
             setIsAddonRefresh((prev) => !prev);
           }}
-          className="border-none flex justify-center items-center text-[#A1A1A1]"
-        >
-          <MdKeyboardArrowLeft />
-          Back to product list
-        </button>
+          className="py-2"
+        />
         <h3 className="capitalize font-semibold text-xl ">Add New Add Ons</h3>
       </div>
       <form
@@ -558,7 +557,7 @@ function VendorNewAddon({
               Discard
             </button>
             <button
-              className="border-2 px-5 py-2 bg-[#374A75] text-white capitalize rounded-lg"
+              className="border-2 px-5 py-2 bg-[#374A75] hover:bg-[#6d87c4] text-white capitalize rounded-lg"
               type="submit"
               disabled={isSubmitting}
             >

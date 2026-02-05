@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
 import { CategorySvgMap } from "../../common-components/CategorySvgMap";
@@ -20,6 +20,7 @@ const Categories = ({
     selectedData,
     categories,
     userResponses,
+    seatCountData,
   } = useBoqApp();
 
   const { categoryConfig } = useBoqApp();
@@ -29,9 +30,11 @@ const Categories = ({
 
   const containerRef = useRef(null);
   const scrollRef = useRef(null);
+  const wrapperRef = useRef(null);
   const [currentPage, setCurrentPage] = useState(0);
   const [itemsPerPage, setItemsPerPage] = useState(4);
   const [hasOverflow, setHasOverflow] = useState(false);
+  const [hoveredSubcat, setHoveredSubcat] = useState(null);
 
   useEffect(() => {
     const el = scrollRef.current;
@@ -154,7 +157,7 @@ const Categories = ({
 
   const paginatedItems = categories.slice(
     currentPage * itemsPerPage,
-    currentPage * itemsPerPage + itemsPerPage
+    currentPage * itemsPerPage + itemsPerPage,
   );
 
   const getFillForCategory = (catName) => {
@@ -163,8 +166,8 @@ const Categories = ({
 
     const selValue =
       typeof selectedCategory === "string"
-        ? selectedCategory
-        : selectedCategory?.category;
+        ? getCleanedCategoryName(selectedCategory)
+        : getCleanedCategoryName(selectedCategory?.category);
 
     const isSelected = selValue === catName;
     const isCompleted =
@@ -177,6 +180,71 @@ const Categories = ({
 
     return isSelected ? SELECTED : DEFAULT;
   };
+
+  function normalizeSeatKey(name) {
+    if (name.toLowerCase().includes("l-type")) {
+      return "lType";
+    }
+
+    return name
+      .toLowerCase()
+      .replace(/\s+/g, "")
+      .replace("cabin", "")
+      .replace("workstation", "")
+      .replace("room", "Room");
+  }
+
+  function normalizeWorkspaceName(name) {
+    return name.toLowerCase().replace(/\s+/g, "");
+  }
+
+  function getSubcategorySummary(selectedData, hoveredSubcat) {
+    const workspaceKey = normalizeWorkspaceName(hoveredSubcat.name);
+
+    const items = selectedData.filter((item) => {
+      if (item.category !== hoveredSubcat.category) return false;
+
+      const itemKey = normalizeWorkspaceName(item.subcategory);
+      const hoverKey = workspaceKey;
+
+      if (hoverKey === "meetingroom") {
+        return (
+          itemKey === "meetingroom" ||
+          itemKey === "meetingroommain" ||
+          itemKey === "meetingroomvisitor"
+        );
+      }
+
+      return itemKey === hoverKey || itemKey.startsWith(hoverKey);
+    });
+
+    if (!items.length) return null;
+
+    const itemsSelected = items.length;
+
+    const workspaceCost = items.reduce(
+      (sum, item) => sum + (item.finalPrice || 0),
+      0,
+    );
+
+    const seatKey = normalizeSeatKey(hoveredSubcat.name);
+    const totalSeats = seatCountData?.[seatKey] ?? 0;
+
+    const costPerSeat =
+      totalSeats > 0 ? Math.round(workspaceCost / totalSeats) : null;
+    return {
+      subcategory: hoveredSubcat.name,
+      category: hoveredSubcat.category,
+      itemsSelected,
+      workspaceCost,
+      costPerSeat,
+    };
+  }
+  const summary = useMemo(() => {
+    if (!hoveredSubcat) return null;
+
+    return getSubcategorySummary(selectedData, hoveredSubcat);
+  }, [hoveredSubcat, selectedData]);
 
   return (
     <>
@@ -225,7 +293,7 @@ const Categories = ({
                               {SvgIconFactory ? (
                                 SvgIconFactory(
                                   fill,
-                                  "h-8 w-8 lg:h-[60px] lg:w-[60px]"
+                                  "h-8 w-8 lg:h-[60px] lg:w-[60px]",
                                 )
                               ) : (
                                 <div
@@ -280,8 +348,8 @@ const Categories = ({
                   ? SELECTED
                   : DEFAULT
                 : isSelected
-                ? SELECTED
-                : DEFAULT;
+                  ? SELECTED
+                  : DEFAULT;
 
               return (
                 <div
@@ -301,17 +369,17 @@ const Categories = ({
                         isCategoryCompleted && isSelected
                           ? "shadow-[inset_6px_6px_12px_rgba(0,0,0,0.3),inset_-6px_-6px_12px_rgba(255,255,255,0.1)] bg-gradient-to-r from-[#334A78] to-[#68B2DC]"
                           : isCategoryCompleted
-                          ? "bg-gradient-to-r from-[#334A78] to-[#68B2DC] shadow-[6px_6px_12px_rgba(0,0,0,0.2),-6px_-6px_12px_rgba(255,255,255,0.3)]"
-                          : isSelected
-                          ? "bg-[#fff] shadow-[inset_6px_6px_12px_rgba(0,0,0,0.1),inset_-6px_-6px_12px_rgba(255,255,255,0.8)] scale-105"
-                          : "bg-[#fff] shadow-[6px_6px_12px_rgba(0,0,0,0.2),-6px_-6px_12px_rgba(255,255,255,0.8)] group-hover:scale-105"
+                            ? "bg-gradient-to-r from-[#334A78] to-[#68B2DC] shadow-[6px_6px_12px_rgba(0,0,0,0.2),-6px_-6px_12px_rgba(255,255,255,0.3)]"
+                            : isSelected
+                              ? "bg-[#fff] shadow-[inset_6px_6px_12px_rgba(0,0,0,0.1),inset_-6px_-6px_12px_rgba(255,255,255,0.8)] scale-105"
+                              : "bg-[#fff] shadow-[6px_6px_12px_rgba(0,0,0,0.2),-6px_-6px_12px_rgba(255,255,255,0.8)] group-hover:scale-105"
                       } w-14 md:w-16 lg:w-20 h-14 md:h-16 lg:h-20 rounded-full flex justify-center items-center group-hover:scale-105 transition-transform duration-[1000ms] ease-in-out`}
                     >
                       {SvgIconFactory ? (
                         typeof SvgIconFactory === "function" ? (
                           SvgIconFactory(
                             fill,
-                            "w-8 h-8 lg:w-[60px] lg:h-[60px]"
+                            "w-8 h-8 lg:w-[60px] lg:h-[60px]",
                           )
                         ) : (
                           SvgIconFactory
@@ -377,59 +445,94 @@ const Categories = ({
                     </button>
                   </div>
                 )}
-                <div
-                  ref={scrollRef}
-                  className="subcat-scroll flex flex-row items-center justify-start overflow-x-auto scrollbar-hide py-1 scroll-smooth"
-                >
-                  {selectedCategory?.subcategories
-                    ?.filter((subCategory) =>
-                      selectedCategory.category === "HVAC"
-                        ? userResponses.hvacType === "Centralized"
-                          ? subCategory === "Centralized"
-                          : subCategory !== "Centralized"
-                        : true
-                    )
-                    .map((subCategory, index) => {
-                      const isCompleted = checkIfSubCategoryCompleted(
-                        selectedCategory.category,
-                        subCategory
-                      );
-                      return (
-                        <motion.div
-                          key={index}
-                          onClick={() => setSelectedSubCategory(subCategory)}
-                          transition={{ duration: 0.3 }}
-                          className={`group rounded flex flex-row items-start justify-center shrink-0 mr-5 group hover:bg-[#F9F9F9] border hover:border-[#374A75] ${
-                            isCompleted ? "bg-[#374A75]" : ""
-                          } ${
-                            selectedSubCategory === subCategory && !isCompleted
-                              ? "bg-[#E0F0FF]"
-                              : ""
-                          }`}
-                        >
-                          <p
-                            className={`relative text-[#252525] text-center text-xs md:text-sm flex items-center justify-center py-3 cursor-pointer group-hover:text-[#334A78] px-2 md:px-5 ${
-                              isCompleted
-                                ? "font-semibold text-[#fff]"
-                                : "font-normal"
+                <div ref={wrapperRef} className="relative">
+                  <div
+                    ref={scrollRef}
+                    className="subcat-scroll flex flex-row items-center justify-start overflow-x-auto overflow-y-hidden scrollbar-hide py-1 scroll-smooth"
+                  >
+                    {selectedCategory?.subcategories
+                      ?.filter((subCategory) =>
+                        selectedCategory.category === "HVAC"
+                          ? userResponses.hvacType === "Centralized"
+                            ? subCategory === "Centralized"
+                            : subCategory !== "Centralized"
+                          : true,
+                      )
+                      .map((subCategory, index) => {
+                        const isCompleted = checkIfSubCategoryCompleted(
+                          selectedCategory.category,
+                          subCategory,
+                        );
+
+                        return (
+                          <motion.div
+                            key={index}
+                            onClick={() => setSelectedSubCategory(subCategory)}
+                            transition={{ duration: 0.3 }}
+                            className={`group rounded flex flex-row items-start justify-center shrink-0 mr-5 group hover:bg-[#F9F9F9] border hover:border-[#374A75] ${
+                              isCompleted ? "bg-[#374A75]" : ""
+                            } ${
+                              selectedSubCategory === subCategory &&
+                              !isCompleted
+                                ? "bg-[#E0F0FF]"
+                                : ""
                             }`}
                           >
-                            {subCategory}
-                            <span
-                              className={`absolute left-0 bottom-0 block w-0 h-1 bg-[#334A78] transition-all duration-300 ease-in-out rounded-b-md ${
-                                selectedSubCategory === subCategory
-                                  ? "w-full"
-                                  : "group-hover:w-full"
-                              } ${
+                            <p
+                              className={`relative text-[#252525] text-center text-xs md:text-sm flex items-center justify-center py-3 cursor-pointer group-hover:text-[#334A78] px-2 md:px-5 ${
                                 isCompleted
-                                  ? "bg-[#E0F0FF] group-hover:bg-[#334A78]"
-                                  : ""
+                                  ? "font-semibold text-[#fff]"
+                                  : "font-normal"
                               }`}
-                            ></span>
-                          </p>
-                        </motion.div>
-                      );
-                    })}
+                              onMouseEnter={(e) => {
+                                const rect =
+                                  e.currentTarget.getBoundingClientRect();
+
+                                setHoveredSubcat({
+                                  name: subCategory,
+                                  category: selectedCategory.category,
+                                  index,
+                                  rect,
+                                });
+                              }}
+                              onMouseLeave={() => setHoveredSubcat(null)}
+                            >
+                              {subCategory}
+                              <span
+                                className={`absolute left-0 bottom-0 block w-0 h-1 bg-[#334A78] transition-all duration-300 ease-in-out rounded-b-md ${
+                                  selectedSubCategory === subCategory
+                                    ? "w-full"
+                                    : "group-hover:w-full"
+                                } ${
+                                  isCompleted
+                                    ? "bg-[#E0F0FF] group-hover:bg-[#334A78]"
+                                    : ""
+                                }`}
+                              ></span>
+                            </p>
+                          </motion.div>
+                        );
+                      })}
+                  </div>
+
+                  {summary && wrapperRef.current && (
+                    <div
+                      className="absolute z-[999]"
+                      style={{
+                        top:
+                          hoveredSubcat.rect.bottom -
+                          wrapperRef.current.getBoundingClientRect().top +
+                          8,
+                        left:
+                          hoveredSubcat.rect.left -
+                          wrapperRef.current.getBoundingClientRect().left +
+                          hoveredSubcat.rect.width / 2,
+                        transform: "translateX(-35%)",
+                      }}
+                    >
+                      <SubcategorySummaryCard summary={summary} />
+                    </div>
+                  )}
                 </div>
               </motion.div>
             )}
@@ -450,12 +553,12 @@ const Categories = ({
                           ? userResponses.hvacType === "Centralized"
                             ? subCategory === "Centralized"
                             : subCategory !== "Centralized"
-                          : true
+                          : true,
                       )
                       .map((subCategory, index) => {
                         const imageSrcSubCat = getImageSrcSubCat(
                           selectedCategory.category,
-                          subCategory
+                          subCategory,
                         );
 
                         return (
@@ -494,3 +597,36 @@ const Categories = ({
 };
 
 export default Categories;
+
+function SubcategorySummaryCard({ summary }) {
+  if (!summary) return null;
+
+  return (
+    <div className="w-64 rounded-lg bg-white shadow-xl p-4">
+      {/* <h4 className="font-semibold text-sm mb-2">Summary</h4> */}
+
+      <div className="text-xs space-y-1 text-[#444]">
+        <p>
+          Items selected:{" "}
+          <span className="font-medium">{summary.itemsSelected}</span>
+        </p>
+        <p>
+          Workspace cost:{" "}
+          <span className="font-medium">
+            ₹ {summary.workspaceCost.toLocaleString("en-IN")}
+          </span>
+        </p>
+        {summary.category === "Furniture" &&
+          (summary.subcategory === "Linear Workstation" ||
+            summary.subcategory === "L-Type Workstation") && (
+            <p>
+              Cost per seat:{" "}
+              <span className="font-medium">
+                ₹ {summary?.costPerSeat?.toLocaleString("en-IN")}
+              </span>
+            </p>
+          )}
+      </div>
+    </div>
+  );
+}

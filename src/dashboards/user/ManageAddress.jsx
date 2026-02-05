@@ -8,8 +8,8 @@ function ManageAddress() {
   const { accountHolder, fetchUserData } = useApp();
   const [errors, setErrors] = useState({});
   const [isAddressFormOpen, setIsAddressFormOpen] = useState(false);
-  const [removingAddressId, setRemovingAddressId] = useState(null);
   const [isAddressEdit, setIsAddressEdit] = useState(false);
+  const [addressToDelete, setAddressToDelete] = useState(null);
 
   const [addressFormdata, setaddressFormData] = useState({
     id: "",
@@ -173,7 +173,7 @@ function ManageAddress() {
     // 2. Prepare the updated address list
     // let updatedAddressList = [];
     let updatedAddressList = [...(accountHolder?.address || [])].map((addr) =>
-      addr.id === updatedAddress.id ? updatedAddress : addr
+      addr.id === updatedAddress.id ? updatedAddress : addr,
     );
 
     if (updatedAddress.ismarkedDefault) {
@@ -213,19 +213,18 @@ function ManageAddress() {
   };
 
   const sortedAddressList = [...(accountHolder?.address || [])].sort(
-    (a, b) => (b.ismarkedDefault === true) - (a.ismarkedDefault === true)
+    (a, b) => (b.ismarkedDefault === true) - (a.ismarkedDefault === true),
   );
 
   //remove address from the list
   const handleRemoveAddress = async (address) => {
-    setRemovingAddressId(address.id);
     try {
       if (address.ismarkedDefault) {
         toast.error("Default address cant be removed");
         return;
       }
       const updatedAddresslist = accountHolder?.address.filter(
-        (add) => add.id !== address.id
+        (add) => add.id !== address.id,
       );
 
       const { error } = await supabase
@@ -241,7 +240,7 @@ function ManageAddress() {
       console.error(error);
     } finally {
       fetchUserData();
-      setRemovingAddressId(null);
+      setAddressToDelete(null);
     }
   };
 
@@ -298,11 +297,10 @@ function ManageAddress() {
           !isAddressFormOpen &&
           sortedAddressList.map((add, index) => (
             <AddressCard
-              removingAddressId={removingAddressId}
               add={add}
               handleSetDefaultAddress={handleSetDefaultAddress}
-              handleRemoveAddress={handleRemoveAddress}
               handleEditAddress={handleEditAddress}
+              setAddressToDelete={setAddressToDelete}
               key={index}
             />
           ))}
@@ -319,6 +317,16 @@ function ManageAddress() {
             setdata={setEditaddressFormData}
           />
         </div>
+      )}
+      {addressToDelete && (
+        <DeleteAddressWarning
+          address={addressToDelete}
+          onCancel={() => setAddressToDelete(null)}
+          onConfirm={async () => {
+            await handleRemoveAddress(addressToDelete);
+            setAddressToDelete(null);
+          }}
+        />
       )}
     </div>
   );
@@ -374,9 +382,8 @@ function CustomInput({
 function AddressCard({
   add,
   handleSetDefaultAddress,
-  handleRemoveAddress,
-  removingAddressId,
   handleEditAddress,
+  setAddressToDelete,
 }) {
   return (
     <div className="font-Poppins flex items-start justify-between gap-3 border border-[#ccc] p-5 rounded-md flex-1">
@@ -416,36 +423,10 @@ function AddressCard({
           Edit
         </button>
         <button
-          onClick={() => handleRemoveAddress(add)}
+          onClick={() => setAddressToDelete(add)}
           className="border boder-[#ccc] text-[#000] px-5 py-2 hover:bg-[#f9f9f9]"
-          disabled={removingAddressId === add.id}
         >
-          {removingAddressId === add.id ? (
-            <div className="spinner flex justify-center items-center">
-              <svg
-                className="animate-spin h-5 w-5 text-blue-500"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-              >
-                <circle
-                  className="opacity-25"
-                  cx="12"
-                  cy="12"
-                  r="10"
-                  stroke="currentColor"
-                  strokeWidth="4"
-                ></circle>
-                <path
-                  className="opacity-75"
-                  fill="currentColor"
-                  d="M4 12a8 8 0 018-8v8h8a8 8 0 01-8 8V12H4z"
-                ></path>
-              </svg>
-            </div>
-          ) : (
-            "Delete"
-          )}
+          Delete
         </button>
       </div>
     </div>
@@ -572,6 +553,42 @@ function AddressForm({
           </div>
         </div>
       </form>
+    </div>
+  );
+}
+
+function DeleteAddressWarning({ address, onCancel, onConfirm }) {
+  return (
+    <div className="fixed inset-0 bg-black/40 flex items-center justify-center">
+      <div className="bg-white p-5 rounded-lg shadow-lg max-w-xs md:max-w-sm w-full">
+        <h3 className="text-lg font-semibold text-red-500 mb-2">
+          Confirm Deletion
+        </h3>
+
+        <p className="text-sm text-gray-700 mb-4">
+          Are you sure you want to delete this address?
+          <br />
+          <span className="text-xs text-gray-500">
+            {address.address}, {address.city}
+          </span>
+        </p>
+
+        <div className="flex justify-end gap-3">
+          <button
+            className="px-4 py-1 rounded bg-gray-200 hover:bg-gray-300"
+            onClick={onCancel}
+          >
+            Cancel
+          </button>
+
+          <button
+            className="px-4 py-1 rounded bg-red-500 hover:bg-red-600 text-white"
+            onClick={onConfirm}
+          >
+            Delete
+          </button>
+        </div>
+      </div>
     </div>
   );
 }

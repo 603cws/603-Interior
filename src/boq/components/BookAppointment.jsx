@@ -36,7 +36,7 @@ function BookAppointment({ onClose, isdashboardbooking = false }) {
 
   const filteredTimings = times?.filter(
     (time) =>
-      !todayBookedTimmings?.some((booked) => booked?.start_time === time)
+      !todayBookedTimmings?.some((booked) => booked?.start_time === time),
   );
 
   const handletime = (time) => {
@@ -80,7 +80,7 @@ function BookAppointment({ onClose, isdashboardbooking = false }) {
               time: selectedTIme,
               email: accountHolder.email,
             }),
-          }
+          },
         );
         // admin email
         await fetch(
@@ -96,7 +96,7 @@ function BookAppointment({ onClose, isdashboardbooking = false }) {
               userEmail: accountHolder.email,
               phoneNo: accountHolder?.phone,
             }),
-          }
+          },
         );
       } else {
         toast.error("please select the time");
@@ -219,7 +219,7 @@ function BookAppointment({ onClose, isdashboardbooking = false }) {
                 </div>
                 <div className="flex-1">
                   <h4 className="text-[#111] font-medium text-sm md:text-base mb-3">
-                    select time*
+                    Select Time*
                   </h4>
                   <div
                     className={`${
@@ -255,12 +255,12 @@ function BookAppointment({ onClose, isdashboardbooking = false }) {
                             disabled={isPast}
                             key={time}
                             onClick={() => handletime(time)}
-                            className={`  border  px-2 py-1 md:px-4 md:py-3 rounded-lg text-xs  border-[#757575]  ${
+                            className={`border px-2 py-1 md:px-4 md:py-3 rounded-lg text-xs border-[#757575] ${
                               isPast
                                 ? "bg-gray-200 text-gray-500 cursor-not-allowed"
                                 : selectedTIme === time
-                                ? "text-[#F3F8FF] bg-[#374A75]"
-                                : "text-[#374A75] bg-[#F3F8FF] hover:shadow-md"
+                                  ? "text-[#F3F8FF] bg-[#374A75]"
+                                  : "text-[#374A75] bg-[#F3F8FF] hover:shadow-md"
                             }`}
                           >
                             {time}
@@ -276,7 +276,7 @@ function BookAppointment({ onClose, isdashboardbooking = false }) {
                       <PiWarningCircleFill color="#D59E61" size={20} />
                     </div>
                     <h2 className="text-sm text-[#000] ">
-                      All times are in central Time(India)
+                      All times are in Central Time(India)
                     </h2>
                   </div>
                 </div>
@@ -284,7 +284,7 @@ function BookAppointment({ onClose, isdashboardbooking = false }) {
               <div className=" flex justify-center items-center my-2 md:my-4">
                 <button
                   onClick={handlesubmit}
-                  className="px-2 py-1 md:px-5 md:py-3 bg-[#374A75] text-[#fafafa] rounded-lg"
+                  className="px-2 py-1 md:px-5 md:py-3 bg-[#374A75] text-[#fafafa] rounded-lg hover:bg-[#6d87c4]"
                   disabled={isSubmitting}
                 >
                   {isSubmitting ? (

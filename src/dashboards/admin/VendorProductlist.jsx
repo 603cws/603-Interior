@@ -17,6 +17,7 @@ import { baseImageUrl } from "../../utils/HelperConstant";
 import PagInationNav from "../../common-components/PagInationNav";
 import SelectSubcategories from "./SelectSubcategories";
 import MultipleDeleteWarningCard from "../components/MultipleDeleteWarningCard";
+import BackButton from "../../common-components/BackButton";
 
 function VendorProductlist({ setVendorproductlist, selectedVendor }) {
   const [toggle, setToggle] = useState(true);
@@ -63,7 +64,7 @@ function VendorProductlist({ setVendorproductlist, selectedVendor }) {
 
     if (e.target.value !== "") {
       const filtered = products.filter(
-        (item) => item.status.toLowerCase() === e.target.value.toLowerCase()
+        (item) => item.status.toLowerCase() === e.target.value.toLowerCase(),
       );
       setFilteredProducts(filtered);
     } else {
@@ -192,7 +193,7 @@ function VendorProductlist({ setVendorproductlist, selectedVendor }) {
   const resetFilterstatuAfterSearch = () => {
     if (selected !== "") {
       const filtered = products.filter(
-        (item) => item.status.toLowerCase() === selected.toLowerCase()
+        (item) => item.status.toLowerCase() === selected.toLowerCase(),
       );
       setFilteredProducts(filtered);
     } else {
@@ -231,12 +232,12 @@ function VendorProductlist({ setVendorproductlist, selectedVendor }) {
         const filtered = filteredProducts.filter(
           (item) =>
             item.status.toLowerCase() === selected.toLowerCase() &&
-            normalize(item.title).includes(normalize(query))
+            normalize(item.title).includes(normalize(query)),
         );
         setFilteredProducts(filtered);
       } else {
         const filtered = products.filter((item) =>
-          normalize(item.title).includes(normalize(query))
+          normalize(item.title).includes(normalize(query)),
         );
         setFilteredProducts(filtered);
       }
@@ -259,12 +260,12 @@ function VendorProductlist({ setVendorproductlist, selectedVendor }) {
         const filtered = filteredAddons.filter(
           (item) =>
             item.status.toLowerCase() === selected.toLowerCase() &&
-            normalize(item.title).includes(normalize(query))
+            normalize(item.title).includes(normalize(query)),
         );
         setFilteredAddons(filtered);
       } else {
         const filtered = addons.filter((item) =>
-          normalize(item.title).includes(normalize(query))
+          normalize(item.title).includes(normalize(query)),
         );
         setFilteredAddons(filtered);
       }
@@ -281,7 +282,7 @@ function VendorProductlist({ setVendorproductlist, selectedVendor }) {
       }
       const filtered = products.filter(
         (item) =>
-          item.products.category.toLowerCase() === category.toLowerCase()
+          item.products.category.toLowerCase() === category.toLowerCase(),
       );
 
       setFilteredProducts(filtered);
@@ -291,7 +292,7 @@ function VendorProductlist({ setVendorproductlist, selectedVendor }) {
         return;
       }
       const filtered = addons.filter((item) =>
-        item.title.toLowerCase().includes(category.toLowerCase())
+        item.title.toLowerCase().includes(category.toLowerCase()),
       );
 
       setFilteredAddons(filtered);
@@ -300,7 +301,7 @@ function VendorProductlist({ setVendorproductlist, selectedVendor }) {
   };
   const paginatedItems = items.slice(
     (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
+    currentPage * itemsPerPage,
   );
 
   const goToPage = (page) => {
@@ -347,7 +348,7 @@ function VendorProductlist({ setVendorproductlist, selectedVendor }) {
           `
              *, 
               products (category, subcategory, subcategory1)
-            `
+            `,
         )
         .eq("vendor_id", selectedVendor?.id);
 
@@ -409,14 +410,14 @@ function VendorProductlist({ setVendorproductlist, selectedVendor }) {
     setSelectedItemForDelete((prev) =>
       prev.includes(blogId)
         ? prev.filter((id) => id !== blogId)
-        : [...prev, blogId]
+        : [...prev, blogId],
     );
   };
 
   async function handleMultipleDelete(selectedProducts) {
     if (selectedProducts?.length === 0) return;
     const filteredItems = items.filter((item) =>
-      selectedProducts?.includes(item.id)
+      selectedProducts?.includes(item.id),
     );
 
     try {
@@ -491,12 +492,11 @@ function VendorProductlist({ setVendorproductlist, selectedVendor }) {
           <>
             <div className="sticky top-0 z-20 bg-white">
               <div className="hidden lg:flex justify-between items-center px-4 py-2 border-b-2 border-b-gray-400 ">
-                <button
+                <BackButton
+                  label="Back to vendor list"
                   onClick={() => setVendorproductlist(false)}
-                  className="capitalize font-semibold flex items-center text-xs text-[#A1A1A1] "
-                >
-                  <IoIosArrowBack /> Back to vendor list
-                </button>
+                  className=""
+                />
 
                 <div className="relative inline-block" ref={dropdownRef}>
                   <button
@@ -698,7 +698,7 @@ function VendorProductlist({ setVendorproductlist, selectedVendor }) {
                                     id=""
                                     onClick={(e) => e.stopPropagation()}
                                     checked={selectedItemForDelete?.includes(
-                                      item.id
+                                      item.id,
                                     )}
                                     onChange={() =>
                                       handleCheckboxChange(item.id)
@@ -781,7 +781,7 @@ function VendorProductlist({ setVendorproductlist, selectedVendor }) {
                                       }}
                                       className=" flex gap-2 items-center w-full text-left px-3 py-2 hover:bg-gray-200"
                                     >
-                                      <VscEye /> view
+                                      <VscEye /> View
                                     </button>
                                     {toggle ? (
                                       <button

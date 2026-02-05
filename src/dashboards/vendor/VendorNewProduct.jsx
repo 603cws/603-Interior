@@ -17,6 +17,7 @@ import {
 } from "../../utils/HelperConstant";
 import MultiImageCrop from "../components/MultiImageCrop";
 import ButtonSpinner from "../../utils/ButtonSpinner";
+import BackButton from "../../common-components/BackButton";
 
 function VendorNewProduct({
   setAddNewProduct,
@@ -138,7 +139,7 @@ function VendorNewProduct({
 
   const removeAdditionalImage = (index) => {
     let additionalimages = variant.additionalImages.filter(
-      (_, i) => i !== index
+      (_, i) => i !== index,
     );
     setVariant((prevVariants) => ({
       ...prevVariants,
@@ -235,7 +236,7 @@ function VendorNewProduct({
             .from("addon")
             .upload(
               `${cleanedTitle}-additional-${index}-${uniqueID}`,
-              imageFile.file
+              imageFile.file,
             );
 
           additionalImagePaths.push(additionalImageUpload.path);
@@ -283,7 +284,7 @@ function VendorNewProduct({
   useEffect(() => {
     if (category !== "HVAC" && category !== "Civil / Plumbing") {
       const filter = AllCatArray.filter((cat) => cat.name === category).flatMap(
-        (subcat) => subcat.subcategories
+        (subcat) => subcat.subcategories,
       );
       setSelectedSubcategories(filter.join(","));
     }
@@ -390,23 +391,21 @@ function VendorNewProduct({
   const AdditonalInformation = additionalDetailsConfig.filter(
     (info) =>
       info.category.toLowerCase() === category.toLowerCase() &&
-      info.subcategory.toLowerCase() === subSubCategory.toLowerCase()
+      info.subcategory.toLowerCase() === subSubCategory.toLowerCase(),
   );
 
   return (
     <div className="flex flex-col justify-center items-start font-Poppins relative">
       <div className="px-3 lg:px-5 py-2 border-b-2 bg-white w-full border-b-gray-400 sticky top-0 z-10">
-        <button
+        <BackButton
+          label="Back to product list"
           onClick={() => {
             setAddNewProduct(false);
             setProductlist(true);
             setIsProductRefresh((prev) => !prev);
           }}
-          className="border-none flex justify-center items-center text-[#A1A1A1]"
-        >
-          <MdKeyboardArrowLeft />
-          Back to product list
-        </button>
+          className="py-2"
+        />
         <h3 className="capitalize font-semibold text-xl ">add new products</h3>
       </div>
       <form
@@ -851,14 +850,14 @@ function VendorNewProduct({
           </div>
           <div className="w-full flex items-end justify-between mt-5">
             <button
-              className="border-2 px-5 py-2 capitalize rounded-lg"
+              className="border-2 px-5 py-2 capitalize rounded-lg hover:bg-gray-100"
               type="button"
               onClick={handleFormClear}
             >
               Discard
             </button>
             <button
-              className="border-2 px-5 py-2 bg-[#374A75] text-white capitalize rounded-lg"
+              className="border-2 px-5 py-2 bg-[#374A75] hover:bg-[#6d87c4] text-white capitalize rounded-lg"
               type="submit"
               disabled={isSubmitting}
             >

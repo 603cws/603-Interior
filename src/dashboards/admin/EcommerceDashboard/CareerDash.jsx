@@ -112,7 +112,7 @@ function CareerDash() {
               <MdArrowBackIos />
             </button>
           )}
-          Job post
+          Job Post
         </h2>
         {careerstate?.jobposting && (
           <div className="flex gap-2">
@@ -760,17 +760,17 @@ function JobPostForm({
 
         <div className="flex justify-end space-x-6 m-3">
           <button
-            className="border border-[#ccc] px-5 py-3 text-[#111] rounded-lg "
+            className="border border-[#ccc] hover:bg-gray-100 px-5 py-3 text-[#111] rounded-lg "
             type="button"
             onClick={reset}
           >
             Discard
           </button>
           <button
-            className="border border-[#ccc] px-5 py-3 text-[#fff] bg-[#374A75] rounded-lg "
+            className="border border-[#ccc] px-5 py-3 text-[#fff] bg-[#374A75] hover:bg-[#6d87c4] rounded-lg "
             type="submit"
           >
-            {isedit ? "update" : "save"}
+            {isedit ? "Update" : "Save"}
           </button>
         </div>
       </form>

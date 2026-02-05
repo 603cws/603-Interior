@@ -9,7 +9,7 @@ function findKeyWithExactAndPartialMatch(subCategory, dataObject) {
   if (!subCategory || !dataObject) return null;
   const normalizedSubCat = normalize(subCategory);
   const exactMatch = Object.keys(dataObject).find(
-    (key) => normalizedSubCat === normalize(key)
+    (key) => normalizedSubCat === normalize(key),
   );
   if (exactMatch) return exactMatch;
   return (
@@ -33,6 +33,20 @@ function getAreaAndQuantity(subCategory, areas, quantities) {
   };
 }
 
+function clampTextToLines(doc, text, maxWidth, maxLines, fontSize = 9) {
+  if (!text) return "";
+
+  doc.setFontSize(fontSize);
+
+  const lines = doc.splitTextToSize(text, maxWidth);
+
+  if (lines.length <= maxLines) {
+    return lines.join("\n");
+  }
+
+  return [...lines.slice(0, maxLines), "..."].join("\n");
+}
+
 const PDFGenerator = {
   generatePDF: async (
     selectedData,
@@ -41,7 +55,7 @@ const PDFGenerator = {
     areasData,
     categories,
     BOQTitle,
-    userResponses
+    userResponses,
   ) => {
     const areas = areasData[0];
     const quantities = quantityData[0];
@@ -71,7 +85,7 @@ const PDFGenerator = {
     doc.text(
       `BOQ DATE: ${new Date().toLocaleDateString("en-GB")}`,
       pageWidth - 128,
-      110
+      110,
     );
 
     // ================= BOQ DETAILS =================
@@ -86,12 +100,12 @@ const PDFGenerator = {
     doc.text(
       `HVAC: ${userResponses.hvacType ? userResponses.hvacType : "N/A"}`,
       20,
-      y + 30
+      y + 30,
     );
     doc.text(
       `Flooring: ${userResponses.flooring ? userResponses.flooring : "N/A"}`,
       20,
-      y + 45
+      y + 45,
     );
     const rightMargin = 20;
     const layoutX = pageWidth - rightMargin;
@@ -110,7 +124,7 @@ const PDFGenerator = {
       `Unused Area: ${areas.totalArea - areas.usedSpace} sq ft.`,
       layoutX,
       y + 45,
-      { align: "right" }
+      { align: "right" },
     );
 
     // ================= SUMMARY SECTION =================
@@ -119,14 +133,14 @@ const PDFGenerator = {
     categories.forEach((cat) => {
       const category = cat.category;
       const productsInCategory = selectedData.filter(
-        (item) => item.category === category
+        (item) => item.category === category,
       );
       const totalPrice = productsInCategory.reduce((acc, item) => {
         let itemTotal = item.finalPrice || 0;
         if (item.addons) {
           const addonSum = Object.values(item.addons).reduce(
             (addonAcc, addon) => addonAcc + (addon.finalPrice || 0),
-            0
+            0,
           );
           itemTotal += addonSum;
         }
@@ -145,7 +159,7 @@ const PDFGenerator = {
     yOffset += 20;
     const grandTotalAmount = Object.values(categoryTotals).reduce(
       (acc, val) => acc + val,
-      0
+      0,
     );
     const summaryRows = Object.entries(categoryTotals).map(
       ([category, total]) => [
@@ -154,7 +168,7 @@ const PDFGenerator = {
           content: `Rs. ${total.toLocaleString("en-IN")}/-`,
           styles: { halign: "center", fontSize: 10 },
         },
-      ]
+      ],
     );
     summaryRows.push([
       {
@@ -220,7 +234,7 @@ const PDFGenerator = {
       doc.text(categoryName, 250, currentY);
       currentY += 10;
       hasAddons = items.some(
-        (item) => item.addons && Object.keys(item.addons).length > 0
+        (item) => item.addons && Object.keys(item.addons).length > 0,
       );
       const excludedQtyCategories = [
         "Lighting",
@@ -245,7 +259,7 @@ const PDFGenerator = {
           if (item.product_variant?.variant_image) {
             try {
               productImage = await loadImage(
-                item.product_variant.variant_image
+                item.product_variant.variant_image,
               );
             } catch (error) {
               console.error(error);
@@ -270,23 +284,34 @@ const PDFGenerator = {
                   price: a.finalPrice,
                   _imgData: addonImage,
                 };
-              })
+              }),
             );
           }
           const { area } = getAreaAndQuantity(
             item.subcategory,
             areas,
-            quantities
+            quantities,
           );
           const qty = item.quantity || "-";
           const totalAmount = (item.finalPrice || 0) + addonTotal;
+
+          const productTitle = item.product_variant?.variant_title || "N/A";
+
+          const productDescription = item.shortDescription
+            ? item.shortDescription
+            : clampTextToLines(
+                doc,
+                item.product_variant?.variant_details || "",
+                hasAddons ? 95 : 115, // match product column width
+                4,
+                9,
+              );
+
           return {
             no: idx + 1,
             image: " ",
             _imgData: productImage || null,
-            product: `${item.product_variant?.variant_title || "N/A"}\n${
-              item.product_variant?.variant_details || ""
-            }`,
+            product: `${productTitle}\n${productDescription}`,
             ...(hasAddons
               ? { addons: "", _addons: addonCell, _hasAddons: true }
               : {}),
@@ -299,7 +324,7 @@ const PDFGenerator = {
             }`,
             amount: `Rs. ${totalAmount.toLocaleString("en-IN")}`,
           };
-        })
+        }),
       );
       const categoryObj = categories.find((c) => c.category === categoryName);
       if (categoryObj && categoryObj.subcategory1) {
@@ -354,8 +379,8 @@ const PDFGenerator = {
         margin: hasAddons
           ? { left: 18, right: 15, bottom: 80 }
           : hideQty
-          ? { left: 65, right: 10 }
-          : { left: 52, right: 10 },
+            ? { left: 65, right: 10 }
+            : { left: 52, right: 10 },
         didDrawCell: (data) => {
           if (data.section === "body" && data.column.dataKey === "image") {
             const rowData = data.row.raw;
@@ -390,7 +415,7 @@ const PDFGenerator = {
                     contentX,
                     yOffset,
                     imgSize,
-                    imgSize
+                    imgSize,
                   );
                 }
 
@@ -404,7 +429,7 @@ const PDFGenerator = {
                   `Rs. ${Number(addon.price || 0).toLocaleString("en-IN")}`,
                   textX,
                   yOffset + 18,
-                  { maxWidth: textWidth }
+                  { maxWidth: textWidth },
                 );
                 yOffset += imgSize + vGap;
               });
@@ -426,7 +451,7 @@ const PDFGenerator = {
               data.cell.text = [];
               data.cell.styles.minCellHeight = Math.max(
                 data.cell.styles.minCellHeight || 0,
-                required
+                required,
               );
             }
           }
@@ -447,7 +472,7 @@ const PDFGenerator = {
       `Rs. ${boqTotal.toLocaleString("en-IN")}`,
       pageWidth - rightMargin2,
       finalY,
-      { align: "right" }
+      { align: "right" },
     );
     doc.setFont("helvetica", "bold");
     doc.setFontSize(12);
@@ -456,7 +481,7 @@ const PDFGenerator = {
       `Rs. ${boqTotal.toLocaleString("en-IN")}`,
       pageWidth - rightMargin2,
       finalY + 25,
-      { align: "right" }
+      { align: "right" },
     );
 
     const blob = doc.output("blob");

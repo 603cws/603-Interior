@@ -100,7 +100,7 @@ function ProductView() {
         setIsCarted(check);
       } else {
         const check = localcartItems.some(
-          (item) => item.productId?.id === data?.id
+          (item) => item.productId?.id === data?.id,
         );
 
         setIsCarted(check);
@@ -159,21 +159,21 @@ function ProductView() {
         (item) =>
           item.status === "approved" &&
           item.product_id.category !== "Partitions / Ceilings" &&
-          item.product_id.category !== "Civil / Plumbing"
+          item.product_id.category !== "Civil / Plumbing",
       );
 
       //similar product
       const similarFiltered = filterdata?.filter(
         (item) =>
           item?.id !== product?.id &&
-          item?.product_type === product?.product_type
+          item?.product_type === product?.product_type,
       );
 
       //productmaylike filter
       const productmaylikeFiltered = filterdata?.filter(
         (item) =>
           item.id !== product?.id &&
-          item.product_id?.category === product?.product_id.category
+          item.product_id?.category === product?.product_id.category,
       );
 
       // 1. Extract unique image names
@@ -223,12 +223,12 @@ function ProductView() {
 
     if (isAuthenticated) {
       const check = cartItems?.some(
-        (item) => item.productId?.id === product.id
+        (item) => item.productId?.id === product.id,
       );
       setIsCarted(check);
     } else {
       const check = localcartItems?.some(
-        (item) => item.productId?.id === product.id
+        (item) => item.productId?.id === product.id,
       );
       setIsCarted(check);
     }
@@ -236,7 +236,7 @@ function ProductView() {
 
   const additionalImagesArray = product?.additional_images
     ? JSON.parse(product?.additional_images).map(
-        (imageName) => `${baseImageUrl}${imageName}`
+        (imageName) => `${baseImageUrl}${imageName}`,
       )
     : [];
 
@@ -300,7 +300,7 @@ function ProductView() {
                   />
                 </div>
                 {additionalImagesArray.length > 0 ? (
-                  <div className="flex lg:flex-wrap items-center gap-3 mx-6 lg:ml-16 mt-3">
+                  <div className="flex lg:flex-wrap items-center gap-3 sm:mx-6 lg:ml-16 mt-3">
                     {additionalImagesArray.map((img, idx) => (
                       <img
                         key={idx}
@@ -353,22 +353,22 @@ function ProductView() {
               <div className="my-2 lg:my-3 font-Poppins">
                 <div className="flex items-center gap-2">
                   <p className="text-sm lg:text-xl font-bold text-[#334A78] leading-[38.4px]">
-                    Rs {product?.ecommercePrice?.sellingPrice || product?.price}
+                    ₹ {product?.ecommercePrice?.sellingPrice || product?.price}
                   </p>
                   <p className="text-sm lg:text-xl text-[#898994] leading-[38.4px]">
                     MRP{" "}
                     <span className="line-through">
-                      Rs {product?.ecommercePrice?.mrp || product?.price}
+                      ₹ {product?.ecommercePrice?.mrp || product?.price}
                     </span>
                   </p>
                   <p className="text-sm lg:text-base text-[#F69E60]">
-                    (Rs.
+                    (₹
                     {product?.ecommercePrice?.mrp -
                       product?.ecommercePrice?.sellingPrice}
                     OFF)
                   </p>
                 </div>
-                <p className="text-xs text-[#3AA495]">inclusive of all taxes</p>
+                {/* <p className="text-xs text-[#3AA495]">inclusive of all taxes</p> */}
               </div>
 
               {/* qunatiy counter */}
@@ -424,7 +424,9 @@ function ProductView() {
               {/* add to card and buy now */}
               <div className="my-4 lg:flex gap-8 hidden">
                 <button
-                  onClick={() => handleAddToCart(product, isCarted)}
+                  onClick={() =>
+                    handleAddToCart(product, isCarted, productqunatity)
+                  }
                   disabled={product?.stockQty < 1}
                   className={`text-[#212B36] uppercase bg-[#FFFFFF] border border-[#212B36] w-52 px-10 py-4 rounded-sm hover:bg-[#334A78] hover:text-[#fff] transition-colors duration-500 ease-in-out ${
                     product?.stockQty < 1
@@ -436,7 +438,7 @@ function ProductView() {
                 </button>
                 <button
                   onClick={() => {
-                    handleAddToCart(product, isCarted);
+                    handleAddToCart(product, isCarted, productqunatity);
                     navigate("/cart");
                   }}
                   disabled={product?.stockQty < 1}
@@ -497,13 +499,21 @@ function ProductView() {
             <div className="fixed bottom-0 left-0 w-full bg-white p-5 flex justify-between uppercase items-center border-t lg:hidden z-50">
               <button
                 onClick={() =>
-                  isCarted ? navigate("/cart") : handleAddToCart(product)
+                  isCarted
+                    ? navigate("/cart")
+                    : handleAddToCart(product, isCarted, productqunatity)
                 }
                 className="flex-1 border border-[#213626] font-Poppins text-[#212B36] uppercase py-4 mr-2 rounded text-xs tracking-widest"
               >
                 {isCarted ? "Go to cart" : "Add to cart"}
               </button>
-              <button className="flex-1 bg-[#304778] border-[#213625] font-Poppins text-white py-4 ml-2 rounded text-xs tracking-widest">
+              <button
+                onClick={() => {
+                  handleAddToCart(product, isCarted, productqunatity);
+                  navigate("/cart");
+                }}
+                className="flex-1 bg-[#304778] border-[#213625] font-Poppins text-white py-4 ml-2 rounded text-xs tracking-widest"
+              >
                 BUY NOW
               </button>
             </div>

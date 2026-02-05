@@ -33,7 +33,7 @@ function SubscripedEmail() {
         <MobileCard SubscripedEmail={SubscripedEmail} />
       </div>
       <div className="hidden md:block">
-        <CouponTable SubscripedEmail={SubscripedEmail} />
+        <SubscribedEmailTable SubscripedEmail={SubscripedEmail} />
       </div>
     </div>
   );
@@ -41,7 +41,7 @@ function SubscripedEmail() {
 
 export default SubscripedEmail;
 
-const CouponTable = ({ SubscripedEmail }) => {
+const SubscribedEmailTable = ({ SubscripedEmail }) => {
   const [currentPage, setCurrentPage] = useState(1);
 
   const discountCouponPerPage = 9;
@@ -50,7 +50,7 @@ const CouponTable = ({ SubscripedEmail }) => {
   const indexofFirstDiscount = indexoflastDisocunt - discountCouponPerPage;
   const currentBlogs = SubscripedEmail.slice(
     indexofFirstDiscount,
-    indexoflastDisocunt
+    indexoflastDisocunt,
   );
 
   const totalPages = Math.ceil(SubscripedEmail.length / discountCouponPerPage);
@@ -67,7 +67,7 @@ const CouponTable = ({ SubscripedEmail }) => {
             {/* <th className="py-2">Id</th> */}
             <th className="py-2">Email</th>
             {/* <th className="py-2">subscribed Status</th> */}
-            <th className="py-2">createdAt</th>
+            <th className="py-2">Created At</th>
           </tr>
         </thead>
         <tbody>
@@ -106,7 +106,7 @@ function MobileCard({ SubscripedEmail }) {
   const indexofFirstDiscount = indexoflastDisocunt - discountCouponPerPage;
   const currentBlogs = SubscripedEmail.slice(
     indexofFirstDiscount,
-    indexoflastDisocunt
+    indexoflastDisocunt,
   );
 
   const totalPages = Math.ceil(SubscripedEmail.length / discountCouponPerPage);

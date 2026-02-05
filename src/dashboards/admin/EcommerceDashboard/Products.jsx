@@ -714,7 +714,10 @@ function Products({
                   />
                 </div>
                 <div className="lg:hidden flex gap-2">
-                  <div className="relative inline-block text-xs">
+                  <div
+                    className="relative inline-block text-xs"
+                    ref={dropdownRef}
+                  >
                     <button
                       onClick={() => setFilterDropdown(!filterDropdown)}
                       className="h-10 w-10 flex justify-center items-center border rounded"

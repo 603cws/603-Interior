@@ -27,14 +27,14 @@ export const useSelectedData = ({
         // 🔴 Uncheck → remove item
         if (!isChecked) {
           const updatedData = validPrevData.filter(
-            (item) => item.groupKey !== groupKey
+            (item) => item.groupKey !== groupKey,
           );
           localStorage.setItem("selectedData", JSON.stringify(updatedData));
           return updatedData;
         }
 
         const existingProduct = validPrevData.find(
-          (item) => item.groupKey === groupKey
+          (item) => item.groupKey === groupKey,
         );
 
         // Quantity calculations
@@ -47,7 +47,7 @@ export const useSelectedData = ({
         ) {
           calQty = Math.ceil(
             +areasData[0][normalizeKey(subCat)] /
-              multiplyFirstTwoFlexible(product?.dimensions)
+              multiplyFirstTwoFlexible(product?.dimensions),
           );
         } else {
           calQty = productQuantity[subCat]?.[selectedSubCategory1];
@@ -70,6 +70,7 @@ export const useSelectedData = ({
             variant_info: product.information,
             variant_additional_info: product.additonalinformation,
           },
+          shortDescription: product?.information?.ShortDescription || "",
           addons: existingProduct
             ? existingProduct.addons
             : selectedAddons || [],
@@ -93,43 +94,43 @@ export const useSelectedData = ({
                   userResponses,
                   selectedProductView,
                   formulaMap,
-                  seatCountData
+                  seatCountData,
                 )
               : category.category === "Furniture" &&
-                subcategory1 === "Chair" &&
-                (subCat === "Md Cabin Main" || subCat === "Md Cabin Visitor")
-              ? product.price *
-                (productQuantity[subCat]?.[selectedSubCategory1] ?? 0) *
-                (quantityData[0]["md"] ?? 1)
-              : category.category === "Furniture" &&
-                subcategory1 === "Chair" &&
-                (subCat === "Manager Cabin Main" ||
-                  subCat === "Manager Cabin Visitor")
-              ? product.price *
-                (productQuantity[subCat]?.[selectedSubCategory1] ?? 0) *
-                (quantityData[0]["manager"] ?? 1)
-              : product.price *
-                (productQuantity[subCat]?.[selectedSubCategory1] ?? 0),
+                  subcategory1 === "Chair" &&
+                  (subCat === "Md Cabin Main" || subCat === "Md Cabin Visitor")
+                ? product.price *
+                  (productQuantity[subCat]?.[selectedSubCategory1] ?? 0) *
+                  (quantityData[0]["md"] ?? 1)
+                : category.category === "Furniture" &&
+                    subcategory1 === "Chair" &&
+                    (subCat === "Manager Cabin Main" ||
+                      subCat === "Manager Cabin Visitor")
+                  ? product.price *
+                    (productQuantity[subCat]?.[selectedSubCategory1] ?? 0) *
+                    (quantityData[0]["manager"] ?? 1)
+                  : product.price *
+                    (productQuantity[subCat]?.[selectedSubCategory1] ?? 0),
           quantity:
             category.category === "Paint"
               ? Math.ceil(+areasData[0][normalizeKey(subCat)] / 120) *
                 numOfCoats
               : category.category === "Furniture" &&
-                subcategory1 === "Chair" &&
-                (subCat === "Md Cabin Main" || subCat === "Md Cabin Visitor")
-              ? calQty * (quantityData[0]["md"] ?? 1)
-              : category.category === "Furniture" &&
-                subcategory1 === "Chair" &&
-                (subCat === "Manager Cabin Main" ||
-                  subCat === "Manager Cabin Visitor")
-              ? calQty * (quantityData[0]["manager"] ?? 1)
-              : calQty,
+                  subcategory1 === "Chair" &&
+                  (subCat === "Md Cabin Main" || subCat === "Md Cabin Visitor")
+                ? calQty * (quantityData[0]["md"] ?? 1)
+                : category.category === "Furniture" &&
+                    subcategory1 === "Chair" &&
+                    (subCat === "Manager Cabin Main" ||
+                      subCat === "Manager Cabin Visitor")
+                  ? calQty * (quantityData[0]["manager"] ?? 1)
+                  : calQty,
         };
 
         // Update or add
         const updatedData = existingProduct
           ? validPrevData.map((item) =>
-              item.groupKey === groupKey ? productData : item
+              item.groupKey === groupKey ? productData : item,
             )
           : [...validPrevData, productData];
 
@@ -151,7 +152,7 @@ export const useSelectedData = ({
       normalizeKey,
       multiplyFirstTwoFlexible,
       calculateTotalPrice,
-    ]
+    ],
   );
 
   return handleSelectedData;

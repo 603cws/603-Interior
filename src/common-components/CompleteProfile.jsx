@@ -54,7 +54,10 @@ function CompleteProfile() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!user) return alert("User not found!");
+    if (!user) {
+      toast.error("User not found!");
+      return;
+    }
     const { error } = await supabase.from("profiles").upsert({
       id: user.id,
       company_name: companyName,

@@ -45,7 +45,7 @@ function Addon({
           ...variant,
           imageUrl: variant.image || `${baseImageUrl}${variant.title}.jpg`,
         }))
-      : []
+      : [],
   );
 
   const handleAddonSelection = (addon) => {
@@ -97,7 +97,7 @@ function Addon({
           <div className="flex-1">
             <h4 className="text-sm font-semibold">{variant.title}</h4>
             <p className="text-xs">
-              Price: ₹{variant.price.toLocaleString("en-IN")}
+              Price: ₹ {variant.price.toLocaleString("en-IN")}
             </p>
           </div>
         </div>

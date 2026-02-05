@@ -46,7 +46,7 @@ function Transactions({ sidebarDispatch, onOrderSelect }) {
             ...order,
             product_variants_map: productVariantMap,
           };
-        })
+        }),
       );
 
       setOrdersData(ordersWithVariants);
@@ -106,7 +106,9 @@ function Transactions({ sidebarDispatch, onOrderSelect }) {
                         t.status === "Pending" ? "bg-yellow-500" : "bg-blue-500"
                       }`}
                     ></span>
-                    {t.status}
+                    {t?.status === "PartiallyCancelled"
+                      ? "Partially Cancelled"
+                      : t.status}
                   </span>
                 </td>
                 <td>₹{t.final_amount}</td>

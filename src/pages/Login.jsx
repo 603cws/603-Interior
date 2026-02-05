@@ -10,6 +10,7 @@ import { motion } from "framer-motion";
 import { useResetBOQ } from "../utils/HelperFunction";
 import { useBoqApp } from "../Context/BoqContext";
 import ResetPassword from "../common-components/ResetPassword";
+import BackButton from "../common-components/BackButton";
 
 function Login() {
   const [isSignUp, setIsSignUp] = useState(false);
@@ -108,6 +109,16 @@ function Login() {
   };
 
   const handleRegister = async () => {
+    if (
+      !formData?.email ||
+      !formData?.password ||
+      !formData?.mobile ||
+      !formData?.location ||
+      !formData?.company
+    ) {
+      toast.error("Fill all the required fields");
+      return;
+    }
     let { data, error } = await supabase.auth.signUp({
       email: formData.email,
       password: formData.password,
@@ -115,7 +126,11 @@ function Login() {
     });
 
     if (error) {
-      alert(error);
+      if (error?.code === "user_already_exists") {
+        toast.error("email already registered");
+      } else {
+        toast.error("something went error");
+      }
       console.error("Error signing up:", error);
       return;
     }
@@ -128,7 +143,7 @@ function Login() {
       "user",
       formData.location,
       formData.company,
-      formData.mobile
+      formData.mobile,
     );
     await SendWelcomeEmail(formData?.email, formData?.company);
     if (layoutId) {
@@ -147,12 +162,18 @@ function Login() {
           email: email,
           companyName: companyName,
         }),
-      }
+      },
     );
   }
 
   const handleLogin = async () => {
     setIsLogingIn(true);
+
+    if (!formData?.email || !formData?.password) {
+      toast.error("please enter the credentials");
+      setIsLogingIn(false);
+      return;
+    }
     let { data, error } = await supabase.auth.signInWithPassword({
       email: formData.email,
       password: formData.password,
@@ -161,6 +182,7 @@ function Login() {
     if (error) {
       toast.error(error.message);
       console.error("Error logging in:", error);
+      setIsLogingIn(false);
       return;
     }
 
@@ -233,7 +255,7 @@ function Login() {
       const userId = data.user.id;
       setUserId(userId);
       setIsAuthenticated(true);
-      navigate("/cart");
+      navigate("/cart", { replace: true });
     }
   };
 
@@ -248,7 +270,11 @@ function Login() {
       });
 
       if (error) {
-        alert(error);
+        if (error?.code === "user_already_exists") {
+          toast.error("email already registered");
+        } else {
+          toast.error("something went error");
+        }
         console.error("Error signing up:", error);
         return;
       }
@@ -259,7 +285,7 @@ function Login() {
         "user",
         formData.location,
         formData.company,
-        formData.mobile
+        formData.mobile,
       );
       await ecommerceLogin();
     }
@@ -291,7 +317,7 @@ function Login() {
         "check_user_exists",
         {
           user_email: formData.email,
-        }
+        },
       );
 
       if (emailCheckError || !data) {
@@ -303,7 +329,7 @@ function Login() {
         formData.email,
         {
           redirectTo: `${window.location.origin}/Login?type=recovery`,
-        }
+        },
       );
 
       if (error) {
@@ -412,16 +438,16 @@ function Header({ isSignUp, isForgotPassword }) {
         {isForgotPassword
           ? "Forgot password"
           : isSignUp
-          ? "Create Account"
-          : "Welcome back!"}
+            ? "Create Account"
+            : "Welcome back!"}
       </h1>
 
       <p className="capitalize text-[#fff] md:text-[#000] text-sm font-semibold text-center my-2">
         {isForgotPassword
           ? "No worries, we'll send you reset instructions"
           : isSignUp
-          ? ""
-          : "Please enter your Credentials"}
+            ? ""
+            : "Please enter your Credentials"}
       </p>
     </div>
   );
@@ -443,6 +469,7 @@ function EmailField({ formData, handleChange }) {
         onChange={handleChange}
         placeholder="example@gmail.com"
         className="w-full py-1 pl-1 md:py-2 rounded-lg md:pl-2 focus:outline-none border"
+        required
       />
     </div>
   );
@@ -462,6 +489,7 @@ function CompanyLocationFields({ formData, handleChange }) {
           onChange={handleChange}
           placeholder="Your Company Name"
           className="w-full py-1 pl-1 md:py-2 rounded-lg md:pl-2 focus:outline-none border"
+          required
         />
       </div>
 
@@ -479,6 +507,7 @@ function CompanyLocationFields({ formData, handleChange }) {
           }
           placeholder="Your Location"
           className="w-full py-1 pl-1 md:py-2 rounded-lg md:pl-2 focus:outline-none border"
+          required
         />
       </div>
     </div>
@@ -503,12 +532,13 @@ function MobileField({ formData, handleChange }) {
         className="w-full py-1 pl-1 md:py-2 rounded-lg md:pl-2 focus:outline-none border  [appearance:textfield]
     [&::-webkit-inner-spin-button]:appearance-none
     [&::-webkit-outer-spin-button]:appearance-none"
+        required
       />
     </div>
   );
 }
 
-function PasswordField({ label, name, value, onChange }) {
+function PasswordField({ label, name, value, onChange, signIn = false }) {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const toggleVisibility = () => {
     setIsPasswordVisible(!isPasswordVisible);
@@ -527,10 +557,12 @@ function PasswordField({ label, name, value, onChange }) {
         name={name}
         value={value}
         onChange={onChange}
+        autoComplete={signIn ? "current-password" : "new-password"}
         placeholder={
-          name === "password" ? "Enter Password" : "Conform Password"
+          name === "password" ? "Enter Password" : "Confirm Password"
         }
         className="w-full py-1 pl-1 md:py-2 rounded-lg md:pl-2 focus:outline-none border"
+        required
       />
       <span
         onClick={toggleVisibility}
@@ -563,22 +595,18 @@ function SignUpForm({
         value={formData.password}
         onChange={handleChange}
       />
-
       <PasswordField
         label="Confirm Password"
         name="confirmPassword"
         value={formData.confirmPassword}
         onChange={handleChange}
       />
-
       <SubmitButton text="Sign Up" isLogingIn={isLogingIn} />
-
       <AuthSwitch
         text="Already have an account?"
         actionText="Sign In"
         onClick={toggleForm}
       />
-
       <OAuthDivider />
       <GoogleButton onClick={signInWithGoogle} />
     </>
@@ -602,6 +630,7 @@ function SignInForm({
         name="password"
         value={formData.password}
         onChange={handleChange}
+        signIn={true}
       />
 
       <div className="flex justify-end w-full lg:w-3/4">
@@ -647,13 +676,11 @@ function ForgotPasswordForm({
         {isSubmitting ? "Sending..." : "Reset Password"}
       </button>
 
-      <button
-        type="button"
+      <BackButton
+        label="Back to login"
         onClick={backToSignIn}
-        className="flex items-center gap-2 mt-4"
-      >
-        <FaAngleLeft /> Back to login
-      </button>
+        className="mt-4"
+      />
     </>
   );
 }

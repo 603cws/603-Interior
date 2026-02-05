@@ -15,6 +15,7 @@ import DesktopActions from "./DesktopActions";
 import MobileActions from "./MobileActions";
 import { fetchFilteredBOQProducts } from "../utils/BoqUtils";
 import { useBoqApp } from "../../Context/BoqContext";
+import { AnimatePresence } from "framer-motion";
 
 const useBodyNoScroll = (active) => {
   useEffect(() => {
@@ -55,7 +56,7 @@ const buildAddonsPayload = (selectedData) =>
       title: addon.title,
       finalPrice: addon.price || "",
       productId: product.product_variant?.variant_id,
-    }))
+    })),
   );
 
 const buildAnswersPayload = (userResponses) => [
@@ -78,7 +79,7 @@ function Navbar({
   const [isOpen, setIsOpen] = useState(false);
   const [boqList, setBoqList] = useState([]);
   const [completed100, setCompleted100] = useState(
-    () => localStorage.getItem("boqCompleted") === "done"
+    () => localStorage.getItem("boqCompleted") === "done",
   );
   const [deleteAlert, setDeleteAlert] = useState(false);
   const [selectedboqid, setSelectedboqid] = useState(null);
@@ -174,7 +175,7 @@ function Navbar({
 
       const formattedBOQProducts = await fetchFilteredBOQProducts(
         data.products,
-        data.addons
+        data.addons,
       );
       setSelectedData(formattedBOQProducts);
       setUserId(data.userId);
@@ -210,11 +211,11 @@ function Navbar({
         const productTotal = product.finalPrice || 0;
         const addonsTotal = (product.addons || []).reduce(
           (addonSum, addon) => addonSum + (addon.finalPrice || 0),
-          0
+          0,
         );
         return total + productTotal + addonsTotal;
       },
-      0
+      0,
     );
     const withFloor =
       userResponses.flooring === "bareShell"
@@ -310,7 +311,7 @@ function Navbar({
         areasData,
         categories,
         BOQTitle,
-        userResponses
+        userResponses,
       );
       setIsDownloading(false);
     } catch (error) {
@@ -387,16 +388,21 @@ function Navbar({
             isProfileCard={isProfileCard}
             setIsProfileCard={setIsProfileCard}
           />,
-          document.body
+          document.body,
         )}
       {completed100 &&
         createPortal(
           <Boqcompleted setCompleted100={setCompleted100} />,
-          document.body
+          document.body,
         )}
-      {showLayoutDetails && (
-        <CurrentLayoutDetails onClose={() => setShowLayoutDetails(false)} />
-      )}
+      <AnimatePresence mode="wait">
+        {showLayoutDetails && (
+          <CurrentLayoutDetails
+            key="layout-details"
+            onClose={() => setShowLayoutDetails(false)}
+          />
+        )}
+      </AnimatePresence>
       {deleteAlert && (
         <div className="fixed inset-0 bg-black/20 pt-4">
           <AlertBox

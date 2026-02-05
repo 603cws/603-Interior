@@ -1,5 +1,41 @@
 import { FaAngleDown, FaAngleUp } from "react-icons/fa";
 import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+
+const faqVariants = {
+  collapsed: {
+    height: 0,
+    opacity: 0,
+  },
+  open: {
+    height: "auto",
+    opacity: 1,
+    transition: {
+      height: {
+        duration: 0.35,
+        ease: "easeInOut",
+      },
+      opacity: {
+        duration: 0.2,
+        delay: 0.05,
+      },
+    },
+  },
+  exit: {
+    height: 0,
+    opacity: 0,
+    transition: {
+      height: {
+        duration: 0.25,
+        ease: "easeInOut",
+      },
+      opacity: {
+        duration: 0.15,
+      },
+    },
+  },
+};
+
 const accordionItems = [
   {
     title: "What is Workved Interiors?",
@@ -53,13 +89,24 @@ function Help() {
                   </button>
                   {expandedIndex === index ? <FaAngleUp /> : <FaAngleDown />}
                 </div>
-                {expandedIndex === index && (
-                  <div className="p-4 bg-white lg:border border-[#E5E7EB] lg:rounded-b-lg">
-                    <p className="text-black text-xs lg:text-base">
-                      {item.content}
-                    </p>
-                  </div>
-                )}
+                <AnimatePresence initial={false}>
+                  {expandedIndex === index && (
+                    <motion.div
+                      variants={faqVariants}
+                      initial="collapsed"
+                      animate="open"
+                      exit="exit"
+                      className="overflow-hidden bg-white lg:border border-[#E5E7EB] lg:rounded-b-lg"
+                    >
+                      {/* inner wrapper for padding (IMPORTANT) */}
+                      <div className="p-4">
+                        <p className="text-black text-xs lg:text-base">
+                          {item.content}
+                        </p>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
             ))}
           </div>
@@ -76,13 +123,13 @@ function Help() {
             <div className="flex flex-col md:flex-row justify-center items-center gap-4 my-1">
               <a
                 href="tel:+919136036603"
-                className="px-5 w-44 py-3 bg-[#374A75] text-white capitalize"
+                className="px-5 w-44 py-3 bg-[#374A75] text-white capitalize hover:bg-[#6d87c4]"
               >
                 +91-9136036603
               </a>
               <a
                 href="mailto:sales@603thecoworkingspace.com"
-                className="border-2 w-44 border-[#ccc] text-[#374A75] px-5 py-2 flex justify-center items-center"
+                className="border-2 w-44 border-[#ccc] text-[#374A75] px-5 py-2 flex justify-center items-center hover:bg-[#eee]"
               >
                 Email
               </a>

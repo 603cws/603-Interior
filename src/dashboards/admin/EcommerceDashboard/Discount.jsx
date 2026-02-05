@@ -11,12 +11,13 @@ function Discount() {
   const [createDiscount, setCreateDiscount] = useState(false);
   const [selectedDiscounts, setSelectedDiscounts] = useState([]);
   const [editDiscount, setEditDiscount] = useState(null);
+  const [discountsToDelete, setDiscountsToDelete] = useState(null);
 
   useEffect(() => {
-    fetchBlogs();
+    fetchDiscountCoupons();
   }, []);
 
-  const fetchBlogs = async () => {
+  const fetchDiscountCoupons = async () => {
     try {
       const { data, error } = await supabase.from("coupons").select("*");
       if (error) console.error("Error fetching disocunts:", error);
@@ -29,11 +30,6 @@ function Discount() {
   const handleDelete = async () => {
     if (selectedDiscounts.length === 0) return;
 
-    if (
-      !window.confirm("Are you sure you want to delete selected discount(s)?")
-    )
-      return;
-
     try {
       const { error } = await supabase
         .from("coupons")
@@ -43,7 +39,7 @@ function Discount() {
       if (error) throw error;
 
       setSelectedDiscounts([]);
-      fetchBlogs();
+      fetchDiscountCoupons();
     } catch (error) {
       console.error("Error deleting discounts:", error);
     }
@@ -57,20 +53,20 @@ function Discount() {
         <EditDiscount
           coupon={editDiscount}
           onClose={() => setEditDiscount(false)}
-          onUpdate={fetchBlogs}
+          onUpdate={fetchDiscountCoupons}
         />
       ) : (
         <div>
           <div className="border-b border-b-[#ccc]">
             <div className="flex justify-between items-center">
               <h2 className="p-2 font-semibold text-[#374A75] lg:text-2xl md:text-xl text-lg ">
-                Discount
+                Discount Management
               </h2>
               <div className="px-2 py-2 flex gap-2">
                 {selectedDiscounts.length > 0 && (
                   <button
-                    onClick={handleDelete}
-                    className="px-2 py-1 md:px-4 md:py-2 border border-[#CCCCCC] rounded-md text-[#374A75] text-lg font-medium hover:bg-[#f1f1f1]"
+                    onClick={() => setDiscountsToDelete([...selectedDiscounts])}
+                    className="px-2 py-1 md:px-4 md:py-2 border border-[#CCCCCC] rounded-md text-[#374A75] text-sm md:text-lg font-medium hover:bg-[#f1f1f1]"
                   >
                     Delete ({selectedDiscounts.length})
                   </button>
@@ -92,6 +88,16 @@ function Discount() {
               setEditDiscount={setEditDiscount}
             />
           </div>
+          {discountsToDelete && (
+            <DeleteDiscountWarning
+              count={discountsToDelete.length}
+              onCancel={() => setDiscountsToDelete(null)}
+              onConfirm={async () => {
+                await handleDelete(discountsToDelete);
+                setDiscountsToDelete(null);
+              }}
+            />
+          )}
         </div>
       )}
     </div>
@@ -114,7 +120,7 @@ const CouponTable = ({
   const indexofFirstDiscount = indexoflastDisocunt - discountCouponPerPage;
   const currentBlogs = disocunts.slice(
     indexofFirstDiscount,
-    indexoflastDisocunt
+    indexoflastDisocunt,
   );
 
   const totalPages = Math.ceil(disocunts.length / discountCouponPerPage);
@@ -138,7 +144,7 @@ const CouponTable = ({
     setSelectedDiscounts((prev) =>
       prev.includes(blogId)
         ? prev.filter((id) => id !== blogId)
-        : [...prev, blogId]
+        : [...prev, blogId],
     );
   };
 
@@ -305,7 +311,7 @@ function DiscountForm({ setCreateDiscount }) {
             </label>
             <input
               type="number"
-              placeholder="Rs 999"
+              placeholder="₹ 999"
               required
               {...register("minAmount", {
                 required: true,
@@ -361,20 +367,57 @@ function DiscountForm({ setCreateDiscount }) {
         </div>
         <div className="flex justify-end space-x-6 m-3">
           <button
-            className="border border-[#ccc] px-5 py-3 text-[#111] rounded-lg "
+            className="border border-[#ccc] hover:bg-gray-100 px-5 py-3 text-[#111] rounded-lg "
             type="reset"
             onClick={reset}
           >
             Discard
           </button>
           <button
-            className="border border-[#ccc] px-5 py-3 text-[#fff] bg-[#374A75] rounded-lg "
+            className="border border-[#ccc] px-5 py-3 text-[#fff] bg-[#374A75] hover:bg-[#6d87c4] rounded-lg "
             type="submit"
           >
             Save
           </button>
         </div>
       </form>
+    </div>
+  );
+}
+
+function DeleteDiscountWarning({ count, onCancel, onConfirm }) {
+  return (
+    <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+      <div className="bg-white p-5 rounded-lg shadow-lg max-w-xs md:max-w-sm w-full">
+        <h3 className="text-lg font-semibold text-red-600 mb-2">
+          Confirm Deletion
+        </h3>
+
+        <p className="text-sm text-gray-700 mb-4">
+          Are you sure you want to delete <b>{count}</b>{" "}
+          {count === 1 ? "discount" : "discounts"}?
+          <br />
+          <span className="text-red-500 font-medium">
+            This action cannot be undone.
+          </span>
+        </p>
+
+        <div className="flex justify-end gap-3">
+          <button
+            className="px-4 py-1 rounded bg-gray-200 hover:bg-gray-300"
+            onClick={onCancel}
+          >
+            Cancel
+          </button>
+
+          <button
+            className="px-4 py-1 rounded bg-red-600 hover:bg-red-700 text-white"
+            onClick={onConfirm}
+          >
+            Delete
+          </button>
+        </div>
+      </div>
     </div>
   );
 }
