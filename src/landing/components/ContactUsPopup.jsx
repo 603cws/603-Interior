@@ -1,15 +1,10 @@
 import { useState } from "react";
-import axios from "axios";
 import toast from "react-hot-toast";
 import { IoIosCloseCircle } from "react-icons/io";
 import { motion } from "framer-motion";
-
+import { supabase } from "../../services/supabase";
 function ContactUsPopup({ onClose }) {
   const [isSubmitting, setisSubmitting] = useState(false);
-
-  const templateID = import.meta.env.VITE_TEMPLATE_ID;
-  const serviceid = import.meta.env.VITE_SERVICE_ID;
-  const your_public_key = import.meta.env.VITE_CONTACT_EMAILJS_PUBLIC;
 
   const [form, setFormData] = useState({
     message: "",
@@ -25,50 +20,74 @@ function ContactUsPopup({ onClose }) {
 
   const handleformsubmit = async (e) => {
     e.preventDefault();
-
-    if (
-      !form.email ||
-      !form.companyName ||
-      !form.name ||
-      !form.mobileNo ||
-      !form.message
-    ) {
-      toast.error("form not filled");
-      return;
-    } else {
-      const data = {
-        service_id: serviceid,
-        template_id: templateID,
-        user_id: your_public_key,
-        template_params: {
-          name: form.name,
-          mobile: form.mobileNo,
-          company: form.companyName,
-          email: form.email,
-          message: form.message,
-        },
-      };
-
-      try {
-        setisSubmitting(true);
-        await axios.post("https://api.emailjs.com/api/v1.0/email/send", data, {
-          headers: { "Content-Type": "application/json" },
-        });
-        toast.success("we will shortly reach you");
-
-        setFormData({
-          message: "",
-          name: "",
-          email: "",
-          mobileNo: 0,
-          companyName: "",
-        });
-      } catch (error) {
-        console.error("Error sending email:", error);
-        toast.error("Oops... Something went wrong");
-      } finally {
-        setisSubmitting(false);
+    try {
+      setisSubmitting(true);
+      if (
+        !form.email ||
+        !form.companyName ||
+        !form.name ||
+        !form.mobileNo ||
+        !form.message
+      ) {
+        toast.error("form not filled");
+        return;
       }
+      const { error } = await supabase
+        .from("contactUsData")
+        .insert([
+          {
+            name: form.name,
+            mobileNo: form.mobileNo,
+            companyName: form.companyName,
+            email: form.email,
+            message: form.message,
+          },
+        ])
+        .select();
+
+      if (error) throw error;
+      toast.success("we will shortly reach you");
+      // send email to user
+      await fetch(
+        "https://bwxzfwsoxwtzhjbzbdzs.supabase.co/functions/v1/ContactUsEmailUser",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            email: form.email,
+            companyName: form.companyName,
+          }),
+        },
+      );
+      const AdminEmail = "workvedbusinesscentre@gmail.com";
+      // send email to admin
+      await fetch(
+        "https://bwxzfwsoxwtzhjbzbdzs.supabase.co/functions/v1/ContactUsEmailAdmin",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            email: AdminEmail,
+            companyName: form.companyName,
+            phone: form.mobileNo,
+            message: form.message,
+            userEmail: form.email,
+            name: form.name,
+          }),
+        },
+      );
+
+      setFormData({
+        message: "",
+        name: "",
+        email: "",
+        mobileNo: 0,
+        companyName: "",
+      });
+    } catch (error) {
+      console.error("Error sending email:", error);
+    } finally {
+      setisSubmitting(false);
     }
   };
   return (
