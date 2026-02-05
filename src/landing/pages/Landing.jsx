@@ -14,6 +14,9 @@ import Footer from "../../common-components/Footer";
 import GetInTouchSection from "../components/GetInTouchSection";
 import LazyImage from "../../utils/LazyImage";
 import { trackCTA } from "../../lib/trackCTA";
+import AnimationWrapper from "../components/AnimationWrapper";
+import { FaQuestion } from "react-icons/fa";
+import { IoMdClose } from "react-icons/io";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -82,6 +85,7 @@ function Landing() {
   const navigate = useNavigate();
   const containerRef = useRef();
   const [isloading, setIsloading] = useState(false);
+  const [showWalkthrough, setShowWalkthrough] = useState(false);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -109,7 +113,7 @@ function Landing() {
           duration: 2,
           ease: "power2.out",
         },
-        "<"
+        "<",
       );
 
       tl.to(
@@ -120,27 +124,27 @@ function Landing() {
           duration: 2,
           ease: "power2.out",
         },
-        "<"
+        "<",
       );
 
       tl.fromTo(
         ".round-table",
         { right: "2%", rotate: 0, opacity: 1 },
-        { left: "2%", rotate: -360, opacity: 1, duration: 3 }
+        { left: "2%", rotate: -360, opacity: 1, duration: 3 },
       );
 
       tl.fromTo(
         ".rotating-table",
         { left: "2%", top: "40%", rotate: 0, opacity: 1 },
         { left: "2%", top: "70%", rotate: -90, opacity: 1, duration: 3 },
-        "<"
+        "<",
       );
 
       tl.fromTo(
         ".down-table",
         { right: "0%", opacity: 1 },
         { right: "25%", opacity: 1, duration: 2 },
-        "<"
+        "<",
       );
       tl.fromTo(
         containerRef.current,
@@ -151,33 +155,33 @@ function Landing() {
           borderRadius: 20,
           duration: 2,
           ease: "power2.out",
-        }
+        },
       );
 
       tl.fromTo(
         ".upper-table",
         { y: -200, opacity: 0 },
-        { y: 0, opacity: 1, duration: 1 }
+        { y: 0, opacity: 1, duration: 1 },
       );
 
       tl.fromTo(
         ".circle",
         { scale: 0 },
         { scale: 1, stagger: 0.2, duration: 1, ease: "back.out(1.7)" },
-        "<"
+        "<",
       );
 
       tl.fromTo(
         ".side-table",
         { right: "-100%", opacity: 0 },
         { right: "2%", opacity: 1, duration: 2 },
-        "<"
+        "<",
       );
 
       tl.fromTo(
         ".center-text",
         { opacity: 0, y: 100 },
-        { opacity: 1, y: 0, duration: 1 }
+        { opacity: 1, y: 0, duration: 1 },
       );
       tl.to({}, { duration: 5 });
     }, containerRef);
@@ -284,8 +288,35 @@ function Landing() {
               </div>
             </div>
           </div>
+          <div className="hidden xl:block fixed right-10 bottom-0 z-50  hover:animate-none">
+            <div
+              onClick={() => setShowWalkthrough(true)}
+              className="animate-bounce group w-12 h-12 bg-[#78A3FF] rounded-full flex justify-center items-center text-xl cursor-pointer shadow-lg"
+            >
+              <FaQuestion />
+              <p className="absolute pointer-events-none bottom-full right-1/2 translate-x-1/2 mb-3 bg-[#334A78] text-white text-sm font-medium px-2 py-2 rounded-md shadow-2xl opacity-0 translate-y-2 transition-all duration-300 ease-out group-hover:opacity-100 group-hover:scale-100 group-hover:translate-y-0 w-28">
+                See how it works ?
+                <span className="absolute top-full left-1/2 -translate-x-1/2 w-2 h-2 bg-[#334A78] rotate-45" />
+              </p>
+            </div>
+          </div>
         </div>
       </section>
+
+      {showWalkthrough && (
+        <div className="hidden fixed inset-0 z-[9999] xl:flex items-center justify-center bg-black/40 backdrop-blur-sm">
+          <div className="relative w-[95%] max-w-6xl max-h-[95vh] bg-white rounded-2xl shadow-2xl overflow-hidden">
+            <button
+              className="absolute right-4 top-4 z-50 rounded-full bg-black/10 hover:bg-black/20 p-2"
+              onClick={() => setShowWalkthrough(false)}
+            >
+              <IoMdClose size={20} />
+            </button>
+
+            <AnimationWrapper />
+          </div>
+        </div>
+      )}
 
       <section className="hidden lg:block overflow-hidden py-14">
         <div
