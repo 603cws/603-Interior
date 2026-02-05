@@ -3,10 +3,6 @@ import toast from "react-hot-toast";
 import { useState } from "react";
 import LandingNavbar from "../components/LandingNavbar";
 import { supabase } from "../../services/supabase";
-
-// const templateID = import.meta.env.VITE_TEMPLATE_ID;
-// const serviceid = import.meta.env.VITE_SERVICE_ID;
-// const your_public_key = import.meta.env.VITE_CONTACT_EMAILJS_PUBLIC;
 const background = "/images/contact-us/contactpage.webp";
 
 function Contactus() {
@@ -26,78 +22,76 @@ function Contactus() {
 
   const handleformsubmit = async (e) => {
     e.preventDefault();
-
-    if (
-      !form.email ||
-      !form.companyName ||
-      !form.name ||
-      !form.mobileNo ||
-      !form.message
-    ) {
-      toast.error("form not filled");
-      return;
-    } else {
-      try {
-        setisSubmitting(true);
-        const { data, error } = await supabase
-          .from("contactUsData")
-          .insert([
-            {
-              name: form.name,
-              mobileNo: form.mobileNo,
-              companyName: form.companyName,
-              email: form.email,
-              message: form.message,
-            },
-          ])
-          .select();
-
-        if (error) throw error;
-        toast.success("we will shortly reach you");
-
-        console.log("data", data);
-        // send email to user
-        await fetch(
-          "https://bwxzfwsoxwtzhjbzbdzs.supabase.co/functions/v1/ContactUsEmailUser",
-          {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              email: form.email,
-              companyName: form.companyName,
-            }),
-          }
-        );
-        const AdminEmail = "workvedbusinesscentre@gmail.com";
-        // send email to admin
-        await fetch(
-          "https://bwxzfwsoxwtzhjbzbdzs.supabase.co/functions/v1/ContactUsEmailAdmin",
-          {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              email: AdminEmail,
-              companyName: form.companyName,
-              phone: form.mobileNo,
-              message: form.message,
-              userEmail: form.email,
-              name: form.name,
-            }),
-          }
-        );
-
-        setFormData({
-          message: "",
-          name: "",
-          email: "",
-          mobileNo: 0,
-          companyName: "",
-        });
-      } catch (error) {
-        console.error("Error sending email:", error);
-      } finally {
-        setisSubmitting(false);
+    try {
+      setisSubmitting(true);
+      if (
+        !form.email ||
+        !form.companyName ||
+        !form.name ||
+        !form.mobileNo ||
+        !form.message
+      ) {
+        toast.error("form not filled");
+        return;
       }
+      const { data, error } = await supabase
+        .from("contactUsData")
+        .insert([
+          {
+            name: form.name,
+            mobileNo: form.mobileNo,
+            companyName: form.companyName,
+            email: form.email,
+            message: form.message,
+          },
+        ])
+        .select();
+
+      if (error) throw error;
+      toast.success("we will shortly reach you");
+
+      console.log("data", data);
+      // send email to user
+      await fetch(
+        "https://bwxzfwsoxwtzhjbzbdzs.supabase.co/functions/v1/ContactUsEmailUser",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            email: form.email,
+            companyName: form.companyName,
+          }),
+        },
+      );
+      const AdminEmail = "workvedbusinesscentre@gmail.com";
+      // send email to admin
+      await fetch(
+        "https://bwxzfwsoxwtzhjbzbdzs.supabase.co/functions/v1/ContactUsEmailAdmin",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            email: AdminEmail,
+            companyName: form.companyName,
+            phone: form.mobileNo,
+            message: form.message,
+            userEmail: form.email,
+            name: form.name,
+          }),
+        },
+      );
+
+      setFormData({
+        message: "",
+        name: "",
+        email: "",
+        mobileNo: 0,
+        companyName: "",
+      });
+    } catch (error) {
+      console.error("Error sending email:", error);
+    } finally {
+      setisSubmitting(false);
     }
   };
 
