@@ -139,34 +139,38 @@ function DashboardProductCard({
                 </h5>
                 <hr />
                 {product?.segment && (
-                  <h5 className="uppercase text-[#334A78] font-medium text-xs opacity-80">
-                    segment:
-                    <span className="font-bold text-[#000]">
-                      {product.segment}
-                    </span>
-                  </h5>
+                  <>
+                    <h5 className="uppercase text-[#334A78] font-medium text-xs opacity-80">
+                      segment:
+                      <span className="font-bold text-[#000]">
+                        {product.segment}
+                      </span>
+                    </h5>
+                    <hr />
+                  </>
                 )}
-
-                <hr />
                 {product?.status && (
-                  <h5 className="uppercase text-[#334A78] font-medium text-xs opacity-80">
-                    status:
-                    <span className="font-bold text-[#000]">
-                      {product?.status}
-                    </span>
-                  </h5>
+                  <>
+                    <h5 className="uppercase text-[#334A78] font-medium text-xs opacity-80">
+                      status:
+                      <span className="font-bold text-[#000]">
+                        {product?.status}
+                      </span>
+                    </h5>
+                    <hr />
+                  </>
                 )}
-                <hr />
                 {product?.default && (
-                  <h5 className="uppercase text-[#334A78] font-medium text-xs opacity-80">
-                    Default:
-                    <span className="font-bold text-[#000]">
-                      {product.default}
-                    </span>
-                  </h5>
+                  <>
+                    <h5 className="uppercase text-[#334A78] font-medium text-xs opacity-80">
+                      Default:
+                      <span className="font-bold text-[#000]">
+                        {product.default}
+                      </span>
+                    </h5>
+                    <hr />
+                  </>
                 )}
-
-                <hr />
               </div>
             </div>
 
@@ -179,7 +183,7 @@ function DashboardProductCard({
                         setSelectedItem(product);
                         setSelectSubcategories(true);
                       }}
-                      className={`group px-2 md:px-5 py-1 md:py-2 bg-[#F8FBFF] border-[#A3FEE7] flex flex-col items-center justify-center rounded-sm text-xs md:text-sm transition-all duration-300 ease-out hover:bg-[#E9FFF9] hover:shadow-[0_6px_18px_rgba(163,254,231,0.45)] hover:-translate-y-1 active:scale-95 ${currentStatus === "approved" ? "border-2 md:border-4 shadow-[0_0_0_2px_rgba(72,187,120,0.45)]" : "border md:border-2"}`}
+                      className={`group px-2 md:px-5 py-1 md:py-2 bg-[#F8FBFF] border-[#A3FEE7] flex flex-col items-center justify-center rounded-sm text-xs md:text-sm transition-all duration-300 ease-out hover:bg-[#E9FFF9] hover:-translate-y-1 active:scale-95 ${currentStatus === "approved" ? "border-2 md:border-4" : "border md:border-2"}`}
                     >
                       <AiTwotoneCheckCircle
                         size={25}
@@ -192,7 +196,7 @@ function DashboardProductCard({
                         updateStatus(product, "pending");
                         setRejectReason("");
                       }}
-                      className={`group px-2 md:px-5 py-1 md:py-2 bg-[#FFFEF8] border-[#FFB966] flex flex-col items-center justify-center rounded-sm text-xs md:text-sm transition-all duration-300 ease-out hover:bg-[#FFF4E0] hover:shadow-[0_4px_14px_rgba(255,185,102,0.35)] hover:-translate-y-1 active:scale-95 ${currentStatus === "pending" ? "border-2 md:border-4 shadow-[0_0_0_2px_rgba(255,185,102,0.4)]" : "border md:border-2"}`}
+                      className={`group px-2 md:px-5 py-1 md:py-2 bg-[#FFFEF8] border-[#FFB966] flex flex-col items-center justify-center rounded-sm text-xs md:text-sm transition-all duration-300 ease-out hover:bg-[#FFF4E0] hover:-translate-y-1 active:scale-95 ${currentStatus === "pending" ? "border-2 md:border-4" : "border md:border-2"}`}
                     >
                       <PiClockCountdown
                         size={25}
@@ -202,7 +206,7 @@ function DashboardProductCard({
                     </button>
                     <button
                       onClick={() => setShowTextarea(true)}
-                      className={`group px-2 md:px-5 py-1 md:py-2 bg-[#FFF8F8] border-[#FF6666] flex flex-col items-center justify-center rounded-sm text-xs md:text-sm transition-all duration-300 ease-out hover:bg-[#FFECEC] hover:shadow-[0_6px_18px_rgba(255,102,102,0.4)] hover:-translate-y-1 active:scale-95 ${currentStatus === "rejected" ? "border-2 md:border-4 shadow-[0_0_0_2px_rgba(255,102,102,0.45)]" : "border md:border-2"}`}
+                      className={`group px-2 md:px-5 py-1 md:py-2 bg-[#FFF8F8] border-[#FF6666] flex flex-col items-center justify-center rounded-sm text-xs md:text-sm transition-all duration-300 ease-out hover:bg-[#FFECEC] hover:-translate-y-1 active:scale-95 ${currentStatus === "rejected" ? "border-2 md:border-4" : "border md:border-2"}`}
                     >
                       <IoCloseCircleOutline
                         size={25}
@@ -271,7 +275,7 @@ function DashboardProductCard({
                 onClick={() => {
                   handleDelete(product);
                 }}
-                className="px-5 py-2 bg-red-400"
+                className="px-5 py-2 bg-red-400 hover:bg-red-500"
               >
                 Yes
               </button>
@@ -279,7 +283,7 @@ function DashboardProductCard({
                 onClick={() => {
                   setDeleteWarning(false);
                 }}
-                className="px-5 py-2 bg-gray-400"
+                className="px-5 py-2 bg-gray-400 hover:bg-gray-500"
               >
                 No
               </button>

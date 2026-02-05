@@ -23,13 +23,13 @@ function DeleteWarning({
             onClick={() => {
               setDeleteWarning(false);
             }}
-            className="px-5 py-2 bg-[#EEEEEE] rounded-md"
+            className="px-5 py-2 bg-[#EEEEEE] hover:bg-[#c5c5c5] rounded-md"
           >
             Cancel
           </button>
           <button
             onClick={() => handleDelete(selectedProductview)}
-            className="px-5 py-2 bg-[#B4EAEA] rounded-md"
+            className="px-5 py-2 bg-[#B4EAEA] hover:bg-[#a2d2d2] rounded-md"
           >
             Delete
           </button>

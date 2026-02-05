@@ -274,9 +274,9 @@ function ManageAddress() {
         <div className="font-Poppins py-2">
           <button
             onClick={handleAddAddress}
-            className="w-full text-xs leading-6 text-[#334A78] border border-[#334A78] py-2 rounded-md"
+            className="w-full text-xs leading-6 text-[#334A78] border border-[#334A78] py-2 rounded-md transition-all duration-200 hover:bg-[#EEF3FF]"
           >
-            Add new Address
+            Add New Address
           </button>
         </div>
       )}
@@ -539,14 +539,14 @@ function AddressForm({
           <div className="flex mb-2 justify-start items-center gap-5 font-Poppins font-semibold">
             <button
               type="submit"
-              className="uppercase text-xs text-[#ffffff] tracking-wider   px-12 py-3 flex justify-center items-center bg-[#334A78] border border-[#212B36]  rounded-sm font-thin"
+              className="uppercase text-xs text-[#ffffff] tracking-wider px-12 py-3 flex justify-center items-center bg-[#334A78] hover:bg-[#293c61] border border-[#212B36] rounded-sm font-thin"
             >
               Save
             </button>
             <button
               type="button"
               onClick={clearForm}
-              className="uppercase text-xs  tracking-wider px-12 py-3 flex justify-center items-center  border border-[#AAA]  rounded-sm font-thin"
+              className="uppercase text-xs tracking-wider px-12 py-3 flex justify-center items-center border border-[#AAA] hover:bg-[#eee] rounded-sm font-thin"
             >
               Cancel
             </button>

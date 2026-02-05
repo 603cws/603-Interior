@@ -4,6 +4,7 @@ import { baseImageUrl } from "../../utils/HelperConstant";
 import { exportToExcel } from "../../utils/DataExport";
 import PagInationNav from "../../common-components/PagInationNav";
 import BackButton from "../../common-components/BackButton";
+import toast from "react-hot-toast";
 
 export default function Orders({ vendorId = null }) {
   const [ordersData, setOrdersData] = useState(null);
@@ -397,29 +398,53 @@ export function OrderDetails({ order, onBack, vendorId = null }) {
         </h2>
         <button
           onClick={() => {
-            const exportData = Object.entries(order.product_variants_map).map(
-              ([variantId, variants]) => {
-                const variant = variants[0];
-                const product = order.products.find((p) => p.id === variant.id);
+            const exportData = (order.order_items || [])
+              .filter((item) => {
+                const vendor_id = item?.product_variants?.vendor_id;
+                return vendor_id === vendorId;
+              })
+              .map((item) => {
+                const variant = item.product_variants || {};
 
                 return {
-                  "Order ID": order.id || "",
+                  "Order ID": item.order_id || order.id || "",
                   "Order Status": order.status || "",
-                  "Variant ID": variantId || "",
+                  "Item Status": item.item_status || "",
+                  "Variant ID": variant.id || "",
                   "Product ID": variant.product_id || "",
                   "Product Name": variant.title || "",
-                  Price: variant?.price ? `₹${variant.price}` : "",
-                  Quantity: product?.quantity || "",
+                  MRP: item.mrp ? `₹${item.mrp}` : "",
+                  "Selling Price": item.selling_price
+                    ? `₹${item.selling_price}`
+                    : "",
+                  "Final Amount": item.final_amount
+                    ? `₹${item.final_amount}`
+                    : "",
+                  Quantity: item.quantity || "",
+                  "GST Amount": item.gst_amount ? `₹${item.gst_amount}` : "",
                   Description: variant.details || "",
                   Dimension: variant.dimensions || "NA",
                   Manufacturer: variant.manufacturer || "",
                   Segment: variant.segment || "",
                   Category: variant.product_type || "",
-                  "Order Date": new Date(order.created_at).toLocaleDateString(),
+                  Brand: variant?.information?.Brand || "",
+                  Material: variant?.information?.Material || "",
+                  Color: variant?.information?.ProductColor || "",
+                  "Refund Status": item?.refund?.state || "NA",
+                  "Refund Amount": item?.refund?.amount
+                    ? `₹${item.refund.amount / 100}`
+                    : "NA",
+                  "Order Date": new Date(item.created_at).toLocaleDateString(),
                 };
-              },
-            );
-            exportToExcel(exportData, `${order.id}-products.xlsx`);
+              });
+
+            if (!exportData.length) {
+              console.warn("No products found for this vendor");
+              toast.error("No products found for this vendor");
+              return;
+            }
+
+            exportToExcel(exportData, `${order.id}-vendor-products.xlsx`);
           }}
           className="flex gap-2 items-center rounded-md border p-2 text-[#374A75] text-sm md:text-lg hover:bg-[#F9F9F9]"
         >
