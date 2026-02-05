@@ -245,7 +245,7 @@ function Header() {
                   pathname === "/products" ? "after:w-full" : "after:w-0"
                 } hover:after:w-full`}
               >
-                home
+                Store
               </li>
               <li
                 onClick={() => navigate("/shop")}
@@ -253,7 +253,7 @@ function Header() {
                   pathname === "/shop" ? "after:w-full" : "after:w-0"
                 } hover:after:w-full`}
               >
-                shop
+                Collection
               </li>
               {/* <li
                 onClick={() => navigate("/Aboutus")}
@@ -412,8 +412,8 @@ function Header() {
               className="bg-white w-full absolute top-full left-0 px-2 py-3 overflow-hidden z-10"
             >
               <ul className="text-sm font-bold text-[#334A78] uppercase space-y-5">
-                <li onClick={() => navigate("/Products")}>Home</li>
-                <li onClick={() => navigate("/shop")}>shop</li>
+                <li onClick={() => navigate("/Products")}>Store</li>
+                <li onClick={() => navigate("/shop")}>Collection</li>
                 {/* <li onClick={() => navigate("/Aboutus")}>about us</li>
                 <li onClick={() => navigate("/Contactus")}>contact us</li> */}
               </ul>

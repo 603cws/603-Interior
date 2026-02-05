@@ -324,7 +324,7 @@ function Addresspage() {
         setpaymentLoading(false);
         return;
       }
-      const products = cartItems.map((item) => ({
+      const products = cartItems?.map((item) => ({
         id: item.productId.id,
         price: item?.productId?.ecommercePrice?.sellingPrice,
         ecommercePriceObject: item?.productId?.ecommercePrice,
@@ -332,6 +332,8 @@ function Addresspage() {
         image: item?.productId?.image,
         name: item?.productId?.title,
         description: item?.productId?.details,
+        subtotal:
+          item?.productId?.ecommercePrice?.sellingPrice * item?.quantity,
         vendorId: item?.productId?.vendor_id,
       }));
 
@@ -366,13 +368,21 @@ function Addresspage() {
         name: accountHolder?.companyName,
         orderId: orderId,
         total: {
-          totalMRP: pricingdetails?.price,
+          totalMRP: pricingdetails?.subtotal,
           finalPrice: pricingdetails?.finalValue,
           charges: {
             GST: pricingdetails?.gst,
             delivery: pricingdetails?.shippingFee,
           },
         },
+        // total: {
+        //   totalMRP: pricingdetails?.price,
+        //   finalPrice: pricingdetails?.finalValue,
+        //   charges: {
+        //     GST: pricingdetails?.gst,
+        //     delivery: pricingdetails?.shippingFee,
+        //   },
+        // },
         items: products,
         address: getDefaultAddress,
       };
@@ -436,14 +446,16 @@ function Addresspage() {
                 const userid = accountHolder?.userId;
                 await deleteCart(userid);
                 // send email
-                await fetch(
-                  "https://bwxzfwsoxwtzhjbzbdzs.supabase.co/functions/v1/orderemail",
-                  {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(orderData),
-                  },
-                );
+                if (import.meta.env.MODE !== "development") {
+                  await fetch(
+                    "https://bwxzfwsoxwtzhjbzbdzs.supabase.co/functions/v1/orderemail",
+                    {
+                      method: "POST",
+                      headers: { "Content-Type": "application/json" },
+                      body: JSON.stringify(orderData),
+                    },
+                  );
+                }
                 setpaymentLoading((prev) => !prev);
 
                 navigate(`/orderSuccess/${orderId}`, { replace: true });

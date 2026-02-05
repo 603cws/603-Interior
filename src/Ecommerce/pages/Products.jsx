@@ -300,7 +300,7 @@ function Products() {
       </section>
 
       {/* section 3 */}
-      <section className="lg:container lg:mx-auto px-3 my-16 font-TimesNewRoman">
+      <section className="lg:container lg:mx-auto px-3 my-6 lg:my-16 font-TimesNewRoman">
         <div className="relative">
           <SectionHeader title={"Shop by categories"} isborder={true} />
           <CategorySvg
@@ -440,7 +440,7 @@ function Products() {
             <button
               onMouseEnter={() => setSelectedProduct("chair")}
               onClick={() => setSelectedProduct("chair")}
-              className={`absolute top-[65%] left-[30%] w-6 h-6 rounded-full bg-white border-[7px] border-[#374A75] shadow-lg ${
+              className={`absolute top-[65%] left-[30%] w-5 h-5 lg:w-6 lg:h-6 rounded-full bg-white border-4 lg:border-[7px] border-[#374A75] shadow-lg ${
                 selectedProduct === "chair" ? "opacity-100" : "opacity-70"
               }`}
             />
@@ -449,7 +449,7 @@ function Products() {
             <button
               onMouseEnter={() => setSelectedProduct("lamp")}
               onClick={() => setSelectedProduct("lamp")}
-              className={`absolute top-[25%] left-[35%] w-6 h-6 rounded-full bg-white border-[7px] border-[#374A75] shadow-lg ${
+              className={`absolute top-[25%] left-[35%] w-5 h-5 lg:w-6 lg:h-6 rounded-full bg-white border-4 lg:border-[7px] border-[#374A75] shadow-lg ${
                 selectedProduct === "lamp" ? "opacity-100" : "opacity-70"
               }`}
             />
@@ -458,7 +458,7 @@ function Products() {
             <button
               onMouseEnter={() => setSelectedProduct("chair-green")}
               onClick={() => setSelectedProduct("chair-green")}
-              className={`absolute top-[61%] left-[53%] w-6 h-6 rounded-full bg-white border-[7px] border-[#374A75] shadow-lg ${
+              className={`absolute top-[61%] left-[53%] w-5 h-5 lg:w-6 lg:h-6 rounded-full bg-white border-4 lg:border-[7px] border-[#374A75] shadow-lg ${
                 selectedProduct === "chair-green" ? "opacity-100" : "opacity-70"
               }`}
             />
@@ -467,7 +467,7 @@ function Products() {
             <button
               onMouseEnter={() => setSelectedProduct("rug")}
               onClick={() => setSelectedProduct("rug")}
-              className={`absolute bottom-[20%] left-[40%] w-6 h-6 rounded-full bg-white border-[7px] border-[#374A75] shadow-lg ${
+              className={`absolute bottom-[20%] left-[40%] w-5 h-5 lg:w-6 lg:h-6 rounded-full bg-white border-4 lg:border-[7px] border-[#374A75] shadow-lg ${
                 selectedProduct === "rug" ? "opacity-100" : "opacity-70"
               }`}
             />

@@ -379,7 +379,7 @@ function ShopProducts() {
       <div className="min-h-screen">
         <section ref={containerRef}>
           <div className=" hidden lg:block lg:container lg:mx-auto my-6 lg:my-10">
-            <SectionHeader title={"Shop "} isborder={false} />
+            <SectionHeader title={"Collection"} isborder={false} />
           </div>
         </section>
 

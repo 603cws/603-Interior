@@ -34,7 +34,7 @@ function Contactus() {
         toast.error("form not filled");
         return;
       }
-      const { data, error } = await supabase
+      const { error } = await supabase
         .from("contactUsData")
         .insert([
           {
@@ -49,8 +49,6 @@ function Contactus() {
 
       if (error) throw error;
       toast.success("we will shortly reach you");
-
-      console.log("data", data);
       // send email to user
       await fetch(
         "https://bwxzfwsoxwtzhjbzbdzs.supabase.co/functions/v1/ContactUsEmailUser",

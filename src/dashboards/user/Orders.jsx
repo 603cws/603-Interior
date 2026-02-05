@@ -132,10 +132,10 @@ function Orders() {
         <div className="flex flex-col items-center justify-center h-full">
           <p className="text-xl font-bold text-[#ccc]">Hold On...</p>
           <p className="text-xl font-bold text-[#ccc]">
-            Fetching orders for {accountHolder.companyName} !!
+            Fetching orders for {accountHolder?.companyName} !!
           </p>
         </div>
-      ) : orders.length === 0 ? (
+      ) : orders?.length === 0 ? (
         <div className="flex flex-col gap-3 justify-center items-center h-full">
           <p className="text-xl font-bold text-[#ccc]">No orders yet ?</p>
           <button
@@ -164,7 +164,7 @@ function Orders() {
               <h2 className="text-[#171717] font-bold px-3 py-3 sticky top-0 bg-[#fff] border-b">
                 All Orders
               </h2>
-              {orders.map((order) => (
+              {orders?.map((order) => (
                 <div key={order.id}>
                   <div className="px-3">
                     <div className="font-Poppins p-3 shadow-[0px_0px_2px_rgba(0,0,0,0.1)] my-2 border">
@@ -201,7 +201,7 @@ function Orders() {
                           )}
                         </div>
                       </div>
-                      <div className="flex items-center md:gap-5 bg-[#F5F8FF] px-3 py-5 my-2">
+                      <div className="flex items-center gap-2 md:gap-5 bg-[#F5F8FF] px-1 py-3  md:px-3 md:py-5 my-2">
                         <img
                           src={`${baseImageUrl}/${order?.order_items?.[0]?.product_variants.image}`}
                           alt="order item"
@@ -404,8 +404,6 @@ function OrderProducts({ orderID, setOrderToCancel }) {
 
   if (loading) return <p>loading .....</p>;
 
-  console.log("order", order);
-
   return (
     <>
       <div className="px-4">
@@ -462,71 +460,73 @@ function OrderProducts({ orderID, setOrderToCancel }) {
           {products?.map((product) => (
             <div
               key={product.id}
-              className="border border-[#374A75] px-2 md:px-3 py-2 md:py-4 rounded-md flex md:grid grid-cols-[3fr,1fr] items-start"
+              className="border border-[#374A75] px-2 md:px-3 py-2 md:py-4 rounded-md flex flex-col md:grid grid-cols-[3fr,1fr] items-start"
             >
-              <div className="flex justify-between items-center gap-2 lg:gap-7 flex-1">
+              <div className="flex flex-col md:flex-row justify-between items-center gap-2 lg:gap-7 flex-1">
                 <img
                   src={`${baseImageUrl}/${product?.product_variants?.image}`}
                   alt={product?.product_variants?.title}
                   className="h-24 w-24 object-contain"
                 />
-                <div className="space-y-2">
-                  <h4 className="text-sm md:text-lg font-bold text-[#171717] line-clamp-2 md:line-clamp-none">
-                    {product?.product_variants?.title}
-                  </h4>
-                  <p className="text-[#171717] text-xs md:text-sm line-clamp-3 md:line-clamp-none">
-                    {product?.product_variants?.details}
-                  </p>
-                </div>
-                <div className="space-y-2">
-                  <h4 className="text-sm md:text-base font-semibold text-[#171717] capitalize">
-                    MRP
-                  </h4>
-                  <p className="text-[#171717] text-xs md:text-sm">
-                    {product?.mrp}
-                  </p>
-                </div>
-                <div className="space-y-2">
-                  <h4 className="text-sm md:text-base font-semibold text-[#171717] capitalize">
-                    Price
-                  </h4>
-                  <p className="text-[#171717] text-xs md:text-sm">
-                    {product?.selling_price}
-                  </p>
-                </div>
-                <div className="space-y-2">
-                  <h4 className="text-sm md:text-base font-semibold text-[#171717] capitalize">
-                    quantity
-                  </h4>
-                  <p className="text-[#171717] text-xs md:text-sm">
-                    {product?.quantity}
-                  </p>
-                </div>
-                <div className="space-y-2">
-                  <h4 className="text-sm md:text-base font-semibold text-[#171717] capitalize">
-                    Subtotal
-                  </h4>
-                  <p className="text-[#171717] text-xs md:text-sm">
-                    {product?.sub_total}
-                  </p>
-                </div>
+                <div className="flex flex-wrap justify-between items-center gap-3 mb-3">
+                  <div className="space-y-2">
+                    <h4 className="text-sm md:text-lg font-bold text-[#171717] line-clamp-2 md:line-clamp-none">
+                      {product?.product_variants?.title}
+                    </h4>
+                    <p className="text-[#171717] text-xs md:text-sm line-clamp-3 md:line-clamp-none">
+                      {product?.product_variants?.details}
+                    </p>
+                  </div>
+                  <div className="space-y-2">
+                    <h4 className="text-sm md:text-base font-semibold text-[#171717] capitalize">
+                      MRP
+                    </h4>
+                    <p className="text-[#171717] text-xs md:text-sm">
+                      {product?.mrp}
+                    </p>
+                  </div>
+                  <div className="space-y-2">
+                    <h4 className="text-sm md:text-base font-semibold text-[#171717] capitalize">
+                      Price
+                    </h4>
+                    <p className="text-[#171717] text-xs md:text-sm">
+                      {product?.selling_price}
+                    </p>
+                  </div>
+                  <div className="space-y-2">
+                    <h4 className="text-sm md:text-base font-semibold text-[#171717] capitalize">
+                      quantity
+                    </h4>
+                    <p className="text-[#171717] text-xs md:text-sm">
+                      {product?.quantity}
+                    </p>
+                  </div>
+                  <div className="space-y-2">
+                    <h4 className="text-sm md:text-base font-semibold text-[#171717] capitalize">
+                      Subtotal
+                    </h4>
+                    <p className="text-[#171717] text-xs md:text-sm">
+                      {product?.sub_total}
+                    </p>
+                  </div>
 
-                <div className="space-y-2">
-                  <h4 className="text-sm md:text-base font-semibold text-[#171717] capitalize">
-                    GST
-                  </h4>
-                  <p className="text-[#171717] text-xs md:text-sm">
-                    {product?.gst_amount}
-                  </p>
-                </div>
+                  <div className="space-y-2">
+                    <h4 className="text-sm md:text-base font-semibold text-[#171717] capitalize">
+                      GST
+                    </h4>
+                    <p className="text-[#171717] text-xs md:text-sm">
+                      {product?.gst_amount}
+                    </p>
+                  </div>
 
-                <div className="space-y-2">
-                  <h4 className="text-sm md:text-base font-semibold text-[#171717] capitalize text-nowrap">
-                    Total price
-                  </h4>
-                  <p className="text-[#171717] text-xs md:text-sm">
-                    {product?.final_amount}
-                  </p>
+                  <div className="space-y-2">
+                    <h4 className="text-sm md:text-base font-semibold text-[#171717] capitalize text-nowrap">
+                      Total price
+                    </h4>
+                    <p className="text-[#171717] text-xs md:text-sm">
+                      {product?.final_amount}
+                    </p>
+                  </div>
                 </div>
               </div>
 
@@ -868,7 +868,7 @@ function CancelWarning({
           </p>
         </div>
 
-        <div className="flex justify-end gap-3">
+        <div className="flex justify-between md:justify-end gap-3">
           <button
             className="px-4 py-1 rounded bg-gray-200 hover:bg-gray-300"
             onClick={onCancel}

@@ -72,7 +72,7 @@ function Dashboard() {
 
   const [sidebarstate, sidebarDispatch] = useReducer(
     handlesidebarState,
-    sidebarInitialState
+    sidebarInitialState,
   );
   const [boqdata, setboqdata] = useState();
   const { accountHolder } = useApp();
@@ -291,7 +291,7 @@ function Dashboard() {
             <img
               src="/logo/workved-interior.png"
               alt="Workved Logo"
-              className={`${isExpanded ? "h-20 w-32" : "h-9 w-16"}`}
+              className={`h-9 w-20`}
               onClick={() => navigate("/")}
             />
           </div>
@@ -317,7 +317,7 @@ function Dashboard() {
             } transition-transform duration-300 ease-in-out shadow-lg`}
           >
             <div className="flex gap-2 justify-center items-center mt-6">
-              <div>
+              <div className="border rounded-full border-[#ccc] ">
                 <img
                   src={accountHolder?.profileImage}
                   alt="usericon"
@@ -325,8 +325,8 @@ function Dashboard() {
                 />
               </div>
               <div className="text-gray-800 text-sm">
-                <h2>{accountHolder?.companyName}</h2>
-                <p>{accountHolder?.email}</p>
+                <h2 className="font-semibold ">{accountHolder?.companyName}</h2>
+                <p className="text-sm">{accountHolder?.email}</p>
               </div>
             </div>
 
