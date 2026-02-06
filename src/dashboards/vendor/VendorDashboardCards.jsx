@@ -20,37 +20,6 @@ function formatDate(isoString) {
   });
 }
 
-const cardsDetails = [
-  {
-    id: 1,
-    item: products,
-    title: "products",
-    imgpath: "/images/vendorproduct.png",
-    className: "bg-[#B4DFFF]",
-  },
-  {
-    id: 2,
-    item: addons,
-    title: "addons",
-    imgpath: "/images/vendoraddon.png",
-    className: "bg-[#D8FFD8]",
-  },
-  {
-    id: 3,
-    item: pendingproducts,
-    title: "pending products",
-    imgpath: "/images/vendorProductPending.png",
-    className: "bg-[#D8F7FF]",
-  },
-  {
-    id: 4,
-    item: pendingAddons,
-    title: "pending Addons",
-    imgpath: "/images/vendorAddonPending.png",
-    className: "bg-[#D8DFFF]",
-  },
-];
-
 function VendorDashboardCards({ handleproduct }) {
   const [isloading, setIsloading] = useState(false);
   const [products, setProducts] = useState([]);
@@ -102,6 +71,37 @@ function VendorDashboardCards({ handleproduct }) {
     fetchAddons();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const cardsDetails = [
+    {
+      id: 1,
+      item: products,
+      title: "products",
+      imgpath: "/images/vendorproduct.png",
+      className: "bg-[#B4DFFF]",
+    },
+    {
+      id: 2,
+      item: addons,
+      title: "addons",
+      imgpath: "/images/vendoraddon.png",
+      className: "bg-[#D8FFD8]",
+    },
+    {
+      id: 3,
+      item: pendingproducts,
+      title: "pending products",
+      imgpath: "/images/vendorProductPending.png",
+      className: "bg-[#D8F7FF]",
+    },
+    {
+      id: 4,
+      item: pendingAddons,
+      title: "pending Addons",
+      imgpath: "/images/vendorAddonPending.png",
+      className: "bg-[#D8DFFF]",
+    },
+  ];
 
   function handlerejectedProduct(item) {
     setRejectedProduct(item);
