@@ -17,7 +17,7 @@ function UserDashSetting() {
                 setManageAddress(false);
                 setProfileInfo(true);
               }}
-              className={`px-5 py-2 capitalize text-[#374A75] border border-[#374A75] rounded hover:bg-[#EBF1F6] ${
+              className={`text-sm md:text-base px-5 py-2 capitalize text-[#374A75] border border-[#374A75] rounded hover:bg-[#EBF1F6] ${
                 profileInfo ? "bg-[#D3E3F0]" : ""
               }`}
             >
@@ -28,7 +28,7 @@ function UserDashSetting() {
                 setProfileInfo(false);
                 setManageAddress(true);
               }}
-              className={`px-5 py-2 capitalize text-[#374A75] border border-[#374A75] rounded hover:bg-[#EBF1F6] ${
+              className={`text-sm md:text-base px-5 py-2 capitalize text-[#374A75] border border-[#374A75] rounded hover:bg-[#EBF1F6] ${
                 manageAddress ? "bg-[#D3E3F0]" : ""
               }`}
             >

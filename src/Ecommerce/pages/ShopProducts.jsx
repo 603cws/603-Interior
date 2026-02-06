@@ -187,10 +187,15 @@ function ShopProducts() {
       result = result.filter(
         (item) =>
           item.title.toLowerCase().includes(query.toLowerCase()) ||
+          query.toLocaleLowerCase().includes(item.title.toLocaleLowerCase()) ||
           item.product_type.toLowerCase().includes(query.toLowerCase()) ||
-          item.product_id?.category
-            ?.toLowerCase()
-            .includes(query.toLowerCase()),
+          query
+            .toLocaleLowerCase()
+            .includes(item.product_type.toLocaleLowerCase()) |
+            item.product_id?.category
+              ?.toLowerCase()
+              .includes(query.toLowerCase()) ||
+          query.toLowerCase().includes(item.product_id?.category.toLowerCase()),
       );
     }
 

@@ -264,7 +264,7 @@ function Landing() {
                     trackCTA("make your space");
                     navigate("/Layout");
                   }}
-                  className="relative group w-44 lg:w-56 h-11 lg:h-14 rounded-lg p-1 bg-gradient-to-br from-[#334A78] to-[#78A3FF] hover:bg-[#334A78]"
+                  className="relative group w-48 lg:w-56 h-11 lg:h-14 rounded-lg p-1 bg-gradient-to-br from-[#334A78] to-[#78A3FF] hover:bg-[#334A78]"
                 >
                   <span className="flex w-full h-full items-center justify-center rounded-md bg-white text-base lg:text-lg font-bold capitalize text-[#334A78] group-hover:text-[#FFF] group-hover:bg-[#334A78] transition-colors duration-500 ease-in-out whitespace-pre-line">
                     {isloading ? "loading.." : "Get Your BOQ (Free)"}

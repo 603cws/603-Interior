@@ -45,37 +45,6 @@ const BOTTOM_OFFERS = [
   { title: "HVAC", subtitle: "Up to 20% off", img: "/images/ecommerce/ac.png" },
 ];
 
-const products2 = {
-  chair: {
-    title: "Orange Chair",
-    price: "₹ 3799.00",
-    image: "/images/ecommerce/chair.webp",
-    link: "/productview/d6a99c93-e0b9-4958-9dc5-be9a9afc472e",
-    id: "d6a99c93-e0b9-4958-9dc5-be9a9afc472e",
-  },
-  lamp: {
-    title: "Pendant Lamp",
-    price: "₹ 2599.00",
-    image: "/images/ecommerce/lamp.webp",
-    link: "/productview/d4bedb5d-b06a-444c-8dd3-9bef55e631de",
-    id: "d4bedb5d-b06a-444c-8dd3-9bef55e631de",
-  },
-  rug: {
-    title: "Rug",
-    price: "₹ 2599.00",
-    image: "/images/ecommerce/rug.webp",
-    link: "/productview/45776063-a918-44f7-858b-8b95738c8e78",
-    id: "45776063-a918-44f7-858b-8b95738c8e78",
-  },
-  "chair-green": {
-    title: "Chair Green",
-    price: "₹ 2599.00",
-    image: "/images/ecommerce/chair-green.png",
-    link: "/productview/1d352504-f171-41fc-9bc4-333c68ae9200",
-    id: "1d352504-f171-41fc-9bc4-333c68ae9200",
-  },
-};
-
 const featuredProducts = [
   {
     title: "Lighting",
@@ -154,16 +123,27 @@ const EcommerceFeatures = [
     width: "w-8",
   },
 ];
+const CLICKABLE_IDS = [
+  "d6a99c93-e0b9-4958-9dc5-be9a9afc472e",
+  "d4bedb5d-b06a-444c-8dd3-9bef55e631de",
+  "45776063-a918-44f7-858b-8b95738c8e78",
+  "1d352504-f171-41fc-9bc4-333c68ae9200",
+];
 function Products() {
   const { handleAddToCart } = useHandleAddToCart();
   const [products, setProducts] = useState([]);
-
   const [selectedCategory, setSelectedCategory] = useState("Furniture");
   const [categoryProducts, setCategoryProducts] = useState([]);
-  const [selectedProduct, setSelectedProduct] = useState("chair");
+  const [selectedProductId, setSelectedProductId] = useState(null);
   const [bestProducts, setBestProducts] = useState([]);
 
   const navigate = useNavigate();
+  const clickableProducts = products.filter((p) =>
+    CLICKABLE_IDS.includes(p.id),
+  );
+  const selectedProduct =
+    clickableProducts.find((p) => p.id === selectedProductId) ??
+    clickableProducts[0];
 
   useEffect(() => {
     const fetchProductsData = async () => {
@@ -428,7 +408,6 @@ function Products() {
         <SectionHeader title={"Elegance and Comfort"} />
 
         <div className="flex flex-col lg:flex-row gap-6 lg:gap-2 w-full items-center place-self-center">
-          {/* Left Image with Hotspots */}
           <div className="relative w-full lg:w-2/3 items-center">
             <img
               src="/images/ecommerce/roomImage.jpg"
@@ -436,85 +415,90 @@ function Products() {
               className="w-full rounded-lg h-full"
             />
 
-            {/* Hotspot for Chair */}
             <button
-              onMouseEnter={() => setSelectedProduct("chair")}
-              onClick={() => setSelectedProduct("chair")}
+              onMouseEnter={() =>
+                setSelectedProductId(clickableProducts[3]?.id)
+              }
+              onClick={() => setSelectedProductId(clickableProducts[3]?.id)}
               className={`absolute top-[65%] left-[30%] w-5 h-5 lg:w-6 lg:h-6 rounded-full bg-white border-4 lg:border-[7px] border-[#374A75] shadow-lg ${
                 selectedProduct === "chair" ? "opacity-100" : "opacity-70"
               }`}
             />
 
-            {/* Hotspot for Lamp */}
             <button
-              onMouseEnter={() => setSelectedProduct("lamp")}
-              onClick={() => setSelectedProduct("lamp")}
+              onMouseEnter={() =>
+                setSelectedProductId(clickableProducts[1]?.id)
+              }
+              onClick={() => setSelectedProductId(clickableProducts[1]?.id)}
               className={`absolute top-[25%] left-[35%] w-5 h-5 lg:w-6 lg:h-6 rounded-full bg-white border-4 lg:border-[7px] border-[#374A75] shadow-lg ${
                 selectedProduct === "lamp" ? "opacity-100" : "opacity-70"
               }`}
             />
 
-            {/* Hotspot for Green Chair */}
             <button
-              onMouseEnter={() => setSelectedProduct("chair-green")}
-              onClick={() => setSelectedProduct("chair-green")}
+              onMouseEnter={() =>
+                setSelectedProductId(clickableProducts[2]?.id)
+              }
+              onClick={() => setSelectedProductId(clickableProducts[2]?.id)}
               className={`absolute top-[61%] left-[53%] w-5 h-5 lg:w-6 lg:h-6 rounded-full bg-white border-4 lg:border-[7px] border-[#374A75] shadow-lg ${
                 selectedProduct === "chair-green" ? "opacity-100" : "opacity-70"
               }`}
             />
 
-            {/* Hotspot for Rug */}
             <button
-              onMouseEnter={() => setSelectedProduct("rug")}
-              onClick={() => setSelectedProduct("rug")}
+              onMouseEnter={() =>
+                setSelectedProductId(clickableProducts[0]?.id)
+              }
+              onClick={() => setSelectedProductId(clickableProducts[0]?.id)}
               className={`absolute bottom-[20%] left-[40%] w-5 h-5 lg:w-6 lg:h-6 rounded-full bg-white border-4 lg:border-[7px] border-[#374A75] shadow-lg ${
                 selectedProduct === "rug" ? "opacity-100" : "opacity-70"
               }`}
             />
           </div>
 
-          {/* Right Product Info */}
-          <div className="lg:w-1/3 flex flex-col items-center lg:items-center lg:text-left font-TimesNewRoman">
-            {/* Product Image */}
+          <div className="lg:w-1/3 flex flex-col items-center lg:text-left font-TimesNewRoman">
             <img
-              src={products2[selectedProduct].image}
-              alt={products2[selectedProduct].title}
+              src={selectedProduct?.image}
+              alt={selectedProduct?.product_id?.title}
               className="w-96 h-auto rounded-lg shadow-md p-4 cursor-pointer"
-              onClick={() => navigate(products2[selectedProduct].link)}
+              onClick={() => selectedProduct && navigate(selectedProduct.link)}
             />
 
-            {/* Black Dots */}
             <div className="flex items-center justify-center gap-2 my-4">
-              {Object.keys(products2).map((key, idx) => (
+              {clickableProducts.map((product) => (
                 <button
-                  key={idx}
-                  onClick={() => setSelectedProduct(key)}
-                  className={`w-3 h-3 rounded-full ${
-                    selectedProduct === key ? "bg-black" : "bg-gray-400"
+                  key={product.id}
+                  onClick={() => setSelectedProductId(product.id)}
+                  className={`w-3 h-3 rounded-full transition ${
+                    selectedProduct?.id === product.id
+                      ? "bg-black"
+                      : "bg-gray-400"
                   }`}
-                ></button>
+                />
               ))}
             </div>
 
-            {/* Title & Price */}
             <h3
               className="text-lg font-medium cursor-pointer"
-              onClick={() => navigate(products2[selectedProduct].link)}
+              onClick={() => selectedProduct && navigate(selectedProduct.link)}
             >
-              {products2[selectedProduct].title}
+              {selectedProduct?.title}
             </h3>
+
             <p
               className="text-gray-600 cursor-pointer"
-              onClick={() => navigate(products2[selectedProduct].link)}
+              onClick={() => selectedProduct && navigate(selectedProduct.link)}
             >
-              {products2[selectedProduct].price}
+              ₹{selectedProduct?.ecommercePrice?.mrp}
             </p>
             <button
               onClick={() => {
-                handleAddToCart(products2[selectedProduct], false);
+                if (!selectedProduct) return;
+                handleAddToCart(selectedProduct, false);
                 navigate("/cart");
               }}
-              className="bg-[#334A78] text-[#fff] text-xs px-4 py-2 mt-2 capitalize font-bold rounded hover:bg-[#4C69A4] transition-transform duration-300 hover:scale-110"
+              className="bg-[#334A78] text-white text-xs px-4 py-2 mt-2 font-bold rounded
+               hover:bg-[#4C69A4] transition-transform duration-300 hover:scale-110"
             >
               BUY NOW
             </button>

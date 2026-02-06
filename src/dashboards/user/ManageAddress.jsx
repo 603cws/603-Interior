@@ -268,9 +268,12 @@ function ManageAddress() {
     }
   };
 
+  const hasNoAddresses =
+    !accountHolder?.address || accountHolder.address.length === 0;
+
   return (
     <div className="font-Poppins w-full h-full overflow-auto px-4 scrollbar-hide">
-      {TotalAddress < 3 && (
+      {TotalAddress < 3 && TotalAddress > 0 && (
         <div className="font-Poppins py-2">
           <button
             onClick={handleAddAddress}
@@ -293,6 +296,9 @@ function ManageAddress() {
       )}
 
       <div className="space-y-3 mt-3">
+        {hasNoAddresses && !isAddressFormOpen && !isAddressEdit && (
+          <AddressEmptyState onAdd={handleAddAddress} />
+        )}
         {accountHolder?.address?.length > 0 &&
           !isAddressFormOpen &&
           sortedAddressList.map((add, index) => (
@@ -589,6 +595,28 @@ function DeleteAddressWarning({ address, onCancel, onConfirm }) {
           </button>
         </div>
       </div>
+    </div>
+  );
+}
+function AddressEmptyState({ onAdd }) {
+  return (
+    <div className="flex flex-col items-center justify-center text-center mt-10 p-6 border border-dashed border-[#CCD5E3] rounded-lg bg-[#F9FBFF]">
+      <div className="text-4xl mb-3">📍</div>
+
+      <h3 className="text-[#171717] font-semibold text-base mb-1">
+        No address saved yet
+      </h3>
+
+      <p className="text-sm text-[#6B7280] mb-4 max-w-xs">
+        Add a delivery address to make checkout faster and easier.
+      </p>
+
+      <button
+        onClick={onAdd}
+        className="px-6 py-2 text-xs uppercase tracking-wide bg-[#334A78] text-white rounded-md hover:bg-[#293c61]"
+      >
+        Add New Address
+      </button>
     </div>
   );
 }

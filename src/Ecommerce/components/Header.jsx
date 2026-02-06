@@ -40,6 +40,8 @@ function Header() {
     setShowLoginPopup,
   } = useEcomApp();
 
+  const MIN_CHARS = 3;
+
   const hasShownToast = useRef(false);
   const pathname = window.location.pathname;
   const { handleAddtoWishlist } = useHandleAddToCart();
@@ -138,7 +140,7 @@ function Header() {
     const value = e.target.value;
     setSearchTerm(value);
 
-    if (value.trim() === "") {
+    if (value.trim().length < MIN_CHARS) {
       setSuggestions([]);
       return;
     }
@@ -164,6 +166,12 @@ function Header() {
     setSearchTerm(item.title);
     navigate(`/shop?query=${encodeURIComponent(item.title)}`);
     setSuggestions([]);
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      handleSearch();
+    }
   };
 
   return (
@@ -283,7 +291,7 @@ function Header() {
               </button>
             </div>
             <div className="flex items-center flex-1 gap-5">
-              <div className="relative flex-[3_1_auto] border-[2px] rounded py-1 px-1 text-sm flex font-TimesNewRoman">
+              <div className="relative flex-[3_1_auto] border-[2px] rounded py-1.5 px-1 text-[15px] flex font-TimesNewRoman">
                 <input
                   type="text"
                   name=""
@@ -291,22 +299,29 @@ function Header() {
                   placeholder="Search products..."
                   value={searchTerm}
                   onChange={handleChange}
+                  onKeyDown={handleKeyDown}
                   className="flex-1 focus:outline-none border-r-[2px] text-[#334A78]"
                 />
                 <button onClick={handleSearch} className="px-0.5">
                   <CiSearch color="#334A78" size={18} />
                 </button>
-                {suggestions?.length > 0 && (
+                {searchTerm.length >= MIN_CHARS && suggestions.length === 0 && (
+                  <div className="absolute top-[110%] left-0 right-0 bg-white border border-gray-200 rounded-md shadow-md z-10 px-3 py-2 text-sm text-gray-500">
+                    No results for "
+                    <span className="font-medium">{searchTerm}</span>"
+                  </div>
+                )}
+                {suggestions.length > 0 && (
                   <ul className="absolute top-[110%] left-0 right-0 bg-white border border-gray-200 rounded-md shadow-md z-10 max-h-48 overflow-auto">
-                    {suggestions?.map((item) => (
+                    {suggestions.map((item) => (
                       <li
                         key={item.id}
                         onClick={() => handleSuggestionClick(item)}
                         className="px-3 py-1 text-[#334A78] hover:bg-gray-100 cursor-pointer text-sm"
                       >
-                        {item?.title} —{" "}
+                        {item.title} —{" "}
                         <span className="text-gray-500">
-                          {item?.product_type}
+                          {item.product_type}
                         </span>
                       </li>
                     ))}
