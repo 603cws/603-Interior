@@ -12,7 +12,6 @@ import { LuPackageCheck } from "react-icons/lu";
 import { IoCloseCircleOutline } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
 import { LuChevronDown } from "react-icons/lu";
-// import { generateInvoicePDF } from "./InvoicePdf";
 import { v4 as uuidv4 } from "uuid";
 import toast from "react-hot-toast";
 
@@ -69,7 +68,6 @@ function Orders() {
   async function handleOrderCancel(order) {
     setEntireOrderCancellation((prev) => !prev);
 
-    // check the status from the db
     const { data } = await supabase
       .from("orders_table")
       .select("status")
@@ -82,7 +80,6 @@ function Orders() {
     }
 
     const uniqueId = uuidv4();
-
     const refundAmountInPaisa = order?.final_amount * 100;
     const reqbody = {
       amount: refundAmountInPaisa,
@@ -230,7 +227,7 @@ function Orders() {
                             disabled={entireOrderCancellation}
                             // onClick={() => handleOrderCancel(order)}
                             onClick={() => setOrderToCancel(order)}
-                            className=" px-10 border border-[#213626] uppercase text-xs tracking-wider rounded-sm py-2 hover:bg-red-500"
+                            className="px-10 border border-[#213626] uppercase text-xs tracking-wider rounded-sm py-2 hover:bg-red-500"
                           >
                             cancel
                           </button>
@@ -238,7 +235,7 @@ function Orders() {
                           <button
                             disabled={true}
                             onClick={() => handleOrderCancel(order)}
-                            className=" px-10 border border-[#213626] uppercase text-xs tracking-wider rounded-sm py-2"
+                            className="px-10 border border-[#213626] uppercase text-xs tracking-wider rounded-sm py-2"
                           >
                             cancelled
                           </button>
@@ -535,14 +532,14 @@ function OrderProducts({ orderID, setOrderToCancel }) {
                   <button
                     // onClick={() => handleOrderitemCancel(product)}
                     onClick={() => setProductToCancel({ order, product })}
-                    className=" px-10 border border-[#213626] uppercase text-xs tracking-wider rounded-sm py-2 hover:bg-red-500"
+                    className="px-10 border border-[#213626] uppercase text-xs tracking-wider rounded-sm py-2 hover:bg-red-500"
                   >
                     cancel
                   </button>
                 ) : (
                   <button
                     disabled={true}
-                    className=" px-10 border border-[#213626] uppercase text-xs tracking-wider rounded-sm py-2"
+                    className="px-10 border border-[#213626] uppercase text-xs tracking-wider rounded-sm py-2"
                   >
                     cancelled
                   </button>
@@ -670,7 +667,7 @@ function OrderProductView({ order, product }) {
               <p className="capitalize font-bold text-sm md:text-base">
                 {order?.status}
               </p>
-              <p className="text-xs ">On {order?.delivery_date}</p>
+              <p className="text-xs">On {order?.delivery_date}</p>
             </div>
           </div>
           <div className="my-3 md:my-0">
@@ -779,7 +776,7 @@ function Breadcrumbs({
 function PriceDistribution({ order }) {
   return (
     <div className="font-Poppins bg-[#fff]">
-      <div className="">
+      <div>
         <div className="flex justify-between border-b py-2">
           <p>Total MRP</p>
           <p>
@@ -862,7 +859,7 @@ function CancelWarning({
       <div className="bg-white p-5 rounded-lg shadow-lg w-full max-w-xs md:max-w-sm">
         <h3 className="text-lg font-semibold text-red-500 mb-2">{title}</h3>
         <div className="mb-4">
-          <p className="text-sm text-gray-700 ">{description}</p>
+          <p className="text-sm text-gray-700">{description}</p>
           <p className="text-red-500 text-xs">
             Refund will be initiated if applicable.
           </p>

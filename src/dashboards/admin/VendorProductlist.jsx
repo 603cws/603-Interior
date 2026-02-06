@@ -26,7 +26,7 @@ function VendorProductlist({ setVendorproductlist, selectedVendor }) {
   const [rejectReason, setRejectReason] = useState();
   const tableRef = useRef(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const [openMenuId, setOpenMenuId] = useState(null); // Store the ID of the row with an open menu
+  const [openMenuId, setOpenMenuId] = useState(null);
   const [productPreview, setProductPreview] = useState(false);
   const [selectedProductview, setSelectedProductview] = useState();
   const [isAddProduct, setIsAddProduct] = useState(false);
@@ -156,7 +156,6 @@ function VendorProductlist({ setVendorproductlist, selectedVendor }) {
         return;
       }
 
-      // Otherwise, close the menu
       setOpenMenuId(null);
     };
 
@@ -361,7 +360,6 @@ function VendorProductlist({ setVendorproductlist, selectedVendor }) {
       });
       setProducts(sortedData);
       setFilteredProducts(sortedData);
-      // setProducts(data);
     } catch (error) {
       console.error("Error fetching products:", error);
     } finally {
@@ -472,7 +470,7 @@ function VendorProductlist({ setVendorproductlist, selectedVendor }) {
 
   return (
     <div className="flex flex-col h-full min-h-0 loverflow-hidden lg:border-2 border-[#334A78] rounded-lg bg-[#fff]">
-      <div className="overflow-y-auto scrollbar-hide h-[calc(100vh-80px)] relative ">
+      <div className="overflow-y-auto scrollbar-hide h-[calc(100vh-80px)] relative">
         {editProduct ? (
           <VendorProductEdit
             setEditProduct={setEditProduct}
@@ -490,7 +488,7 @@ function VendorProductlist({ setVendorproductlist, selectedVendor }) {
         ) : (
           <>
             <div className="sticky top-0 z-20 bg-white">
-              <div className="hidden lg:flex justify-between items-center px-4 py-2 border-b-2 border-b-gray-400 ">
+              <div className="hidden lg:flex justify-between items-center px-4 py-2 border-b-2 border-b-gray-400">
                 <BackButton
                   label="Back to vendor list"
                   onClick={() => setVendorproductlist(false)}
@@ -565,7 +563,7 @@ function VendorProductlist({ setVendorproductlist, selectedVendor }) {
                     </button>
                   ))}
                 </div>
-                <div className=" hidden lg:flex gap-2 w-1/3">
+                <div className="hidden lg:flex gap-2 w-1/3">
                   <div>
                     {selectedItemForDelete?.length > 0 && (
                       <button
@@ -667,7 +665,7 @@ function VendorProductlist({ setVendorproductlist, selectedVendor }) {
                             ) : (
                               <th className="p-3 font-medium">Addon ID</th>
                             )}
-                            <th className="p-3  font-medium">Price</th>
+                            <th className="p-3 font-medium">Price</th>
                             {toggle ? (
                               <>
                                 <th className="p-3 font-medium">Details</th>
@@ -683,7 +681,7 @@ function VendorProductlist({ setVendorproductlist, selectedVendor }) {
                             <th className="p-3 font-medium">Action</th>
                           </tr>
                         </thead>
-                        <tbody className=" text-sm">
+                        <tbody className="text-sm">
                           {paginatedItems.map((item) => (
                             <tr
                               key={item.id}
@@ -778,7 +776,7 @@ function VendorProductlist({ setVendorproductlist, selectedVendor }) {
                                       onClick={() => {
                                         handleProductPreview(item);
                                       }}
-                                      className=" flex gap-2 items-center w-full text-left px-3 py-2 hover:bg-gray-200"
+                                      className="flex gap-2 items-center w-full text-left px-3 py-2 hover:bg-gray-200"
                                     >
                                       <VscEye /> View
                                     </button>
@@ -788,7 +786,7 @@ function VendorProductlist({ setVendorproductlist, selectedVendor }) {
                                           setSelectedproduct(item);
                                           setEditProduct(true);
                                         }}
-                                        className=" flex gap-2 items-center w-full text-left px-3 py-2 hover:bg-gray-200"
+                                        className="flex gap-2 items-center w-full text-left px-3 py-2 hover:bg-gray-200"
                                       >
                                         <VscEye />
                                         Edit
@@ -799,7 +797,7 @@ function VendorProductlist({ setVendorproductlist, selectedVendor }) {
                                           setSelectedAddon(item);
                                           setEditAddon(true);
                                         }}
-                                        className=" flex gap-2 items-center w-full text-left px-3 py-2 hover:bg-gray-200"
+                                        className="flex gap-2 items-center w-full text-left px-3 py-2 hover:bg-gray-200"
                                       >
                                         <VscEye />
                                         Edit

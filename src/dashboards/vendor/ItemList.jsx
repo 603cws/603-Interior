@@ -17,7 +17,7 @@ function ItemList({
   const scrollContainerRef = useRef(null);
   const paginatedItems = items.slice(
     (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
+    currentPage * itemsPerPage,
   );
 
   const goToPage = (page) => {
@@ -32,12 +32,11 @@ function ItemList({
     <>
       <div
         ref={scrollContainerRef}
-        className={`grid grid-cols-2  gap-4 p-2 
-      h-5/6  overflow-y-auto ${
-        isExpanded
-          ? "md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-6"
-          : "md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-7 gap-4"
-      }`}
+        className={`grid grid-cols-2 gap-4 p-2 h-5/6 overflow-y-auto ${
+          isExpanded
+            ? "md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-6"
+            : "md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-7 gap-4"
+        }`}
       >
         {paginatedItems?.length > 0 &&
           paginatedItems?.map((item) => (
@@ -92,10 +91,10 @@ function ItemCard({
 
   return (
     <div>
-      <div className="relative max-w-xs md:w-44 md:h-44 flex justify-center items-center rounded-2xl shadow-sm border border-[#ccc] ">
+      <div className="relative max-w-xs md:w-44 md:h-44 flex justify-center items-center rounded-2xl shadow-sm border border-[#ccc]">
         <img
           src={`${baseImageUrl}/${item?.image}`}
-          alt="chair"
+          alt={item?.title || "chair"}
           className="w-28 h-36 md:w-40 md:h-40 p-2 object-contain"
         />
         <div className="absolute right-0 bottom-2 text-xl" ref={optionboxref}>

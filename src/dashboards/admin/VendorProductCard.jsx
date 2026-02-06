@@ -37,7 +37,7 @@ function VendorProductCard({
                 <div>
                   <img src={`${baseImageUrl}${product.image}`} alt="product" />
                 </div>
-                <div className="flex gap-2 ">
+                <div className="flex gap-2">
                   {additionalImages.map((image, index) => (
                     <div key={index}>
                       <img
@@ -173,7 +173,7 @@ function VendorProductCard({
               </div>
             )}
 
-            <div className="flex text-[#000] justify-between  w-full p-4">
+            <div className="flex text-[#000] justify-between w-full p-4">
               {accountHolder.role !== "user" && (
                 <button
                   onClick={() => setDeleteWarning(true)}

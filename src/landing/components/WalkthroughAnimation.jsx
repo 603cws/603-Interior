@@ -114,7 +114,11 @@ export const LayoutScreen = () => {
   return (
     <div className="flex flex-col h-full bg-[#f4f7f9] font-TimesNewRoman">
       <div className="bg-[#334A78] p-4 flex justify-between items-center h-20 shrink-0">
-        <img src="/logo/logo-new.png" alt="" className="max-w-[100px] h-auto" />
+        <img
+          src="/logo/logo-new.png"
+          alt="Workved logo"
+          className="max-w-[100px] h-auto"
+        />
         <div className="flex-1 flex justify-center">
           <div className="w-full max-w-xl bg-[#334A78] border border-yellow-500 rounded-lg py-2 px-6 flex items-center justify-between shadow-inner">
             <div className="flex items-center gap-4">
@@ -315,7 +319,11 @@ export const PlanSelectionScreen = () => {
     <div className="flex flex-col h-[300px] bg-white relative font-TimesNewRoman">
       {/* Minimal Header */}
       <div className="bg-[#334A78] p-4 flex justify-between items-center h-14 shrink-0">
-        <img src="/logo/logo-new.png" alt="" className="max-w-[100px] h-auto" />
+        <img
+          src="/logo/logo-new.png"
+          alt="Workved logo"
+          className="max-w-[100px] h-auto"
+        />
 
         <div className="flex items-center gap-6">
           <span className="text-white text-xs font-bold">Draft BOQ</span>

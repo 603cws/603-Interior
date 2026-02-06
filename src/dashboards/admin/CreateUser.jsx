@@ -72,9 +72,8 @@ function CreateUser() {
     const { name, value } = e.target;
 
     if (name === "mobile") {
-      // Allow only numbers and limit to 10 digits
-      if (!/^\d*$/.test(value)) return; // Prevent non-numeric input
-      if (value.length > 10) return; // Restrict to 10 digits
+      if (!/^\d*$/.test(value)) return;
+      if (value.length > 10) return;
     }
 
     setFormData((prev) => ({
@@ -83,7 +82,6 @@ function CreateUser() {
     }));
   };
 
-  // Handle Multi-Select Category Change
   const handleCategoryChange = (selectedOptions) => {
     setFormData((prev) => ({
       ...prev,
@@ -172,7 +170,7 @@ function CreateUser() {
   };
 
   return (
-    <div className="flex-1 bg-[#FFF] mb-5 cursor-default overflow-auto ">
+    <div className="flex-1 bg-[#FFF] mb-5 cursor-default overflow-auto">
       <div className="h-[calc(100vh-130px)] flex-col flex justify-center items-center">
         <div className=" w-11/12 h-full bg-white p-6 flex flex-col items-center text-center">
           <div className="w-full text-left font-Poppins">
@@ -282,12 +280,12 @@ function CreateUser() {
                   placeholder="Enter password"
                   value={formData.password}
                   onChange={handleChange}
-                  className={`border p-2 rounded-md`}
+                  className="border p-2 rounded-md"
                   required
                 />
                 <div
                   onClick={togglePasswordVisibility}
-                  className={`absolute top-[60%] right-10 cursor-pointer`}
+                  className="absolute top-[60%] right-10 cursor-pointer"
                 >
                   {isPasswordVisible ? (
                     <IoEyeOutline size={20} />
@@ -309,7 +307,7 @@ function CreateUser() {
                 />
                 <div
                   onClick={toggleConfirmPasswordVisibility}
-                  className={`absolute top-[60%] right-10 cursor-pointer`}
+                  className="absolute top-[60%] right-10 cursor-pointer"
                 >
                   {isConfirmPasswordVisible ? (
                     <IoEyeOutline size={20} />

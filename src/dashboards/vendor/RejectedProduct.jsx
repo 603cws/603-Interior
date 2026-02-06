@@ -3,7 +3,7 @@ import { PiWarningCircleFill } from "react-icons/pi";
 
 function RejectedProduct({ onClose, product }) {
   return (
-    <div className="fixed  inset-0 flex items-center justify-center bg-black bg-opacity-40 z-30 p-4">
+    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-30 p-4">
       <div className="bg-white py-5 px-3 sm:py-10 sm:px-6 rounded-lg shadow-xl max-w-sm md:max-w-2xl lg:max-w-3xl border border-gray-200">
         <div className="flex justify-end items-center mb-4">
           <MdClose
@@ -19,7 +19,7 @@ function RejectedProduct({ onClose, product }) {
           </p>
         </div>
         <div className="flex flex-col sm:flex-row sm:gap-7">
-          <div className=" border border-gray-300 p-3 mt-3 sm:p-4 sm:mt-4 rounded-lg">
+          <div className="border border-gray-300 p-3 mt-3 sm:p-4 sm:mt-4 rounded-lg">
             <div className="border-b border-gray-200 pb-2 mb-2">
               <h4 className="font-semibold text-base text-gray-900 capitalize">
                 {product?.status || "NA"}
@@ -56,7 +56,7 @@ function RejectedProduct({ onClose, product }) {
               </div>
             </div>
           </div>
-          <div className="border border-gray-300 p-3 mt-3 sm:p-4  sm:mt-4 rounded-lg">
+          <div className="border border-gray-300 p-3 mt-3 sm:p-4 sm:mt-4 rounded-lg">
             <div className="border-b border-gray-200 pb-2 mb-2">
               <h4 className="font-semibold text-base text-gray-900">Reason</h4>
             </div>

@@ -151,8 +151,8 @@ export default function FormulaEditor() {
                 </h4>
                 <div className="hidden lg:block overflow-x-auto">
                   <table className="w-full bg-[#fff]">
-                    <thead className="">
-                      <tr className="">
+                    <thead>
+                      <tr>
                         <th className="border-b p-2 text-left">Category</th>
                         <th className="border-b p-2 text-left">Formula</th>
                         <th className="border-b p-2 text-left">Description</th>
@@ -197,7 +197,7 @@ export default function FormulaEditor() {
                               }
                             />
                           </td>
-                          <td className=" p-2 space-x-2 text-[#A1A1A1] font-semibold">
+                          <td className="p-2 space-x-2 text-[#A1A1A1] font-semibold">
                             <button
                               className="bg-[#374A75] text-white px-3 py-1 rounded hover:bg-[#5c7ebd]"
                               onClick={() => {
@@ -222,7 +222,6 @@ export default function FormulaEditor() {
                             </button>
                             <button
                               className="bg-[#FA343A] text-white px-3 py-1 rounded hover:bg-red-700"
-                              // onClick={() => deleteFormula(f.category)}
                               onClick={() => setFormulaToDelete(f.category)}
                             >
                               Delete
@@ -303,7 +302,7 @@ function FormulaCard({
         <p className="font-semibold text-lg mb-2">{formula.category}</p>
 
         <input
-          className=" w-full py-2 mb-2 text-sm text-[#A1A1A1] font-semibold"
+          className="w-full py-2 mb-2 text-sm text-[#A1A1A1] font-semibold"
           value={currentEdit.formula ?? formula.formula}
           onChange={(e) =>
             setEditing((prev) => ({
@@ -316,7 +315,7 @@ function FormulaCard({
           }
         />
         <input
-          className=" w-full py-2 mb-4 text-sm text-[#A1A1A1] font-semibold"
+          className="w-full py-2 mb-4 text-sm text-[#A1A1A1] font-semibold"
           value={currentEdit.description ?? formula.description}
           onChange={(e) =>
             setEditing((prev) => ({

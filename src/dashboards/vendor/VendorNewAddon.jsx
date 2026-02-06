@@ -1,7 +1,7 @@
 import { BsUpload } from "react-icons/bs";
 import { useEffect, useRef, useState } from "react";
 import { supabase } from "../../services/supabase";
-import { toast } from "react-hot-toast"; //Toaster
+import { toast } from "react-hot-toast";
 import { useApp } from "../../Context/Context";
 import {
   useAllCatArray,
@@ -19,12 +19,9 @@ function VendorNewAddon({
   const [preview, setPreview] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [subcat, setSubcat] = useState([]);
-
   const [selectedSubcategories, setSelectedSubcategories] = useState();
   const [subSubCategory, setSubSubCategory] = useState("");
-
   const [category, setCategory] = useState("");
-
   const fileInputRef = useRef(null);
 
   const [dimensions, setDimensions] = useState({
@@ -208,6 +205,7 @@ function VendorNewAddon({
       setIsSubmitting(false);
     }
   };
+
   useEffect(() => {
     if (category !== "HVAC" && category !== "Civil / Plumbing") {
       const filter = AllCatArray.filter((cat) => cat.name === category).flatMap(
@@ -284,7 +282,7 @@ function VendorNewAddon({
           }}
           className="py-2"
         />
-        <h3 className="capitalize font-semibold text-xl ">Add New Add Ons</h3>
+        <h3 className="capitalize font-semibold text-xl">Add New Add Ons</h3>
       </div>
       <form
         className="lg:flex gap-5 py-3 px-5 w-full"
@@ -393,7 +391,7 @@ function VendorNewAddon({
                     onChange={handleChange}
                     value={addon.price}
                     required
-                    className="w-full py-1.5 px-2 border-2 rounded-lg [&::-webkit-inner-spin-button]:appearance-none  focus:outline-none focus:ring-0"
+                    className="w-full py-1.5 px-2 border-2 rounded-lg [&::-webkit-inner-spin-button]:appearance-none focus:outline-none focus:ring-0"
                   />
                 </div>
               )}
@@ -408,7 +406,7 @@ function VendorNewAddon({
                       name="height"
                       value={dimensions.height}
                       onChange={handleDimensionChange}
-                      className="w-20 xl:w-32 py-1.5 px-2 border-2 rounded-lg [&::-webkit-inner-spin-button]:appearance-none  focus:outline-none focus:ring-0"
+                      className="w-20 xl:w-32 py-1.5 px-2 border-2 rounded-lg [&::-webkit-inner-spin-button]:appearance-none focus:outline-none focus:ring-0"
                       required
                     />
                     <span className="absolute right-2 top-2">H</span>
@@ -419,7 +417,7 @@ function VendorNewAddon({
                       name="length"
                       value={dimensions.length}
                       onChange={handleDimensionChange}
-                      className="w-20 xl:w-32 py-1.5 px-2 border-2 rounded-lg [&::-webkit-inner-spin-button]:appearance-none  focus:outline-none focus:ring-0"
+                      className="w-20 xl:w-32 py-1.5 px-2 border-2 rounded-lg [&::-webkit-inner-spin-button]:appearance-none focus:outline-none focus:ring-0"
                       required
                     />
                     <span className="absolute top-2 right-2">L</span>
@@ -430,7 +428,7 @@ function VendorNewAddon({
                       name="width"
                       value={dimensions.width}
                       onChange={handleDimensionChange}
-                      className="w-20 xl:w-32 py-1.5 px-2 border-2 rounded-lg [&::-webkit-inner-spin-button]:appearance-none  focus:outline-none focus:ring-0"
+                      className="w-20 xl:w-32 py-1.5 px-2 border-2 rounded-lg [&::-webkit-inner-spin-button]:appearance-none focus:outline-none focus:ring-0"
                       required
                     />
                     <span className="absolute top-2 right-2">W</span>
@@ -454,7 +452,7 @@ function VendorNewAddon({
                     name="mrp"
                     onChange={handleChange}
                     value={addon.mrp}
-                    className="w-full py-1.5 px-2 border-2 rounded-lg [&::-webkit-inner-spin-button]:appearance-none  focus:outline-none focus:ring-0"
+                    className="w-full py-1.5 px-2 border-2 rounded-lg [&::-webkit-inner-spin-button]:appearance-none focus:outline-none focus:ring-0"
                     required
                   />
                 </div>
@@ -465,7 +463,7 @@ function VendorNewAddon({
                     name="sellingPrice"
                     onChange={handleChange}
                     value={addon.sellingPrice}
-                    className="w-full py-1.5 px-2 border-2 rounded-lg [&::-webkit-inner-spin-button]:appearance-none  focus:outline-none focus:ring-0"
+                    className="w-full py-1.5 px-2 border-2 rounded-lg [&::-webkit-inner-spin-button]:appearance-none focus:outline-none focus:ring-0"
                     required
                   />
                 </div>
@@ -476,7 +474,7 @@ function VendorNewAddon({
                     name="quantity"
                     onChange={handleChange}
                     value={addon.quantity}
-                    className="w-full py-1.5 px-2 border-2 rounded-lg [&::-webkit-inner-spin-button]:appearance-none  focus:outline-none focus:ring-0"
+                    className="w-full py-1.5 px-2 border-2 rounded-lg [&::-webkit-inner-spin-button]:appearance-none focus:outline-none focus:ring-0"
                     required
                   />
                 </div>

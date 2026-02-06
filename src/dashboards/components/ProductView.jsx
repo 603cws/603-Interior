@@ -6,13 +6,11 @@ function ProductView({ onClose, product }) {
     : [];
 
   return (
-    <div className="fixed inset-0 z-50 font-Poppins  flex justify-center items-center bg-[#000]/20 backdrop-blur-[1px] ">
-      <div className="max-w-xs sm:max-w-sm md:max-w-2xl  lg:max-w-3xl mx-auto p-6 bg-white rounded-lg shadow-md border border-[#ccc] max-h-[85vh] overflow-y-auto gradient-scrollbar">
-        {/* Top section with image and details */}
+    <div className="fixed inset-0 z-50 font-Poppins flex justify-center items-center bg-[#000]/20 backdrop-blur-[1px]">
+      <div className="max-w-xs sm:max-w-sm md:max-w-2xl lg:max-w-3xl mx-auto p-6 bg-white rounded-lg shadow-md border border-[#ccc] max-h-[85vh] overflow-y-auto gradient-scrollbar">
         <div className="flex flex-col md:flex-row gap-6">
           {/* Left Image Section */}
-          <div className="flex-1 flex flex-col">
-            {/* <div className="w-[200px] h-[200px]  md:w-[300px] lg:[350px]"> */}
+          <div className="flex-1 flex flex-col gap-3">
             <div className="flex-1">
               <img
                 src={`${baseImageUrl}${product.image}`}
@@ -20,7 +18,7 @@ function ProductView({ onClose, product }) {
                 className="object-cover max-h-full"
               />
             </div>
-            <div className="flex gap-2 ">
+            <div className="flex gap-2">
               {additionalImages.length > 0 ? (
                 additionalImages.map((image, index) => (
                   <div key={index}>
@@ -45,7 +43,7 @@ function ProductView({ onClose, product }) {
               {product?.title || "NA"}
             </h2>
             <p className="text-[#374A75] font-semibold text-xl lg:text-2xl mt-1">
-              ₹: {product?.price || "NA"}
+              ₹ {product?.price || "NA"}
             </p>
             <p className="mt-2 text-black text-sm">
               {product?.details || "NA"}

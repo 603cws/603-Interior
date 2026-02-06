@@ -15,17 +15,17 @@ const getDynamicSubcategories = (category, type, AllCatArray) => {
   const special = specialArray.find(
     (item) =>
       item.name.trim().toLowerCase() === normalizedCategory &&
-      item.type.trim().toLowerCase() === normalizedType
+      item.type.trim().toLowerCase() === normalizedType,
   );
   if (special) {
     return special.subcategories;
   }
   const foundCategory = AllCatArray.find(
-    (item) => item.name.trim().toLowerCase() === normalizedCategory
+    (item) => item.name.trim().toLowerCase() === normalizedCategory,
   );
   if (!foundCategory) return [];
   const matchType = foundCategory.subCat1.find(
-    (sub) => sub.trim().toLowerCase() === normalizedType
+    (sub) => sub.trim().toLowerCase() === normalizedType,
   );
   if (matchType) {
     return foundCategory.subcategories;
@@ -33,6 +33,7 @@ const getDynamicSubcategories = (category, type, AllCatArray) => {
   return [];
 };
 
+//                Data Format
 //       {
 //     "id": "2e96ecdf-06ae-4f4b-ab41-664f3944e368",
 //     "created_at": "2025-12-06T06:02:27.747939+00:00",
@@ -95,15 +96,13 @@ function SelectSubcategories({
   const category = product?.products?.category;
   const type = product?.products?.subcategory1;
 
-  console.log("product", product);
-
   const subcategories = getDynamicSubcategories(category, type, AllCatArray);
 
   const handleSelect = (subcategory) => {
     setSelectedSubcategories((prev) =>
       prev.includes(subcategory)
         ? prev.filter((item) => item !== subcategory)
-        : [...prev, subcategory]
+        : [...prev, subcategory],
     );
   };
 
@@ -118,12 +117,7 @@ function SelectSubcategories({
       const subcategory1 = product?.products?.subcategory1;
       const subcategoryString = selectedSubcategories.join(",");
 
-      console.log("selected products", selectedSubcategories);
-
-      // console.log("product", product);
-      console.log("markdefault", markDefault);
       // if defaultproducts exists
-      // later also add the approve part
       if (markDefault) {
         //1)find all the product in this subcategory1,segment,default,approved status
         const { data: getAllDefaultProducts, error: fetchError } =
@@ -136,7 +130,6 @@ function SelectSubcategories({
             .eq("segment", product?.segment);
 
         if (fetchError) return console.error("fetcherror", fetchError);
-        console.log("data", getAllDefaultProducts);
 
         if (getAllDefaultProducts && getAllDefaultProducts?.length > 0) {
           const updated = getAllDefaultProducts?.map((item) => {
@@ -149,7 +142,7 @@ function SelectSubcategories({
               (v) =>
                 !selectedSubcategories
                   .map((s) => s.toLowerCase())
-                  .includes(v.toLowerCase())
+                  .includes(v.toLowerCase()),
             );
 
             return {
@@ -158,7 +151,6 @@ function SelectSubcategories({
             };
           });
 
-          console.log("updated", updated);
           for (const item of updated) {
             const defaultSubCat = item.filtered;
 
@@ -167,8 +159,6 @@ function SelectSubcategories({
               .update({ defaultSubCat })
               .eq("id", item.id)
               .select();
-
-            console.log("updated data", updatedData);
 
             if (error) console.error("Update failed:", item.id, error);
           }
@@ -245,7 +235,6 @@ function SelectSubcategories({
   return (
     <div className="fixed inset-0 flex justify-center items-center bg-[#000]/30 z-50">
       <div className=" max-w-xs sm:max-w-sm md:max-w-2xl  lg:max-w-none mx-auto p-4 md:p-5 rounded-lg md:rounded-xl border-2 relative bg-white max-h-[85vh] overflow-y-auto gradient-scrollbar">
-        {/* <div className=" bg-[#fff] p-5 rounded-lg relative "> */}
         <div className="flex  justify-end items-center">
           <button onClick={onClose} className="">
             <IoIosCloseCircleOutline size={25} color="#334A78" />

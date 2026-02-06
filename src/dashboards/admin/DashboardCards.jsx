@@ -14,7 +14,7 @@ function DashboardCards({
   }
 
   const pendingproduct = products.filter(
-    (product) => product.status === "pending"
+    (product) => product.status === "pending",
   );
 
   const pendingAddons = addons.filter((addon) => addon.status === "pending");
@@ -23,7 +23,7 @@ function DashboardCards({
     <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
       <div
         onClick={clients}
-        className="bg-gradient-to-r from-[#6BE4FC] to-[#4AF3DF] text-white p-5  flex flex-col gap-3 justify-between w-full h-full relative hover:scale-110 transition-transform duration-300 ease-in-out cursor-pointer rounded-sm"
+        className="bg-gradient-to-r from-[#6BE4FC] to-[#4AF3DF] text-white p-5 flex flex-col gap-3 justify-between w-full h-full relative hover:scale-110 transition-transform duration-300 ease-in-out cursor-pointer rounded-sm"
       >
         <h2 className="self-start text-xl font-bold">Client</h2>
         <h1 className="self-end justify-end font-semibold text-3xl xl:text-5xl">

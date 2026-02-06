@@ -359,7 +359,7 @@ function Header() {
             <button onClick={() => navigate("/")} className="">
               <img
                 src="/logo/workved-interior.png"
-                alt="w"
+                alt="Workved logo"
                 className="h-10 cursor-pointer"
               />
             </button>

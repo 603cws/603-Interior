@@ -49,6 +49,7 @@ function Contactus() {
 
       if (error) throw error;
       toast.success("we will shortly reach you");
+
       // send email to user
       await fetch(
         "https://bwxzfwsoxwtzhjbzbdzs.supabase.co/functions/v1/ContactUsEmailUser",
@@ -101,7 +102,7 @@ function Contactus() {
           <h1 className="font-TimesNewRoman italic font-bold text-2xl xl:text-5xl xl:leading-[59px] xl:tracking-[0.3px] text-[#304778]">
             Get in Touch With Us
           </h1>
-          <p className="  font-Georgia text-lg lg:text-2xl  text-[#304778]">
+          <p className="font-Georgia text-lg lg:text-2xl text-[#304778]">
             Whether you’re ready to start designing your dream office or just
             have a question, our team is here to help. Let’s create a workspace
             that inspires productivity and creativity.
@@ -111,19 +112,19 @@ function Contactus() {
           <img
             src={background}
             alt="home background"
-            className=" w-full h-full"
+            className="w-full h-full"
           />
         </div>
       </div>
       <div className="lg:container xl:max-w-7xl xl:px-0 xl:mx-auto">
-        <section className="hidden  sm:block lg:pt-8 lg:h-[130vh] xl:h-screen 3xl:h-[75vh]  md:mx-auto">
+        <section className="hidden sm:block lg:pt-8 lg:h-[130vh] xl:h-screen 3xl:h-[75vh] md:mx-auto">
           <div
-            className=" py-3 flex flex-col-reverse
+            className="py-3 flex flex-col-reverse
             lg:flex-row-reverse lg:justify-center lg:items-center  gap-10 h-full 3xl:h-full relative transform -translate-y-1/6"
           >
-            <div className="lg:relative lg:flex-1 lg:h-full  3xl:h-[720px]">
+            <div className="lg:relative lg:flex-1 lg:h-full 3xl:h-[720px]">
               <div className="max-w-2xl bg-[#304778] text-white lg:absolute lg:-top-[20%] xl:-top-1/4">
-                <div className="px-8 py-10 rounded-3xl pb-5 ">
+                <div className="px-8 py-10 rounded-3xl pb-5">
                   <div className="[&_p]:font-Georgia py-3">
                     <h2 className="font-Georgia text-3xl  xl:text-5xl  pb-4">
                       Let’s Connect with us!
@@ -138,14 +139,14 @@ function Contactus() {
                   <div className="font-Georgia">
                     <form
                       action=""
-                      className=" [&_label]:text-[#F8F9FA] [&_input]:text-[#DBDBDB] [&_input]:bg-[#304778] [&_textarea]:bg-[#304778] [&_input]:border-[#DEE2E6] [&_input]:border-opacity-40 [&_textarea]:border-[#DEE2E6] [&_textarea]:border-opacity-40 font-Georgia text-[15px]"
+                      className="[&_label]:text-[#F8F9FA] [&_input]:text-[#DBDBDB] [&_input]:bg-[#304778] [&_textarea]:bg-[#304778] [&_input]:border-[#DEE2E6] [&_input]:border-opacity-40 [&_textarea]:border-[#DEE2E6] [&_textarea]:border-opacity-40 font-Georgia text-[15px]"
                     >
                       <div className="mb-2 flex flex-col gap-2">
                         <label className="">Full Name*</label>
                         <input
                           type="text"
                           name="name"
-                          className="font-medium w-full  p-2 mb-2 border   focus:outline-none  capitalize"
+                          className="font-medium w-full p-2 mb-2 border focus:outline-none capitalize"
                           placeholder="Full Name"
                           value={form.name}
                           onChange={handleChange}
@@ -157,7 +158,7 @@ function Contactus() {
                         <input
                           type="email"
                           name="email"
-                          className="font-medium w-full p-2 mb-2 border  focus:outline-none "
+                          className="font-medium w-full p-2 mb-2 border focus:outline-none "
                           placeholder="Email Address"
                           value={form.email}
                           onChange={handleChange}
@@ -169,15 +170,15 @@ function Contactus() {
                         <input
                           type="text"
                           name="companyName"
-                          className="w-full p-2 mb-2 border focus:outline-none  font-medium"
+                          className="w-full p-2 mb-2 border focus:outline-none font-medium"
                           required
                           value={form.companyName}
                           onChange={handleChange}
-                          placeholder="Your Organization Name "
+                          placeholder="Your Organization Name"
                         />
                       </div>
                       <div className="mb-2 flex flex-col gap-2">
-                        <label className=" mt-2">Mobile Number*</label>
+                        <label className="mt-2">Mobile Number*</label>
                         <input
                           type="Number"
                           name="mobileNo"
@@ -194,14 +195,14 @@ function Contactus() {
                         <textarea
                           rows="4"
                           name="message"
-                          className="w-full p-2 mb-2 border border-[#D1D5DB] focus:outline-none  font-medium"
+                          className="w-full p-2 mb-2 border border-[#D1D5DB] focus:outline-none font-medium"
                           placeholder="Write your messages..."
                           value={form.message}
                           onChange={handleChange}
                         ></textarea>
                       </div>
                       <button
-                        className="px-10 py-4 font-Georgia rounded-3xl  border-white border  mb-2 text-white"
+                        className="px-10 py-4 font-Georgia rounded-3xl border-white border mb-2 text-white"
                         onClick={handleformsubmit}
                         disabled={isSubmitting}
                       >
@@ -239,7 +240,7 @@ function Contactus() {
             </div>
 
             <div className="font-Georgia lg:flex-1 space-y-4">
-              <h2 className="text-[#1C346B] italic text-[31.1px] font-medium leading-[48px] ">
+              <h2 className="text-[#1C346B] italic text-[31.1px] font-medium leading-[48px]">
                 Interested in working with us!
               </h2>
               <p className="text-[#525B5B] text-[17.6px] leading-8">
@@ -251,15 +252,13 @@ function Contactus() {
                   <h3>Working Mail</h3>
                   <p className="">partners@workved.com</p>
                 </div>
-                <div className="space-y-2.5 ">
+                <div className="space-y-2.5">
                   <h3>Office Phone</h3>
                   <p className="font-TimesNewRoman">+91-9136036603</p>
                 </div>
               </div>
               <div className="space-y-2.5">
-                <h4 className="text-[#304778] text-[19.5px] ">
-                  Office Address
-                </h4>
+                <h4 className="text-[#304778] text-[19.5px]">Office Address</h4>
                 <p className="text-[#525B5B] text-[15px]">
                   Makhija Arcade, 35th Rd, Khar West, Mumbai Maharashtra 400052
                 </p>
@@ -280,13 +279,13 @@ function Contactus() {
           </div>
         </section>
 
-        <section className="sm:hidden py-8 ">
-          <div className="flex flex-col-reverse  bg-white   mx-4">
-            <div className=" flex-1 ">
-              <div className="max-w-2xl bg-[#304778] text-white ">
-                <div className="px-4 pt-10 pb-4 rounded-3xl ">
-                  <div className="[&_p]:font-Georgia  font-semibold py-3">
-                    <h2 className="font-Georgia font-medium  text-4xl  pb-4">
+        <section className="sm:hidden py-8">
+          <div className="flex flex-col-reverse bg-white mx-4">
+            <div className="flex-1">
+              <div className="max-w-2xl bg-[#304778] text-white">
+                <div className="px-4 pt-10 pb-4 rounded-3xl">
+                  <div className="[&_p]:font-Georgia font-semibold py-3">
+                    <h2 className="font-Georgia font-medium text-4xl pb-4">
                       Let’s Connect with us!
                     </h2>
                     <p className="text-base font-Georgia text-[#F8F9FA] text-opacity-80">
@@ -296,17 +295,17 @@ function Contactus() {
                       preferences, and feedback.
                     </p>
                   </div>
-                  <div className="font-Georgia ">
+                  <div className="font-Georgia">
                     <form
                       action=""
-                      className="font-semibold  [&_label]:text-[#F8F9FA] [&_input]:text-[#DBDBDB] [&_input]:bg-[#304778] [&_textarea]:bg-[#304778] [&_input]:border-[#DEE2E6] [&_input]:border-opacity-40 [&_textarea]:border-[#DEE2E6] [&_textarea]:border-opacity-40 "
+                      className="font-semibold [&_label]:text-[#F8F9FA] [&_input]:text-[#DBDBDB] [&_input]:bg-[#304778] [&_textarea]:bg-[#304778] [&_input]:border-[#DEE2E6] [&_input]:border-opacity-40 [&_textarea]:border-[#DEE2E6] [&_textarea]:border-opacity-40"
                     >
                       <div className="mb-2 flex flex-col gap-2">
                         <label className="font-semibold ">Full Name*</label>
                         <input
                           type="text"
                           name="name"
-                          className="font-medium w-full  p-2 mb-2 border   focus:outline-none  capitalize"
+                          className="font-medium w-full p-2 mb-2 border focus:outline-none capitalize"
                           placeholder="Full Name"
                           value={form.name}
                           onChange={handleChange}
@@ -318,7 +317,7 @@ function Contactus() {
                         <input
                           type="email"
                           name="email"
-                          className="font-medium w-full  p-2 mb-2 border  focus:outline-none "
+                          className="font-medium w-full p-2 mb-2 border focus:outline-none "
                           placeholder="Email Address"
                           value={form.email}
                           onChange={handleChange}
@@ -330,11 +329,11 @@ function Contactus() {
                         <input
                           type="text"
                           name="companyName"
-                          className="w-full  p-2 mb-2 border focus:outline-none  font-medium"
+                          className="w-full p-2 mb-2 border focus:outline-none font-medium"
                           required
                           value={form.companyName}
                           onChange={handleChange}
-                          placeholder="your organization name "
+                          placeholder="your organization name"
                         />
                       </div>
                       <div className="mb-2 flex flex-col gap-2">
@@ -344,7 +343,7 @@ function Contactus() {
                         <input
                           type="Number"
                           name="mobileNo"
-                          className="w-full  p-2 mb-2 focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none border font-medium"
+                          className="w-full p-2 mb-2 focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none border font-medium"
                           placeholder="Enter Mobile No"
                           value={form.mobileNo}
                           onChange={handleChange}
@@ -353,18 +352,18 @@ function Contactus() {
                         />
                       </div>
                       <div className="mb-2 flex flex-col gap-2">
-                        <label className=" mt-2">Message*</label>
+                        <label className="mt-2">Message*</label>
                         <textarea
                           rows="4"
                           name="message"
-                          className="w-full  p-2 mb-2 border border-[#D1D5DB] focus:outline-none  font-medium"
+                          className="w-full p-2 mb-2 border border-[#D1D5DB] focus:outline-none font-medium"
                           placeholder="Write your messages..."
                           value={form.message}
                           onChange={handleChange}
                         ></textarea>
                       </div>
                       <button
-                        className="px-10 py-4 font-Georgia rounded-3xl  border-white border  mb-2 text-white"
+                        className="px-10 py-4 font-Georgia rounded-3xl border-white border mb-2 text-white"
                         onClick={handleformsubmit}
                         disabled={isSubmitting}
                       >
@@ -401,8 +400,8 @@ function Contactus() {
               </div>
             </div>
 
-            <div className="font-TimesNewRoman bg-white flex-1 space-y-2 px-4  pb-4 border">
-              <h2 className="text-[#1C346B] text-3xl ">
+            <div className="font-TimesNewRoman bg-white flex-1 space-y-2 px-4 pb-4 border">
+              <h2 className="text-[#1C346B] text-3xl">
                 Interested in working with us!
               </h2>
               <p className="text-[#525B5B] text-lg">
@@ -412,7 +411,7 @@ function Contactus() {
               <div className="flex flex-col gap-3 [&_h3]:text-[#304778] [&_h4]:text-[#304778] [&_h3]:text-[19.5px] [&_p]:text-[#525B5B] [&_p]:text-[15px]">
                 <div>
                   <h3>Working Mail</h3>
-                  <p className="">partners@workved.com</p>
+                  <p>partners@workved.com</p>
                 </div>
                 <div>
                   <h3>Office Phone</h3>
@@ -420,9 +419,7 @@ function Contactus() {
                 </div>
               </div>
               <div>
-                <h4 className="text-[#304778] text-[19.5px] ">
-                  Office Address
-                </h4>
+                <h4 className="text-[#304778] text-[19.5px]">Office Address</h4>
                 <p className="text-[#525B5B] text-[15px]">
                   Makhija Arcade, 35th Rd, Khar West, Mumbai Maharashtra 400052
                 </p>

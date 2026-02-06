@@ -1,6 +1,5 @@
 import Spinner from "../../common-components/Spinner";
 import MultipleDeleteWarningCard from "../components/MultipleDeleteWarningCard";
-
 import DashboardProductCard from "../vendor/DashboardProductCard";
 import SelectSubcategories from "./SelectSubcategories";
 import { baseImageUrl } from "../../utils/HelperConstant";
@@ -506,7 +505,7 @@ function Table({
                               onClick={() => {
                                 handleProductPreview(item);
                               }}
-                              className=" flex gap-2 items-center w-full text-left px-3 py-2 hover:bg-gray-200"
+                              className="flex gap-2 items-center w-full text-left px-3 py-2 hover:bg-gray-200"
                             >
                               <VscEye /> View
                             </button>
@@ -516,7 +515,7 @@ function Table({
                                   setSelectedproduct(item);
                                   setEditProduct(true);
                                 }}
-                                className=" flex gap-2 items-center w-full text-left px-3 py-2 hover:bg-gray-200"
+                                className="flex gap-2 items-center w-full text-left px-3 py-2 hover:bg-gray-200"
                               >
                                 <VscEye /> Edit
                               </button>
@@ -526,7 +525,7 @@ function Table({
                                   setSelectedAddon(item);
                                   setEditAddon(true);
                                 }}
-                                className=" flex gap-2 items-center w-full text-left px-3 py-2 hover:bg-gray-200"
+                                className="flex gap-2 items-center w-full text-left px-3 py-2 hover:bg-gray-200"
                               >
                                 <VscEye /> Edit
                               </button>
@@ -674,7 +673,7 @@ function RejectReasonPopup({
           value={rejectReason}
           onChange={(e) => setRejectReason(e.target.value)}
         />
-        <div className="mt-7 flex  gap-20 justify-between">
+        <div className="mt-7 flex gap-20 justify-between">
           <button
             className="border-[1px] border-[#BBBBBB] px-4 py-2 rounded-md mr-2"
             onClick={() => setRejectReasonPopup(false)}

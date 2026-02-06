@@ -30,9 +30,9 @@ function DashboardProductCard({
     : [];
 
   return (
-    <div className="flex  justify-center items-center h-screen fixed inset-0 z-30 top-0 w-screen">
+    <div className="flex justify-center items-center h-screen fixed inset-0 z-30 top-0 w-screen">
       <div className="absolute inset-0 bg-black opacity-50"></div>
-      <div className=" font-Poppins max-w-xs sm:max-w-sm md:max-w-2xl  lg:max-w-3xl mx-auto p-4 md:p-10 rounded-lg md:rounded-xl border-2 relative bg-white max-h-[85vh] overflow-y-auto gradient-scrollbar">
+      <div className=" font-Poppins max-w-xs sm:max-w-sm md:max-w-2xl lg:max-w-3xl mx-auto p-4 md:p-10 rounded-lg md:rounded-xl border-2 relative bg-white max-h-[85vh] overflow-y-auto gradient-scrollbar">
         {!deleteWarning ? (
           <div>
             <div className="flex flex-col md:flex-row gap-4">
@@ -48,7 +48,7 @@ function DashboardProductCard({
                         <img
                           src={`${baseImageUrl}${image}`}
                           alt="product"
-                          className="h-12 w-12 "
+                          className="h-12 w-12"
                         />
                       </div>
                     ))
@@ -245,7 +245,7 @@ function DashboardProductCard({
               </div>
             )}
 
-            <div className="flex text-[#000] justify-between  w-full p-4">
+            <div className="flex text-[#000] justify-between w-full p-4">
               {accountHolder.role !== "user" && (
                 <button
                   onClick={() => {

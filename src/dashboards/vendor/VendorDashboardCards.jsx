@@ -20,6 +20,37 @@ function formatDate(isoString) {
   });
 }
 
+const cardsDetails = [
+  {
+    id: 1,
+    item: products,
+    title: "products",
+    imgpath: "/images/vendorproduct.png",
+    className: "bg-[#B4DFFF]",
+  },
+  {
+    id: 2,
+    item: addons,
+    title: "addons",
+    imgpath: "/images/vendoraddon.png",
+    className: "bg-[#D8FFD8]",
+  },
+  {
+    id: 3,
+    item: pendingproducts,
+    title: "pending products",
+    imgpath: "/images/vendorProductPending.png",
+    className: "bg-[#D8F7FF]",
+  },
+  {
+    id: 4,
+    item: pendingAddons,
+    title: "pending Addons",
+    imgpath: "/images/vendorAddonPending.png",
+    className: "bg-[#D8DFFF]",
+  },
+];
+
 function VendorDashboardCards({ handleproduct }) {
   const [isloading, setIsloading] = useState(false);
   const [products, setProducts] = useState([]);
@@ -72,37 +103,6 @@ function VendorDashboardCards({ handleproduct }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const cardsDetails = [
-    {
-      id: 1,
-      item: products,
-      title: "products",
-      imgpath: "/images/vendorproduct.png",
-      className: "bg-[#B4DFFF]",
-    },
-    {
-      id: 2,
-      item: addons,
-      title: "addons",
-      imgpath: "/images/vendoraddon.png",
-      className: "bg-[#D8FFD8]",
-    },
-    {
-      id: 3,
-      item: pendingproducts,
-      title: "pending products",
-      imgpath: "/images/vendorProductPending.png",
-      className: "bg-[#D8F7FF]",
-    },
-    {
-      id: 4,
-      item: pendingAddons,
-      title: "pending Addons",
-      imgpath: "/images/vendorAddonPending.png",
-      className: "bg-[#D8DFFF]",
-    },
-  ];
-
   function handlerejectedProduct(item) {
     setRejectedProduct(item);
     setRejectedProductView((prev) => !prev);
@@ -114,7 +114,7 @@ function VendorDashboardCards({ handleproduct }) {
   return (
     <div className="text-[#194F48]">
       <div className="flex flex-col gap-4 overflow-auto h-[calc(100vh-170px)] scrollbar-hide sm:h-auto mb-6">
-        <div className="grid grid-cols-2 md:flex   gap-4 font-Poppins">
+        <div className="grid grid-cols-2 md:flex gap-4 font-Poppins">
           {cardsDetails.map((card) => (
             <Card
               handleproduct={handleproduct}
@@ -156,11 +156,11 @@ function ProductTable({ products, addons, handlerejectedProduct }) {
 
   const paginatedProducts = items.slice(
     (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
+    currentPage * itemsPerPage,
   );
 
   return (
-    <div className=" max-w-xs sm:max-w-none  bg-white p-4 rounded-lg shadow border  md:h-[calc(100vh-350px)] flex flex-col">
+    <div className="max-w-xs sm:max-w-none bg-white p-4 rounded-lg shadow border md:h-[calc(100vh-350px)] flex flex-col">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-lg font-semibold">Product Review</h2>
       </div>
@@ -181,7 +181,7 @@ function ProductTable({ products, addons, handlerejectedProduct }) {
                   <div className="w-8 h-8 rounded">
                     <img
                       src={`${baseImageUrl}/${product?.image}`}
-                      alt="product "
+                      alt="product"
                       className="w-full h-full"
                     />
                   </div>
@@ -243,7 +243,7 @@ function ProductTable({ products, addons, handlerejectedProduct }) {
               <span key={page} className="px-2">
                 ...
               </span>
-            ) : null
+            ) : null,
           )}
           <button
             disabled={currentPage === totalPages}
@@ -262,7 +262,7 @@ function Card({ handleproduct, item, imgpath, className, title }) {
   return (
     <div
       onClick={() => handleproduct()}
-      className={`rounded-lg p-7 flex flex-col justify-between lg:h-48 lg:w-40 xl:h-48 xl:w-52 relative hover:scale-110 transition-transform duration-300 ease-in-out cursor-pointer  ${className}`}
+      className={`rounded-lg p-7 flex flex-col justify-between lg:h-48 lg:w-40 xl:h-48 xl:w-52 relative hover:scale-110 transition-transform duration-300 ease-in-out cursor-pointer ${className}`}
     >
       <h2 className="self-center text-xl tracking-wide font-medium capitalize">
         {title}

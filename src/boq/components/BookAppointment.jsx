@@ -103,6 +103,7 @@ function BookAppointment({ onClose, isdashboardbooking = false }) {
       }
     } catch (error) {
       console.error(error);
+      toast.error("Somethiing went wrong");
     } finally {
       setisSubmitting(false);
     }
@@ -125,6 +126,7 @@ function BookAppointment({ onClose, isdashboardbooking = false }) {
       setTodayBookedTimmings(data);
     } catch (error) {
       console.error("error", error);
+      toast.error("Somethiing went wrong");
     }
   }
 

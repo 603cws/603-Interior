@@ -26,10 +26,8 @@ function VendorNewProduct({
   const [file, setFile] = useState(null);
   const [preview, setPreview] = useState(null);
   const [subcat, setSubcat] = useState([]);
-
   const [selectedSubcategories, setSelectedSubcategories] = useState();
   const [subSubCategory, setSubSubCategory] = useState("");
-
   const [category, setCategory] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -39,7 +37,6 @@ function VendorNewProduct({
     width: "",
   });
   const [displayOption, setDisplayOption] = useState("");
-
   const fileInputRef = useRef(null);
 
   const mulitpleimagesFileinputref = useRef(null);
@@ -405,10 +402,10 @@ function VendorNewProduct({
           }}
           className="py-2"
         />
-        <h3 className="capitalize font-semibold text-xl ">add new products</h3>
+        <h3 className="capitalize font-semibold text-xl">add new products</h3>
       </div>
       <form
-        className="lg:flex gap-5 px-3 py-2  lg:py-3 lg:px-5 w-full"
+        className="lg:flex gap-5 px-3 py-2 lg:py-3 lg:px-5 w-full"
         onSubmit={onSubmit}
         onKeyDown={(e) => {
           if (e.key === "Enter") {
@@ -535,7 +532,7 @@ function VendorNewProduct({
                     name="price"
                     onChange={handleChange}
                     value={variant.price}
-                    className="w-full py-1.5 px-2 border-2 rounded-lg [&::-webkit-inner-spin-button]:appearance-none  focus:outline-none focus:ring-0"
+                    className="w-full py-1.5 px-2 border-2 rounded-lg [&::-webkit-inner-spin-button]:appearance-none focus:outline-none focus:ring-0"
                     required
                   />
                 </div>
@@ -552,7 +549,7 @@ function VendorNewProduct({
                       name="height"
                       value={dimensions.height}
                       onChange={handleDimensionChange}
-                      className="w-20 xl:w-32 py-1.5 px-2 border-2 rounded-lg [&::-webkit-inner-spin-button]:appearance-none  focus:outline-none focus:ring-0"
+                      className="w-20 xl:w-32 py-1.5 px-2 border-2 rounded-lg [&::-webkit-inner-spin-button]:appearance-none focus:outline-none focus:ring-0"
                       required
                     />
                     <span className="absolute right-2 top-2">H</span>
@@ -563,7 +560,7 @@ function VendorNewProduct({
                       name="length"
                       value={dimensions.length}
                       onChange={handleDimensionChange}
-                      className="w-20 xl:w-32 py-1.5 px-2 border-2 rounded-lg [&::-webkit-inner-spin-button]:appearance-none  focus:outline-none focus:ring-0"
+                      className="w-20 xl:w-32 py-1.5 px-2 border-2 rounded-lg [&::-webkit-inner-spin-button]:appearance-none focus:outline-none focus:ring-0"
                       required
                     />
                     <span className="absolute top-2 right-2">L</span>
@@ -574,7 +571,7 @@ function VendorNewProduct({
                       name="width"
                       value={dimensions.width}
                       onChange={handleDimensionChange}
-                      className="w-20 xl:w-32 py-1.5 px-2 border-2 rounded-lg [&::-webkit-inner-spin-button]:appearance-none  focus:outline-none focus:ring-0"
+                      className="w-20 xl:w-32 py-1.5 px-2 border-2 rounded-lg [&::-webkit-inner-spin-button]:appearance-none focus:outline-none focus:ring-0"
                       required
                     />
                     <span className="absolute top-2 right-2">W</span>
@@ -606,7 +603,7 @@ function VendorNewProduct({
                   name="mrp"
                   onChange={handleChange}
                   value={variant.mrp}
-                  className="w-full py-1.5 px-2 border-2 rounded-lg [&::-webkit-inner-spin-button]:appearance-none  focus:outline-none focus:ring-0"
+                  className="w-full py-1.5 px-2 border-2 rounded-lg [&::-webkit-inner-spin-button]:appearance-none focus:outline-none focus:ring-0"
                   required
                 />
               </div>
@@ -617,7 +614,7 @@ function VendorNewProduct({
                   name="sellingPrice"
                   onChange={handleChange}
                   value={variant.sellingPrice}
-                  className="w-full py-1.5 px-2 border-2 rounded-lg [&::-webkit-inner-spin-button]:appearance-none  focus:outline-none focus:ring-0"
+                  className="w-full py-1.5 px-2 border-2 rounded-lg [&::-webkit-inner-spin-button]:appearance-none focus:outline-none focus:ring-0"
                   required
                 />
               </div>
@@ -628,7 +625,7 @@ function VendorNewProduct({
                   name="quantity"
                   onChange={handleChange}
                   value={variant.quantity}
-                  className="w-full py-1.5 px-2 border-2 rounded-lg [&::-webkit-inner-spin-button]:appearance-none  focus:outline-none focus:ring-0"
+                  className="w-full py-1.5 px-2 border-2 rounded-lg [&::-webkit-inner-spin-button]:appearance-none focus:outline-none focus:ring-0"
                   required
                 />
               </div>
@@ -680,7 +677,7 @@ function VendorNewProduct({
                   <div className="flex items-start gap-4">
                     {!preview && (
                       <div
-                        className="w-28 h-28 p-2 flex flex-col items-center justify-center border border-dashed rounded-lg text-center text-gray-500 cursor-pointer  hover:border-gray-400"
+                        className="w-28 h-28 p-2 flex flex-col items-center justify-center border border-dashed rounded-lg text-center text-gray-500 cursor-pointer hover:border-gray-400"
                         onClick={() => fileInputRef.current.click()}
                         onDragOver={(e) => e.preventDefault()}
                         onDrop={handleDrop}

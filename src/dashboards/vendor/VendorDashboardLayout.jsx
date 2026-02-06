@@ -60,7 +60,7 @@ function VendorDashboardLayout() {
 
   const [sidebarstate, sidebarDispatch] = useReducer(
     handlesidebarState,
-    sidebarInitialState
+    sidebarInitialState,
   );
   const { accountHolder } = useApp();
   const [isOpen, setIsOpen] = useState(false);
@@ -268,7 +268,7 @@ function VendorDashboardLayout() {
           </div>
         </div>
         {/* header for dashboard */}
-        <div className="flex justify-between items-center border-b border-[#CCCCCC] lg:border-2 lg:border-[#334A78] lg:rounded-lg bg-white  lg:h-[50px] shrink-0 ">
+        <div className="flex justify-between items-center border-b border-[#CCCCCC] lg:border-2 lg:border-[#334A78] lg:rounded-lg bg-white lg:h-[50px] shrink-0">
           <div className="mx-3">
             <h3 className="font-semibold text-2xl text-[#374A75] capitalize">
               {sidebarstate?.currentSection}
@@ -295,8 +295,8 @@ function VendorDashboardLayout() {
             {/* header inside setting */}
             {/* Scrollable content section */}
             {iseditopen ? (
-              <div className="flex-1 flex flex-col justify-center items-center h-[90%] font-Poppins ">
-                <div className="flex justify-center items-center lg:w-full  h-full">
+              <div className="flex-1 flex flex-col justify-center items-center h-[90%] font-Poppins">
+                <div className="flex justify-center items-center lg:w-full h-full">
                   <UserCard setIsEditopen={setIsEditopen} />
                 </div>
               </div>
@@ -321,7 +321,7 @@ function VendorDashboardLayout() {
 
         {sidebarstate?.isProductOpen && (
           <div className="flex flex-col h-full min-h-0 overflow-hidden lg:border-2 border-[#334A78] rounded-lg bg-white">
-            <div className="">
+            <div>
               <VendorItem isExpanded={isExpanded} />
             </div>
           </div>
@@ -349,7 +349,7 @@ function MobileMenuItem({ icon, title, currentSection, onClick, setIsOpen }) {
       }}
       className={`flex items-center space-x-3 px-2 font-semibold ${
         currentSection === title
-          ? "bg-gradient-to-r from-[#4C85F5] to-[#6AC7FF]  py-2 rounded-md text-white"
+          ? "bg-gradient-to-r from-[#4C85F5] to-[#6AC7FF] py-2 rounded-md text-white"
           : "text-[#1A3365]"
       }`}
     >
@@ -362,7 +362,7 @@ function MobileMenuItem({ icon, title, currentSection, onClick, setIsOpen }) {
 function SidebarItem({ icon, text, onClick, isExpanded, currentSection }) {
   return (
     <div
-      className={`flex items-center  gap-3 hover:bg-[#E9E9E9] p-2 rounded cursor-pointer ${
+      className={`flex items-center gap-3 hover:bg-[#E9E9E9] p-2 rounded cursor-pointer ${
         isExpanded ? "" : "justify-center"
       } ${
         currentSection?.toLowerCase() === text?.toLowerCase()

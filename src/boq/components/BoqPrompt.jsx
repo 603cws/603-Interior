@@ -1,6 +1,6 @@
 import { Dialog, Transition } from "@headlessui/react";
 import { Fragment, useEffect, useState } from "react";
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 import { supabase } from "../../services/supabase";
 import { boqLimit } from "../../constants/constant";
 import { useBoqApp } from "../../Context/BoqContext";
@@ -37,11 +37,12 @@ function BoqPrompt({ onConfirm, onCancel, isProfileCard, setIsProfileCard }) {
 
       if (fetchError) {
         console.error("Error fetching user BOQs:", fetchError);
+        toast.error("Error fetching user BOQs");
         return;
       }
 
       const current = allBOQs.find(
-        (b) => b.id === BOQID && b.boqTitle === BOQTitle
+        (b) => b.id === BOQID && b.boqTitle === BOQTitle,
       );
       if (current) {
         setIsDraftBoq(current.isDraft);

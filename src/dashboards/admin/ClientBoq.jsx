@@ -233,16 +233,16 @@ function ClientBoq({ setClientBoqs }) {
         {isloading ? (
           <Spinner />
         ) : savedBoqs.length > 0 ? (
-          <div className="overflow-y-auto scrollbar-hide h-[calc(100vh-95px)] relative ">
+          <div className="overflow-y-auto scrollbar-hide h-[calc(100vh-95px)] relative">
             <div className="sticky top-0 z-20 bg-white">
               <BackButton
                 label="Back to client list"
                 onClick={() => setClientBoqs(false)}
                 className="mt-3 ml-3"
               />
-              <div className="flex flex-col md:flex-row md:items-center px-2 gap-3 lg:gap-5 lg:px-4 py-2 border-b-2 border-b-gray-400 ">
+              <div className="flex flex-col md:flex-row md:items-center px-2 gap-3 lg:gap-5 lg:px-4 py-2 border-b-2 border-b-gray-400">
                 <div className="flex justify-between ">
-                  <h3 className="text-sm md:text-base font-semibold lg:text-xl text-[#374A75] ">
+                  <h3 className="text-sm md:text-base font-semibold lg:text-xl text-[#374A75]">
                     Created BOQs
                   </h3>
                   <div className="relative md:hidden flex items-center gap-5">
@@ -307,14 +307,14 @@ function ClientBoq({ setClientBoqs }) {
                     })}
                 </div>
               </div>
-              <div className="flex  items-center justify-between gap-3 px-2 lg:px-4 py-2 border-b-2 border-b-gray-400 bg-white z-20 relative">
+              <div className="flex items-center justify-between gap-3 px-2 lg:px-4 py-2 border-b-2 border-b-gray-400 bg-white z-20 relative">
                 <div className="flex gap-2">
                   {tabs.map((tab) => (
                     <button
                       key={tab.value}
-                      className={`flex items-center gap-2 px-3 lg:px-6 py-2 border rounded-lg  text-[#374A75] text-sm lg:text-lg ${
+                      className={`flex items-center gap-2 px-3 lg:px-6 py-2 border rounded-lg text-[#374A75] text-sm lg:text-lg ${
                         selectedTab === tab.value
-                          ? "bg-[#D3E3F0]  border-[#374A75]"
+                          ? "bg-[#D3E3F0] border-[#374A75]"
                           : "bg-white border-[#374A75]"
                       }`}
                       value={tab.value}
@@ -410,7 +410,7 @@ function ClientBoq({ setClientBoqs }) {
                   <section className="hidden lg:block h-[90%] font-Poppins overflow-hidden">
                     <div
                       ref={scrollContainerRef}
-                      className=" w-full h-full border-t border-b border-[#CCCCCC] overflow-y-auto custom-scrollbar"
+                      className="w-full h-full border-t border-b border-[#CCCCCC] overflow-y-auto custom-scrollbar"
                     >
                       <table
                         className="min-w-full border-collapse"
@@ -423,7 +423,7 @@ function ClientBoq({ setClientBoqs }) {
                             ) : (
                               <th className="p-3 font-medium">Addon ID</th>
                             )}
-                            <th className="p-3  font-medium">Price</th>
+                            <th className="p-3 font-medium">Price</th>
                             {toggle ? (
                               <>
                                 <th className="p-3 font-medium">Category</th>
@@ -437,14 +437,14 @@ function ClientBoq({ setClientBoqs }) {
                             <th className="p-3 font-medium">Action</th>
                           </tr>
                         </thead>
-                        <tbody className=" text-sm">
+                        <tbody className="text-sm">
                           {selectedBoq &&
                             paginatedItems.map((item) => (
                               <tr
                                 key={item.id}
                                 className="hover:bg-gray-50 cursor-pointer"
                               >
-                                <td className="border border-gray-200 p-3 align-middle ">
+                                <td className="border border-gray-200 p-3 align-middle">
                                   <div className="flex items-center gap-2">
                                     <img
                                       src={`${baseImageUrl}${item.image}`}
@@ -499,7 +499,7 @@ function ClientBoq({ setClientBoqs }) {
                                         onClick={() => {
                                           handleProductPreview(item);
                                         }}
-                                        className=" flex gap-2 items-center w-full text-left px-3 py-2 hover:bg-gray-200"
+                                        className="flex gap-2 items-center w-full text-left px-3 py-2 hover:bg-gray-200"
                                       >
                                         <VscEye /> view
                                       </button>
@@ -547,7 +547,7 @@ function ClientBoq({ setClientBoqs }) {
             )}
           </div>
         ) : (
-          <div className="">
+          <div>
             <BackButton
               label="Back to client list"
               onClick={() => setClientBoqs(false)}
