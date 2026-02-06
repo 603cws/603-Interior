@@ -7,6 +7,7 @@ import { useSearchParams } from "react-router-dom";
 import { supabase } from "../../services/supabase";
 import SpinnerFullPage from "../../common-components/SpinnerFullPage";
 import { TopDealCard } from "../components/Card";
+import { handleError } from "../../common-components/handleError";
 
 function TopDeal() {
   const [products, setProducts] = useState([]);
@@ -32,7 +33,7 @@ function TopDeal() {
       // Filter products where it is approved
       const filtered = data.filter(
         (item) =>
-          item.status === "approved" && item.product_id.category === category
+          item.status === "approved" && item.product_id.category === category,
       );
 
       // 1. Extract unique image names
@@ -44,7 +45,9 @@ function TopDeal() {
         .createSignedUrls(uniqueImages, 3600); // 1 hour expiry
 
       if (signedUrlError) {
-        console.error("Error generating signed URLs:", signedUrlError);
+        handleError(signedUrlError, {
+          prodMessage: "Error generating signed URLs. Please try again.",
+        });
         return;
       }
 
@@ -62,7 +65,9 @@ function TopDeal() {
 
       setProducts(product);
     } catch (error) {
-      console.error("Error fetching filtered data:", error);
+      handleError(error, {
+        prodMessage: "Error fetching filtered data. Please try again.",
+      });
     } finally {
       setProductsloading(false);
     }

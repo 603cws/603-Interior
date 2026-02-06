@@ -17,6 +17,7 @@ import {
 import MultiImageCrop from "../components/MultiImageCrop";
 import ButtonSpinner from "../../utils/ButtonSpinner";
 import BackButton from "../../common-components/BackButton";
+import { handleError } from "../../common-components/handleError";
 
 function VendorNewProduct({
   setAddNewProduct,
@@ -209,8 +210,9 @@ function VendorNewProduct({
           .single();
 
         if (insertError) {
-          console.error(insertError);
-          toast.error("Error inserting new product.");
+          handleError(insertError, {
+            prodMessage: "Error inserting new product. Please try again.",
+          });
           return;
         }
 
@@ -263,16 +265,18 @@ function VendorNewProduct({
           .select();
 
         if (variantError) {
-          console.error(variantError);
-          toast.error(`Error inserting variant: ${variant.title}`);
+          handleError(variantError, {
+            prodMessage: "Error inserting variant. Please try again.",
+          });
         } else {
           toast.success("Data inserted successfully!");
           handleFormClear();
         }
       }
     } catch (error) {
-      console.error("Error in onSubmit:", error);
-      toast.error("An unexpected error occurred.");
+      handleError(error, {
+        prodMessage: "An unexpected error occurred. Please try again.",
+      });
     } finally {
       setIsSubmitting(false);
     }

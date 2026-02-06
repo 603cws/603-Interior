@@ -12,6 +12,7 @@ import { useNavigate } from "react-router-dom";
 import { AiFillStar } from "react-icons/ai";
 import { baseImageUrl } from "../../utils/HelperConstant";
 import BackButton from "../../common-components/BackButton";
+import { handleError } from "../../common-components/handleError";
 
 function AllReviews() {
   const [productReviews, setProductReviews] = useState([]);
@@ -52,7 +53,9 @@ function AllReviews() {
         )
         .eq("productId", productId);
       if (error) {
-        console.error(error);
+        handleError(error, {
+          prodMessage: "Something went wrong. Please try again.",
+        });
       }
       setProductReviews(data);
       const variant = data[0]?.product_variants;
@@ -63,7 +66,9 @@ function AllReviews() {
         type: variant?.product_type,
       });
     } catch (error) {
-      console.error(error);
+      handleError(error, {
+        prodMessage: "Something went wrong. Please try again.",
+      });
     }
   };
 
@@ -108,7 +113,10 @@ function AllReviews() {
         .single();
 
       if (fetchError) {
-        console.error("Error fetching review:", fetchError);
+        handleError(fetchError, {
+          prodMessage:
+            "Error fetching reviewSomething went wrong. Please try again.",
+        });
         return;
       }
 
@@ -138,7 +146,9 @@ function AllReviews() {
         .eq("id", reviewId);
 
       if (updateError) {
-        console.error("Error updating likes:", updateError);
+        handleError(updateError, {
+          prodMessage: "Error updating likes. Please try again.",
+        });
         return;
       }
 
@@ -150,7 +160,9 @@ function AllReviews() {
         ),
       );
     } catch (error) {
-      console.error("Unexpected error:", error);
+      handleError(error, {
+        prodMessage: "Something went wrong. Please try again.",
+      });
     }
   };
 
@@ -163,7 +175,9 @@ function AllReviews() {
         .single();
 
       if (fetchError) {
-        console.error("Error fetching review:", fetchError);
+        handleError(fetchError, {
+          prodMessage: "Error fetching review. Please try again.",
+        });
         return;
       }
 
@@ -194,7 +208,9 @@ function AllReviews() {
         .eq("id", reviewId);
 
       if (updateError) {
-        console.error("Error updating likes:", updateError);
+        handleError(updateError, {
+          prodMessage: "Error updating likes. Please try again.",
+        });
         return;
       }
 
@@ -206,7 +222,9 @@ function AllReviews() {
         ),
       );
     } catch (error) {
-      console.error("Unexpected error:", error);
+      handleError(error, {
+        prodMessage: "Something went wrong. Please try again.",
+      });
     }
   };
 

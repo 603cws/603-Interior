@@ -4,6 +4,7 @@ import Calendar from "react-calendar";
 import { useEffect, useState } from "react";
 import { BsThreeDots } from "react-icons/bs";
 import { supabase } from "../../services/supabase";
+import { handleError } from "../../common-components/handleError";
 
 const timeSlots = [
   "09:00 am",
@@ -109,7 +110,9 @@ function Schedule() {
         throw error;
       }
     } catch (error) {
-      console.error(error);
+      handleError(error, {
+        prodMessage: "Something went wrong. Please try again.",
+      });
     }
   };
 

@@ -6,6 +6,7 @@ import toast from "react-hot-toast";
 import { useApp } from "../Context/Context";
 import { useHandleAddToCart } from "../utils/HelperFunction";
 import { useBoqApp } from "../Context/BoqContext";
+import { handleError } from "./handleError";
 
 export default function LoginPopup({ onClose, product }) {
   const [isSignUp, setIsSignUp] = useState(false);
@@ -59,8 +60,9 @@ export default function LoginPopup({ onClose, product }) {
     });
 
     if (error) {
-      toast.error("Google login failed");
-      console.error("Google Login Error:", error.message);
+      handleError(error, {
+        prodMessage: "Google Login Error.",
+      });
     }
   };
 
@@ -74,8 +76,9 @@ export default function LoginPopup({ onClose, product }) {
     });
 
     if (error) {
-      console.error("Profile update failed:", error.message);
-      toast.error("Failed to save profile.");
+      handleError(error, {
+        prodMessage: "Failed to save profile.",
+      });
     }
   };
 

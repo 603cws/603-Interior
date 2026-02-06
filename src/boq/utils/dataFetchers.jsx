@@ -1,3 +1,4 @@
+import { handleError } from "../../common-components/handleError";
 import { supabase } from "../../services/supabase";
 
 export const fetchCategories = async () => {
@@ -19,7 +20,9 @@ export const fetchCategories = async () => {
 
     return formattedData;
   } catch (err) {
-    console.error("Error fetching categories:", err);
+    handleError(err, {
+      prodMessage: "Unexpected error occured. Please try again!",
+    });
     return [];
   }
 };
@@ -33,7 +36,7 @@ export const fetchProductsData = async () => {
                 *,
                 addons(*, addon_variants(*)),
                 product_variants(*, profiles(company_name))
-            `
+            `,
       )
       .order("created_at", { ascending: true });
     if (error) throw error;
@@ -41,14 +44,14 @@ export const fetchProductsData = async () => {
     const approvedProducts = data
       .map((product) => {
         const approvedVariants = product.product_variants.filter(
-          (variant) => variant.status === "approved"
+          (variant) => variant.status === "approved",
         );
 
         // ✅ Filter addons & their variants
         const approvedAddons = product.addons
           .map((addon) => {
             const approvedAddonVariants = addon.addon_variants.filter(
-              (variant) => variant.status === "approved"
+              (variant) => variant.status === "approved",
             );
 
             if (approvedAddonVariants.length === 0) return null;
@@ -90,7 +93,7 @@ export const fetchProductsData = async () => {
     if (signedUrlError) throw signedUrlError;
 
     const urlMap = Object.fromEntries(
-      signedUrls.map((item) => [item.path, item.signedUrl])
+      signedUrls.map((item) => [item.path, item.signedUrl]),
     );
 
     const processedData = approvedProducts.map((product) => ({
@@ -115,7 +118,9 @@ export const fetchProductsData = async () => {
 
     return processedData;
   } catch (error) {
-    console.error("Error fetching products data:", error);
+    handleError(error, {
+      prodMessage: "Error fetching products data",
+    });
     return [];
   }
 };
@@ -127,7 +132,7 @@ export const fetchRoomData = async (userId, currentLayoutID) => {
       .select()
       .eq(
         currentLayoutID ? "id" : "userId",
-        currentLayoutID ? currentLayoutID : userId
+        currentLayoutID ? currentLayoutID : userId,
       )
       .order("created_at", { ascending: false })
       .limit(1);
@@ -138,7 +143,9 @@ export const fetchRoomData = async (userId, currentLayoutID) => {
       layoutData: layoutData || [],
     };
   } catch (error) {
-    console.error("Error fetching room data:", error);
+    handleError(error, {
+      prodMessage: "Error fetching room data",
+    });
     return { layoutData: [] };
   }
 };
@@ -157,7 +164,9 @@ export const fetchCategoriesandSubCat1 = async () => {
     }, {});
     return transformedData;
   } catch (err) {
-    console.error("Unexpected error:", err);
+    handleError(err, {
+      prodMessage: "Unexpected error occured.",
+    });
     return [];
   }
 };

@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 import { FBXLoader } from "three/examples/jsm/loaders/FBXLoader";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
+import { handleError } from "./handleError";
 
 const ThreeDViewer = ({ onClose }) => {
   const mountRef = useRef(null);
@@ -20,7 +21,7 @@ const ThreeDViewer = ({ onClose }) => {
       60,
       mountNode.clientWidth / mountNode.clientHeight,
       0.1,
-      5000
+      5000,
     );
     camera.position.set(0, 0, 50);
 
@@ -67,9 +68,11 @@ const ThreeDViewer = ({ onClose }) => {
         setProgress(percentLoaded);
       },
       (error) => {
-        console.error("Error loading FBX:", error);
+        handleError(error, {
+          prodMessage: "Error loading FBX. Please try again.",
+        });
         setLoading(false);
-      }
+      },
     );
 
     const controls = new OrbitControls(camera, renderer.domElement);

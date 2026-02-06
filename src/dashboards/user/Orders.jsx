@@ -14,6 +14,7 @@ import { useNavigate } from "react-router-dom";
 import { LuChevronDown } from "react-icons/lu";
 import { v4 as uuidv4 } from "uuid";
 import toast from "react-hot-toast";
+import { handleError } from "../../common-components/handleError";
 
 const statusIcon = {
   pending: <MdOutlinePendingActions />,
@@ -54,7 +55,9 @@ function Orders() {
 
       setOrders(ordersData);
     } catch (error) {
-      console.error("Error fetching orders with products:", error);
+      handleError(error, {
+        prodMessage: "Error fetching orders. Please try again.",
+      });
     } finally {
       setLoading(false);
     }
@@ -116,7 +119,9 @@ function Orders() {
         toast?.success("refund initated");
       }
     } catch (error) {
-      console.error("error", error);
+      handleError(error, {
+        prodMessage: "Something went wrong. Please try again.",
+      });
     } finally {
       setEntireOrderCancellation((prev) => !prev);
       setRefreshOrder((prev) => !prev);
@@ -313,7 +318,9 @@ function OrderProducts({ orderID, setOrderToCancel }) {
 
       setOrder(ordersData);
     } catch (error) {
-      console.error("Error fetching orders with products:", error);
+      handleError(error, {
+        prodMessage: "Something went wrong. Please try again.",
+      });
     } finally {
       setLoading(false);
     }
@@ -395,7 +402,9 @@ function OrderProducts({ orderID, setOrderToCancel }) {
         setorderRefresh((prev) => !prev);
       }
     } catch (error) {
-      console.error("error", error);
+      handleError(error, {
+        prodMessage: "Something went wrong. Please try again.",
+      });
     }
   }
 

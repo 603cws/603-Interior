@@ -10,6 +10,7 @@ import {
 } from "../../utils/AllCatArray";
 import ButtonSpinner from "../../utils/ButtonSpinner";
 import BackButton from "../../common-components/BackButton";
+import { handleError } from "../../common-components/handleError";
 
 function VendorNewAddon({
   setAddNewProduct,
@@ -136,8 +137,9 @@ function VendorNewAddon({
           .single();
 
         if (insertError) {
-          console.error(insertError);
-          toast.error("Error inserting new product.");
+          handleError(insertError, {
+            prodMessage: "Error inserting new product. Please try again.",
+          });
           return;
         }
 
@@ -150,8 +152,9 @@ function VendorNewAddon({
         .single();
 
       if (addonCategoryError) {
-        console.error("Error inserting addon category:", addonCategoryError);
-
+        handleError(addonCategoryError, {
+          prodMessage: "Error inserting addon category. Please try again.",
+        });
         return;
       }
 
@@ -166,10 +169,10 @@ function VendorNewAddon({
             .upload(`${title}-${addonId}`, image);
 
         if (addonVariantImageError) {
-          console.error(
-            "Error uploading addon variant image:",
-            addonVariantImageError,
-          );
+          handleError(addonVariantImageError, {
+            prodMessage:
+              "Error uploading addon variant image. Please try again.",
+          });
         }
 
         const { error: addonVariantError } = await supabase
@@ -192,14 +195,18 @@ function VendorNewAddon({
           });
 
         if (addonVariantError) {
-          console.error("Error inserting addon variant:", addonVariantError);
+          handleError(addonVariantError, {
+            prodMessage: "Error inserting addon variant. Please try again.",
+          });
           return;
         } else {
           toast.success(`Addon variant ${title} added successfully.`);
         }
       }
     } catch (error) {
-      console.error("Error in onSubmit:", error);
+      handleError(error, {
+        prodMessage: "Something went wrong. Please try again.",
+      });
     } finally {
       handleFormClear();
       setIsSubmitting(false);

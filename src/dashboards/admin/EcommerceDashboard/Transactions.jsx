@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { supabase } from "../../../services/supabase";
+import { handleError } from "../../../common-components/handleError";
 
 function Transactions({ sidebarDispatch, onOrderSelect }) {
   const [ordersData, setOrdersData] = useState(null);
@@ -15,7 +16,9 @@ function Transactions({ sidebarDispatch, onOrderSelect }) {
         .limit(7);
 
       if (error) {
-        console.error(error);
+        handleError(error, {
+          prodMessage: "Something went wrong. Please try again.",
+        });
         setLoadingOrders(false);
         return;
       }
@@ -33,7 +36,9 @@ function Transactions({ sidebarDispatch, onOrderSelect }) {
                   .eq("id", productId);
 
                 if (variantsError) {
-                  console.error(variantsError);
+                  handleError(variantsError, {
+                    prodMessage: "Something went wrong. Please try again.",
+                  });
                   productVariantMap[productId] = [];
                 } else {
                   productVariantMap[productId] = variants;

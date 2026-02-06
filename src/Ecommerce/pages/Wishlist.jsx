@@ -10,6 +10,7 @@ import SpinnerFullPage from "../../common-components/SpinnerFullPage";
 import { showRemoveFromCartToast } from "../../utils/AddToCartToast";
 import MobileHeader from "../../common-components/MobileHeader";
 import LoginPopup from "../../common-components/LoginPopup";
+import { handleError } from "../../common-components/handleError";
 
 function Wishlist() {
   const [wishlistItems, setWishlistItems] = useState([]);
@@ -54,7 +55,9 @@ function Wishlist() {
         .createSignedUrls(uniqueImages, 3600); // 1 hour expiry
 
       if (signedUrlError) {
-        console.error("Error generating signed URLs:", signedUrlError);
+        handleError(signedUrlError, {
+          prodMessage: "Error generating signed URLs. Please try again.",
+        });
         return;
       }
 
@@ -81,7 +84,9 @@ function Wishlist() {
       ];
       setWishlistItems(uniquecartitems);
     } catch (error) {
-      console.error(error);
+      handleError(error, {
+        prodMessage: "Something went wrong. Please try again.",
+      });
     } finally {
       setIsloading(false);
     }
@@ -107,7 +112,9 @@ function Wishlist() {
         prevItems.filter((item) => item.id !== product.id),
       );
     } catch (err) {
-      console.error(err);
+      handleError(err, {
+        prodMessage: "Something went wrong. Please try again.",
+      });
     }
   };
 
@@ -125,7 +132,9 @@ function Wishlist() {
         ),
       );
     } catch (err) {
-      console.error(err);
+      handleError(err, {
+        prodMessage: "Something went wrong. Please try again.",
+      });
     }
   };
 

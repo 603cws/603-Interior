@@ -1,6 +1,7 @@
 import { supabase } from "../../../services/supabase";
 import { useState, useEffect } from "react";
 import PagInationNav from "../../../common-components/PagInationNav";
+import { handleError } from "../../../common-components/handleError";
 
 function SubscripedEmail() {
   const [SubscripedEmail, setSubscripedEmail] = useState([]);
@@ -12,10 +13,15 @@ function SubscripedEmail() {
   const fetchSubscripedEmails = async () => {
     try {
       const { data, error } = await supabase.from("news_letter").select("*");
-      if (error) console.error("Error fetching SubscripedEmail:", error);
+      if (error)
+        handleError(error, {
+          prodMessage: "Something went wrong. Please try again.",
+        });
       setSubscripedEmail(data);
     } catch (error) {
-      console.error("Unexpected Error:", error);
+      handleError(error, {
+        prodMessage: "Something went wrong. Please try again.",
+      });
     }
   };
 

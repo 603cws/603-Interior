@@ -4,6 +4,7 @@ import { ImBin } from "react-icons/im";
 import toast from "react-hot-toast";
 import PagInationNav from "../../../common-components/PagInationNav";
 import BackButton from "../../../common-components/BackButton";
+import { handleError } from "../../../common-components/handleError";
 
 function ProductReviews({ product, onClose }) {
   const [productReviews, setProductReviews] = useState([]);
@@ -26,10 +27,15 @@ function ProductReviews({ product, onClose }) {
         .from("reviews")
         .select(`*,userId(company_name)`)
         .eq("productId", product.id);
-      if (error) console.error(error);
+      if (error)
+        handleError(error, {
+          prodMessage: "Something went wrong. Please try again.",
+        });
       setProductReviews(data);
     } catch (error) {
-      console.error(error);
+      handleError(error, {
+        prodMessage: "Something went wrong. Please try again.",
+      });
     } finally {
       setLoading(false);
     }
@@ -43,7 +49,9 @@ function ProductReviews({ product, onClose }) {
           .remove(review.images);
 
         if (storageError) {
-          console.error("Error deleting images:", storageError);
+          handleError(storageError, {
+            prodMessage: "Error deleting images. Please try again.",
+          });
         }
       }
 
@@ -51,11 +59,16 @@ function ProductReviews({ product, onClose }) {
         .from("reviews")
         .delete()
         .eq("id", review.id);
-      if (error) console.error(error);
+      if (error)
+        handleError(error, {
+          prodMessage: "Something went wrong. Please try again.",
+        });
       toast.success("Review Deleted Successfully!");
       setDeleteWarning(false);
     } catch (error) {
-      console.error(error);
+      handleError(error, {
+        prodMessage: "Something went wrong. Please try again.",
+      });
     }
   };
 

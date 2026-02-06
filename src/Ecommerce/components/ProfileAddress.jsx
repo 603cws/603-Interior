@@ -3,6 +3,7 @@ import { useApp } from "../../Context/Context";
 import { v4 as uuidv4 } from "uuid";
 import { supabase } from "../../services/supabase";
 import toast from "react-hot-toast";
+import { handleError } from "../../common-components/handleError";
 
 function ProfileAddress() {
   const { accountHolder, fetchUserData } = useApp();
@@ -147,14 +148,18 @@ function ProfileAddress() {
           .eq("id", accountHolder?.userId);
 
         if (error) {
-          console.error(error);
+          handleError(error, {
+            prodMessage: "Something went wrong. Please try again.",
+          });
           return;
         }
 
         //  clear the form on succesful submission
         clearForm();
       } catch (error) {
-        console.error(error);
+        handleError(error, {
+          prodMessage: "Something went wrong. Please try again.",
+        });
       } finally {
         setIsAddressFormOpen(false);
         fetchUserData();
@@ -172,7 +177,7 @@ function ProfileAddress() {
     // 2. Prepare the updated address list
     // let updatedAddressList = [];
     let updatedAddressList = [...(accountHolder?.address || [])].map((addr) =>
-      addr.id === updatedAddress.id ? updatedAddress : addr
+      addr.id === updatedAddress.id ? updatedAddress : addr,
     );
 
     if (updatedAddress.ismarkedDefault) {
@@ -190,13 +195,17 @@ function ProfileAddress() {
           .eq("id", accountHolder?.userId);
 
         if (error) {
-          console.error(error);
+          handleError(error, {
+            prodMessage: "Something went wrong. Please try again.",
+          });
           return;
         }
 
         clearForm();
       } catch (error) {
-        console.error(error);
+        handleError(error, {
+          prodMessage: "Something went wrong. Please try again.",
+        });
       } finally {
         setIsAddressEdit(false);
         fetchUserData();
@@ -211,7 +220,7 @@ function ProfileAddress() {
   };
 
   const sortedAddressList = [...(accountHolder?.address || [])].sort(
-    (a, b) => (b.ismarkedDefault === true) - (a.ismarkedDefault === true)
+    (a, b) => (b.ismarkedDefault === true) - (a.ismarkedDefault === true),
   );
 
   const handleRemoveAddress = async (address) => {
@@ -222,7 +231,7 @@ function ProfileAddress() {
         return;
       }
       const updatedAddresslist = accountHolder?.address.filter(
-        (add) => add.id !== address.id
+        (add) => add.id !== address.id,
       );
 
       const { error } = await supabase
@@ -231,11 +240,15 @@ function ProfileAddress() {
         .eq("id", accountHolder?.userId);
 
       if (error) {
-        console.error(error);
+        handleError(error, {
+          prodMessage: "Something went wrong. Please try again.",
+        });
         return;
       }
     } catch (error) {
-      console.error(error);
+      handleError(error, {
+        prodMessage: "Something went wrong. Please try again.",
+      });
     } finally {
       fetchUserData();
       setRemovingAddressId(null);
@@ -255,13 +268,17 @@ function ProfileAddress() {
         .eq("id", accountHolder?.userId);
 
       if (error) {
-        console.error("Failed to update default address:", error);
+        handleError(error, {
+          prodMessage: "Something went wrong. Please try again.",
+        });
         return;
       }
 
       fetchUserData();
     } catch (err) {
-      console.error("Unexpected error:", err);
+      handleError(err, {
+        prodMessage: "Something went wrong. Please try again.",
+      });
     }
   };
 

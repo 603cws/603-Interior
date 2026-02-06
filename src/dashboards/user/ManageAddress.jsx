@@ -3,6 +3,7 @@ import { v4 as uuidv4 } from "uuid";
 import toast from "react-hot-toast";
 import { useApp } from "../../Context/Context";
 import { supabase } from "../../services/supabase";
+import { handleError } from "../../common-components/handleError";
 
 function ManageAddress() {
   const { accountHolder, fetchUserData } = useApp();
@@ -148,14 +149,18 @@ function ManageAddress() {
           .eq("id", accountHolder?.userId);
 
         if (error) {
-          console.error(error);
+          handleError(error, {
+            prodMessage: "Something went wrong. Please try again.",
+          });
           return;
         }
 
         //  clear the form on succesful submission
         clearForm();
       } catch (error) {
-        console.error(error);
+        handleError(error, {
+          prodMessage: "Something went wrong. Please try again.",
+        });
       } finally {
         setIsAddressFormOpen(false);
         fetchUserData();
@@ -191,14 +196,18 @@ function ManageAddress() {
           .eq("id", accountHolder?.userId);
 
         if (error) {
-          console.error(error);
+          handleError(error, {
+            prodMessage: "Something went wrong. Please try again.",
+          });
           return;
         }
 
         //  clear the form on succesful submission
         clearForm();
       } catch (error) {
-        console.error(error);
+        handleError(error, {
+          prodMessage: "Something went wrong. Please try again.",
+        });
       } finally {
         setIsAddressEdit(false);
         fetchUserData();
@@ -233,11 +242,15 @@ function ManageAddress() {
         .eq("id", accountHolder?.userId);
 
       if (error) {
-        console.error(error);
+        handleError(error, {
+          prodMessage: "Something went wrong. Please try again.",
+        });
         return;
       }
     } catch (error) {
-      console.error(error);
+      handleError(error, {
+        prodMessage: "Something went wrong. Please try again.",
+      });
     } finally {
       fetchUserData();
       setAddressToDelete(null);
@@ -258,13 +271,17 @@ function ManageAddress() {
         .eq("id", accountHolder?.userId);
 
       if (error) {
-        console.error("Failed to update default address:", error);
+        handleError(error, {
+          prodMessage: "Something went wrong. Please try again.",
+        });
         return;
       }
 
       fetchUserData(); // refreshes the user and address list
     } catch (err) {
-      console.error("Unexpected error:", err);
+      handleError(err, {
+        prodMessage: "Something went wrong. Please try again.",
+      });
     }
   };
 

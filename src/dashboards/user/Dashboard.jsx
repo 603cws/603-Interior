@@ -23,6 +23,7 @@ import Orders from "./Orders";
 import UserBoqItem from "./UserBoqItem";
 import UserDashSetting from "./UserDashSetting";
 import DashboardHeader from "../../common-components/DashboardHeader";
+import { handleError } from "../../common-components/handleError";
 
 function handlesidebarState(state, action) {
   switch (action.type) {
@@ -134,7 +135,9 @@ function Dashboard() {
         setIsboqavailable(true);
       }
     } catch (error) {
-      console.error(error);
+      handleError(error, {
+        prodMessage: "Something went wrong. Please try again.",
+      });
     }
   };
 
@@ -150,7 +153,9 @@ function Dashboard() {
         throw new Error(error);
       }
     } catch (error) {
-      console.error("something went wrong", error);
+      handleError(error, {
+        prodMessage: "Something went wrong. Please try again.",
+      });
     } finally {
       setSelectedBoq(() => null);
       setisfetchBoqDataRefresh(false);

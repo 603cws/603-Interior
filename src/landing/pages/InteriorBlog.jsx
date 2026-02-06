@@ -7,6 +7,7 @@ import LandingNavbar from "../components/LandingNavbar";
 import { supabase } from "../../services/supabase";
 import { blogImageUrl } from "../../utils/HelperConstant";
 import SpinnerFullPage from "../../common-components/SpinnerFullPage";
+import { handleError } from "../../common-components/handleError";
 
 let itemsPerPage = 4;
 
@@ -24,7 +25,9 @@ function InteriorBlog() {
         let getMainBlog = data?.slice(0, 1);
         setMainBlog(getMainBlog);
       } catch (error) {
-        console.error(error);
+        handleError(error, {
+          prodMessage: "Something went wrong. Please try again.",
+        });
       }
     }
     GetBlogsFromDb();

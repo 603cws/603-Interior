@@ -17,6 +17,7 @@ import PagInationNav from "../../common-components/PagInationNav";
 import SelectSubcategories from "./SelectSubcategories";
 import MultipleDeleteWarningCard from "../components/MultipleDeleteWarningCard";
 import BackButton from "../../common-components/BackButton";
+import { handleError } from "../../common-components/handleError";
 
 function VendorProductlist({ setVendorproductlist, selectedVendor }) {
   const [toggle, setToggle] = useState(true);
@@ -326,8 +327,9 @@ function VendorProductlist({ setVendorproductlist, selectedVendor }) {
       toast.success("Product deleted successfully!");
       setProductPreview(false);
     } catch (error) {
-      toast.error("Failed to delete product.");
-      console.error("Delete error:", error);
+      handleError(error, {
+        prodMessage: "Failed to delete product. Please try again.",
+      });
     }
     fetchProducts();
   };
@@ -361,7 +363,9 @@ function VendorProductlist({ setVendorproductlist, selectedVendor }) {
       setProducts(sortedData);
       setFilteredProducts(sortedData);
     } catch (error) {
-      console.error("Error fetching products:", error);
+      handleError(error, {
+        prodMessage: "Error fetching products. Please try again.",
+      });
     } finally {
       setIsloading(false);
     }
@@ -383,7 +387,9 @@ function VendorProductlist({ setVendorproductlist, selectedVendor }) {
       });
 
       if (error) {
-        console.error("Error fetching addons:", error);
+        handleError(error, {
+          prodMessage: "Error fetching addons. Please try again.",
+        });
       } else {
         setAddons(sortedData);
         setFilteredAddons(sortedData);
@@ -443,7 +449,10 @@ function VendorProductlist({ setVendorproductlist, selectedVendor }) {
               imagePaths = imagePaths.concat(parsed);
             }
           } catch (err) {
-            console.error("Error parsing additional images", err);
+            handleError(err, {
+              prodMessage:
+                "Error fetching additional images. Please try again.",
+            });
           }
         }
 
@@ -458,8 +467,9 @@ function VendorProductlist({ setVendorproductlist, selectedVendor }) {
 
       toast.success("Selected items deleted successfully!");
     } catch (error) {
-      console.error("Delete error:", error);
-      toast.error("Something went wrong while deleting");
+      handleError(error, {
+        prodMessage: "Error deleting images. Please try again.",
+      });
     } finally {
       setMultipleDeleteWaring(false);
       setSelectedItemForDelete([]);

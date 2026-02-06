@@ -4,6 +4,7 @@ import toast from "react-hot-toast";
 import { supabase } from "../../services/supabase";
 import { boqLimit } from "../../constants/constant";
 import { useBoqApp } from "../../Context/BoqContext";
+import { handleError } from "../../common-components/handleError";
 
 function BoqPrompt({ onConfirm, onCancel, isProfileCard, setIsProfileCard }) {
   const [boqTitle, setBoqTitle] = useState("");
@@ -36,8 +37,9 @@ function BoqPrompt({ onConfirm, onCancel, isProfileCard, setIsProfileCard }) {
         .eq("userId", userId);
 
       if (fetchError) {
-        console.error("Error fetching user BOQs:", fetchError);
-        toast.error("Error fetching user BOQs");
+        handleError(fetchError, {
+          prodMessage: "Error fetching user BOQs",
+        });
         return;
       }
 
@@ -127,8 +129,9 @@ function BoqPrompt({ onConfirm, onCancel, isProfileCard, setIsProfileCard }) {
         }
       }
     } catch (err) {
-      console.error("Error saving BOQ:", err);
-      toast.error("Something went wrong while saving the BOQ.");
+      handleError(err, {
+        prodMessage: "Something went wrong while saving the BOQ.",
+      });
     }
     setIsProfileCard(false);
   };

@@ -10,6 +10,7 @@ import { MdKeyboardArrowRight } from "react-icons/md";
 import toast from "react-hot-toast";
 import { MdEdit } from "react-icons/md";
 import { resumeUrl } from "../../../utils/HelperConstant";
+import { handleError } from "../../../common-components/handleError";
 function handlesidebarState(state, action) {
   switch (action.type) {
     case "TOGGLE_SECTION":
@@ -60,7 +61,9 @@ function CareerDash() {
         setJobPostings(data);
         if (error) throw error;
       } catch (error) {
-        console.error("error", error);
+        handleError(error, {
+          prodMessage: "Something went wrong. Please try again.",
+        });
       }
     }
     GetAllJobPosting();
@@ -72,7 +75,9 @@ function CareerDash() {
         setJobApplication(data);
         if (error) throw error;
       } catch (error) {
-        console.error("error", error);
+        handleError(error, {
+          prodMessage: "Something went wrong. Please try again.",
+        });
       }
     }
     GetAllJobApplication();
@@ -250,7 +255,9 @@ function JobCard({
 
       toast.success("Job, applications, and resumes deleted successfully");
     } catch (error) {
-      console.error("Error deleting job data:", error.message);
+      handleError(error, {
+        prodMessage: "Something went wrong. Please try again.",
+      });
     } finally {
       setDeleting(false);
     }
@@ -584,8 +591,9 @@ function JobPostForm({
         }
       }
     } catch (error) {
-      console.error("error", error);
-      toast.error("something went wrong");
+      handleError(error, {
+        prodMessage: "Something went wrong. Please try again.",
+      });
     }
   }
   return (

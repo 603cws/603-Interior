@@ -7,6 +7,7 @@ import { useSearchParams } from "react-router-dom";
 import { supabase } from "../../services/supabase";
 import SpinnerFullPage from "../../common-components/SpinnerFullPage";
 import { YouMayAlsoLikeCard } from "../components/Card";
+import { handleError } from "../../common-components/handleError";
 
 function YouMayAlsoLike() {
   const [products, setProducts] = useState([]);
@@ -37,7 +38,7 @@ function YouMayAlsoLike() {
       const filtered = data.filter(
         (item) =>
           item.status === "approved" &&
-          selectedTypes.includes(item.product_type)
+          selectedTypes.includes(item.product_type),
       );
 
       // 1. Extract unique image names
@@ -49,7 +50,9 @@ function YouMayAlsoLike() {
         .createSignedUrls(uniqueImages, 3600); // 1 hour expiry
 
       if (signedUrlError) {
-        console.error("Error generating signed URLs:", signedUrlError);
+        handleError(signedUrlError, {
+          prodMessage: "Error generating signed URLs. Please try again.",
+        });
         return;
       }
 
@@ -67,7 +70,9 @@ function YouMayAlsoLike() {
 
       setProducts(product);
     } catch (error) {
-      console.error("Error fetching filtered data:", error);
+      handleError(error, {
+        prodMessage: "Error fetching filtered data. Please try again.",
+      });
     } finally {
       setProductsloading(false);
     }

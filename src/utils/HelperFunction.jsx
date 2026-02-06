@@ -5,6 +5,7 @@ import { AddToCartToast, RemoveFromCartToast } from "./AddToCartToast";
 import { useNavigate } from "react-router-dom";
 import { useEcomApp } from "../Context/EcomContext";
 import { useBoqApp } from "../Context/BoqContext";
+import { handleError } from "../common-components/handleError";
 
 export const useHandleAddToCart = () => {
   const { isAuthenticated } = useApp();
@@ -69,7 +70,9 @@ export const useHandleAddToCart = () => {
 
         AddToCartToast(product);
       } catch (error) {
-        console.error(error);
+        handleError(error, {
+          prodMessage: "Something went wrong. Please try again.",
+        });
       } finally {
         getCartItems();
       }
@@ -79,7 +82,7 @@ export const useHandleAddToCart = () => {
   const handleAddtoWishlist = async (
     product,
     productQuantity = 1,
-    isUserSignUp = false
+    isUserSignUp = false,
   ) => {
     if (isAuthenticated || isUserSignUp) {
       try {
@@ -94,7 +97,7 @@ export const useHandleAddToCart = () => {
           .eq("type", "wishlist");
 
         const existingItem = cartdata?.find(
-          (item) => item.productId.id === product.id
+          (item) => item.productId.id === product.id,
         );
 
         if (existingItem) {
@@ -123,7 +126,9 @@ export const useHandleAddToCart = () => {
           AddToCartToast(product, "wishlist");
         }
       } catch (error) {
-        console.error(error);
+        handleError(error, {
+          prodMessage: "Something went wrong. Please try again.",
+        });
       } finally {
         getCartItems();
       }
@@ -153,7 +158,9 @@ export const useLogout = () => {
       setIsAuthLoading(true);
       const { error } = await supabase.auth.signOut();
       if (error) {
-        console.error("Error signing out:", error.message);
+        handleError(error, {
+          prodMessage: "Error signing out. Please try again.",
+        });
       } else {
         toast.success("User signed out successfully");
         setAccountHolder({

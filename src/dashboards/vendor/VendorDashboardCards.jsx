@@ -5,6 +5,7 @@ import { useApp } from "../../Context/Context";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 import { baseImageUrl } from "../../utils/HelperConstant";
 import RejectedProduct from "./RejectedProduct";
+import { handleError } from "../../common-components/handleError";
 
 const statusColors = {
   rejected: "bg-orange-100 text-orange-600",
@@ -44,7 +45,9 @@ function VendorDashboardCards({ handleproduct }) {
 
       setProducts(data);
     } catch (error) {
-      console.error("Error fetching products:", error);
+      handleError(error, {
+        prodMessage: "Error fetching products. Please try again.",
+      });
     } finally {
       setIsloading(false);
     }
@@ -62,7 +65,9 @@ function VendorDashboardCards({ handleproduct }) {
       setAddons(data);
       setPendingAddons(getpendingAddons);
     } catch (error) {
-      console.error("Error fetching addons:", error);
+      handleError(error, {
+        prodMessage: "Error fetching addons. Please try again.",
+      });
     }
   };
 

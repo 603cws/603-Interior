@@ -4,6 +4,7 @@ import { MdDeleteOutline } from "react-icons/md";
 import { adminsupabase } from "../../services/supabase";
 import { useApp } from "../../Context/Context";
 import PagInationNav from "../../common-components/PagInationNav";
+import { handleError } from "../../common-components/handleError";
 
 function Clients({
   isExpanded,
@@ -59,7 +60,9 @@ function Clients({
         setIsModalOpen(false);
         setSelectedUser(null);
       } catch (error) {
-        console.error(error);
+        handleError(error, {
+          prodMessage: "Something went wrong. Please try again.",
+        });
       } finally {
         setIsrefresh(true);
       }

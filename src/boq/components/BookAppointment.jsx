@@ -5,11 +5,11 @@ import { PiWarningCircleFill } from "react-icons/pi";
 import "../../styles/calender.css";
 import toast from "react-hot-toast";
 import { supabase } from "../../services/supabase";
-
 import Calendar from "react-calendar";
 import { useApp } from "../../Context/Context";
 import AppointmentConfirmation from "./AppointmentConfirmation";
 import { IoMdClose } from "react-icons/io";
+import { handleError } from "../../common-components/handleError";
 
 const times = [
   "09:00 am",
@@ -102,8 +102,9 @@ function BookAppointment({ onClose, isdashboardbooking = false }) {
         toast.error("please select the time");
       }
     } catch (error) {
-      console.error(error);
-      toast.error("Somethiing went wrong");
+      handleError(error, {
+        prodMessage: "Somethiing went wrong",
+      });
     } finally {
       setisSubmitting(false);
     }
@@ -125,8 +126,9 @@ function BookAppointment({ onClose, isdashboardbooking = false }) {
 
       setTodayBookedTimmings(data);
     } catch (error) {
-      console.error("error", error);
-      toast.error("Somethiing went wrong");
+      handleError(error, {
+        prodMessage: "Somethiing went wrong",
+      });
     }
   }
 
@@ -155,8 +157,9 @@ function BookAppointment({ onClose, isdashboardbooking = false }) {
 
       toast.success("Appointment booked successfully");
     } catch (error) {
-      console.error("Error inserting data:", error.message);
-      toast.error("Failed to book appointment");
+      handleError(error, {
+        prodMessage: "Failed to book appointment",
+      });
     }
   };
 

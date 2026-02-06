@@ -14,6 +14,7 @@ import ItemList from "./ItemList";
 import { IoIosSearch } from "react-icons/io";
 import { IoCloseCircle } from "react-icons/io5";
 import { HiPlus } from "react-icons/hi";
+import { handleError } from "../../common-components/handleError";
 
 function VendorItem({ isExpanded }) {
   const [toggle, setToggle] = useState(true);
@@ -93,7 +94,9 @@ function VendorItem({ isExpanded }) {
       setProducts(sortedData);
       setFilteredProducts(sortedData);
     } catch (error) {
-      console.error("Error fetching products:", error);
+      handleError(error, {
+        prodMessage: "Something went wrong. Please try again.",
+      });
     } finally {
       setIsloading(false);
     }
@@ -106,7 +109,9 @@ function VendorItem({ isExpanded }) {
       .eq("vendorId", accountHolder.userId);
 
     if (error) {
-      console.error("Error fetching addons:", error);
+      handleError(error, {
+        prodMessage: "Error fetching addons. Please try again.",
+      });
     } else {
       const sortedData = data.sort((a, b) => {
         // Prioritize "pending" status
@@ -232,7 +237,9 @@ function VendorItem({ isExpanded }) {
             imagePaths = imagePaths.concat(parsedAdditionalImages);
           }
         } catch (parseError) {
-          console.error("error parsing error", parseError);
+          handleError(parseError, {
+            prodMessage: "Something went wrong. Please try again.",
+          });
         }
       }
 
@@ -246,7 +253,9 @@ function VendorItem({ isExpanded }) {
 
       setProductPreview(false);
     } catch (error) {
-      console.error(error);
+      handleError(error, {
+        prodMessage: "Something went wrong. Please try again.",
+      });
     } finally {
       selectedProductview.type === "product"
         ? setIsProductRefresh(true)

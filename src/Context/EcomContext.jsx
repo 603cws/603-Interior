@@ -1,12 +1,13 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { supabase } from "../services/supabase";
+import { handleError } from "../common-components/handleError";
 
 const EcomContext = createContext();
 export const EcomAppProvider = ({ children }) => {
   const [compare, setCompare] = useState([]);
   const [cartItems, setCartItems] = useState([]);
   const [localcartItems, setLocalCartItems] = useState(
-    JSON.parse(localStorage.getItem("cartitems")) || []
+    JSON.parse(localStorage.getItem("cartitems")) || [],
   );
   const [wishlistItems, setWishlistItems] = useState([]);
   const [filters, setFilters] = useState({
@@ -52,7 +53,9 @@ export const EcomAppProvider = ({ children }) => {
         .createSignedUrls(uniqueImages, 3600);
 
       if (signedUrlError) {
-        console.error("Error generating signed URLs:", signedUrlError);
+        handleError(signedUrlError, {
+          prodMessage: "Error generating signed URLs. Please try again.",
+        });
         return;
       }
 
@@ -70,27 +73,29 @@ export const EcomAppProvider = ({ children }) => {
       }));
 
       const cartProductsRaw = updatedProducts.filter(
-        (item) => item.type === "cart"
+        (item) => item.type === "cart",
       );
       const wishlistProductsRaw = updatedProducts.filter(
-        (item) => item.type === "wishlist"
+        (item) => item.type === "wishlist",
       );
 
       const cartProducts = [
         ...new Map(
-          cartProductsRaw.map((item) => [item.productId.id, item])
+          cartProductsRaw.map((item) => [item.productId.id, item]),
         ).values(),
       ];
       const wishlistProducts = [
         ...new Map(
-          wishlistProductsRaw.map((item) => [item.productId.id, item])
+          wishlistProductsRaw.map((item) => [item.productId.id, item]),
         ).values(),
       ];
 
       setCartItems(cartProducts);
       setWishlistItems(wishlistProducts);
     } catch (error) {
-      console.error(error);
+      handleError(error, {
+        prodMessage: "Something went wrong. Please try again.",
+      });
     }
   }
 

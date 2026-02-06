@@ -1,5 +1,6 @@
 import { jsPDF } from "jspdf";
 import "jspdf-autotable";
+import { handleError } from "../../common-components/handleError";
 
 function normalize(str) {
   return str.toLowerCase().replace(/[\s-]+/g, "");
@@ -262,7 +263,9 @@ const PDFGenerator = {
                 item.product_variant.variant_image,
               );
             } catch (error) {
-              console.error(error);
+              handleError(error, {
+                prodMessage: "Something went wrong.",
+              });
             }
           }
           let addonCell = [];
@@ -275,7 +278,9 @@ const PDFGenerator = {
                   try {
                     addonImage = await loadImage(a.image);
                   } catch (error) {
-                    console.error(error);
+                    handleError(error, {
+                      prodMessage: "Something went wrong.",
+                    });
                   }
                 }
                 addonTotal += a.finalPrice || 0;

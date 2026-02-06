@@ -3,6 +3,7 @@ import toast from "react-hot-toast";
 import { useState } from "react";
 import LandingNavbar from "../components/LandingNavbar";
 import { supabase } from "../../services/supabase";
+import { handleError } from "../../common-components/handleError";
 const background = "/images/contact-us/contactpage.webp";
 
 function Contactus() {
@@ -88,7 +89,9 @@ function Contactus() {
         companyName: "",
       });
     } catch (error) {
-      console.error("Error sending email:", error);
+      handleError(error, {
+        prodMessage: "Something went wrong. Please try again.",
+      });
     } finally {
       setisSubmitting(false);
     }

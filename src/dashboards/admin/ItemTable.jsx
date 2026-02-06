@@ -6,6 +6,7 @@ import { exportToExcel } from "../../utils/DataExport";
 import { supabase } from "../../services/supabase";
 import { IoCloseCircle, IoCloudDownloadOutline } from "react-icons/io5";
 import Table from "./Table";
+import { handleError } from "../../common-components/handleError";
 
 const tabs = [
   { name: "Products", value: "products" },
@@ -278,7 +279,9 @@ function ItemTable({
       setProducts(sortedData);
       // setFilteredProducts(sortedData);
     } catch (error) {
-      console.error("Error fetching products:", error);
+      handleError(error, {
+        prodMessage: "Error fetching products. Please try again.",
+      });
     } finally {
       setIsloading(false);
       setIsProductRefresh(false);
@@ -299,7 +302,9 @@ function ItemTable({
       });
 
       if (error) {
-        console.error("Error fetching addons:", error);
+        handleError(error, {
+          prodMessage: "Error fetching addons. Please try again.",
+        });
       } else {
         setAddons(sortedData);
         setFilteredAddons(sortedData);

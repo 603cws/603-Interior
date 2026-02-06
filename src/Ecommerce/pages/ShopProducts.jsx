@@ -13,6 +13,7 @@ import Footer from "../../common-components/Footer";
 import PagInationNav from "../../common-components/PagInationNav";
 import { useEcomApp } from "../../Context/EcomContext";
 import { ShopCard } from "../components/Card";
+import { handleError } from "../../common-components/handleError";
 
 const categoryies = [
   {
@@ -248,7 +249,9 @@ function ShopProducts() {
         .createSignedUrls(uniqueImages, 3600); // 1 hour expiry
 
       if (signedUrlError) {
-        console.error("Error generating signed URLs:", signedUrlError);
+        handleError(signedUrlError, {
+          prodMessage: "Error generating signed URLs. Please try again.",
+        });
         return;
       }
 
@@ -267,7 +270,9 @@ function ShopProducts() {
       setFilteredProducts(updatedProducts);
       setProducts(updatedProducts);
     } catch (error) {
-      console.error("Error fetching filtered data:", error);
+      handleError(error, {
+        prodMessage: "Error fetching filtered data. Please try again.",
+      });
     } finally {
       setProductsloading(false);
     }

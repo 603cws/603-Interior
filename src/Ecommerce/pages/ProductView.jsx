@@ -19,6 +19,7 @@ import { CardWithCompare } from "../components/Card";
 import ProductsMayLike from "../components/ProductsMayLike";
 import CustomerReview from "../components/CustomerReview";
 import ComparePreview from "../components/ComparePreview";
+import { handleError } from "../../common-components/handleError";
 
 // const offers = [
 //   "Flat ₹50 Off + Free Surprise Gift On All Prepaid Offers 🎁",
@@ -117,7 +118,9 @@ function ProductView() {
         .createSignedUrls([imageName], 3600); // pass as array, 1 hour expiry
 
       if (signedUrlError) {
-        console.error("Error generating signed URL:", signedUrlError);
+        handleError(signedUrlError, {
+          prodMessage: "Error generating signed URL. Please try again.",
+        });
         return;
       }
 
@@ -131,7 +134,9 @@ function ProductView() {
       };
       setproduct(productwithimage);
     } catch (error) {
-      console.error(error);
+      handleError(error, {
+        prodMessage: "Something went wrong. Please try again.",
+      });
     } finally {
       setIsloading(false);
     }
@@ -185,7 +190,9 @@ function ProductView() {
         .createSignedUrls(uniqueImages, 3600); // 1 hour expiry
 
       if (signedUrlError) {
-        console.error("Error generating signed URLs:", signedUrlError);
+        handleError(signedUrlError, {
+          prodMessage: "Error generating signed URL. Please try again.",
+        });
         return;
       }
 
@@ -208,7 +215,9 @@ function ProductView() {
       setSimilarProducts(updatedProducts);
       setProductsMayLike(updatedproductmaylike);
     } catch (error) {
-      console.error(error);
+      handleError(error, {
+        prodMessage: "Something went wrong. Please try again.",
+      });
     }
   }
 

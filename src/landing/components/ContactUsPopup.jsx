@@ -3,6 +3,7 @@ import toast from "react-hot-toast";
 import { IoIosCloseCircle } from "react-icons/io";
 import { motion } from "framer-motion";
 import { supabase } from "../../services/supabase";
+import { handleError } from "../../common-components/handleError";
 function ContactUsPopup({ onClose }) {
   const [isSubmitting, setisSubmitting] = useState(false);
 
@@ -85,7 +86,9 @@ function ContactUsPopup({ onClose }) {
         companyName: "",
       });
     } catch (error) {
-      console.error("Error sending email:", error);
+      handleError(error, {
+        prodMessage: "Error sending email. Please try again.",
+      });
     } finally {
       setisSubmitting(false);
     }

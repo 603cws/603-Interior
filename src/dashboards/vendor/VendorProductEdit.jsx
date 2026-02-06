@@ -17,6 +17,7 @@ import {
 import MultiImageCrop from "../components/MultiImageCrop";
 import ButtonSpinner from "../../utils/ButtonSpinner";
 import BackButton from "../../common-components/BackButton";
+import { handleError } from "../../common-components/handleError";
 
 function VendorProductEdit({
   setEditProduct,
@@ -68,7 +69,9 @@ function VendorProductEdit({
         .single();
 
       if (error) {
-        console.error("Error fetching vendor:", error.message);
+        handleError(error, {
+          prodMessage: "Error fetching vendor. Please try again.",
+        });
       } else {
         const parseddata = JSON.parse(data.allowed_category);
         setVendordata(parseddata);
@@ -184,8 +187,9 @@ function VendorProductEdit({
       .eq("id", variant?.selectedProductId);
 
     if (error) {
-      console.error("Error deleting additional image:", error.message);
-      toast.error("error");
+      handleError(error, {
+        prodMessage: "Error deleting additional image. Please try again.",
+      });
     }
     if (mulitpleimagesFileinputref.current) {
       mulitpleimagesFileinputref.current.value = null;
@@ -260,8 +264,9 @@ function VendorProductEdit({
             .single();
 
           if (insertError) {
-            console.error(insertError);
-            toast.error("Error inserting new product.");
+            handleError(insertError, {
+              prodMessage: "Error inserting new product. Please try again.",
+            });
             return;
           }
 
@@ -373,14 +378,16 @@ function VendorProductEdit({
         .eq("id", variant.selectedProductId);
 
       if (variantError) {
-        console.error(variantError);
-        toast.error(`Error inserting variant: ${variant.title}`);
+        handleError(variantError, {
+          prodMessage: "Error inserting variant. Please try again.",
+        });
       }
 
       toast.success("product updated successfully");
     } catch (error) {
-      console.error("Error in onSubmit:", error);
-      toast.error("An unexpected error occurred.");
+      handleError(error, {
+        prodMessage: "An unexpected error occurred. Please try again.",
+      });
     } finally {
       handleFormClear();
       setIsSubmitting(false);

@@ -10,6 +10,7 @@ import { useResetBOQ } from "../utils/HelperFunction";
 import { useBoqApp } from "../Context/BoqContext";
 import ResetPassword from "../common-components/ResetPassword";
 import BackButton from "../common-components/BackButton";
+import { handleError } from "../common-components/handleError";
 
 function Login() {
   const [isSignUp, setIsSignUp] = useState(false);
@@ -83,7 +84,9 @@ function Login() {
     });
 
     if (error) {
-      console.error("Error updating profile:", error.message);
+      handleError(error, {
+        prodMessage: "Error updating profile. Please try again.",
+      });
     }
   };
 
@@ -103,7 +106,9 @@ function Login() {
         throw new Error(`Error updating layout table: ${error.message}`);
       }
     } catch (e) {
-      console.error(e);
+      handleError(e, {
+        prodMessage: "Something went wrong. Please try again.",
+      });
     }
   };
 
@@ -130,7 +135,9 @@ function Login() {
       } else {
         toast.error("something went error");
       }
-      console.error("Error signing up:", error);
+      handleError(error, {
+        prodMessage: "Error signing up. Please try again.",
+      });
       return;
     }
     toast.success("User signed up successfully:");
@@ -180,7 +187,9 @@ function Login() {
 
     if (error) {
       toast.error(error.message);
-      console.error("Error logging in:", error);
+      handleError(error, {
+        prodMessage: "Error logging in. Please try again.",
+      });
       setIsLogingIn(false);
       return;
     }
@@ -203,7 +212,10 @@ function Login() {
           .limit(1)
           .single();
 
-        if (error) console.error("Error fetching layout:", error);
+        if (error)
+          handleError(error, {
+            prodMessage: "Error fetching layout. Please try again.",
+          });
 
         const layoutId = layoutData?.id;
 
@@ -212,7 +224,10 @@ function Login() {
           .select("role")
           .eq("user_id", userId);
 
-        if (userError) console.error("Error fetching user data:", userError);
+        if (userError)
+          handleError(userError, {
+            prodMessage: "Error fetching user data. Please try again.",
+          });
 
         const firstElement = userData[0];
 
@@ -228,7 +243,10 @@ function Login() {
           navigate("/Layout", { replace: true });
         }
       } catch (fetchError) {
-        console.error("Error checking area and quantity IDs:", fetchError);
+        handleError(fetchError, {
+          prodMessage:
+            "Error checking area and quantity IDs. Please try again.",
+        });
         navigate("/Layout", { replace: true });
       } finally {
         setIsLogingIn(false);
@@ -245,8 +263,9 @@ function Login() {
     });
 
     if (error) {
-      toast.error(error.message);
-      console.error("Error logging in:", error);
+      handleError(error, {
+        prodMessage: "Error logging in. Please try again.",
+      });
       return;
     }
 
@@ -274,7 +293,9 @@ function Login() {
         } else {
           toast.error("something went error");
         }
-        console.error("Error signing up:", error);
+        handleError(error, {
+          prodMessage: "Error signing up. Please try again.",
+        });
         return;
       }
       toast.success("User signed up successfully:");
@@ -332,8 +353,9 @@ function Login() {
       );
 
       if (error) {
-        console.error("Error sending reset email:", error.message);
-        toast.error("Error sending reset email. Please try again.");
+        handleError(error, {
+          prodMessage: "Error sending reset email. Please try again.",
+        });
       } else {
         toast.success("Password reset email sent! Check your inbox.");
       }
@@ -351,7 +373,9 @@ function Login() {
       },
     });
     if (error) {
-      console.error("Google Login Error:", error.message);
+      handleError(error, {
+        prodMessage: "Google Login Error. Please try again.",
+      });
     }
   };
 

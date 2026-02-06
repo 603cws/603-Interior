@@ -1,4 +1,5 @@
 import { Parser } from "expr-eval";
+import { handleError } from "../../common-components/handleError";
 
 const parser = new Parser();
 
@@ -6,7 +7,7 @@ export const calculateCategoryTotal = (
   category,
   base,
   multiplier = 1,
-  formulaMap = {}
+  formulaMap = {},
 ) => {
   const categoryFormula = formulaMap[category]?.formula;
   const defaultFormula = formulaMap["Default"]?.formula;
@@ -22,7 +23,9 @@ export const calculateCategoryTotal = (
     const expr = parser.parse(formulaString);
     return expr.evaluate({ base, multiplier });
   } catch (err) {
-    console.error(`Invalid formula for category "${category}"`, err);
+    handleError(err, {
+      prodMessage: `Invalid formula for category "${category}`,
+    });
     return base * multiplier;
   }
 };

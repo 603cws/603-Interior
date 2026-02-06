@@ -17,6 +17,7 @@ import { HiOutlineArrowSmRight } from "react-icons/hi";
 import Footer from "../../common-components/Footer";
 import CategorySvg from "../../common-components/CategorySvg";
 import { useEcomApp } from "../../Context/EcomContext";
+import { handleError } from "../../common-components/handleError";
 
 const TOP_OFFERS = [
   {
@@ -173,7 +174,9 @@ function Products() {
             .createSignedUrls(uniqueImages, 3600); // 1 hour expiry
 
         if (signedUrlError) {
-          console.error("Error generating signed URLs:", signedUrlError);
+          handleError(signedUrlError, {
+            prodMessage: "An unexpected error occurred. Please try again.",
+          });
           return;
         }
 
@@ -212,7 +215,9 @@ function Products() {
 
         setBestProducts(sortedByStars);
       } catch (error) {
-        console.error("Error fetching filtered data:", error);
+        handleError(error, {
+          prodMessage: "Error fetching filtered data. Please try again.",
+        });
       }
     };
     fetchProductsData();

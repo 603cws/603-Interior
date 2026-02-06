@@ -10,6 +10,7 @@ import toast from "react-hot-toast";
 import ProductReview from "./ProductReview";
 import { supabase } from "../../services/supabase";
 import { useNavigate } from "react-router-dom";
+import { handleError } from "../../common-components/handleError";
 
 function CustomerReview({ product, productid }) {
   const { isAuthenticated, accountHolder } = useApp();
@@ -87,11 +88,15 @@ function CustomerReview({ product, productid }) {
         .select(`*,profiles:userId(company_name)`)
         .eq("productId", productId);
       if (error) {
-        console.error(error);
+        handleError(error, {
+          prodMessage: "Something went wrong. Please try again.",
+        });
       }
       setProductReviews(data);
     } catch (error) {
-      console.error(error);
+      handleError(error, {
+        prodMessage: "Something went wrong. Please try again.",
+      });
     } finally {
       setisloading(false);
     }
@@ -106,7 +111,9 @@ function CustomerReview({ product, productid }) {
         .single();
 
       if (fetchError) {
-        console.error("Error fetching review:", fetchError);
+        handleError(fetchError, {
+          prodMessage: "Error fetching review. Please try again.",
+        });
         return;
       }
 
@@ -137,7 +144,9 @@ function CustomerReview({ product, productid }) {
         .eq("id", reviewId);
 
       if (updateError) {
-        console.error("Error updating likes:", updateError);
+        handleError(updateError, {
+          prodMessage: "Error updating likes. Please try again.",
+        });
         return;
       }
 
@@ -145,11 +154,13 @@ function CustomerReview({ product, productid }) {
         prevReviews.map((review) =>
           review.id === reviewId
             ? { ...review, likes: updatedLikes, dislikes: updatedDislikes }
-            : review
-        )
+            : review,
+        ),
       );
     } catch (error) {
-      console.error("Unexpected error:", error);
+      handleError(error, {
+        prodMessage: "Something went wrong. Please try again.",
+      });
     }
   };
 
@@ -162,7 +173,10 @@ function CustomerReview({ product, productid }) {
         .single();
 
       if (fetchError) {
-        console.error("Error fetching review:", fetchError);
+        handleError(fetchError, {
+          prodMessage: "Error fetching review. Please try again.",
+        });
+
         return;
       }
 
@@ -193,7 +207,9 @@ function CustomerReview({ product, productid }) {
         .eq("id", reviewId);
 
       if (updateError) {
-        console.error("Error updating likes:", updateError);
+        handleError(updateError, {
+          prodMessage: "Error updating likes. Please try again.",
+        });
         return;
       }
 
@@ -201,11 +217,13 @@ function CustomerReview({ product, productid }) {
         prevReviews.map((review) =>
           review.id === reviewId
             ? { ...review, dislikes: updatedDislikes, likes: updatedLikes }
-            : review
-        )
+            : review,
+        ),
       );
     } catch (error) {
-      console.error("Unexpected error:", error);
+      handleError(error, {
+        prodMessage: "Something went wrong. Please try again.",
+      });
     }
   };
 
@@ -280,8 +298,8 @@ function CustomerReview({ product, productid }) {
                     star >= 3
                       ? "bg-[#304778]"
                       : star === 2
-                      ? "bg-[#FACC15]"
-                      : "bg-[#FA9515]";
+                        ? "bg-[#FACC15]"
+                        : "bg-[#FA9515]";
                   return (
                     <div key={star} className="flex items-center gap-2">
                       <span className="md:text-sm text-xs w-4 whitespace-nowrap md:mr-4">
@@ -374,7 +392,7 @@ function CustomerReview({ product, productid }) {
                 : JSON.parse(review.dislikes || "[]");
               const dislikeCount = dislikesArray.length;
               const userHasDisliked = dislikesArray.includes(
-                accountHolder?.userId
+                accountHolder?.userId,
               );
 
               return (

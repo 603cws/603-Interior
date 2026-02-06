@@ -21,6 +21,7 @@ import PagInationNav from "../../../common-components/PagInationNav";
 import { MdOutlineRateReview } from "react-icons/md";
 import ProductReviews from "./ProductReviews";
 import { useBoqApp } from "../../../Context/BoqContext";
+import { handleError } from "../../../common-components/handleError";
 
 function Products({
   isproductRefresh,
@@ -347,7 +348,9 @@ function Products({
       setProducts(sortedData);
       setFilteredProducts(sortedData);
     } catch (error) {
-      console.error("Error fetching products:", error);
+      handleError(error, {
+        prodMessage: "Something went wrong. Please try again.",
+      });
     } finally {
       setIsloading(false);
       setIsProductRefresh(false);

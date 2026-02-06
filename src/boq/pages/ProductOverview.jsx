@@ -23,6 +23,7 @@ import {
 import { baseImageUrl } from "../../utils/HelperConstant";
 import { useBoqApp } from "../../Context/BoqContext";
 import Spinner from "../../common-components/Spinner";
+import { handleError } from "../../common-components/handleError";
 
 function ProductOverview() {
   const [relatedProducts, setRelatedProducts] = useState([]);
@@ -121,7 +122,7 @@ function ProductOverview() {
             category: selectedCategory,
             subCategory: selectedSubCategory,
             subCategory1: selectedSubCategory1,
-          })
+          }),
         );
       } else if (id) {
         const { data, error } = await supabase
@@ -132,7 +133,9 @@ function ProductOverview() {
           .neq("productDisplayType", "ecommerce");
 
         if (error) {
-          console.error("Error fetching product:", error);
+          handleError(error, {
+            prodMessage: "Something went wrong. Please try again.",
+          });
           return;
         }
 
@@ -160,7 +163,7 @@ function ProductOverview() {
 
   const additionalImagesArray = product?.additional_images
     ? JSON.parse(product.additional_images).map(
-        (img) => `${baseImageUrl}${img}`
+        (img) => `${baseImageUrl}${img}`,
       )
     : [];
 
@@ -174,7 +177,7 @@ function ProductOverview() {
         : item.id === product?.id &&
           item.category === cat?.category &&
           item.subcategory === subCat &&
-          item.subcategory1 === subCat1
+          item.subcategory1 === subCat1,
     );
 
   const findClosestKey = (targetKey, dataObject) => {
@@ -245,7 +248,7 @@ function ProductOverview() {
       userResponses,
       product,
       formulaMap,
-      seatCountData
+      seatCountData,
     );
   }, [
     cat,
@@ -278,11 +281,11 @@ function ProductOverview() {
         const matchesCategory = !cat?.category || p.category === cat.category;
         return matchesVariant && matchesCategory;
       }),
-    [productData, searchQuery, cat]
+    [productData, searchQuery, cat],
   );
 
   const allAddons = filteredProducts.flatMap((p) =>
-    p.subcategory1 === subCat1 && Array.isArray(p.addons) ? p.addons : []
+    p.subcategory1 === subCat1 && Array.isArray(p.addons) ? p.addons : [],
   );
 
   // related products
@@ -298,7 +301,9 @@ function ProductOverview() {
         .eq("subcategory1", subCat1);
 
       if (error) {
-        console.error("❌ Error fetching related products:", error);
+        handleError(error, {
+          prodMessage: "Something went wrong. Please try again.",
+        });
         return;
       }
 
@@ -310,7 +315,7 @@ function ProductOverview() {
               v.id !== product?.id &&
               v.status === "approved" &&
               v.image &&
-              v.title
+              v.title,
           ),
         }))
         .filter((p) => p.product_variants.length);

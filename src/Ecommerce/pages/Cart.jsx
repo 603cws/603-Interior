@@ -18,6 +18,7 @@ import AppliedCoupon from "../../common-components/AppliedCoupon";
 import { MdOutlineCancel } from "react-icons/md";
 import { useEcomApp } from "../../Context/EcomContext";
 import { AlsoLikeCard, CartCard } from "../components/Card";
+import { handleError } from "../../common-components/handleError";
 
 function EmptyCart() {
   const navigate = useNavigate();
@@ -230,8 +231,9 @@ function Cart() {
       calculateTotalDiffertoShow(coupon);
       setMobileCouponName(coupon);
     } catch (error) {
-      console.error(error);
-      toast.error("Invalid Coupon");
+      handleError(error, {
+        prodMessage: "Invalid Coupon. Please try again.",
+      });
     }
   };
 
@@ -259,7 +261,9 @@ function Cart() {
 
       if (fetchError) throw new Error(fetchError);
     } catch (error) {
-      console.error(error);
+      handleError(error, {
+        prodMessage: "Something went wrong. Please try again.",
+      });
     }
   };
 
@@ -284,7 +288,9 @@ function Cart() {
       setGst(gstprice);
       toast.success("coupon is valid");
     } catch (error) {
-      console.error(error);
+      handleError(error, {
+        prodMessage: "Something went wrong. Please try again.",
+      });
       toast.error("Invalid Coupon");
     } finally {
       setIsMobileCouponFormOpen(false);
@@ -348,7 +354,9 @@ function Cart() {
             });
 
           if (insertError) {
-            console.error("Error inserting item:", item, insertError.message);
+            handleError(insertError, {
+              prodMessage: "Error inserting item. Please try again.",
+            });
             throw new Error(insertError.message);
           }
         }
@@ -357,7 +365,9 @@ function Cart() {
       // Remove synced items from localStorage
       localStorage.setItem("cartitems", JSON.stringify([]));
     } catch (error) {
-      console.error("Cart sync error:", error);
+      handleError(error, {
+        prodMessage: "Cart sync error. Please try again.",
+      });
     } finally {
       getCartItems();
     }
@@ -404,7 +414,9 @@ function Cart() {
         .eq("type", "cart");
 
       if (error) {
-        console.error("Failed to clear cart from database:", error.message);
+        handleError(error, {
+          prodMessage: "Failed to clear cart from database. Please try again.",
+        });
       } else {
         setCartItems([]);
         setShowClearCartPopup(false);
@@ -445,7 +457,9 @@ function Cart() {
         .createSignedUrls(uniqueImages, 3600); // 1 hour expiry
 
       if (signedUrlError) {
-        console.error("Error generating signed URLs:", signedUrlError);
+        handleError(signedUrlError, {
+          prodMessage: "Error generating signed URLs. Please try again.",
+        });
         return;
       }
       const urlMap = {};
@@ -486,7 +500,9 @@ function Cart() {
       }
       setAlsoLike(selected);
     } catch (err) {
-      console.error("Error fetching recommendations:", err);
+      handleError(err, {
+        prodMessage: "Error fetching recommendations. Please try again.",
+      });
     }
   };
 

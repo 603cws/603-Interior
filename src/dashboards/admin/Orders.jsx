@@ -5,6 +5,7 @@ import { exportToExcel } from "../../utils/DataExport";
 import PagInationNav from "../../common-components/PagInationNav";
 import BackButton from "../../common-components/BackButton";
 import toast from "react-hot-toast";
+import { handleError } from "../../common-components/handleError";
 
 export default function Orders({ vendorId = null }) {
   const [ordersData, setOrdersData] = useState(null);
@@ -35,7 +36,9 @@ export default function Orders({ vendorId = null }) {
         .select(`*,users_profiles(*),order_items(*,product_variants(*))`)
         .order("created_at", { ascending: false });
       if (error) {
-        console.error(error);
+        handleError(error, {
+          prodMessage: "Something went wrong. Please try again.",
+        });
         return;
       }
       const filteredOrders = vendorId

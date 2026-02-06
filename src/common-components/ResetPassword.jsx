@@ -3,6 +3,7 @@ import { IoEyeOffOutline, IoEyeOutline } from "react-icons/io5";
 import { supabase } from "../services/supabase";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import { handleError } from "./handleError";
 
 function ResetPassword({ setResetPass }) {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
@@ -40,8 +41,9 @@ function ResetPassword({ setResetPass }) {
     });
 
     if (error) {
-      console.error("Error resetting password:", error.message);
-      toast.error("Error resetting password. Please try again.");
+      handleError(error, {
+        prodMessage: "Error resetting password. Please try again.",
+      });
     } else {
       toast.success("Password reset successfully! Please log in.");
       setResetPass(false);

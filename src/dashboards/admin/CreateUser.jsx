@@ -3,6 +3,7 @@ import { adminsupabase, supabase } from "../../services/supabase";
 import Select from "react-select";
 import { IoEyeOffOutline, IoEyeOutline } from "react-icons/io5";
 import toast from "react-hot-toast";
+import { handleError } from "../../common-components/handleError";
 
 function CreateUser() {
   const [categories, setCategories] = useState([]);
@@ -39,7 +40,9 @@ function CreateUser() {
           .select("name");
 
         if (error) {
-          console.error("Error fetching categories:", error);
+          handleError(error, {
+            prodMessage: "Error fetching categories. Please try again.",
+          });
           return;
         }
 
@@ -51,10 +54,16 @@ function CreateUser() {
 
           setCategories(formattedCategories);
         } else {
-          console.error("Invalid categories data format:", data);
+          handleError(data, {
+            prodMessage:
+              "Unexpected error fetching categories. Please try again.",
+          });
         }
       } catch (err) {
-        console.error("Unexpected error fetching categories:", err);
+        handleError(err, {
+          prodMessage:
+            "Unexpected error fetching categories. Please try again.",
+        });
       }
     };
 
@@ -108,7 +117,9 @@ function CreateUser() {
     });
 
     if (error) {
-      console.error("Error updating profile:", error.message);
+      handleError(error, {
+        prodMessage: "Error updating profile. Please try again.",
+      });
     }
   };
 
@@ -147,8 +158,9 @@ function CreateUser() {
       });
 
       if (error) {
-        console.error("Supabase Error:", error);
-        toast.error(error.message || "Error creating user");
+        handleError(error, {
+          prodMessage: "Error creating user. Please try again.",
+        });
         return;
       }
 
@@ -167,9 +179,9 @@ function CreateUser() {
         toast.success(`${formData.role} created successfully`);
       }
     } catch (error) {
-      console.error("Error signing up:", error);
-    } finally {
-      setIsloading(false);
+      handleError(error, {
+        prodMessage: "Error signing up. Please try again.",
+      });
     }
   };
 

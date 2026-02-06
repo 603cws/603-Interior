@@ -13,6 +13,7 @@ import { AnimatedButton } from "../../common-components/AnimatedButton";
 import { fullNames, workspaceImages } from "../utils/Constants";
 import { MIN_AREA, MAX_AREA, mapAreaValues } from "../utils/AreaCalculations";
 import { useBoqApp } from "../../Context/BoqContext";
+import { handleError } from "../../common-components/handleError";
 
 const TreeMap = ({ totalArea, areaQuantities, areaValues, seatCounts }) => {
   const [hoveredArea, setHoveredArea] = useState(null);
@@ -36,7 +37,7 @@ const TreeMap = ({ totalArea, areaQuantities, areaValues, seatCounts }) => {
   const validTotalArea = totalArea > 0 ? totalArea : 4000;
   const builtArea = Object.keys(areaQuantities).reduce(
     (acc, key) => acc + areaQuantities[key] * areaValues[key],
-    0
+    0,
   );
   const availableArea = validTotalArea - builtArea;
 
@@ -89,7 +90,7 @@ const TreeMap = ({ totalArea, areaQuantities, areaValues, seatCounts }) => {
     }),
     {
       x: `Available Space: ${((availableArea / validTotalArea) * 100).toFixed(
-        2
+        2,
       )}%`,
       y: availableArea,
       fillColor: colors["Available Space"],
@@ -98,7 +99,7 @@ const TreeMap = ({ totalArea, areaQuantities, areaValues, seatCounts }) => {
 
   function splitTreemapLabels(root) {
     const labels = root.querySelectorAll(
-      ".apexcharts-treemap .apexcharts-datalabel"
+      ".apexcharts-treemap .apexcharts-datalabel",
     );
 
     labels.forEach((label) => {
@@ -106,7 +107,7 @@ const TreeMap = ({ totalArea, areaQuantities, areaValues, seatCounts }) => {
       if (!txt.includes("|||")) return;
 
       const rect = label.closest(
-        "g.apexcharts-data-labels"
+        "g.apexcharts-data-labels",
       )?.previousElementSibling;
 
       let aspectRatio = 1;
@@ -135,7 +136,7 @@ const TreeMap = ({ totalArea, areaQuantities, areaValues, seatCounts }) => {
       lines.forEach((line, i) => {
         const tspan = document.createElementNS(
           "http://www.w3.org/2000/svg",
-          "tspan"
+          "tspan",
         );
         tspan.setAttribute("x", x);
         tspan.setAttribute("dy", i === 0 ? startDy : `${lh}em`);
@@ -349,7 +350,7 @@ const TreeMap = ({ totalArea, areaQuantities, areaValues, seatCounts }) => {
           areaQuantities,
           totalArea,
           builtArea,
-          seatCounts
+          seatCounts,
         );
 
         // Insert into tables
@@ -360,7 +361,9 @@ const TreeMap = ({ totalArea, areaQuantities, areaValues, seatCounts }) => {
           .single();
 
         if (error) {
-          console.error("Error inserting into layout:", error.message);
+          handleError(error, {
+            prodMessage: "Error inserting into layout. Please try again.",
+          });
         }
 
         if (data) {

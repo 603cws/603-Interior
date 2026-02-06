@@ -10,6 +10,7 @@ import { MdOutlineDelete } from "react-icons/md";
 import { IoClose } from "react-icons/io5";
 import toast from "react-hot-toast";
 import { showRemoveFromCartToast } from "../../utils/AddToCartToast";
+import { handleError } from "../../common-components/handleError";
 
 export default function Card({ image, title, subtitle }) {
   return (
@@ -224,7 +225,9 @@ export function CartCard({ cartitem }) {
         showRemoveFromCartToast(product);
         if (error) throw new Error(error);
       } catch (error) {
-        console.error(error);
+        handleError(error, {
+          prodMessage: "Something went wrong. Please try again.",
+        });
       } finally {
         getCartItems();
       }
@@ -250,11 +253,15 @@ export function CartCard({ cartitem }) {
         .update({ quantity: newQuantity })
         .eq("productId", productId);
       if (error) {
-        console.error(error);
+        handleError(error, {
+          prodMessage: "Something went wrong. Please try again.",
+        });
       }
       setLoadingQty(false);
     } catch (error) {
-      console.error(error);
+      handleError(error, {
+        prodMessage: "Something went wrong. Please try again.",
+      });
     } finally {
       setLoadingQty(false);
       getCartItems();
@@ -327,10 +334,14 @@ export function CartCard({ cartitem }) {
         localStorage.setItem("cartitems", JSON.stringify(updatedItems));
         setLocalCartItems(updatedItems);
       } else {
-        console.error("Signed URL error:", error);
+        handleError(error, {
+          prodMessage: "Something went wrong. Please try again.",
+        });
       }
     } catch (err) {
-      console.error("refreshSignedUrl failed:", err);
+      handleError(err, {
+        prodMessage: "Something went wrong. Please try again.",
+      });
     }
   };
   const cartItemTotal =

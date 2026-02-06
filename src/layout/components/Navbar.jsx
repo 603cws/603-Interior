@@ -11,6 +11,7 @@ import EnterAreaModal from "./EnterAreaModal";
 import { AnimatedButton } from "../../common-components/AnimatedButton";
 import { MIN_AREA, MAX_AREA, mapAreaValues } from "../utils/AreaCalculations";
 import { useBoqApp } from "../../Context/BoqContext";
+import { handleError } from "../../common-components/handleError";
 
 function Navbar({
   resetAll,
@@ -110,7 +111,7 @@ function Navbar({
           areaQuantities,
           totalArea,
           builtArea,
-          seatCounts
+          seatCounts,
         );
 
         const { data, error } = await supabase
@@ -120,7 +121,9 @@ function Navbar({
           .single();
 
         if (error) {
-          console.error("Error inserting into layout:", error.message);
+          handleError(error, {
+            prodMessage: "Something went wrong. Please try again.",
+          });
         }
         if (data) {
           const currentLayoutID = data.id;

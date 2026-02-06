@@ -6,6 +6,7 @@ import { MdDeleteOutline } from "react-icons/md";
 import { FaBuilding } from "react-icons/fa";
 import { useState } from "react";
 import { adminsupabase } from "../../services/supabase";
+import { handleError } from "../../common-components/handleError";
 
 function AdminDashVendors({
   isExpanded,
@@ -37,7 +38,9 @@ function AdminDashVendors({
         setIsModalOpen(false);
         setSelectedUser(null);
       } catch (error) {
-        console.error(error);
+        handleError(error, {
+          prodMessage: "Something went wrong. Please try again.",
+        });
       } finally {
         setIsvendorRefresh(true);
       }

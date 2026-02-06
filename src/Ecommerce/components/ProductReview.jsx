@@ -4,6 +4,7 @@ import { useApp } from "../../Context/Context";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
+import { handleError } from "../../common-components/handleError";
 
 const ratings = ["Bad", "Average", "OK", "Good", "Very Good"];
 
@@ -22,7 +23,7 @@ export default function ProductReview({ product, onClose }) {
 
   const handleFileChange = (e) => {
     const selected = Array.from(e.target.files).filter((file) =>
-      file.type.startsWith("image/")
+      file.type.startsWith("image/"),
     );
     if (selected.length > 3) {
       toast.error("You can only upload up to 3 files.");
@@ -68,11 +69,15 @@ export default function ProductReview({ product, onClose }) {
         },
       ]);
       if (error) {
-        console.error(error);
+        handleError(error, {
+          prodMessage: "An unexpected error occurred. Please try again.",
+        });
       }
       toast.success("Thank you! Your review has been submitted");
     } catch (error) {
-      console.error(error);
+      handleError(error, {
+        prodMessage: "An unexpected error occurred. Please try again.",
+      });
     } finally {
       setUploading(false);
       setRating(2);

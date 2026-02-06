@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import DashboardCards from "./DashboardCards";
 import DashboardInbox from "./DashboardInbox";
 import { supabase } from "../../services/supabase";
+import { handleError } from "../../common-components/handleError";
 
 function AdminDashHome({
   allusers,
@@ -30,7 +31,9 @@ function AdminDashHome({
       });
       setProducts(sortedData);
     } catch (error) {
-      console.error("Error fetching products:", error);
+      handleError(error, {
+        prodMessage: "Error fetching products. Please try again.",
+      });
     }
   };
 
@@ -50,7 +53,9 @@ function AdminDashHome({
       });
       setAddons(sortedData);
     } catch (error) {
-      console.error("error", error);
+      handleError(error, {
+        prodMessage: "Something went wrong. Please try again.",
+      });
     }
   };
 

@@ -28,6 +28,7 @@ import EcomDashHome from "./EcomDashHome";
 import DeleteWarning from "../../components/DeleteWarning";
 import SubscripedEmail from "./SubscripedEmail";
 import { RiMailAiLine } from "react-icons/ri";
+import { handleError } from "../../../common-components/handleError";
 
 function handlesidebarState(state, action) {
   switch (action.type) {
@@ -113,13 +114,15 @@ function AdminDashboardEcom() {
       if (selectedProductview.additional_images) {
         try {
           const parsedAdditionalImages = JSON.parse(
-            selectedProductview.additional_images
+            selectedProductview.additional_images,
           );
           if (Array.isArray(parsedAdditionalImages)) {
             imagePaths = imagePaths.concat(parsedAdditionalImages);
           }
         } catch (parseError) {
-          console.error("error parsing error", parseError);
+          handleError(parseError, {
+            prodMessage: "Something went wrong. Please try again.",
+          });
         }
       }
 
@@ -133,7 +136,9 @@ function AdminDashboardEcom() {
 
       setProductPreview(false);
     } catch (error) {
-      console.error(error);
+      handleError(error, {
+        prodMessage: "Something went wrong. Please try again.",
+      });
     } finally {
       setIsProductRefresh(true);
       // selectedProductview.type === "product"
@@ -207,7 +212,9 @@ function AdminDashboardEcom() {
       setAllusers(data);
       setFilteredUsers(data);
     } catch (error) {
-      console.error(error);
+      handleError(error, {
+        prodMessage: "Something went wrong. Please try again.",
+      });
     } finally {
       setIsrefresh(false);
     }
@@ -231,7 +238,7 @@ function AdminDashboardEcom() {
 
   const [sidebarstate, sidebarDispatch] = useReducer(
     handlesidebarState,
-    sidebarInitialState
+    sidebarInitialState,
   );
 
   const [isOpen, setIsOpen] = useState(false);

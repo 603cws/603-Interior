@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { supabase } from "../../services/supabase";
 import { useBoqApp } from "../../Context/BoqContext";
 import toast from "react-hot-toast";
+import { handleError } from "../../common-components/handleError";
 
 export default function FormulaEditor() {
   const { formulaMap, refetchFormulas } = useBoqApp();
@@ -21,7 +22,9 @@ export default function FormulaEditor() {
   const fetchCategories = async () => {
     const { data, error } = await supabase.from("categories").select("name");
     if (error) {
-      console.error("Error fetching categories:", error);
+      handleError(error, {
+        prodMessage: "Error fetching categories. Please try again.",
+      });
     } else {
       setCategories(data.map((cat) => cat.name));
     }
@@ -39,7 +42,10 @@ export default function FormulaEditor() {
       .from("formulas")
       .update({ [field]: value })
       .eq("category", category);
-    if (error) console.error("Error updating formula:", error);
+    if (error)
+      handleError(error, {
+        prodMessage: "Error updating formula. Please try again.",
+      });
     else await refetchFormulas();
   };
 
@@ -48,7 +54,10 @@ export default function FormulaEditor() {
       .from("formulas")
       .delete()
       .eq("category", category);
-    if (error) console.error("Error deleting formula:", error);
+    if (error)
+      handleError(error, {
+        prodMessage: "Error deleting formula. Please try again.",
+      });
     else await refetchFormulas();
   };
 
@@ -62,7 +71,10 @@ export default function FormulaEditor() {
     const { error } = await supabase
       .from("formulas")
       .insert([{ category, formula, description }]);
-    if (error) console.error("Error adding formula:", error);
+    if (error)
+      handleError(error, {
+        prodMessage: "Error adding formula. Please try again.",
+      });
     else {
       await refetchFormulas();
       setNewFormula({ category: "", formula: "", description: "" });

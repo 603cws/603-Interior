@@ -5,6 +5,7 @@ import { supabase } from "../../services/supabase";
 import { specialArray } from "../../utils/AllCatArray";
 import { useAllCatArray } from "../../utils/AllCatArray";
 import toast from "react-hot-toast";
+import { handleError } from "../../common-components/handleError";
 
 const getDynamicSubcategories = (category, type, AllCatArray) => {
   if (!category || !type) return [];
@@ -129,7 +130,12 @@ function SelectSubcategories({
             .eq("default", product?.segment)
             .eq("segment", product?.segment);
 
-        if (fetchError) return console.error("fetcherror", fetchError);
+        if (fetchError) {
+          handleError(fetchError, {
+            prodMessage: "Something went wrong. Please try again.",
+          });
+          return;
+        }
 
         if (getAllDefaultProducts && getAllDefaultProducts?.length > 0) {
           const updated = getAllDefaultProducts?.map((item) => {
@@ -154,13 +160,16 @@ function SelectSubcategories({
           for (const item of updated) {
             const defaultSubCat = item.filtered;
 
-            const { data: updatedData, error } = await supabase
+            const { error } = await supabase
               .from("product_variants")
               .update({ defaultSubCat })
               .eq("id", item.id)
               .select();
 
-            if (error) console.error("Update failed:", item.id, error);
+            if (error)
+              handleError(error, {
+                prodMessage: "Something went wrong. Please try again.",
+              });
           }
         }
       }
@@ -173,7 +182,9 @@ function SelectSubcategories({
         .eq("subcategory1", subcategory1)
         .limit(1);
       if (fetchError) {
-        console.error("Fetch error:", fetchError);
+        handleError(fetchError, {
+          prodMessage: "Something went wrong. Please try again.",
+        });
         return;
       }
       let productId;
@@ -192,7 +203,9 @@ function SelectSubcategories({
           .select()
           .single();
         if (insertError) {
-          console.error("Insert error:", insertError);
+          handleError(insertError, {
+            prodMessage: "Something went wrong. Please try again.",
+          });
           return;
         }
         productId = newProduct.id;
@@ -207,7 +220,9 @@ function SelectSubcategories({
           })
           .eq("id", product.id);
         if (updateError) {
-          console.error("Update variant error:", updateError);
+          handleError(updateError, {
+            prodMessage: "Something went wrong. Please try again.",
+          });
           return;
         }
       } else {
@@ -218,7 +233,9 @@ function SelectSubcategories({
           })
           .eq("id", product.id);
         if (updateError) {
-          console.error("Update variant error:", updateError);
+          handleError(updateError, {
+            prodMessage: "Something went wrong. Please try again.",
+          });
           return;
         }
       }
@@ -226,7 +243,9 @@ function SelectSubcategories({
       setRejectReason("");
       onClose();
     } catch (error) {
-      console.error(error);
+      handleError(error, {
+        prodMessage: "Something went wrong. Please try again.",
+      });
     } finally {
       setMarkDefault(false);
     }

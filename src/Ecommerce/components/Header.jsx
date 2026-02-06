@@ -13,6 +13,7 @@ import { motion } from "framer-motion";
 import { CiSearch } from "react-icons/ci";
 import { useEcomApp } from "../../Context/EcomContext";
 import { useBoqApp } from "../../Context/BoqContext";
+import { handleError } from "../../common-components/handleError";
 
 function Header() {
   const navigate = useNavigate();
@@ -122,7 +123,9 @@ function Header() {
       );
       setProducts(filtered);
     } catch (error) {
-      console.error(error);
+      handleError(error, {
+        prodMessage: "An unexpected error occurred. Please try again.",
+      });
     }
   };
 

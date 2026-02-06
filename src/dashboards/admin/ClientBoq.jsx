@@ -12,6 +12,7 @@ import { IoIosSearch } from "react-icons/io";
 import ProductView from "../components/ProductView";
 import PagInationNav from "../../common-components/PagInationNav";
 import BackButton from "../../common-components/BackButton";
+import { handleError } from "../../common-components/handleError";
 function ClientBoq({ setClientBoqs }) {
   const [savedBoqs, setSavedBoqs] = useState([]);
   const [selectedBoq, setSelectedBoq] = useState();
@@ -72,9 +73,14 @@ function ClientBoq({ setClientBoqs }) {
         setSelectedBoq(data[0]);
         setIsboqavailable(true);
       }
-      if (error) console.error(error);
+      if (error)
+        handleError(error, {
+          prodMessage: "Something went wrong. Please try again.",
+        });
     } catch (error) {
-      console.error(error);
+      handleError(error, {
+        prodMessage: "Something went wrong. Please try again.",
+      });
     } finally {
       setIsloading(false);
     }
@@ -106,7 +112,9 @@ function ClientBoq({ setClientBoqs }) {
         setFilteredAddons(data);
       }
     } catch (error) {
-      console.error(error);
+      handleError(error, {
+        prodMessage: "Something went wrong. Please try again.",
+      });
     } finally {
       setIsloading(false);
     }
@@ -139,7 +147,9 @@ function ClientBoq({ setClientBoqs }) {
         setFilteredProducts([]);
       }
     } catch (error) {
-      console.error(error);
+      handleError(error, {
+        prodMessage: "Something went wrong. Please try again.",
+      });
     } finally {
       setIsloading(false);
     }
