@@ -138,8 +138,8 @@ function Contactus() {
                   </div>
                   <div className="font-Georgia">
                     <form
-                      action=""
-                      className="[&_label]:text-[#F8F9FA] [&_input]:text-[#DBDBDB] [&_input]:bg-[#304778] [&_textarea]:bg-[#304778] [&_input]:border-[#DEE2E6] [&_input]:border-opacity-40 [&_textarea]:border-[#DEE2E6] [&_textarea]:border-opacity-40 font-Georgia text-[15px]"
+                      onSubmit={handleformsubmit}
+                      className=" [&_label]:text-[#F8F9FA] [&_input]:text-[#DBDBDB] [&_input]:bg-[#304778] [&_textarea]:bg-[#304778] [&_input]:border-[#DEE2E6] [&_input]:border-opacity-40 [&_textarea]:border-[#DEE2E6] [&_textarea]:border-opacity-40 font-Georgia text-[15px]"
                     >
                       <div className="mb-2 flex flex-col gap-2">
                         <label className="">Full Name*</label>
@@ -199,11 +199,12 @@ function Contactus() {
                           placeholder="Write your messages..."
                           value={form.message}
                           onChange={handleChange}
+                          required
                         ></textarea>
                       </div>
                       <button
                         className="px-10 py-4 font-Georgia rounded-3xl border-white border mb-2 text-white"
-                        onClick={handleformsubmit}
+                        type="submit"
                         disabled={isSubmitting}
                       >
                         {isSubmitting ? (

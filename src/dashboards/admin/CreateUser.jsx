@@ -17,6 +17,7 @@ function CreateUser() {
     password: "",
     confirmPassword: "",
   });
+  const [isloading, setIsloading] = useState(false);
 
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] =
@@ -137,6 +138,7 @@ function CreateUser() {
     }
 
     try {
+      setIsloading(true);
       const { data, error } = await adminsupabase.auth.admin.createUser({
         email: formData.email,
         password: formData.password,
@@ -166,6 +168,8 @@ function CreateUser() {
       }
     } catch (error) {
       console.error("Error signing up:", error);
+    } finally {
+      setIsloading(false);
     }
   };
 
@@ -338,7 +342,7 @@ function CreateUser() {
                 type="submit"
                 className="bg-[#374A75] text-white px-6 py-2 rounded border border-[#000] font-bold hover:bg-[#6d87c4]"
               >
-                Submit
+                {isloading ? "loading.." : "submit"}
               </button>
             </div>
           </form>

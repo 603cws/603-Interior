@@ -21,7 +21,7 @@ function LandingNavbar({ className }) {
             <li
               onClick={() => navigate("/products")}
               className={`cursor-pointer relative after:content-[''] after:absolute after:left-0 after:bottom-[-2px] after:h-[1px] after:bg-[#FFC900] after:transition-all after:duration-300 ${
-                pathname === "/Aboutus" ? "after:w-full" : "after:w-0"
+                pathname === "/" ? "after:w-full" : "after:w-0"
               } hover:after:w-full`}
             >
               Store

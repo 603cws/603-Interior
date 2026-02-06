@@ -141,7 +141,7 @@ function ContactUsPopup({ onClose }) {
               </h2>
               <div className="text-[#000]">
                 <form
-                  action=""
+                  onSubmit={handleformsubmit}
                   className="space-y-2 lg:space-y-3 [&_label]:font-semibold [&_input]:border [&_input]:p-1.5 [&_input]:rounded-md [&_input]:text-xs lg:[&_input]:text-sm [&_label]:text-xs lg:[&_label]:text-sm "
                 >
                   <div className="flex flex-col gap-1">
@@ -199,14 +199,15 @@ function ContactUsPopup({ onClose }) {
                       value={form.message}
                       onChange={handleChange}
                       className="border rounded-md p-1.5 text-xs lg:text-sm"
+                      required
                     >
                       {" "}
                     </textarea>
                   </div>
                   <button
                     className="bg-[#304778] text-[#fff] font-semibold px-10 py-2 rounded-md"
-                    onClick={handleformsubmit}
                     disabled={isSubmitting}
+                    type="submit"
                   >
                     {isSubmitting ? (
                       <div className="spinner">

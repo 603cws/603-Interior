@@ -180,7 +180,6 @@ export default function LoginPopup({ onClose, product }) {
               className="w-full h-full object-cover object-bottom"
             />
           </div>
-
           <form
             onSubmit={handleSubmit}
             className="flex flex-col justify-center items-center p-8 relative"
@@ -213,10 +212,11 @@ export default function LoginPopup({ onClose, product }) {
                   <input
                     type="email"
                     name="email"
-                    value={formData.email}
+                    value={formData?.email}
                     onChange={handleChange}
                     className="w-full mb-4 p-2 border border-gray-300 rounded-md"
-                    placeholder="you@example.com"
+                    placeholder="JohnDoe@example.com"
+                    required
                   />
 
                   <label className="text-sm block mb-1 text-gray-700">
@@ -226,13 +226,14 @@ export default function LoginPopup({ onClose, product }) {
                     <input
                       type={showPassword ? "text" : "password"}
                       name="password"
-                      value={formData.password}
+                      value={formData?.password}
                       onChange={handleChange}
                       className="w-full p-2 border border-gray-300 rounded-md pr-16"
                       autoComplete={
                         isSignUp ? "new-password" : "current-password"
                       }
                       placeholder="••••••••"
+                      required
                     />
                     <button
                       type="button"
@@ -250,10 +251,11 @@ export default function LoginPopup({ onClose, product }) {
                     <input
                       type={showConfirmPassword ? "text" : "password"}
                       name="confirmPassword"
-                      value={formData.confirmPassword}
+                      value={formData?.confirmPassword}
                       onChange={handleChange}
                       className="w-full mb-4 p-2 border border-gray-300 rounded-md"
                       placeholder="••••••••"
+                      required
                     />
                     <button
                       type="button"
@@ -276,10 +278,11 @@ export default function LoginPopup({ onClose, product }) {
                   <input
                     type="text"
                     name="company"
-                    value={formData.company}
+                    value={formData?.company}
                     onChange={handleChange}
                     className="w-full mb-4 p-2 border border-gray-300 rounded-md"
                     placeholder="Your Company"
+                    required
                   />
 
                   <label className="text-sm block mb-1 text-gray-700">
@@ -288,10 +291,11 @@ export default function LoginPopup({ onClose, product }) {
                   <input
                     type="text"
                     name="location"
-                    value={formData.location}
+                    value={formData?.location}
                     onChange={handleChange}
                     className="w-full mb-4 p-2 border border-gray-300 rounded-md"
                     placeholder="City, Area"
+                    required
                   />
 
                   <label className="text-sm block mb-1 text-gray-700">
@@ -300,10 +304,11 @@ export default function LoginPopup({ onClose, product }) {
                   <input
                     type="text"
                     name="phone"
-                    value={formData.phone}
+                    value={formData?.phone}
                     onChange={handleChange}
                     className="w-full mb-4 p-2 border border-gray-300 rounded-md"
-                    placeholder="1234567890"
+                    placeholder="Enter mobile number"
+                    required
                   />
                 </>
               )}
@@ -316,10 +321,11 @@ export default function LoginPopup({ onClose, product }) {
                   <input
                     type="email"
                     name="email"
-                    value={formData.email}
+                    value={formData?.email}
                     onChange={handleChange}
                     className="w-full mb-4 p-2 border border-gray-300 rounded-md"
-                    placeholder="you@example.com"
+                    placeholder="JohnDoe@example.com"
+                    required
                   />
 
                   <label className="text-sm block mb-1 text-gray-700">
@@ -329,10 +335,11 @@ export default function LoginPopup({ onClose, product }) {
                     <input
                       type={showPassword ? "text" : "password"}
                       name="password"
-                      value={formData.password}
+                      value={formData?.password}
                       onChange={handleChange}
                       className="w-full p-2 border border-gray-300 rounded-md pr-16"
                       placeholder="••••••••"
+                      required
                     />
                     <button
                       type="button"

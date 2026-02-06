@@ -709,11 +709,21 @@ function ShopProducts() {
                     )}
                   </div>
                 </div>
-                {currentItems.length === 0 && (
-                  <p className="text-center">No products found</p>
+                {currentItems?.length === 0 && (
+                  // <div className="h-[80vh] lg:h-full flex flex-col justify-center items-center">
+                  <div className="h-[80vh] lg:h-auto flex flex-col lg:flex-none justify-center items-center">
+                    <div className="flex justify-center items-center">
+                      <img
+                        src="/images/productNotFound.png"
+                        alt="product not found"
+                      />
+                    </div>
+                    <p className="text-center">No products found</p>
+                  </div>
+                  // </div>
                 )}
                 <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-5 gap-4 items-stretch">
-                  {currentItems.map((product, index) => (
+                  {currentItems?.map((product, index) => (
                     <ShopCard product={product} key={index} />
                   ))}
                 </div>

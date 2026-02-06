@@ -13,6 +13,7 @@ import { MdLocationOn } from "react-icons/md";
 
 function Footer() {
   const [email, setEmail] = useState("");
+  const [isloading, setisloading] = useState(false);
   const { currentYear } = getDateInfo();
 
   const scrollToTop = () => {
@@ -27,23 +28,29 @@ function Footer() {
 
   const handleSubscribe = async (e) => {
     e.preventDefault();
+    try {
+      setisloading(true);
+      if (!isValidEmail(email)) {
+        toast.error("Please enter a valid email address.");
+        return;
+      }
 
-    if (!isValidEmail(email)) {
-      toast.error("Please enter a valid email address.");
-      return;
-    }
+      const { error } = await supabase
+        .from("news_letter")
+        .insert([{ email, subscribed: true }]);
 
-    const { error } = await supabase
-      .from("news_letter")
-      .insert([{ email, subscribed: true }]);
-
-    if (error) {
-      console.error(error);
-
-      toast.error("Invalid email");
-    } else {
+      if (error) {
+        throw error;
+      }
       toast.success("subscribed sucessfully");
       setEmail("");
+    } catch (error) {
+      error.code === "23505"
+        ? toast.error("email already subscribed")
+        : toast.error("something went wrong");
+      console.error(error);
+    } finally {
+      setisloading(false);
     }
   };
 
@@ -68,9 +75,13 @@ function Footer() {
               onChange={(e) => setEmail(e.target.value)}
               className="border-y-[1px] border-l-[1px] border-[#777777] w-full py-3.5 bg-transparent px-2 focus:outline-none focus:ring-0 text-[#fff]"
               name="subscribe-email"
+              required
             />
-            <button className="capitalize bg-[#EBEFF9] text-[#000000] text-nowrap py-3.5 border-y-[1px] border-r-[1px] border-[#777777] font-bold px-2 lg:px-4 hover:bg-[#EBEFF9]/80">
-              subscribe now
+            <button
+              type="submit"
+              className="capitalize bg-[#EBEFF9] text-[#000000] text-nowrap py-3.5 border-y-[1px] border-r-[1px] border-[#777777] font-bold px-2 lg:px-4 hover:bg-[#EBEFF9]/80"
+            >
+              {isloading ? "loading..." : "subscribe now"}
             </button>
           </form>
         </div>
