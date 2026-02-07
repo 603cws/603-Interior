@@ -1,9 +1,6 @@
 import { useEffect, useState, useRef, useMemo } from "react";
 import { ToastContainer } from "react-toastify";
-import {
-  MdKeyboardArrowDown,
-  MdOutlineKeyboardArrowLeft,
-} from "react-icons/md";
+import { MdKeyboardArrowDown } from "react-icons/md";
 import { normalizeKey } from "../utils/CalculateTotalPriceHelper";
 import SelectArea from "../components/SelectArea";
 import { calculateTotalPrice } from "../utils/productUtils";
@@ -24,6 +21,7 @@ import { baseImageUrl } from "../../utils/HelperConstant";
 import { useBoqApp } from "../../Context/BoqContext";
 import Spinner from "../../common-components/Spinner";
 import { handleError } from "../../common-components/handleError";
+import BackButton from "../../common-components/BackButton";
 
 function ProductOverview() {
   const [relatedProducts, setRelatedProducts] = useState([]);
@@ -140,7 +138,17 @@ function ProductOverview() {
         }
 
         if (data.image) data.image = `${baseImageUrl}${data.image}`;
-        setProducts([data]);
+
+        const subCategoriesArray = data?.products?.subcategory
+          ? data.products.subcategory.split(",").map((item) => item.trim())
+          : [];
+
+        setProducts([
+          {
+            ...data,
+            subcategory: subCategoriesArray,
+          },
+        ]);
 
         const stored = JSON.parse(sessionStorage.getItem("productData"));
         if (stored) {
@@ -368,21 +376,16 @@ function ProductOverview() {
             </div>
 
             <div className="flex items-center">
-              <span
-                className="flex items-center cursor-pointer hover:underline"
+              <BackButton
+                label="Back"
                 onClick={() => {
                   setSelectedCategory(cat);
                   setSelectedSubCategory(subCat);
                   setSelectedSubCategory1(subCat1);
                   navigate("/boq", { state: { minimizedView: true } });
                 }}
-              >
-                <MdOutlineKeyboardArrowLeft
-                  size={20}
-                  style={{ color: "#334A78" }}
-                />
-                <p>Back</p>
-              </span>
+                className="mt-3 text-black"
+              />
             </div>
 
             <div
@@ -478,7 +481,7 @@ function ProductOverview() {
                 )}
 
               <button
-                className="border-2 lg:border-[1.5px] border-[#212B36] px-2 py-1.5 text-sm lg:text-lg w-full md:w-2/5 mb-1 md:mb-3 mt-2 md:mt-5 rounded-sm"
+                className="border-2 lg:border-[1.5px] border-[#212B36] px-2 py-1.5 text-sm lg:text-lg w-full md:w-2/5 mb-1 md:mb-3 mt-2 md:mt-5 rounded-sm hover:scale-105 transition duration-300"
                 onClick={() => setShowSelectArea(true)}
               >
                 {isProductInCart() ? "Remove from BOQ " : "Add to BOQ"}
