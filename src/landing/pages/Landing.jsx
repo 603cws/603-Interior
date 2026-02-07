@@ -459,7 +459,7 @@ function Landing() {
             >
               {testimonials.map((t, idx) => (
                 <SwiperSlide key={idx} className="h-auto flex">
-                  <div className="bg-[#F9FAFB] rounded-2xl p-6 flex flex-col items-stretch font-Georgia">
+                  <div className="bg-[#F9FAFB] xl:h-[420px] rounded-2xl p-6 flex flex-col items-stretch font-Georgia border border-[#ccc]">
                     <div className="flex items-stretch gap-4 mb-4">
                       <img
                         src={t.image}
@@ -471,7 +471,7 @@ function Landing() {
                         <p className="text-sm text-[#4B5563]">{t.role}</p>
                       </div>
                     </div>
-                    <p className="text-[#374151] leading-relaxed mt-4">
+                    <p className="text-[#374151] leading-relaxed xl:mt-4">
                       &quot;{t.text}&quot;
                     </p>
                   </div>
@@ -505,19 +505,19 @@ function Landing() {
             modules={[Autoplay, Pagination, Navigation]}
             className="my-10 h-[450px]"
           >
-            {featuredProjects.map((project, idx) => (
+            {featuredProjects?.map((project, idx) => (
               <SwiperSlide key={idx} className="h-full">
                 <div
                   className="relative group w-full h-full bg-cover bg-center bg-no-repeat overflow-hidden rounded-lg"
                   style={{
-                    backgroundImage: `url("../images/home/${project.img}")`,
+                    backgroundImage: `url("../images/home/${project?.img}")`,
                   }}
                 >
                   <div className="absolute inset-0 bg-black/50 flex items-end p-5 translate-y-full group-hover:translate-y-0 transition-transform duration-700 ease-in-out" />
                   <h3 className="absolute right-0 translate-x-full group-hover:translate-x-0 bottom-5 text-white font-Georgia text-2xl text-right capitalize px-2 transition-transform duration-700 ease-in-out">
-                    {project.title}
+                    {project?.title}
                     <br />
-                    {project.location}
+                    {project?.location}
                   </h3>
                 </div>
               </SwiperSlide>

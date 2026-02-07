@@ -224,6 +224,7 @@ function ProductView() {
   useEffect(() => {
     fetchproductbyid();
     fetchSimilarproduct();
+    setProductquantity(1);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [productid]);
 
