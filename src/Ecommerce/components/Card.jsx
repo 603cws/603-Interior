@@ -146,7 +146,7 @@ export function ShopCard({ product }) {
   }, [isAuthenticated, cartItems, localcartItems, product?.id]);
 
   return (
-    <div className="font-TimesNewRoman max-w-sm max-h-sm border border-[#ccc]">
+    <div className="font-TimesNewRoman max-w-sm max-h-sm border-2 border-[#ccc]">
       <div
         onClick={() =>
           naviagte(`/productview/${product.id}`, { state: { from: "shop" } })
@@ -192,7 +192,7 @@ export function ShopCard({ product }) {
         {product?.stockQty > 0 ? (
           <button
             onClick={() => handleAddToCart(product, iscarted)}
-            className="text-[#000] uppercase bg-[#FFFFFF] text-xs border border-[#ccc] px-2 py-2 rounded-sm hover:bg-[#f2f2f2]"
+            className="bg-[#334A78] text-[#fff] text-xs lg:text-sm px-3.5 py-1.5 capitalize font-bold rounded-sm hover:bg-[#4C69A4] transition"
           >
             {iscarted ? "Go to cart" : "Add to cart"}{" "}
           </button>

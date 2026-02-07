@@ -191,7 +191,9 @@ function Header() {
               </p>
               <ul className="py-2 text-sm [&_li]:cursor-pointer">
                 <li
-                  onClick={() => navigate("/dashboard")}
+                  onClick={() =>
+                    navigate("/dashboard", { state: { openSettings: true } })
+                  }
                   className="flex items-center px-4 py-2 ml-2 hover:bg-[#f9f9f9]"
                 >
                   <img
@@ -203,7 +205,9 @@ function Header() {
                 </li>
                 <li
                   className="flex items-center px-4 py-2 ml-2 hover:bg-[#f9f9f9]"
-                  onClick={() => navigate("/dashboard")}
+                  onClick={() =>
+                    navigate("/dashboard", { state: { openOrders: true } })
+                  }
                 >
                   <img
                     src="../images/ecommerce/icon1.svg"

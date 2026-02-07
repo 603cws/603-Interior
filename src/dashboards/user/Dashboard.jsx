@@ -188,6 +188,9 @@ function Dashboard() {
     if (location.state?.openHelp) {
       sidebarDispatch({ type: "TOGGLE_SECTION", payload: SECTIONS.HELP });
     }
+    if (location.state?.openOrders) {
+      sidebarDispatch({ type: "TOGGLE_SECTION", payload: SECTIONS.ORDERS });
+    }
   }, [location.state]);
 
   useEffect(() => {

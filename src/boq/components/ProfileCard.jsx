@@ -8,6 +8,8 @@ import { MdClose } from "react-icons/md";
 import { useLogout } from "../../utils/HelperFunction";
 import GobackLayoutWarning from "./GobackLayoutWarning";
 import { useBoqApp } from "../../Context/BoqContext";
+import AnimationWrapper from "../../landing/components/AnimationWrapper";
+import { IoMdClose } from "react-icons/io";
 
 const profileVariants = {
   hidden: { x: "100%", opacity: 0 },
@@ -35,6 +37,7 @@ function ProfileCard({
   const profileRef = useRef(null);
   const [showBookAppointment, setShowBookAppointment] = useState(false);
   const [isLayoutWarning, setIslayoutWarning] = useState(false);
+  const [showWalkthrough, setShowWalkthrough] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -167,7 +170,10 @@ function ProfileCard({
                 )}
               </>
             )}
-            <div className="flex items-center mx-4 gap-3 hover:bg-[#E5F4FF] hover:cursor-not-allowed hover:rounded-lg pl-2 py-1.5">
+            <div
+              onClick={() => setShowWalkthrough(true)}
+              className="flex items-center mx-4 gap-3 hover:bg-[#E5F4FF] hover:cursor-pointer hover:rounded-lg pl-2 py-1.5"
+            >
               <img
                 src="/images/profile-card/video.png"
                 alt="video"
@@ -245,6 +251,20 @@ function ProfileCard({
             onCancel={() => setIslayoutWarning((prev) => !prev)}
             onConfirm={() => navigate("/Layout")}
           />
+        )}
+        {showWalkthrough && (
+          <div className="hidden fixed inset-0 z-[9999] xl:flex items-center justify-center bg-black/40 backdrop-blur-sm">
+            <div className="relative w-[95%] max-w-6xl max-h-[95vh] bg-white rounded-2xl shadow-2xl overflow-hidden">
+              <button
+                className="absolute right-4 top-4 z-50 rounded-full bg-black/10 hover:bg-black/20 p-2"
+                onClick={() => setShowWalkthrough(false)}
+              >
+                <IoMdClose size={20} />
+              </button>
+
+              <AnimationWrapper />
+            </div>
+          </div>
         )}
       </motion.div>
     </div>

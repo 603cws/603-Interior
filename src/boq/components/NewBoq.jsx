@@ -97,9 +97,10 @@ function NewBoq({ onConfirm }) {
       }
       if (!deletedRows || deletedRows.length === 0) {
         toast.info("No draft rows found to delete (nothing matched).");
-      } else {
-        toast.success(`Deleted ${deletedRows.length} draft(s).`);
       }
+      // else {
+      //   toast.success(`Deleted ${deletedRows.length} draft(s).`);
+      // }
       onConfirm("Draft BOQ", "new");
     } catch (err) {
       handleError(err, {

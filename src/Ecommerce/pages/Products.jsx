@@ -466,7 +466,11 @@ function Products() {
               src={selectedProduct?.image}
               alt={selectedProduct?.product_id?.title}
               className="w-96 h-auto rounded-lg shadow-md p-4 cursor-pointer"
-              onClick={() => selectedProduct && navigate(selectedProduct.link)}
+              // onClick={() => selectedProduct && navigate(selectedProduct.link)}
+              onClick={() =>
+                selectedProduct &&
+                navigate(`/productview/${selectedProduct.id}`)
+              }
             />
 
             <div className="flex items-center justify-center gap-2 my-4">
@@ -485,17 +489,39 @@ function Products() {
 
             <h3
               className="text-lg font-medium cursor-pointer"
-              onClick={() => selectedProduct && navigate(selectedProduct.link)}
+              onClick={() =>
+                selectedProduct &&
+                navigate(`/productview/${selectedProduct.id}`)
+              }
             >
               {selectedProduct?.title}
             </h3>
 
-            <p
-              className="text-gray-600 cursor-pointer"
-              onClick={() => selectedProduct && navigate(selectedProduct.link)}
-            >
-              ₹{selectedProduct?.ecommercePrice?.mrp}
-            </p>
+            <div className="flex items-center gap-2 cursor-pointer">
+              <span className="text-gray-900 font-semibold">
+                ₹{" "}
+                {Number(
+                  selectedProduct?.ecommercePrice?.sellingPrice,
+                )?.toLocaleString("en-IN", {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })}
+              </span>
+
+              {selectedProduct?.ecommercePrice?.mrp && (
+                <span className="text-gray-500 line-through text-sm">
+                  ₹{" "}
+                  {Number(selectedProduct?.ecommercePrice?.mrp)?.toLocaleString(
+                    "en-IN",
+                    {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    },
+                  )}
+                </span>
+              )}
+            </div>
+
             <button
               onClick={() => {
                 if (!selectedProduct) return;
@@ -517,7 +543,7 @@ function Products() {
           <SectionHeader title="best products" />
           <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-5">
             {bestProducts?.map((product) => (
-              <Card key={product.id} product={product} />
+              <Card key={product.id} product={product} isBestProduct={true} />
             ))}
           </div>
         </section>
@@ -623,7 +649,7 @@ function Products() {
 
 export default Products;
 
-function Card({ product }) {
+function Card({ product, isBestProduct = false }) {
   const naviagte = useNavigate();
   const { isAuthenticated } = useApp();
   const {
@@ -659,10 +685,33 @@ function Card({ product }) {
     }
   }, [isAuthenticated, cartItems, localcartItems, product?.id]);
 
+  const mrp = Number(product?.ecommercePrice?.mrp);
+  const sellingPrice = Number(product?.ecommercePrice?.sellingPrice);
+
+  const discountPercentage =
+    mrp && sellingPrice ? Math.round(((mrp - sellingPrice) / mrp) * 100) : 0;
+
+  const showDiscountBadge = discountPercentage > 15;
+
   return (
     <>
-      <div className="h-[300px] lg:h-[370px]">
-        <div className="h-full flex flex-col border-[1px] border-[#AAAAAA] relative">
+      <div className="h-[300px] lg:h-[350px] font-TimesNewRoman">
+        <div className="h-full bg-white rounded border-2 border-[#ccc] transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-[0_12px_30px_rgba(0,0,0,0.08)] group overflow-hidden relative ">
+          {showDiscountBadge && (
+            <div className="absolute top-0 left-0 z-10">
+              <span className="bg-green-100 text-green-700 text-xs font-medium px-2 py-1 rounded-br-full border border-green-200">
+                {discountPercentage}% OFF
+              </span>
+            </div>
+          )}
+          {isBestProduct && (
+            <div className="absolute top-0 right-0 w-24 h-24 overflow-hidden z-10">
+              <span className="absolute top-2.5 right-[-36px] w-28 text-center rotate-45 bg-[#FFF3D6] text-[#9C6B00] text-[8px] font-medium py-1 shadow-md">
+                TOP RATED
+              </span>
+            </div>
+          )}
+
           {product.image && (
             <div
               onClick={() =>
@@ -670,30 +719,37 @@ function Card({ product }) {
                   state: { from: "products" },
                 })
               }
-              className=" cursor-pointer"
+              className=" cursor-pointer flex justify-center pt-5"
             >
               <img
                 src={product.image}
                 alt={product.title}
-                className="w-52 h-40 lg:h-56 mx-auto mt-4 object-contain"
+                className="w-48 h-40 lg:h-52 object-contain transition-transform duration-300 group-hover:scale-105"
               />
             </div>
           )}
-          <div className="px-2 py-2 flex flex-col justify-center gap-3 font-TimesNewRoman mt-auto">
-            <p className=" text-xs lg:text-sm line-clamp-1">{product.title}</p>
-            <p className="text-xs lg:text-sm">
-              ₹{" "}
-              {product?.ecommercePrice?.sellingPrice.toLocaleString("en-IN", {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2,
-              })}
+          <div className="px-3 py-3 flex flex-col gap-2 mt-auto">
+            <p className="text-sm font-medium text-gray-800 line-clamp-1">
+              {product.title}
             </p>
+            <div className="flex items-center gap-2">
+              <p className="text-sm font-semibold text-gray-800">
+                ₹ {sellingPrice.toLocaleString("en-IN")}
+              </p>
+
+              {showDiscountBadge && (
+                <p className="text-xs text-gray-400 line-through">
+                  ₹ {mrp.toLocaleString("en-IN")}
+                </p>
+              )}
+            </div>
+
             <div className="flex justify-between items-center gap-2">
               <div>
                 {product.stockQty > 0 ? (
                   <button
                     onClick={() => handleAddToCart(product, iscarted)}
-                    className="flex items-center gap-1 font-TimesNewRoman text-sm py-1.5 border border-[#ccc] px-2 hover:bg-[#DDDDDD]"
+                    className="bg-[#334A78] text-[#fff] text-xs lg:text-sm px-4 py-2 capitalize font-bold rounded-sm hover:bg-[#4C69A4] transition"
                   >
                     {iscarted ? "Go to cart" : "Add to cart"}{" "}
                   </button>
@@ -713,7 +769,7 @@ function Card({ product }) {
                     JSON.stringify(product),
                   );
                 }}
-                className="text-[#ccc] hover:text-red-600 cursor-pointer"
+                className="text-gray-400 hover:text-red-500 transition"
               >
                 {isWishlisted ? (
                   <AiFillHeart size={20} color="red" />
