@@ -505,6 +505,7 @@ function Cart() {
         prodMessage: "Error fetching recommendations. Please try again.",
       });
     }
+  };
   const isCouponExpired = (coupon) => {
     if (!coupon?.expiryDate) return false;
     return new Date(coupon.expiryDate) < new Date();
