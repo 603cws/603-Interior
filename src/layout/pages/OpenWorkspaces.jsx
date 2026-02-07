@@ -62,7 +62,7 @@ function OpenWorkspaces({
             onIncrement={() =>
               updateAreas(
                 workspace.type,
-                (areaQuantities[workspace.type] || 0) + 1
+                (areaQuantities[workspace.type] || 0) + 1,
               )
             }
             onDecrement={() => {
@@ -78,7 +78,7 @@ function OpenWorkspaces({
               handleSizeChange(
                 size,
                 workspace.type,
-                areaQuantities[workspace.type]
+                areaQuantities[workspace.type],
               )
             }
             tooltipText={workspace.tooltipText}
@@ -86,8 +86,8 @@ function OpenWorkspaces({
               workspace.type === "linear"
                 ? sizeMapping[variant] || ""
                 : workspace.type === "lType"
-                ? sizeMapping.lType
-                : ""
+                  ? sizeMapping.lType
+                  : ""
             }`}
           />
         ))}

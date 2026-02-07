@@ -1,9 +1,41 @@
+import { motion } from "framer-motion";
 function UnusedAreaWarning({ onConfirm, onCancel, unusedArea, isSubmitting }) {
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-70 z-30">
-      <div className="max-w-sm mx-2 md:max-w-lg w-full bg-gradient-to-br from-[#334A78] to-[#68B2DC] p-4 rounded-2xl">
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.25 }}
+      className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-70 z-30"
+    >
+      <motion.div
+        initial={{ y: 40, scale: 0.9, opacity: 0 }}
+        animate={{
+          y: 0,
+          scale: 1,
+          opacity: 1,
+        }}
+        exit={{
+          y: 30,
+          scale: 0.95,
+          opacity: 0,
+        }}
+        transition={{
+          type: "spring",
+          stiffness: 160,
+          damping: 18,
+        }}
+        className="max-w-sm mx-2 md:max-w-lg w-full bg-gradient-to-br from-[#334A78] to-[#68B2DC] p-4 rounded-2xl"
+      >
         <div className="bg-white rounded-lg text-center py-10">
-          <h2 className="text-lg font-semibold">Alert: Unused Space Found</h2>
+          <motion.h2
+            initial={{ scale: 0.9 }}
+            animate={{ scale: [1, 1.04, 1] }}
+            transition={{ duration: 0.4 }}
+            className="text-lg font-semibold"
+          >
+            Alert: Unused Space Found
+          </motion.h2>
           <p className="mt-5 text-sm md:text-base">
             There is {unusedArea} sq ft of unused space.
             <br className="hidden md:block" /> Are you sure you want to proceed?
@@ -30,8 +62,8 @@ function UnusedAreaWarning({ onConfirm, onCancel, unusedArea, isSubmitting }) {
             </button>
           </div>
         </div>
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 }
 

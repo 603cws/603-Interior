@@ -4,6 +4,7 @@ import LandingNavbar from "../components/LandingNavbar";
 import { FaAngleDown, FaAngleUp } from "react-icons/fa";
 import HeroSection from "../components/HeroSection";
 import GetInTouchSection from "../components/GetInTouchSection";
+import { motion, AnimatePresence } from "framer-motion";
 
 const generalquestions = [
   {
@@ -187,7 +188,7 @@ function HelpnFaq() {
             questions={questions}
             category={category}
           />
-        )
+        ),
       )}
 
       <GetInTouchSection />
@@ -238,7 +239,7 @@ function AskedQuestionSection({ sectionIndex, questions, category }) {
 
         <div className=" flex-1 flex flex-col  border rounded-xl">
           {questions?.map((item, index) => (
-            <div
+            <motion.div
               key={index}
               className="mb-3 font-Georgia font-medium text-xs lg:text-base text-[#232323] border-b last:border-b-0 mx-4"
             >
@@ -249,18 +250,39 @@ function AskedQuestionSection({ sectionIndex, questions, category }) {
                 <button className="text-start font-Georgia font-bold text-sm lg:text-lg">
                   {item.title}
                 </button>
-                {newexpandedIndex[category] === index ? (
+                {/* {newexpandedIndex[category] === index ? (
                   <FaAngleUp />
                 ) : (
                   <FaAngleDown />
-                )}
+                )} */}
+                <FaAngleDown
+                  className={`transition-transform duration-300 ${
+                    newexpandedIndex[category] === index
+                      ? "rotate-180"
+                      : "rotate-0"
+                  }`}
+                />
               </div>
-              {newexpandedIndex[category] === index && (
-                <div className="p-4 text-[#777] border-t font-Georgia">
-                  <p>{item.content}</p>
-                </div>
-              )}
-            </div>
+              <AnimatePresence initial={false}>
+                {newexpandedIndex[category] === index && (
+                  <motion.div
+                    layout
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: "auto" }}
+                    exit={{ opacity: 0, height: 0 }}
+                    transition={{
+                      duration: 0.35,
+                      ease: [0.4, 0, 0.2, 1],
+                    }}
+                    className="overflow-hidden"
+                  >
+                    <div className="p-4 text-[#777] border-t font-Georgia">
+                      <p>{item.content}</p>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </motion.div>
           ))}
         </div>
       </div>

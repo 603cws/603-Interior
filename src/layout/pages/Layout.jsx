@@ -78,20 +78,20 @@ function Layout() {
   const [errorMessage, setErrorMessage] = useState("");
   const [mdCabinSize, setMdCabinSize] = useState(areaValues.md);
   const [breakoutRoomSize, setBreakoutRoomSize] = useState(
-    areaValues.breakoutRoom
+    areaValues.breakoutRoom,
   );
   const [videoRecordingRoomSize, setVideoRecordingRoomSize] = useState(
-    areaValues.videoRecordingRoom
+    areaValues.videoRecordingRoom,
   );
   const [conferenceRoomSize, setConferenceRoomSize] = useState(
-    areaValues.conferenceRoom
+    areaValues.conferenceRoom,
   );
   const [boardRoomSize, setBoardRoomSize] = useState(areaValues.boardRoom);
   const [smallCabinSize, setSmallCabinSize] = useState(areaValues.small);
   const [hrRoomSize, setHrRoomSize] = useState(areaValues.hrRoom);
   const [salesRoomSize, setSalesRoomSize] = useState(areaValues.sales);
   const [financeRoomSize, setFinanceRoomSize] = useState(
-    areaValues.financeRoom
+    areaValues.financeRoom,
   );
   const [managerCabinSize, setManagerCabinSize] = useState(areaValues.manager);
   const [receptionSize, setReceptionSize] = useState(areaValues.reception);
@@ -192,7 +192,7 @@ function Layout() {
       const meetingRoomLarge = calculateMeetingRoomLarge(totalArea, areaValues);
       const videoRecordingRoom = calculateVideoRecordingRoom(
         totalArea,
-        areaValues
+        areaValues,
       );
       const phoneBooth = calculatePhoneBooth(totalArea, areaValues);
       const server = calculateServer(totalArea, areaValues);
@@ -261,7 +261,7 @@ function Layout() {
 
         return acc + safeQty * safeVal;
       },
-      0
+      0,
     );
 
     setBuiltArea(calculatedBuiltArea);
@@ -338,7 +338,7 @@ function Layout() {
 
         return acc + safeQty * safeVal;
       },
-      0
+      0,
     );
 
     const freeSpace = totalArea * bufferSpace;
@@ -356,12 +356,12 @@ function Layout() {
       toast.error("Enter valid area", { duration: 2000 });
     } else {
       console.error(
-        "Built area exceeds the available space, showing error message"
+        "Built area exceeds the available space, showing error message",
       );
       setErrorMessageHandler(
         `The built area (${builtArea} sqft) exceeds the available space (${usableArea} sqft).\n` +
           "Adjust the number of workspaces OR.\n" +
-          "Increase the total area to add more workspaces."
+          "Increase the total area to add more workspaces.",
       );
       if (type === "other") {
         setOtherArea(otherArea);
@@ -413,47 +413,47 @@ function Layout() {
   const handleMdCabinAreaChange = handleRoomAreaChange("md", setMdCabinSize);
   const handleSmallCabinAreaChange = handleRoomAreaChange(
     "small",
-    setSmallCabinSize
+    setSmallCabinSize,
   );
   const handleHrRoomAreaChange = handleRoomAreaChange("hrRoom", setHrRoomSize);
   const handleSalesRoomAreaChange = handleRoomAreaChange(
     "sales",
-    setSalesRoomSize
+    setSalesRoomSize,
   );
   const handleFinanceRoomAreaChange = handleRoomAreaChange(
     "financeRoom",
-    setFinanceRoomSize
+    setFinanceRoomSize,
   );
   const handleBreakoutRoomAreaChange = handleRoomAreaChange(
     "breakoutRoom",
-    setBreakoutRoomSize
+    setBreakoutRoomSize,
   );
   const handleVideoRecordingRoomAreaChange = handleRoomAreaChange(
     "videoRecordingRoom",
-    setVideoRecordingRoomSize
+    setVideoRecordingRoomSize,
   );
   const handleConferenceRoomAreaChange = handleRoomAreaChange(
     "conferenceRoom",
-    setConferenceRoomSize
+    setConferenceRoomSize,
   );
   const handleBoardRoomAreaChange = handleRoomAreaChange(
     "boardRoom",
-    setBoardRoomSize
+    setBoardRoomSize,
   );
   const handleManagerCabinSizeChange = handleRoomAreaChange(
     "manager",
-    setManagerCabinSize
+    setManagerCabinSize,
   );
   const handleReceptionSizeChange = handleRoomAreaChange(
     "reception",
-    setReceptionSize
+    setReceptionSize,
   );
   const handleLoungeSizeChange = handleRoomAreaChange("lounge", setLoungeSize);
   const handleUpsSizeChange = handleRoomAreaChange("ups", setUpsRoomSize);
   const handleBmsSizeChange = handleRoomAreaChange("bms", setBmsRoomSize);
   const handleWashroomsSizeChange = handleRoomAreaChange(
     "washrooms",
-    setWashroomsSize
+    setWashroomsSize,
   );
 
   const hrRoomConfig = {
@@ -626,7 +626,9 @@ function Layout() {
       {warning && (
         <ErrorModal onclose={() => setWarning(false)} message={errorMessage} />
       )}
-      {areaWarn && <EnterAreaModal onclose={() => setAreaWarn(false)} />}
+      <AnimatePresence mode="wait">
+        {areaWarn && <EnterAreaModal onclose={() => setAreaWarn(false)} />}
+      </AnimatePresence>
       <AnimatePresence>
         {isOpen && (
           <div ref={profileRef}>

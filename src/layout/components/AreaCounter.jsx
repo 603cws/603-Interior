@@ -336,7 +336,6 @@ const AreaCounter = ({
           </p>
         )}
       </div>
-
       {warning && (
         <ErrorModal
           onclose={() => setWarning(false)}

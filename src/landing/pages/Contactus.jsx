@@ -206,12 +206,16 @@ function Contactus() {
                         ></textarea>
                       </div>
                       <button
-                        className="px-10 py-4 font-Georgia rounded-3xl border-white border mb-2 text-white"
                         type="submit"
                         disabled={isSubmitting}
+                        className="relative px-10 py-4 mb-2 rounded-3xl border border-white font-Georgia text-white overflow-hidden transition-all duration-300 ease-in-out hover:scale-105 active:scale-95 disabled:opacity-60 disabled:cursor-not-allowed group"
                       >
-                        {isSubmitting ? (
-                          <div className="spinner">
+                        {/* Light sweep effect */}
+                        <span className="absolute inset-0 bg-white/10 translate-x-[-120%] skew-x-12 group-hover:translate-x-[120%] transition-transform duration-700 ease-out" />
+
+                        {/* Content */}
+                        <span className="relative z-10 flex items-center justify-center gap-2">
+                          {isSubmitting ? (
                             <svg
                               className="animate-spin h-5 w-5 text-white"
                               xmlns="http://www.w3.org/2000/svg"
@@ -225,17 +229,19 @@ function Contactus() {
                                 r="10"
                                 stroke="currentColor"
                                 strokeWidth="4"
-                              ></circle>
+                              />
                               <path
                                 className="opacity-75"
                                 fill="currentColor"
                                 d="M4 12a8 8 0 018-8v8h8a8 8 0 01-8 8V12H4z"
-                              ></path>
+                              />
                             </svg>
-                          </div>
-                        ) : (
-                          "Send a message"
-                        )}
+                          ) : (
+                            <span className="tracking-wide">
+                              Send a message
+                            </span>
+                          )}
+                        </span>
                       </button>
                     </form>
                   </div>

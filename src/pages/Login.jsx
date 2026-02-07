@@ -5,12 +5,29 @@ import { IoEyeOffOutline, IoEyeOutline } from "react-icons/io5";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useApp } from "../Context/Context";
 import toast from "react-hot-toast";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { useResetBOQ } from "../utils/HelperFunction";
 import { useBoqApp } from "../Context/BoqContext";
 import ResetPassword from "../common-components/ResetPassword";
 import BackButton from "../common-components/BackButton";
 import { handleError } from "../common-components/handleError";
+
+const formVariants = {
+  initial: { opacity: 0, y: 20 },
+  animate: { opacity: 1, y: 0 },
+  exit: { opacity: 0, y: -20 },
+};
+
+const formTransition = {
+  duration: 0.35,
+  ease: "easeInOut",
+};
+
+const headerVariants = {
+  initial: { opacity: 0, y: 10 },
+  animate: { opacity: 1, y: 0 },
+  exit: { opacity: 0, y: -10 },
+};
 
 function Login() {
   const [isSignUp, setIsSignUp] = useState(false);
@@ -394,32 +411,66 @@ function Login() {
             >
               <Header isSignUp={isSignUp} isForgotPassword={isForgotPassword} />
 
-              {isForgotPassword ? (
-                <ForgotPasswordForm
-                  formData={formData}
-                  handleChange={handleChange}
-                  handleForgotPassword={handleForgotPassword}
-                  isSubmitting={isSubmitting}
-                  backToSignIn={backToSignIn}
-                />
-              ) : isSignUp ? (
-                <SignUpForm
-                  formData={formData}
-                  handleChange={handleChange}
-                  toggleForm={toggleForm}
-                  signInWithGoogle={signInWithGoogle}
-                  isLogingIn={isLogingIn}
-                />
-              ) : (
-                <SignInForm
-                  formData={formData}
-                  handleChange={handleChange}
-                  showForgotPassword={showForgotPassword}
-                  toggleForm={toggleForm}
-                  signInWithGoogle={signInWithGoogle}
-                  isLogingIn={isLogingIn}
-                />
-              )}
+              <AnimatePresence mode="wait">
+                {isForgotPassword && (
+                  <motion.div
+                    key="forgot"
+                    variants={formVariants}
+                    initial="initial"
+                    animate="animate"
+                    exit="exit"
+                    transition={formTransition}
+                    className="w-full flex flex-col items-center gap-2"
+                  >
+                    <ForgotPasswordForm
+                      formData={formData}
+                      handleChange={handleChange}
+                      handleForgotPassword={handleForgotPassword}
+                      isSubmitting={isSubmitting}
+                      backToSignIn={backToSignIn}
+                    />
+                  </motion.div>
+                )}{" "}
+                {!isForgotPassword && isSignUp && (
+                  <motion.div
+                    key="signup"
+                    variants={formVariants}
+                    initial="initial"
+                    animate="animate"
+                    exit="exit"
+                    transition={formTransition}
+                    className="w-full flex flex-col items-center gap-2"
+                  >
+                    <SignUpForm
+                      formData={formData}
+                      handleChange={handleChange}
+                      toggleForm={toggleForm}
+                      signInWithGoogle={signInWithGoogle}
+                      isLogingIn={isLogingIn}
+                    />
+                  </motion.div>
+                )}{" "}
+                {!isForgotPassword && !isSignUp && (
+                  <motion.div
+                    key="signin"
+                    variants={formVariants}
+                    initial="initial"
+                    animate="animate"
+                    exit="exit"
+                    transition={formTransition}
+                    className="w-full flex flex-col items-center gap-2"
+                  >
+                    <SignInForm
+                      formData={formData}
+                      handleChange={handleChange}
+                      showForgotPassword={showForgotPassword}
+                      toggleForm={toggleForm}
+                      signInWithGoogle={signInWithGoogle}
+                      isLogingIn={isLogingIn}
+                    />
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </form>
           </div>
         </>
@@ -456,22 +507,62 @@ function SideImage() {
 
 function Header({ isSignUp, isForgotPassword }) {
   return (
-    <div className="w-full lg:w-3/4">
-      <h1 className="capitalize text-2xl md:text-3xl font-bold  text-[#fff] md:text-[#000] text-center">
-        {isForgotPassword
-          ? "Forgot password"
-          : isSignUp
-            ? "Create Account"
-            : "Welcome back!"}
-      </h1>
+    <div className="w-full lg:w-3/4 min-h-[80px]">
+      <AnimatePresence mode="wait">
+        {isForgotPassword && (
+          <motion.div
+            key="forgot-header"
+            variants={headerVariants}
+            initial="initial"
+            animate="animate"
+            exit="exit"
+            transition={formTransition}
+          >
+            <h1 className="capitalize text-2xl md:text-3xl font-bold text-[#fff] md:text-[#000] text-center">
+              Forgot password
+            </h1>
+            <p className="capitalize text-[#fff] md:text-[#000] text-sm font-semibold text-center my-2">
+              No worries, we'll send you reset instructions
+            </p>
+          </motion.div>
+        )}
 
-      <p className="capitalize text-[#fff] md:text-[#000] text-sm font-semibold text-center my-2">
-        {isForgotPassword
-          ? "No worries, we'll send you reset instructions"
-          : isSignUp
-            ? ""
-            : "Please enter your Credentials"}
-      </p>
+        {!isForgotPassword && isSignUp && (
+          <motion.div
+            key="signup-header"
+            variants={headerVariants}
+            initial="initial"
+            animate="animate"
+            exit="exit"
+            transition={formTransition}
+          >
+            <h1 className="capitalize text-2xl md:text-3xl font-bold text-[#fff] md:text-[#000] text-center">
+              Create Account
+            </h1>
+            <p className="capitalize text-[#fff] md:text-[#000] text-sm font-semibold text-center my-2">
+              Fill the details to get started
+            </p>
+          </motion.div>
+        )}
+
+        {!isForgotPassword && !isSignUp && (
+          <motion.div
+            key="signin-header"
+            variants={headerVariants}
+            initial="initial"
+            animate="animate"
+            exit="exit"
+            transition={formTransition}
+          >
+            <h1 className="capitalize text-2xl md:text-3xl font-bold text-[#fff] md:text-[#000] text-center">
+              Welcome back!
+            </h1>
+            <p className="capitalize text-[#fff] md:text-[#000] text-sm font-semibold text-center my-2">
+              Please enter your Credentials
+            </p>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

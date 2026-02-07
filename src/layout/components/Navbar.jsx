@@ -12,6 +12,7 @@ import { AnimatedButton } from "../../common-components/AnimatedButton";
 import { MIN_AREA, MAX_AREA, mapAreaValues } from "../utils/AreaCalculations";
 import { useBoqApp } from "../../Context/BoqContext";
 import { handleError } from "../../common-components/handleError";
+import { AnimatePresence } from "framer-motion";
 
 function Navbar({
   resetAll,
@@ -204,7 +205,9 @@ function Navbar({
 
   return (
     <div>
-      {areaWarn && <EnterAreaModal onclose={() => setAreaWarn(false)} />}
+      <AnimatePresence mode="wait">
+        {areaWarn && <EnterAreaModal onclose={() => setAreaWarn(false)} />}
+      </AnimatePresence>
 
       <div className="bg-gradient-to-r from-[#23445B] to-[#487BA0] hidden lg:block">
         <div className="hidden md:flex justify-between  py-4 items-center px-5 overflow-hidden 3xl:container">
@@ -397,17 +400,18 @@ function Navbar({
           </div>
         </div>
       </div>
-
-      {showWarning && (
-        <UnusedAreaWarning
-          unusedArea={unusedArea}
-          onConfirm={handlegenrateboq}
-          onCancel={() => {
-            setShowWarning(false);
-          }}
-          isSubmitting={isSubmitting}
-        />
-      )}
+      <AnimatePresence mode="wait">
+        {showWarning && (
+          <UnusedAreaWarning
+            unusedArea={unusedArea}
+            onConfirm={handlegenrateboq}
+            onCancel={() => {
+              setShowWarning(false);
+            }}
+            isSubmitting={isSubmitting}
+          />
+        )}
+      </AnimatePresence>
       {resetAlert && (
         <div className="fixed inset-0 bg-[#000]/30 z-20">
           <AlertBox

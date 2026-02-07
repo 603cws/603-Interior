@@ -14,6 +14,7 @@ import { fullNames, workspaceImages } from "../utils/Constants";
 import { MIN_AREA, MAX_AREA, mapAreaValues } from "../utils/AreaCalculations";
 import { useBoqApp } from "../../Context/BoqContext";
 import { handleError } from "../../common-components/handleError";
+import { AnimatePresence } from "framer-motion";
 
 const TreeMap = ({ totalArea, areaQuantities, areaValues, seatCounts }) => {
   const [hoveredArea, setHoveredArea] = useState(null);
@@ -429,17 +430,18 @@ const TreeMap = ({ totalArea, areaQuantities, areaValues, seatCounts }) => {
         >
           {generateLegendItems()}
         </div>
-
-        {showWarning && (
-          <UnusedAreaWarning
-            unusedArea={unusedArea}
-            onConfirm={handlegenrateboq}
-            onCancel={() => {
-              setShowWarning(false);
-            }}
-            isSubmitting={isSubmitting}
-          />
-        )}
+        <AnimatePresence mode="wait">
+          {showWarning && (
+            <UnusedAreaWarning
+              unusedArea={unusedArea}
+              onConfirm={handlegenrateboq}
+              onCancel={() => {
+                setShowWarning(false);
+              }}
+              isSubmitting={isSubmitting}
+            />
+          )}
+        </AnimatePresence>
       </div>
       <div className="flex justify-center items-center mt-3 lg:hidden">
         <AnimatedButton

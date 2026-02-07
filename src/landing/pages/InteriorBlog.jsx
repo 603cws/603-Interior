@@ -162,9 +162,11 @@ function Card({ blog, index }) {
                   state: blog,
                 });
               }}
-              className="relative mt-4 inline-block border-[#334A78] px-6 py-2 border-2 font-medium text-sm tracking-wide group"
+              className="relative mt-4 inline-block border-[#334A78] px-6 py-2 border-2 font-medium text-sm tracking-wide group overflow-hidden transition-transform duration-300 hover:scale-105 active:scale-95"
             >
-              <span className="relative font-Georgia  z-10 text-[#334A78] font-bold">
+              <span className="absolute inset-0 bg-[#334A78] translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out" />
+
+              <span className="relative font-Georgia z-10 text-[#334A78] font-bold group-hover:text-white transition-colors duration-300">
                 Read More
               </span>
             </button>
