@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Footer from "../../common-components/Footer";
 import LandingNavbar from "../components/LandingNavbar";
-import { FaAngleDown, FaAngleUp } from "react-icons/fa";
+import { FaAngleDown } from "react-icons/fa";
 import HeroSection from "../components/HeroSection";
 import GetInTouchSection from "../components/GetInTouchSection";
 import { motion, AnimatePresence } from "framer-motion";
