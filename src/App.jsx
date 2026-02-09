@@ -1,6 +1,6 @@
 import { lazy, Suspense } from "react";
 import "./styles/Landing.css";
-import { Navigate, Route, Routes, useLocation } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 import SpinnerFullPage from "./common-components/SpinnerFullPage";
 import { useApp } from "./Context/Context";
 import PrivateRoute from "./utils/PrivateRoute";
@@ -8,7 +8,7 @@ import ScrollToTop from "./common-components/ScrollToTop";
 import BrandRouter from "./pages/Brands/BrandRouter";
 import DynamicTitle from "./common-components/DynamicTitle";
 import OurWork from "./landing/pages/OurWork";
-import WhatsappBtn from "./utils/WhatsappBtn";
+import FloatingActionMenu from "./utils/FloatingActionMenu";
 const Contactus = lazy(() => import("./landing/pages/Contactus"));
 const AboutUs = lazy(() => import("./landing/pages/AboutUs"));
 const Login = lazy(() => import("./pages/Login"));
@@ -71,35 +71,12 @@ const PageNotFound = lazy(() => import("./common-components/PageNotFound"));
 const Boq = lazy(() => import("./boq/pages/Boq"));
 const Landing = lazy(() => import("./landing/pages/Landing"));
 
-const noWhatsappPopupRoutes = [
-  "/",
-  "/Aboutus",
-  "/OurServices",
-  "/Contactus",
-  "/ourstory",
-  "/Career",
-  "/help",
-  "/termsNcondition",
-  "/privacy-policy",
-  "/Blog",
-];
-
-const matchDynamicRoute = (route, path) => {
-  const routeRegex = new RegExp(`^${route.replace(/:\w+/g, "[^/]+")}$`);
-  return routeRegex.test(path);
-};
-
 function App() {
-  const location = useLocation();
   const { accountHolder, isAuthLoading } = useApp();
 
   if (isAuthLoading) {
     return <SpinnerFullPage />;
   }
-
-  const shouldShowWhatsappBtn = noWhatsappPopupRoutes.some((route) =>
-    matchDynamicRoute(route, location.pathname),
-  );
 
   return (
     <div>
@@ -210,7 +187,7 @@ function App() {
           />
         </Routes>
       </Suspense>
-      {shouldShowWhatsappBtn && <WhatsappBtn />}
+      <FloatingActionMenu />
     </div>
   );
 }

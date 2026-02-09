@@ -76,7 +76,12 @@ function OrderConfirm() {
               continue shopping
             </button>
             <button
-              onClick={() => navigate("/dashboard", { replace: true })}
+              onClick={() =>
+                navigate("/dashboard", {
+                  replace: true,
+                  state: { openOrders: true },
+                })
+              }
               className="flex-1 py-2 uppercase text-[#fff] bg-[#374A75] tracking-wider border border-[#374A75] rounded-md flex justify-center items-center hover:bg-[#4C69A4]"
             >
               view order
