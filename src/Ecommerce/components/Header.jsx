@@ -314,8 +314,8 @@ function Header() {
                 </button>
                 {searchTerm.length >= MIN_CHARS && suggestions.length === 0 && (
                   <div className="absolute top-[110%] left-0 right-0 bg-white border border-gray-200 rounded-md shadow-md z-10 px-3 py-2 text-sm text-gray-500">
-                    No results for "
-                    <span className="font-medium">{searchTerm}</span>"
+                    No results for &quot;
+                    <span className="font-medium">{searchTerm}</span>&quot;
                   </div>
                 )}
                 {suggestions.length > 0 && (

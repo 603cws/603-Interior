@@ -4,7 +4,6 @@ import { AnimatedButton } from "../../common-components/AnimatedButton";
 import { useNavigate } from "react-router-dom";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
@@ -14,9 +13,6 @@ import Footer from "../../common-components/Footer";
 import GetInTouchSection from "../components/GetInTouchSection";
 import LazyImage from "../../utils/LazyImage";
 import { trackCTA } from "../../lib/trackCTA";
-import AnimationWrapper from "../components/AnimationWrapper";
-import { FaQuestion } from "react-icons/fa";
-import { IoMdClose } from "react-icons/io";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -85,7 +81,7 @@ function Landing() {
   const navigate = useNavigate();
   const containerRef = useRef();
   const [isloading, setIsloading] = useState(false);
-  const [showWalkthrough, setShowWalkthrough] = useState(false);
+  // const [showWalkthrough, setShowWalkthrough] = useState(false);
 
   useEffect(() => {
     const ctx = gsap.context(() => {

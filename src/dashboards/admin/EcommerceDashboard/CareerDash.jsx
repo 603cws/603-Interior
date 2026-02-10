@@ -346,7 +346,9 @@ function JobCard({
             <h3 className="text-lg font-semibold">Are you sure?</h3>
             <p>
               Do you really want to delete{" "}
-              <span className="font-semibold">"{jobdata?.jobTitle}"</span>
+              <span className="font-semibold">
+                &quot;{jobdata?.jobTitle}&quot;{" "}
+              </span>
               job post?
             </p>
             <p className="text-xs">

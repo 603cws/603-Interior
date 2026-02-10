@@ -522,7 +522,7 @@ function Header({ isSignUp, isForgotPassword }) {
               Forgot password
             </h1>
             <p className="capitalize text-[#fff] md:text-[#000] text-sm font-semibold text-center my-2">
-              No worries, we'll send you reset instructions
+              No worries, we&apos;ll send you reset instructions
             </p>
           </motion.div>
         )}
