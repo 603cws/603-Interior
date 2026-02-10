@@ -13,6 +13,7 @@ import { motion } from "framer-motion";
 import { CiSearch } from "react-icons/ci";
 import { useEcomApp } from "../../Context/EcomContext";
 import { useBoqApp } from "../../Context/BoqContext";
+import { handleError } from "../../common-components/handleError";
 
 function Header() {
   const navigate = useNavigate();
@@ -39,6 +40,8 @@ function Header() {
     showLoginPopup,
     setShowLoginPopup,
   } = useEcomApp();
+
+  const MIN_CHARS = 3;
 
   const hasShownToast = useRef(false);
   const pathname = window.location.pathname;
@@ -120,7 +123,9 @@ function Header() {
       );
       setProducts(filtered);
     } catch (error) {
-      console.error(error);
+      handleError(error, {
+        prodMessage: "An unexpected error occurred. Please try again.",
+      });
     }
   };
 
@@ -138,7 +143,7 @@ function Header() {
     const value = e.target.value;
     setSearchTerm(value);
 
-    if (value.trim() === "") {
+    if (value.trim().length < MIN_CHARS) {
       setSuggestions([]);
       return;
     }
@@ -166,6 +171,12 @@ function Header() {
     setSuggestions([]);
   };
 
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      handleSearch();
+    }
+  };
+
   return (
     <>
       <header>
@@ -180,7 +191,9 @@ function Header() {
               </p>
               <ul className="py-2 text-sm [&_li]:cursor-pointer">
                 <li
-                  onClick={() => navigate("/dashboard")}
+                  onClick={() =>
+                    navigate("/dashboard", { state: { openSettings: true } })
+                  }
                   className="flex items-center px-4 py-2 ml-2 hover:bg-[#f9f9f9]"
                 >
                   <img
@@ -192,7 +205,9 @@ function Header() {
                 </li>
                 <li
                   className="flex items-center px-4 py-2 ml-2 hover:bg-[#f9f9f9]"
-                  onClick={() => navigate("/dashboard")}
+                  onClick={() =>
+                    navigate("/dashboard", { state: { openOrders: true } })
+                  }
                 >
                   <img
                     src="../images/ecommerce/icon1.svg"
@@ -245,7 +260,7 @@ function Header() {
                   pathname === "/products" ? "after:w-full" : "after:w-0"
                 } hover:after:w-full`}
               >
-                home
+                Store
               </li>
               <li
                 onClick={() => navigate("/shop")}
@@ -253,7 +268,7 @@ function Header() {
                   pathname === "/shop" ? "after:w-full" : "after:w-0"
                 } hover:after:w-full`}
               >
-                shop
+                Collection
               </li>
               {/* <li
                 onClick={() => navigate("/Aboutus")}
@@ -283,7 +298,7 @@ function Header() {
               </button>
             </div>
             <div className="flex items-center flex-1 gap-5">
-              <div className="relative flex-[3_1_auto] border-[2px] rounded py-1 px-1 text-sm flex font-TimesNewRoman">
+              <div className="relative flex-[3_1_auto] border-[2px] rounded py-1.5 px-1 text-[15px] flex font-TimesNewRoman">
                 <input
                   type="text"
                   name=""
@@ -291,22 +306,29 @@ function Header() {
                   placeholder="Search products..."
                   value={searchTerm}
                   onChange={handleChange}
+                  onKeyDown={handleKeyDown}
                   className="flex-1 focus:outline-none border-r-[2px] text-[#334A78]"
                 />
                 <button onClick={handleSearch} className="px-0.5">
                   <CiSearch color="#334A78" size={18} />
                 </button>
-                {suggestions?.length > 0 && (
+                {searchTerm.length >= MIN_CHARS && suggestions.length === 0 && (
+                  <div className="absolute top-[110%] left-0 right-0 bg-white border border-gray-200 rounded-md shadow-md z-10 px-3 py-2 text-sm text-gray-500">
+                    No results for &quot;
+                    <span className="font-medium">{searchTerm}</span>&quot;
+                  </div>
+                )}
+                {suggestions.length > 0 && (
                   <ul className="absolute top-[110%] left-0 right-0 bg-white border border-gray-200 rounded-md shadow-md z-10 max-h-48 overflow-auto">
-                    {suggestions?.map((item) => (
+                    {suggestions.map((item) => (
                       <li
                         key={item.id}
                         onClick={() => handleSuggestionClick(item)}
                         className="px-3 py-1 text-[#334A78] hover:bg-gray-100 cursor-pointer text-sm"
                       >
-                        {item?.title} —{" "}
+                        {item.title} —{" "}
                         <span className="text-gray-500">
-                          {item?.product_type}
+                          {item.product_type}
                         </span>
                       </li>
                     ))}
@@ -359,7 +381,7 @@ function Header() {
             <button onClick={() => navigate("/")} className="">
               <img
                 src="/logo/workved-interior.png"
-                alt="w"
+                alt="Workved logo"
                 className="h-10 cursor-pointer"
               />
             </button>
@@ -412,8 +434,8 @@ function Header() {
               className="bg-white w-full absolute top-full left-0 px-2 py-3 overflow-hidden z-10"
             >
               <ul className="text-sm font-bold text-[#334A78] uppercase space-y-5">
-                <li onClick={() => navigate("/Products")}>Home</li>
-                <li onClick={() => navigate("/shop")}>shop</li>
+                <li onClick={() => navigate("/Products")}>Store</li>
+                <li onClick={() => navigate("/shop")}>Collection</li>
                 {/* <li onClick={() => navigate("/Aboutus")}>about us</li>
                 <li onClick={() => navigate("/Contactus")}>contact us</li> */}
               </ul>

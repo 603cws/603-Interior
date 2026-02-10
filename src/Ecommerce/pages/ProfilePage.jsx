@@ -10,6 +10,7 @@ import { CiStar } from "react-icons/ci";
 import { useNavigate } from "react-router-dom";
 import ProfileAddress from "../components/ProfileAddress";
 import Header from "../components/Header";
+import { handleError } from "../../common-components/handleError";
 
 const ProfilePage = () => {
   const [activeTab, setActiveTab] = useState("personalInfo");
@@ -29,7 +30,9 @@ const ProfilePage = () => {
 
       if (fetchError) throw new Error(fetchError);
     } catch (error) {
-      console.error(error);
+      handleError(error, {
+        prodMessage: "Something went wrong. Please try again.",
+      });
     }
   };
 
@@ -38,10 +41,10 @@ const ProfilePage = () => {
   }, []);
   const today = new Date();
   const validCoupons = allCoupons.filter(
-    (coupon) => new Date(coupon.expiryDate) >= today
+    (coupon) => new Date(coupon.expiryDate) >= today,
   );
   const expiredCoupons = allCoupons.filter(
-    (coupon) => new Date(coupon.expiryDate) < today
+    (coupon) => new Date(coupon.expiryDate) < today,
   );
 
   const TAB_COMPONENTS = {

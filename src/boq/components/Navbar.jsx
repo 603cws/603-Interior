@@ -16,6 +16,7 @@ import MobileActions from "./MobileActions";
 import { fetchFilteredBOQProducts } from "../utils/BoqUtils";
 import { useBoqApp } from "../../Context/BoqContext";
 import { AnimatePresence } from "framer-motion";
+import { handleError } from "../../common-components/handleError";
 
 const useBodyNoScroll = (active) => {
   useEffect(() => {
@@ -148,7 +149,9 @@ function Navbar({
       fetchSavedBOQs();
       setDeleteAlert(false);
     } catch (err) {
-      console.error("Error deleting BOQ:", err);
+      handleError(err, {
+        prodMessage: "Error deleting BOQ.",
+      });
     }
   };
 
@@ -186,8 +189,9 @@ function Navbar({
       toast.success(`Loaded BOQ: ${formatBoqTitle(data.boqTitle)}`);
       localStorage.removeItem("boqCompleted");
     } catch (err) {
-      console.error("Error loading BOQ:", err);
-      toast.error("Error loading BOQ");
+      handleError(err, {
+        prodMessage: "Error loading BOQ.",
+      });
     }
   };
 
@@ -201,7 +205,9 @@ function Navbar({
       if (error) return;
       setBoqList(data || []);
     } catch (err) {
-      console.error("Error fetching BOQs:", err);
+      handleError(err, {
+        prodMessage: "Error fetching BOQ.",
+      });
     }
   };
 
@@ -244,13 +250,17 @@ function Navbar({
         },
       ]);
       if (error) {
-        console.error("Error during insertion:", error);
+        handleError(error, {
+          prodMessage: "Error during insertion.",
+        });
       } else {
         toast.success("BOQ saved successfully!");
         setBOQTitle(boqTitle);
       }
     } catch (error) {
-      console.error("Error during insertion:", error);
+      handleError(error, {
+        prodMessage: "Error during insertion.",
+      });
     }
   };
 
@@ -267,13 +277,16 @@ function Navbar({
         })
         .eq("id", boqId);
       if (error) {
-        console.error("Error updating existing BOQ:", error);
-        toast.error("Failed to update BOQ.");
+        handleError(error, {
+          prodMessage: "Failed to update BOQ.",
+        });
       } else {
         toast.success("BOQ updated successfully!");
       }
     } catch (error) {
-      console.error("Error during update", error);
+      handleError(error, {
+        prodMessage: "Failed to update BOQ.",
+      });
     }
   };
 
@@ -315,7 +328,9 @@ function Navbar({
       );
       setIsDownloading(false);
     } catch (error) {
-      console.error("Error generating PDF:", error);
+      handleError(error, {
+        prodMessage: "Error generating PDF.",
+      });
       setIsDownloading(false);
     }
   };

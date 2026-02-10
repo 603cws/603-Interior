@@ -19,6 +19,8 @@ import { CardWithCompare } from "../components/Card";
 import ProductsMayLike from "../components/ProductsMayLike";
 import CustomerReview from "../components/CustomerReview";
 import ComparePreview from "../components/ComparePreview";
+import { handleError } from "../../common-components/handleError";
+import toast from "react-hot-toast";
 
 // const offers = [
 //   "Flat ₹50 Off + Free Surprise Gift On All Prepaid Offers 🎁",
@@ -117,7 +119,9 @@ function ProductView() {
         .createSignedUrls([imageName], 3600); // pass as array, 1 hour expiry
 
       if (signedUrlError) {
-        console.error("Error generating signed URL:", signedUrlError);
+        handleError(signedUrlError, {
+          prodMessage: "Error generating signed URL. Please try again.",
+        });
         return;
       }
 
@@ -131,7 +135,9 @@ function ProductView() {
       };
       setproduct(productwithimage);
     } catch (error) {
-      console.error(error);
+      handleError(error, {
+        prodMessage: "Something went wrong. Please try again.",
+      });
     } finally {
       setIsloading(false);
     }
@@ -185,7 +191,9 @@ function ProductView() {
         .createSignedUrls(uniqueImages, 3600); // 1 hour expiry
 
       if (signedUrlError) {
-        console.error("Error generating signed URLs:", signedUrlError);
+        handleError(signedUrlError, {
+          prodMessage: "Error generating signed URL. Please try again.",
+        });
         return;
       }
 
@@ -208,13 +216,16 @@ function ProductView() {
       setSimilarProducts(updatedProducts);
       setProductsMayLike(updatedproductmaylike);
     } catch (error) {
-      console.error(error);
+      handleError(error, {
+        prodMessage: "Something went wrong. Please try again.",
+      });
     }
   }
 
   useEffect(() => {
     fetchproductbyid();
     fetchSimilarproduct();
+    setProductquantity(1);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [productid]);
 
@@ -240,9 +251,14 @@ function ProductView() {
       )
     : [];
 
-  const handleProductQuantityInc = () => {
-    if (productqunatity >= 1) {
+  const handleProductQuantityInc = (product) => {
+    console.log(product, productqunatity);
+
+    if (productqunatity >= 1 && product?.stockQty > productqunatity) {
+      console.log("condtion statisfied");
       setProductquantity((prev) => prev + 1);
+    } else {
+      toast.error(`only ${product?.stockQty} items left`);
     }
   };
   const handleProductQuantityDec = () => {
@@ -403,7 +419,7 @@ function ProductView() {
                           ? "cursor-not-allowed"
                           : "cursor-pointer"
                       }`}
-                      onClick={handleProductQuantityInc}
+                      onClick={() => handleProductQuantityInc(product)}
                       disabled={product?.stockQty < 1}
                     >
                       +

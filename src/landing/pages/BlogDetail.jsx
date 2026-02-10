@@ -24,7 +24,7 @@ function BlogDetail() {
             <div className="flex justify-center">
               <img
                 src={`${blogImageUrl}/${blog?.image}`}
-                alt="blog"
+                alt={blog?.title || "blog"}
                 className="w-full object-cover h-72"
               />
             </div>
@@ -58,7 +58,10 @@ function BlogDetail() {
                   <div className="capitalize border-b-2 border-b-[#EFEFEF] py-5">
                     <h3 className="text-[#0E403C]">
                       Edited by :{" "}
-                      <span className="text-[#34BFAD]"> {blog?.author}</span>{" "}
+                      <span className="text-[#34BFAD]">
+                        {" "}
+                        {blog?.author}
+                      </span>{" "}
                     </h3>
                   </div>
                 </div>

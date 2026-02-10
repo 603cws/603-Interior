@@ -3,6 +3,7 @@ import { v4 as uuidv4 } from "uuid";
 import toast from "react-hot-toast";
 import { useApp } from "../../Context/Context";
 import { supabase } from "../../services/supabase";
+import { handleError } from "../../common-components/handleError";
 
 function ManageAddress() {
   const { accountHolder, fetchUserData } = useApp();
@@ -148,14 +149,18 @@ function ManageAddress() {
           .eq("id", accountHolder?.userId);
 
         if (error) {
-          console.error(error);
+          handleError(error, {
+            prodMessage: "Something went wrong. Please try again.",
+          });
           return;
         }
 
         //  clear the form on succesful submission
         clearForm();
       } catch (error) {
-        console.error(error);
+        handleError(error, {
+          prodMessage: "Something went wrong. Please try again.",
+        });
       } finally {
         setIsAddressFormOpen(false);
         fetchUserData();
@@ -191,14 +196,18 @@ function ManageAddress() {
           .eq("id", accountHolder?.userId);
 
         if (error) {
-          console.error(error);
+          handleError(error, {
+            prodMessage: "Something went wrong. Please try again.",
+          });
           return;
         }
 
         //  clear the form on succesful submission
         clearForm();
       } catch (error) {
-        console.error(error);
+        handleError(error, {
+          prodMessage: "Something went wrong. Please try again.",
+        });
       } finally {
         setIsAddressEdit(false);
         fetchUserData();
@@ -233,11 +242,15 @@ function ManageAddress() {
         .eq("id", accountHolder?.userId);
 
       if (error) {
-        console.error(error);
+        handleError(error, {
+          prodMessage: "Something went wrong. Please try again.",
+        });
         return;
       }
     } catch (error) {
-      console.error(error);
+      handleError(error, {
+        prodMessage: "Something went wrong. Please try again.",
+      });
     } finally {
       fetchUserData();
       setAddressToDelete(null);
@@ -258,25 +271,32 @@ function ManageAddress() {
         .eq("id", accountHolder?.userId);
 
       if (error) {
-        console.error("Failed to update default address:", error);
+        handleError(error, {
+          prodMessage: "Something went wrong. Please try again.",
+        });
         return;
       }
 
       fetchUserData(); // refreshes the user and address list
     } catch (err) {
-      console.error("Unexpected error:", err);
+      handleError(err, {
+        prodMessage: "Something went wrong. Please try again.",
+      });
     }
   };
 
+  const hasNoAddresses =
+    !accountHolder?.address || accountHolder.address.length === 0;
+
   return (
     <div className="font-Poppins w-full h-full overflow-auto px-4 scrollbar-hide">
-      {TotalAddress < 3 && (
+      {TotalAddress < 3 && TotalAddress > 0 && (
         <div className="font-Poppins py-2">
           <button
             onClick={handleAddAddress}
-            className="w-full text-xs leading-6 text-[#334A78] border border-[#334A78] py-2 rounded-md"
+            className="w-full text-xs leading-6 text-[#334A78] border border-[#334A78] py-2 rounded-md transition-all duration-200 hover:bg-[#EEF3FF]"
           >
-            Add new Address
+            Add New Address
           </button>
         </div>
       )}
@@ -293,6 +313,9 @@ function ManageAddress() {
       )}
 
       <div className="space-y-3 mt-3">
+        {hasNoAddresses && !isAddressFormOpen && !isAddressEdit && (
+          <AddressEmptyState onAdd={handleAddAddress} />
+        )}
         {accountHolder?.address?.length > 0 &&
           !isAddressFormOpen &&
           sortedAddressList.map((add, index) => (
@@ -539,14 +562,14 @@ function AddressForm({
           <div className="flex mb-2 justify-start items-center gap-5 font-Poppins font-semibold">
             <button
               type="submit"
-              className="uppercase text-xs text-[#ffffff] tracking-wider   px-12 py-3 flex justify-center items-center bg-[#334A78] border border-[#212B36]  rounded-sm font-thin"
+              className="uppercase text-xs text-[#ffffff] tracking-wider px-12 py-3 flex justify-center items-center bg-[#334A78] hover:bg-[#293c61] border border-[#212B36] rounded-sm font-thin"
             >
               Save
             </button>
             <button
               type="button"
               onClick={clearForm}
-              className="uppercase text-xs  tracking-wider px-12 py-3 flex justify-center items-center  border border-[#AAA]  rounded-sm font-thin"
+              className="uppercase text-xs tracking-wider px-12 py-3 flex justify-center items-center border border-[#AAA] hover:bg-[#eee] rounded-sm font-thin"
             >
               Cancel
             </button>
@@ -589,6 +612,28 @@ function DeleteAddressWarning({ address, onCancel, onConfirm }) {
           </button>
         </div>
       </div>
+    </div>
+  );
+}
+function AddressEmptyState({ onAdd }) {
+  return (
+    <div className="flex flex-col items-center justify-center text-center mt-10 p-6 border border-dashed border-[#CCD5E3] rounded-lg bg-[#F9FBFF]">
+      <div className="text-4xl mb-3">📍</div>
+
+      <h3 className="text-[#171717] font-semibold text-base mb-1">
+        No address saved yet
+      </h3>
+
+      <p className="text-sm text-[#6B7280] mb-4 max-w-xs">
+        Add a delivery address to make checkout faster and easier.
+      </p>
+
+      <button
+        onClick={onAdd}
+        className="px-6 py-2 text-xs uppercase tracking-wide bg-[#334A78] text-white rounded-md hover:bg-[#293c61]"
+      >
+        Add New Address
+      </button>
     </div>
   );
 }

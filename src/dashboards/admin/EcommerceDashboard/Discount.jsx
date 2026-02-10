@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import { IoMdArrowBack } from "react-icons/io";
 import EditDiscount from "./EditDiscount";
 import PagInationNav from "../../../common-components/PagInationNav";
+import { handleError } from "../../../common-components/handleError";
 
 function Discount() {
   const [disocunts, setDisounts] = useState([]);
@@ -20,10 +21,15 @@ function Discount() {
   const fetchDiscountCoupons = async () => {
     try {
       const { data, error } = await supabase.from("coupons").select("*");
-      if (error) console.error("Error fetching disocunts:", error);
+      if (error)
+        handleError(error, {
+          prodMessage: "Error fetching discounts. Please try again.",
+        });
       setDisounts(data);
     } catch (error) {
-      console.error("Unexpected Error:", error);
+      handleError(error, {
+        prodMessage: "Something went wrong. Please try again.",
+      });
     }
   };
 
@@ -41,7 +47,9 @@ function Discount() {
       setSelectedDiscounts([]);
       fetchDiscountCoupons();
     } catch (error) {
-      console.error("Error deleting discounts:", error);
+      handleError(error, {
+        prodMessage: "Something went wrong. Please try again.",
+      });
     }
   };
 
@@ -233,7 +241,9 @@ function DiscountForm({ setCreateDiscount }) {
         toast.success("coupon created successfully");
       }
     } catch (error) {
-      console.error("error", error);
+      handleError(error, {
+        prodMessage: "Something went wrong. Please try again.",
+      });
 
       if (error.code === "23505") {
         toast.error(`coupon with name  ${formData?.couponName}  already exist`);

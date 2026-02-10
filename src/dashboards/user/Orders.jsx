@@ -4,7 +4,6 @@ import { useState } from "react";
 import { useApp } from "../../Context/Context";
 import { MdKeyboardArrowRight } from "react-icons/md";
 import { baseImageUrl } from "../../utils/HelperConstant";
-import { BsTelephone } from "react-icons/bs";
 import { IoCashOutline } from "react-icons/io5";
 import { LiaShippingFastSolid } from "react-icons/lia";
 import { BsBoxSeam } from "react-icons/bs";
@@ -13,9 +12,9 @@ import { LuPackageCheck } from "react-icons/lu";
 import { IoCloseCircleOutline } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
 import { LuChevronDown } from "react-icons/lu";
-// import { generateInvoicePDF } from "./InvoicePdf";
 import { v4 as uuidv4 } from "uuid";
 import toast from "react-hot-toast";
+import { handleError } from "../../common-components/handleError";
 
 const statusIcon = {
   pending: <MdOutlinePendingActions />,
@@ -35,6 +34,7 @@ function Orders() {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [entireOrderCancellation, setEntireOrderCancellation] = useState(false);
   const [refreshOrder, setRefreshOrder] = useState(false);
+  const [orderToCancel, setOrderToCancel] = useState(null);
 
   const { accountHolder } = useApp();
   const navigate = useNavigate();
@@ -55,7 +55,9 @@ function Orders() {
 
       setOrders(ordersData);
     } catch (error) {
-      console.error("Error fetching orders with products:", error);
+      handleError(error, {
+        prodMessage: "Error fetching orders. Please try again.",
+      });
     } finally {
       setLoading(false);
     }
@@ -69,7 +71,6 @@ function Orders() {
   async function handleOrderCancel(order) {
     setEntireOrderCancellation((prev) => !prev);
 
-    // check the status from the db
     const { data } = await supabase
       .from("orders_table")
       .select("status")
@@ -82,7 +83,6 @@ function Orders() {
     }
 
     const uniqueId = uuidv4();
-
     const refundAmountInPaisa = order?.final_amount * 100;
     const reqbody = {
       amount: refundAmountInPaisa,
@@ -119,7 +119,9 @@ function Orders() {
         toast?.success("refund initated");
       }
     } catch (error) {
-      console.error("error", error);
+      handleError(error, {
+        prodMessage: "Something went wrong. Please try again.",
+      });
     } finally {
       setEntireOrderCancellation((prev) => !prev);
       setRefreshOrder((prev) => !prev);
@@ -132,10 +134,10 @@ function Orders() {
         <div className="flex flex-col items-center justify-center h-full">
           <p className="text-xl font-bold text-[#ccc]">Hold On...</p>
           <p className="text-xl font-bold text-[#ccc]">
-            Fetching orders for {accountHolder.companyName} !!
+            Fetching orders for {accountHolder?.companyName} !!
           </p>
         </div>
-      ) : orders.length === 0 ? (
+      ) : orders?.length === 0 ? (
         <div className="flex flex-col gap-3 justify-center items-center h-full">
           <p className="text-xl font-bold text-[#ccc]">No orders yet ?</p>
           <button
@@ -164,7 +166,7 @@ function Orders() {
               <h2 className="text-[#171717] font-bold px-3 py-3 sticky top-0 bg-[#fff] border-b">
                 All Orders
               </h2>
-              {orders.map((order) => (
+              {orders?.map((order) => (
                 <div key={order.id}>
                   <div className="px-3">
                     <div className="font-Poppins p-3 shadow-[0px_0px_2px_rgba(0,0,0,0.1)] my-2 border">
@@ -179,7 +181,7 @@ function Orders() {
                           {(order.status === "pending" ||
                             order.status === "approved") && (
                             <p className="text-xs text-[#171717]">
-                              On {order?.delivery_date}
+                              On {order?.created_at?.split("T")?.[0]}
                             </p>
                           )}
                           {order.status === "cancelled" && (
@@ -201,7 +203,7 @@ function Orders() {
                           )}
                         </div>
                       </div>
-                      <div className="flex items-center md:gap-5 bg-[#F5F8FF] px-3 py-5 my-2">
+                      <div className="flex items-center gap-2 md:gap-5 bg-[#F5F8FF] px-1 py-3  md:px-3 md:py-5 my-2">
                         <img
                           src={`${baseImageUrl}/${order?.order_items?.[0]?.product_variants.image}`}
                           alt="order item"
@@ -228,8 +230,9 @@ function Orders() {
                         order.status === "approved" ? (
                           <button
                             disabled={entireOrderCancellation}
-                            onClick={() => handleOrderCancel(order)}
-                            className=" px-10 border border-[#213626] uppercase text-xs tracking-wider rounded-sm py-2 hover:bg-red-600"
+                            // onClick={() => handleOrderCancel(order)}
+                            onClick={() => setOrderToCancel(order)}
+                            className="px-10 border border-[#213626] uppercase text-xs tracking-wider rounded-sm py-2 hover:bg-red-500"
                           >
                             cancel
                           </button>
@@ -237,7 +240,7 @@ function Orders() {
                           <button
                             disabled={true}
                             onClick={() => handleOrderCancel(order)}
-                            className=" px-10 border border-[#213626] uppercase text-xs tracking-wider rounded-sm py-2"
+                            className="px-10 border border-[#213626] uppercase text-xs tracking-wider rounded-sm py-2"
                           >
                             cancelled
                           </button>
@@ -256,9 +259,32 @@ function Orders() {
               ))}
             </div>
           ) : detailedView && !productView ? (
-            <OrderProducts orderID={selectedOrder?.id} />
+            <OrderProducts
+              orderID={selectedOrder?.id}
+              setOrderToCancel={setOrderToCancel}
+            />
           ) : (
             <OrderProductView order={selectedOrder} product={selectedProduct} />
+          )}
+          {orderToCancel && (
+            <CancelWarning
+              title="Cancel Order"
+              description={
+                <>
+                  Are you sure you want to cancel this order?
+                  <br />
+                  <span className="text-xs text-gray-600">
+                    Order ID: {orderToCancel.id}
+                  </span>
+                </>
+              }
+              confirmLabel="Cancel Order"
+              onCancel={() => setOrderToCancel(null)}
+              onConfirm={async () => {
+                await handleOrderCancel(orderToCancel);
+                setOrderToCancel(null);
+              }}
+            />
           )}
         </>
       )}
@@ -268,12 +294,13 @@ function Orders() {
 
 export default Orders;
 
-function OrderProducts({ orderID }) {
+function OrderProducts({ orderID, setOrderToCancel }) {
   const [showPriceDetails, setShowPriceDetails] = useState(false);
   const [loading, setLoading] = useState();
 
   const [order, setOrder] = useState();
   const [orderRefresh, setorderRefresh] = useState(false);
+  const [productToCancel, setProductToCancel] = useState(null);
 
   useEffect(() => {
     fetchOrdersData();
@@ -291,7 +318,9 @@ function OrderProducts({ orderID }) {
 
       setOrder(ordersData);
     } catch (error) {
-      console.error("Error fetching orders with products:", error);
+      handleError(error, {
+        prodMessage: "Something went wrong. Please try again.",
+      });
     } finally {
       setLoading(false);
     }
@@ -373,13 +402,13 @@ function OrderProducts({ orderID }) {
         setorderRefresh((prev) => !prev);
       }
     } catch (error) {
-      console.error("error", error);
+      handleError(error, {
+        prodMessage: "Something went wrong. Please try again.",
+      });
     }
   }
 
   if (loading) return <p>loading .....</p>;
-
-  console.log("order", order);
 
   return (
     <>
@@ -417,7 +446,10 @@ function OrderProducts({ orderID }) {
         </div>
         <div className="flex gap-10">
           {(order?.status === "pending" || order?.status === "approved") && (
-            <button className="flex-1 border border-[#213626] uppercase text-xs tracking-wider rounded-sm py-2 hover:bg-[#f9f9f9]">
+            <button
+              onClick={() => setOrderToCancel(order)}
+              className="flex-1 border border-[#213626] uppercase text-xs tracking-wider rounded-sm py-2 hover:bg-[#f9f9f9]"
+            >
               cancel
             </button>
           )}
@@ -434,86 +466,89 @@ function OrderProducts({ orderID }) {
           {products?.map((product) => (
             <div
               key={product.id}
-              className="border border-[#374A75] px-2 md:px-3 py-2 md:py-4 rounded-md flex md:grid grid-cols-[3fr,1fr] items-start"
+              className="border border-[#374A75] px-2 md:px-3 py-2 md:py-4 rounded-md flex flex-col md:grid grid-cols-[3fr,1fr] items-start"
             >
-              <div className="flex justify-between items-center gap-2 lg:gap-7 flex-1">
+              <div className="flex flex-col md:flex-row justify-between items-center gap-2 lg:gap-7 flex-1">
                 <img
                   src={`${baseImageUrl}/${product?.product_variants?.image}`}
                   alt={product?.product_variants?.title}
                   className="h-24 w-24 object-contain"
                 />
-                <div className="space-y-2">
-                  <h4 className="text-sm md:text-lg font-bold text-[#171717] line-clamp-2 md:line-clamp-none">
-                    {product?.product_variants?.title}
-                  </h4>
-                  <p className="text-[#171717] text-xs md:text-sm line-clamp-3 md:line-clamp-none">
-                    {product?.product_variants?.details}
-                  </p>
-                </div>
-                <div className="space-y-2">
-                  <h4 className="text-sm md:text-base font-semibold text-[#171717] capitalize">
-                    MRP
-                  </h4>
-                  <p className="text-[#171717] text-xs md:text-sm">
-                    {product?.mrp}
-                  </p>
-                </div>
-                <div className="space-y-2">
-                  <h4 className="text-sm md:text-base font-semibold text-[#171717] capitalize">
-                    Price
-                  </h4>
-                  <p className="text-[#171717] text-xs md:text-sm">
-                    {product?.selling_price}
-                  </p>
-                </div>
-                <div className="space-y-2">
-                  <h4 className="text-sm md:text-base font-semibold text-[#171717] capitalize">
-                    quantity
-                  </h4>
-                  <p className="text-[#171717] text-xs md:text-sm">
-                    {product?.quantity}
-                  </p>
-                </div>
-                <div className="space-y-2">
-                  <h4 className="text-sm md:text-base font-semibold text-[#171717] capitalize">
-                    Subtotal
-                  </h4>
-                  <p className="text-[#171717] text-xs md:text-sm">
-                    {product?.sub_total}
-                  </p>
-                </div>
+                <div className="flex flex-wrap justify-between items-center gap-3 mb-3">
+                  <div className="space-y-2">
+                    <h4 className="text-sm md:text-lg font-bold text-[#171717] line-clamp-2 md:line-clamp-none">
+                      {product?.product_variants?.title}
+                    </h4>
+                    <p className="text-[#171717] text-xs md:text-sm line-clamp-3 md:line-clamp-none">
+                      {product?.product_variants?.details}
+                    </p>
+                  </div>
+                  <div className="space-y-2">
+                    <h4 className="text-sm md:text-base font-semibold text-[#171717] capitalize">
+                      MRP
+                    </h4>
+                    <p className="text-[#171717] text-xs md:text-sm">
+                      {product?.mrp}
+                    </p>
+                  </div>
+                  <div className="space-y-2">
+                    <h4 className="text-sm md:text-base font-semibold text-[#171717] capitalize">
+                      Price
+                    </h4>
+                    <p className="text-[#171717] text-xs md:text-sm">
+                      {product?.selling_price}
+                    </p>
+                  </div>
+                  <div className="space-y-2">
+                    <h4 className="text-sm md:text-base font-semibold text-[#171717] capitalize">
+                      quantity
+                    </h4>
+                    <p className="text-[#171717] text-xs md:text-sm">
+                      {product?.quantity}
+                    </p>
+                  </div>
+                  <div className="space-y-2">
+                    <h4 className="text-sm md:text-base font-semibold text-[#171717] capitalize">
+                      Subtotal
+                    </h4>
+                    <p className="text-[#171717] text-xs md:text-sm">
+                      {product?.sub_total}
+                    </p>
+                  </div>
 
-                <div className="space-y-2">
-                  <h4 className="text-sm md:text-base font-semibold text-[#171717] capitalize">
-                    GST
-                  </h4>
-                  <p className="text-[#171717] text-xs md:text-sm">
-                    {product?.gst_amount}
-                  </p>
-                </div>
+                  <div className="space-y-2">
+                    <h4 className="text-sm md:text-base font-semibold text-[#171717] capitalize">
+                      GST
+                    </h4>
+                    <p className="text-[#171717] text-xs md:text-sm">
+                      {product?.gst_amount}
+                    </p>
+                  </div>
 
-                <div className="space-y-2">
-                  <h4 className="text-sm md:text-base font-semibold text-[#171717] capitalize text-nowrap">
-                    Total price
-                  </h4>
-                  <p className="text-[#171717] text-xs md:text-sm">
-                    {product?.final_amount}
-                  </p>
+                  <div className="space-y-2">
+                    <h4 className="text-sm md:text-base font-semibold text-[#171717] capitalize text-nowrap">
+                      Total price
+                    </h4>
+                    <p className="text-[#171717] text-xs md:text-sm">
+                      {product?.final_amount}
+                    </p>
+                  </div>
                 </div>
               </div>
 
               <div className="justify-self-end">
                 {product.item_status !== "cancelled" ? (
                   <button
-                    onClick={() => handleOrderitemCancel(product)}
-                    className=" px-10 border border-[#213626] uppercase text-xs tracking-wider rounded-sm py-2 hover:bg-red-600"
+                    // onClick={() => handleOrderitemCancel(product)}
+                    onClick={() => setProductToCancel({ order, product })}
+                    className="px-10 border border-[#213626] uppercase text-xs tracking-wider rounded-sm py-2 hover:bg-red-500"
                   >
                     cancel
                   </button>
                 ) : (
                   <button
                     disabled={true}
-                    className=" px-10 border border-[#213626] uppercase text-xs tracking-wider rounded-sm py-2"
+                    className="px-10 border border-[#213626] uppercase text-xs tracking-wider rounded-sm py-2"
                   >
                     cancelled
                   </button>
@@ -585,6 +620,29 @@ function OrderProducts({ orderID }) {
         <div className="md:px-5 text-xs md:text-sm font-bold text-[#999]">
           <p>Order ID #{order?.id}</p>
         </div>
+        {productToCancel && (
+          <CancelWarning
+            title="Cancel Product"
+            description={
+              <>
+                Are you sure you want to cancel this product?
+                <br />
+                <span className="text-xs text-gray-600">
+                  {productToCancel.product?.product_variants?.title}
+                </span>
+              </>
+            }
+            confirmLabel="Cancel Product"
+            onCancel={() => setProductToCancel(null)}
+            onConfirm={async () => {
+              await handleOrderitemCancel(
+                productToCancel.order,
+                productToCancel.product,
+              );
+              setProductToCancel(null);
+            }}
+          />
+        )}
       </div>
     </>
   );
@@ -618,7 +676,7 @@ function OrderProductView({ order, product }) {
               <p className="capitalize font-bold text-sm md:text-base">
                 {order?.status}
               </p>
-              <p className="text-xs ">On {order?.delivery_date}</p>
+              <p className="text-xs">On {order?.delivery_date}</p>
             </div>
           </div>
           <div className="my-3 md:my-0">
@@ -727,7 +785,7 @@ function Breadcrumbs({
 function PriceDistribution({ order }) {
   return (
     <div className="font-Poppins bg-[#fff]">
-      <div className="">
+      <div>
         <div className="flex justify-between border-b py-2">
           <p>Total MRP</p>
           <p>
@@ -792,6 +850,44 @@ function PriceDistribution({ order }) {
               maximumFractionDigits: 2,
             })}
           </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function CancelWarning({
+  title,
+  description,
+  confirmLabel = "Confirm",
+  onCancel,
+  onConfirm,
+}) {
+  return (
+    <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+      <div className="bg-white p-5 rounded-lg shadow-lg w-full max-w-xs md:max-w-sm">
+        <h3 className="text-lg font-semibold text-red-500 mb-2">{title}</h3>
+        <div className="mb-4">
+          <p className="text-sm text-gray-700">{description}</p>
+          <p className="text-red-500 text-xs">
+            Refund will be initiated if applicable.
+          </p>
+        </div>
+
+        <div className="flex justify-between md:justify-end gap-3">
+          <button
+            className="px-4 py-1 rounded bg-gray-200 hover:bg-gray-300"
+            onClick={onCancel}
+          >
+            Go Back
+          </button>
+
+          <button
+            className="px-4 py-1 rounded bg-red-500 hover:bg-red-600 text-white"
+            onClick={onConfirm}
+          >
+            {confirmLabel}
+          </button>
         </div>
       </div>
     </div>

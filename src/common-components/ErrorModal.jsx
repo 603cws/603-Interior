@@ -58,7 +58,7 @@ function ErrorModal({ onclose, message, sizeReached }) {
                       >
                         {sentence.trim()}.
                       </li>
-                    )
+                    ),
                 )}
               </ul>
             </div>

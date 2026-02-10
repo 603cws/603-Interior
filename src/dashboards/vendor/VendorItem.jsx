@@ -14,6 +14,7 @@ import ItemList from "./ItemList";
 import { IoIosSearch } from "react-icons/io";
 import { IoCloseCircle } from "react-icons/io5";
 import { HiPlus } from "react-icons/hi";
+import { handleError } from "../../common-components/handleError";
 
 function VendorItem({ isExpanded }) {
   const [toggle, setToggle] = useState(true);
@@ -42,19 +43,14 @@ function VendorItem({ isExpanded }) {
   const buttonRef = useRef({});
   const productview = useRef(null);
   const [isloading, setIsloading] = useState(false);
-
   const [productlist, setProductlist] = useState(true);
-
   const [products, setProducts] = useState([]);
   const [addons, setAddons] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [filteredAddons, setFilteredAddons] = useState([]);
-
   const items = toggle ? filteredProducts : filteredAddons;
   const checkitemsinOriginal = toggle ? products : addons;
-
   const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
-
   const [searchQuery, setSearchQuery] = useState("");
 
   const tabs = [
@@ -98,7 +94,9 @@ function VendorItem({ isExpanded }) {
       setProducts(sortedData);
       setFilteredProducts(sortedData);
     } catch (error) {
-      console.error("Error fetching products:", error);
+      handleError(error, {
+        prodMessage: "Something went wrong. Please try again.",
+      });
     } finally {
       setIsloading(false);
     }
@@ -111,7 +109,9 @@ function VendorItem({ isExpanded }) {
       .eq("vendorId", accountHolder.userId);
 
     if (error) {
-      console.error("Error fetching addons:", error);
+      handleError(error, {
+        prodMessage: "Error fetching addons. Please try again.",
+      });
     } else {
       const sortedData = data.sort((a, b) => {
         // Prioritize "pending" status
@@ -129,7 +129,7 @@ function VendorItem({ isExpanded }) {
   const filterItems = (query) => {
     if (toggle) {
       if (!query) {
-        setFilteredProducts(products); // Reset to original list when input is empty
+        setFilteredProducts(products);
         return;
       }
       const filtered = products.filter((item) =>
@@ -138,7 +138,7 @@ function VendorItem({ isExpanded }) {
       setFilteredProducts(filtered);
     } else {
       if (!query) {
-        setFilteredAddons(addons); // Reset to original list when input is empty
+        setFilteredAddons(addons);
         return;
       }
       const filtered = addons.filter((item) =>
@@ -170,7 +170,6 @@ function VendorItem({ isExpanded }) {
 
   useEffect(() => {
     const handleClickOutside = (event) => {
-      // If clicking inside the menu OR the menu button, do nothing
       if (
         openMenuId !== null &&
         (menuRef.current[openMenuId]?.contains(event.target) ||
@@ -179,7 +178,6 @@ function VendorItem({ isExpanded }) {
         return;
       }
 
-      // Otherwise, close the menu
       setOpenMenuId(null);
     };
 
@@ -208,7 +206,7 @@ function VendorItem({ isExpanded }) {
     try {
       if (selectedProductview && selectedProductview.type === "product") {
         await supabase
-          .from("product_variants") // Ensure this matches your table name
+          .from("product_variants")
           .delete()
           .eq("id", selectedProductview.id);
 
@@ -218,7 +216,7 @@ function VendorItem({ isExpanded }) {
 
       if (selectedProductview.type === "addon") {
         await supabase
-          .from("addon_variants") // Ensure this matches your table name
+          .from("addon_variants")
           .delete()
           .eq("id", selectedProductview.id);
         toast.success("Addon deleted successfully!");
@@ -239,7 +237,9 @@ function VendorItem({ isExpanded }) {
             imagePaths = imagePaths.concat(parsedAdditionalImages);
           }
         } catch (parseError) {
-          console.error("error parsing error", parseError);
+          handleError(parseError, {
+            prodMessage: "Something went wrong. Please try again.",
+          });
         }
       }
 
@@ -251,9 +251,11 @@ function VendorItem({ isExpanded }) {
         if (storageError) throw storageError;
       }
 
-      setProductPreview(false); // Close the modal after deletion
+      setProductPreview(false);
     } catch (error) {
-      console.error(error);
+      handleError(error, {
+        prodMessage: "Something went wrong. Please try again.",
+      });
     } finally {
       selectedProductview.type === "product"
         ? setIsProductRefresh(true)
@@ -264,7 +266,7 @@ function VendorItem({ isExpanded }) {
 
   return (
     <>
-      <div className="overflow-y-auto scrollbar-hide h-[calc(100vh-100px)] rounded-3xl relative ">
+      <div className="overflow-y-auto scrollbar-hide h-[calc(100vh-100px)] rounded-3xl relative">
         {addNewProduct ? (
           <VendorNewProduct
             setAddNewProduct={setAddNewProduct}
@@ -293,9 +295,9 @@ function VendorItem({ isExpanded }) {
           />
         ) : (
           <>
-            <div className=" sticky top-0 z-20 bg-white">
-              <div className="flex justify-between items-center px-4 py-2 border-b-2 border-b-gray-400 ">
-                <h3 className="capitalize font-semibold text-xl ">
+            <div className="sticky top-0 z-20 bg-white">
+              <div className="flex justify-between items-center px-4 py-2 border-b-2 border-b-gray-400">
+                <h3 className="capitalize font-semibold text-xl">
                   product list
                 </h3>
 
@@ -381,8 +383,6 @@ function VendorItem({ isExpanded }) {
               </div>
             </div>
 
-            {/*  */}
-
             {productlist &&
               (isloading ? (
                 <Spinner />
@@ -417,7 +417,7 @@ function VendorItem({ isExpanded }) {
               ))}
 
             {isAddProduct && (
-              <div className="flex flex-col md:justify-center md:items-center h-[80%] font-Poppins overflow-auto ">
+              <div className="flex flex-col md:justify-center md:items-center h-[80%] font-Poppins overflow-auto">
                 <AddItem
                   handleAddproductclose={handleAddproductclose}
                   setAddNewAddon={setAddNewAddon}
@@ -490,7 +490,7 @@ function AddItem({
   handleAddproductclose,
 }) {
   return (
-    <div className="p-2 border-2 border-gray-200 md:px-28 md:py-14 flex flex-col  md:flex-row justify-center items-center gap-4 md:gap-10 rounded-2xl shadow-lg capitalize relative">
+    <div className="p-2 border-2 border-gray-200 md:px-28 md:py-14 flex flex-col md:flex-row justify-center items-center gap-4 md:gap-10 rounded-2xl shadow-lg capitalize relative">
       <Item
         setAddNewitem={setAddNewProduct}
         setIsAddProduct={setIsAddProduct}

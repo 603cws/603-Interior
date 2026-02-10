@@ -37,7 +37,7 @@ function VendorProductCard({
                 <div>
                   <img src={`${baseImageUrl}${product.image}`} alt="product" />
                 </div>
-                <div className="flex gap-2 ">
+                <div className="flex gap-2">
                   {additionalImages.map((image, index) => (
                     <div key={index}>
                       <img
@@ -66,14 +66,18 @@ function VendorProductCard({
                 <h5 className="uppercase text-[#334A78] font-medium text-xs opacity-80">
                   Category:
                   <span className="font-bold text-[#000]">
-                    {product.products?.category}
+                    {product.type === "addon"
+                      ? product?.category
+                      : product.products?.category}
                   </span>
                 </h5>
                 <hr />
                 <h5 className="uppercase text-[#334A78] font-medium text-xs opacity-80">
                   Specification:
                   <span className="font-bold text-[#000]">
-                    {product.products?.subcategory1}
+                    {product.type === "addon"
+                      ? product?.specifications
+                      : product.products?.subcategory1}
                   </span>
                 </h5>
                 <hr />
@@ -87,7 +91,9 @@ function VendorProductCard({
                 <h5 className="uppercase text-[#334A78] font-medium text-xs opacity-80">
                   segment:
                   <span className="font-bold text-[#000]">
-                    {product.segment}
+                    {product.type === "addon"
+                      ? product?.type
+                      : product?.segment}
                   </span>
                 </h5>
                 <hr />
@@ -103,11 +109,12 @@ function VendorProductCard({
                         setSelectedItem(product);
                         setSelectSubcategories(true);
                       }}
-                      className={`px-5 py-2 bg-[#F8FBFF]  border-[#A3FEE7] transition-all duration-500 flex flex-col justify-center items-center rounded-lg ${
-                        currentStatus === "approved" ? "border-4" : "border-2"
-                      }`}
+                      className={`group px-2 md:px-5 py-1 md:py-2 bg-[#F8FBFF] border-[#A3FEE7] flex flex-col items-center justify-center rounded-sm text-xs md:text-sm transition-all duration-300 ease-out hover:bg-[#E9FFF9] hover:-translate-y-1 active:scale-95 ${currentStatus === "approved" ? "border-2 md:border-4" : "border md:border-2"}`}
                     >
-                      <AiTwotoneCheckCircle size={25} />
+                      <AiTwotoneCheckCircle
+                        size={25}
+                        className="text-[#2DBE9D] transition-transform duration-300 group-hover:scale-125"
+                      />
                       {currentStatus === "approved" ? "Approved" : "Approve"}
                     </button>
                     <button
@@ -115,20 +122,22 @@ function VendorProductCard({
                         updateStatus(product, "pending");
                         setRejectReason("");
                       }}
-                      className={`px-7 py-3 bg-[#FFFEF8] border-[#FFB966] transition-all duration-500 flex flex-col justify-center items-center rounded-lg ${
-                        currentStatus === "pending" ? "border-4" : "border-2"
-                      }`}
+                      className={`group px-2 md:px-5 py-1 md:py-2 bg-[#FFFEF8] border-[#FFB966] flex flex-col items-center justify-center rounded-sm text-xs md:text-sm transition-all duration-300 ease-out hover:bg-[#FFF4E0] hover:-translate-y-1 active:scale-95 ${currentStatus === "pending" ? "border-2 md:border-4" : "border md:border-2"}`}
                     >
-                      <PiClockCountdown size={25} />
+                      <PiClockCountdown
+                        size={25}
+                        className="transition-transform duration-300 group-hover:-translate-y-1 group-hover:scale-110"
+                      />
                       Pending
                     </button>
                     <button
-                      className={`px-7 py-3 bg-[#FFF8F8] border-[#FF6666] transition-all duration-500 flex flex-col justify-center items-center rounded-lg ${
-                        currentStatus === "rejected" ? "border-4" : "border-2"
-                      }`}
+                      className={`group px-2 md:px-5 py-1 md:py-2 bg-[#FFF8F8] border-[#FF6666] flex flex-col items-center justify-center rounded-sm text-xs md:text-sm transition-all duration-300 ease-out hover:bg-[#FFECEC] hover:-translate-y-1 active:scale-95 ${currentStatus === "rejected" ? "border-2 md:border-4" : "border md:border-2"}`}
                       onClick={() => setShowTextarea(true)}
                     >
-                      <IoCloseCircleOutline size={25} />
+                      <IoCloseCircleOutline
+                        size={25}
+                        className="transition-transform duration-300 group-hover:rotate-6 group-hover:scale-110"
+                      />
                       {currentStatus === "rejected" ? "Rejected" : "Reject"}
                     </button>
                   </div>
@@ -164,11 +173,11 @@ function VendorProductCard({
               </div>
             )}
 
-            <div className="flex text-[#000] justify-between  w-full p-4">
+            <div className="flex text-[#000] justify-between w-full p-4">
               {accountHolder.role !== "user" && (
                 <button
                   onClick={() => setDeleteWarning(true)}
-                  className="px-3 py-2 capitalize border-[#FF6666] border-2 rounded-2xl flex justify-center items-center gap-2"
+                  className="px-3 py-2 capitalize border-2 border-[#FF6666] text-[#FF4D4D] rounded-sm flex items-center gap-2 transition-all duration-200 hover:bg-[#FF4D4D] hover:text-white"
                 >
                   <MdDeleteOutline /> delete
                 </button>
@@ -177,7 +186,7 @@ function VendorProductCard({
               <div>
                 <button
                   onClick={onClose}
-                  className=" px-3 py-2 capitalize border-[#BBBBBB] border-2 bg-[#fff] rounded-2xl"
+                  className="px-3 py-2 capitalize border-2 border-[#BBBBBB] bg-white rounded-sm transition-all duration-200 hover:bg-[#F5F5F5] hover:border-[#999999]"
                 >
                   cancel
                 </button>
@@ -192,7 +201,7 @@ function VendorProductCard({
                 onClick={() => {
                   handleDelete(product);
                 }}
-                className="px-5 py-2 bg-red-400"
+                className="px-5 py-2 bg-red-400 hover:bg-red-500"
               >
                 Yes
               </button>
@@ -200,7 +209,7 @@ function VendorProductCard({
                 onClick={() => {
                   setDeleteWarning(false);
                 }}
-                className="px-5 py-2 bg-gray-400"
+                className="px-5 py-2 bg-gray-400 hover:bg-gray-500"
               >
                 No
               </button>

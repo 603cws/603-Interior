@@ -6,6 +6,7 @@ import toast from "react-hot-toast";
 import Spinner from "./Spinner";
 import { motion } from "framer-motion";
 import { useBoqApp } from "../Context/BoqContext";
+import { handleError } from "./handleError";
 
 function CompleteProfile() {
   const [user, setUser] = useState(null);
@@ -36,7 +37,9 @@ function CompleteProfile() {
         .single();
 
       if (profileError) {
-        console.error("Error fetching profile:", profileError);
+        handleError(profileError, {
+          prodMessage: "Error fetching profile.",
+        });
         setLoading(false);
         return;
       } else {
@@ -66,7 +69,9 @@ function CompleteProfile() {
       role: "user",
     });
     if (error) {
-      console.error("Error saving profile:", error.message);
+      handleError(error, {
+        prodMessage: "Error saving profile.",
+      });
     } else {
       handleCheck(user.id);
     }
@@ -86,7 +91,11 @@ function CompleteProfile() {
         .limit(1)
         .single();
 
-      if (error) console.error("Error fetching layout:", error);
+      if (error) {
+        handleError(error, {
+          prodMessage: "Error fetching layout.",
+        });
+      }
       const layoutId = layoutData?.id;
       if (layoutId) {
         setCurrentLayoutID(layoutId);
@@ -96,7 +105,9 @@ function CompleteProfile() {
         navigate("/Layout");
       }
     } catch (fetchError) {
-      console.error("Error checking area and quantity IDs:", fetchError);
+      handleError(fetchError, {
+        prodMessage: "Error checking area and quantity ID.",
+      });
       navigate("/Layout");
     }
   };

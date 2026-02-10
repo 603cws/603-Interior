@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { supabase } from "../../services/supabase";
 import SpinnerFullPage from "../../common-components/SpinnerFullPage";
-import { IoFilter } from "react-icons/io5";
 import {
   MdKeyboardArrowLeft,
   MdKeyboardArrowDown,
@@ -14,6 +13,7 @@ import Footer from "../../common-components/Footer";
 import PagInationNav from "../../common-components/PagInationNav";
 import { useEcomApp } from "../../Context/EcomContext";
 import { ShopCard } from "../components/Card";
+import { handleError } from "../../common-components/handleError";
 
 const categoryies = [
   {
@@ -117,13 +117,14 @@ function ShopProducts() {
   } results`;
   const goToPage = (pageNumber) => {
     setCurrentPage(pageNumber);
+
+    setTimeout(() => {
+      containerRef.current?.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }, 0);
   };
-  useEffect(() => {
-    containerRef.current?.scrollIntoView({
-      behavior: "smooth",
-      block: "start",
-    });
-  }, [currentPage]);
 
   useEffect(() => {
     fetchProductsData();
@@ -171,9 +172,9 @@ function ShopProducts() {
     // Brand Filter
     if (filters.brands.length > 0) {
       result = result.filter((product) => {
-        const productBrand = product?.manufacturer?.trim().toLowerCase();
+        const productBrand = product?.manufacturer?.trim();
         return filters.brands.some(
-          (selected) => selected.trim().toLowerCase() === productBrand,
+          (selected) => selected.trim() === productBrand,
         );
       });
     }
@@ -188,10 +189,15 @@ function ShopProducts() {
       result = result.filter(
         (item) =>
           item.title.toLowerCase().includes(query.toLowerCase()) ||
+          query.toLocaleLowerCase().includes(item.title.toLocaleLowerCase()) ||
           item.product_type.toLowerCase().includes(query.toLowerCase()) ||
-          item.product_id?.category
-            ?.toLowerCase()
-            .includes(query.toLowerCase()),
+          query
+            .toLocaleLowerCase()
+            .includes(item.product_type.toLocaleLowerCase()) |
+            item.product_id?.category
+              ?.toLowerCase()
+              .includes(query.toLowerCase()) ||
+          query.toLowerCase().includes(item.product_id?.category.toLowerCase()),
       );
     }
 
@@ -244,7 +250,9 @@ function ShopProducts() {
         .createSignedUrls(uniqueImages, 3600); // 1 hour expiry
 
       if (signedUrlError) {
-        console.error("Error generating signed URLs:", signedUrlError);
+        handleError(signedUrlError, {
+          prodMessage: "Error generating signed URLs. Please try again.",
+        });
         return;
       }
 
@@ -263,7 +271,9 @@ function ShopProducts() {
       setFilteredProducts(updatedProducts);
       setProducts(updatedProducts);
     } catch (error) {
-      console.error("Error fetching filtered data:", error);
+      handleError(error, {
+        prodMessage: "Error fetching filtered data. Please try again.",
+      });
     } finally {
       setProductsloading(false);
     }
@@ -279,6 +289,9 @@ function ShopProducts() {
   };
 
   const handleBrandClick = (brand) => {
+    console.log("filters", filters);
+    console.log("brand", brand);
+
     setFilters((prev) => ({
       ...prev,
       brands: prev.brands.includes(brand)
@@ -380,7 +393,7 @@ function ShopProducts() {
       <div className="min-h-screen">
         <section ref={containerRef}>
           <div className=" hidden lg:block lg:container lg:mx-auto my-6 lg:my-10">
-            <SectionHeader title={"Shop "} isborder={false} />
+            <SectionHeader title={"Collection"} isborder={false} />
           </div>
         </section>
 
@@ -586,14 +599,14 @@ function ShopProducts() {
 
                 {isBrandOpen && (
                   <div className="space-y-2">
-                    {allBrands.map((brand) => (
+                    {allBrands?.map((brand) => (
                       <label
                         key={brand}
                         // onClick={() => handleBrandClick(brand)}
                         className="flex items-center gap-2 cursor-pointer text-[#111] text-sm"
                       >
                         <input
-                          checked={filters.brands.includes(brand)}
+                          checked={filters?.brands?.includes(brand)}
                           onChange={() => handleBrandClick(brand)}
                           type="checkbox"
                           className="w-4 h-4 cursor-pointer text-[#111] capitalize"
@@ -705,11 +718,21 @@ function ShopProducts() {
                     )}
                   </div>
                 </div>
-                {currentItems.length === 0 && (
-                  <p className="text-center">No products found</p>
+                {currentItems?.length === 0 && (
+                  // <div className="h-[80vh] lg:h-full flex flex-col justify-center items-center">
+                  <div className="h-[80vh] lg:h-auto flex flex-col lg:flex-none justify-center items-center">
+                    <div className="flex justify-center items-center">
+                      <img
+                        src="/images/productNotFound.png"
+                        alt="product not found"
+                      />
+                    </div>
+                    <p className="text-center">No products found</p>
+                  </div>
+                  // </div>
                 )}
                 <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-5 gap-4 items-stretch">
-                  {currentItems.map((product, index) => (
+                  {currentItems?.map((product, index) => (
                     <ShopCard product={product} key={index} />
                   ))}
                 </div>

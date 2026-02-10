@@ -11,14 +11,14 @@ function CompareProducts({ product, onClose, onRemove }) {
   }, [product, onClose]);
   return (
     <section>
-      <div className="fixed inset-0 bg-[#000]/30 flex justify-center items-center z-20">
+      <div className="fixed inset-0 bg-[#000]/30 flex justify-center items-center z-50">
         <div
           className="bg-[#fff] max-w-screen-xl w-full h-[90vh] grid font-Poppins relative p-8 "
           style={{
             gridTemplateColumns: `200px repeat(${product.length}, 1fr)`,
           }}
         >
-          <div className="absolute right-5 top-2 ">
+          <div className="absolute right-5 top-2">
             <button onClick={onClose}>
               <MdOutlineCancel color="#666666" size={25} />
             </button>
@@ -65,7 +65,6 @@ function Card({ product, onRemove }) {
   const { cartItems, localcartItems } = useEcomApp();
 
   const [iscarted, setIsCarted] = useState(false);
-  console.log("product", product);
 
   useEffect(() => {
     if (!product?.id) return;
@@ -85,7 +84,7 @@ function Card({ product, onRemove }) {
   return (
     <div
       key={product.id}
-      className="max-w-xs w-full flex flex-col  relative max-h-full"
+      className="max-w-xs w-full flex flex-col relative max-h-full"
     >
       <div className="absolute top-0 right-0">
         <button
@@ -104,18 +103,21 @@ function Card({ product, onRemove }) {
         />
       </div>
       <div className="flex flex-col gap-4 [&_h4]:uppercase [&_h4]:font-medium [&_h4]:text-sm [&_h4]:text[#111111]">
-        <h4>{product?.title}</h4>
-        {/* <h4>rating</h4> */}
-        <h4>{product?.ecommercePrice?.sellingPrice || 0} ₹</h4>
-        {/* <h4>material</h4> */}
+        <h2 className="line-clamp-1">{product?.title}</h2>
+        <h4>₹ {product?.ecommercePrice?.sellingPrice || 0} </h4>
         <h4>{product?.manufacturer}</h4>
       </div>
-      <div className="pt-4 flex flex-col text-[#212B36] items-start gap-2 [&_button]:border [&_button]:border-[#212B36] [&_button]:uppercase [&_button]:text-[15px] [&_button]:tracking-widest [&_button]:w-36 [&_button]:h-10 [&_button]:rounded-sm">
-        <button onClick={() => handleAddToCart(product)}>
-          {iscarted ? "added to cart" : "add to cart"}
-        </button>
-        {/* <button>buy now</button> */}
-      </div>
+      {product.stockQty > 1 ? (
+        <div className="pt-4 flex flex-col text-[#212B36] items-start gap-2 [&_button]:border [&_button]:border-[#212B36] [&_button]:uppercase [&_button]:text-[15px] [&_button]:tracking-widest [&_button]:w-36 [&_button]:h-10 [&_button]:rounded-sm">
+          <button onClick={() => handleAddToCart(product)}>
+            {iscarted ? "added to cart" : "add to cart"}
+          </button>
+        </div>
+      ) : (
+        <span className="text-red-700 uppercase bg-[#FFFFFF] text-xs  py-2 my-2 lg:my-4">
+          out of stock
+        </span>
+      )}
     </div>
   );
 }

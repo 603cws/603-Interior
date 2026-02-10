@@ -4,6 +4,7 @@ import { MdDeleteOutline } from "react-icons/md";
 import { adminsupabase } from "../../services/supabase";
 import { useApp } from "../../Context/Context";
 import PagInationNav from "../../common-components/PagInationNav";
+import { handleError } from "../../common-components/handleError";
 
 function Clients({
   isExpanded,
@@ -12,14 +13,12 @@ function Clients({
   setClientBoqs,
   eComm = false,
 }) {
-  //state
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
   const [selectedindex, setSelectedindex] = useState();
   const [currentPage, setCurrentPage] = useState(1);
   const [filteredusers, setFilteredUsers] = useState(allusers);
   const [query, setQuery] = useState("");
-
   const { setSelectedClient } = useApp();
 
   const filterByMultipleFields = (query) => {
@@ -48,7 +47,6 @@ function Clients({
     setCurrentPage(pageNumber);
   };
 
-  //handle functions
   const handleDeleteClick = (user, index) => {
     setSelectedUser(user);
     setIsModalOpen(true);
@@ -62,7 +60,9 @@ function Clients({
         setIsModalOpen(false);
         setSelectedUser(null);
       } catch (error) {
-        console.error(error);
+        handleError(error, {
+          prodMessage: "Something went wrong. Please try again.",
+        });
       } finally {
         setIsrefresh(true);
       }
@@ -105,7 +105,7 @@ function Clients({
         <div
           className={`grid grid-cols-1 md:grid-cols-2 justify-items-center ${
             isExpanded
-              ? "lg:grid-cols-3 xl:grid-cols-4 gap-8"
+              ? "lg:grid-cols-3 xl:grid-cols-4 gap-8 "
               : "lg:grid-cols-3 xl:grid-cols-4 gap-8"
           } p-2 `}
         >
@@ -163,7 +163,7 @@ function Clients({
                   <h4 className="text-sm">{user.company_name}</h4>
                 </button>
                 {isModalOpen && selectedindex === index && (
-                  <div className=" inset-0 flex items-center justify-center bg-opacity-80 absolute w-full h-full">
+                  <div className="inset-0 flex items-center justify-center bg-opacity-80 absolute w-full h-full">
                     <div className="bg-white rounded-lg px-5 py-2">
                       <h3 className="text-lg font-semibold">Are you sure?</h3>
                       <p>

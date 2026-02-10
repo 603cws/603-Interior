@@ -10,6 +10,7 @@ import {
 import { baseImageUrl } from "../../utils/HelperConstant";
 import ButtonSpinner from "../../utils/ButtonSpinner";
 import BackButton from "../../common-components/BackButton";
+import { handleError } from "../../common-components/handleError";
 
 function VendorEditAddon({
   seteditAddon,
@@ -20,22 +21,15 @@ function VendorEditAddon({
   const [file, setFile] = useState(null);
   const [preview, setPreview] = useState(selectedAddon?.image || null);
   const [isSubmitting, setIsSubmitting] = useState(false);
-
   const [loading, setLoading] = useState(true);
-
   const [vendordata, setVendordata] = useState();
-
   const [subcat, setSubcat] = useState([]);
-
   const [selectedSubcategories, setSelectedSubcategories] = useState();
   const [subSubCategory, setSubSubCategory] = useState(
     selectedAddon?.specifications || "",
   );
-
   const [category, setCategory] = useState(selectedAddon?.category || "");
-
   const fileInputRef = useRef(null);
-
   const [dimensions, setDimensions] = useState({
     height: selectedAddon?.dimensions?.split("x")[0] || "",
     length: selectedAddon?.dimensions?.split("x")[1] || "",
@@ -69,7 +63,9 @@ function VendorEditAddon({
         .single();
 
       if (error) {
-        console.error("Error fetching vendor:", error.message);
+        handleError(error, {
+          prodMessage: "Error fetching vendor. Please try again.",
+        });
       } else {
         const parseddata = JSON.parse(data.allowed_category);
         setVendordata(parseddata);
@@ -174,14 +170,15 @@ function VendorEditAddon({
           .insert({
             category: category,
             subcategory: selectedSubcategories,
-            subcategory1: subSubCategory || null, // Insert subSubCategory (from state)
+            subcategory1: subSubCategory || null,
           })
           .select()
           .single();
 
         if (insertError) {
-          console.error(insertError);
-          toast.error("Error inserting new product.");
+          handleError(insertError, {
+            prodMessage: "Error inserting new product. Please try again.",
+          });
           return;
         }
 
@@ -195,8 +192,9 @@ function VendorEditAddon({
         .single();
 
       if (addonCategoryError) {
-        console.error("Error inserting addon category:", addonCategoryError);
-
+        handleError(addonCategoryError, {
+          prodMessage: "Error inserting addon category. Please try again.",
+        });
         return;
       }
 
@@ -210,10 +208,10 @@ function VendorEditAddon({
             .upload(`${title}-${addonId}`, image);
 
         if (addonVariantImageError) {
-          console.error(
-            "Error uploading addon variant image:",
-            addonVariantImageError,
-          );
+          handleError(addonVariantImageError, {
+            prodMessage:
+              "Error uploading addon variant image. Please try again.",
+          });
         }
 
         addon.image = addonVariantImage.path;
@@ -241,19 +239,24 @@ function VendorEditAddon({
         .eq("id", addon?.id);
 
       if (addonVariantError) {
-        console.error("Error inserting addon variant:", addonVariantError);
+        handleError(addonVariantError, {
+          prodMessage: "Error inserting addon variant. Please try again.",
+        });
 
         return;
       } else {
         toast.success(`Addon ${title} Upaded successfully.`);
       }
     } catch (error) {
-      console.error("Error in onSubmit:", error);
+      handleError(error, {
+        prodMessage: "Something went wrong. Please try again.",
+      });
     } finally {
       handleFormClear();
       setIsSubmitting(false);
     }
   };
+
   useEffect(() => {
     if (category !== "HVAC" && category !== "Civil / Plumbing") {
       const filter = AllCatArray.filter((cat) => cat.name === category).flatMap(
@@ -340,7 +343,7 @@ function VendorEditAddon({
           }}
           className="py-2"
         />
-        <h3 className="capitalize font-semibold text-xl ">Edit Add On</h3>
+        <h3 className="capitalize font-semibold text-xl">Edit Add On</h3>
       </div>
       <form
         className="lg:flex gap-5 py-3 px-5 w-full"
@@ -352,7 +355,6 @@ function VendorEditAddon({
         }}
       >
         <div className="w-full lg:w-1/2">
-          {/* div for category */}
           <div>
             <h3 className="capitalize mb-3 text-xl font-semibold">category</h3>
             <div className="w-full shadow-lg border-2 p-5 my-3 rounded-xl capitalize">
@@ -365,7 +367,6 @@ function VendorEditAddon({
                   className="w-full border-2 py-1.5 px-2 rounded-lg"
                   onChange={(e) => handlecategorychange(e)}
                   required
-                  // onChange={(e) => setCategory(e.target.value)}
                 >
                   <option value="">Select Category</option>
 
@@ -453,7 +454,7 @@ function VendorEditAddon({
                     onChange={handleChange}
                     value={addon?.price}
                     required
-                    className="w-full py-1.5 px-2 border-2 rounded-lg [&::-webkit-inner-spin-button]:appearance-none  focus:outline-none focus:ring-0"
+                    className="w-full py-1.5 px-2 border-2 rounded-lg [&::-webkit-inner-spin-button]:appearance-none focus:outline-none focus:ring-0"
                   />
                 </div>
               )}
@@ -468,7 +469,7 @@ function VendorEditAddon({
                       name="height"
                       value={dimensions?.height}
                       onChange={handleDimensionChange}
-                      className="w-20 xl:w-32 py-1.5 px-2 border-2 rounded-lg [&::-webkit-inner-spin-button]:appearance-none  focus:outline-none focus:ring-0"
+                      className="w-20 xl:w-32 py-1.5 px-2 border-2 rounded-lg [&::-webkit-inner-spin-button]:appearance-none focus:outline-none focus:ring-0"
                       required
                     />
                     <span className="absolute right-2 top-2">H</span>
@@ -479,7 +480,7 @@ function VendorEditAddon({
                       name="length"
                       value={dimensions?.length}
                       onChange={handleDimensionChange}
-                      className="w-20 xl:w-32 py-1.5 px-2 border-2 rounded-lg [&::-webkit-inner-spin-button]:appearance-none  focus:outline-none focus:ring-0"
+                      className="w-20 xl:w-32 py-1.5 px-2 border-2 rounded-lg [&::-webkit-inner-spin-button]:appearance-none focus:outline-none focus:ring-0"
                       required
                     />
                     <span className="absolute top-2 right-2">L</span>
@@ -490,7 +491,7 @@ function VendorEditAddon({
                       name="width"
                       value={dimensions?.width}
                       onChange={handleDimensionChange}
-                      className="w-20 xl:w-32 py-1.5 px-2 border-2 rounded-lg [&::-webkit-inner-spin-button]:appearance-none  focus:outline-none focus:ring-0"
+                      className="w-20 xl:w-32 py-1.5 px-2 border-2 rounded-lg [&::-webkit-inner-spin-button]:appearance-none focus:outline-none focus:ring-0"
                       required
                     />
                     <span className="absolute top-2 right-2">W</span>
@@ -514,7 +515,7 @@ function VendorEditAddon({
                     name="mrp"
                     onChange={handleChange}
                     value={addon.mrp}
-                    className="w-full py-1.5 px-2 border-2 rounded-lg [&::-webkit-inner-spin-button]:appearance-none  focus:outline-none focus:ring-0"
+                    className="w-full py-1.5 px-2 border-2 rounded-lg [&::-webkit-inner-spin-button]:appearance-none focus:outline-none focus:ring-0"
                     required
                   />
                 </div>
@@ -525,7 +526,7 @@ function VendorEditAddon({
                     name="sellingPrice"
                     onChange={handleChange}
                     value={addon.sellingPrice}
-                    className="w-full py-1.5 px-2 border-2 rounded-lg [&::-webkit-inner-spin-button]:appearance-none  focus:outline-none focus:ring-0"
+                    className="w-full py-1.5 px-2 border-2 rounded-lg [&::-webkit-inner-spin-button]:appearance-none focus:outline-none focus:ring-0"
                     required
                   />
                 </div>
@@ -536,7 +537,7 @@ function VendorEditAddon({
                     name="quantity"
                     onChange={handleChange}
                     value={addon.quantity}
-                    className="w-full py-1.5 px-2 border-2 rounded-lg [&::-webkit-inner-spin-button]:appearance-none  focus:outline-none focus:ring-0"
+                    className="w-full py-1.5 px-2 border-2 rounded-lg [&::-webkit-inner-spin-button]:appearance-none focus:outline-none focus:ring-0"
                     required
                   />
                 </div>
@@ -585,7 +586,6 @@ function VendorEditAddon({
                     <div className="relative w-24 h-24 border rounded-lg overflow-hidden group">
                       <img
                         src={imageUrl}
-                        // src={preview}
                         alt="Preview"
                         className="w-full h-full object-cover"
                       />
@@ -622,7 +622,7 @@ function VendorEditAddon({
                   <ButtonSpinner />
                 </div>
               ) : (
-                "update Addon"
+                "Update Addon"
               )}
             </button>
           </div>

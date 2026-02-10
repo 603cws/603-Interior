@@ -8,6 +8,7 @@ import ScrollToTop from "./common-components/ScrollToTop";
 import BrandRouter from "./pages/Brands/BrandRouter";
 import DynamicTitle from "./common-components/DynamicTitle";
 import OurWork from "./landing/pages/OurWork";
+import FloatingActionMenu from "./utils/FloatingActionMenu";
 const Contactus = lazy(() => import("./landing/pages/Contactus"));
 const AboutUs = lazy(() => import("./landing/pages/AboutUs"));
 const Login = lazy(() => import("./pages/Login"));
@@ -186,6 +187,7 @@ function App() {
           />
         </Routes>
       </Suspense>
+      <FloatingActionMenu />
     </div>
   );
 }

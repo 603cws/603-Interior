@@ -3,6 +3,7 @@ import { supabase } from "../../services/supabase";
 import { fetchProductsData } from "../utils/dataFetchers";
 import { calculateAutoTotalPriceHelper } from "./CalculateTotalPriceHelper";
 import { calculateCategoryTotal } from "./calculateCategoryTotal";
+import { handleError } from "../../common-components/handleError";
 
 export const normalizeKey = (subcategory) => {
   return subcategory
@@ -50,7 +51,7 @@ export const fetchFilteredBOQProducts = async (products = [], addons = []) => {
         let matchedVariant, matchedProduct;
         for (const prod of allProducts) {
           matchedVariant = prod.product_variants?.find(
-            (v) => v.id === variantId
+            (v) => v.id === variantId,
           );
           if (matchedVariant) {
             matchedProduct = prod;
@@ -63,13 +64,13 @@ export const fetchFilteredBOQProducts = async (products = [], addons = []) => {
         const matchingAddons = addonData
           ? (() => {
               const addonProduct = allProducts.find((p) =>
-                p.addons?.some((a) => a.id === addonData.addonId)
+                p.addons?.some((a) => a.id === addonData.addonId),
               );
               const addon = addonProduct?.addons?.find(
-                (a) => a.id === addonData.addonId
+                (a) => a.id === addonData.addonId,
               );
               const addonVariant = addon?.addon_variants?.find(
-                (v) => v.id === addonData.variantId
+                (v) => v.id === addonData.variantId,
               );
               return addon && addonVariant
                 ? [
@@ -104,7 +105,7 @@ export const fetchFilteredBOQProducts = async (products = [], addons = []) => {
             variant_image: matchedVariant?.image || matchedProduct.image,
             variant_price: matchedVariant?.price || matchedProduct.price,
             additional_images: JSON.parse(
-              matchedVariant?.additional_images || []
+              matchedVariant?.additional_images || [],
             ),
             variant_info: matchedVariant?.information || {},
             variant_additional_info: matchedVariant?.additonalinformation || {},
@@ -114,7 +115,9 @@ export const fetchFilteredBOQProducts = async (products = [], addons = []) => {
       })
       .filter(Boolean);
   } catch (error) {
-    console.error("Error in fetchFilteredBOQProducts:", error);
+    handleError(error, {
+      prodMessage: "Something went wrong. Please try again.",
+    });
     return [];
   }
 };
@@ -126,7 +129,7 @@ export const handleLoadBOQ = async (
   setSelectedPlan,
   setBOQTitle,
   setBoqTotal,
-  setBOQID
+  setBOQID,
 ) => {
   try {
     const { data, error } = await supabase
@@ -136,8 +139,9 @@ export const handleLoadBOQ = async (
       .single();
 
     if (error) {
-      console.error("Error fetching BOQ:", error);
-      toast.error("Failed to load BOQ");
+      handleError(error, {
+        prodMessage: "Failed to load BOQ.",
+      });
       return;
     }
 
@@ -148,7 +152,7 @@ export const handleLoadBOQ = async (
 
     const formattedBOQProducts = await fetchFilteredBOQProducts(
       data.products,
-      data.addons
+      data.addons,
     );
 
     setSelectedData(formattedBOQProducts);
@@ -161,15 +165,16 @@ export const handleLoadBOQ = async (
     toast.success(`Loaded BOQ: ${data.boqTitle}`);
     localStorage.removeItem("boqCompleted");
   } catch (err) {
-    console.error("Error loading BOQ:", err);
-    toast.error("Error loading BOQ");
+    handleError(err, {
+      prodMessage: "Error loading BOQ.",
+    });
   }
 };
 
 export const createDraftBOQ = async (
   title = "Draft BOQ",
   userId,
-  currentLayoutID
+  currentLayoutID,
 ) => {
   try {
     const payload = {
@@ -186,16 +191,18 @@ export const createDraftBOQ = async (
       .single();
 
     if (error) {
-      console.error("Error inserting draft BOQ:", error);
-      toast.error("Failed to create draft BOQ. Try again.");
+      handleError(error, {
+        prodMessage: "Failed to create draft BOQ. Please try again.",
+      });
       return null;
     }
 
     toast.success("New draft BOQ created successfully!");
     return data;
   } catch (err) {
-    console.error("Unexpected error creating draft BOQ:", err);
-    toast.error("Unexpected error. Check console.");
+    handleError(err, {
+      prodMessage: "Unexpected error occured. Please try again!",
+    });
     return null;
   }
 };
@@ -210,7 +217,7 @@ export const calculateAutoTotalPrice = (
   quantityData,
   areasData,
   formulaMap,
-  userResponses
+  userResponses,
 ) => {
   const baseTotal = calculateAutoTotalPriceHelper(
     quantityData[0],
@@ -220,14 +227,14 @@ export const calculateAutoTotalPrice = (
     subcategory1,
     userResponses.height,
     dimensions,
-    seatCountData
+    seatCountData,
   );
 
   const total = calculateCategoryTotal(
     cat,
     baseTotal,
     variantPrice,
-    formulaMap
+    formulaMap,
   );
 
   return total;

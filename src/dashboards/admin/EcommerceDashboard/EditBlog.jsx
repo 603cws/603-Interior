@@ -4,6 +4,7 @@ import { supabase } from "../../../services/supabase";
 import Spinner from "../../../common-components/Spinner";
 import toast from "react-hot-toast";
 import BackButton from "../../../common-components/BackButton";
+import { handleError } from "../../../common-components/handleError";
 
 function EditBlog({ blog, onClose, onUpdate }) {
   const [heading, setHeading] = useState({
@@ -100,7 +101,9 @@ function EditBlog({ blog, onClose, onUpdate }) {
           .from("blog-images")
           .upload(imageName, image);
         if (uploadError) {
-          console.error("Error uploading image:", uploadError);
+          handleError(uploadError, {
+            prodMessage: "Error uploading image. Please try again.",
+          });
           return;
         }
         if (blog.image) {
@@ -123,8 +126,10 @@ function EditBlog({ blog, onClose, onUpdate }) {
         })
         .eq("id", blog.id);
       if (error) {
-        console.error("Error inserting data:", error);
-        toast.error(error.message || "Error inserting data");
+        handleError(error, {
+          prodMessage: "Error inserting data. Please try again.",
+        });
+
         await supabase.storage.from("blog-images").remove([imageName]);
         return;
       }
@@ -134,7 +139,9 @@ function EditBlog({ blog, onClose, onUpdate }) {
       onClose();
       onUpdate();
     } catch (error) {
-      console.error("Unexpected error:", error);
+      handleError(error, {
+        prodMessage: "Something went wrong. Please try again.",
+      });
     } finally {
       setInserting(false);
     }

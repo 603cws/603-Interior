@@ -18,6 +18,7 @@ import AppliedCoupon from "../../common-components/AppliedCoupon";
 import { MdOutlineCancel } from "react-icons/md";
 import { useEcomApp } from "../../Context/EcomContext";
 import { AlsoLikeCard, CartCard } from "../components/Card";
+import { handleError } from "../../common-components/handleError";
 
 function EmptyCart() {
   const navigate = useNavigate();
@@ -230,8 +231,9 @@ function Cart() {
       calculateTotalDiffertoShow(coupon);
       setMobileCouponName(coupon);
     } catch (error) {
-      console.error(error);
-      toast.error("Invalid Coupon");
+      handleError(error, {
+        prodMessage: "Invalid Coupon. Please try again.",
+      });
     }
   };
 
@@ -254,12 +256,15 @@ function Cart() {
     try {
       const { data: coupon, error: fetchError } = await supabase
         .from("coupons")
-        .select("*");
+        .select("*")
+        .order("expiryDate", { ascending: false });
       setAllCoupons(coupon);
 
       if (fetchError) throw new Error(fetchError);
     } catch (error) {
-      console.error(error);
+      handleError(error, {
+        prodMessage: "Something went wrong. Please try again.",
+      });
     }
   };
 
@@ -284,7 +289,9 @@ function Cart() {
       setGst(gstprice);
       toast.success("coupon is valid");
     } catch (error) {
-      console.error(error);
+      handleError(error, {
+        prodMessage: "Something went wrong. Please try again.",
+      });
       toast.error("Invalid Coupon");
     } finally {
       setIsMobileCouponFormOpen(false);
@@ -348,7 +355,9 @@ function Cart() {
             });
 
           if (insertError) {
-            console.error("Error inserting item:", item, insertError.message);
+            handleError(insertError, {
+              prodMessage: "Error inserting item. Please try again.",
+            });
             throw new Error(insertError.message);
           }
         }
@@ -357,7 +366,9 @@ function Cart() {
       // Remove synced items from localStorage
       localStorage.setItem("cartitems", JSON.stringify([]));
     } catch (error) {
-      console.error("Cart sync error:", error);
+      handleError(error, {
+        prodMessage: "Cart sync error. Please try again.",
+      });
     } finally {
       getCartItems();
     }
@@ -404,7 +415,9 @@ function Cart() {
         .eq("type", "cart");
 
       if (error) {
-        console.error("Failed to clear cart from database:", error.message);
+        handleError(error, {
+          prodMessage: "Failed to clear cart from database. Please try again.",
+        });
       } else {
         setCartItems([]);
         setShowClearCartPopup(false);
@@ -445,7 +458,9 @@ function Cart() {
         .createSignedUrls(uniqueImages, 3600); // 1 hour expiry
 
       if (signedUrlError) {
-        console.error("Error generating signed URLs:", signedUrlError);
+        handleError(signedUrlError, {
+          prodMessage: "Error generating signed URLs. Please try again.",
+        });
         return;
       }
       const urlMap = {};
@@ -486,8 +501,14 @@ function Cart() {
       }
       setAlsoLike(selected);
     } catch (err) {
-      console.error("Error fetching recommendations:", err);
+      handleError(err, {
+        prodMessage: "Error fetching recommendations. Please try again.",
+      });
     }
+  };
+  const isCouponExpired = (coupon) => {
+    if (!coupon?.expiryDate) return false;
+    return new Date(coupon.expiryDate) < new Date();
   };
 
   return (
@@ -822,20 +843,29 @@ function Cart() {
                         </div>
 
                         <div className="mt-6 flex-1 overflow-y-auto space-y-2">
-                          {allCoupons?.map((coupon, index) => (
-                            <CouponCard
-                              key={index}
-                              coupon={coupon}
-                              mobileCouponName={mobileCouponName}
-                              setMobileCouponName={setMobileCouponName}
-                              calculateTotalDiffertoShow={
-                                calculateTotalDiffertoShow
-                              }
-                              setDifferenceInPricetoshow={
-                                setDifferenceInPricetoshow
-                              }
-                            />
-                          ))}
+                          {allCoupons
+                            ?.slice()
+                            .sort((a, b) => {
+                              const aExpired = isCouponExpired(a);
+                              const bExpired = isCouponExpired(b);
+
+                              if (aExpired === bExpired) return 0;
+                              return aExpired ? 1 : -1;
+                            })
+                            ?.map((coupon, index) => (
+                              <CouponCard
+                                key={index}
+                                coupon={coupon}
+                                mobileCouponName={mobileCouponName}
+                                setMobileCouponName={setMobileCouponName}
+                                calculateTotalDiffertoShow={
+                                  calculateTotalDiffertoShow
+                                }
+                                setDifferenceInPricetoshow={
+                                  setDifferenceInPricetoshow
+                                }
+                              />
+                            ))}
                         </div>
 
                         <div className="flex justify-between items-center font-Poppins gap-2 ">
@@ -852,7 +882,7 @@ function Cart() {
                               onClick={() =>
                                 handleApplyofCoupon(mobileCouponName)
                               }
-                              className="px-[65px] py-[17px] text-white bg-[#334A78] border border-[#212B36]"
+                              className="px-[65px] py-[17px] text-white bg-[#334A78] border border-[#212B36] hover:bg-[#4C69A4]"
                             >
                               Apply
                             </button>
@@ -864,7 +894,7 @@ function Cart() {
                   {orignalTotalPrice > 0 && (
                     <button
                       onClick={handlePlaceOrder}
-                      className="hidden uppercase text-xl text-[#ffffff] tracking-wider w-full lg:flex justify-center items-center bg-[#334A78] border border-[#212B36] py-3 rounded-sm font-thin"
+                      className="hidden uppercase text-xl text-[#ffffff] tracking-wider w-full lg:flex justify-center items-center bg-[#334A78] hover:bg-[#4C69A4] border border-[#212B36] py-3 rounded-sm font-thin"
                     >
                       {isPlaceOrderLoading ? "loading..." : "place ORDER"}
                     </button>
@@ -976,10 +1006,17 @@ function CouponCard({
   calculateTotalDiffertoShow,
   setDifferenceInPricetoshow,
 }) {
+  const isExpired = coupon?.expiryDate
+    ? new Date(coupon.expiryDate) < new Date()
+    : false;
+
   return (
-    <div className="flex items-start space-x-2 font-Poppins ">
+    <div
+      className={`flex items-start space-x-2 font-Poppins ${isExpired ? "opacity-50" : ""}`}
+    >
       <input
         type="checkbox"
+        disabled={isExpired}
         checked={mobileCouponName?.couponName === coupon?.couponName}
         onChange={(e) => {
           if (e.target.checked) {
@@ -991,7 +1028,8 @@ function CouponCard({
           }
         }}
         // disabled={!(coupon?.expiryDate > new Date())}
-        className="w-5 h-5 accent-[#304778] mt-1 cursor-pointer"
+        // className="w-5 h-5 accent-[#304778] mt-1 cursor-pointer"
+        className={`w-5 h-5 mt-1 ${isExpired ? "accent-gray-300 cursor-not-allowed" : "accent-[#304778] cursor-pointer"}`}
       />
 
       <div className="flex-1 ">
@@ -1008,7 +1046,9 @@ function CouponCard({
         </p>
 
         <p className="text-xs text-[#304778] leading-[28.8px]">
-          <span className="font-semibold">Expires on:</span>{" "}
+          <span className="font-semibold">
+            {isExpired ? "Expired" : "Expires"} on:
+          </span>{" "}
           {coupon?.expiryDate}
           <span className="mx-2">|</span>
           <span className="font-semibold">11:59 PM</span>

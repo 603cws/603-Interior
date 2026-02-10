@@ -23,6 +23,7 @@ import Orders from "./Orders";
 import UserBoqItem from "./UserBoqItem";
 import UserDashSetting from "./UserDashSetting";
 import DashboardHeader from "../../common-components/DashboardHeader";
+import { handleError } from "../../common-components/handleError";
 
 function handlesidebarState(state, action) {
   switch (action.type) {
@@ -72,7 +73,7 @@ function Dashboard() {
 
   const [sidebarstate, sidebarDispatch] = useReducer(
     handlesidebarState,
-    sidebarInitialState
+    sidebarInitialState,
   );
   const [boqdata, setboqdata] = useState();
   const { accountHolder } = useApp();
@@ -134,7 +135,9 @@ function Dashboard() {
         setIsboqavailable(true);
       }
     } catch (error) {
-      console.error(error);
+      handleError(error, {
+        prodMessage: "Something went wrong. Please try again.",
+      });
     }
   };
 
@@ -150,7 +153,9 @@ function Dashboard() {
         throw new Error(error);
       }
     } catch (error) {
-      console.error("something went wrong", error);
+      handleError(error, {
+        prodMessage: "Something went wrong. Please try again.",
+      });
     } finally {
       setSelectedBoq(() => null);
       setisfetchBoqDataRefresh(false);
@@ -182,6 +187,9 @@ function Dashboard() {
     }
     if (location.state?.openHelp) {
       sidebarDispatch({ type: "TOGGLE_SECTION", payload: SECTIONS.HELP });
+    }
+    if (location.state?.openOrders) {
+      sidebarDispatch({ type: "TOGGLE_SECTION", payload: SECTIONS.ORDERS });
     }
   }, [location.state]);
 
@@ -291,7 +299,7 @@ function Dashboard() {
             <img
               src="/logo/workved-interior.png"
               alt="Workved Logo"
-              className={`${isExpanded ? "h-20 w-32" : "h-9 w-16"}`}
+              className={`h-9 w-20`}
               onClick={() => navigate("/")}
             />
           </div>
@@ -317,7 +325,7 @@ function Dashboard() {
             } transition-transform duration-300 ease-in-out shadow-lg`}
           >
             <div className="flex gap-2 justify-center items-center mt-6">
-              <div>
+              <div className="border rounded-full border-[#ccc] ">
                 <img
                   src={accountHolder?.profileImage}
                   alt="usericon"
@@ -325,8 +333,8 @@ function Dashboard() {
                 />
               </div>
               <div className="text-gray-800 text-sm">
-                <h2>{accountHolder?.companyName}</h2>
-                <p>{accountHolder?.email}</p>
+                <h2 className="font-semibold ">{accountHolder?.companyName}</h2>
+                <p className="text-sm">{accountHolder?.email}</p>
               </div>
             </div>
 

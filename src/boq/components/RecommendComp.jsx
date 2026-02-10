@@ -3,6 +3,7 @@ import Addon from "../../common-components/Addon";
 import { supabase } from "../../services/supabase";
 import { useEffect, useState } from "react";
 import Spinner from "../../common-components/Spinner";
+import { handleError } from "../../common-components/handleError";
 
 function RecommendComp({ setShowRecommend, currentProduct, manufacturer }) {
   const [recommendedProducts, setRecommededProducts] = useState([]);
@@ -25,7 +26,9 @@ function RecommendComp({ setShowRecommend, currentProduct, manufacturer }) {
         setRecommededProducts(data);
         if (error) throw new Error(error);
       } catch (error) {
-        console.error(error);
+        handleError(error, {
+          prodMessage: "Somethiing went wrong",
+        });
       } finally {
         setIsLoading(false);
       }

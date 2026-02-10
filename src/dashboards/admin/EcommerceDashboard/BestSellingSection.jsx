@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { supabase } from "../../../services/supabase";
 import { baseImageUrl } from "../../../utils/HelperConstant";
+import { handleError } from "../../../common-components/handleError";
 
 function BestSellingSection({ sidebarDispatch, handleProductPreview }) {
   const [variantsData, setVariantsData] = useState([]);
@@ -30,12 +31,14 @@ function BestSellingSection({ sidebarDispatch, handleProductPreview }) {
       });
 
       const bestSellingProducts = Object.values(map).sort(
-        (a, b) => b.count - a.count
+        (a, b) => b.count - a.count,
       );
 
       setVariantsData(bestSellingProducts.slice(0, 5));
     } catch (error) {
-      console.error(error);
+      handleError(error, {
+        prodMessage: "Something went wrong. Please try again.",
+      });
     } finally {
       setLoading(false);
     }

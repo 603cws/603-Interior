@@ -4,6 +4,7 @@ import toast from "react-hot-toast";
 import { supabase } from "../../services/supabase";
 import { boqLimit } from "../../constants/constant";
 import { useBoqApp } from "../../Context/BoqContext";
+import { handleError } from "../../common-components/handleError";
 
 function NewBoq({ onConfirm }) {
   const [boqMode, setBoqMode] = useState("new");
@@ -24,8 +25,9 @@ function NewBoq({ onConfirm }) {
           .eq("userId", userId)
           .order("created_at", { ascending: false });
         if (error) {
-          console.error("Error fetching BOQs:", error);
-          toast.error("Error fetching saved BOQs");
+          handleError(error, {
+            prodMessage: "Error fetching BOQs.",
+          });
           return;
         }
         setBoqList(data || []);
@@ -45,8 +47,9 @@ function NewBoq({ onConfirm }) {
         setDisabledNewBoq(false);
         setIsAtNonDraftLimit(totalNonDraftBoqs >= boqLimit);
       } catch (err) {
-        console.error("Error fetching BOQs:", err);
-        toast.error("Unexpected error while fetching BOQs");
+        handleError(err, {
+          prodMessage: "Unexpected error while fetching BOQs.",
+        });
       }
     };
 
@@ -87,21 +90,22 @@ function NewBoq({ onConfirm }) {
         .match({ userId, isDraft: true })
         .select();
       if (deleteError) {
-        console.error("Delete error:", deleteError);
-        toast.error(
-          "Failed to delete previous drafts: " + (deleteError.message || ""),
-        );
+        handleError(deleteError, {
+          prodMessage: "Unexpected error while fetching BOQs.",
+        });
         return;
       }
       if (!deletedRows || deletedRows.length === 0) {
         toast.info("No draft rows found to delete (nothing matched).");
-      } else {
-        toast.success(`Deleted ${deletedRows.length} draft(s).`);
       }
+      // else {
+      //   toast.success(`Deleted ${deletedRows.length} draft(s).`);
+      // }
       onConfirm("Draft BOQ", "new");
     } catch (err) {
-      console.error("Unexpected error while discarding drafts:", err);
-      toast.error("Unexpected error. Check console.");
+      handleError(err, {
+        prodMessage: "Unexpected error while discarding drafts.",
+      });
     }
   };
 

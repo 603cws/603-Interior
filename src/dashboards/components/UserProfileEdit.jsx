@@ -3,6 +3,7 @@ import { useApp } from "../../Context/Context";
 import { useEffect } from "react";
 import { supabase } from "../../services/supabase";
 import toast from "react-hot-toast";
+import { handleError } from "../../common-components/handleError";
 
 function UserProfileEdit({ setIsEditopen }) {
   const { accountHolder, setAccountHolder } = useApp();
@@ -21,7 +22,9 @@ function UserProfileEdit({ setIsEditopen }) {
         await supabase.auth.getUser();
 
       if (authError) {
-        console.error("Error fetching auth data:", authError);
+        handleError(authError, {
+          prodMessage: "Something went wrong. Please try again.",
+        });
       }
       const { data: profileData, error: profileError } = await supabase
         .from("profiles")
@@ -30,7 +33,9 @@ function UserProfileEdit({ setIsEditopen }) {
         .single();
 
       if (profileError) {
-        console.error("Error fetching profile:", profileError);
+        handleError(profileError, {
+          prodMessage: "Something went wrong. Please try again.",
+        });
       }
       if (profileData) {
         setValue("companyName", profileData.company_name || "");
@@ -42,7 +47,9 @@ function UserProfileEdit({ setIsEditopen }) {
         setValue("email", authData.user.email || "");
       }
     } catch (error) {
-      console.error("Error fetching user data:", error);
+      handleError(error, {
+        prodMessage: "Something went wrong. Please try again.",
+      });
     }
   };
 
@@ -64,8 +71,9 @@ function UserProfileEdit({ setIsEditopen }) {
         .eq("id", accountHolder.userId);
 
       if (error) {
-        console.error("Error updating profile:", error);
-        toast.error("Failed to update profile");
+        handleError(error, {
+          prodMessage: "Something went wrong. Please try again.",
+        });
         return;
       }
 
@@ -77,7 +85,9 @@ function UserProfileEdit({ setIsEditopen }) {
       }));
       fetchProfileData();
     } catch (err) {
-      console.error("Unexpected error:", err);
+      handleError(err, {
+        prodMessage: "Something went wrong. Please try again.",
+      });
     } finally {
       setIsEditopen((isedit) => !isedit);
     }

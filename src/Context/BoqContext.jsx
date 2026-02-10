@@ -26,6 +26,7 @@ import {
   filterExcludedItems,
   multiplyFirstTwoFlexible,
 } from "../utils/BoqUtils";
+import { handleError } from "../common-components/handleError";
 
 const BoqContext = createContext();
 
@@ -43,7 +44,7 @@ export const BoqAppProvider = ({ children }) => {
   const [selectedSubCategory, setSelectedSubCategory] = useState(null);
   const [selectedSubCategory1, setSelectedSubCategory1] = useState(null);
   const [selectedData, setSelectedData] = useState(
-    JSON.parse(localStorage.getItem("selectedData")) || []
+    JSON.parse(localStorage.getItem("selectedData")) || [],
   );
   const [selectedAddons, setSelectedAddons] = useState([]);
   const [selectedProductView, setSelectedProductView] = useState([]);
@@ -58,7 +59,7 @@ export const BoqAppProvider = ({ children }) => {
   });
 
   const [selectedPlan, setSelectedPlan] = useState(
-    sessionStorage.getItem("selectedPlan") || null
+    sessionStorage.getItem("selectedPlan") || null,
   );
 
   const prevSelectedData = useRef(selectedData);
@@ -72,11 +73,11 @@ export const BoqAppProvider = ({ children }) => {
   const [boqTotal, setBoqTotal] = useState(0);
   const [currentLayoutData, setCurrentLayoutData] = useState({});
   const [currentLayoutID, setCurrentLayoutID] = useState(
-    sessionStorage.getItem("currentLayoutID")
+    sessionStorage.getItem("currentLayoutID"),
   );
 
   const [BOQTitle, setBOQTitle] = useState(
-    sessionStorage.getItem("BOQTitle") || ""
+    sessionStorage.getItem("BOQTitle") || "",
   );
   const [BOQID, setBOQID] = useState(sessionStorage.getItem("BOQID") || "");
   const [formulaMap, setFormulaMap] = useState({});
@@ -115,7 +116,9 @@ export const BoqAppProvider = ({ children }) => {
         .select("config_data");
 
       if (error) {
-        console.error(error);
+        handleError(error, {
+          prodMessage: "Something went wrong. Please try again.",
+        });
         return;
       }
       setCategoryConfig(data?.[0]?.config_data ?? {});
@@ -136,7 +139,7 @@ export const BoqAppProvider = ({ children }) => {
       const selectedItem = selectedData?.find(
         (item) =>
           item.category === selectedCategory?.category &&
-          item.subcategory === subcategory
+          item.subcategory === subcategory,
       );
 
       if (selectedItem) {
@@ -300,7 +303,9 @@ export const BoqAppProvider = ({ children }) => {
     const { data, error } = await supabase.from("formulas").select("*");
 
     if (error) {
-      console.error("Error fetching formulas:", error);
+      handleError(error, {
+        prodMessage: "Error fetching formulas. Please try again.",
+      });
     } else {
       const map = {};
 
@@ -347,7 +352,7 @@ export const BoqAppProvider = ({ children }) => {
               title: addon.title,
               finalPrice: addon.price || "",
               productId: product.product_variant?.variant_id,
-            }))
+            })),
           );
         }
 
@@ -371,10 +376,14 @@ export const BoqAppProvider = ({ children }) => {
           .eq("id", boqId);
 
         if (error) {
-          console.error(error);
+          handleError(error, {
+            prodMessage: "Something went wrong. Please try again.",
+          });
         }
       } catch (err) {
-        console.error("Auto-save error:", err);
+        handleError(err, {
+          prodMessage: "Something went wrong. Please try again.",
+        });
       }
     };
     if (!BOQID || !BOQTitle) return;
@@ -414,7 +423,7 @@ export const BoqAppProvider = ({ children }) => {
 
           processedQuantityData = processData(
             roomDataResult.layoutData,
-            "quantity"
+            "quantity",
           );
           if (processedQuantityData) {
             setQuantityData([processedQuantityData]);
@@ -466,7 +475,7 @@ export const BoqAppProvider = ({ children }) => {
                 }
 
                 return true;
-              }
+              },
             );
 
             return {
@@ -482,7 +491,9 @@ export const BoqAppProvider = ({ children }) => {
         setLoading(false);
         setSubCat1(subCategory1Data);
       } catch (error) {
-        console.error("Error loading data:", error);
+        handleError(error, {
+          prodMessage: "Error loading data. Please try again.",
+        });
         setLoading(false);
       }
     };
@@ -683,7 +694,7 @@ export const BoqAppProvider = ({ children }) => {
       allProductQuantities,
       categoryConfig,
       loading,
-    ]
+    ],
   );
 
   return <BoqContext.Provider value={value}>{children}</BoqContext.Provider>;

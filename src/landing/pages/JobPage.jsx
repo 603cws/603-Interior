@@ -13,6 +13,7 @@ import toast from "react-hot-toast";
 import HeroSection from "../components/HeroSection";
 import { v4 as uuidv4 } from "uuid";
 import BackButton from "../../common-components/BackButton";
+import { handleError } from "../../common-components/handleError";
 
 const JobPage = () => {
   const { jobTitle } = useParams();
@@ -194,7 +195,9 @@ function JobForm({ SetJobForm, jobTitle, job }) {
           toast.error("this file was already uploaded");
         }
 
-        console.error("Error uploading image:", uploadError);
+        handleError(uploadError, {
+          prodMessage: "Error uploading image. Please try again.",
+        });
         return;
       }
 
@@ -224,7 +227,9 @@ function JobForm({ SetJobForm, jobTitle, job }) {
         }
 
         if (ApplicationError) {
-          console.error("error", ApplicationError);
+          handleError(ApplicationError, {
+            prodMessage: "Something went wrong. Please try again.",
+          });
           if (ApplicationError?.code === "23505") {
             toast.error("this email was already registered");
           }
@@ -234,7 +239,9 @@ function JobForm({ SetJobForm, jobTitle, job }) {
         }
       }
     } catch (error) {
-      console.error("Unexpected error:", error);
+      handleError(error, {
+        prodMessage: "Something went wrong. Please try again.",
+      });
     }
   };
 

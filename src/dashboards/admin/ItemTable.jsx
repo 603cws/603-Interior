@@ -1,14 +1,12 @@
 import { useEffect, useRef, useState } from "react";
-
 import { useBoqApp } from "../../Context/BoqContext";
 import { IoIosSearch } from "react-icons/io";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import { exportToExcel } from "../../utils/DataExport";
-
 import { supabase } from "../../services/supabase";
 import { IoCloseCircle, IoCloudDownloadOutline } from "react-icons/io5";
-
 import Table from "./Table";
+import { handleError } from "../../common-components/handleError";
 
 const tabs = [
   { name: "Products", value: "products" },
@@ -53,14 +51,10 @@ function ItemTable({
 
   const dropdownRef = useRef(null);
   const [filterDropdown, setFilterDropdown] = useState(false);
-
   const { categories } = useBoqApp();
   const items = toggle ? filteredProducts : filteredAddons;
-
   const categoriesData = categories.map((item) => item.category);
-
   const normalize = (str) => str.replace(/\s+/g, " ").trim().toLowerCase();
-
   const subcategoriesByCategory = categories.reduce((acc, item) => {
     acc[item.category] = item.subcategories || [];
     return acc;
@@ -68,7 +62,7 @@ function ItemTable({
 
   const handleTabClick = (event) => {
     setProductlist(true);
-    const tab = event.target.value; // Get value from button
+    const tab = event.target.value;
     setSelectedTab(tab);
     setToggle(tab === "products");
   };
@@ -285,7 +279,9 @@ function ItemTable({
       setProducts(sortedData);
       // setFilteredProducts(sortedData);
     } catch (error) {
-      console.error("Error fetching products:", error);
+      handleError(error, {
+        prodMessage: "Error fetching products. Please try again.",
+      });
     } finally {
       setIsloading(false);
       setIsProductRefresh(false);
@@ -306,7 +302,9 @@ function ItemTable({
       });
 
       if (error) {
-        console.error("Error fetching addons:", error);
+        handleError(error, {
+          prodMessage: "Error fetching addons. Please try again.",
+        });
       } else {
         setAddons(sortedData);
         setFilteredAddons(sortedData);
@@ -318,7 +316,6 @@ function ItemTable({
 
   useEffect(() => {
     fetchProducts();
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isproductRefresh]);
 
@@ -356,7 +353,7 @@ function ItemTable({
     <>
       <div className="relative">
         <div className="sticky top-0 z-20 bg-white">
-          <div className="hidden lg:flex justify-between items-center px-4 py-2 border-b-2 border-b-gray-400 ">
+          <div className="hidden lg:flex justify-between items-center px-4 py-2 border-b-2 border-b-gray-400">
             <h3 className=" capitalize font-semibold text-xl">product list</h3>
 
             <div className="flex gap-2">
@@ -646,7 +643,7 @@ function ItemTable({
                       toggle ? "products.xlsx" : "addons.xlsx",
                     );
                   }}
-                  className=" px-4 py-2 rounded text-[#374A75] text-sm flex items-center gap-3 border "
+                  className="px-4 py-2 rounded text-[#374A75] text-sm flex items-center gap-3 border"
                 >
                   <IoCloudDownloadOutline /> <span>Export</span>
                 </button>
@@ -659,7 +656,7 @@ function ItemTable({
                 <button
                   key={tab.value}
                   className={`flex items-center gap-2 px-2 text-sm md:text-base md:px-6 py-1 md:py-2 border border-[#374A75] rounded text-[#374A75] ${
-                    selectedTab === tab.value ? "bg-[#D3E3F0] " : "bg-white "
+                    selectedTab === tab.value ? "bg-[#D3E3F0]" : "bg-white"
                   }`}
                   value={tab.value}
                   onClick={handleTabClick}
@@ -669,7 +666,7 @@ function ItemTable({
               ))}
             </div>
 
-            <div className=" hidden lg:flex gap-2 w-1/3">
+            <div className="hidden lg:flex gap-2 w-1/3">
               <div>
                 {selectedItemForDelete?.length > 0 && (
                   <button
@@ -743,7 +740,7 @@ function ItemTable({
                         onChange={(e) => {
                           const value = e.target.value;
                           setSelectedCategory(value);
-                          setSelectedSubCategory(""); // IMPORTANT reset
+                          setSelectedSubCategory("");
                           applyFilters({
                             query: searchQuery,
                             category: value,
@@ -1022,7 +1019,6 @@ function ItemTable({
           </div>
         </div>
 
-        {/*  */}
         {productlist && (
           <Table
             items={items}

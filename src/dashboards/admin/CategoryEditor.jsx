@@ -2,6 +2,7 @@ import { useState } from "react";
 import { supabase } from "../../services/supabase";
 import { useBoqApp } from "../../Context/BoqContext";
 import toast from "react-hot-toast";
+import { handleError } from "../../common-components/handleError";
 
 export default function CategoryEditor() {
   const { categoryConfig, setCategoryConfig } = useBoqApp();
@@ -23,7 +24,9 @@ export default function CategoryEditor() {
       .update({ config_data: newConfig, updated_at: new Date().toISOString() })
       .eq("id", 1);
     if (error) {
-      console.error("Error updating config:", error);
+      handleError(error, {
+        prodMessage: "Something went wrong. Please try again.",
+      });
     }
   };
 

@@ -3,6 +3,7 @@ import { adminsupabase, supabase } from "../../services/supabase";
 import Select from "react-select";
 import { IoEyeOffOutline, IoEyeOutline } from "react-icons/io5";
 import toast from "react-hot-toast";
+import { handleError } from "../../common-components/handleError";
 
 function CreateUser() {
   const [categories, setCategories] = useState([]);
@@ -17,6 +18,7 @@ function CreateUser() {
     password: "",
     confirmPassword: "",
   });
+  const [isloading, setIsloading] = useState(false);
 
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] =
@@ -38,7 +40,9 @@ function CreateUser() {
           .select("name");
 
         if (error) {
-          console.error("Error fetching categories:", error);
+          handleError(error, {
+            prodMessage: "Error fetching categories. Please try again.",
+          });
           return;
         }
 
@@ -50,10 +54,16 @@ function CreateUser() {
 
           setCategories(formattedCategories);
         } else {
-          console.error("Invalid categories data format:", data);
+          handleError(data, {
+            prodMessage:
+              "Unexpected error fetching categories. Please try again.",
+          });
         }
       } catch (err) {
-        console.error("Unexpected error fetching categories:", err);
+        handleError(err, {
+          prodMessage:
+            "Unexpected error fetching categories. Please try again.",
+        });
       }
     };
 
@@ -72,9 +82,8 @@ function CreateUser() {
     const { name, value } = e.target;
 
     if (name === "mobile") {
-      // Allow only numbers and limit to 10 digits
-      if (!/^\d*$/.test(value)) return; // Prevent non-numeric input
-      if (value.length > 10) return; // Restrict to 10 digits
+      if (!/^\d*$/.test(value)) return;
+      if (value.length > 10) return;
     }
 
     setFormData((prev) => ({
@@ -83,7 +92,6 @@ function CreateUser() {
     }));
   };
 
-  // Handle Multi-Select Category Change
   const handleCategoryChange = (selectedOptions) => {
     setFormData((prev) => ({
       ...prev,
@@ -109,7 +117,9 @@ function CreateUser() {
     });
 
     if (error) {
-      console.error("Error updating profile:", error.message);
+      handleError(error, {
+        prodMessage: "Error updating profile. Please try again.",
+      });
     }
   };
 
@@ -139,6 +149,7 @@ function CreateUser() {
     }
 
     try {
+      setIsloading(true);
       const { data, error } = await adminsupabase.auth.admin.createUser({
         email: formData.email,
         password: formData.password,
@@ -147,8 +158,9 @@ function CreateUser() {
       });
 
       if (error) {
-        console.error("Supabase Error:", error);
-        toast.error(error.message || "Error creating user");
+        handleError(error, {
+          prodMessage: "Error creating user. Please try again.",
+        });
         return;
       }
 
@@ -167,12 +179,14 @@ function CreateUser() {
         toast.success(`${formData.role} created successfully`);
       }
     } catch (error) {
-      console.error("Error signing up:", error);
+      handleError(error, {
+        prodMessage: "Error signing up. Please try again.",
+      });
     }
   };
 
   return (
-    <div className="flex-1 bg-[#FFF] mb-5 cursor-default overflow-auto ">
+    <div className="flex-1 bg-[#FFF] mb-5 cursor-default overflow-auto">
       <div className="h-[calc(100vh-130px)] flex-col flex justify-center items-center">
         <div className=" w-11/12 h-full bg-white p-6 flex flex-col items-center text-center">
           <div className="w-full text-left font-Poppins">
@@ -282,12 +296,12 @@ function CreateUser() {
                   placeholder="Enter password"
                   value={formData.password}
                   onChange={handleChange}
-                  className={`border p-2 rounded-md`}
+                  className="border p-2 rounded-md"
                   required
                 />
                 <div
                   onClick={togglePasswordVisibility}
-                  className={`absolute top-[60%] right-10 cursor-pointer`}
+                  className="absolute top-[60%] right-10 cursor-pointer"
                 >
                   {isPasswordVisible ? (
                     <IoEyeOutline size={20} />
@@ -309,7 +323,7 @@ function CreateUser() {
                 />
                 <div
                   onClick={toggleConfirmPasswordVisibility}
-                  className={`absolute top-[60%] right-10 cursor-pointer`}
+                  className="absolute top-[60%] right-10 cursor-pointer"
                 >
                   {isConfirmPasswordVisible ? (
                     <IoEyeOutline size={20} />
@@ -340,7 +354,7 @@ function CreateUser() {
                 type="submit"
                 className="bg-[#374A75] text-white px-6 py-2 rounded border border-[#000] font-bold hover:bg-[#6d87c4]"
               >
-                Submit
+                {isloading ? "loading.." : "submit"}
               </button>
             </div>
           </form>

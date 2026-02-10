@@ -17,6 +17,7 @@ import { HiOutlineArrowSmRight } from "react-icons/hi";
 import Footer from "../../common-components/Footer";
 import CategorySvg from "../../common-components/CategorySvg";
 import { useEcomApp } from "../../Context/EcomContext";
+import { handleError } from "../../common-components/handleError";
 
 const TOP_OFFERS = [
   {
@@ -44,37 +45,6 @@ const BOTTOM_OFFERS = [
   },
   { title: "HVAC", subtitle: "Up to 20% off", img: "/images/ecommerce/ac.png" },
 ];
-
-const products2 = {
-  chair: {
-    title: "Orange Chair",
-    price: "₹ 3799.00",
-    image: "/images/ecommerce/chair.webp",
-    link: "/productview/d6a99c93-e0b9-4958-9dc5-be9a9afc472e",
-    id: "d6a99c93-e0b9-4958-9dc5-be9a9afc472e",
-  },
-  lamp: {
-    title: "Pendant Lamp",
-    price: "₹ 2599.00",
-    image: "/images/ecommerce/lamp.webp",
-    link: "/productview/d4bedb5d-b06a-444c-8dd3-9bef55e631de",
-    id: "d4bedb5d-b06a-444c-8dd3-9bef55e631de",
-  },
-  rug: {
-    title: "Rug",
-    price: "₹ 2599.00",
-    image: "/images/ecommerce/rug.webp",
-    link: "/productview/45776063-a918-44f7-858b-8b95738c8e78",
-    id: "45776063-a918-44f7-858b-8b95738c8e78",
-  },
-  "chair-green": {
-    title: "Chair Green",
-    price: "₹ 2599.00",
-    image: "/images/ecommerce/chair-green.png",
-    link: "/productview/1d352504-f171-41fc-9bc4-333c68ae9200",
-    id: "1d352504-f171-41fc-9bc4-333c68ae9200",
-  },
-};
 
 const featuredProducts = [
   {
@@ -154,16 +124,27 @@ const EcommerceFeatures = [
     width: "w-8",
   },
 ];
+const CLICKABLE_IDS = [
+  "d6a99c93-e0b9-4958-9dc5-be9a9afc472e",
+  "d4bedb5d-b06a-444c-8dd3-9bef55e631de",
+  "45776063-a918-44f7-858b-8b95738c8e78",
+  "1d352504-f171-41fc-9bc4-333c68ae9200",
+];
 function Products() {
   const { handleAddToCart } = useHandleAddToCart();
   const [products, setProducts] = useState([]);
-
   const [selectedCategory, setSelectedCategory] = useState("Furniture");
   const [categoryProducts, setCategoryProducts] = useState([]);
-  const [selectedProduct, setSelectedProduct] = useState("chair");
+  const [selectedProductId, setSelectedProductId] = useState(null);
   const [bestProducts, setBestProducts] = useState([]);
 
   const navigate = useNavigate();
+  const clickableProducts = products.filter((p) =>
+    CLICKABLE_IDS.includes(p.id),
+  );
+  const selectedProduct =
+    clickableProducts.find((p) => p.id === selectedProductId) ??
+    clickableProducts[0];
 
   useEffect(() => {
     const fetchProductsData = async () => {
@@ -193,7 +174,9 @@ function Products() {
             .createSignedUrls(uniqueImages, 3600); // 1 hour expiry
 
         if (signedUrlError) {
-          console.error("Error generating signed URLs:", signedUrlError);
+          handleError(signedUrlError, {
+            prodMessage: "An unexpected error occurred. Please try again.",
+          });
           return;
         }
 
@@ -232,7 +215,9 @@ function Products() {
 
         setBestProducts(sortedByStars);
       } catch (error) {
-        console.error("Error fetching filtered data:", error);
+        handleError(error, {
+          prodMessage: "Error fetching filtered data. Please try again.",
+        });
       }
     };
     fetchProductsData();
@@ -300,7 +285,7 @@ function Products() {
       </section>
 
       {/* section 3 */}
-      <section className="lg:container lg:mx-auto px-3 my-16 font-TimesNewRoman">
+      <section className="lg:container lg:mx-auto px-3 my-6 lg:my-16 font-TimesNewRoman">
         <div className="relative">
           <SectionHeader title={"Shop by categories"} isborder={true} />
           <CategorySvg
@@ -428,7 +413,6 @@ function Products() {
         <SectionHeader title={"Elegance and Comfort"} />
 
         <div className="flex flex-col lg:flex-row gap-6 lg:gap-2 w-full items-center place-self-center">
-          {/* Left Image with Hotspots */}
           <div className="relative w-full lg:w-2/3 items-center">
             <img
               src="/images/ecommerce/roomImage.jpg"
@@ -436,87 +420,119 @@ function Products() {
               className="w-full rounded-lg h-full"
             />
 
-            {/* Hotspot for Chair */}
             <button
-              onMouseEnter={() => setSelectedProduct("chair")}
-              onClick={() => setSelectedProduct("chair")}
-              className={`absolute top-[65%] left-[30%] w-6 h-6 rounded-full bg-white border-[7px] border-[#374A75] shadow-lg ${
+              onMouseEnter={() =>
+                setSelectedProductId(clickableProducts[3]?.id)
+              }
+              onClick={() => setSelectedProductId(clickableProducts[3]?.id)}
+              className={`absolute top-[65%] left-[30%] w-5 h-5 lg:w-6 lg:h-6 rounded-full bg-white border-4 lg:border-[7px] border-[#374A75] shadow-lg ${
                 selectedProduct === "chair" ? "opacity-100" : "opacity-70"
               }`}
             />
 
-            {/* Hotspot for Lamp */}
             <button
-              onMouseEnter={() => setSelectedProduct("lamp")}
-              onClick={() => setSelectedProduct("lamp")}
-              className={`absolute top-[25%] left-[35%] w-6 h-6 rounded-full bg-white border-[7px] border-[#374A75] shadow-lg ${
+              onMouseEnter={() =>
+                setSelectedProductId(clickableProducts[1]?.id)
+              }
+              onClick={() => setSelectedProductId(clickableProducts[1]?.id)}
+              className={`absolute top-[25%] left-[35%] w-5 h-5 lg:w-6 lg:h-6 rounded-full bg-white border-4 lg:border-[7px] border-[#374A75] shadow-lg ${
                 selectedProduct === "lamp" ? "opacity-100" : "opacity-70"
               }`}
             />
 
-            {/* Hotspot for Green Chair */}
             <button
-              onMouseEnter={() => setSelectedProduct("chair-green")}
-              onClick={() => setSelectedProduct("chair-green")}
-              className={`absolute top-[61%] left-[53%] w-6 h-6 rounded-full bg-white border-[7px] border-[#374A75] shadow-lg ${
+              onMouseEnter={() =>
+                setSelectedProductId(clickableProducts[2]?.id)
+              }
+              onClick={() => setSelectedProductId(clickableProducts[2]?.id)}
+              className={`absolute top-[61%] left-[53%] w-5 h-5 lg:w-6 lg:h-6 rounded-full bg-white border-4 lg:border-[7px] border-[#374A75] shadow-lg ${
                 selectedProduct === "chair-green" ? "opacity-100" : "opacity-70"
               }`}
             />
 
-            {/* Hotspot for Rug */}
             <button
-              onMouseEnter={() => setSelectedProduct("rug")}
-              onClick={() => setSelectedProduct("rug")}
-              className={`absolute bottom-[20%] left-[40%] w-6 h-6 rounded-full bg-white border-[7px] border-[#374A75] shadow-lg ${
+              onMouseEnter={() =>
+                setSelectedProductId(clickableProducts[0]?.id)
+              }
+              onClick={() => setSelectedProductId(clickableProducts[0]?.id)}
+              className={`absolute bottom-[20%] left-[40%] w-5 h-5 lg:w-6 lg:h-6 rounded-full bg-white border-4 lg:border-[7px] border-[#374A75] shadow-lg ${
                 selectedProduct === "rug" ? "opacity-100" : "opacity-70"
               }`}
             />
           </div>
 
-          {/* Right Product Info */}
-          <div className="lg:w-1/3 flex flex-col items-center lg:items-center lg:text-left font-TimesNewRoman">
-            {/* Product Image */}
+          <div className="lg:w-1/3 flex flex-col items-center lg:text-left font-TimesNewRoman">
             <img
-              src={products2[selectedProduct].image}
-              alt={products2[selectedProduct].title}
+              src={selectedProduct?.image}
+              alt={selectedProduct?.product_id?.title}
               className="w-96 h-auto rounded-lg shadow-md p-4 cursor-pointer"
-              onClick={() => navigate(products2[selectedProduct].link)}
+              // onClick={() => selectedProduct && navigate(selectedProduct.link)}
+              onClick={() =>
+                selectedProduct &&
+                navigate(`/productview/${selectedProduct.id}`)
+              }
             />
 
-            {/* Black Dots */}
             <div className="flex items-center justify-center gap-2 my-4">
-              {Object.keys(products2).map((key, idx) => (
+              {clickableProducts.map((product) => (
                 <button
-                  key={idx}
-                  onClick={() => setSelectedProduct(key)}
-                  className={`w-3 h-3 rounded-full ${
-                    selectedProduct === key ? "bg-black" : "bg-gray-400"
+                  key={product.id}
+                  onClick={() => setSelectedProductId(product.id)}
+                  className={`w-3 h-3 rounded-full transition ${
+                    selectedProduct?.id === product.id
+                      ? "bg-black"
+                      : "bg-gray-400"
                   }`}
-                ></button>
+                />
               ))}
             </div>
 
-            {/* Title & Price */}
             <h3
               className="text-lg font-medium cursor-pointer"
-              onClick={() => navigate(products2[selectedProduct].link)}
+              onClick={() =>
+                selectedProduct &&
+                navigate(`/productview/${selectedProduct.id}`)
+              }
             >
-              {products2[selectedProduct].title}
+              {selectedProduct?.title}
             </h3>
-            <p
-              className="text-gray-600 cursor-pointer"
-              onClick={() => navigate(products2[selectedProduct].link)}
-            >
-              {products2[selectedProduct].price}
-            </p>
+
+            <div className="flex items-center gap-2 cursor-pointer">
+              <span className="text-gray-900 font-semibold">
+                ₹{" "}
+                {Number(
+                  selectedProduct?.ecommercePrice?.sellingPrice,
+                )?.toLocaleString("en-IN", {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })}
+              </span>
+
+              {selectedProduct?.ecommercePrice?.mrp && (
+                <span className="text-gray-500 line-through text-sm">
+                  ₹{" "}
+                  {Number(selectedProduct?.ecommercePrice?.mrp)?.toLocaleString(
+                    "en-IN",
+                    {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    },
+                  )}
+                </span>
+              )}
+            </div>
+
             <button
               onClick={() => {
-                handleAddToCart(products2[selectedProduct], false);
+                if (!selectedProduct) return;
+                handleAddToCart(selectedProduct, false);
                 navigate("/cart");
               }}
-              className="bg-[#334A78] text-[#fff] text-xs px-4 py-2 mt-2 capitalize font-bold rounded hover:bg-[#4C69A4] transition-transform duration-300 hover:scale-110"
+              disabled={selectedProduct?.stockQty < 1}
+              className="bg-[#334A78] text-white text-xs px-4 py-2 mt-2 font-bold rounded
+               hover:bg-[#4C69A4] transition-transform duration-300 hover:scale-110"
             >
-              BUY NOW
+              {selectedProduct?.stockQty > 1 ? "BUY NOW" : "Sold out"}
             </button>
           </div>
         </div>
@@ -528,7 +544,7 @@ function Products() {
           <SectionHeader title="best products" />
           <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-5">
             {bestProducts?.map((product) => (
-              <Card key={product.id} product={product} />
+              <Card key={product.id} product={product} isBestProduct={true} />
             ))}
           </div>
         </section>
@@ -634,7 +650,7 @@ function Products() {
 
 export default Products;
 
-function Card({ product }) {
+function Card({ product, isBestProduct = false }) {
   const naviagte = useNavigate();
   const { isAuthenticated } = useApp();
   const {
@@ -670,10 +686,33 @@ function Card({ product }) {
     }
   }, [isAuthenticated, cartItems, localcartItems, product?.id]);
 
+  const mrp = Number(product?.ecommercePrice?.mrp);
+  const sellingPrice = Number(product?.ecommercePrice?.sellingPrice);
+
+  const discountPercentage =
+    mrp && sellingPrice ? Math.round(((mrp - sellingPrice) / mrp) * 100) : 0;
+
+  const showDiscountBadge = discountPercentage > 15;
+
   return (
     <>
-      <div className="h-[300px] lg:h-[370px]">
-        <div className="h-full flex flex-col border-[1px] border-[#AAAAAA] relative">
+      <div className="h-[300px] lg:h-[350px] font-TimesNewRoman">
+        <div className="h-full bg-white rounded border-2 border-[#ccc] transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-[0_12px_30px_rgba(0,0,0,0.08)] group overflow-hidden relative ">
+          {showDiscountBadge && (
+            <div className="absolute top-0 left-0 z-10">
+              <span className="bg-green-100 text-green-700 text-xs font-medium px-2 py-1 rounded-br-full border border-green-200">
+                {discountPercentage}% OFF
+              </span>
+            </div>
+          )}
+          {isBestProduct && (
+            <div className="absolute top-0 right-0 w-24 h-24 overflow-hidden z-10">
+              <span className="absolute top-2.5 right-[-36px] w-28 text-center rotate-45 bg-[#FFF3D6] text-[#9C6B00] text-[8px] font-medium py-1 shadow-md">
+                TOP RATED
+              </span>
+            </div>
+          )}
+
           {product.image && (
             <div
               onClick={() =>
@@ -681,30 +720,37 @@ function Card({ product }) {
                   state: { from: "products" },
                 })
               }
-              className=" cursor-pointer"
+              className=" cursor-pointer flex justify-center pt-5"
             >
               <img
                 src={product.image}
                 alt={product.title}
-                className="w-52 h-40 lg:h-56 mx-auto mt-4 object-contain"
+                className="w-48 h-40 lg:h-52 object-contain transition-transform duration-300 group-hover:scale-105"
               />
             </div>
           )}
-          <div className="px-2 py-2 flex flex-col justify-center gap-3 font-TimesNewRoman mt-auto">
-            <p className=" text-xs lg:text-sm line-clamp-1">{product.title}</p>
-            <p className="text-xs lg:text-sm">
-              ₹{" "}
-              {product?.ecommercePrice?.sellingPrice.toLocaleString("en-IN", {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2,
-              })}
+          <div className="px-3 py-3 flex flex-col gap-2 mt-auto">
+            <p className="text-sm font-medium text-gray-800 line-clamp-1">
+              {product.title}
             </p>
+            <div className="flex items-center gap-2">
+              <p className="text-sm font-semibold text-gray-800">
+                ₹ {sellingPrice.toLocaleString("en-IN")}
+              </p>
+
+              {showDiscountBadge && (
+                <p className="text-xs text-gray-400 line-through">
+                  ₹ {mrp.toLocaleString("en-IN")}
+                </p>
+              )}
+            </div>
+
             <div className="flex justify-between items-center gap-2">
               <div>
                 {product.stockQty > 0 ? (
                   <button
                     onClick={() => handleAddToCart(product, iscarted)}
-                    className="flex items-center gap-1 font-TimesNewRoman text-sm py-1.5 border border-[#ccc] px-2 hover:bg-[#DDDDDD]"
+                    className="bg-[#334A78] text-[#fff] text-xs lg:text-sm px-4 py-2 capitalize font-bold rounded-sm hover:bg-[#4C69A4] transition"
                   >
                     {iscarted ? "Go to cart" : "Add to cart"}{" "}
                   </button>
@@ -724,7 +770,7 @@ function Card({ product }) {
                     JSON.stringify(product),
                   );
                 }}
-                className="text-[#ccc] hover:text-red-600 cursor-pointer"
+                className="text-gray-400 hover:text-red-500 transition"
               >
                 {isWishlisted ? (
                   <AiFillHeart size={20} color="red" />

@@ -24,6 +24,7 @@ import AdminSetting from "./AdminSetting";
 import AdminDashItems from "./AdminDashItems";
 import AdminDashClient from "./AdminDashClient";
 import AdminDashVendors from "./AdminDashVendors";
+import { handleError } from "../../common-components/handleError";
 
 function handlesidebarState(state, action) {
   switch (action.type) {
@@ -83,7 +84,7 @@ function AdminDashboard() {
 
   const [sidebarstate, sidebarDispatch] = useReducer(
     handlesidebarState,
-    sidebarInitialState
+    sidebarInitialState,
   );
 
   useEffect(() => {
@@ -145,7 +146,9 @@ function AdminDashboard() {
 
       setAllvendors(data);
     } catch (error) {
-      console.error(error);
+      handleError(error, {
+        prodMessage: "Something went wrong. Please try again.",
+      });
     } finally {
       setIsvendorRefresh(false);
     }
@@ -160,7 +163,9 @@ function AdminDashboard() {
 
       setAllusers(data);
     } catch (error) {
-      console.error(error);
+      handleError(error, {
+        prodMessage: "Something went wrong. Please try again.",
+      });
     } finally {
       setIsrefresh(false);
     }

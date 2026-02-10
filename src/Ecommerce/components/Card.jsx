@@ -10,6 +10,7 @@ import { MdOutlineDelete } from "react-icons/md";
 import { IoClose } from "react-icons/io5";
 import toast from "react-hot-toast";
 import { showRemoveFromCartToast } from "../../utils/AddToCartToast";
+import { handleError } from "../../common-components/handleError";
 
 export default function Card({ image, title, subtitle }) {
   return (
@@ -91,13 +92,19 @@ export function CardWithCompare({ product, handleCompareToggle, compare }) {
             )}
           </div>
         </div>
-        <button
-          onClick={() => handleAddToCart(product, iscarted)}
-          className="text-[#000] uppercase bg-[#FFFFFF] text-xs border border-[#ccc] px-2 py-2 my-2 lg:my-4 rounded-sm hover:bg-[#DDDDDD]"
-        >
-          {iscarted ? "go to cart" : "add to cart"}
-        </button>
-        <div className="hidden lg:flex gap-3">
+        {product.stockQty > 1 ? (
+          <button
+            onClick={() => handleAddToCart(product, iscarted)}
+            className="text-[#000] uppercase bg-[#FFFFFF] text-xs border border-[#ccc] px-2 py-2 my-2 lg:my-4 rounded-sm hover:bg-[#DDDDDD]"
+          >
+            {iscarted ? "go to cart" : "add to cart"}
+          </button>
+        ) : (
+          <span className="text-red-700 uppercase bg-[#FFFFFF] text-xs  px-2 py-2 my-2 lg:my-4">
+            out of stock
+          </span>
+        )}
+        <div className="hidden lg:flex gap-3 lg:mt-auto">
           <input
             type="checkbox"
             name="compare"
@@ -145,7 +152,7 @@ export function ShopCard({ product }) {
   }, [isAuthenticated, cartItems, localcartItems, product?.id]);
 
   return (
-    <div className="font-TimesNewRoman max-w-sm max-h-sm border border-[#ccc]">
+    <div className="font-TimesNewRoman max-w-sm max-h-sm border-2 border-[#ccc]">
       <div
         onClick={() =>
           naviagte(`/productview/${product.id}`, { state: { from: "shop" } })
@@ -191,7 +198,7 @@ export function ShopCard({ product }) {
         {product?.stockQty > 0 ? (
           <button
             onClick={() => handleAddToCart(product, iscarted)}
-            className="text-[#000] uppercase bg-[#FFFFFF] text-xs border border-[#ccc] px-2 py-2 rounded-sm hover:bg-[#f2f2f2]"
+            className="bg-[#334A78] text-[#fff] text-xs lg:text-sm px-3.5 py-1.5 capitalize font-bold rounded-sm hover:bg-[#4C69A4] transition"
           >
             {iscarted ? "Go to cart" : "Add to cart"}{" "}
           </button>
@@ -224,7 +231,9 @@ export function CartCard({ cartitem }) {
         showRemoveFromCartToast(product);
         if (error) throw new Error(error);
       } catch (error) {
-        console.error(error);
+        handleError(error, {
+          prodMessage: "Something went wrong. Please try again.",
+        });
       } finally {
         getCartItems();
       }
@@ -250,11 +259,15 @@ export function CartCard({ cartitem }) {
         .update({ quantity: newQuantity })
         .eq("productId", productId);
       if (error) {
-        console.error(error);
+        handleError(error, {
+          prodMessage: "Something went wrong. Please try again.",
+        });
       }
       setLoadingQty(false);
     } catch (error) {
-      console.error(error);
+      handleError(error, {
+        prodMessage: "Something went wrong. Please try again.",
+      });
     } finally {
       setLoadingQty(false);
       getCartItems();
@@ -327,10 +340,14 @@ export function CartCard({ cartitem }) {
         localStorage.setItem("cartitems", JSON.stringify(updatedItems));
         setLocalCartItems(updatedItems);
       } else {
-        console.error("Signed URL error:", error);
+        handleError(error, {
+          prodMessage: "Something went wrong. Please try again.",
+        });
       }
     } catch (err) {
-      console.error("refreshSignedUrl failed:", err);
+      handleError(err, {
+        prodMessage: "Something went wrong. Please try again.",
+      });
     }
   };
   const cartItemTotal =

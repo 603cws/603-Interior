@@ -1,6 +1,5 @@
 import Spinner from "../../common-components/Spinner";
 import MultipleDeleteWarningCard from "../components/MultipleDeleteWarningCard";
-
 import DashboardProductCard from "../vendor/DashboardProductCard";
 import SelectSubcategories from "./SelectSubcategories";
 import { baseImageUrl } from "../../utils/HelperConstant";
@@ -20,6 +19,7 @@ import { supabase } from "../../services/supabase";
 import toast from "react-hot-toast";
 import { IoCheckmark } from "react-icons/io5";
 import DeleteWarning from "../components/DeleteWarning";
+import { handleError } from "../../common-components/handleError";
 
 const formatDateTime = (dateString) => {
   const d = new Date(dateString);
@@ -237,7 +237,9 @@ function Table({
             imagePaths = imagePaths.concat(parsedAdditionalImages);
           }
         } catch (parseError) {
-          console.error("error parsing error", parseError);
+          handleError(parseError, {
+            prodMessage: "Something went wrong. Please try again.",
+          });
         }
       }
 
@@ -251,7 +253,9 @@ function Table({
 
       setProductPreview(false);
     } catch (error) {
-      console.error(error);
+      handleError(error, {
+        prodMessage: "Something went wrong. Please try again.",
+      });
     } finally {
       selectedProductview.type === "product"
         ? setIsProductRefresh(true)
@@ -307,7 +311,9 @@ function Table({
               imagePaths = imagePaths.concat(parsed);
             }
           } catch (err) {
-            console.error("Error parsing additional images", err);
+            handleError(err, {
+              prodMessage: "Something went wrong. Please try again.",
+            });
           }
         }
 
@@ -322,8 +328,9 @@ function Table({
 
       toast.success("Selected items deleted successfully!");
     } catch (error) {
-      console.error("Delete error:", error);
-      toast.error("Something went wrong while deleting");
+      handleError(error, {
+        prodMessage: "Something went wrong. Please try again.",
+      });
     } finally {
       setMultipleDeleteWaring(false);
       setSelectedItemForDelete([]);
@@ -506,7 +513,7 @@ function Table({
                               onClick={() => {
                                 handleProductPreview(item);
                               }}
-                              className=" flex gap-2 items-center w-full text-left px-3 py-2 hover:bg-gray-200"
+                              className="flex gap-2 items-center w-full text-left px-3 py-2 hover:bg-gray-200"
                             >
                               <VscEye /> View
                             </button>
@@ -516,7 +523,7 @@ function Table({
                                   setSelectedproduct(item);
                                   setEditProduct(true);
                                 }}
-                                className=" flex gap-2 items-center w-full text-left px-3 py-2 hover:bg-gray-200"
+                                className="flex gap-2 items-center w-full text-left px-3 py-2 hover:bg-gray-200"
                               >
                                 <VscEye /> Edit
                               </button>
@@ -526,7 +533,7 @@ function Table({
                                   setSelectedAddon(item);
                                   setEditAddon(true);
                                 }}
-                                className=" flex gap-2 items-center w-full text-left px-3 py-2 hover:bg-gray-200"
+                                className="flex gap-2 items-center w-full text-left px-3 py-2 hover:bg-gray-200"
                               >
                                 <VscEye /> Edit
                               </button>
@@ -674,7 +681,7 @@ function RejectReasonPopup({
           value={rejectReason}
           onChange={(e) => setRejectReason(e.target.value)}
         />
-        <div className="mt-7 flex  gap-20 justify-between">
+        <div className="mt-7 flex gap-20 justify-between">
           <button
             className="border-[1px] border-[#BBBBBB] px-4 py-2 rounded-md mr-2"
             onClick={() => setRejectReasonPopup(false)}

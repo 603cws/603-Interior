@@ -8,6 +8,7 @@ import LandingNavbar from "../components/LandingNavbar";
 import { useEffect, useState } from "react";
 import { supabase } from "../../services/supabase";
 import HeroSection from "../components/HeroSection";
+import { handleError } from "../../common-components/handleError";
 
 function Career() {
   const [jobPostings, setJobPostings] = useState();
@@ -23,7 +24,9 @@ function Career() {
 
         if (error) throw error;
       } catch (error) {
-        console.error("error", error);
+        handleError(error, {
+          prodMessage: "Something went wrong. Please try again.",
+        });
       }
     }
     GetAllJobPosting();

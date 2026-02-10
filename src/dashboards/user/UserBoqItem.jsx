@@ -13,6 +13,7 @@ import { supabase } from "../../services/supabase";
 
 import Spinner from "../../common-components/Spinner";
 import { useApp } from "../../Context/Context";
+import { handleError } from "../../common-components/handleError";
 
 const tabs = [
   { name: "Products", value: "products" },
@@ -154,7 +155,9 @@ function UserBoqItem({ selectedBoq, setSelectedBoq }) {
         setIsboqavailable(true);
       }
     } catch (error) {
-      console.error(error);
+      handleError(error, {
+        prodMessage: "Something went wrong. Please try again.",
+      });
     }
   };
 
@@ -179,7 +182,9 @@ function UserBoqItem({ selectedBoq, setSelectedBoq }) {
         setFilteredAddons(data);
       }
     } catch (error) {
-      console.error(error);
+      handleError(error, {
+        prodMessage: "Something went wrong. Please try again.",
+      });
     } finally {
       setIsloading(false);
     }
@@ -212,7 +217,9 @@ function UserBoqItem({ selectedBoq, setSelectedBoq }) {
         setFilteredProducts([]);
       }
     } catch (error) {
-      console.error(error);
+      handleError(error, {
+        prodMessage: "Something went wrong. Please try again.",
+      });
     } finally {
       setIsloading(false);
     }

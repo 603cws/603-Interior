@@ -21,6 +21,7 @@ import PagInationNav from "../../../common-components/PagInationNav";
 import { MdOutlineRateReview } from "react-icons/md";
 import ProductReviews from "./ProductReviews";
 import { useBoqApp } from "../../../Context/BoqContext";
+import { handleError } from "../../../common-components/handleError";
 
 function Products({
   isproductRefresh,
@@ -320,7 +321,7 @@ function Products({
   // Slice the items for pagination
   const paginatedItems = items.slice(
     (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
+    currentPage * itemsPerPage,
   );
 
   const handleMenuToggle = (id) => {
@@ -347,7 +348,9 @@ function Products({
       setProducts(sortedData);
       setFilteredProducts(sortedData);
     } catch (error) {
-      console.error("Error fetching products:", error);
+      handleError(error, {
+        prodMessage: "Something went wrong. Please try again.",
+      });
     } finally {
       setIsloading(false);
       setIsProductRefresh(false);
@@ -668,7 +671,7 @@ function Products({
                         }));
                         exportToExcel(
                           exportData,
-                          toggle ? "products.xlsx" : "addons.xlsx"
+                          toggle ? "products.xlsx" : "addons.xlsx",
                         );
                       }}
                       className=" px-4 py-2 rounded text-[#374A75] text-sm flex items-center gap-3 border "
@@ -973,7 +976,7 @@ function Products({
                         }));
                         exportToExcel(
                           exportData,
-                          toggle ? "products.xlsx" : "addons.xlsx"
+                          toggle ? "products.xlsx" : "addons.xlsx",
                         );
                       }}
                       className="h-10 w-10 flex justify-center items-center border rounded "

@@ -4,7 +4,6 @@ import { AnimatedButton } from "../../common-components/AnimatedButton";
 import { useNavigate } from "react-router-dom";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
@@ -14,9 +13,6 @@ import Footer from "../../common-components/Footer";
 import GetInTouchSection from "../components/GetInTouchSection";
 import LazyImage from "../../utils/LazyImage";
 import { trackCTA } from "../../lib/trackCTA";
-import AnimationWrapper from "../components/AnimationWrapper";
-import { FaQuestion } from "react-icons/fa";
-import { IoMdClose } from "react-icons/io";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -85,7 +81,7 @@ function Landing() {
   const navigate = useNavigate();
   const containerRef = useRef();
   const [isloading, setIsloading] = useState(false);
-  const [showWalkthrough, setShowWalkthrough] = useState(false);
+  // const [showWalkthrough, setShowWalkthrough] = useState(false);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -264,7 +260,7 @@ function Landing() {
                     trackCTA("make your space");
                     navigate("/Layout");
                   }}
-                  className="relative group w-44 lg:w-56 h-11 lg:h-14 rounded-lg p-1 bg-gradient-to-br from-[#334A78] to-[#78A3FF] hover:bg-[#334A78]"
+                  className="relative group w-48 lg:w-56 h-11 lg:h-14 rounded-lg p-1 bg-gradient-to-br from-[#334A78] to-[#78A3FF] hover:bg-[#334A78]"
                 >
                   <span className="flex w-full h-full items-center justify-center rounded-md bg-white text-base lg:text-lg font-bold capitalize text-[#334A78] group-hover:text-[#FFF] group-hover:bg-[#334A78] transition-colors duration-500 ease-in-out whitespace-pre-line">
                     {isloading ? "loading.." : "Get Your BOQ (Free)"}
@@ -273,35 +269,8 @@ function Landing() {
               </div>
             </div>
           </div>
-          <div className="hidden xl:block fixed right-10 bottom-0 z-50  hover:animate-none">
-            <div
-              onClick={() => setShowWalkthrough(true)}
-              className="animate-bounce group w-12 h-12 bg-[#78A3FF] rounded-full flex justify-center items-center text-xl cursor-pointer shadow-lg"
-            >
-              <FaQuestion />
-              <p className="text-center absolute pointer-events-none bottom-full right-1/2 translate-x-1/2 mb-3 bg-[#334A78] text-white text-sm font-medium px-2 py-2 rounded-md shadow-2xl opacity-0 translate-y-2 transition-all duration-300 ease-out group-hover:opacity-100 group-hover:scale-100 group-hover:translate-y-0 w-28">
-                See how we work ?
-                <span className="absolute top-full left-1/2 -translate-x-1/2 w-2 h-2 bg-[#334A78] rotate-45" />
-              </p>
-            </div>
-          </div>
         </div>
       </section>
-
-      {showWalkthrough && (
-        <div className="hidden fixed inset-0 z-[9999] xl:flex items-center justify-center bg-black/40 backdrop-blur-sm">
-          <div className="relative w-[95%] max-w-6xl max-h-[95vh] bg-white rounded-2xl shadow-2xl overflow-hidden">
-            <button
-              className="absolute right-4 top-4 z-50 rounded-full bg-black/10 hover:bg-black/20 p-2"
-              onClick={() => setShowWalkthrough(false)}
-            >
-              <IoMdClose size={20} />
-            </button>
-
-            <AnimationWrapper />
-          </div>
-        </div>
-      )}
 
       <section className="hidden lg:block overflow-hidden py-14">
         <div
@@ -459,7 +428,7 @@ function Landing() {
             >
               {testimonials.map((t, idx) => (
                 <SwiperSlide key={idx} className="h-auto flex">
-                  <div className="bg-[#F9FAFB] rounded-2xl p-6 flex flex-col items-stretch font-Georgia">
+                  <div className="bg-[#F9FAFB] xl:h-[420px] rounded-2xl p-6 flex flex-col items-stretch font-Georgia border border-[#ccc]">
                     <div className="flex items-stretch gap-4 mb-4">
                       <img
                         src={t.image}
@@ -471,7 +440,7 @@ function Landing() {
                         <p className="text-sm text-[#4B5563]">{t.role}</p>
                       </div>
                     </div>
-                    <p className="text-[#374151] leading-relaxed mt-4">
+                    <p className="text-[#374151] leading-relaxed xl:mt-4">
                       &quot;{t.text}&quot;
                     </p>
                   </div>
@@ -505,19 +474,19 @@ function Landing() {
             modules={[Autoplay, Pagination, Navigation]}
             className="my-10 h-[450px]"
           >
-            {featuredProjects.map((project, idx) => (
+            {featuredProjects?.map((project, idx) => (
               <SwiperSlide key={idx} className="h-full">
                 <div
                   className="relative group w-full h-full bg-cover bg-center bg-no-repeat overflow-hidden rounded-lg"
                   style={{
-                    backgroundImage: `url("../images/home/${project.img}")`,
+                    backgroundImage: `url("../images/home/${project?.img}")`,
                   }}
                 >
                   <div className="absolute inset-0 bg-black/50 flex items-end p-5 translate-y-full group-hover:translate-y-0 transition-transform duration-700 ease-in-out" />
                   <h3 className="absolute right-0 translate-x-full group-hover:translate-x-0 bottom-5 text-white font-Georgia text-2xl text-right capitalize px-2 transition-transform duration-700 ease-in-out">
-                    {project.title}
+                    {project?.title}
                     <br />
-                    {project.location}
+                    {project?.location}
                   </h3>
                 </div>
               </SwiperSlide>

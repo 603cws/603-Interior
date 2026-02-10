@@ -4,6 +4,7 @@ import Calendar from "react-calendar";
 import { useEffect, useState } from "react";
 import { BsThreeDots } from "react-icons/bs";
 import { supabase } from "../../services/supabase";
+import { handleError } from "../../common-components/handleError";
 
 const timeSlots = [
   "09:00 am",
@@ -109,22 +110,24 @@ function Schedule() {
         throw error;
       }
     } catch (error) {
-      console.error(error);
+      handleError(error, {
+        prodMessage: "Something went wrong. Please try again.",
+      });
     }
   };
 
   return (
-    <div className="flex flex-col h-full min-h-0 overflow-hidden lg:border-2 lg:border-[#334A78] lg:rounded-lg bg-white ">
-      <div className="w-full  overflow-y-auto scrollbar-hide h-[calc(100vh-110px)] py-2 ">
+    <div className="flex flex-col h-full min-h-0 overflow-hidden lg:border-2 lg:border-[#334A78] lg:rounded-lg bg-white">
+      <div className="w-full overflow-y-auto scrollbar-hide h-[calc(100vh-110px)] py-2">
         <div>
           <div className="text-xl text-[#000] capitalize font-semibold border-b-2 border-b-[#CCCCCC] py-2">
-            <h2 className="px-4 ">Appointments Overview</h2>
+            <h2 className="px-4">Appointments Overview</h2>
           </div>
           <div className="lg:grid grid-cols-[1fr,2fr]">
-            <div className="">
+            <div>
               <div className="bg-[#374A75] flex justify-center items-center gap-2 py-3 m-3 rounded text-[#fff] hover:bg-[#6d87c4]">
                 <LuPlus />
-                <p className="">Appointment</p>
+                <p>Appointment</p>
               </div>
               <div className="flex justify-center items-center my-10">
                 <Calendar
@@ -139,16 +142,15 @@ function Schedule() {
               </div>
               <div className="text-[#000] capitalize border border-[#CCC] rounded-lg m-3 p-2">
                 <div className="">
-                  <div className="flex justify-between items-center border-b border-b-[#CCCCCC] ">
+                  <div className="flex justify-between items-center border-b border-b-[#CCCCCC]">
                     <h3 className="font-medium">Event Type</h3>
                     <BsThreeDots />
                   </div>
-                  <ul className=" list-inside">
-                    <li className="flex justify-between items-center ">
+                  <ul className="list-inside">
+                    <li className="flex justify-between items-center">
                       <p className="before:content-['•'] before:mr-2">
                         meeting
                       </p>{" "}
-                      {/* <BsThreeDots /> */}
                     </li>
                   </ul>
                 </div>
@@ -161,7 +163,7 @@ function Schedule() {
                   : "select a date"}
               </h4>
               <div className="overflow-x-auto">
-                <table className="w-full border-collapse border border-[#ccc] text-[#3D194F] ">
+                <table className="w-full border-collapse border border-[#ccc] text-[#3D194F]">
                   <thead>
                     <tr className="">
                       {columns.map((col, index) => (
@@ -187,7 +189,7 @@ function Schedule() {
                               className="border border-[#ccc] px-4 py-2 relative"
                             >
                               {scheduleData[day]?.[time] && (
-                                <div className="bg-purple-100 rounded-lg p-2 shadow-md flex ">
+                                <div className="bg-purple-100 rounded-lg p-2 shadow-md flex">
                                   <div>
                                     <p className="font-semibold text-sm">
                                       {scheduleData[day][time].company}

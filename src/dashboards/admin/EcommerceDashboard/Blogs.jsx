@@ -3,6 +3,7 @@ import { supabase } from "../../../services/supabase";
 import NewBlog from "./NewBlog";
 import EditBlog from "./EditBlog";
 import PagInationNav from "../../../common-components/PagInationNav";
+import { handleError } from "../../../common-components/handleError";
 
 function Blogs() {
   const [blogs, setBlogs] = useState([]);
@@ -36,10 +37,15 @@ function Blogs() {
         .from("blogs")
         .select("*")
         .order("created_at", { ascending: false });
-      if (error) console.error("Error fetching blogs:", error);
+      if (error)
+        handleError(error, {
+          prodMessage: "Error fetching blogs. Please try again.",
+        });
       setBlogs(data);
     } catch (error) {
-      console.error("Unexpected Error:", error);
+      handleError(error, {
+        prodMessage: "Something went wrong. Please try again.",
+      });
     }
   };
 
@@ -73,7 +79,9 @@ function Blogs() {
           .remove(imagePaths);
 
         if (storageError)
-          console.error("storageError while deleting image", storageError);
+          handleError(storageError, {
+            prodMessage: "Something went wrong. Please try again.",
+          });
 
         if (storageError) throw storageError;
       }
@@ -86,7 +94,9 @@ function Blogs() {
       setSelectedBlogs([]);
       fetchBlogs();
     } catch (error) {
-      console.error("Error deleting blogs:", error);
+      handleError(error, {
+        prodMessage: "Error deleting blogs. Please try again.",
+      });
     }
   };
 

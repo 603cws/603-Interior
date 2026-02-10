@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { supabase } from "../../../services/supabase";
 import Chart from "react-apexcharts";
+import { handleError } from "../../../common-components/handleError";
 
 function SalesSection() {
   const [ordersData, setOrdersData] = useState([]);
@@ -17,7 +18,9 @@ function SalesSection() {
         .order("created_at", { ascending: false });
 
       if (error) {
-        console.error(error);
+        handleError(error, {
+          prodMessage: "Something went wrong. Please try again.",
+        });
         setLoadingOrders(false);
         return;
       }
@@ -59,7 +62,7 @@ function SalesSection() {
   const itemsSold = filteredOrders.length;
   const revenue = filteredOrders.reduce(
     (sum, order) => sum + (parseFloat(order.final_amount) || 0),
-    0
+    0,
   );
 
   // Build aggregated buckets based on timeFilter
@@ -155,7 +158,7 @@ function SalesSection() {
       colors: ["#6467F2"],
       grid: { borderColor: "#f1f1f1" },
     }),
-    [chartData.categories]
+    [chartData.categories],
   );
 
   // Apex options for PIE (needs labels)
@@ -190,13 +193,13 @@ function SalesSection() {
         },
       },
     }),
-    [chartData.categories, chartData.values]
+    [chartData.categories, chartData.values],
   );
 
   // Correct series shape per type
   const barSeries = useMemo(
     () => [{ name: "Revenue", data: chartData.values }],
-    [chartData.values]
+    [chartData.values],
   );
   const pieSeries = useMemo(() => chartData.values, [chartData.values]);
 
@@ -233,7 +236,7 @@ function SalesSection() {
             value={timeFilter}
             onChange={(e) =>
               setTimeFilter(
-                e.target.value === "all" ? "all" : parseInt(e.target.value, 10)
+                e.target.value === "all" ? "all" : parseInt(e.target.value, 10),
               )
             }
             className="border border-gray-300 rounded-lg px-3 py-1 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"

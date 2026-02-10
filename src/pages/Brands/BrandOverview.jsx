@@ -235,7 +235,6 @@ function BrandsOverview() {
   const navigate = useNavigate();
 
   const [selectedCategory, setSelectedCategory] = useState("Furniture");
-  const [activeIndex, setActiveIndex] = useState(0);
 
   const images = useMemo(
     () => brandImages[selectedCategory] || [],

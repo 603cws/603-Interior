@@ -4,6 +4,7 @@ import toast from "react-hot-toast";
 import { supabase } from "../../../services/supabase";
 import Spinner from "../../../common-components/Spinner";
 import BackButton from "../../../common-components/BackButton";
+import { handleError } from "../../../common-components/handleError";
 
 function EditDiscount({ coupon, onClose, onUpdate }) {
   const [updating, setUpdating] = useState(false);
@@ -76,8 +77,9 @@ function EditDiscount({ coupon, onClose, onUpdate }) {
       onUpdate && onUpdate();
       onClose && onClose();
     } catch (err) {
-      console.error("Unexpected error:", err);
-      toast.error("Unexpected error while updating coupon.");
+      handleError(err, {
+        prodMessage: "Something went wrong. Please try again.",
+      });
     } finally {
       setUpdating(false);
     }

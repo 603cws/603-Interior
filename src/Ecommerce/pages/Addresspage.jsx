@@ -13,6 +13,7 @@ import AppliedCoupon from "../../common-components/AppliedCoupon";
 import { useEcomApp } from "../../Context/EcomContext";
 import AddressCard from "../components/AddressCard";
 import DeliveryEstimate from "../components/DeliveryEstimate";
+import { handleError } from "../../common-components/handleError";
 
 function Addresspage() {
   const [isAddressFormOpen, setIsAddressFormOpen] = useState(false);
@@ -114,14 +115,18 @@ function Addresspage() {
           .eq("id", accountHolder?.userId);
 
         if (error) {
-          console.error(error);
+          handleError(error, {
+            prodMessage: "Something went wrong. Please try again.",
+          });
           return;
         }
 
         //  clear the form on succesful submission
         clearForm();
       } catch (error) {
-        console.error(error);
+        handleError(error, {
+          prodMessage: "Something went wrong. Please try again.",
+        });
       } finally {
         setIsAddressFormOpen(false);
         fetchUserData();
@@ -171,11 +176,15 @@ function Addresspage() {
         .eq("id", accountHolder?.userId);
 
       if (error) {
-        console.error(error);
+        handleError(error, {
+          prodMessage: "Something went wrong. Please try again.",
+        });
         return;
       }
     } catch (error) {
-      console.error(error);
+      handleError(error, {
+        prodMessage: "Something went wrong. Please try again.",
+      });
     } finally {
       fetchUserData();
       setRemovingAddressId(null);
@@ -195,13 +204,17 @@ function Addresspage() {
         .eq("id", accountHolder?.userId);
 
       if (error) {
-        console.error("Failed to update default address:", error);
+        handleError(error, {
+          prodMessage: "Failed to update default address. Please try again.",
+        });
         return;
       }
 
       fetchUserData();
     } catch (err) {
-      console.error("Unexpected error:", err);
+      handleError(err, {
+        prodMessage: "Something went wrong. Please try again.",
+      });
     }
   };
 
@@ -305,7 +318,9 @@ function Addresspage() {
 
       return { neworder, data };
     } catch (error) {
-      console.error("error", error);
+      handleError(error, {
+        prodMessage: "Something went wrong. Please try again.",
+      });
     }
   }
 
@@ -324,7 +339,7 @@ function Addresspage() {
         setpaymentLoading(false);
         return;
       }
-      const products = cartItems.map((item) => ({
+      const products = cartItems?.map((item) => ({
         id: item.productId.id,
         price: item?.productId?.ecommercePrice?.sellingPrice,
         ecommercePriceObject: item?.productId?.ecommercePrice,
@@ -332,6 +347,8 @@ function Addresspage() {
         image: item?.productId?.image,
         name: item?.productId?.title,
         description: item?.productId?.details,
+        subtotal:
+          item?.productId?.ecommercePrice?.sellingPrice * item?.quantity,
         vendorId: item?.productId?.vendor_id,
       }));
 
@@ -353,7 +370,9 @@ function Addresspage() {
       );
 
       if (!result) {
-        console.error("Something went wrong. No result returned.");
+        handleError("Error occured", {
+          prodMessage: "Something went wrong. Please try again.",
+        });
         return;
       }
 
@@ -366,13 +385,21 @@ function Addresspage() {
         name: accountHolder?.companyName,
         orderId: orderId,
         total: {
-          totalMRP: pricingdetails?.price,
+          totalMRP: pricingdetails?.subtotal,
           finalPrice: pricingdetails?.finalValue,
           charges: {
             GST: pricingdetails?.gst,
             delivery: pricingdetails?.shippingFee,
           },
         },
+        // total: {
+        //   totalMRP: pricingdetails?.price,
+        //   finalPrice: pricingdetails?.finalValue,
+        //   charges: {
+        //     GST: pricingdetails?.gst,
+        //     delivery: pricingdetails?.shippingFee,
+        //   },
+        // },
         items: products,
         address: getDefaultAddress,
       };
@@ -425,10 +452,9 @@ function Addresspage() {
                     .eq("id", item.productId.id);
 
                   if (stockError) {
-                    console.error(
-                      `Failed to update stock for ${item.productId.title}:`,
-                      stockError,
-                    );
+                    handleError(stockError, {
+                      prodMessage: "Something went wrong. Please try again.",
+                    });
                   }
                 }
 
@@ -436,14 +462,16 @@ function Addresspage() {
                 const userid = accountHolder?.userId;
                 await deleteCart(userid);
                 // send email
-                await fetch(
-                  "https://bwxzfwsoxwtzhjbzbdzs.supabase.co/functions/v1/orderemail",
-                  {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(orderData),
-                  },
-                );
+                if (import.meta.env.MODE !== "development") {
+                  await fetch(
+                    "https://bwxzfwsoxwtzhjbzbdzs.supabase.co/functions/v1/orderemail",
+                    {
+                      method: "POST",
+                      headers: { "Content-Type": "application/json" },
+                      body: JSON.stringify(orderData),
+                    },
+                  );
+                }
                 setpaymentLoading((prev) => !prev);
 
                 navigate(`/orderSuccess/${orderId}`, { replace: true });
@@ -470,8 +498,9 @@ function Addresspage() {
         setpaymentLoading((prev) => !prev);
       }
     } catch (err) {
-      console.error("Payment error:", err);
-      toast.error("Something went wrong. Please try again.");
+      handleError(err, {
+        prodMessage: "Something went wrong. Please try again.",
+      });
       setpaymentLoading((prev) => !prev);
     }
   };

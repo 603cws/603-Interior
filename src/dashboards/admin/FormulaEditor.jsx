@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { supabase } from "../../services/supabase";
 import { useBoqApp } from "../../Context/BoqContext";
 import toast from "react-hot-toast";
+import { handleError } from "../../common-components/handleError";
 
 export default function FormulaEditor() {
   const { formulaMap, refetchFormulas } = useBoqApp();
@@ -21,7 +22,9 @@ export default function FormulaEditor() {
   const fetchCategories = async () => {
     const { data, error } = await supabase.from("categories").select("name");
     if (error) {
-      console.error("Error fetching categories:", error);
+      handleError(error, {
+        prodMessage: "Error fetching categories. Please try again.",
+      });
     } else {
       setCategories(data.map((cat) => cat.name));
     }
@@ -39,7 +42,10 @@ export default function FormulaEditor() {
       .from("formulas")
       .update({ [field]: value })
       .eq("category", category);
-    if (error) console.error("Error updating formula:", error);
+    if (error)
+      handleError(error, {
+        prodMessage: "Error updating formula. Please try again.",
+      });
     else await refetchFormulas();
   };
 
@@ -48,7 +54,10 @@ export default function FormulaEditor() {
       .from("formulas")
       .delete()
       .eq("category", category);
-    if (error) console.error("Error deleting formula:", error);
+    if (error)
+      handleError(error, {
+        prodMessage: "Error deleting formula. Please try again.",
+      });
     else await refetchFormulas();
   };
 
@@ -62,7 +71,10 @@ export default function FormulaEditor() {
     const { error } = await supabase
       .from("formulas")
       .insert([{ category, formula, description }]);
-    if (error) console.error("Error adding formula:", error);
+    if (error)
+      handleError(error, {
+        prodMessage: "Error adding formula. Please try again.",
+      });
     else {
       await refetchFormulas();
       setNewFormula({ category: "", formula: "", description: "" });
@@ -151,8 +163,8 @@ export default function FormulaEditor() {
                 </h4>
                 <div className="hidden lg:block overflow-x-auto">
                   <table className="w-full bg-[#fff]">
-                    <thead className="">
-                      <tr className="">
+                    <thead>
+                      <tr>
                         <th className="border-b p-2 text-left">Category</th>
                         <th className="border-b p-2 text-left">Formula</th>
                         <th className="border-b p-2 text-left">Description</th>
@@ -197,7 +209,7 @@ export default function FormulaEditor() {
                               }
                             />
                           </td>
-                          <td className=" p-2 space-x-2 text-[#A1A1A1] font-semibold">
+                          <td className="p-2 space-x-2 text-[#A1A1A1] font-semibold">
                             <button
                               className="bg-[#374A75] text-white px-3 py-1 rounded hover:bg-[#5c7ebd]"
                               onClick={() => {
@@ -222,7 +234,6 @@ export default function FormulaEditor() {
                             </button>
                             <button
                               className="bg-[#FA343A] text-white px-3 py-1 rounded hover:bg-red-700"
-                              // onClick={() => deleteFormula(f.category)}
                               onClick={() => setFormulaToDelete(f.category)}
                             >
                               Delete
@@ -303,7 +314,7 @@ function FormulaCard({
         <p className="font-semibold text-lg mb-2">{formula.category}</p>
 
         <input
-          className=" w-full py-2 mb-2 text-sm text-[#A1A1A1] font-semibold"
+          className="w-full py-2 mb-2 text-sm text-[#A1A1A1] font-semibold"
           value={currentEdit.formula ?? formula.formula}
           onChange={(e) =>
             setEditing((prev) => ({
@@ -316,7 +327,7 @@ function FormulaCard({
           }
         />
         <input
-          className=" w-full py-2 mb-4 text-sm text-[#A1A1A1] font-semibold"
+          className="w-full py-2 mb-4 text-sm text-[#A1A1A1] font-semibold"
           value={currentEdit.description ?? formula.description}
           onChange={(e) =>
             setEditing((prev) => ({

@@ -1,3 +1,4 @@
+import { handleError } from "../common-components/handleError";
 import { supabase } from "../services/supabase";
 import { useEffect, useState } from "react";
 
@@ -22,7 +23,9 @@ export const useAllCatArray = () => {
 
       setAllCatArray(formatted);
     } catch (err) {
-      console.error("Error fetching categories:", err);
+      handleError(err, {
+        prodMessage: "Error fetching categories. Please try again.",
+      });
     }
   };
 
