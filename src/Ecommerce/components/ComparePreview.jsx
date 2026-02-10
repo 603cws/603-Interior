@@ -19,7 +19,7 @@ function ComparePreview() {
   return (
     <>
       {compare?.length > 0 && (
-        <div className="hidden lg:block fixed bottom-20 right-5 z-50">
+        <div className="hidden xl:block fixed bottom-10 right-10 z-50">
           <div
             className="relative"
             onMouseEnter={() => setShowPreview(true)}
@@ -36,18 +36,18 @@ function ComparePreview() {
             </button>
 
             {showPreview && !showCompare && (
-              <div className="absolute transform transition-all ease-in border border-[#ccc] bottom-full mb-2 left-0 -translate-x-[55%] translate-y-[20%] bg-white shadow-lg rounded-lg p-4 w-[350px] h-[300px]">
+              <div className="absolute transform transition-all ease-in border border-[#ccc] bottom-full mb-2 left-0 -translate-x-[55%] translate-y-[20%] bg-white shadow-lg rounded-lg p-2 w-[400px] h-[320px] overflow-x-scroll">
                 <div className="flex  gap-3">
                   {compare?.map((item) => (
                     <div
                       key={item.id}
-                      className="flex flex-col border-r border-[#ccc] items-center gap-3"
+                      className="flex w-[120px] flex-col border-r border-[#ccc] items-center gap-3"
                     >
                       <div className="relative">
                         <img
                           src={item.image}
                           alt={item.title}
-                          className="h-[200px] w-[200px] object-contain"
+                          className="h-[150px] w-[150px] object-contain"
                         />
 
                         <button
@@ -59,8 +59,8 @@ function ComparePreview() {
                           <MdOutlineCancel color="#666666" size={20} />
                         </button>
                       </div>
-                      <p className="text-sm font-medium text-gray-800 truncate">
-                        {item.title}
+                      <p className="text-sm font-medium text-gray-800 truncate text-wrap">
+                        {item?.title}
                       </p>
                     </div>
                   ))}

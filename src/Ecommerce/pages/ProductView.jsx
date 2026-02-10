@@ -20,6 +20,7 @@ import ProductsMayLike from "../components/ProductsMayLike";
 import CustomerReview from "../components/CustomerReview";
 import ComparePreview from "../components/ComparePreview";
 import { handleError } from "../../common-components/handleError";
+import toast from "react-hot-toast";
 
 // const offers = [
 //   "Flat ₹50 Off + Free Surprise Gift On All Prepaid Offers 🎁",
@@ -250,9 +251,14 @@ function ProductView() {
       )
     : [];
 
-  const handleProductQuantityInc = () => {
-    if (productqunatity >= 1) {
+  const handleProductQuantityInc = (product) => {
+    console.log(product, productqunatity);
+
+    if (productqunatity >= 1 && product?.stockQty > productqunatity) {
+      console.log("condtion statisfied");
       setProductquantity((prev) => prev + 1);
+    } else {
+      toast.error(`only ${product?.stockQty} items left`);
     }
   };
   const handleProductQuantityDec = () => {
@@ -413,7 +419,7 @@ function ProductView() {
                           ? "cursor-not-allowed"
                           : "cursor-pointer"
                       }`}
-                      onClick={handleProductQuantityInc}
+                      onClick={() => handleProductQuantityInc(product)}
                       disabled={product?.stockQty < 1}
                     >
                       +
