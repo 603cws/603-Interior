@@ -23,6 +23,10 @@ export const useHandleAddToCart = () => {
       return;
     }
 
+    if (product?.stockQty < 1) {
+      return toast.error(`product is out of stock`);
+    }
+
     if (!isAuthenticated) {
       const formattedproductforcart = {
         productId: product,

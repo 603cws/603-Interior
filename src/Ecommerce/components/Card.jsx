@@ -92,13 +92,19 @@ export function CardWithCompare({ product, handleCompareToggle, compare }) {
             )}
           </div>
         </div>
-        <button
-          onClick={() => handleAddToCart(product, iscarted)}
-          className="text-[#000] uppercase bg-[#FFFFFF] text-xs border border-[#ccc] px-2 py-2 my-2 lg:my-4 rounded-sm hover:bg-[#DDDDDD]"
-        >
-          {iscarted ? "go to cart" : "add to cart"}
-        </button>
-        <div className="hidden lg:flex gap-3">
+        {product.stockQty > 1 ? (
+          <button
+            onClick={() => handleAddToCart(product, iscarted)}
+            className="text-[#000] uppercase bg-[#FFFFFF] text-xs border border-[#ccc] px-2 py-2 my-2 lg:my-4 rounded-sm hover:bg-[#DDDDDD]"
+          >
+            {iscarted ? "go to cart" : "add to cart"}
+          </button>
+        ) : (
+          <span className="text-red-700 uppercase bg-[#FFFFFF] text-xs  px-2 py-2 my-2 lg:my-4">
+            out of stock
+          </span>
+        )}
+        <div className="hidden lg:flex gap-3 lg:mt-auto">
           <input
             type="checkbox"
             name="compare"

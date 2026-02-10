@@ -528,10 +528,11 @@ function Products() {
                 handleAddToCart(selectedProduct, false);
                 navigate("/cart");
               }}
+              disabled={selectedProduct?.stockQty < 1}
               className="bg-[#334A78] text-white text-xs px-4 py-2 mt-2 font-bold rounded
                hover:bg-[#4C69A4] transition-transform duration-300 hover:scale-110"
             >
-              BUY NOW
+              {selectedProduct?.stockQty > 1 ? "BUY NOW" : "Sold out"}
             </button>
           </div>
         </div>

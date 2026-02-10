@@ -117,13 +117,14 @@ function ShopProducts() {
   } results`;
   const goToPage = (pageNumber) => {
     setCurrentPage(pageNumber);
+
+    setTimeout(() => {
+      containerRef.current?.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }, 0);
   };
-  useEffect(() => {
-    containerRef.current?.scrollIntoView({
-      behavior: "smooth",
-      block: "start",
-    });
-  }, [currentPage]);
 
   useEffect(() => {
     fetchProductsData();
@@ -171,9 +172,9 @@ function ShopProducts() {
     // Brand Filter
     if (filters.brands.length > 0) {
       result = result.filter((product) => {
-        const productBrand = product?.manufacturer?.trim().toLowerCase();
+        const productBrand = product?.manufacturer?.trim();
         return filters.brands.some(
-          (selected) => selected.trim().toLowerCase() === productBrand,
+          (selected) => selected.trim() === productBrand,
         );
       });
     }
@@ -288,6 +289,9 @@ function ShopProducts() {
   };
 
   const handleBrandClick = (brand) => {
+    console.log("filters", filters);
+    console.log("brand", brand);
+
     setFilters((prev) => ({
       ...prev,
       brands: prev.brands.includes(brand)
@@ -595,14 +599,14 @@ function ShopProducts() {
 
                 {isBrandOpen && (
                   <div className="space-y-2">
-                    {allBrands.map((brand) => (
+                    {allBrands?.map((brand) => (
                       <label
                         key={brand}
                         // onClick={() => handleBrandClick(brand)}
                         className="flex items-center gap-2 cursor-pointer text-[#111] text-sm"
                       >
                         <input
-                          checked={filters.brands.includes(brand)}
+                          checked={filters?.brands?.includes(brand)}
                           onChange={() => handleBrandClick(brand)}
                           type="checkbox"
                           className="w-4 h-4 cursor-pointer text-[#111] capitalize"

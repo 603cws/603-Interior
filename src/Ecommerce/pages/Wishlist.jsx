@@ -155,16 +155,16 @@ function Wishlist() {
             <h6 className="capitalize text-xl text-[#334A78]">
               my wishlist{" "}
               <span className="text-[#334A78]/70">
-                {wishlistItems.length} items
+                {wishlistItems?.length} items
               </span>
             </h6>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-6 gap-2">
-            {wishlistItems.map((item, index) => (
+            {wishlistItems?.map((item, index) => (
               <div key={index} className="font-Poppins relative border">
                 <div className="relative flex justify-center items-center p-2">
                   <img
-                    src={item.productId.image}
+                    src={item?.productId?.image}
                     alt="chair"
                     className="h-52 object-contain"
                   />
@@ -194,18 +194,24 @@ function Wishlist() {
                       </div>
                     </div>
                   </div>
-                  <button
-                    onClick={() => {
-                      if (item.type === "cart") {
-                        navigate("/cart");
-                      } else {
-                        handleMoveToCart(item);
-                      }
-                    }}
-                    className="text-[#000] capitalize bg-[#FFFFFF] text-[6px] md:text-[10px] lg:text-xs border border-[#ccc] px-2  py-2 rounded-sm hover:bg-[#DDDDDD]"
-                  >
-                    {item.type === "cart" ? "Go to Cart" : "Move to Cart"}
-                  </button>
+                  {item?.stockQty > 1 ? (
+                    <button
+                      onClick={() => {
+                        if (item.type === "cart") {
+                          navigate("/cart");
+                        } else {
+                          handleMoveToCart(item);
+                        }
+                      }}
+                      className="text-[#000] capitalize bg-[#FFFFFF] text-[6px] md:text-[10px] lg:text-xs border border-[#ccc] px-2  py-2 rounded-sm hover:bg-[#DDDDDD]"
+                    >
+                      {item.type === "cart" ? "Go to Cart" : "Move to Cart"}
+                    </button>
+                  ) : (
+                    <span className="text-red-700 uppercase bg-[#FFFFFF] text-xs  px-2 py-2 my-2 lg:my-4">
+                      out of stock
+                    </span>
+                  )}
                 </div>
               </div>
             ))}
