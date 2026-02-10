@@ -12,23 +12,23 @@ import { BoqAppProvider } from "./Context/BoqContext.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <ErrorBoundary
+    {/* <ErrorBoundary
       FallbackComponent={ErrorFallback}
       onReset={() => {
         // action to run when resetErrorBoundary() is called
         window.location.reload(); // refresh the entire page
       }}
-    >
-      <BrowserRouter>
-        <AppProvider>
-          <BoqAppProvider>
-            <EcomAppProvider>
-              <Toaster />
-              <App />
-            </EcomAppProvider>
-          </BoqAppProvider>
-        </AppProvider>
-      </BrowserRouter>
-    </ErrorBoundary>
+    > */}
+    <BrowserRouter>
+      <AppProvider>
+        <BoqAppProvider>
+          <EcomAppProvider>
+            <Toaster />
+            <App />
+          </EcomAppProvider>
+        </BoqAppProvider>
+      </AppProvider>
+    </BrowserRouter>
+    {/* </ErrorBoundary> */}
   </StrictMode>,
 );
