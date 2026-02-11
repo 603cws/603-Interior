@@ -166,7 +166,10 @@ function Wishlist() {
                   <img
                     src={item?.productId?.image}
                     alt="chair"
-                    className="h-52 object-contain"
+                    onClick={() =>
+                      navigate(`/productview/${item?.productId?.id}`)
+                    }
+                    className="h-52 object-contain cursor-pointer"
                   />
                   <div className="absolute top-2 right-2 bg-[#fff]/30  rounded-full">
                     <button

@@ -142,7 +142,8 @@ function AdminDashboard() {
       const { data } = await supabase
         .from("users_profiles")
         .select("*")
-        .eq("role", "vendor");
+        .eq("role", "vendor")
+        .order("created_at", { ascending: false });
 
       setAllvendors(data);
     } catch (error) {
@@ -159,7 +160,8 @@ function AdminDashboard() {
       const { data } = await supabase
         .from("users_profiles")
         .select("*")
-        .eq("role", "user");
+        .eq("role", "user")
+        .order("created_at", { ascending: false });
 
       setAllusers(data);
     } catch (error) {

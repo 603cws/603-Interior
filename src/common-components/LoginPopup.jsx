@@ -167,7 +167,7 @@ export default function LoginPopup({ onClose, product }) {
   };
 
   return (
-    <div className="fixed inset-0 bg-[#000]/25 flex justify-center items-center z-[999] font-TimesNewRoman">
+    <div className="fixed inset-0 bg-[#000]/15 flex justify-center items-center z-[999] font-TimesNewRoman">
       <div className="max-w-3xl lg:max-w-4xl w-full relative flex justify-center items-center">
         <div className="absolute right-0 md:right-7 lg:right-10 top-0 z-50">
           <button className="text-xl md:text-[#fff]" onClick={onClose}>
@@ -199,7 +199,7 @@ export default function LoginPopup({ onClose, product }) {
             </div>
 
             <div className="w-full max-w-md">
-              <h2 className="text-2xl font-semibold text-gray-800 mb-6">
+              <h2 className="text-2xl font-semibold text-[#334A78] mb-6">
                 {isSignUp
                   ? step === 1
                     ? "Create Account"
@@ -369,8 +369,10 @@ export default function LoginPopup({ onClose, product }) {
               <button
                 type="submit"
                 disabled={loading}
-                className={`w-full ${
-                  loading ? "bg-gray-300 cursor-wait" : "bg-[#1A3A36]"
+                className={`w-full  ${
+                  loading
+                    ? "cursor-wait bg-[#4a68a4]"
+                    : "bg-[#334A78] hover:bg-[#4a68a4]"
                 } text-white py-2 rounded-full font-semibold`}
               >
                 {loading

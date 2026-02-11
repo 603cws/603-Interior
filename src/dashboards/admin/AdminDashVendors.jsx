@@ -7,6 +7,7 @@ import { FaBuilding } from "react-icons/fa";
 import { useState } from "react";
 import { adminsupabase } from "../../services/supabase";
 import { handleError } from "../../common-components/handleError";
+import UserCard from "../components/UserCard";
 
 function AdminDashVendors({
   isExpanded,
@@ -24,6 +25,8 @@ function AdminDashVendors({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
   const [selectedindex, setSelectedindex] = useState();
+  const [sortOrder, setSortOrder] = useState("newest");
+  const [detailedView, setDetailedView] = useState(null);
 
   const handleDeletevendirClick = (user, index) => {
     setSelectedUser(user);
@@ -47,17 +50,26 @@ function AdminDashVendors({
     }
   };
 
-  const filterVendorByMultipleFields = (query) => {
-    if (!query) {
-      setFilteredvendors(allvendors); // Reset to original list when input is empty
-      return;
+  const filterVendorByMultipleFields = (query, order = sortOrder) => {
+    let result = [...allvendors];
+    // if (!query) {
+    //   setFilteredvendors(allvendors); // Reset to original list when input is empty
+    //   return;
+    // }
+    if (query) {
+      result = allvendors.filter(
+        (item) =>
+          item?.company_name?.toLowerCase().includes(query?.toLowerCase()) ||
+          item?.email?.toLowerCase().includes(query?.toLowerCase()),
+      );
     }
-    const filteredvendor = allvendors.filter(
-      (item) =>
-        item?.company_name?.toLowerCase().includes(query?.toLowerCase()) ||
-        item?.email?.toLowerCase().includes(query?.toLowerCase()),
-    );
-    setFilteredvendors(filteredvendor);
+    result.sort((a, b) => {
+      const dateA = new Date(a.created_at);
+      const dateB = new Date(b.created_at);
+
+      return order === "newest" ? dateB - dateA : dateA - dateB;
+    });
+    setFilteredvendors(result);
   };
   return (
     <>
@@ -69,7 +81,7 @@ function AdminDashVendors({
                 <h3 className="capitalize font-semibold text-xl ">
                   Vendor List
                 </h3>
-                <div className="w-1/2 hidden lg:block">
+                <div className="w-1/2 hidden lg:flex items-center gap-2">
                   <input
                     type="text"
                     className="w-full rounded-lg px-2 py-1.5 outline-none border text-sm"
@@ -80,6 +92,18 @@ function AdminDashVendors({
                     }}
                     value={query}
                   />
+                  <select
+                    value={sortOrder}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      setSortOrder(value);
+                      filterVendorByMultipleFields(query, value);
+                    }}
+                    className="rounded-md px-2 py-1.5 border text-sm outline-none bg-white"
+                  >
+                    <option value="newest">Newest first</option>
+                    <option value="oldest">Oldest first</option>
+                  </select>
                 </div>
                 <div className="lg:hidden flex gap-2">
                   {/* add vendor button */}
@@ -128,6 +152,18 @@ function AdminDashVendors({
                       </div>
                     )}
                   </div>
+                  <select
+                    value={sortOrder}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      setSortOrder(value);
+                      filterVendorByMultipleFields(query, value);
+                    }}
+                    className="rounded-md px-2 py-1.5 border text-sm outline-none bg-white"
+                  >
+                    <option value="newest">Newest</option>
+                    <option value="oldest">Oldest</option>
+                  </select>
                 </div>
               </div>
             </div>
@@ -155,7 +191,8 @@ function AdminDashVendors({
                         alt="profile"
                         className={`${
                           isExpanded ? "w-10 h-10" : "w-12 h-12"
-                        }  rounded-full object-cover border border-[#ccc]`}
+                        }  rounded-full object-cover border border-[#ccc] cursor-pointer`}
+                        onClick={() => setDetailedView(user)}
                       />
 
                       <div className="flex flex-col justify-center">
@@ -233,6 +270,14 @@ function AdminDashVendors({
           setVendorproductlist={setVendorproductlist}
           selectedVendor={selectedVendor}
         />
+      )}
+      {detailedView && (
+        <div className="fixed inset-0 bg-black/20 z-[999] flex justify-center items-center">
+          <UserCard
+            selectedUser={detailedView}
+            setDetailedView={setDetailedView}
+          />
+        </div>
       )}
     </>
   );

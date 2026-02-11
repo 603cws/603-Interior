@@ -5,6 +5,7 @@ import { adminsupabase } from "../../services/supabase";
 import { useApp } from "../../Context/Context";
 import PagInationNav from "../../common-components/PagInationNav";
 import { handleError } from "../../common-components/handleError";
+import UserCard from "../components/UserCard";
 
 function Clients({
   isExpanded,
@@ -19,18 +20,30 @@ function Clients({
   const [currentPage, setCurrentPage] = useState(1);
   const [filteredusers, setFilteredUsers] = useState(allusers);
   const [query, setQuery] = useState("");
+  const [sortOrder, setSortOrder] = useState("newest");
+  const [detailedView, setDetailedView] = useState(null);
+
   const { setSelectedClient } = useApp();
 
-  const filterByMultipleFields = (query) => {
-    if (!query) {
-      setFilteredUsers(allusers);
+  const filterByMultipleFields = (query, order = sortOrder) => {
+    let result = [...allusers];
+    // if (!query) {
+    //   setFilteredUsers(allusers);
+    // }
+    if (query) {
+      result = allusers.filter(
+        (item) =>
+          item?.company_name?.toLowerCase().includes(query?.toLowerCase()) ||
+          item?.email?.toLowerCase().includes(query?.toLowerCase()),
+      );
     }
-    const filtereduser = allusers.filter(
-      (item) =>
-        item?.company_name?.toLowerCase().includes(query?.toLowerCase()) ||
-        item?.email?.toLowerCase().includes(query?.toLowerCase()),
-    );
-    setFilteredUsers(filtereduser);
+    result.sort((a, b) => {
+      const dateA = new Date(a.created_at);
+      const dateB = new Date(b.created_at);
+
+      return order === "newest" ? dateB - dateA : dateA - dateB;
+    });
+    setFilteredUsers(result);
   };
 
   const itemperPage = 12;
@@ -88,6 +101,22 @@ function Clients({
           <div className="flex justify-between items-center px-1 py-2 border-b-2 border-b-gray-400">
             <h3 className="capitalize font-semibold text-xl">Client List</h3>
             <div className="flex-1 md:w-1/2 md:flex-none flex flex-row-reverse gap-2">
+              <select
+                value={sortOrder}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  setSortOrder(value);
+                  filterByMultipleFields(query, value);
+                }}
+                className="rounded-md px-1 lg:px-2 py-1.5 border outline-none bg-white text-xs lg:text-sm"
+              >
+                <option value="newest" className="text-xs lg:text-sm">
+                  Newest first
+                </option>
+                <option value="oldest" className="text-xs lg:text-sm">
+                  Oldest first
+                </option>
+              </select>
               <input
                 type="text"
                 className="w-full rounded-md px-2 py-1.5 outline-none border text-sm"
@@ -123,9 +152,10 @@ function Clients({
                   <img
                     src={`${user.profile_image}`}
                     alt="usericon"
+                    onClick={() => setDetailedView(user)}
                     className={`${
                       isExpanded ? "w-10 h-10" : "w-12 h-12"
-                    } rounded-full object-cover border border-[#ccc] `}
+                    } rounded-full object-cover border border-[#ccc] cursor-pointer`}
                   />
                   <div className="flex flex-col justify-center cursor-default">
                     <h2
@@ -197,6 +227,14 @@ function Clients({
           currentPage={currentPage}
         />
       </div>
+      {detailedView && (
+        <div className="fixed inset-0 bg-black/20 z-[999] flex justify-center items-center">
+          <UserCard
+            selectedUser={detailedView}
+            setDetailedView={setDetailedView}
+          />
+        </div>
+      )}
     </div>
   );
 }

@@ -289,9 +289,6 @@ function ShopProducts() {
   };
 
   const handleBrandClick = (brand) => {
-    console.log("filters", filters);
-    console.log("brand", brand);
-
     setFilters((prev) => ({
       ...prev,
       brands: prev.brands.includes(brand)

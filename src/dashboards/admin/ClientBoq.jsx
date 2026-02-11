@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { supabase } from "../../services/supabase";
 import { useApp } from "../../Context/Context";
-import { IoCloseCircle, IoCloudDownloadOutline } from "react-icons/io5";
+import { IoCloseCircle } from "react-icons/io5";
 import { category } from "../../utils/AllCatArray";
 import MobileTabProductCard from "../../dashboards/user/MobileTabProductCard";
 import Spinner from "../../common-components/Spinner";
@@ -13,6 +13,8 @@ import ProductView from "../components/ProductView";
 import PagInationNav from "../../common-components/PagInationNav";
 import BackButton from "../../common-components/BackButton";
 import { handleError } from "../../common-components/handleError";
+import CurrentLayoutDetails from "../../boq/components/CurrentLayoutDetails";
+
 function ClientBoq({ setClientBoqs }) {
   const [savedBoqs, setSavedBoqs] = useState([]);
   const [selectedBoq, setSelectedBoq] = useState();
@@ -40,6 +42,8 @@ function ClientBoq({ setClientBoqs }) {
   const [productPreview, setProductPreview] = useState(false);
   const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
   const [mobileFilterOpen, setMobileFilterOPen] = useState(false);
+  const [currentLayoutData, setCurrentLayoutData] = useState(null);
+  const [showLayoutData, setShowLayoutData] = useState(false);
 
   const items = toggle ? filteredProducts : filteredAddons;
   const tabs = [
@@ -66,12 +70,13 @@ function ClientBoq({ setClientBoqs }) {
       setIsloading(true);
       const { data, error } = await supabase
         .from("boq_data_new")
-        .select("*")
+        .select(`*,layout(*)`)
         .eq("userId", selectedClient.id);
       if (data) {
         setSavedBoqs(data);
         setSelectedBoq(data[0]);
         setIsboqavailable(true);
+        setCurrentLayoutData(data[0].layout);
       }
       if (error)
         handleError(error, {
@@ -256,9 +261,9 @@ function ClientBoq({ setClientBoqs }) {
                     Created BOQs
                   </h3>
                   <div className="relative md:hidden flex items-center gap-5">
-                    <button>
+                    {/* <button>
                       <IoCloudDownloadOutline size={22} color="#374A75" />
-                    </button>
+                    </button> */}
                     <button
                       onClick={() => setMobileFilterOPen(!mobileFilterOpen)}
                     >
@@ -300,6 +305,7 @@ function ClientBoq({ setClientBoqs }) {
                           key={boq?.id}
                           onClick={() => {
                             setSelectedBoq(boq);
+                            setCurrentLayoutData(boq.layout);
                             setSearchQuery("");
                             setSelectedCategory("");
                           }}
@@ -315,6 +321,18 @@ function ClientBoq({ setClientBoqs }) {
                         </div>
                       );
                     })}
+                </div>
+                <div className="lg:ml-auto flex items-center gap-2">
+                  <p>
+                    Total: ₹
+                    {selectedBoq?.boqTotalPrice?.toLocaleString("en-IN")}
+                  </p>
+                  <button
+                    onClick={() => setShowLayoutData(true)}
+                    className="bg-white text-[#374a75] border-[#ccc] rounded-lg border-2 px-4 py-1 text-sm lg:text-lg hover:bg-[#374A75] hover:text-white hover:border-[#374a75] transition duration-300 ease-in-out"
+                  >
+                    Layout Details
+                  </button>
                 </div>
               </div>
               <div className="flex items-center justify-between gap-3 px-2 lg:px-4 py-2 border-b-2 border-b-gray-400 bg-white z-20 relative">
@@ -415,7 +433,9 @@ function ClientBoq({ setClientBoqs }) {
             {productlist &&
               (isloading ? (
                 <Spinner />
-              ) : selectedBoq && items.length > 0 ? (
+              ) : selectedBoq &&
+                items.length > 0 &&
+                selectedBoq.products !== null ? (
                 <>
                   <section className="hidden lg:block h-[90%] font-Poppins overflow-hidden">
                     <div
@@ -546,7 +566,7 @@ function ClientBoq({ setClientBoqs }) {
                   )}
                 </>
               ))}
-            {selectedBoq && (
+            {selectedBoq && selectedBoq.products !== null && (
               <div className="z-30 sticky bottom-0 bg-white py-1 text-[#3d194f]">
                 <PagInationNav
                   totalPages={totalPages}
@@ -577,6 +597,12 @@ function ClientBoq({ setClientBoqs }) {
             setProductPreview(false);
           }}
           product={selectedProductview}
+        />
+      )}
+      {showLayoutData && (
+        <CurrentLayoutDetails
+          dataFromDashboard={currentLayoutData}
+          onClose={() => setShowLayoutData(false)}
         />
       )}
     </div>

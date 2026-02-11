@@ -252,10 +252,7 @@ function ProductView() {
     : [];
 
   const handleProductQuantityInc = (product) => {
-    console.log(product, productqunatity);
-
     if (productqunatity >= 1 && product?.stockQty > productqunatity) {
-      console.log("condtion statisfied");
       setProductquantity((prev) => prev + 1);
     } else {
       toast.error(`only ${product?.stockQty} items left`);
