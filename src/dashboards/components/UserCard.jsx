@@ -3,7 +3,6 @@ import { useApp } from "../../Context/Context";
 function UserCard({ setIsEditopen, selectedUser, setDetailedView }) {
   const { accountHolder } = useApp();
   const user = selectedUser ? selectedUser : accountHolder;
-  console.log(user);
 
   return (
     <div className="w-[320px] sm:w-[400px] lg:w-[500px] border border-[#ccc] shadow-xl rounded-lg bg-[#fff]">

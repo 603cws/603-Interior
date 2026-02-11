@@ -3,8 +3,9 @@ import { IoIosCloseCircle } from "react-icons/io";
 import { useBoqApp } from "../../Context/BoqContext";
 import { motion } from "framer-motion";
 
-function CurrentLayoutDetails({ onClose }) {
+function CurrentLayoutDetails({ onClose, dataFromDashboard }) {
   const { currentLayoutData } = useBoqApp();
+  const layoutData = dataFromDashboard ? dataFromDashboard : currentLayoutData;
 
   return (
     <motion.div
@@ -34,7 +35,7 @@ function CurrentLayoutDetails({ onClose }) {
               <PiFrameCornersFill size={25} color="#374A75" />
               <p className="text-sm">Total Area:</p>
               <span className="text-[#347ABF] text-sm">
-                {currentLayoutData.totalArea} sq.ft
+                {layoutData.totalArea} sq.ft
               </span>
             </div>
           </div>
@@ -44,16 +45,14 @@ function CurrentLayoutDetails({ onClose }) {
               className="bg-[#374A75] text-white h-full flex items-center px-2"
               style={{
                 width: `${
-                  (currentLayoutData.usedSpace / currentLayoutData.totalArea) *
-                  100
+                  (layoutData.usedSpace / layoutData.totalArea) * 100
                 }%`,
               }}
             >
-              Used Area: {currentLayoutData.usedSpace} sq.ft
+              Used Area: {layoutData.usedSpace} sq.ft
             </div>
             <div className="bg-[#ECF2FF] text-[#374A75] h-full flex-1 flex items-center px-2">
-              Unused Area:{" "}
-              {currentLayoutData.totalArea - currentLayoutData.usedSpace} sq.ft
+              Unused Area: {layoutData.totalArea - layoutData.usedSpace} sq.ft
             </div>
           </div>
 
@@ -69,7 +68,7 @@ function CurrentLayoutDetails({ onClose }) {
                 </tr>
               </thead>
               <tbody>
-                {Object.entries(currentLayoutData)
+                {Object.entries(layoutData)
                   .filter(
                     ([key]) =>
                       key.endsWith("Area") &&
@@ -79,9 +78,8 @@ function CurrentLayoutDetails({ onClose }) {
                   .map(([areaKey, areaValue]) => {
                     const baseName = areaKey.replace("Area", "");
                     const qtyKey = `${baseName}Qty`;
-                    const qtyValue = currentLayoutData[qtyKey];
-                    const seatsValue =
-                      currentLayoutData.seatCount?.[baseName] ?? "-";
+                    const qtyValue = layoutData[qtyKey];
+                    const seatsValue = layoutData.seatCount?.[baseName] ?? "-";
 
                     if (!qtyValue || qtyValue === 0) return null;
 

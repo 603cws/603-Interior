@@ -7,6 +7,7 @@ import { FaBuilding } from "react-icons/fa";
 import { useState } from "react";
 import { adminsupabase } from "../../services/supabase";
 import { handleError } from "../../common-components/handleError";
+import UserCard from "../components/UserCard";
 
 function AdminDashVendors({
   isExpanded,
@@ -25,6 +26,7 @@ function AdminDashVendors({
   const [selectedUser, setSelectedUser] = useState(null);
   const [selectedindex, setSelectedindex] = useState();
   const [sortOrder, setSortOrder] = useState("newest");
+  const [detailedView, setDetailedView] = useState(null);
 
   const handleDeletevendirClick = (user, index) => {
     setSelectedUser(user);
@@ -189,7 +191,8 @@ function AdminDashVendors({
                         alt="profile"
                         className={`${
                           isExpanded ? "w-10 h-10" : "w-12 h-12"
-                        }  rounded-full object-cover border border-[#ccc]`}
+                        }  rounded-full object-cover border border-[#ccc] cursor-pointer`}
+                        onClick={() => setDetailedView(user)}
                       />
 
                       <div className="flex flex-col justify-center">
@@ -267,6 +270,14 @@ function AdminDashVendors({
           setVendorproductlist={setVendorproductlist}
           selectedVendor={selectedVendor}
         />
+      )}
+      {detailedView && (
+        <div className="fixed inset-0 bg-black/20 z-[999] flex justify-center items-center">
+          <UserCard
+            selectedUser={detailedView}
+            setDetailedView={setDetailedView}
+          />
+        </div>
       )}
     </>
   );
