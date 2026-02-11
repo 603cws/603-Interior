@@ -124,12 +124,16 @@ function Footer() {
                   >
                     career
                   </li>
-                  <li
-                    onClick={() => navigate("/brandOverview")}
-                    className="relative cursor-pointer w-fit after:content-[''] after:block after:h-[1px] after:bg-white after:w-0 after:transition-all after:duration-300 hover:after:w-full"
-                  >
-                    brands
-                  </li>
+                  {/* add the condition to show on workved and dev.workved */}
+                  {(window.location.hostname === "dev.workved" ||
+                    window.location.hostname === "localhost") && (
+                    <li
+                      onClick={() => navigate("/brandOverview")}
+                      className="relative cursor-pointer w-fit after:content-[''] after:block after:h-[1px] after:bg-white after:w-0 after:transition-all after:duration-300 hover:after:w-full"
+                    >
+                      brands
+                    </li>
+                  )}
                 </ul>
                 <ul className="flex flex-col gap-4 flex-1 tracking-wide list-none m-0 p-0">
                   <li

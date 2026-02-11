@@ -197,7 +197,7 @@ const brandImages = {
     { name: "bluestar", image: "/images/brands/HVAC/Blue_Star.png" },
     { name: "daikin", image: "/images/brands/HVAC/DAIKIN.svg" },
     { name: "lg", image: "/images/brands/HVAC/LG.svg" },
-    { name: "#", image: "/images/brands/HVAC/Carrier.svg" },
+    { name: "carrier", image: "/images/brands/HVAC/Carrier.svg" },
     { name: "mitsubishi", image: "/images/brands/HVAC/Mitsubishi.svg" },
     { name: "voltas", image: "/images/brands/HVAC/Voltas.png" },
   ],

@@ -44,7 +44,7 @@ export const useProgressBar = ({
             subcategory === "Centralized"
               ? ["Centralized"]
               : categoryObj.subcategories.filter(
-                  (sub) => sub !== "Centralized"
+                  (sub) => sub !== "Centralized",
                 );
         }
 
@@ -71,7 +71,7 @@ export const useProgressBar = ({
               "Civil / Plumbing",
               subcategory,
               validSubCat1List,
-              categoryConfig
+              categoryConfig,
             );
           }
 
@@ -81,13 +81,13 @@ export const useProgressBar = ({
               (i) =>
                 i.category === "Furniture" &&
                 i.subcategory === "Md Cabin Main" &&
-                i.subcategory1 === "Chair"
+                i.subcategory1 === "Chair",
             );
             const visitorFilled = selectedData.some(
               (i) =>
                 i.category === "Furniture" &&
                 i.subcategory === "Md Cabin Visitor" &&
-                i.subcategory1 === "Chair"
+                i.subcategory1 === "Chair",
             );
 
             if (mainFilled && visitorFilled) {
@@ -101,13 +101,13 @@ export const useProgressBar = ({
               (i) =>
                 i.category === "Furniture" &&
                 i.subcategory === "Manager Cabin Main" &&
-                i.subcategory1 === "Chair"
+                i.subcategory1 === "Chair",
             );
             const visitorFilled = selectedData.some(
               (i) =>
                 i.category === "Furniture" &&
                 i.subcategory === "Manager Cabin Visitor" &&
-                i.subcategory1 === "Chair"
+                i.subcategory1 === "Chair",
             );
 
             if (mainFilled && visitorFilled) {
@@ -121,7 +121,7 @@ export const useProgressBar = ({
               "Furniture",
               subcategory,
               validSubCat1List,
-              categoryConfig
+              categoryConfig,
             );
           }
 
@@ -133,7 +133,7 @@ export const useProgressBar = ({
             totalProgress += subCategory1Percentage;
           } else {
             console.warn(
-              `SubCategory1 "${subcategory1}" not found or excluded.`
+              `SubCategory1 "${subcategory1}" not found or excluded.`,
             );
           }
         } else {
@@ -142,9 +142,11 @@ export const useProgressBar = ({
       });
 
       totalProgress = Math.min(totalProgress, 100);
-      setProgress(Math.round(totalProgress * 100) / 100);
+
+      // setProgress(Math.round(totalProgress * 100) / 100);
+      setProgress(Math.ceil(totalProgress));
     },
-    [setProgress, filterExcludedItems, categoryConfig]
+    [setProgress, filterExcludedItems, categoryConfig],
   );
 
   return handleProgressBar;

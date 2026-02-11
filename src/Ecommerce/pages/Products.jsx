@@ -387,26 +387,29 @@ function Products() {
       </section>
 
       {/* section 5 */}
-      <section>
-        <div className=" lg:container lg:mx-auto my-3 px-3 lg:px-12 lg:my-10">
-          <SectionHeader title={"Shop by brands"} />
-          <div className="grid grid-cols-4 lg:grid-cols-4 gap-2 gap-y-4">
-            {brands.map((brand, index) => (
-              <div
-                className="hover:shadow-lg flex justify-center items-center w-full h-28 cursor-pointer"
-                key={index}
-                onClick={() => navigate(`/brandOverview/${brand.name}`)}
-              >
-                <img
-                  src={brand.image}
-                  alt={brand.name}
-                  className="object-scale-down h-full w-44"
-                />
-              </div>
-            ))}
+      {(window.location.hostname === "dev.workved" ||
+        window.location.hostname === "localhost") && (
+        <section>
+          <div className=" lg:container lg:mx-auto my-3 px-3 lg:px-12 lg:my-10">
+            <SectionHeader title={"Shop by brands"} />
+            <div className="grid grid-cols-4 lg:grid-cols-4 gap-2 gap-y-4">
+              {brands.map((brand, index) => (
+                <div
+                  className="hover:shadow-lg flex justify-center items-center w-full h-28 cursor-pointer"
+                  key={index}
+                  onClick={() => navigate(`/brandOverview/${brand.name}`)}
+                >
+                  <img
+                    src={brand.image}
+                    alt={brand.name}
+                    className="object-scale-down h-full w-44"
+                  />
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* section 7*/}
       <section className="lg:container lg:mx-auto my-3 px-3 lg:px-12 lg:my-10">

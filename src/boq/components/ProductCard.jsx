@@ -72,6 +72,7 @@ function ProductCard({
     setOpenSection((prev) => (prev === section ? null : section));
   };
   const productsInSubCategory = productsInCategory[selectedSubCategory] || [];
+  const [priceRange, setPriceRange] = useState([0, 100000]);
 
   const filteredProducts = productsInSubCategory
     .filter((product) => {
@@ -126,12 +127,18 @@ function ProductCard({
   );
 
   const filteredVariants = filteredProducts.filter((variant) => {
-    if (selectedPlanFilter === "Custom") return true;
+    /* ---------- PLAN FILTER ---------- */
+    const planMatch =
+      selectedPlanFilter === "Custom"
+        ? true
+        : variant.segment &&
+          variant.segment.toLowerCase() === selectedPlanFilter.toLowerCase();
 
-    return (
-      variant.segment &&
-      variant.segment.toLowerCase() === selectedPlanFilter.toLowerCase()
-    );
+    /* ---------- PRICE FILTER ---------- */
+    const price = Number(variant.price || 0);
+    const priceMatch = price >= priceRange[0] && price <= priceRange[1];
+
+    return planMatch && priceMatch;
   });
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -268,6 +275,8 @@ function ProductCard({
               isMobileFilterOpen={isMobileFilterOpen}
               setIsMobileFilterOpen={setIsMobileFilterOpen}
               paginatedVariants={paginatedVariants}
+              priceRange={priceRange}
+              setPriceRange={setPriceRange}
             />
           )}
 
@@ -332,6 +341,8 @@ function ProductCard({
                   brandsList={brandsList}
                   selectedBrands={selectedBrands}
                   setSelectedBrands={setSelectedBrands}
+                  priceRange={priceRange}
+                  setPriceRange={setPriceRange}
                 />
               </motion.div>
             )}

@@ -50,6 +50,8 @@ function FilterPanel({
   isMobileFilterOpen,
   setIsMobileFilterOpen,
   paginatedVariants,
+  priceRange,
+  setPriceRange,
 }) {
   const planOptions = ["Minimal", "Exclusive", "Luxury", "Custom"];
 
@@ -183,6 +185,68 @@ function FilterPanel({
                       </label>
                     );
                   })}
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+
+        <div className="border">
+          <button
+            className="flex w-full items-center justify-between px-4 py-3 text-sm"
+            onClick={() => toggleSection("price")}
+          >
+            <span className="font-semibold text-[#334A78]">Price</span>
+            <span className="text-sm">
+              {openSection === "price" ? <IoIosArrowUp /> : <IoIosArrowDown />}
+            </span>
+          </button>
+
+          <AnimatePresence initial={false}>
+            {openSection === "price" && (
+              <motion.div
+                variants={accordionVariants}
+                initial="collapsed"
+                animate="open"
+                exit="exit"
+                className="overflow-hidden border-t border-black bg-white"
+              >
+                <div className="px-4 py-4 space-y-4 text-sm">
+                  {/* Range display */}
+                  <div className="flex justify-between text-xs font-semibold text-[#334A78]">
+                    <span>₹ {priceRange[0].toLocaleString()}</span>
+                    <span>₹ {priceRange[1].toLocaleString()}</span>
+                  </div>
+
+                  {/* Slider */}
+                  <input
+                    type="range"
+                    min={500}
+                    max={100000}
+                    step={500}
+                    value={priceRange[1]}
+                    onChange={(e) =>
+                      setPriceRange([priceRange[0], Number(e.target.value)])
+                    }
+                    className="w-full accent-[#334A78] cursor-pointer"
+                  />
+
+                  {/* Presets */}
+                  <div className="flex flex-wrap gap-2">
+                    {[25000, 50000, 75000, 100000].map((value) => (
+                      <button
+                        key={value}
+                        onClick={() => setPriceRange([0, value])}
+                        className={`px-3 py-1 border text-xs font-semibold ${
+                          priceRange[1] === value
+                            ? "bg-[#334A78] text-white"
+                            : "bg-white text-black"
+                        }`}
+                      >
+                        Up to ₹{value / 1000}k
+                      </button>
+                    ))}
+                  </div>
                 </div>
               </motion.div>
             )}
@@ -333,6 +397,62 @@ function FilterPanel({
                       </label>
                     );
                   })}
+                </div>
+              )}
+            </div>
+
+            <div className="border border-[#ccc] rounded">
+              <button
+                className="flex w-full items-center justify-between px-3 py-2 text-xs font-semibold uppercase text-[#334A78]"
+                onClick={() => toggleSection("price")}
+              >
+                <span>Price</span>
+                <span className="text-xs">
+                  {openSection === "price" ? (
+                    <IoIosArrowUp />
+                  ) : (
+                    <IoIosArrowDown />
+                  )}
+                </span>
+              </button>
+
+              {openSection === "price" && (
+                <div className="border-t border-[#ccc] px-4 py-4 space-y-4 text-xs">
+                  {/* Range display */}
+                  <div className="flex justify-between font-semibold text-[#334A78]">
+                    <span>₹ {priceRange[0].toLocaleString()}</span>
+                    <span>₹ {priceRange[1].toLocaleString()}</span>
+                  </div>
+
+                  {/* Slider */}
+                  <input
+                    type="range"
+                    min={0}
+                    max={100000}
+                    step={1000}
+                    value={priceRange[1]}
+                    onChange={(e) =>
+                      setPriceRange([priceRange[0], Number(e.target.value)])
+                    }
+                    className="w-full accent-[#334A78]"
+                  />
+
+                  {/* Presets */}
+                  <div className="flex flex-wrap gap-2">
+                    {[25000, 50000, 75000, 100000].map((value) => (
+                      <button
+                        key={value}
+                        onClick={() => setPriceRange([0, value])}
+                        className={`px-3 py-1 border text-[11px] font-semibold ${
+                          priceRange[1] === value
+                            ? "bg-[#334A78] text-white"
+                            : "bg-white text-black"
+                        }`}
+                      >
+                        Up to ₹{value / 1000}k
+                      </button>
+                    ))}
+                  </div>
                 </div>
               )}
             </div>

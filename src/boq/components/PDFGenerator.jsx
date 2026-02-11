@@ -491,9 +491,9 @@ const PDFGenerator = {
 
     const blob = doc.output("blob");
     const url = URL.createObjectURL(blob);
-    import.meta.env.MODE === "development"
-      ? window.open(url, "_blank")
-      : doc.save("products_summary.pdf");
+    window.open(url, "_blank");
+    if (import.meta.env.MODE !== "development")
+      doc.save("products_summary.pdf");
   },
 };
 
