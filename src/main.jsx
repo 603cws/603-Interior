@@ -10,25 +10,35 @@ import ErrorFallback from "./common-components/ErrorFallBack.jsx";
 import { EcomAppProvider } from "./Context/EcomContext.jsx";
 import { BoqAppProvider } from "./Context/BoqContext.jsx";
 
+const AppWrapper = ({ children }) => {
+  if (import.meta.env.DEV) {
+    console.log("Error boundary triggered!");
+    return (
+      <ErrorBoundary
+        FallbackComponent={ErrorFallback}
+        onReset={() => window.location.reload()}
+      >
+        {children}
+      </ErrorBoundary>
+    );
+  }
+
+  return children;
+};
+
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    {/* <ErrorBoundary
-      FallbackComponent={ErrorFallback}
-      onReset={() => {
-        // action to run when resetErrorBoundary() is called
-        window.location.reload(); // refresh the entire page
-      }}
-    > */}
-    <BrowserRouter>
-      <AppProvider>
-        <BoqAppProvider>
-          <EcomAppProvider>
-            <Toaster />
-            <App />
-          </EcomAppProvider>
-        </BoqAppProvider>
-      </AppProvider>
-    </BrowserRouter>
-    {/* </ErrorBoundary> */}
+    <AppWrapper>
+      <BrowserRouter>
+        <AppProvider>
+          <BoqAppProvider>
+            <EcomAppProvider>
+              <Toaster />
+              <App />
+            </EcomAppProvider>
+          </BoqAppProvider>
+        </AppProvider>
+      </BrowserRouter>
+    </AppWrapper>
   </StrictMode>,
 );
