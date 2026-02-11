@@ -323,6 +323,7 @@ function ProductOverview() {
               v.id !== product?.id &&
               v.status === "approved" &&
               v.image &&
+              v.productDisplayType !== "ecommerce" &&
               v.title,
           ),
         }))
