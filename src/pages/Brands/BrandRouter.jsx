@@ -27,6 +27,7 @@ import Syska from "./Lighting/Syska";
 import Havells from "./Lighting/Havells";
 import Jaguar from "./Lighting/Jaguar";
 import Panasonic from "./Lighting/Panasonic";
+import Carrier from "./HVAC/Carrier";
 
 const BrandRouter = () => {
   const { brandName } = useParams();
@@ -60,6 +61,7 @@ const BrandRouter = () => {
     havells: <Havells />,
     jaguar: <Jaguar />,
     panasonic: <Panasonic />,
+    carrier: <Carrier />,
   };
 
   return components[brandName] || <div>Brand Not Found</div>;
